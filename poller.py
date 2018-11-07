@@ -1,5 +1,5 @@
 import argparse
-import requests
+from typing import Optional
 from pathlib import Path
 from collections import defaultdict
 from multiprocessing import Process, Queue
@@ -32,12 +32,12 @@ class Wrapper:
             input_q = self.in_queue.get()
             self._process_input(input_q)
 
-    def _process_input(self, input_q: dict):
+    def _process_input(self, input_q: dict) -> None:
         buffer = defaultdict(list)
 
         for message in input_q['result']:
-            message_text = message['message']['text']
-            if self._validate_message(message_text):
+            message_text = self._process_message_text(message['message']['text'])
+            if message_text:
                 chat_id = message['message']['chat']['id']
                 buffer[chat_id].append(message_text)
 
@@ -58,11 +58,18 @@ class Wrapper:
             for resp in zip(ids_batch, response_batch):
                 self._send_results(*resp)
 
-    def _validate_message(self, message_text: str):
-        result = False if message_text[:6] == '/start' or message_text[:4] == '/end' else True
-        return result
+    @staticmethod
+    def _process_message_text(message_text: str) -> Optional[str]:
+        if message_text[:4] == '/end':
+            processed_message = None
+        elif message_text[:6] == '/start':
+            processed_message = '/next'
+        else:
+            processed_message = message_text
 
-    def _send_results(self, chat_id, response):
+        return processed_message
+
+    def _send_results(self, chat_id, response) -> None:
         resp_text = str("{\"text\":\"" + response + "\"}")
 
         payload = {
@@ -82,11 +89,11 @@ class Poller(Process):
         self.config = config
         self.out_queue = out_queue
 
-    def run(self):
+    def run(self) -> None:
         while True:
             self._poll()
 
-    def _poll(self):
+    def _poll(self) -> None:
         interval = self.config['polling_interval_secs']
         polling_url = self.config['get_updates_url']
         payload = polling.poll(
@@ -105,11 +112,11 @@ class Poller(Process):
             estimation = False
         return estimation
 
-    def _process(self, payload: dict):
+    def _process(self, payload: dict) -> None:
         self.out_queue.put(payload)
 
 
-def main():
+def main() -> None:
     args = parser.parse_args()
     pipeline_config_path = find_config(args.config_path)
 
