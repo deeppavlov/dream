@@ -16,9 +16,16 @@ from deeppavlov.core.commands.infer import build_model
 from deeppavlov.core.common.file import read_json
 from deeppavlov.deep import find_config
 
+
 parser = argparse.ArgumentParser()
+
 parser.add_argument('config_path', help='path to a pipeline json config', type=str)
-parser.add_argument("--default-skill", action="store_true", help="wrap with default skill")
+
+parser.add_argument('--host', default=None, help='router bot host', type=str)
+parser.add_argument('--port', default=None, help='router bot port', type=str)
+parser.add_argument('--token', default=None, help='bot token', type=str)
+
+parser.add_argument('--default-skill', action='store_true', help='wrap with default skill')
 
 
 class Wrapper:
@@ -120,6 +127,9 @@ def main() -> None:
     args = parser.parse_args()
 
     pipeline_config_path = find_config(args.config_path)
+    host = args.host
+    port = args.port
+    token = args.token
     default_skill_wrap = args.default_skill
 
     root_path = Path(__file__).resolve().parent
@@ -130,9 +140,9 @@ def main() -> None:
     get_updates_url: str = config['get_updates_url_template']
 
     url_params = {
-        'host': config['router_bot_host'],
-        'port': config['router_bot_port'],
-        'token': config['bot_token']
+        'host': host or config['router_bot_host'],
+        'port': port or config['router_bot_port'],
+        'token': token or config['bot_token']
     }
 
     config['send_message_url'] = send_message_url.format(**url_params)
