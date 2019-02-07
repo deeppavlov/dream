@@ -18,6 +18,7 @@ from deeppavlov.deep import find_config
 
 parser = argparse.ArgumentParser()
 parser.add_argument('config_path', help='path to a pipeline json config', type=str)
+parser.add_argument("--default-skill", action="store_true", help="wrap with default skill")
 
 
 class Wrapper:
@@ -117,7 +118,9 @@ class Poller(Process):
 
 def main() -> None:
     args = parser.parse_args()
+
     pipeline_config_path = find_config(args.config_path)
+    default_skill_wrap = args.default_skill
 
     root_path = Path(__file__).resolve().parent
     config_path = root_path / 'config.json'
@@ -136,7 +139,7 @@ def main() -> None:
     config['get_updates_url'] = get_updates_url .format(**url_params)
 
     model = build_model(pipeline_config_path)
-    skill = DefaultStatelessSkill(model)
+    skill = DefaultStatelessSkill(model) if default_skill_wrap else model
     agent = DefaultAgent(skills=[skill])
     Wrapper(config, agent)
 
