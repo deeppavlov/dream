@@ -11,7 +11,7 @@ import polling
 from deeppavlov.core.agent.agent import Agent
 from deeppavlov.agents.default_agent.default_agent import DefaultAgent
 from deeppavlov.skills.default_skill.default_skill import DefaultStatelessSkill
-from deeppavlov.core.commands.infer import build_model_from_config
+from deeppavlov.core.commands.infer import build_model
 from deeppavlov.core.common.file import read_json
 from deeppavlov.deep import find_config
 
@@ -136,7 +136,7 @@ def main() -> None:
     config['send_message_url'] = send_message_url.format(**url_params)
     config['get_updates_url'] = get_updates_url .format(**url_params)
 
-    model = build_model_from_config(pipeline_config_path)
+    model = build_model(pipeline_config_path)
     skill = DefaultStatelessSkill(model)
     agent = DefaultAgent(skills=[skill])
     Wrapper(config, agent)
