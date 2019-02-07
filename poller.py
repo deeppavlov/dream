@@ -60,10 +60,8 @@ class Wrapper:
 
     @staticmethod
     def _process_message_text(message_text: str) -> Optional[str]:
-        if message_text[:4] == '/end':
+        if message_text[:6] == '/start' or message_text[:4] == '/end':
             processed_message = None
-        elif message_text[:6] == '/start':
-            processed_message = '/next'
         else:
             processed_message = message_text
 
