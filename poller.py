@@ -1,4 +1,5 @@
 import argparse
+import json
 from typing import Optional
 from pathlib import Path
 from collections import defaultdict
@@ -16,7 +17,7 @@ from deeppavlov.core.common.file import read_json
 from deeppavlov.deep import find_config
 
 parser = argparse.ArgumentParser()
-parser.add_argument("config_path", help="path to a pipeline json config", type=str)
+parser.add_argument('config_path', help='path to a pipeline json config', type=str)
 
 
 class Wrapper:
@@ -99,7 +100,7 @@ class Poller(Process):
             check_success=self._estimate,
             step=interval,
             poll_forever=True,
-            ignore_exceptions=(requests.exceptions.ConnectionError,)
+            ignore_exceptions=(requests.exceptions.ConnectionError, json.decoder.JSONDecodeError, )
         )
         self._process(payload)
 
