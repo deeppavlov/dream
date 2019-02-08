@@ -1,4 +1,7 @@
 import argparse
+import json
+import logging
+import sys
 from typing import Optional
 from pathlib import Path
 from collections import defaultdict
@@ -11,12 +14,27 @@ import polling
 from deeppavlov.core.agent.agent import Agent
 from deeppavlov.agents.default_agent.default_agent import DefaultAgent
 from deeppavlov.skills.default_skill.default_skill import DefaultStatelessSkill
-from deeppavlov.core.commands.infer import build_model_from_config
+from deeppavlov.core.commands.infer import build_model
 from deeppavlov.core.common.file import read_json
 from deeppavlov.deep import find_config
 
+
+logging.disable(logging.DEBUG)
+log = logging.getLogger('convai_router_bot_poller')
+log.propagate = False
+log.setLevel(logging.DEBUG)
+log_handler = logging.StreamHandler(sys.stderr)
+log_formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+log_handler.setFormatter(log_formatter)
+log.addHandler(log_handler)
+
+
 parser = argparse.ArgumentParser()
-parser.add_argument("config_path", help="path to a pipeline json config", type=str)
+parser.add_argument('config_path', help='path to a pipeline json config', type=str)
+parser.add_argument('--host', default=None, help='router bot host', type=str)
+parser.add_argument('--port', default=None, help='router bot port', type=str)
+parser.add_argument('--token', default=None, help='bot token', type=str)
+parser.add_argument('--default-skill', action='store_true', help='wrap with default skill')
 
 
 class Wrapper:
@@ -28,8 +46,11 @@ class Wrapper:
         self.poller = Poller(config, self.in_queue)
         self.poller.start()
 
+        log.info('Wrapper initiated')
+
         while True:
             input_q = self.in_queue.get()
+            log.info('Payload received')
             self._process_input(input_q)
 
     def _process_input(self, input_q: dict) -> None:
@@ -43,9 +64,15 @@ class Wrapper:
 
         chats = []
         chat_ids = []
+        log_msg = ''
+
         for chat_id, chat in buffer.items():
             chats.append(chat)
             chat_ids.append(chat_id)
+            log_msg = f'{log_msg}, {str(chat_id)}' if log_msg else f'Processing messages for chats: {str(chat_id)}'
+
+        if log_msg:
+            log.info(log_msg)
 
         batched_chats = zip_longest(*chats, fillvalue=None)
         infer_batches = [list(zip(*[(chat_ids[i], u) for i, u in enumerate(batch) if u])) for batch in batched_chats]
@@ -60,10 +87,8 @@ class Wrapper:
 
     @staticmethod
     def _process_message_text(message_text: str) -> Optional[str]:
-        if message_text[:4] == '/end':
+        if message_text[:6] == '/start' or message_text[:4] == '/end':
             processed_message = None
-        elif message_text[:6] == '/start':
-            processed_message = '/next'
         else:
             processed_message = message_text
 
@@ -78,9 +103,12 @@ class Wrapper:
         }
 
         requests.post(
+
             url=self.config['send_message_url'],
             json=payload
         )
+
+        log.info(f'Sent response to chat: {str(chat_id)}')
 
 
 class Poller(Process):
@@ -101,7 +129,7 @@ class Poller(Process):
             check_success=self._estimate,
             step=interval,
             poll_forever=True,
-            ignore_exceptions=(requests.exceptions.ConnectionError,)
+            ignore_exceptions=(requests.exceptions.ConnectionError, json.decoder.JSONDecodeError, )
         )
         self._process(payload)
 
@@ -118,7 +146,12 @@ class Poller(Process):
 
 def main() -> None:
     args = parser.parse_args()
+
     pipeline_config_path = find_config(args.config_path)
+    host = args.host
+    port = args.port
+    token = args.token
+    default_skill_wrap = args.default_skill
 
     root_path = Path(__file__).resolve().parent
     config_path = root_path / 'config.json'
@@ -128,16 +161,16 @@ def main() -> None:
     get_updates_url: str = config['get_updates_url_template']
 
     url_params = {
-        'host': config['router_bot_host'],
-        'port': config['router_bot_port'],
-        'token': config['bot_token']
+        'host': host or config['router_bot_host'],
+        'port': port or config['router_bot_port'],
+        'token': token or config['bot_token']
     }
 
     config['send_message_url'] = send_message_url.format(**url_params)
     config['get_updates_url'] = get_updates_url .format(**url_params)
 
-    model = build_model_from_config(pipeline_config_path)
-    skill = DefaultStatelessSkill(model)
+    model = build_model(pipeline_config_path)
+    skill = DefaultStatelessSkill(model) if default_skill_wrap else model
     agent = DefaultAgent(skills=[skill])
     Wrapper(config, agent)
 
