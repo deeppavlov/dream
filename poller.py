@@ -1,5 +1,7 @@
 import argparse
 import json
+import logging
+import sys
 from typing import Optional
 from pathlib import Path
 from collections import defaultdict
@@ -17,14 +19,21 @@ from deeppavlov.core.common.file import read_json
 from deeppavlov.deep import find_config
 
 
+logging.disable(logging.DEBUG)
+log = logging.getLogger('convai_router_bot_poller')
+log.propagate = False
+log.setLevel(logging.DEBUG)
+log_handler = logging.StreamHandler(sys.stderr)
+log_formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+log_handler.setFormatter(log_formatter)
+log.addHandler(log_handler)
+
+
 parser = argparse.ArgumentParser()
-
 parser.add_argument('config_path', help='path to a pipeline json config', type=str)
-
 parser.add_argument('--host', default=None, help='router bot host', type=str)
 parser.add_argument('--port', default=None, help='router bot port', type=str)
 parser.add_argument('--token', default=None, help='bot token', type=str)
-
 parser.add_argument('--default-skill', action='store_true', help='wrap with default skill')
 
 
@@ -37,8 +46,11 @@ class Wrapper:
         self.poller = Poller(config, self.in_queue)
         self.poller.start()
 
+        log.info('Wrapper initiated')
+
         while True:
             input_q = self.in_queue.get()
+            log.info('Payload received')
             self._process_input(input_q)
 
     def _process_input(self, input_q: dict) -> None:
@@ -52,9 +64,15 @@ class Wrapper:
 
         chats = []
         chat_ids = []
+        log_msg = ''
+
         for chat_id, chat in buffer.items():
             chats.append(chat)
             chat_ids.append(chat_id)
+            log_msg = f'{log_msg}, {str(chat_id)}' if log_msg else f'Processing messages for chats: {str(chat_id)}'
+
+        if log_msg:
+            log.info(log_msg)
 
         batched_chats = zip_longest(*chats, fillvalue=None)
         infer_batches = [list(zip(*[(chat_ids[i], u) for i, u in enumerate(batch) if u])) for batch in batched_chats]
@@ -85,9 +103,12 @@ class Wrapper:
         }
 
         requests.post(
+
             url=self.config['send_message_url'],
             json=payload
         )
+
+        log.info(f'Sent response to chat: {str(chat_id)}')
 
 
 class Poller(Process):
