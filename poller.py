@@ -95,7 +95,7 @@ class Wrapper:
         return processed_message
 
     def _send_results(self, chat_id, response) -> None:
-        resp_text = str("{\"text\":\"" + response + "\"}")
+        resp_text = str("{\"text\":\"" + str(response) + "\"}")
 
         payload = {
             'chat_id': chat_id,
