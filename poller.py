@@ -35,7 +35,7 @@ parser.add_argument('config_path', help='path to a pipeline json config', type=s
 parser.add_argument('--host', default=None, help='router bot host', type=str)
 parser.add_argument('--port', default=None, help='router bot port', type=str)
 parser.add_argument('--token', default=None, help='bot token', type=str)
-parser.add_argument('--default-skill', action='store_true', help='wrap with default skill')
+parser.add_argument('--no-default-skill', action='store_true', help='not to wrap with default skill')
 parser.add_argument('-d', '--download', action='store_true', help='download DeepPavlov components')
 
 
@@ -153,7 +153,7 @@ def main() -> None:
     host = args.host
     port = args.port
     token = args.token
-    default_skill_wrap = args.default_skill
+    no_default_skill_wrap = args.no_default_skill
 
     root_path = Path(__file__).resolve().parent
     config_path = root_path / 'config.json'
@@ -175,7 +175,7 @@ def main() -> None:
         deep_download(pipeline_config_path)
 
     model = build_model(pipeline_config_path)
-    skill = DefaultStatelessSkill(model) if default_skill_wrap else model
+    skill = model if no_default_skill_wrap else DefaultStatelessSkill(model)
     agent = DefaultAgent(skills=[skill])
     Wrapper(config, agent)
 
