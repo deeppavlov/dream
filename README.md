@@ -24,3 +24,7 @@ Integration tool which makes DeepPavlov agents accessible via ConvAI Router Bot
     python setup.py develop
     cd ..
     ```
+5. To run DeepPavlov config run:
+    ```
+    python poller.py <path/to/deeppavlov/config.json> [-d] [--host] [--port] [--token] [--no-default-skill]
+    ```
