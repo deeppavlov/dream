@@ -76,16 +76,22 @@ class Wrapper:
         if log_msg:
             log.info(log_msg)
 
+        # "slices" of replicas from all conversations, each slice contains replicas from different conversation
         batched_chats = zip_longest(*chats, fillvalue=None)
-        infer_batches = [list(zip(*[(chat_ids[i], u) for i, u in enumerate(batch) if u])) for batch in batched_chats]
 
-        for infer_batch in infer_batches:
-            ids_batch = list(infer_batch[0])
-            utterance_batch = list(infer_batch[1])
-            response_batch = self.agent(utterance_batch, ids_batch)
+        for chats_batch in batched_chats:
+            utts_batch = [(chat_ids[utt_id], utt) for utt_id, utt in enumerate(chats_batch) if utt]
+            j = self.config['infer_batch_length']
+            chunked_utts_batch = [utts_batch[i * j:(i + 1) * j] for i in range((len(utts_batch) + j - 1) // j)]
 
-            for resp in zip(ids_batch, response_batch):
-                self._send_results(*resp)
+            for chunk in chunked_utts_batch:
+                batch = list(zip(*chunk))
+                ids_batch = list(batch[0])
+                utts_batch = list(batch[1])
+                response_batch = self.agent(utts_batch, ids_batch)
+
+                for resp in zip(ids_batch, response_batch):
+                    self._send_results(*resp)
 
     @staticmethod
     def _process_message_text(message_text: str) -> Optional[str]:
