@@ -127,5 +127,4 @@ def run():
     return infer
 
 
-if __name__ == '__main__':
-    experimental_bot(run, token=getenv('TELEGRAM_TOKEN'), proxy=getenv('TELEGRAM_PROXY'))
+experimental_bot(run, token=getenv('TELEGRAM_TOKEN'), proxy=getenv('TELEGRAM_PROXY'))
