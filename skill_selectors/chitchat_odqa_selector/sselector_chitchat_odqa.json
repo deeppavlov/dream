@@ -177,7 +177,7 @@
     "variables": {
       "ROOT_PATH": "~/.deeppavlov",
       "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
-      "MODELS_PATH": "{ROOT_PATH}/models/classifiers/chitchat_vs_odqa_v5"
+      "MODELS_PATH": "{ROOT_PATH}/models"
     },
     "requirements": [
       "{DEEPPAVLOV_PATH}/requirements/tf.txt",
