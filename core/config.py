@@ -17,7 +17,7 @@ SKILLS = [
     # },
     {
         "name": "chitchat",
-        "url": "http://0.0.0.0:2081/chitchat",
+        "url": "http://dp-agent_chitchat_1:2081/chitchat",
         "path": root / "skills/ranking_chitchat/agent_ranking_chitchat_2staged_tfidf_smn_v4_prep.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
@@ -45,11 +45,11 @@ SKILLS = [
     #     "url": "http://0.0.0.0:2087/kbqa",
     #     "path": configs.dp_assistant.agent_kbqa_rus
     # },
-    {
-        "name": "mailruqa",
-        "url": "http://0.0.0.0:2089/mailruqa",
-        "path": root / "skills/text_qa/agent_ranking_mailru_bert_3.json"
-    }
+#    {
+#        "name": "mailruqa",
+#        "url": "http://skills:2089/mailruqa",
+#        "path": root / "skills/text_qa/agent_ranking_mailru_bert_3.json"
+#    }
     # {
     #     "name": "generalqa",
     #     "url": "http://0.0.0.0:2090/generalqa",
@@ -61,15 +61,15 @@ SKILLS = [
 ANNOTATORS = [
     {
         "name": "ner",
-        "url": "http://0.0.0.0:2083/ner_rus",
-        "path": root / "annotators/ner/preproc_ner_rus_vpc.json",
+        "url": "http://dp-agent_ner_1:2083/ner_rus",
+        "path": root / "annotators/ner/ner_rus_lower_vpc_with_context.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
         }
     },
     {
         "name": "sentiment",
-        "url": "http://0.0.0.0:2084/rusentiment",
+        "url": "http://dp-agent_sentiment_1:2084/rusentiment",
         "path": root / "annotators/sentiment/preproc_rusentiment.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
@@ -77,7 +77,7 @@ ANNOTATORS = [
     },
     {
         "name": "obscenity",
-        "url": "http://0.0.0.0:2088/obscenity",
+        "url": "http://dp-agent_obscenity_1_1:2088/obscenity",
         "path": root / "annotators/obscenity/obscenity_classifier.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
@@ -88,7 +88,7 @@ ANNOTATORS = [
 SKILL_SELECTORS = [
     {
         "name": "chitchat_odqa",
-        "url": "http://0.0.0.0:2082/chitchat_odqa_selector",
+        "url": "http://dp-agent_chitchat_odqa_1:2082/chitchat_odqa_selector",
         "path": root / "skill_selectors/chitchat_odqa_selector/sselector_chitchat_odqa.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""

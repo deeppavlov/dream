@@ -5,7 +5,7 @@ import yaml
 from mongoengine import connect
 
 DB_NAME = 'test'
-HOST = 'localhost'
+HOST = 'dp-agent_mongo_1'
 PORT = 27017
 
 _run_config_path: Path = Path(__file__).resolve().parent / 'config.yaml'

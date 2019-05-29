@@ -1,0 +1,19 @@
+FROM ubuntu:latest
+
+ARG skillconfig
+ARG skillport
+
+ENV CONFIG=$skillconfig
+ENV PORT=$skillport
+
+RUN apt-get update -y --fix-missing && \
+    apt-get install -y python3 python3-pip python3-dev build-essential git openssl
+
+RUN pip3 install deeppavlov tensorflow==1.10.0
+
+RUN mkdir dp-agent
+WORKDIR /dp-agent
+COPY . /dp-agent/.
+
+RUN python3 -m deeppavlov install $CONFIG
+ENTRYPOINT python3 -m deeppavlov riseapi -d $CONFIG --port $PORT
