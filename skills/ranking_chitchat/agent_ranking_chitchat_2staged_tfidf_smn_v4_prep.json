@@ -131,7 +131,7 @@
       "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs"
     },
     "requirements": [
-      "{DEEPPAVLOV_PATH}/requirements/tf-gpu.txt",
+      "{DEEPPAVLOV_PATH}/requirements/tf.txt",
       "{DEEPPAVLOV_PATH}/requirements/fasttext.txt",
       "{DEEPPAVLOV_PATH}/requirements/gensim.txt"
     ],
