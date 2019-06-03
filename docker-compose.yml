@@ -4,6 +4,7 @@ services:
     build:
       context: ./
       dockerfile: dockerfile_agent
+    container_name: agent
     volumes:
      - .:/dp-agent
     ports:
@@ -26,10 +27,11 @@ services:
       args:
         skillconfig: skills/ranking_chitchat/agent_ranking_chitchat_2staged_tfidf_smn_v4_prep.json
         skillport: 2081
+    container_name: chitchat
     volumes:
      - .:/dp-agent
-     - ${EXTERNAL_FOLDER}/dp_logs:/logs
-     - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
+     - ${EXTERNAL_FOLDER}dp_logs:/logs
+     - ${EXTERNAL_FOLDER}.deeppavlov:/root/.deeppavlov
     ports:
      - "2081:2081"
     tty: true
@@ -40,10 +42,11 @@ services:
       args:
         skillconfig: annotators/ner/ner_rus_lower_vpc_with_context.json
         skillport: 2083
+    container_name: ner
     volumes:
      - .:/dp-agent
-     - ${EXTERNAL_FOLDER}/dp_logs:/logs
-     - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
+     - ${EXTERNAL_FOLDER}dp_logs:/logs
+     - ${EXTERNAL_FOLDER}.deeppavlov:/root/.deeppavlov
     ports:
      - "2083:2083"
     tty: true
@@ -54,10 +57,11 @@ services:
       args:
         skillconfig: annotators/sentiment/preproc_rusentiment.json
         skillport: 2084
+    container_name: sentiment
     volumes:
      - .:/dp-agent
-     - ${EXTERNAL_FOLDER}/dp_logs:/logs
-     - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
+     - ${EXTERNAL_FOLDER}dp_logs:/logs
+     - ${EXTERNAL_FOLDER}.deeppavlov:/root/.deeppavlov
     ports:
      - "2084:2084"
     tty: true
@@ -68,10 +72,11 @@ services:
       args:
         skillconfig: annotators/obscenity/obscenity_classifier.json
         skillport: 2088
+    container_name: obscenity
     volumes:
      - .:/dp-agent
-     - ${EXTERNAL_FOLDER}/dp_logs:/logs
-     - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
+     - ${EXTERNAL_FOLDER}dp_logs:/logs
+     - ${EXTERNAL_FOLDER}.deeppavlov:/root/.deeppavlov
     ports:
      - "2088:2088"
     tty: true
@@ -82,10 +87,11 @@ services:
       args:
         skillconfig: skill_selectors/chitchat_odqa_selector/sselector_chitchat_odqa.json
         skillport: 2082
+    container_name: chitchat_odqa
     volumes:
      - .:/dp-agent
-     - ${EXTERNAL_FOLDER}/dp_logs:/logs
-     - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
+     - ${EXTERNAL_FOLDER}dp_logs:/logs
+     - ${EXTERNAL_FOLDER}.deeppavlov:/root/.deeppavlov
     ports:
      - "2082:2082"
     tty: true
