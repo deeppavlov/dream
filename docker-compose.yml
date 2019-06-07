@@ -40,7 +40,7 @@ services:
       context: ./
       dockerfile: dockerfile_skill_basic
       args:
-        skillconfig: annotators/ner/ner_rus_lower_vpc_with_context.json
+        skillconfig: annotators/ner/preproc_ner_rus.json
         skillport: 2083
     container_name: ner
     volumes:
