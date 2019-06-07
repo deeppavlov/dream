@@ -1,8 +1,6 @@
 from mongoengine import DynamicDocument, ReferenceField, ListField, StringField, DynamicField, \
     DateTimeField, FloatField, DictField
 
-from . import VERSION
-
 
 class User(DynamicDocument):
     persona = ListField(default=[])
