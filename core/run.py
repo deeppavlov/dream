@@ -5,9 +5,16 @@ from multiprocessing import Process, Pipe
 from multiprocessing.connection import Connection
 from typing import Callable, Optional, Collection, Hashable, List, Tuple
 from os import getenv
+import argparse
 
 import telebot
 from telebot.types import Message, Location, User
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-ch", "--channel", help="run agent in telegram or cmd_client", type=str,
+                    choices=['telegram', 'cmd_client'], default='cmd_client')
+args = parser.parse_args()
+CHANNEL = args.channel
 
 
 def _model_process(model_function: Callable, conn: Connection, batch_size: int = -1, *,
@@ -102,7 +109,7 @@ def run():
 
     agent = Agent(state_manager, preprocessor, postprocessor, skill_manager)
 
-    def infer(messages: Collection[Message], dialog_ids):
+    def infer_telegram(messages: Collection[Message], dialog_ids):
         utterances: List[Optional[str]] = [message.text for message in messages]
         tg_users: List[User] = [message.from_user for message in messages]
 
@@ -124,7 +131,36 @@ def run():
                         date_times=date_times, locations=locations, channel_types=ch_types)
         return answers
 
-    return infer
+    def infer_cmd(messages, dialog_ids):
+        utterances: List[Optional[str]] = [message['data'] for message in messages]
+        u_ids = [str(message['from_user']['id']) for message in messages]
+
+        date_times = [datetime.utcnow()] * len(messages)
+        locations: List[Optional[Location]] = [None] * len(messages)
+
+        answers = agent(utterances=utterances, user_telegram_ids=u_ids, user_device_types=[None] * len(messages),
+                        date_times=date_times, locations=locations, channel_types=['cmd_client'] * len(messages))
+        return answers
+
+    if CHANNEL == 'telegram':
+        return infer_telegram
+    else:
+        return infer_cmd
 
 
-experimental_bot(run, token=getenv('TELEGRAM_TOKEN'), proxy=getenv('TELEGRAM_PROXY'))
+def main():
+    if CHANNEL == 'telegram':
+        experimental_bot(run, token=getenv('TELEGRAM_TOKEN'), proxy=getenv('TELEGRAM_PROXY'))
+    else:
+        message_processor = run()
+        user_id = input('Provide user id: ')
+        user = {'id': user_id}
+        while True:
+            msg = input(f'You ({user_id}): ')
+            message = {'data': msg, 'from_user': user}
+            responses = message_processor([message], [1])
+            print('Bot: ', responses[0])
+
+
+if __name__ == '__main__':
+    main()
