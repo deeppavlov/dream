@@ -14,6 +14,7 @@ RUN pip3 install deeppavlov tensorflow==1.10.0
 RUN mkdir dp-agent
 WORKDIR /dp-agent
 COPY . /dp-agent/.
+ENV PYTHONPATH "${PYTONPATH}:/dp-agent"
 
 RUN python3 -m deeppavlov install $CONFIG
-ENTRYPOINT python3 /dp-agent/core/run_dp_servers.py $CONFIG -p $PORT
+ENTRYPOINT python3 -m core.run_dp_servers $CONFIG -p $PORT
