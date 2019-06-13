@@ -6,6 +6,10 @@ import yaml
 
 # from deeppavlov import configs
 
+DB_NAME = 'test'
+HOST = 'mongo'
+PORT = 27017
+
 MAX_WORKERS = 4
 root = Path(__file__).parent.parent
 
@@ -153,6 +157,10 @@ if _run_config_path.is_file():
         config = config.get('agent_config', {})
 
         MAX_WORKERS = config.get('MAX_WORKERS', MAX_WORKERS)
+
+        DB_NAME = config.get('DB_NAME', DB_NAME)
+        HOST = config.get('HOST', HOST)
+        PORT = config.get('PORT', PORT)
 
         for group in _component_groups:
             setattr(_module, group, list(map(_get_config_path, config.get(group, []))))
