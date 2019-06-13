@@ -17,8 +17,11 @@ SKILLS = [
     # },
     {
         "name": "chitchat",
-        "url": "http://0.0.0.0:2081/chitchat",
-        "path": root / "skills/ranking_chitchat/agent_ranking_chitchat_2staged_tfidf_smn_v4_prep.json",
+        "url": "http://chitchat:2081/model",
+        "host": "http://chitchat",
+        "port": 2081,
+        "endpoint": "model",
+        "path": "skills/ranking_chitchat/agent_ranking_chitchat_2staged_tfidf_smn_v4_prep.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
         },
@@ -45,11 +48,11 @@ SKILLS = [
     #     "url": "http://0.0.0.0:2087/kbqa",
     #     "path": configs.dp_assistant.agent_kbqa_rus
     # },
-    {
-        "name": "mailruqa",
-        "url": "http://0.0.0.0:2089/mailruqa",
-        "path": root / "skills/text_qa/agent_ranking_mailru_bert_3.json"
-    }
+    # {
+    #     "name": "mailruqa",
+    #     "url": "http://skills:2089/mailruqa",
+    #     "path": root / "skills/text_qa/agent_ranking_mailru_bert_3.json"
+    # }
     # {
     #     "name": "generalqa",
     #     "url": "http://0.0.0.0:2090/generalqa",
@@ -61,24 +64,33 @@ SKILLS = [
 ANNOTATORS = [
     {
         "name": "ner",
-        "url": "http://0.0.0.0:2083/ner_rus",
-        "path": root / "annotators/ner/preproc_ner_rus_vpc.json",
+        "url": "http://ner:2083/ner",
+        "host": "http://ner",
+        "port": 2083,
+        "endpoint": "ner",
+        "path": "annotators/ner/preproc_ner_rus.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
         }
     },
     {
         "name": "sentiment",
-        "url": "http://0.0.0.0:2084/rusentiment",
-        "path": root / "annotators/sentiment/preproc_rusentiment.json",
+        "host": "http://ner",
+        "port": 2084,
+        "endpoint": "intents",
+        "url": "http://sentiment:2084/intents",
+        "path": "annotators/sentiment/preproc_rusentiment.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
         }
     },
     {
         "name": "obscenity",
-        "url": "http://0.0.0.0:2088/obscenity",
-        "path": root / "annotators/obscenity/obscenity_classifier.json",
+        "host": "http://ner",
+        "port": 2088,
+        "endpoint": "model",
+        "url": "http://obscenity:2088/model",
+        "path": "annotators/obscenity/obscenity_classifier.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
         }
@@ -88,8 +100,11 @@ ANNOTATORS = [
 SKILL_SELECTORS = [
     {
         "name": "chitchat_odqa",
-        "url": "http://0.0.0.0:2082/chitchat_odqa_selector",
-        "path": root / "skill_selectors/chitchat_odqa_selector/sselector_chitchat_odqa.json",
+        "host": "http://ner",
+        "port": 2082,
+        "endpoint": "intents",
+        "url": "http://chitchat_odqa:2082/intents",
+        "path": "skill_selectors/chitchat_odqa_selector/sselector_chitchat_odqa.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
         }
