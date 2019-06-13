@@ -1,11 +1,12 @@
 import os
 import re
-from multiprocessing import Process
+# from multiprocessing import Process
 from pathlib import Path
 from itertools import islice
 from typing import Union, Optional, Dict
 from logging import getLogger
 import ssl
+import argparse
 
 from flasgger import Swagger, swag_from
 from flask import Flask, request, jsonify, redirect
@@ -13,7 +14,7 @@ from flask_cors import CORS
 from deeppavlov.core.commands.infer import build_model
 from deeppavlov.core.common.chainer import Chainer
 
-from core.config import ANNOTATORS, SKILL_SELECTORS, SKILLS, RESPONSE_SELECTORS, POSTPROCESSORS
+# from core.config import ANNOTATORS, SKILL_SELECTORS, SKILLS, RESPONSE_SELECTORS, POSTPROCESSORS
 
 # from utils.server_utils.server import skill_server
 log = getLogger(__name__)
@@ -22,6 +23,10 @@ Swagger(app)
 CORS(app)
 
 pattern = re.compile(r'^https?://(?P<host>.*):(?P<port>\d*)(?P<endpoint>.*)$')
+
+parser = argparse.ArgumentParser()
+parser.add_argument('config', type=str)
+parser.add_argument('-p', '--port', type=int)
 
 
 def _get_ssl_context(ssl_key, ssl_cert):
@@ -82,7 +87,7 @@ def interact_skill(model: Chainer, batch_size: Optional[int] = None):
 
 def skill_server(config: Union[dict, str, Path], https=False, ssl_key=None, ssl_cert=None, *,
                  host: Optional[str] = None, port: Optional[int] = None, endpoint: Optional[str] = None,
-                 download: bool = False, batch_size: Optional[int] = None, env: Optional[Dict[str, str]] = None):
+                 download: bool = True, batch_size: Optional[int] = None, env: Optional[Dict[str, str]] = None):
     if env:
         os.environ.update(env)
     host = host or '0.0.0.0'
@@ -191,19 +196,6 @@ def skill_server(config: Union[dict, str, Path], https=False, ssl_key=None, ssl_
     app.run(host=host, port=port, threaded=False, ssl_context=ssl_context)
 
 
-processes = []
-for item in SKILLS + ANNOTATORS + SKILL_SELECTORS + RESPONSE_SELECTORS + POSTPROCESSORS:
-    if item['path'] is None:
-        continue
-    url = item['url']
-    parsed = pattern.search(url)
-    if not parsed:
-        raise RuntimeError(f'could not parse an url: `{url}`')
-    host, port, endpoint = parsed.groups()
-    p = Process(target=skill_server, kwargs={'config': item['path'], 'port': port, 'endpoint': endpoint,
-                                             'download': True, 'env': item.get('env')})
-    p.start()
-    processes.append(p)
-
-for p in processes:
-    p.join()
+if __name__ == '__main__':
+    args = parser.parse_args()
+    skill_server(args.config, port=args.port)

@@ -16,4 +16,4 @@ WORKDIR /dp-agent
 COPY . /dp-agent/.
 
 RUN python3 -m deeppavlov install $CONFIG
-ENTRYPOINT python3 -m deeppavlov riseapi -d $CONFIG --port $PORT
+ENTRYPOINT python3 /dp-agent/core/run_dp_servers.py $CONFIG -p $PORT
