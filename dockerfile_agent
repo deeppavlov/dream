@@ -10,6 +10,6 @@ RUN mkdir dp-agent
 WORKDIR /dp-agent
 COPY . /dp-agent/.
 
-RUN python3 core/connection.py
+ENV PYTHONPATH "${PYTONPATH}:/dp-agent"
 
 EXPOSE 8888
