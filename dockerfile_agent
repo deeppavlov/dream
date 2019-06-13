@@ -3,6 +3,8 @@ FROM ubuntu:latest
 RUN apt-get update -y --fix-missing && \
     apt-get install -y python3 python3-pip python3-dev build-essential git openssl
 
+ENV PYTHONIOENCODING=utf-8
+
 COPY requirements.txt /
 RUN pip3 install -r requirements.txt
 
