@@ -21,10 +21,10 @@ SKILLS = [
     # },
     {
         "name": "chitchat",
-        "url": "http://chitchat:2081/model",
+        "url": "http://chitchat:2081/skill",
         "host": "http://chitchat",
         "port": 2081,
-        "endpoint": "model",
+        "endpoint": "skill",
         "path": "skills/ranking_chitchat/agent_ranking_chitchat_2staged_tfidf_smn_v4_prep.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
@@ -68,10 +68,10 @@ SKILLS = [
 ANNOTATORS = [
     {
         "name": "ner",
-        "url": "http://ner:2083/ner",
+        "url": "http://ner:2083/skill",
         "host": "http://ner",
         "port": 2083,
-        "endpoint": "ner",
+        "endpoint": "skill",
         "path": "annotators/ner/preproc_ner_rus.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
@@ -79,10 +79,10 @@ ANNOTATORS = [
     },
     {
         "name": "sentiment",
-        "host": "http://ner",
+        "host": "http://sentiment",
         "port": 2084,
-        "endpoint": "intents",
-        "url": "http://sentiment:2084/intents",
+        "endpoint": "skill",
+        "url": "http://sentiment:2084/skill",
         "path": "annotators/sentiment/preproc_rusentiment.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
@@ -90,10 +90,10 @@ ANNOTATORS = [
     },
     {
         "name": "obscenity",
-        "host": "http://ner",
+        "host": "http://obscenity",
         "port": 2088,
-        "endpoint": "model",
-        "url": "http://obscenity:2088/model",
+        "endpoint": "skill",
+        "url": "http://obscenity:2088/skill",
         "path": "annotators/obscenity/obscenity_classifier.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
@@ -106,8 +106,8 @@ SKILL_SELECTORS = [
         "name": "chitchat_odqa",
         "host": "http://ner",
         "port": 2082,
-        "endpoint": "intents",
-        "url": "http://chitchat_odqa:2082/intents",
+        "endpoint": "skill",
+        "url": "http://chitchat_odqa:2082/skill",
         "path": "skill_selectors/chitchat_odqa_selector/sselector_chitchat_odqa.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
