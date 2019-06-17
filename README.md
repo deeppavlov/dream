@@ -8,9 +8,9 @@
 Deployment
 ==========
 1. Create a new **Python 3.6.7** environment.
-2. Install project requirements:
+2. Install project docker config generator requirements:
     ```bash
-    pip -r install requirements.txt
+    pip -r install gen_requirements.txt
     ```
 3. Install and configure [Docker](https://docs.docker.com/install/) and [Docker-compose](https://docs.docker.com/compose/install/)
 4. Set up an environmental variable for storing high volume downloadable data, like pre-trained models in [.env](../.env) file.
