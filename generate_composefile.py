@@ -31,8 +31,8 @@ SKILL_BASIC = {
               'dockerfile': 'dockerfile_skill_basic',
               'args': {}},
     'volumes': ['.:/dp-agent',
-                '${EXTERNAL_FOLDER}dp_logs:/logs',
-                '${EXTERNAL_FOLDER}.deeppavlov:/root/.deeppavlov'],
+                '${EXTERNAL_FOLDER}/dp_logs:/logs',
+                '${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov'],
     'ports': [],
     'tty': True,
 }
