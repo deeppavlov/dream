@@ -21,7 +21,6 @@ SKILLS = [
     # },
     {
         "name": "chitchat",
-        "url": "http://chitchat:2081/skill",
         "host": "http://chitchat",
         "port": 2081,
         "endpoint": "skill",
@@ -68,7 +67,6 @@ SKILLS = [
 ANNOTATORS = [
     {
         "name": "ner",
-        "url": "http://ner:2083/skill",
         "host": "http://ner",
         "port": 2083,
         "endpoint": "skill",
@@ -82,7 +80,6 @@ ANNOTATORS = [
         "host": "http://sentiment",
         "port": 2084,
         "endpoint": "skill",
-        "url": "http://sentiment:2084/skill",
         "path": "annotators/sentiment/preproc_rusentiment.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
@@ -93,7 +90,6 @@ ANNOTATORS = [
         "host": "http://obscenity",
         "port": 2088,
         "endpoint": "skill",
-        "url": "http://obscenity:2088/skill",
         "path": "annotators/obscenity/obscenity_classifier.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
@@ -104,10 +100,9 @@ ANNOTATORS = [
 SKILL_SELECTORS = [
     {
         "name": "chitchat_odqa",
-        "host": "http://ner",
+        "host": "http://chitchat_odqa",
         "port": 2082,
         "endpoint": "skill",
-        "url": "http://chitchat_odqa:2082/skill",
         "path": "skill_selectors/chitchat_odqa_selector/sselector_chitchat_odqa.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
