@@ -10,6 +10,7 @@ services:
     - sentiment
     - obscenity
     - chitchat_odqa
+    - mongo
     ports:
     - 8888:8888
     tty: true
@@ -28,8 +29,8 @@ services:
     tty: true
     volumes:
     - .:/dp-agent
-    - ${EXTERNAL_FOLDER}dp_logs:/logs
-    - ${EXTERNAL_FOLDER}.deeppavlov:/root/.deeppavlov
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
   chitchat_odqa:
     build:
       args:
@@ -43,8 +44,15 @@ services:
     tty: true
     volumes:
     - .:/dp-agent
-    - ${EXTERNAL_FOLDER}dp_logs:/logs
-    - ${EXTERNAL_FOLDER}.deeppavlov:/root/.deeppavlov
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
+  mongo:
+    command: mongod
+    image: mongo:3.2.0
+    ports:
+    - 27017:27017
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
   ner:
     build:
       args:
@@ -58,8 +66,8 @@ services:
     tty: true
     volumes:
     - .:/dp-agent
-    - ${EXTERNAL_FOLDER}dp_logs:/logs
-    - ${EXTERNAL_FOLDER}.deeppavlov:/root/.deeppavlov
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
   obscenity:
     build:
       args:
@@ -73,8 +81,8 @@ services:
     tty: true
     volumes:
     - .:/dp-agent
-    - ${EXTERNAL_FOLDER}dp_logs:/logs
-    - ${EXTERNAL_FOLDER}.deeppavlov:/root/.deeppavlov
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
   sentiment:
     build:
       args:
@@ -88,6 +96,6 @@ services:
     tty: true
     volumes:
     - .:/dp-agent
-    - ${EXTERNAL_FOLDER}dp_logs:/logs
-    - ${EXTERNAL_FOLDER}.deeppavlov:/root/.deeppavlov
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
 version: '2.0'
