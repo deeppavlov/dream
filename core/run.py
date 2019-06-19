@@ -98,8 +98,7 @@ def run():
         if getenv('DPA_LAUNCHING_ENV') != 'docker':
             if not service.get('external', False):
                 service['host'] = 'http://0.0.0.0'
-        service['url'] = service[
-            'url'] = f"{service['host']}:{service['port']}/{service['endpoint']}"
+        service['url'] = f"{service['host']}:{service['port']}/{service['endpoint']}"
 
     logging.getLogger('requests.packages.urllib3.connectionpool').setLevel(logging.WARNING)
 
