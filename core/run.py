@@ -101,13 +101,13 @@ def run():
 
     state_manager = StateManager()
 
-    anno_names, anno_urls = zip(*[(annotator['name'], '{}:{}/{}'.format(annotator['host'], annotator['port'], annotator['endpoint'])) for annotator in ANNOTATORS])
+    anno_names, anno_urls = zip(*[(anno['name'], f"{anno['host']}:{anno['port']}/{anno['endpoint']}") for anno in ANNOTATORS])
     preprocessor = Service(
         rest_caller=RestCaller(max_workers=MAX_WORKERS, names=anno_names, urls=anno_urls))
     postprocessor = DefaultPostprocessor()
     skill_caller = RestCaller(max_workers=MAX_WORKERS)
     response_selector = ConfidenceResponseSelector()
-    ss_names, ss_urls = zip(*[(annotator['name'], '{}:{}/{}'.format(annotator['host'], annotator['port'], annotator['endpoint'])) for annotator in SKILL_SELECTORS])
+    ss_names, ss_urls = zip(*[(sselector['name'], f"{sselector['host']}:{sselector['port']}/{sselector['endpoint']}") for sselector in SKILL_SELECTORS])
     skill_selector = ChitchatQASelector(rest_caller=RestCaller(max_workers=MAX_WORKERS, names=ss_names, urls=ss_urls))
     skill_manager = SkillManager(skill_selector=skill_selector, response_selector=response_selector,
                                  skill_caller=skill_caller, profile_handlers=[skill['name'] for skill in SKILLS
