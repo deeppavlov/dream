@@ -80,6 +80,8 @@ class SkillConfig(Config):
         self.template['container_name'] = self.container_name
         self.template['build']['args']['skillport'] = skill_config['port']
         self.template['build']['args']['skillconfig'] = skill_config['path']
+        self.template['build']['args']['skill_endpoint'] = skill_config['endpoint']
+        self.template['build']['args']['skillhost'] = skill_config['host']
         self.template['ports'].append("{}:{}".format(skill_config['port'], skill_config['port']))
 
     @property
