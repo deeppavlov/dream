@@ -9,7 +9,7 @@ import yaml
 # from deeppavlov import configs
 
 DB_NAME = 'test'
-HOST = 'mongo'
+HOST = '127.0.0.1'
 PORT = 27017
 
 MAX_WORKERS = 4
@@ -131,6 +131,8 @@ POSTPROCESSORS = [
 for service in chain(ANNOTATORS, SKILL_SELECTORS, SKILLS, RESPONSE_SELECTORS, POSTPROCESSORS):
     host = service['name'] if getenv('DPA_LAUNCHING_ENV') == 'docker' else service['host']
     service['url'] = f"{service['protocol']}://{host}:{service['port']}/{service['endpoint']}"
+
+HOST = 'mongo' if getenv('DPA_LAUNCHING_ENV') == 'docker' else HOST
 
 
 def _get_config_path(component_config: dict) -> dict:
