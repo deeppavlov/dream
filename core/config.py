@@ -1,4 +1,6 @@
 import sys
+from os import getenv
+from itertools import chain
 from copy import deepcopy
 from pathlib import Path
 
@@ -21,7 +23,8 @@ SKILLS = [
     # },
     {
         "name": "chitchat",
-        "host": "http://chitchat",
+        "protocol": "http",
+        "host": "127.0.0.1",
         "port": 2081,
         "endpoint": "skill",
         "path": "skills/ranking_chitchat/agent_ranking_chitchat_2staged_tfidf_smn_v4_prep.json",
@@ -67,7 +70,8 @@ SKILLS = [
 ANNOTATORS = [
     {
         "name": "ner",
-        "host": "http://ner",
+        "protocol": "http",
+        "host": "127.0.0.1",
         "port": 2083,
         "endpoint": "skill",
         "path": "annotators/ner/preproc_ner_rus.json",
@@ -77,7 +81,8 @@ ANNOTATORS = [
     },
     {
         "name": "sentiment",
-        "host": "http://sentiment",
+        "protocol": "http",
+        "host": "127.0.0.1",
         "port": 2084,
         "endpoint": "skill",
         "path": "annotators/sentiment/preproc_rusentiment.json",
@@ -87,7 +92,8 @@ ANNOTATORS = [
     },
     {
         "name": "obscenity",
-        "host": "http://obscenity",
+        "protocol": "http",
+        "host": "127.0.0.1",
         "port": 2088,
         "endpoint": "skill",
         "path": "annotators/obscenity/obscenity_classifier.json",
@@ -100,7 +106,8 @@ ANNOTATORS = [
 SKILL_SELECTORS = [
     {
         "name": "chitchat_odqa",
-        "host": "http://chitchat_odqa",
+        "protocol": "http",
+        "host": "127.0.0.1",
         "port": 2082,
         "endpoint": "skill",
         "path": "skill_selectors/chitchat_odqa_selector/sselector_chitchat_odqa.json",
@@ -119,6 +126,11 @@ POSTPROCESSORS = [
 ]
 
 # TODO include Bot?
+
+# generate component url
+for service in chain(ANNOTATORS, SKILL_SELECTORS, SKILLS, RESPONSE_SELECTORS, POSTPROCESSORS):
+    host = service['name'] if getenv('DPA_LAUNCHING_ENV') == 'docker' else service['host']
+    service['url'] = f"{service['protocol']}://{host}:{service['port']}/{service['endpoint']}"
 
 
 def _get_config_path(component_config: dict) -> dict:

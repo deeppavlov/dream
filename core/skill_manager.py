@@ -58,7 +58,9 @@ class SkillManager:
     def get_skill_responses(self, dialogs):
         n_dialogs = len(dialogs)
         skill_names = [s['name'] for s in self.skills]
-        skill_urls = [f"{skill['host']}:{skill['port']}/{skill['endpoint']}" for skill in self.skills]
+
+        skill_urls = [skill['url'] for skill in self.skills]
+
         state = get_state(dialogs)
         if self.skill_selector is not None:
             selected_skills = self.skill_selector(state)
@@ -75,7 +77,7 @@ class SkillManager:
             compressed_dialogs = list(compress(s['dialogs'], map(operator.not_, exclude)))
             if not compressed_dialogs:
                 skill_names.remove(skill['name'])
-                skill_urls.remove(f"{skill['host']}:{skill['port']}/{skill['endpoint']}")
+                skill_urls.remove(skill['url'])
                 continue
             s['dialogs'] = compressed_dialogs
             payloads.append(s)
