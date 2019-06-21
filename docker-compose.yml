@@ -21,7 +21,7 @@ services:
       args:
         skill_endpoint: skill
         skillconfig: skills/ranking_chitchat/agent_ranking_chitchat_2staged_tfidf_smn_v4_prep.json
-        skillhost: http://chitchat
+        skillhost: 0.0.0.0
         skillport: 2081
       context: ./
       dockerfile: dockerfile_skill_basic
@@ -38,7 +38,7 @@ services:
       args:
         skill_endpoint: skill
         skillconfig: skill_selectors/chitchat_odqa_selector/sselector_chitchat_odqa.json
-        skillhost: http://chitchat_odqa
+        skillhost: 0.0.0.0
         skillport: 2082
       context: ./
       dockerfile: dockerfile_skill_basic
@@ -62,7 +62,7 @@ services:
       args:
         skill_endpoint: skill
         skillconfig: annotators/ner/preproc_ner_rus.json
-        skillhost: http://ner
+        skillhost: 0.0.0.0
         skillport: 2083
       context: ./
       dockerfile: dockerfile_skill_basic
@@ -79,7 +79,7 @@ services:
       args:
         skill_endpoint: skill
         skillconfig: annotators/obscenity/obscenity_classifier.json
-        skillhost: http://obscenity
+        skillhost: 0.0.0.0
         skillport: 2088
       context: ./
       dockerfile: dockerfile_skill_basic
@@ -96,7 +96,7 @@ services:
       args:
         skill_endpoint: skill
         skillconfig: annotators/sentiment/preproc_rusentiment.json
-        skillhost: http://sentiment
+        skillhost: 0.0.0.0
         skillport: 2084
       context: ./
       dockerfile: dockerfile_skill_basic
