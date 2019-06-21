@@ -92,8 +92,6 @@ def skill_server(config: Union[dict, str, Path], https=False, ssl_key=None, ssl_
                  download: bool = True, batch_size: Optional[int] = None, env: Optional[Dict[str, str]] = None):
     if env:
         os.environ.update(env)
-    if host.startswith('http://'):
-        host = host[7:]
     host = host or '0.0.0.0'
     port = port or 80
     endpoint = f'/{endpoint}' or '/skill'

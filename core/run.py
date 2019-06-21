@@ -6,7 +6,6 @@ from multiprocessing import Process, Pipe
 from multiprocessing.connection import Connection
 from typing import Callable, Optional, Collection, Hashable, List, Tuple
 from os import getenv
-from itertools import chain
 
 import telebot
 from telebot.types import Message, Location, User
@@ -93,12 +92,6 @@ def run():
         POSTPROCESSORS
 
     import logging
-
-    for service in chain(ANNOTATORS, SKILL_SELECTORS, SKILLS, RESPONSE_SELECTORS, POSTPROCESSORS):
-        if getenv('DPA_LAUNCHING_ENV') != 'docker':
-            if not service.get('external', False):
-                service['host'] = 'http://0.0.0.0'
-        service['url'] = f"{service['host']}:{service['port']}/{service['endpoint']}"
 
     logging.getLogger('requests.packages.urllib3.connectionpool').setLevel(logging.WARNING)
 
