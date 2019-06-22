@@ -32,6 +32,8 @@ Running Agent
 
 Agent can run both from container and from a local machine.
 
+Please consider setting your locale according your input language to avoid decoding errors while communicating agent via command line.
+
 **Container**
 
 1. Connect to agent container ([more information](https://docs.docker.com/engine/reference/commandline/exec/)):
