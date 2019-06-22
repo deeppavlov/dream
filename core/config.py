@@ -8,6 +8,9 @@ import yaml
 
 # from deeppavlov import configs
 
+TELEGRAM_TOKEN = ''
+TELEGRAM_PROXY = ''
+
 DB_NAME = 'test'
 HOST = '127.0.0.1'
 PORT = 27017
@@ -133,6 +136,8 @@ for service in chain(ANNOTATORS, SKILL_SELECTORS, SKILLS, RESPONSE_SELECTORS, PO
     service['url'] = f"{service['protocol']}://{host}:{service['port']}/{service['endpoint']}"
 
 HOST = 'mongo' if getenv('DPA_LAUNCHING_ENV') == 'docker' else HOST
+TELEGRAM_TOKEN = TELEGRAM_TOKEN or getenv('TELEGRAM_TOKEN')
+TELEGRAM_PROXY = TELEGRAM_PROXY or getenv('TELEGRAM_PROXY')
 
 
 def _get_config_path(component_config: dict) -> dict:

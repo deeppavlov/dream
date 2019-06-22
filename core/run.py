@@ -5,10 +5,12 @@ from threading import Thread
 from multiprocessing import Process, Pipe
 from multiprocessing.connection import Connection
 from typing import Callable, Optional, Collection, Hashable, List, Tuple
-from os import getenv
 
 import telebot
 from telebot.types import Message, Location, User
+
+from core.config import TELEGRAM_TOKEN, TELEGRAM_PROXY
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-ch", "--channel", help="run agent in telegram or cmd_client", type=str,
@@ -88,8 +90,7 @@ def run():
     from core.postprocessor import DefaultPostprocessor
     from core.response_selector import ConfidenceResponseSelector
     from core.skill_selector import ChitchatQASelector
-    from core.config import MAX_WORKERS, ANNOTATORS, SKILL_SELECTORS, SKILLS, RESPONSE_SELECTORS, \
-        POSTPROCESSORS
+    from core.config import MAX_WORKERS, ANNOTATORS, SKILL_SELECTORS, SKILLS
 
     import logging
 
@@ -154,7 +155,7 @@ def run():
 
 def main():
     if CHANNEL == 'telegram':
-        experimental_bot(run, token=getenv('TELEGRAM_TOKEN'), proxy=getenv('TELEGRAM_PROXY'))
+        experimental_bot(run, token=TELEGRAM_TOKEN, proxy=TELEGRAM_PROXY)
     else:
         message_processor = run()
         user_id = input('Provide user id: ')
