@@ -161,10 +161,11 @@ def main():
         user_id = input('Provide user id: ')
         user = {'id': user_id}
         while True:
-            msg = input(f'You ({user_id}): ')
-            message = {'data': msg, 'from_user': user}
-            responses = message_processor([message], [1])
-            print('Bot: ', responses[0])
+            msg = input(f'You ({user_id}): ').strip()
+            if msg:
+                message = {'data': msg, 'from_user': user}
+                responses = message_processor([message], [1])
+                print('Bot: ', responses[0])
 
 
 if __name__ == '__main__':
