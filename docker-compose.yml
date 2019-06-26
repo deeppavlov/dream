@@ -19,6 +19,7 @@ services:
   chitchat:
     build:
       args:
+        gpu: 'false'
         skill_endpoint: skill
         skillconfig: skills/ranking_chitchat/agent_ranking_chitchat_2staged_tfidf_smn_v4_prep.json
         skillhost: 0.0.0.0
@@ -26,6 +27,8 @@ services:
       context: ./
       dockerfile: dockerfile_skill_basic
     container_name: chitchat
+    environment:
+    - CUDA_VISIBLE_DEVICES=""
     ports:
     - 2081:2081
     tty: true
@@ -36,6 +39,7 @@ services:
   chitchat_odqa:
     build:
       args:
+        gpu: 'false'
         skill_endpoint: skill
         skillconfig: skill_selectors/chitchat_odqa_selector/sselector_chitchat_odqa.json
         skillhost: 0.0.0.0
@@ -43,6 +47,8 @@ services:
       context: ./
       dockerfile: dockerfile_skill_basic
     container_name: chitchat_odqa
+    environment:
+    - CUDA_VISIBLE_DEVICES=""
     ports:
     - 2082:2082
     tty: true
@@ -60,6 +66,7 @@ services:
   ner:
     build:
       args:
+        gpu: 'false'
         skill_endpoint: skill
         skillconfig: annotators/ner/preproc_ner_rus.json
         skillhost: 0.0.0.0
@@ -67,6 +74,8 @@ services:
       context: ./
       dockerfile: dockerfile_skill_basic
     container_name: ner
+    environment:
+    - CUDA_VISIBLE_DEVICES=""
     ports:
     - 2083:2083
     tty: true
@@ -77,6 +86,7 @@ services:
   obscenity:
     build:
       args:
+        gpu: 'false'
         skill_endpoint: skill
         skillconfig: annotators/obscenity/obscenity_classifier.json
         skillhost: 0.0.0.0
@@ -84,6 +94,8 @@ services:
       context: ./
       dockerfile: dockerfile_skill_basic
     container_name: obscenity
+    environment:
+    - CUDA_VISIBLE_DEVICES=""
     ports:
     - 2088:2088
     tty: true
@@ -94,6 +106,7 @@ services:
   sentiment:
     build:
       args:
+        gpu: 'false'
         skill_endpoint: skill
         skillconfig: annotators/sentiment/preproc_rusentiment.json
         skillhost: 0.0.0.0
@@ -101,6 +114,8 @@ services:
       context: ./
       dockerfile: dockerfile_skill_basic
     container_name: sentiment
+    environment:
+    - CUDA_VISIBLE_DEVICES=""
     ports:
     - 2084:2084
     tty: true
@@ -108,4 +123,4 @@ services:
     - .:/dp-agent
     - ${EXTERNAL_FOLDER}/dp_logs:/logs
     - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
-version: '2.0'
+version: '2.3'

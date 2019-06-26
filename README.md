@@ -7,16 +7,16 @@
 
 Deployment
 ==========
-1. Create a new **Python 3.6.7** environment.
+1. Create a new **Python 3.6.7** environment;
 2. Install project docker config generator requirements:
     ```bash
     pip -r install gen_requirements.txt
     ```
-3. Install and configure [Docker](https://docs.docker.com/install/) and [Docker-compose](https://docs.docker.com/compose/install/)
-4. Set up an environmental variable for storing high volume downloadable data, like pre-trained models in [.env](../.env) file.
-``EXTERNAL_FOLDER=''`` - this variable stores path for external folder where downloaded data will be stored. By default it is linked to project's homefolder.
-5. (optional) Configure `TELEGRAM_TOKEN` and `TELEGRAM_PROXY` environment variables if you want to communicate with the bot via Telegram.
-6. Configure all skills, skill selectors, response selectors, annotators and database connection in [config.py](core/config.py)
+3. Install and configure [Docker](https://docs.docker.com/install/) and [Docker-compose](https://docs.docker.com/compose/install/) (Docker Compose must be version 1.19.0 or higher);
+4. Set up an environmental variable for storing high volume downloadable data, like pre-trained models in [.env](../.env) file;
+``EXTERNAL_FOLDER=''`` - this variable stores path for external folder where downloaded data will be stored. By default it is linked to project's homefolder;
+5. (optional) Configure `TELEGRAM_TOKEN` and `TELEGRAM_PROXY` environment variables if you want to communicate with the bot via Telegram;
+6. Configure all skills, skill selectors, response selectors, annotators and database connection in [config.py](core/config.py), if you want a skill use GPU, set flag `gpu` to `True` and env `CUDA_VISIBLE_DEVICES` to desired GPU number;
 7. Generate **docker-compose.yml** by running the command:
     ```bash
     python generate_composefile.py
