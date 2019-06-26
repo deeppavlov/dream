@@ -1,0 +1,111 @@
+services:
+  agent:
+    build:
+      context: ./
+      dockerfile: dockerfile_agent
+    container_name: agent
+    depends_on:
+    - chitchat
+    - ner
+    - sentiment
+    - obscenity
+    - chitchat_odqa
+    - mongo
+    ports:
+    - 8888:8888
+    tty: true
+    volumes:
+    - .:/dp-agent
+  chitchat:
+    build:
+      args:
+        skill_endpoint: skill
+        skillconfig: skills/ranking_chitchat/agent_ranking_chitchat_2staged_tfidf_smn_v4_prep.json
+        skillhost: 0.0.0.0
+        skillport: 2081
+      context: ./
+      dockerfile: dockerfile_skill_basic
+    container_name: chitchat
+    ports:
+    - 2081:2081
+    tty: true
+    volumes:
+    - .:/dp-agent
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
+  chitchat_odqa:
+    build:
+      args:
+        skill_endpoint: skill
+        skillconfig: skill_selectors/chitchat_odqa_selector/sselector_chitchat_odqa.json
+        skillhost: 0.0.0.0
+        skillport: 2082
+      context: ./
+      dockerfile: dockerfile_skill_basic
+    container_name: chitchat_odqa
+    ports:
+    - 2082:2082
+    tty: true
+    volumes:
+    - .:/dp-agent
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
+  mongo:
+    command: mongod
+    image: mongo:3.2.0
+    ports:
+    - 27017:27017
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+  ner:
+    build:
+      args:
+        skill_endpoint: skill
+        skillconfig: annotators/ner/preproc_ner_rus.json
+        skillhost: 0.0.0.0
+        skillport: 2083
+      context: ./
+      dockerfile: dockerfile_skill_basic
+    container_name: ner
+    ports:
+    - 2083:2083
+    tty: true
+    volumes:
+    - .:/dp-agent
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
+  obscenity:
+    build:
+      args:
+        skill_endpoint: skill
+        skillconfig: annotators/obscenity/obscenity_classifier.json
+        skillhost: 0.0.0.0
+        skillport: 2088
+      context: ./
+      dockerfile: dockerfile_skill_basic
+    container_name: obscenity
+    ports:
+    - 2088:2088
+    tty: true
+    volumes:
+    - .:/dp-agent
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
+  sentiment:
+    build:
+      args:
+        skill_endpoint: skill
+        skillconfig: annotators/sentiment/preproc_rusentiment.json
+        skillhost: 0.0.0.0
+        skillport: 2084
+      context: ./
+      dockerfile: dockerfile_skill_basic
+    container_name: sentiment
+    ports:
+    - 2084:2084
+    tty: true
+    volumes:
+    - .:/dp-agent
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
+version: '2.0'

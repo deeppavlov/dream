@@ -1,14 +1,16 @@
+import argparse
 import time
 from datetime import datetime
 from threading import Thread
 from multiprocessing import Process, Pipe
 from multiprocessing.connection import Connection
 from typing import Callable, Optional, Collection, Hashable, List, Tuple
-from os import getenv
-import argparse
 
 import telebot
 from telebot.types import Message, Location, User
+
+from core.config import TELEGRAM_TOKEN, TELEGRAM_PROXY
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-ch", "--channel", help="run agent in telegram or cmd_client", type=str,
@@ -39,7 +41,8 @@ def _model_process(model_function: Callable, conn: Connection, batch_size: int =
 
 
 def experimental_bot(
-        model_function: Callable[..., Callable[[Collection[Message], Collection[Hashable]], Collection[str]]],
+        model_function: Callable[
+            ..., Callable[[Collection[Message], Collection[Hashable]], Collection[str]]],
         token: str, proxy: Optional[str] = None, *, batch_size: int = -1, poll_period: float = 0.5):
     """
 
@@ -95,14 +98,16 @@ def run():
 
     state_manager = StateManager()
 
-    anno_names, anno_urls = zip(*[(annotator['name'], annotator['url']) for annotator in ANNOTATORS])
+    anno_names, anno_urls = zip(
+        *[(annotator['name'], annotator['url']) for annotator in ANNOTATORS])
     preprocessor = Service(
         rest_caller=RestCaller(max_workers=MAX_WORKERS, names=anno_names, urls=anno_urls))
     postprocessor = DefaultPostprocessor()
     skill_caller = RestCaller(max_workers=MAX_WORKERS)
     response_selector = ConfidenceResponseSelector()
-    ss_names, ss_urls = zip(*[(annotator['name'], annotator['url']) for annotator in SKILL_SELECTORS])
-    skill_selector = ChitchatQASelector(rest_caller=RestCaller(max_workers=MAX_WORKERS, names=ss_names, urls=ss_urls))
+    ss_names, ss_urls = zip(*[(selector['name'], selector['url']) for selector in SKILL_SELECTORS])
+    skill_selector = ChitchatQASelector(
+        rest_caller=RestCaller(max_workers=MAX_WORKERS, names=ss_names, urls=ss_urls))
     skill_manager = SkillManager(skill_selector=skill_selector, response_selector=response_selector,
                                  skill_caller=skill_caller, profile_handlers=[skill['name'] for skill in SKILLS
                                                                               if skill.get('profile_handler')])
@@ -150,7 +155,7 @@ def run():
 
 def main():
     if CHANNEL == 'telegram':
-        experimental_bot(run, token=getenv('TELEGRAM_TOKEN'), proxy=getenv('TELEGRAM_PROXY'))
+        experimental_bot(run, token=TELEGRAM_TOKEN, proxy=TELEGRAM_PROXY)
     else:
         message_processor = run()
         user_id = input('Provide user id: ')
