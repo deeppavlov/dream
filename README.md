@@ -70,6 +70,15 @@ Deployment
    
    In this shell you will now see the logs from all working services.
 
+Running Agent
+=============
+
+Agent can run both from container and from a local machine.
+
+Please consider setting your locale according your input language to avoid decoding errors while communicating agent via command line.
+
+**Container**
+
 1. Connect to agent's container:
 
     ```bash
@@ -79,12 +88,31 @@ Deployment
     ([more information on `docker exec`](https://docs.docker.com/engine/reference/commandline/exec/))
 
 1. Start communicating with the chatbot from the agent's container console:
+
     ```bash
     python3 -m core.run
  
     ```
+
+**Local machine**
+
+1. Setup `DPA_LAUNCHING_ENV` environment variable:
+
+    ```bash
+    export DPA_LAUNCHING_ENV="local"
+    ```
+
+1. Install Agent requirements:
+    ```bash
+    pip -r install gen_requirements.txt
+    ```
+
+2. Start communicating with the chatbot from the console:
+    ```bash
+    python3 -m core.run
+    ```
     or via the Telegram:
-    
+
     ```bash
     python3 -m core.run -ch telegram
     ```

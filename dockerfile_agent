@@ -13,5 +13,6 @@ WORKDIR /dp-agent
 COPY . /dp-agent/.
 
 ENV PYTHONPATH "${PYTONPATH}:/dp-agent"
+ENV DPA_LAUNCHING_ENV "docker"
 
 EXPOSE 8888

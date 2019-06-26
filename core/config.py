@@ -1,4 +1,6 @@
 import sys
+from os import getenv
+from itertools import chain
 from copy import deepcopy
 from pathlib import Path
 
@@ -6,8 +8,11 @@ import yaml
 
 # from deeppavlov import configs
 
+TELEGRAM_TOKEN = ''
+TELEGRAM_PROXY = ''
+
 DB_NAME = 'test'
-HOST = 'mongo'
+HOST = '127.0.0.1'
 PORT = 27017
 
 MAX_WORKERS = 4
@@ -21,8 +26,8 @@ SKILLS = [
     # },
     {
         "name": "chitchat",
-        "url": "http://chitchat:2081/skill",
-        "host": "http://chitchat",
+        "protocol": "http",
+        "host": "127.0.0.1",
         "port": 2081,
         "endpoint": "skill",
         "path": "skills/ranking_chitchat/agent_ranking_chitchat_2staged_tfidf_smn_v4_prep.json",
@@ -68,8 +73,8 @@ SKILLS = [
 ANNOTATORS = [
     {
         "name": "ner",
-        "url": "http://ner:2083/skill",
-        "host": "http://ner",
+        "protocol": "http",
+        "host": "127.0.0.1",
         "port": 2083,
         "endpoint": "skill",
         "path": "annotators/ner/preproc_ner_rus.json",
@@ -79,10 +84,10 @@ ANNOTATORS = [
     },
     {
         "name": "sentiment",
-        "host": "http://sentiment",
+        "protocol": "http",
+        "host": "127.0.0.1",
         "port": 2084,
         "endpoint": "skill",
-        "url": "http://sentiment:2084/skill",
         "path": "annotators/sentiment/preproc_rusentiment.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
@@ -90,10 +95,10 @@ ANNOTATORS = [
     },
     {
         "name": "obscenity",
-        "host": "http://obscenity",
+        "protocol": "http",
+        "host": "127.0.0.1",
         "port": 2088,
         "endpoint": "skill",
-        "url": "http://obscenity:2088/skill",
         "path": "annotators/obscenity/obscenity_classifier.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
@@ -104,10 +109,10 @@ ANNOTATORS = [
 SKILL_SELECTORS = [
     {
         "name": "chitchat_odqa",
-        "host": "http://ner",
+        "protocol": "http",
+        "host": "127.0.0.1",
         "port": 2082,
         "endpoint": "skill",
-        "url": "http://chitchat_odqa:2082/skill",
         "path": "skill_selectors/chitchat_odqa_selector/sselector_chitchat_odqa.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
@@ -124,6 +129,15 @@ POSTPROCESSORS = [
 ]
 
 # TODO include Bot?
+
+# generate component url
+for service in chain(ANNOTATORS, SKILL_SELECTORS, SKILLS, RESPONSE_SELECTORS, POSTPROCESSORS):
+    host = service['name'] if getenv('DPA_LAUNCHING_ENV') == 'docker' else service['host']
+    service['url'] = f"{service['protocol']}://{host}:{service['port']}/{service['endpoint']}"
+
+HOST = 'mongo' if getenv('DPA_LAUNCHING_ENV') == 'docker' else HOST
+TELEGRAM_TOKEN = TELEGRAM_TOKEN or getenv('TELEGRAM_TOKEN')
+TELEGRAM_PROXY = TELEGRAM_PROXY or getenv('TELEGRAM_PROXY')
 
 
 def _get_config_path(component_config: dict) -> dict:

@@ -27,6 +27,8 @@ pattern = re.compile(r'^https?://(?P<host>.*):(?P<port>\d*)(?P<endpoint>.*)$')
 parser = argparse.ArgumentParser()
 parser.add_argument('config', type=str)
 parser.add_argument('-p', '--port', type=int)
+parser.add_argument('-host', '--host', type=str)
+parser.add_argument('-ep', '--endpoint', type=str)
 
 
 def _get_ssl_context(ssl_key, ssl_cert):
@@ -92,7 +94,7 @@ def skill_server(config: Union[dict, str, Path], https=False, ssl_key=None, ssl_
         os.environ.update(env)
     host = host or '0.0.0.0'
     port = port or 80
-    endpoint = endpoint or '/skill'
+    endpoint = f'/{endpoint}' or '/skill'
     if batch_size is not None and batch_size < 1:
         log.warning(f'batch_size of {batch_size} is less than 1 and is interpreted as unlimited')
         batch_size = None
@@ -198,4 +200,4 @@ def skill_server(config: Union[dict, str, Path], https=False, ssl_key=None, ssl_
 
 if __name__ == '__main__':
     args = parser.parse_args()
-    skill_server(args.config, port=args.port)
+    skill_server(args.config, port=args.port, host=args.host, endpoint=args.endpoint)
