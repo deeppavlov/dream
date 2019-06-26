@@ -91,7 +91,7 @@ class SkillConfig(Config):
 
 class DatabaseConfig:
     def __init__(self, host, port, template=None):
-        if template is None and host == 'mongo':
+        if template is None and host == '127.0.0.1':
             self.template = deepcopy(MONGO_BASIC)
             self.container_name = 'mongo'
             self.template['mongo']['ports'][0] = self.template['mongo']['ports'][0].format(port)
