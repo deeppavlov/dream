@@ -8,6 +8,8 @@ from core.config import SKILLS, ANNOTATORS, SKILL_SELECTORS, RESPONSE_SELECTORS,
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-f', '--filename', type=str, default='docker-compose.yml')
+parser.add_argument('--no_agent', help="don't create container for agent", action="store_true")
+parser.add_argument('--no_db', help="don't create container for database (use external one)", action="store_true")
 
 AGENT_BASIC = {
     'agent': {'build': {'context': './', 'dockerfile': 'dockerfile_agent'},
@@ -91,7 +93,7 @@ class SkillConfig(Config):
 
 class DatabaseConfig:
     def __init__(self, host, port, template=None):
-        if template is None and host == '127.0.0.1':
+        if template is None:
             self.template = deepcopy(MONGO_BASIC)
             self.container_name = 'mongo'
             self.template['mongo']['ports'][0] = self.template['mongo']['ports'][0].format(port)
@@ -105,8 +107,11 @@ class DatabaseConfig:
 
 
 class DockerComposeConfig:
-    def __init__(self, agent):
-        self.agent = agent
+    def __init__(self, agent=None, no_agent=False, no_db=False):
+        self.no_agent = no_agent
+        self.no_db = no_db
+        if not self.no_agent:
+            self.agent = agent
         self.skills = []
         self.database = []
 
@@ -114,19 +119,24 @@ class DockerComposeConfig:
         if skill.external is True:
             return
         self.skills.append(skill)
-        self.agent.add_dependence(skill.container_name)
 
-    def add_db(self, db):
-        if not db.container_name:
-            return
-        self.database.append(db)
-        self.agent.add_dependence(db.container_name)
+    def add_db(self, db=None):
+        if not self.no_db:
+            self.database.append(db)
+
+    def add_dependencies_to_agent(self):
+        if not self.no_agent:
+            for container in chain(self.skills, self.database):
+                self.agent.add_dependence(container.container_name)
 
     @property
     def config(self):
         config_dict = {'version': '2.0', 'services': {}}
-        for container in chain([self.agent], self.skills, self.database):
+        self.add_dependencies_to_agent()
+        for container in chain(self.skills, self.database):
             config_dict['services'].update(container.config)
+        if not self.no_agent:
+            config_dict['services'].update(self.agent.config)
 
         return dict(config_dict)
 
@@ -134,7 +144,7 @@ class DockerComposeConfig:
 if __name__ == '__main__':
     args = parser.parse_args()
 
-    dcc = DockerComposeConfig(AgentConfig())
+    dcc = DockerComposeConfig(AgentConfig(), args.no_agent, args.no_db)
 
     for conf in chain(SKILLS, ANNOTATORS, SKILL_SELECTORS, RESPONSE_SELECTORS, POSTPROCESSORS):
         dcc.add_skill(SkillConfig(conf))
