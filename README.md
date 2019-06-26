@@ -7,25 +7,68 @@
 
 Deployment
 ==========
-1. Create a new **Python 3.6.7** environment.
-2. Install project docker config generator requirements:
+1. Create a new **Python 3.6.7** virtual environment.
+1. Install requirements for Docker config generator:
     ```bash
     pip -r install gen_requirements.txt
     ```
-3. Install and configure [Docker](https://docs.docker.com/install/) and [Docker-compose](https://docs.docker.com/compose/install/)
-4. Set up an environmental variable for storing high volume downloadable data, like pre-trained models in [.env](../.env) file.
-``EXTERNAL_FOLDER=''`` - this variable stores path for external folder where downloaded data will be stored. By default it is linked to project's homefolder.
-5. (optional) Configure `TELEGRAM_TOKEN` and `TELEGRAM_PROXY` environment variables if you want to communicate with the bot via Telegram.
-6. Configure all skills, skill selectors, response selectors, annotators and database connection in [config.py](core/config.py)
-7. Generate **docker-compose.yml** by running the command:
+1. Install and configure [Docker](https://docs.docker.com/install/) and [Docker-compose](https://docs.docker.com/compose/install/) (version 1.19.0 or later).
+
+1. Create a directory for storing downloaded data, such as pre-trained models.
+   It should be located outside the agent project's home directory.
+   
+1. Create a `.env` file in the agent's home directory.
+   Add an `EXTERNAL_FOLDER` variable with the path to data directory:
+   
+   ```dotenv
+   EXTERNAL_FOLDER=<path to data directory>
+   ```
+1. If you want to communicate with the bot via Telegram, add the following environment variables to `.env`:
+
+   ```dotenv
+   TELEGRAM_TOKEN=<token>
+   TELEGRAM_PROXY=socks5://<user>:<password>@<path:port>
+   ```
+   
+   Here's an example of values:
+   
+   ```dotenv
+   TELEGRAM_TOKEN=123456789:AAGCiO0QFb_I-GXL-CbJDw7--JQbHkiQyYA
+   TELEGRAM_PROXY=socks5://tgproxy:tgproxy_pwd@123.45.67.89:1447
+   ```
+
+1. To enable using GPU, add the following variable to `.env`:
+
+   ```dotenv
+   CUDA_VISIBLE_DEVICES=<number of available GPU cores>
+   ```
+   
+1. Configure all skills, skill selectors, response selectors, annotators and database connection in [core/config.py](core/config.py).
+   If you want a particular skill to use GPU, set its `gpu` value to `True`.
+
+   If you want a minimal configuration, you need one skill and one skill selector.
+   Pick skill `chitchat` and  selector `chitchat_odqa` and comment out all other skills, selectors and annotators.
+   
+1. Generate a Docker environment configuration (`docker-compose.yml`) by running the command:
+
     ```bash
     python generate_composefile.py
-
     ```
-8. Run containers:
+    This configuration represents the choice of skills from the previous step.
+    Re-generate it every time you change [core/config.py](core/config.py).
+    
+1. Run the Docker environment with:
+
      ```bash
      docker-compose up --build
      ```
+   Now you have a working environment with the following services:
+   
+   * DeepPavlov Agent (`agent`)
+   * MongoDB (`mongo`)
+   * A service for each skill, selector or other component.
+   
+   In this shell you will now see the logs from all working services.
 
 Running Agent
 =============
@@ -36,14 +79,19 @@ Please consider setting your locale according your input language to avoid decod
 
 **Container**
 
-1. Connect to agent container ([more information](https://docs.docker.com/engine/reference/commandline/exec/)):
+1. Connect to agent's container:
+
     ```bash
     docker exec -it agent /bin/bash
     ```
 
-2. Start communicating with the chatbot from the agent container console:
+    ([more information on `docker exec`](https://docs.docker.com/engine/reference/commandline/exec/))
+
+1. Start communicating with the chatbot from the agent's container console:
+
     ```bash
     python3 -m core.run
+ 
     ```
 
 **Local machine**
@@ -61,10 +109,10 @@ Please consider setting your locale according your input language to avoid decod
 
 2. Start communicating with the chatbot from the console:
     ```bash
-    python -m core.run
+    python3 -m core.run
     ```
     or via the Telegram:
 
     ```bash
-    python -m core.run -ch telegram
+    python3 -m core.run -ch telegram
     ```
