@@ -6,14 +6,47 @@
     <img src="https://github.com/deepmipt/dp-agent/blob/dev/Agent%20Pipeline.png" height="600">
 </p>
 
-Deployment
-==========
+Services Configuration
+======================
+
+You can configure services at the Agent [config file](../core/config.py).
+
+**Config Description**
+
+* **name**
+    * An arbitrary and unique name of the service
+* **protocol**
+    * A web protocol, _**"http"**_ by default
+* **host**
+    * A service host machine name, _**"127.0.0.1"**_ by default
+* **port**
+    * A port on a service host machine
+* **endpoint**
+    * A service URL endpoint, _**"/skill"**_ by default
+* **path**
+    * A path to the agent service config file, currently valid only for DeepPavlov skills
+* **env**
+    * Environment variables dictionary
+* **gpu**
+    * If a service needs to be run on GPU, _**False**_ by default
+* **external**
+    * If the service is running from the **dp-agent** repo. _**False**_ by default.
+
+Notice that if you want to run an Agent from only one skill, you can leave
+**SKILL_SELECTORS** and **RESPONSE_SELECTORS** empty.
+
+Also you can include in the Agent configuration any external service running on some other machine.
+
+Services Deployment
+===================
 1. Create a new **Python 3.6.7** virtual environment.
 1. Install requirements for Docker config generator:
     ```bash
     pip -r install gen_requirements.txt
     ```
 1. Install and configure [Docker](https://docs.docker.com/install/) and [Docker-compose](https://docs.docker.com/compose/install/) (version 1.19.0 or later).
+
+1. (optional) Install [nvidia-docker](https://github.com/NVIDIA/nvidia-docker) if you wish to run some services on GPU.
 
 1. Create a directory for storing downloaded data, such as pre-trained models.
    It should be located outside the agent project's home directory.
@@ -64,8 +97,8 @@ Deployment
    
    In this shell you will now see the logs from all working services.
 
-Running Agent
-=============
+Running the Agent
+=================
 
 Agent can run both from container and from a local machine.
 
