@@ -3,7 +3,20 @@
 **DeepPavlov Agent** is a platform for creating multi-skill chatbots.
 
 <p align="center">
-    <img src="https://github.com/deepmipt/dp-agent/blob/dev/Agent%20Pipeline.png" height="600">
+    <img src="../images/Agent%20Pipeline.png" height="600">
+</p>
+
+Ready Agent from the box
+========================
+
+To demonstrate the abilities of the platform, we included in this repo some basic skills and selectors
+made on [DeepPavlov](https://github.com/deepmipt/DeepPavlov). Currently all these services are made only for **Russian language**.
+Here are the types of conversation you will get if you run the Agent from the pre-made configuration:
+
+<p align="center">
+  <img src="https://github.com/deepmipt/dp-agent/blob/dev/images/conversation_1.jpg" width="100" />
+  <img src="https://github.com/deepmipt/dp-agent/blob/dev/images/conversation_2.jpg" width="100" />
+  <img src="https://github.com/deepmipt/dp-agent/blob/dev/images/conversation_3.jpg" width="100" />
 </p>
 
 Services Configuration
