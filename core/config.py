@@ -3,6 +3,7 @@ from os import getenv
 from itertools import chain
 from copy import deepcopy
 from pathlib import Path
+from collections import defaultdict
 
 import yaml
 
@@ -142,6 +143,21 @@ POSTPROCESSORS = [
 
 
 # TODO include Bot?
+
+FULL_SKILL_NAMES_MAP = {
+    "chitchat": ["chitchat", "hellobot", "sberchat", "gen_chitchat"],
+    "odqa": ["odqa", "kbqa", "generalqa", "mailruqa"]
+}
+available_names = [s['name'] for s in SKILLS]
+SKILL_NAMES_MAP = defaultdict(list)
+count_names = 0
+for selector_names, agent_names in FULL_SKILL_NAMES_MAP.items():
+    names = {an for an in agent_names if an in available_names}
+    SKILL_NAMES_MAP[selector_names] += list(names)
+    if names:
+        count_names += 1
+if count_names < 2:
+    SKILL_SELECTORS = []
 
 # generate component url
 for service in chain(ANNOTATORS, SKILL_SELECTORS, SKILLS, RESPONSE_SELECTORS, POSTPROCESSORS):
