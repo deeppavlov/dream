@@ -105,9 +105,11 @@ def run():
     postprocessor = DefaultPostprocessor()
     skill_caller = RestCaller(max_workers=MAX_WORKERS)
     response_selector = ConfidenceResponseSelector()
-    ss_names, ss_urls = zip(*[(selector['name'], selector['url']) for selector in SKILL_SELECTORS])
-    skill_selector = ChitchatQASelector(
-        rest_caller=RestCaller(max_workers=MAX_WORKERS, names=ss_names, urls=ss_urls))
+    skill_selector = None
+    if SKILL_SELECTORS:
+        ss_names, ss_urls = zip(*[(selector['name'], selector['url']) for selector in SKILL_SELECTORS])
+        skill_selector = ChitchatQASelector(
+            rest_caller=RestCaller(max_workers=MAX_WORKERS, names=ss_names, urls=ss_urls))
     skill_manager = SkillManager(skill_selector=skill_selector, response_selector=response_selector,
                                  skill_caller=skill_caller, profile_handlers=[skill['name'] for skill in SKILLS
                                                                               if skill.get('profile_handler')])
