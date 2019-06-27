@@ -17,13 +17,13 @@ Deployment
 1. Create a directory for storing downloaded data, such as pre-trained models.
    It should be located outside the agent project's home directory.
    
-1. Create a `.env` file in the agent's home directory.
-   Add an `EXTERNAL_FOLDER` variable with the path to data directory:
+1. Setup an `EXTERNAL_FOLDER` variable with the path to data directory. This path
+    will be used by Agent to download models' data:
    
    ```dotenv
    EXTERNAL_FOLDER=<path to data directory>
    ```
-1. If you want to communicate with the bot via Telegram, add the following environment variables to `.env`:
+1. If you want to communicate with the bot via Telegram, setup the following environment variables:
 
    ```dotenv
    TELEGRAM_TOKEN=<token>
@@ -36,13 +36,6 @@ Deployment
    TELEGRAM_TOKEN=123456789:AAGCiO0QFb_I-GXL-CbJDw7--JQbHkiQyYA
    TELEGRAM_PROXY=socks5://tgproxy:tgproxy_pwd@123.45.67.89:1447
    ```
-
-1. To enable using GPU, add the following variable to `.env`:
-
-   ```dotenv
-   CUDA_VISIBLE_DEVICES=<number of available GPU cores>
-   ```
-   
 1. Configure all skills, skill selectors, response selectors, annotators and database connection in [core/config.py](core/config.py).
    If you want a particular skill to use GPU, set its `gpu` value to `True`.
 
@@ -91,7 +84,6 @@ Please consider setting your locale according your input language to avoid decod
 
     ```bash
     python3 -m core.run
- 
     ```
 
 **Local machine**
