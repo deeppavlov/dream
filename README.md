@@ -14,9 +14,9 @@ made on [DeepPavlov](https://github.com/deepmipt/DeepPavlov). Currently all thes
 Here are the types of conversation you will get if you run the Agent from the pre-made configuration:
 
 <p align="center">
-  <img src="https://github.com/deepmipt/dp-agent/blob/dev/images/conversation_1.jpg" width="300" />
-  <img src="https://github.com/deepmipt/dp-agent/blob/dev/images/conversation_2.jpg" width="300" />
-  <img src="https://github.com/deepmipt/dp-agent/blob/dev/images/conversation_3.jpg" width="300" />
+  <img src="https://github.com/deepmipt/dp-agent/blob/dev/images/conversation_1.jpg" width="200" />
+  <img src="https://github.com/deepmipt/dp-agent/blob/dev/images/conversation_2.jpg" width="200" />
+  <img src="https://github.com/deepmipt/dp-agent/blob/dev/images/conversation_3.jpg" width="200" />
 </p>
 
 Services Configuration
