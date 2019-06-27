@@ -82,7 +82,18 @@ class SkillConfig(Config):
         self.template['build']['args']['skillconfig'] = skill_config['path']
         self.template['build']['args']['skill_endpoint'] = skill_config['endpoint']
         self.template['build']['args']['skillhost'] = '0.0.0.0'
+        self.template['build']['args']['gpu'] = 'false'
         self.template['ports'].append("{}:{}".format(skill_config['port'], skill_config['port']))
+
+        env_vars = skill_config.get('env')
+        if env_vars:
+            self.template['environment'] = []
+            for env, val in env_vars.items():
+                self.template['environment'].append('{}={}'.format(env, '""' if not str(val).strip() else val))
+
+        if skill_config.get('gpu'):
+            self.template['runtime'] = 'nvidia'
+            self.template['build']['args']['gpu'] = 'true'
 
     @property
     def config(self):
@@ -124,7 +135,7 @@ class DockerComposeConfig:
 
     @property
     def config(self):
-        config_dict = {'version': '2.0', 'services': {}}
+        config_dict = {'version': '2.3', 'services': {}}
         for container in chain([self.agent], self.skills, self.database):
             config_dict['services'].update(container.config)
 

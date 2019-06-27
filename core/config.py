@@ -21,8 +21,15 @@ root = Path(__file__).parent.parent
 SKILLS = [
     # {
     #     "name": "odqa",
-    #     "url": "http://0.0.0.0:2080/odqa",
-    #     "path": configs.dp_assistant.agent_ru_odqa_retr_noans_rubert_infer
+    #     "url": "http://odqa:2080/skill",
+    #     "host": "http://odqa",
+    #     "port": 2080,
+    #     "endpoint": "skill",
+    #     "path": "skills/text_qa/agent_ru_odqa_retr_noans_rubert_infer.json",
+    #     "env": {
+    #         "CUDA_VISIBLE_DEVICES": ""
+    #     },
+    #     "gpu": False
     # },
     {
         "name": "chitchat",
@@ -34,7 +41,8 @@ SKILLS = [
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
         },
-        "profile_handler": True
+        "profile_handler": True,
+        "gpu": False
     },
     # {
     #     "name": "hellobot",
@@ -80,7 +88,8 @@ ANNOTATORS = [
         "path": "annotators/ner/preproc_ner_rus.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
-        }
+        },
+        "gpu": False
     },
     {
         "name": "sentiment",
@@ -91,7 +100,8 @@ ANNOTATORS = [
         "path": "annotators/sentiment/preproc_rusentiment.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
-        }
+        },
+        "gpu": False
     },
     {
         "name": "obscenity",
@@ -102,7 +112,8 @@ ANNOTATORS = [
         "path": "annotators/obscenity/obscenity_classifier.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
-        }
+        },
+        "gpu": False
     }
 ]
 
@@ -116,7 +127,8 @@ SKILL_SELECTORS = [
         "path": "skill_selectors/chitchat_odqa_selector/sselector_chitchat_odqa.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
-        }
+        },
+        "gpu": False
     }
 ]
 
@@ -127,6 +139,7 @@ RESPONSE_SELECTORS = [
 POSTPROCESSORS = [
 
 ]
+
 
 # TODO include Bot?
 
