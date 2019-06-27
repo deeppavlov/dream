@@ -52,6 +52,9 @@ class AnnotationsParser(Component):
             for i, key_rec in enumerate(self.keys):
                 val = ann
                 for j in range(len(key_rec)):
-                    val = val[key_rec[j]]
+                    try:
+                        val = val[key_rec[j]]
+                    except KeyError:
+                        val = []
                 ann_values[i] = ann_values[i] + [val]
         return ann_values
