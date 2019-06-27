@@ -26,9 +26,9 @@ SKILLS = [
         "endpoint": "skill",
         "path": "skills/text_qa/agent_ru_odqa_retr_noans_rubert_infer.json",
         "env": {
-            "CUDA_VISIBLE_DEVICES": "0"
+            "CUDA_VISIBLE_DEVICES": ""
         },
-        "gpu": True
+        "gpu": False
     },
     {
         "name": "chitchat",
