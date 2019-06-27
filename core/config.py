@@ -7,8 +7,6 @@ from collections import defaultdict
 
 import yaml
 
-# from deeppavlov import configs
-
 TELEGRAM_TOKEN = ''
 TELEGRAM_PROXY = ''
 
@@ -20,18 +18,18 @@ MAX_WORKERS = 4
 root = Path(__file__).parent.parent
 
 SKILLS = [
-    # {
-    #     "name": "odqa",
-    #     "url": "http://odqa:2080/skill",
-    #     "host": "http://odqa",
-    #     "port": 2080,
-    #     "endpoint": "skill",
-    #     "path": "skills/text_qa/agent_ru_odqa_retr_noans_rubert_infer.json",
-    #     "env": {
-    #         "CUDA_VISIBLE_DEVICES": ""
-    #     },
-    #     "gpu": False
-    # },
+    {
+        "name": "odqa",
+        "protocol": "http",
+        "host": "127.0.0.1",
+        "port": 2080,
+        "endpoint": "skill",
+        "path": "skills/text_qa/agent_ru_odqa_retr_noans_rubert_infer.json",
+        "env": {
+            "CUDA_VISIBLE_DEVICES": "0"
+        },
+        "gpu": True
+    },
     {
         "name": "chitchat",
         "protocol": "http",
@@ -44,39 +42,7 @@ SKILLS = [
         },
         "profile_handler": True,
         "gpu": False
-    },
-    # {
-    #     "name": "hellobot",
-    #     "url": "http://127.0.0.1:2085/ruler_call/",
-    #     "path": None,
-    #     "profile_handler": True
-    # },
-    # {
-    #     "name": "sberchat",
-    #     "url": "http://23.102.48.212:8443/api/",
-    #     "path": None
-    # },
-    # {
-    #     "name": "gen_chitchat",
-    #     "url": "http://0.0.0.0:2086/gen_chitchat",
-    #     "path": configs.dp_assistant.agent_transformer_chit_chat_40k_v01_1_20
-    # },
-    # {
-    #     "name": "kbqa",
-    #     "url": "http://0.0.0.0:2087/kbqa",
-    #     "path": configs.dp_assistant.agent_kbqa_rus
-    # },
-    # {
-    #     "name": "mailruqa",
-    #     "url": "http://skills:2089/mailruqa",
-    #     "path": root / "skills/text_qa/agent_ranking_mailru_bert_3.json"
-    # }
-    # {
-    #     "name": "generalqa",
-    #     "url": "http://0.0.0.0:2090/generalqa",
-    #     "path": configs.dp_assistant.agent_general_qa
-    #
-    # }
+    }
 ]
 
 ANNOTATORS = [
@@ -145,8 +111,8 @@ POSTPROCESSORS = [
 # TODO include Bot?
 
 FULL_SKILL_NAMES_MAP = {
-    "chitchat": ["chitchat", "hellobot", "sberchat", "gen_chitchat"],
-    "odqa": ["odqa", "kbqa", "generalqa", "mailruqa"]
+    "chitchat": ["chitchat"],
+    "odqa": ["odqa"]
 }
 available_names = [s['name'] for s in SKILLS]
 SKILL_NAMES_MAP = defaultdict(list)
