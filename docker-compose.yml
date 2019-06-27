@@ -5,6 +5,7 @@ services:
       dockerfile: dockerfile_agent
     container_name: agent
     depends_on:
+    - odqa
     - chitchat
     - ner
     - sentiment
@@ -98,6 +99,26 @@ services:
     - CUDA_VISIBLE_DEVICES=""
     ports:
     - 2088:2088
+    tty: true
+    volumes:
+    - .:/dp-agent
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
+  odqa:
+    build:
+      args:
+        gpu: 'false'
+        skill_endpoint: skill
+        skillconfig: skills/text_qa/agent_ru_odqa_retr_noans_rubert_infer.json
+        skillhost: 0.0.0.0
+        skillport: 2080
+      context: ./
+      dockerfile: dockerfile_skill_basic
+    container_name: odqa
+    environment:
+    - CUDA_VISIBLE_DEVICES=""
+    ports:
+    - 2080:2080
     tty: true
     volumes:
     - .:/dp-agent
