@@ -12,6 +12,8 @@ RUN mkdir dp-agent
 WORKDIR /dp-agent
 COPY . /dp-agent/.
 
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
 ENV PYTHONPATH "${PYTONPATH}:/dp-agent"
 ENV DPA_LAUNCHING_ENV "docker"
 
