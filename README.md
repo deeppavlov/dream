@@ -24,7 +24,7 @@ Deployment
    ```dotenv
    EXTERNAL_FOLDER=<path to data directory>
    ```
-1. If you want to communicate with the bot via Telegram, setup the following environment variables:
+1. (optional) If you want to communicate with the bot via Telegram, setup the following environment variables:
 
    ```dotenv
    TELEGRAM_TOKEN=<token>
@@ -86,6 +86,15 @@ Agent can run both from container and from a local machine.
     ```
 
 **Local machine**
+
+1. (optional) Please consider setting your locale according your input language to avoid decoding errors while communicating agent via command line.
+   For example:
+
+    ```bash
+    export LANG="C.UTF-8"
+    export LC_ALL="C.UTF-8"
+    ```
+
 
 1. Setup `DPA_LAUNCHING_ENV` environment variable:
 
