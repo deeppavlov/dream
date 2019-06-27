@@ -2,7 +2,7 @@
 
 **DeepPavlov Agent** is a platform for creating multi-skill chatbots.
 
-<img src="https://github.com/deepmipt/dp-agent/blob/dev/Agent%20Pipeline.png" width="100" height="100">
+<img src="https://github.com/deepmipt/dp-agent/blob/dev/Agent%20Pipeline.png" height="600">
 
 Deployment
 ==========
