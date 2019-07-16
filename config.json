@@ -1,7 +1,7 @@
 {
-  "router_bot_host": "10.11.1.65",
-  "router_bot_port": "8433",
-  "bot_token": "",
+  "router_bot_host": "0.0.0.0",
+  "router_bot_port": "6666",
+  "bot_token": "asd",
   "send_message_url_template": "http://{host}:{port}/bot{token}/sendMessage",
   "get_updates_url_template": "http://{host}:{port}/bot{token}/getUpdates",
   "polling_interval_secs": 1,
