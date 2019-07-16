@@ -40,6 +40,7 @@ class Wrapper:
 
         self.poller = Poller(config, self.in_queue)
         self.poller.start()
+        self.chat_events = None
 
         log.info('Wrapper initiated')
 
@@ -66,23 +67,28 @@ class Wrapper:
             chat_ids.append(chat_id)
             log_msg = f'{log_msg}, {str(chat_id)}' if log_msg else f'Processing messages for chats: {str(chat_id)}'
 
+        self.chat_events = {chat_id: [asyncio.Event() for _ in range(len(chat))] for chat_id, chat in buffer.items()}
+        for events in self.chat_events.values():
+            events[-1].set()
+
         if log_msg:
-            await self.loop.run_in_executor(None, log.info, log_msg)
+            log.info(log_msg)
 
         # "slices" of replicas from all conversations, each slice contains replicas from different conversation
         batched_chats = zip_longest(*chats, fillvalue=None)
 
         tasks = (self.loop.create_task(self._process_chats_batch(chats_batch,
-                                                                 chat_ids)) for chats_batch in batched_chats)
+                                                                 msg_id,
+                                                                 chat_ids)) for msg_id, chats_batch in enumerate(batched_chats))
         await asyncio.gather(*tasks)
 
-    async def _process_chats_batch(self, chats_batch, chat_ids):
+    async def _process_chats_batch(self, chats_batch, msg_id, chat_ids):
         utts_batch = [(chat_ids[utt_id], utt) for utt_id, utt in enumerate(chats_batch) if utt]
         j = self.config['infer_batch_length']
         chunked_utts_batch = [utts_batch[i * j:(i + 1) * j] for i in range((len(utts_batch) + j - 1) // j)]
-        await asyncio.gather(*(self.loop.create_task(self._process_chunk(chunk)) for chunk in chunked_utts_batch))
+        await asyncio.gather(*(self.loop.create_task(self._process_chunk(chunk, msg_id)) for chunk in chunked_utts_batch))
 
-    async def _process_chunk(self, chunk):
+    async def _process_chunk(self, chunk, msg_id):
         batch = list(zip(*chunk))
         ids_batch = list(batch[0])
         utts_batch = list(batch[1])
@@ -92,7 +98,7 @@ class Wrapper:
                                                                            self.model_url,
                                                                            data=data_json,
                                                                            headers=self.headers))
-        tasks = (self.loop.create_task(self._send_results(*resp)) for resp in zip(ids_batch, response.json()))
+        tasks = (self.loop.create_task(self._send_results(*resp, msg_id)) for resp in zip(ids_batch, response.json()))
         await asyncio.gather(*tasks)
 
     @staticmethod
@@ -104,18 +110,17 @@ class Wrapper:
 
         return processed_message
 
-    async def _send_results(self, chat_id, response) -> None:
+    async def _send_results(self, chat_id, response, msg_id) -> None:
         resp_text = str("{\"text\":\"" + str(response) + "\"}")
-
         payload = {
             'chat_id': chat_id,
             'text': resp_text
         }
-
+        await self.chat_events[chat_id][msg_id-1].wait()
         await self.loop.run_in_executor(None, functools.partial(requests.post,
                                                                 url=self.config['send_message_url'],
                                                                 json=payload))
-
+        self.chat_events[chat_id][msg_id].set()
         await self.loop.run_in_executor(None, log.info, f'Sent response to chat: {str(chat_id)}')
 
 
@@ -185,4 +190,3 @@ def main() -> None:
 
 if __name__ == '__main__':
     main()
-
