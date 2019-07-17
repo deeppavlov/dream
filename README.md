@@ -3,7 +3,7 @@
 **DeepPavlov Agent** is a platform for creating multi-skill chatbots.
 
 <p align="center">
-    <img src="images/Agent%20Pipeline.png" height="600">
+    <img src="docs/source/_static/Agent%20Pipeline.png" height="600">
 </p>
 
 Ready Agent from the box
@@ -14,9 +14,9 @@ made on [DeepPavlov](https://github.com/deepmipt/DeepPavlov). Currently all thes
 Here are the types of conversation you will get if you run the Agent from the pre-made configuration:
 
 <p align="center">
-  <img src="images/conversation_1.jpg" width="200" />
-  <img src="images/conversation_2.jpg" width="200" />
-  <img src="images/conversation_3.jpg" width="200" />
+  <img src="docs/source/_static/conversation_1.jpg" width="200" />
+  <img src="docs/source/_static/conversation_2.jpg" width="200" />
+  <img src="docs/source/_static/conversation_3.jpg" width="200" />
 </p>
 
 Services Configuration
