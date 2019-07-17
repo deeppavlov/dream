@@ -157,10 +157,10 @@ class Poller(Process):
         self.out_queue.put(payload)
 
 
-def main() -> None:
+def main(model_url=None) -> None:
     args = parser.parse_args()
 
-    model_url = args.model_url
+    model_url = model_url or args.model_url
     host = args.host
     port = args.port
     token = args.token
