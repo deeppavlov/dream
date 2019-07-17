@@ -19,7 +19,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'dp-agent'
+project = 'deeppavlov-agent'
 copyright = '2019, mipt'
 author = 'mipt'
 
@@ -57,8 +57,8 @@ templates_path = ['_templates']
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-# source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
+source_suffix = ['.rst', '.md']
+# source_suffix = '.rst'
 
 # The master toctree document.
 master_doc = 'index'
@@ -159,8 +159,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'dp-agent', 'dp-agent Documentation',
-     author, 'dp-agent', 'One line description of project.',
+    (master_doc, 'deeppavlov-agent', 'deeppavlov-agent Documentation',
+     author, 'deeppavlov-agent', 'One line description of project.',
      'Miscellaneous'),
 ]
 
