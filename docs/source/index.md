@@ -22,7 +22,7 @@ Here are the types of conversation you will get if you run the Agent from the pr
 Services Configuration
 ======================
 
-You can configure services at the Agent [config file](../core/config.py).
+You can configure services at the Agent [config file](https://github.com/deepmipt/dp-agent/core/config.py).
 
 **Config Description**
 
@@ -67,23 +67,23 @@ Services Deployment
 1. Setup an `EXTERNAL_FOLDER` variable with the path to data directory. This path
     will be used by Agent to download models' data:
 
-   ```dotenv
+   ```bash
    EXTERNAL_FOLDER=<path to data directory>
    ```
 1. (optional) If you want to communicate with the bot via Telegram, setup the following environment variables:
 
-   ```dotenv
+   ```bash
    TELEGRAM_TOKEN=<token>
    TELEGRAM_PROXY=socks5://<user>:<password>@<path:port>
    ```
 
    Here's an example of values:
 
-   ```dotenv
+   ```bash
    TELEGRAM_TOKEN=123456789:AAGCiO0QFb_I-GXL-CbJDw7--JQbHkiQyYA
    TELEGRAM_PROXY=socks5://tgproxy:tgproxy_pwd@123.45.67.89:1447
    ```
-1. Configure all skills, skill selectors, response selectors, annotators and database connection in [core/config.py](core/config.py).
+1. Configure all skills, skill selectors, response selectors, annotators and database connection in [config file](https://github.com/deepmipt/dp-agent/core/config.py).
    If you want a particular skill to use GPU, set its `gpu` value to `True`.
 
    If you want a minimal configuration, you need one skill and one skill selector.
@@ -95,7 +95,7 @@ Services Deployment
     python generate_composefile.py
     ```
     This configuration represents the choice of skills from the previous step.
-    Re-generate it every time you change [core/config.py](core/config.py).
+    Re-generate it every time you change [config file](https://github.com/deepmipt/dp-agent/core/config.py).
 
 1. Run the Docker environment with:
 
