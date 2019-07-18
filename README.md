@@ -22,7 +22,7 @@ Here are the types of conversation you will get if you run the Agent from the pr
 Services Configuration
 ======================
 
-You can configure services at the Agent [config file](../core/config.py).
+You can configure services at the Agent [config file](core/config.py).
 
 **Config Description**
 
