@@ -1,4 +1,5 @@
 import asyncio
+import random
 import time
 from collections import namedtuple
 from multiprocessing import Process
@@ -62,6 +63,31 @@ class PollerTester:
             self.result = data
 
 
+class TestCasesKeeper:
+    def __init__(self):
+        self.default_msg = 'All work and no play makes Jack a dull boy.'
+        self.tests = []
+
+    def add_test(self, chats: list = None, msg: str = None, shuffle: bool = False):
+        buf = []
+        test = []
+        if msg is None:
+            msg = self.default_msg
+        for chat_id, num_msgs_in_chat in enumerate(chats):
+            buf.append([{'message': {'text': msg, 'chat': {'id': chat_id}}} for _ in range(num_msgs_in_chat)])
+        for chat in buf:
+            test += chat
+        if shuffle:
+            random.shuffle(test)
+        self.tests.append(test)
+
+    def get_tests(self):
+        return self.tests
+
+
 if __name__ == '__main__':
-    tester = PollerTester([[{'message': {'text': 'asdf asdf', 'chat': {'id': i}}} for i in range(2)],
-                          [{'message': {'text': 'asdf asdf', 'chat': {'id': 42}}} for _ in range(2)]])
+    random.seed(42)
+    tk = TestCasesKeeper()
+    tk.add_test([200])
+    tk.add_test([1 for i in range(200)])
+    tester = PollerTester(tk.get_tests())
