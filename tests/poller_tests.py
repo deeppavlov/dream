@@ -30,27 +30,31 @@ poller_process.start()
 
 async def handle_updates(request: web.Request):
     global test_start_time, messages_to_process, result, messages_to_process
-    test_start_time = time.perf_counter()
     res = result
+    result = []
     if res:
         messages_to_process = len(res)
-    result = []
+        test_start_time = time.perf_counter()
     return web.json_response({'result': res})
 
 async def handle_message(request: web.Request):
-    global messages_to_process, test_finish_time, all_messages_processed
+    global messages_to_process, all_messages_processed
     messages_to_process -= 1
     if messages_to_process == 0:
         test_finish_time = time.perf_counter()
+        print(f'took {test_finish_time - test_start_time}')
         all_messages_processed.set()
     return web.Response(status=200)
 
+test_samples = [[{'message':{'text': 'asdf asdf', 'chat': {'id': i}}} for i in range(200)],
+                [{'message':{'text': 'asdf asdf', 'chat': {'id': 42}}} for _ in range(200)]]
+
 async def tests():
-    global result, all_messages_processed
-    while True:
+    global result, all_messages_processed, test_samples
+    for data in test_samples:
         await all_messages_processed.wait()
         all_messages_processed.clear()
-        result = [{'message':{'text': 'asdf asdf', 'chat': {'id': i}}} for i in range(200)]
+        result = data
 
 if __name__=='__main__':
     loop.create_task(tests())
