@@ -22,7 +22,7 @@ Here are the types of conversation you will get if you run the Agent from the pr
 Services Configuration
 ======================
 
-You can configure services at the Agent [config file](https://github.com/deepmipt/dp-agent/core/config.py).
+You can configure services at the Agent [config file](https://github.com/deepmipt/dp-agent/blob/master/core/config.py).
 
 **Config Description**
 
@@ -83,7 +83,7 @@ Services Deployment
    TELEGRAM_TOKEN=123456789:AAGCiO0QFb_I-GXL-CbJDw7--JQbHkiQyYA
    TELEGRAM_PROXY=socks5://tgproxy:tgproxy_pwd@123.45.67.89:1447
    ```
-1. Configure all skills, skill selectors, response selectors, annotators and database connection in [config file](https://github.com/deepmipt/dp-agent/core/config.py).
+1. Configure all skills, skill selectors, response selectors, annotators and database connection in [config file](https://github.com/deepmipt/dp-agent/blob/master/core/config.py).
    If you want a particular skill to use GPU, set its `gpu` value to `True`.
 
    If you want a minimal configuration, you need one skill and one skill selector.
@@ -95,7 +95,7 @@ Services Deployment
     python generate_composefile.py
     ```
     This configuration represents the choice of skills from the previous step.
-    Re-generate it every time you change [config file](https://github.com/deepmipt/dp-agent/core/config.py).
+    Re-generate it every time you change [config file](https://github.com/deepmipt/dp-agent/blob/master/core/config.py).
 
 1. Run the Docker environment with:
 
