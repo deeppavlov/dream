@@ -1,7 +1,8 @@
 import asyncio
+import logging
 import random
-import time
 from collections import namedtuple
+from dateutil import parser
 from multiprocessing import Process
 
 from aiohttp import web
@@ -14,11 +15,11 @@ class PollerTester:
         server_port = 7000
 
         self.result = []
-        self.test_start_time = 0
         self.messages_to_process = 0
         self.all_messages_processed = asyncio.Event()
         self.all_messages_processed.set()
         self._test_samples = tests
+        self._log_file = 'tests.log'
 
         # Start poller
         class Crutch:
@@ -30,6 +31,9 @@ class PollerTester:
                 return self.args
 
         poller.parser = Crutch()
+        log_handler = logging.FileHandler(self._log_file, mode='w')
+        log_handler.setFormatter(poller.log_formatter)
+        poller.log.addHandler(log_handler)
         poller_process = Process(target=poller.main)
         poller_process.start()
 
@@ -45,14 +49,11 @@ class PollerTester:
         self.result = []
         if res:
             self.messages_to_process = len(res)
-            self.test_start_time = time.perf_counter()
         return web.json_response({'result': res})
 
     async def _handle_message(self, request: web.Request):
         self.messages_to_process -= 1
         if self.messages_to_process == 0:
-            test_finish_time = time.perf_counter()
-            print(f'took {test_finish_time - self.test_start_time}')
             self.all_messages_processed.set()
         return web.Response(status=200)
 
@@ -61,7 +62,30 @@ class PollerTester:
             await self.all_messages_processed.wait()
             self.all_messages_processed.clear()
             self.result = data
+        await self.all_messages_processed.wait()
+        await self._process_log()
 
+    async def _process_log(self):
+        tests = {}
+        current_test = []
+        with open(self._log_file, 'r') as file:
+            line = file.readline()
+            while line:
+                time = parser.parse(line[:23])
+                payload = line[29:].strip()
+                if 'Payload received' in payload:
+                    tests[time] = []
+                    current_test = tests[time]
+                if 'Sent response to chat' in payload:
+                    current_test.append(time)
+                line = file.readline()
+        for test_n, (test_begin, msgs_sent) in enumerate(tests.items()):
+            all_test = (msgs_sent[-1] - test_begin).total_seconds()
+            msgs_sending = (msgs_sent[-1] - msgs_sent[0]).total_seconds()
+            until_first_msg = (msgs_sent[0] - test_begin).total_seconds()
+            print(f'Test {test_n}:\nTotal duration:\t\t{all_test} seconds:\n'
+                  f'First response in:\t{until_first_msg} seconds\n'
+                  f'Responses sent in:\t{msgs_sending} seconds\n')
 
 class TestCasesKeeper:
     def __init__(self):

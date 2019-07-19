@@ -184,9 +184,6 @@ def main() -> None:
 
     Wrapper(config, model_url)
 
-    while True:
-        pass
-
 
 if __name__ == '__main__':
     main()
