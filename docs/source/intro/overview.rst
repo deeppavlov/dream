@@ -6,7 +6,7 @@ Modern chatbots usually solve different tasks (like chitchat, goal-oriented, que
 so the platform should have the following characteristics:
 
     * be stable at highload environment
-    * save and pass the chatbot state across all the connected models
+    * save and pass the chatbot state_ across all the connected models
 
 .. image:: ../_static/Agent_Pipeline.png
    :height: 600
@@ -35,6 +35,11 @@ so the platform should have the following characteristics:
       like adding a user name to the reply, inserting emojis, etc.;
 
     * ``Response`` is a final postprocessed bot utterance that is shown to the user.
+
+    * ``State`` is current dialogs between users and a bot serialized as **json**. State is used to pass information
+      across the services and contains all possibly needed information about the current dialogs.
+      It has separate `documentation <state_>`__.
+
 
 Ready Agent from the box
 ========================
@@ -214,3 +219,4 @@ Agent can run both from container and from a local machine.
 .. _nvidia-docker: https://github.com/NVIDIA/nvidia-docker
 .. _Docker environment configuration: https://github.com/deepmipt/dp-agent/blob/master/docker-compose.yml
 .. _docker-exec: https://docs.docker.com/engine/reference/commandline/exec/
+.. _state: https://deeppavlov-agent.readthedocs.io/en/latest/_static/api.html
