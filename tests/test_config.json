@@ -1,0 +1,21 @@
+{
+  "model_url": "http://0.0.0.0:5000/answer",
+  "router_bot_host": "0.0.0.0",
+  "router_bot_port": 7000,
+  "bot_token": "some_token",
+  "log_file_name": "tests.log",
+  "test_template": {
+    "payload": "All work and no play makes Jack a dull boy.",
+    "num_of_chats": 1,
+    "msgs_per_chat": 1,
+    "shuffle_msgs": false
+  },
+  "test_cases": [
+    {
+      "num_of_chats": 200
+    },
+    {
+      "msgs_per_chat": 200
+    }
+  ]
+}

@@ -4,7 +4,7 @@ import logging
 import sys
 from typing import Optional
 from pathlib import Path
-from collections import defaultdict, OrderedDict
+from collections import defaultdict
 from multiprocessing import Process, Queue
 from itertools import zip_longest
 
@@ -168,7 +168,7 @@ def main() -> None:
     root_path = Path(__file__).resolve().parent
     config_path = root_path / 'config.json'
     with open(config_path, encoding='utf8') as fin:
-        config = json.load(fin, object_pairs_hook=OrderedDict)
+        config = json.load(fin)
 
     send_message_url: str = config['send_message_url_template']
     get_updates_url: str = config['get_updates_url_template']
