@@ -2,6 +2,7 @@ import asyncio
 import json
 import logging
 import random
+import re
 from collections import namedtuple
 from dateutil import parser
 from multiprocessing import Process
@@ -71,16 +72,16 @@ class PollerTester:
     async def _process_log(self):
         tests = {}
         current_test = []
+        start_pat = re.compile(r'(.*?) INFO Payload received')
+        sent_pat = re.compile(r'(.*?) INFO Sent response to chat')
         with open(config['log_file_name'], 'r') as file:
             line = file.readline()
             while line:
-                time = parser.parse(line[:23])
-                payload = line[29:].strip()
-                if 'Payload received' in payload:
-                    tests[time] = []
-                    current_test = tests[time]
-                if 'Sent response to chat' in payload:
-                    current_test.append(time)
+                for time in start_pat.findall(line):
+                    tests[parser.parse(time)] = []
+                    current_test = tests[parser.parse(time)]
+                for time in sent_pat.findall(line):
+                    current_test.append(parser.parse(time))
                 line = file.readline()
         for test_n, (test_begin, msgs_sent) in enumerate(tests.items()):
             test_config = self._test_configs[test_n]

@@ -35,7 +35,6 @@ class Wrapper:
         self.config = config
         self.model_url = model_url
         self.in_queue = Queue()
-        self.headers = {'Content-type': 'application/json'}
         self.loop = asyncio.get_event_loop()
 
         self.poller = Poller(config, self.in_queue)
@@ -95,9 +94,12 @@ class Wrapper:
         data = {"text1": utts_batch}
         response = await self.loop.run_in_executor(None, functools.partial(requests.post,
                                                                            self.model_url,
-                                                                           json=data,
-                                                                           headers=self.headers))
-        tasks = (self.loop.create_task(self._send_results(*resp, msg_id)) for resp in zip(ids_batch, response.json()))
+                                                                           json=data))
+        if response.status_code == 200:
+            tasks = (self.loop.create_task(self._send_results(*resp, msg_id)) for resp in zip(ids_batch, response.json()))
+        else:
+            log.error(f'Got {response.status_code} code from {self.model_url}')
+            tasks = (self.loop.create_task(self._send_results(*resp, msg_id)) for resp in zip_longest(ids_batch, [], fillvalue='Server error'))
         await asyncio.gather(*tasks)
 
     @staticmethod
