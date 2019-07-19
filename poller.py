@@ -1,17 +1,17 @@
+import aiohttp
 import argparse
-import json
-import logging
-import sys
-from typing import Optional
-from pathlib import Path
-from collections import defaultdict
-from multiprocessing import Process, Queue
-from itertools import zip_longest
-
-import requests
-import polling
 import asyncio
 import functools
+import json
+import logging
+import polling
+import requests
+import sys
+from collections import defaultdict
+from itertools import zip_longest
+from multiprocessing import Process, Queue
+from pathlib import Path
+from typing import Optional
 
 logging.disable(logging.DEBUG)
 log = logging.getLogger('convai_router_bot_poller')
@@ -93,10 +93,9 @@ class Wrapper:
         ids_batch = list(batch[0])
         utts_batch = list(batch[1])
         data = {"text1": utts_batch}
-        data_json = json.dumps(data)
         response = await self.loop.run_in_executor(None, functools.partial(requests.post,
                                                                            self.model_url,
-                                                                           data=data_json,
+                                                                           json=data,
                                                                            headers=self.headers))
         tasks = (self.loop.create_task(self._send_results(*resp, msg_id)) for resp in zip(ids_batch, response.json()))
         await asyncio.gather(*tasks)
@@ -117,11 +116,11 @@ class Wrapper:
             'text': resp_text
         }
         await self.chat_events[chat_id][msg_id-1].wait()
-        await self.loop.run_in_executor(None, functools.partial(requests.post,
-                                                                url=self.config['send_message_url'],
-                                                                json=payload))
+        async with aiohttp.ClientSession() as session:
+            await session.post(self.config['send_message_url'], json=payload)
         self.chat_events[chat_id][msg_id].set()
-        await self.loop.run_in_executor(None, log.info, f'Sent response to chat: {str(chat_id)}')
+        # TODO: Refactor logs to log in asynchronous mode
+        log.info(f'Sent response to chat: {str(chat_id)}')
 
 
 class Poller(Process):
