@@ -1,9 +1,40 @@
 Architecture Overview
 =====================
 
+**DeepPavlov Agent** helps production chatbot developers to organize multiple NLP models in a single pipeline.
+Modern chatbots usually solve different tasks (like chitchat, goal-oriented, question answering) simultaneously,
+so the platform should have the following characteristics:
+
+    * be stable at highload environment
+    * save and pass the chatbot state across all the connected models
+
 .. image:: ../_static/Agent_Pipeline.png
    :height: 600
+   :align: center
    :alt: Architecture
+
+**Key concepts in DeepPavlov Agent architecture:**
+
+* ``Utterance`` is a single message produced by a human or a bot;
+
+* ``Service`` is any NLP model that can be inferred as a REST service.
+
+  There are different types of services:
+
+    * ``Annotator`` is a service for utterance preprocessing. It can be some basic text preprocessing like
+      coreference resolution, named entiry recognition, spell correction, etc.;
+
+    * ``Skill`` is a service producing a bot reply to a user utterance;
+
+    * ``Skill Selector`` is a service choosing which bunch of available skills should be responsible
+      for producing possible bot replies;
+
+    * ``Response Selector`` is a service choosing a single bot reply from the available replies;
+
+    * ``Postprocessor`` is a service postprocessing a bot utterance. It can make some basic things
+      like adding a user name to the reply, inserting emojis, etc.;
+
+    * ``Response`` is a final postprocessed bot utterance that is shown to the user.
 
 Ready Agent from the box
 ========================
