@@ -70,32 +70,38 @@ class PollerTester:
         await self._process_log()
 
     async def _process_log(self):
-        tests = {}
-        current_test = []
+        tests = []
         start_pat = re.compile(r'(.*?) INFO Payload received')
         sent_pat = re.compile(r'(.*?) INFO Sent response to chat')
+        error_pat = re.compile(r'ERROR Got \d+ code from')
         with open(config['log_file_name'], 'r') as file:
-            line = file.readline()
-            while line:
+            test_failed = False
+            for line in file.readlines():
                 for time in start_pat.findall(line):
-                    tests[parser.parse(time)] = []
-                    current_test = tests[parser.parse(time)]
+                    test_failed = False
+                    tests.append([parser.parse(time)])
+                if error_pat.search(line):
+                    test_failed = True
+                    tests[-1] = []
                 for time in sent_pat.findall(line):
-                    current_test.append(parser.parse(time))
-                line = file.readline()
-        for test_n, (test_begin, msgs_sent) in enumerate(tests.items()):
-            test_config = self._test_configs[test_n]
-            all_test = (msgs_sent[-1] - test_begin).total_seconds()
-            msgs_sending = (msgs_sent[-1] - msgs_sent[0]).total_seconds()
-            until_first_msg = (msgs_sent[0] - test_begin).total_seconds()
-            print(f'Test {test_n}:\n'
-                  f'\tPayload:\t\t{test_config["payload"]}\n'
-                  f'\tChats:\t\t\t{test_config["num_of_chats"]}\n'
-                  f'\tMsgs in chat:\t{test_config["msgs_per_chat"]}\n'
-                  f'\tShuffled:\t\t{test_config["shuffle_msgs"]}\n\n'
-                  f'Total duration:\t\t{all_test} seconds\n'
-                  f'First response in:\t{until_first_msg} seconds\n'
-                  f'Responses sent in:\t{msgs_sending} seconds\n')
+                    if not test_failed:
+                        tests[-1].append(parser.parse(time))
+        for test_n, timestamps in enumerate(tests):
+            if timestamps:
+                test_config = self._test_configs[test_n]
+                all_test = (timestamps[-1] - timestamps[0]).total_seconds()
+                msgs_sending = (timestamps[-1] - timestamps[1]).total_seconds()
+                until_first_msg = (timestamps[1] - timestamps[0]).total_seconds()
+                print(f'Test {test_n}:\n'
+                      f'\tPayload:\t\t{test_config["payload"]}\n'
+                      f'\tChats:\t\t\t{test_config["num_of_chats"]}\n'
+                      f'\tMsgs in chat:\t{test_config["msgs_per_chat"]}\n'
+                      f'\tShuffled:\t\t{test_config["shuffle_msgs"]}\n\n'
+                      f'Total duration:\t\t{all_test} seconds\n'
+                      f'First response in:\t{until_first_msg} seconds\n'
+                      f'Responses sent in:\t{msgs_sending} seconds\n')
+            else:
+                print(f'Test {test_n} failed.\n')
 
 class TestCasesKeeper:
     def __init__(self, seed: int = 42):
