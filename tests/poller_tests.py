@@ -1,9 +1,10 @@
 import asyncio
 import json
 import logging
+import numpy as np
 import random
 import re
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 from dateutil import parser
 from multiprocessing import Process
 
@@ -86,38 +87,43 @@ class PollerTester:
                 for time in sent_pat.findall(line):
                     if not test_failed:
                         tests[-1].append(parser.parse(time))
+        buf = defaultdict(list)
         for test_n, timestamps in enumerate(tests):
             if timestamps:
                 test_config = self._test_configs[test_n]
                 all_test = (timestamps[-1] - timestamps[0]).total_seconds()
                 msgs_sending = (timestamps[-1] - timestamps[1]).total_seconds()
                 until_first_msg = (timestamps[1] - timestamps[0]).total_seconds()
-                print(f'Test {test_n}:\n'
-                      f'\tPayload:\t\t{test_config["payload"]}\n'
-                      f'\tChats:\t\t\t{test_config["num_of_chats"]}\n'
-                      f'\tMsgs in chat:\t{test_config["msgs_per_chat"]}\n'
-                      f'\tShuffled:\t\t{test_config["shuffle_msgs"]}\n\n'
-                      f'Total duration:\t\t{all_test} seconds\n'
-                      f'First response in:\t{until_first_msg} seconds\n'
-                      f'Responses sent in:\t{msgs_sending} seconds\n')
+                buf[test_config].append((all_test, msgs_sending, until_first_msg))
             else:
                 print(f'Test {test_n} failed.\n')
+        for test_config, results in buf.items():
+            print(f'\tPayload:\t\t{test_config.payload}\n'
+                  f'\tChats:\t\t\t{test_config.num_of_chats}\n'
+                  f'\tMsgs in chat:\t{test_config.msgs_per_chat}\n'
+                  f'\tShuffled:\t\t{test_config.shuffle_msgs}\n\n'
+                  f'Total duration:\t\t{np.average([res[0] for res in results]):.3f} seconds, variance {np.var([res[0] for res in results]):.3f}\n'
+                  f'First response in:\t{np.average([res[2] for res in results]):.3f} seconds, variance {np.var([res[2] for res in results]):.3f}\n'
+                  f'Responses sent in:\t{np.average([res[1] for res in results]):.3f} seconds, variance {np.var([res[1] for res in results]):.3f}\n')
 
 class TestCasesKeeper:
     def __init__(self, seed: int = 42):
         random.seed(seed)
         self.tests = []
         self.test_configs = []
+        TestTemplate = namedtuple('Config', sorted(config['test_template']))
         for test_case in config['test_cases']:
             test_template = config['test_template'].copy()
             test_template.update(test_case)
-            self.test_configs.append(test_template)
-            test = []
-            for chat_id in range(test_template['num_of_chats']):
-                test += [{'message': {'text': test_template['payload'], 'chat': {'id': chat_id}}} for _ in range(test_template['msgs_per_chat'])]
-            if test_template['shuffle_msgs']:
-                random.shuffle(test)
-            self.tests.append(test)
+            test_template = TestTemplate(**test_template)
+            for i in range(test_template.repeat_test):
+                self.test_configs.append(test_template)
+                test = []
+                for chat_id in range(test_template.num_of_chats):
+                    test += [{'message': {'text': test_template.payload, 'chat': {'id': chat_id}}} for _ in range(test_template.msgs_per_chat)]
+                if test_template.shuffle_msgs:
+                    random.shuffle(test)
+                self.tests.append(test)
 
     def get_tests(self):
         return self.tests
