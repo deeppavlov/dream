@@ -92,9 +92,14 @@ class Wrapper:
         ids_batch = list(batch[0])
         utts_batch = list(batch[1])
         data = {"text1": utts_batch}
-        response = await self.loop.run_in_executor(None, functools.partial(requests.post,
-                                                                           self.model_url,
-                                                                           json=data))
+        try:
+            response = await self.loop.run_in_executor(None, functools.partial(requests.post,
+                                                                               self.model_url,
+                                                                               json=data,
+                                                                               timeout=self.config['request_timeout']))
+        except requests.exceptions.ReadTimeout:
+            response = requests.Response()
+            response.status_code = 503
         if response.status_code == 200:
             tasks = (self.loop.create_task(self._send_results(*resp, msg_id)) for resp in zip(ids_batch, response.json()))
         else:

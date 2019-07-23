@@ -102,9 +102,9 @@ class PollerTester:
                   f'\tChats:\t\t\t{test_config.num_of_chats}\n'
                   f'\tMsgs in chat:\t{test_config.msgs_per_chat}\n'
                   f'\tShuffled:\t\t{test_config.shuffle_msgs}\n\n'
-                  f'Total duration:\t\t{np.average([res[0] for res in results]):.3f} seconds, variance {np.var([res[0] for res in results]):.3f}\n'
-                  f'First response in:\t{np.average([res[2] for res in results]):.3f} seconds, variance {np.var([res[2] for res in results]):.3f}\n'
-                  f'Responses sent in:\t{np.average([res[1] for res in results]):.3f} seconds, variance {np.var([res[1] for res in results]):.3f}\n')
+                  f'Total duration:\t\t{np.average([res[0] for res in results]):.3f} seconds, std = {np.std([res[0] for res in results]):.3f}\n'
+                  f'First response in:\t{np.average([res[2] for res in results]):.3f} seconds, std = {np.std([res[2] for res in results]):.3f}\n'
+                  f'Responses sent in:\t{np.average([res[1] for res in results]):.3f} seconds, std = {np.std([res[1] for res in results]):.3f}\n')
 
 class TestCasesKeeper:
     def __init__(self, seed: int = 42):

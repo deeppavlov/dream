@@ -5,5 +5,6 @@
   "send_message_url_template": "http://{host}:{port}/bot{token}/sendMessage",
   "get_updates_url_template": "http://{host}:{port}/bot{token}/getUpdates",
   "polling_interval_secs": 1,
-  "infer_batch_length": 20
+  "infer_batch_length": 20,
+  "request_timeout": 120
 }
