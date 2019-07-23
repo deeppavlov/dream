@@ -3,7 +3,7 @@
 **DeepPavlov Agent** is a platform for creating multi-skill chatbots.
 
 <p align="center">
-    <img src="images/Agent%20Pipeline.png" height="600">
+    <img src="docs/source/_static/Agent%20Pipeline.png" height="600">
 </p>
 
 Ready Agent from the box
@@ -14,15 +14,15 @@ made on [DeepPavlov](https://github.com/deepmipt/DeepPavlov). Currently all thes
 Here are the types of conversation you will get if you run the Agent from the pre-made configuration:
 
 <p align="center">
-  <img src="images/conversation_1.jpg" width="200" />
-  <img src="images/conversation_2.jpg" width="200" />
-  <img src="images/conversation_3.jpg" width="200" />
+  <img src="docs/source/_static/conversation_1.jpg" width="200" />
+  <img src="docs/source/_static/conversation_2.jpg" width="200" />
+  <img src="docs/source/_static/conversation_3.jpg" width="200" />
 </p>
 
 Services Configuration
 ======================
 
-You can configure services at the Agent [config file](../core/config.py).
+You can configure services at the Agent [config file](core/config.py).
 
 **Config Description**
 
@@ -83,7 +83,7 @@ Services Deployment
    TELEGRAM_TOKEN=123456789:AAGCiO0QFb_I-GXL-CbJDw7--JQbHkiQyYA
    TELEGRAM_PROXY=socks5://tgproxy:tgproxy_pwd@123.45.67.89:1447
    ```
-1. Configure all skills, skill selectors, response selectors, annotators and database connection in [core/config.py](core/config.py).
+1. Configure all skills, skill selectors, response selectors, annotators and database connection in the [config file](core/config.py).
    If you want a particular skill to use GPU, set its `gpu` value to `True`.
 
    If you want a minimal configuration, you need one skill and one skill selector.
@@ -95,7 +95,7 @@ Services Deployment
     python generate_composefile.py
     ```
     This configuration represents the choice of skills from the previous step.
-    Re-generate it every time you change [core/config.py](core/config.py).
+    Re-generate it every time you change the [config file](core/config.py).
     
 1. Run the Docker environment with:
 
