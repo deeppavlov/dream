@@ -81,13 +81,13 @@ class Wrapper:
                                                                  chat_ids)) for msg_id, chats_batch in enumerate(batched_chats))
         await asyncio.gather(*tasks)
 
-    async def _process_chats_batch(self, chats_batch, msg_id, chat_ids):
+    async def _process_chats_batch(self, chats_batch: list, msg_id: int, chat_ids: list) -> None:
         utts_batch = [(chat_ids[utt_id], utt) for utt_id, utt in enumerate(chats_batch) if utt]
         j = self.config['infer_batch_length']
         chunked_utts_batch = [utts_batch[i * j:(i + 1) * j] for i in range((len(utts_batch) + j - 1) // j)]
         await asyncio.gather(*(self.loop.create_task(self._process_chunk(chunk, msg_id)) for chunk in chunked_utts_batch))
 
-    async def _process_chunk(self, chunk, msg_id):
+    async def _process_chunk(self, chunk: list, msg_id: int) -> None:
         batch = list(zip(*chunk))
         ids_batch = list(batch[0])
         utts_batch = list(batch[1])
@@ -116,7 +116,7 @@ class Wrapper:
 
         return processed_message
 
-    async def _send_results(self, chat_id, response, msg_id) -> None:
+    async def _send_results(self, chat_id: int, response: list, msg_id: int) -> None:
         resp_text = str("{\"text\":\"" + str(response) + "\"}")
         payload = {
             'chat_id': chat_id,
