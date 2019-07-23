@@ -2,15 +2,14 @@ import asyncio
 import json
 import logging
 import numpy as np
+import poller
 import random
 import re
+from aiohttp import web
 from collections import namedtuple, defaultdict
 from dateutil import parser
 from multiprocessing import Process
 
-from aiohttp import web
-
-import poller
 
 with open('test_config.json', encoding='utf8') as fin:
     config = json.load(fin)
@@ -111,7 +110,7 @@ class TestCasesKeeper:
         random.seed(seed)
         self.tests = []
         self.test_configs = []
-        TestTemplate = namedtuple('Config', sorted(config['test_template']))
+        TestTemplate = namedtuple('TestTemplate', sorted(config['test_template']))
         for test_case in config['test_cases']:
             test_template = config['test_template'].copy()
             test_template.update(test_case)
