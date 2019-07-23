@@ -1,10 +1,8 @@
-import aiohttp
 import argparse
 import asyncio
 import functools
 import json
 import logging
-import polling
 import requests
 import sys
 from collections import defaultdict
@@ -12,6 +10,9 @@ from itertools import zip_longest
 from multiprocessing import Process, Queue
 from pathlib import Path
 from typing import Optional
+
+import aiohttp
+import polling
 
 logging.disable(logging.DEBUG)
 log = logging.getLogger('convai_router_bot_poller')

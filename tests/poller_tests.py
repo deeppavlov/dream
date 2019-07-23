@@ -1,14 +1,16 @@
 import asyncio
 import json
 import logging
-import numpy as np
-import poller
 import random
 import re
-from aiohttp import web
 from collections import namedtuple, defaultdict
 from dateutil import parser
 from multiprocessing import Process
+
+import numpy as np
+from aiohttp import web
+
+import poller
 
 
 with open('test_config.json', encoding='utf8') as fin:
