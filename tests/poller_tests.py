@@ -36,9 +36,9 @@ class PollerTester:
                 return self.args
 
         poller.parser = Crutch()
-        log_handler = logging.FileHandler(config['log_file_name'], mode='w')
-        log_handler.setFormatter(poller.log_formatter)
-        poller.log.addHandler(log_handler)
+#        log_handler = logging.FileHandler(config['log_file_name'], mode='w')
+#        log_handler.setFormatter(poller.log_formatter)
+#        poller.log.addHandler(log_handler)
         poller_process = Process(target=poller.main)
         poller_process.start()
 

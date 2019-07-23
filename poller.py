@@ -4,25 +4,15 @@ import functools
 import json
 import logging
 import requests
-import sys
 from collections import defaultdict
 from itertools import zip_longest
+from logging import config as logging_config
 from multiprocessing import Process, Queue
 from pathlib import Path
 from typing import Optional
 
 import aiohttp
 import polling
-
-logging.disable(logging.DEBUG)
-log = logging.getLogger('convai_router_bot_poller')
-log.propagate = False
-log.setLevel(logging.DEBUG)
-log_handler = logging.StreamHandler(sys.stderr)
-log_formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-log_handler.setFormatter(log_formatter)
-log.addHandler(log_handler)
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument('model_url', default=None, help='path to model endpoint', type=str)
@@ -41,11 +31,14 @@ class Wrapper:
         self.poller.start()
         self.chat_events = None
 
-        log.info('Wrapper initiated')
+        logging_config.dictConfig(self.config["logging"])
+        self.log = logging.root.manager.loggerDict['wrapper_logger']
+
+        self.log.info('Wrapper initiated')
 
         while True:
             input_q = self.in_queue.get()
-            log.info('Payload received')
+            self.log.info('Payload received')
             self.loop.run_until_complete(self._process_input(input_q))
 
     async def _process_input(self, input_q: dict) -> None:
@@ -71,7 +64,7 @@ class Wrapper:
             events[-1].set()
 
         if log_msg:
-            log.info(log_msg)
+            self.log.info(log_msg)
 
         # "slices" of replicas from all conversations, each slice contains replicas from different conversation
         batched_chats = zip_longest(*chats, fillvalue=None)
@@ -103,7 +96,7 @@ class Wrapper:
         if response.status_code == 200:
             tasks = (self.loop.create_task(self._send_results(*resp, msg_id)) for resp in zip(ids_batch, response.json()))
         else:
-            log.error(f'Got {response.status_code} code from {self.config["model_url"]}')
+            self.log.error(f'Got {response.status_code} code from {self.config["model_url"]}')
             tasks = (self.loop.create_task(self._send_results(*resp, msg_id)) for resp in zip_longest(ids_batch, [], fillvalue='Server error'))
         await asyncio.gather(*tasks)
 
@@ -127,7 +120,7 @@ class Wrapper:
             await session.post(self.config['send_message_url'], json=payload)
         self.chat_events[chat_id][msg_id].set()
         # TODO: Refactor logs to log in asynchronous mode
-        log.info(f'Sent response to chat: {str(chat_id)}')
+        self.log.info(f'Sent response to chat: {str(chat_id)}')
 
 
 class Poller(Process):
