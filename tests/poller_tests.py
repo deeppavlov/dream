@@ -15,6 +15,9 @@ from poller import Wrapper
 
 with open('test_config.json', encoding='utf8') as fin:
     config = json.load(fin)
+    config["logging"]["handlers"]["log_to_file"]["filename"] = config["log_file_name"]
+    config["send_message_url"] = f"http://{config['router_bot_host']}:{config['router_bot_port']}/bot{config['bot_token']}/sendMessage"
+    config["get_updates_url"] = f"http://{config['router_bot_host']}:{config['router_bot_port']}/bot{config['bot_token']}/getUpdates"
 
 
 class PollerTester:

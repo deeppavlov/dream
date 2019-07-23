@@ -2,20 +2,13 @@
   "model_url": "http://0.0.0.0:5000/answer",
   "router_bot_host": "0.0.0.0",
   "router_bot_port": 7000,
+  "send_message_url": "WILL_BE_CHANGED_IN_SCRIPT",
+  "get_updates_url": "WILL_BE_CHANGED_IN_SCRIPT",
   "bot_token": "some_token",
   "infer_batch_length": 20,
   "request_timeout": 120,
-  "send_message_url": "http://0.0.0.0:7000/botsome_token/sendMessage",
-  "get_updates_url": "http://0.0.0.0:7000/botsome_token/getUpdates",
   "polling_interval_secs": 1,
   "log_file_name": "tests.log",
-  "test_template": {
-    "payload": "All work and no play makes Jack a dull boy.",
-    "repeat_test": 5,
-    "num_of_chats": 1,
-    "msgs_per_chat": 1,
-    "shuffle_msgs": false
-  },
   "logging": {
     "version": 1,
     "formatters": {
@@ -34,7 +27,7 @@
       "log_to_file": {
         "level": "DEBUG",
         "class": "logging.FileHandler",
-        "filename": "tests.log",
+        "filename": "WILL_BE_CHANGED_IN_SCRIPT",
         "formatter": "log_formatter",
         "mode": "w"
       }
@@ -46,6 +39,13 @@
         "handlers": ["log_to_stderr", "log_to_file"]
       }
     }
+  },
+  "test_template": {
+    "payload": "All work and no play makes Jack a dull boy.",
+    "repeat_test": 5,
+    "num_of_chats": 1,
+    "msgs_per_chat": 1,
+    "shuffle_msgs": false
   },
   "test_cases": [
     {
