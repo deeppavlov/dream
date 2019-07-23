@@ -10,7 +10,7 @@ from multiprocessing import Process
 import numpy as np
 from aiohttp import web
 
-import poller
+from poller import Wrapper
 
 
 with open('test_config.json', encoding='utf8') as fin:
@@ -26,20 +26,7 @@ class PollerTester:
         self._test_samples = tests_keeper.get_tests()
         self._test_configs = tests_keeper.get_configs()
 
-        # Start poller
-        class Crutch:
-            def __init__(self):
-                Args = namedtuple('Args', ['model_url', 'host', 'port', 'token'])
-                self.args = Args(config['model_url'], config['router_bot_host'], f'{config["router_bot_port"]}', config["bot_token"])
-
-            def parse_args(self):
-                return self.args
-
-        poller.parser = Crutch()
-#        log_handler = logging.FileHandler(config['log_file_name'], mode='w')
-#        log_handler.setFormatter(poller.log_formatter)
-#        poller.log.addHandler(log_handler)
-        poller_process = Process(target=poller.main)
+        poller_process = Process(target=Wrapper, args=(config,))
         poller_process.start()
 
         loop = asyncio.get_event_loop()
