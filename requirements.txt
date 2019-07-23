@@ -1,5 +1,3 @@
 aiohttp==3.5.4
-requests==2.19.1
+numpy==1.14.5
 polling==0.3.0
-pytest==5.0.1
-pytest-aiohttp==0.3.0

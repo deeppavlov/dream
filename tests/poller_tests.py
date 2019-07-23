@@ -1,6 +1,5 @@
 import asyncio
 import json
-import logging
 import random
 import re
 from collections import namedtuple, defaultdict
@@ -11,7 +10,6 @@ import numpy as np
 from aiohttp import web
 
 from poller import Wrapper
-
 
 with open('test_config.json', encoding='utf8') as fin:
     config = json.load(fin)
