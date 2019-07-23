@@ -24,16 +24,15 @@ log.addHandler(log_handler)
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('model_url', help='path to model endpoint', type=str)
+parser.add_argument('model_url', default=None, help='path to model endpoint', type=str)
 parser.add_argument('--host', default=None, help='router bot host', type=str)
 parser.add_argument('--port', default=None, help='router bot port', type=str)
 parser.add_argument('--token', default=None, help='bot token', type=str)
 
 
 class Wrapper:
-    def __init__(self, config: dict, model_url=None):
+    def __init__(self, config: dict):
         self.config = config
-        self.model_url = model_url
         self.in_queue = Queue()
         self.loop = asyncio.get_event_loop()
 
@@ -94,7 +93,7 @@ class Wrapper:
         data = {"text1": utts_batch}
         try:
             response = await self.loop.run_in_executor(None, functools.partial(requests.post,
-                                                                               self.model_url,
+                                                                               self.config['model_url'],
                                                                                json=data,
                                                                                timeout=self.config['request_timeout']))
         except requests.exceptions.ReadTimeout:
@@ -103,7 +102,7 @@ class Wrapper:
         if response.status_code == 200:
             tasks = (self.loop.create_task(self._send_results(*resp, msg_id)) for resp in zip(ids_batch, response.json()))
         else:
-            log.error(f'Got {response.status_code} code from {self.model_url}')
+            log.error(f'Got {response.status_code} code from {self.config["model_url"]}')
             tasks = (self.loop.create_task(self._send_results(*resp, msg_id)) for resp in zip_longest(ids_batch, [], fillvalue='Server error'))
         await asyncio.gather(*tasks)
 
@@ -187,8 +186,9 @@ def main() -> None:
 
     config['send_message_url'] = send_message_url.format(**url_params)
     config['get_updates_url'] = get_updates_url .format(**url_params)
+    config['model_url'] = model_url or config['model_url']
 
-    Wrapper(config, model_url)
+    Wrapper(config)
 
 
 if __name__ == '__main__':
