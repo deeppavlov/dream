@@ -3,7 +3,6 @@ import asyncio
 import functools
 import json
 import logging
-import requests
 from collections import defaultdict
 from itertools import zip_longest
 from logging import config as logging_config
@@ -12,6 +11,7 @@ from pathlib import Path
 from typing import Optional
 
 import aiohttp
+import requests
 import polling
 
 parser = argparse.ArgumentParser()
