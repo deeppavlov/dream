@@ -212,13 +212,18 @@ Agent can run both from container and from a local machine.
 
         python3 -m core.run -ch telegram
 
-    or via HTTP api client:
+**HTTP api server**
+
+1. You can run agent api server from both container and local environment:
 
     .. code:: bash
 
         python3 -m core.run -ch http_client [-p 8888]
 
-    HTTP client accepts POST requests with application/json content-type.
+    In both cases api will be accessible on your localhost
+
+2. Web server accepts POST requests with application/json content-type:
+
     Request should be in form:
 
     .. code:: javascript
