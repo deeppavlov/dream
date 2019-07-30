@@ -28,19 +28,21 @@ def _model_process(model_function: Callable, conn: Connection, batch_size: int =
     if batch_size <= 0:
         batch_size = float('inf')
 
+    check_time = time.time()
+
     while True:
         batch: List[Tuple[str, Hashable]] = []
-        while conn.poll() and len(batch) < batch_size:
+        while conn.poll() and len(batch) < batch_size and time.time() - check_time <= poll_period:
             batch.append(conn.recv())
 
         if not batch:
-            time.sleep(poll_period)
             continue
 
         messages, dialog_ids = zip(*batch)
         responses = model(messages, dialog_ids)
         for response, dialog_id in zip(responses, dialog_ids):
             conn.send((response, dialog_id))
+        check_time = time.time()  # maybe it should be moved before model call
 
 
 def experimental_bot(
