@@ -109,7 +109,7 @@ class TestCasesKeeper:
                 self.test_configs.append(test_template)
                 test = []
                 for chat_id in range(test_template.num_of_chats):
-                    test += [{'message': {'text': test_template.payload, 'chat': {'id': chat_id}}} for _ in range(test_template.msgs_per_chat)]
+                    test += [{'message': {'payload': {'text': test_template.payload}, 'chat': {'id': chat_id}}} for _ in range(test_template.msgs_per_chat)]
                 if test_template.shuffle_msgs:
                     random.shuffle(test)
                 self.tests.append(test)
