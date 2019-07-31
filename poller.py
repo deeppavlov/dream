@@ -8,7 +8,7 @@ from itertools import zip_longest
 from logging import config as logging_config
 from multiprocessing import Process, Queue
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Dict
 
 import aiohttp
 import requests
@@ -45,7 +45,7 @@ class Wrapper:
         buffer = defaultdict(list)
 
         for message in input_q['result']:
-            message_text = self._process_message_text(message['message']['text'])
+            message_text = self._process_payload(message['message']['payload'])
             if message_text:
                 chat_id = message['message']['chat']['id']
                 buffer[chat_id].append(message_text)
@@ -101,13 +101,12 @@ class Wrapper:
         await asyncio.gather(*tasks)
 
     @staticmethod
-    def _process_message_text(message_text: str) -> Optional[str]:
-        if message_text[:6] == '/start' or message_text[:4] == '/end':
-            processed_message = None
+    def _process_payload(payload: Dict) -> Optional[str]:
+        if payload.get('command', None) is not None:
+            message = None
         else:
-            processed_message = message_text
-
-        return processed_message
+            message = payload['text']
+        return message
 
     async def _send_results(self, chat_id: int, response: list, msg_id: int) -> None:
         resp_text = str("{\"text\":\"" + str(response) + "\"}")
