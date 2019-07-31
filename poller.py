@@ -15,7 +15,7 @@ import requests
 import polling
 
 parser = argparse.ArgumentParser()
-parser.add_argument('model_url', default=None, help='path to model endpoint', type=str)
+parser.add_argument('--model_url', default=None, help='path to model endpoint', type=str)
 parser.add_argument('--host', default=None, help='router bot host', type=str)
 parser.add_argument('--port', default=None, help='router bot port', type=str)
 parser.add_argument('--token', default=None, help='bot token', type=str)
@@ -109,7 +109,8 @@ class Wrapper:
         return message
 
     async def _send_results(self, chat_id: int, response: list, msg_id: int) -> None:
-        resp_text = str("{\"text\":\"" + str(response) + "\"}")
+        buf = {'text': ' '.join(str(element) for element in response)}
+        resp_text = json.dumps(buf)
         payload = {
             'chat_id': chat_id,
             'text': resp_text
