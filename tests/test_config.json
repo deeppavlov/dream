@@ -1,13 +1,14 @@
 {
-  "model_url": "http://0.0.0.0:5000/answer",
   "router_bot_host": "0.0.0.0",
   "router_bot_port": 7000,
+  "bot_token": "some_token",
   "send_message_url": "WILL_BE_CHANGED_IN_SCRIPT",
   "get_updates_url": "WILL_BE_CHANGED_IN_SCRIPT",
-  "bot_token": "some_token",
+  "model_url": "http://0.0.0.0:5000/answer",
+  "model_param_name": "text1",
+  "polling_interval_secs": 1,
   "infer_batch_length": 20,
   "request_timeout": 120,
-  "polling_interval_secs": 1,
   "log_file_name": "tests.log",
   "logging": {
     "version": 1,

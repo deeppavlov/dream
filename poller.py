@@ -8,7 +8,7 @@ from itertools import zip_longest
 from logging import config as logging_config
 from multiprocessing import Process, Queue
 from pathlib import Path
-from typing import Optional, Dict
+from typing import Dict, List, Optional, Tuple
 
 import aiohttp
 import requests
@@ -70,21 +70,21 @@ class Wrapper:
         batched_chats = zip_longest(*chats, fillvalue=None)
 
         tasks = (self.loop.create_task(self._process_chats_batch(chats_batch,
-                                                                 msg_id,
-                                                                 chat_ids)) for msg_id, chats_batch in enumerate(batched_chats))
+                                                                 layer_id,
+                                                                 chat_ids)) for layer_id, chats_batch in enumerate(batched_chats))
         await asyncio.gather(*tasks)
 
-    async def _process_chats_batch(self, chats_batch: list, msg_id: int, chat_ids: list) -> None:
+    async def _process_chats_batch(self, chats_batch: List[str], layer_id: int, chat_ids: List[int]) -> None:
         utts_batch = [(chat_ids[utt_id], utt) for utt_id, utt in enumerate(chats_batch) if utt]
         j = self.config['infer_batch_length']
         chunked_utts_batch = [utts_batch[i * j:(i + 1) * j] for i in range((len(utts_batch) + j - 1) // j)]
-        await asyncio.gather(*(self.loop.create_task(self._process_chunk(chunk, msg_id)) for chunk in chunked_utts_batch))
+        await asyncio.gather(*(self.loop.create_task(self._process_chunk(chunk, layer_id)) for chunk in chunked_utts_batch))
 
-    async def _process_chunk(self, chunk: list, msg_id: int) -> None:
-        batch = list(zip(*chunk))
-        ids_batch = list(batch[0])
-        utts_batch = list(batch[1])
-        data = {"text1": utts_batch}
+    async def _process_chunk(self, chunk: List[Tuple[int, str]], layer_id: int) -> None:
+        ids_utts_batch = list(zip(*chunk))
+        ids_batch = list(ids_utts_batch[0])
+        utts_batch = list(ids_utts_batch[1])
+        data = {self.config["model_param_name"]: utts_batch}
         try:
             response = await self.loop.run_in_executor(None, functools.partial(requests.post,
                                                                                self.config['model_url'],
@@ -93,11 +93,14 @@ class Wrapper:
         except requests.exceptions.ReadTimeout:
             response = requests.Response()
             response.status_code = 503
+
         if response.status_code == 200:
-            tasks = (self.loop.create_task(self._send_results(*resp, msg_id)) for resp in zip(ids_batch, response.json()))
+            zip_batch = zip(ids_batch, response.json())
         else:
             self.log.error(f'Got {response.status_code} code from {self.config["model_url"]}')
-            tasks = (self.loop.create_task(self._send_results(*resp, msg_id)) for resp in zip_longest(ids_batch, [], fillvalue='Server error'))
+            zip_batch = zip_longest(ids_batch, [], fillvalue='Server error')
+        tasks = (self.loop.create_task(self._send_results(chat_id, chat_resp, layer_id)) for (chat_id, chat_resp) in zip_batch)
+
         await asyncio.gather(*tasks)
 
     @staticmethod
@@ -108,17 +111,17 @@ class Wrapper:
             message = payload['text']
         return message
 
-    async def _send_results(self, chat_id: int, response: list, msg_id: int) -> None:
+    async def _send_results(self, chat_id: int, response: list, layer_id: int) -> None:
         buf = {'text': ' '.join(str(element) for element in response)}
         resp_text = json.dumps(buf)
         payload = {
             'chat_id': chat_id,
             'text': resp_text
         }
-        await self.chat_events[chat_id][msg_id-1].wait()
+        await self.chat_events[chat_id][layer_id-1].wait()
         async with aiohttp.ClientSession() as session:
             await session.post(self.config['send_message_url'], json=payload)
-        self.chat_events[chat_id][msg_id].set()
+        self.chat_events[chat_id][layer_id].set()
         # TODO: Refactor logs to log in asynchronous mode
         self.log.info(f'Sent response to chat: {str(chat_id)}')
 
