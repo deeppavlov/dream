@@ -1,65 +1,51 @@
 import argparse
+import asyncio
+import functools
 import json
 import logging
-import sys
-from typing import Optional
-from pathlib import Path
 from collections import defaultdict
-from multiprocessing import Process, Queue
 from itertools import zip_longest
+from logging import config as logging_config
+from multiprocessing import Process, Queue
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
 
+import aiohttp
 import requests
 import polling
 
-from deeppavlov.core.agent.agent import Agent
-from deeppavlov.agents.default_agent.default_agent import DefaultAgent
-from deeppavlov.skills.default_skill.default_skill import DefaultStatelessSkill
-from deeppavlov.core.commands.infer import build_model
-from deeppavlov.core.common.file import read_json
-from deeppavlov.deep import find_config
-from deeppavlov.download import deep_download
-
-
-logging.disable(logging.DEBUG)
-log = logging.getLogger('convai_router_bot_poller')
-log.propagate = False
-log.setLevel(logging.DEBUG)
-log_handler = logging.StreamHandler(sys.stderr)
-log_formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-log_handler.setFormatter(log_formatter)
-log.addHandler(log_handler)
-
-
 parser = argparse.ArgumentParser()
-parser.add_argument('config_path', help='path to a pipeline json config', type=str)
+parser.add_argument('--model_url', default=None, help='path to model endpoint', type=str)
 parser.add_argument('--host', default=None, help='router bot host', type=str)
 parser.add_argument('--port', default=None, help='router bot port', type=str)
 parser.add_argument('--token', default=None, help='bot token', type=str)
-parser.add_argument('--no-default-skill', action='store_true', help='not to wrap with default skill')
-parser.add_argument('-d', '--download', action='store_true', help='download DeepPavlov components')
 
 
 class Wrapper:
-    def __init__(self, config: dict, agent: Agent=None):
+    def __init__(self, config: dict):
         self.config = config
-        self.agent = agent
         self.in_queue = Queue()
+        self.loop = asyncio.get_event_loop()
 
         self.poller = Poller(config, self.in_queue)
         self.poller.start()
+        self.chat_events = None
 
-        log.info('Wrapper initiated')
+        logging_config.dictConfig(self.config["logging"])
+        self.log = logging.root.manager.loggerDict['wrapper_logger']
+
+        self.log.info('Wrapper initiated')
 
         while True:
             input_q = self.in_queue.get()
-            log.info('Payload received')
-            self._process_input(input_q)
+            self.log.info('Payload received')
+            self.loop.run_until_complete(self._process_input(input_q))
 
-    def _process_input(self, input_q: dict) -> None:
+    async def _process_input(self, input_q: dict) -> None:
         buffer = defaultdict(list)
 
         for message in input_q['result']:
-            message_text = self._process_message_text(message['message']['text'])
+            message_text = self._process_payload(message['message']['payload'])
             if message_text:
                 chat_id = message['message']['chat']['id']
                 buffer[chat_id].append(message_text)
@@ -73,50 +59,71 @@ class Wrapper:
             chat_ids.append(chat_id)
             log_msg = f'{log_msg}, {str(chat_id)}' if log_msg else f'Processing messages for chats: {str(chat_id)}'
 
+        self.chat_events = {chat_id: [asyncio.Event() for _ in range(len(chat))] for chat_id, chat in buffer.items()}
+        for events in self.chat_events.values():
+            events[-1].set()
+
         if log_msg:
-            log.info(log_msg)
+            self.log.info(log_msg)
 
         # "slices" of replicas from all conversations, each slice contains replicas from different conversation
         batched_chats = zip_longest(*chats, fillvalue=None)
 
-        for chats_batch in batched_chats:
-            utts_batch = [(chat_ids[utt_id], utt) for utt_id, utt in enumerate(chats_batch) if utt]
-            j = self.config['infer_batch_length']
-            chunked_utts_batch = [utts_batch[i * j:(i + 1) * j] for i in range((len(utts_batch) + j - 1) // j)]
+        tasks = (self.loop.create_task(self._process_chats_batch(chats_batch,
+                                                                 layer_id,
+                                                                 chat_ids)) for layer_id, chats_batch in enumerate(batched_chats))
+        await asyncio.gather(*tasks)
 
-            for chunk in chunked_utts_batch:
-                batch = list(zip(*chunk))
-                ids_batch = list(batch[0])
-                utts_batch = list(batch[1])
-                response_batch = self.agent(utts_batch, ids_batch)
+    async def _process_chats_batch(self, chats_batch: List[str], layer_id: int, chat_ids: List[int]) -> None:
+        utts_batch = [(chat_ids[utt_id], utt) for utt_id, utt in enumerate(chats_batch) if utt]
+        j = self.config['infer_batch_length']
+        chunked_utts_batch = [utts_batch[i * j:(i + 1) * j] for i in range((len(utts_batch) + j - 1) // j)]
+        await asyncio.gather(*(self.loop.create_task(self._process_chunk(chunk, layer_id)) for chunk in chunked_utts_batch))
 
-                for resp in zip(ids_batch, response_batch):
-                    self._send_results(*resp)
+    async def _process_chunk(self, chunk: List[Tuple[int, str]], layer_id: int) -> None:
+        ids_utts_batch = list(zip(*chunk))
+        ids_batch = list(ids_utts_batch[0])
+        utts_batch = list(ids_utts_batch[1])
+        data = {self.config["model_param_name"]: utts_batch}
+        try:
+            response = await self.loop.run_in_executor(None, functools.partial(requests.post,
+                                                                               self.config['model_url'],
+                                                                               json=data,
+                                                                               timeout=self.config['request_timeout']))
+        except requests.exceptions.ReadTimeout:
+            response = requests.Response()
+            response.status_code = 503
+
+        if response.status_code == 200:
+            zip_batch = zip(ids_batch, response.json())
+        else:
+            self.log.error(f'Got {response.status_code} code from {self.config["model_url"]}')
+            zip_batch = zip_longest(ids_batch, [], fillvalue='Server error')
+        tasks = (self.loop.create_task(self._send_results(chat_id, chat_resp, layer_id)) for (chat_id, chat_resp) in zip_batch)
+
+        await asyncio.gather(*tasks)
 
     @staticmethod
-    def _process_message_text(message_text: str) -> Optional[str]:
-        if message_text[:6] == '/start' or message_text[:4] == '/end':
-            processed_message = None
+    def _process_payload(payload: Dict) -> Optional[str]:
+        if payload.get('command', None) is not None:
+            message = None
         else:
-            processed_message = message_text
+            message = payload['text']
+        return message
 
-        return processed_message
-
-    def _send_results(self, chat_id, response) -> None:
-        resp_text = str("{\"text\":\"" + str(response) + "\"}")
-
+    async def _send_results(self, chat_id: int, response: list, layer_id: int) -> None:
+        buf = {'text': ' '.join(str(element) for element in response)}
+        resp_text = json.dumps(buf)
         payload = {
             'chat_id': chat_id,
             'text': resp_text
         }
-
-        requests.post(
-
-            url=self.config['send_message_url'],
-            json=payload
-        )
-
-        log.info(f'Sent response to chat: {str(chat_id)}')
+        await self.chat_events[chat_id][layer_id-1].wait()
+        async with aiohttp.ClientSession() as session:
+            await session.post(self.config['send_message_url'], json=payload)
+        self.chat_events[chat_id][layer_id].set()
+        # TODO: Refactor logs to log in asynchronous mode
+        self.log.info(f'Sent response to chat: {str(chat_id)}')
 
 
 class Poller(Process):
@@ -155,15 +162,15 @@ class Poller(Process):
 def main() -> None:
     args = parser.parse_args()
 
-    pipeline_config_path = find_config(args.config_path)
+    model_url = args.model_url
     host = args.host
     port = args.port
     token = args.token
-    no_default_skill_wrap = args.no_default_skill
 
     root_path = Path(__file__).resolve().parent
     config_path = root_path / 'config.json'
-    config = read_json(config_path)
+    with open(config_path, encoding='utf8') as fin:
+        config = json.load(fin)
 
     send_message_url: str = config['send_message_url_template']
     get_updates_url: str = config['get_updates_url_template']
@@ -176,19 +183,10 @@ def main() -> None:
 
     config['send_message_url'] = send_message_url.format(**url_params)
     config['get_updates_url'] = get_updates_url .format(**url_params)
+    config['model_url'] = model_url or config['model_url']
 
-    if args.download:
-        deep_download(pipeline_config_path)
-
-    model = build_model(pipeline_config_path)
-    skill = model if no_default_skill_wrap else DefaultStatelessSkill(model)
-    agent = DefaultAgent(skills=[skill])
-    Wrapper(config, agent)
-
-    while True:
-        pass
+    Wrapper(config)
 
 
 if __name__ == '__main__':
     main()
-

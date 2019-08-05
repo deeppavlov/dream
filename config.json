@@ -4,6 +4,33 @@
   "bot_token": "",
   "send_message_url_template": "http://{host}:{port}/bot{token}/sendMessage",
   "get_updates_url_template": "http://{host}:{port}/bot{token}/getUpdates",
+  "model_url": "https://7004.lnsigo.mipt.ru/answer",
+  "model_param_name": "text1",
   "polling_interval_secs": 1,
-  "infer_batch_length": 20
+  "infer_batch_length": 20,
+  "request_timeout": 120,
+  "logging": {
+    "version": 1,
+    "formatters": {
+      "log_formatter": {
+        "class": "logging.Formatter",
+        "format": "%(asctime)s %(levelname)s %(message)s"
+      }
+    },
+    "handlers": {
+      "log_to_stderr": {
+        "level": "DEBUG",
+        "class": "logging.StreamHandler",
+        "stream": "ext://sys.stderr",
+        "formatter": "log_formatter"
+      }
+    },
+    "loggers": {
+      "wrapper_logger": {
+        "propagate": false,
+        "level": "DEBUG",
+        "handlers": ["log_to_stderr"]
+      }
+    }
+  }
 }

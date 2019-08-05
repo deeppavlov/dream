@@ -1,0 +1,59 @@
+{
+  "router_bot_host": "0.0.0.0",
+  "router_bot_port": 7000,
+  "bot_token": "some_token",
+  "send_message_url": "WILL_BE_CHANGED_IN_SCRIPT",
+  "get_updates_url": "WILL_BE_CHANGED_IN_SCRIPT",
+  "model_url": "http://0.0.0.0:5000/answer",
+  "model_param_name": "text1",
+  "polling_interval_secs": 1,
+  "infer_batch_length": 20,
+  "request_timeout": 120,
+  "log_file_name": "tests.log",
+  "logging": {
+    "version": 1,
+    "formatters": {
+      "log_formatter": {
+        "class": "logging.Formatter",
+        "format": "%(asctime)s %(levelname)s %(message)s"
+      }
+    },
+    "handlers": {
+      "log_to_stderr": {
+        "level": "DEBUG",
+        "class": "logging.StreamHandler",
+        "stream": "ext://sys.stderr",
+        "formatter": "log_formatter"
+      },
+      "log_to_file": {
+        "level": "DEBUG",
+        "class": "logging.FileHandler",
+        "filename": "WILL_BE_CHANGED_IN_SCRIPT",
+        "formatter": "log_formatter",
+        "mode": "w"
+      }
+    },
+    "loggers": {
+      "wrapper_logger": {
+        "propagate": false,
+        "level": "DEBUG",
+        "handlers": ["log_to_stderr", "log_to_file"]
+      }
+    }
+  },
+  "test_template": {
+    "payload": "All work and no play makes Jack a dull boy.",
+    "repeat_test": 5,
+    "num_of_chats": 1,
+    "msgs_per_chat": 1,
+    "shuffle_msgs": false
+  },
+  "test_cases": [
+    {
+      "num_of_chats": 20
+    },
+    {
+      "msgs_per_chat": 20
+    }
+  ]
+}
