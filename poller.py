@@ -19,6 +19,9 @@ parser.add_argument('--model_url', default=None, help='path to model endpoint', 
 parser.add_argument('--host', default=None, help='router bot host', type=str)
 parser.add_argument('--port', default=None, help='router bot port', type=str)
 parser.add_argument('--token', default=None, help='bot token', type=str)
+parser.add_argument('--send-state', default=None, help='true to send state', type=bool)
+parser.add_argument('--convai_mode', default=None, help='if true send full payload, else - only "text" field',
+                    type=bool)
 
 
 class Wrapper:
@@ -45,10 +48,13 @@ class Wrapper:
         buffer = defaultdict(list)
 
         for message in input_q['result']:
-            message_text = self._process_payload(message['message']['payload'])
-            if message_text:
+            if self.config['convai_mode'] is True:
+                chat_item = message['message']
+            else:
+                chat_item = self._process_payload(message['message']['payload'])
+            if chat_item:
                 chat_id = message['message']['chat']['id']
-                buffer[chat_id].append(message_text)
+                buffer[chat_id].append(chat_item)
 
         chats = []
         chat_ids = []
@@ -122,7 +128,6 @@ class Wrapper:
         async with aiohttp.ClientSession() as session:
             await session.post(self.config['send_message_url'], json=payload)
         self.chat_events[chat_id][layer_id].set()
-        # TODO: Refactor logs to log in asynchronous mode
         self.log.info(f'Sent response to chat: {str(chat_id)}')
 
 
@@ -166,6 +171,8 @@ def main() -> None:
     host = args.host
     port = args.port
     token = args.token
+    send_state = args.send_state
+    convai_mode = args.convai_mode
 
     root_path = Path(__file__).resolve().parent
     config_path = root_path / 'config.json'
@@ -184,6 +191,8 @@ def main() -> None:
     config['send_message_url'] = send_message_url.format(**url_params)
     config['get_updates_url'] = get_updates_url .format(**url_params)
     config['model_url'] = model_url or config['model_url']
+    config['send_state'] = send_state or config['send_state']
+    config['convai_mode'] = convai_mode or config['convai_mode']
 
     Wrapper(config)
 
