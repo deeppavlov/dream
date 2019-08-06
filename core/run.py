@@ -98,10 +98,11 @@ def run():
 
     state_manager = StateManager()
 
-    anno_names, anno_urls = zip(
-        *[(annotator['name'], annotator['url']) for annotator in ANNOTATORS])
+    anno_names, anno_urls, anno_formatters = zip(
+        *[(annotator['name'], annotator['url'], annotator['state_formatter']) for annotator in ANNOTATORS])
     preprocessor = Service(
-        rest_caller=RestCaller(max_workers=MAX_WORKERS, names=anno_names, urls=anno_urls))
+        rest_caller=RestCaller(max_workers=MAX_WORKERS, names=anno_names, urls=anno_urls,
+                               state_formatters=anno_formatters))
     postprocessor = DefaultPostprocessor()
     skill_caller = RestCaller(max_workers=MAX_WORKERS)
     response_selector = ConfidenceResponseSelector()
