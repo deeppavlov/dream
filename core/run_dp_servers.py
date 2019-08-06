@@ -197,6 +197,52 @@ def skill_server(config: Union[dict, str, Path], https=False, ssl_key=None, ssl_
 
     app.run(host=host, port=port, threaded=False, ssl_context=ssl_context)
 
+def model_server(config: Union[dict, str, Path], https=False, ssl_key=None, ssl_cert=None, *,
+                 host: Optional[str] = None, port: Optional[int] = None,
+                 endpoint: Optional[str] = None,
+                 download: bool = True, batch_size: Optional[int] = None,
+                 env: Optional[Dict[str, str]] = None):
+    if env:
+        os.environ.update(env)
+    host = host or '0.0.0.0'
+    port = port or 80
+    endpoint = f'/{endpoint}' or '/skill'
+    if batch_size is not None and batch_size < 1:
+        log.warning(f'batch_size of {batch_size} is less than 1 and is interpreted as unlimited')
+        batch_size = None
+
+    ssl_context = _get_ssl_context(ssl_key, ssl_cert) if https else None
+
+    model = build_model(config, download=download)
+
+    @app.route('/')
+    def index():
+        return redirect('/apidocs/')
+
+    endpoint_description = {
+        'description': 'A model endpoint',
+        'parameters': [
+            {
+                'name': 'data',
+                'in': 'body',
+                'required': 'true',
+                'example': {arg: ['value'] for arg in 'model_args_names'}
+            }
+        ],
+        'responses': {
+            "200": {
+                "description": "A model response"
+            }
+        }
+    }
+
+    @app.route(endpoint, methods=['POST'])
+    @swag_from(endpoint_description)
+    def answer():
+        return interact(model, model_args_names)
+
+    app.run(host=host, port=port, threaded=False, ssl_context=ssl_context)
+
 
 if __name__ == '__main__':
     args = parser.parse_args()

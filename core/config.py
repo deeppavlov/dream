@@ -7,6 +7,8 @@ from collections import defaultdict
 
 import yaml
 
+from state_formatters.dp_formatters import *
+
 TELEGRAM_TOKEN = ''
 TELEGRAM_PROXY = ''
 
@@ -80,7 +82,8 @@ ANNOTATORS = [
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
         },
-        "gpu": False
+        "gpu": False,
+        "formatter": obscenity_formatter
     }
 ]
 
