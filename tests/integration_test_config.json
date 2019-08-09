@@ -24,30 +24,30 @@
           "scores_range_stop": null
         }
       }
-    }
-  },
-  "text": {
-    "update_id": 164,
-    "message": {
-      "message_id": 0,
-      "from": {
-        "id": 801793983,
-        "is_bot": true,
-        "first_name": "0"
-      },
-      "chat": {
-        "id": 801793983,
-        "first_name": "0",
-        "type": "private"
-      },
-      "date": 1565100390.098376,
-      "payload": {
-        "text": "blah blah blah",
-        "command": null,
-        "profile": null,
-        "topic": null,
-        "scores_range_start": null,
-        "scores_range_stop": null
+    },
+    "text": {
+      "update_id": 164,
+      "message": {
+        "message_id": 0,
+        "from": {
+          "id": 801793983,
+          "is_bot": true,
+          "first_name": "0"
+        },
+        "chat": {
+          "id": 801793983,
+          "first_name": "0",
+          "type": "private"
+        },
+        "date": 1565100390.098376,
+        "payload": {
+          "text": "blah blah blah",
+          "command": null,
+          "profile": null,
+          "topic": null,
+          "scores_range_start": null,
+          "scores_range_stop": null
+        }
       }
     }
   }

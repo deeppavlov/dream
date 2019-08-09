@@ -11,16 +11,25 @@ parser.add_argument('--port', default=5000, type=int)
 
 
 class Server:
-    """Server to emulate router bot.
+    """Server to emulate router bot and DeepPavlov model launched as REST Api.
 
-    Endpoints:
+    DeepPavlov model on each infer returns tuple with upper text and unchanged infer.
+
+    Example:
+        'Infer' -> ('INFER', 'Infer')
+
+    Server endpoints:
         /bot{token}/getUpdates (get): Returns messages from user.
-        /bot{token}/sendMessage (post): Receives payload that passed to Deeppavlov model.
-        /answer (post): Enpoint emulates Deeppavlov REST API endpoint.
+        /bot{token}/sendMessage (post): Receives payload that passed to DeepPavlov model.
+        /answer (post): Endpoint emulates DeepPavlov REST API endpoint.
         /newTest (post): Add messages from user
 
     """
     def __init__(self, port):
+        self._test_n = 0
+        self._updates = []
+        self._infer = ''
+        self._send_messages = set()
         with open('../config.json', 'r') as config_file:
             config = json.load(config_file)
         logging_config.dictConfig(config['logging'])
@@ -34,23 +43,43 @@ class Server:
         web.run_app(self._app, port=port)
 
     async def _dp_model(self, request: web.Request):
-        self._log.info('request to model')
-        return web.Response(status=200)
+        request_txt = await request.text()
+        self._log.debug(f'Infer is correct: {request_txt == self._infer}')
+        data = await request.json()
+        ret = [(inf.upper(), inf) for inf in data['text1']]
+
+        return web.json_response(ret)
 
     async def _handle_updates(self, request: web.Request):
-        self._log.info('request to updates')
-        res = self.result
-        self.result = []
-        if res:
-            self.messages_to_process = len(res)
+        res = self._updates
+        self._updates = []
         return web.json_response({'result': res})
 
     async def _handle_message(self, request: web.Request):
-        self._log.info('request to _handle_message')
+        request_txt = await request.text()
+        if request_txt in self._send_messages:
+            self._gen_messages.append(request_txt)
+        if len(self._send_messages) == len(self._gen_messages):
+            self._log.debug('All messages received: True')
         return web.Response(status=200)
 
     async def _set_new_test(self, request: web.Request):
-        self._log.info('request to set new test')
+        """Sets test data.
+
+        Request must contain dictionary with following keys:
+            'updates' (list): Messages from router bot.
+            'infer' (str): Serialized JSON object that router bot poller should send to the DeepPavlov model.
+            'send_messages' (List[str]): Each item is serialized JSON object that poller sends to router bot's
+                /sendMessage endpoint.
+
+        """
+        self._log.info(f'Test {self._test_n}')
+        self._test_n += 1
+        data = await request.json()
+        self._updates = data['updates']
+        self._infer = data['infer']
+        self._send_messages = data['send_messages']
+        self._gen_messages = []
         return web.Response(status=200)
 
 
