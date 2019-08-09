@@ -1,0 +1,54 @@
+{
+  "messages": {
+    "command": {
+      "update_id": 163,
+      "message": {
+        "message_id": 0,
+        "from": {
+          "id": 801793983,
+          "is_bot": true,
+          "first_name": "0"
+        },
+        "chat": {
+          "id": 801793983,
+          "first_name": "0",
+          "type": "private"
+        },
+        "date": 1565100382.776386,
+        "payload": {
+          "text": null,
+          "command": "start",
+          "profile": "Я офисный работник. Я люблю свой коллектив. Я рано встаю. Я печатаю на компьютере. У меня есть кошка.",
+          "topic": "\nТема: \"Знакомство\" (узнайте имя, возраст, место жительства собеседника и т.п.)\n",
+          "scores_range_start": null,
+          "scores_range_stop": null
+        }
+      }
+    }
+  },
+  "text": {
+    "update_id": 164,
+    "message": {
+      "message_id": 0,
+      "from": {
+        "id": 801793983,
+        "is_bot": true,
+        "first_name": "0"
+      },
+      "chat": {
+        "id": 801793983,
+        "first_name": "0",
+        "type": "private"
+      },
+      "date": 1565100390.098376,
+      "payload": {
+        "text": "blah blah blah",
+        "command": null,
+        "profile": null,
+        "topic": null,
+        "scores_range_start": null,
+        "scores_range_stop": null
+      }
+    }
+  }
+}
