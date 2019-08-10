@@ -1,7 +1,7 @@
-from typing import Dict
+from typing import Dict, Any
 
 
-def base_state_formatter(state: Dict):
+def base_input_formatter(state: Dict):
     """This state_formatter takes the most popular fields from Agent state and returns them as dict values:
         * last utterances: a list of last utterance from each dialog in the state
         * last_annotations: a list of last annotation from each last utterance
@@ -37,7 +37,8 @@ def base_state_formatter(state: Dict):
         dialog_ids.append(dialog['id'])
         user_ids.append(dialog['user']['id'])
 
-    return {'last_utterances': last_utterances,
+    return {'dialogs': state['dialogs'],
+            'last_utterances': last_utterances,
             'last_annotations': last_annotations,
             'utterances_histories': utterances_histories,
             'annotation_histories': annotations_histories,
@@ -45,12 +46,48 @@ def base_state_formatter(state: Dict):
             'user_ids': user_ids}
 
 
-def obscenity_formatter(state: Dict, model_args_names=('context',)):
-    last_utterances = base_state_formatter(state)['last_utterances']
-    payload = {model_args_names[0]: last_utterances}
-    return payload
+def last_utterances(payload, model_args_names):
+    utterances = base_input_formatter(payload)['last_utterances']
+    return {model_args_names[0]: utterances}
 
 
-FORMATTERS = {"obscenity": obscenity_formatter}
+def base_skill_output_formatter(payload):
+    return {"text": payload[0],
+            "confidence": payload[1]}
 
 
+def base_annotator_formatter(payload: Any, model_args_names=('context',), mode='in'):
+    if mode == 'in':
+        return last_utterances(payload, model_args_names)
+    elif mode == 'out':
+        return payload
+
+
+def ner_formatter(payload: Any, model_args_names=('context',), mode='in'):
+    if mode == 'in':
+        return last_utterances(payload, model_args_names)
+    elif mode == 'out':
+        return {'tokens': payload[0],
+                'tags': payload[1]}
+
+
+def odqa_formatter(payload: Any, model_args_names=('context',), mode='in'):
+    if mode == 'in':
+        return last_utterances(payload, model_args_names)
+    elif mode == 'out':
+        return base_skill_output_formatter(payload)
+
+
+def chitchat_formatter(payload: Any,
+                       model_args_names=("utterances", 'annotations', 'u_histories', 'dialogs'),
+                       mode='in'):
+    if mode == 'in':
+        parsed = base_input_formatter(payload)
+        return {model_args_names[0]: parsed['last_utterances'],
+                model_args_names[1]: parsed['last_annotations'],
+                model_args_names[2]: parsed['utterances_histories'],
+                model_args_names[3]: parsed['dialogs']}
+    elif mode == 'out':
+        return {"text": payload[0],
+                "confidence": payload[1],
+                "name": payload[2]}

@@ -99,7 +99,7 @@ def run():
     state_manager = StateManager()
 
     anno_names, anno_urls, anno_formatters = zip(
-        *[(annotator['name'], annotator['url'], annotator['state_formatter']) for annotator in ANNOTATORS])
+        *[(a['name'], a['url'], a['formatter']) for a in ANNOTATORS])
     preprocessor = Service(
         rest_caller=RestCaller(max_workers=MAX_WORKERS, names=anno_names, urls=anno_urls,
                                state_formatters=anno_formatters))

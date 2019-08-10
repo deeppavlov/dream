@@ -20,30 +20,32 @@ MAX_WORKERS = 4
 root = Path(__file__).parent.parent
 
 SKILLS = [
-    {
-        "name": "odqa",
-        "protocol": "http",
-        "host": "127.0.0.1",
-        "port": 2080,
-        "endpoint": "skill",
-        "path": "skills/text_qa/agent_ru_odqa_retr_noans_rubert_infer.json",
-        "env": {
-            "CUDA_VISIBLE_DEVICES": ""
-        },
-        "gpu": False
-    },
+    # {
+    #     "name": "odqa",
+    #     "protocol": "http",
+    #     "host": "127.0.0.1",
+    #     "port": 2080,
+    #     "endpoint": "odqa",
+    #     "path": "skills/text_qa/agent_ru_odqa_retr_noans_rubert_infer.json",
+    #     "env": {
+    #         "CUDA_VISIBLE_DEVICES": ""
+    #     },
+    #     "gpu": False,
+    #     "formatter": odqa_formatter
+    # },
     {
         "name": "chitchat",
         "protocol": "http",
         "host": "127.0.0.1",
         "port": 2081,
-        "endpoint": "skill",
+        "endpoint": "chitchat",
         "path": "skills/ranking_chitchat/agent_ranking_chitchat_2staged_tfidf_smn_v4_prep.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
         },
         "profile_handler": True,
-        "gpu": False
+        "gpu": False,
+        "formatter": chitchat_formatter
     }
 ]
 
@@ -53,62 +55,47 @@ ANNOTATORS = [
         "protocol": "http",
         "host": "127.0.0.1",
         "port": 2083,
-        "endpoint": "skill",
+        "endpoint": "ner",
         "path": "annotators/ner/preproc_ner_rus.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
         },
-        "gpu": False
-    },
-    {
-        "name": "sentiment",
-        "protocol": "http",
-        "host": "127.0.0.1",
-        "port": 2084,
-        "endpoint": "skill",
-        "path": "annotators/sentiment/preproc_rusentiment.json",
-        "env": {
-            "CUDA_VISIBLE_DEVICES": ""
-        },
-        "gpu": False
-    },
-    {
-        "name": "obscenity",
-        "protocol": "http",
-        "host": "127.0.0.1",
-        "port": 2088,
-        "endpoint": "skill",
-        "path": "annotators/obscenity/obscenity_classifier.json",
-        "env": {
-            "CUDA_VISIBLE_DEVICES": ""
-        },
         "gpu": False,
-        "formatter": obscenity_formatter
+        "formatter": ner_formatter
     }
+    # {
+    #     "name": "sentiment",
+    #     "protocol": "http",
+    #     "host": "127.0.0.1",
+    #     "port": 2084,
+    #     "endpoint": "intents",
+    #     "path": "annotators/sentiment/preproc_rusentiment.json",
+    #     "env": {
+    #         "CUDA_VISIBLE_DEVICES": ""
+    #     },
+    #     "gpu": False,
+    #     "formatter": base_annotator_formatter
+    # },
+    # {
+    #     "name": "obscenity",
+    #     "protocol": "http",
+    #     "host": "127.0.0.1",
+    #     "port": 2088,
+    #     "endpoint": "model",
+    #     "path": "annotators/obscenity/obscenity_classifier.json",
+    #     "env": {
+    #         "CUDA_VISIBLE_DEVICES": ""
+    #     },
+    #     "gpu": False,
+    #     "formatter": base_annotator_formatter
+    # }
 ]
 
-SKILL_SELECTORS = [
-    {
-        "name": "chitchat_odqa",
-        "protocol": "http",
-        "host": "127.0.0.1",
-        "port": 2082,
-        "endpoint": "skill",
-        "path": "skill_selectors/chitchat_odqa_selector/sselector_chitchat_odqa.json",
-        "env": {
-            "CUDA_VISIBLE_DEVICES": ""
-        },
-        "gpu": False
-    }
-]
+SKILL_SELECTORS = []
 
-RESPONSE_SELECTORS = [
+RESPONSE_SELECTORS = []
 
-]
-
-POSTPROCESSORS = [
-
-]
+POSTPROCESSORS = []
 
 
 # TODO include Bot?
