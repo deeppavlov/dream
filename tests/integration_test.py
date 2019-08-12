@@ -72,21 +72,25 @@ async def test0():
     updates = [message.cmd(0)] + [message.txt(i) for i in msg_chat_ids]
     payload = {
         'updates': updates,
-        'infer': json.dumps({config["model_param_name"]: [t['message']['payload']['text'] for t in updates if t['message']['payload']['text'] is not None]}),
-        'send_messages': [json.dumps({'chat_id': chat_id, 'text': json.dumps({'text': "BLAH BLAH BLAH blah blah blah"})}) for chat_id in msg_chat_ids]
+        'infer': {config["model_param_name"]: [t['message']['payload']['text'] for t in updates if t['message']['payload']['text'] is not None]},
+        'send_messages': [{'chat_id': chat_id, 'text': '{"text": "BLAH BLAH BLAH blah blah blah"}'} for chat_id in msg_chat_ids],
+        'convai': False,
+        'state': False
     }
     await start_test(payload)
 
 
 async def test1():
-    """convai  = false, state = false"""
+    """convai  = true, state = false"""
     message = Message()
     msg_chat_ids = [1, 2]
     updates = [message.cmd(0)] + [message.txt(i) for i in msg_chat_ids]
     payload = {
         'updates': updates,
-        'infer': json.dumps({config["model_param_name"]: [t['message']['payload']['text'] for t in updates if t['message']['payload']['text'] is not None]}),
-        'send_messages': [json.dumps({'chat_id': chat_id, 'text': json.dumps({'text': "BLAH BLAH BLAH blah blah blah"})}) for chat_id in msg_chat_ids]
+        'infer': {config["model_param_name"]: [t['message'] for t in updates]},
+        'send_messages': [{'chat_id': 0, 'text': '{"text": ""}'}] + [{'chat_id': chat_id, 'text': '{"text": "BLAH BLAH BLAH blah blah blah"}'} for chat_id in msg_chat_ids],
+        'convai': True,
+        'state': False
     }
     await start_test(payload)
 
@@ -94,9 +98,9 @@ async def test1():
 if __name__ == '__main__':
     server = Popen('python router_bot_emulator.py'.split())
     loop = asyncio.get_event_loop()
-    for foo in [test0, test1]:
+    for convai, foo in zip(['', '--convai'], [test0, test1]):
         poller = pexpect.spawn(
-            'python ../poller.py --port 5000 --host 0.0.0.0 --model http://0.0.0.0:5000/answer --token x')
+            f'python ../poller.py --port 5000 --host 0.0.0.0 --model http://0.0.0.0:5000/answer --token x {convai}')
         loop.run_until_complete(foo())
         time.sleep(2)
         poller.sendcontrol('c')

@@ -20,8 +20,7 @@ parser.add_argument('--host', default=None, help='router bot host', type=str)
 parser.add_argument('--port', default=None, help='router bot port', type=str)
 parser.add_argument('--token', default=None, help='bot token', type=str)
 parser.add_argument('--send-state', default=None, help='true to send state', type=bool)
-parser.add_argument('--convai_mode', default=None, help='if true send full payload, else - only "text" field',
-                    type=bool)
+parser.add_argument('--convai', action='store_true')
 
 
 class Wrapper:
@@ -172,7 +171,7 @@ def main() -> None:
     port = args.port
     token = args.token
     send_state = args.send_state
-    convai_mode = args.convai_mode
+    convai_mode = args.convai
 
     root_path = Path(__file__).resolve().parent
     config_path = root_path / 'config.json'
