@@ -7,14 +7,13 @@ Creates subprocess with router bot and Deeppavlov REST API emulator. Runs router
 import asyncio
 import copy
 import json
-from multiprocessing import Process
+import time
 from subprocess import Popen
 from typing import Dict
 
 import aiohttp
+import pexpect.popen_spawn
 from aiohttp import client_exceptions
-
-from poller import Wrapper
 
 with open('../config.json', encoding='utf8') as fin:
     config = json.load(fin)
@@ -26,6 +25,7 @@ with open('../config.json', encoding='utf8') as fin:
                                                        port=config['router_bot_port'],
                                                        token=config['bot_token'])
     config['model_url'] = f"http://{config['router_bot_host']}:{config['router_bot_port']}/answer"
+    config['logging']['loggers']['wrapper_logger']['level'] = 'ERROR'
 
 TEST_GRID = []
 
@@ -55,16 +55,7 @@ class Message:
         return self._get_msg(self._txt_template, chat_id)
 
 
-async def foo():
-    message = Message()
-    msg_chat_ids = [1, 2]
-    payload = {
-        'updates': [message.cmd(0)] + [message.txt(i) for i in msg_chat_ids],
-        'infer': None,
-        'send_messages': None
-    }
-    payload['infer'] = json.dumps({config["model_param_name"]: [t['message']['payload']['text'] for t in payload['updates'] if t['message']['payload']['text'] is not None]})
-    payload['send_messages'] = [json.dumps({'chat_id': chat_id, 'text': json.dumps({'text': "BLAH BLAH BLAH blah blah blah"})}) for chat_id in msg_chat_ids]
+async def start_test(payload: Dict):
     async with aiohttp.ClientSession() as session:
         while True:
             try:
@@ -73,10 +64,42 @@ async def foo():
             except client_exceptions.ClientConnectionError:
                 pass
 
+
+async def test0():
+    """convai  = false, state = false"""
+    message = Message()
+    msg_chat_ids = [1, 2]
+    updates = [message.cmd(0)] + [message.txt(i) for i in msg_chat_ids]
+    payload = {
+        'updates': updates,
+        'infer': json.dumps({config["model_param_name"]: [t['message']['payload']['text'] for t in updates if t['message']['payload']['text'] is not None]}),
+        'send_messages': [json.dumps({'chat_id': chat_id, 'text': json.dumps({'text': "BLAH BLAH BLAH blah blah blah"})}) for chat_id in msg_chat_ids]
+    }
+    await start_test(payload)
+
+
+async def test1():
+    """convai  = false, state = false"""
+    message = Message()
+    msg_chat_ids = [1, 2]
+    updates = [message.cmd(0)] + [message.txt(i) for i in msg_chat_ids]
+    payload = {
+        'updates': updates,
+        'infer': json.dumps({config["model_param_name"]: [t['message']['payload']['text'] for t in updates if t['message']['payload']['text'] is not None]}),
+        'send_messages': [json.dumps({'chat_id': chat_id, 'text': json.dumps({'text': "BLAH BLAH BLAH blah blah blah"})}) for chat_id in msg_chat_ids]
+    }
+    await start_test(payload)
+
+
 if __name__ == '__main__':
     server = Popen('python router_bot_emulator.py'.split())
-    poller_process = Process(target=Wrapper, args=(config,))
-    poller_process.start()
-
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(foo())
+    for foo in [test0, test1]:
+        poller = pexpect.spawn(
+            'python ../poller.py --port 5000 --host 0.0.0.0 --model http://0.0.0.0:5000/answer --token x')
+        loop.run_until_complete(foo())
+        time.sleep(2)
+        poller.sendcontrol('c')
+        poller.close()
+
+    server.kill()

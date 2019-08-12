@@ -73,7 +73,7 @@ class Server:
                 /sendMessage endpoint.
 
         """
-        self._log.info(f'Test {self._test_n}')
+        self._log.debug(f'Test {self._test_n}')
         self._test_n += 1
         data = await request.json()
         self._updates = data['updates']
