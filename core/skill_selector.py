@@ -19,7 +19,6 @@ class ChitchatQASelector(Service):
 
         """
         response = self.rest_caller(payload=state)
-        # TODO refactor riseapi so it would not return keys from dp config?
-        predicted_names = [el[self.rest_caller.names[0]]['skill_names'] for el in response]
+        predicted_names = [el[self.rest_caller.names[0]][0] for el in response]
         skill_names = [SKILL_NAMES_MAP[name] for name in predicted_names]
         return skill_names

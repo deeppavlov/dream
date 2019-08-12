@@ -11,7 +11,6 @@ from telebot.types import Message, Location, User
 
 from core.config import TELEGRAM_TOKEN, TELEGRAM_PROXY
 
-
 parser = argparse.ArgumentParser()
 parser.add_argument("-ch", "--channel", help="run agent in telegram or cmd_client", type=str,
                     choices=['telegram', 'cmd_client'], default='cmd_client')
@@ -108,12 +107,16 @@ def run():
     response_selector = ConfidenceResponseSelector()
     skill_selector = None
     if SKILL_SELECTORS:
-        ss_names, ss_urls = zip(*[(selector['name'], selector['url']) for selector in SKILL_SELECTORS])
+        ss_names, ss_urls, ss_formatters = zip(
+            *[(selector['name'], selector['url'], selector['formatter']) for selector in
+              SKILL_SELECTORS])
         skill_selector = ChitchatQASelector(
-            rest_caller=RestCaller(max_workers=MAX_WORKERS, names=ss_names, urls=ss_urls))
+            rest_caller=RestCaller(max_workers=MAX_WORKERS, names=ss_names, urls=ss_urls,
+                                   state_formatters=ss_formatters))
     skill_manager = SkillManager(skill_selector=skill_selector, response_selector=response_selector,
-                                 skill_caller=skill_caller, profile_handlers=[skill['name'] for skill in SKILLS
-                                                                              if skill.get('profile_handler')])
+                                 skill_caller=skill_caller,
+                                 profile_handlers=[skill['name'] for skill in SKILLS
+                                                   if skill.get('profile_handler')])
 
     agent = Agent(state_manager, preprocessor, postprocessor, skill_manager)
 
@@ -135,7 +138,8 @@ def run():
         locations: List[Optional[Location]] = [message.location for message in messages]
         ch_types = ['telegram'] * len(messages)
 
-        answers = agent(utterances=utterances, user_telegram_ids=u_tg_ids, user_device_types=u_d_types,
+        answers = agent(utterances=utterances, user_telegram_ids=u_tg_ids,
+                        user_device_types=u_d_types,
                         date_times=date_times, locations=locations, channel_types=ch_types)
         return answers
 
@@ -146,8 +150,10 @@ def run():
         date_times = [datetime.utcnow()] * len(messages)
         locations: List[Optional[Location]] = [None] * len(messages)
 
-        answers = agent(utterances=utterances, user_telegram_ids=u_ids, user_device_types=[None] * len(messages),
-                        date_times=date_times, locations=locations, channel_types=['cmd_client'] * len(messages))
+        answers = agent(utterances=utterances, user_telegram_ids=u_ids,
+                        user_device_types=[None] * len(messages),
+                        date_times=date_times, locations=locations,
+                        channel_types=['cmd_client'] * len(messages))
         return answers
 
     if CHANNEL == 'telegram':

@@ -5,8 +5,12 @@ services:
       dockerfile: dockerfile_agent
     container_name: agent
     depends_on:
+    - odqa
     - chitchat
     - ner
+    - sentiment
+    - obscenity
+    - chitchat_odqa
     - mongo
     ports:
     - 8888:8888
@@ -28,6 +32,26 @@ services:
     - CUDA_VISIBLE_DEVICES=""
     ports:
     - 2081:2081
+    tty: true
+    volumes:
+    - .:/dp-agent
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
+  chitchat_odqa:
+    build:
+      args:
+        gpu: 'false'
+        skill_endpoint: intents
+        skillconfig: skill_selectors/chitchat_odqa_selector/sselector_chitchat_odqa.json
+        skillhost: 0.0.0.0
+        skillport: 2082
+      context: ./
+      dockerfile: dockerfile_skill_basic
+    container_name: chitchat_odqa
+    environment:
+    - CUDA_VISIBLE_DEVICES=""
+    ports:
+    - 2082:2082
     tty: true
     volumes:
     - .:/dp-agent
@@ -55,6 +79,66 @@ services:
     - CUDA_VISIBLE_DEVICES=""
     ports:
     - 2083:2083
+    tty: true
+    volumes:
+    - .:/dp-agent
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
+  obscenity:
+    build:
+      args:
+        gpu: 'false'
+        skill_endpoint: model
+        skillconfig: annotators/obscenity/obscenity_classifier.json
+        skillhost: 0.0.0.0
+        skillport: 2088
+      context: ./
+      dockerfile: dockerfile_skill_basic
+    container_name: obscenity
+    environment:
+    - CUDA_VISIBLE_DEVICES=""
+    ports:
+    - 2088:2088
+    tty: true
+    volumes:
+    - .:/dp-agent
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
+  odqa:
+    build:
+      args:
+        gpu: 'false'
+        skill_endpoint: odqa
+        skillconfig: skills/text_qa/agent_ru_odqa_retr_noans_rubert_infer.json
+        skillhost: 0.0.0.0
+        skillport: 2080
+      context: ./
+      dockerfile: dockerfile_skill_basic
+    container_name: odqa
+    environment:
+    - CUDA_VISIBLE_DEVICES=""
+    ports:
+    - 2080:2080
+    tty: true
+    volumes:
+    - .:/dp-agent
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
+  sentiment:
+    build:
+      args:
+        gpu: 'false'
+        skill_endpoint: intents
+        skillconfig: annotators/sentiment/preproc_rusentiment.json
+        skillhost: 0.0.0.0
+        skillport: 2084
+      context: ./
+      dockerfile: dockerfile_skill_basic
+    container_name: sentiment
+    environment:
+    - CUDA_VISIBLE_DEVICES=""
+    ports:
+    - 2084:2084
     tty: true
     volumes:
     - .:/dp-agent
