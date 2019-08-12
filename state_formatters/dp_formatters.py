@@ -71,6 +71,13 @@ def ner_formatter(payload: Any, model_args_names=('context',), mode='in'):
                 'tags': payload[1]}
 
 
+def sentiment_formatter(payload: Any, model_args_names=('context',), mode='in'):
+    if mode == 'in':
+        return last_utterances(payload, model_args_names)
+    elif mode == 'out':
+        return [el[0] for el in payload]
+
+
 def odqa_formatter(payload: Any, model_args_names=('context',), mode='in'):
     if mode == 'in':
         return last_utterances(payload, model_args_names)

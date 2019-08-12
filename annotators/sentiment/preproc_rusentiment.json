@@ -79,15 +79,10 @@
         "in": "y_pred_ids",
         "out": "y_pred_labels",
         "ref": "classes_vocab"
-      },
-      {
-        "class_name": "annotators.sentiment.first_element_extractor:FirstElementExtractor",
-        "in": "y_pred_labels",
-        "out": "labels"
       }
     ],
     "out": [
-      "labels"
+      "y_pred_labels"
     ]
   },
   "metadata": {

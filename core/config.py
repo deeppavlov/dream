@@ -3,7 +3,6 @@ from os import getenv
 from itertools import chain
 from copy import deepcopy
 from pathlib import Path
-from collections import defaultdict
 
 import yaml
 
@@ -20,19 +19,19 @@ MAX_WORKERS = 4
 root = Path(__file__).parent.parent
 
 SKILLS = [
-    # {
-    #     "name": "odqa",
-    #     "protocol": "http",
-    #     "host": "127.0.0.1",
-    #     "port": 2080,
-    #     "endpoint": "odqa",
-    #     "path": "skills/text_qa/agent_ru_odqa_retr_noans_rubert_infer.json",
-    #     "env": {
-    #         "CUDA_VISIBLE_DEVICES": ""
-    #     },
-    #     "gpu": False,
-    #     "formatter": odqa_formatter
-    # },
+    {
+        "name": "odqa",
+        "protocol": "http",
+        "host": "127.0.0.1",
+        "port": 2080,
+        "endpoint": "odqa",
+        "path": "skills/text_qa/agent_ru_odqa_retr_noans_rubert_infer.json",
+        "env": {
+            "CUDA_VISIBLE_DEVICES": ""
+        },
+        "gpu": False,
+        "formatter": odqa_formatter
+    },
     {
         "name": "chitchat",
         "protocol": "http",
@@ -62,58 +61,56 @@ ANNOTATORS = [
         },
         "gpu": False,
         "formatter": ner_formatter
+    },
+    {
+        "name": "sentiment",
+        "protocol": "http",
+        "host": "127.0.0.1",
+        "port": 2084,
+        "endpoint": "intents",
+        "path": "annotators/sentiment/preproc_rusentiment.json",
+        "env": {
+            "CUDA_VISIBLE_DEVICES": ""
+        },
+        "gpu": False,
+        "formatter": sentiment_formatter
+    },
+    {
+        "name": "obscenity",
+        "protocol": "http",
+        "host": "127.0.0.1",
+        "port": 2088,
+        "endpoint": "model",
+        "path": "annotators/obscenity/obscenity_classifier.json",
+        "env": {
+            "CUDA_VISIBLE_DEVICES": ""
+        },
+        "gpu": False,
+        "formatter": base_annotator_formatter
     }
-    # {
-    #     "name": "sentiment",
-    #     "protocol": "http",
-    #     "host": "127.0.0.1",
-    #     "port": 2084,
-    #     "endpoint": "intents",
-    #     "path": "annotators/sentiment/preproc_rusentiment.json",
-    #     "env": {
-    #         "CUDA_VISIBLE_DEVICES": ""
-    #     },
-    #     "gpu": False,
-    #     "formatter": base_annotator_formatter
-    # },
-    # {
-    #     "name": "obscenity",
-    #     "protocol": "http",
-    #     "host": "127.0.0.1",
-    #     "port": 2088,
-    #     "endpoint": "model",
-    #     "path": "annotators/obscenity/obscenity_classifier.json",
-    #     "env": {
-    #         "CUDA_VISIBLE_DEVICES": ""
-    #     },
-    #     "gpu": False,
-    #     "formatter": base_annotator_formatter
-    # }
 ]
 
-SKILL_SELECTORS = []
-
+SKILL_SELECTORS = [
+    {
+        "name": "chitchat_odqa",
+        "protocol": "http",
+        "host": "127.0.0.1",
+        "port": 2082,
+        "endpoint": "intents",
+        "path": "skill_selectors/chitchat_odqa_selector/sselector_chitchat_odqa.json",
+        "env": {
+            "CUDA_VISIBLE_DEVICES": ""
+        },
+        "gpu": False,
+        "formatter": base_annotator_formatter
+    }
+]
 RESPONSE_SELECTORS = []
 
 POSTPROCESSORS = []
 
 
 # TODO include Bot?
-
-FULL_SKILL_NAMES_MAP = {
-    "chitchat": ["chitchat"],
-    "odqa": ["odqa"]
-}
-available_names = [s['name'] for s in SKILLS]
-SKILL_NAMES_MAP = defaultdict(list)
-count_names = 0
-for selector_names, agent_names in FULL_SKILL_NAMES_MAP.items():
-    names = {an for an in agent_names if an in available_names}
-    SKILL_NAMES_MAP[selector_names] += list(names)
-    if names:
-        count_names += 1
-if count_names < 2:
-    SKILL_SELECTORS = []
 
 # generate component url
 for service in chain(ANNOTATORS, SKILL_SELECTORS, SKILLS, RESPONSE_SELECTORS, POSTPROCESSORS):
