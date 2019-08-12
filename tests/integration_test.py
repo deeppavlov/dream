@@ -55,7 +55,7 @@ class Message:
         return self._get_msg(self._txt_template, chat_id)
 
 
-async def start_test(payload: Dict):
+async def send_test(payload: Dict):
     async with aiohttp.ClientSession() as session:
         while True:
             try:
@@ -72,12 +72,12 @@ async def test0():
     updates = [message.cmd(0)] + [message.txt(i) for i in msg_chat_ids]
     payload = {
         'updates': updates,
-        'infer': {config["model_param_name"]: [t['message']['payload']['text'] for t in updates if t['message']['payload']['text'] is not None]},
+        'infer': {config["model_args_names"][0]: [t['message']['payload']['text'] for t in updates if t['message']['payload']['text'] is not None]},
         'send_messages': [{'chat_id': chat_id, 'text': '{"text": "BLAH BLAH BLAH blah blah blah"}'} for chat_id in msg_chat_ids],
         'convai': False,
         'state': False
     }
-    await start_test(payload)
+    await send_test(payload)
 
 
 async def test1():
@@ -87,7 +87,7 @@ async def test1():
     updates = [message.cmd(0)] + [message.txt(i) for i in msg_chat_ids]
     payload = {
         'updates': updates,
-        'infer': {config["model_param_name"]: [t['message'] for t in updates]},
+        'infer': {config["model_args_names"][0]: [t['message'] for t in updates]},
         'send_messages': [{'chat_id': 0, 'text': '{"text": ""}'}] + [{'chat_id': chat_id, 'text': '{"text": "BLAH BLAH BLAH blah blah blah"}'} for chat_id in msg_chat_ids],
         'convai': True,
         'state': False

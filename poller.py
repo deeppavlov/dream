@@ -89,7 +89,8 @@ class Wrapper:
         ids_utts_batch = list(zip(*chunk))
         ids_batch = list(ids_utts_batch[0])
         utts_batch = list(ids_utts_batch[1])
-        data = {self.config["model_param_name"]: utts_batch}
+        if self.config['send_state'] is False:
+            data = {self.config["model_args_names"][0]: utts_batch}
         try:
             response = await self.loop.run_in_executor(None, functools.partial(requests.post,
                                                                                self.config['model_url'],
