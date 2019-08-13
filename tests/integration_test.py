@@ -10,7 +10,7 @@ import json
 import time
 from string import ascii_lowercase
 from subprocess import Popen
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 import aiohttp
 import pexpect.popen_spawn
@@ -18,15 +18,6 @@ from aiohttp import client_exceptions
 
 with open('../config.json', encoding='utf8') as fin:
     config = json.load(fin)
-    config['bot_token'] = 'x'
-    config['router_bot_host'] = '0.0.0.0'
-    config['router_bot_port'] = '5000'
-    for url in ('send_message_url', 'get_updates_url'):
-        config[url] = config[f'{url}_template'].format(host=config['router_bot_host'],
-                                                       port=config['router_bot_port'],
-                                                       token=config['bot_token'])
-    config['model_url'] = f"http://{config['router_bot_host']}:{config['router_bot_port']}/answer"
-    config['logging']['loggers']['wrapper_logger']['level'] = 'ERROR'
 
 TEST_GRID = []
 
@@ -68,7 +59,8 @@ def send_msg(chat_id: int, text: str) -> Dict:
     return {'chat_id': chat_id, 'text': f'{{"text": "{text}"}}'}
 
 
-async def gen_test(payload: Dict, convai: bool, state: bool, cmd: List[int], txt: List[int], text: Optional[List[str]] = None, state_list: Optional[List] = None) -> None:
+async def gen_test(convai: bool, state: bool, cmd: List[int], txt: List[int], send_messages: List[Tuple[int, str]],
+                   text: Optional[List[str]] = None, state_list: Optional[List] = None) -> None:
     message = Message()
     updates = [message.cmd(chat_id) for chat_id in cmd] + [message.txt(chat_id) for chat_id in txt]
     if convai is True:
@@ -77,8 +69,8 @@ async def gen_test(payload: Dict, convai: bool, state: bool, cmd: List[int], txt
         infer = {config["model_args_names"][0]: text}
     if state:
         infer[config["model_args_names"][1]] = state_list
-    new_dict = {'convai': convai, 'state': state, 'updates': updates, 'infer': infer}
-    payload.update(new_dict)
+    send_msgs = [send_msg(*s) for s in send_messages]
+    payload = {'convai': convai, 'state': state, 'updates': updates, 'infer': infer, 'send_messages': send_msgs}
     async with aiohttp.ClientSession() as session:
         while True:
             try:
@@ -89,55 +81,31 @@ async def gen_test(payload: Dict, convai: bool, state: bool, cmd: List[int], txt
 
 
 async def test0():
-    """convai  = false, state = false"""
-    payload = {
-        'send_messages': [send_msg(1, "A a"), send_msg(2, "B b")]
-    }
-    await gen_test(payload, convai=False, state=False, cmd=[0], txt=[1, 2], text=['a', 'b'])
+    await gen_test(convai=False, state=False, cmd=[0], txt=[1, 2], send_messages=[(1, 'A a'), (2, 'B b')], text=['a', 'b'])
 
 
 async def test1():
-    """convai  = true, state = false"""
-    payload = {
-        'send_messages': [send_msg(0, 'start'), send_msg(1, 'A a'), send_msg(2, 'B b')]
-    }
-    await gen_test(payload, convai=True, state=False, cmd=[0], txt=[1, 2])
+    await gen_test(convai=True, state=False, cmd=[0], txt=[1, 2], send_messages=[(0, 'start'), (1, 'A a'), (2, 'B b')])
 
 
 async def test2():
-    """convai  = false, state = true"""
-    payload = {
-        'send_messages': [send_msg(0, 'A')]
-    }
-    await gen_test(payload, convai=False, state=True, cmd=[0], txt=[0], text=['a'], state_list=[None])
-    await asyncio.sleep(3)
-    payload = {
-        'send_messages': [send_msg(0, 'A')]
-    }
-    await gen_test(payload, convai=False, state=True, cmd=[], txt=[0], text=['a'], state_list=[['a']])
-    await asyncio.sleep(3)
-    payload = {
-        'send_messages': [send_msg(0, 'A')]
-    }
-    await gen_test(payload, convai=False, state=True, cmd=[], txt=[0], text=['a'], state_list=[['a', 'a']])
+    await gen_test(convai=False, state=True, cmd=[0], txt=[0], send_messages=[(0, 'A')], text=['a'], state_list=[None])
+    await asyncio.sleep(1)
+
+    await gen_test(convai=False, state=True, cmd=[], txt=[0], send_messages=[(0, 'A')], text=['a'], state_list=[['a']])
+    await asyncio.sleep(1)
+
+    await gen_test(convai=False, state=True, cmd=[], txt=[0], send_messages=[(0, 'A')], text=['a'], state_list=[['a', 'a']])
 
 
 async def test3():
-    """convai  = true, state = true"""
-    payload = {
-        'send_messages': [send_msg(0, 'start'), send_msg(1, 'start')]
-    }
-    await gen_test(payload, convai=True, state=True, cmd=[0, 1], txt=[], state_list=[None, None])
-    await asyncio.sleep(3)
-    payload = {
-        'send_messages': [send_msg(0, 'A'), send_msg(1, 'B')]
-    }
-    await gen_test(payload, convai=True, state=True, cmd=[], txt=[0, 1], state_list=[['start'], ['start']])
-    await asyncio.sleep(3)
-    payload = {
-        'send_messages': [send_msg(0, 'A'), send_msg(1, 'B')]
-    }
-    await gen_test(payload, convai=True, state=True, cmd=[], txt=[0, 1], state_list=[['start', 'a'], ['start', 'b']])
+    await gen_test(convai=True, state=True, cmd=[0, 1], txt=[], send_messages=[(0, 'start'), (1, 'start')], state_list=[None, None])
+    await asyncio.sleep(1)
+
+    await gen_test(convai=True, state=True, cmd=[], txt=[0, 1], send_messages=[(0, 'A'), (1, 'B')], state_list=[['start'], ['start']])
+    await asyncio.sleep(1)
+
+    await gen_test(convai=True, state=True, cmd=[], txt=[0, 1], send_messages=[(0, 'A'), (1, 'B')], state_list=[['start', 'a'], ['start', 'b']])
 
 if __name__ == '__main__':
     server = Popen('python router_bot_emulator.py'.split())
@@ -146,7 +114,7 @@ if __name__ == '__main__':
         poller = pexpect.spawn(
             f'python ../poller.py --port 5000 --host 0.0.0.0 --model http://0.0.0.0:5000/answer --token x {convai} {state}')
         loop.run_until_complete(foo())
-        time.sleep(2)
+        time.sleep(1)
         poller.sendcontrol('c')
         poller.close()
 
