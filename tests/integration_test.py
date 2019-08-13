@@ -10,7 +10,7 @@ import json
 import time
 from string import ascii_lowercase
 from subprocess import Popen
-from typing import Dict
+from typing import Dict, List, Optional
 
 import aiohttp
 import pexpect.popen_spawn
@@ -68,7 +68,17 @@ def send_msg(chat_id: int, text: str) -> Dict:
     return {'chat_id': chat_id, 'text': f'{{"text": "{text}"}}'}
 
 
-async def send_test(payload: Dict):
+async def gen_test(payload: Dict, convai: bool, state: bool, cmd: List[int], txt: List[int], text: Optional[List[str]] = None, state_list: Optional[List] = None) -> None:
+    message = Message()
+    updates = [message.cmd(chat_id) for chat_id in cmd] + [message.txt(chat_id) for chat_id in txt]
+    if convai is True:
+        infer = {config["model_args_names"][0]: [t['message'] for t in updates]}
+    else:
+        infer = {config["model_args_names"][0]: text}
+    if state:
+        infer[config["model_args_names"][1]] = state_list
+    new_dict = {'convai': convai, 'state': state, 'updates': updates, 'infer': infer}
+    payload.update(new_dict)
     async with aiohttp.ClientSession() as session:
         while True:
             try:
@@ -80,107 +90,54 @@ async def send_test(payload: Dict):
 
 async def test0():
     """convai  = false, state = false"""
-    message = Message()
-    msg_chat_ids = [1, 2]
-    updates = [message.cmd(0)] + [message.txt(i) for i in msg_chat_ids]
     payload = {
-        'updates': updates,
-        'infer': {config["model_args_names"][0]: ['a', 'b']},
-        'send_messages': [send_msg(1, "A a"), send_msg(2, "B b")],
-        'convai': False,
-        'state': False
+        'send_messages': [send_msg(1, "A a"), send_msg(2, "B b")]
     }
-    await send_test(payload)
+    await gen_test(payload, convai=False, state=False, cmd=[0], txt=[1, 2], text=['a', 'b'])
 
 
 async def test1():
     """convai  = true, state = false"""
-    message = Message()
-    msg_chat_ids = [1, 2]
-    updates = [message.cmd(0)] + [message.txt(i) for i in msg_chat_ids]
     payload = {
-        'updates': updates,
-        'infer': {config["model_args_names"][0]: [t['message'] for t in updates]},
-        'send_messages': [send_msg(0, 'start'), send_msg(1, 'A a'), send_msg(2, 'B b')],
-        'convai': True,
-        'state': False
+        'send_messages': [send_msg(0, 'start'), send_msg(1, 'A a'), send_msg(2, 'B b')]
     }
-    await send_test(payload)
+    await gen_test(payload, convai=True, state=False, cmd=[0], txt=[1, 2])
 
 
 async def test2():
     """convai  = false, state = true"""
-    message = Message()
-    updates = [message.cmd(0), message.txt(0)]
-    updates[1]['message']['payload']['text'] = 'first'
     payload = {
-        'updates': updates,
-        'infer': {config["model_args_names"][0]: ['first'], config['model_args_names'][1]: [None]},
-        'send_messages': [send_msg(0, 'FIRST')],
-        'convai': False,
-        'state': True
+        'send_messages': [send_msg(0, 'A')]
     }
-    await send_test(payload)
+    await gen_test(payload, convai=False, state=True, cmd=[0], txt=[0], text=['a'], state_list=[None])
     await asyncio.sleep(3)
-    updates = [message.txt(0)]
-    updates[0]['message']['payload']['text'] = 'second'
     payload = {
-        'updates': updates,
-        'infer': {config["model_args_names"][0]: ['second'], config['model_args_names'][1]: [['first']]},
-        'send_messages': [send_msg(0, 'SECOND')],
-        'convai': False,
-        'state': True
+        'send_messages': [send_msg(0, 'A')]
     }
-    await send_test(payload)
+    await gen_test(payload, convai=False, state=True, cmd=[], txt=[0], text=['a'], state_list=[['a']])
     await asyncio.sleep(3)
-    updates = [message.txt(0)]
-    updates[0]['message']['payload']['text'] = 'third'
     payload = {
-        'updates': updates,
-        'infer': {config["model_args_names"][0]: ['third'], config['model_args_names'][1]: [['first', 'second']]},
-        'send_messages': [send_msg(0, 'THIRD')],
-        'convai': False,
-        'state': True
+        'send_messages': [send_msg(0, 'A')]
     }
-    await send_test(payload)
+    await gen_test(payload, convai=False, state=True, cmd=[], txt=[0], text=['a'], state_list=[['a', 'a']])
 
 
 async def test3():
     """convai  = true, state = true"""
-    message = Message()
-    updates = [message.cmd(0), message.cmd(1)]
     payload = {
-        'updates': updates,
-        'infer': {config["model_args_names"][0]: [t['message'] for t in updates], config["model_args_names"][1]: [None, None]},
-        'send_messages': [send_msg(0, 'start'), send_msg(1, 'start')],
-        'convai': True,
-        'state': True
+        'send_messages': [send_msg(0, 'start'), send_msg(1, 'start')]
     }
-    await send_test(payload)
+    await gen_test(payload, convai=True, state=True, cmd=[0, 1], txt=[], state_list=[None, None])
     await asyncio.sleep(3)
-    updates = [message.txt(0), message.txt(1)]
-    updates[0]['message']['payload']['text'] = 'first'
-    updates[1]['message']['payload']['text'] = 'second'
     payload = {
-        'updates': updates,
-        'infer': {config["model_args_names"][0]: [t['message'] for t in updates], config["model_args_names"][1]: [['start'], ['start']]},
-        'send_messages': [send_msg(0, 'FIRST'), send_msg(1, 'SECOND')],
-        'convai': True,
-        'state': True
+        'send_messages': [send_msg(0, 'A'), send_msg(1, 'B')]
     }
-    await send_test(payload)
+    await gen_test(payload, convai=True, state=True, cmd=[], txt=[0, 1], state_list=[['start'], ['start']])
     await asyncio.sleep(3)
-    updates = [message.txt(0), message.txt(1)]
-    updates[0]['message']['payload']['text'] = 'third'
-    updates[1]['message']['payload']['text'] = 'fourth'
     payload = {
-        'updates': updates,
-        'infer': {config["model_args_names"][0]: [t['message'] for t in updates], config["model_args_names"][1]: [['start', 'first'], ['start', 'second']]},
-        'send_messages': [send_msg(0, 'THIRD'), send_msg(1, 'FOURTH')],
-        'convai': True,
-        'state': True
+        'send_messages': [send_msg(0, 'A'), send_msg(1, 'B')]
     }
-    await send_test(payload)
+    await gen_test(payload, convai=True, state=True, cmd=[], txt=[0, 1], state_list=[['start', 'a'], ['start', 'b']])
 
 if __name__ == '__main__':
     server = Popen('python router_bot_emulator.py'.split())
