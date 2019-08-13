@@ -1,5 +1,7 @@
 import argparse
 import time
+
+from aiohttp import web
 from datetime import datetime
 from threading import Thread
 from multiprocessing import Process, Pipe
@@ -12,8 +14,9 @@ from telebot.types import Message, Location, User
 from core.transform_config import TELEGRAM_TOKEN, TELEGRAM_PROXY
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-ch", "--channel", help="run agent in telegram or cmd_client", type=str,
-                    choices=['telegram', 'cmd_client'], default='cmd_client')
+parser.add_argument("-ch", "--channel", help="run agent in telegram, cmd_client or http_client", type=str,
+                    choices=['telegram', 'cmd_client', 'http_client'], default='cmd_client')
+parser.add_argument('-p', '--port', help='port for http client, default 8888', default=8888)
 args = parser.parse_args()
 CHANNEL = args.channel
 
@@ -158,10 +161,38 @@ def run():
         return infer_cmd
 
 
+async def init_app():
+    app = web.Application()
+    handle_func = await api_message_processor(run())
+    app.router.add_post('/', handle_func)
+    return app
+
+
+async def api_message_processor(message_processor):
+    async def api_handle(request):
+        result = {}
+        if request.method == 'POST':
+            if request.headers.get('content-type') != 'application/json':
+                raise web.HTTPBadRequest(reason='Content-Type should be application/json')
+            data = await request.json()
+            user_id = data.get('user_id')
+            payload = data.get('payload', '')
+
+            if not user_id:
+                raise web.HTTPBadRequest(reason='user_id key is required')
+
+            message = {'data': payload, 'from_user': {'id': user_id}}
+            responses = message_processor([message], [1])
+            result = {'user_id': user_id, 'response': responses[0]}
+        return web.json_response(result)
+
+    return api_handle
+
+
 def main():
     if CHANNEL == 'telegram':
         experimental_bot(run, token=TELEGRAM_TOKEN, proxy=TELEGRAM_PROXY)
-    else:
+    elif CHANNEL == 'cmd_client':
         message_processor = run()
         user_id = input('Provide user id: ')
         user = {'id': user_id}
@@ -171,6 +202,9 @@ def main():
                 message = {'data': msg, 'from_user': user}
                 responses = message_processor([message], [1])
                 print('Bot: ', responses[0])
+    elif CHANNEL == 'http_client':
+        app = init_app()
+        web.run_app(app, port=args.port)
 
 
 if __name__ == '__main__':
