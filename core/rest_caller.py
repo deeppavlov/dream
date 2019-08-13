@@ -21,11 +21,11 @@ class RestCaller:
     def __init__(self, max_workers: int = MAX_WORKERS,
                  names: Optional[Sequence[str]] = None,
                  urls: Optional[Sequence[str]] = None,
-                 state_formatters = None) -> None:
+                 formatters = None) -> None:
         self.names = tuple(names or ())
         self.urls = tuple(urls or ())
         self.executor = ThreadPoolExecutor(max_workers=max_workers)
-        self.state_formatters = state_formatters
+        self.formatters = formatters
 
     def __call__(self, payload: Union[Dict, Sequence[Dict]],
                  names: Optional[Sequence[str]] = None,
@@ -35,7 +35,7 @@ class RestCaller:
 
         names = names if names is not None else self.names
         urls = urls if urls is not None else self.urls
-        state_formatters = state_formatters if state_formatters is not None else self.state_formatters
+        state_formatters = state_formatters if state_formatters is not None else self.formatters
 
         if names is None:
             raise ValueError('No service names were provided.')

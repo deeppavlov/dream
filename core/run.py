@@ -101,7 +101,7 @@ def run():
         *[(a['name'], a['url'], a['formatter']) for a in ANNOTATORS])
     preprocessor = Service(
         rest_caller=RestCaller(max_workers=MAX_WORKERS, names=anno_names, urls=anno_urls,
-                               state_formatters=anno_formatters))
+                               formatters=anno_formatters))
     postprocessor = DefaultPostprocessor()
     skill_caller = RestCaller(max_workers=MAX_WORKERS)
     response_selector = ConfidenceResponseSelector()
@@ -112,7 +112,7 @@ def run():
               SKILL_SELECTORS])
         skill_selector = ChitchatQASelector(
             rest_caller=RestCaller(max_workers=MAX_WORKERS, names=ss_names, urls=ss_urls,
-                                   state_formatters=ss_formatters))
+                                   formatters=ss_formatters))
     skill_manager = SkillManager(skill_selector=skill_selector, response_selector=response_selector,
                                  skill_caller=skill_caller,
                                  profile_handlers=[skill['name'] for skill in SKILLS
