@@ -62,7 +62,7 @@ class Server:
             ret = []
             for inf in data['text1']:
                 text = inf['payload']['text']
-                reps_tuple = (text.upper(), text) if text is not None else ['']
+                reps_tuple = (text.upper(), text) if text is not None else [inf['payload']['command']]
                 ret.append(reps_tuple)
         if self._convai is False and self._state is True:
             history = [] if data['state'][0] is None else data['state'][0]
@@ -74,11 +74,12 @@ class Server:
                 text = tex['payload']['text']
                 history = [] if stat is None else stat
                 if text is None:
-                    text = ""
+                    text = tex['payload']['command']
                     history.append(tex['payload']['command'])
                 else:
                     history.append(text)
-                ret.append((text.upper(), history))
+                    text = text.upper()
+                ret.append((text, history))
         return web.json_response(ret)
 
     async def _handle_updates(self, request: web.Request):

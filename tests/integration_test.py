@@ -88,7 +88,7 @@ async def test1():
     payload = {
         'updates': updates,
         'infer': {config["model_args_names"][0]: [t['message'] for t in updates]},
-        'send_messages': [{'chat_id': 0, 'text': '{"text": ""}'}] + [{'chat_id': chat_id, 'text': '{"text": "BLAH BLAH BLAH blah blah blah"}'} for chat_id in msg_chat_ids],
+        'send_messages': [{'chat_id': 0, 'text': '{"text": "start"}'}] + [{'chat_id': chat_id, 'text': '{"text": "BLAH BLAH BLAH blah blah blah"}'} for chat_id in msg_chat_ids],
         'convai': True,
         'state': False
     }
@@ -139,7 +139,7 @@ async def test3():
     payload = {
         'updates': updates,
         'infer': {config["model_args_names"][0]: [t['message'] for t in updates], config["model_args_names"][1]: [None, None]},
-        'send_messages': [{'chat_id': 0, 'text': '{"text": ""}'}, {'chat_id': 1, 'text': '{"text": ""}'}],
+        'send_messages': [{'chat_id': 0, 'text': '{"text": "start"}'}, {'chat_id': 1, 'text': '{"text": "start"}'}],
         'convai': True,
         'state': True
     }
