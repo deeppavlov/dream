@@ -3,7 +3,7 @@
 **DeepPavlov Agent** is a platform for creating multi-skill chatbots.
 
 <p align="center">
-    <img src="docs/source/_static/Agent%20Pipeline.png" height="600">
+    <img src="docs/source/_static/Agent_Pipeline.png" height="600">
 </p>
 
 Ready Agent from the box
