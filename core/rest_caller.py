@@ -1,9 +1,9 @@
 from concurrent.futures import ThreadPoolExecutor
-from typing import Dict, List, Any, Optional, Sequence, Union, Callable
+from typing import Dict, List, Any, Optional, Sequence, Union
 
 import requests
 
-from core.config import MAX_WORKERS
+from core.transform_config import MAX_WORKERS
 
 
 def _make_request(name, url, formatter, payload):

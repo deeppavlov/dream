@@ -5,10 +5,9 @@ from core.agent import Agent
 from core.state_manager import StateManager
 from core.skill_manager import SkillManager
 from core.rest_caller import RestCaller
-from core.service import Service
 from core.postprocessor import DefaultPostprocessor
 from core.response_selector import ConfidenceResponseSelector
-from core.config import MAX_WORKERS, ANNOTATORS, SKILL_SELECTORS
+from core.transform_config import MAX_WORKERS, ANNOTATORS, SKILL_SELECTORS
 from core.skill_selector import ChitchatQASelector
 from core.state_schema import Human
 # from deeppavlov import configs, build_model

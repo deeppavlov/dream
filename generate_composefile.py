@@ -3,7 +3,7 @@ import argparse
 from copy import deepcopy
 from itertools import chain
 
-from core.config import SKILLS, ANNOTATORS, SKILL_SELECTORS, RESPONSE_SELECTORS, POSTPROCESSORS, PORT
+from core.transform_config import SKILLS, ANNOTATORS, SKILL_SELECTORS, RESPONSE_SELECTORS, POSTPROCESSORS, PORT
 
 
 parser = argparse.ArgumentParser()

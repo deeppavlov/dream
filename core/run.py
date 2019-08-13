@@ -9,7 +9,7 @@ from typing import Callable, Optional, Collection, Hashable, List, Tuple
 import telebot
 from telebot.types import Message, Location, User
 
-from core.config import TELEGRAM_TOKEN, TELEGRAM_PROXY
+from core.transform_config import TELEGRAM_TOKEN, TELEGRAM_PROXY
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-ch", "--channel", help="run agent in telegram or cmd_client", type=str,
@@ -85,11 +85,9 @@ def run():
     from core.state_manager import StateManager
     from core.skill_manager import SkillManager
     from core.rest_caller import RestCaller
-    from core.service import Service
     from core.postprocessor import DefaultPostprocessor
     from core.response_selector import ConfidenceResponseSelector
-    from core.skill_selector import ChitchatQASelector
-    from core.config import MAX_WORKERS, ANNOTATORS, SKILL_SELECTORS, SKILLS
+    from core.transform_config import MAX_WORKERS, ANNOTATORS, SKILL_SELECTORS, SKILLS
 
     import logging
 
@@ -99,9 +97,8 @@ def run():
 
     anno_names, anno_urls, anno_formatters = zip(
         *[(a['name'], a['url'], a['formatter']) for a in ANNOTATORS])
-    preprocessor = Service(
-        rest_caller=RestCaller(max_workers=MAX_WORKERS, names=anno_names, urls=anno_urls,
-                               formatters=anno_formatters))
+    preprocessor = RestCaller(max_workers=MAX_WORKERS, names=anno_names, urls=anno_urls,
+                               formatters=anno_formatters)
     postprocessor = DefaultPostprocessor()
     skill_caller = RestCaller(max_workers=MAX_WORKERS)
     response_selector = ConfidenceResponseSelector()
@@ -110,9 +107,8 @@ def run():
         ss_names, ss_urls, ss_formatters = zip(
             *[(selector['name'], selector['url'], selector['formatter']) for selector in
               SKILL_SELECTORS])
-        skill_selector = ChitchatQASelector(
-            rest_caller=RestCaller(max_workers=MAX_WORKERS, names=ss_names, urls=ss_urls,
-                                   formatters=ss_formatters))
+        skill_selector = RestCaller(max_workers=MAX_WORKERS, names=ss_names, urls=ss_urls,
+                                   formatters=ss_formatters)
     skill_manager = SkillManager(skill_selector=skill_selector, response_selector=response_selector,
                                  skill_caller=skill_caller,
                                  profile_handlers=[skill['name'] for skill in SKILLS

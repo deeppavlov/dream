@@ -3,7 +3,7 @@ import operator
 from itertools import compress
 from typing import List, Dict, Optional, Sequence
 
-from core.config import MAX_WORKERS, SKILLS
+from core.transform_config import MAX_WORKERS, SKILLS
 from core.hardcode_utterances import NOANSWER_UTT
 from core.state_schema import Human
 from core.state_manager import get_state
@@ -64,7 +64,7 @@ class SkillManager:
 
         state = get_state(dialogs)
         if self.skill_selector is not None:
-            selected_skills = self.skill_selector(state)
+            selected_skills = [list(d.values())[0] for d in self.skill_selector(state)]
         else:
             selected_skills = [skill_names] * n_dialogs
         excluded_skills = []
