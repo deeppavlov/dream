@@ -19,7 +19,7 @@ parser.add_argument('--model_url', default=None, help='path to model endpoint', 
 parser.add_argument('--host', default=None, help='router bot host', type=str)
 parser.add_argument('--port', default=None, help='router bot port', type=str)
 parser.add_argument('--token', default=None, help='bot token', type=str)
-parser.add_argument('--send-state', default=None, help='true to send state', type=bool)
+parser.add_argument('--state', action='store_true', help='add argument to send state to model')
 parser.add_argument('--convai', action='store_true')
 
 
@@ -171,7 +171,7 @@ def main() -> None:
     host = args.host
     port = args.port
     token = args.token
-    send_state = args.send_state
+    send_state = args.state
     convai_mode = args.convai
 
     root_path = Path(__file__).resolve().parent
