@@ -17,15 +17,17 @@ import pexpect.popen_spawn
 from aiohttp import client_exceptions
 
 with open('../config.json', encoding='utf8') as fin:
-    config = json.load(fin)
+    poller_config = json.load(fin)
+with open('integration_test_config.json', 'r') as conf_file:
+    integration_config = json.load(conf_file)
+    port = integration_config['emulator_port']
+    host = integration_config['emulator_host']
 
 TEST_GRID = []
 
 
 class Message:
     def __init__(self) -> None:
-        with open('integration_test_config.json', 'r') as conf_file:
-            integration_config = json.load(conf_file)
         self._cmd_template = integration_config['messages']['command']
         self._txt_template = integration_config['messages']['text']
         self._n_letter = 0
@@ -54,28 +56,28 @@ def send_msg(chat_id: int, text: str) -> Dict:
 
 
 async def gen_test(convai: bool, state: bool, cmd: List[int], txt: List[int], send_messages: List[Tuple[int, str]],
-                   text: Optional[List[str]] = None, state_list: Optional[List] = None) -> None:
+                   first_batch: Optional[List[str]] = None, state_list: Optional[List] = None) -> None:
     message = Message()
     updates = [message.cmd(chat_id) for chat_id in cmd] + [message.txt(chat_id) for chat_id in txt]
     if convai is True:
-        infer = {config["model_args_names"][0]: [t['message'] for t in updates]}
+        infer = {poller_config["model_args_names"][0]: [t['message'] for t in updates]}
     else:
-        infer = {config["model_args_names"][0]: text}
+        infer = {poller_config["model_args_names"][0]: first_batch}
     if state:
-        infer[config["model_args_names"][1]] = state_list
+        infer[poller_config["model_args_names"][1]] = state_list
     send_msgs = [send_msg(*s) for s in send_messages]
     payload = {'convai': convai, 'state': state, 'updates': updates, 'infer': infer, 'send_messages': send_msgs}
     async with aiohttp.ClientSession() as session:
         while True:
             try:
-                await session.post('http://0.0.0.0:5000/newTest', json=payload)
+                await session.post(f'http://{host}:{port}/newTest', json=payload)
                 break
             except client_exceptions.ClientConnectionError:
                 pass
 
 
 async def test0():
-    await gen_test(convai=False, state=False, cmd=[0], txt=[1, 2], send_messages=[(1, 'A a'), (2, 'B b')], text=['a', 'b'])
+    await gen_test(convai=False, state=False, cmd=[0], txt=[1, 2], send_messages=[(1, 'A a'), (2, 'B b')], first_batch=['a', 'b'])
 
 
 async def test1():
@@ -83,13 +85,13 @@ async def test1():
 
 
 async def test2():
-    await gen_test(convai=False, state=True, cmd=[0], txt=[0], send_messages=[(0, 'A')], text=['a'], state_list=[None])
+    await gen_test(convai=False, state=True, cmd=[0], txt=[0], send_messages=[(0, 'A')], first_batch=['a'], state_list=[None])
     await asyncio.sleep(1)
 
-    await gen_test(convai=False, state=True, cmd=[], txt=[0], send_messages=[(0, 'A')], text=['a'], state_list=[['a']])
+    await gen_test(convai=False, state=True, cmd=[], txt=[0], send_messages=[(0, 'A')], first_batch=['a'], state_list=[['a']])
     await asyncio.sleep(1)
 
-    await gen_test(convai=False, state=True, cmd=[], txt=[0], send_messages=[(0, 'A')], text=['a'], state_list=[['a', 'a']])
+    await gen_test(convai=False, state=True, cmd=[], txt=[0], send_messages=[(0, 'A')], first_batch=['a'], state_list=[['a', 'a']])
 
 
 async def test3():
@@ -105,8 +107,13 @@ if __name__ == '__main__':
     server = Popen('python router_bot_emulator.py'.split())
     loop = asyncio.get_event_loop()
     for convai, state, foo in zip(['', '--convai', '', '--convai'], ['', '', '--state', '--state'], [test0, test1, test2, test3]):
-        poller = pexpect.spawn(
-            f'python ../poller.py --port 5000 --host 0.0.0.0 --model http://0.0.0.0:5000/answer --token x {convai} {state}')
+        poller = pexpect.spawn(' '.join(['python', '../poller.py',
+                                         '--port', str(port),
+                                         '--host', host,
+                                         '--model', f'http://{host}:{port}/answer',
+                                         '--token', 'x',
+                                         convai,
+                                         state]))
         loop.run_until_complete(foo())
         time.sleep(1)
         poller.sendcontrol('c')
