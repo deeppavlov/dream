@@ -58,30 +58,31 @@ class Server:
         self._log.debug(f'Infer is correct: {ordered(data) == ordered(self._infer)}')
         ret = []
         if self._state is False:
-            for batch_item in data['text1']:
+            for message in data['text1']:
                 if self._convai is True:
-                    text = batch_item['payload']['text']
-                    command = batch_item['payload']['command']
+                    text = message['payload']['text']
+                    command = message['payload']['command']
                 else:
-                    text = batch_item
+                    text = message
                     command = None
                 resp_list = [text.upper(), text] if command is None else [command]
                 ret.append(resp_list)
-        if self._convai is False and self._state is True:
-            history = [] if data['state'][0] is None else data['state'][0]
-            history.append(data['text1'][0])
-            ret = [(data['text1'][0].upper(), history)]
-        if self._convai is True and self._state is True:
-            for tex, stat in zip(data['text1'], data['state']):
-                text = tex['payload']['text']
-                history = [] if stat is None else stat
-                if text is None:
-                    text = tex['payload']['command']
-                    history.append(tex['payload']['command'])
+        else:
+            for message, state in zip(data['text1'], data['state']):
+                if self._convai is True:
+                    text = message['payload']['text']
+                    command = message['payload']['command']
+                else:
+                    text = message
+                    command = None
+                history = [] if state is None else state
+                if command is not None:
+                    history.append(command)
+                    resp_list = [command, history]
                 else:
                     history.append(text)
-                    text = text.upper()
-                ret.append((text, history))
+                    resp_list = [text.upper(), history]
+                ret.append(resp_list)
         return web.json_response(ret)
 
     async def _handle_updates(self, request: web.Request):
