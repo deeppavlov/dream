@@ -8,6 +8,7 @@ import asyncio
 import copy
 import json
 import time
+from string import ascii_lowercase
 from subprocess import Popen
 from typing import Dict
 
@@ -38,6 +39,7 @@ class Message:
         self._txt_template = integration_config['messages']['text']
         self._message_id = 0
         self._date = self._cmd_template['message']['date']
+        self._n_letter = 0
 
     def _get_msg(self, template, chat_id: int) -> Dict:
         msg = copy.deepcopy(template)
@@ -48,11 +50,22 @@ class Message:
         msg['message']['chat']['id'] = chat_id
         return msg
 
+    def _get_letter(self):
+        ret = ascii_lowercase[self._n_letter]
+        self._n_letter = (self._n_letter + 1) % len(ascii_lowercase)
+        return ret
+
     def cmd(self, chat_id: int) -> Dict:
         return self._get_msg(self._cmd_template, chat_id)
 
     def txt(self, chat_id: int) -> Dict:
-        return self._get_msg(self._txt_template, chat_id)
+        msg = self._get_msg(self._txt_template, chat_id)
+        msg['message']['payload']['text'] = self._get_letter()
+        return msg
+
+
+def send_msg(chat_id: int, text: str) -> Dict:
+    return {'chat_id': chat_id, 'text': f'{{"text": "{text}"}}'}
 
 
 async def send_test(payload: Dict):
@@ -72,8 +85,8 @@ async def test0():
     updates = [message.cmd(0)] + [message.txt(i) for i in msg_chat_ids]
     payload = {
         'updates': updates,
-        'infer': {config["model_args_names"][0]: [t['message']['payload']['text'] for t in updates if t['message']['payload']['text'] is not None]},
-        'send_messages': [{'chat_id': chat_id, 'text': '{"text": "BLAH BLAH BLAH blah blah blah"}'} for chat_id in msg_chat_ids],
+        'infer': {config["model_args_names"][0]: ['a', 'b']},
+        'send_messages': [send_msg(1, "A a"), send_msg(2, "B b")],
         'convai': False,
         'state': False
     }
@@ -88,7 +101,7 @@ async def test1():
     payload = {
         'updates': updates,
         'infer': {config["model_args_names"][0]: [t['message'] for t in updates]},
-        'send_messages': [{'chat_id': 0, 'text': '{"text": "start"}'}] + [{'chat_id': chat_id, 'text': '{"text": "BLAH BLAH BLAH blah blah blah"}'} for chat_id in msg_chat_ids],
+        'send_messages': [send_msg(0, 'start'), send_msg(1, 'A a'), send_msg(2, 'B b')],
         'convai': True,
         'state': False
     }
@@ -102,8 +115,8 @@ async def test2():
     updates[1]['message']['payload']['text'] = 'first'
     payload = {
         'updates': updates,
-        'infer': {config["model_args_names"][0]: [t['message']['payload']['text'] for t in updates if t['message']['payload']['text'] is not None], config['model_args_names'][1]: [None]},
-        'send_messages': [{'chat_id': 0, 'text': '{"text": "FIRST"}'}],
+        'infer': {config["model_args_names"][0]: ['first'], config['model_args_names'][1]: [None]},
+        'send_messages': [send_msg(0, 'FIRST')],
         'convai': False,
         'state': True
     }
@@ -114,7 +127,7 @@ async def test2():
     payload = {
         'updates': updates,
         'infer': {config["model_args_names"][0]: ['second'], config['model_args_names'][1]: [['first']]},
-        'send_messages': [{'chat_id': 0, 'text': '{"text": "SECOND"}'}],
+        'send_messages': [send_msg(0, 'SECOND')],
         'convai': False,
         'state': True
     }
@@ -125,7 +138,7 @@ async def test2():
     payload = {
         'updates': updates,
         'infer': {config["model_args_names"][0]: ['third'], config['model_args_names'][1]: [['first', 'second']]},
-        'send_messages': [{'chat_id': 0, 'text': '{"text": "THIRD"}'}],
+        'send_messages': [send_msg(0, 'THIRD')],
         'convai': False,
         'state': True
     }
@@ -139,7 +152,7 @@ async def test3():
     payload = {
         'updates': updates,
         'infer': {config["model_args_names"][0]: [t['message'] for t in updates], config["model_args_names"][1]: [None, None]},
-        'send_messages': [{'chat_id': 0, 'text': '{"text": "start"}'}, {'chat_id': 1, 'text': '{"text": "start"}'}],
+        'send_messages': [send_msg(0, 'start'), send_msg(1, 'start')],
         'convai': True,
         'state': True
     }
@@ -151,7 +164,7 @@ async def test3():
     payload = {
         'updates': updates,
         'infer': {config["model_args_names"][0]: [t['message'] for t in updates], config["model_args_names"][1]: [['start'], ['start']]},
-        'send_messages': [{'chat_id': 0, 'text': '{"text": "FIRST"}'}, {'chat_id': 1, 'text': '{"text": "SECOND"}'}],
+        'send_messages': [send_msg(0, 'FIRST'), send_msg(1, 'SECOND')],
         'convai': True,
         'state': True
     }
@@ -163,7 +176,7 @@ async def test3():
     payload = {
         'updates': updates,
         'infer': {config["model_args_names"][0]: [t['message'] for t in updates], config["model_args_names"][1]: [['start', 'first'], ['start', 'second']]},
-        'send_messages': [{'chat_id': 0, 'text': '{"text": "THIRD"}'}, {'chat_id': 1, 'text': '{"text": "FOURTH"}'}],
+        'send_messages': [send_msg(0, 'THIRD'), send_msg(1, 'FOURTH')],
         'convai': True,
         'state': True
     }
