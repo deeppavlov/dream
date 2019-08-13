@@ -28,16 +28,10 @@ class Message:
             integration_config = json.load(conf_file)
         self._cmd_template = integration_config['messages']['command']
         self._txt_template = integration_config['messages']['text']
-        self._message_id = 0
-        self._date = self._cmd_template['message']['date']
         self._n_letter = 0
 
     def _get_msg(self, template, chat_id: int) -> Dict:
         msg = copy.deepcopy(template)
-        msg['message']['date'] = self._date
-        self._date += 1.0
-        msg['message']['message_id'] = self._message_id
-        self._message_id += 1
         msg['message']['chat']['id'] = chat_id
         return msg
 

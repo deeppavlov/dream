@@ -5,6 +5,7 @@ import logging
 from logging import config as logging_config
 
 from aiohttp import web
+from aiohttp.web_response import Response
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--port', default=5000, type=int)
@@ -34,7 +35,7 @@ class Server:
         /newTest (post): Add messages from user
 
     """
-    def __init__(self, port):
+    def __init__(self, port: int) -> None:
         self._test_n = 0
         self._updates = []
         self._infer = ''
@@ -53,7 +54,7 @@ class Server:
                               web.post('/newTest', self._set_new_test)])
         web.run_app(self._app, port=port)
 
-    async def _dp_model(self, request: web.Request):
+    async def _dp_model(self, request: web.Request) -> Response:
         data = await request.json()
         self._log.debug(f'Infer is correct: {ordered(data) == ordered(self._infer)}')
         ret = []
@@ -85,19 +86,19 @@ class Server:
                 ret.append(resp_list)
         return web.json_response(ret)
 
-    async def _handle_updates(self, request: web.Request):
+    async def _handle_updates(self, request: web.Request) -> Response:
         res = self._updates
         self._updates = []
         return web.json_response({'result': res})
 
-    async def _handle_message(self, request: web.Request):
+    async def _handle_message(self, request: web.Request) -> Response:
         data = await request.json()
         self._gen_messages.append(data)
         if ordered(self._send_messages) == ordered(self._gen_messages):
             self._log.debug('All messages received: True')
         return web.Response(status=200)
 
-    async def _set_new_test(self, request: web.Request):
+    async def _set_new_test(self, request: web.Request) -> Response:
         """Sets test data.
 
         Request must contain dictionary with following keys:
