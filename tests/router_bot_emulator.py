@@ -14,7 +14,7 @@ def ordered(obj):
     if isinstance(obj, dict):
         return sorted((k, ordered(v)) for k, v in obj.items())
     if isinstance(obj, list):
-        return sorted(ordered(x) for x in obj)
+        return [None for x in obj if x is None] + sorted(ordered(x) for x in obj if x is not None)
     else:
         return obj
 
@@ -64,6 +64,21 @@ class Server:
                 text = inf['payload']['text']
                 reps_tuple = (text.upper(), text) if text is not None else ['']
                 ret.append(reps_tuple)
+        if self._convai is False and self._state is True:
+            history = [] if data['state'][0] is None else data['state'][0]
+            history.append(data['text1'][0])
+            ret = [(data['text1'][0].upper(), history)]
+        if self._convai is True and self._state is True:
+            ret = []
+            for tex, stat in zip(data['text1'], data['state']):
+                text = tex['payload']['text']
+                history = [] if stat is None else stat
+                if text is None:
+                    text = ""
+                    history.append(tex['payload']['command'])
+                else:
+                    history.append(text)
+                ret.append((text.upper(), history))
         return web.json_response(ret)
 
     async def _handle_updates(self, request: web.Request):

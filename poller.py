@@ -32,6 +32,7 @@ class Wrapper:
         self.poller = Poller(config, self.in_queue)
         self.poller.start()
         self.chat_events = None
+        self._states = {}
 
         logging_config.dictConfig(self.config["logging"])
         self.log = logging.root.manager.loggerDict['wrapper_logger']
@@ -73,11 +74,14 @@ class Wrapper:
 
         # "slices" of replicas from all conversations, each slice contains replicas from different conversation
         batched_chats = zip_longest(*chats, fillvalue=None)
-
-        tasks = (self.loop.create_task(self._process_chats_batch(chats_batch,
+        if self.config['send_state'] is True:
+            for layer_id, chats_batch in enumerate(batched_chats):
+                await self._process_chats_batch(chats_batch, layer_id, chat_ids)
+        else:
+            tasks = (self.loop.create_task(self._process_chats_batch(chats_batch,
                                                                  layer_id,
                                                                  chat_ids)) for layer_id, chats_batch in enumerate(batched_chats))
-        await asyncio.gather(*tasks)
+            await asyncio.gather(*tasks)
 
     async def _process_chats_batch(self, chats_batch: List[str], layer_id: int, chat_ids: List[int]) -> None:
         utts_batch = [(chat_ids[utt_id], utt) for utt_id, utt in enumerate(chats_batch) if utt]
@@ -89,8 +93,9 @@ class Wrapper:
         ids_utts_batch = list(zip(*chunk))
         ids_batch = list(ids_utts_batch[0])
         utts_batch = list(ids_utts_batch[1])
-        if self.config['send_state'] is False:
-            data = {self.config["model_args_names"][0]: utts_batch}
+        data = {self.config["model_args_names"][0]: utts_batch}
+        if self.config['send_state']:
+            data[self.config["model_args_names"][1]] = [self._states.get(chat_id) for chat_id in ids_batch]
         try:
             response = await self.loop.run_in_executor(None, functools.partial(requests.post,
                                                                                self.config['model_url'],
@@ -118,8 +123,12 @@ class Wrapper:
         return message
 
     async def _send_results(self, chat_id: int, response: list, layer_id: int) -> None:
-        buf = {'text': ' '.join(str(element) for element in response)}
-        resp_text = json.dumps(buf)
+        if self.config['send_state'] is True:
+            self._states[chat_id] = response[1]
+            resp_text = json.dumps({'text': str(response[0])})
+        else:
+            buf = {'text': ' '.join(str(element) for element in response)}
+            resp_text = json.dumps(buf)
         payload = {
             'chat_id': chat_id,
             'text': resp_text
