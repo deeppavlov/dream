@@ -56,20 +56,22 @@ class Server:
     async def _dp_model(self, request: web.Request):
         data = await request.json()
         self._log.debug(f'Infer is correct: {ordered(data) == ordered(self._infer)}')
-        if self._convai is False and self._state is False:
-            ret = [(inf.upper(), inf) for inf in data['text1']]
-        if self._convai is True and self._state is False:
-            ret = []
-            for inf in data['text1']:
-                text = inf['payload']['text']
-                reps_tuple = (text.upper(), text) if text is not None else [inf['payload']['command']]
-                ret.append(reps_tuple)
+        ret = []
+        if self._state is False:
+            for batch_item in data['text1']:
+                if self._convai is True:
+                    text = batch_item['payload']['text']
+                    command = batch_item['payload']['command']
+                else:
+                    text = batch_item
+                    command = None
+                resp_list = [text.upper(), text] if command is None else [command]
+                ret.append(resp_list)
         if self._convai is False and self._state is True:
             history = [] if data['state'][0] is None else data['state'][0]
             history.append(data['text1'][0])
             ret = [(data['text1'][0].upper(), history)]
         if self._convai is True and self._state is True:
-            ret = []
             for tex, stat in zip(data['text1'], data['state']):
                 text = tex['payload']['text']
                 history = [] if stat is None else stat
