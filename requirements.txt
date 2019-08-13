@@ -1,5 +1,6 @@
 aiohttp==3.5.4
 python-dateutil==2.8.0
 numpy==1.14.5
+pexpect==4.7.0
 polling==0.3.0
 requests==2.19.1
