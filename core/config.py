@@ -16,7 +16,6 @@ HOST = '127.0.0.1'
 PORT = 27017
 
 MAX_WORKERS = 4
-root = Path(__file__).parent.parent
 
 SKILLS = [
     {
