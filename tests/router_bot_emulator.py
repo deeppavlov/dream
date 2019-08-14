@@ -35,6 +35,8 @@ class Server:
         /newTest (post): Add messages from user
 
     """
+    _loop: asyncio.events.AbstractEventLoop
+
     def __init__(self, port: int) -> None:
         self._test_n = 0
         self._updates = []
@@ -56,7 +58,7 @@ class Server:
 
     async def _dp_model(self, request: web.Request) -> Response:
         data = await request.json()
-        self._log.debug(f'Infer is correct: {ordered(data) == ordered(self._infer)}')
+        self._test_result['Infer is correct'] = (ordered(data) == ordered(self._infer))
         ret = []
         if self._state is False:
             for message in data['text1']:
@@ -95,7 +97,8 @@ class Server:
         data = await request.json()
         self._gen_messages.append(data)
         if ordered(self._send_messages) == ordered(self._gen_messages):
-            self._log.debug('All messages received: True')
+            self._test_result['All messages received'] = True
+            self._event.set()
         return web.Response(status=200)
 
     async def _set_new_test(self, request: web.Request) -> Response:
@@ -108,7 +111,8 @@ class Server:
                 /sendMessage endpoint.
 
         """
-        self._log.debug(f'Test {self._test_n}')
+        self._event = asyncio.Event()
+        self._test_result = {'Infer is correct': False, 'All messages received': False}
         self._test_n += 1
         data = await request.json()
         self._updates = data['updates']
@@ -117,7 +121,8 @@ class Server:
         self._convai = data['convai']
         self._state = data['state']
         self._gen_messages = []
-        return web.Response(status=200)
+        await self._event.wait()
+        return web.json_response(self._test_result)
 
 
 if __name__ == '__main__':

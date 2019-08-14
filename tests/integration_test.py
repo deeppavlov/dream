@@ -70,7 +70,8 @@ async def gen_test(convai: bool, state: bool, cmd: List[int], txt: List[int], se
     async with aiohttp.ClientSession() as session:
         while True:
             try:
-                await session.post(f'http://{host}:{port}/newTest', json=payload)
+                resp = await session.post(f'http://{host}:{port}/newTest', json=payload)
+                print(await resp.json())
                 break
             except client_exceptions.ClientConnectionError:
                 pass
@@ -86,20 +87,16 @@ async def test1():
 
 async def test2():
     await gen_test(convai=False, state=True, cmd=[0], txt=[0], send_messages=[(0, 'A')], first_batch=['a'], state_list=[None])
-    await asyncio.sleep(1)
 
     await gen_test(convai=False, state=True, cmd=[], txt=[0], send_messages=[(0, 'A')], first_batch=['a'], state_list=[['a']])
-    await asyncio.sleep(1)
 
     await gen_test(convai=False, state=True, cmd=[], txt=[0], send_messages=[(0, 'A')], first_batch=['a'], state_list=[['a', 'a']])
 
 
 async def test3():
     await gen_test(convai=True, state=True, cmd=[0, 1], txt=[], send_messages=[(0, 'start'), (1, 'start')], state_list=[None, None])
-    await asyncio.sleep(1)
 
     await gen_test(convai=True, state=True, cmd=[], txt=[0, 1], send_messages=[(0, 'A'), (1, 'B')], state_list=[['start'], ['start']])
-    await asyncio.sleep(1)
 
     await gen_test(convai=True, state=True, cmd=[], txt=[0, 1], send_messages=[(0, 'A'), (1, 'B')], state_list=[['start', 'a'], ['start', 'b']])
 
@@ -115,7 +112,6 @@ if __name__ == '__main__':
                                          convai,
                                          state]))
         loop.run_until_complete(foo())
-        time.sleep(1)
         poller.sendcontrol('c')
         poller.close()
 
