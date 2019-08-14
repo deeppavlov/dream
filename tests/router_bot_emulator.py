@@ -38,9 +38,9 @@ class Server:
     _loop: asyncio.events.AbstractEventLoop
 
     def __init__(self, port: int) -> None:
-        self._updates = []
-        self._infer = ''
-        self._send_messages = set()
+        self._poller_input = []
+        self._model_input = ''
+        self._expected_output = set()
         self._convai = False
         self._state = False
         with open('../config.json', 'r') as config_file:
@@ -57,7 +57,7 @@ class Server:
 
     async def _dp_model(self, request: web.Request) -> Response:
         data = await request.json()
-        self._test_result['Infer is correct'] = (ordered(data) == ordered(self._infer))
+        self._test_result['model_input_correct'] = (ordered(data) == ordered(self._model_input))
         ret = []
         if self._state is False:
             for message in data['text1']:
@@ -88,15 +88,15 @@ class Server:
         return web.json_response(ret)
 
     async def _handle_updates(self, request: web.Request) -> Response:
-        res = self._updates
-        self._updates = []
+        res = self._poller_input
+        self._poller_input = []
         return web.json_response({'result': res})
 
     async def _handle_message(self, request: web.Request) -> Response:
         data = await request.json()
         self._gen_messages.append(data)
-        if ordered(self._send_messages) == ordered(self._gen_messages):
-            self._test_result['All messages received'] = True
+        if ordered(self._expected_output) == ordered(self._gen_messages):
+            self._test_result['poller_output_correct'] = True
             self._event.set()
         return web.Response(status=200)
 
@@ -105,18 +105,18 @@ class Server:
 
         Request must contain dictionary with following keys:
             'updates' (list): Messages from router bot.
-            'infer' (str): Serialized JSON object that router bot poller should send to the DeepPavlov model.
+            'model_input' (str): Serialized JSON object that router bot poller should send to the DeepPavlov model.
             'send_messages' (List[str]): Each item is serialized JSON object that poller sends to router bot's
                 /sendMessage endpoint.
 
         """
         self._event = asyncio.Event()
-        self._test_result = {'Infer is correct': False, 'All messages received': False}
+        self._test_result = {'model_input_correct': False, 'poller_output_correct': False}
         self._loop.create_task(self._timer())
         data = await request.json()
-        self._updates = data['updates']
-        self._infer = data['infer']
-        self._send_messages = data['send_messages']
+        self._poller_input = data['poller_input']
+        self._model_input = data['model_input']
+        self._expected_output = data['expected_output']
         self._convai = data['convai']
         self._state = data['state']
         self._gen_messages = []

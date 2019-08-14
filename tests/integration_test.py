@@ -21,13 +21,14 @@ class IntegrationTester:
             self._config = json.load(test_config_file)
             poller_config = json.load(poller_config_file)
             self.model_args_names = poller_config["model_args_names"]
-        self._cmd_template = self._config['messages']['command']
-        self._txt_template = self._config['messages']['text']
         self._host = self._config['emulator_host']
         self._port = self._config['emulator_port']
 
     def _msg(self, chat_id: int, text: Optional[str]) -> Dict:
-        template = self._cmd_template if text is None else self._txt_template
+        if text is None:
+            template = self._config['messages']['command']
+        else:
+            template = self._config['messages']['text']
         msg = copy.deepcopy(template)
         msg['message']['chat']['id'] = chat_id
         msg['message']['payload']['text'] = text
@@ -37,13 +38,20 @@ class IntegrationTester:
     def output_message(chat_id: int, text: str) -> Dict:
         return {'chat_id': chat_id, 'text': f'{{"text": "{text}"}}'}
 
-    async def gen_test(self, test_case: Dict) -> None:
-        updates = [self._msg(chat_id, text) for chat_id, text in test_case['poller_input']]
-        infer = {arg_name: arg_value for arg_name, arg_value in zip(self.model_args_names, test_case['model_input'])}
-        if self._convai is True:
-            infer[self.model_args_names[0]] = [t['message'] for t in updates]
-        send_msgs = [self.output_message(*s) for s in test_case['expected_output']]
-        payload = {'convai': self._convai, 'state': self._state, 'updates': updates, 'infer': infer, 'send_messages': send_msgs}
+    async def _start_poller(self, convai, state):
+        poller_call = ['python ../poller.py', f'--port {self._port}', f'--host {self._host}',
+                       f'--model http://{self._host}:{self._port}/answer', '--token x']
+        if convai is True:
+            poller_call.append('--convai')
+        if state is True:
+            poller_call.append('--state')
+        self._poller = pexpect.spawn(' '.join(poller_call))
+
+    async def _stop_poller(self):
+        self._poller.sendcontrol('c')
+        self._poller.close()
+
+    async def _send_updates_to_emulator(self, payload):
         async with aiohttp.ClientSession() as session:
             while True:
                 try:
@@ -53,31 +61,26 @@ class IntegrationTester:
                 except client_exceptions.ClientConnectionError:
                     pass
 
-    async def test(self, te):
-        convai = '--convai' if self._convai else ''
-        state = '--state' if self._state else ''
-        poller = pexpect.spawn(' '.join(['python', '../poller.py',
-                                         '--port', str(self._port),
-                                         '--host', self._host,
-                                         '--model', f'http://{self._host}:{self._port}/answer',
-                                         '--token', 'x',
-                                         convai,
-                                         state]))
-        for test_case in te['test_cases']:
-            await self.gen_test(test_case)
-        poller.sendcontrol('c')
-        poller.close()
-
     async def run_tests(self):
-        for te in self._config['tests']:
-            self._convai = te['convai']
-            self._state = te['state']
-            await self.test(te)
+        for test in self._config['tests']:
+            await self._start_poller(test['convai'], test['state'])
 
+            for test_case in test['test_cases']:
+                poller_input = [self._msg(chat_id, text) for chat_id, text in test_case['poller_input']]
+                model_input = {arg_name: arg_value for arg_name, arg_value in
+                         zip(self.model_args_names, test_case['model_input'])}
+                if test['convai'] is True:
+                    model_input[self.model_args_names[0]] = [t['message'] for t in poller_input]
+                expected_output = [self.output_message(*s) for s in test_case['expected_output']]
+                payload = {'convai': test['convai'], 'state': test['state'], 'poller_input': poller_input, 'model_input': model_input,
+                           'expected_output': expected_output}
+                await self._send_updates_to_emulator(payload)
+
+            await self._stop_poller()
 
 if __name__ == '__main__':
     server = Popen('python router_bot_emulator.py'.split())
-    loop = asyncio.get_event_loop()
     tester = IntegrationTester('../config.json', 'integration_test_config.json')
+    loop = asyncio.get_event_loop()
     loop.run_until_complete(tester.run_tests())
     server.kill()
