@@ -21,7 +21,7 @@ services:
     build:
       args:
         gpu: 'false'
-        skill_endpoint: skill
+        skill_endpoint: chitchat
         skillconfig: skills/ranking_chitchat/agent_ranking_chitchat_2staged_tfidf_smn_v4_prep.json
         skillhost: 0.0.0.0
         skillport: 2081
@@ -41,7 +41,7 @@ services:
     build:
       args:
         gpu: 'false'
-        skill_endpoint: skill
+        skill_endpoint: intents
         skillconfig: skill_selectors/chitchat_odqa_selector/sselector_chitchat_odqa.json
         skillhost: 0.0.0.0
         skillport: 2082
@@ -68,7 +68,7 @@ services:
     build:
       args:
         gpu: 'false'
-        skill_endpoint: skill
+        skill_endpoint: ner
         skillconfig: annotators/ner/preproc_ner_rus.json
         skillhost: 0.0.0.0
         skillport: 2083
@@ -88,7 +88,7 @@ services:
     build:
       args:
         gpu: 'false'
-        skill_endpoint: skill
+        skill_endpoint: model
         skillconfig: annotators/obscenity/obscenity_classifier.json
         skillhost: 0.0.0.0
         skillport: 2088
@@ -108,7 +108,7 @@ services:
     build:
       args:
         gpu: 'false'
-        skill_endpoint: skill
+        skill_endpoint: odqa
         skillconfig: skills/text_qa/agent_ru_odqa_retr_noans_rubert_infer.json
         skillhost: 0.0.0.0
         skillport: 2080
@@ -128,7 +128,7 @@ services:
     build:
       args:
         gpu: 'false'
-        skill_endpoint: skill
+        skill_endpoint: intents
         skillconfig: annotators/sentiment/preproc_rusentiment.json
         skillhost: 0.0.0.0
         skillport: 2084
