@@ -1,6 +1,7 @@
 {
   "emulator_host": "0.0.0.0",
   "emulator_port": 5000,
+  "watchdog_delay": 2,
   "tests": [
     {
       "convai": false,
