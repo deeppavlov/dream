@@ -30,9 +30,11 @@ class Message:
         self._txt_template = integration_config['messages']['text']
         self._n_letter = 0
 
-    def _get_msg(self, template, chat_id: int) -> Dict:
+    def _msg(self, chat_id: int, text: Optional[str]) -> Dict:
+        template = self._cmd_template if text is None else self._txt_template
         msg = copy.deepcopy(template)
         msg['message']['chat']['id'] = chat_id
+        msg['message']['payload']['text'] = text
         return msg
 
     def _get_letter(self):
@@ -40,28 +42,20 @@ class Message:
         self._n_letter = (self._n_letter + 1) % len(ascii_lowercase)
         return ret
 
-    def cmd(self, chat_id: int) -> Dict:
-        return self._get_msg(self._cmd_template, chat_id)
-
-    def txt(self, chat_id: int) -> Dict:
-        msg = self._get_msg(self._txt_template, chat_id)
-        msg['message']['payload']['text'] = self._get_letter()
-        return msg
-
     @staticmethod
     def send_msg(chat_id: int, text: str) -> Dict:
         return {'chat_id': chat_id, 'text': f'{{"text": "{text}"}}'}
 
-    async def gen_test(self, cmd: List[int], txt: List[int], send_messages: List[Tuple[int, str]],
+    async def gen_test(self, poller_input: List[Tuple[int, Optional[str]]], expected_output: List[Tuple[int, str]],
                        first_batch: Optional[List[str]] = None, state_list: Optional[List] = None) -> None:
-        updates = [self.cmd(chat_id) for chat_id in cmd] + [self.txt(chat_id) for chat_id in txt]
+        updates = [self._msg(chat_id, text) for chat_id, text in poller_input]
         if self._convai is True:
             infer = {poller_config["model_args_names"][0]: [t['message'] for t in updates]}
         else:
             infer = {poller_config["model_args_names"][0]: first_batch}
         if self._state:
             infer[poller_config["model_args_names"][1]] = state_list
-        send_msgs = [self.send_msg(*s) for s in send_messages]
+        send_msgs = [self.send_msg(*s) for s in expected_output]
         payload = {'convai': self._convai, 'state': self._state, 'updates': updates, 'infer': infer, 'send_messages': send_msgs}
         async with aiohttp.ClientSession() as session:
             while True:
@@ -75,30 +69,30 @@ class Message:
 
 async def test0():
     message = Message(convai=False, state=False)
-    await message.gen_test(cmd=[0], txt=[1, 2], send_messages=[(1, 'A a'), (2, 'B b')], first_batch=['a', 'b'])
+    await message.gen_test(poller_input=[(0, None), (1, 'a'), (2, 'b')], expected_output=[(1, 'A a'), (2, 'B b')], first_batch=['a', 'b'])
 
 
 async def test1():
     message = Message(convai=True, state=False)
-    await message.gen_test(cmd=[0], txt=[1, 2], send_messages=[(0, 'start'), (1, 'A a'), (2, 'B b')])
+    await message.gen_test(poller_input=[(0, None), (1, 'a'), (2, 'b')], expected_output=[(0, 'start'), (1, 'A a'), (2, 'B b')])
 
 
 async def test2():
     message = Message(convai=False, state=True)
-    await message.gen_test(cmd=[0], txt=[0], send_messages=[(0, 'A')], first_batch=['a'], state_list=[None])
+    await message.gen_test(poller_input=[(0, None), (0, 'a')], expected_output=[(0, 'A')], first_batch=['a'], state_list=[None])
 
-    await message.gen_test(cmd=[], txt=[0], send_messages=[(0, 'B')], first_batch=['b'], state_list=[['a']])
+    await message.gen_test(poller_input=[(0, 'b')], expected_output=[(0, 'B')], first_batch=['b'], state_list=[['a']])
 
-    await message.gen_test(cmd=[], txt=[0], send_messages=[(0, 'C')], first_batch=['c'], state_list=[['a', 'b']])
+    await message.gen_test(poller_input=[(0, 'c')], expected_output=[(0, 'C')], first_batch=['c'], state_list=[['a', 'b']])
 
 
 async def test3():
     message = Message(convai=True, state=True)
-    await message.gen_test(cmd=[0, 1], txt=[], send_messages=[(0, 'start'), (1, 'start')], state_list=[None, None])
+    await message.gen_test(poller_input=[(0, None), (1, None)], expected_output=[(0, 'start'), (1, 'start')], state_list=[None, None])
 
-    await message.gen_test(cmd=[], txt=[0, 1], send_messages=[(0, 'A'), (1, 'B')], state_list=[['start'], ['start']])
+    await message.gen_test(poller_input=[(0, 'a'), (1, 'b')], expected_output=[(0, 'A'), (1, 'B')], state_list=[['start'], ['start']])
 
-    await message.gen_test(cmd=[], txt=[0, 1], send_messages=[(0, 'C'), (1, 'D')], state_list=[['start', 'a'], ['start', 'b']])
+    await message.gen_test(poller_input=[(0, 'c'), (1, 'd')], expected_output=[(0, 'C'), (1, 'D')], state_list=[['start', 'a'], ['start', 'b']])
 
 if __name__ == '__main__':
     server = Popen('python router_bot_emulator.py'.split())
