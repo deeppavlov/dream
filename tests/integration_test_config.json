@@ -1,6 +1,83 @@
 {
   "emulator_host": "0.0.0.0",
   "emulator_port": 5000,
+  "test_template": {
+    "convai": false,
+    "state": false,
+    "test_cases": [
+      {
+        "poller_input": [],
+        "expected_output": [],
+        "model_input": []
+      }
+    ]
+  },
+  "tests": [
+    {
+      "convai": false,
+      "state": false,
+      "test_cases": [
+        {
+          "poller_input": [[0, null], [1, "a"], [2, "b"]],
+          "expected_output": [[1, "A a"], [2, "B b"]],
+          "model_input": [["a", "b"]]
+        }
+      ]
+    },
+    {
+      "convai": true,
+      "state": false,
+      "test_cases": [
+        {
+          "poller_input": [[0, null], [1, "a"], [2, "b"]],
+          "expected_output": [[0, "start"], [1, "A a"], [2, "B b"]],
+          "model_input": [null]
+        }
+      ]
+    },
+    {
+      "convai": false,
+      "state": true,
+      "test_cases": [
+        {
+          "poller_input": [[0, null], [0, "a"]],
+          "expected_output": [[0, "A"]],
+          "model_input": [["a"], [null]]
+        },
+        {
+          "poller_input": [[0, "b"]],
+          "expected_output": [[0, "B"]],
+          "model_input": [["b"], [["a"]]]
+        },
+        {
+          "poller_input": [[0, "c"]],
+          "expected_output": [[0, "C"]],
+          "model_input": [["c"], [["a", "b"]]]
+        }
+      ]
+    },
+    {
+      "convai": true,
+      "state": true,
+      "test_cases": [
+        {
+          "poller_input": [[0, null], [1, null]],
+          "expected_output": [[0, "start"], [1, "start"]],
+          "model_input": [null, [null, null]]
+        },
+        {
+          "poller_input": [[0, "a"], [1, "b"]],
+          "expected_output": [[0, "A"], [1, "B"]],
+          "model_input": [null, [["start"], ["start"]]]
+        },
+        {
+          "poller_input": [[0, "c"], [1, "d"]],
+          "expected_output": [[0, "C"], [1, "D"]],
+          "model_input": [null, [["start", "a"], ["start", "b"]]]
+        }
+      ]
+    }
+  ],
   "messages": {
     "command": {
       "update_id": 163,
