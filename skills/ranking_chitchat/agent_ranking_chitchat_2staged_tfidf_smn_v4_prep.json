@@ -1,22 +1,13 @@
 {
   "info": "(v4) Agent_v2-based ranking chit-chat. Using cleaned dataset Books + VK 2-turns dialogs + pBot. There are 279901 items in total.",
   "chainer": {
-    "in": ["dialogs"],
+    "in": ["utterances_batch",
+           "last_annotations",
+           "history_batch",
+           "dialogs"],
     "pipe": [
       {
-        "class_name": "core.state_parsers.state_parser:DialogsParser",
-        "in": ["dialogs"],
-        "out": [
-          "utterances_batch",
-          "last_annotations",
-          "history_batch",
-          "annotations_histories",
-          "dialog_ids",
-          "user_ids"
-        ]
-      },
-      {
-        "class_name": "core.state_parsers.state_parser:AnnotationsParser",
+        "class_name": "skills.ranking_chitchat.parsers:AnnotationsParser",
         "keys": ["ner.tokens", "ner.tags"],
         "in": ["last_annotations"],
         "out": ["utterance_toks", "utterance_tags"]
@@ -135,6 +126,9 @@
       "{DEEPPAVLOV_PATH}/requirements/fasttext.txt",
       "{DEEPPAVLOV_PATH}/requirements/gensim.txt"
     ],
+    "labels": {
+      "server_utils": "Chitchat"
+    },
     "download": [
       {
         "url": "http://files.deeppavlov.ai/deeppavlov_data/dev/chitchat_2staged_tfidf_smn_v3.tar.gz",

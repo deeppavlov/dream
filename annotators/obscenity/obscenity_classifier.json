@@ -1,23 +1,9 @@
 {
   "chainer": {
     "in": [
-      "dialogs"
+      "last_utterances"
     ],
     "pipe": [
-      {
-        "class_name": "core.state_parsers.state_parser:DialogsParser",
-        "in": [
-          "dialogs"
-        ],
-        "out": [
-          "last_utterances",
-          "last_annotations",
-          "utterances_histories",
-          "annotations_histories",
-          "dialog_ids",
-          "user_ids"
-        ]
-      },
       {
         "class_name": "annotators.obscenity.obscenity_classifier:ObscenityClassifier",
         "data_path": "{DOWNLOADS_PATH}/obscenity_dataset/",

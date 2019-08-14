@@ -3,7 +3,7 @@ import operator
 from itertools import compress
 from typing import List, Dict, Optional, Sequence
 
-from core.config import MAX_WORKERS, SKILLS
+from core.transform_config import MAX_WORKERS, SKILLS
 from core.hardcode_utterances import NOANSWER_UTT
 from core.state_schema import Human
 from core.state_manager import get_state
@@ -58,12 +58,13 @@ class SkillManager:
     def get_skill_responses(self, dialogs):
         n_dialogs = len(dialogs)
         skill_names = [s['name'] for s in self.skills]
+        skill_urls = [s['url'] for s in self.skills]
+        skill_formatters = [s['formatter'] for s in self.skills]
 
-        skill_urls = [skill['url'] for skill in self.skills]
 
         state = get_state(dialogs)
         if self.skill_selector is not None:
-            selected_skills = self.skill_selector(state)
+            selected_skills = [list(d.values())[0] for d in self.skill_selector(state)]
         else:
             selected_skills = [skill_names] * n_dialogs
         excluded_skills = []
@@ -78,10 +79,12 @@ class SkillManager:
             if not compressed_dialogs:
                 skill_names.remove(skill['name'])
                 skill_urls.remove(skill['url'])
+                skill_formatters.remove(skill['formatter'])
                 continue
             s['dialogs'] = compressed_dialogs
             payloads.append(s)
-        skill_responses = self.skill_caller(payload=payloads, names=skill_names, urls=skill_urls)
+        skill_responses = self.skill_caller(payload=payloads, names=skill_names, urls=skill_urls,
+                                            formatters=skill_formatters)
         for response, dialog in zip(skill_responses, dialogs):
             # if 'hellobot' in response and len(dialog['utterances']) == 1 and not dialog['user']['profile']['name']:
             #     response['hellobot']['confidence'] = 1.

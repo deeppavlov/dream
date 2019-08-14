@@ -84,6 +84,9 @@ You can configure services at the Agent `config file`_.
     * If a service needs to be run on GPU, **False** by default
 * **external**
     * If the service is running from the **dp-agent** repo. **False** by default.
+* **formatter**
+    * The name of a function that converts the Agent state into a service input format
+      and converts a service output format into the Agent state
 
 Notice that if you want to run an Agent from only one skill, you can leave
 **SKILL_SELECTORS** and **RESPONSE_SELECTORS** empty.

@@ -1,21 +1,9 @@
 {
   "chainer": {
     "in": [
-      "dialogs"
+      "last_utterances"
     ],
     "pipe": [
-      {
-        "class_name": "core.state_parsers.state_parser:DialogsParser",
-        "in": ["dialogs"],
-        "out": [
-          "last_utterances",
-          "last_annotations",
-          "utterances_histories",
-          "annotations_histories",
-          "dialog_ids",
-          "user_ids"
-        ]
-      },
       {
         "id": "classes_vocab",
         "class_name": "simple_vocab",
@@ -91,15 +79,10 @@
         "in": "y_pred_ids",
         "out": "y_pred_labels",
         "ref": "classes_vocab"
-      },
-      {
-        "class_name": "annotators.sentiment.first_element_extractor:FirstElementExtractor",
-        "in": "y_pred_labels",
-        "out": "labels"
       }
     ],
     "out": [
-      "labels"
+      "y_pred_labels"
     ]
   },
   "metadata": {

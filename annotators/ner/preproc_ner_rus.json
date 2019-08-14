@@ -1,19 +1,7 @@
 {
   "chainer": {
-    "in": ["dialogs"],
+    "in": ["last_utterances"],
     "pipe": [
-      {
-        "class_name": "core.state_parsers.state_parser:DialogsParser",
-        "in": ["dialogs"],
-        "out": [
-          "last_utterances",
-          "last_annotations",
-          "utterances_histories",
-          "annotations_histories",
-          "dialog_ids",
-          "user_ids"
-        ]
-      },
       {
         "in": ["last_utterances"],
         "class_name": "lazy_tokenizer",
