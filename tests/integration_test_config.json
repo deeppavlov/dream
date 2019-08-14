@@ -1,17 +1,6 @@
 {
   "emulator_host": "0.0.0.0",
   "emulator_port": 5000,
-  "test_template": {
-    "convai": false,
-    "state": false,
-    "test_cases": [
-      {
-        "poller_input": [],
-        "expected_output": [],
-        "model_input": []
-      }
-    ]
-  },
   "tests": [
     {
       "convai": false,
