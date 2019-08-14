@@ -38,7 +38,6 @@ class Server:
     _loop: asyncio.events.AbstractEventLoop
 
     def __init__(self, port: int) -> None:
-        self._test_n = 0
         self._updates = []
         self._infer = ''
         self._send_messages = set()
@@ -113,7 +112,7 @@ class Server:
         """
         self._event = asyncio.Event()
         self._test_result = {'Infer is correct': False, 'All messages received': False}
-        self._test_n += 1
+        self._loop.create_task(self._timer())
         data = await request.json()
         self._updates = data['updates']
         self._infer = data['infer']
@@ -124,6 +123,10 @@ class Server:
         await self._event.wait()
         return web.json_response(self._test_result)
 
+    async def _timer(self):
+        await asyncio.sleep(10)
+        self._log.info('timer called event.set()')
+        self._event.set()
 
 if __name__ == '__main__':
     args = parser.parse_args()
