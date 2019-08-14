@@ -1,8 +1,7 @@
 import argparse
 import asyncio
-import json
 import logging
-from logging import config as logging_config
+import sys
 
 from aiohttp import web
 from aiohttp.web_response import Response
@@ -38,15 +37,19 @@ class Server:
     _loop: asyncio.events.AbstractEventLoop
 
     def __init__(self, port: int) -> None:
-        self._poller_input = []
-        self._model_input = ''
-        self._expected_output = set()
-        self._convai = False
-        self._state = False
-        with open('../config.json', 'r') as config_file:
-            config = json.load(config_file)
-        logging_config.dictConfig(config['logging'])
-        self._log = logging.root.manager.loggerDict['wrapper_logger']
+        self._config = {
+            'poller_input': [],
+            'model_input': {},
+            'expected_output': [],
+            'convai': False,
+            'state': False
+        }
+
+        log_handler = logging.StreamHandler(sys.stderr)
+        self._log = logging.getLogger('server')
+        self._log.setLevel(logging.DEBUG)
+        self._log.addHandler(log_handler)
+
         self._loop = asyncio.get_event_loop()
         self._app = web.Application(loop=self._loop)
         self._app.add_routes([web.get('/bot{token}/getUpdates', self._handle_updates),
@@ -57,11 +60,11 @@ class Server:
 
     async def _dp_model(self, request: web.Request) -> Response:
         data = await request.json()
-        self._test_result['model_input_correct'] = (ordered(data) == ordered(self._model_input))
+        self._test_result['model_input_correct'] = (ordered(data) == ordered(self._config['model_input']))
         ret = []
-        if self._state is False:
+        if self._config['state'] is False:
             for message in data['text1']:
-                if self._convai is True:
+                if self._config['convai'] is True:
                     text = message['payload']['text']
                     command = message['payload']['command']
                 else:
@@ -71,7 +74,7 @@ class Server:
                 ret.append(resp_list)
         else:
             for message, state in zip(data['text1'], data['state']):
-                if self._convai is True:
+                if self._config['convai'] is True:
                     text = message['payload']['text']
                     command = message['payload']['command']
                 else:
@@ -88,16 +91,18 @@ class Server:
         return web.json_response(ret)
 
     async def _handle_updates(self, request: web.Request) -> Response:
-        res = self._poller_input
-        self._poller_input = []
-        return web.json_response({'result': res})
+        return web.json_response({'result': self._config.pop('poller_input', [])})
 
     async def _handle_message(self, request: web.Request) -> Response:
         data = await request.json()
-        self._gen_messages.append(data)
-        if ordered(self._expected_output) == ordered(self._gen_messages):
-            self._test_result['poller_output_correct'] = True
+        try:
+            self._config['expected_output'].remove(data)
+        except ValueError:
             self._event.set()
+        else:
+            if not self._config['expected_output']:
+                self._test_result['poller_output_correct'] = True
+                self._event.set()
         return web.Response(status=200)
 
     async def _set_new_test(self, request: web.Request) -> Response:
@@ -114,12 +119,7 @@ class Server:
         self._test_result = {'model_input_correct': False, 'poller_output_correct': False}
         self._loop.create_task(self._timer())
         data = await request.json()
-        self._poller_input = data['poller_input']
-        self._model_input = data['model_input']
-        self._expected_output = data['expected_output']
-        self._convai = data['convai']
-        self._state = data['state']
-        self._gen_messages = []
+        self._config.update(data)
         await self._event.wait()
         return web.json_response(self._test_result)
 
