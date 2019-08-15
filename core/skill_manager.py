@@ -5,7 +5,7 @@ from typing import List, Dict, Optional, Sequence
 from warnings import warn
 
 from core.transform_config import MAX_WORKERS, SKILLS
-from core.hardcode_utterances import NOANSWER_UTT
+from models.hardcode_utterances import NOANSWER_UTT
 from core.state_schema import Human
 from core.state_manager import get_state
 
