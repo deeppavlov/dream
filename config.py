@@ -16,7 +16,7 @@ SKILLS = [
         "host": "127.0.0.1",
         "port": 2080,
         "endpoint": "odqa",
-        "path": "skills/text_qa/agent_ru_odqa_retr_noans_rubert_infer.json",
+        "path": "odqa/ru_odqa_infer_wiki",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
         },
@@ -46,7 +46,7 @@ ANNOTATORS = [
         "host": "127.0.0.1",
         "port": 2083,
         "endpoint": "ner",
-        "path": "annotators/ner/preproc_ner_rus.json",
+        "path": "ner/ner_rus",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
         },

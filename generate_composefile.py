@@ -30,7 +30,7 @@ MONGO_BASIC = {
 
 SKILL_BASIC = {
     'build': {'context': './',
-              'dockerfile': 'dockerfile_skill_basic',
+              'dockerfile': 'dp/dockerfile_skill_basic',
               'args': {}},
     'volumes': ['.:/dp-agent',
                 '${EXTERNAL_FOLDER}/dp_logs:/logs',
