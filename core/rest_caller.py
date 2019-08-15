@@ -30,25 +30,25 @@ class RestCaller:
     def __call__(self, payload: Union[Dict, Sequence[Dict]],
                  names: Optional[Sequence[str]] = None,
                  urls: Optional[Sequence[str]] = None,
-                 state_formatters = None) -> List[
+                 formatters = None) -> List[
         Dict[str, Dict[str, Any]]]:
 
         names = names if names is not None else self.names
         urls = urls if urls is not None else self.urls
-        state_formatters = state_formatters if state_formatters is not None else self.formatters
+        formatters = formatters if formatters is not None else self.formatters
 
         if names is None:
             raise ValueError('No service names were provided.')
         if urls is None:
             raise ValueError('No service urls were provided')
-        if state_formatters is None:
+        if formatters is None:
             raise ValueError('No state formatters were provided.')
 
         if not isinstance(payload, Sequence):
             payload = [payload] * len(names)
 
         total_result = []
-        for preprocessed in zip(*self.executor.map(_make_request, names, urls, state_formatters,
+        for preprocessed in zip(*self.executor.map(_make_request, names, urls, formatters,
                                                    payload)):
             res = {}
             for data in preprocessed:
