@@ -9,7 +9,6 @@ services:
     - chitchat
     - ner
     - sentiment
-    - obscenity
     - chitchat_odqa
     - mongo
     ports:
@@ -21,8 +20,8 @@ services:
     build:
       args:
         gpu: 'false'
-        skill_endpoint: chitchat
-        skillconfig: skills/ranking_chitchat/agent_ranking_chitchat_2staged_tfidf_smn_v4_prep.json
+        skill_endpoint: model
+        skillconfig: faq/tfidf_autofaq
         skillhost: 0.0.0.0
         skillport: 2081
       context: ./
@@ -42,7 +41,7 @@ services:
       args:
         gpu: 'false'
         skill_endpoint: intents
-        skillconfig: skill_selectors/chitchat_odqa_selector/sselector_chitchat_odqa.json
+        skillconfig: classifiers/rusentiment_bigru_superconv
         skillhost: 0.0.0.0
         skillport: 2082
       context: ./
@@ -84,26 +83,6 @@ services:
     - .:/dp-agent
     - ${EXTERNAL_FOLDER}/dp_logs:/logs
     - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
-  obscenity:
-    build:
-      args:
-        gpu: 'false'
-        skill_endpoint: model
-        skillconfig: annotators/obscenity/obscenity_classifier.json
-        skillhost: 0.0.0.0
-        skillport: 2088
-      context: ./
-      dockerfile: dockerfile_skill_basic
-    container_name: obscenity
-    environment:
-    - CUDA_VISIBLE_DEVICES=""
-    ports:
-    - 2088:2088
-    tty: true
-    volumes:
-    - .:/dp-agent
-    - ${EXTERNAL_FOLDER}/dp_logs:/logs
-    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
   odqa:
     build:
       args:
@@ -129,7 +108,7 @@ services:
       args:
         gpu: 'false'
         skill_endpoint: intents
-        skillconfig: annotators/sentiment/preproc_rusentiment.json
+        skillconfig: classifiers/rusentiment_cnn
         skillhost: 0.0.0.0
         skillport: 2084
       context: ./

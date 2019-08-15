@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Sequence, Hashable, Any, TypeVar, Callable, List, Dict
+from typing import Sequence, Hashable, Any, Callable, List, Dict
 from itertools import compress
 import operator
 

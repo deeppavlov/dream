@@ -78,6 +78,20 @@ def sentiment_formatter(payload: Any, model_args_names=('context',), mode='in'):
         return [el[0] for el in payload]
 
 
+def chitchat_odqa_formatter(payload: Any, model_args_names=('context',), mode='in'):
+    if mode == 'in':
+        return last_utterances(payload, model_args_names)
+    elif mode == 'out':
+        response = []
+        for el in payload:
+            class_name = el[0][0]
+            if class_name in ['speech', 'negative']:
+                response.append('chitchat')
+            else:
+                response.append('odqa')
+        return response
+
+
 def odqa_formatter(payload: Any, model_args_names=('context',), mode='in'):
     if mode == 'in':
         return last_utterances(payload, model_args_names)
