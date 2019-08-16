@@ -5,4 +5,4 @@ COPY requirements.txt /tmp/requirements.txt
 
 RUN pip install -r /tmp/requirements.txt
 
-CMD python server.py
+CMD gunicorn --workers=2 server:app
