@@ -98,3 +98,9 @@ def chitchat_formatter(payload: Any,
         return {"text": payload[0],
                 "confidence": payload[1],
                 "name": payload[2]}
+
+def alice_formatter(payload, mode='in'):
+    if mode == 'in':
+        return {'sentences': [u['text'] for u in payload['dialogs'][0]['utterances']]}
+    elif mode == 'out':
+        return {"text": payload, "confidence": 1}
