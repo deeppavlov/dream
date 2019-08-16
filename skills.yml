@@ -1,0 +1,9 @@
+services:
+  alice:
+    build:
+      context: ./skills/ALICEChatAPI/
+    container_name: alice
+    ports: ['3000:3000']
+    command: python -u server.py
+    volumes: ['./skills/ALICEChatAPI:/src']
+version: '3'

@@ -63,10 +63,10 @@ Services Deployment
 
 1. Create a directory for storing downloaded data, such as pre-trained models.
    It should be located outside the agent project's home directory.
-   
+
 1. Setup an `EXTERNAL_FOLDER` variable with the path to data directory. This path
     will be used by Agent to download models' data:
-   
+
    ```dotenv
    EXTERNAL_FOLDER=<path to data directory>
    ```
@@ -76,9 +76,9 @@ Services Deployment
    TELEGRAM_TOKEN=<token>
    TELEGRAM_PROXY=socks5://<user>:<password>@<path:port>
    ```
-   
+
    Here's an example of values:
-   
+
    ```dotenv
    TELEGRAM_TOKEN=123456789:AAGCiO0QFb_I-GXL-CbJDw7--JQbHkiQyYA
    TELEGRAM_PROXY=socks5://tgproxy:tgproxy_pwd@123.45.67.89:1447
@@ -88,7 +88,7 @@ Services Deployment
 
    If you want a minimal configuration, you need one skill and one skill selector.
    Pick skill `chitchat` and  selector `chitchat_odqa` and comment out all other skills, selectors and annotators.
-   
+
 1. Generate a Docker environment configuration (`docker-compose.yml`) by running the command:
 
     ```bash
@@ -96,18 +96,18 @@ Services Deployment
     ```
     This configuration represents the choice of skills from the previous step.
     Re-generate it every time you change the [config file](core/config.py).
-    
+
 1. Run the Docker environment with:
 
      ```bash
-     docker-compose up --build
+     docker-compose -f docker-compose.yml -f skills.yml up --build
      ```
    Now you have a working environment with the following services:
-   
+
    * DeepPavlov Agent (`agent`)
    * MongoDB (`mongo`)
    * A service for each skill, selector or other component.
-   
+
    In this shell you will now see the logs from all working services.
 
 Running the Agent

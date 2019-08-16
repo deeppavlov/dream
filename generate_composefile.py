@@ -15,7 +15,7 @@ AGENT_BASIC = {
     'agent': {'build': {'context': './', 'dockerfile': 'dockerfile_agent'},
               'container_name': 'agent',
               'volumes': ['.:/dp-agent'],
-              'ports': ['8888:8888'],
+              'ports': ['28888:8888'],
               'tty': True,
               'depends_on': []}
 }
@@ -142,7 +142,7 @@ class DockerComposeConfig:
 
     @property
     def config(self):
-        config_dict = {'version': '2.3', 'services': {}}
+        config_dict = {'version': '3', 'services': {}}
         self.add_dependencies_to_agent()
         for container in chain(self.skills, self.database):
             config_dict['services'].update(container.config)
