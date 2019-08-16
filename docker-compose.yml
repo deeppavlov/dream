@@ -12,7 +12,7 @@ services:
     - chitchat_odqa
     - mongo
     ports:
-    - 8888:8888
+    - 4242:4242
     tty: true
     volumes:
     - .:/dp-agent
