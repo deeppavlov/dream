@@ -14,7 +14,7 @@ SKILLS = [
         "name": "alice",
         "protocol": "http",
         "host": "alice",
-        "port": 3000,
+        "port": 8000,
         "endpoint": "respond",
         "formatter": "alice_formatter",
         "external": True,
