@@ -27,7 +27,11 @@ def respond():
     for s in user_sentences:
         response = bot.respond(s, session_id).replace("\n", "")
     logger.info("response: {}".format(response))
-    return jsonify([response])
+    if response.strip():
+        confidence = 0.95
+    else:
+        confidence = 0.01
+    return jsonify([[response, confidence]])
 
 
 if __name__ == '__main__':

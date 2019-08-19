@@ -16,10 +16,22 @@ SKILLS = [
         "host": "alice",
         "port": 8000,
         "endpoint": "respond",
-        "formatter": "alice_formatter",
         "external": True,
         "path": "",
         "formatter": alice_formatter
+    },
+    {
+        "name": "aiml",
+        "protocol": "http",
+        "host": "aiml",
+        "port": 2080,
+        "endpoint": "aiml",
+        "path": "skills/aiml/aiml_skill.json",
+        "env": {
+            "CUDA_VISIBLE_DEVICES": ""
+        },
+        "gpu": False,
+        "formatter": aiml_formatter
     }
 ]
 

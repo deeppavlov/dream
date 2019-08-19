@@ -12,4 +12,10 @@ settings['model_defaults']['Chitchat'] = {
     "model_endpoint": "/chitchat",
     "model_args_names": ["utterances", "annotations", "u_histories", "dialogs"]
 }
+
+settings['model_defaults']['AIMLSkill'] = {
+    "model_endpoint": "/aiml",
+    "model_args_names": ["utterances_batch", "history_batch", "states_batch"]
+}
+print(settings_path)
 save_json(settings, settings_path)
