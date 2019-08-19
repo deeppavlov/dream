@@ -8,6 +8,12 @@ from core.skill_manager import SkillManager
 from core.hardcode_utterances import TG_START_UTT
 from core.state_schema import Dialog, Human
 
+import logging
+
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+logger = logging.getLogger(__name__)
 Profile = Dict[str, Any]
 
 
@@ -35,6 +41,7 @@ class Agent:
 
         selected_skills = self.skill_manager.get_skill_responses(me_dialogs)
         self._update_utterances(me_dialogs, selected_skills, key='selected_skills')
+        logger.info("Selected skills: {}".format(selected_skills))
 
         skill_names, responses, confidences, profiles = self.skill_manager(me_dialogs)
         self._update_profiles(me_users, profiles)
