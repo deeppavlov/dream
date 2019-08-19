@@ -1,11 +1,11 @@
 from datetime import datetime
-from typing import Sequence, Hashable, Any, TypeVar, Callable, List, Dict
+from typing import Sequence, Hashable, Any, Callable, List, Dict
 from itertools import compress
 import operator
 
 from core.state_manager import StateManager, get_state
 from core.skill_manager import SkillManager
-from core.hardcode_utterances import TG_START_UTT
+from models.hardcode_utterances import TG_START_UTT
 from core.state_schema import Dialog, Human
 
 Profile = Dict[str, Any]

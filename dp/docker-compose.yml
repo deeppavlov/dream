@@ -1,8 +1,8 @@
 services:
   agent:
     build:
-      context: ./
-      dockerfile: dockerfile_agent
+      context: ..
+      dockerfile: ../dockerfile_agent
     container_name: agent
     depends_on:
     - odqa
@@ -12,7 +12,7 @@ services:
     - chitchat_odqa
     - mongo
     ports:
-    - 4242:4242
+    - 8888:8888
     tty: true
     volumes:
     - .:/dp-agent
@@ -24,8 +24,8 @@ services:
         skillconfig: faq/tfidf_autofaq
         skillhost: 0.0.0.0
         skillport: 2081
-      context: ./
-      dockerfile: dp/dockerfile_skill_cpu
+      context: ..
+      dockerfile: ../dockerfile_skill_basic
     container_name: chitchat
     environment:
     - CUDA_VISIBLE_DEVICES=""
@@ -44,8 +44,8 @@ services:
         skillconfig: classifiers/rusentiment_bigru_superconv
         skillhost: 0.0.0.0
         skillport: 2082
-      context: ./
-      dockerfile: dp/dockerfile_skill_cpu
+      context: ..
+      dockerfile: ../dockerfile_skill_basic
     container_name: chitchat_odqa
     environment:
     - CUDA_VISIBLE_DEVICES=""
@@ -68,11 +68,11 @@ services:
       args:
         gpu: 'false'
         skill_endpoint: ner
-        skillconfig: ner/ner_rus
+        skillconfig: annotators/ner/preproc_ner_rus.json
         skillhost: 0.0.0.0
         skillport: 2083
-      context: ./
-      dockerfile: dp/dockerfile_skill_cpu
+      context: ..
+      dockerfile: ../dockerfile_skill_basic
     container_name: ner
     environment:
     - CUDA_VISIBLE_DEVICES=""
@@ -88,11 +88,11 @@ services:
       args:
         gpu: 'false'
         skill_endpoint: odqa
-        skillconfig: odqa/ru_odqa_infer_wiki
+        skillconfig: skills/text_qa/agent_ru_odqa_retr_noans_rubert_infer.json
         skillhost: 0.0.0.0
         skillport: 2080
-      context: ./
-      dockerfile: dp/dockerfile_skill_cpu
+      context: ..
+      dockerfile: ../dockerfile_skill_basic
     container_name: odqa
     environment:
     - CUDA_VISIBLE_DEVICES=""
@@ -111,8 +111,8 @@ services:
         skillconfig: classifiers/rusentiment_cnn
         skillhost: 0.0.0.0
         skillport: 2084
-      context: ./
-      dockerfile: dp/dockerfile_skill_cpu
+      context: ..
+      dockerfile: ../dockerfile_skill_basic
     container_name: sentiment
     environment:
     - CUDA_VISIBLE_DEVICES=""
