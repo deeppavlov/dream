@@ -84,7 +84,6 @@ class SkillConfig(Config):
         self.template['build']['args']['skillconfig'] = skill_config['path']
         self.template['build']['args']['skill_endpoint'] = skill_config['endpoint']
         self.template['build']['args']['skillhost'] = '0.0.0.0'
-        self.template['build']['args']['gpu'] = 'false'
         self.template['ports'].append("{}:{}".format(skill_config['port'], skill_config['port']))
         self.template['build']['dockerfile'] = "dp/{}".format(skill_config.get("dockerfile",
                                                                                "dockerfile_skill_cpu"))
