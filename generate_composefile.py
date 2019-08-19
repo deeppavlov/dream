@@ -15,7 +15,7 @@ AGENT_BASIC = {
     'agent': {'build': {'context': './', 'dockerfile': 'dockerfile_agent'},
               'container_name': 'agent',
               'volumes': ['.:/dp-agent'],
-              'ports': ['8888:8888'],
+              'ports': ['4242:4242'],
               'tty': True,
               'depends_on': []}
 }
@@ -30,7 +30,7 @@ MONGO_BASIC = {
 
 SKILL_BASIC = {
     'build': {'context': './',
-              'dockerfile': 'dockerfile_skill_basic',
+              'dockerfile': 'dp/dockerfile_skill_cpu',
               'args': {}},
     'volumes': ['.:/dp-agent',
                 '${EXTERNAL_FOLDER}/dp_logs:/logs',
@@ -86,6 +86,8 @@ class SkillConfig(Config):
         self.template['build']['args']['skillhost'] = '0.0.0.0'
         self.template['build']['args']['gpu'] = 'false'
         self.template['ports'].append("{}:{}".format(skill_config['port'], skill_config['port']))
+        self.template['build']['dockerfile'] = "dp/{}".format(skill_config.get("dockerfile",
+                                                                               "dockerfile_skill_cpu"))
 
         env_vars = skill_config.get('env')
         if env_vars:
@@ -93,9 +95,8 @@ class SkillConfig(Config):
             for env, val in env_vars.items():
                 self.template['environment'].append('{}={}'.format(env, '""' if not str(val).strip() else val))
 
-        if skill_config.get('gpu'):
+        if skill_config.get('dockerfile') == "dockerfile_skill_gpu":
             self.template['runtime'] = 'nvidia'
-            self.template['build']['args']['gpu'] = 'true'
 
     @property
     def config(self):

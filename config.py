@@ -16,11 +16,11 @@ SKILLS = [
         "host": "127.0.0.1",
         "port": 2080,
         "endpoint": "odqa",
-        "path": "skills/text_qa/agent_ru_odqa_retr_noans_rubert_infer.json",
+        "path": "odqa/ru_odqa_infer_wiki",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
         },
-        "gpu": False,
+        "dockerfile": "dockerfile_skill_cpu",
         "formatter": odqa_formatter
     },
     {
@@ -28,14 +28,14 @@ SKILLS = [
         "protocol": "http",
         "host": "127.0.0.1",
         "port": 2081,
-        "endpoint": "chitchat",
-        "path": "skills/ranking_chitchat/agent_ranking_chitchat_2staged_tfidf_smn_v4_prep.json",
+        "endpoint": "model",
+        "path": "faq/tfidf_autofaq",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
         },
         "profile_handler": True,
-        "gpu": False,
-        "formatter": chitchat_formatter
+        "dockerfile": "dockerfile_skill_cpu",
+        "formatter": odqa_formatter
     }
 ]
 
@@ -46,11 +46,11 @@ ANNOTATORS = [
         "host": "127.0.0.1",
         "port": 2083,
         "endpoint": "ner",
-        "path": "annotators/ner/preproc_ner_rus.json",
+        "path": "ner/ner_rus",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
         },
-        "gpu": False,
+        "dockerfile": "dockerfile_skill_cpu",
         "formatter": ner_formatter
     },
     {
@@ -59,25 +59,12 @@ ANNOTATORS = [
         "host": "127.0.0.1",
         "port": 2084,
         "endpoint": "intents",
-        "path": "annotators/sentiment/preproc_rusentiment.json",
+        "path": "classifiers/rusentiment_cnn",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
         },
-        "gpu": False,
+        "dockerfile": "dockerfile_skill_cpu",
         "formatter": sentiment_formatter
-    },
-    {
-        "name": "obscenity",
-        "protocol": "http",
-        "host": "127.0.0.1",
-        "port": 2088,
-        "endpoint": "model",
-        "path": "annotators/obscenity/obscenity_classifier.json",
-        "env": {
-            "CUDA_VISIBLE_DEVICES": ""
-        },
-        "gpu": False,
-        "formatter": base_annotator_formatter
     }
 ]
 
@@ -88,14 +75,15 @@ SKILL_SELECTORS = [
         "host": "127.0.0.1",
         "port": 2082,
         "endpoint": "intents",
-        "path": "skill_selectors/chitchat_odqa_selector/sselector_chitchat_odqa.json",
+        "path": "classifiers/rusentiment_bigru_superconv",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
         },
-        "gpu": False,
-        "formatter": base_annotator_formatter
+        "dockerfile": "dockerfile_skill_cpu",
+        "formatter": chitchat_odqa_formatter
     }
 ]
+
 RESPONSE_SELECTORS = []
 
 POSTPROCESSORS = []

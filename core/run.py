@@ -90,8 +90,8 @@ def run():
     from core.state_manager import StateManager
     from core.skill_manager import SkillManager
     from core.rest_caller import RestCaller
-    from core.postprocessor import DefaultPostprocessor
-    from core.response_selector import ConfidenceResponseSelector
+    from models.postprocessor import DefaultPostprocessor
+    from models.response_selector import ConfidenceResponseSelector
     from core.transform_config import MAX_WORKERS, ANNOTATORS, SKILL_SELECTORS, SKILLS
 
     import logging

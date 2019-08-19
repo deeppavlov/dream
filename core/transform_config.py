@@ -6,7 +6,7 @@ from pathlib import Path
 
 import yaml
 
-from core.config import *
+from config import *
 
 # generate component url
 for service in chain(ANNOTATORS, SKILL_SELECTORS, SKILLS, RESPONSE_SELECTORS, POSTPROCESSORS):
