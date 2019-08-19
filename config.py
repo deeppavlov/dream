@@ -20,7 +20,7 @@ SKILLS = [
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
         },
-        "gpu": False,
+        "dockerfile": "dockerfile_skill_cpu",
         "formatter": odqa_formatter
     },
     {
@@ -34,7 +34,7 @@ SKILLS = [
             "CUDA_VISIBLE_DEVICES": ""
         },
         "profile_handler": True,
-        "gpu": False,
+        "dockerfile": "dockerfile_skill_cpu",
         "formatter": odqa_formatter
     }
 ]
@@ -50,7 +50,7 @@ ANNOTATORS = [
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
         },
-        "gpu": False,
+        "dockerfile": "dockerfile_skill_cpu",
         "formatter": ner_formatter
     },
     {
@@ -63,7 +63,7 @@ ANNOTATORS = [
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
         },
-        "gpu": False,
+        "dockerfile": "dockerfile_skill_cpu",
         "formatter": sentiment_formatter
     }
 ]
@@ -79,7 +79,7 @@ SKILL_SELECTORS = [
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
         },
-        "gpu": False,
+        "dockerfile": "dockerfile_skill_cpu",
         "formatter": chitchat_odqa_formatter
     }
 ]
