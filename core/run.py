@@ -16,7 +16,7 @@ from core.transform_config import TELEGRAM_TOKEN, TELEGRAM_PROXY
 parser = argparse.ArgumentParser()
 parser.add_argument("-ch", "--channel", help="run agent in telegram, cmd_client or http_client", type=str,
                     choices=['telegram', 'cmd_client', 'http_client'], default='cmd_client')
-parser.add_argument('-p', '--port', help='port for http client, default 8888', default=8888)
+parser.add_argument('-p', '--port', help='port for http client, default 4242', default=4242)
 args = parser.parse_args()
 CHANNEL = args.channel
 
