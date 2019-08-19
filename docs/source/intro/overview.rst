@@ -71,11 +71,12 @@ You can configure services at the Agent `config file`_.
 * **external**
     * If the service is running from the **dp-agent** repo. **False** by default.
 * **dockerfile**
-    * Specify a dockerfile name available inside the Agent repo. **dockerfile_skill_cpu** by default.
+    * Specify a dockerfile name available inside the Agent repo. **"dockerfile_skill_cpu"** by default.
 
     Available options:
-        * **dockerfile_skill_cpu**
-        * **dockerfile_skill_gpu**
+
+        * **"dockerfile_skill_cpu"**
+        * **"dockerfile_skill_gpu"**
 * **formatter**
     * The name of a function that converts the Agent state into a service input format
       and converts a service output format into the Agent state
