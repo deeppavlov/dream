@@ -19,7 +19,6 @@ services:
   chitchat:
     build:
       args:
-        gpu: 'false'
         skill_endpoint: model
         skillconfig: faq/tfidf_autofaq
         skillhost: 0.0.0.0
@@ -39,7 +38,6 @@ services:
   chitchat_odqa:
     build:
       args:
-        gpu: 'false'
         skill_endpoint: intents
         skillconfig: classifiers/rusentiment_bigru_superconv
         skillhost: 0.0.0.0
@@ -66,7 +64,6 @@ services:
   ner:
     build:
       args:
-        gpu: 'false'
         skill_endpoint: ner
         skillconfig: ner/ner_rus
         skillhost: 0.0.0.0
@@ -86,7 +83,6 @@ services:
   odqa:
     build:
       args:
-        gpu: 'false'
         skill_endpoint: odqa
         skillconfig: odqa/ru_odqa_infer_wiki
         skillhost: 0.0.0.0
@@ -106,7 +102,6 @@ services:
   sentiment:
     build:
       args:
-        gpu: 'false'
         skill_endpoint: intents
         skillconfig: classifiers/rusentiment_cnn
         skillhost: 0.0.0.0
