@@ -1,0 +1,3 @@
+python-aiml==0.9.1
+flask==0.12
+gunicorn==19.9.0

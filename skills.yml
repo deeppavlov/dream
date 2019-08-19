@@ -1,0 +1,9 @@
+services:
+  alice:
+    build:
+      context: ./skills/ALICEChatAPI/
+    container_name: alice
+    ports: ['8000:8000']
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8000
+    volumes: ['./skills/ALICEChatAPI:/src']
+version: '3'
