@@ -2,10 +2,28 @@ from typing import Sequence, List, Tuple, Callable, Dict
 import random
 import itertools
 import copy
-
-from deeppavlov.models.tokenizers.utils import detokenize
+import re
 
 from core.state_schema import Dialog
+
+
+def detokenize(tokens):
+    """
+    Detokenizing a text undoes the tokenizing operation, restores
+    punctuation and spaces to the places that people expect them to be.
+    Ideally, `detokenize(tokenize(text))` should be identical to `text`,
+    except for line breaks.
+    """
+    text = ' '.join(tokens)
+    step0 = text.replace('. . .', '...')
+    step1 = step0.replace("`` ", '"').replace(" ''", '"')
+    step2 = step1.replace(" ( ", " (").replace(" ) ", ") ")
+    step3 = re.sub(r' ([.,:;?!%]+)([ \'"`])', r"\1\2", step2)
+    step4 = re.sub(r' ([.,:;?!%]+)$', r"\1", step3)
+    step5 = step4.replace(" '", "'").replace(" n't", "n't") \
+        .replace(" nt", "nt").replace("can not", "cannot")
+    step6 = step5.replace(" ` ", " '")
+    return step6.strip()
 
 
 class PersonNormalizer:
