@@ -1,4 +1,4 @@
-FROM deeppavlov/base:agent
+FROM deeppavlov/base-cpu:latest
 
 ARG skillconfig
 ARG skillport
