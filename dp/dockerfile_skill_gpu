@@ -1,0 +1,22 @@
+FROM deeppavlov/base-gpu:latest
+
+ARG skillconfig
+ARG skillport
+ARG skill_endpoint
+ARG skillhost
+
+ENV CONFIG=$skillconfig
+ENV PORT=$skillport
+ENV HOST=$skillhost
+ENV ENDPOINT=$skill_endpoint
+
+RUN mkdir dp-agent
+WORKDIR /dp-agent
+COPY . /dp-agent/.
+ENV PYTHONPATH "${PYTONPATH}:/dp-agent"
+
+RUN pip install -r /base/DeepPavlov/deeppavlov/requirements/tf-gpu.txt
+RUN python -m deeppavlov install $CONFIG
+RUN python dp/dp_server_config.py
+
+ENTRYPOINT python -m deeppavlov riseapi $CONFIG -p $PORT -d
