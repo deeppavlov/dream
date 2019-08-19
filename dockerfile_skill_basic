@@ -1,4 +1,4 @@
-FROM deeppavlov/base:latest
+FROM deeppavlov/base-cpu:latest
 
 ARG skillconfig
 ARG skillport
@@ -18,7 +18,8 @@ COPY . /dp-agent/.
 ENV PYTHONPATH "${PYTONPATH}:/dp-agent"
 
 RUN if [ $GPU = "true" ]; then pip install -r /base/DeepPavlov/deeppavlov/requirements/tf-gpu.txt; fi
-RUN python3.6 -m deeppavlov install $CONFIG
-RUN python3.6 dp_server_config.py
+RUN python3 -m deeppavlov install $CONFIG
+RUN python3 dp_server_config.py
 
-ENTRYPOINT python3.6 -m deeppavlov riseapi $CONFIG -p $PORT -d
+RUN echo $CONFIG
+ENTRYPOINT python3 -m deeppavlov riseapi $CONFIG -p $PORT -d

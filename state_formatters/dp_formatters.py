@@ -99,6 +99,7 @@ def chitchat_formatter(payload: Any,
                 "confidence": payload[1],
                 "name": payload[2]}
 
+
 def alice_formatter(payload, mode='in'):
     if mode == 'in':
         sents = [u['text'] for u in payload['dialogs'][-1]['utterances']]
@@ -108,4 +109,16 @@ def alice_formatter(payload, mode='in'):
         return {'sentences': sents}
     elif mode == 'out':
         # TODO: how to deal with confidence?
-        return {"text": payload, "confidence": 1}
+        return base_skill_output_formatter(payload)
+
+
+def aiml_formatter(payload, mode='in'):
+    if mode == 'in':
+        sents = [u['text'] for u in payload['dialogs'][-1]['utterances']]
+        users = [u['user_id'] for u in payload['dialogs'][-1]['utterances']]
+        return {
+            'states_batch': [{'user_id': users[-1]}],
+            'utterances_batch': [sents[-1]]
+        }
+    elif mode == 'out':
+        return base_skill_output_formatter(payload)
