@@ -2,10 +2,21 @@ services:
   agent:
     build: {context: ./, dockerfile: dockerfile_agent}
     container_name: agent
-    depends_on: [mongo]
+    depends_on: [aiml, mongo]
     ports: ['28888:8888']
     tty: true
     volumes: ['.:/dp-agent']
+  aiml:
+    build:
+      args: {gpu: 'false', skill_endpoint: aiml, skillconfig: skills/aiml/aiml_skill.json,
+        skillhost: 0.0.0.0, skillport: 2080}
+      context: ./
+      dockerfile: dockerfile_skill_basic
+    container_name: aiml
+    environment: [CUDA_VISIBLE_DEVICES=""]
+    ports: ['2080:2080']
+    tty: true
+    volumes: ['.:/dp-agent', '${EXTERNAL_FOLDER}/dp_logs:/logs', '${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov']
   mongo:
     command: mongod
     image: mongo:3.2.0
