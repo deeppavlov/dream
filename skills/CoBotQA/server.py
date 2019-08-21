@@ -20,7 +20,7 @@ COBOT_QA_SERVICE_URL =  os.environ.get('COBOT_QA_SERVICE_URL')
 if COBOT_API_KEY is None:
     raise RuntimeError('COBOT_API_KEY environment variable is not set')
 if COBOT_QA_SERVICE_URL is None:
-    raise RuntimeError('EVI_QA_SERVICE_URL environment variable is not set')
+    raise RuntimeError('COBOT_QA_SERVICE_URL environment variable is not set')
 
 headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COBOT_API_KEY}'}
 
