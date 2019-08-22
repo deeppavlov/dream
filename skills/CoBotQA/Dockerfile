@@ -1,4 +1,4 @@
-FROM python:3.6.1
+FROM python:3.7.4
 
 WORKDIR /src
 COPY requirements.txt /tmp/requirements.txt
