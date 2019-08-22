@@ -13,7 +13,7 @@ SKILLS = [
     {
         "name": "alice",
         "protocol": "http",
-        "host": "alice",
+        "host": "127.0.0.1",
         "port": 8000,
         "endpoint": "respond",
         "external": True,
@@ -23,7 +23,7 @@ SKILLS = [
     {
         "name": "aiml",
         "protocol": "http",
-        "host": "aiml",
+        "host": "127.0.0.1",
         "port": 2080,
         "endpoint": "aiml",
         "path": "skills/aiml/aiml_skill.json",
@@ -52,7 +52,21 @@ SKILL_SELECTORS = [
     #     "gpu": False,
     #     "formatter": base_annotator_formatter
     # }
+    {
+        "name": "rule_based_selector",
+        "protocol": "http",
+        "host": "127.0.0.1",
+        "port": 2083,
+        "endpoint": "selected",
+        "path": "skill_selectors/alexa_skill_selectors/rule_based_selector.json",
+        "env": {
+            "CUDA_VISIBLE_DEVICES": ""
+        },
+        "gpu": False,
+        "formatter": base_annotator_formatter
+    }
 ]
-RESPONSE_SELECTORS = []
+RESPONSE_SELECTORS = [
+]
 
 POSTPROCESSORS = []

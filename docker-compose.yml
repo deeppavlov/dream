@@ -1,25 +1,63 @@
 services:
   agent:
-    build: {context: ./, dockerfile: dockerfile_agent}
+    build:
+      context: ./
+      dockerfile: dockerfile_agent
     container_name: agent
-    depends_on: [aiml, mongo]
-    ports: ['28888:8888']
+    depends_on:
+    - aiml
+    - rule_based_selector
+    - mongo
+    ports:
+    - 28888:8888
     tty: true
-    volumes: ['.:/dp-agent']
+    volumes:
+    - .:/dp-agent
   aiml:
     build:
-      args: {gpu: 'false', skill_endpoint: aiml, skillconfig: skills/aiml/aiml_skill.json,
-        skillhost: 0.0.0.0, skillport: 2080}
+      args:
+        gpu: 'false'
+        skill_endpoint: aiml
+        skillconfig: skills/aiml/aiml_skill.json
+        skillhost: 0.0.0.0
+        skillport: 2080
       context: ./
       dockerfile: dockerfile_skill_basic
     container_name: aiml
-    environment: [CUDA_VISIBLE_DEVICES=""]
-    ports: ['2080:2080']
+    environment:
+    - CUDA_VISIBLE_DEVICES=""
+    ports:
+    - 2080:2080
     tty: true
-    volumes: ['.:/dp-agent', '${EXTERNAL_FOLDER}/dp_logs:/logs', '${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov']
+    volumes:
+    - .:/dp-agent
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
   mongo:
     command: mongod
     image: mongo:3.2.0
-    ports: ['27017:27017']
-    volumes: ['/var/run/docker.sock:/var/run/docker.sock']
+    ports:
+    - 27017:27017
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+  rule_based_selector:
+    build:
+      args:
+        gpu: 'false'
+        skill_endpoint: selected
+        skillconfig: skill_selectors/alexa_skill_selectors/rule_based_selector.json
+        skillhost: 0.0.0.0
+        skillport: 2083
+      context: ./
+      dockerfile: dockerfile_skill_basic
+    container_name: rule_based_selector
+    environment:
+    - CUDA_VISIBLE_DEVICES=""
+    ports:
+    - 2083:2083
+    tty: true
+    volumes:
+    - .:/dp-agent
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
 version: '3'
