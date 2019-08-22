@@ -6,36 +6,18 @@
       "states_batch"
     ],
     "out": [
-      "best_answers_batch"
+      "skill_names"
     ],
     "pipe": [
       {
-        "class_name": "aiml_skill",
-        "id": "my_aiml_skill",
-        "path_to_aiml_scripts": "skills/aiml/Free-AIML",
-        "positive_confidence": 0.96,
-        "null_response": "I don't know",
-        "null_confidence": 0.2,
+        "class_name": "rule_based_selector",
         "in": [
           "utterances_batch",
           "history_batch",
           "states_batch"
         ],
         "out": [
-          "aiml_responses_batch",
-          "aiml_confidences_batch",
-          "aiml_output_states_batch"
-        ]
-      },
-      {
-        "class_name": "rule_based_selector",
-        "aiml_null_response": "#my_aiml_skill.null_response",
-        "in": [
-          "utterances_batch",
-          "aiml_responses_batch"
-        ],
-        "out": [
-          "best_answers_batch"
+          "skill_names"
         ]
       }
     ]
