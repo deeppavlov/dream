@@ -32,6 +32,16 @@ SKILLS = [
         },
         "gpu": False,
         "formatter": aiml_formatter
+    },
+    {
+        "name": "cobotqa",
+        "protocol": "http",
+        "host": "cobotqa",
+        "port": 8001,
+        "endpoint": "respond",
+        "external": True,
+        "path": "",
+        "formatter": cobot_qa_formatter
     }
 ]
 

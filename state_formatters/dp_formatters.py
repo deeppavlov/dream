@@ -1,5 +1,5 @@
 from typing import Dict, Any
-import json
+
 
 def base_input_formatter(state: Dict):
     """This state_formatter takes the most popular fields from Agent state and returns them as dict values:
@@ -78,6 +78,20 @@ def sentiment_formatter(payload: Any, model_args_names=('context',), mode='in'):
         return [el[0] for el in payload]
 
 
+def chitchat_odqa_formatter(payload: Any, model_args_names=('context',), mode='in'):
+    if mode == 'in':
+        return last_utterances(payload, model_args_names)
+    elif mode == 'out':
+        response = []
+        for el in payload:
+            class_name = el[0][0]
+            if class_name in ['speech', 'negative']:
+                response.append('chitchat')
+            else:
+                response.append('odqa')
+        return response
+
+
 def odqa_formatter(payload: Any, model_args_names=('context',), mode='in'):
     if mode == 'in':
         return last_utterances(payload, model_args_names)
@@ -124,8 +138,15 @@ def aiml_formatter(payload, mode='in'):
         return base_skill_output_formatter(payload)
 
 
+def cobot_qa_formatter(payload, mode='in'):
+    if mode == 'in':
+        sentences = base_input_formatter(payload)['last_utterances']
+        return {'sentences': sentences}
+    elif mode == 'out':
+        return base_skill_output_formatter(payload)
+
+
 def base_skill_selector_formatter(payload: Any, mode='in'):
-    print(json.dumps(payload, indent=2))
     if mode == 'in':
         return {"states_batch": payload}
     elif mode == 'out':
