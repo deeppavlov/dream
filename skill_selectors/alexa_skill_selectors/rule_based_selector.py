@@ -20,6 +20,11 @@ class RuleBasedSelector(Component):
                  ) -> List[List[str]]:
 
         skill_names = []
+        # for i in range(len(utterances_batch)):
+        #     if "aiml" in utterances_batch[i]:
+        #         skill_names.append("aiml")
+        #     elif "alice" in utterances_batch[i]:
+        #         skill_names.append("alice")
 
         for i in range(len(utterances_batch)):
             skills_for_uttr = []

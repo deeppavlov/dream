@@ -1,8 +1,6 @@
 {
   "chainer": {
     "in": [
-      "utterances_batch",
-      "history_batch",
       "states_batch"
     ],
     "out": [
@@ -12,8 +10,6 @@
       {
         "class_name": "rule_based_selector",
         "in": [
-          "utterances_batch",
-          "history_batch",
           "states_batch"
         ],
         "out": [

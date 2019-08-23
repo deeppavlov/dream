@@ -1,5 +1,5 @@
 from typing import Dict, Any
-
+import json
 
 def base_input_formatter(state: Dict):
     """This state_formatter takes the most popular fields from Agent state and returns them as dict values:
@@ -122,3 +122,14 @@ def aiml_formatter(payload, mode='in'):
         }
     elif mode == 'out':
         return base_skill_output_formatter(payload)
+
+
+def base_skill_selector_formatter(payload: Any, mode='in'):
+    print(json.dumps(payload, indent=2))
+    if mode == 'in':
+        return {"states_batch": payload}
+    elif mode == 'out':
+        selected_skills = []
+        for dialog in payload['dialogs']:
+            selected_skills.append(dialog['utterances'][-1]['selected_skills'])
+        return {"selected_skills": selected_skills}
