@@ -1,0 +1,14 @@
+# С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
+services:
+  agent:
+    volumes:
+      - '.:/dp-agent'
+  cobotqa:
+    volumes:
+      - './skills/CoBotQA:/src'
+  alice:
+    volumes:
+      - './skills/ALICEChatAPI:/src'
+  aiml:
+    volumes: ['${EXTERNAL_FOLDER}/dp_logs:/logs', '${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov', '.:/dp-agent']
+version: '3.7'

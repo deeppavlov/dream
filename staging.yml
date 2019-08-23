@@ -1,0 +1,14 @@
+services:
+  agent:
+    image: 127.0.0.1:5000/agent:latest
+  cobotqa:
+    image: 127.0.0.1:5000/cobotqa:latest
+  alice:
+    image: 127.0.0.1:5000/alice:latest
+  aiml:
+    image: 127.0.0.1:5000/aiml:latest
+    volumes: ['external-logs:/logs', 'external-deeppavlov:/root/.deeppavlov']
+volumes:
+  external-logs:
+  external-deeppavlov:
+version: '3.7'

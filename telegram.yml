@@ -1,0 +1,5 @@
+services:
+  agent:
+    command: 'python3 -m core.run -ch telegram'
+    env_file: [.env]
+version: '3.7'
