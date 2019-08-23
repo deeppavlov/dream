@@ -16,7 +16,7 @@ from core.transform_config import TELEGRAM_TOKEN, TELEGRAM_PROXY
 parser = argparse.ArgumentParser()
 parser.add_argument("-ch", "--channel", help="run agent in telegram, cmd_client or http_client", type=str,
                     choices=['telegram', 'cmd_client', 'http_client'], default='cmd_client')
-parser.add_argument('-p', '--port', help='port for http client, default 8888', default=8888)
+parser.add_argument('-p', '--port', help='port for http client, default 4242', default=4242)
 args = parser.parse_args()
 CHANNEL = args.channel
 
@@ -90,8 +90,8 @@ def run():
     from core.state_manager import StateManager
     from core.skill_manager import SkillManager
     from core.rest_caller import RestCaller
-    from core.postprocessor import DefaultPostprocessor
-    from core.response_selector import ConfidenceResponseSelector
+    from models.postprocessor import DefaultPostprocessor
+    from models.response_selector import ConfidenceResponseSelector
     from core.transform_config import MAX_WORKERS, ANNOTATORS, SKILL_SELECTORS, SKILLS
 
     import logging
