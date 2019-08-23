@@ -33,15 +33,6 @@
     "variables": {
       "ROOT_PATH": "~/.deeppavlov",
       "DOWNLOADS_PATH": "{ROOT_PATH}/downloads"
-    },
-    "requirements": [
-      "{DEEPPAVLOV_PATH}/requirements/aiml_skill.txt"
-    ],
-    "download": [
-      {
-        "url": "http://files.deeppavlov.ai/aiml_skill/aiml_scripts.tar.gz",
-        "subdir": "{DOWNLOADS_PATH}"
-      }
-    ]
+    }
   }
 }

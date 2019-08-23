@@ -18,8 +18,8 @@ settings['model_defaults']['AIMLSkill'] = {
     "model_args_names": ["utterances_batch", "history_batch", "states_batch"]
 }
 
-settings['model_defaults']['SkillSelector'] = {
-    "model_endpoint": "/skill_names",
+settings['model_defaults']['RuleBasedSkillSelector'] = {
+    "model_endpoint": "/selected_skills",
     "model_args_names": ["states_batch"]
 }
 
