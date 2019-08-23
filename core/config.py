@@ -39,31 +39,18 @@ ANNOTATORS = [
 ]
 
 SKILL_SELECTORS = [
-    # {
-    #     "name": "chitchat_odqa",
-    #     "protocol": "http",
-    #     "host": "127.0.0.1",
-    #     "port": 2082,
-    #     "endpoint": "intents",
-    #     "path": "skill_selectors/chitchat_odqa_selector/sselector_chitchat_odqa.json",
-    #     "env": {
-    #         "CUDA_VISIBLE_DEVICES": ""
-    #     },
-    #     "gpu": False,
-    #     "formatter": base_annotator_formatter
-    # }
     {
         "name": "rule_based_selector",
         "protocol": "http",
         "host": "127.0.0.1",
         "port": 2083,
-        "endpoint": "selected",
+        "endpoint": "skill_names",
         "path": "skill_selectors/alexa_skill_selectors/rule_based_selector.json",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
         },
         "gpu": False,
-        "formatter": base_annotator_formatter
+        "formatter": base_skill_selector_formatter
     }
 ]
 RESPONSE_SELECTORS = [
