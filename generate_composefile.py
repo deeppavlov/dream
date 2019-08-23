@@ -17,7 +17,8 @@ AGENT_BASIC = {
               'volumes': ['.:/dp-agent'],
               'ports': ['28888:8888'],
               'tty': True,
-              'depends_on': []}
+              'depends_on': [],
+              'env_file': ['.env']}
 }
 
 MONGO_BASIC = {
