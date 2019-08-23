@@ -1,29 +1,32 @@
-# Copyright 2017 Neural Networks and Deep Learning lab, MIPT
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-import itertools
+from typing import Sequence, List, Tuple, Callable, Dict
 import random
-from typing import List, Dict, Tuple, Union, Callable
-from logging import getLogger
-from copy import copy
+import itertools
+import copy
+import re
 
-from deeppavlov.core.models.component import Component
-
-logger = getLogger()
+from core.state_schema import Dialog
 
 
-class PersonNormalizer(Component):
+def detokenize(tokens):
+    """
+    Detokenizing a text undoes the tokenizing operation, restores
+    punctuation and spaces to the places that people expect them to be.
+    Ideally, `detokenize(tokenize(text))` should be identical to `text`,
+    except for line breaks.
+    """
+    text = ' '.join(tokens)
+    step0 = text.replace('. . .', '...')
+    step1 = step0.replace("`` ", '"').replace(" ''", '"')
+    step2 = step1.replace(" ( ", " (").replace(" ) ", ") ")
+    step3 = re.sub(r' ([.,:;?!%]+)([ \'"`])', r"\1\2", step2)
+    step4 = re.sub(r' ([.,:;?!%]+)$', r"\1", step3)
+    step5 = step4.replace(" '", "'").replace(" n't", "n't") \
+        .replace(" nt", "nt").replace("can not", "cannot")
+    step6 = step5.replace(" ` ", " '")
+    return step6.strip()
+
+
+class PersonNormalizer:
     """
     Detects mentions of mate user's name and either
     (0) converts them to user's name taken from state
@@ -32,6 +35,7 @@ class PersonNormalizer(Component):
     Parameters:
         person_tag: tag name that corresponds to a person entity
     """
+
     def __init__(self,
                  person_tag: str = 'PER',
                  **kwargs):
@@ -84,10 +88,10 @@ class PersonNormalizer(Component):
                         j += 1
                     if (i + j == len(tokens)) or (tokens[i + j][0] in ',.!?;)'):
                         # it is mate gooser
-                        out_tags.extend([t[:2] + mate_tag for t in tags[i+1:i+j]])
+                        out_tags.extend([t[:2] + mate_tag for t in tags[i + 1:i + j]])
                     else:
                         # it isn't
-                        out_tags.extend(tags[i+1:i+j])
+                        out_tags.extend(tags[i + 1:i + j])
                     i += j
                     continue
             if i > 0:
@@ -96,10 +100,10 @@ class PersonNormalizer(Component):
                     j = 1
                     while (len(out_tags) >= j) and (out_tags[-j][2:] == person_tag):
                         j += 1
-                    if (len(out_tags) < j) or (tokens[i-j][-1] in ',.!?('):
+                    if (len(out_tags) < j) or (tokens[i - j][-1] in ',.!?('):
                         # it was mate gooser
                         for k in range(j - 1):
-                            out_tags[-k-1] = out_tags[-k-1][:2] + mate_tag
+                            out_tags[-k - 1] = out_tags[-k - 1][:2] + mate_tag
                     out_tags.append(tag)
                     i += 1
                     continue
@@ -111,9 +115,9 @@ class PersonNormalizer(Component):
     def replace_mate_gooser_name(tokens: List[str],
                                  tags: List[str],
                                  replacement: str,
-                                 mate_tag: str = 'MATE-GOOSER') ->\
+                                 mate_tag: str = 'MATE-GOOSER') -> \
             Tuple[List[str], List[str]]:
-        assert len(tokens) == len(tags),\
+        assert len(tokens) == len(tags), \
             f"tokens({tokens}) and tags({tags}) should have the same length"
         if 'B-' + mate_tag not in tags:
             return tokens, tags
@@ -140,9 +144,9 @@ class PersonNormalizer(Component):
     @staticmethod
     def remove_mate_gooser_name(tokens: List[str],
                                 tags: List[str],
-                                mate_tag: str = 'MATE-GOOSER') ->\
+                                mate_tag: str = 'MATE-GOOSER') -> \
             Tuple[List[str], List[str]]:
-        assert len(tokens) == len(tags),\
+        assert len(tokens) == len(tags), \
             f"tokens({tokens}) and tags({tags}) should have the same length"
         # TODO: uppercase first letter if name was removed
         if 'B-' + mate_tag not in tags:
@@ -171,7 +175,7 @@ class PersonNormalizer(Component):
 LIST_LIST_STR_BATCH = List[List[List[str]]]
 
 
-class HistoryPersonNormalize(Component):
+class HistoryPersonNormalize:
     """
     Takes batch of dialog histories and normalizes only bot responses.
 
@@ -182,6 +186,7 @@ class HistoryPersonNormalize(Component):
     Parameters:
         per_tag: tag name that corresponds to a person entity
     """
+
     def __init__(self, per_tag: str = 'PER', **kwargs):
         self.per_normalizer = PersonNormalizer(per_tag=per_tag)
 
@@ -197,7 +202,7 @@ class HistoryPersonNormalize(Component):
         return out_tokens, out_tags
 
 
-class MyselfDetector(Component):
+class MyselfDetector:
     """
     Finds first mention of a name and sets it as a user name.
 
@@ -206,6 +211,7 @@ class MyselfDetector(Component):
         state_slot: name of a state slot corresponding to a user's name
 
     """
+
     def __init__(self,
                  person_tag: str = 'PER',
                  **kwargs):
@@ -237,7 +243,7 @@ class MyselfDetector(Component):
         return ' '.join(tokens[per_start:per_excl_end])
 
 
-class NerWithContextWrapper(Component):
+class NerWithContextWrapper:
     """
     Tokenizers utterance and history of dialogue and gets entity tags for
     utterance's tokens.
@@ -247,9 +253,10 @@ class NerWithContextWrapper(Component):
         tokenizer: tokenizer to use
 
     """
+
     def __init__(self,
-                 ner_model: Union[Component, Callable],
-                 tokenizer: Union[Component, Callable],
+                 ner_model: Callable,
+                 tokenizer: Callable,
                  context_delimeter: str = None,
                  **kwargs):
         self.ner_model = ner_model
@@ -259,7 +266,7 @@ class NerWithContextWrapper(Component):
     def __call__(self,
                  utterances: List[str],
                  history: List[List[str]] = [[]],
-                 prev_utterances: List[str] = []) ->\
+                 prev_utterances: List[str] = []) -> \
             Tuple[List[List[str]], List[List[str]]]:
         if prev_utterances:
             history = history or itertools.repeat([])
@@ -285,3 +292,30 @@ class NerWithContextWrapper(Component):
         return utt_toks, tags
 
 
+class DefaultPostprocessor:
+    def __init__(self) -> None:
+        self.person_normalizer = PersonNormalizer(per_tag='PER')
+
+    def __call__(self, dialogs: Sequence[Dialog]) -> Sequence[str]:
+        new_responses = []
+        for d in dialogs:
+            # get tokens & tags
+            response = d['utterances'][-1]
+            try:
+                ner_annotations = response['annotations']['ner']
+                user_name = d['user']['profile']['name']
+                # replace names with user name
+                if ner_annotations and (response['active_skill'] == 'chitchat'):
+                    response_toks_norm, _ = \
+                        self.person_normalizer([ner_annotations['tokens']],
+                                               [ner_annotations['tags']],
+                                               [user_name])
+                    response_toks_norm = response_toks_norm[0]
+                    # detokenize
+                    new_responses.append(detokenize(response_toks_norm))
+                else:
+                    new_responses.append(response['text'])
+            except KeyError:
+                new_responses.append(response['text'])
+
+        return new_responses

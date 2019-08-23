@@ -46,18 +46,6 @@ Ready Agent from the box
 
 To demonstrate the abilities of the platform, we included in this repo some basic skills and selectors
 made on DeepPavlov_. Currently all these services are made only for **Russian language**.
-Here are the types of conversation you will get if you run the Agent from the pre-made configuration:
-
-|pic1|  |pic2|  |pic3|
-
-.. |pic1| image:: ../_static/conversation_1.jpg
-   :width: 30%
-
-.. |pic2| image:: ../_static/conversation_2.jpg
-   :width: 30%
-
-.. |pic3| image:: ../_static/conversation_3.jpg
-   :width: 30%
 
 Services Configuration
 ======================
@@ -80,10 +68,15 @@ You can configure services at the Agent `config file`_.
     * A path to the agent service config file, currently valid only for DeepPavlov skills
 * **env**
     * Environment variables dictionary
-* **gpu**
-    * If a service needs to be run on GPU, **False** by default
 * **external**
     * If the service is running from the **dp-agent** repo. **False** by default.
+* **dockerfile**
+    * Specify a dockerfile name available inside the Agent repo. **"dockerfile_skill_cpu"** by default.
+
+    Available options:
+
+        * **"dockerfile_skill_cpu"**
+        * **"dockerfile_skill_gpu"**
 * **formatter**
     * The name of a function that converts the Agent state into a service input format
       and converts a service output format into the Agent state
@@ -162,7 +155,7 @@ Services Deployment
 Running the Agent
 =================
 
-Agent can run both from container and from a local machine.
+Agent can run both from container and from a local machine. The default Agent port is **4242**.
 
 **Container**
 
@@ -221,7 +214,7 @@ Agent can run both from container and from a local machine.
 
     .. code:: bash
 
-        python3 -m core.run -ch http_client [-p 8888]
+        python3 -m core.run -ch http_client [-p 4242]
 
     In both cases api will be accessible on your localhost
 
@@ -243,7 +236,7 @@ Agent can run both from container and from a local machine.
         curl --header "Content-Type: application/json" \
              --request POST \
              --data '{"user_id":"xyz","payload":"hello"}' \
-             http://localhost:8888
+             http://localhost:4242
 
     Agent will return a json response:
 
@@ -256,7 +249,7 @@ Agent can run both from container and from a local machine.
 
     In case of wrong format, HTTP errors will be returned
 
-.. _config file: https://github.com/deepmipt/dp-agent/blob/master/core/config.py
+.. _config file: https://github.com/deepmipt/dp-agent/blob/master/config.py
 .. _DeepPavlov: https://github.com/deepmipt/DeepPavlov
 .. _Docker: https://docs.docker.com/install/
 .. _Docker-compose: https://docs.docker.com/compose/install/
