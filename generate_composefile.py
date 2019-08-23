@@ -80,7 +80,9 @@ class SkillConfig(Config):
 
     def parse_config(self, skill_config):
         self.container_name = skill_config['name']
-        self.template['container_name'] = self.container_name
+        # TODO: container_name is not necessary, it is the same as service name
+        #       say about this to dp-agent team
+        # self.template['container_name'] = self.container_name
         self.template['build']['args']['skillport'] = skill_config['port']
         self.template['build']['args']['skillconfig'] = skill_config['path']
         self.template['build']['args']['skill_endpoint'] = skill_config['endpoint']
@@ -143,7 +145,7 @@ class DockerComposeConfig:
 
     @property
     def config(self):
-        config_dict = {'version': '3', 'services': {}}
+        config_dict = {'version': '3.7', 'services': {}}
         self.add_dependencies_to_agent()
         for container in chain(self.skills, self.database):
             config_dict['services'].update(container.config)

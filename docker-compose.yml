@@ -6,7 +6,7 @@ services:
     env_file: [.env]
     ports: ['28888:8888']
     tty: true
-    volumes: ['.:/dp-agent']
+    volumes: []
   aiml:
     build:
       args: {skill_endpoint: aiml, skillconfig: skills/aiml/aiml_skill.json, skillhost: 0.0.0.0,
@@ -17,10 +17,9 @@ services:
     environment: [CUDA_VISIBLE_DEVICES=""]
     ports: ['2080:2080']
     tty: true
-    volumes: ['.:/dp-agent', '${EXTERNAL_FOLDER}/dp_logs:/logs', '${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov']
   mongo:
     command: mongod
     image: mongo:3.2.0
     ports: ['27017:27017']
     volumes: ['/var/run/docker.sock:/var/run/docker.sock']
-version: '3'
+version: '3.7'

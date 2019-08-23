@@ -1,8 +1,9 @@
 FROM python:3.7.4
 
+RUN mkdir /src
+COPY . /src/
 WORKDIR /src
-COPY requirements.txt /tmp/requirements.txt
 
-RUN pip install -r /tmp/requirements.txt
+RUN pip install -r /src/requirements.txt
 
 CMD gunicorn --workers=2 server:app
