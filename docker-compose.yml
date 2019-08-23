@@ -8,10 +8,10 @@ services:
     volumes: ['.:/dp-agent']
   aiml:
     build:
-      args: {gpu: 'false', skill_endpoint: aiml, skillconfig: skills/aiml/aiml_skill.json,
-        skillhost: 0.0.0.0, skillport: 2080}
+      args: {skill_endpoint: aiml, skillconfig: skills/aiml/aiml_skill.json, skillhost: 0.0.0.0,
+        skillport: 2080}
       context: ./
-      dockerfile: dockerfile_skill_basic
+      dockerfile: dp/dockerfile_skill_cpu
     container_name: aiml
     environment: [CUDA_VISIBLE_DEVICES=""]
     ports: ['2080:2080']
