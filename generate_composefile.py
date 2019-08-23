@@ -3,7 +3,8 @@ import argparse
 from copy import deepcopy
 from itertools import chain
 
-from core.transform_config import SKILLS, ANNOTATORS, SKILL_SELECTORS, RESPONSE_SELECTORS, POSTPROCESSORS, PORT
+from core.transform_config import SKILLS, ANNOTATORS, SKILL_SELECTORS, RESPONSE_SELECTORS,\
+    POSTPROCESSORS, PORT, AGENT_ENV_FILE
 
 
 parser = argparse.ArgumentParser()
@@ -17,6 +18,7 @@ AGENT_BASIC = {
               'volumes': ['.:/dp-agent'],
               'ports': ['4242:4242'],
               'tty': True,
+              'env_file': AGENT_ENV_FILE,
               'depends_on': []}
 }
 
@@ -142,7 +144,7 @@ class DockerComposeConfig:
 
     @property
     def config(self):
-        config_dict = {'version': '2.3', 'services': {}}
+        config_dict = {'version': '3.7', 'services': {}}
         self.add_dependencies_to_agent()
         for container in chain(self.skills, self.database):
             config_dict['services'].update(container.config)

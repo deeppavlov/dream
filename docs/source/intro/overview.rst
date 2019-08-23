@@ -109,7 +109,7 @@ Services Deployment
 
         EXTERNAL_FOLDER=<path to data directory>
 
-7. (optional) If you want to communicate with the bot via Telegram, setup the following environment variables:
+7. (optional) If you want to communicate with the Agent via Telegram, setup the following environment variables:
 
    .. code:: bash
 
@@ -123,11 +123,13 @@ Services Deployment
        TELEGRAM_TOKEN=123456789:AAGCiO0QFb_I-GXL-CbJDw7--JQbHkiQyYA
        TELEGRAM_PROXY=socks5://tgproxy:tgproxy_pwd@123.45.67.89:1447
 
-8. Configure all skills, skill selectors, response selectors, annotators and database connection in the `config file`_.
-   If you want a particular skill to use GPU, set its ``gpu`` value to ``True``.
+   If you run the Agent via docker, put this variables into a file and configure it's path under ``AGENT_ENV_FILE``
+   variable in the `config file`_. This file name is automatically picked up when the docker-compose file
+   is being generated.
 
-   If you want a minimal configuration, you need one skill and one skill selector.
-   Pick skill ``chitchat`` and  selector ``chitchat_odqa`` and comment out all other skills, selectors and annotators.
+8. Configure all skills, skill selectors, response selectors, annotators and database connection in the `config file`_.
+
+   If you want a minimal configuration, you need one annotator and one skill.
 
 9. Generate a `Docker environment configuration`_  by running the command:
 
