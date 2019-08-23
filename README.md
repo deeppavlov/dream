@@ -4,4 +4,4 @@
 
 Please refer to our [readthedocs documentation](https://deeppavlov-agent.readthedocs.io).
 
-- [Alexa Bot README](notes/README-alexa.md)
+- [Alexa Bot README](README-alexa.md)
