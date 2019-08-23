@@ -11,6 +11,7 @@ services:
     - sentiment
     - chitchat_odqa
     - mongo
+    env_file: agent.env
     ports:
     - 4242:4242
     tty: true
@@ -118,4 +119,4 @@ services:
     - .:/dp-agent
     - ${EXTERNAL_FOLDER}/dp_logs:/logs
     - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
-version: '2.3'
+version: '3.7'
