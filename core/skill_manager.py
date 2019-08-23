@@ -65,7 +65,6 @@ class SkillManager:
         state = get_state(dialogs)
         if self.skill_selector is not None:
             selected_skills = [list(d.values())[0] for d in self.skill_selector(state)]
-            print(selected_skills)
             for i, skills in enumerate(selected_skills):
                 for s in skills:
                     if s not in skill_names:
