@@ -15,6 +15,7 @@ class RuleBasedSelector(Component):
     """
     Rule-based skill selector which choosing among TransferTransfo, Base AIML and Alice AIML
     """
+    wh_words = {"what", "when", "where", "which", "who", "whom", "whose", "why", "how"}
 
     def __init__(self, **kwargs):
         logger.info("Skill selector Initialized")
@@ -24,12 +25,19 @@ class RuleBasedSelector(Component):
 
         skill_names = [["aiml", "alice", "cobotqa"] for _ in states_batch]
 
-        # for dialog in states_batch:
-        #     skills_for_uttr = []
-        #     if "aiml" in dialog['utterances'][-1]['text']:
-        #         skills_for_uttr.append("aiml")
-        #     if "alice" in dialog['utterances'][-1]['text']:
-        #         skills_for_uttr.append("alice")
-        #     skill_names.append(skills_for_uttr)
+        for dialog in states_batch:
+            skills_for_uttr = []
+
+            tokens = dialog['utterances'][-1]['text'].lower().split()
+
+            if len(set(tokens).intersection(self.wh_words)) > 0:
+                skills_for_uttr.append("aiml")
+                skills_for_uttr.append("alice")
+                skills_for_uttr.append("cobotqa")
+            else:
+                skills_for_uttr.append("alice")
+                skills_for_uttr.append("cobotqa")
+
+            skill_names.append(skills_for_uttr)
 
         return skill_names
