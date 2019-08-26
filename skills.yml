@@ -2,18 +2,13 @@ services:
   alice:
     build:
       context: ./skills/ALICEChatAPI/
-    container_name: alice
     ports: ['8000:8000']
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8000
-    volumes: ['./skills/ALICEChatAPI:/src']
+    volumes: []
   cobotqa:
     build:
       context: ./skills/CoBotQA/
-    container_name: cobotqa
     ports: ['8001:8001']
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8001
-    volumes: ['./skills/CoBotQA:/src']
-    environment:
-      - COBOT_API_KEY=${COBOT_API_KEY}
-      - COBOT_QA_SERVICE_URL=${COBOT_QA_SERVICE_URL}
-version: '3'
+    volumes: []   
+version: '3.7'
