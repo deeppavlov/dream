@@ -1,13 +1,17 @@
 services:
   agent:
     image: 127.0.0.1:5000/agent:latest
+    env_file: [.env.staging]
   cobotqa:
     image: 127.0.0.1:5000/cobotqa:latest
+    env_file: [.env.staging]
   alice:
     image: 127.0.0.1:5000/alice:latest
+    env_file: [.env.staging]
   aiml:
     image: 127.0.0.1:5000/aiml:latest
     volumes: ['external-logs:/logs', 'external-deeppavlov:/root/.deeppavlov']
+    env_file: [.env.staging]
 volumes:
   external-logs:
   external-deeppavlov:
