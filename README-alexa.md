@@ -7,28 +7,27 @@ should be set to use this miniskill:
  * COBOT_API_KEY - API key given to our Team
  * COBOT_QA_SERVICE_URL - service url, could be found in Trello
 
+ .env file
+ =======================
+
+ В корне нужно сделать .env файл со следующими полями. Значения полей ищи в Trello.
+
+ ```
+ EXTERNAL_FOLDER=/path
+ COBOT_API_KEY=apikey
+ COBOT_QA_SERVICE_URL=url
+ # optional, only if you want to use docker-compose with `-f telegram.yml`
+ TELEGRAM_TOKEN=token
+ TELEGRAM_PROXY=proxy
+ ```
+
 How to run and test
 =======================
 
 ```
-$: docker-compose -f docker-compose.yml -f skills.yml up --build
-$: docker-compose -f docker-compose.yml -f skills.yml exec agent bash
+$: docker-compose -f docker-compose.yml -f skills.yml -f dev.yml up --build
+$: docker-compose -f docker-compose.yml -f skills.yml -f dev.yml exec agent bash
 $(inside docker): python3 -m core.run
-```
-
-
-.env file
-=======================
-
-В корне нужно сделать .env файл со следующими полями. Значения полей ищи в Trello.
-
-```
-EXTERNAL_FOLDER=/path
-COBOT_API_KEY=apikey
-COBOT_QA_SERVICE_URL=url
-TELEGRAM_TOKEN=token
-TELEGRAM_PROXY=proxy
-
 ```
 
 
@@ -65,3 +64,4 @@ staging
 - Создание своего докер регистри: `docker service create --name registry --publish published=5000,target=5000 registry:2`
 - Какие порты надо открыть для докер и докер-машины: https://www.digitalocean.com/community/tutorials/how-to-configure-the-linux-firewall-for-docker-swarm-on-ubuntu-16-04
 - Вот так можно создать окружение для стейджинга на удаленной машине используя docker-machine: https://dev.to/zac_siegel/using-docker-machine-to-provision-a-remote-docker-host-1267
+- Unset docker-machine env: `eval "$(docker-machine env -u)"`

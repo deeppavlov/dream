@@ -144,3 +144,12 @@ def cobot_qa_formatter(payload, mode='in'):
         return {'sentences': sentences}
     elif mode == 'out':
         return base_skill_output_formatter(payload)
+
+
+def base_skill_selector_formatter(payload: Any, mode='in'):
+    if mode == 'in':
+        return {"states_batch": payload['dialogs']}
+    elif mode == 'out':
+        # it's questionable why output from Model itself is 2dim: batch size x n_skills
+        # and payload here is 3dim. I don't know which dim is extra and from where it comes
+        return payload[0]

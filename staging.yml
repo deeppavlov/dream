@@ -12,6 +12,10 @@ services:
     image: 127.0.0.1:5000/aiml:latest
     volumes: ['external-logs:/logs', 'external-deeppavlov:/root/.deeppavlov']
     env_file: [.env.staging]
+  rule_based_selector:
+    image: 127.0.0.1:5000/rule_based_selector:latest
+    env_file: [.env.staging]
+    volumes: ['external-logs:/logs', 'external-deeppavlov:/root/.deeppavlov'
 volumes:
   external-logs:
   external-deeppavlov:
