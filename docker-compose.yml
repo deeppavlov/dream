@@ -2,7 +2,7 @@ services:
   agent:
     build: {context: ./, dockerfile: dockerfile_agent}
     container_name: agent
-    depends_on: [aiml, mongo]    
+    depends_on: [aiml, mongo]
     ports: ['28888:8888']
     tty: true
     volumes: []
@@ -21,4 +21,19 @@ services:
     image: mongo:3.2.0
     ports: ['27017:27017']
     volumes: ['/var/run/docker.sock:/var/run/docker.sock']
+  rule_based_selector:
+    build:
+      args:
+        skill_endpoint: selected_skills
+        skillconfig: skill_selectors/alexa_skill_selectors/rule_based_selector.json
+        skillhost: 0.0.0.0
+        skillport: 8002
+      context: ./
+      dockerfile: dp/dockerfile_skill_cpu
+    container_name: rule_based_selector
+    environment:
+    - CUDA_VISIBLE_DEVICES=""
+    ports:
+    - 8002:8002
+    tty: true
 version: '3.7'
