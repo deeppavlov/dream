@@ -10,6 +10,5 @@ services:
       context: ./skills/CoBotQA/
     ports: ['8001:8001']
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8001
-    volumes: []
-    env_file: [.env]    
+    volumes: []   
 version: '3.7'

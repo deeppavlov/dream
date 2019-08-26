@@ -2,8 +2,7 @@ services:
   agent:
     build: {context: ./, dockerfile: dockerfile_agent}
     container_name: agent
-    depends_on: [aiml, mongo]
-    env_file: [.env]
+    depends_on: [aiml, mongo]    
     ports: ['28888:8888']
     tty: true
     volumes: []
