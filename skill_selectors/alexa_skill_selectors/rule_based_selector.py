@@ -23,7 +23,7 @@ class RuleBasedSelector(Component):
 
     def __call__(self, states_batch, **kwargs) -> List[List[str]]:
 
-        skill_names = [["aiml", "alice", "cobotqa"] for _ in states_batch]
+        skill_names = []
 
         for dialog in states_batch:
             skills_for_uttr = []
