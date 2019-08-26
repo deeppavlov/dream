@@ -63,7 +63,6 @@ SKILL_SELECTORS = [
         "formatter": base_skill_selector_formatter
     }
 ]
-RESPONSE_SELECTORS = [
-]
+RESPONSE_SELECTORS = []
 
 POSTPROCESSORS = []
