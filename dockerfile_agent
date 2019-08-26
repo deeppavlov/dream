@@ -10,6 +10,7 @@ RUN pip3 install -r requirements.txt
 
 RUN mkdir dp-agent
 WORKDIR /dp-agent
+# TODO: Copy only necessary dirs and files
 COPY . /dp-agent/.
 
 ENV LANG C.UTF-8

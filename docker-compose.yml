@@ -5,7 +5,7 @@ services:
     depends_on: [aiml, mongo]
     ports: ['28888:8888']
     tty: true
-    volumes: ['.:/dp-agent']
+    volumes: []
   aiml:
     build:
       args: {skill_endpoint: aiml, skillconfig: skills/aiml/aiml_skill.json, skillhost: 0.0.0.0,
@@ -16,7 +16,6 @@ services:
     environment: [CUDA_VISIBLE_DEVICES=""]
     ports: ['2080:2080']
     tty: true
-    volumes: ['.:/dp-agent', '${EXTERNAL_FOLDER}/dp_logs:/logs', '${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov']
   mongo:
     command: mongod
     image: mongo:3.2.0
@@ -37,8 +36,4 @@ services:
     ports:
     - 8002:8002
     tty: true
-    volumes:
-    - .:/dp-agent
-    - ${EXTERNAL_FOLDER}/dp_logs:/logs
-    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
-version: '3'
+version: '3.7'

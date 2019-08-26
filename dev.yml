@@ -1,0 +1,21 @@
+# С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
+services:
+  agent:
+    env_file: [.env]
+    volumes:
+      - '.:/dp-agent'
+  cobotqa:
+    env_file: [.env]
+    volumes:
+      - './skills/CoBotQA:/src'
+  alice:
+    env_file: [.env]
+    volumes:
+      - './skills/ALICEChatAPI:/src'
+  aiml:
+    env_file: [.env]
+    volumes: ['${EXTERNAL_FOLDER}/dp_logs:/logs', '${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov', '.:/dp-agent']
+  rule_based_selector:
+    env_file: [.env]
+    volumes: ['${EXTERNAL_FOLDER}/dp_logs:/logs', '${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov', '.:/dp-agent']
+version: '3.7'

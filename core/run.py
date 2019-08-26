@@ -12,6 +12,13 @@ import telebot
 from telebot.types import Message, Location, User
 
 from core.transform_config import TELEGRAM_TOKEN, TELEGRAM_PROXY
+import logging
+
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-ch", "--channel", help="run agent in telegram, cmd_client or http_client", type=str,
@@ -28,16 +35,18 @@ def _model_process(model_function: Callable, conn: Connection, batch_size: int =
         batch_size = float('inf')
 
     check_time = time.time()
-
     while True:
         batch: List[Tuple[str, Hashable]] = []
-        while conn.poll() and len(batch) < batch_size and time.time() - check_time <= poll_period:
+        while conn.poll():
             batch.append(conn.recv())
 
         if not batch:
             continue
+        else:
+            logger.debug("_model_process batch: {}".format(batch))
 
         messages, dialog_ids = zip(*batch)
+        logger.debug("_model_process messages: {}".format(messages))
         responses = model(messages, dialog_ids)
         for response, dialog_id in zip(responses, dialog_ids):
             conn.send((response, dialog_id))
@@ -60,6 +69,7 @@ def experimental_bot(
     Returns: None
 
     """
+    logger.debug("Telegram proxy: {}".format(proxy))
     if proxy is not None:
         telebot.apihelper.proxy = {'https': proxy}
 
@@ -73,6 +83,7 @@ def experimental_bot(
     def responder():
         while True:
             text, chat_id = parent_conn.recv()
+            logger.debug("responder message: {}".format(text))
             bot.send_message(chat_id, text)
 
     t = Thread(target=responder)
@@ -80,6 +91,7 @@ def experimental_bot(
 
     @bot.message_handler()
     def handle_message(message: Message):
+        logger.debug("Telegram message: {}".format(message.text))
         parent_conn.send((message, message.chat.id))
 
     bot.polling(none_stop=True)
