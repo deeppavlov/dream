@@ -18,4 +18,17 @@ services:
   rule_based_selector:
     env_file: [.env]
     volumes: ['${EXTERNAL_FOLDER}/dp_logs:/logs', '${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov', '.:/dp-agent']
+  cobot_topics:
+    env_file: [.env]
+    volumes:
+      - './annotators/CoBotTopicClassification:/src'
+  cobot_sentiment:
+    env_file: [.env]
+    volumes:
+      - './annotators/CoBotSentimentClassification:/src'
+  cobot_offensiveness:
+    env_file: [.env]
+    volumes:
+      - './annotators/CoBotOffensiveSpeechClassification:/src'
+
 version: '3.7'
