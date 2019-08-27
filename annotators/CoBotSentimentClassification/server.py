@@ -24,6 +24,8 @@ if COBOT_SENTIMENT_SERVICE_URL is None:
 
 headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COBOT_API_KEY}'}
 
+sentiment_classes = {0: "negative", 1: "neutral", 2: "positive"}
+
 
 @app.route("/sentiment", methods=['POST'])
 def respond():
@@ -38,7 +40,7 @@ def respond():
 
     for i, sent in enumerate(user_sentences):
         logger.info(f"user_sentence: {sent}, session_id: {session_id}")
-        sentiment = result["sentimentClasses"][i]["sentimentClass"]
+        sentiment = sentiment_classes[result["sentimentClasses"][i]["sentimentClass"]]
         confidence = result["sentimentClasses"][i]["confidence"]
         sentiments += [sentiment]
         confidences += [confidence]

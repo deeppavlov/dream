@@ -24,6 +24,9 @@ if COBOT_OFFENSIVE_SERVICE_URL is None:
 
 headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COBOT_API_KEY}'}
 
+toxicity_classes = {0: "non-toxic", 1: "toxic"}
+blacklist_classes = {0: "not blacklist", 1: "blacklist"}
+
 
 @app.route("/offensiveness", methods=['POST'])
 def respond():
@@ -39,9 +42,9 @@ def respond():
 
     for i, sent in enumerate(user_sentences):
         logger.info(f"user_sentence: {sent}, session_id: {session_id}")
-        toxicity = result["offensivenessClasses"][i]["values"][1]["offensivenessClass"]
-        confidence = result["offensivenessClasses"][i]["values"][1]["confidence"]
-        blacklist = result["offensivenessClasses"][i]["values"][0]["offensivenessClass"]
+        toxicity = toxicity_classes[result["offensivenessClasses"][i]["values"][1]["offensivenessClass"]]
+        confidence = float(result["offensivenessClasses"][i]["values"][1]["confidence"])
+        blacklist = blacklist_classes[result["offensivenessClasses"][i]["values"][0]["offensivenessClass"]]
         toxicities += [toxicity]
         confidences += [confidence]
         blacklists += [blacklist]
