@@ -17,10 +17,7 @@ collections = {'Dialog': Dialog,
 
 parser = argparse.ArgumentParser()
 parser.add_argument('collections', metavar='collections', type=str, nargs='+',
-                    help='A list of Mongo collections to retrieve')
-
-for d in Utterance.objects:
-    print((d.to_dict()))
+                    help='a list of db collections to retrieve')
 
 
 def main():

@@ -96,7 +96,8 @@ def odqa_formatter(payload: Any, model_args_names=('context',), mode='in'):
     if mode == 'in':
         return last_utterances(payload, model_args_names)
     elif mode == 'out':
-        return base_skill_output_formatter(payload)
+        return {"text": payload[0],
+                "confidence": 0.5}
 
 
 def chitchat_formatter(payload: Any,

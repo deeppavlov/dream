@@ -267,6 +267,24 @@ dumped separately:
     * Utterance (HumanUtterance & BotUtterance)
     * Dialog
 
+To dump a DB collection, make sure that ``mongoengine`` is installed:
+
+    .. code:: bash
+
+        pip install mongoengine==0.17.0
+
+Then run:
+
+    .. code:: bash
+
+         python -m utils.get_db_data [collections]
+
+For example:
+
+    .. code:: bash
+
+         python -m utils.get_db_data Dialog User
+
 
 
 .. _config file: https://github.com/deepmipt/dp-agent/blob/master/config.py
