@@ -54,7 +54,7 @@ ANNOTATORS = [
         "endpoint": "topics",
         "external": True,
         "path": "",
-        "formatter": cobot_qa_formatter  #base_annotator_formatter
+        "formatter": cobot_qa_formatter
     },
     {
         "name": "cobot_sentiment",
@@ -64,7 +64,7 @@ ANNOTATORS = [
         "endpoint": "sentiment",
         "external": True,
         "path": "",
-        "formatter": cobot_qa_formatter  #base_annotator_formatter
+        "formatter": cobot_qa_formatter
     },
     {
         "name": "cobot_offensiveness",
@@ -74,7 +74,7 @@ ANNOTATORS = [
         "endpoint": "offensiveness",
         "external": True,
         "path": "",
-        "formatter": cobot_qa_formatter  #base_annotator_formatter
+        "formatter": cobot_qa_formatter
     }
 ]
 
