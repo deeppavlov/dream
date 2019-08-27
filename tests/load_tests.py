@@ -9,13 +9,14 @@ from multiprocessing import Process
 import numpy as np
 from aiohttp import web
 
-from poller import Wrapper
+from poller import Wrapper, init_log
 
 with open('load_test_config.json', encoding='utf8') as fin:
     config = json.load(fin)
     config["logging"]["handlers"]["log_to_file"]["filename"] = config["log_file_name"]
     config["send_message_url"] = f"http://{config['router_bot_host']}:{config['router_bot_port']}/bot{config['bot_token']}/sendMessage"
     config["get_updates_url"] = f"http://{config['router_bot_host']}:{config['router_bot_port']}/bot{config['bot_token']}/getUpdates"
+    init_log(config)
 
 
 class PollerTester:

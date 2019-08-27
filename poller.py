@@ -5,7 +5,7 @@ import json
 import logging
 from collections import defaultdict
 from itertools import zip_longest
-from logging import config as logging_config
+from logging import Logger, config as logging_config
 from multiprocessing import Process, Queue
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
@@ -14,6 +14,8 @@ import aiohttp
 import requests
 import polling
 
+log: Logger
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--model_url', default=None, help='path to model endpoint', type=str)
 parser.add_argument('--host', default=None, help='router bot host', type=str)
@@ -21,6 +23,12 @@ parser.add_argument('--port', default=None, help='router bot port', type=str)
 parser.add_argument('--token', default=None, help='bot token', type=str)
 parser.add_argument('--state', action='store_true', help='add argument to send state to model')
 parser.add_argument('--convai', action='store_true')
+
+
+def init_log(conf: Dict) -> None:
+    global log
+    logging_config.dictConfig(conf["logging"])
+    log = logging.root.manager.loggerDict['wrapper_logger']
 
 
 class Wrapper:
@@ -36,14 +44,11 @@ class Wrapper:
         self._chat_events = None
         self._states = {}
 
-        logging_config.dictConfig(self._config["logging"])
-        self._log = logging.root.manager.loggerDict['wrapper_logger']
-
-        self._log.info('Wrapper initiated')
+        log.info('Wrapper initiated')
 
         while True:
             input_q = self._in_queue.get()
-            self._log.info('Payload received')
+            log.info('Payload received')
             self._loop.run_until_complete(self._process_input(input_q))
 
     async def _process_input(self, input_q: Dict) -> None:
@@ -73,7 +78,7 @@ class Wrapper:
                 events[-1].set()
 
         if log_msg:
-            self._log.info(log_msg)
+            log.info(log_msg)
 
         # "slices" of replicas from all conversations, each slice contains replicas from different conversation
         batched_chats = zip_longest(*chats, fillvalue=None)
@@ -111,7 +116,7 @@ class Wrapper:
         if response.status_code == 200:
             zip_batch = zip(ids_batch, response.json())
         else:
-            self._log.error(f'Got {response.status_code} code from {self._config["model_url"]}')
+            log.error(f'Got {response.status_code} code from {self._config["model_url"]}')
             zip_batch = zip_longest(ids_batch, [], fillvalue='Server error')
         tasks = (self._loop.create_task(self._send_results(chat_id, chat_resp, layer_id)) for (chat_id, chat_resp) in zip_batch)
 
@@ -147,7 +152,7 @@ class Wrapper:
         if self._config['send_state'] is False:
             self._chat_events[chat_id][layer_id].set()
 
-        self._log.info(f'Sent response to chat: {str(chat_id)}')
+        log.info(f'Sent response to chat: {str(chat_id)}')
 
 
 class Poller(Process):
@@ -213,6 +218,7 @@ def main() -> None:
     config['send_state'] = send_state or config['send_state']
     config['convai_mode'] = convai_mode or config['convai_mode']
 
+    init_log(config)
     Wrapper(config)
 
 
