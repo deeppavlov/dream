@@ -74,7 +74,7 @@ ANNOTATORS = [
         "endpoint": "offensiveness",
         "external": True,
         "path": "",
-        "formatter": cobot_qa_formatter
+        "formatter": cobot_offensiveness_formatter
     }
 ]
 

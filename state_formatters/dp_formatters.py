@@ -153,3 +153,22 @@ def base_skill_selector_formatter(payload: Any, mode='in'):
         # it's questionable why output from Model itself is 2dim: batch size x n_skills
         # and payload here is 3dim. I don't know which dim is extra and from where it comes
         return payload[0]
+
+
+def cobot_offensiveness_formatter(payload, mode='in'):
+    if mode == 'in':
+        sentences = base_input_formatter(payload)['last_utterances']
+        return {'sentences': sentences}
+    elif mode == 'out':
+        return {"text": payload[0],
+                "confidence": payload[1],
+                "is_blacklisted": payload[2]}
+
+
+def cobot_conversation_evaluation_formatter(payload, mode='in'):
+    if mode == 'in':
+        return {"states_batch": payload['dialogs']}
+    elif mode == 'out':
+        return base_skill_output_formatter(payload)
+
+

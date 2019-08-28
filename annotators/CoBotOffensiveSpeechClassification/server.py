@@ -32,9 +32,10 @@ blacklist_classes = {0: "not blacklist", 1: "blacklist"}
 def respond():
     user_sentences = request.json['sentences']
     session_id = uuid.uuid4().hex
-    blacklists = []
     toxicities = []
     confidences = []
+    blacklists = []
+
     result = requests.request(url=f'{COBOT_OFFENSIVE_SERVICE_URL}',
                               headers=headers,
                               data=json.dumps({'utterances': user_sentences}),
