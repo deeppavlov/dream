@@ -251,6 +251,42 @@ Agent can run both from container and from a local machine. The default Agent po
 
     In case of wrong format, HTTP errors will be returned
 
+Analyzing the data
+==================
+
+All conversations with the Agent are stored to a Mongo DB. When they are dumped, they have
+the same format as the Agent's state_. Someone may need to dump and analyze the whole dialogs,
+or users, or annotations. For now, the following Mongo collections are available and can be
+dumped separately:
+
+    * Human
+    * Bot
+    * User (Human & Bot)
+    * HumanUtterance
+    * BotUtterance
+    * Utterance (HumanUtterance & BotUtterance)
+    * Dialog
+
+To dump a DB collection, make sure that ``mongoengine`` is installed:
+
+    .. code:: bash
+
+        pip install mongoengine==0.17.0
+
+Then run:
+
+    .. code:: bash
+
+         python -m utils.get_db_data [collections]
+
+For example:
+
+    .. code:: bash
+
+         python -m utils.get_db_data Dialog User
+
+
+
 .. _config file: https://github.com/deepmipt/dp-agent/blob/master/config.py
 .. _DeepPavlov: https://github.com/deepmipt/DeepPavlov
 .. _Docker: https://docs.docker.com/install/
