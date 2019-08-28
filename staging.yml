@@ -25,6 +25,9 @@ services:
   cobot_offensiveness:
     image: 127.0.0.1:5000/cobot_offensiveness:latest
     env_file: [.env.staging]
+  cobot_dialogact:
+    image: 127.0.0.1:5000/cobot_dialogact:latest
+    env_file: [.env.staging]
 volumes:
   external-logs:
   external-deeppavlov:

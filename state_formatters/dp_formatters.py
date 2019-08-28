@@ -165,6 +165,14 @@ def cobot_offensiveness_formatter(payload, mode='in'):
                 "is_blacklisted": payload[2]}
 
 
+def cobot_dialogact_formatter(payload, mode='in'):
+    import json
+    if mode == 'in':
+        return {"states_batch": payload['dialogs']}
+    elif mode == 'out':
+        return {"text": payload[0]}
+
+
 def cobot_conversation_evaluation_formatter(payload, mode='in'):
     if mode == 'in':
         return {"states_batch": payload['dialogs']}
