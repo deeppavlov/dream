@@ -75,6 +75,16 @@ ANNOTATORS = [
         "external": True,
         "path": "",
         "formatter": cobot_offensiveness_formatter
+    },
+    {
+        "name": "cobot_dialogact",
+        "protocol": "http",
+        "host": "cobot_dialogact",
+        "port": 8006,
+        "endpoint": "dialogact",
+        "external": True,
+        "path": "",
+        "formatter": cobot_dialogact_formatter
     }
 ]
 
