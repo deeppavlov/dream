@@ -97,7 +97,7 @@ def run():
     from core.rest_caller import RestCaller
     from models.postprocessor import DefaultPostprocessor
     from models.response_selector import ConfidenceResponseSelector
-    from core.transform_config import MAX_WORKERS, ANNOTATORS, SKILL_SELECTORS, SKILLS
+    from core.transform_config import MAX_WORKERS, ANNOTATORS, SKILL_SELECTORS, SKILLS, RESPONSE_SELECTORS
 
     import logging
 
@@ -108,17 +108,25 @@ def run():
     anno_names, anno_urls, anno_formatters = zip(
         *[(a['name'], a['url'], a['formatter']) for a in ANNOTATORS])
     preprocessor = RestCaller(max_workers=MAX_WORKERS, names=anno_names, urls=anno_urls,
-                               formatters=anno_formatters)
+                              formatters=anno_formatters)
     postprocessor = DefaultPostprocessor()
     skill_caller = RestCaller(max_workers=MAX_WORKERS)
-    response_selector = ConfidenceResponseSelector()
+
+    if RESPONSE_SELECTORS:
+        rs_names, rs_urls, rs_formatters = zip(
+            *[(rs['name'], rs['url'], rs['formatter']) for rs in RESPONSE_SELECTORS])
+        response_selector = RestCaller(max_workers=MAX_WORKERS, names=rs_names, urls=rs_urls,
+                                       formatters=rs_formatters)
+    else:
+        response_selector = ConfidenceResponseSelector()
+
     skill_selector = None
     if SKILL_SELECTORS:
         ss_names, ss_urls, ss_formatters = zip(
-            *[(selector['name'], selector['url'], selector['formatter']) for selector in
-              SKILL_SELECTORS])
+            *[(ss['name'], ss['url'], ss['formatter']) for ss in SKILL_SELECTORS])
         skill_selector = RestCaller(max_workers=MAX_WORKERS, names=ss_names, urls=ss_urls,
-                                   formatters=ss_formatters)
+                                    formatters=ss_formatters)
+
     skill_manager = SkillManager(skill_selector=skill_selector, response_selector=response_selector,
                                  skill_caller=skill_caller,
                                  profile_handlers=[skill['name'] for skill in SKILLS
