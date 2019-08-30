@@ -51,7 +51,7 @@ def respond():
         conv["pastResponses"] = [uttr["text"] for uttr in dialog["utterances"][::2]]
         conversations += [conv]
 
-    result = requests.request(url=COBOT_DIALOGACT_SERVICE_URL,
+    result = requests.request(url=f'{COBOT_DIALOGACT_SERVICE_URL}',
                               headers=headers,
                               data=json.dumps({'conversations': conversations}),
                               method='POST').json()
