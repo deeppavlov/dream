@@ -1,5 +1,6 @@
 import argparse
 import time
+from os import getenv
 
 from aiohttp import web
 from datetime import datetime
@@ -11,7 +12,6 @@ from typing import Callable, Optional, Collection, Hashable, List, Tuple
 import telebot
 from telebot.types import Message, Location, User
 
-from core.transform_config import TELEGRAM_TOKEN, TELEGRAM_PROXY
 import logging
 
 
@@ -37,8 +37,10 @@ def _model_process(model_function: Callable, conn: Connection, batch_size: int =
     check_time = time.time()
     while True:
         batch: List[Tuple[str, Hashable]] = []
-        while conn.poll():
+        while conn.poll() and len(batch) < batch_size:
             batch.append(conn.recv())
+            if time.time() - check_time >= poll_period:
+                break
 
         if not batch:
             continue
@@ -55,8 +57,8 @@ def _model_process(model_function: Callable, conn: Connection, batch_size: int =
 
 def experimental_bot(
         model_function: Callable[
-            ..., Callable[[Collection[Message], Collection[Hashable]], Collection[str]]],
-        token: str, proxy: Optional[str] = None, *, batch_size: int = -1, poll_period: float = 0.5):
+            ..., Callable[[Collection[Message], Collection[Hashable]], Collection[str]]], *,
+        batch_size: int = -1, poll_period: float = 0.5):
     """
 
     Args:
@@ -69,7 +71,9 @@ def experimental_bot(
     Returns: None
 
     """
-    logger.debug("Telegram proxy: {}".format(proxy))
+    token = getenv('TELEGRAM_TOKEN')
+    proxy = getenv('TELEGRAM_PROXY')
+
     if proxy is not None:
         telebot.apihelper.proxy = {'https': proxy}
 
@@ -104,7 +108,7 @@ def run():
     from core.rest_caller import RestCaller
     from models.postprocessor import DefaultPostprocessor
     from models.response_selector import ConfidenceResponseSelector
-    from core.transform_config import MAX_WORKERS, ANNOTATORS, SKILL_SELECTORS, SKILLS
+    from core.transform_config import MAX_WORKERS, ANNOTATORS, SKILL_SELECTORS, SKILLS, RESPONSE_SELECTORS
 
     import logging
 
@@ -117,17 +121,25 @@ def run():
     else:
         anno_names, anno_urls, anno_formatters = None, None, []
     preprocessor = RestCaller(max_workers=MAX_WORKERS, names=anno_names, urls=anno_urls,
-                               formatters=anno_formatters)
+                              formatters=anno_formatters)
     postprocessor = DefaultPostprocessor()
     skill_caller = RestCaller(max_workers=MAX_WORKERS)
-    response_selector = ConfidenceResponseSelector()
+
+    if RESPONSE_SELECTORS:
+        rs_names, rs_urls, rs_formatters = zip(
+            *[(rs['name'], rs['url'], rs['formatter']) for rs in RESPONSE_SELECTORS])
+        response_selector = RestCaller(max_workers=MAX_WORKERS, names=rs_names, urls=rs_urls,
+                                       formatters=rs_formatters)
+    else:
+        response_selector = ConfidenceResponseSelector()
+
     skill_selector = None
     if SKILL_SELECTORS:
         ss_names, ss_urls, ss_formatters = zip(
-            *[(selector['name'], selector['url'], selector['formatter']) for selector in
-              SKILL_SELECTORS])
+            *[(ss['name'], ss['url'], ss['formatter']) for ss in SKILL_SELECTORS])
         skill_selector = RestCaller(max_workers=MAX_WORKERS, names=ss_names, urls=ss_urls,
-                                   formatters=ss_formatters)
+                                    formatters=ss_formatters)
+
     skill_manager = SkillManager(skill_selector=skill_selector, response_selector=response_selector,
                                  skill_caller=skill_caller,
                                  profile_handlers=[skill['name'] for skill in SKILLS
@@ -207,7 +219,7 @@ async def api_message_processor(message_processor):
 
 def main():
     if CHANNEL == 'telegram':
-        experimental_bot(run, token=TELEGRAM_TOKEN, proxy=TELEGRAM_PROXY)
+        experimental_bot(run)
     elif CHANNEL == 'cmd_client':
         message_processor = run()
         user_id = input('Provide user id: ')

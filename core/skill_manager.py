@@ -28,15 +28,14 @@ class SkillManager:
         self.skill_caller = skill_caller
         self.skills = SKILLS
         self.skill_names = [s['name'] for s in self.skills]
-        self.skill_responses = []
-
         self.profile_handlers = [name for name in reversed(profile_handlers) if name in self.skill_names]
         self.profile_fields = list(Human.profile.default.keys())
 
     def __call__(self, dialogs):
 
-        user_profiles = self._get_user_profiles(self.skill_responses)
-        selected_skill_names, utterances, confidences = self.response_selector(self.skill_responses)
+        skill_responses = [d.utterances[-1]['selected_skills'] for d in dialogs]
+        user_profiles = self._get_user_profiles(skill_responses)
+        selected_skill_names, utterances, confidences = self.response_selector(get_state(dialogs))
         utterances = [utt if utt else NOANSWER_UTT for utt in utterances]
         return selected_skill_names, utterances, confidences, user_profiles
 
@@ -93,5 +92,4 @@ class SkillManager:
             payloads.append(s)
         skill_responses = self.skill_caller(payload=payloads, names=skill_names, urls=skill_urls,
                                             formatters=skill_formatters)
-        self.skill_responses = skill_responses
         return skill_responses
