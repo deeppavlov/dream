@@ -1,5 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor
-from typing import Dict, List, Any, Optional, Sequence, Union
+from typing import Dict, List, Any, Optional, Sequence, Union, Callable
 
 import requests
 
@@ -30,8 +30,7 @@ class RestCaller:
     def __call__(self, payload: Union[Dict, Sequence[Dict]],
                  names: Optional[Sequence[str]] = None,
                  urls: Optional[Sequence[str]] = None,
-                 formatters = None) -> List[
-        Dict[str, Dict[str, Any]]]:
+                 formatters: List[Callable] = None) -> List[Dict[str, Dict[str, Any]]]:
 
         names = names if names is not None else self.names
         urls = urls if urls is not None else self.urls
