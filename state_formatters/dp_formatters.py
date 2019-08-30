@@ -96,7 +96,8 @@ def odqa_formatter(payload: Any, model_args_names=('context',), mode='in'):
     if mode == 'in':
         return last_utterances(payload, model_args_names)
     elif mode == 'out':
-        return base_skill_output_formatter(payload)
+        return {"text": payload[0],
+                "confidence": 0.5}
 
 
 def chitchat_formatter(payload: Any,
@@ -162,3 +163,30 @@ def transfertransfo_formatter(payload: Any, mode='in'):
                 'personality': [dialog['bot']['persona'] for dialog in parsed['dialogs']]}
     elif mode == 'out':
         return base_skill_output_formatter(payload)
+
+
+def cobot_offensiveness_formatter(payload, mode='in'):
+    if mode == 'in':
+        sentences = base_input_formatter(payload)['last_utterances']
+        return {'sentences': sentences}
+    elif mode == 'out':
+        return {"text": payload[0],
+                "confidence": payload[1],
+                "is_blacklisted": payload[2]}
+
+
+def cobot_dialogact_formatter(payload, mode='in'):
+    import json
+    if mode == 'in':
+        return {"states_batch": payload['dialogs']}
+    elif mode == 'out':
+        return {"text": payload[0]}
+
+
+def cobot_conversation_evaluation_formatter(payload, mode='in'):
+    if mode == 'in':
+        return {"states_batch": payload['dialogs']}
+    elif mode == 'out':
+        return base_skill_output_formatter(payload)
+
+
