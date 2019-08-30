@@ -10,5 +10,29 @@ services:
       context: ./skills/CoBotQA/
     ports: ['8001:8001']
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8001
-    volumes: []   
+    volumes: []
+  cobot_topics:
+    build:
+      context: ./annotators/CoBotTopicClassification/
+    ports: ['8003:8003']
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8003
+    volumes: []
+  cobot_sentiment:
+    build:
+      context: ./annotators/CoBotSentimentClassification/
+    ports: ['8004:8004']
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8004
+    volumes: []
+  cobot_offensiveness:
+    build:
+      context: ./annotators/CoBotOffensiveSpeechClassification/
+    ports: ['8005:8005']
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8005
+    volumes: []
+  cobot_dialogact:
+    build:
+      context: ./annotators/CoBotDialogActClassification/
+    ports: ['8006:8006']
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8006
+    volumes: []
 version: '3.7'
