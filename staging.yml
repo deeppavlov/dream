@@ -15,7 +15,10 @@ services:
   rule_based_selector:
     image: 127.0.0.1:5000/rule_based_selector:latest
     env_file: [.env.staging]
-    volumes: ['external-logs:/logs', 'external-deeppavlov:/root/.deeppavlov'
+    volumes: ['external-logs:/logs', 'external-deeppavlov:/root/.deeppavlov']
+  transfertransfo:
+    image: 127.0.0.1:5000/transfertransfo:latest
+    env_file: [.env.staging]
 volumes:
   external-logs:
   external-deeppavlov:
