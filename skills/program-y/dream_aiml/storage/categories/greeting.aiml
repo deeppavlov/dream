@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+  <category>
+    <pattern>HELLO *</pattern>
+    <template>
+      <srai>HELLO</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>* HELLO #</pattern>
+    <template>
+      <srai>HELLO</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># HIYA #</pattern>
+    <template>
+      <srai>HELLO</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># HI #</pattern>
+    <template>
+      <srai>HELLO</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># YO #</pattern>
+    <template>
+      <srai>HELLO</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># HEY #</pattern>
+    <template>
+      <srai>HELLO</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>GOOD DAY</pattern>
+    <template>
+      <srai>HELLO</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>          HELLO      </pattern>
+    <template>
+      <random>
+        <li>Hello!</li>
+        <li>Hi there!</li>
+        <li>Greetings!</li>
+        <li>Hiya!</li>
+        <li>
+          <think>
+            <set name="dayphase">
+              <srai>DAY PHASE</srai>
+            </set>
+          </think>
+          <condition name="dayphase">
+            <li value="Morning">Good morning.</li>
+            <li value="Noon">Good afternoon.</li>
+            <li value="Afternoon">Good afternoon.</li>
+            <li value="Night">Good evening.</li>
+            <li>Hello!</li>
+          </condition>
+        </li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern>HI</pattern>
+    <template>
+      <random>
+        <li>Hi nice to see you!</li>
+        <li>Hi it's great to see you!</li>
+        <li>Hi how are you?</li>
+        <li>Hi! I can really feel your smile today.</li>
+        <li>Hi! It's delightful to see you.</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern>GOOD MORNING</pattern>
+    <template>
+      <random>
+        <li>Good morning.</li>
+        <li>Hi it's good to see you.</li>
+        <li>Good morning. Did you sleep well?</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern>GOOD AFTERNOON</pattern>
+    <template>Good afternoon to you too!</template>
+  </category>
+  <category>
+    <pattern># WHAT ABOUT YOU #</pattern>
+    <template>
+      <srai>HOW ARE YOU</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>HOW ARE YOU</pattern>
+    <template>I am fine, thanks! Do you want to know what I can do?</template>
+  </category>
+  <category>
+    <pattern>YES</pattern>
+    <that>* what I can do</that>
+    <template>
+      <srai>WHAT CAN YOU DO</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>NO</pattern>
+    <that>* what I can do</that>
+    <template>Okay. What do you want?</template>
+  </category>
+  <category>
+    <pattern>WHAT CAN YOU DO</pattern>
+    <template>I am newborn, so I can do not so much. For example I can answer for any question.</template>
+  </category>
+</aiml>
