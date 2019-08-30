@@ -1,13 +1,13 @@
 from state_formatters.dp_formatters import *
 
-TELEGRAM_TOKEN = ''
-TELEGRAM_PROXY = ''
-
 DB_NAME = 'test'
 HOST = '127.0.0.1'
 PORT = 27017
 
 MAX_WORKERS = 1
+
+# AGENT_ENV_FILE not used right now, they are redefined in specific docker-compose files (like dev.yml)
+AGENT_ENV_FILE = "agent.env"
 
 SKILLS = [
     {
