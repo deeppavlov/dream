@@ -1,5 +1,6 @@
 import argparse
 import time
+from os import getenv
 
 from aiohttp import web
 from datetime import datetime
@@ -11,7 +12,6 @@ from typing import Callable, Optional, Collection, Hashable, List, Tuple
 import telebot
 from telebot.types import Message, Location, User
 
-from core.transform_config import TELEGRAM_TOKEN, TELEGRAM_PROXY
 import logging
 
 
@@ -37,8 +37,10 @@ def _model_process(model_function: Callable, conn: Connection, batch_size: int =
     check_time = time.time()
     while True:
         batch: List[Tuple[str, Hashable]] = []
-        while conn.poll():
+        while conn.poll() and len(batch) < batch_size:
             batch.append(conn.recv())
+            if time.time() - check_time >= poll_period:
+                break
 
         if not batch:
             continue
@@ -55,8 +57,8 @@ def _model_process(model_function: Callable, conn: Connection, batch_size: int =
 
 def experimental_bot(
         model_function: Callable[
-            ..., Callable[[Collection[Message], Collection[Hashable]], Collection[str]]],
-        token: str, proxy: Optional[str] = None, *, batch_size: int = -1, poll_period: float = 0.5):
+            ..., Callable[[Collection[Message], Collection[Hashable]], Collection[str]]], *,
+        batch_size: int = -1, poll_period: float = 0.5):
     """
 
     Args:
@@ -69,7 +71,9 @@ def experimental_bot(
     Returns: None
 
     """
-    logger.debug("Telegram proxy: {}".format(proxy))
+    token = getenv('TELEGRAM_TOKEN')
+    proxy = getenv('TELEGRAM_PROXY')
+
     if proxy is not None:
         telebot.apihelper.proxy = {'https': proxy}
 
@@ -207,7 +211,7 @@ async def api_message_processor(message_processor):
 
 def main():
     if CHANNEL == 'telegram':
-        experimental_bot(run, token=TELEGRAM_TOKEN, proxy=TELEGRAM_PROXY)
+        experimental_bot(run)
     elif CHANNEL == 'cmd_client':
         message_processor = run()
         user_id = input('Provide user id: ')
