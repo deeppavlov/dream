@@ -3,7 +3,8 @@ import argparse
 from copy import deepcopy
 from itertools import chain
 
-from core.transform_config import SKILLS, ANNOTATORS, SKILL_SELECTORS, RESPONSE_SELECTORS, POSTPROCESSORS, PORT
+from core.transform_config import SKILLS, ANNOTATORS, SKILL_SELECTORS, RESPONSE_SELECTORS,\
+    POSTPROCESSORS, PORT, AGENT_ENV_FILE
 
 
 parser = argparse.ArgumentParser()
@@ -17,6 +18,7 @@ AGENT_BASIC = {
               'volumes': ['.:/dp-agent'],
               'ports': ['28888:8888'],
               'tty': True,
+              'env_file': AGENT_ENV_FILE,
               'depends_on': []}
 }
 

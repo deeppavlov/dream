@@ -1,13 +1,13 @@
 from state_formatters.dp_formatters import *
 
-TELEGRAM_TOKEN = ''
-TELEGRAM_PROXY = ''
-
 DB_NAME = 'test'
 HOST = '127.0.0.1'
 PORT = 27017
 
 MAX_WORKERS = 1
+
+# AGENT_ENV_FILE not used right now, they are redefined in specific docker-compose files (like dev.yml)
+AGENT_ENV_FILE = "agent.env"
 
 SKILLS = [
     {
@@ -47,7 +47,7 @@ SKILLS = [
         "name": "transfertransfo",
         "protocol": "http",
         "host": "transfertransfo",
-        "port": 8003,
+        "port": 8007,
         "endpoint": "transfertransfo",
         "external": True,
         "path": "",
@@ -56,6 +56,46 @@ SKILLS = [
 ]
 
 ANNOTATORS = [
+    {
+        "name": "cobot_topics",
+        "protocol": "http",
+        "host": "cobot_topics",
+        "port": 8003,
+        "endpoint": "topics",
+        "external": True,
+        "path": "",
+        "formatter": cobot_qa_formatter
+    },
+    {
+        "name": "cobot_sentiment",
+        "protocol": "http",
+        "host": "cobot_sentiment",
+        "port": 8004,
+        "endpoint": "sentiment",
+        "external": True,
+        "path": "",
+        "formatter": cobot_qa_formatter
+    },
+    {
+        "name": "cobot_offensiveness",
+        "protocol": "http",
+        "host": "cobot_offensiveness",
+        "port": 8005,
+        "endpoint": "offensiveness",
+        "external": True,
+        "path": "",
+        "formatter": cobot_offensiveness_formatter
+    },
+    {
+        "name": "cobot_dialogact",
+        "protocol": "http",
+        "host": "cobot_dialogact",
+        "port": 8006,
+        "endpoint": "dialogact",
+        "external": True,
+        "path": "",
+        "formatter": cobot_dialogact_formatter
+    }
 ]
 
 SKILL_SELECTORS = [
