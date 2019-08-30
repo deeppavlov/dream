@@ -62,6 +62,7 @@ services:
     - 27017:27017
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
+    - /data/db:/root/data/db
   ner:
     build:
       args:

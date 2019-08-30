@@ -27,7 +27,7 @@ MONGO_BASIC = {
               'image': 'mongo:3.2.0',
               'ports': ['{}:27017'],
               # map port to none standard port, to avoid conflicts with locally installed mongodb.
-              'volumes': ['/var/run/docker.sock:/var/run/docker.sock']}
+              'volumes': ['/var/run/docker.sock:/var/run/docker.sock', '/data/db:/root/data/db']}
 }
 
 SKILL_BASIC = {
