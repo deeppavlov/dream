@@ -38,6 +38,9 @@ class Agent:
         self.state_manager.add_human_utterances(me_dialogs, utterances, date_times)
         informative_dialogs = list(compress(me_dialogs, map(operator.not_, should_reset)))
         self._update_annotations(informative_dialogs)
+        for dialog in me_dialogs:
+            last_uttr = dialog.utterances[-1]
+            logger.info("User utterance: {}.  Annotations :{}\n".format(last_uttr.text, last_uttr.annotations))
 
         selected_skills = self.skill_manager.get_skill_responses(me_dialogs)
         self._update_utterances(me_dialogs, selected_skills, key='selected_skills')
