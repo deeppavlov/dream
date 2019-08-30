@@ -1,0 +1,261 @@
+webchat:
+  description: Program-Y Webchat Client
+  host: 127.0.0.1
+  port: 8090
+  debug: false
+  api: /api/web/v1.0/ask
+
+  scheduler:
+    name: Scheduler1
+    debug_level: 50
+    add_listeners: False
+    remove_all_jobs: False
+
+  storage:
+      entities:
+          categories: file
+          errors: file
+          duplicates: file
+          learnf: file
+          conversations:   file
+
+          maps: file
+          sets: file
+          rdf: file
+
+          denormal: file
+          normal: file
+          gender: file
+          person: file
+          person2: file
+          regex_templates: file
+
+          properties: file
+          variables: file
+
+          twitter: file
+
+          spelling_corpus: file
+          license_keys: file
+
+          template_nodes: file
+          pattern_nodes: file
+
+          binaries: file
+          braintree: file
+
+          preprocessors: file
+          postprocessors: file
+
+          usergroups: file
+
+      stores:
+
+          file:
+              type:   file
+              config:
+                categories_storage:
+                  dirs: ../../storage/categories
+                  subdirs: true
+                  extension: .aiml
+                errors_storage:
+                  file: ../../storage/debug/errors.txt
+                duplicates_storage:
+                  file: ../../storage/debug/duplicates.txt
+                learnf_storage:
+                  dirs: ../../storage/categories/learnf
+
+                conversation_storage:
+                  dirs: ../../storage/conversations
+
+                sets_storage:
+                  dirs: ../../storage/sets
+                  extension: txt
+                maps_storage:
+                  dirs: ../../storage/maps
+                  extension: txt
+                rdf_storage:
+                  dirs: ../../storage/rdfs
+                  subdirs: true
+                  extension: txt
+
+                denormal_storage:
+                  file: ../../storage/lookups/denormal.txt
+                normal_storage:
+                  file: ../../storage/lookups/normal.txt
+                gender_storage:
+                  file: ../../storage/lookups/gender.txt
+                person_storage:
+                  file: ../../storage/lookups/person.txt
+                person2_storage:
+                  file: ../../storage/lookups/person2.txt
+                regex_storage:
+                  file: ../../storage/regex/regex-templates.txt
+
+                properties_storage:
+                  file: ../../storage/properties/properties.txt
+                defaults_storage:
+                  file: ../../storage/properties/defaults.txt
+                variables_storage:
+                  dirs: ../../storage/variables
+
+                twitter_storage:
+                  dirs: ../../storage/twitter
+
+                spelling_storage:
+                  file: ../../storage/spelling/corpus.txt
+
+                #license_storage:
+                #  file: ../../storage/licenses/license.keys
+
+                pattern_nodes_storage:
+                  file: ../../storage/nodes/pattern_nodes.conf
+                template_nodes_storage:
+                  file: ../../storage/nodes/template_nodes.conf
+
+                binaries_storage:
+                  file: ../../storage/braintree/braintree.bin
+                braintree_storage:
+                  file: ../../storage/braintree/braintree.xml
+
+                preprocessors_storage:
+                  file: ../../storage/processing/preprocessors.conf
+                postprocessors_storage:
+                  file: ../../storage/processing/postprocessors.conf
+
+                usergroups_storage:
+                  file: ../../storage/security/usergroups.yaml
+
+          logger:
+              type:   logger
+              config:
+                  conversation_logger: conversation
+
+
+#####################################################################################################
+#
+
+bot:
+    brain: brain
+
+    initial_question: Hi, how can I help you today?
+    initial_question_srai: YINITIALQUESTION
+    default_response: Sorry, I don't have an answer for that!
+    default_response_srai: YEMPTY
+    empty_string: YEMPTY
+    exit_response: So long, and thanks for the fish!
+    exit_response_srai: YEXITRESPONSE
+
+    override_properties: true
+
+    max_question_recursion: 1000
+    max_question_timeout: 60
+    max_search_depth: 100
+    max_search_timeout: 60
+
+    spelling:
+      load: true
+      classname: programy.spelling.norvig.NorvigSpellingChecker
+      corpus: file
+      check_before: false
+      check_and_retry: false
+
+    conversations:
+      save: true
+      load: false
+
+
+#####################################################################################################
+#
+
+brain:
+
+    # Overrides
+    overrides:
+      allow_system_aiml: true
+      allow_learn_aiml: true
+      allow_learnf_aiml: true
+
+    # Defaults
+    defaults:
+      default-get: unknown
+      default-property: unknown
+      default-map: unknown
+
+    # Binary
+    binaries:
+      save_binary: false
+      load_binary: false
+      load_aiml_on_binary_fail: false
+
+    debugfiles:
+      save-errors: true
+      save-duplicates: true
+
+    # Braintree
+    braintree:
+      create: False
+
+    services:
+        REST:
+            classname: programy.services.rest.GenericRESTService
+            method: GET
+            host: 0.0.0.0
+        Pannous:
+            classname: programy.services.pannous.PannousService
+            url: http://weannie.pannous.com/api
+        Pandora:
+            classname: programy.services.pandora.PandoraService
+            url: http://www.pandorabots.com/pandora/talk-xml
+        Wikipedia:
+            classname: programy.services.wikipediaservice.WikipediaService
+        DuckDuckGo:
+            classname: programy.services.duckduckgo.DuckDuckGoService
+            url: http://api.duckduckgo.com
+
+    security:
+        authentication:
+            classname: programy.security.authenticate.passthrough.BasicPassThroughAuthenticationService
+            denied_srai: AUTHENTICATION_FAILED
+        authorisation:
+            classname: programy.security.authorise.usergroupsauthorisor.BasicUserGroupAuthorisationService
+            denied_srai: AUTHORISATION_FAILED
+
+    oob:
+      default:
+        classname: programy.oob.defaults.default.DefaultOutOfBandProcessor
+      alarm:
+        classname: programy.oob.defaults.alarm.AlarmOutOfBandProcessor
+      camera:
+        classname: programy.oob.defaults.camera.CameraOutOfBandProcessor
+      clear:
+        classname: programy.oob.defaults.clear.ClearOutOfBandProcessor
+      dial:
+        classname: programy.oob.defaults.dial.DialOutOfBandProcessor
+      dialog:
+        classname: programy.oob.defaults.dialog.DialogOutOfBandProcessor
+      email:
+        classname: programy.oob.defaults.email.EmailOutOfBandProcessor
+      geomap:
+        classname: programy.oob.defaults.map.MapOutOfBandProcessor
+      schedule:
+        classname: programy.oob.defaults.schedule.ScheduleOutOfBandProcessor
+      search:
+        classname: programy.oob.defaults.search.SearchOutOfBandProcessor
+      sms:
+        classname: programy.oob.defaults.sms.SMSOutOfBandProcessor
+      url:
+        classname: programy.oob.defaults.url.URLOutOfBandProcessor
+      wifi:
+        classname: programy.oob.defaults.wifi.WifiOutOfBandProcessor
+
+    dynamic:
+        variables:
+            gettime: programy.dynamic.variables.datetime.GetTime
+        sets:
+            numeric: programy.dynamic.sets.numeric.IsNumeric
+            roman:   programy.dynamic.sets.roman.IsRomanNumeral
+        maps:
+            romantodec: programy.dynamic.maps.roman.MapRomanToDecimal
+            dectoroman: programy.dynamic.maps.roman.MapDecimalToRoman
+
