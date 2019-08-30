@@ -153,3 +153,12 @@ def base_skill_selector_formatter(payload: Any, mode='in'):
         # it's questionable why output from Model itself is 2dim: batch size x n_skills
         # and payload here is 3dim. I don't know which dim is extra and from where it comes
         return payload[0]
+
+
+def transfertransfo_formatter(payload: Any, mode='in'):
+    if mode == 'in':
+        parsed = base_input_formatter(payload)
+        return {'utterances_histories': parsed['utterances_histories'],
+                'personality': [dialog['bot']['persona'] for dialog in parsed['dialogs']]}
+    elif mode == 'out':
+        return base_skill_output_formatter(payload)
