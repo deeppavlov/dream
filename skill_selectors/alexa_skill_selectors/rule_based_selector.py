@@ -34,9 +34,11 @@ class RuleBasedSelector(Component):
                 skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("aiml")
                 skills_for_uttr.append("alice")
+                skills_for_uttr.append("transfertransfo")
             else:
                 skills_for_uttr.append("alice")
-                skills_for_uttr.append("aiml")
+                skills_for_uttr.append("cobotqa")
+                skills_for_uttr.append("transfertransfo")
 
             skill_names.append(skills_for_uttr)
 

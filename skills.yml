@@ -10,7 +10,7 @@ services:
       context: ./skills/CoBotQA/
     ports: ['8001:8001']
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8001
-    volumes: []
+    volumes: []   
   cobot_topics:
     build:
       context: ./annotators/CoBotTopicClassification/
@@ -34,5 +34,11 @@ services:
       context: ./annotators/CoBotDialogActClassification/
     ports: ['8006:8006']
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8006
+    volumes: []
+  transfertransfo:
+    build:
+      context: ./skills/transfertransfo/
+    ports: ['8007:8007']
+    command: uvicorn server:app --host 0.0.0.0 --port 8007
     volumes: []
 version: '3.7'
