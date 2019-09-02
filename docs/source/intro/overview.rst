@@ -285,7 +285,63 @@ For example:
 
          python -m utils.get_db_data Dialog User
 
+Testing HTTP api and automatical processing of predefined dialogs 
+=================================================================
 
+In order to process predefined dialogs or generate random one from predefined list of phrases
+you can use `http_api_script.py`, which located in ``utils`` folder.
+
+Make sure that ``aiohttp`` is installed:
+
+    .. code:: bash
+
+        pip install aiohttp==3.5.4
+
+**Processing predefined dialog**
+
+In this mode script will pass predefined dialogs from file ``-df`` to agent's api.
+
+1. Creeate a file with dialog. Json format is used. You can find an example in ``utils/ru_test_dialogs.json``:
+    
+    .. code:: javascript
+
+          {
+              "uuid1": ["phrase1.1", "phrase1.2", "..."],
+              "uuid2": ["phrase2.1", "phrase2.2", "..."],
+              "uuid3": ["phrase3.1", "phrase3.2", "..."],
+          }
+
+2. Run :
+
+    .. code:: bash
+
+         python utils/http_api_test.py -u <api url> -df <dialogs file path>
+
+
+3. Used command line arguments are:
+    
+    * -u --url - url address of agent's api
+    * -df --datafile - path to file with predefined dialogs
+
+**Processing predefined dialog**
+
+In this mode script will generate ``-uc`` dialogs with ``-pc`` phrases in each. Phrases will be selected randomly from phrase file ``-pf`` and pass them to agent's api.
+
+1. Creeate a file with sample phrases. This is a simple text file with one phrase per line.
+  You can find an example in ``utils/ru_test_phrases.txt``:
+
+2. Run:
+
+    .. code:: bash
+
+         python utils/http_api_test.py -u <api url> -pf <phrases file path> -uc <user count> -pc <phrase per dialog count>
+
+3. Used command line arguments are:
+    
+    * -u --url - url address of agent's api
+    * -pf --phrasefile - path to file with predefined sample phrases
+    * -uc --usercount - number of users, which will be passing dialogs
+    * -pc --phrasecount - number of phrases in each dialog
 
 .. _config file: https://github.com/deepmipt/dp-agent/blob/master/config.py
 .. _DeepPavlov: https://github.com/deepmipt/DeepPavlov
