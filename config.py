@@ -1,8 +1,9 @@
 from state_formatters.dp_formatters import *
 
 DB_NAME = 'test'
-HOST = '127.0.0.1'
-PORT = 27017
+DB_HOST = '127.0.0.1'
+DB_PORT = 27017
+DB_PATH = '/data/db'
 
 MAX_WORKERS = 4
 
