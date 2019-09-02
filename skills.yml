@@ -35,4 +35,10 @@ services:
     ports: ['8006:8006']
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8006
     volumes: []
+  convers_evaluation_selector:
+    build:
+      context: ./response_selectors/convers_evaluation_based_selector/
+    ports: ['8007:8007']
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8007
+    volumes: []
 version: '3.7'

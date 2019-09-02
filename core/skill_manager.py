@@ -36,7 +36,9 @@ class SkillManager:
     def __call__(self, dialogs):
 
         user_profiles = self._get_user_profiles(self.skill_responses)
-        selected_skill_names, utterances, confidences = self.response_selector(self.skill_responses)
+        print(self.skill_responses)
+        print(self.response_selector)
+        selected_skill_names, utterances, confidences = self.response_selector(self.skill_responses, dialogs)
         utterances = [utt if utt else NOANSWER_UTT for utt in utterances]
         return selected_skill_names, utterances, confidences, user_profiles
 

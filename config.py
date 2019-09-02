@@ -76,16 +76,16 @@ ANNOTATORS = [
         "path": "",
         "formatter": cobot_offensiveness_formatter
     },
-    {
-        "name": "cobot_dialogact",
-        "protocol": "http",
-        "host": "cobot_dialogact",
-        "port": 8006,
-        "endpoint": "dialogact",
-        "external": True,
-        "path": "",
-        "formatter": cobot_dialogact_formatter
-    }
+    # {
+    #     "name": "cobot_dialogact",
+    #     "protocol": "http",
+    #     "host": "cobot_dialogact",
+    #     "port": 8006,
+    #     "endpoint": "dialogact",
+    #     "external": True,
+    #     "path": "",
+    #     "formatter": cobot_dialogact_formatter
+    # }
 ]
 
 SKILL_SELECTORS = [
@@ -103,6 +103,17 @@ SKILL_SELECTORS = [
         "formatter": base_skill_selector_formatter
     }
 ]
-RESPONSE_SELECTORS = []
+RESPONSE_SELECTORS = [
+    {
+        "name": "convers_evaluation_selector",
+        "protocol": "http",
+        "host": "repsonse_selector",
+        "port": 8007,
+        "endpoint": "respond",
+        "external": True,
+        "path": "",
+        "formatter": base_response_selector_formatter
+    }
+]
 
 POSTPROCESSORS = []
