@@ -28,8 +28,8 @@ headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COB
 
 @app.route("/respond", methods=['POST'])
 def respond():
-    response_candidates = request.json['response_candidates']
-    user_states_batch = request.json['states_batch']
+    dialogs_batch = request.json['states_batch']["dialogs"]
+    response_candidates = [dialog["utterances"][-1]["selected_skills"] for dialog in dialogs_batch]
     session_id = uuid.uuid4().hex
     conversations = []
     dialog_ids = []
@@ -37,16 +37,11 @@ def respond():
     utterances = []
     confidences = []
 
-    characteristics = ["isResponseOnTopic", "isResponseInteresting", "responseEngagesUser",
-                       "isResponseErroneous", "isResponseComprehensible"]
-    skill_names = response_candidates.keys()
-    logger.info("Skill names: {}".format(skill_names))
-
-    for i, dialog in enumerate(user_states_batch):
-        for resp in response_candidates[i]:
+    for i, dialog in enumerate(dialogs_batch):
+        for skill_name in response_candidates[i]:
             conv = dict()
             conv["currentUtterance"] = dialog["utterances"][-1]["text"]
-            conv["currentResponse"] = resp
+            conv["currentResponse"] = response_candidates[i][skill_name]["text"]
             # every odd utterance is from user
             conv["pastUtterances"] = [uttr["text"] for uttr in dialog["utterances"][1::2]]
             # every second utterance is from bot
@@ -54,25 +49,25 @@ def respond():
             # collect all the conversations variants to evaluate them batch-wise
             conversations += [conv]
             dialog_ids += [i]
-
+    logger.info(conversations)
     result = requests.request(url=COBOT_CONVERSATION_EVALUATION_SERVICE_URL,
                               headers=headers,
-                              data=json.dumps({'conversations': [conversations]}),
+                              data=json.dumps({'conversations': conversations}),
                               method='POST').json()
     # result is an array where each element is a dict with scores
     result = np.array(result["conversationEvaluationScores"])
 
     dialog_ids = np.array(dialog_ids)
 
-    for i, dialog in enumerate(user_states_batch):
-        sent = dialog["utterances"][-1]["text"]
-        logger.info(f"user_sentence: {sent}, session_id: {session_id}")
-        # curr_cands is dict
-        curr_cands = response_candidates[i]
-        # choose results which correspond curr candidates -> result[dialog_ids == i]
-        best_id, confidence = select_response(curr_cands, result[dialog_ids == i], dialog)
-        best_skill_name = skill_names[best_id]
-        best_response = curr_cands[best_skill_name]
+    for i, dialog in enumerate(dialogs_batch):
+        # curr_candidates is dict
+        curr_candidates = response_candidates[i]
+        # choose results which correspond curr candidates
+        curr_scores = result[dialog_ids == i]
+        best_id = select_response(curr_candidates, curr_scores, dialog)
+        best_skill_name = list(response_candidates[i].keys())[best_id]
+        best_response = curr_candidates[best_skill_name]["text"]
+        confidence = curr_candidates[best_skill_name]["confidence"]
 
         selected_skill_names.append(best_skill_name)
         utterances.append(best_response)
@@ -83,13 +78,15 @@ def respond():
     return jsonify(list(zip(selected_skill_names, utterances, confidences)))
 
 
-def select_response(curr_candidates: dict, curr_scores: np.ndarray[dict], state: dict):
+def select_response(curr_candidates, curr_scores, dialog):
     # calculate curr_scores which is an array of values-scores for each candidate
-    curr_scores = [sum(cand_scores.values()) for cand_scores in curr_scores]
-    # choose candidate with max score
-    confidence = np.amax(curr_scores)
-    best_id = np.argmax(curr_scores)
-    return best_id, confidence
+    curr_single_cores = [(cand_scores["isResponseOnTopic"] + cand_scores["isResponseInteresting"] +
+                          cand_scores["responseEngagesUser"] + cand_scores["isResponseComprehensible"] -
+                          cand_scores["isResponseErroneous"])
+                         for cand_scores in curr_scores]
+
+    best_id = np.argmax(curr_single_cores)
+    return best_id
 
 
 if __name__ == '__main__':
