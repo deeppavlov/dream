@@ -54,6 +54,25 @@ You can configure services at the Agent `config file`_.
 
 **Config Description**
 
+**Database**
+
+All default values are taken from `Mongo DB documentation <mongo-docs_>`__. Please refer to these docs if you need to
+change anything.
+
+* **DB_NAME**
+    * An name of the database. Default name is **"test"**
+* **DB_HOST**
+    * A database host, **"127.0.0.1"** by default
+* **DB_PORT**
+    * A database port, **"27017"** by default
+* **DB_PATH**
+    * A database data path. Default path is **"/data/db"**.
+
+    Please make sure that this path exists on your machine and has valid permissions.
+
+
+**Services**
+
 * **name**
     * An arbitrary and unique name of the service
 * **protocol**
@@ -295,3 +314,4 @@ For example:
 .. _Docker environment configuration: https://github.com/deepmipt/dp-agent/blob/master/docker-compose.yml
 .. _docker-exec: https://docs.docker.com/engine/reference/commandline/exec/
 .. _state: https://deeppavlov-agent.readthedocs.io/en/latest/_static/api.html
+.. _mongo-docs: https://docs.mongodb.com/manual/tutorial/manage-mongodb-processes/
