@@ -256,4 +256,3 @@ brain:
         maps:
             romantodec: programy.dynamic.maps.roman.MapRomanToDecimal
             dectoroman: programy.dynamic.maps.roman.MapDecimalToRoman
-
