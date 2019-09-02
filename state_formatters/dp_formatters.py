@@ -156,6 +156,15 @@ def base_skill_selector_formatter(payload: Any, mode='in'):
         return payload[0]
 
 
+def transfertransfo_formatter(payload: Any, mode='in'):
+    if mode == 'in':
+        parsed = base_input_formatter(payload)
+        return {'utterances_histories': parsed['utterances_histories'],
+                'personality': [dialog['bot']['persona'] for dialog in parsed['dialogs']]}
+    elif mode == 'out':
+        return base_skill_output_formatter(payload)
+
+
 def cobot_offensiveness_formatter(payload, mode='in'):
     if mode == 'in':
         sentences = base_input_formatter(payload)['last_utterances']
