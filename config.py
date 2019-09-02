@@ -118,7 +118,7 @@ RESPONSE_SELECTORS = [
         "name": "convers_evaluation_selector",
         "protocol": "http",
         "host": "repsonse_selector",
-        "port": 8007,
+        "port": 8008,
         "endpoint": "respond",
         "external": True,
         "path": "",
