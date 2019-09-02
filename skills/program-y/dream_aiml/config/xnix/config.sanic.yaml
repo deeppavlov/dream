@@ -1,9 +1,9 @@
 rest:
   description: Program-Y Sanic Rest Client
   host: 0.0.0.0
-  port: 8989
+  port: 8008
   debug: false
-  workers: 4
+  workers: 2
   api: /api/sanic/v1.0.ask
 
   scheduler:

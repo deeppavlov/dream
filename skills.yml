@@ -10,7 +10,7 @@ services:
       context: ./skills/CoBotQA/
     ports: ['8001:8001']
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8001
-    volumes: []   
+    volumes: []
   cobot_topics:
     build:
       context: ./annotators/CoBotTopicClassification/
@@ -40,5 +40,12 @@ services:
       context: ./skills/transfertransfo/
     ports: ['8007:8007']
     command: uvicorn server:app --host 0.0.0.0 --port 8007
+    volumes: []
+  program_y:
+    build:
+      context: ./skills/program-y/
+    ports: ['8008:8008']
+    working_dir: /src/dream_aiml/scripts/xnix
+    command: ./sanic.sh
     volumes: []
 version: '3.7'
