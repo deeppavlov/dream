@@ -1,0 +1,2 @@
+programy==3.8.5
+sanic==19.6.3

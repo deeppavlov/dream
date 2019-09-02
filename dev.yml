@@ -38,5 +38,9 @@ services:
     env_file: [.env]
     volumes:
       - './skills/transfertransfo:/app'
+  program_y:
+    env_file: [.env]
+    volumes:
+      - './skills/program-y:/src'
 
 version: '3.7'
