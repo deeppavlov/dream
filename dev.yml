@@ -34,5 +34,9 @@ services:
     env_file: [.env]
     volumes:
       - './annotators/CoBotDialogActClassification:/src'
+  convers_evaluation_selector:
+    env_file: [.env]
+    volumes:
+      - './response_selectors/convers_evaluation_based_selector:/src'
 
 version: '3.7'
