@@ -6,7 +6,6 @@ import json
 from time import time
 from random import random, randrange
 import uuid
-from pprint import pprint
 
 '''
 structure of dialog file (-df) should be written in json
@@ -38,13 +37,13 @@ if args.dialogfile:
     try:
         with open(args.dialogfile, 'r') as file:
             payloads = json.load(file)
-    except exception as e:
+    except Exception as e:
         raise e
 elif args.phrasesfile:
     try:
         with open(args.phrasesfile, 'r') as file:
             phrases = [line.rstrip('\n') for line in file]
-    except exception as e:
+    except Exception as e:
         raise e
     payloads = {uuid.uuid4().hex: [phrases[randrange(len(phrases))] for i in range(args.phrasecount)] for i in range(args.usercount)}
 else:
@@ -76,7 +75,6 @@ async def run(url, payloads, out_filename):
     result = [['uuid', 'send timestamp', 'receive timestamp', 'processing_time', 'phrase length', 'phrase text']]
     for i in responses:
         result.extend(i)
-    pprint(result)
     with open(out_filename, 'w', newline='') as f:
         writer = csv.writer(f, delimiter=' ')
         for row in result:
