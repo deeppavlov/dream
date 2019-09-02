@@ -109,7 +109,7 @@ Services Deployment
 
         EXTERNAL_FOLDER=<path to data directory>
 
-7. (optional) If you want to communicate with the bot via Telegram, setup the following environment variables:
+7. (optional) If you want to communicate with the Agent via Telegram, setup the following environment variables:
 
    .. code:: bash
 
@@ -123,11 +123,13 @@ Services Deployment
        TELEGRAM_TOKEN=123456789:AAGCiO0QFb_I-GXL-CbJDw7--JQbHkiQyYA
        TELEGRAM_PROXY=socks5://tgproxy:tgproxy_pwd@123.45.67.89:1447
 
-8. Configure all skills, skill selectors, response selectors, annotators and database connection in the `config file`_.
-   If you want a particular skill to use GPU, set its ``gpu`` value to ``True``.
+   If you run the Agent via docker, put this variables into a file and configure it's path under ``AGENT_ENV_FILE``
+   variable in the `config file`_. This file name is automatically picked up when the docker-compose file
+   is being generated.
 
-   If you want a minimal configuration, you need one skill and one skill selector.
-   Pick skill ``chitchat`` and  selector ``chitchat_odqa`` and comment out all other skills, selectors and annotators.
+8. Configure all skills, skill selectors, response selectors, annotators and database connection in the `config file`_.
+
+   If you want a minimal configuration, you need one annotator and one skill.
 
 9. Generate a `Docker environment configuration`_  by running the command:
 
@@ -248,6 +250,42 @@ Agent can run both from container and from a local machine. The default Agent po
         }
 
     In case of wrong format, HTTP errors will be returned
+
+Analyzing the data
+==================
+
+All conversations with the Agent are stored to a Mongo DB. When they are dumped, they have
+the same format as the Agent's state_. Someone may need to dump and analyze the whole dialogs,
+or users, or annotations. For now, the following Mongo collections are available and can be
+dumped separately:
+
+    * Human
+    * Bot
+    * User (Human & Bot)
+    * HumanUtterance
+    * BotUtterance
+    * Utterance (HumanUtterance & BotUtterance)
+    * Dialog
+
+To dump a DB collection, make sure that ``mongoengine`` is installed:
+
+    .. code:: bash
+
+        pip install mongoengine==0.17.0
+
+Then run:
+
+    .. code:: bash
+
+         python -m utils.get_db_data [collections]
+
+For example:
+
+    .. code:: bash
+
+         python -m utils.get_db_data Dialog User
+
+
 
 .. _config file: https://github.com/deepmipt/dp-agent/blob/master/config.py
 .. _DeepPavlov: https://github.com/deepmipt/DeepPavlov
