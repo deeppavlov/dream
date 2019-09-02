@@ -1,9 +1,10 @@
-webchat:
-  description: Program-Y Webchat Client
-  host: 127.0.0.1
-  port: 8090
+rest:
+  description: Program-Y Sanic Rest Client
+  host: 0.0.0.0
+  port: 8989
   debug: false
-  api: /api/web/v1.0/ask
+  workers: 4
+  api: /api/sanic/v1.0.ask
 
   scheduler:
     name: Scheduler1
@@ -105,8 +106,8 @@ webchat:
                 spelling_storage:
                   file: ../../storage/spelling/corpus.txt
 
-                #license_storage:
-                #  file: ../../storage/licenses/license.keys
+                license_storage:
+                  file: ../../storage/licenses/license.keys
 
                 pattern_nodes_storage:
                   file: ../../storage/nodes/pattern_nodes.conf
@@ -258,4 +259,3 @@ brain:
         maps:
             romantodec: programy.dynamic.maps.roman.MapRomanToDecimal
             dectoroman: programy.dynamic.maps.roman.MapDecimalToRoman
-

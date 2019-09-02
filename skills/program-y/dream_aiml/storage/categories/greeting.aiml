@@ -117,6 +117,6 @@
   </category>
   <category>
     <pattern>WHAT CAN YOU DO</pattern>
-    <template>I am newborn, so I can do not so much. For example I can answer for any question.</template>
+    <template>I am newborn, so I can't do so much. For example I can answer for any question.</template>
   </category>
 </aiml>
