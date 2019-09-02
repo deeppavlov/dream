@@ -285,11 +285,11 @@ For example:
 
          python -m utils.get_db_data Dialog User
 
-Testing HTTP api and automatical processing of predefined dialogs 
+Testing HTTP API and automatic processing of predefined dialogs
 =================================================================
 
-In order to process predefined dialogs or generate random one from predefined list of phrases
-you can use `http_api_script.py`, which located in ``utils`` folder.
+In order to process predefined dialogs or generate a random one from predefined list of phrases
+you can use `utils/http_api_script.py` script.
 
 Make sure that ``aiohttp`` is installed:
 
@@ -297,11 +297,11 @@ Make sure that ``aiohttp`` is installed:
 
         pip install aiohttp==3.5.4
 
-**Processing predefined dialog**
+**Processing a predefined dialog**
 
-In this mode script will pass predefined dialogs from file ``-df`` to agent's api.
+In this mode the script will pass predefined dialogs from the file ``-df`` to the agent's API.
 
-1. Creeate a file with dialog. Json format is used. You can find an example in ``utils/ru_test_dialogs.json``:
+1. Create a JSON file with a dialog. You can find an example in ``utils/ru_test_dialogs.json``:
     
     .. code:: javascript
 
@@ -311,24 +311,25 @@ In this mode script will pass predefined dialogs from file ``-df`` to agent's ap
               "uuid3": ["phrase3.1", "phrase3.2", "..."],
           }
 
-2. Run :
+2. Run:
 
     .. code:: bash
 
          python utils/http_api_test.py -u <api url> -df <dialogs file path>
 
 
-3. Used command line arguments are:
+3. The command line arguments are:
     
-    * -u --url - url address of agent's api
-    * -df --datafile - path to file with predefined dialogs
+    * -u --url - url address of the agent's API
+    * -df --datafile - path to a file with predefined dialogs
 
-**Processing predefined dialog**
+**Processing a random dialog from predefined phrases**
 
-In this mode script will generate ``-uc`` dialogs with ``-pc`` phrases in each. Phrases will be selected randomly from phrase file ``-pf`` and pass them to agent's api.
+In this mode the script will generate ``-uc`` dialogs with ``-pc`` phrases in each. Phrases will be selected randomly from the phrase file ``-pf`` and passed to the agent's API.
 
-1. Creeate a file with sample phrases. This is a simple text file with one phrase per line.
-  You can find an example in ``utils/ru_test_phrases.txt``:
+1. Create a file with sample phrases. This is a simple text file with one phrase per line.
+
+   You can find an example in ``utils/ru_test_phrases.txt``:
 
 2. Run:
 
@@ -336,11 +337,11 @@ In this mode script will generate ``-uc`` dialogs with ``-pc`` phrases in each. 
 
          python utils/http_api_test.py -u <api url> -pf <phrases file path> -uc <user count> -pc <phrase per dialog count>
 
-3. Used command line arguments are:
+3. The command line arguments are:
     
-    * -u --url - url address of agent's api
-    * -pf --phrasefile - path to file with predefined sample phrases
-    * -uc --usercount - number of users, which will be passing dialogs
+    * -u --url - url address of the agent's API
+    * -pf --phrasefile - path to a file with predefined sample phrases
+    * -uc --usercount - number of users taking part in the dialogs
     * -pc --phrasecount - number of phrases in each dialog
 
 .. _config file: https://github.com/deepmipt/dp-agent/blob/master/config.py
