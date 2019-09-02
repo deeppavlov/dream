@@ -34,6 +34,10 @@ services:
     env_file: [.env]
     volumes:
       - './annotators/CoBotDialogActClassification:/src'
+  transfertransfo:
+    env_file: [.env]
+    volumes:
+      - './skills/transfertransfo:/app'
   convers_evaluation_selector:
     env_file: [.env]
     volumes:

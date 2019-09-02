@@ -14,8 +14,8 @@ services:
     env_file: [.env.staging]
   rule_based_selector:
     image: 127.0.0.1:5000/rule_based_selector:latest
+    volumes: ['external-logs:/logs', 'external-deeppavlov:/root/.deeppavlov']
     env_file: [.env.staging]
-    volumes: ['external-logs:/logs', 'external-deeppavlov:/root/.deeppavlov'
   cobot_topics:
     image: 127.0.0.1:5000/cobot_topics:latest
     env_file: [.env.staging]
@@ -27,6 +27,9 @@ services:
     env_file: [.env.staging]
   cobot_dialogact:
     image: 127.0.0.1:5000/cobot_dialogact:latest
+    env_file: [.env.staging]
+  transfertransfo:
+    image: 127.0.0.1:5000/transfertransfo:latest
     env_file: [.env.staging]
   convers_evaluation_selector:
     image: 127.0.0.1:5000/convers_evaluation_selector:latest

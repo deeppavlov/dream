@@ -12,11 +12,12 @@ class User(DynamicDocument):
 
 
 class Bot(User):
-    persona = ListField(default=['Мне нравится общаться с людьми.',
-                                 'Пару лет назад я окончила вуз с отличием.',
-                                 'Я работаю в банке.',
-                                 'В свободное время помогаю пожилым людям в благотворительном фонде',
-                                 'Люблю путешествовать'])
+    persona = ListField(default=[
+                                "i prefer vinyl records to any other music recording format.",
+                                "i fix airplanes for a living.",
+                                "drive junk cars that no one else wants.",
+                                "i think if i work hard enough i can fix the world.",
+                                "i am never still."])
 
     def to_dict(self):
         return {'id': str(self.id),

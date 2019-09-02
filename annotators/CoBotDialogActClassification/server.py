@@ -54,13 +54,17 @@ def respond():
     result = requests.request(url=f'{COBOT_DIALOGACT_SERVICE_URL}',
                               headers=headers,
                               data=json.dumps({'conversations': conversations}),
-                              method='POST').json()
-
-    for i, sent in enumerate(user_sentences):
-        logger.info(f"user_sentence: {sent}, session_id: {session_id}")
-        intent = result["dialogActIntents"][i]
-        intents += [intent]
-        logger.info(f"intent: {intent}")
+                              method='POST')
+    if result.status_code != 200:
+        logger.warning("result status code is not 200: {}. result text: {}; result status: {}".format(result, result.text, result.status_code))
+        intents = []
+    else:
+        result = result.json()
+        for i, sent in enumerate(user_sentences):
+            logger.info(f"user_sentence: {sent}, session_id: {session_id}")
+            intent = result["dialogActIntents"][i]
+            intents += [intent]
+            logger.info(f"intent: {intent}")
 
     return jsonify(list(zip(intents)))
 
