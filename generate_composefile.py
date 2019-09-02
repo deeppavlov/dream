@@ -4,7 +4,7 @@ from copy import deepcopy
 from itertools import chain
 
 from core.transform_config import SKILLS, ANNOTATORS, SKILL_SELECTORS, RESPONSE_SELECTORS,\
-    POSTPROCESSORS, PORT, AGENT_ENV_FILE
+    POSTPROCESSORS, DB_PORT, DB_PATH, AGENT_ENV_FILE
 
 
 parser = argparse.ArgumentParser()
@@ -27,7 +27,7 @@ MONGO_BASIC = {
               'image': 'mongo:3.2.0',
               'ports': ['{}:27017'],
               # map port to none standard port, to avoid conflicts with locally installed mongodb.
-              'volumes': ['/var/run/docker.sock:/var/run/docker.sock']}
+              'volumes': ['/var/run/docker.sock:/var/run/docker.sock', f'{DB_PATH}:/root/data/db']}
 }
 
 SKILL_BASIC = {
@@ -162,7 +162,7 @@ if __name__ == '__main__':
     for conf in chain(SKILLS, ANNOTATORS, SKILL_SELECTORS, RESPONSE_SELECTORS, POSTPROCESSORS):
         dcc.add_skill(SkillConfig(conf))
 
-    dcc.add_db(DatabaseConfig(PORT))
+    dcc.add_db(DatabaseConfig(DB_PORT))
 
     with open(args.filename, 'w') as f:
         yaml.dump(dcc.config, f)
