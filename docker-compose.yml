@@ -1,26 +1,44 @@
 services:
   agent:
-    build: {context: ./, dockerfile: dockerfile_agent}
+    build:
+      context: ./
+      dockerfile: dockerfile_agent
     container_name: agent
-    depends_on: [aiml, mongo]
-    ports: ['28888:8888']
+    depends_on:
+    - aiml
+    - rule_based_selector
+    - mongo
+    env_file: agent.env
+    ports:
+    - 28888:8888
     tty: true
-    volumes: []
+    volumes:
+    - .:/dp-agent
   aiml:
     build:
-      args: {skill_endpoint: aiml, skillconfig: skills/aiml/aiml_skill.json, skillhost: 0.0.0.0,
-        skillport: 2080}
+      args:
+        skill_endpoint: aiml
+        skillconfig: skills/aiml/aiml_skill.json
+        skillhost: 0.0.0.0
+        skillport: 2080
       context: ./
       dockerfile: dp/dockerfile_skill_cpu
-    container_name: aiml
-    environment: [CUDA_VISIBLE_DEVICES=""]
-    ports: ['2080:2080']
+    environment:
+    - CUDA_VISIBLE_DEVICES=""
+    ports:
+    - 2080:2080
     tty: true
+    volumes:
+    - .:/dp-agent
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
   mongo:
     command: mongod
     image: mongo:3.2.0
-    ports: ['27017:27017']
-    volumes: ['/var/run/docker.sock:/var/run/docker.sock']
+    ports:
+    - 27017:27017
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
   rule_based_selector:
     build:
       args:
@@ -30,10 +48,13 @@ services:
         skillport: 8002
       context: ./
       dockerfile: dp/dockerfile_skill_cpu
-    container_name: rule_based_selector
     environment:
     - CUDA_VISIBLE_DEVICES=""
     ports:
     - 8002:8002
     tty: true
+    volumes:
+    - .:/dp-agent
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
 version: '3.7'

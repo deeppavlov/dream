@@ -31,6 +31,9 @@ services:
   transfertransfo:
     image: 127.0.0.1:5000/transfertransfo:latest
     env_file: [.env.staging]
+  personality_catcher:
+    image: 127.0.0.1:5000/personality_catcher:latest
+    env_file: [.env.staging]
 volumes:
   external-logs:
   external-deeppavlov:
