@@ -41,4 +41,10 @@ services:
     ports: ['8007:8007']
     command: uvicorn server:app --host 0.0.0.0 --port 8007
     volumes: []
+  personality_catcher:
+    build:
+      context: ./skills/personality_catcher/
+    ports: ['8008:8008']
+    command: uvicorn server:app --host 0.0.0.0 --port 8008
+    volumes: []
 version: '3.7'
