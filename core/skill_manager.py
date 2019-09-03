@@ -1,6 +1,6 @@
 import copy
 import operator
-from itertools import compress
+from itertools import compress, chain
 from typing import List, Dict, Optional, Sequence
 from warnings import warn
 
@@ -35,8 +35,14 @@ class SkillManager:
 
         skill_responses = [d.utterances[-1]['selected_skills'] for d in dialogs]
         user_profiles = self._get_user_profiles(skill_responses)
-        selected_skill_names, utterances, confidences = self.response_selector(get_state(dialogs))
-        utterances = [utt if utt else NOANSWER_UTT for utt in utterances]
+        # select 0 element because RS always selects only one response:
+        selected_skill_names = list(chain.from_iterable(self.response_selector(get_state(dialogs))[0].values()))
+        utterances = []
+        confidences = []
+        for responses, selected_name in zip(skill_responses, selected_skill_names):
+            selected_skill = responses[selected_name]
+            utterances.append(selected_skill['text'] or NOANSWER_UTT)
+            confidences.append(selected_skill['confidence'])
         return selected_skill_names, utterances, confidences, user_profiles
 
     def _get_user_profiles(self, skill_responses) -> Optional[List[Dict]]:
