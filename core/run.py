@@ -4,6 +4,7 @@ from os import getenv
 
 from aiohttp import web
 from datetime import datetime
+from string import hexdigits
 from threading import Thread
 from multiprocessing import Process, Pipe
 from multiprocessing.connection import Connection
@@ -221,9 +222,14 @@ async def dialog(request):
     if dialog_id == 'all':
         dialogs = Dialog.objects()
         return web.json_response([i.to_dict() for i in dialogs])
-    else:
+    elif len(dialog_id) == 24 and all(c in hexdigits for c in dialog_id):
         dialog = Dialog.objects(id__exact=dialog_id)
-        return web.json_response(dialog[0].to_dict())
+        if not dialog:
+            raise web.HTTPNotFound(reason=f'dialog with id {dialog_id} is not exist')
+        else:
+            return web.json_response(dialog[0].to_dict())
+    else:
+        raise web.HTTPBadRequest(reason='dialog id should be 24-character hex string')
 
 
 def main():
