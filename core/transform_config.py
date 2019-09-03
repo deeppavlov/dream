@@ -13,7 +13,7 @@ for service in chain(ANNOTATORS, SKILL_SELECTORS, SKILLS, RESPONSE_SELECTORS, PO
     host = service['name'] if getenv('DPA_LAUNCHING_ENV') == 'docker' else service['host']
     service['url'] = f"{service['protocol']}://{host}:{service['port']}/{service['endpoint']}"
 
-HOST = 'mongo' if getenv('DPA_LAUNCHING_ENV') == 'docker' else HOST
+DB_HOST = 'mongo' if getenv('DPA_LAUNCHING_ENV') == 'docker' else DB_HOST
 
 
 def _get_config_path(component_config: dict) -> dict:
@@ -49,8 +49,8 @@ if _run_config_path.is_file():
         MAX_WORKERS = config.get('MAX_WORKERS', MAX_WORKERS)
 
         DB_NAME = config.get('DB_NAME', DB_NAME)
-        HOST = config.get('HOST', HOST)
-        PORT = config.get('PORT', PORT)
+        DB_HOST = config.get('HOST', DB_HOST)
+        DB_PORT = config.get('PORT', DB_PORT)
 
         for group in _component_groups:
             setattr(_module, group, list(map(_get_config_path, config.get(group, []))))
