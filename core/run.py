@@ -217,8 +217,13 @@ async def users_dialogs(request):
 
 async def dialog(request):
     from core.state_schema import Dialog
-    dialog = Dialog.objects(id__exact=request.match_info['dialog_id'])
-    return web.json_response(dialog[0].to_dict())
+    dialog_id = request.match_info['dialog_id']
+    if dialog_id == 'all':
+        dialogs = Dialog.objects()
+        return web.json_response([i.to_dict() for i in dialogs])
+    else:
+        dialog = Dialog.objects(id__exact=dialog_id)
+        return web.json_response(dialog[0].to_dict())
 
 
 def main():
