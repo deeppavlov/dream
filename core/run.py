@@ -4,6 +4,7 @@ from os import getenv
 
 from aiohttp import web
 from datetime import datetime
+from string import hexdigits
 from threading import Thread
 from multiprocessing import Process, Pipe
 from multiprocessing.connection import Connection
@@ -193,6 +194,8 @@ async def init_app():
     app = web.Application()
     handle_func = await api_message_processor(run())
     app.router.add_post('/', handle_func)
+    app.router.add_get('/dialogs', users_dialogs)
+    app.router.add_get('/dialogs/{dialog_id}', dialog)
     return app
 
 
@@ -215,6 +218,31 @@ async def api_message_processor(message_processor):
         return web.json_response(result)
 
     return api_handle
+
+
+async def users_dialogs(request):
+    from core.state_schema import Dialog
+    exist_dialogs = Dialog.objects()
+    result = list()
+    for i in exist_dialogs:
+        result.append({'id': str(i.id), 'location': i.location, 'channel_type': i.channel_type, 'user': i.user.to_dict()})
+    return web.json_response(result)
+
+
+async def dialog(request):
+    from core.state_schema import Dialog
+    dialog_id = request.match_info['dialog_id']
+    if dialog_id == 'all':
+        dialogs = Dialog.objects()
+        return web.json_response([i.to_dict() for i in dialogs])
+    elif len(dialog_id) == 24 and all(c in hexdigits for c in dialog_id):
+        dialog = Dialog.objects(id__exact=dialog_id)
+        if not dialog:
+            raise web.HTTPNotFound(reason=f'dialog with id {dialog_id} is not exist')
+        else:
+            return web.json_response(dialog[0].to_dict())
+    else:
+        raise web.HTTPBadRequest(reason='dialog id should be 24-character hex string')
 
 
 def main():
