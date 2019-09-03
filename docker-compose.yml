@@ -6,7 +6,7 @@ services:
     container_name: agent
     depends_on:
       - aiml
-        - mongo
+      - mongo
     env_file: agent.env
     ports:
       - 4242:4242
