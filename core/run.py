@@ -180,6 +180,8 @@ async def init_app():
     app = web.Application()
     handle_func = await api_message_processor(run())
     app.router.add_post('/', handle_func)
+    app.router.add_get('/dialogs', users_dialogs)
+    app.router.add_get('/dialogs/{dialog_id}', dialog)
     return app
 
 
@@ -202,6 +204,21 @@ async def api_message_processor(message_processor):
         return web.json_response(result)
 
     return api_handle
+
+
+async def users_dialogs(request):
+    from core.state_schema import Dialog
+    exist_dialogs = Dialog.objects()
+    result = list()
+    for i in exist_dialogs:
+        result.append({'id': str(i.id), 'location': i.location, 'channel_type': i.channel_type, 'user': i.user.to_dict()})
+    return web.json_response(result)
+
+
+async def dialog(request):
+    from core.state_schema import Dialog
+    dialog = Dialog.objects(id__exact=request.match_info['dialog_id'])
+    return web.json_response(dialog[0].to_dict())
 
 
 def main():
