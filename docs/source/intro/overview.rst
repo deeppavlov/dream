@@ -270,9 +270,10 @@ Agent can run both from container and from a local machine. The default Agent po
 
     In case of wrong format, HTTP errors will be returned
 
-3. In addition to everything else HTTP api server allows to view dialogs in database through GET requests. Result is returned in json format (which can be easily prettifyed with various browser extensions)
+3. In addition to everything else the HTTP api server allows viewing dialogs in the database through GET requests.
+   The result is returned in json format which can be easily prettifyed with various browser extensions.
 
-    Three main web pages are provided (examples are shown for case, when agent is running on http://localhost:4242):
+    Three main web pages are provided (examples are shown for the case when agent is running on http://localhost:4242):
 
       * http://localhost:4242/dialogs - provides list of all dialogs (without utterances)
       * http://localhost:4242/dialogs/all - provides list of all dialogs (with utterances)
