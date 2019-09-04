@@ -30,7 +30,7 @@ headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COB
 
 @app.route("/dialogact", methods=['POST'])
 def respond():
-    user_states_batch = request.json['states_batch']
+    user_states_batch = request.json['dialogs']
     user_sentences = [dialog["utterances"][-1]["text"] for dialog in user_states_batch]
     session_id = uuid.uuid4().hex
     intents = []

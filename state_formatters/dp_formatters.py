@@ -177,13 +177,15 @@ def cobot_offensiveness_formatter(payload, mode='in'):
 
 def cobot_dialogact_formatter(payload, mode='in'):
     if mode == 'in':
-        return {"states_batch": payload['dialogs']}
+        dialogs = base_input_formatter(payload)['dialogs']
+        return {"dialogs": dialogs}
     elif mode == 'out':
         return {"text": payload[0]}
 
 
 def base_response_selector_formatter(payload, mode='in'):
     if mode == 'in':
-        return base_input_formatter(payload)
+        dialogs = base_input_formatter(payload)['dialogs']
+        return {"dialogs": dialogs}
     elif mode == 'out':
         return payload
