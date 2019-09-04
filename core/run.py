@@ -106,8 +106,11 @@ def run():
 
     state_manager = StateManager()
 
-    anno_names, anno_urls, anno_formatters = zip(
-        *[(a['name'], a['url'], a['formatter']) for a in ANNOTATORS])
+    if ANNOTATORS:
+        anno_names, anno_urls, anno_formatters = zip(
+            *[(a['name'], a['url'], a['formatter']) for a in ANNOTATORS])
+    else:
+        anno_names, anno_urls, anno_formatters = [], [], []
     preprocessor = RestCaller(max_workers=MAX_WORKERS, names=anno_names, urls=anno_urls,
                               formatters=anno_formatters)
     postprocessor = DefaultPostprocessor()
