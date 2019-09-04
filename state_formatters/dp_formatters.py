@@ -52,6 +52,14 @@ def last_utterances(payload, model_args_names):
 
 
 def base_skill_output_formatter(payload):
+    """Works with a single batch instance
+
+    Args:
+       payload: one batch instance
+
+    Returns: a formatted batch instance
+
+    """
     return {"text": payload[0],
             "confidence": payload[1]}
 
