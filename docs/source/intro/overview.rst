@@ -373,6 +373,21 @@ In this mode the script will generate ``-uc`` dialogs with ``-pc`` phrases in ea
     * -uc --usercount - number of users taking part in the dialogs
     * -pc --phrasecount - number of phrases in each dialog
 
+
+
+Testing Agent in a batch mode
+=============================
+
+To test how the Agent replies if it receives a list of utterances, use ``utils/agent_test.py``. Pass a file with
+a list of utterances as input. Use the existing ``utils/ru_test_phrases.py`` or create your own file:
+
+
+    .. code:: bash
+
+         python utils/agent_batch_test.py ru_test_phrases.py
+
+
+
 .. _config file: https://github.com/deepmipt/dp-agent/blob/master/config.py
 .. _DeepPavlov: https://github.com/deepmipt/DeepPavlov
 .. _Docker: https://docs.docker.com/install/
