@@ -11,4 +11,4 @@ class ConfidenceResponseSelector:
         for r in responses:
             sr = sorted(r.items(), key=lambda x: x[1]['confidence'], reverse=True)[0]
             skill_names.append(sr[0])
-        return [{'confidence_response_selector': skill_names}]
+        return [{'confidence_response_selector': sn} for sn in skill_names]
