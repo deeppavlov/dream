@@ -30,12 +30,9 @@ headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COB
 def respond():
     dialogs_batch = request.json['states_batch']["dialogs"]
     response_candidates = [dialog["utterances"][-1]["selected_skills"] for dialog in dialogs_batch]
-    session_id = uuid.uuid4().hex
     conversations = []
     dialog_ids = []
     selected_skill_names = []
-    utterances = []
-    confidences = []
 
     for i, dialog in enumerate(dialogs_batch):
         for skill_name in response_candidates[i]:
@@ -49,33 +46,38 @@ def respond():
             # collect all the conversations variants to evaluate them batch-wise
             conversations += [conv]
             dialog_ids += [i]
-    logger.info(conversations)
+
     result = requests.request(url=COBOT_CONVERSATION_EVALUATION_SERVICE_URL,
                               headers=headers,
                               data=json.dumps({'conversations': conversations}),
-                              method='POST').json()
-    # result is an array where each element is a dict with scores
-    result = np.array(result["conversationEvaluationScores"])
+                              method='POST')
+    if result.status_code != 200:
+        logger.warning(
+            "result status code is not 200: {}. result text: {}; result status: {}".format(result, result.text,
+                                                                                           result.status_code))
+        selected_skill_names = []
+    else:
+        result = result.json()
+        # result is an array where each element is a dict with scores
+        result = np.array(result["conversationEvaluationScores"])
 
-    dialog_ids = np.array(dialog_ids)
+        dialog_ids = np.array(dialog_ids)
 
-    for i, dialog in enumerate(dialogs_batch):
-        # curr_candidates is dict
-        curr_candidates = response_candidates[i]
-        # choose results which correspond curr candidates
-        curr_scores = result[dialog_ids == i]
-        best_id = select_response(curr_candidates, curr_scores, dialog)
-        best_skill_name = list(response_candidates[i].keys())[best_id]
-        best_response = curr_candidates[best_skill_name]["text"]
-        confidence = curr_candidates[best_skill_name]["confidence"]
+        for i, dialog in enumerate(dialogs_batch):
+            # curr_candidates is dict
+            curr_candidates = response_candidates[i]
+            # choose results which correspond curr candidates
+            curr_scores = result[dialog_ids == i]
+            best_id = select_response(curr_candidates, curr_scores, dialog)
+            best_skill_name = list(response_candidates[i].keys())[best_id]
+            # best_response = curr_candidates[best_skill_name]["text"]
+            # confidence = curr_candidates[best_skill_name]["confidence"]
 
-        selected_skill_names.append(best_skill_name)
-        utterances.append(best_response)
-        confidences.append(confidence)
+            selected_skill_names.append(best_skill_name)
 
-        logger.info(f"Choose final skill: {best_skill_name}")
+            logger.info(f"Choose final skill: {best_skill_name}")
 
-    return jsonify(list(zip(selected_skill_names, utterances, confidences)))
+    return jsonify(selected_skill_names)
 
 
 def select_response(curr_candidates, curr_scores, dialog):
