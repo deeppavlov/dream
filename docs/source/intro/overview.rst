@@ -384,7 +384,7 @@ a list of utterances as input. Use the existing ``utils/ru_test_phrases.py`` or 
 
     .. code:: bash
 
-         python utils/agent_batch_test.py ru_test_phrases.py
+         python utils/agent_batch_test.py utils/ru_test_phrases.py
 
 
 
