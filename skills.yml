@@ -44,7 +44,7 @@ services:
   convers_evaluation_selector:
     build:
       context: ./response_selectors/convers_evaluation_based_selector/
-    ports: ['8008:8008']
-    command: gunicorn --workers=2 server:app -b 0.0.0.0:8008
+    ports: ['8009:8009']
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8009
     volumes: []
 version: '3.7'
