@@ -67,7 +67,7 @@ SKILLS = [
         "name": "personality_catcher",
         "protocol": "http",
         "host": "personality_catcher",
-        "port": 8009,
+        "port": 8010,
         "endpoint": "personality_catcher",
         "external": True,
         "path": "",
