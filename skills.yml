@@ -41,6 +41,13 @@ services:
     ports: ['8007:8007']
     command: uvicorn server:app --host 0.0.0.0 --port 8007
     volumes: []
+  program_y:
+    build:
+      context: ./skills/program-y/
+    ports: ['8008:8008']
+    working_dir: /src/dream_aiml/scripts/xnix
+    command: ./sanic.sh
+    volumes: []
   convers_evaluation_selector:
     build:
       context: ./response_selectors/convers_evaluation_based_selector/

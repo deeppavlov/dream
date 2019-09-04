@@ -183,6 +183,17 @@ def cobot_dialogact_formatter(payload, mode='in'):
         return {"text": payload[0]}
 
 
+def program_y_formatter(payload, mode='in'):
+    if mode == 'in':
+        inp_data = base_input_formatter(payload)
+        sentences = inp_data['last_utterances']
+        user_ids = inp_data['user_ids']
+        return {'sentences': sentences, 'user_ids': user_ids}
+    elif mode == 'out':
+        return {"text": payload[0],
+                "confidence": payload[1]}
+
+
 def base_response_selector_formatter(payload, mode='in'):
     if mode == 'in':
         dialogs = base_input_formatter(payload)['dialogs']
