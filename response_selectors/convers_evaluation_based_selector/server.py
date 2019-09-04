@@ -68,13 +68,10 @@ def respond():
             curr_candidates = response_candidates[i]
             # choose results which correspond curr candidates
             curr_scores = result[dialog_ids == i]
-            best_id = select_response(curr_candidates, curr_scores, dialog)
-            best_skill_name = list(response_candidates[i].keys())[best_id]
+            best_skill_name = select_response(curr_candidates, curr_scores, dialog)
             # best_response = curr_candidates[best_skill_name]["text"]
             # confidence = curr_candidates[best_skill_name]["confidence"]
-
             selected_skill_names.append(best_skill_name)
-
             logger.info(f"Choose final skill: {best_skill_name}")
 
     return jsonify(selected_skill_names)
@@ -88,7 +85,16 @@ def select_response(curr_candidates, curr_scores, dialog):
                          for cand_scores in curr_scores]
 
     best_id = np.argmax(curr_single_cores)
-    return best_id
+    best_skill_name = list(curr_candidates.keys())[best_id]
+
+    while curr_candidates[best_skill_name]["text"] == "" or curr_candidates[best_skill_name]["confidence"] == 0.:
+        curr_single_cores[best_id] = 0.
+        best_id = np.argmax(curr_single_cores)
+        best_skill_name = list(curr_candidates.keys())[best_id]
+        if sum(curr_single_cores) == 0.:
+            break
+
+    return best_skill_name
 
 
 if __name__ == '__main__':
