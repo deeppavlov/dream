@@ -176,7 +176,6 @@ def cobot_offensiveness_formatter(payload, mode='in'):
 
 
 def cobot_dialogact_formatter(payload, mode='in'):
-    import json
     if mode == 'in':
         return {"states_batch": payload['dialogs']}
     elif mode == 'out':
@@ -190,3 +189,12 @@ def cobot_conversation_evaluation_formatter(payload, mode='in'):
         return base_skill_output_formatter(payload)
 
 
+def program_y_formatter(payload, mode='in'):
+    if mode == 'in':
+        inp_data = base_input_formatter(payload)
+        sentences = inp_data['last_utterances']
+        user_ids = inp_data['user_ids']
+        return {'sentences': sentences, 'user_ids': user_ids}
+    elif mode == 'out':
+        return {"text": payload[0],
+                "confidence": payload[1]}
