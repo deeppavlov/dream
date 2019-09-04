@@ -38,9 +38,16 @@ services:
     env_file: [.env]
     volumes:
       - './skills/transfertransfo:/app'
+<<<<<<< HEAD
   personality_catcher:
     env_file: [.env]
     volumes:
       - './skills/personality_catcher:/app'
+=======
+  program_y:
+    env_file: [.env]
+    volumes:
+      - './skills/program-y:/src'
+>>>>>>> dev
 
 version: '3.7'
