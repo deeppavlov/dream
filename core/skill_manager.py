@@ -27,6 +27,7 @@ class SkillManager:
         self.max_workers = MAX_WORKERS
         self.skill_caller = skill_caller
         self.skills = SKILLS
+
         self.skill_names = [s['name'] for s in self.skills]
         self.profile_handlers = [name for name in reversed(profile_handlers) if name in self.skill_names]
         self.profile_fields = list(Human.profile.default.keys())
@@ -36,7 +37,8 @@ class SkillManager:
         skill_responses = [d.utterances[-1]['selected_skills'] for d in dialogs]
         user_profiles = self._get_user_profiles(skill_responses)
         # select 0 element because RS always selects only one response:
-        selected_skill_names = list(chain.from_iterable(self.response_selector(get_state(dialogs))[0].values()))
+        selected_skill_names = [list(formatted.values())[0]
+                                for formatted in self.response_selector(get_state(dialogs))]
         utterances = []
         confidences = []
         for responses, selected_name in zip(skill_responses, selected_skill_names):
