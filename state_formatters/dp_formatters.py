@@ -184,6 +184,6 @@ def cobot_dialogact_formatter(payload, mode='in'):
 
 def base_response_selector_formatter(payload, mode='in'):
     if mode == 'in':
-        return {"states_batch": payload}
+        return base_input_formatter(payload)
     elif mode == 'out':
         return payload

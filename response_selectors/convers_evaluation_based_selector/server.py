@@ -28,7 +28,7 @@ headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COB
 
 @app.route("/respond", methods=['POST'])
 def respond():
-    dialogs_batch = request.json['states_batch']["dialogs"]
+    dialogs_batch = request.json["dialogs"]
     response_candidates = [dialog["utterances"][-1]["selected_skills"] for dialog in dialogs_batch]
     conversations = []
     dialog_ids = []
