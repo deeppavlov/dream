@@ -54,10 +54,20 @@ SKILLS = [
         "formatter": transfertransfo_formatter
     },
     {
+        "name": "program_y",
+        "protocol": "http",
+        "host": "program_y",
+        "port": 8008,
+        "endpoint": "api/rest/v1.0/ask",
+        "external": True,
+        "path": "",
+        "formatter": program_y_formatter
+    },
+    {
         "name": "personality_catcher",
         "protocol": "http",
         "host": "personality_catcher",
-        "port": 8008,
+        "port": 8009,
         "endpoint": "personality_catcher",
         "external": True,
         "path": "",

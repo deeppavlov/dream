@@ -15,7 +15,7 @@ class RuleBasedSelector(Component):
     """
     Rule-based skill selector which choosing among TransferTransfo, Base AIML and Alice AIML
     """
-    wh_words = {"what", "when", "where", "which", "who", "whom", "whose", "why", "how"}
+    wh_words = {"what", "when", "where", "which", "who", "whom", "whose", "why"}
 
     def __init__(self, **kwargs):
         logger.info("Skill selector Initialized")
@@ -33,13 +33,11 @@ class RuleBasedSelector(Component):
             if "/new_persona" in dialog['utterances'][-1]['text']:
                 skills_for_uttr.append("personality_catcher")  # TODO: rm crutch of personality_catcher
             elif len(set(tokens).intersection(self.wh_words)) > 0:
-                skills_for_uttr.append("aiml")
-                skills_for_uttr.append("alice")
                 skills_for_uttr.append("cobotqa")
+                skills_for_uttr.append("program_y")
                 skills_for_uttr.append("transfertransfo")
             else:
-                skills_for_uttr.append("alice")
-                skills_for_uttr.append("cobotqa")
+                skills_for_uttr.append("program_y")
                 skills_for_uttr.append("transfertransfo")
 
             skill_names.append(skills_for_uttr)
