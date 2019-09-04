@@ -53,6 +53,16 @@ SKILLS = [
         "external": True,
         "path": "",
         "formatter": transfertransfo_formatter
+    },
+    {
+        "name": "program_y",
+        "protocol": "http",
+        "host": "program_y",
+        "port": 8008,
+        "endpoint": "api/rest/v1.0/ask",
+        "external": True,
+        "path": "",
+        "formatter": program_y_formatter
     }
 ]
 

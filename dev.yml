@@ -38,6 +38,10 @@ services:
     env_file: [.env]
     volumes:
       - './skills/transfertransfo:/app'
+  program_y:
+    env_file: [.env]
+    volumes:
+      - './skills/program-y:/src'
   convers_evaluation_selector:
     env_file: [.env]
     volumes:
