@@ -26,6 +26,10 @@ services:
     env_file: [.env]
     volumes:
       - './annotators/CoBotSentimentClassification:/src'
+  cobot_sentseg:
+    env_file: [.env]
+    volumes:
+      - './annotators/SentSeg:/src'
   cobot_offensiveness:
     env_file: [.env]
     volumes:
