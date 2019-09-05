@@ -1,0 +1,7 @@
+requests==2.22.0
+tensorflow==1.13.1
+Flask==0.12.2
+nltk==3.2.5
+numpy==1.15.4
+gunicorn==19.9.0
+requests==2.22.0
