@@ -22,7 +22,7 @@ so the platform should have the following characteristics:
   There are different types of services:
 
     * ``Annotator`` is a service for utterance preprocessing. It can be some basic text preprocessing like
-      coreference resolution, named entiry recognition, spell correction, etc.;
+      coreference resolution, named entity recognition, spell correction, etc.;
 
     * ``Skill`` is a service producing a bot reply to a user utterance;
 
