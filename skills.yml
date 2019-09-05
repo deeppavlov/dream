@@ -22,7 +22,7 @@ services:
       context: ./annotators/CoBotSentimentClassification/
     ports: ['8004:8004']
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8004
-    volumes: []
+    volumes: []  
   cobot_offensiveness:
     build:
       context: ./annotators/CoBotOffensiveSpeechClassification/
@@ -47,5 +47,11 @@ services:
     ports: ['8008:8008']
     working_dir: /src/dream_aiml/scripts/xnix
     command: ./sanic.sh
+    volumes: []
+  cobot_sentseg:
+    build:
+      context: ./annotators/SentSeg/
+    ports: ['8009:8009']
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8009
     volumes: []
 version: '3.7'
