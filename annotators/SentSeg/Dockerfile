@@ -6,4 +6,4 @@ WORKDIR /src
 
 RUN pip install -r /src/requirements.txt
 
-CMD gunicorn --workers=2 server:app
+CMD gunicorn --workers=1 server:app
