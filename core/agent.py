@@ -12,11 +12,11 @@ Profile = Dict[str, Any]
 
 
 class Agent:
-    def __init__(self, state_manager: StateManager, preprocessor: Callable,
+    def __init__(self, state_manager: StateManager, preprocessors: List[Callable],
                  postprocessor: Callable,
                  skill_manager: SkillManager) -> None:
         self.state_manager = state_manager
-        self.preprocessor = preprocessor
+        self.preprocessors = preprocessors
         self.postprocessor = postprocessor
         self.skill_manager = skill_manager
 
@@ -50,9 +50,10 @@ class Agent:
         return sent_responses  # return text only to the users
 
     def _update_annotations(self, me_dialogs: Sequence[Dialog]) -> None:
-        annotations = self.preprocessor(get_state(me_dialogs))
-        utterances = [dialog.utterances[-1] for dialog in me_dialogs]
-        self.state_manager.add_annotations(utterances, annotations)
+        for prep in self.preprocessors:
+            annotations = prep(get_state(me_dialogs))
+            utterances = [dialog.utterances[-1] for dialog in me_dialogs]
+            self.state_manager.add_annotations(utterances, annotations)
 
     def _update_profiles(self, me_users: Sequence[Human], profiles: List[Profile]) -> None:
         for me_user, profile in zip(me_users, profiles):
