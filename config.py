@@ -87,10 +87,10 @@ ANNOTATORS = [
         "formatter": cobot_qa_formatter
     },
     {
-        "name": "cobot_sentseg",
+        "name": "sentseg",
         "protocol": "http",
-        "host": "cobot_sentseg",
-        "port": 8009,
+        "host": "sentseg",
+        "port": 8011,
         "endpoint": "sentseg",
         "external": True,
         "path": "",
