@@ -1,68 +1,128 @@
+import asyncio
+
+from collections import defaultdict
 from datetime import datetime
-from typing import Sequence, Hashable, Any, Callable, List, Dict
-from itertools import compress
-import operator
+from time import time
+from typing import Any, Optional, Callable, Hashable
 
-from core.state_manager import StateManager, get_state
-from core.skill_manager import SkillManager
-from models.hardcode_utterances import TG_START_UTT
-from core.state_schema import Dialog, Human
-
-Profile = Dict[str, Any]
+from core.pipeline import Pipeline
+from core.state_manager import StateManager
+from core.state_schema import Dialog
 
 
-class Agent:
-    def __init__(self, state_manager: StateManager, preprocessors: List[Callable],
-                 postprocessor: Callable,
-                 skill_manager: SkillManager) -> None:
+class AsyncAgent:
+    def __init__(self, pipeline: Pipeline, state_manager: StateManager,
+                 process_logger_callable: Optional[Callable] = None,
+                 response_logger_callable: Optional[Callable] = None):
+        self.workflow = dict()
+        self.pipeline = pipeline
         self.state_manager = state_manager
-        self.preprocessors = preprocessors
-        self.postprocessor = postprocessor
-        self.skill_manager = skill_manager
+        self.process_logger_callable = process_logger_callable
+        self.response_logger_callable = response_logger_callable
 
-    def __call__(self, utterances: Sequence[str], user_telegram_ids: Sequence[Hashable],
-                 user_device_types: Sequence[Any],
-                 date_times: Sequence[datetime], locations=Sequence[Any],
-                 channel_types=Sequence[str]):
-        should_reset = [utterance == TG_START_UTT for utterance in utterances]
-        # here and further me stands for mongoengine
-        me_users = self.state_manager.get_or_create_users(user_telegram_ids, user_device_types)
-        me_dialogs = self.state_manager.get_or_create_dialogs(me_users, locations, channel_types,
-                                                              should_reset)
-        self.state_manager.add_human_utterances(me_dialogs, utterances, date_times)
-        informative_dialogs = list(compress(me_dialogs, map(operator.not_, should_reset)))
-        self._update_annotations(informative_dialogs)
+    def add_workflow_record(self, dialog: Dialog):
+        if dialog.id in self.workflow.keys():
+            raise ValueError(f'dialog with id {dialog.id} is already in workflow')
+        self.workflow[dialog.id] = {'dialog': dialog, 'services': defaultdict(dict)}
 
-        selected_skills = self.skill_manager.get_skill_responses(me_dialogs)
-        self._update_utterances(me_dialogs, selected_skills, key='selected_skills')
+    def get_workflow_record(self, dialog_id):
+        if dialog_id not in self.workflow.keys():
+            raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
+        return self.workflow[dialog_id]
 
-        skill_names, responses, confidences, profiles = self.skill_manager(me_dialogs)
-        self._update_profiles(me_users, profiles)
+    def flush_record(self, dialog_id: str):
+        if dialog_id not in self.workflow.keys():
+            raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
+        return self.workflow.pop(dialog_id)
 
-        self.state_manager.add_bot_utterances(me_dialogs, responses, responses,
-                                              [datetime.utcnow()] * len(me_dialogs),
-                                              skill_names, confidences)
+    def save_in_workflow(self, dialog_id: str, key: str, value: Any):
+        if dialog_id not in self.workflow.keys():
+            raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
+        self.workflow[dialog_id][key] = value
 
-        sent_responses = self.postprocessor(me_dialogs)
-        self._update_utterances(me_dialogs, sent_responses, key='text')
-        self._update_annotations(me_dialogs)
+    def get_from_workflow(self, dialog_id: str, key: str):
+        if dialog_id not in self.workflow.keys():
+            raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
+        if dialog_id not in self.workflow[dialog_id].keys():
+            raise ValueError(f'Item with key {key} is not exist in dialog {dialog_id}')
+        return self.workflow[dialog_id][key]
 
-        return sent_responses  # return text only to the users
+    def register_service_request(self, dialog_id: str, service_name):
+        if dialog_id not in self.workflow.keys():
+            raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
+        self.workflow[dialog_id]['services'][service_name] = {'send': time(), 'done': None}
 
-    def _update_annotations(self, me_dialogs: Sequence[Dialog]) -> None:
-        for prep in self.preprocessors:
-            annotations = prep(get_state(me_dialogs))
-            utterances = [dialog.utterances[-1] for dialog in me_dialogs]
-            self.state_manager.add_annotations(utterances, annotations)
+    def get_services_status(self, dialog_id: str):
+        if dialog_id not in self.workflow.keys():
+            raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
+        done, waiting = set(), set()
+        for key, value in self.workflow[dialog_id]['services'].items():
+            if value['done'] is not None:
+                done.add(key)
+            else:
+                waiting.add(key)
 
-    def _update_profiles(self, me_users: Sequence[Human], profiles: List[Profile]) -> None:
-        for me_user, profile in zip(me_users, profiles):
-            if any(profile.values()):
-                self.state_manager.update_user_profile(me_user, profile)
+        return done, waiting
 
-    def _update_utterances(self, me_dialogs: Sequence[Dialog], values: Sequence[Any],
-                           key: str) -> None:
-        if values:
-            utterances = [dialog.utterances[-1] for dialog in me_dialogs]
-            for utt, val in zip(utterances, values):
-                self.state_manager.update_me_object(utt, {key: val})
+    def process_service_response(self, dialog_id: str, service_name: str = None, response: str = None):
+        '''
+        Ultimate method, which performs next operations:
+        1. Updates workflow dict with completed service
+        2. Updates dialog within workflow dict, using service update callable
+        3. Asks pipeline for next services which became available on current stage workflow
+        4. Modifies next services when processed responce is received from a selector service
+        5. Returns next services in list form
+        '''
+        workflow_record = self.get_workflow_record(dialog_id)
+
+        # Updating workflow with service response
+        service = self.pipeline.get_service_by_name(service_name)
+        if service:
+            self.workflow[dialog_id]['services'][service_name]['done'] = time()
+            if response:
+                service.state_processor_method(workflow_record['dialog'], response)
+
+        # Calculating next steps
+        done, waiting = self.get_services_status(dialog_id)
+        next_services = self.pipeline.get_next_services(done, waiting)
+
+        # Processing the case, when service is skill selector
+        if service and service.is_selector():
+            selected_services = list(response.values())[0]
+            result = []
+            for service in next_services:
+                if service.name not in selected_services:
+                    self.workflow[dialog_id]['services'][service.name] = {'done': time(), 'send': None}
+                else:
+                    result.append(service)
+            next_services = result
+        if self.process_logger_callable:
+            self.process_logger_callable(self.workflow['dialog_id'])  # send dialog workflow record to further logging operations
+
+        return next_services
+
+    async def register_msg(self, utterance: str, user_telegram_id: Hashable,
+                           user_device_type: Any,
+                           date_time: datetime, location=Any,
+                           channel_type=str, deadline=None):
+
+        user = self.state_manager.get_or_create_user(user_telegram_id, user_device_type)
+        dialog = self.state_manager.get_or_create_dialog(user, location, channel_type)
+        self.state_manager.add_human_utterance(dialog, utterance, date_time)
+        self.add_workflow_record(dialog)
+
+        await self.process(dialog.id)
+
+    async def process(self, dialog_id, service_name=None, response=None):
+        workflow_record = self.get_workflow_record(dialog_id)
+        next_services = self.process_service_response(dialog_id, service_name, response)
+
+        for service in next_services:
+            self.register_service_request(dialog_id, service.name)
+            payload = service.apply_workflow_formatter(workflow_record)
+            response = await service.connector.send(payload)
+            if service.is_responder():
+                self.flush_record(dialog_id)
+                break
+            if response is not None:
+                await self.process(dialog_id, service.name, response)
