@@ -1,3 +1,4 @@
+# TODO: Do not change this file, it does not use
 from typing import List, Tuple
 
 from deeppavlov.core.common.registry import register
@@ -30,9 +31,7 @@ class RuleBasedSelector(Component):
 
             tokens = dialog['utterances'][-1]['text'].lower().split()
 
-            if "/new_persona" in dialog['utterances'][-1]['text']:
-                skills_for_uttr.append("personality_catcher")  # TODO: rm crutch of personality_catcher
-            elif len(set(tokens).intersection(self.wh_words)) > 0:
+            if len(set(tokens).intersection(self.wh_words)) > 0:
                 skills_for_uttr.append("aiml")
                 skills_for_uttr.append("alice")
                 skills_for_uttr.append("cobotqa")
