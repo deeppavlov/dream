@@ -74,7 +74,7 @@ ANNOTATORS = [
         "endpoint": "sentseg",
         "external": True,
         "path": "",
-        "formatter": cobot_qa_formatter
+        "formatter": sent_segm_formatter
     }
     # {
     #     "name": "cobot_topics",
