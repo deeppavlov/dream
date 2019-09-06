@@ -26,6 +26,10 @@ services:
     env_file: [.env]
     volumes:
       - './annotators/CoBotSentimentClassification:/src'
+  sentseg:
+    env_file: [.env]
+    volumes:
+      - './annotators/SentSeg:/src'
   cobot_offensiveness:
     env_file: [.env]
     volumes:
@@ -46,5 +50,9 @@ services:
     env_file: [.env]
     volumes:
       - './skills/program-y:/src'
+  convers_evaluation_selector:
+    env_file: [.env]
+    volumes:
+      - './response_selectors/convers_evaluation_based_selector:/src'
 
 version: '3.7'

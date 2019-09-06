@@ -71,6 +71,14 @@ def last_utterances(payload, model_args_names):
 
 
 def base_skill_output_formatter(payload):
+    """Works with a single batch instance
+
+    Args:
+       payload: one batch instance
+
+    Returns: a formatted batch instance
+
+    """
     return {"text": payload[0],
             "confidence": payload[1]}
 
@@ -224,16 +232,10 @@ def cobot_offensiveness_formatter(payload, mode='in'):
 
 def cobot_dialogact_formatter(payload, mode='in'):
     if mode == 'in':
-        return {"states_batch": payload['dialogs']}
+        dialogs = base_input_formatter(payload)['dialogs']
+        return {"dialogs": dialogs}
     elif mode == 'out':
         return {"text": payload[0]}
-
-
-def cobot_conversation_evaluation_formatter(payload, mode='in'):
-    if mode == 'in':
-        return {"states_batch": payload['dialogs']}
-    elif mode == 'out':
-        return base_skill_output_formatter(payload)
 
 
 def program_y_formatter(payload, mode='in'):
@@ -245,3 +247,19 @@ def program_y_formatter(payload, mode='in'):
     elif mode == 'out':
         return {"text": payload[0],
                 "confidence": payload[1]}
+
+
+def base_response_selector_formatter(payload, mode='in'):
+    if mode == 'in':
+        dialogs = base_input_formatter(payload)['dialogs']
+        return {"dialogs": dialogs}
+    elif mode == 'out':
+        return payload
+
+
+def sent_segm_formatter(payload, mode='in'):
+    if mode == 'in':
+        sentences = base_input_formatter(payload)['last_utterances']
+        return {'sentences': sentences}
+    elif mode == 'out':
+        return payload

@@ -22,6 +22,9 @@ services:
   cobot_sentiment:
     image: 127.0.0.1:5000/cobot_sentiment:latest
     env_file: [.env.staging]
+  sentseg:
+    image: 127.0.0.1:5000/cobot_sentseg:latest
+    env_file: [.env.staging]
   cobot_offensiveness:
     image: 127.0.0.1:5000/cobot_offensiveness:latest
     env_file: [.env.staging]
@@ -30,6 +33,9 @@ services:
     env_file: [.env.staging]
   transfertransfo:
     image: 127.0.0.1:5000/transfertransfo:latest
+    env_file: [.env.staging]
+  convers_evaluation_selector:
+    image: 127.0.0.1:5000/convers_evaluation_selector:latest
     env_file: [.env.staging]
   personality_catcher:
     image: 127.0.0.1:5000/personality_catcher:latest
