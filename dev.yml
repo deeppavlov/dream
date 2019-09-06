@@ -54,5 +54,7 @@ services:
     env_file: [.env]
     volumes:
       - './response_selectors/convers_evaluation_based_selector:/src'
-
+  mongo:
+    volumes:
+     - /data/db:/root/data/db
 version: '3.7'
