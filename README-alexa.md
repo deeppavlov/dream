@@ -11,6 +11,7 @@ should be set to use this miniskill:
  =======================
 
  В корне нужно сделать .env файл со следующими полями. Значения полей ищи в Trello.
+ Можешь просто скопировать `cp .env.staging .env`. Но не забудь поменять или убрать TELEGRAM_TOKEN.
 
  ```
  EXTERNAL_FOLDER=/path
@@ -21,6 +22,7 @@ should be set to use this miniskill:
  TELEGRAM_PROXY=proxy
  ```
 
+
 How to run and test
 =======================
 
@@ -29,6 +31,14 @@ $: docker-compose -f docker-compose.yml -f skills.yml -f dev.yml up --build
 $: docker-compose -f docker-compose.yml -f skills.yml -f dev.yml exec agent bash
 $(inside docker): python3 -m core.run
 ```
+
+#### Про использование generate_composefile
+
+generate_composefile.py лежит в билиотеке для непродвинутых пользователей, которые просто хотят что-то поднять из коробки.
+У нас docker-compose.yml уже сгенерирован и поэтому запускать generate_composefile.py без надобности не нужно.
+Запускайте его (хотя можно и вручную в docker-compose.yml добавить), когда добавляете или изменяете internal скилл в config.py.
+Причем обращайте внимание на следующие вещи:
+- Секции volumes и env_file в docker-compose.yml не должно быть. Сейчас volumes и env_file описываются в файлах staging.yml и dev.yml.
 
 
 Deploy to staging
