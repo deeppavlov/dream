@@ -1,7 +1,7 @@
-from typing import Dict, Any
+from typing import Dict, Any, List
 
 
-def base_input_formatter(state: Dict):
+def base_input_formatter(state: List):
     """This state_formatter takes the most popular fields from Agent state and returns them as dict values:
         * last utterances: a list of last utterance from each dialog in the state
         * last_annotations: a list of last annotation from each last utterance
@@ -22,7 +22,7 @@ def base_input_formatter(state: Dict):
     dialog_ids = []
     user_ids = []
 
-    for dialog in state['dialogs']:
+    for dialog in state:
         utterances_history = []
         annotations_history = []
         for utterance in dialog['utterances']:
@@ -37,7 +37,7 @@ def base_input_formatter(state: Dict):
         dialog_ids.append(dialog['id'])
         user_ids.append(dialog['user']['id'])
 
-    return {'dialogs': state['dialogs'],
+    return {'dialogs': state,
             'last_utterances': last_utterances,
             'last_annotations': last_annotations,
             'utterances_histories': utterances_histories,

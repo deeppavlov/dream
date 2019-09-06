@@ -7,85 +7,7 @@ from core.bot import BOT
 from core import VERSION
 
 
-def get_state(dialogs: Sequence[Dialog]):
-    state = {'version': VERSION, 'dialogs': []}
-    for d in dialogs:
-        state['dialogs'].append(d.to_dict())
-    return state
-
-
 class StateManager:
-
-    @classmethod
-    def get_or_create_users(cls, user_telegram_ids=Sequence[Hashable], user_device_types=Sequence[Any]):
-        users = []
-        for user_telegram_id, device_type in zip(user_telegram_ids, user_device_types):
-            user_query = Human.objects(user_telegram_id__exact=user_telegram_id)
-            if not user_query:
-                user = cls.create_new_human(user_telegram_id, device_type)
-            else:
-                user = user_query[0]
-            users.append(user)
-        return users
-
-    @classmethod
-    def get_or_create_dialogs(cls, users, locations, channel_types, should_reset):
-        dialogs = []
-        for user, loc, channel_type, reset in zip(users, locations, channel_types, should_reset):
-            if reset:
-                dialog = cls.create_new_dialog(user=user,
-                                               bot=BOT,
-                                               location=loc,
-                                               channel_type=channel_type)
-            else:
-                exist_dialogs = Dialog.objects(user__exact=user)
-                if not exist_dialogs:
-                    # TODO remove this "if" condition: it should never happen in production, only while testing
-                    dialog = cls.create_new_dialog(user=user,
-                                                   bot=BOT,
-                                                   location=loc,
-                                                   channel_type=channel_type)
-                else:
-                    dialog = exist_dialogs[0]
-
-            dialogs.append(dialog)
-        return dialogs
-
-    @classmethod
-    def add_human_utterances(cls, dialogs: Sequence[Dialog], texts: Sequence[str], date_times: Sequence[datetime],
-                             annotations: Optional[Sequence[dict]] = None,
-                             selected_skills: Optional[Sequence[dict]] = None) -> None:
-        if annotations is None:
-            annotations = [None] * len(texts)
-
-        if selected_skills is None:
-            selected_skills = [None] * len(texts)
-
-        for dialog, text, anno, date_time, ss in zip(dialogs, texts, annotations, date_times, selected_skills):
-            utterance = cls.create_new_human_utterance(text, dialog.user, date_time, anno, ss)
-            dialog.utterances.append(utterance)
-            dialog.save()
-
-    @classmethod
-    def add_bot_utterances(cls, dialogs: Sequence[Dialog], orig_texts: Sequence[str], texts: Sequence[str],
-                           date_times: Sequence[datetime], active_skills: Sequence[str],
-                           confidences: Sequence[float], annotations: Optional[Sequence[dict]] = None) -> None:
-        if annotations is None:
-            annotations = [None] * len(dialogs)
-
-        for dialog, orig_text, text, date_time, active_skill, confidence, anno in zip(dialogs, orig_texts, texts,
-                                                                                      date_times, active_skills,
-                                                                                      confidences, annotations):
-            utterance = cls.create_new_bot_utterance(orig_text, text, dialog.bot, date_time, active_skill, confidence,
-                                                     anno)
-            dialog.utterances.append(utterance)
-            dialog.save()
-
-    @staticmethod
-    def add_annotations(utterances: Sequence[Utterance], annotations: Sequence[Dict]):
-        for utt, ann in zip(utterances, annotations):
-            utt.annotations.update(ann)
-            utt.save()
 
     @staticmethod
     def create_new_dialog(user, bot, location=None, channel_type=None):
@@ -131,11 +53,85 @@ class StateManager:
         return utt
 
     @staticmethod
-    def update_me_object(me_obj, kwargs):
-        me_obj.modify(**kwargs)
-        me_obj.save()
-
-    @staticmethod
     def update_user_profile(me_user, profile):
         me_user.profile.update(**profile)
         me_user.save()
+
+    # non batch shit
+
+    @classmethod
+    def get_or_create_user(cls, user_telegram_id=Hashable, user_device_type=Any):
+        user_query = Human.objects(user_telegram_id__exact=user_telegram_id)
+        if not user_query:
+            user = cls.create_new_human(user_telegram_id, user_device_type)
+        else:
+            user = user_query[0]
+        return user
+
+    @classmethod
+    def get_or_create_dialog(cls, user, location, channel_type, should_reset=False):
+        if should_reset:
+            dialog = cls.create_new_dialog(user=user, bot=BOT, location=location,
+                                           channel_type=channel_type)
+        else:
+            exist_dialogs = Dialog.objects(user__exact=user)
+            if not exist_dialogs:
+                # TODO remove this "if" condition: it should never happen in production, only while testing
+                dialog = cls.create_new_dialog(user=user, bot=BOT, location=location,
+                                               channel_type=channel_type)
+            else:
+                dialog = exist_dialogs[0]
+
+        return dialog
+
+    @classmethod
+    def add_human_utterance(cls, dialog: Dialog, text: str, date_time: datetime,
+                            annotation: Optional[dict] = None,
+                            selected_skill: Optional[dict] = None) -> None:
+        utterance = cls.create_new_human_utterance(text, dialog.user, date_time, annotation, selected_skill)
+        dialog.utterances.append(utterance)
+        dialog.save()
+
+    @classmethod
+    def add_bot_utterance(cls, dialog: Dialog, orig_text: str,
+                          date_time: datetime, active_skill: str,
+                          confidence: float, text: str = None, annotation: Optional[dict] = None) -> None:
+        if not text:
+            text = orig_text
+        utterance = cls.create_new_bot_utterance(orig_text, text, dialog.bot, date_time, active_skill, confidence,
+                                                 annotation)
+        dialog.utterances.append(utterance)
+        dialog.save()
+
+    @staticmethod
+    def add_annotation(dialog: Dialog, payload: Dict):
+        dialog.utterances[-1].annotations.update(payload)
+        dialog.utterances[-1].save()
+
+    @staticmethod
+    def add_selected_skill(dialog: Dialog, payload: Dict):
+        if not dialog.utterances[-1].selected_skills:
+            dialog.utterances[-1].selected_skills = {}
+        dialog.utterances[-1].selected_skills.update(payload)
+        dialog.utterances[-1].save()
+
+    @staticmethod
+    def add_text(dialog: Dialog, payload: str):
+        dialog.utterances[-1].text = payload
+        dialog.utterances[-1].save()
+
+    @classmethod
+    def add_bot_utterance_simple(cls, dialog: Dialog, payload: Dict):
+        active_skill_name = list(payload.values())[0]
+        active_skill = dialog.utterances[-1].selected_skills.get(active_skill_name, None)
+        if not active_skill:
+            raise ValueError(f'provided {payload} is not valid')
+
+        text = active_skill['text']
+        confidence = active_skill['confidence']
+
+        cls.add_bot_utterance(dialog, text, datetime.now(), active_skill_name, confidence)
+
+    @staticmethod
+    def do_nothing(*args, **kwargs):  # exclusive workaround for skill selector
+        pass
