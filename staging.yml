@@ -23,7 +23,7 @@ services:
     image: 127.0.0.1:5000/cobot_sentiment:latest
     env_file: [.env.staging]
   sentseg:
-    image: 127.0.0.1:5000/cobot_sentseg:latest
+    image: 127.0.0.1:5000/sentseg:latest
     env_file: [.env.staging]
   cobot_offensiveness:
     image: 127.0.0.1:5000/cobot_offensiveness:latest
@@ -40,7 +40,14 @@ services:
   personality_catcher:
     image: 127.0.0.1:5000/personality_catcher:latest
     env_file: [.env.staging]
+  program_y:
+    image: 127.0.0.1:5000/program_y:latest
+    env_file: [.env.staging]
+  mongo:
+    volumes:
+      - external-mongo-db:/root/data/db
 volumes:
   external-logs:
   external-deeppavlov:
+  external-mongo-db:
 version: '3.7'

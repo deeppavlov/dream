@@ -161,7 +161,7 @@ if __name__ == '__main__':
 
     dcc = DockerComposeConfig(AgentConfig(), args.no_agent, args.no_db)
 
-    for conf in chain(SKILLS, ANNOTATORS, SKILL_SELECTORS, RESPONSE_SELECTORS, POSTPROCESSORS):
+    for conf in chain(SKILLS, *ANNOTATORS, SKILL_SELECTORS, RESPONSE_SELECTORS, POSTPROCESSORS):
         dcc.add_skill(SkillConfig(conf))
 
     dcc.add_db(DatabaseConfig(DB_PORT))
