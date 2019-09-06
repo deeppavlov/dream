@@ -1,9 +1,9 @@
 services:
   agent:
+    container_name: agent
     build:
       context: ./
       dockerfile: dockerfile_agent
-    container_name: agent
     depends_on:
     - aiml
     - rule_based_selector
@@ -40,6 +40,7 @@ services:
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
   rule_based_selector:
+    container_name: rule_based_selector
     build:
       args:
         skill_endpoint: selected_skills
