@@ -1,38 +1,38 @@
 from state_formatters.dp_formatters import *
 
 DB_NAME = 'test'
-HOST = '127.0.0.1'
-PORT = 27017
+DB_HOST = '127.0.0.1'
+DB_PORT = 27017
+DB_PATH = '/data/db'
 
-MAX_WORKERS = 1
+MAX_WORKERS = 4
 
-# AGENT_ENV_FILE not used right now, they are redefined in specific docker-compose files (like dev.yml)
 AGENT_ENV_FILE = "agent.env"
 
 SKILLS = [
-    {
-        "name": "alice",
-        "protocol": "http",
-        "host": "alice",
-        "port": 8000,
-        "endpoint": "respond",
-        "external": True,
-        "path": "",
-        "formatter": alice_formatter
-    },
-    {
-        "name": "aiml",
-        "protocol": "http",
-        "host": "aiml",
-        "port": 2080,
-        "endpoint": "aiml",
-        "path": "skills/aiml/aiml_skill.json",
-        "env": {
-            "CUDA_VISIBLE_DEVICES": ""
-        },
-        "gpu": False,
-        "formatter": aiml_formatter
-    },
+    # {
+    #     "name": "alice",
+    #     "protocol": "http",
+    #     "host": "alice",
+    #     "port": 8000,
+    #     "endpoint": "respond",
+    #     "external": True,
+    #     "path": "",
+    #     "formatter": alice_formatter
+    # },
+    # {
+    #     "name": "aiml",
+    #     "protocol": "http",
+    #     "host": "aiml",
+    #     "port": 2080,
+    #     "endpoint": "aiml",
+    #     "path": "skills/aiml/aiml_skill.json",
+    #     "env": {
+    #         "CUDA_VISIBLE_DEVICES": ""
+    #     },
+    #     "gpu": False,
+    #     "formatter": aiml_formatter
+    # },
     {
         "name": "cobotqa",
         "protocol": "http",

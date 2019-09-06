@@ -9,7 +9,7 @@ services:
       - mongo
     env_file: agent.env
     ports:
-      - 4242:4242
+    - 4242:4242
     tty: true
     volumes:
       - .:/dp-agent
@@ -28,6 +28,10 @@ services:
     ports:
       - 2080:2080
     tty: true
+    volumes:
+      - .:/dp-agent
+      - ${EXTERNAL_FOLDER}/dp_logs:/logs
+      - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
   mongo:
     command: mongod
     image: mongo:3.2.0
@@ -51,4 +55,8 @@ services:
     ports:
       - 8002:8002
     tty: true
+    volumes:
+      - .:/dp-agent
+      - ${EXTERNAL_FOLDER}/dp_logs:/logs
+      - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
 version: '3.7'

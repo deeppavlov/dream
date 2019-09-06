@@ -13,14 +13,6 @@ from typing import Callable, Optional, Collection, Hashable, List, Tuple
 import telebot
 from telebot.types import Message, Location, User
 
-import logging
-
-
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.DEBUG)
-logger = logging.getLogger(__name__)
-
-
 parser = argparse.ArgumentParser()
 parser.add_argument("-ch", "--channel", help="run agent in telegram, cmd_client or http_client", type=str,
                     choices=['telegram', 'cmd_client', 'http_client'], default='cmd_client')
@@ -36,6 +28,7 @@ def _model_process(model_function: Callable, conn: Connection, batch_size: int =
         batch_size = float('inf')
 
     check_time = time.time()
+
     while True:
         batch: List[Tuple[str, Hashable]] = []
         while conn.poll() and len(batch) < batch_size:
@@ -45,11 +38,8 @@ def _model_process(model_function: Callable, conn: Connection, batch_size: int =
 
         if not batch:
             continue
-        else:
-            logger.debug("_model_process batch: {}".format(batch))
 
         messages, dialog_ids = zip(*batch)
-        logger.debug("_model_process messages: {}".format(messages))
         responses = model(messages, dialog_ids)
         for response, dialog_id in zip(responses, dialog_ids):
             conn.send((response, dialog_id))
@@ -72,6 +62,7 @@ def experimental_bot(
     Returns: None
 
     """
+
     token = getenv('TELEGRAM_TOKEN')
     proxy = getenv('TELEGRAM_PROXY')
 
@@ -88,7 +79,6 @@ def experimental_bot(
     def responder():
         while True:
             text, chat_id = parent_conn.recv()
-            logger.debug("responder message: {}".format(text))
             bot.send_message(chat_id, text)
 
     t = Thread(target=responder)
@@ -96,7 +86,6 @@ def experimental_bot(
 
     @bot.message_handler()
     def handle_message(message: Message):
-        logger.debug("Telegram message: {}".format(message.text))
         parent_conn.send((message, message.chat.id))
 
     bot.polling(none_stop=True)
@@ -116,11 +105,12 @@ def run():
     logging.getLogger('requests.packages.urllib3.connectionpool').setLevel(logging.WARNING)
 
     state_manager = StateManager()
+
     if ANNOTATORS:
         anno_names, anno_urls, anno_formatters = zip(
             *[(a['name'], a['url'], a['formatter']) for a in ANNOTATORS])
     else:
-        anno_names, anno_urls, anno_formatters = None, None, []
+        anno_names, anno_urls, anno_formatters = [], [], []
     preprocessor = RestCaller(max_workers=MAX_WORKERS, names=anno_names, urls=anno_urls,
                               formatters=anno_formatters)
     postprocessor = DefaultPostprocessor()
