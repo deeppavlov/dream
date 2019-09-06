@@ -33,7 +33,7 @@ def change_personality(placeholders: Input_placeholders):
         (
             f"personality has changed by command {CMD_NAME} to this text: {per.replace(CMD_NAME, '')}",
             1.0,
-            [ut for ut in per.split("|") if not (CMD_NAME in ut)],
+            [ut for ut in per.split("\n") if not (CMD_NAME in ut)],
         )
         for per in placeholders.personality
     ]
