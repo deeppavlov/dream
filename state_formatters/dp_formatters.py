@@ -1,7 +1,25 @@
-from typing import Dict, Any
+from typing import Dict, Any, List
+import copy
 
+CMDS = ["/new_persona"]  # TODO: rm crutch of personality_catcher
 
-def base_input_formatter(state: Dict):
+# TODO: rm crutch of personality_catcher
+def exclude_cmds(utter, cmds):
+    if cmds:
+        utter = utter.replace(cmds[-1],'')
+        return exclude_cmds(utter, cmds[:-1])
+    else:
+        return utter
+
+# TODO: rm crutch of personality_catcher
+def commands_excluder(utters_batch: List, cmds=[]):
+    cmds = cmds if cmds else CMDS
+    out_batch = []
+    for utters in utters_batch:
+        out_batch.append([exclude_cmds(ut, cmds) for ut in utters])
+    return out_batch
+
+def base_input_formatter(state: Dict, cmd_exclude=True):
     """This state_formatter takes the most popular fields from Agent state and returns them as dict values:
         * last utterances: a list of last utterance from each dialog in the state
         * last_annotations: a list of last annotation from each last utterance
@@ -40,7 +58,8 @@ def base_input_formatter(state: Dict):
     return {'dialogs': state['dialogs'],
             'last_utterances': last_utterances,
             'last_annotations': last_annotations,
-            'utterances_histories': utterances_histories,
+            # TODO: rm crutch of personality_catcher
+            'utterances_histories': commands_excluder(utterances_histories) if cmd_exclude else utterances_histories, 
             'annotation_histories': annotations_histories,
             'dialog_ids': dialog_ids,
             'user_ids': user_ids}
@@ -163,14 +182,42 @@ def base_skill_selector_formatter(payload: Any, mode='in'):
         # and payload here is 3dim. I don't know which dim is extra and from where it comes
         return payload[0]
 
+# TODO: rm crutch of personality_catcher
+default_persona = [
+    "i prefer vinyl records to any other music recording format.",
+    "i fix airplanes for a living.",
+    "drive junk cars that no one else wants.",
+    "i think if i work hard enough i can fix the world.",
+    "i am never still."
+]
+
+# TODO: rm crutch of personality_catcher
+def get_persona(dialog):
+    try:
+        hypts = [ut.get('selected_skills', {}).get('personality_catcher', {}).get('personality') for ut in dialog['utterances'][:-1]]
+    except Exception:
+        hypts = []
+    hypts = [hypt for hypt in hypts if hypt]
+    return hypts[-1] if hypts else default_persona
+
 
 def transfertransfo_formatter(payload: Any, mode='in'):
     if mode == 'in':
         parsed = base_input_formatter(payload)
         return {'utterances_histories': parsed['utterances_histories'],
-                'personality': [dialog['bot']['persona'] for dialog in parsed['dialogs']]}
+                'personality': [get_persona(dialog) for dialog in parsed['dialogs']]}
     elif mode == 'out':
         return base_skill_output_formatter(payload)
+
+# TODO: rm crutch of personality_catcher
+def personality_catcher_formatter(payload: Any, mode='in'):
+    if mode == 'in':
+        parsed = base_input_formatter(payload, cmd_exclude=False)
+        return {'personality': parsed['last_utterances']}
+    elif mode == 'out':
+        response = base_skill_output_formatter(payload)
+        response['personality'] = payload[2]
+        return response
 
 
 def cobot_offensiveness_formatter(payload, mode='in'):

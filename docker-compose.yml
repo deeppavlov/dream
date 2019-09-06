@@ -41,6 +41,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /data/db:/root/data/db
   rule_based_selector:
+    container_name: rule_based_selector
     build:
       args:
         skill_endpoint: selected_skills
@@ -49,7 +50,6 @@ services:
         skillport: 8002
       context: ./
       dockerfile: dp/dockerfile_skill_cpu
-    container_name: rule_based_selector
     environment:
       - CUDA_VISIBLE_DEVICES=""
     ports:

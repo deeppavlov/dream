@@ -42,6 +42,10 @@ services:
     env_file: [.env]
     volumes:
       - './skills/transfertransfo:/app'
+  personality_catcher:
+    env_file: [.env]
+    volumes:
+      - './skills/personality_catcher:/app'
   program_y:
     env_file: [.env]
     volumes:

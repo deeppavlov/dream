@@ -62,6 +62,16 @@ SKILLS = [
         "external": True,
         "path": "",
         "formatter": program_y_formatter
+    },
+    {
+        "name": "personality_catcher",
+        "protocol": "http",
+        "host": "personality_catcher",
+        "port": 8010,
+        "endpoint": "personality_catcher",
+        "external": True,
+        "path": "",
+        "formatter": personality_catcher_formatter
     }
 ]
 

@@ -30,11 +30,9 @@ class RuleBasedSelector(Component):
 
             tokens = dialog['utterances'][-1]['text'].lower().split()
 
-            # skills_for_uttr.append("cobotqa")
-            # skills_for_uttr.append("program_y")
-            # skills_for_uttr.append("transfertransfo")
-
-            if len(set(tokens).intersection(self.wh_words)) > 0:
+            if "/new_persona" in dialog['utterances'][-1]['text']:
+                skills_for_uttr.append("personality_catcher")  # TODO: rm crutch of personality_catcher
+            elif len(set(tokens).intersection(self.wh_words)) > 0:
                 skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("program_y")
                 skills_for_uttr.append("transfertransfo")
