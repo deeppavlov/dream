@@ -152,8 +152,6 @@ def cobot_qa_formatter(payload, mode='in'):
         sentences = base_input_formatter(payload)['last_utterances']
         return {'sentences': sentences}
     elif mode == 'out':
-        print(payload, "\n")
-        print(base_skill_output_formatter(payload))
         return base_skill_output_formatter(payload)
 
 
@@ -208,5 +206,13 @@ def base_response_selector_formatter(payload, mode='in'):
     if mode == 'in':
         dialogs = base_input_formatter(payload)['dialogs']
         return {"dialogs": dialogs}
+    elif mode == 'out':
+        return payload
+
+
+def sent_segm_formatter(payload, mode='in'):
+    if mode == 'in':
+        sentences = base_input_formatter(payload)['last_utterances']
+        return {'sentences': sentences}
     elif mode == 'out':
         return payload
