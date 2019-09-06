@@ -26,13 +26,15 @@ parser.add_argument('phrasefile', help='name of the file with phrases for dialog
 def init_agent():
     state_manager = StateManager()
 
-    if ANNOTATORS:
-        anno_names, anno_urls, anno_formatters = zip(
-            *[(a['name'], a['url'], a['formatter']) for a in ANNOTATORS])
-    else:
-        anno_names, anno_urls, anno_formatters = [], [], []
-    preprocessor = RestCaller(max_workers=MAX_WORKERS, names=anno_names, urls=anno_urls,
-                              formatters=anno_formatters)
+    preprocessors = []
+    for ants in ANNOTATORS:
+        if ants:
+            anno_names, anno_urls, anno_formatters = zip(
+                *[(a['name'], a['url'], a['formatter']) for a in ants])
+        else:
+            anno_names, anno_urls, anno_formatters = [], [], []
+        preprocessors.append(RestCaller(max_workers=MAX_WORKERS, names=anno_names, urls=anno_urls,
+                                        formatters=anno_formatters))
     postprocessor = DefaultPostprocessor()
     skill_caller = RestCaller(max_workers=MAX_WORKERS)
 
@@ -56,7 +58,7 @@ def init_agent():
                                  profile_handlers=[skill['name'] for skill in SKILLS
                                                    if skill.get('profile_handler')])
 
-    agent = Agent(state_manager, preprocessor, postprocessor, skill_manager)
+    agent = Agent(state_manager, preprocessors, postprocessor, skill_manager)
     return agent
 
 

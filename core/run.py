@@ -106,13 +106,16 @@ def run():
 
     state_manager = StateManager()
 
-    if ANNOTATORS:
-        anno_names, anno_urls, anno_formatters = zip(
-            *[(a['name'], a['url'], a['formatter']) for a in ANNOTATORS])
-    else:
-        anno_names, anno_urls, anno_formatters = [], [], []
-    preprocessor = RestCaller(max_workers=MAX_WORKERS, names=anno_names, urls=anno_urls,
-                              formatters=anno_formatters)
+    preprocessors = []
+    for ants in ANNOTATORS:
+        if ants:
+            anno_names, anno_urls, anno_formatters = zip(
+                *[(a['name'], a['url'], a['formatter']) for a in ants])
+        else:
+            anno_names, anno_urls, anno_formatters = [], [], []
+        preprocessors.append(RestCaller(max_workers=MAX_WORKERS, names=anno_names, urls=anno_urls,
+                                        formatters=anno_formatters))
+
     postprocessor = DefaultPostprocessor()
     skill_caller = RestCaller(max_workers=MAX_WORKERS)
 
@@ -136,7 +139,7 @@ def run():
                                  profile_handlers=[skill['name'] for skill in SKILLS
                                                    if skill.get('profile_handler')])
 
-    agent = Agent(state_manager, preprocessor, postprocessor, skill_manager)
+    agent = Agent(state_manager, preprocessors, postprocessor, skill_manager)
 
     def infer_telegram(messages: Collection[Message], dialog_ids):
         utterances: List[Optional[str]] = [message.text for message in messages]
@@ -215,7 +218,8 @@ async def users_dialogs(request):
     exist_dialogs = Dialog.objects()
     result = list()
     for i in exist_dialogs:
-        result.append({'id': str(i.id), 'location': i.location, 'channel_type': i.channel_type, 'user': i.user.to_dict()})
+        result.append(
+            {'id': str(i.id), 'location': i.location, 'channel_type': i.channel_type, 'user': i.user.to_dict()})
     return web.json_response(result)
 
 
