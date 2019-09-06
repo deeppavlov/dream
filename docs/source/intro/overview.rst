@@ -148,7 +148,7 @@ Services Deployment
 
 8. Configure all skills, skill selectors, response selectors, annotators and database connection in the `config file`_.
 
-   If you want a minimal configuration, you need one annotator and one skill.
+   If you want a minimal configuration, you need only one skill.
 
 9. Generate a `Docker environment configuration`_  by running the command:
 

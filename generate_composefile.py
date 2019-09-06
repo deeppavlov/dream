@@ -16,7 +16,7 @@ AGENT_BASIC = {
     'agent': {'build': {'context': './', 'dockerfile': 'dockerfile_agent'},
               'container_name': 'agent',
               'volumes': ['.:/dp-agent'],
-              'ports': ['28888:8888'],
+              'ports': ['4242:4242'],
               'tty': True,
               'env_file': AGENT_ENV_FILE,
               'depends_on': []}

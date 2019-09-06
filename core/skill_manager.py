@@ -27,7 +27,6 @@ class SkillManager:
         self.max_workers = MAX_WORKERS
         self.skill_caller = skill_caller
         self.skills = SKILLS
-
         self.skill_names = [s['name'] for s in self.skills]
         self.profile_handlers = [name for name in reversed(profile_handlers) if name in self.skill_names]
         self.profile_fields = list(Human.profile.default.keys())
