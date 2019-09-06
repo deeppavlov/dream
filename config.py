@@ -1,9 +1,8 @@
 from state_formatters.dp_formatters import *
 
 DB_NAME = 'test'
-DB_HOST = '127.0.0.1'
-DB_PORT = 27017
-DB_PATH = '/data/db'
+HOST = '127.0.0.1'
+PORT = 27017
 
 MAX_WORKERS = 1
 
@@ -67,6 +66,16 @@ SKILLS = [
 ]
 
 ANNOTATORS = [
+    {
+        "name": "sentseg",
+        "protocol": "http",
+        "host": "sentseg",
+        "port": 8011,
+        "endpoint": "sentseg",
+        "external": True,
+        "path": "",
+        "formatter": cobot_qa_formatter
+    }
     # {
     #     "name": "cobot_topics",
     #     "protocol": "http",
