@@ -8,7 +8,7 @@ so the platform should have the following characteristics:
     * be stable at highload environment
     * save and pass the chatbot state_ across all the connected models
 
-.. image:: ../_static/Agent_Pipeline.png
+.. image:: ../_static/Agent_Pipeline_v2.png
    :height: 600
    :align: center
    :alt: Architecture
@@ -34,7 +34,7 @@ so the platform should have the following characteristics:
     * ``Postprocessor`` is a service postprocessing a bot utterance. It can make some basic things
       like adding a user name to the reply, inserting emojis, etc.;
 
-    * ``Response`` is a final postprocessed bot utterance that is shown to the user.
+    * ``Postprocessed Response`` is a final postprocessed bot utterance that is shown to the user.
 
     * ``State`` is current dialogs between users and a bot serialized as **json**. State is used to pass information
       across the services and contains all possibly needed information about the current dialogs.
