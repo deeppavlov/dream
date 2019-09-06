@@ -75,7 +75,7 @@ SKILLS = [
     }
 ]
 
-ANNOTATORS = [
+ANNOTATORS_1 = [
     {
         "name": "sentseg",
         "protocol": "http",
@@ -127,6 +127,8 @@ ANNOTATORS = [
     #     "formatter": cobot_dialogact_formatter
     # }
 ]
+ANNOTATORS_2 = []
+ANNOTATORS_3 = []
 
 SKILL_SELECTORS = [
     {
