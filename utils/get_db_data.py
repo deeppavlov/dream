@@ -2,11 +2,11 @@ import argparse
 from warnings import warn
 
 from core.state_schema import Dialog, Utterance, HumanUtterance, BotUtterance, Human, Bot, User
-from core.transform_config import HOST, PORT, DB_NAME
+from core.transform_config import DB_HOST, DB_PORT, DB_NAME
 
 from mongoengine import connect
 
-state_storage = connect(host=HOST, port=PORT, db=DB_NAME)
+state_storage = connect(host=DB_HOST, port=DB_PORT, db=DB_NAME)
 collections = {'Dialog': Dialog,
                'Utterance': Utterance,
                'HumanUtterance': HumanUtterance,

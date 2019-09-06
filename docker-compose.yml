@@ -1,19 +1,18 @@
 services:
   agent:
-    container_name: agent
     build:
       context: ./
       dockerfile: dockerfile_agent
+    container_name: agent
     depends_on:
-    - aiml
-    - rule_based_selector
-    - mongo
+      - aiml
+      - mongo
     env_file: agent.env
     ports:
-    - 28888:8888
+    - 4242:4242
     tty: true
     volumes:
-    - .:/dp-agent
+      - .:/dp-agent
   aiml:
     build:
       args:
@@ -23,22 +22,24 @@ services:
         skillport: 2080
       context: ./
       dockerfile: dp/dockerfile_skill_cpu
+    container_name: aiml
     environment:
-    - CUDA_VISIBLE_DEVICES=""
+      - CUDA_VISIBLE_DEVICES=""
     ports:
-    - 2080:2080
+      - 2080:2080
     tty: true
     volumes:
-    - .:/dp-agent
-    - ${EXTERNAL_FOLDER}/dp_logs:/logs
-    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
+      - .:/dp-agent
+      - ${EXTERNAL_FOLDER}/dp_logs:/logs
+      - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
   mongo:
     command: mongod
     image: mongo:3.2.0
     ports:
-    - 27017:27017
+      - 27017:27017
     volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /data/db:/root/data/db
   rule_based_selector:
     container_name: rule_based_selector
     build:
@@ -50,12 +51,12 @@ services:
       context: ./
       dockerfile: dp/dockerfile_skill_cpu
     environment:
-    - CUDA_VISIBLE_DEVICES=""
+      - CUDA_VISIBLE_DEVICES=""
     ports:
-    - 8002:8002
+      - 8002:8002
     tty: true
     volumes:
-    - .:/dp-agent
-    - ${EXTERNAL_FOLDER}/dp_logs:/logs
-    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
+      - .:/dp-agent
+      - ${EXTERNAL_FOLDER}/dp_logs:/logs
+      - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
 version: '3.7'
