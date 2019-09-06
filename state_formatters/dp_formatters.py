@@ -152,6 +152,8 @@ def cobot_qa_formatter(payload, mode='in'):
         sentences = base_input_formatter(payload)['last_utterances']
         return {'sentences': sentences}
     elif mode == 'out':
+        print(payload, "\n")
+        print(base_skill_output_formatter(payload))
         return base_skill_output_formatter(payload)
 
 
