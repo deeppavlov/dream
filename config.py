@@ -39,7 +39,7 @@ SKILLS = [
     }
 ]
 
-ANNOTATORS = [
+ANNOTATORS_1 = [
     {
         "name": "ner",
         "protocol": "http",
@@ -52,7 +52,10 @@ ANNOTATORS = [
         },
         "dockerfile": "dockerfile_skill_cpu",
         "formatter": ner_formatter
-    },
+    }
+]
+
+ANNOTATORS_2 = [
     {
         "name": "sentiment",
         "protocol": "http",
@@ -67,6 +70,8 @@ ANNOTATORS = [
         "formatter": sentiment_formatter
     }
 ]
+
+ANNOTATORS_3 = []
 
 SKILL_SELECTORS = [
     {

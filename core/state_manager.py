@@ -84,7 +84,7 @@ class StateManager:
     @staticmethod
     def add_annotations(utterances: Sequence[Utterance], annotations: Sequence[Dict]):
         for utt, ann in zip(utterances, annotations):
-            utt.annotations = ann
+            utt.annotations.update(ann)
             utt.save()
 
     @staticmethod
