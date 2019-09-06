@@ -7,12 +7,9 @@ services:
     depends_on:
       - aiml
       - mongo
-    env_file: agent.env
     ports:
     - 4242:4242
     tty: true
-    volumes:
-      - .:/dp-agent
   aiml:
     build:
       args:
@@ -28,18 +25,11 @@ services:
     ports:
       - 2080:2080
     tty: true
-    volumes:
-      - .:/dp-agent
-      - ${EXTERNAL_FOLDER}/dp_logs:/logs
-      - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
   mongo:
     command: mongod
     image: mongo:3.2.0
     ports:
       - 27017:27017
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /data/db:/root/data/db
   rule_based_selector:
     container_name: rule_based_selector
     build:
@@ -55,8 +45,4 @@ services:
     ports:
       - 8002:8002
     tty: true
-    volumes:
-      - .:/dp-agent
-      - ${EXTERNAL_FOLDER}/dp_logs:/logs
-      - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
 version: '3.7'
