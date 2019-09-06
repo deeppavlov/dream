@@ -1,3 +1,4 @@
+# TODO: Do not change this file, it does not use
 from typing import List, Tuple
 
 from deeppavlov.core.common.registry import register
@@ -34,6 +35,7 @@ class RuleBasedSelector(Component):
                 skills_for_uttr.append("aiml")
                 skills_for_uttr.append("alice")
                 skills_for_uttr.append("cobotqa")
+                skills_for_uttr.append("transfertransfo")
             else:
                 skills_for_uttr.append("alice")
                 skills_for_uttr.append("cobotqa")

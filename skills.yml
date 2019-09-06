@@ -47,6 +47,11 @@ services:
     ports: ['8008:8008']
     working_dir: /src/dream_aiml/scripts/xnix
     command: ./sanic.sh
+  personality_catcher:
+    build:
+      context: ./skills/personality_catcher/
+    ports: ['8010:8010']
+    command: uvicorn server:app --host 0.0.0.0 --port 8010
     volumes: []
   sentseg:
     build:
