@@ -4,6 +4,7 @@ from os import getenv
 
 from aiohttp import web
 from datetime import datetime
+from string import hexdigits
 from threading import Thread
 from multiprocessing import Process, Pipe
 from multiprocessing.connection import Connection
@@ -11,14 +12,6 @@ from typing import Callable, Optional, Collection, Hashable, List, Tuple
 
 import telebot
 from telebot.types import Message, Location, User
-
-import logging
-
-
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.DEBUG)
-logger = logging.getLogger(__name__)
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-ch", "--channel", help="run agent in telegram, cmd_client or http_client", type=str,
@@ -35,6 +28,7 @@ def _model_process(model_function: Callable, conn: Connection, batch_size: int =
         batch_size = float('inf')
 
     check_time = time.time()
+
     while True:
         batch: List[Tuple[str, Hashable]] = []
         while conn.poll() and len(batch) < batch_size:
@@ -44,11 +38,8 @@ def _model_process(model_function: Callable, conn: Connection, batch_size: int =
 
         if not batch:
             continue
-        else:
-            logger.debug("_model_process batch: {}".format(batch))
 
         messages, dialog_ids = zip(*batch)
-        logger.debug("_model_process messages: {}".format(messages))
         responses = model(messages, dialog_ids)
         for response, dialog_id in zip(responses, dialog_ids):
             conn.send((response, dialog_id))
@@ -71,6 +62,7 @@ def experimental_bot(
     Returns: None
 
     """
+
     token = getenv('TELEGRAM_TOKEN')
     proxy = getenv('TELEGRAM_PROXY')
 
@@ -87,7 +79,6 @@ def experimental_bot(
     def responder():
         while True:
             text, chat_id = parent_conn.recv()
-            logger.debug("responder message: {}".format(text))
             bot.send_message(chat_id, text)
 
     t = Thread(target=responder)
@@ -95,7 +86,6 @@ def experimental_bot(
 
     @bot.message_handler()
     def handle_message(message: Message):
-        logger.debug("Telegram message: {}".format(message.text))
         parent_conn.send((message, message.chat.id))
 
     bot.polling(none_stop=True)
@@ -115,11 +105,12 @@ def run():
     logging.getLogger('requests.packages.urllib3.connectionpool').setLevel(logging.WARNING)
 
     state_manager = StateManager()
+
     if ANNOTATORS:
         anno_names, anno_urls, anno_formatters = zip(
             *[(a['name'], a['url'], a['formatter']) for a in ANNOTATORS])
     else:
-        anno_names, anno_urls, anno_formatters = None, None, []
+        anno_names, anno_urls, anno_formatters = [], [], []
     preprocessor = RestCaller(max_workers=MAX_WORKERS, names=anno_names, urls=anno_urls,
                               formatters=anno_formatters)
     postprocessor = DefaultPostprocessor()
@@ -193,6 +184,8 @@ async def init_app():
     app = web.Application()
     handle_func = await api_message_processor(run())
     app.router.add_post('/', handle_func)
+    app.router.add_get('/dialogs', users_dialogs)
+    app.router.add_get('/dialogs/{dialog_id}', dialog)
     return app
 
 
@@ -215,6 +208,31 @@ async def api_message_processor(message_processor):
         return web.json_response(result)
 
     return api_handle
+
+
+async def users_dialogs(request):
+    from core.state_schema import Dialog
+    exist_dialogs = Dialog.objects()
+    result = list()
+    for i in exist_dialogs:
+        result.append({'id': str(i.id), 'location': i.location, 'channel_type': i.channel_type, 'user': i.user.to_dict()})
+    return web.json_response(result)
+
+
+async def dialog(request):
+    from core.state_schema import Dialog
+    dialog_id = request.match_info['dialog_id']
+    if dialog_id == 'all':
+        dialogs = Dialog.objects()
+        return web.json_response([i.to_dict() for i in dialogs])
+    elif len(dialog_id) == 24 and all(c in hexdigits for c in dialog_id):
+        dialog = Dialog.objects(id__exact=dialog_id)
+        if not dialog:
+            raise web.HTTPNotFound(reason=f'dialog with id {dialog_id} is not exist')
+        else:
+            return web.json_response(dialog[0].to_dict())
+    else:
+        raise web.HTTPBadRequest(reason='dialog id should be 24-character hex string')
 
 
 def main():
