@@ -612,9 +612,15 @@ class model:
 				print(line)
 
 	def predict(self, sess, text):				
-			inp_sent = text
+			inp_sent = text			
+
 			if inp_sent == "":
 				return ""
+
+			
+			for p in ['.', '?', '!']:
+				if p in inp_sent:
+					return inp_sent
 
 			words = word_tokenize(inp_sent)
 
