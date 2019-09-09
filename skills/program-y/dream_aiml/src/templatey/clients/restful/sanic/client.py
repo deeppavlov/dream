@@ -55,14 +55,6 @@ class SanicRestBotClient(RestBotClient):
     def server_abort(self, message, status_code):
         raise ServerError(message, status_code=status_code)
 
-    def get_question(self, rest_request):
-        # TODO: Add error handling
-        return rest_request.json['question']
-
-    def get_userid(self, rest_request):
-        # TODO: Add error handling
-        return rest_request.json['userid']
-
     def create_response(self, response, status):
         return json(response, status=status)
 
@@ -82,6 +74,7 @@ class SanicRestBotClient(RestBotClient):
                     confidence = 0.98
                 else:
                     confidence = 0
+                print("user_id: {}; question: {}; answer: {}".format(userid, question, answer))
                 responses.append([answer, confidence])
             return responses, 200
 

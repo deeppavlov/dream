@@ -101,22 +101,24 @@
   </category>
   <category>
     <pattern>HOW ARE YOU</pattern>
-    <template>I am fine, thanks! Do you want to know what I can do?</template>
-  </category>
-  <category>
-    <pattern>YES</pattern>
-    <that>* what I can do</that>
     <template>
-      <srai>WHAT CAN YOU DO</srai>
+      <think>
+        <set name="topic">LIST ACTIVITIES</set>
+      </think>
+      I am fine, thanks! Do you want to know what I can do?
     </template>
   </category>
-  <category>
-    <pattern>NO</pattern>
-    <that>* what I can do</that>
-    <template>Okay. What do you want?</template>
-  </category>
-  <category>
-    <pattern>WHAT CAN YOU DO</pattern>
-    <template>I am newborn, so I can't do so much. For example I can answer for any question.</template>
-  </category>
+
+  <topic name="LIST ACTIVITIES">
+    <category>
+      <pattern>YES</pattern>
+      <template>
+        I am newborn, so I can't do so much. For example I can answer for any question.
+      </template>
+    </category>
+    <category>
+      <pattern>NO</pattern>
+      <template>Okay. What do you want?</template>
+    </category>
+  </topic>
 </aiml>
