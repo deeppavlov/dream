@@ -79,7 +79,7 @@ class SanicRestBotClient(RestBotClient):
                 if answer == NULL_RESPONSE:
                     confidence = 0.2
                 elif answer:
-                    confidence = 0.9
+                    confidence = 0.98
                 else:
                     confidence = 0
                 responses.append([answer, confidence])
