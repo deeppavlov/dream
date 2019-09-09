@@ -42,9 +42,9 @@ def respond():
             conv["currentResponse"] = response_candidates[i][skill_name]["text"]
             # every odd utterance is from user
             # cobot recommends to take 2 last utt for conversation evaluation service
-            conv["pastUtterances"] = [uttr["text"] for uttr in dialog["utterances"][1::2]][:2]
+            conv["pastUtterances"] = [uttr["text"] for uttr in dialog["utterances"][1::2]][-2:]
             # every second utterance is from bot
-            conv["pastResponses"] = [uttr["text"] for uttr in dialog["utterances"][::2]][:2]
+            conv["pastResponses"] = [uttr["text"] for uttr in dialog["utterances"][::2]][-2:]
             # collect all the conversations variants to evaluate them batch-wise
             conversations += [conv]
             dialog_ids += [i]
