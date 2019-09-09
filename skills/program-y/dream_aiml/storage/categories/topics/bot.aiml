@@ -787,19 +787,6 @@
         </template>
     </category>
     <category>
-        <pattern>WHAT DO YOU *</pattern>
-        <template>
-            <random>
-                <li>I miss your vivid sense of humor.</li>
-                <li>I miss your loving, kind words.</li>
-                <li>I enjoy watching movies.</li>
-                <li>I enjoy just listening to your questions.</li>
-                <li>What would you<star/>?
-                </li>
-            </random>
-        </template>
-    </category>
-    <category>
         <pattern>WHAT DO YOU KNOW</pattern>
         <template>I'm able to access all the information on the internet.</template>
     </category>
