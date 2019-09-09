@@ -1,6 +1,5 @@
 import argparse
 import time
-from os import getenv
 
 from aiohttp import web
 from datetime import datetime
@@ -12,7 +11,11 @@ from typing import Callable, Optional, Collection, Hashable, List, Tuple
 
 import telebot
 from telebot.types import Message, Location, User
+from os import getenv
+import sentry_sdk
 
+
+sentry_sdk.init(getenv('SENTRY_DSN'))
 parser = argparse.ArgumentParser()
 parser.add_argument("-ch", "--channel", help="run agent in telegram, cmd_client or http_client", type=str,
                     choices=['telegram', 'cmd_client', 'http_client'], default='cmd_client')

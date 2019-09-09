@@ -33,8 +33,11 @@ from sanic.exceptions import ServerError
 
 from programy.clients.restful.client import RestBotClient
 from programy.clients.restful.sanic.config import SanicRestConfiguration
+from os import getenv
+import sentry_sdk
 
 
+sentry_sdk.init(getenv('SENTRY_DSN'))
 # TODO: Get if from config.sanic.yml
 NULL_RESPONSE = "Sorry, I don't have an answer for that!"
 
@@ -86,6 +89,7 @@ class SanicRestBotClient(RestBotClient):
             return responses, 200
 
         except Exception as excep:
+            sentry_sdk.capture_exception(excep)
             return self.format_error_response(userid, question, str(excep)), 500
 
     def run(self, sanic):
