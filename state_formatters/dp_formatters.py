@@ -39,6 +39,7 @@ def base_input_formatter(state: Dict, cmd_exclude=True):
     last_annotations = []
     dialog_ids = []
     user_ids = []
+    user_telegram_ids = []
 
     for dialog in state['dialogs']:
         utterances_history = []
@@ -54,15 +55,18 @@ def base_input_formatter(state: Dict, cmd_exclude=True):
 
         dialog_ids.append(dialog['id'])
         user_ids.append(dialog['user']['id'])
+        # USER ID, который вводится в console.run - это user_telegram_id  ¯\_(ツ)_/¯ 
+        user_telegram_ids.append(dialog['user']['user_telegram_id'])
 
     return {'dialogs': state['dialogs'],
             'last_utterances': last_utterances,
             'last_annotations': last_annotations,
             # TODO: rm crutch of personality_catcher
-            'utterances_histories': commands_excluder(utterances_histories) if cmd_exclude else utterances_histories, 
+            'utterances_histories': commands_excluder(utterances_histories) if cmd_exclude else utterances_histories,
             'annotation_histories': annotations_histories,
             'dialog_ids': dialog_ids,
-            'user_ids': user_ids}
+            'user_ids': user_ids,
+            'user_telegram_ids': user_telegram_ids}
 
 
 def last_utterances(payload, model_args_names):
@@ -242,7 +246,7 @@ def program_y_formatter(payload, mode='in'):
     if mode == 'in':
         inp_data = base_input_formatter(payload)
         sentences = inp_data['last_utterances']
-        user_ids = inp_data['user_ids']
+        user_ids = inp_data['user_telegram_ids']
         return {'sentences': sentences, 'user_ids': user_ids}
     elif mode == 'out':
         return {"text": payload[0],
