@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+  <category>
+    <pattern><set>wakewords</set> MUTE *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> UNMUTE *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> RESUME *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> SET THE VOLUME TO *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> TURN THE VOLUME UP *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> TURN THE VOLUME DOWN *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> TURN UP THE VOLUME *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> TURN DOWN THE VOLUME *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> SHOW MY *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> SHOW ME *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> PLAY *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> READ *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> OPEN *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> START *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> LAUNCH *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> PAUSE * ON FIRE TV</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> PLAY * ON FIRE TV</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> RESUME * ON FIRE TV</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> STOP * ON FIRE TV</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> FAST FORWARD * ON FIRE TV</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> REWIND * ON FIRE TV</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> SEARCH FOR * ON FIRE TV</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> LAUNCH * </pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> RETURN HOME</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> TURN ON FIRE TV</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> TURN OFF FIRE TV</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> GO TO * ON FIRE TV</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> SWITCH TO * ON FIRE TV</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> SET * TIMER *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> STOP PLAYING IN * </pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> STOP IN * </pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> RESTART</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> NEXT IN *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> ADD * SONG *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> CREATE * PLAYLIST *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> ADD * TO * PLAYLIST</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> THUMBS DOWN</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> THUMBS UP</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> WAKE * UP * </pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> SET * REMINDER *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> SET * ALARM *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> SET * TIMER *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> HOW MUCH TIME * TIMER *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> WHAT * TIMERS *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> CANCEL * TIMER</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> TURN OFF * TIMER</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> TURN OFF * REMINDER</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> TURN OFF * ALARM</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> WHAT TIME IS IT *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> WHAT DATE IS IT *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> WHAT IS THE TIME *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> WHAT IS THE DATE *</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> * ALARM</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> * REMINDER</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> * TIMER</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> SNOOZE</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> WHEN * THIS YEAR</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> WHEN * THIS MONTH</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+  <category>
+    <pattern><set>wakewords</set> WHEN * THIS WEEK</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+    <pattern><set>wakewords</set> WHEN * THIS DAY</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><set>wakewords</set> WHEN * TODAY</pattern>
+    <template>
+      <srai>CANNOT</srai>
+    </template>
+  </category>
+
+
+
+  <category>
+    <pattern>          CANNOT      </pattern>
+    <template>
+      <random>
+        <li>Unfortunately, I cannot do this.</li>
+        <li>Sorry, I am a chatbot, I cannot do this</li>
+      </random>
+    </template>
+  </category>
+
+  <topic name="LIST ACTIVITIES">
+    <category>
+      <pattern>YES</pattern>
+      <template>
+        I am newborn, so I can't do so much. For example I can answer for any question.
+      </template>
+    </category>
+    <category>
+      <pattern>NO</pattern>
+      <template>Okay. What do you want?</template>
+    </category>
+  </topic>
+</aiml>
