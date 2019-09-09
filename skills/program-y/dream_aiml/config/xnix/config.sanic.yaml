@@ -2,8 +2,8 @@ rest:
   description: Program-Y Sanic Rest Client
   host: 0.0.0.0
   port: 8008
-  debug: false
-  workers: 2
+  debug: true
+  workers: 1 # 2 воркера ведёт к багу с how are you - yes, no. Видимо синхронизации нету!!
   api: /api/sanic/v1.0.ask
 
   scheduler:
@@ -155,7 +155,7 @@ bot:
     max_search_timeout: 60
 
     spelling:
-      load: true
+      load: false
       classname: programy.spelling.norvig.NorvigSpellingChecker
       corpus: file
       check_before: false
