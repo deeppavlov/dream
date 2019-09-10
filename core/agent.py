@@ -20,10 +20,20 @@ class AsyncAgent:
         self.process_logger_callable = process_logger_callable
         self.response_logger_callable = response_logger_callable
 
-    def add_workflow_record(self, dialog: Dialog):
+    def add_workflow_record(self, dialog: Dialog, deadline_timestamp: Optional[float] = None, **kwargs):
         if dialog.id in self.workflow.keys():
             raise ValueError(f'dialog with id {dialog.id} is already in workflow')
-        self.workflow[dialog.id] = {'dialog': dialog, 'services': defaultdict(dict)}
+        workflow_record = {'dialog': dialog, 'services': defaultdict(dict)}
+        if deadline_timestamp:
+            workflow_record['deadline_timestamp'] = deadline_timestamp
+        if 'dialog' in kwargs:
+            raise ValueError("'dialog' key is system reserved")
+        if 'services' in kwargs:
+            raise ValueError("'services key' is system reserved")
+        if 'deadline_timestamp' in kwargs:
+            raise ValueError("'deadline_timestamp' key is system reserved")
+        workflow_record.update(kwargs)
+        self.workflow[dialog.id] = workflow_record
 
     def get_workflow_record(self, dialog_id):
         if dialog_id not in self.workflow.keys():
@@ -34,18 +44,6 @@ class AsyncAgent:
         if dialog_id not in self.workflow.keys():
             raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
         return self.workflow.pop(dialog_id)
-
-    def save_in_workflow(self, dialog_id: str, key: str, value: Any):
-        if dialog_id not in self.workflow.keys():
-            raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
-        self.workflow[dialog_id][key] = value
-
-    def get_from_workflow(self, dialog_id: str, key: str):
-        if dialog_id not in self.workflow.keys():
-            raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
-        if dialog_id not in self.workflow[dialog_id].keys():
-            raise ValueError(f'Item with key {key} is not exist in dialog {dialog_id}')
-        return self.workflow[dialog_id][key]
 
     def register_service_request(self, dialog_id: str, service_name):
         if dialog_id not in self.workflow.keys():
@@ -104,12 +102,12 @@ class AsyncAgent:
     async def register_msg(self, utterance: str, user_telegram_id: Hashable,
                            user_device_type: Any,
                            date_time: datetime, location=Any,
-                           channel_type=str, deadline=None):
+                           channel_type=str, deadline_timestamp=None, **kwargs):
 
         user = self.state_manager.get_or_create_user(user_telegram_id, user_device_type)
         dialog = self.state_manager.get_or_create_dialog(user, location, channel_type)
         self.state_manager.add_human_utterance(dialog, utterance, date_time)
-        self.add_workflow_record(dialog)
+        self.add_workflow_record(dialog, deadline_timestamp, **kwargs)
 
         await self.process(dialog.id)
 

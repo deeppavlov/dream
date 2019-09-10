@@ -25,9 +25,21 @@ class HTTPConnector:
             return {self.name: self.formatter(response[0], mode='out')}
 
 
-class CmdConnector:
+class CmdOutputConnector:
     async def send(self, payload):
         print('bot: ', payload['utterances'][-1]['text'])
+
+
+class HttpOutputConnector:
+    def __init__(self, intermediate_storage: Dict):
+        self.intermediate_storage = intermediate_storage
+
+    async def send(self, payload):
+        message_uuid = payload['message_uuid']
+        event = payload['event']
+        response_text = payload['dialog'].utterances[-1].text
+        self.intermediate_storage[message_uuid] = response_text
+        event.set()
 
 
 class ConfidenceResponseSelectorConnector:
