@@ -1,394 +1,580 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <aiml version="2.0">
   <category>
-    <pattern><set>wakewords</set> MUTE *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> MUTE #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>которая net
+  </category>
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> UNMUTE *</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> UNMUTE *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> RESUME #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> RESUME *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> SHOW #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> SET THE VOLUME TO *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> PLAY #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> TURN THE VOLUME UP *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> READ #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> TURN THE VOLUME DOWN *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> OPEN #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> TURN UP THE VOLUME *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> START #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> TURN DOWN THE VOLUME *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> LAUNCH #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> SET THE VOLUME TO #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> SHOW MY *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> TURN THE VOLUME UP #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> SHOW ME *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> TURN THE VOLUME DOWN #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> PLAY *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> TURN UP THE VOLUME #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> READ *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> TURN DOWN THE VOLUME #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> PAUSE # ON FIRE TV</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> OPEN *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> PLAY # ON FIRE TV</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> START *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> RESUME # ON FIRE TV</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> LAUNCH *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> STOP # ON FIRE TV</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> PAUSE * ON FIRE TV</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> FAST FORWARD # ON FIRE TV</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> PLAY * ON FIRE TV</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> REWIND # ON FIRE TV</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> RESUME * ON FIRE TV</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> SEARCH FOR # ON FIRE TV</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> STOP * ON FIRE TV</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> RETURN HOME</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> FAST FORWARD * ON FIRE TV</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> TURN ON FIRE TV</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> REWIND * ON FIRE TV</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> TURN OFF FIRE TV</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> SEARCH FOR * ON FIRE TV</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> GO TO # ON FIRE TV</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> LAUNCH * </pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> SWITCH TO # ON FIRE TV</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> STOP PLAYING IN # </pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> RETURN HOME</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> STOP IN # </pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> TURN ON FIRE TV</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> RESTART</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> TURN OFF FIRE TV</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> NEXT IN #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> GO TO * ON FIRE TV</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> ADD # SONG #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> SWITCH TO * ON FIRE TV</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> CREATE # PLAYLIST #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> SET * TIMER *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> ADD # TO # PLAYLIST</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> STOP PLAYING IN * </pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> THUMBS DOWN</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> STOP IN * </pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> THUMBS UP</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # ALARM #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> RESTART</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # REMINDER #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> NEXT IN *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # REMIND #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> ADD * SONG *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # TIMER #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> CREATE * PLAYLIST *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # ALARMS #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> ADD * TO * PLAYLIST</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # REMINDERS #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> THUMBS DOWN</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # TIMERS #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> THUMBS UP</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> WAKE # UP # </pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> WAKE * UP * </pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # TURN # ON # </pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> SET * REMINDER *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # TURN # OFF # </pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> SET * ALARM *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # WHAT TIME IS IT #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> SET * TIMER *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # WHAT DATE IS IT #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> HOW MUCH TIME * TIMER *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # WHAT IS THE TIME #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> WHAT * TIMERS *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # WHAT IS THE DATE #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> CANCEL * TIMER</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # SNOOZE</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> TURN OFF * TIMER</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # WHEN # THIS YEAR</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> TURN OFF * REMINDER</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # WHEN # THIS MONTH</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> TURN OFF * ALARM</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # WHEN # THIS WEEK</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # WHEN # THIS DAY</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> WHAT TIME IS IT *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # WHEN # TODAY</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # CALL *</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> WHAT DATE IS IT *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # ANSWER #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> WHAT IS THE TIME *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # END THE CALL</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> WHAT IS THE DATE *</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # MESSAGE #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> * ALARM</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # SEND *</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> * REMINDER</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # DROP IN #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> * TIMER</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # ANNOUNCE #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> SNOOZE</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # BROADCAST #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> WHEN * THIS YEAR</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # TELL #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> WHEN * THIS MONTH</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # INFORMATION #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # BUY #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-  <category>
-    <pattern><set>wakewords</set> WHEN * THIS WEEK</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # REORDER #</pattern>
     <template>
-      <srai>CANNOT</srai>
-    </template>
-  </category>
-    <pattern><set>wakewords</set> WHEN * THIS DAY</pattern>
-    <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern><set>wakewords</set> WHEN * TODAY</pattern>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # ORDER #</pattern>
     <template>
-      <srai>CANNOT</srai>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # ADD # TO # CART #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # REQUEST #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # ASK # </pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # SHOP FOR #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # DEAL #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # DEALS #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # FIND #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> WHAT DID I MISS</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # NOTIFICATIONS #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # CREATE #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # NEED #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # ADD #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # MOVE #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # MAKE # DONATION #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> WHAT *</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> WILL * </pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # ENABLE #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # GIVE #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # WHO #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # WHEN # </pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # WHY #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # WHETHER #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # WOULD #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # HOW #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+  <category>
+    <pattern><regex pattern="(ALEXA|AMAZON|ECHO|COMPUTER)" /> # SAMPLE #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
 
 
-
   <category>
-    <pattern>          CANNOT      </pattern>
+    <pattern>CAN YOU DO ALEXA THINGS</pattern>
     <template>
       <random>
-        <li>Unfortunately, I cannot do this.</li>
+        <li>Unfortunately, I cannot do this because I am a chatbot.</li>
         <li>Sorry, I am a chatbot, I cannot do this</li>
       </random>
     </template>
   </category>
-
-  <topic name="LIST ACTIVITIES">
-    <category>
-      <pattern>YES</pattern>
-      <template>
-        I am newborn, so I can't do so much. For example I can answer for any question.
-      </template>
-    </category>
-    <category>
-      <pattern>NO</pattern>
-      <template>Okay. What do you want?</template>
-    </category>
-  </topic>
 </aiml>
