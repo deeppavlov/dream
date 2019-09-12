@@ -20,7 +20,7 @@ def parse_old_config():
             name = log_record['name']
         formatter = log_record['formatter']
         batch_size = log_record.get('batch_size', 1)
-        url2 = log_record.get('url2')
+        url2 = log_record.get('url2', None)
         if log_record['protocol'] == 'http':
             if log_record.get('external', False):
                 url = f"http://{log_record['host']}:{log_record['port']}/{log_record['endpoint']}"

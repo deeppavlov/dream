@@ -4,6 +4,7 @@ import uuid
 
 from aiohttp import web
 from datetime import datetime
+from string import hexdigits
 
 from core.agent import AsyncAgent
 from core.pipeline import Pipeline, Service, simple_workflow_formatter
