@@ -4,13 +4,19 @@ from typing import List, Tuple
 from deeppavlov.core.common.registry import register
 from deeppavlov.core.models.component import Component
 import logging
+from os import getenv
+import sentry_sdk
 
+
+sentry_sdk.init(getenv('SENTRY_DSN'))
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+# TODO: THIS SKILL SELECTOR IS NOT WORKING NOW!
+#       USE rule_based_selector.py
 @register('intents_based_selector')
 class RuleBasedSelector(Component):
     """

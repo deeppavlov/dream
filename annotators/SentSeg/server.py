@@ -6,6 +6,12 @@ import json
 import uuid
 import logging
 import requests
+from os import getenv
+import sentry_sdk
+
+
+sentry_sdk.init(getenv('SENTRY_DSN'))
+
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -34,15 +40,15 @@ def respond():
     user_sentences = request.json['sentences']
     session_id = uuid.uuid4().hex
 
-    sentseg_result = []    
+    sentseg_result = []
 
     for i, text in enumerate(user_sentences):
         logger.info(f"user text: {text}, session_id: {session_id}")
         sentseg = model.predict(sess, text)
-        sentseg_result += [sentseg]                
+        sentseg_result += [sentseg]
         logger.info(f"punctuated sent. : {sentseg}")
 
     return jsonify(sentseg_result)
 
-if __name__ =='__main__':	
+if __name__ =='__main__':
 	app.run(debug=False, host='0.0.0.0', port=3000)
