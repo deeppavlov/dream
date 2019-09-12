@@ -1,70 +1,123 @@
 services:
   agent:
-    build: {context: ./, dockerfile: dockerfile_agent}
+    build:
+      context: ./
+      dockerfile: dockerfile_agent
     container_name: agent
-    depends_on: [odqa, chitchat, ner, sentiment, chitchat_odqa, mongo]
+    depends_on:
+    - odqa
+    - chitchat
+    - ner
+    - sentiment
+    - chitchat_odqa
+    - mongo
     env_file: agent.env
-    ports: ['4242:4242']
+    ports:
+    - 4242:4242
     tty: true
-    volumes: ['.:/dp-agent']
+    volumes:
+    - .:/dp-agent
   chitchat:
     build:
-      args: {skill_endpoint: model, skillconfig: faq/tfidf_autofaq, skillhost: 0.0.0.0,
-        skillport: 2081}
+      args:
+        skill_endpoint: model
+        skillconfig: faq/tfidf_autofaq
+        skillhost: 0.0.0.0
+        skillport: 2081
       context: ./
       dockerfile: dp/dockerfile_skill_cpu
     container_name: chitchat
-    environment: [CUDA_VISIBLE_DEVICES=""]
-    ports: ['2081:2081']
+    environment:
+    - CUDA_VISIBLE_DEVICES=""
+    ports:
+    - 2081:2081
     tty: true
-    volumes: ['.:/dp-agent', '${EXTERNAL_FOLDER}/dp_logs:/logs', '${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov']
+    volumes:
+    - .:/dp-agent
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
   chitchat_odqa:
     build:
-      args: {skill_endpoint: model, skillconfig: classifiers/rusentiment_bigru_superconv,
-        skillhost: 0.0.0.0, skillport: 2082}
+      args:
+        skill_endpoint: model
+        skillconfig: classifiers/rusentiment_bigru_superconv
+        skillhost: 0.0.0.0
+        skillport: 2082
       context: ./
       dockerfile: dp/dockerfile_skill_cpu
     container_name: chitchat_odqa
-    environment: [CUDA_VISIBLE_DEVICES=""]
-    ports: ['2082:2082']
+    environment:
+    - CUDA_VISIBLE_DEVICES=""
+    ports:
+    - 2082:2082
     tty: true
-    volumes: ['.:/dp-agent', '${EXTERNAL_FOLDER}/dp_logs:/logs', '${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov']
+    volumes:
+    - .:/dp-agent
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
   mongo:
     command: mongod
     image: mongo:3.2.0
-    ports: ['27017:27017']
-    volumes: ['/var/run/docker.sock:/var/run/docker.sock', '/data/db:/root/data/db']
+    ports:
+    - 27017:27017
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    - /data/db:/root/data/db
   ner:
     build:
-      args: {skill_endpoint: model, skillconfig: ner/ner_rus, skillhost: 0.0.0.0,
-        skillport: 2083}
+      args:
+        skill_endpoint: model
+        skillconfig: ner/ner_rus
+        skillhost: 0.0.0.0
+        skillport: 2083
       context: ./
       dockerfile: dp/dockerfile_skill_cpu
     container_name: ner
-    environment: [CUDA_VISIBLE_DEVICES=""]
-    ports: ['2083:2083']
+    environment:
+    - CUDA_VISIBLE_DEVICES=""
+    ports:
+    - 2083:2083
     tty: true
-    volumes: ['.:/dp-agent', '${EXTERNAL_FOLDER}/dp_logs:/logs', '${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov']
+    volumes:
+    - .:/dp-agent
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
   odqa:
     build:
-      args: {skill_endpoint: model, skillconfig: odqa/ru_odqa_infer_wiki, skillhost: 0.0.0.0,
-        skillport: 2080}
+      args:
+        skill_endpoint: model
+        skillconfig: odqa/ru_odqa_infer_wiki
+        skillhost: 0.0.0.0
+        skillport: 2080
       context: ./
       dockerfile: dp/dockerfile_skill_cpu
     container_name: odqa
-    environment: [CUDA_VISIBLE_DEVICES=""]
-    ports: ['2080:2080']
+    environment:
+    - CUDA_VISIBLE_DEVICES=""
+    ports:
+    - 2080:2080
     tty: true
-    volumes: ['.:/dp-agent', '${EXTERNAL_FOLDER}/dp_logs:/logs', '${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov']
+    volumes:
+    - .:/dp-agent
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
   sentiment:
     build:
-      args: {skill_endpoint: model, skillconfig: classifiers/rusentiment_cnn, skillhost: 0.0.0.0,
-        skillport: 2084}
+      args:
+        skill_endpoint: model
+        skillconfig: classifiers/rusentiment_cnn
+        skillhost: 0.0.0.0
+        skillport: 2084
       context: ./
       dockerfile: dp/dockerfile_skill_cpu
     container_name: sentiment
-    environment: [CUDA_VISIBLE_DEVICES=""]
-    ports: ['2084:2084']
+    environment:
+    - CUDA_VISIBLE_DEVICES=""
+    ports:
+    - 2084:2084
     tty: true
-    volumes: ['.:/dp-agent', '${EXTERNAL_FOLDER}/dp_logs:/logs', '${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov']
+    volumes:
+    - .:/dp-agent
+    - ${EXTERNAL_FOLDER}/dp_logs:/logs
+    - ${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov
 version: '3.7'
