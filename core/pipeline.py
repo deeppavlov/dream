@@ -1,4 +1,4 @@
-from collections import defaultdict
+from collections import defaultdict, Counter
 
 
 class Service:
@@ -25,17 +25,10 @@ class Service:
             return workflow_record
         return self.workflow_formatter(workflow_record)
 
-    def __repr__(self):
-        return self.name
-
 
 class Pipeline:
     def __init__(self, services):
-        service_names = [i.name for i in services]
-        counter = defaultdict(int)
-        for i in service_names:
-            counter[i] += 1
-        wrong_names = [k for k, v in counter.items() if v != 1]
+        wrong_names = [k for k, v in Counter([i.name for i in services]).items() if v != 1]
         if wrong_names:
             raise ValueError(f'there are some duplicate service names presented {wrong_names}')
 
@@ -47,9 +40,11 @@ class Pipeline:
     def get_service_by_name(self, service_name):
         if not service_name:
             return None
-        if service_name not in self.services:
+
+        service = self.services.get(service_name, None)
+        if not service:
             raise ValueError(f'service {service_name} does not exist')
-        return self.services[service_name]
+        return service
 
     def process_service_names(self):
         wrong_names = defaultdict(list)
