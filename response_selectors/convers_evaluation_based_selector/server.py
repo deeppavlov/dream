@@ -8,6 +8,11 @@ import numpy as np
 
 import requests
 from flask import Flask, request, jsonify
+from os import getenv
+import sentry_sdk
+
+
+sentry_sdk.init(getenv('SENTRY_DSN'))
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -55,9 +60,10 @@ def respond():
                               data=json.dumps({'conversations': conversations}),
                               method='POST')
     if result.status_code != 200:
-        logger.warning(
-            "result status code is not 200: {}. result text: {}; result status: {}".format(result, result.text,
-                                                                                           result.status_code))
+        msg = "result status code is not 200: {}. result text: {}; result status: {}".format(result, result.text,
+                                                                                             result.status_code)
+        sentry_sdk.capture_message(msg)
+        logger.warning(msg)
         selected_skill_names = []
     else:
         result = result.json()
