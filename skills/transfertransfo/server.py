@@ -10,7 +10,11 @@ import torch
 from pytorch_pretrained_bert import OpenAIGPTLMHeadModel, OpenAIGPTTokenizer
 from utils import download_pretrained_model
 from interact import sample_sequence
+from os import getenv
+import sentry_sdk
 
+
+sentry_sdk.init(getenv('SENTRY_DSN'))
 
 SEED = 31415
 # DEVICE = "cuda"

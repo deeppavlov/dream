@@ -3,6 +3,11 @@ from typing import List
 
 from fastapi import FastAPI, Body
 from pydantic import BaseModel
+from os import getenv
+import sentry_sdk
+
+
+sentry_sdk.init(getenv('SENTRY_DSN'))
 
 
 CMD_NAME = "/new_persona"

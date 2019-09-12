@@ -7,6 +7,11 @@ import uuid
 
 import requests
 from flask import Flask, request, jsonify
+from os import getenv
+import sentry_sdk
+
+
+sentry_sdk.init(getenv('SENTRY_DSN'))
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
