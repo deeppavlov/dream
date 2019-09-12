@@ -43,7 +43,6 @@ class HttpOutputConnector:
 
 class ConfidenceResponseSelectorConnector:
     async def send(self, payload: Dict):
-        skill_name = ''
         response = payload['utterances'][-1]['selected_skills']
         skill_name = sorted(response.items(), key=lambda x: x[1]['confidence'], reverse=True)[0][0]
         return {'confidence_response_selector': skill_name}
