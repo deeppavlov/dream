@@ -9,7 +9,7 @@ settings = read_json(settings_path)
 settings['model_defaults']['Chitchat'] = {
     "host": "",
     "port": "",
-    "model_endpoint": "/chitchat",
+    "model_endpoint": "/model",
     "model_args_names": ["utterances", "annotations", "u_histories", "dialogs"]
 }
 save_json(settings, settings_path)
