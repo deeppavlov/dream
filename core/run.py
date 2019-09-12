@@ -4,10 +4,11 @@ import uuid
 
 from aiohttp import web
 from datetime import datetime
+
 from core.agent import AsyncAgent
 from core.pipeline import Pipeline, Service, simple_workflow_formatter
 from core.connectors import CmdOutputConnector, HttpOutputConnector
-from core.config_parser import services, worker_tasks, session
+from core.config_parser import parse_old_config
 from core.state_manager import StateManager
 from core.transform_config import DEBUG
 
@@ -20,13 +21,12 @@ args = parser.parse_args()
 CHANNEL = args.channel
 
 
-def prepare_agent(endpoint: Service):
+def prepare_agent(services, endpoint: Service):
     pipeline = Pipeline(services)
     pipeline.add_responder_service(endpoint)
-
     agent = AsyncAgent(pipeline, StateManager)
 
-    return agent.register_msg
+    return agent.register_msg, agent.process
 
 
 async def run(register_msg):
@@ -37,13 +37,31 @@ async def run(register_msg):
             await register_msg(msg, user_id, 'cmd', datetime.now(), 'lab', CHANNEL)
 
 
-async def init_app(register_msg, intermediate_storage):
-    app = web.Application()
+async def init_app(register_msg, intermediate_storage, on_startup, on_shutdown):
+    app = web.Application(debug=True)
     handle_func = await api_message_processor(register_msg, intermediate_storage)
     app.router.add_post('/', handle_func)
     app.router.add_get('/dialogs', users_dialogs)
     app.router.add_get('/dialogs/{dialog_id}', dialog)
+    app.on_startup.append(on_startup)
+    app.on_shutdown.append(on_shutdown)
     return app
+
+
+def prepare_startup(consumers, process_callable, session):
+    result = []
+    for i in consumers:
+        result.append(asyncio.ensure_future(i.call_service(process_callable)))
+
+    async def startup_background_tasks(app):
+        app['consumers'] = result
+        app['client_session'] = session
+
+    return startup_background_tasks
+
+
+async def on_shutdown(app):
+    await app['client_session'].close()
 
 
 async def api_message_processor(register_msg, intermediate_storage):
@@ -99,12 +117,16 @@ async def dialog(request):
 
 
 if __name__ == '__main__':
+    services, workers, session = parse_old_config()
+
     if CHANNEL == 'cmd_client':
         endpoint = Service('cmd_responder', CmdOutputConnector(), None, 1, ['responder'], set(), simple_workflow_formatter)
         loop = asyncio.get_event_loop()
-        loop.add_signal_handler(signal.SIGTERM, handler, loop)
         loop.set_debug(DEBUG)
-        future = asyncio.ensure_future(run(prepare_agent(endpoint)))
+        register_msg, process = prepare_agent(services, endpoint)
+        future = asyncio.ensure_future(run(register_msg))
+        for i in workers:
+            loop.create_task(i.call_service(process))
         try:
             loop.run_until_complete(future)
         except Exception as e:
@@ -114,7 +136,8 @@ if __name__ == '__main__':
             loop.close()
     elif CHANNEL == 'http_client':
         intermediate_storage = {}
-        endpoint = Service('cmd_responder', HttpOutputConnector(intermediate_storage), None, 1, ['responder'])
-        register_msg = prepare_agent(endpoint)
-        app = init_app(register_msg, intermediate_storage)
+        endpoint = Service('http_responder', HttpOutputConnector(intermediate_storage), None, 1, ['responder'])
+        register_msg, process_callable = prepare_agent(services, endpoint)
+        app = init_app(register_msg, intermediate_storage, prepare_startup(workers, process_callable, session), on_shutdown)
+
         web.run_app(app, port=args.port)

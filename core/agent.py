@@ -21,24 +21,20 @@ class AsyncAgent:
         self.response_logger_callable = response_logger_callable
 
     def add_workflow_record(self, dialog: Dialog, deadline_timestamp: Optional[float] = None, **kwargs):
-        if dialog.id in self.workflow.keys():
+        if str(dialog.id) in self.workflow.keys():
             raise ValueError(f'dialog with id {dialog.id} is already in workflow')
         workflow_record = {'dialog': dialog, 'services': defaultdict(dict)}
         if deadline_timestamp:
             workflow_record['deadline_timestamp'] = deadline_timestamp
-        if 'dialog' in kwargs:
-            raise ValueError("'dialog' key is system reserved")
-        if 'services' in kwargs:
-            raise ValueError("'services key' is system reserved")
-        if 'deadline_timestamp' in kwargs:
-            raise ValueError("'deadline_timestamp' key is system reserved")
+
         workflow_record.update(kwargs)
-        self.workflow[dialog.id] = workflow_record
+        self.workflow[str(dialog.id)] = workflow_record
 
     def get_workflow_record(self, dialog_id):
-        if dialog_id not in self.workflow.keys():
+        record = self.workflow.get(dialog_id, None)
+        if not record:
             raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
-        return self.workflow[dialog_id]
+        return record
 
     def flush_record(self, dialog_id: str):
         if dialog_id not in self.workflow.keys():
@@ -109,18 +105,28 @@ class AsyncAgent:
         self.state_manager.add_human_utterance(dialog, utterance, date_time)
         self.add_workflow_record(dialog, deadline_timestamp, **kwargs)
 
-        await self.process(dialog.id)
+        await self.process(str(dialog.id))
 
     async def process(self, dialog_id, service_name=None, response=None):
         workflow_record = self.get_workflow_record(dialog_id)
         next_services = self.process_service_response(dialog_id, service_name, response)
 
+        service_requests = []
+        has_responder = False
         for service in next_services:
             self.register_service_request(dialog_id, service.name)
             payload = service.apply_workflow_formatter(workflow_record)
-            response = await service.connector.send(payload)
+            service_requests.append(service.connector.send(payload))
             if service.is_responder():
-                self.flush_record(dialog_id)
-                break
+                has_responder = True
+
+        responses = await asyncio.gather(*service_requests, return_exceptions=True)
+
+        tasks = []
+        for service, response in zip(next_services, responses):
             if response is not None:
-                await self.process(dialog_id, service.name, response)
+                tasks.append(self.process(dialog_id, service.name, response))
+        await asyncio.gather(*tasks)
+
+        if has_responder:
+            self.flush_record(dialog_id)
