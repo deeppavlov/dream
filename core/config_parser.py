@@ -12,22 +12,19 @@ def parse_old_config():
     worker_tasks = []
     session = aiohttp.ClientSession()
 
-    def make_service_from_config_rec(log_record, session, state_processor_method, tags, names_previous_services, name_modifier=None):
+    def make_service_from_config_rec(conf_record, session, state_processor_method, tags, names_previous_services, name_modifier=None):
         worker_tasks = []
         if name_modifier:
-            name = name_modifier(log_record['name'])
+            name = name_modifier(conf_record['name'])
         else:
-            name = log_record['name']
-        formatter = log_record['formatter']
-        batch_size = log_record.get('batch_size', 1)
-        url2 = log_record.get('url2', None)
-        if log_record['protocol'] == 'http':
-            if log_record.get('external', False):
-                url = f"http://{log_record['host']}:{log_record['port']}/{log_record['endpoint']}"
-            else:
-                url = f"http://{log_record['name']}:{log_record['port']}/{log_record['endpoint']}"
+            name = conf_record['name']
+        formatter = conf_record['formatter']
+        batch_size = conf_record.get('batch_size', 1)
+        url = conf_record['url']
+        url2 = conf_record.get('url2', None)
+        if conf_record['protocol'] == 'http':
             if batch_size == 1 and not url2:
-                connector = HTTPConnector(session, url, formatter, log_record['name'])
+                connector = HTTPConnector(session, url, formatter, conf_record['name'])
             else:
                 queue = asyncio.Queue()
                 connector = AioQueueConnector(queue)  # worker task and queue connector
