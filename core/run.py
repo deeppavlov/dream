@@ -6,7 +6,7 @@ from aiohttp import web
 from datetime import datetime
 from string import hexdigits
 
-from core.agent import AsyncAgent
+from core.agent import Agent
 from core.pipeline import Pipeline, Service, simple_workflow_formatter
 from core.connectors import CmdOutputConnector, HttpOutputConnector
 from core.config_parser import parse_old_config
@@ -25,7 +25,7 @@ CHANNEL = args.channel
 def prepare_agent(services, endpoint: Service):
     pipeline = Pipeline(services)
     pipeline.add_responder_service(endpoint)
-    agent = AsyncAgent(pipeline, StateManager)
+    agent = Agent(pipeline, StateManager)
 
     return agent.register_msg, agent.process
 
