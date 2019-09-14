@@ -73,7 +73,7 @@ class Agent:
         service = self.pipeline.get_service_by_name(service_name)
         if service:
             self.workflow[dialog_id]['services'][service_name]['done'] = time()
-            if response:
+            if response and service.state_processor_method:
                 service.state_processor_method(workflow_record['dialog'], response)
 
         # Calculating next steps
