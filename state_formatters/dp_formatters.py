@@ -1,7 +1,7 @@
-from typing import Dict, Any
+from typing import List, Any
 
 
-def base_input_formatter(state: Dict):
+def base_input_formatter(state: List):
     """This state_formatter takes the most popular fields from Agent state and returns them as dict values:
         * last utterances: a list of last utterance from each dialog in the state
         * last_annotations: a list of last annotation from each last utterance
@@ -16,7 +16,7 @@ def base_input_formatter(state: Dict):
 
     """
     utterances_histories = []
-    last_utterances = []
+    last_utts = []
     annotations_histories = []
     last_annotations = []
     dialog_ids = []
@@ -29,7 +29,7 @@ def base_input_formatter(state: Dict):
             utterances_history.append(utterance['text'])
             annotations_history.append(utterance['annotations'])
 
-        last_utterances.append(utterances_history[-1])
+        last_utts.append(utterances_history[-1])
         utterances_histories.append(utterances_history)
         last_annotations.append(annotations_history[-1])
         annotations_histories.append(annotations_history)
@@ -38,7 +38,7 @@ def base_input_formatter(state: Dict):
         user_ids.append(dialog['user']['id'])
 
     return {'dialogs': state,
-            'last_utterances': last_utterances,
+            'last_utterances': last_utts,
             'last_annotations': last_annotations,
             'utterances_histories': utterances_histories,
             'annotation_histories': annotations_histories,
@@ -83,7 +83,7 @@ def sentiment_formatter(payload: Any, model_args_names=('x',), mode='in'):
     if mode == 'in':
         return last_utterances(payload, model_args_names)
     elif mode == 'out':
-        return [el[0] for el in payload]
+        return [el for el in payload]
 
 
 def chitchat_odqa_formatter(payload: Any, model_args_names=('x',), mode='in'):
@@ -92,7 +92,7 @@ def chitchat_odqa_formatter(payload: Any, model_args_names=('x',), mode='in'):
     elif mode == 'out':
         response = []
         for el in payload:
-            class_name = el[0][0]
+            class_name = el[0]
             if class_name in ['speech', 'negative']:
                 response.append('chitchat')
             else:
