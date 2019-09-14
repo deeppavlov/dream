@@ -39,7 +39,7 @@ services:
   chitchat_odqa:
     build:
       args:
-        skill_endpoint: intents
+        skill_endpoint: model
         skillconfig: classifiers/rusentiment_bigru_superconv
         skillhost: 0.0.0.0
         skillport: 2082
@@ -66,7 +66,7 @@ services:
   ner:
     build:
       args:
-        skill_endpoint: ner
+        skill_endpoint: model
         skillconfig: ner/ner_rus
         skillhost: 0.0.0.0
         skillport: 2083
@@ -85,7 +85,7 @@ services:
   odqa:
     build:
       args:
-        skill_endpoint: odqa
+        skill_endpoint: model
         skillconfig: odqa/ru_odqa_infer_wiki
         skillhost: 0.0.0.0
         skillport: 2080
@@ -104,7 +104,7 @@ services:
   sentiment:
     build:
       args:
-        skill_endpoint: intents
+        skill_endpoint: model
         skillconfig: classifiers/rusentiment_cnn
         skillhost: 0.0.0.0
         skillport: 2084

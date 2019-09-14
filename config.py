@@ -15,7 +15,7 @@ SKILLS = [
         "protocol": "http",
         "host": "127.0.0.1",
         "port": 2080,
-        "endpoint": "odqa",
+        "endpoint": "model",
         "path": "odqa/ru_odqa_infer_wiki",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
@@ -45,7 +45,7 @@ ANNOTATORS_1 = [
         "protocol": "http",
         "host": "127.0.0.1",
         "port": 2083,
-        "endpoint": "ner",
+        "endpoint": "model",
         "path": "ner/ner_rus",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
@@ -61,7 +61,7 @@ ANNOTATORS_2 = [
         "protocol": "http",
         "host": "127.0.0.1",
         "port": 2084,
-        "endpoint": "intents",
+        "endpoint": "model",
         "path": "classifiers/rusentiment_cnn",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
@@ -79,7 +79,7 @@ SKILL_SELECTORS = [
         "protocol": "http",
         "host": "127.0.0.1",
         "port": 2082,
-        "endpoint": "intents",
+        "endpoint": "model",
         "path": "classifiers/rusentiment_bigru_superconv",
         "env": {
             "CUDA_VISIBLE_DEVICES": ""
