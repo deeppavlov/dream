@@ -10,7 +10,7 @@ from core.state_manager import StateManager
 from core.state_schema import Dialog
 
 
-class AsyncAgent:
+class Agent:
     def __init__(self, pipeline: Pipeline, state_manager: StateManager,
                  process_logger_callable: Optional[Callable] = None,
                  response_logger_callable: Optional[Callable] = None):
