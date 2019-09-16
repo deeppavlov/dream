@@ -98,14 +98,27 @@ class Agent:
     async def register_msg(self, utterance: str, user_telegram_id: Hashable,
                            user_device_type: Any,
                            date_time: datetime, location=Any,
-                           channel_type=str, deadline_timestamp=None, **kwargs):
-
+                           channel_type=str, deadline_timestamp=None,
+                           require_response = False, **kwargs):
+        event = None
+        message_uuid = None
+        hold_flush = False
         user = self.state_manager.get_or_create_user(user_telegram_id, user_device_type)
         dialog = self.state_manager.get_or_create_dialog(user, location, channel_type)
         self.state_manager.add_human_utterance(dialog, utterance, date_time)
-        self.add_workflow_record(dialog, deadline_timestamp, **kwargs)
-
+        if require_response:
+            event = asyncio.Event()
+            hold_flush = True
+        self.add_workflow_record(dialog=dialog, deadline_timestamp=deadline_timestamp,
+                                 event=event, hold_flush=hold_flush, **kwargs)
         await self.process(str(dialog.id))
+
+        if require_response:
+            await event.wait()
+            workflow_record = self.get_workflow_record(str(dialog.id))
+            self.flush_record(str(dialog.id))
+            return workflow_record
+
 
     async def process(self, dialog_id, service_name=None, response=None):
         workflow_record = self.get_workflow_record(dialog_id)
@@ -128,5 +141,5 @@ class Agent:
                 tasks.append(self.process(dialog_id, service.name, response))
         await asyncio.gather(*tasks)
 
-        if has_responder:
+        if has_responder and not workflow_record.get('hold_flush', False):
             self.flush_record(dialog_id)

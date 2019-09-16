@@ -9,7 +9,7 @@ from core.agent import Agent
 from core.state_manager import StateManager
 from core.pipeline import Pipeline, Service
 from core.config_parser import parse_old_config
-from core.connectors import HttpOutputConnector
+from core.connectors import EventSetOutputConnector
 
 import logging
 
@@ -20,31 +20,13 @@ parser.add_argument('phrasefile', help='name of the file with phrases for dialog
                     default="../utils/ru_test_phrases.txt")
 
 
-def init_agent(intermediate_storage):
+def init_agent():
     services, workers, session = parse_old_config()
     pipeline = Pipeline(services)
-    endpoint = Service('http_responder', HttpOutputConnector(intermediate_storage), None, 1, ['responder'])
+    endpoint = Service('http_responder', EventSetOutputConnector(), None, 1, ['responder'])
     pipeline.add_responder_service(endpoint)
     agent = Agent(pipeline, StateManager())
     return agent, session
-
-
-class DummyOutputConnector:
-    def __init__(self, intermediate_storage):
-        self.intermediate_storage = intermediate_storage
-
-    async def send(self, payload):
-        self.intermediate_storage[payload['message_uuid']] = payload
-        payload['event'].set()
-
-
-async def process_message_return_event(agent, phrase, u_tg_id, u_d_type, date_time, location, ch_type, intermediate_storage):
-    event = asyncio.Event()
-    message_uuid = uuid.uuid4().hex
-    await agent.register_msg(utterance=phrase, user_telegram_id=u_tg_id, user_device_type=u_d_type, date_time=date_time,
-                             location=location, channel_type=ch_type, event=event, message_uuid=message_uuid)
-    await event.wait()
-    return intermediate_storage.pop(message_uuid)
 
 
 async def main():
@@ -59,11 +41,11 @@ async def main():
     locations = [choice(['moscow', 'novosibirsk', 'novokuznetsk']) for _ in range(length)]
     ch_types = ['cmd_client'] * length
     intermediate_storage = {}
-    agent, session = init_agent(intermediate_storage)
+    agent, session = init_agent()
     result = []
     for u, u_tg_id, u_d_type, dt, loc, ch_t in zip(phrases, u_tg_ids, u_d_types, date_times, locations, ch_types):
-        response = await process_message_return_event(agent, u, u_tg_id, u_d_type, dt, loc, ch_t, intermediate_storage)
-        result.append(response)
+        response = await agent.register_msg(u, u_tg_id, u_d_type, dt, loc, ch_t, None, True)
+        result.append(response['dialog'].utterances[-1].text)
 
     await session.close()
 

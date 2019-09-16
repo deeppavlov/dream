@@ -24,30 +24,6 @@ class AioQueueConnector:
         await self.queue.put(payload)
 
 
-class CmdOutputConnector:
-    async def send(self, payload):
-        print('bot: ', payload['utterances'][-1]['text'])
-
-
-class HttpOutputConnector:
-    def __init__(self, intermediate_storage: Dict):
-        self.intermediate_storage = intermediate_storage
-
-    async def send(self, payload):
-        message_uuid = payload['message_uuid']
-        event = payload['event']
-        response_text = payload['dialog'].utterances[-1].text
-        self.intermediate_storage[message_uuid] = response_text
-        event.set()
-
-
-class ConfidenceResponseSelectorConnector:
-    async def send(self, payload: Dict):
-        response = payload['utterances'][-1]['selected_skills']
-        skill_name = sorted(response.items(), key=lambda x: x[1]['confidence'], reverse=True)[0][0]
-        return {'confidence_response_selector': skill_name}
-
-
 class QueueListenerBatchifyer:
     def __init__(self, session, url, formatter, service_name, queue, batch_size):
         self.session = session
@@ -73,3 +49,32 @@ class QueueListenerBatchifyer:
                                                   {self.service_name: self.formatter(response_text, mode='out')}))
                 await asyncio.gather(*tasks)
             await asyncio.sleep(0.1)
+
+
+class ConfidenceResponseSelectorConnector:
+    async def send(self, payload: Dict):
+        response = payload['utterances'][-1]['selected_skills']
+        skill_name = sorted(response.items(), key=lambda x: x[1]['confidence'], reverse=True)[0][0]
+        return {'confidence_response_selector': skill_name}
+
+
+class CmdOutputConnector:
+    async def send(self, payload):
+        print('bot: ', payload['utterances'][-1]['text'])
+
+
+class HttpOutputConnector:
+    def __init__(self, intermediate_storage: Dict):
+        self.intermediate_storage = intermediate_storage
+
+    async def send(self, payload):
+        message_uuid = payload['message_uuid']
+        event = payload['event']
+        response_text = payload['dialog'].utterances[-1].text
+        self.intermediate_storage[message_uuid] = response_text
+        event.set()
+
+
+class EventSetOutputConnector:
+    async def send(self, payload):
+        payload['event'].set()
