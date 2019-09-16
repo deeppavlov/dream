@@ -46,6 +46,10 @@ services:
   mongo:
     volumes:
       - external-mongo-db:/root/data/db
+  toxic_classification:
+    image: 127.0.0.1:5000/toxic_classification:latest
+    volumes: ['external-logs:/logs', 'external-deeppavlov:/root/.deeppavlov']
+    env_file: [.env.staging]
 volumes:
   external-logs:
   external-deeppavlov:

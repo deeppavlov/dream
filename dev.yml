@@ -57,4 +57,7 @@ services:
   mongo:
     volumes:
      - /data/db:/root/data/db
+  toxic_classification:
+    env_file: [.env]
+    volumes: ['${EXTERNAL_FOLDER}/dp_logs:/logs', '${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov', '.:/dp-agent']
 version: '3.7'
