@@ -40,16 +40,15 @@ async def main():
     date_times = [datetime.utcnow()] * length
     locations = [choice(['moscow', 'novosibirsk', 'novokuznetsk']) for _ in range(length)]
     ch_types = ['cmd_client'] * length
-    intermediate_storage = {}
     agent, session = init_agent()
-    result = []
+    res = []
     for u, u_tg_id, u_d_type, dt, loc, ch_t in zip(phrases, u_tg_ids, u_d_types, date_times, locations, ch_types):
         response = await agent.register_msg(u, u_tg_id, u_d_type, dt, loc, ch_t, None, True)
-        result.append(response['dialog'].utterances[-1].text)
+        res.append(response['dialog'].utterances[-1].text)
 
     await session.close()
 
-    return result
+    return res
 
 
 if __name__ == "__main__":
