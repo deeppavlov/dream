@@ -21,14 +21,11 @@ app = Flask(__name__)
 
 COBOT_API_KEY = os.environ.get('COBOT_API_KEY')
 COBOT_DIALOGACT_SERVICE_URL =  os.environ.get('COBOT_DIALOGACT_SERVICE_URL')
-COBOT_TOPICS_SERVICE_URL = os.environ.get('COBOT_TOPICS_SERVICE_URL')
 
 if COBOT_API_KEY is None:
     raise RuntimeError('COBOT_API_KEY environment variable is not set')
 if COBOT_DIALOGACT_SERVICE_URL is None:
     raise RuntimeError('COBOT_DIALOGACT_SERVICE_URL environment variable is not set')
-if COBOT_TOPICS_SERVICE_URL is None:
-    raise RuntimeError('COBOT_TOPICS_SERVICE_URL environment variable is not set')
 
 headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COBOT_API_KEY}'}
 
@@ -41,15 +38,9 @@ def respond():
     intents = []
     conversations = []
 
-    topics = requests.request(url=f'{COBOT_TOPICS_SERVICE_URL}',
-                              headers=headers,
-                              data=json.dumps({'utterances': user_sentences}),
-                              method='POST').json()
-
     for i, dialog in enumerate(user_states_batch):
         conv = dict()
         conv["currentUtterance"] = dialog["utterances"][-1]["text"]
-        conv["currentUtteranceTopic"] = topics["topics"][i]["topicClass"]
         # every odd utterance is from user
         conv["pastUtterances"] = [uttr["text"] for uttr in dialog["utterances"][1::2]]
         # every second utterance is from bot
