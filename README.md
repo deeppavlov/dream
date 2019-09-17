@@ -35,3 +35,25 @@ Integration tool which makes DeepPavlov agents accessible via ConvAI Router Bot
  * `--state`: add this argument to send dialogue state besides utterance to model. Overrides default settings from `config.json`.
  * `--convai`: add this argument to send full payload to model instead of plain text. Overrides default settings from `config.json`.
  * `--agent`: add this argument to send utterances from router bot to web interface of `dp-agent`. Overrides default settings from `config.json`.
+ 
+
+## ConvAI Router Bot Poller modes
+
+One can use 4 combinations of `convai` and `state` states while `agent` is set to `False`. `agent` mode could be
+set to `True` only when `convai` and `state` are set to `False`.
+
+In `state` mode `CRBP` sends two argument batches: utterances batch and state batch. Argument names are stored at
+`config.json`.
+
+In `convai` mode `CRBP` sends as utterance data received from [ConvAI Router Bot](https://github.com/deepmipt/convai_router_bot) as is.
+Payload structure could be seen in `_get_message_dict` function from
+[conversation_getaways](https://github.com/deepmipt/convai_router_bot/blob/master/convai/conversation_gateways.py) module.
+In not `convai` mode `CRBP` sends only `text` field.
+
+| CRBP mode | request payload |
+|:---:|:---:|
+| `convai=False`, `state=False`, `agent=False` | `{'text1': ['a', 'b']}` |
+| `convai=True`, `state=False`, `agent=False` | `{'text1': [<payload_0>, <payload_1>]}` |
+| `convai=False`, `state=True`, `agent=False` | `{'text1': ['a', 'b'], 'state': [None, ['c', 'd']]}` |
+| `convai=True`, `state=True`, `agent=False` | `{'text1': [<payload_0>, <payload_1>], 'state': [None, ['c', 'd']]}` |
+| `convai=False`, `state=False`, `agent=True` | `{'user_id': 74455, 'payload': 'Hello, Agent!'}` |
