@@ -7,6 +7,12 @@ import uuid
 
 import requests
 from flask import Flask, request, jsonify
+from os import getenv
+import sentry_sdk
+
+
+sentry_sdk.init(getenv('SENTRY_DSN'))
+
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -39,17 +45,24 @@ def respond():
     result = requests.request(url=f'{COBOT_OFFENSIVE_SERVICE_URL}',
                               headers=headers,
                               data=json.dumps({'utterances': user_sentences}),
-                              method='POST').json()
-
-    for i, sent in enumerate(user_sentences):
-        logger.info(f"user_sentence: {sent}, session_id: {session_id}")
-        toxicity = toxicity_classes[result["offensivenessClasses"][i]["values"][1]["offensivenessClass"]]
-        confidence = float(result["offensivenessClasses"][i]["values"][1]["confidence"])
-        blacklist = blacklist_classes[result["offensivenessClasses"][i]["values"][0]["offensivenessClass"]]
-        toxicities += [toxicity]
-        confidences += [confidence]
-        blacklists += [blacklist]
-        logger.info(f"sentiment: {toxicity}")
+                              method='POST')
+    if result.status_code != 200:
+        msg = "result status code is not 200: {}. result text: {}; result status: {}".format(result, result.text,
+                                                                                             result.status_code)
+        sentry_sdk.capture_message(msg)
+        logger.warning(msg)
+        selected_skill_names = []
+    else:
+        result = result.json()
+        for i, sent in enumerate(user_sentences):
+            logger.info(f"user_sentence: {sent}, session_id: {session_id}")
+            toxicity = toxicity_classes[result["offensivenessClasses"][i]["values"][1]["offensivenessClass"]]
+            confidence = float(result["offensivenessClasses"][i]["values"][1]["confidence"])
+            blacklist = blacklist_classes[result["offensivenessClasses"][i]["values"][0]["offensivenessClass"]]
+            toxicities += [toxicity]
+            confidences += [confidence]
+            blacklists += [blacklist]
+            logger.info(f"sentiment: {toxicity}")
 
     return jsonify(list(zip(toxicities, confidences, blacklists)))
 

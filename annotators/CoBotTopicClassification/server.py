@@ -71,7 +71,6 @@ def respond():
         for i, sent_list in enumerate(user_list_sentences):
             logger.info(f"user_sentence: {sent_list}, session_id: {session_id}")
             curr_topics = result[dialog_ids == i]
-            logger.info(f"curr_topics: {curr_topics}")
 
             curr_topics = [t["topicClass"] for t in curr_topics]
             topics += [curr_topics]

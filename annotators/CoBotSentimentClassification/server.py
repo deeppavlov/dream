@@ -42,15 +42,23 @@ def respond():
     result = requests.request(url=f'{COBOT_SENTIMENT_SERVICE_URL}',
                               headers=headers,
                               data=json.dumps({'utterances': user_sentences}),
-                              method='POST').json()
+                              method='POST')
 
-    for i, sent in enumerate(user_sentences):
-        logger.info(f"user_sentence: {sent}, session_id: {session_id}")
-        sentiment = sentiment_classes[result["sentimentClasses"][i]["sentimentClass"]]
-        confidence = result["sentimentClasses"][i]["confidence"]
-        sentiments += [sentiment]
-        confidences += [confidence]
-        logger.info(f"sentiment: {sentiment}")
+    if result.status_code != 200:
+        msg = "result status code is not 200: {}. result text: {}; result status: {}".format(result, result.text,
+                                                                                             result.status_code)
+        sentry_sdk.capture_message(msg)
+        logger.warning(msg)
+        selected_skill_names = []
+    else:
+        result = result.json()
+        for i, sent in enumerate(user_sentences):
+            logger.info(f"user_sentence: {sent}, session_id: {session_id}")
+            sentiment = sentiment_classes[result["sentimentClasses"][i]["sentimentClass"]]
+            confidence = result["sentimentClasses"][i]["confidence"]
+            sentiments += [sentiment]
+            confidences += [confidence]
+            logger.info(f"sentiment: {sentiment}")
 
     return jsonify(list(zip(sentiments, confidences)))
 
