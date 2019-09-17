@@ -5,8 +5,7 @@ services:
       dockerfile: dockerfile_agent
     container_name: agent
     depends_on:
-      - aiml
-      - mongo
+      - aiml      
     ports:
     - 4242:4242
     tty: true
@@ -25,11 +24,11 @@ services:
     ports:
       - 2080:2080
     tty: true
-  mongo:
-    command: mongod
-    image: mongo:3.2.0
-    ports:
-      - 27017:27017
+  # mongo:
+  #   command: mongod
+  #   image: mongo:3.2.0
+  #   ports:
+  #     - 27017:27017
   rule_based_selector:
     container_name: rule_based_selector
     build:

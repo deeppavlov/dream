@@ -1,9 +1,8 @@
 from state_formatters.dp_formatters import *
 
-DB_NAME = 'test'
-DB_HOST = '127.0.0.1'
+DB_NAME = 'dream-dev'
+DB_HOST = 'mongodb://dream:destruct_people_royalty@dream-mongodb.cluster-ckb0nlkfs4kq.us-east-1.docdb.amazonaws.com:27017'
 DB_PORT = 27017
-DB_PATH = '/data/db'
 
 MAX_WORKERS = 4
 
