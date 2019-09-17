@@ -2,15 +2,19 @@ from collections import defaultdict, Counter
 
 
 class Service:
-    def __init__(self, name, connector, state_processor_method,
-                 batch_size=1, tags=None, names_previous_services=None, workflow_formatter=None):
+    def __init__(self, name, connector=None, state_processor_method=None,
+                 batch_size=1, tags=None, names_previous_services=None,
+                 workflow_formatter=None, connector_callable=None):
         self.name = name
         self.batch_size = batch_size
-        self.connector = connector
         self.state_processor_method = state_processor_method
         self.names_previous_services = names_previous_services or set()
         self.tags = tags or []
         self.workflow_formatter = workflow_formatter
+        if not (connector or connector_callable):
+            raise ValueError('Either connector or connector_callable should be provided')
+        self.connector = connector
+        self._connector_callable = connector_callable
         self.previous_services = set()
         self.next_services = set()
 
@@ -24,6 +28,13 @@ class Service:
         if not self.workflow_formatter:
             return workflow_record
         return self.workflow_formatter(workflow_record)
+
+    @property
+    def connector_callable(self):
+        if self._connector_callable:
+            return self._connector_callable
+        else:
+            return self.connector.send
 
 
 class Pipeline:
