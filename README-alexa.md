@@ -75,3 +75,9 @@ staging
 - Какие порты надо открыть для докер и докер-машины: https://www.digitalocean.com/community/tutorials/how-to-configure-the-linux-firewall-for-docker-swarm-on-ubuntu-16-04
 - Вот так можно создать окружение для стейджинга на удаленной машине используя docker-machine: https://dev.to/zac_siegel/using-docker-machine-to-provision-a-remote-docker-host-1267
 - Unset docker-machine env: `eval "$(docker-machine env -u)"`
+
+
+Deploy to Alexa
+=======================
+
+- [Deploy to Alexa README](aws_lambda/README.md)
