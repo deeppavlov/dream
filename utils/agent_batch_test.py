@@ -44,10 +44,7 @@ async def main():
     for u, u_d_type, dt, loc, ch_t in zip(phrases, u_d_types, date_times, locations, ch_types):
         u_tg_id = uuid.uuid4().hex
         tasks.append(agent.register_msg(u, u_tg_id, u_d_type, dt, loc, ch_t, None, True))
-    res = await asyncio.gather(*tasks, return_exceptions=True)
-    for i in res:
-        if isinstance(i, Exception):
-            raise i
+    res = await asyncio.gather(*tasks, return_exceptions=False)
 
     await session.close()
 
