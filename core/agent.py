@@ -112,7 +112,6 @@ class Agent:
         self.add_workflow_record(dialog=dialog, deadline_timestamp=deadline_timestamp,
                                  event=event, hold_flush=hold_flush, **kwargs)
         await self.process(str(dialog.id))
-
         if require_response:
             await event.wait()
             workflow_record = self.get_workflow_record(str(dialog.id))
@@ -138,6 +137,8 @@ class Agent:
         tasks = []
         for service, response in zip(next_services, responses):
             if response is not None:
+                if isinstance(response, Exception):
+                    raise response
                 tasks.append(self.process(dialog_id, service.name, response))
         await asyncio.gather(*tasks)
 

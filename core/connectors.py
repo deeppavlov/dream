@@ -1,10 +1,10 @@
 import asyncio
 import aiohttp
-from typing import Dict, List
+from typing import Dict, List, Callable
 
 
 class HTTPConnector:
-    def __init__(self, session, url, formatter, service_name):
+    def __init__(self, session: aiohttp.ClientSession, url: str, formatter: Callable, service_name: str):
         self.session = session
         self.url = url
         self.formatter = formatter
@@ -58,11 +58,6 @@ class ConfidenceResponseSelectorConnector:
         return {'confidence_response_selector': skill_name}
 
 
-class CmdOutputConnector:
-    async def send(self, payload):
-        print('bot: ', payload['utterances'][-1]['text'])
-
-
 class HttpOutputConnector:
     def __init__(self, intermediate_storage: Dict):
         self.intermediate_storage = intermediate_storage
@@ -77,4 +72,7 @@ class HttpOutputConnector:
 
 class EventSetOutputConnector:
     async def send(self, payload):
-        payload['event'].set()
+        event = payload.get('event', None)
+        if not event or not isinstance(event, asyncio.Event):
+            raise ValueError("'event' key is not presented in payload")
+        event.set()
