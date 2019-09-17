@@ -8,6 +8,7 @@ from typing import Any, Optional, Callable, Hashable
 from core.pipeline import Pipeline
 from core.state_manager import StateManager
 from core.state_schema import Dialog
+from models.hardcode_utterances import TG_START_UTT
 
 
 class Agent:
@@ -99,13 +100,13 @@ class Agent:
                            user_device_type: Any,
                            date_time: datetime, location=Any,
                            channel_type=str, deadline_timestamp=None,
-                           require_response = False, **kwargs):
+                           require_response=False, **kwargs):
         event = None
-        message_uuid = None
         hold_flush = False
         user = self.state_manager.get_or_create_user(user_telegram_id, user_device_type)
-        dialog = self.state_manager.get_or_create_dialog(user, location, channel_type)
-        self.state_manager.add_human_utterance(dialog, utterance, date_time)
+        should_reset = True if utterance == TG_START_UTT else False
+        dialog = self.state_manager.get_or_create_dialog(user, location, channel_type, should_reset=should_reset)
+        self.state_manager.add_human_utterance(dialog, user, utterance, date_time)
         if require_response:
             event = asyncio.Event()
             hold_flush = True
@@ -117,7 +118,6 @@ class Agent:
             workflow_record = self.get_workflow_record(str(dialog.id))
             self.flush_record(str(dialog.id))
             return workflow_record
-
 
     async def process(self, dialog_id, service_name=None, response=None):
         workflow_record = self.get_workflow_record(dialog_id)

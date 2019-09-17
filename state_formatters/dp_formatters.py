@@ -35,7 +35,7 @@ def base_input_formatter(state: List):
         annotations_histories.append(annotations_history)
 
         dialog_ids.append(dialog['id'])
-        user_ids.append(dialog['user']['id'])
+        user_ids.extend([utt['user']['id'] for utt in state[0]['utterances']])
 
     return {'dialogs': state,
             'last_utterances': last_utts,

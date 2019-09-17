@@ -86,11 +86,11 @@ def parse_old_config():
 
     if not RESPONSE_SELECTORS:
         services.append(Service('confidence_response_selector', ConfidenceResponseSelectorConnector(),
-                                StateManager.add_bot_utterance_simple,
+                                StateManager.add_bot_response,
                                 1, ['RESPONSE_SELECTORS'], previous_services, simple_workflow_formatter))
     else:
         for r in RESPONSE_SELECTORS:
-            service, workers = make_service_from_config_rec(r, session, StateManager.add_bot_utterance_simple,
+            service, workers = make_service_from_config_rec(r, session, StateManager.add_bot_response,
                                                             ['RESPONSE_SELECTORS'], previous_services)
             services.append(service)
             worker_tasks.extend(workers)
