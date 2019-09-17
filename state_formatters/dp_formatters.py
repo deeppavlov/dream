@@ -247,7 +247,7 @@ def cobot_dialogact_formatter(payload, mode='in'):
         dialogs = base_input_formatter(payload)['dialogs']
         return {"dialogs": dialogs}
     elif mode == 'out':
-        return {"text": payload[0]}
+        return payload[0]
 
 
 def program_y_formatter(payload, mode='in'):
