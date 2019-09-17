@@ -3,12 +3,12 @@ import asyncio
 import functools
 import json
 import logging
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 from itertools import zip_longest
 from logging import Logger, config as logging_config
 from multiprocessing import Process, Queue
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 
 import aiohttp
 import requests
@@ -23,6 +23,7 @@ parser.add_argument('--port', default=None, help='router bot port', type=str)
 parser.add_argument('--token', default=None, help='bot token', type=str)
 parser.add_argument('--state', action='store_true', help='add argument to send state to model')
 parser.add_argument('--convai', action='store_true')
+parser.add_argument('--agent', action='store_true', help='run poller in dp-agent mode')
 
 
 def init_log(conf: Dict) -> None:
@@ -30,6 +31,8 @@ def init_log(conf: Dict) -> None:
     logging_config.dictConfig(conf["logging"])
     log = logging.root.manager.loggerDict['wrapper_logger']
 
+
+Message = namedtuple('Message', ['chat_id', 'payload'])
 
 class Wrapper:
     _chat_events: Optional[Dict[int, List[asyncio.Event]]]
@@ -82,7 +85,7 @@ class Wrapper:
 
         # "slices" of replicas from all conversations, each slice contains replicas from different conversation
         batched_chats = zip_longest(*chats, fillvalue=None)
-        if self._config['send_state'] is True:
+        if self._config['send_state'] is True or self._config['agent_mode'] is True:
             for layer_id, chats_batch in enumerate(batched_chats):
                 await self._process_chats_batch(chats_batch, layer_id, chat_ids)
         else:
@@ -92,15 +95,35 @@ class Wrapper:
             await asyncio.gather(*tasks)
 
     async def _process_chats_batch(self, chats_batch: List[str], layer_id: int, chat_ids: List[int]) -> None:
-        utts_batch = [(chat_ids[utt_id], utt) for utt_id, utt in enumerate(chats_batch) if utt]
-        j = self._config['infer_batch_length']
-        chunked_utts_batch = [utts_batch[i * j:(i + 1) * j] for i in range((len(utts_batch) + j - 1) // j)]
-        await asyncio.gather(*(self._loop.create_task(self._process_chunk(chunk, layer_id)) for chunk in chunked_utts_batch))
+        utts_batch: List[Message] = [Message(chat_id, utt) for chat_id, utt in zip(chat_ids, chats_batch) if utt]
+        if self._config['agent_mode'] is True:
+            await asyncio.gather(*(self._loop.create_task(self._send_to_agent(msg, layer_id)) for msg in utts_batch))
+        else:
+            j = self._config['infer_batch_length']
+            chunked_utts_batch = [utts_batch[i * j:(i + 1) * j] for i in range((len(utts_batch) + j - 1) // j)]
+            await asyncio.gather(*(self._loop.create_task(self._process_chunk(chunk, layer_id)) for chunk in chunked_utts_batch))
 
-    async def _process_chunk(self, chunk: List[Tuple[int, str]], layer_id: int) -> None:
-        ids_utts_batch = list(zip(*chunk))
-        ids_batch = list(ids_utts_batch[0])
-        utts_batch = list(ids_utts_batch[1])
+    async def _send_to_agent(self, msg: Message, layer_id: int) -> None:
+        chat_id, payload = msg
+        data = {'user_id': str(chat_id), 'payload': payload}
+        try:
+            response = await self._loop.run_in_executor(None, functools.partial(requests.post,
+                                                                                self._config['model_url'],
+                                                                                json=data,
+                                                                                timeout=self._config['request_timeout']))
+        except requests.exceptions.ReadTimeout:
+            response = requests.Response()
+            response.status_code = 503
+        if response.status_code == 200:
+            resp_text = response.json().get('response', 'Empty response')
+        else:
+            log.error(f'Got {response.status_code} code from {self._config["model_url"]}')
+            resp_text = 'Agent error'
+        await self._send_results(chat_id, [resp_text], layer_id)
+
+    async def _process_chunk(self, chunk: List[Message], layer_id: int) -> None:
+        ids_batch = [msg.chat_id for msg in chunk]
+        utts_batch = [msg.payload for msg in chunk]
         data = {self._config["model_args_names"][0]: utts_batch}
         if self._config['send_state']:
             data[self._config["model_args_names"][1]] = [self._states.get(chat_id) for chat_id in ids_batch]
@@ -197,6 +220,7 @@ def main() -> None:
     token = args.token
     send_state = args.state
     convai_mode = args.convai
+    agent_mode = args.agent
 
     root_path = Path(__file__).resolve().parent
     config_path = root_path / 'config.json'
@@ -217,6 +241,10 @@ def main() -> None:
     config['model_url'] = model_url or config['model_url']
     config['send_state'] = send_state or config['send_state']
     config['convai_mode'] = convai_mode or config['convai_mode']
+    config['agent_mode'] = agent_mode or config['agent_mode']
+
+    if config['agent_mode'] and (config['convai_mode'] or config['send_state']):
+        raise ValueError('one shouldn\'t use --convai or --state arguments with --agent')
 
     init_log(config)
     Wrapper(config)
