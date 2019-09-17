@@ -59,7 +59,7 @@ def parse_old_config():
 
     if ANNOTATORS_3:
         for anno in ANNOTATORS_3:
-            service, worker_task = make_service_from_config_rec(anno, session, StateManager.add_annotation,
+            service, workers = make_service_from_config_rec(anno, session, StateManager.add_annotation,
                                                                 ['ANNOTATORS_3'], previous_services)
             services.append(service)
             worker_tasks.extend(workers)

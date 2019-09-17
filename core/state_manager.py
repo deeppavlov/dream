@@ -1,10 +1,8 @@
 from datetime import datetime
-from typing import Sequence, Hashable, Any, Optional, Dict
+from typing import Hashable, Any, Optional, Dict
 
-from core.state_schema import Human, Bot, Utterance, HumanUtterance, BotUtterance, Dialog
-from core.connection import state_storage
 from core.bot import BOT
-from core import VERSION
+from core.state_schema import Human, Bot, HumanUtterance, BotUtterance, Dialog
 
 
 class StateManager:
