@@ -42,8 +42,8 @@ Integration tool which makes DeepPavlov agents accessible via ConvAI Router Bot
 One can use 4 combinations of `convai` and `state` states while `agent` is set to `False`. `agent` mode could be
 set to `True` only when `convai` and `state` are set to `False`.
 
-In `state` mode `CRBP` sends two argument batches: utterances batch and state batch. Argument names are stored at
-`config.json`.
+In `state` mode `CRBP` sends two argument batches: utterances batch and state batch. State could be `None` or any JSON structure.
+Argument names are stored at `config.json`.
 
 In `convai` mode `CRBP` sends as utterance data received from [ConvAI Router Bot](https://github.com/deepmipt/convai_router_bot) as is.
 Payload structure could be seen in `_get_message_dict` function from
@@ -54,6 +54,6 @@ In not `convai` mode `CRBP` sends only `text` field.
 |:---:|:---:|
 | `convai=False`, `state=False`, `agent=False` | `{'text1': ['a', 'b']}` |
 | `convai=True`, `state=False`, `agent=False` | `{'text1': [<payload_0>, <payload_1>]}` |
-| `convai=False`, `state=True`, `agent=False` | `{'text1': ['a', 'b'], 'state': [None, ['c', 'd']]}` |
-| `convai=True`, `state=True`, `agent=False` | `{'text1': [<payload_0>, <payload_1>], 'state': [None, ['c', 'd']]}` |
+| `convai=False`, `state=True`, `agent=False` | `{'text1': ['a', 'b'], 'state': [<state_0>, <state_1>]}` |
+| `convai=True`, `state=True`, `agent=False` | `{'text1': [<payload_0>, <payload_1>], 'state': [<state_0>, <state_1>]}` |
 | `convai=False`, `state=False`, `agent=True` | `{'user_id': 74455, 'payload': 'Hello, Agent!'}` |
