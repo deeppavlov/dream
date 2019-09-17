@@ -128,7 +128,7 @@ class Agent:
         for service in next_services:
             self.register_service_request(dialog_id, service.name)
             payload = service.apply_workflow_formatter(workflow_record)
-            service_requests.append(service.connector.send(payload))
+            service_requests.append(service.connector_callable(payload))
             if service.is_responder():
                 has_responder = True
 
