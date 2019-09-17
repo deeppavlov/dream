@@ -35,20 +35,23 @@ async def main():
         phrases = [line.rstrip('\n') for line in file]
         length = len(phrases)
 
-    u_tg_ids = [str(uuid.uuid4())] * length
     u_d_types = [choice(['iphone', 'android']) for _ in range(length)]
     date_times = [datetime.utcnow()] * length
     locations = [choice(['moscow', 'novosibirsk', 'novokuznetsk']) for _ in range(length)]
     ch_types = ['cmd_client'] * length
     agent, session = init_agent()
-    res = []
-    for u, u_tg_id, u_d_type, dt, loc, ch_t in zip(phrases, u_tg_ids, u_d_types, date_times, locations, ch_types):
-        response = await agent.register_msg(u, u_tg_id, u_d_type, dt, loc, ch_t, None, True)
-        res.append(response['dialog'].utterances[-1].text)
+    tasks = []
+    for u, u_d_type, dt, loc, ch_t in zip(phrases, u_d_types, date_times, locations, ch_types):
+        u_tg_id = uuid.uuid4().hex
+        tasks.append(agent.register_msg(u, u_tg_id, u_d_type, dt, loc, ch_t, None, True))
+    res = await asyncio.gather(*tasks, return_exceptions=True)
+    for i in res:
+        if isinstance(i, Exception):
+            raise i
 
     await session.close()
 
-    return res
+    return [i['dialog'].utterances[-1].text for i in res]
 
 
 if __name__ == "__main__":
