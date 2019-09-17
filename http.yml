@@ -1,0 +1,4 @@
+services:
+  agent:
+    command: 'python3 -m core.run -ch http_client'
+version: '3.7'
