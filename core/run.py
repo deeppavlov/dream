@@ -5,10 +5,11 @@ import uuid
 from aiohttp import web
 from datetime import datetime
 from string import hexdigits
+from aiohttp_swagger import *
 
 from core.agent import Agent
 from core.pipeline import Pipeline, Service, simple_workflow_formatter
-from core.connectors import CmdOutputConnector, HttpOutputConnector
+from core.connectors import EventSetOutputConnector, HttpOutputConnector
 from core.config_parser import parse_old_config
 from core.state_manager import StateManager
 from core.transform_config import DEBUG
@@ -17,6 +18,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-ch", "--channel", help="run agent in telegram, cmd_client or http_client", type=str,
                     choices=['cmd_client', 'http_client'], default='cmd_client')
 parser.add_argument('-p', '--port', help='port for http client, default 4242', default=4242)
+parser.add_argument('-d', '--debug', help='run in debug mode', action='store_true')
 args = parser.parse_args()
 CHANNEL = args.channel
 
@@ -34,8 +36,10 @@ async def run(register_msg):
     while True:
         msg = input(f'You ({user_id}): ').strip()
         if msg:
-            await register_msg(msg, user_id, 'cmd', datetime.now(), 'lab', CHANNEL)
-
+            response = await register_msg(utterance=msg, user_telegram_id=user_id, user_device_type='cmd',
+                                          date_time=datetime.now(), location='lab', channel_type=CHANNEL,
+                                          deadline_timestamp=None, require_response=True)
+            print('Bot: ', response['dialog'].utterances[-1].text)
 
 async def on_shutdown(app):
     await app['client_session'].close()
@@ -47,6 +51,7 @@ async def init_app(register_msg, intermediate_storage, on_startup, on_shutdown_f
     app.router.add_post('/', handle_func)
     app.router.add_get('/dialogs', users_dialogs)
     app.router.add_get('/dialogs/{dialog_id}', dialog)
+    setup_swagger(app, swagger_url='/docs')
     app.on_startup.append(on_startup)
     app.on_shutdown.append(on_shutdown_func)
     return app
@@ -124,20 +129,23 @@ def main():
     services, workers, session = parse_old_config()
 
     if CHANNEL == 'cmd_client':
-        endpoint = Service('cmd_responder', CmdOutputConnector(), None, 1, ['responder'], set(),
-                           simple_workflow_formatter)
+        endpoint = Service('cmd_responder', EventSetOutputConnector(), None, 1, ['responder'], set())
         loop = asyncio.get_event_loop()
-        loop.set_debug(DEBUG)
+        loop.set_debug(args.debug)
         register_msg, process = prepare_agent(services, endpoint)
         future = asyncio.ensure_future(run(register_msg))
         for i in workers:
             loop.create_task(i.call_service(process))
         try:
             loop.run_until_complete(future)
+        except KeyboardInterrupt:
+            pass
         except Exception as e:
             raise e
         finally:
-            loop.run_until_complete(asyncio.gather(session.close()))
+            future.cancel()
+            loop.run_until_complete(session.close())
+            loop.stop()
             loop.close()
     elif CHANNEL == 'http_client':
         intermediate_storage = {}
