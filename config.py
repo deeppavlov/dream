@@ -85,27 +85,40 @@ ANNOTATORS_1 = [
         "external": True,
         "path": "",
         "formatter": sent_segm_formatter
+    },
+    {
+        "name": "cobot_dialogact",
+        "protocol": "http",
+        "host": "cobot_dialogact",
+        "port": 8006,
+        "endpoint": "dialogact",
+        "external": True,
+        "path": "",
+        "formatter": cobot_dialogact_formatter
     }
-    # {
-    #     "name": "cobot_topics",
-    #     "protocol": "http",
-    #     "host": "cobot_topics",
-    #     "port": 8003,
-    #     "endpoint": "topics",
-    #     "external": True,
-    #     "path": "",
-    #     "formatter": cobot_qa_formatter
-    # },
-    # {
-    #     "name": "cobot_sentiment",
-    #     "protocol": "http",
-    #     "host": "cobot_sentiment",
-    #     "port": 8004,
-    #     "endpoint": "sentiment",
-    #     "external": True,
-    #     "path": "",
-    #     "formatter": cobot_qa_formatter
-    # },
+]
+
+ANNOTATORS_2 = [
+    {
+        "name": "cobot_topics",
+        "protocol": "http",
+        "host": "cobot_topics",
+        "port": 8003,
+        "endpoint": "topics",
+        "external": True,
+        "path": "",
+        "formatter": base_response_selector_formatter
+    },
+    {
+        "name": "cobot_sentiment",
+        "protocol": "http",
+        "host": "cobot_sentiment",
+        "port": 8004,
+        "endpoint": "sentiment",
+        "external": True,
+        "path": "",
+        "formatter": cobot_qa_formatter
+    },
     # {
     #     "name": "cobot_offensiveness",
     #     "protocol": "http",
@@ -115,19 +128,9 @@ ANNOTATORS_1 = [
     #     "external": True,
     #     "path": "",
     #     "formatter": cobot_offensiveness_formatter
-    # },
-    # {
-    #     "name": "cobot_dialogact",
-    #     "protocol": "http",
-    #     "host": "cobot_dialogact",
-    #     "port": 8006,
-    #     "endpoint": "dialogact",
-    #     "external": True,
-    #     "path": "",
-    #     "formatter": cobot_dialogact_formatter
     # }
 ]
-ANNOTATORS_2 = []
+
 ANNOTATORS_3 = []
 
 SKILL_SELECTORS = [
