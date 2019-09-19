@@ -1,16 +1,10 @@
 services:
   agent:
+    command: 'python3 -m core.run -ch http_client'
     image: ${DOCKER_REGISTRY}/agent
     env_file: [.env.staging]
   cobotqa:
     image: ${DOCKER_REGISTRY}/cobotqa
-    env_file: [.env.staging]
-  alice:
-    image: ${DOCKER_REGISTRY}/alice
-    env_file: [.env.staging]
-  aiml:
-    image: ${DOCKER_REGISTRY}/aiml
-    volumes: ['external-logs:/logs', 'external-deeppavlov:/root/.deeppavlov']
     env_file: [.env.staging]
   rule_based_selector:
     image: ${DOCKER_REGISTRY}/rule_based_selector
@@ -43,11 +37,11 @@ services:
   program_y:
     image: ${DOCKER_REGISTRY}/program_y
     env_file: [.env.staging]
-  mongo:
-    volumes:
-      - external-mongo-db:/root/data/db
+  agent_telegram:
+    command: 'python3 -m core.run -ch telegram'
+    image: ${DOCKER_REGISTRY}/agent
+    env_file: [.env.staging]
 volumes:
   external-logs:
   external-deeppavlov:
-  external-mongo-db:
 version: '3.7'
