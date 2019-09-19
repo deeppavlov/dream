@@ -13,5 +13,5 @@ for r in $(grep 'image: \${DOCKER_REGISTRY}' staging.yml | sed -e 's/^.*\///')
   aws ecr create-repository --repository-name "$r"
  done
 
-docker-compose -f docker-compose.yml -f skills.yml -f staging.yml build
-docker-compose -f docker-compose.yml -f skills.yml -f staging.yml push
+docker-compose -f docker-compose.yml -f staging.yml build
+docker-compose -f docker-compose.yml -f staging.yml push
