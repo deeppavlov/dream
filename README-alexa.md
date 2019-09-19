@@ -81,3 +81,30 @@ Deploy to Alexa
 =======================
 
 - [Deploy to Alexa README](aws_lambda/README.md)
+
+
+- https://docs.docker.com/docker-for-aws/deploy/
+
+1. Создаем туннель, чтобы использовать менеджер `ssh -i ~/Downloads/dream-local-idris-2.pem -NL localhost:2374:/var/run/docker.sock docker@ec2-18-232-102-32.compute-1.amazonaws.com`
+
+2. Check `DOCKER_HOST=localhost:2374 docker info`
+3. DOCKER_HOST=localhost:2374 eval $(aws ecr get-login --no-include-email)
+- DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com docker-compose -f docker-compose.yml -f staging.yml build agent
+- DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com docker-compose -f docker-compose.yml -f staging.yml push agent
+4. DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com DOCKER_HOST=localhost:2374 docker stack deploy --compose-file docker-compose.yml,skills.yml,staging.yml,http.yml --with-registry-auth --prune dream_staging
+
+- DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com DOCKER_HOST=localhost:2374 docker stack ps dream_staging | grep agent:
+
+- DefaultDNSTarget: Docker-ExternalLoa-LOFSURITNPLE-525614984.us-east-1.elb.amazonaws.com
+
+
+- Setup mongo - sudo systemctl start mongod
+- Mongo user - https://devops.ionos.com/tutorials/enable-mongodb-authentication/
+- не работае с монго 4!!!
+	db.createUser(
+      {
+          user: "dream",
+          pwd: "destruct_people_royalty",
+          roles: [ "root" ]
+      }
+  )

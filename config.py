@@ -1,8 +1,9 @@
 from state_formatters.dp_formatters import *
+from os import getenv
 
-DB_NAME = 'dream-dev'
-DB_HOST = 'mongodb://dream:destruct_people_royalty@dream-mongodb.cluster-ckb0nlkfs4kq.us-east-1.docdb.amazonaws.com:27017'
-DB_PORT = 27017
+DB_NAME = getenv('DB_NAME') 
+DB_HOST = getenv('DB_HOST') 
+DB_PORT = getenv('DB_PORT') # Get rid of it, becayse DB_HOST already includes it 
 
 MAX_WORKERS = 4
 
