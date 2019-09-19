@@ -97,7 +97,7 @@ ANNOTATORS_2 = [
         "endpoint": "topics",
         "external": True,
         "path": "",
-        "formatter": base_response_selector_formatter
+        "formatter": cobot_classifiers_formatter
     },
     {
         "name": "cobot_sentiment",
@@ -107,7 +107,7 @@ ANNOTATORS_2 = [
         "endpoint": "sentiment",
         "external": True,
         "path": "",
-        "formatter": cobot_qa_formatter
+        "formatter": cobot_classifiers_formatter
     },
     {
         "name": "cobot_dialogact",
@@ -118,17 +118,17 @@ ANNOTATORS_2 = [
         "external": True,
         "path": "",
         "formatter": cobot_dialogact_formatter
+    },
+    {
+        "name": "cobot_offensiveness",
+        "protocol": "http",
+        "host": "cobot_offensiveness",
+        "port": 8005,
+        "endpoint": "offensiveness",
+        "external": True,
+        "path": "",
+        "formatter": cobot_classifiers_formatter
     }
-    # {
-    #     "name": "cobot_offensiveness",
-    #     "protocol": "http",
-    #     "host": "cobot_offensiveness",
-    #     "port": 8005,
-    #     "endpoint": "offensiveness",
-    #     "external": True,
-    #     "path": "",
-    #     "formatter": cobot_offensiveness_formatter
-    # }
 ]
 
 ANNOTATORS_3 = []

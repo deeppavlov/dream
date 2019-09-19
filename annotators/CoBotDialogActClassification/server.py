@@ -42,6 +42,7 @@ def respond():
 
     session_id = uuid.uuid4().hex
     intents = []
+    topics = []
     conversations = []
     dialog_ids = []
 
@@ -72,11 +73,14 @@ def respond():
             logger.info(f"user_sentence: {sent_list}, session_id: {session_id}")
             curr_intents = result[dialog_ids == i]
 
+            curr_topics = [t["topic"] for t in curr_intents]
             curr_intents = [t["dialogActIntent"] for t in curr_intents]
             intents += [curr_intents]
+            topics += [curr_topics]
             logger.info(f"intent: {curr_intents}")
+            logger.info(f"topic: {curr_topics}")
 
-    return jsonify(list(zip(intents)))
+    return jsonify(list(zip(intents, topics)))
 
 
 if __name__ == '__main__':
