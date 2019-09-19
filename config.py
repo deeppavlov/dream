@@ -85,16 +85,6 @@ ANNOTATORS_1 = [
         "external": True,
         "path": "",
         "formatter": sent_segm_formatter
-    },
-    {
-        "name": "cobot_dialogact",
-        "protocol": "http",
-        "host": "cobot_dialogact",
-        "port": 8006,
-        "endpoint": "dialogact",
-        "external": True,
-        "path": "",
-        "formatter": cobot_dialogact_formatter
     }
 ]
 
@@ -119,6 +109,16 @@ ANNOTATORS_2 = [
         "path": "",
         "formatter": cobot_qa_formatter
     },
+    {
+        "name": "cobot_dialogact",
+        "protocol": "http",
+        "host": "cobot_dialogact",
+        "port": 8006,
+        "endpoint": "dialogact",
+        "external": True,
+        "path": "",
+        "formatter": cobot_dialogact_formatter
+    }
     # {
     #     "name": "cobot_offensiveness",
     #     "protocol": "http",
