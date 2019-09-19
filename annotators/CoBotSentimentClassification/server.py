@@ -3,6 +3,8 @@
 import json
 import logging
 import os
+import re
+import numpy as np
 import uuid
 
 import requests
@@ -35,7 +37,18 @@ sentiment_classes = {0: "negative", 1: "neutral", 2: "positive"}
 
 @app.route("/sentiment", methods=['POST'])
 def respond():
-    user_sentences = request.json['sentences']
+    user_states_batch = request.json['dialogs']
+    user_list_sentences = [re.split("[\.\?\!]", dialog["utterances"][-1]["annotations"]["sentseg"])
+                           for dialog in user_states_batch]
+    user_list_sentences = [[sent.strip() for sent in sent_list if sent != ""]
+                           for sent_list in user_list_sentences]
+
+    user_sentences = []
+    dialog_ids = []
+    for i, sent_list in enumerate(user_list_sentences):
+        for sent in sent_list:
+            user_sentences.append(sent)
+            dialog_ids += [i]
     session_id = uuid.uuid4().hex
     sentiments = []
     confidences = []
@@ -52,13 +65,19 @@ def respond():
         selected_skill_names = []
     else:
         result = result.json()
+        # result is an array where each element is a dict with scores
+        result = np.array(result["sentimentClasses"])
+        dialog_ids = np.array(dialog_ids)
+
         for i, sent in enumerate(user_sentences):
             logger.info(f"user_sentence: {sent}, session_id: {session_id}")
-            sentiment = sentiment_classes[result["sentimentClasses"][i]["sentimentClass"]]
-            confidence = result["sentimentClasses"][i]["confidence"]
-            sentiments += [sentiment]
-            confidences += [confidence]
-            logger.info(f"sentiment: {sentiment}")
+            curr_sentiments = result[dialog_ids == i]
+
+            curr_confidences = [float(t["confidence"]) for t in curr_sentiments]
+            curr_sentiments = [sentiment_classes[t["sentimentClass"]] for t in curr_sentiments]
+            sentiments += [curr_sentiments]
+            confidences += [curr_confidences]
+            logger.info(f"sentiment: {curr_sentiments}")
 
     return jsonify(list(zip(sentiments, confidences)))
 

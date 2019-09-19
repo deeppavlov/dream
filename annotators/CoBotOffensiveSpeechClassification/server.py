@@ -3,6 +3,8 @@
 import json
 import logging
 import os
+import re
+import numpy as np
 import uuid
 
 import requests
@@ -36,7 +38,18 @@ blacklist_classes = {0: "not blacklist", 1: "blacklist"}
 
 @app.route("/offensiveness", methods=['POST'])
 def respond():
-    user_sentences = request.json['sentences']
+    user_states_batch = request.json['dialogs']
+    user_list_sentences = [re.split("[\.\?\!]", dialog["utterances"][-1]["annotations"]["sentseg"])
+                           for dialog in user_states_batch]
+    user_list_sentences = [[sent.strip() for sent in sent_list if sent != ""]
+                           for sent_list in user_list_sentences]
+
+    user_sentences = []
+    dialog_ids = []
+    for i, sent_list in enumerate(user_list_sentences):
+        for sent in sent_list:
+            user_sentences.append(sent)
+            dialog_ids += [i]
     session_id = uuid.uuid4().hex
     toxicities = []
     confidences = []
@@ -54,15 +67,22 @@ def respond():
         selected_skill_names = []
     else:
         result = result.json()
-        for i, sent in enumerate(user_sentences):
-            logger.info(f"user_sentence: {sent}, session_id: {session_id}")
-            toxicity = toxicity_classes[result["offensivenessClasses"][i]["values"][1]["offensivenessClass"]]
-            confidence = float(result["offensivenessClasses"][i]["values"][1]["confidence"])
-            blacklist = blacklist_classes[result["offensivenessClasses"][i]["values"][0]["offensivenessClass"]]
-            toxicities += [toxicity]
-            confidences += [confidence]
-            blacklists += [blacklist]
-            logger.info(f"sentiment: {toxicity}")
+        # result is an array where each element is a dict with scores
+        result = np.array(result["offensivenessClasses"])
+        dialog_ids = np.array(dialog_ids)
+
+        for i, sent_list in enumerate(user_list_sentences):
+            logger.info(f"user_sentence: {sent_list}, session_id: {session_id}")
+            curr_toxicities = result[dialog_ids == i]
+
+            curr_confidences = [float(t["values"][1]["confidence"]) for t in curr_toxicities]
+            curr_blacklists = [blacklist_classes[t["values"][0]["offensivenessClass"]] for t in curr_toxicities]
+            curr_toxicities = [toxicity_classes[t["values"][1]["offensivenessClass"]] for t in curr_toxicities]
+
+            toxicities += [curr_toxicities]
+            confidences += [curr_confidences]
+            blacklists += [curr_blacklists]
+            logger.info(f"sentiment: {curr_toxicities}")
 
     return jsonify(list(zip(toxicities, confidences, blacklists)))
 

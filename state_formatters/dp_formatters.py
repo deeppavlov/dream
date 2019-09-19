@@ -232,14 +232,20 @@ def personality_catcher_formatter(payload: Any, mode='in'):
         return response
 
 
-def cobot_offensiveness_formatter(payload, mode='in'):
+def cobot_classifiers_formatter(payload, mode='in'):
     if mode == 'in':
-        sentences = base_input_formatter(payload)['last_utterances']
-        return {'sentences': sentences}
+        dialogs = base_input_formatter(payload)['dialogs']
+        return {"dialogs": dialogs}
     elif mode == 'out':
-        return {"text": payload[0],
-                "confidence": payload[1],
-                "is_blacklisted": payload[2]}
+        if len(payload) == 3:
+            return {"text": payload[0],
+                    "confidence": payload[1],
+                    "is_blacklisted": payload[2]}
+        elif len(payload) == 2:
+            return {"text": payload[0],
+                    "confidence": payload[1]}
+        elif len(payload) == 1:
+            return {"text": payload[0]}
 
 
 def cobot_dialogact_formatter(payload, mode='in'):
@@ -247,7 +253,8 @@ def cobot_dialogact_formatter(payload, mode='in'):
         dialogs = base_input_formatter(payload)['dialogs']
         return {"dialogs": dialogs}
     elif mode == 'out':
-        return payload[0]
+        return {"intents": payload[0],
+                "topics": payload[1]}
 
 
 def program_y_formatter(payload, mode='in'):

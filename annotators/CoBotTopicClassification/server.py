@@ -73,7 +73,7 @@ def respond():
             curr_topics = result[dialog_ids == i]
 
             curr_topics = [t["topicClass"] for t in curr_topics]
-            topics += [curr_topics]
+            topics += [[curr_topics]]
             logger.info(f"topic: {curr_topics}")
 
     return jsonify(topics)
