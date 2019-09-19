@@ -8,13 +8,6 @@ services:
     env_file: [.env.dev]
     volumes:
       - './skills/CoBotQA:/src'
-  alice:
-    env_file: [.env.dev]
-    volumes:
-      - './skills/ALICEChatAPI:/src'
-  aiml:
-    env_file: [.env.dev]
-    volumes: ['${EXTERNAL_FOLDER}/dp_logs:/logs', '${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov', '.:/dp-agent']
   rule_based_selector:
     env_file: [.env.dev]
     volumes: ['${EXTERNAL_FOLDER}/dp_logs:/logs', '${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov', '.:/dp-agent']
