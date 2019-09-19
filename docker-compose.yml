@@ -1,5 +1,6 @@
 services:
   agent:
+    command: 'python3 -m core.run -ch http_client'
     build:
       context: ./
       dockerfile: dockerfile_agent
