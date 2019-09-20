@@ -15,7 +15,7 @@ from sentry_sdk.integrations.aws_lambda import \
 
 
 SENTRY_DSN = 'https://7a6d57df6fb44ae4bfc3d43a8b4f16f3@sentry.io/1553895'
-DP_AGENT_URL = 'http://brave-cobra-100.localtunnel.me'
+DP_AGENT_URL = 'http://Docker-ExternalLoa-LOFSURITNPLE-525614984.us-east-1.elb.amazonaws.com:4242'
 
 sentry_sdk.init(
     SENTRY_DSN,
@@ -24,6 +24,7 @@ sentry_sdk.init(
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+request_data = None
 
 class LaunchRequestHandler(AbstractRequestHandler):
     """Handler for Skill Launch."""
@@ -133,9 +134,16 @@ class IntentReflectorHandler(AbstractRequestHandler):
         user_id = ask_utils.get_user_id(handler_input)
         text = ask_utils.get_slot_value(handler_input, 'navigation')
         if not text:
-            logger.warning("NO TEXT!")
-            sentry_sdk.capture_message("no text")
-            response = "Sorry"
+            # try to take the most probable hypothesis
+            if 'speechRecognition' in request_data['request']:
+                speech = request_data['request']['speechRecognition']
+                speech_text = ' '.join([token['value'] for token in speech['hypotheses'][0]['tokens']])
+                logger.info(f'got text from speech: {speech_text}')
+                response = call_dp_agent(user_id, speech_text)
+            else:
+                response = "Sorry"
+                logger.warning("NO TEXT NO SPEECH!")
+                sentry_sdk.capture_message("no text! no speech!")
         else:
             response = call_dp_agent(user_id, text)
         speak_output = response
@@ -186,3 +194,9 @@ sb.add_request_handler(IntentReflectorHandler()) # make sure IntentReflectorHand
 sb.add_exception_handler(CatchAllExceptionHandler())
 
 handler = sb.lambda_handler()
+
+
+def handler_wrapper(event, context):
+    global request_data
+    request_data = event
+    return handler(event=event, context=context)
