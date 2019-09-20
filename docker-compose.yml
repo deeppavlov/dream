@@ -1,37 +1,12 @@
 services:
   agent:
+    command: 'python3 -m core.run -ch http_client'
     build:
       context: ./
       dockerfile: dockerfile_agent
-    container_name: agent
-    depends_on:
-      - aiml
-      - mongo
     ports:
-    - 4242:4242
-    tty: true
-  aiml:
-    build:
-      args:
-        skill_endpoint: aiml
-        skillconfig: skills/aiml/aiml_skill.json
-        skillhost: 0.0.0.0
-        skillport: 2080
-      context: ./
-      dockerfile: dp/dockerfile_skill_cpu
-    container_name: aiml
-    environment:
-      - CUDA_VISIBLE_DEVICES=""
-    ports:
-      - 2080:2080
-    tty: true
-  mongo:
-    command: mongod
-    image: mongo:3.2.0
-    ports:
-      - 27017:27017
+      - 4242:4242
   rule_based_selector:
-    container_name: rule_based_selector
     build:
       args:
         skill_endpoint: selected_skills
@@ -44,5 +19,64 @@ services:
       - CUDA_VISIBLE_DEVICES=""
     ports:
       - 8002:8002
-    tty: true
+  cobotqa:
+    build:
+      context: ./skills/CoBotQA/
+    ports: ['8001:8001']
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8001
+    volumes: []
+  cobot_topics:
+    build:
+      context: ./annotators/CoBotTopicClassification/
+    ports: ['8003:8003']
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8003
+    volumes: []
+  cobot_sentiment:
+    build:
+      context: ./annotators/CoBotSentimentClassification/
+    ports: ['8004:8004']
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8004
+    volumes: []
+  cobot_offensiveness:
+    build:
+      context: ./annotators/CoBotOffensiveSpeechClassification/
+    ports: ['8005:8005']
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8005
+    volumes: []
+  cobot_dialogact:
+    build:
+      context: ./annotators/CoBotDialogActClassification/
+    ports: ['8006:8006']
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8006
+    volumes: []
+  transfertransfo:
+    build:
+      context: ./skills/transfertransfo/
+    ports: ['8007:8007']
+    command: uvicorn server:app --host 0.0.0.0 --port 8007
+    volumes: []
+  program_y:
+    build:
+      context: ./skills/program-y/
+    ports: ['8008:8008']
+    working_dir: /src/dream_aiml/scripts/xnix
+    command: ./sanic.sh
+  personality_catcher:
+    build:
+      context: ./skills/personality_catcher/
+    ports: ['8010:8010']
+    command: uvicorn server:app --host 0.0.0.0 --port 8010
+    volumes: []
+  sentseg:
+    build:
+      context: ./annotators/SentSeg/
+    ports: ['8011:8011']
+    command: bash -c "./setup.sh && gunicorn --workers=1 server:app -b 0.0.0.0:8011"
+    volumes: []
+  convers_evaluation_selector:
+    build:
+      context: ./response_selectors/convers_evaluation_based_selector/
+    ports: ['8009:8009']
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8009
+    volumes: []
 version: '3.7'

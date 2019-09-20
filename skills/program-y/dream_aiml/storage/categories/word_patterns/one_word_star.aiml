@@ -1026,17 +1026,6 @@
         <template>Interesting comparison.</template>
     </category>
     <category>
-        <pattern>STOP *</pattern>
-        <template>OK I'll try not to do
-            <set name="it">
-                <set name="topic">
-                    <person/>
-                </set>
-            </set>
-            so much.
-        </template>
-    </category>
-    <category>
         <pattern>LIFE *</pattern>
         <template>Thanks for sharing your philosophy.</template>
     </category>
