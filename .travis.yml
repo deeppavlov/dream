@@ -1,4 +1,6 @@
 language: python
+git:
+  depth: false
 python:
   - "3.7"
 script: bin/run_codestyle.sh
