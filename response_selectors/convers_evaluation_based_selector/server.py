@@ -22,6 +22,7 @@ app = Flask(__name__)
 
 COBOT_API_KEY = os.environ.get('COBOT_API_KEY')
 COBOT_CONVERSATION_EVALUATION_SERVICE_URL =  os.environ.get('COBOT_CONVERSATION_EVALUATION_SERVICE_URL')
+TOXIC_COMMENT_CLASSIFICATION_SERVICE_URL = "http://toxic_classification:8013/toxicity_annotations"
 
 if COBOT_API_KEY is None:
     raise RuntimeError('COBOT_API_KEY environment variable is not set')
@@ -39,6 +40,7 @@ def respond():
     dialog_ids = []
     selected_skill_names = []
     confidences = []
+    utterances = []
 
     for i, dialog in enumerate(dialogs_batch):
         for skill_name in response_candidates[i]:
@@ -54,14 +56,30 @@ def respond():
             conversations += [conv]
             dialog_ids += [i]
             confidences += [response_candidates[i][skill_name]["confidence"]]
+            utterances += [response_candidates[i][skill_name]["text"]]  # all bot utterances
+
+    toxic_result = requests.request(url=TOXIC_COMMENT_CLASSIFICATION_SERVICE_URL,
+                                    headers=headers,
+                                    data=json.dumps({'sentences': utterances}),
+                                    method='POST')
+
+    if toxic_result.status_code != 200:
+        msg = "result status code is not 200: {}. result text: {}; result status: {}".format(
+            toxic_result, toxic_result.text, toxic_result.status_code)
+        sentry_sdk.capture_message(msg)
+        logger.warning(msg)
+        selected_skill_names = []
+    else:
+        toxic_result = toxic_result.json()
+        toxicities = [max(res[0].values()) for res in toxic_result]
 
     result = requests.request(url=COBOT_CONVERSATION_EVALUATION_SERVICE_URL,
                               headers=headers,
                               data=json.dumps({'conversations': conversations}),
                               method='POST')
     if result.status_code != 200:
-        msg = "result status code is not 200: {}. result text: {}; result status: {}".format(result, result.text,
-                                                                                             result.status_code)
+        msg = "result status code is not 200: {}. result text: {}; result status: {}".format(
+            result, result.text, result.status_code)
         sentry_sdk.capture_message(msg)
         logger.warning(msg)
         selected_skill_names = []
@@ -72,16 +90,24 @@ def respond():
 
         dialog_ids = np.array(dialog_ids)
         confidences = np.array(confidences)
+        toxicities = np.array(toxicities)
 
         for i, dialog in enumerate(dialogs_batch):
             # curr_candidates is dict
             curr_candidates = response_candidates[i]
             # choose results which correspond curr candidates
-            curr_scores = result[dialog_ids == i]
-            curr_confidences = confidences[dialog_ids == i]
+            curr_scores = result[dialog_ids == i]  # list of two dictionaries
+            curr_confidences = confidences[dialog_ids == i]  # list of two float numbers
+            ids = toxicities[dialog_ids == i] > 0.5  # [[False False]]
+            curr_scores[ids] = {"isResponseOnTopic": 0.,
+                                "isResponseInteresting": 0.,
+                                "responseEngagesUser": 0.,
+                                "isResponseComprehensible": 0.,
+                                "isResponseErroneous": 1.,
+                                }
+            curr_confidences[ids] = 0.
+
             best_skill_name = select_response(curr_candidates, curr_scores, curr_confidences, dialog)
-            # best_response = curr_candidates[best_skill_name]["text"]
-            # confidence = curr_candidates[best_skill_name]["confidence"]
             selected_skill_names.append(best_skill_name)
             logger.info(f"Choose final skill: {best_skill_name}")
 
