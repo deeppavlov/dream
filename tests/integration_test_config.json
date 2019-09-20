@@ -1,0 +1,123 @@
+{
+  "emulator_host": "0.0.0.0",
+  "emulator_port": 5000,
+  "watchdog_delay": 2,
+  "tests": [
+    {
+      "convai": false,
+      "state": false,
+      "test_cases": [
+        {
+          "poller_input": [[0, null], [1, "a"], [2, "b"]],
+          "expected_output": [[1, "A a"], [2, "B b"]],
+          "model_input": [["a", "b"]]
+        }
+      ]
+    },
+    {
+      "convai": true,
+      "state": false,
+      "test_cases": [
+        {
+          "poller_input": [[0, null], [1, "a"], [2, "b"]],
+          "expected_output": [[0, "start"], [1, "A a"], [2, "B b"]],
+          "model_input": [null]
+        }
+      ]
+    },
+    {
+      "convai": false,
+      "state": true,
+      "test_cases": [
+        {
+          "poller_input": [[0, null], [0, "a"]],
+          "expected_output": [[0, "A"]],
+          "model_input": [["a"], [null]]
+        },
+        {
+          "poller_input": [[0, "b"]],
+          "expected_output": [[0, "B"]],
+          "model_input": [["b"], [["a"]]]
+        },
+        {
+          "poller_input": [[0, "c"]],
+          "expected_output": [[0, "C"]],
+          "model_input": [["c"], [["a", "b"]]]
+        }
+      ]
+    },
+    {
+      "convai": true,
+      "state": true,
+      "test_cases": [
+        {
+          "poller_input": [[0, null], [1, null]],
+          "expected_output": [[0, "start"], [1, "start"]],
+          "model_input": [null, [null, null]]
+        },
+        {
+          "poller_input": [[0, "a"], [1, "b"]],
+          "expected_output": [[0, "A"], [1, "B"]],
+          "model_input": [null, [["start"], ["start"]]]
+        },
+        {
+          "poller_input": [[0, "c"], [1, "d"]],
+          "expected_output": [[0, "C"], [1, "D"]],
+          "model_input": [null, [["start", "a"], ["start", "b"]]]
+        }
+      ]
+    }
+  ],
+  "messages": {
+    "command": {
+      "update_id": 163,
+      "message": {
+        "message_id": 0,
+        "from": {
+          "id": 801793983,
+          "is_bot": true,
+          "first_name": "0"
+        },
+        "chat": {
+          "id": 801793983,
+          "first_name": "0",
+          "type": "private"
+        },
+        "date": 1565100382.776386,
+        "payload": {
+          "text": null,
+          "command": "start",
+          "profile": "Я офисный работник. Я люблю свой коллектив. Я рано встаю. Я печатаю на компьютере. У меня есть кошка.",
+          "topic": "\nТема: \"Знакомство\" (узнайте имя, возраст, место жительства собеседника и т.п.)\n",
+          "scores_range_start": null,
+          "scores_range_stop": null
+        }
+      }
+    },
+    "text": {
+      "update_id": 164,
+      "message": {
+        "message_id": 0,
+        "from": {
+          "id": 801793983,
+          "is_bot": true,
+          "first_name": "0"
+        },
+        "chat": {
+          "id": 801793983,
+          "first_name": "0",
+          "type": "private"
+        },
+        "date": 1565100390.098376,
+        "payload": {
+          "text": "blah blah blah",
+          "command": null,
+          "profile": null,
+          "topic": null,
+          "scores_range_start": null,
+          "scores_range_stop": null
+        }
+      }
+    }
+  }
+}
