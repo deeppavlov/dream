@@ -33,6 +33,11 @@ generate_composefile.py лежит в билиотеке для непродви
 - Секции volumes и env_file в docker-compose.yml не должно быть. Сейчас volumes и env_file описываются в файлах staging.yml и dev.yml.
 ```
 
+#### Про Codestyle
+
+- Надо запустить `bin/run_codestyle.sh` - 0 - это успех.
+
+
 Deploy to staging
 =======================
 
@@ -44,7 +49,7 @@ Deploy to staging
 3. Деплой на стейджинг: `DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com DOCKER_HOST=localhost:2374 docker stack deploy --compose-file docker-compose.yml,staging.yml --with-registry-auth dream_staging`
 
 **Комментарии:**
-- pem ключ лежит тут https://trello.com/c/vEUbMmKK (не забудь `chmod 400`) 
+- pem ключ лежит тут https://trello.com/c/vEUbMmKK (не забудь `chmod 400`)
 - Как поднять nginx , чтобы обращаться к http сервису агента: `DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com DOCKER_HOST=localhost:2374 docker service create --name nginx --publish published=80,target=4242 nginx`
 - https://docs.docker.com/docker-for-aws/deploy/
 - Check if remote docker connection ok `DOCKER_HOST=localhost:2374 docker info`
