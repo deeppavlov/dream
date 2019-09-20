@@ -15,7 +15,7 @@ from sentry_sdk.integrations.aws_lambda import \
 
 
 SENTRY_DSN = 'https://7a6d57df6fb44ae4bfc3d43a8b4f16f3@sentry.io/1553895'
-DP_AGENT_URL = 'http://brave-cobra-100.localtunnel.me'
+DP_AGENT_URL = 'http://Docker-ExternalLoa-LOFSURITNPLE-525614984.us-east-1.elb.amazonaws.com:4242'
 
 sentry_sdk.init(
     SENTRY_DSN,
