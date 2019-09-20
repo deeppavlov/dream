@@ -38,12 +38,13 @@ Deploy to staging
 
 - новые .env переменные надо не забывать добавлять в .env.staging и .env.dev
 
-0. Билдим и пушим образы в ECR: `./push_to_ecr`
+0. Билдим и пушим образы в ECR: `DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com ./push_to_ecr.sh`
 1. Открыть ssh туннель к докер менеджеру `ssh -i ~/Downloads/dream-local-idris-2.pem -NL localhost:2374:/var/run/docker.sock docker@ec2-18-232-102-32.compute-1.amazonaws.com`
 2. Авторизация в ECR (если до этого не был запущен `./push_to_ecr`): `eval $(aws ecr get-login --no-include-email)`
 3. Деплой на стейджинг: `DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com DOCKER_HOST=localhost:2374 docker stack deploy --compose-file docker-compose.yml,staging.yml --with-registry-auth dream_staging`
 
 **Комментарии:**
+- pem ключ лежит тут https://trello.com/c/vEUbMmKK (не забудь `chmod 400`) 
 - Как поднять nginx , чтобы обращаться к http сервису агента: `DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com DOCKER_HOST=localhost:2374 docker service create --name nginx --publish published=80,target=4242 nginx`
 - https://docs.docker.com/docker-for-aws/deploy/
 - Check if remote docker connection ok `DOCKER_HOST=localhost:2374 docker info`
