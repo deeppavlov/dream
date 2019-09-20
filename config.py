@@ -1,9 +1,13 @@
-from state_formatters.dp_formatters import *
+from state_formatters.dp_formatters import cobot_qa_formatter, transfertransfo_formatter, \
+  program_y_formatter, personality_catcher_formatter, sent_segm_formatter, base_skill_selector_formatter, \
+  base_response_selector_formatter
+
 from os import getenv
 
-DB_NAME = getenv('DB_NAME') 
-DB_HOST = getenv('DB_HOST') 
-DB_PORT = getenv('DB_PORT') # Get rid of it, becayse DB_HOST already includes it 
+DB_NAME = getenv('DB_NAME')
+DB_HOST = getenv('DB_HOST')
+# Get rid of it, becayse DB_HOST already includes it
+DB_PORT = getenv('DB_PORT')
 
 MAX_WORKERS = 4
 
