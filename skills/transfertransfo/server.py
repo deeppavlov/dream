@@ -2,6 +2,7 @@ import os
 import logging
 from typing import List
 import random
+import time
 
 from fastapi import FastAPI, Body
 from pydantic import BaseModel
@@ -47,6 +48,8 @@ logging.basicConfig(
         # logging.FileHandler("../logs/{}.log".format(date)),
     ],
 )
+
+logger = logging.getLogger(__name__)
 
 
 class Input_placeholders(BaseModel):
@@ -94,7 +97,10 @@ def inference(personality, utterances_histories):
 
 @app.post("/transfertransfo/")
 def transfer_transfo_chitchat_model(placeholders: Input_placeholders):
+    st_time = time.time()
     response = [
         inference(pers, hist) for pers, hist in zip(placeholders.personality, placeholders.utterances_histories)
     ]
+    total_time = time.time() - st_time
+    logger.info(f'transfertransfo exec time: {total_time:.3f}s')
     return response
