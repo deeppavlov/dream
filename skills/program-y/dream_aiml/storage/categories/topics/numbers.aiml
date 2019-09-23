@@ -124,24 +124,6 @@
         <pattern>WHAT IS 8 ASTERISK 4</pattern>
         <template>24.</template>
     </category>
-   <category>
-        <pattern>WHAT IS THE <set>ordinal</set> LETTER <set>preposition</set> *
-        </pattern>
-        <template>
-            <think>
-                <set name="nth">
-                    <map>
-                        <name>ordinal2number</name>
-                        <star/>
-                    </map>
-                </set>
-            </think>
-            <srai>NTH
-                <get name="nth"/>
-                <star index="3"/>
-            </srai>
-        </template>
-    </category>
     <category>
         <pattern>100</pattern>
         <template>

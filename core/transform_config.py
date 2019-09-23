@@ -16,8 +16,6 @@ for service in chain(*ANNOTATORS, SKILL_SELECTORS, SKILLS, RESPONSE_SELECTORS,
     host = service['name'] if getenv('DPA_LAUNCHING_ENV') == 'docker' else service['host']
     service['url'] = f"{service['protocol']}://{host}:{service['port']}/{service['endpoint']}"
 
-DB_HOST = 'mongo' if getenv('DPA_LAUNCHING_ENV') == 'docker' else DB_HOST
-
 
 def _get_config_path(component_config: dict) -> dict:
     component_config = deepcopy(component_config)
