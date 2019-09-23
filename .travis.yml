@@ -1,6 +1,8 @@
 language: python
-git:
-  depth: false
+install:
+  - git clone git@github.com:${TRAVIS_REPO_SLUG}.git
+  - cd $TRAVIS_REPO_SLUG
+  - git checkout -qf $TRAVIS_COMMIT
 python:
   - "3.7"
 script: bin/run_codestyle.sh
