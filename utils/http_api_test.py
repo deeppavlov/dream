@@ -60,7 +60,7 @@ async def perform_test_dialogue(session, url, uuid, payloads):
             end_time = time()
             if response['user_id'] != uuid:
                 print('INFO, request returned wrong uuid')
-            result.append([uuid, start_time, end_time, end_time - start_time, len(i), i])
+            result.append([uuid, start_time, end_time, end_time - start_time, len(i), i, response['response']])
 
     return result
 
@@ -72,7 +72,7 @@ async def run(url, payloads, out_filename):
             task = asyncio.ensure_future(perform_test_dialogue(session, url, k, v))
             tasks.append(task)
         responses = await asyncio.gather(*tasks)
-    result = [['uuid', 'send timestamp', 'receive timestamp', 'processing_time', 'phrase length', 'phrase text']]
+    result = [['uuid', 'send timestamp', 'receive timestamp', 'processing_time', 'phrase length', 'phrase text', 'response']]
     for i in responses:
         result.extend(i)
     with open(out_filename, 'w', newline='') as f:
