@@ -221,6 +221,7 @@ def transfertransfo_formatter(payload: Any, mode='in'):
     elif mode == 'out':
         return base_skill_output_formatter(payload)
 
+
 # TODO: rm crutch of personality_catcher
 def personality_catcher_formatter(payload: Any, mode='in'):
     if mode == 'in':
@@ -275,3 +276,11 @@ def sent_segm_formatter(payload, mode='in'):
         return {'sentences': sentences}
     elif mode == 'out':
         return payload
+
+
+def dp_toxic_formatter(payload, mode='in'):
+    if mode == 'in':
+        sentences = base_input_formatter(payload)['last_utterances']
+        return {'sentences': sentences}
+    elif mode == 'out':
+        return payload[0]

@@ -79,4 +79,17 @@ services:
     ports: ['8009:8009']
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8009
     volumes: []
+  toxic_classification:
+    build:
+      args:
+        skill_endpoint: toxicity_annotations
+        skillconfig: annotators/DeepPavlovToxicClassification/toxic_classification.json
+        skillhost: 0.0.0.0
+        skillport: 8013
+      context: ./
+      dockerfile: dp/dockerfile_skill_gpu
+    environment:
+      - CUDA_VISIBLE_DEVICES="0"
+    ports:
+      - 8013:8013
 version: '3.7'

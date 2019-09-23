@@ -23,5 +23,10 @@ settings['model_defaults']['RuleBasedSkillSelector'] = {
     "model_args_names": ["states_batch"]
 }
 
+settings['model_defaults']['ToxicClassificationModel'] = {
+    "model_endpoint": "/toxicity_annotations",
+    "model_args_names": ["sentences"]
+}
+
 print(settings_path)
 save_json(settings, settings_path)
