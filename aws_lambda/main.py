@@ -24,6 +24,7 @@ sentry_sdk.init(
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+request_data = None
 
 class LaunchRequestHandler(AbstractRequestHandler):
     """Handler for Skill Launch."""
@@ -37,9 +38,9 @@ class LaunchRequestHandler(AbstractRequestHandler):
 
         return (
             handler_input.response_builder
-            .speak(speak_output)
-            .ask(speak_output)
-            .response
+                .speak(speak_output)
+                .ask(speak_output)
+                .response
         )
 
 
@@ -55,9 +56,9 @@ class HelloWorldIntentHandler(AbstractRequestHandler):
 
         return (
             handler_input.response_builder
-            .speak(speak_output)
-            .ask(speak_output)
-            .response
+                .speak(speak_output)
+                .ask(speak_output)
+                .response
         )
 
 
@@ -73,9 +74,9 @@ class HelpIntentHandler(AbstractRequestHandler):
 
         return (
             handler_input.response_builder
-            .speak(speak_output)
-            .ask(speak_output)
-            .response
+                .speak(speak_output)
+                .ask(speak_output)
+                .response
         )
 
 
@@ -91,8 +92,8 @@ class StopIntentHandler(AbstractRequestHandler):
 
         return (
             handler_input.response_builder
-            .speak(speak_output)
-            .response
+                .speak(speak_output)
+                .response
         )
 
 
@@ -113,7 +114,7 @@ class SessionEndedRequestHandler(AbstractRequestHandler):
 
 def call_dp_agent(user_id, text):
     logger.info("call_dp_agent user_id: {}; text: {}".format(user_id, text))
-    r = requests.post(DP_AGENT_URL, json={'user_id': user_id, 'payload': text})
+    r = requests.post(DP_AGENT_URL, json = {'user_id': user_id, 'payload': text})
     return r.json()["response"]
 
 
@@ -129,21 +130,29 @@ class IntentReflectorHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
+        intent_name = ask_utils.get_intent_name(handler_input)
         user_id = ask_utils.get_user_id(handler_input)
         text = ask_utils.get_slot_value(handler_input, 'navigation')
         if not text:
-            logger.warning("NO TEXT!")
-            sentry_sdk.capture_message("no text")
-            response = "Sorry"
+            # try to take the most probable hypothesis
+            if 'speechRecognition' in request_data['request']:
+                speech = request_data['request']['speechRecognition']
+                speech_text = ' '.join([token['value'] for token in speech['hypotheses'][0]['tokens']])
+                logger.info(f'got text from speech: {speech_text}')
+                response = call_dp_agent(user_id, speech_text)
+            else:
+                response = "Sorry"
+                logger.warning("NO TEXT NO SPEECH!")
+                sentry_sdk.capture_message("no text! no speech!")
         else:
             response = call_dp_agent(user_id, text)
         speak_output = response
 
         return (
             handler_input.response_builder
-            .speak(speak_output)
-            .ask(speak_output)
-            .response
+                .speak(speak_output)
+                .ask(speak_output)
+                .response
         )
 
 
@@ -165,9 +174,9 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
 
         return (
             handler_input.response_builder
-            .speak(speak_output)
-            .ask(speak_output)
-            .response
+                .speak(speak_output)
+                .ask(speak_output)
+                .response
         )
 
 
@@ -180,9 +189,14 @@ sb.add_request_handler(LaunchRequestHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(StopIntentHandler())
 sb.add_request_handler(SessionEndedRequestHandler())
-# make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
-sb.add_request_handler(IntentReflectorHandler())
+sb.add_request_handler(IntentReflectorHandler()) # make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
 
 sb.add_exception_handler(CatchAllExceptionHandler())
 
 handler = sb.lambda_handler()
+
+
+def handler_wrapper(event, context):
+    global request_data
+    request_data = event
+    return handler(event=event, context=context)
