@@ -3,7 +3,6 @@
 import json
 import logging
 import os
-import uuid
 import numpy as np
 
 import requests
@@ -21,7 +20,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 COBOT_API_KEY = os.environ.get('COBOT_API_KEY')
-COBOT_CONVERSATION_EVALUATION_SERVICE_URL =  os.environ.get('COBOT_CONVERSATION_EVALUATION_SERVICE_URL')
+COBOT_CONVERSATION_EVALUATION_SERVICE_URL = os.environ.get('COBOT_CONVERSATION_EVALUATION_SERVICE_URL')
 TOXIC_COMMENT_CLASSIFICATION_SERVICE_URL = "http://toxic_classification:8013/toxicity_annotations"
 
 if COBOT_API_KEY is None:
@@ -65,10 +64,10 @@ def respond():
                                     method='POST')
 
     if toxic_result.status_code != 200:
-        msg = "result status code is not 200: {}. result text: {}; result status: {}".format(
+        msg = "Toxic classifier: result status code is not 200: {}. result text: {}; result status: {}".format(
             toxic_result, toxic_result.text, toxic_result.status_code)
         sentry_sdk.capture_message(msg)
-        logger.warning("Toxic classifier: " + msg)
+        logger.warning(msg)
         toxicities = [0.] * len(utterances)
     else:
         toxic_result = toxic_result.json()
@@ -80,10 +79,10 @@ def respond():
                               data=json.dumps({'conversations': conversations}),
                               method='POST')
     if result.status_code != 200:
-        msg = "result status code is not 200: {}. result text: {}; result status: {}".format(
-            result, result.text, result.status_code)
+        msg = "Cobot Conversation Evaluator: result status code is \
+  not 200: {}. result text: {}; result status: {}".format(result, result.text, result.status_code)
         sentry_sdk.capture_message(msg)
-        logger.warning("Conversation Evaluator:" + msg)
+        logger.warning(msg)
         result = np.array([{"isResponseOnTopic": 0.,
                             "isResponseInteresting": 0.,
                             "responseEngagesUser": 0.,
@@ -106,14 +105,6 @@ def respond():
         # choose results which correspond curr candidates
         curr_scores = result[dialog_ids == i]  # array of dictionaries
         curr_confidences = confidences[dialog_ids == i]  # array of float numbers
-        # ids = toxicities[dialog_ids == i] > 0.5
-        # curr_scores[ids] = {"isResponseOnTopic": 0.,
-        #                     "isResponseInteresting": 0.,
-        #                     "responseEngagesUser": 0.,
-        #                     "isResponseComprehensible": 0.,
-        #                     "isResponseErroneous": 1.,
-        #                     }
-        # curr_confidences[ids] = 0.
 
         best_skill_name = select_response(curr_candidates, curr_scores, curr_confidences,
                                           toxicities[dialog_ids == i], dialog)
