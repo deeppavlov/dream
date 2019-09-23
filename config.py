@@ -86,19 +86,19 @@ ANNOTATORS_1 = [
         "path": "",
         "formatter": sent_segm_formatter
     },
-    {
-        "name": "toxic_classification",
-        "protocol": "http",
-        "host": "toxic_classification",
-        "port": 8013,
-        "endpoint": "toxicity_annotations",
-        "path": "annotators/DeepPavlovToxicClassification/toxic_classification.json",
-        "env": {
-            "CUDA_VISIBLE_DEVICES": "0"
-        },
-        "gpu": True,
-        "formatter": dp_toxic_formatter
-    }
+    # {
+    #     "name": "toxic_classification",
+    #     "protocol": "http",
+    #     "host": "toxic_classification",
+    #     "port": 8013,
+    #     "endpoint": "toxicity_annotations",
+    #     "path": "annotators/DeepPavlovToxicClassification/toxic_classification.json",
+    #     "env": {
+    #         "CUDA_VISIBLE_DEVICES": "0"
+    #     },
+    #     "gpu": True,
+    #     "formatter": dp_toxic_formatter
+    # }
 ]
 
 ANNOTATORS_2 = [
@@ -122,16 +122,16 @@ ANNOTATORS_2 = [
     #     "path": "",
     #     "formatter": cobot_classifiers_formatter
     # },
-    {
-        "name": "cobot_dialogact",
-        "protocol": "http",
-        "host": "cobot_dialogact",
-        "port": 8006,
-        "endpoint": "dialogact",
-        "external": True,
-        "path": "",
-        "formatter": cobot_dialogact_formatter
-    },
+    # {
+    #     "name": "cobot_dialogact",
+    #     "protocol": "http",
+    #     "host": "cobot_dialogact",
+    #     "port": 8006,
+    #     "endpoint": "dialogact",
+    #     "external": True,
+    #     "path": "",
+    #     "formatter": cobot_dialogact_formatter
+    # },
     # {
     #     "name": "cobot_offensiveness",
     #     "protocol": "http",
