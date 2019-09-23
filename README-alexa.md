@@ -33,11 +33,6 @@ generate_composefile.py лежит в билиотеке для непродви
 - Секции volumes и env_file в docker-compose.yml не должно быть. Сейчас volumes и env_file описываются в файлах staging.yml и dev.yml.
 ```
 
-#### Про Codestyle
-
-- Надо запустить `bin/run_codestyle.sh` - 0 - это успех.
-
-
 Deploy to staging
 =======================
 
@@ -64,3 +59,12 @@ Deploy to Alexa Lambda
 =======================
 
 - [Deploy to Alexa Lambda README](aws_lambda/README.md)
+
+
+Deploy Machine
+=======================
+Поднята деплой машина на амазоне. Через нее можно быстро собрать и запуишть имейджи в регистри и сделать деплой.
+
+- `ssh -i ~/Downloads/dream-local-idris.pem ubuntu@34.203.223.60`
+- aws сконфигурирован
+- Скачать репу можно в папку ``/home/ubuntu/dp-agent-alexa`
