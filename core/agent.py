@@ -40,6 +40,8 @@ class Agent:
     def flush_record(self, dialog_id: str):
         if dialog_id not in self.workflow.keys():
             raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
+        if self.response_logger_callable:
+            self.response_logger_callable(dialog_id, self.workflow)
         return self.workflow.pop(dialog_id)
 
     def register_service_request(self, dialog_id: str, service_name):
