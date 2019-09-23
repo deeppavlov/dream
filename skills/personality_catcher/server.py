@@ -1,5 +1,6 @@
 import logging
 from typing import List
+import time
 
 from fastapi import FastAPI, Body
 from pydantic import BaseModel
@@ -18,7 +19,7 @@ logging.basicConfig(
     format="%(asctime)s %(module)s %(lineno)d %(levelname)s : %(message)s",
     handlers=[logging.StreamHandler()],
 )
-
+logger = logging.getLogger(__name__)
 
 class Input_placeholders(BaseModel):
     personality: List[str] = Body(
@@ -34,6 +35,7 @@ app = FastAPI()
 
 @app.post("/personality_catcher/")
 def change_personality(placeholders: Input_placeholders):
+    st_time = time.time()
     response = [
         (
             f"personality has changed by command {CMD_NAME} to this text: {per.replace(CMD_NAME, '')}",
@@ -42,4 +44,6 @@ def change_personality(placeholders: Input_placeholders):
         )
         for per in placeholders.personality
     ]
+    total_time = time.time() - st_time
+    logger.info(f'personality_catcher exec time: {total_time:.3f}s')
     return response

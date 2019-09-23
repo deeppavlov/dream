@@ -3,6 +3,7 @@
 import json
 import logging
 import os
+import time
 import numpy as np
 
 import requests
@@ -33,6 +34,7 @@ headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COB
 
 @app.route("/respond", methods=['POST'])
 def respond():
+    st_time = time.time()
     dialogs_batch = request.json["dialogs"]
     response_candidates = [dialog["utterances"][-1]["selected_skills"] for dialog in dialogs_batch]
     conversations = []
@@ -111,6 +113,8 @@ def respond():
         selected_skill_names.append(best_skill_name)
         logger.info(f"Choose final skill: {best_skill_name}")
 
+    total_time = time.time() - st_time
+    logger.info(f'convers_evaluation_selector exec time: {total_time:.3f}s')
     return jsonify(selected_skill_names)
 
 
