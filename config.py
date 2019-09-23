@@ -1,9 +1,9 @@
 from state_formatters.dp_formatters import *
+from os import getenv
 
-DB_NAME = 'test'
-DB_HOST = '127.0.0.1'
-DB_PORT = 27017
-DB_PATH = '/data/db'
+DB_NAME = getenv('DB_NAME') 
+DB_HOST = getenv('DB_HOST') 
+DB_PORT = getenv('DB_PORT') # Get rid of it, becayse DB_HOST already includes it 
 
 MAX_WORKERS = 4
 
@@ -85,6 +85,19 @@ ANNOTATORS_1 = [
         "external": True,
         "path": "",
         "formatter": sent_segm_formatter
+    },
+    {
+        "name": "toxic_classification",
+        "protocol": "http",
+        "host": "toxic_classification",
+        "port": 8013,
+        "endpoint": "toxicity_annotations",
+        "path": "annotators/DeepPavlovToxicClassification/toxic_classification.json",
+        "env": {
+            "CUDA_VISIBLE_DEVICES": "0"
+        },
+        "gpu": True,
+        "formatter": dp_toxic_formatter
     }
 ]
 
