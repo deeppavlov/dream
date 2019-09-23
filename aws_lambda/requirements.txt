@@ -1,0 +1,2 @@
+ask-sdk-core>=1.10.2
+sentry-sdk==0.11.2

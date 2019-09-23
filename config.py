@@ -1,9 +1,9 @@
 from state_formatters.dp_formatters import *
+from os import getenv
 
-DB_NAME = 'test'
-DB_HOST = '127.0.0.1'
-DB_PORT = 27017
-DB_PATH = '/data/db'
+DB_NAME = getenv('DB_NAME') 
+DB_HOST = getenv('DB_HOST') 
+DB_PORT = getenv('DB_PORT') # Get rid of it, becayse DB_HOST already includes it 
 
 MAX_WORKERS = 4
 

@@ -1,63 +1,63 @@
 # С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
 services:
   agent:
-    env_file: [.env]
+    env_file: [.env.dev]
     volumes:
       - '.:/dp-agent'
   cobotqa:
-    env_file: [.env]
+    env_file: [.env.dev]
     volumes:
       - './skills/CoBotQA:/src'
-  alice:
-    env_file: [.env]
-    volumes:
-      - './skills/ALICEChatAPI:/src'
-  aiml:
-    env_file: [.env]
-    volumes: ['${EXTERNAL_FOLDER}/dp_logs:/logs', '${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov', '.:/dp-agent']
   rule_based_selector:
-    env_file: [.env]
+    env_file: [.env.dev]
     volumes: ['${EXTERNAL_FOLDER}/dp_logs:/logs', '${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov', '.:/dp-agent']
   cobot_topics:
-    env_file: [.env]
+    env_file: [.env.dev]
     volumes:
       - './annotators/CoBotTopicClassification:/src'
   cobot_sentiment:
-    env_file: [.env]
+    env_file: [.env.dev]
     volumes:
       - './annotators/CoBotSentimentClassification:/src'
   sentseg:
-    env_file: [.env]
+    env_file: [.env.dev]
     volumes:
       - './annotators/SentSeg:/src'
   cobot_offensiveness:
-    env_file: [.env]
+    env_file: [.env.dev]
     volumes:
       - './annotators/CoBotOffensiveSpeechClassification:/src'
   cobot_dialogact:
-    env_file: [.env]
+    env_file: [.env.dev]
     volumes:
       - './annotators/CoBotDialogActClassification:/src'
   transfertransfo:
-    env_file: [.env]
+    env_file: [.env.dev]
     volumes:
       - './skills/transfertransfo:/app'
   personality_catcher:
-    env_file: [.env]
+    env_file: [.env.dev]
     volumes:
       - './skills/personality_catcher:/app'
   program_y:
-    env_file: [.env]
+    env_file: [.env.dev]
     volumes:
       - './skills/program-y:/src'
   convers_evaluation_selector:
-    env_file: [.env]
+    env_file: [.env.dev]
     volumes:
       - './response_selectors/convers_evaluation_based_selector:/src'
   mongo:
+    env_file: [.env.dev]
+    command: mongod
+    image: mongo:4.0.0
+    ports:
+      - 27017:27017
     volumes:
+      - /data/db_new:/root/data/db
      - /data/db:/root/data/db
   toxic_classification:
-    env_file: [.env]
-    volumes: ['${EXTERNAL_FOLDER}/dp_logs:/logs', '${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov', '.:/dp-agent']
+    env_file: [.env.dev]
+    volumes:
+      - './annotators/ToxicClassification:/src'
 version: '3.7'

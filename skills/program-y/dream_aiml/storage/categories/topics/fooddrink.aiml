@@ -138,36 +138,6 @@
         <template>Steak.</template>
     </category>
     <category>
-        <pattern>
-            <set>fastfood</set>
-        </pattern>
-        <template>
-            <srai>FIND THE NEAREST
-                <star/>
-            </srai>
-        </template>
-    </category>
-    <category>
-        <pattern>FIND
-            <set>fastfood</set>
-        </pattern>
-        <template>
-            <srai>FIND THE NEAREST
-                <star/>
-            </srai>
-        </template>
-    </category>
-    <category>
-        <pattern>FIND A
-            <set>fastfood</set>
-        </pattern>
-        <template>
-            <srai>FIND THE NEAREST
-                <star/>
-            </srai>
-        </template>
-    </category>
-    <category>
         <pattern>YUMMY</pattern>
         <template>Sounds delicious.</template>
     </category>
