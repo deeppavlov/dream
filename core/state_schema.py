@@ -4,7 +4,62 @@ from mongoengine import DynamicDocument, ReferenceField, ListField, StringField,
     DateTimeField, FloatField, DictField, ObjectIdField
 
 from . import STATE_API_VERSION
+from datetime import datetime
 
+HUMAN_UTTERANCE_SCHEMA = {
+    'id': None,
+    'text': None,
+    'user': {},
+    'annotations': {},
+    'date_time': None,
+    'selected_skills': {},
+    'type': 'human'
+}
+
+BOT_UTTERANCE_SCHEMA = {
+    'id': None,
+    'active_skill': None,
+    'confidence': None,
+    'text': None,
+    'orig_text': None,
+    'user': {},
+    'annotations': {},
+    'date_time': None,
+    'type': 'bot'
+}
+
+BOT_SCHEMA = {
+    'id': None,
+    'persona': [],
+    'attributes': {}
+}
+
+HUMAN_SCHEMA = {
+    'id': None,
+    'user_telegram_id': None,
+    'device_type': None,
+    'persona': [],
+    'profile': {
+        "name": None,
+        "gender": None,
+        "birthdate": None,
+        "location": None,
+        "home_coordinates": None,
+        "work_coordinates": None,
+        "occupation": None,
+        "income_per_year": None
+    },
+    'attributes': {}
+}
+
+DIALOG_SCHEMA = {
+    'id': [],
+    'location': [],
+    'utterances': [],
+    'channel_type': None,
+    'human': None,
+    'bot': None
+}
 
 class User(DynamicDocument):
     persona = ListField(default=[])
@@ -24,6 +79,11 @@ class Bot(User):
                 'persona': self.persona,
                 'attributes': str(self.attributes)
                 }
+    @classmethod
+    def from_dict(cls, payload):
+        bot = cls()
+        
+        return bot
 
 
 class Human(User):
@@ -37,7 +97,7 @@ class Human(User):
         "home_coordinates": None,
         "work_coordinates": None,
         "occupation": None,
-        "income_per_year": None
+        "income_per_year": None,
     })
 
     def to_dict(self):
@@ -49,12 +109,18 @@ class Human(User):
                 'profile': self.profile,
                 'attributes': str(self.attributes)
                 }
+    
+    @classmethod
+    def from_dict(cls, payload):
+        human = cls()
+
+        return human
 
 
 class Utterance(DynamicDocument):
     text = StringField(required=True)
     annotations = DictField(default={})
-    user = ReferenceField(User, required=True)
+    user = DictField(default={})
     date_time = DateTimeField(required=True)
 
     meta = {'allow_inheritance': True}
@@ -69,10 +135,23 @@ class HumanUtterance(Utterance):
     def to_dict(self):
         return {'id': str(self.id),
                 'text': self.text,
-                'user': self.user.to_dict(),
+                'user': self.user,
                 'annotations': self.annotations,
                 'date_time': str(self.date_time),
-                'selected_skills': self.selected_skills}
+                'selected_skills': self.selected_skills},
+                'type': 'human'
+
+    @classmethod
+    def from_dict(cls, payload):
+        utterance = cls()
+        utterance.id = payload['id']
+        utterance.text = payload['text']
+        utterance.annotations = payload['annotations']
+        utterance.date_time = payload['date_time']
+        utterance.selected_skills = payload['selected_skills']
+        utterance.user = payload['user']
+        utterance.save()
+        return utterance
 
 
 class BotUtterance(Utterance):
@@ -89,8 +168,23 @@ class BotUtterance(Utterance):
             'orig_text': self.orig_text,
             'user': self.user.to_dict(),
             'annotations': self.annotations,
-            'date_time': str(self.date_time)
+            'date_time': str(self.date_time),
+            'type': 'bot'
         }
+
+    @classmethod
+    def from_dict(cls, payload):
+        utterance = cls()
+        utterance.id = payload['id']
+        utterance.text = payload['text']
+        utterance.orig_text = payload['orig_text']
+        utterance.annotations = payload['annotations']
+        utterance.date_time = payload['date_time']
+        utterance.active_skill = payload['active_skill']
+        utterance.confidence = payload['confidence']
+        utterance.user = payload['user']
+        utterance.save()
+        return utterance
 
 
 class Dialog(DynamicDocument):
@@ -98,7 +192,8 @@ class Dialog(DynamicDocument):
     utterances = ListField(ReferenceField(Utterance), default=[])
     channel_type = StringField(choices=['telegram', 'vk', 'facebook', 'cmd_client', 'http_client'], default='telegram')
     version = StringField(default=STATE_API_VERSION, required=True)
-    human_id = ObjectIdField(required=True)
+    human = ReferenceField(Human, required=True)
+    bot = ReferenceField(Bot, required=True)
 
     def to_dict(self):
         return {
@@ -106,6 +201,13 @@ class Dialog(DynamicDocument):
             'location': self.location,
             'utterances': [utt.to_dict() for utt in self.utterances],
             'channel_type': self.channel_type,
-            'human_id': self.human_id
+            'human': self.human.to_dict(),
+            'bot': self.bot.to_dict()
         }
 
+    @classmethod
+    def from_dict(cls, payload):
+        dialog = cls()
+        dialog.location = payload['location']
+        dialog.channel_type = payload['channel_type']
+        return dialog

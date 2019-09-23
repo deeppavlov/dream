@@ -24,10 +24,11 @@ class Agent:
     def add_workflow_record(self, dialog: Dialog, deadline_timestamp: Optional[float] = None, **kwargs):
         if str(dialog.id) in self.workflow.keys():
             raise ValueError(f'dialog with id {dialog.id} is already in workflow')
-        workflow_record = {'dialog': dialog, 'services': defaultdict(dict)}
+        workflow_record = {'dialog_object': dialog, 'dialog': dialog.to_dict(), 'services': defaultdict(dict)}
         if deadline_timestamp:
             workflow_record['deadline_timestamp'] = deadline_timestamp
-
+        if 'dialog_object' in kwargs:
+            raise ValueError("'dialog_object' is system reserved workflow record field")
         workflow_record.update(kwargs)
         self.workflow[str(dialog.id)] = workflow_record
 
@@ -47,29 +48,23 @@ class Agent:
     def register_service_request(self, dialog_id: str, service_name):
         if dialog_id not in self.workflow.keys():
             raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
-        self.workflow[dialog_id]['services'][service_name] = {'send': time(), 'done': None}
+        self.workflow[dialog_id]['services'][service_name] = {'send': time(), 'done': None, 'skipped': False}
 
     def get_services_status(self, dialog_id: str):
         if dialog_id not in self.workflow.keys():
             raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
-        done, waiting = set(), set()
+        done, waiting, skipped = set(), set(), set()
         for key, value in self.workflow[dialog_id]['services'].items():
-            if value['done'] is not None:
+            if value['skipped']:
+                skipped.add(key)
+            elif value['done'] is not None:
                 done.add(key)
             else:
                 waiting.add(key)
 
-        return done, waiting
+        return done, waiting, skipped
 
-    def process_service_response(self, dialog_id: str, service_name: str = None, response: str = None):
-        '''
-        Ultimate method, which performs next operations:
-        1. Updates workflow dict with completed service
-        2. Updates dialog within workflow dict, using service update callable
-        3. Asks pipeline for next services which became available on current stage workflow
-        4. Modifies next services when processed responce is received from a selector service
-        5. Returns next services in list form
-        '''
+    async def process_service_response(self, dialog_id: str, service_name: str = None, response: str = None):
         workflow_record = self.get_workflow_record(dialog_id)
 
         # Updating workflow with service response
@@ -77,33 +72,36 @@ class Agent:
         if service:
             self.workflow[dialog_id]['services'][service_name]['done'] = time()
             if response and service.state_processor_method:
-                service.state_processor_method(workflow_record['dialog'], response)
+                service.state_processor_method(dialog=workflow_record['dialog'],
+                                               dialog_object=workflow_record['dialog_object'],
+                                               payload=response)
 
         # Calculating next steps
-        done, waiting = self.get_services_status(dialog_id)
-        next_services = self.pipeline.get_next_services(done, waiting)
+        done, waiting, skipped = self.get_services_status(dialog_id)
+        next_services_dict = self.pipeline.get_next_services(done, waiting)
 
         # Processing the case, when service is skill selector
         if service and service.is_selector():
             selected_services = list(response.values())[0]
             result = []
-            for service in next_services:
-                if service.name not in selected_services:
-                    self.workflow[dialog_id]['services'][service.name] = {'done': time(), 'send': None}
+            for name, service in next_services_dict.values():
+                if name not in selected_services:
+                    self.workflow[dialog_id]['services'][name] = {'done': None, 'send': None, 'skipped': True}
                 else:
                     result.append(service)
             next_services = result
+        else:
+            next_services = [service for name, service in next_services_dict.values if name not in skipped]
         if self.process_logger_callable:
             self.process_logger_callable(self.workflow['dialog_id'])  # send dialog workflow record to further logging operations
-
+    
         return next_services
 
     async def register_msg(self, utterance: str, user_telegram_id: Hashable,
                            user_device_type: Any,
                            date_time: datetime, location=Any,
                            channel_type=str, deadline_timestamp=None,
-                           require_response=False, **kwargs):
-        event = None
+                           require_response=False, should_reset=False, **kwargs):
         hold_flush = False
         user = self.state_manager.get_or_create_user(user_telegram_id, user_device_type)
         should_reset = True if utterance == TG_START_UTT else False
@@ -111,10 +109,11 @@ class Agent:
         self.state_manager.add_human_utterance(dialog, user, utterance, date_time)
         if require_response:
             event = asyncio.Event()
+            kwargs['event'] = event
             hold_flush = True
         self.add_workflow_record(dialog=dialog, deadline_timestamp=deadline_timestamp,
                                  event=event, hold_flush=hold_flush, **kwargs)
-        await self.process(str(dialog.id))
+        await self.process(str(dialog.id), 'input', utterance)
         if require_response:
             await event.wait()
             workflow_record = self.get_workflow_record(str(dialog.id))
@@ -126,13 +125,13 @@ class Agent:
         next_services = self.process_service_response(dialog_id, service_name, response)
 
         service_requests = []
-        has_responder = False
+        has_responder = []
         for service in next_services:
             self.register_service_request(dialog_id, service.name)
             payload = service.apply_workflow_formatter(workflow_record)
-            service_requests.append(service.connector_callable(payload))
+            service_requests.append(service.connector_func(payload))
             if service.is_responder():
-                has_responder = True
+                has_responder.append(service)
 
         responses = await asyncio.gather(*service_requests, return_exceptions=True)
 
@@ -144,5 +143,8 @@ class Agent:
                 tasks.append(self.process(dialog_id, service.name, response))
         await asyncio.gather(*tasks)
 
-        if has_responder and not workflow_record.get('hold_flush', False):
-            self.flush_record(dialog_id)
+        if has_responder:  # TODO(Pugin): this part breaks some processing logic on the end
+            for i in has_responder:
+                i.state_processor_method(workflow_record['dialog'], workflow_record['dialog_object'], None)
+            if not workflow_record.get('hold_flush', False):
+                self.flush_record(dialog_id)
