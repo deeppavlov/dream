@@ -1,53 +1,46 @@
 services:
   agent:
-    image: 127.0.0.1:5000/agent:latest
+    image: ${DOCKER_REGISTRY}/agent
     env_file: [.env.staging]
   cobotqa:
-    image: 127.0.0.1:5000/cobotqa:latest
-    env_file: [.env.staging]
-  alice:
-    image: 127.0.0.1:5000/alice:latest
-    env_file: [.env.staging]
-  aiml:
-    image: 127.0.0.1:5000/aiml:latest
-    volumes: ['external-logs:/logs', 'external-deeppavlov:/root/.deeppavlov']
+    image: ${DOCKER_REGISTRY}/cobotqa
     env_file: [.env.staging]
   rule_based_selector:
-    image: 127.0.0.1:5000/rule_based_selector:latest
+    image: ${DOCKER_REGISTRY}/rule_based_selector
     volumes: ['external-logs:/logs', 'external-deeppavlov:/root/.deeppavlov']
     env_file: [.env.staging]
   cobot_topics:
-    image: 127.0.0.1:5000/cobot_topics:latest
+    image: ${DOCKER_REGISTRY}/cobot_topics
     env_file: [.env.staging]
   cobot_sentiment:
-    image: 127.0.0.1:5000/cobot_sentiment:latest
+    image: ${DOCKER_REGISTRY}/cobot_sentiment
     env_file: [.env.staging]
   sentseg:
-    image: 127.0.0.1:5000/sentseg:latest
+    image: ${DOCKER_REGISTRY}/sentseg
     env_file: [.env.staging]
   cobot_offensiveness:
-    image: 127.0.0.1:5000/cobot_offensiveness:latest
+    image: ${DOCKER_REGISTRY}/cobot_offensiveness
     env_file: [.env.staging]
   cobot_dialogact:
-    image: 127.0.0.1:5000/cobot_dialogact:latest
+    image: ${DOCKER_REGISTRY}/cobot_dialogact
     env_file: [.env.staging]
   transfertransfo:
-    image: 127.0.0.1:5000/transfertransfo:latest
+    image: ${DOCKER_REGISTRY}/transfertransfo
     env_file: [.env.staging]
   convers_evaluation_selector:
-    image: 127.0.0.1:5000/convers_evaluation_selector:latest
+    image: ${DOCKER_REGISTRY}/convers_evaluation_selector
     env_file: [.env.staging]
   personality_catcher:
-    image: 127.0.0.1:5000/personality_catcher:latest
+    image: ${DOCKER_REGISTRY}/personality_catcher
     env_file: [.env.staging]
   program_y:
-    image: 127.0.0.1:5000/program_y:latest
+    image: ${DOCKER_REGISTRY}/program_y
     env_file: [.env.staging]
-  mongo:
-    volumes:
-      - external-mongo-db:/root/data/db
+  agent_telegram:
+    command: 'python3 -m core.run -ch telegram'
+    image: ${DOCKER_REGISTRY}/agent
+    env_file: [.env.staging]
 volumes:
   external-logs:
   external-deeppavlov:
-  external-mongo-db:
 version: '3.7'
