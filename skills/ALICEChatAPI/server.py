@@ -5,12 +5,11 @@ from flask import Flask, request, jsonify
 import ai
 import uuid
 import logging
-
+import time
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
-
 
 app = Flask(__name__)
 bot = ai.Chatbot()
@@ -19,6 +18,8 @@ bot.initialize("aiml-dir")
 
 @app.route("/respond", methods=['POST'])
 def respond():
+    # todo: logging doesn't work here, some problems with Sanic
+    st_time = time.time()
     # bot.reset() not work
     user_sentences = request.json['sentences']
     response = "..."
@@ -31,6 +32,9 @@ def respond():
         confidence = 0.95
     else:
         confidence = 0.01
+
+    total_time = time.time() - st_time
+    logger.info(f'program_y exec time: {total_time:.3f}s')
     return jsonify([[response, confidence]])
 
 
