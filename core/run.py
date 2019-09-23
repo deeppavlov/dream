@@ -6,7 +6,6 @@ import logging
 from aiohttp import web
 from datetime import datetime
 from string import hexdigits
-from aiohttp_swagger import *
 
 from core.agent import Agent
 from core.pipeline import Pipeline, Service
@@ -73,7 +72,6 @@ async def init_app(register_msg, intermediate_storage, on_startup, on_shutdown_f
     app.router.add_post('/', handle_func)
     app.router.add_get('/dialogs', users_dialogs)
     app.router.add_get('/dialogs/{dialog_id}', dialog)
-    setup_swagger(app, swagger_url='/docs')
     app.on_startup.append(on_startup)
     app.on_shutdown.append(on_shutdown_func)
     return app

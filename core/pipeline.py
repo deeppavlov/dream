@@ -2,19 +2,16 @@ from collections import defaultdict, Counter
 
 
 class Service:
-    def __init__(self, name, connector=None, state_processor_method=None,
+    def __init__(self, name, connector_func, state_processor_method=None,
                  batch_size=1, tags=None, names_previous_services=None,
-                 workflow_formatter=None, connector_callable=None):
+                 workflow_formatter=None):
         self.name = name
         self.batch_size = batch_size
         self.state_processor_method = state_processor_method
         self.names_previous_services = names_previous_services or set()
         self.tags = tags or []
         self.workflow_formatter = workflow_formatter
-        if not (connector or connector_callable):
-            raise ValueError('Either connector or connector_callable should be provided')
-        self.connector = connector
-        self._connector_callable = connector_callable
+        self.connector_func = connector_func
         self.previous_services = set()
         self.next_services = set()
 
@@ -24,17 +21,13 @@ class Service:
     def is_responder(self):
         return 'responder' in self.tags
 
+    def is_input(self):
+        return 'input' in self.tags
+
     def apply_workflow_formatter(self, workflow_record):
         if not self.workflow_formatter:
             return workflow_record
         return self.workflow_formatter(workflow_record)
-
-    @property
-    def connector_callable(self):
-        if self._connector_callable:
-            return self._connector_callable
-        else:
-            return self.connector.send
 
 
 class Pipeline:
@@ -75,16 +68,16 @@ class Pipeline:
             waiting = set()
         removed_names = waiting | done
         for name, service in self.services.items():
-            if not {i.name for i in service.previous_services} <= done:
+            if not {i.name for i in service.previous_services} <= done or service.is_input():
                 removed_names.add(name)
 
-        return [service for name, service in self.services.items() if name not in removed_names]
+        return {name: service for name, service in self.services.items() if name not in removed_names}
 
     def get_endpoint_services(self):
         return [s for s in self.services.values() if not s.next_services and 'responder' not in s.tags]
 
     def add_responder_service(self, service):
-        if 'responder' not in service.tags:
+        if not service.is_responder():
             raise ValueError('service should be a responder')
         endpoints = self.get_endpoint_services()
         service.previous_services = set(endpoints)
@@ -93,6 +86,16 @@ class Pipeline:
 
         for s in endpoints:
             self.services[s.name].next_services.add(service)
+
+    def add_input_service(self, service):
+        if not service.is_input():
+            raise ValueError('service should be an input')
+        starting_services = self.get_next_services()
+        service.next_services = set(starting_services)
+        self.services[service.name] = service
+
+        for s in starting_services:
+            self.services[s.name].previous_services.add(service)
 
 
 def simple_workflow_formatter(workflow_record):

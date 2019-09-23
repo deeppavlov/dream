@@ -21,18 +21,22 @@ def parse_old_config():
         formatter = conf_record['formatter']
         batch_size = conf_record.get('batch_size', 1)
         url = conf_record['url']
-        url2 = conf_record.get('url2', None)
+
         if conf_record['protocol'] == 'http':
-            if batch_size == 1 and not url2:
-                connector = HTTPConnector(session, url, formatter, conf_record['name'])
+            if batch_size == 1 and isinstance(url, str):
+                connector_func = HTTPConnector(session, url, formatter, conf_record['name']).send
             else:
                 queue = asyncio.Queue()
-                connector = AioQueueConnector(queue)  # worker task and queue connector
-                worker_tasks.append(QueueListenerBatchifyer(session, url, formatter, name, queue, batch_size))
-                if url2:
-                    worker_tasks.append(QueueListenerBatchifyer(session, url2, formatter, name, queue, batch_size))
-
-        service = Service(name, connector, state_processor_method, batch_size,
+                connector_func = AioQueueConnector(queue).send  # worker task and queue connector
+                if isinstance(url, str):
+                    urls = [url]
+                else:
+                    urls = url
+                for u in urls:
+                    worker_tasks.append(QueueListenerBatchifyer(session, u, formatter, 
+                                                                name, queue, batch_size))
+                
+        service = Service(name, connector_func, state_processor_method, batch_size,
                           tags, names_previous_services, simple_workflow_formatter)
 
         return service, worker_tasks
