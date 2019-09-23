@@ -4,6 +4,7 @@ import json
 import logging
 import os
 import uuid
+import time
 
 import requests
 from flask import Flask, request, jsonify
@@ -33,6 +34,7 @@ headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COB
 
 @app.route("/topics", methods=['POST'])
 def respond():
+    st_time = time.time()
     user_sentences = request.json['sentences']
     session_id = uuid.uuid4().hex
     topics = []
@@ -49,7 +51,8 @@ def respond():
         topics += [topic]
         confidences += [confidence]
         logger.info(f"topic: {topic}")
-
+    total_time = time.time() - st_time
+    logger.info(f'cobot_topics exec time: {total_time:.3f}s')
     return jsonify(list(zip(topics, confidences)))
 
 
