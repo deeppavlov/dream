@@ -1,0 +1,21 @@
+services:  
+  alice:
+    build:
+      context: ./skills/ALICEChatAPI/
+    ports: ['8000:8000']
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8000
+    volumes: []
+  aiml:
+    build:
+      args:
+        skill_endpoint: aiml
+        skillconfig: skills/aiml/aiml_skill.json
+        skillhost: 0.0.0.0
+        skillport: 2080
+      context: ./
+      dockerfile: dp/dockerfile_skill_cpu
+    environment:
+      - CUDA_VISIBLE_DEVICES=""
+    ports:
+      - 2080:2080
+version: '3.7'
