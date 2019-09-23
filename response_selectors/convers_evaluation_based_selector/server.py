@@ -68,7 +68,7 @@ def respond():
         msg = "result status code is not 200: {}. result text: {}; result status: {}".format(
             toxic_result, toxic_result.text, toxic_result.status_code)
         sentry_sdk.capture_message(msg)
-        logger.warning(msg)
+        logger.warning("Toxic classifier: " + msg)
         toxicities = [0.] * len(utterances)
     else:
         toxic_result = toxic_result.json()
@@ -83,7 +83,7 @@ def respond():
         msg = "result status code is not 200: {}. result text: {}; result status: {}".format(
             result, result.text, result.status_code)
         sentry_sdk.capture_message(msg)
-        logger.warning(msg)
+        logger.warning("Conversation Evaluator:" + msg)
         result = np.array([{"isResponseOnTopic": 0.,
                             "isResponseInteresting": 0.,
                             "responseEngagesUser": 0.,
@@ -106,27 +106,39 @@ def respond():
         # choose results which correspond curr candidates
         curr_scores = result[dialog_ids == i]  # array of dictionaries
         curr_confidences = confidences[dialog_ids == i]  # array of float numbers
-        ids = toxicities[dialog_ids == i] > 0.5
-        curr_scores[ids] = {"isResponseOnTopic": 0.,
-                            "isResponseInteresting": 0.,
-                            "responseEngagesUser": 0.,
-                            "isResponseComprehensible": 0.,
-                            "isResponseErroneous": 1.,
-                            }
-        curr_confidences[ids] = 0.
+        # ids = toxicities[dialog_ids == i] > 0.5
+        # curr_scores[ids] = {"isResponseOnTopic": 0.,
+        #                     "isResponseInteresting": 0.,
+        #                     "responseEngagesUser": 0.,
+        #                     "isResponseComprehensible": 0.,
+        #                     "isResponseErroneous": 1.,
+        #                     }
+        # curr_confidences[ids] = 0.
 
-        best_skill_name = select_response(curr_candidates, curr_scores, curr_confidences, dialog)
+        best_skill_name = select_response(curr_candidates, curr_scores, curr_confidences,
+                                          toxicities[dialog_ids == i], dialog)
         selected_skill_names.append(best_skill_name)
         logger.info(f"Choose final skill: {best_skill_name}")
 
     return jsonify(selected_skill_names)
 
 
-def select_response(curr_candidates, curr_scores, curr_confidences, dialog):
+def select_response(curr_candidates, curr_scores, curr_confidences, curr_toxicities,  dialog):
     confidence_strength = 2
     conv_eval_strength = 0.4
     # calculate curr_scores which is an array of values-scores for each candidate
     curr_single_cores = []
+
+    # exclude toxic messages
+    ids = curr_toxicities > 0.5
+    curr_scores[ids] = {"isResponseOnTopic": 0.,
+                        "isResponseInteresting": 0.,
+                        "responseEngagesUser": 0.,
+                        "isResponseComprehensible": 0.,
+                        "isResponseErroneous": 1.,
+                        }
+    curr_confidences[ids] = 0.
+
     for i in range(len(curr_scores)):
         cand_scores = curr_scores[i]
         confidence = curr_confidences[i]
@@ -137,7 +149,8 @@ def select_response(curr_candidates, curr_scores, curr_confidences, dialog):
             cand_scores["isResponseComprehensible"] - \
             cand_scores["isResponseErroneous"]
         score = conv_eval_strength*score_conv_eval + confidence_strength*confidence
-        logger.info(f'Skill {skill_name} has score: {score}. Cand scores: {cand_scores}')
+        logger.info(f'Skill {skill_name} has score: {score}. Toxicity: {curr_toxicities[i]} '
+                    f'Cand scores: {cand_scores}')
         curr_single_cores.append(score)
     best_id = np.argmax(curr_single_cores)
     best_skill_name = list(curr_candidates.keys())[best_id]
