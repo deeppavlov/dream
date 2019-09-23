@@ -1,6 +1,7 @@
 import asyncio
 import argparse
 import uuid
+import logging
 
 from aiohttp import web
 from datetime import datetime
@@ -8,26 +9,46 @@ from string import hexdigits
 from aiohttp_swagger import *
 
 from core.agent import Agent
-from core.pipeline import Pipeline, Service, simple_workflow_formatter
+from core.pipeline import Pipeline, Service
 from core.connectors import EventSetOutputConnector, HttpOutputConnector
 from core.config_parser import parse_old_config
 from core.state_manager import StateManager
 from core.transform_config import DEBUG
+
+logger = logging.getLogger('service_logger')
+logger.setLevel(logging.INFO)
+fh = logging.FileHandler('../service.log')
+fh.setLevel(logging.INFO)
+logger.addHandler(fh)
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-ch", "--channel", help="run agent in telegram, cmd_client or http_client", type=str,
                     choices=['cmd_client', 'http_client'], default='cmd_client')
 parser.add_argument('-p', '--port', help='port for http client, default 4242', default=4242)
 parser.add_argument('-d', '--debug', help='run in debug mode', action='store_true')
+parser.add_argument('-rl', '--response-logger', help='run agent with services response logging', action='store_true')
 args = parser.parse_args()
 CHANNEL = args.channel
 
 
-def prepare_agent(services, endpoint: Service):
+def response_logger(dialog_id, workflow):
+    for service_name, service_data in workflow[dialog_id]['services'].items():
+        done = service_data['done']
+        send = service_data['send']
+        if send is None or done is None:
+            continue
+        logger.info(f'{service_name}\t{round(done - send, 5)}\tseconds')
+
+
+def prepare_agent(services, endpoint: Service, use_response_logger: bool):
     pipeline = Pipeline(services)
     pipeline.add_responder_service(endpoint)
-    agent = Agent(pipeline, StateManager())
-
+    if use_response_logger:
+        response_logger_callable = response_logger
+    else:
+        response_logger_callable = None
+    agent = Agent(pipeline, StateManager(), response_logger_callable=response_logger_callable)
     return agent.register_msg, agent.process
 
 
@@ -40,6 +61,7 @@ async def run(register_msg):
                                           date_time=datetime.now(), location='lab', channel_type=CHANNEL,
                                           deadline_timestamp=None, require_response=True)
             print('Bot: ', response['dialog'].utterances[-1].text)
+
 
 async def on_shutdown(app):
     await app['client_session'].close()
@@ -132,7 +154,7 @@ def main():
         endpoint = Service('cmd_responder', EventSetOutputConnector(), None, 1, ['responder'], set())
         loop = asyncio.get_event_loop()
         loop.set_debug(args.debug)
-        register_msg, process = prepare_agent(services, endpoint)
+        register_msg, process = prepare_agent(services, endpoint, use_response_logger=args.response_logger)
         future = asyncio.ensure_future(run(register_msg))
         for i in workers:
             loop.create_task(i.call_service(process))
@@ -147,6 +169,7 @@ def main():
             loop.run_until_complete(session.close())
             loop.stop()
             loop.close()
+            logging.shutdown()
     elif CHANNEL == 'http_client':
         intermediate_storage = {}
         endpoint = Service('http_responder', HttpOutputConnector(intermediate_storage), None, 1, ['responder'])
