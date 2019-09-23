@@ -981,48 +981,6 @@
         </template>
     </category>
     <category>
-        <pattern>MY BIRTHDATE IS <set>month</set>
-            <set>ordinal</set>
-            <set>number</set>
-        </pattern>
-        <template>
-            <srai>MY BIRTHDATE IS
-                <star/>
-                <map>
-                    <name>ordinal2number</name>
-                    <star index="2"/>
-                </map>
-                <star index="3"/>
-            </srai>
-        </template>
-    </category>
-    <category>
-        <pattern>MY BIRTHDATE IS <set>month</set>
-            <set>number</set>
-            <set>number</set>
-        </pattern>
-        <template>So you are
-            <set var="age">
-                <srai>AGE FROM
-                    <star/>
-                    <star index="2"/>
-                    <star index="3"/>
-                </srai>
-            </set>
-            .
-            <think>
-                <srai>MY AGE IS
-                    <get var="age"/>
-                </srai>
-                <set name="birthdate">
-                    <star/>
-                    <star index="2"/>,
-                    <star index="3"/>
-                </set>
-            </think>
-        </template>
-    </category>
-    <category>
         <pattern>MY AGE</pattern>
         <template>
             <get name="age"/>

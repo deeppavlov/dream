@@ -151,13 +151,6 @@
     </category>
 
     <category>
-        <pattern>I AM LEAVING *</pattern>
-        <template>
-            <srai>bye</srai>
-        </template>
-    </category>
-
-    <category>
         <pattern>CYA</pattern>
         <template>
             <srai>BYE</srai>
@@ -166,13 +159,6 @@
 
     <category>
         <pattern>I NEED TO GO</pattern>
-        <template>
-            <srai>BYE</srai>
-        </template>
-    </category>
-
-    <category>
-        <pattern>I AM LEAVING</pattern>
         <template>
             <srai>BYE</srai>
         </template>
