@@ -58,6 +58,7 @@ def respond():
             confidences += [response_candidates[i][skill_name]["confidence"]]
             utterances += [response_candidates[i][skill_name]["text"]]  # all bot utterances
 
+    # check all possible skill responses for toxicity
     toxic_result = requests.request(url=TOXIC_COMMENT_CLASSIFICATION_SERVICE_URL,
                                     headers=headers,
                                     data=json.dumps({'sentences': utterances}),
@@ -68,11 +69,12 @@ def respond():
             toxic_result, toxic_result.text, toxic_result.status_code)
         sentry_sdk.capture_message(msg)
         logger.warning(msg)
-        selected_skill_names = []
+        toxicities = [0.] * len(utterances)
     else:
         toxic_result = toxic_result.json()
         toxicities = [max(res[0].values()) for res in toxic_result]
 
+    # evaluate all possible skill responses
     result = requests.request(url=COBOT_CONVERSATION_EVALUATION_SERVICE_URL,
                               headers=headers,
                               data=json.dumps({'conversations': conversations}),
@@ -82,34 +84,40 @@ def respond():
             result, result.text, result.status_code)
         sentry_sdk.capture_message(msg)
         logger.warning(msg)
-        selected_skill_names = []
+        result = np.array([{"isResponseOnTopic": 0.,
+                            "isResponseInteresting": 0.,
+                            "responseEngagesUser": 0.,
+                            "isResponseComprehensible": 0.,
+                            "isResponseErroneous": 0.,
+                            }
+                           for _ in conversations])
     else:
         result = result.json()
         # result is an array where each element is a dict with scores
         result = np.array(result["conversationEvaluationScores"])
 
-        dialog_ids = np.array(dialog_ids)
-        confidences = np.array(confidences)
-        toxicities = np.array(toxicities)
+    dialog_ids = np.array(dialog_ids)
+    confidences = np.array(confidences)
+    toxicities = np.array(toxicities)
 
-        for i, dialog in enumerate(dialogs_batch):
-            # curr_candidates is dict
-            curr_candidates = response_candidates[i]
-            # choose results which correspond curr candidates
-            curr_scores = result[dialog_ids == i]  # list of two dictionaries
-            curr_confidences = confidences[dialog_ids == i]  # list of two float numbers
-            ids = toxicities[dialog_ids == i] > 0.5  # [[False False]]
-            curr_scores[ids] = {"isResponseOnTopic": 0.,
-                                "isResponseInteresting": 0.,
-                                "responseEngagesUser": 0.,
-                                "isResponseComprehensible": 0.,
-                                "isResponseErroneous": 1.,
-                                }
-            curr_confidences[ids] = 0.
+    for i, dialog in enumerate(dialogs_batch):
+        # curr_candidates is dict
+        curr_candidates = response_candidates[i]
+        # choose results which correspond curr candidates
+        curr_scores = result[dialog_ids == i]  # array of dictionaries
+        curr_confidences = confidences[dialog_ids == i]  # array of float numbers
+        ids = toxicities[dialog_ids == i] > 0.5
+        curr_scores[ids] = {"isResponseOnTopic": 0.,
+                            "isResponseInteresting": 0.,
+                            "responseEngagesUser": 0.,
+                            "isResponseComprehensible": 0.,
+                            "isResponseErroneous": 1.,
+                            }
+        curr_confidences[ids] = 0.
 
-            best_skill_name = select_response(curr_candidates, curr_scores, curr_confidences, dialog)
-            selected_skill_names.append(best_skill_name)
-            logger.info(f"Choose final skill: {best_skill_name}")
+        best_skill_name = select_response(curr_candidates, curr_scores, curr_confidences, dialog)
+        selected_skill_names.append(best_skill_name)
+        logger.info(f"Choose final skill: {best_skill_name}")
 
     return jsonify(selected_skill_names)
 

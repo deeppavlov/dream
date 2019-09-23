@@ -10,7 +10,8 @@ services:
       - './skills/CoBotQA:/src'
   rule_based_selector:
     env_file: [.env.dev]
-    volumes: ['${EXTERNAL_FOLDER}/dp_logs:/logs', '${EXTERNAL_FOLDER}/.deeppavlov:/root/.deeppavlov', '.:/dp-agent']
+    volumes:
+      - './skill_selectors/alexa_skill_selectors:/src'
   cobot_topics:
     env_file: [.env.dev]
     volumes:
@@ -55,9 +56,8 @@ services:
       - 27017:27017
     volumes:
       - /data/db_new:/root/data/db
-     - /data/db:/root/data/db
   toxic_classification:
     env_file: [.env.dev]
     volumes:
-      - './annotators/ToxicClassification:/src'
+      - './annotators/DeepPavlovToxicClassification:/src'
 version: '3.7'

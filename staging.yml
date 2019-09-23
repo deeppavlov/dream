@@ -7,7 +7,6 @@ services:
     env_file: [.env.staging]
   rule_based_selector:
     image: ${DOCKER_REGISTRY}/rule_based_selector
-    volumes: ['external-logs:/logs', 'external-deeppavlov:/root/.deeppavlov']
     env_file: [.env.staging]
   cobot_topics:
     image: ${DOCKER_REGISTRY}/cobot_topics
