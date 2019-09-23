@@ -89,6 +89,19 @@ ANNOTATORS_1 = [
         "external": True,
         "path": "",
         "formatter": sent_segm_formatter
+    },
+    {
+        "name": "toxic_classification",
+        "protocol": "http",
+        "host": "toxic_classification",
+        "port": 8013,
+        "endpoint": "toxicity_annotations",
+        "path": "annotators/DeepPavlovToxicClassification/toxic_classification.json",
+        "env": {
+            "CUDA_VISIBLE_DEVICES": "0"
+        },
+        "gpu": True,
+        "formatter": dp_toxic_formatter
     }
     # {
     #     "name": "cobot_topics",

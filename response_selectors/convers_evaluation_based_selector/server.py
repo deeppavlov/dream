@@ -3,7 +3,6 @@
 import json
 import logging
 import os
-import uuid
 import numpy as np
 
 import requests
@@ -21,7 +20,8 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 COBOT_API_KEY = os.environ.get('COBOT_API_KEY')
-COBOT_CONVERSATION_EVALUATION_SERVICE_URL =  os.environ.get('COBOT_CONVERSATION_EVALUATION_SERVICE_URL')
+COBOT_CONVERSATION_EVALUATION_SERVICE_URL = os.environ.get('COBOT_CONVERSATION_EVALUATION_SERVICE_URL')
+TOXIC_COMMENT_CLASSIFICATION_SERVICE_URL = "http://toxic_classification:8013/toxicity_annotations"
 
 if COBOT_API_KEY is None:
     raise RuntimeError('COBOT_API_KEY environment variable is not set')
@@ -39,6 +39,7 @@ def respond():
     dialog_ids = []
     selected_skill_names = []
     confidences = []
+    utterances = []
 
     for i, dialog in enumerate(dialogs_batch):
         for skill_name in response_candidates[i]:
@@ -54,45 +55,81 @@ def respond():
             conversations += [conv]
             dialog_ids += [i]
             confidences += [response_candidates[i][skill_name]["confidence"]]
+            utterances += [response_candidates[i][skill_name]["text"]]  # all bot utterances
 
+    # check all possible skill responses for toxicity
+    toxic_result = requests.request(url=TOXIC_COMMENT_CLASSIFICATION_SERVICE_URL,
+                                    headers=headers,
+                                    data=json.dumps({'sentences': utterances}),
+                                    method='POST')
+
+    if toxic_result.status_code != 200:
+        msg = "Toxic classifier: result status code is not 200: {}. result text: {}; result status: {}".format(
+            toxic_result, toxic_result.text, toxic_result.status_code)
+        sentry_sdk.capture_message(msg)
+        logger.warning(msg)
+        toxicities = [0.] * len(utterances)
+    else:
+        toxic_result = toxic_result.json()
+        toxicities = [max(res[0].values()) for res in toxic_result]
+
+    # evaluate all possible skill responses
     result = requests.request(url=COBOT_CONVERSATION_EVALUATION_SERVICE_URL,
                               headers=headers,
                               data=json.dumps({'conversations': conversations}),
                               method='POST')
     if result.status_code != 200:
-        msg = "result status code is not 200: {}. result text: {}; result status: {}".format(result, result.text,
-                                                                                             result.status_code)
+        msg = "Cobot Conversation Evaluator: result status code is \
+  not 200: {}. result text: {}; result status: {}".format(result, result.text, result.status_code)
         sentry_sdk.capture_message(msg)
         logger.warning(msg)
-        selected_skill_names = []
+        result = np.array([{"isResponseOnTopic": 0.,
+                            "isResponseInteresting": 0.,
+                            "responseEngagesUser": 0.,
+                            "isResponseComprehensible": 0.,
+                            "isResponseErroneous": 0.,
+                            }
+                           for _ in conversations])
     else:
         result = result.json()
         # result is an array where each element is a dict with scores
         result = np.array(result["conversationEvaluationScores"])
 
-        dialog_ids = np.array(dialog_ids)
-        confidences = np.array(confidences)
+    dialog_ids = np.array(dialog_ids)
+    confidences = np.array(confidences)
+    toxicities = np.array(toxicities)
 
-        for i, dialog in enumerate(dialogs_batch):
-            # curr_candidates is dict
-            curr_candidates = response_candidates[i]
-            # choose results which correspond curr candidates
-            curr_scores = result[dialog_ids == i]
-            curr_confidences = confidences[dialog_ids == i]
-            best_skill_name = select_response(curr_candidates, curr_scores, curr_confidences, dialog)
-            # best_response = curr_candidates[best_skill_name]["text"]
-            # confidence = curr_candidates[best_skill_name]["confidence"]
-            selected_skill_names.append(best_skill_name)
-            logger.info(f"Choose final skill: {best_skill_name}")
+    for i, dialog in enumerate(dialogs_batch):
+        # curr_candidates is dict
+        curr_candidates = response_candidates[i]
+        # choose results which correspond curr candidates
+        curr_scores = result[dialog_ids == i]  # array of dictionaries
+        curr_confidences = confidences[dialog_ids == i]  # array of float numbers
+
+        best_skill_name = select_response(curr_candidates, curr_scores, curr_confidences,
+                                          toxicities[dialog_ids == i], dialog)
+        selected_skill_names.append(best_skill_name)
+        logger.info(f"Choose final skill: {best_skill_name}")
 
     return jsonify(selected_skill_names)
 
 
-def select_response(curr_candidates, curr_scores, curr_confidences, dialog):
+def select_response(curr_candidates, curr_scores, curr_confidences, curr_toxicities,  dialog):
     confidence_strength = 2
     conv_eval_strength = 0.4
     # calculate curr_scores which is an array of values-scores for each candidate
     curr_single_cores = []
+
+    # exclude toxic messages
+    ids = curr_toxicities > 0.5
+    curr_scores[ids] = {"isResponseOnTopic": 0.,
+                        "isResponseInteresting": 0.,
+                        "responseEngagesUser": 0.,
+                        "isResponseComprehensible": 0.,
+                        "isResponseErroneous": 1.,
+                        }
+    curr_confidences[ids] = 0.
+
     for i in range(len(curr_scores)):
         cand_scores = curr_scores[i]
         confidence = curr_confidences[i]
@@ -103,7 +140,8 @@ def select_response(curr_candidates, curr_scores, curr_confidences, dialog):
             cand_scores["isResponseComprehensible"] - \
             cand_scores["isResponseErroneous"]
         score = conv_eval_strength*score_conv_eval + confidence_strength*confidence
-        logger.info(f'Skill {skill_name} has score: {score}. Cand scores: {cand_scores}')
+        logger.info(f'Skill {skill_name} has score: {score}. Toxicity: {curr_toxicities[i]} '
+                    f'Cand scores: {cand_scores}')
         curr_single_cores.append(score)
     best_id = np.argmax(curr_single_cores)
     best_skill_name = list(curr_candidates.keys())[best_id]
