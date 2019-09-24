@@ -105,9 +105,7 @@ def odqa_formatter(payload: Any, model_args_names=('question_raw',), mode='in'):
         return last_utterances(payload, model_args_names)
     elif mode == 'out':
         return {"text": payload[0],
-                "confidence": 0.5,
-                "persona": ["Я котик."],
-                "ololo": "ololo"}
+                "confidence": 0.5}
 
 
 def chitchat_formatter(payload: Any, model_args_names=('q',), mode='in'):
