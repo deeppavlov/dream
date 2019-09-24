@@ -2,14 +2,11 @@ import asyncio
 import argparse
 import uuid
 
-
 from aiohttp import web
 from datetime import datetime
-from string import hexdigits
 from random import choice
 
-from core.agent import Agent
-from core.pipeline import Pipeline, Service
+from core.pipeline import Service
 from core.connectors import HttpOutputConnector
 from core.config_parser import parse_old_config
 from core.state_manager import StateManager
@@ -107,7 +104,8 @@ def main():
         if s.is_selector():
             s.connector_func = DummySelectorConnector(['chitchat', 'odqa'], 0.01, s.name).send
         else:
-            s.connector_func = DummyConnector(['we have a phrase', 'and another one', 'not so short one'], 0.01, s.name).send
+            s.connector_func = DummyConnector(['we have a phrase', 'and another one', 'not so short one'], 0.01,
+                                              s.name).send
     intermediate_storage = {}
     endpoint = Service('http_responder', HttpOutputConnector(intermediate_storage).send,
                        StateManager.save_dialog_dict, 1, ['responder'])

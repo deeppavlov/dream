@@ -1,14 +1,19 @@
 from datetime import datetime
 from typing import Hashable, Any, Optional, Dict, TypeVar, List
-from copy import deepcopy
 
-from core.state_schema import User, Human, Bot, HumanUtterance, BotUtterance, Dialog, HUMAN_UTTERANCE_SCHEMA, BOT_UTTERANCE_SCHEMA, BOT_SCHEMA, HUMAN_SCHEMA, DIALOG_SCHEMA
-from core.connection import connect
+from mongoengine import connect
+
+from core.state_schema import User, Human, Bot, HumanUtterance, BotUtterance, Dialog, HUMAN_UTTERANCE_SCHEMA,\
+    BOT_UTTERANCE_SCHEMA
+from core.transform_config import DB_HOST, DB_PORT, DB_NAME
+
 
 userT = TypeVar('userT', bound=User)
 
 
 class StateManager:
+
+    state_storage = connect(host=DB_HOST, port=DB_PORT, db=DB_NAME)
 
     @staticmethod
     def create_new_dialog(human, bot, location=None, channel_type=None):
@@ -35,7 +40,8 @@ class StateManager:
         return bot
 
     @staticmethod
-    def create_new_human_utterance(text, user: Human, date_time, annotations=None, selected_skills=None):
+    def create_new_human_utterance(text, user: Human, date_time, annotations=None,
+                                   selected_skills=None):
         utt = HumanUtterance(text=text,
                              user=user.to_dict(),
                              date_time=date_time,
@@ -45,7 +51,8 @@ class StateManager:
         return utt
 
     @staticmethod
-    def create_new_bot_utterance(orig_text, text, user, date_time, active_skill, confidence, annotations=None):
+    def create_new_bot_utterance(orig_text, text, user, date_time, active_skill, confidence,
+                                 annotations=None):
         utt = BotUtterance(orig_text=orig_text,
                            text=text,
                            user=user,
@@ -86,21 +93,24 @@ class StateManager:
     def add_human_utterance(cls, dialog: Dialog, user: Human, text: str, date_time: datetime,
                             annotation: Optional[dict] = None,
                             selected_skill: Optional[dict] = None) -> None:
-        utterance = cls.create_new_human_utterance(text, user, date_time, annotation, selected_skill)
+        utterance = cls.create_new_human_utterance(text, user, date_time, annotation,
+                                                   selected_skill)
         dialog.utterances.append(utterance)
         dialog.save()
 
     @classmethod
     def add_bot_utterance(cls, dialog: Dialog, orig_text: str,
                           date_time: datetime, active_skill: str,
-                          confidence: float, text: str = None, annotation: Optional[dict] = None) -> None:
+                          confidence: float, text: str = None,
+                          annotation: Optional[dict] = None) -> None:
         if not text:
             text = orig_text
         try:
             bot = dialog.utterances[-2].user
         except IndexError:
             bot = cls.create_new_bot()
-        utterance = cls.create_new_bot_utterance(orig_text, text, bot, date_time, active_skill, confidence,
+        utterance = cls.create_new_bot_utterance(orig_text, text, bot, date_time, active_skill,
+                                                 confidence,
                                                  annotation)
         dialog.utterances.append(utterance)
         dialog.save()
@@ -170,7 +180,8 @@ class StateManager:
         bot.save()
 
     @classmethod
-    def add_human_utterance_simple_dict(cls, dialog: Dict, dialog_object: Dialog, payload: Dict, **kwargs) -> None:
+    def add_human_utterance_simple_dict(cls, dialog: Dict, dialog_object: Dialog, payload: Dict,
+                                        **kwargs) -> None:
         utterance = HUMAN_UTTERANCE_SCHEMA
         utterance['text'] = payload
         utterance['date_time'] = str(datetime.now())
@@ -188,7 +199,6 @@ class StateManager:
             else:
                 human['attributes'][attr_name] = attr_value
 
-
     @staticmethod
     def update_bot_dict(bot: Dict, active_skill: Dict):
         attributes = active_skill.get('bot_attributes', {})
@@ -199,7 +209,8 @@ class StateManager:
                 bot['attributes'][attr_name] = attr_value
 
     @classmethod
-    def add_bot_utterance_simple_dict(cls, dialog: Dict, dialog_object: Dialog, payload: Dict, **kwargs) -> None:
+    def add_bot_utterance_simple_dict(cls, dialog: Dict, dialog_object: Dialog, payload: Dict,
+                                      **kwargs) -> None:
         active_skill_name = list(payload.values())[0]
         active_skill = dialog['utterances'][-1]['selected_skills'].get(active_skill_name, None)
         if not active_skill:

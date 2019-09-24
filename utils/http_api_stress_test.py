@@ -1,10 +1,7 @@
 import aiohttp
 import asyncio
 import argparse
-import csv
-import json
 from time import time
-from random import random, randrange
 import uuid
 from statistics import mean, median
 
@@ -24,6 +21,7 @@ try:
 except Exception as e:
     raise e
 
+
 async def perform_test_dialogue(session, url, uuid, payloads):
     times = []
     for i in payloads:
@@ -38,6 +36,7 @@ async def perform_test_dialogue(session, url, uuid, payloads):
         times.append(end_time - start_time)
 
     return times
+
 
 async def run_users(url, payload, mnu, mxu):
     async with aiohttp.ClientSession() as session:

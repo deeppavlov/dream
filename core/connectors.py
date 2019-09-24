@@ -1,6 +1,6 @@
 import asyncio
 import aiohttp
-from typing import Dict, List, Callable
+from typing import Dict, Callable
 
 
 class HTTPConnector:

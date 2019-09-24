@@ -1,8 +1,10 @@
 import aiohttp
 import asyncio
 
-from core.transform_config import SKILLS, ANNOTATORS_1, ANNOTATORS_2, ANNOTATORS_3, SKILL_SELECTORS, RESPONSE_SELECTORS, POSTPROCESSORS
-from core.connectors import HTTPConnector, ConfidenceResponseSelectorConnector, AioQueueConnector, QueueListenerBatchifyer
+from core.transform_config import SKILLS, ANNOTATORS_1, ANNOTATORS_2, ANNOTATORS_3, SKILL_SELECTORS,\
+    RESPONSE_SELECTORS, POSTPROCESSORS
+from core.connectors import HTTPConnector, ConfidenceResponseSelectorConnector, AioQueueConnector, \
+    QueueListenerBatchifyer
 from core.pipeline import Service, simple_workflow_formatter
 from core.state_manager import StateManager
 
@@ -12,8 +14,9 @@ def parse_old_config():
     worker_tasks = []
     session = aiohttp.ClientSession()
 
-    def make_service_from_config_rec(conf_record, session, state_processor_method, tags, names_previous_services, name_modifier=None):
-        worker_tasks = []
+    def make_service_from_config_rec(conf_record, sess, state_processor_method, tags, names_previous_services,
+                                     name_modifier=None):
+        _worker_tasks = []
         if name_modifier:
             name = name_modifier(conf_record['name'])
         else:
@@ -22,9 +25,11 @@ def parse_old_config():
         batch_size = conf_record.get('batch_size', 1)
         url = conf_record['url']
 
+        connector_func = None
+
         if conf_record['protocol'] == 'http':
             if batch_size == 1 and isinstance(url, str):
-                connector_func = HTTPConnector(session, url, formatter, conf_record['name']).send
+                connector_func = HTTPConnector(sess, url, formatter, conf_record['name']).send
             else:
                 queue = asyncio.Queue()
                 connector_func = AioQueueConnector(queue).send  # worker task and queue connector
@@ -33,13 +38,15 @@ def parse_old_config():
                 else:
                     urls = url
                 for u in urls:
-                    worker_tasks.append(QueueListenerBatchifyer(session, u, formatter, 
-                                                                name, queue, batch_size))
-                
-        service = Service(name, connector_func, state_processor_method, batch_size,
-                          tags, names_previous_services, simple_workflow_formatter)
+                    _worker_tasks.append(QueueListenerBatchifyer(sess, u, formatter,
+                                                                 name, queue, batch_size))
+        if connector_func is None:
+            raise ValueError(f'No connector function is defined while making a service {name}.')
 
-        return service, worker_tasks
+        _service = Service(name, connector_func, state_processor_method, batch_size,
+                           tags, names_previous_services, simple_workflow_formatter)
+
+        return _service, _worker_tasks
 
     def add_bot_to_name(name):
         return f'bot_{name}'
@@ -64,7 +71,7 @@ def parse_old_config():
     if ANNOTATORS_3:
         for anno in ANNOTATORS_3:
             service, workers = make_service_from_config_rec(anno, session, StateManager.add_annotation_dict,
-                                                                ['ANNOTATORS_3'], previous_services)
+                                                            ['ANNOTATORS_3'], previous_services)
             services.append(service)
             worker_tasks.extend(workers)
 
@@ -129,7 +136,8 @@ def parse_old_config():
         previous_services = {i.name for i in services if 'POST_ANNOTATORS_2' in i.tags}
 
     for anno in ANNOTATORS_3:
-        service, workers = make_service_from_config_rec(anno, session, StateManager.add_annotation_dict, ['POST_ANNOTATORS_3'],
+        service, workers = make_service_from_config_rec(anno, session, StateManager.add_annotation_dict,
+                                                        ['POST_ANNOTATORS_3'],
                                                         previous_services, add_bot_to_name)
         services.append(service)
         worker_tasks.extend(workers)
