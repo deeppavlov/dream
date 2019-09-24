@@ -50,7 +50,6 @@ def respond():
 
     session_id = uuid.uuid4().hex
     topics = []
-    confidences = []
     result = requests.request(url=f'{COBOT_TOPICS_SERVICE_URL}',
                               headers=headers,
                               data=json.dumps({'utterances': user_sentences}),
@@ -61,7 +60,7 @@ def respond():
                                                                                              result.status_code)
         sentry_sdk.capture_message(msg)
         logger.warning(msg)
-        selected_skill_names = []
+        topics = [[]] * len(user_states_batch)
     else:
         result = result.json()
         # result is an array where each element is a dict with scores
