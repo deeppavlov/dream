@@ -311,7 +311,7 @@ def program_y_formatter(payload, mode='in'):
 
 def base_response_selector_formatter(payload, mode='in'):
     if mode == 'in':
-        dialogs = base_input_formatter(payload)['dialogs']
+        dialogs = punct_input_formatter(payload, punctuated=True, segmented=False)['dialogs']
         return {"dialogs": dialogs}
     elif mode == 'out':
         return payload
