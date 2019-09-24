@@ -242,6 +242,7 @@ class StateManager:
             else:
                 break
         for utt in utt_objects[::-1]:
+            utt.save()
             dialog_object.utterances.append(utt)
 
         dialog_object.human.update_from_dict(dialog['human'])
