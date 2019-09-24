@@ -111,8 +111,8 @@ def main():
     intermediate_storage = {}
     endpoint = Service('http_responder', HttpOutputConnector(intermediate_storage).send,
                        StateManager.save_dialog_dict, 1, ['responder'])
-    input = Service('input', None, StateManager.add_human_utterance_simple_dict, 1, ['input'])
-    register_msg, process_callable = prepare_agent(services, endpoint, input)
+    input_srv = Service('input', None, StateManager.add_human_utterance_simple_dict, 1, ['input'])
+    register_msg, process_callable = prepare_agent(services, endpoint, input_srv, False)
     app = init_app(register_msg, intermediate_storage, prepare_startup(workers, process_callable, session),
                    on_shutdown)
 
