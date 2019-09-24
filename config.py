@@ -86,62 +86,62 @@ ANNOTATORS_1 = [
         "path": "",
         "formatter": sent_segm_formatter
     },
-    # {
-    #     "name": "toxic_classification",
-    #     "protocol": "http",
-    #     "host": "toxic_classification",
-    #     "port": 8013,
-    #     "endpoint": "toxicity_annotations",
-    #     "path": "annotators/DeepPavlovToxicClassification/toxic_classification.json",
-    #     "env": {
-    #         "CUDA_VISIBLE_DEVICES": "0"
-    #     },
-    #     "gpu": True,
-    #     "formatter": dp_toxic_formatter
-    # }
+    {
+        "name": "toxic_classification",
+        "protocol": "http",
+        "host": "toxic_classification",
+        "port": 8013,
+        "endpoint": "toxicity_annotations",
+        "path": "annotators/DeepPavlovToxicClassification/toxic_classification.json",
+        "env": {
+            "CUDA_VISIBLE_DEVICES": "0"
+        },
+        "gpu": True,
+        "formatter": dp_toxic_formatter
+    }
 ]
 
 ANNOTATORS_2 = [
-    # {
-    #     "name": "cobot_topics",
-    #     "protocol": "http",
-    #     "host": "cobot_topics",
-    #     "port": 8003,
-    #     "endpoint": "topics",
-    #     "external": True,
-    #     "path": "",
-    #     "formatter": cobot_classifiers_formatter
-    # },
-    # {
-    #     "name": "cobot_sentiment",
-    #     "protocol": "http",
-    #     "host": "cobot_sentiment",
-    #     "port": 8004,
-    #     "endpoint": "sentiment",
-    #     "external": True,
-    #     "path": "",
-    #     "formatter": cobot_classifiers_formatter
-    # },
-    # {
-    #     "name": "cobot_dialogact",
-    #     "protocol": "http",
-    #     "host": "cobot_dialogact",
-    #     "port": 8006,
-    #     "endpoint": "dialogact",
-    #     "external": True,
-    #     "path": "",
-    #     "formatter": cobot_dialogact_formatter
-    # },
-    # {
-    #     "name": "cobot_offensiveness",
-    #     "protocol": "http",
-    #     "host": "cobot_offensiveness",
-    #     "port": 8005,
-    #     "endpoint": "offensiveness",
-    #     "external": True,
-    #     "path": "",
-    #     "formatter": cobot_classifiers_formatter
-    # }
+    {
+        "name": "cobot_topics",
+        "protocol": "http",
+        "host": "cobot_topics",
+        "port": 8003,
+        "endpoint": "topics",
+        "external": True,
+        "path": "",
+        "formatter": cobot_classifiers_formatter
+    },
+    {
+        "name": "cobot_sentiment",
+        "protocol": "http",
+        "host": "cobot_sentiment",
+        "port": 8004,
+        "endpoint": "sentiment",
+        "external": True,
+        "path": "",
+        "formatter": cobot_classifiers_formatter
+    },
+    {
+        "name": "cobot_dialogact",
+        "protocol": "http",
+        "host": "cobot_dialogact",
+        "port": 8006,
+        "endpoint": "dialogact",
+        "external": True,
+        "path": "",
+        "formatter": cobot_dialogact_formatter
+    },
+    {
+        "name": "cobot_offensiveness",
+        "protocol": "http",
+        "host": "cobot_offensiveness",
+        "port": 8005,
+        "endpoint": "offensiveness",
+        "external": True,
+        "path": "",
+        "formatter": cobot_classifiers_formatter
+    }
 ]
 
 ANNOTATORS_3 = []

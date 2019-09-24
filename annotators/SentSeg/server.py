@@ -1,4 +1,5 @@
 
+import re
 from flask import Flask, jsonify, request
 import sentsegmodel as model
 import tensorflow as tf
@@ -12,15 +13,16 @@ import sentry_sdk
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
-
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 class pars:
-	def __init__(self, dict_properties):
-		for k, v in dict_properties.items():
-			setattr(self, k, v)
+    def __init__(self, dict_properties):
+        for k, v in dict_properties.items():
+            setattr(self, k, v)
+
 
 dict_params = json.load(open("config.json"))
 params = pars(dict_params)
@@ -35,6 +37,7 @@ logger.info("sentseg model is loaded.")
 
 app = Flask(__name__)
 
+
 @app.route('/sentseg', methods=['POST'])
 def respond():
     user_sentences = request.json['sentences']
@@ -45,10 +48,34 @@ def respond():
     for i, text in enumerate(user_sentences):
         logger.info(f"user text: {text}, session_id: {session_id}")
         sentseg = model.predict(sess, text)
-        sentseg_result += [sentseg]
+        segments = split_segments(sentseg)
+        sentseg_result += [{"punct_sent": sentseg, "segments": segments}]
         logger.info(f"punctuated sent. : {sentseg}")
 
     return jsonify(sentseg_result)
 
+
+def split_segments(sentence):
+    segm = re.split("([\.\?\!])", sentence)
+    segm = [sent.strip() for sent in segm if sent != ""]
+
+    curr_sent = ""
+    punct_occur = False
+    segments = []
+
+    for s in segm:
+        if re.match("[\.\?\!]", s):
+            punct_occur = True
+            curr_sent += s
+        elif punct_occur:
+            segments.append(curr_sent)
+            curr_sent = s
+            punct_occur = False
+        else:
+            curr_sent += s
+    segments.append(curr_sent)
+    return segments
+
+
 if __name__ =='__main__':
-	app.run(debug=False, host='0.0.0.0', port=3000)
+    app.run(debug=False, host='0.0.0.0', port=3000)
