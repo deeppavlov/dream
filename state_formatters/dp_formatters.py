@@ -74,6 +74,46 @@ def last_utterances(payload, model_args_names):
     return {model_args_names[0]: utterances}
 
 
+def punct_input_formatter(state: Dict, cmd_exclude=True):
+    utterances_histories = []
+    last_utterances = []
+    annotations_histories = []
+    last_annotations = []
+    dialog_ids = []
+    user_ids = []
+    user_telegram_ids = []
+
+    for dialog in state['dialogs']:
+        utterances_history = []
+        annotations_history = []
+        for utterance in dialog['utterances']:
+            try:
+                utterances_history.append(utterance["annotations"]["sentseg"]["punct_sent"])
+            except:
+                # bot utterances are not annotated
+                utterances_history.append(utterance["text"])
+            annotations_history.append(utterance['annotations'])
+
+        last_utterances.append(utterances_history[-1])
+        utterances_histories.append(utterances_history)
+        last_annotations.append(annotations_history[-1])
+        annotations_histories.append(annotations_history)
+
+        dialog_ids.append(dialog['id'])
+        user_ids.append(dialog['user']['id'])
+        # USER ID, который вводится в console.run - это user_telegram_id  ¯\_(ツ)_/¯
+        user_telegram_ids.append(dialog['user']['user_telegram_id'])
+
+    return {'dialogs': state['dialogs'],
+            'last_utterances': last_utterances,
+            'last_annotations': last_annotations,
+            'utterances_histories': commands_excluder(utterances_histories) if cmd_exclude else utterances_histories,
+            'annotation_histories': annotations_histories,
+            'dialog_ids': dialog_ids,
+            'user_ids': user_ids,
+            'user_telegram_ids': user_telegram_ids}
+
+
 def base_skill_output_formatter(payload):
     """Works with a single batch instance
 
@@ -180,8 +220,7 @@ def aiml_formatter(payload, mode='in'):
 
 def cobot_qa_formatter(payload, mode='in'):
     if mode == 'in':
-        sentences = base_input_formatter(payload)['last_utterances']
-        return {'sentences': sentences}
+        return {'sentences': punct_input_formatter(payload)['last_utterances']}
     elif mode == 'out':
         return base_skill_output_formatter(payload)
 
@@ -215,7 +254,7 @@ def get_persona(dialog):
 
 def transfertransfo_formatter(payload: Any, mode='in'):
     if mode == 'in':
-        parsed = base_input_formatter(payload)
+        parsed = punct_input_formatter(payload)
         return {'utterances_histories': parsed['utterances_histories'],
                 'personality': [get_persona(dialog) for dialog in parsed['dialogs']]}
     elif mode == 'out':
@@ -260,10 +299,8 @@ def cobot_dialogact_formatter(payload, mode='in'):
 
 def program_y_formatter(payload, mode='in'):
     if mode == 'in':
-        inp_data = base_input_formatter(payload)
-        sentences = inp_data['last_utterances']
-        user_ids = inp_data['user_telegram_ids']
-        return {'sentences': sentences, 'user_ids': user_ids}
+        return {'sentences': punct_input_formatter(payload)["last_utterances"],
+                'user_ids': punct_input_formatter(payload)["user_telegram_ids"]}
     elif mode == 'out':
         return {"text": payload[0],
                 "confidence": payload[1]}
