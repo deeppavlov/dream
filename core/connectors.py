@@ -65,7 +65,7 @@ class HttpOutputConnector:
     async def send(self, payload):
         message_uuid = payload['message_uuid']
         event = payload['event']
-        response_text = payload['dialog'].utterances[-1].text
+        response_text = payload['dialog']['utterances'][-1]['text']
         self.intermediate_storage[message_uuid] = response_text
         event.set()
 

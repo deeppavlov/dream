@@ -48,23 +48,21 @@ class Agent:
     def register_service_request(self, dialog_id: str, service_name):
         if dialog_id not in self.workflow.keys():
             raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
-        self.workflow[dialog_id]['services'][service_name] = {'send': time(), 'done': None, 'skipped': False}
+        self.workflow[dialog_id]['services'][service_name] = {'send': time(), 'done': None}
 
     def get_services_status(self, dialog_id: str):
         if dialog_id not in self.workflow.keys():
             raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
-        done, waiting, skipped = set(), set(), set()
+        done, waiting = set(), set()
         for key, value in self.workflow[dialog_id]['services'].items():
-            if value['skipped']:
-                skipped.add(key)
-            elif value['done'] is not None:
+            if value['done'] is not None:
                 done.add(key)
             else:
                 waiting.add(key)
 
-        return done, waiting, skipped
+        return done, waiting
 
-    async def process_service_response(self, dialog_id: str, service_name: str = None, response: str = None):
+    def process_service_response(self, dialog_id: str, service_name: str = None, response: str = None):
         workflow_record = self.get_workflow_record(dialog_id)
 
         # Updating workflow with service response
@@ -77,21 +75,19 @@ class Agent:
                                                payload=response)
 
         # Calculating next steps
-        done, waiting, skipped = self.get_services_status(dialog_id)
-        next_services_dict = self.pipeline.get_next_services(done, waiting)
+        done, waiting = self.get_services_status(dialog_id)
+        next_services = self.pipeline.get_next_services(done, waiting)
 
         # Processing the case, when service is skill selector
         if service and service.is_selector():
             selected_services = list(response.values())[0]
             result = []
-            for name, service in next_services_dict.values():
-                if name not in selected_services:
-                    self.workflow[dialog_id]['services'][name] = {'done': None, 'send': None, 'skipped': True}
+            for service in next_services:
+                if service.name not in selected_services:
+                    self.workflow[dialog_id]['services'][service.name] = {'done': time(), 'send': None}
                 else:
                     result.append(service)
             next_services = result
-        else:
-            next_services = [service for name, service in next_services_dict.values if name not in skipped]
         if self.process_logger_callable:
             self.process_logger_callable(self.workflow['dialog_id'])  # send dialog workflow record to further logging operations
     
@@ -106,13 +102,12 @@ class Agent:
         user = self.state_manager.get_or_create_user(user_telegram_id, user_device_type)
         should_reset = True if utterance == TG_START_UTT else False
         dialog = self.state_manager.get_or_create_dialog(user, location, channel_type, should_reset=should_reset)
-        self.state_manager.add_human_utterance(dialog, user, utterance, date_time)
         if require_response:
             event = asyncio.Event()
             kwargs['event'] = event
             hold_flush = True
         self.add_workflow_record(dialog=dialog, deadline_timestamp=deadline_timestamp,
-                                 event=event, hold_flush=hold_flush, **kwargs)
+                                 hold_flush=hold_flush, **kwargs)
         await self.process(str(dialog.id), 'input', utterance)
         if require_response:
             await event.wait()

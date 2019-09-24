@@ -71,7 +71,7 @@ class Pipeline:
             if not {i.name for i in service.previous_services} <= done or service.is_input():
                 removed_names.add(name)
 
-        return {name: service for name, service in self.services.items() if name not in removed_names}
+        return [service for name, service in self.services.items() if name not in removed_names]
 
     def get_endpoint_services(self):
         return [s for s in self.services.values() if not s.next_services and 'responder' not in s.tags]
@@ -99,4 +99,4 @@ class Pipeline:
 
 
 def simple_workflow_formatter(workflow_record):
-    return workflow_record['dialog'].to_dict()
+    return workflow_record['dialog']

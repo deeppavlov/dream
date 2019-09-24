@@ -77,13 +77,12 @@ class Bot(User):
         return {'id': str(self.id),
                 'user_type': 'bot',
                 'persona': self.persona,
-                'attributes': str(self.attributes)
+                'attributes': self.attributes
                 }
-    @classmethod
-    def from_dict(cls, payload):
-        bot = cls()
-        
-        return bot
+
+    def update_from_dict(self, payload):
+        self.persona = payload['persona']
+        self.attributes = payload['attributes']
 
 
 class Human(User):
@@ -107,14 +106,14 @@ class Human(User):
                 'device_type': self.device_type,
                 'persona': self.persona,
                 'profile': self.profile,
-                'attributes': str(self.attributes)
+                'attributes': self.attributes
                 }
     
-    @classmethod
-    def from_dict(cls, payload):
-        human = cls()
-
-        return human
+    def update_from_dict(self, payload):
+        self.device_type = payload['device_type']
+        self.persona = payload['persona']
+        self.profile = payload['profile']
+        self.attributes = payload['attributes']
 
 
 class Utterance(DynamicDocument):
@@ -133,16 +132,18 @@ class HumanUtterance(Utterance):
     selected_skills = DynamicField(default=[])
 
     def to_dict(self):
-        return {'id': str(self.id),
-                'text': self.text,
-                'user': self.user,
-                'annotations': self.annotations,
-                'date_time': str(self.date_time),
-                'selected_skills': self.selected_skills},
-                'type': 'human'
+        return {
+            'id': str(self.id),
+            'text': self.text,
+            'user': self.user,
+            'annotations': self.annotations,
+            'date_time': str(self.date_time),
+            'selected_skills': self.selected_skills,
+            'type': 'human'
+        }
 
     @classmethod
-    def from_dict(cls, payload):
+    def make_from_dict(cls, payload):
         utterance = cls()
         utterance.id = payload['id']
         utterance.text = payload['text']
@@ -166,14 +167,14 @@ class BotUtterance(Utterance):
             'confidence': self.confidence,
             'text': self.text,
             'orig_text': self.orig_text,
-            'user': self.user.to_dict(),
+            'user': self.user,
             'annotations': self.annotations,
             'date_time': str(self.date_time),
             'type': 'bot'
         }
 
     @classmethod
-    def from_dict(cls, payload):
+    def make_from_dict(cls, payload):
         utterance = cls()
         utterance.id = payload['id']
         utterance.text = payload['text']
@@ -206,7 +207,7 @@ class Dialog(DynamicDocument):
         }
 
     @classmethod
-    def from_dict(cls, payload):
+    def make_from_dict(cls, payload):
         dialog = cls()
         dialog.location = payload['location']
         dialog.channel_type = payload['channel_type']
