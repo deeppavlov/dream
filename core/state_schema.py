@@ -10,7 +10,6 @@ HUMAN_UTTERANCE_SCHEMA = {
     'annotations': {},
     'date_time': None,
     'selected_skills': {},
-    'type': 'human'
 }
 
 BOT_UTTERANCE_SCHEMA = {
@@ -22,7 +21,6 @@ BOT_UTTERANCE_SCHEMA = {
     'user': {},
     'annotations': {},
     'date_time': None,
-    'type': 'bot'
 }
 
 BOT_SCHEMA = {
@@ -142,8 +140,7 @@ class HumanUtterance(Utterance):
             'user': self.user,
             'annotations': self.annotations,
             'date_time': str(self.date_time),
-            'selected_skills': self.selected_skills,
-            'type': 'human'
+            'selected_skills': self.selected_skills
         }
 
     @classmethod
@@ -173,8 +170,7 @@ class BotUtterance(Utterance):
             'orig_text': self.orig_text,
             'user': self.user,
             'annotations': self.annotations,
-            'date_time': str(self.date_time),
-            'type': 'bot'
+            'date_time': str(self.date_time)
         }
 
     @classmethod

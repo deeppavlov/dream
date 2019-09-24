@@ -244,12 +244,12 @@ class StateManager:
         utt_objects = []
         for utt in dialog['utterances'][::-1]:
             if not utt['id']:
-                if utt['type'] == 'human':
+                if utt['user']['user_type'] == 'human':
                     utt_objects.append(HumanUtterance.make_from_dict(utt))
-                elif utt['type'] == 'bot':
+                elif utt['user']['user_type'] == 'bot':
                     utt_objects.append(BotUtterance.make_from_dict(utt))
                 else:
-                    raise ValueError('utterance of unknown type')
+                    raise ValueError('unknown user type in the utterance')
             else:
                 break
         for utt in utt_objects[::-1]:
