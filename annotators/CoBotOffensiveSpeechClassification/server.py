@@ -64,7 +64,9 @@ def respond():
                                                                                              result.status_code)
         sentry_sdk.capture_message(msg)
         logger.warning(msg)
-        selected_skill_names = []
+        toxicities = [[]] * len(user_states_batch)
+        confidences = [[]] * len(user_states_batch)
+        blacklists = [[]] * len(user_states_batch)
     else:
         result = result.json()
         # result is an array where each element is a dict with scores

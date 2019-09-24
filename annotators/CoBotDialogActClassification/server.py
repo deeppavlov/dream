@@ -63,7 +63,8 @@ def respond():
                               method='POST')
     if result.status_code != 200:
         logger.warning("result status code is not 200: {}. result text: {}; result status: {}".format(result, result.text, result.status_code))
-        intents = []
+        intents = [[]] * len(user_states_batch)
+        topics = [[]] * len(user_states_batch)
     else:
         result = result.json()
         result = np.array(result["dialogActIntents"])
