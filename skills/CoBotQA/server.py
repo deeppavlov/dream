@@ -4,12 +4,12 @@ import json
 import logging
 import os
 import uuid
+import time
 
 import requests
 from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
-
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 COBOT_API_KEY = os.environ.get('COBOT_API_KEY')
-COBOT_QA_SERVICE_URL =  os.environ.get('COBOT_QA_SERVICE_URL')
+COBOT_QA_SERVICE_URL = os.environ.get('COBOT_QA_SERVICE_URL')
 
 if COBOT_API_KEY is None:
     raise RuntimeError('COBOT_API_KEY environment variable is not set')
@@ -31,6 +31,7 @@ headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COB
 
 @app.route("/respond", methods=['POST'])
 def respond():
+    st_time = time.time()
     user_sentences = request.json['sentences']
     session_id = uuid.uuid4().hex
     responses = []
@@ -48,6 +49,8 @@ def respond():
         else:
             confidence = 0.00
         confidences += [confidence]
+    total_time = time.time() - st_time
+    logger.info(f'cobotqa exec time: {total_time:.3f}s')
     return jsonify(list(zip(responses, confidences)))
 
 

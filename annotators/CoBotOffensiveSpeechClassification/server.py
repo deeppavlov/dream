@@ -4,6 +4,7 @@ import json
 import logging
 import os
 import uuid
+import time
 
 import requests
 from flask import Flask, request, jsonify
@@ -30,6 +31,7 @@ blacklist_classes = {0: "not blacklist", 1: "blacklist"}
 
 @app.route("/offensiveness", methods=['POST'])
 def respond():
+    st_time = time.time()
     user_sentences = request.json['sentences']
     session_id = uuid.uuid4().hex
     toxicities = []
@@ -51,6 +53,8 @@ def respond():
         blacklists += [blacklist]
         logger.info(f"sentiment: {toxicity}")
 
+    total_time = time.time() - st_time
+    logger.info(f'cobot_offensiveness exec time: {total_time:.3f}s')
     return jsonify(list(zip(toxicities, confidences, blacklists)))
 
 

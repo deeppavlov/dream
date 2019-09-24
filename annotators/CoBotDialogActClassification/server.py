@@ -4,6 +4,7 @@ import json
 import logging
 import os
 import uuid
+import time
 
 import requests
 from flask import Flask, request, jsonify
@@ -35,6 +36,7 @@ headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COB
 
 @app.route("/dialogact", methods=['POST'])
 def respond():
+    st_time = time.time()
     user_states_batch = request.json['dialogs']
     user_sentences = [dialog["utterances"][-1]["text"] for dialog in user_states_batch]
     session_id = uuid.uuid4().hex
@@ -71,6 +73,8 @@ def respond():
             intents += [intent]
             logger.info(f"intent: {intent}")
 
+    total_time = time.time() - st_time
+    logger.info(f'cobot_dialogact exec time: {total_time:.3f}s')
     return jsonify(list(zip(intents)))
 
 
