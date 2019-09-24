@@ -74,7 +74,7 @@ def last_utterances(payload, model_args_names):
     return {model_args_names[0]: utterances}
 
 
-def punct_input_formatter(state: Dict, cmd_exclude=True):
+def punct_input_formatter(state: Dict, cmd_exclude=True, punctuated=True, segmented=False):
     utterances_histories = []
     last_utterances = []
     annotations_histories = []
@@ -88,7 +88,10 @@ def punct_input_formatter(state: Dict, cmd_exclude=True):
         annotations_history = []
         for utterance in dialog['utterances']:
             try:
-                utterances_history.append(utterance["annotations"]["sentseg"]["punct_sent"])
+                if punctuated:
+                    utterances_history.append(utterance["annotations"]["sentseg"]["punct_sent"])
+                elif segmented:
+                    utterances_history.append(utterance["annotations"]["sentseg"]["segments"])
             except:
                 # bot utterances are not annotated
                 utterances_history.append(utterance["text"])
@@ -220,7 +223,7 @@ def aiml_formatter(payload, mode='in'):
 
 def cobot_qa_formatter(payload, mode='in'):
     if mode == 'in':
-        return {'sentences': punct_input_formatter(payload)['last_utterances']}
+        return {'sentences': punct_input_formatter(payload, punctuated=True, segmented=False)['last_utterances']}
     elif mode == 'out':
         return base_skill_output_formatter(payload)
 
@@ -254,7 +257,7 @@ def get_persona(dialog):
 
 def transfertransfo_formatter(payload: Any, mode='in'):
     if mode == 'in':
-        parsed = punct_input_formatter(payload)
+        parsed = punct_input_formatter(payload, punctuated=True, segmented=False)
         return {'utterances_histories': parsed['utterances_histories'],
                 'personality': [get_persona(dialog) for dialog in parsed['dialogs']]}
     elif mode == 'out':
@@ -274,8 +277,7 @@ def personality_catcher_formatter(payload: Any, mode='in'):
 
 def cobot_classifiers_formatter(payload, mode='in'):
     if mode == 'in':
-        dialogs = base_input_formatter(payload)['dialogs']
-        return {"dialogs": dialogs}
+        return {'sentences': punct_input_formatter(payload, punctuated=False, segmented=True)["last_utterances"]}
     elif mode == 'out':
         if len(payload) == 3:
             return {"text": payload[0],
@@ -290,8 +292,8 @@ def cobot_classifiers_formatter(payload, mode='in'):
 
 def cobot_dialogact_formatter(payload, mode='in'):
     if mode == 'in':
-        dialogs = base_input_formatter(payload)['dialogs']
-        return {"dialogs": dialogs}
+        return {'utterances_histories': punct_input_formatter(
+            payload, punctuated=False, segmented=True)["utterances_histories"]}
     elif mode == 'out':
         return {"intents": payload[0],
                 "topics": payload[1]}
@@ -299,8 +301,9 @@ def cobot_dialogact_formatter(payload, mode='in'):
 
 def program_y_formatter(payload, mode='in'):
     if mode == 'in':
-        return {'sentences': punct_input_formatter(payload)["last_utterances"],
-                'user_ids': punct_input_formatter(payload)["user_telegram_ids"]}
+        parsed = punct_input_formatter(payload, punctuated=True, segmented=False)
+        return {'sentences': parsed["last_utterances"],
+                'user_ids': parsed["user_telegram_ids"]}
     elif mode == 'out':
         return {"text": payload[0],
                 "confidence": payload[1]}

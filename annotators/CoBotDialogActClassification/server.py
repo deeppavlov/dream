@@ -34,9 +34,7 @@ headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COB
 
 @app.route("/dialogact", methods=['POST'])
 def respond():
-    user_states_batch = request.json['dialogs']
-    user_list_sentences = [dialog["utterances"][-1]["annotations"]["sentseg"]["segments"]
-                           for dialog in user_states_batch]
+    utterances_histories = request.json['utterances_histories']
 
     session_id = uuid.uuid4().hex
     intents = []
@@ -44,14 +42,15 @@ def respond():
     conversations = []
     dialog_ids = []
 
-    for i, dialog in enumerate(user_states_batch):
-        for user_sent in user_list_sentences[i]:
+    for i, dialog in enumerate(utterances_histories):
+        # dialog is a list of replies. each reply is a list of sentences
+        for user_sent in dialog[-1]:
             conv = dict()
             conv["currentUtterance"] = user_sent
             # every odd utterance is from user
-            conv["pastUtterances"] = [uttr["text"] for uttr in dialog["utterances"][1::2]]
+            conv["pastUtterances"] = dialog[1::2][-2:]
             # every second utterance is from bot
-            conv["pastResponses"] = [uttr["text"] for uttr in dialog["utterances"][::2]]
+            conv["pastResponses"] = dialog[::2][-2:]
             conversations += [conv]
             dialog_ids += [i]
 
@@ -61,14 +60,14 @@ def respond():
                               method='POST')
     if result.status_code != 200:
         logger.warning("result status code is not 200: {}. result text: {}; result status: {}".format(result, result.text, result.status_code))
-        intents = [[]] * len(user_states_batch)
-        topics = [[]] * len(user_states_batch)
+        intents = [[]] * len(utterances_histories)
+        topics = [[]] * len(utterances_histories)
     else:
         result = result.json()
         result = np.array(result["dialogActIntents"])
         dialog_ids = np.array(dialog_ids)
 
-        for i, sent_list in enumerate(user_list_sentences):
+        for i, sent_list in enumerate(utterances_histories):
             logger.info(f"user_sentence: {sent_list}, session_id: {session_id}")
             curr_intents = result[dialog_ids == i]
 
