@@ -40,9 +40,10 @@ def response_logger(dialog_id, workflow):
         logger.info(f'{service_name}\t{round(done - send, 5)}\tseconds')
 
 
-def prepare_agent(services, endpoint: Service, use_response_logger: bool):
+def prepare_agent(services, endpoint: Service, input_serv: Service, use_response_logger: bool):
     pipeline = Pipeline(services)
     pipeline.add_responder_service(endpoint)
+    pipeline.add_input_service(input_serv)
     if use_response_logger:
         response_logger_callable = response_logger
     else:
@@ -59,7 +60,7 @@ async def run(register_msg):
             response = await register_msg(utterance=msg, user_telegram_id=user_id, user_device_type='cmd',
                                           date_time=datetime.now(), location='lab', channel_type=CHANNEL,
                                           deadline_timestamp=None, require_response=True)
-            print('Bot: ', response['dialog'].utterances[-1].text)
+            print('Bot: ', response['dialog']['utterances'][-1]['text'])
 
 
 async def on_shutdown(app):
@@ -149,10 +150,12 @@ def main():
     services, workers, session = parse_old_config()
 
     if CHANNEL == 'cmd_client':
-        endpoint = Service('cmd_responder', EventSetOutputConnector(), None, 1, ['responder'], set())
+        endpoint = Service('cmd_responder', EventSetOutputConnector().send,
+                           StateManager.save_dialog_dict, 1, ['responder'])
+        input_srv = Service('input', None, StateManager.add_human_utterance_simple_dict, 1, ['input'])
         loop = asyncio.get_event_loop()
         loop.set_debug(args.debug)
-        register_msg, process = prepare_agent(services, endpoint, use_response_logger=args.response_logger)
+        register_msg, process = prepare_agent(services, endpoint, input_srv, use_response_logger=args.response_logger)
         future = asyncio.ensure_future(run(register_msg))
         for i in workers:
             loop.create_task(i.call_service(process))
@@ -170,8 +173,10 @@ def main():
             logging.shutdown()
     elif CHANNEL == 'http_client':
         intermediate_storage = {}
-        endpoint = Service('http_responder', HttpOutputConnector(intermediate_storage), None, 1, ['responder'])
-        register_msg, process_callable = prepare_agent(services, endpoint)
+        endpoint = Service('http_responder', HttpOutputConnector(intermediate_storage).send,
+                           StateManager.save_dialog_dict, 1, ['responder'])
+        input_srv = Service('input', None, StateManager.add_human_utterance_simple_dict, 1, ['input'])
+        register_msg, process_callable = prepare_agent(services, endpoint, input_srv, args.response_logger)
         app = init_app(register_msg, intermediate_storage, prepare_startup(workers, process_callable, session),
                        on_shutdown)
 

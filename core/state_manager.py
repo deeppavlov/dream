@@ -37,7 +37,7 @@ class StateManager:
     @staticmethod
     def create_new_human_utterance(text, user: Human, date_time, annotations=None, selected_skills=None):
         utt = HumanUtterance(text=text,
-                             user=user,
+                             user=user.to_dict(),
                              date_time=date_time,
                              annotations=annotations or HumanUtterance.annotations.default,
                              selected_skills=selected_skills or HumanUtterance.selected_skills.default)
@@ -74,6 +74,7 @@ class StateManager:
         else:
             exist_dialogs = Dialog.objects(human__exact=user)
             if not exist_dialogs:
+                bot = cls.create_new_bot()
                 dialog = cls.create_new_dialog(human=user, bot=bot, location=location,
                                                channel_type=channel_type)
             else:
@@ -173,7 +174,7 @@ class StateManager:
         utterance = HUMAN_UTTERANCE_SCHEMA
         utterance['text'] = payload
         utterance['date_time'] = str(datetime.now())
-        utterance['user'] = dialog['user']
+        utterance['user'] = dialog['human']
         dialog['utterances'].append(utterance)
 
     @staticmethod
@@ -233,14 +234,19 @@ class StateManager:
         for utt in dialog['utterances'][::-1]:
             if not utt['id']:
                 if utt['type'] == 'human':
-                    utt_objects.append(HumanUtterance.from_dict(utt))
+                    utt_objects.append(HumanUtterance.make_from_dict(utt))
                 elif utt['type'] == 'bot':
-                    utt_objects.append(BotUtterance.from_dict(utt))
+                    utt_objects.append(BotUtterance.make_from_dict(utt))
                 else:
                     raise ValueError('utterance of unknown type')
             else:
                 break
         for utt in utt_objects[::-1]:
             dialog_object.utterances.append(utt)
+
+        dialog_object.human.update_from_dict(dialog['human'])
+        dialog_object.bot.update_from_dict(dialog['bot'])
+        dialog_object.human.save()
+        dialog_object.bot.save()
 
         dialog_object.save()
