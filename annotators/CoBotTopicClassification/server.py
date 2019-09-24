@@ -35,9 +35,7 @@ headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COB
 
 @app.route("/topics", methods=['POST'])
 def respond():
-    user_states_batch = request.json['dialogs']
-    user_list_sentences = [dialog["utterances"][-1]["annotations"]["sentseg"]["segments"]
-                           for dialog in user_states_batch]
+    user_list_sentences = request.json['sentences']
 
     user_sentences = []
     dialog_ids = []
