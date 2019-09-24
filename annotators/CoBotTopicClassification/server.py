@@ -36,10 +36,8 @@ headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COB
 @app.route("/topics", methods=['POST'])
 def respond():
     user_states_batch = request.json['dialogs']
-    user_list_sentences = [re.split("[\.\?\!]", dialog["utterances"][-1]["annotations"]["sentseg"])
+    user_list_sentences = [dialog["utterances"][-1]["annotations"]["sentseg"]["segments"]
                            for dialog in user_states_batch]
-    user_list_sentences = [[sent.strip() for sent in sent_list if sent != ""]
-                           for sent_list in user_list_sentences]
 
     user_sentences = []
     dialog_ids = []
