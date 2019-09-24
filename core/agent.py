@@ -1,7 +1,6 @@
 import asyncio
 
 from collections import defaultdict
-from datetime import datetime
 from time import time
 from typing import Any, Optional, Callable, Hashable
 
@@ -42,7 +41,7 @@ class Agent:
         if dialog_id not in self.workflow.keys():
             raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
         if self.response_logger_callable:
-            self.response_logger_callable(dialog_id, self.workflow)
+            self.response_logger_callable(self.workflow[dialog_id])
         return self.workflow.pop(dialog_id)
 
     def register_service_request(self, dialog_id: str, service_name):
@@ -68,7 +67,12 @@ class Agent:
         # Updating workflow with service response
         service = self.pipeline.get_service_by_name(service_name)
         if service:
-            self.workflow[dialog_id]['services'][service_name]['done'] = time()
+            service_data = self.workflow[dialog_id]['services'][service_name]
+            service_data['done'] = time()
+            try:
+                service_data['send']
+            except KeyError:
+                service_data['send'] = None
             if response and service.state_processor_method:
                 service.state_processor_method(dialog=workflow_record['dialog'],
                                                dialog_object=workflow_record['dialog_object'],
@@ -78,7 +82,7 @@ class Agent:
         done, waiting = self.get_services_status(dialog_id)
         next_services = self.pipeline.get_next_services(done, waiting)
 
-        # Processing the case, when service is skill selector
+        # Processing the case, when service is a skill selector
         if service and service.is_selector():
             selected_services = list(response.values())[0]
             result = []
@@ -88,16 +92,16 @@ class Agent:
                 else:
                     result.append(service)
             next_services = result
+        # send dialog workflow record to further logging operations:
         if self.process_logger_callable:
-            self.process_logger_callable(self.workflow['dialog_id'])  # send dialog workflow record to further logging operations
-    
+            self.process_logger_callable(self.workflow['dialog_id'])
+
         return next_services
 
     async def register_msg(self, utterance: str, user_telegram_id: Hashable,
-                           user_device_type: Any,
-                           date_time: datetime, location=Any,
+                           user_device_type: Any, location=Any,
                            channel_type=str, deadline_timestamp=None,
-                           require_response=False, should_reset=False, **kwargs):
+                           require_response=False, **kwargs):
         hold_flush = False
         user = self.state_manager.get_or_create_user(user_telegram_id, user_device_type)
         should_reset = True if utterance == TG_START_UTT else False
@@ -105,15 +109,17 @@ class Agent:
         if require_response:
             event = asyncio.Event()
             kwargs['event'] = event
-            hold_flush = True
-        self.add_workflow_record(dialog=dialog, deadline_timestamp=deadline_timestamp,
-                                 hold_flush=hold_flush, **kwargs)
-        await self.process(str(dialog.id), 'input', utterance)
-        if require_response:
+            self.add_workflow_record(dialog=dialog, deadline_timestamp=deadline_timestamp,
+                                     hold_flush=True, **kwargs)
+            await self.process(str(dialog.id), 'input', utterance)
             await event.wait()
             workflow_record = self.get_workflow_record(str(dialog.id))
             self.flush_record(str(dialog.id))
             return workflow_record
+        else:
+            self.add_workflow_record(dialog=dialog, deadline_timestamp=deadline_timestamp,
+                                     hold_flush=hold_flush, **kwargs)
+            await self.process(str(dialog.id), 'input', utterance)
 
     async def process(self, dialog_id, service_name=None, response=None):
         workflow_record = self.get_workflow_record(dialog_id)

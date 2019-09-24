@@ -1,10 +1,7 @@
-import uuid
-
-from mongoengine import DynamicDocument, ReferenceField, ListField, StringField, DynamicField, \
-    DateTimeField, FloatField, DictField, ObjectIdField
+from mongoengine import DynamicDocument, ReferenceField, ListField, StringField, DynamicField, DateTimeField,\
+    FloatField, DictField
 
 from . import STATE_API_VERSION
-from datetime import datetime
 
 HUMAN_UTTERANCE_SCHEMA = {
     'id': None,
@@ -61,6 +58,7 @@ DIALOG_SCHEMA = {
     'bot': None
 }
 
+
 class User(DynamicDocument):
     persona = ListField(default=[])
     attributes = DictField()
@@ -68,6 +66,9 @@ class User(DynamicDocument):
     meta = {'allow_inheritance': True}
 
     def to_dict(self):
+        raise NotImplementedError
+
+    def update_from_dict(self, *args, **kwargs):
         raise NotImplementedError
 
 
@@ -108,7 +109,7 @@ class Human(User):
                 'profile': self.profile,
                 'attributes': self.attributes
                 }
-    
+
     def update_from_dict(self, payload):
         self.device_type = payload['device_type']
         self.persona = payload['persona']
@@ -125,6 +126,9 @@ class Utterance(DynamicDocument):
     meta = {'allow_inheritance': True}
 
     def to_dict(self):
+        raise NotImplementedError
+
+    def make_from_dict(self, *args, **kwargs):
         raise NotImplementedError
 
 

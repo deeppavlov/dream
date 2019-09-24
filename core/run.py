@@ -12,7 +12,6 @@ from core.pipeline import Pipeline, Service
 from core.connectors import EventSetOutputConnector, HttpOutputConnector
 from core.config_parser import parse_old_config
 from core.state_manager import StateManager
-from core.transform_config import DEBUG
 
 logger = logging.getLogger('service_logger')
 logger.setLevel(logging.INFO)
@@ -31,8 +30,8 @@ args = parser.parse_args()
 CHANNEL = args.channel
 
 
-def response_logger(dialog_id, workflow):
-    for service_name, service_data in workflow[dialog_id]['services'].items():
+def response_logger(workflow_record):
+    for service_name, service_data in workflow_record['services'].items():
         done = service_data['done']
         send = service_data['send']
         if send is None or done is None:
@@ -58,7 +57,7 @@ async def run(register_msg):
         msg = input(f'You ({user_id}): ').strip()
         if msg:
             response = await register_msg(utterance=msg, user_telegram_id=user_id, user_device_type='cmd',
-                                          date_time=datetime.now(), location='lab', channel_type=CHANNEL,
+                                          location='lab', channel_type=CHANNEL,
                                           deadline_timestamp=None, require_response=True)
             print('Bot: ', response['dialog']['utterances'][-1]['text'])
 
