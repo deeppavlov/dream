@@ -3,6 +3,7 @@ import copy
 
 CMDS = ["/new_persona"]  # TODO: rm crutch of personality_catcher
 
+
 # TODO: rm crutch of personality_catcher
 def exclude_cmds(utter, cmds):
     if cmds:
@@ -11,6 +12,7 @@ def exclude_cmds(utter, cmds):
     else:
         return utter
 
+
 # TODO: rm crutch of personality_catcher
 def commands_excluder(utters_batch: List, cmds=[]):
     cmds = cmds if cmds else CMDS
@@ -18,6 +20,7 @@ def commands_excluder(utters_batch: List, cmds=[]):
     for utters in utters_batch:
         out_batch.append([exclude_cmds(ut, cmds) for ut in utters])
     return out_batch
+
 
 def base_input_formatter(state: Dict, cmd_exclude=True):
     """This state_formatter takes the most popular fields from Agent state and returns them as dict values:
@@ -107,10 +110,16 @@ def punct_input_formatter(state: Dict, cmd_exclude=True, punctuated=True, segmen
         # USER ID, который вводится в console.run - это user_telegram_id  ¯\_(ツ)_/¯
         user_telegram_ids.append(dialog['user']['user_telegram_id'])
 
+    if cmd_exclude:
+        if punctuated:
+            utterances_histories = commands_excluder(utterances_histories)
+        elif segmented:
+            utterances_histories = [commands_excluder(utter_list)
+                                     for utter_list in utterances_histories]
     return {'dialogs': state['dialogs'],
             'last_utterances': last_utterances,
             'last_annotations': last_annotations,
-            'utterances_histories': commands_excluder(utterances_histories) if cmd_exclude else utterances_histories,
+            'utterances_histories': utterances_histories,
             'annotation_histories': annotations_histories,
             'dialog_ids': dialog_ids,
             'user_ids': user_ids,
