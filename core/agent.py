@@ -83,7 +83,7 @@ class Agent:
         next_services = self.pipeline.get_next_services(done, waiting)
 
         # Processing the case, when service is a skill selector
-        if service and service.is_selector():
+        if service and service.is_sselector():
             selected_services = list(response.values())[0]
             result = []
             for service in next_services:

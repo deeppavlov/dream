@@ -101,7 +101,7 @@ def main():
     for s in services:
         if 'RESPONSE_SELECTORS' in s.tags:
             continue
-        if s.is_selector():
+        if s.is_sselector():
             s.connector_func = DummySelectorConnector(['chitchat', 'odqa'], 0.01, s.name).send
         else:
             s.connector_func = DummyConnector(['we have a phrase', 'and another one', 'not so short one'], 0.01,

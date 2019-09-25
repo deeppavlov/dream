@@ -90,13 +90,11 @@ def chitchat_odqa_formatter(payload: Any, model_args_names=('x',), mode='in'):
     if mode == 'in':
         return last_utterances(payload, model_args_names)
     elif mode == 'out':
-        response = []
-        for el in payload:
-            class_name = el[0]
-            if class_name in ['speech', 'negative']:
-                response.append('chitchat')
-            else:
-                response.append('odqa')
+        class_name = payload[0]
+        if class_name in ['speech', 'negative']:
+            response = ['chitchat']
+        else:
+            response = ['odqa']
         return response
 
 

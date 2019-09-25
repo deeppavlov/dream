@@ -80,15 +80,27 @@ But it's possible to extend it with  ``human_attributes`` and ``bot_attributes``
         {"text": "hello", "confidence": 0.33, "human_attributes": {"name": "Vasily"},
         "bot_attributes": {"persona": ["I like swimming.", "I have a nice swimming suit."]}}
 
+Everything sent to ``human_attributes`` and ``bot_attributes`` keys will update `user` field in the same
+utterance for the human and in the next utterance for the bot. Please refer to user_state_api_ to find more
+information about the **User** object updates.
+
+Also it's possible for a skill to send any additional key to the state:
+
+    .. code:: json
+
+        {"text": "hello", "confidence": 0.33, "any_key": "any_value"}
+
+
 Response Selector
 =================
 
 Unlike Skill Selector, Response Selector should select a *single* skill responsible for generation of the
-final response shown to the user. The expected result is a name of the selected skill:
+final response shown to the user. The expected result is a name of the selected skill, text (may be
+overwritten from the original skill response) and confidence (also may be overwritten):
 
  .. code:: json
 
-        "chitchat"
+        {"skill_name": "chitchat", "text": "Hello, Joe!", "confidence": 0.3}
 
 Postprocessor
 =============
@@ -108,4 +120,5 @@ utterance shown to the user, and the original skill answer will go to the ``orig
 .. _state: https://deeppavlov-agent.readthedocs.io/en/latest/_static/api.html
 .. _config file: https://github.com/deepmipt/dp-agent/blob/master/config.py
 .. _formatters: https://github.com/deepmipt/dp-agent/blob/master/state_formatters/dp_formatters.py
+.. _user_state_api: https://deeppavlov-agent.readthedocs.io/en/latest/api/user_state_api.html
 
