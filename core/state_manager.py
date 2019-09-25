@@ -211,7 +211,10 @@ class StateManager:
     @classmethod
     def add_bot_utterance_simple_dict(cls, dialog: Dict, dialog_object: Dialog, payload: Dict,
                                       **kwargs) -> None:
-        active_skill_name = list(payload.values())[0]
+        rselector_data = list(payload.values())[0]
+        active_skill_name = rselector_data['skill_name']
+        new_text = rselector_data['text']
+        new_confidence = rselector_data['confidence']
         active_skill = dialog['utterances'][-1]['selected_skills'].get(active_skill_name, None)
         if not active_skill:
             raise ValueError(f'provided {payload} is not valid')
@@ -219,11 +222,11 @@ class StateManager:
         cls.update_bot_dict(dialog['bot'], active_skill)
 
         utterance = BOT_UTTERANCE_SCHEMA
-        utterance['text'] = active_skill['text']
+        utterance['text'] = new_text
         utterance['orig_text'] = active_skill['text']
         utterance['date_time'] = str(datetime.now())
         utterance['active_skill'] = active_skill_name
-        utterance['confidence'] = active_skill['confidence']
+        utterance['confidence'] = new_confidence
         utterance['user'] = dialog['bot']
         dialog['utterances'].append(utterance)
 

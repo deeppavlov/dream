@@ -35,7 +35,7 @@ SKILLS = [
         },
         "profile_handler": True,
         "dockerfile": "dockerfile_skill_cpu",
-        "formatter": odqa_formatter
+        "formatter": chitchat_formatter
     }
 ]
 

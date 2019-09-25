@@ -15,7 +15,7 @@ class Service:
         self.previous_services = set()
         self.next_services = set()
 
-    def is_selector(self):
+    def is_sselector(self):
         return 'selector' in self.tags
 
     def is_responder(self):
