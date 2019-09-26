@@ -8,7 +8,7 @@ services:
       - 4242:4242
     environment:
       WAIT_HOSTS: rule_based_selector:8002, cobotqa:8001, cobot_topics:8003, transfertransfo:8007, toxic_classification:8013
-      WAIT_HOSTS_TIMEOUT: 120
+      WAIT_HOSTS_TIMEOUT: 480
   rule_based_selector:
     build:
       args:
