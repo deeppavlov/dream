@@ -13,7 +13,7 @@ userT = TypeVar('userT', bound=User)
 
 class StateManager:
 
-    state_storage = connect(host=DB_HOST, port=DB_PORT, db=DB_NAME)
+    state_storage = connect(host=DB_HOST, port=int(DB_PORT), db=DB_NAME)
 
     @staticmethod
     def create_new_dialog(human, bot, location=None, channel_type=None):
