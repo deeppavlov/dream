@@ -99,6 +99,8 @@ ANNOTATORS_1 = [
         "gpu": True,
         "formatter": dp_toxic_formatter
     }
+]
+ANNOTATORS_2 = [
     # {
     #     "name": "cobot_topics",
     #     "protocol": "http",
@@ -140,7 +142,6 @@ ANNOTATORS_1 = [
     #     "formatter": cobot_dialogact_formatter
     # }
 ]
-ANNOTATORS_2 = []
 ANNOTATORS_3 = []
 
 SKILL_SELECTORS = [
@@ -172,3 +173,5 @@ RESPONSE_SELECTORS = [
 ]
 
 POSTPROCESSORS = []
+
+DEBUG = True
