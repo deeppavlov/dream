@@ -1,7 +1,7 @@
 uuid "send timestamp" "receive timestamp" processing_time "phrase length" "phrase text" response
-1 1569241364.326453 1569241366.5825467 2.256093740463257 2 Hi Hiya!
-1 1569241366.5825567 1569241368.944999 2.3624422550201416 11 "How are you" "I'm fine, thanks! Do you want to know what I can do?"
-1 1569241368.9450076 1569241371.0026174 2.057609796524048 3 Yes "I'm newborn, so I can't do so much. For example I can answer for any question."
-1 1569241371.0026305 1569241374.852886 3.8502554893493652 17 "Do you like Siri?" "Siri was a big inspiration to me."
-1 1569241374.8528955 1569241377.446313 2.5934174060821533 24 "Do you better than Siri?" "i don't know. i am always busy."
-1 1569241377.4463234 1569241378.6467283 1.2004048824310303 7 Goodbye Goodbye!
+1 1569515960.9170723 1569515966.1112049 5.194132566452026 2 Hi Greetings!
+1 1569515966.1112168 1569515968.8777976 2.766580820083618 11 "How are you" "I'm fine, thanks! Do you want to know what I can do?"
+1 1569515968.8778148 1569515973.266522 4.388707160949707 3 Yes "I'm newborn, so I can't do so much. For example I can answer for any question."
+1 1569515973.2665322 1569515977.410159 4.143626928329468 17 "Do you like Siri?" "Siri was a big inspiration to me."
+1 1569515977.4101708 1569515980.5383754 3.128204584121704 24 "Do you better than Siri?" "i don't know. i like to read."
+1 1569515980.538393 1569515983.3212175 2.7828245162963867 7 Goodbye Goodbye!
