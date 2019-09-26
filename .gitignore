@@ -109,5 +109,8 @@ venv.bak/
 #GIT
 .git/
 
+#vscode
+.vscode/
+
 
 .*DS_Store
