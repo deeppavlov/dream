@@ -4,6 +4,7 @@ import copy
 
 CMDS = ["/new_persona"]  # TODO: rm crutch of personality_catcher
 
+
 # TODO: rm crutch of personality_catcher
 def exclude_cmds(utter, cmds):
     if cmds:
@@ -12,6 +13,7 @@ def exclude_cmds(utter, cmds):
     else:
         return utter
 
+
 # TODO: rm crutch of personality_catcher
 def commands_excluder(utters_batch: List, cmds=[]):
     cmds = cmds if cmds else CMDS
@@ -19,6 +21,7 @@ def commands_excluder(utters_batch: List, cmds=[]):
     for utters in utters_batch:
         out_batch.append([exclude_cmds(ut, cmds) for ut in utters])
     return out_batch
+
 
 def base_input_formatter(state: List, cmd_exclude=True):
     """This state_formatter takes the most popular fields from Agent state and returns them as dict values:
@@ -57,7 +60,9 @@ def base_input_formatter(state: List, cmd_exclude=True):
         dialog_ids.append(dialog['id'])
         user_ids.extend([utt['user']['id'] for utt in state[0]['utterances']])
         # USER ID, который вводится в console.run - это user_telegram_id  ¯\_(ツ)_/¯
-        user_telegram_ids.extend([utt['user']['user_telegram_id'] for utt in state[0]['utterances']])
+        user_telegram_ids.extend([utt['user']['user_telegram_id']
+                                  if utt['user']["user_type"] == "human" else None
+                                  for utt in state[0]['utterances']])
 
     return {'dialogs': state,
             'last_utterances': last_utts,
@@ -187,7 +192,7 @@ def cobot_qa_formatter(payload, mode='in'):
 
 def base_skill_selector_formatter(payload: Any, mode='in'):
     if mode == 'in':
-        return {"states_batch": payload['dialogs']}
+        return {"states_batch": base_input_formatter(payload)['dialogs']}
     elif mode == 'out':
         # it's questionable why output from Model itself is 2dim: batch size x n_skills
         # and payload here is 3dim. I don't know which dim is extra and from where it comes
@@ -279,7 +284,6 @@ def sent_segm_formatter(payload, mode='in'):
 
 def dp_toxic_formatter(payload, mode='in'):
     if mode == 'in':
-        print(payload)
         sentences = base_input_formatter(payload)['last_utterances']
         return {'sentences': sentences}
     elif mode == 'out':
