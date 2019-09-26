@@ -7,7 +7,7 @@ trap cleanup EXIT
 
 function wait_service()
 {
-    local timeout=120
+    local timeout=480
     local url=$1
     local reply_keyword=$2
     while [[ $timeout -gt 0 ]]; do
