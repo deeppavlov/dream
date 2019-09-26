@@ -76,6 +76,7 @@ async def init_app(register_msg, intermediate_storage, on_startup, on_shutdown_f
     app.router.add_post('/', handle_func)
     app.router.add_get('/dialogs', users_dialogs)
     app.router.add_get('/dialogs/{dialog_id}', dialog)
+    app.router.add_get('/ping', pong)
     app.on_startup.append(on_startup)
     app.on_shutdown.append(on_shutdown_func)
     return app
@@ -131,6 +132,10 @@ async def users_dialogs():
         result.append(
             {'id': str(i.id), 'location': i.location, 'channel_type': i.channel_type, 'user': i.user.to_dict()})
     return web.json_response(result)
+
+
+async def pong(request):
+    return web.json_response("pong")
 
 
 async def dialog(request):

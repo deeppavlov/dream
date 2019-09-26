@@ -1,11 +1,14 @@
 services:
   agent:
-    command: 'python3 -m core.run -ch http_client'
+    command: sh -c 'bin/wait && python3 -m core.run -ch http_client'
     build:
       context: ./
       dockerfile: dockerfile_agent
     ports:
       - 4242:4242
+    environment:
+      WAIT_HOSTS: rule_based_selector:8002, cobotqa:8001, cobot_topics:8003, transfertransfo:8007, toxic_classification:8013
+      WAIT_HOSTS_TIMEOUT: 120
   rule_based_selector:
     build:
       args:

@@ -1,6 +1,4 @@
-from state_formatters.dp_formatters import cobot_qa_formatter, transfertransfo_formatter, \
-  program_y_formatter, personality_catcher_formatter, sent_segm_formatter, base_skill_selector_formatter, \
-  base_response_selector_formatter
+from state_formatters.dp_formatters import *
 
 from os import getenv
 
