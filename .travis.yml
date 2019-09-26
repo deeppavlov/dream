@@ -1,11 +1,5 @@
 language: python
-install:
-  - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
-  - cd $TRAVIS_REPO_SLUG
-  - git checkout -qf $TRAVIS_COMMIT
-python:
-  - "3.7"
 services:
   - docker
-#script: bin/run_codestyle.sh
-script: tests/runtests.sh
+script: 
+  - tests/runtests.sh
