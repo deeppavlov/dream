@@ -40,6 +40,8 @@ def respond():
     conversations = []
     dialog_ids = []
     selected_skill_names = []
+    selected_texts = []
+    selected_confidences = []
     confidences = []
     utterances = []
 
@@ -108,14 +110,16 @@ def respond():
         curr_scores = result[dialog_ids == i]  # array of dictionaries
         curr_confidences = confidences[dialog_ids == i]  # array of float numbers
 
-        best_skill_name = select_response(curr_candidates, curr_scores, curr_confidences,
-                                          toxicities[dialog_ids == i], dialog)
+        best_skill_name, best_text, best_confidence = select_response(curr_candidates, curr_scores, curr_confidences,
+                                                                      toxicities[dialog_ids == i], dialog)
         selected_skill_names.append(best_skill_name)
+        selected_texts.append(best_text)
+        selected_confidences.append(best_confidence)
         logger.info(f"Choose final skill: {best_skill_name}")
 
     total_time = time.time() - st_time
     logger.info(f'convers_evaluation_selector exec time: {total_time:.3f}s')
-    return jsonify(selected_skill_names)
+    return jsonify(list(zip(selected_skill_names, selected_texts, selected_confidences)))
 
 
 def select_response(curr_candidates, curr_scores, curr_confidences, curr_toxicities,  dialog):
@@ -149,15 +153,19 @@ def select_response(curr_candidates, curr_scores, curr_confidences, curr_toxicit
         curr_single_cores.append(score)
     best_id = np.argmax(curr_single_cores)
     best_skill_name = list(curr_candidates.keys())[best_id]
+    best_text = curr_candidates[best_skill_name]["text"]
+    best_confidence = curr_candidates[best_skill_name]["confidence"]
 
     while curr_candidates[best_skill_name]["text"] == "" or curr_candidates[best_skill_name]["confidence"] == 0.:
         curr_single_cores[best_id] = 0.
         best_id = np.argmax(curr_single_cores)
         best_skill_name = list(curr_candidates.keys())[best_id]
+        best_text = curr_candidates[best_skill_name]["text"]
+        best_confidence = curr_candidates[best_skill_name]["confidence"]
         if sum(curr_single_cores) == 0.:
             break
 
-    return best_skill_name
+    return best_skill_name, best_text, best_confidence
 
 
 if __name__ == '__main__':
