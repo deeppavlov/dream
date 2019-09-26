@@ -64,4 +64,4 @@ dockercompose_cmd exec agent python3 \
   utils/http_api_test.py -u http://0.0.0.0:4242 -df tests/dream/test_dialogs.json -of tests/dream/test_dialogs_output.csv
 
 echo "Assert passed dialogs"
-dockercompose_cmd exec agent python3 tests/dream/assert_test_dialogs.py --file tests/dream/test_dialogs_output.csv
+dockercompose_cmd exec agent python3 tests/dream/assert_test_dialogs.py -pred_f tests/dream/test_dialogs_output.csv -true_f tests/dream/test_dialogs_gold_phrases.csv
