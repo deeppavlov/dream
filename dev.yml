@@ -8,46 +8,68 @@ services:
     env_file: [.env.dev]
     volumes:
       - './skills/CoBotQA:/src'
+    ports:
+      - 8001:8001
   rule_based_selector:
     env_file: [.env.dev]
     volumes:
       - './skill_selectors/alexa_skill_selectors:/src'
+    ports:
+      - 8002:8002
   cobot_topics:
     env_file: [.env.dev]
     volumes:
       - './annotators/CoBotTopicClassification:/src'
+    ports:
+      - 8003:8003
   cobot_sentiment:
     env_file: [.env.dev]
     volumes:
       - './annotators/CoBotSentimentClassification:/src'
+    ports:
+      - 8004:8004
   sentseg:
     env_file: [.env.dev]
     volumes:
       - './annotators/SentSeg:/src'
+    ports:
+      - 8011:8011
   cobot_offensiveness:
     env_file: [.env.dev]
     volumes:
       - './annotators/CoBotOffensiveSpeechClassification:/src'
+    ports:
+      - 8005:8005
   cobot_dialogact:
     env_file: [.env.dev]
     volumes:
       - './annotators/CoBotDialogActClassification:/src'
+    ports:
+      - 8006:8006
   transfertransfo:
     env_file: [.env.dev]
     volumes:
       - './skills/transfertransfo:/app'
+    ports:
+      - 8007:8007
   personality_catcher:
     env_file: [.env.dev]
     volumes:
       - './skills/personality_catcher:/app'
+    ports:
+      - 8010:8010
   program_y:
     env_file: [.env.dev]
     volumes:
       - './skills/program-y:/src'
+    ports:
+      - 8008:8008
   convers_evaluation_selector:
     env_file: [.env.dev]
     volumes:
       - './response_selectors/convers_evaluation_based_selector:/src'
+    ports:
+      - 8009:8009
   mongo:
     env_file: [.env.dev]
     command: mongod
@@ -60,4 +82,6 @@ services:
     env_file: [.env.dev]
     volumes:
       - './annotators/DeepPavlovToxicClassification:/src'
+    ports:
+      - 8013:8013
 version: '3.7'
