@@ -4,7 +4,7 @@ import argparse
 import csv
 import json
 from time import time
-from random import random, randrange
+from random import randrange
 import uuid
 
 '''
@@ -18,7 +18,6 @@ structure of dialog file (-df) should be written in json
 structure of phrase file (-pf) simple text file. One phrase per line
 '''
 
-
 parser = argparse.ArgumentParser()
 parser.add_argument('-u', '--url', type=str)
 parser.add_argument('-uc', '--usercount', help='count of test users, which will send the message',
@@ -28,7 +27,6 @@ parser.add_argument('-pc', '--phrasecount', help='count of phrases in single dia
 parser.add_argument('-pf', '--phrasesfile', help='name of the file with phrases for dialog', type=str, default="")
 parser.add_argument('-df', '--dialogfile', help='name of the file with predefined dialogs', type=str, default="")
 parser.add_argument('-of', '--outputfile', help='name of the output file', type=str, default='output.csv')
-
 
 args = parser.parse_args()
 payloads = {}
@@ -45,7 +43,8 @@ elif args.phrasesfile:
             phrases = [line.rstrip('\n') for line in file]
     except Exception as e:
         raise e
-    payloads = {uuid.uuid4().hex: [phrases[randrange(len(phrases))] for i in range(args.phrasecount)] for i in range(args.usercount)}
+    payloads = {uuid.uuid4().hex: [phrases[randrange(len(phrases))] for j in range(args.phrasecount)] for i in
+                range(args.usercount)}
 else:
     raise ValueError('You should provide either predefined dialog (-df) or file with phrases (-pf)')
 
@@ -79,6 +78,7 @@ async def run(url, payloads, out_filename):
         writer = csv.writer(f, delimiter=' ')
         for row in result:
             writer.writerow(row)
+
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()

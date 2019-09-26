@@ -1,7 +1,9 @@
-from typing import Dict, Any, List
+from typing import List, Any
+from typing import Dict
 import copy
 
 CMDS = ["/new_persona"]  # TODO: rm crutch of personality_catcher
+
 
 # TODO: rm crutch of personality_catcher
 def exclude_cmds(utter, cmds):
@@ -11,6 +13,7 @@ def exclude_cmds(utter, cmds):
     else:
         return utter
 
+
 # TODO: rm crutch of personality_catcher
 def commands_excluder(utters_batch: List, cmds=[]):
     cmds = cmds if cmds else CMDS
@@ -19,7 +22,8 @@ def commands_excluder(utters_batch: List, cmds=[]):
         out_batch.append([exclude_cmds(ut, cmds) for ut in utters])
     return out_batch
 
-def base_input_formatter(state: Dict, cmd_exclude=True):
+
+def base_input_formatter(state: List, cmd_exclude=True):
     """This state_formatter takes the most popular fields from Agent state and returns them as dict values:
         * last utterances: a list of last utterance from each dialog in the state
         * last_annotations: a list of last annotation from each last utterance
@@ -34,32 +38,34 @@ def base_input_formatter(state: Dict, cmd_exclude=True):
 
     """
     utterances_histories = []
-    last_utterances = []
+    last_utts = []
     annotations_histories = []
     last_annotations = []
     dialog_ids = []
     user_ids = []
     user_telegram_ids = []
 
-    for dialog in state['dialogs']:
+    for dialog in state:
         utterances_history = []
         annotations_history = []
         for utterance in dialog['utterances']:
             utterances_history.append(utterance['text'])
             annotations_history.append(utterance['annotations'])
 
-        last_utterances.append(utterances_history[-1])
+        last_utts.append(utterances_history[-1])
         utterances_histories.append(utterances_history)
         last_annotations.append(annotations_history[-1])
         annotations_histories.append(annotations_history)
 
         dialog_ids.append(dialog['id'])
-        user_ids.append(dialog['user']['id'])
-        # USER ID, который вводится в console.run - это user_telegram_id  ¯\_(ツ)_/¯ 
-        user_telegram_ids.append(dialog['user']['user_telegram_id'])
+        user_ids.extend([utt['user']['id'] for utt in state[0]['utterances']])
+        # USER ID, который вводится в console.run - это user_telegram_id  ¯\_(ツ)_/¯
+        user_telegram_ids.extend([utt['user']['user_telegram_id']
+                                  if utt['user']["user_type"] == "human" else None
+                                  for utt in state[0]['utterances']])
 
-    return {'dialogs': state['dialogs'],
-            'last_utterances': last_utterances,
+    return {'dialogs': state,
+            'last_utterances': last_utts,
             'last_annotations': last_annotations,
             # TODO: rm crutch of personality_catcher
             'utterances_histories': commands_excluder(utterances_histories) if cmd_exclude else utterances_histories,
@@ -106,20 +112,18 @@ def sentiment_formatter(payload: Any, model_args_names=('x',), mode='in'):
     if mode == 'in':
         return last_utterances(payload, model_args_names)
     elif mode == 'out':
-        return [el[0] for el in payload]
+        return [el for el in payload]
 
 
 def chitchat_odqa_formatter(payload: Any, model_args_names=('x',), mode='in'):
     if mode == 'in':
         return last_utterances(payload, model_args_names)
     elif mode == 'out':
-        response = []
-        for el in payload:
-            class_name = el[0][0]
-            if class_name in ['speech', 'negative']:
-                response.append('chitchat')
-            else:
-                response.append('odqa')
+        class_name = payload[0]
+        if class_name in ['speech', 'negative']:
+            response = ['chitchat']
+        else:
+            response = ['odqa']
         return response
 
 
@@ -188,7 +192,7 @@ def cobot_qa_formatter(payload, mode='in'):
 
 def base_skill_selector_formatter(payload: Any, mode='in'):
     if mode == 'in':
-        return {"states_batch": payload['dialogs']}
+        return {"states_batch": base_input_formatter(payload)['dialogs']}
     elif mode == 'out':
         # it's questionable why output from Model itself is 2dim: batch size x n_skills
         # and payload here is 3dim. I don't know which dim is extra and from where it comes
@@ -281,7 +285,7 @@ def base_response_selector_formatter(payload, mode='in'):
         dialogs = base_input_formatter(payload)['dialogs']
         return {"dialogs": dialogs}
     elif mode == 'out':
-        return payload
+        return {"skill_name": payload[0], "text": payload[1], "confidence": payload[2]}
 
 
 def sent_segm_formatter(payload, mode='in'):
