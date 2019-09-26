@@ -76,6 +76,7 @@ class Agent:
         return done, waiting
 
     def process_service_response(self, dialog_id: str, service_name: str = None, response: str = None):
+        logger.info(f"Service: {response}")
         workflow_record = self.get_workflow_record(dialog_id)
 
         # Updating workflow with service response
