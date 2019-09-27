@@ -24,7 +24,7 @@ AGENT_BASIC = {
 
 MONGO_BASIC = {
     'mongo': {'command': 'mongod',
-              'image': 'mongo:3.2.0',
+              'image': 'mongo:4.0.0',
               'ports': ['{}:27017'],
               # map port to none standard port, to avoid conflicts with locally installed mongodb.
               'volumes': ['/var/run/docker.sock:/var/run/docker.sock', f'{DB_PATH}:/root/data/db']}
