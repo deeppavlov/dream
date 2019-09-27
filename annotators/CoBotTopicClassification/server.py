@@ -5,7 +5,6 @@ import logging
 import os
 import uuid
 import time
-import re
 import numpy as np
 
 import requests
