@@ -9,7 +9,6 @@ from pydantic import BaseModel
 import torch
 
 from pytorch_pretrained_bert import OpenAIGPTLMHeadModel, OpenAIGPTTokenizer
-from utils import download_pretrained_model
 from interact import sample_sequence
 from os import getenv
 import sentry_sdk
@@ -29,7 +28,11 @@ TOP_K = 0
 TOP_P = 0.9
 NO_SAMPLE = True
 
-args = lambda: None
+
+def args():
+    None
+
+
 args.max_length = MAX_LENGTH
 args.device = DEVICE
 args.model = MODEL
