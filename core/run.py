@@ -13,13 +13,15 @@ from core.connectors import EventSetOutputConnector, HttpOutputConnector
 from core.config_parser import parse_old_config
 from core.state_manager import StateManager
 from os import getenv
+from sys import stdout
 import sentry_sdk
 
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
 logger = logging.getLogger('service_logger')
-logger.setLevel(logging.INFO)
 fh = logging.FileHandler('../service.log')
-fh.setLevel(logging.INFO)
 logger.addHandler(fh)
+logger.addHandler(logging.StreamHandler(stdout))
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 parser = argparse.ArgumentParser()
