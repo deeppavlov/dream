@@ -20,3 +20,4 @@ fi
 cp aws_lambda/main.py aws_lambda/package/
 cd aws_lambda/package && zip -r9 dp_agent_lambda.zip . && cd ../..
 aws lambda update-function-code --function-name $LAMBDA_NAME --zip-file fileb://aws_lambda/package/dp_agent_lambda.zip
+rm aws_lambda/package/dp_agent_lambda.zip
