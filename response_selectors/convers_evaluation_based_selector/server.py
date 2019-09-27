@@ -129,7 +129,7 @@ def respond():
     return jsonify(list(zip(selected_skill_names, selected_texts, selected_confidences)))
 
 
-def select_response(curr_candidates, curr_scores, curr_confidences, curr_toxicities,  dialog):
+def select_response(curr_candidates, curr_scores, curr_confidences, curr_toxicities, dialog):
     confidence_strength = 2
     conv_eval_strength = 0.4
     # calculate curr_scores which is an array of values-scores for each candidate
@@ -154,7 +154,7 @@ def select_response(curr_candidates, curr_scores, curr_confidences, curr_toxicit
             cand_scores["responseEngagesUser"] + \
             cand_scores["isResponseComprehensible"] - \
             cand_scores["isResponseErroneous"]
-        score = conv_eval_strength*score_conv_eval + confidence_strength*confidence
+        score = conv_eval_strength * score_conv_eval + confidence_strength * confidence
         logger.info(f'Skill {skill_name} has score: {score}. Toxicity: {curr_toxicities[i]} '
                     f'Cand scores: {cand_scores}')
         curr_single_cores.append(score)
