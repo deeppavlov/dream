@@ -21,6 +21,15 @@ $: docker-compose -f docker-compose.yml -f dev.yml exec agent bash
 $(inside docker): python3 -m core.run
 ```
 
+Автотесты
+====================
+`tests/runtests.sh`
+
+
+Кодстиль
+====================
+`bin/run_codestyle.sh`
+
 #### Про использование generate_composefile
 
 - НЕ НАДО ЕГО ИСПОЛЬЗОВАТЬ!
