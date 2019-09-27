@@ -34,11 +34,11 @@ so the platform should have the following characteristics:
     * ``Postprocessor`` is a service postprocessing a bot utterance. It can make some basic things
       like adding a user name to the reply, inserting emojis, etc.;
 
-    * ``Postprocessed Response`` is a final postprocessed bot utterance that is shown to the user.
+* ``Postprocessed Response`` is a final postprocessed bot utterance that is shown to the user.
 
-    * ``State`` is current dialogs between users and a bot serialized as **json**. State is used to pass information
-      across the services and contains all possibly needed information about the current dialogs.
-      It has separate `documentation <state_>`__.
+* ``State`` is current dialogs between users and a bot serialized as **json**. State is used to pass information
+  across the services and contains all possibly needed information about the current dialogs.
+  It has separate `documentation <state_>`__.
 
 
 Ready Agent from the box

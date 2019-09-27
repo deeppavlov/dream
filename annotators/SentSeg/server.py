@@ -1,4 +1,3 @@
-
 import re
 from flask import Flask, jsonify, request
 import sentsegmodel as model
@@ -6,10 +5,10 @@ import tensorflow as tf
 import json
 import uuid
 import logging
+import time
 import requests
 from os import getenv
 import sentry_sdk
-
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -34,12 +33,12 @@ sess = tf.Session()
 saver.restore(sess, params.model_path)
 logger.info("sentseg model is loaded.")
 
-
 app = Flask(__name__)
 
 
 @app.route('/sentseg', methods=['POST'])
 def respond():
+    st_time = time.time()
     user_sentences = request.json['sentences']
     session_id = uuid.uuid4().hex
 
@@ -51,7 +50,8 @@ def respond():
         segments = split_segments(sentseg)
         sentseg_result += [{"punct_sent": sentseg, "segments": segments}]
         logger.info(f"punctuated sent. : {sentseg}")
-
+    total_time = time.time() - st_time
+    logger.info(f'sentseg exec time: {total_time:.3f}s')
     return jsonify(sentseg_result)
 
 
@@ -77,5 +77,5 @@ def split_segments(sentence):
     return segments
 
 
-if __name__ =='__main__':
+if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=3000)

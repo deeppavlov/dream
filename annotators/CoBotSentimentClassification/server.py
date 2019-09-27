@@ -6,6 +6,7 @@ import os
 import re
 import numpy as np
 import uuid
+import time
 
 import requests
 from flask import Flask, request, jsonify
@@ -37,6 +38,7 @@ sentiment_classes = {0: "negative", 1: "neutral", 2: "positive"}
 
 @app.route("/sentiment", methods=['POST'])
 def respond():
+    st_time = time.time()
     user_list_sentences = request.json['sentences']
 
     user_sentences = []
@@ -76,6 +78,8 @@ def respond():
             confidences += [curr_confidences]
             logger.info(f"sentiment: {curr_sentiments}")
 
+    total_time = time.time() - st_time
+    logger.info(f'cobot_sentiment exec time: {total_time:.3f}s')
     return jsonify(list(zip(sentiments, confidences)))
 
 
