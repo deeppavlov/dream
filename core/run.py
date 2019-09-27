@@ -12,16 +12,14 @@ from core.pipeline import Pipeline, Service
 from core.connectors import EventSetOutputConnector, HttpOutputConnector
 from core.config_parser import parse_old_config
 from core.state_manager import StateManager
+from os import getenv
+import sentry_sdk
 
 logger = logging.getLogger('service_logger')
 logger.setLevel(logging.INFO)
 fh = logging.FileHandler('../service.log')
 fh.setLevel(logging.INFO)
 logger.addHandler(fh)
-
-
-from os import getenv
-import sentry_sdk
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 parser = argparse.ArgumentParser()
