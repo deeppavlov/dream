@@ -8,4 +8,4 @@ RUN pip install -r /src/requirements.txt
 COPY . /src/
 WORKDIR /src
 
-CMD gunicorn --workers=2 server:app
+CMD cd dream_aiml/scripts/xnix && ./sanic.sh
