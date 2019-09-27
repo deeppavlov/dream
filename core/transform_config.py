@@ -1,3 +1,5 @@
+# flake8: noqa
+
 import sys
 from os import getenv
 from itertools import chain
