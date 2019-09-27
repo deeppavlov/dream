@@ -3,7 +3,6 @@
 import json
 import logging
 import os
-import re
 import uuid
 import time
 import numpy as np
@@ -23,7 +22,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 COBOT_API_KEY = os.environ.get('COBOT_API_KEY')
-COBOT_DIALOGACT_SERVICE_URL =  os.environ.get('COBOT_DIALOGACT_SERVICE_URL')
+COBOT_DIALOGACT_SERVICE_URL = os.environ.get('COBOT_DIALOGACT_SERVICE_URL')
 
 if COBOT_API_KEY is None:
     raise RuntimeError('COBOT_API_KEY environment variable is not set')
@@ -61,7 +60,8 @@ def respond():
                               data=json.dumps({'conversations': conversations}),
                               method='POST')
     if result.status_code != 200:
-        logger.warning("result status code is not 200: {}. result text: {}; result status: {}".format(result, result.text, result.status_code))
+        logger.warning("result status code is not 200: {}. result text: {}; result status: {}".format(
+            result, result.text, result.status_code))
         intents = [[]] * len(utterances_histories)
         topics = [[]] * len(utterances_histories)
     else:
@@ -82,7 +82,7 @@ def respond():
 
     total_time = time.time() - st_time
     logger.info(f'cobot_dialogact exec time: {total_time:.3f}s')
-    return jsonify(list(zip(intents)))
+    return jsonify(list(zip(intents, topics)))
 
 
 if __name__ == '__main__':

@@ -3,7 +3,6 @@
 import json
 import logging
 import os
-import re
 import numpy as np
 import uuid
 import time

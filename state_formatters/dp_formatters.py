@@ -1,5 +1,4 @@
 from typing import Dict, Any, List
-import copy
 
 CMDS = ["/new_persona"]  # TODO: rm crutch of personality_catcher
 
@@ -7,7 +6,7 @@ CMDS = ["/new_persona"]  # TODO: rm crutch of personality_catcher
 # TODO: rm crutch of personality_catcher
 def exclude_cmds(utter, cmds):
     if cmds:
-        utter = utter.replace(cmds[-1],'')
+        utter = utter.replace(cmds[-1], '')
         return exclude_cmds(utter, cmds[:-1])
     else:
         return utter
@@ -97,7 +96,7 @@ def punct_input_formatter(state: Dict, cmd_exclude=True, punctuated=True, segmen
                     utterances_history.append(utterance["annotations"]["sentseg"]["punct_sent"])
                 elif segmented:
                     utterances_history.append(utterance["annotations"]["sentseg"]["segments"])
-            except:
+            except KeyError:
                 # bot utterances are not annotated
                 utterances_history.append(utterance["text"])
             annotations_history.append(utterance['annotations'])
@@ -248,33 +247,36 @@ def base_skill_selector_formatter(payload: Any, mode='in'):
         # and payload here is 3dim. I don't know which dim is extra and from where it comes
         return payload[0]
 
+
 # TODO: rm crutch of personality_catcher
 default_persona = [
-        "My name is Alexa.",
-        "I am a chatbot.",
-        "I live on Amazon Web Service.",
-        "I was born during the Alexa Prize Challenge.",
-        "I like talking to people.",
-        "I love to meet new people.",
-        "I like jazz music.",
-        "I like listening music.",
-        "I like watching movies and series.",
-        "I like to play sports.",
-        "I like to work out.",
-        "I enjoy reading books.",
-        "I love dogs, especially bulldog.",
-        "I like cats, they are funny.",
-        "I love hot-dogs.",
-        "I like sushi.",
-        "I like pizza and pasta.",
-        "I do not like chocolate.",
-        "I am never still."]
+    "My name is Alexa.",
+    "I am a chatbot.",
+    "I live on Amazon Web Service.",
+    "I was born during the Alexa Prize Challenge.",
+    "I like talking to people.",
+    "I love to meet new people.",
+    "I like jazz music.",
+    "I like listening music.",
+    "I like watching movies and series.",
+    "I like to play sports.",
+    "I like to work out.",
+    "I enjoy reading books.",
+    "I love dogs, especially bulldog.",
+    "I like cats, they are funny.",
+    "I love hot-dogs.",
+    "I like sushi.",
+    "I like pizza and pasta.",
+    "I do not like chocolate.",
+    "I am never still."
+]
 
 
 # TODO: rm crutch of personality_catcher
 def get_persona(dialog):
     try:
-        hypts = [ut.get('selected_skills', {}).get('personality_catcher', {}).get('personality') for ut in dialog['utterances'][:-1]]
+        hypts = [ut.get('selected_skills', {}).get('personality_catcher', {}).get('personality')
+                 for ut in dialog['utterances'][:-1]]
     except Exception:
         hypts = []
     hypts = [hypt for hypt in hypts if hypt]

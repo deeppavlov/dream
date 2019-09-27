@@ -6,7 +6,6 @@ import json
 import uuid
 import logging
 import time
-import requests
 from os import getenv
 import sentry_sdk
 
@@ -56,7 +55,7 @@ def respond():
 
 
 def split_segments(sentence):
-    segm = re.split("([\.\?\!])", sentence)
+    segm = re.split(r"([\.\?\!])", sentence)
     segm = [sent.strip() for sent in segm if sent != ""]
 
     curr_sent = ""
@@ -64,7 +63,7 @@ def split_segments(sentence):
     segments = []
 
     for s in segm:
-        if re.match("[\.\?\!]", s):
+        if re.match(r"[\.\?\!]", s):
             punct_occur = True
             curr_sent += s
         elif punct_occur:
