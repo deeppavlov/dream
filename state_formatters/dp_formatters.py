@@ -81,14 +81,14 @@ def last_utterances(payload, model_args_names):
 
 def punct_input_formatter(state: Dict, cmd_exclude=True, punctuated=True, segmented=False):
     utterances_histories = []
-    last_utterances = []
+    last_utts = []
     annotations_histories = []
     last_annotations = []
     dialog_ids = []
     user_ids = []
     user_telegram_ids = []
 
-    for dialog in state['dialogs']:
+    for dialog in state:
         utterances_history = []
         annotations_history = []
         for utterance in dialog['utterances']:
@@ -102,24 +102,26 @@ def punct_input_formatter(state: Dict, cmd_exclude=True, punctuated=True, segmen
                 utterances_history.append(utterance["text"])
             annotations_history.append(utterance['annotations'])
 
-        last_utterances.append(utterances_history[-1])
+        last_utts.append(utterances_history[-1])
         utterances_histories.append(utterances_history)
         last_annotations.append(annotations_history[-1])
         annotations_histories.append(annotations_history)
 
         dialog_ids.append(dialog['id'])
-        user_ids.append(dialog['user']['id'])
+        user_ids.extend([utt['user']['id'] for utt in state[0]['utterances']])
         # USER ID, который вводится в console.run - это user_telegram_id  ¯\_(ツ)_/¯
-        user_telegram_ids.append(dialog['user']['user_telegram_id'])
+        user_telegram_ids.extend([utt['user']['user_telegram_id']
+                                  if utt['user']["user_type"] == "human" else None
+                                  for utt in state[0]['utterances']])
 
     if cmd_exclude:
         if punctuated:
             utterances_histories = commands_excluder(utterances_histories)
         elif segmented:
             utterances_histories = [commands_excluder(utter_list)
-                                     for utter_list in utterances_histories]
-    return {'dialogs': state['dialogs'],
-            'last_utterances': last_utterances,
+                                    for utter_list in utterances_histories]
+    return {'dialogs': state,
+            'last_utterances': last_utts,
             'last_annotations': last_annotations,
             'utterances_histories': utterances_histories,
             'annotation_histories': annotations_histories,
