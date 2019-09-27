@@ -15,11 +15,10 @@ from os import getenv
 import sentry_sdk
 
 
-sentry_sdk.init(getenv('SENTRY_DSN'))
+sentry_sdk.init(getenv("SENTRY_DSN"))
 
 SEED = 31415
-# DEVICE = "cuda"
-DEVICE = "cpu"
+DEVICE = os.getenv("DEVICE", "cpu")  # cuda or cpu
 MAX_HISTORY = 2
 MAX_LENGTH = 20
 MIN_LENGTH = 1
@@ -102,5 +101,5 @@ def transfer_transfo_chitchat_model(placeholders: Input_placeholders):
         inference(pers, hist) for pers, hist in zip(placeholders.personality, placeholders.utterances_histories)
     ]
     total_time = time.time() - st_time
-    logger.info(f'transfertransfo exec time: {total_time:.3f}s')
+    logger.info(f"transfertransfo exec time: {total_time:.3f}s")
     return response
