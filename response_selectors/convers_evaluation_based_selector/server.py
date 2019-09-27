@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import re
 import json
 import logging
 import os
@@ -110,8 +111,14 @@ def respond():
         curr_scores = result[dialog_ids == i]  # array of dictionaries
         curr_confidences = confidences[dialog_ids == i]  # array of float numbers
 
-        best_skill_name, best_text, best_confidence = select_response(curr_candidates, curr_scores, curr_confidences,
-                                                                      toxicities[dialog_ids == i], dialog)
+        if re.search("how are you", dialog["utterances"][-1].lower()):
+            best_skill_name = "program_y"
+            best_text = curr_candidates[best_skill_name]["text"]
+            best_confidence = curr_candidates[best_skill_name]["confidence"]
+        else:
+            best_skill_name, best_text, best_confidence = select_response(
+                curr_candidates, curr_scores, curr_confidences,
+                toxicities[dialog_ids == i], dialog)
         selected_skill_names.append(best_skill_name)
         selected_texts.append(best_text)
         selected_confidences.append(best_confidence)
