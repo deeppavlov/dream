@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Hashable, Any, Optional, Dict, TypeVar, List
+from copy import deepcopy
 
 from mongoengine import connect
 
@@ -182,7 +183,7 @@ class StateManager:
     @classmethod
     def add_human_utterance_simple_dict(cls, dialog: Dict, dialog_object: Dialog, payload: Dict,
                                         **kwargs) -> None:
-        utterance = HUMAN_UTTERANCE_SCHEMA
+        utterance = deepcopy(HUMAN_UTTERANCE_SCHEMA)
         utterance['text'] = payload
         utterance['date_time'] = str(datetime.now())
         utterance['user'] = dialog['human']
@@ -221,7 +222,7 @@ class StateManager:
         cls.update_human_dict(dialog['human'], active_skill)
         cls.update_bot_dict(dialog['bot'], active_skill)
 
-        utterance = BOT_UTTERANCE_SCHEMA
+        utterance = deepcopy(BOT_UTTERANCE_SCHEMA)
         utterance['text'] = new_text
         utterance['orig_text'] = active_skill['text']
         utterance['date_time'] = str(datetime.now())
