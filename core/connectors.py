@@ -1,5 +1,6 @@
 import asyncio
 import aiohttp
+import time
 from typing import Dict, Callable
 
 
@@ -13,7 +14,8 @@ class HTTPConnector:
     async def send(self, payload: Dict):
         async with self.session.post(self.url, json=self.formatter([payload])) as resp:
             response = await resp.json()
-            return {self.service_name: self.formatter(response[0], mode='out')}
+            response_time = time.time()
+            return {self.service_name: self.formatter(response[0], mode='out')}, response_time
 
 
 class AioQueueConnector:
@@ -44,9 +46,11 @@ class QueueListenerBatchifyer:
                 tasks = []
                 async with self.session.post(self.url, json=self.formatter(batch)) as resp:
                     response = await resp.json()
+                    response_time = time.time()
                 for dialog, response_text in zip(batch, response):
                     tasks.append(process_callable(dialog['id'], self.service_name,
-                                                  {self.service_name: self.formatter(response_text, mode='out')}))
+                                                  {self.service_name: self.formatter(response_text, mode='out')},
+                                                  response_time))
                 await asyncio.gather(*tasks)
             await asyncio.sleep(0.1)
 
@@ -57,7 +61,7 @@ class ConfidenceResponseSelectorConnector:
         best_skill = sorted(response.items(), key=lambda x: x[1]['confidence'], reverse=True)[0]
         return {'confidence_response_selector': {'skill_name': best_skill[0],
                                                  'text': best_skill[1]['text'],
-                                                 'confidence': best_skill[1]['confidence']}}
+                                                 'confidence': best_skill[1]['confidence']}}, time.time()
 
 
 class HttpOutputConnector:
