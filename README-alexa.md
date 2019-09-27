@@ -21,6 +21,15 @@ $: docker-compose -f docker-compose.yml -f dev.yml exec agent bash
 $(inside docker): python3 -m core.run
 ```
 
+Автотесты
+====================
+`tests/runtests.sh`
+
+
+Кодстиль
+====================
+`bin/run_codestyle.sh`
+
 #### Про использование generate_composefile
 
 - НЕ НАДО ЕГО ИСПОЛЬЗОВАТЬ!
@@ -39,12 +48,12 @@ Deploy to staging
 - новые .env переменные надо не забывать добавлять в .env.staging и .env.dev
 
 0. Билдим и пушим образы в ECR: `DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com ./push_to_ecr.sh`
-1. Открыть ssh туннель к докер менеджеру `ssh -i ~/Downloads/dream-local-idris-2.pem -NL localhost:2374:/var/run/docker.sock docker@ec2-18-232-102-32.compute-1.amazonaws.com`
+1. Открыть ssh туннель к докер менеджеру `ssh -i ~/Downloads/dream-local-idris-2.pem -NL localhost:2374:/var/run/docker.sock docker@ec2-34-207-206-65.compute-1.amazonaws.com`
 2. Авторизация в ECR (если до этого не был запущен `./push_to_ecr`): `eval $(aws ecr get-login --no-include-email)`
 3. Деплой на стейджинг: `DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com DOCKER_HOST=localhost:2374 docker stack deploy --compose-file docker-compose.yml,staging.yml --with-registry-auth dream_staging`
 
 **Комментарии:**
-- pem ключ лежит тут https://trello.com/c/vEUbMmKK (не забудь `chmod 400`) 
+- pem ключ лежит тут https://trello.com/c/vEUbMmKK (не забудь `chmod 400`)
 - Как поднять nginx , чтобы обращаться к http сервису агента: `DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com DOCKER_HOST=localhost:2374 docker service create --name nginx --publish published=80,target=4242 nginx`
 - https://docs.docker.com/docker-for-aws/deploy/
 - Check if remote docker connection ok `DOCKER_HOST=localhost:2374 docker info`
@@ -59,3 +68,12 @@ Deploy to Alexa Lambda
 =======================
 
 - [Deploy to Alexa Lambda README](aws_lambda/README.md)
+
+
+Deploy Machine
+=======================
+Поднята деплой машина на амазоне. Через нее можно быстро собрать и запуишть имейджи в регистри и сделать деплой.
+
+- `ssh -i ~/Downloads/dream-local-idris.pem ubuntu@34.203.223.60`
+- aws сконфигурирован
+- Скачать репу можно в папку ``/home/ubuntu/dp-agent-alexa`
