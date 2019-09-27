@@ -4,6 +4,7 @@ import json
 import logging
 import os
 import uuid
+import time
 import re
 import numpy as np
 
@@ -35,6 +36,7 @@ headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COB
 
 @app.route("/topics", methods=['POST'])
 def respond():
+    st_time = time.time()
     user_list_sentences = request.json['sentences']
 
     user_sentences = []
@@ -71,6 +73,8 @@ def respond():
             topics += [[curr_topics]]
             logger.info(f"topic: {curr_topics}")
 
+    total_time = time.time() - st_time
+    logger.info(f'cobot_topics exec time: {total_time:.3f}s')
     return jsonify(topics)
 
 

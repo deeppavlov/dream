@@ -5,6 +5,7 @@ import logging
 import os
 import re
 import uuid
+import time
 import numpy as np
 
 import requests
@@ -34,6 +35,7 @@ headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COB
 
 @app.route("/dialogact", methods=['POST'])
 def respond():
+    st_time = time.time()
     utterances_histories = request.json['utterances_histories']
 
     session_id = uuid.uuid4().hex
@@ -78,7 +80,9 @@ def respond():
             logger.info(f"intent: {curr_intents}")
             logger.info(f"topic: {curr_topics}")
 
-    return jsonify(list(zip(intents, topics)))
+    total_time = time.time() - st_time
+    logger.info(f'cobot_dialogact exec time: {total_time:.3f}s')
+    return jsonify(list(zip(intents)))
 
 
 if __name__ == '__main__':
