@@ -71,7 +71,8 @@ async def run(url, payloads, out_filename):
             task = asyncio.ensure_future(perform_test_dialogue(session, url, k, v))
             tasks.append(task)
         responses = await asyncio.gather(*tasks)
-    result = [['uuid', 'send timestamp', 'receive timestamp', 'processing_time', 'phrase length', 'phrase text', 'response']]
+    result = [['uuid', 'send timestamp', 'receive timestamp', 'processing_time',
+               'phrase length', 'phrase text', 'response']]
     for i in responses:
         result.extend(i)
     with open(out_filename, 'w', newline='') as f:
