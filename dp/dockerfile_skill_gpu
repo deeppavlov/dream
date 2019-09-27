@@ -17,6 +17,7 @@ ENV PYTHONPATH "${PYTONPATH}:/dp-agent"
 
 RUN pip install -r /base/DeepPavlov/deeppavlov/requirements/tf-gpu.txt
 RUN python -m deeppavlov install $CONFIG
+RUN python -m deeppavlov download $CONFIG
 RUN python dp/dp_server_config.py
 
-ENTRYPOINT python -m deeppavlov riseapi $CONFIG -p $PORT -d
+ENTRYPOINT python -m deeppavlov riseapi $CONFIG -p $PORT
