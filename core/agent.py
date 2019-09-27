@@ -47,32 +47,34 @@ class Agent:
     def register_service_request(self, dialog_id: str, service_name):
         if dialog_id not in self.workflow.keys():
             raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
-        self.workflow[dialog_id]['services'][service_name] = {'send': time(), 'done': None}
+        self.workflow[dialog_id]['services'][service_name] = {'send': True, 'done': False, 'send_time': time(),
+                                                              'done_time': None}
 
     def get_services_status(self, dialog_id: str):
         if dialog_id not in self.workflow.keys():
             raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
         done, waiting = set(), set()
         for key, value in self.workflow[dialog_id]['services'].items():
-            if value['done'] is not None:
+            if value['done']:
                 done.add(key)
             else:
                 waiting.add(key)
 
         return done, waiting
 
-    def process_service_response(self, dialog_id: str, service_name: str = None, response: str = None):
+    def process_service_response(self, dialog_id: str, service_name: str = None, response: Any = None,
+                                 response_time: float = None):
         workflow_record = self.get_workflow_record(dialog_id)
 
         # Updating workflow with service response
         service = self.pipeline.get_service_by_name(service_name)
         if service:
             service_data = self.workflow[dialog_id]['services'][service_name]
-            service_data['done'] = time()
-            try:
-                service_data['send']
-            except KeyError:
-                service_data['send'] = None
+            service_data['done'] = True
+            service_data['done_time'] = response_time
+            if service_name == 'input':
+                service_data['send'] = True
+                service_data['send_time'] = service_data['done_time']
             if response and service.state_processor_method:
                 service.state_processor_method(dialog=workflow_record['dialog'],
                                                dialog_object=workflow_record['dialog_object'],
@@ -88,7 +90,8 @@ class Agent:
             result = []
             for service in next_services:
                 if service.name not in selected_services:
-                    self.workflow[dialog_id]['services'][service.name] = {'done': time(), 'send': None}
+                    self.workflow[dialog_id]['services'][service.name] = {'done': True, 'send': False,
+                                                                          'send_time': None, 'done_time': None}
                 else:
                     result.append(service)
             next_services = result
@@ -111,7 +114,7 @@ class Agent:
             kwargs['event'] = event
             self.add_workflow_record(dialog=dialog, deadline_timestamp=deadline_timestamp,
                                      hold_flush=True, **kwargs)
-            await self.process(str(dialog.id), 'input', utterance)
+            await self.process(str(dialog.id), 'input', utterance, time())
             await event.wait()
             workflow_record = self.get_workflow_record(str(dialog.id))
             self.flush_record(str(dialog.id))
@@ -119,11 +122,11 @@ class Agent:
         else:
             self.add_workflow_record(dialog=dialog, deadline_timestamp=deadline_timestamp,
                                      hold_flush=hold_flush, **kwargs)
-            await self.process(str(dialog.id), 'input', utterance)
+            await self.process(str(dialog.id), 'input', utterance, time())
 
-    async def process(self, dialog_id, service_name=None, response=None):
+    async def process(self, dialog_id, service_name=None, response: Any = None, response_time: float = None):
         workflow_record = self.get_workflow_record(dialog_id)
-        next_services = self.process_service_response(dialog_id, service_name, response)
+        next_services = self.process_service_response(dialog_id, service_name, response, response_time)
 
         service_requests = []
         has_responder = []
@@ -138,10 +141,16 @@ class Agent:
 
         tasks = []
         for service, response in zip(next_services, responses):
-            if response is not None:
-                if isinstance(response, Exception):
-                    raise response
-                tasks.append(self.process(dialog_id, service.name, response))
+            if response is None:
+                r = [None]
+                rt = time()
+            else:
+                r = response[0]
+                rt = response[1]
+            if r is not None:
+                if isinstance(r, Exception):
+                    raise r
+                tasks.append(self.process(dialog_id, service.name, r, rt))
         await asyncio.gather(*tasks)
 
         if has_responder:  # TODO(Pugin): this part breaks some processing logic on the end
