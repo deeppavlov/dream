@@ -11,18 +11,21 @@ class HTTPConnector:
         self.formatter = formatter
         self.service_name = service_name
 
-    async def send(self, payload: Dict):
+    async def send(self, payload: Dict, callback: Callable):
         async with self.session.post(self.url, json=self.formatter([payload])) as resp:
             response = await resp.json()
-            response_time = time.time()
-            return {self.service_name: self.formatter(response[0], mode='out')}, response_time
+            await callback(
+                dialog_id=payload['id'], service_name=self.service_name,
+                response={self.service_name: self.formatter(response[0], mode='out')},
+                respinse_time=time.time()
+            )
 
 
 class AioQueueConnector:
     def __init__(self, queue):
         self.queue = queue
 
-    async def send(self, payload: Dict):
+    async def send(self, payload: Dict, **kwargs):
         await self.queue.put(payload)
 
 
@@ -56,29 +59,47 @@ class QueueListenerBatchifyer:
 
 
 class ConfidenceResponseSelectorConnector:
-    async def send(self, payload: Dict):
+    def __init__(self, service_name: str):
+        self.service_name = service_name
+
+    async def send(self, payload: Dict, callback: Callable):
         response = payload['utterances'][-1]['selected_skills']
         best_skill = sorted(response.items(), key=lambda x: x[1]['confidence'], reverse=True)[0]
-        return {'confidence_response_selector': {'skill_name': best_skill[0],
-                                                 'text': best_skill[1]['text'],
-                                                 'confidence': best_skill[1]['confidence']}}, time.time()
+        await callback(
+            dialog_id=payload['id'], service_name=self.service_name,
+            response={
+                'confidence_response_selector': {
+                    'skill_name': best_skill[0],
+                    'text': best_skill[1]['text'],
+                    'confidence': best_skill[1]['confidence']
+                }
+            },
+            response_time=time.time())
 
 
 class HttpOutputConnector:
-    def __init__(self, intermediate_storage: Dict):
+    def __init__(self, intermediate_storage: Dict, service_name: str):
         self.intermediate_storage = intermediate_storage
+        self.service_name = service_name
 
-    async def send(self, payload):
+    async def send(self, payload: Dict, callback: Callable):
         message_uuid = payload['message_uuid']
         event = payload['event']
         response_text = payload['dialog']['utterances'][-1]['text']
         self.intermediate_storage[message_uuid] = response_text
         event.set()
+        await callback(payload['dialog']['id'], self.service_name,
+                       None, time.time())
 
 
 class EventSetOutputConnector:
-    async def send(self, payload):
+    def __init__(self, service_name: str):
+        self.service_name = service_name
+
+    async def send(self, payload: Dict, callback: Callable):
         event = payload.get('event', None)
         if not event or not isinstance(event, asyncio.Event):
             raise ValueError("'event' key is not presented in payload")
         event.set()
+        await callback(payload['dialog']['id'], self.service_name,
+                       None, time.time())

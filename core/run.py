@@ -149,7 +149,7 @@ def main():
     services, workers, session = parse_old_config()
 
     if CHANNEL == 'cmd_client':
-        endpoint = Service('cmd_responder', EventSetOutputConnector().send,
+        endpoint = Service('cmd_responder', EventSetOutputConnector('cmd_responder').send,
                            StateManager.save_dialog_dict, 1, ['responder'])
         input_srv = Service('input', None, StateManager.add_human_utterance_simple_dict, 1, ['input'])
         loop = asyncio.get_event_loop()
@@ -172,7 +172,7 @@ def main():
             logging.shutdown()
     elif CHANNEL == 'http_client':
         intermediate_storage = {}
-        endpoint = Service('http_responder', HttpOutputConnector(intermediate_storage).send,
+        endpoint = Service('http_responder', HttpOutputConnector(intermediate_storage, 'http_responder').send,
                            StateManager.save_dialog_dict, 1, ['responder'])
         input_srv = Service('input', None, StateManager.add_human_utterance_simple_dict, 1, ['input'])
         register_msg, process_callable = prepare_agent(services, endpoint, input_srv, args.response_logger)

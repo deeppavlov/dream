@@ -72,13 +72,14 @@ class Agent:
             service_data = self.workflow[dialog_id]['services'][service_name]
             service_data['done'] = True
             service_data['done_time'] = response_time
-            if service_name == 'input':
-                service_data['send'] = True
-                service_data['send_time'] = service_data['done_time']
             if response and service.state_processor_method:
                 service.state_processor_method(dialog=workflow_record['dialog'],
                                                dialog_object=workflow_record['dialog_object'],
                                                payload=response)
+        # Flush record  and return zero next services if service is is_responder
+        if service.is_responder():
+            self.flush_record(dialog_id)
+            return []
 
         # Calculating next steps
         done, waiting = self.get_services_status(dialog_id)
@@ -105,23 +106,19 @@ class Agent:
                            user_device_type: Any, location=Any,
                            channel_type=str, deadline_timestamp=None,
                            require_response=False, **kwargs):
-        hold_flush = False
         user = self.state_manager.get_or_create_user(user_telegram_id, user_device_type)
         should_reset = True if utterance == TG_START_UTT else False
         dialog = self.state_manager.get_or_create_dialog(user, location, channel_type, should_reset=should_reset)
         if require_response:
             event = asyncio.Event()
             kwargs['event'] = event
-            self.add_workflow_record(dialog=dialog, deadline_timestamp=deadline_timestamp,
-                                     hold_flush=True, **kwargs)
+            self.add_workflow_record(dialog=dialog, deadline_timestamp=deadline_timestamp, **kwargs)
+            self.register_service_request(str(dialog.id), 'input')
             await self.process(str(dialog.id), 'input', utterance, time())
             await event.wait()
-            workflow_record = self.get_workflow_record(str(dialog.id))
-            self.flush_record(str(dialog.id))
-            return workflow_record
+            return self.get_workflow_record(str(dialog.id))
         else:
-            self.add_workflow_record(dialog=dialog, deadline_timestamp=deadline_timestamp,
-                                     hold_flush=hold_flush, **kwargs)
+            self.add_workflow_record(dialog=dialog, deadline_timestamp=deadline_timestamp, **kwargs)
             await self.process(str(dialog.id), 'input', utterance, time())
 
     async def process(self, dialog_id, service_name=None, response: Any = None, response_time: float = None):
@@ -129,32 +126,11 @@ class Agent:
         next_services = self.process_service_response(dialog_id, service_name, response, response_time)
 
         service_requests = []
-        has_responder = []
         for service in next_services:
             self.register_service_request(dialog_id, service.name)
             payload = service.apply_workflow_formatter(workflow_record)
-            service_requests.append(service.connector_func(payload))
-            if service.is_responder():
-                has_responder.append(service)
+            service_requests.append(
+                service.connector_func(payload=payload, callback=self.process)
+            )
 
-        responses = await asyncio.gather(*service_requests, return_exceptions=True)
-
-        tasks = []
-        for service, response in zip(next_services, responses):
-            if response is None:
-                r = [None]
-                rt = time()
-            else:
-                r = response[0]
-                rt = response[1]
-            if r is not None:
-                if isinstance(r, Exception):
-                    raise r
-                tasks.append(self.process(dialog_id, service.name, r, rt))
-        await asyncio.gather(*tasks)
-
-        if has_responder:  # TODO(Pugin): this part breaks some processing logic on the end
-            for i in has_responder:
-                i.state_processor_method(workflow_record['dialog'], workflow_record['dialog_object'], None)
-            if not workflow_record.get('hold_flush', False):
-                self.flush_record(dialog_id)
+        await asyncio.gather(*service_requests)
