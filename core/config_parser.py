@@ -96,9 +96,14 @@ def parse_old_config():
         previous_services = {i.name for i in services if 'SKILLS' in i.tags}
 
     if not RESPONSE_SELECTORS:
-        services.append(Service('confidence_response_selector', ConfidenceResponseSelectorConnector().send,
-                                StateManager.add_bot_utterance_simple_dict,
-                                1, ['RESPONSE_SELECTORS'], previous_services, simple_workflow_formatter))
+        services.append(
+            Service(
+                'confidence_response_selector',
+                ConfidenceResponseSelectorConnector('confidence_response_selector').send,
+                StateManager.add_bot_utterance_simple_dict,
+                1, ['RESPONSE_SELECTORS'], previous_services, simple_workflow_formatter
+            )
+        )
     else:
         for r in RESPONSE_SELECTORS:
             service, workers = make_service_from_config_rec(r, session, StateManager.add_bot_utterance_simple_dict,
