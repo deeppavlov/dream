@@ -14,10 +14,11 @@ class HTTPConnector:
     async def send(self, payload: Dict, callback: Callable):
         async with self.session.post(self.url, json=self.formatter([payload])) as resp:
             response = await resp.json()
+            response_time = time.time()
             await callback(
                 dialog_id=payload['id'], service_name=self.service_name,
                 response={self.service_name: self.formatter(response[0], mode='out')},
-                response_time=time.time()
+                response_time=response_time
             )
 
 
@@ -65,6 +66,7 @@ class ConfidenceResponseSelectorConnector:
     async def send(self, payload: Dict, callback: Callable):
         response = payload['utterances'][-1]['selected_skills']
         best_skill = sorted(response.items(), key=lambda x: x[1]['confidence'], reverse=True)[0]
+        response_time = time.time()
         await callback(
             dialog_id=payload['id'], service_name=self.service_name,
             response={
@@ -74,7 +76,7 @@ class ConfidenceResponseSelectorConnector:
                     'confidence': best_skill[1]['confidence']
                 }
             },
-            response_time=time.time())
+            response_time=response_time)
 
 
 class HttpOutputConnector:
@@ -88,8 +90,9 @@ class HttpOutputConnector:
         response_text = payload['dialog']['utterances'][-1]['text']
         self.intermediate_storage[message_uuid] = response_text
         event.set()
+        response_time = time.time()
         await callback(payload['dialog']['id'], self.service_name,
-                       response_text, time.time())
+                       response_text, response_time)
 
 
 class EventSetOutputConnector:
@@ -101,5 +104,6 @@ class EventSetOutputConnector:
         if not event or not isinstance(event, asyncio.Event):
             raise ValueError("'event' key is not presented in payload")
         event.set()
+        response_time = time.time()
         await callback(payload['dialog']['id'], self.service_name,
-                       " ", time.time())
+                       " ", response_time)
