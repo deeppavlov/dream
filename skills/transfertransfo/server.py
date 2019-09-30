@@ -9,17 +9,15 @@ from pydantic import BaseModel
 import torch
 
 from pytorch_pretrained_bert import OpenAIGPTLMHeadModel, OpenAIGPTTokenizer
-from utils import download_pretrained_model
 from interact import sample_sequence
 from os import getenv
 import sentry_sdk
 
 
-sentry_sdk.init(getenv('SENTRY_DSN'))
+sentry_sdk.init(getenv("SENTRY_DSN"))
 
 SEED = 31415
-# DEVICE = "cuda"
-DEVICE = "cpu"
+DEVICE = os.getenv("DEVICE", "cpu")  # cuda or cpu
 MAX_HISTORY = 2
 MAX_LENGTH = 20
 MIN_LENGTH = 1
@@ -30,7 +28,11 @@ TOP_K = 0
 TOP_P = 0.9
 NO_SAMPLE = True
 
-args = lambda: None
+
+def args():
+    None
+
+
 args.max_length = MAX_LENGTH
 args.device = DEVICE
 args.model = MODEL
@@ -102,5 +104,5 @@ def transfer_transfo_chitchat_model(placeholders: Input_placeholders):
         inference(pers, hist) for pers, hist in zip(placeholders.personality, placeholders.utterances_histories)
     ]
     total_time = time.time() - st_time
-    logger.info(f'transfertransfo exec time: {total_time:.3f}s')
+    logger.info(f"transfertransfo exec time: {total_time:.3f}s")
     return response

@@ -48,6 +48,8 @@ services:
   transfertransfo:
     build:
       context: ./skills/transfertransfo/
+    environment:
+      DEVICE: cpu
     command: uvicorn server:app --host 0.0.0.0 --port 8007
     volumes: []
   program_y:
