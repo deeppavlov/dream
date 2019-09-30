@@ -62,9 +62,9 @@ class Pipeline:
         return wrong_names  # wrong names means that some service_names, used in previous services don't exist
 
     def get_next_services(self, done: set = None, waiting: set =None):
-        if done is not None:
+        if done is None:
             done = set()
-        if waiting is not None:
+        if waiting is None:
             waiting = set()
         removed_names = waiting | done
         for name, service in self.services.items():
