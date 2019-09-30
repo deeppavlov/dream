@@ -183,15 +183,15 @@
         </pattern>
         <template>Yes</template>
     </category>
-    <category>
-        <pattern>
-            <set>language</set>
-        </pattern>
-        <template>
-            <star/>
-            is a language.
-        </template>
-    </category>
+    <!--<category>-->
+        <!--<pattern>-->
+            <!--<set>language</set>-->
+        <!--</pattern>-->
+        <!--<template>-->
+            <!--<star/>-->
+            <!--is a language.-->
+        <!--</template>-->
+    <!--</category>-->
     <category>
         <pattern>IS * A LANGUAGE</pattern>
         <template>
