@@ -12,19 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from overrides import overrides
-from typing import List, Dict, Union
-from pathlib import Path
-
-import tensorflow as tf
-from bert_dp.modeling import BertModel
-from bert_dp.preprocessing import InputFeatures
-from deeppavlov.core.common.registry import register
-from deeppavlov.models.bert.bert_classifier import BertClassifierModel
-from deeppavlov.download import download_resource
 import logging
 from os import getenv
+from typing import List, Union
+
 import sentry_sdk
+from bert_dp.preprocessing import InputFeatures
+from overrides import overrides
+
+from deeppavlov.core.common.registry import register
+from deeppavlov.models.bert.bert_classifier import BertClassifierModel
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -52,9 +49,6 @@ class BertFloatClassifierModel(BertClassifierModel):
     ]
 
     def __init__(self, **kwargs) -> None:
-        download_resource(url="http://files.deeppavlov.ai/deeppavlov_data/classifiers/toxic_float_conv_bert_v0.tar.gz",
-                          dest_paths=[Path("~/.deeppavlov/models/classifiers")])
-        logger.info("Model has been downloaded.")
         super().__init__(**kwargs)
         # FOR INIT GRAPH when training was used the following loss function
         # we have multi-label case
