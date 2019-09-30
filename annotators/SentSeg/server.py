@@ -1,3 +1,4 @@
+import re
 from flask import Flask, jsonify, request
 import sentsegmodel as model
 import tensorflow as tf
@@ -5,7 +6,6 @@ import json
 import uuid
 import logging
 import time
-import requests
 from os import getenv
 import sentry_sdk
 
@@ -46,11 +46,34 @@ def respond():
     for i, text in enumerate(user_sentences):
         logger.info(f"user text: {text}, session_id: {session_id}")
         sentseg = model.predict(sess, text)
-        sentseg_result += [sentseg]
+        segments = split_segments(sentseg)
+        sentseg_result += [{"punct_sent": sentseg, "segments": segments}]
         logger.info(f"punctuated sent. : {sentseg}")
     total_time = time.time() - st_time
     logger.info(f'sentseg exec time: {total_time:.3f}s')
     return jsonify(sentseg_result)
+
+
+def split_segments(sentence):
+    segm = re.split(r"([\.\?\!])", sentence)
+    segm = [sent.strip() for sent in segm if sent != ""]
+
+    curr_sent = ""
+    punct_occur = False
+    segments = []
+
+    for s in segm:
+        if re.match(r"[\.\?\!]", s):
+            punct_occur = True
+            curr_sent += s
+        elif punct_occur:
+            segments.append(curr_sent)
+            curr_sent = s
+            punct_occur = False
+        else:
+            curr_sent += s
+    segments.append(curr_sent)
+    return segments
 
 
 if __name__ == '__main__':

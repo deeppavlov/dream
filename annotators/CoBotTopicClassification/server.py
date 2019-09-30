@@ -5,6 +5,7 @@ import logging
 import os
 import uuid
 import time
+import numpy as np
 
 import requests
 from flask import Flask, request, jsonify
@@ -35,25 +36,45 @@ headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COB
 @app.route("/topics", methods=['POST'])
 def respond():
     st_time = time.time()
-    user_sentences = request.json['sentences']
+    user_list_sentences = request.json['sentences']
+
+    user_sentences = []
+    dialog_ids = []
+    for i, sent_list in enumerate(user_list_sentences):
+        for sent in sent_list:
+            user_sentences.append(sent)
+            dialog_ids += [i]
+
     session_id = uuid.uuid4().hex
     topics = []
-    confidences = []
     result = requests.request(url=f'{COBOT_TOPICS_SERVICE_URL}',
                               headers=headers,
                               data=json.dumps({'utterances': user_sentences}),
-                              method='POST').json()
+                              method='POST')
 
-    for i, sent in enumerate(user_sentences):
-        logger.info(f"user_sentence: {sent}, session_id: {session_id}")
-        topic = result["topics"][i]["topicClass"]
-        confidence = result["topics"][i]["confidence"]
-        topics += [topic]
-        confidences += [confidence]
-        logger.info(f"topic: {topic}")
+    if result.status_code != 200:
+        msg = "result status code is not 200: {}. result text: {}; result status: {}".format(result, result.text,
+                                                                                             result.status_code)
+        sentry_sdk.capture_message(msg)
+        logger.warning(msg)
+        topics = [[]] * len(user_list_sentences)
+    else:
+        result = result.json()
+        # result is an array where each element is a dict with scores
+        result = np.array(result["topics"])
+        dialog_ids = np.array(dialog_ids)
+
+        for i, sent_list in enumerate(user_list_sentences):
+            logger.info(f"user_sentence: {sent_list}, session_id: {session_id}")
+            curr_topics = result[dialog_ids == i]
+
+            curr_topics = [t["topicClass"] for t in curr_topics]
+            topics += [[curr_topics]]
+            logger.info(f"topic: {curr_topics}")
+
     total_time = time.time() - st_time
     logger.info(f'cobot_topics exec time: {total_time:.3f}s')
-    return jsonify(list(zip(topics, confidences)))
+    return jsonify(topics)
 
 
 if __name__ == '__main__':

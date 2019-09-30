@@ -102,6 +102,7 @@ ANNOTATORS_1 = [
         "formatter": dp_toxic_formatter
     }
 ]
+
 ANNOTATORS_2 = [
     # {
     #     "name": "cobot_topics",
@@ -111,7 +112,7 @@ ANNOTATORS_2 = [
     #     "endpoint": "topics",
     #     "external": True,
     #     "path": "",
-    #     "formatter": cobot_qa_formatter
+    #     "formatter": cobot_classifiers_formatter
     # },
     # {
     #     "name": "cobot_sentiment",
@@ -121,17 +122,7 @@ ANNOTATORS_2 = [
     #     "endpoint": "sentiment",
     #     "external": True,
     #     "path": "",
-    #     "formatter": cobot_qa_formatter
-    # },
-    # {
-    #     "name": "cobot_offensiveness",
-    #     "protocol": "http",
-    #     "host": "cobot_offensiveness",
-    #     "port": 8005,
-    #     "endpoint": "offensiveness",
-    #     "external": True,
-    #     "path": "",
-    #     "formatter": cobot_offensiveness_formatter
+    #     "formatter": cobot_classifiers_formatter
     # },
     # {
     #     "name": "cobot_dialogact",
@@ -142,8 +133,19 @@ ANNOTATORS_2 = [
     #     "external": True,
     #     "path": "",
     #     "formatter": cobot_dialogact_formatter
+    # },
+    # {
+    #     "name": "cobot_offensiveness",
+    #     "protocol": "http",
+    #     "host": "cobot_offensiveness",
+    #     "port": 8005,
+    #     "endpoint": "offensiveness",
+    #     "external": True,
+    #     "path": "",
+    #     "formatter": cobot_classifiers_formatter
     # }
 ]
+
 ANNOTATORS_3 = []
 
 SKILL_SELECTORS = [

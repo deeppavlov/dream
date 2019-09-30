@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List
 
 from deeppavlov.core.common.registry import register
 from deeppavlov.core.models.component import Component
@@ -19,7 +19,7 @@ class RuleBasedSelector(Component):
     """
     Rule-based skill selector which choosing among TransferTransfo, Base AIML and Alice AIML
     """
-    wh_words = {"what", "when", "where", "which", "who", "whom", "whose", "why"}
+    wh_words = {"what", "when", "where", "which", "who", "whom", "whose", "why", "how"}
 
     def __init__(self, **kwargs):
         logger.info("Skill selector Initialized")
