@@ -79,6 +79,20 @@ def last_utterances(payload, model_args_names):
 
 
 def punct_input_formatter(state: Dict, cmd_exclude=True, punctuated=True, segmented=False):
+    """
+    The same function as `base_input_formatter` but all utterances in all returned fields
+    are either texts with added punctuation by `sentseg` annotator (if `punctuated=True`)
+    or lists of sentences with punctuation (if `segmented`).
+
+    Args:
+        state: dialog state
+        cmd_exclude:
+        punctuated: whether to return texts with added punctuation by `sentseg` annotator as one utterance
+        segmented: whether to return lists of sentences with punctuation as one utterance
+
+    Returns:
+        formatted dialog state
+    """
     utterances_histories = []
     last_utts = []
     annotations_histories = []
