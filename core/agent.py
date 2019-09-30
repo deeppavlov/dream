@@ -78,7 +78,8 @@ class Agent:
                                                payload=response)
         # Flush record  and return zero next services if service is is_responder
         if service.is_responder():
-            self.flush_record(dialog_id)
+            if not workflow_record.get('hold_flush'):
+                self.flush_record(dialog_id)
             return []
 
         # Calculating next steps
@@ -112,11 +113,12 @@ class Agent:
         if require_response:
             event = asyncio.Event()
             kwargs['event'] = event
-            self.add_workflow_record(dialog=dialog, deadline_timestamp=deadline_timestamp, **kwargs)
+            self.add_workflow_record(dialog=dialog, deadline_timestamp=deadline_timestamp, hold_flush=True, **kwargs)
             self.register_service_request(str(dialog.id), 'input')
             await self.process(str(dialog.id), 'input', utterance, time())
             await event.wait()
-            return self.get_workflow_record(str(dialog.id))
+            return self.flush_record(str(dialog.id))
+
         else:
             self.add_workflow_record(dialog=dialog, deadline_timestamp=deadline_timestamp, **kwargs)
             await self.process(str(dialog.id), 'input', utterance, time())

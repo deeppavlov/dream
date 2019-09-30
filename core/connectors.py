@@ -17,7 +17,7 @@ class HTTPConnector:
             await callback(
                 dialog_id=payload['id'], service_name=self.service_name,
                 response={self.service_name: self.formatter(response[0], mode='out')},
-                respinse_time=time.time()
+                response_time=time.time()
             )
 
 
@@ -89,7 +89,7 @@ class HttpOutputConnector:
         self.intermediate_storage[message_uuid] = response_text
         event.set()
         await callback(payload['dialog']['id'], self.service_name,
-                       None, time.time())
+                       response_text, time.time())
 
 
 class EventSetOutputConnector:
@@ -102,4 +102,4 @@ class EventSetOutputConnector:
             raise ValueError("'event' key is not presented in payload")
         event.set()
         await callback(payload['dialog']['id'], self.service_name,
-                       None, time.time())
+                       " ", time.time())

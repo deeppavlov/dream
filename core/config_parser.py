@@ -29,7 +29,7 @@ def parse_old_config():
 
         if conf_record['protocol'] == 'http':
             if batch_size == 1 and isinstance(url, str):
-                connector_func = HTTPConnector(sess, url, formatter, conf_record['name']).send
+                connector_func = HTTPConnector(sess, url, formatter, name).send
             else:
                 queue = asyncio.Queue()
                 connector_func = AioQueueConnector(queue).send  # worker task and queue connector
