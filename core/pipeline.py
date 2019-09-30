@@ -61,10 +61,10 @@ class Pipeline:
                 self.services[name_prev_service].next_services.add(service)
         return wrong_names  # wrong names means that some service_names, used in previous services don't exist
 
-    def get_next_services(self, done: set = None, waiting: set =None):
-        if done is not None:
+    def get_next_services(self, done: set = None, waiting: set = None):
+        if done is None:
             done = set()
-        if waiting is not None:
+        if waiting is None:
             waiting = set()
         removed_names = waiting | done
         for name, service in self.services.items():
@@ -76,7 +76,7 @@ class Pipeline:
     def get_endpoint_services(self):
         return [s for s in self.services.values() if not s.next_services and 'responder' not in s.tags]
 
-    def add_responder_service(self, service):
+    def add_responder_service(self, segit rvice):
         if not service.is_responder():
             raise ValueError('service should be a responder')
         endpoints = self.get_endpoint_services()
