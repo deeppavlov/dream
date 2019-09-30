@@ -50,44 +50,44 @@
             </think>
         </template>
     </category>
-    <category>
-        <pattern>
-            <set>name</set>
-            S *
-        </pattern>
-        <template>
-            <think>
-                <set var="name">
-                    <star/>
-                </set>
-                <srai>SETHESHE
-                    <get var="name"/>
-                </srai>
-                <condition name="pronoun">
-                    <li value="he">
-                        <set var="hisher">his</set>
-                    </li>
-                    <li>
-                        <set var="hisher">her</set>
-                    </li>
-                </condition>
-            </think>
-            <random>
-                <li>
-                    <get var="hisher"/>
-                    what?
-                </li>
-                <li>Are you sure it was<get var="hisher"/>?
-                </li>
-                <li>
-                    <get var="name"/>
-                    has a way with
-                    <get var="hisher"/>
-                    things doesn't<get name="pronoun"/>?
-                </li>
-            </random>
-        </template>
-    </category>
+    <!--<category>-->
+        <!--<pattern>-->
+            <!--<set>name</set>-->
+            <!--S *-->
+        <!--</pattern>-->
+        <!--<template>-->
+            <!--<think>-->
+                <!--<set var="name">-->
+                    <!--<star/>-->
+                <!--</set>-->
+                <!--<srai>SETHESHE-->
+                    <!--<get var="name"/>-->
+                <!--</srai>-->
+                <!--<condition name="pronoun">-->
+                    <!--<li value="he">-->
+                        <!--<set var="hisher">his</set>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<set var="hisher">her</set>-->
+                    <!--</li>-->
+                <!--</condition>-->
+            <!--</think>-->
+            <!--<random>-->
+                <!--<li>-->
+                    <!--<get var="hisher"/>-->
+                    <!--what?-->
+                <!--</li>-->
+                <!--<li>Are you sure it was<get var="hisher"/>?-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<get var="name"/>-->
+                    <!--has a way with-->
+                    <!--<get var="hisher"/>-->
+                    <!--things doesn't<get name="pronoun"/>?-->
+                <!--</li>-->
+            <!--</random>-->
+        <!--</template>-->
+    <!--</category>-->
     <category>
         <pattern>MY FAMILY IS *</pattern>
         <template>Family is one of the gifts of life.</template>

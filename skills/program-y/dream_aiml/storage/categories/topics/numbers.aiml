@@ -59,18 +59,18 @@
             years?
         </template>
     </category>
-    <category>
-        <pattern>
-            <set>numbername</set>
-            *
-        </pattern>
-        <template>
-            <map name="name2number">
-                <star/>
-            </map>
-            <star index="2"/>
-            is better than none. (star = "<star/>")
-        </template>
+    <!--<category>-->
+        <!--<pattern>-->
+            <!--<set>numbername</set>-->
+            <!--*-->
+        <!--</pattern>-->
+        <!--<template>-->
+            <!--<map name="name2number">-->
+                <!--<star/>-->
+            <!--</map>-->
+            <!--<star index="2"/>-->
+            <!--is better than none. (star = "<star/>")-->
+        <!--</template>-->
     </category>
     <category>
         <pattern>WHAT COMES AFTER
