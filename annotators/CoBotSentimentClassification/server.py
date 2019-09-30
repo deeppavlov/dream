@@ -3,6 +3,7 @@
 import json
 import logging
 import os
+import numpy as np
 import uuid
 import time
 
@@ -37,22 +38,45 @@ sentiment_classes = {0: "negative", 1: "neutral", 2: "positive"}
 @app.route("/sentiment", methods=['POST'])
 def respond():
     st_time = time.time()
-    user_sentences = request.json['sentences']
+    user_list_sentences = request.json['sentences']
+
+    user_sentences = []
+    dialog_ids = []
+    for i, sent_list in enumerate(user_list_sentences):
+        for sent in sent_list:
+            user_sentences.append(sent)
+            dialog_ids += [i]
     session_id = uuid.uuid4().hex
     sentiments = []
     confidences = []
     result = requests.request(url=f'{COBOT_SENTIMENT_SERVICE_URL}',
                               headers=headers,
                               data=json.dumps({'utterances': user_sentences}),
-                              method='POST').json()
+                              method='POST')
 
-    for i, sent in enumerate(user_sentences):
-        logger.info(f"user_sentence: {sent}, session_id: {session_id}")
-        sentiment = sentiment_classes[result["sentimentClasses"][i]["sentimentClass"]]
-        confidence = result["sentimentClasses"][i]["confidence"]
-        sentiments += [sentiment]
-        confidences += [confidence]
-        logger.info(f"sentiment: {sentiment}")
+    if result.status_code != 200:
+        msg = "result status code is not 200: {}. result text: {}; result status: {}".format(result, result.text,
+                                                                                             result.status_code)
+        sentry_sdk.capture_message(msg)
+        logger.warning(msg)
+        sentiments = [[]] * len(user_list_sentences)
+        confidences = [[]] * len(user_list_sentences)
+    else:
+        result = result.json()
+        # result is an array where each element is a dict with scores
+        result = np.array(result["sentimentClasses"])
+        dialog_ids = np.array(dialog_ids)
+
+        for i, sent in enumerate(user_sentences):
+            logger.info(f"user_sentence: {sent}, session_id: {session_id}")
+            curr_sentiments = result[dialog_ids == i]
+
+            curr_confidences = [float(t["confidence"]) for t in curr_sentiments]
+            curr_sentiments = [sentiment_classes[t["sentimentClass"]] for t in curr_sentiments]
+            sentiments += [curr_sentiments]
+            confidences += [curr_confidences]
+            logger.info(f"sentiment: {curr_sentiments}")
+
     total_time = time.time() - st_time
     logger.info(f'cobot_sentiment exec time: {total_time:.3f}s')
     return jsonify(list(zip(sentiments, confidences)))

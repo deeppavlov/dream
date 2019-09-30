@@ -5,6 +5,7 @@ import logging
 import os
 import uuid
 import time
+import numpy as np
 
 import requests
 from flask import Flask, request, jsonify
@@ -21,15 +22,12 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 COBOT_API_KEY = os.environ.get('COBOT_API_KEY')
-COBOT_DIALOGACT_SERVICE_URL =  os.environ.get('COBOT_DIALOGACT_SERVICE_URL')
-COBOT_TOPICS_SERVICE_URL = os.environ.get('COBOT_TOPICS_SERVICE_URL')
+COBOT_DIALOGACT_SERVICE_URL = os.environ.get('COBOT_DIALOGACT_SERVICE_URL')
 
 if COBOT_API_KEY is None:
     raise RuntimeError('COBOT_API_KEY environment variable is not set')
 if COBOT_DIALOGACT_SERVICE_URL is None:
     raise RuntimeError('COBOT_DIALOGACT_SERVICE_URL environment variable is not set')
-if COBOT_TOPICS_SERVICE_URL is None:
-    raise RuntimeError('COBOT_TOPICS_SERVICE_URL environment variable is not set')
 
 headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COBOT_API_KEY}'}
 
@@ -37,45 +35,54 @@ headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COB
 @app.route("/dialogact", methods=['POST'])
 def respond():
     st_time = time.time()
-    user_states_batch = request.json['dialogs']
-    user_sentences = [dialog["utterances"][-1]["text"] for dialog in user_states_batch]
+    utterances_histories = request.json['utterances_histories']
+
     session_id = uuid.uuid4().hex
     intents = []
+    topics = []
     conversations = []
+    dialog_ids = []
 
-    topics = requests.request(url=f'{COBOT_TOPICS_SERVICE_URL}',
-                              headers=headers,
-                              data=json.dumps({'utterances': user_sentences}),
-                              method='POST').json()
-
-    for i, dialog in enumerate(user_states_batch):
-        conv = dict()
-        conv["currentUtterance"] = dialog["utterances"][-1]["text"]
-        conv["currentUtteranceTopic"] = topics["topics"][i]["topicClass"]
-        # every odd utterance is from user
-        conv["pastUtterances"] = [uttr["text"] for uttr in dialog["utterances"][1::2]]
-        # every second utterance is from bot
-        conv["pastResponses"] = [uttr["text"] for uttr in dialog["utterances"][::2]]
-        conversations += [conv]
+    for i, dialog in enumerate(utterances_histories):
+        # dialog is a list of replies. each reply is a list of sentences
+        for user_sent in dialog[-1]:
+            conv = dict()
+            conv["currentUtterance"] = user_sent
+            # every odd utterance is from user
+            conv["pastUtterances"] = dialog[1::2][-2:]
+            # every second utterance is from bot
+            conv["pastResponses"] = dialog[::2][-2:]
+            conversations += [conv]
+            dialog_ids += [i]
 
     result = requests.request(url=f'{COBOT_DIALOGACT_SERVICE_URL}',
                               headers=headers,
                               data=json.dumps({'conversations': conversations}),
                               method='POST')
     if result.status_code != 200:
-        logger.warning("result status code is not 200: {}. result text: {}; result status: {}".format(result, result.text, result.status_code))
-        intents = []
+        logger.warning("result status code is not 200: {}. result text: {}; result status: {}".format(
+            result, result.text, result.status_code))
+        intents = [[]] * len(utterances_histories)
+        topics = [[]] * len(utterances_histories)
     else:
         result = result.json()
-        for i, sent in enumerate(user_sentences):
-            logger.info(f"user_sentence: {sent}, session_id: {session_id}")
-            intent = result["dialogActIntents"][i]
-            intents += [intent]
-            logger.info(f"intent: {intent}")
+        result = np.array(result["dialogActIntents"])
+        dialog_ids = np.array(dialog_ids)
+
+        for i, sent_list in enumerate(utterances_histories):
+            logger.info(f"user_sentence: {sent_list}, session_id: {session_id}")
+            curr_intents = result[dialog_ids == i]
+
+            curr_topics = [t["topic"] for t in curr_intents]
+            curr_intents = [t["dialogActIntent"] for t in curr_intents]
+            intents += [curr_intents]
+            topics += [curr_topics]
+            logger.info(f"intent: {curr_intents}")
+            logger.info(f"topic: {curr_topics}")
 
     total_time = time.time() - st_time
     logger.info(f'cobot_dialogact exec time: {total_time:.3f}s')
-    return jsonify(list(zip(intents)))
+    return jsonify(list(zip(intents, topics)))
 
 
 if __name__ == '__main__':
