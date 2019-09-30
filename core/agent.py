@@ -104,7 +104,7 @@ class Agent:
         return next_services
 
     async def register_msg(self, utterance: str, user_telegram_id: Hashable,
-                           user_device_type: Any, location=Any,
+                           user_device_type: Any, location: Any,
                            channel_type=str, deadline_timestamp=None,
                            require_response=False, **kwargs):
         user = self.state_manager.get_or_create_user(user_telegram_id, user_device_type)
