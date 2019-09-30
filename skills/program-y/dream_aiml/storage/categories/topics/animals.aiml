@@ -40,23 +40,6 @@
         </template>
     </category>
     <category>
-        <pattern>
-            <set>animals</set>
-        </pattern>
-        <template>
-            <star/>
-            is the plural of
-            <uniq>
-                <subj>?subj</subj>
-                <pred>hasPlural</pred>
-                <obj>
-                    <star/>
-                </obj>
-            </uniq>
-            .
-        </template>
-    </category>
-    <category>
         <pattern>SOUND
             <set>animal</set>
         </pattern>
@@ -404,15 +387,6 @@
         <template>Dog, cat, horse, monkey, snake, eagle.</template>
     </category>
     <category>
-        <pattern>
-            <set>animal</set>
-        </pattern>
-        <template>
-            <star/>
-            is an animal.
-        </template>
-    </category>
-    <category>
         <pattern>IS * AN ANIMAL</pattern>
         <template>
             <star/>
@@ -482,15 +456,6 @@
                 </map>
                 AN ANIMAL
             </srai>
-        </template>
-    </category>
-    <category>
-        <pattern>
-            <set>bird</set>
-        </pattern>
-        <template>
-            <star/>
-            is a bird.
         </template>
     </category>
     <category>

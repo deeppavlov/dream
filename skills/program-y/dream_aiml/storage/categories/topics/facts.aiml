@@ -11,19 +11,19 @@
     <!-- -->
 
     <!-- Modified for Y-Bot by Keith Sterling July 2017 -->
-    <category>
-        <pattern>
-            <set>article</set>
-            *
-        </pattern>
-        <template>
-            <random>
-                <li>Is that a fact?</li>
-                <li>Thanks for the info.</li>
-                <li>I will make a point of remembering that.</li>
-            </random>
-        </template>
-    </category>
+    <!--<category>-->
+        <!--<pattern>-->
+            <!--<set>article</set>-->
+            <!--*-->
+        <!--</pattern>-->
+        <!--<template>-->
+            <!--<random>-->
+                <!--<li>Is that a fact?</li>-->
+                <!--<li>Thanks for the info.</li>-->
+                <!--<li>I will make a point of remembering that.</li>-->
+            <!--</random>-->
+        <!--</template>-->
+    <!--</category>-->
 
 
  </aiml>
