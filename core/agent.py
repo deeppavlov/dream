@@ -105,7 +105,7 @@ class Agent:
 
     async def register_msg(self, utterance: str, user_telegram_id: Hashable,
                            user_device_type: Any, location: Any,
-                           channel_type=str, deadline_timestamp=None,
+                           channel_type: str, deadline_timestamp=None,
                            require_response=False, **kwargs):
         user = self.state_manager.get_or_create_user(user_telegram_id, user_device_type)
         should_reset = True if utterance == TG_START_UTT else False
@@ -121,6 +121,7 @@ class Agent:
 
         else:
             self.add_workflow_record(dialog=dialog, deadline_timestamp=deadline_timestamp, **kwargs)
+            self.register_service_request(str(dialog.id), 'input')
             await self.process(str(dialog.id), 'input', utterance, time())
 
     async def process(self, dialog_id, service_name=None, response: Any = None, response_time: float = None):
