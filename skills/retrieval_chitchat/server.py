@@ -1,11 +1,9 @@
 import os
-from os import getenv
 from typing import List
 import logging
 import pickle
 import random
 import time
-import logging
 
 import numpy as np
 from fastapi import FastAPI, Body
@@ -22,19 +20,18 @@ MODEL_PATH = os.getenv("MODEL_PATH", "./models")
 DATABASE_PATH = os.getenv("DATABASE_PATH")
 CONFIDENCE_PATH = os.getenv("CONFIDENCE_PATH")
 
-sentry_sdk.init(getenv('SENTRY_DSN'))
+sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
-logging.basicConfig(format='%(asctime)s - %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S',
-                    level=logging.INFO,
-                    handlers=[LoggingHandler()])
-                    
+logging.basicConfig(
+    format="%(asctime)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S", level=logging.INFO, handlers=[LoggingHandler()]
+)
+
 logger = logging.getLogger(__name__)
 
 model = SentenceTransformer(MODEL_PATH)
-database = pickle.load(open(DATABASE_PATH, 'rb'))
+database = pickle.load(open(DATABASE_PATH, "rb"))
 confidence = np.load(CONFIDENCE_PATH)
-embeddings = normalize(np.array([el['embedding'] for el in database]))
+embeddings = normalize(np.array([el["embedding"] for el in database]))
 
 
 class Input_placeholders(BaseModel):
@@ -52,6 +49,7 @@ class Input_placeholders(BaseModel):
     )
     utterances_histories: List[List[str]] = Body(..., example=[["Hello", "Hi", "How are you?"]])
 
+
 app = FastAPI()
 
 random.seed(SEED)
@@ -61,12 +59,12 @@ torch.cuda.manual_seed(SEED)
 model.to(DEVICE)
 model.eval()
 
-sep_token = ' [SEP] '
+sep_token = " [SEP] "
 top_k = 10
 
 
 def inference(personality, utterance):
-    personality_input = ' '.join(personality)
+    personality_input = " ".join(personality)
     utterance_input = utterance[-1]
     model_input = [utterance_input + sep_token + personality_input]
     with torch.no_grad():
@@ -75,7 +73,7 @@ def inference(personality, utterance):
     top_k_idx = np.flip(np.argsort(cosine_similarity, -1), -1)[:top_k]
     top_k_confidence = [len([i for i in confidence if i < cosine_similarity[idx]]) for idx in top_k_idx]
     top_k_confidence = np.array(top_k_confidence) / len(confidence)
-    top_k_responses = [(database[idx]['response'], conf) for idx, conf in zip(top_k_idx, top_k_confidence)]
+    top_k_responses = [(database[idx]["response"], conf) for idx, conf in zip(top_k_idx, top_k_confidence)]
     return top_k_responses[0]
 
 
@@ -86,5 +84,5 @@ def retrieval_chitchat_model(placeholders: Input_placeholders):
         inference(pers, hist) for pers, hist in zip(placeholders.personality, placeholders.utterances_histories)
     ]
     total_time = time.time() - st_time
-    logger.info(f'retrieval_chitchat exec time: {total_time:.3f}s')
+    logger.info(f"retrieval_chitchat exec time: {total_time:.3f}s")
     return response

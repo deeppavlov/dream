@@ -74,6 +74,16 @@ SKILLS = [
         "external": True,
         "path": "",
         "formatter": personality_catcher_formatter
+    },
+    {
+        "name": "retrieval_chitchat",
+        "protocol": "http",
+        "host": "retrieval_chitchat",
+        "port": 8015,
+        "endpoint": "retrieval_chitchat",
+        "external": True,
+        "path": "",
+        "formatter": transfertransfo_formatter
     }
 ]
 
