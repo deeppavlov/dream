@@ -11,15 +11,9 @@ services:
       WAIT_HOSTS_TIMEOUT: 480
   rule_based_selector:
     build:
-      args:
-        skill_endpoint: selected_skills
-        skillconfig: skill_selectors/alexa_skill_selectors/rule_based_selector.json
-        skillhost: 0.0.0.0
-        skillport: 8002
-      context: ./
-      dockerfile: dp/dockerfile_skill_cpu
-    environment:
-      - CUDA_VISIBLE_DEVICES=""
+      context: ./skill_selectors/rule_based_selector
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8002
+    volumes: []
   cobotqa:
     build:
       context: ./skills/CoBotQA/

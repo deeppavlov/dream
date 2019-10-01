@@ -13,7 +13,7 @@ services:
   rule_based_selector:
     env_file: [.env.dev]
     volumes:
-      - './skill_selectors/alexa_skill_selectors:/src'
+      - './skill_selectors/rule_based_selector:/src'
     ports:
       - 8002:8002
   cobot_topics:

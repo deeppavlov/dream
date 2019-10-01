@@ -155,11 +155,8 @@ SKILL_SELECTORS = [
         "host": "skill_selector",
         "port": 8002,
         "endpoint": "selected_skills",
-        "path": "skill_selectors/alexa_skill_selectors/rule_based_selector.json",
-        "env": {
-            "CUDA_VISIBLE_DEVICES": ""
-        },
-        "gpu": False,
+        "external": True,
+        "path": "",
         "formatter": base_skill_selector_formatter
     }
 ]
