@@ -42,9 +42,11 @@ class RuleBasedSelector():
                 skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("program_y")
                 skills_for_uttr.append("transfertransfo")
+                skills_for_uttr.append("retrieval_chitchat")
             else:
                 skills_for_uttr.append("program_y")
                 skills_for_uttr.append("transfertransfo")
+                skills_for_uttr.append("retrieval_chitchat")
 
             skill_names.append(skills_for_uttr)
 
