@@ -29,7 +29,7 @@ def parse_old_config():
 
         if conf_record['protocol'] == 'http':
             if batch_size == 1 and isinstance(url, str):
-                connector_func = HTTPConnector(sess, url, formatter, conf_record['name']).send
+                connector_func = HTTPConnector(sess, url, formatter, name).send
             else:
                 queue = asyncio.Queue()
                 connector_func = AioQueueConnector(queue).send  # worker task and queue connector
@@ -96,9 +96,14 @@ def parse_old_config():
         previous_services = {i.name for i in services if 'SKILLS' in i.tags}
 
     if not RESPONSE_SELECTORS:
-        services.append(Service('confidence_response_selector', ConfidenceResponseSelectorConnector().send,
-                                StateManager.add_bot_utterance_simple_dict,
-                                1, ['RESPONSE_SELECTORS'], previous_services, simple_workflow_formatter))
+        services.append(
+            Service(
+                'confidence_response_selector',
+                ConfidenceResponseSelectorConnector('confidence_response_selector').send,
+                StateManager.add_bot_utterance_simple_dict,
+                1, ['RESPONSE_SELECTORS'], previous_services, simple_workflow_formatter
+            )
+        )
     else:
         for r in RESPONSE_SELECTORS:
             service, workers = make_service_from_config_rec(r, session, StateManager.add_bot_utterance_simple_dict,
