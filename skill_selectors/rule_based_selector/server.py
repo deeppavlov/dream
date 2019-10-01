@@ -1,8 +1,10 @@
+#!/usr/bin/env python
+
+import logging
+import time
 from typing import List
 
-from deeppavlov.core.common.registry import register
-from deeppavlov.core.models.component import Component
-import logging
+from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
 
@@ -13,9 +15,10 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+app = Flask(__name__)
 
-@register('rule_based_selector')
-class RuleBasedSelector(Component):
+
+class RuleBasedSelector():
     """
     Rule-based skill selector which choosing among TransferTransfo, Base AIML and Alice AIML
     """
@@ -23,7 +26,6 @@ class RuleBasedSelector(Component):
 
     def __init__(self, **kwargs):
         logger.info("Skill selector Initialized")
-        pass
 
     def __call__(self, states_batch, **kwargs) -> List[List[str]]:
 
@@ -47,3 +49,20 @@ class RuleBasedSelector(Component):
             skill_names.append(skills_for_uttr)
 
         return skill_names
+
+
+selector = RuleBasedSelector()
+
+
+@app.route("/selected_skills", methods=['POST'])
+def respond():
+    st_time = time.time()
+    states_batch = request.json["states_batch"]
+    skill_names = selector(states_batch)
+    total_time = time.time() - st_time
+    logger.info(f'rule_based_selector exec time: {total_time:.3f}s')
+    return jsonify(skill_names)
+
+
+if __name__ == '__main__':
+    app.run(debug=False, host='0.0.0.0', port=3000)

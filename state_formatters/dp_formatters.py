@@ -259,7 +259,7 @@ def base_skill_selector_formatter(payload: Any, mode='in'):
     elif mode == 'out':
         # it's questionable why output from Model itself is 2dim: batch size x n_skills
         # and payload here is 3dim. I don't know which dim is extra and from where it comes
-        return payload[0]
+        return payload
 
 
 # TODO: rm crutch of personality_catcher
