@@ -46,6 +46,11 @@ services:
       DEVICE: cpu
     command: uvicorn server:app --host 0.0.0.0 --port 8007
     volumes: []
+  retrieval_chitchat:
+    build:
+      context: ./skills/retrieval_chitchat/
+    command: uvicorn server:app --host 0.0.0.0 --port 8015
+    volumes: []
   program_y:
     build:
       context: ./skills/program-y/
