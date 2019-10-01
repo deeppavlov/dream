@@ -35,10 +35,6 @@ services:
   program_y:
     image: ${DOCKER_REGISTRY}/program_y
     env_file: [.env.staging]
-  agent_telegram:
-    command: 'python3 -m core.run -ch telegram'
-    image: ${DOCKER_REGISTRY}/agent
-    env_file: [.env.staging]
   toxic_classification:
     image: ${DOCKER_REGISTRY}/toxic_classification
     env_file: [.env.staging]
