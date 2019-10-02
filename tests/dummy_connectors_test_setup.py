@@ -1,6 +1,7 @@
 import asyncio
 import argparse
 import uuid
+import time
 
 from aiohttp import web
 from datetime import datetime
@@ -24,9 +25,13 @@ class DummyConnector:
         self.sleeptime = sleeptime
         self.service_name = service_name
 
-    async def send(self, payload):
+    async def send(self, payload, callback):
         await asyncio.sleep(self.sleeptime)
-        return {self.service_name: {"text": choice(self.returns), "confidence": 0.5}}
+        await callback(
+            dialog_id=payload['id'],
+            service_name=self.service_name,
+            response={self.service_name: {"text": choice(self.returns), "confidence": 0.5}},
+            response_time=time.time())
 
 
 class DummySelectorConnector:
@@ -35,9 +40,13 @@ class DummySelectorConnector:
         self.sleeptime = sleeptime
         self.service_name = service_name
 
-    async def send(self, payload):
+    async def send(self, payload, callback):
         await asyncio.sleep(self.sleeptime)
-        return {self.service_name: self.returns}
+        await callback(
+            dialog_id=payload['id'],
+            service_name=self.service_name,
+            response={self.service_name: self.returns},
+            response_time=time.time())
 
 
 async def on_shutdown(app):
@@ -107,7 +116,7 @@ def main():
             s.connector_func = DummyConnector(['we have a phrase', 'and another one', 'not so short one'], 0.01,
                                               s.name).send
     intermediate_storage = {}
-    endpoint = Service('http_responder', HttpOutputConnector(intermediate_storage).send,
+    endpoint = Service('http_responder', HttpOutputConnector(intermediate_storage, 'http_responder').send,
                        StateManager.save_dialog_dict, 1, ['responder'])
     input_srv = Service('input', None, StateManager.add_human_utterance_simple_dict, 1, ['input'])
     register_msg, process_callable = prepare_agent(services, endpoint, input_srv, False)

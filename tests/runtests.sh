@@ -42,7 +42,7 @@ function logger() {
 }
 
 function dockercompose_cmd() {
-    DOCKER_COMPOSE_CMD="docker-compose -f docker-compose.yml -f dev.yml -p test"
+    DOCKER_COMPOSE_CMD="docker-compose -f docker-compose.yml -f dev.yml -f test.yml -p test"
     eval '$DOCKER_COMPOSE_CMD "$@"'
     if [[ $? != 0 ]]; then
         logger "FAILED dockercompose_cmd: $@"
