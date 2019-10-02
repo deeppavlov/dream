@@ -71,7 +71,7 @@
             <!--<star index="2"/>-->
             <!--is better than none. (star = "<star/>")-->
         <!--</template>-->
-    </category>
+    <!--</category>-->
     <category>
         <pattern>WHAT COMES AFTER
             <set>number</set>

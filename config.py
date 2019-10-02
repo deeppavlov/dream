@@ -106,7 +106,7 @@ ANNOTATORS_1 = [
         "endpoint": "toxicity_annotations",
         "path": "annotators/DeepPavlovToxicClassification/toxic_classification.json",
         "env": {
-            "CUDA_VISIBLE_DEVICES": "0"
+            "CUDA_VISIBLE_DEVICES": 0
         },
         "gpu": True,
         "formatter": dp_toxic_formatter
