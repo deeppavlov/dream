@@ -43,9 +43,13 @@ services:
     build:
       context: ./skills/transfertransfo/
     environment:
-      DEVICE: cpu
+      DEVICE: cuda
     command: uvicorn server:app --host 0.0.0.0 --port 8007
     volumes: []
+    deploy:
+      placement:
+        constraints:
+          - node.labels.with_gpu == true
   program_y:
     build:
       context: ./skills/program-y/
@@ -76,5 +80,9 @@ services:
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
-      - CUDA_VISIBLE_DEVICES="0"
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      placement:
+        constraints:
+          - node.labels.with_gpu == true
 version: '3.7'
