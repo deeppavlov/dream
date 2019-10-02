@@ -19,6 +19,7 @@ DEVICE = "cpu"
 MODEL_PATH = os.getenv("MODEL_PATH", "./models")
 DATABASE_PATH = os.getenv("DATABASE_PATH")
 CONFIDENCE_PATH = os.getenv("CONFIDENCE_PATH")
+EMBEDDING_SPLIT_BY = 27
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
@@ -32,6 +33,7 @@ model = SentenceTransformer(MODEL_PATH)
 database = pickle.load(open(DATABASE_PATH, "rb"))
 confidence = np.load(CONFIDENCE_PATH)
 embeddings = normalize(np.array([el["embedding"] for el in database]))
+splitted_embeddings = np.split(embeddings, EMBEDDING_SPLIT_BY)
 
 
 class Input_placeholders(BaseModel):
@@ -69,7 +71,13 @@ def inference(personality, utterance):
     model_input = [utterance_input + sep_token + personality_input]
     with torch.no_grad():
         encoded_query = model.encode(model_input)
-    cosine_similarity = embeddings.dot(normalize(encoded_query)[0])
+    # to split embeddings tensor for OOM avoid
+    encoded_query = normalize(encoded_query)[0]
+    cosine_similarity = []
+    for embedding_slice in splitted_embeddings:
+        cosine_similarity.append(embedding_slice.dot(encoded_query))
+    cosine_similarity = np.concatenate(cosine_similarity)
+
     top_k_idx = np.flip(np.argsort(cosine_similarity, -1), -1)[:top_k]
     top_k_confidence = [len([i for i in confidence if i < cosine_similarity[idx]]) for idx in top_k_idx]
     top_k_confidence = np.array(top_k_confidence) / len(confidence)
