@@ -76,4 +76,33 @@ Deploy Machine
 
 - `ssh -i ~/Downloads/dream-local-idris.pem ubuntu@34.203.223.60`
 - aws сконфигурирован
-- Скачать репу можно в папку ``/home/ubuntu/dp-agent-alexa`
+- Скачать репу можно в папку `/home/ubuntu/dp-agent-alexa`
+
+
+GPU
+========================
+1. Create machine with public ip with GPU AMI
+2. Setup docker daemon to use nvidia runtime as default
+```
+ubuntu@ip-172-31-42-16:~$ cat /etc/docker/daemon.json
+{
+    "runtimes": {
+        "nvidia": {
+            "path": "nvidia-container-runtime",
+            "runtimeArgs": []
+        }
+    },
+   "default-runtime": "nvidia"
+}
+```
+3. Restart docker daemon and check it
+```
+ubuntu@ip-172-31-42-16:~$ sudo nano /etc/docker/daemon.json
+ubuntu@ip-172-31-42-16:~$ sudo service docker stop
+ubuntu@ip-172-31-42-16:~$ sudo service docker start
+ubuntu@ip-172-31-42-16:~$ sudo service docker status
+ubuntu@ip-172-31-42-16:~$ docker run nvidia/cuda:9.0-base nvidia-smi
+```
+4. Add GPU worker to docker swarm
+5. Add label to the GPU worker machine `docker node update --label-add with_gpu=true o0mvol5rehp80k9a0xkzye7zw`
+6. Setup placement in docker-compose.yml.
