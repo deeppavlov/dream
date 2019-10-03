@@ -12,14 +12,15 @@ class HTTPConnector:
         self.service_name = service_name
 
     async def send(self, payload: Dict, callback: Callable):
-        async with self.session.post(self.url, json=self.formatter([payload])) as resp:
-            response = await resp.json()
-            response_time = time.time()
-            await callback(
-                dialog_id=payload['id'], service_name=self.service_name,
-                response={self.service_name: self.formatter(response[0], mode='out')},
-                response_time=response_time
-            )
+        async with aiohttp.ClientSession() as session:
+            async with session.post(self.url, json=self.formatter([payload])) as resp:
+                response = await resp.json()
+                response_time = time.time()
+        await callback(
+            dialog_id=payload['id'], service_name=self.service_name,
+            response={self.service_name: self.formatter(response[0], mode='out')},
+            response_time=response_time
+        )
 
 
 class AioQueueConnector:
