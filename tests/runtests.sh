@@ -5,6 +5,13 @@ set -e
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 trap cleanup EXIT
 
+DEVICE=$1
+if [[ "$DEVICE" = "" ]]; then
+	DEVICE="gpu"
+fi
+
+echo running tests on $DEVICE
+
 function wait_service()
 {
     local timeout=480
@@ -45,7 +52,11 @@ function logger() {
 }
 
 function dockercompose_cmd() {
-    DOCKER_COMPOSE_CMD="docker-compose -f docker-compose.yml -f dev.yml -f test.yml -p test"
+    if [[ "$DEVICE" == "cpu" ]]; then
+        DOCKER_COMPOSE_CMD="docker-compose -f docker-compose.yml -f dev.yml -f cpu.yml -p test"
+    else
+        DOCKER_COMPOSE_CMD="docker-compose -f docker-compose.yml -f dev.yml -p test"
+    fi
     eval '$DOCKER_COMPOSE_CMD "$@"'
     if [[ $? != 0 ]]; then
         logger "FAILED dockercompose_cmd: $@"
