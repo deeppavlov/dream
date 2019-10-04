@@ -165,6 +165,10 @@ bot:
       save: true
       load: false
 
+    joiner:
+      classname: templatey.processors.sentence_joiner_deduplicator.SentenceJoinerDeDuplicator
+
+
 
 #####################################################################################################
 #
