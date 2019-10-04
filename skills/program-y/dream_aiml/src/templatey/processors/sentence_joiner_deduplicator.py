@@ -25,7 +25,7 @@ class SentenceJoinerDeDuplicator(SentenceJoiner):
                     final_sentences.append(sentence)
                 else:
                     if srai is False:
-                        final_sentences.append(sentence+self._configuration.terminator)
+                        final_sentences.append(sentence + self._configuration.terminator)
                     else:
                         final_sentences.append(sentence)
 
