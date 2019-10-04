@@ -31,6 +31,9 @@ function cleanup()
     local exit_status=${1:-$?}
     echo SHUTDOWN TESTING ENVIRONMENT..
 
+    dockercompose_cmd exec -T agent bash -c "chown -R $(id -u):$(id -g) /dp-agent"
+    dockercompose_cmd exec -T agent bash -c "find /dp-agent -name __pycache__ | xargs rm -rf"
+
     dockercompose_cmd down
     echo EXIT $0 with STATUS: $exit_status
 }
@@ -49,19 +52,18 @@ function dockercompose_cmd() {
     fi
 }
 
-
 echo Loading testing env..
 AGENT_PORT=4242
 export AGENT_PORT=$AGENT_PORT
 
-dockercompose_cmd up -d
+dockercompose_cmd up -d --build
 dockercompose_cmd logs -f --tail="all" --timestamps &
 
 wait_service "http://0.0.0.0:$AGENT_PORT/ping" pong
 
 echo "Pass dialogs from dp-agent"
-dockercompose_cmd exec agent python3 \
+dockercompose_cmd exec -T -u $(id -u) agent python3 \
   utils/http_api_test.py -u http://0.0.0.0:4242 -df tests/dream/test_dialogs.json -of tests/dream/test_dialogs_output.csv
 
 echo "Assert passed dialogs"
-dockercompose_cmd exec agent python3 tests/dream/assert_test_dialogs.py -pred_f tests/dream/test_dialogs_output.csv -true_f tests/dream/test_dialogs_gold_phrases.csv
+dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/assert_test_dialogs.py -pred_f tests/dream/test_dialogs_output.csv -true_f tests/dream/test_dialogs_gold_phrases.csv
