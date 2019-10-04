@@ -77,4 +77,8 @@ dockercompose_cmd exec -T -u $(id -u) agent python3 \
   utils/http_api_test.py -u http://0.0.0.0:4242 -df tests/dream/test_dialogs.json -of tests/dream/test_dialogs_output.csv
 
 echo "Assert passed dialogs"
-dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/assert_test_dialogs.py -pred_f tests/dream/test_dialogs_output.csv -true_f tests/dream/test_dialogs_gold_phrases.csv
+if [[ "$DEVICE" == "cpu" ]]; then
+    dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/assert_test_dialogs.py -pred_f tests/dream/test_dialogs_output.csv -true_f tests/dream/test_dialogs_gold_phrases.csv -time_limit 20
+else
+    dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/assert_test_dialogs.py -pred_f tests/dream/test_dialogs_output.csv -true_f tests/dream/test_dialogs_gold_phrases.csv
+fi
