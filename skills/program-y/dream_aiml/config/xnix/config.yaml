@@ -147,9 +147,9 @@ bot:
     override_properties: true
 
     max_question_recursion: 1000
-    max_question_timeout: 60
+    max_question_timeout: 6000
     max_search_depth: 100
-    max_search_timeout: 60
+    max_search_timeout: 6000
 
     spelling:
       load: true
@@ -161,6 +161,10 @@ bot:
     conversations:
       save: true
       load: false
+
+    joiner:
+      classname: templatey.processors.sentence_joiner_deduplicator.SentenceJoinerDeDuplicator
+
 
 
 #####################################################################################################
