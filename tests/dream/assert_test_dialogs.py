@@ -2,10 +2,10 @@ import argparse
 import csv
 import statistics
 
-
 parser = argparse.ArgumentParser()
 parser.add_argument('-pred_f', '--pred_file', type=str)
 parser.add_argument('-true_f', '--true_file', type=str)
+parser.add_argument('-time_limit', '--time_limit', type=float, default=3)
 
 
 def main():
@@ -24,7 +24,8 @@ def main():
     mean_proc_time = statistics.mean(proc_times)
 
     print(f'Mean proc time: {mean_proc_time}')
-    assert statistics.mean(proc_times) <= 20, print(f'Mean proc time: {mean_proc_time} > 20')
+    assert statistics.mean(proc_times) <= args.time_limit, print(
+        f'Mean proc time: {mean_proc_time} > {args.time_limit}')
 
     for pred_r, true_r in zip(pred_data, true_data):
         true_sents = set([sent.lower() for sent in true_r[1:]])
