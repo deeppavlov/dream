@@ -23,7 +23,9 @@ $(inside docker): python3 -m core.run
 
 Автотесты
 ====================
-`tests/runtests.sh`
+по умолчанию запуск на gpu: `tests/runtests.sh`
+
+запуск на cpu: `tests/runtests.sh cpu`
 
 
 Кодстиль
