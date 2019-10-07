@@ -1,7 +1,9 @@
-pytelegrambotapi==3.5.2
 mongoengine==0.17.0
-aiohttp==3.5.4
+aiogram==2.3
+aiohttp==3.6.1
+aiohttp-socks==0.2.2
 aiohttp-swagger==1.0.9
 pyyaml==5.1
 sentry-sdk==0.11.2
 dnspython
+aiogram==2.3
