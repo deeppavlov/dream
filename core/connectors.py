@@ -88,7 +88,7 @@ class HttpOutputConnector:
     async def send(self, payload: Dict, callback: Callable):
         message_uuid = payload['message_uuid']
         event = payload['event']
-        response_text = payload['dialog']['utterances'][-1]['text']
+        response_text = payload
         self.intermediate_storage[message_uuid] = response_text
         event.set()
         response_time = time.time()

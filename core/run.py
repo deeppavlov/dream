@@ -87,9 +87,12 @@ async def on_shutdown(app):
     await app['client_session'].close()
 
 
-async def init_app(register_msg, intermediate_storage, on_startup, on_shutdown_func=on_shutdown):
+async def init_app(
+        register_msg, intermediate_storage,
+        on_startup, on_shutdown_func=on_shutdown
+        debug=False):
     app = web.Application(debug=True)
-    handle_func = await api_message_processor(register_msg, intermediate_storage)
+    handle_func = await api_message_processor(register_msg, intermediate_storage, debug)
     app.router.add_post('/', handle_func)
     app.router.add_get('/dialogs', users_dialogs)
     app.router.add_get('/dialogs/{dialog_id}', dialog)
@@ -111,7 +114,7 @@ def prepare_startup(consumers, process_callable, session):
     return startup_background_tasks
 
 
-async def api_message_processor(register_msg, intermediate_storage):
+async def api_message_processor(register_msg, intermediate_storage, debug=False):
     async def api_handle(request):
         user_id = None
         bot_response = None
@@ -135,8 +138,15 @@ async def api_message_processor(register_msg, intermediate_storage):
 
             if bot_response is None:
                 raise RuntimeError('Got None instead of a bot response.')
+            if debug:
+                response = {
+                    'response_text': bot_response['dialog']['utterances'][-1]['text'],
+                    'skills': bot_response['dialog']['utterances'][-2]['selected_skills']
+                }
+            else:
+                response = bot_response['dialog']['utterances'][-1]['text']
 
-        return web.json_response({'user_id': user_id, 'response': bot_response})
+        return web.json_response({'user_id': user_id, 'response': response})
 
     return api_handle
 
@@ -203,7 +213,7 @@ def main():
         input_srv = Service('input', None, StateManager.add_human_utterance_simple_dict, 1, ['input'])
         register_msg, process_callable = prepare_agent(services, endpoint, input_srv, args.response_logger)
         app = init_app(register_msg, intermediate_storage, prepare_startup(workers, process_callable, session),
-                       on_shutdown)
+                       on_shutdown, args.debug)
 
         web.run_app(app, port=args.port)
 
