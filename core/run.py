@@ -89,7 +89,7 @@ async def on_shutdown(app):
 
 async def init_app(
         register_msg, intermediate_storage,
-        on_startup, on_shutdown_func=on_shutdown
+        on_startup, on_shutdown_func=on_shutdown,
         debug=False):
     app = web.Application(debug=True)
     handle_func = await api_message_processor(register_msg, intermediate_storage, debug)
