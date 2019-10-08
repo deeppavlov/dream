@@ -129,11 +129,3 @@ class AIMLEmbeddedBotClient(BotClient):
         response = self.process_question(client_context, message_text)
         return response
 
-
-if __name__ == "__main__":
-    my_bot = AIMLEmbeddedBotClient(id="koni", config_file_path=CONFIG_PATH)
-    # client_context = my_bot.create_client_context("testuser")
-    # response = my_bot.process_question(client_context, "Hello")
-    response = my_bot.handle_user_message(user_id="testuser", message_text="Hello")
-    print("Response = ", response)
-    print("Fin.")
