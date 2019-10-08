@@ -24,10 +24,8 @@ class AIMLEmbeddedBotClient(BotClient):
         Second, ProgramY allows to specify paths to modules which are in dot notation relative to
             project root, which is different from config dir and usually placed 2 directories higher
 
-        
         In this module we gather all this configurations via parameters.
 
-        
         :param id: str, unique identifier of the bot
         :param config_file_path: path to the YAML config file
         :param src_root_path: sometimes YAML config path asserts that we reference to
