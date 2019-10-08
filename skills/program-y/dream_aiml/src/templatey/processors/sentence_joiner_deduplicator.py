@@ -13,7 +13,8 @@ class SentenceJoinerDeDuplicator(SentenceJoiner):
             YLogger.warning(self, "Sentence DeDuplicator stripped duplicated answers: %d %d",
                             len_before, len_after)
         final_sentences = []
-        # TODO it would be better to reference to CONFIG setting for the IDK response, but
+        # TODO it would be better to reference to config's bot.default_response setting for
+        # the IDK response, but
         # 1) it is not clear what is the best practice to reference variables from YAML.
         # 2) config consumed by SentenceJoinerDeDuplicator has no acces to BotConfiguration where
         # IDK is specified
