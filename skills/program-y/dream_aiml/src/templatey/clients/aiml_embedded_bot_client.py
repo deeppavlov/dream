@@ -17,7 +17,7 @@ class AIMLEmbeddedBotClient(BotClient):
 
         WARNING this module changes CWD (Current Working Directory)!
 
-        ProgramY has tricky assumptions about current directories and uses environmental variables 
+        ProgramY has tricky assumptions about current directories and uses environmental variables
         to specify search paths when launched from bash scripts.
 
         First ProgramY uses file paths relative to config file.
@@ -128,4 +128,3 @@ class AIMLEmbeddedBotClient(BotClient):
         client_context = self.create_client_context(user_id)
         response = self.process_question(client_context, message_text)
         return response
-
