@@ -85,4 +85,14 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu == true
+  intent_responder:
+    build:
+      context: ./skills/IntentResponder/
+    command: gunicorn --workers=1 --name=responder --bind 0.0.0.0:8012 --timeout=500 server:app
+    volumes: []
+  intent_catcher:
+    build:
+      context: ./annotators/IntentCatcher/
+    command: gunicorn --workers=1 --name=catcher --bind 0.0.0.0:8014 --timeout=500 src.server:app
+    volumes: []
 version: '3.7'

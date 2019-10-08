@@ -38,6 +38,12 @@ services:
   toxic_classification:
     image: ${DOCKER_REGISTRY}/toxic_classification
     env_file: [.env.staging]
+  intent_catcher:
+    image: ${DOCKER_REGISTRY}/intent_catcher
+    env_file: [.env.staging]
+  intent_responder:
+    image: ${DOCKER_REGISTRY}/intent_responder
+    env_file: [.env.staging]
 volumes:
   external-logs:
   external-deeppavlov:
