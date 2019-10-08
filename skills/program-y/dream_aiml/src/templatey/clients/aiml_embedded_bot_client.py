@@ -1,5 +1,5 @@
 import sys
-from programy.clients.events.console.client import ConsoleBotClient
+import os
 from programy.config.file.yaml_file import YamlConfigurationFile
 from programy.config.programy import ProgramyConfiguration
 from programy.clients.args import CommandLineClientArguments
@@ -8,15 +8,6 @@ from programy.utils.license.keys import LicenseKeys
 from programy.utils.substitutions.substitues import Substitutions
 from programy.clients.botfactory import BotFactory
 from programy.clients.events.console.config import ConsoleConfiguration
-
-PY_ROOT_PATH = "/home/alx/Cloud/aiml_related/dp_agent_alexa/skills/program-y/dream_aiml"
-SRC_PATH = PY_ROOT_PATH + "/src"
-LINUX_CONFIGS_PATH = PY_ROOT_PATH + "/config/xnix"
-CONFIG_PATH = LINUX_CONFIGS_PATH + "/config.yaml"
-
-import os
-# ipdb> os.getcwd()
-# '/home/alx/Cloud/aiml_related/dp_agent_alexa/skills/program-y/dream_aiml/scripts'
 
 
 class AIMLEmbeddedBotClient(BotClient):
@@ -141,21 +132,10 @@ class AIMLEmbeddedBotClient(BotClient):
         return response
 
 
-if __name__=="__main__":
-    # import ipdb;ipdb.set_trace()
+if __name__ == "__main__":
     my_bot = AIMLEmbeddedBotClient(id="koni", config_file_path=CONFIG_PATH)
-
     # client_context = my_bot.create_client_context("testuser")
     # response = my_bot.process_question(client_context, "Hello")
-
     response = my_bot.handle_user_message(user_id="testuser", message_text="Hello")
-
     print("Response = ", response)
-    import ipdb; ipdb.set_trace()
     print("Fin.")
-
-#
-# def myfun():
-#     path_to_programy_config = "/somepath.yaml"
-#     seb = SomeEmbeddedBot(path_to_programy_config, id="koni")
-#     resp = seb.handle_user_message(user_id="test_user", message_text="Hello I love you tell me what is your name")
