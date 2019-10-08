@@ -90,4 +90,16 @@ services:
       - './annotators/DeepPavlovToxicClassification:/src'
     ports:
       - 8013:8013
+  intent_responder:
+    env_file: [.env.dev]
+    volumes:
+      - './skills/IntentResponder:/src'
+    ports:
+      - 8012:8012
+  intent_catcher:
+    env_file: [.env.dev]
+    volumes:
+      - './annotators/IntentCatcher:/src'
+    ports:
+      - 8014:8014
 version: '3.7'
