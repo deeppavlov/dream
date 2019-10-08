@@ -13,9 +13,14 @@ class SentenceJoinerDeDuplicator(SentenceJoiner):
             YLogger.warning(self, "Sentence DeDuplicator stripped duplicated answers: %d %d",
                             len_before, len_after)
         final_sentences = []
-        for sentence in answers:
-            if sentence:
+        # TODO it would be better to reference to CONFIG setting for the IDK response, but
+        # 1) it is not clear what is the best practice to reference variables from YAML.
+        # 2) config consumed by SentenceJoinerDeDuplicator has no acces to BotConfiguration where
+        # IDK is specified
+        IDK_SENTENCE = "Sorry, I don't have an answer for that!"
 
+        for sentence in answers:
+            if sentence and sentence != IDK_SENTENCE:
                 # Capitalise the start of each sentence
                 if sentence[0].isalpha():
                     sentence = sentence[0].upper() + sentence[1:]
@@ -28,5 +33,10 @@ class SentenceJoinerDeDuplicator(SentenceJoiner):
                         final_sentences.append(sentence + self._configuration.terminator)
                     else:
                         final_sentences.append(sentence)
+                # return just the first answer that satisfies the criteria of allowed answer (not IDK).
+                break
 
+        if len(final_sentences) == 0:
+            # if we here means all answers are IDKs, choose the only one:
+            final_sentences = [IDK_SENTENCE]
         return " ".join([sentence for sentence in final_sentences])
