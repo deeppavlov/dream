@@ -1,9 +1,6 @@
-# test bot
 import unittest
-
 import sys
-# sys.path.append()
-################# Universal Import ###################################################
+# ################ Enable code imports ##########################################
 import os
 SELF_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(os.path.dirname(SELF_DIR))
@@ -11,11 +8,7 @@ SRC_ROOT_DIR = ROOT_DIR + "/src"
 sys.path.append(SRC_ROOT_DIR)
 # #####################################################
 from templatey.clients.aiml_embedded_bot_client import AIMLEmbeddedBotClient
-
-PY_ROOT_PATH = "/home/alx/Cloud/aiml_related/dp_agent_alexa/skills/program-y/dream_aiml"
-SRC_PATH = PY_ROOT_PATH + "/src"
-LINUX_CONFIGS_PATH = PY_ROOT_PATH + "/config/xnix"
-CONFIG_PATH = LINUX_CONFIGS_PATH + "/config.yaml"
+CONFIG_PATH = ROOT_DIR + "/config/xnix/config.yaml"
 
 
 class TestAIMLEmbeddedBotClient(unittest.TestCase):
