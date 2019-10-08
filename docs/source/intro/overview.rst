@@ -107,7 +107,7 @@ Also you can include in the Agent configuration any external service running on 
 
 Services Deployment
 ===================
-1. Create a new **Python 3.6.7** virtual environment.
+1. Create a new **Python 3.7.4** virtual environment.
 
 2. Install requirements for Docker config generator:
 
@@ -115,9 +115,16 @@ Services Deployment
 
         pip -r install gen_requirements.txt
 
-3. Install and configure Docker_ and Docker-compose_ (version 1.19.0 or later).
+3. Install and configure Docker_ (version 19.03.2 or later) and Docker-compose_ (version 1.19.0 or later).
 
 4. (optional) Install nvidia-docker_ if you wish to run some services on GPU.
+
+   To be able to run GPU-based docker files please make sure about two things on your host system:
+
+    * Your nvidia driver has to support the CUDA version installed in the GPU-based docker file.
+    * Please notice that ``docker-compose.yml`` of **3.7** version doesn't officially support `runtime: nvidia`
+      option anymore, so you have to manually edit ``/etc/docker/daemon.json`` on your system. Read in the
+      nvidia-container-runtime_  documentation how to do it.
 
 5. Create a directory for storing downloaded data, such as pre-trained models.
    It should be located outside the agent project's home directory.
@@ -192,7 +199,7 @@ Agent can run both from container and from a local machine. The default Agent po
 
     .. code:: bash
 
-        python3 -m core.run
+        python -m core.run
 
 **Local machine**
 
@@ -221,13 +228,13 @@ Agent can run both from container and from a local machine. The default Agent po
 
     .. code:: bash
 
-        python3 -m core.run
+        python -m core.run
 
     or via the Telegram:
 
     .. code:: bash
 
-        python3 -m core.run -ch telegram
+        python -m core.run -ch telegram
 
 **HTTP api server**
 
@@ -235,7 +242,7 @@ Agent can run both from container and from a local machine. The default Agent po
 
     .. code:: bash
 
-        python3 -m core.run -ch http_client [-p 4242]
+        python -m core.run -ch http_client [-p 4242]
 
     In both cases api will be accessible on your localhost
 
@@ -397,3 +404,4 @@ a list of utterances as input. Use the existing ``utils/ru_test_phrases.py`` or 
 .. _docker-exec: https://docs.docker.com/engine/reference/commandline/exec/
 .. _state: https://deeppavlov-agent.readthedocs.io/en/latest/_static/api.html
 .. _mongo-docs: https://docs.mongodb.com/manual/tutorial/manage-mongodb-processes/
+.. _nvidia-container-runtime: https://github.com/NVIDIA/nvidia-container-runtime
