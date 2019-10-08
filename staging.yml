@@ -26,6 +26,9 @@ services:
   transfertransfo:
     image: ${DOCKER_REGISTRY}/transfertransfo
     env_file: [.env.staging]
+  retrieval_chitchat:
+    image: ${DOCKER_REGISTRY}/retrieval_chitchat
+    env_file: [.env.staging]
   convers_evaluation_selector:
     image: ${DOCKER_REGISTRY}/convers_evaluation_selector
     env_file: [.env.staging]

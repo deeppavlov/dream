@@ -52,6 +52,12 @@ services:
       - './skills/transfertransfo:/app'
     ports:
       - 8007:8007
+  retrieval_chitchat:
+    env_file: [.env.dev]
+    volumes:
+      - './skills/retrieval_chitchat:/app'
+    ports:
+      - 8015:8015
   personality_catcher:
     env_file: [.env.dev]
     volumes:
