@@ -74,6 +74,16 @@ SKILLS = [
         "external": True,
         "path": "",
         "formatter": personality_catcher_formatter
+    },
+    {
+        "name": "intent_responder",
+        "protocol": "http",
+        "host": "intent_responder",
+        "port": 8012,
+        "endpoint": "respond",
+        "external": True,
+        "path": "",
+        "formatter": intent_responder_formatter
     }
 ]
 
@@ -104,6 +114,16 @@ ANNOTATORS_1 = [
 ]
 
 ANNOTATORS_2 = [
+    {
+        "name": "intent_catcher",
+        "protocol": "http",
+        "host": "intent_catcher",
+        "port": 8014,
+        "endpoint": "detect",
+        "external": True,
+        "path": "",
+        "formatter": intent_catcher_formatter
+    },
     # {
     #     "name": "cobot_topics",
     #     "protocol": "http",
@@ -114,16 +134,16 @@ ANNOTATORS_2 = [
     #     "path": "",
     #     "formatter": cobot_classifiers_formatter
     # },
-    # {
-    #     "name": "cobot_sentiment",
-    #     "protocol": "http",
-    #     "host": "cobot_sentiment",
-    #     "port": 8004,
-    #     "endpoint": "sentiment",
-    #     "external": True,
-    #     "path": "",
-    #     "formatter": cobot_classifiers_formatter
-    # },
+    {
+        "name": "cobot_sentiment",
+        "protocol": "http",
+        "host": "cobot_sentiment",
+        "port": 8004,
+        "endpoint": "sentiment",
+        "external": True,
+        "path": "",
+        "formatter": cobot_classifiers_formatter
+    },
     # {
     #     "name": "cobot_dialogact",
     #     "protocol": "http",
@@ -134,16 +154,16 @@ ANNOTATORS_2 = [
     #     "path": "",
     #     "formatter": cobot_dialogact_formatter
     # },
-    # {
-    #     "name": "cobot_offensiveness",
-    #     "protocol": "http",
-    #     "host": "cobot_offensiveness",
-    #     "port": 8005,
-    #     "endpoint": "offensiveness",
-    #     "external": True,
-    #     "path": "",
-    #     "formatter": cobot_classifiers_formatter
-    # }
+    {
+        "name": "cobot_offensiveness",
+        "protocol": "http",
+        "host": "cobot_offensiveness",
+        "port": 8005,
+        "endpoint": "offensiveness",
+        "external": True,
+        "path": "",
+        "formatter": cobot_classifiers_formatter
+    }
 ]
 
 ANNOTATORS_3 = []

@@ -1,0 +1,8 @@
+sentry_sdk==0.12.2
+Flask==1.1.1
+requests==2.22.0
+nltk==3.4.5
+tensorflow_hub==0.6.0
+scikit_learn==0.21.3
+typing==3.7.4.1
+gunicorn==19.9.0

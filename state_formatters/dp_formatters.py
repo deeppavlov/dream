@@ -373,3 +373,36 @@ def dp_toxic_formatter(payload, mode='in'):
         return {'sentences': sentences}
     elif mode == 'out':
         return payload[0]
+
+
+def intent_responder_formatter(payload, mode='in'):
+    if mode == 'in':
+        inp_data = base_input_formatter(payload)
+
+        user_utterances = inp_data['last_utterances']
+        annotations = inp_data['last_annotations']
+
+        bot_utterances = []
+        for dialog in inp_data['dialogs']:
+            utterances = dialog['utterances']
+            bot_utterance = ""
+            for utt in utterances[::-1]:
+                if utt['user']['user_type'] != "human":
+                    bot_utterance = utt['text']
+                    break
+            bot_utterances.append(bot_utterance)
+        return {'annotations': annotations, 'user_utterances': user_utterances, 'bot_utterances': bot_utterances}
+    elif mode == 'out':
+        return base_skill_output_formatter(payload)
+
+
+def intent_catcher_formatter(payload, mode='in'):
+    if mode == 'in':
+        inp_data = base_input_formatter(payload)
+        try:
+            segmented_sentences = [ann['sentseg']['segments'] for ann in inp_data['last_annotations']]
+        except KeyError:
+            segmented_sentences = [ann['bot_sentseg']['segments'] for ann in inp_data['last_annotations']]
+        return {'sentences' : segmented_sentences}
+    elif mode == 'out':
+        return payload
