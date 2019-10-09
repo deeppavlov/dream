@@ -94,7 +94,17 @@ SKILLS = [
         "external": True,
         "path": "",
         "formatter": intent_responder_formatter
-    }
+    },
+    {
+        "name": "dummy_skill",
+        "protocol": "http",
+        "host": "dummy_skill",
+        "port": 8019,
+        "endpoint": "respond",
+        "external": True,
+        "path": "",
+        "formatter": dummy_skill_formatter
+    },
 ]
 
 ANNOTATORS_1 = [

@@ -107,14 +107,18 @@ def annotated_input_formatter(state: Dict, cmd_exclude=True, annotation="punctua
         annotations_history = []
         for utterance in dialog['utterances']:
             try:
+                if "bot_sentseg" in utterance["annotations"].keys():
+                    prefix = "bot_"
+                else:
+                    prefix = ""
                 if annotation == "punctuated":
-                    utterances_history.append(utterance["annotations"]["sentseg"]["punct_sent"])
+                    utterances_history.append(utterance["annotations"][prefix + "sentseg"]["punct_sent"])
                 elif annotation == "segmented":
-                    utterances_history.append(utterance["annotations"]["sentseg"]["segments"])
+                    utterances_history.append(utterance["annotations"][prefix + "sentseg"]["segments"])
                 elif annotation == "coref_resolved":
                     # sentrewrite model annotates k last utterances, we can take only last one or
                     # take all last k utterances from this annotator
-                    utterances_history.append(utterance["annotations"]["sentrewrite"]["modified_sents"][-1])
+                    utterances_history.append(utterance["annotations"][prefix + "sentrewrite"]["modified_sents"][-1])
             except KeyError:
                 # bot utterances are not annotated
                 utterances_history.append(utterance["text"])
@@ -420,3 +424,11 @@ def intent_catcher_formatter(payload, mode='in'):
         return {'sentences' : segmented_sentences}
     elif mode == 'out':
         return payload
+
+
+def dummy_skill_formatter(payload, mode='in'):
+    if mode == 'in':
+        dialogs = annotated_input_formatter(payload, annotation="punctuated")['dialogs']
+        return {"dialogs": dialogs}
+    elif mode == 'out':
+        return base_skill_output_formatter(payload)

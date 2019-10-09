@@ -41,13 +41,16 @@ class RuleBasedSelector():
             if "/new_persona" in dialog['utterances'][-1]['text']:
                 skills_for_uttr.append("personality_catcher")  # TODO: rm crutch of personality_catcher
             elif len(set(tokens).intersection(self.wh_words)) > 0:
+                skills_for_uttr.append("dummy_skill")
                 skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("program_y")
                 skills_for_uttr.append("transfertransfo")
                 skills_for_uttr.append("retrieval_chitchat")
             elif intent_detected:
+                skills_for_uttr.append("dummy_skill")
                 skills_for_uttr.append("intent_responder")
             else:
+                skills_for_uttr.append("dummy_skill")
                 skills_for_uttr.append("program_y")
                 skills_for_uttr.append("transfertransfo")
                 skills_for_uttr.append("retrieval_chitchat")

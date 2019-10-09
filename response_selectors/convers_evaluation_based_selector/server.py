@@ -119,6 +119,7 @@ def respond():
             best_skill_name, best_text, best_confidence = select_response(
                 curr_candidates, curr_scores, curr_confidences,
                 toxicities[dialog_ids == i], dialog)
+
         selected_skill_names.append(best_skill_name)
         selected_texts.append(best_text)
         selected_confidences.append(best_confidence)
@@ -137,6 +138,15 @@ def select_response(curr_candidates, curr_scores, curr_confidences, curr_toxicit
 
     # exclude toxic messages
     ids = curr_toxicities > 0.5
+    if sum(ids) == len(curr_toxicities):
+        # the most dummy заглушка на случай, когда все абсолютно скиллы вернули токсичные ответы
+        non_toxic_answers = ["I really do not know what to answer.",
+                             "Sorry, probably, I din't get what you mean.",
+                             "I didn't get it. Sorry"
+                             ]
+        non_toxic_answer = np.random.choice(non_toxic_answers)
+        return None, non_toxic_answer, 1.0
+
     curr_scores[ids] = {"isResponseOnTopic": 0.,
                         "isResponseInteresting": 0.,
                         "responseEngagesUser": 0.,

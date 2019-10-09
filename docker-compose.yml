@@ -104,4 +104,9 @@ services:
       context: ./annotators/IntentCatcher/
     command: gunicorn --workers=1 --name=catcher --bind 0.0.0.0:8014 --timeout=500 src.server:app
     volumes: []
+  dummy_skill:
+    build:
+      context: ./skills/dummy_skill/
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8019
+    volumes: []
 version: '3.7'
