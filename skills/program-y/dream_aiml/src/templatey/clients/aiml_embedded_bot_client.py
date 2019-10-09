@@ -17,10 +17,10 @@ class AIMLEmbeddedBotClient(BotClient):
 
         WARNING this module changes CWD (Current Working Directory)!
 
-        ProgramY has tricky assumptions about current directories and uses environmental variables
+        ProgramY has assumptions about current directories and uses environmental variables
         to specify search paths when launched from bash scripts.
 
-        First ProgramY uses file paths relative to config file.
+        First, ProgramY uses file paths relative to config file.
         Second, ProgramY allows to specify paths to modules which are in dot notation relative to
             project root, which is different from config dir and usually placed 2 directories higher
 
@@ -34,6 +34,7 @@ class AIMLEmbeddedBotClient(BotClient):
                 joiner:
                     classname: templatey.processors.sentence_joiner_deduplicator.SentenceJoinerDeDuplicator
             means that a class SentenceJoinerDeDuplicator will be searched from
+            src_modules_root_path by appending dot prefixes.
 
         """
         self._id = id
