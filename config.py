@@ -134,6 +134,16 @@ ANNOTATORS_2 = [
         "path": "",
         "formatter": intent_catcher_formatter
     },
+    {
+        "name": "sentrewrite",
+        "protocol": "http",
+        "host": "sentrewrite",
+        "port": 8017,
+        "endpoint": "sentrewrite",
+        "external": True,
+        "path": "",
+        "formatter": sent_rewrite_formatter
+    },
     # {
     #     "name": "cobot_topics",
     #     "protocol": "http",

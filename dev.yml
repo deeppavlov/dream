@@ -34,6 +34,12 @@ services:
       - './annotators/SentSeg:/src'
     ports:
       - 8011:8011
+  sentrewrite:
+    env_file: [.env.dev]
+    volumes:
+      - './annotators/SentRewrite:/src'
+    ports:
+      - 8017:8017
   cobot_offensiveness:
     env_file: [.env.dev]
     volumes:

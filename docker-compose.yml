@@ -90,6 +90,10 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu == true
+  sentrewrite:
+    build:
+      context: ./annotators/SentRewrite/
+    command: bash -c "./setup.sh && gunicorn --workers=1 server:app -b 0.0.0.0:8017"
   intent_responder:
     build:
       context: ./skills/IntentResponder/
