@@ -114,11 +114,19 @@
       <pattern>YES</pattern>
       <template>
         I am newborn, so I can't do so much. For example I can answer for any question.
+       <think>
+        <set name="topic"><star/></set>
+      </think>
       </template>
     </category>
     <category>
       <pattern>NO</pattern>
-      <template>Okay. What do you want?</template>
+      <template>
+        Okay. What do you want?
+       <think>
+        <set name="topic"><star/></set>
+       </think>
+      </template>
     </category>
   </topic>
 </aiml>
