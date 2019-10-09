@@ -108,4 +108,10 @@ services:
       - './annotators/IntentCatcher:/src'
     ports:
       - 8014:8014
+  dummy_skill:
+    env_file: [.env.dev]
+    volumes:
+      - './skills/dummy_skill:/src'
+    ports:
+      - 8019:8019
 version: '3.7'
