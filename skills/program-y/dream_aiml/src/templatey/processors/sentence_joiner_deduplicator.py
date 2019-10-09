@@ -1,3 +1,4 @@
+import re
 from programy.dialog.joiner.joiner import SentenceJoiner
 from programy.utils.logging.ylogger import YLogger
 
@@ -21,7 +22,16 @@ class SentenceJoinerDeDuplicator(SentenceJoiner):
         IDK_SENTENCE = "Sorry, I don't have an answer for that!"
 
         for sentence in answers:
-            if sentence and sentence != IDK_SENTENCE:
+            if sentence and sentence.lower() != IDK_SENTENCE.lower():
+                # Sometimes sentence can be already merged list of answers which may contain
+                # duplicated IDKs. So we make cleaning here.
+                if IDK_SENTENCE.lower() in sentence.lower():
+                    sentence, _ = re.subn(IDK_SENTENCE, '', sentence, flags=re.IGNORECASE)
+                    sentence = sentence.strip()
+                    if not sentence:
+                        # if sentence is empty after IDK removal
+                        continue
+
                 # Capitalise the start of each sentence
                 if sentence[0].isalpha():
                     sentence = sentence[0].upper() + sentence[1:]
