@@ -17,6 +17,9 @@ services:
   sentseg:
     image: ${DOCKER_REGISTRY}/sentseg
     env_file: [.env.staging]
+  sentrewrite:
+    image: ${DOCKER_REGISTRY}/sentrewrite
+    env_file: [.env.staging]
   cobot_offensiveness:
     image: ${DOCKER_REGISTRY}/cobot_offensiveness
     env_file: [.env.staging]

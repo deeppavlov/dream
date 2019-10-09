@@ -78,17 +78,18 @@ def last_utterances(payload, model_args_names):
     return {model_args_names[0]: utterances}
 
 
-def punct_input_formatter(state: Dict, cmd_exclude=True, punctuated=True, segmented=False):
+def annotated_input_formatter(state: Dict, cmd_exclude=True, annotation="punctuated"):
     """
     The same function as `base_input_formatter` but all utterances in all returned fields
-    are either texts with added punctuation by `sentseg` annotator (if `punctuated=True`)
-    or lists of sentences with punctuation (if `segmented`).
+    could be:
+    - texts with added punctuation by `sentseg` annotator (if `annotation="punctuated"`)
+    - lists of sentences with punctuation (if `annotation="segmented"`)
+    - punctuated texts rewritten (with resolved coref) by `sentrewrite` (if `annotation="coref_resolved"`)
 
     Args:
         state: dialog state
         cmd_exclude:
-        punctuated: whether to return texts with added punctuation by `sentseg` annotator as one utterance
-        segmented: whether to return lists of sentences with punctuation as one utterance
+        annotation: `punctuated` or `segmented` or `coref_resolved`
 
     Returns:
         formatted dialog state
@@ -106,10 +107,14 @@ def punct_input_formatter(state: Dict, cmd_exclude=True, punctuated=True, segmen
         annotations_history = []
         for utterance in dialog['utterances']:
             try:
-                if punctuated:
+                if annotation == "punctuated":
                     utterances_history.append(utterance["annotations"]["sentseg"]["punct_sent"])
-                elif segmented:
+                elif annotation == "segmented":
                     utterances_history.append(utterance["annotations"]["sentseg"]["segments"])
+                elif annotation == "coref_resolved":
+                    # sentrewrite model annotates k last utterances, we can take only last one or
+                    # take all last k utterances from this annotator
+                    utterances_history.append(utterance["annotations"]["sentrewrite"]["modified_sents"][-1])
             except KeyError:
                 # bot utterances are not annotated
                 utterances_history.append(utterance["text"])
@@ -128,11 +133,12 @@ def punct_input_formatter(state: Dict, cmd_exclude=True, punctuated=True, segmen
                                   for utt in state[0]['utterances']])
 
     if cmd_exclude:
-        if punctuated:
+        if annotation in ["punctuated", "coref_resolved"]:
             utterances_histories = commands_excluder(utterances_histories)
-        elif segmented:
+        elif annotation == "segmented":
             utterances_histories = [commands_excluder(utter_list)
                                     for utter_list in utterances_histories]
+
     return {'dialogs': state,
             'last_utterances': last_utts,
             'last_annotations': last_annotations,
@@ -247,7 +253,7 @@ def aiml_formatter(payload, mode='in'):
 
 def cobot_qa_formatter(payload, mode='in'):
     if mode == 'in':
-        sentences = punct_input_formatter(payload, punctuated=True, segmented=False)['last_utterances']
+        sentences = annotated_input_formatter(payload, annotation="coref_resolved")['last_utterances']
         return {'sentences': sentences}
     elif mode == 'out':
         return base_skill_output_formatter(payload)
@@ -255,7 +261,7 @@ def cobot_qa_formatter(payload, mode='in'):
 
 def base_skill_selector_formatter(payload: Any, mode='in'):
     if mode == 'in':
-        return {"states_batch": punct_input_formatter(payload, punctuated=True, segmented=False)['dialogs']}
+        return {"states_batch": annotated_input_formatter(payload, annotation="punctuated")['dialogs']}
     elif mode == 'out':
         # it's questionable why output from Model itself is 2dim: batch size x n_skills
         # and payload here is 3dim. I don't know which dim is extra and from where it comes
@@ -299,7 +305,7 @@ def get_persona(dialog):
 
 def transfertransfo_formatter(payload: Any, mode='in'):
     if mode == 'in':
-        parsed = punct_input_formatter(payload, punctuated=True, segmented=False)
+        parsed = annotated_input_formatter(payload, annotation="punctuated")
         return {'utterances_histories': parsed['utterances_histories'],
                 'personality': [get_persona(dialog) for dialog in parsed['dialogs']]}
     elif mode == 'out':
@@ -319,7 +325,7 @@ def personality_catcher_formatter(payload: Any, mode='in'):
 
 def cobot_classifiers_formatter(payload, mode='in'):
     if mode == 'in':
-        return {'sentences': punct_input_formatter(payload, punctuated=False, segmented=True)["last_utterances"]}
+        return {'sentences': annotated_input_formatter(payload, annotation="segmented")["last_utterances"]}
     elif mode == 'out':
         if len(payload) == 3:
             return {"text": payload[0],
@@ -334,8 +340,8 @@ def cobot_classifiers_formatter(payload, mode='in'):
 
 def cobot_dialogact_formatter(payload, mode='in'):
     if mode == 'in':
-        return {'utterances_histories': punct_input_formatter(
-            payload, punctuated=False, segmented=True)["utterances_histories"]}
+        return {'utterances_histories': annotated_input_formatter(
+            payload, annotation="segmented")["utterances_histories"]}
     elif mode == 'out':
         return {"intents": payload[0],
                 "topics": payload[1]}
@@ -343,7 +349,7 @@ def cobot_dialogact_formatter(payload, mode='in'):
 
 def program_y_formatter(payload, mode='in'):
     if mode == 'in':
-        parsed = punct_input_formatter(payload, punctuated=True, segmented=False)
+        parsed = annotated_input_formatter(payload, annotation="coref_resolved")
         return {'sentences': parsed["last_utterances"],
                 'user_ids': parsed["user_telegram_ids"]}
     elif mode == 'out':
@@ -353,7 +359,7 @@ def program_y_formatter(payload, mode='in'):
 
 def base_response_selector_formatter(payload, mode='in'):
     if mode == 'in':
-        dialogs = punct_input_formatter(payload, punctuated=True, segmented=False)['dialogs']
+        dialogs = annotated_input_formatter(payload, annotation="punctuated")['dialogs']
         return {"dialogs": dialogs}
     elif mode == 'out':
         return {"skill_name": payload[0], "text": payload[1], "confidence": payload[2]}
@@ -363,6 +369,14 @@ def sent_segm_formatter(payload, mode='in'):
     if mode == 'in':
         sentences = base_input_formatter(payload)['last_utterances']
         return {'sentences': sentences}
+    elif mode == 'out':
+        return payload
+
+
+def sent_rewrite_formatter(payload, mode='in'):
+    if mode == 'in':
+        return {'utterances_histories': annotated_input_formatter(payload, annotation="punctuated")[
+            "utterances_histories"]}
     elif mode == 'out':
         return payload
 
