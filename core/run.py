@@ -138,15 +138,11 @@ async def api_message_processor(register_msg, intermediate_storage, debug=False)
 
             if bot_response is None:
                 raise RuntimeError('Got None instead of a bot response.')
+            response = {'user_id': user_id, 'response': bot_response['dialog']['utterances'][-1]['text']}
             if debug:
-                response = {
-                    'response_text': bot_response['dialog']['utterances'][-1]['text'],
-                    'skills': bot_response['dialog']['utterances'][-2]['selected_skills']
-                }
-            else:
-                response = bot_response['dialog']['utterances'][-1]['text']
+                response['debug_output'] = bot_response['dialog']['utterances'][-2]['selected_skills']
 
-        return web.json_response({'user_id': user_id, 'response': response})
+        return web.json_response(response)
 
     return api_handle
 
