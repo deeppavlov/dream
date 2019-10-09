@@ -303,5 +303,11 @@
         </template>
     </category>
 
+    <category>
+        <pattern>NO</pattern>
+        <template>
+            I think that thinking in positive concepts is more constructive!
+        </template>
+    </category>
 
 </aiml>
