@@ -17,7 +17,6 @@ MODEL_PATH = os.environ.get('USE_MODEL_PATH', None)
 if MODEL_PATH is None:
     MODEL_PATH = 'https://tfhub.dev/google/universal-sentence-encoder/1'
 
-INTENT_EMBEDDINGS_PATH = 'src/data/intent_embeddings.json'
 INTENT_DATA_PATH = 'src/data/intent_data.json'
 
 TFHUB_CACHE_DIR = os.environ.get('TFHUB_CACHE_DIR', None)
