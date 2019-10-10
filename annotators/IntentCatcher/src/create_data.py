@@ -22,7 +22,7 @@ if TFHUB_CACHE_DIR is None:
     os.environ['TFHUB_CACHE_DIR'] = '../tfhub_model'
 
 TRAIN_SIZE = 0.6
-MIN_RECALL = 0.90
+MIN_PRECISION = 0.85
 NUM_SAMPLING = 50
 
 similarity_measure = cosine_similarity  # Choose sim measure
@@ -45,15 +45,15 @@ def main():
         intent_names = set(intent_phrases.keys())
 
         intent_preembedded = dict()
-        for intent, sentences in intent_phrases.items():
-            intent_preembedded[intent] = sentences
-            intent_preembedded[intent] += [s + '.' for s in sentences] + [s + '!' for s in sentences]
+        for intent, blocks in intent_phrases.items():
+            intent_preembedded[intent] = blocks['phrases']
+            intent_preembedded[intent] += [s + '.' for s in blocks['phrases']] + [s + '!' for s in blocks['phrases']]
 
-        intent_embeddings_op = {intent: model([s.lower() for s in sentences])
+        intent_embeddings_op = {intent: model(sentences)
                                 for intent, sentences in intent_preembedded.items()}
 
         random_preembedded = random_phrases + [s + '.' for s in random_phrases] + [s + '!' for s in random_phrases]
-        random_embeddings_op = model([s.lower() for s in random_preembedded])
+        random_embeddings_op = model(random_preembedded)
 
         intent_embeddings = sess.run(intent_embeddings_op)
         random_embeddings = sess.run(random_embeddings_op)
@@ -87,10 +87,11 @@ def main():
                 # Filter scores and labels for identical utterances
                 precision, recall, thresholds = precision_recall_curve(labels, scores)
 
-                # filter precision/recall/thresholds by recall > MIN_RECALL
-                # precision = precision[recall > MIN_RECALL]
-                # thresholds = thresholds[recall > MIN_RECALL]
-                # recall = recall[recall > MIN_RECALL]
+                # filter precision/recall/thresholds by precision > MIN_PRECISION
+                p_idx = np.argwhere(precision >= intent_phrases[intent]['min_precision']).reshape(-1)[0]
+                precision = precision[p_idx:]
+                recall = recall[p_idx:]
+                thresholds = thresholds[p_idx:]
 
                 f1 = 2.0 * precision * recall / (precision + recall + 1e-10)
                 threshold_i = np.argmax(f1)

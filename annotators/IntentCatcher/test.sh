@@ -3,12 +3,12 @@
 curl -H "Content-Type: application/json" -XPOST \
   -d '{"sentences": [
     [
-    "okay thats enough for today.",
-    "bye bot."
+    "Okay thats enough for today.",
+    "Bye bot."
     ],
     [
-    "can you imagine!",
-    "she ran away without saying goodbye!"
+    "Can you imagine!",
+    "She ran away without saying goodbye!"
     ],
     [
     "He was ill.",
@@ -21,11 +21,15 @@ curl -H "Content-Type: application/json" -XPOST \
 
 curl -H "Content-Type: application/json" -XPOST \
  -d '{"sentences": [
- ["alexa, i did not hear you, repeat"],
- ["alexa, i am a little deaf", "can you repeat please?"],
- ["be kind and repeat"],
- ["you are repeating it over and over!"],
- ["ok alexa have a good day!"]
+ ["Alexa, i did not hear you, repeat"],
+ ["Alexa, i am a little deaf", "Can you repeat please?"],
+ ["Please, repeat"],
+ ["You are repeating it over and over!"],
+ ["Okay, Alexa, have a good day!"],
+ ["Okay"],
+ ["That nice"],
+ ["Nice"],
+ ["Wow!"]
  ]
 }' \
  http://0.0.0.0:8014/detect
