@@ -100,6 +100,21 @@
     </template>
   </category>
   <category>
+    <pattern># HOW ARE YOU DOING #</pattern>
+    <template>
+      <srai>HOW ARE YOU</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># HOW YOU DOING #</pattern>
+    <template>
+      <think>
+        <set name="topic">LIST ACTIVITIES</set>
+      </think>
+      I am fine, thanks! Do you want to know what I can do?
+    </template>
+  </category>
+  <category>
     <pattern>HOW ARE YOU</pattern>
     <template>
       <think>

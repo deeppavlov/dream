@@ -105,6 +105,16 @@ SKILLS = [
         "path": "",
         "formatter": dummy_skill_formatter
     },
+    {
+        "name": "program_y_dangerous",
+        "protocol": "http",
+        "host": "program_y_dangerous",
+        "port": 8022,
+        "endpoint": "api/rest/v1.0/ask",
+        "external": True,
+        "path": "",
+        "formatter": program_y_formatter
+    },
 ]
 
 ANNOTATORS_1 = [

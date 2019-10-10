@@ -113,4 +113,9 @@ services:
       context: ./skills/dummy_skill/
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8019
     volumes: []
+  program_y_dangerous:
+    build:
+      context: ./skills/program-y-dangerous/
+    working_dir: /src/dream_aiml/scripts/xnix
+    command: ./sanic.sh
 version: '3.7'

@@ -27,16 +27,16 @@
             </random>
         </template>
     </category>
-    <category>
-        <pattern>PLEASE</pattern>
-        <template>
-            <random>
-                <li>You are polite.</li>
-                <li>Thanks for asking nicely.</li>
-                <li>Your polite style is very nice.</li>
-            </random>
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>PLEASE</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>You are polite.</li>-->
+<!--                <li>Thanks for asking nicely.</li>-->
+<!--                <li>Your polite style is very nice.</li>-->
+<!--            </random>-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>WHO</pattern>
         <template>

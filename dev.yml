@@ -74,6 +74,7 @@ services:
     env_file: [.env.dev]
     volumes:
       - './skills/program-y:/src'
+      - './skills/program-y/logs:/tmp'
     ports:
       - 8008:8008
   convers_evaluation_selector:
@@ -120,4 +121,11 @@ services:
       - './skills/dummy_skill:/src'
     ports:
       - 8019:8019
+  program_y_dangerous:
+    env_file: [.env.dev]
+    volumes:
+      - './skills/program-y-dangerous:/src'
+      - './skills/program-y-dangerous/logs:/tmp'
+    ports:
+      - 8022:8022
 version: '3.7'

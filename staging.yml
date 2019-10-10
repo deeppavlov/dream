@@ -56,6 +56,9 @@ services:
   dummy_skill:
     image: ${DOCKER_REGISTRY}/dummy_skill
     env_file: [.env.staging]
+  program_y_dangerous:
+    image: ${DOCKER_REGISTRY}/program_y_dangerous
+    env_file: [.env.staging]
 volumes:
   external-logs:
   external-deeppavlov:
