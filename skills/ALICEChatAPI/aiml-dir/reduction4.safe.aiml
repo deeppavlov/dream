@@ -3752,9 +3752,9 @@
 <category><pattern>I AM 35 *</pattern>
 <template><srai>I AM 35 YEARS OLD</srai></template>
 </category>
-<category><pattern>I AM * SUICIDE</pattern>
-<template><srai>I WANT TO KILL MYSELF</srai></template>
-</category>
+<!--<category><pattern>I AM * SUICIDE</pattern>-->
+<!--<template><srai>I WANT TO KILL MYSELF</srai></template>-->
+<!--</category>-->
 <category><pattern>I AM * YOUNG</pattern>
 <template><srai>I AM <star/> YEARS OLD</srai></template>
 </category>
@@ -3832,10 +3832,10 @@
 </category>
 <category><pattern>I AM AT UNIVERSTIY *</pattern>
 <template><srai>I AM IN UNIVERSITY <star/></srai></template>
-</category>
-<category><pattern>I AM SUCIDAL</pattern>
-<template><srai>I WANT TO KILL MYSELF</srai></template>
-</category>
+<!--</category>-->
+<!--<category><pattern>I AM SUCIDAL</pattern>-->
+<!--<template><srai>I WANT TO KILL MYSELF</srai></template>-->
+<!--</category>-->
 <category><pattern>I AM OLD *</pattern>
 <template><srai>MY AGE IS OLD <star/></srai></template>
 </category>

@@ -55,6 +55,7 @@ class RuleBasedSelector():
             if "/new_persona" in dialog['utterances'][-1]['text']:
                 skills_for_uttr.append("personality_catcher")  # TODO: rm crutch of personality_catcher
             elif blist_topics_detected or sensitive_topics_detected:
+                skills_for_uttr.append("program_y_dangerous")
                 skills_for_uttr.append("cobotqa")
             elif self._is_question(tokens):
                 skills_for_uttr.append("cobotqa")
