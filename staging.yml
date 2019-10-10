@@ -51,7 +51,7 @@ services:
     image: ${DOCKER_REGISTRY}/intent_responder
     env_file: [.env.staging]
   blacklisted_words:
-    image: ${DOCKER_REGISTRY}/intent_responder
+    image: ${DOCKER_REGISTRY}/blacklisted_words
     env_file: [.env.staging]
   dummy_skill:
     image: ${DOCKER_REGISTRY}/dummy_skill
