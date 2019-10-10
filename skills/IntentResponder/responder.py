@@ -33,6 +33,10 @@ class Responder:
                     # Special formatter which used in AWS Lambda to identify what was the intent
                     response += " #+#{}".format(intent_name)
                     confidence = intent_data['confidence']
+                    # todo: we need to know what intent was called
+                    # current workaround is to use only one intent if several were detected
+                    # and to append special token with intent_name
+                    break
             responses.append(response)
             confidences.append(confidence)
         return list(zip(responses, confidences))
