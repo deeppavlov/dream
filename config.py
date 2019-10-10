@@ -164,16 +164,16 @@ ANNOTATORS_2 = [
         "path": "",
         "formatter": sent_rewrite_formatter
     },
-    # {
-    #     "name": "cobot_topics",
-    #     "protocol": "http",
-    #     "host": "cobot_topics",
-    #     "port": 8003,
-    #     "endpoint": "topics",
-    #     "external": True,
-    #     "path": "",
-    #     "formatter": cobot_classifiers_formatter
-    # },
+    {
+        "name": "cobot_topics",
+        "protocol": "http",
+        "host": "cobot_topics",
+        "port": 8003,
+        "endpoint": "topics",
+        "external": True,
+        "path": "",
+        "formatter": cobot_classifiers_formatter
+    },
     {
         "name": "cobot_sentiment",
         "protocol": "http",
