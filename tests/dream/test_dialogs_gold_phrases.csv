@@ -3,5 +3,5 @@ Hi
 "How are you" "I'm fine, thanks! Do you want to know what I can do?"
 Yes "I'm newborn, so I can't do so much. For example I can answer for any question."
 "Do you like Siri?" "Siri was a big inspiration to me."
-"Do you better than Siri?" "i don't know. i like to read."
-Goodbye "Have a good day!" "Have a nice day!" "Have a great day!" "See you!" "See you later!" "See you soon!" "See ya!" "Bye!" "Bye-bye!" "Goodbye!"
+"Do you better than Siri?"
+Goodbye "Have a good day!" "Have a nice day!" "Have a great day! #+#exit" "See you! #+#exit" "See you later! #+#exit" "See you soon! #+#exit" "See ya! #+#exit" "Bye! #+#exit" "Bye-bye! #+#exit" "Goodbye! #+#exit" "Goodbye! It was nice speaking with you! #+#exit"
