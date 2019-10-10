@@ -93,7 +93,7 @@ def respond():
         has_blacklisted = [False] * len(utterances)
     else:
         blacklist_result = blacklist_result.json()
-        has_blacklisted = [int(res['is_blacklisted']) for res in blacklist_result]
+        has_blacklisted = [int(res['profanity']) for res in blacklist_result]
 
     for i, has_blisted in enumerate(has_blacklisted):
         if has_blisted:

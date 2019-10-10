@@ -45,8 +45,12 @@ class RuleBasedSelector():
             intents = dialog['utterances'][-1]['annotations']['intent_catcher'].values()
             intent_detected = any([i['detected'] == 1 for i in intents])
 
+            blist_topics_detected = dialog['utterances'][-1]['annotations']['blacklisted_words']['restricted_topics']
+
             if "/new_persona" in dialog['utterances'][-1]['text']:
                 skills_for_uttr.append("personality_catcher")  # TODO: rm crutch of personality_catcher
+            elif blist_topics_detected:
+                skills_for_uttr.append("cobotqa")
             elif self._is_question(tokens):
                 skills_for_uttr.append("dummy_skill")
                 skills_for_uttr.append("cobotqa")
@@ -54,14 +58,14 @@ class RuleBasedSelector():
                 # skills_for_uttr.append("transfertransfo")
                 # skills_for_uttr.append("retrieval_chitchat")
             elif intent_detected:
-                skills_for_uttr.append("dummy_skill")
                 skills_for_uttr.append("intent_responder")
             else:
-                skills_for_uttr.append("dummy_skill")
                 skills_for_uttr.append("program_y")
                 # skills_for_uttr.append("transfertransfo")
                 skills_for_uttr.append("retrieval_chitchat")
 
+            # always add dummy_skill
+            skills_for_uttr.append("dummy_skill")
             skill_names.append(skills_for_uttr)
 
         return skill_names
