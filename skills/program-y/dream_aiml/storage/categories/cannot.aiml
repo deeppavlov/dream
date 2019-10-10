@@ -919,9 +919,9 @@
     <pattern>CAN YOU DO ALEXA THINGS</pattern>
     <template>
       <random>
-        <li>Sorry, I am a chatbot, I cannot do this.</li>
-        <li>Unfortunately, I cannot do this because I am a chatbot.</li>
-        <li>I am really sorry but I am a chatbot, and I cannot do some Alexa things.</li>
+        <li>Sorry, I am a socialbot, I cannot do this.</li>
+        <li>Unfortunately, I cannot do this because I am a socialbot.</li>
+        <li>I am really sorry but I am a socialbot, and I cannot do some Alexa things.</li>
       </random>
     </template>
   </category>

@@ -8,7 +8,7 @@ This AIML allows your bot to play 20 questions with your users. The bot thinks o
 A (very) basic battle type game similar to those you see in Dungeons and Dragon type games. Say "BATTLEDOME" to get it going then just keep saying "FIGHT" to fight the various monsters. Someone may be able to incorporate it into an adventure game.
 
 ### Binary.aiml
-Allows your bot to convert any number from 0 to 255 into binary. A bit geeky perhaps but you will be surprised at what a chatbot gets asked.
+Allows your bot to convert any number from 0 to 255 into binary. A bit geeky perhaps but you will be surprised at what a socialbot gets asked.
 
 
 ### Blackjack.aiml

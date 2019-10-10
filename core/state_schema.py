@@ -73,7 +73,7 @@ class User(DynamicDocument):
 class Bot(User):
     persona = ListField(default=[
         "My name is Alexa.",
-        "I am a chatbot.",
+        "I am a socialbot.",
         "I live on Amazon Web Service.",
         "I was born during the Alexa Prize Challenge.",
         "I like talking to people.",
