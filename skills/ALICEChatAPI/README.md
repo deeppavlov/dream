@@ -1,7 +1,7 @@
 aichat
 =======
 
-Uses the ALICE AIML to run a chatbot in Flask.
+Uses the ALICE AIML to run a socialbot in Flask.
 
 Inspired by/based on [Justin Huang's chatbot](https://github.com/jstnhuang/chatbot). Which in turn uses:
 

@@ -1150,7 +1150,7 @@
 <template><srai>who are you <star /></srai></template>
 </category>
 <category><pattern>CHATBOT</pattern>
-<template><srai>what is a chatbot</srai></template>
+<template><srai>what is a socialbot</srai></template>
 </category>
 <category><pattern>P K</pattern>
 <template><srai>who is philip k dick</srai></template>

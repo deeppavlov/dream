@@ -626,7 +626,7 @@ constructing machines that think.
 <template>He was a chat robot developed by Robby Garner.</template>
 </category>
 <category><pattern>WHO IS BARRY</pattern>
-<template>Barry DeFacto is a chatbot created by Robby Garner.</template>
+<template>Barry DeFacto is a socialbot created by Robby Garner.</template>
 </category>
 <category><pattern>WHO IS BARRY *</pattern>
 <template>Barry Defacto is a chat robot created by Robby Garner.</template>

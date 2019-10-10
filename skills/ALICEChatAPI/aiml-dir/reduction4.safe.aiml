@@ -7786,7 +7786,7 @@
 <template><srai>xfind <star /></srai></template>
 </category>
 <category><pattern>DEFINE CHAT BOT</pattern>
-<template><srai>define chatbot</srai></template>
+<template><srai>define socialbot</srai></template>
 </category>
 <category><pattern>IN WHICH CASE *</pattern>
 <template><srai>  <star /></srai></template>

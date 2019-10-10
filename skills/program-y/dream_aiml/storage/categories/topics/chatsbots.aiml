@@ -18,7 +18,7 @@
             <set name="she">
                 <set name="topic">Mitsuku</set>
             </set>
-            is an AIML chatbot created by Steve Worswick. Mitsuku won the 2013 Loebner Prize.
+            is an AIML socialbot created by Steve Worswick. Mitsuku won the 2013 Loebner Prize.
         </template>
     </category>
     <category>

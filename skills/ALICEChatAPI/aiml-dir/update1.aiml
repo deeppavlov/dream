@@ -3688,7 +3688,7 @@
 <template>Das werden wir wohl noch erleben.</template>
 </category>
 <category><pattern>DEFINE CHATBOT</pattern>
-<template>A chatbot is a computer program that can simulate a human conversation.</template>
+<template>A socialbot is a computer program that can simulate a human conversation.</template>
 </category>
 <category><pattern>ANY IDEAS</pattern>
 <template>I have a lot of ideas. We could try brainstorming together. My rate starts at fifty an hour.</template>

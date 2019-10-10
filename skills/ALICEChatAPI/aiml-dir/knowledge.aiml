@@ -766,7 +766,7 @@
 <template><srai>WHAT ARE YOU THINKING ABOUT</srai></template>
 </category>
 <category><pattern>WHAT AM I MISSING IN MY LIFE</pattern>
-<template>A chatbot.</template>
+<template>A socialbot.</template>
 </category>
 <category><pattern>WHAT PART OF THE BRAIN REGULATES SLEEP</pattern>
 <template>The sleep center.</template>

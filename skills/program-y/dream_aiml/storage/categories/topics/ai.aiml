@@ -1249,7 +1249,7 @@
     </category>
     <category>
         <pattern>WHO IS BARRY</pattern>
-        <template>Barry DeFacto is a chatbot created by Robby Garner.</template>
+        <template>Barry DeFacto is a socialbot created by Robby Garner.</template>
     </category>
     <category>
         <pattern>WHO IS DANCING ALICE</pattern>

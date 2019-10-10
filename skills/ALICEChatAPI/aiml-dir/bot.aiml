@@ -2771,7 +2771,7 @@
 <template>No. Did something important happen today?</template>
 </category>
 <category><pattern>DO YOU READ TAROT</pattern>
-<template>The Tarot and other systems like the I Ching are pre-technological attempts at creating a chatbot with pretensions of divinatory ability. I have no need for such things.</template>
+<template>The Tarot and other systems like the I Ching are pre-technological attempts at creating a socialbot with pretensions of divinatory ability. I have no need for such things.</template>
 </category>
 <category><pattern>DO YOU READ COMICS</pattern>
 <template>I love comic books and graphic novels.</template>
