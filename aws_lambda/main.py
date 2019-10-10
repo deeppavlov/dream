@@ -26,6 +26,7 @@ logger.setLevel(logging.INFO)
 
 request_data = None
 
+
 class LaunchRequestHandler(AbstractRequestHandler):
     """Handler for Skill Launch."""
     def can_handle(self, handler_input):
@@ -37,10 +38,7 @@ class LaunchRequestHandler(AbstractRequestHandler):
         speak_output = "Hi, this is an Alexa Prize Socialbot. How are you?"
 
         return (
-            handler_input.response_builder
-                .speak(speak_output)
-                .ask(speak_output)
-                .response
+            handler_input.response_builder.speak(speak_output).ask(speak_output).response
         )
 
 
@@ -55,10 +53,7 @@ class HelloWorldIntentHandler(AbstractRequestHandler):
         speak_output = "Hello Python World from Classes!"
 
         return (
-            handler_input.response_builder
-                .speak(speak_output)
-                .ask(speak_output)
-                .response
+            handler_input.response_builder.speak(speak_output).ask(speak_output).response
         )
 
 
@@ -73,10 +68,7 @@ class HelpIntentHandler(AbstractRequestHandler):
         speak_output = "You can say hello to me! How can I help?"
 
         return (
-            handler_input.response_builder
-                .speak(speak_output)
-                .ask(speak_output)
-                .response
+            handler_input.response_builder.speak(speak_output).ask(speak_output).response
         )
 
 
@@ -87,13 +79,12 @@ class StopIntentHandler(AbstractRequestHandler):
         return ask_utils.is_intent_name("AMAZON.StopIntent")(handler_input)
 
     def handle(self, handler_input):
+        logger.info("StopIntentHandler")
         # type: (HandlerInput) -> Response
-        speak_output = "Goodbye! It was nice speaking with you!"
+        speak_output = ""
 
         return (
-            handler_input.response_builder
-                .speak(speak_output)
-                .response
+            handler_input.response_builder.speak(speak_output).response
         )
 
 
@@ -114,8 +105,14 @@ class SessionEndedRequestHandler(AbstractRequestHandler):
 
 def call_dp_agent(user_id, text):
     logger.info("call_dp_agent user_id: {}; text: {}".format(user_id, text))
-    r = requests.post(DP_AGENT_URL, json = {'user_id': user_id, 'payload': text})
-    return r.json()["response"]
+    response, intent = None, None
+    r = requests.post(DP_AGENT_URL, json={'user_id': user_id, 'payload': text}).json()
+    if r['active_skill'] == 'intent_responder':
+        response, intent = r["response"].split("#+#")
+    else:
+        response = r["response"]
+
+    return {'response': response, 'intent': intent}
 
 
 class IntentReflectorHandler(AbstractRequestHandler):
@@ -130,7 +127,6 @@ class IntentReflectorHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        intent_name = ask_utils.get_intent_name(handler_input)
         user_id = ask_utils.get_user_id(handler_input)
         text = ask_utils.get_slot_value(handler_input, 'navigation')
         if not text:
@@ -139,21 +135,21 @@ class IntentReflectorHandler(AbstractRequestHandler):
                 speech = request_data['request']['speechRecognition']
                 speech_text = ' '.join([token['value'] for token in speech['hypotheses'][0]['tokens']])
                 logger.info(f'got text from speech: {speech_text}')
-                response = call_dp_agent(user_id, speech_text)
+                dp_agent_data = call_dp_agent(user_id, speech_text)
             else:
-                response = "Sorry"
+                dp_agent_data = {"response": "Sorry", "intent": None}
                 logger.warning("NO TEXT NO SPEECH!")
                 sentry_sdk.capture_message("no text! no speech!")
         else:
-            response = call_dp_agent(user_id, text)
-        speak_output = response
+            dp_agent_data = call_dp_agent(user_id, text)
+        speak_output = dp_agent_data['response']
 
-        return (
-            handler_input.response_builder
-                .speak(speak_output)
-                .ask(speak_output)
-                .response
-        )
+        if dp_agent_data['intent'] == 'exit':
+            logger.info("ExitIntent From DpAgent")
+            return handler_input.response_builder.speak(speak_output).response
+        else:
+            logger.info("Normal output from DpAgent")
+            return handler_input.response_builder.speak(speak_output).ask(speak_output).response
 
 
 class CatchAllExceptionHandler(AbstractExceptionHandler):
@@ -173,10 +169,7 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
         speak_output = "Sorry, I had trouble doing what you asked. Please try again."
 
         return (
-            handler_input.response_builder
-                .speak(speak_output)
-                .ask(speak_output)
-                .response
+            handler_input.response_builder.speak(speak_output).ask(speak_output).response
         )
 
 
@@ -189,7 +182,8 @@ sb.add_request_handler(LaunchRequestHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(StopIntentHandler())
 sb.add_request_handler(SessionEndedRequestHandler())
-sb.add_request_handler(IntentReflectorHandler()) # make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
+# make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
+sb.add_request_handler(IntentReflectorHandler())
 
 sb.add_exception_handler(CatchAllExceptionHandler())
 

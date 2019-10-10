@@ -30,6 +30,8 @@ class Responder:
             for intent_name, intent_data in utt['annotation']['intent_catcher'].items():
                 if intent_data['detected'] and intent_data['confidence'] > confidence:
                     response = self.response_funcs[intent_name](utt, self.intent_responses[intent_name])
+                    # Special formatter which used in AWS Lambda to identify what was the intent
+                    response += " #+#{}".format(intent_name)
                     confidence = intent_data['confidence']
             responses.append(response)
             confidences.append(confidence)

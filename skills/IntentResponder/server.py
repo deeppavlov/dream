@@ -7,7 +7,7 @@ import sentry_sdk
 import uuid
 from flask import Flask, request, jsonify
 
-from responder import *
+from responder import Responder
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -21,7 +21,7 @@ logger.setLevel(gunicorn_logger.level)
 app = Flask(__name__)
 
 logger.info('Creating responder...')
-exiter = Responder(logger)
+responder = Responder(logger)
 logger.info('Creating responder... finished')
 
 
@@ -38,7 +38,7 @@ def respond():
              for u, a, b in zip(user_sentences, annotations, bot_sentences)]
 
     logger.info(f"Number of utterances: {len(user_sentences)}")
-    responses = exiter.respond(input)
+    responses = responder.respond(input)
     for r in responses:
         logger.info(f"Response:{r}")
     return jsonify(responses)
