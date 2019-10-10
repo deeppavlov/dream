@@ -130,6 +130,16 @@ ANNOTATORS_1 = [
         },
         "gpu": True,
         "formatter": dp_toxic_formatter
+    },
+    {
+        "name": "blacklisted_words",
+        "protocol": "http",
+        "host": "blacklisted_words",
+        "port": 8018,
+        "endpoint": "blacklisted_words",
+        "external": True,
+        "path": "",
+        "formatter": sent_segm_formatter
     }
 ]
 
