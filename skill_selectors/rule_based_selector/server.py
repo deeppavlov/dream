@@ -28,6 +28,8 @@ class RuleBasedSelector():
         "would", "should", "shall", "may", "might", "can", "could"
     }
 
+    sensitive_topics = {"Politics", "Celebrities", "Religion", "Sex_Profanity", "SciTech", "Art_Event"}
+
     def __init__(self, **kwargs):
         logger.info("Skill selector Initialized")
 
@@ -45,14 +47,16 @@ class RuleBasedSelector():
             intents = dialog['utterances'][-1]['annotations']['intent_catcher'].values()
             intent_detected = any([i['detected'] == 1 for i in intents])
 
+            cobot_topics = dialog['utterances'][-1]['annotations']['cobot_topics']['text']
+            sensitive_topics_detected = any([t in self.sensitive_topics for t in cobot_topics])
+
             blist_topics_detected = dialog['utterances'][-1]['annotations']['blacklisted_words']['restricted_topics']
 
             if "/new_persona" in dialog['utterances'][-1]['text']:
                 skills_for_uttr.append("personality_catcher")  # TODO: rm crutch of personality_catcher
-            elif blist_topics_detected:
+            elif blist_topics_detected or sensitive_topics_detected:
                 skills_for_uttr.append("cobotqa")
             elif self._is_question(tokens):
-                skills_for_uttr.append("dummy_skill")
                 skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("program_y")
                 # skills_for_uttr.append("transfertransfo")
