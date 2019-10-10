@@ -13,7 +13,7 @@ ENV USE_MODEL_PATH='https://tfhub.dev/google/universal-sentence-encoder/1'
 
 RUN python -c "import tensorflow_hub as hub; model=hub.Module('$USE_MODEL_PATH')"
 
-COPY ./src/ /src
+COPY . /src
 WORKDIR /src
 
 EXPOSE 8014:8014
