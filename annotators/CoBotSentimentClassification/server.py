@@ -59,8 +59,8 @@ def respond():
                                                                                              result.status_code)
         sentry_sdk.capture_message(msg)
         logger.warning(msg)
-        sentiments = [[]] * len(user_list_sentences)
-        confidences = [[]] * len(user_list_sentences)
+        sentiments = [['neutral']] * len(user_list_sentences)
+        confidences = [[0.0]] * len(user_list_sentences)
     else:
         result = result.json()
         # result is an array where each element is a dict with scores

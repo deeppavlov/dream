@@ -108,6 +108,12 @@ services:
       - './annotators/IntentCatcher:/src'
     ports:
       - 8014:8014
+  blacklisted_words:
+    env_file: [.env.dev]
+    volumes:
+      - './annotators/BlacklistedWordsDetector:/src'
+    ports:
+      - 8018:8018
   dummy_skill:
     env_file: [.env.dev]
     volumes:

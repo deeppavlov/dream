@@ -104,6 +104,10 @@ services:
       context: ./annotators/IntentCatcher/
     command: gunicorn --workers=1 --name=catcher --bind 0.0.0.0:8014 --timeout=500 src.server:app
     volumes: []
+  blacklisted_words:
+    build:
+      context: ./annotators/BlacklistedWordsDetector/
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8018
   dummy_skill:
     build:
       context: ./skills/dummy_skill/
