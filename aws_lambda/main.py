@@ -36,7 +36,8 @@ class LaunchRequestHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         speak_output = "Hi, this is an Alexa Prize Socialbot. How are you?"
-
+        user_id = ask_utils.get_user_id(handler_input)
+        call_dp_agent(user_id, '/start')
         return (
             handler_input.response_builder.speak(speak_output).ask(speak_output).response
         )

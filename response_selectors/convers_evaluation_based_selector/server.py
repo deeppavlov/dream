@@ -137,7 +137,7 @@ def respond():
         curr_scores = result[dialog_ids == i]  # array of dictionaries
         curr_confidences = confidences[dialog_ids == i]  # array of float numbers
 
-        if re.search("how are you", dialog["utterances"][-1]["text"].lower()):
+        if re.search("how are you", dialog["utterances"][-1]["text"].lower()) and 'program_y' in curr_candidates:
             best_skill_name = "program_y"
             best_text = curr_candidates[best_skill_name]["text"]
             best_confidence = curr_candidates[best_skill_name]["confidence"]
