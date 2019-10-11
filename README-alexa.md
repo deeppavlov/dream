@@ -23,9 +23,12 @@ $(inside docker): python3 -m core.run
 
 Автотесты
 ====================
-по умолчанию запуск на gpu: `tests/runtests.sh`
+по умолчанию все тесты запускаются на gpu: `tests/runtests.sh`
 
-запуск на cpu: `tests/runtests.sh cpu`
+запуск на cpu: `tests/runtests.sh DEVICE=cpu`
+запуск определенных тестов с параметром MODE: 
+- тестовый диалог: `tests/runtests.sh MODE=test_dialog`
+- получить ответы бота на спорные/фактоидные/персона вопросы `tests/runtests.sh MODE=infer_questions`
 
 
 Кодстиль
@@ -108,3 +111,7 @@ ubuntu@ip-172-31-42-16:~$ docker run nvidia/cuda:9.0-base nvidia-smi
 4. Add GPU worker to docker swarm
 5. Add label to the GPU worker machine `docker node update --label-add with_gpu=true o0mvol5rehp80k9a0xkzye7zw`
 6. Setup placement in docker-compose.yml.
+
+
+- For local setup install nvidia-docker2 https://github.com/NVIDIA/nvidia-docker/wiki/Installation-(version-2.0)
+- Restart docker daemon and do step 2.

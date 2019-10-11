@@ -6,6 +6,11 @@ import json
 from time import time
 from random import randrange
 import uuid
+import logging
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 '''
 structure of dialog file (-df) should be written in json
@@ -28,38 +33,21 @@ parser.add_argument('-pf', '--phrasesfile', help='name of the file with phrases 
 parser.add_argument('-df', '--dialogfile', help='name of the file with predefined dialogs', type=str, default="")
 parser.add_argument('-of', '--outputfile', help='name of the output file', type=str, default='output.csv')
 
-args = parser.parse_args()
-payloads = {}
-
-if args.dialogfile:
-    try:
-        with open(args.dialogfile, 'r') as file:
-            payloads = json.load(file)
-    except Exception as e:
-        raise e
-elif args.phrasesfile:
-    try:
-        with open(args.phrasesfile, 'r') as file:
-            phrases = [line.rstrip('\n') for line in file]
-    except Exception as e:
-        raise e
-    payloads = {uuid.uuid4().hex: [phrases[randrange(len(phrases))] for j in range(args.phrasecount)] for i in
-                range(args.usercount)}
-else:
-    raise ValueError('You should provide either predefined dialog (-df) or file with phrases (-pf)')
-
 
 async def perform_test_dialogue(session, url, uuid, payloads):
     result = []
     for i in payloads:
         request_body = {'user_id': uuid, 'payload': i}
         start_time = time()
-        async with session.post(url, json=request_body) as resp:
-            response = await resp.json()
-            end_time = time()
-            if response['user_id'] != uuid:
-                print('INFO, request returned wrong uuid')
-            result.append([uuid, start_time, end_time, end_time - start_time, len(i), i, response['response']])
+        logger.debug("Start time: {}".format(start_time))
+        async with aiohttp.ClientSession() as inner_session:
+            async with inner_session.post(url, json=request_body) as resp:
+                response = await resp.json()
+                end_time = time()
+                logger.debug("End time: {}; Response: {}".format(start_time, response))
+                if response['user_id'] != uuid:
+                    logger.info('request returned wrong uuid')
+                result.append([uuid, start_time, end_time, end_time - start_time, len(i), i, response['response']])
 
     return result
 
@@ -82,6 +70,26 @@ async def run(url, payloads, out_filename):
 
 
 if __name__ == '__main__':
+    args = parser.parse_args()
+    payloads = {}
+
+    if args.dialogfile:
+        try:
+            with open(args.dialogfile, 'r') as file:
+                payloads = json.load(file)
+        except Exception as e:
+            raise e
+    elif args.phrasesfile:
+        try:
+            with open(args.phrasesfile, 'r') as file:
+                phrases = [line.rstrip('\n') for line in file]
+        except Exception as e:
+            raise e
+        payloads = {uuid.uuid4().hex: [phrases[randrange(len(phrases))] for j in range(args.phrasecount)] for i in
+                    range(args.usercount)}
+    else:
+        raise ValueError('You should provide either predefined dialog (-df) or file with phrases (-pf)')
+
     loop = asyncio.get_event_loop()
     future = asyncio.ensure_future(run(args.url, payloads, args.outputfile))
     loop.run_until_complete(future)
