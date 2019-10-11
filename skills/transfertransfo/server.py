@@ -100,6 +100,7 @@ def inference(personality, utterances_histories):
 @app.post("/transfertransfo/")
 def transfer_transfo_chitchat_model(placeholders: Input_placeholders):
     st_time = time.time()
+    logger.info(f"transfertransfo start time: {st_time}")
     response = [
         inference(pers, hist) for pers, hist in zip(placeholders.personality, placeholders.utterances_histories)
     ]

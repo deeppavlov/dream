@@ -38,10 +38,20 @@ def respond():
     confidences = []
     for sent in user_sentences:
         logger.info(f"user_sentence: {sent}, session_id: {session_id}")
-        response = requests.request(url=f'{COBOT_QA_SERVICE_URL}',
-                                    headers=headers,
-                                    data=json.dumps({'question': sent}),
-                                    method='POST').json()['response']
+        result = requests.request(url=f'{COBOT_QA_SERVICE_URL}',
+                                  headers=headers,
+                                  data=json.dumps({'question': sent}),
+                                  method='POST')
+        if result.status_code != 200:
+            logger.warning(
+                f"result status code is not 200: {result}. result text: {result.text}; "
+                f"result status: {result.status_code}")
+            response = ''
+            sentry_sdk.capture_message(
+                f"CobotQA! result status code is not 200: {result}. result text: {result.text}; "
+                f"result status: {result.status_code}")
+        else:
+            response = result.json()['response']
         responses += [response]
         logger.info(f"response: {response}")
         if len(response) > 0 and 'skill://amzn1' not in response:

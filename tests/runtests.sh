@@ -1,16 +1,19 @@
 #!/usr/bin/env bash
 
-set -e
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-trap cleanup EXIT
 
-DEVICE=$1
-if [[ "$DEVICE" = "" ]]; then
-	DEVICE="gpu"
-fi
+for ARGUMENT in "$@"
+do
 
-echo running tests on $DEVICE
+    KEY=$(echo $ARGUMENT | cut -f1 -d=)
+    VALUE=$(echo $ARGUMENT | cut -f2 -d=)
+
+    case "$KEY" in
+            DEVICE)        DEVICE=${VALUE} ;;
+            MODE)          MODE=${VALUE} ;;
+            *)
+    esac
+done
 
 function wait_service()
 {
@@ -63,6 +66,26 @@ function dockercompose_cmd() {
     fi
 }
 
+if [[ "$DEVICE" = "" ]]; then
+	DEVICE="gpu"
+fi
+
+if [[ "$MODE" = "" ]]; then
+	MODE="all"
+fi
+
+if [[ "$MODE" = "clean" ]]; then
+	cleanup
+	exit 0
+fi
+
+set -e
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+trap cleanup EXIT
+
+echo running tests on $DEVICE in mode: $MODE
+
 echo Loading testing env..
 AGENT_PORT=4242
 export AGENT_PORT=$AGENT_PORT
@@ -72,13 +95,29 @@ dockercompose_cmd logs -f --tail="all" --timestamps &
 
 wait_service "http://0.0.0.0:$AGENT_PORT/ping" pong
 
-echo "Pass dialogs from dp-agent"
-dockercompose_cmd exec -T -u $(id -u) agent python3 \
-  utils/http_api_test.py -u http://0.0.0.0:4242 -df tests/dream/test_dialogs.json -of tests/dream/test_dialogs_output.csv
+if [[ "$MODE" == "test_dialog" || "$MODE" == "all" ]]; then
+  echo "Pass dialogs from dp-agent"
+  dockercompose_cmd exec -T -u $(id -u) agent python3 \
+    utils/http_api_test.py -u http://0.0.0.0:4242 -df tests/dream/test_dialogs.json -of tests/dream/output/test_dialogs_output.csv
 
-echo "Assert passed dialogs"
-if [[ "$DEVICE" == "cpu" ]]; then
-    dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/assert_test_dialogs.py -pred_f tests/dream/test_dialogs_output.csv -true_f tests/dream/test_dialogs_gold_phrases.csv -time_limit 20
-else
-    dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/assert_test_dialogs.py -pred_f tests/dream/test_dialogs_output.csv -true_f tests/dream/test_dialogs_gold_phrases.csv
+  echo "Assert passed dialogs"
+  if [[ "$DEVICE" == "cpu" ]]; then
+      dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/assert_test_dialogs.py -pred_f tests/dream/output/test_dialogs_output.csv -true_f tests/dream/test_dialogs_gold_phrases.csv -time_limit 20
+  else
+      dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/assert_test_dialogs.py -pred_f tests/dream/output/test_dialogs_output.csv -true_f tests/dream/test_dialogs_gold_phrases.csv
+  fi
+fi
+
+if [[ "$MODE" == "infer_questions" || "$MODE" == "all" ]]; then
+  echo "Passing questions to Alexa"
+  dockercompose_cmd exec -T -u $(id -u) agent python3 \
+    utils/xlsx_responder.py --url http://0.0.0.0:4242 \
+    --input 'tests/dream/test_questions.xlsx' \
+    --output 'tests/dream/output/test_questions_output.xlsx'
+
+  echo "Computing Q&A metrics"
+  dockercompose_cmd exec -T -u $(id -u) agent python3 \
+    tests/dream/compute_qa_metrics.py \
+    --pred_file 'tests/dream/output/test_questions_output.xlsx' \
+    --output 'tests/dream/output/qa_metrics.txt'
 fi

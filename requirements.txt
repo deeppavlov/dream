@@ -7,3 +7,8 @@ pyyaml==5.1
 sentry-sdk==0.11.2
 dnspython
 aiogram==2.3
+pandas==0.25.1
+openpyxl==3.0.0
+xlrd==1.2.0
+py-rouge==1.1
+nltk==3.2.5

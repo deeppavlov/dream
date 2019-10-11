@@ -115,5 +115,4 @@ venv.bak/
 
 .*DS_Store
 
-# tests
-tests/dream/test_dialogs_output.csv
+tests/dream/output/*
