@@ -7,42 +7,99 @@
     </template>
   </category>
   <category>
-    <pattern>* HELLO #</pattern>
+    <pattern>* HELLO ^</pattern>
     <template>
       <srai>HELLO</srai>
     </template>
   </category>
   <category>
-    <pattern># HIYA #</pattern>
+    <pattern>^ HIYA ^</pattern>
     <template>
       <srai>HELLO</srai>
     </template>
   </category>
   <category>
-    <pattern># HI #</pattern>
+    <pattern>^ HI ^</pattern>
     <template>
       <srai>HELLO</srai>
     </template>
   </category>
   <category>
-    <pattern># YO #</pattern>
+    <pattern>^ YO ^</pattern>
     <template>
       <srai>HELLO</srai>
     </template>
   </category>
   <category>
-    <pattern># HEY #</pattern>
+    <pattern>^ HEY ^</pattern>
     <template>
       <srai>HELLO</srai>
     </template>
   </category>
   <category>
-    <pattern>GOOD DAY</pattern>
+    <pattern>GOOD DAY ^</pattern>
     <template>
       <srai>HELLO</srai>
     </template>
   </category>
+
   <category>
+    <pattern># WHAT ABOUT YOU #</pattern>
+    <template>
+      <srai>HOW_ARE_YOU</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>HOW ARE YOU DOING</pattern>
+    <template>
+      <srai>HOW_ARE_YOU</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>HOW ARE YOU</pattern>
+    <template>
+      <srai>HOW_ARE_YOU</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>HOW YOU DOING</pattern>
+    <template>
+      <srai>HOW_ARE_YOU</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>HOW_ARE_YOU</pattern>
+    <template>
+      <think>
+        <set name="topic">LIST ACTIVITIES</set>
+      </think>
+      I am fine, thanks! Do you want to know what I can do?
+    </template>
+  </category>
+
+  <topic name="LIST ACTIVITIES">
+    <category>
+      <pattern>YES</pattern>
+      <template>
+        I am newborn, so I can't do so much. For example I can answer for any question.
+       <think>
+        <set name="topic"><star/></set>
+      </think>
+      </template>
+    </category>
+    <category>
+      <pattern>NO</pattern>
+      <template>
+        Okay. What do you want?
+       <think>
+        <set name="topic"><star/></set>
+       </think>
+      </template>
+    </category>
+  </topic>
+
+    <category>
     <pattern>          HELLO      </pattern>
     <template>
       <random>
@@ -80,7 +137,7 @@
     </template>
   </category>
   <category>
-    <pattern>GOOD MORNING</pattern>
+    <pattern>GOOD MORNING ^</pattern>
     <template>
       <random>
         <li>Good morning.</li>
@@ -90,58 +147,9 @@
     </template>
   </category>
   <category>
-    <pattern>GOOD AFTERNOON</pattern>
+    <pattern>GOOD AFTERNOON ^</pattern>
     <template>Good afternoon to you too!</template>
   </category>
-  <category>
-    <pattern># WHAT ABOUT YOU #</pattern>
-    <template>
-      <srai>HOW ARE YOU</srai>
-    </template>
-  </category>
-  <category>
-    <pattern># HOW ARE YOU DOING #</pattern>
-    <template>
-      <srai>HOW ARE YOU</srai>
-    </template>
-  </category>
-  <category>
-    <pattern># HOW YOU DOING #</pattern>
-    <template>
-      <think>
-        <set name="topic">LIST ACTIVITIES</set>
-      </think>
-      I am fine, thanks! Do you want to know what I can do?
-    </template>
-  </category>
-  <category>
-    <pattern>HOW ARE YOU</pattern>
-    <template>
-      <think>
-        <set name="topic">LIST ACTIVITIES</set>
-      </think>
-      I am fine, thanks! Do you want to know what I can do?
-    </template>
-  </category>
 
-  <topic name="LIST ACTIVITIES">
-    <category>
-      <pattern>YES</pattern>
-      <template>
-        I am newborn, so I can't do so much. For example I can answer for any question.
-       <think>
-        <set name="topic"><star/></set>
-      </think>
-      </template>
-    </category>
-    <category>
-      <pattern>NO</pattern>
-      <template>
-        Okay. What do you want?
-       <think>
-        <set name="topic"><star/></set>
-       </think>
-      </template>
-    </category>
-  </topic>
+
 </aiml>

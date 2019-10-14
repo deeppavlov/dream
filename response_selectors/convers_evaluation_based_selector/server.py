@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import re
 import json
 import logging
 import os
@@ -137,7 +136,9 @@ def respond():
         curr_scores = result[dialog_ids == i]  # array of dictionaries
         curr_confidences = confidences[dialog_ids == i]  # array of float numbers
 
-        if re.search("how are you", dialog["utterances"][-1]["text"].lower()) and 'program_y' in curr_candidates:
+        spec = "I'm fine, thanks! Do you want to know what I can do?"
+        if ('program_y' in curr_candidates) and (curr_candidates["program_y"]["text"] == spec):
+            # in case we are answering to questions `how are you?`, `how are you doing?`, `how you doing?`
             best_skill_name = "program_y"
             best_text = curr_candidates[best_skill_name]["text"]
             best_confidence = curr_candidates[best_skill_name]["confidence"]
