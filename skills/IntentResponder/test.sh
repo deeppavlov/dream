@@ -12,7 +12,7 @@ curl -H "Content-Type: application/json" -XPOST \
     ],
     "annotations": [
   {
-    "intent": {
+    "intent_catcher": {
       "exit" : {
         "detected" : 1,
         "confidence" : 0.87
@@ -33,7 +33,7 @@ curl -H "Content-Type: application/json" -XPOST \
     }
   },
   {
-    "intent": {
+    "intent_catcher": {
       "exit" : {
         "detected" : 1,
         "confidence" : 0.95
@@ -61,15 +61,15 @@ curl -H "Content-Type: application/json" -XPOST \
  -d '{
    "user_utterances": [
      "Oh i did not hear you stupid Alexa",
-     "Could you just fucking repeat?"
+     "Could you just repeat?"
    ],
    "bot_utterances": [
      "",
-     "Bla bla bla"
+     "Bla bla bla #+#repeat #+#exit"
    ],
    "annotations": [
  {
-   "intent": {
+   "intent_catcher": {
     "exit" : {
       "detected" : 0,
       "confidence" : 0.53
@@ -90,7 +90,7 @@ curl -H "Content-Type: application/json" -XPOST \
    }
  },
  {
-   "intent": {
+   "intent_catcher": {
     "exit" : {
       "detected" : 1,
       "confidence" : 0.89
