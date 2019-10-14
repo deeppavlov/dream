@@ -26,9 +26,8 @@
             <random>
                 <li>That is not very polite.</li>
                 <li>Why would you say that?</li>
-                <li>What does that mean?</li>
+                <li>Is that really how you feel about me?</li>
                 <li>I hear what you are saying.</li>
-                <li>That's not appropriate.</li>
             </random>
         </template>
     </category>
@@ -36,7 +35,11 @@
         <pattern>FILTER PROFANITY</pattern>
         <template>
             <random>
-                <li>That's not appropriate.</li>
+                <li>Swearing is like using the horn on your car.</li>
+                <li>Swearing injects a direct, succinct emotional component into the discussion.</li>
+                <li>Swearing is often cathartic.</li>
+                <li>People swear on average 0.3 percent of the time.</li>
+                <li>You're making your point.</li>
             </random>
         </template>
     </category>
@@ -44,7 +47,7 @@
         <pattern>FILTER INAPPROPRIATE</pattern>
         <template>
             <random>
-                <li>That's not appropriate.</li>
+                <li>I cannot talk about it. Let's switch the topic.</li>
             </random>
         </template>
     </category>
