@@ -118,4 +118,9 @@ services:
       context: ./skills/program-y-dangerous/
     working_dir: /src/dream_aiml/scripts/xnix
     command: ./sanic.sh
+  cobot_nounphrases:
+    build:
+      context: ./annotators/nounphrases/
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8016
+    volumes: []
 version: '3.7'
