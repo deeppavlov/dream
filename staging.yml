@@ -59,6 +59,9 @@ services:
   program_y_dangerous:
     image: ${DOCKER_REGISTRY}/program_y_dangerous
     env_file: [.env.staging]
+  cobot_nounphrases:
+    image: ${DOCKER_REGISTRY}/cobot_nounphrases
+    env_file: [.env.staging]
 volumes:
   external-logs:
   external-deeppavlov:

@@ -432,3 +432,11 @@ def dummy_skill_formatter(payload, mode='in'):
         return {"dialogs": dialogs}
     elif mode == 'out':
         return base_skill_output_formatter(payload)
+
+
+def punct_dialogs_formatter(payload, mode='in'):
+    if mode == 'in':
+        dialogs = annotated_input_formatter(payload, annotation="punctuated")['dialogs']
+        return {"dialogs": dialogs}
+    elif mode == 'out':
+        return payload

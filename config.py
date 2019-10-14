@@ -205,6 +205,16 @@ ANNOTATORS_2 = [
     #     "formatter": cobot_dialogact_formatter
     # },
     {
+        "name": "cobot_nounphrases",
+        "protocol": "http",
+        "host": "cobot_nounphrases",
+        "port": 8016,
+        "endpoint": "nounphrases",
+        "external": True,
+        "path": "",
+        "formatter": punct_dialogs_formatter
+    },
+    {
         "name": "cobot_offensiveness",
         "protocol": "http",
         "host": "cobot_offensiveness",

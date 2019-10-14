@@ -128,4 +128,10 @@ services:
       - './skills/program-y-dangerous/logs:/tmp'
     ports:
       - 8022:8022
+  cobot_nounphrases:
+    env_file: [.env.dev]
+    volumes:
+      - './annotators/nounphrases:/src'
+    ports:
+      - 8016:8016
 version: '3.7'
