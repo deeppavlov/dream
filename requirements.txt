@@ -4,7 +4,7 @@ aiohttp==3.6.1
 aiohttp-socks==0.2.2
 aiohttp-swagger==1.0.9
 pyyaml==5.1
-sentry-sdk==0.11.2
+sentry-sdk==0.12.3
 dnspython
 aiogram==2.3
 pandas==0.25.1

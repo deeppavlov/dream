@@ -60,25 +60,27 @@ For example:
 Skill
 =====
 
-Skill should return a dict with required ``text`` and ``confidence`` keys. If a skill wants to
-update either **Human** or **Bot** profile, it should pack these attributes into ``human_attributes`` and
-``bot_attributes`` keys. All attributes in ``human_attributes`` and ``bot_attributes`` will overwrite
-current **Human** and **Bot** attribute values accordingly. And if there are no such attributes, they will be stored under
-``attributes`` key inside **Human** or **Bot**.
+Skill should return a **list of dicts** where each dict ia a single hypothesis. Each dict requires
+``text`` and ``confidence`` keys. If a skill wants to update either **Human** or **Bot** profile,
+it should pack these attributes into ``human_attributes`` and ``bot_attributes`` keys.
+
+All attributes in ``human_attributes`` and ``bot_attributes`` will overwrite current **Human** and **Bot**
+attribute values accordingly. And if there are no such attributes, they will be stored under ``attributes``
+key inside **Human** or **Bot**.
 
 The minimum required response of a skill is a 2-key dictionary:
 
 
     .. code:: json
 
-        {"text": "hello", "confidence": 0.33}
+        [{"text": "hello", "confidence": 0.33}]
 
 But it's possible to extend it with  ``human_attributes`` and ``bot_attributes`` keys:
 
     .. code:: json
 
-        {"text": "hello", "confidence": 0.33, "human_attributes": {"name": "Vasily"},
-        "bot_attributes": {"persona": ["I like swimming.", "I have a nice swimming suit."]}}
+        [{"text": "hello", "confidence": 0.33, "human_attributes": {"name": "Vasily"},
+        "bot_attributes": {"persona": ["I like swimming.", "I have a nice swimming suit."]}}]
 
 Everything sent to ``human_attributes`` and ``bot_attributes`` keys will update `user` field in the same
 utterance for the human and in the next utterance for the bot. Please refer to user_state_api_ to find more
@@ -88,7 +90,7 @@ Also it's possible for a skill to send any additional key to the state:
 
     .. code:: json
 
-        {"text": "hello", "confidence": 0.33, "any_key": "any_value"}
+        [{"text": "hello", "confidence": 0.33, "any_key": "any_value"}]
 
 
 Response Selector
@@ -101,6 +103,12 @@ overwritten from the original skill response) and confidence (also may be overwr
  .. code:: json
 
         {"skill_name": "chitchat", "text": "Hello, Joe!", "confidence": 0.3}
+
+Also it's possible for a Response Selector to overwrite any ``human`` or ``bot`` attributes:
+
+ .. code:: json
+
+        {"skill_name": "chitchat", "text": "Hello, Joe!", "confidence": 0.3, "human_attributes": {"name": "Ivan"}}
 
 Postprocessor
 =============

@@ -5,7 +5,8 @@ from core.transform_config import SKILLS, ANNOTATORS_1, ANNOTATORS_2, ANNOTATORS
     RESPONSE_SELECTORS, POSTPROCESSORS
 from core.connectors import HTTPConnector, ConfidenceResponseSelectorConnector, AioQueueConnector, \
     QueueListenerBatchifyer
-from core.pipeline import Service, simple_workflow_formatter
+from core.pipeline import simple_workflow_formatter
+from core.service import Service
 from core.state_manager import StateManager
 
 
@@ -88,7 +89,7 @@ def parse_old_config():
 
     if SKILLS:
         for s in SKILLS:
-            service, workers = make_service_from_config_rec(s, session, StateManager.add_selected_skill_dict,
+            service, workers = make_service_from_config_rec(s, session, StateManager.add_hypothesis_dict,
                                                             ['SKILLS'], previous_services)
             services.append(service)
             worker_tasks.extend(workers)

@@ -65,18 +65,12 @@ class ConfidenceResponseSelectorConnector:
         self.service_name = service_name
 
     async def send(self, payload: Dict, callback: Callable):
-        response = payload['utterances'][-1]['selected_skills']
-        best_skill = sorted(response.items(), key=lambda x: x[1]['confidence'], reverse=True)[0]
+        response = payload['utterances'][-1]['hypotheses']
+        best_skill = sorted(response, key=lambda x: x['confidence'], reverse=True)[0]
         response_time = time.time()
         await callback(
             dialog_id=payload['id'], service_name=self.service_name,
-            response={
-                'confidence_response_selector': {
-                    'skill_name': best_skill[0],
-                    'text': best_skill[1]['text'],
-                    'confidence': best_skill[1]['confidence']
-                }
-            },
+            response={'confidence_response_selector': best_skill},
             response_time=response_time)
 
 

@@ -1,23 +1,27 @@
-import asyncio
+import logging
 import argparse
 import uuid
-import logging
-
-from aiohttp import web
 from datetime import datetime
 from string import hexdigits
 from os import getenv
 
-from core.agent import Agent
-from core.pipeline import Pipeline, Service
-from core.connectors import EventSetOutputConnector, HttpOutputConnector
-from core.config_parser import parse_old_config
-from core.state_manager import StateManager
-from sys import stdout
-import sentry_sdk
+import asyncio
+from aiohttp import web
 from aiogram import Bot
 from aiogram.utils import executor
 from aiogram.dispatcher import Dispatcher
+
+from core.agent import Agent
+from core.pipeline import Pipeline
+from core.service import Service
+from core.connectors import EventSetOutputConnector, HttpOutputConnector
+from core.config_parser import parse_old_config
+from core.state_manager import StateManager
+from state_formatters.output_formatters import http_api_output_formatter, http_debug_output_formatter
+
+from sys import stdout
+import sentry_sdk
+
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger('service_logger')
@@ -87,12 +91,12 @@ async def on_shutdown(app):
     await app['client_session'].close()
 
 
-async def init_app(
-        register_msg, intermediate_storage,
-        on_startup, on_shutdown_func=on_shutdown,
-        debug=False):
+async def init_app(register_msg, intermediate_storage,
+                   on_startup, on_shutdown_func=on_shutdown,
+                   debug=False):
     app = web.Application(debug=True)
-    handle_func = await api_message_processor(register_msg, intermediate_storage, debug)
+    handle_func = await api_message_processor(
+        register_msg, intermediate_storage, debug)
     app.router.add_post('/', handle_func)
     app.router.add_get('/dialogs', users_dialogs)
     app.router.add_get('/dialogs/{dialog_id}', dialog)
@@ -116,8 +120,7 @@ def prepare_startup(consumers, process_callable, session):
 
 async def api_message_processor(register_msg, intermediate_storage, debug=False):
     async def api_handle(request):
-        user_id = None
-        bot_response = None
+        response = None
         if request.method == 'POST':
             if request.headers.get('content-type') != 'application/json':
                 raise web.HTTPBadRequest(reason='Content-Type should be application/json')
@@ -138,12 +141,10 @@ async def api_message_processor(register_msg, intermediate_storage, debug=False)
 
             if bot_response is None:
                 raise RuntimeError('Got None instead of a bot response.')
-            response = {
-                'user_id': user_id,
-                'response': bot_response['dialog']['utterances'][-1]['text'],
-                'active_skill': bot_response['dialog']['utterances'][-1]['active_skill']}
             if debug:
-                response['debug_output'] = bot_response['dialog']['utterances'][-2]['selected_skills']
+                response = http_debug_output_formatter(bot_response)
+            else:
+                response = http_api_output_formatter(bot_response)
 
         return web.json_response(response)
 
@@ -170,14 +171,12 @@ async def dialog(request):
     if dialog_id == 'all':
         dialogs = Dialog.objects()
         return web.json_response([i.to_dict() for i in dialogs])
-    elif len(dialog_id) == 24 and all(c in hexdigits for c in dialog_id):
+    if len(dialog_id) == 24 and all(c in hexdigits for c in dialog_id):
         d = Dialog.objects(id__exact=dialog_id)
         if not d:
             raise web.HTTPNotFound(reason=f'dialog with id {dialog_id} is not exist')
-        else:
-            return web.json_response(d[0].to_dict())
-    else:
-        raise web.HTTPBadRequest(reason='dialog id should be 24-character hex string')
+        return web.json_response(d[0].to_dict())
+    raise web.HTTPBadRequest(reason='dialog id should be 24-character hex string')
 
 
 def main():

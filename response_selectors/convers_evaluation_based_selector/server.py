@@ -37,7 +37,7 @@ headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COB
 def respond():
     st_time = time.time()
     dialogs_batch = request.json["dialogs"]
-    response_candidates = [dialog["utterances"][-1]["selected_skills"] for dialog in dialogs_batch]
+    response_candidates = [dialog["utterances"][-1]["hypotheses"] for dialog in dialogs_batch]
     conversations = []
     dialog_ids = []
     selected_skill_names = []
@@ -45,12 +45,13 @@ def respond():
     selected_confidences = []
     confidences = []
     utterances = []
+    skill_names = []
 
     for i, dialog in enumerate(dialogs_batch):
-        for skill_name in response_candidates[i]:
+        for skill_data in response_candidates[i]:
             conv = dict()
             conv["currentUtterance"] = dialog["utterances"][-1]["text"]
-            conv["currentResponse"] = response_candidates[i][skill_name]["text"]
+            conv["currentResponse"] = skill_data["text"]
             # every odd utterance is from user
             # cobot recommends to take 2 last utt for conversation evaluation service
             conv["pastUtterances"] = [uttr["text"] for uttr in dialog["utterances"][1::2]][-2:]
@@ -59,10 +60,11 @@ def respond():
             # collect all the conversations variants to evaluate them batch-wise
             conversations += [conv]
             dialog_ids += [i]
-            confidences += [response_candidates[i][skill_name]["confidence"]]
-            utterances += [response_candidates[i][skill_name]["text"]]  # all bot utterances
+            confidences += [skill_data["confidence"]]
+            utterances += [skill_data["text"]]  # all bot utterances
+            skill_names += [skill_data["skill_name"]]
 
-    # todo: refactor external service calls
+    # TODO: refactor external service calls
     # check all possible skill responses for toxicity
     toxic_result = requests.request(url=TOXIC_COMMENT_CLASSIFICATION_SERVICE_URL,
                                     headers=headers,
@@ -136,21 +138,15 @@ def respond():
         curr_scores = result[dialog_ids == i]  # array of dictionaries
         curr_confidences = confidences[dialog_ids == i]  # array of float numbers
 
-        spec = "I'm fine, thanks! Do you want to know what I can do?"
-        if ('program_y' in curr_candidates) and (curr_candidates["program_y"]["text"] == spec):
-            # in case we are answering to questions `how are you?`, `how are you doing?`, `how you doing?`
-            best_skill_name = "program_y"
-            best_text = curr_candidates[best_skill_name]["text"]
-            best_confidence = curr_candidates[best_skill_name]["confidence"]
-        else:
-            best_skill_name, best_text, best_confidence = select_response(
-                curr_candidates, curr_scores, curr_confidences,
-                toxicities[dialog_ids == i], has_blacklisted[dialog_ids == i], dialog)
+        best_skill_name, best_text, best_confidence = select_response(
+            curr_candidates, curr_scores, curr_confidences,
+            toxicities[dialog_ids == i], has_blacklisted[dialog_ids == i], dialog)
 
         selected_skill_names.append(best_skill_name)
         selected_texts.append(best_text)
         selected_confidences.append(best_confidence)
-        logger.info(f"Choose final skill: {best_skill_name}")
+        logger.info(f"Choose selected_skill_names: {selected_skill_names};"
+                    f"selected_texts {selected_texts}; selected_confidences {selected_confidences}")
 
     total_time = time.time() - st_time
     logger.info(f'convers_evaluation_selector exec time: {total_time:.3f}s')
@@ -182,10 +178,16 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                    }
     confidences[ids] = 0.
 
+    skill_names = [c['skill_name'] for c in candidates]
+    how_are_you_spec = "I'm fine, thanks! Do you want to know what I can do?"
     for i in range(len(scores)):
+        if skill_names[i] == 'program_y' and candidates[i]['text'] == how_are_you_spec:
+            very_big_score = 100
+            curr_single_cores.append(very_big_score)
+            break
         cand_scores = scores[i]
         confidence = confidences[i]
-        skill_name = list(candidates.keys())[i]
+        skill_name = skill_names[i]
         score_conv_eval = cand_scores["isResponseOnTopic"] + \
             cand_scores["isResponseInteresting"] + \
             cand_scores["responseEngagesUser"] + \
@@ -196,16 +198,16 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                     f'Cand scores: {cand_scores}')
         curr_single_cores.append(score)
     best_id = np.argmax(curr_single_cores)
-    best_skill_name = list(candidates.keys())[best_id]
-    best_text = candidates[best_skill_name]["text"]
-    best_confidence = candidates[best_skill_name]["confidence"]
+    best_skill_name = skill_names[best_id]
+    best_text = candidates[best_id]["text"]
+    best_confidence = candidates[best_id]["confidence"]
 
-    while candidates[best_skill_name]["text"] == "" or candidates[best_skill_name]["confidence"] == 0.:
+    while candidates[best_id]["text"] == "" or candidates[best_id]["confidence"] == 0.:
         curr_single_cores[best_id] = 0.
         best_id = np.argmax(curr_single_cores)
-        best_skill_name = list(candidates.keys())[best_id]
-        best_text = candidates[best_skill_name]["text"]
-        best_confidence = candidates[best_skill_name]["confidence"]
+        best_skill_name = candidates[best_id]
+        best_text = candidates[best_id]["text"]
+        best_confidence = candidates[best_id]["confidence"]
         if sum(curr_single_cores) == 0.:
             break
 

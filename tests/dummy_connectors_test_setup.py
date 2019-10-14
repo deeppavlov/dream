@@ -7,7 +7,7 @@ from aiohttp import web
 from datetime import datetime
 from random import choice
 
-from core.pipeline import Service
+from core.service import Service
 from core.connectors import HttpOutputConnector
 from core.config_parser import parse_old_config
 from core.state_manager import StateManager
@@ -30,7 +30,7 @@ class DummyConnector:
         await callback(
             dialog_id=payload['id'],
             service_name=self.service_name,
-            response={self.service_name: {"text": choice(self.returns), "confidence": 0.5}},
+            response={self.service_name: [{"text": choice(self.returns), "confidence": 0.5}]},
             response_time=time.time())
 
 

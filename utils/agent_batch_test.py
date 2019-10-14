@@ -22,9 +22,12 @@ parser.add_argument('phrasefile', help='name of the file with phrases for dialog
 
 def init_agent():
     services, workers, session = parse_old_config()
+    endpoint = Service('cmd_responder', EventSetOutputConnector('cmd_responder').send,
+                       StateManager.save_dialog_dict, 1, ['responder'])
+    input_srv = Service('input', None, StateManager.add_human_utterance_simple_dict, 1, ['input'])
     pipeline = Pipeline(services)
-    endpoint = Service('http_responder', EventSetOutputConnector(), None, 1, ['responder'])
     pipeline.add_responder_service(endpoint)
+    pipeline.add_input_service(input_srv)
     agent = Agent(pipeline, StateManager())
     return agent, session
 
@@ -43,12 +46,13 @@ async def main():
     tasks = []
     for u, u_d_type, dt, loc, ch_t in zip(phrases, u_d_types, date_times, locations, ch_types):
         u_tg_id = uuid.uuid4().hex
-        tasks.append(agent.register_msg(u, u_tg_id, u_d_type, dt, loc, ch_t, None, True))
+        tasks.append(agent.register_msg(utterance=u, user_telegram_id=u_tg_id, user_device_type=u_d_type,
+                                        location=loc, channel_type=ch_t, require_response=True))
     res = await asyncio.gather(*tasks, return_exceptions=False)
 
     await session.close()
 
-    return [i['dialog'].utterances[-1].text for i in res]
+    return [i['dialog']['utterances'][-1]['text'] for i in res]
 
 
 if __name__ == "__main__":

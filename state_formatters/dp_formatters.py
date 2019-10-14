@@ -162,8 +162,7 @@ def base_skill_output_formatter(payload):
     Returns: a formatted batch instance
 
     """
-    return {"text": payload[0],
-            "confidence": payload[1]}
+    return [{"text": payload[0], "confidence": payload[1]}]
 
 
 def base_annotator_formatter(payload: Any, model_args_names=('x',), mode='in'):
@@ -204,16 +203,16 @@ def odqa_formatter(payload: Any, model_args_names=('question_raw',), mode='in'):
     if mode == 'in':
         return last_utterances(payload, model_args_names)
     elif mode == 'out':
-        return {"text": payload[0],
-                "confidence": 0.5}
+        return [{"text": payload[0],
+                "confidence": 0.5}]
 
 
 def chitchat_formatter(payload: Any, model_args_names=('q',), mode='in'):
     if mode == 'in':
         return last_utterances(payload, model_args_names)
     elif mode == 'out':
-        return {"text": payload[0],
-                "confidence": 0.5}
+        return [{"text": payload[0],
+                "confidence": 0.5}]
 
 
 def chitchat_example_formatter(payload: Any,
@@ -226,9 +225,7 @@ def chitchat_example_formatter(payload: Any,
                 model_args_names[2]: parsed['utterances_histories'],
                 model_args_names[3]: parsed['dialogs']}
     elif mode == 'out':
-        return {"text": payload[0],
-                "confidence": payload[1],
-                "name": payload[2]}
+        return [{"text": payload[0], "confidence": payload[1], "name": payload[2]}]
 
 
 def alice_formatter(payload, mode='in'):
@@ -357,8 +354,8 @@ def program_y_formatter(payload, mode='in'):
         return {'sentences': parsed["last_utterances"],
                 'user_ids': parsed["user_telegram_ids"]}
     elif mode == 'out':
-        return {"text": payload[0],
-                "confidence": payload[1]}
+        return [{"text": payload[0],
+                "confidence": payload[1]}]
 
 
 def base_response_selector_formatter(payload, mode='in'):
