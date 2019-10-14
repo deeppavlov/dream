@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 donotknow_answers = ["I really do not know what to answer.",
-                     "Sorry, probably, I din't get what you mean.",
+                     "Sorry, probably, I didn't get what you mean.",
                      "I didn't get it. Sorry.",
                      "Let's talk about something else."]
 
