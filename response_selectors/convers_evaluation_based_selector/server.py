@@ -164,7 +164,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     if sum(ids) == len(toxicities):
         # the most dummy заглушка на случай, когда все абсолютно скиллы вернули токсичные ответы
         non_toxic_answers = ["I really do not know what to answer.",
-                             "Sorry, probably, I din't get what you mean.",
+                             "Sorry, probably, I didn't get what you mean.",
                              "I didn't get it. Sorry"
                              ]
         non_toxic_answer = np.random.choice(non_toxic_answers)
