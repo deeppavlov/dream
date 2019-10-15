@@ -42,7 +42,7 @@ def respond():
     dialog_ids = []
     for i, sent_list in enumerate(user_list_sentences):
         for sent in sent_list:
-            user_sentences.append(sent)
+            user_sentences.append(sent.replace(' \'', '\''))
             dialog_ids += [i]
 
     session_id = uuid.uuid4().hex
