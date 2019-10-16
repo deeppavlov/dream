@@ -1,18 +1,16 @@
-import os
 import logging
-from typing import List
+import os
 import random
 import time
-
-from fastapi import FastAPI, Body
-from pydantic import BaseModel
-import torch
-
-from pytorch_pretrained_bert import OpenAIGPTLMHeadModel, OpenAIGPTTokenizer
-from interact import sample_sequence
 from os import getenv
-import sentry_sdk
 
+import sentry_sdk
+import torch
+from flask import Flask, request, jsonify
+from flasgger import Swagger, swag_from
+from pytorch_pretrained_bert import OpenAIGPTLMHeadModel, OpenAIGPTTokenizer
+
+from interact import sample_sequence
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 
@@ -53,24 +51,9 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
+app = Flask(__name__)
+swagger = Swagger(app)
 
-class Input_placeholders(BaseModel):
-    personality: List[List[str]] = Body(
-        ...,
-        example=[
-            [
-                "i prefer vinyl records to any other music recording format.",
-                "i fix airplanes for a living.",
-                "drive junk cars that no one else wants.",
-                "i think if i work hard enough i can fix the world.",
-                "i am never still.",
-            ]
-        ],
-    )
-    utterances_histories: List[List[str]] = Body(..., example=[["Hello", "Hi", "How are you?"]])
-
-
-app = FastAPI()
 
 random.seed(SEED)
 torch.random.manual_seed(SEED)
@@ -97,13 +80,15 @@ def inference(personality, utterances_histories):
         return "", 0.0
 
 
-@app.post("/transfertransfo/")
-def transfer_transfo_chitchat_model(placeholders: Input_placeholders):
+@app.route("/transfertransfo", methods=['POST'])
+@swag_from('chitchat_endpoint.yml')
+def transfer_transfo_chitchat_model():
     st_time = time.time()
-    logger.info(f"transfertransfo start time: {st_time}")
+    personality = request.json['personality']
+    utterances_histories = request.json['utterances_histories']
     response = [
-        inference(pers, hist) for pers, hist in zip(placeholders.personality, placeholders.utterances_histories)
+        inference(pers, hist) for pers, hist in zip(personality, utterances_histories)
     ]
     total_time = time.time() - st_time
     logger.info(f"transfertransfo exec time: {total_time:.3f}s")
-    return response
+    return jsonify(response)
