@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 
-import json
 import logging
 import os
 import numpy as np
 import uuid
 import time
 
-import requests
 from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
@@ -49,16 +47,19 @@ def respond():
     session_id = uuid.uuid4().hex
     sentiments = []
     confidences = []
-    result = requests.request(url=f'{COBOT_SENTIMENT_SERVICE_URL}',
-                              headers=headers,
-                              data=json.dumps({'utterances': user_sentences}),
-                              method='POST')
 
-    if result.status_code != 200:
-        msg = "result status code is not 200: {}. result text: {}; result status: {}".format(result, result.text,
-                                                                                             result.status_code)
-        sentry_sdk.capture_message(msg)
-        logger.warning(msg)
+    # cobot sentiment is dead
+    # result = requests.request(url=f'{COBOT_SENTIMENT_SERVICE_URL}',
+    #                           headers=headers,
+    #                           data=json.dumps({'utterances': user_sentences}),
+    #                           method='POST')
+    result = None
+    if result is None or result.status_code != 200:
+        if result is not None:
+            msg = "result status code is not 200: {}. result text: {}; result status: {}".format(result, result.text,
+                                                                                                 result.status_code)
+            sentry_sdk.capture_message(msg)
+            logger.warning(msg)
         sentiments = [['neutral']] * len(user_list_sentences)
         confidences = [[0.0]] * len(user_list_sentences)
     else:

@@ -46,6 +46,7 @@ def respond():
     for i, text in enumerate(user_sentences):
         logger.info(f"user text: {text}, session_id: {session_id}")
         sentseg = model.predict(sess, text)
+        sentseg = sentseg.replace(' \'', '\'')
         segments = split_segments(sentseg)
         sentseg_result += [{"punct_sent": sentseg, "segments": segments}]
         logger.info(f"punctuated sent. : {sentseg}")

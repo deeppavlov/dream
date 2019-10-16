@@ -28,9 +28,10 @@ def main():
         f'Mean proc time: {mean_proc_time} > {args.time_limit}')
 
     for pred_r, true_r in zip(pred_data, true_data):
-        true_sents = set([sent.lower() for sent in true_r[1:]])
+        true_sents = set([sent.lower().replace('\n', ' ') for sent in true_r[1:]])
         if true_sents:
-            assert pred_r[-1].lower() in true_sents, print("ERROR: {} not in {}".format(pred_r[-1], true_sents))
+            assert pred_r[-1].lower().replace('\n', ' ') in true_sents, print("ERROR: {} not in {}".
+                                                                              format(pred_r[-1], true_sents))
 
 
 if __name__ == '__main__':
