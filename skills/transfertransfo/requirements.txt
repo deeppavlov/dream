@@ -4,25 +4,9 @@ pytorch-ignite==0.2.0
 pytorch-pretrained-bert==0.6.2
 
 # web
-appdirs==1.4.3
-attrs==19.1.0
-black==19.3b0
-Click==7.0
-dataclasses==0.6
-entrypoints==0.3
-fastapi==0.36.0
-flake8==3.7.8
-h11==0.8.1
-httptools==0.0.13
-mccabe==0.6.1
-pycodestyle==2.5.0
-pydantic==0.30
-pyflakes==2.1.1
-starlette==0.12.7
-toml==0.10.0
-uvicorn==0.8.6
-uvloop==0.12.2
-websockets==7.0
+gunicorn==19.9.0
+flask==1.1.1
+flasgger==0.9.4.dev0
 
 # external
 sentry-sdk==0.12.3

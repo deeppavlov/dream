@@ -3,84 +3,87 @@ services:
   agent:
     env_file: [.env.dev]
     volumes:
-      - '.:/dp-agent'
+      - ".:/dp-agent"
   cobotqa:
     env_file: [.env.dev]
     volumes:
-      - './skills/CoBotQA:/src'
+      - "./skills/CoBotQA:/src"
     ports:
       - 8001:8001
   rule_based_selector:
     env_file: [.env.dev]
     volumes:
-      - './skill_selectors/rule_based_selector:/src'
+      - "./skill_selectors/rule_based_selector:/src"
     ports:
       - 8002:8002
   cobot_topics:
     env_file: [.env.dev]
     volumes:
-      - './annotators/CoBotTopicClassification:/src'
+      - "./annotators/CoBotTopicClassification:/src"
     ports:
       - 8003:8003
   cobot_sentiment:
     env_file: [.env.dev]
     volumes:
-      - './annotators/CoBotSentimentClassification:/src'
+      - "./annotators/CoBotSentimentClassification:/src"
     ports:
       - 8004:8004
   sentseg:
     env_file: [.env.dev]
     volumes:
-      - './annotators/SentSeg:/src'
+      - "./annotators/SentSeg:/src"
     ports:
       - 8011:8011
   sentrewrite:
     env_file: [.env.dev]
     volumes:
-      - './annotators/SentRewrite:/src'
+      - "./annotators/SentRewrite:/src"
     ports:
       - 8017:8017
   cobot_offensiveness:
     env_file: [.env.dev]
     volumes:
-      - './annotators/CoBotOffensiveSpeechClassification:/src'
+      - "./annotators/CoBotOffensiveSpeechClassification:/src"
     ports:
       - 8005:8005
   cobot_dialogact:
     env_file: [.env.dev]
     volumes:
-      - './annotators/CoBotDialogActClassification:/src'
+      - "./annotators/CoBotDialogActClassification:/src"
     ports:
       - 8006:8006
   transfertransfo:
+    build:
+      args:
+        MODE: dev
     env_file: [.env.dev]
     volumes:
-      - './skills/transfertransfo:/app'
+      - "./skills/transfertransfo:/app"
     ports:
       - 8007:8007
   retrieval_chitchat:
     env_file: [.env.dev]
     volumes:
-      - './skills/retrieval_chitchat:/app'
+      - "./skills/retrieval_chitchat:/app"
     ports:
       - 8015:8015
   personality_catcher:
     env_file: [.env.dev]
     volumes:
-      - './skills/personality_catcher:/app'
+      - "./skills/personality_catcher:/app"
     ports:
       - 8010:8010
   program_y:
     env_file: [.env.dev]
     volumes:
-      - './skills/program-y:/src'
-      - './skills/program-y/logs:/tmp'
+      - "./skills/program-y:/src"
+      - "./skills/program-y/logs:/tmp"
     ports:
       - 8008:8008
   convers_evaluation_selector:
     env_file: [.env.dev]
     volumes:
-      - './response_selectors/convers_evaluation_based_selector:/src'
+      - "./response_selectors/convers_evaluation_based_selector:/src"
     ports:
       - 8009:8009
   mongo:
@@ -94,44 +97,44 @@ services:
   toxic_classification:
     env_file: [.env.dev]
     volumes:
-      - './annotators/DeepPavlovToxicClassification:/src'
+      - "./annotators/DeepPavlovToxicClassification:/src"
     ports:
       - 8013:8013
   intent_responder:
     env_file: [.env.dev]
     volumes:
-      - './skills/IntentResponder:/src'
+      - "./skills/IntentResponder:/src"
     ports:
       - 8012:8012
   intent_catcher:
     env_file: [.env.dev]
     volumes:
-      - './annotators/IntentCatcher:/src'
+      - "./annotators/IntentCatcher:/src"
     ports:
       - 8014:8014
   blacklisted_words:
     env_file: [.env.dev]
     volumes:
-      - './annotators/BlacklistedWordsDetector:/src'
+      - "./annotators/BlacklistedWordsDetector:/src"
     ports:
       - 8018:8018
   dummy_skill:
     env_file: [.env.dev]
     volumes:
-      - './skills/dummy_skill:/src'
+      - "./skills/dummy_skill:/src"
     ports:
       - 8019:8019
   program_y_dangerous:
     env_file: [.env.dev]
     volumes:
-      - './skills/program-y-dangerous:/src'
-      - './skills/program-y-dangerous/logs:/tmp'
+      - "./skills/program-y-dangerous:/src"
+      - "./skills/program-y-dangerous/logs:/tmp"
     ports:
       - 8022:8022
   cobot_nounphrases:
     env_file: [.env.dev]
     volumes:
-      - './annotators/nounphrases:/src'
+      - "./annotators/nounphrases:/src"
     ports:
       - 8016:8016
-version: '3.7'
+version: "3.7"
