@@ -42,8 +42,8 @@ class RuleBasedSelector():
 
         for dialog in states_batch:
             skills_for_uttr = []
-
-            tokens = dialog['utterances'][-1]['text'].lower().split()
+            reply = dialog['utterances'][-1]['text'].replace("\'", " \'").lower()
+            tokens = reply.split()
             intents = dialog['utterances'][-1]['annotations']['intent_catcher'].values()
             intent_detected = any([i['detected'] == 1 for i in intents])
 
@@ -54,6 +54,8 @@ class RuleBasedSelector():
 
             if "/new_persona" in dialog['utterances'][-1]['text']:
                 skills_for_uttr.append("personality_catcher")  # TODO: rm crutch of personality_catcher
+            elif intent_detected:
+                skills_for_uttr.append("intent_responder")
             elif blist_topics_detected or sensitive_topics_detected:
                 skills_for_uttr.append("program_y_dangerous")
                 skills_for_uttr.append("cobotqa")
@@ -62,8 +64,6 @@ class RuleBasedSelector():
                 skills_for_uttr.append("program_y")
                 # skills_for_uttr.append("transfertransfo")
                 # skills_for_uttr.append("retrieval_chitchat")
-            elif intent_detected:
-                skills_for_uttr.append("intent_responder")
             else:
                 skills_for_uttr.append("program_y")
                 # skills_for_uttr.append("transfertransfo")

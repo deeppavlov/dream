@@ -59,7 +59,116 @@
           "I did not hear you, repeat"
         ],
         "min_precision" : 0.0
-      }
+      },
+    "what_is_your_name" : {
+        "phrases" : [
+          "What is your name",
+          "What's your name",
+          "How can i call you",
+          "How to call you",
+          "How can i name you",
+          "How to name you",
+          "What is your surname",
+          "What is your family name",
+          "What is your lastname",
+          "What's your surname",
+          "What's your family name",
+          "What's your lastname",
+          "How to contact you"
+        ],
+      "min_precision" : 0.00
+    },
+    "where_are_you_from" : {
+        "phrases" : [
+          "Where are you from",
+          "Where do you live",
+          "Where are you living",
+          "Where do you exist",
+          "Where you was born",
+          "Where you were born",
+          "What is your birthplace",
+          "What's your birthplace",
+          "Where you were born",
+          "What is your location",
+          "What's your location",
+          "What is your address",
+          "What's your address"
+        ],
+      "min_precision" : 0.00
+    },
+    "who_made_you" : {
+        "phrases" : [
+          "Who did you",
+          "Who created you",
+          "Who built you",
+          "Who made you",
+          "Who developed you",
+          "Who designed you",
+          "Who produced you",
+          "Who programmed you",
+          "Who make you",
+          "Who create you",
+          "Who build you",
+          "Who owns you",
+          "Who is your botmaster",
+          "Who is your master",
+          "Who is your holder",
+          "Who is your host",
+          "Who is your creator",
+          "Who is your developer",
+          "Who is your team",
+          "Who is your leader",
+          "Who is your teamleader",
+          "Who is your architect",
+          "Who is your author",
+          "Who is your builder",
+          "Who is your implementer",
+          "Who is your owner",
+          "Who is your skipper",
+          "Who is your trainer",
+          "Who is your manager",
+          "Who is your chief",
+          "Which team made you",
+          "Which university build you",
+          "Which university made you",
+          "Which university owns you",
+          "Whom do you belong to",
+          "Whom do you belong with",
+          "What is the name of your creator",
+          "What's the name of your creator",
+          "Tell me the name of your creator"
+        ],
+      "min_precision" : 0.00
+    },
+    "what_is_your_job" : {
+        "phrases" : [
+          "What is your job",
+          "What's your job",
+          "What is your work",
+          "What's your work",
+          "Who do you work",
+          "Who are you working",
+          "What is your profession",
+          "What's your profession",
+          "Tell me your job",
+          "Tell me your profession",
+          "Do you have a job",
+          "What are you doing for living",
+          "What do you do for living",
+          "What is your occupation"
+        ],
+      "min_precision" : 0.00
+    },
+    "what_can_you_do" : {
+        "phrases" : [
+          "What can you do",
+          "What you can do",
+          "What are you skills",
+          "What skills do you have",
+          "Tell me your skills"
+        ],
+      "min_precision" : 0.00
+    }
   },
   "random_phrases" : [
     "That nice",
@@ -73,6 +182,8 @@
     "Okay",
     "That okay",
     "Ok",
-    "Nice"
+    "Nice",
+    "Who is the best",
+    "What is my name"
   ]
 }

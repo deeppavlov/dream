@@ -92,7 +92,9 @@ def annotated_input_formatter(state: Dict, cmd_exclude=True, annotation="punctua
         annotation: `punctuated` or `segmented` or `coref_resolved`
 
     Returns:
-        formatted dialog state
+        formatted dialog state.
+        In case of `segmented`, returned `dialogs` field DOES NOT contain segments but `punctuated` texts
+            while other returned fields contain segments instead of `text`.
     """
     utterances_histories = []
     last_utts = []
@@ -112,12 +114,15 @@ def annotated_input_formatter(state: Dict, cmd_exclude=True, annotation="punctua
                 else:
                     prefix = ""
                 if annotation == "punctuated":
+                    utterance["text"] = utterance["annotations"][prefix + "sentseg"]["punct_sent"]
                     utterances_history.append(utterance["annotations"][prefix + "sentseg"]["punct_sent"])
                 elif annotation == "segmented":
+                    utterance["text"] = utterance["annotations"][prefix + "sentseg"]["punct_sent"]
                     utterances_history.append(utterance["annotations"][prefix + "sentseg"]["segments"])
                 elif annotation == "coref_resolved":
                     # sentrewrite model annotates k last utterances, we can take only last one or
                     # take all last k utterances from this annotator
+                    utterance["text"] = utterance["annotations"][prefix + "sentrewrite"]["modified_sents"][-1]
                     utterances_history.append(utterance["annotations"][prefix + "sentrewrite"]["modified_sents"][-1])
             except KeyError:
                 # bot utterances are not annotated
@@ -262,7 +267,8 @@ def cobot_qa_formatter(payload, mode='in'):
 
 def base_skill_selector_formatter(payload: Any, mode='in'):
     if mode == 'in':
-        return {"states_batch": annotated_input_formatter(payload, annotation="punctuated")['dialogs']}
+        dialogs = annotated_input_formatter(payload, annotation="punctuated")['dialogs']
+        return {"states_batch": dialogs}
     elif mode == 'out':
         # it's questionable why output from Model itself is 2dim: batch size x n_skills
         # and payload here is 3dim. I don't know which dim is extra and from where it comes

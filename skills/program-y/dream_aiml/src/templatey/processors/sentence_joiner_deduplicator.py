@@ -21,7 +21,8 @@ class SentenceJoinerDeDuplicator(SentenceJoiner):
         # IDK is specified
         IDK_SENTENCE = "Sorry, I don't have an answer for that!"
 
-        for sentence in answers:
+        # reversed `answers` to join answers in correct order
+        for sentence in answers[::-1]:
             if sentence and sentence.lower() != IDK_SENTENCE.lower():
                 # Sometimes sentence can be already merged list of answers which may contain
                 # duplicated IDKs. So we make cleaning here.
@@ -45,7 +46,7 @@ class SentenceJoinerDeDuplicator(SentenceJoiner):
                     else:
                         final_sentences.append(sentence)
                 # return just the first answer that satisfies the criteria of allowed answer (not IDK).
-                break
+                # break
 
         if len(final_sentences) == 0:
             # if we here means all answers are IDKs, choose the only one:

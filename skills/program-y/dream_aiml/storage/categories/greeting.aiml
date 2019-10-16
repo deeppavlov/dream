@@ -82,7 +82,7 @@
     <category>
       <pattern>YES</pattern>
       <template>
-        I am newborn, so I can't do so much. For example I can answer for any question.
+        I am newborn socialbot, so I can't do so much. For example I can answer for any question.
        <think>
         <set name="topic"><star/></set>
       </think>

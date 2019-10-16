@@ -35,8 +35,38 @@ def repeat_respond(utt, response_phrases):
     return utt['bot_sentence'] if len(utt['bot_sentence']) > 0 else "I did not say anything!"
 
 
+def where_are_you_from_respond(utt, response_phrases):
+    response = random.choice(response_phrases).strip()
+    return response
+
+
+def who_made_you_respond(utt, response_phrases):
+    response = random.choice(response_phrases).strip()
+    return response
+
+
+def what_is_your_name_respond(utt, response_phrases):
+    response = random.choice(response_phrases).strip()
+    return response
+
+
+def what_is_your_job_respond(utt, response_phrases):
+    response = random.choice(response_phrases).strip()
+    return response
+
+
+def what_can_you_do_respond(utt, response_phrases):
+    response = random.choice(response_phrases).strip()
+    return response
+
+
 def get_respond_funcs():
     return {
-        "exit" : exit_respond,
-        "repeat" : repeat_respond
+        "exit": exit_respond,
+        "repeat": repeat_respond,
+        "where_are_you_from": where_are_you_from_respond,
+        "who_made_you": who_made_you_respond,
+        "what_is_your_name": what_is_your_name_respond,
+        "what_is_your_job": what_is_your_job_respond,
+        "what_can_you_do": what_can_you_do_respond
     }
