@@ -17,27 +17,27 @@ services:
   cobotqa:
     build:
       context: ./skills/CoBotQA/
-    command: gunicorn --workers=2 server:app -b 0.0.0.0:8001
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8001 -t 60
     volumes: []
   cobot_topics:
     build:
       context: ./annotators/CoBotTopicClassification/
-    command: gunicorn --workers=2 server:app -b 0.0.0.0:8003
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8003 -t 60
     volumes: []
   cobot_sentiment:
     build:
       context: ./annotators/CoBotSentimentClassification/
-    command: gunicorn --workers=2 server:app -b 0.0.0.0:8004
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8004 -t 60
     volumes: []
   cobot_offensiveness:
     build:
       context: ./annotators/CoBotOffensiveSpeechClassification/
-    command: gunicorn --workers=2 server:app -b 0.0.0.0:8005
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8005 -t 60
     volumes: []
   cobot_dialogact:
     build:
       context: ./annotators/CoBotDialogActClassification/
-    command: gunicorn --workers=2 server:app -b 0.0.0.0:8006
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8006 -t 60
     volumes: []
   transfertransfo:
     build:
