@@ -139,8 +139,9 @@ class IntentReflectorHandler(AbstractRequestHandler):
                 dp_agent_data = call_dp_agent(user_id, speech_text)
             else:
                 dp_agent_data = {"response": "Sorry", "intent": None}
-                logger.warning("NO TEXT NO SPEECH!")
-                sentry_sdk.capture_message("no text! no speech!")
+                msg = f"LAMBDA: NO TEXT NO SPEECH!\nincoming request: {request_data['request']}"
+                logger.warning(msg)
+                sentry_sdk.capture_message(msg)
         else:
             dp_agent_data = call_dp_agent(user_id, text)
         speak_output = dp_agent_data['response']
@@ -194,4 +195,11 @@ handler = sb.lambda_handler()
 def handler_wrapper(event, context):
     global request_data
     request_data = event
+    if 'request' in request_data:
+        logger.info(f'incoming request:\n{request_data["request"]}')
+    else:
+        msg = 'LAMBDA: no field request in request_data'
+        logger.warning(msg)
+        sentry_sdk.capture_message(msg)
+
     return handler(event=event, context=context)
