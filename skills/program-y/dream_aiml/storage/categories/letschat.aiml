@@ -57,13 +57,6 @@
   </category>
 
   <category>
-    <pattern>LET US TALK ABOUT _</pattern>
-    <template>
-      <srai>LET_US_CHAT_ABOUT <star/></srai>
-    </template>
-  </category>
-
-  <category>
     <pattern>LET US DISCUSS _</pattern>
     <template>
       <srai>LET_US_CHAT_ABOUT <star/></srai>
