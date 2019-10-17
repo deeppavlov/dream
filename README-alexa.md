@@ -26,7 +26,7 @@ $(inside docker): python3 -m core.run
 по умолчанию все тесты запускаются на gpu: `tests/runtests.sh`
 
 запуск на cpu: `tests/runtests.sh DEVICE=cpu`
-запуск определенных тестов с параметром MODE: 
+запуск определенных тестов с параметром MODE:
 - тестовый диалог: `tests/runtests.sh MODE=test_dialog`
 - получить ответы бота на спорные/фактоидные/персона вопросы `tests/runtests.sh MODE=infer_questions`
 
@@ -115,3 +115,7 @@ ubuntu@ip-172-31-42-16:~$ docker run nvidia/cuda:9.0-base nvidia-smi
 
 - For local setup install nvidia-docker2 https://github.com/NVIDIA/nvidia-docker/wiki/Installation-(version-2.0)
 - Restart docker daemon and do step 2.
+
+How to run monitoring script
+==========================
+- `SENTRY_DSN=https://7a6d57df6fb44ae4bfc3d43a8b4f16f3@sentry.io/1553895 python3 service_monitoring.py http://Docker-ExternalLoa-LOFSURITNPLE-525614984.us-east-1.elb.amazonaws.com:4242`
