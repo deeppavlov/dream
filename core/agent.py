@@ -120,6 +120,7 @@ class Agent:
                            require_response=False, **kwargs):
         user = self.state_manager.get_or_create_user(user_telegram_id, user_device_type)
         should_reset = True if utterance == TG_START_UTT else False
+        logger.info("SHOULD_RESET: {}".format(should_reset))
         dialog = self.state_manager.get_or_create_dialog(user, location, channel_type, should_reset=should_reset)
         if require_response:
             event = asyncio.Event()

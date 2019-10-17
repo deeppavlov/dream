@@ -151,13 +151,12 @@ async def api_message_processor(register_msg, intermediate_storage, debug=False)
     return api_handle
 
 
-async def users_dialogs():
+async def users_dialogs(request):
     from core.state_schema import Dialog
     exist_dialogs = Dialog.objects()
     result = list()
     for i in exist_dialogs:
-        result.append(
-            {'id': str(i.id), 'location': i.location, 'channel_type': i.channel_type, 'user': i.user.to_dict()})
+        result.append(i.to_dict())
     return web.json_response(result)
 
 
