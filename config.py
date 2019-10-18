@@ -194,16 +194,16 @@ ANNOTATORS_2 = [
         "path": "",
         "formatter": cobot_classifiers_formatter
     },
-    # {
-    #     "name": "cobot_dialogact",
-    #     "protocol": "http",
-    #     "host": "cobot_dialogact",
-    #     "port": 8006,
-    #     "endpoint": "dialogact",
-    #     "external": True,
-    #     "path": "",
-    #     "formatter": cobot_dialogact_formatter
-    # },
+    {
+        "name": "cobot_dialogact",
+        "protocol": "http",
+        "host": "cobot_dialogact",
+        "port": 8006,
+        "endpoint": "dialogact",
+        "external": True,
+        "path": "",
+        "formatter": cobot_dialogact_formatter
+    },
     {
         "name": "cobot_nounphrases",
         "protocol": "http",

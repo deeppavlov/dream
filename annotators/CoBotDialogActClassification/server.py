@@ -47,11 +47,12 @@ def respond():
         # dialog is a list of replies. each reply is a list of sentences
         for user_sent in dialog[-1]:
             conv = dict()
+            logger.info("User sent: {}".format(user_sent))
             conv["currentUtterance"] = user_sent
             # every odd utterance is from user
-            conv["pastUtterances"] = dialog[1::2][-2:]
+            conv["pastUtterances"] = [" ".join(list_sent) for list_sent in dialog[:-1][1::2][-2:]]
             # every second utterance is from bot
-            conv["pastResponses"] = dialog[::2][-2:]
+            conv["pastResponses"] = [" ".join(list_sent) for list_sent in dialog[:-1][::2][-2:]]
             conversations += [conv]
             dialog_ids += [i]
 
