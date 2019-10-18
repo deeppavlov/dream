@@ -28,7 +28,12 @@ class RuleBasedSelector():
         "would", "should", "shall", "may", "might", "can", "could"
     }
 
-    sensitive_topics = {"Politics", "Celebrities", "Religion", "Sex_Profanity", "SciTech", "Art_Event"}
+    sensitive_topics = {"Politics", "Celebrities", "Religion", "Sex_Profanity", "Sports",
+                        "News", "Psychology"
+                        }
+    # `General_ChatIntent` sensitive in case when `?` in reply
+    sensitive_dialogacts = {"Opinion_RequestIntent", "General_ChatIntent"
+                            }
 
     def __init__(self, **kwargs):
         logger.info("Skill selector Initialized")
@@ -43,12 +48,15 @@ class RuleBasedSelector():
         for dialog in states_batch:
             skills_for_uttr = []
             reply = dialog['utterances'][-1]['text'].replace("\'", " \'").lower()
-            tokens = reply.split()
+            # tokens = reply.split()
             intents = dialog['utterances'][-1]['annotations']['intent_catcher'].values()
             intent_detected = any([i['detected'] == 1 for i in intents])
 
             cobot_topics = dialog['utterances'][-1]['annotations']['cobot_topics']['text']
             sensitive_topics_detected = any([t in self.sensitive_topics for t in cobot_topics])
+            cobot_dialogacts = dialog['utterances'][-1]['annotations']['cobot_dialogact']['intents']
+            sensitive_dialogacts_detected = any([(t in self.sensitive_dialogacts and "?" in reply)
+                                                 for t in cobot_dialogacts])
 
             blist_topics_detected = dialog['utterances'][-1]['annotations']['blacklisted_words']['restricted_topics']
 
@@ -56,10 +64,11 @@ class RuleBasedSelector():
                 skills_for_uttr.append("personality_catcher")  # TODO: rm crutch of personality_catcher
             elif intent_detected:
                 skills_for_uttr.append("intent_responder")
-            elif blist_topics_detected or sensitive_topics_detected:
+            elif blist_topics_detected or (sensitive_topics_detected and sensitive_dialogacts_detected):
                 skills_for_uttr.append("program_y_dangerous")
                 skills_for_uttr.append("cobotqa")
-            elif self._is_question(tokens):
+            # elif self._is_question(tokens):
+            elif "Information_RequestIntent" in cobot_dialogacts:
                 skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("program_y")
                 # skills_for_uttr.append("transfertransfo")

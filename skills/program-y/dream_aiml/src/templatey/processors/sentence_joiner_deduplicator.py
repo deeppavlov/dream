@@ -8,7 +8,13 @@ class SentenceJoinerDeDuplicator(SentenceJoiner):
         # The simplest heuristic is to pull answers through set data structure and deduplicate pure
         # duplicates
         len_before = len(answers)
-        answers = list(set(answers))
+
+        new_answers = []
+        for i in range(len(answers)):
+            if not(answers[i] in new_answers):
+                new_answers.append(answers[i])
+        answers = new_answers
+
         len_after = len(answers)
         if len_after != len_before:
             YLogger.warning(self, "Sentence DeDuplicator stripped duplicated answers: %d %d",
@@ -22,7 +28,7 @@ class SentenceJoinerDeDuplicator(SentenceJoiner):
         IDK_SENTENCE = "Sorry, I don't have an answer for that!"
 
         # reversed `answers` to join answers in correct order
-        for sentence in answers[::-1]:
+        for sentence in answers:
             if sentence and sentence.lower() != IDK_SENTENCE.lower():
                 # Sometimes sentence can be already merged list of answers which may contain
                 # duplicated IDKs. So we make cleaning here.
