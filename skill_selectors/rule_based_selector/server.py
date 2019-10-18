@@ -76,7 +76,7 @@ class RuleBasedSelector():
             else:
                 skills_for_uttr.append("program_y")
                 # skills_for_uttr.append("transfertransfo")
-                skills_for_uttr.append("retrieval_chitchat")
+                # skills_for_uttr.append("retrieval_chitchat")
 
             # always add dummy_skill
             skills_for_uttr.append("dummy_skill")
