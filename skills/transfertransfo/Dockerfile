@@ -1,6 +1,6 @@
 FROM pytorch/pytorch:1.2-cuda10.0-cudnn7-runtime
 
-RUN mkdir /app
+########### DOWNLOADING MODELS ###########
 
 ARG MODE
 ENV MODE ${MODE:-staging}
@@ -13,8 +13,14 @@ RUN mkdir -p /root/models && \
     cd /root/models/ && \
     tar -xvzf finetuned_chatbot_gpt.tar.gz
 
+########### MODELS ###########
+
+RUN mkdir /app
+
 COPY requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt
+
+RUN python -m nltk.downloader all
 
 ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
@@ -25,4 +31,4 @@ ENV DEVICE cpu
 COPY . /app/
 WORKDIR /app
 
-CMD gunicorn --workers=2 server:app
+CMD gunicorn --workers=2 server:app --timeout 120

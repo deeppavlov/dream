@@ -116,3 +116,5 @@ venv.bak/
 .*DS_Store
 
 tests/dream/output/*
+
+skills/transfertransfo/tests/test_results.json
