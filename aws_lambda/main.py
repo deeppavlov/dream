@@ -43,36 +43,6 @@ class LaunchRequestHandler(AbstractRequestHandler):
         )
 
 
-class HelloWorldIntentHandler(AbstractRequestHandler):
-    """Handler for Hello World Intent."""
-    def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
-        return ask_utils.is_intent_name("HelloWorldIntent")(handler_input)
-
-    def handle(self, handler_input):
-        # type: (HandlerInput) -> Response
-        speak_output = "Hello Python World from Classes!"
-
-        return (
-            handler_input.response_builder.speak(speak_output).ask(speak_output).response
-        )
-
-
-class HelpIntentHandler(AbstractRequestHandler):
-    """Handler for Help Intent."""
-    def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
-        return ask_utils.is_intent_name("AMAZON.HelpIntent")(handler_input)
-
-    def handle(self, handler_input):
-        # type: (HandlerInput) -> Response
-        speak_output = "You can say hello to me! How can I help?"
-
-        return (
-            handler_input.response_builder.speak(speak_output).ask(speak_output).response
-        )
-
-
 class StopIntentHandler(AbstractRequestHandler):
     """Single handler for Cancel and Stop Intent."""
     def can_handle(self, handler_input):
@@ -85,7 +55,7 @@ class StopIntentHandler(AbstractRequestHandler):
         speak_output = ""
 
         return (
-            handler_input.response_builder.speak(speak_output).response
+            handler_input.response_builder.speak(speak_output).set_should_end_session(True).response
         )
 
 
@@ -137,6 +107,10 @@ class IntentReflectorHandler(AbstractRequestHandler):
                 speech_text = ' '.join([token['value'] for token in speech['hypotheses'][0]['tokens']])
                 logger.info(f'got text from speech: {speech_text}')
                 dp_agent_data = call_dp_agent(user_id, speech_text)
+            elif ask_utils.is_intent_name("AMAZON.CancelIntent")(handler_input):
+                text = 'cancel'
+                logger.info(f'got AMAZON.CancelIntent, set text to: {text}')
+                dp_agent_data = call_dp_agent(user_id, text)
             else:
                 dp_agent_data = {"response": "Sorry", "intent": None}
                 msg = f"LAMBDA: NO TEXT NO SPEECH!\nincoming request: {request_data['request']}"
@@ -181,7 +155,6 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
 sb = SkillBuilder()
 
 sb.add_request_handler(LaunchRequestHandler())
-sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(StopIntentHandler())
 sb.add_request_handler(SessionEndedRequestHandler())
 # make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
