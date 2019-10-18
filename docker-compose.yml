@@ -68,12 +68,12 @@ services:
   sentseg:
     build:
       context: ./annotators/SentSeg/
-    command: bash -c "./setup.sh && gunicorn --workers=1 server:app -b 0.0.0.0:8011"
+    command: bash -c "./setup.sh && gunicorn --workers=1 server:app -b 0.0.0.0:8011 -t 60"
     volumes: []
   convers_evaluation_selector:
     build:
       context: ./response_selectors/convers_evaluation_based_selector/
-    command: gunicorn --workers=2 server:app -b 0.0.0.0:8009
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8009 -t 60
     volumes: []
   toxic_classification:
     build:
@@ -93,7 +93,7 @@ services:
   sentrewrite:
     build:
       context: ./annotators/SentRewrite/
-    command: bash -c "./setup.sh && gunicorn --workers=1 server:app -b 0.0.0.0:8017"
+    command: bash -c "./setup.sh && gunicorn --workers=1 server:app -b 0.0.0.0:8017 -t 60"
   intent_responder:
     build:
       context: ./skills/IntentResponder/
