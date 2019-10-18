@@ -23,3 +23,15 @@ Welcome to DeepPavlov Agent documentation!
    :caption: User State API
 
    api/user_state_api
+
+.. toctree::
+   :maxdepth: 2
+   :caption: User Commands
+
+   user_commands/commands
+
+.. toctree::
+   :maxdepth: 2
+   :caption: State Formatters
+
+   state_formatters/formatters

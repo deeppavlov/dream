@@ -1,0 +1,414 @@
+openapi: 3.0.1
+info:
+  title: DeepPavlov Agent State API
+  version: 0.12.1
+  description: >-
+    Agents built with DeepPavlov Agent communicate with their Services via HTTP, so
+    endpoints should be specified.
+servers:
+  - url: 'http://localhost:{port}/'
+    description: Local development server
+    variables:
+      port:
+        default: '4242'
+paths:
+  /:
+    get:
+      summary: Root path
+      responses:
+        '200':
+          description: Go to /apidocs/ to see graphical web UI for this API.
+  '/api/v0/{skill_endpoint}/':
+    post:
+      parameters:
+        - name: skill_endpoint
+          in: path
+          required: true
+          schema:
+            enum:
+              - model
+      summary: Generic skill endpoint
+      description: >-
+        An agent built with DeepPavlov Agent sends requests to the services endpoints in
+        order to retrieve the answers.
+      requestBody:
+        description: Description of the request to be executed
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestBodySchema'
+            examples:
+              general:
+                $ref: '#/components/examples/GenericRequestBody'
+      responses:
+        '200':
+          description: Request finished succesfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ODQAResponse200Schema"
+              examples:
+                odqa:
+                  $ref: "#/components/examples/ODQAResponse"
+        '404':
+          description: This skill doesn't exsits.
+components:
+  schemas:
+    RequestBodySchema:
+      type: object
+      properties:
+        id:
+          description: REQUIRED. A unique id of the dialog.
+          type: string
+        location:
+          description: 'REQUIRED. A free-formatted location where the dialog is happening.'
+          type: string
+        utterances:
+          description: >-
+            REQUIRED. A list of all utterances of the dialog. The last utterance always belongs
+            to a human user.
+          type: array
+          items:
+             oneOf:
+              - $ref: '#/components/schemas/HumanUtterance'
+              - $ref: '#/components/schemas/BotUtterance'
+        human:
+          $ref: '#/components/schemas/Human'
+        bot:
+          $ref: '#/components/schemas/Bot'
+        channel_type:
+          description: >-
+            REQUIRED. A channel where the communication is happening. For example, "telegram",
+            "facebook", "http".
+          type: string
+    Human:
+      description: 'REQUIRED. A human user in the dialog.'
+      type: object
+      properties:
+        id:
+          description: REQUIRED. A unique is of the human user.
+          type: string
+        user_telegram_id:
+          description:  REQUIRED. A unique Telegram id of the human user.
+          type: string
+        user_type:
+          description: REQUIRED. A user type. Here it is always “human”.
+          type: string
+        device_type:
+          description: >-
+            REQUIRED. A name of the device which is used by the user. For example, it can be "iphone" or "android".
+          type: string
+        persona:
+          description: REQUIRED. A persona of the human user. It is stored as an array of sentences characterizing the human user. By default this is an empty array.
+          type: array
+          items:
+            type: string
+        profile:
+          $ref: '#/components/schemas/Profile'
+        attributes:
+          description: Generic key-value attributes.
+          type: object
+          items:
+            type: object
+    Bot:
+      description: >-
+        REQUIRED. A bot user of the dialog. A bot is an agent with a particular skill set.
+      type: object
+      properties:
+        id:
+          description: REQUIRED.  A unique is of the bot user.
+          type: string
+        user_type:
+          description: REQUIRED. A user type. Here it is always “human”.
+          type: string
+        persona:
+          description: REQUIRED. A persona of the bot user. It is stored as an array of sentences characterizing the human user. By default this is an empty array.
+          type: array
+          items:
+            type: string
+        attributes:
+          description: Generic key-value attributes.
+          type: object
+          items:
+            type: object
+    Profile:
+      description: REQUIRED. A personal information about the human user.
+      type: object
+      properties:
+        gender:
+          description: REQUIRED. A gender of the human user.
+          type: string
+        birthdate:
+          description: REQUIRED. Birthdate
+          type: string
+          format: date
+        name:
+          description: REQUIRED. A name of the human user.
+          type: string
+        location:
+          description: REQUIRED. A location of the human user.
+          type: object
+        home_coordinates:
+          description: REQUIRED. Home coordinates of the human user.
+          type: object
+        work_coordinates:
+          description: REQUIRED. Workplace coordinates of the human user.
+          type: object
+        occupation:
+          description: REQUIRED. A profession of the human user.
+          type: string
+        income_per_year:
+          description: REQUIRED. An income of the human user.
+          type: number
+    HumanUtterance:
+      description: RESUIRED. An utterance of the human user.
+      type: object
+      properties:
+        id:
+          type: string
+          description: REQUIRED. A unique id of the human utterance.
+        text:
+          type: string
+          description: >-
+            REQUIRED. Text of the human utterance. If this is the very first utterance of the dialog,
+            it has the "/start" value.
+        user:
+          $ref: '#/components/schemas/Human'
+        annotations:
+          $ref: '#/components/schemas/Annotations'
+        date_time:
+          type: string
+          format: datetime
+          description: REQUIRED. A time of the utterance receiving by the agent server.
+        hypotheses:
+          type: array
+          items:
+            type: object
+          description: >-
+            Response candidates to this particular Utterance, generated by Skills.
+        attributes:
+          description: Generic key-value attributes.
+          type: object
+          items:
+            type: object
+    BotUtterance:
+      description: RESUIRED. An utterance of the bot user.
+      type: object
+      properties:
+        id:
+          type: string
+          description: REQUIRED. A unique id of the bot utterance.
+        text:
+          type: string
+          description: >-
+            REQUIRED. Text of the bot utterance.
+        orig_text:
+          type: string
+          description: >-
+            An original reponse given by the skill which can be transformed later by ResponseSelector
+            or Postprocessor. If it was transformed, the transformed response goes to the "text" field
+            and the original response is stored to the "orig_text" field. The field has value None by default.
+        user:
+            $ref: '#/components/schemas/Bot'
+        annotations:
+          $ref: '#/components/schemas/Annotations'
+        date_time:
+          type: string
+          format: datetime
+          description: REQUIRED. A time of the utterance receiving by the agent server.
+        confidence:
+          type: number
+          description: Skill confidence in its response.
+        active_skill:
+          type: string
+          description: >-
+            A name of the skill which was responsible for the final bot response generation.
+    Annotations:
+      description: >-
+        REQUIRED. The utterances annotations, or tags. The default values of the field is an empty array: []. If the dialog starts with "/start" utterance, this utterance is not being annotated.
+      type: object
+    ODQAResponse200Unit:
+      description: >-
+        A list of skill responses. Each response here is a hypothetical response to the same human utterance. So s skill should generate a number of possible reponses for each incoming human utterance.
+      type: array
+      items:
+        type: object
+        properties:
+          text:
+            description: A text reponse of the skill.
+            type: string
+          confidence:
+            description: >-
+              Skill confidence in its reponse.
+            type: number
+    ODQAResponse200Schema:
+      description: >-
+        A batch of lists or skill responses. A skill should provide a list of hypothetical answers for each incoming human utterance.
+      properties:
+        responses:
+          type: array
+          items:
+            $ref: '#/components/schemas/ODQAResponse200Unit'
+  examples:
+    GenericRequestBody:
+      description: one exaustive example
+      value:
+        id: 5d9b755eb8cd280022907f27
+        location: lab
+        utterances:
+          - id: 5d9b755eb8cd280022907f29
+            text: Hello
+            user:
+              id: 5d9b755eb8cd280022907f25
+              user_telegram_id: vasily
+              user_type: human
+              device_type: cmd
+              persona: []
+              profile:
+                name: None
+                gender: None
+                birthdate: None
+                location: None
+                home_coordinates: None
+                work_coordinates: None
+                occupation: None
+                income_per_year: None
+              attributes: {}
+            annotations:
+              ner:
+                tokens:
+                  - Hello
+                tags:
+                  - O
+            date_time: '2019-10-07 20:26:54.409000'
+            hypotheses:
+              - skill_name: chitchat
+                text: Hi!
+                confidence: 0.6
+              - skill_name: odqa
+                text: to my friends
+                confidence: 0.23
+          - id: 5d9b755eb8cd280022907f28
+            active_skill: chitchat
+            confidence: 0.6
+            text: Hi!
+            orig_text: None
+            user:
+              id: 5d9b755eb8cd280022907f26
+              user_type: bot
+              persona: []
+              attributes: {}
+            annotations:
+              bot_ner:
+                tokens:
+                  - Hi
+                  - '!'
+                tags:
+                  - O
+                  - O
+            date_time: '2019-10-07 20:26:54.856000'
+          - id: 5d9b7565b8cd280022907f2b
+            text: What is your name?
+            user:
+              id: 5d9b755eb8cd280022907f25
+              user_telegram_id: к5698
+              user_type: human
+              device_type: cmd
+              persona: []
+              profile:
+                name: None
+                gender: None
+                birthdate: None
+                location: None
+                home_coordinates: None
+                work_coordinates: None
+                occupation: None
+                income_per_year: None
+              attributes: {}
+            annotations:
+              ner:
+                tokens:
+                  - What
+                  - is
+                  - your
+                  - name
+                  - '?'
+                tags:
+                  - O
+                  - O
+                  - O
+                  - O
+                  - O
+            date_time: '2019-10-07 20:27:01.193000'
+            hypotheses:
+              - skill_name: chitchat
+                text: My name is DeepPavlov Agent!
+                confidence: 0.9
+              - skill_name: odqa
+                text: Alexander the Great
+                confidence: 0.5
+          - id: 5d9b7565b8cd280022907f2a
+            active_skill: chitchat
+            confidence: 0.6
+            text: My name is DeepPavlov Agent!
+            orig_text: None
+            user:
+              id: 5d9b755eb8cd280022907f26
+              user_type: bot
+              persona: []
+              attributes: {}
+            annotations:
+              bot_ner:
+                tokens:
+                  - My
+                  - name
+                  - is
+                  - DeepPavlov
+                  - Agent
+                  - '!'
+                tags:
+                  - O
+                  - O
+                  - O
+                  - O
+                  - O
+                  - O
+            date_time: '2019-10-07 20:27:01.367000'
+        channel_type: cmd_client
+        human:
+          id: 5d9b755eb8cd280022907f25
+          user_telegram_id: к5698
+          user_type: human
+          device_type: cmd
+          persona: []
+          profile:
+            name: None
+            gender: None
+            birthdate: None
+            location: None
+            home_coordinates: None
+            work_coordinates: None
+            occupation: None
+            income_per_year: None
+          attributes: {}
+        bot:
+          id: 5d9b755eb8cd280022907f26
+          user_type: bot
+          persona: []
+          attributes: {}
+        version: 0.12.0
+    ODQAResponse:
+      description: An example of Open Domain Question Answering (ODQA) skill.
+      value:
+        responses:
+          -
+            - text: Peter the Great was born at 1672.
+              confidence: 0.947
+            - text: at 1672
+              confidence: 0.998
+          -
+            - text: The Earth population is 7 billions.
+              confidence: 0.3333
+            - text: 7 billions
+              confidence: 0.36

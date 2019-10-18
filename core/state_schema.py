@@ -10,6 +10,7 @@ HUMAN_UTTERANCE_SCHEMA = {
     'annotations': {},
     'date_time': None,
     'hypotheses': [],
+    'attributes': {}
 }
 
 BOT_UTTERANCE_SCHEMA = {
@@ -152,6 +153,7 @@ class Utterance(DynamicDocument):
 
 class HumanUtterance(Utterance):
     hypotheses = ListField(default=[])
+    attributes = DictField(default={})
 
     def to_dict(self):
         return {
@@ -160,7 +162,8 @@ class HumanUtterance(Utterance):
             'user': self.user,
             'annotations': self.annotations,
             'date_time': str(self.date_time),
-            'hypotheses': self.hypotheses
+            'hypotheses': self.hypotheses,
+            'attributes': self.attributes
         }
 
     @classmethod
@@ -171,6 +174,7 @@ class HumanUtterance(Utterance):
         utterance.annotations = payload['annotations']
         utterance.date_time = payload['date_time']
         utterance.hypotheses = payload['hypotheses']
+        utterance.attributes = payload['attributes']
         utterance.user = payload['user']
         utterance.save()
         return utterance
@@ -217,14 +221,22 @@ class Dialog(DynamicDocument):
     bot = ReferenceField(Bot, required=True)
 
     def to_dict(self):
-        return {
-            'id': str(self.id),
-            'location': self.location,
-            'utterances': [utt.to_dict() for utt in self.utterances],
-            'channel_type': self.channel_type,
-            'human': self.human.to_dict(),
-            'bot': self.bot.to_dict()
-        }
+        try:
+            return {
+                'id': str(self.id),
+                'location': self.location,
+                'utterances': [utt.to_dict() for utt in self.utterances],
+                'channel_type': self.channel_type,
+                'human': self.human.to_dict(),
+                'bot': self.bot.to_dict()
+            }
+        except TypeError:
+            return {
+                'id': str(self.id),
+                'location': self.location,
+                'utterances': [],
+                'error': 'TypeError! Probably old schema dialog!'
+            }
 
     @classmethod
     def make_from_dict(cls, payload):

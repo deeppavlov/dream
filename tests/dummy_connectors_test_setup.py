@@ -15,6 +15,7 @@ from core.run import prepare_agent
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-p', '--port', help='port for http client, default 4242', default=4242)
+parser.add_argument('-rl', '--response-logger', help='run agent with services response logging', action='store_true')
 args = parser.parse_args()
 CHANNEL = 'vk'
 
@@ -26,12 +27,14 @@ class DummyConnector:
         self.service_name = service_name
 
     async def send(self, payload, callback):
+        service_send_time = time.time()
         await asyncio.sleep(self.sleeptime)
         await callback(
             dialog_id=payload['id'],
             service_name=self.service_name,
             response={self.service_name: [{"text": choice(self.returns), "confidence": 0.5}]},
-            response_time=time.time())
+            service_send_time=service_send_time,
+            service_response_time=time.time())
 
 
 class DummySelectorConnector:
@@ -41,12 +44,14 @@ class DummySelectorConnector:
         self.service_name = service_name
 
     async def send(self, payload, callback):
+        service_send_time = time.time()
         await asyncio.sleep(self.sleeptime)
         await callback(
             dialog_id=payload['id'],
             service_name=self.service_name,
             response={self.service_name: self.returns},
-            response_time=time.time())
+            service_send_time=service_send_time,
+            service_response_time=time.time())
 
 
 async def on_shutdown(app):
@@ -119,7 +124,7 @@ def main():
     endpoint = Service('http_responder', HttpOutputConnector(intermediate_storage, 'http_responder').send,
                        StateManager.save_dialog_dict, 1, ['responder'])
     input_srv = Service('input', None, StateManager.add_human_utterance_simple_dict, 1, ['input'])
-    register_msg, process_callable = prepare_agent(services, endpoint, input_srv, False)
+    register_msg, process_callable = prepare_agent(services, endpoint, input_srv, args.response_logger)
     app = init_app(register_msg, intermediate_storage, prepare_startup(workers, process_callable, session),
                    on_shutdown)
 

@@ -7,7 +7,8 @@ import asyncio
 
 from core.agent import Agent
 from core.state_manager import StateManager
-from core.pipeline import Pipeline, Service
+from core.pipeline import Pipeline
+from core.service import Service
 from core.config_parser import parse_old_config
 from core.connectors import EventSetOutputConnector
 
@@ -21,7 +22,7 @@ parser.add_argument('phrasefile', help='name of the file with phrases for dialog
 
 
 def init_agent():
-    services, workers, session = parse_old_config()
+    services, workers, session, _ = parse_old_config()
     endpoint = Service('cmd_responder', EventSetOutputConnector('cmd_responder').send,
                        StateManager.save_dialog_dict, 1, ['responder'])
     input_srv = Service('input', None, StateManager.add_human_utterance_simple_dict, 1, ['input'])

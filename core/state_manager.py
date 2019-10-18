@@ -52,12 +52,13 @@ class StateManager:
 
     @staticmethod
     def create_new_human_utterance(text, user: Human, date_time, annotations=None,
-                                   hypotheses=None):
+                                   hypotheses=None, message_attributes=None):
         utt = HumanUtterance(text=text,
                              user=user.to_dict(),
                              date_time=date_time,
                              annotations=annotations or HumanUtterance.annotations.default,
-                             hypotheses=hypotheses or HumanUtterance.hypotheses.default)
+                             hypotheses=hypotheses or HumanUtterance.hypotheses.default,
+                             attributes=message_attributes or HumanUtterance.attributes.default)
         utt.save()
         return utt
 
@@ -103,9 +104,10 @@ class StateManager:
     @classmethod
     def add_human_utterance(cls, dialog: Dialog, user: Human, text: str, date_time: datetime,
                             annotation: Optional[dict] = None,
-                            hypothesis: Optional[dict] = None) -> None:
+                            hypothesis: Optional[dict] = None,
+                            message_attrs: Optional[dict] = None) -> None:
         utterance = cls.create_new_human_utterance(text, user, date_time, annotation,
-                                                   hypothesis)
+                                                   hypothesis, message_attrs)
         dialog.utterances.append(utterance)
         dialog.save()
 
@@ -193,6 +195,7 @@ class StateManager:
         utterance['text'] = payload
         utterance['date_time'] = str(datetime.now())
         utterance['user'] = dialog['human']
+        utterance['attributes'] = kwargs.get('message_attrs', {})
         dialog['utterances'].append(utterance)
 
     @staticmethod
@@ -246,7 +249,7 @@ class StateManager:
         dialog['utterances'][-1]['text'] = payload
 
     @staticmethod
-    def save_dialog_dict(dialog: Dict, dialog_object: Dialog, payload=None):
+    def save_dialog_dict(dialog: Dict, dialog_object: Dialog, payload=None, **kwargs):
         utt_objects = []
         for utt in dialog['utterances'][::-1]:
             if not utt['id']:
