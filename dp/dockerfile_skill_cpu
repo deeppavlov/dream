@@ -9,6 +9,9 @@ ENV CONFIG=$skillconfig
 ENV PORT=$skillport
 ENV HOST=$skillhost
 ENV ENDPOINT=$skill_endpoint
+ENV TFHUB_CACHE_DIR=/tmp/tfhub
+
+VOLUME /tmp/tfhub
 
 RUN mkdir dp-agent
 WORKDIR /dp-agent
@@ -21,6 +24,7 @@ COPY . /dp-agent/.
 
 RUN python -m deeppavlov install $CONFIG
 RUN python dp/dp_server_config.py
+RUN sed -i "/uvicorn.run/s/app,/app, timeout_keep_alive=20,/g" "/base/DeepPavlov/deeppavlov/utils/server/server.py"
 
 RUN pip install sentry-sdk==0.12.3 # TODO: Move it to separate requirements 
 

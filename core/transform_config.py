@@ -15,8 +15,9 @@ ANNOTATORS = [ANNOTATORS_1, ANNOTATORS_2, ANNOTATORS_3]
 # generate component url
 for service in chain(*ANNOTATORS, SKILL_SELECTORS, SKILLS, RESPONSE_SELECTORS,
                      POSTPROCESSORS):
-    host = service['name'] if getenv('DPA_LAUNCHING_ENV') == 'docker' else service['host']
-    service['url'] = f"{service['protocol']}://{host}:{service['port']}/{service['endpoint']}"
+    if 'url' not in service:
+        host = service['name'] if getenv('DPA_LAUNCHING_ENV') == 'docker' else service['host']
+        service['url'] = f"{service['protocol']}://{host}:{service['port']}/{service['endpoint']}"
 
 
 def _get_config_path(component_config: dict) -> dict:
