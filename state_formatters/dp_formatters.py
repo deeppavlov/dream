@@ -1,24 +1,6 @@
 from typing import Dict, Any, List
 
-CMDS = ["/new_persona"]  # TODO: rm crutch of personality_catcher
-
-
-# TODO: rm crutch of personality_catcher
-def exclude_cmds(utter, cmds):
-    if cmds:
-        utter = utter.replace(cmds[-1], '')
-        return exclude_cmds(utter, cmds[:-1])
-    else:
-        return utter
-
-
-# TODO: rm crutch of personality_catcher
-def commands_excluder(utters_batch: List, cmds=[]):
-    cmds = cmds if cmds else CMDS
-    out_batch = []
-    for utters in utters_batch:
-        out_batch.append([exclude_cmds(ut, cmds) for ut in utters])
-    return out_batch
+from .utils import commands_excluder
 
 
 def base_input_formatter(state: List, cmd_exclude=True):
@@ -31,6 +13,7 @@ def base_input_formatter(state: List, cmd_exclude=True):
         * user_ids: a list of all user ids, each dialog have a unique human participant id
     Args:
         state: dialog state
+        cmd_exclude: a bool, set True to exclude commands from utterances_histories
 
     Returns: formatted dialog state
 
@@ -65,7 +48,6 @@ def base_input_formatter(state: List, cmd_exclude=True):
     return {'dialogs': state,
             'last_utterances': last_utts,
             'last_annotations': last_annotations,
-            # TODO: rm crutch of personality_catcher
             'utterances_histories': commands_excluder(utterances_histories) if cmd_exclude else utterances_histories,
             'annotation_histories': annotations_histories,
             'dialog_ids': dialog_ids,
@@ -88,7 +70,7 @@ def annotated_input_formatter(state: Dict, cmd_exclude=True, annotation="punctua
 
     Args:
         state: dialog state
-        cmd_exclude:
+        cmd_exclude: a bool, set True to exclude commands from utterances_histories
         annotation: `punctuated` or `segmented` or `coref_resolved`
 
     Returns:
@@ -275,50 +257,15 @@ def base_skill_selector_formatter(payload: Any, mode='in'):
         return payload
 
 
-# TODO: rm crutch of personality_catcher
-default_persona = [
-    "I am a chatbot.",
-    "I live on Amazon Web Service.",
-    "I was born during the Alexa Prize Challenge.",
-    "I like talking to people.",
-    "I love to meet new people.",
-    "I like jazz music.",
-    "I like listening music.",
-    "I like watching movies and series.",
-    "I like to play sports.",
-    "I like to work out.",
-    "I enjoy reading books.",
-    "I love dogs, especially bulldog.",
-    "I like cats, they are funny.",
-    "I love hot-dogs.",
-    "I like sushi.",
-    "I like pizza and pasta.",
-    "I do not like chocolate.",
-    "I am never still."
-]
-
-
-# TODO: rm crutch of personality_catcher
-def get_persona(dialog):
-    try:
-        hypts = [ut.get('selected_skills', {}).get('personality_catcher', {}).get('personality')
-                 for ut in dialog['utterances'][:-1]]
-    except Exception:
-        hypts = []
-    hypts = [hypt for hypt in hypts if hypt]
-    return hypts[-1] if hypts else default_persona
-
-
 def transfertransfo_formatter(payload: Any, mode='in'):
     if mode == 'in':
         parsed = annotated_input_formatter(payload, annotation="punctuated")
         return {'utterances_histories': parsed['utterances_histories'],
-                'personality': [get_persona(dialog) for dialog in parsed['dialogs']]}
+                'personality': [dialog['bot']['persona'] for dialog in parsed['dialogs']]}
     elif mode == 'out':
         return base_skill_output_formatter(payload)
 
 
-# TODO: rm crutch of personality_catcher
 def personality_catcher_formatter(payload: Any, mode='in'):
     if mode == 'in':
         parsed = base_input_formatter(payload, cmd_exclude=False)
@@ -326,6 +273,7 @@ def personality_catcher_formatter(payload: Any, mode='in'):
     elif mode == 'out':
         response = base_skill_output_formatter(payload)
         response['personality'] = payload[2]
+        response["bot_attributes"] = {"persona": payload[2]}
         return response
 
 

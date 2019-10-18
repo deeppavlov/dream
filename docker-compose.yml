@@ -44,7 +44,7 @@ services:
       context: ./skills/transfertransfo/
     environment:
       DEVICE: cuda
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8007
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8007 -t 60
     volumes: []
     deploy:
       placement:
