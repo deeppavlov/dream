@@ -23,7 +23,6 @@ parameters:
       example: {
                 "personality": [
                   [
-                    "My name is Alexa.",
                     "I am a socialbot.",
                     "I live on Amazon Web Service.",
                     "I was born during the Alexa Prize Challenge.",

@@ -277,7 +277,6 @@ def base_skill_selector_formatter(payload: Any, mode='in'):
 
 # TODO: rm crutch of personality_catcher
 default_persona = [
-    "My name is Alexa.",
     "I am a chatbot.",
     "I live on Amazon Web Service.",
     "I was born during the Alexa Prize Challenge.",
