@@ -37,7 +37,7 @@ class LaunchRequestHandler(AbstractRequestHandler):
         # type: (HandlerInput) -> Response
         speak_output = "Hi, this is an Alexa Prize Socialbot. How are you?"
         user_id = ask_utils.get_user_id(handler_input)
-        call_dp_agent(user_id, '/start')
+        call_dp_agent(user_id, '/start', request_data)
         return (
             handler_input.response_builder.speak(speak_output).ask(speak_output).response
         )
@@ -74,10 +74,23 @@ class SessionEndedRequestHandler(AbstractRequestHandler):
         return handler_input.response_builder.response
 
 
-def call_dp_agent(user_id, text):
+def call_dp_agent(user_id, text, request_data):
     logger.info("call_dp_agent user_id: {}; text: {}".format(user_id, text))
+
+    device_id, session_id, request_id = "", "", ""
+    try:
+        device_id = request_data['context']['System']['device'].get('deviceId')
+        session_id = request_data['session']['sessionId']
+        request_id = request_data['request']['requestId']
+    except KeyError as e:
+        logger.error("No key in request_data")
+        sentry_sdk.capture_exception(e)
+
     response, intent = None, None
-    r = requests.post(DP_AGENT_URL, json={'user_id': user_id, 'payload': text}).json()
+    r = requests.post(
+        DP_AGENT_URL,
+        json={'user_id': user_id, 'payload': text, 'device_id': device_id,
+              'session_id': session_id, 'request_id': request_id}).json()
     if r['active_skill'] == 'intent_responder':
         response, intent = r["response"].split("#+#")
     else:
@@ -106,18 +119,18 @@ class IntentReflectorHandler(AbstractRequestHandler):
                 speech = request_data['request']['speechRecognition']
                 speech_text = ' '.join([token['value'] for token in speech['hypotheses'][0]['tokens']])
                 logger.info(f'got text from speech: {speech_text}')
-                dp_agent_data = call_dp_agent(user_id, speech_text)
+                dp_agent_data = call_dp_agent(user_id, speech_text, request_data)
             elif ask_utils.is_intent_name("AMAZON.CancelIntent")(handler_input):
                 text = 'cancel'
                 logger.info(f'got AMAZON.CancelIntent, set text to: {text}')
-                dp_agent_data = call_dp_agent(user_id, text)
+                dp_agent_data = call_dp_agent(user_id, text, request_data)
             else:
                 dp_agent_data = {"response": "Sorry", "intent": None}
                 msg = f"LAMBDA: NO TEXT NO SPEECH!\nincoming request: {request_data['request']}"
                 logger.warning(msg)
                 sentry_sdk.capture_message(msg)
         else:
-            dp_agent_data = call_dp_agent(user_id, text)
+            dp_agent_data = call_dp_agent(user_id, text, request_data)
         speak_output = dp_agent_data['response']
 
         if dp_agent_data['intent'] == 'exit':

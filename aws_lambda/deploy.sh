@@ -8,6 +8,9 @@ if [ "$LAMBDA_NAME" = "" ]; then
 	exit 1
 fi
 
+echo "Cleaning old package"
+rm -r aws_lambda/package/
+
 if ! pip3 install -r aws_lambda/requirements.txt --target aws_lambda/package &> /dev/null; then
     echo "pip3 was not found, trying pip.."
 
