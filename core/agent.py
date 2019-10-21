@@ -74,6 +74,8 @@ class Agent:
 
     def process_service_response(self, dialog_id: str, service_name: str = None, response: Any = None,
                                  **kwargs):
+        if "dialog_object" not in response:
+            logger.info(f"Service: {response}")
         workflow_record = self.get_workflow_record(dialog_id)
 
         # Updating workflow with service response

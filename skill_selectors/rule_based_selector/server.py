@@ -49,6 +49,7 @@ class RuleBasedSelector():
             skills_for_uttr = []
             reply = dialog['utterances'][-1]['text'].replace("\'", " \'").lower()
             # tokens = reply.split()
+
             intents = dialog['utterances'][-1]['annotations']['intent_catcher'].values()
             intent_detected = any([i['detected'] == 1 for i in intents])
 
@@ -67,14 +68,9 @@ class RuleBasedSelector():
             elif blist_topics_detected or (sensitive_topics_detected and sensitive_dialogacts_detected):
                 skills_for_uttr.append("program_y_dangerous")
                 skills_for_uttr.append("cobotqa")
-            # elif self._is_question(tokens):
-            elif "Information_RequestIntent" in cobot_dialogacts:
-                skills_for_uttr.append("cobotqa")
-                skills_for_uttr.append("program_y")
-                # skills_for_uttr.append("transfertransfo")
-                # skills_for_uttr.append("retrieval_chitchat")
             else:
                 skills_for_uttr.append("program_y")
+                skills_for_uttr.append("cobotqa")
                 # skills_for_uttr.append("transfertransfo")
                 # skills_for_uttr.append("retrieval_chitchat")
 
