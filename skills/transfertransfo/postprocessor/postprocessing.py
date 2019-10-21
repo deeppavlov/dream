@@ -230,7 +230,9 @@ def ngram_replacer(info, reply, n=3):
 
 
 def replace_repeated_reply(reply, request):
-    return DROP_SPEC_TOKEN if reply in request else reply
+    request = [re.sub(r'[\?\.,\!\'"\)\]]*', "", line.strip().lower()).strip() for line in request]
+    _reply = re.sub(r'[\?\.,\!\'"\)\]]*', "", reply.strip().lower()).strip()
+    return DROP_SPEC_TOKEN if _reply in request else reply
 
 
 def postprocess_text(
