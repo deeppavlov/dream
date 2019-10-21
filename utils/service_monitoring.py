@@ -5,7 +5,7 @@ from sys import argv
 from os import getenv
 
 
-def main(url, interval=60):
+def main(url, interval=600):
     user_id = "status_monitoring_user"
     while(True):
         result = requests.post(url, json={"user_id": user_id, "payload": "hey"}).json()

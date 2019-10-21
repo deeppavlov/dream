@@ -119,3 +119,17 @@ ubuntu@ip-172-31-42-16:~$ docker run nvidia/cuda:9.0-base nvidia-smi
 How to run monitoring script
 ==========================
 - `SENTRY_DSN=https://7a6d57df6fb44ae4bfc3d43a8b4f16f3@sentry.io/1553895 python3 service_monitoring.py http://Docker-ExternalLoa-LOFSURITNPLE-525614984.us-east-1.elb.amazonaws.com:4242`
+
+- Для мониторинга CPU/Memory/Disk используется https://github.com/stefanprodan/swarmprom - Docker Swarm monitoring with Prometheus, Grafana, cAdvisor, Node Exporter, Alert Manager and Unsee.
+
+- ssh to Deploy machine && cd /home/ubuntu/swarmprom && run command below:
+
+```
+ADMIN_USER=admin \
+ADMIN_PASSWORD=dreamlocal \
+SLACK_URL=https://hooks.slack.com/services/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 \
+SLACK_CHANNEL=alexaprize-alerts \
+SLACK_USER=alertmanager \
+DOCKER_HOST=localhost:2374 \
+docker stack deploy -c docker-compose.yml mon
+```
