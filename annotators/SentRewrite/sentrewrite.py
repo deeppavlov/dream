@@ -1,31 +1,118 @@
 import spacy
 import neuralcoref
 
+# import logging
+#
+# logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+#                     level=logging.INFO)
+# logger = logging.getLogger(__name__)
+
 nlp = spacy.load('en_core_web_sm')
 neuralcoref.add_to_pipe(nlp)
 
 
-def recover_mentions(dialog):
-    # dialog: list of utterances, each utterance could have several sentences
+def distance(ner, mention):
+    inside = (ner["start_pos"] >= mention["start"] - 1) and (ner["end_pos"] <= mention["end"] + 1)
+    offset = abs(ner["start_pos"] - mention["start"]) + abs(ner["end_pos"] - mention["end"])
+    return inside, offset
 
-    discourse = " ".join(dialog)
+
+def recover_mentions(dialog, ner_dialog):
+    # replace mentions of each cluster with the main one.
+    # dialog: [utterance -> sentence]
+    # ner_dialog: [utterance -> sentence -> ner (dict: confidence, start_pos, end_pos, text, type)]
+
+    # change start_pos, end_pos to dialog level in order to be suitable to clusters below
+    ners = []
+    pos_sent = 0
+    for i, utterance in enumerate(ner_dialog):
+        for j, sent in enumerate(utterance):
+            for ner in sent:
+                if ner["confidence"] < 0.6:
+                    continue
+                ners.append({"confidence": ner["confidence"],
+                             "start_pos": ner["start_pos"] + pos_sent,
+                             "end_pos": ner["end_pos"] + pos_sent,
+                             "text": ner["text"],
+                             "type": ner["type"]})
+            if i == j == 0:
+                pos_sent = len(dialog[0][0]) + 1
+            else:
+                pos_sent += (len(dialog[i][j]) + 1)
+
+    discourse = " ".join([" ".join(utterance) for utterance in dialog])
+    # logger.info(f"discourse: {discourse}")
+    # logger.info(f"ner (dialog level):{ners}")
     doc = nlp(discourse)
     if not doc._.has_coref:
-        return {"clusters": [], "modified_sents": dialog}
+        return {"clusters": [], "modified_sents": [" ".join(utterance) for utterance in dialog]}
+        # return {"clusters": [], "modified_sents": ['hello']}
     else:
+        # list of clusters: [cluster -> mention (dict: start, end, text, resolved)]
         clusters = [[{'start': mention.start_char,
                       'end': mention.end_char,
                       'text': mention.text,
-                      'resolved': cluster.main.text
+                      'resolved': cluster.main.text,
+                      'ner': {"type": "O", "offset": 10000}
                       }
                      for mention in cluster.mentions]
                     for cluster in doc._.coref_clusters
                     ]
 
-        mentions = [mention for cluster in clusters for mention in cluster]
+        # logger.info(f"clusters: {clusters}")
 
+        new_clusters = []
+        # find the main mention for each cluster
+        for cluster in clusters:
+            if len(cluster) == 0:
+                continue
+            main_mention = cluster[0]
+            for mention in cluster:
+                # find the main ner for each mention, which will be used to decide which mention is the main
+                for ner in ners:
+                    inside, offset = distance(ner, mention)
+                    if inside:
+                        if mention["ner"]["offset"] > offset:
+                            mention["ner"] = {"type": ner["type"], "offset": offset}
+                if main_mention["ner"]["type"] == "O":
+                    main_mention = mention
+                elif mention["ner"]["offset"] < main_mention["ner"]["offset"]:
+                    main_mention = mention
+
+            # change main mention if necessary
+            if main_mention["ner"]["type"] != "O":
+                new_clusters.append(cluster)
+                for m in new_clusters[-1]:
+                    m["resolved"] = main_mention["resolved"]
+            # keep cluster refer to pronouns
+            else:
+                pronouns = ["i", "we", "you", "he", "she", "it", "they",
+                            "me", "us", "him", "her", "them"]
+
+                # check if cluster refer to pronouns
+                is_pronoun_cluster = False
+                for m in cluster:
+                    if m["text"] in pronouns:
+                        is_pronoun_cluster = True
+                        break
+                if is_pronoun_cluster:
+                    new_resolved = cluster[0]["resolved"]
+                    if new_resolved in pronouns:
+                        for m in cluster:
+                            if m["text"] not in pronouns:
+                                new_resolved = m["text"]
+                                break
+                    if new_resolved not in pronouns:
+                        new_clusters.append(cluster)
+                        for m in new_clusters[-1]:
+                            m["resolved"] = new_resolved
+
+        # logger.info(f"new clusters:{new_clusters}")
+
+        mentions = [mention for cluster in new_clusters for mention in cluster]
         sorted_mentions = sorted(mentions, key=lambda i: i['start'], reverse=True)
 
+        dialog = [" ".join(utterance) for utterance in dialog]
         new_utter_pos = [{"start": 0, "end": len(dialog[0])}]
         for i in range(1, len(dialog)):
             new_utter_pos.append(
@@ -48,4 +135,4 @@ def recover_mentions(dialog):
         for i in range(len(dialog)):
             new_dialog.append(discourse[new_utter_pos[i]["start"]: new_utter_pos[i]["end"]])
 
-        return {"clusters": clusters, "modified_sents": new_dialog}
+        return {"clusters": new_clusters, "modified_sents": new_dialog}

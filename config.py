@@ -165,14 +165,14 @@ ANNOTATORS_2 = [
         "formatter": intent_catcher_formatter
     },
     {
-        "name": "sentrewrite",
+        "name": "ner",
         "protocol": "http",
-        "host": "sentrewrite",
-        "port": 8017,
-        "endpoint": "sentrewrite",
+        "host": "ner",
+        "port": 8021,
+        "endpoint": "ner",
         "external": True,
         "path": "",
-        "formatter": sent_rewrite_formatter
+        "formatter": ner_formatter
     },
     {
         "name": "cobot_topics",
@@ -226,7 +226,18 @@ ANNOTATORS_2 = [
     }
 ]
 
-ANNOTATORS_3 = []
+ANNOTATORS_3 = [
+    {
+        "name": "sentrewrite",
+        "protocol": "http",
+        "host": "sentrewrite",
+        "port": 8017,
+        "endpoint": "sentrewrite",
+        "external": True,
+        "path": "",
+        "formatter": sent_rewrite_formatter
+    }
+]
 
 SKILL_SELECTORS = [
     {
