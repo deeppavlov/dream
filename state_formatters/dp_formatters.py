@@ -159,14 +159,6 @@ def base_annotator_formatter(payload: Any, model_args_names=('x',), mode='in'):
         return payload
 
 
-def ner_formatter(payload: Any, model_args_names=('x',), mode='in'):
-    if mode == 'in':
-        return last_utterances(payload, model_args_names)
-    if mode == 'out':
-        return {'tokens': payload[0],
-                'tags': payload[1]}
-
-
 def sentiment_formatter(payload: Any, model_args_names=('x',), mode='in'):
     if mode == 'in':
         return last_utterances(payload, model_args_names)
@@ -329,8 +321,9 @@ def sent_segm_formatter(payload, mode='in'):
 
 def sent_rewrite_formatter(payload, mode='in'):
     if mode == 'in':
-        return {'utterances_histories': annotated_input_formatter(payload, annotation="punctuated")[
-            "utterances_histories"]}
+        histories = annotated_input_formatter(payload, annotation="segmented")
+        return {"utterances_histories": histories["utterances_histories"],
+                "annotation_histories": histories["annotation_histories"]}
     elif mode == 'out':
         return payload
 
@@ -390,3 +383,10 @@ def punct_dialogs_formatter(payload, mode='in'):
         return {"dialogs": dialogs}
     elif mode == 'out':
         return payload
+
+
+def ner_formatter(payload, mode='in'):
+    if mode == 'in':
+        return {'last_utterances': annotated_input_formatter(payload, annotation="segmented")[
+            "last_utterances"]}
+    return payload

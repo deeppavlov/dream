@@ -1,0 +1,5 @@
+sentry_sdk==0.13.0
+Flask==1.1.1
+torch==1.2.0
+flair==0.4.4
+gunicorn==19.9.0

@@ -40,6 +40,12 @@ services:
       - "./annotators/SentRewrite:/src"
     ports:
       - 8017:8017
+  ner:
+    env_file: [.env.dev]
+    volumes:
+      - './annotators/NER:/src'
+    ports:
+      - 8021:8021
   cobot_offensiveness:
     env_file: [.env.dev]
     volumes:
