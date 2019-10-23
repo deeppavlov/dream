@@ -27,9 +27,34 @@ curl -H "Content-Type: application/json" -XPOST \
  ["You are repeating it over and over!"],
  ["Okay, Alexa, have a good day!"],
  ["Okay"],
+ ["Great"],
  ["That nice"],
+ ["Great"],
+ ["Thanks"],
  ["Nice"],
- ["Wow!"]
+ ["Wow!"],
+ ["Where do you live?"]
  ]
 }' \
  http://0.0.0.0:8014/detect
+
+ curl -H "Content-Type: application/json" -XPOST \
+  -d '{"sentences": [
+  ["Lets have a chat"],
+  ["Lets chat about smth"],
+  ["Lets chat about music"],
+  ["Lets chat about music or cinema"],
+  ["Lets chat about literature"],
+  ["Lets chat about you"],
+  ["Lets talk about you"],
+  ["Lets talk about litarature"],
+  ["Lets talk about Trump"],
+  ["Lets talk about politics"],
+  ["Lets talk about indie music"],
+  ["Let'\''s chat about Taylor Swift"],
+  ["Let'\''s chat about our president"],
+  ["Let'\''s chat about recent movies"],
+  ["Let'\''s talk about music"]
+  ]
+ }' \
+  http://0.0.0.0:8014/detect

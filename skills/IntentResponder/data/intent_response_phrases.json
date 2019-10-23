@@ -18,6 +18,9 @@
     "I live somewhere on the Earth. But I am participating in the Alexa Prize Challenge. So, I must keep those details in secret.",
     "This is a competition of socialbots, so I cannot tell you my location now."
   ],
+  "lets_chat": [
+    "Okay, let's chat"
+  ],
   "who_made_you" : [
     "I was built by one of the university teams participating in the Alexa Prize Challenge. But which one is a secret for now.",
     "I cannot answer questions about my creator for now because they are participating in the Alexa Prize Challenge.",

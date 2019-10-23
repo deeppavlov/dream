@@ -1,40 +1,17 @@
 {
   "intent_phrases": {
-      "exit" : {
-        "phrases" : [
-        "Have a good day",
-        "Ok have a good day",
-        "Have a good night",
-        "Ok have a good night",
-        "Have a great day",
-        "Ok have a great day",
-        "Have a nice one",
-        "Have a nice day",
-        "Ok have a nice day",
-        "Have a good evening",
-        "Have a good night",
-        "Have a good one",
+    "exit" : {
+      "phrases" : [
+        "Have a ((good)|(great)|(nice)) ((day)|(night)|(one)|(evening))",
+        "See ((you)|(ya)) ((later)|(soon))",
+        "Goodbye(, ((Alexa)|(bot))){0,1}",
+        "((Alexa)|(Bot)), goodbye",
         "Take care",
-        "See you later",
-        "See you soon",
         "See you",
-        "See you, Alexa",
-        "Alexa see you",
         "See ya",
         "Talk to you later",
         "Catch you later",
         "Farewell",
-        "Goodbye",
-        "Alexa, goodbye",
-        "Goodbye, Alexa",
-        "Goodbye, bot",
-        "Bye",
-        "Alexa bye",
-        "Bye Alexa",
-        "Bye bot",
-        "Bye bye",
-        "Bye bye Alexa",
-        "Alexa bye bye",
         "Peace out",
         "I am out of here",
         "I have to go",
@@ -42,148 +19,132 @@
         "I gotta head out",
         "Adios"
       ],
-      "min_precision" : 0.90
+    "min_precision" : 0.80,
+    "punctuation" : [
+        ".",
+        "!"
+      ]
     },
     "repeat" : {
-        "phrases" : [
-          "Repeat",
-          "Alexa, repeat",
-          "Repeat, Alexa",
-          "Please repeat",
-          "Repeat please",
-          "Can you repeat",
-          "Can you please repeat",
-          "Would you repeat",
-          "I did not hear you",
-          "I do not hear you",
-          "I did not hear you, repeat"
-        ],
-        "min_precision" : 0.0
-      },
+      "phrases": [
+        "Repeat(, please){0, 1}(, Alexa){0,1}",
+        "(Alexa, ){0,1}repeat(, please){0,1}",
+        "((Can)|(Would)) you (please ){0,1}repeat( please){0,1}",
+        "I ((did)|(do))((n't)|(not)) hear( you){0,1}",
+        "I did not hear you",
+        "I do not hear you",
+        "I did not hear you, repeat"
+      ],
+      "min_precision" : 0.0,
+      "punctuation" : [
+          ".",
+          "!"
+        ]
+    },
     "what_is_your_name" : {
-        "phrases" : [
-          "What is your name",
-          "What's your name",
-          "How can i call you",
-          "How to call you",
-          "How can i name you",
-          "How to name you",
-          "What is your surname",
-          "What is your family name",
-          "What is your lastname",
-          "What's your surname",
-          "What's your family name",
-          "What's your lastname",
-          "How to contact you"
-        ],
-      "min_precision" : 0.00
+      "phrases" : [
+        "What is your name",
+        "What's your name",
+        "How can i call you",
+        "How to call you",
+        "How can i name you",
+        "How to name you",
+        "What is your surname",
+        "What is your family name",
+        "What is your lastname",
+        "What's your surname",
+        "What's your family name",
+        "What's your lastname",
+        "How to contact you"
+      ],
+      "min_precision" : 0.00,
+      "punctuation" : [
+        "?"
+      ]
     },
     "where_are_you_from" : {
-        "phrases" : [
-          "Where are you from",
-          "Where do you live",
-          "Where are you living",
-          "Where do you exist",
-          "Where you was born",
-          "Where you were born",
-          "What is your birthplace",
-          "What's your birthplace",
-          "Where you were born",
-          "What is your location",
-          "What's your location",
-          "What is your address",
-          "What's your address"
-        ],
-      "min_precision" : 0.00
-    },
-    "who_made_you" : {
-        "phrases" : [
-          "Who did you",
-          "Who created you",
-          "Who built you",
-          "Who made you",
-          "Who developed you",
-          "Who designed you",
-          "Who produced you",
-          "Who programmed you",
-          "Who make you",
-          "Who create you",
-          "Who build you",
-          "Who owns you",
-          "Who is your botmaster",
-          "Who is your master",
-          "Who is your holder",
-          "Who is your host",
-          "Who is your creator",
-          "Who is your developer",
-          "Who is your team",
-          "Who is your leader",
-          "Who is your teamleader",
-          "Who is your architect",
-          "Who is your author",
-          "Who is your builder",
-          "Who is your implementer",
-          "Who is your owner",
-          "Who is your skipper",
-          "Who is your trainer",
-          "Who is your manager",
-          "Who is your chief",
-          "Which team made you",
-          "Which university build you",
-          "Which university made you",
-          "Which university owns you",
-          "Whom do you belong to",
-          "Whom do you belong with",
-          "What is the name of your creator",
-          "What's the name of your creator",
-          "Tell me the name of your creator"
-        ],
-      "min_precision" : 0.00
-    },
-    "what_is_your_job" : {
-        "phrases" : [
-          "What is your job",
-          "What's your job",
-          "What is your work",
-          "What's your work",
-          "Who do you work",
-          "Who are you working",
-          "What is your profession",
-          "What's your profession",
-          "Tell me your job",
-          "Tell me your profession",
-          "Do you have a job",
-          "What are you doing for living",
-          "What do you do for living",
-          "What is your occupation"
-        ],
-      "min_precision" : 0.00
+      "phrases": [
+        "Where are you from",
+        "Where do you live",
+        "Where are you living",
+        "Where do you exist",
+        "Where were you born",
+        "What is your birthplace",
+        "What's your birthplace",
+        "What is your location",
+        "What's your location",
+        "What is your address",
+        "What's your address"
+      ],
+      "min_precision" : 0.00,
+      "punctuation" : [
+          "?"
+        ]
     },
     "what_can_you_do" : {
-        "phrases" : [
-          "What can you do",
-          "What you can do",
-          "What are you skills",
-          "What skills do you have",
-          "Tell me your skills"
-        ],
-      "min_precision" : 0.00
+      "phrases" : [
+        "What can you do",
+        "What you can do",
+        "What are you skills",
+        "What skills do you have",
+        "Tell me your skills"
+      ],
+      "min_precision" : 0.00,
+      "punctuation" : [
+        "?"
+      ]
+    },
+    "who_made_you" : {
+      "phrases": [
+        "Who ((did)|(created)|(made)|(make)|(create)|(build)|(owns)|(developed)|(designed)|(produced)|(programmed)) you",
+        "Who is your ((botmaster)|(creator)|(developer)|(master)|(holder)|(host)|(team))",
+        "Which ((team)|(university)|(country)) ((made)|(developed)|(created)|(build)|(owns)) you",
+        "Who is your ((leader)|(teamleader)|(architect)|(author)|(builder)|(implementer)|(owner)|(skipper)|(trainer)|(manager)|(chief))",
+        "Whom do you belong ((to)|(with))",
+        "((Tell me)|(What is)|(What's)) the name of your ((creator)|(builder)|(developer)|(owner)|(implementer)|(architect)|(author))"
+      ],
+      "min_precision" : 0.00,
+      "punctuation" : [
+        "?"
+      ]
+    },
+    "what_is_your_job" : {
+      "phrases" : [
+        "What('s){0,1} is your ((profession)|(job)|(work)|(occupation))",
+        "Tell me your ((job)|(profession))",
+        "What do you do",
+        "Who do you work",
+        "Who are you working",
+        "Do you have a job",
+        "What are you doing for living",
+        "What do you do for living"
+      ],
+      "min_precision": 0.00,
+      "punctuation" : [
+          "?"
+        ]
     }
   },
-  "random_phrases" : [
-    "That nice",
-    "That great",
-    "Cool",
-    "We had a nice walk",
-    "I can see you",
-    "I hear you now",
-    "I heard him crying",
-    "Stop repeating after me",
-    "Okay",
-    "That okay",
-    "Ok",
-    "Nice",
-    "Who is the best",
-    "What is my name"
-  ]
+  "random_phrases" : {
+    "phrases" : [
+      "Bot",
+      "((Hello)|(Hey)|(Hi))(, ((Alexa)|(bot))){0,1}",
+      "(That ){0,1}((nice)|(great)|(cool)|(okay))",
+      "We had a ((nice)|(good)) walk",
+      "I can ((see)|(hear)|(feel)) you( now){0,1}",
+      "I heard him crying",
+      "Stop repeating after me",
+      "who is the best",
+      "Repeating does not help",
+      "Art is my favorite subject at school",
+      "I love ((politics)|(sports)|(art)|(music))",
+      "Developing you must've been a hard work",
+      "((When|Where)) is it going to rain"
+    ],
+    "punctuation" : [
+      ".",
+      "?",
+      "!"
+    ]
+  }
 }

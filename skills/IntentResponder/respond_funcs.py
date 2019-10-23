@@ -45,6 +45,11 @@ def who_made_you_respond(utt, response_phrases):
     return response
 
 
+def lets_chat_respond(utt, response_phrases):
+    response = random.choice(response_phrases).strip()
+    return response
+
+
 def what_is_your_name_respond(utt, response_phrases):
     response = random.choice(response_phrases).strip()
     return response

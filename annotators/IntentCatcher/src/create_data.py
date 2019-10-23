@@ -2,13 +2,13 @@
 
 import os
 import json
-import itertools
+from itertools import chain
 import tensorflow as tf
 import tensorflow_hub as hub
 import numpy as np
 from sklearn.metrics import precision_recall_curve
 from collections import OrderedDict, defaultdict
-from utils import *
+from utils import cosine_similarity, generate_phrases, train_test_split
 
 INTENT_PHRASES_PATH = './data/intent_phrases.json'
 INTENT_DATA_PATH = './data/intent_data.json'
@@ -21,7 +21,7 @@ TFHUB_CACHE_DIR = os.environ.get('TFHUB_CACHE_DIR', None)
 if TFHUB_CACHE_DIR is None:
     os.environ['TFHUB_CACHE_DIR'] = '../tfhub_model'
 
-TRAIN_SIZE = 0.6
+TRAIN_SIZE = 0.5
 MIN_PRECISION = 0.85
 NUM_SAMPLING = 50
 
@@ -37,22 +37,21 @@ def main():
         random_phrases = all_data['random_phrases']
 
     intent_data = {}
-    intents = intent_phrases.keys()
+    intents = list(intent_phrases.keys())
 
     with tf.compat.v1.Session() as sess:
         sess.run([tf.compat.v1.global_variables_initializer(), tf.compat.v1.tables_initializer()])
 
-        intent_names = set(intent_phrases.keys())
-
-        intent_preembedded = dict()
-        for intent, blocks in intent_phrases.items():
-            intent_preembedded[intent] = blocks['phrases']
-            intent_preembedded[intent] += [s + '.' for s in blocks['phrases']] + [s + '!' for s in blocks['phrases']]
+        intent_gen_phrases = dict()
+        for intent, data in intent_phrases.items():
+            phrases = generate_phrases(data['phrases'], data['punctuation'])
+            # print(f"INTENT: {intent}\nNUM PHRASES:\n{len(phrases)}\n" + "-" * 50)
+            intent_gen_phrases[intent] = phrases
 
         intent_embeddings_op = {intent: model(sentences)
-                                for intent, sentences in intent_preembedded.items()}
+                                for intent, sentences in intent_gen_phrases.items()}
 
-        random_preembedded = random_phrases + [s + '.' for s in random_phrases] + [s + '!' for s in random_phrases]
+        random_preembedded = generate_phrases(random_phrases['phrases'], random_phrases['punctuation'])
         random_embeddings_op = model(random_preembedded)
 
         intent_embeddings = sess.run(intent_embeddings_op)
@@ -67,18 +66,17 @@ def main():
             for t in range(NUM_SAMPLING):
                 positive_sentences = intent_embeddings[intent]
 
-                true_length = len(positive_sentences) // 3
-                idx = np.random.choice(a=list(range(true_length)), size=int(TRAIN_SIZE * true_length))
+                train_idx, test_idx = train_test_split(
+                    intent_gen_phrases[intent],
+                    len(intent_phrases[intent]['punctuation']),
+                    TRAIN_SIZE
+                )
 
-                idx = np.concatenate((idx, [i + true_length for i in idx], [i + 2 * true_length for i in idx]))
-                # Leave 60% to comparison, 40% to test
-
-                train_positive = positive_sentences[idx].tolist()
-                test_positive = positive_sentences[np.array(
-                    list(set(range(len(positive_sentences))) - set(idx)))].tolist()
-                negative_embeddings = [intent_embeddings[o_intent].tolist() for o_intent in (intent_names - {intent})]
+                train_positive = positive_sentences[train_idx].tolist()
+                test_positive = positive_sentences[test_idx].tolist()
+                negative_embeddings = [intent_embeddings[o_intent].tolist() for o_intent in (set(intents) - {intent})]
                 negative_embeddings += [random_embeddings]
-                negative_embeddings = list(itertools.chain.from_iterable(negative_embeddings))
+                negative_embeddings = list(chain.from_iterable(negative_embeddings))
                 labels = [1.0] * len(test_positive) + [0.0] * len(negative_embeddings)
                 all_sentences = test_positive + negative_embeddings
                 fd = {test_sentences: all_sentences, intent_sentences: train_positive}
@@ -108,11 +106,14 @@ def main():
                 history['f1'].append(f1[threshold_i])
                 history['threshold'].append(threshold)
 
+            threshold = np.sum(np.array(history['f1']) * np.array(history['threshold']))
+            threshold /= np.sum(history['f1'])
             intent_data[intent] = {
-                'threshold' : float(np.mean(history['threshold'])),
+                'threshold' : float(threshold),
                 'tp' : float(np.mean(history['tp'])),
                 'fn' : float(np.mean(history['fn'])),
                 'embeddings' : intent_embeddings[intent].tolist(),
+                'phrases' : intent_gen_phrases[intent],
                 'metrics' : {
                     'f1' : float(np.mean(history['f1'])),
                     'precision' : float(np.mean(history['precision'])),
@@ -123,7 +124,7 @@ def main():
             print(f"Intent: {intent}\nMEAN + STD:")
             intent_mean_std = {
                 'threshold' : {
-                    'mean': float(np.mean(history['threshold'])),
+                    'mean': intent_data[intent]['threshold'],
                     'std' : float(np.std(history['threshold']))
                 },
                 'tp' : {
