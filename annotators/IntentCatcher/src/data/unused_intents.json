@@ -1,0 +1,14 @@
+"lets_chat" : {
+  "phrases": [
+      "Let('){0,1}s ((chat)|(talk)) (about ((something)|(someone)|(anything)|(anyone)|(person)|(a topic)|(these things)|(art)|(sports)|(movies)|(music)|(news)|(politics)|)){0,1}",
+      "Let('){0,1}s discuss ((something)|(someone)|(anything)|(anyone)|(a subject)|(a topic)|(art)|(music)|(sports)|(movies)|(news)|(politics)){0,1}",
+      "Can we talk about ((something)|(someone)|(anything)|(anyone)|(a subject)|(a topic)|(art)|(sports)|(movies)|(news)|(politics)){0,1}"
+    ],
+  "min_precision" : 0.00,
+  "punctuation" : [
+      ".",
+      "?",
+      "!"
+    ]
+  }
+}
