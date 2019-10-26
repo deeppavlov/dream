@@ -22,10 +22,6 @@ curl -H "Content-Type: application/json" -XPOST \
         "confidence" : 0.2
       }
     },
-    "cobot_sentiment": {
-      "text":"positive",
-       "confidence":0.95
-     },
     "cobot_offensiveness": {
       "text": "non-toxic",
       "confidence":0.95,
@@ -43,10 +39,7 @@ curl -H "Content-Type: application/json" -XPOST \
         "confidence" : 0.1
       }
     },
-    "cobot_sentiment": {
-      "text":"negative",
-      "confidence":0.95
-    }, "cobot_offensiveness": {
+     "cobot_offensiveness": {
       "text": "non-toxic",
       "confidence":0.95,
       "is_blacklisted":"not blacklist"
@@ -79,11 +72,7 @@ curl -H "Content-Type: application/json" -XPOST \
       "confidence" : 0.79
    }
  },
-   "cobot_sentiment":{
-     "text":"neutral",
-     "confidence":0.95
-   },
-   "cobot_offensiveness":{
+ "cobot_offensiveness":{
      "text": "toxic",
      "confidence":0.95,
      "is_blacklisted":"not blacklist"
@@ -100,11 +89,7 @@ curl -H "Content-Type: application/json" -XPOST \
      "confidence" : 0.90
    }
  },
-   "cobot_sentiment":{
-     "text":"negative",
-     "confidence":0.95
-   },
-   "cobot_offensiveness":{
+ "cobot_offensiveness":{
      "text": "toxic",
      "confidence":0.95,
      "is_blacklisted":"blacklist"

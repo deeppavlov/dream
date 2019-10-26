@@ -22,12 +22,6 @@ services:
       - "./annotators/CoBotTopicClassification:/src"
     ports:
       - 8003:8003
-  cobot_sentiment:
-    env_file: [.env.dev]
-    volumes:
-      - "./annotators/CoBotSentimentClassification:/src"
-    ports:
-      - 8004:8004
   sentseg:
     env_file: [.env.dev]
     volumes:

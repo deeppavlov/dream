@@ -185,16 +185,6 @@ ANNOTATORS_2 = [
         "formatter": cobot_classifiers_formatter
     },
     {
-        "name": "cobot_sentiment",
-        "protocol": "http",
-        "host": "cobot_sentiment",
-        "port": 8004,
-        "endpoint": "sentiment",
-        "external": True,
-        "path": "",
-        "formatter": cobot_classifiers_formatter
-    },
-    {
         "name": "cobot_dialogact",
         "protocol": "http",
         "host": "cobot_dialogact",
