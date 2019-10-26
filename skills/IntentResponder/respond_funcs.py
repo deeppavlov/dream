@@ -7,6 +7,7 @@ def exit_respond(utt, response_phrases):
     response = random.choice(response_phrases).strip()  # Neutral response
     annotation = utt['annotation']
     try:
+        # todo: update sentiment annotator name
         sentiment = annotation['cobot_sentiment']['text']
     except KeyError:
         sentiment = 'neutral'

@@ -11,9 +11,6 @@ services:
   cobot_topics:
     image: ${DOCKER_REGISTRY}/cobot_topics
     env_file: [.env.staging]
-  cobot_sentiment:
-    image: ${DOCKER_REGISTRY}/cobot_sentiment
-    env_file: [.env.staging]
   sentseg:
     image: ${DOCKER_REGISTRY}/sentseg
     env_file: [.env.staging]
