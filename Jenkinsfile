@@ -19,7 +19,7 @@ node {
                sh "./tests/runtests.sh MODE=infer_questions"
             }
             stage('Deploy Dev') {
-               sh "./delploy.sh MODE=all TARGET=dev"
+               sh "./deploy.sh MODE=all TARGET=dev"
                currentBuild.result = 'DEPLOYED'
             }
         }
@@ -29,7 +29,7 @@ node {
                sh "./tests/runtests.sh MODE=infer_questions"
             }
             stage('Deploy Prod') {
-                sh "./delploy.sh MODE=all TARGET=prod"
+                sh "./deploy.sh MODE=all TARGET=prod"
                 currentBuild.result = 'DEPLOYED'
             }
         }
