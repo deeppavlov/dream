@@ -47,26 +47,35 @@ generate_composefile.py лежит в билиотеке для непродви
 - Секции volumes и env_file в docker-compose.yml не должно быть. Сейчас volumes и env_file описываются в файлах staging.yml и dev.yml.
 ```
 
-Deploy to staging
+Deploy to prod and staging
 =======================
 
-- новые .env переменные надо не забывать добавлять в .env.staging и .env.dev
+- новые ENV переменные надо не забывать добавлять в .env.staging, .env.dev и .env.prod.
 
-0. Билдим и пушим образы в ECR: `DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com ./push_to_ecr.sh`
-1. Открыть ssh туннель к докер менеджеру `ssh -i ~/Downloads/dream-local-idris-2.pem -NL localhost:2374:/var/run/docker.sock docker@ec2-34-207-206-65.compute-1.amazonaws.com`
-2. Авторизация в ECR (если до этого не был запущен `./push_to_ecr`): `eval $(aws ecr get-login --no-include-email)`
-3. Деплой на стейджинг: `DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com DOCKER_HOST=localhost:2374 docker stack deploy --compose-file docker-compose.yml,staging.yml --with-registry-auth dream_staging`
+0. Обновить код для staging: `git checkout dev; git pull origin dev`
+0. Обновить код для prod: `git fetch --tags; git checkout RELEASE_VERSION`
+1. Билдим и пушим образы в ECR: `VERSION="$(git rev-parse --short HEAD)" ENV_FILE=.env.prod DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com ./push_to_ecr.sh`
+2. Деплой на стейджинг `VERSION="$(git rev-parse --short HEAD)" ENV_FILE=.env.staging DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com DOCKER_HOST=localhost:2375 docker stack deploy --compose-file docker-compose.yml,staging.yml --with-registry-auth dream_staging`
+2. Деплой на прод: `VERSION="$(git rev-parse --short HEAD)" ENV_FILE=.env.prod DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com DOCKER_HOST=localhost:2374 docker stack deploy --compose-file docker-compose.yml,staging.yml --with-registry-auth dream_prod`
+
+
+
+- Открыть ssh туннель к докер менеджеру `ssh -i ~/Downloads/dream-local-idris-2.pem -NL localhost:2374:/var/run/docker.sock docker@ec2-34-207-206-65.compute-1.amazonaws.com`
+- Авторизация в ECR (если до этого не был запущен `./push_to_ecr`): `eval $(aws ecr get-login --no-include-email)`
 
 **Комментарии:**
 - pem ключ лежит тут https://trello.com/c/vEUbMmKK (не забудь `chmod 400`)
-- Как поднять nginx , чтобы обращаться к http сервису агента: `DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com DOCKER_HOST=localhost:2374 docker service create --name nginx --publish published=80,target=4242 nginx`
 - https://docs.docker.com/docker-for-aws/deploy/
+- Staging DOCKER_HOST port 2375
+- Prod DOCKER_HOST port 2374
 - Check if remote docker connection ok `DOCKER_HOST=localhost:2374 docker info`
 - Посмотреть как там стек `DOCKER_HOST=localhost:2374 docker stack ps dream_staging`
 - Посмотреть сервиса стека `DOCKER_HOST=localhost:2374 docker stack services dream_staging`
 - Mongo user - https://devops.ionos.com/tutorials/enable-mongodb-authentication/
 - Mongo сейчас на отдельной машине (TODO бэкапы)
-- DefaultDNSTarget (output в CloudFormation): `Docker-ExternalLoa-LOFSURITNPLE-525614984.us-east-1.elb.amazonaws.com`
+- DefaultDNSTarget (output в CloudFormation) Prod: `Docker-ExternalLoa-LOFSURITNPLE-525614984.us-east-1.elb.amazonaws.com`
+- DefaultDNSTarget (output в CloudFormation) Staging: `Docker-st-External-1918W05RU8XQW-178993125.us-east-1.elb.amazonaws.com`
+- Ports exposed with --publish are automatically exposed through the platform load balancer
 
 
 Deploy to Alexa Lambda
@@ -77,7 +86,7 @@ Deploy to Alexa Lambda
 
 Deploy Machine
 =======================
-Поднята деплой машина на амазоне. Через нее можно быстро собрать и запуишть имейджи в регистри и сделать деплой.
+Поднята деплой машина на амазоне. Через нее можно быстро собрать и запушить имейджи в регистри и сделать деплой.
 
 - `ssh -i ~/Downloads/dream-local-idris.pem ubuntu@34.203.223.60`
 - aws сконфигурирован
@@ -109,6 +118,7 @@ ubuntu@ip-172-31-42-16:~$ sudo service docker status
 ubuntu@ip-172-31-42-16:~$ docker run nvidia/cuda:9.0-base nvidia-smi
 ```
 4. Add GPU worker to docker swarm
+5. Find docker gpu node in docker manager: `docker node ls`
 5. Add label to the GPU worker machine `docker node update --label-add with_gpu=true o0mvol5rehp80k9a0xkzye7zw`
 6. Setup placement in docker-compose.yml.
 
