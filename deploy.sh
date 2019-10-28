@@ -40,4 +40,4 @@ if [[ "$MODE" == "agent" || "$MODE" == "all" ]]; then
   VERSION="$(git rev-parse --short HEAD)" ENV_FILE=$ENV_FILE DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com DOCKER_HOST=$DOCKER_HOST docker stack deploy --compose-file docker-compose.yml,staging.yml --with-registry-auth $REGISTRY_AUTH
 fi
 
-echo "Successfully deployed!"
+echo "Successfully deployed"
