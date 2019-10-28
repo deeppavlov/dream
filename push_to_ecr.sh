@@ -4,9 +4,11 @@
 
 # https://stackoverflow.com/a/51663052
 
+export VERSION=$VERSION
+export ENV_FILE=$ENV_FILE
 eval $(aws ecr get-login --no-include-email)
 
-for r in $(grep 'image: \${DOCKER_REGISTRY}' staging.yml | sed -e 's/^.*\///')
+for r in $(grep 'image: \${DOCKER_REGISTRY}' staging.yml | sed -e 's|^.*/||' | sed -e 's|:.*||')
  do
   # TODO: сейчас если репа уже есть, то тут ошибка появляется, надо ее не показывать
   echo "$r"

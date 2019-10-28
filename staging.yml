@@ -1,64 +1,94 @@
 services:
   agent:
-    image: ${DOCKER_REGISTRY}/agent
-    env_file: [.env.staging]
+    image: ${DOCKER_REGISTRY}/agent:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   cobotqa:
-    image: ${DOCKER_REGISTRY}/cobotqa
-    env_file: [.env.staging]
+    image: ${DOCKER_REGISTRY}/cobotqa:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   rule_based_selector:
-    image: ${DOCKER_REGISTRY}/rule_based_selector
-    env_file: [.env.staging]
+    image: ${DOCKER_REGISTRY}/rule_based_selector:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   cobot_topics:
-    image: ${DOCKER_REGISTRY}/cobot_topics
-    env_file: [.env.staging]
+    image: ${DOCKER_REGISTRY}/cobot_topics:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   sentseg:
-    image: ${DOCKER_REGISTRY}/sentseg
-    env_file: [.env.staging]
+    image: ${DOCKER_REGISTRY}/sentseg:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   sentrewrite:
-    image: ${DOCKER_REGISTRY}/sentrewrite
-    env_file: [.env.staging]
+    image: ${DOCKER_REGISTRY}/sentrewrite:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   cobot_offensiveness:
-    image: ${DOCKER_REGISTRY}/cobot_offensiveness
-    env_file: [.env.staging]
+    image: ${DOCKER_REGISTRY}/cobot_offensiveness:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   cobot_dialogact:
-    image: ${DOCKER_REGISTRY}/cobot_dialogact
-    env_file: [.env.staging]
+    image: ${DOCKER_REGISTRY}/cobot_dialogact:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   transfertransfo:
-    image: ${DOCKER_REGISTRY}/transfertransfo
-    env_file: [.env.staging]
+    image: ${DOCKER_REGISTRY}/transfertransfo:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   retrieval_chitchat:
-    image: ${DOCKER_REGISTRY}/retrieval_chitchat
-    env_file: [.env.staging]
+    image: ${DOCKER_REGISTRY}/retrieval_chitchat:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   convers_evaluation_selector:
-    image: ${DOCKER_REGISTRY}/convers_evaluation_selector
-    env_file: [.env.staging]
+    image: ${DOCKER_REGISTRY}/convers_evaluation_selector:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   personality_catcher:
-    image: ${DOCKER_REGISTRY}/personality_catcher
-    env_file: [.env.staging]
+    image: ${DOCKER_REGISTRY}/personality_catcher:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   program_y:
-    image: ${DOCKER_REGISTRY}/program_y
-    env_file: [.env.staging]
+    image: ${DOCKER_REGISTRY}/program_y:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   toxic_classification:
-    image: ${DOCKER_REGISTRY}/toxic_classification
-    env_file: [.env.staging]
+    image: ${DOCKER_REGISTRY}/toxic_classification:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   intent_catcher:
-    image: ${DOCKER_REGISTRY}/intent_catcher
-    env_file: [.env.staging]
+    image: ${DOCKER_REGISTRY}/intent_catcher:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   intent_responder:
-    image: ${DOCKER_REGISTRY}/intent_responder
-    env_file: [.env.staging]
+    image: ${DOCKER_REGISTRY}/intent_responder:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   blacklisted_words:
-    image: ${DOCKER_REGISTRY}/blacklisted_words
-    env_file: [.env.staging]
+    image: ${DOCKER_REGISTRY}/blacklisted_words:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   dummy_skill:
-    image: ${DOCKER_REGISTRY}/dummy_skill
-    env_file: [.env.staging]
+    image: ${DOCKER_REGISTRY}/dummy_skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   program_y_dangerous:
-    image: ${DOCKER_REGISTRY}/program_y_dangerous
-    env_file: [.env.staging]
+    image: ${DOCKER_REGISTRY}/program_y_dangerous:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   cobot_nounphrases:
-    image: ${DOCKER_REGISTRY}/cobot_nounphrases
-    env_file: [.env.staging]
+    image: ${DOCKER_REGISTRY}/cobot_nounphrases:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  ner:
+    image: ${DOCKER_REGISTRY}/ner:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  mongo:
+    command: mongod
+    image: mongo:4.0.0
+    env_file:
+      - ${ENV_FILE}
+
 volumes:
   external-logs:
   external-deeppavlov:
