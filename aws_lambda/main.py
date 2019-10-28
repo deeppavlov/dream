@@ -1,21 +1,23 @@
 # -*- coding: utf-8 -*-
 import logging
+import os
 
-from ask_sdk_core.skill_builder import SkillBuilder
-from ask_sdk_core.dispatch_components import AbstractRequestHandler
-from ask_sdk_core.dispatch_components import AbstractExceptionHandler
 import ask_sdk_core.utils as ask_utils
 import requests
-from ask_sdk_core.handler_input import HandlerInput
-
-from ask_sdk_model import Response
 import sentry_sdk
+from ask_sdk_core.dispatch_components import AbstractExceptionHandler
+from ask_sdk_core.dispatch_components import AbstractRequestHandler
+from ask_sdk_core.handler_input import HandlerInput
+from ask_sdk_core.skill_builder import SkillBuilder
+from ask_sdk_model import Response
+from dotenv import load_dotenv
 from sentry_sdk.integrations.aws_lambda import \
     AwsLambdaIntegration
 
+load_dotenv()
 
-SENTRY_DSN = 'https://7a6d57df6fb44ae4bfc3d43a8b4f16f3@sentry.io/1553895'
-DP_AGENT_URL = 'http://Docker-ExternalLoa-LOFSURITNPLE-525614984.us-east-1.elb.amazonaws.com:4242'
+SENTRY_DSN = os.getenv('SENTRY_DSN')
+DP_AGENT_URL = os.getenv('DP_AGENT_URL')
 
 sentry_sdk.init(
     SENTRY_DSN,

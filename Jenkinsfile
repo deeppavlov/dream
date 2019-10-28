@@ -18,6 +18,20 @@ node {
             stage('CollectPredictions') {
                sh "./tests/runtests.sh MODE=infer_questions"
             }
+            stage('Deploy Dev') {
+               sh "./delploy.sh MODE=all TARGET=dev"
+               currentBuild.result = 'DEPLOYED'
+            }
+        }
+        def tag = sh(returnStdout: true, script: "git tag --contains | head -1").trim()
+        if (tag) {
+            stage('CollectPredictions') {
+               sh "./tests/runtests.sh MODE=infer_questions"
+            }
+            stage('Deploy Prod') {
+                sh "./delploy.sh MODE=all TARGET=prod"
+                currentBuild.result = 'DEPLOYED'
+            }
         }
     } catch(e) {
         currentBuild.result = 'FAILURE'

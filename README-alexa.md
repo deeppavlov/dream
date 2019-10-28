@@ -52,13 +52,15 @@ Deploy to prod and staging
 
 - новые ENV переменные надо не забывать добавлять в .env.staging, .env.dev и .env.prod.
 
-0. Обновить код для staging: `git checkout dev; git pull origin dev`
-0. Обновить код для prod: `git fetch --tags; git checkout RELEASE_VERSION`
-1. Билдим и пушим образы в ECR: `VERSION="$(git rev-parse --short HEAD)" ENV_FILE=.env.prod DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com ./push_to_ecr.sh`
-2. Деплой на стейджинг `VERSION="$(git rev-parse --short HEAD)" ENV_FILE=.env.staging DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com DOCKER_HOST=localhost:2375 docker stack deploy --compose-file docker-compose.yml,staging.yml --with-registry-auth dream_staging`
-2. Деплой на прод: `VERSION="$(git rev-parse --short HEAD)" ENV_FILE=.env.prod DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com DOCKER_HOST=localhost:2374 docker stack deploy --compose-file docker-compose.yml,staging.yml --with-registry-auth dream_prod`
-
-
+1. Обновить код:
+    - для staging: `git checkout dev; git pull origin dev`
+    - для prod: `git fetch --tags; git checkout RELEASE_VERSION` 
+2. Деплой
+    - одной командой: `./deploy.sh MODE=[all, agent, lambda] TARGET=[dev, prod]`
+    - руками:
+        1. Билдим и пушим образы в ECR: `VERSION="$(git rev-parse --short HEAD)" ENV_FILE=.env.prod DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com ./push_to_ecr.sh`
+        2. Деплой на стейджинг `VERSION="$(git rev-parse --short HEAD)" ENV_FILE=.env.staging DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com DOCKER_HOST=localhost:2375 docker stack deploy --compose-file docker-compose.yml,staging.yml --with-registry-auth dream_staging`
+        2. Деплой на прод: `VERSION="$(git rev-parse --short HEAD)" ENV_FILE=.env.prod DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com DOCKER_HOST=localhost:2374 docker stack deploy --compose-file docker-compose.yml,staging.yml --with-registry-auth dream_prod`
 
 - Открыть ssh туннель к докер менеджеру `ssh -i ~/Downloads/dream-local-idris-2.pem -NL localhost:2374:/var/run/docker.sock docker@ec2-34-207-206-65.compute-1.amazonaws.com`
 - Авторизация в ECR (если до этого не был запущен `./push_to_ecr`): `eval $(aws ecr get-login --no-include-email)`
