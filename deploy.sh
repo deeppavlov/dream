@@ -41,3 +41,4 @@ if [[ "$MODE" == "agent" || "$MODE" == "all" ]]; then
 fi
 
 echo "Successfully deployed"
+exit 0

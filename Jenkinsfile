@@ -20,7 +20,7 @@ node {
             }
             stage('Deploy Dev') {
                sh "./deploy.sh MODE=all TARGET=dev"
-               currentBuild.result = 'DEPLOYED'
+               currentBuild.result = 'SUCCESS'
             }
         }
         def tag = sh(returnStdout: true, script: "git tag --contains | head -1").trim()
@@ -30,11 +30,12 @@ node {
             }
             stage('Deploy Prod') {
                 sh "./deploy.sh MODE=all TARGET=prod"
-                currentBuild.result = 'DEPLOYED'
+                currentBuild.result = 'SUCCESS'
             }
         }
     } catch(e) {
         currentBuild.result = 'FAILURE'
+        echo "Caught exception: ${e}"
         throw e
     } finally {
         archiveArtifacts artifacts: 'tests/dream/output/*', fingerprint: true
