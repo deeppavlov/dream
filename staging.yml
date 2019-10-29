@@ -55,6 +55,10 @@ services:
     image: ${DOCKER_REGISTRY}/toxic_classification:${VERSION}
     env_file:
       - ${ENV_FILE}
+  sentiment_classification:
+    image: ${DOCKER_REGISTRY}/sentiment_classification:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   intent_catcher:
     image: ${DOCKER_REGISTRY}/intent_catcher:${VERSION}
     env_file:

@@ -109,6 +109,11 @@ fi
 if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
     echo "Passing test data to each skill selected for testing"
 
+    if container_is_started sentiment_classification; then
+        echo "Passing test data to sentiment_classification"
+        dockercompose_cmd exec -T -u $(id -u) sentiment_classification python annotators/DeepPavlovSentimentClassification/tests/run_test.py
+    fi
+
     if container_is_started transfertransfo; then
         echo "Passing test data to transfertransfo"
         dockercompose_cmd exec -T -u $(id -u) transfertransfo python tests/run_test.py \

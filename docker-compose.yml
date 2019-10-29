@@ -86,6 +86,21 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu == true
+  sentiment_classification:
+    build:
+      args:
+        skill_endpoint: sentiment_annotations
+        skillconfig: annotators/DeepPavlovSentimentClassification/sentiment_yelp_conv_bert.json
+        skillhost: 0.0.0.0
+        skillport: 8024
+      context: ./
+      dockerfile: dp/dockerfile_skill_gpu
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      placement:
+        constraints:
+          - node.labels.with_gpu == true
   sentrewrite:
     build:
       context: ./annotators/SentRewrite/

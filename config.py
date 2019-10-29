@@ -142,6 +142,19 @@ ANNOTATORS_1 = [
         "formatter": dp_toxic_formatter
     },
     {
+        "name": "sentiment_classification",
+        "protocol": "http",
+        "host": "sentiment_classification",
+        "port": 8024,
+        "endpoint": "sentiment_annotations",
+        "path": "annotators/DeepPavlovSentimentClassification/sentiment_yelp_conv_bert.json",
+        "env": {
+            "CUDA_VISIBLE_DEVICES": 0
+        },
+        "gpu": True,
+        "formatter": cobot_classifiers_formatter
+    },
+    {
         "name": "blacklisted_words",
         "protocol": "http",
         "host": "blacklisted_words",
