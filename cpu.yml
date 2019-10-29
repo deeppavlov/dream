@@ -11,3 +11,6 @@ services:
   toxic_classification:
     environment:
       CUDA_VISIBLE_DEVICES: ""
+  sentiment_classification:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""

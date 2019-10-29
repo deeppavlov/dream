@@ -98,9 +98,15 @@ services:
   toxic_classification:
     env_file: [.env.dev]
     volumes:
-      - "./annotators/DeepPavlovToxicClassification:/src"
+      - "./annotators/DeepPavlovToxicClassification:/dp-agent/annotators/DeepPavlovToxicClassification"
     ports:
       - 8013:8013
+  sentiment_classification:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/DeepPavlovSentimentClassification:/dp-agent/annotators/DeepPavlovSentimentClassification"
+    ports:
+      - 8024:8024
   intent_responder:
     env_file: [.env.dev]
     volumes:

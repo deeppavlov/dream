@@ -28,5 +28,10 @@ settings['model_defaults']['ToxicClassificationModel'] = {
     "model_args_names": ["sentences"]
 }
 
+settings['model_defaults']['SentimentClassificationModel'] = {
+    "model_endpoint": "/sentiment_annotations",
+    "model_args_names": ["sentences"]
+}
+
 print(settings_path)
 save_json(settings, settings_path)
