@@ -1,9 +1,10 @@
-from sentrewrite import recover_mentions
-from flask import Flask, jsonify, request
 import logging
 import time
 from os import getenv
+
 import sentry_sdk
+from flask import Flask, jsonify, request
+from sentrewrite import recover_mentions
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 

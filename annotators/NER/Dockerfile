@@ -1,4 +1,4 @@
-FROM python:3.7.4
+FROM pytorch/pytorch:1.2-cuda10.0-cudnn7-runtime
 
 RUN mkdir /src
 
@@ -8,7 +8,8 @@ RUN pip install -r /src/requirements.txt
 RUN pip uninstall -y bson pymongo && pip install bson==0.5.7 && pip install pymongo==3.7.2
 COPY ./download_flair_model.py /src/download_flair_model.py
 RUN python /src/download_flair_model.py
-# COPY ~/.flair/models/en-ner-ontonotes-v0.4.pt ~/models/en-ner-ontonotes-v0.4.pt
+
+ENV DEVICE cpu
 
 COPY . /src/
 WORKDIR /src
