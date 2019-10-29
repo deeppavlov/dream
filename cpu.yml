@@ -4,6 +4,10 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
+  ner:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
   toxic_classification:
     environment:
       CUDA_VISIBLE_DEVICES: ""
