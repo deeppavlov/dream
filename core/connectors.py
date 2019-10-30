@@ -13,19 +13,22 @@ class HTTPConnector:
         self.formatter = formatter
         self.service_name = service_name
 
-    async def send(self, payload: Dict, callback: Callable):
+    async def send(self, payload: Dict, callback: Callable, error_callback: Callable):
         formatted_payload = self.formatter([payload])
         service_send_time = time.time()
         async with aiohttp.ClientSession() as session:
             async with session.post(self.url, json=formatted_payload) as resp:
-                response = await resp.json()
-                service_response_time = time.time()
-                await callback(
-                    dialog_id=payload['id'], service_name=self.service_name,
-                    response={self.service_name: self.formatter(response[0], mode='out')},
-                    service_send_time=service_send_time,
-                    service_response_time=service_response_time
-                )
+                try:
+                    response = await resp.json()
+                    service_response_time = time.time()
+                    await callback(
+                        dialog_id=payload['id'], service_name=self.service_name,
+                        response={self.service_name: self.formatter(response[0], mode='out')},
+                        service_send_time=service_send_time,
+                        service_response_time=service_response_time
+                    )
+                except Exception as e:
+                    error_callback(self.service_name, payload['id'], e)
 
 
 class AioQueueConnector:
@@ -74,7 +77,7 @@ class ConfidenceResponseSelectorConnector:
     def __init__(self, service_name: str):
         self.service_name = service_name
 
-    async def send(self, payload: Dict, callback: Callable):
+    async def send(self, payload: Dict, callback: Callable, error_callback: Callable):
         service_send_time = time.time()
         response = payload['utterances'][-1]['hypotheses']
         best_skill = sorted(response, key=lambda x: x['confidence'], reverse=True)[0]
@@ -91,7 +94,7 @@ class HttpOutputConnector:
         self.intermediate_storage = intermediate_storage
         self.service_name = service_name
 
-    async def send(self, payload: Dict, callback: Callable):
+    async def send(self, payload: Dict, callback: Callable, error_callback: Callable):
         message_uuid = payload['message_uuid']
         event = payload['event']
         response_text = payload
@@ -110,7 +113,7 @@ class EventSetOutputConnector:
     def __init__(self, service_name: str):
         self.service_name = service_name
 
-    async def send(self, payload: Dict, callback: Callable):
+    async def send(self, payload: Dict, callback: Callable, error_callback: Callable):
         event = payload.get('event', None)
         service_send_time = time.time()
         if not event or not isinstance(event, asyncio.Event):
