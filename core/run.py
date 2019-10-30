@@ -41,6 +41,8 @@ parser.add_argument('-d', '--debug', help='run in debug mode', action='store_tru
 parser.add_argument('-rl', '--response-logger', help='run agent with services response logging', action='store_true')
 
 args = parser.parse_args()
+if args.debug:
+    logger.setLevel(logging.DEBUG)
 MODE = args.mode
 CHANNEL = args.channel
 

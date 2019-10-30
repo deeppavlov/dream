@@ -76,6 +76,18 @@ class SessionEndedRequestHandler(AbstractRequestHandler):
         return handler_input.response_builder.response
 
 
+def get_conversation_id(request_data):
+    request_section = request_data['request']
+    conversation_id = request_section.get('conversation_id') or request_data.get('conversation_id')
+    conversation_id = conversation_id or request_section.get('conversationId') or request_data.get('conversationId')
+
+    if not conversation_id:
+        if 'payload' in request_section:
+            payload = request_section['payload']
+            conversation_id = payload.get('conversationId') or payload.get('conversaion_id')
+    return conversation_id
+
+
 def call_dp_agent(user_id, text, request_data):
     logger.info("call_dp_agent user_id: {}; text: {}".format(user_id, text))
 
@@ -88,11 +100,14 @@ def call_dp_agent(user_id, text, request_data):
         logger.error("No key in request_data")
         sentry_sdk.capture_exception(e)
 
+    conversation_id = get_conversation_id(request_data)
+
     response, intent = None, None
     r = requests.post(
         DP_AGENT_URL,
         json={'user_id': user_id, 'payload': text, 'device_id': device_id,
-              'session_id': session_id, 'request_id': request_id}).json()
+              'session_id': session_id, 'request_id': request_id,
+              'conversation_id': conversation_id}).json()
     if r['active_skill'] == 'intent_responder':
         response, intent = r["response"].split("#+#")
     else:
