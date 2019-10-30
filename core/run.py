@@ -63,7 +63,7 @@ def prepare_agent(services, endpoint: Service, input_serv: Service, use_response
     else:
         response_logger_callable = None
     agent = Agent(pipeline, StateManager(), response_logger_callable=response_logger_callable)
-    return agent.register_msg, agent.process
+    return agent.register_msg, agent.process, agent
 
 
 async def run(register_msg):
@@ -96,7 +96,7 @@ async def on_shutdown(app):
     await app['client_session'].close()
 
 
-async def init_app(register_msg, intermediate_storage,
+async def init_app(register_msg, intermediate_storage, agent,
                    on_startup, on_shutdown_func=on_shutdown,
                    debug=False):
     app = web.Application(debug=True)
@@ -105,6 +105,7 @@ async def init_app(register_msg, intermediate_storage,
     app.router.add_post('/', handle_func)
     app.router.add_get('/dialogs', users_dialogs)
     app.router.add_get('/dialogs/{dialog_id}', dialog)
+    app.router.add_get('/drop_workflow', await drop_workflow(agent))
     app.router.add_get('/ping', pong)
     app.on_startup.append(on_startup)
     app.on_shutdown.append(on_shutdown_func)
@@ -121,6 +122,16 @@ def prepare_startup(consumers, process_callable, session):
         app['client_session'] = session
 
     return startup_background_tasks
+
+
+async def drop_workflow(agent):
+    async def api_handle(request):
+        try:
+            agent.drop_workflow()
+            return web.json_response({'success': True})
+        except Exception:
+            return web.json_response({'success': False})
+    return api_handle
 
 
 async def api_message_processor(register_msg, intermediate_storage, debug=False):
@@ -197,7 +208,9 @@ def run_default():
         input_srv = Service('input', None, StateManager.add_human_utterance_simple_dict, 1, ['input'])
         loop = asyncio.get_event_loop()
         loop.set_debug(args.debug)
-        register_msg, process = prepare_agent(services, endpoint, input_srv, use_response_logger=args.response_logger)
+        register_msg, process, _ = prepare_agent(
+            services, endpoint, input_srv, use_response_logger=args.response_logger
+        )
         if gateway:
             gateway.on_channel_callback = register_msg
             gateway.on_service_callback = process
@@ -226,11 +239,11 @@ def run_default():
         endpoint = Service('http_responder', HttpOutputConnector(intermediate_storage, 'http_responder').send,
                            StateManager.save_dialog_dict, 1, ['responder'])
         input_srv = Service('input', None, StateManager.add_human_utterance_simple_dict, 1, ['input'])
-        register_msg, process_callable = prepare_agent(services, endpoint, input_srv, args.response_logger)
+        register_msg, process_callable, agent = prepare_agent(services, endpoint, input_srv, args.response_logger)
         if gateway:
             gateway.on_channel_callback = register_msg
             gateway.on_service_callback = process_callable
-        app = init_app(register_msg, intermediate_storage, prepare_startup(workers, process_callable, session),
+        app = init_app(register_msg, intermediate_storage, agent, prepare_startup(workers, process_callable, session),
                        on_shutdown, args.debug)
         web.run_app(app, port=args.port)
 
@@ -245,7 +258,7 @@ def run_default():
         endpoint = Service('telegram_responder', EventSetOutputConnector('telegram_responder').send,
                            StateManager.save_dialog_dict, 1, ['responder'])
         input_srv = Service('input', None, StateManager.add_human_utterance_simple_dict, 1, ['input'])
-        register_msg, process = prepare_agent(
+        register_msg, process, _ = prepare_agent(
             services, endpoint, input_srv, use_response_logger=args.response_logger)
         if gateway:
             gateway.on_channel_callback = register_msg

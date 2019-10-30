@@ -93,6 +93,7 @@ dockercompose_cmd logs -f --tail="all" --timestamps &
 
 wait_service "http://0.0.0.0:$AGENT_PORT/ping" pong
 
+
 if [[ "$MODE" == "test_dialog" || "$MODE" == "all" ]]; then
     echo "Pass dialogs from dp-agent"
     dockercompose_cmd exec -T -u $(id -u) agent python3 \
@@ -104,6 +105,9 @@ if [[ "$MODE" == "test_dialog" || "$MODE" == "all" ]]; then
     else
         dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/assert_test_dialogs.py -pred_f tests/dream/output/test_dialogs_output.csv -true_f tests/dream/test_dialogs_gold_phrases.csv
     fi
+
+    echo "Check workflow bug"
+    dockercompose_cmd exec -T -u $(id -u) agent python3 tests/test_workflow_bug.py
 fi
 
 if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then

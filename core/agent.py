@@ -47,6 +47,9 @@ class Agent:
             raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
         return record
 
+    def drop_workflow(self):
+        self.workflow = {}
+
     def flush_record(self, dialog_id: str):
         if dialog_id not in self.workflow.keys():
             raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
@@ -84,7 +87,7 @@ class Agent:
             service_data = self.workflow[dialog_id]['services'][service_name]
             service_data['done'] = True
             service_data['agent_done_time'] = time()
-            if response and service.state_processor_method:
+            if service.state_processor_method:
                 service.state_processor_method(dialog=workflow_record['dialog'],
                                                dialog_object=workflow_record['dialog_object'],
                                                payload=response,
@@ -155,7 +158,13 @@ class Agent:
             self.register_service_request(dialog_id, service.name)
             payload = service.apply_workflow_formatter(workflow_record)
             service_requests.append(
-                service.connector_func(payload=payload, callback=self.process)
+                service.connector_func(
+                    payload=payload, callback=self.process, error_callback=self.process_service_error
+                )
             )
 
         await asyncio.gather(*service_requests)
+
+    def process_service_error(self, service_name, dialog_id, exception):
+        self.flush_record(dialog_id)
+        raise exception
