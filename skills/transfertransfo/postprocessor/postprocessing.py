@@ -12,7 +12,6 @@ import nltk
 from .sentiment import pick_emoji
 from .heuristics import apply_heuristics
 
-
 logger = logging.getLogger(__name__)
 
 DROP_SPEC_TOKEN = "<DROP_REPLY>"
@@ -246,14 +245,18 @@ def postprocess_text(
     heuristic=True,
     emoji_prob=0.3,
     ngram_size=3,
-    add_questions=0.3,
+    add_questions=0.3
 ):
 
     utterances_histories_str = ". ".join(utterances_histories)
     personality_str = ". ".join(personality)
 
     if heuristic:
-        reply = apply_heuristics(reply=reply, utterances_histories=utterances_histories, personality=personality)
+        reply = apply_heuristics(
+            reply=reply,
+            utterances_histories=utterances_histories,
+            personality=personality,
+        )
         if not (reply):
             return DROP_SPEC_TOKEN
 
@@ -266,7 +269,7 @@ def postprocess_text(
     if replace_ngram:
         reply = ngram_replacer(personality, reply, n=ngram_size)
 
-    if random.uniform(0, 1) < emoji_prob:
+    if random.uniform(0, 1) < emoji_prob and DROP_SPEC_TOKEN != reply:
         reply = " ".join([reply, pick_emoji(reply)])
 
     return reply

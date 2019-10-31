@@ -49,6 +49,13 @@ parameters:
                     "Hi",
                     "How are you?"
                   ]
+                ],
+                "utterances_histories": [
+                  [
+                    "Hello",
+                    "Hi",
+                    "How are you?"
+                  ]
                 ]
               }
 responses:
