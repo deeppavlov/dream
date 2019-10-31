@@ -19,7 +19,6 @@ from core.config_parser import parse_old_config, get_service_gateway_config
 from core.state_manager import StateManager
 from state_formatters.output_formatters import http_api_output_formatter, http_debug_output_formatter
 
-from sys import stdout
 import sentry_sdk
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -27,7 +26,6 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger('service_logger')
 fh = logging.FileHandler('../service.log')
 logger.addHandler(fh)
-logger.addHandler(logging.StreamHandler(stdout))
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 parser = argparse.ArgumentParser()
