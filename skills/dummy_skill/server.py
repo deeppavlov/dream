@@ -2,7 +2,6 @@
 
 import logging
 import time
-import uuid
 import numpy as np
 
 from flask import Flask, request, jsonify
@@ -18,28 +17,21 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-donotknow_answers = ["I really do not know what to answer.",
-                     "Sorry, probably, I didn't get what you mean.",
-                     "I didn't get it. Sorry.",
-                     "Let's talk about something else."]
+donotknow_answers = np.array(["I really do not know what to answer.",
+                              "Sorry, probably, I didn't get what you mean.",
+                              "I didn't get it. Sorry.",
+                              "Let's talk about something else."])
 
 
 @app.route("/respond", methods=['POST'])
 def respond():
     st_time = time.time()
     dialogs_batch = request.json["dialogs"]
-    sentences = [dialog["utterances"][-1]["text"] for dialog in dialogs_batch]
-    session_id = uuid.uuid4().hex
     confidences = []
     responses = []
 
-    for i, dialog in enumerate(dialogs_batch):
-        logger.info(f"user_sentence: {sentences[i]}, session_id: {session_id}")
-        response = np.random.choice(donotknow_answers)
-
-        responses += [response]
-        confidences += [0.5]
-        logger.info(f"response: {response}")
+    responses = np.random.choice(donotknow_answers, size=len(dialogs_batch)).tolist()
+    confidences = [0.5] * len(dialogs_batch)
 
     total_time = time.time() - st_time
     logger.info(f'dummy_skill exec time: {total_time:.3f}s')
