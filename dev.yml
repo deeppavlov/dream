@@ -144,4 +144,10 @@ services:
       - "./annotators/nounphrases:/src"
     ports:
       - 8016:8016
+  movie_skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/movie_skill:/src"
+    ports:
+      - 8023:8023
 version: "3.7"

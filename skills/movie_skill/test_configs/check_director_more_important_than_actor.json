@@ -1,0 +1,164 @@
+[
+  {
+    "id": "5db852bc40697b994208244c",
+    "location": "lab",
+    "utterances": [
+      {
+        "id": null,
+        "text": "what do you think about quentin tarantino?",
+        "user": {
+          "id": "5db852bc40697b994208244a",
+          "user_telegram_id": "450967",
+          "user_type": "human",
+          "device_type": "cmd",
+          "persona": [],
+          "profile": {
+            "name": null,
+            "gender": null,
+            "birthdate": null,
+            "location": null,
+            "home_coordinates": null,
+            "work_coordinates": null,
+            "occupation": null,
+            "income_per_year": null
+          },
+          "attributes": {}
+        },
+        "annotations": {
+          "sentseg": {
+            "punct_sent": "what do you think about quentin tarantino?",
+            "segments": [
+              "what do you think about quentin tarantino?"
+            ]
+          },
+          "blacklisted_words": {
+            "profanity": false,
+            "restricted_topics": false
+          },
+          "toxic_classification": {
+            "identity_hate": 0.0005517899990081787,
+            "insult": 0.0006555914878845215,
+            "obscene": 0.00024953484535217285,
+            "severe_toxic": 0.00013887882232666016,
+            "sexual_explicit": 0.00027963396860286593,
+            "threat": 0.00040512109990231693,
+            "toxic": 0.0016464329091832042
+          },
+          "intent_catcher": {
+            "exit": {
+              "confidence": 0.00363880443317358,
+              "detected": 0
+            },
+            "repeat": {
+              "confidence": 0.0036150672353513764,
+              "detected": 0
+            },
+            "what_can_you_do": {
+              "confidence": 0.0003659269363543533,
+              "detected": 0
+            },
+            "what_is_your_job": {
+              "confidence": 0.0004242985651992536,
+              "detected": 0
+            },
+            "what_is_your_name": {
+              "confidence": 0.0004212754305309107,
+              "detected": 0
+            },
+            "where_are_you_from": {
+              "confidence": 0.00011492382242168204,
+              "detected": 0
+            },
+            "who_made_you": {
+              "confidence": 0.003958742424047768,
+              "detected": 0
+            }
+          },
+          "cobot_nounphrases": [
+            "quentin tarantino"
+          ],
+          "ner": [
+            []
+          ],
+          "cobot_topics": {
+            "text": [
+              "Celebrities"
+            ]
+          },
+          "cobot_dialogact": {
+            "intents": [
+              "Opinion_RequestIntent"
+            ],
+            "topics": [
+              "Entertainment_Movies"
+            ]
+          },
+          "cobot_offensiveness": {
+            "text": [
+              "non-toxic"
+            ],
+            "confidence": [
+              2.808209e-07
+            ],
+            "is_blacklisted": [
+              "not blacklist"
+            ]
+          },
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "what do you think about quentin tarantino?"
+            ]
+          }
+        },
+        "date_time": "2019-10-29 14:54:52.407002",
+        "hypotheses": [],
+        "attributes": {}
+      }
+    ],
+    "channel_type": "cmd_client",
+    "human": {
+      "id": "5db852bc40697b994208244a",
+      "user_telegram_id": "450967",
+      "user_type": "human",
+      "device_type": "cmd",
+      "persona": [],
+      "profile": {
+        "name": null,
+        "gender": null,
+        "birthdate": null,
+        "location": null,
+        "home_coordinates": null,
+        "work_coordinates": null,
+        "occupation": null,
+        "income_per_year": null
+      },
+      "attributes": {}
+    },
+    "bot": {
+      "id": "5db852bc40697b994208244b",
+      "user_type": "bot",
+      "persona": [
+        "I am a socialbot.",
+        "I live on Amazon Web Service.",
+        "I was born during the Alexa Prize Challenge.",
+        "I like talking to people.",
+        "I love to meet new people.",
+        "I like jazz music.",
+        "I like listening music.",
+        "I like watching movies and series.",
+        "I like to play sports.",
+        "I like to work out.",
+        "I enjoy reading books.",
+        "I love dogs, especially bulldog.",
+        "I like cats, they are funny.",
+        "I love hot-dogs.",
+        "I like sushi.",
+        "I like pizza and pasta.",
+        "I do not like chocolate.",
+        "I am never still."
+      ],
+      "attributes": {}
+    }
+  }
+]

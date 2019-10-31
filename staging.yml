@@ -92,6 +92,10 @@ services:
     image: mongo:4.0.0
     env_file:
       - ${ENV_FILE}
+  movie_skill:
+    image: ${DOCKER_REGISTRY}/movie_skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
 
 volumes:
   external-logs:
