@@ -1,0 +1,165 @@
+[
+  {
+    "id": "5db85407be82d9b4fda18d57",
+    "location": "lab",
+    "utterances": [
+      {
+        "id": null,
+        "text": "what do you think about brad pitt in the avengers?",
+        "user": {
+          "id": "5db85407be82d9b4fda18d55",
+          "user_telegram_id": "935867",
+          "user_type": "human",
+          "device_type": "cmd",
+          "persona": [],
+          "profile": {
+            "name": null,
+            "gender": null,
+            "birthdate": null,
+            "location": null,
+            "home_coordinates": null,
+            "work_coordinates": null,
+            "occupation": null,
+            "income_per_year": null
+          },
+          "attributes": {}
+        },
+        "annotations": {
+          "sentseg": {
+            "punct_sent": "what do you think about brad pitt in the avengers?",
+            "segments": [
+              "what do you think about brad pitt in the avengers?"
+            ]
+          },
+          "blacklisted_words": {
+            "profanity": false,
+            "restricted_topics": false
+          },
+          "toxic_classification": {
+            "identity_hate": 0.00021532177925109863,
+            "insult": 0.00036066770553588867,
+            "obscene": 0.0001678168773651123,
+            "severe_toxic": 0.00010159611701965332,
+            "sexual_explicit": 0.000183162308530882,
+            "threat": 0.00037027662619948387,
+            "toxic": 0.0010580220259726048
+          },
+          "intent_catcher": {
+            "exit": {
+              "confidence": 0.0043132658102006255,
+              "detected": 0
+            },
+            "repeat": {
+              "confidence": 0.0027172666755417726,
+              "detected": 0
+            },
+            "what_can_you_do": {
+              "confidence": 0.00037146129469281286,
+              "detected": 0
+            },
+            "what_is_your_job": {
+              "confidence": 0.000459542334675363,
+              "detected": 0
+            },
+            "what_is_your_name": {
+              "confidence": 0.0006284528447554385,
+              "detected": 0
+            },
+            "where_are_you_from": {
+              "confidence": 8.517008074757791e-05,
+              "detected": 0
+            },
+            "who_made_you": {
+              "confidence": 0.004383856553751797,
+              "detected": 0
+            }
+          },
+          "cobot_nounphrases": [
+            "brad pitt",
+            "the avengers"
+          ],
+          "ner": [
+            []
+          ],
+          "cobot_dialogact": {
+            "intents": [
+              "Opinion_RequestIntent"
+            ],
+            "topics": [
+              "Entertainment_Movies"
+            ]
+          },
+          "cobot_topics": {
+            "text": [
+              "Movies_TV"
+            ]
+          },
+          "cobot_offensiveness": {
+            "text": [
+              "non-toxic"
+            ],
+            "confidence": [
+              3.9920606e-06
+            ],
+            "is_blacklisted": [
+              "not blacklist"
+            ]
+          },
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "what do you think about brad pitt in the avengers?"
+            ]
+          }
+        },
+        "date_time": "2019-10-29 15:00:23.512328",
+        "hypotheses": [],
+        "attributes": {}
+      }
+    ],
+    "channel_type": "cmd_client",
+    "human": {
+      "id": "5db85407be82d9b4fda18d55",
+      "user_telegram_id": "935867",
+      "user_type": "human",
+      "device_type": "cmd",
+      "persona": [],
+      "profile": {
+        "name": null,
+        "gender": null,
+        "birthdate": null,
+        "location": null,
+        "home_coordinates": null,
+        "work_coordinates": null,
+        "occupation": null,
+        "income_per_year": null
+      },
+      "attributes": {}
+    },
+    "bot": {
+      "id": "5db85407be82d9b4fda18d56",
+      "user_type": "bot",
+      "persona": [
+        "I am a socialbot.",
+        "I live on Amazon Web Service.",
+        "I was born during the Alexa Prize Challenge.",
+        "I like talking to people.",
+        "I love to meet new people.",
+        "I like jazz music.",
+        "I like listening music.",
+        "I like watching movies and series.",
+        "I like to play sports.",
+        "I like to work out.",
+        "I enjoy reading books.",
+        "I love dogs, especially bulldog.",
+        "I like cats, they are funny.",
+        "I love hot-dogs.",
+        "I like sushi.",
+        "I like pizza and pasta.",
+        "I do not like chocolate.",
+        "I am never still."
+      ],
+      "attributes": {}
+    }
+  }
+]

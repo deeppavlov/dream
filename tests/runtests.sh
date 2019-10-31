@@ -127,6 +127,11 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
             --from_url http://0.0.0.0:8007/transfertransfo
     fi
 
+    if container_is_started movie_skill; then
+        echo "Run tests for movie_skill"
+        dockercompose_cmd exec -T -u $(id -u) movie_skill python test.py
+    fi
+
 fi
 
 if [[ "$MODE" == "infer_questions" || "$MODE" == "all" ]]; then

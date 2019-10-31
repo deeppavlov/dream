@@ -390,3 +390,33 @@ def ner_formatter(payload, mode='in'):
         return {'last_utterances': annotated_input_formatter(payload, annotation="segmented")[
             "last_utterances"]}
     return payload
+
+
+def skill_with_attributes_formatter(payload, mode='in'):
+    if mode == 'in':
+        # import json
+        # print(json.dumps(payload, indent=2))
+        dialogs = annotated_input_formatter(payload, annotation="punctuated")['dialogs']
+        return {"dialogs": dialogs}
+    elif mode == 'out':
+        if len(payload) == 4:
+            return [{"text": payload[0],
+                     "confidence": payload[1],
+                     "human_attributes": payload[2],
+                     "bot_attributes": payload[3]
+                     }]
+        elif len(payload) == 5:
+            # payload[4] is a dictionary with additional keys-labels-annotations to the reply
+            # payload[4] = {"any_key" : "any_value"}
+            result = {"text": payload[0],
+                      "confidence": payload[1],
+                      "human_attributes": payload[2],
+                      "bot_attributes": payload[3]
+                      }
+            for key in payload[4]:
+                result[key] = payload[4][key]
+            return [result]
+        else:
+            return [{"text": payload[0],
+                     "confidence": payload[1]
+                     }]

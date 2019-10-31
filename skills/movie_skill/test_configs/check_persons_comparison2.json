@@ -1,0 +1,173 @@
+[
+  {
+    "id": "5db85496cb76cd853f6e5f83",
+    "location": "lab",
+    "utterances": [
+      {
+        "id": null,
+        "text": "what do you think? who is better brad pitt or quentin tarantino?",
+        "user": {
+          "id": "5db85496cb76cd853f6e5f81",
+          "user_telegram_id": "459867",
+          "user_type": "human",
+          "device_type": "cmd",
+          "persona": [],
+          "profile": {
+            "name": null,
+            "gender": null,
+            "birthdate": null,
+            "location": null,
+            "home_coordinates": null,
+            "work_coordinates": null,
+            "occupation": null,
+            "income_per_year": null
+          },
+          "attributes": {}
+        },
+        "annotations": {
+          "blacklisted_words": {
+            "profanity": false,
+            "restricted_topics": false
+          },
+          "sentseg": {
+            "punct_sent": "what do you think? who is better brad pitt or quentin tarantino?",
+            "segments": [
+              "what do you think?",
+              "who is better brad pitt or quentin tarantino?"
+            ]
+          },
+          "toxic_classification": {
+            "identity_hate": 0.00011968612670898438,
+            "insult": 0.00031679868698120117,
+            "obscene": 5.9604644775390625e-05,
+            "severe_toxic": 3.314018249511719e-05,
+            "sexual_explicit": 6.190392014104873e-05,
+            "threat": 0.00011646834900602698,
+            "toxic": 0.0007037490722723305
+          },
+          "intent_catcher": {
+            "exit": {
+              "confidence": 0.019623806876240515,
+              "detected": 0
+            },
+            "repeat": {
+              "confidence": 0.010786422466166741,
+              "detected": 0
+            },
+            "what_can_you_do": {
+              "confidence": 0.0017233403387069367,
+              "detected": 0
+            },
+            "what_is_your_job": {
+              "confidence": 0.001134852900005729,
+              "detected": 0
+            },
+            "what_is_your_name": {
+              "confidence": 0.001373983760213407,
+              "detected": 0
+            },
+            "where_are_you_from": {
+              "confidence": 0.0003388566424021795,
+              "detected": 0
+            },
+            "who_made_you": {
+              "confidence": 0.007611877744425049,
+              "detected": 0
+            }
+          },
+          "cobot_nounphrases": [
+            "brad pitt",
+            "quentin tarantino"
+          ],
+          "ner": [
+            [],
+            []
+          ],
+          "cobot_dialogact": {
+            "intents": [
+              "Opinion_RequestIntent",
+              "Information_RequestIntent"
+            ],
+            "topics": [
+              "Phatic",
+              "Entertainment_Movies"
+            ]
+          },
+          "cobot_topics": {
+            "text": [
+              "Phatic",
+              "Celebrities"
+            ]
+          },
+          "cobot_offensiveness": {
+            "text": [
+              "non-toxic",
+              "non-toxic"
+            ],
+            "confidence": [
+              9.648285e-07,
+              7.561213e-07
+            ],
+            "is_blacklisted": [
+              "not blacklist",
+              "not blacklist"
+            ]
+          },
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "what do you think? who is better brad pitt or quentin tarantino?"
+            ]
+          }
+        },
+        "date_time": "2019-10-29 15:02:46.395725",
+        "hypotheses": [],
+        "attributes": {}
+      }
+    ],
+    "channel_type": "cmd_client",
+    "human": {
+      "id": "5db85496cb76cd853f6e5f81",
+      "user_telegram_id": "459867",
+      "user_type": "human",
+      "device_type": "cmd",
+      "persona": [],
+      "profile": {
+        "name": null,
+        "gender": null,
+        "birthdate": null,
+        "location": null,
+        "home_coordinates": null,
+        "work_coordinates": null,
+        "occupation": null,
+        "income_per_year": null
+      },
+      "attributes": {}
+    },
+    "bot": {
+      "id": "5db85496cb76cd853f6e5f82",
+      "user_type": "bot",
+      "persona": [
+        "I am a socialbot.",
+        "I live on Amazon Web Service.",
+        "I was born during the Alexa Prize Challenge.",
+        "I like talking to people.",
+        "I love to meet new people.",
+        "I like jazz music.",
+        "I like listening music.",
+        "I like watching movies and series.",
+        "I like to play sports.",
+        "I like to work out.",
+        "I enjoy reading books.",
+        "I love dogs, especially bulldog.",
+        "I like cats, they are funny.",
+        "I love hot-dogs.",
+        "I like sushi.",
+        "I like pizza and pasta.",
+        "I do not like chocolate.",
+        "I am never still."
+      ],
+      "attributes": {}
+    }
+  }
+]

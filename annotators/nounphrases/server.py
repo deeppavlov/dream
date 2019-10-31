@@ -27,7 +27,7 @@ def respond():
     sentences = [dialog["utterances"][-1]["text"] for dialog in dialogs_batch]
     session_id = uuid.uuid4().hex
 
-    nounphrases = [noun_phrase_extraction(sent.lower()) for sent in sentences]
+    nounphrases = [noun_phrase_extraction(sent) for sent in sentences]
 
     for i, sent in enumerate(sentences):
         logger.info(f"user_sentence: {sent}, session_id: {session_id}")

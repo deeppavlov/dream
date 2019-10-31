@@ -134,6 +134,11 @@ services:
       context: ./annotators/nounphrases/
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8016
     volumes: []
+  movie_skill:
+    build:
+      context: ./skills/movie_skill/
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8023 --timeout=100
+    volumes: []
   ner:
     build:
       context: ./annotators/NER/

@@ -115,6 +115,16 @@ SKILLS = [
         "path": "",
         "formatter": program_y_formatter
     },
+    {
+        "name": "movie_skill",
+        "protocol": "http",
+        "host": "movie_skill",
+        "port": 8023,
+        "endpoint": "movie_skill",
+        "external": True,
+        "path": "",
+        "formatter": skill_with_attributes_formatter
+    },
 ]
 
 ANNOTATORS_1 = [
