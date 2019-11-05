@@ -205,7 +205,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     while candidates[best_id]["text"] == "" or candidates[best_id]["confidence"] == 0.:
         curr_single_cores[best_id] = 0.
         best_id = np.argmax(curr_single_cores)
-        best_skill_name = candidates[best_id]
+        best_skill_name = candidates[best_id]["skill_name"]
         best_text = candidates[best_id]["text"]
         best_confidence = candidates[best_id]["confidence"]
         if sum(curr_single_cores) == 0.:

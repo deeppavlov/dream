@@ -80,7 +80,7 @@ class MovieSkillTemplates:
         # e.g. unique_persons = {"name1": ["actor", "director"], "name2": ["actor"]}
 
         if unique_persons:
-            logger.info("Unique persons :{}".format(unique_persons))
+            logger.info("Unique persons: {}".format(unique_persons))
 
         if len(movies_ids) > 0 and len(unique_persons) > 0:
             movies_names = [self.imdb(movie)["title"] for movie in movies_ids]
@@ -93,6 +93,9 @@ class MovieSkillTemplates:
                         movies_ids_toremove.append(movies_ids[i])
                     elif person_name in movie_name:
                         persons_names_toremove.append(person_name)
+
+            movies_ids_toremove = list(set(movies_ids_toremove))
+            persons_names_toremove = list(set(persons_names_toremove))
             for i in movies_ids_toremove:
                 movies_ids.remove(i)
             for n in persons_names_toremove:
@@ -137,18 +140,13 @@ class MovieSkillTemplates:
                 return self.give_opinion_about_persons_in_movie(
                     movies_ids[0], [person_name])
             elif len(movies_ids) == 1 and len(unique_persons) > 1:
-                # give opinion about persons, do not take into account movie-name
-                return self.give_opinion_about_person(uttr, unique_persons)
+                # give opinion about persons in this movie
+                return self.give_opinion_about_persons_in_movie(
+                    movies_ids[0], list(unique_persons.keys()))
             elif len(movies_ids) > 1 and len(unique_persons) == 1:
-                persons_names = [name for name in unique_persons]
-                professions = [set(unique_persons[name]) for name in unique_persons]
-                professions = list(set.intersection(*professions))
-                if professions:
-                    return self.give_opinion_about_persons_in_movie(
-                        movies_ids[0], persons_names, profession=professions)
-                else:
-                    return "Oh, really? This is too difficult question for me now. " \
-                           "Could you, please, ask it in a bit more simple way?", {}
+                # give opinion about persons in the first movie name
+                return self.give_opinion_about_persons_in_movie(
+                    movies_ids[0], list(unique_persons.keys()))
             else:
                 return "Oh, really? This is too difficult question for me now. " \
                        "Could you, please, ask it in a bit more simple way?", {}
@@ -205,9 +203,10 @@ class MovieSkillTemplates:
             # len(movies_ids) either 2 or 3
             movies_names = [self.imdb(movie)["title"] for movie in movies_ids]
             if len(movies_names) == 2:
-                reply = f"Are you talking about {movies_names[0]} or {movies_names[1]}?"
+                reply = f"Are you talking about the movie {movies_names[0]} or {movies_names[1]}?"
             else:
-                reply = f"Are you talking about {movies_names[0]}, {movies_names[1]} or {movies_names[2]}?"
+                reply = f"Are you talking about one of the following movies: " \
+                        f"{movies_names[0]}, {movies_names[1]} or {movies_names[2]}?"
 
             return reply, {"movie": [(movies_names, "clarification")]}
 
@@ -222,12 +221,7 @@ class MovieSkillTemplates:
             if len(list(unique_persons.values())[0]) == 1 or dialog_subjects is None or len(dialog_subjects) == 0:
                 # only one profession
                 # or many professions but there were not previously discussed movies or professionals
-                max_movies = 0
-                for prof in list(unique_persons.values())[0]:
-                    n_movies = len(self.imdb.professionals[f"{prof}s"][name])
-                    if n_movies > max_movies:
-                        max_movies = n_movies
-                        profession = prof
+                profession = self.imdb.get_main_profession(name=name)
             else:
                 # two or more professions and non-empty dialog_subjects
                 if dialog_subjects[-1][0] == "movie":
@@ -526,18 +520,46 @@ class MovieSkillTemplates:
             # profession is a list of common professions
             # but that doesn't mean they are in the same profession in this movie.
             # let's check
-            common_prof = True
-            for prof in profession:
-                for name in names:
-                    if name not in self.imdb(movie_id)[f"{prof}s"]:
-                        common_prof = False
-                        break
-                if common_prof:
-                    profession = prof
-                    break  # just to stop on actors if this person is actor
-            if isinstance(profession, list):
-                return (f"I suppose these guys are of different occupations in {movie}.",
-                        {prof: [(name, "info")] for name, prof in zip(names, profession)})
+
+            if profession is None:
+                professions = self.imdb.professions
+            else:
+                professions = profession
+
+            all_professions_in_this_movie = []
+            common_professions_in_this_movie = []
+            are_in_this_movie = []
+            for name in names:
+                is_in_this_movie = False
+                professions_in_this_movie = []
+                for prof in professions:
+                    if name in self.imdb(movie_id)[f"{prof}s"]:
+                        is_in_this_movie = True
+                        professions_in_this_movie.append(prof)
+                all_professions_in_this_movie.append(set(professions_in_this_movie))
+                are_in_this_movie.append(is_in_this_movie)
+
+            if sum(are_in_this_movie) == len(are_in_this_movie):
+                # list of common professions for this persons in this movie
+                common_professions_in_this_movie = list(set.intersection(*all_professions_in_this_movie))
+                if len(common_professions_in_this_movie) == 0:
+                    # all were in this movie but have different professions
+                    return (f"I suppose these guys are of different occupations in {movie}.",
+                            {prof: [(name, "info")] for name, prof in zip(names, profession)})
+                else:
+                    # chose profession and go ahead
+                    if "actor" in common_professions_in_this_movie:
+                        profession = "actor"
+                    else:
+                        profession = common_professions_in_this_movie[0]
+            else:
+                professions = np.array([self.imdb.get_main_profession(name) for name in names])
+                not_from_movie_names = ", ".join(np.array(names)[np.array(are_in_this_movie) is False])
+                return (f"I suppose {not_from_movie_names} didn't participated in {movie}.",
+                        {prof: [(name, "incorrect")]
+                         for name, prof in zip(np.array(names)[np.array(are_in_this_movie) is False],
+                                               np.array(professions)[np.array(are_in_this_movie) is False])})
+
             attitudes = []
             for name in names:
                 attitudes += [self.imdb.generate_opinion_about_movie_person(name, profession)]
