@@ -119,7 +119,7 @@ Services Deployment
 
     .. code:: bash
 
-        pip -r install gen_requirements.txt
+        pip install -r gen_requirements.txt
 
 3. Install and configure Docker_ (version 19.03.2 or later) and Docker-compose_ (version 1.19.0 or later).
 
@@ -230,7 +230,7 @@ Agent can run both from container and from a local machine. The default Agent po
 
     .. code:: bash
 
-        pip -r install gen_requirements.txt
+        pip install -r gen_requirements.txt
 
 4. Start communicating with the chatbot from the console:
 

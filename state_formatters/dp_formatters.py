@@ -1,5 +1,4 @@
 from typing import Dict, Any, List
-
 from .utils import commands_excluder
 
 
@@ -161,9 +160,17 @@ def base_annotator_formatter(payload: Any, model_args_names=('x',), mode='in'):
 
 def sentiment_formatter(payload: Any, model_args_names=('x',), mode='in'):
     if mode == 'in':
-        return last_utterances(payload, model_args_names)
-    if mode == 'out':
-        return [el for el in payload]
+        return {'sentences': annotated_input_formatter(payload, annotation="punctuated")["last_utterances"]}
+    elif mode == 'out':
+        if len(payload) == 3:
+            return {"text": payload[0],
+                    "confidence": payload[1],
+                    "is_blacklisted": payload[2]}
+        elif len(payload) == 2:
+            return {"text": payload[0],
+                    "confidence": payload[1]}
+        elif len(payload) == 1:
+            return {"text": payload[0]}
 
 
 def chitchat_odqa_formatter(payload: Any, model_args_names=('x',), mode='in'):
@@ -389,8 +396,7 @@ def punct_dialogs_formatter(payload, mode='in'):
 
 def ner_formatter(payload, mode='in'):
     if mode == 'in':
-        return {'last_utterances': annotated_input_formatter(payload, annotation="segmented")[
-            "last_utterances"]}
+        return {'last_utterances': annotated_input_formatter(payload, annotation="segmented")["last_utterances"]}
     return payload
 
 
