@@ -70,4 +70,4 @@ class Pipeline:
 
 
 def simple_workflow_formatter(workflow_record):
-    return workflow_record['dialog'].to_dict()
+    return workflow_record['dialog']

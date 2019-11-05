@@ -1,17 +1,16 @@
-import asyncio
-from copy import deepcopy
 from itertools import chain
+from copy import deepcopy
 
 import aiohttp
+import asyncio
 
-from core.connectors import (AgentGatewayToServiceConnector, AioQueueConnector,
-                             ConfidenceResponseSelectorConnector,
-                             HTTPConnector, QueueListenerBatchifyer)
+from core.transform_config import SKILLS, ANNOTATORS_1, ANNOTATORS_2, ANNOTATORS_3, SKILL_SELECTORS, \
+    RESPONSE_SELECTORS, POSTPROCESSORS
+from core.connectors import HTTPConnector, ConfidenceResponseSelectorConnector, AioQueueConnector, \
+    QueueListenerBatchifyer, AgentGatewayToServiceConnector
 from core.pipeline import simple_workflow_formatter
 from core.service import Service
-from core.transform_config import (ANNOTATORS_1, ANNOTATORS_2, ANNOTATORS_3,
-                                   POSTPROCESSORS, RESPONSE_SELECTORS,
-                                   SKILL_SELECTORS, SKILLS)
+from core.state_manager import StateManager
 from core.transport.settings import TRANSPORT_SETTINGS
 
 
@@ -28,7 +27,7 @@ def add_bot_to_name(name):
     return f'bot_{name}'
 
 
-def parse_old_config(state_manager):
+def parse_old_config():
     services = []
     worker_tasks = []
     session = None
@@ -77,7 +76,7 @@ def parse_old_config(state_manager):
 
     for anno in ANNOTATORS_1:
         service, workers, session, gateway = make_service_from_config_rec(anno, session,
-                                                                          state_manager.add_annotation,
+                                                                          StateManager.add_annotation_dict,
                                                                           ['ANNOTATORS_1'], set(), gateway)
         services.append(service)
         worker_tasks.extend(workers)
@@ -87,7 +86,7 @@ def parse_old_config(state_manager):
     if ANNOTATORS_2:
         for anno in ANNOTATORS_2:
             service, workers, session, gateway = make_service_from_config_rec(anno, session,
-                                                                              state_manager.add_annotation,
+                                                                              StateManager.add_annotation_dict,
                                                                               ['ANNOTATORS_2'], previous_services,
                                                                               gateway)
             services.append(service)
@@ -98,7 +97,7 @@ def parse_old_config(state_manager):
     if ANNOTATORS_3:
         for anno in ANNOTATORS_3:
             service, workers, session, gateway = make_service_from_config_rec(anno, session,
-                                                                              state_manager.add_annotation,
+                                                                              StateManager.add_annotation_dict,
                                                                               ['ANNOTATORS_3'], previous_services,
                                                                               gateway)
             services.append(service)
@@ -108,7 +107,7 @@ def parse_old_config(state_manager):
 
     if SKILL_SELECTORS:
         for ss in SKILL_SELECTORS:
-            service, workers, session, gateway = make_service_from_config_rec(ss, session, state_manager.do_nothing,
+            service, workers, session, gateway = make_service_from_config_rec(ss, session, StateManager.do_nothing,
                                                                               ['SKILL_SELECTORS', 'selector'],
                                                                               previous_services, gateway)
             services.append(service)
@@ -119,7 +118,7 @@ def parse_old_config(state_manager):
     if SKILLS:
         for s in SKILLS:
             service, workers, session, gateway = make_service_from_config_rec(s, session,
-                                                                              state_manager.add_hypothesis,
+                                                                              StateManager.add_hypothesis_dict,
                                                                               ['SKILLS'], previous_services, gateway)
             services.append(service)
             worker_tasks.extend(workers)
@@ -131,7 +130,7 @@ def parse_old_config(state_manager):
             Service(
                 'confidence_response_selector',
                 ConfidenceResponseSelectorConnector('confidence_response_selector').send,
-                state_manager.add_bot_utterance,
+                StateManager.add_bot_utterance_simple_dict,
                 1, ['RESPONSE_SELECTORS'], previous_services, simple_workflow_formatter
             )
         )
@@ -139,7 +138,7 @@ def parse_old_config(state_manager):
         for r in RESPONSE_SELECTORS:
             service, workers, session, gateway = \
                 make_service_from_config_rec(r, session,
-                                             state_manager.add_bot_utterance,
+                                             StateManager.add_bot_utterance_simple_dict,
                                              ['RESPONSE_SELECTORS'], previous_services,
                                              gateway)
             services.append(service)
@@ -149,7 +148,7 @@ def parse_old_config(state_manager):
 
     if POSTPROCESSORS:
         for p in POSTPROCESSORS:
-            service, workers, session, gateway = make_service_from_config_rec(p, session, state_manager.add_text,
+            service, workers, session, gateway = make_service_from_config_rec(p, session, StateManager.add_text_dict,
                                                                               ['POSTPROCESSORS'], previous_services,
                                                                               gateway)
             services.append(service)
@@ -160,7 +159,7 @@ def parse_old_config(state_manager):
     if ANNOTATORS_1:
         for anno in ANNOTATORS_1:
             service, workers, session, gateway = make_service_from_config_rec(anno, session,
-                                                                              state_manager.add_annotation,
+                                                                              StateManager.add_annotation_dict,
                                                                               ['POST_ANNOTATORS_1'], previous_services,
                                                                               gateway, add_bot_to_name)
             services.append(service)
@@ -171,7 +170,7 @@ def parse_old_config(state_manager):
     if ANNOTATORS_2:
         for anno in ANNOTATORS_2:
             service, workers, session, gateway = make_service_from_config_rec(anno, session,
-                                                                              state_manager.add_annotation,
+                                                                              StateManager.add_annotation_dict,
                                                                               ['POST_ANNOTATORS_2'], previous_services,
                                                                               gateway, add_bot_to_name)
             services.append(service)
@@ -181,7 +180,7 @@ def parse_old_config(state_manager):
 
     for anno in ANNOTATORS_3:
         service, workers, session, gateway = make_service_from_config_rec(anno, session,
-                                                                          state_manager.add_annotation,
+                                                                          StateManager.add_annotation_dict,
                                                                           ['POST_ANNOTATORS_3'],
                                                                           previous_services, gateway, add_bot_to_name)
         services.append(service)
