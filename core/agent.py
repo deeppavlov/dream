@@ -1,11 +1,23 @@
 import asyncio
+
 from collections import defaultdict
 from time import time
-from typing import Any, Callable, Hashable, Optional
+from typing import Any, Optional, Callable, Hashable
 
 from core.pipeline import Pipeline
 from core.state_manager import StateManager
 from core.state_schema import Dialog
+from models.hardcode_utterances import TG_START_UTT
+
+import logging
+from os import getenv
+import sentry_sdk
+
+sentry_sdk.init(getenv('SENTRY_DSN'))
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class Agent:
@@ -21,7 +33,7 @@ class Agent:
     def add_workflow_record(self, dialog: Dialog, deadline_timestamp: Optional[float] = None, **kwargs):
         if str(dialog.id) in self.workflow.keys():
             raise ValueError(f'dialog with id {dialog.id} is already in workflow')
-        workflow_record = {'dialog': dialog, 'services': defaultdict(dict)}
+        workflow_record = {'dialog_object': dialog, 'dialog': dialog.to_dict(), 'services': defaultdict(dict)}
         if deadline_timestamp:
             workflow_record['deadline_timestamp'] = deadline_timestamp
         if 'dialog_object' in kwargs:
@@ -34,6 +46,9 @@ class Agent:
         if not record:
             raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
         return record
+
+    def drop_workflow(self):
+        self.workflow = {}
 
     def flush_record(self, dialog_id: str):
         if dialog_id not in self.workflow.keys():
@@ -60,8 +75,10 @@ class Agent:
 
         return done, waiting
 
-    async def process_service_response(self, dialog_id: str, service_name: str = None, response: Any = None,
-                                       **kwargs):
+    def process_service_response(self, dialog_id: str, service_name: str = None, response: Any = None,
+                                 **kwargs):
+        if "dialog_object" not in response:
+            logger.info(f"Service: {response}")
         workflow_record = self.get_workflow_record(dialog_id)
 
         # Updating workflow with service response
@@ -71,10 +88,10 @@ class Agent:
             service_data['done'] = True
             service_data['agent_done_time'] = time()
             if service.state_processor_method:
-                await service.state_processor_method(
-                    dialog=workflow_record['dialog'], payload=response,
-                    message_attrs=kwargs.pop('message_attrs', {})
-                )
+                service.state_processor_method(dialog=workflow_record['dialog'],
+                                               dialog_object=workflow_record['dialog_object'],
+                                               payload=response,
+                                               message_attrs=kwargs.pop('message_attrs', {}))
 
             # passing kwargs to services record
             if not set(service_data.keys()).intersection(set(kwargs.keys())):
@@ -112,7 +129,9 @@ class Agent:
                            user_device_type: Any, location: Any,
                            channel_type: str, deadline_timestamp=None,
                            require_response=False, **kwargs):
-        dialog = await self.state_manager.get_or_create_dialog_by_tg_id(user_telegram_id, channel_type)
+        user = self.state_manager.get_or_create_user(user_telegram_id, user_device_type)
+        should_reset = True if utterance == TG_START_UTT else False
+        dialog = self.state_manager.get_or_create_dialog(user, location, channel_type, should_reset=should_reset)
         dialog_id = str(dialog.id)
         service_name = 'input'
         message_attrs = kwargs.pop('message_attrs', {})
@@ -132,14 +151,20 @@ class Agent:
 
     async def process(self, dialog_id, service_name=None, response: Any = None, **kwargs):
         workflow_record = self.get_workflow_record(dialog_id)
-        next_services = await self.process_service_response(dialog_id, service_name, response, **kwargs)
+        next_services = self.process_service_response(dialog_id, service_name, response, **kwargs)
 
         service_requests = []
         for service in next_services:
             self.register_service_request(dialog_id, service.name)
             payload = service.apply_workflow_formatter(workflow_record)
             service_requests.append(
-                service.connector_func(payload=payload, callback=self.process)
+                service.connector_func(
+                    payload=payload, callback=self.process, error_callback=self.process_service_error
+                )
             )
 
         await asyncio.gather(*service_requests)
+
+    def process_service_error(self, service_name, dialog_id, exception):
+        self.flush_record(dialog_id)
+        raise exception

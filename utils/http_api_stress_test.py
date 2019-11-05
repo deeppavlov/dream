@@ -1,10 +1,10 @@
-import argparse
+import aiohttp
 import asyncio
+import argparse
+from time import time
 import uuid
 from statistics import mean, median
-from time import time
 
-import aiohttp
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-u', '--url', type=str)
@@ -39,21 +39,18 @@ async def perform_test_dialogue(session, url, uuid, payloads):
 
 
 async def run_users(url, payload, mnu, mxu):
-    payload_len = len(payload)
     async with aiohttp.ClientSession() as session:
         for i in range(mnu, mxu + 1):
             tasks = []
-            for _ in range(0, i):
+            for j in range(0, i):
                 user_id = uuid.uuid4().hex
                 tasks.append(asyncio.ensure_future(perform_test_dialogue(session, url, user_id, payload)))
-            test_start_time = time()
             responses = await asyncio.gather(*tasks)
-            test_time = time() - test_start_time
             times = []
             for resp in responses:
                 times.extend(resp)
 
-            print(f'test No {i} finished: {max(times)} {min(times)} {mean(times)} {median(times)} total_time {test_time} msgs {i*payload_len} mean_rps {(i*payload_len)/test_time}')  # noqa
+            print(f'test No {i} finished: {max(times)} {min(times)} {mean(times)} {median(times)}')
 
 
 if __name__ == '__main__':
