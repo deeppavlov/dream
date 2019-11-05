@@ -282,6 +282,8 @@ def cobot_classifiers_formatter(payload, mode='in'):
                     "confidence": payload[1]}
         elif len(payload) == 1:
             return {"text": payload[0]}
+        elif len(payload) == 0:
+            return {"text": []}
 
 
 def cobot_dialogact_formatter(payload, mode='in'):
