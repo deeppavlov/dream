@@ -206,6 +206,24 @@ class IMDb:
         except KeyError:
             return None
 
+    def get_main_profession(self, name: str, from_which_professions=None):
+        max_movies = 0
+        profession = "actor"
+
+        if from_which_professions is None:
+            from_which_professions = self.professions
+
+        for prof in from_which_professions:
+            try:
+                n_movies = len(self.professionals[f"{prof}s"][name])
+            except KeyError:
+                n_movies = 0
+            if n_movies > max_movies:
+                max_movies = n_movies
+                profession = prof
+
+        return profession
+
     def __call__(self, name_or_id):
         """
         Return the dictionary with all the available information about the given movie by `imdb_id` or `title`
