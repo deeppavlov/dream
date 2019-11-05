@@ -8,8 +8,7 @@ RUN apt-get update -y --fix-missing && \
         openssl \
         git \
         libssl-dev \
-        libffi-dev \
-        curl && \
+        libffi-dev && \
     rm -rf /var/lib/apt/lists/*
 
 ENV PYTHONIOENCODING=utf-8

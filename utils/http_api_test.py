@@ -7,6 +7,7 @@ from time import time
 from random import randrange
 import uuid
 import logging
+from tqdm import tqdm
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.DEBUG)
@@ -36,11 +37,12 @@ parser.add_argument('-of', '--outputfile', help='name of the output file', type=
 
 async def perform_test_dialogue(session, url, uuid, payloads):
     result = []
-    for i in payloads:
+    for i in tqdm(payloads, desc=uuid):
         request_body = {'user_id': uuid, 'payload': i}
         start_time = time()
-        logger.debug("Start time: {}".format(start_time))
-        async with session.post(url, json=request_body) as resp:
+        async with session.post(url, json=request_body, timeout=None) as resp:
+            resp.raise_for_status()
+
             response = await resp.json()
             end_time = time()
             logger.debug("End time: {}; Response: {}".format(start_time, response))
@@ -90,5 +92,6 @@ if __name__ == '__main__':
         raise ValueError('You should provide either predefined dialog (-df) or file with phrases (-pf)')
 
     loop = asyncio.get_event_loop()
+    loop.set_debug(True)
     future = asyncio.ensure_future(run(args.url, payloads, args.outputfile))
     loop.run_until_complete(future)
