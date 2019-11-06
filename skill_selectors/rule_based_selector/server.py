@@ -76,7 +76,7 @@ class RuleBasedSelector():
                 # skills_for_uttr.append("retrieval_chitchat")
 
             about_movies = "Entertainment_Movies" in cobot_dialogact_topics or "Movies_TV" in cobot_topics
-            if about_movies or sensitive_dialogacts_detected:
+            if about_movies:
                 skills_for_uttr.append("movie_skill")
 
             # always add dummy_skill

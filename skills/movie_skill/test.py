@@ -21,7 +21,7 @@ def test_one_step_responses():
 
     input_data = get_input_json("test_configs/check_movie.json")
     response = requests.post(url, json=input_data).json()[0]
-    assert response[1:] == [0.98, {}, {}, {'movie': [['The Avengers', 'very_positive']]}], print(response)
+    assert response[1:] == [0.98, {}, {}, {'movie': [['0848228', 'very_positive']]}], print(response)
 
     input_data = get_input_json("test_configs/check_person_of_the_same_prof.json")
     response = requests.post(url, json=input_data).json()[0]
