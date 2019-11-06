@@ -176,7 +176,7 @@ class IMDb:
             None if the movie not in the database
         """
         try:
-            return self.lowercased_movies_names[name.lower()]
+            return self.processed_movies_names[self.process_movie_name(name)]
         except KeyError:
             return None
 

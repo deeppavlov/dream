@@ -29,7 +29,7 @@ class MovieSkillTemplates:
         # let's collect about which movies and persons we were talking about
         dialog_subjects = []
         # list, each element is a tuple
-        # e.g. ("movie", [("The Avengers", "positive"), ]) or ("actor", [("Brad Pitt", "very_positive")])
+        # e.g. ("movie", [("0123456", "positive"), ]) or ("actor", [("Brad Pitt", "very_positive")])
 
         for i in range(len(dialog["utterances"])):
             if i + 1 < len(dialog["utterances"]):
@@ -118,9 +118,9 @@ class MovieSkillTemplates:
                 subject = dialog_subjects[-1]
                 if subject[0] == "movie":
                     if len(subject[1]) == 1:
-                        movie_name = subject[1][0][0]
+                        movie_id = subject[1][0][0]
                         attitude = subject[1][0][1]
-                        return self.give_opinion_about_movie(movie_name, attitude)
+                        return self.give_opinion_about_movie([movie_id], attitude)
                     else:
                         movies = [m[0] for m in subject[1]]
                         return self.give_opinion_about_movie(movies)
@@ -197,7 +197,7 @@ class MovieSkillTemplates:
                 attitude_to_movie = self.imdb.generate_opinion_about_movie(movie_name)
             reply = self.opinion_about_movie(movie_name, attitude_to_movie,
                                              genres=self.imdb.get_info_about_movie(movie_name, "genre"))
-            return reply, {"movie": [(movie_name, attitude_to_movie)]}
+            return reply, {"movie": [(movies_ids[0], attitude_to_movie)]}
         else:
             # found several movies. need to clarify!
             # len(movies_ids) either 2 or 3
@@ -208,7 +208,7 @@ class MovieSkillTemplates:
                 reply = f"Are you talking about one of the following movies: " \
                         f"{movies_names[0]}, {movies_names[1]} or {movies_names[2]}?"
 
-            return reply, {"movie": [(movies_names, "clarification")]}
+            return reply, {"movie": [(movie_id, "clarification") for movie_id in movies_ids]}
 
     def give_opinion_about_person(self, uttr, unique_persons, dialog_subjects=None, attitude_to_person=None):
         if len(unique_persons) == 1:
@@ -226,7 +226,7 @@ class MovieSkillTemplates:
                 # two or more professions and non-empty dialog_subjects
                 if dialog_subjects[-1][0] == "movie":
                     # the last discussed subject is a movie
-                    # dialog_subject = [("movie", [("John Smith", "positive")])]
+                    # dialog_subject = [("movie", [("0123456", "positive")])]
                     last_discussed_movie = dialog_subjects[-1][1][0][0]
                     person_in_movie_profs = []
                     for prof in self.imdb.professions:  # e.g. `actor`
