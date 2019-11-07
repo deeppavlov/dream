@@ -2,6 +2,14 @@ FROM python:3.7.4
 
 RUN mkdir /src
 
+RUN mkdir /elmo2
+RUN curl https://storage.googleapis.com/tfhub-modules/google/elmo/3.tar.gz > /elmo2/elmo2.tar.gz
+RUN tar -xvzf /elmo2/elmo2.tar.gz -C /elmo2
+RUN rm /elmo2/elmo2.tar.gz
+
+RUN mkdir /src/tfhub_cache_dir
+ENV TFHUB_CACHE_DIR tfhub_cache_dir
+
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 RUN python -c "import nltk; nltk.download('punkt')"

@@ -26,7 +26,6 @@ dict_params = json.load(open("config.json"))
 params = pars(dict_params)
 
 model = model.model(params)
-
 saver = tf.train.Saver()
 sess = tf.Session()
 saver.restore(sess, params.model_path)
