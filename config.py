@@ -2,10 +2,10 @@ from os import getenv
 
 from state_formatters.dp_formatters import *
 
-DB_NAME = getenv('DB_NAME', 'test')
-DB_HOST = getenv('DB_HOST', '127.0.0.1')
-DB_PORT = getenv('DB_PORT', 27017)
-DB_PATH = getenv('DB_PATH', '/data/db')
+DB_NAME = getenv('DB_NAME')
+DB_HOST = getenv('DB_HOST')
+DB_PORT = int(getenv('DB_PORT'))
+DB_PATH = getenv('DB_PATH')
 
 MAX_WORKERS = 4
 
@@ -162,7 +162,7 @@ ANNOTATORS_1 = [
             "CUDA_VISIBLE_DEVICES": 0
         },
         "gpu": True,
-        "formatter": cobot_classifiers_formatter
+        "formatter": sentiment_formatter
     },
     {
         "name": "blacklisted_words",
