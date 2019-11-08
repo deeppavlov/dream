@@ -55,7 +55,8 @@ class StopIntentHandler(AbstractRequestHandler):
         logger.info("StopIntentHandler")
         # type: (HandlerInput) -> Response
         speak_output = ""
-
+        user_id = ask_utils.get_user_id(handler_input)
+        call_dp_agent(user_id, '/close', request_data)
         return (
             handler_input.response_builder.speak(speak_output).set_should_end_session(True).response
         )
@@ -108,7 +109,7 @@ def call_dp_agent(user_id, text, request_data):
         json={'user_id': user_id, 'payload': text, 'device_id': device_id,
               'session_id': session_id, 'request_id': request_id,
               'conversation_id': conversation_id}).json()
-    if r['active_skill'] == 'intent_responder':
+    if r.get('active_skill') == 'intent_responder':
         response, intent = r["response"].split("#+#")
     else:
         response = r["response"]
@@ -151,6 +152,7 @@ class IntentReflectorHandler(AbstractRequestHandler):
         speak_output = dp_agent_data['response']
 
         if dp_agent_data['intent'] == 'exit':
+            call_dp_agent(user_id, '/close', request_data)
             logger.info("ExitIntent From DpAgent")
             return handler_input.response_builder.speak(speak_output).response
         else:
