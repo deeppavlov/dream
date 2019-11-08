@@ -6,3 +6,4 @@ runs/
 ParlAI/
 __pycache__
 models
+tests/*results.json

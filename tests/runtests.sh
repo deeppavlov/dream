@@ -93,7 +93,6 @@ dockercompose_cmd logs -f --tail="all" --timestamps &
 
 wait_service "http://0.0.0.0:$AGENT_PORT/ping" pong
 
-
 if [[ "$MODE" == "test_dialog" || "$MODE" == "all" ]]; then
     echo "Check workflow bug"
     dockercompose_cmd exec -T -u $(id -u) agent python3 tests/test_workflow_bug.py
@@ -121,10 +120,15 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
     if container_is_started transfertransfo; then
         echo "Passing test data to transfertransfo"
         dockercompose_cmd exec -T -u $(id -u) transfertransfo python tests/run_test.py \
-            --true_file test_tasks.json \
             --true_file tests/test_tasks.json \
             --pred_file tests/test_results.json \
             --from_url http://0.0.0.0:8007/transfertransfo
+
+        # echo "Passing question test data to transfertransfo from dream/...xlsx , it takes about 3 hours"
+        # dockercompose_cmd exec -T -u $(id -u) transfertransfo python tests/run_test.py \
+        #     --true_file tests/test_question_tasks.json \
+        #     --pred_file tests/test_question_tasks_results.json \
+        #     --from_url http://0.0.0.0:8007/transfertransfo
     fi
 
     if container_is_started movie_skill; then

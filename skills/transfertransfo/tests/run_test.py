@@ -9,8 +9,11 @@ parser.add_argument("-from_url", "--from_url", type=str, default="http://0.0.0.0
 
 
 def get_response(url, personality, history):
-    data = requests.post(url, json={"personality": [personality], "utterances_histories": [history]})
-    return data.json()[0]
+    try:
+        data = requests.post(url, json={"personality": [personality], "utterances_histories": [history]})
+        return data.json()[0]
+    except Exception:
+        return ("", 0)
 
 
 def main():
@@ -24,7 +27,7 @@ def main():
         responses = []
         for _ in range(task["num_try"]):
             responses.append(get_response(args.from_url, personality, task["utterances_histories"]))
-
+        responses = sorted(responses, key=lambda x: -x[1])
         responses = [
             {
                 "valid": not task["targets"] or bool([True for tgt in task["targets"] if tgt in res]),
@@ -32,6 +35,7 @@ def main():
                 "confidence": conf,
             }
             for res, conf in responses
+            if res
         ]
         task["responses"] = responses
         valid = bool([True for res in responses if res["valid"]])
