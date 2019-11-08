@@ -70,7 +70,9 @@ class ApiHandler:
                 raise web.HTTPBadRequest(reason='user_id key is required')
             command_performed = await handle_command(payload, user_id, request.app['agent'].state_manager)
             if command_performed:
-                return web.json_response({'user_id': user_id, 'response': 'command_performed'})
+                return web.json_response({
+                    'user_id': user_id, 'response': 'command_performed', 'active_skill': 'command_performed'
+                })
 
             response = await register_msg(utterance=payload, user_telegram_id=user_id,
                                           user_device_type=data.pop('user_device_type', 'http'),
