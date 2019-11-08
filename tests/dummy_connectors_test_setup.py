@@ -12,6 +12,7 @@ from core.connectors import HttpOutputConnector
 from core.config_parser import parse_old_config
 from core.state_manager import StateManager
 from core.run import prepare_agent
+from state_formatters.output_formatters import http_debug_output_formatter
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-p', '--port', help='port for http client, default 4242', default=4242)
@@ -104,13 +105,13 @@ async def api_message_processor(register_msg, intermediate_storage):
             if bot_response is None:
                 raise RuntimeError('Got None instead of a bot response.')
 
-        return web.json_response({'user_id': user_id, 'response': bot_response})
+        return web.json_response(http_debug_output_formatter(bot_response['dialog'].to_dict()))
 
     return api_handle
 
 
 def main():
-    services, workers, session = parse_old_config()
+    services, workers, session, _ = parse_old_config()
 
     for s in services:
         if 'RESPONSE_SELECTORS' in s.tags:
@@ -122,8 +123,8 @@ def main():
                                               s.name).send
     intermediate_storage = {}
     endpoint = Service('http_responder', HttpOutputConnector(intermediate_storage, 'http_responder').send,
-                       StateManager.save_dialog_dict, 1, ['responder'])
-    input_srv = Service('input', None, StateManager.add_human_utterance_simple_dict, 1, ['input'])
+                       StateManager.save_dialog, 1, ['responder'])
+    input_srv = Service('input', None, StateManager.add_human_utterance, 1, ['input'])
     register_msg, process_callable = prepare_agent(services, endpoint, input_srv, args.response_logger)
     app = init_app(register_msg, intermediate_storage, prepare_startup(workers, process_callable, session),
                    on_shutdown)

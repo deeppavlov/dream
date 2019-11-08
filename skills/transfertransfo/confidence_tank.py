@@ -2,7 +2,6 @@ import os
 
 import numpy as np
 import requests
-import tqdm
 
 TGT_URL = os.getenv("TGT_URL", "http://localhost/transfertransfo/")
 N_REQUESTS = int(os.getenv("N_REQUESTS", 5))
@@ -83,7 +82,7 @@ def history_gen(dialogs):
 
 
 confidences = []
-for history in tqdm.tqdm(list(history_gen(dialogs))):
+for history in list(history_gen(dialogs)):
     response = {}
     for _ in range(N_REQUESTS):
         data = requests.post(TGT_URL, json={"personality": [personality], "utterances_histories": [history]}).json()[0]

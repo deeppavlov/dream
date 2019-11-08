@@ -35,9 +35,10 @@ function cleanup() {
     local exit_status=${1:-$?}
     echo SHUTDOWN TESTING ENVIRONMENT..
 
-    dockercompose_cmd exec -T agent bash -c "chown -R $(id -u):$(id -g) /dp-agent"
-    dockercompose_cmd exec -T agent bash -c "find /dp-agent -name __pycache__ | xargs rm -rf"
-    dockercompose_cmd exec -T mongo bash -c "rm -rf /root/data/db/*"
+    dockercompose_cmd stop
+    dockercompose_cmd run -T agent bash -c "chown -R $(id -u):$(id -g) /dp-agent"
+    dockercompose_cmd run -T agent bash -c "find /dp-agent -name __pycache__ | xargs rm -rf"
+    dockercompose_cmd run -T mongo bash -c "rm -rf /root/data/db/*"
 
     dockercompose_cmd down
     dockercompose_cmd rm mongo

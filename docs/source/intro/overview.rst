@@ -82,7 +82,7 @@ change anything.
 * **port**
     * A port on a service host machine
 * **endpoint**
-    * A service URL endpoint, **"/skill"** by default
+    * A service URL endpoint, **"/model"** by default
 * **url** (optional)
     * A service url. By default it is generated from **protocol + host + port +  endpoint**
 * **path**
@@ -91,13 +91,8 @@ change anything.
     * Environment variables dictionary
 * **external** (optional)
     * If the service is running from the **dp-agent** repo. **False** by default.
-* **dockerfile** (optional)
-    * Specify a dockerfile name available inside the Agent repo. **"dockerfile_skill_cpu"** by default.
-
-    Available options:
-
-        * **"dockerfile_skill_cpu"**
-        * **"dockerfile_skill_gpu"**
+* **base_image**
+    * Specify a base docker image name for **dp/dockerfile_skill image**.
 * **formatter**
     * The name of a function that converts the Agent state into a service input format
       and converts a service output format into the Agent state
@@ -119,7 +114,7 @@ Services Deployment
 
     .. code:: bash
 
-        pip -r install gen_requirements.txt
+        pip install -r gen_requirements.txt
 
 3. Install and configure Docker_ (version 19.03.2 or later) and Docker-compose_ (version 1.19.0 or later).
 
@@ -218,7 +213,9 @@ Agent can run both from container and from a local machine. The default Agent po
 
         export LANG="C.UTF-8"
         export LC_ALL="C.UTF-8"
+        stty iutf8
 
+    `stty iutf8` fixes decoding errors that occure when using backspace with utf-8 symbols.
 
 2. Setup **DPA_LAUNCHING_ENV** environment variable:
 
@@ -230,7 +227,7 @@ Agent can run both from container and from a local machine. The default Agent po
 
     .. code:: bash
 
-        pip -r install gen_requirements.txt
+        pip install -r gen_requirements.txt
 
 4. Start communicating with the chatbot from the console:
 

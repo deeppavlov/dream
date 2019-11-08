@@ -39,11 +39,12 @@ async def perform_test_dialogue(session, url, uuid, payloads):
     for i in payloads:
         request_body = {'user_id': uuid, 'payload': i}
         start_time = time()
-        logger.debug("Start time: {}".format(start_time))
         async with session.post(url, json=request_body) as resp:
+            resp.raise_for_status()
+
             response = await resp.json()
             end_time = time()
-            logger.debug("End time: {}; Response: {}".format(start_time, response))
+            logger.debug("Time: {}; Request: {}; Response: {}".format(start_time - end_time, request_body, response))
             if response['user_id'] != uuid:
                 logger.info('request returned wrong uuid')
             result.append([uuid, start_time, end_time, end_time - start_time, len(i), i, response['response']])
@@ -53,11 +54,16 @@ async def perform_test_dialogue(session, url, uuid, payloads):
 
 async def run(url, payloads, out_filename):
     tasks = []
+    responses = []
+    batch_size = 32
     async with aiohttp.ClientSession() as session:
-        for k, v in payloads.items():
+        for i, k_v in enumerate(payloads.items()):
+            k, v = k_v
             task = asyncio.ensure_future(perform_test_dialogue(session, url, k, v))
             tasks.append(task)
-        responses = await asyncio.gather(*tasks)
+            if i % batch_size == 0:
+                responses += await asyncio.gather(*tasks)
+                tasks = []
     result = [['uuid', 'send timestamp', 'receive timestamp', 'processing_time',
                'phrase length', 'phrase text', 'response']]
     for i in responses:
@@ -90,5 +96,6 @@ if __name__ == '__main__':
         raise ValueError('You should provide either predefined dialog (-df) or file with phrases (-pf)')
 
     loop = asyncio.get_event_loop()
+    # loop.set_debug(True)
     future = asyncio.ensure_future(run(args.url, payloads, args.outputfile))
     loop.run_until_complete(future)
