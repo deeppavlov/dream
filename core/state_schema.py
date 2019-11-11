@@ -199,6 +199,15 @@ class Dialog:
         return result
 
     @classmethod
+    async def get_all(cls, db):
+        humans = {i._id: i for i in await Human.get_all(db)}
+        result = []
+        async for document in db[cls.collection_name].find():
+            result.append(cls(actual=True, human=humans[document['_human_id']], **document))
+            await result[-1].load_external_info(db)
+        return result
+
+    @classmethod
     async def get_by_id(cls, db, dialog_id):
         dialog = await db[cls.collection_name].find_one({'_id': ObjectId(dialog_id)})
         if dialog:
@@ -311,6 +320,13 @@ class Human:
         if user:
             return cls(**user)
         return None
+
+    @classmethod
+    async def get_all(cls, db):
+        result = []
+        async for user in db[cls.collection_name].find():
+            result.append(cls(**user))
+        return result
 
     async def save(self, db):
         is_changed = self.prev_state != self.get_state()

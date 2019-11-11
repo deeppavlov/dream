@@ -22,6 +22,7 @@ async def init_app(agent, session, consumers, debug=False):
 
     app.router.add_post('/', handler.handle_api_request)
     app.router.add_get('/dialogs/{dialog_id}', handler.dialog)
+    app.router.add_get('/dialogs', handler.all_dialogs)
 
     app.router.add_get('/ping', handler.pong)
     app.router.add_get('/user/{user_telegram_id}', handler.dialogs_by_user)
@@ -106,3 +107,21 @@ class ApiHandler:
         user_telegram_id = request.match_info['user_telegram_id']
         dialogs = await state_manager.get_dialogs_by_user_ext_id(user_telegram_id)
         return web.json_response([i.to_dict() for i in dialogs])
+
+    async def all_dialogs(self, request):
+        def dialg_to_dict(dialog):
+            result = {
+                'id': dialog.id,
+                'utterances': [],
+                'human': dialog.human.to_dict(),
+                'bot': dialog.bot.to_dict()
+            }
+            for i in dialog.utterances:
+                utt_dct = {'text': i.text}
+                if hasattr(i, 'attributes'):
+                    utt_dct['attributes'] = i.attributes
+                result['utterances'].append(utt_dct)
+
+        state_manager = request.app['agent'].state_manager
+        dialogs = await state_manager.get_all_dialogs()
+        return web.json_response([dialg_to_dict(i) for i in dialogs])
