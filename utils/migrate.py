@@ -47,10 +47,15 @@ async def prepare_db(db):
 
 async def create_and_save_dialogs(dialogs, utterances, users, db_new):
     users_and_dialogs = defaultdict(list)
+    users_dict = {}
     for d in dialogs:
         user = users[d.get('user') or d.get('human')]
-        user_obj = Human(telegram_id=user['user_telegram_id'], profile=user['profile'])
-        await user_obj.save(db_new)
+        if user['user_telegram_id'] in users_dict:
+            user_obj = users_dict[user['user_telegram_id']]
+        else:
+            user_obj = Human(telegram_id=user['user_telegram_id'], profile=user['profile'])
+            await user_obj.save(db_new)
+            users_dict[user['user_telegram_id']] = user_obj
 
         bot = users.get(d['bot'])
         bot_obj = Bot(persona=bot['persona'])

@@ -1,4 +1,5 @@
 import uuid
+from collections import defaultdict
 from copy import copy
 from datetime import datetime
 from itertools import chain
@@ -72,6 +73,13 @@ class HumanUtterance:
             result.append(cls(actual=True, **document))
         return result
 
+    @classmethod
+    async def get_all(cls, db):
+        result = []
+        async for document in db[cls.collection_name].find():
+            result.append(cls(**document))
+        return result
+
 
 class BotUtterance:
     collection_name = 'bot_utterance'
@@ -128,6 +136,13 @@ class BotUtterance:
         result = []
         async for document in db[cls.collection_name].find({'_dialog_id': dialog_id}):
             result.append(cls(actual=True, **document))
+        return result
+
+    @classmethod
+    async def get_all(cls, db):
+        result = []
+        async for document in db[cls.collection_name].find():
+            result.append(cls(**document))
         return result
 
 
@@ -201,10 +216,17 @@ class Dialog:
     @classmethod
     async def get_all(cls, db):
         humans = {i._id: i for i in await Human.get_all(db)}
+        bots = {i._id: i for i in await Bot.get_all(db)}
+        utterances = defaultdict(list)
+        for doc in await HumanUtterance.get_all(db):
+            utterances[doc._dialog_id].append(doc)
+        for doc in await BotUtterance.get_all(db):
+            utterances[doc._dialog_id].append(doc)
         result = []
         async for document in db[cls.collection_name].find():
-            result.append(cls(actual=True, human=humans[document['_human_id']], **document))
-            await result[-1].load_external_info(db)
+            dialog = cls(actual=True, human=humans[document['_human_id']], **document)
+            dialog.bot = bots[document['_bot_id']]
+            dialog.utterances = sorted(utterances[document['_id']], key=lambda x: x._in_dialog_id)
         return result
 
     @classmethod
@@ -324,8 +346,8 @@ class Human:
     @classmethod
     async def get_all(cls, db):
         result = []
-        async for user in db[cls.collection_name].find():
-            result.append(cls(**user))
+        async for document in db[cls.collection_name].find():
+            result.append(cls(**document))
         return result
 
     async def save(self, db):
@@ -388,6 +410,13 @@ class Bot:
             if bot:
                 return cls(**bot)
         return cls()
+
+    @classmethod
+    async def get_all(cls, db):
+        result = []
+        async for document in db[cls.collection_name].find():
+            result.append(cls(**document))
+        return result
 
     async def save(self, db):
         is_changed = self.prev_state != self.get_state()
