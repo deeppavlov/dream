@@ -1,7 +1,6 @@
 import argparse
 import asyncio
 from collections import defaultdict
-from datetime import datetime
 
 import motor.motor_asyncio
 from bson.objectid import ObjectId
@@ -46,8 +45,10 @@ async def prepare_db(db):
 
 
 async def create_and_save_dialogs(dialogs, utterances, users, db_new):
-    users_and_dialogs = defaultdict(list)
+    users_and_dialogs = defaultdict(dict)
+    users_and_utterances = defaultdict(list)
     users_dict = {}
+    print('dialogs preparation')
     for d in dialogs:
         user = users[d.get('user') or d.get('human')]
         if user['user_telegram_id'] in users_dict:
@@ -63,45 +64,51 @@ async def create_and_save_dialogs(dialogs, utterances, users, db_new):
 
         d_obj = Dialog(human=user_obj, channel_type=d['channel_type'], _active=False)
         d_obj.bot = bot_obj
-        latest_dt = datetime.fromtimestamp(0)
         for j in d['utterances']:
-            utt = utterances[j]
+            users_and_utterances[user_obj].append(utterances[j])
+
+        users_and_dialogs[user_obj][d['utterances'][0]] = d_obj
+    print('adding utterances and saving dialogs')
+    for k, v in users_and_utterances.items():
+        d_utt_dict = users_and_dialogs[k]
+        utterances = sorted(v, key=lambda x: x['date_time'])
+        dialogs = []
+        for utt in utterances:
+            if utt['_id'] in d_utt_dict:
+                dialogs.append(d_utt_dict.pop(utt['_id']))
+            if not dialogs:
+                raise ValueError('something happened with dialog')
             if utt['_cls'] == 'Utterance.HumanUtterance':
-                d_obj.add_human_utterance()
-                d_obj.utterances[-1].text = utt['text']
-                d_obj.utterances[-1].annotations = utt['annotations']
-                d_obj.utterances[-1].date_time = utt['date_time']
-                d_obj.utterances[-1].attributes = utt.get('attributes', {})
-                d_obj.utterances[-1].hypotheses = []
+                dialogs[-1].add_human_utterance()
+                dialogs[-1].utterances[-1].text = utt['text']
+                dialogs[-1].utterances[-1].annotations = utt['annotations']
+                dialogs[-1].utterances[-1].date_time = utt['date_time']
+                dialogs[-1].utterances[-1].attributes = utt.get('attributes', {})
+                dialogs[-1].utterances[-1].hypotheses = []
                 if 'hypotheses' in utt:
-                    d_obj.utterances[-1].hypotheses = utt['hypotheses']
+                    dialogs[-1].utterances[-1].hypotheses = utt['hypotheses']
                 elif 'selected_skills' in utt and utt['selected_skills']:
                     for k, v in utt['selected_skills'].items():
                         v['skill_name'] = k
-                        d_obj.utterances[-1].hypotheses.append(v)
+                        dialogs[-1].utterances[-1].hypotheses.append(v)
                 if isinstance(utt['user'], dict):
-                    d_obj.utterances[-1].user = utt['user']
+                    dialogs[-1].utterances[-1].user = utt['user']
                 elif isinstance(utt['user'], ObjectId):
-                    d_obj.utterances[-1].user = d_obj.human.to_dict()
+                    dialogs[-1].utterances[-1].user = dialogs[-1].human.to_dict()
             elif utt['_cls'] == 'Utterance.BotUtterance':
-                d_obj.add_bot_utterance()
-                d_obj.utterances[-1].text = utt['text']
-                d_obj.utterances[-1].annotations = utt['annotations']
-                d_obj.utterances[-1].date_time = utt['date_time']
-                d_obj.utterances[-1].orig_text = utt.get('orig_text') or utt['text']
-                d_obj.utterances[-1].active_skill = utt['active_skill']
-                d_obj.utterances[-1].confidence = utt['confidence']
+                dialogs[-1].add_bot_utterance()
+                dialogs[-1].utterances[-1].text = utt['text']
+                dialogs[-1].utterances[-1].annotations = utt['annotations']
+                dialogs[-1].utterances[-1].date_time = utt['date_time']
+                dialogs[-1].utterances[-1].orig_text = utt.get('orig_text') or utt['text']
+                dialogs[-1].utterances[-1].active_skill = utt['active_skill']
+                dialogs[-1].utterances[-1].confidence = utt['confidence']
             if isinstance(utt['user'], dict):
-                d_obj.utterances[-1].user = utt['user']
+                dialogs[-1].utterances[-1].user = utt['user']
             elif isinstance(utt['user'], ObjectId):
-                d_obj.utterances[-1].user = d_obj.bot.to_dict()
-            if latest_dt < utt['date_time']:
-                latest_dt = utt['date_time']
-        users_and_dialogs[user_obj].append((d_obj, latest_dt))
-    for v in users_and_dialogs.values():
-        d = [i[0] for i in sorted(v, key=lambda x: x[1])]
-        d[-1]._active = True
-        for i in d:
+                dialogs[-1].utterances[-1].user = dialogs[-1].bot.to_dict()
+        dialogs[-1]._active = True
+        for i in dialogs:
             await i.save(db_new)
 
 
@@ -109,10 +116,11 @@ async def main(db_old, db_new):
     users_old = db_old.user
     dialog_old = db_old.dialog
     utterances_old = db_old.utterance
-
+    print('Collecting old database...')
     users_dict = await get_users(users_old)
     utterances_dict = await get_utterances(utterances_old)
     dialogs_list = await get_dialogs(dialog_old)
+    print('collection done, new database preparation')
     await prepare_db(db_new)
 
     await create_and_save_dialogs(dialogs_list, utterances_dict, users_dict, db_new)
