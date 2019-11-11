@@ -227,6 +227,7 @@ class Dialog:
             dialog = cls(actual=True, human=humans[document['_human_id']], **document)
             dialog.bot = bots[document['_bot_id']]
             dialog.utterances = sorted(utterances[document['_id']], key=lambda x: x._in_dialog_id)
+            result.append(dialog)
         return result
 
     @classmethod

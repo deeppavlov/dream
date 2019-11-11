@@ -90,8 +90,6 @@ def get_conversation_id(request_data):
 
 
 def call_dp_agent(user_id, text, request_data):
-    logger.info("call_dp_agent user_id: {}; text: {}".format(user_id, text))
-
     device_id, session_id, request_id = "", "", ""
     try:
         device_id = request_data['context']['System']['device'].get('deviceId')
@@ -113,6 +111,8 @@ def call_dp_agent(user_id, text, request_data):
         response, intent = r["response"].split("#+#")
     else:
         response = r["response"]
+
+    logger.info("call_dp_agent user_id: {}; text: {}; repsonse: {}".format(user_id, text, response))
 
     return {'response': response, 'intent': intent}
 

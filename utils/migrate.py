@@ -139,7 +139,7 @@ def check_keys(iterable):
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
 
-    client = motor.motor_asyncio.AsyncIOMotorClient(args.host, args.port)
+    client = motor.motor_asyncio.AsyncIOMotorClient(args.host, int(args.port))
 
     db_old = client[args.old_db_name]
     db_new = client[args.new_db_name]

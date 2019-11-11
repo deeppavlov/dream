@@ -54,7 +54,7 @@ Deploy to prod and staging
 
 1. Обновить код:
     - для staging: `git checkout dev; git pull origin dev`
-    - для prod: `git fetch --tags; git checkout RELEASE_VERSION` 
+    - для prod: `git fetch --tags; git checkout RELEASE_VERSION`
 2. Деплой
     - одной командой: `./deploy.sh MODE=[all, agent, lambda] TARGET=[dev, prod]`
     - руками:
@@ -145,3 +145,11 @@ SLACK_USER=alertmanager \
 DOCKER_HOST=localhost:2374 \
 docker stack deploy -c docker-compose.yml mon
 ```
+
+
+Миграции
+==========================
+
+1. Открыть туннель к Монго Машине на Амазоне: `ssh -i ~/Downloads/dream-local-idris.pem -L 27018:localhost:27017 ubuntu@18.208.199.52 -N`
+2. Выполнить скрипт миграции: `python -m utils.migrate --host localhost --port 27018 -od dream-staging -nd dream-staging-v2-111119`, где -od - название текущей базы, -nd - название базы после миграции.
+3. Поменять DB_NAME в .env файле - `DB_NAME=dream-staging-v2-111119`
