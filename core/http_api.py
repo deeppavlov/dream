@@ -121,6 +121,7 @@ class ApiHandler:
                 if hasattr(i, 'attributes'):
                     utt_dct['attributes'] = i.attributes
                 result['utterances'].append(utt_dct)
+            return result
 
         state_manager = request.app['agent'].state_manager
         dialogs = await state_manager.get_all_dialogs()
