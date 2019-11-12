@@ -1,0 +1,191 @@
+{
+  "intent_phrases": {
+    "exit" : {
+      "phrases" : [
+        "Have a ((good)|(great)|(nice)) ((day)|(night)|(one)|(evening))(, (Alexa)|(bot)){0,1}",
+        "See ((you)|(ya)) ((later)|(soon))",
+        "((Goodbye)|(Bye)(Bye-bye))(, ((Alexa)|(bot))){0,1}",
+        "((Alexa)|(Bot)), ((goodbye)|(bye)(bye bye))",
+        "((Farewell)|(Peace out)|(Adios)|(Catch you later)|(See ((you)|(ya)))|(Take care))",
+        "I ((am out of here)|(have to go)|(gotta run)|(gotta head out))(, ((bye)|(goodbye)|(bye bye))){0,1}"
+      ],
+    "min_precision" : 0.80,
+    "punctuation" : [
+        ".",
+        "!"
+      ]
+    },
+    "repeat" : {
+      "phrases": [
+        "I did not hear you",
+        "Repeat(, please){0,1}(, ((Alexa)|(bot))){0,1}",
+        "((Alexa)|(Bot)), repeat(, please){0,1}",
+        "((Can)|(Would)) you (please ){0,1}repeat( please){0,1}"
+      ],
+      "min_precision" : 0.0,
+      "punctuation" : [
+          ".",
+          "!"
+        ]
+    },
+    "what_is_your_name" : {
+      "phrases" : [
+        "How to ((call)|(name)|(contact)) you",
+        "How can i ((name)|(call)|(contact)) you",
+        "What(('s)|(is)) your ((family name)|(surname)|(lastname)|(name))"
+      ],
+      "min_precision" : 0.00,
+      "punctuation" : [
+        "?"
+      ]
+    },
+    "where_are_you_from" : {
+      "phrases": [
+        "What (((country)|(city)|(place)) ){0,1}are you from",
+        "What(('s)|(is)) ((country)|(city)|(place)) of origin",
+        "Where do you live",
+        "Where are you living",
+        "Where do you exist",
+        "Where were you born",
+        "What(('s)|(is)) your ((birthplace)|(location)|(address))"
+      ],
+      "min_precision" : 0.00,
+      "punctuation" : [
+          "?"
+        ]
+    },
+    "what_can_you_do" : {
+      "phrases" : [
+        "What can you do",
+        "What are you able to do",
+        "What you can do",
+        "What are your ((skills)|(abilities)|(features))",
+        "What ((skills)|(abilities)|(features)) do you have",
+        "Tell me (about ){0,1}your ((skills)|(features)|(abilities))",
+        "Tell me what you ((can)|(are able to)) do"
+      ],
+      "min_precision" : 0.00,
+      "punctuation" : [
+        "?"
+      ]
+    },
+    "who_made_you" : {
+      "phrases": [
+        "Who ((did)|(created)|(made)|(make)|(create)|(build)|(owns)|(developed)|(designed)|(produced)|(programmed)) you",
+        "Who is your ((botmaster)|(creator)|(developer)|(master)|(holder)|(host)|(team))",
+        "Which ((team)|(university)|(country)) ((made)|(developed)|(created)|(build)|(owns)) you",
+        "Who is your ((leader)|(teamleader)|(architect)|(author)|(builder)|(implementer)|(owner)|(skipper)|(trainer)|(manager)|(chief))",
+        "Who(m){0,1} do you belong ((to)|(with))",
+        "((Tell me)|(What is)|(What's)) the name of your ((creator)|(builder)|(developer)|(owner)|(implementer)|(architect)|(author))"
+      ],
+      "min_precision" : 0.00,
+      "punctuation" : [
+        "?"
+      ]
+    },
+    "what_is_your_job" : {
+      "phrases" : [
+        "What('s){0,1} is your ((profession)|(job)|(work)|(occupation))",
+        "Tell me your ((job)|(profession))",
+        "What do you do",
+        "Who do you work( as){0,1}",
+        "Who are you working( as){0,1}",
+        "Do you have a job",
+        "What are you doing for (a ){0,1}living",
+        "What do you do for (a ){0,1}living",
+        "What is your ((job)|(work)|(task))"
+      ],
+      "min_precision": 0.00,
+      "punctuation" : [
+          "?"
+        ]
+    },
+    "opinion_request": {
+      "phrases": [
+        "What (do){0,1} you ((think)|(rekon)|(believe)|(suppose)|(feel)) about ((it)|(this)|(this movie)|(him)|(her)|(them)|(Morgan Freeman)|(Brad Pitt)|(Angeline Jolie-Pitt)|(Home Alone)|(The Avengers))",
+        "What ((do){0,1} you ((think)|(rekon)|(believe)|(suppose)|(feel))){0,1} about ((drama)|(comedy)|(horrors)|(this actors)|(this plot)|(this synopsis)|(the cast)|(this book)|(Harry Potter book)|(psychology)|(religion)|(cars))",
+        "What('s){0,1} ((is)|(are)){0,1} your ((take)|(reaction)|(position)|(opinion)|(experience)|(view)|(thought)|(feeling))(s){0,1} ((about)|(on)) ((it)|(this)|(this movie)|(him)|(her)|(them)|(Chris Evans)|(Matthew Perry)|(TV show)|(book)|(song)|(movie)|(The Shawshank Redemption))",
+        "How ((do){0,1} you ((feel)|(think))){0,1} about ((it)|(this)|(this movie)|(him)|(her)|(them)|(Meggy Smith)|(John Doe)|(book)|(song)|(series)|(creation)|(The Godfather)|(The Dark Knight))",
+        "(Do){0,1} you ((think)|(believe)|(suppose)|(feel)) (that){0,1} ((it)|(this)|(this movie)|(him)|(her)|(them)|(Christian Bale)|(Heath Ledger)|(12 Angry Men)|(Schindler's List)|(movie)|(picture)|(tragedy)|(biography)|(shoes)|(t-shirt)) ((is)|(are)|(was)|(were)|(will be)) ((cool)|(nice)|(great)|(interesting|correct|substantial))",
+        "In your ((honest)|(recent)){0,1} ((position)|(opinion)|(experience)|(view)|(thought)|(feeling))(s){0,1}, ((it)|(this)|(this movie)|(him)|(her)|(them)|(shirt)|(lipstick)|(blue skirt)|(Liam Neeson)|(Caroline)|(adventure)) ((is)|(are)|(was)|(were)|(will be)) ((cool)|(nice)|(great)|(interesting|correct|substantial))",
+        "((Can you)|(Could you)|(Would you)){0,1}(, please,){0,1} ((tell me)|(tell)|(give)|(give me)) your ((position)|(opinion)|(experience)|(view)|(thought)|(feeling))(s){0,1} on ((it)|(this)|(this movie)|(him)|(her)|(them)|(The Lord of Rings)|(Sean Astin)|(Pul Fiction)|(poem)|(roman)|(Rotten Tomatoes)|(series)|(book))",
+        "((Do){0,1} you have ){0,1}((an)|(any)|(the)) ((objection)|(position)|(opinion)|(experience)|(view)|(thought)|(feeling))(s){0,1} ((on)|(about)) ((it)|(this)|(this movie)|(him)|(her)|(them)|(Tim Roth)|(Laura)|(jump)|(haircut)|(nail polisher)|(Fight Club)|(Forrest Gump))",
+        "((Are)|(Would)|(Could)|(Can)|(Will)|(Whether)|(Do)) you ((support)|(agree)|(approve)|(disapprove))(( position)|( opinion)|( experience)|( view)|( thought)|( feeling))(s){0,1} that ((it)|(this)|(this movie)|(him)|(her)|(them)|(Tom Hanks)|(Rebecca Williams)|(scenario)|(work)|(fish)|(plate)) ((is)|(are)|(was)|(were)|(will be)) ((cool)|(nice)|(great)|(interesting|correct|substantial))",
+        "If I ((asked)|(will ask)|(ask)) your ((position)|(opinion)|(experience)|(view)|(thought)|(feeling))(s){0,1}, on ()(, ((what)|(how)) ((would)|(could)|(can)|(will)|(whether)|(do)) you ((say)|(answer))){0,1}",
+        "((So, )|(Then )){0,1}what do you think",
+        "I('d){0,1} ((like)|(love)|(would like)|(would love)|(wish)|(want)|(would be interested)) to ((hear)|(listen)|(get)) your ((position)|(opinion)|(experience)|(view)|(thought)|(feeling))(s){0,1}, on ((it)|(this)|(this movie)|(him)|(her)|(them)|(Inception)|(Leonardo DiCaprio)|(The Matrix)|(cats)|(dogs)|(horses))",
+        "I ((think)|(suppose)) you ((are)|(would)|(could)|(can)|(will)) ((agree)|(approve)|(disapprove))(( these)|( this)|( that)|( my))(( position)|( opinion)|( experience)|( view)|( thought)|( feeling))(s){0,1}( that ((it)|(this)|(this movie)|(him)|(her)|(them)|(Keanu Reeves)|(drama)|(sweater)|(shirt)|(cocktail)) ((is)|(are)|(was)|(were)|(will be)) ((cool)|(nice)|(great)|(interesting|correct|substantial))){0,1}",
+        "Do(n't){0,1} you ((like)|(love)|(hate)|(dislike)) ((it)|(this)|(this movie)|(him)|(her)|(them)|(watching movies)|(talking to other people)|(singing)|(drawing)|(Lana Wachowski)|(Goodfellas)|(Robert De Niro))",
+        "((Are)|(Whether)|(Am)) ((you)|(I)|(they)|(people))(( right)|( correct)|( justified)|( wrong)|( logical)|( okay)){0,1} in ((agreement)|(thinking)|(position)|(opinion)|(experience)|(view)|(thought)|(feeling)) on ((it)|(this)|(this movie)|(him)|(her)|(them)|(crime)|(drugs)|(animals)|(pets)|(birds)|(profession)|(hobby)|(Seven Samurai))",
+        "From your point of view, ((it)|(this)|(this movie)|(him)|(her)|(them)|(morning)|(butterflies)|(leopard)|(thinking)|(helping others)|(study)|(Takashi Shimura)) ((is)|(are)|(was)|(were)|(will be)) ((cool)|(nice)|(great)|(interesting|correct|substantial))",
+        "((Would)|(Could)) it be ((right)|(correct)|(justified)|(wrong)|(logical)|(okay)) ((to say)|(in thinking)|(in statement)|(in assuming)|(in saying)) that ((it)|(this)|(this movie)|(him)|(her)|(them)|(he is not right)|(it will never happen)|(you are stupid)|(I cannot help you)|(Life Is Beautiful))"
+      ],
+      "min_precision": 0.00,
+      "punctuation": [
+        ".",
+        "?"
+      ]
+    }
+  },
+  "random_phrases" : {
+    "phrases" : [
+      "[0-9]{1,10}",
+      "((Joe Doe)|(Jim Beam)|(Anton Yugorski)|(Daniil Cherniavskii))",
+      "What has been your greatest challenge\\?",
+      "Who is your greatest inspiration\\?",
+      "Did you watch the super bowl last year\\?",
+      "The lari (Georgian: ლარი; ISO 4217: GEL) is the currency of Georgia\\.",
+      "Who is ((this person)|(Mark)|(James)|(Putin)|(president)|(minister)|(someone))\\?",
+      "(Alexa, ){0,1}Start( ((talking)|(walking)|(doing something))){0,1}(, please){0,1}",
+      "Alexa, ((do)|(play)|(record)|(find)|(take a look)|(look for)|(translate)|(turn on)|(switch off)|(enable))( ((something)|(anything))){0,1}",
+      "Lets chat about ((something)|(anything))",
+      "Start( ((talking)|(walking)|(doing something))){0,1}(, please){0,1}",
+      "Lets chat about something",
+      "How are you doing?",
+      "How are you?",
+      "How to fix it?",
+      "Wokring is very exhausting",
+      "I need to go to my job",
+      "I live in a town",
+      "I am from US",
+      "Running is my favorite activity",
+      "My surname is Chavez",
+      "I want to do something bad ((yesterday)|(today)|(night)|(evening)|(day)|(night))",
+      "How are you still working?",
+      "((Bot)|(Alexa))",
+      "Can you imagine!",
+      "He wanted to bring peace out here",
+      "She passed out right before",
+      "I am taking care of my son now",
+      "It is very peacefull out here",
+      "Cork's Nicholas Murphy won seven of those kick-outs, including four clean catches",
+      "It is good maners to say ((goodbye)|(bye bye)|(farewell)) when leaving(, ((Alexa)|(Bot))){0,1}",
+      "Before you leave, you should say goodbye",
+      "Repeating same phrases does not help",
+      "Let me repeat",
+      "He tried not to repeat his mistakes",
+      "A repeat prescription",
+      "The majority of Russians are averse to any repeat of the terror employed by the Soviets in 1918",
+      "Do not interrupt me",
+      "((Hello)|(Hey)|(Hi))(, ((Alexa)|(bot))){0,1}",
+      "(That ){0,1}((nice)|(great)|(cool)|(okay))",
+      "We had a ((nice)|(good)) walk",
+      "I can ((see)|(hear)|(feel)) you( now){0,1}",
+      "I heard him crying",
+      "Stop repeating after me",
+      "Who is the best",
+      "What to do if a man pass out?",
+      "Repeating does not help",
+      "Art is my favorite subject at school",
+      "I love ((politics)|(sports)|(art)|(music))",
+      "Developing you must've been a hard work",
+      "((When|Where)) is it going to rain",
+      "I am working as a ((manager)|(builder))"
+    ],
+    "punctuation" : [
+      ".",
+      "?",
+      "!"
+    ]
+  }
+}

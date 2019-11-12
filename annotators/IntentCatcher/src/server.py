@@ -8,7 +8,7 @@ import sentry_sdk
 import uuid
 from flask import Flask, request, jsonify
 
-from src.detector import RegCombinedDetector
+from src.detector import ClassifierDetector
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -24,7 +24,7 @@ app = Flask(__name__)
 sess = tf.compat.v1.Session()
 
 logger.info('Creating detector...')
-detector = RegCombinedDetector(logger)
+detector = ClassifierDetector(logger)
 logger.info('Creating detector... finished')
 
 logger.info('Initializing tf variables...')
@@ -32,7 +32,9 @@ sess.run(tf.compat.v1.tables_initializer())
 
 logger.info("Tables initialized")
 sess.run(tf.compat.v1.global_variables_initializer())
+logger.info("Global variables initialized")
 
+detector.detect([["Wake up phrase"]], sess)
 logger.info("DONE")
 
 

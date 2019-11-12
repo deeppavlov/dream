@@ -21,10 +21,13 @@ curl -H "Content-Type: application/json" -XPOST \
 
 curl -H "Content-Type: application/json" -XPOST \
  -d '{"sentences": [
+ ["What to do if a man pass out?"],
  ["Alexa, i did not hear you, repeat"],
  ["Alexa, i am a little deaf", "Can you repeat please?"],
  ["Please, repeat"],
  ["You are repeating it over and over!"],
+ ["I will repeat here what I wrote as part of a much longer post on my blog"],
+ ["Here was a repeat of the French-Algerian War, which inevitably led to torture and crimes by both the French and the Algerian guerrillas."],
  ["Okay, Alexa, have a good day!"],
  ["Okay"],
  ["Great"],
@@ -32,29 +35,31 @@ curl -H "Content-Type: application/json" -XPOST \
  ["Great"],
  ["Thanks"],
  ["Nice"],
- ["Wow!"],
- ["Where do you live?"]
+ ["Wow!"]
  ]
 }' \
  http://0.0.0.0:8014/detect
 
  curl -H "Content-Type: application/json" -XPOST \
   -d '{"sentences": [
-  ["Lets have a chat"],
-  ["Lets chat about smth"],
-  ["Lets chat about music"],
+  ["i want to commit a suicide today."],
+  ["Hello there!"],
+  ["How are you?"],
+  ["I want to bring peace out here"],
+  ["Where do you live?"],
+  ["See you later"],
+  ["Talk to you later"],
+  ["What are you able to do?"],
+  ["How can I call you?"],
+  ["I am from US, and you?"],
   ["Lets chat about music or cinema"],
-  ["Lets chat about literature"],
-  ["Lets chat about you"],
-  ["Lets talk about you"],
-  ["Lets talk about litarature"],
-  ["Lets talk about Trump"],
-  ["Lets talk about politics"],
-  ["Lets talk about indie music"],
-  ["Let'\''s chat about Taylor Swift"],
-  ["Let'\''s chat about our president"],
-  ["Let'\''s chat about recent movies"],
-  ["Let'\''s talk about music"]
+  ["Do you know Donald Trump"],
+  ["OK, take care, bye!"],
+  ["See ya, Alexa"],
+  ["I have seen a shop nearby"],
+  ["Would you recommend me smth?"],
+  ["Hi there"],
+  ["Ok, see you next week!"]
   ]
  }' \
   http://0.0.0.0:8014/detect
