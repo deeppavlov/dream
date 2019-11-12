@@ -7,10 +7,12 @@ import itertools
 import json
 from typing import List
 
+import numpy as np
+
 import tensorflow as tf
 import tensorflow_hub as hub
 
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 
 from src.utils import *
 
@@ -18,8 +20,9 @@ MODEL_PATH = os.environ.get('USE_MODEL_PATH', None)
 if MODEL_PATH is None:
     MODEL_PATH = 'https://tfhub.dev/google/universal-sentence-encoder/1'
 
-INTENT_DATA_PATH = 'src/data/intent_data.json'
-INTENT_PHRASES_PATH = 'src/data/intent_phrases.json'
+INTENT_MODEL_PATH = '/data/classifier_data/models/linear_classifier.h5'
+INTENT_DATA_PATH = '/data/classifier_data/intent_data.json'
+INTENT_PHRASES_PATH = '/data/classifier_data/intent_phrases.json'
 
 TFHUB_CACHE_DIR = os.environ.get('TFHUB_CACHE_DIR', None)
 if TFHUB_CACHE_DIR is None:
@@ -49,6 +52,8 @@ class USESimpleDetector(AbstractDetector):
     def __init__(self, logger):
         super().__init__(logger)
         self.data = json.load(open(INTENT_DATA_PATH))
+        if 'random' in self.data.keys():
+            self.data.pop('random')
         self.intents = sorted(list(self.data.keys()))
         self.embedder = hub.Module(MODEL_PATH)
         self.sentences = tf.compat.v1.placeholder(dtype=tf.string)
@@ -89,7 +94,7 @@ class USESimpleDetector(AbstractDetector):
         return detected_confidence
 
 
-class RegCombinedDetector(USESimpleDetector):
+class USERegCombinedDetector(USESimpleDetector):
     def __init__(self, logger):
         super().__init__(logger)
         intent_phrases = json.load(open(INTENT_PHRASES_PATH))['intent_phrases']
@@ -125,4 +130,48 @@ class RegCombinedDetector(USESimpleDetector):
             for intent in self.intents:
                 data = dc[intent]
                 self.logger.info(f"Intent: {intent}, detect: {data['detected']}, confidence: {data['confidence']}")
+        return detected_confidence
+
+
+class ClassifierDetector(AbstractDetector):
+    def __init__(self, logger):
+        super().__init__(logger)
+        self.data = json.load(open(INTENT_DATA_PATH))
+        if 'random' in self.data.keys():
+            self.data.pop('random')
+        self.intents = sorted(list(self.data.keys()))
+        self.embedder = hub.Module(MODEL_PATH)
+        self.model = tf.keras.models.load_model(INTENT_MODEL_PATH)
+        self.sentences = tf.compat.v1.placeholder(dtype=tf.string)
+        self.embedded_sentences = self.embedder(self.sentences)
+
+    def detect(self, utterances : List, sess):
+        len_sentences = [len(utt) for utt in utterances]
+        tok_sentences = list(itertools.chain.from_iterable(utterances))
+        embedded_sentences = sess.run(self.embedded_sentences, feed_dict={self.sentences: tok_sentences})
+
+        predictions = self.model.predict(embedded_sentences)
+        predictions_class = np.argmax(predictions, axis=1)
+        prediction_confidence = np.max(predictions, axis=1)
+        predictions = list(zip(predictions_class, prediction_confidence))
+
+        i = 0
+        detected_confidence = []
+        for utt, l in zip(utterances, len_sentences):
+            self.logger.info(f"Utterance: {utt}")
+            ans = {}
+            prediction = [(self.intents[j], conf) for j, conf in predictions[i:i + l] if j < len(self.intents)]
+            confidences = defaultdict(int)
+            detected = {intent for intent, conf in prediction}
+            for intent, conf in prediction:
+                confidences[intent] = max(conf, confidences[intent])
+            for intent in self.intents:
+                logger_line = f"Intent: {intent}    "
+                logger_line += f"prediction: {round(float(confidences[intent]), 3)}, detect: {int(intent in detected)}"
+                self.logger.info(logger_line)
+
+            ans = {intent: {'detected': int(intent in detected),
+                            'confidence': float(confidences[intent])} for intent in self.intents}
+            detected_confidence.append(ans)
+            i += l
         return detected_confidence

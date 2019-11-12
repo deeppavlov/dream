@@ -50,8 +50,10 @@ class RuleBasedSelector():
             reply = dialog['utterances'][-1]['text'].replace("\'", " \'").lower()
             # tokens = reply.split()
 
-            intents = dialog['utterances'][-1]['annotations']['intent_catcher'].values()
-            intent_detected = any([i['detected'] == 1 for i in intents])
+            # TODO: opinion_request response
+            intent_detected = any([v['detected'] == 1 for k, v in
+                                   dialog['utterances'][-1]['annotations']['intent_catcher'].items()
+                                   if k != 'opinion_request'])
 
             cobot_topics = dialog['utterances'][-1]['annotations']['cobot_topics']['text']
             sensitive_topics_detected = any([t in self.sensitive_topics for t in cobot_topics])
