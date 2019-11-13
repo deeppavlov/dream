@@ -113,7 +113,7 @@ services:
   intent_catcher:
     build:
       context: ./annotators/IntentCatcher/
-    command: gunicorn --workers=1 --name=catcher --bind 0.0.0.0:8014 --timeout=500 src.server:app
+    command: gunicorn --workers=1 --name=catcher --bind 0.0.0.0:8014 --timeout=500 server:app
     volumes: []
   blacklisted_words:
     build:

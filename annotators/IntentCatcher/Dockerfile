@@ -27,4 +27,4 @@ WORKDIR /src
 
 EXPOSE 8014:8014
 
-CMD gunicorn --workers=1 --name=catcher --bind 0.0.0.0:8014 --timeout=500 src.server:app
+CMD gunicorn --workers=1 --name=catcher --bind 0.0.0.0:8014 --timeout=500 server:app

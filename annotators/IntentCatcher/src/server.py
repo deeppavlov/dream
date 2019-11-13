@@ -8,7 +8,7 @@ import sentry_sdk
 import uuid
 from flask import Flask, request, jsonify
 
-from src.detector import ClassifierDetector
+from detector import ClassifierDetector
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
