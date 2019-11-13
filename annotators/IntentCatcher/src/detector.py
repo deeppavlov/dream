@@ -14,7 +14,7 @@ import tensorflow_hub as hub
 
 from collections import OrderedDict, defaultdict
 
-from src.utils import *
+from utils import *
 
 MODEL_PATH = os.environ.get('USE_MODEL_PATH', None)
 if MODEL_PATH is None:

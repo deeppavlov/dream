@@ -116,7 +116,7 @@ services:
   intent_catcher:
     env_file: [.env.dev]
     volumes:
-      - "./annotators/IntentCatcher:/src"
+      - "./annotators/IntentCatcher/src:/src"
     ports:
       - 8014:8014
   blacklisted_words:
