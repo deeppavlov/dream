@@ -2,40 +2,20 @@ import logging
 import time
 from os import getenv
 
-import flair
+import ner_model
 import sentry_sdk
-import torch
-from flair.data import Sentence
-from flair.models import SequenceTagger
 from flask import Flask, jsonify, request
+from nltk.tokenize import word_tokenize
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-cuda_available = torch.cuda.is_available()
-logger.info(f"torch.cuda.is_available(): {cuda_available}")
-DEVICE = getenv("DEVICE", "cpu")
-logger.info(f"DEVICE: {DEVICE}")
-if torch.cuda.is_available():
-    flair.device = torch.device(DEVICE)
-    logger.info("set flair.device to cuda")
-else:
-    logger.info("set flair.device to cpu")
-    flair.device = torch.device('cpu')
-
-tagger = SequenceTagger.load('ner-ontonotes')
-logger.info("flair model is loaded.")
-
 app = Flask(__name__)
 
-
-def annotate(list_sents):
-    sentences = [Sentence(sent) for sent in list_sents]
-    tagger.predict(sentences=sentences, embedding_storage_mode="gpu")
-    return [sent.to_dict(tag_type='ner')["entities"] for sent in sentences]
+ner = ner_model.load_model()
+logger.info("ner model is loaded.")
 
 
 @app.route('/ner', methods=['POST'])
@@ -45,9 +25,9 @@ def respond():
     logger.info(f"input (the last utterances): {last_utterances}")
 
     ret = []
-
-    for i, utterance in enumerate(last_utterances):
-        ret.append(annotate(utterance))
+    for utterance in last_utterances:
+        sents = [word_tokenize(sent) for sent in utterance]
+        ret.append(ner.predict(sents))
 
     logger.info(f"NER output: {ret}")
 

@@ -1,6 +1,6 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python3 -m core.run -ch http_client --response-logger'
+    command: sh -c 'bin/wait && python3 -m core.run -ch http_client --response-logger --debug'
     build:
       context: ./
       dockerfile: dockerfile_agent

@@ -1,18 +1,23 @@
-FROM pytorch/pytorch:1.2-cuda10.0-cudnn7-runtime
+FROM python:3.7.4
 
 RUN mkdir /src
 
+RUN curl files.deeppavlov.ai/alexaprize_data/ner.tar.xz > /ner.tar.xz
+RUN tar -xf ner.tar.xz
+RUN rm ner.tar.xz
+
+RUN mkdir /elmo2
+RUN curl files.deeppavlov.ai/alexaprize_data/elmo2.tar.gz > /elmo2/elmo2.tar.gz
+RUN tar -xvzf /elmo2/elmo2.tar.gz -C /elmo2
+RUN rm /elmo2/elmo2.tar.gz
+RUN mkdir /src/tfhub_cache_dir
+ENV TFHUB_CACHE_DIR tfhub_cache_dir
+
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
-
-RUN pip uninstall -y bson pymongo && pip install bson==0.5.7 && pip install pymongo==3.7.2
-COPY ./download_flair_model.py /src/download_flair_model.py
-RUN python /src/download_flair_model.py
-
-ENV DEVICE cpu
+RUN python -c "import nltk; nltk.download('punkt')"
 
 COPY . /src/
 WORKDIR /src
 
-
-CMD gunicorn --workers=1 server:app --preload
+CMD gunicorn --workers=1 server:app
