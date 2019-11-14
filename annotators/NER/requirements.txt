@@ -1,5 +1,8 @@
-sentry_sdk==0.13.0
+tensorflow==1.14.0
+tensorflow_hub==0.4.0
 Flask==1.1.1
-torch==1.2.0
-flair==0.4.4
+nltk==3.2.5
+numpy==1.15.4
 gunicorn==19.9.0
+requests==2.22.0
+sentry-sdk==0.12.3

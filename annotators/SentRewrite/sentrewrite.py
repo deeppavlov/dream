@@ -1,7 +1,7 @@
 import neuralcoref
 import spacy
 
-nlp = spacy.load('en_core_web_sm')
+nlp = spacy.load("en_core_web_sm")
 neuralcoref.add_to_pipe(nlp)
 
 
@@ -40,11 +40,11 @@ def recover_mentions(dialog, ner_dialog):
         return {"clusters": [], "modified_sents": [" ".join(utterance) for utterance in dialog]}
     else:
         # list of clusters: [cluster -> mention (dict: start, end, text, resolved)]
-        clusters = [[{'start': mention.start_char,
-                      'end': mention.end_char,
-                      'text': mention.text,
-                      'resolved': cluster.main.text,
-                      'ner': {"type": "O", "offset": 10000}
+        clusters = [[{"start": mention.start_char,
+                      "end": mention.end_char,
+                      "text": mention.text,
+                      "resolved": cluster.main.text,
+                      "ner": {"type": "O", "offset": 10000}
                       }
                      for mention in cluster.mentions]
                     for cluster in doc._.coref_clusters
@@ -97,7 +97,7 @@ def recover_mentions(dialog, ner_dialog):
                             m["resolved"] = new_resolved
 
         mentions = [mention for cluster in new_clusters for mention in cluster]
-        sorted_mentions = sorted(mentions, key=lambda i: i['start'], reverse=True)
+        sorted_mentions = sorted(mentions, key=lambda i: i["start"], reverse=True)
 
         dialog = [" ".join(utterance) for utterance in dialog]
         new_utter_pos = [{"start": 0, "end": len(dialog[0])}]
