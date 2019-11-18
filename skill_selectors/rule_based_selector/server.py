@@ -55,10 +55,10 @@ class RuleBasedSelector():
                                    dialog['utterances'][-1]['annotations']['intent_catcher'].items()
                                    if k != 'opinion_request'])
 
-            cobot_topics = dialog['utterances'][-1]['annotations']['cobot_topics']['text']
+            cobot_topics = set(dialog['utterances'][-1]['annotations']['cobot_topics']['text'])
             sensitive_topics_detected = any([t in self.sensitive_topics for t in cobot_topics])
             cobot_dialogacts = dialog['utterances'][-1]['annotations']['cobot_dialogact']['intents']
-            cobot_dialogact_topics = dialog['utterances'][-1]['annotations']['cobot_dialogact']['topics']
+            cobot_dialogact_topics = set(dialog['utterances'][-1]['annotations']['cobot_dialogact']['topics'])
             sensitive_dialogacts_detected = any([(t in self.sensitive_dialogacts and "?" in reply)
                                                  for t in cobot_dialogacts])
 
@@ -76,8 +76,15 @@ class RuleBasedSelector():
                 skills_for_uttr.append("cobotqa")
                 # skills_for_uttr.append("transfertransfo")
                 # skills_for_uttr.append("retrieval_chitchat")
-
-            about_movies = "Entertainment_Movies" in cobot_dialogact_topics or "Movies_TV" in cobot_topics
+            movie_cobot_dialogacts = {
+                "Entertainment_Movies", "Sports", "Entertainment_Music", "Entertainment_General",
+                "Entertainment_Books", "Phatic"
+            }
+            movie_cobot_topics = {
+                "Movies_TV", "Celebrities", "Art_Event", "Entertainment",
+                "Fashion", "Games", "Literature", "Music", "Sports"
+            }
+            about_movies = (movie_cobot_dialogacts & cobot_dialogact_topics) | (movie_cobot_topics & cobot_topics)
             if about_movies:
                 skills_for_uttr.append("movie_skill")
 

@@ -46,7 +46,7 @@
         <pattern>FILTER INAPPROPRIATE</pattern>
         <template>
             <random>
-                <li>I cannot talk about it. Let's switch the topic.</li>
+                <li>I cannot talk about it. Would you like to switch the topic?</li>
             </random>
         </template>
     </category>

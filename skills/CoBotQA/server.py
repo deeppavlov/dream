@@ -53,7 +53,10 @@ def respond():
         responses += [response]
         logger.info(f"response: {response}")
         if len(response) > 0 and 'skill://amzn1' not in response:
-            confidence = 0.97
+            if "let's talk about" in sent.lower():
+                confidence = 0.5
+            else:
+                confidence = 0.97
         else:
             confidence = 0.00
         confidences += [confidence]

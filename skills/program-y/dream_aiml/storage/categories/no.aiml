@@ -310,4 +310,11 @@
         </template>
     </category>
 
+    <category>
+        <pattern>CANCEL</pattern>
+        <template>
+            Okay. Cancelling completed.
+        </template>
+    </category>
+
 </aiml>

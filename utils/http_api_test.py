@@ -31,6 +31,7 @@ parser.add_argument('-pc', '--phrasecount', help='count of phrases in single dia
                     type=int, default=10)
 parser.add_argument('-pf', '--phrasesfile', help='name of the file with phrases for dialog', type=str, default="")
 parser.add_argument('-df', '--dialogfile', help='name of the file with predefined dialogs', type=str, default="")
+parser.add_argument('-cf', '--csvfile', help='name of the file with predefined dialogs in csv', type=str, default="")
 parser.add_argument('-of', '--outputfile', help='name of the output file', type=str, default='output.csv')
 
 
@@ -79,19 +80,18 @@ if __name__ == '__main__':
     payloads = {}
 
     if args.dialogfile:
-        try:
-            with open(args.dialogfile, 'r') as file:
-                payloads = json.load(file)
-        except Exception as e:
-            raise e
+        with open(args.dialogfile, 'r') as file:
+            payloads = json.load(file)
     elif args.phrasesfile:
-        try:
-            with open(args.phrasesfile, 'r') as file:
-                phrases = [line.rstrip('\n') for line in file]
-        except Exception as e:
-            raise e
+        with open(args.phrasesfile, 'r') as file:
+            phrases = [line.rstrip('\n') for line in file]
         payloads = {uuid.uuid4().hex: [phrases[randrange(len(phrases))] for j in range(args.phrasecount)] for i in
                     range(args.usercount)}
+    elif args.csvfile:
+        with open(args.csvfile, 'r') as f:
+            reader = csv.reader(f, delimiter=' ')
+            phrases = [row[0] for row in reader][1:]
+        payloads = {uuid.uuid4().hex: phrases}
     else:
         raise ValueError('You should provide either predefined dialog (-df) or file with phrases (-pf)')
 

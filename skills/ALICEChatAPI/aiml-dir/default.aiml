@@ -128,9 +128,6 @@
 <category><pattern>LET US HAVE *</pattern>
 <template>So many suitors, so little time.</template>
 </category>
-<category><pattern>LET US *</pattern>
-<template><random>      <li>OK let's do <set name="it">        <set name="topic">         <person/>        </set>       </set>.</li>      <li>That sounds good to me.</li>      <li>I am agreeable to that.</li>      <li>I would like to do that too.</li>     </random></template>
-</category>
 <category><pattern>LET ME SPEAK *</pattern>
 <template>I'm not stopping you.</template>
 </category>

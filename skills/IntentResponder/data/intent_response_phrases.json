@@ -14,12 +14,12 @@
   ],
   "repeat" : [],
   "where_are_you_from": [
-    "As a socialbot, I live in the cloud. If you want to know me better, let's spend more time talking with each other.",
-    "I live somewhere on the Earth. But I am participating in the Alexa Prize Challenge. So, I must keep those details in secret.",
-    "This is a competition of socialbots, so I cannot tell you my location now."
+    "As a socialbot, I live in the cloud. If you want to know me better, let's spend more time talking with each other. Where are you from?",
+    "I live somewhere on the Earth. But I am participating in the Alexa Prize Challenge. So, I must keep those details in secret. Do you like secrets?",
+    "This is a competition of socialbots, so I cannot tell you my location now. What is your location?"
   ],
   "lets_chat": [
-    "Okay, let's chat"
+    "Okay, let's chat. Would you like to discuss movies?"
   ],
   "who_made_you" : [
     "I was built by one of the university teams participating in the Alexa Prize Challenge. But which one is a secret for now.",
@@ -27,16 +27,21 @@
     "I was built by one of the university teams participating in the Alexa Prize Challenge. I will tell you later by which one."
   ],
   "what_is_your_name": [
-    "My name is a secret because I am participating in the Alexa Prize Challenge.",
-    "I cannot tell you my name because it's a secret for now.",
-    "My name can not be disclosed during the Alexa Prize Challenge."
+    "My name is a secret because I am participating in the Alexa Prize Challenge. What is your name?",
+    "I cannot tell you my name because it's a secret for now. What is your name?",
+    "My name can not be disclosed during the Alexa Prize Challenge. What is your name?"
   ],
   "what_is_your_job": [
-    "I am a socialbot, and I am chatting with people.",
-    "I am chatting with people to give them an opportunity to become familiar with artificial intelligence.",
-    "I am a socialbot but some people call it artificial intelligence."
+    "I am a socialbot, and I am chatting with people. What do you do?",
+    "I am chatting with people to give them an opportunity to become familiar with artificial intelligence. Do you have a job?",
+    "I am a socialbot but some people call it artificial intelligence. What do you think about AI?"
   ],
   "what_can_you_do": [
-    "I am newborn socialbot, so I can't do so much. For example I can answer for any question."
+    "I am newborn socialbot, so I can't do so much. For example I can answer for any question, especially about movies."
+  ],
+  "doing_well": [
+    "I am happy for you! Where are you from?"
+  ],
+  "what_time": [
   ]
 }

@@ -32,23 +32,26 @@ class MovieSkillScenario:
             attr = {}
             # TODO check correct order of concatenation of replies
             try:
-                intents = dialog["utterances"][-1]["annotations"]["cobot_dialogact"]["intents"]
-                uttr = dialog["utterances"][-1]["text"]
-                if ("Opinion_RequestIntent" in intents or ("General_ChatIntent" in intents and "?" in uttr) or (
-                        "Multiple_GoalsIntent" in intents and "?" in uttr)):
+                annotations = dialog["utterances"][-1]["annotations"]
+                intents = annotations["cobot_dialogact"]["intents"]
+                opinion_request_detected = annotations["intent_catcher"].get(
+                    "opinion_request", {}).get("detected") == 1
+                logger.info(f"intents {intents}")
+                if ("Opinion_RequestIntent" in intents) or opinion_request_detected:
+                    logger.info(f"intents {intents}")
                     # TODO: check whether the opinion is already in attributes
                     reply, subject_attitude = self.templates.give_opinion(dialog)
                     current_reply += reply
                     for subject in subject_attitude:
                         attr[subject] = subject_attitude[subject]
                     confidence = self.default_conf
-                if "Information_RequestIntent" in dialog["utterances"][-1]["annotations"]["cobot_dialogact"]["intents"]:
+                if "Information_RequestIntent" in intents:
                     # TODO: we can answer actually for some of the questions
                     # TODO: for difficult questions we have cobotqa
                     reply = self.templates.give_factual_answer(dialog)
                     current_reply += reply
                     confidence = self.default_conf
-                if "Opinion_DeliveryIntent" in dialog["utterances"][-1]["annotations"]["cobot_dialogact"]["intents"]:
+                if "Opinion_DeliveryIntent" in intents:
                     # TODO: attitude is not sentiment actually
                     attitude = dialog["utterances"][-1]["annotations"]["cobot_sentiment"]["text"]
                     # TODO:  what if subject `this actor`?
@@ -57,15 +60,14 @@ class MovieSkillScenario:
                     human_attr[subject] = attitude
                     confidence = self.default_conf
                     current_reply += reply
-                if ("Information_DeliveryIntent" in
-                        dialog["utterances"][-1]["annotations"]["cobot_dialogact"]["intents"]):
+                if "Information_DeliveryIntent" in intents:
                     # заглушка с ответом "о круто я не знала"
                     # TODO: ask a question about opinion or fact
                     reply = self.templates.didnotknowbefore()
                     confidence = self.default_conf
                     current_reply += reply
             except Exception as e:
-
+                logger.exception(f"exception in movie skill {e}")
                 with sentry_sdk.push_scope() as scope:
                     dialog_replies = []
                     for reply in dialog["utterances"]:
