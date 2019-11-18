@@ -1,0 +1,2 @@
+sentry-sdk==0.12.3
+numpy==1.15.4

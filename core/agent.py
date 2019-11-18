@@ -7,6 +7,16 @@ from core.pipeline import Pipeline
 from core.state_manager import StateManager
 from core.state_schema import Dialog
 
+import logging
+from os import getenv
+import sentry_sdk
+
+sentry_sdk.init(getenv('SENTRY_DSN'))
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 class Agent:
     def __init__(self, pipeline: Pipeline, state_manager: StateManager,
@@ -62,6 +72,8 @@ class Agent:
 
     async def process_service_response(self, dialog_id: str, service_name: str = None, response: Any = None,
                                        **kwargs):
+        if "dialog_object" not in response:
+            logger.info(f"Service: {response}")
         workflow_record = self.get_workflow_record(dialog_id)
 
         # Updating workflow with service response

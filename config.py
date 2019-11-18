@@ -236,7 +236,20 @@ ANNOTATORS_2 = [
         "external": True,
         "path": "",
         "formatter": cobot_classifiers_formatter
-    }
+    },
+    {
+        "name": "attitude_classification",
+        "protocol": "http",
+        "host": "attitude_classification",
+        "port": 8025,
+        "endpoint": "attitude_annotations",
+        "path": "annotators/DeepPavlovAttitudeClassification/amazon_reviews_bert.json",
+        "env": {
+            "CUDA_VISIBLE_DEVICES": 0
+        },
+        "gpu": True,
+        "formatter": attitude_formatter
+    },
 ]
 
 ANNOTATORS_3 = [

@@ -8,7 +8,8 @@ services:
       - 4242:4242
     environment:
       WAIT_HOSTS: "rule_based_selector:8002, cobotqa:8001, cobot_topics:8003, transfertransfo:8007,
-        toxic_classification:8013, sentrewrite:8017, ner:8021, sentiment_classification:8024"
+        toxic_classification:8013, sentrewrite:8017, ner:8021, sentiment_classification:8024,
+        attitude_classification:8025"
       WAIT_HOSTS_TIMEOUT: 480
   rule_based_selector:
     build:
@@ -147,4 +148,19 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8021 -t 100
     volumes: []
     tty: true
+  attitude_classification:
+    build:
+      args:
+        skill_endpoint: attitude_annotations
+        skillconfig: annotators/DeepPavlovAttitudeClassification/amazon_reviews_bert.json
+        skillhost: 0.0.0.0
+        skillport: 8025
+      context: ./
+      dockerfile: dp/dockerfile_skill_gpu
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      placement:
+        constraints:
+          - node.labels.with_gpu == true
 version: '3.7'
