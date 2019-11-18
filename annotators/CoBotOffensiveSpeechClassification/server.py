@@ -4,7 +4,6 @@ import json
 import logging
 import os
 import numpy as np
-import uuid
 import time
 
 import requests
@@ -47,7 +46,6 @@ def respond():
         for sent in sent_list:
             user_sentences.append(sent)
             dialog_ids += [i]
-    session_id = uuid.uuid4().hex
     toxicities = []
     confidences = []
     blacklists = []
@@ -71,7 +69,7 @@ def respond():
         dialog_ids = np.array(dialog_ids)
 
         for i, sent_list in enumerate(user_list_sentences):
-            logger.info(f"user_sentence: {sent_list}, session_id: {session_id}")
+            logger.info(f"user_sentence: {sent_list}")
             curr_toxicities = result[dialog_ids == i]
 
             curr_confidences = [float(t["values"][1]["confidence"]) for t in curr_toxicities]

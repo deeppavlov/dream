@@ -29,54 +29,6 @@ logger.setLevel(logging.INFO)
 request_data = None
 
 
-class LaunchRequestHandler(AbstractRequestHandler):
-    """Handler for Skill Launch."""
-    def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
-        return ask_utils.is_request_type("LaunchRequest")(handler_input)
-
-    def handle(self, handler_input):
-        # type: (HandlerInput) -> Response
-        speak_output = "Hi, this is an Alexa Prize Socialbot. How are you?"
-        user_id = ask_utils.get_user_id(handler_input)
-        call_dp_agent(user_id, '/start', request_data)
-        return (
-            handler_input.response_builder.speak(speak_output).ask(speak_output).response
-        )
-
-
-class StopIntentHandler(AbstractRequestHandler):
-    """Single handler for Cancel and Stop Intent."""
-    def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
-        return ask_utils.is_intent_name("AMAZON.StopIntent")(handler_input)
-
-    def handle(self, handler_input):
-        logger.info("StopIntentHandler")
-        # type: (HandlerInput) -> Response
-        speak_output = ""
-        user_id = ask_utils.get_user_id(handler_input)
-        call_dp_agent(user_id, '/close', request_data)
-        return (
-            handler_input.response_builder.speak(speak_output).set_should_end_session(True).response
-        )
-
-
-class SessionEndedRequestHandler(AbstractRequestHandler):
-    """Handler for Session End."""
-    def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
-        return ask_utils.is_request_type("SessionEndedRequest")(handler_input)
-
-    def handle(self, handler_input):
-        logger.info("SessionEndedRequestHandler")
-        # type: (HandlerInput) -> Response
-
-        # Any cleanup logic goes here.
-
-        return handler_input.response_builder.response
-
-
 def get_conversation_id(request_data):
     request_section = request_data['request']
     conversation_id = request_section.get('conversation_id') or request_data.get('conversation_id')
@@ -117,6 +69,67 @@ def call_dp_agent(user_id, text, request_data):
     return {'response': response, 'intent': intent}
 
 
+def process_dp_agent_response(agent_data, user_id, handler_input):
+    speak_output = agent_data['response']
+    if agent_data['intent'] == 'exit':
+        call_dp_agent(user_id, '/close', request_data)
+        logger.info("ExitIntent From DpAgent")
+        return handler_input.response_builder.speak(speak_output).response
+    else:
+        logger.info("Normal output from DpAgent")
+        return handler_input.response_builder.speak(speak_output).ask(speak_output).response
+
+
+class LaunchRequestHandler(AbstractRequestHandler):
+    """Handler for Skill Launch."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return ask_utils.is_request_type("LaunchRequest")(handler_input)
+
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        # speak_output = "Hi, this is an Alexa Prize Socialbot. How are you?"
+        user_id = ask_utils.get_user_id(handler_input)
+        call_dp_agent(user_id, '/start', request_data)
+        # text = "Alexa, let's chat."
+        text = "hello"
+        logger.info(f'LaunchRequestHandler send text to dp_agent: {text}')
+        dp_agent_data = call_dp_agent(user_id, text, request_data)
+        return process_dp_agent_response(dp_agent_data, user_id, handler_input)
+
+
+class StopIntentHandler(AbstractRequestHandler):
+    """Single handler for Cancel and Stop Intent."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return ask_utils.is_intent_name("AMAZON.StopIntent")(handler_input)
+
+    def handle(self, handler_input):
+        logger.info("StopIntentHandler")
+        # type: (HandlerInput) -> Response
+        speak_output = ""
+        user_id = ask_utils.get_user_id(handler_input)
+        call_dp_agent(user_id, '/close', request_data)
+        return (
+            handler_input.response_builder.speak(speak_output).set_should_end_session(True).response
+        )
+
+
+class SessionEndedRequestHandler(AbstractRequestHandler):
+    """Handler for Session End."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return ask_utils.is_request_type("SessionEndedRequest")(handler_input)
+
+    def handle(self, handler_input):
+        logger.info("SessionEndedRequestHandler")
+        # type: (HandlerInput) -> Response
+
+        # Any cleanup logic goes here.
+
+        return handler_input.response_builder.response
+
+
 class IntentReflectorHandler(AbstractRequestHandler):
     """The intent reflector is used for interaction model testing and debugging.
     It will simply repeat the intent the user said. You can create custom handlers
@@ -149,15 +162,8 @@ class IntentReflectorHandler(AbstractRequestHandler):
                 sentry_sdk.capture_message(msg)
         else:
             dp_agent_data = call_dp_agent(user_id, text, request_data)
-        speak_output = dp_agent_data['response']
 
-        if dp_agent_data['intent'] == 'exit':
-            call_dp_agent(user_id, '/close', request_data)
-            logger.info("ExitIntent From DpAgent")
-            return handler_input.response_builder.speak(speak_output).response
-        else:
-            logger.info("Normal output from DpAgent")
-            return handler_input.response_builder.speak(speak_output).ask(speak_output).response
+        return process_dp_agent_response(dp_agent_data, user_id, handler_input)
 
 
 class CatchAllExceptionHandler(AbstractExceptionHandler):

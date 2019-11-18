@@ -5,7 +5,6 @@ from os import getenv
 import tensorflow as tf
 import logging
 import sentry_sdk
-import uuid
 from flask import Flask, request, jsonify
 
 from detector import ClassifierDetector
@@ -40,8 +39,6 @@ logger.info("DONE")
 
 @app.route("/detect", methods=['POST'])
 def detect():
-    session_id = uuid.uuid4().hex
-    logger.info(f"Session_id: {session_id}")
     utterances = request.json['sentences']
     logger.info(f"Number of utterances: {len(utterances)}")
     results = detector.detect(utterances, sess)

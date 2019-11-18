@@ -3,7 +3,6 @@
 import json
 import logging
 import os
-import uuid
 import time
 
 import requests
@@ -33,11 +32,10 @@ headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COB
 def respond():
     st_time = time.time()
     user_sentences = request.json['sentences']
-    session_id = uuid.uuid4().hex
     responses = []
     confidences = []
     for sent in user_sentences:
-        logger.info(f"user_sentence: {sent}, session_id: {session_id}")
+        logger.info(f"user_sentence: {sent}")
         result = requests.request(url=f'{COBOT_QA_SERVICE_URL}',
                                   headers=headers,
                                   data=json.dumps({'question': sent}),

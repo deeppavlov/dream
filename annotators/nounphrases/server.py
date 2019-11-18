@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import logging
-import uuid
 import time
 
 from flask import Flask, request, jsonify
@@ -25,12 +24,11 @@ def respond():
     st_time = time.time()
     dialogs_batch = request.json['dialogs']
     sentences = [dialog["utterances"][-1]["text"] for dialog in dialogs_batch]
-    session_id = uuid.uuid4().hex
 
     nounphrases = [noun_phrase_extraction(sent) for sent in sentences]
 
     for i, sent in enumerate(sentences):
-        logger.info(f"user_sentence: {sent}, session_id: {session_id}")
+        logger.info(f"user_sentence: {sent}")
 
         logger.info(f"Nouns: {nounphrases[i]}")
 

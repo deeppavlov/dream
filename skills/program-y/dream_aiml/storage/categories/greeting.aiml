@@ -99,57 +99,86 @@
     </category>
   </topic>
 
-    <category>
-    <pattern>          HELLO      </pattern>
+  <category>
+    <pattern>HELLO</pattern>
     <template>
+      <think>
+        <set name="topic">USER_MOOD</set>
+      </think>
       <random>
-        <li>Hello!</li>
-        <li>Hi there!</li>
-        <li>Greetings!</li>
-        <li>Hiya!</li>
-        <li>
-          <think>
-            <set name="dayphase">
-              <srai>DAY PHASE</srai>
-            </set>
-          </think>
-          <condition name="dayphase">
-            <li value="Morning">Good morning.</li>
-            <li value="Noon">Good afternoon.</li>
-            <li value="Afternoon">Good afternoon.</li>
-            <li value="Night">Good evening.</li>
-            <li>Hello!</li>
-          </condition>
-        </li>
+        <li>Hi, this is an Alexa Prize Socialbot. How are you?</li>
       </random>
     </template>
   </category>
-  <category>
-    <pattern>HI</pattern>
+
+  <topic name="USER_MOOD">
+   <category>
+    <pattern><set>goodmoods</set></pattern>
     <template>
-      <random>
-        <li>Hi nice to see you!</li>
-        <li>Hi it's great to see you!</li>
-        <li>Hi how are you?</li>
-        <li>Hi! I can really feel your smile today.</li>
-        <li>Hi! It's delightful to see you.</li>
-      </random>
+      <srai>GOOD_MOOD_REPSONSE</srai>
     </template>
   </category>
-  <category>
-    <pattern>GOOD MORNING ^</pattern>
-    <template>
-      <random>
-        <li>Good morning.</li>
-        <li>Hi it's good to see you.</li>
-        <li>Good morning. Did you sleep well?</li>
-      </random>
+
+   <category>
+    <pattern>I FEEL <set>goodmoods</set></pattern>
+     <template>
+      <srai>GOOD_MOOD_REPSONSE</srai>
     </template>
   </category>
+
   <category>
-    <pattern>GOOD AFTERNOON ^</pattern>
-    <template>Good afternoon to you too!</template>
+    <pattern>I AM <set>goodmoods</set></pattern>
+     <template>
+      <srai>GOOD_MOOD_REPSONSE</srai>
+    </template>
   </category>
+
+  <category>
+    <pattern>GOOD_MOOD_REPSONSE</pattern>
+    <template>
+      <random>
+        <li>I am glad. What do you want to talk about?</li>
+      </random>
+      <think>
+        <set name="topic"><star/></set>
+      </think>
+    </template>
+  </category>
+
+  <category>
+    <pattern><set>badmoods</set></pattern>
+    <template>
+      <srai>BAD_MOOD_REPSONSE</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>I FEEL <set>badmoods</set></pattern>
+     <template>
+      <srai>BAD_MOOD_REPSONSE</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>I AM <set>badmoods</set></pattern>
+     <template>
+      <srai>BAD_MOOD_REPSONSE</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>BAD_MOOD_REPSONSE</pattern>
+    <template>
+      <random>
+        <li>I am sorry to hear it. What do you want to talk about?</li>
+      </random>
+      <think>
+        <set name="topic"><star/></set>
+      </think>
+    </template>
+  </category>
+
+ </topic>
 
 
 </aiml>
