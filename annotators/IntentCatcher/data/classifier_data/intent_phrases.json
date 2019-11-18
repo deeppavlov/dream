@@ -20,7 +20,8 @@
         "I did not hear you",
         "Repeat(, please){0,1}(, ((Alexa)|(bot))){0,1}",
         "((Alexa)|(Bot)), repeat(, please){0,1}",
-        "((Can)|(Would)) you (please ){0,1}repeat( please){0,1}"
+        "((Can)|(Would)) you (please ){0,1}repeat( please){0,1}",
+         "I did not hear you, well please repeat."
       ],
       "min_precision" : 0.0,
       "punctuation" : [
@@ -62,7 +63,8 @@
         "What are your ((skills)|(abilities)|(features))",
         "What ((skills)|(abilities)|(features)) do you have",
         "Tell me (about ){0,1}your ((skills)|(features)|(abilities))",
-        "Tell me what you ((can)|(are able to)) do"
+        "Tell me what you ((can)|(are able to)) do",
+        "Tell me more about yourself"
       ],
       "min_precision" : 0.00,
       "punctuation" : [
@@ -125,6 +127,29 @@
         ".",
         "?"
       ]
+    },
+    "doing_well": {
+      "phrases": [
+        "I(('m)|( am)) ((doing)|(all)) ((okay)|(right))",
+        "I(('m)|( am)) ((fine)|(good)|(well)|(happy)|(very kind as well)|(okay)) (()|(thanks))"
+      ],
+      "min_precision": 0.00,
+      "punctuation": [
+        ".",
+        "!"
+      ]
+    },
+    "what_time": {
+      "phrases": [
+        "what(('s)|( is)|()) the time",
+        "what time is it",
+        "((tell)|(say)) the time"
+      ],
+      "min_precision": 0.00,
+      "punctuation": [
+        ".",
+        "?"
+      ]
     }
   },
   "random_phrases" : {
@@ -180,7 +205,8 @@
       "I love ((politics)|(sports)|(art)|(music))",
       "Developing you must've been a hard work",
       "((When|Where)) is it going to rain",
-      "I am working as a ((manager)|(builder))"
+      "I am working as a ((manager)|(builder))",
+      "cancel"
     ],
     "punctuation" : [
       ".",

@@ -100,7 +100,7 @@ if [[ "$MODE" == "test_dialog" || "$MODE" == "all" ]]; then
 
     echo "Pass dialogs from dp-agent"
     dockercompose_cmd exec -T -u $(id -u) agent python3 \
-        utils/http_api_test.py -u http://0.0.0.0:4242 -df tests/dream/test_dialogs.json -of tests/dream/output/test_dialogs_output.csv
+        utils/http_api_test.py -u http://0.0.0.0:4242 -cf tests/dream/test_dialogs_gold_phrases.csv -of tests/dream/output/test_dialogs_output.csv
 
     echo "Assert passed dialogs"
     if [[ "$DEVICE" == "cpu" ]]; then

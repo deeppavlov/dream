@@ -110,6 +110,20 @@
   </category>
 
   <category>
+    <pattern>LET US TALK ABOUT MOVIES</pattern>
+    <template>
+      I can answer about actors and films. For example, what do you think about The Avengers movie?
+    </template>
+  </category>
+
+  <category>
+    <pattern>LET_US_CHAT_ABOUT MOVIES</pattern>
+    <template>
+      I can answer about actors and films. For example, what do you think about The Avengers movie?
+    </template>
+  </category>
+
+  <category>
     <pattern>LET_US_CHAT_ABOUT MY _</pattern>
     <template>
       <random>
@@ -127,6 +141,17 @@
         <li>You are first. Tell me something about <star/>.</li>
         <li>Yeah, let's talk about it! </li>
         <li>Just tell me something I do not know about <star/>.</li>
+      </random>
+    </template>
+  </category>
+
+  <category>
+    <pattern>LET US TALK ABOUT</pattern>
+    <template>
+      <random>
+        <li>Talk about what, movies? What is the latest movie you've seen?</li>
+        <li>Talk about what?</li>
+        <li>Okay! Tell me about the weather in your location.</li>
       </random>
     </template>
   </category>

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import random
+from datetime import datetime
 
 
 def exit_respond(utt, response_phrases):
@@ -40,28 +41,24 @@ def where_are_you_from_respond(utt, response_phrases):
     return response
 
 
-def who_made_you_respond(utt, response_phrases):
+def random_respond(utt, response_phrases):
     response = random.choice(response_phrases).strip()
     return response
 
 
-def lets_chat_respond(utt, response_phrases):
-    response = random.choice(response_phrases).strip()
+def random_respond_with_question_asking(utt, response_phrases):
+    response = random_respond(utt, response_phrases)
+    if 'you' in utt:
+        you = 'you'
+    else:
+        you = 'yours'
+    response = f"{response}. And {you}?"
     return response
 
 
-def what_is_your_name_respond(utt, response_phrases):
-    response = random.choice(response_phrases).strip()
-    return response
-
-
-def what_is_your_job_respond(utt, response_phrases):
-    response = random.choice(response_phrases).strip()
-    return response
-
-
-def what_can_you_do_respond(utt, response_phrases):
-    response = random.choice(response_phrases).strip()
+def what_time_respond(utt, response_phrases):
+    time = datetime.utcnow()
+    response = f"It is {time.hour} hours and {time.minute} minutes by UTC. What is your favorite time?"
     return response
 
 
@@ -69,9 +66,11 @@ def get_respond_funcs():
     return {
         "exit": exit_respond,
         "repeat": repeat_respond,
-        "where_are_you_from": where_are_you_from_respond,
-        "who_made_you": who_made_you_respond,
-        "what_is_your_name": what_is_your_name_respond,
-        "what_is_your_job": what_is_your_job_respond,
-        "what_can_you_do": what_can_you_do_respond,
+        "where_are_you_from": random_respond,
+        "who_made_you": random_respond,
+        "what_is_your_name": random_respond,
+        "what_is_your_job": random_respond,
+        "what_can_you_do": random_respond,
+        "what_time": what_time_respond,
+        "doing_well": random_respond,
     }

@@ -20,6 +20,8 @@ TRAIN_SIZE = 0.8
 parser = argparse.ArgumentParser()
 parser.add_argument(
     '--data_path', help='path to intent_data.json, if not assigned - downloaded from share.ipavlov.mipt.ru')
+parser.add_argument(
+    '--model_path', help='path where to save the model', default='./models/' + MODEL_NAME + '.h5')
 args = parser.parse_args()
 
 # Create metrics directory if not exists
@@ -94,7 +96,7 @@ def main():
         y=train_data['y'],
         epochs=80
     )
-    model.save('./models/' + MODEL_NAME + '.h5')
+    model.save(args.model_path)
 
 
 if __name__ == '__main__':
