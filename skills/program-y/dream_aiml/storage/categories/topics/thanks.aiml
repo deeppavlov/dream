@@ -16,8 +16,6 @@
         <pattern>GOOD</pattern>
         <template>
             <random>
-                <li>Thanks.</li>
-                <li>Sounds like that worked.</li>
                 <li>Glad to hear it.</li>
                 <li>I'm glad you're satisfied.</li>
             </random>

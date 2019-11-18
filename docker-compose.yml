@@ -64,7 +64,7 @@ services:
   sentseg:
     build:
       context: ./annotators/SentSeg/
-    command: bash -c "./setup.sh && gunicorn --workers=1 server:app -b 0.0.0.0:8011 -t 60"
+    command: bash -c "./setup.sh && gunicorn --workers=1 server:app -b 0.0.0.0:8011 -t 100"
     volumes: []
   convers_evaluation_selector:
     build:
@@ -144,7 +144,7 @@ services:
       context: ./annotators/NER/
     environment:
       DEVICE: cuda
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8021
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8021 -t 100
     volumes: []
     tty: true
 version: '3.7'

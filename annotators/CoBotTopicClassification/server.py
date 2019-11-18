@@ -3,7 +3,6 @@
 import json
 import logging
 import os
-import uuid
 import time
 import numpy as np
 
@@ -45,7 +44,6 @@ def respond():
             user_sentences.append(sent.replace(' \'', '\''))
             dialog_ids += [i]
 
-    session_id = uuid.uuid4().hex
     topics = []
     result = requests.request(url=f'{COBOT_TOPICS_SERVICE_URL}',
                               headers=headers,
@@ -65,7 +63,7 @@ def respond():
         dialog_ids = np.array(dialog_ids)
 
         for i, sent_list in enumerate(user_list_sentences):
-            logger.info(f"user_sentence: {sent_list}, session_id: {session_id}")
+            logger.info(f"user_sentence: {sent_list}")
             curr_topics = result[dialog_ids == i]
 
             curr_topics = [t["topicClass"] for t in curr_topics]

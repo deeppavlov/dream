@@ -3,7 +3,6 @@
 import json
 import logging
 import os
-import uuid
 import time
 import numpy as np
 
@@ -36,8 +35,6 @@ headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COB
 def respond():
     st_time = time.time()
     utterances_histories = request.json['utterances_histories']
-
-    session_id = uuid.uuid4().hex
     intents = []
     topics = []
     conversations = []
@@ -71,7 +68,7 @@ def respond():
         dialog_ids = np.array(dialog_ids)
 
         for i, sent_list in enumerate(utterances_histories):
-            logger.info(f"user_sentence: {sent_list}, session_id: {session_id}")
+            logger.info(f"user_sentence: {sent_list}")
             curr_intents = result[dialog_ids == i]
 
             curr_topics = [t["topic"] for t in curr_intents]
