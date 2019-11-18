@@ -428,3 +428,17 @@ def skill_with_attributes_formatter(payload, mode='in'):
             return [{"text": payload[0],
                      "confidence": payload[1]
                      }]
+
+
+def attitude_formatter(payload, mode='in'):
+    if mode == 'in':
+        return {'sentences': annotated_input_formatter(payload, annotation="punctuated")["last_utterances"]}
+    elif mode == 'out':
+        payload = payload[0]
+        if len(payload) == 2:
+            return {"text": payload[0],
+                    "confidence": payload[1]}
+        elif len(payload) == 1:
+            return {"text": payload[0]}
+        elif len(payload) == 0:
+            return {"text": []}
