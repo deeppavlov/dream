@@ -3,9 +3,10 @@
 import json
 import logging
 import os
-import time
+from time import time
 
 import requests
+from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
@@ -17,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
+ASYNC_SIZE = int(os.environ.get('ASYNC_SIZE', 10))
 COBOT_API_KEY = os.environ.get('COBOT_API_KEY')
 COBOT_QA_SERVICE_URL = os.environ.get('COBOT_QA_SERVICE_URL')
 
@@ -28,39 +30,50 @@ if COBOT_QA_SERVICE_URL is None:
 headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COBOT_API_KEY}'}
 
 
+def send_cobotqa(question):
+    request_body = {'question': question}
+    resp = requests.request(url=COBOT_QA_SERVICE_URL,
+                            headers=headers,
+                            data=json.dumps(request_body),
+                            method='POST')
+
+    if resp.status_code != 200:
+        logger.warning(
+            f"result status code is not 200: {resp}. result text: {resp.text}; "
+            f"result status: {resp.status_code}")
+        response = ''
+        sentry_sdk.capture_message(
+            f"CobotQA! result status code is not 200: {resp}. result text: {resp.text}; "
+            f"result status: {resp.status_code}")
+    else:
+        response = resp.json()['response']
+
+    return response
+
+
 @app.route("/respond", methods=['POST'])
 def respond():
-    st_time = time.time()
-    user_sentences = request.json['sentences']
+    st_time = time()
+    questions = request.json['sentences']
     responses = []
     confidences = []
-    for sent in user_sentences:
-        logger.info(f"user_sentence: {sent}")
-        result = requests.request(url=f'{COBOT_QA_SERVICE_URL}',
-                                  headers=headers,
-                                  data=json.dumps({'question': sent}),
-                                  method='POST')
-        if result.status_code != 200:
-            logger.warning(
-                f"result status code is not 200: {result}. result text: {result.text}; "
-                f"result status: {result.status_code}")
-            response = ''
-            sentry_sdk.capture_message(
-                f"CobotQA! result status code is not 200: {result}. result text: {result.text}; "
-                f"result status: {result.status_code}")
-        else:
-            response = result.json()['response']
-        responses += [response]
-        logger.info(f"response: {response}")
+
+    executor = ThreadPoolExecutor(max_workers=ASYNC_SIZE)
+    for i, response in enumerate(executor.map(send_cobotqa, questions)):
+        logger.info("Question: {}".format(questions[i]))
+        logger.info("Response: {}".format(response))
+        responses.append(response)
+
         if len(response) > 0 and 'skill://amzn1' not in response:
-            if "let's talk about" in sent.lower():
+            if "let's talk about" in questions[i].lower():
                 confidence = 0.5
             else:
                 confidence = 0.97
         else:
             confidence = 0.00
         confidences += [confidence]
-    total_time = time.time() - st_time
+
+    total_time = time() - st_time
     logger.info(f'cobotqa exec time: {total_time:.3f}s')
     return jsonify(list(zip(responses, confidences)))
 

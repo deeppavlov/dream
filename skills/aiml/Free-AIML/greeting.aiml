@@ -31,25 +31,25 @@
 <category>
    <pattern>YES</pattern>
    <that>HOW ARE YOU</that>
-   <template>I am newborn, so I can do not so much. For example I can answer for any question.</template>
+   <template>I am newborn, so I can do not so much. For example, I can answer any question.</template>
 </category>
 
 <category>
    <pattern>YES</pattern>
    <that>I am fine, thanks! Do you want to know what I can do?</that>
-   <template>I am newborn, so I can do not so much. For example I can answer for any question.</template>
+   <template>I am newborn, so I can do not so much. For example, I can answer any question.</template>
 </category>
 
 <category>
    <pattern>YES</pattern>
    <that>I am fine, *</that>
-   <template>I am newborn, so I can do not so much. For example I can answer for any question.</template>
+   <template>I am newborn, so I can do not so much. For example, I can answer any question.</template>
 </category>
 
 <category>
    <pattern>YES</pattern>
    <that>I am fine</that>
-   <template>I am newborn, so I can do not so much. For example I can answer for any question.</template>
+   <template>I am newborn, so I can do not so much. For example, I can answer any question.</template>
 </category>
 
 <category>
