@@ -19,6 +19,8 @@ services:
   cobotqa:
     build:
       context: ./skills/CoBotQA/
+    environment:
+      - ASYNC_SIZE=20
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8001 -t 60
     volumes: []
   cobot_topics:

@@ -26,8 +26,8 @@
     <pattern>LIVE_PLACE</pattern>
     <template>
       <random>
-        <li>As a socialbot, I live in the cloud.</li>
-        <li>I am socialbot designed by one of the university teams participating in the Alexa Prize Challenge. So, I must keep those details in secret.  </li>
+        <li>As a socialbot, I live in a cloud.</li>
+        <li>I am the socialbot designed by one of the university teams participating in the Alexa Prize Challenge. So, I must keep those details in secret.  </li>
         <li>This is a competition of socialbots, so I cannot tell you now.</li>
       </random>
     </template>

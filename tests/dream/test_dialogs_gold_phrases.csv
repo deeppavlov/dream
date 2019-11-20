@@ -1,10 +1,10 @@
 "phrase text" response1 response2 response3
 Hi
 "How are you" "I'm fine, thanks! Do you want to know what I can do?"
-Yes "I'm newborn socialbot, so I can't do so much. For example I can answer for any question."
+Yes "I'm newborn socialbot, so I can't do so much. For example, I can answer any question."
 "Do you like Siri?" "Siri was a big inspiration to me." "I'm partial to all AIs." "I like all AIs."
 "Do you better than Siri?"
-"Where do you live?" "As a socialbot, I live in the cloud. If you want to know me better, let's spend more time talking with each other. Where are you from? #+#where_are_you_from" "I live somewhere on the Earth. But I am participating in the Alexa Prize Challenge. So, I must keep those details in secret. Do you like secrets? #+#where_are_you_from" "This is a competition of socialbots, so I cannot tell you my location now. What is your location? #+#where_are_you_from"
+"Where do you live?" "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other. Where are you from? #+#where_are_you_from" "I live somewhere on the Earth. But I am participating in the Alexa Prize Challenge. So, I must keep those details in secret. Do you like secrets? #+#where_are_you_from" "This is a competition of socialbots, so I cannot tell you my location now. What is your location? #+#where_are_you_from"
 "Who build you?" "I was built by one of the university teams participating in the Alexa Prize Challenge. But which one is a secret for now. #+#who_made_you" "I cannot answer questions about my creator for now because they are participating in the Alexa Prize Challenge. #+#who_made_you" "I was built by one of the university teams participating in the Alexa Prize Challenge. I will tell you later by which one. #+#who_made_you"
 Goodbye "Have a good day! #+#exit" "Have a nice day! #+#exit" "Have a great day! #+#exit" "See you! #+#exit" "See you later! #+#exit" "See you soon! #+#exit" "See ya! #+#exit" "Bye! #+#exit" "Bye-bye! #+#exit" "Goodbye! #+#exit" "Goodbye! It was nice speaking with you! #+#exit"
 "do you like porn" "I cannot talk about it. Would you like to switch the topic?"
