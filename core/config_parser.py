@@ -11,7 +11,7 @@ from core.pipeline import simple_workflow_formatter
 from core.service import Service
 from core.transform_config import (ANNOTATORS_1, ANNOTATORS_2, ANNOTATORS_3,
                                    POSTPROCESSORS, RESPONSE_SELECTORS,
-                                   SKILL_SELECTORS, SKILLS)
+                                   SKILL_SELECTORS, SKILLS, BOT_ANNOTATORS)
 from core.transport.settings import TRANSPORT_SETTINGS
 
 
@@ -159,6 +159,8 @@ def parse_old_config(state_manager):
 
     if ANNOTATORS_1:
         for anno in ANNOTATORS_1:
+            if anno not in BOT_ANNOTATORS:
+                continue
             service, workers, session, gateway = make_service_from_config_rec(anno, session,
                                                                               state_manager.add_annotation,
                                                                               ['POST_ANNOTATORS_1'], previous_services,
@@ -170,6 +172,8 @@ def parse_old_config(state_manager):
 
     if ANNOTATORS_2:
         for anno in ANNOTATORS_2:
+            if anno not in BOT_ANNOTATORS:
+                continue
             service, workers, session, gateway = make_service_from_config_rec(anno, session,
                                                                               state_manager.add_annotation,
                                                                               ['POST_ANNOTATORS_2'], previous_services,
@@ -180,6 +184,8 @@ def parse_old_config(state_manager):
         previous_services = {i.name for i in services if 'POST_ANNOTATORS_2' in i.tags}
 
     for anno in ANNOTATORS_3:
+        if anno not in BOT_ANNOTATORS:
+            continue
         service, workers, session, gateway = make_service_from_config_rec(anno, session,
                                                                           state_manager.add_annotation,
                                                                           ['POST_ANNOTATORS_3'],
