@@ -6,6 +6,7 @@ import logging
 import numpy as np
 from ahocorapy.keywordtree import KeywordTree
 
+from utils import GENRES, ALL_GENRES
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -23,7 +24,8 @@ class IMDb:
         Args:
             db_path: path to the json database file
         """
-        self.movies_names_tree = KeywordTree(case_insensitive=True, )
+        self.movies_names_tree = KeywordTree(case_insensitive=True)
+        self.genres_tree = KeywordTree(case_insensitive=True)
         self.names_tree = {}
         for prof in self.professions:
             self.names_tree[prof] = KeywordTree(case_insensitive=True)
@@ -58,7 +60,8 @@ class IMDb:
 
         # let's get rid from movie `Movie`, `You` to escape many incorrect cases
         for title in ["Movie", "You", "Up", "She", "Shi", "Can", "Me2", "One", "If",
-                      "In", "New", "He", "Why", "Two", "OK", "Em", "Out", "Me", "Yes", "It"]:
+                      "In", "New", "He", "Why", "Two", "OK", "Em", "Out", "Me", "Yes", "It",
+                      "Love"]:
             movie_id = self.movies_names[title]
             self.database.pop(movie_id)
             self.movies_names.pop(title)
@@ -94,6 +97,12 @@ class IMDb:
                 self.names_tree[prof].add(f" {person} ")
             self.names_tree[prof].finalize()
 
+        # genres without whitespaces to include subwording genres
+        self.genres_tree.add("genre")
+        for genre in ALL_GENRES:
+            self.genres_tree.add(f"{genre}")
+        self.genres_tree.finalize()
+
     @staticmethod
     def process_movie_name(movie):
         """
@@ -114,18 +123,24 @@ class IMDb:
                  (r"\s?:\s?", ""),
                  (r"\s?(part)?\s?II\s?", " part 2 "),
                  (r"\s?(part)?\s?III\s?", " part 3 "),
-                 (r"\s?the first part\s?", " part 1 "),
-                 (r"\s?the second part\s?", " part 2 "),
-                 (r"\s?the third part\s?", " part 3 "),
-                 (r"\s?the fourth part\s?", " part 4 "),
-                 (r"\s?the fifth part\s?", " part 5 "),
-                 (r"\s?the sixth part\s?", " part 6 "),
-                 (r"\s?the seventh part\s?", " part 7 "),
-                 (r"\s?the eighth part\s?", " part 8 "),
-                 (r"\s?the ninth part\s?", " part 9 "),
+                 (r"\s?(the)?\s?first part\s?", " part 1 "),
+                 (r"\s?(the)?\s?second part\s?", " part 2 "),
+                 (r"\s?(the)?\s?third part\s?", " part 3 "),
+                 (r"\s?(the)?\s?fourth part\s?", " part 4 "),
+                 (r"\s?(the)?\s?fifth part\s?", " part 5 "),
+                 (r"\s?(the)?\s?sixth part\s?", " part 6 "),
+                 (r"\s?(the)?\s?seventh part\s?", " part 7 "),
+                 (r"\s?(the)?\s?eighth part\s?", " part 8 "),
+                 (r"\s?(the)?\s?ninth part\s?", " part 9 "),
+                 (r"\s+the\s+", " "),
+                 (r"\s+a\s+", " "),
+                 (r"^the\s+", ""),
+                 (r"^a\s+", ""),
+                 (r"\s+the$", ""),
+                 (r"\s+a$", ""),
                  ]
 
-        movie_name = movie
+        movie_name = movie.lower()
         for pair in pairs:
             movie_name = re.sub(pair[0], pair[1], movie_name)
         puncts = string.punctuation
@@ -133,7 +148,7 @@ class IMDb:
             movie_name = movie_name.replace(p, " ")
         movie_name = re.sub(r"\s\s+", ' ', movie_name).strip()
 
-        return movie_name.lower()
+        return movie_name
 
     def collect_persons_and_movies(self, profession="actor"):
 
@@ -254,7 +269,7 @@ class IMDb:
 
         Args:
             reply: any string reply
-            subject: `movie`, `actor` or any profession
+            subject: `movie`, `actor` or any profession, `genre`
 
         Returns:
             imdb-ids if `movie`, full cased name if `actor` or any profession
@@ -266,13 +281,17 @@ class IMDb:
         lower_cased_reply = f" {self.process_movie_name(reply.lower())} "
         if subject == "movie":
             results = self.movies_names_tree.search_all(lower_cased_reply)
-        else:
+        elif subject in self.professions:
             results = self.names_tree[subject].search_all(lower_cased_reply)
+        elif subject == "genre":
+            results = self.genres_tree.search_all(lower_cased_reply)
+        else:
+            results = []
 
         bad_ids = []
         for result in results:
             # each result = ("name", start_index)
-            found_substring = result[0]  # including whitespaces
+            found_substring = result[0]  # including whitespaces for `movie` and professions
             start = result[1]
 
             for i, length in enumerate(lengths):
@@ -281,11 +300,20 @@ class IMDb:
                         # e.g. found `Morgan` and `Morgan Freeman` -> let's get rid from Morgan
                         bad_ids.append(i)
 
-            lengths.append(len(found_substring[1:-1]))  # exclude whitespaces
+            if found_substring[0] == " ":
+                lengths.append(len(found_substring[1:-1]))  # exclude whitespaces
+            else:
+                lengths.append(len(found_substring))  # where no whitespaces - `genre`
             if subject == "movie":
                 found = self.processed_movies_names[found_substring[1:-1]]  # exclude whitespaces
-            else:
+            elif subject in self.professions:
                 found = self.professionals[f"lowercased_{subject}s"][found_substring[1:-1]]  # exclude whitespaces
+            elif subject == "genre":
+                for genre in GENRES:
+                    if found_substring in GENRES[genre]:
+                        found = genre  # cased genre title
+            else:
+                found = ""
 
             identifiers.append(found)
             starts.append(start)
@@ -381,3 +409,58 @@ class IMDb:
                 return "neutral"
             else:
                 return "unknown"
+
+    def genereate_opinion_about_genre(self, genre: str, attitude=None):
+        """
+        Return opinion about known genres and return genres of particular opinion.
+
+        Args:
+            genre: one of the known IMDb genres or `Genre`
+            attitude: if `Genre` and `attitude` is given return genres with the given attitude
+
+        Returns:
+            string attitude if `attitude` is not given
+            list of genres if `attitude` is given
+        """
+        genres = {
+            "Genre": ["I like comedies a lot. I also love different science fiction and documentary movies."],
+            "Action": "positive",
+            "Adult": "neutral",
+            "Adventure": "positive",
+            "Animation": "neutral",
+            "Biography": "neutral",
+            "Comedy": "very_positive",
+            "Crime": "positive",
+            "Documentary": "very_positive",
+            "Drama": "neutral",
+            "Family": "positive",
+            "Fantasy": "positive",
+            "Film-noir": "negative",
+            "Game-show": "neutral",
+            "History": "positive",
+            "Horror": "neutral",
+            "Music": "negative",
+            "Musical": "negative",
+            "Mystery": "negative",
+            "News": "positive",
+            "Reality-tv": "neutral",
+            "Romance": "positive",
+            "Sci-fi": "very_positive",
+            "Short": "neutral",
+            "Sport": "positive",
+            "Talk-show": "positive",
+            "Thriller": "neutral",
+            "War": "neutral",
+            "Western": "positive"
+        }
+        if genre == "Genre":
+            if not(attitude is None):
+                res = []
+                for k in genres:
+                    if genres[k] == attitude:
+                        res += [k]
+                return res
+            else:
+                return []
+        else:
+            return genres[genre]

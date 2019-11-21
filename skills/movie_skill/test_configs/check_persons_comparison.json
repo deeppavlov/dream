@@ -1,17 +1,13 @@
 [
   {
-    "id": "5db8544cfe9936516931b915",
-    "location": "lab",
+    "id": "475422486fbc4afeae20f9bd120b293f",
     "utterances": [
       {
-        "id": null,
-        "text": "what do you think? who is better brad pitt or chris evans?",
+        "text": "what do you think? who is better? brad pitt or chris evans?",
         "user": {
-          "id": "5db8544cfe9936516931b913",
-          "user_telegram_id": "907546",
-          "user_type": "human",
-          "device_type": "cmd",
-          "persona": [],
+          "id": "729da4f0116b42a89be95d37eebe7dab",
+          "user_telegram_id": "20457",
+          "persona": {},
           "profile": {
             "name": null,
             "gender": null,
@@ -22,69 +18,119 @@
             "occupation": null,
             "income_per_year": null
           },
-          "attributes": {}
+          "attributes": {},
+          "user_type": "human"
         },
         "annotations": {
-          "sentseg": {
-            "punct_sent": "what do you think? who is better brad pitt or chris evans?",
-            "segments": [
-              "what do you think?",
-              "who is better brad pitt or chris evans?"
-            ]
-          },
           "blacklisted_words": {
             "profanity": false,
             "restricted_topics": false
           },
           "toxic_classification": {
-            "identity_hate": 0.00019022822380065918,
-            "insult": 0.00032532215118408203,
-            "obscene": 9.608268737792969e-05,
-            "severe_toxic": 5.969405174255371e-05,
-            "sexual_explicit": 0.00012392284406814724,
-            "threat": 0.00020781808416359127,
-            "toxic": 0.0008127158507704735
+            "identity_hate": 0.0001702128938632086,
+            "insult": 0.0003142216010019183,
+            "obscene": 9.395235974807292e-05,
+            "severe_toxic": 5.360060458770022e-05,
+            "sexual_explicit": 0.0001144014167948626,
+            "threat": 0.0001901707291835919,
+            "toxic": 0.0008100082632154226
           },
-          "cobot_nounphrases": [
-            "brad pitt",
-            "chris evans"
-          ],
+          "sentseg": {
+            "punct_sent": "what do you think? who is better? brad pitt or chris evans?",
+            "segments": [
+              "what do you think?",
+              "who is better?",
+              "brad pitt or chris evans?"
+            ]
+          },
+          "sentiment_classification": {
+            "text": [
+              "negative",
+              0.710454523563385
+            ]
+          },
           "intent_catcher": {
             "exit": {
-              "confidence": 0.019623806876240515,
+              "confidence": 0.0,
               "detected": 0
             },
+            "opinion_request": {
+              "confidence": 0.9757670760154724,
+              "detected": 1
+            },
             "repeat": {
-              "confidence": 0.010786422466166741,
+              "confidence": 0.0,
               "detected": 0
             },
             "what_can_you_do": {
-              "confidence": 0.0017233403387069367,
+              "confidence": 0.0,
               "detected": 0
             },
             "what_is_your_job": {
-              "confidence": 0.001134852900005729,
+              "confidence": 0.0,
               "detected": 0
             },
             "what_is_your_name": {
-              "confidence": 0.0013969342999458965,
+              "confidence": 0.0,
               "detected": 0
             },
             "where_are_you_from": {
-              "confidence": 0.0003156834824308496,
+              "confidence": 0.0,
               "detected": 0
             },
             "who_made_you": {
-              "confidence": 0.007811833933251601,
+              "confidence": 0.0,
               "detected": 0
             }
           },
+          "cobot_nounphrases": [
+            "pitt",
+            "chris evans"
+          ],
           "ner": [
             [],
-            []
+            [],
+            [
+              {
+                "confidence": 1,
+                "end_pos": 2,
+                "start_pos": 0,
+                "text": "brad pitt",
+                "type": "PER"
+              },
+              {
+                "confidence": 1,
+                "end_pos": 5,
+                "start_pos": 3,
+                "text": "chris evans",
+                "type": "PER"
+              }
+            ]
           ],
+          "attitude_classification": {
+            "text": "very_positive",
+            "confidence": 0.3862217366695404
+          },
+          "cobot_offensiveness": {
+            "text": [
+              "non-toxic",
+              "non-toxic",
+              "non-toxic"
+            ],
+            "confidence": [
+              9.648285e-07,
+              4.410861e-06,
+              0.24508433
+            ],
+            "is_blacklisted": [
+              "not blacklist",
+              "not blacklist",
+              "not blacklist"
+            ]
+          },
           "cobot_topics": {
             "text": [
+              "Phatic",
               "Phatic",
               "Celebrities"
             ]
@@ -92,46 +138,31 @@
           "cobot_dialogact": {
             "intents": [
               "Opinion_RequestIntent",
-              "Information_RequestIntent"
+              "Information_RequestIntent",
+              "General_ChatIntent"
             ],
             "topics": [
               "Phatic",
-              "Entertainment_Movies"
-            ]
-          },
-          "cobot_offensiveness": {
-            "text": [
-              "non-toxic",
-              "non-toxic"
-            ],
-            "confidence": [
-              9.648285e-07,
-              0.032939035
-            ],
-            "is_blacklisted": [
-              "not blacklist",
-              "not blacklist"
+              "Other",
+              "Phatic"
             ]
           },
           "sentrewrite": {
             "clusters": [],
             "modified_sents": [
-              "what do you think? who is better brad pitt or chris evans?"
+              "what do you think? who is better? brad pitt or chris evans?"
             ]
           }
         },
-        "date_time": "2019-10-29 15:01:32.336473",
         "hypotheses": [],
+        "date_time": "2019-11-19 13:13:49.496193",
         "attributes": {}
       }
     ],
-    "channel_type": "cmd_client",
     "human": {
-      "id": "5db8544cfe9936516931b913",
-      "user_telegram_id": "907546",
-      "user_type": "human",
-      "device_type": "cmd",
-      "persona": [],
+      "id": "729da4f0116b42a89be95d37eebe7dab",
+      "user_telegram_id": "20457",
+      "persona": {},
       "profile": {
         "name": null,
         "gender": null,
@@ -142,32 +173,14 @@
         "occupation": null,
         "income_per_year": null
       },
-      "attributes": {}
+      "attributes": {},
+      "user_type": "human"
     },
     "bot": {
-      "id": "5db8544cfe9936516931b914",
-      "user_type": "bot",
-      "persona": [
-        "I am a socialbot.",
-        "I live on Amazon Web Service.",
-        "I was born during the Alexa Prize Challenge.",
-        "I like talking to people.",
-        "I love to meet new people.",
-        "I like jazz music.",
-        "I like listening music.",
-        "I like watching movies and series.",
-        "I like to play sports.",
-        "I like to work out.",
-        "I enjoy reading books.",
-        "I love dogs, especially bulldog.",
-        "I like cats, they are funny.",
-        "I love hot-dogs.",
-        "I like sushi.",
-        "I like pizza and pasta.",
-        "I do not like chocolate.",
-        "I am never still."
-      ],
-      "attributes": {}
+      "id": "f22a2fd4e8b94beab2fe7cbce2174802",
+      "persona": {},
+      "attributes": {},
+      "user_type": "bot"
     }
   }
 ]

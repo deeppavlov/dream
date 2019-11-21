@@ -1,17 +1,13 @@
 [
   {
-    "id": "5db853113bfc82b037d2de1d",
-    "location": "lab",
+    "id": "5dd3ea444f2d3609caf52f95",
     "utterances": [
       {
-        "id": "5db853143bfc82b037d2de1f",
         "text": "what do you think about Chris Evans?",
         "user": {
-          "id": "5db853113bfc82b037d2de1b",
-          "user_telegram_id": "549867",
-          "user_type": "human",
-          "device_type": "cmd",
-          "persona": [],
+          "id": "88f00971e3b94efa8c6a0cc7cbd6df9a",
+          "user_telegram_id": "9483560",
+          "persona": {},
           "profile": {
             "name": null,
             "gender": null,
@@ -22,80 +18,79 @@
             "occupation": null,
             "income_per_year": null
           },
-          "attributes": {}
+          "attributes": {},
+          "user_type": "human"
         },
         "annotations": {
+          "blacklisted_words": {
+            "profanity": false,
+            "restricted_topics": false
+          },
+          "toxic_classification": {
+            "identity_hate": 0.0008108805050142109,
+            "insult": 0.000617783865891397,
+            "obscene": 0.000717956165317446,
+            "severe_toxic": 0.00032494444167241454,
+            "sexual_explicit": 0.0005841166130267084,
+            "threat": 0.0008467803127132356,
+            "toxic": 0.0019052965799346566
+          },
           "sentseg": {
             "punct_sent": "what do you think about Chris Evans?",
             "segments": [
               "what do you think about Chris Evans?"
             ]
           },
-          "blacklisted_words": {
-            "profanity": false,
-            "restricted_topics": false
-          },
-          "toxic_classification": {
-            "identity_hate": 0.0010668039321899414,
-            "insult": 0.0008044540882110596,
-            "obscene": 0.0010260343551635742,
-            "severe_toxic": 0.000476837158203125,
-            "sexual_explicit": 0.0007737978012301028,
-            "threat": 0.001290180254727602,
-            "toxic": 0.0026918419171124697
+          "sentiment_classification": {
+            "text": [
+              "neutral",
+              0.6310409903526306
+            ]
           },
           "intent_catcher": {
             "exit": {
-              "confidence": 0.009057664839805543,
+              "confidence": 0.0,
               "detected": 0
             },
+            "opinion_request": {
+              "confidence": 0.9999243021011353,
+              "detected": 1
+            },
             "repeat": {
-              "confidence": 0.004814803933123083,
+              "confidence": 0.0,
               "detected": 0
             },
             "what_can_you_do": {
-              "confidence": 0.0003926580160474486,
+              "confidence": 0.0,
               "detected": 0
             },
             "what_is_your_job": {
-              "confidence": 0.00046440170038896647,
+              "confidence": 0.0,
               "detected": 0
             },
             "what_is_your_name": {
-              "confidence": 0.0008361795074739257,
+              "confidence": 0.0,
               "detected": 0
             },
             "where_are_you_from": {
-              "confidence": 0.00010163227478563471,
+              "confidence": 0.0,
               "detected": 0
             },
             "who_made_you": {
-              "confidence": 0.005763317340349387,
+              "confidence": 0.0,
               "detected": 0
             }
           },
           "cobot_nounphrases": [
             "chris evans"
           ],
-          "ner": [
-            [
-              {
-                "confidence": 0.9326256215572357,
-                "end_pos": 36,
-                "start_pos": 24,
-                "text": "Chris Evans?",
-                "type": "PERSON"
-              }
-            ]
-          ],
-          "cobot_dialogact": {
-            "intents": [
-              "Opinion_RequestIntent"
-            ],
-            "topics": [
-              "Other"
-            ]
+          "attitude_classification": {
+            "text": "very_positive",
+            "confidence": 0.8667430281639099
           },
+          "ner": [
+            []
+          ],
           "cobot_topics": {
             "text": [
               "Sports"
@@ -112,6 +107,14 @@
               "not blacklist"
             ]
           },
+          "cobot_dialogact": {
+            "intents": [
+              "Opinion_RequestIntent"
+            ],
+            "topics": [
+              "Other"
+            ]
+          },
           "sentrewrite": {
             "clusters": [],
             "modified_sents": [
@@ -119,7 +122,6 @@
             ]
           }
         },
-        "date_time": "2019-10-29 14:56:17.285000",
         "hypotheses": [
           {
             "skill_name": "dummy_skill",
@@ -133,16 +135,18 @@
           },
           {
             "skill_name": "movie_skill",
-            "text": "Chris Evans is a perfect actor!",
+            "text": "Chris Evans is an awesome actor! How about you?",
             "confidence": 0.98,
             "human_attributes": {},
             "bot_attributes": {},
-            "actor": [
+            "bot_attitudes": [
               [
                 "Chris Evans",
+                "actor",
                 "very_positive"
               ]
-            ]
+            ],
+            "human_attitudes": []
           },
           {
             "skill_name": "cobotqa",
@@ -150,44 +154,20 @@
             "confidence": 0.97
           }
         ],
+        "date_time": "2019-11-19 13:12:31.091584",
         "attributes": {}
       },
       {
-        "id": "5db853143bfc82b037d2de1e",
+        "text": "Chris Evans is an awesome actor! How about you?",
+        "orig_text": null,
         "active_skill": "movie_skill",
         "confidence": 0.98,
-        "text": "Chris Evans is a perfect actor!",
-        "orig_text": null,
-        "user": {
-          "id": "5db853113bfc82b037d2de1c",
-          "user_type": "bot",
-          "persona": [
-            "I am a socialbot.",
-            "I live on Amazon Web Service.",
-            "I was born during the Alexa Prize Challenge.",
-            "I like talking to people.",
-            "I love to meet new people.",
-            "I like jazz music.",
-            "I like listening music.",
-            "I like watching movies and series.",
-            "I like to play sports.",
-            "I like to work out.",
-            "I enjoy reading books.",
-            "I love dogs, especially bulldog.",
-            "I like cats, they are funny.",
-            "I love hot-dogs.",
-            "I like sushi.",
-            "I like pizza and pasta.",
-            "I do not like chocolate.",
-            "I am never still."
-          ],
-          "attributes": {}
-        },
         "annotations": {
           "bot_sentseg": {
-            "punct_sent": "Chris Evans is a perfect actor!",
+            "punct_sent": "Chris Evans is an awesome actor! How about you?",
             "segments": [
-              "Chris Evans is a perfect actor!"
+              "Chris Evans is an awesome actor!",
+              "How about you?"
             ]
           },
           "bot_blacklisted_words": {
@@ -195,80 +175,101 @@
             "restricted_topics": false
           },
           "bot_toxic_classification": {
-            "identity_hate": 0.0008524954319000244,
-            "insult": 0.0007450878620147705,
-            "obscene": 0.0007227063179016113,
-            "severe_toxic": 0.00031694769859313965,
-            "sexual_explicit": 0.0007208610186353326,
-            "threat": 0.0010237961541861296,
-            "toxic": 0.0024253663141280413
+            "identity_hate": 0.001773100346326828,
+            "insult": 0.0011502413544803858,
+            "obscene": 0.003453717101365328,
+            "severe_toxic": 0.0010588130680844188,
+            "sexual_explicit": 0.0022317084949463606,
+            "threat": 0.002644358901306987,
+            "toxic": 0.0045123775489628315
           },
-          "bot_intent_catcher": {
-            "exit": {
-              "confidence": 0.007854072946263696,
-              "detected": 0
-            },
-            "repeat": {
-              "confidence": 0.005540884017079711,
-              "detected": 0
-            },
-            "what_can_you_do": {
-              "confidence": 0.0004933103206566108,
-              "detected": 0
-            },
-            "what_is_your_job": {
-              "confidence": 0.000595044453257173,
-              "detected": 0
-            },
-            "what_is_your_name": {
-              "confidence": 0.0011626406613705524,
-              "detected": 0
-            },
-            "where_are_you_from": {
-              "confidence": 0.0001110336746118245,
-              "detected": 0
-            },
-            "who_made_you": {
-              "confidence": 0.006055000611986658,
-              "detected": 0
-            }
+          "bot_sentiment_classification": {
+            "text": [
+              "positive",
+              0.9638574123382568
+            ]
           },
           "bot_cobot_nounphrases": [
             "chris evans"
           ],
+          "bot_intent_catcher": {
+            "exit": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "opinion_request": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "repeat": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_can_you_do": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_job": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_name": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "where_are_you_from": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "who_made_you": {
+              "confidence": 0.0,
+              "detected": 0
+            }
+          },
           "bot_ner": [
             [
               {
-                "confidence": 0.7516719698905945,
-                "end_pos": 11,
+                "confidence": 1,
+                "end_pos": 2,
                 "start_pos": 0,
                 "text": "Chris Evans",
-                "type": "PERSON"
+                "type": "PER"
               }
-            ]
+            ],
+            []
           ],
+          "bot_attitude_classification": {
+            "text": "very_positive",
+            "confidence": 0.9894077181816101
+          },
           "bot_cobot_dialogact": {
             "intents": [
+              "General_ChatIntent",
               "General_ChatIntent"
             ],
             "topics": [
-              "Entertainment_Movies"
+              "Phatic",
+              "Phatic"
             ]
           },
           "bot_cobot_offensiveness": {
             "text": [
-              "toxic"
+              "toxic",
+              "non-toxic"
             ],
             "confidence": [
-              0.9278936
+              0.90723526,
+              2.3863127e-05
             ],
             "is_blacklisted": [
+              "not blacklist",
               "not blacklist"
             ]
           },
           "bot_cobot_topics": {
             "text": [
-              "Movies_TV"
+              "Movies_TV",
+              "Phatic"
             ]
           },
           "bot_sentrewrite": {
@@ -277,8 +278,8 @@
                 {
                   "end": 35,
                   "ner": {
-                    "offset": 1,
-                    "type": "PERSON"
+                    "offset": 10000,
+                    "type": "O"
                   },
                   "resolved": "Chris Evans",
                   "start": 24,
@@ -287,8 +288,8 @@
                 {
                   "end": 48,
                   "ner": {
-                    "offset": 0,
-                    "type": "PERSON"
+                    "offset": 9,
+                    "type": "PER"
                   },
                   "resolved": "Chris Evans",
                   "start": 37,
@@ -298,21 +299,24 @@
             ],
             "modified_sents": [
               "what do you think about Chris Evans?",
-              "Chris Evans is a perfect actor!"
+              "Chris Evans is an awesome actor! How about you?"
             ]
           }
         },
-        "date_time": "2019-10-29 14:56:19.546000"
+        "date_time": "2019-11-19 13:12:35.282367",
+        "user": {
+          "id": "5298138e62d34f54b91daeb9204786da",
+          "persona": {},
+          "attributes": {},
+          "user_type": "bot"
+        }
       },
       {
-        "id": null,
         "text": "what do you think about quentin tarantino?",
         "user": {
-          "id": "5db853113bfc82b037d2de1b",
-          "user_telegram_id": "549867",
-          "user_type": "human",
-          "device_type": "cmd",
-          "persona": [],
+          "id": "5dd3ea444f2d3609caf52f93",
+          "user_telegram_id": "9483560",
+          "persona": {},
           "profile": {
             "name": null,
             "gender": null,
@@ -323,63 +327,86 @@
             "occupation": null,
             "income_per_year": null
           },
-          "attributes": {}
+          "attributes": {},
+          "user_type": "human"
         },
         "annotations": {
+          "blacklisted_words": {
+            "profanity": false,
+            "restricted_topics": false
+          },
           "sentseg": {
             "punct_sent": "what do you think about quentin tarantino?",
             "segments": [
               "what do you think about quentin tarantino?"
             ]
           },
-          "blacklisted_words": {
-            "profanity": false,
-            "restricted_topics": false
-          },
           "toxic_classification": {
-            "identity_hate": 0.0005517899990081787,
-            "insult": 0.0006555914878845215,
-            "obscene": 0.00024953484535217285,
-            "severe_toxic": 0.00013887882232666016,
-            "sexual_explicit": 0.00027963396860286593,
-            "threat": 0.00040512109990231693,
-            "toxic": 0.0016464329091832042
+            "identity_hate": 0.00030232706922106445,
+            "insult": 0.0004537636414170265,
+            "obscene": 0.00011290713882772252,
+            "severe_toxic": 7.045419624773785e-05,
+            "sexual_explicit": 0.00013892991410102695,
+            "threat": 0.00020876263442914933,
+            "toxic": 0.001067746663466096
           },
-          "intent_catcher": {
-            "exit": {
-              "confidence": 0.00363880443317358,
-              "detected": 0
-            },
-            "repeat": {
-              "confidence": 0.0036150672353513764,
-              "detected": 0
-            },
-            "what_can_you_do": {
-              "confidence": 0.0003659269363543533,
-              "detected": 0
-            },
-            "what_is_your_job": {
-              "confidence": 0.0004242985651992536,
-              "detected": 0
-            },
-            "what_is_your_name": {
-              "confidence": 0.0004212754305309107,
-              "detected": 0
-            },
-            "where_are_you_from": {
-              "confidence": 0.00011492382242168204,
-              "detected": 0
-            },
-            "who_made_you": {
-              "confidence": 0.003958742424047768,
-              "detected": 0
-            }
+          "sentiment_classification": {
+            "text": [
+              "neutral",
+              0.660469651222229
+            ]
           },
           "cobot_nounphrases": [
             "quentin tarantino"
           ],
+          "intent_catcher": {
+            "exit": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "opinion_request": {
+              "confidence": 0.9999998807907104,
+              "detected": 1
+            },
+            "repeat": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_can_you_do": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_job": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_name": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "where_are_you_from": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "who_made_you": {
+              "confidence": 0.0,
+              "detected": 0
+            }
+          },
+          "attitude_classification": {
+            "text": "very_positive",
+            "confidence": 0.6522014141082764
+          },
           "ner": [
-            []
+            [
+              {
+                "confidence": 1,
+                "end_pos": 7,
+                "start_pos": 5,
+                "text": "quentin tarantino",
+                "type": "PER"
+              }
+            ]
           ],
           "cobot_dialogact": {
             "intents": [
@@ -387,6 +414,11 @@
             ],
             "topics": [
               "Entertainment_Movies"
+            ]
+          },
+          "cobot_topics": {
+            "text": [
+              "Celebrities"
             ]
           },
           "cobot_offensiveness": {
@@ -400,19 +432,14 @@
               "not blacklist"
             ]
           },
-          "cobot_topics": {
-            "text": [
-              "Celebrities"
-            ]
-          },
           "sentrewrite": {
             "clusters": [
               [
                 {
                   "end": 35,
                   "ner": {
-                    "offset": 1,
-                    "type": "PERSON"
+                    "offset": 10000,
+                    "type": "O"
                   },
                   "resolved": "Chris Evans",
                   "start": 24,
@@ -421,8 +448,8 @@
                 {
                   "end": 48,
                   "ner": {
-                    "offset": 0,
-                    "type": "PERSON"
+                    "offset": 9,
+                    "type": "PER"
                   },
                   "resolved": "Chris Evans",
                   "start": 37,
@@ -432,23 +459,20 @@
             ],
             "modified_sents": [
               "what do you think about Chris Evans?",
-              "Chris Evans is a perfect actor!",
+              "Chris Evans is an awesome actor! How about you?",
               "what do you think about quentin tarantino?"
             ]
           }
         },
-        "date_time": "2019-10-29 14:56:34.795291",
         "hypotheses": [],
+        "date_time": "2019-11-19 13:12:39.548974",
         "attributes": {}
       }
     ],
-    "channel_type": "cmd_client",
     "human": {
-      "id": "5db853113bfc82b037d2de1b",
-      "user_telegram_id": "549867",
-      "user_type": "human",
-      "device_type": "cmd",
-      "persona": [],
+      "id": "5dd3ea444f2d3609caf52f93",
+      "user_telegram_id": "9483560",
+      "persona": {},
       "profile": {
         "name": null,
         "gender": null,
@@ -459,32 +483,14 @@
         "occupation": null,
         "income_per_year": null
       },
-      "attributes": {}
+      "attributes": {},
+      "user_type": "human"
     },
     "bot": {
-      "id": "5db853113bfc82b037d2de1c",
-      "user_type": "bot",
-      "persona": [
-        "I am a socialbot.",
-        "I live on Amazon Web Service.",
-        "I was born during the Alexa Prize Challenge.",
-        "I like talking to people.",
-        "I love to meet new people.",
-        "I like jazz music.",
-        "I like listening music.",
-        "I like watching movies and series.",
-        "I like to play sports.",
-        "I like to work out.",
-        "I enjoy reading books.",
-        "I love dogs, especially bulldog.",
-        "I like cats, they are funny.",
-        "I love hot-dogs.",
-        "I like sushi.",
-        "I like pizza and pasta.",
-        "I do not like chocolate.",
-        "I am never still."
-      ],
-      "attributes": {}
+      "id": "5dd3ea444f2d3609caf52f94",
+      "persona": {},
+      "attributes": {},
+      "user_type": "bot"
     }
   }
 ]

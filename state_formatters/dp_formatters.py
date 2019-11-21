@@ -416,6 +416,14 @@ def skill_with_attributes_formatter(payload, mode='in'):
         elif len(payload) == 5:
             # payload[4] is a dictionary with additional keys-labels-annotations to the reply
             # payload[4] = {"any_key" : "any_value"}
+            # for example, movie-skill
+            # Dp-formatter for movie-skill:
+            # {
+            #   'text': "It's a pleasure to know you better. I adore Brad Pitt!",
+            #   'confidence': 0.98, 'human_attributes': {}, 'bot_attributes': {},
+            #   'bot_attitudes': [['Brad Pitt', 'actor', 'very_positive']],
+            #   'human_attitudes': [['Brad Pitt', 'actor', 'positive']]
+            # }
             result = {"text": payload[0],
                       "confidence": payload[1],
                       "human_attributes": payload[2],

@@ -1,12 +1,12 @@
 [
   {
-    "id": "b8b1775954a7457392c9f755b0632e3f",
+    "id": "fc9a0fb45ff34edc8b374ea1b05184fa",
     "utterances": [
       {
-        "text": "what do you think about brad pitt in the avengers?",
+        "text": "I like comedies. Do you like it?",
         "user": {
-          "id": "d53068099976486f870677f6823a49d0",
-          "user_telegram_id": "309467",
+          "id": "7d1c86c3f00546f3ad2b3aefdef963c9",
+          "user_telegram_id": "3046",
           "persona": {},
           "profile": {
             "name": null,
@@ -22,29 +22,30 @@
           "user_type": "human"
         },
         "annotations": {
+          "sentseg": {
+            "punct_sent": "I like comedies. Do you like it?",
+            "segments": [
+              "I like comedies.",
+              "Do you like it?"
+            ]
+          },
           "blacklisted_words": {
             "profanity": false,
             "restricted_topics": false
           },
           "toxic_classification": {
-            "identity_hate": 0.00013623066479340196,
-            "insult": 0.00026888938737101853,
-            "obscene": 7.741383888060227e-05,
-            "severe_toxic": 5.6521537771914154e-05,
-            "sexual_explicit": 0.00010588587610982358,
-            "threat": 0.00020646517805289477,
-            "toxic": 0.0007219428080134094
-          },
-          "sentseg": {
-            "punct_sent": "what do you think about brad pitt in the avengers?",
-            "segments": [
-              "what do you think about brad pitt in the avengers?"
-            ]
+            "identity_hate": 0.0007630421314388514,
+            "insult": 0.0008271414553746581,
+            "obscene": 0.000650911417324096,
+            "severe_toxic": 0.0002818010398186743,
+            "sexual_explicit": 0.0007590385503135622,
+            "threat": 0.0007598186493851244,
+            "toxic": 0.0021520229056477547
           },
           "sentiment_classification": {
             "text": [
-              "positive",
-              0.6228899955749512
+              "neutral",
+              0.6900936961174011
             ]
           },
           "intent_catcher": {
@@ -53,7 +54,7 @@
               "detected": 0
             },
             "opinion_request": {
-              "confidence": 0.9992018342018127,
+              "confidence": 0.9421222805976868,
               "detected": 1
             },
             "repeat": {
@@ -82,70 +83,62 @@
             }
           },
           "cobot_nounphrases": [
-            "brad pitt",
-            "the avengers"
+            "i",
+            "comedies"
+          ],
+          "ner": [
+            [],
+            []
           ],
           "attitude_classification": {
             "text": "very_positive",
-            "confidence": 0.8604733347892761
-          },
-          "ner": [
-            [
-              {
-                "confidence": 1,
-                "end_pos": 7,
-                "start_pos": 5,
-                "text": "brad pitt",
-                "type": "PER"
-              },
-              {
-                "confidence": 1,
-                "end_pos": 10,
-                "start_pos": 9,
-                "text": "avengers",
-                "type": "ORG"
-              }
-            ]
-          ],
-          "cobot_dialogact": {
-            "intents": [
-              "Opinion_RequestIntent"
-            ],
-            "topics": [
-              "Entertainment_Movies"
-            ]
+            "confidence": 0.7493887543678284
           },
           "cobot_topics": {
             "text": [
-              "Movies_TV"
+              "Movies_TV",
+              "Phatic"
+            ]
+          },
+          "cobot_dialogact": {
+            "intents": [
+              "Information_DeliveryIntent",
+              "General_ChatIntent"
+            ],
+            "topics": [
+              "Entertainment_Movies",
+              "Phatic"
             ]
           },
           "cobot_offensiveness": {
             "text": [
+              "non-toxic",
               "non-toxic"
             ],
             "confidence": [
-              3.9920606e-06
+              6.3722564e-06,
+              0.00013245687
             ],
             "is_blacklisted": [
+              "not blacklist",
               "not blacklist"
             ]
           },
           "sentrewrite": {
             "clusters": [],
             "modified_sents": [
-              "what do you think about brad pitt in the avengers?"
+              "I like comedies. Do you like it?"
             ]
           }
         },
         "hypotheses": [],
-        "date_time": "2019-11-19 13:54:01.861946",
+        "date_time": "2019-11-19 15:44:11.347191",
         "attributes": {}
       }
     ],
     "human": {
-      "id": "d53068099976486f870677f6823a49d0",
-      "user_telegram_id": "309467",
+      "id": "7d1c86c3f00546f3ad2b3aefdef963c9",
+      "user_telegram_id": "3046",
       "persona": {},
       "profile": {
         "name": null,
@@ -161,7 +154,7 @@
       "user_type": "human"
     },
     "bot": {
-      "id": "86517f25f5054035a8591412e006e7cc",
+      "id": "1e6f2e207b3e4ebf80b3e1095c4e9f59",
       "persona": {},
       "attributes": {},
       "user_type": "bot"

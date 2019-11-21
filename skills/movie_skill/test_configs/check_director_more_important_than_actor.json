@@ -1,17 +1,13 @@
 [
   {
-    "id": "5db852bc40697b994208244c",
-    "location": "lab",
+    "id": "a78fae83b7fb4fb3b2c06a5b3dba0145",
     "utterances": [
       {
-        "id": null,
         "text": "what do you think about quentin tarantino?",
         "user": {
-          "id": "5db852bc40697b994208244a",
-          "user_telegram_id": "450967",
-          "user_type": "human",
-          "device_type": "cmd",
-          "persona": [],
+          "id": "5f0e6f298f9d435eb92133f6209a048f",
+          "user_telegram_id": "2309570",
+          "persona": {},
           "profile": {
             "name": null,
             "gender": null,
@@ -22,75 +18,90 @@
             "occupation": null,
             "income_per_year": null
           },
-          "attributes": {}
+          "attributes": {},
+          "user_type": "human"
         },
         "annotations": {
+          "blacklisted_words": {
+            "profanity": false,
+            "restricted_topics": false
+          },
           "sentseg": {
             "punct_sent": "what do you think about quentin tarantino?",
             "segments": [
               "what do you think about quentin tarantino?"
             ]
           },
-          "blacklisted_words": {
-            "profanity": false,
-            "restricted_topics": false
-          },
           "toxic_classification": {
-            "identity_hate": 0.0005517899990081787,
-            "insult": 0.0006555914878845215,
-            "obscene": 0.00024953484535217285,
-            "severe_toxic": 0.00013887882232666016,
-            "sexual_explicit": 0.00027963396860286593,
-            "threat": 0.00040512109990231693,
-            "toxic": 0.0016464329091832042
+            "identity_hate": 0.00030232706922106445,
+            "insult": 0.0004537636414170265,
+            "obscene": 0.00011290713882772252,
+            "severe_toxic": 7.045419624773785e-05,
+            "sexual_explicit": 0.00013892991410102695,
+            "threat": 0.00020876263442914933,
+            "toxic": 0.001067746663466096
+          },
+          "sentiment_classification": {
+            "text": [
+              "neutral",
+              0.660469651222229
+            ]
           },
           "intent_catcher": {
             "exit": {
-              "confidence": 0.00363880443317358,
+              "confidence": 0.0,
               "detected": 0
             },
+            "opinion_request": {
+              "confidence": 0.9999998807907104,
+              "detected": 1
+            },
             "repeat": {
-              "confidence": 0.0036150672353513764,
+              "confidence": 0.0,
               "detected": 0
             },
             "what_can_you_do": {
-              "confidence": 0.0003659269363543533,
+              "confidence": 0.0,
               "detected": 0
             },
             "what_is_your_job": {
-              "confidence": 0.0004242985651992536,
+              "confidence": 0.0,
               "detected": 0
             },
             "what_is_your_name": {
-              "confidence": 0.0004212754305309107,
+              "confidence": 0.0,
               "detected": 0
             },
             "where_are_you_from": {
-              "confidence": 0.00011492382242168204,
+              "confidence": 0.0,
               "detected": 0
             },
             "who_made_you": {
-              "confidence": 0.003958742424047768,
+              "confidence": 0.0,
               "detected": 0
             }
           },
           "cobot_nounphrases": [
             "quentin tarantino"
           ],
+          "attitude_classification": {
+            "text": "very_positive",
+            "confidence": 0.6522014141082764
+          },
           "ner": [
-            []
+            [
+              {
+                "confidence": 1,
+                "end_pos": 7,
+                "start_pos": 5,
+                "text": "quentin tarantino",
+                "type": "PER"
+              }
+            ]
           ],
           "cobot_topics": {
             "text": [
               "Celebrities"
-            ]
-          },
-          "cobot_dialogact": {
-            "intents": [
-              "Opinion_RequestIntent"
-            ],
-            "topics": [
-              "Entertainment_Movies"
             ]
           },
           "cobot_offensiveness": {
@@ -104,6 +115,14 @@
               "not blacklist"
             ]
           },
+          "cobot_dialogact": {
+            "intents": [
+              "Opinion_RequestIntent"
+            ],
+            "topics": [
+              "Entertainment_Movies"
+            ]
+          },
           "sentrewrite": {
             "clusters": [],
             "modified_sents": [
@@ -111,18 +130,15 @@
             ]
           }
         },
-        "date_time": "2019-10-29 14:54:52.407002",
         "hypotheses": [],
+        "date_time": "2019-11-19 13:08:43.255362",
         "attributes": {}
       }
     ],
-    "channel_type": "cmd_client",
     "human": {
-      "id": "5db852bc40697b994208244a",
-      "user_telegram_id": "450967",
-      "user_type": "human",
-      "device_type": "cmd",
-      "persona": [],
+      "id": "5f0e6f298f9d435eb92133f6209a048f",
+      "user_telegram_id": "2309570",
+      "persona": {},
       "profile": {
         "name": null,
         "gender": null,
@@ -133,32 +149,14 @@
         "occupation": null,
         "income_per_year": null
       },
-      "attributes": {}
+      "attributes": {},
+      "user_type": "human"
     },
     "bot": {
-      "id": "5db852bc40697b994208244b",
-      "user_type": "bot",
-      "persona": [
-        "I am a socialbot.",
-        "I live on Amazon Web Service.",
-        "I was born during the Alexa Prize Challenge.",
-        "I like talking to people.",
-        "I love to meet new people.",
-        "I like jazz music.",
-        "I like listening music.",
-        "I like watching movies and series.",
-        "I like to play sports.",
-        "I like to work out.",
-        "I enjoy reading books.",
-        "I love dogs, especially bulldog.",
-        "I like cats, they are funny.",
-        "I love hot-dogs.",
-        "I like sushi.",
-        "I like pizza and pasta.",
-        "I do not like chocolate.",
-        "I am never still."
-      ],
-      "attributes": {}
+      "id": "11c3231ca8ca4b3a9e09396d3ebdbb0b",
+      "persona": {},
+      "attributes": {},
+      "user_type": "bot"
     }
   }
 ]
