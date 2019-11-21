@@ -1,17 +1,13 @@
 [
   {
-    "id": "5db85287465d45061aaf7d4c",
-    "location": "lab",
+    "id": "c2b10366fa49482f95ad5590bbb36a1b",
     "utterances": [
       {
-        "id": null,
         "text": "what do you think about chris evans?",
         "user": {
-          "id": "5db85287465d45061aaf7d4a",
-          "user_telegram_id": "34956",
-          "user_type": "human",
-          "device_type": "cmd",
-          "persona": [],
+          "id": "ddab4de5f0b142079e7b876d79b35b14",
+          "user_telegram_id": "48956",
+          "persona": {},
           "profile": {
             "name": null,
             "gender": null,
@@ -22,72 +18,95 @@
             "occupation": null,
             "income_per_year": null
           },
-          "attributes": {}
+          "attributes": {},
+          "user_type": "human"
         },
         "annotations": {
+          "blacklisted_words": {
+            "profanity": false,
+            "restricted_topics": false
+          },
           "sentseg": {
             "punct_sent": "what do you think about chris evans?",
             "segments": [
               "what do you think about chris evans?"
             ]
           },
-          "blacklisted_words": {
-            "profanity": false,
-            "restricted_topics": false
-          },
           "toxic_classification": {
-            "identity_hate": 0.0009653568267822266,
-            "insult": 0.0007232129573822021,
-            "obscene": 0.0009310543537139893,
-            "severe_toxic": 0.0005081593990325928,
-            "sexual_explicit": 0.0008892983896657825,
-            "threat": 0.0012317531509324908,
-            "toxic": 0.002430571708828211
+            "identity_hate": 0.0006410146015696228,
+            "insult": 0.0005342934164218605,
+            "obscene": 0.0005096690147183836,
+            "severe_toxic": 0.00028575651231221855,
+            "sexual_explicit": 0.0005265880026854575,
+            "threat": 0.0007605702267028391,
+            "toxic": 0.0017358158947899938
+          },
+          "sentiment_classification": {
+            "text": [
+              "positive",
+              0.6265983581542969
+            ]
           },
           "intent_catcher": {
             "exit": {
-              "confidence": 0.009057664839805543,
+              "confidence": 0.0,
               "detected": 0
             },
+            "opinion_request": {
+              "confidence": 0.9999243021011353,
+              "detected": 1
+            },
             "repeat": {
-              "confidence": 0.004814803933123083,
+              "confidence": 0.0,
               "detected": 0
             },
             "what_can_you_do": {
-              "confidence": 0.0003926580160474486,
+              "confidence": 0.0,
               "detected": 0
             },
             "what_is_your_job": {
-              "confidence": 0.00046440170038896647,
+              "confidence": 0.0,
               "detected": 0
             },
             "what_is_your_name": {
-              "confidence": 0.0008361795074739257,
+              "confidence": 0.0,
               "detected": 0
             },
             "where_are_you_from": {
-              "confidence": 0.00010163227478563471,
+              "confidence": 0.0,
               "detected": 0
             },
             "who_made_you": {
-              "confidence": 0.005763317340349387,
+              "confidence": 0.0,
               "detected": 0
             }
           },
           "cobot_nounphrases": [
             "chris evans"
           ],
+          "attitude_classification": {
+            "text": "very_positive",
+            "confidence": 0.7951676845550537
+          },
           "ner": [
             [
               {
-                "confidence": 0.9430634379386902,
-                "end_pos": 29,
-                "start_pos": 24,
-                "text": "chris",
-                "type": "PERSON"
+                "confidence": 1,
+                "end_pos": 7,
+                "start_pos": 5,
+                "text": "chris evans",
+                "type": "PER"
               }
             ]
           ],
+          "cobot_dialogact": {
+            "intents": [
+              "Opinion_RequestIntent"
+            ],
+            "topics": [
+              "Politics"
+            ]
+          },
           "cobot_topics": {
             "text": [
               "Sports"
@@ -104,14 +123,6 @@
               "not blacklist"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "Opinion_RequestIntent"
-            ],
-            "topics": [
-              "Politics"
-            ]
-          },
           "sentrewrite": {
             "clusters": [],
             "modified_sents": [
@@ -119,18 +130,15 @@
             ]
           }
         },
-        "date_time": "2019-10-29 14:53:59.185999",
         "hypotheses": [],
+        "date_time": "2019-11-19 13:06:17.625857",
         "attributes": {}
       }
     ],
-    "channel_type": "cmd_client",
     "human": {
-      "id": "5db85287465d45061aaf7d4a",
-      "user_telegram_id": "34956",
-      "user_type": "human",
-      "device_type": "cmd",
-      "persona": [],
+      "id": "ddab4de5f0b142079e7b876d79b35b14",
+      "user_telegram_id": "48956",
+      "persona": {},
       "profile": {
         "name": null,
         "gender": null,
@@ -141,32 +149,14 @@
         "occupation": null,
         "income_per_year": null
       },
-      "attributes": {}
+      "attributes": {},
+      "user_type": "human"
     },
     "bot": {
-      "id": "5db85287465d45061aaf7d4b",
-      "user_type": "bot",
-      "persona": [
-        "I am a socialbot.",
-        "I live on Amazon Web Service.",
-        "I was born during the Alexa Prize Challenge.",
-        "I like talking to people.",
-        "I love to meet new people.",
-        "I like jazz music.",
-        "I like listening music.",
-        "I like watching movies and series.",
-        "I like to play sports.",
-        "I like to work out.",
-        "I enjoy reading books.",
-        "I love dogs, especially bulldog.",
-        "I like cats, they are funny.",
-        "I love hot-dogs.",
-        "I like sushi.",
-        "I like pizza and pasta.",
-        "I do not like chocolate.",
-        "I am never still."
-      ],
-      "attributes": {}
+      "id": "6370ea06a42a4a9da98d7b1ab556da94",
+      "persona": {},
+      "attributes": {},
+      "user_type": "bot"
     }
   }
 ]

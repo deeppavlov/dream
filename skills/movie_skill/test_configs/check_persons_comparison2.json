@@ -1,17 +1,13 @@
 [
   {
-    "id": "5db85496cb76cd853f6e5f83",
-    "location": "lab",
+    "id": "75f6711ff295428ba064f2284b2771e8",
     "utterances": [
       {
-        "id": null,
-        "text": "what do you think? who is better brad pitt or quentin tarantino?",
+        "text": "who is better? brad pitt or quentin tarantino.",
         "user": {
-          "id": "5db85496cb76cd853f6e5f81",
-          "user_telegram_id": "459867",
-          "user_type": "human",
-          "device_type": "cmd",
-          "persona": [],
+          "id": "0a6ae2c391594022836f6404c438bd39",
+          "user_telegram_id": "93485",
+          "persona": {},
           "profile": {
             "name": null,
             "gender": null,
@@ -22,81 +18,111 @@
             "occupation": null,
             "income_per_year": null
           },
-          "attributes": {}
+          "attributes": {},
+          "user_type": "human"
         },
         "annotations": {
           "blacklisted_words": {
             "profanity": false,
             "restricted_topics": false
           },
+          "toxic_classification": {
+            "identity_hate": 8.207132486859336e-05,
+            "insult": 0.0003528161032591015,
+            "obscene": 4.315620753914118e-05,
+            "severe_toxic": 2.782383671728894e-05,
+            "sexual_explicit": 5.414067709352821e-05,
+            "threat": 9.818756370805204e-05,
+            "toxic": 0.0007235848461277783
+          },
           "sentseg": {
-            "punct_sent": "what do you think? who is better brad pitt or quentin tarantino?",
+            "punct_sent": "who is better? brad pitt or quentin tarantino.",
             "segments": [
-              "what do you think?",
-              "who is better brad pitt or quentin tarantino?"
+              "who is better?",
+              "brad pitt or quentin tarantino."
             ]
           },
-          "toxic_classification": {
-            "identity_hate": 0.00011968612670898438,
-            "insult": 0.00031679868698120117,
-            "obscene": 5.9604644775390625e-05,
-            "severe_toxic": 3.314018249511719e-05,
-            "sexual_explicit": 6.190392014104873e-05,
-            "threat": 0.00011646834900602698,
-            "toxic": 0.0007037490722723305
+          "sentiment_classification": {
+            "text": [
+              "neutral",
+              0.6653227806091309
+            ]
           },
           "intent_catcher": {
             "exit": {
-              "confidence": 0.019623806876240515,
+              "confidence": 0.0,
               "detected": 0
             },
+            "opinion_request": {
+              "confidence": 0.9991207718849182,
+              "detected": 1
+            },
             "repeat": {
-              "confidence": 0.010786422466166741,
+              "confidence": 0.0,
               "detected": 0
             },
             "what_can_you_do": {
-              "confidence": 0.0017233403387069367,
+              "confidence": 0.0,
               "detected": 0
             },
             "what_is_your_job": {
-              "confidence": 0.001134852900005729,
+              "confidence": 0.0,
               "detected": 0
             },
             "what_is_your_name": {
-              "confidence": 0.001373983760213407,
+              "confidence": 0.0,
               "detected": 0
             },
             "where_are_you_from": {
-              "confidence": 0.0003388566424021795,
+              "confidence": 0.0,
               "detected": 0
             },
             "who_made_you": {
-              "confidence": 0.007611877744425049,
+              "confidence": 0.0,
               "detected": 0
             }
           },
           "cobot_nounphrases": [
-            "brad pitt",
+            "pitt",
             "quentin tarantino"
           ],
           "ner": [
             [],
-            []
+            [
+              {
+                "confidence": 1,
+                "end_pos": 2,
+                "start_pos": 0,
+                "text": "brad pitt",
+                "type": "PER"
+              },
+              {
+                "confidence": 1,
+                "end_pos": 5,
+                "start_pos": 3,
+                "text": "quentin tarantino",
+                "type": "PER"
+              }
+            ]
           ],
+          "attitude_classification": {
+            "text": "neutral",
+            "confidence": 0.3844570219516754
+          },
           "cobot_dialogact": {
             "intents": [
-              "Opinion_RequestIntent",
-              "Information_RequestIntent"
+              "Information_RequestIntent",
+              "Information_DeliveryIntent"
             ],
             "topics": [
-              "Phatic",
+              "Other",
               "Entertainment_Movies"
             ]
           },
           "cobot_topics": {
             "text": [
               "Phatic",
-              "Celebrities"
+              "Movies_TV"
             ]
           },
           "cobot_offensiveness": {
@@ -105,8 +131,8 @@
               "non-toxic"
             ],
             "confidence": [
-              9.648285e-07,
-              7.561213e-07
+              4.410861e-06,
+              2.1350338e-06
             ],
             "is_blacklisted": [
               "not blacklist",
@@ -116,22 +142,19 @@
           "sentrewrite": {
             "clusters": [],
             "modified_sents": [
-              "what do you think? who is better brad pitt or quentin tarantino?"
+              "who is better? brad pitt or quentin tarantino."
             ]
           }
         },
-        "date_time": "2019-10-29 15:02:46.395725",
         "hypotheses": [],
+        "date_time": "2019-11-19 13:58:16.696047",
         "attributes": {}
       }
     ],
-    "channel_type": "cmd_client",
     "human": {
-      "id": "5db85496cb76cd853f6e5f81",
-      "user_telegram_id": "459867",
-      "user_type": "human",
-      "device_type": "cmd",
-      "persona": [],
+      "id": "0a6ae2c391594022836f6404c438bd39",
+      "user_telegram_id": "93485",
+      "persona": {},
       "profile": {
         "name": null,
         "gender": null,
@@ -142,32 +165,14 @@
         "occupation": null,
         "income_per_year": null
       },
-      "attributes": {}
+      "attributes": {},
+      "user_type": "human"
     },
     "bot": {
-      "id": "5db85496cb76cd853f6e5f82",
-      "user_type": "bot",
-      "persona": [
-        "I am a socialbot.",
-        "I live on Amazon Web Service.",
-        "I was born during the Alexa Prize Challenge.",
-        "I like talking to people.",
-        "I love to meet new people.",
-        "I like jazz music.",
-        "I like listening music.",
-        "I like watching movies and series.",
-        "I like to play sports.",
-        "I like to work out.",
-        "I enjoy reading books.",
-        "I love dogs, especially bulldog.",
-        "I like cats, they are funny.",
-        "I love hot-dogs.",
-        "I like sushi.",
-        "I like pizza and pasta.",
-        "I do not like chocolate.",
-        "I am never still."
-      ],
-      "attributes": {}
+      "id": "c2476c8440eb43a48569dd1e30cd7173",
+      "persona": {},
+      "attributes": {},
+      "user_type": "bot"
     }
   }
 ]

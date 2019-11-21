@@ -18,7 +18,6 @@ node {
             stage('CollectPredictions') {
                sh "./tests/runtests.sh MODE=infer_questions"
             }
-
             stage('Deploy Dev') {
                sh "./deploy.sh MODE=all TARGET=dev"
                currentBuild.result = 'SUCCESS'

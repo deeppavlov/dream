@@ -1,12 +1,12 @@
 [
   {
-    "id": "b8b1775954a7457392c9f755b0632e3f",
+    "id": "2deb205495cb497fbccc59506ba540e9",
     "utterances": [
       {
-        "text": "what do you think about brad pitt in the avengers?",
+        "text": "what movie genres do you like?",
         "user": {
-          "id": "d53068099976486f870677f6823a49d0",
-          "user_telegram_id": "309467",
+          "id": "e5291272614742178b54ae073e016b82",
+          "user_telegram_id": "340957",
           "persona": {},
           "profile": {
             "name": null,
@@ -22,29 +22,29 @@
           "user_type": "human"
         },
         "annotations": {
+          "sentseg": {
+            "punct_sent": "what movie genres do you like?",
+            "segments": [
+              "what movie genres do you like?"
+            ]
+          },
           "blacklisted_words": {
             "profanity": false,
             "restricted_topics": false
           },
           "toxic_classification": {
-            "identity_hate": 0.00013623066479340196,
-            "insult": 0.00026888938737101853,
-            "obscene": 7.741383888060227e-05,
-            "severe_toxic": 5.6521537771914154e-05,
-            "sexual_explicit": 0.00010588587610982358,
-            "threat": 0.00020646517805289477,
-            "toxic": 0.0007219428080134094
-          },
-          "sentseg": {
-            "punct_sent": "what do you think about brad pitt in the avengers?",
-            "segments": [
-              "what do you think about brad pitt in the avengers?"
-            ]
+            "identity_hate": 0.0001729550422169268,
+            "insult": 0.0002797907800413668,
+            "obscene": 7.302064477698877e-05,
+            "severe_toxic": 3.7877183785894886e-05,
+            "sexual_explicit": 8.631935634184629e-05,
+            "threat": 0.00011046128929592669,
+            "toxic": 0.0006099658785387874
           },
           "sentiment_classification": {
             "text": [
-              "positive",
-              0.6228899955749512
+              "neutral",
+              0.7697993516921997
             ]
           },
           "intent_catcher": {
@@ -53,7 +53,7 @@
               "detected": 0
             },
             "opinion_request": {
-              "confidence": 0.9992018342018127,
+              "confidence": 0.7673248052597046,
               "detected": 1
             },
             "repeat": {
@@ -82,34 +82,18 @@
             }
           },
           "cobot_nounphrases": [
-            "brad pitt",
-            "the avengers"
+            "what movie genres"
           ],
           "attitude_classification": {
             "text": "very_positive",
-            "confidence": 0.8604733347892761
+            "confidence": 0.47932547330856323
           },
           "ner": [
-            [
-              {
-                "confidence": 1,
-                "end_pos": 7,
-                "start_pos": 5,
-                "text": "brad pitt",
-                "type": "PER"
-              },
-              {
-                "confidence": 1,
-                "end_pos": 10,
-                "start_pos": 9,
-                "text": "avengers",
-                "type": "ORG"
-              }
-            ]
+            []
           ],
           "cobot_dialogact": {
             "intents": [
-              "Opinion_RequestIntent"
+              "Information_RequestIntent"
             ],
             "topics": [
               "Entertainment_Movies"
@@ -125,7 +109,7 @@
               "non-toxic"
             ],
             "confidence": [
-              3.9920606e-06
+              7.961389e-07
             ],
             "is_blacklisted": [
               "not blacklist"
@@ -134,18 +118,18 @@
           "sentrewrite": {
             "clusters": [],
             "modified_sents": [
-              "what do you think about brad pitt in the avengers?"
+              "what movie genres do you like?"
             ]
           }
         },
         "hypotheses": [],
-        "date_time": "2019-11-19 13:54:01.861946",
+        "date_time": "2019-11-19 12:47:16.915415",
         "attributes": {}
       }
     ],
     "human": {
-      "id": "d53068099976486f870677f6823a49d0",
-      "user_telegram_id": "309467",
+      "id": "e5291272614742178b54ae073e016b82",
+      "user_telegram_id": "340957",
       "persona": {},
       "profile": {
         "name": null,
@@ -161,7 +145,7 @@
       "user_type": "human"
     },
     "bot": {
-      "id": "86517f25f5054035a8591412e006e7cc",
+      "id": "20e2ba6aad624c72b72cf3ed95915a5f",
       "persona": {},
       "attributes": {},
       "user_type": "bot"

@@ -1,42 +1,46 @@
-GENRES = {"crime": ["criminal"],
-          "drama": ["dramatic"],
-          "mystery": ["mystic", "mystical", "mysterious"],
-          "thriller": [],
-          "action": [],
-          "romance": ["romantic", "love story"],
-          "comedy": ["comic", "comical", "funny", "humorous", "jocular", "grotesque", "buffo", "entertaining"],
-          "short": [],
-          "documentary": ["doc", "docs", "record"],
-          "adventure": [r"cloak[\s|-]and[\s|-]dagger", r"cloak[\s|-]and[\s|-]sword"],
-          "reality-tv": ["reality", r"reality[\s|-]show"],
-          "sci-fi": [r"science[\s|-]fiction", r"sci[\s|-]fi"],
-          "animation": ["cartoon", 'animated'],
-          "family": ["home"],
-          "horror": ["nightmare", "awful", r"scar(ing|ed|y/ey)", "spooky", "eer(ie|y)", "uncanny", "fearful"],
-          "fantasy": ["fantastic", "phantasy"],
-          "history": ["historical"],
-          "biography": ["biographical"],
-          "news": ["tidings"],
-          "music": [],
-          "war": ["war(fare|time)", "military", "martial"],
-          "western": ["west(erly)?"],
-          "talk-show": [r"talk[\s|-]show", 'conversation', "interview", r"chat[\s|-]show"],
-          "musical": [],
-          "film-noir": [r"film[\s|-]noir"],
-          "sport": ["sport(y|s)?"],
-          "game-show": [r"game[\s|-]show", r"play[\s|-]show", "competition"],
-          "adult": [r"grown[\s|-]up"]
+GENRES = {"Genre": ["genre"],
+          "Action": ["action"],
+          "Adult": ["adult", "grown up", "grown-up"],
+          "Adventure": ["adventure", "cloak and dagger", "cloak-and-dagger",
+                        "cloak and sword", "cloak-and-sword"],
+          "Animation": ["animation", "cartoon", 'animated'],
+          "Biography": ["biography", "biographies", "biographical"],
+          "Comedy": ["comedy", "comedies", "comic", "comical", "funny", "comedian",
+                     "humorous", "jocular", "grotesque", "buffo", "entertaining"],
+          "Crime": ["crime", "criminal"],
+          "Documentary": ["documentary", "documentaries", "doc", "docs", "record"],
+          "Drama": ["drama", "dramatic"],
+          "Family": ["family", "families", "home"],
+          "Fantasy": ["fantasy", "fantasies", "phantasy", "phantasies", "fantastic", "phantastic"],
+          "Film-noir": ["film noir", "film-noir"],
+          "Game-show": ["game show", "game-show", "play show", "play-show", "competition"],
+          "History": ["history", "histories", "historical"],
+          "Horror": ["horror", "nightmare", "awful", "scaring", "scared", "scary", "scarey",
+                     "spooky", "spookies", "eerie", "eery", "uncanny", "uncannies", "fearful"],
+          "Music": ["music"],
+          "Musical": ["musical"],
+          "Mystery": ["mystery", "mysteries", "mystic", "mystical", "mysterious"],
+          "News": ["news", "tidings"],
+          "Reality-tv": ["reality tv", "reality-tv", "reality", "realities", "reality show", "reality-show"],
+          "Romance": ["romance", "romantic", "love story", "love stories"],
+          "Sci-fi": ["science fiction", "science-fiction", "sci fi", "sci-fi"],
+          "Short": ["short"],
+          "Sport": ["sport", "sporty", "sports"],
+          "Talk-show": ["talk show", "talk-show", 'conversation', "interview", "chat show", "chat-show"],
+          "Thriller": ["thriller"],
+          "War": ["war", "military", "militaries", "martial"],
+          "Western": ["western", "west"]
           }
 
-all_genres = list(GENRES.keys()) + sum(list(GENRES.values()), [])
-all_genres_str = r"("
+ALL_GENRES = sum(list(GENRES.values()), [])
+ALL_GENRES_STR = r"("
 
-for i, genre in enumerate(all_genres):
-    all_genres_str += genre
-    if i == len(all_genres) - 1:
-        all_genres_str += ")"
+for i, genre in enumerate(ALL_GENRES):
+    ALL_GENRES_STR += genre
+    if i == len(ALL_GENRES) - 1:
+        ALL_GENRES_STR += ")"
     else:
-        all_genres_str += "|"
+        ALL_GENRES_STR += "|"
 
 # all_genres_str looks like:
 # '(crime|drama|mystery|thriller|action|romance)' etc
