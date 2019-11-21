@@ -98,9 +98,9 @@ Deploy Machine
 GPU
 ========================
 1. Create machine with public ip with GPU AMI
-2. Setup docker daemon to use nvidia runtime as default
+2. Setup docker daemon to use nvidia runtime as default and couldwatch logging:
 ```
-ubuntu@ip-172-31-42-16:~$ cat /etc/docker/daemon.json
+/etc/docker/daemon.json:
 {
     "runtimes": {
         "nvidia": {
@@ -108,8 +108,14 @@ ubuntu@ip-172-31-42-16:~$ cat /etc/docker/daemon.json
             "runtimeArgs": []
         }
     },
-   "default-runtime": "nvidia"
+   "default-runtime": "nvidia",
+    "log-driver": "awslogs",
+    "log-opts": {
+        "awslogs-group": "Docker-staging-lg",
+        "tag": "{{.Name}}-{{.ID}}"
+    }
 }
+# or "awslogs-group": "Docker-staging-lg" for prod!!!
 ```
 3. Restart docker daemon and check it
 ```
@@ -122,8 +128,9 @@ ubuntu@ip-172-31-42-16:~$ docker run nvidia/cuda:9.0-base nvidia-smi
 4. Add GPU worker to docker swarm
 5. Find docker gpu node in docker manager: `docker node ls`
 5. Add label to the GPU worker machine `docker node update --label-add with_gpu=true o0mvol5rehp80k9a0xkzye7zw`
-6. Setup placement in docker-compose.yml.
-
+6. Add IAM role Docker-staging-WorkerInstanceProfile (Docker-WorkerInstanceProfile for prod) to EC2 instance Actions -> Instance setting -> Attach/Replace IAM Role
+docker run --log-driver=awslogs --log-opt awslogs-group=Docker-staging-lg alpine echo 'a cloudonaut.io example'
+7. Setup placement in docker-compose.yml.
 
 - For local setup install nvidia-docker2 https://github.com/NVIDIA/nvidia-docker/wiki/Installation-(version-2.0)
 - Restart docker daemon and do step 2.

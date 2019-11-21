@@ -16,6 +16,9 @@ services:
       context: ./skill_selectors/rule_based_selector
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8002
     volumes: []
+    deploy:
+      mode: replicated
+      replicas: 4
   cobotqa:
     build:
       context: ./skills/CoBotQA/
@@ -23,21 +26,33 @@ services:
       - ASYNC_SIZE=20
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8001 -t 60
     volumes: []
+    deploy:
+      mode: replicated
+      replicas: 4
   cobot_topics:
     build:
       context: ./annotators/CoBotTopicClassification/
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8003 -t 60
     volumes: []
+    deploy:
+      mode: replicated
+      replicas: 4
   cobot_offensiveness:
     build:
       context: ./annotators/CoBotOffensiveSpeechClassification/
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8005 -t 60
     volumes: []
+    deploy:
+      mode: replicated
+      replicas: 4
   cobot_dialogact:
     build:
       context: ./annotators/CoBotDialogActClassification/
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8006 -t 60
     volumes: []
+    deploy:
+      mode: replicated
+      replicas: 4
   transfertransfo:
     build:
       context: ./skills/transfertransfo/
@@ -59,21 +74,33 @@ services:
       context: ./skills/program-y/
     working_dir: /src/dream_aiml/scripts/xnix
     command: ./sanic.sh
+    deploy:
+      mode: replicated
+      replicas: 4
   personality_catcher:
     build:
       context: ./skills/personality_catcher/
     command: uvicorn server:app --host 0.0.0.0 --port 8010
     volumes: []
+    deploy:
+      mode: replicated
+      replicas: 4
   sentseg:
     build:
       context: ./annotators/SentSeg/
     command: bash -c "./setup.sh && gunicorn --workers=1 server:app -b 0.0.0.0:8011 -t 100"
     volumes: []
+    deploy:
+      mode: replicated
+      replicas: 4
   convers_evaluation_selector:
     build:
       context: ./response_selectors/convers_evaluation_based_selector/
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8009 -t 60
     volumes: []
+    deploy:
+      mode: replicated
+      replicas: 4
   toxic_classification:
     build:
       args:
@@ -89,6 +116,8 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu == true
+      mode: replicated
+      replicas: 1
   sentiment_classification:
     build:
       args:
@@ -104,44 +133,70 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu == true
+      mode: replicated
+      replicas: 1
   sentrewrite:
     build:
       context: ./annotators/SentRewrite/
     command: bash -c "./setup.sh && gunicorn --workers=1 server:app -b 0.0.0.0:8017 -t 60"
+    deploy:
+      mode: replicated
+      replicas: 4
   intent_responder:
     build:
       context: ./skills/IntentResponder/
     command: gunicorn --workers=1 --name=responder --bind 0.0.0.0:8012 --timeout=500 server:app
     volumes: []
+    deploy:
+      mode: replicated
+      replicas: 4
   intent_catcher:
     build:
       context: ./annotators/IntentCatcher/
     command: gunicorn --workers=1 --name=catcher --bind 0.0.0.0:8014 --timeout=500 server:app
     volumes: []
+    deploy:
+      mode: replicated
+      replicas: 4
   blacklisted_words:
     build:
       context: ./annotators/BlacklistedWordsDetector/
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8018
+    deploy:
+      mode: replicated
+      replicas: 4
   dummy_skill:
     build:
       context: ./skills/dummy_skill/
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8019
     volumes: []
+    deploy:
+      mode: replicated
+      replicas: 4
   program_y_dangerous:
     build:
       context: ./skills/program-y-dangerous/
     working_dir: /src/dream_aiml/scripts/xnix
     command: ./sanic.sh
+    deploy:
+      mode: replicated
+      replicas: 4
   cobot_nounphrases:
     build:
       context: ./annotators/nounphrases/
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8016
     volumes: []
+    deploy:
+      mode: replicated
+      replicas: 4
   movie_skill:
     build:
       context: ./skills/movie_skill/
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8023 --timeout=100
     volumes: []
+    deploy:
+      mode: replicated
+      replicas: 4
   ner:
     build:
       context: ./annotators/NER/
@@ -150,6 +205,9 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8021 -t 100
     volumes: []
     tty: true
+    deploy:
+      mode: replicated
+      replicas: 4
   attitude_classification:
     build:
       args:
@@ -165,4 +223,6 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu == true
+      mode: replicated
+      replicas: 1
 version: '3.7'
