@@ -49,7 +49,8 @@ def respond():
         result = requests.request(url=f'{COBOT_TOPICS_SERVICE_URL}',
                                   headers=headers,
                                   data=json.dumps({'utterances': user_sentences}),
-                                  method='POST')
+                                  method='POST',
+                                  timeout=10)
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         sentry_sdk.capture_exception(e)
         logger.exception("CoBotTopicClassification Timeout")

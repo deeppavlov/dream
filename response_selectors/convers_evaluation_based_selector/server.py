@@ -123,7 +123,8 @@ def respond():
         result = requests.request(url=COBOT_CONVERSATION_EVALUATION_SERVICE_URL,
                                   headers=headers,
                                   data=json.dumps({'conversations': conversations}),
-                                  method='POST')
+                                  method='POST',
+                                  timeout=10)
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         logger.exception("cobot convers eval Timeout")
         sentry_sdk.capture_exception(e)
