@@ -1,5 +1,5 @@
 # USAGE example: python utils/collect_amazon_dialogs.py --input dialogs.json
-# USAGE example with requesting: python utils/collect_amazon_dialogs.py --input dialogs.json \
+# USAGE example with requesting: python utils/collect_amazon_dialogs.py --input dialogs.json --with_debug_info \
 #        --with_requesting --url http://Docker-st-External-1918W05RU8XQW-178993125.us-east-1.elb.amazonaws.com:4242
 # to get ratings run ./utils/download_ratings.sh
 # to get dialogs run wget <agent_url>:4242/dialogs
@@ -23,22 +23,27 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--input', help='input json with dialogs (can be fetched through /dialogs)')
 parser.add_argument('--output', help='output filename prefix', default='amazon_dialogs')
 parser.add_argument('--with_requesting', action='store_true', default=False, help='pass user queries to url')
+parser.add_argument('--with_debug_info', action='store_true', default=False,
+                    help='get debug info for with_requesting mode')
 parser.add_argument('--url', help='url, used only when with_requesting is True', default='http://0.0.0.0:4242')
 parser.add_argument('--feedback', help='feedbacks csv', default='conversation_feedback.csv')
 parser.add_argument('--ratings', help='ratings csv', default='ratings.csv')
 
 
-def print_pretty(dialog, file=sys.stdout, field='dialog'):
+def print_pretty(dialog, file=sys.stdout, field='dialog', with_debug_info=False):
     # Skip /start and next utt
     # TODO: Do not use 2:, for new dialogs, because /start not saved in state in new version of dp-agetn
     if field == 'new_dialog':
         print(dialog)
         for utt in dialog:
-            bot_response = utt[-1]
-            human_response = utt[-2]
+            bot_response = utt[-2]
+            human_response = utt[-3]
             if bot_response != 'command_performed':
                 print(f"Human: {human_response}", file=file)
                 print(f"Bot: {bot_response}", file=file)
+                if with_debug_info:
+                    for row in utt[-1]["debug_output"]:
+                        print(f"Bot {row['skill_name']} ({row['confidence']}): {row['text']}", file=file)
     else:
         for i, utt in enumerate(dialog['utterances']):
             if i % 2 == 1:
@@ -56,10 +61,10 @@ def collect_human_responses(dialog):
     return responses
 
 
-def print_row(row, f, field='dialog'):
+def print_row(row, f, field='dialog', with_debug_info=False):
     print(f'--{row["conversation_id"]}----{row["rating_val"]}----{row["feedback_txt"]}---{row["start_time"]}',
           file=f)
-    print_pretty(row[field], file=f, field=field)
+    print_pretty(row[field], file=f, field=field, with_debug_info=with_debug_info)
     print("-----------------------", file=f)
 
 
@@ -85,18 +90,18 @@ def print_to_file(new_conversations, args):
     if args.with_requesting:
         with open(f'./{args.output}_with_requests.txt', 'w') as f:
             for _, row in new_conversations.sort_values('start_time', ascending=False).iterrows():
-                print_row(row, f, 'new_dialog')
+                print_row(row, f, 'new_dialog', args.with_debug_info)
 
 
 async def make_requests(new_conversations, args):
     result = []
     async with aiohttp.ClientSession() as session:
-        new_conversations = new_conversations.sort_values('start_time', ascending=False)
         for _, row in tqdm(new_conversations.iterrows(), total=new_conversations.shape[0]):
             uid = uuid.uuid4().hex
             dialog = row["dialog"]
             responses = collect_human_responses(dialog)
-            res = await perform_test_dialogue(session, args.url, uid, ['/start'] + responses + ['/close'])
+            inp = ['/start'] + responses + ['/close']
+            res = await perform_test_dialogue(session, args.url, uid, inp, args.with_debug_info)
             result.append(res)
     new_conversations["new_dialog"] = result
     return new_conversations
@@ -126,10 +131,14 @@ async def main(args):
             start_time = rating_val['Approximate Start Time'].iloc[0]
             rating_val = rating_val['Rating'].iloc[0]
             new_conversations.append({"conversation_id": conv_id, "rating_val": float(rating_val),
-                                      "feedback_txt": feedback_txt, "dialog": dialog, "start_time": start_time})
+                                      "feedback_txt": feedback_txt, "dialog": dialog,
+                                      "start_time": start_time})
 
     new_conversations = pd.DataFrame(new_conversations)
     new_conversations['start_time'] = pd.to_datetime(new_conversations['start_time'])
+    new_conversations = new_conversations.sort_values('start_time', ascending=False)
+    # NOTE: head only latest 10 for debug
+    # new_conversations = new_conversations.head(10)
     if args.with_requesting:
         new_conversations = await make_requests(new_conversations, args)
     print_to_file(new_conversations, args)

@@ -216,11 +216,11 @@ def chitchat_example_formatter(payload: Any,
 
 def alice_formatter(payload, mode='in'):
     if mode == 'in':
-        sents = [u['text'] for u in payload['dialogs'][-1]['utterances']]
+        inp_data = base_input_formatter(payload)
         last_n_sents = 5
         # Send only last n sents of the latest dialogue
-        sents = sents[-last_n_sents:]
-        return {'sentences': sents}
+        last_sents_batch = [hist[-last_n_sents:] for hist in inp_data['utterances_histories']]
+        return {"sentences_batch": last_sents_batch}
     elif mode == 'out':
         # TODO: how to deal with confidence?
         return base_skill_output_formatter(payload)

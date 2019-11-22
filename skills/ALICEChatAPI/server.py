@@ -21,21 +21,23 @@ def respond():
     # todo: logging doesn't work here, some problems with Sanic
     st_time = time.time()
     # bot.reset() not work
-    user_sentences = request.json['sentences']
-    response = "..."
-    session_id = uuid.uuid4().hex
-    logger.info("user_sentences: {}, session_id: {}".format(user_sentences, session_id))
-    for s in user_sentences:
-        response = bot.respond(s, session_id).replace("\n", "")
-    logger.info("response: {}".format(response))
-    if response.strip():
-        confidence = 0.95
-    else:
-        confidence = 0.01
+    responses = []
+    for user_sentences in request.json['sentences_batch']:
+        response = "..."
+        session_id = uuid.uuid4().hex
+        logger.info("user_sentences: {}, session_id: {}".format(user_sentences, session_id))
+        for s in user_sentences:
+            response = bot.respond(s, session_id).replace("\n", "")
+        logger.info("response: {}".format(response))
+        if response.strip():
+            confidence = 0.7
+        else:
+            confidence = 0.01
+        responses.append([response, confidence])
 
     total_time = time.time() - st_time
-    logger.info(f'program_y exec time: {total_time:.3f}s')
-    return jsonify([[response, confidence]])
+    logger.info(f'alice exec time: {total_time:.3f}s')
+    return jsonify(responses)
 
 
 if __name__ == '__main__':

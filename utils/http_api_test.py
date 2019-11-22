@@ -35,7 +35,7 @@ parser.add_argument('-cf', '--csvfile', help='name of the file with predefined d
 parser.add_argument('-of', '--outputfile', help='name of the output file', type=str, default='output.csv')
 
 
-async def perform_test_dialogue(session, url, uuid, payloads):
+async def perform_test_dialogue(session, url, uuid, payloads, with_debug_info=False):
     result = []
     for i in payloads:
         request_body = {'user_id': uuid, 'payload': i}
@@ -49,6 +49,8 @@ async def perform_test_dialogue(session, url, uuid, payloads):
             if response['user_id'] != uuid:
                 logger.info('request returned wrong uuid')
             result.append([uuid, start_time, end_time, end_time - start_time, len(i), i, response['response']])
+            if with_debug_info:
+                result[-1].append(response)
 
     return result
 

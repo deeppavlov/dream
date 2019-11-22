@@ -100,6 +100,10 @@ services:
     image: ${DOCKER_REGISTRY}/attitude_classification:${VERSION}
     env_file:
       - ${ENV_FILE}
+  alice:
+    image: ${DOCKER_REGISTRY}/alice:${VERSION}
+    env_file:
+      - ${ENV_FILE}
 
 volumes:
   external-logs:
