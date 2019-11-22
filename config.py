@@ -12,16 +12,16 @@ MAX_WORKERS = 4
 AGENT_ENV_FILE = "agent.env"
 
 SKILLS = [
-    # {
-    #     "name": "alice",
-    #     "protocol": "http",
-    #     "host": "alice",
-    #     "port": 8000,
-    #     "endpoint": "respond",
-    #     "external": True,
-    #     "path": "",
-    #     "formatter": alice_formatter
-    # },
+    {
+        "name": "alice",
+        "protocol": "http",
+        "host": "alice",
+        "port": 8000,
+        "endpoint": "respond",
+        "external": True,
+        "path": "",
+        "formatter": alice_formatter
+    },
     # {
     #     "name": "aiml",
     #     "protocol": "http",

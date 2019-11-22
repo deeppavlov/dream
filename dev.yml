@@ -156,4 +156,10 @@ services:
       - "./annotators/DeepPavlovAttitudeClassification:/dp-agent/annotators/DeepPavlovAttitudeClassification"
     ports:
       - 8025:8025
+  alice:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/ALICEChatAPI:/src"
+    ports:
+      - 8000:8000
 version: "3.7"

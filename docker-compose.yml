@@ -225,4 +225,11 @@ services:
           - node.labels.with_gpu == true
       mode: replicated
       replicas: 1
+  alice:
+    build:
+      context: ./skills/ALICEChatAPI/
+    command: gunicorn --workers=4 server:app -b 0.0.0.0:8000
+    deploy:
+      mode: replicated
+      replicas: 2
 version: '3.7'
