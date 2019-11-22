@@ -52,11 +52,18 @@ def respond():
             conv["pastResponses"] = [" ".join(list_sent) for list_sent in dialog[:-1][::2][-2:]]
             conversations += [conv]
             dialog_ids += [i]
+    try:
+        result = requests.request(url=f'{COBOT_DIALOGACT_SERVICE_URL}',
+                                  headers=headers,
+                                  data=json.dumps({'conversations': conversations}),
+                                  method='POST',
+                                  timeout=10)
+    except requests.ConnectTimeout as e:
+        sentry_sdk.capture_exception(e)
+        logger.exception("CoBotDialogActClassification ConnectTimeout")
+        result = requests.Response()
+        result.status_code = 504
 
-    result = requests.request(url=f'{COBOT_DIALOGACT_SERVICE_URL}',
-                              headers=headers,
-                              data=json.dumps({'conversations': conversations}),
-                              method='POST')
     if result.status_code != 200:
         logger.warning("result status code is not 200: {}. result text: {}; result status: {}".format(
             result, result.text, result.status_code))

@@ -52,7 +52,7 @@ class SentenceJoinerDeDuplicator(SentenceJoiner):
                     else:
                         final_sentences.append(sentence)
                 # return just the first answer that satisfies the criteria of allowed answer (not IDK).
-                # break
+                break
 
         if len(final_sentences) == 0:
             # if we here means all answers are IDKs, choose the only one:

@@ -17,6 +17,22 @@
         <template>\</template>
     </category>
     <category>
+        <pattern>YES</pattern>
+        <template>Interesting. What are your 3 favorite movies?</template>
+    </category>
+    <category>
+        <pattern>OK</pattern>
+        <template>Okay. What is the funniest joke you know by heart?</template>
+    </category>
+    <category>
+        <pattern>OKAY</pattern>
+        <template>Okay. In one sentence, how would you sum up the internet?</template>
+    </category>
+    <category>
+        <pattern>HAPPY</pattern>
+        <template>Good! What is the most ridiculous fact you know?</template>
+    </category>
+    <category>
         <pattern>ME</pattern>
         <template>
             <random>
@@ -214,9 +230,7 @@
         <pattern>FINE</pattern>
         <template>
             <random>
-                <li>OK.</li>
-                <li>No need to be hard on yourself.</li>
-                <li>You know what FINE stand for.</li>
+                <li>I am happy for you! What's new?</li>
             </random>
         </template>
     </category>

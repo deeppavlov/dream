@@ -1,7 +1,7 @@
 "phrase text" response1 response2 response3
 Hi
 "How are you" "I'm fine, thanks! Do you want to know what I can do?"
-Yes "I'm newborn socialbot, so I can't do so much. For example, I can answer any question."
+Yes "I'm newborn socialbot, so I can't do so much. For example, I can answer any question." "I'm learning day by day. For now, I can answer a question, tell a joke or fact and discuss movies." "I'm learning day by day. What would you like me to do?"
 "Do you like Siri?" "Siri was a big inspiration to me." "I'm partial to all AIs." "I like all AIs."
 "Do you better than Siri?"
 "Where do you live?" "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other. Where are you from? #+#where_are_you_from" "I live somewhere on the Earth. But I am participating in the Alexa Prize Challenge. So, I must keep those details in secret. Do you like secrets? #+#where_are_you_from" "This is a competition of socialbots, so I cannot tell you my location now. What is your location? #+#where_are_you_from"
@@ -16,3 +16,7 @@ Goodbye "Have a good day! #+#exit" "Have a nice day! #+#exit" "Have a great day!
 "what do you think about The Avengers?"
 "let's talk about" "Talk about what, movies? What's the latest movie you've seen?" "Talk about what?" "Okay! Tell me about the weather in your location."
 "cancel" "Okay. Cancelling completed."
+"happy." "Good! What's the most ridiculous fact you know?"
+"yeah" "Interesting. What are your 3 favorite movies?"
+"okay." "Okay. In one sentence, how would you sum up the internet?"
+"what else can you do?" "I'm learning day by day. What would you like me to do? #+#what_can_you_do" "I'm learning day by day. For now, I can answer a question, tell a joke or fact and discuss movies. #+#what_can_you_do" "I'm newborn socialbot, so I can't do so much. For example, I can answer any question, especially about movies. #+#what_can_you_do"
