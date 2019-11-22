@@ -22,9 +22,18 @@ def get_sentiment(text):
     Returns:
     (sentiment, confidens) (str, float): sentiment and confidence
     """
-    sentiment_result = requests.request(
-        url=SENTIMENT_CLASSIFICATION_SERVICE_URL, data=json.dumps({"sentences": [text]}), method="POST"
-    )
+    try:
+        sentiment_result = requests.request(
+            url=SENTIMENT_CLASSIFICATION_SERVICE_URL,
+            data=json.dumps({"sentences": [text]}),
+            method="POST",
+            timeout=10
+        )
+    except (requests.ConnectTimeout, requests.ReadTimeout) as e:
+        sentry_sdk.capture_exception(e)
+        logger.exception("SentumentResult Timeout")
+        sentiment_result = requests.Response()
+        sentiment_result.status_code = 504
 
     if sentiment_result.status_code != 200:
         msg = "Sentiment classifier: result status code is not 200: {}. result text: {}; result status: {}".format(

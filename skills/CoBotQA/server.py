@@ -32,10 +32,17 @@ headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COB
 
 def send_cobotqa(question):
     request_body = {'question': question}
-    resp = requests.request(url=COBOT_QA_SERVICE_URL,
-                            headers=headers,
-                            data=json.dumps(request_body),
-                            method='POST')
+    try:
+        resp = requests.request(url=COBOT_QA_SERVICE_URL,
+                                headers=headers,
+                                data=json.dumps(request_body),
+                                method='POST',
+                                timeout=10)
+    except (requests.ConnectTimeout, requests.ReadTimeout) as e:
+        sentry_sdk.capture_exception(e)
+        logger.exception("CoBotQA Timeout")
+        resp = requests.Response()
+        resp.status_code = 504
 
     if resp.status_code != 200:
         logger.warning(
