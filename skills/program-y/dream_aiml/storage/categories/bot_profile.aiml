@@ -104,4 +104,13 @@
       </random>
     </template>
   </category>
+
+  <category>
+    <pattern>WHAT ELSE CAN YOU DO</pattern>
+    <template>
+      <random>
+        <li>I'm learning day by day. What would you like me to do?</li>
+      </random>
+    </template>
+  </category>
 </aiml>

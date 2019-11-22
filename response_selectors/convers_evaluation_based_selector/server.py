@@ -66,10 +66,17 @@ def respond():
 
     # TODO: refactor external service calls
     # check all possible skill responses for toxicity
-    toxic_result = requests.request(url=TOXIC_COMMENT_CLASSIFICATION_SERVICE_URL,
-                                    headers=headers,
-                                    data=json.dumps({'sentences': utterances}),
-                                    method='POST')
+    try:
+        toxic_result = requests.request(url=TOXIC_COMMENT_CLASSIFICATION_SERVICE_URL,
+                                        headers=headers,
+                                        data=json.dumps({'sentences': utterances}),
+                                        method='POST',
+                                        timeout=10)
+    except requests.ConnectTimeout as e:
+        logger.exception("toxic result ConnectTimeout")
+        sentry_sdk.capture_exception(e)
+        toxic_result = requests.Response()
+        toxic_result.status_code = 504
 
     if toxic_result.status_code != 200:
         msg = "Toxic classifier: result status code is not 200: {}. result text: {}; result status: {}".format(
@@ -81,10 +88,17 @@ def respond():
         toxic_result = toxic_result.json()
         toxicities = [max(res[0].values()) for res in toxic_result]
 
-    blacklist_result = requests.request(url=BLACKLIST_DETECTOR_URL,
-                                        headers=headers,
-                                        data=json.dumps({'sentences': utterances}),
-                                        method='POST')
+    try:
+        blacklist_result = requests.request(url=BLACKLIST_DETECTOR_URL,
+                                            headers=headers,
+                                            data=json.dumps({'sentences': utterances}),
+                                            method='POST',
+                                            timeout=10)
+    except requests.ConnectTimeout as e:
+        logger.exception("blacklist_result ConnectTimeout")
+        sentry_sdk.capture_exception(e)
+        blacklist_result = requests.Response()
+        blacklist_result.status_code = 504
 
     if blacklist_result.status_code != 200:
         msg = "blacklist detector: result status code is not 200: {}. result text: {}; result status: {}".format(
@@ -104,11 +118,18 @@ def respond():
             logger.info(msg)
             sentry_sdk.capture_message(msg)
 
-    # evaluate all possible skill responses
-    result = requests.request(url=COBOT_CONVERSATION_EVALUATION_SERVICE_URL,
-                              headers=headers,
-                              data=json.dumps({'conversations': conversations}),
-                              method='POST')
+    try:
+        # evaluate all possible skill responses
+        result = requests.request(url=COBOT_CONVERSATION_EVALUATION_SERVICE_URL,
+                                  headers=headers,
+                                  data=json.dumps({'conversations': conversations}),
+                                  method='POST')
+    except requests.ConnectTimeout as e:
+        logger.exception("cobot convers eval ConnectTimeout")
+        sentry_sdk.capture_exception(e)
+        result = requests.Response()
+        result.status_code = 504
+
     if result.status_code != 200:
         msg = "Cobot Conversation Evaluator: result status code is \
   not 200: {}. result text: {}; result status: {}".format(result, result.text, result.status_code)
@@ -123,7 +144,6 @@ def respond():
                            for _ in conversations])
     else:
         result = result.json()
-        # result is an array where each element is a dict with scores
         result = np.array(result["conversationEvaluationScores"])
 
     dialog_ids = np.array(dialog_ids)

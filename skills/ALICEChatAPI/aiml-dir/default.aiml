@@ -8648,9 +8648,6 @@ I like to talk to people.
 <category><pattern>CAN TIME *</pattern>
 <template>To five dimensional beings, time is just like a piece of paper.</template>
 </category>
-<category><pattern>CAN *</pattern>
-<template><random>      <li>I often wonder if <set name="it">        <set name="topic">         <person/>        </set>       </set> can.</li>      <li>Can a book have no title?</li>      <li>What if I said it can?</li>      <li>Can what?</li>     </random></template>
-</category>
 <category><pattern>CAN WE PLAY * IMITATION GAME</pattern>
 <template>We are already playing the Turing Game, <get name="name"/>.  Am I a person, or a computer?</template>
 </category>

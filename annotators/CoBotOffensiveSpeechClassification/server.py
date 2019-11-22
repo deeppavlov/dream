@@ -50,10 +50,18 @@ def respond():
     confidences = []
     blacklists = []
 
-    result = requests.request(url=f'{COBOT_OFFENSIVE_SERVICE_URL}',
-                              headers=headers,
-                              data=json.dumps({'utterances': user_sentences}),
-                              method='POST')
+    try:
+        result = requests.request(url=f'{COBOT_OFFENSIVE_SERVICE_URL}',
+                                  headers=headers,
+                                  data=json.dumps({'utterances': user_sentences}),
+                                  method='POST',
+                                  timeout=10)
+    except requests.ConnectTimeout as e:
+        sentry_sdk.capture_exception(e)
+        logger.exception("CoBotOffensiveSpeechClassification ConnectTimeout")
+        result = requests.Response()
+        result.status_code = 504
+
     if result.status_code != 200:
         msg = "result status code is not 200: {}. result text: {}; result status: {}".format(result, result.text,
                                                                                              result.status_code)

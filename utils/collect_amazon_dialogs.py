@@ -40,7 +40,7 @@ def print_pretty(dialog, file=sys.stdout, field='dialog'):
                 print(f"Human: {human_response}", file=file)
                 print(f"Bot: {bot_response}", file=file)
     else:
-        for i, utt in enumerate(dialog['utterances'][2:]):
+        for i, utt in enumerate(dialog['utterances']):
             if i % 2 == 1:
                 person = 'Bot'
             else:
@@ -50,7 +50,7 @@ def print_pretty(dialog, file=sys.stdout, field='dialog'):
 
 def collect_human_responses(dialog):
     responses = []
-    for i, utt in enumerate(dialog['utterances'][2:]):
+    for i, utt in enumerate(dialog['utterances']):
         if i % 2 != 1:
             responses.append(utt['text'])
     return responses

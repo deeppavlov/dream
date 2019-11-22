@@ -45,10 +45,16 @@ def respond():
             dialog_ids += [i]
 
     topics = []
-    result = requests.request(url=f'{COBOT_TOPICS_SERVICE_URL}',
-                              headers=headers,
-                              data=json.dumps({'utterances': user_sentences}),
-                              method='POST')
+    try:
+        result = requests.request(url=f'{COBOT_TOPICS_SERVICE_URL}',
+                                  headers=headers,
+                                  data=json.dumps({'utterances': user_sentences}),
+                                  method='POST')
+    except requests.ConnectTimeout as e:
+        sentry_sdk.capture_exception(e)
+        logger.exception("CoBotTopicClassification ConnectTimeout")
+        result = requests.Response()
+        result.status_code = 504
 
     if result.status_code != 200:
         msg = "result status code is not 200: {}. result text: {}; result status: {}".format(result, result.text,
