@@ -6,7 +6,6 @@ import os
 from time import time
 
 import numpy as np
-import nltk
 from nltk.tokenize import sent_tokenize
 import requests
 from concurrent.futures import ThreadPoolExecutor
@@ -14,7 +13,6 @@ from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
 
-nltk.download('punkt')
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
