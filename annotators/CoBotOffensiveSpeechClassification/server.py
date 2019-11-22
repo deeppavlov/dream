@@ -56,9 +56,9 @@ def respond():
                                   data=json.dumps({'utterances': user_sentences}),
                                   method='POST',
                                   timeout=10)
-    except requests.ConnectTimeout as e:
+    except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         sentry_sdk.capture_exception(e)
-        logger.exception("CoBotOffensiveSpeechClassification ConnectTimeout")
+        logger.exception("CoBotOffensiveSpeechClassification Timeout")
         result = requests.Response()
         result.status_code = 504
 

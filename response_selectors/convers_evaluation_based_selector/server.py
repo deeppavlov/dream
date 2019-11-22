@@ -72,8 +72,8 @@ def respond():
                                         data=json.dumps({'sentences': utterances}),
                                         method='POST',
                                         timeout=10)
-    except requests.ConnectTimeout as e:
-        logger.exception("toxic result ConnectTimeout")
+    except (requests.ConnectTimeout, requests.ReadTimeout) as e:
+        logger.exception("toxic result Timeout")
         sentry_sdk.capture_exception(e)
         toxic_result = requests.Response()
         toxic_result.status_code = 504
@@ -94,8 +94,8 @@ def respond():
                                             data=json.dumps({'sentences': utterances}),
                                             method='POST',
                                             timeout=10)
-    except requests.ConnectTimeout as e:
-        logger.exception("blacklist_result ConnectTimeout")
+    except (requests.ConnectTimeout, requests.ReadTimeout) as e:
+        logger.exception("blacklist_result Timeout")
         sentry_sdk.capture_exception(e)
         blacklist_result = requests.Response()
         blacklist_result.status_code = 504
@@ -124,8 +124,8 @@ def respond():
                                   headers=headers,
                                   data=json.dumps({'conversations': conversations}),
                                   method='POST')
-    except requests.ConnectTimeout as e:
-        logger.exception("cobot convers eval ConnectTimeout")
+    except (requests.ConnectTimeout, requests.ReadTimeout) as e:
+        logger.exception("cobot convers eval Timeout")
         sentry_sdk.capture_exception(e)
         result = requests.Response()
         result.status_code = 504
