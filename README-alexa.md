@@ -115,9 +115,9 @@ GPU
         "tag": "{{.Name}}-{{.ID}}"
     }
 }
-# or "awslogs-group": "Docker-staging-lg" for prod!!!
+# or "awslogs-group": "Docker-lg" for prod!!!
 ```
-3. Restart docker daemon and check it
+3. Restart docker daemon and check it (`sudo service docker restart`)
 ```
 ubuntu@ip-172-31-42-16:~$ sudo nano /etc/docker/daemon.json
 ubuntu@ip-172-31-42-16:~$ sudo service docker stop
@@ -129,7 +129,8 @@ ubuntu@ip-172-31-42-16:~$ docker run nvidia/cuda:9.0-base nvidia-smi
 5. Find docker gpu node in docker manager: `docker node ls`
 5. Add label to the GPU worker machine `docker node update --label-add with_gpu=true o0mvol5rehp80k9a0xkzye7zw`
 6. Add IAM role Docker-staging-WorkerInstanceProfile (Docker-WorkerInstanceProfile for prod) to EC2 instance Actions -> Instance setting -> Attach/Replace IAM Role
-docker run --log-driver=awslogs --log-opt awslogs-group=Docker-staging-lg alpine echo 'a cloudonaut.io example'
+
+You can run to check if logs appear in cloudwatch by command `docker run alpine echo 'Say Hi!'`
 7. Setup placement in docker-compose.yml.
 
 - For local setup install nvidia-docker2 https://github.com/NVIDIA/nvidia-docker/wiki/Installation-(version-2.0)
