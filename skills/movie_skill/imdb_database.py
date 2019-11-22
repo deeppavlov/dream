@@ -5,6 +5,7 @@ import logging
 
 import numpy as np
 from ahocorapy.keywordtree import KeywordTree
+from nltk.tokenize import wordpunct_tokenize
 
 from utils import GENRES, ALL_GENRES
 
@@ -24,7 +25,8 @@ class IMDb:
         Args:
             db_path: path to the json database file
         """
-        self.movies_names_tree = KeywordTree(case_insensitive=True)
+        self.without_ignored_movies_names_tree = KeywordTree(case_insensitive=True)
+        self.with_ignored_movies_names_tree = KeywordTree(case_insensitive=True)
         self.genres_tree = KeywordTree(case_insensitive=True)
         self.names_tree = {}
         for prof in self.professions:
@@ -55,18 +57,29 @@ class IMDb:
                              for imdb_id in self.database}
         self.lowercased_movies_names = {self.database[imdb_id]["title"].lower(): imdb_id
                                         for imdb_id in self.database}
-        self.processed_movies_names = {self.process_movie_name(movie): self.movies_names[movie]
-                                       for movie in self.movies_names.keys()}
+        # without ignored movies
+        self.without_ignored_movies_names = {self.process_movie_name(movie): self.movies_names[movie]
+                                             for movie in self.movies_names.keys()}
+        # with ignored movies
+        self.with_ignored_movies_names = {self.process_movie_name(movie): self.movies_names[movie]
+                                          for movie in self.movies_names.keys()}
 
         # let's get rid from movie `Movie`, `You` to escape many incorrect cases
-        for title in ["Movie", "You", "Up", "She", "Shi", "Can", "Me2", "One", "If",
-                      "In", "New", "He", "Why", "Two", "OK", "Em", "Out", "Me", "Yes", "It",
-                      "Love"]:
-            movie_id = self.movies_names[title]
-            self.database.pop(movie_id)
-            self.movies_names.pop(title)
-            self.lowercased_movies_names.pop(title.lower())
-            self.processed_movies_names.pop(title.lower())
+        with open("./databases/ignore_movie_titles.txt", "r") as f:
+            movie_titles_to_ignore = f.read().splitlines()
+        for title in movie_titles_to_ignore + ["Let's Talk", "Let's Chat"]:
+            proc_title = self.process_movie_name(title)
+            try:
+                self.without_ignored_movies_names.pop(proc_title)
+            except KeyError:
+                pass
+        for title in ["Movie"]:
+            proc_title = self.process_movie_name(title)
+            try:
+                self.with_ignored_movies_names.pop(proc_title)
+                self.without_ignored_movies_names.pop(proc_title)
+            except KeyError:
+                pass
 
         # add lower-cased names of different professionals to the database
         for imdb_id in self.database:
@@ -88,9 +101,13 @@ class IMDb:
 
         # compose trees
         # add whitespaces to find thise words only as tokens not as a part of other words
-        for movie in self.processed_movies_names:
-            self.movies_names_tree.add(f" {movie} ")
-        self.movies_names_tree.finalize()
+        for movie in self.without_ignored_movies_names:
+            self.without_ignored_movies_names_tree.add(f" {movie} ")
+        self.without_ignored_movies_names_tree.finalize()
+
+        for movie in self.with_ignored_movies_names:
+            self.with_ignored_movies_names_tree.add(f" {movie} ")
+        self.with_ignored_movies_names_tree.finalize()
 
         for prof in self.professions:
             for person in self.professionals[f"lowercased_{prof}s"]:
@@ -191,7 +208,7 @@ class IMDb:
             None if the movie not in the database
         """
         try:
-            return self.processed_movies_names[self.process_movie_name(name)]
+            return self.with_ignored_movies_names[self.process_movie_name(name)]
         except KeyError:
             return None
 
@@ -280,7 +297,23 @@ class IMDb:
 
         lower_cased_reply = f" {self.process_movie_name(reply.lower())} "
         if subject == "movie":
-            results = self.movies_names_tree.search_all(lower_cased_reply)
+            results = self.without_ignored_movies_names_tree.search_all(lower_cased_reply)
+            results = list(results)
+            if len(results) == 0:
+                for target_name in ["film", "series", "movie"]:
+                    start_movie_name = reply.lower().find(target_name)
+                    if start_movie_name != -1:
+                        if lower_cased_reply[-(len(target_name) + 1):] == f"{target_name} ":
+                            tokens = wordpunct_tokenize(lower_cased_reply)
+                            new_lower_cased_reply = f" {self.process_movie_name(' '.join(tokens[-3:]))} "
+                            logger.info(f"1. Trying to find movie title in `{new_lower_cased_reply}`")
+                            results = self.with_ignored_movies_names_tree.search_all(new_lower_cased_reply)
+                        else:
+                            tokens = wordpunct_tokenize(reply[start_movie_name:])
+                            new_lower_cased_reply = f" {self.process_movie_name(' '.join(tokens[:3]))} "
+                            logger.info(f"2. Trying to find movie title in `{new_lower_cased_reply}`")
+                            results = self.with_ignored_movies_names_tree.search_all(new_lower_cased_reply)
+
         elif subject in self.professions:
             results = self.names_tree[subject].search_all(lower_cased_reply)
         elif subject == "genre":
@@ -288,6 +321,7 @@ class IMDb:
         else:
             results = []
 
+        results = list(results)
         bad_ids = []
         for result in results:
             # each result = ("name", start_index)
@@ -305,7 +339,7 @@ class IMDb:
             else:
                 lengths.append(len(found_substring))  # where no whitespaces - `genre`
             if subject == "movie":
-                found = self.processed_movies_names[found_substring[1:-1]]  # exclude whitespaces
+                found = self.with_ignored_movies_names[found_substring[1:-1]]  # exclude whitespaces
             elif subject in self.professions:
                 found = self.professionals[f"lowercased_{subject}s"][found_substring[1:-1]]  # exclude whitespaces
             elif subject == "genre":

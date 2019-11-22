@@ -165,9 +165,9 @@ class MovieSkillTemplates:
                 elif subject[1] == "genre":
                     result = self.give_opinion_about_genres(uttr, [subject[0]])
                 else:
-                    result = "Could you, please, clarify what you are asking about?", []
+                    result = "Could you, please, clarify what you are asking about?", [], 0.5
             else:
-                result = "Could you, please, clarify what you are asking about?", []
+                result = "Could you, please, clarify what you are asking about?", [], 0.5
         else:
             # detected and movie(s), and person(s)
             if len(movies_ids) == 1 and len(unique_persons) == 1:
@@ -185,7 +185,7 @@ class MovieSkillTemplates:
                     movies_ids[0], list(unique_persons.keys()))
             else:
                 result = "Oh, really? This is too difficult question for me now. " \
-                         "Could you, please, ask it in a bit more simple way?", []
+                         "Could you, please, ask it in a bit more simple way?", [], 0.5
 
         # counter question
         # firstly check whether current subject was in dialog_subjects in human replies
@@ -205,7 +205,7 @@ class MovieSkillTemplates:
             if "Opinion_ExpressionIntent" in intents or "Information_DeliveryIntent" in intents:
                 already_expressed_by_user = True
             if not already_expressed_by_user:
-                result = (result[0] + " " + self.counter_question(result[0]), result[1])
+                result = (result[0] + " " + self.counter_question(result[0]), result[1], result[2])
 
         # if no opinion expressed by bot
         replies = ["Sorry, I didn't get about what you are asking now.",
@@ -213,7 +213,7 @@ class MovieSkillTemplates:
                    "Could you, please, clarify what are you asking about?"
                    ]
         if result is None:
-            result = np.random.choice(replies), []
+            result = np.random.choice(replies), [], 0.5
 
         return result
 
@@ -262,7 +262,7 @@ class MovieSkillTemplates:
         elif len(genres) > 0:
             if genres == ["Genre"]:
                 if dialog_subjects[-1][1] == "genre":
-                    result += [[dialog_subjects[-1][0], "genre", attitude] for genre in genres]
+                    result += [[dialog_subjects[-1][0], "genre", attitude]]
             else:
                 result += [[genre, "genre", attitude] for genre in genres]
         else:
@@ -271,7 +271,7 @@ class MovieSkillTemplates:
             if len(dialog_subjects) > 0:
                 subject = dialog_subjects[-1]
                 result += [[subject[0], subject[1], attitude]]
-        return self.cool_comment(), result
+        return self.cool_comment(), result, 0.9
 
     def extract_profession_from_uttr(self, uttr):
         """Find professions from `self.imdb.professions` appeared in the given utterance
@@ -328,7 +328,7 @@ class MovieSkillTemplates:
                 attitude_to_movie = self.imdb.generate_opinion_about_movie(movie_name)
             reply = self.opinion_about_movie(movie_name, attitude_to_movie,
                                              genres=self.imdb.get_info_about_movie(movie_name, "genre"))
-            return reply, [[movies_ids[0], "movie", attitude_to_movie]]
+            return reply, [[movies_ids[0], "movie", attitude_to_movie]], 0.98
         else:
             # found several movies. need to clarify!
             # len(movies_ids) either 2 or 3
@@ -339,7 +339,7 @@ class MovieSkillTemplates:
                 reply = f"Are you talking about one of the following movies: " \
                         f"{movies_names[0]}, {movies_names[1]} or {movies_names[2]}?"
 
-            return reply, [[movie_id, "movie", "clarification"] for movie_id in movies_ids]
+            return reply, [[movie_id, "movie", "clarification"] for movie_id in movies_ids], 0.9
 
     def give_opinion_about_person(self, uttr, unique_persons, dialog_subjects=None, attitude_to_person=None):
         if len(unique_persons) == 1:
@@ -409,7 +409,7 @@ class MovieSkillTemplates:
             # BELOW we generate the opinion about this person of this profession
             reply = self.opinion_about_person(name, attitude_to_person, profession)
 
-            return reply, [[name, profession, attitude_to_person]]
+            return reply, [[name, profession, attitude_to_person]], 0.98
         else:
             # several persons.
             names = [person for person in unique_persons.keys()]
@@ -433,32 +433,32 @@ class MovieSkillTemplates:
                         subject_attitudes = []
                         for name in names:
                             subject_attitudes += [[name, profession, "very_positive"]]
-                        return reply, subject_attitudes
+                        return reply, subject_attitudes, 0.98
                     elif "very_positive" in attitudes and len(np.unique(attitudes)) > 1:
                         # if at least one of the attitudes is `very_positive`
                         # choose one of the names with this attitude as the best
                         name = names[attitudes.index("very_positive")]
                         reply = f"They all good. But {name} is really outstanding {profession}!"
-                        return reply, [[name, profession, "very_positive"]]
+                        return reply, [[name, profession, "very_positive"]], 0.98
                     elif "positive" in attitudes and len(np.unique(attitudes)) > 1:
                         # if at least one of the attitudes is `positive` and no `very_positive`
                         # choose one of the names with this attitude as the best
                         name = names[attitudes.index("positive")]
                         reply = f"They all good. But {name} is so talented {profession}!"
-                        return reply, [[name, profession, "positive"]]
+                        return reply, [[name, profession, "positive"]], 0.98
                     else:
                         # either all `positive` or all `neutral`
                         reply = f"It's not simple to chose one. I prefer to say they all are good {profession}s."
                         subject_attitudes = []
                         for name_id, name in enumerate(names):
                             subject_attitudes += [[name, profession, attitudes[name_id]]]
-                        return reply, subject_attitudes
+                        return reply, subject_attitudes, 0.98
                 else:
                     reply = "It is hard for me to choose because they are of the different professions actually."
-                    return reply, []
+                    return reply, [], 0.9
             else:
                 reply = "I probably didn't get your question. Could you, please, ask it in a bit more simple way?"
-                return reply, []
+                return reply, [], 0.5
 
     def give_opinion_about_persons_in_movie(self, movie_id, names, profession=None, attitude=None):
         """
@@ -485,7 +485,7 @@ class MovieSkillTemplates:
 
                 opinion = self.opinion_about_person(name, attitude, profession)
                 return (f"{opinion} Although I am not sure that {name} appeared in {movie}.",
-                        [[name, profession, attitude]])
+                        [[name, profession, attitude]], 0.9)
 
             if attitude is None:
                 attitude = self.imdb.generate_opinion_about_movie_person(name, profession)
@@ -501,24 +501,24 @@ class MovieSkillTemplates:
                            f"{name} showed their great potential in {movie}!",
                            f"{name} showed their talent as {article} {profession} in {movie}!",
                            ]
-                return np.random.choice(replies), [[name, profession, attitude]]
+                return np.random.choice(replies), [[name, profession, attitude]], 0.98
             if attitude == "positive":
                 replies = [f"{name} did a good work as {article} {profession} in {movie}.",
                            f"{name} worked hard in {movie}!",
                            f"{name} greatly contributed as {article} {profession} to {movie}!",
                            ]
-                return np.random.choice(replies), [[name, profession, attitude]]
+                return np.random.choice(replies), [[name, profession, attitude]], 0.98
             if attitude == "neutral":
                 replies = [f"{name} is one of the {profession}s of {movie}. "
                            f"But I can't say whether they did a good work or not.",
                            f"{name} as a professional {profession} deserves acknowledgment for work to {movie}!",
                            ]
-                return np.random.choice(replies), [[name, profession, attitude]]
+                return np.random.choice(replies), [[name, profession, attitude]], 0.98
             if attitude == "unknown":
                 replies = [f"I have never heard that {name} took part in {movie}.",
                            f"I didn't know that {name} was in {movie}.",
                            ]
-                return np.random.choice(replies), [[name, profession, attitude]]
+                return np.random.choice(replies), [[name, profession, attitude]], 0.98
         else:
             # profession is a list of common professions
             # but that doesn't mean they are in the same profession in this movie.
@@ -548,7 +548,7 @@ class MovieSkillTemplates:
                 if len(common_professions_in_this_movie) == 0:
                     # all were in this movie but have different professions
                     return (f"I suppose these guys are of different occupations in {movie}.",
-                            [[name, prof, "info"] for name, prof in zip(names, profession)])
+                            [[name, prof, "info"] for name, prof in zip(names, profession)], 0.9)
                 else:
                     # chose profession and go ahead
                     if "actor" in common_professions_in_this_movie:
@@ -561,7 +561,7 @@ class MovieSkillTemplates:
                 return (f"I suppose {not_from_movie_names} didn't participated in {movie}.",
                         [[name, prof, "incorrect"]
                          for name, prof in zip(np.array(names)[np.array(are_in_this_movie) is False],
-                                               np.array(professions)[np.array(are_in_this_movie) is False])])
+                                               np.array(professions)[np.array(are_in_this_movie) is False])], 0.9)
 
             attitudes = []
             for name in names:
@@ -574,7 +574,7 @@ class MovieSkillTemplates:
                            f"They showed their great talent as {profession}s in {movie}!",
                            ]
                 return np.random.choice(replies), [[name, profession, attitude]
-                                                   for name, attitude in zip(names, attitudes)]
+                                                   for name, attitude in zip(names, attitudes)], 0.98
             elif "very_positive" in attitudes and len(np.unique(attitudes)) > 1:
                 # if at least one of the attitudes is `very_positive`
                 # choose one of the names with this attitude as the best
@@ -583,7 +583,7 @@ class MovieSkillTemplates:
                            f"They worked hard. Although, {name} is one of my favourite {profession}s in {movie}.",
                            ]
                 return np.random.choice(replies), [[name, profession, attitude]
-                                                   for name, attitude in zip(names, attitudes)]
+                                                   for name, attitude in zip(names, attitudes)], 0.98
             elif "positive" in attitudes and len(np.unique(attitudes)) > 1:
                 # if at least one of the attitudes is `positive` and noone is `very_positive`
                 # choose one of the names with this attitude as the best
@@ -592,17 +592,19 @@ class MovieSkillTemplates:
                            f"They deserve acknowledgment for their work in {movie}.",
                            ]
                 return np.random.choice(replies), [[name, profession, attitude]
-                                                   for name, attitude in zip(names, attitudes)]
+                                                   for name, attitude in zip(names, attitudes)], 0.98
             else:
                 # either all `positive` or all `neutral`
                 replies = [f"They all are good in {movie}.",
                            f"They are professional {profession}s, so they deserve credits for {movie}.",
                            ]
                 return np.random.choice(replies), [[name, profession, attitude]
-                                                   for name, attitude in zip(names, attitudes)]
+                                                   for name, attitude in zip(names, attitudes)], 0.98
 
     def give_opinion_about_genres(self, uttr, genres):
         add_info = []
+        confidence = 0.5
+
         if genres == ["Genre"]:
             # question about preferences only about preferred genres
             # TODO: questions about favourite genres and not favourite
@@ -610,12 +612,15 @@ class MovieSkillTemplates:
                 reply = self.opinion_about_genres(genres[0], attitude="negative")
                 curr_genres = self.imdb.genereate_opinion_about_genre("Genre", attitude="negative")
                 add_info = [[g, "genre", "negative"] for g in curr_genres]
+                confidence = 0.98
             elif re.search(self.LIKE_PATTERN, uttr):
                 reply = self.opinion_about_genres(genres[0], attitude="very_positive")
                 curr_genres = self.imdb.genereate_opinion_about_genre("Genre", attitude="very_positive")
                 add_info = [[g, "genre", "very_positive"] for g in curr_genres]
+                confidence = 0.98
             else:
                 reply = "Could you, please, ask in more simple way?"
+                confidence = 0.5
         else:
             # assume word genre was mentioned just as context
             try:
@@ -629,8 +634,9 @@ class MovieSkillTemplates:
                 add_info += [[genre, "genre", self.imdb.genereate_opinion_about_genre(genre)]]
                 reply += " " + self.opinion_about_genres(genre)
             reply = reply.strip()
+            confidence = 0.9
 
-        return reply, add_info
+        return reply, add_info, confidence
 
     def faq_about_genres(self, question):
         # what_genre = [r"(what|which)(\')*s*(.*?)(is|are|was|were|will be)*?(.*?)(the|a|its)*?(\s*?)genres?",

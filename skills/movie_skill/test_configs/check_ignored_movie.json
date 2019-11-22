@@ -1,0 +1,154 @@
+[
+  {
+    "id": "72e6501e95854a67a95a076aac61f9cf",
+    "utterances": [
+      {
+        "text": "what do you think about movie she",
+        "user": {
+          "id": "47cdbeaa08dd4898b751a8a3df1cb498",
+          "user_telegram_id": "2094566",
+          "persona": {},
+          "profile": {
+            "name": null,
+            "gender": null,
+            "birthdate": null,
+            "location": null,
+            "home_coordinates": null,
+            "work_coordinates": null,
+            "occupation": null,
+            "income_per_year": null
+          },
+          "attributes": {},
+          "user_type": "human"
+        },
+        "annotations": {
+          "blacklisted_words": {
+            "profanity": false,
+            "restricted_topics": false
+          },
+          "sentseg": {
+            "punct_sent": "what do you think about movie she?",
+            "segments": [
+              "what do you think about movie she?"
+            ]
+          },
+          "toxic_classification": {
+            "identity_hate": 0.0001048688791343011,
+            "insult": 0.000227180658839643,
+            "obscene": 3.0435949156526476e-05,
+            "severe_toxic": 2.0536732336040586e-05,
+            "sexual_explicit": 4.817044464289211e-05,
+            "threat": 6.730274617439136e-05,
+            "toxic": 0.0003903712204191834
+          },
+          "sentiment_classification": {
+            "text": [
+              "neutral",
+              0.7066340446472168
+            ]
+          },
+          "cobot_nounphrases": [
+            "movie"
+          ],
+          "intent_catcher": {
+            "exit": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "opinion_request": {
+              "confidence": 0.9999977350234985,
+              "detected": 1
+            },
+            "repeat": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_can_you_do": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_job": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_name": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "where_are_you_from": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "who_made_you": {
+              "confidence": 0.0,
+              "detected": 0
+            }
+          },
+          "attitude_classification": {
+            "text": "very_positive",
+            "confidence": 0.7825623750686646
+          },
+          "ner": [
+            []
+          ],
+          "cobot_dialogact": {
+            "intents": [
+              "Opinion_RequestIntent"
+            ],
+            "topics": [
+              "Entertainment_Movies"
+            ]
+          },
+          "cobot_offensiveness": {
+            "text": [
+              "non-toxic"
+            ],
+            "confidence": [
+              2.91273e-07
+            ],
+            "is_blacklisted": [
+              "not blacklist"
+            ]
+          },
+          "cobot_topics": {
+            "text": [
+              "Movies_TV"
+            ]
+          },
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "what do you think about movie she?"
+            ]
+          }
+        },
+        "hypotheses": [],
+        "date_time": "2019-11-22 16:12:09.581967",
+        "attributes": {}
+      }
+    ],
+    "human": {
+      "id": "47cdbeaa08dd4898b751a8a3df1cb498",
+      "user_telegram_id": "2094566",
+      "persona": {},
+      "profile": {
+        "name": null,
+        "gender": null,
+        "birthdate": null,
+        "location": null,
+        "home_coordinates": null,
+        "work_coordinates": null,
+        "occupation": null,
+        "income_per_year": null
+      },
+      "attributes": {},
+      "user_type": "human"
+    },
+    "bot": {
+      "id": "2116cedb402047a786d7213fb3659d13",
+      "persona": {},
+      "attributes": {},
+      "user_type": "bot"
+    }
+  }
+]
