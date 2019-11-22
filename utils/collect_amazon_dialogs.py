@@ -33,11 +33,18 @@ parser.add_argument('--ratings', help='ratings csv', default='ratings.csv')
 def print_pretty(dialog, file=sys.stdout, field='dialog', with_debug_info=False):
     # Skip /start and next utt
     # TODO: Do not use 2:, for new dialogs, because /start not saved in state in new version of dp-agetn
+    if with_debug_info:
+        bot_idx = -2
+        human_idx = -3
+    else:
+        bot_idx = -1
+        human_idx = -2
+
     if field == 'new_dialog':
         print(dialog)
         for utt in dialog:
-            bot_response = utt[-2]
-            human_response = utt[-3]
+            bot_response = utt[bot_idx]
+            human_response = utt[human_idx]
             if bot_response != 'command_performed':
                 print(f"Human: {human_response}", file=file)
                 print(f"Bot: {bot_response}", file=file)
