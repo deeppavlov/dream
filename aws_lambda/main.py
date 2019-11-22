@@ -60,10 +60,10 @@ def call_dp_agent(user_id, text, request_data):
             json={'user_id': user_id, 'payload': text, 'device_id': device_id,
                   'session_id': session_id, 'request_id': request_id,
                   'conversation_id': conversation_id},
-            timeout=10).json()
-    except requests.ConnectTimeout as e:
+            timeout=7).json()
+    except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         sentry_sdk.capture_exception(e)
-        logger.exception("AWS_LAMBDA ConnectTimeout")
+        logger.exception("AWS_LAMBDA Timeout")
         return {'response': "Okay...", 'intent': None}
 
     if r.get('active_skill') == 'intent_responder':
