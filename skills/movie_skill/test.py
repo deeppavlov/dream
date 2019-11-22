@@ -60,9 +60,9 @@ def test_one_step_responses():
     print("check_person_not_in_movie")
     input_data = get_input_json("test_configs/check_person_not_in_movie.json")
     response = requests.post(url, json=input_data).json()[0]
-    assert response[1:] == [0.98, {}, {}, {"bot_attitudes": [['Brad Pitt', 'actor', 'very_positive']],
-                                           "human_attitudes": []
-                                           }], \
+    assert response[1:] == [0.9, {}, {}, {"bot_attitudes": [['Brad Pitt', 'actor', 'very_positive']],
+                                          "human_attitudes": []
+                                          }], \
         print(response)
     assert "Although I am not sure " in response[0], print(response)
 
@@ -87,8 +87,8 @@ def test_one_step_responses():
     print("check_genre")
     input_data = get_input_json("test_configs/check_genre.json")
     response = requests.post(url, json=input_data).json()[0]
-    assert response[1:] == [0.98, {}, {}, {'bot_attitudes': [['Comedy', 'genre', 'very_positive']],
-                                           'human_attitudes': []}], \
+    assert response[1:] == [0.9, {}, {}, {'bot_attitudes': [['Comedy', 'genre', 'very_positive']],
+                                          'human_attitudes': []}], \
         print(response)
 
     print("check_favorite_genres")
@@ -103,8 +103,24 @@ def test_one_step_responses():
     print("check_get_opinion_give_opinion")
     input_data = get_input_json("test_configs/check_get_opinion_give_opinion.json")
     response = requests.post(url, json=input_data).json()[0]
-    assert response[1:] == [0.98, {}, {}, {'bot_attitudes': [['Comedy', 'genre', 'very_positive']],
-                                           'human_attitudes': [['Comedy', 'genre', 'very_positive']]}], \
+    assert response[1:] == [0.9, {}, {}, {'bot_attitudes': [['Comedy', 'genre', 'very_positive']],
+                                          'human_attitudes': [['Comedy', 'genre', 'very_positive']]}], \
+        print(response)
+
+    print("check_ignored_movie")
+    input_data = get_input_json("test_configs/check_ignored_movie.json")
+    response = requests.post(url, json=input_data).json()[0]
+    assert response[1:] == [0.98, {}, {}, {"bot_attitudes": [['0026983', 'movie', 'positive']],
+                                           "human_attitudes": []
+                                           }], \
+        print(response)
+
+    print("check_ignored_movie2")
+    input_data = get_input_json("test_configs/check_ignored_movie2.json")
+    response = requests.post(url, json=input_data).json()[0]
+    assert response[1:] == [0.98, {}, {}, {"bot_attitudes": [['0317533', 'movie', 'positive']],
+                                           "human_attitudes": []
+                                           }], \
         print(response)
 
     print("SUCCESS!")

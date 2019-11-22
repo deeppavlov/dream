@@ -39,18 +39,16 @@ class MovieSkillScenario:
                 logger.info(f"intents {intents}")
                 if "Opinion_ExpressionIntent" in intents or "Information_DeliveryIntent" in intents:
                     attitude = dialog["utterances"][-1]["annotations"]["attitude_classification"]["text"]
-                    reply, subject_attitude = self.templates.get_user_opinion(dialog, attitude)
+                    reply, subject_attitude, confidence = self.templates.get_user_opinion(dialog, attitude)
                     for subject in subject_attitude:
                         attr["human_attitudes"] += [subject]
-                    confidence = self.default_conf
                     current_reply += " " + reply
                 if (("Information_RequestIntent"
                      in intents) or ("Opinion_RequestIntent" in intents) or opinion_request_detected):
-                    reply, subject_attitude = self.templates.give_opinion(dialog)
+                    reply, subject_attitude, confidence = self.templates.give_opinion(dialog)
                     current_reply += " " + reply
                     for subject in subject_attitude:
                         attr["bot_attitudes"] += [subject]
-                    confidence = self.default_conf
                 if "Information_DeliveryIntent" in intents:
                     pass
                     # TODO: ask a question about opinion or fact
