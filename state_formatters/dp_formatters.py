@@ -240,10 +240,13 @@ def aiml_formatter(payload, mode='in'):
 
 def cobot_qa_formatter(payload, mode='in'):
     if mode == 'in':
-        sentences = annotated_input_formatter(payload, annotation="coref_resolved")['last_utterances']
-        return {'sentences': sentences}
+        dialogs = annotated_input_formatter(payload, annotation="coref_resolved")['dialogs']
+        return {'dialogs': dialogs}
     elif mode == 'out':
-        return base_skill_output_formatter(payload)
+        hyps = []
+        for resp, conf in zip(payload[0], payload[1]):
+            hyps.append({"text": resp, "confidence": conf})
+        return hyps
 
 
 def base_skill_selector_formatter(payload: Any, mode='in'):

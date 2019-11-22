@@ -57,13 +57,13 @@
         <pattern>SOME OF THE PEOPLE *</pattern>
         <template>Who are you talking about specifically?</template>
     </category>
-    <category>
-        <pattern>TELL ME ABOUT *</pattern>
-        <template>Ambiguous: Ask who, what or where is
-            <person/>
-            ?
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>TELL ME ABOUT *</pattern>-->
+<!--        <template>Ambiguous: Ask who, what or where is-->
+<!--            <person/>-->
+<!--            ?-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>TELL ME I *</pattern>
         <template>You<person/>.

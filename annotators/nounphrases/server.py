@@ -29,6 +29,8 @@ def respond():
 
     for i, sent in enumerate(sentences):
         logger.info(f"user_sentence: {sent}")
+        if nounphrases[i] is None:
+            nounphrases[i] = []
 
         logger.info(f"Nouns: {nounphrases[i]}")
 
