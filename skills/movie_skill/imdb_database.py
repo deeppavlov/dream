@@ -1,7 +1,7 @@
 import json
 import re
-import string
 import logging
+import string
 
 import numpy as np
 from ahocorapy.keywordtree import KeywordTree
@@ -81,12 +81,22 @@ class IMDb:
             except KeyError:
                 pass
 
+        to_remove = []
+        for movie in self.with_ignored_movies_names.keys():
+            proc_title = self.process_movie_name(movie)
+            if re.match(f"^[{string.digits}]+$", proc_title):
+                to_remove.append(proc_title)
+        for proc_title in to_remove:
+            self.with_ignored_movies_names.pop(proc_title)
+            self.without_ignored_movies_names.pop(proc_title)
+
         # add lower-cased names of different professionals to the database
         for imdb_id in self.database:
             for profession in self.professions:
                 if f"{profession}s" in self.database[imdb_id]:
                     self.database[imdb_id][f"lowercased_{profession}s"] = [
-                        name.lower() for name in self.database[imdb_id][f"{profession}s"]]
+                        name.lower() for name in self.database[imdb_id][f"{profession}s"]
+                        if len(name.split()) > 1]
                 else:
                     self.database[imdb_id][f"lowercased_{profession}s"] = []
                     self.database[imdb_id][f"{profession}s"] = []
@@ -111,7 +121,8 @@ class IMDb:
 
         for prof in self.professions:
             for person in self.professionals[f"lowercased_{prof}s"]:
-                self.names_tree[prof].add(f" {person} ")
+                if len(person.split()) > 1:
+                    self.names_tree[prof].add(f" {person} ")
             self.names_tree[prof].finalize()
 
         # genres without whitespaces to include subwording genres
