@@ -32,6 +32,9 @@ if COBOT_QA_SERVICE_URL is None:
 
 headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COBOT_API_KEY}'}
 
+with open("./google-10000-english-no-swears.txt", "r") as f:
+    UNIGRAMS = f.read().splitlines()[:1000]
+
 
 def send_cobotqa(question):
     request_body = {'question': question}
@@ -79,21 +82,23 @@ def respond():
         attit = curr_uttr["annotations"]["attitude_classification"]["text"]
         for _ in range(N_FACTS_TO_CHOSE):
             for ent in curr_uttr["annotations"]["ner"][0]:
-                if attit in ["neutral", "positive", "very_positive"]:
-                    entities.append(ent["text"].lower())
-                    questions.append("Fun fact about {}".format(ent["text"]))
-                    dialog_ids += [i]
-                else:
-                    entities.append(ent["text"].lower())
-                    questions.append("Fact about {}".format(ent["text"]))
-                    dialog_ids += [i]
+                if ent["text"].lower() not in UNIGRAMS:
+                    if attit in ["neutral", "positive", "very_positive"]:
+                        entities.append(ent["text"].lower())
+                        questions.append("Fun fact about {}".format(ent["text"]))
+                        dialog_ids += [i]
+                    else:
+                        entities.append(ent["text"].lower())
+                        questions.append("Fact about {}".format(ent["text"]))
+                        dialog_ids += [i]
             for ent in curr_uttr["annotations"]["cobot_nounphrases"]:
-                if ent in entities + ["I"]:
-                    pass
-                else:
-                    entities.append(ent.lower())
-                    questions.append("Fact about {}".format(ent))
-                    dialog_ids += [i]
+                if ent.lower() not in UNIGRAMS:
+                    if ent in entities + ["I"]:
+                        pass
+                    else:
+                        entities.append(ent.lower())
+                        questions.append("Fact about {}".format(ent))
+                        dialog_ids += [i]
 
     executor = ThreadPoolExecutor(max_workers=ASYNC_SIZE)
     for i, response in enumerate(executor.map(send_cobotqa, questions)):
