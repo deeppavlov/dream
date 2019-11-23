@@ -40,17 +40,25 @@ async def perform_test_dialogue(session, url, uuid, payloads, with_debug_info=Fa
     for i in payloads:
         request_body = {'user_id': uuid, 'payload': i}
         start_time = time()
-        async with session.post(url, json=request_body) as resp:
-            resp.raise_for_status()
-
-            response = await resp.json()
+        try:
+            async with session.post(url, json=request_body) as resp:
+                resp.raise_for_status()
+                response = await resp.json()
+                end_time = time()
+                logger.debug("Time: {}; Request: {}; Response: {}".format(
+                    start_time - end_time, request_body, response)
+                )
+                if response['user_id'] != uuid:
+                    logger.info('request returned wrong uuid')
+                result.append([uuid, start_time, end_time, end_time - start_time, len(i), i, response['response']])
+                if with_debug_info:
+                    result[-1].append(response)
+        except aiohttp.client_exceptions.ClientResponseError as e:
+            logger.exception(e)
             end_time = time()
-            logger.debug("Time: {}; Request: {}; Response: {}".format(start_time - end_time, request_body, response))
-            if response['user_id'] != uuid:
-                logger.info('request returned wrong uuid')
-            result.append([uuid, start_time, end_time, end_time - start_time, len(i), i, response['response']])
+            result.append([uuid, start_time, end_time, end_time - start_time, len(i), i, e])
             if with_debug_info:
-                result[-1].append(response)
+                result[-1].append(e)
 
     return result
 

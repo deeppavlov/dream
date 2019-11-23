@@ -18,7 +18,17 @@
     </category>
     <category>
         <pattern>YES</pattern>
-        <template>Interesting. What are your 3 favorite movies?</template>
+        <template>
+            <random>
+                <li>Interesting. What are your 3 favorite movies?</li>
+                <li>Interesting.</li>
+                <li>Interesting. Do you like hollywood movies?</li>
+                <li>Okay. What movie can you watch over and over without ever getting tired of?</li>
+                <li>Interesting. What was the last photo you took?</li>
+                <li>Interesting. What was the most unsettling film you’ve seen?</li>
+                <li>Interesting. What’s the most ironic thing you’ve seen happen?</li>
+            </random>
+        </template>
     </category>
     <category>
         <pattern>OK</pattern>
