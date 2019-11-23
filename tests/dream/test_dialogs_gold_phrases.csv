@@ -17,6 +17,6 @@ Goodbye "Have a good day! #+#exit" "Have a nice day! #+#exit" "Have a great day!
 "let's talk about" "Talk about what, movies? What's the latest movie you've seen?" "Talk about what?" "Okay! Tell me about the weather in your location."
 "cancel" "Okay. Cancelling completed."
 "happy." "Good! What's the most ridiculous fact you know?"
-"yeah" "Interesting. What are your 3 favorite movies?"
+"yeah"
 "okay." "Okay. In one sentence, how would you sum up the internet?"
 "what else can you do?" "I'm learning day by day. What would you like me to do? #+#what_can_you_do" "I'm learning day by day. For now, I can answer a question, tell a joke or fact and discuss movies. #+#what_can_you_do" "I'm newborn socialbot, so I can't do so much. For example, I can answer any question, especially about movies. #+#what_can_you_do"
