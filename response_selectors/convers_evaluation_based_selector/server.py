@@ -202,7 +202,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     skill_names = [c['skill_name'] for c in candidates]
     how_are_you_spec = "I'm fine, thanks! Do you want to know what I can do?"
     psycho_help_spec = "If you or someone you know is in immediate danger"
-    greeting_spec = "Hi, this is an Alexa Prize Socialbot. How are you?"
+    greeting_spec = "Hi, this is an Alexa Prize Socialbot"
 
     for i in range(len(scores)):
         if skill_names[i] == 'program_y' and candidates[i]['text'] == how_are_you_spec:
@@ -213,11 +213,13 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             very_big_score = 100
             curr_single_cores.append(very_big_score)
             break
-        elif skill_names[i] == 'program_y' and greeting_spec in candidates[i]['text'] and len(dialog["utterances"]) < 2:
-            very_big_score = 100
-            curr_single_cores.append(very_big_score)
-            break
-
+        elif skill_names[i] == 'program_y' and greeting_spec in candidates[i]['text']:
+            if len(dialog["utterances"]) < 2:
+                very_big_score = 100
+                curr_single_cores.append(very_big_score)
+                break
+            else:
+                confidences[i] = 0.2  # Low confidence for greeting in the middle of dialogue
         cand_scores = scores[i]
         confidence = confidences[i]
         skill_name = skill_names[i]

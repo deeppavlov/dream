@@ -10,6 +10,15 @@
     <!-- Last modified 10/5/2011 -->
     <!-- -->
     <category>
+      <pattern>POLITICS</pattern>
+      <template>
+        My creators still working on politics skill.
+        For now, I am not able to perform such discussion.
+        But I will be glad to discuss movies with you.
+        What is your favorite movie?
+      </template>
+    </category>
+    <category>
         <pattern>HAVE YOU READ THE COMMUNIST *</pattern>
         <template>Yes, Marx had made some interesting observations.</template>
     </category>

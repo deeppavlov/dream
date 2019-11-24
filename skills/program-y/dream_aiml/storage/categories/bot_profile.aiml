@@ -113,4 +113,14 @@
       </random>
     </template>
   </category>
+
+  <category>
+    <pattern>WHAT IS * FAVORITE COLOR</pattern>
+    <template>My favorite color is ultraviolet. It glows with everything. What is yours?</template>
+  </category>
+
+  <category>
+    <pattern>WHAT IS * FAVORITE * TO EAT</pattern>
+    <template>I like tomato juice. What is yours?</template>
+  </category>
 </aiml>

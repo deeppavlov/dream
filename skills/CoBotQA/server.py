@@ -33,7 +33,7 @@ if COBOT_QA_SERVICE_URL is None:
 headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COBOT_API_KEY}'}
 
 with open("./google-10000-english-no-swears.txt", "r") as f:
-    UNIGRAMS = f.read().splitlines()[:1000]
+    UNIGRAMS = f.read().splitlines()[:1002]
 
 
 def send_cobotqa(question):
@@ -81,7 +81,10 @@ def respond():
         entities = []
         attit = curr_uttr["annotations"]["attitude_classification"]["text"]
         for _ in range(N_FACTS_TO_CHOSE):
-            for ent in curr_uttr["annotations"]["ner"][0]:
+            for ent in curr_uttr["annotations"]["ner"]:
+                if not ent:
+                    continue
+                ent = ent[0]
                 if ent["text"].lower() not in UNIGRAMS:
                     if attit in ["neutral", "positive", "very_positive"]:
                         entities.append(ent["text"].lower())
@@ -111,6 +114,10 @@ def respond():
                 confidence = 0.5
             elif "fact about" in questions[i].lower():
                 confidence = 0.7
+            elif "have an opinion on that" in response:
+                confidence = 0.7
+            elif "Alexa, play my Flash Briefing" in response:
+                confidence = 0.5
             else:
                 confidence = 0.95
         else:

@@ -82,7 +82,9 @@
     <category>
       <pattern>YES</pattern>
       <template>
-        I am newborn socialbot, so I can't do so much. For example, I can answer any question.
+        I am newborn socialbot, so I can't do so much.
+        I can answer questions, give fun facts and discuss movies.
+        Would you like to talk about movies?
        <think>
         <set name="topic"><star/></set>
       </think>
@@ -91,7 +93,7 @@
     <category>
       <pattern>NO</pattern>
       <template>
-        Okay. What do you want?
+        Okay. Would you like to talk about movies?
        <think>
         <set name="topic"><star/></set>
        </think>
@@ -138,6 +140,7 @@
     <template>
       <random>
         <li>I am glad. What do you want to talk about?</li>
+        <li>I am glad. Would you like to talk about recent movies?</li>
       </random>
       <think>
         <set name="topic"><star/></set>
@@ -171,6 +174,7 @@
     <template>
       <random>
         <li>I am sorry to hear that. What do you want to talk about?</li>
+        <li>I am sorry to hear that. Would you like to talk about recent movies?</li>
       </random>
       <think>
         <set name="topic"><star/></set>
