@@ -112,14 +112,18 @@
   <category>
     <pattern>LET US TALK ABOUT MOVIES</pattern>
     <template>
-      I can answer about actors and films. For example, what do you think about The Avengers movie?
+      <srai>LET_US_CHAT_ABOUT MOVIES</srai>
     </template>
   </category>
 
   <category>
     <pattern>LET_US_CHAT_ABOUT MOVIES</pattern>
     <template>
-      I can answer about actors and films. For example, what do you think about The Avengers movie?
+      <random>
+        <li> I can answer about actors and films. For example, what do you think about The Avengers movie? </li>
+        <li> I can answer about films and actors. For example, what do you think about The Titanic movie? </li>
+        <li> I can answer about films and actors. What is your favorite movie? </li>
+      </random>
     </template>
   </category>
 
@@ -149,9 +153,18 @@
     <pattern>LET US TALK ABOUT</pattern>
     <template>
       <random>
-        <li>Talk about what, movies? What is the latest movie you've seen?</li>
-        <li>Talk about what?</li>
-        <li>Okay! Tell me about the weather in your location.</li>
+        <li>I misheard you. What is it that you’d like to chat about?</li>
+      </random>
+    </template>
+  </category>
+
+
+  <category>
+    <pattern>LET_US_CHAT_ABOUT SOMETHING ELSE</pattern>
+    <template>
+      <random>
+        <li>What about movies? What is the latest movie you've seen?</li>
+        <li>Let's chat about movies! What was the most unsettling film you’ve seen?</li>
       </random>
     </template>
   </category>

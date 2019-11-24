@@ -20,23 +20,35 @@
         <pattern>YES</pattern>
         <template>
             <random>
-                <li>Interesting. What are your 3 favorite movies?</li>
+                <li>Okay</li>
+                <li>Sounds interesting</li>
                 <li>Interesting.</li>
+                <li>Interesting. What are your 3 favorite movies?</li>
                 <li>Interesting. Do you like hollywood movies?</li>
                 <li>Okay. What movie can you watch over and over without ever getting tired of?</li>
-                <li>Interesting. What was the last photo you took?</li>
-                <li>Interesting. What was the most unsettling film you’ve seen?</li>
                 <li>Interesting. What’s the most ironic thing you’ve seen happen?</li>
             </random>
         </template>
     </category>
     <category>
         <pattern>OK</pattern>
-        <template>Okay. What is the funniest joke you know by heart?</template>
+        <template>
+          <random>
+              <li>Okay</li>
+              <li>Sounds interesting</li>
+              <li>Okay. What is the funniest joke you know by heart?</li>
+          </random>
+        </template>
     </category>
     <category>
         <pattern>OKAY</pattern>
-        <template>Okay. In one sentence, how would you sum up the internet?</template>
+        <template>
+          <random>
+              <li>Okay</li>
+              <li>Sounds interesting</li>
+              <li>Okay. In one sentence, how would you sum up the internet?</li>
+          </random>
+        </template>
     </category>
     <category>
         <pattern>HAPPY</pattern>

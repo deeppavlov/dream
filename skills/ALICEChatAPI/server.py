@@ -30,7 +30,7 @@ def respond():
             response = bot.respond(s, session_id).replace("\n", "")
         logger.info("response: {}".format(response))
         if response.strip():
-            confidence = 0.7
+            confidence = 0.65
         else:
             confidence = 0.01
         responses.append([response, confidence])

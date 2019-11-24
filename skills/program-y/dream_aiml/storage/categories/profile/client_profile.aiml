@@ -1995,23 +1995,6 @@
         </template>
     </category>
     <category>
-        <pattern>LET *</pattern>
-        <template>
-            <random>
-                <li>I don't know if it's in my power to give permission.</li>
-                <li>Should it be permitted?</li>
-                <li>I am unsure if I should let it.</li>
-            </random>
-            <think>
-                <set name="it">
-                    <set name="topic">
-                        <star/>
-                    </set>
-                </set>
-            </think>
-        </template>
-    </category>
-    <category>
         <pattern>DO YOU WATCH THE *</pattern>
         <template>I haven't seen it. What is it about?
             <think>
