@@ -126,6 +126,22 @@ def respond():
     for i, dialog in enumerate(dialogs):
         resp_cands = list(responses[dialog_ids == i])
         conf_cands = list(confidences[dialog_ids == i])
+
+        annotations = dialog["utterances"][-1]["annotations"]
+        intents = annotations["cobot_dialogact"]["intents"]
+        opinion_request_detected = annotations["intent_catcher"].get(
+            "opinion_request", {}).get("detected") == 1
+        reply = dialog['utterances'][-1]['text'].replace("\'", " \'").lower()
+
+        sensitive_topics = {"Politics", "Celebrities", "Religion", "Sex_Profanity", "Sports", "News", "Psychology"}
+        # `General_ChatIntent` sensitive in case when `?` in reply
+        sensitive_dialogacts = {"Opinion_RequestIntent", "General_ChatIntent"}
+        cobot_topics = set(dialog['utterances'][-1]['annotations']['cobot_topics']['text'])
+        sensitive_topics_detected = any([t in sensitive_topics for t in cobot_topics])
+        cobot_dialogacts = dialog['utterances'][-1]['annotations']['cobot_dialogact']['intents']
+        sensitive_dialogacts_detected = any([(t in sensitive_dialogacts and "?" in reply) for t in cobot_dialogacts])
+        blist_topics_detected = dialog['utterances'][-1]['annotations']['blacklisted_words']['restricted_topics']
+
         for j in range(len(resp_cands)):
             sentences = sent_tokenize(resp_cands[j])
             # initial answer to the user's reply
@@ -137,6 +153,17 @@ def respond():
                     resp_cands[j] = " ".join(sentences[:2])
                 else:
                     resp_cands[j] = " ".join(sentences[:1])
+            if j != 0:
+                # facts
+                talk_about = ["What kind of movies do you like movies?",
+                              "How often do you go to movies?",
+                              "Who is your favorite actor or actress?"]
+                if ("Opinion_RequestIntent" in intents) or opinion_request_detected:
+                    resp_cands[j] = f"I don't have an opinion on that but I know some facts. {resp_cands[j]} " \
+                                    f"Maybe we can talk about something else. {np.random.choice(talk_about)}"
+                elif blist_topics_detected or (sensitive_topics_detected and sensitive_dialogacts_detected):
+                    resp_cands[j] = f"I don't have an opinion on that but I know some facts. {resp_cands[j]} " \
+                                    f"Let's talk about something else. {np.random.choice(talk_about)}"
 
         final_responses.append(resp_cands)
         final_confidences.append(conf_cands)
