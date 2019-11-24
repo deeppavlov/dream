@@ -73,7 +73,7 @@ class IMDb:
                 self.without_ignored_movies_names.pop(proc_title)
             except KeyError:
                 pass
-        for title in ["Movie"]:
+        for title in ["Movie", "The Tragedy"]:
             proc_title = self.process_movie_name(title)
             try:
                 self.with_ignored_movies_names.pop(proc_title)
