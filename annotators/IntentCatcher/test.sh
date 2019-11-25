@@ -63,3 +63,16 @@ curl -H "Content-Type: application/json" -XPOST \
   ]
  }' \
   http://0.0.0.0:8014/detect
+
+curl -H "Content-Type: application/json" -XPOST \
+  -d '{"sentences": [
+  ["End conversation"],
+  ["Let end this conversation"],
+  ["Stop dialog"],
+  ["Alexa, end"],
+  ["How do i end this dialog?"],
+  ["Play in the end"],
+  ["Stop it, Alexa"]
+  ]
+ }' \
+  http://0.0.0.0:8014/detect
