@@ -31,8 +31,10 @@ for dialog in dialogs:
     added = False
     utterances = dialog['utterances']
     for utterance in utterances:
-        if ('attributes' in utterance and 'conversation_id' in utterance['attributes']
-            and utterance['attributes']['conversation_id'] in conv_ids and not added):
+        cond1 = 'attributes' in utterance
+        cond2 = 'conversation_id' in utterance['attributes']
+        cond3 = utterance['attributes']['conversation_id'] in conv_ids
+        if cond1 and cond2 and cond3 and not added:
             added = True
             dialog_list.append(dialog)
 cPickle.dump(dialog_list, open('dialog_list.pkl', 'wb'))
