@@ -87,6 +87,15 @@ def process_dp_agent_response(agent_data, user_id, handler_input):
         return handler_input.response_builder.speak(speak_output).ask(speak_output).response
 
 
+def get_text_from_speech(speech):
+    tokens, probs = zip(*[(token['value'], token['confidence']) for token in speech['hypotheses'][0]['tokens']])
+    text = ' '.join(tokens)
+    logger.info(f'got text from speech: {text}')
+    if min(probs) < 0.5:
+        sentry_sdk.capture_message(f'ASR top_1 hypotheses has low prob: {[(t, p) for t, p in zip(tokens, probs)]}')
+    return text, min(probs)
+
+
 class LaunchRequestHandler(AbstractRequestHandler):
     """Handler for Skill Launch."""
     def can_handle(self, handler_input):
@@ -99,7 +108,11 @@ class LaunchRequestHandler(AbstractRequestHandler):
         user_id = ask_utils.get_user_id(handler_input)
         call_dp_agent(user_id, '/start', request_data)
         # text = "Alexa, let's chat."
-        text = "hello"
+        speech = request_data['request'].get('payload', {}).get('speechRecognition', None)
+        if speech is not None:
+            text, _ = get_text_from_speech(speech)
+        else:
+            text = "hello"
         logger.info(f'LaunchRequestHandler send text to dp_agent: {text}')
         dp_agent_data = call_dp_agent(user_id, text, request_data)
         return process_dp_agent_response(dp_agent_data, user_id, handler_input)
@@ -150,25 +163,25 @@ class IntentReflectorHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         user_id = ask_utils.get_user_id(handler_input)
-        text = ask_utils.get_slot_value(handler_input, 'navigation')
-        if not text:
-            # try to take the most probable hypothesis
-            if 'speechRecognition' in request_data['request']:
-                speech = request_data['request']['speechRecognition']
-                speech_text = ' '.join([token['value'] for token in speech['hypotheses'][0]['tokens']])
-                logger.info(f'got text from speech: {speech_text}')
-                dp_agent_data = call_dp_agent(user_id, speech_text, request_data)
-            elif ask_utils.is_intent_name("AMAZON.CancelIntent")(handler_input):
-                text = 'cancel'
-                logger.info(f'got AMAZON.CancelIntent, set text to: {text}')
-                dp_agent_data = call_dp_agent(user_id, text, request_data)
-            else:
-                dp_agent_data = {"response": "Sorry", "intent": None}
-                msg = f"LAMBDA: NO TEXT NO SPEECH!\nincoming request: {request_data['request']}"
-                logger.warning(msg)
-                sentry_sdk.capture_message(msg)
-        else:
+        slot_text = ask_utils.get_slot_value(handler_input, 'navigation')
+
+        # try to take the most probable hypothesis
+        if 'speechRecognition' in request_data['request']:
+            speech = request_data['request']['speechRecognition']
+            speech_text, _ = get_text_from_speech(speech)
+            dp_agent_data = call_dp_agent(user_id, speech_text, request_data)
+        elif len(slot_text) > 0:
+            # in case if there is no speech in request, get slot value
+            dp_agent_data = call_dp_agent(user_id, slot_text, request_data)
+        elif ask_utils.is_intent_name("AMAZON.CancelIntent")(handler_input):
+            text = 'cancel'
+            logger.info(f'got AMAZON.CancelIntent, set text to: {text}')
             dp_agent_data = call_dp_agent(user_id, text, request_data)
+        else:
+            dp_agent_data = {"response": "Sorry", "intent": None}
+            msg = f"LAMBDA: NO TEXT NO SPEECH!\nincoming request: {request_data['request']}"
+            logger.warning(msg)
+            sentry_sdk.capture_message(msg)
 
         return process_dp_agent_response(dp_agent_data, user_id, handler_input)
 
