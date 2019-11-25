@@ -2,10 +2,13 @@
   "intent_phrases": {
     "exit" : {
       "phrases" : [
+        "End (((this)|(our)|(it)) ){0,1}((chat)|(conversation)|(dialog))(, ((Alexa)|(bot))){0,1}",
+        "((End)|(Stop)) it(, ((Alexa)|(bot))){0,1}",
+        "I ((do not)|(don't)) ((want to)|(wanna)) talk( anymore){0,1}",
         "Have a ((good)|(great)|(nice)) ((day)|(night)|(one)|(evening))(, (Alexa)|(bot)){0,1}",
         "See ((you)|(ya)) ((later)|(soon))",
-        "((Goodbye)|(Bye)(Bye-bye))(, ((Alexa)|(bot))){0,1}",
-        "((Alexa)|(Bot)), ((goodbye)|(bye)(bye bye))",
+        "((Goodbye)|(Bye)|(Bye-bye)|(Stop)|(Exit)|(End))(, ((Alexa)|(bot))){0,1}",
+        "((Alexa)|(Bot)), ((goodbye)|(bye)|(bye bye)|(stop)|(exit)|(end))",
         "((Farewell)|(Peace out)|(Adios)|(Catch you later)|(See ((you)|(ya)))|(Take care))",
         "I ((am out of here)|(have to go)|(gotta run)|(gotta head out))(, ((bye)|(goodbye)|(bye bye))){0,1}"
       ],
@@ -143,7 +146,7 @@
       "phrases": [
         "what(('s)|( is)|()) the time",
         "what time is it",
-        "((tell)|(say)) the time"
+        "((tell)|(say))( me){0,1} the time"
       ],
       "min_precision": 0.00,
       "punctuation": [
@@ -155,6 +158,9 @@
   "random_phrases" : {
     "phrases" : [
       "[0-9]{1,10}",
+      "I (don't ){0,1}((feel like doing)|(want to do)|(wanna do)) ((something)|(anything))",
+      "I ((want to commit)|(am thinking about commiting)) suicide ((today)|(yesterday)|(tomorrow))",
+      "I ((think)|(feel like)|(assume)) ((I)|(you)) ((love)|(like)|(hate)|(adore)) ((music)|(art)|(politics)|(you)|(James)|(Trump)|(Putin)|(Billie))",
       "((Joe Doe)|(Jim Beam)|(Anton Yugorski)|(Daniil Cherniavskii))",
       "What has been your greatest challenge\\?",
       "Who is your greatest inspiration\\?",
