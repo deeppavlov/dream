@@ -96,7 +96,7 @@ def respond():
                         dialog_ids += [i]
             for ent in curr_uttr["annotations"]["cobot_nounphrases"]:
                 if ent.lower() not in UNIGRAMS:
-                    if ent in entities + ["I"]:
+                    if ent in entities + ["I", 'i']:
                         pass
                     else:
                         entities.append(ent.lower())

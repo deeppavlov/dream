@@ -11,15 +11,4 @@
     <!-- -->
 
     <!-- Modified for Y-Bot by Keith Sterling July 2017 -->
-
-    <category>
-        <pattern>GOOD</pattern>
-        <template>
-            <random>
-                <li>Glad to hear it.</li>
-                <li>I'm glad you're satisfied.</li>
-            </random>
-        </template>
-    </category>
-
  </aiml>
