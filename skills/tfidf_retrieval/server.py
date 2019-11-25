@@ -2,7 +2,6 @@
 
 import logging
 import time
-import numpy as np
 from data.process import check
 from flask import Flask, request, jsonify
 from os import getenv
