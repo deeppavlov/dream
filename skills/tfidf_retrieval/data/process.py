@@ -2,8 +2,7 @@
 """
 As the number of dialogs and data is small, we still can process it on the fly. 
 """
-
-import numpy as np
+from collections import defaultdict
 import os
 import pandas as pd
 import json
@@ -35,14 +34,11 @@ for dialog in dialogs:
     added = False
     utterances = dialog['utterances']
     for utterance in utterances:
-        if ('attributes' in utterance
-                and 'conversation_id' in utterance['attributes']
-                and utterance['attributes']['conversation_id'] in conv_ids
-                and not added):
+        if ('attributes' in utterance and 'conversation_id' in utterance['attributes']
+                and utterance['attributes']['conversation_id'] in conv_ids and not added):
             added = True
             dialog_list.append(dialog)
 cPickle.dump(dialog_list, open('dialog_list.pkl', 'wb'))
-from collections import defaultdict
 
 phrase_list = defaultdict(list)
 for dialog in dialog_list:
