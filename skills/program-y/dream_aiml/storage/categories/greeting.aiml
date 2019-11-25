@@ -82,9 +82,17 @@
     <category>
       <pattern>YES</pattern>
       <template>
-        I am newborn socialbot, so I can't do so much.
-        I can answer questions, give fun facts and discuss movies.
-        Would you like to talk about movies?
+        <random>
+          <li>I am newborn socialbot, so I can't do so much.
+          I can answer questions, give fun facts and discuss movies.
+          What is your favorite TV Series?</li>
+          <li>I am newborn socialbot, so I can't do so much.
+          I can answer questions, give fun facts and discuss movies.
+          what is your favorite movie?</li>
+          <li>I am newborn socialbot, so I can't do so much.
+          I can answer questions, give fun facts and discuss movies.
+          what's your favorite tv show?</li>
+        </random>
        <think>
         <set name="topic"><star/></set>
       </think>
@@ -93,7 +101,7 @@
     <category>
       <pattern>NO</pattern>
       <template>
-        Okay. Would you like to talk about movies?
+        Okay. What is your favorite TV Series?
        <think>
         <set name="topic"><star/></set>
        </think>
@@ -140,7 +148,7 @@
     <template>
       <random>
         <li>I am glad. What do you want to talk about?</li>
-        <li>I am glad. Would you like to talk about recent movies?</li>
+        <li>I am glad. what is your favorite movie?</li>
       </random>
       <think>
         <set name="topic"><star/></set>
@@ -174,7 +182,7 @@
     <template>
       <random>
         <li>I am sorry to hear that. What do you want to talk about?</li>
-        <li>I am sorry to hear that. Would you like to talk about recent movies?</li>
+        <li>I am sorry to hear that. do you like comedies?</li>
       </random>
       <think>
         <set name="topic"><star/></set>

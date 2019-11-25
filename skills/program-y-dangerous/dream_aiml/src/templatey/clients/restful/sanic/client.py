@@ -34,6 +34,7 @@ from programy.clients.restful.client import RestBotClient
 from programy.clients.restful.sanic.config import SanicRestConfiguration
 from os import getenv
 import sentry_sdk
+import uuid
 from sentry_sdk.integrations.logging import ignore_logger
 
 
@@ -65,14 +66,15 @@ class SanicRestBotClient(RestBotClient):
 
     def process_request(self, request):
         question = "Unknown"
-        userid = "Unknown"
         try:
             response, status = self.verify_api_key_usage(request)
             if response is not None:
                 return response, status
             responses = []
-            for question, userid in zip(request.json['sentences'], request.json['user_ids']):
-                answer = self.ask_question(userid, question)
+            for user_sentences in request.json['sentences_batch']:
+                userid = uuid.uuid4().hex
+                for s in user_sentences:
+                    answer = self.ask_question(userid, s)
                 if answer == NULL_RESPONSE:
                     confidence = 0.2
                 elif answer:
@@ -82,7 +84,6 @@ class SanicRestBotClient(RestBotClient):
                 print("user_id: {}; question: {}; answer: {}".format(userid, question, answer))
                 responses.append([answer, confidence])
             return responses, 200
-
         except Exception as excep:
             sentry_sdk.capture_exception(excep)
             return self.format_error_response(userid, question, str(excep)), 500

@@ -216,13 +216,17 @@ def chitchat_example_formatter(payload: Any,
 
 def alice_formatter(payload, mode='in'):
     if mode == 'in':
-        inp_data = base_input_formatter(payload)
+        inp_data = annotated_input_formatter(payload)
         last_n_sents = 5
-        # Send only last n sents of the latest dialogue
-        last_sents_batch = [hist[-last_n_sents:] for hist in inp_data['utterances_histories']]
-        return {"sentences_batch": last_sents_batch}
+        batch = []
+        for dialog in inp_data['dialogs']:
+            user_utts = []
+            for utt in dialog['utterances']:
+                if utt['user']['user_type'] == "human":
+                    user_utts.append(utt['text'])
+            batch.append(user_utts[-last_n_sents:])
+        return {"sentences_batch": batch}
     elif mode == 'out':
-        # TODO: how to deal with confidence?
         return base_skill_output_formatter(payload)
 
 
@@ -303,16 +307,6 @@ def cobot_dialogact_formatter(payload, mode='in'):
     elif mode == 'out':
         return {"intents": payload[0],
                 "topics": payload[1]}
-
-
-def program_y_formatter(payload, mode='in'):
-    if mode == 'in':
-        parsed = annotated_input_formatter(payload, annotation="coref_resolved")
-        return {'sentences': parsed["last_utterances"],
-                'user_ids': parsed["user_telegram_ids"]}
-    elif mode == 'out':
-        return [{"text": payload[0],
-                "confidence": payload[1]}]
 
 
 def base_response_selector_formatter(payload, mode='in'):
