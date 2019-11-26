@@ -5,18 +5,17 @@ import pandas as pd
 import json
 import _pickle as cPickle
 import zipfile
+import urllib
 
 
 def most_frequent(List):
     return max(set(List), key=List.count)
 
 
+urllib.request.urlretrieve(
+    "http://lnsigo.mipt.ru/export/models/new_vectorizer.zip", "new_vectorizer.zip")
 with zipfile.ZipFile('new_vectorizer.zip', 'r') as zip_ref:
     zip_ref.extractall(os.getcwd())
-ratings = pd.read_csv('ratings.csv')
-ratings = ratings[ratings['Rating'] >= 4]
-conv_ids = ratings['Conversation ID']
-conv_ids = set(list(conv_ids))
 
 donotknow_answers = ["I really do not know what to answer.",
                      "Sorry, probably, I didn't get what you mean.",
@@ -25,19 +24,7 @@ donotknow_answers = ["I really do not know what to answer.",
                      "I'm newborn socialbot, so I can't do so much. For example I can answer for any question.",
                      "I'm really sorry but i'm a socialbot, and I cannot do some Alexa things."]
 
-dialogs = json.load(open('dialogs.3', 'r'))
-dialog_list = list()
-for dialog in dialogs:
-    added = False
-    utterances = dialog['utterances']
-    for utterance in utterances:
-        cond1 = 'attributes' in utterance
-        cond2 = 'conversation_id' in utterance['attributes']
-        cond3 = utterance['attributes']['conversation_id'] in conv_ids
-        if cond1 and cond2 and cond3 and not added:
-            added = True
-            dialog_list.append(dialog)
-cPickle.dump(dialog_list, open('dialog_list.pkl', 'wb'))
+dialog_list = cPickle.load(open('dialog_list.pkl', 'wb'))
 
 phrase_list = defaultdict(list)
 for dialog in dialog_list:
