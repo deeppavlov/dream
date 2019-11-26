@@ -16,15 +16,17 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 
-@app.post("/tfidf_retrieval/")
-def tfidf_retrieval():
+@app.route("/respond", methods=['POST'])
+def respond():
     st_time = time.time()
-    last_utterances = request.json['last_utterances']
-    response = [check(last_utterance)
-                for last_utterance in last_utterances
-                ]
+    last_utterances = request.json['sentences']
+    response = []
+    for last_utterance in last_utterances:
+        response = response + check(last_utterance)
+    assert len(response[0]) == 2
     total_time = time.time() - st_time
     logger.info(f"Tfidf exec time: {total_time:.3f}s")
+    logger.info(response)
     return jsonify(response)
 
 

@@ -3,7 +3,8 @@ from collections import defaultdict
 import os
 import _pickle as cPickle
 import zipfile
-import urllib
+import urllib.request
+import logging
 
 
 def most_frequent(List):
@@ -22,7 +23,7 @@ donotknow_answers = ["I really do not know what to answer.",
                      "I'm newborn socialbot, so I can't do so much. For example I can answer for any question.",
                      "I'm really sorry but i'm a socialbot, and I cannot do some Alexa things."]
 
-dialog_list = cPickle.load(open('dialog_list.pkl', 'wb'))
+dialog_list = cPickle.load(open('data/dialog_list.pkl', 'rb'))
 
 phrase_list = defaultdict(list)
 for dialog in dialog_list:
@@ -36,18 +37,30 @@ for phrase in phrase_list.keys():
     phrase_list[phrase] = most_frequent(phrase_list[phrase])
 vectorizer = cPickle.load(open('new_vectorizer.pkl', 'rb'))
 
-vectorized_phrases = vectorizer.transform(list(phrase_list.keys()))
+human_phrases = list(phrase_list.keys())
+vectorized_phrases = vectorizer.transform(human_phrases)
+assert vectorized_phrases.shape[0] > 0
 
 
-def check(human_phrase, vectorizer=vectorizer, top_best=1):
-    global phrase_list, vectorized_phrases
-    human_phrases = list(phrase_list.keys())
-    transformed_phrase = vectorizer.transform([human_phrase])
+def check(human_phrase, vectorizer=vectorizer, top_best=2):
+    global phrase_list, vectorized_phrases, human_phrases
+    assert len(human_phrases) > 0
+    transformed_phrase = vectorizer.transform([human_phrase.lower()])
+    logging.info(str(transformed_phrase.shape))
+    logging.info(str(vectorized_phrases.shape))
     multiply_result = (transformed_phrase * vectorized_phrases.transpose())
-    best_inds = multiply_result.data.argsort()[::-1][:top_best]
+    assert multiply_result.shape[0] > 0
+    logging.info(str(multiply_result.shape))
+    sorted_data = multiply_result.data.argsort()[::-1]
+    logging.info(sorted_data.shape)
+    if sorted_data.shape[0] == 0:
+        return [(donotknow_answers[0], 0)]
+    best_inds = sorted_data[:top_best]
+    assert len(best_inds) > 0
     ans = []
     for ind in best_inds:
         score = multiply_result.data[ind]
-        bot_answer = phrase_list[human_phrases[ind]]
+        index = multiply_result.indices[ind]
+        bot_answer = phrase_list[human_phrases[index]]
         ans.append((bot_answer, score))
     return ans

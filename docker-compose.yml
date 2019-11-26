@@ -235,7 +235,7 @@ services:
   tfidf_retrieval:
     build:
       context: ./skills/tfidf_retrieval/
-    command: gunicorn --workers=4 server:app -b 0.0.0.0:8028
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8028
     volumes: []
     deploy:
       mode: replicated
