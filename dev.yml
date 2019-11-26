@@ -162,4 +162,10 @@ services:
       - "./skills/ALICEChatAPI:/src"
     ports:
       - 8000:8000
+  tfidf_retrieval:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/tfidf_retrieval:/src"
+    ports:
+      - 8028:8028
 version: "3.7"
