@@ -23,7 +23,7 @@ donotknow_answers = ["I really do not know what to answer.",
                      "I'm newborn socialbot, so I can't do so much. For example I can answer for any question.",
                      "I'm really sorry but i'm a socialbot, and I cannot do some Alexa things."]
 
-dialog_list = cPickle.load(open('data/dialog_list.pkl', 'rb'))
+dialog_list = json.load(open('data/dialog_list.json', 'r'))
 
 phrase_list = defaultdict(list)
 for dialog in dialog_list:

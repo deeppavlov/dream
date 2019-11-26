@@ -15,7 +15,7 @@ def __main__():
     parser.add_argument("--ratings_file", type=str, default="ratings.csv",
                         help="Ratings file")
     parser.add_argument("--dialogs_file", type=str, default="dialogs.3", help="Dialog file")
-    parser.add_argument("--output_file", type=str, default="dialog_list.pkl", help="FIle with best dialogs")
+    parser.add_argument("--output_file", type=str, default="dialog_list.json", help="FIle with best dialogs")
 
     args = parser.parse_args()
     print('Reading ratings from file ' + str(args.ratings_file))
@@ -30,13 +30,11 @@ def __main__():
         added = False
         utterances = dialog['utterances']
         for utterance in utterances:
-            cond1 = 'attributes' in utterance
-            cond2 = 'conversation_id' in utterance['attributes']
-            cond3 = utterance['attributes']['conversation_id'] in conv_ids
-            if cond1 and cond2 and cond3 and not added:
+            cond1 = 'attributes' in utterance and 'conversation_id' in utterance['attributes']
+            if cond1 and utterance['attributes']['conversation_id'] in conv_ids and not added:
                 added = True
                 dialog_list.append(dialog)
-    cPickle.dump(dialog_list, open(args.output_file, 'wb'))
+    json.dump(dialog_list, open(args.output_file, 'w'))
     print('Dialogs successfully extracted into file ' + str(args.output_file))
 
 
