@@ -129,7 +129,7 @@ SKILLS = [
         "name": "tfidf_retrieval",
         "protocol": "http",
         "host": "tfidf_retrieval",
-        "port": 8024,
+        "port": 8028,
         "endpoint": "tridf_retrieval",
         "external": True,
         "path": "",

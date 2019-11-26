@@ -232,4 +232,12 @@ services:
     deploy:
       mode: replicated
       replicas: 2
+  tfidf_retrieval:
+    build:
+      context: ./skills/tfidf_retrieval/
+    command: gunicorn --workers=4 server:app -b 0.0.0.0:8028
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
 version: '3.7'
