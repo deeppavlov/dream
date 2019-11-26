@@ -7,7 +7,6 @@ This is a temporary script file.
 from argparse import ArgumentParser
 import pandas as pd
 import json
-import _pickle as cPickle
 
 
 def __main__():
