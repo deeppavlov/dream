@@ -63,7 +63,7 @@ SKILLS = [
         "endpoint": "api/rest/v1.0/ask",
         "external": True,
         "path": "",
-        "formatter": program_y_formatter
+        "formatter": alice_formatter
     },
     {
         "name": "personality_catcher",
@@ -113,7 +113,7 @@ SKILLS = [
         "endpoint": "api/rest/v1.0/ask",
         "external": True,
         "path": "",
-        "formatter": program_y_formatter
+        "formatter": alice_formatter
     },
     {
         "name": "movie_skill",
