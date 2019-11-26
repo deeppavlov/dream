@@ -77,7 +77,7 @@ class SanicRestBotClient(RestBotClient):
             for user_sentences in request.json['sentences_batch']:
                 userid = uuid.uuid4().hex
                 # if user said let's chat at beginning of a dialogue, that we should response with greeting
-                if len(user_sentences) == 1 and remove_punct(user_sentences[0]).lower() == remove_punct('let\'s chat'):
+                if remove_punct(user_sentences[0]).lower() == remove_punct('let\'s chat'):
                     user_sentences[0] = 'hello'
                 for s in user_sentences:
                     answer = self.ask_question(userid, s)
