@@ -130,10 +130,10 @@ SKILLS = [
         "protocol": "http",
         "host": "tfidf_retrieval",
         "port": 8028,
-        "endpoint": "tridf_retrieval",
+        "endpoint": "respond",
         "external": True,
         "path": "",
-        "formatter": dp_toxic_formatter
+        "formatter": tfidf_formatter
     },
 ]
 
