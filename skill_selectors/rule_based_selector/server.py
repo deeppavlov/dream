@@ -75,7 +75,7 @@ class RuleBasedSelector():
                 skills_for_uttr.append("program_y")
                 skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("alice")
-                # skills_for_uttr.append("transfertransfo")
+                skills_for_uttr.append("tfidf_retrieval")
                 # skills_for_uttr.append("retrieval_chitchat")
             movie_cobot_dialogacts = {
                 "Entertainment_Movies", "Sports", "Entertainment_Music", "Entertainment_General",
