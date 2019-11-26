@@ -14,17 +14,17 @@ def test_one_step_responses():
     print("check_actor")
     input_data = get_input_json("test_configs/check_actor.json")
     response = requests.post(url, json=input_data).json()[0]
-    assert response[1:] == [0.98, {}, {}, {"bot_attitudes": [['Chris Evans', 'actor', 'very_positive']],
-                                           "human_attitudes": []
-                                           }], \
+    assert response[1:] == [1.0, {}, {}, {"bot_attitudes": [['Chris Evans', 'actor', 'very_positive']],
+                                          "human_attitudes": []
+                                          }], \
         print(response)
 
     print("check_director_more_important_than_actor")
     input_data = get_input_json("test_configs/check_director_more_important_than_actor.json")
     response = requests.post(url, json=input_data).json()[0]
-    assert response[1:] == [0.98, {}, {}, {"bot_attitudes": [['Quentin Tarantino', 'director', 'very_positive']],
-                                           "human_attitudes": []
-                                           }], \
+    assert response[1:] == [1.0, {}, {}, {"bot_attitudes": [['Quentin Tarantino', 'director', 'very_positive']],
+                                          "human_attitudes": []
+                                          }], \
         print(response)
 
     print("check_movie")
@@ -38,9 +38,9 @@ def test_one_step_responses():
     print("check_person_of_the_same_prof")
     input_data = get_input_json("test_configs/check_person_of_the_same_prof.json")
     response = requests.post(url, json=input_data).json()[0]
-    assert response[1:] == [0.98, {}, {}, {"bot_attitudes": [['Quentin Tarantino', 'actor', 'positive']],
-                                           "human_attitudes": []
-                                           }], \
+    assert response[1:] == [1.0, {}, {}, {"bot_attitudes": [['Quentin Tarantino', 'actor', 'positive']],
+                                          "human_attitudes": []
+                                          }], \
         print(response)
 
     print("check_person_from_movie")
@@ -69,18 +69,18 @@ def test_one_step_responses():
     print("check_persons_comparison")
     input_data = get_input_json("test_configs/check_persons_comparison.json")
     response = requests.post(url, json=input_data).json()[0]
-    assert response[1:] == [0.98, {}, {}, {"bot_attitudes": [['Brad Pitt', 'actor', 'very_positive'],
-                                                             ['Chris Evans', 'actor', 'very_positive']],
-                                           "human_attitudes": []
-                                           }], \
+    assert response[1:] == [1.0, {}, {}, {"bot_attitudes": [['Brad Pitt', 'actor', 'very_positive'],
+                                                            ['Chris Evans', 'actor', 'very_positive']],
+                                          "human_attitudes": []
+                                          }], \
         print(response)
 
     print("check_persons_comparison2")
     input_data = get_input_json("test_configs/check_persons_comparison2.json")
     response = requests.post(url, json=input_data).json()[0]
-    assert response[1:] == [0.98, {}, {}, {'bot_attitudes': [['Brad Pitt', 'actor', 'very_positive']],
-                                           'human_attitudes': [['Brad Pitt', 'actor', 'neutral'],
-                                                               ['Quentin Tarantino', 'director', 'neutral']]}], \
+    assert response[1:] == [1.0, {}, {}, {'bot_attitudes': [['Brad Pitt', 'actor', 'very_positive']],
+                                          'human_attitudes': [['Brad Pitt', 'actor', 'neutral'],
+                                                              ['Quentin Tarantino', 'director', 'neutral']]}], \
         print(response)
     assert "They all good. But" in response[0], print(response)
 
