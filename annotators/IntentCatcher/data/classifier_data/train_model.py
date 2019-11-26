@@ -84,7 +84,7 @@ def main():
 
     print("Scoring model...")
     metrics = score_model((data, intents, random_phrases_embeddings), samples=20, epochs=80)
-    metrics.to_excel('../../metrics/' + MODEL_NAME + '_metrics.xlsx')
+    metrics.to_csv('../../metrics/' + MODEL_NAME + '_metrics.csv')
     print("METRICS:")
     print(metrics)
 
