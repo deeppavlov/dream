@@ -1,24 +1,32 @@
 import asyncio
-
-from aiohttp import web
-from string import hexdigits
 from datetime import datetime
+from string import hexdigits
+
+import aiohttp_jinja2
+import jinja2
+from aiohttp import web
+
 from state_formatters.output_formatters import (http_api_output_formatter,
                                                 http_debug_output_formatter)
 
 
-async def init_app(agent, session, consumers, debug=False):
+async def init_app(agent, session, consumers, stats, debug=False):
     app = web.Application()
     handler = ApiHandler(debug)
+    stats_handler = WSstatsHandler()
     consumers = [asyncio.ensure_future(i.call_service(agent.process)) for i in consumers]
 
     async def on_startup(app):
         app['consumers'] = consumers
         app['agent'] = agent
         app['client_session'] = session
+        app['websockets'] = []
+        app['stats'] = stats
 
     async def on_shutdown(app):
         await app['client_session'].close()
+        for ws in app['websockets']:
+            await ws.close()
 
     app.router.add_post('/', handler.handle_api_request)
     app.router.add_get('/dialogs/{dialog_id}', handler.dialog)
@@ -26,8 +34,14 @@ async def init_app(agent, session, consumers, debug=False):
 
     app.router.add_get('/ping', handler.pong)
     app.router.add_get('/user/{user_telegram_id}', handler.dialogs_by_user)
+
+    app.router.add_get('/debug/current_load', stats_handler.ws_page)
+    app.router.add_get('/debug/current_load/ws', stats_handler.index)
+
     app.on_startup.append(on_startup)
     app.on_shutdown.append(on_shutdown)
+
+    aiohttp_jinja2.setup(app, loader=jinja2.PackageLoader('templates', ''))
     return app
 
 
@@ -126,3 +140,18 @@ class ApiHandler:
         state_manager = request.app['agent'].state_manager
         dialogs = await state_manager.get_all_dialogs()
         return web.json_response([dialg_to_dict(i) for i in dialogs])
+
+
+class WSstatsHandler:
+    @aiohttp_jinja2.template('services_ws_highcharts.html')
+    async def ws_page(self, request):
+        return {}
+
+    async def index(self, request):
+        ws = web.WebSocketResponse()
+        await ws.prepare(request)
+        request.app['websockets'].append(ws)
+        stats = request.app['stats']
+        await stats.work_with_ws(ws)
+
+        return ws
