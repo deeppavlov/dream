@@ -36,6 +36,7 @@ for dialog in dialog_list:
 logging.info('Phrase list created')
 for phrase in phrase_list.keys():
     phrase_list[phrase] = most_frequent(phrase_list[phrase])
+
 vectorizer = cPickle.load(open('new_vectorizer.pkl', 'rb'))
 
 human_phrases = list(phrase_list.keys())
