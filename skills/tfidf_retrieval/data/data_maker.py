@@ -13,6 +13,7 @@ import json
 def process(dialog):
     return [utterance['text'] for utterance in dialog['utterances']]
 
+
 def __main__():
     parser = ArgumentParser()
     parser.add_argument("--ratings_file", type=str, default="ratings.csv",
