@@ -67,13 +67,14 @@ class IMDb:
         # let's get rid from movie `Movie`, `You` to escape many incorrect cases
         with open("./databases/ignore_movie_titles.txt", "r") as f:
             movie_titles_to_ignore = f.read().splitlines()
-        for title in movie_titles_to_ignore + ["Let's Talk", "Let's Chat"]:
+        for title in movie_titles_to_ignore:
             proc_title = self.process_movie_name(title)
             try:
                 self.without_ignored_movies_names.pop(proc_title)
             except KeyError:
                 pass
-        for title in ["Movie", "The Tragedy"]:
+        for title in ["Movie", "The Tragedy", "The Favorite", "Angela", "Attitude", "Do You Believe",
+                      "Earthquake", "The Gays", "No Matter What", "Talk to Me", "You", "Let's Talk", "Let's Chat"]:
             proc_title = self.process_movie_name(title)
             try:
                 self.with_ignored_movies_names.pop(proc_title)
@@ -290,7 +291,7 @@ class IMDb:
             # exception if name_or_id == None or name_or_id not in database
             return {}
 
-    def find_name(self, reply, subject="movie"):
+    def find_name(self, reply, subject="movie", find_ignored=False):
         """
         Find name in the given reply (across preprocessed movies names from the database
         or lower-cased names of people of the given profession)
@@ -298,6 +299,7 @@ class IMDb:
         Args:
             reply: any string reply
             subject: `movie`, `actor` or any profession, `genre`
+            find_ignored: whether to search among ignored movies titles
 
         Returns:
             imdb-ids if `movie`, full cased name if `actor` or any profession
@@ -310,7 +312,9 @@ class IMDb:
         if subject == "movie":
             results = self.without_ignored_movies_names_tree.search_all(lower_cased_reply)
             results = list(results)
-            if len(results) == 0:
+            if find_ignored:
+                results = self.with_ignored_movies_names_tree.search_all(lower_cased_reply)
+            elif len(results) == 0:
                 for target_name in ["film", "series", "movie"]:
                     start_movie_name = reply.lower().find(target_name)
                     if start_movie_name != -1:

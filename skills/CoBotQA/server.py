@@ -99,7 +99,6 @@ def respond():
                     if ent in entities + ["I", 'i']:
                         pass
                     else:
-                        entities.append(ent.lower())
                         questions.append("Fact about {}".format(ent))
                         dialog_ids += [i]
 
