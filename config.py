@@ -103,7 +103,7 @@ SKILLS = [
         "endpoint": "respond",
         "external": True,
         "path": "",
-        "formatter": dummy_skill_formatter
+        "formatter": cobot_qa_formatter
     },
     {
         "name": "program_y_dangerous",
