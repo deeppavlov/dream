@@ -78,9 +78,10 @@ curl -H "Content-Type: application/json" -XPOST \
    ["Dont do this"],
    ["Absolutely not"],
    ["Absolutely yes"],
-   ["Lets chat"]
+   ["Lets chat"],
    ["Yeah, sure"],
-   ["Sure, go ahead"]
+   ["Sure, go ahead"],
+   ["Cancel dialog"]
    ]
   }' \
    http://0.0.0.0:8014/detect

@@ -36,7 +36,7 @@
     "yes" : {
       "phrases": [
         "((Sure)|(Fine)|(Okay)|(Ok)|(Yes)|(Yup)|(Yea)|(Yeah)|(Cool)|(Good)|(Go ahead))(, why not){0,1}",
-        "((Yeah)|(Yes)|(Okay)|(Sure)|(Yup)|(Fine)|(Definetely)), ((go ahead)|(do it)|(lets do it)|(continue)|(go on)|(tell me))",
+        "((Yeah)|(Yes)|(Okay)|(Sure)|(Yup)|(Fine)|(Definetely)|(Absolutely)), ((go ahead)|(do it)|(lets do it)|(continue)|(go on)|(tell me))",
         "((Come on)|(Do it)|(Tell me)|(Go on)|(Continue)|(Definetely)|(As you wish)|(As you want)|(That will be cool)|(Whatever))"
       ],
       "min_precision" : 0.0,
@@ -49,7 +49,7 @@
       "phrases": [
         "((No)|(Nope)|(No way)|(Don't)|(Do not do this)|(Please, no)|(Never do this)|(Surely not)|(Don't do this))",
         "((No)|(Please)), ((never)|(no way)|(don't)|(do not)|(never again)|(definetely no))",
-        "I said ((no)|(never)|(don't))",
+        "((I said)|(Uhh)) ((no)|(never)|(don't))",
         "((Definetely not)|(Never)|(Never ask me that again)|(That's boring)|(That will be boring)|(I don't know)|(I am not sure))"
       ],
       "min_precision" : 0.0,
