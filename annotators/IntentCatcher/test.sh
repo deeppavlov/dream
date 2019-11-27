@@ -18,28 +18,6 @@ curl -H "Content-Type: application/json" -XPOST \
 }' \
   http://0.0.0.0:8014/detect
 
-
-curl -H "Content-Type: application/json" -XPOST \
- -d '{"sentences": [
- ["What to do if a man pass out?"],
- ["Alexa, i did not hear you, repeat"],
- ["Alexa, i am a little deaf", "Can you repeat please?"],
- ["Please, repeat"],
- ["You are repeating it over and over!"],
- ["I will repeat here what I wrote as part of a much longer post on my blog"],
- ["Here was a repeat of the French-Algerian War, which inevitably led to torture and crimes by both the French and the Algerian guerrillas."],
- ["Okay, Alexa, have a good day!"],
- ["Okay"],
- ["Great"],
- ["That nice"],
- ["Great"],
- ["Thanks"],
- ["Nice"],
- ["Wow!"]
- ]
-}' \
- http://0.0.0.0:8014/detect
-
  curl -H "Content-Type: application/json" -XPOST \
   -d '{"sentences": [
   ["i want to commit a suicide today."],
@@ -76,3 +54,33 @@ curl -H "Content-Type: application/json" -XPOST \
   ]
  }' \
   http://0.0.0.0:8014/detect
+
+
+
+curl -H "Content-Type: application/json" -XPOST \
+   -d '{"sentences": [
+   ["What to do if a man pass out?"],
+   ["Alexa, i did not hear you, repeat"],
+   ["Alexa, i am a little deaf", "Can you repeat please?"],
+   ["Please, repeat"],
+   ["You are repeating it over and over!"],
+   ["Okay, Alexa, have a good day!"],
+   ["Okay"],
+   ["Great"],
+   ["That nice"],
+   ["Great"],
+   ["Thanks"],
+   ["Nice"],
+   ["Wow"],
+   ["Nice one"],
+   ["Do not"],
+   ["No"],
+   ["Dont do this"],
+   ["Absolutely not"],
+   ["Absolutely yes"],
+   ["Lets chat"]
+   ["Yeah, sure"],
+   ["Sure, go ahead"]
+   ]
+  }' \
+   http://0.0.0.0:8014/detect
