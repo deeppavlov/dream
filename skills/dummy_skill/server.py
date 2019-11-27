@@ -22,20 +22,31 @@ donotknow_answers = np.array(["I really do not know what to answer.",
                               "I didn't get it. Sorry.",
                               "Let's talk about something else."])
 
+with open("./topical_chat_questions.txt", "r") as f:
+    QUESTIONS = f.read().splitlines()
+
 
 @app.route("/respond", methods=['POST'])
 def respond():
     st_time = time.time()
     dialogs_batch = request.json["dialogs"]
-    confidences = []
-    responses = []
+    final_confidences = []
+    final_responses = []
 
-    responses = np.random.choice(donotknow_answers, size=len(dialogs_batch)).tolist()
-    confidences = [0.5] * len(dialogs_batch)
+    for dialog in dialogs_batch:
+        cands = []
+        confs = []
+
+        cands += [np.random.choice(donotknow_answers)]
+        confs += [0.5]
+        cands += [np.random.choice(QUESTIONS)]
+        confs += [0.6]
+        final_responses.append(cands)
+        final_confidences.append(confs)
 
     total_time = time.time() - st_time
     logger.info(f'dummy_skill exec time: {total_time:.3f}s')
-    return jsonify(list(zip(responses, confidences)))
+    return jsonify(list(zip(final_responses, final_confidences)))
 
 
 if __name__ == '__main__':
