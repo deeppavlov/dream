@@ -24,8 +24,8 @@ donotknow_answers = ["I really do not know what to answer.",
                      "I'm newborn socialbot, so I can't do so much. For example I can answer for any question.",
                      "I'm really sorry but i'm a socialbot, and I cannot do some Alexa things."]
 
-dialog_list = json.load(open('dialog_list.json', 'r'))
-
+dialog_list = json.load(open('data/dialog_list.json', 'r'))
+logging.info('List loaded')
 phrase_list = defaultdict(list)
 for dialog in dialog_list:
     for i in range(0, len(dialog) - 1, 2):
@@ -33,6 +33,7 @@ for dialog in dialog_list:
         bot_phrase = dialog[i + 1]
         if bot_phrase not in donotknow_answers:
             phrase_list[human_phrase].append(bot_phrase)
+logging.info('Phrase list created')
 for phrase in phrase_list.keys():
     phrase_list[phrase] = most_frequent(phrase_list[phrase])
 vectorizer = cPickle.load(open('new_vectorizer.pkl', 'rb'))
