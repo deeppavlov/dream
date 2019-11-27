@@ -58,7 +58,7 @@ def random_respond_with_question_asking(utt, response_phrases):
 
 def what_time_respond(utt, response_phrases):
     time = datetime.utcnow()
-    response = f"It is {time.hour} hours and {time.minute} minutes by UTC. What is your favorite time?"
+    response = f"It is {time.hour} hours and {time.minute} minutes by UTC. What a time to be alive!"
     return response
 
 
