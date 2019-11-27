@@ -1,5 +1,6 @@
 import argparse
 import csv
+import logging
 import statistics
 
 parser = argparse.ArgumentParser()
@@ -26,7 +27,8 @@ def main():
     print(f'Mean proc time: {mean_proc_time}')
     assert statistics.mean(proc_times) <= args.time_limit, print(
         f'Mean proc time: {mean_proc_time} > {args.time_limit}')
-
+    logging.info(pred_data)
+    logging.info(true_data)
     for pred_r, true_r in zip(pred_data, true_data):
         true_sents = set([sent.lower().replace('\n', ' ') for sent in true_r[1:]])
         if true_sents:
