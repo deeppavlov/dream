@@ -14,10 +14,10 @@ node {
            sh "./tests/runtests.sh MODE=test_skills"
            currentBuild.result = 'SUCCESS'
         }
+        stage('CollectPredictions') {
+           sh "./tests/runtests.sh MODE=infer_questions"
+        }
         if (env.BRANCH_NAME == 'dev') {
-            stage('CollectPredictions') {
-               sh "./tests/runtests.sh MODE=infer_questions"
-            }
             stage('Deploy Dev') {
                sh "./deploy.sh MODE=all TARGET=dev"
                currentBuild.result = 'SUCCESS'
