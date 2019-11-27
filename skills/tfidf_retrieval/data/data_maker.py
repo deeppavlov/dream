@@ -4,6 +4,7 @@ Spyder Editor
 
 This is a temporary script file.
 """
+
 from argparse import ArgumentParser
 import pandas as pd
 import json
@@ -38,4 +39,3 @@ def __main__():
 
 
 __main__()
-

@@ -46,13 +46,13 @@ def check(human_phrase, vectorizer=vectorizer, top_best=2):
     global phrase_list, vectorized_phrases, human_phrases
     assert len(human_phrases) > 0
     transformed_phrase = vectorizer.transform([human_phrase.lower()])
-    #logging.info(str(transformed_phrase.shape))
-    #logging.info(str(vectorized_phrases.shape))
+    # logging.info(str(transformed_phrase.shape))
+    # logging.info(str(vectorized_phrases.shape))
     multiply_result = (transformed_phrase * vectorized_phrases.transpose())
     assert multiply_result.shape[0] > 0
     logging.info(str(multiply_result.shape))
     sorted_data = multiply_result.data.argsort()[::-1]
-    #logging.info(sorted_data.shape)
+    # logging.info(sorted_data.shape)
     if sorted_data.shape[0] == 0:
         return [(donotknow_answers[0], 0)]
     best_inds = sorted_data[:top_best]
