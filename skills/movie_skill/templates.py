@@ -914,8 +914,7 @@ class MovieSkillTemplates:
 
     @staticmethod
     def counter_question(answer):
-        replies = ["What do you think?",
-                   "How do you think?"]
+        replies = ["What do you think?"]
         replies_you = ["And you?",
                        "What about you?",
                        "How about you?"]
