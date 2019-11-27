@@ -207,13 +207,13 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     very_big_score = 100
 
     for i in range(len(scores)):
-        # if len(dialog['utterances']) < 2 and greeting_spec not in candidates[i]['text'] \
-        #         and skill_names[i] == 'program_y':
-        #     # greet user in first utterance
-        #     candidates[i]['text'] = greeting_spec + ' ' + candidates[i]['text']
-        #     curr_single_scores.append(very_big_score)
-        #     break
-        if skill_names[i] == 'program_y' and candidates[i]['text'] == how_are_you_spec:
+         if len(dialog['utterances']) < 2 and greeting_spec not in candidates[i]['text'] \
+                 and skill_names[i] == 'program_y':
+             # greet user in first utterance
+             candidates[i]['text'] = greeting_spec + ' ' + candidates[i]['text']
+             curr_single_scores.append(very_big_score)
+             break
+        elif skill_names[i] == 'program_y' and candidates[i]['text'] == how_are_you_spec:
             curr_single_scores.append(very_big_score)
             break
         elif skill_names[i] == 'program_y_dangerous' and psycho_help_spec in candidates[i]['text']:
