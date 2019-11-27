@@ -1,6 +1,5 @@
 import argparse
 import csv
-import logging
 import statistics
 
 parser = argparse.ArgumentParser()
