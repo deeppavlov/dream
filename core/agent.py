@@ -114,9 +114,6 @@ class Agent:
                 else:
                     result.append(service)
             next_services = result
-        # send dialog workflow record to further logging operations:
-        if self.process_logger_callable:
-            self.process_logger_callable(self.workflow['dialog_id'])
 
         return next_services
 
@@ -134,21 +131,33 @@ class Agent:
             kwargs['event'] = event
             self.add_workflow_record(dialog=dialog, deadline_timestamp=deadline_timestamp, hold_flush=True, **kwargs)
             self.register_service_request(dialog_id, service_name)
+            # TODO(pugin): remove after tasks and stats is merged
+            if self.process_logger_callable:
+                await self.process_logger_callable(service_name, time(), 'send')
             await self.process(dialog_id, service_name, response=utterance, message_attrs=message_attrs)
             await event.wait()
             return self.flush_record(dialog_id)
 
         self.add_workflow_record(dialog=dialog, deadline_timestamp=deadline_timestamp, **kwargs)
         self.register_service_request(dialog_id, service_name)
+        # TODO(pugin): remove after tasks and stats is merged
+        if self.process_logger_callable:
+            await self.process_logger_callable(service_name, time(), 'send')
         await self.process(dialog_id, service_name, response=utterance, message_attrs=message_attrs)
 
     async def process(self, dialog_id, service_name=None, response: Any = None, **kwargs):
+        # TODO(pugin): remove after tasks and stats is merged
+        if self.process_logger_callable and service_name:
+            await self.process_logger_callable(service_name, time(), 'done')
         workflow_record = self.get_workflow_record(dialog_id)
         next_services = await self.process_service_response(dialog_id, service_name, response, **kwargs)
 
         service_requests = []
         for service in next_services:
             self.register_service_request(dialog_id, service.name)
+            # TODO(pugin): remove after tasks and stats is merged
+            if self.process_logger_callable:
+                await self.process_logger_callable(service.name, time(), 'send')
             payload = service.apply_workflow_formatter(workflow_record)
             service_requests.append(
                 service.connector_func(payload=payload, callback=self.process)

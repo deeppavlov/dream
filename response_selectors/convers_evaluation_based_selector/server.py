@@ -178,7 +178,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     confidence_strength = 2
     conv_eval_strength = 0.4
     # calculate curr_scores which is an array of values-scores for each candidate
-    curr_single_cores = []
+    curr_single_scores = []
 
     # exclude toxic messages and messages with blacklisted phrases
     ids = (toxicities > 0.5) & (has_blacklisted > 0)
@@ -202,21 +202,26 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     skill_names = [c['skill_name'] for c in candidates]
     how_are_you_spec = "I'm fine, thanks! Do you want to know what I can do?"
     psycho_help_spec = "If you or someone you know is in immediate danger"
-    greeting_spec = "Hi, this is an Alexa Prize Socialbot"
+    greeting_spec = "Hi, this is an Alexa Prize Socialbot."
+
+    very_big_score = 100
 
     for i in range(len(scores)):
-        if skill_names[i] == 'program_y' and candidates[i]['text'] == how_are_you_spec:
-            very_big_score = 100
-            curr_single_cores.append(very_big_score)
+        if len(dialog['utterances']) < 2 and greeting_spec not in candidates[i]['text'] \
+                and skill_names[i] == 'program_y':
+            # greet user in first utterance
+            candidates[i]['text'] = greeting_spec + ' ' + candidates[i]['text']
+            curr_single_scores.append(very_big_score)
+            break
+        elif skill_names[i] == 'program_y' and candidates[i]['text'] == how_are_you_spec:
+            curr_single_scores.append(very_big_score)
             break
         elif skill_names[i] == 'program_y_dangerous' and psycho_help_spec in candidates[i]['text']:
-            very_big_score = 100
-            curr_single_cores.append(very_big_score)
+            curr_single_scores.append(very_big_score)
             break
         elif skill_names[i] == 'program_y' and greeting_spec in candidates[i]['text']:
             if len(dialog["utterances"]) < 2:
-                very_big_score = 100
-                curr_single_cores.append(very_big_score)
+                curr_single_scores.append(very_big_score)
                 break
             else:
                 confidences[i] = 0.2  # Low confidence for greeting in the middle of dialogue
@@ -231,19 +236,19 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
         score = conv_eval_strength * score_conv_eval + confidence_strength * confidence
         logger.info(f'Skill {skill_name} has score: {score}. Toxicity: {toxicities[i]} '
                     f'Cand scores: {cand_scores}')
-        curr_single_cores.append(score)
-    best_id = np.argmax(curr_single_cores)
+        curr_single_scores.append(score)
+    best_id = np.argmax(curr_single_scores)
     best_skill_name = skill_names[best_id]
     best_text = candidates[best_id]["text"]
     best_confidence = candidates[best_id]["confidence"]
 
     while candidates[best_id]["text"] == "" or candidates[best_id]["confidence"] == 0.:
-        curr_single_cores[best_id] = 0.
-        best_id = np.argmax(curr_single_cores)
+        curr_single_scores[best_id] = 0.
+        best_id = np.argmax(curr_single_scores)
         best_skill_name = candidates[best_id]["skill_name"]
         best_text = candidates[best_id]["text"]
         best_confidence = candidates[best_id]["confidence"]
-        if sum(curr_single_cores) == 0.:
+        if sum(curr_single_scores) == 0.:
             break
 
     return best_skill_name, best_text, best_confidence

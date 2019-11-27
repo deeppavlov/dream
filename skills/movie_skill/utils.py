@@ -28,7 +28,7 @@ GENRES = {"Genre": ["genre"],
           "Sport": ["sport", "sporty", "sports"],
           "Talk-show": ["talk show", "talk-show", 'conversation', "interview", "chat show", "chat-show"],
           "Thriller": ["thriller"],
-          "War": ["war", "military", "militaries", "martial"],
+          "War": ["war movie", "military", "militaries", "martial"],
           "Western": ["western", "west"]
           }
 

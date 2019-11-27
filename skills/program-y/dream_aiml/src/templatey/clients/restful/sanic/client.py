@@ -35,12 +35,17 @@ from os import getenv
 import sentry_sdk
 import uuid
 from sentry_sdk.integrations.logging import ignore_logger
+import string
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 ignore_logger("root")
 # TODO: Get if from config.sanic.yml
 NULL_RESPONSE = "Sorry, I don't have an answer for that!"
+
+
+def remove_punct(s):
+    return ''.join([c for c in s if c not in string.punctuation])
 
 
 class SanicRestBotClient(RestBotClient):
@@ -71,6 +76,9 @@ class SanicRestBotClient(RestBotClient):
             responses = []
             for user_sentences in request.json['sentences_batch']:
                 userid = uuid.uuid4().hex
+                # if user said let's chat at beginning of a dialogue, that we should response with greeting
+                if remove_punct(user_sentences[0]).lower() == remove_punct('let\'s chat'):
+                    user_sentences[0] = 'hello'
                 for s in user_sentences:
                     answer = self.ask_question(userid, s)
                 if answer == NULL_RESPONSE:
