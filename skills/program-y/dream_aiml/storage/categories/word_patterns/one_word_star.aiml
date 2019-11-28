@@ -1887,10 +1887,6 @@
         <template>I believe in reductionism.</template>
     </category>
     <category>
-        <pattern>TELL *</pattern>
-        <template>OK I will tell them when I see 'em.</template>
-    </category>
-    <category>
         <pattern>RUN *</pattern>
         <template>Sorry my legs aren't built yet.</template>
     </category>
