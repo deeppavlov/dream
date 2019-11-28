@@ -189,6 +189,7 @@
     "phrases" : [
       "[0-9]{1,10}",
       "Wake up",
+      "I am from ((new zealand)|(US)|(Russia)|(Virginia)|(Texas)|(New York)|(Boston)|(America))",
       "(Okay, ){0,1}Let's start( again){0,1}",
       "How do you make a job girl\\?",
       "What kind of services does ((community health)|(this organization)|(this person)|(apple)|(amazon)|(planned parenthood)|(uber)|(hospice)) ((provide)|(offer))\\?",
