@@ -50,7 +50,19 @@
     </template>
   </category>
   <category>
+    <pattern># WHAT ABOUT YOURSELF #</pattern>
+    <template>
+      <srai>HOW_ARE_YOU</srai>
+    </template>
+  </category>
+  <category>
     <pattern># HOW ABOUT YOU #</pattern>
+    <template>
+      <srai>HOW_ARE_YOU</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># HOW ABOUT YOURSELF #</pattern>
     <template>
       <srai>HOW_ARE_YOU</srai>
     </template>
