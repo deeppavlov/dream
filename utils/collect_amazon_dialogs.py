@@ -144,7 +144,7 @@ async def main(args):
     new_conversations = pd.DataFrame(new_conversations)
     new_conversations['start_time'] = pd.to_datetime(new_conversations['start_time'])
     new_conversations = new_conversations.sort_values('start_time', ascending=False)
-    new_conversations = new_conversations.head(10)
+    new_conversations = new_conversations.head(args.first_n)
     if args.with_requesting:
         new_conversations = await make_requests(new_conversations, args)
     print_to_file(new_conversations, args)
