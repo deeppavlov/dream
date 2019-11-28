@@ -11,8 +11,8 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 import aiohttp
-import requests
 import polling
+import requests
 
 log: Logger
 
@@ -36,6 +36,9 @@ Message = namedtuple('Message', ['chat_id', 'payload'])
 
 
 class Wrapper:
+    _active_chats: dict
+    _backlog: defaultdict
+
     def __init__(self, config: Dict) -> None:
         self._config = config
         self._in_queue = Queue()
@@ -44,13 +47,16 @@ class Wrapper:
         self._poller = Poller(config, self._in_queue)
         self._poller.start()
         self._states = {}
+        self._active_chats = dict()
+        self._backlog = defaultdict(list)
 
         log.info('Wrapper initiated')
+        self._loop.run_until_complete(self._poll_msgs())
 
+    async def _poll_msgs(self):
         while True:
-            input_q = self._in_queue.get()
-            log.info('Payload received')
-            self._loop.run_until_complete(self._process_input(input_q))
+            input_q = await self._loop.run_in_executor(None, self._in_queue.get)
+            self._loop.create_task(self._process_input(input_q))
 
     async def _process_input(self, input_q: Dict) -> None:
         buffer = defaultdict(list)
@@ -63,34 +69,40 @@ class Wrapper:
             if chat_item:
                 chat_id = message['message']['chat']['id']
                 buffer[chat_id].append(chat_item)
-
         chats = []
         chat_ids = []
-        log_msg = ''
 
         for chat_id, chat in buffer.items():
-            chats.append(chat)
-            chat_ids.append(chat_id)
-            log_msg = f'{log_msg}, {str(chat_id)}' if log_msg else f'Processing messages for chats: {str(chat_id)}'
+            if chat_id in self._active_chats:
+                self._backlog[chat_id].extend(chat)
+                log.info(f'Message from chat "{chat_id}" pushed to backlog')
+            else:
+                chats.append(chat)
+                chat_ids.append(chat_id)
 
-        if log_msg:
-            log.info(log_msg)
+        if chats:
+            await self._batchify(chats, chat_ids)
 
+    async def _batchify(self, chats: list, chat_ids: list) -> None:
+        log.info(f'Processing messages for chats: {chat_ids}')
+
+        for chat_id, chat in zip(chat_ids, chats):
+            self._active_chats[chat_id] = len(chat)
         # "slices" of replicas from all conversations, each slice contains replicas from different conversation
         batched_chats = zip_longest(*chats, fillvalue=None)
-        for layer_id, chats_batch in enumerate(batched_chats):
-            await self._process_chats_batch(chats_batch, layer_id, chat_ids)
+        for chats_batch in batched_chats:
+            await self._process_chats_batch(chats_batch, chat_ids)
 
-    async def _process_chats_batch(self, chats_batch: List[str], layer_id: int, chat_ids: List[int]) -> None:
+    async def _process_chats_batch(self, chats_batch: List[str], chat_ids: List[int]) -> None:
         utts_batch: List[Message] = [Message(chat_id, utt) for chat_id, utt in zip(chat_ids, chats_batch) if utt]
         if self._config['agent_mode'] is True:
-            await asyncio.gather(*(self._loop.create_task(self._send_to_agent(msg, layer_id)) for msg in utts_batch))
+            await asyncio.gather(*(self._loop.create_task(self._send_to_agent(msg)) for msg in utts_batch))
         else:
             j = self._config['infer_batch_length']
             chunked_utts_batch = [utts_batch[i * j:(i + 1) * j] for i in range((len(utts_batch) + j - 1) // j)]
-            await asyncio.gather(*(self._loop.create_task(self._process_chunk(chunk, layer_id)) for chunk in chunked_utts_batch))
+            await asyncio.gather(*(self._loop.create_task(self._process_chunk(chunk)) for chunk in chunked_utts_batch))
 
-    async def _send_to_agent(self, msg: Message, layer_id: int) -> None:
+    async def _send_to_agent(self, msg: Message) -> None:
         chat_id, payload = msg
         data = {'user_id': str(chat_id), 'payload': payload}
         try:
@@ -106,9 +118,9 @@ class Wrapper:
         else:
             log.error(f'Got {response.status_code} code from {self._config["model_url"]}')
             resp_text = 'Agent error'
-        await self._send_results(chat_id, [resp_text], layer_id)
+        await self._send_results(chat_id, [resp_text])
 
-    async def _process_chunk(self, chunk: List[Message], layer_id: int) -> None:
+    async def _process_chunk(self, chunk: List[Message]) -> None:
         ids_batch = [msg.chat_id for msg in chunk]
         utts_batch = [msg.payload for msg in chunk]
         data = {self._config["model_args_names"][0]: utts_batch}
@@ -128,7 +140,7 @@ class Wrapper:
         else:
             log.error(f'Got {response.status_code} code from {self._config["model_url"]}')
             zip_batch = zip_longest(ids_batch, [], fillvalue='Server error')
-        tasks = (self._loop.create_task(self._send_results(chat_id, chat_resp, layer_id)) for (chat_id, chat_resp) in zip_batch)
+        tasks = (self._loop.create_task(self._send_results(chat_id, chat_resp)) for (chat_id, chat_resp) in zip_batch)
 
         await asyncio.gather(*tasks)
 
@@ -140,7 +152,8 @@ class Wrapper:
             message = payload['text']
         return message
 
-    async def _send_results(self, chat_id: int, response: list, layer_id: int) -> None:
+    async def _send_results(self, chat_id: int, response: list) -> None:
+        await self._check_backlog(chat_id)
         if self._config['send_state'] is True:
             self._states[chat_id] = response[1]
             resp_text = json.dumps({'text': str(response[0])})
@@ -157,6 +170,14 @@ class Wrapper:
             await session.post(self._config['send_message_url'], json=payload)
 
         log.info(f'Sent response to chat: {str(chat_id)}')
+
+    async def _check_backlog(self, chat_id) -> None:
+        self._active_chats[chat_id] -= 1
+        if self._active_chats[chat_id] == 0:
+            self._active_chats.pop(chat_id)
+            if chat_id in self._backlog:
+                chat = self._backlog.pop(chat_id)
+                self._loop.create_task(self._batchify([chat], [chat_id]))
 
 
 class Poller(Process):
