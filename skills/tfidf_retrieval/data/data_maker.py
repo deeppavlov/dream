@@ -11,14 +11,14 @@ import json
 
 
 def process(dialog):
-    return [utterance['text'] for utterance in dialog['utterances']]
+    return {'utterances': [utterance['text'] for utterance in dialog['utterances']]}
 
 
 def __main__():
     parser = ArgumentParser()
     parser.add_argument("--ratings_file", type=str, default="ratings.csv",
                         help="Ratings file")
-    parser.add_argument("--dialogs_file", type=str, default="dialogs.3", help="Dialog file")
+    parser.add_argument("--dialogs_file", type=str, default="dialogs.1", help="Dialog file")
     parser.add_argument("--output_file", type=str, default="dialog_list.json", help="FIle with best dialogs")
 
     args = parser.parse_args()
@@ -38,7 +38,7 @@ def __main__():
             if cond1 and utterance['attributes']['conversation_id'] in conv_ids and not added:
                 added = True
                 dialog_list.append(process(dialog))
-    json.dump(dialog_list, open(args.output_file, 'w'))
+    json.dump(dialog_list, open(args.output_file, 'w'), indent=4)
     print('Dialogs successfully extracted into file ' + str(args.output_file))
 
 
