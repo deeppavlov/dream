@@ -35,10 +35,13 @@ for dialog in dialog_list:
         bot_phrase = dialog[i + 1]
         if bot_phrase not in donotknow_answers and 'Benjamin' not in bot_phrase:
             phrase_list[human_phrase].append(bot_phrase)
+
 logging.info('Phrase list created')
 for phrase in phrase_list.keys():
     phrase_list[phrase] = most_frequent(phrase_list[phrase])
-
+to_del=['yes']
+for phrase in to_del:
+    del phrase_list[to_del]
 vectorizer = cPickle.load(open('new_vectorizer.pkl', 'rb'))
 
 human_phrases = list(phrase_list.keys())
