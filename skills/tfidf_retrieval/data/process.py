@@ -22,7 +22,9 @@ donotknow_answers = ["I really do not know what to answer.",
                      "I didn't get it. Sorry.",
                      "Let's talk about something else.",
                      "I'm newborn socialbot, so I can't do so much. For example I can answer for any question.",
-                     "I'm really sorry but i'm a socialbot, and I cannot do some Alexa things."]
+                     "I'm really sorry but i'm a socialbot, and I cannot do some Alexa things.",
+                     "I didn’t catch that.",
+                     "I didn’t get that."]
 
 dialog_list = json.load(open('data/dialog_list.json', 'r'))
 logging.info('List loaded')
@@ -31,7 +33,7 @@ for dialog in dialog_list:
     for i in range(0, len(dialog) - 1, 2):
         human_phrase = dialog[i]
         bot_phrase = dialog[i + 1]
-        if bot_phrase not in donotknow_answers:
+        if bot_phrase not in donotknow_answers and 'Benjamin' not in bot_phrase:
             phrase_list[human_phrase].append(bot_phrase)
 logging.info('Phrase list created')
 for phrase in phrase_list.keys():
