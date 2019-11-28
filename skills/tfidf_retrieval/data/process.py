@@ -64,8 +64,8 @@ def check(human_phrase, vectorizer=vectorizer, top_best=2):
     ans = []
     for ind in best_inds:
         score = multiply_result.data[ind]
-        if score < 0.5:
-            score = score / 2
+        if score < 0.6:
+            score = score / 1.5
         index = multiply_result.indices[ind]
         bot_answer = phrase_list[human_phrases[index]]
         ans.append((bot_answer, score))
