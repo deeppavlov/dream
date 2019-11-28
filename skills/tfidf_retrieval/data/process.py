@@ -27,6 +27,8 @@ donotknow_answers = ["I really do not know what to answer.",
                      "I didn’t get that."]
 
 dialog_list = json.load(open('data/dialog_list.json', 'r'))
+custom_dialogs = [(j.strip()[2:-2].split("','"))
+                  for j in open('data/custom_dialogs.txt', 'r').readlines() if len(j) >= 2]
 logging.info('List loaded')
 phrase_list = defaultdict(list)
 for dialog in dialog_list:
