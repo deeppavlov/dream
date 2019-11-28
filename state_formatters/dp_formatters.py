@@ -314,7 +314,11 @@ def base_response_selector_formatter(payload, mode='in'):
         dialogs = annotated_input_formatter(payload, annotation="punctuated")['dialogs']
         return {"dialogs": dialogs}
     elif mode == 'out':
-        return {"skill_name": payload[0], "text": payload[1], "confidence": payload[2]}
+        if len(payload) == 3:
+            return {"skill_name": payload[0], "text": payload[1], "confidence": payload[2]}
+        elif len(payload) == 5:
+            return {"skill_name": payload[0], "text": payload[1], "confidence": payload[2],
+                    "human_attributes": payload[3], "bot_attributes": payload[4]}
 
 
 def sent_segm_formatter(payload, mode='in'):

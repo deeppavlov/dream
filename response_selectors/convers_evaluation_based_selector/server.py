@@ -43,6 +43,8 @@ def respond():
     selected_skill_names = []
     selected_texts = []
     selected_confidences = []
+    selected_human_attributes = []
+    selected_bot_attributes = []
     confidences = []
     utterances = []
     skill_names = []
@@ -155,23 +157,29 @@ def respond():
     for i, dialog in enumerate(dialogs_batch):
         # curr_candidates is dict
         curr_candidates = response_candidates[i]
+        logger.info(f"Curr candidates: {curr_candidates}")
         # choose results which correspond curr candidates
         curr_scores = result[dialog_ids == i]  # array of dictionaries
         curr_confidences = confidences[dialog_ids == i]  # array of float numbers
 
-        best_skill_name, best_text, best_confidence = select_response(
+        best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes = select_response(
             curr_candidates, curr_scores, curr_confidences,
             toxicities[dialog_ids == i], has_blacklisted[dialog_ids == i], dialog)
 
         selected_skill_names.append(best_skill_name)
         selected_texts.append(best_text)
         selected_confidences.append(best_confidence)
+        selected_human_attributes.append(best_human_attributes)
+        selected_bot_attributes.append(best_bot_attributes)
         logger.info(f"Choose selected_skill_names: {selected_skill_names};"
-                    f"selected_texts {selected_texts}; selected_confidences {selected_confidences}")
+                    f"selected_texts {selected_texts}; selected_confidences {selected_confidences};"
+                    f"selected human attributes: {selected_human_attributes}; "
+                    f"selected bot attributes: {selected_bot_attributes}")
 
     total_time = time.time() - st_time
     logger.info(f'convers_evaluation_selector exec time: {total_time:.3f}s')
-    return jsonify(list(zip(selected_skill_names, selected_texts, selected_confidences)))
+    return jsonify(list(zip(selected_skill_names, selected_texts, selected_confidences,
+                            selected_human_attributes, selected_bot_attributes)))
 
 
 def select_response(candidates, scores, confidences, toxicities, has_blacklisted, dialog):
@@ -245,6 +253,8 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     best_skill_name = skill_names[best_id]
     best_text = candidates[best_id]["text"]
     best_confidence = candidates[best_id]["confidence"]
+    best_human_attributes = candidates[best_id].get("human_attributes", {})
+    best_bot_attributes = candidates[best_id].get("bot_attributes", {})
 
     if best_text.strip() in ["Okay.", "That's cool!", "Interesting.", "Sounds interesting.", "Sounds interesting!",
                              "OK.", "Cool!", "Thanks!", "Okay, thanks."]:
@@ -259,10 +269,12 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
         best_skill_name = candidates[best_id]["skill_name"]
         best_text = candidates[best_id]["text"]
         best_confidence = candidates[best_id]["confidence"]
+        best_human_attributes = candidates[best_id].get("human_attributes", {})
+        best_bot_attributes = candidates[best_id].get("bot_attributes", {})
         if sum(curr_single_scores) == 0.:
             break
 
-    return best_skill_name, best_text, best_confidence
+    return best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes
 
 
 if __name__ == '__main__':

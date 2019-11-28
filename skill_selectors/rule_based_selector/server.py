@@ -91,6 +91,7 @@ class RuleBasedSelector():
 
             # always add dummy_skill
             skills_for_uttr.append("dummy_skill")
+            skills_for_uttr.append("personal_info_skill")
             skill_names.append(skills_for_uttr)
 
         return skill_names
