@@ -125,6 +125,16 @@ SKILLS = [
         "path": "",
         "formatter": skill_with_attributes_formatter
     },
+    {
+        "name": "tfidf_retrieval",
+        "protocol": "http",
+        "host": "tfidf_retrieval",
+        "port": 8028,
+        "endpoint": "respond",
+        "external": True,
+        "path": "",
+        "formatter": tfidf_formatter
+    },
 ]
 
 ANNOTATORS_1 = [
