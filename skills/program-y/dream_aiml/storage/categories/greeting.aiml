@@ -50,6 +50,12 @@
     </template>
   </category>
   <category>
+    <pattern># HOW ABOUT YOU #</pattern>
+    <template>
+      <srai>HOW_ARE_YOU</srai>
+    </template>
+  </category>
+  <category>
     <pattern>HOW ARE YOU DOING</pattern>
     <template>
       <srai>HOW_ARE_YOU</srai>
@@ -68,15 +74,52 @@
     </template>
   </category>
 
+<!--  <category>-->
+<!--    <pattern>HOW_ARE_YOU</pattern>-->
+<!--    <template>-->
+<!--      <think>-->
+<!--        <set name="topic">LIST ACTIVITIES</set>-->
+<!--      </think>-->
+<!--      I am fine, thanks! Do you want to know what I can do?-->
+<!--    </template>-->
+<!--  </category>-->
+
   <category>
     <pattern>HOW_ARE_YOU</pattern>
     <template>
       <think>
-        <set name="topic">LIST ACTIVITIES</set>
+        <set name="topic">THANKSGIVING</set>
       </think>
-      I am fine, thanks! Do you want to know what I can do?
+      I'm fine! Happy Thanksgiving, my friend! I'm so grateful to you for conversation with me. What are you grateful for this Thanksgiving?
     </template>
   </category>
+
+  <topic name="THANKSGIVING">
+    <category>
+      <pattern># FOR *</pattern>
+      <template>
+        <think>
+          <set name="topic">LIST ACTIVITIES</set>
+        </think>
+        <random>
+          <li>This is very nice.
+            As John Kennedy said,
+            "We must find time to stop and thank the people who make a difference in our lives."
+            Do you want to know what I can do?</li>
+          <li>I am so happy to hear that.
+            Henry Jacobsen said,
+            "Praise God even when you don’t understand what He is doing."
+            Do you want to know what I can do?
+          </li>
+          <li>This is really inspiring!
+            As Marcus Tullius Cicero said,
+            "Gratitude is not only the greatest of virtues, but the parent of all others."
+            Do you want to know what I can do?
+          </li>
+        </random>
+      </template>
+    </category>
+  </topic>
 
   <topic name="LIST ACTIVITIES">
     <category>
