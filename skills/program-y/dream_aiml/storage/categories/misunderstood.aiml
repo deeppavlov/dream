@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+  <category>
+    <pattern># I # NOT ASKED YOU #</pattern>
+    <template>
+      <random>
+        <li>Probably, I misunderstood you. What did you ask me about?</li>
+        <li>Probably, I misunderstood you. Could you, please, ask me in more simple way.</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern># I # NOT ASK YOU #</pattern>
+    <template>
+      <random>
+        <li>Probably, I misunderstood you. What did you ask me about?</li>
+        <li>Probably, I misunderstood you. Could you, please, ask me in more simple way.</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern># I # ASKED YOU # NOT #</pattern>
+    <template>
+      <random>
+        <li>Probably, I misunderstood you. What did you ask me about?</li>
+        <li>Probably, I misunderstood you. Could you, please, ask me in more simple way.</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern># I # ASK YOU # NOT #</pattern>
+    <template>
+      <random>
+        <li>Probably, I misunderstood you. What did you ask me about?</li>
+        <li>Probably, I misunderstood you. Could you, please, ask me in more simple way.</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern># I # ASKED YOU # ELSE #</pattern>
+    <template>
+      <random>
+        <li>Probably, I misunderstood you. What did you ask me about?</li>
+        <li>Probably, I misunderstood you. Could you, please, ask me in more simple way.</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern># I # ASK YOU # ELSE #</pattern>
+    <template>
+      <random>
+        <li>Probably, I misunderstood you. What did you ask me about?</li>
+        <li>Probably, I misunderstood you. Could you, please, ask me in more simple way.</li>
+      </random>
+    </template>
+  </category>
+</aiml>

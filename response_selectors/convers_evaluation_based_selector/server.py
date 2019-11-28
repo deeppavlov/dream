@@ -234,6 +234,8 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                 break
             else:
                 confidences[i] = 0.2  # Low confidence for greeting in the middle of dialogue
+        elif skill_names[i] == 'cobotqa' and "Here's something I found on the web." in candidates[i]['text']:
+            confidences[i] = 0.6
         if skill_names[i] == 'dummy_skill':
             question = candidates[i]['text']
 
