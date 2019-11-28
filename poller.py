@@ -34,9 +34,8 @@ def init_log(conf: Dict) -> None:
 
 Message = namedtuple('Message', ['chat_id', 'payload'])
 
-class Wrapper:
-    _chat_events: Optional[Dict[int, List[asyncio.Event]]]
 
+class Wrapper:
     def __init__(self, config: Dict) -> None:
         self._config = config
         self._in_queue = Queue()
@@ -44,7 +43,6 @@ class Wrapper:
 
         self._poller = Poller(config, self._in_queue)
         self._poller.start()
-        self._chat_events = None
         self._states = {}
 
         log.info('Wrapper initiated')
@@ -75,24 +73,13 @@ class Wrapper:
             chat_ids.append(chat_id)
             log_msg = f'{log_msg}, {str(chat_id)}' if log_msg else f'Processing messages for chats: {str(chat_id)}'
 
-        if self._config['send_state'] is False:
-            self._chat_events = {chat_id: [asyncio.Event() for _ in range(len(chat))] for chat_id, chat in buffer.items()}
-            for events in self._chat_events.values():
-                events[-1].set()
-
         if log_msg:
             log.info(log_msg)
 
         # "slices" of replicas from all conversations, each slice contains replicas from different conversation
         batched_chats = zip_longest(*chats, fillvalue=None)
-        if self._config['send_state'] is True or self._config['agent_mode'] is True:
-            for layer_id, chats_batch in enumerate(batched_chats):
-                await self._process_chats_batch(chats_batch, layer_id, chat_ids)
-        else:
-            tasks = (self._loop.create_task(self._process_chats_batch(chats_batch,
-                                                                      layer_id,
-                                                                      chat_ids)) for layer_id, chats_batch in enumerate(batched_chats))
-            await asyncio.gather(*tasks)
+        for layer_id, chats_batch in enumerate(batched_chats):
+            await self._process_chats_batch(chats_batch, layer_id, chat_ids)
 
     async def _process_chats_batch(self, chats_batch: List[str], layer_id: int, chat_ids: List[int]) -> None:
         utts_batch: List[Message] = [Message(chat_id, utt) for chat_id, utt in zip(chat_ids, chats_batch) if utt]
@@ -166,14 +153,8 @@ class Wrapper:
             'text': resp_text
         }
 
-        if self._config['send_state'] is False:
-            await self._chat_events[chat_id][layer_id - 1].wait()
-
         async with aiohttp.ClientSession() as session:
             await session.post(self._config['send_message_url'], json=payload)
-
-        if self._config['send_state'] is False:
-            self._chat_events[chat_id][layer_id].set()
 
         log.info(f'Sent response to chat: {str(chat_id)}')
 
