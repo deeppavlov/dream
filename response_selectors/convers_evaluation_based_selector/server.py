@@ -205,6 +205,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     greeting_spec = "Hi, this is an Alexa Prize Socialbot."
 
     very_big_score = 100
+    question = ""
 
     for i in range(len(scores)):
         if len(dialog['utterances']) < 2 and greeting_spec not in candidates[i]['text'] \
@@ -225,6 +226,9 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                 break
             else:
                 confidences[i] = 0.2  # Low confidence for greeting in the middle of dialogue
+        if skill_names[i] == 'dummy_skill':
+            question = candidates[i]['text']
+
         cand_scores = scores[i]
         confidence = confidences[i]
         skill_name = skill_names[i]
@@ -241,6 +245,13 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     best_skill_name = skill_names[best_id]
     best_text = candidates[best_id]["text"]
     best_confidence = candidates[best_id]["confidence"]
+
+    if best_text.strip() in ["Okay.", "That's cool!", "Interesting.", "Sounds interesting.", "Sounds interesting!",
+                             "OK.", "Cool!", "Thanks!", "Okay, thanks."]:
+        logger.info(f"adding {question} to response.")
+        best_text += np.random.choice([f" Let's switch the topic. {question}",
+                                       f" Let me ask you something. {question}",
+                                       f" I would like to ask you a question. {question}"])
 
     while candidates[best_id]["text"] == "" or candidates[best_id]["confidence"] == 0.:
         curr_single_scores[best_id] = 0.
