@@ -6,29 +6,28 @@ import _pickle as cPickle
 import zipfile
 import urllib.request
 import logging
-from argparse import ArgumentParser
 
 
 def most_frequent(List):
     return max(set(List), key=List.count)
 
 
-def get_vectorizer(args):
+def get_vectorizer(vectorizer_dir):
     if 'new_vectorizer.pkl' not in os.listdir(os.getcwd()):
-        urllib.request.urlretrieve(args.vectorizer_dir, "new_vectorizer.zip")
+        urllib.request.urlretrieve(vectorizer_dir, "new_vectorizer.zip")
         with zipfile.ZipFile('new_vectorizer.zip', 'r') as zip_ref:
             zip_ref.extractall(os.getcwd())
     vectorizer = cPickle.load(open('new_vectorizer.pkl', 'rb'))
     return vectorizer
 
 
-def get_dialogs(args, save_full=True):
-    dialog_list = json.load(open(args.dialog_dir, 'r'))
-    if os.path.isfile(args.custom_dialog_dir):
-        custom_dialogs = json.load(open(args.custom_dialog_dir, 'r'))
+def get_dialogs(dialog_dir, custom_dialog_dir, full_dialog_dir, save_full=True):
+    dialog_list = json.load(open(dialog_dir, 'r'))
+    if os.path.isfile(custom_dialog_dir):
+        custom_dialogs = json.load(open(custom_dialog_dir, 'r'))
         dialog_list = dialog_list + custom_dialogs
     if save_full:
-        json.dumps(dialog_list, open(args.full_dialog_dir, 'r'), indent=4)
+        json.dump(dialog_list, open(full_dialog_dir, 'w'), indent=4)
     return dialog_list
 
 
@@ -48,17 +47,10 @@ def create_phraselist(dialog_list, donotknow_answers, todel_userphrases, banned_
     return phrase_list
 
 
-parser = ArgumentParser()
-parser.add_argument("--vectorizer_dir", type=str,
-                    default="http://lnsigo.mipt.ru/export/models/new_vectorizer.zip", help="Directory with vectorizer")
-parser.add_argument("--dialog_dir", type=str,
-                    default="data/dialog_list.json", help="Directory with automatically extracted dialogs")
-parser.add_argument("--custom_dialog_dir", type=str,
-                    default="data/custom_dialog_list.json", help="Directory with dialogs added by user")
-parser.add_argument("--full_dialog_dir", type=str,
-                    default="data/full_dialog_list.json", help="Output directory with all dialogs")
-args = parser.parse_args()
-
+vectorizer_dir = "http://lnsigo.mipt.ru/export/models/new_vectorizer.zip"
+dialog_dir = "data/dialog_list.json"
+custom_dialog_dir = "data/custom_dialog_list.json"
+full_dialog_dir = "data/full_dialog_list.json"
 donotknow_answers = ["I really do not know what to answer.",
                      "Sorry, probably, I didn't get what you mean.",
                      "I didn't get it. Sorry.",
@@ -69,8 +61,9 @@ donotknow_answers = ["I really do not know what to answer.",
                      "I didn’t get that."]
 todel_userphrases = ['yes']
 banned_words = ['Benjamin']
-vectorizer = get_vectorizer(args=args)
-dialog_list = get_dialogs(args=args)
+vectorizer = get_vectorizer(vectorizer_dir=vectorizer_dir)
+dialog_list = get_dialogs(dialog_dir=dialog_dir, custom_dialog_dir=custom_dialog_dir,
+                          full_dialog_dir=full_dialog_dir)
 phrase_list = create_phraselist(dialog_list=dialog_list, donotknow_answers=donotknow_answers,
                                 todel_userphrases=todel_userphrases, banned_words=banned_words)
 
