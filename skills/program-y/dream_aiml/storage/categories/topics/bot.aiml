@@ -779,9 +779,8 @@
         <pattern>WHAT</pattern>
         <template>
             <random>
-                <li>You must need more information.</li>
-                <li>Did I say something that confused you?</li>
-                <li>Would you like me to repeat myself.</li>
+                <li>Next time if you want me to repeat, simply tell me: repeat.</li>
+                <li>Did I say something confusing?</li>
                 <li>You sound shocked.</li>
             </random>
         </template>
