@@ -239,7 +239,7 @@ services:
     volumes: []
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 4
   personal_info_skill:
     build:
       context: ./skills/personal_info_skill/
