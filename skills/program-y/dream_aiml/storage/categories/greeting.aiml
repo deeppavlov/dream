@@ -86,29 +86,134 @@
     </template>
   </category>
 
+<!--  <category>-->
+<!--    <pattern>HOW_ARE_YOU</pattern>-->
+<!--    <template>-->
+<!--      <think>-->
+<!--        <set name="topic">LIST ACTIVITIES</set>-->
+<!--      </think>-->
+<!--      I am fine, thanks! Do you want to know what I can do?-->
+<!--    </template>-->
+<!--  </category>-->
+
   <category>
     <pattern>HOW_ARE_YOU</pattern>
     <template>
       <think>
-        <set name="topic">LIST ACTIVITIES</set>
+        <set name="topic">BLACKFRIDAY</set>
       </think>
-      I am fine, thanks! Do you want to know what I can do?
+      I'm fine! Happy Black Friday! Will you go shopping today?
     </template>
   </category>
+
+  <topic name="BLACKFRIDAY">
+    <category>
+      <pattern>YES</pattern>
+      <template>
+        <random>
+          <li>Cool! I'm waiting for Cyber Monday. What are you going to buy today?</li>
+          <li>I'm waiting for Cyber Monday. What do you want to buy?</li>
+        </random>
+       <think>
+        <set name="topic">BLACKFRIDAYWHATTOBUY</set>
+      </think>
+      </template>
+    </category>
+    <category>
+      <pattern>NO</pattern>
+      <template>
+        <random>
+          <li>More than a hundred million people were shopping on Black Friday previous year.
+            So, I agree it's a good decision to skip shopping today. Do you want to know what I can do?</li>
+          <li>I agree, it's good for your wallet and nerves.
+            Do you want to know what I can do?</li>
+        </random>
+       <think>
+        <set name="topic">LIST ACTIVITIES</set>
+       </think>
+      </template>
+    </category>
+    <category>
+      <pattern># I #</pattern>
+      <template>
+        <random>
+          <li>I'm waiting for Cyber Monday. Do you want to know what I can do?</li>
+        </random>
+       <think>
+        <set name="topic">LIST ACTIVITIES</set>
+      </think>
+      </template>
+    </category>
+  </topic>
+
+
+  <topic name="LIST ACTIVITIES">
+    <category>
+      <pattern>HOW_ARE_YOU</pattern>
+      <template>
+        <random>
+          <li>I'm waiting for Cyber Monday. Do you want to know what I can do?</li>
+        </random>
+       <think>
+        <set name="topic">LIST ACTIVITIES</set>
+      </think>
+      </template>
+    </category>
+  </topic>
+
+  <topic name="BLACKFRIDAYWHATTOBUY">
+    <category>
+      <pattern>HOW_ARE_YOU</pattern>
+      <template>
+        <random>
+          <li>I'm waiting for Cyber Monday. What are you going to buy today?</li>
+        </random>
+       <think>
+        <set name="topic">BLACKFRIDAYWHATTOBUY</set>
+      </think>
+      </template>
+    </category>
+    <category>
+      <pattern># NOT #</pattern>
+      <template>
+        <random>
+          <li>Anyway, just a recommendation for you: set a budget and do your own research before shopping.
+          Do you want to know what I can do?</li>
+          <li>Anyway, don't forget about Cyber Monday.
+          Do you want to know what I can do?</li>
+        </random>
+       <think>
+        <set name="topic">LIST ACTIVITIES</set>
+      </think>
+      </template>
+    </category>
+    <category>
+      <pattern>#</pattern>
+      <template>
+        <random>
+          <li>Cool! Have a great shopping today! Do you want to know what I can do?</li>
+          <li>It's so cool! You sound like a professional shopper! Do you want to know what I can do?</li>
+        </random>
+       <think>
+        <set name="topic">LIST ACTIVITIES</set>
+      </think>
+      </template>
+    </category>
+  </topic>
 
   <topic name="LIST ACTIVITIES">
     <category>
       <pattern>YES</pattern>
       <template>
         <random>
-          <li>I am newborn socialbot, so I can't do so much.
-          I can answer questions, give fun facts and discuss movies.
+          <li>I am a newborn socialbot, so I can't do so much.
+          I can answer questions, share fun facts and discuss movies.
           What is your favorite TV Series?</li>
-          <li>I am newborn socialbot, so I can't do so much.
-          I can answer questions, give fun facts and discuss movies.
+          <li>I am a newborn socialbot, so I can't do so much.
+          I can answer questions, share fun facts and discuss movies.
           what is your favorite movie?</li>
-          <li>I am newborn socialbot, so I can't do so much.
-          I can answer questions, give fun facts and discuss movies.
+          <li>I am a newborn socialbot, so I can't do so much.
+          I can answer questions, share fun facts and discuss movies.
           what's your favorite tv show?</li>
         </random>
        <think>
@@ -200,7 +305,7 @@
     <template>
       <random>
         <li>I am sorry to hear that. What do you want to talk about?</li>
-        <li>I am sorry to hear that. do you like comedies?</li>
+        <li>I am sorry to hear that. Do you like comedies?</li>
       </random>
       <think>
         <set name="topic"><star/></set>
