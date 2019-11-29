@@ -158,6 +158,14 @@ def base_annotator_formatter(payload: Any, model_args_names=('x',), mode='in'):
         return payload
 
 
+def tfidf_formatter(payload, mode='in'):
+    if mode == 'in':
+        sentences = base_input_formatter(payload)['last_utterances']
+        return {'sentences': sentences}
+    elif mode == 'out':
+        return base_skill_output_formatter(payload)
+
+
 def sentiment_formatter(payload: Any, model_args_names=('x',), mode='in'):
     if mode == 'in':
         return {'sentences': annotated_input_formatter(payload, annotation="punctuated")["last_utterances"]}
