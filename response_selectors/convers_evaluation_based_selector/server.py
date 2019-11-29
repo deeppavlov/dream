@@ -260,8 +260,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     if best_text.strip() in ["Okay.", "That's cool!", "Interesting.", "Sounds interesting.", "Sounds interesting!",
                              "OK.", "Cool!", "Thanks!", "Okay, thanks."]:
         logger.info(f"adding {question} to response.")
-        best_text += np.random.choice([f" Let's switch the topic. {question}",
-                                       f" Let me ask you something. {question}",
+        best_text += np.random.choice([f" Let me ask you something. {question}",
                                        f" I would like to ask you a question. {question}"])
 
     while candidates[best_id]["text"] == "" or candidates[best_id]["confidence"] == 0.:
