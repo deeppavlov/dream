@@ -258,7 +258,8 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     best_bot_attributes = candidates[best_id].get("bot_attributes", {})
 
     if best_text.strip() in ["Okay.", "That's cool!", "Interesting.", "Sounds interesting.", "Sounds interesting!",
-                             "OK.", "Cool!", "Thanks!", "Okay, thanks."]:
+                             "OK.", "Cool!", "Thanks!", "Okay, thanks.", "I'm glad you think so!",
+                             "Sorry, I don't have an answer for that!", "Let's talk about something else."]:
         logger.info(f"adding {question} to response.")
         best_text += np.random.choice([f" Let me ask you something. {question}",
                                        f" I would like to ask you a question. {question}"])
