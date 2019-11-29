@@ -52,8 +52,8 @@ In not `convai` mode `CRBP` sends only `text` field.
 
 | CRBP mode | request payload |
 |:---:|:---:|
-| `convai=False`, `state=False`, `agent=False` | `{'text1': ['a', 'b']}` |
-| `convai=True`, `state=False`, `agent=False` | `{'text1': [<payload_0>, <payload_1>]}` |
-| `convai=False`, `state=True`, `agent=False` | `{'text1': ['a', 'b'], 'state': [<state_0>, <state_1>]}` |
-| `convai=True`, `state=True`, `agent=False` | `{'text1': [<payload_0>, <payload_1>], 'state': [<state_0>, <state_1>]}` |
+| `convai=False`, `state=False`, `agent=False` | `{'x': ['a', 'b']}` |
+| `convai=True`, `state=False`, `agent=False` | `{'x': [<payload_0>, <payload_1>]}` |
+| `convai=False`, `state=True`, `agent=False` | `{'x': ['a', 'b'], 'state': [<state_0>, <state_1>]}` |
+| `convai=True`, `state=True`, `agent=False` | `{'x': [<payload_0>, <payload_1>], 'state': [<state_0>, <state_1>]}` |
 | `convai=False`, `state=False`, `agent=True` | `{'user_id': 74455, 'payload': 'Hello, Agent!'}` |
