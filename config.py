@@ -63,7 +63,7 @@ SKILLS = [
         "endpoint": "api/rest/v1.0/ask",
         "external": True,
         "path": "",
-        "formatter": alice_formatter
+        "formatter": program_y_formatter
     },
     {
         "name": "personality_catcher",
@@ -113,7 +113,7 @@ SKILLS = [
         "endpoint": "api/rest/v1.0/ask",
         "external": True,
         "path": "",
-        "formatter": alice_formatter
+        "formatter": program_y_formatter
     },
     {
         "name": "movie_skill",
@@ -129,6 +129,7 @@ SKILLS = [
         "name": "tfidf_retrieval",
         "protocol": "http",
         "host": "tfidf_retrieval",
+<<<<<<< HEAD
         "port": 8028,
         "endpoint": "respond",
         "external": True,
@@ -145,6 +146,14 @@ SKILLS = [
         "path": "",
         "formatter": skill_with_attributes_formatter
     }
+=======
+        "port": 8024,
+        "endpoint": "tridf_retrieval",
+        "external": True,
+        "path": "",
+        "formatter": dp_toxic_formatter
+    },
+>>>>>>> dev
 ]
 
 ANNOTATORS_1 = [
