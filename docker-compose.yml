@@ -240,4 +240,12 @@ services:
     deploy:
       mode: replicated
       replicas: 2
+  personal_info_skill:
+    build:
+      context: ./skills/personal_info_skill/
+    command: gunicorn --workers=4 server:app -b 0.0.0.0:8030
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
 version: '3.7'

@@ -94,13 +94,14 @@ def respond():
                         entities.append(ent["text"].lower())
                         questions.append("Fact about {}".format(ent["text"]))
                         dialog_ids += [i]
-            for ent in curr_uttr["annotations"]["cobot_nounphrases"]:
-                if ent.lower() not in UNIGRAMS:
-                    if ent in entities + ["I", 'i']:
-                        pass
-                    else:
-                        questions.append("Fact about {}".format(ent))
-                        dialog_ids += [i]
+            if len(entities) == 0:
+                for ent in curr_uttr["annotations"]["cobot_nounphrases"]:
+                    if ent.lower() not in UNIGRAMS:
+                        if ent in entities + ["I", 'i']:
+                            pass
+                        else:
+                            questions.append("Fact about {}".format(ent))
+                            dialog_ids += [i]
 
     executor = ThreadPoolExecutor(max_workers=ASYNC_SIZE)
     for i, response in enumerate(executor.map(send_cobotqa, questions)):
@@ -161,8 +162,8 @@ def respond():
                     resp_cands[j] = " ".join(sentences[:1])
             if j != 0:
                 # facts
-                talk_about = ["What kind of movies do you like movies?",
-                              "How often do you go to movies?",
+                talk_about = ["What genre of movies do you like?",
+                              "How often do you watch movies?",
                               "Who is your favorite actor or actress?"]
                 if ("Opinion_RequestIntent" in intents) or opinion_request_detected:
                     resp_cands[j] = f"I don't have an opinion on that but I know some facts. {resp_cands[j]} " \

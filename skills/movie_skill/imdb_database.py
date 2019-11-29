@@ -74,7 +74,8 @@ class IMDb:
             except KeyError:
                 pass
         for title in ["Movie", "The Tragedy", "The Favorite", "Angela", "Attitude", "Do You Believe",
-                      "Earthquake", "The Gays", "No Matter What", "Talk to Me", "You", "Let's Talk", "Let's Chat"]:
+                      "Earthquake", "The Gays", "No Matter What", "Talk to Me", "You", "Let's Talk", "Let's Chat",
+                      "In", "If", "Can", "O", "OK", "One", "Two", "Movie", "Film", "New", "Next", "Out", "Love"]:
             proc_title = self.process_movie_name(title)
             try:
                 self.with_ignored_movies_names.pop(proc_title)

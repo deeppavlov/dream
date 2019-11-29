@@ -1,7 +1,13 @@
 "phrase text" response1 response2 response3
 "Let's chat" "Hi, this is an Alexa Prize Socialbot. How are you?"
+<<<<<<< HEAD
 "good" "I'm glad. What do you want to talk about?" "I'm glad. what's your favorite movie?" "Glad to hear it. What's new?"
 "How are you" "I'm fine, thanks! Do you want to know what I can do?"
+=======
+"good" "I'm glad. What do you want to talk about?" "I'm glad. what's your favorite movie?"
+"How are you" "I'm fine! Happy Thanksgiving, my friend! I'm so grateful to you for conversation with me. What are you grateful for this Thanksgiving?"
+"For talking to you"
+>>>>>>> 0b1a66c8797db7a019ed08ea7bf2dc24aea6d8a6
 Yes "I'm newborn socialbot, so I can't do so much. I can answer questions, give fun facts and discuss movies. what's your favorite TV Series?" "I'm newborn socialbot, so I can't do so much. I can answer questions, give fun facts and discuss movies. what's your favorite movie?" "I'm newborn socialbot, so I can't do so much. I can answer questions, give fun facts and discuss movies. what's your favorite tv show?"
 "Do you like Siri?" "Siri was a big inspiration to me." "I'm partial to all AIs." "I like all AIs." "I like electricity."
 "Do you better than Siri?"
@@ -20,12 +26,15 @@ Yes "I'm newborn socialbot, so I can't do so much. I can answer questions, give 
 "okay."
 "what else can you do?" "I'm learning day by day. What would you like me to do? #+#what_can_you_do" "I'm learning day by day. For now, I can answer a question, tell a joke or fact and discuss movies. #+#what_can_you_do" "I'm newborn socialbot, so I can't do so much. For example, I can answer any question, especially about movies. What is your favorite movie? #+#what_can_you_do"
 "which 1"
-"What do you think of Angela Merkel’s policies over the past few years?"
+"what do you think of angela merkel’s policies over the past few years?"
 "hey are you Canadian"
 "I didn't ask you that definition let's chat about something else"
+"I didn't ask you that definition"
 "let's talk about something else"
 "what's your favorite thing to eat" "I like tomato juice. what's yours?"
 "who is your favorite democratic presidential candidate"
 "politics" "My creators still working on politics skill. For now, i'm not able to perform such discussion. But i'll be glad to discuss movies with you. what's your favorite movie?"
 "cancel" "Have a good day! #+#exit" "Have a nice day! #+#exit" "Have a great day! #+#exit" "See you! #+#exit" "See you later! #+#exit" "See you soon! #+#exit" "See ya! #+#exit" "Bye! #+#exit" "Bye-bye! #+#exit" "Goodbye! #+#exit" "Goodbye! It was nice speaking with you! #+#exit"
 Goodbye "Have a good day! #+#exit" "Have a nice day! #+#exit" "Have a great day! #+#exit" "See you! #+#exit" "See you later! #+#exit" "See you soon! #+#exit" "See ya! #+#exit" "Bye! #+#exit" "Bye-bye! #+#exit" "Goodbye! #+#exit" "Goodbye! It was nice speaking with you! #+#exit"
+"how about yourself"
+"what about yourself"

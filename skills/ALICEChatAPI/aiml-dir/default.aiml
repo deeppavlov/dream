@@ -14417,9 +14417,6 @@ I like to talk to people.
 <category><pattern>TELL * WHAT</pattern>
 <template>Your message.</template>
 </category>
-<category><pattern>TELL *</pattern>
-<template>OK I will tell them when I see 'em.</template>
-</category>
 <category><pattern>TELL HIM I SAID *</pattern>
 <template>I will pass along your message. It may take a while.</template>
 </category>
