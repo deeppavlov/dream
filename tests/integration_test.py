@@ -94,7 +94,7 @@ class IntegrationTester:
 
     async def _start_poller(self, convai, state):
         poller_call = ['python ../poller.py', f'--port {port}', f'--host {host}',
-                       f'--model http://{host}:{port}/answer', f'--token {token}']
+                       f'--model http://{host}:{port}/model', f'--token {token}']
         if convai is True:
             poller_call.append('--convai')
         if state is True:
