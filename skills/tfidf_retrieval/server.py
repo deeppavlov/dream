@@ -2,6 +2,10 @@
 
 import logging
 import time
+<<<<<<< HEAD
+=======
+import numpy as np
+>>>>>>> dev
 from data.process import check
 from flask import Flask, request, jsonify
 from os import getenv
@@ -16,6 +20,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 
+<<<<<<< HEAD
 @app.route("/respond", methods=['POST'])
 def respond():
     st_time = time.time()
@@ -27,6 +32,17 @@ def respond():
     total_time = time.time() - st_time
     logger.info(f"Tfidf exec time: {total_time:.3f}s")
     logger.info(response)
+=======
+@app.post("/tfidf_retrieval/")
+def tfidf_retrieval():
+    st_time = time.time()
+    last_utterances = request.json['last_utterances']
+    response = [check(last_utterance)
+                for last_utterance in last_utterances
+                ]
+    total_time = time.time() - st_time
+    logger.info(f"Tfidf exec time: {total_time:.3f}s")
+>>>>>>> dev
     return jsonify(response)
 
 
