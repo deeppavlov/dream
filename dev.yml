@@ -168,4 +168,10 @@ services:
       - "./skills/tfidf_retrieval:/src"
     ports:
       - 8028:8028
+  personal_info_skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/personal_info_skill:/src"
+    ports:
+      - 8030:8030
 version: "3.7"

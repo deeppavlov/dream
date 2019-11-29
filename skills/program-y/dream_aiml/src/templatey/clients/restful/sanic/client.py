@@ -31,14 +31,12 @@ from sanic.exceptions import ServerError
 
 from programy.clients.restful.client import RestBotClient
 from programy.clients.restful.sanic.config import SanicRestConfiguration
-from os import getenv
 import sentry_sdk
 import uuid
 from sentry_sdk.integrations.logging import ignore_logger
 import string
+from templatey.processors.pre.normalizer import PreProcessor
 
-
-sentry_sdk.init(getenv('SENTRY_DSN'))
 ignore_logger("root")
 # TODO: Get if from config.sanic.yml
 NULL_RESPONSE = "Sorry, I don't have an answer for that!"
@@ -52,6 +50,7 @@ class SanicRestBotClient(RestBotClient):
 
     def __init__(self, id, argument_parser=None):
         RestBotClient.__init__(self, id, argument_parser)
+        self.preprocesser = PreProcessor(fpath="../../storage/lookups/normal.txt")
 
     def get_client_configuration(self):
         return SanicRestConfiguration("rest")
@@ -80,7 +79,7 @@ class SanicRestBotClient(RestBotClient):
                 if remove_punct(user_sentences[0]).lower() == remove_punct('let\'s chat'):
                     user_sentences[0] = 'hello'
                 for s in user_sentences:
-                    answer = self.ask_question(userid, s)
+                    answer = self.ask_question(userid, self.preprocesser.process(s))
                 if answer == NULL_RESPONSE:
                     confidence = 0.2
                 elif len(answer.split()) <= 3:
