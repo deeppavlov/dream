@@ -3,6 +3,7 @@
 import logging
 import time
 import numpy as np
+import pandas as pd
 
 from flask import Flask, request, jsonify
 from os import getenv
@@ -22,8 +23,7 @@ donotknow_answers = np.array(["I really do not know what to answer.",
                               "I didn't get it. Sorry.",
                               "Let's talk about something else."])
 
-with open("./topical_chat_questions.txt", "r") as f:
-    QUESTIONS = f.read().splitlines()
+QUESTIONS = pd.read_csv("./questions_with_topics.csv")
 
 
 @app.route("/respond", methods=['POST'])
@@ -34,12 +34,23 @@ def respond():
     final_responses = []
 
     for dialog in dialogs_batch:
+        topics = dialog["utterances"][-1]["annotations"]["cobot_topics"].get("text", [])
+        if len(topics) == 0:
+            topics = ["Phatic"]
+
+        logger.info(f"Found topics: {topics}")
         cands = []
         confs = []
 
         cands += [np.random.choice(donotknow_answers)]
         confs += [0.5]
-        cands += [np.random.choice(QUESTIONS)]
+
+        questions_with_the_same_topics = QUESTIONS.loc[np.any([QUESTIONS["topic"] == t
+                                                               for t in topics], axis=0), "question"]
+        if len(questions_with_the_same_topics) == 0:
+            questions_with_the_same_topics = QUESTIONS.loc[np.any([QUESTIONS["topic"] == t
+                                                                   for t in ["Phatic"]], axis=0), "question"]
+        cands += [np.random.choice(questions_with_the_same_topics)]
         confs += [0.6]
         final_responses.append(cands)
         final_confidences.append(confs)
