@@ -990,7 +990,7 @@ stuff
 french
 storage
 oh
-japan
+ok
 doing
 loans
 shoes
@@ -999,6 +999,7 @@ stay
 nature
 orders
 availability
+japan
 africa
 summary
 turn
@@ -1155,7 +1156,6 @@ nice
 score
 statistics
 client
-ok
 returns
 capital
 follow
