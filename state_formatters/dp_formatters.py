@@ -161,7 +161,6 @@ def base_annotator_formatter(payload: Any, model_args_names=('x',), mode='in'):
 def tfidf_formatter(payload, mode='in'):
     if mode == 'in':
         sentences = base_input_formatter(payload)['last_utterances']
-        assert True
         return {'sentences': sentences}
     elif mode == 'out':
         return base_skill_output_formatter(payload)
