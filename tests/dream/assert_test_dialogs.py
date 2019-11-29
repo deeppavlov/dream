@@ -26,7 +26,6 @@ def main():
     print(f'Mean proc time: {mean_proc_time}')
     assert statistics.mean(proc_times) <= args.time_limit, print(
         f'Mean proc time: {mean_proc_time} > {args.time_limit}')
-
     for pred_r, true_r in zip(pred_data, true_data):
         true_sents = set([sent.lower().replace('\n', ' ') for sent in true_r[1:]])
         if true_sents:
