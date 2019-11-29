@@ -89,12 +89,14 @@ class ApiHandler:
                     'user_id': user_id, 'response': 'command_performed', 'active_skill': 'command_performed'
                 })
 
-            response = await register_msg(utterance=payload, user_telegram_id=user_id,
-                                          user_device_type=data.pop('user_device_type', 'http'),
-                                          date_time=datetime.now(),
-                                          location=data.pop('location', ''),
-                                          channel_type='http_client',
-                                          message_attrs=data, require_response=True)
+            response = await asyncio.shield(
+                register_msg(utterance=payload, user_telegram_id=user_id,
+                             user_device_type=data.pop('user_device_type', 'http'),
+                             date_time=datetime.now(),
+                             location=data.pop('location', ''),
+                             channel_type='http_client',
+                             message_attrs=data, require_response=True)
+            )
 
             if response is None:
                 raise RuntimeError('Got None instead of a bot response.')
@@ -143,6 +145,9 @@ class ApiHandler:
 
 
 class WSstatsHandler:
+    def __init__(self):
+        self.update_time = 0.5
+
     @aiohttp_jinja2.template('services_ws_highcharts.html')
     async def ws_page(self, request):
         return {}
@@ -151,7 +156,10 @@ class WSstatsHandler:
         ws = web.WebSocketResponse()
         await ws.prepare(request)
         request.app['websockets'].append(ws)
-        stats = request.app['stats']
-        await stats.work_with_ws(ws)
+        stats_storage = request.app['stats']
+        while True:
+            data = stats_storage.get_current_load()
+            await ws.send_json(data)
+            await asyncio.sleep(self.update_time)
 
         return ws
