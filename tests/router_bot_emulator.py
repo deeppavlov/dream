@@ -45,7 +45,7 @@ class Server:
         /bot{token}/getUpdates (GET, POST): Returns messages from router bot on GET-request, receives messages from
             router bot on POST-request.
         /bot{token}/sendMessage (POST): Receives messages for router bot.
-        /answer (POST): Endpoint emulates DeepPavlov REST API endpoint.
+        /model (POST): Endpoint emulates DeepPavlov REST API endpoint.
 
     """
     _config: Dict[str, Union[List, Dict, bool]]
@@ -80,11 +80,11 @@ class Server:
         self._app.add_routes([web.get('/bot{token}/getUpdates', self._handle_updates),
                               web.post('/bot{token}/getUpdates', self._set_new_test),
                               web.post('/bot{token}/sendMessage', self._handle_message),
-                              web.post('/answer', self._dp_model)])
+                              web.post('/model', self._dp_model)])
         web.run_app(self._app, port=parsed_args.port)
 
     async def _dp_model(self, request: web.Request) -> Response:
-        """Handler for POST-requests to /answer endpoint. Simulates DeepPavlov model REST api interface.
+        """Handler for POST-requests to /model endpoint. Simulates DeepPavlov model REST api interface.
 
         Args:
             request: Request with payload for DeepPavlov model.
@@ -97,7 +97,7 @@ class Server:
         self._test_result['model_input_correct'] = (ordered(data) == ordered(self._config['model_input']))
         ret = []
         if self._config['state'] is False:
-            for message in data['text1']:
+            for message in data['x']:
                 if self._config['convai'] is True:
                     text = message['payload']['text']
                     command = message['payload']['command']
@@ -107,7 +107,7 @@ class Server:
                 resp_list = [text.upper(), text] if command is None else [command]
                 ret.append(resp_list)
         else:
-            for message, state in zip(data['text1'], data['state']):
+            for message, state in zip(data['x'], data['state']):
                 if self._config['convai'] is True:
                     text = message['payload']['text']
                     command = message['payload']['command']

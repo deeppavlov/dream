@@ -23,6 +23,7 @@ parser.add_argument('--model_url', default=None, help='path to model endpoint', 
 parser.add_argument('--host', default=None, help='router bot host', type=str)
 parser.add_argument('--port', default=None, help='router bot port', type=str)
 parser.add_argument('--token', default=None, help='bot token', type=str)
+parser.add_argument('--arg-name', default=None, help='model first argument name', type=str)
 parser.add_argument('--state', action='store_true', help='add argument to send state to model')
 parser.add_argument('--convai', action='store_true')
 parser.add_argument('--agent', action='store_true', help='run poller in dp-agent mode')
@@ -237,6 +238,7 @@ def main() -> None:
     send_state = args.state
     convai_mode = args.convai
     agent_mode = args.agent
+    arg_name = args.arg_name
 
     root_path = Path(__file__).resolve().parent
     config_path = root_path / 'config.json'
@@ -258,6 +260,7 @@ def main() -> None:
     config['send_state'] = send_state or config['send_state']
     config['convai_mode'] = convai_mode or config['convai_mode']
     config['agent_mode'] = agent_mode or config['agent_mode']
+    config['model_args_names'][0] = arg_name or config['model_args_names'][0]
 
     if config['agent_mode'] and (config['convai_mode'] or config['send_state']):
         raise ValueError('one shouldn\'t use --convai or --state arguments with --agent')
