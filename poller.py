@@ -4,11 +4,13 @@ import functools
 import json
 import logging
 from collections import defaultdict, namedtuple
+from functools import partial
 from itertools import zip_longest
 from logging import Logger, config as logging_config
 from multiprocessing import Process, Queue
 from pathlib import Path
-from typing import Dict, List, Optional
+from queue import Empty
+from typing import Dict, List, Tuple, Union
 
 import aiohttp
 import polling
@@ -49,25 +51,32 @@ class Wrapper:
         self._states = {}
         self._active_chats = dict()
         self._backlog = defaultdict(list)
-
+        self._run = True
         log.info('Wrapper initiated')
-        self._loop.run_until_complete(self._poll_msgs())
+
+        try:
+            self._loop.run_until_complete(self._poll_msgs())
+        except KeyboardInterrupt:
+            self._poller.terminate()
+            self._poller.join()
+            self._run = False
+            self._loop.close()
 
     async def _poll_msgs(self):
-        while True:
-            input_q = await self._loop.run_in_executor(None, self._in_queue.get)
-            self._loop.create_task(self._process_input(input_q))
+        queue_get = partial(self._in_queue.get, timeout=1)
+        while self._run:
+            try:
+                input_q = await self._loop.run_in_executor(None, queue_get)
+                self._loop.create_task(self._process_input(input_q))
+            except Empty:
+                pass
 
     async def _process_input(self, input_q: Dict) -> None:
         buffer = defaultdict(list)
 
         for message in input_q['result']:
-            if self._config['convai_mode'] is True:
-                chat_item = message['message']
-            else:
-                chat_item = self._process_payload(message['message']['payload'])
+            chat_id, chat_item = self._process_payload(message['message'])
             if chat_item:
-                chat_id = message['message']['chat']['id']
                 buffer[chat_id].append(chat_item)
         chats = []
         chat_ids = []
@@ -75,7 +84,7 @@ class Wrapper:
         for chat_id, chat in buffer.items():
             if chat_id in self._active_chats:
                 self._backlog[chat_id].extend(chat)
-                log.info(f'Message from chat "{chat_id}" pushed to backlog')
+                log.info(f'Message from chat {chat_id} pushed to backlog')
             else:
                 chats.append(chat)
                 chat_ids.append(chat_id)
@@ -144,13 +153,18 @@ class Wrapper:
 
         await asyncio.gather(*tasks)
 
-    @staticmethod
-    def _process_payload(payload: Dict) -> Optional[str]:
-        if payload.get('command', None) is not None:
-            message = None
+    def _process_payload(self, message: Dict) -> Tuple[int, Union[str, dict]]:
+        chat_id = message["chat"]["id"]
+        if self._config['convai_mode'] is True:
+            chat_item = message
         else:
-            message = payload['text']
-        return message
+            command = message['payload'].get('command')
+            if command is not None:
+                log.info(f'Got command "{command}" from chat {chat_id}')
+                chat_item = None
+            else:
+                chat_item = message['payload']['text']
+        return chat_id, chat_item
 
     async def _send_results(self, chat_id: int, response: list) -> None:
         await self._check_backlog(chat_id)
