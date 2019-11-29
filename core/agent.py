@@ -148,8 +148,11 @@ class Agent:
     async def process(self, dialog_id, service_name=None, response: Any = None, **kwargs):
         # TODO(pugin): remove after tasks and stats is merged
         if self.process_logger_callable and service_name:
-            await self.process_logger_callable(service_name, time(), 'done')
+            await self.process_logger_callable(service_name, time(), 'done', **kwargs)
         workflow_record = self.get_workflow_record(dialog_id)
+        if isinstance(response, Exception):
+            await self.process_logger_callable('responder', time(), 'done')
+            raise response
         next_services = await self.process_service_response(dialog_id, service_name, response, **kwargs)
 
         service_requests = []
