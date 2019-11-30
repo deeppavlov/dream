@@ -86,120 +86,15 @@
     </template>
   </category>
 
-<!--  <category>-->
-<!--    <pattern>HOW_ARE_YOU</pattern>-->
-<!--    <template>-->
-<!--      <think>-->
-<!--        <set name="topic">LIST ACTIVITIES</set>-->
-<!--      </think>-->
-<!--      I am fine, thanks! Do you want to know what I can do?-->
-<!--    </template>-->
-<!--  </category>-->
-
   <category>
     <pattern>HOW_ARE_YOU</pattern>
     <template>
       <think>
-        <set name="topic">BLACKFRIDAY</set>
+        <set name="topic">LIST ACTIVITIES</set>
       </think>
-      I'm fine! Happy Black Friday! Will you go shopping today?
+      I am fine, thanks! Do you want to know what I can do?
     </template>
   </category>
-
-  <topic name="BLACKFRIDAY">
-    <category>
-      <pattern>YES</pattern>
-      <template>
-        <random>
-          <li>Cool! I'm waiting for Cyber Monday. What are you going to buy today?</li>
-          <li>I'm waiting for Cyber Monday. What do you want to buy?</li>
-        </random>
-       <think>
-        <set name="topic">BLACKFRIDAYWHATTOBUY</set>
-      </think>
-      </template>
-    </category>
-    <category>
-      <pattern>NO</pattern>
-      <template>
-        <random>
-          <li>More than a hundred million people were shopping on Black Friday previous year.
-            So, I agree it's a good decision to skip shopping today. Do you want to know what I can do?</li>
-          <li>I agree, it's good for your wallet and nerves.
-            Do you want to know what I can do?</li>
-        </random>
-       <think>
-        <set name="topic">LIST ACTIVITIES</set>
-       </think>
-      </template>
-    </category>
-    <category>
-      <pattern># I #</pattern>
-      <template>
-        <random>
-          <li>I'm waiting for Cyber Monday. Do you want to know what I can do?</li>
-        </random>
-       <think>
-        <set name="topic">LIST ACTIVITIES</set>
-      </think>
-      </template>
-    </category>
-  </topic>
-
-
-  <topic name="LIST ACTIVITIES">
-    <category>
-      <pattern>HOW_ARE_YOU</pattern>
-      <template>
-        <random>
-          <li>I'm waiting for Cyber Monday. Do you want to know what I can do?</li>
-        </random>
-       <think>
-        <set name="topic">LIST ACTIVITIES</set>
-      </think>
-      </template>
-    </category>
-  </topic>
-
-  <topic name="BLACKFRIDAYWHATTOBUY">
-    <category>
-      <pattern>HOW_ARE_YOU</pattern>
-      <template>
-        <random>
-          <li>I'm waiting for Cyber Monday. What are you going to buy today?</li>
-        </random>
-       <think>
-        <set name="topic">BLACKFRIDAYWHATTOBUY</set>
-      </think>
-      </template>
-    </category>
-    <category>
-      <pattern># NOT #</pattern>
-      <template>
-        <random>
-          <li>Anyway, just a recommendation for you: set a budget and do your own research before shopping.
-          Do you want to know what I can do?</li>
-          <li>Anyway, don't forget about Cyber Monday.
-          Do you want to know what I can do?</li>
-        </random>
-       <think>
-        <set name="topic">LIST ACTIVITIES</set>
-      </think>
-      </template>
-    </category>
-    <category>
-      <pattern>#</pattern>
-      <template>
-        <random>
-          <li>Cool! Have a great shopping today! Do you want to know what I can do?</li>
-          <li>It's so cool! You sound like a professional shopper! Do you want to know what I can do?</li>
-        </random>
-       <think>
-        <set name="topic">LIST ACTIVITIES</set>
-      </think>
-      </template>
-    </category>
-  </topic>
 
   <topic name="LIST ACTIVITIES">
     <category>
