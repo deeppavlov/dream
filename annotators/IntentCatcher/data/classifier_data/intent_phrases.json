@@ -10,7 +10,7 @@
         "((Goodbye)|(Bye)|(Bye-bye)|(Stop)|(Exit)|(End))(, ((Alexa)|(bot))){0,1}",
         "((Alexa)|(Bot)), ((goodbye)|(bye)|(bye bye)|(stop)|(exit)|(end))",
         "((Farewell)|(Peace out)|(Adios)|(Catch you later)|(See ((you)|(ya)))|(Take care))",
-        "I ((am out of here)|(have to go)|(gotta run)|(gotta head out))(, ((bye)|(goodbye)|(bye bye))){0,1}"
+        "(((Okay)|(Well)|(So)) ,){0,1}I ((am out of here)|(have to go)|(gotta go)|(gotta run)|(gotta head out)|(gonna go))( ((now)|(right now))){0,1}(, ((bye)|(goodbye)|(bye bye))){0,1}"
       ],
     "min_precision" : 0.80,
     "punctuation" : [
@@ -58,6 +58,30 @@
           "!"
         ]
     },
+    "dont_understand" : {
+      "phrases": [
+        "(Sorry, ){0,1}I ((don't)|(do not)|(didn't)|(did not)) ((understand)|(get)|(know))( ((what you mean)|(you)|(what you say))){0,1}",
+        "((I don't ((know)|(understand)|(get)) )|(I am not sure )|())what ((do)|(did)) you mean",
+        "((I don't ((know)|(understand)|(get)) )|(I am not sure )|())what are you talking about",
+        "(What, ){0,1}it doesn't make (any ){0,1}sense"
+      ],
+      "min_precision" : 0.0,
+      "punctuation" : [
+          ".",
+          "!"
+        ]
+    },
+    "tell_me_more" : {
+      "phrases": [
+        "(((Please)|(Well)|(That's ((neat)|(cool)|(great)|(funny)))), ){0,1}tell me more (about it){0,1}",
+        "What else ((do you know)|(can you tell me)) about it"
+      ],
+      "min_precision" : 0.0,
+      "punctuation" : [
+          ".",
+          "!"
+        ]
+    },
     "what_is_your_name" : {
       "phrases" : [
         "Do you have a ((name)|(surname))",
@@ -72,12 +96,13 @@
     },
     "where_are_you_from" : {
       "phrases": [
+        "Where are you from(, Alexa){0,1}",
         "(((I live in )|(I am from )){0,1}((Virginia)|(Texas)|(Washington)|(New York)|(France)|(US)|(States)|(Boston)|(Berkley)|(City))\\. ){0,1}What (((country)|(city)|(place)) ){0,1}are you from",
         "What(('s)|(is)) ((country)|(city)|(place)) of origin",
-        "Where do you live",
-        "Where are you living",
-        "Where do you exist",
-        "Where were you born",
+        "Where do you live(, Alexa){0,1}",
+        "Where are you living(, Alexa){0,1}",
+        "Where do you exist(, Alexa){0,1}",
+        "Where were you born(, Alexa){0,1}",
         "What(('s)|(is)) your ((birthplace)|(location)|(address))"
       ],
       "min_precision" : 0.00,
@@ -162,8 +187,8 @@
     },
     "doing_well": {
       "phrases": [
-        "I(('m)|( am)) ((doing)|(all)) ((okay)|(right)|(fine)|(great)|(cool))",
-        "I(('m)|( am)) ((fine)|(good)|(well)|(happy)|(very kind as well)|(okay)|(great)|(cool)) (()|(thanks))"
+        "I(('m)|( am)) ((doing)|(all)) ((okay)|(right)|(fine)|(great)|(cool))( thanks){0,1}",
+        "I(('m)|( am)) ((fine)|(good)|(well)|(happy)|(very kind as well)|(okay)|(great)|(cool))( thanks){0,1}"
       ],
       "min_precision": 0.00,
       "punctuation": [
