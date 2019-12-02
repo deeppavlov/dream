@@ -14,7 +14,6 @@ import aiohttp
 from tqdm import tqdm
 from http_api_test import perform_test_dialogue
 
-
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -28,6 +27,7 @@ parser.add_argument('--with_debug_info', action='store_true', default=False,
 parser.add_argument('--url', help='url, used only when with_requesting is True', default='http://0.0.0.0:4242')
 parser.add_argument('--feedback', help='feedbacks csv', default='conversation_feedback.csv')
 parser.add_argument('--ratings', help='ratings csv', default='ratings.csv')
+parser.add_argument('--first_n', help='Number of dialogs for debug', default=999999)
 
 
 def print_pretty(dialog, file=sys.stdout, field='dialog', with_debug_info=False):
@@ -144,8 +144,8 @@ async def main(args):
     new_conversations = pd.DataFrame(new_conversations)
     new_conversations['start_time'] = pd.to_datetime(new_conversations['start_time'])
     new_conversations = new_conversations.sort_values('start_time', ascending=False)
-    # NOTE: head only latest 10 for debug
-    # new_conversations = new_conversations.head(10)
+    args.first_n = int(args.first_n)
+    new_conversations = new_conversations.head(args.first_n)
     if args.with_requesting:
         new_conversations = await make_requests(new_conversations, args)
     print_to_file(new_conversations, args)

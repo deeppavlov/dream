@@ -10,34 +10,17 @@
   <script src="https://code.highcharts.com/modules/export-data.js"></script>
 {% endblock %}
 {% block content %}
-  <div id="container" style="min-width: 310px; min-height: 600px; margin: 0 auto"></div>
-
-
-
+  <div id="container_queue" style="min-width: 310px; min-height: 600px; margin: 0 auto"></div>
+  <div id="container_response_time" style="min-width: 310px; min-height: 600px; margin: 0 auto"></div>
     <script type="text/javascript">
-        var servicesCurrentMap = new Map();
 
         var socket = new WebSocket('ws://' + window.location.host + '/debug/current_load/ws');
-        var temp_val;
-        var now = new Date().getTime()
-        var totalPoints = 3000;
-        var updateInterval = 100;
-        var timerId;
-
-        socket.onmessage = function(event) {
-            data = JSON.parse(event.data);
-            for (var [key, value] of Object.entries(data)) {
-                servicesCurrentMap.set(key, value);
-            }
-        };
-
-        socket.onclose = function(event) {
-          clearInterval(timerId);
-          alert('service is unavailable');
-        };
+        var point;
+        var now;
+        var totalPoints = 600;
 
         // Create the chart
-        var chart = Highcharts.chart('container', {
+        var chartQ = Highcharts.chart('container_queue', {
              legend: {
                 layout: 'vertical',
                 align: 'left',
@@ -45,7 +28,7 @@
             },
             chart: {
               animation: {
-                  duration: 10
+                  duration: 20
               }
             },
             plotOptions: {
@@ -68,7 +51,7 @@
             },
             xAxis: {
                 type: 'datetime',
-                tickInterval: 60000,
+                tickInterval: 15000,
                 plotLines: [{
                     value: 0,
                     width: 1,
@@ -95,25 +78,89 @@
                 text: 'Services Load'
             },
         });
+        var chartR = Highcharts.chart('container_response_time', {
+             legend: {
+                layout: 'vertical',
+                align: 'left',
+                verticalAlign: 'top'
+            },
+            chart: {
+              animation: {
+                  duration: 400
+              }
+            },
+            plotOptions: {
+              line: {
+                marker: {
+                  enabled: false
+                },
+                animation: false,
+              },
+              series: {
+                animation: false,
+                label: {
+                  enabled: false
+                }
+              }
+            },
 
-        function update() {
-          var point;
-          for (var [key, value] of servicesCurrentMap) {
-            var currentSeries = chart.series.find(a => a.name === key);
+            time: {
+                useUTC: false
+            },
+            xAxis: {
+                type: 'datetime',
+                tickInterval: 15000,
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }],
+                title: {
+                    text: 'Time'
+                }
+            },
+            yAxis: {
+              min: 0,
+              allowDecimals: true,
+              title: {
+                  text: 'Response time'
+              },
+            },
+            title: {
+                text: 'Services mean response time'
+            },
+        });
 
-            point = [now, value]
+        socket.onmessage = function(event) {
+          data = JSON.parse(event.data);
+          now = new Date().getTime();
+          for (var [key, value] of Object.entries(data.current_load)) {
+            point = [now, value];
+            var currentSeries = chartQ.series.find(a => a.name === key);
             if (currentSeries) { 
               currentSeries.addPoint(point, false, currentSeries.data.length > totalPoints);
             } else {
-              chart.addSeries( {name: key, data: [point] }, false);
+              chartQ.addSeries( {name: key, data: [point] }, false);
             }
           }
-          now += updateInterval;
-          chart.redraw();
-        }
-        $(document).ready(function () {
-          timerId = setInterval(update, updateInterval);
+          chartQ.redraw();
+          for (var [key, value] of Object.entries(data.response_time)) {
+            point = [now, value];
+            var currentSeries = chartR.series.find(a => a.name === key);
+            if (currentSeries) { 
+              currentSeries.addPoint(point, false, currentSeries.data.length > totalPoints);
+            } else {
+              chartR.addSeries( {name: key, data: [point] }, false);
+            }
+          }
+          chartR.redraw();
+        };
 
+        socket.onclose = function(event) {
+          alert('service is unavailable');
+        };
+
+        $(document).ready(function () {
         });
 
     </script>

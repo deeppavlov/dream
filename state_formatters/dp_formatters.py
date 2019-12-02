@@ -158,6 +158,14 @@ def base_annotator_formatter(payload: Any, model_args_names=('x',), mode='in'):
         return payload
 
 
+def tfidf_formatter(payload, mode='in'):
+    if mode == 'in':
+        sentences = base_input_formatter(payload)['last_utterances']
+        return {'sentences': sentences}
+    elif mode == 'out':
+        return base_skill_output_formatter(payload)
+
+
 def sentiment_formatter(payload: Any, model_args_names=('x',), mode='in'):
     if mode == 'in':
         return {'sentences': annotated_input_formatter(payload, annotation="punctuated")["last_utterances"]}
@@ -314,7 +322,11 @@ def base_response_selector_formatter(payload, mode='in'):
         dialogs = annotated_input_formatter(payload, annotation="punctuated")['dialogs']
         return {"dialogs": dialogs}
     elif mode == 'out':
-        return {"skill_name": payload[0], "text": payload[1], "confidence": payload[2]}
+        if len(payload) == 3:
+            return {"skill_name": payload[0], "text": payload[1], "confidence": payload[2]}
+        elif len(payload) == 5:
+            return {"skill_name": payload[0], "text": payload[1], "confidence": payload[2],
+                    "human_attributes": payload[3], "bot_attributes": payload[4]}
 
 
 def sent_segm_formatter(payload, mode='in'):

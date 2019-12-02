@@ -91,9 +91,14 @@ def get_text_from_speech(speech):
     tokens, probs = zip(*[(token['value'], token['confidence']) for token in speech['hypotheses'][0]['tokens']])
     text = ' '.join(tokens)
     logger.info(f'got text from speech: {text}')
-    if min(probs) < 0.5:
-        sentry_sdk.capture_message(f'ASR top_1 hypotheses has low prob: {[(t, p) for t, p in zip(tokens, probs)]}')
-    return text, min(probs)
+    mean_proba = sum(probs) / len(probs)
+    if mean_proba < 0.75:
+        with sentry_sdk.push_scope() as scope:
+            token_with_probs = [(t, p) for t, p in zip(tokens, probs)]
+            scope.set_extra('token_with_probs', token_with_probs)
+            scope.set_extra('mean_proba', mean_proba)
+            sentry_sdk.capture_message(f'ASR top_1 hypotheses has mean proba < 0.75')
+    return text, mean_proba
 
 
 class LaunchRequestHandler(AbstractRequestHandler):

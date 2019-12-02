@@ -75,6 +75,8 @@ class RuleBasedSelector():
                 skills_for_uttr.append("program_y")
                 skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("alice")
+                if len(dialog['utterances']) > 7:
+                    skills_for_uttr.append("tfidf_retrieval")
                 # skills_for_uttr.append("transfertransfo")
                 # skills_for_uttr.append("retrieval_chitchat")
             movie_cobot_dialogacts = {
@@ -91,6 +93,7 @@ class RuleBasedSelector():
 
             # always add dummy_skill
             skills_for_uttr.append("dummy_skill")
+            skills_for_uttr.append("personal_info_skill")
             skill_names.append(skills_for_uttr)
 
         return skill_names
