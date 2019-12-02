@@ -39,11 +39,16 @@
   "what_can_you_do": [
     "I'm a newborn socialbot, so I can't do so much. For example, I can answer any question, especially about movies. What is your favorite movie?",
     "I'm learning day by day. For now, I can answer a question, tell a joke or fact and discuss movies.",
-    "I'm learning day by day. What would you like me to do?"
+    "I'm learning day by day. I can tell you a joke or a fun fact, or disscuss movies, or answer questions. What would you like me to do?"
   ],
   "doing_well": [
     "I am happy for you! Where are you from?"
   ],
   "what_time": [
+  ],
+  "dont_understand": [
+    "Sorry, I might sound confusing, i am still learning. What do you want to talk about?",
+    "Sorry, I am still learning, let's switch the topic.",
+    "Sorry if I confused you. Do you want to talk about something else?"
   ]
 }
