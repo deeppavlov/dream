@@ -14,7 +14,6 @@
 ## TODO:
 
 - Code refactoring
-- train_model.py
 
 ## Метрики
 
@@ -35,11 +34,7 @@
 | f1              | 0.9120129891799224 | 0.9358415110352029 | 0.9746897449315843 | 0.7194057170314414 | 0.9979061770597972 | 0.9742250386801233 | 0.6900003591180062 | 0.7985519789654074 | 0.8506173289454824 | 0.9243565391639006  | 0.32399999999999995 | 0.9588085002450688   | 0.979446891092533  | 0.7238899498265154 |
 
 
-
-
 ## Getting started
-
-В папке src/data должен быть tokenizer_english.pickle - токенайзер из NLTK.
 
 Чтобы добавить интент, нужно:
  1. Вписать в `<intent_data_path>/intent_phrases.json` имя вашего интента, фразы/регекспы фраз, по которым будет идти матчинг, допустимые в этом случае знаки пунктуации, а также min_precision - минимально приемлимый precision для подбора трешхолда.
@@ -50,4 +45,4 @@
  ```
   python3 create_data.py /data/classifier_data/intent_phrases.json -p
   python /data/classifier_data/train_model.py --data_path /data/classifier_data/intent_data.json --model_path /data/classifier_data/models/linear_classifier.h5
-``
+ ```
