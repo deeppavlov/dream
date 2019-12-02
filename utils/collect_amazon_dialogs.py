@@ -25,8 +25,8 @@ parser.add_argument('--with_requesting', action='store_true', default=False, hel
 parser.add_argument('--with_debug_info', action='store_true', default=False,
                     help='get debug info for with_requesting mode')
 parser.add_argument('--url', help='url, used only when with_requesting is True', default='http://0.0.0.0:4242')
-parser.add_argument('--feedback', help='feedbacks csv', default='conversation_feedback.csv')
-parser.add_argument('--ratings', help='ratings csv', default='ratings.csv')
+parser.add_argument('--feedback', help='feedbacks csv', default='./ratings/conversation_feedback.csv')
+parser.add_argument('--ratings', help='ratings csv', default='./ratings/ratings.csv')
 parser.add_argument('--first_n', help='Number of dialogs for debug', default=999999)
 
 
