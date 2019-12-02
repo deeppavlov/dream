@@ -990,15 +990,17 @@ stuff
 french
 storage
 oh
-japan
+ok
 doing
 loans
 shoes
 entry
 stay
 nature
+wow
 orders
 availability
+japan
 africa
 summary
 turn
@@ -1155,7 +1157,6 @@ nice
 score
 statistics
 client
-ok
 returns
 capital
 follow
@@ -3685,7 +3686,6 @@ sit
 bodies
 photographs
 cutting
-wow
 simon
 writers
 marks

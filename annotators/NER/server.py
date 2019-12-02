@@ -26,7 +26,7 @@ def respond():
 
     ret = []
     for utterance in last_utterances:
-        sents = [word_tokenize(sent) for sent in utterance]
+        sents = [word_tokenize(sent.lower()) for sent in utterance]
         ret.append(ner.predict(sents))
 
     logger.info(f"NER output: {ret}")

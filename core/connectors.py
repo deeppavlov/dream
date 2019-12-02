@@ -17,12 +17,22 @@ class HTTPConnector:
     async def send(self, payload: Dict, callback: Callable):
         formatted_payload = self.formatter([payload])
         service_send_time = time.time()
-        async with self.session.post(self.url, json=formatted_payload) as resp:
-            response = await resp.json()
+        try:
+            async with self.session.post(self.url, json=formatted_payload) as resp:
+                response = await resp.json()
+                service_response_time = time.time()
+                await callback(
+                    dialog_id=payload['id'], service_name=self.service_name,
+                    response={self.service_name: self.formatter(response[0], mode='out')},
+                    service_send_time=service_send_time,
+                    service_response_time=service_response_time
+                )
+        except Exception as e:
+            response = e
             service_response_time = time.time()
             await callback(
                 dialog_id=payload['id'], service_name=self.service_name,
-                response={self.service_name: self.formatter(response[0], mode='out')},
+                response=response,
                 service_send_time=service_send_time,
                 service_response_time=service_response_time
             )
@@ -56,17 +66,27 @@ class QueueListenerBatchifyer:
                 tasks = []
                 formatted_payload = self.formatter(batch)
                 service_send_time = time.time()
-                async with self.session.post(self.url, json=formatted_payload) as resp:
-                    response = await resp.json()
-                    service_response_time = time.time()
-                for dialog, response_text in zip(batch, response):
-                    tasks.append(
-                        process_callable(
-                            dialog_id=dialog['id'], service_name=self.service_name,
-                            response={self.service_name: self.formatter(response_text, mode='out')},
-                            service_send_time=service_send_time,
-                            service_response_time=service_response_time))
-                await asyncio.gather(*tasks)
+                try:
+                    async with self.session.post(self.url, json=formatted_payload) as resp:
+                        response = await resp.json()
+                        service_response_time = time.time()
+                    for dialog, response_text in zip(batch, response):
+                        tasks.append(
+                            process_callable(
+                                dialog_id=dialog['id'], service_name=self.service_name,
+                                response={self.service_name: self.formatter(response_text, mode='out')},
+                                service_send_time=service_send_time,
+                                service_response_time=service_response_time))
+                    await asyncio.gather(*tasks)
+                except Exception as e:
+                    for dialog in batch:
+                        tasks.append(
+                            process_callable(
+                                dialog_id=dialog['id'], service_name=self.service_name,
+                                response=e,
+                                service_send_time=service_send_time,
+                                service_response_time=service_response_time))
+                    await asyncio.gather(*tasks)
             await asyncio.sleep(0.1)
 
 

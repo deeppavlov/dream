@@ -104,7 +104,14 @@ services:
     image: ${DOCKER_REGISTRY}/alice:${VERSION}
     env_file:
       - ${ENV_FILE}
-
+  tfidf_retrieval:
+    image: ${DOCKER_REGISTRY}/tfidf_retrieval:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  personal_info_skill:
+    image: ${DOCKER_REGISTRY}/personal_info_skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
 volumes:
   external-logs:
   external-deeppavlov:
