@@ -73,4 +73,5 @@ def get_respond_funcs():
         "what_can_you_do": random_respond,
         "what_time": what_time_respond,
         "doing_well": random_respond,
+        "dont_understand": random_respond
     }
