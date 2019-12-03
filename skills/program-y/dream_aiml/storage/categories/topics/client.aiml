@@ -357,10 +357,10 @@
         <pattern>NICE TO MEET YOU TOO</pattern>
         <template>How can I help you?</template>
     </category>
-    <category>
-        <pattern>MY NAME IS</pattern>
-        <template>What is your name?</template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>MY NAME IS</pattern>-->
+<!--        <template>What is your name?</template>-->
+<!--    </category>-->
     <category>
         <pattern>MY *</pattern>
         <template>
@@ -392,10 +392,10 @@
             </condition>
         </template>
     </category>
-    <category>
-        <pattern>NO MY NAME IS NOT *</pattern>
-        <template>What is your name?</template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>NO MY NAME IS NOT *</pattern>-->
+<!--        <template>What is your name?</template>-->
+<!--    </category>-->
     <category>
         <pattern>I AM GOOD AT *</pattern>
         <template>
