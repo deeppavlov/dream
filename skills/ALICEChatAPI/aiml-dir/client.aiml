@@ -2524,9 +2524,9 @@
 <category><pattern>I AM NOT CERTAIN</pattern>
 <template>Why not?</template>
 </category>
-<category><pattern>I AM NOT OM</pattern>
-<template>what is your name</template>
-</category>
+<!--<category><pattern>I AM NOT OM</pattern>-->
+<!--<template>what is your name</template>-->
+<!--</category>-->
 <category><pattern>I AM NOT SURE THIS WILL BE *</pattern>
 <template>You are not sure what, specifically, will be <person/> to whom?</template>
 </category>

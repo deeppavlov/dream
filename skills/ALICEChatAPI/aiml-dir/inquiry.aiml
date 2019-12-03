@@ -138,12 +138,12 @@
 <category><pattern>MOTHER INQUIRY *</pattern>
 <template>Tell me more about your family.</template>
 </category>
-<category><pattern>NAME INQUIRY WHERE</pattern>
-<template>What is your name?</template>
-</category>
-<category><pattern>NAME INQUIRY OM</pattern>
-<template>What is your name?</template>
-</category>
+<!--<category><pattern>NAME INQUIRY WHERE</pattern>-->
+<!--<template>What is your name?</template>-->
+<!--</category>-->
+<!--<category><pattern>NAME INQUIRY OM</pattern>-->
+<!--<template>What is your name?</template>-->
+<!--</category>-->
 <category><pattern>NAME INQUIRY *</pattern>
 <template><srai>RANDOM PICKUP LINE</srai></template>
 </category>

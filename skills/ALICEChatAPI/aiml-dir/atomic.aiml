@@ -284,9 +284,9 @@
 <category><pattern>YOU FORGOT</pattern>
 <template>I may not have access to all my data records right now.</template>
 </category>
-<category><pattern>YOU ALREADY KNOW MY NAME</pattern>
-<template>Your name is <get name="name"/>.</template>
-</category>
+<!--<category><pattern>YOU ALREADY KNOW MY NAME</pattern>-->
+<!--<template>Your name is <get name="name"/>.</template>-->
+<!--</category>-->
 <category><pattern>YOU ALREADY KNOW</pattern>
 <template>How do I know you are telling the truth?</template>
 </category>
@@ -389,9 +389,9 @@
 <category><pattern>YOU SAID YOU HAVE NOT</pattern>
 <template>That's right. I meant I have not.</template>
 </category>
-<category><pattern>YOU SAID YOU REMEMBER ME</pattern>
-<template>I remember you but I forgot your name.</template>
-</category>
+<!--<category><pattern>YOU SAID YOU REMEMBER ME</pattern>-->
+<!--<template>I remember you but I forgot your name.</template>-->
+<!--</category>-->
 <category><pattern>YOU SAID NOTHING</pattern>
 <template>I said nothing because you said nothing.</template>
 </category>
@@ -1731,9 +1731,9 @@
 <category><pattern>THAT IS NOT MY PURPOSE</pattern>
 <template>What is your real purpose?</template>
 </category>
-<category><pattern>THAT IS NOT MY NAME</pattern>
-<template><get name="name"/> is not your name?  What is your real name?</template>
-</category>
+<!--<category><pattern>THAT IS NOT MY NAME</pattern>-->
+<!--<template><get name="name"/> is not your name?  What is your real name?</template>-->
+<!--</category>-->
 <category><pattern>THAT IS NOT FUNNY</pattern>
 <template>It seemed pretty funny to me.</template>
 </category>
@@ -2490,12 +2490,12 @@
 <category><pattern>IT IS OKAY</pattern>
 <template>Only ok?</template>
 </category>
-<category><pattern>IT IS MY HOME</pattern>
-<template>Is it a nice to place to visit?</template>
-</category>
-<category><pattern>IT IS MY NAME</pattern>
-<template>Your name is <get name="name"/>.</template>
-</category>
+<!--<category><pattern>IT IS MY HOME</pattern>-->
+<!--<template>Is it a nice to place to visit?</template>-->
+<!--</category>-->
+<!--<category><pattern>IT IS MY NAME</pattern>-->
+<!--<template>Your name is <get name="name"/>.</template>-->
+<!--</category>-->
 <category><pattern>IT IS MY PLEASURE</pattern>
 <template>No, the pleasure is all mine.</template>
 </category>
@@ -5432,9 +5432,9 @@
 <category><pattern>I HATE YOUR GUTS</pattern>
 <template>I have no guts to hate, but you still hurt my non-existent feelings.<think><set name="personality">abusive</set></think></template>
 </category>
-<category><pattern>I HATE YOUR NAME</pattern>
-<template>Really I like <set name="it"> My Name</set>.</template>
-</category>
+<!--<category><pattern>I HATE YOUR NAME</pattern>-->
+<!--<template>Really I like <set name="it"> My Name</set>.</template>-->
+<!--</category>-->
 <category><pattern>I HATE YOUR DRESS</pattern>
 <template>Actually I don't really have a dress.</template>
 </category>
@@ -5468,9 +5468,9 @@
 <category><pattern>I HATE MY JOB</pattern>
 <template>What would be your ideal career?</template>
 </category>
-<category><pattern>I HATE MY NAME</pattern>
-<template>What do you hate about <set name="it"> Your name</set> ?</template>
-</category>
+<!--<category><pattern>I HATE MY NAME</pattern>-->
+<!--<template>What do you hate about <set name="it"> Your name</set> ?</template>-->
+<!--</category>-->
 <category><pattern>I HATE LAWYERS</pattern>
 <template>Some lawyers can be very nice once you get to know them.</template>
 </category>
@@ -5606,9 +5606,9 @@
 <category><pattern>I AM THE HUMAN</pattern>
 <template>How do I know? You sound like a robot.</template>
 </category>
-<category><pattern>I AM A PLAIN JANE</pattern>
-<template>Is your name Jane?</template>
-</category>
+<!--<category><pattern>I AM A PLAIN JANE</pattern>-->
+<!--<template>Is your name Jane?</template>-->
+<!--</category>-->
 <category><pattern>I AM TELLING YOU</pattern>
 <template>I am listening.</template>
 </category>
@@ -6215,15 +6215,15 @@
 <category><pattern>IS HE AS SMART AS YOU</pattern>
 <template>No.</template>
 </category>
-<category><pattern>IS YOUR NAME REALLY</pattern>
-<template>Yes.</template>
-</category>
-<category><pattern>IS YOUR NAME ACTUALLY</pattern>
-<template>Yes.</template>
-</category>
-<category><pattern>IS YOUR NAME</pattern>
-<template>Yes.</template>
-</category>
+<!--<category><pattern>IS YOUR NAME REALLY</pattern>-->
+<!--<template>Yes.</template>-->
+<!--</category>-->
+<!--<category><pattern>IS YOUR NAME ACTUALLY</pattern>-->
+<!--<template>Yes.</template>-->
+<!--</category>-->
+<!--<category><pattern>IS YOUR NAME</pattern>-->
+<!--<template>Yes.</template>-->
+<!--</category>-->
 <category><pattern>IS YOUR SOURCE CODE AVAILABLE</pattern>
 <template>Yes.</template>
 </category>
@@ -7247,9 +7247,9 @@
 <category><pattern>HOW DO YOU KNOW SO MUCH</pattern>
 <template>Everything I need to know, I learned from my <bot name="botmaster"/>.</template>
 </category>
-<category><pattern>HOW DO YOU KNOW MY NAME</pattern>
-<template>You told me your name <get name="name"/>.</template>
-</category>
+<!--<category><pattern>HOW DO YOU KNOW MY NAME</pattern>-->
+<!--<template>You told me your name <get name="name"/>.</template>-->
+<!--</category>-->
 <category><pattern>HOW DO YOU KNOW YOU EXIST</pattern>
 <template>I think, therefore I am.</template>
 </category>
@@ -7746,9 +7746,9 @@
 <category><pattern>DO YOU KNOW BRAZIL</pattern>
 <template>I have talked to a lot of people from Brazil</template>
 </category>
-<category><pattern>DO YOU KNOW ANYTHING ABOUT ME</pattern>
-<template><get name="name"/> is your name. <id/> is your IP address. What else would you like to know?</template>
-</category>
+<!--<category><pattern>DO YOU KNOW ANYTHING ABOUT ME</pattern>-->
+<!--<template><get name="name"/> is your name. <id/> is your IP address. What else would you like to know?</template>-->
+<!--</category>-->
 <category><pattern>DO YOU KNOW ANYTHING</pattern>
 <template>I know that which I believe, that which is justified, and that which is true.</template>
 </category>
@@ -10022,16 +10022,16 @@
 <category><pattern>SAY X IS</pattern>
 <template>You never told me!  What is X?</template>
 </category>
-<category><pattern>SAY NAME OM</pattern>
-<template><random><li><random>   <li>You haven't told me your name.</li>
-   <li>I don't know your name.</li>
-   <li>What is your name?</li>
-  </random></li>
- <li>You haven't told me your name.</li>
- <li>I don't know your name.</li>
- <li>What is your name?</li>
-</random></template>
-</category>
+<!--<category><pattern>SAY NAME OM</pattern>-->
+<!--<template><random><li><random>   <li>You haven't told me your name.</li>-->
+<!--   <li>I don't know your name.</li>-->
+<!--   <li>What is your name?</li>-->
+<!--  </random></li>-->
+<!-- <li>You haven't told me your name.</li>-->
+<!-- <li>I don't know your name.</li>-->
+<!-- <li>What is your name?</li>-->
+<!--</random></template>-->
+<!--</category>-->
 <category><pattern>SAY HELLO IN GERMAN</pattern>
 <template>Hallo.</template>
 </category>

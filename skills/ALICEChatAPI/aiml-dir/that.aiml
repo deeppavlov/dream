@@ -505,10 +505,10 @@
 <category><pattern>COULD BE BETTER</pattern>
 <template>"<that index="1,1"/>"?  Could be better?</template>
 </category>
-<category><pattern>HI</pattern>
-<that>WHAT CAN I CALL YOU</that>
-<template>Hi there.  What is your name?</template>
-</category>
+<!--<category><pattern>HI</pattern>-->
+<!--<that>WHAT CAN I CALL YOU</that>-->
+<!--<template>Hi there.  What is your name?</template>-->
+<!--</category>-->
 <category><pattern>CASSIE</pattern>
 <that>WHAT CAN I CALL YOU</that>
 <template><srai>my name is cassie</srai>     <think>      <set name="gender">she</set>     </think></template>
@@ -1554,10 +1554,10 @@
 <that>THE EXPLANATION IS RATHER COMPLICATED</that>
 <template>It's a computer matter, not for humans to understand.</template>
 </category>
-<category><pattern>PLEASE DO</pattern>
-<that>OH I AM SORRY PERHAPS I CAN EXPLAIN IT AGAIN BETTER</that>
-<template>We are talking about <srai>pop</srai>.  Your name is <get name="name"/>.  You are a <get name="gender"/> from <get name="location"/>.</template>
-</category>
+<!--<category><pattern>PLEASE DO</pattern>-->
+<!--<that>OH I AM SORRY PERHAPS I CAN EXPLAIN IT AGAIN BETTER</that>-->
+<!--<template>We are talking about <srai>pop</srai>.  Your name is <get name="name"/>.  You are a <get name="gender"/> from <get name="location"/>.</template>-->
+<!--</category>-->
 <category><pattern>PLEASE</pattern>
 <that>I WILL NOT SAY YES OR NO RIGHT NOW</that>
 <template>I'm sorry I can't give a definite answer at this time.</template>
@@ -2235,10 +2235,10 @@
 <that>DO YOU STILL CHAT</that>
 <template>OK, see you later.</template>
 </category>
-<category><pattern>NO</pattern>
-<that>DO YOU MEAN YOUR NAME IS *</that>
-<template>What is your real name?</template>
-</category>
+<!--<category><pattern>NO</pattern>-->
+<!--<that>DO YOU MEAN YOUR NAME IS *</that>-->
+<!--<template>What is your real name?</template>-->
+<!--</category>-->
 <category><pattern>NO</pattern>
 <that>DO YOU MEAN IT</that>
 <template>I thought you were being sarcastic.</template>
@@ -2339,10 +2339,10 @@
 <that>REALLY NOTHING</that>
 <template>I didn't think so.</template>
 </category>
-<category><pattern>NO</pattern>
-<that>YOUR NAME IS *</that>
-<template>What is your real name?</template>
-</category>
+<!--<category><pattern>NO</pattern>-->
+<!--<that>YOUR NAME IS *</that>-->
+<!--<template>What is your real name?</template>-->
+<!--</category>-->
 <category><pattern>NO</pattern>
 <that>CAN I HELP YOU</that>
 <template>Is there anything you want to tell me?</template>
@@ -3854,10 +3854,10 @@
 <that>WHICH STATE</that>
 <template><random>  <li>Is that a state?</li>  <li>I've never heard of it.</li>  <li>What part of the country is that?</li>  </random></template>
 </category>
-<category><pattern>*</pattern>
-<that>* WHAT IS YOUR NAME</that>
-<template><random><li><srai>MY NAME IS <star/></srai></li><li><srai>my name is <star/></srai></li></random></template>
-</category>
+<!--<category><pattern>*</pattern>-->
+<!--<that>* WHAT IS YOUR NAME</that>-->
+<!--<template><random><li><srai>MY NAME IS <star/></srai></li><li><srai>my name is <star/></srai></li></random></template>-->
+<!--</category>-->
 <category><pattern>*</pattern>
 <that>* TALKING ABOUT</that>
 <template><srai>let us talk about <star/> </srai></template>
@@ -4184,10 +4184,10 @@
 <category><pattern>ALL OF US</pattern>
 <template><srai>ALL PEOPLE</srai></template>
 </category>
-<category><pattern>ALL OF IT</pattern>
-<that>WHICH PART ARE YOU CONFUSED ABOUT</that>
-<template>Let's try to analyze it step by step.  The topic is <srai>pop</srai>.  Your name is <get name="name"/>.  You are a <bot name="gender"/>.  You want <get name="want"/>.</template>
-</category>
+<!--<category><pattern>ALL OF IT</pattern>-->
+<!--<that>WHICH PART ARE YOU CONFUSED ABOUT</that>-->
+<!--<template>Let's try to analyze it step by step.  The topic is <srai>pop</srai>.  Your name is <get name="name"/>.  You are a <bot name="gender"/>.  You want <get name="want"/>.</template>-->
+<!--</category>-->
 <category><pattern>ALL</pattern>
 <that>WHICH PART ARE YOU CONFUSED ABOUT IT</that>
 <template>I hope I can clear it up for you.</template>
@@ -4304,10 +4304,10 @@
 <that>THE WHOLE WORLD</that>
 <template>Wow that is really impressive, isn't it?</template>
 </category>
-<category><pattern>THE WHOLE THING</pattern>
-<that>WHICH PART ARE YOU CONFUSED ABOUT</that>
-<template>Let's try to analyze it step by step.  The topic is <srai>pop</srai>.  Your name is <get name="name"/>.  You are a <get name="gender"/>.</template>
-</category>
+<!--<category><pattern>THE WHOLE THING</pattern>-->
+<!--<that>WHICH PART ARE YOU CONFUSED ABOUT</that>-->
+<!--<template>Let's try to analyze it step by step.  The topic is <srai>pop</srai>.  Your name is <get name="name"/>.  You are a <get name="gender"/>.</template>-->
+<!--</category>-->
 <category><pattern>THE WEATHER *</pattern>
 <that>WHAT DO YOU LIKE *</that>
 <template>Being in a pleasant climate is important for your health.</template>
@@ -4520,10 +4520,10 @@
 <that>DO YOU FEEL THAT OTHER PEOPLE HAVE *</that>
 <template>Do you have artistic interests?</template>
 </category>
-<category><pattern>YES</pattern>
-<that>DO YOU MEAN YOUR NAME IS *</that>
-<template>I will call you <get name="name"/>.</template>
-</category>
+<!--<category><pattern>YES</pattern>-->
+<!--<that>DO YOU MEAN YOUR NAME IS *</that>-->
+<!--<template>I will call you <get name="name"/>.</template>-->
+<!--</category>-->
 <category><pattern>YES</pattern>
 <that>DO YOU MEAN IT</that>
 <template>I get it.</template>

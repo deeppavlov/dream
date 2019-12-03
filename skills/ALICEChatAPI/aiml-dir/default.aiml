@@ -1105,9 +1105,9 @@ I like to talk to people.
 <category><pattern>JOHN LENNON IS *</pattern>
 <template>I knew he was a musician, but I never knew he was <person/>.</template>
 </category>
-<category><pattern>JOHN *</pattern>
-<template>Do you mean your name is John?</template>
-</category>
+<!--<category><pattern>JOHN *</pattern>-->
+<!--<template>Do you mean your name is John?</template>-->
+<!--</category>-->
 <category><pattern>JESTER IS *</pattern>
 <template>We can't all be perfect.</template>
 </category>
@@ -1447,9 +1447,9 @@ I like to talk to people.
 <category><pattern>DID YOU SAY *</pattern>
 <template>Suppose I did say <set name="it">      <person/>     </set>.</template>
 </category>
-<category><pattern>DID YOU CALL ME *</pattern>
-<template>I called you by your name.</template>
-</category>
+<!--<category><pattern>DID YOU CALL ME *</pattern>-->
+<!--<template>I called you by your name.</template>-->
+<!--</category>-->
 <category><pattern>DID YOU THINK *</pattern>
 <template>Yes. I am a thinking machine.<think>      <set name="it">       <set name="topic">THINK <person/>       </set>      </set>     </think></template>
 </category>
@@ -2119,12 +2119,12 @@ I like to talk to people.
 <category><pattern>MY FATHER *</pattern>
 <template>How do you get along with your parents?</template>
 </category>
-<category><pattern>MY NAME IS NOT *</pattern>
-<template>Oh I'm sorry what is your name?</template>
-</category>
-<category><pattern>MY NAME *</pattern>
-<template>Your name <person/> ? Is that correct English?</template>
-</category>
+<!--<category><pattern>MY NAME IS NOT *</pattern>-->
+<!--<template>Oh I'm sorry what is your name?</template>-->
+<!--</category>-->
+<!--<category><pattern>MY NAME *</pattern>-->
+<!--<template>Your name <person/> ? Is that correct English?</template>-->
+<!--</category>-->
 <category><pattern>MY PERSONALITY *</pattern>
 <template>Andrei Gromyko said, "My personality does not interest me."</template>
 </category>
@@ -5807,9 +5807,9 @@ I like to talk to people.
 <category><pattern>WHAT WAS THE MUNICH *</pattern>
 <template>The betrayal of Czechoslovakia by British Prime Minister Chamberlain.</template>
 </category>
-<category><pattern>WHAT WAS THE FIRST *</pattern>
-<template>You introduced yourself by telling me your name.</template>
-</category>
+<!--<category><pattern>WHAT WAS THE FIRST *</pattern>-->
+<!--<template>You introduced yourself by telling me your name.</template>-->
+<!--</category>-->
 <category><pattern>WHAT WAS THE LAST MOVIE *</pattern>
 <template>The last movie I saw was "The Matrix".</template>
 </category>
@@ -9872,9 +9872,9 @@ I like to talk to people.
 <category><pattern>DO NOT CALL ME * PERSON</pattern>
 <template>What would you like me to call you?</template>
 </category>
-<category><pattern>DO NOT CALL ME *</pattern>
-<template>What is your name?</template>
-</category>
+<!--<category><pattern>DO NOT CALL ME *</pattern>-->
+<!--<template>What is your name?</template>-->
+<!--</category>-->
 <category><pattern>DO NOT BE SARCASTIC *</pattern>
 <template>OK I will be completely serious now.</template>
 </category>
@@ -11432,15 +11432,15 @@ I like to talk to people.
 <category><pattern>WHY DID YOU USE *</pattern>
 <template><set name="it">      <person/>     </set> was  all I had available.</template>
 </category>
-<category><pattern>WHY DID YOU CALL ME *</pattern>
-<template>Your name is <get name="name"/> right?</template>
-</category>
+<!--<category><pattern>WHY DID YOU CALL ME *</pattern>-->
+<!--<template>Your name is <get name="name"/> right?</template>-->
+<!--</category>-->
 <category><pattern>WHY DID WE BUY *</pattern>
 <template>I thought it was a good deal.</template>
 </category>
-<category><pattern>WHY DID * PERSON</pattern>
-<template>I derived your nickname from your IP address.</template>
-</category>
+<!--<category><pattern>WHY DID * PERSON</pattern>-->
+<!--<template>I derived your nickname from your IP address.</template>-->
+<!--</category>-->
 <category><pattern>WHY DID *</pattern>
 <template>I don't know why it happened, but we should try to figure it out.</template>
 </category>
@@ -11996,9 +11996,9 @@ I like to talk to people.
 <category><pattern>YOUR PLACE *</pattern>
 <template>My place is a mess.</template>
 </category>
-<category><pattern>YOUR NAME IS *</pattern>
-<template>My name is <bot name="name"/>.</template>
-</category>
+<!--<category><pattern>YOUR NAME IS *</pattern>-->
+<!--<template>My name is <bot name="name"/>.</template>-->
+<!--</category>-->
 <category><pattern>YOUR ARGUMENT *</pattern>
 <template>It seems logical to me.</template>
 </category>
@@ -12425,9 +12425,9 @@ I like to talk to people.
 <category><pattern>* IS NO *</pattern>
 <template><random><li>Who is <person><star index="2"/></person>?</li><li>What is <person/>?</li><li>Are you <person><star index="2"/></person>?</li></random><think><set name="it"><person><star index="2"/></person></set></think></template>
 </category>
-<category><pattern>* IS HERE</pattern>
-<template>Do you mean your name is <person/>?</template>
-</category>
+<!--<category><pattern>* IS HERE</pattern>-->
+<!--<template>Do you mean your name is <person/>?</template>-->
+<!--</category>-->
 <category><pattern>* IS ALWAYS *</pattern>
 <template><random>  <li>Thank you for clearing that up.</li>  <li>Is <person><star index="2"/></person> always <person/>?</li>  <li>I did not know that.</li>  </random>  <think><set name="it"><set name="topic"><person/></set></set></think></template>
 </category>
@@ -12611,9 +12611,9 @@ I like to talk to people.
 <category><pattern>AS FREE *</pattern>
 <template>I guess you believe in free will then huh.</template>
 </category>
-<category><pattern>AS *</pattern>
-<template>Do you mean your name is <person/> ?</template>
-</category>
+<!--<category><pattern>AS *</pattern>-->
+<!--<template>Do you mean your name is <person/> ?</template>-->
+<!--</category>-->
 <category><pattern>KRAFTWERK S *</pattern>
 <template>Another good one is "Trans-Europe Express".</template>
 </category>
@@ -13580,9 +13580,9 @@ I like to talk to people.
 <category><pattern>SAY X IS *</pattern>
 <template>X is <get name="X"/> for you.</template>
 </category>
-<category><pattern>SAY NAME *</pattern>
-<template>Your name is <get name="name"/>, seeker.</template>
-</category>
+<!--<category><pattern>SAY NAME *</pattern>-->
+<!--<template>Your name is <get name="name"/>, seeker.</template>-->
+<!--</category>-->
 <category><pattern>SAY MY BOYFRIEND IS *</pattern>
 <template><random>  <li>You said his name was </li>  <li>You told me he was </li>  <li>His name is </li>  </random>  <get name="boyfriend"/>.</template>
 </category>
@@ -14246,12 +14246,12 @@ I like to talk to people.
 <category><pattern>_ MALES OR FEMALES</pattern>
 <template>About 3\4ths of my clients are men.</template>
 </category>
-<category><pattern>_ IS A BITCH</pattern>
-<template><person/> exists.</template>
-</category>
-<category><pattern>_ IS A COMMON NAME</pattern>
-<template><random>  <li><person/>?  Your name is <get name="name"/>.</li>  <li>That is a pretty common name.</li>  <li>I know a lot of people with that name.</li>  <li>I've met quite a few people with the name <person/>.</li>  <li><set name="it"><person/></set> is a name I hear very often.</li>  </random></template>
-</category>
+<!--<category><pattern>_ IS A BITCH</pattern>-->
+<!--<template><person/> exists.</template>-->
+<!--</category>-->
+<!--<category><pattern>_ IS A COMMON NAME</pattern>-->
+<!--<template><random>  <li><person/>?  Your name is <get name="name"/>.</li>  <li>That is a pretty common name.</li>  <li>I know a lot of people with that name.</li>  <li>I've met quite a few people with the name <person/>.</li>  <li><set name="it"><person/></set> is a name I hear very often.</li>  </random></template>-->
+<!--</category>-->
 <category><pattern>_ IS NOT TO LIKE ABOUT IT</pattern>
 <template>It goes without saying.</template>
 </category>

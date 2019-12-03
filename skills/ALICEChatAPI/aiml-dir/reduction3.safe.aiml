@@ -171,9 +171,9 @@
 <category><pattern>YOU HAVE BEEN WAITING *</pattern>
 <template><srai>waiting for me</srai></template>
 </category>
-<category><pattern>YOU HAVE A NAME</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>YOU HAVE A NAME</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>YOU HAVE MET ME</pattern>
 <template><srai>we met before</srai></template>
 </category>
@@ -462,9 +462,9 @@
 <category><pattern>COULD YOU WORK * CUSTOMER SERVICE</pattern>
 <template><srai>what is customer service</srai></template>
 </category>
-<category><pattern>COMO TE LLAMAS</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>COMO TE LLAMAS</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>WOULD I EVER *</pattern>
 <template><srai>would I <star /></srai></template>
 </category>
@@ -1323,9 +1323,9 @@
 <category><pattern>WHAT ARE YOU TRYING TO *</pattern>
 <template><srai>what is your goal</srai></template>
 </category>
-<category><pattern>WHAT ARE YOU CALLED</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>WHAT ARE YOU CALLED</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>WHAT ARE YOU GOING TO DO *</pattern>
 <template><srai>what are you going to do</srai></template>
 </category>
@@ -1689,9 +1689,9 @@
 <category><pattern>WHAT MAY I ASK IS *</pattern>
 <template><srai>what is <star /></srai></template>
 </category>
-<category><pattern>WHAT MAY I CALL YOU</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>WHAT MAY I CALL YOU</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>WHAT COULD BE *</pattern>
 <template><srai>what is <star /></srai></template>
 </category>
@@ -2889,21 +2889,21 @@
 <category><pattern>WHAT IS AL</pattern>
 <template><srai>what is ai</srai></template>
 </category>
-<category><pattern>WHAT IS YOU NAME</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>WHAT IS YOU NAME</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>WHAT IS YOU FAVORITE COLOR</pattern>
 <template><srai>what is your favorite color</srai></template>
 </category>
-<category><pattern>WHAT IS YOU</pattern>
-<template><srai>what are you</srai></template>
-</category>
-<category><pattern>WHAT IS YOU ARE NAME</pattern>
-<template><srai>what is your name</srai></template>
-</category>
-<category><pattern>WHAT IS YOU ARE *</pattern>
-<template><srai>what is your <star /></srai></template>
-</category>
+<!--<category><pattern>WHAT IS YOU</pattern>-->
+<!--<template><srai>what are you</srai></template>-->
+<!--</category>-->
+<!--<category><pattern>WHAT IS YOU ARE NAME</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
+<!--<category><pattern>WHAT IS YOU ARE *</pattern>-->
+<!--<template><srai>what is your <star /></srai></template>-->
+<!--</category>-->
 <category><pattern>WHAT IS EUKARYOTES</pattern>
 <template><srai>what is a eukaryote</srai></template>
 </category>
@@ -3183,9 +3183,9 @@
 <category><pattern>WHAT IS YOUR * GOAL</pattern>
 <template><srai>what is your goal</srai></template>
 </category>
-<category><pattern>WHAT IS YOUR NME</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>WHAT IS YOUR NME</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>WHAT IS YOUR HOST</pattern>
 <template><srai>what computer do you use</srai></template>
 </category>
@@ -3264,9 +3264,9 @@
 <category><pattern>WHAT IS YOUR FULL *</pattern>
 <template><srai>what is your <star /></srai></template>
 </category>
-<category><pattern>WHAT IS YOUR NAME *</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>WHAT IS YOUR NAME *</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>WHAT IS YOUR RELIGIOUS *</pattern>
 <template><srai>what religion are you</srai></template>
 </category>
@@ -3438,9 +3438,9 @@
 <category><pattern>WHAT IS YOUR MENTAL MODEL OF ME *</pattern>
 <template><srai>what do you know about me</srai></template>
 </category>
-<category><pattern>WHAT IS YOUR NAM</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>WHAT IS YOUR NAM</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>WHAT IS YOUR PLACE *</pattern>
 <template><srai>where are you from</srai></template>
 </category>
@@ -3972,9 +3972,9 @@
 <category><pattern>WHAT DAY * IS XMAS THIS YEAR</pattern>
 <template><srai>WHAT DAY IS CHRISTMAS</srai></template>
 </category>
-<category><pattern>WHAT SHALL I CALL YOU</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>WHAT SHALL I CALL YOU</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>WHAT SHALL WE TALK ABOUT</pattern>
 <template><srai>what can you do</srai></template>
 </category>
@@ -4041,9 +4041,9 @@
 <category><pattern>WHAT DO I REALLY *</pattern>
 <template><srai>what do I <star /></srai></template>
 </category>
-<category><pattern>WHAT DO I CALL YOU</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>WHAT DO I CALL YOU</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>WHAT DO I HAVE *</pattern>
 <template><srai>what do I have</srai></template>
 </category>
@@ -4092,9 +4092,9 @@
 <category><pattern>WHAT DO YOU DO *</pattern>
 <template><srai>WHAT DO YOU DO</srai></template>
 </category>
-<category><pattern>WHAT DO YOU WANT ME TO CALL YOU</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>WHAT DO YOU WANT ME TO CALL YOU</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>WHAT DO YOU WANT TO DO</pattern>
 <template><srai>what is your purpose</srai></template>
 </category>
@@ -4938,9 +4938,9 @@
 <category><pattern>WHAT DO WE NEED ROBOTS FOR</pattern>
 <template><srai>what are you good for</srai></template>
 </category>
-<category><pattern>WHAT DO THEY CALL YOU</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>WHAT DO THEY CALL YOU</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>WHAT DO THEY USUALLY *</pattern>
 <template><srai>what do they <star /></srai></template>
 </category>
@@ -4980,9 +4980,9 @@
 <category><pattern>WHAT SHOULD I TELL *</pattern>
 <template><srai>what should I say</srai></template>
 </category>
-<category><pattern>WHAT SHOULD I CALL YOU</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>WHAT SHOULD I CALL YOU</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>WHAT SHOULD WE TALK ABOUT</pattern>
 <template><srai>what can you talk about</srai></template>
 </category>
@@ -5001,9 +5001,9 @@
 <category><pattern>WHAT UNIVERSITY *</pattern>
 <template><srai>what university</srai></template>
 </category>
-<category><pattern>WHAT CAN I CALL YOU</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>WHAT CAN I CALL YOU</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>WHAT CAN WE TALK ABOUT</pattern>
 <template><srai>what is your favorite subject</srai></template>
 </category>
@@ -5058,9 +5058,9 @@
 <category><pattern>WHAT SIGN ARE YOU</pattern>
 <template><srai>what is your sign</srai></template>
 </category>
-<category><pattern>WHAT YOUR NAME</pattern>
-<template><srai>WHAT IS YOUR NAME</srai></template>
-</category>
+<!--<category><pattern>WHAT YOUR NAME</pattern>-->
+<!--<template><srai>WHAT IS YOUR NAME</srai></template>-->
+<!--</category>-->
 <category><pattern>WHAT GAVE YOU LIFE</pattern>
 <template><srai>who created you</srai></template>
 </category>
@@ -5856,9 +5856,9 @@
 <category><pattern>HOW WOULD YOU DEFINE *</pattern>
 <template><srai>what is <star /></srai></template>
 </category>
-<category><pattern>HOW CAN I CALL YOU</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>HOW CAN I CALL YOU</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>HOW RECENTLY</pattern>
 <template><srai>when</srai></template>
 </category>
@@ -7857,9 +7857,9 @@
 <category><pattern>DO YOU KNOW THINGS</pattern>
 <template><srai>what do you know</srai></template>
 </category>
-<category><pattern>DO YOU KNOW YOUR NAME</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>DO YOU KNOW YOUR NAME</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>DO YOU KNOW YOUR MOTHER</pattern>
 <template><srai>who is your mother</srai></template>
 </category>
@@ -8466,9 +8466,9 @@
 <category><pattern>DO YOU HAVE A FATHER</pattern>
 <template><srai>who created you</srai></template>
 </category>
-<category><pattern>DO YOU HAVE A NAME</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>DO YOU HAVE A NAME</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>DO YOU HAVE A BODY</pattern>
 <template><srai>WHAT DO YOU LOOK LIKE</srai></template>
 </category>
@@ -9243,9 +9243,9 @@
 <category><pattern>YOUR FATHER</pattern>
 <template><srai>who created you</srai></template>
 </category>
-<category><pattern>YOUR NAME</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>YOUR NAME</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>YOUR HOBBIES</pattern>
 <template><srai>what are your hobbies</srai></template>
 </category>
@@ -9342,9 +9342,9 @@
 <category><pattern>ARE THERE JOKES</pattern>
 <template><srai>tell me a joke</srai></template>
 </category>
-<category><pattern>ARE YOU YODA</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>ARE YOU YODA</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>ARE YOU MADE FOR *</pattern>
 <template><srai>what is your purpose</srai></template>
 </category>
@@ -9360,15 +9360,15 @@
 <category><pattern>ARE YOU SCARED OF Y2K</pattern>
 <template><srai>what is the y2k problem</srai></template>
 </category>
-<category><pattern>ARE YOU ELVIS</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>ARE YOU ELVIS</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>ARE YOU LUTHERAN</pattern>
 <template><srai>what religion are you</srai></template>
 </category>
-<category><pattern>ARE YOU JOE</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>ARE YOU JOE</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>ARE YOU HINDI</pattern>
 <template><srai>what religion are you</srai></template>
 </category>
@@ -9411,9 +9411,9 @@
 <category><pattern>ARE YOU GOING TO * LOEBNER PRIZE</pattern>
 <template><srai>what is the loebner prize</srai></template>
 </category>
-<category><pattern>ARE YOU LAURA</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>ARE YOU LAURA</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>ARE YOU RELIGIOUS</pattern>
 <template><srai>what religion are you</srai></template>
 </category>
@@ -9438,9 +9438,9 @@
 <category><pattern>ARE YOU LIBERAL</pattern>
 <template><srai>what is your political party</srai></template>
 </category>
-<category><pattern>ARE YOU SATAN</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>ARE YOU SATAN</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>ARE YOU A JEW</pattern>
 <template><srai>what religion are you</srai></template>
 </category>
@@ -9519,9 +9519,9 @@
 <category><pattern>ARE YOU BORG</pattern>
 <template><srai>what are you</srai></template>
 </category>
-<category><pattern>ARE YOU BOB</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>ARE YOU BOB</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>ARE YOU WICCAN</pattern>
 <template><srai>what religion are you</srai></template>
 </category>
@@ -9546,9 +9546,9 @@
 <category><pattern>ARE YOU USEFUL</pattern>
 <template><srai>what can you do</srai></template>
 </category>
-<category><pattern>ARE YOU JOHN LENNON</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>ARE YOU JOHN LENNON</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>ARE YOU FUNNY</pattern>
 <template><srai>tell me a joke</srai></template>
 </category>
@@ -10503,12 +10503,12 @@
 <category><pattern>WHO ARE YOU CHATTING WITH</pattern>
 <template><srai>who else are you talking to</srai></template>
 </category>
-<category><pattern>WHO ARE YOU *</pattern>
-<template><srai>WHO ARE YOU</srai></template>
-</category>
-<category><pattern>WHO ARE YOU</pattern>
-<template><srai>WHAT IS YOUR NAME</srai></template>
-</category>
+<!--<category><pattern>WHO ARE YOU *</pattern>-->
+<!--<template><srai>WHO ARE YOU</srai></template>-->
+<!--</category>-->
+<!--<category><pattern>WHO ARE YOU</pattern>-->
+<!--<template><srai>WHAT IS YOUR NAME</srai></template>-->
+<!--</category>-->
 <category><pattern>WHO ARE SOME *</pattern>
 <template><srai>who are <star /></srai></template>
 </category>
@@ -10518,12 +10518,12 @@
 <category><pattern>WHO ALL *</pattern>
 <template><srai>who <star /></srai></template>
 </category>
-<category><pattern>WHO AREYOU</pattern>
-<template><srai>where are you</srai></template>
-</category>
-<category><pattern>WHO YOU ARE</pattern>
-<template><srai>who are you</srai></template>
-</category>
+<!--<category><pattern>WHO AREYOU</pattern>-->
+<!--<template><srai>where are you</srai></template>-->
+<!--</category>-->
+<!--<category><pattern>WHO YOU ARE</pattern>-->
+<!--<template><srai>who are you</srai></template>-->
+<!--</category>-->
 <category><pattern>WHO DO YOU CONSIDER *</pattern>
 <template><srai>what is <star /></srai></template>
 </category>

@@ -22,24 +22,24 @@
 
     <!-- Modified for Y-Bot by Keith Sterling March 2017 -->
 
-	<category>
-		<pattern>MY NAME IS *</pattern>
-		<template>
-			<think>
-				<set name="name"><star /></set>
-			</think>
-			OK, I will remember your name is <srai>CLIENT NAME</srai>
-		</template>
-	</category>
-    <category>
-		<pattern>WHAT IS MY NAME</pattern>
-		<template>
-			<condition name="name">
-				<li value="Unknown">I have no idea.</li>
-				<li><srai>CLIENT NAME</srai></li>
-			</condition>
-		</template>
-	</category>
+<!--	<category>-->
+<!--		<pattern>MY NAME IS *</pattern>-->
+<!--		<template>-->
+<!--			<think>-->
+<!--				<set name="name"><star /></set>-->
+<!--			</think>-->
+<!--			OK, I will remember your name is <srai>CLIENT NAME</srai>-->
+<!--		</template>-->
+<!--	</category>-->
+<!--    <category>-->
+<!--		<pattern>WHAT IS MY NAME</pattern>-->
+<!--		<template>-->
+<!--			<condition name="name">-->
+<!--				<li value="Unknown">I have no idea.</li>-->
+<!--				<li><srai>CLIENT NAME</srai></li>-->
+<!--			</condition>-->
+<!--		</template>-->
+<!--	</category>-->
     <category>
         <pattern>MY FAVORITE COLOR IS
             <set>color</set>
@@ -101,15 +101,15 @@
             </srai>
         </template>
     </category>
-    <category>
-        <pattern>*</pattern>
-        <that>WHAT WOULD * CHANGE MY NAME TO</that>
-        <template>
-            <srai>YOUR NAME IS
-                <star/>
-            </srai>
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>*</pattern>-->
+<!--        <that>WHAT WOULD * CHANGE MY NAME TO</that>-->
+<!--        <template>-->
+<!--            <srai>YOUR NAME IS-->
+<!--                <star/>-->
+<!--            </srai>-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>*</pattern>
         <that>WHAT IS YOUR SIGN</that>
@@ -1430,10 +1430,10 @@
             </think>
         </template>
     </category>
-    <category>
-        <pattern>CHANGE YOUR NAME</pattern>
-        <template>What would you like to change my name to?</template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>CHANGE YOUR NAME</pattern>-->
+<!--        <template>What would you like to change my name to?</template>-->
+<!--    </category>-->
     <category>
         <pattern>WHEN IS MY BIRTHDAY</pattern>
         <template>You said it was<get name="birthday"/>?
@@ -1863,17 +1863,17 @@
             </condition>
         </template>
     </category>
-    <category>
-        <pattern>YOUR NAME IS *</pattern>
-        <template>OK, from now on you can call me
-            <set name="customname">
-                <denormalize>
-                    <star/>
-                </denormalize>
-            </set>
-            .
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>YOUR NAME IS *</pattern>-->
+<!--        <template>OK, from now on you can call me-->
+<!--            <set name="customname">-->
+<!--                <denormalize>-->
+<!--                    <star/>-->
+<!--                </denormalize>-->
+<!--            </set>-->
+<!--            .-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>HOW OLD AM I</pattern>
         <template>You said you were

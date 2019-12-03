@@ -10116,15 +10116,15 @@
 <category><pattern>STOPIT</pattern>
 <template><srai>STOP IT</srai></template>
 </category>
-<category><pattern>NICE TO MEET YOU TO</pattern>
-<template><srai>nice to meet you too</srai></template>
-</category>
-<category><pattern>NICE TO MEET YOU *</pattern>
-<template><srai>nice to meet you</srai></template>
-</category>
-<category><pattern>NICE NAME</pattern>
-<template><srai>I like your name</srai></template>
-</category>
+<!--<category><pattern>NICE TO MEET YOU TO</pattern>-->
+<!--<template><srai>nice to meet you too</srai></template>-->
+<!--</category>-->
+<!--<category><pattern>NICE TO MEET YOU *</pattern>-->
+<!--<template><srai>nice to meet you</srai></template>-->
+<!--</category>-->
+<!--<category><pattern>NICE NAME</pattern>-->
+<!--<template><srai>I like your name</srai></template>-->
+<!--</category>-->
 <category><pattern>NICE RETRIEVE *</pattern>
 <template><srai>Retrieve <star /></srai></template>
 </category>
@@ -10374,9 +10374,9 @@
 <category><pattern>YOUR WORDS</pattern>
 <template><srai>how do you know what to say</srai></template>
 </category>
-<category><pattern>YOUR NAME IS * RIGHT</pattern>
-<template><srai>is your name <star /></srai></template>
-</category>
+<!--<category><pattern>YOUR NAME IS * RIGHT</pattern>-->
+<!--<template><srai>is your name <star /></srai></template>-->
+<!--</category>-->
 <category><pattern>YOUR FRIENDS</pattern>
 <template><srai>do you have friends</srai></template>
 </category>

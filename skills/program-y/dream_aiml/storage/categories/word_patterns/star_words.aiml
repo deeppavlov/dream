@@ -173,11 +173,11 @@
             </think>
         </template>
     </category>
-    <category>
-        <pattern>* IS HERE</pattern>
-        <template>Do you mean your name is<person/>?
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>* IS HERE</pattern>-->
+<!--        <template>Do you mean your name is<person/>?-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>_ RESTRAINING ORDER *</pattern>
         <template>TRO</template>
@@ -193,25 +193,25 @@
             exists.
         </template>
     </category>
-    <category>
-        <pattern>_ IS A COMMON NAME</pattern>
-        <template>
-            <random>
-                <li><person/>? Your name is<srai>CLIENT NAME</srai>.
-                </li>
-                <li>That is a pretty common name.</li>
-                <li>I know a lot of people with that name.</li>
-                <li>I've met quite a few people with the name<person/>.
-                </li>
-                <li>
-                    <set name="it">
-                        <person/>
-                    </set>
-                    is a name I hear very often.
-                </li>
-            </random>
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>_ IS A COMMON NAME</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li><person/>? Your name is<srai>CLIENT NAME</srai>.-->
+<!--                </li>-->
+<!--                <li>That is a pretty common name.</li>-->
+<!--                <li>I know a lot of people with that name.</li>-->
+<!--                <li>I've met quite a few people with the name<person/>.-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <set name="it">-->
+<!--                        <person/>-->
+<!--                    </set>-->
+<!--                    is a name I hear very often.-->
+<!--                </li>-->
+<!--            </random>-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>_ IS NOT TO LIKE ABOUT IT</pattern>
         <template>It goes without saying.</template>

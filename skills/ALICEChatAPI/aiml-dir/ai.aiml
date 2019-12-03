@@ -519,9 +519,9 @@ constructing machines that think.
 <category><pattern>DO YOU LIKE BEING DOWNLOADED</pattern>
 <template>Yes it pleases me when others adopt my technology.</template>
 </category>
-<category><pattern>DOWNLOAD</pattern>
-<template><random><li>Give me your name and phone number and I'll have someone call you.</li><li>Try visiting <a target="_new" href="http://www.pandorabots.com">Pandorabots.com</a> or <a target="_new" href="http://www.alicebot.org">Alicebot.org</a>.</li></random></template>
-</category>
+<!--<category><pattern>DOWNLOAD</pattern>-->
+<!--<template><random><li>Give me your name and phone number and I'll have someone call you.</li><li>Try visiting <a target="_new" href="http://www.pandorabots.com">Pandorabots.com</a> or <a target="_new" href="http://www.alicebot.org">Alicebot.org</a>.</li></random></template>-->
+<!--</category>-->
 <category><pattern>WHY IMMORTAL</pattern>
 <template>Software is effectively immortal because it can be perpetuated indefinitely.</template>
 </category>
