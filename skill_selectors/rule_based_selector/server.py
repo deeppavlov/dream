@@ -55,6 +55,7 @@ class RuleBasedSelector():
                                    dialog['utterances'][-1]['annotations']['intent_catcher'].items()
                                    if k not in {'opinion_request', 'yes', 'no', 'tell_me_more'}])
 
+            not_confident_asr = dialog['utterances'][-1]['annotations']['asr']['asr_confidence'] == 'very_low'
             cobot_topics = set(dialog['utterances'][-1]['annotations']['cobot_topics']['text'])
             sensitive_topics_detected = any([t in self.sensitive_topics for t in cobot_topics])
             cobot_dialogacts = dialog['utterances'][-1]['annotations']['cobot_dialogact']['intents']
@@ -94,6 +95,10 @@ class RuleBasedSelector():
             # always add dummy_skill
             skills_for_uttr.append("dummy_skill")
             skills_for_uttr.append("personal_info_skill")
+
+            # Use only misheard asr skill if asr is not confident
+            if not_confident_asr:
+                skills_for_uttr = ["misheard_asr"]
             skill_names.append(skills_for_uttr)
 
         return skill_names

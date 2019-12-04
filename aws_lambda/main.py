@@ -51,6 +51,12 @@ def call_dp_agent(user_id, text, request_data):
         logger.error("No key in request_data")
         sentry_sdk.capture_exception(e)
 
+    speech = []
+    try:
+        speech = request_data['request']['speechRecognition']
+    except KeyError:
+        logger.error("No speech in request_data")
+
     conversation_id = get_conversation_id(request_data)
 
     response, intent = None, None
@@ -59,7 +65,7 @@ def call_dp_agent(user_id, text, request_data):
             DP_AGENT_URL,
             json={'user_id': user_id, 'payload': text, 'device_id': device_id,
                   'session_id': session_id, 'request_id': request_id,
-                  'conversation_id': conversation_id},
+                  'conversation_id': conversation_id, 'speech': speech},
             timeout=7).json()
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         sentry_sdk.capture_exception(e)

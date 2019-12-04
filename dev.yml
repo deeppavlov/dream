@@ -174,4 +174,16 @@ services:
       - "./skills/personal_info_skill:/src"
     ports:
       - 8030:8030
+  asr:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/asr:/src"
+    ports:
+      - 8031:8031
+  misheard_asr:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/misheard_asr:/src"
+    ports:
+      - 8033:8033
 version: "3.7"

@@ -106,6 +106,16 @@ SKILLS = [
         "formatter": cobot_qa_formatter
     },
     {
+        "name": "misheard_asr",
+        "protocol": "http",
+        "host": "misheard_asr",
+        "port": 8033,
+        "endpoint": "misheard_respond",
+        "external": True,
+        "path": "",
+        "formatter": cobot_qa_formatter
+    },
+    {
         "name": "program_y_dangerous",
         "protocol": "http",
         "host": "program_y_dangerous",
@@ -193,6 +203,16 @@ ANNOTATORS_1 = [
         "external": True,
         "path": "",
         "formatter": sent_segm_formatter
+    },
+    {
+        "name": "asr",
+        "protocol": "http",
+        "host": "asr",
+        "port": 8031,
+        "endpoint": "asr_check",
+        "external": True,
+        "path": "",
+        "formatter": asr_formatter
     }
 ]
 
