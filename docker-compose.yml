@@ -248,4 +248,18 @@ services:
     deploy:
       mode: replicated
       replicas: 2
+  asr:
+    build:
+      context: ./annotators/asr/
+    command: gunicorn --workers=4 server:app -b 0.0.0.0:8031
+    deploy:
+      mode: replicated
+      replicas: 2
+  misheard_asr:
+    build:
+      context: ./skills/misheard_asr/
+    command: gunicorn --workers=4 server:app -b 0.0.0.0:8033
+    deploy:
+      mode: replicated
+      replicas: 2
 version: '3.7'
