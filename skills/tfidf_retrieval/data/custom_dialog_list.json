@@ -14,5 +14,12 @@
             "nice fact what else you know about star wars",
             "Han Solo died in the original script! I think it is mind-blowing! What do you think?"
         ]
+    },
+    {
+        "utterances": [
+            "let's talk about",
+            "I misheard you. what's it that you’d like to chat about?"
+        ]
     }
+
 ]
