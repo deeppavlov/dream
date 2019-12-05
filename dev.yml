@@ -147,7 +147,7 @@ services:
   movie_skill:
     env_file: [.env.dev]
     volumes:
-      - "./skills/movie_skill:/src"
+      - "./skills/movie_skill/src:/src"
     ports:
       - 8023:8023
   attitude_classification:

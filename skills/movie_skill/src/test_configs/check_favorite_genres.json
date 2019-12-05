@@ -1,0 +1,384 @@
+[
+  {
+    "id": "5de8cb18124264b7dea273f9",
+    "utterances": [
+      {
+        "text": "let's chat.",
+        "user": {
+          "id": "3b3d1ccbc3f74aae9177ed2fa2a4f2a0",
+          "user_telegram_id": "09568056789-0697-",
+          "persona": {},
+          "profile": {
+            "name": null,
+            "gender": null,
+            "birthdate": null,
+            "location": null,
+            "home_coordinates": null,
+            "work_coordinates": null,
+            "occupation": null,
+            "income_per_year": null
+          },
+          "attributes": {},
+          "user_type": "human"
+        },
+        "annotations": {
+          "blacklisted_words": {
+            "profanity": false,
+            "restricted_topics": false
+          },
+          "sentseg": {
+            "punct_sent": "let's chat.",
+            "segments": [
+              "let's chat."
+            ]
+          },
+          "toxic_classification": {
+            "identity_hate": 0.0002440552052576095,
+            "insult": 0.0003098979650530964,
+            "obscene": 0.00016110707656480372,
+            "severe_toxic": 8.006249845493585e-05,
+            "sexual_explicit": 0.00016148835129570216,
+            "threat": 0.00024449516786262393,
+            "toxic": 0.0008366421679966152
+          },
+          "sentiment_classification": {
+            "text": [
+              "positive",
+              0.708730161190033
+            ]
+          },
+          "intent_catcher": {
+            "doing_well": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "exit": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "no": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "opinion_request": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "repeat": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_can_you_do": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_job": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_name": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_time": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "where_are_you_from": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "who_made_you": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "yes": {
+              "confidence": 0.0,
+              "detected": 0
+            }
+          },
+          "cobot_nounphrases": [],
+          "ner": [
+            []
+          ],
+          "attitude_classification": {
+            "text": "very_positive",
+            "confidence": 0.5619882941246033
+          },
+          "cobot_dialogact": {
+            "intents": [
+              "OtherIntent"
+            ],
+            "topics": [
+              "Other"
+            ]
+          },
+          "cobot_offensiveness": {
+            "text": [
+              "non-toxic"
+            ],
+            "confidence": [
+              7.830236e-08
+            ],
+            "is_blacklisted": [
+              "not blacklist"
+            ]
+          },
+          "cobot_topics": {
+            "text": [
+              "Phatic"
+            ]
+          },
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "let's chat."
+            ]
+          }
+        },
+        "hypotheses": [
+          {
+            "skill_name": "alice",
+            "text": "I don't know if it's in my power to give permission.",
+            "confidence": 0.65
+          },
+          {
+            "skill_name": "program_y",
+            "text": "Hi, this is an Alexa Prize Socialbot. How are you?",
+            "confidence": 0.98
+          },
+          {
+            "skill_name": "personal_info_skill",
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {}
+          },
+          {
+            "skill_name": "dummy_skill",
+            "text": "I really do not know what to answer.",
+            "confidence": 0.5
+          },
+          {
+            "skill_name": "dummy_skill",
+            "text": "how are you doing?",
+            "confidence": 0.6
+          },
+          {
+            "skill_name": "cobotqa",
+            "text": "",
+            "confidence": 0.0
+          }
+        ],
+        "date_time": "2019-12-05 09:17:09.489207",
+        "attributes": {}
+      },
+      {
+        "text": "Hi, this is an Alexa Prize Socialbot. How are you?",
+        "orig_text": null,
+        "active_skill": "program_y",
+        "confidence": 0.98,
+        "annotations": {
+          "bot_sentseg": {
+            "punct_sent": "Hi, this is an Alexa Prize Socialbot. How are you?",
+            "segments": [
+              "Hi, this is an Alexa Prize Socialbot.",
+              "How are you?"
+            ]
+          },
+          "bot_ner": [
+            [
+              {
+                "confidence": 1,
+                "end_pos": 6,
+                "start_pos": 5,
+                "text": "alexa",
+                "type": "MISC"
+              }
+            ],
+            []
+          ],
+          "bot_sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "let's chat.",
+              "Hi, this is an Alexa Prize Socialbot. How are you?"
+            ]
+          }
+        },
+        "date_time": "2019-12-05 09:17:11.989242",
+        "user": {
+          "id": "96675cd4082a4a8aa331610fd7b499d2",
+          "persona": {},
+          "attributes": {},
+          "user_type": "bot"
+        }
+      },
+      {
+        "text": "what movie genres do you like?",
+        "user": {
+          "id": "5de8cb18124264b7dea273f7",
+          "user_telegram_id": "09568056789-0697-",
+          "persona": {},
+          "profile": {
+            "name": null,
+            "gender": null,
+            "birthdate": null,
+            "location": null,
+            "home_coordinates": null,
+            "work_coordinates": null,
+            "occupation": null,
+            "income_per_year": null
+          },
+          "attributes": {},
+          "user_type": "human"
+        },
+        "annotations": {
+          "blacklisted_words": {
+            "profanity": false,
+            "restricted_topics": false
+          },
+          "sentseg": {
+            "punct_sent": "what movie genres do you like?",
+            "segments": [
+              "what movie genres do you like?"
+            ]
+          },
+          "toxic_classification": {
+            "identity_hate": 0.00016349914949387312,
+            "insult": 0.0002666461223270744,
+            "obscene": 7.386279321508482e-05,
+            "severe_toxic": 3.918625588994473e-05,
+            "sexual_explicit": 9.648440754972398e-05,
+            "threat": 0.00011771651770686731,
+            "toxic": 0.000615110038779676
+          },
+          "sentiment_classification": {
+            "text": [
+              "neutral",
+              0.7574180364608765
+            ]
+          },
+          "intent_catcher": {
+            "doing_well": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "exit": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "no": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "opinion_request": {
+              "confidence": 0.8268857002258301,
+              "detected": 1
+            },
+            "repeat": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_can_you_do": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_job": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_name": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_time": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "where_are_you_from": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "who_made_you": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "yes": {
+              "confidence": 0.0,
+              "detected": 0
+            }
+          },
+          "cobot_nounphrases": [
+            "what movie genres"
+          ],
+          "attitude_classification": {
+            "text": "very_positive",
+            "confidence": 0.47932547330856323
+          },
+          "ner": [
+            []
+          ],
+          "cobot_dialogact": {
+            "intents": [
+              "Information_RequestIntent"
+            ],
+            "topics": [
+              "Entertainment_Movies"
+            ]
+          },
+          "cobot_topics": {
+            "text": [
+              "Movies_TV"
+            ]
+          },
+          "cobot_offensiveness": {
+            "text": [
+              "non-toxic"
+            ],
+            "confidence": [
+              7.961389e-07
+            ],
+            "is_blacklisted": [
+              "not blacklist"
+            ]
+          },
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "let's chat.",
+              "Hi, this is an Alexa Prize Socialbot. How are you?",
+              "what movie genres do you like?"
+            ]
+          }
+        },
+        "hypotheses": [],
+        "date_time": "2019-12-05 09:17:14.237974",
+        "attributes": {}
+      }
+    ],
+    "human": {
+      "id": "5de8cb18124264b7dea273f7",
+      "user_telegram_id": "09568056789-0697-",
+      "persona": {},
+      "profile": {
+        "name": null,
+        "gender": null,
+        "birthdate": null,
+        "location": null,
+        "home_coordinates": null,
+        "work_coordinates": null,
+        "occupation": null,
+        "income_per_year": null
+      },
+      "attributes": {},
+      "user_type": "human"
+    },
+    "bot": {
+      "id": "5de8cb18124264b7dea273f8",
+      "persona": {},
+      "attributes": {},
+      "user_type": "bot"
+    }
+  }
+]
