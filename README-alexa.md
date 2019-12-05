@@ -14,9 +14,18 @@ should be set to use this miniskill:
 
 How to run and test
 =======================
-
+To run on GPU & optimized for performance configuration:
 ```
 $: docker-compose -f docker-compose.yml -f dev.yml up --build
+```
+
+To run on single machine without GPU:
+```
+$: docker-compose -f docker-compose.yml -f dev.yml -f cpu.yml -f one_worker.yml up --build
+```
+
+Run agent:
+```
 $: docker-compose -f docker-compose.yml -f dev.yml exec agent bash
 $(inside docker): python3 -m core.run
 ```
