@@ -7,9 +7,19 @@ import zipfile
 import urllib.request
 import logging
 
+TFIDF_BAD_FILTER = os.getenv('TFIDF_BAD_FILTER')
+USE_COBOT = os.getenv('USE_TFIDF_COBOT')
+USE_ASSESSMENT = os.getenv('USE_ASSESSMENT')
+
 
 def most_frequent(List):
     return max(set(List), key=List.count)
+
+
+def preprocess(phrase):
+    for sign in '!#$%&*+.,:;<>=?@[]^_{}|':
+        phrase = phrase.replace(sign, ' ' + sign + ' ')
+    return phrase
 
 
 def get_vectorizer(vectorizer_dir):
@@ -31,26 +41,54 @@ def get_dialogs(dialog_dir, custom_dialog_dir, full_dialog_dir, save_full=True):
     return dialog_list
 
 
-def create_phraselist(dialog_list, donotknow_answers, todel_userphrases, banned_words):
+def count(good, bad):
+    return good / (good + bad + 0.001)
+
+
+def create_phraselist(dialog_list, donotknow_answers, todel_userphrases, banned_words,
+                      bad_dialog_list=None):
     phrase_list = defaultdict(list)
+    good_phrase_list = defaultdict(list)
+    bad_phrase_list = defaultdict(list)
+    good_total_count = 0
+    bad_total_count = 0
     for dialog in dialog_list:
         utterances = dialog['utterances']
         for i in range(0, len(utterances) - 1, 2):
-            human_phrase = utterances[i]
-            bot_phrase = utterances[i + 1]
+            human_phrase = preprocess(utterances[i])
+            bot_phrase = preprocess(utterances[i + 1])
             no_wrongwords = all([banned_word not in bot_phrase for banned_word in banned_words])
             if bot_phrase not in donotknow_answers and human_phrase not in todel_userphrases and no_wrongwords:
-                phrase_list[human_phrase].append(bot_phrase)
+                good_phrase_list[human_phrase].append(bot_phrase)
+                good_total_count += 1
+    if bad_dialog_list is not None:
+        for dialog in bad_dialog_list:
+            utterances = dialog['utterances']
+            for i in range(0, len(utterances) - 1, 2):
+                human_phrase = utterances[i]
+                bot_phrase = utterances[i + 1]
+                no_wrongwords = all([banned_word not in bot_phrase for banned_word in banned_words])
+                bad_phrase_list[human_phrase].append(bot_phrase)
+                bad_total_count += 1
     logging.info('Phrase list created')
-    for phrase in phrase_list.keys():
-        phrase_list[phrase] = most_frequent(phrase_list[phrase])
+    for phrase in good_phrase_list.keys():
+        candidate = most_frequent(good_phrase_list[phrase])
+        good_count = good_phrase_list[phrase].count(candidate)
+        bad_count = bad_phrase_list[phrase].count(candidate)
+        if not TFIDF_BAD_FILTER or count(good_count, bad_count) > count(good_total_count, bad_total_count):
+            phrase_list[phrase] = most_frequent(good_phrase_list[phrase])
     return phrase_list
 
 
-vectorizer_dir = "http://lnsigo.mipt.ru/export/models/new_vectorizer.zip"
-dialog_dir = "data/dialog_list.json"
+vectorizer_dir = "http://lnsigo.mipt.ru/export/models/new_vectorizer_2.zip"
+if USE_COBOT:
+    dialog_dir = 'data/cobot_dialog_list.json'
+    full_dialog_dir = "data/full_cobot_dialog_list.json"
+else:
+    dialog_dir = "data/dialog_list.json"
+    full_dialog_dir = "data/full_dialog_list.json"
 custom_dialog_dir = "data/custom_dialog_list.json"
-full_dialog_dir = "data/full_dialog_list.json"
+
 donotknow_answers = ["I really do not know what to answer.",
                      "Sorry, probably, I didn't get what you mean.",
                      "I didn't get it. Sorry.",
@@ -59,16 +97,31 @@ donotknow_answers = ["I really do not know what to answer.",
                      "I'm really sorry but i'm a socialbot, and I cannot do some Alexa things.",
                      "I didn’t catch that.",
                      "I didn’t get that."]
+donotknow_answers = [preprocess(j) for j in donotknow_answers]
 todel_userphrases = ['yes']
 banned_words = ['Benjamin']
 vectorizer = get_vectorizer(vectorizer_dir=vectorizer_dir)
 dialog_list = get_dialogs(dialog_dir=dialog_dir, custom_dialog_dir=custom_dialog_dir,
                           full_dialog_dir=full_dialog_dir)
+if TFIDF_BAD_FILTER:
+    bad_dialog_dir = "data/bad_dialog_list.json"
+    bad_dialog_list = get_dialogs(bad_dialog_dir, '', '', False)
+else:
+    bad_dialog_list = None
 phrase_list = create_phraselist(dialog_list=dialog_list, donotknow_answers=donotknow_answers,
-                                todel_userphrases=todel_userphrases, banned_words=banned_words)
+                                todel_userphrases=todel_userphrases, banned_words=banned_words,
+                                bad_dialog_list=bad_dialog_list)
+
+if USE_ASSESSMENT:
+    goodbad_list = json.load(open('data/goodpoor.json', 'r'))[0]
+    phrase_list.update(goodbad_list['good'])
+    for key in goodbad_list['poor']:
+        if key in phrase_list and goodbad_list['poor'][key] == phrase_list[key]:
+            del phrase_list[key]
 
 
 def check(human_phrase, vectorizer=vectorizer, phrase_list=phrase_list, top_best=2):
+    human_phrase = preprocess(human_phrase)
     human_phrases = list(phrase_list.keys())
     vectorized_phrases = vectorizer.transform(human_phrases)
     assert vectorized_phrases.shape[0] > 0
@@ -88,5 +141,8 @@ def check(human_phrase, vectorizer=vectorizer, phrase_list=phrase_list, top_best
             score = score / 1.5
         index = multiply_result.indices[ind]
         bot_answer = phrase_list[human_phrases[index]]
+        for sign in '!#$%&*+.,:;<>=?@[]^_{}|':
+            bot_answer = bot_answer.replace(' ' + sign, sign)
+        bot_answer = bot_answer.replace('  ', ' ').lower().strip()
         ans.append((bot_answer, score))
     return ans

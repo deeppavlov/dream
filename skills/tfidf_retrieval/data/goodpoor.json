@@ -1,0 +1,23 @@
+[
+    {
+        "good": {
+            "how is the Eiffel going?": "The Eiffel Tower is completed.",
+            "how is the NFL?": "Today, the Bears will play the Lions at 10:00am on CBS. The Bengals will play the Ravens at 10:00am on CBS. The Browns will play the Bills at 10:00am on CBS. The Saints will play the Falcons at 10:00am on FOX.",
+            "who made you?": "I cannot answer questions about my creator for now because they are participating in the Alexa Prize Challenge. #+#who_made_you",
+            "what is Alexa prize challenge?": "The Alexa Prize is Amazon's university competition to advance AI. Student teams are building skills known as socialbots, that can converse on popular topics, such as entertainment, politics, and sports. The socialbots are a work in progress, and your conversations and feedback will help students develop more engaging AI. To try one, say: Alexa, Let\u2019s Chat."
+        },
+        "poor": {
+            "what's the time?": "Sorry, I didn\u2019t catch that.",
+            "what is the time?": "I didn\u2019t catch that.",
+            "do I have friends?": "Whatever we think, we feel.",
+            "very kind as well.": "Sorry, probably, I didn't get what you mean.",
+            "good how are you": "I'm glad you're satisfied.",
+            "what do you wanna talk about": "This might answer your question: A wide area network is a telecommunications network that extends over a large geographical area for the primary purpose of computer networking.",
+            "how are you today": "I'm feeling like a whiz, so if you'd like a challenge, ask me for a quiz.",
+            "give me a quiz": "I'm really sorry but i'm a socialbot, and I cannot do some Alexa things.",
+            "what are your favorite topics": "Here's something I found on the web. According to girlsaskguys.com:  Relationships and dating are my two favorite topics on here!",
+            "why": "You're smart, you tell me.",
+            "yes I like this kind of questions": "Interesting. What\u2019s the most ironic thing you\u2019ve seen happen?"
+        }
+    }
+]
