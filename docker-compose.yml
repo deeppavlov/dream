@@ -192,7 +192,7 @@ services:
   movie_skill:
     build:
       context: ./skills/movie_skill/
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8023 --timeout=120
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8023 --timeout=300
     volumes: []
     deploy:
       mode: replicated
