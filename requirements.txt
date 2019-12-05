@@ -15,3 +15,4 @@ aio-pika==5.6.0
 requests==2.22.0
 motor==2.0.0
 tqdm==4.36.1
+aiohttp_cors==0.7.0
