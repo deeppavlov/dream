@@ -1,7 +1,11 @@
 import json
+import time
 import re
 import logging
 import string
+from copy import deepcopy
+import pickle
+from pathlib import Path
 
 import numpy as np
 from ahocorapy.keywordtree import KeywordTree
@@ -17,14 +21,89 @@ logger = logging.getLogger(__name__)
 class IMDb:
     professions = ["actor", "director"]
 
-    def __init__(
-            self,
-            db_path="/home/dilyara/Documents/GitHub/dp-agent-alexa/skills/movie_skill/databases/imdb_dataset_58k.json"):
-        """
+    def __init__(self, db_path="../data/imdb_58k_parsed.json", save_folder="../data/"):
+        t0 = time.time()
+        self.with_ignored_movies_names = {}
+        self.without_ignored_movies_names = {}
+        self.database = {}
+        self.professionals = {}
+        self.without_ignored_movies_names_tree = None
+        self.with_ignored_movies_names_tree = None
+        self.names_tree = None
+        self.genres_tree = None
+        self.load(save_folder)
 
-        Args:
-            db_path: path to the json database file
-        """
+        # if (Path(save_folder).joinpath(
+        #         "with_ignored_movies_names.json").exists() and Path(save_folder).joinpath(
+        #         "without_ignored_movies_names.json").exists() and Path(save_folder).joinpath(
+        #         "database.json").exists() and Path(save_folder).joinpath(
+        #         "professionals.json").exists() and Path(save_folder).joinpath(
+        #         "without_ignored_movies_names_tree.pkl").exists() and Path(save_folder).joinpath(
+        #         "with_ignored_movies_names_tree.pkl").exists() and Path(save_folder).joinpath(
+        #         "names_tree.pkl").exists() and Path(save_folder).joinpath(
+        #         "genres_tree.pkl").exists()):
+        #     self.load(save_folder)
+        # else:
+        #     self.train_and_save(db_path, save_folder)
+
+        logger.info(f"Initialized in {time.time() - t0} sec")
+
+    def save(self, save_folder):
+        with open(Path(save_folder).joinpath("with_ignored_movies_names.json"), "w") as f:
+            json.dump(self.with_ignored_movies_names, f, indent=2)
+
+        with open(Path(save_folder).joinpath("without_ignored_movies_names.json"), "w") as f:
+            json.dump(self.without_ignored_movies_names, f, indent=2)
+
+        with open(Path(save_folder).joinpath("database.json"), "w") as f:
+            json.dump(self.database, f, indent=2)
+
+        with open(Path(save_folder).joinpath("professionals.json"), "w") as f:
+            json.dump(self.professionals, f, indent=2)
+
+        with open(Path(save_folder).joinpath("without_ignored_movies_names_tree.pkl"), "wb") as f:
+            pickle.dump(self.without_ignored_movies_names_tree, f)
+
+        with open(Path(save_folder).joinpath("with_ignored_movies_names_tree.pkl"), "wb") as f:
+            pickle.dump(self.with_ignored_movies_names_tree, f)
+
+        with open(Path(save_folder).joinpath("names_tree.pkl"), "wb") as f:
+            pickle.dump(self.names_tree, f)
+
+        with open(Path(save_folder).joinpath("genres_tree.pkl"), "wb") as f:
+            pickle.dump(self.genres_tree, f)
+
+    def load(self, save_folder):
+        start_time = time.time()
+        logger.info(f"Loading models")
+        with open(Path(save_folder).joinpath("with_ignored_movies_names.json"), "r") as f:
+            self.with_ignored_movies_names = json.load(f)
+
+        with open(Path(save_folder).joinpath("without_ignored_movies_names.json"), "r") as f:
+            self.without_ignored_movies_names = json.load(f)
+
+        with open(Path(save_folder).joinpath("database.json"), "r") as f:
+            self.database = json.load(f)
+
+        with open(Path(save_folder).joinpath("professionals.json"), "r") as f:
+            self.professionals = json.load(f)
+
+        with open(Path(save_folder).joinpath("without_ignored_movies_names_tree.pkl"), "rb") as f:
+            self.without_ignored_movies_names_tree = pickle.load(f)
+
+        with open(Path(save_folder).joinpath("with_ignored_movies_names_tree.pkl"), "rb") as f:
+            self.with_ignored_movies_names_tree = pickle.load(f)
+
+        with open(Path(save_folder).joinpath("names_tree.pkl"), "rb") as f:
+            self.names_tree = pickle.load(f)
+
+        with open(Path(save_folder).joinpath("genres_tree.pkl"), "rb") as f:
+            self.genres_tree = pickle.load(f)
+
+        logger.info(f"Loading models time {time.time() - start_time}")
+
+    def train_and_save(self, db_path, save_folder):
+        t0 = time.time()
         self.without_ignored_movies_names_tree = KeywordTree(case_insensitive=True)
         self.with_ignored_movies_names_tree = KeywordTree(case_insensitive=True)
         self.genres_tree = KeywordTree(case_insensitive=True)
@@ -33,10 +112,8 @@ class IMDb:
             self.names_tree[prof] = KeywordTree(case_insensitive=True)
 
         with open(db_path, "r") as f:
-            # list of dictionaries. Each dictionary is about one movie
             self.database = json.load(f)
 
-        # make the databases of the same structure
         if "imdb_id" in self.database[0].keys():
             if re.match("tt+", self.database[0]["imdb_id"]):
                 for movie in self.database:
@@ -51,25 +128,16 @@ class IMDb:
                 self.database[j].pop("users_rating")
             self.database = {movie["imdb_id"]: movie for movie in self.database}
 
-        # dictionary for getting imdb_id having name of the movie
-        # these dictionaries of the same type: key `movie title` <-> value `imdb_id`
         self.movies_names = {}
         for imdb_id in self.database:
             self.movies_names[self.database[imdb_id]["title"]] = []
         for imdb_id in self.database:
             self.movies_names[self.database[imdb_id]["title"]].append(imdb_id)
-        # let's choose
-        # for imdb_id in self.database:
-        #     self.movies_names[self.database[imdb_id]["title"]].append(imdb_id)
 
-        # without ignored movies
         self.without_ignored_movies_names = {self.process_movie_name(movie): self.movies_names[movie]
                                              for movie in self.movies_names.keys()}
-        # with ignored movies
-        self.with_ignored_movies_names = {self.process_movie_name(movie): self.movies_names[movie]
-                                          for movie in self.movies_names.keys()}
+        self.with_ignored_movies_names = deepcopy(self.without_ignored_movies_names)
 
-        # let's get rid from movie `Movie`, `You` to escape many incorrect casesл
         with open("databases/google-10000-english-no-swears.txt", "r") as f:
             self.frequent_unigrams = f.read().splitlines()[:5000]
 
@@ -83,18 +151,18 @@ class IMDb:
             if int(bigram[0]) > 1000 and "a" not in bigram and "the" not in bigram:
                 self.frequent_bigrams.append(bigram[1] + " " + bigram[2])
 
-        movie_titles_to_ignore = self.get_movies_titles_to_ignore(self.movies_names.keys())
-        for title in movie_titles_to_ignore:
-            proc_title = self.process_movie_name(title)
+        movie_titles_to_ignore = self.get_processed_movies_titles_to_ignore()
+        for proc_title in movie_titles_to_ignore:
             try:
                 self.without_ignored_movies_names.pop(proc_title)
             except KeyError:
                 pass
-        for title in ["Movie", "The Tragedy", "The Favorite", "Angela", "Attitude", "Do You Believe",
-                      "Earthquake", "The Gays", "No Matter What", "Talk to Me", "You", "Let's Talk", "Let's Chat",
-                      "In", "If", "Can", "O", "OK", "One", "Two", "Movie", "Film",
-                      "New", "Next", "Out", "Love", "Like"]:
-            proc_title = self.process_movie_name(title)
+        for proc_title in ["movie", "tragedy", "favorite", "favourite", "angela",
+                           "attitude", "do you believe", "earthquake", "gays",
+                           "no matter what", "talk to me", "you", "lets talk",
+                           "lets chat", "in", "if", "can", "o", "ok", "one",
+                           "two", "film", "new", "next", "out", "love",
+                           "like", "watch"]:
             try:
                 self.with_ignored_movies_names.pop(proc_title)
                 self.without_ignored_movies_names.pop(proc_title)
@@ -102,8 +170,7 @@ class IMDb:
                 pass
 
         to_remove = []
-        for movie in self.with_ignored_movies_names.keys():
-            proc_title = self.process_movie_name(movie)
+        for proc_title in self.with_ignored_movies_names.keys():
             if re.match(f"^[{string.digits}]+$", proc_title):
                 to_remove.append(proc_title)
         for proc_title in to_remove:
@@ -129,6 +196,8 @@ class IMDb:
         for prof in self.professions:
             self.collect_persons_and_movies(profession=prof)
 
+        logger.info(f"Everything's except trees were done in {time.time() - t0} sec")
+
         # compose trees
         # add whitespaces to find thise words only as tokens not as a part of other words
         for movie in self.without_ignored_movies_names:
@@ -150,6 +219,8 @@ class IMDb:
         for genre in ALL_GENRES:
             self.genres_tree.add(f"{genre}")
         self.genres_tree.finalize()
+        logger.info(f"Trained in {time.time() - t0} sec")
+        self.save(save_folder)
 
     @staticmethod
     def process_movie_name(movie):
@@ -180,6 +251,15 @@ class IMDb:
                  (r"\s?(the)?\s?seventh part\s?", " part 7 "),
                  (r"\s?(the)?\s?eighth part\s?", " part 8 "),
                  (r"\s?(the)?\s?ninth part\s?", " part 9 "),
+                 (r"\s?(the)?\s?first\s?", " part 1 "),
+                 (r"\s?(the)?\s?second\s?", " part 2 "),
+                 (r"\s?(the)?\s?third\s?", " part 3 "),
+                 (r"\s?(the)?\s?fourth\s?", " part 4 "),
+                 (r"\s?(the)?\s?fifth\s?", " part 5 "),
+                 (r"\s?(the)?\s?sixth\s?", " part 6 "),
+                 (r"\s?(the)?\s?seventh\s?", " part 7 "),
+                 (r"\s?(the)?\s?eighth\s?", " part 8 "),
+                 (r"\s?(the)?\s?ninth\s?", " part 9 "),
                  (r"\s+the\s+", " "),
                  (r"\s+a\s+", " "),
                  (r"^the\s+", ""),
@@ -198,12 +278,9 @@ class IMDb:
 
         return movie_name
 
-    def get_movies_titles_to_ignore(self, movies_titles):
-        to_ignore = []
-        for movie_title in movies_titles:
-            processed_title = self.process_movie_name(movie_title)
-            if processed_title in self.frequent_unigrams + self.frequent_bigrams:
-                to_ignore.append(movie_title)
+    def get_processed_movies_titles_to_ignore(self):
+        to_ignore = list(set(self.without_ignored_movies_names.keys()).intersection(
+            set(self.frequent_unigrams + self.frequent_bigrams)))
 
         return to_ignore
 

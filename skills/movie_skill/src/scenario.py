@@ -1,4 +1,5 @@
 import logging
+import time
 
 from templates import MovieSkillTemplates
 
@@ -15,7 +16,9 @@ class MovieSkillScenario:
 
     def __init__(self):
         self.default_conf = 0.98
+        t0 = time.time()
         self.templates = MovieSkillTemplates()
+        logger.info(f"Movie Skill initialized in {time.time() - t0} sec")
 
     def __call__(self, dialogs):
         texts = []

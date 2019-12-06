@@ -196,7 +196,7 @@ services:
     volumes: []
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
   ner:
     build:
       context: ./annotators/NER/

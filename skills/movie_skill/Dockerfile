@@ -8,8 +8,8 @@ RUN pip install -r /src/requirements.txt
 
 COPY ./src/ /src
 
-ADD http://files.deeppavlov.ai/alexaprize_data/imdb_58k_parsed.tar.gz /data/imdb_58k_parsed.tar.gz
-RUN tar -zxvf /data/imdb_58k_parsed.tar.gz -C /data/
+ADD http://files.deeppavlov.ai/alexaprize_data/imdb_database_and_models.tar.gz /data/imdb_database_and_models.tar.gz
+RUN tar -zxvf /data/imdb_database_and_models.tar.gz -C /data/
 
 WORKDIR /src
 
