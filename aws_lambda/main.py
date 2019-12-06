@@ -55,7 +55,9 @@ def call_dp_agent(user_id, text, request_data):
     try:
         speech = request_data['request']['speechRecognition']
     except KeyError:
-        logger.error("No speech in request_data")
+        speech = request_data['request'].get('payload', {}).get('speechRecognition', [])
+        if not speech:
+            logger.error("No speech in request_data")
 
     conversation_id = get_conversation_id(request_data)
 
