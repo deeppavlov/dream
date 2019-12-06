@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 class IMDb:
     professions = ["actor", "director"]
 
-    def __init__(self, db_path="../data/imdb_58k_parsed.json", save_folder="../data/"):
+    def __init__(self, db_path="./databases/imdb_dataset_58k.json", save_folder="../data/"):
         t0 = time.time()
         self.with_ignored_movies_names = {}
         self.without_ignored_movies_names = {}
@@ -31,22 +31,30 @@ class IMDb:
         self.with_ignored_movies_names_tree = None
         self.names_tree = None
         self.genres_tree = None
-        self.load(save_folder)
+        # self.load(save_folder)
 
-        # if (Path(save_folder).joinpath(
-        #         "with_ignored_movies_names.json").exists() and Path(save_folder).joinpath(
-        #         "without_ignored_movies_names.json").exists() and Path(save_folder).joinpath(
-        #         "database.json").exists() and Path(save_folder).joinpath(
-        #         "professionals.json").exists() and Path(save_folder).joinpath(
-        #         "without_ignored_movies_names_tree.pkl").exists() and Path(save_folder).joinpath(
-        #         "with_ignored_movies_names_tree.pkl").exists() and Path(save_folder).joinpath(
-        #         "names_tree.pkl").exists() and Path(save_folder).joinpath(
-        #         "genres_tree.pkl").exists()):
-        #     self.load(save_folder)
-        # else:
-        #     self.train_and_save(db_path, save_folder)
+        if (Path(save_folder).joinpath(
+                "with_ignored_movies_names.json").exists() and Path(save_folder).joinpath(
+                "without_ignored_movies_names.json").exists() and Path(save_folder).joinpath(
+                "database.json").exists() and Path(save_folder).joinpath(
+                "professionals.json").exists() and Path(save_folder).joinpath(
+                "without_ignored_movies_names_tree.pkl").exists() and Path(save_folder).joinpath(
+                "with_ignored_movies_names_tree.pkl").exists() and Path(save_folder).joinpath(
+                "names_tree.pkl").exists() and Path(save_folder).joinpath(
+                "genres_tree.pkl").exists()):
+            self.load(save_folder)
+        else:
+            self.train_and_save(db_path, save_folder)
 
         logger.info(f"Initialized in {time.time() - t0} sec")
+        logger.info(f"Search across {len(self.with_ignored_movies_names)} with ignored movies")
+        logger.info(f"Search across {len(self.without_ignored_movies_names)} without ignored movies")
+        npersons = 0
+        for prof in self.professions:
+            for person in self.professionals[f"lowercased_{prof}s"]:
+                if len(person.split()) > 1:
+                    npersons += 1
+        logger.info(f"Search across {npersons} persons names")
 
     def save(self, save_folder):
         with open(Path(save_folder).joinpath("with_ignored_movies_names.json"), "w") as f:
@@ -118,13 +126,18 @@ class IMDb:
             if re.match("tt+", self.database[0]["imdb_id"]):
                 for movie in self.database:
                     movie["imdb_id"] = movie["imdb_id"][2:]
+            for movie in self.database:
+                movie["imdb_rating"] = float(movie["imdb_rating"])
             self.database = {movie["imdb_id"]: movie for movie in self.database}
         elif "imdb_url" in self.database[0].keys():
             for j in range(len(self.database)):
                 for s in self.database[j]["imdb_url"].split("/"):
                     if re.match("tt+", s):
                         self.database[j]["imdb_id"] = s[2:]
-                self.database[j]["imdb_rating"] = self.database[j]["users_rating"]
+                try:
+                    self.database[j]["imdb_rating"] = float(self.database[j]["users_rating"])
+                except TypeError:
+                    self.database[j]["imdb_rating"] = 0.0
                 self.database[j].pop("users_rating")
             self.database = {movie["imdb_id"]: movie for movie in self.database}
 

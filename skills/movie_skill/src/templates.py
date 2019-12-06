@@ -32,7 +32,7 @@ class MovieSkillTemplates:
     lowest_confidence = 0.2
     notsure_confidence = 0.5
 
-    def __init__(self, db_path="../data/imdb_58k_parsed.json"):
+    def __init__(self, db_path="./databases/imdb_dataset_58k.json"):
         np.random.seed(42)
         self.imdb = IMDb(db_path)
 
@@ -315,6 +315,23 @@ class MovieSkillTemplates:
         return found_profs
 
     def give_factual_answer(self, dialog):
+        # answer to InfoRequestIntent
+        # qa answers?
+        # TODO: remove "do you know", "tell me"
+        # uttr = dialog["utterances"][-1]["text"]
+        # nouns = dialog["utterances"][-1]["annotations"]["cobot_nounphrases"]
+        # # remove some `please`, "could you" and like this from user's question
+        # uttr = re.sub(r"(\s|,\s)?please,?", "", uttr.lower())
+        # uttr = re.sub(r"(can|could|would)\s(you)?\s?", "", uttr)
+        # # replace `do you know what` to `what`
+        # # replace `search for the genre of this movie` to `what the genre of this movie`
+        # uttr = re.sub(r"((tell\sme|say|guess)(\swhat)?|do\syou\sknow(\swhat)?|look\sfor|find|google|search\sfor)",
+        #               "what", uttr)
+
+        # return self.donotknow()
+        return ""
+
+    def faq(self, dialog):
         # answer to InfoRequestIntent
         # qa answers?
         # TODO: remove "do you know", "tell me"
