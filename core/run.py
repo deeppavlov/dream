@@ -37,6 +37,7 @@ parser.add_argument("-ch", "--channel", help="run agent in telegram, cmd_client 
 parser.add_argument('-p', '--port', help='port for http client, default 4242', default=4242)
 parser.add_argument('-d', '--debug', help='run in debug mode', action='store_true')
 parser.add_argument('-rl', '--response-logger', help='run agent with services response logging', action='store_true')
+parser.add_argument('--use_cors', help='enables CORS support for HTTP requests', action='store_true', default=False)
 
 args = parser.parse_args()
 
@@ -143,7 +144,7 @@ def run_default():
         if gateway:
             gateway.on_channel_callback = register_msg
             gateway.on_service_callback = process_callable
-        app = init_app(agent, session, workers, stats, args.debug)
+        app = init_app(agent, session, workers, stats, args.debug, args.use_cors)
         web.run_app(app, port=args.port)
 
     elif CHANNEL == 'telegram':
