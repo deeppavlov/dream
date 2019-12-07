@@ -11,12 +11,8 @@ from state_formatters.output_formatters import (http_api_output_formatter,
                                                 http_debug_output_formatter)
 
 
-async def init_app(agent, session, consumers, stats, debug=False):
+async def init_app(agent, session, consumers, stats, debug=False, use_cors=False):
     app = web.Application()
-    cors = aiohttp_cors.setup(
-        app,
-        defaults={"*": aiohttp_cors.ResourceOptions(allow_credentials=True, expose_headers="*", allow_headers="*")}
-    )
     handler = ApiHandler(debug)
     stats_handler = WSstatsHandler()
     consumers = [asyncio.ensure_future(i.call_service(agent.process)) for i in consumers]
@@ -33,7 +29,15 @@ async def init_app(agent, session, consumers, stats, debug=False):
         for ws in app['websockets']:
             await ws.close()
 
-    cors.add(app.router.add_post('/', handler.handle_api_request))
+    if use_cors:
+        cors = aiohttp_cors.setup(
+            app,
+            defaults={"*": aiohttp_cors.ResourceOptions(allow_credentials=True, expose_headers="*", allow_headers="*")}
+        )
+        cors.add(app.router.add_post('/', handler.handle_api_request))
+    else:
+        app.router.add_post('/', handler.handle_api_request)
+
     app.router.add_get('/dialogs/{dialog_id}', handler.dialog)
     app.router.add_get('/dialogs', handler.all_dialogs)
 
