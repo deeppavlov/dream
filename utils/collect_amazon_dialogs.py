@@ -24,15 +24,17 @@ parser.add_argument('--output', help='output filename prefix', default='amazon_d
 parser.add_argument('--with_requesting', action='store_true', default=False, help='pass user queries to url')
 parser.add_argument('--with_debug_info', action='store_true', default=False,
                     help='get debug info for with_requesting mode')
+parser.add_argument('--with_skill_name', action='store_true', default=False,
+                    help='get active skill name for collected dialogs')
 parser.add_argument('--url', help='url, used only when with_requesting is True', default='http://0.0.0.0:4242')
 parser.add_argument('--feedback', help='feedbacks csv', default='./ratings/conversation_feedback.csv')
 parser.add_argument('--ratings', help='ratings csv', default='./ratings/ratings.csv')
 parser.add_argument('--first_n', help='Number of dialogs for debug', default=999999)
 
 
-def print_pretty(dialog, file=sys.stdout, field='dialog', with_debug_info=False):
+def print_pretty(dialog, file=sys.stdout, field='dialog', with_debug_info=False, with_skill_name=False):
     # Skip /start and next utt
-    # TODO: Do not use 2:, for new dialogs, because /start not saved in state in new version of dp-agetn
+    # TODO: Do not use 2:, for new dialogs, because /start not saved in state in new version of dp-agent
     if with_debug_info:
         bot_idx = -2
         human_idx = -3
@@ -53,11 +55,12 @@ def print_pretty(dialog, file=sys.stdout, field='dialog', with_debug_info=False)
                         print(f"Bot {row['skill_name']} ({row['confidence']}): {row['text']}", file=file)
     else:
         for i, utt in enumerate(dialog['utterances']):
-            if i % 2 == 1:
-                person = 'Bot'
+            person = 'Bot' if i % 2 == 1 else 'Human'
+            if with_skill_name and person == 'Bot':
+                active_skill = utt.get('active_skill', 'no_skill_name')
+                print(f"{person}({active_skill}): {utt['text']}", file=file)
             else:
-                person = 'Human'
-            print(f"{person}: {utt['text']}", file=file)
+                print(f"{person}: {utt['text']}", file=file)
 
 
 def collect_human_responses(dialog):
@@ -68,10 +71,10 @@ def collect_human_responses(dialog):
     return responses
 
 
-def print_row(row, f, field='dialog', with_debug_info=False):
+def print_row(row, f, field='dialog', with_debug_info=False, with_skill_name=False):
     print(f'--{row["conversation_id"]}----{row["rating_val"]}----{row["feedback_txt"]}---{row["start_time"]}',
           file=f)
-    print_pretty(row[field], file=f, field=field, with_debug_info=with_debug_info)
+    print_pretty(row[field], file=f, field=field, with_debug_info=with_debug_info, with_skill_name=with_skill_name)
     print("-----------------------", file=f)
 
 
@@ -84,20 +87,20 @@ def print_to_file(new_conversations, args):
                 no_feedbacks.append(row)
             else:
                 with_feedbacks.append(row)
-            print_row(row, f)
+            print_row(row, f, with_skill_name=args.with_skill_name)
 
     with open(f'./{args.output}_with_feedbacks.txt', 'w') as f:
         for row in with_feedbacks:
-            print_row(row, f)
+            print_row(row, f, with_skill_name=args.with_skill_name)
 
     with open(f'./{args.output}_without_feedbacks.txt', 'w') as f:
         for row in no_feedbacks:
-            print_row(row, f)
+            print_row(row, f, with_skill_name=args.with_skill_name)
 
     if args.with_requesting:
         with open(f'./{args.output}_with_requests.txt', 'w') as f:
             for _, row in new_conversations.sort_values('start_time', ascending=False).iterrows():
-                print_row(row, f, 'new_dialog', args.with_debug_info)
+                print_row(row, f, 'new_dialog', with_debug_info=args.with_debug_info)
 
 
 async def make_requests(new_conversations, args):
@@ -141,14 +144,15 @@ async def main(args):
                                       "feedback_txt": feedback_txt, "dialog": dialog,
                                       "start_time": start_time})
 
-    new_conversations = pd.DataFrame(new_conversations)
-    new_conversations['start_time'] = pd.to_datetime(new_conversations['start_time'])
-    new_conversations = new_conversations.sort_values('start_time', ascending=False)
-    args.first_n = int(args.first_n)
-    new_conversations = new_conversations.head(args.first_n)
-    if args.with_requesting:
-        new_conversations = await make_requests(new_conversations, args)
-    print_to_file(new_conversations, args)
+    if len(new_conversations) > 0:
+        new_conversations = pd.DataFrame(new_conversations)
+        new_conversations['start_time'] = pd.to_datetime(new_conversations['start_time'])
+        new_conversations = new_conversations.sort_values('start_time', ascending=False)
+        args.first_n = int(args.first_n)
+        new_conversations = new_conversations.head(args.first_n)
+        if args.with_requesting:
+            new_conversations = await make_requests(new_conversations, args)
+        print_to_file(new_conversations, args)
 
 
 if __name__ == '__main__':

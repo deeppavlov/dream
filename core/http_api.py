@@ -145,6 +145,8 @@ class ApiHandler:
                 utt_dct = {'text': i.text}
                 if hasattr(i, 'attributes'):
                     utt_dct['attributes'] = i.attributes
+                if hasattr(i, 'active_skill'):
+                    utt_dct['active_skill'] = i.active_skill
                 result['utterances'].append(utt_dct)
             return result
 
