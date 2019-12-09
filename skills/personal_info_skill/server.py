@@ -111,7 +111,7 @@ def process_info(dialog, which_info="name"):
                  prev_bot_uttr) and curr_user_annot.get("intent_catcher",
                                                         {}).get("yes", {}).get("detected", 0) == 1:
         logger.info(f"Found location=homeland")
-        human_attr["location"] = dialog["human"]["profile"]["location"]
+        human_attr["location"] = dialog["human"]["attributes"]["homeland"]
         response = f"Cool! I will remember your location is {human_attr['location']}."
         confidence = 10.0
         got_info = True
