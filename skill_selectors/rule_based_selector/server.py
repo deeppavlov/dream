@@ -53,7 +53,7 @@ class RuleBasedSelector():
             # TODO: opinion_request/yes/no response
             intent_detected = any([v['detected'] == 1 for k, v in
                                    dialog['utterances'][-1]['annotations']['intent_catcher'].items()
-                                   if k not in {'opinion_request', 'yes', 'no', 'tell_me_more'}])
+                                   if k not in {'opinion_request', 'yes', 'no', 'tell_me_more', 'doing_well'}])
 
             not_confident_asr = dialog['utterances'][-1]['annotations']['asr']['asr_confidence'] == 'very_low'
             cobot_topics = set(dialog['utterances'][-1]['annotations']['cobot_topics']['text'])
