@@ -18,7 +18,9 @@ from core.pipeline import Pipeline
 from core.service import Service
 from core.state_manager import StateManager
 from core.connectors import EventSetOutputConnector
+from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 import sentry_sdk
+
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -26,7 +28,10 @@ logger = logging.getLogger('service_logger')
 fh = logging.FileHandler('../service.log')
 logger.addHandler(fh)
 
-sentry_sdk.init(getenv('SENTRY_DSN'))
+sentry_sdk.init(
+    dsn=getenv('SENTRY_DSN'),
+    integrations=[AioHttpIntegration()]
+)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-m', '--mode', help='run agent in default mode or as one of the high load components',
