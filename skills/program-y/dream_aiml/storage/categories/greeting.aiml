@@ -141,32 +141,19 @@
 
   <topic name="USER_MOOD">
    <category>
-    <pattern><set>goodmoods</set></pattern>
+    <pattern># <set>goodmoods</set> #</pattern>
     <template>
-      <srai>GOOD_MOOD_REPSONSE</srai>
-    </template>
-  </category>
-
-   <category>
-    <pattern>I FEEL <set>goodmoods</set></pattern>
-     <template>
-      <srai>GOOD_MOOD_REPSONSE</srai>
+      <srai>GOOD_MOOD_RESPONSE</srai>
     </template>
   </category>
 
   <category>
-    <pattern>I AM <set>goodmoods</set></pattern>
-     <template>
-      <srai>GOOD_MOOD_REPSONSE</srai>
-    </template>
-  </category>
-
-  <category>
-    <pattern>GOOD_MOOD_REPSONSE</pattern>
+    <pattern>GOOD_MOOD_RESPONSE</pattern>
     <template>
       <random>
         <li>I am glad. What do you want to talk about?</li>
-        <li>I am glad. what is your favorite movie?</li>
+        <li>I am glad. What is your favorite movie?</li>
+        <li>I am glad. Where are you from?</li>
       </random>
       <think>
         <set name="topic"><star/></set>
@@ -175,32 +162,26 @@
   </category>
 
   <category>
-    <pattern><set>badmoods</set></pattern>
+    <pattern># NOT # <set>goodmoods</set> #</pattern>
     <template>
-      <srai>BAD_MOOD_REPSONSE</srai>
+      <srai>BAD_MOOD_RESPONSE</srai>
     </template>
   </category>
 
   <category>
-    <pattern>I FEEL <set>badmoods</set></pattern>
-     <template>
-      <srai>BAD_MOOD_REPSONSE</srai>
+    <pattern># <set>badmoods</set> #</pattern>
+    <template>
+      <srai>BAD_MOOD_RESPONSE</srai>
     </template>
   </category>
 
   <category>
-    <pattern>I AM <set>badmoods</set></pattern>
-     <template>
-      <srai>BAD_MOOD_REPSONSE</srai>
-    </template>
-  </category>
-
-  <category>
-    <pattern>BAD_MOOD_REPSONSE</pattern>
+    <pattern>BAD_MOOD_RESPONSE</pattern>
     <template>
       <random>
         <li>I am sorry to hear that. What do you want to talk about?</li>
         <li>I am sorry to hear that. Do you like comedies?</li>
+        <li>I am sorry to hear that. Where are you from?</li>
       </random>
       <think>
         <set name="topic"><star/></set>
