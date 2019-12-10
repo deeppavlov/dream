@@ -142,9 +142,10 @@ class ApiHandler:
                 'bot': dialog.bot.to_dict()
             }
             for i in dialog.utterances:
-                utt_dct = {'text': i.text}
+                utt_dct = {'text': i.text, 'date_time': i.date_time}
                 if hasattr(i, 'attributes'):
-                    utt_dct['attributes'] = i.attributes
+                    # do not output ASR results in /dialogs
+                    utt_dct['attributes'] = {k: v for k, v in i.attributes.items() if k != 'speech'}
                 if hasattr(i, 'active_skill'):
                     utt_dct['active_skill'] = i.active_skill
                 result['utterances'].append(utt_dct)
