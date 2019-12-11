@@ -52,7 +52,7 @@
     </category>
     <category>
         <pattern>HAPPY</pattern>
-        <template>Good! What is the most ridiculous fact you know?</template>
+        <template>Good! What is the funniest fact you know?</template>
     </category>
     <category>
         <pattern>ME</pattern>
