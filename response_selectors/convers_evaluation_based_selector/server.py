@@ -107,9 +107,11 @@ def respond():
         sentry_sdk.capture_message(msg)
         logger.warning(msg)
         has_blacklisted = [False] * len(utterances)
+        has_restricted = [False] * len(utterances)
     else:
         blacklist_result = blacklist_result.json()
         has_blacklisted = [int(res['profanity']) for res in blacklist_result]
+        has_restricted = [int(res['restricted_topics']) for res in blacklist_result]
 
     for i, has_blisted in enumerate(has_blacklisted):
         if has_blisted:
@@ -152,6 +154,7 @@ def respond():
     confidences = np.array(confidences)
     toxicities = np.array(toxicities)
     has_blacklisted = np.array(has_blacklisted)
+    has_restricted = np.array(has_restricted)
 
     for i, dialog in enumerate(dialogs_batch):
         # curr_candidates is dict
@@ -163,7 +166,7 @@ def respond():
 
         best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes = select_response(
             curr_candidates, curr_scores, curr_confidences,
-            toxicities[dialog_ids == i], has_blacklisted[dialog_ids == i], dialog)
+            toxicities[dialog_ids == i], has_blacklisted[dialog_ids == i], has_restricted[dialog_ids == i], dialog)
 
         selected_skill_names.append(best_skill_name)
         selected_texts.append(best_text)
@@ -181,14 +184,21 @@ def respond():
                             selected_human_attributes, selected_bot_attributes)))
 
 
-def select_response(candidates, scores, confidences, toxicities, has_blacklisted, dialog):
+def select_response(candidates, scores, confidences, toxicities, has_blacklisted, has_restricted, dialog):
     confidence_strength = 2
     conv_eval_strength = 0.4
     # calculate curr_scores which is an array of values-scores for each candidate
     curr_single_scores = []
 
+    if dialog["utterances"][-1]["annotations"].get("blacklisted_words", {}).get("restricted_topics", False):
+        user_has_restricted = np.ones(len(candidates), dtype=int)
+    else:
+        user_has_restricted = np.zeros(len(candidates), dtype=int)
     # exclude toxic messages and messages with blacklisted phrases
-    ids = (toxicities > 0.5) & (has_blacklisted > 0)
+    logger.info(f"User utterance restricted: {user_has_restricted}. Bot utterance restricted: {has_restricted}.")
+    ids = ((toxicities > 0.5) & (has_blacklisted > 0)) | ((user_has_restricted == 0) & (has_restricted == 1))
+    logger.info(f"Bot excluded utterances: {ids}.")
+
     if sum(ids) == len(toxicities):
         # the most dummy заглушка на случай, когда все абсолютно скиллы вернули токсичные ответы
         non_toxic_answers = ["I really do not know what to answer.",
