@@ -11,6 +11,12 @@ services:
         toxic_classification:8013, sentrewrite:8017, ner:8021, sentiment_classification:8024,
         attitude_classification:8025, movie_skill:8023"
       WAIT_HOSTS_TIMEOUT: 480
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   rule_based_selector:
     build:
       context: ./skill_selectors/rule_based_selector
@@ -19,6 +25,9 @@ services:
     deploy:
       mode: replicated
       replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   cobotqa:
     build:
       context: ./skills/CoBotQA/
@@ -29,6 +38,9 @@ services:
     deploy:
       mode: replicated
       replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   cobot_topics:
     build:
       context: ./annotators/CoBotTopicClassification/
@@ -37,6 +49,9 @@ services:
     deploy:
       mode: replicated
       replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   cobot_offensiveness:
     build:
       context: ./annotators/CoBotOffensiveSpeechClassification/
@@ -45,6 +60,9 @@ services:
     deploy:
       mode: replicated
       replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   cobot_dialogact:
     build:
       context: ./annotators/CoBotDialogActClassification/
@@ -53,6 +71,9 @@ services:
     deploy:
       mode: replicated
       replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   transfertransfo:
     build:
       context: ./skills/transfertransfo/
@@ -61,6 +82,8 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8007 -t 60
     volumes: []
     deploy:
+      mode: replicated
+      replicas: 1
       placement:
         constraints:
           - node.labels.with_gpu == true
@@ -69,6 +92,12 @@ services:
       context: ./skills/retrieval_chitchat/
     command: uvicorn server:app --host 0.0.0.0 --port 8015
     volumes: []
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   program_y:
     build:
       context: ./skills/program-y/
@@ -77,6 +106,9 @@ services:
     deploy:
       mode: replicated
       replicas: 4
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   personality_catcher:
     build:
       context: ./skills/personality_catcher/
@@ -85,6 +117,9 @@ services:
     deploy:
       mode: replicated
       replicas: 4
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   sentseg:
     build:
       context: ./annotators/SentSeg/
@@ -93,6 +128,9 @@ services:
     deploy:
       mode: replicated
       replicas: 4
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   convers_evaluation_selector:
     build:
       context: ./response_selectors/convers_evaluation_based_selector/
@@ -101,6 +139,9 @@ services:
     deploy:
       mode: replicated
       replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   toxic_classification:
     build:
       args:
@@ -113,11 +154,11 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=0
     deploy:
+      mode: replicated
+      replicas: 1
       placement:
         constraints:
           - node.labels.with_gpu == true
-      mode: replicated
-      replicas: 1
   sentiment_classification:
     build:
       args:
@@ -130,11 +171,11 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=0
     deploy:
+      mode: replicated
+      replicas: 1
       placement:
         constraints:
           - node.labels.with_gpu == true
-      mode: replicated
-      replicas: 1
   sentrewrite:
     build:
       context: ./annotators/SentRewrite/
@@ -142,6 +183,9 @@ services:
     deploy:
       mode: replicated
       replicas: 4
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   intent_responder:
     build:
       context: ./skills/IntentResponder/
@@ -150,6 +194,9 @@ services:
     deploy:
       mode: replicated
       replicas: 4
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   intent_catcher:
     build:
       context: ./annotators/IntentCatcher/
@@ -158,6 +205,12 @@ services:
     deploy:
       mode: replicated
       replicas: 4
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+      resources:
+        limits:
+          memory: 6G
   blacklisted_words:
     build:
       context: ./annotators/BlacklistedWordsDetector/
@@ -165,6 +218,9 @@ services:
     deploy:
       mode: replicated
       replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   dummy_skill:
     build:
       context: ./skills/dummy_skill/
@@ -173,6 +229,9 @@ services:
     deploy:
       mode: replicated
       replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   program_y_dangerous:
     build:
       context: ./skills/program-y-dangerous/
@@ -181,6 +240,9 @@ services:
     deploy:
       mode: replicated
       replicas: 4
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   cobot_nounphrases:
     build:
       context: ./annotators/nounphrases/
@@ -189,6 +251,9 @@ services:
     deploy:
       mode: replicated
       replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   movie_skill:
     build:
       context: ./skills/movie_skill/
@@ -197,6 +262,12 @@ services:
     deploy:
       mode: replicated
       replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+      resources:
+        limits:
+          memory: 6G
   ner:
     build:
       context: ./annotators/NER/
@@ -208,6 +279,9 @@ services:
     deploy:
       mode: replicated
       replicas: 4
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   attitude_classification:
     build:
       args:
@@ -220,11 +294,11 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=0
     deploy:
+      mode: replicated
+      replicas: 1
       placement:
         constraints:
           - node.labels.with_gpu == true
-      mode: replicated
-      replicas: 1
   alice:
     build:
       context: ./skills/ALICEChatAPI/
@@ -232,6 +306,9 @@ services:
     deploy:
       mode: replicated
       replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   tfidf_retrieval:
     build:
       context: ./skills/tfidf_retrieval/
@@ -240,6 +317,9 @@ services:
     deploy:
       mode: replicated
       replicas: 4
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   personal_info_skill:
     build:
       context: ./skills/personal_info_skill/
@@ -248,6 +328,9 @@ services:
     deploy:
       mode: replicated
       replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   asr:
     build:
       context: ./annotators/asr/
@@ -255,6 +338,9 @@ services:
     deploy:
       mode: replicated
       replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   misheard_asr:
     build:
       context: ./skills/misheard_asr/
@@ -262,4 +348,7 @@ services:
     deploy:
       mode: replicated
       replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
 version: '3.7'
