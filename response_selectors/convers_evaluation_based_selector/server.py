@@ -214,7 +214,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     skill_names = [c['skill_name'] for c in candidates]
     how_are_you_spec = "I'm fine, thanks! Do you want to know what I can do?"
     psycho_help_spec = "If you or someone you know is in immediate danger"
-    greeting_spec = "Hi, this is an Alexa Prize Socialbot."
+    greeting_spec = "this is an Alexa Prize Socialbot"
 
     very_big_score = 100
     question = ""
@@ -223,7 +223,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
         if len(dialog['utterances']) < 2 and greeting_spec not in candidates[i]['text'] \
                 and skill_names[i] == 'program_y':
             # greet user in first utterance
-            candidates[i]['text'] = greeting_spec + ' ' + candidates[i]['text']
+            candidates[i]['text'] = "Hello, " + greeting_spec + ' ' + candidates[i]['text']
             curr_single_scores.append(very_big_score)
             break
         elif skill_names[i] == 'program_y' and candidates[i]['text'] == how_are_you_spec:

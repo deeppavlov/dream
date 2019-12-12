@@ -214,6 +214,8 @@ brain:
         DuckDuckGo:
             classname: programy.services.duckduckgo.DuckDuckGoService
             url: http://api.duckduckgo.com
+        DayTimeClf:
+            classname: templatey.services.daytime_clf_service.DayTimeClfService
 
     security:
         authentication:
