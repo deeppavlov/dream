@@ -311,8 +311,7 @@ services:
           - node.labels.with_gpu != true
   tfidf_retrieval:
     build:
-      context: ./
-      dockerfile: skills/tfidf_retrieval/Dockerfile
+      context: ./skills/tfidf_retrieval/
     command: bash -c " gunicorn --workers=1 server:app -b 0.0.0.0:8028"
     volumes: []
     deploy:
