@@ -180,6 +180,12 @@ services:
       - "./annotators/asr:/src"
     ports:
       - 8031:8031
+  book_skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/book_skill:/src"
+    ports:
+      - 8032:8032
   misheard_asr:
     env_file: [.env.dev]
     volumes:

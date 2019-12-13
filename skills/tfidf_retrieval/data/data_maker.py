@@ -29,7 +29,7 @@ def __main__():
 
     print('Reading ratings from file ' + str(args.ratings_file))
     ratings = pd.read_csv(args.ratings_file)
-    good_ratings = ratings[ratings['Rating'] >= 4]
+    good_ratings = ratings[ratings['Rating'] >= 5]
     good_ids = set(list(good_ratings['Conversation ID']))
     if args.bad_output_file:
         bad_ratings = ratings[ratings['Rating'] <= 2]
