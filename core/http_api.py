@@ -39,7 +39,7 @@ async def init_app(agent, session, consumers, stats, debug=False, use_cors=False
         app.router.add_post('/', handler.handle_api_request)
 
     app.router.add_get('/dialogs/{dialog_id}', handler.dialog)
-    app.router.add_get('/dialogs', handler.all_dialogs)
+    app.router.add_get('/restricted/dialogs', handler.all_dialogs)
 
     app.router.add_get('/ping', handler.pong)
     app.router.add_get('/user/{user_telegram_id}', handler.dialogs_by_user)
