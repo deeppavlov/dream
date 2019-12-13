@@ -64,6 +64,15 @@ class MovieSkillScenario:
                         curr_confidence = [confidence]
                     for subject in subject_attitude:
                         attr["bot_attitudes"] += [subject]
+
+                    reply, subject_attitude, confidence = self.templates.faq(dialog)
+                    if confidence < 0.9:
+                        pass
+                    else:
+                        current_reply = reply
+                        curr_confidence = [confidence]
+                    for subject in subject_attitude:
+                        attr["bot_attitudes"] += [subject]
                 if "Information_DeliveryIntent" in intents:
                     pass
                     # TODO: ask a question about opinion or fact
