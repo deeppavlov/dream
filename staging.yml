@@ -120,6 +120,10 @@ services:
     image: ${DOCKER_REGISTRY}/misheard_asr:${VERSION}
     env_file:
       - ${ENV_FILE}
+  book_skill:
+    image: ${DOCKER_REGISTRY}/book_skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
 volumes:
   external-logs:
   external-deeppavlov:

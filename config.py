@@ -154,7 +154,17 @@ SKILLS = [
         "external": True,
         "path": "",
         "formatter": skill_with_attributes_formatter
-    }
+    },
+    {
+        "name": "book_skill",
+        "protocol": "http",
+        "host": "book_skill",
+        "port": 8032,
+        "endpoint": "book_skill",
+        "external": True,
+        "path": "",
+        "formatter": skill_with_attributes_formatter
+    },
 ]
 
 ANNOTATORS_1 = [

@@ -43,7 +43,7 @@ def to_list(dialog_file):
 
 def __main__():
     parser = ArgumentParser()
-    parser.add_argument("--dialogs_file", type=str, default="dialogs.2", help="Dialog file")
+    parser.add_argument("--dialogs_file", type=str, default="dialogs", help="Dialog file")
     parser.add_argument("--output_file", type=str, default="cobot_dialog_list.json", help="FIle with best dialogs")
     args = parser.parse_args()
     API_KEY = os.environ.get('COBOT_API_KEY')

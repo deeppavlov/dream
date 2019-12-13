@@ -31,7 +31,7 @@ def get_vectorizer(vectorizer_dir):
     return vectorizer
 
 
-def get_dialogs(dialog_dir, custom_dialog_dir, full_dialog_dir, save_full=True):
+def get_dialogs(dialog_dir, custom_dialog_dir, full_dialog_dir, save_full=False):
     dialog_list = json.load(open(dialog_dir, 'r'))
     if os.path.isfile(custom_dialog_dir):
         custom_dialogs = json.load(open(custom_dialog_dir, 'r'))
@@ -99,7 +99,8 @@ donotknow_answers = ["I really do not know what to answer.",
                      "I didn’t get that."]
 donotknow_answers = [preprocess(j) for j in donotknow_answers]
 todel_userphrases = ['yes']
-banned_words = ['Benjamin']
+banned_words = ['Benjamin', 'misheard', 'cannot do this',
+                "I didn't get your homeland .  Could you ,  please ,  repeat it . "]
 vectorizer = get_vectorizer(vectorizer_dir=vectorizer_dir)
 dialog_list = get_dialogs(dialog_dir=dialog_dir, custom_dialog_dir=custom_dialog_dir,
                           full_dialog_dir=full_dialog_dir)
@@ -111,16 +112,24 @@ else:
 phrase_list = create_phraselist(dialog_list=dialog_list, donotknow_answers=donotknow_answers,
                                 todel_userphrases=todel_userphrases, banned_words=banned_words,
                                 bad_dialog_list=bad_dialog_list)
-
 if USE_ASSESSMENT:
     goodbad_list = json.load(open('data/goodpoor.json', 'r'))[0]
     phrase_list.update(goodbad_list['good'])
     for key in goodbad_list['poor']:
         if key in phrase_list and goodbad_list['poor'][key] == phrase_list[key]:
             del phrase_list[key]
+gold_phrases = open('../global_data/gold_phrases.csv', 'r').readlines()[1:]
+gold_list = []
+for gold_phrase in gold_phrases:
+    if gold_phrase[0] == '"':
+        gold_phrase = gold_phrase[1:]
+    gold_phrase = gold_phrase.split('"\n')[0].split('" "')[0].lower()
+    if gold_phrase in phrase_list:
+        del phrase_list[gold_phrase]
 
 
 def check(human_phrase, vectorizer=vectorizer, phrase_list=phrase_list, top_best=2):
+    banned_phrases = ['where are you from?']
     human_phrase = preprocess(human_phrase)
     human_phrases = list(phrase_list.keys())
     vectorized_phrases = vectorizer.transform(human_phrases)
@@ -144,5 +153,7 @@ def check(human_phrase, vectorizer=vectorizer, phrase_list=phrase_list, top_best
         for sign in '!#$%&*+.,:;<>=?@[]^_{}|':
             bot_answer = bot_answer.replace(' ' + sign, sign)
         bot_answer = bot_answer.replace('  ', ' ').lower().strip()
-        ans.append((bot_answer, score))
+        assert "I didn't get your homeland." not in bot_answer
+        if all([banned_phrase not in bot_answer for banned_phrase in banned_phrases]):
+            ans.append((bot_answer, score))
     return ans
