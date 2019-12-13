@@ -22,6 +22,13 @@ def get_text_from_speech(speech):
     return text, mean_proba
 
 
+def speech_exists(speech):
+    if speech and speech['hypotheses']:
+        if speech['hypotheses'] and speech['hypotheses'][0].get('tokens'):
+            return True
+    return False
+
+
 @app.route("/asr_check", methods=['POST'])
 def respond():
     st_time = time.time()
@@ -29,7 +36,7 @@ def respond():
     result = []
     logger.debug(f"ASR Input speeches: {speeches}")
     for speech in speeches:
-        if speech:
+        if speech_exists(speech):
             text, mean_proba = get_text_from_speech(speech)
             if mean_proba <= 0.45:
                 result.append({'asr_confidence': 'very_low'})

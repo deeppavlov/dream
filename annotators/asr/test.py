@@ -68,6 +68,10 @@ def main():
     result = requests.post(url, json={'speeches': [[]]})
     assert result.json()[0]['asr_confidence'] == 'undefined'
 
+    empty_json = {'hypotheses': [{'tokens': []}]}
+    result = requests.post(url, json={'speeches': [empty_json]})
+    assert result.json()[0]['asr_confidence'] == 'undefined'
+
 
 if __name__ == '__main__':
     main()
