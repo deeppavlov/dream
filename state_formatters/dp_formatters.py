@@ -424,9 +424,9 @@ def ner_formatter(payload, mode='in'):
 
 def skill_with_attributes_formatter(payload, mode='in'):
     if mode == 'in':
-        # import json
-        # print(json.dumps(payload, indent=2))
         dialogs = annotated_input_formatter(payload, annotation="punctuated")['dialogs']
+        # import json
+        # print(json.dumps(dialogs, indent=2))
         return {"dialogs": dialogs}
     elif mode == 'out':
         if len(payload) == 4:

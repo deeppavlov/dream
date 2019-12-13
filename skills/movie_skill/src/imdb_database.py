@@ -175,7 +175,7 @@ class IMDb:
                            "no matter what", "talk to me", "you", "lets talk",
                            "lets chat", "in", "if", "can", "o", "ok", "one",
                            "two", "film", "new", "next", "out", "love",
-                           "like", "watch"]:
+                           "like", "watch", "actress", "less", "want"]:
             try:
                 self.with_ignored_movies_names.pop(proc_title)
                 self.without_ignored_movies_names.pop(proc_title)
@@ -621,7 +621,7 @@ class IMDb:
             list of genres if `attitude` is given
         """
         genres = {
-            "Genre": ["I like comedies a lot. I also love different science fiction and documentary movies."],
+            # "Genre": ["I like comedies a lot. I also love different science fiction and documentary movies."],
             "Action": "positive",
             "Adult": "neutral",
             "Adventure": "positive",
