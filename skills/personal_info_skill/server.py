@@ -129,20 +129,33 @@ def process_info(dialog, which_info="name"):
             if not ent:
                 continue
             ent = ent[0]
+            if ent["text"].lower() == "alexa":
+                if (re.search(r"(my (name is|name's)|call me) alexa", curr_user_uttr) or (re.search(
+                        r"(what is|what's|whats|tell me) your? name",
+                        prev_bot_uttr) and re.match(r"^alexa[\.,!\?]*$", curr_user_uttr))):
+                    # - my name is alexa
+                    # - what's your name? - alexa.
+                    pass
+                else:
+                    # in all other cases skip alexa
+                    continue
             logger.info(f"Found {which_info} `{ent['text']}`")
             human_attr[which_info] = " ".join([n.capitalize() for n in ent["text"].split()])
             if which_info in ["name", "location"]:
                 response = response_phrases[which_info] + human_attr[which_info] + "."
+                confidence = 10.0
+                got_info = True
             elif which_info in ["homeland"]:
                 if dialog["human"]["profile"].get("location", None) is None:
                     response = response_phrases[which_info]
+                    confidence = 10.0
+                    got_info = True
                 else:
                     response = f"Cool! I will remember your homeland is {human_attr[which_info]}."
+                    confidence = 10.0
+                    got_info = True
             else:
                 pass
-
-            confidence = 10.0
-            got_info = True
         if not got_info:
             if prev_bot_uttr == repeat_info_phrases[
                 which_info] and curr_user_annot.get("intent_catcher",

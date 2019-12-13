@@ -364,7 +364,7 @@ class MovieSkillTemplates:
                                                       user_uttr)):
                     response = "I can't name one particular movie but I don't like musicals and " \
                                "I'm a bit scared by mystery movies. What movies you don't like?"
-                    confidence = self.movie_highest_confidence
+                    confidence = self.person_highest_confidence
                     result = [["Musical", "genre", "negative"], ["Mystery", "genre", "negative"]]
                 # less favorite genre
                 if (re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.LESSFAVORITE_PATTERN} (genre|movie genre)",
@@ -374,14 +374,14 @@ class MovieSkillTemplates:
                     response = self.opinion_about_genres("Genre", attitude="negative")
                     curr_genres = self.imdb.genereate_opinion_about_genre("Genre", attitude="negative")
                     result = [[g, "genre", "negative"] for g in curr_genres]
-                    confidence = self.movie_highest_confidence
+                    confidence = self.person_highest_confidence
                 # less favorite actor
                 if (re.search(f"{self.WHO_PATTERN}{self.ANY_LETTERS}{self.LESSFAVORITE_PATTERN} actor",
                               user_uttr) or re.search(f"{self.WHO_PATTERN}{self.ANY_LETTERS} actor"
                                                       f"{self.ANY_LETTERS}{self.NOT_LIKE_PATTERN}",
                                                       user_uttr)):
                     response = "I think all actors have successful and failed roles. Who is your favorite actor?"
-                    confidence = self.movie_highest_confidence
+                    confidence = self.person_highest_confidence
                     result = []
                 # less favorite actress
                 if (re.search(f"{self.WHO_PATTERN}{self.ANY_LETTERS}{self.LESSFAVORITE_PATTERN} actress",
@@ -389,7 +389,7 @@ class MovieSkillTemplates:
                                                       f"{self.ANY_LETTERS}{self.NOT_LIKE_PATTERN}",
                                                       user_uttr)):
                     response = "I think all actresses have successful and failed roles. Who is your favorite actress?"
-                    confidence = self.movie_highest_confidence
+                    confidence = self.person_highest_confidence
                     result = []
 
             elif re.search(self.FAVORITE_PATTERN, user_uttr) or re.search(self.LIKE_PATTERN, user_uttr):
@@ -400,7 +400,7 @@ class MovieSkillTemplates:
                                                       user_uttr)):
                     response = "I adore all Star Wars movies. The best episode is the fifth one, " \
                                "The Empire Strikes Back. What is your favorite movie?"
-                    confidence = self.movie_highest_confidence
+                    confidence = self.person_highest_confidence
                     result = [["0080684", "movie", "very_positive"]]
                 # favorite genre
                 if (re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.FAVORITE_PATTERN} (genre|movie genre)",
@@ -410,14 +410,14 @@ class MovieSkillTemplates:
                     response = self.opinion_about_genres("Genre", attitude="very_positive")
                     curr_genres = self.imdb.genereate_opinion_about_genre("Genre", attitude="very_positive")
                     result = [[g, "genre", "very_positive"] for g in curr_genres]
-                    confidence = self.movie_highest_confidence
+                    confidence = self.person_highest_confidence
                 # favorite actor
                 if (re.search(f"{self.WHO_PATTERN}{self.ANY_LETTERS}{self.FAVORITE_PATTERN} actor",
                               user_uttr) or re.search(f"{self.WHO_PATTERN}{self.ANY_LETTERS} actor"
                                                       f"{self.ANY_LETTERS}{self.LIKE_PATTERN}",
                                                       user_uttr)):
                     response = "I will always believe that Brad Pitt is the most talented actor ever! Who is yours?"
-                    confidence = self.movie_highest_confidence
+                    confidence = self.person_highest_confidence
                     result = [["Brad Pitt", "actor", "very_positive"]]
                 # favorite actress
                 if (re.search(f"{self.WHO_PATTERN}{self.ANY_LETTERS}{self.FAVORITE_PATTERN} actress",
@@ -425,7 +425,7 @@ class MovieSkillTemplates:
                                                       f"{self.ANY_LETTERS}{self.LIKE_PATTERN}",
                                                       user_uttr)):
                     response = "I think Jodie Foster is the most talented actress ever! Who is yours?"
-                    confidence = self.movie_highest_confidence
+                    confidence = self.person_highest_confidence
                     result = [["Jodie Foster", "actor", "very_positive"]]
 
         # can you watch movies
@@ -872,8 +872,12 @@ class MovieSkillTemplates:
         """
         Generate templated reply about movie `name` with the given `attitude`
         """
-        subject = np.random.choice(["movie", "film", "pic", "picture"] + [genre.lower() + " movie" for genre in genres])
-
+        if "Series" not in genres:
+            subject = np.random.choice(["movie", "film", "pic", "picture"] + [genre.lower() + " movie"
+                                                                              for genre in genres])
+        else:
+            subject = np.random.choice(
+                ["series"] + [genre.lower() + " series" for genre in genres if genre != "Series"])
         if attitude == "very_positive":
             replies = [f"I like {name} so much!",
                        f"I like {name} a lot!",

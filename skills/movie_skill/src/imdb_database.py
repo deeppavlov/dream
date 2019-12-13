@@ -31,7 +31,6 @@ class IMDb:
         self.with_ignored_movies_names_tree = None
         self.names_tree = None
         self.genres_tree = None
-        # self.load(save_folder)
 
         if (Path(save_folder).joinpath(
                 "with_ignored_movies_names.json").exists() and Path(save_folder).joinpath(
@@ -175,13 +174,17 @@ class IMDb:
                            "no matter what", "talk to me", "you", "lets talk",
                            "lets chat", "in", "if", "can", "o", "ok", "one",
                            "two", "film", "new", "next", "out", "love",
-                           "like", "watch", "actress", "less", "want"]:
+                           "like", "watch", "actress", "less", "want", "abortion",
+                           "alexa", "you tell me", "movie movie"
+                           ]:
             try:
                 self.with_ignored_movies_names.pop(proc_title)
+            except KeyError:
+                pass
+            try:
                 self.without_ignored_movies_names.pop(proc_title)
             except KeyError:
                 pass
-
         to_remove = []
         for proc_title in self.with_ignored_movies_names.keys():
             if re.match(f"^[{string.digits}]+$", proc_title):
