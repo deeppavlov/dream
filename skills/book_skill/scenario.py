@@ -302,6 +302,7 @@ class BookSkillScenario:
         GENRE_HATE_PHRASE = GENRE_HATE_PHRASE_PART1 + GENRE_HATE_PHRASE_PART2
         GENRE_NOTSURE_PHRASE = "Did you enjoy this book?"
         reply = ""
+        confidence = 0
         for dialog in dialogs:
             # TODO check correct order of concatenation of replies
             text_utterances = [j['text'] for j in dialog['utterances']]
