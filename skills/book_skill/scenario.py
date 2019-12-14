@@ -53,7 +53,7 @@ def request_detected(annotated_utterance):
 
 def opinion_expression_detected(annotated_utterance):
     y1 = 'Opinion_ExpressionIntent' in annotated_utterance['annotations']['cobot_dialogact']['intents']
-    y2 = 'Information_DeliveryIntent' in annotated_utterance['annotations']['cobot_dialog_act']['intents']
+    y2 = 'Information_DeliveryIntent' in annotated_utterance['annotations']['cobot_dialogact']['intents']
     y3 = was_question_about_book(annotated_utterance['text'])
     return y1 or y2 or y3
 
@@ -304,103 +304,109 @@ class BookSkillScenario:
         reply = ""
         confidence = 0
         for dialog in dialogs:
-            # TODO check correct order of concatenation of replies
-            text_utterances = [j['text'] for j in dialog['utterances']]
-            # logging.info('***'.join([j for j in text_utterances]))
-            bot_phrases = [j for i, j in enumerate(text_utterances) if i % 2 == 1]
-            annotated_user_phrase = dialog['utterances'][-1]
-            logging.info(str(annotated_user_phrase))
-            # I don't denote annotated_user_phrase['text'].lower() as a single variable
-            # in order not to confuse it with annotated_user_phrase
-            if any([j in annotated_user_phrase['text'].lower() for j in ['talk about books', 'chat about books']]):
-                reply, confidence = START_PHRASE, 1
-            elif fact_request_detected(annotated_user_phrase):
-                reply, confidence = YES_PHRASE_3_FACT, self.default_conf
-            elif YES_PHRASE_3_FACT == bot_phrases[-1]:
-                if is_no(annotated_user_phrase):
-                    reply, confidence = NO_PHRASE_4, self.default_conf
-                elif is_yes(annotated_user_phrase):
-                    reply, confidence = self.fact_about_book(annotated_user_phrase)
-                else:
-                    reply, confidence = self.default_reply, 0
-            elif START_PHRASE in bot_phrases:
-                if repeat(annotated_user_phrase):
-                    reply, confidence = bot_phrases[-1], self.default_conf
-                elif is_stop(annotated_user_phrase) or side_intent(annotated_user_phrase):
-                    reply, confidence = self.default_reply, 0
-                elif START_PHRASE == bot_phrases[-1]:
-                    if is_no(annotated_user_phrase):
-                        reply, confidence = NO_PHRASE_1, self.default_conf
-                    elif is_yes(annotated_user_phrase):
-                        reply, confidence = YES_PHRASE_1, self.default_conf
-                    else:
-                        reply, confidence = self.default_reply, 0
-                elif NO_PHRASE_1 == bot_phrases[-1]:
-                    reply, confidence = NO_PHRASE_2, self.default_conf
-                elif YES_PHRASE_1 == bot_phrases[-1]:
-                    if is_no(annotated_user_phrase):
-                        reply, confidence = YES_PHRASE_2_NO, self.default_conf
-                    else:
-                        reply, confidence = parse_author_best_book(annotated_user_phrase,
-                                                                   default_phrase=YES_PHRASE_2,
-                                                                   default_confidence=self.default_conf)
-                elif YES_PHRASE_2 == bot_phrases[-1] or 'Interesting. Have you read ' in bot_phrases[-1]:
-                    if is_no(annotated_user_phrase):
-                        reply, confidence = NO_PHRASE_2, self.default_conf
-                    elif is_yes(annotated_user_phrase) or opinion_expression_detected(annotated_user_phrase):
-                        if is_negative(annotated_user_phrase):
-                            reply, confidence = NO_PHRASE_3, self.default_conf
-                        else:
-                            reply, confidence = YES_PHRASE_3_1, self.default_conf
-                    else:
-                        reply, confidence = self.default_reply, 0
+            try:
+                # TODO check correct order of concatenation of replies
+                text_utterances = [j['text'] for j in dialog['utterances']]
+                # logging.info('***'.join([j for j in text_utterances]))
+                bot_phrases = [j for i, j in enumerate(text_utterances) if i % 2 == 1]
+                annotated_user_phrase = dialog['utterances'][-1]
+                logging.info(str(annotated_user_phrase))
+                # I don't denote annotated_user_phrase['text'].lower() as a single variable
+                # in order not to confuse it with annotated_user_phrase
+                if any([j in annotated_user_phrase['text'].lower() for j in ['talk about books', 'chat about books']]):
+                    reply, confidence = START_PHRASE, 1
                 elif fact_request_detected(annotated_user_phrase):
-                    reply, confidence = self.fact_about_book(annotated_user_phrase)
-
-                else:
-                    if GENRE_PHRASE_1 not in bot_phrases:
-                        reply, confidence = GENRE_PHRASE_1, self.default_conf
-                    elif GENRE_PHRASE_1 == bot_phrases[-1]:
-                        book = get_genre_book(annotated_user_phrase)
-                        if book is None:
-                            reply, confidence = self.default_reply, 0
-                        else:
-                            reply, confidence = GENRE_PHRASE_2(book), self.default_conf
-                    elif 'Amazing! Have you read ' in bot_phrases[-1] and 'book' in bot_phrases[-1]:
-                        if tell_me_more(annotated_user_phrase):
-                            reply = None
-                            bookname = bot_phrases[-1].split('book')[1].split('?')[0]
-                            bookreads_data = json.load(open(self.bookread_dir, 'r'))[0]
-                            for genre in bookreads_data:
-                                if bookreads_data[genre]['title'] == bookname:
-                                    reply, confidence = bookreads_data[genre]['description'], self.default_conf
-                            if reply is None:
-                                part1 = 'From bot phrase ' + bot_phrases[-1]
-                                part2 = ' bookname *' + bookname + '* didnt match'
-                                raise Exception(part1 + part2)
-                        elif is_no(annotated_user_phrase):
-                            reply, confidence = GENRE_PHRASE_ADVICE, self.default_conf
+                    reply, confidence = YES_PHRASE_3_FACT, self.default_conf
+                elif YES_PHRASE_3_FACT == bot_phrases[-1]:
+                    if is_no(annotated_user_phrase):
+                        reply, confidence = NO_PHRASE_4, self.default_conf
+                    elif is_yes(annotated_user_phrase):
+                        reply, confidence = self.fact_about_book(annotated_user_phrase)
+                    else:
+                        reply, confidence = self.default_reply, 0
+                elif START_PHRASE in bot_phrases:
+                    if repeat(annotated_user_phrase):
+                        reply, confidence = bot_phrases[-1], self.default_conf
+                    elif is_stop(annotated_user_phrase) or side_intent(annotated_user_phrase):
+                        reply, confidence = self.default_reply, 0
+                    elif START_PHRASE == bot_phrases[-1]:
+                        if is_no(annotated_user_phrase):
+                            reply, confidence = NO_PHRASE_1, self.default_conf
                         elif is_yes(annotated_user_phrase):
-                            if is_positive(annotated_user_phrase):
+                            reply, confidence = YES_PHRASE_1, self.default_conf
+                        else:
+                            reply, confidence = self.default_reply, 0
+                    elif NO_PHRASE_1 == bot_phrases[-1]:
+                        reply, confidence = NO_PHRASE_2, self.default_conf
+                    elif YES_PHRASE_1 == bot_phrases[-1]:
+                        if is_no(annotated_user_phrase):
+                            reply, confidence = YES_PHRASE_2_NO, self.default_conf
+                        else:
+                            reply, confidence = parse_author_best_book(annotated_user_phrase,
+                                                                       default_phrase=YES_PHRASE_2,
+                                                                       default_confidence=self.default_conf)
+                    elif YES_PHRASE_2 == bot_phrases[-1] or 'Interesting. Have you read ' in bot_phrases[-1]:
+                        if is_no(annotated_user_phrase):
+                            reply, confidence = NO_PHRASE_2, self.default_conf
+                        elif is_yes(annotated_user_phrase) or opinion_expression_detected(annotated_user_phrase):
+                            if is_negative(annotated_user_phrase):
+                                reply, confidence = NO_PHRASE_3, self.default_conf
+                            else:
+                                reply, confidence = YES_PHRASE_3_1, self.default_conf
+                        else:
+                            reply, confidence = self.default_reply, 0
+                    elif fact_request_detected(annotated_user_phrase):
+                        reply, confidence = self.fact_about_book(annotated_user_phrase)
+
+                    else:
+                        if GENRE_PHRASE_1 not in bot_phrases:
+                            reply, confidence = GENRE_PHRASE_1, self.default_conf
+                        elif GENRE_PHRASE_1 == bot_phrases[-1]:
+                            book = get_genre_book(annotated_user_phrase)
+                            if book is None:
+                                reply, confidence = self.default_reply, 0
+                            else:
+                                reply, confidence = GENRE_PHRASE_2(book), self.default_conf
+                        elif 'Amazing! Have you read ' in bot_phrases[-1] and 'book' in bot_phrases[-1]:
+                            if tell_me_more(annotated_user_phrase):
+                                reply = None
+                                bookname = bot_phrases[-1].split('book')[1].split('?')[0]
+                                bookreads_data = json.load(open(self.bookread_dir, 'r'))[0]
+                                for genre in bookreads_data:
+                                    if bookreads_data[genre]['title'] == bookname:
+                                        reply, confidence = bookreads_data[genre]['description'], self.default_conf
+                                if reply is None:
+                                    part1 = 'From bot phrase ' + bot_phrases[-1]
+                                    part2 = ' bookname *' + bookname + '* didnt match'
+                                    raise Exception(part1 + part2)
+                            elif is_no(annotated_user_phrase):
+                                reply, confidence = GENRE_PHRASE_ADVICE, self.default_conf
+                            elif is_yes(annotated_user_phrase):
+                                if is_positive(annotated_user_phrase):
+                                    reply, confidence = GENRE_LOVE_PHRASE, self.default_conf
+                                elif is_negative(annotated_user_phrase):
+                                    reply, confidence = GENRE_HATE_PHRASE, self.default_conf
+                                else:
+                                    reply, confidence = GENRE_NOTSURE_PHRASE, self.default_conf
+
+                            else:
+                                reply, confidence = self.default_reply, 0
+                        elif bot_phrases[-1] == GENRE_NOTSURE_PHRASE:
+                            if is_yes(annotated_user_phrase):
                                 reply, confidence = GENRE_LOVE_PHRASE, self.default_conf
-                            elif is_negative(annotated_user_phrase):
+                            elif is_no(annotated_user_phrase):
                                 reply, confidence = GENRE_HATE_PHRASE, self.default_conf
                             else:
-                                reply, confidence = GENRE_NOTSURE_PHRASE, self.default_conf
+                                reply, confidence = self.default_reply, 0
+                else:
+                    reply, confidence = self.default_reply, 0
 
-                        else:
-                            reply, confidence = self.default_reply, 0
-                    elif bot_phrases[-1] == GENRE_NOTSURE_PHRASE:
-                        if is_yes(annotated_user_phrase):
-                            reply, confidence = GENRE_LOVE_PHRASE, self.default_conf
-                        elif is_no(annotated_user_phrase):
-                            reply, confidence = GENRE_HATE_PHRASE, self.default_conf
-                        else:
-                            reply, confidence = self.default_reply, 0
-            else:
-                reply, confidence = self.default_reply, 0
-
-            assert reply is not None
+                assert reply is not None
+            except Exception as e:
+                logger.exception("exception in book skill")
+                sentry_sdk.capture_exception(e)
+                reply = "sorry"
+                confidence = 0
             texts.append(reply)
             confidences.append(confidence)
 
