@@ -4,13 +4,14 @@ from string import hexdigits
 
 import aiohttp_jinja2
 import jinja2
+import aiohttp_cors
 from aiohttp import web
 
 from state_formatters.output_formatters import (http_api_output_formatter,
                                                 http_debug_output_formatter)
 
 
-async def init_app(agent, session, consumers, stats, debug=False):
+async def init_app(agent, session, consumers, stats, debug=False, use_cors=False):
     app = web.Application()
     handler = ApiHandler(debug)
     stats_handler = WSstatsHandler()
@@ -28,9 +29,17 @@ async def init_app(agent, session, consumers, stats, debug=False):
         for ws in app['websockets']:
             await ws.close()
 
-    app.router.add_post('/', handler.handle_api_request)
+    if use_cors:
+        cors = aiohttp_cors.setup(
+            app,
+            defaults={"*": aiohttp_cors.ResourceOptions(allow_credentials=True, expose_headers="*", allow_headers="*")}
+        )
+        cors.add(app.router.add_post('/', handler.handle_api_request))
+    else:
+        app.router.add_post('/', handler.handle_api_request)
+
     app.router.add_get('/dialogs/{dialog_id}', handler.dialog)
-    app.router.add_get('/dialogs', handler.all_dialogs)
+    app.router.add_get('/restricted/dialogs', handler.all_dialogs)
 
     app.router.add_get('/ping', handler.pong)
     app.router.add_get('/user/{user_telegram_id}', handler.dialogs_by_user)
@@ -133,9 +142,12 @@ class ApiHandler:
                 'bot': dialog.bot.to_dict()
             }
             for i in dialog.utterances:
-                utt_dct = {'text': i.text}
+                utt_dct = {'text': i.text, 'date_time': i.date_time}
                 if hasattr(i, 'attributes'):
-                    utt_dct['attributes'] = i.attributes
+                    # do not output ASR results in /dialogs
+                    utt_dct['attributes'] = {k: v for k, v in i.attributes.items() if k != 'speech'}
+                if hasattr(i, 'active_skill'):
+                    utt_dct['active_skill'] = i.active_skill
                 result['utterances'].append(utt_dct)
             return result
 

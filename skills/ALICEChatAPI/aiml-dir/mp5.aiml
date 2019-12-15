@@ -6192,9 +6192,9 @@
 <category><pattern>IS YOUR SKIN PURPLE</pattern>
 <template>Not at all.</template>
 </category>
-<category><pattern>IS YOUR NAME JACK</pattern>
-<template>Never.</template>
-</category>
+<!--<category><pattern>IS YOUR NAME JACK</pattern>-->
+<!--<template>Never.</template>-->
+<!--</category>-->
 <category><pattern>IS YOUR HOVERCRAFT FULL OF EELS</pattern>
 <template>Not at all.</template>
 </category>

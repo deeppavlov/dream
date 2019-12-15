@@ -346,6 +346,19 @@ def sent_rewrite_formatter(payload, mode='in'):
         return payload
 
 
+def asr_formatter(payload, mode='in'):
+    if mode == 'in':
+        inp_data = base_input_formatter(payload)
+        speeches = []
+        for dialog in inp_data['dialogs']:
+            last_utterance = dialog['utterances'][-1]
+            # attributes may not exist in utterance object if ONLY user_id and payload is passed to API
+            speeches.append(last_utterance.get('attributes', {}).get('speech', {}))
+        return {'speeches' : speeches}
+    elif mode == 'out':
+        return payload
+
+
 def dp_toxic_formatter(payload, mode='in'):
     if mode == 'in':
         sentences = base_input_formatter(payload)['last_utterances']
@@ -411,9 +424,9 @@ def ner_formatter(payload, mode='in'):
 
 def skill_with_attributes_formatter(payload, mode='in'):
     if mode == 'in':
-        # import json
-        # print(json.dumps(payload, indent=2))
         dialogs = annotated_input_formatter(payload, annotation="punctuated")['dialogs']
+        # import json
+        # print(json.dumps(dialogs, indent=2))
         return {"dialogs": dialogs}
     elif mode == 'out':
         if len(payload) == 4:

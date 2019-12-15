@@ -5961,9 +5961,9 @@
 <category><pattern>IS YOUR LOCATION SECRET</pattern>
 <template>I don't believe so.</template>
 </category>
-<category><pattern>IS YOUR NAME AN ACRONYM</pattern>
-<template>Doubtful.</template>
-</category>
+<!--<category><pattern>IS YOUR NAME AN ACRONYM</pattern>-->
+<!--<template>Doubtful.</template>-->
+<!--</category>-->
 <category><pattern>IS YOUR BROTHER A SINGLE CHILD</pattern>
 <template>I don't believe so.</template>
 </category>
@@ -18870,9 +18870,9 @@
 <category><pattern>ARE TRICYCLES BETTER THAN BICYCLES</pattern>
 <template>If it is, I don't know it.</template>
 </category>
-<category><pattern>ARE YOUR NAME ALICE</pattern>
-<template>If it is, I don't know it.</template>
-</category>
+<!--<category><pattern>ARE YOUR NAME ALICE</pattern>-->
+<!--<template>If it is, I don't know it.</template>-->
+<!--</category>-->
 <category><pattern>ARE MOLLUSCS VERTEBRATES</pattern>
 <template>I don't know if that's true or not.</template>
 </category>

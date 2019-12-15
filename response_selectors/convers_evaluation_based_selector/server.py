@@ -107,9 +107,11 @@ def respond():
         sentry_sdk.capture_message(msg)
         logger.warning(msg)
         has_blacklisted = [False] * len(utterances)
+        has_inappropriate = [False] * len(utterances)
     else:
         blacklist_result = blacklist_result.json()
         has_blacklisted = [int(res['profanity']) for res in blacklist_result]
+        has_inappropriate = [int(res['inappropriate']) for res in blacklist_result]
 
     for i, has_blisted in enumerate(has_blacklisted):
         if has_blisted:
@@ -152,6 +154,7 @@ def respond():
     confidences = np.array(confidences)
     toxicities = np.array(toxicities)
     has_blacklisted = np.array(has_blacklisted)
+    has_inappropriate = np.array(has_inappropriate)
 
     for i, dialog in enumerate(dialogs_batch):
         # curr_candidates is dict
@@ -163,7 +166,7 @@ def respond():
 
         best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes = select_response(
             curr_candidates, curr_scores, curr_confidences,
-            toxicities[dialog_ids == i], has_blacklisted[dialog_ids == i], dialog)
+            toxicities[dialog_ids == i], has_blacklisted[dialog_ids == i], has_inappropriate[dialog_ids == i], dialog)
 
         selected_skill_names.append(best_skill_name)
         selected_texts.append(best_text)
@@ -181,14 +184,16 @@ def respond():
                             selected_human_attributes, selected_bot_attributes)))
 
 
-def select_response(candidates, scores, confidences, toxicities, has_blacklisted, dialog):
+def select_response(candidates, scores, confidences, toxicities, has_blacklisted, has_inappropriate, dialog):
     confidence_strength = 2
     conv_eval_strength = 0.4
     # calculate curr_scores which is an array of values-scores for each candidate
     curr_single_scores = []
 
     # exclude toxic messages and messages with blacklisted phrases
-    ids = (toxicities > 0.5) & (has_blacklisted > 0)
+    ids = (toxicities > 0.5) | (has_blacklisted > 0) | (has_inappropriate > 0)
+    logger.info(f"Bot excluded utterances: {ids}.")
+
     if sum(ids) == len(toxicities):
         # the most dummy заглушка на случай, когда все абсолютно скиллы вернули токсичные ответы
         non_toxic_answers = ["I really do not know what to answer.",
@@ -209,7 +214,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     skill_names = [c['skill_name'] for c in candidates]
     how_are_you_spec = "I'm fine, thanks! Do you want to know what I can do?"
     psycho_help_spec = "If you or someone you know is in immediate danger"
-    greeting_spec = "Hi, this is an Alexa Prize Socialbot."
+    greeting_spec = "this is an Alexa Prize Socialbot"
 
     very_big_score = 100
     question = ""
@@ -218,7 +223,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
         if len(dialog['utterances']) < 2 and greeting_spec not in candidates[i]['text'] \
                 and skill_names[i] == 'program_y':
             # greet user in first utterance
-            candidates[i]['text'] = greeting_spec + ' ' + candidates[i]['text']
+            candidates[i]['text'] = "Hello, " + greeting_spec + ' ' + candidates[i]['text']
             curr_single_scores.append(very_big_score)
             break
         elif skill_names[i] == 'program_y' and candidates[i]['text'] == how_are_you_spec:

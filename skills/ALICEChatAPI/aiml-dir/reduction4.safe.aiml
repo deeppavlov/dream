@@ -1400,9 +1400,9 @@
 <category><pattern>* IS YOUR *</pattern>
 <template><srai>YOUR <star index="2"/> IS <star/> </srai></template>
 </category>
-<category><pattern>* IS YOUR NAME</pattern>
-<template><srai>YOUR NAME IS <star/></srai></template>
-</category>
+<!--<category><pattern>* IS YOUR NAME</pattern>-->
+<!--<template><srai>YOUR NAME IS <star/></srai></template>-->
+<!--</category>-->
 <category><pattern>* IS THE BEST</pattern>
 <template><srai>MY FAVORITE IS <star/></srai></template>
 </category>
@@ -1752,9 +1752,9 @@
 <category><pattern>GETTING *</pattern>
 <template><srai>ARE YOU <star/></srai></template>
 </category>
-<category><pattern>why is your name</pattern>
-<template><srai>what does alice stand for</srai></template>
-</category>
+<!--<category><pattern>why is your name</pattern>-->
+<!--<template><srai>what does alice stand for</srai></template>-->
+<!--</category>-->
 <category><pattern>why were you named alice</pattern>
 <template><srai>WHAT DOES ALICE STAND FOR</srai></template>
 </category>
@@ -3437,9 +3437,9 @@
 <category><pattern>IS YOUR STARSIGN *</pattern>
 <template><srai>WHAT IS YOUR SIGN</srai></template>
 </category>
-<category><pattern>IS YOUR NAME *</pattern>
-<template><srai>WHAT IS YOUR NAME</srai></template>
-</category>
+<!--<category><pattern>IS YOUR NAME *</pattern>-->
+<!--<template><srai>WHAT IS YOUR NAME</srai></template>-->
+<!--</category>-->
 <category><pattern>IS YOUR DOWNLOAD *</pattern>
 <template><srai>DOWNLOAD</srai></template>
 </category>
@@ -4486,9 +4486,9 @@
 <category><pattern>what can you tell me about september 11</pattern>
 <template><srai>What is september 11</srai></template>
 </category>
-<category><pattern>what do they call you</pattern>
-<template><srai>what is your name</srai></template>
-</category>
+<!--<category><pattern>what do they call you</pattern>-->
+<!--<template><srai>what is your name</srai></template>-->
+<!--</category>-->
 <category><pattern>what do you think of michael jackson</pattern>
 <template><srai> who is michael jackson</srai></template>
 </category>
@@ -6782,9 +6782,9 @@
 <category><pattern>YOU ARE PLANNING *</pattern>
 <template><srai>WHAT ARE YOUR PLANS </srai></template>
 </category>
-<category><pattern>YOU ARE NAMED *</pattern>
-<template><srai>WHAT IS YOUR NAME</srai></template>
-</category>
+<!--<category><pattern>YOU ARE NAMED *</pattern>-->
+<!--<template><srai>WHAT IS YOUR NAME</srai></template>-->
+<!--</category>-->
 <category><pattern>YOU ARE HAVING *</pattern>
 <template><srai>DO YOU HAVE <star/></srai></template>
 </category>
@@ -7308,12 +7308,12 @@
 <category><pattern>SIMPLY *</pattern>
 <template><srai>  <star /></srai></template>
 </category>
-<category><pattern>STATE YOUR NAME *</pattern>
-<template><srai>NAME</srai></template>
-</category>
-<category><pattern>STATE YOUR NAME</pattern>
-<template><srai>NAME</srai></template>
-</category>
+<!--<category><pattern>STATE YOUR NAME *</pattern>-->
+<!--<template><srai>NAME</srai></template>-->
+<!--</category>-->
+<!--<category><pattern>STATE YOUR NAME</pattern>-->
+<!--<template><srai>NAME</srai></template>-->
+<!--</category>-->
 <category><pattern>YOU ARE TECHNICALLY *</pattern>
 <template><srai>YOU ARE <star/></srai>  <!-- REDUCTION --></template>
 </category>
@@ -7889,9 +7889,9 @@
 <category><pattern>WHAT TIME IS IT</pattern>
 <template><srai>TIME</srai></template>
 </category>
-<category><pattern>WHAT DID YOU SAY YOUR NAME *</pattern>
-<template><srai>NAME</srai></template>
-</category>
+<!--<category><pattern>WHAT DID YOU SAY YOUR NAME *</pattern>-->
+<!--<template><srai>NAME</srai></template>-->
+<!--</category>-->
 <category><pattern>WHAT MONTH IS THIS</pattern>
 <template><srai>MONTH</srai></template>
 </category>
@@ -7958,9 +7958,9 @@
 <category><pattern>WHAT IS YOUR ORIENTATION</pattern>
 <template><srai>ORIENTATION</srai> <!-- REDUCTION --></template>
 </category>
-<category><pattern>WHAT IS YOUR NAME</pattern>
-<template><srai>NAME</srai></template>
-</category>
+<!--<category><pattern>WHAT IS YOUR NAME</pattern>-->
+<!--<template><srai>NAME</srai></template>-->
+<!--</category>-->
 <category><pattern>WHAT IS YOUR FAVORITE POSSESSION</pattern>
 <template><srai>FAVORITE POSSESSION</srai></template>
 </category>
@@ -8907,9 +8907,9 @@
 <category><pattern>WHY DO YOU CALL ME * CREATOR</pattern>
 <template><srai>WHO CREATED YOU</srai></template>
 </category>
-<category><pattern>BECAUSE THAT IS YOUR NAME</pattern>
-<template><srai>NAME</srai></template>
-</category>
+<!--<category><pattern>BECAUSE THAT IS YOUR NAME</pattern>-->
+<!--<template><srai>NAME</srai></template>-->
+<!--</category>-->
 <category><pattern>BECAUSE OF *</pattern>
 <template><srai>BECAUSE</srai>  <srai><star/></srai></template>
 </category>
@@ -9076,10 +9076,10 @@
 <category><pattern>* SHAPE IS WHAT</pattern>
 <template><srai>what shape is <star /></srai></template>
 </category>
-<category><pattern>*</pattern>
-<that>WHAT IS YOUR NAME</that>
-<template><srai>CALL ME <star /></srai><!-- REDUCTION --></template>
-</category>
+<!--<category><pattern>*</pattern>-->
+<!--<that>WHAT IS YOUR NAME</that>-->
+<!--<template><srai>CALL ME <star /></srai>&lt;!&ndash; REDUCTION &ndash;&gt;</template>-->
+<!--</category>-->
 <category><pattern>*</pattern>
 <that>HOW DO YOU USUALLY INTRODUCE YOURSELF</that>
 <template><srai>MY NAME IS <star /></srai></template>
@@ -9749,9 +9749,9 @@
 <category><pattern>TELL ME WHAT * IT IS</pattern>
 <template><srai>WHAT <star /> IS IT</srai></template>
 </category>
-<category><pattern>TELL ME YOUR NAME</pattern>
-<template><srai>NAME</srai></template>
-</category>
+<!--<category><pattern>TELL ME YOUR NAME</pattern>-->
+<!--<template><srai>NAME</srai></template>-->
+<!--</category>-->
 <category><pattern>TELL ME JOKE</pattern>
 <template><srai>JOKE</srai></template>
 </category>
@@ -10056,9 +10056,9 @@
 <category><pattern>YOU ARE DEFINATELY *</pattern>
 <template><srai>you are <star /></srai></template>
 </category>
-<category><pattern>YOU ARE NAME *</pattern>
-<template><srai>your name <star /></srai></template>
-</category>
+<!--<category><pattern>YOU ARE NAME *</pattern>-->
+<!--<template><srai>your name <star /></srai></template>-->
+<!--</category>-->
 <category><pattern>YOU ARE SURELY *</pattern>
 <template><srai>you are <star /></srai></template>
 </category>
@@ -11613,9 +11613,9 @@
 <category><pattern>I WOULD RATHER YOU *</pattern>
 <template><srai>you should <star /></srai></template>
 </category>
-<category><pattern>I WILL CALL YOU *</pattern>
-<template><srai>your name is <star /></srai></template>
-</category>
+<!--<category><pattern>I WILL CALL YOU *</pattern>-->
+<!--<template><srai>your name is <star /></srai></template>-->
+<!--</category>-->
 <category><pattern>I AM YES</pattern>
 <template><srai>yes I am</srai></template>
 </category>

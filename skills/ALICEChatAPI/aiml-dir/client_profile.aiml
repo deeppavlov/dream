@@ -290,15 +290,15 @@
 <li>I don't know.  What is your name?</li></condition>
 </template>
 </category>
-<category><pattern>MY NAME</pattern>
-<template>
-<condition name="name">  
-<li value="OM">I'd like to know your name.</li>  
-<li value="JUDGE">I know you as Judge.</li>  
-<li value="*">You said your name is <get name="name"/>?</li>  
-<li>I don't know.  What is your name?</li></condition>
-</template>
-</category>
+<!--<category><pattern>MY NAME</pattern>-->
+<!--<template>-->
+<!--<condition name="name">  -->
+<!--<li value="OM">I'd like to know your name.</li>  -->
+<!--<li value="JUDGE">I know you as Judge.</li>  -->
+<!--<li value="*">You said your name is <get name="name"/>?</li>  -->
+<!--<li>I don't know.  What is your name?</li></condition>-->
+<!--</template>-->
+<!--</category>-->
 
 <category><pattern>SET PROFILE</pattern>
 <template><srai>SET PREDICATES</srai></template>

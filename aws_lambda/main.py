@@ -51,6 +51,14 @@ def call_dp_agent(user_id, text, request_data):
         logger.error("No key in request_data")
         sentry_sdk.capture_exception(e)
 
+    speech = []
+    try:
+        speech = request_data['request']['speechRecognition']
+    except KeyError:
+        speech = request_data['request'].get('payload', {}).get('speechRecognition', [])
+        if not speech:
+            logger.error("No speech in request_data")
+
     conversation_id = get_conversation_id(request_data)
 
     response, intent = None, None
@@ -59,7 +67,7 @@ def call_dp_agent(user_id, text, request_data):
             DP_AGENT_URL,
             json={'user_id': user_id, 'payload': text, 'device_id': device_id,
                   'session_id': session_id, 'request_id': request_id,
-                  'conversation_id': conversation_id},
+                  'conversation_id': conversation_id, 'speech': speech},
             timeout=7).json()
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         sentry_sdk.capture_exception(e)
@@ -114,7 +122,8 @@ class LaunchRequestHandler(AbstractRequestHandler):
         call_dp_agent(user_id, '/start', request_data)
         # text = "Alexa, let's chat."
         speech = request_data['request'].get('payload', {}).get('speechRecognition', None)
-        if speech is not None:
+        # sometimes LaunchRequest comes with no tokens in speechRecognition
+        if speech is not None and len(speech['hypotheses'][0]['tokens']) > 0:
             text, _ = get_text_from_speech(speech)
         else:
             text = "hello"
@@ -175,12 +184,17 @@ class IntentReflectorHandler(AbstractRequestHandler):
             speech = request_data['request']['speechRecognition']
             speech_text, _ = get_text_from_speech(speech)
             dp_agent_data = call_dp_agent(user_id, speech_text, request_data)
-        elif len(slot_text) > 0:
+        elif slot_text is not None and len(slot_text) > 0:
             # in case if there is no speech in request, get slot value
             dp_agent_data = call_dp_agent(user_id, slot_text, request_data)
         elif ask_utils.is_intent_name("AMAZON.CancelIntent")(handler_input):
             text = 'cancel'
             logger.info(f'got AMAZON.CancelIntent, set text to: {text}')
+            dp_agent_data = call_dp_agent(user_id, text, request_data)
+        elif ask_utils.is_intent_name("ByeIntent")(handler_input):
+            # todo: remove from Intent Schema redundant intents
+            text = 'bye'
+            logger.info(f'got ByeIntent, set text to: {text}')
             dp_agent_data = call_dp_agent(user_id, text, request_data)
         else:
             dp_agent_data = {"response": "Sorry", "intent": None}

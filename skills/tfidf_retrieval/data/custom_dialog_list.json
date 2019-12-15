@@ -9,10 +9,19 @@
     },
     {
         "utterances": [
-            "USER_PHRASE_1_DIALOG2",
-            "BOT_PHRASE_1_DIALOG2",
-            "USER_PHRASE_2_DIALOG2",
-            "BOT_PHRASE_2_DIALOG2"
+            "star wars",
+            "Here's a fact about Star Wars. Star Wars's executive producers are George Lucas, J.J. Abrams, Jason McGatlin, John Knoll, Tom Karnowski, and Tommy Harper.",
+            "nice fact what else you know about star wars",
+            "Han Solo died in the original script! I think it is mind-blowing! What do you think?"
+        ]
+    },
+    {
+        "utterances": [
+            "let's talk about",
+            "I misheard you. what's it that you’d like to chat about?",
+            "let's talk about books",
+            "OK, let's talk about books. Do you love reading?"
         ]
     }
+
 ]

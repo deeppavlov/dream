@@ -50,13 +50,16 @@ async def perform_test_dialogue(session, url, uuid, payloads, with_debug_info=Fa
                 )
                 if response['user_id'] != uuid:
                     logger.info('request returned wrong uuid')
-                result.append([uuid, start_time, end_time, end_time - start_time, len(i), i, response['response']])
+                active_skill = response['active_skill']
+                result.append([uuid, active_skill, start_time, end_time,
+                               end_time - start_time, len(i), i, response['response']])
                 if with_debug_info:
                     result[-1].append(response)
         except aiohttp.client_exceptions.ClientResponseError as e:
             logger.exception(e)
             end_time = time()
-            result.append([uuid, start_time, end_time, end_time - start_time, len(i), i, e])
+            active_skill = 'exception'
+            result.append([uuid, active_skill, start_time, end_time, end_time - start_time, len(i), i, e])
             if with_debug_info:
                 result[-1].append(e)
 
@@ -75,7 +78,7 @@ async def run(url, payloads, out_filename):
             if i % batch_size == 0:
                 responses += await asyncio.gather(*tasks)
                 tasks = []
-    result = [['uuid', 'send timestamp', 'receive timestamp', 'processing_time',
+    result = [['uuid', 'active_skill', 'send timestamp', 'receive timestamp', 'processing_time',
                'phrase length', 'phrase text', 'response']]
     for i in responses:
         result.extend(i)

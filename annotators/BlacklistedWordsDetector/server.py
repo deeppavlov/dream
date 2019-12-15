@@ -57,7 +57,7 @@ class Blacklist:
         Returns:
             True if at least one blacklisted phrase is in utterance else False
         """
-        return len(self._collect_ngrams(utterance) & self.blacklist) > 0
+        return len(self._collect_ngrams(utterance.lower()) & self.blacklist) > 0
 
     def __repr__(self):
         return self.name
