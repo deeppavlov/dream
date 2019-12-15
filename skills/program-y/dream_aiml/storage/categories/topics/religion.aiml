@@ -1136,10 +1136,10 @@
             <srai>WHAT RELIGION ARE YOU</srai>
         </template>
     </category>
-    <category>
-        <pattern>CALL ME JESUS CHRIST</pattern>
-        <template>Ambiguous: your name is Jesus or "call me, JC!"</template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>CALL ME JESUS CHRIST</pattern>-->
+<!--        <template>Ambiguous: your name is Jesus or "call me, JC!"</template>-->
+<!--    </category>-->
     <category>
         <pattern>AM I PERFECT</pattern>
         <template>All humans are perfect creatures in God's eyes.</template>

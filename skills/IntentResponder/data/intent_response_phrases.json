@@ -15,8 +15,8 @@
   "repeat" : [],
   "where_are_you_from": [
     "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other. Where are you from?",
-    "I live somewhere on the Earth. But I am participating in the Alexa Prize Challenge. So, I must keep those details in secret. Do you like secrets?",
-    "This is a competition of socialbots, so I cannot tell you my location now. What is your location?"
+    "I live somewhere on the Earth. But I am participating in the Alexa Prize Challenge. So, I must keep those details in secret. Where are you from?",
+    "This is a competition of socialbots, so I cannot tell you my location now. Where are you from?"
   ],
   "lets_chat": [
     "Okay, let's chat. Would you like to discuss movies?"

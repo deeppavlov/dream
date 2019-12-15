@@ -102,13 +102,13 @@
       <template>
         <random>
           <li>I am a newborn socialbot, so I can't do so much.
-          I can answer questions, share fun facts and discuss movies.
+          I can answer questions, share fun facts, discuss movies and books.
           What is your favorite TV Series?</li>
           <li>I am a newborn socialbot, so I can't do so much.
-          I can answer questions, share fun facts and discuss movies.
+          I can answer questions, share fun facts, discuss movies and books.
           what is your favorite movie?</li>
           <li>I am a newborn socialbot, so I can't do so much.
-          I can answer questions, share fun facts and discuss movies.
+          I can answer questions, share fun facts, discuss movies and books.
           what's your favorite tv show?</li>
         </random>
        <think>
@@ -127,46 +127,79 @@
     </category>
   </topic>
 
+  <!--<category>-->
+    <!--<pattern>HELLO</pattern>-->
+    <!--<template>-->
+      <!--<think>-->
+        <!--<set name="topic">USER_MOOD</set>-->
+      <!--</think>-->
+      <!--<random>-->
+        <!--<li>Hi, this is an Alexa Prize Socialbot. How are you?</li>-->
+      <!--</random>-->
+    <!--</template>-->
+  <!--</category>-->
   <category>
-    <pattern>HELLO</pattern>
-    <template>
-      <think>
-        <set name="topic">USER_MOOD</set>
-      </think>
-      <random>
-        <li>Hi, this is an Alexa Prize Socialbot. How are you?</li>
-      </random>
-    </template>
-  </category>
+      <pattern>HELLO</pattern>
+      <template>
+          <!--set time of day -->
+          <sraix service="daytimeclf"></sraix>
+          <!--find in rdf storage -->
+          <think>
+              <set var="tuples">
+                  <select>
+                      <vars>?x</vars>
+                      <q>
+                          <subj>TIME_OF_DAY</subj>
+                          <pred>IS</pred>
+                          <obj>?x</obj>
+                      </q>
+                  </select>
+              </set>
+
+              <!-- convert rdf into variable-->
+              <set name="time_of_day">
+                  <get var="?x">
+                      <tuple>
+                          <first>
+                              <get var="tuples"/>
+                          </first>
+                      </tuple>
+                  </get>
+              </set>
+          </think>
+          <condition name="time_of_day">
+              <!--<li value="night">Good Night, this is an Alexa Prize Socialbot! Why don't you sleep so late?</li>-->
+              <li value="night">Good Night, this is an Alexa Prize Socialbot!</li>
+              <li value="morning">Good Morning, this is an Alexa Prize Socialbot!</li>
+              <li value="day">Hello, this is an Alexa Prize Socialbot!</li>
+              <li value="evening">Good Evening, this is an Alexa Prize Socialbot!</li>
+              <!--<li>Hi, this is an Alexa Prize Socialbot. What timezone do you use?</li>-->
+              <li>Hi, this is an Alexa Prize Socialbot!</li>
+          </condition>
+
+          <!-- How_are_you interaction starts here:-->
+          <think>
+              <set name="topic">USER_MOOD</set>
+          </think>
+          How are you?
+      </template>
+    </category>
 
   <topic name="USER_MOOD">
    <category>
-    <pattern><set>goodmoods</set></pattern>
+    <pattern># <set>goodmoods</set> #</pattern>
     <template>
-      <srai>GOOD_MOOD_REPSONSE</srai>
-    </template>
-  </category>
-
-   <category>
-    <pattern>I FEEL <set>goodmoods</set></pattern>
-     <template>
-      <srai>GOOD_MOOD_REPSONSE</srai>
+      <srai>GOOD_MOOD_RESPONSE</srai>
     </template>
   </category>
 
   <category>
-    <pattern>I AM <set>goodmoods</set></pattern>
-     <template>
-      <srai>GOOD_MOOD_REPSONSE</srai>
-    </template>
-  </category>
-
-  <category>
-    <pattern>GOOD_MOOD_REPSONSE</pattern>
+    <pattern>GOOD_MOOD_RESPONSE</pattern>
     <template>
       <random>
         <li>I am glad. What do you want to talk about?</li>
-        <li>I am glad. what is your favorite movie?</li>
+        <li>I am glad. What is your favorite movie?</li>
+        <li>I am glad. Where are you from?</li>
       </random>
       <think>
         <set name="topic"><star/></set>
@@ -175,32 +208,26 @@
   </category>
 
   <category>
-    <pattern><set>badmoods</set></pattern>
+    <pattern># NOT # <set>goodmoods</set> #</pattern>
     <template>
-      <srai>BAD_MOOD_REPSONSE</srai>
+      <srai>BAD_MOOD_RESPONSE</srai>
     </template>
   </category>
 
   <category>
-    <pattern>I FEEL <set>badmoods</set></pattern>
-     <template>
-      <srai>BAD_MOOD_REPSONSE</srai>
+    <pattern># <set>badmoods</set> #</pattern>
+    <template>
+      <srai>BAD_MOOD_RESPONSE</srai>
     </template>
   </category>
 
   <category>
-    <pattern>I AM <set>badmoods</set></pattern>
-     <template>
-      <srai>BAD_MOOD_REPSONSE</srai>
-    </template>
-  </category>
-
-  <category>
-    <pattern>BAD_MOOD_REPSONSE</pattern>
+    <pattern>BAD_MOOD_RESPONSE</pattern>
     <template>
       <random>
         <li>I am sorry to hear that. What do you want to talk about?</li>
         <li>I am sorry to hear that. Do you like comedies?</li>
+        <li>I am sorry to hear that. Where are you from?</li>
       </random>
       <think>
         <set name="topic"><star/></set>

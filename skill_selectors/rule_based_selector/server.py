@@ -8,7 +8,6 @@ from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
 
-
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -53,8 +52,9 @@ class RuleBasedSelector():
             # TODO: opinion_request/yes/no response
             intent_detected = any([v['detected'] == 1 for k, v in
                                    dialog['utterances'][-1]['annotations']['intent_catcher'].items()
-                                   if k not in {'opinion_request', 'yes', 'no', 'tell_me_more'}])
+                                   if k not in {'opinion_request', 'yes', 'no', 'tell_me_more', 'doing_well'}])
 
+            not_confident_asr = dialog['utterances'][-1]['annotations']['asr']['asr_confidence'] == 'very_low'
             cobot_topics = set(dialog['utterances'][-1]['annotations']['cobot_topics']['text'])
             sensitive_topics_detected = any([t in self.sensitive_topics for t in cobot_topics])
             cobot_dialogacts = dialog['utterances'][-1]['annotations']['cobot_dialogact']['intents']
@@ -81,19 +81,31 @@ class RuleBasedSelector():
                 # skills_for_uttr.append("retrieval_chitchat")
             movie_cobot_dialogacts = {
                 "Entertainment_Movies", "Sports", "Entertainment_Music", "Entertainment_General",
-                "Entertainment_Books", "Phatic"
+                "Phatic"
             }
             movie_cobot_topics = {
                 "Movies_TV", "Celebrities", "Art_Event", "Entertainment",
-                "Fashion", "Games", "Literature", "Music", "Sports"
+                "Fashion", "Games", "Music", "Sports"
             }
             about_movies = (movie_cobot_dialogacts & cobot_dialogact_topics) | (movie_cobot_topics & cobot_topics)
             if about_movies:
                 skills_for_uttr.append("movie_skill")
-
+            books_cobot_dialogacts = {
+                "Entertainment_General", "Entertainment_Books"
+            }
+            books_cobot_topics = {
+                "Entertainment", "Literature"
+            }
+            about_books = (books_cobot_dialogacts & cobot_dialogact_topics) | (books_cobot_topics & cobot_topics)
+            if about_books:
+                skills_for_uttr.append("book_skill")
             # always add dummy_skill
             skills_for_uttr.append("dummy_skill")
             skills_for_uttr.append("personal_info_skill")
+
+            # Use only misheard asr skill if asr is not confident and skip it for greeting
+            if not_confident_asr and len(dialog['utterances']) > 1:
+                skills_for_uttr = ["misheard_asr"]
             skill_names.append(skills_for_uttr)
 
         return skill_names

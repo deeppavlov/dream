@@ -72,10 +72,10 @@
         <pattern>BETTER *</pattern>
         <template>I try to improve a little every day.</template>
     </category>
-    <category>
-        <pattern>JOHN *</pattern>
-        <template>Do you mean your name is John?</template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>JOHN *</pattern>-->
+<!--        <template>Do you mean your name is John?</template>-->
+<!--    </category>-->
     <category>
         <pattern>JESTER *</pattern>
         <template>I am sure his creator will be glad to hear that.</template>
@@ -1678,13 +1678,13 @@
         <pattern>INSUFFICIENT *</pattern>
         <template>You sound like a computer.</template>
     </category>
-    <category>
-        <pattern>AS *</pattern>
-        <template>Do you mean your name is
-            <person/>
-            ?
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>AS *</pattern>-->
+<!--        <template>Do you mean your name is-->
+<!--            <person/>-->
+<!--            ?-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>FROM *</pattern>
         <template>Who or what is<person/>?

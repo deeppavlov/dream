@@ -95,8 +95,8 @@ dockercompose_cmd logs -f --tail="all" --timestamps &
 wait_service "http://0.0.0.0:$AGENT_PORT/ping" pong
 
 if [[ "$MODE" == "test_dialog" || "$MODE" == "all" ]]; then
-    echo "Check workflow bug"
-    dockercompose_cmd exec -T -u $(id -u) agent python3 tests/test_workflow_bug.py
+    echo "Test workflow bug and asr"
+    dockercompose_cmd exec -T -u $(id -u) agent python3 tests/test_workflow_bug_and_asr.py
 
     echo "Pass dialogs from dp-agent"
     dockercompose_cmd exec -T -u $(id -u) agent python3 \
@@ -137,6 +137,15 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
         dockercompose_cmd exec -T -u $(id -u) movie_skill python test.py
     fi
 
+    if container_is_started book_skill; then
+        echo "Run tests for book_skill"
+        dockercompose_cmd exec -T -u $(id -u) book_skill python test.py
+    fi
+
+    if container_is_started asr; then
+        echo "Run tests for asr container"
+        dockercompose_cmd exec -T -u $(id -u) asr python test.py
+    fi
 fi
 
 if [[ "$MODE" == "infer_questions" || "$MODE" == "all" ]]; then

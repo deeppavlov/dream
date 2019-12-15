@@ -1,0 +1,384 @@
+[
+  {
+    "id": "5de8c95f2c1d86694a6129b7",
+    "utterances": [
+      {
+        "text": "let's chat.",
+        "user": {
+          "id": "cd4cce61e01b450ea1e21f57f3778697",
+          "user_telegram_id": "40596809458608546",
+          "persona": {},
+          "profile": {
+            "name": null,
+            "gender": null,
+            "birthdate": null,
+            "location": null,
+            "home_coordinates": null,
+            "work_coordinates": null,
+            "occupation": null,
+            "income_per_year": null
+          },
+          "attributes": {},
+          "user_type": "human"
+        },
+        "annotations": {
+          "blacklisted_words": {
+            "profanity": false,
+            "restricted_topics": false
+          },
+          "sentseg": {
+            "punct_sent": "let's chat.",
+            "segments": [
+              "let's chat."
+            ]
+          },
+          "toxic_classification": {
+            "identity_hate": 0.0002440552052576095,
+            "insult": 0.0003098979650530964,
+            "obscene": 0.00016110707656480372,
+            "severe_toxic": 8.006249845493585e-05,
+            "sexual_explicit": 0.00016148835129570216,
+            "threat": 0.00024449516786262393,
+            "toxic": 0.0008366421679966152
+          },
+          "sentiment_classification": {
+            "text": [
+              "positive",
+              0.708730161190033
+            ]
+          },
+          "intent_catcher": {
+            "doing_well": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "exit": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "no": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "opinion_request": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "repeat": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_can_you_do": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_job": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_name": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_time": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "where_are_you_from": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "who_made_you": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "yes": {
+              "confidence": 0.0,
+              "detected": 0
+            }
+          },
+          "cobot_nounphrases": [],
+          "ner": [
+            []
+          ],
+          "attitude_classification": {
+            "text": "very_positive",
+            "confidence": 0.5619882941246033
+          },
+          "cobot_topics": {
+            "text": [
+              "Phatic"
+            ]
+          },
+          "cobot_dialogact": {
+            "intents": [
+              "OtherIntent"
+            ],
+            "topics": [
+              "Other"
+            ]
+          },
+          "cobot_offensiveness": {
+            "text": [
+              "non-toxic"
+            ],
+            "confidence": [
+              7.830236e-08
+            ],
+            "is_blacklisted": [
+              "not blacklist"
+            ]
+          },
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "let's chat."
+            ]
+          }
+        },
+        "hypotheses": [
+          {
+            "skill_name": "alice",
+            "text": "I am unsure if I should let chat.",
+            "confidence": 0.65
+          },
+          {
+            "skill_name": "personal_info_skill",
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {}
+          },
+          {
+            "skill_name": "dummy_skill",
+            "text": "Sorry, probably, I didn't get what you meant.",
+            "confidence": 0.5
+          },
+          {
+            "skill_name": "dummy_skill",
+            "text": "would you like to chat?",
+            "confidence": 0.6
+          },
+          {
+            "skill_name": "program_y",
+            "text": "Hi, this is an Alexa Prize Socialbot. How are you?",
+            "confidence": 0.98
+          },
+          {
+            "skill_name": "cobotqa",
+            "text": "",
+            "confidence": 0.0
+          }
+        ],
+        "date_time": "2019-12-05 09:09:48.874935",
+        "attributes": {}
+      },
+      {
+        "text": "Hi, this is an Alexa Prize Socialbot. How are you?",
+        "orig_text": null,
+        "active_skill": "program_y",
+        "confidence": 0.98,
+        "annotations": {
+          "bot_sentseg": {
+            "punct_sent": "Hi, this is an Alexa Prize Socialbot. How are you?",
+            "segments": [
+              "Hi, this is an Alexa Prize Socialbot.",
+              "How are you?"
+            ]
+          },
+          "bot_ner": [
+            [
+              {
+                "confidence": 1,
+                "end_pos": 6,
+                "start_pos": 5,
+                "text": "alexa",
+                "type": "MISC"
+              }
+            ],
+            []
+          ],
+          "bot_sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "let's chat.",
+              "Hi, this is an Alexa Prize Socialbot. How are you?"
+            ]
+          }
+        },
+        "date_time": "2019-12-05 09:09:51.651978",
+        "user": {
+          "id": "6ef791817b9740a59dcd051192f7be93",
+          "persona": {},
+          "attributes": {},
+          "user_type": "bot"
+        }
+      },
+      {
+        "text": "what do you think about the avengers?",
+        "user": {
+          "id": "5de8c95f2c1d86694a6129b5",
+          "user_telegram_id": "40596809458608546",
+          "persona": {},
+          "profile": {
+            "name": null,
+            "gender": null,
+            "birthdate": null,
+            "location": null,
+            "home_coordinates": null,
+            "work_coordinates": null,
+            "occupation": null,
+            "income_per_year": null
+          },
+          "attributes": {},
+          "user_type": "human"
+        },
+        "annotations": {
+          "blacklisted_words": {
+            "profanity": false,
+            "restricted_topics": false
+          },
+          "toxic_classification": {
+            "identity_hate": 0.00015753477055113763,
+            "insult": 0.0002779257483780384,
+            "obscene": 8.037230873014778e-05,
+            "severe_toxic": 5.134517414262518e-05,
+            "sexual_explicit": 0.00010875256703002378,
+            "threat": 0.00016481066995766014,
+            "toxic": 0.0006597969331778586
+          },
+          "sentseg": {
+            "punct_sent": "what do you think about the avengers?",
+            "segments": [
+              "what do you think about the avengers?"
+            ]
+          },
+          "sentiment_classification": {
+            "text": [
+              "neutral",
+              0.6117857098579407
+            ]
+          },
+          "intent_catcher": {
+            "doing_well": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "exit": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "no": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "opinion_request": {
+              "confidence": 0.9996422529220581,
+              "detected": 1
+            },
+            "repeat": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_can_you_do": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_job": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_name": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_time": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "where_are_you_from": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "who_made_you": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "yes": {
+              "confidence": 0.0,
+              "detected": 0
+            }
+          },
+          "cobot_nounphrases": [
+            "the avengers"
+          ],
+          "attitude_classification": {
+            "text": "very_positive",
+            "confidence": 0.863861620426178
+          },
+          "ner": [
+            []
+          ],
+          "cobot_dialogact": {
+            "intents": [
+              "Opinion_RequestIntent"
+            ],
+            "topics": [
+              "Entertainment_Movies"
+            ]
+          },
+          "cobot_topics": {
+            "text": [
+              "Music"
+            ]
+          },
+          "cobot_offensiveness": {
+            "text": [
+              "non-toxic"
+            ],
+            "confidence": [
+              1.1534254e-06
+            ],
+            "is_blacklisted": [
+              "not blacklist"
+            ]
+          },
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "let's chat.",
+              "Hi, this is an Alexa Prize Socialbot. How are you?",
+              "what do you think about the avengers?"
+            ]
+          }
+        },
+        "hypotheses": [],
+        "date_time": "2019-12-05 09:09:55.286897",
+        "attributes": {}
+      }
+    ],
+    "human": {
+      "id": "5de8c95f2c1d86694a6129b5",
+      "user_telegram_id": "40596809458608546",
+      "persona": {},
+      "profile": {
+        "name": null,
+        "gender": null,
+        "birthdate": null,
+        "location": null,
+        "home_coordinates": null,
+        "work_coordinates": null,
+        "occupation": null,
+        "income_per_year": null
+      },
+      "attributes": {},
+      "user_type": "human"
+    },
+    "bot": {
+      "id": "5de8c95f2c1d86694a6129b6",
+      "persona": {},
+      "attributes": {},
+      "user_type": "bot"
+    }
+  }
+]

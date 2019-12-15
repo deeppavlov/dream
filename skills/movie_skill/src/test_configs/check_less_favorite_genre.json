@@ -1,0 +1,425 @@
+[
+  {
+    "id": "5df29484e33eceb6e0a100b3",
+    "utterances": [
+      {
+        "text": "hi.",
+        "user": {
+          "id": "5f33e96fb3a1440a91a41a19fae9e8c1",
+          "user_telegram_id": "4895869486-0489-06",
+          "persona": {},
+          "profile": {
+            "name": null,
+            "gender": null,
+            "birthdate": null,
+            "location": null,
+            "home_coordinates": null,
+            "work_coordinates": null,
+            "occupation": null,
+            "income_per_year": null
+          },
+          "attributes": {},
+          "user_type": "human"
+        },
+        "annotations": {
+          "blacklisted_words": {
+            "inappropriate": false,
+            "profanity": false,
+            "restricted_topics": false
+          },
+          "asr": {
+            "asr_confidence": "undefined"
+          },
+          "sentseg": {
+            "punct_sent": "hi.",
+            "segments": [
+              "hi."
+            ]
+          },
+          "toxic_classification": {
+            "identity_hate": 0.00018963225011248142,
+            "insult": 0.00035495031625032425,
+            "obscene": 0.00013205016148276627,
+            "severe_toxic": 7.709668716415763e-05,
+            "sexual_explicit": 0.0002453750930726528,
+            "threat": 0.00019372250244487077,
+            "toxic": 0.0008196829003281891
+          },
+          "sentiment_classification": {
+            "text": [
+              "neutral",
+              0.6439297199249268
+            ]
+          },
+          "cobot_nounphrases": [],
+          "intent_catcher": {
+            "doing_well": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "dont_understand": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "exit": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "no": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "opinion_request": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "repeat": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "tell_me_more": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_can_you_do": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_job": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_name": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_time": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "where_are_you_from": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "who_made_you": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "yes": {
+              "confidence": 0.0,
+              "detected": 0
+            }
+          },
+          "ner": [
+            [
+              {
+                "confidence": 1,
+                "end_pos": 1,
+                "start_pos": 0,
+                "text": "hi",
+                "type": "ORG"
+              }
+            ]
+          ],
+          "attitude_classification": {
+            "text": "very_positive",
+            "confidence": 0.6038849353790283
+          },
+          "cobot_dialogact": {
+            "intents": [
+              "General_ChatIntent"
+            ],
+            "topics": [
+              "Phatic"
+            ]
+          },
+          "cobot_topics": {
+            "text": [
+              "Phatic"
+            ]
+          },
+          "cobot_offensiveness": {
+            "text": [
+              "non-toxic"
+            ],
+            "confidence": [
+              4.6625214e-06
+            ],
+            "is_blacklisted": [
+              "not blacklist"
+            ]
+          },
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "hi."
+            ]
+          }
+        },
+        "hypotheses": [
+          {
+            "skill_name": "alice",
+            "text": "Hi there!",
+            "confidence": 0.65
+          },
+          {
+            "skill_name": "personal_info_skill",
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {}
+          },
+          {
+            "skill_name": "dummy_skill",
+            "text": "I really do not know what to answer.",
+            "confidence": 0.5
+          },
+          {
+            "skill_name": "dummy_skill",
+            "text": "are you a kanye west fan?",
+            "confidence": 0.6
+          },
+          {
+            "skill_name": "movie_skill",
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {},
+            "bot_attitudes": [],
+            "human_attitudes": []
+          },
+          {
+            "skill_name": "program_y",
+            "text": "Hello, this is an Alexa Prize Socialbot! How are you?",
+            "confidence": 0.98
+          },
+          {
+            "skill_name": "cobotqa",
+            "text": "Hi there.",
+            "confidence": 0.95
+          }
+        ],
+        "date_time": "2019-12-12 19:26:56.450570",
+        "attributes": {}
+      },
+      {
+        "text": "Hello, this is an Alexa Prize Socialbot! How are you?",
+        "orig_text": null,
+        "active_skill": "program_y",
+        "confidence": 0.98,
+        "annotations": {
+          "bot_sentseg": {
+            "punct_sent": "Hello, this is an Alexa Prize Socialbot! How are you?",
+            "segments": [
+              "Hello, this is an Alexa Prize Socialbot!",
+              "How are you?"
+            ]
+          },
+          "bot_ner": [
+            [
+              {
+                "confidence": 1,
+                "end_pos": 7,
+                "start_pos": 5,
+                "text": "alexa prize",
+                "type": "MISC"
+              }
+            ],
+            []
+          ],
+          "bot_sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "hi.",
+              "Hello, this is an Alexa Prize Socialbot! How are you?"
+            ]
+          }
+        },
+        "date_time": "2019-12-12 19:27:00.064902",
+        "user": {
+          "id": "f059eb1beb4a4aebbdbf68001446c184",
+          "persona": {},
+          "attributes": {},
+          "user_type": "bot"
+        }
+      },
+      {
+        "text": "what is your less favorite movie genre?",
+        "user": {
+          "id": "5df29484e33eceb6e0a100b1",
+          "user_telegram_id": "4895869486-0489-06",
+          "persona": {},
+          "profile": {
+            "name": null,
+            "gender": null,
+            "birthdate": null,
+            "location": null,
+            "home_coordinates": null,
+            "work_coordinates": null,
+            "occupation": null,
+            "income_per_year": null
+          },
+          "attributes": {},
+          "user_type": "human"
+        },
+        "annotations": {
+          "blacklisted_words": {
+            "inappropriate": false,
+            "profanity": false,
+            "restricted_topics": false
+          },
+          "asr": {
+            "asr_confidence": "undefined"
+          },
+          "toxic_classification": {
+            "identity_hate": 0.00013183942064642906,
+            "insult": 0.0002795755863189697,
+            "obscene": 5.562471051234752e-05,
+            "severe_toxic": 2.8137686967966147e-05,
+            "sexual_explicit": 6.479016883531585e-05,
+            "threat": 8.365917892660946e-05,
+            "toxic": 0.0005719103501178324
+          },
+          "sentseg": {
+            "punct_sent": "what is your less favorite movie genre?",
+            "segments": [
+              "what is your less favorite movie genre?"
+            ]
+          },
+          "sentiment_classification": {
+            "text": [
+              "positive",
+              0.7691525220870972
+            ]
+          },
+          "cobot_nounphrases": [
+            "your less favorite movie genre"
+          ],
+          "intent_catcher": {
+            "doing_well": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "dont_understand": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "exit": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "no": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "opinion_request": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "repeat": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "tell_me_more": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_can_you_do": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_job": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_name": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_time": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "where_are_you_from": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "who_made_you": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "yes": {
+              "confidence": 0.0,
+              "detected": 0
+            }
+          },
+          "attitude_classification": {
+            "text": "very_positive",
+            "confidence": 0.4825207591056824
+          },
+          "ner": [
+            []
+          ],
+          "cobot_offensiveness": {
+            "text": [
+              "non-toxic"
+            ],
+            "confidence": [
+              3.0328517e-06
+            ],
+            "is_blacklisted": [
+              "not blacklist"
+            ]
+          },
+          "cobot_topics": {
+            "text": [
+              "Movies_TV"
+            ]
+          },
+          "cobot_dialogact": {
+            "intents": [
+              "Information_RequestIntent"
+            ],
+            "topics": [
+              "Entertainment_Movies"
+            ]
+          },
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "hi.",
+              "Hello, this is an Alexa Prize Socialbot! How are you?",
+              "what is your less favorite movie genre?"
+            ]
+          }
+        },
+        "hypotheses": [],
+        "date_time": "2019-12-12 19:27:12.577233",
+        "attributes": {}
+      }
+    ],
+    "human": {
+      "id": "5df29484e33eceb6e0a100b1",
+      "user_telegram_id": "4895869486-0489-06",
+      "persona": {},
+      "profile": {
+        "name": null,
+        "gender": null,
+        "birthdate": null,
+        "location": null,
+        "home_coordinates": null,
+        "work_coordinates": null,
+        "occupation": null,
+        "income_per_year": null
+      },
+      "attributes": {},
+      "user_type": "human"
+    },
+    "bot": {
+      "id": "5df29484e33eceb6e0a100b2",
+      "persona": {},
+      "attributes": {},
+      "user_type": "bot"
+    }
+  }
+]
