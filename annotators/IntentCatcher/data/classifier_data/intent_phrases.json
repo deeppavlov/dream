@@ -9,7 +9,7 @@
         "See ((you)|(ya)) ((later)|(soon))",
         "((Goodbye)|(Bye)|(Bye-bye)|(Stop)|(Exit)|(End))(, ((Alexa)|(bot))){0,1}",
         "((Alexa)|(Bot)), ((goodbye)|(bye)|(bye bye)|(stop)|(exit)|(end))",
-        "((Farewell)|(Peace out)|(Adios)|(Catch you later)|(See ((you)|(ya)))|(Take care))",
+        "((Farewell)|(Peace out)|(Adios)|(Catch you later)|(See ((you)|(ya)))|(Take care)|(Turn off))",
         "(((Okay)|(Well)|(So)) ,){0,1}I ((am out of here)|(have to go)|(gotta go)|(gotta run)|(gotta head out)|(gonna go))( ((now)|(right now))){0,1}(, ((bye)|(goodbye)|(bye bye))){0,1}"
       ],
     "min_precision" : 0.80,
@@ -213,6 +213,8 @@
   "random_phrases" : {
     "phrases" : [
       "[0-9]{1,10}",
+      "stop ((hitting you)|(doing this)|(doing that))",
+      "((repeat what)|(what do you want me to repeat))",
       "Wake up",
       "I am from ((new zealand)|(US)|(Russia)|(Virginia)|(Texas)|(New York)|(Boston)|(America))",
       "(Okay, ){0,1}Let's start( again){0,1}",
