@@ -45,7 +45,7 @@ class MovieSkillTemplates:
         np.random.seed(42)
         self.imdb = IMDb(db_path)
 
-    def extract_previous_dialog_subjects(self, dialog):
+    def extract_previous_dialog_subjects(self, dialog, n_previous=6):
         """Extract from the dialog history info about previously discussed movies and movie persons
 
         Args:
@@ -60,13 +60,14 @@ class MovieSkillTemplates:
         """
         # TODO: several dialog subjects in the last reply
         dialog_subjects = []
-        for i in range(len(dialog["utterances"])):
+        utterances = dialog["utterances"][-n_previous:]
+        for i in range(len(utterances)):
             # if i + 1 < len(dialog["utterances"]):
             #     chosen_skill = dialog["utterances"][i + 1].get("active_skill", "")
             # else:
             #     chosen_skill = ""
-            if "hypotheses" in dialog["utterances"][i].keys():  # and chosen_skill == "movie_skill":
-                hypotheses = dialog["utterances"][i]["hypotheses"]
+            if "hypotheses" in utterances[i].keys():  # and chosen_skill == "movie_skill":
+                hypotheses = utterances[i]["hypotheses"]
                 try:
                     for hyp in hypotheses:
                         if hyp["skill_name"] == "movie_skill":

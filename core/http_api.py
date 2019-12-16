@@ -134,15 +134,24 @@ class ApiHandler:
         return web.json_response([i.to_dict() for i in dialogs])
 
     async def all_dialogs(self, request):
+        date_start = request.rel_url.query.get('date_start', None)
+        date_finish = request.rel_url.query.get('date_finish', None)
+        if date_start:
+            date_start = datetime.strptime(date_start, '%Y-%m-%d')
+        if date_finish:
+            date_finish = datetime.strptime(date_finish, '%Y-%m-%d')
+
         def dialg_to_dict(dialog):
             result = {
                 'id': dialog.id,
                 'utterances': [],
                 'human': dialog.human.to_dict(),
-                'bot': dialog.bot.to_dict()
+                'bot': dialog.bot.to_dict(),
+                'date_start': str(dialog.date_start),
+                'date_finish': str(dialog.date_finish)
             }
             for i in dialog.utterances:
-                utt_dct = {'text': i.text, 'date_time': i.date_time}
+                utt_dct = {'text': i.text, 'date_time': str(i.date_time)}
                 if hasattr(i, 'attributes'):
                     # do not output ASR results in /dialogs
                     utt_dct['attributes'] = {k: v for k, v in i.attributes.items() if k != 'speech'}
@@ -152,7 +161,7 @@ class ApiHandler:
             return result
 
         state_manager = request.app['agent'].state_manager
-        dialogs = await state_manager.get_all_dialogs()
+        dialogs = await state_manager.get_all_dialogs(date_start, date_finish)
         return web.json_response([dialg_to_dict(i) for i in dialogs])
 
 
