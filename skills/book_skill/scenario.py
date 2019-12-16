@@ -309,6 +309,8 @@ class BookSkillScenario:
                 text_utterances = [j['text'] for j in dialog['utterances']]
                 # logging.info('***'.join([j for j in text_utterances]))
                 bot_phrases = [j for i, j in enumerate(text_utterances) if i % 2 == 1]
+                if len(bot_phrases) == 0:
+                    bot_phrases.append('')
                 annotated_user_phrase = dialog['utterances'][-1]
                 logging.info(str(annotated_user_phrase))
                 # I don't denote annotated_user_phrase['text'].lower() as a single variable

@@ -129,7 +129,8 @@ for gold_phrase in gold_phrases:
 
 
 def check(human_phrase, vectorizer=vectorizer, phrase_list=phrase_list, top_best=2):
-    banned_phrases = ['where are you from?']
+    banned_phrases = ['where are you from?',
+                      "hi, this is an alexa prize socialbot. yeah, let's chat! what do you want to talk about?"]
     human_phrase = preprocess(human_phrase)
     human_phrases = list(phrase_list.keys())
     vectorized_phrases = vectorizer.transform(human_phrases)
@@ -156,4 +157,6 @@ def check(human_phrase, vectorizer=vectorizer, phrase_list=phrase_list, top_best
         assert "I didn't get your homeland." not in bot_answer
         if all([banned_phrase not in bot_answer for banned_phrase in banned_phrases]):
             ans.append((bot_answer, score))
+        else:
+            ans.append(("I really do not know what to answer.", 0))
     return ans
