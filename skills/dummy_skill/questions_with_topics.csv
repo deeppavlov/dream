@@ -26,7 +26,7 @@ the republican party is really popular in the states do you agree?,Art_Event
 what did you think of the last couple elections?,Politics
 do you follow politics?,Politics
 do you watch many movies in the theaters?,Movies_TV
-did you ever watch et?,Movies_TV
+have you ever watched et?,Movies_TV
 did you know that summer was considered a bad time to release a movie?,Movies_TV
 do you know much about the bible?,Religion
 do you like dance?,Entertainment
@@ -371,7 +371,7 @@ do you know much about book banning in schools?,Literature
 are you a fan of netflix?,Phatic
 do you like to watch movies?,Movies_TV
 how are you today?,Phatic
-do you spend much time reading?,Phatic
+do you spend a lof of time reading?,Phatic
 do you shop online?,Other
 do you like the avengers?,Music
 have you purchased on the amazon?,Other
@@ -583,7 +583,7 @@ do you ever keep up on what the rollings stones do nowadays?,Religion
 do you have a favorite album?,Music
 my friend do you play the piano?,Music
 did you see the black panther movie?,Movies_TV
-you ever heard of reddit?,Phatic
+have you ever heard of reddit?,Phatic
 are you on facebook?,SciTech
 do you play golf?,Sports
 have you ever played golf?,Sports
@@ -632,7 +632,7 @@ do you watch soccer?,Sports
 what is your take on golf and tennis?,Sports
 do you like golf?,Sports
 are you a fan of elvis presley?,Celebrities
-you're netflix fan ?,Phatic
+you're a netflix fan ?,Phatic
 how are you today?,Phatic
 are you a fan of boy band bts?,Music
 do you like to travel?,Travel_Geo
@@ -789,7 +789,7 @@ my friend do you have spotify?,Music
 do you enjoy concerts?,Art_Event
 do you listen to spotify?,Music
 do you watch basketball?,Sports
-do you like basket ball?,Phatic
+do you like basketball?,Phatic
 do you own a car?,SciTech
 at this very moment?,Music
 do you like youtube?,Music
@@ -1391,7 +1391,7 @@ did you know there are cables carrying phone and internet data across the oceans
 do you use your phone much?,Celebrities
 are you aware of imran khan's pakistan?,Politics
 how are you doing today?,Phatic
-did you ever see jumanji?,Movies_TV
+have you ever seen jumanji?,Movies_TV
 are you interested in cricket?,Sports
 have you seen the original jumanji movie with robin williams?,Movies_TV
 are you a fan of donald glover?,Celebrities
@@ -1437,7 +1437,6 @@ how did you like the green lantern movie ?,Movies_TV
 do you like jazz music?,Music
 are you registered to vote?,Phatic
 do you watch basketball?,Sports
-50 million but they turned it down?,Other
 do you watch netflix?,Movies_TV
 or can you play it?,Phatic
 do you like guitar?,Music
@@ -1543,7 +1542,6 @@ do you watch the nba?,Sports
 do you like cars?,Games
 do you like to watch netflix?,Phatic
 do you like fleetwood mac?,Music
-000 per episode in house?,Movies_TV
 are you a fan of stand up comedy?,Other
 do u like basketball?,Sports
 are you a basketball fan?,Sports
@@ -1571,20 +1569,20 @@ did you like jason mamoa's role in game of thrones ?,Games
 do you like to dance?,Entertainment
 do you enjoy reading?,Travel_Geo
 what forms of entertainment do you enjoy?,Entertainment
-do you think parents should be allowed to keep their kids from doing state required testing?,SciTech
+do you think parents should be allowed to keep their kids from doing state-required testing?,SciTech
 did you know teh emperor of japan is a scientist?,SciTech
 how are you today?,Phatic
 how are you today?,Phatic
 do you like watching tv?,Movies_TV
 do you watch tv?,Movies_TV
-do you watch much baseball?,Sports
+do you watch a lot of baseball?,Sports
 do you like rap or rapping?,Music
 do you like baseball?,Sports
 did you know that hugh laurie is the highest paid tv actor ever?,Movies_TV
 do you shop online?,Other
 do you buy from amazon?,Other
 do you currently own or drive a car?,SciTech
-do you watch much tv?,Movies_TV
+do you watch a lot of tv?,Movies_TV
 how does this make you feel?,Phatic
 do you like the simpson on tv?,Movies_TV
 president with a beard has been republican?,Politics
@@ -1721,7 +1719,7 @@ what do you do for entertainment?,Entertainment
 did you know that soccer worldwide makes more than all over sports combined?,Sports
 do you use your phone much?,Celebrities
 did you know on a rotary phone 212 is the fastest area code to dial?,SciTech
-are you a you tube fan?,Phatic
+are you a youtube fan?,Phatic
 are you a fan of comedy?,Phatic
 do you like nba?,Sports
 do you like lebron?,Sports
@@ -1760,7 +1758,7 @@ what do you think about virtual pop and artists?,Music
 are you a fan of youtube?,SciTech
 do you like to travel?,Travel_Geo
 did you hear about the winter advisory that was going on in dc recently?,Weather_Time
-do you like traveling and what is the most important thing for you while choosing hotel?,Phatic
+do you like traveling and what is the most important thing for you while choosing a hotel?,Phatic
 are you a netflix user?,SciTech
 are you a fan of animals?,Pets_Animals
 i tried to watch black mirror on netflix have you ever seen it?,Other
@@ -1818,7 +1816,7 @@ do you like basketball?,Sports
 which do you like more?,Phatic
 what do you do for entertainment?,Entertainment
 do you know much about the sun?,SciTech
-do you know  much about the ancient thinkers?,Other
+do you know  much about ancient thinkers?,Other
 are you a fan of the star wars franchise?,Movies_TV
 do you use youtube?,Music
 do you like traditional dances?,Phatic
@@ -2031,7 +2029,7 @@ do you like baseball?,Sports
 have you heard of the parkland shotting?,SciTech
 do you still use a landline ?,Movies_TV
 how are you doing on this fine evening?,Phatic
-do you like government?,Phatic
+do you like the government?,Phatic
 do you know any interesting facts about government?,Politics
 do you know much about presidential history?,Other
 do you know much about humans?,SciTech
@@ -2109,7 +2107,7 @@ do you listen to the radio?,Music
 do you play golf?,Sports
 do you like golf?,Sports
 do you play golf ?,Sports
-have you paid much attention with what's been going on with brexit?,Phatic
+have you paid much attention to what's been going on with brexit?,Phatic
 did you know the dutch are creating a bus that goes 160 mph?,Other
 do you like to travel?,Travel_Geo
 do you like to travel?,Travel_Geo
@@ -2137,7 +2135,7 @@ do you enjoy reading?,Travel_Geo
 did you watch the last soccer world cup?,Sports
 did you have much interest in last summers fifa world cup?,Sports
 do you know what the 5th planet in the solar system is?,SciTech
-do you used it?,Phatic
+do you use it?,Phatic
 do you watch basketball very often?,Sports
 do you watch football?,Sports
 do you like soccer?,Sports
@@ -2208,7 +2206,7 @@ do you like cars?,Games
 have you seen the show the romanoffs?,Movies_TV
 do you enjoy using the internet?,Phatic
 do you have a car?,SciTech
-do you used facebook?,SciTech
+do you use facebook?,SciTech
 do you like reading?,Travel_Geo
 do you like to eat mcdonald's?,Phatic
 do you like cars?,Games
@@ -2230,7 +2228,7 @@ did you ever play with a nintendo?,Games
 are you a fan of the nintendo system?,SciTech
 do you have a favorite basketball player?,Sports
 do you like rap music?,Music
-did you know the 3 horizontal lines on the menu of internet and app are called a hamburger?,SciTech
+did you know the 3 horizontal lines on the menu of the internet and app are called a hamburger?,SciTech
 did you know the presidents guest house is bigger than the white house?,Other
 do you watch any tv drama?,Movies_TV
 do you like horror films?,Movies_TV
@@ -2289,7 +2287,7 @@ do you use facebook or myspace ?,SciTech
 do you know where the headquarters of netflix is located?,Other
 who did kanye west speak with at msnbc?,Celebrities
 do you like comedy films?,Movies_TV
-do you follow government?,Phatic
+do you follow the government?,Phatic
 do you use youtube?,Music
 have you watched the show hosted by murphy brown?,Movies_TV
 how are you doing today?,Phatic
@@ -2361,7 +2359,7 @@ do you watch fox news?,News
 are you a fan of comedies?,Phatic
 do you watch tv?,Movies_TV
 how are you tonight?,Phatic
-do did you watch a lot tv in the 90s?,Movies_TV
+did you watch a lot tv in the 90s?,Movies_TV
 did you know the hebrew bible is known as tanakh?,Religion
 do you like drama?,Music
 i wonder why they were so happy blake shelton got blocked on the voice?,Music
@@ -2425,7 +2423,7 @@ do you like music?,Music
 are you a dog person?,Pets_Animals
 do you watch much television?,Movies_TV
 do you watch tv?,Movies_TV
-do you eatch tv?,Movies_TV
+do you watch tv?,Movies_TV
 do you know much about the presidents?,Movies_TV
 did you know the president's guest house is bigger than the white house?,Other
 do you like tv?,Movies_TV
@@ -2508,7 +2506,7 @@ do you watch netflix?,Movies_TV
 do you use netflix?,Phatic
 are you familiar with the show goosebumps 2 for kids?,Movies_TV
 do you ever watch shows on netflix?,Movies_TV
-do you follow government?,Phatic
+do you follow the government?,Phatic
 what do you think about the release of that isis member?,Politics
 what do you think of wikileaks?,Phatic
 do you know what wikileaks is?,Phatic
@@ -2996,7 +2994,7 @@ do you like dogs?,Pets_Animals
 are you a dog lover?,Pets_Animals
 do you like horses?,Pets_Animals
 do you watch much nfl games?,Games
-so do you care how bad russia's economy is or isn't?,Other
+so do you care how bad russia's economy is or it isn't?,Other
 are you a fan of our president?,Politics
 so apparently this butler guy stole a jersey it seems?,Movies_TV
 did you know that wikileaks published the government's plans to destroy wikileaks ?,Politics
@@ -3413,7 +3411,7 @@ do you watch nfl?,Movies_TV
 do you watch football?,Sports
 do you enjoy football and the nfl?,Sports
 are you an nfl fan?,Sports
-have yo heard about tom brady?,Travel_Geo
+have you heard about tom brady?,Travel_Geo
 what's your favorite team?,Sports
 do you enjoy the nfl?,Movies_TV
 are you an nfl fan?,Sports
@@ -3455,7 +3453,7 @@ do you usually vote in elections?,Politics
 what are your thoughts?,Celebrities
 do you know much about the presidents?,Movies_TV
 do you listen to the radio?,Music
-do you know that cars were invented in 1800's?,Other
+do you know that cars were invented in the 1800's?,Other
 how are you this morning?,Phatic
 do you know when russia invaded the ukraine?,Politics
 do you like to travel?,Travel_Geo
@@ -3485,7 +3483,6 @@ did you know it's possible to make a radio with a razorblade and pencil?,Music
 do you have a favorite kind of shoe?,Movies_TV
 do you buy nike products?,Other
 what kind of shoes do you like?,Fashion
-how you doing tonight?,Phatic
 do you watch much football at all?,Sports
 do you watch the nfl?,Movies_TV
 do you have a favorite piece of clothing?,Phatic
@@ -3581,7 +3578,7 @@ do you know anything about zimbabwe?,Other
 do you like radio programs?,Phatic
 are you comfortable talking about the government?,Politics
 do you still listen to the radio?,Music
-did you know that trump is not among the 3 most wealthiest potus'?,Phatic
+did you know that trump is not among the 3 most wealthy potus'?,Phatic
 do you like trump as president?,Politics
 do you follow politics?,Politics
 do you watch football?,Sports

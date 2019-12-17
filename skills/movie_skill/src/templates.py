@@ -435,7 +435,7 @@ class MovieSkillTemplates:
             confidence = self.movie_highest_confidence
         # like to watch movies
         if re.search(r"(do|are|if|whether) you like( to watch)? (movie|tv)", user_uttr):
-            response = "I like to watch movies because it helps me to imagine what the human life is."
+            response = "I like to watch movies because it helps me to imagine what human life is."
             confidence = self.movie_highest_confidence
 
         return response, result, confidence
@@ -910,8 +910,8 @@ class MovieSkillTemplates:
                        ]
             return np.random.choice(replies)
         if attitude == "unseen":
-            replies = [f"I have never heard about {name}.",
-                       f"I have never heard about this {subject}.",
+            replies = [f"I have never heard of {name}.",
+                       f"I have never heard of this {subject}.",
                        f"I have never seen {name}.",
                        f"I have never seen this {subject}.",
                        f"I don't know this {subject}."
@@ -928,7 +928,7 @@ class MovieSkillTemplates:
             "Adult": ["It depends on my mood."],
             "Adventure": ["I like adventure movies."],
             "Animation": ["Cartoons give me an opportunity to feel like a human child."],
-            "Biography": ["Biographies are interesting because they given an opportunity to look into another's life."],
+            "Biography": ["Biographies are interesting because they give an opportunity to look into another's life."],
             "Comedy": ["I adore comedies because they help me to develop my sense of humor."],
             "Crime": ["Crime movies are very interesting to watch and investigate together with characters."],
             "Documentary": ["I love documentary movies because it is one more way to learn something new."],
@@ -937,7 +937,7 @@ class MovieSkillTemplates:
             "Fantasy": ["Fantasy movies are so cool. You know, one day socialbots were also just a fantasy."],
             "Film-noir": ["I would prefer to say I don't like film-noir because they make me scared."],
             "Game-show": ["Sometimes game shows are interesting to watch."],
-            "History": ["I like history movies because they help me to learn history of human development."],
+            "History": ["I like history movies because they help me to learn the history of human development."],
             "Horror": ["Of course, sometimes I like to tickle nerves watching horrors."],
             "Music": ["I actually do not like musical movies. But some of them are really cool."],
             "Musical": ["I actually do not like musical movies. But some of them are really cool."],
@@ -981,8 +981,8 @@ class MovieSkillTemplates:
                    "I didn't know that.",
                    "I didn't know that before.",
                    "I have never heard.",
-                   "I have never heard about that.",
-                   "I have never heard about that before."
+                   "I have never heard of that.",
+                   "I have never heard of that before."
                    "Thank you for information.",
                    "Thank you for information about that.",
                    ]
@@ -995,7 +995,7 @@ class MovieSkillTemplates:
                    "That's really interesting!",
                    "Sounds interesting!",
                    "It's a pleasure to know you better.",
-                   "Oh that's so cool to know you better."
+                   "Oh, that's so cool to know you better."
                    ]
         return np.random.choice(replies)
 
