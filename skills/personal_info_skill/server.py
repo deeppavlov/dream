@@ -86,7 +86,7 @@ def process_info(dialog, which_info="name"):
         "location": re.search(
             r"((what is|what's|whats|tell me) your? location|"
             r"where do you live|where are you now|"
-            r"is that were you live now)",
+            r"is that where you live now)",
             prev_bot_uttr) or re.search(
             r"(my (location is|location's)|(i am|i'm|i)( live| living)? in([a-zA-z ]+)?now)",
             curr_user_uttr)
@@ -96,8 +96,8 @@ def process_info(dialog, which_info="name"):
                            "homeland": "I didn't get your homeland. Could you, please, repeat it."}
 
     response_phrases = {"name": f"Nice to meet you. I will remember your name, ",
-                        "location": f"Cool! I will remember your location is ",
-                        "homeland": f"Cool! Is that were you live now?"}
+                        "location": f"Cool! I will remember your location is in ",
+                        "homeland": f"Cool! Is that where you live now?"}
 
     got_info = False
     # if user doesn't want to share his info
@@ -107,15 +107,15 @@ def process_info(dialog, which_info="name"):
         confidence = 1.0
         return response, confidence, human_attr, bot_attr
 
-    if re.search(r"is that were you live now",
+    if re.search(r"is that where you live now",
                  prev_bot_uttr) and curr_user_annot.get("intent_catcher",
                                                         {}).get("yes", {}).get("detected", 0) == 1:
         logger.info(f"Found location=homeland")
         human_attr["location"] = dialog["human"]["attributes"]["homeland"]
-        response = f"Cool! I will remember your location is {human_attr['location']}."
+        response = f"Cool! I will remember your location is in {human_attr['location']}."
         confidence = 10.0
         got_info = True
-    elif re.search(r"is that were you live now",
+    elif re.search(r"is that where you live now",
                    prev_bot_uttr) and curr_user_annot.get("intent_catcher",
                                                           {}).get("no", {}).get("detected", 0) == 1:
         logger.info(f"Found location is not homeland")
