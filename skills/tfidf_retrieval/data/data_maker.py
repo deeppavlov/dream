@@ -58,7 +58,7 @@ def __main__():
                 bot_phrase = dialog['utterances'][i]['text']
                 user_phrase = dialog['utterances'][i - 1]['text']
                 utterance_num = i // 2
-                if (id_, utterance_num) in good_turns:
+                if (id_, utterance_num) in good_turns and '#+#' not in bot_phrase:
                     good_poor_phrases[0]['good'][user_phrase] = bot_phrase
                 if (id_, utterance_num) in poor_turns:
                     good_poor_phrases[0]['poor'][user_phrase] = bot_phrase
