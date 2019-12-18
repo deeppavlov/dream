@@ -17,7 +17,7 @@ def most_frequent(List):
 
 
 def preprocess(phrase):
-    for sign in '!#$%&*+.,:;<>=?@[]^_{}|':
+    for sign in '!$%&*.,:;<>=?@[]^_{}|':
         phrase = phrase.replace(sign, ' ' + sign + ' ')
     return phrase
 
@@ -100,7 +100,7 @@ donotknow_answers = ["I really do not know what to answer.",
 donotknow_answers = [preprocess(j) for j in donotknow_answers]
 todel_userphrases = ['yes']
 banned_words = ['Benjamin', 'misheard', 'cannot do this',
-                "I didn't get your homeland .  Could you ,  please ,  repeat it . "]
+                "I didn't get your homeland .  Could you ,  please ,  repeat it . ", '#+#']
 vectorizer = get_vectorizer(vectorizer_dir=vectorizer_dir)
 dialog_list = get_dialogs(dialog_dir=dialog_dir, custom_dialog_dir=custom_dialog_dir,
                           full_dialog_dir=full_dialog_dir)
