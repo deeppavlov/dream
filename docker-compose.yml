@@ -361,4 +361,15 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+  christmas_new_year_skill:
+    build:
+      context: ./skills/christmas_new_year_skill/
+    command: gunicorn --workers=4 server:app -b 0.0.0.0:8036
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
 version: '3.7'

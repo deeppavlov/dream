@@ -41,4 +41,6 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8028
   personal_info_skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8030
+  christmas_new_year_skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8036
 version: '3.7'

@@ -175,7 +175,7 @@ class IMDb:
                            "lets chat", "in", "if", "can", "o", "ok", "one",
                            "two", "film", "new", "next", "out", "love",
                            "like", "watch", "actress", "less", "want", "abortion",
-                           "alexa", "you tell me", "movie movie"
+                           "alexa", "you tell me", "movie movie", "tricks"
                            ]:
             try:
                 self.with_ignored_movies_names.pop(proc_title)

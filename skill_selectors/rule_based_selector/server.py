@@ -102,6 +102,7 @@ class RuleBasedSelector():
             # always add dummy_skill
             skills_for_uttr.append("dummy_skill")
             skills_for_uttr.append("personal_info_skill")
+            skills_for_uttr.append("christmas_new_year_skill")
 
             # Use only misheard asr skill if asr is not confident and skip it for greeting
             if not_confident_asr and len(dialog['utterances']) > 1:

@@ -165,6 +165,16 @@ SKILLS = [
         "path": "",
         "formatter": skill_with_attributes_formatter
     },
+    {
+        "name": "christmas_new_year_skill",
+        "protocol": "http",
+        "host": "christmas_new_year_skill",
+        "port": 8036,
+        "endpoint": "respond",
+        "external": True,
+        "path": "",
+        "formatter": skill_with_attributes_formatter
+    },
 ]
 
 ANNOTATORS_1 = [
