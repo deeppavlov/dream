@@ -124,6 +124,10 @@ services:
     image: ${DOCKER_REGISTRY}/book_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
+  christmas_new_year_skill:
+    image: ${DOCKER_REGISTRY}/christmas_new_year_skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
 volumes:
   external-logs:
   external-deeppavlov:

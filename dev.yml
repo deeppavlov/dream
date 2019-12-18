@@ -192,4 +192,10 @@ services:
       - "./skills/misheard_asr:/src"
     ports:
       - 8033:8033
+  christmas_new_year_skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/christmas_new_year_skill:/src"
+    ports:
+      - 8036:8036
 version: "3.7"
