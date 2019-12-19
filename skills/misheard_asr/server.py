@@ -16,7 +16,6 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-
 misheard_responses = np.array(["Excuse me, I misheard you. Could you repeat that, please?",
                                "I couldn't hear you. Could you say that again, please?",
                                "Sorry, I didn't catch that. Could you say it again, please?"
@@ -29,14 +28,72 @@ def misheard_response():
     dialogs_batch = request.json["dialogs"]
     final_confidences = []
     final_responses = []
+    final_human_attributes = []
+    final_bot_attributes = []
 
     for dialog in dialogs_batch:
-        final_responses.append([np.random.choice(misheard_responses)])
-        final_confidences.append([1.0])
+        prev_user_utt = None
+        if len(dialog['utterances']) > 2 :
+            prev_user_utt = dialog['utterances'][-3]
+        bot_attributes = dialog["bot"]["attributes"]
+        human_attributes = dialog["human"]["attributes"]
+        current_user_utt = dialog['utterances'][-1]
+        prev_bot_utt = dialog['utterances'][-2]
+        logger.debug(f"MISHEARD ASR INPUT: current utt text: {current_user_utt['text']};"
+                     f"bot attrs: {bot_attributes}; user attrs: {human_attributes}"
+                     f"HYPOTS: {current_user_utt['hypotheses']}"
+                     f"PREV BOT UTT: {prev_bot_utt}")
+        if bot_attributes.get('asr_misheard') is True and prev_bot_utt['active_skill'] == 'misheard_asr':
+            bot_attributes['asr_misheard'] = False
+            if current_user_utt['annotations']['intent_catcher'].get('yes', {}).get('detected') == 1:
+                hypots = prev_user_utt["hypotheses"]
+                logger.debug(f"PREV HYPOTS: {hypots}")
+                candidates = []
+                confs = []
+                for resp in hypots:
+                    if resp["skill_name"] != "misheard_asr":
+                        candidates.append(resp['text'])
+                        confs.append(resp['confidence'])
+                final_responses.append(candidates)
+                final_confidences.append(confs)
+                final_human_attributes.append([human_attributes] * len(candidates))
+                final_bot_attributes.append([bot_attributes] * len(candidates))
+            elif current_user_utt['annotations']['intent_catcher'].get('no', {}).get('detected') == 1:
+                response = "What is it that you'd like to chat about?"
+                final_responses.append([response])
+                final_confidences.append([1.0])
+                final_human_attributes.append([human_attributes])
+                final_bot_attributes.append([bot_attributes])
+            else:
+                final_responses.append(["sorry"])
+                final_confidences.append([0.0])
+                final_human_attributes.append([human_attributes])
+                final_bot_attributes.append([bot_attributes])
+        else:
+            bot_attributes['asr_misheard'] = False
+            if current_user_utt['annotations']['asr']['asr_confidence'] == 'very_low':
+                final_responses.append([np.random.choice(misheard_responses)])
+                final_confidences.append([1.0])
+                final_human_attributes.append([human_attributes])
+                final_bot_attributes.append([bot_attributes])
+            elif current_user_utt['annotations']['asr']['asr_confidence'] == 'medium':
+                response = f"Excuse me, I misheard you. Have you said: \"{dialog['utterances'][-1]['text']}\"?"
+                final_responses.append([response])
+                final_confidences.append([1.0])
+                bot_attributes['asr_misheard'] = True
+                final_human_attributes.append([human_attributes])
+                final_bot_attributes.append([bot_attributes])
+            else:
+                final_responses.append(["sorry"])
+                final_confidences.append([0.0])
+                final_human_attributes.append([human_attributes])
+                final_bot_attributes.append([bot_attributes])
 
     total_time = time.time() - st_time
     logger.info(f'misheard_asr#misheard_respond exec time: {total_time:.3f}s')
-    return jsonify(list(zip(final_responses, final_confidences)))
+    resp = list(zip(final_responses, final_confidences, final_human_attributes, final_bot_attributes))
+    logger.debug(f'misheard_asr#misheard_respond OUTPUT: {resp}')
+    return jsonify(resp)
 
 
 if __name__ == '__main__':

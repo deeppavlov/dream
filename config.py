@@ -113,7 +113,7 @@ SKILLS = [
         "endpoint": "misheard_respond",
         "external": True,
         "path": "",
-        "formatter": cobot_qa_formatter
+        "formatter": misheard_asr_formatter
     },
     {
         "name": "program_y_dangerous",

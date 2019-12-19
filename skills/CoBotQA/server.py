@@ -33,7 +33,7 @@ if COBOT_QA_SERVICE_URL is None:
 headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COBOT_API_KEY}'}
 
 with open("./google-10000-english-no-swears.txt", "r") as f:
-    UNIGRAMS = f.read().splitlines()[:1002]
+    UNIGRAMS = f.read().splitlines()[:1003]
 
 
 def remove_punct_and_articles(s, lowecase=True):
