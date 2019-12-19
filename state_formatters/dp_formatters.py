@@ -261,6 +261,17 @@ def cobot_qa_formatter(payload, mode='in'):
         return hyps
 
 
+def misheard_asr_formatter(payload, mode='in'):
+    if mode == 'in':
+        dialogs = annotated_input_formatter(payload, annotation="coref_resolved")['dialogs']
+        return {'dialogs': dialogs}
+    elif mode == 'out':
+        hyps = []
+        for resp, conf, ha, ba in zip(payload[0], payload[1], payload[2], payload[3]):
+            hyps.append({"text": resp, "confidence": conf, "human_attributes": ha, "bot_attributes": ba})
+        return hyps
+
+
 def base_skill_selector_formatter(payload: Any, mode='in'):
     if mode == 'in':
         dialogs = annotated_input_formatter(payload, annotation="punctuated")['dialogs']

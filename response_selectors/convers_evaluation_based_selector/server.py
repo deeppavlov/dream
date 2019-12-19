@@ -215,11 +215,14 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     how_are_you_spec = "I'm fine, thanks! Do you want to know what I can do?"
     psycho_help_spec = "If you or someone you know is in immediate danger"
     greeting_spec = "this is an Alexa Prize Socialbot"
+    misheard_with_spec1 = "I misheard you"
+    misheard_with_spec2 = "like to chat about"
 
     very_big_score = 100
     question = ""
 
     for i in range(len(scores)):
+        is_misheard = misheard_with_spec1 in candidates[i]['text'] or misheard_with_spec2 in candidates[i]['text']
         if len(dialog['utterances']) < 2 and greeting_spec not in candidates[i]['text'] \
                 and skill_names[i] == 'program_y':
             # greet user in first utterance
@@ -240,6 +243,9 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                 confidences[i] = 0.2  # Low confidence for greeting in the middle of dialogue
         elif skill_names[i] == 'cobotqa' and "Here's something I found on the web." in candidates[i]['text']:
             confidences[i] = 0.6
+        elif skill_names[i] == 'misheard_asr' and is_misheard:
+            curr_single_scores.append(very_big_score)
+            break
         if skill_names[i] == 'dummy_skill':
             question = candidates[i]['text']
 

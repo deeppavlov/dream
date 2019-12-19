@@ -18,9 +18,6 @@ app = Flask(__name__)
 
 
 class RuleBasedSelector():
-    """
-    Rule-based skill selector which choosing among TransferTransfo, Base AIML and Alice AIML
-    """
     wh_words = {"what", "when", "where", "which", "who", "whom", "whose", "why", "how"}
     first_question_words = {
         "do", "have", "did", "had", "are", "is", "am", "will",
@@ -53,8 +50,6 @@ class RuleBasedSelector():
             intent_detected = any([v['detected'] == 1 for k, v in
                                    dialog['utterances'][-1]['annotations']['intent_catcher'].items()
                                    if k not in {'opinion_request', 'yes', 'no', 'tell_me_more', 'doing_well'}])
-
-            not_confident_asr = dialog['utterances'][-1]['annotations']['asr']['asr_confidence'] == 'very_low'
             cobot_topics = set(dialog['utterances'][-1]['annotations']['cobot_topics']['text'])
             sensitive_topics_detected = any([t in self.sensitive_topics for t in cobot_topics])
             cobot_dialogacts = dialog['utterances'][-1]['annotations']['cobot_dialogact']['intents']
@@ -104,9 +99,11 @@ class RuleBasedSelector():
             skills_for_uttr.append("personal_info_skill")
             skills_for_uttr.append("christmas_new_year_skill")
 
-            # Use only misheard asr skill if asr is not confident and skip it for greeting
-            if not_confident_asr and len(dialog['utterances']) > 1:
-                skills_for_uttr = ["misheard_asr"]
+            if len(dialog['utterances']) > 1:
+                skills_for_uttr += ["misheard_asr"]
+                # Use only misheard asr skill if asr is not confident and skip it for greeting
+                if dialog['utterances'][-1]['annotations']['asr']['asr_confidence'] == 'very_low':
+                    skills_for_uttr = ["misheard_asr"]
             skill_names.append(skills_for_uttr)
 
         return skill_names
