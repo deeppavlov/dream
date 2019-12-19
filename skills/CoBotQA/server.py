@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import json
 import logging
 import os
 import string
@@ -8,11 +7,11 @@ from time import time
 
 import numpy as np
 from nltk.tokenize import sent_tokenize, word_tokenize
-import requests
 from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
+from cobotqa_service import send_cobotqa
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -44,34 +43,6 @@ def remove_punct_and_articles(s, lowecase=True):
     no_punct = ''.join([c for c in s if c not in string.punctuation])
     no_articles = ' '.join([w for w in word_tokenize(no_punct) if w.lower() not in articles])
     return no_articles
-
-
-def send_cobotqa(question):
-    request_body = {'question': question}
-    try:
-        resp = requests.request(url=COBOT_QA_SERVICE_URL,
-                                headers=headers,
-                                data=json.dumps(request_body),
-                                method='POST',
-                                timeout=10)
-    except (requests.ConnectTimeout, requests.ReadTimeout) as e:
-        sentry_sdk.capture_exception(e)
-        logger.exception("CoBotQA Timeout")
-        resp = requests.Response()
-        resp.status_code = 504
-
-    if resp.status_code != 200:
-        logger.warning(
-            f"result status code is not 200: {resp}. result text: {resp.text}; "
-            f"result status: {resp.status_code}")
-        response = ''
-        sentry_sdk.capture_message(
-            f"CobotQA! result status code is not 200: {resp}. result text: {resp.text}; "
-            f"result status: {resp.status_code}")
-    else:
-        response = resp.json()['response']
-
-    return response
 
 
 @app.route("/respond", methods=['POST'])
