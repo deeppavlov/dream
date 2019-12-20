@@ -108,6 +108,8 @@ services:
     image: ${DOCKER_REGISTRY}/tfidf_retrieval:${VERSION}
     env_file:
       - ${ENV_FILE}
+  music_tfidf_retrieval:
+    image: ${DOCKER_REGISTRY}/music_tfidf_retrieval:${VERSION}
   convert_reddit:
     image: ${DOCKER_REGISTRY}/convert_reddit:${VERSION}
     env_file:

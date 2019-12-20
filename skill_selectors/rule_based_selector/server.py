@@ -86,6 +86,11 @@ class RuleBasedSelector():
             about_movies = (movie_cobot_dialogacts & cobot_dialogact_topics) | (movie_cobot_topics & cobot_topics)
             if about_movies:
                 skills_for_uttr.append("movie_skill")
+
+            about_music = ("Entertainment_Music" in cobot_dialogact_topics) | ("Music" in cobot_topics)
+            if about_music and len(dialog["utterances"]) > 2:
+                skills_for_uttr.append("music_tfidf_retrieval")
+
             books_cobot_dialogacts = {
                 "Entertainment_General", "Entertainment_Books"
             }

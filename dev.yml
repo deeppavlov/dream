@@ -168,6 +168,13 @@ services:
       - "./skills/tfidf_retrieval:/src"
     ports:
       - 8028:8028
+
+  music_tfidf_retrieval:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/music_tfidf_retrieval:/src"
+    ports:
+      - 8034:8034
   convert_reddit:
     env_file: [.env.dev]
     volumes:

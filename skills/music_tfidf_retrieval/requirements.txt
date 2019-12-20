@@ -1,0 +1,7 @@
+flask==1.1.1
+gunicorn==19.9.0
+requests==2.22.0
+numpy==1.17.2
+sentry-sdk==0.13.3
+scikit-learn==0.21.3
+Cython==0.29.13
