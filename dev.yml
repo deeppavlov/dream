@@ -168,6 +168,12 @@ services:
       - "./skills/tfidf_retrieval:/src"
     ports:
       - 8028:8028
+  convert_reddit:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/convert_reddit:/app"
+    ports:
+      - 8029:8029
   personal_info_skill:
     env_file: [.env.dev]
     volumes:

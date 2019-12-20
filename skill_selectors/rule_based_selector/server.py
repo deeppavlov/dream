@@ -74,6 +74,7 @@ class RuleBasedSelector():
                     skills_for_uttr.append("tfidf_retrieval")
                 # skills_for_uttr.append("transfertransfo")
                 # skills_for_uttr.append("retrieval_chitchat")
+                    skills_for_uttr.append("convert_reddit")
             movie_cobot_dialogacts = {
                 "Entertainment_Movies", "Sports", "Entertainment_Music", "Entertainment_General",
                 "Phatic"
