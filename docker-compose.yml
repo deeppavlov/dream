@@ -320,6 +320,17 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+  convert_reddit:
+    build:
+      context: ./skills/convert_reddit/
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8029 -t 60
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   personal_info_skill:
     build:
       context: ./skills/personal_info_skill/

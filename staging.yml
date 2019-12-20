@@ -108,6 +108,10 @@ services:
     image: ${DOCKER_REGISTRY}/tfidf_retrieval:${VERSION}
     env_file:
       - ${ENV_FILE}
+  convert_reddit:
+    image: ${DOCKER_REGISTRY}/convert_reddit:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   personal_info_skill:
     image: ${DOCKER_REGISTRY}/personal_info_skill:${VERSION}
     env_file:

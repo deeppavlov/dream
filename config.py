@@ -146,6 +146,16 @@ SKILLS = [
         "formatter": tfidf_formatter
     },
     {
+        "name": "convert_reddit",
+        "protocol": "http",
+        "host": "convert_reddit",
+        "port": 8029,
+        "endpoint": "convert_reddit",
+        "external": True,
+        "path": "",
+        "formatter": transfertransfo_formatter
+    },
+    {
         "name": "personal_info_skill",
         "protocol": "http",
         "host": "personal_info_skill",
