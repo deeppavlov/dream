@@ -8,7 +8,8 @@ RUN apt-get update -y --fix-missing && \
         openssl \
         git \
         libssl-dev \
-        libffi-dev && \
+        libffi-dev \
+        cron && \
     rm -rf /var/lib/apt/lists/*
 
 ENV PYTHONIOENCODING=utf-8
@@ -25,5 +26,12 @@ ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 ENV PYTHONPATH "${PYTHONPATH}:/dp-agent"
 ENV DPA_LAUNCHING_ENV "docker"
+
+# cronjobs
+RUN mkdir /cron_env
+COPY ./utils/agent_cronjobs /etc/cron.d/agent_cronjobs
+RUN chmod 0644 /etc/cron.d/agent_cronjobs
+RUN crontab /etc/cron.d/agent_cronjobs
+RUN touch /var/log/cron.log
 
 EXPOSE 4242

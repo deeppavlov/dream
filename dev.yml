@@ -1,6 +1,7 @@
 # С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
 services:
   agent:
+    command: sh -c 'bin/wait && python3 -m core.run -ch http_client --response-logger --debug'
     env_file: [.env.dev]
     volumes:
       - ".:/dp-agent"
