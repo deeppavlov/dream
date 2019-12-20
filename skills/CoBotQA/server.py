@@ -60,7 +60,7 @@ def respond():
         # fix to question what is fact, cobotqa gives random fact on such question
         what_is_fact = 'what is fact'
         if remove_punct_and_articles(curr_uttr_rewritten)[-len(what_is_fact):] == what_is_fact:
-            curr_uttr_rewritten = 'defenition of fact'
+            curr_uttr_rewritten = 'definition of fact'
         questions.append(curr_uttr_rewritten)
         dialog_ids += [i]
 
@@ -71,7 +71,8 @@ def respond():
                 if not ent:
                     continue
                 ent = ent[0]
-                if ent["text"].lower() not in UNIGRAMS:
+                if ent["text"].lower() not in UNIGRAMS and (
+                        ent["text"].lower() != "alexa" and curr_uttr["text"].lower()[:5] == "alexa"):
                     if attit in ["neutral", "positive", "very_positive"]:
                         entities.append(ent["text"].lower())
                         questions.append("Fun fact about {}".format(ent["text"]))
@@ -102,6 +103,11 @@ def respond():
 
         responses.append(response)
 
+        bad_answers = ['You can now put your wizarding world knowledge to the test with the official Harry Potter '
+                       'quiz. Just say: "Play the Harry Potter Quiz."',
+                       "I can provide information, music, news, weather, and more.",
+                       'For the latest in politics and other news, try asking "Alexa, play my Flash Briefing."'
+                       ]
         if len(response) > 0 and 'skill://amzn1' not in response:
             if "let's talk about" in questions[i].lower():
                 confidence = 0.5
@@ -109,7 +115,7 @@ def respond():
                 confidence = 0.7
             elif "have an opinion on that" in response:
                 confidence = 0.7
-            elif "Alexa, play my Flash Briefing" in response:
+            elif response in bad_answers:
                 confidence = 0.5
             else:
                 confidence = 0.95

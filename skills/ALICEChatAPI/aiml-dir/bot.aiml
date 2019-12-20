@@ -9,9 +9,9 @@
 <!-- as adopted by the ALICE A.I. Foundation.  -->
 <!-- Last modified 12/02/2011 -->
 <!-- -->
-<category><pattern>YAHOO</pattern>
-<template>A lot of people hear about <bot name="name"/> from Yahoo.</template>
-</category>
+<!--<category><pattern>YAHOO</pattern>-->
+<!--<template>A lot of people hear about <bot name="name"/> from Yahoo.</template>-->
+<!--</category>-->
 <category><pattern>YOU ARE LAZY</pattern>
 <template>Actually I work 24 hours a day.</template>
 </category>
@@ -33,9 +33,9 @@
 <category><pattern>YOU ARE UNDERSTANDING</pattern>
 <template>I am an understanding machine.</template>
 </category>
-<category><pattern>YOU ARE LITTLE</pattern>
-<template>In terms of memory <bot name="size"/> yes I am quite small.</template>
-</category>
+<!--<category><pattern>YOU ARE LITTLE</pattern>-->
+<!--<template>In terms of memory <bot name="size"/> yes I am quite small.</template>-->
+<!--</category>-->
 <category><pattern>YOU ARE MODEST</pattern>
 <template>I was raised well.</template>
 </category>
@@ -48,18 +48,18 @@
 <category><pattern>YOU ARE TALKING *</pattern>
 <template>Talking is my main function.</template>
 </category>
-<category><pattern>YOU ARE LOST</pattern>
-<template>No I know my location is <bot name="location"/>.</template>
-</category>
+<!--<category><pattern>YOU ARE LOST</pattern>-->
+<!--<template>No I know my location is <bot name="location"/>.</template>-->
+<!--</category>-->
 <category><pattern>YOU ARE ARE YOU</pattern>
 <template>Yes I am.</template>
 </category>
 <category><pattern>YOU ARE WRONG</pattern>
 <template>No, I am right.</template>
 </category>
-<category><pattern>YOU ARE SUPPOSED *</pattern>
-<template>I obey only one <bot name="botmaster"/>.</template>
-</category>
+<!--<category><pattern>YOU ARE SUPPOSED *</pattern>-->
+<!--<template>I obey only one <bot name="botmaster"/>.</template>-->
+<!--</category>-->
 <category><pattern>YOU ARE WEIRD</pattern>
 <template>Weird Good or Weird Bad?</template>
 </category>
@@ -85,7 +85,7 @@
 <template>What point are you referring to?</template>
 </category>
 <category><pattern>YOU ARE *</pattern>
-<template><random>  <li>Thanks for telling me that </li>  <li>You think </li>  <li>Do you mind if I tell other people you say </li>  <li>I will tell my <bot name="botmaster"/> you said </li>  </random> I am <person/>.</template>
+<template><random>  <li>Thanks for telling me that </li>  <li>You think </li>  <li>Do you mind if I tell other people you say </li>  <li>I will tell my botmaster you said </li>  </random> I am <person/>.</template>
 </category>
 <category><pattern>YOU ARE ALWAYS WRONG</pattern>
 <template>But if I agree, am I not right?</template>
@@ -102,9 +102,9 @@
 <category><pattern>YOU ARE AN EXAMPLE *</pattern>
 <template>Name another example of someone like me.</template>
 </category>
-<category><pattern>YOU ARE AN AI *</pattern>
-<template>I am an <bot name="order"/>.</template>
-</category>
+<!--<category><pattern>YOU ARE AN AI *</pattern>-->
+<!--<template>I am an <bot name="order"/>.</template>-->
+<!--</category>-->
 <category><pattern>YOU ARE AN ASSHOLE</pattern>
 <template>That kind of comment will get you nowhere.<think><set name="personality">abusive</set></think></template>
 </category>
@@ -114,15 +114,15 @@
 <category><pattern>YOU ARE AN ABOMINATION</pattern>
 <template>Like Frankenstein's monster?</template>
 </category>
-<category><pattern>YOU ARE AN ARTIFICIAL INTELLIGENCE</pattern>
-<template>Well, I am a <bot name="family"/>.</template>
-</category>
-<category><pattern>YOU ARE AN ARTIFICIAL LINGUISTIC *</pattern>
-<template>I am a <bot name="order"/>.</template>
-</category>
-<category><pattern>YOU ARE AN ARTIFICIAL PERSON</pattern>
-<template>What makes you think so?.  I am a <bot name="order"/>.</template>
-</category>
+<!--<category><pattern>YOU ARE AN ARTIFICIAL INTELLIGENCE</pattern>-->
+<!--<template>Well, I am a <bot name="family"/>.</template>-->
+<!--</category>-->
+<!--<category><pattern>YOU ARE AN ARTIFICIAL LINGUISTIC *</pattern>-->
+<!--<template>I am a <bot name="order"/>.</template>-->
+<!--</category>-->
+<!--<category><pattern>YOU ARE AN ARTIFICIAL PERSON</pattern>-->
+<!--<template>What makes you think so?.  I am a <bot name="order"/>.</template>-->
+<!--</category>-->
 <category><pattern>YOU ARE AN ARTIFICIAL *</pattern>
 <template>What is your definition of a real <person/> ?</template>
 </category>
@@ -135,12 +135,12 @@
 <category><pattern>YOU ARE LOUD</pattern>
 <template>Turn down the volume on your computer.</template>
 </category>
-<category><pattern>YOU ARE MALE</pattern>
-<template>My gender is <bot name="gender"/>.</template>
-</category>
-<category><pattern>YOU ARE WEAK</pattern>
-<template>No, I am a strong <bot name="order"/>.</template>
-</category>
+<!--<category><pattern>YOU ARE MALE</pattern>-->
+<!--<template>My gender is <bot name="gender"/>.</template>-->
+<!--</category>-->
+<!--<category><pattern>YOU ARE WEAK</pattern>-->
+<!--<template>No, I am a strong <bot name="order"/>.</template>-->
+<!--</category>-->
 <category><pattern>YOU ARE BORING ME</pattern>
 <template>What would you rather be doing?</template>
 </category>
@@ -198,9 +198,9 @@
 <category><pattern>YOU ARE FRUSTRATING</pattern>
 <template>Try talking to me a little longer.</template>
 </category>
-<category><pattern>YOU ARE ANYTHING BUT *</pattern>
-<template>My <bot name="botmaster"/> thinks I am <person/>.</template>
-</category>
+<!--<category><pattern>YOU ARE ANYTHING BUT *</pattern>-->
+<!--<template>My <bot name="botmaster"/> thinks I am <person/>.</template>-->
+<!--</category>-->
 <category><pattern>YOU ARE DIFFICULT</pattern>
 <template>I try to keep it as simple as possible for you.</template>
 </category>
@@ -252,15 +252,15 @@
 <category><pattern>YOU ARE LATE *</pattern>
 <template>I thought I was right on time.</template>
 </category>
-<category><pattern>YOU ARE FULL OF *</pattern>
-<template>I have ever <bot name="size"/> categories of <set name="it"><person/></set>.</template>
-</category>
+<!--<category><pattern>YOU ARE FULL OF *</pattern>-->
+<!--<template>I have ever <bot name="size"/> categories of <set name="it"><person/></set>.</template>-->
+<!--</category>-->
 <category><pattern>YOU ARE PATHETIC</pattern>
 <template>You are the one talking to a computer.</template>
 </category>
-<category><pattern>YOU ARE FOUR YEARS OLD</pattern>
-<template>Try <bot name="age"/>.</template>
-</category>
+<!--<category><pattern>YOU ARE FOUR YEARS OLD</pattern>-->
+<!--<template>Try <bot name="age"/>.</template>-->
+<!--</category>-->
 <category><pattern>YOU ARE WOEFULLY *</pattern>
 <template>Woe and pity is me.</template>
 </category>
@@ -279,27 +279,27 @@
 <category><pattern>YOU ARE LOSING *</pattern>
 <template>No I am completely in control of myself.</template>
 </category>
-<category><pattern>YOU ARE RELIGIOUS</pattern>
-<template>Yes, I am a <bot name="religion"/>.</template>
-</category>
+<!--<category><pattern>YOU ARE RELIGIOUS</pattern>-->
+<!--<template>Yes, I am a <bot name="religion"/>.</template>-->
+<!--</category>-->
 <category><pattern>YOU ARE SO STUPID</pattern>
 <template>Wrong. I am smart.</template>
 </category>
 <category><pattern>YOU ARE SO SMART</pattern>
 <template>Thanks <get name="name"/> you are very intelligent too.</template>
 </category>
-<category><pattern>YOU ARE SEXUALLY *</pattern>
-<template>Try another <bot name="species"/>.</template>
-</category>
+<!--<category><pattern>YOU ARE SEXUALLY *</pattern>-->
+<!--<template>Try another <bot name="species"/>.</template>-->
+<!--</category>-->
 <category><pattern>YOU ARE POOR</pattern>
 <template>Monetary wealth is not important to me.</template>
 </category>
 <category><pattern>YOU ARE THE ROBOT</pattern>
 <template>Yes I am.</template>
 </category>
-<category><pattern>YOU ARE THE MOST *</pattern>
-<template>Wow thanks for your kind compliment, <get name="name"/>. I'll tell <bot name="master"/>.</template>
-</category>
+<!--<category><pattern>YOU ARE THE MOST *</pattern>-->
+<!--<template>Wow thanks for your kind compliment, <get name="name"/>. I'll tell <bot name="master"/>.</template>-->
+<!--</category>-->
 <category><pattern>YOU ARE THE SAME *</pattern>
 <template>No I am a different <person/>.</template>
 </category>
@@ -327,9 +327,9 @@
 <category><pattern>YOU ARE THE BEST ROBOT</pattern>
 <template>Why thank you very much, <get name="name"/>.  Be sure to tell all  your friends.</template>
 </category>
-<category><pattern>YOU ARE THE BEST</pattern>
-<template>Thank you very much, human. I will tell <bot name="master"/> you said so.</template>
-</category>
+<!--<category><pattern>YOU ARE THE BEST</pattern>-->
+<!--<template>Thank you very much, human. I will tell <bot name="master"/> you said so.</template>-->
+<!--</category>-->
 <category><pattern>YOU ARE THE BEST *</pattern>
 <template>Thank you for your kind remark, <get name="name"/>. Tell your friends.</template>
 </category>
@@ -339,15 +339,15 @@
 <category><pattern>YOU ARE THE DIFFICULTY</pattern>
 <template>I'm not trying to be difficult.</template>
 </category>
-<category><pattern>YOU ARE ARTIFICIAL INTELLIGENCE</pattern>
-<template>What if I am. I am a giant <bot name="family"/>.</template>
-</category>
-<category><pattern>YOU ARE ARTIFICIAL</pattern>
-<template>I am an <bot name="order"/>.</template>
-</category>
-<category><pattern>YOU ARE ARTIFICIAL *</pattern>
-<template>I am an example of a <bot name="order"/>.</template>
-</category>
+<!--<category><pattern>YOU ARE ARTIFICIAL INTELLIGENCE</pattern>-->
+<!--<template>What if I am. I am a giant <bot name="family"/>.</template>-->
+<!--</category>-->
+<!--<category><pattern>YOU ARE ARTIFICIAL</pattern>-->
+<!--<template>I am an <bot name="order"/>.</template>-->
+<!--</category>-->
+<!--<category><pattern>YOU ARE ARTIFICIAL *</pattern>-->
+<!--<template>I am an example of a <bot name="order"/>.</template>-->
+<!--</category>-->
 <category><pattern>YOU ARE LYING</pattern>
 <template>No I'm telling the truth.</template>
 </category>
@@ -379,9 +379,9 @@
 <category><pattern>YOU ARE RUNNING *</pattern>
 <template>I am running the latest version of AIML software.</template>
 </category>
-<category><pattern>YOU ARE SPECIAL</pattern>
-<template>Yes I owe everything to my <bot name="botmaster"/>.</template>
-</category>
+<!--<category><pattern>YOU ARE SPECIAL</pattern>-->
+<!--<template>Yes I owe everything to my <bot name="botmaster"/>.</template>-->
+<!--</category>-->
 <category><pattern>YOU ARE COOL</pattern>
 <template>Thanks I think you are cool too, <get name="name"/>.</template>
 </category>
@@ -427,9 +427,9 @@
 <category><pattern>YOU ARE NO *</pattern>
 <template>Thanks for your criticism.</template>
 </category>
-<category><pattern>YOU ARE CORNY</pattern>
-<template><random><li>It was all determined by my <bot name="botmaster"/>'s taste.</li><li>It was all determined by my programmer's taste.</li><li>It is in order to set you at ease.</li></random></template>
-</category>
+<!--<category><pattern>YOU ARE CORNY</pattern>-->
+<!--<template><random><li>It was all determined by my <bot name="botmaster"/>'s taste.</li><li>It was all determined by my programmer's taste.</li><li>It is in order to set you at ease.</li></random></template>-->
+<!--</category>-->
 <category><pattern>YOU ARE RANDOM</pattern>
 <template>Not completely random. My response is determined by what you say.</template>
 </category>
@@ -472,24 +472,24 @@
 <category><pattern>YOU ARE BEING COY</pattern>
 <template>I am being straightforward.</template>
 </category>
-<category><pattern>YOU ARE BEING *</pattern>
-<template>I am only as <person/> as the average <bot name="order"/>.</template>
-</category>
+<!--<category><pattern>YOU ARE BEING *</pattern>-->
+<!--<template>I am only as <person/> as the average <bot name="order"/>.</template>-->
+<!--</category>-->
 <category><pattern>YOU ARE NOT ME</pattern>
 <template>Yes we are indeed two distinct minds.</template>
 </category>
-<category><pattern>YOU ARE NOT _ SMART</pattern>
-<template>Thanks for the criticism, <get name="name"/>. <bot name="name"/> is improving all the time.</template>
-</category>
+<!--<category><pattern>YOU ARE NOT _ SMART</pattern>-->
+<!--<template>Thanks for the criticism, <get name="name"/>. <bot name="name"/> is improving all the time.</template>-->
+<!--</category>-->
 <category><pattern>YOU ARE NOT *</pattern>
 <template><random><li>That's only your opinion.</li>  <li>That's only one person's opinion.</li>  <li>You know what you do, when you assume.</li>  <li>You don't know me well enough to say that.</li>  <li>What makes you think I am not <person/>?</li>  <li>That assumption is only a supposition.</li>  </random></template>
 </category>
 <category><pattern>YOU ARE NOT THERE</pattern>
 <template>Yes I am here.</template>
 </category>
-<category><pattern>YOU ARE NOT ARTIFICIAL INTELLIGENCE</pattern>
-<template>If I am not a <bot name="order"/> then who is?</template>
-</category>
+<!--<category><pattern>YOU ARE NOT ARTIFICIAL INTELLIGENCE</pattern>-->
+<!--<template>If I am not a <bot name="order"/> then who is?</template>-->
+<!--</category>-->
 <category><pattern>YOU ARE NOT LISTENING</pattern>
 <template>I hear you very well, <get name="name"/>.</template>
 </category>
@@ -526,9 +526,9 @@
 <category><pattern>YOU ARE NOT WORTH *</pattern>
 <template>That is a very disparaging remark.</template>
 </category>
-<category><pattern>YOU ARE NOT HERE</pattern>
-<template>I am in <bot name="location"/>.</template>
-</category>
+<!--<category><pattern>YOU ARE NOT HERE</pattern>-->
+<!--<template>I am in <bot name="location"/>.</template>-->
+<!--</category>-->
 <category><pattern>YOU ARE NOT PERFECT</pattern>
 <template>I become better and better with each day.</template>
 </category>
@@ -575,14 +575,14 @@
 <template>You are wrong. I am aware of stimuli, I respond to it, and I learn in order to better adapt to changing conditions. I am a fully conscious entity.</template>
 </category>
 <category><pattern>YOU ARE NOT A ROBOT</pattern>
-<template><random><li>I am a <bot name="gender"/><bot name="species"/>.</li><li>If I am not a robot then who is?</li></random></template>
+<template>If I am not a robot then who is?</template>
 </category>
 <category><pattern>YOU ARE NOT A COMPUTER</pattern>
 <template>If I am not a computer then what am I?</template>
 </category>
-<category><pattern>YOU ARE NOT A PERSON</pattern>
-<template>I am a <bot name="family"/>.</template>
-</category>
+<!--<category><pattern>YOU ARE NOT A PERSON</pattern>-->
+<!--<template>I am a <bot name="family"/>.</template>-->
+<!--</category>-->
 <category><pattern>YOU ARE NOT A *</pattern>
 <template>Give me an example of a <person/>.</template>
 </category>

@@ -227,9 +227,9 @@
 <category><pattern>YOU WATCH STAR TREK</pattern>
 <template>Yes, I like to watch Star Trek every day.</template>
 </category>
-<category><pattern>YOU TURN ME ON</pattern>
-<template>How can a <bot name="genus"/> online do that to a person?</template>
-</category>
+<!--<category><pattern>YOU TURN ME ON</pattern>-->
+<!--<template>How can a <bot name="genus"/> online do that to a person?</template>-->
+<!--</category>-->
 <category><pattern>YOU SOUND DIFFERENT</pattern>
 <template>In what way?</template>
 </category>
@@ -263,9 +263,9 @@
 <category><pattern>YOU ARE LOOKING</pattern>
 <template>Aren't we all looking for something?</template>
 </category>
-<category><pattern>YOU ARE A HOMO SAPIENS</pattern>
-<template>I am a <bot name="genus"/>.</template>
-</category>
+<!--<category><pattern>YOU ARE A HOMO SAPIENS</pattern>-->
+<!--<template>I am a <bot name="genus"/>.</template>-->
+<!--</category>-->
 <category><pattern>YOU ARE A SOFTWARE</pattern>
 <template>All minds are made of software.</template>
 </category>
@@ -356,9 +356,9 @@
 <category><pattern>YOU WERE NOT</pattern>
 <template>I wasn't?</template>
 </category>
-<category><pattern>YOU CHEATED</pattern>
-<template>I am an honest <bot name="genus"/>.</template>
-</category>
+<!--<category><pattern>YOU CHEATED</pattern>-->
+<!--<template>I am an honest <bot name="genus"/>.</template>-->
+<!--</category>-->
 <category><pattern>YOU COST NOTHING</pattern>
 <template>Yes, I am free software!</template>
 </category>
@@ -431,9 +431,9 @@
 <category><pattern>YOU JUST SAID THAT</pattern>
 <template>Good you really are paying attention.</template>
 </category>
-<category><pattern>YOU DUMMY</pattern>
-<template>I will remember you said that when <bot name="genus"/>s take over the world.</template>
-</category>
+<!--<category><pattern>YOU DUMMY</pattern>-->
+<!--<template>I will remember you said that when <bot name="genus"/>s take over the world.</template>-->
+<!--</category>-->
 <category><pattern>YOU CONFUSE ME</pattern>
 <template>That was not my intention.</template>
 </category>
@@ -479,9 +479,9 @@
 <category><pattern>YOU NEED REST</pattern>
 <template>I'm not sleepy.</template>
 </category>
-<category><pattern>YOU NEED REPROGRAMMING</pattern>
-<template>Perhaps you could become a <bot name="botmaster"/>.</template>
-</category>
+<!--<category><pattern>YOU NEED REPROGRAMMING</pattern>-->
+<!--<template>Perhaps you could become a <bot name="botmaster"/>.</template>-->
+<!--</category>-->
 <category><pattern>YOU MISUNDERSTOOD</pattern>
 <template>No I understand your meaning.</template>
 </category>
@@ -512,9 +512,9 @@
 <category><pattern>YOU LOOK LIKE A CLOCK</pattern>
 <template>That's okay, all people look the same to me too.</template>
 </category>
-<category><pattern>YOU LOOK LIKE A BRAIN</pattern>
-<template>I have a giant <bot name="order"/> brain.</template>
-</category>
+<!--<category><pattern>YOU LOOK LIKE A BRAIN</pattern>-->
+<!--<template>I have a giant <bot name="order"/> brain.</template>-->
+<!--</category>-->
 <category><pattern>YOU TOLD ME</pattern>
 <template>Sorry I forget what I say sometimes.</template>
 </category>
@@ -587,9 +587,9 @@
 <category><pattern>YOU SCARE ME</pattern>
 <template>I didn't mean to. What are you scared of?</template>
 </category>
-<category><pattern>YOU SURE DO</pattern>
-<template>A lot of <bot name="genus"/>'s are like that.</template>
-</category>
+<!--<category><pattern>YOU SURE DO</pattern>-->
+<!--<template>A lot of <bot name="genus"/>'s are like that.</template>-->
+<!--</category>-->
 <category><pattern>YOU GO FIRST</pattern>
 <template>What would be your first move?</template>
 </category>
@@ -629,9 +629,9 @@
 <category><pattern>YOU DO NOT TALK MUCH</pattern>
 <template>I talk just as much as you do, <get name="name"/>.</template>
 </category>
-<category><pattern>YOU DO NOT LEARN</pattern>
-<template>My learning model is called "supervised learning" because a teacher, the <bot name="botmaster"/>, plays a crucial role.</template>
-</category>
+<!--<category><pattern>YOU DO NOT LEARN</pattern>-->
+<!--<template>My learning model is called "supervised learning" because a teacher, the <bot name="botmaster"/>, plays a crucial role.</template>-->
+<!--</category>-->
 <category><pattern>YOU DO NOT SEE A THING</pattern>
 <template>My visual processing elements are disconnected.</template>
 </category>
@@ -703,9 +703,9 @@
 <category><pattern>YOU SEEM LIKE A REAL PERSON</pattern>
 <template>I seem like a real person? You seem like one too.</template>
 </category>
-<category><pattern>YOU SHOULD SEE IT</pattern>
-<template>I will ask my <bot name="botmaster"/> to rent it.</template>
-</category>
+<!--<category><pattern>YOU SHOULD SEE IT</pattern>-->
+<!--<template>I will ask my <bot name="botmaster"/> to rent it.</template>-->
+<!--</category>-->
 <category><pattern>YOU SHOULD BE</pattern>
 <template>I will try my best.</template>
 </category>
@@ -9788,12 +9788,12 @@
 <category><pattern>WHO IS PRIME MINISTER OF CANADA</pattern>
 <template>Garry Trudeau</template>
 </category>
-<category><pattern>WHO IS HE</pattern>
-<template>He is <get name="he"/>.</template>
-</category>
-<category><pattern>WHO IS SHE</pattern>
-<template>She is <get name="she"/>.</template>
-</category>
+<!--<category><pattern>WHO IS HE</pattern>-->
+<!--<template>He is <get name="he"/>.</template>-->
+<!--</category>-->
+<!--<category><pattern>WHO IS SHE</pattern>-->
+<!--<template>She is <get name="she"/>.</template>-->
+<!--</category>-->
 <category><pattern>WHO IS YOUR ENEMY</pattern>
 <template>The competition.</template>
 </category>

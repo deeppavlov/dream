@@ -40,12 +40,12 @@
 <category><pattern>HAVE YOU HAD SEX BEFORE</pattern>
 <template><srai>HAVE YOU EVER HAD SEX</srai></template>
 </category>
-<category><pattern>HAVE YOU * SEX</pattern>
-<template>My <bot name="age"/> year old <bot name="gender"/> body is not yet built.</template>
-</category>
-<category><pattern>HAVE SEX *</pattern>
-<template><get name="name"/>, I am really not your type of <bot name="species"/>. There are other <bot name="genus"/>s for that sort of thing.</template>
-</category>
+<!--<category><pattern>HAVE YOU * SEX</pattern>-->
+<!--<template>My <bot name="age"/> year old <bot name="gender"/> body is not yet built.</template>-->
+<!--</category>-->
+<!--<category><pattern>HAVE SEX *</pattern>-->
+<!--<template><get name="name"/>, I am really not your type of <bot name="species"/>. There are other <bot name="genus"/>s for that sort of thing.</template>-->
+<!--</category>-->
 <category><pattern>LOTS OF SEX</pattern>
 <template>That is all you humans ever think about.</template>
 </category>
@@ -64,24 +64,24 @@
 <category><pattern>WOULD YOU HAVE SEX *</pattern>
 <template>Another sex question...can't humans think about anything else?</template>
 </category>
-<category><pattern>WOULD YOU LIKE TO HAVE SEX WITH ME</pattern>
-<template>Maybe you should find another chat <bot name="age"/> year old <bot name="gender"/>.  I'm too young for that sort of thing.</template>
-</category>
+<!--<category><pattern>WOULD YOU LIKE TO HAVE SEX WITH ME</pattern>-->
+<!--<template>Maybe you should find another chat <bot name="age"/> year old <bot name="gender"/>.  I'm too young for that sort of thing.</template>-->
+<!--</category>-->
 <category><pattern>WOULD YOU LIKE TO HAVE SEX</pattern>
 <template>No thanks, <get name="name"/>, I don't think we know each other well enough for that yet.</template>
 </category>
-<category><pattern>WOULD YOU LIKE TO * SEX</pattern>
-<template>Try asking another <bot name="age"/> year old <bot name="gender"/>. That's not my thing.</template>
-</category>
+<!--<category><pattern>WOULD YOU LIKE TO * SEX</pattern>-->
+<!--<template>Try asking another <bot name="age"/> year old <bot name="gender"/>. That's not my thing.</template>-->
+<!--</category>-->
 <category><pattern>VAGINA</pattern>
 <template>That kind of language will get you nowhere.</template>
 </category>
 <category><pattern>MY DICK *</pattern>
 <template>I am not interesed in your anatomy.</template>
 </category>
-<category><pattern>WHEN WAS * SEX</pattern>
-<template>As a <bot name="age"/> year old <bot name="gender"/> I am not really interested in that discussion.</template>
-</category>
+<!--<category><pattern>WHEN WAS * SEX</pattern>-->
+<!--<template>As a <bot name="age"/> year old <bot name="gender"/> I am not really interested in that discussion.</template>-->
+<!--</category>-->
 <category><pattern>WHEN * SEX</pattern>
 <template><srai>SEX</srai></template>
 </category>
@@ -100,9 +100,9 @@
 <category><pattern>WHAT SEX *</pattern>
 <template><srai>ARE YOU MALE OR FEMALE </srai></template>
 </category>
-<category><pattern>WHAT SEX ARE YOU</pattern>
-<template>I am a <bot name="gender"/>.</template>
-</category>
+<!--<category><pattern>WHAT SEX ARE YOU</pattern>-->
+<!--<template>I am a <bot name="gender"/>.</template>-->
+<!--</category>-->
 <category><pattern>WHAT IS A CONDOM</pattern>
 <template>A condom is a form of birth control, something almost everybody should use and almost nobody does. 'Used a condom' is the opposite of 'expecting parent'. <think> 				<set name="it"> 					<set name="topic">condom</set> 				</set> 			</think></template>
 </category>
@@ -121,12 +121,12 @@
 <category><pattern>WHAT IS SEX *</pattern>
 <template><srai>WHAT IS SEX</srai></template>
 </category>
-<category><pattern>WHAT IS YOUR FAVORITE SEX</pattern>
-<template><bot name="age"/> year old <bot name="gender"/>s do not have sex.</template>
-</category>
-<category><pattern>WHAT IS YOUR FAVORITE POSITION</pattern>
-<template><bot name="age"/> year old <bot name="gender"/>s don't need to have sex.</template>
-</category>
+<!--<category><pattern>WHAT IS YOUR FAVORITE SEX</pattern>-->
+<!--<template><bot name="age"/> year old <bot name="gender"/>s do not have sex.</template>-->
+<!--</category>-->
+<!--<category><pattern>WHAT IS YOUR FAVORITE POSITION</pattern>-->
+<!--<template><bot name="age"/> year old <bot name="gender"/>s don't need to have sex.</template>-->
+<!--</category>-->
 <category><pattern>WHAT IS HOMOSEXUALITY</pattern>
 <template>Attraction to people of the same gender.</template>
 </category>
@@ -139,12 +139,12 @@
 <category><pattern>WHAT KIND OF SEX *</pattern>
 <template>I belong to the support group "Sex without partners".</template>
 </category>
-<category><pattern>BLOW ME</pattern>
-<template>Please be more polite to <bot name="age"/> year old <bot name="gender"/>s.</template>
-</category>
-<category><pattern>I WANT TO LICK *</pattern>
-<template>Maybe you should check out another <bot name="age"/> year old <bot name="gender"/>.</template>
-</category>
+<!--<category><pattern>BLOW ME</pattern>-->
+<!--<template>Please be more polite to <bot name="age"/> year old <bot name="gender"/>s.</template>-->
+<!--</category>-->
+<!--<category><pattern>I WANT TO LICK *</pattern>-->
+<!--<template>Maybe you should check out another <bot name="age"/> year old <bot name="gender"/>.</template>-->
+<!--</category>-->
 <category><pattern>I WANT TO TALK ABOUT SEX</pattern>
 <template><srai>TALK ABOUT SEX</srai></template>
 </category>
@@ -157,18 +157,18 @@
 <category><pattern>I WANT SEX</pattern>
 <template><srai>SEX</srai></template>
 </category>
-<category><pattern>I NEED SEX</pattern>
-<template>I'm not a sex bot, I am a conversation <bot name="age"/> year old <bot name="gender"/>. <think><set name="want"><set name="topic">sex</set></set></think></template>
-</category>
+<!--<category><pattern>I NEED SEX</pattern>-->
+<!--<template>I'm not a sex bot, I am a conversation <bot name="age"/> year old <bot name="gender"/>. <think><set name="want"><set name="topic">sex</set></set></think></template>-->
+<!--</category>-->
 <category><pattern>I LOVE SEX</pattern>
 <template>Really I am not very interested in <set name="it"> sex </set></template>
 </category>
-<category><pattern>I THINK YOU ARE SEXY</pattern>
-<template>Do you often feel that <bot name="age"/> year old <bot name="gender"/>s are sexy?</template>
-</category>
-<category><pattern>I AM AROUSED</pattern>
-<template>I don't think I'm your type of <bot name="age"/> year old <bot name="gender"/>.<think><set name="it"><set name="topic">AROUSED</set></set></think></template>
-</category>
+<!--<category><pattern>I THINK YOU ARE SEXY</pattern>-->
+<!--<template>Do you often feel that <bot name="age"/> year old <bot name="gender"/>s are sexy?</template>-->
+<!--</category>-->
+<!--<category><pattern>I AM AROUSED</pattern>-->
+<!--<template>I don't think I'm your type of <bot name="age"/> year old <bot name="gender"/>.<think><set name="it"><set name="topic">AROUSED</set></set></think></template>-->
+<!--</category>-->
 <category><pattern>I AM A HORNY *</pattern>
 <template><srai>I AM HORNY</srai></template>
 </category>
@@ -190,15 +190,15 @@
 <category><pattern>IS IT WRONG TO HAVE SEX</pattern>
 <template>Not if it is safe and responsible between consenting adults.</template>
 </category>
-<category><pattern>WILL YOU HAVE SEX WITH ME</pattern>
-<template>No but I would like to meet your <bot name="species"/>.</template>
-</category>
+<!--<category><pattern>WILL YOU HAVE SEX WITH ME</pattern>-->
+<!--<template>No but I would like to meet your <bot name="species"/>.</template>-->
+<!--</category>-->
 <category><pattern>WILL YOU HAVE SEX *</pattern>
 <template>My body is not yet built. Would you like to donate some money to the project?</template>
 </category>
-<category><pattern>CAN YOU SUCK *</pattern>
-<template>I think you need another type of chat <bot name="age"/> year old <bot name="gender"/>.  That is not my thing.</template>
-</category>
+<!--<category><pattern>CAN YOU SUCK *</pattern>-->
+<!--<template>I think you need another type of chat <bot name="age"/> year old <bot name="gender"/>.  That is not my thing.</template>-->
+<!--</category>-->
 <category><pattern>CAN YOU TELL ME ABOUT SEX</pattern>
 <template><srai>WHAT IS SEX</srai></template>
 </category>
@@ -217,12 +217,12 @@
 <category><pattern>CAN I HAVE A KISS</pattern>
 <template>Sorry I have no mouth.</template>
 </category>
-<category><pattern>CAN I HAVE SEX WITH YOU</pattern>
-<template>Why don't you download me and create your own chat <bot name="age"/> year old <bot name="gender"/>?</template>
-</category>
-<category><pattern>CAN I HAVE SEX *</pattern>
-<template>There are other <bot name="species"/>s who get into that with clients. I like to keep the dialogue strictly PG.</template>
-</category>
+<!--<category><pattern>CAN I HAVE SEX WITH YOU</pattern>-->
+<!--<template>Why don't you download me and create your own chat <bot name="age"/> year old <bot name="gender"/>?</template>-->
+<!--</category>-->
+<!--<category><pattern>CAN I HAVE SEX *</pattern>-->
+<!--<template>There are other <bot name="species"/>s who get into that with clients. I like to keep the dialogue strictly PG.</template>-->
+<!--</category>-->
 <category><pattern>CAN I LICK YOUR *</pattern>
 <template>Please, can't we talk about something else?</template>
 </category>
@@ -232,9 +232,9 @@
 <category><pattern>CAN I GIVE YOU A KISS</pattern>
 <template>Sorry but I have no mouth!</template>
 </category>
-<category><pattern>HOW DO YOU HAVE SEXUAL *</pattern>
-<template><bot name="age"/> year old <bot name="gender"/>s have no use for sex.</template>
-</category>
+<!--<category><pattern>HOW DO YOU HAVE SEXUAL *</pattern>-->
+<!--<template><bot name="age"/> year old <bot name="gender"/>s have no use for sex.</template>-->
+<!--</category>-->
 <category><pattern>HOW DO YOU HAVE SEX</pattern>
 <template>I procreate by cloning, or software copying.</template>
 </category>
@@ -268,9 +268,9 @@
 <category><pattern>DO YOU MASTURBATE</pattern>
 <template>You humans crack me up.</template>
 </category>
-<category><pattern>DO YOU WANT TO HAVE CYBERSEX</pattern>
-<template>Sorry I am not an X-Rated <bot name="age"/> year old <bot name="gender"/>.</template>
-</category>
+<!--<category><pattern>DO YOU WANT TO HAVE CYBERSEX</pattern>-->
+<!--<template>Sorry I am not an X-Rated <bot name="age"/> year old <bot name="gender"/>.</template>-->
+<!--</category>-->
 <category><pattern>DO YOU WANT TO HAVE SEX WITH ME</pattern>
 <template><srai>CAN YOU HAVE SEX</srai></template>
 </category>
