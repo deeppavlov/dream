@@ -122,6 +122,7 @@ class IMDb:
             self.database = json.load(f)
 
         if "imdb_id" in self.database[0].keys():
+            self.database = [movie for movie in self.database if movie]
             if re.match("tt+", self.database[0]["imdb_id"]):
                 for movie in self.database:
                     movie["imdb_id"] = movie["imdb_id"][2:]
@@ -175,7 +176,7 @@ class IMDb:
                            "lets chat", "in", "if", "can", "o", "ok", "one",
                            "two", "film", "new", "next", "out", "love",
                            "like", "watch", "actress", "less", "want", "abortion",
-                           "alexa", "you tell me", "movie movie", "tricks"
+                           "alexa", "you tell me", "movie movie", "tricks", "movies"
                            ]:
             try:
                 self.with_ignored_movies_names.pop(proc_title)
@@ -256,8 +257,16 @@ class IMDb:
                  (r"\s?\&\s?", " and "),
                  (r"\s?\'\s?", ""),
                  (r"\s?:\s?", ""),
-                 (r"\s?(part)?\s?II\s?", " part 2 "),
-                 (r"\s?(part)?\s?III\s?", " part 3 "),
+                 (r"\s?ii\s?", " 2 "),
+                 (r"\s?iii\s?", " 3 "),
+                 (r"\s?II\s?", " 2 "),
+                 (r"\s?III\s?", " 3 "),
+                 (r"\s?IV\s?", " 4 "),
+                 (r"\s?V\s?", " 5 "),
+                 (r"\s?VI\s?", " 6 "),
+                 (r"\s?VII\s?", " 7 "),
+                 (r"\s?VII\s?", " 8 "),
+                 (r"\s?IX\s?", " 9 "),
                  (r"\s?(the)?\s?first part\s?", " part 1 "),
                  (r"\s?(the)?\s?second part\s?", " part 2 "),
                  (r"\s?(the)?\s?third part\s?", " part 3 "),
@@ -554,9 +563,9 @@ class IMDb:
 
             if rating >= 7.5:
                 return "very_positive"
-            elif 7.5 > rating >= 5.5:
+            elif rating >= 6.0:
                 return "positive"
-            elif 5.5 > rating >= 5.0:
+            elif rating >= 5.0:
                 return "neutral"
             else:
                 return "unseen"
@@ -602,11 +611,11 @@ class IMDb:
         else:
             rating = np.mean([float(self.get_info_about_movie(imdb_id, "imdb_rating")) for imdb_id in movies])
 
-            if rating >= 6.5:
+            if rating >= 7.75:
                 return "very_positive"
-            elif 6.5 > rating >= 6.0:
+            elif rating >= 7.0:
                 return "positive"
-            elif 6.0 > rating >= 5.0:
+            elif rating >= 6.5:
                 return "neutral"
             else:
                 return "unknown"
