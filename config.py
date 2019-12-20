@@ -166,6 +166,16 @@ SKILLS = [
         "formatter": skill_with_attributes_formatter
     },
     {
+        "name": "music_tfidf_retrieval",
+        "protocol": "http",
+        "host": "music_tfidf_retrieval",
+        "port": 8034,
+        "endpoint": "respond",
+        "external": True,
+        "path": "",
+        "formatter": tfidf_formatter
+    },
+    {
         "name": "book_skill",
         "protocol": "http",
         "host": "book_skill",
