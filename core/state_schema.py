@@ -251,6 +251,19 @@ class Dialog:
         return result
 
     @classmethod
+    async def get_all_gen(cls, db, date_start=None, date_finish=None):
+        query = {}
+        if date_start:
+            query['date_finish'] = {'$gte': date_start}
+        if date_finish:
+            query['date_start'] = {'$lte': date_finish}
+        async for document in db[cls.collection_name].find(query):
+            human = await Human.get_by_id(db, document['_human_id'])
+            dialog = cls(human=human, **document)
+            await dialog.load_external_info(db)
+            yield dialog
+
+    @classmethod
     async def get_by_id(cls, db, dialog_id):
         dialog = await db[cls.collection_name].find_one({'_id': ObjectId(dialog_id)})
         if dialog:
