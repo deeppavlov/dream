@@ -1,3 +1,4 @@
+boto3
 aiogram==2.3
 aiohttp==3.6.1
 aiohttp-socks==0.2.2
