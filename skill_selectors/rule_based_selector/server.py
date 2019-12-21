@@ -106,7 +106,7 @@ class RuleBasedSelector():
             skills_for_uttr.append("christmas_new_year_skill")
 
             if len(dialog['utterances']) > 1:
-                skills_for_uttr += ["misheard_asr"]
+                # skills_for_uttr += ["misheard_asr"]
                 # Use only misheard asr skill if asr is not confident and skip it for greeting
                 if dialog['utterances'][-1]['annotations']['asr']['asr_confidence'] == 'very_low':
                     skills_for_uttr = ["misheard_asr"]

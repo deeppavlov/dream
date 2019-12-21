@@ -66,4 +66,4 @@ def test_asr_medium_confidence():
 if __name__ == "__main__":
     test_workflow_bug()
     test_asr_low_confidence()
-    test_asr_medium_confidence()
+    # test_asr_medium_confidence()
