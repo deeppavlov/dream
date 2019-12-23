@@ -914,6 +914,18 @@
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
+  <category>
+    <pattern>PLAY #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>LET US PLAY #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
 
   <category>
     <pattern>CAN YOU DO ALEXA THINGS</pattern>

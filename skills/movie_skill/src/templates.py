@@ -26,7 +26,9 @@ class MovieSkillTemplates:
 
     LESSFAVORITE_PATTERN = r"(less favorite|unloved|loveless|worst|less interesting)"
 
-    MOVIE_PATTERN = r"(movie|film|series|picture|cinema|screen|show|cartoon|tv show)"
+    MOVIE_PATTERN = r"(movie|film|series|picture|cinema|screen|cartoon)"
+
+    TVSHOW_PATTERN = r"(show|tv show|tv program|tv-show|tv-program)"
 
     WHAT_PATTERN = r"(what is|what's|whats|tell|what are|what're|what|list|which)"
 
@@ -367,6 +369,15 @@ class MovieSkillTemplates:
                                "I'm a bit scared by mystery movies. What movies you don't like?"
                     confidence = self.person_highest_confidence
                     result = [["Musical", "genre", "negative"], ["Mystery", "genre", "negative"]]
+                # less favorite tv show
+                if (re.search(
+                        f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.LESSFAVORITE_PATTERN} {self.TVSHOW_PATTERN}",
+                        user_uttr) or re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.TVSHOW_PATTERN}"
+                                                f"{self.ANY_LETTERS}{self.NOT_LIKE_PATTERN}",
+                                                user_uttr)):
+                    response = "Hmm... I can't name one particular TV show. What TV shows you don't like?"
+                    confidence = self.person_highest_confidence
+                    result = []
                 # less favorite genre
                 if (re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.LESSFAVORITE_PATTERN} (genre|movie genre)",
                               user_uttr) or re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS} (genre|movie genre)"
@@ -403,6 +414,15 @@ class MovieSkillTemplates:
                                "The Empire Strikes Back. What is your favorite movie?"
                     confidence = self.person_highest_confidence
                     result = [["0080684", "movie", "very_positive"]]
+                # favorite tv show
+                if (re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.FAVORITE_PATTERN} {self.TVSHOW_PATTERN}",
+                              user_uttr) or re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.TVSHOW_PATTERN}"
+                                                      f"{self.ANY_LETTERS}{self.LIKE_PATTERN}",
+                                                      user_uttr)):
+                    response = "I adore a lot of documentary movies. My favorite one is TV-series Cosmos " \
+                               "started in 2014. What is your favorite TV show?"
+                    confidence = self.person_highest_confidence
+                    result = [["2395695", "movie", "very_positive"]]
                 # favorite genre
                 if (re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.FAVORITE_PATTERN} (genre|movie genre)",
                               user_uttr) or re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS} (genre|movie genre)"
