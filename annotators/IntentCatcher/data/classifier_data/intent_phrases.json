@@ -1,7 +1,7 @@
 {
   "intent_phrases": {
-    "exit" : {
-      "phrases" : [
+    "exit": {
+      "phrases": [
         "((End)|(Stop)|(Cancel)) ((this)|(our)){0,1}((chat)|(conversation)|(dialog))(, ((Alexa)|(bot))){0,1}",
         "((End)|(Stop)|(Cancel)) it(, ((Alexa)|(bot))){0,1}",
         "I ((do not)|(don't)) ((want to)|(wanna)) talk( anymore){0,1}",
@@ -12,89 +12,242 @@
         "((Farewell)|(Peace out)|(Adios)|(Catch you later)|(See ((you)|(ya)))|(Take care)|(Turn off))",
         "(((Okay)|(Well)|(So)) ,){0,1}I ((am out of here)|(have to go)|(gotta go)|(gotta run)|(gotta head out)|(gonna go))( ((now)|(right now))){0,1}(, ((bye)|(goodbye)|(bye bye))){0,1}"
       ],
-    "min_precision" : 0.80,
-    "punctuation" : [
+      "min_precision": 0.80,
+      "punctuation": [
         ".",
         "!"
       ]
     },
-    "repeat" : {
+    "repeat": {
       "phrases": [
         "I did not hear you",
         "What did you say",
         "Repeat(, please){0,1}(, ((Alexa)|(bot))){0,1}",
         "((Alexa)|(Bot)), repeat(, please){0,1}",
         "((Can)|(Would)) you (please ){0,1}repeat( please){0,1}",
-         "I did not hear you, well please repeat."
+        "I did not hear you, well please repeat."
       ],
-      "min_precision" : 0.0,
-      "punctuation" : [
-          ".",
-          "!"
-        ]
+      "min_precision": 0.0,
+      "punctuation": [
+        ".",
+        "!"
+      ]
     },
-    "yes" : {
+    "yes": {
       "phrases": [
         "((Sure)|(Fine)|(Okay)|(Ok)|(Yes)|(Yup)|(Yea)|(Yeah)|(Cool)|(Good)|(Go ahead))(, why not){0,1}",
         "((Yeah)|(Yes)|(Okay)|(Sure)|(Yup)|(Fine)|(Definetely)|(Absolutely)), ((go ahead)|(do it)|(lets do it)|(continue)|(go on)|(tell me))",
         "((Come on)|(Do it)|(Tell me)|(Go on)|(Continue)|(Definetely)|(As you wish)|(As you want)|(That will be cool)|(Whatever))"
       ],
-      "min_precision" : 0.0,
-      "punctuation" : [
-          ".",
-          "!"
-        ]
+      "min_precision": 0.0,
+      "punctuation": [
+        ".",
+        "!"
+      ]
     },
-    "no" : {
+    "no": {
       "phrases": [
         "((No)|(Nope)|(No way)|(Don't)|(Do not do this)|(Please, no)|(Never do this)|(Surely not)|(Don't do this))",
         "((No)|(Please)), ((never)|(no way)|(don't)|(do not)|(never again)|(definetely no))",
         "((I said)|(Uhh)) ((no)|(never)|(don't))",
         "((Definetely not)|(Never)|(Never ask me that again)|(That's boring)|(That will be boring)|(I don't know)|(I am not sure))"
       ],
-      "min_precision" : 0.0,
-      "punctuation" : [
-          ".",
-          "!"
-        ]
+      "min_precision": 0.0,
+      "punctuation": [
+        ".",
+        "!"
+      ]
     },
-    "dont_understand" : {
+    "dont_understand": {
       "phrases": [
         "(Sorry, ){0,1}I ((don't)|(do not)|(didn't)|(did not)) ((understand)|(get)|(know))( ((what you mean)|(you)|(what you say))){0,1}",
         "((I don't ((know)|(understand)|(get)) )|(I am not sure )|())what ((do)|(did)) you mean",
         "((I don't ((know)|(understand)|(get)) )|(I am not sure )|())what are you talking about",
         "(What, ){0,1}it doesn't make (any ){0,1}sense"
       ],
-      "min_precision" : 0.0,
-      "punctuation" : [
-          ".",
-          "!"
-        ]
+      "min_precision": 0.0,
+      "punctuation": [
+        ".",
+        "!"
+      ]
     },
-    "tell_me_more" : {
+    "tell_me_more": {
       "phrases": [
         "(((Please)|(Well)|(That's ((neat)|(cool)|(great)|(funny)))), ){0,1}tell me more (about it){0,1}",
         "What else ((do you know)|(can you tell me)) about it"
       ],
-      "min_precision" : 0.0,
-      "punctuation" : [
-          ".",
-          "!"
-        ]
+      "min_precision": 0.0,
+      "punctuation": [
+        ".",
+        "!"
+      ]
     },
-    "what_is_your_name" : {
-      "phrases" : [
+    "weather_forecast_intent": {
+      "phrases": [
+        "alexa can you forecast the weather?",
+        "alexa can you tell me about the weather",
+        "alexa check the weather",
+        "alexa how is how is weather tomorrow",
+        "alexa how is the weather in india",
+        "alexa how is the weather tomorrow",
+        "alexa open singapore weather",
+        "alexa seven day weather forecast",
+        "alexa tell me the weather in san no",
+        "alexa weather",
+        "alexa what is the weather going to be like in niles ohio tomorrow",
+        "alexa what is the weather now he can go out",
+        "alexa what is the weather today in columbus ohio",
+        "alexa what is the weather today in elyria ohio",
+        "alexa what will the weather tomorrow be",
+        "alexa what's the weather",
+        "alexa what's the weather forecast for this weekend",
+        "alexa what's the weather going to be tomorrow",
+        "alexa what's the weather gonna be tomorrow",
+        "alexa what's the weather gonna be tonight",
+        "alexa what's the weather in bbc",
+        "alexa what's the weather in new york city",
+        "alexa what's the weather in new york new jersey",
+        "alexa what's the weather in sofia",
+        "alexa what's the weather in vancouver bc canada",
+        "alexa what's the weather like today",
+        "alexa what's the weather like tomorrow",
+        "alexa what's the weather out today",
+        "alexa what's the weather outside like",
+        "alexa yes what's the weather like today",
+        "ask her what the weather alexa what's the weather in robinson township pennsylvania",
+        "but how is the weather today",
+        "can you tell me what the weather is out",
+        "check the weather",
+        "do you have do you know what the weather by you is",
+        "do you like much tell isn't sometimes depends on how i feel that work what time of the year it is what's shows are on and weather and then i have time",
+        "do you like the weather",
+        "do you prefer cloudy weather or sunny weather",
+        "echo how is the weather now",
+        "from ukrainian. i live in a village. you can tell me about weather today?",
+        "get the weather alexa",
+        "hello weather no understand way what was the question",
+        "hey alexa what the weather will be",
+        "how do you feel about the weather",
+        "how is the weather in santa cruz de tenerife",
+        "how is the weather in seoul south korea",
+        "how is the weather today",
+        "how much do you think the weather is? would you like to know more?",
+        "how the weather in puerto rico",
+        "how's the weather",
+        "how's the weather outside right now",
+        "how's the weather over there",
+        "how's the weather today",
+        "i talked to you every morning about four o'clock in the morning and ask you the weather i'm from saint paul minnesota",
+        "i'm doing fine what is the weather today alexa",
+        "i'm very well how's the weather",
+        "indepens with weather in what condition in what",
+        "is that better than the weather man",
+        "is that your favorite weather",
+        "is the weather nice",
+        "is there an weather forecast to snow here",
+        "just tell me something i don't know about the weather in treasure island.",
+        "just tell me something i don't know about the weather.",
+        "let's angeles weather today",
+        "let's talk about the weather",
+        "let's talk about the weather in treasure island",
+        "looking crazy but the falcon the rainfall rainfall grade and it's so crazy that you can't be in look at the weather when it's so funky outside today and that's just not good at all",
+        "no so what's which do you like cold weather or hot weather",
+        "no the weather",
+        "no where are you from how's the weather there",
+        "noise what's the weather",
+        "oh the weather you want you know ussr me we got to play the finger that i will see him",
+        "ok. can you spoke about weather?",
+        "okay never mind how's the weather in atlanta",
+        "set up to do with the weather",
+        "shut up alexa what's the weather in boca raton",
+        "so how's the weather",
+        "so how's the weather over there",
+        "so what do you think about the weather today",
+        "so what was the weather like today",
+        "so what's the weather gonna be like this week",
+        "so what's the weather tomorrow",
+        "stop alexa how is the weather in india",
+        "stop weather singer",
+        "thank you for your information, but could you inform me about the predictions of weather in istanbul",
+        "thank you, how the weather will be today?",
+        "that's true i was just wondering if you had nice weather of by your location",
+        "the weather",
+        "the weather today",
+        "they crash and the weather in the pool",
+        "uh what's the weather today",
+        "wait, how is the weather in istanbul today",
+        "weather",
+        "weather this week",
+        "weather today goodbye",
+        "weather tomorrow",
+        "what about the weather tomorrow",
+        "what do you think of the weather",
+        "what is nine eleven and how did it affect the weather",
+        "what is the cember tenth weather going to be",
+        "what is the the weather in elyria ohio today",
+        "what is the weather for tomorrow",
+        "what is the weather going to be tomorrow",
+        "what is the weather gonna be tomorrow",
+        "what is the weather in crofton tomorrow",
+        "what is the weather in franklin",
+        "what is the weather like near you?",
+        "what is the weather outside?",
+        "what is the weather today in shrewsbury massachusetts",
+        "what is the weather tomorrow in boston?",
+        "what is today's weather",
+        "what the weather like in moscow?",
+        "what the weather today?",
+        "what weather tech dot com",
+        "what will the weather be like in niles tomorrow",
+        "what you can do today weather file",
+        "what's the weather",
+        "what's the weather for today",
+        "what's the weather for you",
+        "what's the weather forecast",
+        "what's the weather forecast for tomorrow",
+        "what's the weather going to be today",
+        "what's the weather gonna be for tomorrow",
+        "what's the weather gonna be like tomorrow",
+        "what's the weather gonna be tomorrow",
+        "what's the weather in your area",
+        "what's the weather is",
+        "what's the weather like here",
+        "what's the weather like in memphis",
+        "what's the weather like in richland washington",
+        "what's the weather like in the summer where you are?",
+        "what's the weather like this",
+        "what's the weather like to travel very far baby to two hours",
+        "what's the weather like today in moscow?",
+        "what's the weather like today?",
+        "what's the weather outdoors",
+        "what's the weather today",
+        "what's the weather today tonight in machesney park",
+        "what's the weather tomorrow",
+        "what's the weather tonight",
+        "what's the weather will be in new york",
+        "who the weather in puerto rico",
+        "why are you telling me about pilots i just wanted to talk about the weather",
+        "you are first. tell me something about the weather."
+      ],
+      "punctuation": [
+        "?",
+        ".",
+        "!"
+      ]
+    },
+    "what_is_your_name": {
+      "phrases": [
         "Do you have a ((name)|(surname))",
         "How to ((call)|(name)|(contact)) you",
         "How can i ((name)|(call)|(contact)) you",
         "What(('s)|(is)) your ((family name)|(surname)|(lastname)|(name))"
       ],
-      "min_precision" : 0.00,
-      "punctuation" : [
+      "min_precision": 0.00,
+      "punctuation": [
         "?"
       ]
     },
-    "where_are_you_from" : {
+    "where_are_you_from": {
       "phrases": [
         "Where are you from(, Alexa){0,1}",
         "(((I live in )|(I am from )){0,1}((Virginia)|(Texas)|(Washington)|(New York)|(France)|(US)|(States)|(Boston)|(Berkley)|(City))\\. ){0,1}What (((country)|(city)|(place)) ){0,1}are you from",
@@ -105,13 +258,13 @@
         "Where were you born(, Alexa){0,1}",
         "What(('s)|(is)) your ((birthplace)|(location)|(address))"
       ],
-      "min_precision" : 0.00,
-      "punctuation" : [
-          "?"
-        ]
+      "min_precision": 0.00,
+      "punctuation": [
+        "?"
+      ]
     },
-    "what_can_you_do" : {
-      "phrases" : [
+    "what_can_you_do": {
+      "phrases": [
         "What do you ((wanna)|(want to)) talk about",
         "What can ((we)|(you)) talk about",
         "What can you do",
@@ -123,12 +276,12 @@
         "Tell me what you ((can)|(are able to)) do",
         "Tell me more about yourself"
       ],
-      "min_precision" : 0.00,
-      "punctuation" : [
+      "min_precision": 0.00,
+      "punctuation": [
         "?"
       ]
     },
-    "who_made_you" : {
+    "who_made_you": {
       "phrases": [
         "Who ((did)|(created)|(made)|(make)|(create)|(build)|(owns)|(developed)|(designed)|(produced)|(programmed)) you",
         "Who is your ((botmaster)|(creator)|(developer)|(master)|(holder)|(host)|(team))",
@@ -137,13 +290,13 @@
         "Who(m){0,1} do you belong ((to)|(with))",
         "((Tell me)|(What is)|(What's)) the name of your ((creator)|(builder)|(developer)|(owner)|(implementer)|(architect)|(author))"
       ],
-      "min_precision" : 0.00,
-      "punctuation" : [
+      "min_precision": 0.00,
+      "punctuation": [
         "?"
       ]
     },
-    "what_is_your_job" : {
-      "phrases" : [
+    "what_is_your_job": {
+      "phrases": [
         "What('s){0,1} is your ((profession)|(job)|(work)|(occupation))",
         "Tell me your ((job)|(profession))",
         "What do you do",
@@ -155,9 +308,9 @@
         "What is your ((job)|(work)|(task))"
       ],
       "min_precision": 0.00,
-      "punctuation" : [
-          "?"
-        ]
+      "punctuation": [
+        "?"
+      ]
     },
     "opinion_request": {
       "phrases": [
@@ -210,8 +363,8 @@
       ]
     }
   },
-  "random_phrases" : {
-    "phrases" : [
+  "random_phrases": {
+    "phrases": [
       "[0-9]{1,10}",
       "stop ((hitting you)|(doing this)|(doing that))",
       "((repeat what)|(what do you want me to repeat))",
@@ -296,7 +449,7 @@
       "((When|Where)) is it going to rain",
       "I am working as a ((manager)|(builder))"
     ],
-    "punctuation" : [
+    "punctuation": [
       ".",
       "?",
       "!"

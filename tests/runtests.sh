@@ -146,6 +146,11 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
         echo "Run tests for asr container"
         dockercompose_cmd exec -T -u $(id -u) asr python test.py
     fi
+
+    if container_is_started weather_skill; then
+        echo "Run tests for weather_skill container"
+        dockercompose_cmd exec -T -u $(id -u) weather_skill python test_weather_skill_policy.py
+    fi
 fi
 
 if [[ "$MODE" == "infer_questions" || "$MODE" == "all" ]]; then

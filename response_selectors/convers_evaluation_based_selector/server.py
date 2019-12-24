@@ -10,7 +10,7 @@ import requests
 from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
-
+import pprint
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -159,7 +159,8 @@ def respond():
     for i, dialog in enumerate(dialogs_batch):
         # curr_candidates is dict
         curr_candidates = response_candidates[i]
-        logger.info(f"Curr candidates: {curr_candidates}")
+        logger.info(f"Curr candidates:")
+        logger.info(pprint.pformat(curr_candidates, compact=False))
         # choose results which correspond curr candidates
         curr_scores = result[dialog_ids == i]  # array of dictionaries
         curr_confidences = confidences[dialog_ids == i]  # array of float numbers

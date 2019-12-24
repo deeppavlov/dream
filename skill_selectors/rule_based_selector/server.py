@@ -49,7 +49,8 @@ class RuleBasedSelector():
             # TODO: opinion_request/yes/no response
             intent_detected = any([v['detected'] == 1 for k, v in
                                    dialog['utterances'][-1]['annotations']['intent_catcher'].items()
-                                   if k not in {'opinion_request', 'yes', 'no', 'tell_me_more', 'doing_well'}])
+                                   if k not in {'opinion_request', 'yes', 'no', 'tell_me_more', 'doing_well',
+                                                'weather_forecast_intent'}])
             cobot_topics = set(dialog['utterances'][-1]['annotations']['cobot_topics']['text'])
             sensitive_topics_detected = any([t in self.sensitive_topics for t in cobot_topics])
             cobot_dialogacts = dialog['utterances'][-1]['annotations']['cobot_dialogact']['intents']
@@ -110,6 +111,18 @@ class RuleBasedSelector():
                 # Use only misheard asr skill if asr is not confident and skip it for greeting
                 if dialog['utterances'][-1]['annotations']['asr']['asr_confidence'] == 'very_low':
                     skills_for_uttr = ["misheard_asr"]
+
+            # prev_user_uttr = dialog["utterances"][-3] if len(dialog["utterances"]) >= 3 else {}
+            prev_user_uttr_hyp = dialog["utterances"][-3]["hypotheses"] if len(dialog["utterances"]) >= 3 else []
+            weather_city_slot_requested = any([
+                hyp.get("weather_forecast_interaction_city_slot_requested", False)
+                for hyp in prev_user_uttr_hyp if hyp["skill_name"] == "weather_skill"])
+            prev_bot_uttr = dialog["utterances"][-2] if len(dialog["utterances"]) >= 2 else {}
+            if (dialog['utterances'][-1]['annotations']['intent_catcher'].get(
+                    "weather_forecast_intent", {}).get("detected", False) or (
+                    prev_bot_uttr.get("active_skill", "") == "weather_skill" and weather_city_slot_requested)):
+                skills_for_uttr.append("weather_skill")
+
             skill_names.append(skills_for_uttr)
 
         return skill_names
