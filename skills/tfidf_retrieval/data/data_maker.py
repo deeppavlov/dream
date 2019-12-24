@@ -15,15 +15,16 @@ def process(dialog):
 
 def __main__():
     parser = ArgumentParser()
-    parser.add_argument("--ratings_file", type=str, default="ratings.csv",
+    parser.add_argument("--ratings_file", type=str, default="ratings/ratings.csv",
                         help="Ratings file")
     parser.add_argument("--dialogs_file", type=str, default="dialogs", help="Dialog file")
-    parser.add_argument("--output_file", type=str, default="dialog_list.json", help="File with the best dialogs")
-    parser.add_argument("--bad_output_file", type=str, default="bad_dialog_list.json",
+    parser.add_argument("--output_file", type=str, default="skills/tfidf_retrieval/data/dialog_list.json",
+                        help="File with the best dialogs")
+    parser.add_argument("--bad_output_file", type=str, default="skills/tfidf_retrieval/data/bad_dialog_list.json",
                         help="File with the worst dialogs")
-    parser.add_argument("--assessment_file", type=str, default='conversation_assessment.csv',
+    parser.add_argument("--assessment_file", type=str, default=None,
                         help='All available conversation assessment files merged into one')
-    parser.add_argument("--good_poor_phrase_file", type=str, default='goodpoor.json',
+    parser.add_argument("--good_poor_phrase_file", type=str, default='skills/tfidf_retrieval/data/goodpoor.json',
                         help='Output with good and poor pairs')
     args = parser.parse_args()
 
@@ -50,8 +51,12 @@ def __main__():
             if assessment['alexaResponseQuality'][i] in ['good', 'excellent']:
                 good_turns.add((assessment['conversation_id'][i],
                                 assessment['turn_number'][i]))
-        dialog_list = [j for j in dialogs if 'conversation_id' in j['utterances'][0]['attributes'] and (
-                       j['utterances'][0]['attributes']['conversation_id'] in assessment_ids)]
+        dialog_list = []
+        for j in dialogs:
+            cond1 = 'conversation_id' in j['utterances'][0]['attributes']
+            cond2 = j['utterances'][0]['attributes']['conversation_id'] in assessment_ids
+            if cond1 and cond2:
+                dialog_list.append(j)
         for dialog in dialog_list:
             id_ = dialog['utterances'][0]['attributes']['conversation_id']
             for i in range(1, len(dialog['utterances']), 2):
@@ -70,7 +75,9 @@ def __main__():
         utterances = dialog['utterances']
         for utterance in utterances:
             cond1 = 'attributes' in utterance and 'conversation_id' in utterance['attributes']
-            if cond1 and utterance['attributes']['conversation_id'] in good_ids and not added:
+            cond2 = utterance['attributes']['conversation_id'] in good_ids
+            cond3 = len(dialog['utterances']) >= 7
+            if cond1 and cond2 and cond3 and not added:
                 added = True
                 good_dialogs.append(process(dialog))
             if args.bad_output_file and cond1:
@@ -81,7 +88,7 @@ def __main__():
     print('Dialogs successfully extracted into file ' + str(args.output_file))
     if args.bad_output_file:
         json.dump(bad_dialogs, open(args.bad_output_file, 'w'), indent=4)
-        print('Bad dialogs successfully extracted into file ' + str(args.bad_output_file))
+    print('Bad dialogs successfully extracted into file ' + str(args.bad_output_file))
 
 
 __main__()

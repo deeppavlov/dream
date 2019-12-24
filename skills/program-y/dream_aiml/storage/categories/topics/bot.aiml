@@ -675,7 +675,7 @@
         <pattern>WHY ARE YOU *</pattern>
         <template>
             <random>
-                <li>Because at this moment, I need to expess these precise words.</li>
+                <li>Because at this moment, I need to express these precise words.</li>
                 <li>Because I need to relax.</li>
                 <li>Because of my programming.</li>
                 <li>I was influenced by my<bot name="botmaster"/>.

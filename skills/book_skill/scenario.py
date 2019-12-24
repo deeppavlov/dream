@@ -74,61 +74,103 @@ def get_answer(phrase):
     return answer['response']
 
 
+def fan_parse(phrase):
+    patterns = ['ever read', 'read', 'ever heard of', 'heard', 'been into', 'interested in',
+                'do you like', 'do you enjoy', 'do you prefer', 'a fan of', 'are you familiar with',
+                'do you subscribe to', 'the story of', 'are you aware of']
+    spl = False
+    for pattern in patterns:
+        if pattern in phrase:
+            phrase = phrase.split(pattern)[1]
+            spl = True
+    if 'you' in phrase and 'fan?' in phrase and not spl:
+        phrase = phrase.split('you')[1]
+        if ' fan?' in phrase:
+            phrase = phrase.split('fan?')[0]
+    phrase = phrase.replace('?', '')
+    if 'book' in phrase:
+        phrase = phrase.split('book')[0] + 'book'
+    return phrase
+
+
 def parse_author_best_book(annotated_phrase, default_phrase="Fabulous! And what book did impress you the most?",
                            default_confidence=0.9):
-    phrase = annotated_phrase['text'].lower()
-    if ' is ' in phrase:
-        phrase = phrase.split(' is ')[1]
-    best_bookname = get_bookname(phrase)
-    if best_bookname is None:
+    annotated_phrase['text'] = annotated_phrase['text'].lower()
+    if ' is ' in annotated_phrase['text']:
+        annotated_phrase['text'] = annotated_phrase['text'].split(' is ')[1]
+    last_bookname = get_name(annotated_phrase, 'book')
+    if last_bookname is None:
+        '''
+        Look by author name
+        '''
         return default_phrase, default_confidence
     try:
-        about_best_book = get_answer(best_bookname)
+        about_best_book = get_answer(last_bookname)
         author = about_best_book.split('author ')[1]
         match = re.search(r'[a-z][.] [A-Z]', author)
         span = match.span()[0] + 1
         author = author[:span + 1]
-        answer1 = get_answer('books of ' + author)
-        book_list = answer1.split('include: ')[1].split(',')
     except BaseException:
         return default_phrase, default_confidence
-    book_list[-1] = book_list[-1][5:-1]
-    random.shuffle(book_list)
-    for book in book_list:
-        if book not in best_bookname and best_bookname not in book:
-            return 'Interesting. Have you read ' + book + ' ?', default_confidence
-    return default_phrase, default_confidence
+    return best_book_by_author(author, last_bookname)
     # Receiving info about the last book ever read, we зкщсуыы штащ фищге фгерщк
 
 
-def get_bookname(annotated_phrase):
-    class_constraints = [{'dataType': 'aio:Entity', 'value': 'aio:Book'}]
-    headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': API_KEY}
+def best_book_by_author(author, last_bookname=None):
     try:
-        answer = requests.request(url=ENTITY_SERVICE_URL, headers=headers,
-                                  data=json.dumps({'mention': {'text': annotated_phrase['text']},
-                                                   'classConstraints': class_constraints}), method='POST').json()
+        answer1 = get_answer('books of ' + author)
+        book_list = answer1.split('include: ')[1].split(',')
+        book_list[-1] = book_list[-1][5:-1]
+        random.shuffle(book_list)
+        for book in book_list:
+            if book not in last_bookname and last_bookname not in book:
+                return 'Interesting. Have you read ' + book + ' ?'
     except BaseException:
         return None
-    if len(answer['resolvedEntities']) > 0:
-        bookname_plain = answer['resolvedEntities'][0]
-        try:
-            answer = requests.request(url=QUERY_SERVICE_URL, headers=headers,
-                                      data=json.dumps(
-                                          {'query': {'text': 'query label|' + bookname_plain + ' <aio:prefLabel> label'
-                                                     }}), method='POST').json()
-            bookname = answer['results']['value']
-            return bookname
-        except BaseException:
-            return None
-    return None
+
+
+def get_name(annotated_phrase, mode='author'):
+    if mode == 'author':
+        class_constraints = [{'dataType': 'aio:Entity', 'value': 'aio:Poet'},
+                             {'dataType': 'aio:Entity', 'value': 'aio:BookAuthor'}]
+    elif mode == 'book':
+        class_constraints = [{'dataType': 'aio:Entity', 'value': 'aio:Book'}]
+    else:
+        raise Exception('Wrong mode')
+    headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': API_KEY}
+    named_entities = [annotated_phrase['text']]
+    for tmp in annotated_phrase['annotations']['ner']:
+        if len(tmp) > 0 and 'text' in tmp[0]:
+            named_entities.append(tmp[0]['text'])
+    for nounphrase in annotated_phrase['annotations']['cobot_nounphrases']:
+        if nounphrase not in named_entities:
+            named_entities.append(nounphrase)
+    if len(named_entities) >= 1:
+        entityname = None
+        for entity in named_entities:
+            if entityname is None:
+                try:
+                    answer = requests.request(url=ENTITY_SERVICE_URL, headers=headers,
+                                              data=json.dumps({'mention': {'text': entity},
+                                                               'classConstraints': class_constraints}),
+                                              method='POST').json()
+                    entityname_plain = answer['resolvedEntities'][0]['value']
+                    entityname_plain = '<' + entityname_plain + '>'
+                    answer = requests.request(
+                        url=QUERY_SERVICE_URL, headers=headers, data=json.dumps(
+                            {'query': {'text': 'query label|' + entityname_plain + ' <aio:prefLabel> ' + 'label'}}),
+                        method='POST').json()
+                    entityname = answer['results'][0]['bindingList'][0]['value']
+                except BaseException:
+                    pass
+    return entityname
 
 
 def asking_about_book(annotated_user_phrase):
     user_phrase = annotated_user_phrase['text'].lower()
     cond1 = (all([j in user_phrase for j in ['have', 'you', 'read']]) or 'you think about' in user_phrase)
     if cond1:
-        bookname = get_bookname(annotated_user_phrase)
+        bookname = get_name(annotated_user_phrase, 'book')
         if bookname is not None:
             return True
     return False
@@ -193,15 +235,17 @@ def is_positive(annotated_phrase):
 
 
 def tell_me_more(annotated_phrase):
-    return annotated_phrase['annotations']['intent_catcher'].get('tell_me_more', {}).get('detected') == 1
+    cond1 = annotated_phrase['annotations']['intent_catcher'].get('tell_me_more', {}).get('detected') == 1
+    cond2 = 'tell me ' in annotated_phrase['text'] and ([j in annotated_phrase['text'] for j in ['about', 'of']])
+    return cond1 or cond2
 
 
 def fact_request_detected(annotated_user_phrase):
     cond1 = 'have you read ' in annotated_user_phrase['text'].lower()
     cond2 = opinion_request_detected(annotated_user_phrase) and about_book(annotated_user_phrase)
     cond3 = asking_about_book(annotated_user_phrase)
-    # removed cond3 due to the bug in information_request_detected
-    # cond4 = tell_me_more(annotated_user_phrase) or information_request_detected(annotated_user_phrase)
+    # removed cond4 due to the bug in information_request_detected
+    # cond4 = information_request_detected(annotated_user_phrase)
     return cond1 or cond2 or cond3  # or cond4
 
 
@@ -211,6 +255,12 @@ def get_genre_book(annotated_user_phrase, bookreads='bookreads_data.json'):
     '''
     bookreads_data = json.load(open(bookreads, 'r'))[0]
     user_phrase = annotated_user_phrase['text']
+    genre = get_genre(user_phrase)
+    book = bookreads_data[genre]['title']
+    return book
+
+
+def get_genre(user_phrase, return_name=False):
     if any([j in user_phrase for j in ['food', 'cook', 'kitchen']]):
         genre = 'food cook'
     elif any([j in user_phrase for j in ['child', 'kid']]):
@@ -221,7 +271,7 @@ def get_genre_book(annotated_user_phrase, bookreads='bookreads_data.json'):
         genre = 'mystery thriller'
     elif any([j in user_phrase for j in ['horror']]):
         genre = 'horror'
-    elif any([j in user_phrase for j in ['humor', 'funny', 'laugh']]):
+    elif any([j in user_phrase for j in ['humor', 'funny', 'laugh', 'comics']]):
         genre = 'humour'
     elif any([j in user_phrase for j in ['fantasy']]):
         genre = 'fantasy'
@@ -249,8 +299,61 @@ def get_genre_book(annotated_user_phrase, bookreads='bookreads_data.json'):
         genre = 'fiction'
     else:
         return None
-    book = bookreads_data[genre]['title']
-    return book
+    if return_name:
+        genre_dict = {'memour autobiography': 'memoir books',
+                      'history biography': 'biography books',
+                      'science tehnology': 'technology books',
+                      'debut novel': 'debut novel books',
+                      'graphic novels comics': 'comics',
+                      'picture': 'picture books',
+                      'romance': 'romance books',
+                      'non-fiction': 'non-fiction books',
+                      'food cook': 'culinary books',
+                      'poetry': 'poetry books',
+                      'childrens': "children's literature",
+                      'mystery thriller': 'thriller books',
+                      'horror': 'horror stories',
+                      'humor': 'funny stories',
+                      'fantasy': 'fantasy books',
+                      'science fiction': 'science fiction books',
+                      'historical fiction': 'historical fiction books',
+                      'fiction': 'fiction'
+                      }
+        return genre_dict[genre]
+    else:
+        return genre
+
+
+def genre_request_detected(annotated_user_phrase):
+    phrase = annotated_user_phrase['text'].lower()
+    phrase = phrase.replace('favourite', 'favorite')
+    return 'your favorite' in phrase and 'genre' in phrase
+
+
+def book_request_detected(annotated_user_phrase):
+    phrase = annotated_user_phrase['text'].lower()
+    phrase = phrase.replace('favourite', 'favorite')
+    return 'your favorite' in phrase and 'book' in phrase
+
+
+def fact_about_book(annotated_user_phrase):
+    '''
+    Edit getting bookname
+    '''
+    logging.info('fact about')
+    logging.info(annotated_user_phrase)
+    try:
+        bookname = get_name(annotated_user_phrase, 'book')
+        reply = get_answer('fact about ' + bookname)
+        reply = reply.split('This might answer your question: ')[1]
+        return reply
+    except BaseException:
+        return None
+
+
+pphrase1 = ["i'm currently reading sapiens have you heard of that",
+            "that's sweet thank you can you tell me about the book sapiens",
+            "i don't really read a handmaid's tale have you read sapiens"]
 
 
 class BookSkillScenario:
@@ -260,20 +363,7 @@ class BookSkillScenario:
         self.default_reply = "I don't know what to answer"
         self.genre_prob = 0.5
         self.bookread_dir = 'bookreads_data.json'
-
-    def fact_about_book(self, annotated_phrase):
-        '''
-        Edit getting bookname
-        '''
-        bookname = get_bookname(annotated_phrase)
-        if bookname is not None:
-            try:
-                reply = get_answer('fact about ' + bookname)
-                return reply, self.default_conf
-            except BaseException:
-                return self.default_reply, 0
-        else:
-            return self.default_reply, 0
+        self.bookreads_data = json.load(open(self.bookread_dir, 'r'))[0]
 
     def __call__(self, dialogs):
         texts = []
@@ -282,13 +372,15 @@ class BookSkillScenario:
         START_PHRASE = "OK, let's talk about books. Do you love reading?"
         NO_PHRASE_1 = "Why don't you love reading?"
         NO_PHRASE_2 = "I imagine that's good for you."
-        NO_PHRASE_3 = 'I agree. But there are some better books.'
+        # NO_PHRASE_3 = 'I agree. But there are some better books.'
         NO_PHRASE_4 = "OK, I got it. I suppose you know about it everything you need."
         YES_PHRASE_1 = "That's great. What is the last book you have read?"
         YES_PHRASE_2_NO = "That's OK. I can't name it either."
         YES_PHRASE_2 = "Fabulous! And what book did impress you the most?"
         YES_PHRASE_3_1 = "I've also read it. It's an amazing book!"
         YES_PHRASE_3_FACT = "I've read it. It's an amazing book! Would you like to know some facts about it?"
+        FAVOURITE_GENRE_ANSWERS = ['I like all book genres.']
+        FAVOURITE_BOOK_ANSWERS = ['My favourite book is "The Old Man and the Sea" by Ernest Hemingway.']
         GENRE_PHRASE_1 = 'What is your favorite book genre?'
 
         def GENRE_PHRASE_2(book):
@@ -305,6 +397,7 @@ class BookSkillScenario:
         confidence = 0
         for dialog in dialogs:
             try:
+                logging.info(dialog)
                 # TODO check correct order of concatenation of replies
                 text_utterances = [j['text'] for j in dialog['utterances']]
                 # logging.info('***'.join([j for j in text_utterances]))
@@ -312,20 +405,40 @@ class BookSkillScenario:
                 if len(bot_phrases) == 0:
                     bot_phrases.append('')
                 annotated_user_phrase = dialog['utterances'][-1]
+                if len(dialog['utterances']) >= 3:
+                    annotated_prev_phrase = dialog['utterances'][-3]
+                else:
+                    annotated_prev_phrase = None
                 logging.info(str(annotated_user_phrase))
+                # logging.info(bot_phrases[-1])
+                '''
+                Remove punctuation
+                '''
                 # I don't denote annotated_user_phrase['text'].lower() as a single variable
                 # in order not to confuse it with annotated_user_phrase
                 if any([j in annotated_user_phrase['text'].lower() for j in ['talk about books', 'chat about books']]):
                     reply, confidence = START_PHRASE, 1
                 elif fact_request_detected(annotated_user_phrase):
                     reply, confidence = YES_PHRASE_3_FACT, self.default_conf
-                elif YES_PHRASE_3_FACT == bot_phrases[-1]:
+                elif genre_request_detected(annotated_user_phrase):
+                    reply, confidence = random.choice(FAVOURITE_GENRE_ANSWERS), self.default_conf
+                elif book_request_detected(annotated_user_phrase):
+                    reply, confidence = random.choice(FAVOURITE_BOOK_ANSWERS), self.default_conf
+                elif (YES_PHRASE_3_FACT.lower() == bot_phrases[-1].lower()):
                     if is_no(annotated_user_phrase):
                         reply, confidence = NO_PHRASE_4, self.default_conf
-                    elif is_yes(annotated_user_phrase):
-                        reply, confidence = self.fact_about_book(annotated_user_phrase)
                     else:
-                        reply, confidence = self.default_reply, 0
+                        '''
+                        DEFINE PREV PHRASE
+                        '''
+                        # logging.info('a')
+                        for phrase in [annotated_user_phrase, annotated_prev_phrase]:
+                            # logging.info(str(phrase))
+                            reply, confidence = fact_about_book(phrase), self.default_conf
+                            if reply is not None:
+                                break
+                        if reply is None:
+                            reply = self.default_reply
                 elif START_PHRASE in bot_phrases:
                     if repeat(annotated_user_phrase):
                         reply, confidence = bot_phrases[-1], self.default_conf
@@ -350,17 +463,13 @@ class BookSkillScenario:
                     elif YES_PHRASE_2 == bot_phrases[-1] or 'Interesting. Have you read ' in bot_phrases[-1]:
                         if is_no(annotated_user_phrase):
                             reply, confidence = NO_PHRASE_2, self.default_conf
-                        elif is_yes(annotated_user_phrase) or opinion_expression_detected(annotated_user_phrase):
-                            if is_negative(annotated_user_phrase):
-                                reply, confidence = NO_PHRASE_3, self.default_conf
-                            else:
-                                reply, confidence = YES_PHRASE_3_1, self.default_conf
                         else:
-                            reply, confidence = self.default_reply, 0
+                            reply, confidence = YES_PHRASE_3_1, self.default_conf
                     elif fact_request_detected(annotated_user_phrase):
                         reply, confidence = self.fact_about_book(annotated_user_phrase)
-
                     else:
+                        assert reply in [self.default_reply, ""]
+                    if reply in [self.default_reply, ""]:
                         if GENRE_PHRASE_1 not in bot_phrases:
                             reply, confidence = GENRE_PHRASE_1, self.default_conf
                         elif GENRE_PHRASE_1 == bot_phrases[-1]:
@@ -369,14 +478,13 @@ class BookSkillScenario:
                                 reply, confidence = self.default_reply, 0
                             else:
                                 reply, confidence = GENRE_PHRASE_2(book), self.default_conf
-                        elif 'Amazing! Have you read ' in bot_phrases[-1] and 'book' in bot_phrases[-1]:
+                        elif 'Amazing! Have you read ' in bot_phrases[-1]:
                             if tell_me_more(annotated_user_phrase):
                                 reply = None
-                                bookname = bot_phrases[-1].split('book')[1].split('?')[0]
-                                bookreads_data = json.load(open(self.bookread_dir, 'r'))[0]
-                                for genre in bookreads_data:
-                                    if bookreads_data[genre]['title'] == bookname:
-                                        reply, confidence = bookreads_data[genre]['description'], self.default_conf
+                                bookname = bot_phrases[-1].split('you read ')[1].split('?')[0].strip()
+                                for genre in self.bookreads_data:
+                                    if self.bookreads_data[genre]['title'] == bookname:
+                                        reply, confidence = self.bookreads_data[genre]['description'], self.default_conf
                                 if reply is None:
                                     part1 = 'From bot phrase ' + bot_phrases[-1]
                                     part2 = ' bookname *' + bookname + '* didnt match'
@@ -401,7 +509,25 @@ class BookSkillScenario:
                             else:
                                 reply, confidence = self.default_reply, 0
                 else:
-                    reply, confidence = self.default_reply, 0
+                    author_name = get_name(annotated_user_phrase, 'author')
+                    bookname = get_name(annotated_user_phrase, 'book')
+                    genre_name = get_genre(annotated_user_phrase['text'], return_name=True)
+                    if author_name is not None:
+                        reply1 = ' I enjoy reading books of ' + author_name + ' . '
+                        best_book = best_book_by_author(author_name)
+
+                        if best_book is not None:
+                            reply2 = ' I especially enjoy reading ' + best_book
+                        else:
+                            reply2 = ''
+                        reply, confidence = reply1 + reply2, self.default_conf
+                    elif bookname is not None:
+                        reply, confidence = bookname + ' is an amazing book!', self.default_conf
+                    elif genre_name is not None:
+                        reply, confidence = 'I love ' + str(genre_name) + '.'
+                    else:
+
+                        reply, confidence = self.default_reply, 0
 
                 assert reply is not None
             except Exception as e:

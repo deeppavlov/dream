@@ -365,7 +365,7 @@ def asr_formatter(payload, mode='in'):
             last_utterance = dialog['utterances'][-1]
             # attributes may not exist in utterance object if ONLY user_id and payload is passed to API
             speeches.append(last_utterance.get('attributes', {}).get('speech', {}))
-        return {'speeches' : speeches}
+        return {'speeches': speeches}
     elif mode == 'out':
         return payload
 
@@ -406,7 +406,7 @@ def intent_catcher_formatter(payload, mode='in'):
             segmented_sentences = [ann['sentseg']['segments'] for ann in inp_data['last_annotations']]
         except KeyError:
             segmented_sentences = [ann['bot_sentseg']['segments'] for ann in inp_data['last_annotations']]
-        return {'sentences' : segmented_sentences}
+        return {'sentences': segmented_sentences}
     elif mode == 'out':
         return payload
 
@@ -469,6 +469,14 @@ def skill_with_attributes_formatter(payload, mode='in'):
             return [{"text": payload[0],
                      "confidence": payload[1]
                      }]
+
+
+def book_skill_formatter(payload, mode='in'):
+    if mode == 'in':
+        dialogs = annotated_input_formatter(payload, annotation="coref_resolved")['dialogs']
+        return {'dialogs': dialogs}
+    else:
+        return skill_with_attributes_formatter(payload, mode='out')
 
 
 def attitude_formatter(payload, mode='in'):
