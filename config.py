@@ -183,7 +183,7 @@ SKILLS = [
         "endpoint": "book_skill",
         "external": True,
         "path": "",
-        "formatter": skill_with_attributes_formatter
+        "formatter": book_skill_formatter
     },
     {
         "name": "christmas_new_year_skill",

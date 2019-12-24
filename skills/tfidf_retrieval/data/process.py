@@ -98,9 +98,10 @@ donotknow_answers = ["I really do not know what to answer.",
                      "I didn’t catch that.",
                      "I didn’t get that."]
 donotknow_answers = [preprocess(j) for j in donotknow_answers]
-todel_userphrases = ['yes']
+todel_userphrases = ['yes', 'wow', "let's talk about.", 'yeah']
 banned_words = ['Benjamin', 'misheard', 'cannot do this',
-                "I didn't get your homeland .  Could you ,  please ,  repeat it . ", '#+#']
+                "I didn't get your homeland .  Could you ,  please ,  repeat it . ", '#+#',
+                "you are first. tell me something about positronic."]
 vectorizer = get_vectorizer(vectorizer_dir=vectorizer_dir)
 dialog_list = get_dialogs(dialog_dir=dialog_dir, custom_dialog_dir=custom_dialog_dir,
                           full_dialog_dir=full_dialog_dir)
@@ -126,11 +127,23 @@ for gold_phrase in gold_phrases:
     gold_phrase = gold_phrase.split('"\n')[0].split('" "')[0].lower()
     if gold_phrase in phrase_list:
         del phrase_list[gold_phrase]
+for user_phrase in todel_userphrases:
+    if user_phrase in phrase_list:
+        del phrase_list[user_phrase]
+phrase_list["let's talk about."] = "i misheard you. what's it that you’d like to chat about?"
 
 
 def check(human_phrase, vectorizer=vectorizer, phrase_list=phrase_list, top_best=2):
     banned_phrases = ['where are you from?',
-                      "hi, this is an alexa prize socialbot. yeah, let's chat! what do you want to talk about?"]
+                      "hi, this is an alexa prize socialbot. yeah, let's chat! what do you want to talk about?",
+                      "you are first. tell me something about positronic.",
+                      "i'm made by amazon."]
+    misheard_phrases = ["I misheard you",
+                        "Could you repeat that, please?",
+                        "Could you say that again, please?",
+                        "I couldn't hear you",
+                        "Sorry, I didn't catch that",
+                        "What is it that you'd like to chat about?"]
     human_phrase = preprocess(human_phrase)
     human_phrases = list(phrase_list.keys())
     vectorized_phrases = vectorizer.transform(human_phrases)
@@ -147,6 +160,7 @@ def check(human_phrase, vectorizer=vectorizer, phrase_list=phrase_list, top_best
     ans = []
     for ind in best_inds:
         score = multiply_result.data[ind]
+        score = min(score, 0.9)
         if score < 0.6:
             score = score / 1.5
         index = multiply_result.indices[ind]
@@ -155,7 +169,7 @@ def check(human_phrase, vectorizer=vectorizer, phrase_list=phrase_list, top_best
             bot_answer = bot_answer.replace(' ' + sign, sign)
         bot_answer = bot_answer.replace('  ', ' ').lower().strip()
         assert "I didn't get your homeland." not in bot_answer
-        if all([banned_phrase not in bot_answer for banned_phrase in banned_phrases]):
+        if all([banned_phrase not in bot_answer for banned_phrase in banned_phrases + misheard_phrases]):
             ans.append((bot_answer, score))
         else:
             ans.append(("I really do not know what to answer.", 0))
