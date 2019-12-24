@@ -50,12 +50,12 @@ def respond():
         logger.info(f"Get prev xmas topic: {prev_xmas_scenario}")
         response, confidence = share_info(dialog)
         if response != "" and not (prev_xmas_scenario in SCENARIOS_TOPICS):
-            mode = "info"
+            # mode = "info"
             logger.info(f"Response: {response}, mode: {mode}")
         if response == "" and not (prev_xmas_scenario in SCENARIOS_TOPICS):
             response, confidence = xmas_faq(dialog)
             if response != "" and not (prev_xmas_scenario in SCENARIOS_TOPICS):
-                mode = "faq"
+                # mode = "faq"
                 logger.info(f"Response: {response}, mode: {mode}")
         try:
             # try get scenario
@@ -187,13 +187,13 @@ def xmas_scenario(dialog, topic=""):
             curr_scenario = SCENARIOS_TOPICS[STARTING_SCENARIO.index(response)]
     elif topic != "":
         curr_scenario = topic
-        if re.search(bot_starts_scenario[topic], prev_bot_uttr.lower()):
+        if re.search(bot_starts_scenario.get(topic, "xxxxx"), prev_bot_uttr.lower()):
             logger.info(f"Christmas scenario {topic} started.")
             response = scenarios[topic][0]
             confidence = high_confidence
         else:
             logger.info(f"Trying to find next reply for Christmas scenario {topic}.")
-            for j, reply in enumerate(scenarios[topic]):
+            for j, reply in enumerate(scenarios.get(topic, [])):
                 if reply == prev_bot_uttr:
                     if j < len(scenarios[topic]) - 1:
                         response = scenarios[topic][j + 1]
