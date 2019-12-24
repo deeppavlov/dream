@@ -55,6 +55,27 @@ def cobotqa_weather_forecast_now(city_str, timeperiod=None):
 
 
 SORRY_TEMPLATE = "Sorry, we have a problem with the weather service. Try again a little bit later."
+# Temperature coneversion constants
+KELVIN_OFFSET = 273.15
+FAHRENHEIT_OFFSET = 32.0
+FAHRENHEIT_DEGREE_SCALE = 1.8
+
+
+def kelvin_to_fahrenheit(kelvintemp):
+    """
+    # taken from
+    # https://github.com/csparpa/pyowm/blob/9ee1f88818d6be154865cc7447f2f6708a37227b/pyowm/utils/temputils.py
+
+    Converts a numeric temperature from Kelvin degrees to Fahrenheit degrees
+    :param kelvintemp: the Kelvin temperature
+    :type kelvintemp: int/long/float
+    :returns: the float Fahrenheit temperature
+    :raises: *TypeError* when bad argument types are provided
+    """
+    if kelvintemp < 0:
+        raise ValueError(__name__ + ": negative temperature values not allowed")
+    fahrenheittemp = (kelvintemp - KELVIN_OFFSET) * FAHRENHEIT_DEGREE_SCALE + FAHRENHEIT_OFFSET
+    return float("{0:.2f}".format(fahrenheittemp))
 
 
 def owm_requests_weather_forecast_now(city_str):
@@ -70,7 +91,7 @@ def owm_requests_weather_forecast_now(city_str):
         json_data = resp.json()
         try:
             description = json_data['weather'][0]['description']
-            temperature = json_data['main']['temp']
+            temperature = kelvin_to_fahrenheit(json_data['main']['temp'])
             city_name = json_data['name']
             response_template = "It is %s, temperature: %0.1f in %s" % (
                 description, temperature, city_name)
