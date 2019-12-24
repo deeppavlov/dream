@@ -391,4 +391,15 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+  weather_skill:
+    build:
+      context: ./skills/weather_skill/
+    command: gunicorn --workers=4 server:app -b 0.0.0.0:8037
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
 version: '3.7'

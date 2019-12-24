@@ -195,6 +195,16 @@ SKILLS = [
         "path": "",
         "formatter": skill_with_attributes_formatter
     },
+    {
+        "name": "weather_skill",
+        "protocol": "http",
+        "host": "weather_skill",
+        "port": 8037,
+        "endpoint": "respond",
+        "external": True,
+        "path": "",
+        "formatter": skill_with_attributes_formatter
+    },
 ]
 
 ANNOTATORS_1 = [

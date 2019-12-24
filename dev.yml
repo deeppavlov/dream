@@ -212,4 +212,10 @@ services:
       - "./skills/christmas_new_year_skill:/src"
     ports:
       - 8036:8036
+  weather_skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/weather_skill:/src"
+    ports:
+      - 8037:8037
 version: "3.7"
