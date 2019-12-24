@@ -71,6 +71,7 @@ class RuleBasedSelector():
                 skills_for_uttr.append("program_y")
                 skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("alice")
+                skills_for_uttr.append("christmas_new_year_skill")
                 if len(dialog['utterances']) > 7:
                     skills_for_uttr.append("tfidf_retrieval")
                 # skills_for_uttr.append("transfertransfo")
@@ -87,10 +88,14 @@ class RuleBasedSelector():
             about_movies = (movie_cobot_dialogacts & cobot_dialogact_topics) | (movie_cobot_topics & cobot_topics)
             if about_movies:
                 skills_for_uttr.append("movie_skill")
+                if "christmas_new_year_skill" not in skills_for_uttr:
+                    skills_for_uttr.append("christmas_new_year_skill")
 
             about_music = ("Entertainment_Music" in cobot_dialogact_topics) | ("Music" in cobot_topics)
             if about_music and len(dialog["utterances"]) > 2:
                 skills_for_uttr.append("music_tfidf_retrieval")
+                if "christmas_new_year_skill" not in skills_for_uttr:
+                    skills_for_uttr.append("christmas_new_year_skill")
 
             books_cobot_dialogacts = {
                 "Entertainment_General", "Entertainment_Books"
@@ -101,10 +106,11 @@ class RuleBasedSelector():
             about_books = (books_cobot_dialogacts & cobot_dialogact_topics) | (books_cobot_topics & cobot_topics)
             if about_books:
                 skills_for_uttr.append("book_skill")
+                if "christmas_new_year_skill" not in skills_for_uttr:
+                    skills_for_uttr.append("christmas_new_year_skill")
             # always add dummy_skill
             skills_for_uttr.append("dummy_skill")
             skills_for_uttr.append("personal_info_skill")
-            skills_for_uttr.append("christmas_new_year_skill")
 
             if len(dialog['utterances']) > 1:
                 # skills_for_uttr += ["misheard_asr"]
