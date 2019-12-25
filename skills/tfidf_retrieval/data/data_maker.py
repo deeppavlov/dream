@@ -54,9 +54,9 @@ def __main__():
         dialog_list = []
         for j in dialogs:
             cond1 = 'conversation_id' in j['utterances'][0]['attributes']
-            cond2 = j['utterances'][0]['attributes']['conversation_id'] in assessment_ids
-            if cond1 and cond2:
-                dialog_list.append(j)
+            if cond1:
+                if j['utterances'][0]['attributes']['conversation_id'] in assessment_ids:
+                    dialog_list.append(j)
         for dialog in dialog_list:
             id_ = dialog['utterances'][0]['attributes']['conversation_id']
             for i in range(1, len(dialog['utterances']), 2):
@@ -72,15 +72,15 @@ def __main__():
     bad_dialogs = []
     for dialog in dialogs:
         added = False
-        utterances = dialog['utterances']
+        utterances = [utterance for utterance in dialog['utterances']
+                      if 'attributes' in utterance and 'conversation_id' in utterance['attributes']]
         for utterance in utterances:
-            cond1 = 'attributes' in utterance and 'conversation_id' in utterance['attributes']
-            cond2 = utterance['attributes']['conversation_id'] in good_ids
-            cond3 = len(dialog['utterances']) >= 7
-            if cond1 and cond2 and cond3 and not added:
+            cond1 = utterance['attributes']['conversation_id'] in good_ids
+            cond2 = len(dialog['utterances']) >= 7
+            if cond1 and cond2 and not added:
                 added = True
                 good_dialogs.append(process(dialog))
-            if args.bad_output_file and cond1:
+            if args.bad_output_file:
                 if utterance['attributes']['conversation_id'] in bad_ids and not added:
                     added = True
                     bad_dialogs.append(process(dialog))

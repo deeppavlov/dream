@@ -3,7 +3,6 @@ from os import getenv
 from string import punctuation
 import sentry_sdk
 import random
-import re
 import requests
 import json
 
@@ -93,30 +92,40 @@ def fan_parse(phrase):
     return phrase
 
 
-def parse_author_best_book(annotated_phrase, default_phrase="Fabulous! And what book did impress you the most?",
-                           default_confidence=0.9):
+def parse_author_best_book(annotated_phrase, default_phrase="Fabulous! And what book did impress you the most?"):
     annotated_phrase['text'] = annotated_phrase['text'].lower()
     if ' is ' in annotated_phrase['text']:
         annotated_phrase['text'] = annotated_phrase['text'].split(' is ')[1]
-    last_bookname = get_name(annotated_phrase, 'book')
+    last_bookname = get_name(annotated_phrase, 'book').lower()
     if last_bookname is None:
         '''
         Look by author name
         '''
-        return default_phrase, default_confidence
+        return default_phrase
     try:
-        about_best_book = get_answer(last_bookname)
-        author = about_best_book.split('author ')[1]
-        match = re.search(r'[a-z][.] [A-Z]', author)
-        span = match.span()[0] + 1
-        author = author[:span + 1]
+        '''
+        Get author or this book using QUERY LANGUAGE !!!! Not get_answer
+        '''
+        headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': API_KEY}
+        aie_book = get_name(last_bookname, mode='book', return_plain=True)
+        answer = requests.request(url=QUERY_SERVICE_URL, headers=headers,
+                                  data=json.dumps(
+                                      {'query': {'text': 'query d|d' + ' <aio:isTheAuthorOf> ' + aie_book}}),
+                                  method='POST').json()
+        authorname_plain = '<' + answer['results'][0]['bindingList'][0]['value'] + '>'
+        answer = requests.request(
+            url=QUERY_SERVICE_URL, headers=headers, data=json.dumps(
+                {'query': {'text': 'query label|' + authorname_plain + ' <aio:prefLabel> ' + 'label'}}),
+            method='POST').json()
+        author = answer['results'][0]['bindingList'][0]['value']
     except BaseException:
-        return default_phrase, default_confidence
-    return best_book_by_author(author, last_bookname)
-    # Receiving info about the last book ever read, we зкщсуыы штащ фищге фгерщк
+        return default_phrase
+    return best_book_by_author(author, last_bookname, default_phrase=default_phrase)
+    # Receiving info about the last book ever read, we process info about author
 
 
-def best_book_by_author(author, last_bookname=None):
+def best_book_by_author(author, last_bookname=None,
+                        default_phrase="Fabulous! And what book did impress you the most?"):
     try:
         answer1 = get_answer('books of ' + author)
         book_list = answer1.split('include: ')[1].split(',')
@@ -126,10 +135,12 @@ def best_book_by_author(author, last_bookname=None):
             if book not in last_bookname and last_bookname not in book:
                 return 'Interesting. Have you read ' + book + ' ?'
     except BaseException:
-        return None
+        return default_phrase
 
 
-def get_name(annotated_phrase, mode='author'):
+def get_name(annotated_phrase, mode='author', return_plain=False):
+    if type(annotated_phrase) == str:
+        annotated_phrase = {'text': annotated_phrase}
     if mode == 'author':
         class_constraints = [{'dataType': 'aio:Entity', 'value': 'aio:Poet'},
                              {'dataType': 'aio:Entity', 'value': 'aio:BookAuthor'}]
@@ -139,30 +150,33 @@ def get_name(annotated_phrase, mode='author'):
         raise Exception('Wrong mode')
     headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': API_KEY}
     named_entities = [annotated_phrase['text']]
-    for tmp in annotated_phrase['annotations']['ner']:
-        if len(tmp) > 0 and 'text' in tmp[0]:
-            named_entities.append(tmp[0]['text'])
-    for nounphrase in annotated_phrase['annotations']['cobot_nounphrases']:
-        if nounphrase not in named_entities:
-            named_entities.append(nounphrase)
-    if len(named_entities) >= 1:
-        entityname = None
-        for entity in named_entities:
-            if entityname is None:
-                try:
-                    answer = requests.request(url=ENTITY_SERVICE_URL, headers=headers,
-                                              data=json.dumps({'mention': {'text': entity},
-                                                               'classConstraints': class_constraints}),
-                                              method='POST').json()
-                    entityname_plain = answer['resolvedEntities'][0]['value']
-                    entityname_plain = '<' + entityname_plain + '>'
+    if 'annotations' in annotated_phrase:
+        for tmp in annotated_phrase['annotations']['ner']:
+            if len(tmp) > 0 and 'text' in tmp[0]:
+                named_entities.append(tmp[0]['text'])
+        for nounphrase in annotated_phrase['annotations']['cobot_nounphrases']:
+            if nounphrase not in named_entities:
+                named_entities.append(nounphrase)
+    entityname = None
+    for entity in named_entities:
+        if entityname is None:
+            try:
+                answer = requests.request(url=ENTITY_SERVICE_URL, headers=headers,
+                                          data=json.dumps({'mention': {'text': entity},
+                                                           'classConstraints': class_constraints}),
+                                          method='POST').json()
+                entityname_plain = answer['resolvedEntities'][0]['value']
+                entityname_plain = '<' + entityname_plain + '>'
+                if return_plain:
+                    entityname = entityname_plain
+                else:
                     answer = requests.request(
                         url=QUERY_SERVICE_URL, headers=headers, data=json.dumps(
                             {'query': {'text': 'query label|' + entityname_plain + ' <aio:prefLabel> ' + 'label'}}),
                         method='POST').json()
                     entityname = answer['results'][0]['bindingList'][0]['value']
-                except BaseException:
-                    pass
+            except BaseException:
+                pass
     return entityname
 
 
@@ -313,7 +327,7 @@ def get_genre(user_phrase, return_name=False):
                       'childrens': "children's literature",
                       'mystery thriller': 'thriller books',
                       'horror': 'horror stories',
-                      'humor': 'funny stories',
+                      'humour': 'funny stories',
                       'fantasy': 'fantasy books',
                       'science fiction': 'science fiction books',
                       'historical fiction': 'historical fiction books',
@@ -355,6 +369,8 @@ pphrase1 = ["i'm currently reading sapiens have you heard of that",
             "that's sweet thank you can you tell me about the book sapiens",
             "i don't really read a handmaid's tale have you read sapiens"]
 
+GENRE_PHRASES = json.load(open('genre_phrases.json', 'r'))[0]
+
 
 class BookSkillScenario:
 
@@ -379,7 +395,7 @@ class BookSkillScenario:
         YES_PHRASE_2 = "Fabulous! And what book did impress you the most?"
         YES_PHRASE_3_1 = "I've also read it. It's an amazing book!"
         YES_PHRASE_3_FACT = "I've read it. It's an amazing book! Would you like to know some facts about it?"
-        FAVOURITE_GENRE_ANSWERS = ['I like all book genres.']
+        FAVOURITE_GENRE_ANSWERS = list(GENRE_PHRASES.values())
         FAVOURITE_BOOK_ANSWERS = ['My favourite book is "The Old Man and the Sea" by Ernest Hemingway.']
         GENRE_PHRASE_1 = 'What is your favorite book genre?'
 
@@ -457,16 +473,15 @@ class BookSkillScenario:
                         if is_no(annotated_user_phrase):
                             reply, confidence = YES_PHRASE_2_NO, self.default_conf
                         else:
-                            reply, confidence = parse_author_best_book(annotated_user_phrase,
-                                                                       default_phrase=YES_PHRASE_2,
-                                                                       default_confidence=self.default_conf)
+                            reply = parse_author_best_book(annotated_user_phrase, default_phrase=YES_PHRASE_2)
+                            confidence = 0.9
                     elif YES_PHRASE_2 == bot_phrases[-1] or 'Interesting. Have you read ' in bot_phrases[-1]:
                         if is_no(annotated_user_phrase):
                             reply, confidence = NO_PHRASE_2, self.default_conf
                         else:
                             reply, confidence = YES_PHRASE_3_1, self.default_conf
                     elif fact_request_detected(annotated_user_phrase):
-                        reply, confidence = self.fact_about_book(annotated_user_phrase)
+                        reply, confidence = fact_about_book(annotated_user_phrase), self.default_conf
                     else:
                         assert reply in [self.default_reply, ""]
                     if reply in [self.default_reply, ""]:
@@ -524,9 +539,8 @@ class BookSkillScenario:
                     elif bookname is not None:
                         reply, confidence = bookname + ' is an amazing book!', self.default_conf
                     elif genre_name is not None:
-                        reply, confidence = 'I love ' + str(genre_name) + '.'
+                        reply, confidence = GENRE_PHRASES[genre_name], self.default_conf
                     else:
-
                         reply, confidence = self.default_reply, 0
 
                 assert reply is not None
