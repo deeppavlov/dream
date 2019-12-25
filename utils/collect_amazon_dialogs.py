@@ -3,6 +3,7 @@
 #        --with_requesting --url http://Docker-st-External-1918W05RU8XQW-178993125.us-east-1.elb.amazonaws.com:4242
 # to get ratings run ./utils/download_ratings.sh
 # to get dialogs run wget <agent_url>:4242/dialogs
+import os
 import json
 import pandas as pd
 import sys
@@ -19,7 +20,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--input', help='input json with dialogs (can be fetched through /dialogs)')
+parser.add_argument('--input', help='input json or folder with dialogs (can be fetched through /dialogs)')
 parser.add_argument('--output', help='output filename prefix', default='amazon_dialogs')
 parser.add_argument('--with_requesting', action='store_true', default=False, help='pass user queries to url')
 parser.add_argument('--with_debug_info', action='store_true', default=False,
@@ -118,8 +119,16 @@ async def make_requests(new_conversations, args):
 
 
 async def main(args):
-    with open(args.input, 'r') as f:
-        data = json.load(f)
+    if os.path.isfile(args.input):
+        with open(args.input, 'r') as f:
+            data = json.load(f)
+    else:
+        data = []
+        for filename in os.listdir(args.input):
+            path = os.path.join(args.input, filename)
+            with open(path, 'r') as f:
+                dialog_list = json.load(f)
+            data.extend(dialog_list)
     conversations = {}
     for d in data:
         for utt in d['utterances']:
