@@ -98,7 +98,7 @@ donotknow_answers = ["I really do not know what to answer.",
                      "I didn’t catch that.",
                      "I didn’t get that."]
 donotknow_answers = [preprocess(j) for j in donotknow_answers]
-todel_userphrases = ['yes', 'wow', "let's talk about.", 'yeah']
+todel_userphrases = ['yes', 'wow', "let's talk about.", 'yeah', 'politics']
 banned_words = ['Benjamin', 'misheard', 'cannot do this',
                 "I didn't get your homeland .  Could you ,  please ,  repeat it . ", '#+#',
                 "you are first. tell me something about positronic."]

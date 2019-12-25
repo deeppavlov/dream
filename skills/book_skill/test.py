@@ -30,12 +30,14 @@ def main_test():
                     'My favourite book is "The Old Man and the Sea" by Ernest Hemingway.',
                     "OK, let's talk about books. Do you love reading?",
                     "That's great. What is the last book you have read?",
-                    "Fabulous! And what book did impress you the most?", "I've also read it. It's an amazing book!",
+                    "Interesting. Have you read ",
+                    # This should be a beginning of the response - response needs to be randomized
+                    "I've also read it. It's an amazing book!",
                     'What is your favorite book genre?',
                     'Amazing! Have you read The Testaments ? And if you have read it, what do you think about it?',
                     json.load(open('bookreads_data.json', 'r'))[0]['fiction']['description']]
     for i in range(len(responses)):
-        assert responses[i] == gold_phrases[i], str(i) + ' ' + str(responses[i])
+        assert gold_phrases[i] in responses[i], str(i) + ' ' + str(responses[i])
 
 
 if __name__ == '__main__':
