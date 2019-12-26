@@ -439,6 +439,9 @@ class IMDb:
             dictionary
             empty dictionary if movie not in the database
         """
+        if name_or_id is None:
+            return {}
+
         if name_or_id.isdigit() and 6 <= len(name_or_id) <= 8:
             # this is imdb_id
             pass
