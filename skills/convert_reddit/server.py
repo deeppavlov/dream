@@ -99,6 +99,12 @@ def is_unanswerable_utters(history):
             return True
 
 
+def clear_answer(answer):
+    answer = re.sub("[^A-Za-z0-9-!,.’?'\"’ ]+", "", answer).strip()
+    answer = re.sub(' +', ' ', answer)
+    return answer
+
+
 def inference(utterances_histories):
     context_encoding = encode_context(utterances_histories)
     scores = context_encoding.dot(response_encodings.T)
@@ -121,7 +127,7 @@ def inference(utterances_histories):
                     break
 
     if len(filtered_indices) > 0:
-        return responses[filtered_indices[0]], approximate_confidence(scores[filtered_indices[0]])
+        return clear_answer(responses[filtered_indices[0]]), approximate_confidence(scores[filtered_indices[0]])
     else:
         return "", 0.0
 
