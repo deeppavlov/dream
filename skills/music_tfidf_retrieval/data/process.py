@@ -8,7 +8,9 @@ import urllib.request
 import logging
 import tarfile
 import pathlib
+import time
 
+t = time.time()
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s %(module)s %(lineno)d %(levelname)s : %(message)s",
@@ -30,15 +32,15 @@ def most_frequent(List):
 
 
 def preprocess(phrase):
-    for sign in "!#$%&*+.,:;<>=?@[]^_{}|":
+    # return phrase
+    for sign in "!$%.,:;?":
         phrase = phrase.replace(sign, " " + sign + " ")
     return phrase
 
 
-def get_vectorizer(vectorizer_dir):
+def get_vectorizer(vectorizer_file='new_vectorizer_2.zip'):
     if "new_vectorizer.pkl" not in os.listdir(os.getcwd()):
-        urllib.request.urlretrieve(vectorizer_dir, "new_vectorizer.zip")
-        with zipfile.ZipFile("new_vectorizer.zip", "r") as zip_ref:
+        with zipfile.ZipFile(vectorizer_file, "r") as zip_ref:
             zip_ref.extractall(os.getcwd())
     vectorizer = cPickle.load(open("new_vectorizer.pkl", "rb"))
     return vectorizer
@@ -73,6 +75,9 @@ def create_phraselist(dialog_list, donotknow_answers, todel_userphrases, banned_
     bad_phrase_list = defaultdict(list)
     good_total_count = 0
     bad_total_count = 0
+    donotknow_answers = set(donotknow_answers)
+    todel_userphrases = set(todel_userphrases)
+    banned_words = set(banned_words)
     for dialog in dialog_list:
         utterances = dialog["utterances"]
         for i in range(0, len(utterances) - 1, 2):
@@ -101,51 +106,7 @@ def create_phraselist(dialog_list, donotknow_answers, todel_userphrases, banned_
     return phrase_list
 
 
-# YAAAH, HARDCORE!!!!
-vectorizer_dir = "http://lnsigo.mipt.ru/export/models/new_vectorizer_2.zip"
-dataset_file = "data/music_dialog_list.json"
-dataset_file_url = "http://files.deeppavlov.ai/alexaprize_data/music_dataset_based_on_topicalchat_20191210.tar.gz"
-
-donotknow_answers = [
-    "I really do not know what to answer.",
-    "Sorry, probably, I didn't get what you mean.",
-    "I didn't get it. Sorry.",
-    "Let's talk about something else.",
-    "I'm newborn socialbot, so I can't do so much. For example I can answer for any question.",
-    "I'm really sorry but i'm a socialbot, and I cannot do some Alexa things.",
-    "I didn’t catch that.",
-    "I didn’t get that.",
-]
-donotknow_answers = [preprocess(j) for j in donotknow_answers]
-todel_userphrases = ["yes"]
-banned_words = ["Benjamin"]
-vectorizer = get_vectorizer(vectorizer_dir=vectorizer_dir)
-get_dataset(dataset_file, dataset_file_url)
-dialog_list = get_dialogs(dataset_file, "", "", False)
-dialog_list = [{"utterances": dialog["utterances"][2:-2]} for dialog in dialog_list]
-
-# if TFIDF_BAD_FILTER:
-#     bad_dialog_dir = "data/bad_dialog_list.json"
-#     bad_dialog_list = get_dialogs(bad_dialog_dir, '', '', False)
-# else:
-#     bad_dialog_list = None
-phrase_list = create_phraselist(
-    dialog_list=dialog_list,
-    donotknow_answers=donotknow_answers,
-    todel_userphrases=todel_userphrases,
-    banned_words=banned_words,
-    bad_dialog_list=None,
-)
-
-# if USE_ASSESSMENT:
-#     goodbad_list = json.load(open('data/goodpoor.json', 'r'))[0]
-#     phrase_list.update(goodbad_list['good'])
-#     for key in goodbad_list['poor']:
-#         if key in phrase_list and goodbad_list['poor'][key] == phrase_list[key]:
-#             del phrase_list[key]
-
-
-def check(human_phrase, vectorizer=vectorizer, phrase_list=phrase_list, top_best=2):
+def check(human_phrase, vectorizer, phrase_list, top_best=2):
     human_phrase = preprocess(human_phrase)
     human_phrases = list(phrase_list.keys())
     vectorized_phrases = vectorizer.transform(human_phrases)

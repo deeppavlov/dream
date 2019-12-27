@@ -96,12 +96,14 @@ def parse_author_best_book(annotated_phrase, default_phrase="Fabulous! And what 
     annotated_phrase['text'] = annotated_phrase['text'].lower()
     if ' is ' in annotated_phrase['text']:
         annotated_phrase['text'] = annotated_phrase['text'].split(' is ')[1]
-    last_bookname = get_name(annotated_phrase, 'book').lower()
+    last_bookname = get_name(annotated_phrase, 'book')
     if last_bookname is None:
         '''
         Look by author name
         '''
         return default_phrase
+    else:
+        last_bookname = last_bookname.lower()
     try:
         '''
         Get author or this book using QUERY LANGUAGE !!!! Not get_answer
@@ -152,7 +154,7 @@ def get_name(annotated_phrase, mode='author', return_plain=False):
     named_entities = [annotated_phrase['text']]
     if 'annotations' in annotated_phrase:
         for tmp in annotated_phrase['annotations']['ner']:
-            if len(tmp) > 0 and 'text' in tmp[0]:
+            if len(tmp) > 0 and 'text' in tmp[0] and tmp[0]['text'] not in named_entities:
                 named_entities.append(tmp[0]['text'])
         for nounphrase in annotated_phrase['annotations']['cobot_nounphrases']:
             if nounphrase not in named_entities:
@@ -270,6 +272,8 @@ def get_genre_book(annotated_user_phrase, bookreads='bookreads_data.json'):
     bookreads_data = json.load(open(bookreads, 'r'))[0]
     user_phrase = annotated_user_phrase['text']
     genre = get_genre(user_phrase)
+    if genre is None:
+        genre = 'fiction'
     book = bookreads_data[genre]['title']
     return book
 
