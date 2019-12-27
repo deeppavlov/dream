@@ -60,21 +60,6 @@
     </template>
   </category>
 
-  <category>
-    <pattern>I *</pattern>
-    <template>
-      <srai><star/></srai>
-    </template>
-  </category>
-
-  <category>
-    <pattern>PLEASE *</pattern>
-    <template>
-      <srai><star/></srai>
-    </template>
-  </category>
-
-
 <!--  let's chat-->
 
   <category>
