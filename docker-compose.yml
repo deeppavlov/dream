@@ -115,6 +115,9 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+      resources:
+        limits:
+          memory: 2G
   personality_catcher:
     build:
       context: ./skills/personality_catcher/
@@ -244,7 +247,7 @@ services:
     working_dir: /src/dream_aiml/scripts/xnix
     command: ./sanic.sh
     healthcheck:
-      test: ["CMD-SHELL", "curl -s --header \"Content-Type: application/json\" --request POST --data '{\"sentences_batch\":[[\"i want to commit a suicide\"]],\"user_ids\":[123131]}' http://localhost:8008/api/rest/v1.0/ask || exit 1"]
+      test: ["CMD-SHELL", "curl -s --header \"Content-Type: application/json\" --request POST --data '{\"sentences_batch\":[[\"i want to commit a suicide\"]],\"user_ids\":[123131]}' http://localhost:8022/api/rest/v1.0/ask || exit 1"]
       interval: 10s
       timeout: 2s
       retries: 3
@@ -255,6 +258,9 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+      resources:
+        limits:
+          memory: 2G
   cobot_nounphrases:
     build:
       context: ./annotators/nounphrases/
