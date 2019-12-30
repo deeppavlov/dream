@@ -5,6 +5,9 @@ import sentry_sdk
 import random
 import requests
 import json
+import os
+import zipfile
+import _pickle as cPickle
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -22,12 +25,10 @@ ENTITY_SERVICE_URL = getenv('COBOT_ENTITY_SERVICE_URL')
 QUERY_SERVICE_URL = getenv('COBOT_QUERY_SERVICE_URL')
 QA_SERVICE_URL = getenv('COBOT_QA_SERVICE_URL')
 API_KEY = getenv('COBOT_API_KEY')
-
-
-# QUERY_SERVICE_URL = 'https://ssy3pe4ema.execute-api.us-east-1.amazonaws.com/prod/knowledge/v1/query'
-# ENTITY_SERVICE_URL = 'https://746y2ig586.execute-api.us-east-1.amazonaws.com/prod//knowledge/v1/entityResolution'
-# QA_SERVICE_URL = 'https://06421kpunk.execute-api.us-east-1.amazonaws.com/prod/qa/v1/answer'
-# API_KEY = 'MYF6T5vloa7UIfT1LwftY3I33JmzlTaA86lwlVGm'
+if "author_namesbooks.pkl" not in os.listdir(os.getcwd()):
+    with zipfile.ZipFile("../global_data/author_namesbooks.zip", "r") as zip_ref:
+        zip_ref.extractall(os.getcwd())
+author_names, author_books = cPickle.load(open('author_namesbooks.pkl', 'rb'))
 
 
 def was_question_about_book(phrase):
@@ -93,6 +94,7 @@ def fan_parse(phrase):
 
 
 def parse_author_best_book(annotated_phrase, default_phrase="Fabulous! And what book did impress you the most?"):
+    global author_names
     annotated_phrase['text'] = annotated_phrase['text'].lower()
     if ' is ' in annotated_phrase['text']:
         annotated_phrase['text'] = annotated_phrase['text'].split(' is ')[1]
@@ -105,6 +107,7 @@ def parse_author_best_book(annotated_phrase, default_phrase="Fabulous! And what 
     else:
         last_bookname = last_bookname.lower()
     try:
+        last_bookname = last_bookname.lower()
         '''
         Get author or this book using QUERY LANGUAGE !!!! Not get_answer
         '''
@@ -115,11 +118,14 @@ def parse_author_best_book(annotated_phrase, default_phrase="Fabulous! And what 
                                       {'query': {'text': 'query d|d' + ' <aio:isTheAuthorOf> ' + aie_book}}),
                                   method='POST').json()
         authorname_plain = '<' + answer['results'][0]['bindingList'][0]['value'] + '>'
-        answer = requests.request(
-            url=QUERY_SERVICE_URL, headers=headers, data=json.dumps(
-                {'query': {'text': 'query label|' + authorname_plain + ' <aio:prefLabel> ' + 'label'}}),
-            method='POST').json()
-        author = answer['results'][0]['bindingList'][0]['value']
+        if authorname_plain in author_names:
+            author = author_names[authorname_plain]
+        else:
+            answer = requests.request(
+                url=QUERY_SERVICE_URL, headers=headers, data=json.dumps(
+                    {'query': {'text': 'query label|' + authorname_plain + ' <aio:prefLabel> ' + 'label'}}),
+                method='POST').json()
+            author = answer['results'][0]['bindingList'][0]['value']
     except BaseException:
         return default_phrase
     return best_book_by_author(author, last_bookname, default_phrase=default_phrase)
@@ -128,14 +134,21 @@ def parse_author_best_book(annotated_phrase, default_phrase="Fabulous! And what 
 
 def best_book_by_author(author, last_bookname=None,
                         default_phrase="Fabulous! And what book did impress you the most?"):
+    global author_books
     try:
-        answer1 = get_answer('books of ' + author)
+        if author in author_books:
+            answer1 = author_books[author]
+        else:
+            answer1 = get_answer('books of ' + author)
         book_list = answer1.split('include: ')[1].split(',')
         book_list[-1] = book_list[-1][5:-1]
+        book_list = [j for j in book_list if all([ban_sign not in j for ban_sign in '[]()'])]
         random.shuffle(book_list)
+        if last_bookname is None:
+            return book_list[0]
         for book in book_list:
             if book not in last_bookname and last_bookname not in book:
-                return 'Interesting. Have you read ' + book + ' ?'
+                return book
     except BaseException:
         return default_phrase
 
@@ -172,11 +185,7 @@ def get_name(annotated_phrase, mode='author', return_plain=False):
                 if return_plain:
                     entityname = entityname_plain
                 else:
-                    answer = requests.request(
-                        url=QUERY_SERVICE_URL, headers=headers, data=json.dumps(
-                            {'query': {'text': 'query label|' + entityname_plain + ' <aio:prefLabel> ' + 'label'}}),
-                        method='POST').json()
-                    entityname = answer['results'][0]['bindingList'][0]['value']
+                    entityname = entity
             except BaseException:
                 pass
     return entityname
@@ -477,7 +486,8 @@ class BookSkillScenario:
                         if is_no(annotated_user_phrase):
                             reply, confidence = YES_PHRASE_2_NO, self.default_conf
                         else:
-                            reply = parse_author_best_book(annotated_user_phrase, default_phrase=YES_PHRASE_2)
+                            book = parse_author_best_book(annotated_user_phrase, default_phrase=YES_PHRASE_2)
+                            reply = 'Interesting. Have you read ' + book + '?'
                             confidence = 0.9
                     elif YES_PHRASE_2 == bot_phrases[-1] or 'Interesting. Have you read ' in bot_phrases[-1]:
                         if is_no(annotated_user_phrase):
@@ -533,10 +543,9 @@ class BookSkillScenario:
                     genre_name = get_genre(annotated_user_phrase['text'], return_name=True)
                     if author_name is not None:
                         reply1 = ' I enjoy reading books of ' + author_name + ' . '
-                        best_book = best_book_by_author(author_name)
-
+                        best_book = best_book_by_author(author_name, default_phrase=None)
                         if best_book is not None:
-                            reply2 = ' I especially enjoy reading ' + best_book
+                            reply2 = ' My favourite book of this author is ' + best_book
                         else:
                             reply2 = ''
                         reply, confidence = reply1 + reply2, self.default_conf

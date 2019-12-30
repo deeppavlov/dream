@@ -21,6 +21,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 vectorizer_file = "../global_data/new_vectorizer_2.zip"
+
 if USE_COBOT:
     dialog_dir = 'data/cobot_dialog_list.json'
     full_dialog_dir = "data/full_cobot_dialog_list.json"
