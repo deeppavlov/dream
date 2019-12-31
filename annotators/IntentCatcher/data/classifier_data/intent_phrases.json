@@ -10,7 +10,7 @@
         "((Goodbye)|(Bye)|(Bye-bye)|(Stop)|(Exit)|(End))(, ((Alexa)|(bot))){0,1}",
         "((Alexa)|(Bot)), ((goodbye)|(bye)|(bye bye)|(stop)|(exit)|(end))",
         "((Farewell)|(Peace out)|(Adios)|(Catch you later)|(See ((you)|(ya)))|(Take care)|(Turn off))",
-        "(((Okay)|(Well)|(So)) ,){0,1}I ((am out of here)|(have to go)|(gotta go)|(gotta run)|(gotta head out)|(gonna go))( ((now)|(right now))){0,1}(, ((bye)|(goodbye)|(bye bye))){0,1}"
+        "(((Okay)|(Well)|(So)) ,){0,1}I ((am out of here)|(have to go)|(gotta go)|(gotta run)|(gotta head out)|(gonna go))( ((now)|(right now))){0,1}(, ((bye)|(goodbye)|(bye bye))){0,1}",
         "power ((down|off))",
         "switch back to alexa",
         "((end)|(stop)|(cancel)) being a stupid social bot"
@@ -198,6 +198,7 @@
         "what is the weather today in shrewsbury massachusetts",
         "what is the weather tomorrow in boston?",
         "what is today's weather",
+        "what is the weather today",
         "what the weather like in moscow?",
         "what the weather today?",
         "what weather tech dot com",
@@ -230,7 +231,11 @@
         "what's the weather will be in new york",
         "who the weather in puerto rico",
         "why are you telling me about pilots i just wanted to talk about the weather",
-        "you are first. tell me something about the weather."
+        "you are first. tell me something about the weather.",
+        "what's the weather in afterward carolina",
+        "i well what's the weather today",
+        "tell me the weather for china today"
+
       ],
       "punctuation": [
         "?",
@@ -450,7 +455,34 @@
       "I love ((politics)|(sports)|(art)|(music))",
       "Developing you must've been a hard work",
       "((When|Where)) is it going to rain",
-      "I am working as a ((manager)|(builder))"
+      "I am working as a ((manager)|(builder))",
+      "i don't need a weather forecast",
+      "i don't need the weather",
+      "are you gonna do is watching angels in the outfield",
+      "i don't wanna weather forecast he want to talk about neural link",
+      "i don't wanna weather forecast for any city",
+      "i don't want the weather forecast",
+      "tell me all about new orléans",
+      "he wanna know what happens to seagull when you get alkaselsor",
+      "where did i say wanna weather",
+      "wow what a wanna stop races",
+      "no alexa i don't want the weather alexa i wanna know why would want to stop racism",
+      "so what do you wanna do",
+      "no i wanna know about aphrodite",
+      "i wanna know about the greek god aphrodite",
+      "tell me a haiku",
+      "he wanna talk about yesterday",
+      "i don't wanna order don't want weather",
+      "didn't i just tell you the weather is fake",
+      "do you guys wanna put telephone",
+      "my sign for what",
+      "so you mean that we could talk about anything right now",
+      "she wasn't talking about the weather you bought",
+      "where i live siesta key florida",
+      "in my opinion is mild weather",
+      "whatever you wanna talk about"
+
+
     ],
     "punctuation": [
       ".",
