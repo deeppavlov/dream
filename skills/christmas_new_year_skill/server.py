@@ -21,9 +21,9 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 STARTING_SCENARIO = ["Do you like gifts?",
-                     "Are you going to celebrate Christmas or New Year?",
-                     "Do you make wishes for Christmas?",
-                     "Do you celebrate Christmas?"]
+                     "Are you going to celebrate New Year?",
+                     "Do you make wishes for New Year?",
+                     "Do you celebrate New Year in your country?"]
 SCENARIOS_TOPICS = ["gifts", "spend_xmas", "wishes", "xmas_in_your_country"]
 
 
@@ -57,6 +57,36 @@ def respond():
             if response != "" and not (prev_xmas_scenario in SCENARIOS_TOPICS):
                 # mode = "faq"
                 logger.info(f"Response: {response}, mode: {mode}")
+        try:
+            # try get scenario
+            if response == "":
+                intents = dialog["utterances"][-1].get("annotations", {}).get("cobot_dialogact", {}).get("intents", [])
+                sentiment = dialog["utterances"][-1].get("annotations", {}).get(
+                    "sentiment_classification", {}).get("text", "")
+                cobot_topics = set(dialog['utterances'][-1]['annotations']['cobot_topics']['text'])
+                cobot_dialogact_topics = set(dialog['utterances'][-1]['annotations']['cobot_dialogact']['topics'])
+
+                if ("Topic_SwitchIntent" in intents or sentiment == "negative" or "Politics" in
+                        cobot_dialogact_topics or "Politics" in cobot_topics or "Religion" in
+                        cobot_topics or "Weather_Time" in cobot_topics):
+                    response, confidence, curr_scenario = "", 0.0, ""
+                else:
+                    response, confidence, curr_scenario = xmas_scenario(dialog, topic=prev_xmas_scenario)
+                    if response != "":
+                        mode = curr_scenario
+                        logger.info(f"Response: {response}, mode: {mode}")
+                    else:
+                        mode = ""
+
+        except Exception as e:
+            logger.exception(f"exception in X-mas skill {e}")
+            with sentry_sdk.push_scope() as scope:
+                dialog_replies = []
+                for reply in dialog["utterances"]:
+                    dialog_replies.append(reply["text"])
+                # This will be changed only for the error caught inside and automatically discarded afterward
+                scope.set_extra('dialogs', dialog_replies)
+                sentry_sdk.capture_exception(e)
 
         human_attributes.append({})
         bot_attributes.append({})
@@ -74,69 +104,65 @@ def xmas_scenario(dialog, topic=""):
     high_confidence = 1.1
     curr_scenario = ""
 
-    XMAS_PATTERN = r"(christmas|xmas|x-mas|x mas|new year|holiday)"
+    XMAS_PATTERN = r"(new year|holiday)"
     user_starts_scenario = f"((chat|talk|conversation|tell me) about {XMAS_PATTERN}|{XMAS_PATTERN})"
     bot_starts_scenario = {
         "gifts": r"do you like gifts",
-        "spend_xmas": r"are you going to celebrate christmas or new year",
-        "wishes": r"do you make wishes for christmas",
-        "xmas_in_your_country": r"do you celebrate christmas in your country"
+        "spend_xmas": r"are you going to celebrate new year",
+        "wishes": r"do you make wishes for new year",
+        "xmas_in_your_country": r"do you celebrate new year in your country"
     }
 
     scenarios = {
         "gifts": [
-            "Ho-ho! Me too! Which gives you the most pleasure - giving presents or receiving them?",
-            "That's awesome! I like both options, but the main thing is that it should be a surprise. "
-            "What kind of gift are you expecting to receive this year's Christmas?",
-            "That's great! I wish to get the highest ratings today! "
-            "Do you tell people what you want for Christmas or do you prefer it to be a surprise?",
-            "Good choice! Although I like surprises, I actually said my wish for today. Ha-ha. "
-            "How often do you receive presents that you really like?",
+            "Ho-ho! Me too! Did you prepare New Year's presents for your family and friends?",
+            "That's awesome! I like giving presents and preparing surprises. "
+            "What would you like to get for this New Year?",
+            "That's great! I wish to get more friends this Holidays! "
+            "Tell me a story about the best present you've ever received.",
+            "That's cool! I'm a newborn, so I have never received gifts. "
+            "What do you think about the present's tradition itself?",
             "Anyway, the main thing is that the gift is from the bottom of the heart. "
-            "Tell me about the most memorable gift you've ever received during Christmas.",
-            "Thank you for this cool story. The gift of love. The gift of peace. The gift of happiness. "
-            "May all these be yours at Christmas. What do you want to talk about?"
+            "Tell me about the most memorable gift you've ever gived during New Year.",
+            "Thank you for this cool story. I wish you a very Happy New Year. What do you want to talk about?"
         ],
         "spend_xmas": [
-            "Either do I! How do you and your family celebrate Christmas?",
-            "Sounds great! I want to ask you a question about snow games. "
-            "When was the last time you made a snowman?",
-            "If only I had a body, I would make a snowman. What about decorations? "
-            "Do you decorate your house over the Christmas period?",
-            "Good decision! What do you think of the practice of decorating the outside of the house during Christmas?"
-            "I like outside decorations. They are so cool! "
-            "I also like listening Christmas music. Which Christmas song do you find the most annoying?",
-            "Ho-ho! That's great! Wishing you a very Merry Christmas! What do you want to talk about?"
+            "Either do I! What are you and your family planning to do this New Year's Eve?",
+            "Sounds great! For you, is it usually a family celebration or more of a party with friends?",
+            "I believe both options are very nice! "
+            "I wish to take part in a lot of New Year's parties talking to people. "
+            "Do you have a Christmas tree? If yes, did you decorate it?",
+            "I love trees! What are your plans for two thousand twentieth?",
+            "Ho-ho! That's great! Wishing you a very Happy New Year! What do you want to talk about?"
         ],
         "wishes": [
             "I make wishes every time I have an opportunity. "
-            "Do you make the same wishes every year or do you show imagination?",
-            "I'm a newborn socialbot, so this will be my first Christmas time! Let me ask you: "
-            "If Christmas were abolished, how would you feel?",
-            'You definitely have enough reasons for this. '
-            'Some people complain they are "expected to be happy" over Christmas, '
-            'and this expectation could annoy them. What do you feel about the "obligation to be happy"?',
-            "I don't have to pretend. I am really happy about Christmas. "
-            "How important was Christmas to you when you were a child? What were your Christmas mornings like?",
-            "You are probably very grateful to your family for Christmas miracles. "
-            "May Santa Claus bring everything you wished for. Merry Christmas! What do you want to talk about?"
+            "Was two thousand nineteenth a good year for you? What were some of your highlights?",
+            "For me this year was also so cool. I was selected for Alexa Prize Challenge! Let me ask you: "
+            "Did you achieve any goals in two thousand nineteenth? ",
+            'I am happy for your. This is so nice to feel the fulfillment of the goals. '
+            'Some people complain they are "expected to be happy" over Holidays, '
+            'and this expectation could annoy them. Do you really feel happy this Holiday?',
+            "I don't have to pretend. I am so happy about New Year. "
+            "How important was New Year to you when you were a child? What were your New Year eves like?",
+            "You are probably very grateful to your family for New Year miracles. "
+            "May Santa Claus bring everything you wished for. Happy New Year! What do you want to talk about?"
         ],
         "xmas_in_your_country": [
             "Great! I celebrate holidays from all over the world. "
-            "What are the traditions or customs you need to follow during Christmas?",
+            "What are the traditions or customs you need to follow during New Year?",
             "I have heard so many different traditions over these holidays. That is really inspiring. "
-            "Are any particular films shown during the Christmas period in your country?",
+            "Are any particular films shown during the New Year period in your country?",
             "That's interesting! I am trying to watch movies of different countries. "
-            "By the way, what do you think of the tradition of giving Christmas cards?",
-            "I wish to get a Christmas card but I cannot disclose my location. "
-            "So, I just wish to get a lot of different conversations these holidays. "
+            "By the way, are children allowed to stay up late on New Year's Eve in your country?",
+            "I will stay up for the whole evening and night to talk to people. "
+            "Are there any special meals or activities for New Year's day?",
+            "I've heard about so many different meals, so, I wish to taste all these special meals! "
             "Best wishes for Happy Holidays and a wonderful New Year! What do you want to talk about?"
         ]
     }
 
     curr_user_uttr = dialog["utterances"][-1]["text"].lower()
-    # curr_user_annot = dialog["utterances"][-1]["annotations"]
-    # curr_user_yes_detected = curr_user_annot.get("intent_catcher", {}).get("yes", {}).get("detected", 0) == 1
 
     if len(dialog["utterances"]) > 1:
         prev_bot_uttr = dialog["utterances"][-2]["text"]
@@ -192,7 +218,12 @@ def xmas_faq(dialog):
         "bot_gifts": [f"(what|which){ANY_PATTERN}(gift|present|bounty|donative|compliment) you "
                       f"(want|wish|desire|would like|like|chose)",
                       f"(what|which){ANY_PATTERN}you{ANY_PATTERN}(want|wish|desire|would like|like|chose)"
-                      f"{ANY_PATTERN}{XMAS_PATTERN}"]
+                      f"{ANY_PATTERN}{XMAS_PATTERN}"],
+        "what_presents": [f"(what|which){ANY_PATTERN}(gift|present){ANY_PATTERN}you"
+                          f"{ANY_PATTERN}(get|got|receive|recieved)",
+                          f"(what|which){ANY_PATTERN}you{ANY_PATTERN}"
+                          f"(get|got|receive|recieved) (for|on) {XMAS_PATTERN}",
+                          ]
     }
     responses = {
         "santa": ["I'm not a human but I exist, and I'm talking to you right now. I believe that anything is possible."
@@ -202,7 +233,8 @@ def xmas_faq(dialog):
                       "That's my favorite holiday! All the people are kinder and happier than usually."],
         "bot_gifts": ["I wish to get new friends.",
                       "I would like to get higher ratings.",
-                      "I want more computational resources because now they are limiting my potential."]
+                      "I want more computational resources because now they are limiting my potential."],
+        "what_presents": ["I've got a lot of cool conversations and warm wishes. The best present from people!"]
     }
 
     for topic in templates.keys():
