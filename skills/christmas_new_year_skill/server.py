@@ -57,36 +57,6 @@ def respond():
             if response != "" and not (prev_xmas_scenario in SCENARIOS_TOPICS):
                 # mode = "faq"
                 logger.info(f"Response: {response}, mode: {mode}")
-        try:
-            # try get scenario
-            if response == "":
-                intents = dialog["utterances"][-1].get("annotations", {}).get("cobot_dialogact", {}).get("intents", [])
-                sentiment = dialog["utterances"][-1].get("annotations", {}).get(
-                    "sentiment_classification", {}).get("text", "")
-                cobot_topics = set(dialog['utterances'][-1]['annotations']['cobot_topics']['text'])
-                cobot_dialogact_topics = set(dialog['utterances'][-1]['annotations']['cobot_dialogact']['topics'])
-
-                if ("Topic_SwitchIntent" in intents or sentiment == "negative" or "Politics" in
-                        cobot_dialogact_topics or "Politics" in cobot_topics or "Religion" in
-                        cobot_topics or "Weather_Time" in cobot_topics):
-                    response, confidence, curr_scenario = "", 0.0, ""
-                else:
-                    response, confidence, curr_scenario = xmas_scenario(dialog, topic=prev_xmas_scenario)
-                    if response != "":
-                        mode = curr_scenario
-                        logger.info(f"Response: {response}, mode: {mode}")
-                    else:
-                        mode = ""
-
-        except Exception as e:
-            logger.exception(f"exception in X-mas skill {e}")
-            with sentry_sdk.push_scope() as scope:
-                dialog_replies = []
-                for reply in dialog["utterances"]:
-                    dialog_replies.append(reply["text"])
-                # This will be changed only for the error caught inside and automatically discarded afterward
-                scope.set_extra('dialogs', dialog_replies)
-                sentry_sdk.capture_exception(e)
 
         human_attributes.append({})
         bot_attributes.append({})
