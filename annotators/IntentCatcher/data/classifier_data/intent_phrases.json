@@ -4,7 +4,7 @@
       "phrases": [
         "((End)|(Stop)|(Cancel)) ((this)|(our)){0,1}((chat)|(conversation)|(dialog))(, ((Alexa)|(bot))){0,1}",
         "((End)|(Stop)|(Cancel)) it(, ((Alexa)|(bot))){0,1}",
-        "I ((do not)|(don't)) ((want to)|(wanna)) talk( anymore){0,1}",
+        "I ((do not)|(don't)) ((want to)|(wanna)) talk( to you){0,1}( anymore){0,1}",
         "Have a ((good)|(great)|(nice)) ((day)|(night)|(one)|(evening))(, (Alexa)|(bot)){0,1}",
         "See ((you)|(ya)) ((later)|(soon))",
         "((Goodbye)|(Bye)|(Bye-bye)|(Stop)|(Exit)|(End))(, ((Alexa)|(bot))){0,1}",
@@ -13,6 +13,7 @@
         "(((Okay)|(Well)|(So)) ,){0,1}I ((am out of here)|(have to go)|(gotta go)|(gotta run)|(gotta head out)|(gonna go))( ((now)|(right now))){0,1}(, ((bye)|(goodbye)|(bye bye))){0,1}",
         "power ((down|off))",
         "switch back to alexa",
+        "(alexa ){0,1}shut off",
         "((end)|(stop)|(cancel)) being a stupid social bot"
       ],
       "min_precision": 0.80,
@@ -480,9 +481,10 @@
       "she wasn't talking about the weather you bought",
       "where i live siesta key florida",
       "in my opinion is mild weather",
-      "whatever you wanna talk about"
-
-
+      "whatever you wanna talk about",
+      "what which rule was lazarus",
+      "when were new year",
+      "what ((rule)|(something)|(anything)) is"
     ],
     "punctuation": [
       ".",
