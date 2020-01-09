@@ -23,8 +23,8 @@
                 <li>Okay</li>
                 <li>Sounds interesting</li>
                 <li>Interesting.</li>
-                <li>Interesting. What are your 3 favorite movies?</li>
-                <li>Interesting. Do you like hollywood movies?</li>
+                <li>Interesting. What is your favorite movie?</li>
+                <li>Interesting. What is your favorite movie genre?</li>
                 <li>Okay. What movie can you watch over and over without ever getting tired of?</li>
                 <li>Interesting. What’s the most ironic thing you’ve seen happen?</li>
             </random>
@@ -36,7 +36,7 @@
           <random>
               <li>Okay</li>
               <li>Sounds interesting</li>
-              <li>Okay. What is the funniest joke you know by heart?</li>
+              <li>Okay.</li>
           </random>
         </template>
     </category>
@@ -46,7 +46,7 @@
           <random>
               <li>Okay</li>
               <li>Sounds interesting</li>
-              <li>Okay. In one sentence, how would you sum up the internet?</li>
+              <li>Okay.</li>
           </random>
         </template>
     </category>

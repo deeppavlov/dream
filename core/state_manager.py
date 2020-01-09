@@ -69,8 +69,8 @@ class StateManager:
     async def get_dialogs_by_user_ext_id(self, user_telegram_id):
         return await Dialog.get_many_by_ext_id(self._db, user_telegram_id)
 
-    async def get_all_dialogs(self):
-        return await Dialog.get_all(self._db)
+    async def get_all_dialogs(self, date_start=None, date_finish=None):
+        return await Dialog.get_all(self._db, date_start, date_finish)
 
     async def drop_active_dialog(self, user_telegram_id):
         user = await Human.get_or_create(self._db, user_telegram_id)

@@ -18,9 +18,6 @@ app = Flask(__name__)
 
 
 class RuleBasedSelector():
-    """
-    Rule-based skill selector which choosing among TransferTransfo, Base AIML and Alice AIML
-    """
     wh_words = {"what", "when", "where", "which", "who", "whom", "whose", "why", "how"}
     first_question_words = {
         "do", "have", "did", "had", "are", "is", "am", "will",
@@ -52,9 +49,8 @@ class RuleBasedSelector():
             # TODO: opinion_request/yes/no response
             intent_detected = any([v['detected'] == 1 for k, v in
                                    dialog['utterances'][-1]['annotations']['intent_catcher'].items()
-                                   if k not in {'opinion_request', 'yes', 'no', 'tell_me_more', 'doing_well'}])
-
-            not_confident_asr = dialog['utterances'][-1]['annotations']['asr']['asr_confidence'] == 'very_low'
+                                   if k not in {'opinion_request', 'yes', 'no', 'tell_me_more', 'doing_well',
+                                                'weather_forecast_intent'}])
             cobot_topics = set(dialog['utterances'][-1]['annotations']['cobot_topics']['text'])
             sensitive_topics_detected = any([t in self.sensitive_topics for t in cobot_topics])
             cobot_dialogacts = dialog['utterances'][-1]['annotations']['cobot_dialogact']['intents']
@@ -75,10 +71,12 @@ class RuleBasedSelector():
                 skills_for_uttr.append("program_y")
                 skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("alice")
+                skills_for_uttr.append("christmas_new_year_skill")
                 if len(dialog['utterances']) > 7:
                     skills_for_uttr.append("tfidf_retrieval")
                 # skills_for_uttr.append("transfertransfo")
                 # skills_for_uttr.append("retrieval_chitchat")
+                    skills_for_uttr.append("convert_reddit")
             movie_cobot_dialogacts = {
                 "Entertainment_Movies", "Sports", "Entertainment_Music", "Entertainment_General",
                 "Phatic"
@@ -90,6 +88,15 @@ class RuleBasedSelector():
             about_movies = (movie_cobot_dialogacts & cobot_dialogact_topics) | (movie_cobot_topics & cobot_topics)
             if about_movies:
                 skills_for_uttr.append("movie_skill")
+                if "christmas_new_year_skill" not in skills_for_uttr:
+                    skills_for_uttr.append("christmas_new_year_skill")
+
+            about_music = ("Entertainment_Music" in cobot_dialogact_topics) | ("Music" in cobot_topics)
+            if about_music and len(dialog["utterances"]) > 2:
+                skills_for_uttr.append("music_tfidf_retrieval")
+                if "christmas_new_year_skill" not in skills_for_uttr:
+                    skills_for_uttr.append("christmas_new_year_skill")
+
             books_cobot_dialogacts = {
                 "Entertainment_General", "Entertainment_Books"
             }
@@ -99,13 +106,29 @@ class RuleBasedSelector():
             about_books = (books_cobot_dialogacts & cobot_dialogact_topics) | (books_cobot_topics & cobot_topics)
             if about_books:
                 skills_for_uttr.append("book_skill")
+                if "christmas_new_year_skill" not in skills_for_uttr:
+                    skills_for_uttr.append("christmas_new_year_skill")
             # always add dummy_skill
             skills_for_uttr.append("dummy_skill")
             skills_for_uttr.append("personal_info_skill")
 
-            # Use only misheard asr skill if asr is not confident and skip it for greeting
-            if not_confident_asr and len(dialog['utterances']) > 1:
-                skills_for_uttr = ["misheard_asr"]
+            if len(dialog['utterances']) > 1:
+                # skills_for_uttr += ["misheard_asr"]
+                # Use only misheard asr skill if asr is not confident and skip it for greeting
+                if dialog['utterances'][-1]['annotations']['asr']['asr_confidence'] == 'very_low':
+                    skills_for_uttr = ["misheard_asr"]
+
+            # prev_user_uttr = dialog["utterances"][-3] if len(dialog["utterances"]) >= 3 else {}
+            prev_user_uttr_hyp = dialog["utterances"][-3]["hypotheses"] if len(dialog["utterances"]) >= 3 else []
+            weather_city_slot_requested = any([
+                hyp.get("weather_forecast_interaction_city_slot_requested", False)
+                for hyp in prev_user_uttr_hyp if hyp["skill_name"] == "weather_skill"])
+            prev_bot_uttr = dialog["utterances"][-2] if len(dialog["utterances"]) >= 2 else {}
+            if (dialog['utterances'][-1]['annotations']['intent_catcher'].get(
+                    "weather_forecast_intent", {}).get("detected", False) or (
+                    prev_bot_uttr.get("active_skill", "") == "weather_skill" and weather_city_slot_requested)):
+                skills_for_uttr.append("weather_skill")
+
             skill_names.append(skills_for_uttr)
 
         return skill_names

@@ -41,21 +41,25 @@ class MovieSkillScenario:
                                                  prev_uttr or "picture" in prev_uttr) and "?" in prev_uttr
                 else:
                     was_question_about_movies = False
+
                 annotations = dialog["utterances"][-1]["annotations"]
                 intents = annotations["cobot_dialogact"]["intents"]
                 opinion_request_detected = annotations["intent_catcher"].get(
                     "opinion_request", {}).get("detected") == 1
+                attitude = annotations.get("attitude_classification", {}).get("text", "")
+                expression_intent = "Opinion_ExpressionIntent" in intents or "Information_DeliveryIntent" in intents
+                is_movie_topic = ("Movies_TV" in annotations['cobot_topics']['text'] or "Entertainment_Movies" in
+                                  annotations['cobot_dialogact']['topics'])
+
                 logger.info(f"intents {intents}")
-                if ("Opinion_ExpressionIntent" in
-                        intents or "Information_DeliveryIntent" in intents or was_question_about_movies):
-                    attitude = dialog["utterances"][-1]["annotations"]["attitude_classification"]["text"]
+                if (expression_intent or was_question_about_movies) and (attitude != "neutral"):
                     reply, subject_attitude, confidence = self.templates.get_user_opinion(dialog, attitude)
                     for subject in subject_attitude:
                         attr["human_attitudes"] += [subject]
                     current_reply += " " + reply
                     curr_confidence.append(confidence)
-                if (("Information_RequestIntent"
-                     in intents) or ("Opinion_RequestIntent" in intents) or opinion_request_detected):
+                if (("Information_RequestIntent" in intents and is_movie_topic) or (
+                        "Opinion_RequestIntent" in intents) or opinion_request_detected):
                     reply, subject_attitude, confidence = self.templates.give_opinion(dialog)
                     if confidence < 0.9:
                         pass
@@ -73,12 +77,6 @@ class MovieSkillScenario:
                         curr_confidence = [confidence]
                     for subject in subject_attitude:
                         attr["bot_attitudes"] += [subject]
-                if "Information_DeliveryIntent" in intents:
-                    pass
-                    # TODO: ask a question about opinion or fact
-                    # reply = self.templates.didnotknowbefore()
-                    # confidence = self.default_conf
-                    # current_reply += " " + reply
             except Exception as e:
                 logger.exception(f"exception in movie skill {e}")
                 with sentry_sdk.push_scope() as scope:

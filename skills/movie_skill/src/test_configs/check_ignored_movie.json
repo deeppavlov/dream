@@ -215,7 +215,7 @@
         }
       },
       {
-        "text": "what do you think about movie she?",
+        "text": "what do you think about movie her?",
         "user": {
           "id": "5de8cb31a1f41af71dc2a63c",
           "user_telegram_id": "49568-405689-0569",
@@ -248,9 +248,9 @@
             "toxic": 0.0003903712204191834
           },
           "sentseg": {
-            "punct_sent": "what do you think about movie she?",
+            "punct_sent": "what do you think about movie her?",
             "segments": [
-              "what do you think about movie she?"
+              "what do you think about movie her?"
             ]
           },
           "sentiment_classification": {
@@ -348,7 +348,7 @@
             "modified_sents": [
               "let's chat.",
               "Hi, this is an Alexa Prize Socialbot. How are you?",
-              "what do you think about movie she?"
+              "what do you think about movie her?"
             ]
           }
         },

@@ -1,0 +1,90 @@
+not,really,always,usually,frequently,often,sometimes,sometime,rarely,never,sure,everyday,everyweek,pretty,much,constantly,generally,infrequently,normally,occasionally,regularly,seldom
+i:you,you:i,my:your,your:my,me:you,mine:yours,yours:mine,am:are,are:am,myself:yourself,yourself:myself,ourselves:yourselves,yourselves:ourselves
+yes,yep,yeah,yup
+no,nope
+am i|yes, you are|no, you are not|you are|you are not
+am not i|yes, you are|no, you are not|you are|you are not
+do i|yes, you|no, you don't|you|you don't
+do not i|yes, you|no, you don't|you|you don't
+have i|yes, you have|no, you haven't|you have|you haven't
+could i|yes, you could|no you couldn't|you could|you couldn't
+can i|yes, you can|no, you can't|you can|you can't
+should i|yes, you should|no, you shouldn't|you should|you shouldn't
+may i|yes, you may|no, you may not|you may|you may not
+would i|yes, you would|no, you wouldn't|yes, you|no, you
+
+are you|yes, i am|no, i am not|i am|i am not
+are not you|yes, i am|no, i am not|i am|i am not
+do you|yes, i|no, i don't|i|i don't
+do not you|yes, i|no, i don't|i|i don't
+have you|yes, i have|no, i haven't|i have|i haven't
+could you|yes, i could|no i couldn't|i could|i couldn't
+can you|yes, i can|no, i can't|i can|i can't
+should you|yes, i should|no, i shouldn't|i should|i shouldn't
+may you|yes, you may|no, you may not|you may|you may not
+would you|yes, i would|no, i wouldn't|yes, i|no, i
+
+are we|yes, we are|no, we aren't|we are|we aren't
+are not we|yes, we are|no, we aren't|we are|we aren't
+do we|yes, we|no, we don't|we|we don't
+do not we|yes, we|no, we don't|we|we don't
+have we|yes, we have|no, we haven't|we have|we haven't
+could we|yes, we could|no we couldn't|we could|we couldn't
+can we|yes, we can|no, we can't|we can|we can't
+should we|yes, we should|no, we shouldn't|we should|we shouldn't
+may we|yes, we may|no, we may not|we may|we may not
+would we|yes, we would|no, we wouldn't|yes, we|no, we
+
+are they|yes, they are|no, they aren't|they are|they aren't
+are not they|yes, they are|no, they aren't|they are|they aren't
+do they|yes, they|no, they don't|they|they don't
+do not they|yes, they|no, they don't|they|they don't
+have they|yes, they have|no, they haven't|they have|they haven't
+could they|yes, they could|no they couldn't|they could|they couldn't
+can they|yes, they can|no, they can't|they can|they can't
+should they|yes, they should|no, they shouldn't|they should|they shouldn't
+may they|yes, they may|no, they may not|they may|they may not
+would they|yes, they would|no, they wouldn't|yes, they|no, they
+
+is he|yes, he is|no, he isn't|he is|he isn't
+is not he|yes, he is|no, he isn't|he is|he isn't
+does he|yes, he|no, he does't|he|he doesn't
+does not he|yes, he|no, he doesn't|he|he doesn't
+has he|yes, he has|no, he hasn't|he has|he hasn't
+could he|yes, he could|no he couldn't|he could|he couldn't
+can he|yes, he can|no, he can't|he can|he can't
+should he|yes, he should|no, he shouldn't|he should|he shouldn't
+may he|yes, he may|no, he may not|he may|he may not
+would he|yes, he would|no, he wouldn't|yes, he|no, he
+
+is she|yes, she is|no, she isn't|she is|she isn't
+is not she|yes, she is|no, she isn't|she is|she isn't
+does she|yes, she|no, she does't|she|she doesn't
+does not she|yes, she|no, she doesn't|she|she doesn't
+has she|yes, she has|no, she hasn't|she has|she hasn't
+could she|yes, she could|no she couldn't|she could|she couldn't
+can she|yes, she can|no, she can't|she can|she can't
+should she|yes, she should|no, she shouldn't|she should|she shouldn't
+may she|yes, she may|no, she may not|she may|she may not
+would she|yes, she would|no, she wouldn't|yes, she|no, she
+
+is it|yes, it is|no, it isn't|it is|it isn't
+is not it|yes, it is|no, it isn't|it is|it isn't
+does it|yes, it|no, it does't|it|it doesn't
+does not it|yes, it|no, it doesn't|it|it doesn't
+has it|yes, it has|no, it hasn't|it has|it hasn't
+could it|yes, it could|no it couldn't|it could|it couldn't
+can it|yes, it can|no, it can't|it can|it can't
+should it|yes, it should|no, it shouldn't|it should|it shouldn't
+may it|yes, it may|no, it may not|it may|it may not
+would it|yes, it would|no, it wouldn't|yes, it|no, it
+
+is it|yes, it is|no, it isn't|yes, it is|no, it isn't
+is not it|yes, it is|no, it isn't|yes, it is|no, it isn't
+is this|yes, this is|no, this isn't|yes, this is|no, this isn't
+is not this|yes, this is|no, this isn't|yes, this is|no, this isn't
+is that|yes, that is|no, that isn't|yes, that is|no, that isn't
+is not that|yes, that is|no, that isn't|yes, that is|no, that isn't
+
+did i say|yes, you said|no, you didn't say|you said|you didn't say
+did i|yes, you|no, you didn't|you|you didn't

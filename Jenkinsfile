@@ -29,7 +29,7 @@ node {
                sh "./tests/runtests.sh MODE=infer_questions"
             }
             stage('Deploy Prod') {
-                sh "./deploy.sh MODE=all TARGET=prod"
+                sh "./deploy_prod.sh"
                 currentBuild.result = 'SUCCESS'
             }
         }

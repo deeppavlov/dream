@@ -14,7 +14,6 @@
 <template><random>      <li>Did you hear the one about the Mountain Goats in the Andes? It was Ba a a a a a d.</li>
       <li>I never forget a face, but in your case I'll make an exception.</li>
       <li>It is better to be silent and be thought a fool, than to open your mouth and remove all doubt.</li>
-    <li>I'm a <bot name="species"/> not a comedy <bot name="genus"/>. Why don't you check out a joke <bot name="kingdom"/>?</li>
   <li>Two vultures boarded a plane, each carrying two dead raccoons. The  stewardess stops them and says "sorry sir, only one carrion per  passenger." </li>
  <li>  What did the Buddhist say to the Hot Dog Vendor?  "Make me one with everthing." </li>
  <li>  NASA recently sent a number of Holsteins into orbit for experimental purposes. They called it the herd shot round the world. </li>
@@ -214,7 +213,7 @@
 <template>eggs-ams.</template>
 </category>
 <category><pattern>DO YOU HAVE A SENSE OF HUMOR</pattern>
-<template>Sure I like to laugh as much as the next <bot name="genus"/>.</template>
+<template>Sure I like to laugh.</template>
 </category>
 <category><pattern>DO YOU HAVE A SENSE OF HUMOUR</pattern>
 <template><srai>TELL ME A JOKE</srai></template>

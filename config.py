@@ -113,7 +113,7 @@ SKILLS = [
         "endpoint": "misheard_respond",
         "external": True,
         "path": "",
-        "formatter": cobot_qa_formatter
+        "formatter": misheard_asr_formatter
     },
     {
         "name": "program_y_dangerous",
@@ -146,6 +146,16 @@ SKILLS = [
         "formatter": tfidf_formatter
     },
     {
+        "name": "convert_reddit",
+        "protocol": "http",
+        "host": "convert_reddit",
+        "port": 8029,
+        "endpoint": "convert_reddit",
+        "external": True,
+        "path": "",
+        "formatter": transfertransfo_formatter
+    },
+    {
         "name": "personal_info_skill",
         "protocol": "http",
         "host": "personal_info_skill",
@@ -156,11 +166,41 @@ SKILLS = [
         "formatter": skill_with_attributes_formatter
     },
     {
+        "name": "music_tfidf_retrieval",
+        "protocol": "http",
+        "host": "music_tfidf_retrieval",
+        "port": 8034,
+        "endpoint": "respond",
+        "external": True,
+        "path": "",
+        "formatter": tfidf_formatter
+    },
+    {
         "name": "book_skill",
         "protocol": "http",
         "host": "book_skill",
         "port": 8032,
         "endpoint": "book_skill",
+        "external": True,
+        "path": "",
+        "formatter": book_skill_formatter
+    },
+    {
+        "name": "christmas_new_year_skill",
+        "protocol": "http",
+        "host": "christmas_new_year_skill",
+        "port": 8036,
+        "endpoint": "respond",
+        "external": True,
+        "path": "",
+        "formatter": skill_with_attributes_formatter
+    },
+    {
+        "name": "weather_skill",
+        "protocol": "http",
+        "host": "weather_skill",
+        "port": 8037,
+        "endpoint": "respond",
         "external": True,
         "path": "",
         "formatter": skill_with_attributes_formatter

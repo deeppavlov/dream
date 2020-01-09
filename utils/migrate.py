@@ -9,7 +9,7 @@ from core.state_schema import Bot, BotUtterance, Dialog, Human, HumanUtterance
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--host', help='mongo host, default mongo', default='mongo')
-parser.add_argument('--port', help='mongo port, default 27017', default=27017)
+parser.add_argument('--port', help='mongo port, default 27017', default=27017, type=int)
 parser.add_argument('-od', '--old_db_name', help='old db name, default test', default='test')
 parser.add_argument('-nd', '--new_db_name', help='new db name, default test', default='dp_agent')
 

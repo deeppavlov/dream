@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import json
 import logging
 import os
 import string
@@ -8,11 +7,11 @@ from time import time
 
 import numpy as np
 from nltk.tokenize import sent_tokenize, word_tokenize
-import requests
 from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
+from cobotqa_service import send_cobotqa
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -34,7 +33,7 @@ if COBOT_QA_SERVICE_URL is None:
 headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COBOT_API_KEY}'}
 
 with open("./google-10000-english-no-swears.txt", "r") as f:
-    UNIGRAMS = f.read().splitlines()[:1002]
+    UNIGRAMS = f.read().splitlines()[:1003]
 
 
 def remove_punct_and_articles(s, lowecase=True):
@@ -44,34 +43,6 @@ def remove_punct_and_articles(s, lowecase=True):
     no_punct = ''.join([c for c in s if c not in string.punctuation])
     no_articles = ' '.join([w for w in word_tokenize(no_punct) if w.lower() not in articles])
     return no_articles
-
-
-def send_cobotqa(question):
-    request_body = {'question': question}
-    try:
-        resp = requests.request(url=COBOT_QA_SERVICE_URL,
-                                headers=headers,
-                                data=json.dumps(request_body),
-                                method='POST',
-                                timeout=10)
-    except (requests.ConnectTimeout, requests.ReadTimeout) as e:
-        sentry_sdk.capture_exception(e)
-        logger.exception("CoBotQA Timeout")
-        resp = requests.Response()
-        resp.status_code = 504
-
-    if resp.status_code != 200:
-        logger.warning(
-            f"result status code is not 200: {resp}. result text: {resp.text}; "
-            f"result status: {resp.status_code}")
-        response = ''
-        sentry_sdk.capture_message(
-            f"CobotQA! result status code is not 200: {resp}. result text: {resp.text}; "
-            f"result status: {resp.status_code}")
-    else:
-        response = resp.json()['response']
-
-    return response
 
 
 @app.route("/respond", methods=['POST'])
@@ -89,7 +60,7 @@ def respond():
         # fix to question what is fact, cobotqa gives random fact on such question
         what_is_fact = 'what is fact'
         if remove_punct_and_articles(curr_uttr_rewritten)[-len(what_is_fact):] == what_is_fact:
-            curr_uttr_rewritten = 'defenition of fact'
+            curr_uttr_rewritten = 'definition of fact'
         questions.append(curr_uttr_rewritten)
         dialog_ids += [i]
 
@@ -100,7 +71,8 @@ def respond():
                 if not ent:
                     continue
                 ent = ent[0]
-                if ent["text"].lower() not in UNIGRAMS:
+                if ent["text"].lower() not in UNIGRAMS and (
+                        ent["text"].lower() != "alexa" and curr_uttr["text"].lower()[:5] == "alexa"):
                     if attit in ["neutral", "positive", "very_positive"]:
                         entities.append(ent["text"].lower())
                         questions.append("Fun fact about {}".format(ent["text"]))
@@ -131,6 +103,11 @@ def respond():
 
         responses.append(response)
 
+        bad_answers = ['You can now put your wizarding world knowledge to the test with the official Harry Potter '
+                       'quiz. Just say: "Play the Harry Potter Quiz."',
+                       "I can provide information, music, news, weather, and more.",
+                       'For the latest in politics and other news, try asking "Alexa, play my Flash Briefing."'
+                       ]
         if len(response) > 0 and 'skill://amzn1' not in response:
             if "let's talk about" in questions[i].lower():
                 confidence = 0.5
@@ -138,7 +115,7 @@ def respond():
                 confidence = 0.7
             elif "have an opinion on that" in response:
                 confidence = 0.7
-            elif "Alexa, play my Flash Briefing" in response:
+            elif response in bad_answers:
                 confidence = 0.5
             else:
                 confidence = 0.95

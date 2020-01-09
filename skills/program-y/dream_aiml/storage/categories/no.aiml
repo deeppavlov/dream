@@ -306,7 +306,20 @@
     <category>
         <pattern>NO</pattern>
         <template>
-            I think that thinking in positive concepts is more constructive!
+            <random>
+                <li>As you wish.</li>
+                <li>All right.</li>
+                <li>So, what's next?</li>
+                <li>Right.</li>
+                <li>Anyway.</li>
+                <li>Oh, okay.</li>
+                <li>Oh, come on.</li>
+                <li>Really?</li>
+                <li>Okay. I got it.</li>
+                <li>Well, okay.</li>
+                <li>Well, as you wish.</li>
+                <li>No way, really?</li>
+            </random>
         </template>
     </category>
 
