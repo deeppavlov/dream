@@ -10,7 +10,7 @@ import requests
 from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
-
+import pprint
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -159,7 +159,8 @@ def respond():
     for i, dialog in enumerate(dialogs_batch):
         # curr_candidates is dict
         curr_candidates = response_candidates[i]
-        logger.info(f"Curr candidates: {curr_candidates}")
+        logger.info(f"Curr candidates:")
+        logger.info(pprint.pformat(curr_candidates, compact=False))
         # choose results which correspond curr candidates
         curr_scores = result[dialog_ids == i]  # array of dictionaries
         curr_confidences = confidences[dialog_ids == i]  # array of float numbers
@@ -215,11 +216,14 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     how_are_you_spec = "I'm fine, thanks! Do you want to know what I can do?"
     psycho_help_spec = "If you or someone you know is in immediate danger"
     greeting_spec = "this is an Alexa Prize Socialbot"
+    misheard_with_spec1 = "I misheard you"
+    misheard_with_spec2 = "like to chat about"
 
     very_big_score = 100
     question = ""
 
     for i in range(len(scores)):
+        is_misheard = misheard_with_spec1 in candidates[i]['text'] or misheard_with_spec2 in candidates[i]['text']
         if len(dialog['utterances']) < 2 and greeting_spec not in candidates[i]['text'] \
                 and skill_names[i] == 'program_y':
             # greet user in first utterance
@@ -240,6 +244,9 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                 confidences[i] = 0.2  # Low confidence for greeting in the middle of dialogue
         elif skill_names[i] == 'cobotqa' and "Here's something I found on the web." in candidates[i]['text']:
             confidences[i] = 0.6
+        elif skill_names[i] == 'misheard_asr' and is_misheard:
+            curr_single_scores.append(very_big_score)
+            break
         if skill_names[i] == 'dummy_skill':
             question = candidates[i]['text']
 
@@ -264,7 +271,9 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
 
     if best_text.strip() in ["Okay.", "That's cool!", "Interesting.", "Sounds interesting.", "Sounds interesting!",
                              "OK.", "Cool!", "Thanks!", "Okay, thanks.", "I'm glad you think so!",
-                             "Sorry, I don't have an answer for that!", "Let's talk about something else."]:
+                             "Sorry, I don't have an answer for that!", "Let's talk about something else.",
+                             "As you wish.", "All right.", "Right.", "Anyway.", "Oh, okay.", "Oh, come on.",
+                             "Really?", "Okay. I got it.", "Well, okay.", "Well, as you wish."]:
         logger.info(f"adding {question} to response.")
         best_text += np.random.choice([f" Let me ask you something. {question}",
                                        f" I would like to ask you a question. {question}"])

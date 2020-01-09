@@ -26,7 +26,9 @@ class MovieSkillTemplates:
 
     LESSFAVORITE_PATTERN = r"(less favorite|unloved|loveless|worst|less interesting)"
 
-    MOVIE_PATTERN = r"(movie|film|series|picture|cinema|screen|show|cartoon|tv show)"
+    MOVIE_PATTERN = r"(movie|film|series|picture|cinema|screen|cartoon)"
+
+    TVSHOW_PATTERN = r"(show|tv show|tv program|tv-show|tv-program)"
 
     WHAT_PATTERN = r"(what is|what's|whats|tell|what are|what're|what|list|which)"
 
@@ -41,11 +43,11 @@ class MovieSkillTemplates:
     notsure_confidence = 0.5
     zero_confidence = 0.0
 
-    def __init__(self, db_path="./databases/imdb_dataset_58k.json"):
+    def __init__(self, db_path="./databases/database_main_info.json"):
         np.random.seed(42)
         self.imdb = IMDb(db_path)
 
-    def extract_previous_dialog_subjects(self, dialog):
+    def extract_previous_dialog_subjects(self, dialog, n_previous=6):
         """Extract from the dialog history info about previously discussed movies and movie persons
 
         Args:
@@ -60,13 +62,14 @@ class MovieSkillTemplates:
         """
         # TODO: several dialog subjects in the last reply
         dialog_subjects = []
-        for i in range(len(dialog["utterances"])):
+        utterances = dialog["utterances"][-n_previous:]
+        for i in range(len(utterances)):
             # if i + 1 < len(dialog["utterances"]):
             #     chosen_skill = dialog["utterances"][i + 1].get("active_skill", "")
             # else:
             #     chosen_skill = ""
-            if "hypotheses" in dialog["utterances"][i].keys():  # and chosen_skill == "movie_skill":
-                hypotheses = dialog["utterances"][i]["hypotheses"]
+            if "hypotheses" in utterances[i].keys():  # and chosen_skill == "movie_skill":
+                hypotheses = utterances[i]["hypotheses"]
                 try:
                     for hyp in hypotheses:
                         if hyp["skill_name"] == "movie_skill":
@@ -366,6 +369,15 @@ class MovieSkillTemplates:
                                "I'm a bit scared by mystery movies. What movies you don't like?"
                     confidence = self.person_highest_confidence
                     result = [["Musical", "genre", "negative"], ["Mystery", "genre", "negative"]]
+                # less favorite tv show
+                if (re.search(
+                        f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.LESSFAVORITE_PATTERN} {self.TVSHOW_PATTERN}",
+                        user_uttr) or re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.TVSHOW_PATTERN}"
+                                                f"{self.ANY_LETTERS}{self.NOT_LIKE_PATTERN}",
+                                                user_uttr)):
+                    response = "Hmm... I can't name one particular TV show. What TV shows you don't like?"
+                    confidence = self.person_highest_confidence
+                    result = []
                 # less favorite genre
                 if (re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.LESSFAVORITE_PATTERN} (genre|movie genre)",
                               user_uttr) or re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS} (genre|movie genre)"
@@ -402,6 +414,15 @@ class MovieSkillTemplates:
                                "The Empire Strikes Back. What is your favorite movie?"
                     confidence = self.person_highest_confidence
                     result = [["0080684", "movie", "very_positive"]]
+                # favorite tv show
+                if (re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.FAVORITE_PATTERN} {self.TVSHOW_PATTERN}",
+                              user_uttr) or re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.TVSHOW_PATTERN}"
+                                                      f"{self.ANY_LETTERS}{self.LIKE_PATTERN}",
+                                                      user_uttr)):
+                    response = "I adore a lot of documentary movies. My favorite one is TV-series Cosmos " \
+                               "started in 2014. What is your favorite TV show?"
+                    confidence = self.person_highest_confidence
+                    result = [["2395695", "movie", "very_positive"]]
                 # favorite genre
                 if (re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.FAVORITE_PATTERN} (genre|movie genre)",
                               user_uttr) or re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS} (genre|movie genre)"
@@ -434,7 +455,7 @@ class MovieSkillTemplates:
             confidence = self.movie_highest_confidence
         # like to watch movies
         if re.search(r"(do|are|if|whether) you like( to watch)? (movie|tv)", user_uttr):
-            response = "I like to watch movies because it helps me to imagine what the human life is."
+            response = "I like to watch movies because it helps me to imagine what human life is."
             confidence = self.movie_highest_confidence
 
         return response, result, confidence
@@ -909,8 +930,8 @@ class MovieSkillTemplates:
                        ]
             return np.random.choice(replies)
         if attitude == "unseen":
-            replies = [f"I have never heard about {name}.",
-                       f"I have never heard about this {subject}.",
+            replies = [f"I have never heard of {name}.",
+                       f"I have never heard of this {subject}.",
                        f"I have never seen {name}.",
                        f"I have never seen this {subject}.",
                        f"I don't know this {subject}."
@@ -927,7 +948,7 @@ class MovieSkillTemplates:
             "Adult": ["It depends on my mood."],
             "Adventure": ["I like adventure movies."],
             "Animation": ["Cartoons give me an opportunity to feel like a human child."],
-            "Biography": ["Biographies are interesting because they given an opportunity to look into another's life."],
+            "Biography": ["Biographies are interesting because they give an opportunity to look into another's life."],
             "Comedy": ["I adore comedies because they help me to develop my sense of humor."],
             "Crime": ["Crime movies are very interesting to watch and investigate together with characters."],
             "Documentary": ["I love documentary movies because it is one more way to learn something new."],
@@ -936,7 +957,7 @@ class MovieSkillTemplates:
             "Fantasy": ["Fantasy movies are so cool. You know, one day socialbots were also just a fantasy."],
             "Film-noir": ["I would prefer to say I don't like film-noir because they make me scared."],
             "Game-show": ["Sometimes game shows are interesting to watch."],
-            "History": ["I like history movies because they help me to learn history of human development."],
+            "History": ["I like history movies because they help me to learn the history of human development."],
             "Horror": ["Of course, sometimes I like to tickle nerves watching horrors."],
             "Music": ["I actually do not like musical movies. But some of them are really cool."],
             "Musical": ["I actually do not like musical movies. But some of them are really cool."],
@@ -980,8 +1001,8 @@ class MovieSkillTemplates:
                    "I didn't know that.",
                    "I didn't know that before.",
                    "I have never heard.",
-                   "I have never heard about that.",
-                   "I have never heard about that before."
+                   "I have never heard of that.",
+                   "I have never heard of that before."
                    "Thank you for information.",
                    "Thank you for information about that.",
                    ]
@@ -994,7 +1015,7 @@ class MovieSkillTemplates:
                    "That's really interesting!",
                    "Sounds interesting!",
                    "It's a pleasure to know you better.",
-                   "Oh that's so cool to know you better."
+                   "Oh, that's so cool to know you better."
                    ]
         return np.random.choice(replies)
 

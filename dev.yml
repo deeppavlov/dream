@@ -1,6 +1,7 @@
 # С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
 services:
   agent:
+    command: sh -c 'bin/wait && python3 -m core.run -ch http_client --response-logger --debug'
     env_file: [.env.dev]
     volumes:
       - ".:/dp-agent"
@@ -168,6 +169,19 @@ services:
       - "./skills/tfidf_retrieval:/src"
     ports:
       - 8028:8028
+
+  music_tfidf_retrieval:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/music_tfidf_retrieval:/src"
+    ports:
+      - 8034:8034
+  convert_reddit:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/convert_reddit:/app"
+    ports:
+      - 8029:8029
   personal_info_skill:
     env_file: [.env.dev]
     volumes:
@@ -192,4 +206,16 @@ services:
       - "./skills/misheard_asr:/src"
     ports:
       - 8033:8033
+  christmas_new_year_skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/christmas_new_year_skill:/src"
+    ports:
+      - 8036:8036
+  weather_skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/weather_skill:/src"
+    ports:
+      - 8037:8037
 version: "3.7"

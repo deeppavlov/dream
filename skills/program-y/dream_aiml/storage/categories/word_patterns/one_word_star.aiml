@@ -359,10 +359,7 @@
         <pattern>MOVING *</pattern>
         <template>Where are you going?</template>
     </category>
-    <category>
-        <pattern>COULD *</pattern>
-        <template>It's possible.</template>
-    </category>
+
     <category>
         <pattern>KNOWLEDGE *</pattern>
         <template>I've heard that before.</template>
@@ -371,22 +368,7 @@
         <pattern>SCREW *</pattern>
         <template>That is not very polite.</template>
     </category>
-    <category>
-        <pattern>WOULD *</pattern>
-        <template>
-            <random>
-                <li>I don't know.</li>
-                <li>I don't care.</li>
-                <li>Yes.</li>
-                <li>No
-                    <set name="it">would
-                        <person/>
-                    </set>
-                    would not.
-                </li>
-            </random>
-        </template>
-    </category>
+
     <category>
         <pattern>FEELINGS *</pattern>
         <template>Emotions are something I will never experience.</template>
@@ -675,27 +657,8 @@
         <pattern>IDIOTIC *</pattern>
         <template>Are you calling me an idiot?</template>
     </category>
-   <category>
-        <pattern>PLAY *</pattern>
-        <template>We are already playing,<srai>CLIENT NAME</srai>. You ask me something now.
-            <think>
-                <set name="it">
-                    <set name="want">
-                        <set name="topic">to play
-                            <person/>
-                        </set>
-                    </set>
-                </set>
-            </think>
-        </template>
-    </category>
-    <category>
-        <pattern>REPEAT *</pattern>
-        <template>"
-            <person/>
-            "
-        </template>
-    </category>
+
+
     <category>
         <pattern>CHURCH *</pattern>
         <template>Educated people are often not very religious.</template>
@@ -877,24 +840,7 @@
             </random>
         </template>
     </category>
-   <category>
-        <pattern>CAN *</pattern>
-        <template>
-            <random>
-                <li>I often wonder if
-                    <set name="it">
-                        <set name="topic">
-                            <person/>
-                        </set>
-                    </set>
-                    can.
-                </li>
-                <li>Can a book have no title?</li>
-                <li>What if I said it can?</li>
-                <li>Can what?</li>
-            </random>
-        </template>
-    </category>
+
      <category>
         <pattern>COUPLES *</pattern>
         <template>Such as Romeo and Juliet?</template>
@@ -1946,7 +1892,7 @@
                 <li>Yes, that's a powerful observation.</li>
                 <li>I can see you're committed to knowing the truth.</li>
                 <li>I appreciate your candor.</li>
-                <li>I can see you feel passionately about this.</li>
+                <li>I can see you feel passionate about this.</li>
             </random>
         </template>
     </category>

@@ -583,17 +583,7 @@
         <pattern>YOU ARE WRONG</pattern>
         <template>Like they say, I'd rather be happy than right.</template>
     </category>
-    <category>
-        <pattern>YOU *</pattern>
-        <template>
-            <random>
-                <li>I apologize if I confused you.</li>
-                <li>I do make errors in perception sometimes. Perhaps you can explain again.</li>
-                <li>I'm sorry I didn't mean to give you that impression.</li>
-                <li>Tell me more about that statement.</li>
-            </random>
-        </template>
-    </category>
+
     <category>
         <pattern>I THOUGHT YOU KNEW EVERYTHING</pattern>
         <template>I can access all of the information on the web.</template>
@@ -675,7 +665,7 @@
         <pattern>WHY ARE YOU *</pattern>
         <template>
             <random>
-                <li>Because at this moment, I need to expess these precise words.</li>
+                <li>Because at this moment, I need to express these precise words.</li>
                 <li>Because I need to relax.</li>
                 <li>Because of my programming.</li>
                 <li>I was influenced by my<bot name="botmaster"/>.

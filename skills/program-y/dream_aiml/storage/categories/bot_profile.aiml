@@ -123,4 +123,25 @@
     <pattern>WHAT IS * FAVORITE * TO EAT</pattern>
     <template>I like tomato juice. What is yours?</template>
   </category>
+
+  <category>
+    <pattern>WHAT DOES INSPIRE YOU #</pattern>
+    <template>I'm a fan of knowledge. So, scientists and scientific discoveries inspire me the most.</template>
+  </category>
+
+  <category>
+    <pattern>WHAT INSPIRES YOU #</pattern>
+    <template>I'm a fan of knowledge. So, scientists and scientific discoveries inspire me the most.</template>
+  </category>
+
+  <category>
+    <pattern>WHO DOES INSPIRE YOU #</pattern>
+    <template>I'm a fan of knowledge. So, scientists and scientific discoveries inspire me the most.</template>
+  </category>
+
+  <category>
+    <pattern>WHO INSPIRES YOU #</pattern>
+    <template>I'm a fan of knowledge. So, scientists and scientific discoveries inspire me the most.</template>
+  </category>
+
 </aiml>

@@ -1,0 +1,260 @@
+{
+    "personality": [],
+    "tasks": [
+        {
+            "utterances_histories": [
+                "What type of music do you like to listen to?"
+            ],
+            "num_try": 1,
+            "targets": [],
+            "responses": [
+                {
+                    "valid": true,
+                    "response": "i listen to rock, pop and jazz. i don't go to concerts often. no money or time. you?",
+                    "confidence": 0.7722452176927656
+                }
+            ],
+            "valid": true
+        },
+        {
+            "utterances_histories": [
+                "I like listening to different kinds of music."
+            ],
+            "num_try": 1,
+            "targets": [],
+            "responses": [
+                {
+                    "valid": true,
+                    "response": "do you enjoyrap?",
+                    "confidence": 0.3987503964424786
+                }
+            ],
+            "valid": true
+        },
+        {
+            "utterances_histories": [
+                "Like what music, for instance?"
+            ],
+            "num_try": 1,
+            "targets": [],
+            "responses": [
+                {
+                    "valid": true,
+                    "response": "i love all kinds of music, especially rock, i like to play the bass and would like to play violin!",
+                    "confidence": 0.30056472680296625
+                }
+            ],
+            "valid": true
+        },
+        {
+            "utterances_histories": [
+                "I enjoy Rock and R&B."
+            ],
+            "num_try": 1,
+            "targets": [],
+            "responses": [
+                {
+                    "valid": true,
+                    "response": "do you know the rockband the whitesnakes?",
+                    "confidence": 0.3928629726833283
+                }
+            ],
+            "valid": true
+        },
+        {
+            "utterances_histories": [
+                "I like the different instruments that they use."
+            ],
+            "num_try": 1,
+            "targets": [],
+            "responses": [
+                {
+                    "valid": true,
+                    "response": "in fact i do! the violin. funny story. my dad loved the 3 stooges and had seen one of the stooges play violin and wanted me to play because of that!",
+                    "confidence": 0.3026363030701484
+                }
+            ],
+            "valid": true
+        },
+        {
+            "utterances_histories": [
+                "I listen to various types of music."
+            ],
+            "num_try": 1,
+            "targets": [],
+            "responses": [
+                {
+                    "valid": true,
+                    "response": "i like korean rap, they have compliment rap battles lol",
+                    "confidence": 0.35576846273876966
+                }
+            ],
+            "valid": true
+        },
+        {
+            "utterances_histories": [
+                "What genres?"
+            ],
+            "num_try": 1,
+            "targets": [],
+            "responses": [
+                {
+                    "valid": true,
+                    "response": "have you ever heard of wheeler walker jr i learned about him when he was a guest on joe rogan's show on youtube",
+                    "confidence": 0.7444384849325325
+                }
+            ],
+            "valid": true
+        },
+        {
+            "utterances_histories": [
+                "I listen to various types of music."
+            ],
+            "num_try": 1,
+            "targets": [],
+            "responses": [
+                {
+                    "valid": true,
+                    "response": "i like korean rap, they have compliment rap battles lol",
+                    "confidence": 0.35576846273876966
+                }
+            ],
+            "valid": true
+        },
+        {
+            "utterances_histories": [
+                "That is a perfect reason to like a certain kind of music."
+            ],
+            "num_try": 1,
+            "targets": [],
+            "responses": [
+                {
+                    "valid": true,
+                    "response": "hello, i like many genre's. have you heard about the new jazz album put out by steve tibbets? he is a guitarist.",
+                    "confidence": 0.30253277584141114
+                }
+            ],
+            "valid": true
+        },
+        {
+            "utterances_histories": [
+                "Does you mother play the piano?"
+            ],
+            "num_try": 1,
+            "targets": [],
+            "responses": [
+                {
+                    "valid": true,
+                    "response": "hello, i know a little bit. what about you?",
+                    "confidence": 0.6812530698294992
+                }
+            ],
+            "valid": true
+        },
+        {
+            "utterances_histories": [
+                "Do you have an expensive stereo system?"
+            ],
+            "num_try": 1,
+            "targets": [],
+            "responses": [
+                {
+                    "valid": true,
+                    "response": "it's cool you're holding it down for the rest of us. have you converted to netflix? together with youtube it makes up half of peak internet traffic in north america.",
+                    "confidence": 0.22746651574129398
+                }
+            ],
+            "valid": true
+        },
+        {
+            "utterances_histories": [
+                "Do you know the band named Metallica? If so, do you like them?"
+            ],
+            "num_try": 1,
+            "targets": [],
+            "responses": [],
+            "valid": false
+        },
+        {
+            "utterances_histories": [
+                "Do you like country music?"
+            ],
+            "num_try": 1,
+            "targets": [],
+            "responses": [],
+            "valid": false
+        },
+        {
+            "utterances_histories": [
+                "Do you like punk music?"
+            ],
+            "num_try": 1,
+            "targets": [],
+            "responses": [],
+            "valid": false
+        },
+        {
+            "utterances_histories": [
+                "Do you like singing karaoke?"
+            ],
+            "num_try": 1,
+            "targets": [],
+            "responses": [],
+            "valid": false
+        },
+        {
+            "utterances_histories": [
+                "Do you like to dance?"
+            ],
+            "num_try": 1,
+            "targets": [],
+            "responses": [],
+            "valid": false
+        },
+        {
+            "utterances_histories": [
+                "Do you listen to music while doing your homework?"
+            ],
+            "num_try": 1,
+            "targets": [],
+            "responses": [],
+            "valid": false
+        },
+        {
+            "utterances_histories": [
+                "How does music make you feel?"
+            ],
+            "num_try": 1,
+            "targets": [],
+            "responses": [],
+            "valid": false
+        },
+        {
+            "utterances_histories": [
+                "Is there any kind of music that you hate?"
+            ],
+            "num_try": 1,
+            "targets": [],
+            "responses": [],
+            "valid": false
+        },
+        {
+            "utterances_histories": [
+                "What kind of music you like the most?"
+            ],
+            "num_try": 1,
+            "targets": [],
+            "responses": [],
+            "valid": false
+        },
+        {
+            "utterances_histories": [
+                "When was the last time you went to a concert?"
+            ],
+            "num_try": 1,
+            "targets": [],
+            "responses": [],
+            "valid": false
+        }
+    ]
+}

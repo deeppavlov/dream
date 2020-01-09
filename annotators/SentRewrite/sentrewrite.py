@@ -1,8 +1,11 @@
 import neuralcoref
 import spacy
+from nltk import sent_tokenize
+from yesno_question import yesno_question
 
 nlp = spacy.load("en_core_web_sm")
 neuralcoref.add_to_pipe(nlp)
+ynq = yesno_question()
 
 
 def distance(ner, mention):
@@ -36,9 +39,7 @@ def recover_mentions(dialog, ner_dialog):
 
     discourse = " ".join([" ".join(utterance) for utterance in dialog])
     doc = nlp(discourse)
-    if not doc._.has_coref:
-        return {"clusters": [], "modified_sents": [" ".join(utterance) for utterance in dialog]}
-    else:
+    if doc._.has_coref:
         # list of clusters: [cluster -> mention (dict: start, end, text, resolved)]
         clusters = [[{"start": mention.start_char,
                       "end": mention.end_char,
@@ -121,5 +122,27 @@ def recover_mentions(dialog, ner_dialog):
         new_dialog = []
         for i in range(len(dialog)):
             new_dialog.append(discourse[new_utter_pos[i]["start"]: new_utter_pos[i]["end"]])
+    else:
+        new_clusters = []
+        new_dialog = [" ".join(utterance) for utterance in dialog]
 
-        return {"clusters": new_clusters, "modified_sents": new_dialog}
+    # rewrite short answers for yes/no questions
+    final_dialog = []
+    if len(new_dialog) < 2:
+        final_dialog = new_dialog
+    else:
+        final_dialog.append(new_dialog[0])
+        for i in range(len(new_dialog) - 1):
+            final_dialog.append(new_dialog[i + 1])
+            sents = sent_tokenize(new_dialog[i])
+            if len(sents) > 0:
+                question = sents[-1]
+                sents = sent_tokenize(new_dialog[i + 1])
+                if len(sents) > 0:
+                    answer = sents[0]
+                    if question != "" and answer != "":
+                        full_answer = ynq.rewrite_yesno_answer(question, answer)
+                        if full_answer != "":
+                            final_dialog[-1] = full_answer + " " + " ".join(sents[1:])
+
+    return {"clusters": new_clusters, "modified_sents": final_dialog}

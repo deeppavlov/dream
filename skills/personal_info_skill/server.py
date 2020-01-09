@@ -81,12 +81,12 @@ def process_info(dialog, which_info="name"):
                               prev_bot_uttr) or re.search(
             r"(my ((home\s?land|mother\s?land|native\s?land|birth\s?place) "
             r"is|(home\s?land|mother\s?land|native\s?land|birth\s?place)'s)|"
-            r"(i was|i were) born in|i am from)",
+            r"(i was|i were) born in|i am from|i'm from)",
             curr_user_uttr),
         "location": re.search(
             r"((what is|what's|whats|tell me) your? location|"
             r"where do you live|where are you now|"
-            r"is that were you live now)",
+            r"is that where you live now)",
             prev_bot_uttr) or re.search(
             r"(my (location is|location's)|(i am|i'm|i)( live| living)? in([a-zA-z ]+)?now)",
             curr_user_uttr)
@@ -95,9 +95,9 @@ def process_info(dialog, which_info="name"):
                            "location": "I didn't get your location. Could you, please, repeat it.",
                            "homeland": "I didn't get your homeland. Could you, please, repeat it."}
 
-    response_phrases = {"name": f"Nice to meet you. I will remember your name, ",
-                        "location": f"Cool! I will remember your location is ",
-                        "homeland": f"Cool! Is that were you live now?"}
+    response_phrases = {"name": "Nice to meet you, ",
+                        "location": "Cool! What do you like about this place?",
+                        "homeland": "Is that where you live now?"}
 
     got_info = False
     # if user doesn't want to share his info
@@ -107,15 +107,22 @@ def process_info(dialog, which_info="name"):
         confidence = 1.0
         return response, confidence, human_attr, bot_attr
 
-    if re.search(r"is that were you live now",
+    if re.search(r"is that where you live now",
                  prev_bot_uttr) and curr_user_annot.get("intent_catcher",
                                                         {}).get("yes", {}).get("detected", 0) == 1:
         logger.info(f"Found location=homeland")
-        human_attr["location"] = dialog["human"]["attributes"]["homeland"]
-        response = f"Cool! I will remember your location is {human_attr['location']}."
+        if dialog["human"]["attributes"].get("homeland", None):
+            human_attr["location"] = dialog["human"]["attributes"]["homeland"]
+        else:
+            found_homeland = check_entities("homeland",
+                                            curr_user_uttr=dialog["utterances"][-3]["text"].lower(),
+                                            curr_user_annot=dialog["utterances"][-3]["annotations"],
+                                            prev_bot_uttr=dialog["utterances"][-4]["text"].lower())
+            human_attr["location"] = found_homeland
+        response = "Cool! What do you like about this place?"
         confidence = 10.0
         got_info = True
-    elif re.search(r"is that were you live now",
+    elif re.search(r"is that where you live now",
                    prev_bot_uttr) and curr_user_annot.get("intent_catcher",
                                                           {}).get("no", {}).get("detected", 0) == 1:
         logger.info(f"Found location is not homeland")
@@ -125,38 +132,8 @@ def process_info(dialog, which_info="name"):
 
     if is_about_templates[which_info] or prev_bot_uttr == repeat_info_phrases[which_info] and not got_info:
         logger.info(f"Asked for {which_info} in {prev_bot_uttr}")
-        for ent in curr_user_annot.get("ner", []):
-            if not ent:
-                continue
-            ent = ent[0]
-            if ent["text"].lower() == "alexa":
-                if (re.search(r"(my (name is|name's)|call me) alexa", curr_user_uttr) or (re.search(
-                        r"(what is|what's|whats|tell me) your? name",
-                        prev_bot_uttr) and re.match(r"^alexa[\.,!\?]*$", curr_user_uttr))):
-                    # - my name is alexa
-                    # - what's your name? - alexa.
-                    pass
-                else:
-                    # in all other cases skip alexa
-                    continue
-            logger.info(f"Found {which_info} `{ent['text']}`")
-            human_attr[which_info] = " ".join([n.capitalize() for n in ent["text"].split()])
-            if which_info in ["name", "location"]:
-                response = response_phrases[which_info] + human_attr[which_info] + "."
-                confidence = 10.0
-                got_info = True
-            elif which_info in ["homeland"]:
-                if dialog["human"]["profile"].get("location", None) is None:
-                    response = response_phrases[which_info]
-                    confidence = 10.0
-                    got_info = True
-                else:
-                    response = f"Cool! I will remember your homeland is {human_attr[which_info]}."
-                    confidence = 10.0
-                    got_info = True
-            else:
-                pass
-        if not got_info:
+        found_info = check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr)
+        if found_info is None:
             if prev_bot_uttr == repeat_info_phrases[
                 which_info] and curr_user_annot.get("intent_catcher",
                                                     {}).get("no", {}).get("detected", 0) == 1:
@@ -165,6 +142,22 @@ def process_info(dialog, which_info="name"):
             else:
                 response = repeat_info_phrases[which_info]
                 confidence = 10.0
+        else:
+            human_attr[which_info] = found_info
+            if which_info == "name":
+                response = response_phrases[which_info] + human_attr[which_info] + "."
+                confidence = 10.0
+            elif which_info == "location":
+                response = response_phrases[which_info]
+                confidence = 10.0
+            elif which_info == "homeland":
+                if dialog["human"]["profile"].get("location", None) is None:
+                    response = response_phrases[which_info]
+                    confidence = 10.0
+                else:
+                    response = f"Cool! I will remember your homeland is {human_attr[which_info]}."
+                    confidence = 10.0
+
     return response, confidence, human_attr, bot_attr
 
 
@@ -200,6 +193,27 @@ def tell_my_info(dialog, which_info="name"):
             response = f"Your {which_info} is {name}."
             confidence = 10.
     return response, confidence
+
+
+def check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr):
+    found_info = None
+    for ent in curr_user_annot.get("ner", []):
+        if not ent:
+            continue
+        ent = ent[0]
+        if ent["text"].lower() == "alexa":
+            if (re.search(r"(my (name is|name's)|call me) alexa", curr_user_uttr) or (re.search(
+                    r"(what is|what's|whats|tell me) your? name",
+                    prev_bot_uttr) and re.match(r"^alexa[\.,!\?]*$", curr_user_uttr))):
+                # - my name is alexa
+                # - what's your name? - alexa.
+                pass
+            else:
+                # in all other cases skip alexa
+                continue
+        logger.info(f"Found {which_info} `{ent['text']}`")
+        found_info = " ".join([n.capitalize() for n in ent["text"].split()])
+    return found_info
 
 
 if __name__ == '__main__':

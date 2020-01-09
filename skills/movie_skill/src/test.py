@@ -35,13 +35,13 @@ def test_one_step_responses():
                                            }], \
         print(response)
 
-    print("check_person_of_the_same_prof")
-    input_data = get_input_json("test_configs/check_person_of_the_same_prof.json")
-    response = requests.post(url, json=input_data).json()[0]
-    assert response[1:] == [1.0, {}, {}, {"bot_attitudes": [['Quentin Tarantino', 'actor', 'positive']],
-                                          "human_attitudes": []
-                                          }], \
-        print(response)
+    # print("check_person_of_the_same_prof")
+    # input_data = get_input_json("test_configs/check_person_of_the_same_prof.json")
+    # response = requests.post(url, json=input_data).json()[0]
+    # assert response[1:] == [1.0, {}, {}, {"bot_attitudes": [['Quentin Tarantino', 'actor', 'positive']],
+    #                                       "human_attitudes": []
+    #                                       }], \
+    #     print(response)
 
     print("check_person_from_movie")
     input_data = get_input_json("test_configs/check_person_from_movie.json")
@@ -111,7 +111,7 @@ def test_one_step_responses():
     print("check_ignored_movie")
     input_data = get_input_json("test_configs/check_ignored_movie.json")
     response = requests.post(url, json=input_data).json()[0]
-    assert response[1:] == [0.98, {}, {}, {"bot_attitudes": [['0026983', 'movie', 'positive']],
+    assert response[1:] == [0.98, {}, {}, {"bot_attitudes": [['1798709', 'movie', 'very_positive']],
                                            "human_attitudes": []
                                            }], \
         print(response)
@@ -119,18 +119,18 @@ def test_one_step_responses():
     print("check_ignored_movie2")
     input_data = get_input_json("test_configs/check_ignored_movie2.json")
     response = requests.post(url, json=input_data).json()[0]
-    assert response[1:] == [0.98, {}, {}, {"bot_attitudes": [['0317533', 'movie', 'positive']],
+    assert response[1:] == [0.98, {}, {}, {"bot_attitudes": [['0108778', 'movie', 'very_positive']],
                                            "human_attitudes": []
                                            }], \
         print(response)
 
-    # print("check_new_movie")
-    # input_data = get_input_json("test_configs/check_new_movie.json")
-    # response = requests.post(url, json=input_data).json()[0]
-    # assert response[1:] == [0.98, {}, {}, {"bot_attitudes": [['7286456', 'movie', 'very_positive']],
-    #                                        "human_attitudes": []/
-    #                                        }], \
-    #     print(response)
+    print("check_new_movie")
+    input_data = get_input_json("test_configs/check_new_movie.json")
+    response = requests.post(url, json=input_data).json()[0]
+    assert response[1:] == [0.98, {}, {}, {"bot_attitudes": [['7286456', 'movie', 'very_positive']],
+                                           "human_attitudes": []
+                                           }], \
+        print(response)
 
     print("check_can_watch_movies")
     input_data = get_input_json("test_configs/check_can_watch_movies.json")

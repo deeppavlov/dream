@@ -108,6 +108,12 @@ services:
     image: ${DOCKER_REGISTRY}/tfidf_retrieval:${VERSION}
     env_file:
       - ${ENV_FILE}
+  music_tfidf_retrieval:
+    image: ${DOCKER_REGISTRY}/music_tfidf_retrieval:${VERSION}
+  convert_reddit:
+    image: ${DOCKER_REGISTRY}/convert_reddit:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   personal_info_skill:
     image: ${DOCKER_REGISTRY}/personal_info_skill:${VERSION}
     env_file:
@@ -122,6 +128,14 @@ services:
       - ${ENV_FILE}
   book_skill:
     image: ${DOCKER_REGISTRY}/book_skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  christmas_new_year_skill:
+    image: ${DOCKER_REGISTRY}/christmas_new_year_skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  weather_skill:
+    image: ${DOCKER_REGISTRY}/weather_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
 volumes:
