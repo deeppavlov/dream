@@ -8,6 +8,9 @@ from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
 
+from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
+
+
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -117,6 +120,12 @@ class RuleBasedSelector():
                 # Use only misheard asr skill if asr is not confident and skip it for greeting
                 if dialog['utterances'][-1]['annotations']['asr']['asr_confidence'] == 'very_low':
                     skills_for_uttr = ["misheard_asr"]
+                # previous user's reply hypotheses
+                hypotheses = dialog["utterances"][-3]["hypotheses"] if len(dialog["utterances"]) >= 3 else []
+                for hyp in hypotheses:
+                    # here we just forcibly add skills which return `can_continue` and it's not `no`
+                    if hyp.get("can_continue", CAN_NOT_CONTINUE) in {CAN_CONTINUE, MUST_CONTINUE}:
+                        skills_for_uttr.append(hyp["skill_name"])
 
             # prev_user_uttr = dialog["utterances"][-3] if len(dialog["utterances"]) >= 3 else {}
             prev_user_uttr_hyp = dialog["utterances"][-3]["hypotheses"] if len(dialog["utterances"]) >= 3 else []
@@ -129,6 +138,7 @@ class RuleBasedSelector():
                     prev_bot_uttr.get("active_skill", "") == "weather_skill" and weather_city_slot_requested)):
                 skills_for_uttr.append("weather_skill")
 
+            skills_for_uttr = list(set(skills_for_uttr))
             skill_names.append(skills_for_uttr)
 
         return skill_names

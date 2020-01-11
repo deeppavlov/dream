@@ -19,7 +19,8 @@ services:
           - node.labels.with_gpu != true
   rule_based_selector:
     build:
-      context: ./skill_selectors/rule_based_selector
+      context: .
+      dockerfile: ./skill_selectors/rule_based_selector/Dockerfile
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8002
     volumes: []
     deploy:
@@ -359,7 +360,8 @@ services:
           - node.labels.with_gpu != true
   personal_info_skill:
     build:
-      context: ./skills/personal_info_skill/
+      context: .
+      dockerfile: ./skills/personal_info_skill/Dockerfile
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8030
     volumes: []
     deploy:
