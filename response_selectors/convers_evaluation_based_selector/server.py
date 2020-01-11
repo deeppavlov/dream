@@ -51,6 +51,7 @@ def respond():
     for i, dialog in enumerate(dialogs_batch):
         for skill_data in response_candidates[i]:
             conv = dict()
+
             conv["currentUtterance"] = dialog["utterances"][-1]["text"]
             conv["currentResponse"] = skill_data["text"]
             # every odd utterance is from user
@@ -167,7 +168,8 @@ def respond():
 
         best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes = select_response(
             curr_candidates, curr_scores, curr_confidences,
-            toxicities[dialog_ids == i], has_blacklisted[dialog_ids == i], has_inappropriate[dialog_ids == i], dialog)
+            toxicities[dialog_ids == i], has_blacklisted[dialog_ids == i], has_inappropriate[dialog_ids == i],
+            dialog)
 
         selected_skill_names.append(best_skill_name)
         selected_texts.append(best_text)
@@ -229,24 +231,19 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             # greet user in first utterance
             candidates[i]['text'] = "Hello, " + greeting_spec + ' ' + candidates[i]['text']
             curr_single_scores.append(very_big_score)
-            break
         elif skill_names[i] == 'program_y' and candidates[i]['text'] == how_are_you_spec:
             curr_single_scores.append(very_big_score)
-            break
         elif skill_names[i] == 'program_y_dangerous' and psycho_help_spec in candidates[i]['text']:
             curr_single_scores.append(very_big_score)
-            break
         elif skill_names[i] == 'program_y' and greeting_spec in candidates[i]['text']:
             if len(dialog["utterances"]) < 2:
                 curr_single_scores.append(very_big_score)
-                break
             else:
                 confidences[i] = 0.2  # Low confidence for greeting in the middle of dialogue
         elif skill_names[i] == 'cobotqa' and "Here's something I found on the web." in candidates[i]['text']:
             confidences[i] = 0.6
         elif skill_names[i] == 'misheard_asr' and is_misheard:
             curr_single_scores.append(very_big_score)
-            break
         if skill_names[i] == 'dummy_skill':
             question = candidates[i]['text']
 
@@ -262,6 +259,14 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
         logger.info(f'Skill {skill_name} has score: {score}. Toxicity: {toxicities[i]} '
                     f'Cand scores: {cand_scores}')
         curr_single_scores.append(score)
+
+    highest_conf_exist = True if any(confidences >= 1.) else False
+    for j in range(len(candidates)):
+        if highest_conf_exist and confidences[j] < 1. and curr_single_scores[j] != very_big_score:
+            # need to drop this candidates
+            logger.info(f"Found highest confidence. Dropping {skill_names[j]}")
+            curr_single_scores[j] = - 1.
+
     best_id = np.argmax(curr_single_scores)
     best_skill_name = skill_names[best_id]
     best_text = candidates[best_id]["text"]

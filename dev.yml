@@ -15,6 +15,7 @@ services:
     env_file: [.env.dev]
     volumes:
       - "./skill_selectors/rule_based_selector:/src"
+      - "./common:/src/common"
     ports:
       - 8002:8002
   cobot_topics:
@@ -186,6 +187,7 @@ services:
     env_file: [.env.dev]
     volumes:
       - "./skills/personal_info_skill:/src"
+      - "./common:/src/common"
     ports:
       - 8030:8030
   asr:

@@ -8,6 +8,8 @@ from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
 
+from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
+
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -26,17 +28,18 @@ def respond():
     responses = []
     human_attributes = []
     bot_attributes = []
+    attributes = []
 
     for dialog in dialogs_batch:
-        response, confidence, human_attr, bot_attr = process_info(
+        response, confidence, human_attr, bot_attr, attr = process_info(
             dialog, which_info="name")
 
         if confidence == 0.0:
-            response, confidence, human_attr, bot_attr = process_info(
+            response, confidence, human_attr, bot_attr, attr = process_info(
                 dialog, which_info="homeland")
 
         if confidence == 0.0:
-            response, confidence, human_attr, bot_attr = process_info(
+            response, confidence, human_attr, bot_attr, attr = process_info(
                 dialog, which_info="location")
 
         if confidence == 0.0:
@@ -52,15 +55,17 @@ def respond():
         confidences.append(confidence)
         human_attributes.append(human_attr)
         bot_attributes.append(bot_attr)
+        attributes.append(attr)
 
     total_time = time.time() - st_time
     logger.info(f'personal_info_skill exec time: {total_time:.3f}s')
-    return jsonify(list(zip(responses, confidences, human_attributes, bot_attributes)))
+    return jsonify(list(zip(responses, confidences, human_attributes, bot_attributes, attributes)))
 
 
 def process_info(dialog, which_info="name"):
     human_attr = {}
     bot_attr = {}
+    attr = {"can_continue": CAN_NOT_CONTINUE}
     response = ""
     confidence = 0.0
 
@@ -105,7 +110,8 @@ def process_info(dialog, which_info="name"):
             "intent_catcher", {}).get("no", {}).get("detected", 0) == 1:
         response = "As you wish."
         confidence = 1.0
-        return response, confidence, human_attr, bot_attr
+        attr["can_continue"] = CAN_NOT_CONTINUE
+        return response, confidence, human_attr, bot_attr, attr
 
     if re.search(r"is that where you live now",
                  prev_bot_uttr) and curr_user_annot.get("intent_catcher",
@@ -120,16 +126,17 @@ def process_info(dialog, which_info="name"):
                                             prev_bot_uttr=dialog["utterances"][-4]["text"].lower())
             human_attr["location"] = found_homeland
         response = "Cool! What do you like about this place?"
-        confidence = 10.0
+        confidence = 1.0
         got_info = True
+        attr["can_continue"] = CAN_NOT_CONTINUE
     elif re.search(r"is that where you live now",
                    prev_bot_uttr) and curr_user_annot.get("intent_catcher",
                                                           {}).get("no", {}).get("detected", 0) == 1:
         logger.info(f"Found location is not homeland")
         response = f"So, where do you live now?"
-        confidence = 10.0
+        confidence = 1.0
         got_info = False
-
+        attr["can_continue"] = MUST_CONTINUE
     if is_about_templates[which_info] or prev_bot_uttr == repeat_info_phrases[which_info] and not got_info:
         logger.info(f"Asked for {which_info} in {prev_bot_uttr}")
         found_info = check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr)
@@ -139,26 +146,32 @@ def process_info(dialog, which_info="name"):
                                                     {}).get("no", {}).get("detected", 0) == 1:
                 response = ""
                 confidence = 0.0
+                attr["can_continue"] = CAN_NOT_CONTINUE
             else:
                 response = repeat_info_phrases[which_info]
-                confidence = 10.0
+                confidence = 1.0
+                attr["can_continue"] = CAN_CONTINUE
         else:
             human_attr[which_info] = found_info
             if which_info == "name":
                 response = response_phrases[which_info] + human_attr[which_info] + "."
-                confidence = 10.0
+                confidence = 1.0
+                attr["can_continue"] = CAN_NOT_CONTINUE
             elif which_info == "location":
                 response = response_phrases[which_info]
-                confidence = 10.0
+                confidence = 1.0
+                attr["can_continue"] = CAN_NOT_CONTINUE
             elif which_info == "homeland":
                 if dialog["human"]["profile"].get("location", None) is None:
                     response = response_phrases[which_info]
-                    confidence = 10.0
+                    confidence = 1.0
+                    attr["can_continue"] = MUST_CONTINUE
                 else:
-                    response = f"Cool! I will remember your homeland is {human_attr[which_info]}."
-                    confidence = 10.0
+                    response = f"Cool! What do you like about this place?"
+                    confidence = 1.0
+                    attr["can_continue"] = CAN_NOT_CONTINUE
 
-    return response, confidence, human_attr, bot_attr
+    return response, confidence, human_attr, bot_attr, attr
 
 
 def tell_my_info(dialog, which_info="name"):
