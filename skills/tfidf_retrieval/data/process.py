@@ -82,7 +82,8 @@ def check(human_phrase, vectorizer, phrase_list, top_best=2):
     banned_phrases = ['where are you from?',
                       "hi, this is an alexa prize socialbot. yeah, let's chat! what do you want to talk about?",
                       "you are first. tell me something about positronic.",
-                      "i'm made by amazon."]
+                      "i'm made by amazon.",
+                      "favorite member of mouse rat?"]
     misheard_phrases = ["I misheard you",
                         "Could you repeat that, please?",
                         "Could you say that again, please?",
