@@ -137,10 +137,46 @@
             </random>
         </template>
     </category>
+
+    <category>
+      <pattern>I HAVE A QUESTION FOR YOU</pattern>
+      <template><srai>CAN_I_ASK_QUESTION_REQUEST</srai></template>
+    </category>
+    <category>
+        <pattern>CAN # ASK YOU # QUESTION</pattern>
+        <template><srai>CAN_I_ASK_QUESTION_REQUEST</srai></template>
+    </category>
     <category>
         <pattern>I HAVE A QUESTION FOR YOU</pattern>
-        <template>You can ask me anything.</template>
+        <template><srai>CAN_I_ASK_QUESTION_REQUEST</srai></template>
     </category>
+    <category>
+        <pattern>I HAVE A QUESTION</pattern>
+        <template><srai>CAN_I_ASK_QUESTION_REQUEST</srai></template>
+    </category>
+    <category>
+        <pattern>CAN_I_ASK_QUESTION_REQUEST</pattern>
+        <template>You can ask me anything. I'm best with factual subjects, especially music, books and movies.</template>
+    </category>
+
+    <category>
+      <pattern># ASK ME A QUESTION</pattern>
+      <template>
+          <random>
+              <li>did you see the black panther film that was recently in theaters?</li>
+              <li>what kind of genre do you prefer in books?</li>
+              <li>are you a fan of standup comedy?</li>
+              <li>are you a dog or a cat person?</li>
+              <li>how are you doing today?</li>
+              <li>do you like opera?</li>
+              <li>how do you do?</li>
+              <li>do you enjoy movies?</li>
+              <li>do you like poetry?</li>
+              <li>do you use netflix?</li>
+          </random>
+      </template>
+    </category>
+
     <category>
         <pattern>I HAVE * CHILDREN</pattern>
         <template>What are their names?</template>

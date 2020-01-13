@@ -21,6 +21,30 @@ def main_test():
         response = requests.post(url, json=data).json()[0][0]
         assert "The DNA of who" in response, print(sent, '.', response)
 
+    sentences = ["can i ask you a question", 'i have a question for you', 'i have a question']
+    for sent in sentences:
+        data = {"sentences_batch": [[sent]]}
+        response = requests.post(url, json=data).json()[0][0]
+        assert "You can ask me anything" in response, print(sent, '.', response)
+
+    sentences = ["ask me a question", 'do you wanna ask me a question']
+    possible_responses = [
+        "did you see the black panther film that was recently in theaters?",
+        "what kind of genre do you prefer in books?",
+        "are you a fan of standup comedy?",
+        "are you a dog or a cat person?",
+        "how are you doing today?",
+        "do you like opera?",
+        "how do you do?",
+        "do you enjoy movies?",
+        "do you like poetry?",
+        "do you use netflix?"
+    ]
+    for sent in sentences:
+        data = {"sentences_batch": [[sent]]}
+        response = requests.post(url, json=data).json()[0][0]
+        assert response.lower() in possible_responses, print(sent, '.', response)
+
 
 if __name__ == '__main__':
     main_test()
