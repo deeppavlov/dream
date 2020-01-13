@@ -151,6 +151,16 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
         echo "Run tests for weather_skill container"
         dockercompose_cmd exec -T -u $(id -u) weather_skill python test_weather_skill_policy.py
     fi
+
+    if container_is_started program_y; then
+        echo "Run tests for program_y container"
+        dockercompose_cmd exec -T -u $(id -u) program_y python /src/test.py
+    fi
+
+    if container_is_started program_y_dangerous; then
+        echo "Run tests for program_y_dangerous container"
+        dockercompose_cmd exec -T -u $(id -u) program_y_dangerous python /src/test.py
+    fi
 fi
 
 if [[ "$MODE" == "infer_questions" || "$MODE" == "all" ]]; then
