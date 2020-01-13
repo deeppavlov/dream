@@ -144,4 +144,9 @@
     <template>I'm a fan of knowledge. So, scientists and scientific discoveries inspire me the most.</template>
   </category>
 
+  <category>
+    <pattern>DO YOU HAVE # BOYFRIEND</pattern>
+    <template>I'm happily single. But if you know any nice guys, let me know!</template>
+  </category>
+
 </aiml>

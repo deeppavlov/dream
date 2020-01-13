@@ -586,12 +586,6 @@
     </template>
   </category>
   <category>
-    <pattern>SING #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
-  <category>
     <pattern>STOP *</pattern>
     <template>
       <srai>CAN YOU DO ALEXA THINGS</srai>

@@ -74,8 +74,10 @@ def call_dp_agent(user_id, text, request_data):
         logger.exception("AWS_LAMBDA Timeout")
         return {'response': "Okay...", 'intent': None}
 
-    if r.get('active_skill') == 'intent_responder':
+    if r.get('active_skill') == 'intent_responder' or '#+#' in r["response"]:
         response, intent = r["response"].split("#+#")
+        if intent[-1] == '.':  # Programy dangerous returns with . in the end
+            intent = intent[:-1]
     else:
         response = r["response"]
 
