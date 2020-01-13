@@ -2,6 +2,7 @@ import boto3
 import os
 from tqdm import tqdm
 import argparse
+import sys
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--bucket', help='bucket name', default='alexa-prod-dialogs-dumps')
@@ -51,10 +52,10 @@ if __name__ == '__main__':
         local_dates = [
             el.replace('_all.txt', '').replace('_with_feedbacks.txt', '').replace('_without_feedbacks.txt', '') for el
             in local_filenames]
-        # recreate txt dumps for last 24h (because ratings file could be updated)
-        local_dates = set(sorted(local_dates)[:-24])
+        # recreate txt dumps for last 48h (because ratings file could be updated with delay)
+        local_dates = set(sorted(local_dates)[:-48])
         for date in tqdm(bucket_dates - local_dates):
             dump_filename = f'time_interval_logs_{date}.json'
-            cmd = f"python {args.dp_agent_alexa_path}/utils/collect_amazon_dialogs.py --input " \
+            cmd = f"{sys.executable} {args.dp_agent_alexa_path}/utils/collect_amazon_dialogs.py --input " \
                 f"{dump_folder + '/' + dump_filename} --output {args.output_txt_path + '/' + date} --with_skill_name"
             os.system(cmd)
