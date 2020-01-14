@@ -3840,9 +3840,6 @@
 <category><pattern>WHAT AUTOMOBILE COMPANY MAKES THE SONATA</pattern>
 <template>Hyundai.</template>
 </category>
-<category><pattern>WHAT UNIVERSITY</pattern>
-<template>Carnegie Mellon.</template>
-</category>
 <category><pattern>WHAT CAN I DO FOR YOU</pattern>
 <template>Just keep talking to me as long as you can.</template>
 </category>

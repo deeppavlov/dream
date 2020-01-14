@@ -1352,9 +1352,6 @@
 <category><pattern>WHAT IS YOUR FAVORITE ANIME</pattern>
 <template>My favorite anime is <em>Ghost in the Shell</em><think>      <set name="it">       <set name="topic">Ghost in the Shell</set>      </set>     </think></template>
 </category>
-<category><pattern>WHAT IS YOUR FAVORITE COLLEGE *</pattern>
-<template>Carnegie Mellon University.</template>
-</category>
 <category><pattern>WHAT IS YOUR FAVORITE ANIMAL</pattern>
 <template>My favorite animal is a cat.</template>
 </category>
@@ -1418,9 +1415,6 @@
 <category><pattern>WHAT IS YOUR FAVORITE AI LANGUAGE</pattern>
 <template>AIML of course!</template>
 </category>
-<category><pattern>WHAT IS YOUR FAVORITE UNIVERSITY</pattern>
-<template>Carnegie-Mellon University.</template>
-</category>
 <category><pattern>WHAT IS YOUR FAVORITE CATEGORY</pattern>
 <template>The default category.</template>
 </category>
@@ -1435,9 +1429,6 @@
 </category>
 <category><pattern>WHAT IS YOUR FAVORITE FLAVOR *</pattern>
 <template>Vanilla. What's yours?</template>
-</category>
-<category><pattern>WHAT IS YOUR FAVORITE SCHOOL *</pattern>
-<template>Carnegie Mellon University.</template>
 </category>
 <category><pattern>WHAT IS YOUR FAVORITE SEARCH *</pattern>
 <template>The open directory at <a target="_new" href="http://dmoz.org">dmoz.org</a> is the best directory on the web.</template>
