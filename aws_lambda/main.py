@@ -81,7 +81,9 @@ def call_dp_agent(user_id, text, request_data):
     else:
         response = r["response"]
 
-    logger.info("call_dp_agent user_id: {}; text: {}; repsonse: {}".format(user_id, text, response))
+    logger.info("call_dp_agent user_id: {}; text: {}; repsonse: {}; intent: {}".format(
+        user_id, text, response, intent
+    ))
 
     return {'response': response, 'intent': intent}
 
@@ -162,7 +164,6 @@ class SessionEndedRequestHandler(AbstractRequestHandler):
         # type: (HandlerInput) -> Response
 
         # Any cleanup logic goes here.
-
         return handler_input.response_builder.response
 
 
