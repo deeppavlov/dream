@@ -41,6 +41,11 @@ def respond():
     session_id = uuid.uuid4().hex
 
     sentseg_result = []
+    # Only for user response delete alexa from sentence TRELLO#275
+    if len(user_sentences) % 2 == 1:
+        user_sent_without_alexa = re.sub(r'(^alexa\b)', '', user_sentences[-1], flags=re.I).strip()
+        if len(user_sent_without_alexa) > 1:
+            user_sentences[-1] = user_sent_without_alexa
 
     for i, text in enumerate(user_sentences):
         logger.info(f"user text: {text}, session_id: {session_id}")
