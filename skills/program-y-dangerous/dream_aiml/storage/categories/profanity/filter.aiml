@@ -76,7 +76,6 @@
     <category>
         <pattern>FILTER_WITH_ROCKY</pattern>
         <template>
-          <li>
             Let me tell you something you already know.
             The world ain't all sunshine and rainbows.
             It's a very mean and nasty place, and I don't care how tough you are, it will beat you to your knees and keep you there permanently if you let it.
@@ -87,7 +86,6 @@
             Cowards do that and that ain't you. You're better than that!
             I'm always gonna love you, no matter what. No matter what happens. You're the best thing in my life.
             But until you start believing in yourself, you ain't gonna have a life. Don't forget to visit your mother. #+#exit
-          </li>
         </template>
     </category>
 
