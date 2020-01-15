@@ -78,7 +78,7 @@ def create_phraselist(dialog_list, donotknow_answers, todel_userphrases, banned_
     return phrase_list
 
 
-def check(human_phrase, vectorizer, phrase_list, top_best=2):
+def check(human_phrase, vectorizer, vectorized_phrases, phrase_list, top_best=1):
     banned_phrases = ['where are you from?',
                       "hi, this is an alexa prize socialbot. yeah, let's chat! what do you want to talk about?",
                       "you are first. tell me something about positronic.",
@@ -92,7 +92,6 @@ def check(human_phrase, vectorizer, phrase_list, top_best=2):
                         "What is it that you'd like to chat about?"]
     human_phrase = preprocess(human_phrase)
     human_phrases = list(phrase_list.keys())
-    vectorized_phrases = vectorizer.transform(human_phrases)
     assert vectorized_phrases.shape[0] > 0
     transformed_phrase = vectorizer.transform([human_phrase.lower()])
     multiply_result = (transformed_phrase * vectorized_phrases.transpose())

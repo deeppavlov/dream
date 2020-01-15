@@ -76,6 +76,7 @@ phrase_list['politics'] = ' '.join(["my creators are still working on politics s
                                     "for now, i'm not able to perform such a discussion.",
                                     "but i'll be glad to discuss movies with you.",
                                     "what's your favorite movie?"])
+vectorized_phrases = vectorizer.transform(list(phrase_list.keys()))
 
 
 @app.route("/respond", methods=['POST'])
@@ -84,7 +85,8 @@ def respond():
     last_utterances = request.json['sentences']
     response = []
     for last_utterance in last_utterances:
-        response = response + check(last_utterance, vectorizer=vectorizer, phrase_list=phrase_list)
+        response = response + check(last_utterance, vectorizer=vectorizer,
+                                    vectorized_phrases=vectorized_phrases, phrase_list=phrase_list)
     if not response:
         with sentry_sdk.push_scope() as scope:
             scope.set_extra('last_utterances', last_utterances)
