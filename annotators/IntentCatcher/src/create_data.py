@@ -19,7 +19,7 @@ parser.add_argument("-p", "--add_phrases", action="store_true")
 args = parser.parse_args()
 
 INTENT_PHRASES_PATH = args.phrases
-INTENT_DATA_PATH = os.path.join(os.path.dirname(INTENT_PHRASES_PATH), 'intent_data.json')
+INTENT_DATA_PATH = os.path.join(os.path.dirname(INTENT_PHRASES_PATH), 'intent_data_train.json')
 print(f"Saving to: {INTENT_DATA_PATH}")
 
 add_thresholds = args.add_thresholds

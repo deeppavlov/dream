@@ -40,10 +40,11 @@
 Чтобы добавить интент, нужно:
  1. Вписать в `<intent_data_path>/intent_phrases.json` имя вашего интента, фразы/регекспы фраз, по которым будет идти матчинг, допустимые в этом случае знаки пунктуации, а также min_precision - минимально приемлимый precision для подбора трешхолда.
  2. Затем выполнить `python3 create_data.py <intent_data_path>/intent_phrases.json -p`, чтобы добавить эмбеддинги фраз, сами фразы (`-p` key) трешхолды и параметры для вычисления *confidence* (`-t` key). Они будут лежать в `<intent_data_path>/intent_data.json`
- 3. Чтобы обучить **ClassifierDetector** на новых фразах (новых интентах), выполнить `python3 train_model.py --data_path <intent_data_path>/intent_data.json`.
+ 3. Чтобы обучить **ClassifierDetector** на новых фразах (новых интентах), выполнить `python3 train_model.py --data_path <intent_data_path>/intent_data_train.json`.
+ 4. Затем следует сделать дамп `intent_data.json` на `share` под версией `intent_data_v<n>.json`, где номер версии `n` указан в Dockerfile
 
 Пример запуска внутри докера:
  ```
   python3 create_data.py /data/classifier_data/intent_phrases.json -p
-  python /data/classifier_data/train_model.py --data_path /data/classifier_data/intent_data.json --model_path /data/classifier_data/models/linear_classifier.h5
+  python /data/classifier_data/train_model.py --data_path /data/classifier_data/intent_data_train.json --model_path /data/classifier_data/models/linear_classifier.h5
  ```
