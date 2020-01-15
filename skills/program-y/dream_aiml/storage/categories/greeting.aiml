@@ -117,6 +117,25 @@
       </template>
     </category>
     <category>
+      <pattern>OKAY</pattern>
+      <template>
+        <random>
+          <li>I am a newborn socialbot, so I can't do so much.
+          I can answer questions, share fun facts, discuss movies and books.
+          What is your favorite TV Series?</li>
+          <li>I am a newborn socialbot, so I can't do so much.
+          I can answer questions, share fun facts, discuss movies and books.
+          what is your favorite movie?</li>
+          <li>I am a newborn socialbot, so I can't do so much.
+          I can answer questions, share fun facts, discuss movies and books.
+          what's your favorite tv show?</li>
+        </random>
+       <think>
+        <set name="topic"><star/></set>
+      </think>
+      </template>
+    </category>
+    <category>
       <pattern>NO</pattern>
       <template>
         Okay. What is your favorite TV Series?
