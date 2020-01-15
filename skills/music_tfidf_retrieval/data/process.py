@@ -106,10 +106,9 @@ def create_phraselist(dialog_list, donotknow_answers, todel_userphrases, banned_
     return phrase_list
 
 
-def check(human_phrase, vectorizer, phrase_list, top_best=2):
+def check(human_phrase, vectorizer, vectorized_phrases, phrase_list, top_best=1):
     human_phrase = preprocess(human_phrase)
     human_phrases = list(phrase_list.keys())
-    vectorized_phrases = vectorizer.transform(human_phrases)
     assert vectorized_phrases.shape[0] > 0
     transformed_phrase = vectorizer.transform([human_phrase.lower()])
     multiply_result = transformed_phrase * vectorized_phrases.transpose()

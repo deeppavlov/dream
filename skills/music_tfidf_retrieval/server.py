@@ -44,6 +44,7 @@ for user_phrase in todel_userphrases:
     if user_phrase in phrase_list:
         del phrase_list[user_phrase]
 phrase_list["let's talk about."] = "i misheard you. what's it that you’d like to chat about?"
+vectorized_phrases = vectorizer.transform(list(phrase_list.keys()))
 
 
 @app.route("/respond", methods=['POST'])
@@ -52,7 +53,8 @@ def respond():
     last_utterances = request.json['sentences']
     response = []
     for last_utterance in last_utterances:
-        response = response + check(last_utterance, vectorizer=vectorizer, phrase_list=phrase_list)
+        response = response + check(last_utterance, vectorizer=vectorizer,
+                                    vectorized_phrases=vectorized_phrases, phrase_list=phrase_list)
     if not response:
         with sentry_sdk.push_scope() as scope:
             scope.set_extra('last_utterances', last_utterances)
