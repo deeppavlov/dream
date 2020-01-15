@@ -73,7 +73,7 @@ def respond():
                                         headers=headers,
                                         data=json.dumps({'sentences': utterances}),
                                         method='POST',
-                                        timeout=10)
+                                        timeout=2)
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         logger.exception("toxic result Timeout")
         sentry_sdk.capture_exception(e)
@@ -95,7 +95,7 @@ def respond():
                                             headers=headers,
                                             data=json.dumps({'sentences': utterances}),
                                             method='POST',
-                                            timeout=10)
+                                            timeout=2)
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         logger.exception("blacklist_result Timeout")
         sentry_sdk.capture_exception(e)
@@ -128,7 +128,7 @@ def respond():
                                   headers=headers,
                                   data=json.dumps({'conversations': conversations}),
                                   method='POST',
-                                  timeout=10)
+                                  timeout=2)
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         logger.exception("cobot convers eval Timeout")
         sentry_sdk.capture_exception(e)

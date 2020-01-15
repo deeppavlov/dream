@@ -68,7 +68,7 @@ def call_dp_agent(user_id, text, request_data):
             json={'user_id': user_id, 'payload': text, 'device_id': device_id,
                   'session_id': session_id, 'request_id': request_id,
                   'conversation_id': conversation_id, 'speech': speech},
-            timeout=7).json()
+            timeout=4).json()
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         sentry_sdk.capture_exception(e)
         logger.exception("AWS_LAMBDA Timeout")
@@ -160,9 +160,10 @@ class SessionEndedRequestHandler(AbstractRequestHandler):
         return ask_utils.is_request_type("SessionEndedRequest")(handler_input)
 
     def handle(self, handler_input):
-        logger.info("SessionEndedRequestHandler")
-        # type: (HandlerInput) -> Response
-
+        if request_data['request'].get('reason') != 'USER_INITIATED':
+            with sentry_sdk.push_scope() as scope:
+                scope.set_extra('request_data', request_data)
+                sentry_sdk.capture_message('Strange SessionEndedRequestHandler reason')
         # Any cleanup logic goes here.
         return handler_input.response_builder.response
 
@@ -201,7 +202,7 @@ class IntentReflectorHandler(AbstractRequestHandler):
             dp_agent_data = call_dp_agent(user_id, text, request_data)
         else:
             dp_agent_data = {"response": "Sorry", "intent": None}
-            msg = f"LAMBDA: NO TEXT NO SPEECH!\nincoming request: {request_data['request']}"
+            msg = f"LAMBDA: NO TEXT NO SPEECH! incoming request: {request_data['request']}"
             logger.warning(msg)
             sentry_sdk.capture_message(msg)
 
@@ -249,7 +250,7 @@ def handler_wrapper(event, context):
     global request_data
     request_data = event
     if 'request' in request_data:
-        logger.info(f'incoming request:\n{request_data["request"]}')
+        logger.info(f'incoming request: {request_data["request"]}')
     else:
         msg = 'LAMBDA: no field request in request_data'
         logger.warning(msg)
