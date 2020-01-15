@@ -176,7 +176,8 @@ class IMDb:
                            "lets chat", "in", "if", "can", "o", "ok", "one",
                            "two", "film", "new", "next", "out", "love",
                            "like", "watch", "actress", "less", "want", "abortion",
-                           "alexa", "you tell me", "movie movie", "tricks", "movies"
+                           "alexa", "you tell me", "movie movie", "tricks", "movies",
+                           "yes", "action"
                            ]:
             try:
                 self.with_ignored_movies_names.pop(proc_title)
@@ -568,10 +569,8 @@ class IMDb:
                 return "very_positive"
             elif rating >= 6.0:
                 return "positive"
-            elif rating >= 5.0:
-                return "neutral"
             else:
-                return "unseen"
+                return "neutral"
 
     def get_movies_with_person(self, name, profession="actor"):
         """
@@ -618,10 +617,8 @@ class IMDb:
                 return "very_positive"
             elif rating >= 7.0:
                 return "positive"
-            elif rating >= 6.5:
-                return "neutral"
             else:
-                return "unknown"
+                return "neutral"
 
     def genereate_opinion_about_genre(self, genre: str, attitude=None):
         """
