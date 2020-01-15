@@ -2,7 +2,6 @@
 
 import json
 
-from typing import List
 from respond_funcs import get_respond_funcs
 
 INTENT_RESPONSES_PATH = './data/intent_response_phrases.json'
@@ -20,30 +19,28 @@ class Responder:
         self.logger = logger
         self.intent_responses = self.load_responses(INTENT_RESPONSES_PATH)
         self.response_funcs = get_respond_funcs()
-        # self.logger.info("Exiter initialized")
 
-    def respond(self, utterances: List):
-        responses, confidences = [], []
-        for utt in utterances:
-            response = ""
-            confidence = 0.0
-            for intent_name, intent_data in utt['annotation']['intent_catcher'].items():
-                if intent_data['detected'] and intent_data['confidence'] > confidence:
-                    if intent_name in self.response_funcs:
-                        response = self.response_funcs[intent_name](utt, self.intent_responses[intent_name])
-                        # Special formatter which used in AWS Lambda to identify what was the intent
-                        while "#+#" in response:
-                            response = response[:response.rfind(" #+#")]
-                        response += " #+#{}".format(intent_name)
-                        confidence = intent_data['confidence']
-                        # todo: we need to know what intent was called
-                        # current workaround is to use only one intent if several were detected
-                        # and to append special token with intent_name
-                    else:
-                        self.logger.info(f'responder for intent_name: {intent_name} not found')
-            responses.append(response)
-            confidences.append(confidence)
-        return list(zip(responses, confidences))
+    def respond(self, dialog: dict):
+        response = ""
+        confidence = 0.0
+
+        utt = dialog["utterances"][-1]
+        for intent_name, intent_data in utt['annotations'].get('intent_catcher', {}).items():
+            if intent_data['detected'] and intent_data['confidence'] > confidence:
+                if intent_name in self.response_funcs:
+                    response = self.response_funcs[intent_name](dialog, self.intent_responses[intent_name])
+                    # Special formatter which used in AWS Lambda to identify what was the intent
+                    while "#+#" in response:
+                        response = response[:response.rfind(" #+#")]
+                    response += " #+#{}".format(intent_name)
+                    confidence = intent_data['confidence']
+                    # todo: we need to know what intent was called
+                    # current workaround is to use only one intent if several were detected
+                    # and to append special token with intent_name
+                else:
+                    self.logger.info(f'responder for intent_name: {intent_name} not found')
+
+        return response, confidence
 
     def load_responses(self, intent_responses_filename: str):
         with open(intent_responses_filename, 'r') as fp:

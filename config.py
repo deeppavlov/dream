@@ -93,7 +93,7 @@ SKILLS = [
         "endpoint": "respond",
         "external": True,
         "path": "",
-        "formatter": intent_responder_formatter
+        "formatter": skill_with_attributes_formatter
     },
     {
         "name": "dummy_skill",

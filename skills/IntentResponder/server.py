@@ -30,18 +30,19 @@ def respond():
     session_id = uuid.uuid4().hex
     logger.info(f"Session_id: {session_id}")
 
-    user_sentences = request.json['user_utterances']
-    bot_sentences = request.json['bot_utterances']
-    annotations = request.json['annotations']
+    dialogs = request.json['dialogs']
+    responses = []
+    confidences = []
 
-    input = [{'user_sentence': u, 'annotation': a, 'bot_sentence': b}
-             for u, a, b in zip(user_sentences, annotations, bot_sentences)]
+    for dialog in dialogs:
+        user_uttr = dialog["utterances"][-1]["text"]
+        logger.info(f"User Utterance: {user_uttr}")
+        response, confidence = responder.respond(dialog)
+        logger.info(f"Response: {response}")
+        responses.append(response)
+        confidences.append(confidence)
 
-    logger.info(f"Number of utterances: {len(user_sentences)}")
-    responses = responder.respond(input)
-    for r in responses:
-        logger.info(f"Response:{r}")
-    return jsonify(responses)
+    return jsonify(list(zip(responses, confidences)))
 
 
 if __name__ == '__main__':
