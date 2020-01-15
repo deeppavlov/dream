@@ -4,9 +4,10 @@ import random
 from datetime import datetime
 
 
-def exit_respond(utt, response_phrases):
+def exit_respond(dialog, response_phrases):
+    utt = dialog["utterances"][-1]
     response = random.choice(response_phrases).strip()  # Neutral response
-    annotation = utt["annotation"]
+    annotation = utt["annotations"]
     try:
         sentiment = annotation["sentiment_classification"]["text"]
     except KeyError:
@@ -32,22 +33,35 @@ def exit_respond(utt, response_phrases):
     return response
 
 
-def repeat_respond(utt, response_phrases):
-    return utt["bot_sentence"] if len(utt["bot_sentence"]) > 0 else "I did not say anything!"
+def repeat_respond(dialog, response_phrases):
+    if len(dialog["utterances"]) >= 2:
+        bot_utt = dialog["utterances"][-2]["text"]
+    else:
+        bot_utt = ""
+    return bot_utt if len(bot_utt) > 0 else "I did not say anything!"
 
 
-def where_are_you_from_respond(utt, response_phrases):
+def where_are_you_from_respond(dialog, response_phrases):
+    already_known_user_property = dialog["human"]["profile"].get("homeland", None)
+    if already_known_user_property is None:
+        response = random.choice(response_phrases).strip() + " Where are you from?"
+    else:
+        already_known_user_property = dialog["human"]["profile"].get("location", None)
+        if already_known_user_property is None:
+            response = random.choice(response_phrases).strip() + " What is your location?"
+        else:
+            response = random.choice(response_phrases).strip()
+    return response
+
+
+def random_respond(dialog, response_phrases):
     response = random.choice(response_phrases).strip()
     return response
 
 
-def random_respond(utt, response_phrases):
-    response = random.choice(response_phrases).strip()
-    return response
-
-
-def random_respond_with_question_asking(utt, response_phrases):
-    response = random_respond(utt, response_phrases)
+def random_respond_with_question_asking(dialog, response_phrases):
+    utt = dialog["utterances"][-1]["text"]
+    response = random_respond(dialog, response_phrases)
     if 'you' in utt:
         you = 'you'
     else:
@@ -56,9 +70,18 @@ def random_respond_with_question_asking(utt, response_phrases):
     return response
 
 
-def what_time_respond(utt, response_phrases):
+def what_time_respond(dialog, response_phrases):
     time = datetime.utcnow()
     response = f"It is {time.hour} hours and {time.minute} minutes by UTC. What a time to be alive!"
+    return response
+
+
+def what_is_your_name_respond(dialog, response_phrases):
+    already_known_user_property = dialog["human"]["profile"].get("name", None)
+    if already_known_user_property is None:
+        response = random.choice(response_phrases).strip() + " What is your name?"
+    else:
+        response = random.choice(response_phrases).strip()
     return response
 
 
@@ -66,9 +89,9 @@ def get_respond_funcs():
     return {
         "exit": exit_respond,
         "repeat": repeat_respond,
-        "where_are_you_from": random_respond,
+        "where_are_you_from": where_are_you_from_respond,
         "who_made_you": random_respond,
-        "what_is_your_name": random_respond,
+        "what_is_your_name": what_is_your_name_respond,
         "what_is_your_job": random_respond,
         "what_can_you_do": random_respond,
         "what_time": what_time_respond,

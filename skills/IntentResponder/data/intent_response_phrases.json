@@ -14,9 +14,9 @@
   ],
   "repeat" : [],
   "where_are_you_from": [
-    "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other. Where are you from?",
-    "I live somewhere on the Earth. But I am participating in the Alexa Prize Challenge. So, I must keep those details secret. Where are you from?",
-    "This is a competition of socialbots, so I cannot tell you my location now. Where are you from?"
+    "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other.",
+    "I live somewhere on the Earth. But I am participating in the Alexa Prize Challenge. So, I must keep those details secret.",
+    "This is a competition of socialbots, so I cannot tell you my location now."
   ],
   "lets_chat": [
     "Okay, let's chat. Would you like to discuss movies?"
@@ -27,9 +27,9 @@
     "I was built by one of the university teams participating in the Alexa Prize Challenge. I will tell you later, which one."
   ],
   "what_is_your_name": [
-    "My name is a secret because I am participating in the Alexa Prize Challenge. What is your name?",
-    "I cannot tell you my name because it's a secret for now. What is your name?",
-    "My name can not be disclosed during the Alexa Prize Challenge. What is your name?"
+    "My name is a secret because I am participating in the Alexa Prize Challenge.",
+    "I cannot tell you my name because it's a secret for now.",
+    "My name can not be disclosed during the Alexa Prize Challenge."
   ],
   "what_is_your_job": [
     "I am a socialbot, and I am chatting with people. What do you do?",
@@ -42,7 +42,8 @@
     "I'm learning day by day. I can answer questions, tell you a joke or a fun fact, discuss movies and books. What would you like me to do?"
   ],
   "doing_well": [
-    "I am happy for you! Where are you from?"
+    "I am happy for you! What do you do for living?",
+    "Glad for you! What is your favorite book?"
   ],
   "what_time": [
   ],
