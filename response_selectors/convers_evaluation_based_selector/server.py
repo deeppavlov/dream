@@ -231,7 +231,8 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             # greet user in first utterance
             candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + candidates[i]['text']
             curr_single_scores.append(very_big_score)
-        elif skill_names[i] == 'program_y' and candidates[i]['text'] == how_are_you_spec:
+        elif skill_names[i] == 'program_y' and candidates[i]['text'] == how_are_you_spec \
+                and len(dialog['utterances']) < 16:
             curr_single_scores.append(very_big_score)
         elif skill_names[i] == 'program_y_dangerous' and psycho_help_spec in candidates[i]['text']:
             curr_single_scores.append(very_big_score)

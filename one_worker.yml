@@ -39,8 +39,22 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8000
   tfidf_retrieval:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8028
+  book_tfidf_retrieval:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8039
+  entertainment_tfidf_retrieval:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8040
+  fashion_tfidf_retrieval:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8041
+  movie_tfidf_retrieval:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8042
   music_tfidf_retrieval:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8034
+  politics_tfidf_retrieval:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8043
+  science_technology_tfidf_retrieval:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8044
+  sport_tfidf_retrieval:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8045
   convert_reddit:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8029 -t 60
   personal_info_skill:

@@ -166,10 +166,80 @@ SKILLS = [
         "formatter": skill_with_attributes_formatter
     },
     {
+        "name": "book_tfidf_retrieval",
+        "protocol": "http",
+        "host": "book_tfidf_retrieval",
+        "port": 8039,
+        "endpoint": "respond",
+        "external": True,
+        "path": "",
+        "formatter": tfidf_formatter
+    },
+    {
+        "name": "entertainment_tfidf_retrieval",
+        "protocol": "http",
+        "host": "entertainment_tfidf_retrieval",
+        "port": 8040,
+        "endpoint": "respond",
+        "external": True,
+        "path": "",
+        "formatter": tfidf_formatter
+    },
+    {
+        "name": "fashion_tfidf_retrieval",
+        "protocol": "http",
+        "host": "fashion_tfidf_retrieval",
+        "port": 8041,
+        "endpoint": "respond",
+        "external": True,
+        "path": "",
+        "formatter": tfidf_formatter
+    },
+    {
+        "name": "movie_tfidf_retrieval",
+        "protocol": "http",
+        "host": "movie_tfidf_retrieval",
+        "port": 8042,
+        "endpoint": "respond",
+        "external": True,
+        "path": "",
+        "formatter": tfidf_formatter
+    },
+    {
         "name": "music_tfidf_retrieval",
         "protocol": "http",
         "host": "music_tfidf_retrieval",
         "port": 8034,
+        "endpoint": "respond",
+        "external": True,
+        "path": "",
+        "formatter": tfidf_formatter
+    },
+    {
+        "name": "politics_tfidf_retrieval",
+        "protocol": "http",
+        "host": "politics_tfidf_retrieval",
+        "port": 8043,
+        "endpoint": "respond",
+        "external": True,
+        "path": "",
+        "formatter": tfidf_formatter
+    },
+    {
+        "name": "science_technology_tfidf_retrieval",
+        "protocol": "http",
+        "host": "science_technology_tfidf_retrieval",
+        "port": 8044,
+        "endpoint": "respond",
+        "external": True,
+        "path": "",
+        "formatter": tfidf_formatter
+    },
+    {
+        "name": "sport_tfidf_retrieval",
+        "protocol": "http",
+        "host": "sport_tfidf_retrieval",
+        "port": 8045,
         "endpoint": "respond",
         "external": True,
         "path": "",

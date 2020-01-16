@@ -170,13 +170,54 @@ services:
       - "./skills/tfidf_retrieval:/src"
     ports:
       - 8028:8028
-
+  book_tfidf_retrieval:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/topicalchat_tfidf_retrieval:/src"
+    ports:
+      - 8039:8039
+  entertainment_tfidf_retrieval:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/topicalchat_tfidf_retrieval:/src"
+    ports:
+      - 8040:8040
+  fashion_tfidf_retrieval:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/topicalchat_tfidf_retrieval:/src"
+    ports:
+      - 8041:8041
+  movie_tfidf_retrieval:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/topicalchat_tfidf_retrieval:/src"
+    ports:
+      - 8042:8042
   music_tfidf_retrieval:
     env_file: [.env.dev]
     volumes:
-      - "./skills/music_tfidf_retrieval:/src"
+      - "./skills/topicalchat_tfidf_retrieval:/src"
     ports:
       - 8034:8034
+  politics_tfidf_retrieval:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/topicalchat_tfidf_retrieval:/src"
+    ports:
+      - 8043:8043
+  science_technology_tfidf_retrieval:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/topicalchat_tfidf_retrieval:/src"
+    ports:
+      - 8044:8044
+  sport_tfidf_retrieval:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/topicalchat_tfidf_retrieval:/src"
+    ports:
+      - 8045:8045
   convert_reddit:
     env_file: [.env.dev]
     volumes:
