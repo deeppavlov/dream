@@ -339,10 +339,106 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+  book_tfidf_retrieval:
+    build:
+      context: ./skills/topicalchat_tfidf_retrieval/
+      args:
+        TOPICAL_DATA_URL: http://lnsigo.mipt.ru/export/alexaprize_data/topicalchat_tfidf_retrieval/topicalchat_book_data.tar.gz
+        MODELS_URL: http://lnsigo.mipt.ru/export/models/new_vectorizer_2.zip
+        TOPIC_NAME: book
+        CONFIDENCE_THRESHOLD: 0.51
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8039
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 4
+  entertainment_tfidf_retrieval:
+    build:
+      context: ./skills/topicalchat_tfidf_retrieval/
+      args:
+        TOPICAL_DATA_URL: http://lnsigo.mipt.ru/export/alexaprize_data/topicalchat_tfidf_retrieval/topicalchat_entertainment_data.tar.gz
+        MODELS_URL: http://lnsigo.mipt.ru/export/models/new_vectorizer_2.zip
+        TOPIC_NAME: entertainment
+        CONFIDENCE_THRESHOLD: 0.59
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8040
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 4
+  fashion_tfidf_retrieval:
+    build:
+      context: ./skills/topicalchat_tfidf_retrieval/
+      args:
+        TOPICAL_DATA_URL: http://lnsigo.mipt.ru/export/alexaprize_data/topicalchat_tfidf_retrieval/topicalchat_fashion_data.tar.gz
+        MODELS_URL: http://lnsigo.mipt.ru/export/models/new_vectorizer_2.zip
+        TOPIC_NAME: fashion
+        CONFIDENCE_THRESHOLD: 0.6
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8041
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 4
+  movie_tfidf_retrieval:
+    build:
+      context: ./skills/topicalchat_tfidf_retrieval/
+      args:
+        TOPICAL_DATA_URL: http://lnsigo.mipt.ru/export/alexaprize_data/topicalchat_tfidf_retrieval/topicalchat_movie_data.tar.gz
+        MODELS_URL: http://lnsigo.mipt.ru/export/models/new_vectorizer_2.zip
+        TOPIC_NAME: movie
+        CONFIDENCE_THRESHOLD: 0.6
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8042
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 4
   music_tfidf_retrieval:
     build:
-      context: ./skills/music_tfidf_retrieval/
+      context: ./skills/topicalchat_tfidf_retrieval/
+      args:
+        TOPICAL_DATA_URL: http://lnsigo.mipt.ru/export/alexaprize_data/topicalchat_tfidf_retrieval/topicalchat_music_data.tar.gz
+        MODELS_URL: http://lnsigo.mipt.ru/export/models/new_vectorizer_2.zip
+        TOPIC_NAME: music
+        CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8034
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 4
+  politics_tfidf_retrieval:
+    build:
+      context: ./skills/topicalchat_tfidf_retrieval/
+      args:
+        TOPICAL_DATA_URL: http://lnsigo.mipt.ru/export/alexaprize_data/topicalchat_tfidf_retrieval/topicalchat_politics_data.tar.gz
+        MODELS_URL: http://lnsigo.mipt.ru/export/models/new_vectorizer_2.zip
+        TOPIC_NAME: politics
+        CONFIDENCE_THRESHOLD: 0.6
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8043
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 4
+  science_technology_tfidf_retrieval:
+    build:
+      context: ./skills/topicalchat_tfidf_retrieval/
+      args:
+        TOPICAL_DATA_URL: http://lnsigo.mipt.ru/export/alexaprize_data/topicalchat_tfidf_retrieval/topicalchat_science_technology_data.tar.gz
+        MODELS_URL: http://lnsigo.mipt.ru/export/models/new_vectorizer_2.zip
+        TOPIC_NAME: science_technology
+        CONFIDENCE_THRESHOLD: 0.6
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8044
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 4
+  sport_tfidf_retrieval:
+    build:
+      context: ./skills/topicalchat_tfidf_retrieval/
+      args:
+        TOPICAL_DATA_URL: http://lnsigo.mipt.ru/export/alexaprize_data/topicalchat_tfidf_retrieval/topicalchat_sport_data.tar.gz
+        MODELS_URL: http://lnsigo.mipt.ru/export/models/new_vectorizer_2.zip
+        TOPIC_NAME: sport
+        CONFIDENCE_THRESHOLD: 0.6
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8045
     volumes: []
     deploy:
       mode: replicated

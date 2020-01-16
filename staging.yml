@@ -108,8 +108,22 @@ services:
     image: ${DOCKER_REGISTRY}/tfidf_retrieval:${VERSION}
     env_file:
       - ${ENV_FILE}
+  book_tfidf_retrieval:
+    image: ${DOCKER_REGISTRY}/book_tfidf_retrieval:${VERSION}
+  entertainment_tfidf_retrieval:
+    image: ${DOCKER_REGISTRY}/entertainment_tfidf_retrieval:${VERSION}
+  fashion_tfidf_retrieval:
+    image: ${DOCKER_REGISTRY}/fashion_tfidf_retrieval:${VERSION}
+  movie_tfidf_retrieval:
+    image: ${DOCKER_REGISTRY}/movie_tfidf_retrieval:${VERSION}
   music_tfidf_retrieval:
     image: ${DOCKER_REGISTRY}/music_tfidf_retrieval:${VERSION}
+  politics_tfidf_retrieval:
+    image: ${DOCKER_REGISTRY}/politics_tfidf_retrieval:${VERSION}
+  science_technology_tfidf_retrieval:
+    image: ${DOCKER_REGISTRY}/science_technology_tfidf_retrieval:${VERSION}
+  sport_tfidf_retrieval:
+    image: ${DOCKER_REGISTRY}/sport_tfidf_retrieval:${VERSION}
   convert_reddit:
     image: ${DOCKER_REGISTRY}/convert_reddit:${VERSION}
     env_file:
