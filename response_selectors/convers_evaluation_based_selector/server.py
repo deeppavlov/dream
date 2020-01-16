@@ -229,7 +229,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
         if len(dialog['utterances']) < 2 and greeting_spec not in candidates[i]['text'] \
                 and skill_names[i] == 'program_y':
             # greet user in first utterance
-            candidates[i]['text'] = "Hello, " + greeting_spec + ' ' + candidates[i]['text']
+            candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + candidates[i]['text']
             curr_single_scores.append(very_big_score)
         elif skill_names[i] == 'program_y' and candidates[i]['text'] == how_are_you_spec:
             curr_single_scores.append(very_big_score)
