@@ -9,6 +9,7 @@ import logging
 import tarfile
 import pathlib
 import time
+import re
 
 t = time.time()
 logging.basicConfig(
@@ -107,7 +108,30 @@ def create_phraselist(dialog_list, donotknow_answers, todel_userphrases, banned_
     return phrase_list
 
 
-def check(human_phrase, vectorizer, vectorized_phrases, phrase_list, top_best=1, confidence_threshold=0.5):
+right_chars = re.compile("[^A-Za-z0-9]+")
+
+
+def tokenize(sentence):
+    filtered_sentence = right_chars.sub(" ", sentence).split()
+    filtered_sentence = [token for token in filtered_sentence if len(token) > 2]
+    return set(filtered_sentence)
+
+
+def is_available(candidate, utterances_history, threshold=0.6):
+    candidate = tokenize(candidate)
+    bot_history = [tokenize(utt) for utt in utterances_history[::-1][1::2]]
+    return not ([True for utt in bot_history if len(candidate & utt) / (len(candidate) + 1) > threshold])
+
+
+def check(
+    human_phrase,
+    vectorizer,
+    vectorized_phrases,
+    phrase_list,
+    top_best=3,
+    confidence_threshold=0.5,
+    utterances_history=[],
+):
     human_phrase = preprocess(human_phrase)
     human_phrases = list(phrase_list.keys())
     assert vectorized_phrases.shape[0] > 0
@@ -122,6 +146,12 @@ def check(human_phrase, vectorizer, vectorized_phrases, phrase_list, top_best=1,
     assert len(best_inds) > 0
     ans = []
     for ind in best_inds:
+        index = multiply_result.indices[ind]
+        bot_answer = phrase_list[human_phrases[index]]
+        for sign in "!#$%&*+.,:;<>=?@[]^_{}|":
+            bot_answer = bot_answer.replace(" " + sign, sign)
+        bot_answer = bot_answer.replace("  ", " ").lower().strip()
+
         score = multiply_result.data[ind]
         score = (
             score / confidence_threshold * 0.5
@@ -131,10 +161,6 @@ def check(human_phrase, vectorizer, vectorized_phrases, phrase_list, top_best=1,
         if confidence_threshold != 0.5:  # if not testing
             score = score / 2 if score < 0.5 else score
         score = 1.0 if score > 0.999 else score
-        index = multiply_result.indices[ind]
-        bot_answer = phrase_list[human_phrases[index]]
-        for sign in "!#$%&*+.,:;<>=?@[]^_{}|":
-            bot_answer = bot_answer.replace(" " + sign, sign)
-        bot_answer = bot_answer.replace("  ", " ").lower().strip()
+        score = score if is_available(bot_answer, utterances_history, 0.6) else 0.0
         ans.append((bot_answer, score))
-    return ans
+    return sorted(ans, key=lambda x: -x[1])
