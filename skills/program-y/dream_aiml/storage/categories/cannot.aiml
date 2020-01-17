@@ -920,9 +920,9 @@
     <pattern>CAN YOU DO ALEXA THINGS</pattern>
     <template>
       <random>
-        <li>Sorry, I am a socialbot, I cannot do this. If you want to use the requested feature say "Alexa, stop" and try again.</li>
-        <li>Unfortunately, I cannot do this because I am a socialbot. If you want to use the requested feature say "Alexa, stop" and try again.</li>
-        <li>I am really sorry but I am a socialbot, and I cannot do some Alexa things. If you want to use the requested feature say "Alexa, stop" and try again.</li>
+        <li>Sorry, I am a socialbot, I cannot do this. If you want to use the requested feature say, Alexa, stop, and try again.</li>
+        <li>Unfortunately, I cannot do this because I am a socialbot. If you want to use the requested feature say, Alexa, stop, and try again.</li>
+        <li>I am really sorry but I am a socialbot, and I cannot do some Alexa things. If you want to use the requested feature say, Alexa, stop, and try again.</li>
       </random>
     </template>
   </category>

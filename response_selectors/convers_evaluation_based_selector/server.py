@@ -215,6 +215,14 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                    }
     confidences[ids] = 0.
 
+    # check for repeatitions
+    bot_utterances = [uttr["text"].lower() for uttr in dialog["utterances"][::2]]
+    for i, cand in enumerate(candidates):
+        if cand["text"].lower() in bot_utterances:
+            confidences[i] /= 2
+            scores[i]['isResponseInteresting'] /= 2
+            scores[i]['responseEngagesUser'] /= 2
+
     skill_names = [c['skill_name'] for c in candidates]
     how_are_you_spec = "I'm fine, thanks! Do you want to know what I can do?"
     psycho_help_spec = "If you or someone you know is in immediate danger"
