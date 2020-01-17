@@ -1,5 +1,19 @@
 {
   "intent_phrases": {
+    "topic_switching": {
+      "phrases": [
+        "(please|can (we|i|you)|let(s|'s){0,1}( us| me){0,1}|(would|do) you like to|(should|could|may) (i|we|you)) ((finish|close|turn off) (the|this|current) (topic|subject)|(change|switch) the (topic|subject)|(move to|turn to|change to|go to|switch to|talk about) ((another|new|next) (topic|subject)|something else))",
+        "i (do not|don't|dont) (want|like) to (continue|talk about) (this|current)( boring){0,1} topic( any more| anymore){0,1}",
+        "i (do not|don't|dont) (want|like) to talk about this (topic|subject|talk){0,1} (anymore|any more)",
+        "(i'm|i am) fed up with this (topic|talk|subject)"
+      ],
+      "min_precision": 0.80,
+      "punctuation": [
+        ".",
+        "!",
+        "?"
+      ]
+    },
     "exit": {
       "phrases": [
         "((End)|(Stop)|(Cancel)) ((this)|(our)){0,1}((chat)|(conversation)|(dialog))(, ((Alexa)|(bot))){0,1}",
@@ -374,6 +388,8 @@
   },
   "random_phrases": {
     "phrases": [
+      "(let|please) continue this (good |interesting |fun |funny ){0,1}(topic|subject|talk)",
+ 	  "(please ){0,1}(dont|do not|don't) (change|switch|finish|close|turn off) (the |this |current ){0,1}(good |interesting |fun |funny ){0,1}(topic|subject|talk)",
       "[0-9]{1,10}",
       "stop ((hitting you)|(doing this)|(doing that))",
       "((repeat what)|(what do you want me to repeat))",
