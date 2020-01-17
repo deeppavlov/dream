@@ -136,6 +136,16 @@ SKILLS = [
         "formatter": skill_with_attributes_formatter
     },
     {
+        "name": "news_skill",
+        "protocol": "http",
+        "host": "news_skill",
+        "port": 8027,
+        "endpoint": "respond",
+        "external": True,
+        "path": "",
+        "formatter": skill_with_attributes_formatter
+    },
+    {
         "name": "tfidf_retrieval",
         "protocol": "http",
         "host": "tfidf_retrieval",

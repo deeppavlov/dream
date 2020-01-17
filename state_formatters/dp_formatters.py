@@ -415,28 +415,25 @@ def ner_formatter(payload, mode='in'):
 
 def skill_with_attributes_formatter(payload, mode='in'):
     if mode == 'in':
-        dialogs = annotated_input_formatter(payload, annotation="punctuated")['dialogs']
+        dialogs = annotated_input_formatter(payload, annotation="coref_resolved")['dialogs']
         # import json
         # print(json.dumps(dialogs, indent=2))
         return {"dialogs": dialogs}
     elif mode == 'out':
-        if len(payload) == 4:
+        if len(payload) == 3:
+            result = {"text": payload[0],
+                      "confidence": payload[1]
+                      }
+            for key in payload[2]:
+                result[key] = payload[2][key]
+            return [result]
+        elif len(payload) == 4:
             return [{"text": payload[0],
                      "confidence": payload[1],
                      "human_attributes": payload[2],
                      "bot_attributes": payload[3]
                      }]
         elif len(payload) == 5:
-            # payload[4] is a dictionary with additional keys-labels-annotations to the reply
-            # payload[4] = {"any_key" : "any_value"}
-            # for example, movie-skill
-            # Dp-formatter for movie-skill:
-            # {
-            #   'text': "It's a pleasure to know you better. I adore Brad Pitt!",
-            #   'confidence': 0.98, 'human_attributes': {}, 'bot_attributes': {},
-            #   'bot_attitudes': [['Brad Pitt', 'actor', 'very_positive']],
-            #   'human_attitudes': [['Brad Pitt', 'actor', 'positive']]
-            # }
             result = {"text": payload[0],
                       "confidence": payload[1],
                       "human_attributes": payload[2],

@@ -143,6 +143,8 @@ class RuleBasedSelector:
 
             books_cobot_dialogacts = {"Entertainment_General", "Entertainment_Books"}
             books_cobot_topics = {"Entertainment", "Literature"}
+            news_cobot_topics = {"News"}
+
             about_movies = (movie_cobot_dialogacts & cobot_dialogact_topics) | (movie_cobot_topics & cobot_topics)
             about_music = ("Entertainment_Music" in cobot_dialogact_topics) | ("Music" in cobot_topics)
             about_books = (books_cobot_dialogacts & cobot_dialogact_topics) | (books_cobot_topics & cobot_topics)
@@ -173,6 +175,7 @@ class RuleBasedSelector:
             ).get("detected", False) or (
                 prev_bot_uttr.get("active_skill", "") == "weather_skill" and weather_city_slot_requested
             )
+            about_news = (news_cobot_topics & cobot_topics)
 
             if "/new_persona" in dialog["utterances"][-1]["text"]:
                 # process /new_persona command
@@ -184,6 +187,8 @@ class RuleBasedSelector:
                 # process user utterance with sensitive content
                 skills_for_uttr.append("program_y_dangerous")
                 skills_for_uttr.append("cobotqa")
+                if about_news or ("news" in reply) or ("new" in reply):
+                    skills_for_uttr.append("news_skill")
             else:
                 # process regular utterances
                 skills_for_uttr.append("program_y")
@@ -225,6 +230,9 @@ class RuleBasedSelector:
 
                 if about_sports and len(dialog["utterances"]) > 2:
                     skills_for_uttr.append("sport_tfidf_retrieval")
+
+                if about_news or ("news" in reply) or ("new" in reply):
+                    skills_for_uttr.append("news_skill")
 
                 for hyp in prev_user_uttr_hyp:
                     # here we just forcibly add skills which return `can_continue` and it's not `no`

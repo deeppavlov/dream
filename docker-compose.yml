@@ -9,7 +9,7 @@ services:
     environment:
       WAIT_HOSTS: "rule_based_selector:8002, cobotqa:8001, cobot_topics:8003, transfertransfo:8007,
         toxic_classification:8013, sentrewrite:8017, ner:8021, sentiment_classification:8024,
-        attitude_classification:8025, movie_skill:8023"
+        attitude_classification:8025, movie_skill:8023, news_skill:8027"
       WAIT_HOSTS_TIMEOUT: 480
     deploy:
       mode: replicated
@@ -511,6 +511,18 @@ services:
     build:
       context: ./skills/weather_skill/
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8037
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+  news_skill:
+    build:
+      context: .
+      dockerfile: ./skills/alexa-prize-news/Dockerfile
+    command: bash -c "python updater.py | gunicorn --workers=2 server:app -b 0.0.0.0:8027 -t 300"
     volumes: []
     deploy:
       mode: replicated
