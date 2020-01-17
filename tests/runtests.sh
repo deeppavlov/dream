@@ -118,20 +118,6 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
         dockercompose_cmd exec -T -u $(id -u) sentiment_classification python annotators/DeepPavlovSentimentClassification/tests/run_test.py
     fi
 
-    if container_is_started transfertransfo; then
-        echo "Passing test data to transfertransfo"
-        dockercompose_cmd exec -T -u $(id -u) transfertransfo python tests/run_test.py \
-            --true_file tests/test_tasks.json \
-            --pred_file tests/test_results.json \
-            --from_url http://0.0.0.0:8007/transfertransfo
-
-        # echo "Passing question test data to transfertransfo from dream/...xlsx , it takes about 3 hours"
-        # dockercompose_cmd exec -T -u $(id -u) transfertransfo python tests/run_test.py \
-        #     --true_file tests/test_question_tasks.json \
-        #     --pred_file tests/test_question_tasks_results.json \
-        #     --from_url http://0.0.0.0:8007/transfertransfo
-    fi
-
     if container_is_started movie_skill; then
         echo "Run tests for movie_skill"
         dockercompose_cmd exec -T -u $(id -u) movie_skill python test.py
