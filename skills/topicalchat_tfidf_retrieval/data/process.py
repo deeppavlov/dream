@@ -130,6 +130,7 @@ def check(human_phrase, vectorizer, vectorized_phrases, phrase_list, top_best=1,
         )
         if confidence_threshold != 0.5:  # if not testing
             score = score / 2 if score < 0.5 else score
+        score = 1.0 if score > 0.999 else score
         index = multiply_result.indices[ind]
         bot_answer = phrase_list[human_phrases[index]]
         for sign in "!#$%&*+.,:;<>=?@[]^_{}|":
