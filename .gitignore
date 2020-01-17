@@ -119,3 +119,5 @@ tests/dream/output/*
 
 skills/transfertransfo/tests/test_results.json
 skills/movie_skill/src/databases/imdb_58k_parsed.json
+
+intent_data_train.json

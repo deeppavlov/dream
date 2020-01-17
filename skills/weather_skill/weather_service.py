@@ -176,7 +176,7 @@ def owm_requests_weather_forecast_now(city_str):
             # humidity = json_data['main']['humidity']
 
             response_template = "It is %s, temperature is around %0.1f in %s. " \
-                                "Wind speed is about %f meters per second" % (
+                                "Wind speed is about %0.1f meters per second" % (
                                     description, temperature, city_name, wind_speed)
         except Exception as e:
             # we have problems with weather service:
