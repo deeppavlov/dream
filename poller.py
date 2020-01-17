@@ -27,6 +27,7 @@ parser.add_argument('--arg-name', default=None, help='model first argument name'
 parser.add_argument('--state', action='store_true', help='add argument to send state to model')
 parser.add_argument('--convai', action='store_true')
 parser.add_argument('--agent', action='store_true', help='run poller in dp-agent mode')
+parser.add_argument('--empty-text', default="Empty response", help="Empty response text to agent", type=str)
 
 
 def init_log(conf: Dict) -> None:
@@ -124,7 +125,8 @@ class Wrapper:
             response = requests.Response()
             response.status_code = 503
         if response.status_code == 200:
-            resp_text = response.json().get('response', 'Empty response')
+            resp_text = response.json().get('response')
+            resp_text = resp_text or self._config['empty_text']
         else:
             log.error(f'Got {response.status_code} code from {self._config["model_url"]}')
             resp_text = 'Agent error'
@@ -189,10 +191,11 @@ class Wrapper:
     async def _check_backlog(self, chat_id) -> None:
         self._active_chats[chat_id] -= 1
         if self._active_chats[chat_id] == 0:
-            self._active_chats.pop(chat_id)
             if chat_id in self._backlog:
                 chat = self._backlog.pop(chat_id)
                 self._loop.create_task(self._batchify([chat], [chat_id]))
+            else:
+                self._active_chats.pop(chat_id)
 
 
 class Poller(Process):
@@ -261,6 +264,7 @@ def main() -> None:
     config['convai_mode'] = convai_mode or config['convai_mode']
     config['agent_mode'] = agent_mode or config['agent_mode']
     config['model_args_names'][0] = arg_name or config['model_args_names'][0]
+    config['empty_text'] = args.empty_text
 
     if config['agent_mode'] and (config['convai_mode'] or config['send_state']):
         raise ValueError('one shouldn\'t use --convai or --state arguments with --agent')
