@@ -5,6 +5,7 @@ import os
 import ask_sdk_core.utils as ask_utils
 import requests
 import sentry_sdk
+import json
 from ask_sdk_core.dispatch_components import AbstractExceptionHandler
 from ask_sdk_core.dispatch_components import AbstractRequestHandler
 from ask_sdk_core.handler_input import HandlerInput
@@ -73,6 +74,10 @@ def call_dp_agent(user_id, text, request_data):
         sentry_sdk.capture_exception(e)
         logger.exception("AWS_LAMBDA Timeout")
         return {'response': "Okay...", 'intent': None}
+    except json.JSONDecodeError as e:
+        sentry_sdk.capture_exception(e)
+        logger.exception("AWS_LAMBDA JSONDecodeError")
+        return {'response': "Interesting...", 'intent': None}
 
     if r.get('active_skill') == 'intent_responder' or '#+#' in r["response"]:
         response, intent = r["response"].split("#+#")

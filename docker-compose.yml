@@ -7,7 +7,7 @@ services:
     ports:
       - 4242:4242
     environment:
-      WAIT_HOSTS: "rule_based_selector:8002, cobotqa:8001, cobot_topics:8003, transfertransfo:8007,
+      WAIT_HOSTS: "rule_based_selector:8002, cobotqa:8001, cobot_topics:8003,
         toxic_classification:8013, sentrewrite:8017, ner:8021, sentiment_classification:8024,
         attitude_classification:8025, movie_skill:8023, news_skill:8027"
       WAIT_HOSTS_TIMEOUT: 480
@@ -75,19 +75,6 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
-  transfertransfo:
-    build:
-      context: ./skills/transfertransfo/
-    environment:
-      DEVICE: cuda
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8007 -t 60
-    volumes: []
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.with_gpu == true
   retrieval_chitchat:
     build:
       context: ./skills/retrieval_chitchat/

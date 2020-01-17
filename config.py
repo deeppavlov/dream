@@ -46,16 +46,6 @@ SKILLS = [
         "formatter": cobot_qa_formatter
     },
     {
-        "name": "transfertransfo",
-        "protocol": "http",
-        "host": "transfertransfo",
-        "port": 8007,
-        "endpoint": "transfertransfo",
-        "external": True,
-        "path": "",
-        "formatter": transfertransfo_formatter
-    },
-    {
         "name": "program_y",
         "protocol": "http",
         "host": "program_y",

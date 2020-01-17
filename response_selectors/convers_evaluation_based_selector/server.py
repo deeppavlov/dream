@@ -11,6 +11,9 @@ from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
 import pprint
+import multiprocessing
+
+
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -31,6 +34,10 @@ if COBOT_CONVERSATION_EVALUATION_SERVICE_URL is None:
     raise RuntimeError('COBOT_CONVERSATION_EVALUATION_SERVICE_URL environment variable is not set')
 
 headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COBOT_API_KEY}'}
+
+
+def custom_request(url, headers, data, timeout=1.6, method='POST'):
+    return requests.request(url=url, headers=headers, data=data, method=method, timeout=timeout)
 
 
 @app.route("/respond", methods=['POST'])
@@ -69,44 +76,53 @@ def respond():
 
     # TODO: refactor external service calls
     # check all possible skill responses for toxicity
-    try:
-        toxic_result = requests.request(url=TOXIC_COMMENT_CLASSIFICATION_SERVICE_URL,
-                                        headers=headers,
-                                        data=json.dumps({'sentences': utterances}),
-                                        method='POST',
-                                        timeout=2)
-    except (requests.ConnectTimeout, requests.ReadTimeout) as e:
-        logger.exception("toxic result Timeout")
-        sentry_sdk.capture_exception(e)
-        toxic_result = requests.Response()
-        toxic_result.status_code = 504
+    with multiprocessing.Pool(3) as p:
+        conv_data = json.dumps({'conversations': conversations})
+        sent_data = json.dumps({'sentences': utterances})
+        toxic_result = p.apply_async(custom_request, (TOXIC_COMMENT_CLASSIFICATION_SERVICE_URL, headers, sent_data))
+        blacklist_result = p.apply_async(custom_request, (BLACKLIST_DETECTOR_URL, headers, sent_data))
+        result = p.apply_async(custom_request, (COBOT_CONVERSATION_EVALUATION_SERVICE_URL, headers, conv_data))
+
+        try:
+            toxic_result = toxic_result.get(1.5)
+        except (requests.ConnectTimeout, requests.ReadTimeout,
+                multiprocessing.context.TimeoutError, multiprocessing.TimeoutError) as e:
+            logger.exception("toxic result Timeout")
+            sentry_sdk.capture_exception(e)
+            toxic_result = requests.Response()
+            toxic_result.status_code = 504
+
+        try:
+            blacklist_result = blacklist_result.get(1)
+        except (requests.ConnectTimeout, requests.ReadTimeout,
+                multiprocessing.context.TimeoutError, multiprocessing.TimeoutError) as e:
+            logger.exception("blacklist_result Timeout")
+            sentry_sdk.capture_exception(e)
+            blacklist_result = requests.Response()
+            blacklist_result.status_code = 504
+
+        try:
+            # evaluate all possible skill responses
+            result = result.get(1)
+        except (requests.ConnectTimeout, requests.ReadTimeout,
+                multiprocessing.context.TimeoutError, multiprocessing.TimeoutError) as e:
+            logger.exception("cobot convers eval Timeout")
+            sentry_sdk.capture_exception(e)
+            result = requests.Response()
+            result.status_code = 504
 
     if toxic_result.status_code != 200:
         msg = "Toxic classifier: result status code is not 200: {}. result text: {}; result status: {}".format(
             toxic_result, toxic_result.text, toxic_result.status_code)
-        sentry_sdk.capture_message(msg)
         logger.warning(msg)
         toxicities = [0.] * len(utterances)
     else:
         toxic_result = toxic_result.json()
         toxicities = [max(res[0].values()) for res in toxic_result]
 
-    try:
-        blacklist_result = requests.request(url=BLACKLIST_DETECTOR_URL,
-                                            headers=headers,
-                                            data=json.dumps({'sentences': utterances}),
-                                            method='POST',
-                                            timeout=2)
-    except (requests.ConnectTimeout, requests.ReadTimeout) as e:
-        logger.exception("blacklist_result Timeout")
-        sentry_sdk.capture_exception(e)
-        blacklist_result = requests.Response()
-        blacklist_result.status_code = 504
-
     if blacklist_result.status_code != 200:
         msg = "blacklist detector: result status code is not 200: {}. result text: {}; result status: {}".format(
             blacklist_result, blacklist_result.text, blacklist_result.status_code)
-        sentry_sdk.capture_message(msg)
         logger.warning(msg)
         has_blacklisted = [False] * len(utterances)
         has_inappropriate = [False] * len(utterances)
@@ -115,26 +131,16 @@ def respond():
         has_blacklisted = [int(res['profanity']) for res in blacklist_result]
         has_inappropriate = [int(res['inappropriate']) for res in blacklist_result]
 
-    for i, has_blisted in enumerate(has_blacklisted):
-        if has_blisted:
-            msg = f"response selector got candidate with blacklisted phrases:\n" \
-                  f"utterance: {utterances[i]}\n" \
-                  f"selected_skills: {response_candidates[dialog_ids[i]]}"
-            logger.info(msg)
-            sentry_sdk.capture_message(msg)
-
-    try:
-        # evaluate all possible skill responses
-        result = requests.request(url=COBOT_CONVERSATION_EVALUATION_SERVICE_URL,
-                                  headers=headers,
-                                  data=json.dumps({'conversations': conversations}),
-                                  method='POST',
-                                  timeout=2)
-    except (requests.ConnectTimeout, requests.ReadTimeout) as e:
-        logger.exception("cobot convers eval Timeout")
-        sentry_sdk.capture_exception(e)
-        result = requests.Response()
-        result.status_code = 504
+        for i, has_blisted in enumerate(has_blacklisted):
+            if has_blisted:
+                with sentry_sdk.push_scope() as scope:
+                    scope.set_extra('utterance', utterances[i])
+                    scope.set_extra('selected_skills', response_candidates[dialog_ids[i]])
+                    sentry_sdk.capture_message("response selector got candidate with blacklisted phrases")
+                    msg = f"response selector got candidate with blacklisted phrases:\n" \
+                          f"utterance: {utterances[i]}\n" \
+                          f"selected_skills: {response_candidates[dialog_ids[i]]}"
+                    logger.info(msg)
 
     if result.status_code != 200:
         msg = "Cobot Conversation Evaluator: result status code is \

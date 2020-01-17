@@ -54,16 +54,6 @@ services:
       - "./annotators/CoBotDialogActClassification:/src"
     ports:
       - 8006:8006
-  transfertransfo:
-    build:
-      args:
-        MODE: dev
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/transfertransfo:/app"
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8007 --timeout 60 --reload
-    ports:
-      - 8007:8007
   retrieval_chitchat:
     env_file: [.env.dev]
     volumes:
