@@ -23,6 +23,7 @@ COBOT_API_KEY = os.environ.get('COBOT_API_KEY')
 COBOT_CONVERSATION_EVALUATION_SERVICE_URL = os.environ.get('COBOT_CONVERSATION_EVALUATION_SERVICE_URL')
 TOXIC_COMMENT_CLASSIFICATION_SERVICE_URL = "http://toxic_classification:8013/toxicity_annotations"
 BLACKLIST_DETECTOR_URL = "http://blacklisted_words:8018/blacklisted_words"
+CALL_BY_NAME_PROBABILITY = 0.5  # if name is already known
 
 if COBOT_API_KEY is None:
     raise RuntimeError('COBOT_API_KEY environment variable is not set')
@@ -294,6 +295,11 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
         best_bot_attributes = candidates[best_id].get("bot_attributes", {})
         if sum(curr_single_scores) == 0.:
             break
+
+    if dialog["human"]["profile"].get("name", False):
+        name = dialog["human"]["profile"].get("name", False)
+        if np.random.uniform() <= CALL_BY_NAME_PROBABILITY:
+            best_text = f"{name}, {best_text}"
 
     return best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes
 
