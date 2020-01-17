@@ -21,7 +21,7 @@ RUN python -c "import tensorflow_hub as hub; model=hub.Module('$USE_MODEL_PATH')
 COPY ./src/ /src
 COPY ./data/ /data
 
-ADD http://files.deeppavlov.ai/alexaprize_data/intent_data_v13.json /data/classifier_data/intent_data.json
+ADD http://files.deeppavlov.ai/alexaprize_data/intent_data_v14.json /data/classifier_data/intent_data.json
 
 WORKDIR /src
 

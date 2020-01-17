@@ -67,6 +67,8 @@ class DialogDataManager():
                 # TODO normalize city...?
                 # TODO validate city?
 
+        # TODO No NER detected location case?
+        # TODO detect from keywords search
         return city
 
 
@@ -152,11 +154,13 @@ class WeatherSkill:
 
                 else:
                     # we have been ignored?
-                    # we havenot extyracted city?
+                    # we have not extracted city?
                     # ignore and forget everything
                     ############################################################
                     # FORGET because it is a complex case. tell a joke about weather?
                     ############################################################
+                    current_reply = "Sorry, I have no weather for the place. I can not understand the city..."
+                    curr_confidence = 0.5
                     return current_reply, curr_confidence, human_attr, bot_attr, context_dict
             else:
                 # just ignore
