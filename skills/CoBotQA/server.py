@@ -71,8 +71,8 @@ def respond():
                 if not ent:
                     continue
                 ent = ent[0]
-                if ent["text"].lower() not in UNIGRAMS and (
-                        ent["text"].lower() != "alexa" and curr_uttr["text"].lower()[:5] == "alexa"):
+                if ent["text"].lower() not in UNIGRAMS and not (
+                        ent["text"].lower() == "alexa" and curr_uttr["text"].lower()[:5] == "alexa"):
                     if attit in ["neutral", "positive", "very_positive"]:
                         entities.append(ent["text"].lower())
                         questions.append("Fun fact about {}".format(ent["text"]))
@@ -115,7 +115,7 @@ def respond():
                 confidence = 0.7
             elif "have an opinion on that" in response:
                 confidence = 0.7
-            elif response in bad_answers:
+            elif response in bad_answers or "I have lots of" in response:
                 confidence = 0.5
             else:
                 confidence = 0.95

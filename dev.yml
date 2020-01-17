@@ -164,6 +164,15 @@ services:
       - "./skills/ALICEChatAPI:/src"
     ports:
       - 8000:8000
+  news_skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./common:/src/common"
+      - "./skills/alexa-prize-news/src:/src/src"
+      - "./skills/alexa-prize-news/server.py:/src/src/server.py"
+      - "./skills/alexa-prize-news/updater.py:/src/src/updater.py"
+    ports:
+      - 8027:8027
   tfidf_retrieval:
     env_file: [.env.dev]
     volumes:
