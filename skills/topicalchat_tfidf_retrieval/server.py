@@ -82,14 +82,16 @@ vectorized_phrases = vectorizer.transform(list(phrase_list.keys()))
 def respond():
     st_time = time.time()
     last_utterances = request.json["sentences"]
+    utterances_histories = request.json["utterances_histories"]
     response = []
-    for last_utterance in last_utterances:
+    for last_utterance, utterances_history in zip(last_utterances, utterances_histories):
         response = response + check(
             last_utterance,
             vectorizer=vectorizer,
             vectorized_phrases=vectorized_phrases,
             phrase_list=phrase_list,
             confidence_threshold=CONFIDENCE_THRESHOLD,
+            utterances_history=utterances_history,
         )
     if not response:
         with sentry_sdk.push_scope() as scope:
