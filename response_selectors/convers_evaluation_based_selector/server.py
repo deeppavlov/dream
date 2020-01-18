@@ -11,8 +11,6 @@ from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
 import pprint
-import multiprocessing
-
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -36,7 +34,7 @@ if COBOT_CONVERSATION_EVALUATION_SERVICE_URL is None:
 headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COBOT_API_KEY}'}
 
 
-def custom_request(url, headers, data, timeout=1.6, method='POST'):
+def custom_request(url, headers, data, timeout, method='POST'):
     return requests.request(url=url, headers=headers, data=data, method=method, timeout=timeout)
 
 
@@ -76,40 +74,33 @@ def respond():
 
     # TODO: refactor external service calls
     # check all possible skill responses for toxicity
-    with multiprocessing.Pool(3) as p:
-        conv_data = json.dumps({'conversations': conversations})
-        sent_data = json.dumps({'sentences': utterances})
-        toxic_result = p.apply_async(custom_request, (TOXIC_COMMENT_CLASSIFICATION_SERVICE_URL, headers, sent_data))
-        blacklist_result = p.apply_async(custom_request, (BLACKLIST_DETECTOR_URL, headers, sent_data))
-        result = p.apply_async(custom_request, (COBOT_CONVERSATION_EVALUATION_SERVICE_URL, headers, conv_data))
+    conv_data = json.dumps({'conversations': conversations})
+    sent_data = json.dumps({'sentences': utterances})
 
-        try:
-            toxic_result = toxic_result.get(1.5)
-        except (requests.ConnectTimeout, requests.ReadTimeout,
-                multiprocessing.context.TimeoutError, multiprocessing.TimeoutError) as e:
-            logger.exception("toxic result Timeout")
-            sentry_sdk.capture_exception(e)
-            toxic_result = requests.Response()
-            toxic_result.status_code = 504
+    try:
+        toxic_result = custom_request(TOXIC_COMMENT_CLASSIFICATION_SERVICE_URL, headers, sent_data, 1.6)
+    except (requests.ConnectTimeout, requests.ReadTimeout) as e:
+        logger.error("toxic result Timeout")
+        sentry_sdk.capture_exception(e)
+        toxic_result = requests.Response()
+        toxic_result.status_code = 504
 
-        try:
-            blacklist_result = blacklist_result.get(1)
-        except (requests.ConnectTimeout, requests.ReadTimeout,
-                multiprocessing.context.TimeoutError, multiprocessing.TimeoutError) as e:
-            logger.exception("blacklist_result Timeout")
-            sentry_sdk.capture_exception(e)
-            blacklist_result = requests.Response()
-            blacklist_result.status_code = 504
+    try:
+        blacklist_result = custom_request(BLACKLIST_DETECTOR_URL, headers, sent_data, 1)
+    except (requests.ConnectTimeout, requests.ReadTimeout) as e:
+        logger.error("blacklist_result Timeout")
+        sentry_sdk.capture_exception(e)
+        blacklist_result = requests.Response()
+        blacklist_result.status_code = 504
 
-        try:
-            # evaluate all possible skill responses
-            result = result.get(1)
-        except (requests.ConnectTimeout, requests.ReadTimeout,
-                multiprocessing.context.TimeoutError, multiprocessing.TimeoutError) as e:
-            logger.exception("cobot convers eval Timeout")
-            sentry_sdk.capture_exception(e)
-            result = requests.Response()
-            result.status_code = 504
+    try:
+        # evaluate all possible skill responses
+        result = custom_request(COBOT_CONVERSATION_EVALUATION_SERVICE_URL, headers, conv_data, 2)
+    except (requests.ConnectTimeout, requests.ReadTimeout) as e:
+        logger.error("cobot convers eval Timeout")
+        sentry_sdk.capture_exception(e)
+        result = requests.Response()
+        result.status_code = 504
 
     if toxic_result.status_code != 200:
         msg = "Toxic classifier: result status code is not 200: {}. result text: {}; result status: {}".format(
@@ -222,7 +213,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     confidences[ids] = 0.
 
     # check for repeatitions
-    bot_utterances = [uttr["text"].lower() for uttr in dialog["utterances"][::2]]
+    bot_utterances = set([uttr["text"].lower() for uttr in dialog["utterances"][::2]])
     for i, cand in enumerate(candidates):
         if cand["text"].lower() in bot_utterances:
             confidences[i] /= 2

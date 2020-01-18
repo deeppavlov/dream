@@ -156,6 +156,7 @@ fi
 
 if [[ "$MODE" == "infer_questions" || "$MODE" == "all" ]]; then
     echo "Passing questions to Alexa"
+    dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/test_response.py
     dockercompose_cmd exec -T -u $(id -u) agent python3 \
         utils/xlsx_responder.py --url http://0.0.0.0:4242 \
         --input 'tests/dream/test_questions.xlsx' \

@@ -113,7 +113,7 @@ services:
     volumes: []
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
       placement:
         constraints:
           - node.labels.with_gpu != true
@@ -201,7 +201,7 @@ services:
     volumes: []
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
       placement:
         constraints:
           - node.labels.with_gpu != true
@@ -338,7 +338,10 @@ services:
     volumes: []
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   entertainment_tfidf_retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
@@ -351,7 +354,10 @@ services:
     volumes: []
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   fashion_tfidf_retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
@@ -364,7 +370,10 @@ services:
     volumes: []
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   movie_tfidf_retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
@@ -377,7 +386,10 @@ services:
     volumes: []
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   music_tfidf_retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
@@ -390,7 +402,10 @@ services:
     volumes: []
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   politics_tfidf_retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
@@ -403,7 +418,10 @@ services:
     volumes: []
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   science_technology_tfidf_retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
@@ -416,7 +434,10 @@ services:
     volumes: []
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   sport_tfidf_retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
@@ -429,7 +450,10 @@ services:
     volumes: []
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   convert_reddit:
     build:
       context: ./skills/convert_reddit/

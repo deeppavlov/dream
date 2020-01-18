@@ -60,7 +60,7 @@ def respond():
                                   timeout=2)
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         sentry_sdk.capture_exception(e)
-        logger.exception("CoBotDialogActClassification Timeout")
+        logger.error("CoBotDialogActClassification Timeout")
         result = requests.Response()
         result.status_code = 504
 
