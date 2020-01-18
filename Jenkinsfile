@@ -25,9 +25,6 @@ node {
         }
         def tag = sh(returnStdout: true, script: "git tag --contains | head -1").trim()
         if (tag) {
-            stage('CollectPredictions') {
-               sh "./tests/runtests.sh MODE=infer_questions"
-            }
             stage('Deploy Prod') {
                 sh "./deploy_prod.sh"
                 currentBuild.result = 'SUCCESS'

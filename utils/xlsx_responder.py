@@ -24,7 +24,7 @@ async def main(args):
     dfs = pd.read_excel(args.input, sheet_name=None, header=None, names=['Sentence', 'Correct_answer'])
     for sheet_name, df in dfs.items():
         results = []
-        async_size = 10
+        async_size = 5
         async with aiohttp.ClientSession() as session:
             start_time = time.time()
             for i in range(0, len(df['Sentence']), async_size):
@@ -33,16 +33,22 @@ async def main(args):
                     uid = uuid.uuid4().hex
                     # result.append(await perform_test_dialogue(session, args.url, uid, ["/start", sent]))
                     task = asyncio.ensure_future(
-                        perform_test_dialogue(session, args.url, uid, ['/start', sent, '/close'])
+                        perform_test_dialogue(session, args.url, uid, ['/start', sent])
                     )
                     tasks.append(task)
                     logger.debug(f"SENT: {sent}")
-                result = await asyncio.gather(*tasks)
+                try:
+                    result = await asyncio.gather(*tasks)
+                except asyncio.TimeoutError as e:
+                    # Lines below not needed, because they may hide a bug
+                    # logger.exception("XlsxTimeoutError")
+                    # result = [[['timeout', 'timeout'], ['timeout', 'timeout']]] * len(tasks)
+                    raise e
                 logger.debug(f"GATHERING took {time.time() - start_time}")
                 results += result
             responses = []
             for r in results:
-                assert len(r) == 3  # /start, sent and /close
+                assert len(r) == 2  # /start, sent
                 responses.append(r[1][-1])  # Collect only responses for sentences
             df['Response'] = responses
             df.to_excel(writer, sheet_name, index=False, header=True)

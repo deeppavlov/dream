@@ -73,11 +73,14 @@ def call_dp_agent(user_id, text, request_data):
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         sentry_sdk.capture_exception(e)
         logger.exception("AWS_LAMBDA Timeout")
-        return {'response': "Okay...", 'intent': None}
+        return {'response': "I am thinking...", 'intent': None}
     except json.JSONDecodeError as e:
         sentry_sdk.capture_exception(e)
         logger.exception("AWS_LAMBDA JSONDecodeError")
-        return {'response': "Interesting...", 'intent': None}
+        return {
+            'response': "We'll meet again, Don't know where, don't know when,"
+                        "But I know we'll meet again, Some sunny day.",
+            'intent': 'exit'}
 
     if r.get('active_skill') == 'intent_responder' or '#+#' in r["response"]:
         response, intent = r["response"].split("#+#")
