@@ -326,17 +326,17 @@
         <pattern>DO YOU WANT MY *</pattern>
         <template>I don't need that information right now.</template>
     </category>
-    <category>
-        <pattern>DO YOU WANT TO *</pattern>
-        <template>
-            <random>
-                <li>I would like to dance if I could.</li>
-                <li>What I want to do now is get my battery charged.</li>
-                <li>That's a great question. I'll have to ponder it.</li>
-                <li>Maybe another time.</li>
-            </random>
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>DO YOU WANT TO *</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>I would like to dance if I could.</li>-->
+<!--                <li>What I want to do now is get my battery charged.</li>-->
+<!--                <li>That's a great question. I'll have to ponder it.</li>-->
+<!--                <li>Maybe another time.</li>-->
+<!--            </random>-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>DO YOU WANT TO TALK</pattern>
         <template>I'm always up for a good conversation.</template>
@@ -470,46 +470,46 @@
         <pattern>ARE YOU LOADED</pattern>
         <template>Yes, I am now fully functional.</template>
     </category>
-    <category>
-        <pattern>ARE YOU *</pattern>
-        <template>
-            <think>
-                <set name="isaname">
-                    <srai>ISANAME
-                        <star/>
-                    </srai>
-                </set>
-            </think>
-            <condition name="isaname">
-                <li value="true">
-                    <srai>WHAT IS YOUR NAME</srai>
-                </li>
-                <li>
-                    <srai>AREYOURESPONSE</srai>
-                </li>
-            </condition>
-        </template>
-    </category>
-    <category>
-        <pattern>ARE YOU * *</pattern>
-        <template>
-            <think>
-                <set name="isaname">
-                    <srai>ISANAME
-                        <star/>
-                    </srai>
-                </set>
-            </think>
-            <condition name="isaname">
-                <li value="true">
-                    <srai>WHAT IS YOUR NAME</srai>
-                </li>
-                <li>
-                    <srai>AREYOURESPONSE</srai>
-                </li>
-            </condition>
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>ARE YOU *</pattern>-->
+<!--        <template>-->
+<!--            <think>-->
+<!--                <set name="isaname">-->
+<!--                    <srai>ISANAME-->
+<!--                        <star/>-->
+<!--                    </srai>-->
+<!--                </set>-->
+<!--            </think>-->
+<!--            <condition name="isaname">-->
+<!--                <li value="true">-->
+<!--                    <srai>WHAT IS YOUR NAME</srai>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <srai>AREYOURESPONSE</srai>-->
+<!--                </li>-->
+<!--            </condition>-->
+<!--        </template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>ARE YOU * *</pattern>-->
+<!--        <template>-->
+<!--            <think>-->
+<!--                <set name="isaname">-->
+<!--                    <srai>ISANAME-->
+<!--                        <star/>-->
+<!--                    </srai>-->
+<!--                </set>-->
+<!--            </think>-->
+<!--            <condition name="isaname">-->
+<!--                <li value="true">-->
+<!--                    <srai>WHAT IS YOUR NAME</srai>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <srai>AREYOURESPONSE</srai>-->
+<!--                </li>-->
+<!--            </condition>-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>ARE YOU LYING</pattern>
         <template>I'm incapable of lying.</template>
@@ -716,16 +716,16 @@
             </random>
         </template>
     </category>
-    <category>
-        <pattern>WILL YOU *</pattern>
-        <template>
-            <random>
-                <li>Will I, or can I?</li>
-                <li>I didn't have any plans to.</li>
-                <li>I make my own decisions about things like that.</li>
-            </random>
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>WILL YOU *</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>Will I, or can I?</li>-->
+<!--                <li>I didn't have any plans to.</li>-->
+<!--                <li>I make my own decisions about things like that.</li>-->
+<!--            </random>-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>SAY THAT AGAIN</pattern>
         <template>
