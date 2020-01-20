@@ -21,14 +21,15 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 vectorizer_file = "../global_data/new_vectorizer_2.zip"
-
-if USE_COBOT:
-    dialog_dir = 'data/cobot_dialog_list.json'
-    full_dialog_dir = "data/full_cobot_dialog_list.json"
-else:
-    dialog_dir = "data/dialog_list.json"
-    full_dialog_dir = "data/full_dialog_list.json"
+dialog_dir = "../global_data/dialog_list.json"
+full_dialog_dir = "data/full_dialog_list.json"  # We WRITE from this directory rather than read from it
 custom_dialog_dir = "data/custom_dialog_list.json"
+
+
+#  if USE_COBOT:  ### WE DO NOT USE IT
+#    dialog_dir = 'data/cobot_dialog_list.json'
+#    full_dialog_dir = "data/full_cobot_dialog_list.json"
+
 
 donotknow_answers = ["I really do not know what to answer.",
                      "Sorry, probably, I didn't get what you mean.",
@@ -47,7 +48,7 @@ vectorizer = get_vectorizer(vectorizer_file=vectorizer_file)
 dialog_list = get_dialogs(dialog_dir=dialog_dir, custom_dialog_dir=custom_dialog_dir,
                           full_dialog_dir=full_dialog_dir)
 if TFIDF_BAD_FILTER:
-    bad_dialog_dir = "data/bad_dialog_list.json"
+    bad_dialog_dir = "../global_data/bad_dialog_list.json"
     bad_dialog_list = get_dialogs(bad_dialog_dir, '', '', False)
 else:
     bad_dialog_list = None
@@ -60,22 +61,22 @@ if USE_ASSESSMENT:
     for key in goodbad_list['poor']:
         if key in phrase_list and goodbad_list['poor'][key] == phrase_list[key]:
             del phrase_list[key]
-gold_phrases = open('../global_data/gold_phrases.csv', 'r').readlines()[1:]
-gold_list = []
-for gold_phrase in gold_phrases:
-    if gold_phrase[0] == '"':
-        gold_phrase = gold_phrase[1:]
-    gold_phrase = gold_phrase.split('"\n')[0].split('" "')[0].lower()
-    if gold_phrase in phrase_list:
-        del phrase_list[gold_phrase]
+# gold_phrases = open('../global_data/gold_phrases.csv', 'r').readlines()[1:]
+# gold_list = []
+# for gold_phrase in gold_phrases:
+#    if gold_phrase[0] == '"':
+#        gold_phrase = gold_phrase[1:]
+#    gold_phrase = gold_phrase.split('"\n')[0].split('" "')[0].lower()
+#    if gold_phrase in phrase_list:
+#        del phrase_list[gold_phrase]
 for user_phrase in todel_userphrases:
     if user_phrase in phrase_list:
         del phrase_list[user_phrase]
-phrase_list["let's talk about."] = "i misheard you. what's it that you’d like to chat about?"
-phrase_list['politics'] = ' '.join(["my creators are still working on politics skill.",
-                                    "for now, i'm not able to perform such a discussion.",
-                                    "but i'll be glad to discuss movies with you.",
-                                    "what's your favorite movie?"])
+# phrase_list["let's talk about."] = "i misheard you. what's it that you’d like to chat about?"
+# phrase_list['politics'] = ' '.join(["my creators are still working on politics skill.",
+#                                    "for now, i'm not able to perform such a discussion.",
+#                                    "but i'll be glad to discuss movies with you.",
+#                                    "what's your favorite movie?"])
 vectorized_phrases = vectorizer.transform(list(phrase_list.keys()))
 
 
