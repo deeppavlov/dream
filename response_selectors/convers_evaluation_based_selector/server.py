@@ -9,6 +9,7 @@ import numpy as np
 import requests
 from flask import Flask, request, jsonify
 from os import getenv
+from collections import Counter
 import sentry_sdk
 import pprint
 
@@ -213,12 +214,14 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     confidences[ids] = 0.
 
     # check for repeatitions
-    bot_utterances = set([uttr["text"].lower() for uttr in dialog["utterances"][::2]])
+
+    bot_utterances = [uttr["text"].lower() for uttr in dialog["utterances"][::2]]
+    bot_utt_counter = Counter(bot_utterances)
     for i, cand in enumerate(candidates):
-        if cand["text"].lower() in bot_utterances:
-            confidences[i] /= 2
-            scores[i]['isResponseInteresting'] /= 2
-            scores[i]['responseEngagesUser'] /= 2
+        coeff = bot_utt_counter[cand["text"].lower()] + 1
+        confidences[i] /= coeff
+        scores[i]['isResponseInteresting'] /= coeff
+        scores[i]['responseEngagesUser'] /= coeff
 
     skill_names = [c['skill_name'] for c in candidates]
     how_are_you_spec = "I'm fine, thanks! Do you want to know what I can do?"

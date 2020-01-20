@@ -187,7 +187,7 @@ class RuleBasedSelector:
                 # process user utterance with sensitive content
                 skills_for_uttr.append("program_y_dangerous")
                 skills_for_uttr.append("cobotqa")
-                if about_news or ("news" in reply) or ("new" in reply):
+                if about_news or ("news" in reply):
                     skills_for_uttr.append("news_skill")
             else:
                 # process regular utterances
