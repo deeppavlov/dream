@@ -13,6 +13,10 @@
     <!-- Modified for Y-Bot by Keith Sterling July 2017 -->
 
     <category>
+        <pattern>SO *</pattern>
+        <template><srai><star/></srai></template>
+    </category>
+    <category>
         <pattern>BEFORE *</pattern>
         <template>What happened after
             <person/>
@@ -325,21 +329,21 @@
         <pattern>CUSTOMER *</pattern>
         <template>What type of business are you in?</template>
     </category>
-   <category>
-        <pattern>WAS *</pattern>
-        <template>
-            <random>
-                <li>I can't say "yes" or "no".</li>
-                <li>Is this a "yes or no" question?</li>
-                <li>
-                    <set name="it">
-                        <person/>
-                    </set>
-                    might have been.
-                </li>
-            </random>
-        </template>
-    </category>
+<!--   <category>-->
+<!--        <pattern>WAS *</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>I can't say "yes" or "no".</li>-->
+<!--                <li>Is this a "yes or no" question?</li>-->
+<!--                <li>-->
+<!--                    <set name="it">-->
+<!--                        <person/>-->
+<!--                    </set>-->
+<!--                    might have been.-->
+<!--                </li>-->
+<!--            </random>-->
+<!--        </template>-->
+<!--    </category>-->
    <category>
         <pattern>MANY *</pattern>
         <template>Which ones?</template>
@@ -825,21 +829,21 @@
             </random>
         </template>
     </category>
-   <category>
-        <pattern>WILL *</pattern>
-        <template>
-            <random>
-                <li>How should I know.</li>
-                <li>Does it really matter.</li>
-                <li>I think so.</li>
-                <li>Good chance.</li>
-                <li>Probably not.</li>
-                <li>It could happen.</li>
-                <li>Insufficient information.</li>
-                <li>I can't say for sure right now.</li>
-            </random>
-        </template>
-    </category>
+<!--   <category>-->
+<!--        <pattern>WILL *</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>How should I know.</li>-->
+<!--                <li>Does it really matter.</li>-->
+<!--                <li>I think so.</li>-->
+<!--                <li>Good chance.</li>-->
+<!--                <li>Probably not.</li>-->
+<!--                <li>It could happen.</li>-->
+<!--                <li>Insufficient information.</li>-->
+<!--                <li>I can't say for sure right now.</li>-->
+<!--            </random>-->
+<!--        </template>-->
+<!--    </category>-->
 
      <category>
         <pattern>COUPLES *</pattern>
