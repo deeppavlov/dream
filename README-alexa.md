@@ -27,7 +27,7 @@ $: docker-compose -f docker-compose.yml -f dev.yml -f cpu.yml -f one_worker.yml 
 Run agent:
 ```
 $: docker-compose -f docker-compose.yml -f dev.yml exec agent bash
-$(inside docker): python3 -m core.run
+$(inside docker): python3 run.py -rl -pl alexa_pipeline_conf.json
 ```
 
 Автотесты
