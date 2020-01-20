@@ -1,4 +1,7 @@
 from typing import Dict, List
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def alice_formatter_dialog(dialog: Dict) -> Dict:
@@ -14,8 +17,8 @@ def eliza_formatter_dialog(dialog: Dict) -> Dict:
     history = []
     for last_utter, next_utter in zip(dialog["utterances"][::2], dialog["utterances"][1::2]):
         is_human = last_utter["user"]["user_type"] == "human"
-        is_bot = last_utter["user"]["user_type"] == "bot"
-        is_eliza = last_utter["user"]["user_type"] == "human"
+        is_bot = next_utter["user"]["user_type"] == "bot"
+        is_eliza = next_utter["active_skill"] == "eliza"
         if is_human and is_bot and is_eliza:
             history.append(last_utter["text"])
     return [{
