@@ -1,5 +1,4 @@
 import motor.motor_asyncio
-from core.transform_config import DB_HOST, DB_PORT, DB_NAME
 
 
 class DataBase:
@@ -11,11 +10,10 @@ class DataBase:
         return cls._inst
 
     def __init__(self, host, port, name):
+        if isinstance(port, str):
+            port = int(port)
         self.client = motor.motor_asyncio.AsyncIOMotorClient(host, port)
         self.db = self.client[name]
 
     def get_db(self):
         return self.db
-
-
-db = DataBase(DB_HOST, DB_PORT, DB_NAME).get_db()

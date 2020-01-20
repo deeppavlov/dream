@@ -1,7 +1,7 @@
 # С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
 services:
   agent:
-    command: sh -c 'bin/wait && python3 -m core.run -ch http_client --response-logger --debug'
+    command: sh -c 'bin/wait && python3 run.py -ch http_client -rl -d -pl alexa_pipeline_conf.json -db db_conf.json'
     env_file: [.env.dev]
     volumes:
       - ".:/dp-agent"
@@ -54,12 +54,6 @@ services:
       - "./annotators/CoBotDialogActClassification:/src"
     ports:
       - 8006:8006
-  retrieval_chitchat:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/retrieval_chitchat:/app"
-    ports:
-      - 8015:8015
   personality_catcher:
     env_file: [.env.dev]
     volumes:

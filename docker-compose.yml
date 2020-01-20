@@ -1,6 +1,6 @@
 services:
   agent:
-    command: sh -c './utils/setup_cron.sh && bin/wait && python3 -m core.run -ch http_client --response-logger --debug'
+    command: sh -c './utils/setup_cron.sh && bin/wait && python3 run.py -ch http_client -rl -d -pl alexa_pipeline_conf.json -db db_conf.json'
     build:
       context: ./
       dockerfile: dockerfile_agent
@@ -72,17 +72,6 @@ services:
     deploy:
       mode: replicated
       replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
-  retrieval_chitchat:
-    build:
-      context: ./skills/retrieval_chitchat/
-    command: uvicorn server:app --host 0.0.0.0 --port 8015
-    volumes: []
-    deploy:
-      mode: replicated
-      replicas: 1
       placement:
         constraints:
           - node.labels.with_gpu != true

@@ -1,0 +1,360 @@
+{
+    "connectors": {
+        "sentseg": {
+            "protocol": "http",
+            "url": "http://sentseg:8011/sentseg"
+        },
+        "ner": {
+            "protocol": "http",
+            "url": "http://ner:8021/ner"
+        },
+        "sentrewrite": {
+            "protocol": "http",
+            "url": "http://sentrewrite:8017/sentrewrite"
+        }
+    },
+    "services": {
+        "annotators_1": {
+            "sentseg": {
+                "connector": "connectors.sentseg",
+                "dialog_formatter": "last_utt_dialog",
+                "response_formatter": "simple_formatter_service",
+                "state_manager_method": "add_annotation"
+            },
+            "toxic_classification": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://toxic_classification:8013/toxicity_annotations"
+                },
+                "dialog_formatter": "last_utt_dialog",
+                "response_formatter": "dp_toxic_formatter_service",
+                "state_manager_method": "add_annotation"
+            },
+            "sentiment_classification": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://sentiment_classification:8024/sentiment_annotations"
+                },
+                "dialog_formatter": "last_utt_dialog",
+                "response_formatter": "cobot_classifiers_formatter_service",
+                "state_manager_method": "add_annotation"
+            },
+            "blacklisted_words": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://blacklisted_words:8018/blacklisted_words"
+                },
+                "dialog_formatter": "last_utt_dialog",
+                "response_formatter": "simple_formatter_service",
+                "state_manager_method": "add_annotation"
+            },
+            "asr": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://asr:8031/asr_check"
+                },
+                "dialog_formatter": "asr_formatter_dialog",
+                "response_formatter": "simple_formatter_service",
+                "state_manager_method": "add_annotation"
+            }
+        },
+        "annotators_2": {
+            "intent_catcher": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://intent_catcher:8014/detect"
+                },
+                "dialog_formatter": "last_utt_sentseg_segments_dialog",
+                "response_formatter": "simple_formatter_service",
+                "previous_services": ["annotators_1.sentseg"],
+                "state_manager_method": "add_annotation"
+            },
+            "ner": {
+                "connector": "connectors.ner",
+                "dialog_formatter": "ner_formatter_dialog",
+                "response_formatter": "simple_formatter_service",
+                "previous_services": ["annotators_1.sentseg"],
+                "state_manager_method": "add_annotation"
+            },
+            "cobot_topics": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://cobot_topics:8003/topics"
+                },
+                "dialog_formatter": "last_utt_sentseg_segments_dialog",
+                "response_formatter": "cobot_classifiers_formatter_service",
+                "previous_services": ["annotators_1.sentseg"],
+                "state_manager_method": "add_annotation"
+            },
+            "cobot_dialogact": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://cobot_dialogact:8006/dialogact"
+                },
+                "dialog_formatter": "cobot_formatter_dialog",
+                "response_formatter": "cobot_dialogact_formatter_service",
+                "previous_services": ["annotators_1"],
+                "state_manager_method": "add_annotation"
+            },
+            "cobot_nounphrases": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://cobot_nounphrases:8016/nounphrases"
+                },
+                "dialog_formatter": "utt_sentseg_punct_dialog",
+                "response_formatter": "simple_formatter_service",
+                "previous_services": ["annotators_1"],
+                "state_manager_method": "add_annotation"
+            },
+            "cobot_offensiveness": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://cobot_offensiveness:8005/offensiveness"
+                },
+                "dialog_formatter": "last_utt_sentseg_segments_dialog",
+                "response_formatter": "cobot_classifiers_formatter_service",
+                "previous_services": ["annotators_1.sentseg"],
+                "state_manager_method": "add_annotation"
+            },
+            "attitude_classification": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://attitude_classification:8025/attitude_annotations"
+                },
+                "dialog_formatter": "last_utt_sentseg_punct_dialog",
+                "response_formatter": "attitude_formatter_service",
+                "previous_services": ["annotators_1.sentseg"],
+                "state_manager_method": "add_annotation"
+            }
+        },
+        "annotators_3": {
+            "sentrewrite": {
+                "connector": "connectors.sentrewrite",
+                "dialog_formatter": "sent_rewrite_formatter_dialog",
+                "response_formatter": "simple_formatter_service",
+                "previous_services": ["annotators_2"],
+                "state_manager_method": "add_annotation"
+            }
+        },
+        "skill_selectors": {
+            "rule_based_selector": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://rule_based_selector:8002/selected_skills"
+                },
+                "dialog_formatter": "base_skill_selector_formatter_dialog",
+                "response_formatter": "simple_formatter_service",
+                "previous_services": [
+                    "annotators_1.asr",
+                    "annotators_1.blacklisted_words",
+                    "annotators_2.cobot_topics",
+                    "annotators_2.cobot_dialogact",
+                    "annotators_2.intent_catcher"
+                ],
+                "tags": ["selector"]
+            }
+        },
+        "skills": {
+            "alice": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://alice:8000/respond"
+                },
+                "dialog_formatter": "alice_formatter_dialog",
+                "response_formatter": "base_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
+            },
+            "cobotqa": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://cobotqa:8001/respond"
+                },
+                "dialog_formatter": "utt_sentrewrite_modified_last_dialog",
+                "response_formatter": "cobot_qa_formatter_service",
+                "previous_services": ["skill_selectors", "annotators_3"],
+                "state_manager_method": "add_hypothesis"
+            },
+            "program_y": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://program_y:8008/api/rest/v1.0/ask"
+                },
+                "dialog_formatter": "alice_formatter_dialog",
+                "response_formatter": "base_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
+            },
+            "personality_catcher": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://personality_catcher:8010/personality_catcher"
+                },
+                "dialog_formatter": "personality_catcher_formatter_dialog",
+                "response_formatter": "personality_catcher_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
+            },
+            "intent_responder": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://intent_responder:8012/respond"
+                },
+                "dialog_formatter": "utt_sentseg_punct_dialog",
+                "response_formatter": "base_formatter_service",
+                "previous_services": ["skill_selectors", "annotators_3"],
+                "state_manager_method": "add_hypothesis"
+            },
+            "dummy_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://dummy_skill:8019/respond"
+                },
+                "dialog_formatter": "utt_sentrewrite_modified_last_dialog",
+                "response_formatter": "cobot_qa_formatter_service",
+                "previous_services": ["skill_selectors", "annotators_3"],
+                "state_manager_method": "add_hypothesis"
+            },
+            "misheard_asr": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://misheard_asr:8033/misheard_respond"
+                },
+                "dialog_formatter": "utt_sentrewrite_modified_last_dialog",
+                "response_formatter": "misheard_asr_formatter_service",
+                "previous_services": ["skill_selectors", "annotators_3"],
+                "state_manager_method": "add_hypothesis"
+            },
+            "program_y_dangerous": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://program_y_dangerous:8022/api/rest/v1.0/ask"
+                },
+                "dialog_formatter": "alice_formatter_dialog",
+                "response_formatter": "base_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
+            },
+            "movie_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://movie_skill:8023/movie_skill"
+                },
+                "dialog_formatter": "utt_sentseg_punct_dialog",
+                "response_formatter": "skill_with_attributes_formatter_service",
+                "previous_services": ["skill_selectors", "annotators_3"],
+                "state_manager_method": "add_hypothesis"
+            },
+            "tfidf_retrieval": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://tfidf_retrieval:8028/respond"
+                },
+                "dialog_formatter": "last_utt_dialog",
+                "response_formatter": "base_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
+            },
+            "convert_reddit": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://convert_reddit:8029/convert_reddit"
+                },
+                "dialog_formatter": "transfertransfo_formatter_dialog",
+                "response_formatter": "base_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
+            },
+            "personal_info_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://personal_info_skill:8030/respond"
+                },
+                "dialog_formatter": "utt_sentseg_punct_dialog",
+                "response_formatter": "skill_with_attributes_formatter_service",
+                "previous_services": ["skill_selectors", "annotators_3"],
+                "state_manager_method": "add_hypothesis"
+            },
+            "music_tfidf_retrieval": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://music_tfidf_retrieval:8034/respond"
+                },
+                "dialog_formatter": "last_utt_dialog",
+                "response_formatter": "base_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
+            },
+            "book_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://book_skill:8032/book_skill"
+                },
+                "dialog_formatter": "utt_sentrewrite_modified_last_dialog",
+                "response_formatter": "skill_with_attributes_formatter_service",
+                "previous_services": ["skill_selectors", "annotators_3"],
+                "state_manager_method": "add_hypothesis"
+            },
+            "christmas_new_year_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://christmas_new_year_skill:8036/respond"
+                },
+                "dialog_formatter": "utt_sentseg_punct_dialog",
+                "response_formatter": "skill_with_attributes_formatter_service",
+                "previous_services": ["skill_selectors", "annotators_3"],
+                "state_manager_method": "add_hypothesis"
+            },
+            "weather_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://weather_skill:8037/respond"
+                },
+                "dialog_formatter": "utt_sentseg_punct_dialog",
+                "response_formatter": "skill_with_attributes_formatter_service",
+                "previous_services": ["skill_selectors", "annotators_3"],
+                "state_manager_method": "add_hypothesis"
+            }
+        },
+        "response_selectors": {
+            "convers_evaluation_selector": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://convers_evaluation_selector:8009/respond"
+                },
+                "dialog_formatter": "utt_sentseg_punct_dialog",
+                "response_formatter": "base_response_selector_formatter_service",
+                "previous_services": ["skills"],
+                "state_manager_method": "add_bot_utterance"
+
+            }
+        },
+        "post_annotators_1": {
+            "sentseg": {
+                "connector": "connectors.sentseg",
+                "dialog_formatter": "last_utt_dialog",
+                "response_formatter": "simple_formatter_service",
+                "previous_services": ["response_selectors"],
+                "state_manager_method": "add_annotation"
+            }
+        },
+        "post_annotators_2": {
+            "ner": {
+                "connector": "connectors.ner",
+                "dialog_formatter": "ner_formatter_dialog",
+                "response_formatter": "simple_formatter_service",
+                "previous_services": ["post_annotators_1"],
+                "state_manager_method": "add_annotation"
+            }
+        },
+        "post_annotators_3": {
+            "sentrewrite": {
+                "connector": "connectors.sentrewrite",
+                "dialog_formatter": "sent_rewrite_formatter_dialog",
+                "response_formatter": "simple_formatter_service",
+                "previous_services": ["post_annotators_2"],
+                "state_manager_method": "add_annotation"
+            }
+        }
+    }
+}

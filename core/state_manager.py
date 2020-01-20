@@ -7,21 +7,25 @@ class StateManager:
     def __init__(self, db):
         self._db = db
 
-    async def add_human_utterance(self, dialog: Dialog, payload: Dict, **kwargs) -> None:
+    async def add_human_utterance(self, dialog: Dialog, payload: Dict, label: str, **kwargs) -> None:
         dialog.add_human_utterance()
         dialog.utterances[-1].text = payload
         dialog.utterances[-1].user = dialog.human.to_dict()
         dialog.utterances[-1].attributes = kwargs.get('message_attrs', {})
 
-    async def add_hypothesis(self, dialog: Dialog, payload: Dict, **kwargs):
-        hypothesis = {'skill_name': list(payload.keys())[0]}
-        for h in list(payload.values())[0]:
+    async def add_hypothesis(self, dialog: Dialog, payload: Dict, label: str, **kwargs):
+        hypothesis = {'skill_name': label, 'annotations': {}}
+        for h in payload:
             dialog.utterances[-1].hypotheses.append({**hypothesis, **h})
 
-    async def add_annotation(self, dialog: Dialog, payload: Dict, **kwargs):
-        dialog.utterances[-1].annotations.update(payload)
+    async def add_annotation(self, dialog: Dialog, payload: Dict, label: str, **kwargs):
+        dialog.utterances[-1].annotations[label] = payload
 
-    async def add_text(self, dialog: Dialog, payload: str, **kwargs):
+    async def add_hypothesis_annotation(self, dialog: Dialog, payload: Dict, label: str, **kwargs):
+        ind = kwargs['ind']
+        dialog.utterances[-1].hypotheses[ind]['annotations'][label] = payload
+
+    async def add_text(self, dialog: Dialog, payload: str, label: str, **kwargs):
         dialog.utterances[-1].text = payload
 
     async def update_human(self, human: Human, active_skill: Dict):
@@ -42,26 +46,21 @@ class StateManager:
             else:
                 bot.attributes[attr_name] = attr_value
 
-    async def add_bot_utterance(self, dialog: Dialog, payload: Dict, **kwargs) -> None:
-        rselector_data = list(payload.values())[0]
-        new_text = rselector_data['text']
-        new_confidence = rselector_data['confidence']
-        await self.update_human(dialog.human, rselector_data)
-        await self.update_bot(dialog.bot, rselector_data)
+    async def add_bot_utterance(self, dialog: Dialog, payload: Dict, label: str, **kwargs) -> None:
+        await self.update_human(dialog.human, payload)
+        await self.update_bot(dialog.bot, payload)
         dialog.add_bot_utterance()
-        dialog.utterances[-1].text = new_text
-        dialog.utterances[-1].active_skill = rselector_data['skill_name']
-        dialog.utterances[-1].confidence = new_confidence
+        dialog.utterances[-1].text = payload['text']
+        dialog.utterances[-1].active_skill = payload['skill_name']
+        dialog.utterances[-1].confidence = payload['confidence']
+        dialog.utterances[-1].annotations = payload.get('annotations', {})
         dialog.utterances[-1].user = dialog.bot.to_dict()
 
-    async def save_dialog(self, dialog: Dialog, payload: Dict, **kwargs) -> None:
+    async def save_dialog(self, dialog: Dialog, payload: Dict, label: str, **kwargs) -> None:
         await dialog.save(self._db)
 
     async def get_or_create_dialog_by_tg_id(self, user_telegram_id, channel_type):
         return await Dialog.get_or_create_by_ext_id(self._db, user_telegram_id, channel_type)
-
-    async def do_nothing(self, dialog: Dialog, payload: Dict, **kwargs) -> None:
-        pass
 
     async def get_dialog_by_id(self, dialog_id):
         return await Dialog.get_by_id(self._db, dialog_id)
@@ -81,3 +80,6 @@ class StateManager:
         await HumanUtterance.prepare_collection(self._db)
         await Human.prepare_collection(self._db)
         await Dialog.prepare_collection(self._db)
+
+    async def get_channels(self):
+        return await Dialog.get_channels(self._db)

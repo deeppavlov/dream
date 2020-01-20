@@ -37,11 +37,9 @@ class AgentGatewayBase:
 
 class ServiceGatewayConnectorBase:
     _service_config: dict
-    _formatter: Callable
 
-    def __init__(self, service_config: Dict, formatter: Callable) -> None:
+    def __init__(self, service_config: Dict) -> None:
         self._service_config = service_config
-        self._formatter = formatter
 
     async def send_to_service(self, dialogs: List[Dict]) -> List[Any]:
         raise NotImplementedError
