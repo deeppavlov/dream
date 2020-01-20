@@ -9,6 +9,21 @@ def alice_formatter_dialog(dialog: Dict) -> Dict:
     return [{'sentences_batch': [human_utts[-last_n_sents:]]}]
 
 
+def eliza_formatter_dialog(dialog: Dict) -> Dict:
+    # Used by: eliza_formatter
+    history = []
+    for last_utter, next_utter in zip(dialog["utterances"][::2], dialog["utterances"][1::2]):
+        is_human = last_utter["user"]["user_type"] == "human"
+        is_bot = last_utter["user"]["user_type"] == "bot"
+        is_eliza = last_utter["user"]["user_type"] == "human"
+        if is_human and is_bot and is_eliza:
+            history.append(last_utter["text"])
+    return [{
+        "last_utterance_batch": [dialog['utterances'][-1]['text']],
+        "human_utterance_history_batch": [history],
+    }]
+
+
 def aiml_formatter_dialog(dialog: Dict) -> Dict:
     # Used by: aiml_formatter
     return [{

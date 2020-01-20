@@ -304,6 +304,17 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+  eliza:
+    build:
+      context: ./skills/eliza/
+    command: gunicorn --workers=4 server:app -b 0.0.0.0:8047
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   tfidf_retrieval:
     build:
       context: ./skills/tfidf_retrieval/

@@ -96,6 +96,10 @@ services:
     image: ${DOCKER_REGISTRY}/alice:${VERSION}
     env_file:
       - ${ENV_FILE}
+  eliza:
+    image: ${DOCKER_REGISTRY}/eliza:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   tfidf_retrieval:
     image: ${DOCKER_REGISTRY}/tfidf_retrieval:${VERSION}
     env_file:
