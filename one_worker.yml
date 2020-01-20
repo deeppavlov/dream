@@ -33,6 +33,8 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8021 -t 100
   alice:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8000
+  eliza:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8047
   tfidf_retrieval:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8028
   book_tfidf_retrieval:

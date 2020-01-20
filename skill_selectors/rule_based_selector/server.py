@@ -194,6 +194,7 @@ class RuleBasedSelector:
                 skills_for_uttr.append("program_y")
                 skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("alice")
+                skills_for_uttr.append("eliza")
                 skills_for_uttr.append("christmas_new_year_skill")
                 skills_for_uttr.append("personal_info_skill")
 

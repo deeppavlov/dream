@@ -148,6 +148,12 @@ services:
       - "./skills/ALICEChatAPI:/src"
     ports:
       - 8000:8000
+  eliza:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/eliza:/src"
+    ports:
+      - 8047:8047
   news_skill:
     env_file: [.env.dev]
     volumes:
