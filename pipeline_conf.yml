@@ -1,0 +1,77 @@
+connectors:
+  chitchat:
+    protocol: http
+    url: http://chitchat:2081/model
+  chitchat_odqa:
+    protocol: http
+    url: http://chitchat_odqa:2082/model
+  ner:
+    protocol: http
+    url: http://ner:2083/model
+  odqa:
+    protocol: http
+    url: http://odqa:2080/model
+  sentiment:
+    protocol: http
+    url: http://sentiment:2084/model
+services:
+  annotators1:
+    ner:
+      connector: connectors.ner
+      dialog_formatter: base_last_utterances_formatter_in
+      response_formatter: ner_formatter_out
+      state_manager_method: add_annotation
+  annotators2:
+    sentiment:
+      connector: connectors.sentiment
+      dialog_formatter: base_last_utterances_formatter_in
+      previous_services:
+      - annotators1
+      response_formatter: sentiment_formatter_out
+      state_manager_method: add_annotation
+  chitchat_odqa:
+    connector: connectors.chitchat_odqa
+    dialog_formatter: base_last_utterances_formatter_in
+    previous_services:
+    - annotators2
+    response_formatter: chitchat_odqa_formatter_out
+    tags:
+    - selector
+  confidence_response_selector:
+    connector:
+      class_name: core.connectors:ConfidenceResponseSelectorConnector
+      protocol: python
+    dialog_formatter: all_hypotheses_formatter_in
+    previous_services:
+    - post_annotators
+    state_manager_method: add_bot_utterance
+  post_annotators:
+    ner:
+      connector: connectors.ner
+      dialog_formatter: base_hypotheses_formatter_in
+      previous_services:
+      - skills
+      response_formatter: ner_formatter_out
+      state_manager_method: add_hypothesis_annotation
+    sentiment:
+      connector: connectors.sentiment
+      dialog_formatter: base_hypotheses_formatter_in
+      previous_services:
+      - skills
+      response_formatter: sentiment_formatter_out
+      state_manager_method: add_hypothesis_annotation
+  skills:
+    chitchat:
+      connector: connectors.chitchat
+      dialog_formatter: chitchat_formatter_in
+      previous_services:
+      - chitchat_odqa
+      response_formatter: add_confidence_formatter_out
+      state_manager_method: add_hypothesis
+    odqa:
+      connector: connectors.odqa
+      dialog_formatter: odqa_formatter_in
+      previous_services:
+      - chitchat_odqa
+      response_formatter: add_confidence_formatter_out
+      state_manager_method: add_hypothesis

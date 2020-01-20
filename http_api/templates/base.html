@@ -2,17 +2,15 @@
 <html lang="en">
 <head>
     {% block head %}
-    <title>{% block title %}{% endblock %} - My Webpage</title>
+    <title>{% block title %}{% endblock %} - DeepPavlov Agent</title>
     {% endblock %}
 </head>
 <body>
-    <div id="content">{% block content %}{% endblock %}</div>
+   {% block content %}
+   {% endblock %}
     <div id="footer">
         {% block footer %}
-
         {% endblock %}
     </div>
-
- 
 </body>
 </html>

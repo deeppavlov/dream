@@ -1,10 +1,12 @@
-boto3
+aioconsole==0.1.15
 aiogram==2.3
 aiohttp==3.6.1
 aiohttp-socks==0.2.2
 aiohttp-swagger==1.0.9
 aiohttp-jinja2==1.2.0
 pyyaml==5.1
+aio-pika==5.6.0
+motor==2.0.0
 sentry-sdk==0.13.5
 dnspython
 pandas==0.25.1
@@ -12,8 +14,6 @@ openpyxl==3.0.0
 xlrd==1.2.0
 py-rouge==1.1
 nltk==3.2.5
-aio-pika==5.6.0
 requests==2.22.0
-motor==2.0.0
 tqdm==4.36.1
 aiohttp_cors==0.7.0

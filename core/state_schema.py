@@ -45,6 +45,7 @@ class HumanUtterance:
     @classmethod
     async def prepare_collection(cls, db):
         await db[cls.collection_name].create_index('_dialog_id')
+        await db[cls.collection_name].create_index('date_time')
 
     def to_dict(self):
         return {
@@ -112,6 +113,7 @@ class BotUtterance:
     @classmethod
     async def prepare_collection(cls, db):
         await db[cls.collection_name].create_index('_dialog_id')
+        await db[cls.collection_name].create_index('date_time')
 
     def to_dict(self):
         return {
@@ -187,14 +189,25 @@ class Dialog:
 
     @classmethod
     async def prepare_collection(cls, db):
-        await db[cls.collection_name].create_index([('_user_id', pymongo.ASCENDING), ('_active', pymongo.DESCENDING)])
+        await db[cls.collection_name].create_index(
+            [
+                ('_user_id', pymongo.ASCENDING),
+                ('_active', pymongo.DESCENDING),
+                ('date_start', pymongo.DESCENDING),
+                ('date_finish', pymongo.DESCENDING),
+
+            ]
+        )
 
     def to_dict(self):
         return {
             'id': self.id,
             'utterances': [i.to_dict() for i in self.utterances],
             'human': self.human.to_dict(),
-            'bot': self.bot.to_dict()
+            'bot': self.bot.to_dict(),
+            'channel_type': self.channel_type,
+            'date_start': str(self.date_start),
+            'date_finish': str(self.date_finish),
         }
 
     async def load_external_info(self, db):
@@ -287,6 +300,10 @@ class Dialog:
         human = await Human.get_or_create(db, telegram_id)
         return await cls.get_or_create_by_user(db, human, channel_type)
 
+    @classmethod
+    async def get_channels(cls, db):
+        return await db[cls.collection_name].distinct('channel_type')
+
     def add_human_utterance(self):
         ind = 0
         if self.utterances:
@@ -311,8 +328,9 @@ class Dialog:
                 '_human_id': self._human_id,
                 '_bot_id': self._bot_id,
                 '_active': self._active,
-                'channel_type': self.channel_type
-            })
+                'channel_type': self.channel_type,
+            }
+            )
             dialog = await db[self.collection_name].insert_one(data)
             self._id = dialog.inserted_id
         else:
@@ -331,10 +349,8 @@ class Human:
     collection_name = 'user'
     fieldlist = ['persona', 'attributes', 'profile']
 
-    def __init__(
-        self, telegram_id, _id=None, persona=None,
-        attributes=None, profile=None
-    ):
+    def __init__(self, telegram_id, _id=None, persona=None,
+                 attributes=None, profile=None):
         self._id = _id
         self.temp_id = None
         if not _id:
@@ -408,7 +424,9 @@ class Human:
                 {'_id': self._id},
                 {'$set': {
                     'persona': self.persona,
-                    'profile': self.profile, 'attributes': self.attributes}}
+                    'profile': self.profile, 'attributes': self.attributes
+                }
+                }
             )
         return self._id
 

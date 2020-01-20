@@ -53,7 +53,8 @@ async def run_users(url, payload, mnu, mxu):
             for resp in responses:
                 times.extend(resp)
 
-            print(f'test No {i} finished: {max(times)} {min(times)} {mean(times)} {median(times)} total_time {test_time} msgs {i*payload_len} mean_rps {(i*payload_len)/test_time}')  # noqa
+            print(f'test No {i} finished: {max(times)} {min(times)} {mean(times)} {median(times)} '
+                  f'total_time {test_time} msgs {i*payload_len} mean_rps {(i*payload_len)/test_time}')
 
 
 if __name__ == '__main__':

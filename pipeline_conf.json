@@ -1,0 +1,93 @@
+{
+    "connectors": {
+        "ner": {
+            "protocol": "http",
+            "url": "http://ner:2083/model"
+        },
+        "sentiment": {
+            "protocol": "http",
+            "url": "http://sentiment:2084/model"
+        },
+        "odqa": {
+            "protocol": "http",
+            "url": "http://odqa:2080/model"
+        },
+        "chitchat": {
+            "protocol": "http",
+            "url": "http://chitchat:2081/model"
+        },
+        "chitchat_odqa": {
+            "protocol": "http",
+            "url": "http://chitchat_odqa:2082/model"
+        }
+    },
+    "services": {
+        "annotators1": {
+            "ner": {
+                "dialog_formatter": "base_last_utterances_formatter_in",
+                "response_formatter": "ner_formatter_out",
+                "connector": "connectors.ner",
+                "state_manager_method": "add_annotation"
+            }
+        },
+        "annotators2": {
+            "sentiment": {
+                "dialog_formatter": "base_last_utterances_formatter_in",
+                "response_formatter": "sentiment_formatter_out",
+                "connector": "connectors.sentiment",
+                "previous_services": ["annotators1"],
+                "state_manager_method": "add_annotation"
+            }
+        },
+        "chitchat_odqa":{
+            "dialog_formatter": "base_last_utterances_formatter_in",
+            "response_formatter": "chitchat_odqa_formatter_out",
+            "connector": "connectors.chitchat_odqa",
+            "previous_services": ["annotators2"],
+            "tags": ["selector"]
+        },
+        "skills": {
+            "odqa": {
+                "dialog_formatter": "odqa_formatter_in",
+                "response_formatter": "add_confidence_formatter_out",
+                "connector": "connectors.odqa",
+                "previous_services": ["chitchat_odqa"],
+                "state_manager_method": "add_hypothesis"
+            },
+            "chitchat": {
+                "dialog_formatter": "chitchat_formatter_in",
+                "response_formatter": "add_confidence_formatter_out",
+                "connector": "connectors.chitchat",
+                "previous_services": ["chitchat_odqa"],
+                "state_manager_method": "add_hypothesis"
+            }
+        },
+        "post_annotators": {
+            "ner": {
+                "dialog_formatter": "base_hypotheses_formatter_in",
+                "response_formatter": "ner_formatter_out",
+                "connector": "connectors.ner",
+                "previous_services": ["skills"],
+                "state_manager_method": "add_hypothesis_annotation"
+            },
+            "sentiment": {
+                "dialog_formatter": "base_hypotheses_formatter_in",
+                "response_formatter": "sentiment_formatter_out",
+                "connector": "connectors.sentiment",
+                "previous_services": ["skills"],
+                "state_manager_method": "add_hypothesis_annotation"
+            }
+        },
+
+        "confidence_response_selector": {
+            "dialog_formatter": "all_hypotheses_formatter_in",
+            "connector": {
+                "protocol": "python",
+                "class_name": "core.connectors:ConfidenceResponseSelectorConnector"
+            },
+            "previous_services": ["post_annotators"],
+            "state_manager_method": "add_bot_utterance"
+        }
+
+    }
+}

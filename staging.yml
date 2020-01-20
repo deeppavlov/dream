@@ -31,10 +31,6 @@ services:
     image: ${DOCKER_REGISTRY}/cobot_dialogact:${VERSION}
     env_file:
       - ${ENV_FILE}
-  retrieval_chitchat:
-    image: ${DOCKER_REGISTRY}/retrieval_chitchat:${VERSION}
-    env_file:
-      - ${ENV_FILE}
   convers_evaluation_selector:
     image: ${DOCKER_REGISTRY}/convers_evaluation_selector:${VERSION}
     env_file:
