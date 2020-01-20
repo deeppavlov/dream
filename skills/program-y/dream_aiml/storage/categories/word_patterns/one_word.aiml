@@ -20,13 +20,10 @@
         <pattern>YES</pattern>
         <template>
             <random>
-                <li>Okay</li>
-                <li>Sounds interesting</li>
+                <li>Okay.</li>
                 <li>Interesting.</li>
-                <li>Interesting. What is your favorite movie?</li>
-                <li>Interesting. What is your favorite movie genre?</li>
-                <li>Okay. What movie can you watch over and over without ever getting tired of?</li>
-                <li>Interesting. What’s the most ironic thing you’ve seen happen?</li>
+                <li>Sounds interesting.</li>
+                <li>Cool!</li>
             </random>
         </template>
     </category>
