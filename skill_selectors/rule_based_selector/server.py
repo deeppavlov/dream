@@ -3,6 +3,7 @@
 import logging
 import time
 from typing import List
+import re
 
 from flask import Flask, request, jsonify
 from os import getenv
@@ -175,7 +176,8 @@ class RuleBasedSelector:
             ).get("detected", False) or (
                 prev_bot_uttr.get("active_skill", "") == "weather_skill" and weather_city_slot_requested
             )
-            about_news = (news_cobot_topics & cobot_topics) or ("news" in reply)
+            about_news = (news_cobot_topics & cobot_topics) or re.search(
+                r"(news|(what is|what's)( the)? new|something new)", reply)
 
             if "/new_persona" in dialog["utterances"][-1]["text"]:
                 # process /new_persona command
