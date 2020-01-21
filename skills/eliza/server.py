@@ -41,7 +41,7 @@ def respond():
             for utter in human_utterance_history:
                 eliza_model.respond(utter)
             response_utter = eliza_model.respond(last_utterance)
-            response_utter, confidence = (response_utter, 0.98) if response_utter != "#NOANSWER" else ("sorry", 0.0)
+            response_utter, confidence = (response_utter, 0.75) if response_utter != "#NOANSWER" else ("sorry", 0.0)
             response.append((response_utter, confidence))
         if not response:
             with sentry_sdk.push_scope() as scope:
