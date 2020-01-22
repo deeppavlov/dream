@@ -7,6 +7,13 @@ from aiohttp import web
 
 from state_formatters.output_formatters import (http_api_output_formatter,
                                                 http_debug_output_formatter)
+import logging
+
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 class ApiHandler:
@@ -39,13 +46,13 @@ class ApiHandler:
                     'user_id': user_id, 'response': 'command_performed', 'active_skill': 'command_performed'
                 })
 
-            response = await asyncio.shield(
-                register_msg(utterance=payload, user_telegram_id=user_id,
-                             user_device_type=data.pop('user_device_type', 'http'),
-                             date_time=datetime.now(),
-                             location=data.pop('location', ''),
-                             channel_type='http_client',
-                             message_attrs=data, require_response=True)
+            response = await register_msg(
+                utterance=payload, user_telegram_id=user_id,
+                user_device_type=data.pop('user_device_type', 'http'),
+                date_time=datetime.now(),
+                location=data.pop('location', ''),
+                channel_type='http_client',
+                message_attrs=data, require_response=True
             )
 
             if response is None:

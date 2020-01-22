@@ -9,7 +9,10 @@ loggers:
     level: 'INFO'
     propagate: true
     handlers: ['file_service_logger']
-
+  workflow_logger:
+    level: 'INFO'
+    propagate: true
+    handlers: ['file_workflow_logger']
 formatters:
   default:
     format: "%(asctime)s.%(msecs)d %(levelname)s in '%(name)s'['%(module)s'] at line %(lineno)d: %(message)s"
@@ -35,3 +38,8 @@ handlers:
     level: 'DEBUG'
     formatter: 'default'
     filename: 'service.log'
+  file_workflow_logger:
+    class: 'logging.FileHandler'
+    level: 'DEBUG'
+    formatter: 'default'
+    filename: 'workflow.log'
