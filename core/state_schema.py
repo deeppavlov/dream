@@ -192,12 +192,17 @@ class Dialog:
         await db[cls.collection_name].create_index(
             [
                 ('_user_id', pymongo.ASCENDING),
-                ('_active', pymongo.DESCENDING),
-                ('date_start', pymongo.DESCENDING),
-                ('date_finish', pymongo.DESCENDING),
-
+                ('_active', pymongo.DESCENDING)
             ]
         )
+        await db[cls.collection_name].create_index(
+            [
+                ('date_start', pymongo.DESCENDING),
+                ('date_finish', pymongo.DESCENDING),
+            ]
+        )
+        await db[cls.collection_name].create_index('date_start')
+        await db[cls.collection_name].create_index('date_finish')
 
     def to_dict(self):
         return {
