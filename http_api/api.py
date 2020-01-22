@@ -20,6 +20,7 @@ async def init_app(agent, session, consumers, logger_stats, debug=False):
         app['client_session'] = session
         app['websockets'] = []
         app['logger_stats'] = logger_stats
+        asyncio.ensure_future(agent.state_manager.prepare_db())
 
     async def on_shutdown(app):
         for c in app['consumers']:
