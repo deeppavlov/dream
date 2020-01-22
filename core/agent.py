@@ -61,8 +61,7 @@ class Agent:
         workflow_record, task_data = self.workflow_manager.complete_task(task_id, response, **kwargs)
         service = task_data['service']
 
-        if "dialog_object" not in response:
-            logger.info(f"Service {service.label}: {response}")
+        logger.info(f"Service {service.label}: {response}")
 
         self._response_logger.log_end(task_id, workflow_record, service)
 

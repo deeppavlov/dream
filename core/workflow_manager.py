@@ -1,10 +1,13 @@
+import logging
 from collections import defaultdict
-from uuid import uuid4
-from typing import Optional, Dict, List
 from time import time
+from typing import Dict, List, Optional
+from uuid import uuid4
 
-from core.state_schema import Dialog
 from core.service import Service
+from core.state_schema import Dialog
+
+workflow_logger = logging.getLogger('workflow_logger')
 
 
 class WorkflowManager:
@@ -14,11 +17,15 @@ class WorkflowManager:
 
     def add_workflow_record(self, dialog: Dialog, deadline_timestamp: Optional[float] = None, **kwargs) -> None:
         if str(dialog.id) in self.workflow_records.keys():
+            workflow_logger.exception(f"Dialog with id {dialog.id} is already in workflow. Current phrase is: "
+                                      f'"{self.workflow_records[str(dialog.id)]["dialog"].utterances[-1].text}"')
+            self.get_services_status(str(dialog.id))
             raise ValueError(f'dialog with id {dialog.id} is already in workflow')
         workflow_record = {'dialog': dialog, 'services': defaultdict(dict), 'tasks': set()}
         if deadline_timestamp:
             workflow_record['deadline_timestamp'] = deadline_timestamp
         workflow_record.update(kwargs)
+        workflow_logger.info(f'New workflow record for dialog {dialog.id} by {dialog.human.telegram_id} was added')
         self.workflow_records[str(dialog.id)] = workflow_record
 
     def get_dialog_by_id(self, dialog_id: str) -> Dialog:
@@ -43,6 +50,7 @@ class WorkflowManager:
         workflow_record['services'][service.name]['pending_tasks'].add(task_id)
         workflow_record['tasks'].add(task_id)
         self.tasks[task_id] = task_data
+        workflow_logger.info(f'New task {service.name} for dialog {dialog_id} was created')
         return task_id
 
     def skip_service(self, dialog_id: str, service: Service) -> None:
@@ -52,6 +60,7 @@ class WorkflowManager:
                 workflow_record['services'][service.name]['skipped'] = True
             else:
                 workflow_record['services'][service.name] = {'pending_tasks': set(), 'done': False, 'skipped': True}
+        workflow_logger.info(f'service {service.name} was skipped from pipeline for {dialog_id}')
 
     def get_services_status(self, dialog_id: str) -> List:
         workflow_record = self.workflow_records.get(dialog_id, None)
@@ -67,16 +76,20 @@ class WorkflowManager:
                 done.add(k)
             else:
                 waiting.add(k)
+        workflow_logger.info(f'Current processing status for {dialog_id}: {done}, {waiting}, {skipped}')
         return done, waiting, skipped
 
     def complete_task(self, task_id, response, **kwargs) -> Dict:
         task = self.tasks.pop(task_id, None)
         if not task:
+            workflow_logger.debug(f'task with id: {task_id} was not found in workflow')
             return None, None
 
         workflow_record = self.workflow_records.get(task['dialog'], None)
         if not workflow_record:
             workflow_record = task.pop('workflow_record', None)
+            workflow_logger.debug(f"task {task_id}:{task['service'].name} was finished, "
+                                  f"but corresponding workflow record was flushed earlier")
             return workflow_record, task
 
         workflow_record['tasks'].discard(task_id)
@@ -91,6 +104,7 @@ class WorkflowManager:
         else:
             workflow_record['services'][task['service'].name][task_id]['done'] = True
         workflow_record['services'][task['service'].name][task_id].update(**kwargs)
+        workflow_logger.debug(f"task {task_id}:{task['service'].name} from {task['dialog']} was finished")
         return workflow_record, task
 
     def flush_record(self, dialog_id: str) -> Dict:
@@ -99,5 +113,5 @@ class WorkflowManager:
             return None
         for i in workflow_record.pop('tasks', set()):
             self.tasks[i]['workflow_record'] = workflow_record
-
+        workflow_logger.info(f'A record for {dialog_id} was successfully flushed from workflow')
         return workflow_record

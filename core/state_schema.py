@@ -8,6 +8,13 @@ import pymongo
 from bson.objectid import ObjectId
 
 from . import STATE_API_VERSION
+import logging
+
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 USER_PROFILE = {
     "name": None,
@@ -348,6 +355,7 @@ class Dialog:
                 break
             utt._dialog_id = self._id
             await utt.save(db)
+        logger.info("Dialog saving finished...")
 
 
 class Human:
