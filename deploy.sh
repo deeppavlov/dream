@@ -36,6 +36,22 @@ if [[ "$MODE" == "agent" || "$MODE" == "all" ]]; then
   echo "Deploying agent"
   printf "\t Pushing to ECR\n"
   VERSION="$(git rev-parse --short HEAD)" ENV_FILE=$ENV_FILE DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com ./push_to_ecr.sh
+  printf "\t Docker stack rm\n"
+  DOCKER_HOST=$DOCKER_HOST docker stack rm $REGISTRY_AUTH 
+  
+  printf "\t Waiting till all down and network removed..\n"
+  limit=15
+  until [ -z "$(DOCKER_HOST=$DOCKER_HOST docker service ls --filter label=com.docker.stack.namespace=$REGISTRY_AUTH -q)" ] || [ "$limit" -lt 0 ]; do
+    sleep 2
+    limit="$((limit-1))"
+  done
+
+  limit=15;
+  until [ -z "$(DOCKER_HOST=$DOCKER_HOST docker network ls --filter label=com.docker.stack.namespace=$REGISTRY_AUTH -q)" ] || [ "$limit" -lt 0 ]; do
+    sleep 2;
+    limit="$((limit-1))";
+  done
+
   printf "\t Docker stack deploy\n"
   VERSION="$(git rev-parse --short HEAD)" ENV_FILE=$ENV_FILE DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com DOCKER_HOST=$DOCKER_HOST docker stack deploy --prune --compose-file docker-compose.yml,staging.yml --with-registry-auth $REGISTRY_AUTH
 fi
