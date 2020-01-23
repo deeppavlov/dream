@@ -214,18 +214,20 @@ def check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr):
         if not ent:
             continue
         ent = ent[0]
-        if ent["text"].lower() == "alexa":
-            if (re.search(r"(my (name is|name's)|call me) alexa", curr_user_uttr) or (re.search(
-                    r"(what is|what's|whats|tell me) your? name",
-                    prev_bot_uttr) and re.match(r"^alexa[\.,!\?]*$", curr_user_uttr))):
-                # - my name is alexa
-                # - what's your name? - alexa.
-                pass
-            else:
-                # in all other cases skip alexa
-                continue
-        logger.info(f"Found {which_info} `{ent['text']}`")
-        found_info = " ".join([n.capitalize() for n in ent["text"].split()])
+        if (which_info == "name" and ent["type"] == "PER") or (
+                (which_info == "homeland" or which_info == "location") and ent["type"] == "LOC"):
+            if ent["text"].lower() == "alexa":
+                if (re.search(r"(my (name is|name's)|call me) alexa", curr_user_uttr) or (re.search(
+                        r"(what is|what's|whats|tell me) your? name",
+                        prev_bot_uttr) and re.match(r"^alexa[\.,!\?]*$", curr_user_uttr))):
+                    # - my name is alexa
+                    # - what's your name? - alexa.
+                    pass
+                else:
+                    # in all other cases skip alexa
+                    continue
+            logger.info(f"Found {which_info} `{ent['text']}`")
+            found_info = " ".join([n.capitalize() for n in ent["text"].split()])
     return found_info
 
 
