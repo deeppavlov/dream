@@ -3,6 +3,7 @@
 import json
 import logging
 import os
+import re
 import time
 import numpy as np
 
@@ -309,8 +310,16 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
 
     if dialog["human"]["profile"].get("name", False):
         name = dialog["human"]["profile"].get("name", False)
-        if np.random.uniform() <= CALL_BY_NAME_PROBABILITY:
-            best_text = f"{name}, {best_text}"
+        if len(dialog["utterances"]) >= 2:
+            if re.search(r"\b" + name + r"\b", dialog["utterances"][-2]["text"]):
+                pass
+            else:
+                if np.random.uniform() <= CALL_BY_NAME_PROBABILITY:
+                    best_text = f"{name}, {best_text}"
+        else:
+            # if dialog is just started (now it's impossible)
+            if np.random.uniform() <= CALL_BY_NAME_PROBABILITY:
+                best_text = f"{name}, {best_text}"
 
     return best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes
 
