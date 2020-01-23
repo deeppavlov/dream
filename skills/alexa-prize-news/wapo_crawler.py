@@ -40,8 +40,16 @@ def parse_one_period(SITE, stdate, enddate, mode="posts"):
         if len(data) == 0:
             filename = f'{mode}_' + stdate.strftime("%Y:%m:%d") + '-' + enddate.strftime("%Y:%m:%d")
             print(f"{mode}: saved in {filename}.json")
-            json.dump(docs, open(DATA_PATH + filename + '.json', 'w'), indent=2)
-            break
+            if os.path.isfile(DATA_PATH + filename + '.json'):
+                prev_docs = json.load(open(DATA_PATH + filename + '.json', 'r'))
+                for k in prev_docs:
+                    # it also removes duplicates!
+                    docs[k] = prev_docs[k]
+                json.dump(docs, open(DATA_PATH + filename + '.json', 'w'), indent=2)
+                break
+            else:
+                json.dump(docs, open(DATA_PATH + filename + '.json', 'w'), indent=2)
+                break
         else:
             docs.update({news['contenturl']: news for news in data})
             offset += count
@@ -66,7 +74,7 @@ parse_comments = args.parse_comments
 keep_crawling = args.keep_crawling
 
 DATA_PATH = './data/'
-timedelta = datetime.timedelta(days=1)  # daily report
+timedelta = datetime.timedelta(hours=1, minutes=30)  # daily report
 
 
 if keep_crawling:
@@ -74,11 +82,11 @@ if keep_crawling:
     for f in os.listdir("./data/"):
         os.remove("./data/" + f)
     done_today = False
+    prev_parsed = datetime.datetime.today() - datetime.timedelta(days=1)
     while True:
         t = datetime.datetime.today()
-        future = datetime.datetime(t.year, t.month, t.day, 12, 0)
-        if t.hour >= 12:
-            print("EVERYDAY CRAWLING")
+        if (t - prev_parsed).seconds * 1. / 3600 >= 1.5:
+            print("EVERY 1.5 HOURS CRAWLING")
             parse_one_period(DOCS_SITE, stdate=t - timedelta, enddate=t, mode="posts")
 
             with pysftp.Connection(host=SHARE_HOST_NAME, username=USER_NAME,
@@ -89,8 +97,7 @@ if keep_crawling:
                 sftp.put(local_file, remote_file)
             if parse_comments:
                 parse_one_period(COMMENTS_SITE, stdate=t - timedelta, enddate=t, mode="comments")
-            future += datetime.timedelta(days=1)
-        time.sleep((future - t).seconds)
+        time.sleep(timedelta.seconds)
 else:
     os.chdir("/home/dilyara.baymurzina/wapo/get_period/")
     for f in os.listdir("./data/"):

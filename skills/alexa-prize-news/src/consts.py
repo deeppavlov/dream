@@ -39,7 +39,7 @@ LDA_SUBTOPIC_N_WORDS_PATH = LDA_PATH + "lda_summaries_n_words.dict"
 LDA_SUBTOPIC_SENTENCE_PATH = LDA_PATH + "lda_summaries_sentence.dict"
 
 UPDATE_ON_START = False
-UPDATE_PERIOD = 12 * 60 * 60  # 12 hours
+UPDATE_PERIOD = 1 * 60 * 60  # 1 hours
 
 NUM_NEWS_TO_PRINT = 1  # Number of latest news to propose
 MIN_LEVENSHTEIN_DISTANCE = 2  # Min levenshtein distance for all spell corrections
