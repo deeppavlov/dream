@@ -217,6 +217,12 @@ services:
       - "./skills/topicalchat_tfidf_retrieval:/src"
     ports:
       - 8045:8045
+  animals_tfidf_retrieval:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/topicalchat_tfidf_retrieval:/src"
+    ports:
+      - 8050:8050
   convert_reddit:
     env_file: [.env.dev]
     volumes:

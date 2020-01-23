@@ -53,6 +53,8 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8044
   sport_tfidf_retrieval:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8045
+  animals_tfidf_retrieval:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8050
   convert_reddit:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8029 -t 60
   personal_info_skill:

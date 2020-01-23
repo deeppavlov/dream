@@ -458,6 +458,22 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+  animals_tfidf_retrieval:
+    build:
+      context: ./skills/topicalchat_tfidf_retrieval/
+      args:
+        TOPICAL_DATA_URL: http://lnsigo.mipt.ru/export/alexaprize_data/topicalchat_tfidf_retrieval/topicalchat_animals_data.tar.gz
+        MODELS_URL: http://lnsigo.mipt.ru/export/models/new_vectorizer_2.zip
+        TOPIC_NAME: animals
+        CONFIDENCE_THRESHOLD: 0.6
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8050
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   convert_reddit:
     build:
       context: ./skills/convert_reddit/
