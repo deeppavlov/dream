@@ -141,6 +141,9 @@ class RuleBasedSelector:
             sport_cobot_topics = {
                 "Sports",
             }
+            animals_cobot_topics = {
+                "Pets_Animals",
+            }
 
             books_cobot_dialogacts = {"Entertainment_General", "Entertainment_Books"}
             books_cobot_topics = {"Entertainment", "Literature"}
@@ -159,6 +162,7 @@ class RuleBasedSelector:
                 science_cobot_topics & cobot_topics
             )
             about_sports = (sport_cobot_dialogacts & cobot_dialogact_topics) | (sport_cobot_topics & cobot_topics)
+            about_animals = animals_cobot_topics & cobot_topics
 
             prev_user_uttr_hyp = dialog["utterances"][-3]["hypotheses"] if len(dialog["utterances"]) >= 3 else []
             prev_bot_uttr = dialog["utterances"][-2] if len(dialog["utterances"]) >= 2 else {}
@@ -177,7 +181,8 @@ class RuleBasedSelector:
                 prev_bot_uttr.get("active_skill", "") == "weather_skill" and weather_city_slot_requested
             )
             about_news = (news_cobot_topics & cobot_topics) or re.search(
-                r"(news|(what is|what's)( the)? new|something new)", reply)
+                r"(news|(what is|what's)( the)? new|something new)", reply
+            )
 
             if "/new_persona" in dialog["utterances"][-1]["text"]:
                 # process /new_persona command
@@ -233,6 +238,9 @@ class RuleBasedSelector:
 
                 if about_sports and len(dialog["utterances"]) > 2:
                     skills_for_uttr.append("sport_tfidf_retrieval")
+
+                if about_animals and len(dialog["utterances"]) > 2:
+                    skills_for_uttr.append("animals_tfidf_retrieval")
 
                 if about_news:
                     skills_for_uttr.append("news_skill")

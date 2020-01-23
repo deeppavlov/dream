@@ -30,7 +30,8 @@ if [ -z "$TEST_ONLY" ]; then
         music_tfidf_retrieval \
         politics_tfidf_retrieval \
         science_technology_tfidf_retrieval \
-        sport_tfidf_retrieval "
+        sport_tfidf_retrieval \
+        animals_tfidf_retrieval "
 
     $docker_compose build $skills
     $docker_compose up -d $skills
@@ -40,7 +41,7 @@ fi;
 
 function get_sample {
 echo "Get sample from $1"
-curl -X POST "http://localhost:$2/respond" -H "accept: application/json" -H "Content-Type: application/json" -d "{ \"sentences\": [ \"What do you like?\" ] }"
+curl -X POST "http://localhost:$2/respond" -H "accept: application/json" -H "Content-Type: application/json" -d "{ \"sentences\": [ \"What do you like?\" ], \"utterances_histories\": [ [] ] }"
 echo ""
 }
 
@@ -52,6 +53,7 @@ get_sample music_tfidf_retrieval 8034
 get_sample politics_tfidf_retrieval 8043
 get_sample science_technology_tfidf_retrieval 8044
 get_sample sport_tfidf_retrieval 8045
+get_sample animals_tfidf_retrieval 8050
 
 function run_tests {
 echo "Run tests for $1"
@@ -69,3 +71,4 @@ run_tests music_tfidf_retrieval 8034
 run_tests politics_tfidf_retrieval 8043
 run_tests science_technology_tfidf_retrieval 8044
 run_tests sport_tfidf_retrieval 8045
+run_tests animals_tfidf_retrieval 8050

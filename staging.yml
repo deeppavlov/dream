@@ -120,6 +120,8 @@ services:
     image: ${DOCKER_REGISTRY}/science_technology_tfidf_retrieval:${VERSION}
   sport_tfidf_retrieval:
     image: ${DOCKER_REGISTRY}/sport_tfidf_retrieval:${VERSION}
+  animals_tfidf_retrieval:
+    image: ${DOCKER_REGISTRY}/animals_tfidf_retrieval:${VERSION}
   convert_reddit:
     image: ${DOCKER_REGISTRY}/convert_reddit:${VERSION}
     env_file:

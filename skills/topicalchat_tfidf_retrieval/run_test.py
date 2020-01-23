@@ -14,7 +14,7 @@ parser.add_argument("-from_url", "--from_url", type=str, default="http://0.0.0.0
 
 def get_response(url, sentences):
     try:
-        data = requests.post(url, json={"sentences": sentences})
+        data = requests.post(url, json={"sentences": sentences, "utterances_histories": [[]] * len(sentences)})
         return data.json()[0]
     except Exception:
         print(traceback.format_exc())
