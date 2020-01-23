@@ -52,7 +52,7 @@ def create_phraselist(dialog_list, donotknow_answers, todel_userphrases, banned_
     bad_total_count = 0
     for dialog in dialog_list:
         utterances = dialog['utterances']
-        for i in range(0, len(utterances) - 1, 2):
+        for i in range(0, len(utterances) - 1, 1):
             human_phrase = preprocess(utterances[i])
             bot_phrase = preprocess(utterances[i + 1])
             no_wrongwords = all([banned_word not in bot_phrase for banned_word in banned_words])
@@ -62,7 +62,7 @@ def create_phraselist(dialog_list, donotknow_answers, todel_userphrases, banned_
     if bad_dialog_list is not None:
         for dialog in bad_dialog_list:
             utterances = dialog['utterances']
-            for i in range(0, len(utterances) - 1, 2):
+            for i in range(0, len(utterances) - 1, 1):
                 human_phrase = utterances[i]
                 bot_phrase = utterances[i + 1]
                 no_wrongwords = all([banned_word not in bot_phrase for banned_word in banned_words])

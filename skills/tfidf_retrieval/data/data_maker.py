@@ -8,24 +8,40 @@ from argparse import ArgumentParser
 import pandas as pd
 import json
 import os
+from tqdm import tqdm
+from deeppavlov import configs, build_model
 
 
-def process(dialog, gold_list):
+def process(dialog, gold_list, ner_model):
     utterances = [utterance['text'] for utterance in dialog['utterances']]
     for i in range(len(utterances)):
         if utterances[i] in gold_list:
             utterances[i + 1] = 'NO_ANSWER'
-    return {'utterances': [utterance['text'] for utterance in dialog['utterances']]}
+        elif i % 2 != 0 and 'PER' in ''.join(ner_model([utterances[i]])[1][0]):
+            utterances[i] = 'NO_ANSWER'
+    return {'conversation_id': dialog['utterances'][0]['attributes']['conversation_id'],
+            'utterances': [utterance['text'] for utterance in dialog['utterances']]}
 
 
 def increment(filename):
     prefix, num = filename.split('_v')
+    num = num.split('.json')[0]
     try:
         num = int(num)
     except BaseException:
         raise Exception('Version num ' + num + ' is not convertible to int')
     num += 1
-    return prefix + '_v' + str(num)
+    return prefix + '_v' + str(num) + '.json'
+
+
+def condition(utterance, used_ids):
+    '''
+    This function was added to bypass fucking PEP8
+    '''
+    try:
+        return utterance['attributes']['conversation_id'] not in used_ids
+    except BaseException:
+        return False
 
 
 def __main__():
@@ -43,7 +59,32 @@ def __main__():
                         help='Output with good and poor pairs')
     parser.add_argument("--gold_phrase_file", type=str, default='tests/dream/test_dialogs_gold_phrases.csv',
                         help='Output with good and poor pairs')
+    ner_model = build_model(configs.ner.ner_conll2003_bert, download=True)
     args = parser.parse_args()
+    old_output_file = args.output_file
+    while os.path.exists(increment(old_output_file)):
+        old_output_file = increment(old_output_file)
+    try:
+        good_dialogs = json.load(open(old_output_file, 'r'))
+        output_file = increment(old_output_file)
+    except BaseException:
+        print('No previous output file found')
+        good_dialogs = []
+        output_file = old_output_file
+    if args.bad_output_file:
+        old_bad_output_file = args.bad_output_file
+        while os.path.exists(increment(old_bad_output_file)):
+            old_bad_output_file = increment(old_bad_output_file)
+        try:
+            bad_dialogs = json.load(open(old_bad_output_file, 'r'))
+            bad_output_file = increment(old_bad_output_file)
+        except BaseException:
+            print('No previous bad output file found')
+            bad_dialogs = []
+            bad_output_file = old_bad_output_file
+    else:
+        bad_dialogs = []
+    used_ids = set([dialog['conversation_id'] for dialog in good_dialogs + bad_dialogs])
     assert '_v' in args.output_file, 'Requires version in output'
     if args.bad_output_file:
         assert '_v' in args.bad_output_file, 'Requires version in bad output'
@@ -54,7 +95,6 @@ def __main__():
             gold_phrase = gold_phrase[1:]
         gold_phrase = gold_phrase.split('"\n')[0].split('" "')[0].lower()
         gold_list.append(gold_phrase)
-
     print('Reading ratings from file ' + str(args.ratings_file))
     ratings = pd.read_csv(args.ratings_file)
     good_ratings = ratings[ratings['Rating'] >= 5]
@@ -62,7 +102,6 @@ def __main__():
     if args.bad_output_file:
         bad_ratings = ratings[ratings['Rating'] <= 2]
         bad_ids = set(list(bad_ratings['Conversation ID']))
-
     print('Reading dialogs from file ' + str(args.dialogs_file))
     dialogs = json.load(open(args.dialogs_file, 'r'))
     poor_turns = set()
@@ -82,11 +121,13 @@ def __main__():
         for j in dialogs:
             cond1 = 'conversation_id' in j['utterances'][0]['attributes']
             if cond1:
-                if j['utterances'][0]['attributes']['conversation_id'] in assessment_ids:
+                conv_id = j['utterances'][0]['attributes']['conversation_id']
+                if conv_id in assessment_ids and conv_id not in used_ids:
                     dialog_list.append(j)
         for dialog in dialog_list:
             id_ = dialog['utterances'][0]['attributes']['conversation_id']
-            for i in range(1, len(dialog['utterances']), 2):
+            len_ = len(dialog['utterances'])
+            for i in range(1, len_, 2):
                 bot_phrase = dialog['utterances'][i]['text']
                 user_phrase = dialog['utterances'][i - 1]['text']
                 utterance_num = i // 2
@@ -95,32 +136,24 @@ def __main__():
                 if (id_, utterance_num) in poor_turns:
                     good_poor_phrases[0]['poor'][user_phrase] = bot_phrase
         json.dump(good_poor_phrases, open(args.good_poor_phrase_file, 'w'), indent=4)
-    good_dialogs = []
-    bad_dialogs = []
-    for dialog in dialogs:
+
+    for dialog in tqdm(dialogs):
         added = False
-        utterances = [utterance for utterance in dialog['utterances']
-                      if 'attributes' in utterance and 'conversation_id' in utterance['attributes']]
+        utterances = [utterance for utterance in dialog['utterances'] if condition(utterance, used_ids)]
         for utterance in utterances:
             cond1 = utterance['attributes']['conversation_id'] in good_ids
             cond2 = len(dialog['utterances']) >= 7
             if cond1 and cond2 and not added:
                 added = True
-                good_dialogs.append(process(dialog, gold_list))
+                good_dialogs.append(process(dialog, gold_list, ner_model))
             if args.bad_output_file:
                 if utterance['attributes']['conversation_id'] in bad_ids and not added:
                     added = True
-                    bad_dialogs.append(process(dialog, gold_list))
-    output_file = args.output_file
-    while os.path.exists(output_file):
-        output_file = increment(output_file)
+                    bad_dialogs.append(process(dialog, gold_list, ner_model))
     json.dump(good_dialogs, open(output_file, 'w'), indent=4)
     print('Dialogs successfully extracted into file ' + str(args.output_file))
     if args.bad_output_file:
-        bad_output_file = args.bad_output_file
-        while os.path.exists(bad_output_file):
-            bad_output_file = increment(bad_output_file)
-            json.dump(bad_dialogs, open(bad_output_file, 'w'), indent=4)
+        json.dump(bad_dialogs, open(bad_output_file, 'w'), indent=4)
     print('Bad dialogs successfully extracted into file ' + str(args.bad_output_file))
 
 

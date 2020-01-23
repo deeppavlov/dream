@@ -154,7 +154,6 @@ services:
     image: ${DOCKER_REGISTRY}/news_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
-
 volumes:
   external-logs:
   external-deeppavlov:
