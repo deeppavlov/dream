@@ -264,6 +264,7 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+          - node.labels.group == 0
       resources:
         limits:
           memory: 6G
@@ -549,6 +550,7 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+          - node.labels.group == 1
   news_skill:
     build:
       context: .
