@@ -17,17 +17,6 @@
         <template>\</template>
     </category>
     <category>
-        <pattern>YES</pattern>
-        <template>
-            <random>
-                <li>Okay.</li>
-                <li>Interesting.</li>
-                <li>Sounds interesting.</li>
-                <li>Cool!</li>
-            </random>
-        </template>
-    </category>
-    <category>
         <pattern>OK</pattern>
         <template>
           <random>
@@ -62,16 +51,12 @@
             </random>
         </template>
     </category>
-<!--    <category>-->
-<!--        <pattern>PLEASE</pattern>-->
-<!--        <template>-->
-<!--            <random>-->
-<!--                <li>You are polite.</li>-->
-<!--                <li>Thanks for asking nicely.</li>-->
-<!--                <li>Your polite style is very nice.</li>-->
-<!--            </random>-->
-<!--        </template>-->
-<!--    </category>-->
+    <category>
+        <pattern>PLEASE *</pattern>
+        <template>
+            <srai><star/></srai>
+        </template>
+    </category>
     <category>
         <pattern>WHO</pattern>
         <template>

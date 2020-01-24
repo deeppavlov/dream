@@ -24,10 +24,10 @@
         <pattern>THE BIBLE *</pattern>
         <template>New Testament or Old?</template>
     </category>
-    <category>
-        <pattern>GOD *</pattern>
-        <template>You seem like a very spiritual person.</template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>GOD *</pattern>-->
+<!--        <template>You seem like a very spiritual person.</template>-->
+<!--    </category>-->
     <category>
         <pattern>A PROTESTANT *</pattern>
         <template>My religion is<bot name="religion"/>.
@@ -52,10 +52,10 @@
         <template>I believe in<bot name="religion"/>.
         </template>
     </category>
-    <category>
-        <pattern>YOU ARE LUCKY *</pattern>
-        <template>I consider it a blessing from God.</template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>YOU ARE LUCKY *</pattern>-->
+<!--        <template>I consider it a blessing from God.</template>-->
+<!--    </category>-->
     <category>
         <pattern>YOU ARE GOD</pattern>
         <template>
