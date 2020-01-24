@@ -327,7 +327,7 @@ def get_genre(user_phrase, return_name=False):
     else:
         return None
     if return_name:
-        genre_dict = {'memour autobiography': 'memoir books',
+        genre_dict = {'memoir autobiography': 'memoir books',
                       'history biography': 'biography books',
                       'science tehnology': 'technology books',
                       'debut novel': 'debut novel books',
