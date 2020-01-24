@@ -258,7 +258,9 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             confidences[i] = 0.6
         elif skill_names[i] == 'misheard_asr' and is_misheard:
             curr_single_scores.append(very_big_score)
-        if skill_names[i] == 'dummy_skill':
+        elif skill_names[i] == 'intent_responder' and "#+#" in candidates[i]['text']:
+            curr_single_scores.append(very_big_score)
+        if skill_names[i] == 'dummy_skill' and "question" in candidates[i].get("type", ""):
             question = candidates[i]['text']
 
         cand_scores = scores[i]
