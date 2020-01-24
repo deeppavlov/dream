@@ -52,6 +52,10 @@ if [[ "$MODE" == "agent" || "$MODE" == "all" ]]; then
     limit="$((limit-1))";
   done
 
+  printf "\t Removing stopped containers.."
+  DOCKER_HOST=$DOCKER_HOST docker service update --force docker-rm
+  sleep 10;
+
   printf "\t Docker stack deploy\n"
   VERSION="$(git rev-parse --short HEAD)" ENV_FILE=$ENV_FILE DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com DOCKER_HOST=$DOCKER_HOST docker stack deploy --prune --compose-file docker-compose.yml,staging.yml --with-registry-auth $REGISTRY_AUTH
 fi
