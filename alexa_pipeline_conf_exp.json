@@ -211,7 +211,7 @@
                     "url": "http://dummy_skill:8019/respond"
                 },
                 "dialog_formatter": "utt_sentrewrite_modified_last_dialog",
-                "response_formatter": "cobot_qa_formatter_service",
+                "response_formatter": "skill_with_attributes_formatter_service",
                 "previous_services": ["skill_selectors", "annotators_3"],
                 "state_manager_method": "add_hypothesis"
             },
