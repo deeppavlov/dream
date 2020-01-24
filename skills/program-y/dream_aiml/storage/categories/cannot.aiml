@@ -910,6 +910,13 @@
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
+<!--  alexa can you just do your job and play music please-->
+  <category>
+    <pattern># YOU # PLAY MUSIC #</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
 
   <category>
     <pattern>CAN YOU DO ALEXA THINGS</pattern>

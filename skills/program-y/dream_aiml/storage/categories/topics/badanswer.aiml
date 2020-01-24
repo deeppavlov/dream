@@ -386,18 +386,18 @@
         </template>
     </category>
 
-    <category>
-        <pattern>WILL YOU LEARN *</pattern>
-        <template>
-            <srai>CAN I TEACH YOU</srai>
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>WILL YOU LEARN *</pattern>-->
+<!--        <template>-->
+<!--            <srai>CAN I TEACH YOU</srai>-->
+<!--        </template>-->
+<!--    </category>-->
 
-    <category>
-        <pattern>IF * WILL YOU LEARN *</pattern>
-        <template>
-            <srai>CAN I TEACH YOU</srai>
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>IF * WILL YOU LEARN *</pattern>-->
+<!--        <template>-->
+<!--            <srai>CAN I TEACH YOU</srai>-->
+<!--        </template>-->
+<!--    </category>-->
 
 </aiml>
