@@ -126,6 +126,10 @@ services:
     image: ${DOCKER_REGISTRY}/convert_reddit:${VERSION}
     env_file:
       - ${ENV_FILE}
+  convert_reddit_with_personality:
+    image: ${DOCKER_REGISTRY}/convert_reddit_with_personality:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   personal_info_skill:
     image: ${DOCKER_REGISTRY}/personal_info_skill:${VERSION}
     env_file:

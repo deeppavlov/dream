@@ -68,6 +68,16 @@ def transfertransfo_formatter_dialog(dialog: Dict) -> Dict:
     }]
 
 
+def convert_formatter_dialog(dialog: Dict) -> Dict:
+    return [{
+        'utterances_histories': [
+            [utt['annotations']["sentseg"]["punct_sent"] for utt in dialog['utterances']]
+        ],
+        'personality': [dialog['bot']['persona']],
+        'topics': [dialog["utterances"][-1]["annotations"]["cobot_topics"]]
+    }]
+
+
 def personality_catcher_formatter_dialog(dialog: Dict) -> Dict:
     # Used by: personality_catcher_formatter
     return [{'personality': [dialog['utterances'][-1]['text']]}]

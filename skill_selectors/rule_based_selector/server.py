@@ -208,6 +208,7 @@ class RuleBasedSelector:
                 if len(dialog["utterances"]) > 7:
                     skills_for_uttr.append("tfidf_retrieval")
                     skills_for_uttr.append("convert_reddit")
+                    skills_for_uttr.append("convert_reddit_with_personality")
 
                 # thematic skills
                 if about_movies:
