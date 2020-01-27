@@ -92,13 +92,13 @@ services:
       start_period: 1m
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
       placement:
         constraints:
           - node.labels.with_gpu != true
       resources:
         limits:
-          memory: 2G
+          memory: 1G
   personality_catcher:
     build:
       context: ./skills/personality_catcher/
@@ -235,13 +235,13 @@ services:
       start_period: 1m
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
       placement:
         constraints:
           - node.labels.with_gpu != true
       resources:
         limits:
-          memory: 2G
+          memory: 1G
   cobot_nounphrases:
     build:
       context: ./annotators/nounphrases/
