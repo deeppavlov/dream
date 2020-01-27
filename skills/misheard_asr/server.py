@@ -16,10 +16,14 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-misheard_responses = np.array(["Excuse me, I misheard you. Could you repeat that, please?",
-                               "I couldn't hear you. Could you say that again, please?",
-                               "Sorry, I didn't catch that. Could you say it again, please?"
-                               ])
+misheard_responses = np.array([("Excuse me, I misheard you. Sometimes it’s difficult for me to understand speech well. "
+                                "Sorry. It's just my usual dimness."),
+                               "Sorry, I didn't catch that. Could you say it again, please?",
+                               "I couldn't hear you. I beg your pardon?",
+                               "I beg your pardon?",
+                               ("Sorry, I didn't catch that. Only it's like a fruit machine in there. "
+                                "I open my mouth, and I never know "
+                                "if it’s going to come out three oranges or two lemons and a banana.")])
 
 
 @app.route("/misheard_respond", methods=['POST'])

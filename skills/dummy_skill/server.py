@@ -111,7 +111,7 @@ def respond():
 
         if len(facts_same_nps) > 0:
             logger.info("Found special nounphrases for facts. Return fact with the same nounphrase.")
-            cands += [np.random.choice(facts_same_nps) + " What do you think about it?"]
+            cands += [np.random.choice(facts_same_nps) + ". What do you think about it?"]
             confs += [0.7]
             attrs += [{"type": "nounphrase_fact"}]
         else:
@@ -122,7 +122,7 @@ def respond():
                 facts_with_the_same_topics = FACTS.loc[np.any([FACTS["cobot_topic"] == t
                                                                for t in ["Phatic"]], axis=0), "title"]
             cands += ["Listen what I found on Reddit: " + np.random.choice(
-                facts_with_the_same_topics) + " What do you think about it?"]
+                facts_with_the_same_topics) + ". What do you think about it?"]
             confs += [0.6]
             attrs += [{"type": "topic_fact"}]
 
