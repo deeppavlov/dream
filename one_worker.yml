@@ -1,6 +1,4 @@
 services:
-  rule_based_selector:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8002
   cobotqa:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8001 -t 15
   cobot_topics:

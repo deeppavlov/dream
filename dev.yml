@@ -11,13 +11,6 @@ services:
       - "./skills/CoBotQA:/src"
     ports:
       - 8001:8001
-  rule_based_selector:
-    env_file: [.env.dev]
-    volumes:
-      - "./skill_selectors/rule_based_selector:/src"
-      - "./common:/src/common"
-    ports:
-      - 8002:8002
   cobot_topics:
     env_file: [.env.dev]
     volumes:

@@ -139,8 +139,8 @@
         "skill_selectors": {
             "rule_based_selector": {
                 "connector": {
-                    "protocol": "http",
-                    "url": "http://rule_based_selector:8002/selected_skills"
+                    "protocol": "python",
+                    "class_name": "skill_selectors.rule_based_selector.connector:RuleBasedSkillSelectorConnector"
                 },
                 "dialog_formatter": "base_skill_selector_formatter_dialog",
                 "response_formatter": "simple_formatter_service",

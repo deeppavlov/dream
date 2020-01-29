@@ -1,4 +1,6 @@
-#!/usr/bin/env python
+# server.py is not used
+# skill selector moved to connector.py
+# skill selector is runned as python by agent now
 
 import logging
 import time
@@ -46,6 +48,7 @@ class RuleBasedSelector:
 
     def __init__(self, **kwargs):
         logger.info("Skill selector Initialized")
+        raise RuntimeError('Skill selector`s server.py is used instead of connector.py')
 
     def _is_question(self, tokens):
         return tokens[0] in self.first_question_words or len(set(tokens).intersection(self.wh_words)) > 0
