@@ -15,12 +15,12 @@ def alice_formatter_dialog(dialog: Dict) -> Dict:
 def eliza_formatter_dialog(dialog: Dict) -> Dict:
     # Used by: eliza_formatter
     history = []
-    for last_utter, next_utter in zip(dialog["utterances"][::2], dialog["utterances"][1::2]):
-        is_human = last_utter["user"]["user_type"] == "human"
-        is_bot = next_utter["user"]["user_type"] == "bot"
-        is_eliza = next_utter["active_skill"] == "eliza"
-        if is_human and is_bot and is_eliza:
-            history.append(last_utter["text"])
+    prev_human_utterance = None
+    for utt in dialog['utterances']:
+        if utt["user"]["user_type"] == "human":
+            prev_human_utterance = utt['text']
+        elif utt["user"]["user_type"] == "bot" and utt["active_skill"] == "eliza" and prev_human_utterance is not None:
+            history.append(prev_human_utterance)
     return [{
         "last_utterance_batch": [dialog['utterances'][-1]['text']],
         "human_utterance_history_batch": [history],
