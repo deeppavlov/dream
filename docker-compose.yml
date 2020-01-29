@@ -7,7 +7,7 @@ services:
     ports:
       - 4242:4242
     environment:
-      WAIT_HOSTS: "rule_based_selector:8002, cobotqa:8001, cobot_topics:8003, cobot_offensiveness:8005,
+      WAIT_HOSTS: "cobotqa:8001, cobot_topics:8003, cobot_offensiveness:8005,
         cobot_dialogact:8006, program_y:8008, sentseg:8011, convers_evaluation_selector:8009, personality_catcher:8010,
         intent_responder:8012, intent_catcher:8014, cobot_nounphrases:8016, blacklisted_words:8018, dummy_skill:8019,
         toxic_classification:8013, sentrewrite:8017, ner:8021,  program_y_dangerous:8022, movie_skill:8023,  
@@ -18,18 +18,6 @@ services:
     deploy:
       mode: replicated
       replicas: 1
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
-  rule_based_selector:
-    build:
-      context: .
-      dockerfile: ./skill_selectors/rule_based_selector/Dockerfile
-    command: gunicorn --workers=4 server:app -b 0.0.0.0:8002
-    volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
       placement:
         constraints:
           - node.labels.with_gpu != true

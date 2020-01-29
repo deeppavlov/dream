@@ -7,10 +7,6 @@ services:
     image: ${DOCKER_REGISTRY}/cobotqa:${VERSION}
     env_file:
       - ${ENV_FILE}
-  rule_based_selector:
-    image: ${DOCKER_REGISTRY}/rule_based_selector:${VERSION}
-    env_file:
-      - ${ENV_FILE}
   cobot_topics:
     image: ${DOCKER_REGISTRY}/cobot_topics:${VERSION}
     env_file:
