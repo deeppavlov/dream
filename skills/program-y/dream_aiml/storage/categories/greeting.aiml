@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <aiml version="2.0">
   <category>
+    <pattern>START TALKING</pattern>
+    <template>
+      <srai>HELLO</srai>
+    </template>
+  </category>
+  <category>
     <pattern>HELLO *</pattern>
     <template>
       <srai>HELLO</srai>
