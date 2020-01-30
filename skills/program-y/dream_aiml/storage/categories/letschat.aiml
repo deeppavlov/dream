@@ -29,6 +29,10 @@
     <pattern><set>start</set> # <set>talk</set> ^</pattern>
     <template><srai>LETS_CHAT</srai></template>
   </category>
+  <category>
+    <pattern><set>talk</set> ABOUT</pattern>
+    <template><srai>LETS_CHAT</srai></template>
+  </category>
 
   <category>
     <pattern>LETS_CHAT</pattern>
@@ -43,6 +47,10 @@
 
 <!--  let's chat about something-->
 
+  <category>
+    <pattern><set>talk</set> ABOUT *</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="2"/></srai></template>
+  </category>
   <category>
     <pattern><set>talk</set> # ABOUT #</pattern>
     <template><srai>LET_US_CHAT_ABOUT <star index="3"/></srai></template>

@@ -317,7 +317,7 @@
     </template>
   </category>
   <category>
-    <pattern>OPEN #</pattern>
+    <pattern>OPEN *</pattern>
     <template>
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
@@ -611,7 +611,7 @@
     </template>
   </category>
   <category>
-    <pattern>TURN # ON #</pattern>
+    <pattern>TURN * ON *</pattern>
     <template>
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>

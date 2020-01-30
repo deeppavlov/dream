@@ -17679,7 +17679,7 @@
 <category><pattern>WHY DOES MY BREATH SMELL</pattern>
 <template>There is no reason to think so.</template>
 </category>
-<category><pattern>WHY DOES MY DOG TALK TO ME</pattern>
+<category><pattern>WHY DOES MY DOG <set>talk</set></pattern>
 <template>No way.</template>
 </category>
 <category><pattern>WHY DOES ANIMALS HAVE A TAIL</pattern>
