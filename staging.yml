@@ -150,6 +150,14 @@ services:
     image: ${DOCKER_REGISTRY}/weather_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
+  emotion_classification:
+    image: ${DOCKER_REGISTRY}/emotion_classification:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  emotion_skill:
+    image: ${DOCKER_REGISTRY}/emotion_skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   news_skill:
     image: ${DOCKER_REGISTRY}/news_skill:${VERSION}
     env_file:

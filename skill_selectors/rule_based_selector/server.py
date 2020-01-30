@@ -177,7 +177,18 @@ class RuleBasedSelector:
                     if hyp["skill_name"] == "weather_skill"
                 ]
             )
-
+            emo_groups = [['sad', 'afraid', 'anxious', 'embarrassed', 'devastated', 'ashamed',
+                           'disappointed', 'guilty', 'angry', 'annoyed', 'furious', 'disgusted'],
+                          ['surprised', 'impressed', 'terrified'],
+                          ['excited', 'joyful', 'grateful', 'content'],
+                          ['apprehensive', 'caring', 'prepared', 'anticipating'],
+                          ['trusting', 'confident', 'faithful']]
+            emo_threshold = 0.5
+            some_emotion = False
+            for emo_group in emo_groups:
+                if sum([dialog['utterances'][-1]['annotations']['emotion_classification']['text'][emotion]
+                        for emotion in emo_group]) > emo_threshold:
+                    some_emotion = True
             about_weather = dialog["utterances"][-1]["annotations"]["intent_catcher"].get(
                 "weather_forecast_intent", {}
             ).get("detected", False) or (
@@ -248,7 +259,8 @@ class RuleBasedSelector:
 
                 if about_news:
                     skills_for_uttr.append("news_skill")
-
+                if some_emotion:
+                    skills_for_uttr.append('emotion_skill')
                 for hyp in prev_user_uttr_hyp:
                     # here we just forcibly add skills which return `can_continue` and it's not `no`
                     if hyp.get("can_continue", CAN_NOT_CONTINUE) in {CAN_CONTINUE, MUST_CONTINUE}:

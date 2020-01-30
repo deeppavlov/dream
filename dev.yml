@@ -86,6 +86,12 @@ services:
       - "./annotators/DeepPavlovSentimentClassification:/dp-agent/annotators/DeepPavlovSentimentClassification"
     ports:
       - 8024:8024
+  emotion_classification:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/DeepPavlovEmotionClassification:/dp-agent/annotators/DeepPavlovEmotionClassification"
+    ports:
+      - 8038:8038
   intent_responder:
     env_file: [.env.dev]
     volumes:
@@ -147,6 +153,12 @@ services:
       - "./skills/eliza:/src"
     ports:
       - 8047:8047
+  emotion_skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/emotion_skill:/src"
+    ports:
+      - 8049:8049
   news_skill:
     env_file: [.env.dev]
     volumes:

@@ -39,6 +39,15 @@
                 "response_formatter": "cobot_classifiers_formatter_service",
                 "state_manager_method": "add_annotation"
             },
+            "emotion_classification": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://emotion_classification:8038/emotion_annotations"
+                },
+                "dialog_formatter": "last_utt_dialog",
+                "response_formatter": "cobot_classifiers_formatter_service",
+                "state_manager_method": "add_annotation"
+            },
             "blacklisted_words": {
                 "connector": {
                     "protocol": "http",
@@ -259,6 +268,16 @@
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
             },
+            "emotion_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://emotion_skill:8049/respond"
+                },
+                "dialog_formatter": "utt_sentrewrite_modified_last_dialog",
+                "response_formatter": "skill_with_attributes_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
+            },
             "tfidf_retrieval": {
                 "connector": {
                     "protocol": "http",
@@ -278,7 +297,6 @@
                 "response_formatter": "base_formatter_service",
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
-
             },
             "convert_reddit_with_personality": {
                 "connector": {

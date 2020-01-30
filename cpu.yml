@@ -13,3 +13,6 @@ services:
   attitude_classification:
     environment:
       CUDA_VISIBLE_DEVICES: ""
+  emotion_classification:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
