@@ -555,7 +555,8 @@ class BookSkillScenario:
                         reply, confidence = GENRE_PHRASES[genre_name], self.default_conf
                     else:
                         reply, confidence = self.default_reply, 0
-
+                if reply in bot_phrases[:-2]:
+                    confidence = confidence * 0.5
                 assert reply is not None
             except Exception as e:
                 logger.exception("exception in book skill")
