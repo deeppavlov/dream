@@ -61,7 +61,7 @@ class HumanUtterance:
             'annotations': self.annotations,
             'hypotheses': self.hypotheses,
             'date_time': str(self.date_time),
-            'attributes': self.attributes
+            'attributes': self.attributes,
         }
 
     async def save(self, db):
@@ -83,7 +83,7 @@ class HumanUtterance:
     @classmethod
     async def get_many(cls, db, dialog_id):
         result = []
-        async for document in db[cls.collection_name].find({'_dialog_id': dialog_id}):
+        async for document in db[cls.collection_name].find({'_dialog_id': dialog_id}).sort('_in_dialog_id'):
             result.append(cls(actual=True, **document))
         return result
 
@@ -130,7 +130,7 @@ class BotUtterance:
             'confidence': self.confidence,
             'annotations': self.annotations,
             'date_time': str(self.date_time),
-            'user': self.user
+            'user': self.user,
         }
 
     async def save(self, db):
@@ -152,7 +152,7 @@ class BotUtterance:
     @classmethod
     async def get_many(cls, db, dialog_id):
         result = []
-        async for document in db[cls.collection_name].find({'_dialog_id': dialog_id}):
+        async for document in db[cls.collection_name].find({'_dialog_id': dialog_id}).sort('_in_dialog_id'):
             result.append(cls(actual=True, **document))
         return result
 
@@ -182,6 +182,8 @@ class Dialog:
         self._bot_id = _bot_id
         self._active = _active
         self.utterances = []
+        self.human_utterances = []
+        self.bot_utterances = []
         self.version = version or STATE_API_VERSION
         self._dict = {}
         self.actual = actual
@@ -215,6 +217,8 @@ class Dialog:
         return {
             'id': self.id,
             'utterances': [i.to_dict() for i in self.utterances],
+            'human_utterances': [i.to_dict() for i in self.human_utterances],
+            'bot_utterances': [i.to_dict() for i in self.bot_utterances],
             'human': self.human.to_dict(),
             'bot': self.bot.to_dict(),
             'channel_type': self.channel_type,
@@ -224,9 +228,9 @@ class Dialog:
 
     async def load_external_info(self, db):
         if self._id:
-            human_utterances = await HumanUtterance.get_many(db, self._id)
-            bot_utterances = await BotUtterance.get_many(db, self._id)
-            self.utterances = sorted(chain(human_utterances, bot_utterances), key=lambda x: x._in_dialog_id)
+            self.human_utterances = await HumanUtterance.get_many(db, self._id)
+            self.bot_utterances = await BotUtterance.get_many(db, self._id)
+            self.utterances = sorted(chain(self.human_utterances, self.bot_utterances), key=lambda x: x._in_dialog_id)
             self.bot = await Bot.get_or_create(db, self._bot_id)
 
     @classmethod

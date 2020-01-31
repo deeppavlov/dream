@@ -121,8 +121,14 @@ class RuleBasedSkillSelectorConnector:
         about_sports = (self.sport_cobot_dialogacts & cobot_dialogact_topics) | (self.sport_cobot_topics & cobot_topics)
         about_animals = self.animals_cobot_topics & cobot_topics
 
-        prev_user_uttr_hyp = dialog["utterances"][-3]["hypotheses"] if len(dialog["utterances"]) >= 3 else []
-        prev_bot_uttr = dialog["utterances"][-2] if len(dialog["utterances"]) >= 2 else {}
+        prev_user_uttr_hyp = []
+        prev_bot_uttr = {}
+
+        if len(dialog["human_utterances"]) > 1:
+            prev_user_uttr_hyp = dialog["human_utterances"][-2]["hypotheses"]
+
+        if dialog['bot_utterances']:
+            prev_bot_uttr = dialog["bot_utterances"][-1]
 
         weather_city_slot_requested = any(
             [
@@ -137,8 +143,9 @@ class RuleBasedSkillSelectorConnector:
         ).get("detected", False) or (
             prev_bot_uttr.get("active_skill", "") == "weather_skill" and weather_city_slot_requested
         )
+        news_re_expr = re.compile(r"(news|(what is|what's)( the)? new|something new)")
         about_news = (self.news_cobot_topics & cobot_topics) or re.search(
-            r"(news|(what is|what's)( the)? new|something new)", reply
+            news_re_expr, reply
         )
 
         if "/new_persona" in dialog["utterances"][-1]["text"]:
