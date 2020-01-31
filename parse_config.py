@@ -7,17 +7,19 @@ import aiohttp
 
 from core.connectors import AioQueueConnector, QueueListenerBatchifyer, HTTPConnector, AgentGatewayToServiceConnector
 from core.service import Service, simple_workflow_formatter
+from core.state_manager import StateManager
 from core.transport.mapping import GATEWAYS_MAP
 from core.transport.settings import TRANSPORT_SETTINGS
 from state_formatters import all_formatters
 
 
 class PipelineConfigParser:
-    def __init__(self, state_manager, config):
+    def __init__(self, state_manager: StateManager, config: Dict):
         self.config = config
         self.state_manager = state_manager
         self.services = []
         self.services_names = defaultdict(set)
+        self.last_chance_service = None
         self.connectors = {}
         self.workers = []
         self.session = None
@@ -77,7 +79,7 @@ class PipelineConfigParser:
             elif len(params) == 2:
                 connector_class = getattr(self.get_external_module(params[0]), params[1])
             else:
-                raise ValueError(f"Expected class description in a `module.submodules:ClassName` form,"
+                raise ValueError(f"Expected class description in a `module.submodules:ClassName` form, "
                                  f"but got `{data['class_name']}`")
             others = {k: v for k, v in data.items() if k not in {'protocol', 'class_name'}}
             connector = connector_class(**others)
@@ -85,7 +87,7 @@ class PipelineConfigParser:
         self.workers.extend(workers)
         self.connectors[name] = connector
 
-    def make_service(self, group, name, data: Dict):
+    def make_service(self, group: str, name: str, data: Dict):
         connector_data = data.get('connector', None)
         service_name = ".".join([i for i in [group, name] if i])
         if 'workflow_formatter' in data and not data['workflow_formatter']:
@@ -126,12 +128,20 @@ class PipelineConfigParser:
         names_previous_services = set()
         for sn in data.get('previous_services', set()):
             names_previous_services.update(self.services_names.get(sn, set()))
+        names_required_previous_services = set()
+        for sn in data.get('required_previous_services', set()):
+            names_required_previous_services.update(self.services_names.get(sn, set()))
         tags = data.get('tags', [])
-        self.services.append(
-            Service(name=service_name, connector_func=connector.send, state_processor_method=sm_method, tags=tags,
-                    names_previous_services=names_previous_services, workflow_formatter=workflow_formatter,
-                    dialog_formatter=dialog_formatter, response_formatter=response_formatter, label=name)
-        )
+        service = Service(
+            name=service_name, connector_func=connector.send, state_processor_method=sm_method, tags=tags,
+            names_previous_services=names_previous_services,
+            names_required_previous_services=names_required_previous_services,
+            workflow_formatter=workflow_formatter, dialog_formatter=dialog_formatter,
+            response_formatter=response_formatter, label=name)
+        if service.is_last_chance():
+            self.last_chance_service = service
+        else:
+            self.services.append(service)
 
     def fill_connectors(self):
         for k, v in self.config['connectors'].items():

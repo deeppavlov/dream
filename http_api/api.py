@@ -32,10 +32,8 @@ async def init_app(agent, session, consumers, logger_stats, debug=False):
     app.router.add_get('/api/dialogs/{dialog_id}', handler.dialog)
     app.router.add_get('/api/user/{user_telegram_id}', handler.dialogs_by_user)
     app.router.add_get('/ping', pages.ping)
-    app.router.add_get('/dialogs', pages.dialoglist)
     app.router.add_get('/debug/current_load', stats.ws_page)
     app.router.add_get('/debug/current_load/ws', stats.index)
-
     app.on_startup.append(on_startup)
     app.on_shutdown.append(on_shutdown)
     aiohttp_jinja2.setup(app, loader=jinja2.PackageLoader('http_api', 'templates'))

@@ -56,6 +56,22 @@ class StateManager:
         dialog.utterances[-1].annotations = payload.get('annotations', {})
         dialog.utterances[-1].user = dialog.bot.to_dict()
 
+    async def add_bot_utterance_last_chance(self, dialog: Dialog, payload: Dict, label: str, **kwargs) -> None:
+        if isinstance(dialog.utterances[-1], HumanUtterance):
+            dialog.add_bot_utterance()
+            dialog.utterances[-1].text = payload['text']
+            dialog.utterances[-1].active_skill = 'last_chance'
+            dialog.utterances[-1].confidence = 0
+            dialog.utterances[-1].annotations = payload['annotations']
+            dialog.utterances[-1].user = dialog.bot.to_dict()
+
+    async def add_failure_bot_utterance(self, dialog: Dialog, payload: Dict, label: str, **kwargs) -> None:
+        dialog.add_bot_utterance()
+        dialog.utterances[-1].text = payload
+        dialog.utterances[-1].active_skill = label
+        dialog.utterances[-1].confidence = 0
+        dialog.utterances[-1].user = dialog.bot.to_dict()
+
     async def save_dialog(self, dialog: Dialog, payload: Dict, label: str, **kwargs) -> None:
         await dialog.save(self._db)
 
@@ -68,8 +84,8 @@ class StateManager:
     async def get_dialogs_by_user_ext_id(self, user_telegram_id):
         return await Dialog.get_many_by_ext_id(self._db, user_telegram_id)
 
-    async def get_all_dialogs(self, date_start=None, date_finish=None):
-        return await Dialog.get_all(self._db, date_start, date_finish)
+    async def get_all_dialogs(self):
+        return await Dialog.get_all(self._db)
 
     async def drop_active_dialog(self, user_telegram_id):
         user = await Human.get_or_create(self._db, user_telegram_id)
