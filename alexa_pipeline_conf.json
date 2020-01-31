@@ -14,6 +14,33 @@
         }
     },
     "services": {
+        "last_chance_service": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "core.connectors:LastChanceConnector",
+                "response_text": "Sorry, something went wrong inside. Please tell me, what did you say.",
+                "annotations": {
+                  "sentseg": {
+                    "punct_sent": "Sorry, something went wrong inside. Please tell me, what did you say.",
+                    "segments": [
+                      "Sorry, something went wrong inside.",
+                      "Please tell me, what did you say."
+                    ]
+                  },
+                  "sentrewrite": {
+                    "clusters": [],
+                    "modified_sents": [
+                      "Sorry, something went wrong inside. Please tell me, what did you say."
+                    ]
+                  },
+                  "ner": [
+                    []
+                  ]
+                }
+            },
+            "state_manager_method": "add_bot_utterance_last_chance",
+            "tags": ["last_chance"]
+        },
         "annotators_1": {
             "sentseg": {
                 "connector": "connectors.sentseg",
@@ -76,14 +103,16 @@
                 "dialog_formatter": "last_utt_sentseg_segments_dialog",
                 "response_formatter": "simple_formatter_service",
                 "previous_services": ["annotators_1"],
-                "state_manager_method": "add_annotation"
+                "state_manager_method": "add_annotation",
+                "required_previous_services": ["annotators_1.sentseg"]
             },
             "ner": {
                 "connector": "connectors.ner",
                 "dialog_formatter": "ner_formatter_dialog",
                 "response_formatter": "simple_formatter_service",
                 "previous_services": ["annotators_1"],
-                "state_manager_method": "add_annotation"
+                "state_manager_method": "add_annotation",
+                "required_previous_services": ["annotators_1.sentseg"]
             },
             "cobot_topics": {
                 "connector": {
@@ -93,7 +122,8 @@
                 "dialog_formatter": "last_utt_sentseg_segments_dialog",
                 "response_formatter": "cobot_classifiers_formatter_service",
                 "previous_services": ["annotators_1"],
-                "state_manager_method": "add_annotation"
+                "state_manager_method": "add_annotation",
+                "required_previous_services": ["annotators_1.sentseg"]
             },
             "cobot_dialogact": {
                 "connector": {
@@ -103,7 +133,8 @@
                 "dialog_formatter": "cobot_formatter_dialog",
                 "response_formatter": "cobot_dialogact_formatter_service",
                 "previous_services": ["annotators_1"],
-                "state_manager_method": "add_annotation"
+                "state_manager_method": "add_annotation",
+                "required_previous_services": ["annotators_1.sentseg"]
             },
             "cobot_nounphrases": {
                 "connector": {
@@ -113,7 +144,8 @@
                 "dialog_formatter": "utt_sentseg_punct_dialog",
                 "response_formatter": "simple_formatter_service",
                 "previous_services": ["annotators_1"],
-                "state_manager_method": "add_annotation"
+                "state_manager_method": "add_annotation",
+                "required_previous_services": ["annotators_1.sentseg"]
             },
             "cobot_offensiveness": {
                 "connector": {
@@ -123,7 +155,8 @@
                 "dialog_formatter": "last_utt_sentseg_segments_dialog",
                 "response_formatter": "cobot_classifiers_formatter_service",
                 "previous_services": ["annotators_1"],
-                "state_manager_method": "add_annotation"
+                "state_manager_method": "add_annotation",
+                "required_previous_services": ["annotators_1.sentseg"]
             },
             "attitude_classification": {
                 "connector": {
@@ -133,7 +166,8 @@
                 "dialog_formatter": "last_utt_sentseg_punct_dialog",
                 "response_formatter": "attitude_formatter_service",
                 "previous_services": ["annotators_1"],
-                "state_manager_method": "add_annotation"
+                "state_manager_method": "add_annotation",
+                "required_previous_services": ["annotators_1.sentseg"]
             }
         },
         "annotators_3": {
@@ -142,7 +176,8 @@
                 "dialog_formatter": "sent_rewrite_formatter_dialog",
                 "response_formatter": "simple_formatter_service",
                 "previous_services": ["annotators_2"],
-                "state_manager_method": "add_annotation"
+                "state_manager_method": "add_annotation",
+                "required_previous_services": ["annotators_1.sentseg", "annotators_2.ner"]
             }
         },
         "skill_selectors": {
@@ -154,6 +189,9 @@
                 "dialog_formatter": "base_skill_selector_formatter_dialog",
                 "response_formatter": "simple_formatter_service",
                 "previous_services": ["annotators_3"],
+                "required_previous_services": ["annotators_2.intent_catcher", "annotators_2.cobot_topics",
+                   "annotators_2.cobot_dialogact", "annotators_2.blacklisted_words", "annotators_1.asr",
+                   "annotators_3.sentrewrite"],
                 "tags": ["selector"]
             }
         },
