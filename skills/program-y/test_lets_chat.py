@@ -252,7 +252,7 @@ def main_test():
         "What about movies? What is the latest movie you've seen?",
         "Let's chat about movies! What was the most unsettling film you’ve seen?",
     ]
-    counters = collections.defaultdict(int)
+    errors = []
     for key, sents in sentences.items():
         for sent in sents:
             data = {"sentences_batch": [[sent]]}
@@ -263,8 +263,8 @@ def main_test():
                 if difflib.SequenceMatcher(None, tgt_resp.split(), response.split()).ratio() > 0.6
             ]:
                 print(f"---\nT: {key}\nQ: {sent}\nA: {response}")
-                counters[key] += 1
-    pprint.pprint(counters)
+                errors.append(key)
+    assert not errors, f"Catched errors\n{pprint.pformat(collections.Counter(errors).most_common())}"
 
 
 if __name__ == "__main__":

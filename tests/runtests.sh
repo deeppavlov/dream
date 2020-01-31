@@ -141,6 +141,9 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
     if container_is_started program_y; then
         echo "Run tests for program_y container"
         dockercompose_cmd exec -T -u $(id -u) program_y python /src/test.py
+
+        echo "Run lets_chat tests for program_y container"
+        dockercompose_cmd exec -T -u $(id -u) program_y python /src/test_lets_chat.py
     fi
 
     if container_is_started program_y_dangerous; then
