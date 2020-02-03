@@ -10,9 +10,9 @@ services:
       WAIT_HOSTS: "cobotqa:8001, cobot_topics:8003, cobot_offensiveness:8005,
         cobot_dialogact:8006, program_y:8008, sentseg:8011, convers_evaluation_selector:8009, personality_catcher:8010,
         intent_responder:8012, intent_catcher:8014, cobot_nounphrases:8016, blacklisted_words:8018, dummy_skill:8019,
-        toxic_classification:8013, sentrewrite:8017, ner:8021,  program_y_dangerous:8022, movie_skill:8023,  
-        sentiment_classification:8024, attitude_classification:8025, news_skill:8027, tfidf_retrieval:8028, 
-        convert_reddit:8029, personal_info_skill:8030, asr:8031, book_skill:8032, misheard_asr:8033, 
+        toxic_classification:8013, sentrewrite:8017, ner:8021,  program_y_dangerous:8022, movie_skill:8023,
+        sentiment_classification:8024, attitude_classification:8025, news_skill:8027, tfidf_retrieval:8028,
+        convert_reddit:8029, personal_info_skill:8030, asr:8031, book_skill:8032, misheard_asr:8033,
         christmas_new_year_skill:8036, weather_skill:8037, alice:8000, eliza:8047"
       WAIT_HOSTS_TIMEOUT: 480
     deploy:
@@ -21,6 +21,7 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+          - node.labels.is_agent == true
   cobotqa:
     build:
       context: ./skills/CoBotQA/
@@ -127,6 +128,7 @@ services:
         skillconfig: annotators/DeepPavlovToxicClassification/toxic_classification.json
         skillhost: 0.0.0.0
         skillport: 8013
+        skilldir: annotators/DeepPavlovToxicClassification/
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -144,6 +146,7 @@ services:
         skillconfig: annotators/DeepPavlovSentimentClassification/sentiment_sst_conv_bert.json
         skillhost: 0.0.0.0
         skillport: 8024
+        skilldir: annotators/DeepPavlovSentimentClassification/
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -277,6 +280,7 @@ services:
         skillconfig: annotators/DeepPavlovAttitudeClassification/amazon_reviews_bert.json
         skillhost: 0.0.0.0
         skillport: 8025
+        skilldir: annotators/DeepPavlovAttitudeClassification/
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -300,7 +304,7 @@ services:
   eliza:
     build:
       context: ./skills/eliza/
-    command: gunicorn --workers=4 server:app -b 0.0.0.0:8047
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8047
     volumes: []
     deploy:
       mode: replicated
@@ -579,6 +583,7 @@ services:
         skillconfig: annotators/DeepPavlovEmotionClassification/emo_bert.json
         skillhost: 0.0.0.0
         skillport: 8038
+        skilldir: annotators/DeepPavlovEmotionClassification/
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -602,4 +607,3 @@ services:
         constraints:
           - node.labels.with_gpu != true
 version: '3.7'
-

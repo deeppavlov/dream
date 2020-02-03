@@ -10,7 +10,7 @@ loggers:
     propagate: true
     handlers: ['file_service_logger']
   workflow_logger:
-    level: 'INFO'
+    level: 'WARNING'
     propagate: true
     handlers: ['file_workflow_logger']
 formatters:
@@ -20,26 +20,26 @@ formatters:
 handlers:
   file:
     class: 'logging.FileHandler'
-    level: 'DEBUG'
+    level: 'INFO'
     formatter: 'default'
     filename: '~/dp_agent.log'
   stdout:
     class: 'logging.StreamHandler'
-    level: 'DEBUG'
+    level: 'INFO'
     formatter: 'default'
     stream: 'ext://sys.stdout'
   stderr:
     class: 'logging.StreamHandler'
-    level: 'DEBUG'
+    level: 'INFO'
     formatter: 'default'
     stream: 'ext://sys.stderr'
   file_service_logger:
     class: 'logging.FileHandler'
-    level: 'DEBUG'
+    level: 'INFO'
     formatter: 'default'
     filename: 'service.log'
   file_workflow_logger:
     class: 'logging.FileHandler'
-    level: 'DEBUG'
+    level: 'INFO'
     formatter: 'default'
     filename: 'workflow.log'
