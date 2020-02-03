@@ -102,7 +102,6 @@
                 },
                 "dialog_formatter": "last_utt_sentseg_segments_dialog",
                 "response_formatter": "simple_formatter_service",
-                "previous_services": ["annotators_1"],
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators_1.sentseg"]
             },
@@ -110,7 +109,6 @@
                 "connector": "connectors.ner",
                 "dialog_formatter": "ner_formatter_dialog",
                 "response_formatter": "simple_formatter_service",
-                "previous_services": ["annotators_1"],
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators_1.sentseg"]
             },
@@ -121,7 +119,6 @@
                 },
                 "dialog_formatter": "last_utt_sentseg_segments_dialog",
                 "response_formatter": "cobot_classifiers_formatter_service",
-                "previous_services": ["annotators_1"],
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators_1.sentseg"]
             },
@@ -132,7 +129,6 @@
                 },
                 "dialog_formatter": "cobot_formatter_dialog",
                 "response_formatter": "cobot_dialogact_formatter_service",
-                "previous_services": ["annotators_1"],
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators_1.sentseg"]
             },
@@ -143,7 +139,6 @@
                 },
                 "dialog_formatter": "utt_sentseg_punct_dialog",
                 "response_formatter": "simple_formatter_service",
-                "previous_services": ["annotators_1"],
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators_1.sentseg"]
             },
@@ -165,7 +160,6 @@
                 },
                 "dialog_formatter": "last_utt_sentseg_punct_dialog",
                 "response_formatter": "attitude_formatter_service",
-                "previous_services": ["annotators_1"],
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators_1.sentseg"]
             }
@@ -175,7 +169,6 @@
                 "connector": "connectors.sentrewrite",
                 "dialog_formatter": "sent_rewrite_formatter_dialog",
                 "response_formatter": "simple_formatter_service",
-                "previous_services": ["annotators_2"],
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators_1.sentseg", "annotators_2.ner"]
             }
