@@ -467,6 +467,16 @@
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
             },
+            "superbowl_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://superbowl_skill:8051/respond"
+                },
+                "dialog_formatter": "last_utt_dialog",
+                "response_formatter": "base_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
+            },
             "weather_skill": {
                 "connector": {
                     "protocol": "http",

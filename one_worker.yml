@@ -61,6 +61,8 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8030
   christmas_new_year_skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8036
+  superbowl_skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8051
   weather_skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8037
   emotion_classification:

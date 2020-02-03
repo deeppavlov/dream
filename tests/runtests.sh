@@ -151,6 +151,11 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
         dockercompose_cmd exec -T -u $(id -u) program_y_dangerous python /src/test.py
     fi
 
+    if container_is_started superbowl_skill; then
+        echo "Run tests for superbowl_skill container"
+        dockercompose_cmd exec -T -u $(id -u) superbowl_skill python /src/test_server.py
+    fi
+
     if container_is_started eliza; then
         echo "Run tests for eliza container"
         dockercompose_cmd exec -T -u $(id -u) eliza python /src/test_server.py
