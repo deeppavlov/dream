@@ -114,17 +114,17 @@ def respond():
             cands += [np.random.choice(facts_same_nps) + ". What do you think about it?"]
             confs += [0.7]
             attrs += [{"type": "nounphrase_fact"}]
-        else:
-            logger.info("No special nounphrases for facts. Return fact of the same topic.")
-            facts_with_the_same_topics = FACTS.loc[np.any([FACTS["cobot_topic"] == t
-                                                           for t in curr_topics], axis=0), "title"]
-            if len(facts_with_the_same_topics) == 0:
-                facts_with_the_same_topics = FACTS.loc[np.any([FACTS["cobot_topic"] == t
-                                                               for t in ["Phatic"]], axis=0), "title"]
-            cands += ["Listen what I found on Reddit: " + np.random.choice(
-                facts_with_the_same_topics) + ". What do you think about it?"]
-            confs += [0.6]
-            attrs += [{"type": "topic_fact"}]
+        # else:
+        #     logger.info("No special nounphrases for facts. Return fact of the same topic.")
+        #     facts_with_the_same_topics = FACTS.loc[np.any([FACTS["cobot_topic"] == t
+        #                                                    for t in curr_topics], axis=0), "title"]
+        #     if len(facts_with_the_same_topics) == 0:
+        #         facts_with_the_same_topics = FACTS.loc[np.any([FACTS["cobot_topic"] == t
+        #                                                        for t in ["Phatic"]], axis=0), "title"]
+        #     cands += ["Listen what I found on Reddit: " + np.random.choice(
+        #         facts_with_the_same_topics) + ". What do you think about it?"]
+        #     confs += [0.6]
+        #     attrs += [{"type": "topic_fact"}]
 
         final_responses.append(cands)
         final_confidences.append(confs)
