@@ -251,8 +251,8 @@
             },
             "dummy_skill": {
                 "connector": {
-                    "protocol": "http",
-                    "url": "http://dummy_skill:8019/respond"
+                    "protocol": "python",
+                    "class_name": "skills.dummy_skill.connector:DummySkillConnector"
                 },
                 "dialog_formatter": "utt_sentrewrite_modified_last_dialog",
                 "response_formatter": "cobot_qa_formatter_service",

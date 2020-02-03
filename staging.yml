@@ -59,10 +59,6 @@ services:
     image: ${DOCKER_REGISTRY}/blacklisted_words:${VERSION}
     env_file:
       - ${ENV_FILE}
-  dummy_skill:
-    image: ${DOCKER_REGISTRY}/dummy_skill:${VERSION}
-    env_file:
-      - ${ENV_FILE}
   program_y_dangerous:
     image: ${DOCKER_REGISTRY}/program_y_dangerous:${VERSION}
     env_file:
