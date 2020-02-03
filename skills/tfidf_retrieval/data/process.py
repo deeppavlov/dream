@@ -85,7 +85,10 @@ def check(human_phrase, vectorizer, vectorized_phrases, phrase_list, top_best=1)
                       "hi, this is an alexa prize socialbot. yeah, let's chat! what do you want to talk about?",
                       "you are first. tell me something about positronic.",
                       "i'm made by amazon.",
-                      "favorite member of mouse rat?"]
+                      "favorite member of mouse rat?",
+                      "don't worry, our conversation is confidential.",
+                      "i appreciate your candor",
+                      "i imagine that's good for you."]
     misheard_phrases = ["I misheard you",
                         "Could you repeat that, please?",
                         "Could you say that again, please?",
