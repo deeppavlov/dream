@@ -65,7 +65,7 @@ class WorkflowManager:
     def get_services_status(self, dialog_id: str) -> List:
         workflow_record = self.workflow_records.get(dialog_id, None)
         if not workflow_record:
-            return None, None, None
+            return set(), set(), set()
         done = set()
         waiting = set()
         skipped = set()

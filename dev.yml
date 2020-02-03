@@ -110,12 +110,6 @@ services:
       - "./annotators/BlacklistedWordsDetector:/src"
     ports:
       - 8018:8018
-  dummy_skill:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/dummy_skill:/src"
-    ports:
-      - 8019:8019
   program_y_dangerous:
     env_file: [.env.dev]
     volumes:
