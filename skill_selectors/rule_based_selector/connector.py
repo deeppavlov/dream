@@ -167,6 +167,7 @@ class RuleBasedSkillSelectorConnector:
             skills_for_uttr.append("alice")
             skills_for_uttr.append("eliza")
             skills_for_uttr.append("christmas_new_year_skill")
+            skills_for_uttr.append("superbowl_skill")
             skills_for_uttr.append("personal_info_skill")
 
             if len(dialog["utterances"]) > 7:

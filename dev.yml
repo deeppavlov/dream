@@ -271,6 +271,12 @@ services:
       - "./skills/christmas_new_year_skill:/src"
     ports:
       - 8036:8036
+  superbowl_skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/superbowl_skill:/src"
+    ports:
+      - 8051:8051
   weather_skill:
     env_file: [.env.dev]
     volumes:
