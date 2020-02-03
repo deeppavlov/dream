@@ -21,7 +21,7 @@
       },
       {
         "class_name": "sentiment_classification",
-        "n_classes": 5,
+        "n_classes": 4,
         "return_probas": true,
         "one_hot_labels": true,
         "bert_config_file": "{MODEL_PATH}/bert_config.json",
@@ -54,14 +54,14 @@
       "ROOT_PATH": "~/deeppavlov",
       "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
       "MODELS_PATH": "{ROOT_PATH}/models",
-      "MODEL_PATH": "{MODELS_PATH}/classifiers/sentiment_yelp_bert_v2"
+      "MODEL_PATH": "{MODELS_PATH}/classifiers/sentiment_sst_bert_v2"
     },
     "labels": {
       "server_utils": "SentimentClassificationModel"
     },
     "download": [
       {
-        "url": "http://files.deeppavlov.ai/deeppavlov_data/classifiers/sentiment_yelp_bert_v2.tar.gz",
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/classifiers/sentiment_sst_bert_v2.tar.gz",
         "subdir": "{MODELS_PATH}/classifiers"
       }
     ]

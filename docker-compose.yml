@@ -141,7 +141,7 @@ services:
     build:
       args:
         skill_endpoint: sentiment_annotations
-        skillconfig: annotators/DeepPavlovSentimentClassification/sentiment_yelp_conv_bert.json
+        skillconfig: annotators/DeepPavlovSentimentClassification/sentiment_sst_conv_bert.json
         skillhost: 0.0.0.0
         skillport: 8024
       context: ./
