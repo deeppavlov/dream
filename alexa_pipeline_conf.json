@@ -103,14 +103,16 @@
                 "dialog_formatter": "last_utt_sentseg_segments_dialog",
                 "response_formatter": "simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators_1.sentseg"]
+                "required_previous_services": ["annotators_1.sentseg"],
+                "previous_services": ["annotators_1"]
             },
             "ner": {
                 "connector": "connectors.ner",
                 "dialog_formatter": "ner_formatter_dialog",
                 "response_formatter": "simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators_1.sentseg"]
+                "required_previous_services": ["annotators_1.sentseg"],
+                "previous_services": ["annotators_1"]
             },
             "cobot_topics": {
                 "connector": {
@@ -120,7 +122,8 @@
                 "dialog_formatter": "last_utt_sentseg_segments_dialog",
                 "response_formatter": "cobot_classifiers_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators_1.sentseg"]
+                "required_previous_services": ["annotators_1.sentseg"],
+                "previous_services": ["annotators_1"]
             },
             "cobot_dialogact": {
                 "connector": {
@@ -130,7 +133,8 @@
                 "dialog_formatter": "cobot_formatter_dialog",
                 "response_formatter": "cobot_dialogact_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators_1.sentseg"]
+                "required_previous_services": ["annotators_1.sentseg"],
+                "previous_services": ["annotators_1"]
             },
             "cobot_nounphrases": {
                 "connector": {
@@ -140,7 +144,8 @@
                 "dialog_formatter": "utt_sentseg_punct_dialog",
                 "response_formatter": "simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators_1.sentseg"]
+                "required_previous_services": ["annotators_1.sentseg"],
+                "previous_services": ["annotators_1"]
             },
             "cobot_offensiveness": {
                 "connector": {
@@ -149,9 +154,9 @@
                 },
                 "dialog_formatter": "last_utt_sentseg_segments_dialog",
                 "response_formatter": "cobot_classifiers_formatter_service",
-                "previous_services": ["annotators_1"],
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators_1.sentseg"]
+                "required_previous_services": ["annotators_1.sentseg"],
+                "previous_services": ["annotators_1"]
             },
             "attitude_classification": {
                 "connector": {
@@ -161,7 +166,8 @@
                 "dialog_formatter": "last_utt_sentseg_punct_dialog",
                 "response_formatter": "attitude_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators_1.sentseg"]
+                "required_previous_services": ["annotators_1.sentseg"],
+                "previous_services": ["annotators_1"]
             }
         },
         "annotators_3": {
@@ -170,7 +176,8 @@
                 "dialog_formatter": "sent_rewrite_formatter_dialog",
                 "response_formatter": "simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators_1.sentseg", "annotators_2.ner"]
+                "required_previous_services": ["annotators_1.sentseg", "annotators_2.ner"],
+                "previous_services": ["annotators_2"]
             }
         },
         "skill_selectors": {
