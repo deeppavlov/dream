@@ -69,10 +69,10 @@ class RandomTopicResponder:
 
     def get_random_text(self, topics):
         available_topics = self.topics.intersection(set(topics))
-        selected_topic = choice(list(available_topics))
-        if not selected_topic:
+        if not available_topics:
             return ''
 
+        selected_topic = choice(list(available_topics))
         result = self.topic_phrases[selected_topic][self.current_index[selected_topic]]
 
         self.current_index[selected_topic] += 1

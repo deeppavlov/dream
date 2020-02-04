@@ -9,8 +9,9 @@ from core.workflow_manager import WorkflowManager
 import logging
 from os import getenv
 import sentry_sdk
+from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 
-sentry_sdk.init(getenv('SENTRY_DSN'))
+sentry_sdk.init(dsn=getenv('SENTRY_DSN'), integrations=[AioHttpIntegration()])
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)

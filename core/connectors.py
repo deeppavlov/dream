@@ -6,10 +6,11 @@ from typing import Any, Callable, Dict, List
 
 import aiohttp
 import sentry_sdk
+from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 
 from core.transport.base import ServiceGatewayConnectorBase
 
-sentry_sdk.init(getenv('SENTRY_DSN'))
+sentry_sdk.init(dsn=getenv('SENTRY_DSN'), integrations=[AioHttpIntegration()])
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
