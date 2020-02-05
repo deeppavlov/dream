@@ -277,4 +277,8 @@ services:
       - "./skills/weather_skill:/src"
     ports:
       - 8037:8037
+  comet:
+    env_file: [.env.dev]
+    ports:
+      - 8053:8053
 version: "3.7"
