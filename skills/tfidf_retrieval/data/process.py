@@ -115,11 +115,11 @@ def check(human_phrase, vectorizer, vectorized_phrases, phrase_list, top_best=1)
             score = score / 1.5
         index = multiply_result.indices[ind]
         bot_answer = phrase_list[human_phrases[index]]
+        if bot_answer == 'NO_ANSWER':
+            score = 0
         for sign in '!#$%&*+.,:;<>=?@[]^_{}|':
             bot_answer = bot_answer.replace(' ' + sign, sign)
         bot_answer = bot_answer.replace('  ', ' ').lower().strip()
-        if bot_answer == 'NO_ANSWER':
-            score = 0
         cond1 = all([banned_phrase not in bot_answer for banned_phrase in banned_phrases + misheard_phrases])
         cond2 = len(human_phrase) >= 7 and 'alexa play' not in human_phrase.lower()
         if cond1 and cond2:

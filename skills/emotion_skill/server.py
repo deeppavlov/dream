@@ -22,6 +22,7 @@ logger.info("Scenario done")
 
 @app.route("/respond", methods=['POST'])
 def respond():
+    logger.info('I am working')
     st_time = time.time()
     dialogs = request.json['dialogs']
 

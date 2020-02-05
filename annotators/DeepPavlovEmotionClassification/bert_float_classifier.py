@@ -38,11 +38,7 @@ class BertFloatClassifierModel(BertClassifierModel):
 
     """
 
-    all_columns = ['furious', 'surprised', 'excited', 'content', 'prepared', 'angry',
-                   'disappointed', 'nostalgic', 'lonely', 'anticipating', 'impressed', 'devastated',
-                   'hopeful', 'faithful', 'jealous', 'annoyed', 'afraid', 'terrified', 'sentimental', 'trusting',
-                   'sad', 'confident', 'joyful', 'apprehensive', 'disgusted', 'guilty', 'caring',
-                   'grateful', 'anxious', 'embarrassed', 'proud', 'ashamed']
+    all_columns = ['anger', 'fear', 'joy', 'love', 'sadness', 'surprise', 'neutral']
     used_columns = all_columns  # ["neutral", "very_positive", "very_negative"]
 
     # map2base_sentiment = []  # {"neutral": "neutral", "very_positive": "positive", "very_negative": "negative"}

@@ -147,7 +147,7 @@ class RuleBasedSkillSelectorConnector:
         about_news = (self.news_cobot_topics & cobot_topics) or re.search(
             news_re_expr, reply
         )
-
+        emotions = dialog['utterances'][-1]['annotations']['emotion_classification']['text']
         if "/new_persona" in dialog["utterances"][-1]["text"]:
             # process /new_persona command
             skills_for_uttr.append("personality_catcher")  # TODO: rm crutch of personality_catcher
@@ -210,6 +210,13 @@ class RuleBasedSkillSelectorConnector:
 
             if about_news:
                 skills_for_uttr.append("news_skill")
+
+            emo_prob_threshold = 0.8  # to check if any emotion has at least this prob
+            for emotion, prob in emotions.items():
+                if prob == max(emotions.values()):
+                    found_emotion, found_prob = emotion, prob
+            if found_emotion != 'neutral' and found_prob > emo_prob_threshold:
+                skills_for_uttr.append('emotion_skill')
 
             for hyp in prev_user_uttr_hyp:
                 # here we just forcibly add skills which return `can_continue` and it's not `no`
