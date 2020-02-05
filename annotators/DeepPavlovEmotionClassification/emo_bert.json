@@ -11,7 +11,7 @@
         "class_name": "bert_preprocessor",
         "vocab_file": "{MODEL_PATH}/vocab.txt",
         "do_lower_case": false,
-        "max_seq_length": 256,
+        "max_seq_length": 32,
         "in": [
           "sentences"
         ],
@@ -21,7 +21,7 @@
       },
       {
         "class_name": "emotion_classification",
-        "n_classes": 32,
+        "n_classes": 7,
         "return_probas": true,
         "one_hot_labels": true,
         "bert_config_file": "{MODEL_PATH}/bert_config.json",
@@ -61,7 +61,7 @@
     },
     "download": [
       {
-        "url": "http://files.deeppavlov.ai/alexaprize_data/emo_bert.tar.gz",
+        "url": "http://files.deeppavlov.ai/alexaprize_data/emo_bert3.tar.gz",
         "subdir": "{MODELS_PATH}/classifiers"
       }
     ]
