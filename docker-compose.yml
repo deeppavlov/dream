@@ -13,7 +13,7 @@ services:
         toxic_classification:8013, sentrewrite:8017, ner:8021,  program_y_dangerous:8022, movie_skill:8023,
         sentiment_classification:8024, attitude_classification:8025, news_skill:8027, tfidf_retrieval:8028,
         convert_reddit:8029, personal_info_skill:8030, asr:8031, book_skill:8032, misheard_asr:8033,
-        christmas_new_year_skill:8036, weather_skill:8037, alice:8000, eliza:8047"
+        christmas_new_year_skill:8036, weather_skill:8037, alice:8000, eliza:8047, comet:8053"
       WAIT_HOSTS_TIMEOUT: 480
     deploy:
       mode: replicated
@@ -595,4 +595,17 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+  comet:
+    build:
+      context: ./annotators/COMeT/
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8053
+    volumes: []
+    environment: 
+      DEVICE: gpu_0
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu == true
 version: '3.7'
