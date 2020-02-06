@@ -98,6 +98,12 @@ def main():
     )
     model.save(args.model_path)
 
+    necessary_data = {}
+    for key in data.keys():
+        data[key].pop("embeddings")
+        necessary_data[key] = data[key]
+    json.dump(necessary_data, open('./intent_data.json', 'w'))
+
 
 if __name__ == '__main__':
     main()

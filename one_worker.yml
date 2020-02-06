@@ -1,6 +1,4 @@
 services:
-  rule_based_selector:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8002
   cobotqa:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8001 -t 15
   cobot_topics:
@@ -9,10 +7,6 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8005 -t 15
   cobot_dialogact:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8006 -t 15
-  transfertransfo:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8007 -t 60
-  retrieval_chitchat:
-    command: uvicorn server:app --host 0.0.0.0 --port 8015
   personality_catcher:
     command: uvicorn server:app --host 0.0.0.0 --port 8010
   sentseg:
@@ -27,8 +21,6 @@ services:
     command: gunicorn --workers=1 --name=catcher --bind 0.0.0.0:8014 --timeout=100 server:app
   blacklisted_words:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8018
-  dummy_skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8019
   cobot_nounphrases:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8016
   movie_skill:
@@ -37,16 +29,44 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8021 -t 100
   alice:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8000
+  eliza:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8047
   tfidf_retrieval:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8028
+  book_tfidf_retrieval:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8039
+  entertainment_tfidf_retrieval:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8040
+  fashion_tfidf_retrieval:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8041
+  movie_tfidf_retrieval:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8042
   music_tfidf_retrieval:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8034
+  politics_tfidf_retrieval:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8043
+  science_technology_tfidf_retrieval:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8044
+  sport_tfidf_retrieval:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8045
+  animals_tfidf_retrieval:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8050
   convert_reddit:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8029 -t 60
+  convert_reddit_with_personality:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8048 -t 60
   personal_info_skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8030
   christmas_new_year_skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8036
+  superbowl_skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8051
   weather_skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8037
+  emotion_classification:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8038
+  emotion_skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8049
+  news_skill:
+    command: bash -c "python updater.py | gunicorn --workers=1 server:app -b 0.0.0.0:8027 -t 300"
 version: '3.7'

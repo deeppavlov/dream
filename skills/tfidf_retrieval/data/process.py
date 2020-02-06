@@ -22,7 +22,9 @@ def preprocess(phrase):
 
 
 def get_vectorizer(vectorizer_file='new_vectorizer_2.zip'):
-    if "new_vectorizer.pkl" not in os.listdir(os.getcwd()):
+    cond1 = "new_vectorizer.pkl" not in os.listdir(os.getcwd())
+    cond2 = os.path.exists('new_vectorizer.pkl') and os.path.getsize('new_vectorizer.pkl') < 8412928
+    if cond1 or cond2:
         with zipfile.ZipFile(vectorizer_file, "r") as zip_ref:
             zip_ref.extractall(os.getcwd())
     vectorizer = cPickle.load(open("new_vectorizer.pkl", "rb"))
@@ -52,7 +54,7 @@ def create_phraselist(dialog_list, donotknow_answers, todel_userphrases, banned_
     bad_total_count = 0
     for dialog in dialog_list:
         utterances = dialog['utterances']
-        for i in range(0, len(utterances) - 1, 2):
+        for i in range(0, len(utterances) - 1, 1):
             human_phrase = preprocess(utterances[i])
             bot_phrase = preprocess(utterances[i + 1])
             no_wrongwords = all([banned_word not in bot_phrase for banned_word in banned_words])
@@ -62,7 +64,7 @@ def create_phraselist(dialog_list, donotknow_answers, todel_userphrases, banned_
     if bad_dialog_list is not None:
         for dialog in bad_dialog_list:
             utterances = dialog['utterances']
-            for i in range(0, len(utterances) - 1, 2):
+            for i in range(0, len(utterances) - 1, 1):
                 human_phrase = utterances[i]
                 bot_phrase = utterances[i + 1]
                 no_wrongwords = all([banned_word not in bot_phrase for banned_word in banned_words])
@@ -78,11 +80,15 @@ def create_phraselist(dialog_list, donotknow_answers, todel_userphrases, banned_
     return phrase_list
 
 
-def check(human_phrase, vectorizer, phrase_list, top_best=2):
+def check(human_phrase, vectorizer, vectorized_phrases, phrase_list, top_best=1):
     banned_phrases = ['where are you from?',
                       "hi, this is an alexa prize socialbot. yeah, let's chat! what do you want to talk about?",
                       "you are first. tell me something about positronic.",
-                      "i'm made by amazon."]
+                      "i'm made by amazon.",
+                      "favorite member of mouse rat?",
+                      "don't worry, our conversation is confidential.",
+                      "i appreciate your candor",
+                      "i imagine that's good for you."]
     misheard_phrases = ["I misheard you",
                         "Could you repeat that, please?",
                         "Could you say that again, please?",
@@ -91,7 +97,6 @@ def check(human_phrase, vectorizer, phrase_list, top_best=2):
                         "What is it that you'd like to chat about?"]
     human_phrase = preprocess(human_phrase)
     human_phrases = list(phrase_list.keys())
-    vectorized_phrases = vectorizer.transform(human_phrases)
     assert vectorized_phrases.shape[0] > 0
     transformed_phrase = vectorizer.transform([human_phrase.lower()])
     multiply_result = (transformed_phrase * vectorized_phrases.transpose())
@@ -110,10 +115,11 @@ def check(human_phrase, vectorizer, phrase_list, top_best=2):
             score = score / 1.5
         index = multiply_result.indices[ind]
         bot_answer = phrase_list[human_phrases[index]]
+        if bot_answer == 'NO_ANSWER':
+            score = 0
         for sign in '!#$%&*+.,:;<>=?@[]^_{}|':
             bot_answer = bot_answer.replace(' ' + sign, sign)
         bot_answer = bot_answer.replace('  ', ' ').lower().strip()
-        assert "I didn't get your homeland." not in bot_answer
         cond1 = all([banned_phrase not in bot_answer for banned_phrase in banned_phrases + misheard_phrases])
         cond2 = len(human_phrase) >= 7 and 'alexa play' not in human_phrase.lower()
         if cond1 and cond2:

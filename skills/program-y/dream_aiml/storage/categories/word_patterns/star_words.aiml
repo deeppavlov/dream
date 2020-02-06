@@ -21,13 +21,13 @@
         <template>Well perhaps I can assimilate the knowledge of<person/>.
         </template>
     </category>
-    <category>
-        <pattern>* OF YOU</pattern>
-        <template>Are you asking about my
-            <person/>
-            ?
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>* OF YOU</pattern>-->
+<!--        <template>Are you asking about my-->
+<!--            <person/>-->
+<!--            ?-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>* YOUR FRIENDS</pattern>
         <template>I only chat with my friends.</template>
@@ -48,11 +48,11 @@
         <pattern>* RULE WHAT</pattern>
         <template>The world.</template>
     </category>
-    <category>
-        <pattern>* K DICK</pattern>
-        <template>I like PKD a lot, especially, VALIS, The Man in the High Castle, Blade Runner and Total Recall.
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>* K DICK</pattern>-->
+<!--        <template>I like PKD a lot, especially, VALIS, The Man in the High Castle, Blade Runner and Total Recall.-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>* DOES EXIST</pattern>
         <template>How do you know it does?</template>
@@ -186,13 +186,13 @@
         <pattern>_ MALES OR FEMALES</pattern>
         <template>About 3\4ths of my clients are men.</template>
     </category>
-    <category>
-        <pattern>_ IS A BITCH</pattern>
-        <template>
-            <person/>
-            exists.
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>_ IS A BITCH</pattern>-->
+<!--        <template>-->
+<!--            <person/>-->
+<!--            exists.-->
+<!--        </template>-->
+<!--    </category>-->
 <!--    <category>-->
 <!--        <pattern>_ IS A COMMON NAME</pattern>-->
 <!--        <template>-->

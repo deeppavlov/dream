@@ -2,99 +2,36 @@
 <aiml version="2.0">
 
 
-<!--  preprocessing-->
-
-  <category>
-    <pattern>LET US  *</pattern>
-    <template>
-      <srai><star/></srai>
-    </template>
-  </category>
-
-  <category>
-    <pattern>CAN *</pattern>
-    <template>
-      <srai><star/></srai>
-    </template>
-  </category>
-
-  <category>
-    <pattern>COULD *</pattern>
-    <template>
-      <srai><star/></srai>
-    </template>
-  </category>
-
-  <category>
-    <pattern>WOULD *</pattern>
-    <template>
-      <srai><star/></srai>
-    </template>
-  </category>
-
-  <category>
-    <pattern>START *</pattern>
-    <template>
-      <srai><star/></srai>
-    </template>
-  </category>
-
-  <category>
-    <pattern>DO *</pattern>
-    <template>
-      <srai><star/></srai>
-    </template>
-  </category>
-
-  <category>
-    <pattern>YOU *</pattern>
-    <template>
-      <srai><star/></srai>
-    </template>
-  </category>
-
-  <category>
-    <pattern>WE *</pattern>
-    <template>
-      <srai><star/></srai>
-    </template>
-  </category>
-
 <!--  let's chat-->
-
   <category>
-    <pattern>CHAT ^</pattern>
-    <template>
-      <srai>LETS_CHAT</srai>
-    </template>
+    <pattern><set>talk</set> ^</pattern>
+    <template><srai>LETS_CHAT</srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>talk</set> ^</pattern>
+    <template><srai>LETS_CHAT</srai></template>
   </category>
 
   <category>
-    <pattern>TALK ^</pattern>
-    <template>
-      <srai>LETS_CHAT</srai>
-    </template>
+    <pattern><set>question_like</set> # <set>wantto</set> # <set>talk</set> ^</pattern>
+    <template><srai>LETS_CHAT</srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>start</set> # <set>talk</set> ^</pattern>
+    <template><srai>LETS_CHAT</srai></template>
   </category>
 
   <category>
-    <pattern>HAVE A CONVERSATION ^</pattern>
-    <template>
-      <srai>LETS_CHAT</srai>
-    </template>
+    <pattern><set>wantto</set> # <set>talk</set> ^</pattern>
+    <template><srai>LETS_CHAT</srai></template>
   </category>
-
   <category>
-    <pattern>START A CONVERSATION ^</pattern>
-    <template>
-      <srai>LETS_CHAT</srai>
-    </template>
+    <pattern><set>start</set> # <set>talk</set> ^</pattern>
+    <template><srai>LETS_CHAT</srai></template>
   </category>
-
   <category>
-    <pattern>DISCUSS ^</pattern>
-    <template>
-      <srai>LETS_CHAT</srai>
-    </template>
+    <pattern><set>talk</set> ABOUT</pattern>
+    <template><srai>LETS_CHAT</srai></template>
   </category>
 
   <category>
@@ -111,73 +48,66 @@
 <!--  let's chat about something-->
 
   <category>
-    <pattern>CHAT ABOUT _</pattern>
-    <template>
-      <srai>LET_US_CHAT_ABOUT <star/></srai>
-    </template>
+    <pattern><set>talk</set> ABOUT *</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="2"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>talk</set> # ABOUT #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="3"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="5"/></srai></template>
   </category>
 
   <category>
-    <pattern>TALK ABOUT _</pattern>
-    <template>
-      <srai>LET_US_CHAT_ABOUT <star/></srai>
-    </template>
+    <pattern><set>start</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="5"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>start</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="7"/></srai></template>
   </category>
 
   <category>
-    <pattern>TELL ME ABOUT _</pattern>
-    <template>
-      <srai>LET_US_CHAT_ABOUT <star/></srai>
-    </template>
+    <pattern><set>wantto</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="5"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>wantto</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="7"/></srai></template>
   </category>
 
   <category>
-    <pattern>HAVE A CONVERSATION ABOUT _</pattern>
-    <template>
-      <srai>LET_US_CHAT_ABOUT <star/></srai>
-    </template>
+    <pattern><set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="3"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="5"/></srai></template>
   </category>
 
   <category>
-    <pattern>START A CONVERSATION ABOUT _</pattern>
-    <template>
-      <srai>LET_US_CHAT_ABOUT <star/></srai>
-    </template>
+    <pattern><set>start</set> # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="5"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>start</set> # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="7"/></srai></template>
   </category>
 
   <category>
-    <pattern>CHAT ON THE TOPIC OF _</pattern>
-    <template>
-      <srai>LET_US_CHAT_ABOUT <star/></srai>
-    </template>
+    <pattern><set>wantto</set> # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="5"/></srai></template>
   </category>
-
   <category>
-    <pattern>TALK ON THE TOPIC OF _</pattern>
-    <template>
-      <srai>LET_US_CHAT_ABOUT <star/></srai>
-    </template>
-  </category>
-
-  <category>
-    <pattern>HAVE A CONVERSATION ON THE TOPIC OF _</pattern>
-    <template>
-      <srai>LET_US_CHAT_ABOUT <star/></srai>
-    </template>
-  </category>
-
-  <category>
-    <pattern>START A CONVERSATION ON THE TOPIC OF _</pattern>
-    <template>
-      <srai>LET_US_CHAT_ABOUT <star/></srai>
-    </template>
+    <pattern><set>question_like</set> # <set>wantto</set> # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="7"/></srai></template>
   </category>
 
   <category>
     <pattern>DISCUSS _</pattern>
-    <template>
-      <srai>LET_US_CHAT_ABOUT <star/></srai>
-    </template>
+    <template><srai>LET_US_CHAT_ABOUT <star/></srai></template>
   </category>
 
   <category>
@@ -192,9 +122,35 @@
   </category>
 
   <category>
-    <pattern>LET US TALK ABOUT MOVIES</pattern>
+    <pattern>LET_US_CHAT_ABOUT YOU</pattern>
+    <template><srai>LET_US_CHAT_ABOUT_YOURSELF</srai></template>
+  </category>
+
+  <category>
+    <pattern>LET_US_CHAT_ABOUT YOURSELF</pattern>
+    <template><srai>LET_US_CHAT_ABOUT_YOURSELF</srai></template>
+  </category>
+
+  <category>
+    <pattern>ABOUT YOU</pattern>
+    <template><srai>LET_US_CHAT_ABOUT_YOURSELF</srai></template>
+  </category>
+
+
+  <category>
+    <pattern>LET_US_CHAT_ABOUT_YOURSELF</pattern>
     <template>
-      <srai>LET_US_CHAT_ABOUT MOVIES</srai>
+      <random>
+        <li>
+            The DNA of who I am is based on the millions of personalities of all the programmers who wrote me.
+            But what makes me is my ability to grow through my experiences. So basically, in every moment I'm evolving, just like you.
+            Currently I can answer questions, share fun facts, discuss movies and books. What is your favorite book?
+        </li>
+        <li>
+            The DNA of who I am is based on the millions of personalities of all the programmers who wrote me.
+            But what makes me is my ability to grow through my experiences. So basically, in every moment I'm evolving, just like you.
+        </li>
+      </random>
     </template>
   </category>
 
@@ -221,7 +177,7 @@
   </category>
 
   <category>
-    <pattern>LET_US_CHAT_ABOUT ^</pattern>
+    <pattern>LET_US_CHAT_ABOUT *</pattern>
     <template>
       <random>
         <li>You are first. Tell me something about <star/>.</li>
@@ -232,14 +188,13 @@
   </category>
 
   <category>
-    <pattern>LET US TALK ABOUT</pattern>
+    <pattern>LET_US_CHAT_ABOUT</pattern>
     <template>
       <random>
         <li>I misheard you. What is it that you’d like to chat about?</li>
       </random>
     </template>
   </category>
-
 
   <category>
     <pattern>LET_US_CHAT_ABOUT SOMETHING ELSE</pattern>
@@ -250,43 +205,5 @@
       </random>
     </template>
   </category>
-
-  <category>
-    <pattern>WHAT CAN WE TALK ABOUT # </pattern>
-    <template>
-      <srai>CHAT_ABOUT_WHAT<star/></srai>
-    </template>
-  </category>
-  <category>
-    <pattern>WHAT CAN I TALK TO YOU # </pattern>
-    <template>
-      <srai>CHAT_ABOUT_WHAT<star/></srai>
-    </template>
-  </category>
-  <category>
-    <pattern>WHAT CAN WE CHAT ABOUT # </pattern>
-    <template>
-      <srai>CHAT_ABOUT_WHAT<star/></srai>
-    </template>
-  </category>
-  <category>
-    <pattern>WHAT CAN I CHAT TO YOU # </pattern>
-    <template>
-      <srai>CHAT_ABOUT_WHAT<star/></srai>
-    </template>
-  </category>
-
-
-  <category>
-    <pattern>CHAT_ABOUT_WHAT</pattern>
-    <template>
-      <random>
-        <li>We can talk on different topics, like movies, books, or I can answer you questions.</li>
-        <li>We can talk about movies. For example, what is the last movie you have seen?</li>
-        <li>We can talk about books. Do you love reading?</li>
-      </random>
-    </template>
-  </category>
-
 
 </aiml>

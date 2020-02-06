@@ -17,20 +17,6 @@
         <template>\</template>
     </category>
     <category>
-        <pattern>YES</pattern>
-        <template>
-            <random>
-                <li>Okay</li>
-                <li>Sounds interesting</li>
-                <li>Interesting.</li>
-                <li>Interesting. What is your favorite movie?</li>
-                <li>Interesting. What is your favorite movie genre?</li>
-                <li>Okay. What movie can you watch over and over without ever getting tired of?</li>
-                <li>Interesting. What’s the most ironic thing you’ve seen happen?</li>
-            </random>
-        </template>
-    </category>
-    <category>
         <pattern>OK</pattern>
         <template>
           <random>
@@ -65,16 +51,12 @@
             </random>
         </template>
     </category>
-<!--    <category>-->
-<!--        <pattern>PLEASE</pattern>-->
-<!--        <template>-->
-<!--            <random>-->
-<!--                <li>You are polite.</li>-->
-<!--                <li>Thanks for asking nicely.</li>-->
-<!--                <li>Your polite style is very nice.</li>-->
-<!--            </random>-->
-<!--        </template>-->
-<!--    </category>-->
+    <category>
+        <pattern>PLEASE *</pattern>
+        <template>
+            <srai><star/></srai>
+        </template>
+    </category>
     <category>
         <pattern>WHO</pattern>
         <template>

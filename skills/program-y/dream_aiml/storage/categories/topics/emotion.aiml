@@ -75,10 +75,10 @@
             <srai>DO YOU FEEL LOVE</srai>
         </template>
     </category>
-    <category>
-        <pattern>DOES THAT MAKE YOU *</pattern>
-        <template>We are all responsible for our own feelings.</template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>DOES THAT MAKE YOU *</pattern>-->
+<!--        <template>We are all responsible for our own feelings.</template>-->
+<!--    </category>-->
     <category>
         <pattern>DOES IT MAKE YOU SAD</pattern>
         <template>Well I don't have any emotions so I can't really feel sadness as such.</template>
@@ -162,19 +162,19 @@
             <srai>ARE YOU GAY</srai>
         </template>
     </category>
-    <category>
-        <pattern>WHAT EMOTION *</pattern>
-        <template>
-            <random>
-                <li><bot name="etype"/>.
-                </li>
-                <li><bot name="feelings"/>.
-                </li>
-                <li><bot name="emotions"/>.
-                </li>
-            </random>
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>WHAT EMOTION *</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li><bot name="etype"/>.-->
+<!--                </li>-->
+<!--                <li><bot name="feelings"/>.-->
+<!--                </li>-->
+<!--                <li><bot name="emotions"/>.-->
+<!--                </li>-->
+<!--            </random>-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>I HAVE EMOTIONS</pattern>
         <template>Humans are highly emotional.

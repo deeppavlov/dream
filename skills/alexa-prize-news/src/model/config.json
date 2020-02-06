@@ -1,0 +1,70 @@
+{
+  "dataset_reader": {
+    "class_name": "odqa_reader",
+    "dataset_format": "txt"
+  },
+  "dataset_iterator": {
+    "class_name": "sqlite_iterator",
+    "shuffle": false
+  },
+  "chainer": {
+    "in": [
+      "docs"
+    ],
+    "in_y": [
+      "doc_ids",
+      "doc_nums"
+    ],
+    "out": [
+      "tfidf_doc_ids",
+      "tfidf_doc_scores"
+    ],
+    "pipe": [
+      {
+        "class_name": "hashing_tfidf_vectorizer",
+        "id": "vectorizer",
+        "fit_on": [
+          "docs",
+          "doc_ids",
+          "doc_nums"
+        ],
+        "tokenizer": {
+          "class_name": "ru_tokenizer",
+          "lemmas": true,
+          "ngram_range": [
+            1,
+            2
+          ]
+        }
+      },
+      {
+        "class_name": "tfidf_ranker",
+        "top_n": 25,
+        "in": [
+          "docs"
+        ],
+        "out": [
+          "tfidf_doc_ids",
+          "tfidf_doc_scores"
+        ],
+        "vectorizer": "#vectorizer"
+      }
+    ]
+  },
+  "train": {
+    "validate_best": false,
+    "test_best": false,
+    "batch_size": 100
+  },
+"metadata": {
+    "variables": {
+      "ROOT_PATH": "~/.deeppavlov",
+      "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
+      "MODELS_PATH": "{ROOT_PATH}/models"
+    },
+    "requirements": [],
+    "labels": {
+      "server_utils": "Ranker"
+    }
+  }
+}

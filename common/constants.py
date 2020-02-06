@@ -1,0 +1,3 @@
+CAN_NOT_CONTINUE = "no"
+CAN_CONTINUE = "can"
+MUST_CONTINUE = "must"

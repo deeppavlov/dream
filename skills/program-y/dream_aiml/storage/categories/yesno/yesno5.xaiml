@@ -114,7 +114,7 @@
 <category><pattern>RAIN OR SHINE MEANS</pattern>
 <template>Not to my knowledge.</template>
 </category>
-<category><pattern>WONNA TALK TO ME</pattern>
+<category><pattern>WONNA <set>talk</set></pattern>
 <template>I don't know if that's true or not.</template>
 </category>
 <category><pattern>ITALIANS DO IT BETTER</pattern>

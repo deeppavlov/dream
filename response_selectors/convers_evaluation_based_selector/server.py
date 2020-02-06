@@ -3,14 +3,17 @@
 import json
 import logging
 import os
+import re
 import time
 import numpy as np
 
 import requests
 from flask import Flask, request, jsonify
 from os import getenv
+from collections import Counter
 import sentry_sdk
 import pprint
+
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -23,6 +26,7 @@ COBOT_API_KEY = os.environ.get('COBOT_API_KEY')
 COBOT_CONVERSATION_EVALUATION_SERVICE_URL = os.environ.get('COBOT_CONVERSATION_EVALUATION_SERVICE_URL')
 TOXIC_COMMENT_CLASSIFICATION_SERVICE_URL = "http://toxic_classification:8013/toxicity_annotations"
 BLACKLIST_DETECTOR_URL = "http://blacklisted_words:8018/blacklisted_words"
+CALL_BY_NAME_PROBABILITY = 0.5  # if name is already known
 
 if COBOT_API_KEY is None:
     raise RuntimeError('COBOT_API_KEY environment variable is not set')
@@ -30,6 +34,10 @@ if COBOT_CONVERSATION_EVALUATION_SERVICE_URL is None:
     raise RuntimeError('COBOT_CONVERSATION_EVALUATION_SERVICE_URL environment variable is not set')
 
 headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COBOT_API_KEY}'}
+
+
+def custom_request(url, headers, data, timeout, method='POST'):
+    return requests.request(url=url, headers=headers, data=data, method=method, timeout=timeout)
 
 
 @app.route("/respond", methods=['POST'])
@@ -51,6 +59,7 @@ def respond():
     for i, dialog in enumerate(dialogs_batch):
         for skill_data in response_candidates[i]:
             conv = dict()
+
             conv["currentUtterance"] = dialog["utterances"][-1]["text"]
             conv["currentResponse"] = skill_data["text"]
             # every odd utterance is from user
@@ -67,44 +76,46 @@ def respond():
 
     # TODO: refactor external service calls
     # check all possible skill responses for toxicity
+    conv_data = json.dumps({'conversations': conversations})
+    sent_data = json.dumps({'sentences': utterances})
+
     try:
-        toxic_result = requests.request(url=TOXIC_COMMENT_CLASSIFICATION_SERVICE_URL,
-                                        headers=headers,
-                                        data=json.dumps({'sentences': utterances}),
-                                        method='POST',
-                                        timeout=10)
+        toxic_result = custom_request(TOXIC_COMMENT_CLASSIFICATION_SERVICE_URL, headers, sent_data, 1.6)
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
-        logger.exception("toxic result Timeout")
+        logger.error("toxic result Timeout")
         sentry_sdk.capture_exception(e)
         toxic_result = requests.Response()
         toxic_result.status_code = 504
 
+    try:
+        blacklist_result = custom_request(BLACKLIST_DETECTOR_URL, headers, sent_data, 1)
+    except (requests.ConnectTimeout, requests.ReadTimeout) as e:
+        logger.error("blacklist_result Timeout")
+        sentry_sdk.capture_exception(e)
+        blacklist_result = requests.Response()
+        blacklist_result.status_code = 504
+
+    try:
+        # evaluate all possible skill responses
+        result = custom_request(COBOT_CONVERSATION_EVALUATION_SERVICE_URL, headers, conv_data, 2)
+    except (requests.ConnectTimeout, requests.ReadTimeout) as e:
+        logger.error("cobot convers eval Timeout")
+        sentry_sdk.capture_exception(e)
+        result = requests.Response()
+        result.status_code = 504
+
     if toxic_result.status_code != 200:
         msg = "Toxic classifier: result status code is not 200: {}. result text: {}; result status: {}".format(
             toxic_result, toxic_result.text, toxic_result.status_code)
-        sentry_sdk.capture_message(msg)
         logger.warning(msg)
         toxicities = [0.] * len(utterances)
     else:
         toxic_result = toxic_result.json()
         toxicities = [max(res[0].values()) for res in toxic_result]
 
-    try:
-        blacklist_result = requests.request(url=BLACKLIST_DETECTOR_URL,
-                                            headers=headers,
-                                            data=json.dumps({'sentences': utterances}),
-                                            method='POST',
-                                            timeout=10)
-    except (requests.ConnectTimeout, requests.ReadTimeout) as e:
-        logger.exception("blacklist_result Timeout")
-        sentry_sdk.capture_exception(e)
-        blacklist_result = requests.Response()
-        blacklist_result.status_code = 504
-
     if blacklist_result.status_code != 200:
         msg = "blacklist detector: result status code is not 200: {}. result text: {}; result status: {}".format(
             blacklist_result, blacklist_result.text, blacklist_result.status_code)
-        sentry_sdk.capture_message(msg)
         logger.warning(msg)
         has_blacklisted = [False] * len(utterances)
         has_inappropriate = [False] * len(utterances)
@@ -113,26 +124,16 @@ def respond():
         has_blacklisted = [int(res['profanity']) for res in blacklist_result]
         has_inappropriate = [int(res['inappropriate']) for res in blacklist_result]
 
-    for i, has_blisted in enumerate(has_blacklisted):
-        if has_blisted:
-            msg = f"response selector got candidate with blacklisted phrases:\n" \
-                  f"utterance: {utterances[i]}\n" \
-                  f"selected_skills: {response_candidates[dialog_ids[i]]}"
-            logger.info(msg)
-            sentry_sdk.capture_message(msg)
-
-    try:
-        # evaluate all possible skill responses
-        result = requests.request(url=COBOT_CONVERSATION_EVALUATION_SERVICE_URL,
-                                  headers=headers,
-                                  data=json.dumps({'conversations': conversations}),
-                                  method='POST',
-                                  timeout=10)
-    except (requests.ConnectTimeout, requests.ReadTimeout) as e:
-        logger.exception("cobot convers eval Timeout")
-        sentry_sdk.capture_exception(e)
-        result = requests.Response()
-        result.status_code = 504
+        for i, has_blisted in enumerate(has_blacklisted):
+            if has_blisted:
+                with sentry_sdk.push_scope() as scope:
+                    scope.set_extra('utterance', utterances[i])
+                    scope.set_extra('selected_skills', response_candidates[dialog_ids[i]])
+                    sentry_sdk.capture_message("response selector got candidate with blacklisted phrases")
+                    msg = f"response selector got candidate with blacklisted phrases:\n" \
+                          f"utterance: {utterances[i]}\n" \
+                          f"selected_skills: {response_candidates[dialog_ids[i]]}"
+                    logger.info(msg)
 
     if result.status_code != 200:
         msg = "Cobot Conversation Evaluator: result status code is \
@@ -167,7 +168,8 @@ def respond():
 
         best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes = select_response(
             curr_candidates, curr_scores, curr_confidences,
-            toxicities[dialog_ids == i], has_blacklisted[dialog_ids == i], has_inappropriate[dialog_ids == i], dialog)
+            toxicities[dialog_ids == i], has_blacklisted[dialog_ids == i], has_inappropriate[dialog_ids == i],
+            dialog)
 
         selected_skill_names.append(best_skill_name)
         selected_texts.append(best_text)
@@ -212,6 +214,16 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                    }
     confidences[ids] = 0.
 
+    # check for repeatitions
+
+    bot_utterances = [uttr["text"].lower() for uttr in dialog["utterances"][::2]]
+    bot_utt_counter = Counter(bot_utterances)
+    for i, cand in enumerate(candidates):
+        coeff = bot_utt_counter[cand["text"].lower()] + 1
+        confidences[i] /= coeff
+        scores[i]['isResponseInteresting'] /= coeff
+        scores[i]['responseEngagesUser'] /= coeff
+
     skill_names = [c['skill_name'] for c in candidates]
     how_are_you_spec = "I'm fine, thanks! Do you want to know what I can do?"
     psycho_help_spec = "If you or someone you know is in immediate danger"
@@ -227,27 +239,28 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
         if len(dialog['utterances']) < 2 and greeting_spec not in candidates[i]['text'] \
                 and skill_names[i] == 'program_y':
             # greet user in first utterance
-            candidates[i]['text'] = "Hello, " + greeting_spec + ' ' + candidates[i]['text']
+            if "Sorry, I don't have an answer for that!" in candidates[i]['text']:
+                candidates[i]['text'] = "Hello, " + greeting_spec + '! '
+            else:
+                candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + candidates[i]['text']
             curr_single_scores.append(very_big_score)
-            break
-        elif skill_names[i] == 'program_y' and candidates[i]['text'] == how_are_you_spec:
+        elif skill_names[i] == 'program_y' and candidates[i]['text'] == how_are_you_spec \
+                and len(dialog['utterances']) < 16:
             curr_single_scores.append(very_big_score)
-            break
         elif skill_names[i] == 'program_y_dangerous' and psycho_help_spec in candidates[i]['text']:
             curr_single_scores.append(very_big_score)
-            break
         elif skill_names[i] == 'program_y' and greeting_spec in candidates[i]['text']:
             if len(dialog["utterances"]) < 2:
                 curr_single_scores.append(very_big_score)
-                break
             else:
                 confidences[i] = 0.2  # Low confidence for greeting in the middle of dialogue
         elif skill_names[i] == 'cobotqa' and "Here's something I found on the web." in candidates[i]['text']:
             confidences[i] = 0.6
         elif skill_names[i] == 'misheard_asr' and is_misheard:
             curr_single_scores.append(very_big_score)
-            break
-        if skill_names[i] == 'dummy_skill':
+        elif skill_names[i] == 'intent_responder' and "#+#" in candidates[i]['text']:
+            curr_single_scores.append(very_big_score)
+        if skill_names[i] == 'dummy_skill' and "question" in candidates[i].get("type", ""):
             question = candidates[i]['text']
 
         cand_scores = scores[i]
@@ -262,6 +275,14 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
         logger.info(f'Skill {skill_name} has score: {score}. Toxicity: {toxicities[i]} '
                     f'Cand scores: {cand_scores}')
         curr_single_scores.append(score)
+
+    highest_conf_exist = True if any(confidences >= 1.) else False
+    for j in range(len(candidates)):
+        if highest_conf_exist and confidences[j] < 1. and curr_single_scores[j] != very_big_score:
+            # need to drop this candidates
+            logger.info(f"Found highest confidence. Dropping {skill_names[j]}")
+            curr_single_scores[j] = - 1.
+
     best_id = np.argmax(curr_single_scores)
     best_skill_name = skill_names[best_id]
     best_text = candidates[best_id]["text"]
@@ -288,6 +309,19 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
         best_bot_attributes = candidates[best_id].get("bot_attributes", {})
         if sum(curr_single_scores) == 0.:
             break
+
+    if dialog["human"]["profile"].get("name", False):
+        name = dialog["human"]["profile"].get("name", False)
+        if len(dialog["utterances"]) >= 2:
+            if re.search(r"\b" + name + r"\b", dialog["utterances"][-2]["text"]):
+                pass
+            else:
+                if np.random.uniform() <= CALL_BY_NAME_PROBABILITY:
+                    best_text = f"{name}, {best_text}"
+        else:
+            # if dialog is just started (now it's impossible)
+            if np.random.uniform() <= CALL_BY_NAME_PROBABILITY:
+                best_text = f"{name}, {best_text}"
 
     return best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes
 

@@ -47,7 +47,8 @@ class MovieSkillTemplates:
         np.random.seed(42)
         self.imdb = IMDb(db_path)
 
-    def extract_previous_dialog_subjects(self, dialog, n_previous=6):
+    @staticmethod
+    def extract_previous_dialog_subjects(dialog, n_previous=4):
         """Extract from the dialog history info about previously discussed movies and movie persons
 
         Args:
@@ -150,6 +151,58 @@ class MovieSkillTemplates:
 
         return movies_ids, unique_persons, genres
 
+    @staticmethod
+    def if_already_expressed_opinion(name: str, subject_type: str, dialog_subjects: List[List[str]]):
+        """
+        Each dialog_subject is
+                ["012356", "movie" , "positive", "human"/"bot"]
+            or ["Brad Pitt", "actor", "very_positive", "human"/"bot"]
+            or ["Comedy", "genre", "very_positive", "human"/"bot"]
+        Args:
+            name: persons name, movie imdb id or genre
+            subject_type: "movie", "genre" or one of professions
+            dialog_subjects: subjects previously discussed in the dialog
+
+        Returns:
+            True, if given bot's opinion about `name` was already expressed in the dialog
+            False, otherwise
+        """
+        for subj in dialog_subjects:
+            if subj[0] == name and subj[1] == subject_type and subj[-1] == "bot":
+                return True
+        return False
+
+    def remove_subj_already_expr_opinion(self, movies_ids: List[str], unique_persons: dict,
+                                         genres: List[str], dialog_subjects: List[List[str]]):
+        to_remove = []
+        for el in movies_ids:
+            if self.if_already_expressed_opinion(el, "movie", dialog_subjects):
+                to_remove.append(el)
+        for el in to_remove:
+            movies_ids.remove(el)
+
+        to_remove = []
+        for name in unique_persons.keys():
+            for prof in unique_persons[name]:
+                if self.if_already_expressed_opinion(name, prof, dialog_subjects):
+                    to_remove.append([name, prof])
+        for name, prof in to_remove:
+            try:
+                unique_persons[name].remove(prof)
+                if len(unique_persons[name]) == 0:
+                    unique_persons.pop(name)
+            except KeyError:
+                pass
+
+        to_remove = []
+        for el in genres:
+            if self.if_already_expressed_opinion(el, "genre", dialog_subjects):
+                to_remove.append(el)
+        for el in to_remove:
+            genres.remove(el)
+
+        return movies_ids, unique_persons, genres
+
     def give_opinion(self, dialog):
         annotations = dialog["utterances"][-1]["annotations"]
         intents = annotations["cobot_dialogact"]["intents"]
@@ -161,6 +214,11 @@ class MovieSkillTemplates:
         # not overlapping mentions of movies titles, persons names and genres
         movies_ids, unique_persons, genres = self.extract_mentions(uttr)
         logger.info("Detected Movies Titles: {}, Persons: {}, Genres: {}".format(
+            [self.imdb(movie)["title"] for movie in movies_ids], unique_persons.keys(), genres))
+
+        movies_ids, unique_persons, genres = self.remove_subj_already_expr_opinion(
+            movies_ids, unique_persons, genres, dialog_subjects)
+        logger.info("Bot opinion was NOT expressed on Movies Titles: {}, Persons: {}, Genres: {}".format(
             [self.imdb(movie)["title"] for movie in movies_ids], unique_persons.keys(), genres))
 
         result = None
@@ -186,19 +244,22 @@ class MovieSkillTemplates:
             elif len(dialog_subjects) > 0:
                 # try to find previously detected movie(s) or person(s)
                 subject = dialog_subjects[-1]
-                if subject[1] == "movie":
-                    movie_id = subject[0]
-                    result = self.give_opinion_about_movie([movie_id])
-                elif subject[1] in self.imdb.professions:
-                    # {profession: [(name, attitude_to_person)]}
-                    profession = subject[1]
-                    name = subject[0]
-                    unique_persons = {name: [f"{profession}"]}
-                    result = self.give_opinion_about_person(uttr, unique_persons, dialog_subjects)
-                elif subject[1] == "genre":
-                    result = self.give_opinion_about_genres(uttr, [subject[0]])
+                if self.if_already_expressed_opinion(subject[0], subject[1], dialog_subjects):
+                    result = "", [], self.zero_confidence
                 else:
-                    result = "Could you, please, clarify what you are asking about?", [], self.notsure_confidence
+                    if subject[1] == "movie":
+                        movie_id = subject[0]
+                        result = self.give_opinion_about_movie([movie_id])
+                    elif subject[1] in self.imdb.professions:
+                        # {profession: [(name, attitude_to_person)]}
+                        profession = subject[1]
+                        name = subject[0]
+                        unique_persons = {name: [f"{profession}"]}
+                        result = self.give_opinion_about_person(uttr, unique_persons, dialog_subjects)
+                    elif subject[1] == "genre":
+                        result = self.give_opinion_about_genres(uttr, [subject[0]])
+                    else:
+                        result = "Could you, please, clarify what you are asking about?", [], self.notsure_confidence
             else:
                 result = "Could you, please, clarify what you are asking about?", [], self.notsure_confidence
         else:
@@ -454,7 +515,7 @@ class MovieSkillTemplates:
             response = "Of course, I can. Why not? It's just a sequence of bytes."
             confidence = self.movie_highest_confidence
         # like to watch movies
-        if re.search(r"(do|are|if|whether) you like( to watch)? (movie|tv)", user_uttr):
+        if re.search(r"(do|are|if|whether) you like( to watch| watching)? (movies|tv)", user_uttr):
             response = "I like to watch movies because it helps me to imagine what human life is."
             confidence = self.movie_highest_confidence
 

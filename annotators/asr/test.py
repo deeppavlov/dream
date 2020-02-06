@@ -50,11 +50,11 @@ def main():
             {
                   'tokens': [
                       {
-                          'confidence': 0.4,
+                          'confidence': 0.1,
                           'value': "let's"
                       },
                       {
-                          'confidence': 0.4,
+                          'confidence': 0.1,
                           'value': 'chat'
                       }
                   ]

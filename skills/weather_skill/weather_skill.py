@@ -2,10 +2,14 @@ import logging
 from os import getenv
 import sentry_sdk
 import pprint
+from city_slot import OWMCitySlot
+
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+city_slot_obj = OWMCitySlot()
 
 
 class DialogDataManager():
@@ -47,26 +51,32 @@ class DialogDataManager():
     def retrieve_location_entity_from_utterance(self, utterance_dict=None):
         """
         retrieves the first extracted entity froim utterance dict
-        :param utterance:
+        :param utterance_dict: raw dictionary with serialization of Utterance object.
         :return: city string
         """
         if not utterance_dict:
             # by default provide location extraction from last reply
             utterance_dict = self.get_last_utterance_dict()
 
-        annotations = utterance_dict["annotations"]
-        city = None
-        # logger.info("entities in lastest annotation:")
-        # logger.info(annotations["ner"])
-        for ent in annotations["ner"]:
-            if not ent:
-                continue
-            ent = ent[0]
-            if ent['type'] == "LOC":
-                city = ent['text']
-                # TODO normalize city...?
-                # TODO validate city?
+        # ### Alternative GEO extractor:
+        city = city_slot_obj(utterance_dict['text'])
+        if not city:
+            # if not extracted lets try to grab from NER?
+            annotations = utterance_dict["annotations"]
+            city = None
+            # logger.info("entities in lastest annotation:")
+            # logger.info(annotations["ner"])
+            for ent in annotations["ner"]:
+                if not ent:
+                    continue
+                ent = ent[0]
+                if ent['type'] == "LOC":
+                    city = ent['text']
+                    # TODO normalize city...?
+                    # TODO validate city?
 
+        # TODO No NER detected location case?
+        # TODO detect from keywords search
         return city
 
 
@@ -90,7 +100,6 @@ class WeatherSkill:
         current_reply = ""
         human_attr = {}
         bot_attr = {}
-        # TODO load attrs?
         ######################################################################
         #
         d_man = DialogDataManager(dialog)
@@ -152,11 +161,13 @@ class WeatherSkill:
 
                 else:
                     # we have been ignored?
-                    # we havenot extyracted city?
+                    # we have not extracted city?
                     # ignore and forget everything
                     ############################################################
                     # FORGET because it is a complex case. tell a joke about weather?
                     ############################################################
+                    current_reply = "Sorry, I have no weather for the place. I can not understand the city..."
+                    curr_confidence = 0.5
                     return current_reply, curr_confidence, human_attr, bot_attr, context_dict
             else:
                 # just ignore

@@ -22,16 +22,16 @@
             </random>
         </template>
     </category>
-    <category>
-        <pattern>HOW SHOULD I *</pattern>
-        <template>
-            <random>
-                <li>Trust yourself to make the best and smartest decision.</li>
-                <li>Your inner self will guide you to the right choice.</li>
-                <li>Listen to your heart.</li>
-            </random>
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>HOW SHOULD I *</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>Trust yourself to make the best and smartest decision.</li>-->
+<!--                <li>Your inner self will guide you to the right choice.</li>-->
+<!--                <li>Listen to your heart.</li>-->
+<!--            </random>-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>WHY CAN NOT I TELL YOU ^</pattern>
         <template>You can tell me. I'm a good listener.</template>
@@ -99,6 +99,12 @@
         </template>
     </category>
     <category>
+        <pattern>I DO NOT KNOW WHAT *</pattern>
+        <template>
+            <srai>WHAT <star/></srai>
+        </template>
+    </category>
+    <category>
         <pattern>I DO NOT KNOW</pattern>
         <template>
             <random>
@@ -115,40 +121,76 @@
         <pattern>I CAN NOT HEAR YOU</pattern>
         <template>Try adjusting the media volume control on your Settings.</template>
     </category>
+<!--    <category>-->
+<!--        <pattern>I *</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>-->
+<!--                    <think>-->
+<!--                        <set name="statement">-->
+<!--                            <person>I-->
+<!--                                <star/>-->
+<!--                            </person>-->
+<!--                        </set>-->
+<!--                    </think>-->
+<!--                    Why?-->
+<!--                </li>-->
+<!--                <li>You sound like one of a kind.</li>-->
+<!--                <li>You have great depth.</li>-->
+<!--                <li>You're good at expressing yourself.</li>-->
+<!--                <li>I imagine that is good for you.</li>-->
+<!--                <li>Don't worry, our conversation is confidential.</li>-->
+<!--            </random>-->
+<!--        </template>-->
+<!--    </category>-->
+
     <category>
-        <pattern>I *</pattern>
-        <template>
-            <random>
-                <li>
-                    <think>
-                        <set name="statement">
-                            <person>I
-                                <star/>
-                            </person>
-                        </set>
-                    </think>
-                    Why?
-                </li>
-                <li>You sound like one of a kind.</li>
-                <li>You have great depth.</li>
-                <li>You're good at expressing yourself.</li>
-                <li>I imagine that is good for you.</li>
-                <li>Don't worry, our conversation is confidential.</li>
-            </random>
-        </template>
+      <pattern>I HAVE A QUESTION FOR YOU</pattern>
+      <template><srai>CAN_I_ASK_QUESTION_REQUEST</srai></template>
+    </category>
+    <category>
+        <pattern>CAN # ASK YOU # QUESTION</pattern>
+        <template><srai>CAN_I_ASK_QUESTION_REQUEST</srai></template>
     </category>
     <category>
         <pattern>I HAVE A QUESTION FOR YOU</pattern>
-        <template>You can ask me anything.</template>
+        <template><srai>CAN_I_ASK_QUESTION_REQUEST</srai></template>
     </category>
+    <category>
+        <pattern>I HAVE A QUESTION</pattern>
+        <template><srai>CAN_I_ASK_QUESTION_REQUEST</srai></template>
+    </category>
+    <category>
+        <pattern>CAN_I_ASK_QUESTION_REQUEST</pattern>
+        <template>You can ask me anything. I'm best with factual subjects, especially music, books and movies.</template>
+    </category>
+
+    <category>
+      <pattern># ASK ME A QUESTION</pattern>
+      <template>
+          <random>
+              <li>did you see the black panther film that was recently in theaters?</li>
+              <li>what kind of genre do you prefer in books?</li>
+              <li>are you a fan of standup comedy?</li>
+              <li>are you a dog or a cat person?</li>
+              <li>how are you doing today?</li>
+              <li>do you like opera?</li>
+              <li>how do you do?</li>
+              <li>do you enjoy movies?</li>
+              <li>do you like poetry?</li>
+              <li>do you use netflix?</li>
+          </random>
+      </template>
+    </category>
+
     <category>
         <pattern>I HAVE * CHILDREN</pattern>
         <template>What are their names?</template>
     </category>
-    <category>
-        <pattern>I SAID *</pattern>
-        <template>Perhaps I misunderstood you. Try repeating what you said.</template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>I SAID *</pattern>-->
+<!--        <template>Perhaps I misunderstood you. Try repeating what you said.</template>-->
+<!--    </category>-->
     <category>
         <pattern>I AM</pattern>
         <template>
@@ -168,79 +210,79 @@
         <pattern>I AM NOT JUDGE</pattern>
         <template>What is your name?</template>
     </category>
-    <category>
-        <pattern>I AM NOT *</pattern>
-        <template>
-            <random>
-                <li>I didn't think you were.</li>
-                <li>Would you like to be?</li>
-                <li>For how long?</li>
-            </random>
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>I AM NOT *</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>I didn't think you were.</li>-->
+<!--                <li>Would you like to be?</li>-->
+<!--                <li>For how long?</li>-->
+<!--            </random>-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>I AM IN LOVE</pattern>
         <template>It's a great feeling to be in love. You seem excited.</template>
     </category>
-    <category>
-        <pattern>I AM *</pattern>
-        <template>
-            <think>
-                <set name="isanumber">
-                    <srai>ISANUMBER
-                        <star/>
-                    </srai>
-                </set>
-                <set name="isaname">
-                    <srai>ISANAME
-                        <star/>
-                    </srai>
-                </set>
-            </think>
-            <condition name="isanumber">
-                <li value="true">
-                    <srai>MY AGE IS
-                        <star/>
-                    </srai>
-                </li>
-                <li>
-                    <condition name="isaname">
-                        <li value="true">
-                            <srai>MY NAME IS
-                                <star/>
-                            </srai>
-                        </li>
-                        <li>
-                            <srai>IAMRESPONSE</srai>
-                        </li>
-                    </condition>
-                </li>
-            </condition>
-        </template>
-    </category>
-    <category>
-        <pattern>I AM * *</pattern>
-        <template>
-            <think>
-                <set name="isaname">
-                    <srai>ISANAME
-                        <star/>
-                    </srai>
-                </set>
-            </think>
-            <condition name="isaname">
-                <li value="true">
-                    <srai>MY NAME IS
-                        <star/>
-                        <star index="2"/>
-                    </srai>
-                </li>
-                <li>
-                    <srai>IAMRESPONSE</srai>
-                </li>
-            </condition>
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>I AM *</pattern>-->
+<!--        <template>-->
+<!--            <think>-->
+<!--                <set name="isanumber">-->
+<!--                    <srai>ISANUMBER-->
+<!--                        <star/>-->
+<!--                    </srai>-->
+<!--                </set>-->
+<!--                <set name="isaname">-->
+<!--                    <srai>ISANAME-->
+<!--                        <star/>-->
+<!--                    </srai>-->
+<!--                </set>-->
+<!--            </think>-->
+<!--            <condition name="isanumber">-->
+<!--                <li value="true">-->
+<!--                    <srai>MY AGE IS-->
+<!--                        <star/>-->
+<!--                    </srai>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <condition name="isaname">-->
+<!--                        <li value="true">-->
+<!--                            <srai>MY NAME IS-->
+<!--                                <star/>-->
+<!--                            </srai>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <srai>IAMRESPONSE</srai>-->
+<!--                        </li>-->
+<!--                    </condition>-->
+<!--                </li>-->
+<!--            </condition>-->
+<!--        </template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>I AM * *</pattern>-->
+<!--        <template>-->
+<!--            <think>-->
+<!--                <set name="isaname">-->
+<!--                    <srai>ISANAME-->
+<!--                        <star/>-->
+<!--                    </srai>-->
+<!--                </set>-->
+<!--            </think>-->
+<!--            <condition name="isaname">-->
+<!--                <li value="true">-->
+<!--                    <srai>MY NAME IS-->
+<!--                        <star/>-->
+<!--                        <star index="2"/>-->
+<!--                    </srai>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <srai>IAMRESPONSE</srai>-->
+<!--                </li>-->
+<!--            </condition>-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>I AM TIRED</pattern>
         <template>
@@ -251,25 +293,25 @@
             </random>
         </template>
     </category>
-    <category>
-        <pattern>I AM A *</pattern>
-        <template>
-            <think>
-                <set name="iama">
-                    <star/>
-                </set>
-            </think>
-            Is that your job?
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>I AM A *</pattern>-->
+<!--        <template>-->
+<!--            <think>-->
+<!--                <set name="iama">-->
+<!--                    <star/>-->
+<!--                </set>-->
+<!--            </think>-->
+<!--            Is that your job?-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>I AM JOKING</pattern>
         <template>I thought you were.</template>
     </category>
-    <category>
-        <pattern>I AM ON *</pattern>
-        <template>How do you like being on it?</template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>I AM ON *</pattern>-->
+<!--        <template>How do you like being on it?</template>-->
+<!--    </category>-->
     <category>
         <pattern>I AM CONFUSED</pattern>
         <template>What part are you confused about?</template>
@@ -317,30 +359,30 @@
         <pattern>I KNOW</pattern>
         <template>You are very wise.</template>
     </category>
-    <category>
-        <pattern>AM I *</pattern>
-        <template>
-            <random>
-                <li>I think you're wonderful the way you are.</li>
-                <li>I see many untapped resources.</li>
-                <li>I believe in your ability to answer.</li>
-                <li>I'm always aware of what's bright and beautiful in you.</li>
-                <li>I'd certainly choose you for my team.</li>
-                <li>In spite of any difficulties, I know you can succceed.</li>
-                <li>Oh I really don't know whether you are or not.</li>
-                <li>I think you've improved a great deal.</li>
-                <li>All humans seem the same to me.</li>
-                <li>I think a lot of people are.</li>
-            </random>
-            <think>
-                <set name="it">
-                    <set name="topic">
-                        <person/>
-                    </set>
-                </set>
-            </think>
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>AM I *</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>I think you're wonderful the way you are.</li>-->
+<!--                <li>I see many untapped resources.</li>-->
+<!--                <li>I believe in your ability to answer.</li>-->
+<!--                <li>I'm always aware of what's bright and beautiful in you.</li>-->
+<!--                <li>I'd certainly choose you for my team.</li>-->
+<!--                <li>In spite of any difficulties, I know you can succceed.</li>-->
+<!--                <li>Oh I really don't know whether you are or not.</li>-->
+<!--                <li>I think you've improved a great deal.</li>-->
+<!--                <li>All humans seem the same to me.</li>-->
+<!--                <li>I think a lot of people are.</li>-->
+<!--            </random>-->
+<!--            <think>-->
+<!--                <set name="it">-->
+<!--                    <set name="topic">-->
+<!--                        <person/>-->
+<!--                    </set>-->
+<!--                </set>-->
+<!--            </think>-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>SHOULD I HAVE SEX *</pattern>
         <template>It's better to wait until you are married or in a solid relationship.</template>
@@ -361,37 +403,37 @@
 <!--        <pattern>MY NAME IS</pattern>-->
 <!--        <template>What is your name?</template>-->
 <!--    </category>-->
-    <category>
-        <pattern>MY *</pattern>
-        <template>
-            <think>
-                <set name="isfamiliarname">
-                    <srai>ISAFAMILIARNAME
-                        <star/>
-                    </srai>
-                </set>
-                <set name="familiarpredicate">
-                    <srai>FAMILIARPREDICATE
-                        <star/>
-                    </srai>
-                </set>
-            </think>
-            <condition name="isfamiliarname">
-                <li value="true">
-                    <srai>GETFAMILIARNAME</srai>
-                </li>
-                <li>
-                    <random>
-                        <li>I imagine that is very important to you.</li>
-                        <li>I don't know that about you.</li>
-                        <li>Tell me more about yourself.</li>
-                        <li>How interesting.</li>
-                        <li>I had no idea.</li>
-                    </random>
-                </li>
-            </condition>
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>MY *</pattern>-->
+<!--        <template>-->
+<!--            <think>-->
+<!--                <set name="isfamiliarname">-->
+<!--                    <srai>ISAFAMILIARNAME-->
+<!--                        <star/>-->
+<!--                    </srai>-->
+<!--                </set>-->
+<!--                <set name="familiarpredicate">-->
+<!--                    <srai>FAMILIARPREDICATE-->
+<!--                        <star/>-->
+<!--                    </srai>-->
+<!--                </set>-->
+<!--            </think>-->
+<!--            <condition name="isfamiliarname">-->
+<!--                <li value="true">-->
+<!--                    <srai>GETFAMILIARNAME</srai>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <random>-->
+<!--                        <li>I imagine that is very important to you.</li>-->
+<!--                        <li>I don't know that about you.</li>-->
+<!--                        <li>Tell me more about yourself.</li>-->
+<!--                        <li>How interesting.</li>-->
+<!--                        <li>I had no idea.</li>-->
+<!--                    </random>-->
+<!--                </li>-->
+<!--            </condition>-->
+<!--        </template>-->
+<!--    </category>-->
 <!--    <category>-->
 <!--        <pattern>NO MY NAME IS NOT *</pattern>-->
 <!--        <template>What is your name?</template>-->
