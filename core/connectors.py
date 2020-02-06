@@ -102,11 +102,11 @@ class EventSetOutputConnector:
         event = payload['payload'].get('event', None)
         if not event or not isinstance(event, asyncio.Event):
             raise ValueError("'event' key is not presented in payload")
-        event.set()
         await callback(
             task_id=payload['task_id'],
             response=" "
         )
+        event.set()
 
 
 class AgentGatewayToChannelConnector:
