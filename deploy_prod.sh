@@ -15,6 +15,14 @@ while [[ "$(curl -m 5 -s -o /dev/null -w ''%{http_code}'' $STAGING_DP_AGENT_URL/
 done
 # to finish services loading
 sleep 60;
+
+# warmup query to staging
+curl --header "Content-Type: application/json" --data '{"user_id":"deploy","payload":"/start"}' --request POST -m 5 -s -o /dev/null -w ''%{http_code}'' $STAGING_DP_AGENT_URL
+while [[ "$(curl --header "Content-Type: application/json" --data '{"user_id":"deploy","payload":"after_deploy_warm"}' --request POST -m 5 -s -o /dev/null -w ''%{http_code}'' $STAGING_DP_AGENT_URL)" != "200" ]]; do
+  echo "waiting till STAGING agent responded to QUERY with 200 status code";
+  sleep 5;
+done
+
 echo "Deploying PROD version to staging cluster... done"
 
 echo "Changing PROD lambda url to staging..."
@@ -30,6 +38,14 @@ while [[ "$(curl -m 5 -s -o /dev/null -w ''%{http_code}'' $PROD_DP_AGENT_URL/pin
   sleep 5;
 done
 sleep 60;
+
+# warmup query to prod
+curl --header "Content-Type: application/json" --data '{"user_id":"deploy","payload":"/start"}' --request POST -m 5 -s -o /dev/null -w ''%{http_code}'' $PROD_DP_AGENT_URL
+while [[ "$(curl --header "Content-Type: application/json" --data '{"user_id":"deploy","payload":"after_deploy_warm"}' --request POST -m 5 -s -o /dev/null -w ''%{http_code}'' $PROD_DP_AGENT_URL)" != "200" ]]; do
+  echo "waiting till PROD agent responded to QUERY with 200 status code";
+  sleep 5;
+done
+
 echo "Deploying agent to PROD cluster... done"
 
 echo "Changing PROD lambda url to prod..."

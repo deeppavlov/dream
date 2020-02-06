@@ -69,7 +69,7 @@ def about_book(annotated_utterance):
 
 def get_answer(phrase):
     headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': API_KEY}
-    answer = requests.request(url=QA_SERVICE_URL, headers=headers,
+    answer = requests.request(url=QA_SERVICE_URL, headers=headers, timeout=2,
                               data=json.dumps({'question': phrase}), method='POST').json()
     return answer['response']
 
@@ -113,7 +113,7 @@ def parse_author_best_book(annotated_phrase, default_phrase="Fabulous! And what 
         '''
         headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': API_KEY}
         aie_book = get_name(last_bookname, mode='book', return_plain=True)
-        answer = requests.request(url=QUERY_SERVICE_URL, headers=headers,
+        answer = requests.request(url=QUERY_SERVICE_URL, headers=headers, timeout=2,
                                   data=json.dumps(
                                       {'query': {'text': 'query d|d' + ' <aio:isTheAuthorOf> ' + aie_book}}),
                                   method='POST').json()
@@ -124,7 +124,7 @@ def parse_author_best_book(annotated_phrase, default_phrase="Fabulous! And what 
             answer = requests.request(
                 url=QUERY_SERVICE_URL, headers=headers, data=json.dumps(
                     {'query': {'text': 'query label|' + authorname_plain + ' <aio:prefLabel> ' + 'label'}}),
-                method='POST').json()
+                method='POST', timeout=2).json()
             author = answer['results'][0]['bindingList'][0]['value']
     except BaseException:
         return default_phrase
@@ -179,7 +179,7 @@ def get_name(annotated_phrase, mode='author', return_plain=False):
                 answer = requests.request(url=ENTITY_SERVICE_URL, headers=headers,
                                           data=json.dumps({'mention': {'text': entity},
                                                            'classConstraints': class_constraints}),
-                                          method='POST').json()
+                                          method='POST', timeout=2).json()
                 entityname_plain = answer['resolvedEntities'][0]['value']
                 entityname_plain = '<' + entityname_plain + '>'
                 if return_plain:
@@ -327,7 +327,7 @@ def get_genre(user_phrase, return_name=False):
     else:
         return None
     if return_name:
-        genre_dict = {'memour autobiography': 'memoir books',
+        genre_dict = {'memoir autobiography': 'memoir books',
                       'history biography': 'biography books',
                       'science tehnology': 'technology books',
                       'debut novel': 'debut novel books',
@@ -555,7 +555,8 @@ class BookSkillScenario:
                         reply, confidence = GENRE_PHRASES[genre_name], self.default_conf
                     else:
                         reply, confidence = self.default_reply, 0
-
+                if reply in bot_phrases[:-2]:
+                    confidence = confidence * 0.5
                 assert reply is not None
             except Exception as e:
                 logger.exception("exception in book skill")

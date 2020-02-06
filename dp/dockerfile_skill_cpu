@@ -4,12 +4,14 @@ ARG skillconfig
 ARG skillport
 ARG skill_endpoint
 ARG skillhost
+ARG skilldir
 
 ENV CONFIG=$skillconfig
 ENV PORT=$skillport
 ENV HOST=$skillhost
 ENV ENDPOINT=$skill_endpoint
 ENV TFHUB_CACHE_DIR=/tmp/tfhub
+ENV DIR=$skilldir
 
 VOLUME /tmp/tfhub
 
@@ -20,12 +22,16 @@ ENV PYTHONPATH "${PYTONPATH}:/dp-agent"
 COPY $CONFIG /dp-agent/$CONFIG
 RUN python -m deeppavlov download $CONFIG
 
-COPY . /dp-agent/.
+RUN mkdir -p /dp-agent/$DIR
+COPY $DIR /dp-agent/$DIR
 
 RUN python -m deeppavlov install $CONFIG
+
+COPY dp/ /dp-agent/dp
 RUN python dp/dp_server_config.py
+
 RUN sed -i "/uvicorn.run/s/app,/app, timeout_keep_alive=20,/g" "/base/DeepPavlov/deeppavlov/utils/server/server.py"
 
-RUN pip install sentry-sdk==0.13.0 # TODO: Move it to separate requirements 
+RUN pip install sentry-sdk==0.13.0 # TODO: Move it to separate requirements
 
 ENTRYPOINT python -m deeppavlov riseapi $CONFIG -p $PORT

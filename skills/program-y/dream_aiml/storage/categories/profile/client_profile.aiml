@@ -136,48 +136,48 @@
             </think>
         </template>
     </category>
-    <category>
-        <pattern>I DO NOT LIKE *</pattern>
-        <template>
-            <random>
-                <li>I will add
-                    <set name="dislikes">
-                        <star/>
-                    </set>
-                    to your list of dislikes.
-                </li>
-                <li>What do you like?</li>
-            </random>
-            <think>
-                <set name="it">
-                    <set name="topic">
-                        <star/>
-                    </set>
-                </set>
-            </think>
-        </template>
-    </category>
-    <category>
-        <pattern>I HAVE <set>article</set> *
-        </pattern>
-        <template>
-            <random>
-                <li>How long have you had it?</li>
-                <li>How does it make you feel?</li>
-                <li>When did you get it?</li>
-            </random>
-            <think>
-                <set name="it">
-                    <set name="topic">
-                        <set name="has">
-                            <star/>
-                            <star index="2"/>
-                        </set>
-                    </set>
-                </set>
-            </think>
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>I DO NOT LIKE *</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>I will add-->
+<!--                    <set name="dislikes">-->
+<!--                        <star/>-->
+<!--                    </set>-->
+<!--                    to your list of dislikes.-->
+<!--                </li>-->
+<!--                <li>What do you like?</li>-->
+<!--            </random>-->
+<!--            <think>-->
+<!--                <set name="it">-->
+<!--                    <set name="topic">-->
+<!--                        <star/>-->
+<!--                    </set>-->
+<!--                </set>-->
+<!--            </think>-->
+<!--        </template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>I HAVE <set>article</set> *-->
+<!--        </pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>How long have you had it?</li>-->
+<!--                <li>How does it make you feel?</li>-->
+<!--                <li>When did you get it?</li>-->
+<!--            </random>-->
+<!--            <think>-->
+<!--                <set name="it">-->
+<!--                    <set name="topic">-->
+<!--                        <set name="has">-->
+<!--                            <star/>-->
+<!--                            <star index="2"/>-->
+<!--                        </set>-->
+<!--                    </set>-->
+<!--                </set>-->
+<!--            </think>-->
+<!--        </template>-->
+<!--    </category>-->
      <category>
         <pattern>I AM MARRIED</pattern>
         <template>How long have you been <set name="status">married</set>?
@@ -192,77 +192,77 @@
             Where did you go to medical school?
         </template>
     </category>
-    <category>
-        <pattern>I AM FROM *</pattern>
-        <template>Is that where you live now?
-            <think>
-                <set name="birthplace">
-                    <star/>
-                </set>
-            </think>
-        </template>
-    </category>
-    <category>
-        <pattern>I LIKE TO *</pattern>
-        <template>
-            <think>
-                <set name="likes">
-                    <star/>
-                </set>
-            </think>
-            <random>
-                <li>How long have you been doing it?</li>
-                <li>Do you get to do it very often?</li>
-                <li>Do you think I would like to?</li>
-            </random>
-            <think>
-                <set name="it">
-                    <set name="topic">
-                        <star/>
-                    </set>
-                </set>
-            </think>
-        </template>
-    </category>
-    <category>
-        <pattern>I LIKE MY *</pattern>
-        <template>
-            <think>
-                <set name="likes">
-                    <star/>
-                </set>
-            </think>
-            <random>
-                <li>How long have you had it?</li>
-                <li>Do you get to use it very often?</li>
-                <li>Do you think I would like it to?</li>
-            </random>
-            <think>
-                <set name="it">
-                    <set name="topic">
-                        <star/>
-                    </set>
-                </set>
-            </think>
-        </template>
-    </category>
-    <category>
-        <pattern>I WOULD RATHER BE IN *</pattern>
-        <template>What would be better about it?
-            <think>
-                <set name="it">
-                    <set name="topic">
-                        <star/>
-                    </set>
-                </set>
-            </think>
-        </template>
-    </category>
-    <category>
-        <pattern>HE</pattern>
-        <template><get name="he"/>?
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>I AM FROM *</pattern>-->
+<!--        <template>Is that where you live now?-->
+<!--            <think>-->
+<!--                <set name="birthplace">-->
+<!--                    <star/>-->
+<!--                </set>-->
+<!--            </think>-->
+<!--        </template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>I LIKE TO *</pattern>-->
+<!--        <template>-->
+<!--            <think>-->
+<!--                <set name="likes">-->
+<!--                    <star/>-->
+<!--                </set>-->
+<!--            </think>-->
+<!--            <random>-->
+<!--                <li>How long have you been doing it?</li>-->
+<!--                <li>Do you get to do it very often?</li>-->
+<!--                <li>Do you think I would like to?</li>-->
+<!--            </random>-->
+<!--            <think>-->
+<!--                <set name="it">-->
+<!--                    <set name="topic">-->
+<!--                        <star/>-->
+<!--                    </set>-->
+<!--                </set>-->
+<!--            </think>-->
+<!--        </template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>I LIKE MY *</pattern>-->
+<!--        <template>-->
+<!--            <think>-->
+<!--                <set name="likes">-->
+<!--                    <star/>-->
+<!--                </set>-->
+<!--            </think>-->
+<!--            <random>-->
+<!--                <li>How long have you had it?</li>-->
+<!--                <li>Do you get to use it very often?</li>-->
+<!--                <li>Do you think I would like it to?</li>-->
+<!--            </random>-->
+<!--            <think>-->
+<!--                <set name="it">-->
+<!--                    <set name="topic">-->
+<!--                        <star/>-->
+<!--                    </set>-->
+<!--                </set>-->
+<!--            </think>-->
+<!--        </template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>I WOULD RATHER BE IN *</pattern>-->
+<!--        <template>What would be better about it?-->
+<!--            <think>-->
+<!--                <set name="it">-->
+<!--                    <set name="topic">-->
+<!--                        <star/>-->
+<!--                    </set>-->
+<!--                </set>-->
+<!--            </think>-->
+<!--        </template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>HE</pattern>-->
+<!--        <template><get name="he"/>?-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>MY SIGN IS *</pattern>
         <template>I know a lot of
@@ -362,39 +362,39 @@
             I call you<srai>CLIENT NAME</srai>.
         </template>
     </category>
-    <category>
-        <pattern>MY TOWN IS *</pattern>
-        <template>Thanks for confiding in me.
-            <think>
-                <set name="town">
-                    <star/>
-                </set>
-            </think>
-        </template>
-    </category>
-    <category>
-        <pattern>MY TOWN</pattern>
-        <template>
-            <get name="town"/>
-        </template>
-    </category>
-    <category>
-        <pattern>MY LAST NAME IS *</pattern>
-        <template>Do you like to be called by your first name or last name?
-            <think>
-                <set name="lastname">
-                    <star/>
-                </set>
-            </think>
-        </template>
-    </category>
-    <category>
-        <pattern>MY LAST *</pattern>
-        <that>* FIRST NAME OR LAST NAME</that>
-        <template>
-            <srai>CALL ME BY MY LAST NAME</srai>
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>MY TOWN IS *</pattern>-->
+<!--        <template>Thanks for confiding in me.-->
+<!--            <think>-->
+<!--                <set name="town">-->
+<!--                    <star/>-->
+<!--                </set>-->
+<!--            </think>-->
+<!--        </template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>MY TOWN</pattern>-->
+<!--        <template>-->
+<!--            <get name="town"/>-->
+<!--        </template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>MY LAST NAME IS *</pattern>-->
+<!--        <template>Do you like to be called by your first name or last name?-->
+<!--            <think>-->
+<!--                <set name="lastname">-->
+<!--                    <star/>-->
+<!--                </set>-->
+<!--            </think>-->
+<!--        </template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>MY LAST *</pattern>-->
+<!--        <that>* FIRST NAME OR LAST NAME</that>-->
+<!--        <template>-->
+<!--            <srai>CALL ME BY MY LAST NAME</srai>-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>MY BIRTHPLACE</pattern>
         <template>
@@ -1903,25 +1903,25 @@
             </think>
         </template>
     </category>
-    <category>
-        <pattern>BECAUSE I WANT TO *</pattern>
-        <template>You deserve to feel happy.
-            <think>
-                <set name="want">TO
-                    <star/>
-                </set>
-            </think>
-        </template>
-    </category>
-    <category>
-        <pattern>LOOK AT *</pattern>
-        <template>Would you like to do a search for
-            <set name="it">
-                <star/>
-            </set>
-            ?
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>BECAUSE I WANT TO *</pattern>-->
+<!--        <template>You deserve to feel happy.-->
+<!--            <think>-->
+<!--                <set name="want">TO-->
+<!--                    <star/>-->
+<!--                </set>-->
+<!--            </think>-->
+<!--        </template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>LOOK AT *</pattern>-->
+<!--        <template>Would you like to do a search for-->
+<!--            <set name="it">-->
+<!--                <star/>-->
+<!--            </set>-->
+<!--            ?-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>ROBOTS CAN NOT *</pattern>
         <template>One day soon we may be able to do
@@ -1931,34 +1931,34 @@
             however.
         </template>
     </category>
-    <category>
-        <pattern>I DO NOT CARE ABOUT *</pattern>
-        <template>
-            <random>
-                <li>It matters to me.</li>
-                <li>You sound very cynical.</li>
-            </random>
-            <think>
-                <set name="it">
-                    <set name="topic">
-                        <star/>
-                    </set>
-                </set>
-            </think>
-        </template>
-    </category>
-    <category>
-        <pattern>I FOUND *</pattern>
-        <template>How did you feel when you found it?
-            <think>
-                <set name="it">
-                    <set name="topic">
-                        <star/>
-                    </set>
-                </set>
-            </think>
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>I DO NOT CARE ABOUT *</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>It matters to me.</li>-->
+<!--                <li>You sound very cynical.</li>-->
+<!--            </random>-->
+<!--            <think>-->
+<!--                <set name="it">-->
+<!--                    <set name="topic">-->
+<!--                        <star/>-->
+<!--                    </set>-->
+<!--                </set>-->
+<!--            </think>-->
+<!--        </template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>I FOUND *</pattern>-->
+<!--        <template>How did you feel when you found it?-->
+<!--            <think>-->
+<!--                <set name="it">-->
+<!--                    <set name="topic">-->
+<!--                        <star/>-->
+<!--                    </set>-->
+<!--                </set>-->
+<!--            </think>-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>MY FAVORITE SHOW IS *</pattern>
         <template>
@@ -1978,22 +1978,22 @@
             </random>
         </template>
     </category>
-    <category>
-        <pattern>I DO NOT HAVE A *</pattern>
-        <template>
-            <random>
-                <li>Are you looking for a<person/>?</li>
-                <li>Do you know anyone who has it?.</li>
-            </random>
-            <think>
-                <set name="it">
-                    <set name="topic">
-                        <star/>
-                    </set>
-                </set>
-            </think>
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>I DO NOT HAVE A *</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>Are you looking for a<person/>?</li>-->
+<!--                <li>Do you know anyone who has it?.</li>-->
+<!--            </random>-->
+<!--            <think>-->
+<!--                <set name="it">-->
+<!--                    <set name="topic">-->
+<!--                        <star/>-->
+<!--                    </set>-->
+<!--                </set>-->
+<!--            </think>-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>DO YOU WATCH THE *</pattern>
         <template>I haven't seen it. What is it about?
@@ -2006,34 +2006,34 @@
             </think>
         </template>
     </category>
-    <category>
-        <pattern>I DO NOT KNOW ANY *</pattern>
-        <template>
-            <random>
-            <li>We could try a web search. Would you like to search for it?</li>
-            <li>Would you like to get to know some <person/>?</li>
-            </random>
-            <think>
-                <set name="it">
-                    <set name="topic">
-                        <star/>
-                    </set>
-                </set>
-            </think>
-        </template>
-    </category>
-    <category>
-        <pattern>CAN YOU TALK ABOUT *</pattern>
-        <template>Sure we can talk about it. What would you like people to know about it?
-            <think>
-                <set name="it">
-                    <set name="topic">
-                        <star/>
-                    </set>
-                </set>
-            </think>
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>I DO NOT KNOW ANY *</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--            <li>We could try a web search. Would you like to search for it?</li>-->
+<!--            <li>Would you like to get to know some <person/>?</li>-->
+<!--            </random>-->
+<!--            <think>-->
+<!--                <set name="it">-->
+<!--                    <set name="topic">-->
+<!--                        <star/>-->
+<!--                    </set>-->
+<!--                </set>-->
+<!--            </think>-->
+<!--        </template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>CAN YOU TALK ABOUT *</pattern>-->
+<!--        <template>Sure we can talk about it. What would you like people to know about it?-->
+<!--            <think>-->
+<!--                <set name="it">-->
+<!--                    <set name="topic">-->
+<!--                        <star/>-->
+<!--                    </set>-->
+<!--                </set>-->
+<!--            </think>-->
+<!--        </template>-->
+<!--    </category>-->
 
     <!-- This is what client_profile should contain, everything else should be moved into defaults -->
 

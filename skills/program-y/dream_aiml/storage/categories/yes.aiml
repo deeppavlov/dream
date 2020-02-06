@@ -22,6 +22,17 @@
 
     <!-- Modified for Y-Bot by Keith Sterling July 2017 -->
 
+    <category>
+        <pattern>YES</pattern>
+        <template>
+            <random>
+                <li>Okay.</li>
+                <li>Interesting.</li>
+                <li>Sounds interesting.</li>
+                <li>Cool!</li>
+            </random>
+        </template>
+    </category>
    <category>
         <pattern>HELL YEAH</pattern>
         <template>

@@ -118,20 +118,6 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
         dockercompose_cmd exec -T -u $(id -u) sentiment_classification python annotators/DeepPavlovSentimentClassification/tests/run_test.py
     fi
 
-    if container_is_started transfertransfo; then
-        echo "Passing test data to transfertransfo"
-        dockercompose_cmd exec -T -u $(id -u) transfertransfo python tests/run_test.py \
-            --true_file tests/test_tasks.json \
-            --pred_file tests/test_results.json \
-            --from_url http://0.0.0.0:8007/transfertransfo
-
-        # echo "Passing question test data to transfertransfo from dream/...xlsx , it takes about 3 hours"
-        # dockercompose_cmd exec -T -u $(id -u) transfertransfo python tests/run_test.py \
-        #     --true_file tests/test_question_tasks.json \
-        #     --pred_file tests/test_question_tasks_results.json \
-        #     --from_url http://0.0.0.0:8007/transfertransfo
-    fi
-
     if container_is_started movie_skill; then
         echo "Run tests for movie_skill"
         dockercompose_cmd exec -T -u $(id -u) movie_skill python test.py
@@ -151,10 +137,44 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
         echo "Run tests for weather_skill container"
         dockercompose_cmd exec -T -u $(id -u) weather_skill python test_weather_skill_policy.py
     fi
+
+    if container_is_started program_y; then
+        echo "Run tests for program_y container"
+        dockercompose_cmd exec -T -u $(id -u) program_y python /src/test.py
+
+        echo "Run lets_chat tests for program_y container"
+        dockercompose_cmd exec -T -u $(id -u) program_y python /src/test_lets_chat.py
+    fi
+
+    if container_is_started program_y_dangerous; then
+        echo "Run tests for program_y_dangerous container"
+        dockercompose_cmd exec -T -u $(id -u) program_y_dangerous python /src/test.py
+    fi
+
+    if container_is_started superbowl_skill; then
+        echo "Run tests for superbowl_skill container"
+        dockercompose_cmd exec -T -u $(id -u) superbowl_skill python /src/test_server.py
+    fi
+
+    if container_is_started eliza; then
+        echo "Run tests for eliza container"
+        dockercompose_cmd exec -T -u $(id -u) eliza python /src/test_server.py
+    fi
+
+    if container_is_started news_skill; then
+        echo "Run tests for news_skill"
+        dockercompose_cmd exec -T -u $(id -u) news_skill python /src/src/test.py
+    fi
+
+    if container_is_started comet; then
+        echo "Run tests for comet"
+        dockercompose_cmd exec -T -u $(id -u) comet python /comet/test.py
+    fi
 fi
 
 if [[ "$MODE" == "infer_questions" || "$MODE" == "all" ]]; then
     echo "Passing questions to Alexa"
+    dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/test_response.py
     dockercompose_cmd exec -T -u $(id -u) agent python3 \
         utils/xlsx_responder.py --url http://0.0.0.0:4242 \
         --input 'tests/dream/test_questions.xlsx' \

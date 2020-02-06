@@ -8,6 +8,13 @@ import pymongo
 from bson.objectid import ObjectId
 
 from . import STATE_API_VERSION
+import logging
+
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 USER_PROFILE = {
     "name": None,
@@ -45,6 +52,7 @@ class HumanUtterance:
     @classmethod
     async def prepare_collection(cls, db):
         await db[cls.collection_name].create_index('_dialog_id')
+        await db[cls.collection_name].create_index('date_time')
 
     def to_dict(self):
         return {
@@ -53,7 +61,7 @@ class HumanUtterance:
             'annotations': self.annotations,
             'hypotheses': self.hypotheses,
             'date_time': str(self.date_time),
-            'attributes': self.attributes
+            'attributes': self.attributes,
         }
 
     async def save(self, db):
@@ -75,7 +83,7 @@ class HumanUtterance:
     @classmethod
     async def get_many(cls, db, dialog_id):
         result = []
-        async for document in db[cls.collection_name].find({'_dialog_id': dialog_id}):
+        async for document in db[cls.collection_name].find({'_dialog_id': dialog_id}).sort('_in_dialog_id'):
             result.append(cls(actual=True, **document))
         return result
 
@@ -112,6 +120,7 @@ class BotUtterance:
     @classmethod
     async def prepare_collection(cls, db):
         await db[cls.collection_name].create_index('_dialog_id')
+        await db[cls.collection_name].create_index('date_time')
 
     def to_dict(self):
         return {
@@ -121,7 +130,7 @@ class BotUtterance:
             'confidence': self.confidence,
             'annotations': self.annotations,
             'date_time': str(self.date_time),
-            'user': self.user
+            'user': self.user,
         }
 
     async def save(self, db):
@@ -143,7 +152,7 @@ class BotUtterance:
     @classmethod
     async def get_many(cls, db, dialog_id):
         result = []
-        async for document in db[cls.collection_name].find({'_dialog_id': dialog_id}):
+        async for document in db[cls.collection_name].find({'_dialog_id': dialog_id}).sort('_in_dialog_id'):
             result.append(cls(actual=True, **document))
         return result
 
@@ -173,6 +182,8 @@ class Dialog:
         self._bot_id = _bot_id
         self._active = _active
         self.utterances = []
+        self.human_utterances = []
+        self.bot_utterances = []
         self.version = version or STATE_API_VERSION
         self._dict = {}
         self.actual = actual
@@ -187,21 +198,39 @@ class Dialog:
 
     @classmethod
     async def prepare_collection(cls, db):
-        await db[cls.collection_name].create_index([('_user_id', pymongo.ASCENDING), ('_active', pymongo.DESCENDING)])
+        await db[cls.collection_name].create_index(
+            [
+                ('_user_id', pymongo.ASCENDING),
+                ('_active', pymongo.DESCENDING)
+            ]
+        )
+        await db[cls.collection_name].create_index(
+            [
+                ('date_start', pymongo.DESCENDING),
+                ('date_finish', pymongo.DESCENDING),
+            ]
+        )
+        await db[cls.collection_name].create_index('date_start')
+        await db[cls.collection_name].create_index('date_finish')
 
     def to_dict(self):
         return {
             'id': self.id,
             'utterances': [i.to_dict() for i in self.utterances],
+            'human_utterances': [i.to_dict() for i in self.human_utterances],
+            'bot_utterances': [i.to_dict() for i in self.bot_utterances],
             'human': self.human.to_dict(),
-            'bot': self.bot.to_dict()
+            'bot': self.bot.to_dict(),
+            'channel_type': self.channel_type,
+            'date_start': str(self.date_start),
+            'date_finish': str(self.date_finish),
         }
 
     async def load_external_info(self, db):
         if self._id:
-            human_utterances = await HumanUtterance.get_many(db, self._id)
-            bot_utterances = await BotUtterance.get_many(db, self._id)
-            self.utterances = sorted(chain(human_utterances, bot_utterances), key=lambda x: x._in_dialog_id)
+            self.human_utterances = await HumanUtterance.get_many(db, self._id)
+            self.bot_utterances = await BotUtterance.get_many(db, self._id)
+            self.utterances = sorted(chain(self.human_utterances, self.bot_utterances), key=lambda x: x._in_dialog_id)
             self.bot = await Bot.get_or_create(db, self._bot_id)
 
     @classmethod
@@ -287,6 +316,10 @@ class Dialog:
         human = await Human.get_or_create(db, telegram_id)
         return await cls.get_or_create_by_user(db, human, channel_type)
 
+    @classmethod
+    async def get_channels(cls, db):
+        return await db[cls.collection_name].distinct('channel_type')
+
     def add_human_utterance(self):
         ind = 0
         if self.utterances:
@@ -311,8 +344,9 @@ class Dialog:
                 '_human_id': self._human_id,
                 '_bot_id': self._bot_id,
                 '_active': self._active,
-                'channel_type': self.channel_type
-            })
+                'channel_type': self.channel_type,
+            }
+            )
             dialog = await db[self.collection_name].insert_one(data)
             self._id = dialog.inserted_id
         else:
@@ -325,16 +359,15 @@ class Dialog:
                 break
             utt._dialog_id = self._id
             await utt.save(db)
+        logger.info("Dialog saving finished...")
 
 
 class Human:
     collection_name = 'user'
     fieldlist = ['persona', 'attributes', 'profile']
 
-    def __init__(
-        self, telegram_id, _id=None, persona=None,
-        attributes=None, profile=None
-    ):
+    def __init__(self, telegram_id, _id=None, persona=None,
+                 attributes=None, profile=None):
         self._id = _id
         self.temp_id = None
         if not _id:
@@ -408,7 +441,9 @@ class Human:
                 {'_id': self._id},
                 {'$set': {
                     'persona': self.persona,
-                    'profile': self.profile, 'attributes': self.attributes}}
+                    'profile': self.profile, 'attributes': self.attributes
+                }
+                }
             )
         return self._id
 

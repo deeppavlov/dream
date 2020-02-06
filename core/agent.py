@@ -1,121 +1,38 @@
 import asyncio
-from collections import defaultdict
-from time import time
-from typing import Any, Callable, Hashable, Optional
+from typing import Any, Hashable
 
+from core.log import BaseResponseLogger
 from core.pipeline import Pipeline
 from core.state_manager import StateManager
-from core.state_schema import Dialog
+from core.workflow_manager import WorkflowManager
 
 import logging
 from os import getenv
 import sentry_sdk
+from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 
-sentry_sdk.init(getenv('SENTRY_DSN'))
-
+sentry_sdk.init(dsn=getenv('SENTRY_DSN'), integrations=[AioHttpIntegration()])
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 class Agent:
-    def __init__(self, pipeline: Pipeline, state_manager: StateManager,
-                 process_logger_callable: Optional[Callable] = None,
-                 response_logger_callable: Optional[Callable] = None):
-        self.workflow = dict()
+    _response_logger: BaseResponseLogger
+
+    def __init__(self,
+                 pipeline: Pipeline,
+                 state_manager: StateManager,
+                 workflow_manager: WorkflowManager,
+                 response_logger: BaseResponseLogger) -> None:
         self.pipeline = pipeline
         self.state_manager = state_manager
-        self.process_logger_callable = process_logger_callable
-        self.response_logger_callable = response_logger_callable
-
-    def add_workflow_record(self, dialog: Dialog, deadline_timestamp: Optional[float] = None, **kwargs):
-        if str(dialog.id) in self.workflow.keys():
-            raise ValueError(f'dialog with id {dialog.id} is already in workflow')
-        workflow_record = {'dialog': dialog, 'services': defaultdict(dict)}
-        if deadline_timestamp:
-            workflow_record['deadline_timestamp'] = deadline_timestamp
-        if 'dialog_object' in kwargs:
-            raise ValueError("'dialog_object' is system reserved workflow record field")
-        workflow_record.update(kwargs)
-        self.workflow[str(dialog.id)] = workflow_record
-
-    def get_workflow_record(self, dialog_id):
-        record = self.workflow.get(dialog_id, None)
-        if not record:
-            raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
-        return record
+        self.workflow_manager = workflow_manager
+        self._response_logger = response_logger
 
     def flush_record(self, dialog_id: str):
-        if dialog_id not in self.workflow.keys():
-            raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
-        if self.response_logger_callable:
-            self.response_logger_callable(self.workflow[dialog_id])
-        return self.workflow.pop(dialog_id)
-
-    def register_service_request(self, dialog_id: str, service_name):
-        if dialog_id not in self.workflow.keys():
-            raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
-        self.workflow[dialog_id]['services'][service_name] = {'send': True, 'done': False, 'agent_send_time': time(),
-                                                              'agent_done_time': None}
-
-    def get_services_status(self, dialog_id: str):
-        if dialog_id not in self.workflow.keys():
-            raise ValueError(f'dialog with id {dialog_id} is not exist in workflow')
-        done, waiting = set(), set()
-        for key, value in self.workflow[dialog_id]['services'].items():
-            if value['done']:
-                done.add(key)
-            else:
-                waiting.add(key)
-
-        return done, waiting
-
-    async def process_service_response(self, dialog_id: str, service_name: str = None, response: Any = None,
-                                       **kwargs):
-        if "dialog_object" not in response:
-            logger.info(f"Service: {response}")
-        workflow_record = self.get_workflow_record(dialog_id)
-
-        # Updating workflow with service response
-        service = self.pipeline.get_service_by_name(service_name)
-        if service:
-            service_data = self.workflow[dialog_id]['services'][service_name]
-            service_data['done'] = True
-            service_data['agent_done_time'] = time()
-            if service.state_processor_method:
-                await service.state_processor_method(
-                    dialog=workflow_record['dialog'], payload=response,
-                    message_attrs=kwargs.pop('message_attrs', {})
-                )
-
-            # passing kwargs to services record
-            if not set(service_data.keys()).intersection(set(kwargs.keys())):
-                service_data.update(kwargs)
-
-        # Flush record  and return zero next services if service is is_responder
-        if service.is_responder():
-            if not workflow_record.get('hold_flush'):
-                self.flush_record(dialog_id)
-            return []
-
-        # Calculating next steps
-        done, waiting = self.get_services_status(dialog_id)
-        next_services = self.pipeline.get_next_services(done, waiting)
-
-        # Processing the case, when service is a skill selector
-        if service and service.is_sselector():
-            selected_services = list(response.values())[0]
-            result = []
-            for service in next_services:
-                if service.name not in selected_services:
-                    self.workflow[dialog_id]['services'][service.name] = {'done': True, 'send': False,
-                                                                          'agent_send_time': None,
-                                                                          'agent_done_time': None}
-                else:
-                    result.append(service)
-            next_services = result
-
-        return next_services
+        workflow_record = self.workflow_manager.flush_record(dialog_id)
+        return workflow_record
 
     async def register_msg(self, utterance: str, user_telegram_id: Hashable,
                            user_device_type: Any, location: Any,
@@ -123,47 +40,70 @@ class Agent:
                            require_response=False, **kwargs):
         dialog = await self.state_manager.get_or_create_dialog_by_tg_id(user_telegram_id, channel_type)
         dialog_id = str(dialog.id)
-        service_name = 'input'
+        service = self.pipeline.get_service_by_name('input')
         message_attrs = kwargs.pop('message_attrs', {})
 
         if require_response:
             event = asyncio.Event()
             kwargs['event'] = event
-            self.add_workflow_record(dialog=dialog, deadline_timestamp=deadline_timestamp, hold_flush=True, **kwargs)
-            self.register_service_request(dialog_id, service_name)
-            # TODO(pugin): remove after tasks and stats is merged
-            if self.process_logger_callable:
-                await self.process_logger_callable(service_name, time(), 'send')
-            await self.process(dialog_id, service_name, response=utterance, message_attrs=message_attrs)
+            kwargs['hold_flush'] = True
+
+        self.workflow_manager.add_workflow_record(
+            dialog=dialog, deadline_timestamp=deadline_timestamp, **kwargs)
+        task_id = self.workflow_manager.add_task(dialog_id, service, utterance, 0)
+        self._response_logger.log_start(task_id, {'dialog': dialog}, service)
+        asyncio.create_task(self.process(task_id, utterance, message_attrs=message_attrs))
+
+        if require_response:
             await event.wait()
             return self.flush_record(dialog_id)
 
-        self.add_workflow_record(dialog=dialog, deadline_timestamp=deadline_timestamp, **kwargs)
-        self.register_service_request(dialog_id, service_name)
-        # TODO(pugin): remove after tasks and stats is merged
-        if self.process_logger_callable:
-            await self.process_logger_callable(service_name, time(), 'send')
-        await self.process(dialog_id, service_name, response=utterance, message_attrs=message_attrs)
+    async def process(self, task_id, response: Any = None, **kwargs):
+        workflow_record, task_data = self.workflow_manager.complete_task(task_id, response, **kwargs)
+        service = task_data['service']
 
-    async def process(self, dialog_id, service_name=None, response: Any = None, **kwargs):
-        # TODO(pugin): remove after tasks and stats is merged
-        if self.process_logger_callable and service_name:
-            await self.process_logger_callable(service_name, time(), 'done', **kwargs)
-        workflow_record = self.get_workflow_record(dialog_id)
+        logger.info(f"Service {service.label}: {response}")
+
+        self._response_logger.log_end(task_id, workflow_record, service)
+
         if isinstance(response, Exception):
-            await self.process_logger_callable('responder', time(), 'done')
-            raise response
-        next_services = await self.process_service_response(dialog_id, service_name, response, **kwargs)
+            logger.exception(response)
+            sentry_sdk.capture_exception(response)
+            # Skip all services, which are depends on failured one
+            for i in service.dependent_services:
+                self.workflow_manager.skip_service(workflow_record['dialog'].id, i)
+        else:
+            response_data = service.apply_response_formatter(response)
+            # Updating workflow with service response
+            if service.state_processor_method:
+                await service.state_processor_method(
+                    dialog=workflow_record['dialog'], payload=response_data,
+                    label=service.label,
+                    message_attrs=kwargs.pop('message_attrs', {}), ind=task_data['ind']
+                )
 
-        service_requests = []
+            # Processing the case, when service is a skill selector
+            if service and service.is_sselector():
+                skipped_services = {s for s in service.next_services if s.label not in set(response_data)}
+
+                for s in skipped_services:
+                    self.workflow_manager.skip_service(workflow_record['dialog'].id, s)
+
+            # Flush record  and return zero next services if service is is_responder
+            elif service.is_responder():
+                if not workflow_record.get('hold_flush'):
+                    self.flush_record(workflow_record['dialog'].id)
+                return
+
+        # Calculating next steps
+        done, waiting, skipped = self.workflow_manager.get_services_status(workflow_record['dialog'].id)
+        next_services = self.pipeline.get_next_services(done, waiting, skipped)
+
         for service in next_services:
-            self.register_service_request(dialog_id, service.name)
-            # TODO(pugin): remove after tasks and stats is merged
-            if self.process_logger_callable:
-                await self.process_logger_callable(service.name, time(), 'send')
-            payload = service.apply_workflow_formatter(workflow_record)
-            service_requests.append(
-                service.connector_func(payload=payload, callback=self.process)
-            )
-
-        await asyncio.gather(*service_requests)
+            tasks = service.apply_dialog_formatter(workflow_record)
+            for ind, task_data in enumerate(tasks):
+                task_id = self.workflow_manager.add_task(workflow_record['dialog'].id, service, task_data, ind)
+                self._response_logger.log_start(task_id, workflow_record, service)
+                asyncio.create_task(
+                    service.connector_func(payload={'task_id': task_id, 'payload': task_data}, callback=self.process)
+                )

@@ -28,6 +28,12 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# classes:
+# very_positive	3446
+# negative	2092
+# neutral	1549
+# very_negative	1030
+
 
 @register("sentiment_classification")
 class BertFloatClassifierModel(BertClassifierModel):
@@ -38,7 +44,7 @@ class BertFloatClassifierModel(BertClassifierModel):
 
     """
 
-    all_columns = ["neutral", "negative", "very_positive", "positive", "very_negative"]
+    all_columns = ["very_positive", "negative", "neutral", "very_negative"]
     used_columns = ["neutral", "very_positive", "very_negative"]
     map2base_sentiment = {"neutral": "neutral", "very_positive": "positive", "very_negative": "negative"}
 

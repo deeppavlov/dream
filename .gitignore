@@ -113,9 +113,24 @@ venv.bak/
 .vscode/
 
 
-.*DS_Store
+*.DS_Store
 
 tests/dream/output/*
 
 skills/transfertransfo/tests/test_results.json
 skills/movie_skill/src/databases/imdb_58k_parsed.json
+
+
+
+skills/alexa-prize-news/contexts/
+skills/alexa-prize-news/*.db
+skills/alexa-prize-news/data/
+skills/alexa-prize-news/files/
+skills/alexa-prize-news/*.model
+skills/alexa-prize-news/experiments/subtopics3.txt
+skills/alexa-prize-news/AlexaPrize/model/testModel3.db.done
+skills/alexa-prize-news/AlexaPrize/model/testModel3.npz
+skills/alexa-prize-news/AlexaPrize/topic_modeling/subtopics.dict
+skills/alexa-prize-news/AlexaPrize/topic_modeling/dictionary.dict
+skills/alexa-prize-news/experiments/.ipynb_checkpoints/
+intent_data_train.json

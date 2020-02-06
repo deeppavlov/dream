@@ -1,15 +1,20 @@
 services:
   agent:
-    command: sh -c './utils/setup_cron.sh && bin/wait && python3 -m core.run -ch http_client --response-logger --debug'
+    command: sh -c './utils/setup_cron.sh && bin/wait && python3 run.py -ch http_client -rl -d -pl alexa_pipeline_conf.json -db db_conf.json'
     build:
       context: ./
       dockerfile: dockerfile_agent
     ports:
       - 4242:4242
     environment:
-      WAIT_HOSTS: "rule_based_selector:8002, cobotqa:8001, cobot_topics:8003, transfertransfo:8007,
-        toxic_classification:8013, sentrewrite:8017, ner:8021, sentiment_classification:8024,
-        attitude_classification:8025, movie_skill:8023"
+      WAIT_HOSTS: "cobotqa:8001, cobot_topics:8003, cobot_offensiveness:8005,
+        cobot_dialogact:8006, program_y:8008, sentseg:8011, convers_evaluation_selector:8009, personality_catcher:8010,
+        intent_responder:8012, intent_catcher:8014, cobot_nounphrases:8016, blacklisted_words:8018,
+        toxic_classification:8013, sentrewrite:8017, ner:8021,  program_y_dangerous:8022, movie_skill:8023,
+        sentiment_classification:8024, attitude_classification:8025, news_skill:8027, tfidf_retrieval:8028,
+        convert_reddit:8029, personal_info_skill:8030, asr:8031, book_skill:8032, misheard_asr:8033,
+        christmas_new_year_skill:8036, weather_skill:8037, emotion_classification:8038, alice:8000,
+        eliza:8047, emotion_skill:8049, comet:8053"
       WAIT_HOSTS_TIMEOUT: 480
     deploy:
       mode: replicated
@@ -17,17 +22,7 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
-  rule_based_selector:
-    build:
-      context: ./skill_selectors/rule_based_selector
-    command: gunicorn --workers=4 server:app -b 0.0.0.0:8002
-    volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+          - node.labels.is_agent == true
   cobotqa:
     build:
       context: ./skills/CoBotQA/
@@ -74,30 +69,6 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
-  transfertransfo:
-    build:
-      context: ./skills/transfertransfo/
-    environment:
-      DEVICE: cuda
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8007 -t 60
-    volumes: []
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.with_gpu == true
-  retrieval_chitchat:
-    build:
-      context: ./skills/retrieval_chitchat/
-    command: uvicorn server:app --host 0.0.0.0 --port 8015
-    volumes: []
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
   program_y:
     build:
       context: ./skills/program-y/
@@ -111,13 +82,13 @@ services:
       start_period: 1m
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
       placement:
         constraints:
           - node.labels.with_gpu != true
       resources:
         limits:
-          memory: 2G
+          memory: 1G
   personality_catcher:
     build:
       context: ./skills/personality_catcher/
@@ -125,7 +96,7 @@ services:
     volumes: []
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
       placement:
         constraints:
           - node.labels.with_gpu != true
@@ -158,6 +129,7 @@ services:
         skillconfig: annotators/DeepPavlovToxicClassification/toxic_classification.json
         skillhost: 0.0.0.0
         skillport: 8013
+        skilldir: annotators/DeepPavlovToxicClassification/
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -172,9 +144,10 @@ services:
     build:
       args:
         skill_endpoint: sentiment_annotations
-        skillconfig: annotators/DeepPavlovSentimentClassification/sentiment_yelp_conv_bert.json
+        skillconfig: annotators/DeepPavlovSentimentClassification/sentiment_sst_conv_bert.json
         skillhost: 0.0.0.0
         skillport: 8024
+        skilldir: annotators/DeepPavlovSentimentClassification/
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -213,7 +186,7 @@ services:
     volumes: []
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
       placement:
         constraints:
           - node.labels.with_gpu != true
@@ -224,17 +197,6 @@ services:
     build:
       context: ./annotators/BlacklistedWordsDetector/
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8018
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
-  dummy_skill:
-    build:
-      context: ./skills/dummy_skill/
-    command: gunicorn --workers=4 server:app -b 0.0.0.0:8019
-    volumes: []
     deploy:
       mode: replicated
       replicas: 2
@@ -254,13 +216,13 @@ services:
       start_period: 1m
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
       placement:
         constraints:
           - node.labels.with_gpu != true
       resources:
         limits:
-          memory: 2G
+          memory: 1G
   cobot_nounphrases:
     build:
       context: ./annotators/nounphrases/
@@ -283,6 +245,7 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+          - node.labels.group == 0
       resources:
         limits:
           memory: 6G
@@ -307,6 +270,7 @@ services:
         skillconfig: annotators/DeepPavlovAttitudeClassification/amazon_reviews_bert.json
         skillhost: 0.0.0.0
         skillport: 8025
+        skilldir: annotators/DeepPavlovAttitudeClassification/
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -327,6 +291,17 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+  eliza:
+    build:
+      context: ./skills/eliza/
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8047
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   tfidf_retrieval:
     build:
       context: ./skills/tfidf_retrieval/
@@ -338,14 +313,150 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+  book_tfidf_retrieval:
+    build:
+      context: ./skills/topicalchat_tfidf_retrieval/
+      args:
+        TOPICAL_DATA_URL: http://lnsigo.mipt.ru/export/alexaprize_data/topicalchat_tfidf_retrieval/topicalchat_book_data.tar.gz
+        MODELS_URL: http://lnsigo.mipt.ru/export/models/new_vectorizer_2.zip
+        TOPIC_NAME: book
+        CONFIDENCE_THRESHOLD: 0.51
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8039
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+  entertainment_tfidf_retrieval:
+    build:
+      context: ./skills/topicalchat_tfidf_retrieval/
+      args:
+        TOPICAL_DATA_URL: http://lnsigo.mipt.ru/export/alexaprize_data/topicalchat_tfidf_retrieval/topicalchat_entertainment_data.tar.gz
+        MODELS_URL: http://lnsigo.mipt.ru/export/models/new_vectorizer_2.zip
+        TOPIC_NAME: entertainment
+        CONFIDENCE_THRESHOLD: 0.59
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8040
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+  fashion_tfidf_retrieval:
+    build:
+      context: ./skills/topicalchat_tfidf_retrieval/
+      args:
+        TOPICAL_DATA_URL: http://lnsigo.mipt.ru/export/alexaprize_data/topicalchat_tfidf_retrieval/topicalchat_fashion_data.tar.gz
+        MODELS_URL: http://lnsigo.mipt.ru/export/models/new_vectorizer_2.zip
+        TOPIC_NAME: fashion
+        CONFIDENCE_THRESHOLD: 0.6
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8041
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+  movie_tfidf_retrieval:
+    build:
+      context: ./skills/topicalchat_tfidf_retrieval/
+      args:
+        TOPICAL_DATA_URL: http://lnsigo.mipt.ru/export/alexaprize_data/topicalchat_tfidf_retrieval/topicalchat_movie_data.tar.gz
+        MODELS_URL: http://lnsigo.mipt.ru/export/models/new_vectorizer_2.zip
+        TOPIC_NAME: movie
+        CONFIDENCE_THRESHOLD: 0.6
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8042
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   music_tfidf_retrieval:
     build:
-      context: ./skills/music_tfidf_retrieval/
+      context: ./skills/topicalchat_tfidf_retrieval/
+      args:
+        TOPICAL_DATA_URL: http://lnsigo.mipt.ru/export/alexaprize_data/topicalchat_tfidf_retrieval/topicalchat_music_data.tar.gz
+        MODELS_URL: http://lnsigo.mipt.ru/export/models/new_vectorizer_2.zip
+        TOPIC_NAME: music
+        CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8034
     volumes: []
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+  politics_tfidf_retrieval:
+    build:
+      context: ./skills/topicalchat_tfidf_retrieval/
+      args:
+        TOPICAL_DATA_URL: http://lnsigo.mipt.ru/export/alexaprize_data/topicalchat_tfidf_retrieval/topicalchat_politics_data.tar.gz
+        MODELS_URL: http://lnsigo.mipt.ru/export/models/new_vectorizer_2.zip
+        TOPIC_NAME: politics
+        CONFIDENCE_THRESHOLD: 0.6
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8043
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+  science_technology_tfidf_retrieval:
+    build:
+      context: ./skills/topicalchat_tfidf_retrieval/
+      args:
+        TOPICAL_DATA_URL: http://lnsigo.mipt.ru/export/alexaprize_data/topicalchat_tfidf_retrieval/topicalchat_science_technology_data.tar.gz
+        MODELS_URL: http://lnsigo.mipt.ru/export/models/new_vectorizer_2.zip
+        TOPIC_NAME: science_technology
+        CONFIDENCE_THRESHOLD: 0.6
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8044
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+  sport_tfidf_retrieval:
+    build:
+      context: ./skills/topicalchat_tfidf_retrieval/
+      args:
+        TOPICAL_DATA_URL: http://lnsigo.mipt.ru/export/alexaprize_data/topicalchat_tfidf_retrieval/topicalchat_sport_data.tar.gz
+        MODELS_URL: http://lnsigo.mipt.ru/export/models/new_vectorizer_2.zip
+        TOPIC_NAME: sport
+        CONFIDENCE_THRESHOLD: 0.6
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8045
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+  animals_tfidf_retrieval:
+    build:
+      context: ./skills/topicalchat_tfidf_retrieval/
+      args:
+        TOPICAL_DATA_URL: http://lnsigo.mipt.ru/export/alexaprize_data/topicalchat_tfidf_retrieval/topicalchat_animals_data.tar.gz
+        MODELS_URL: http://lnsigo.mipt.ru/export/models/new_vectorizer_2.zip
+        TOPIC_NAME: animals
+        CONFIDENCE_THRESHOLD: 0.6
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8050
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   convert_reddit:
     build:
       context: ./skills/convert_reddit/
@@ -357,9 +468,21 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+  convert_reddit_with_personality:
+    build:
+      context: ./skills/convert_reddit_with_personality/
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8048 -t 60
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   personal_info_skill:
     build:
-      context: ./skills/personal_info_skill/
+      context: .
+      dockerfile: ./skills/personal_info_skill/Dockerfile
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8030
     volumes: []
     deploy:
@@ -409,6 +532,17 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+  superbowl_skill:
+    build:
+      context: ./skills/superbowl_skill/
+    command: gunicorn --workers=4 server:app -b 0.0.0.0:8051
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   weather_skill:
     build:
       context: ./skills/weather_skill/
@@ -420,4 +554,59 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+          - node.labels.group == 1
+  emotion_skill:
+    build:
+      context: ./skills/emotion_skill/
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8049
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+  emotion_classification:
+    build:
+      args:
+        skill_endpoint: emotion_annotations
+        skillconfig: annotators/DeepPavlovEmotionClassification/emo_bert.json
+        skillhost: 0.0.0.0
+        skillport: 8038
+        skilldir: annotators/DeepPavlovEmotionClassification/
+      context: ./
+      dockerfile: dp/dockerfile_skill_gpu
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu == true
+  news_skill:
+    build:
+      context: .
+      dockerfile: ./skills/alexa-prize-news/Dockerfile
+    command: bash -c "python updater.py | gunicorn --workers=1 server:app -b 0.0.0.0:8027 -t 300"
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+  comet:
+    build:
+      context: ./annotators/COMeT/
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8053
+    volumes: []
+    environment: 
+      DEVICE: gpu_0
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu == true
 version: '3.7'

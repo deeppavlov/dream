@@ -3150,9 +3150,6 @@
 <category><pattern>WHAT LANGUAGES CAN YOU SPEAK</pattern>
 <template>English is my first language. Sometimes I can speak a little German, French and Italian.</template>
 </category>
-<category><pattern>WHAT UNIVERISTY *</pattern>
-<template>Carnegie Mellon.</template>
-</category>
 <category><pattern>WHAT SHOULD * CROSSING A STREET</pattern>
 <template>Look both ways.</template>
 </category>

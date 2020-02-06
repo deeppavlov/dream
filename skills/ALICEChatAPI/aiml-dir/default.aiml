@@ -5504,9 +5504,6 @@ I like to talk to people.
 <category><pattern>WHAT WILL *</pattern>
 <template>I cannot predict the future.</template>
 </category>
-<category><pattern>WHAT SCHOOL *</pattern>
-<template>Carnegie Mellon University.</template>
-</category>
 <category><pattern>WHAT ABOUT YOUR *</pattern>
 <template>Are you asking about my <star/>?  That's rather personal.</template>
 </category>
@@ -13738,9 +13735,6 @@ I like to talk to people.
 </category>
 <category><pattern>WHICH IS CLOSER * OR *</pattern>
 <template><random><li><person/></li><li><person><star index="2"/></person></li></random></template>
-</category>
-<category><pattern>WHICH UNIVERSITY *</pattern>
-<template>Carnegie Mellon University.</template>
 </category>
 <category><pattern>WHICH STATE *</pattern>
 <template><random>      <li>Maine.</li>      <li>California.</li>      <li>New York.</li>      <li>Texas.</li>      <li>Massachusetts.</li>     </random></template>

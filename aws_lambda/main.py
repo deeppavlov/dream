@@ -5,6 +5,7 @@ import os
 import ask_sdk_core.utils as ask_utils
 import requests
 import sentry_sdk
+import json
 from ask_sdk_core.dispatch_components import AbstractExceptionHandler
 from ask_sdk_core.dispatch_components import AbstractRequestHandler
 from ask_sdk_core.handler_input import HandlerInput
@@ -68,18 +69,29 @@ def call_dp_agent(user_id, text, request_data):
             json={'user_id': user_id, 'payload': text, 'device_id': device_id,
                   'session_id': session_id, 'request_id': request_id,
                   'conversation_id': conversation_id, 'speech': speech},
-            timeout=7).json()
+            timeout=4).json()
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         sentry_sdk.capture_exception(e)
         logger.exception("AWS_LAMBDA Timeout")
-        return {'response': "Okay...", 'intent': None}
+        return {'response': "I am thinking...", 'intent': None}
+    except json.JSONDecodeError as e:
+        sentry_sdk.capture_exception(e)
+        logger.exception("AWS_LAMBDA JSONDecodeError")
+        return {
+            'response': "We'll meet again, Don't know where, don't know when,"
+                        "But I know we'll meet again, Some sunny day.",
+            'intent': 'exit'}
 
-    if r.get('active_skill') == 'intent_responder':
+    if r.get('active_skill') == 'intent_responder' or '#+#' in r["response"]:
         response, intent = r["response"].split("#+#")
+        if intent[-1] == '.':  # Programy dangerous returns with . in the end
+            intent = intent[:-1]
     else:
         response = r["response"]
 
-    logger.info("call_dp_agent user_id: {}; text: {}; repsonse: {}".format(user_id, text, response))
+    logger.info("call_dp_agent user_id: {}; text: {}; repsonse: {}; intent: {}".format(
+        user_id, text, response, intent
+    ))
 
     return {'response': response, 'intent': intent}
 
@@ -156,11 +168,11 @@ class SessionEndedRequestHandler(AbstractRequestHandler):
         return ask_utils.is_request_type("SessionEndedRequest")(handler_input)
 
     def handle(self, handler_input):
-        logger.info("SessionEndedRequestHandler")
-        # type: (HandlerInput) -> Response
-
+        if request_data['request'].get('reason') != 'USER_INITIATED':
+            with sentry_sdk.push_scope() as scope:
+                scope.set_extra('request_data', request_data)
+                sentry_sdk.capture_message('Strange SessionEndedRequestHandler reason')
         # Any cleanup logic goes here.
-
         return handler_input.response_builder.response
 
 
@@ -198,7 +210,7 @@ class IntentReflectorHandler(AbstractRequestHandler):
             dp_agent_data = call_dp_agent(user_id, text, request_data)
         else:
             dp_agent_data = {"response": "Sorry", "intent": None}
-            msg = f"LAMBDA: NO TEXT NO SPEECH!\nincoming request: {request_data['request']}"
+            msg = f"LAMBDA: NO TEXT NO SPEECH! incoming request: {request_data['request']}"
             logger.warning(msg)
             sentry_sdk.capture_message(msg)
 
@@ -246,7 +258,7 @@ def handler_wrapper(event, context):
     global request_data
     request_data = event
     if 'request' in request_data:
-        logger.info(f'incoming request:\n{request_data["request"]}')
+        logger.info(f'incoming request: {request_data["request"]}')
     else:
         msg = 'LAMBDA: no field request in request_data'
         logger.warning(msg)

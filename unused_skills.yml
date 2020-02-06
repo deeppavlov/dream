@@ -1,10 +1,4 @@
-services:  
-  alice:
-    build:
-      context: ./skills/ALICEChatAPI/
-    ports: ['8000:8000']
-    command: gunicorn --workers=2 server:app -b 0.0.0.0:8000
-    volumes: []
+services:
   aiml:
     build:
       args:
@@ -18,4 +12,28 @@ services:
       - CUDA_VISIBLE_DEVICES=""
     ports:
       - 2080:2080
+  transfertransfo:
+    build:
+      context: ./skills/transfertransfo/
+    environment:
+      DEVICE: cuda
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8007 -t 60
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu == true
+  retrieval_chitchat:
+    build:
+      context: ./skills/retrieval_chitchat/
+    command: uvicorn server:app --host 0.0.0.0 --port 8015
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
 version: '3.7'

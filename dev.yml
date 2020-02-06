@@ -1,7 +1,7 @@
 # С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
 services:
   agent:
-    command: sh -c 'bin/wait && python3 -m core.run -ch http_client --response-logger --debug'
+    command: sh -c 'bin/wait && python3 run.py -ch http_client -rl -d -pl alexa_pipeline_conf.json -db db_conf.json'
     env_file: [.env.dev]
     volumes:
       - ".:/dp-agent"
@@ -11,12 +11,6 @@ services:
       - "./skills/CoBotQA:/src"
     ports:
       - 8001:8001
-  rule_based_selector:
-    env_file: [.env.dev]
-    volumes:
-      - "./skill_selectors/rule_based_selector:/src"
-    ports:
-      - 8002:8002
   cobot_topics:
     env_file: [.env.dev]
     volumes:
@@ -53,22 +47,6 @@ services:
       - "./annotators/CoBotDialogActClassification:/src"
     ports:
       - 8006:8006
-  transfertransfo:
-    build:
-      args:
-        MODE: dev
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/transfertransfo:/app"
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8007 --timeout 60 --reload
-    ports:
-      - 8007:8007
-  retrieval_chitchat:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/retrieval_chitchat:/app"
-    ports:
-      - 8015:8015
   personality_catcher:
     env_file: [.env.dev]
     volumes:
@@ -108,6 +86,12 @@ services:
       - "./annotators/DeepPavlovSentimentClassification:/dp-agent/annotators/DeepPavlovSentimentClassification"
     ports:
       - 8024:8024
+  emotion_classification:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/DeepPavlovEmotionClassification:/dp-agent/annotators/DeepPavlovEmotionClassification"
+    ports:
+      - 8038:8038
   intent_responder:
     env_file: [.env.dev]
     volumes:
@@ -126,12 +110,6 @@ services:
       - "./annotators/BlacklistedWordsDetector:/src"
     ports:
       - 8018:8018
-  dummy_skill:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/dummy_skill:/src"
-    ports:
-      - 8019:8019
   program_y_dangerous:
     env_file: [.env.dev]
     volumes:
@@ -163,29 +141,104 @@ services:
       - "./skills/ALICEChatAPI:/src"
     ports:
       - 8000:8000
+  eliza:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/eliza:/src"
+    ports:
+      - 8047:8047
+  emotion_skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/emotion_skill:/src"
+    ports:
+      - 8049:8049
+  news_skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./common:/src/common"
+      - "./skills/alexa-prize-news/src:/src/src"
+      - "./skills/alexa-prize-news/server.py:/src/src/server.py"
+      - "./skills/alexa-prize-news/updater.py:/src/src/updater.py"
+    ports:
+      - 8027:8027
   tfidf_retrieval:
     env_file: [.env.dev]
     volumes:
       - "./skills/tfidf_retrieval:/src"
     ports:
       - 8028:8028
-
+  book_tfidf_retrieval:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/topicalchat_tfidf_retrieval:/src"
+    ports:
+      - 8039:8039
+  entertainment_tfidf_retrieval:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/topicalchat_tfidf_retrieval:/src"
+    ports:
+      - 8040:8040
+  fashion_tfidf_retrieval:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/topicalchat_tfidf_retrieval:/src"
+    ports:
+      - 8041:8041
+  movie_tfidf_retrieval:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/topicalchat_tfidf_retrieval:/src"
+    ports:
+      - 8042:8042
   music_tfidf_retrieval:
     env_file: [.env.dev]
     volumes:
-      - "./skills/music_tfidf_retrieval:/src"
+      - "./skills/topicalchat_tfidf_retrieval:/src"
     ports:
       - 8034:8034
+  politics_tfidf_retrieval:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/topicalchat_tfidf_retrieval:/src"
+    ports:
+      - 8043:8043
+  science_technology_tfidf_retrieval:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/topicalchat_tfidf_retrieval:/src"
+    ports:
+      - 8044:8044
+  sport_tfidf_retrieval:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/topicalchat_tfidf_retrieval:/src"
+    ports:
+      - 8045:8045
+  animals_tfidf_retrieval:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/topicalchat_tfidf_retrieval:/src"
+    ports:
+      - 8050:8050
   convert_reddit:
     env_file: [.env.dev]
     volumes:
       - "./skills/convert_reddit:/app"
     ports:
       - 8029:8029
+  convert_reddit_with_personality:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/convert_reddit_with_personality:/app"
+    ports:
+      - 8048:8048
   personal_info_skill:
     env_file: [.env.dev]
     volumes:
       - "./skills/personal_info_skill:/src"
+      - "./common:/src/common"
     ports:
       - 8030:8030
   asr:
@@ -212,10 +265,20 @@ services:
       - "./skills/christmas_new_year_skill:/src"
     ports:
       - 8036:8036
+  superbowl_skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/superbowl_skill:/src"
+    ports:
+      - 8051:8051
   weather_skill:
     env_file: [.env.dev]
     volumes:
       - "./skills/weather_skill:/src"
     ports:
       - 8037:8037
+  comet:
+    env_file: [.env.dev]
+    ports:
+      - 8053:8053
 version: "3.7"

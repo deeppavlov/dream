@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 N_FACTS_TO_CHOSE = 3
-ASYNC_SIZE = int(os.environ.get('ASYNC_SIZE', 10))
+ASYNC_SIZE = int(os.environ.get('ASYNC_SIZE', 6))
 COBOT_API_KEY = os.environ.get('COBOT_API_KEY')
 COBOT_QA_SERVICE_URL = os.environ.get('COBOT_QA_SERVICE_URL')
 
@@ -64,6 +64,8 @@ def respond():
         questions.append(curr_uttr_rewritten)
         dialog_ids += [i]
 
+        facts_questions = []
+        facts_dialog_ids = []
         entities = []
         attit = curr_uttr["annotations"]["attitude_classification"]["text"]
         for _ in range(N_FACTS_TO_CHOSE):
@@ -71,24 +73,32 @@ def respond():
                 if not ent:
                     continue
                 ent = ent[0]
-                if ent["text"].lower() not in UNIGRAMS and (
-                        ent["text"].lower() != "alexa" and curr_uttr["text"].lower()[:5] == "alexa"):
+                if ent["text"].lower() not in UNIGRAMS and not (
+                        ent["text"].lower() == "alexa" and curr_uttr["text"].lower()[:5] == "alexa"):
                     if attit in ["neutral", "positive", "very_positive"]:
                         entities.append(ent["text"].lower())
-                        questions.append("Fun fact about {}".format(ent["text"]))
-                        dialog_ids += [i]
+                        facts_questions.append("Fun fact about {}".format(ent["text"]))
+                        facts_dialog_ids += [i]
                     else:
                         entities.append(ent["text"].lower())
-                        questions.append("Fact about {}".format(ent["text"]))
-                        dialog_ids += [i]
+                        facts_questions.append("Fact about {}".format(ent["text"]))
+                        facts_dialog_ids += [i]
             if len(entities) == 0:
                 for ent in curr_uttr["annotations"]["cobot_nounphrases"]:
                     if ent.lower() not in UNIGRAMS:
                         if ent in entities + ["I", 'i']:
                             pass
                         else:
-                            questions.append("Fact about {}".format(ent))
-                            dialog_ids += [i]
+                            facts_questions.append("Fact about {}".format(ent))
+                            facts_dialog_ids += [i]
+
+        if len(facts_questions) > 6:
+            ids = np.random.choice(np.arange(len(facts_questions)), size=6)
+            facts_questions = np.array(facts_questions)[ids].tolist()
+            facts_dialog_ids = np.array(facts_dialog_ids)[ids].tolist()
+
+        questions.extend(facts_questions)
+        dialog_ids.extend(facts_dialog_ids)
 
     executor = ThreadPoolExecutor(max_workers=ASYNC_SIZE)
     for i, response in enumerate(executor.map(send_cobotqa, questions)):
@@ -115,7 +125,7 @@ def respond():
                 confidence = 0.7
             elif "have an opinion on that" in response:
                 confidence = 0.7
-            elif response in bad_answers:
+            elif response in bad_answers or "I have lots of" in response:
                 confidence = 0.5
             else:
                 confidence = 0.95

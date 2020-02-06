@@ -22,6 +22,11 @@
 
     <!-- Modified for Y-Bot by Keith Sterling July 2017 -->
 
+    <category>
+        <pattern>OFF</pattern>
+        <template>Okay. See you. #+#exit
+        </template>
+    </category>
 
     <category>
         <pattern>SEE YA *</pattern>

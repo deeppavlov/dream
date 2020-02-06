@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block title %}Dialogs list{% endblock %}
+{% block head %}
+{{ super() }}
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/data.js"></script>
+  <script src="https://code.highcharts.com/modules/series-label.js"></script>
+{% endblock %}
+{% block content %}
+  <div id="container_queue" style="min-width: 310px; min-height: 600px; margin: 0 auto"></div>
+  <div id="container_response_time" style="min-width: 310px; min-height: 600px; margin: 0 auto"></div>
+    <script type="text/javascript">
+        var socket = new WebSocket('ws://' + window.location.host + '/debug/current_load/ws');
+        var point;
+        var now;
+        var totalPoints = 600;
+        const chart_config = {
+             legend: {
+                layout: 'vertical',
+                align: 'left',
+                verticalAlign: 'top'
+            },
+            chart: {
+              animation: {
+                  duration: 400
+              }
+            },
+            plotOptions: {
+              line: {
+                marker: {
+                  enabled: false
+                },
+                animation: false,
+              },
+              series: {
+                animation: false,
+                label: {
+                  enabled: false
+                }
+              }
+            },
+            time: {
+                useUTC: false
+            },
+            xAxis: {
+                type: 'datetime',
+                tickInterval: 15000,
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }],
+                title: {
+                    text: 'Time'
+                }
+            },
+        };
+        // Create the chart
+        var chartQ = Highcharts.chart('container_queue', { ...chart_config,
+           ...{
+            yAxis: {
+              min: 0,
+              allowDecimals: false,
+              tickInterval: 1,
+              title: {
+                  text: 'Requests in processing'
+              },
+              plotLines: [{
+                  value: 0,
+                  width: 1,
+                  color: '#808080'
+              }]
+            },
+            title: {
+                text: 'Services Load'
+            }
+          }
+        });
+        var chartR = Highcharts.chart('container_response_time', { ...chart_config,
+          ...{  
+            yAxis: {
+              min: 0,
+              allowDecimals: true,
+              title: {
+                  text: 'Response time'
+              },
+            },
+            title: {
+                text: 'Services mean response time'
+            },
+          }
+        });
+        socket.onmessage = function(event) {
+          data = JSON.parse(event.data);
+          now = (new Date().getTime());
+          for (var [key, value] of Object.entries(data.current_load)) {
+            point = [now, value];
+            var currentSeries = chartQ.series.find(a => a.name === key);
+            if (currentSeries) { 
+              currentSeries.addPoint(point, false, currentSeries.data.length > totalPoints);
+            } else {
+              chartQ.addSeries( {name: key, data: [point] }, false);
+            }
+          }
+          for (var [key, value] of Object.entries(data.response_time)) {
+            point = [now, value];
+            var currentSeries = chartR.series.find(a => a.name === key);
+            if (currentSeries) { 
+              currentSeries.addPoint(point, false, currentSeries.data.length > totalPoints);
+            } else {
+              chartR.addSeries( {name: key, data: [point] }, false);
+            }
+          }
+          chartQ.redraw();
+          chartR.redraw();
+        };
+        socket.onclose = function(event) {
+          alert('service is unavailable');
+        };
+    </script>
+{% endblock %}

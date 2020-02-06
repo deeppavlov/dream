@@ -1,9 +1,5 @@
 version: '3.7'
 services:
-  transfertransfo:
-    environment:
-      DEVICE: cpu
-      CUDA_VISIBLE_DEVICES: ""
   ner:
     environment:
       DEVICE: cpu
@@ -16,4 +12,11 @@ services:
       CUDA_VISIBLE_DEVICES: ""
   attitude_classification:
     environment:
+      CUDA_VISIBLE_DEVICES: ""
+  emotion_classification:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  comet:
+    environment: 
+      DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""

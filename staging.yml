@@ -7,10 +7,6 @@ services:
     image: ${DOCKER_REGISTRY}/cobotqa:${VERSION}
     env_file:
       - ${ENV_FILE}
-  rule_based_selector:
-    image: ${DOCKER_REGISTRY}/rule_based_selector:${VERSION}
-    env_file:
-      - ${ENV_FILE}
   cobot_topics:
     image: ${DOCKER_REGISTRY}/cobot_topics:${VERSION}
     env_file:
@@ -29,14 +25,6 @@ services:
       - ${ENV_FILE}
   cobot_dialogact:
     image: ${DOCKER_REGISTRY}/cobot_dialogact:${VERSION}
-    env_file:
-      - ${ENV_FILE}
-  transfertransfo:
-    image: ${DOCKER_REGISTRY}/transfertransfo:${VERSION}
-    env_file:
-      - ${ENV_FILE}
-  retrieval_chitchat:
-    image: ${DOCKER_REGISTRY}/retrieval_chitchat:${VERSION}
     env_file:
       - ${ENV_FILE}
   convers_evaluation_selector:
@@ -71,10 +59,6 @@ services:
     image: ${DOCKER_REGISTRY}/blacklisted_words:${VERSION}
     env_file:
       - ${ENV_FILE}
-  dummy_skill:
-    image: ${DOCKER_REGISTRY}/dummy_skill:${VERSION}
-    env_file:
-      - ${ENV_FILE}
   program_y_dangerous:
     image: ${DOCKER_REGISTRY}/program_y_dangerous:${VERSION}
     env_file:
@@ -104,14 +88,38 @@ services:
     image: ${DOCKER_REGISTRY}/alice:${VERSION}
     env_file:
       - ${ENV_FILE}
+  eliza:
+    image: ${DOCKER_REGISTRY}/eliza:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   tfidf_retrieval:
     image: ${DOCKER_REGISTRY}/tfidf_retrieval:${VERSION}
     env_file:
       - ${ENV_FILE}
+  book_tfidf_retrieval:
+    image: ${DOCKER_REGISTRY}/book_tfidf_retrieval:${VERSION}
+  entertainment_tfidf_retrieval:
+    image: ${DOCKER_REGISTRY}/entertainment_tfidf_retrieval:${VERSION}
+  fashion_tfidf_retrieval:
+    image: ${DOCKER_REGISTRY}/fashion_tfidf_retrieval:${VERSION}
+  movie_tfidf_retrieval:
+    image: ${DOCKER_REGISTRY}/movie_tfidf_retrieval:${VERSION}
   music_tfidf_retrieval:
     image: ${DOCKER_REGISTRY}/music_tfidf_retrieval:${VERSION}
+  politics_tfidf_retrieval:
+    image: ${DOCKER_REGISTRY}/politics_tfidf_retrieval:${VERSION}
+  science_technology_tfidf_retrieval:
+    image: ${DOCKER_REGISTRY}/science_technology_tfidf_retrieval:${VERSION}
+  sport_tfidf_retrieval:
+    image: ${DOCKER_REGISTRY}/sport_tfidf_retrieval:${VERSION}
+  animals_tfidf_retrieval:
+    image: ${DOCKER_REGISTRY}/animals_tfidf_retrieval:${VERSION}
   convert_reddit:
     image: ${DOCKER_REGISTRY}/convert_reddit:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  convert_reddit_with_personality:
+    image: ${DOCKER_REGISTRY}/convert_reddit_with_personality:${VERSION}
     env_file:
       - ${ENV_FILE}
   personal_info_skill:
@@ -134,8 +142,28 @@ services:
     image: ${DOCKER_REGISTRY}/christmas_new_year_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
+  superbowl_skill:
+    image: ${DOCKER_REGISTRY}/superbowl_skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   weather_skill:
     image: ${DOCKER_REGISTRY}/weather_skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  emotion_classification:
+    image: ${DOCKER_REGISTRY}/emotion_classification:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  emotion_skill:
+    image: ${DOCKER_REGISTRY}/emotion_skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  news_skill:
+    image: ${DOCKER_REGISTRY}/news_skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  comet:
+    image: ${DOCKER_REGISTRY}/comet:${VERSION}
     env_file:
       - ${ENV_FILE}
 volumes:

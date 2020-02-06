@@ -25,9 +25,6 @@ node {
         }
         def tag = sh(returnStdout: true, script: "git tag --contains | head -1").trim()
         if (tag) {
-            stage('CollectPredictions') {
-               sh "./tests/runtests.sh MODE=infer_questions"
-            }
             stage('Deploy Prod') {
                 sh "./deploy_prod.sh"
                 currentBuild.result = 'SUCCESS'
@@ -39,7 +36,6 @@ node {
         throw e
     } finally {
         archiveArtifacts artifacts: 'tests/dream/output/*', fingerprint: true
-        archiveArtifacts artifacts: 'skills/transfertransfo/tests/test_results.json', fingerprint: true
         sh "./tests/runtests.sh MODE=clean"
         def msg = "Build for ${env.BRANCH_NAME} has status ${currentBuild.result}\n${env.BUILD_URL}"
         if (currentBuild.result == 'FAILURE') {

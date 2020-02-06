@@ -157,7 +157,7 @@ def owm_requests_weather_forecast_now(city_str):
     api_key = "644515bef5492fff0a5913f73ac212ae"
     url = "http://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s" % (city_str, api_key)
     try:
-        resp = requests.get(url=url, timeout=3)
+        resp = requests.get(url=url, timeout=2)
         json_data = resp.json()
         try:
             description = json_data['weather'][0]['description']
@@ -176,7 +176,7 @@ def owm_requests_weather_forecast_now(city_str):
             # humidity = json_data['main']['humidity']
 
             response_template = "It is %s, temperature is around %0.1f in %s. " \
-                                "Wind speed is about %f meters per second" % (
+                                "Wind speed is about %0.1f meters per second" % (
                                     description, temperature, city_name, wind_speed)
         except Exception as e:
             # we have problems with weather service:

@@ -38,8 +38,10 @@ def respond():
     for speech in speeches:
         if speech_exists(speech):
             text, mean_proba = get_text_from_speech(speech)
-            if mean_proba <= 0.45:
+            if mean_proba <= 0.1:
                 result.append({'asr_confidence': 'very_low'})
+            elif mean_proba > 0.1 and mean_proba <= 0.45:
+                result.append({'asr_confidence': 'low'})
             elif mean_proba > 0.45 and mean_proba < 0.62:
                 result.append({'asr_confidence': 'medium'})
             else:
