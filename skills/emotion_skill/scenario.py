@@ -97,6 +97,8 @@ class EmotionSkillScenario:
                 logging.info(dialog)
                 text_utterances = [j['text'] for j in dialog['utterances']]
                 bot_phrases = [j for i, j in enumerate(text_utterances) if i % 2 == 1]
+                if len(bot_phrases) == 0:
+                    bot_phrases.append('')
                 annotated_user_phrase = dialog['utterances'][-1]
                 emotion_probs = annotated_user_phrase['annotations']['emotion_classification']['text']
                 most_likely_prob = max(emotion_probs.values())
