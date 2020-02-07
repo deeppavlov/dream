@@ -4,6 +4,7 @@ import logging
 import os
 import string
 from time import time
+import re
 
 import numpy as np
 from nltk.tokenize import sent_tokenize, word_tokenize
@@ -12,6 +13,9 @@ from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
 from cobotqa_service import send_cobotqa
+
+from common.universal_templates import nounphrases_questions
+
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -111,27 +115,43 @@ def respond():
                 and 'Fun is defined by the Oxford English Dictionary as' in response:
             response = ''
 
-        responses.append(response)
-
         bad_answers = ['You can now put your wizarding world knowledge to the test with the official Harry Potter '
                        'quiz. Just say: "Play the Harry Potter Quiz."',
                        "I can provide information, music, news, weather, and more.",
                        'For the latest in politics and other news, try asking "Alexa, play my Flash Briefing."'
                        ]
+        bad_subanswers = ["let's talk about", "i have lots of", "world of warcraft", " wow ", " ok is", "coolness is "]
+
         if len(response) > 0 and 'skill://amzn1' not in response:
-            if "let's talk about" in questions[i].lower():
+            if response in bad_answers or any([bad_substr in response.lower() for bad_substr in bad_subanswers]):
                 confidence = 0.5
-            elif "fact about" in questions[i].lower():
-                confidence = 0.7
-            elif "have an opinion on that" in response:
-                confidence = 0.7
-            elif response in bad_answers or "I have lots of" in response:
-                confidence = 0.5
+            elif "fact about" in questions[i].lower() or "fact about" in response:
+                # this is a fact from cobotqa itself or requested fact
+                sentences = sent_tokenize(response)
+                if len(sentences[0]) < 100 and "fact about" in sentences[0]:
+                    response = " ".join(sentences[:2])
+                    subjects = re.findall(r"fact about ([a-zA-Z ]+)", response)
+                    if len(subjects) > 0:
+                        # cobotqa answer `Here's a fact about Hollywood. Hollywood blablabla.`
+                        response += " " + nounphrases_questions(subjects[0])
+                    confidence = 0.7
+                else:
+                    response = " ".join(sentences[:1])
+                    # check this is requested `fact about NP/NE`
+                    subjects = re.findall(r"fact about ([a-zA-Z ]+)", questions[i].lower())
+                    if len(subjects) > 0:
+                        response += " " + nounphrases_questions(subjects[0])
+                    confidence = 0.7
             else:
+                sentences = sent_tokenize(response)
+                response = " ".join(sentences[:2])
                 confidence = 0.95
         else:
             confidence = 0.00
+            response = ""
+
         confidences += [confidence]
+        responses += [response]
 
     dialog_ids = np.array(dialog_ids)
     responses = np.array(responses)
@@ -159,27 +179,11 @@ def respond():
         blist_topics_detected = dialog['utterances'][-1]['annotations']['blacklisted_words']['restricted_topics']
 
         for j in range(len(resp_cands)):
-            sentences = sent_tokenize(resp_cands[j])
-            # initial answer to the user's reply
-            if j == 0 and len(sentences) > 2:
-                resp_cands[j] = " ".join(sentences[:2])
-            # facts from cobotqa
-            if j != 0 and len(sentences) >= 2:
-                if len(sentences[0]) < 100 and "fact" in sentences[0]:
-                    resp_cands[j] = " ".join(sentences[:2])
-                else:
-                    resp_cands[j] = " ".join(sentences[:1])
             if j != 0:
                 # facts
-                talk_about = ["What genre of movies do you like?",
-                              "How often do you watch movies?",
-                              "Who is your favorite actor or actress?"]
-                if ("Opinion_RequestIntent" in intents) or opinion_request_detected:
-                    resp_cands[j] = f"I don't have an opinion on that but I know some facts. {resp_cands[j]} " \
-                                    f"Maybe we can talk about something else. {np.random.choice(talk_about)}"
-                elif blist_topics_detected or (sensitive_topics_detected and sensitive_dialogacts_detected):
-                    resp_cands[j] = f"I don't have an opinion on that but I know some facts. {resp_cands[j]} " \
-                                    f"Let's talk about something else. {np.random.choice(talk_about)}"
+                if (("Opinion_RequestIntent" in intents) or opinion_request_detected or blist_topics_detected or (
+                        sensitive_topics_detected and sensitive_dialogacts_detected)):
+                    resp_cands[j] = f"I don't have an opinion on that but I know some facts. {resp_cands[j]}"
 
         final_responses.append(resp_cands)
         final_confidences.append(conf_cands)

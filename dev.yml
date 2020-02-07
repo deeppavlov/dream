@@ -9,6 +9,7 @@ services:
     env_file: [.env.dev]
     volumes:
       - "./skills/CoBotQA:/src"
+      - "./common:/src/common"
     ports:
       - 8001:8001
   cobot_topics:
