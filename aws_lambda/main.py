@@ -103,7 +103,10 @@ def process_dp_agent_response(agent_data, user_id, handler_input):
         logger.info("ExitIntent From DpAgent")
         return handler_input.response_builder.speak(speak_output).response
     else:
-        logger.info("Normal output from DpAgent")
+        logger.info(f"Normal output from DpAgent: {speak_output}")
+        # TODO: Think how to validate invalid SSML responses!!!
+        speak_output.replace(">", " ")
+        speak_output.replace("<", " ")
         return handler_input.response_builder.speak(speak_output).ask(speak_output).response
 
 
@@ -168,10 +171,10 @@ class SessionEndedRequestHandler(AbstractRequestHandler):
         return ask_utils.is_request_type("SessionEndedRequest")(handler_input)
 
     def handle(self, handler_input):
-        if request_data['request'].get('reason') != 'USER_INITIATED':
+        if request_data['request'].get('reason') == 'ERROR':
             with sentry_sdk.push_scope() as scope:
                 scope.set_extra('request_data', request_data)
-                sentry_sdk.capture_message('Strange SessionEndedRequestHandler reason')
+                sentry_sdk.capture_message('ERROR in SessionEndedRequestHandler!!!')
         # Any cleanup logic goes here.
         return handler_input.response_builder.response
 
