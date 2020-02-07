@@ -324,13 +324,17 @@ class Dialog:
         ind = 0
         if self.utterances:
             ind = self.utterances[-1]._in_dialog_id + 1
-        self.utterances.append(HumanUtterance(_in_dialog_id=ind))
+        utterance_obj = HumanUtterance(_in_dialog_id=ind)
+        self.utterances.append(utterance_obj)
+        self.human_utterances.append(utterance_obj)
 
     def add_bot_utterance(self):
         ind = 0
         if self.utterances:
             ind = self.utterances[-1]._in_dialog_id + 1
-        self.utterances.append(BotUtterance(_in_dialog_id=ind))
+        utterance_obj = BotUtterance(_in_dialog_id=ind)
+        self.utterances.append(utterance_obj)
+        self.bot_utterances.append(utterance_obj)
 
     async def save(self, db, force=False):
         self._human_id = await self.human.save(db)
