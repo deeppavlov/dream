@@ -25,7 +25,8 @@ services:
           - node.labels.is_agent == true
   cobotqa:
     build:
-      context: ./skills/CoBotQA/
+      context: .
+      dockerfile: ./skills/CoBotQA/Dockerfile
     environment:
       - ASYNC_SIZE=20
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8001 -t 15
