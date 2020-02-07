@@ -111,66 +111,6 @@ def template_cands(filling_data: dict):
     return cands
 
 
-oscars = collections.OrderedDict()
-oscars["oscar_nomination_best_pic"] = {
-    "candidates": nomination_best_picture,
-    "aggressive": True,
-    "regs": [[r"best", r"(movi|cinem|film|pic)"]],
-}
-oscars["oscar_nomination_best_director"] = {
-    "candidates": nomination_best_director,
-    "aggressive": True,
-    "regs": [[r"best", r"director"]],
-}
-oscars["oscar_nomination_best_actor"] = {
-    "candidates": nomination_best_actor,
-    "aggressive": True,
-    "regs": [[r"best", r"actor"]],
-}
-oscars["oscar_nomination_best_actress"] = {
-    "candidates": nomination_best_actress,
-    "aggressive": True,
-    "regs": [[r"best", r"actress"]],
-}
-oscars["oscar_nomination"] = {
-    "candidates": nomination_best_picture + nomination_best_director + nomination_best_actor,
-    "aggressive": True,
-    "regs": [[r"nominat"]],
-}
-oscars["oscar_2019"] = {
-    "candidates": fun_facts_about_oscar_2019,
-    "aggressive": False,
-    "regs": [[r"((two thousand nineteen)|twenty nineteen)"]],
-    "adds": [r"(academy.*awards|oscar)"],
-}
-oscars["oscar_2020"] = {
-    "candidates": fun_facts_about_oscar_2020,
-    "aggressive": False,
-    "regs": [[r"((two thousand twenty)|twenty twenty)"]],
-    "adds": [r"(academy.*awards|oscar)"],
-}
-oscars["who_win_now"] = {
-    "candidates": [
-        "I think all candidates have good chances, "
-        "it’s especially interesting what will happen in the nominations for the best picture "
-        "and also for the best director"
-        "and also for the best actor"
-        "and also for the best actress"
-    ],
-    "aggressive": False,
-    "regs": [[r"(who)", r"(win|make|won)", r"((two thousand twenty)|twenty twenty)"], [r"(who)", r"(win|make|won)"]],
-    "adds": [r"(academy.*awards|oscar)"],
-}
-oscars["oscar"] = {
-    "candidates": fun_facts_about_oscar_2019,
-    "aggressive": False,
-    "regs": [[r".*"]],
-    "adds": [r"(academy.*awards|oscar)"],
-}
-dialog_segment_regs.update(template_regs(oscars))
-dialog_segment_candidates.update(template_cands(oscars))
-
-
 # directors
 # martin scorsese – the irishman
 # todd phillips – joker
@@ -316,6 +256,29 @@ actors["actor_pitt"] = {
     ],
     "aggressive": True,
     "regs": [[r"brad.*pitt"]],
+}
+actors["actor_joker"] = {
+    "candidates": [
+        utt
+        for utt in "<SPLIT_POINT>Here is the fun fact about joaquin phoenix from brightside.me: ".join(
+            [
+                "",
+                "Throughout his career, joaquin phoenix has appeared in more than 30 films.",
+                "joaquin phoenix is been vegan since he was 3.",
+                "At age 6, joaquin phoenix changed his name to Leaf.",
+                "joaquin phoenix worked as a firefighter for a whole month to practice for a role.",
+                "joaquin phoenix had to lose almost 45 pounds to play the Joker.",
+                "His brother, River Phoenix, also began working as an actor whenjoaquin phoenix he was a child.",
+                "joaquin phoenix won a Grammy for his portrayal of Johnny Cash.",
+                "joaquin phoenix has been nominated for an Oscar 3 times.",
+                "joaquin phoenix played Max in SpaceCamp.",
+                "joaquin phoenix produced the documentary, What the Health.",
+            ]
+        ).split("<SPLIT_POINT>")
+        if utt
+    ],
+    "aggressive": True,
+    "regs": [[r"joaquin.*phoenix"], [r"joker.*actor"]],
 }
 actors["actor_dicaprio"] = {
     "candidates": [
@@ -680,6 +643,67 @@ films["film_hollywood"] = {
 }
 dialog_segment_regs.update(template_regs(films))
 dialog_segment_candidates.update(template_cands(films))
+
+
+oscars = collections.OrderedDict()
+oscars["oscar_nomination_best_pic"] = {
+    "candidates": nomination_best_picture,
+    "aggressive": True,
+    "regs": [[r"best", r"(movi|cinem|film|pic)"]],
+}
+oscars["oscar_nomination_best_director"] = {
+    "candidates": nomination_best_director,
+    "aggressive": True,
+    "regs": [[r"best", r"director"]],
+}
+oscars["oscar_nomination_best_actor"] = {
+    "candidates": nomination_best_actor,
+    "aggressive": True,
+    "regs": [[r"best", r"actor"]],
+}
+oscars["oscar_nomination_best_actress"] = {
+    "candidates": nomination_best_actress,
+    "aggressive": True,
+    "regs": [[r"best", r"actress"]],
+}
+oscars["oscar_nomination"] = {
+    "candidates": nomination_best_picture + nomination_best_director + nomination_best_actor,
+    "aggressive": True,
+    "regs": [[r"nominat"]],
+}
+oscars["oscar_2019"] = {
+    "candidates": fun_facts_about_oscar_2019,
+    "aggressive": False,
+    "regs": [[r"((two thousand nineteen)|twenty nineteen)"]],
+    "adds": [r"(academy.*awards|oscar)"],
+}
+oscars["oscar_2020"] = {
+    "candidates": fun_facts_about_oscar_2020,
+    "aggressive": False,
+    "regs": [[r"((two thousand twenty)|twenty twenty)"]],
+    "adds": [r"(academy.*awards|oscar)"],
+}
+oscars["who_win_now"] = {
+    "candidates": [
+        "I think all candidates have good chances, "
+        "it’s especially interesting what will happen in the nominations for the best picture "
+        "and also for the best director"
+        "and also for the best actor"
+        "and also for the best actress"
+    ],
+    "aggressive": False,
+    "regs": [[r"(who)", r"(win|make|won)", r"((two thousand twenty)|twenty twenty)"], [r"(who)", r"(win|make|won)"]],
+    "adds": [r"(academy.*awards|oscar)"],
+}
+oscars["oscar"] = {
+    "candidates": fun_facts_about_oscar_2019,
+    "aggressive": False,
+    "regs": [[r".*"]],
+    "adds": [r"(academy.*awards|oscar)"],
+}
+dialog_segment_regs.update(template_regs(oscars))
+dialog_segment_candidates.update(template_cands(oscars))
+
 dialog_segment_regs = compile_regs(dialog_segment_regs)
 
 

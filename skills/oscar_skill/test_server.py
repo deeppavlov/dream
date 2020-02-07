@@ -27,9 +27,10 @@ true_requests = {
     ],
     "actors": [
         "tell me something about leonardo dicaprio",
-        # "tell me something about joaquin phoenix",
+        "tell me something about joaquin phoenix",
         "tell me something about tom hanks",
         "tell me something about brad pitt",
+        "tell me something about Joker actor",
     ],
     "actresses": [
         "tell me something about laura dern",
@@ -47,6 +48,7 @@ true_requests = {
         "tell me something about nineteen seventeen",
         "tell me something about Once Upon a Time in Hollywood",
         "tell me something about the parasite movie",
+        "tell me something about Joker on Oscors",
     ],
 
 }
