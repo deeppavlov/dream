@@ -230,6 +230,12 @@ def main_test():
         "Hello, this is an Alexa Prize Socialbot!",
         "Good Evening, this is an Alexa Prize Socialbot!",
         "Hi, this is an Alexa Prize Socialbot!",
+        # Hello is extended by oscar
+        "Hi, this is an Alexa Prize Socialbot! The Oscars are coming soon, I look forward to it.",
+        "Hi, this is an Alexa Prize Socialbot! The Oscars ceremony is set for this coming Sunday!"
+        " I think it's very exciting!",
+        "Hi, this is an Alexa Prize Socialbot!"" Oscars are coming:"
+        " '1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night!",
         # lets about youself
         "The DNA of who I am is based on the millions of personalities of all the programmers who wrote me.\n"
         "But what makes me is my ability to grow through my experiences. So basically, in every moment "

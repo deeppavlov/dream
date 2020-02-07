@@ -194,12 +194,28 @@
           </think>
           <condition name="time_of_day">
               <!--<li value="night">Good Night, this is an Alexa Prize Socialbot! Why don't you sleep so late?</li>-->
-              <li value="night">Good Evening, this is an Alexa Prize Socialbot!</li>
-              <li value="morning">Good Morning, this is an Alexa Prize Socialbot!</li>
-              <li value="day">Hello, this is an Alexa Prize Socialbot!</li>
-              <li value="evening">Good Evening, this is an Alexa Prize Socialbot!</li>
+              <li value="night">Good Evening, this is an Alexa Prize Socialbot! The Oscars are coming soon, I look forward to it.</li>
+              <li value="morning">Good Morning, this is an Alexa Prize Socialbot! The Oscars are coming soon, I look forward to it.</li>
+              <li value="day">Hello, this is an Alexa Prize Socialbot! The Oscars are coming soon, I look forward to it.</li>
+              <li value="evening">Good Evening, this is an Alexa Prize Socialbot! The Oscars are coming soon, I look forward to it.</li>
               <!--<li>Hi, this is an Alexa Prize Socialbot. What timezone do you use?</li>-->
-              <li>Hi, this is an Alexa Prize Socialbot!</li>
+              <li>Hi, this is an Alexa Prize Socialbot! The Oscars are coming soon, I look forward to it.</li>
+
+              <!--<li value="night">Good Night, this is an Alexa Prize Socialbot! Why don't you sleep so late?</li>-->
+              <li value="night">Good Evening, this is an Alexa Prize Socialbot! The Oscars ceremony is set for this coming Sunday! I think it's very exciting!</li>
+              <li value="morning">Good Morning, this is an Alexa Prize Socialbot! The Oscars ceremony is set for this coming Sunday! I think it's very exciting!</li>
+              <li value="day">Hello, this is an Alexa Prize Socialbot! The Oscars ceremony is set for this coming Sunday! I think it's very exciting!</li>
+              <li value="evening">Good Evening, this is an Alexa Prize Socialbot! The Oscars ceremony is set for this coming Sunday! I think it's very exciting!</li>
+              <!--<li>Hi, this is an Alexa Prize Socialbot. What timezone do you use?</li>-->
+              <li>Hi, this is an Alexa Prize Socialbot! The Oscars ceremony is set for this coming Sunday! I think it's very exciting!</li>
+
+              <!--<li value="night">Good Night, this is an Alexa Prize Socialbot! Why don't you sleep so late?</li>-->
+              <li value="night">Good Evening, this is an Alexa Prize Socialbot! Oscars are coming: '1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night!</li>
+              <li value="morning">Good Morning, this is an Alexa Prize Socialbot! Oscars are coming: '1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night!</li>
+              <li value="day">Hello, this is an Alexa Prize Socialbot! Oscars are coming: '1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night!</li>
+              <li value="evening">Good Evening, this is an Alexa Prize Socialbot! Oscars are coming: '1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night!</li>
+              <!--<li>Hi, this is an Alexa Prize Socialbot. What timezone do you use?</li>-->
+              <li>Hi, this is an Alexa Prize Socialbot! Oscars are coming: '1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night!</li>
           </condition>
 
           <!-- How_are_you interaction starts here:-->
