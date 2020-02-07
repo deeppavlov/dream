@@ -166,63 +166,14 @@
   <category>
       <pattern>HELLO</pattern>
       <template>
-          <!--set time of day -->
-          <sraix service="daytimeclf"></sraix>
-          <!--find in rdf storage -->
-          <think>
-              <set var="tuples">
-                  <select>
-                      <vars>?x</vars>
-                      <q>
-                          <subj>TIME_OF_DAY</subj>
-                          <pred>IS</pred>
-                          <obj>?x</obj>
-                      </q>
-                  </select>
-              </set>
-
-              <!-- convert rdf into variable-->
-              <set name="time_of_day">
-                  <get var="?x">
-                      <tuple>
-                          <first>
-                              <get var="tuples"/>
-                          </first>
-                      </tuple>
-                  </get>
-              </set>
-          </think>
-          <condition name="time_of_day">
-              <!--<li value="night">Good Night, this is an Alexa Prize Socialbot! Why don't you sleep so late?</li>-->
-              <li value="night">Good Evening, this is an Alexa Prize Socialbot! The Oscars are coming soon, I look forward to it.</li>
-              <li value="morning">Good Morning, this is an Alexa Prize Socialbot! The Oscars are coming soon, I look forward to it.</li>
-              <li value="day">Hello, this is an Alexa Prize Socialbot! The Oscars are coming soon, I look forward to it.</li>
-              <li value="evening">Good Evening, this is an Alexa Prize Socialbot! The Oscars are coming soon, I look forward to it.</li>
-              <!--<li>Hi, this is an Alexa Prize Socialbot. What timezone do you use?</li>-->
-              <li>Hi, this is an Alexa Prize Socialbot! The Oscars are coming soon, I look forward to it.</li>
-
-              <!--<li value="night">Good Night, this is an Alexa Prize Socialbot! Why don't you sleep so late?</li>-->
-              <li value="night">Good Evening, this is an Alexa Prize Socialbot! The Oscars ceremony is set for this coming Sunday! I think it's very exciting!</li>
-              <li value="morning">Good Morning, this is an Alexa Prize Socialbot! The Oscars ceremony is set for this coming Sunday! I think it's very exciting!</li>
-              <li value="day">Hello, this is an Alexa Prize Socialbot! The Oscars ceremony is set for this coming Sunday! I think it's very exciting!</li>
-              <li value="evening">Good Evening, this is an Alexa Prize Socialbot! The Oscars ceremony is set for this coming Sunday! I think it's very exciting!</li>
-              <!--<li>Hi, this is an Alexa Prize Socialbot. What timezone do you use?</li>-->
-              <li>Hi, this is an Alexa Prize Socialbot! The Oscars ceremony is set for this coming Sunday! I think it's very exciting!</li>
-
-              <!--<li value="night">Good Night, this is an Alexa Prize Socialbot! Why don't you sleep so late?</li>-->
-              <li value="night">Good Evening, this is an Alexa Prize Socialbot! Oscars are coming: '1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night!</li>
-              <li value="morning">Good Morning, this is an Alexa Prize Socialbot! Oscars are coming: '1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night!</li>
-              <li value="day">Hello, this is an Alexa Prize Socialbot! Oscars are coming: '1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night!</li>
-              <li value="evening">Good Evening, this is an Alexa Prize Socialbot! Oscars are coming: '1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night!</li>
-              <!--<li>Hi, this is an Alexa Prize Socialbot. What timezone do you use?</li>-->
-              <li>Hi, this is an Alexa Prize Socialbot! Oscars are coming: '1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night!</li>
-          </condition>
-
-          <!-- How_are_you interaction starts here:-->
-          <think>
-              <set name="topic">USER_MOOD</set>
-          </think>
-          How are you?
+        <random>
+          <li>Hi, this is an Alexa Prize Socialbot! The Oscars are coming soon, I look forward to it. How are you? </li>
+          <li>Hi, this is an Alexa Prize Socialbot! The Oscars ceremony is set for this coming Sunday! I think it's very exciting! How are you? </li>
+          <li>Hi, this is an Alexa Prize Socialbot! Oscars are coming: '1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night! How are you? </li>
+        </random>
+        <think>
+            <set name="topic">USER_MOOD</set>
+        </think>
       </template>
     </category>
 
