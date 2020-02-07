@@ -558,7 +558,8 @@ services:
           - node.labels.group == 1
   emotion_skill:
     build:
-      context: ./skills/emotion_skill/
+      context: .
+      dockerfile: ./skills/emotion_skill/Dockerfile
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8049
     volumes: []
     deploy:
@@ -602,7 +603,7 @@ services:
       context: ./annotators/COMeT/
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8053
     volumes: []
-    environment: 
+    environment:
       DEVICE: gpu_0
     deploy:
       mode: replicated
