@@ -103,7 +103,7 @@ if __name__ == '__main__':
     elif args.csvfile:
         with open(args.csvfile, 'r') as f:
             reader = csv.reader(f, delimiter=' ')
-            phrases = [row[0] for row in reader][1:]
+            phrases = [row[1] for row in reader][1:]
         payloads = {uuid.uuid4().hex: phrases}
     else:
         raise ValueError('You should provide either predefined dialog (-df) or file with phrases (-pf)')

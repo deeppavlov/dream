@@ -195,7 +195,8 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
 
     # exclude toxic messages and messages with blacklisted phrases
     ids = (toxicities > 0.5) | (has_blacklisted > 0) | (has_inappropriate > 0)
-    logger.info(f"Bot excluded utterances: {ids}.")
+    logger.info(f"Bot excluded utterances: {ids}. toxicities: {toxicities};"
+                f"has_blacklisted: {has_blacklisted}; has_inappropriate: {has_inappropriate}")
 
     if sum(ids) == len(toxicities):
         # the most dummy заглушка на случай, когда все абсолютно скиллы вернули токсичные ответы

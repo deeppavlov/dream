@@ -152,6 +152,7 @@ services:
     env_file: [.env.dev]
     volumes:
       - "./skills/emotion_skill:/src"
+      - "./common:/src/common"
     ports:
       - 8049:8049
   news_skill:
