@@ -50,7 +50,7 @@ joke9 = "I’ll tell you what I love doing more than anything: trying to pack my
 joke10 = "A three-legged dog walks into a saloon in the Old West." \
          "He slides up to the bar and announces: I’m looking for the man who shot my paw. "
 joke11 = "A sandwich walks into a bar. The barman says sorry we don’t serve food in here ."
-joke12 = "There’s two fish in a tank, and one says How do you drive this thing?",
+joke12 = "There’s two fish in a tank, and one says How do you drive this thing?"
 phrase_dict = {'anger': ["Please, calm down. Can I tell you a joke?",
                          "I feel your pain. Can I tell you a joke?",
                          "I am ready to support you. Can I tell you a joke?"],
