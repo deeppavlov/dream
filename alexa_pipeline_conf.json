@@ -477,6 +477,16 @@
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
             },
+            "oscar_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://oscar_skill:8055/respond"
+                },
+                "dialog_formatter": "last_utt_dialog",
+                "response_formatter": "base_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
+            },
             "weather_skill": {
                 "connector": {
                     "protocol": "http",

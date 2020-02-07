@@ -146,6 +146,10 @@ services:
     image: ${DOCKER_REGISTRY}/superbowl_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
+  oscar_skill:
+    image: ${DOCKER_REGISTRY}/oscar_skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   weather_skill:
     image: ${DOCKER_REGISTRY}/weather_skill:${VERSION}
     env_file:

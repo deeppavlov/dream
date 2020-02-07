@@ -273,6 +273,12 @@ services:
       - "./skills/superbowl_skill:/src"
     ports:
       - 8051:8051
+  oscar_skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/oscar_skill:/src"
+    ports:
+      - 8055:8055
   weather_skill:
     env_file: [.env.dev]
     volumes:

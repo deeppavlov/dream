@@ -118,7 +118,8 @@ def respond():
         bad_answers = ['You can now put your wizarding world knowledge to the test with the official Harry Potter '
                        'quiz. Just say: "Play the Harry Potter Quiz."',
                        "I can provide information, music, news, weather, and more.",
-                       'For the latest in politics and other news, try asking "Alexa, play my Flash Briefing."'
+                       'For the latest in politics and other news, try asking "Alexa, play my Flash Briefing."',
+                       "I don't have an opinion on that."
                        ]
         bad_subanswers = ["let's talk about", "i have lots of", "world of warcraft", " wow ", " ok is", "coolness is "]
 
