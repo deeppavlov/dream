@@ -105,8 +105,7 @@ def process_dp_agent_response(agent_data, user_id, handler_input):
     else:
         logger.info(f"Normal output from DpAgent: {speak_output}")
         # TODO: Think how to validate invalid SSML responses!!!
-        speak_output.replace(">", " ")
-        speak_output.replace("<", " ")
+        speak_output = speak_output.replace(">", " ").replace("<", " ").replace("&", " and ")
         return handler_input.response_builder.speak(speak_output).ask(speak_output).response
 
 
