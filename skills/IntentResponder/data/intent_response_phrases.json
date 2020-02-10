@@ -21,7 +21,9 @@
     "This is a competition of socialbots, so I cannot tell you my location now."
   ],
   "lets_chat": [
-    "Okay, let's chat. Would you like to discuss movies?"
+    "Okay, let's chat. Would you like to discuss movies?",
+    "Okay, let's chat. Would you like to discuss books?",
+    "Okay, let's chat. What would you like to talk about?"
   ],
   "who_made_you" : [
     "I was built by one of the university teams participating in the Alexa Prize Challenge. But which one is a secret for now.",
@@ -40,11 +42,12 @@
   ],
   "what_can_you_do": [
     "I'm a newborn socialbot, so I can't do so much. For example, I can answer any question, especially about movies and books. What is your favorite movie?",
-    "I'm learning day by day. For now, I can answer a question, tell a joke or fact, discuss movies and books. What is your favorite book?",
-    "I'm learning day by day. I can answer questions, tell you a joke or a fun fact, discuss movies and books. What would you like me to do?"
+    "I'm learning day by day. For now, I can answer a question, tell a joke or fact, discuss movies, books and news. What is your favorite book?",
+    "I'm learning day by day. I can answer questions, tell you a joke or a fun fact, discuss movies, books and news. What would you like me to do?"
   ],
   "doing_well": [
     "I am happy for you! What do you do for living?",
+    "I am happy for you! Do you like video games?",
     "Glad for you! What is your favorite book?"
   ],
   "what_time": [

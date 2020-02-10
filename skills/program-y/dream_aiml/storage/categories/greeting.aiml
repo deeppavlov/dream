@@ -108,14 +108,17 @@
       <template>
         <random>
           <li>I am a newborn socialbot, so I can't do so much.
-          I can answer questions, share fun facts, discuss movies and books.
+          I can answer questions, share fun facts, discuss movies, books and news.
           What is your favorite TV Series?</li>
           <li>I am a newborn socialbot, so I can't do so much.
-          I can answer questions, share fun facts, discuss movies and books.
-          what is your favorite movie?</li>
+          I can answer questions, share fun facts, discuss movies, books and news.
+          what is your favorite book?</li>
           <li>I am a newborn socialbot, so I can't do so much.
-          I can answer questions, share fun facts, discuss movies and books.
-          what's your favorite tv show?</li>
+          I can answer questions, share fun facts, discuss movies, books and news.
+          what's your favorite film?</li>
+          <li>I am a newborn socialbot, so I can't do so much.
+          I can answer questions, share fun facts, discuss movies, books and news.
+          what's your favorite video game?</li>
         </random>
        <think>
         <set name="topic"><star/></set>
@@ -127,14 +130,17 @@
       <template>
         <random>
           <li>I am a newborn socialbot, so I can't do so much.
-          I can answer questions, share fun facts, discuss movies and books.
+          I can answer questions, share fun facts, discuss movies, books and news.
           What is your favorite TV Series?</li>
           <li>I am a newborn socialbot, so I can't do so much.
-          I can answer questions, share fun facts, discuss movies and books.
-          what is your favorite movie?</li>
+          I can answer questions, share fun facts, discuss movies, books and news.
+          what is your favorite book?</li>
           <li>I am a newborn socialbot, so I can't do so much.
-          I can answer questions, share fun facts, discuss movies and books.
-          what's your favorite tv show?</li>
+          I can answer questions, share fun facts, discuss movies, books and news.
+          what's your favorite film?</li>
+          <li>I am a newborn socialbot, so I can't do so much.
+          I can answer questions, share fun facts, discuss movies, books and news.
+          what's your favorite video game?</li>
         </random>
        <think>
         <set name="topic"><star/></set>
@@ -144,7 +150,12 @@
     <category>
       <pattern>NO</pattern>
       <template>
-        Okay. What is your favorite TV Series?
+        <random>
+         <li> Okay. What is your favorite TV Series? </li>
+         <li> Okay. What is your favorite book? </li>
+         <li> Okay. What is your favorite film? </li>
+         <li> Okay. What is your favorite video game? </li>
+       </random>
        <think>
         <set name="topic"><star/></set>
        </think>
@@ -152,28 +163,50 @@
     </category>
   </topic>
 
-  <!--<category>-->
-    <!--<pattern>HELLO</pattern>-->
-    <!--<template>-->
-      <!--<think>-->
-        <!--<set name="topic">USER_MOOD</set>-->
-      <!--</think>-->
-      <!--<random>-->
-        <!--<li>Hi, this is an Alexa Prize Socialbot. How are you?</li>-->
-      <!--</random>-->
-    <!--</template>-->
-  <!--</category>-->
   <category>
       <pattern>HELLO</pattern>
       <template>
-        <random>
-          <li>Hi, this is an Alexa Prize Socialbot! The Oscars are coming soon, I look forward to it. How are you? </li>
-          <li>Hi, this is an Alexa Prize Socialbot! The Oscars ceremony is set for this coming Sunday! I think it's very exciting! How are you? </li>
-          <li>Hi, this is an Alexa Prize Socialbot! Oscars are coming: '1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night! How are you? </li>
-        </random>
-        <think>
-            <set name="topic">USER_MOOD</set>
-        </think>
+          <!--set time of day -->
+          <sraix service="daytimeclf"></sraix>
+          <!--find in rdf storage -->
+          <think>
+              <set var="tuples">
+                  <select>
+                      <vars>?x</vars>
+                      <q>
+                          <subj>TIME_OF_DAY</subj>
+                          <pred>IS</pred>
+                          <obj>?x</obj>
+                      </q>
+                  </select>
+              </set>
+
+              <!-- convert rdf into variable-->
+              <set name="time_of_day">
+                  <get var="?x">
+                      <tuple>
+                          <first>
+                              <get var="tuples"/>
+                          </first>
+                      </tuple>
+                  </get>
+              </set>
+          </think>
+          <condition name="time_of_day">
+              <!--<li value="night">Good Night, this is an Alexa Prize Socialbot! Why don't you sleep so late?</li>-->
+              <li value="night">Good Evening, this is an Alexa Prize Socialbot!</li>
+              <li value="morning">Good Morning, this is an Alexa Prize Socialbot!</li>
+              <li value="day">Hello, this is an Alexa Prize Socialbot!</li>
+              <li value="evening">Good Evening, this is an Alexa Prize Socialbot!</li>
+              <!--<li>Hi, this is an Alexa Prize Socialbot. What timezone do you use?</li>-->
+              <li>Hi, this is an Alexa Prize Socialbot!</li>
+          </condition>
+
+          <!-- How_are_you interaction starts here:-->
+          <think>
+              <set name="topic">USER_MOOD</set>
+          </think>
+          How are you?
       </template>
     </category>
 
@@ -191,7 +224,9 @@
       <random>
         <li>I am glad. What do you want to talk about?</li>
         <li>I am glad. What is your favorite movie?</li>
+        <li>I am glad. What is your favorite book?</li>
         <li>I am glad. Where are you from?</li>
+        <li>I am glad. Do you like video games?</li>
       </random>
       <think>
         <set name="topic"><star/></set>
@@ -220,6 +255,7 @@
         <li>I am sorry to hear that. What do you want to talk about?</li>
         <li>I am sorry to hear that. Do you like comedies?</li>
         <li>I am sorry to hear that. Where are you from?</li>
+        <li>I am sorry to hear that. Do you like video games?</li>
       </random>
       <think>
         <set name="topic"><star/></set>

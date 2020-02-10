@@ -80,7 +80,7 @@ def respond():
     sent_data = json.dumps({'sentences': utterances})
 
     try:
-        toxic_result = custom_request(TOXIC_COMMENT_CLASSIFICATION_SERVICE_URL, headers, sent_data, 1.6)
+        toxic_result = custom_request(TOXIC_COMMENT_CLASSIFICATION_SERVICE_URL, headers, sent_data, 1)
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         logger.error("toxic result Timeout")
         sentry_sdk.capture_exception(e)
@@ -97,7 +97,7 @@ def respond():
 
     try:
         # evaluate all possible skill responses
-        result = custom_request(COBOT_CONVERSATION_EVALUATION_SERVICE_URL, headers, conv_data, 2)
+        result = custom_request(COBOT_CONVERSATION_EVALUATION_SERVICE_URL, headers, conv_data, 1)
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         logger.error("cobot convers eval Timeout")
         sentry_sdk.capture_exception(e)
@@ -216,8 +216,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     confidences[ids] = 0.
 
     # check for repeatitions
-
-    bot_utterances = [uttr["text"].lower() for uttr in dialog["utterances"][::2]]
+    bot_utterances = [uttr["text"].lower() for uttr in dialog["bot_utterances"]]
     bot_utt_counter = Counter(bot_utterances)
     for i, cand in enumerate(candidates):
         coeff = bot_utt_counter[cand["text"].lower()] + 1
