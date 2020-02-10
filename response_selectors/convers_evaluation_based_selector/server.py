@@ -62,11 +62,9 @@ def respond():
 
             conv["currentUtterance"] = dialog["utterances"][-1]["text"]
             conv["currentResponse"] = skill_data["text"]
-            # every odd utterance is from user
             # cobot recommends to take 2 last utt for conversation evaluation service
-            conv["pastUtterances"] = [uttr["text"] for uttr in dialog["utterances"][1::2]][-2:]
-            # every second utterance is from bot
-            conv["pastResponses"] = [uttr["text"] for uttr in dialog["utterances"][::2]][-2:]
+            conv["pastUtterances"] = [uttr["text"] for uttr in dialog["human_utterances"]][-3:-1]
+            conv["pastResponses"] = [uttr["text"] for uttr in dialog["bot_utterances"]][-2:]
             # collect all the conversations variants to evaluate them batch-wise
             conversations += [conv]
             dialog_ids += [i]
@@ -230,6 +228,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     greeting_spec = "this is an Alexa Prize Socialbot"
     misheard_with_spec1 = "I misheard you"
     misheard_with_spec2 = "like to chat about"
+    alexa_abilities_spec = "If you want to use the requested feature say"
 
     very_big_score = 100
     question = ""
@@ -259,6 +258,8 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
         elif skill_names[i] == 'misheard_asr' and is_misheard:
             curr_single_scores.append(very_big_score)
         elif skill_names[i] == 'intent_responder' and "#+#" in candidates[i]['text']:
+            curr_single_scores.append(very_big_score)
+        elif skill_names[i] == 'program_y' and alexa_abilities_spec in candidates[i]['text']:
             curr_single_scores.append(very_big_score)
         if skill_names[i] == 'dummy_skill' and "question" in candidates[i].get("type", ""):
             question = candidates[i]['text']

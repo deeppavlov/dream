@@ -36,7 +36,7 @@ if COBOT_QA_SERVICE_URL is None:
 
 headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COBOT_API_KEY}'}
 
-with open("./google-2000-english-no-swears.txt", "r") as f:
+with open("./google-english-no-swears.txt", "r") as f:
     UNIGRAMS = set(f.read().splitlines())
 
 

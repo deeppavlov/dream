@@ -100,7 +100,7 @@
 <!--    </template>-->
 <!--  </category>-->
   <category>
-    <pattern>WHERE IS MY STUFF?</pattern>
+    <pattern>WHERE IS MY STUFF</pattern>
     <template>
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
@@ -273,12 +273,12 @@
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
-  <category>
-    <pattern>SPELL #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
+<!--  <category>-->
+<!--    <pattern>SPELL #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
   <category>
     <pattern>MUTE #</pattern>
     <template>
@@ -291,37 +291,37 @@
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
-  <category>
-    <pattern>RESUME #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
-  <category>
-    <pattern>SHOW #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
+<!--  <category>-->
+<!--    <pattern>RESUME #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
+<!--  <category>-->
+<!--    <pattern>SHOW #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
 
-  <category>
-    <pattern>READ #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
-  <category>
-    <pattern>RESTART #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
-  <category>
-    <pattern>OPEN *</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
+<!--  <category>-->
+<!--    <pattern>READ #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
+<!--  <category>-->
+<!--    <pattern>RESTART #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
+<!--  <category>-->
+<!--    <pattern>OPEN *</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
 <!--  <category>-->
 <!--    <pattern>START #</pattern>-->
 <!--    <template>-->
@@ -335,73 +335,73 @@
 <!--    </template>-->
 <!--  </category>-->
   <category>
-    <pattern>RETURN #</pattern>
+    <pattern>RETURN</pattern>
+    <template>
+      <srai>CAN YOU DO ALEXA THINGS</srai>
+    </template>
+  </category>
+<!--  <category>-->
+<!--    <pattern>SET #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
+<!--  <category>-->
+<!--    <pattern>WATCH #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
+  <category>
+    <pattern>PAUSE</pattern>
     <template>
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern>SET #</pattern>
+    <pattern>REWIND</pattern>
     <template>
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern>WATCH #</pattern>
+    <pattern>FAST FORWARD</pattern>
     <template>
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern>PAUSE #</pattern>
+    <pattern>TURN UP</pattern>
     <template>
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern>REWIND #</pattern>
+    <pattern>TURN DOWN</pattern>
     <template>
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern>FAST FORWARD #</pattern>
+    <pattern>LOUDER</pattern>
     <template>
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern>TURN # UP #</pattern>
+    <pattern>QUIETER</pattern>
     <template>
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern>TURN # DOWN #</pattern>
+    <pattern>DECREASE VOLUME</pattern>
     <template>
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
   <category>
-    <pattern>LOUDER #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
-  <category>
-    <pattern>QUIETER #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
-  <category>
-    <pattern>DECREASE #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
-  <category>
-    <pattern>INCREASE #</pattern>
+    <pattern>INCREASE VOLUME</pattern>
     <template>
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
@@ -430,12 +430,12 @@
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
-  <category>
-    <pattern>CREATE #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
+<!--  <category>-->
+<!--    <pattern>CREATE #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
 <!--  <category>-->
 <!--    <pattern>NEED #</pattern>-->
 <!--    <template>-->
@@ -448,24 +448,24 @@
 <!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
 <!--    </template>-->
 <!--  </category>-->
-  <category>
-    <pattern>MAKE # DONATION #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
-  <category>
-    <pattern>ENABLE #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
-  <category>
-    <pattern>DISABLE #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
+<!--  <category>-->
+<!--    <pattern>MAKE # DONATION #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
+<!--  <category>-->
+<!--    <pattern>ENABLE #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
+<!--  <category>-->
+<!--    <pattern>DISABLE #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
 <!--  <category>-->
 <!--    <pattern>GIVE #</pattern>-->
 <!--    <template>-->
@@ -490,12 +490,12 @@
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
-  <category>
-    <pattern>RAISE #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
+<!--  <category>-->
+<!--    <pattern>RAISE #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
   <category>
     <pattern>MAKE # LIGHTS #</pattern>
     <template>
@@ -556,18 +556,18 @@
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
-  <category>
-    <pattern>CONNECT # TO #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
-  <category>
-    <pattern>DISCONNECT # FROM #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
+<!--  <category>-->
+<!--    <pattern>CONNECT # TO #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
+<!--  <category>-->
+<!--    <pattern>DISCONNECT # FROM #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
   <category>
     <pattern>SWITCH # ACCOUNT #</pattern>
     <template>
@@ -580,12 +580,12 @@
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
-  <category>
-    <pattern>TRACK #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
+<!--  <category>-->
+<!--    <pattern>TRACK #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
 <!--  <category>-->
 <!--    <pattern>STOP *</pattern>-->
 <!--    <template>-->
@@ -610,42 +610,42 @@
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
-  <category>
-    <pattern>TURN * ON *</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
-  <category>
-    <pattern>TURN # OFF #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
-  <category>
-    <pattern>GO TO #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
+<!--  <category>-->
+<!--    <pattern>TURN ON</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
+<!--  <category>-->
+<!--    <pattern>TURN OFF</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
+<!--  <category>-->
+<!--    <pattern>GO TO #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
 <!--  <category>-->
 <!--    <pattern>SWITCH TO #</pattern>-->
 <!--    <template>-->
 <!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
 <!--    </template>-->
 <!--  </category>-->
-  <category>
-    <pattern>STOP IN #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
-  <category>
-    <pattern>NEXT IN #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
+<!--  <category>-->
+<!--    <pattern>STOP IN #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
+<!--  <category>-->
+<!--    <pattern>NEXT IN #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
   <category>
     <pattern>ADD # SONG #</pattern>
     <template>
@@ -683,7 +683,7 @@
     </template>
   </category>
   <category>
-    <pattern>WAKE # UP #</pattern>
+    <pattern>WAKE ME UP #</pattern>
     <template>
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
@@ -694,42 +694,42 @@
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
-  <category>
-    <pattern># ALARM #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
-  <category>
-    <pattern># REMINDER #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
-  <category>
-    <pattern># TIMER #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
-  <category>
-    <pattern># ALARMS #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
-  <category>
-    <pattern># REMINDERS #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
-  <category>
-    <pattern># TIMERS #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
+<!--  <category>-->
+<!--    <pattern># ALARM #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
+<!--  <category>-->
+<!--    <pattern># REMINDER #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
+<!--  <category>-->
+<!--    <pattern># TIMER #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
+<!--  <category>-->
+<!--    <pattern># ALARMS #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
+<!--  <category>-->
+<!--    <pattern># REMINDERS #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
+<!--  <category>-->
+<!--    <pattern># TIMERS #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
   <category>
     <pattern>CALL #</pattern>
     <template>
@@ -760,18 +760,18 @@
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
-  <category>
-    <pattern>SEND #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
-  <category>
-    <pattern>DROP IN #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
+<!--  <category>-->
+<!--    <pattern>SEND #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
+<!--  <category>-->
+<!--    <pattern>DROP IN #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
   <category>
     <pattern>ANNOUNCE #</pattern>
     <template>
@@ -784,12 +784,12 @@
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
-  <category>
-    <pattern>TELL # EVERYONE #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
+<!--  <category>-->
+<!--    <pattern>TELL # EVERYONE #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
 <!--  <category>-->
 <!--    <pattern># MESSAGE #</pattern>-->
 <!--    <template>-->
@@ -802,18 +802,18 @@
 <!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
 <!--    </template>-->
 <!--  </category>-->
-  <category>
-    <pattern># INFORMATION #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
-  <category>
-    <pattern>BUY #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
+<!--  <category>-->
+<!--    <pattern># INFORMATION #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
+<!--  <category>-->
+<!--    <pattern>BUY #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
   <category>
     <pattern>REORDER #</pattern>
     <template>
@@ -832,12 +832,12 @@
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
   </category>
-  <category>
-    <pattern>REQUEST #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
+<!--  <category>-->
+<!--    <pattern>REQUEST #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
 <!--  <category>-->
 <!--    <pattern>ASK # TO #</pattern>-->
 <!--    <template>-->
@@ -850,24 +850,24 @@
 <!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
 <!--    </template>-->
 <!--  </category>-->
-  <category>
-    <pattern>SHOP # FOR</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
-  <category>
-    <pattern># DEAL #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
-  <category>
-    <pattern># DEALS #</pattern>
-    <template>
-      <srai>CAN YOU DO ALEXA THINGS</srai>
-    </template>
-  </category>
+<!--  <category>-->
+<!--    <pattern>SHOP # FOR</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
+<!--  <category>-->
+<!--    <pattern># DEAL #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
+<!--  <category>-->
+<!--    <pattern># DEALS #</pattern>-->
+<!--    <template>-->
+<!--      <srai>CAN YOU DO ALEXA THINGS</srai>-->
+<!--    </template>-->
+<!--  </category>-->
 <!--  <category>-->
 <!--    <pattern>FIND # IN #</pattern>-->
 <!--    <template>-->
@@ -899,7 +899,7 @@
     </template>
   </category>
   <category>
-    <pattern>PLAY #</pattern>
+    <pattern>PLAY MUSIC</pattern>
     <template>
       <srai>CAN YOU DO ALEXA THINGS</srai>
     </template>
