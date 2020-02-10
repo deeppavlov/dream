@@ -166,6 +166,10 @@ services:
     image: ${DOCKER_REGISTRY}/comet:${VERSION}
     env_file:
       - ${ENV_FILE}
+  dummy_skill_dialog:
+    image: ${DOCKER_REGISTRY}/dummy_skill_dialog:${VERSION}
+    env_file:
+      - ${ENV_FILE}
 volumes:
   external-logs:
   external-deeppavlov:
