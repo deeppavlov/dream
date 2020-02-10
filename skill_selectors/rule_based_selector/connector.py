@@ -183,6 +183,10 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("convert_reddit")
                 skills_for_uttr.append("convert_reddit_with_personality")
 
+            if prev_bot_uttr.get("active_skill", "") in ["dummy_skill", "dummy_skill_dialog"] and \
+                    len(dialog["utterances"]) > 4:
+                skills_for_uttr.append("dummy_skill_dialog")
+
             # thematic skills
             if about_movies or prev_active_skill == 'movie_skill':
                 skills_for_uttr.append("movie_skill")

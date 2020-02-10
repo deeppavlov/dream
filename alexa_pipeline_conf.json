@@ -255,6 +255,16 @@
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
             },
+            "dummy_skill_dialog": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://dummy_skill_dialog:8052/respond"
+                },
+                "dialog_formatter": "utt_sentrewrite_modified_last_dialog",
+                "response_formatter": "skill_with_attributes_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
+            },
             "misheard_asr": {
                 "connector": {
                     "protocol": "http",

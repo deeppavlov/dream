@@ -14,7 +14,7 @@ services:
         sentiment_classification:8024, news_skill:8027, tfidf_retrieval:8028,
         convert_reddit:8029, personal_info_skill:8030, asr:8031, book_skill:8032, misheard_asr:8033,
         christmas_new_year_skill:8036, weather_skill:8037, emotion_classification:8038, alice:8000,
-        eliza:8047, emotion_skill:8049, superbowl_skill:8051, comet:8053, oscar_skill:8055"
+        eliza:8047, emotion_skill:8049, dummy_skill_dialog:8052, comet:8053, oscar_skill:8055"
       WAIT_HOSTS_TIMEOUT: 480
     deploy:
       mode: replicated
@@ -588,6 +588,16 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+  dummy_skill_dialog:
+    build:
+      context: ./skills/dummy_skill_dialog/
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8052
+    deploy:
+      mode: replicated
+      replicas: 2
       placement:
         constraints:
           - node.labels.with_gpu != true

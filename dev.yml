@@ -279,6 +279,12 @@ services:
       - "./skills/weather_skill:/src"
     ports:
       - 8037:8037
+  dummy_skill_dialog:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dummy_skill_dialog:/app"
+    ports:
+      - 8052:8052
   comet:
     env_file: [.env.dev]
     ports:
