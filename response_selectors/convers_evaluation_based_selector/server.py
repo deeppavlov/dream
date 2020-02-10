@@ -62,11 +62,9 @@ def respond():
 
             conv["currentUtterance"] = dialog["utterances"][-1]["text"]
             conv["currentResponse"] = skill_data["text"]
-            # every odd utterance is from user
             # cobot recommends to take 2 last utt for conversation evaluation service
-            conv["pastUtterances"] = [uttr["text"] for uttr in dialog["utterances"][1::2]][-2:]
-            # every second utterance is from bot
-            conv["pastResponses"] = [uttr["text"] for uttr in dialog["utterances"][::2]][-2:]
+            conv["pastUtterances"] = [uttr["text"] for uttr in dialog["human_utterances"]][-3:-1]
+            conv["pastResponses"] = [uttr["text"] for uttr in dialog["bot_utterances"]][-2:]
             # collect all the conversations variants to evaluate them batch-wise
             conversations += [conv]
             dialog_ids += [i]
@@ -80,7 +78,7 @@ def respond():
     sent_data = json.dumps({'sentences': utterances})
 
     try:
-        toxic_result = custom_request(TOXIC_COMMENT_CLASSIFICATION_SERVICE_URL, headers, sent_data, 1.6)
+        toxic_result = custom_request(TOXIC_COMMENT_CLASSIFICATION_SERVICE_URL, headers, sent_data, 1)
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         logger.error("toxic result Timeout")
         sentry_sdk.capture_exception(e)
@@ -97,7 +95,7 @@ def respond():
 
     try:
         # evaluate all possible skill responses
-        result = custom_request(COBOT_CONVERSATION_EVALUATION_SERVICE_URL, headers, conv_data, 2)
+        result = custom_request(COBOT_CONVERSATION_EVALUATION_SERVICE_URL, headers, conv_data, 1)
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         logger.error("cobot convers eval Timeout")
         sentry_sdk.capture_exception(e)
@@ -195,7 +193,8 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
 
     # exclude toxic messages and messages with blacklisted phrases
     ids = (toxicities > 0.5) | (has_blacklisted > 0) | (has_inappropriate > 0)
-    logger.info(f"Bot excluded utterances: {ids}.")
+    logger.info(f"Bot excluded utterances: {ids}. toxicities: {toxicities};"
+                f"has_blacklisted: {has_blacklisted}; has_inappropriate: {has_inappropriate}")
 
     if sum(ids) == len(toxicities):
         # the most dummy заглушка на случай, когда все абсолютно скиллы вернули токсичные ответы
@@ -215,8 +214,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     confidences[ids] = 0.
 
     # check for repeatitions
-
-    bot_utterances = [uttr["text"].lower() for uttr in dialog["utterances"][::2]]
+    bot_utterances = [uttr["text"].lower() for uttr in dialog["bot_utterances"]]
     bot_utt_counter = Counter(bot_utterances)
     for i, cand in enumerate(candidates):
         coeff = bot_utt_counter[cand["text"].lower()] + 1
@@ -230,6 +228,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     greeting_spec = "this is an Alexa Prize Socialbot"
     misheard_with_spec1 = "I misheard you"
     misheard_with_spec2 = "like to chat about"
+    alexa_abilities_spec = "If you want to use the requested feature say"
 
     very_big_score = 100
     question = ""
@@ -259,6 +258,8 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
         elif skill_names[i] == 'misheard_asr' and is_misheard:
             curr_single_scores.append(very_big_score)
         elif skill_names[i] == 'intent_responder' and "#+#" in candidates[i]['text']:
+            curr_single_scores.append(very_big_score)
+        elif skill_names[i] == 'program_y' and alexa_abilities_spec in candidates[i]['text']:
             curr_single_scores.append(very_big_score)
         if skill_names[i] == 'dummy_skill' and "question" in candidates[i].get("type", ""):
             question = candidates[i]['text']

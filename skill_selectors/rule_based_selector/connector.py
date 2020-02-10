@@ -1,8 +1,14 @@
 import asyncio
 import re
+import logging
 from typing import Dict, Callable
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
+
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 
 class RuleBasedSkillSelectorConnector:
@@ -129,6 +135,7 @@ class RuleBasedSkillSelectorConnector:
 
         if dialog['bot_utterances']:
             prev_bot_uttr = dialog["bot_utterances"][-1]
+        prev_active_skill = prev_bot_uttr.get("active_skill", "")
 
         weather_city_slot_requested = any(
             [
@@ -168,6 +175,7 @@ class RuleBasedSkillSelectorConnector:
             skills_for_uttr.append("eliza")
             skills_for_uttr.append("christmas_new_year_skill")
             skills_for_uttr.append("superbowl_skill")
+            skills_for_uttr.append("oscar_skill")
             skills_for_uttr.append("personal_info_skill")
 
             if len(dialog["utterances"]) > 7:
@@ -175,15 +183,19 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("convert_reddit")
                 skills_for_uttr.append("convert_reddit_with_personality")
 
+            if prev_bot_uttr.get("active_skill", "") in ["dummy_skill", "dummy_skill_dialog"] and \
+                    len(dialog["utterances"]) > 4:
+                skills_for_uttr.append("dummy_skill_dialog")
+
             # thematic skills
-            if about_movies:
+            if about_movies or prev_active_skill == 'movie_skill':
                 skills_for_uttr.append("movie_skill")
                 skills_for_uttr.append("movie_tfidf_retrieval")
 
             if about_music and len(dialog["utterances"]) > 2:
                 skills_for_uttr.append("music_tfidf_retrieval")
 
-            if about_books:
+            if about_books or prev_active_skill == 'book_skill':
                 skills_for_uttr.append("book_skill")
                 skills_for_uttr.append("book_tfidf_retrieval")
 
@@ -215,7 +227,8 @@ class RuleBasedSkillSelectorConnector:
             for emotion, prob in emotions.items():
                 if prob == max(emotions.values()):
                     found_emotion, found_prob = emotion, prob
-            if found_emotion != 'neutral' and found_prob > emo_prob_threshold:
+            should_run_emotion = found_emotion != 'neutral' and found_prob > emo_prob_threshold
+            if should_run_emotion:
                 skills_for_uttr.append('emotion_skill')
 
             for hyp in prev_user_uttr_hyp:

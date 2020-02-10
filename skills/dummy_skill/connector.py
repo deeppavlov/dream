@@ -10,6 +10,8 @@ from collections import defaultdict
 from random import choice
 from typing import Callable, Dict
 
+from common.universal_templates import nounphrases_questions
+
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -130,11 +132,11 @@ class DummySkillConnector:
             facts_same_nps = []
             for i, nphrase in enumerate(curr_nounphrases):
                 for fact_id in NP_FACTS.get(nphrase, []):
-                    facts_same_nps += [FACTS_MAP[str(fact_id)]]
+                    facts_same_nps += [FACTS_MAP[str(fact_id)] + ". " + nounphrases_questions(nphrase)]
 
             if len(facts_same_nps) > 0:
                 logger.info("Found special nounphrases for facts. Return fact with the same nounphrase.")
-                cands += [choice(facts_same_nps) + ". What do you think about it?"]
+                cands += [choice(facts_same_nps)]
                 confs += [0.7]
                 attrs += [{"type": "nounphrase_fact"}]
             '''

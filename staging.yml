@@ -80,10 +80,6 @@ services:
     image: ${DOCKER_REGISTRY}/movie_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
-  attitude_classification:
-    image: ${DOCKER_REGISTRY}/attitude_classification:${VERSION}
-    env_file:
-      - ${ENV_FILE}
   alice:
     image: ${DOCKER_REGISTRY}/alice:${VERSION}
     env_file:
@@ -146,6 +142,10 @@ services:
     image: ${DOCKER_REGISTRY}/superbowl_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
+  oscar_skill:
+    image: ${DOCKER_REGISTRY}/oscar_skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   weather_skill:
     image: ${DOCKER_REGISTRY}/weather_skill:${VERSION}
     env_file:
@@ -164,6 +164,10 @@ services:
       - ${ENV_FILE}
   comet:
     image: ${DOCKER_REGISTRY}/comet:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  dummy_skill_dialog:
+    image: ${DOCKER_REGISTRY}/dummy_skill_dialog:${VERSION}
     env_file:
       - ${ENV_FILE}
 volumes:

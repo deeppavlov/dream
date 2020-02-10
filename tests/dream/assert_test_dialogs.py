@@ -27,12 +27,19 @@ def main():
     assert statistics.mean(proc_times) <= args.time_limit, print(
         f'Mean proc time: {mean_proc_time} > {args.time_limit}')
     for pred_r, true_r, skill in zip(pred_data, true_data, active_skills):
-        true_sents = set([sent.lower().replace('\n', ' ') for sent in true_r[1:]])
+        true_sents = set([sent.lower().replace('\n', ' ').replace('  ', ' ') for sent in true_r[2:]])
+        true_skill_name = true_r[0]
         assert skill != "exception", print("ERROR: exception in gold phrases".format(pred_r[-1], true_sents))
+        if true_skill_name.strip():
+            if true_skill_name[0] == "!":
+                true_skill_name = true_skill_name[1:]
+                assert true_skill_name != skill, print(f"True skill name: {true_skill_name} == pred skill: {skill}")
+            else:
+                assert true_skill_name == skill, print(f"True skill name: {true_skill_name} != pred skill: {skill}")
         if true_sents:
             checked = False
             for true_sent in true_sents:
-                if true_sent in pred_r[-1].lower().replace('\n', ' '):
+                if true_sent in pred_r[-1].lower().replace('\n', ' ').replace('  ', ' '):
                     checked = True
             assert checked, print("ERROR: {} not in {}".format(pred_r[-1], true_sents))
 
