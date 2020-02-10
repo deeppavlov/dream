@@ -10,9 +10,6 @@ services:
   sentiment_classification:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  attitude_classification:
-    environment:
-      CUDA_VISIBLE_DEVICES: ""
   emotion_classification:
     environment:
       CUDA_VISIBLE_DEVICES: ""

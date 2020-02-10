@@ -46,7 +46,7 @@ class MovieSkillScenario:
                 intents = annotations["cobot_dialogact"]["intents"]
                 opinion_request_detected = annotations["intent_catcher"].get(
                     "opinion_request", {}).get("detected") == 1
-                attitude = annotations.get("attitude_classification", {}).get("text", "")
+                attitude = annotations.get("sentiment_classification", {}).get("text", [""])[0]
                 expression_intent = "Opinion_ExpressionIntent" in intents or "Information_DeliveryIntent" in intents
                 is_movie_topic = ("Movies_TV" in annotations['cobot_topics']['text'] or "Entertainment_Movies" in
                                   annotations['cobot_dialogact']['topics'])
