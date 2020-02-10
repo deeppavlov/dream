@@ -31,7 +31,11 @@ def main():
         true_skill_name = true_r[0]
         assert skill != "exception", print("ERROR: exception in gold phrases".format(pred_r[-1], true_sents))
         if true_skill_name.strip():
-            assert true_skill_name == skill, print(f"True skill name: {true_skill_name}; pred skill: {skill}")
+            if true_skill_name[0] == "!":
+                true_skill_name = true_skill_name[1:]
+                assert true_skill_name != skill, print(f"True skill name: {true_skill_name} == pred skill: {skill}")
+            else:
+                assert true_skill_name == skill, print(f"True skill name: {true_skill_name} != pred skill: {skill}")
         if true_sents:
             checked = False
             for true_sent in true_sents:

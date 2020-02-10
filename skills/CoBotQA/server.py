@@ -36,8 +36,8 @@ if COBOT_QA_SERVICE_URL is None:
 
 headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COBOT_API_KEY}'}
 
-with open("./google-10000-english-no-swears.txt", "r") as f:
-    UNIGRAMS = f.read().splitlines()[:1003]
+with open("./google-2000-english-no-swears.txt", "r") as f:
+    UNIGRAMS = set(f.read().splitlines())
 
 
 def remove_punct_and_articles(s, lowecase=True):
@@ -121,11 +121,12 @@ def respond():
                        'For the latest in politics and other news, try asking "Alexa, play my Flash Briefing."',
                        "I don't have an opinion on that."
                        ]
-        bad_subanswers = ["let's talk about", "i have lots of", "world of warcraft", " wow ", " ok is", "coolness is "]
+        bad_subanswers = ["let's talk about", "i have lots of", "world of warcraft",
+                          " wow ", " ok is", "coolness is ", "about nice"]
 
         if len(response) > 0 and 'skill://amzn1' not in response:
             if response in bad_answers or any([bad_substr in response.lower() for bad_substr in bad_subanswers]):
-                confidence = 0.5
+                confidence = 0.01
             elif "fact about" in questions[i].lower() or "fact about" in response:
                 # this is a fact from cobotqa itself or requested fact
                 sentences = sent_tokenize(response)
