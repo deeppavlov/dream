@@ -80,10 +80,6 @@ services:
     image: ${DOCKER_REGISTRY}/movie_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
-  attitude_classification:
-    image: ${DOCKER_REGISTRY}/attitude_classification:${VERSION}
-    env_file:
-      - ${ENV_FILE}
   alice:
     image: ${DOCKER_REGISTRY}/alice:${VERSION}
     env_file:

@@ -9,7 +9,7 @@ def exit_respond(dialog, response_phrases):
     response = random.choice(response_phrases).strip()  # Neutral response
     annotation = utt["annotations"]
     try:
-        sentiment = annotation["sentiment_classification"]["text"]
+        sentiment = annotation.get("sentiment_classification", {}).get("text", [""])[0]
     except KeyError:
         sentiment = "neutral"
     # sentiment_confidence = annotation['cobot_sentiment']['confidence']

@@ -71,7 +71,7 @@ def respond():
         facts_questions = []
         facts_dialog_ids = []
         entities = []
-        attit = curr_uttr["annotations"]["attitude_classification"]["text"]
+        attit = curr_uttr["annotations"].get("sentiment_classification", {}).get("text", [""])[0]
         for _ in range(N_FACTS_TO_CHOSE):
             for ent in curr_uttr["annotations"]["ner"]:
                 if not ent:
@@ -79,7 +79,7 @@ def respond():
                 ent = ent[0]
                 if ent["text"].lower() not in UNIGRAMS and not (
                         ent["text"].lower() == "alexa" and curr_uttr["text"].lower()[:5] == "alexa"):
-                    if attit in ["neutral", "positive", "very_positive"]:
+                    if attit in ["neutral", "positive"]:
                         entities.append(ent["text"].lower())
                         facts_questions.append("Fun fact about {}".format(ent["text"]))
                         facts_dialog_ids += [i]

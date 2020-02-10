@@ -71,8 +71,8 @@ def test_one_step_responses():
     response = requests.post(url, json=input_data).json()[0]
     assert response[1:] == [1.0, {}, {}, {'bot_attitudes': [['Brad Pitt', 'actor', 'very_positive'],
                                                             ['Chris Evans', 'actor', 'very_positive']],
-                                          'human_attitudes': [['Brad Pitt', 'actor', 'very_positive'],
-                                                              ['Chris Evans', 'actor', 'very_positive']]
+                                          'human_attitudes': [['Brad Pitt', 'actor', 'negative'],
+                                                              ['Chris Evans', 'actor', 'negative']]
                                           }], \
         print(response)
 
@@ -105,7 +105,7 @@ def test_one_step_responses():
     input_data = get_input_json("test_configs/check_get_opinion_give_opinion.json")
     response = requests.post(url, json=input_data).json()[0]
     assert response[1:] == [0.9, {}, {}, {'bot_attitudes': [['Comedy', 'genre', 'very_positive']],
-                                          'human_attitudes': [['Comedy', 'genre', 'very_positive']]}], \
+                                          'human_attitudes': []}], \
         print(response)
 
     print("check_ignored_movie")

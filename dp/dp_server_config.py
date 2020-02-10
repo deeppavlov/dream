@@ -33,11 +33,6 @@ settings['model_defaults']['SentimentClassificationModel'] = {
     "model_args_names": ["sentences"]
 }
 
-settings['model_defaults']['AttitudeClassificationModel'] = {
-    "model_endpoint": "/attitude_annotations",
-    "model_args_names": ["sentences"]
-}
-
 settings['model_defaults']['EmotionClassificationModel'] = {
     "model_endpoint": "/emotion_annotations",
     "model_args_names": ["sentences"]

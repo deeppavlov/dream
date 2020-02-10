@@ -157,17 +157,6 @@
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators_1.sentseg"],
                 "previous_services": ["annotators_1"]
-            },
-            "attitude_classification": {
-                "connector": {
-                    "protocol": "http",
-                    "url": "http://attitude_classification:8025/attitude_annotations"
-                },
-                "dialog_formatter": "last_utt_sentseg_punct_dialog",
-                "response_formatter": "attitude_formatter_service",
-                "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators_1.sentseg"],
-                "previous_services": ["annotators_1"]
             }
         },
         "annotators_3": {
