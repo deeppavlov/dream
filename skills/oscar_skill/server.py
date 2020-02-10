@@ -20,10 +20,6 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-nomination_best_picture = json.load(open("./content/nomination_best_picture.json"))
-nomination_best_director = json.load(open("./content/nomination_best_director.json"))
-nomination_best_actor = json.load(open("./content/nomination_best_actor.json"))
-nomination_best_actress = json.load(open("./content/nomination_best_actress.json"))
 fun_facts_about_oscar_2020 = json.load(open("./content/fun_facts_about_oscar_2020.json"))
 fun_facts_about_oscar_2019 = json.load(open("./content/fun_facts_about_oscar_2019.json"))
 
@@ -647,27 +643,27 @@ dialog_segment_candidates.update(template_cands(films))
 
 oscars = collections.OrderedDict()
 oscars["oscar_nomination_best_pic"] = {
-    "candidates": nomination_best_picture,
+    "candidates": ["in the nomination the best picture won the film parasite "],
     "aggressive": True,
     "regs": [[r"best", r"(movi|cinem|film|pic)"]],
 }
 oscars["oscar_nomination_best_director"] = {
-    "candidates": nomination_best_director,
+    "candidates": ["in the nomination the best director won the director bong joon ho "],
     "aggressive": True,
     "regs": [[r"best", r"director"]],
 }
 oscars["oscar_nomination_best_actor"] = {
-    "candidates": nomination_best_actor,
+    "candidates": ["in the nomination the best actor won the actor joaquin phoenix "],
     "aggressive": True,
     "regs": [[r"best", r"actor"]],
 }
 oscars["oscar_nomination_best_actress"] = {
-    "candidates": nomination_best_actress,
+    "candidates": ["in the nomination the best actress won the actress renée zellweger "],
     "aggressive": True,
     "regs": [[r"best", r"actress"]],
 }
 oscars["oscar_nomination"] = {
-    "candidates": nomination_best_picture + nomination_best_director + nomination_best_actor,
+    "candidates": ["in the nomination the best picture won the film parasite "],
     "aggressive": True,
     "regs": [[r"nominat"]],
 }
@@ -683,20 +679,20 @@ oscars["oscar_2020"] = {
     "regs": [[r"((two thousand twenty)|twenty twenty)"]],
     "adds": [r"(academy.*awards|oscar)"],
 }
-oscars["who_win_now"] = {
+oscars["who_win"] = {
     "candidates": [
-        "I think all candidates have good chances, "
-        "it’s especially interesting what will happen in the nominations for the best picture "
-        "and also for the best director"
-        "and also for the best actor"
-        "and also for the best actress"
+        "i think all candidates had good chances, "
+        "in the nomination the best picture won the film parasite "
+        "in the nomination the best director won the director bong joon ho "
+        "in the nomination the best actor won the actor brad pitt "
+        "in the nomination the best actress won the actress renée zellweger "
     ],
     "aggressive": False,
     "regs": [[r"(who)", r"(win|make|won)", r"((two thousand twenty)|twenty twenty)"], [r"(who)", r"(win|make|won)"]],
     "adds": [r"(academy.*awards|oscar)"],
 }
 oscars["oscar"] = {
-    "candidates": fun_facts_about_oscar_2019,
+    "candidates": fun_facts_about_oscar_2020,
     "aggressive": False,
     "regs": [[r".*"]],
     "adds": [r"(academy.*awards|oscar)"],
