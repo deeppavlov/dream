@@ -5,7 +5,7 @@ import json
 import logging
 from os import getenv
 from string import punctuation
-
+from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
 
 #  import os
 #  import zipfile
@@ -37,8 +37,7 @@ string_fear = "Fear does not empty tomorrow of its sadness, it empties today of 
 joke1 = "When you hit a speed bump in a school zone and remember, there are no speed bumps."
 joke2 = "Police arrested two kids yesterday, one was drinking battery acid, the other was eating fireworks." \
         "They charged one – and let the other one-off."
-joke3 = "Two aerials meet on a roof – fall in love – get married. " \
-        "The ceremony was rubbish – but the reception was brilliant."
+joke3 = "What do you get when you wake up on a workday and realize you ran out of coffee? A depresso."
 joke4 = "I went to the doctors the other day, and I said, ‘Have you got anything for wind?’ So he gave me a kite. "
 joke5 = "A jump-lead walks into a bar. The barman says I’ll serve you, but don’t start anything."
 joke6 = "A priest, a rabbi and a vicar walk into a bar. The barman says, Is this some kind of joke?"
@@ -51,7 +50,7 @@ joke9 = "I’ll tell you what I love doing more than anything: trying to pack my
 joke10 = "A three-legged dog walks into a saloon in the Old West." \
          "He slides up to the bar and announces: I’m looking for the man who shot my paw. "
 joke11 = "A sandwich walks into a bar. The barman says sorry we don’t serve food in here ."
-joke12 = "There’s two fish in a tank, and one says How do you drive this thing?",
+joke12 = "There’s two fish in a tank, and one says How do you drive this thing?"
 phrase_dict = {'anger': ["Please, calm down. Can I tell you a joke?",
                          "I feel your pain. Can I tell you a joke?",
                          "I am ready to support you. Can I tell you a joke?"],
@@ -92,8 +91,10 @@ class EmotionSkillScenario:
     def __call__(self, dialogs):
         texts = []
         confidences = []
+        attrs = []
         for dialog in dialogs:
             try:
+                attr = {"can_continue": CAN_NOT_CONTINUE}
                 logging.info(dialog)
                 text_utterances = [j['text'] for j in dialog['utterances']]
                 bot_phrases = [j for i, j in enumerate(text_utterances) if i % 2 == 1]
@@ -109,13 +110,15 @@ class EmotionSkillScenario:
                 assert most_likely_emotion is not None
                 if 'Can I tell you a joke' in bot_phrases[-1]:
                     if not is_no(annotated_user_phrase):
-                        reply, confidence = random.choice(jokes), self.conf_sure
+                        attr["can_continue"] = CAN_CONTINUE
+                        reply, confidence = random.choice(jokes), 1.0
                     else:
                         reply, confidence = 'NO_ANSWER', 0
                 else:
                     reply = random.choice(phrase_dict[most_likely_emotion])
                     confidence = most_likely_prob * self.precision[emotion]
                 if 'Can I tell you a joke' in reply and confidence < self.conf_sure:
+                    attr["can_continue"] = CAN_CONTINUE
                     # Push reply with offering a joke forward
                     confidence = self.conf_sure
             except Exception as e:
@@ -125,5 +128,6 @@ class EmotionSkillScenario:
                 confidence = 0
             texts.append(reply)
             confidences.append(confidence)
+            attrs.append(attr)
 
-        return texts, confidences  # , human_attributes, bot_attributes, attributes
+        return texts, confidences, attrs  # , human_attributes, bot_attributes, attributes

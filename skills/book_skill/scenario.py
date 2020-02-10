@@ -378,6 +378,10 @@ def fact_about_book(annotated_user_phrase):
         return None
 
 
+def is_previous_was_about_book(dialog):
+    return dialog["utterances"][-2]["active_skill"] == 'book_skill'
+
+
 pphrase1 = ["i'm currently reading sapiens have you heard of that",
             "that's sweet thank you can you tell me about the book sapiens",
             "i don't really read a handmaid's tale have you read sapiens"]
@@ -476,8 +480,12 @@ class BookSkillScenario:
                     elif START_PHRASE == bot_phrases[-1]:
                         if is_no(annotated_user_phrase):
                             reply, confidence = NO_PHRASE_1, self.default_conf
+                            if is_previous_was_about_book(dialog):
+                                confidence = 1.0
                         elif is_yes(annotated_user_phrase):
                             reply, confidence = YES_PHRASE_1, self.default_conf
+                            if is_previous_was_about_book(dialog):
+                                confidence = 1.0
                         else:
                             reply, confidence = self.default_reply, 0
                     elif NO_PHRASE_1 == bot_phrases[-1]:
@@ -485,6 +493,8 @@ class BookSkillScenario:
                     elif YES_PHRASE_1 == bot_phrases[-1]:
                         if is_no(annotated_user_phrase):
                             reply, confidence = YES_PHRASE_2_NO, self.default_conf
+                            if is_previous_was_about_book(dialog):
+                                confidence = 1.0
                         else:
                             book = parse_author_best_book(annotated_user_phrase, default_phrase=YES_PHRASE_2)
                             reply = 'Interesting. Have you read ' + book + '?'
@@ -492,6 +502,8 @@ class BookSkillScenario:
                     elif YES_PHRASE_2 == bot_phrases[-1] or 'Interesting. Have you read ' in bot_phrases[-1]:
                         if is_no(annotated_user_phrase):
                             reply, confidence = NO_PHRASE_2, self.default_conf
+                            if is_previous_was_about_book(dialog):
+                                confidence = 1.0
                         else:
                             reply, confidence = YES_PHRASE_3_1, self.default_conf
                     elif fact_request_detected(annotated_user_phrase):
@@ -520,6 +532,8 @@ class BookSkillScenario:
                                     raise Exception(part1 + part2)
                             elif is_no(annotated_user_phrase):
                                 reply, confidence = GENRE_PHRASE_ADVICE, self.default_conf
+                                if is_previous_was_about_book(dialog):
+                                    confidence = 1.0
                             elif is_yes(annotated_user_phrase):
                                 if is_positive(annotated_user_phrase):
                                     reply, confidence = GENRE_LOVE_PHRASE, self.default_conf
@@ -527,14 +541,20 @@ class BookSkillScenario:
                                     reply, confidence = GENRE_HATE_PHRASE, self.default_conf
                                 else:
                                     reply, confidence = GENRE_NOTSURE_PHRASE, self.default_conf
+                                if is_previous_was_about_book(dialog):
+                                    confidence = 1.0
 
                             else:
                                 reply, confidence = self.default_reply, 0
                         elif bot_phrases[-1] == GENRE_NOTSURE_PHRASE:
                             if is_yes(annotated_user_phrase):
                                 reply, confidence = GENRE_LOVE_PHRASE, self.default_conf
+                                if is_previous_was_about_book(dialog):
+                                    confidence = 1.0
                             elif is_no(annotated_user_phrase):
                                 reply, confidence = GENRE_HATE_PHRASE, self.default_conf
+                                if is_previous_was_about_book(dialog):
+                                    confidence = 1.0
                             else:
                                 reply, confidence = self.default_reply, 0
                 else:

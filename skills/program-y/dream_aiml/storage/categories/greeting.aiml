@@ -108,14 +108,17 @@
       <template>
         <random>
           <li>I am a newborn socialbot, so I can't do so much.
-          I can answer questions, share fun facts, discuss movies and books.
+          I can answer questions, share fun facts, discuss movies, books and news.
           What is your favorite TV Series?</li>
           <li>I am a newborn socialbot, so I can't do so much.
-          I can answer questions, share fun facts, discuss movies and books.
-          what is your favorite movie?</li>
+          I can answer questions, share fun facts, discuss movies, books and news.
+          what is your favorite book?</li>
           <li>I am a newborn socialbot, so I can't do so much.
-          I can answer questions, share fun facts, discuss movies and books.
-          what's your favorite tv show?</li>
+          I can answer questions, share fun facts, discuss movies, books and news.
+          what's your favorite film?</li>
+          <li>I am a newborn socialbot, so I can't do so much.
+          I can answer questions, share fun facts, discuss movies, books and news.
+          what's your favorite video game?</li>
         </random>
        <think>
         <set name="topic"><star/></set>
@@ -127,14 +130,17 @@
       <template>
         <random>
           <li>I am a newborn socialbot, so I can't do so much.
-          I can answer questions, share fun facts, discuss movies and books.
+          I can answer questions, share fun facts, discuss movies, books and news.
           What is your favorite TV Series?</li>
           <li>I am a newborn socialbot, so I can't do so much.
-          I can answer questions, share fun facts, discuss movies and books.
-          what is your favorite movie?</li>
+          I can answer questions, share fun facts, discuss movies, books and news.
+          what is your favorite book?</li>
           <li>I am a newborn socialbot, so I can't do so much.
-          I can answer questions, share fun facts, discuss movies and books.
-          what's your favorite tv show?</li>
+          I can answer questions, share fun facts, discuss movies, books and news.
+          what's your favorite film?</li>
+          <li>I am a newborn socialbot, so I can't do so much.
+          I can answer questions, share fun facts, discuss movies, books and news.
+          what's your favorite video game?</li>
         </random>
        <think>
         <set name="topic"><star/></set>
@@ -144,7 +150,12 @@
     <category>
       <pattern>NO</pattern>
       <template>
-        Okay. What is your favorite TV Series?
+        <random>
+         <li> Okay. What is your favorite TV Series? </li>
+         <li> Okay. What is your favorite book? </li>
+         <li> Okay. What is your favorite film? </li>
+         <li> Okay. What is your favorite video game? </li>
+       </random>
        <think>
         <set name="topic"><star/></set>
        </think>
@@ -152,17 +163,6 @@
     </category>
   </topic>
 
-  <!--<category>-->
-    <!--<pattern>HELLO</pattern>-->
-    <!--<template>-->
-      <!--<think>-->
-        <!--<set name="topic">USER_MOOD</set>-->
-      <!--</think>-->
-      <!--<random>-->
-        <!--<li>Hi, this is an Alexa Prize Socialbot. How are you?</li>-->
-      <!--</random>-->
-    <!--</template>-->
-  <!--</category>-->
   <category>
       <pattern>HELLO</pattern>
       <template>
@@ -224,7 +224,9 @@
       <random>
         <li>I am glad. What do you want to talk about?</li>
         <li>I am glad. What is your favorite movie?</li>
+        <li>I am glad. What is your favorite book?</li>
         <li>I am glad. Where are you from?</li>
+        <li>I am glad. Do you like video games?</li>
       </random>
       <think>
         <set name="topic"><star/></set>
@@ -253,6 +255,7 @@
         <li>I am sorry to hear that. What do you want to talk about?</li>
         <li>I am sorry to hear that. Do you like comedies?</li>
         <li>I am sorry to hear that. Where are you from?</li>
+        <li>I am sorry to hear that. Do you like video games?</li>
       </random>
       <think>
         <set name="topic"><star/></set>

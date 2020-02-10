@@ -5,6 +5,7 @@ from data.process import check, create_phraselist, get_dialogs
 from data.process import get_vectorizer, preprocess
 from flask import Flask, request, jsonify
 import os
+import string
 import json
 import sentry_sdk
 
@@ -24,7 +25,6 @@ vectorizer_file = "../global_data/new_vectorizer_2.zip"
 dialog_dir = "../global_data/dialog_list.json"
 full_dialog_dir = "data/full_dialog_list.json"  # We WRITE from this directory rather than read from it
 custom_dialog_dir = "data/custom_dialog_list.json"
-
 
 #  if USE_COBOT:  ### WE DO NOT USE IT
 #    dialog_dir = 'data/cobot_dialog_list.json'
@@ -86,14 +86,23 @@ for user_phrase in todel_userphrases:
 vectorized_phrases = vectorizer.transform(list(phrase_list.keys()))
 
 
+def nopunct(j):
+    return ''.join([i for i in j if i not in string.punctuation])
+
+
 @app.route("/respond", methods=['POST'])
 def respond():
     st_time = time.time()
     last_utterances = request.json['sentences']
     response = []
+    stopwords = [j.strip() for j in open('data/stopwords.txt', 'r').readlines()[1:]]
     for last_utterance in last_utterances:
-        response = response + check(last_utterance, vectorizer=vectorizer,
-                                    vectorized_phrases=vectorized_phrases, phrase_list=phrase_list)
+        words = [j for j in nopunct(last_utterance).lower().split(' ') if len(j.strip()) > 0]
+        if all([j in stopwords for j in words]):
+            response = response + [['NO_ANSWER', 0]]
+        else:
+            response = response + check(last_utterance, vectorizer=vectorizer,
+                                        vectorized_phrases=vectorized_phrases, phrase_list=phrase_list)
     if not response:
         with sentry_sdk.push_scope() as scope:
             scope.set_extra('last_utterances', last_utterances)

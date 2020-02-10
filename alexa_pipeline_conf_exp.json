@@ -115,16 +115,6 @@
                 "response_formatter": "cobot_classifiers_formatter_service",
                 "previous_services": ["annotators_1.sentseg"],
                 "state_manager_method": "add_annotation"
-            },
-            "attitude_classification": {
-                "connector": {
-                    "protocol": "http",
-                    "url": "http://attitude_classification:8025/attitude_annotations"
-                },
-                "dialog_formatter": "last_utt_sentseg_punct_dialog",
-                "response_formatter": "attitude_formatter_service",
-                "previous_services": ["annotators_1.sentseg"],
-                "state_manager_method": "add_annotation"
             }
         },
         "annotators_3": {

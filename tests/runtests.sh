@@ -156,6 +156,11 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
         dockercompose_cmd exec -T -u $(id -u) superbowl_skill python /src/test_server.py
     fi
 
+    if container_is_started oscar_skill; then
+        echo "Run tests for oscar_skill container"
+        dockercompose_cmd exec -T -u $(id -u) oscar_skill python /src/test_server.py
+    fi
+
     if container_is_started eliza; then
         echo "Run tests for eliza container"
         dockercompose_cmd exec -T -u $(id -u) eliza python /src/test_server.py
@@ -164,6 +169,11 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
     if container_is_started news_skill; then
         echo "Run tests for news_skill"
         dockercompose_cmd exec -T -u $(id -u) news_skill python /src/src/test.py
+    fi
+
+    if container_is_started dummy_skill_dialog; then
+        echo "Run tests for dummy_skill_dialog"
+        dockercompose_cmd exec -T -u $(id -u) dummy_skill_dialog python test.py
     fi
 
     if container_is_started comet; then

@@ -157,17 +157,6 @@
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators_1.sentseg"],
                 "previous_services": ["annotators_1"]
-            },
-            "attitude_classification": {
-                "connector": {
-                    "protocol": "http",
-                    "url": "http://attitude_classification:8025/attitude_annotations"
-                },
-                "dialog_formatter": "last_utt_sentseg_punct_dialog",
-                "response_formatter": "attitude_formatter_service",
-                "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators_1.sentseg"],
-                "previous_services": ["annotators_1"]
             }
         },
         "annotators_3": {
@@ -263,6 +252,16 @@
                 },
                 "dialog_formatter": "utt_sentrewrite_modified_last_dialog",
                 "response_formatter": "cobot_qa_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
+            },
+            "dummy_skill_dialog": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://dummy_skill_dialog:8052/respond"
+                },
+                "dialog_formatter": "utt_sentrewrite_modified_last_dialog",
+                "response_formatter": "skill_with_attributes_formatter_service",
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
             },
@@ -471,6 +470,16 @@
                 "connector": {
                     "protocol": "http",
                     "url": "http://superbowl_skill:8051/respond"
+                },
+                "dialog_formatter": "last_utt_dialog",
+                "response_formatter": "base_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
+            },
+            "oscar_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://oscar_skill:8055/respond"
                 },
                 "dialog_formatter": "last_utt_dialog",
                 "response_formatter": "base_formatter_service",
