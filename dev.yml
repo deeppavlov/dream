@@ -289,4 +289,11 @@ services:
     env_file: [.env.dev]
     ports:
       - 8053:8053
+  meta_script_skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/meta_script_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8054:8054
 version: "3.7"

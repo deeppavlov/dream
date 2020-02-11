@@ -170,6 +170,10 @@ services:
     image: ${DOCKER_REGISTRY}/dummy_skill_dialog:${VERSION}
     env_file:
       - ${ENV_FILE}
+  meta_script_skill:
+    image: ${DOCKER_REGISTRY}/meta_script_skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
 volumes:
   external-logs:
   external-deeppavlov:

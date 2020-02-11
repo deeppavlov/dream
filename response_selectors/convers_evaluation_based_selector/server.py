@@ -6,6 +6,7 @@ import os
 import re
 import time
 import numpy as np
+from random import uniform
 
 import requests
 from flask import Flask, request, jsonify
@@ -232,6 +233,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
 
     skill_names = [c['skill_name'] for c in candidates]
     how_are_you_spec = "I'm fine, thanks! Do you want to know what I can do?"
+    what_i_can_do_spec = "a newborn socialbot"
     psycho_help_spec = "If you or someone you know is in immediate danger"
     greeting_spec = "this is an Alexa Prize Socialbot"
     misheard_with_spec1 = "I misheard you"
@@ -251,7 +253,8 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             else:
                 candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + candidates[i]['text']
             curr_single_scores.append(very_big_score)
-        elif skill_names[i] == 'program_y' and candidates[i]['text'] == how_are_you_spec \
+        elif skill_names[i] == 'program_y' and (
+                candidates[i]['text'] == how_are_you_spec or what_i_can_do_spec in candidates[i]['text']) \
                 and len(dialog['utterances']) < 16:
             curr_single_scores.append(very_big_score)
         elif skill_names[i] == 'program_y_dangerous' and psycho_help_spec in candidates[i]['text']:
@@ -269,6 +272,18 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             curr_single_scores.append(very_big_score)
         elif skill_names[i] == 'program_y' and alexa_abilities_spec in candidates[i]['text']:
             curr_single_scores.append(very_big_score)
+        elif skill_names[i] == 'meta_script_skill' and len(dialog['utterances']) >= 2:
+            if len(dialog['utterances']) >= 5 and confidences[i] == 0.99:
+                # if meta_script returns starting phrase in the middle of dialog (conf 0.99)
+                # when faced topic switching intent or matched phrase,
+                # return it with probability 0.15
+                if uniform(0, 1.) < 0.15:
+                    curr_single_scores.append(very_big_score)
+            elif confidences[i] == 0.9:
+                # if meta_script returns starting phrase in the beginning of dialog (conf 0.9),
+                # return it with probability 0.1
+                if uniform(0, 1.) < 0.1:
+                    curr_single_scores.append(very_big_score)
         if skill_names[i] == 'dummy_skill' and "question" in candidates[i].get("type", ""):
             question = candidates[i]['text']
 
