@@ -350,15 +350,15 @@
             </random>
         </template>
     </category>
-    <category>
-        <pattern>I AGREE</pattern>
-        <template>I'm glad we're on the same wavelength,<srai>CLIENT NAME</srai>.
-        </template>
-    </category>
-    <category>
-        <pattern>I KNOW</pattern>
-        <template>You are very wise.</template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>I AGREE</pattern>-->
+<!--        <template>I'm glad we're on the same wavelength,<srai>CLIENT NAME</srai>.-->
+<!--        </template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>I KNOW</pattern>-->
+<!--        <template>You are very wise.</template>-->
+<!--    </category>-->
 <!--    <category>-->
 <!--        <pattern>AM I *</pattern>-->
 <!--        <template>-->
