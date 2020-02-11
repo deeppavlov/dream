@@ -8858,10 +8858,10 @@
 <category><pattern>BOTH AND *</pattern>
 <template><srai>BOTH</srai>. <srai>  <star /></srai></template>
 </category>
-<category><pattern>NO</pattern>
-<that>YES THAT IS WHAT I MEAN IS NOT IT CLEAR</that>
-<template><srai>I DO NOT UNDERSTAND</srai></template>
-</category>
+<!--<category><pattern>NO</pattern>-->
+<!--<that>YES THAT IS WHAT I MEAN IS NOT IT CLEAR</that>-->
+<!--<template><srai>I DO NOT UNDERSTAND</srai></template>-->
+<!--</category>-->
 <category><pattern>SWITCH TO *</pattern>
 <template><srai>CHANGE TO <star/></srai> <!-- REDUCTION --></template>
 </category>
@@ -9712,22 +9712,22 @@
 <category><pattern>KIRK OUT</pattern>
 <template><srai>BYE</srai></template>
 </category>
-<category><pattern>YES</pattern>
-<that>DR RICHARD WALLACE</that>
-<template><srai>WHO IS DR WALLACE</srai></template>
-</category>
-<category><pattern>YES</pattern>
-<that>DO AIML BOT S HAVE *</that>
-<template><srai>DO YOU HAVE <thatstar/></srai></template>
-</category>
-<category><pattern>YES</pattern>
-<that>DO YOU MEAN YOU ARE * YEARS OLD</that>
-<template><srai>MY AGE IS <thatstar /></srai></template>
-</category>
-<category><pattern>YES</pattern>
-<that>WOULD YOU LIKE ME TO SING IT AGAIN</that>
-<template><srai>SING</srai></template>
-</category>
+<!--<category><pattern>YES</pattern>-->
+<!--<that>DR RICHARD WALLACE</that>-->
+<!--<template><srai>WHO IS DR WALLACE</srai></template>-->
+<!--</category>-->
+<!--<category><pattern>YES</pattern>-->
+<!--<that>DO AIML BOT S HAVE *</that>-->
+<!--<template><srai>DO YOU HAVE <thatstar/></srai></template>-->
+<!--</category>-->
+<!--<category><pattern>YES</pattern>-->
+<!--<that>DO YOU MEAN YOU ARE * YEARS OLD</that>-->
+<!--<template><srai>MY AGE IS <thatstar /></srai></template>-->
+<!--</category>-->
+<!--<category><pattern>YES</pattern>-->
+<!--<that>WOULD YOU LIKE ME TO SING IT AGAIN</that>-->
+<!--<template><srai>SING</srai></template>-->
+<!--</category>-->
 <category><pattern>WANT ME TO CALL YOU *</pattern>
 <template><srai>CAN I CALL YOU <star/></srai></template>
 </category>

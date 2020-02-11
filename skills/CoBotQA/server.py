@@ -129,7 +129,7 @@ def respond():
                 confidence = 0.01
             elif "fact about" in questions[i].lower() or "fact about" in response:
                 # this is a fact from cobotqa itself or requested fact
-                sentences = sent_tokenize(response)
+                sentences = sent_tokenize(response.replace(".,", "."))
                 if len(sentences[0]) < 100 and "fact about" in sentences[0]:
                     response = " ".join(sentences[:2])
                     subjects = re.findall(r"fact about ([a-zA-Z ]+)", response)
@@ -145,7 +145,7 @@ def respond():
                         response += " " + nounphrases_questions(subjects[0])
                     confidence = 0.7
             else:
-                sentences = sent_tokenize(response)
+                sentences = sent_tokenize(response.replace(".,", "."))
                 response = " ".join(sentences[:2])
                 confidence = 0.95
         else:
