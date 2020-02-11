@@ -88,7 +88,8 @@ def check(human_phrase, vectorizer, vectorized_phrases, phrase_list, top_best=1)
                       "favorite member of mouse rat?",
                       "don't worry, our conversation is confidential.",
                       "i appreciate your candor",
-                      "i imagine that's good for you."]
+                      "i imagine that's good for you.",
+                      "might answer your question"]
     misheard_phrases = ["I misheard you",
                         "Could you repeat that, please?",
                         "Could you say that again, please?",
