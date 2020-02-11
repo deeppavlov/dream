@@ -153,10 +153,6 @@
         <template><srai>CAN_I_ASK_QUESTION_REQUEST</srai></template>
     </category>
     <category>
-        <pattern>I HAVE A QUESTION FOR YOU</pattern>
-        <template><srai>CAN_I_ASK_QUESTION_REQUEST</srai></template>
-    </category>
-    <category>
         <pattern>I HAVE A QUESTION</pattern>
         <template><srai>CAN_I_ASK_QUESTION_REQUEST</srai></template>
     </category>

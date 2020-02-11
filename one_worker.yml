@@ -73,4 +73,6 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8049
   news_skill:
     command: bash -c "python updater.py | gunicorn --workers=1 server:app -b 0.0.0.0:8027 -t 300"
+  meta_script_skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8054
 version: '3.7'
