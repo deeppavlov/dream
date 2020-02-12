@@ -78,9 +78,9 @@
     },
     "dont_understand": {
       "phrases": [
-        "(Sorry, ){0,1}I ((don't)|(do not)|(didn't)|(did not)) ((understand)|(get)|(know))( ((what you mean)|(you)|(what you say))){0,1}",
+        "(Sorry, ){0,1}I ((don't)|(do not)|(didn't)|(did not)) ((understand)|(get)|(know))( ((what you mean)|(what you say)|(what you want)|(what are you talking about)))",
         "((I don't ((know)|(understand)|(get)) )|(I am not sure )|())what ((do)|(did)) you mean",
-        "((I don't ((know)|(understand)|(get)) )|(I am not sure )|())what are you talking about",
+        "((I don't ((know)|(understand)|(get)) )|(I am not sure )|())((what you mean)|(what you say)|(what you want)|(what are you talking about))",
         "(What, ){0,1}it doesn't make (any ){0,1}sense"
       ],
       "min_precision": 0.0,
@@ -388,6 +388,9 @@
   },
   "random_phrases": {
     "phrases": [
+      "i don't know",
+      "i do not know",
+      "i have no idea",
       "stop talk about school vesicle to it",
       "stop set an alarm for seven o'clock alarm seven stop alarm for seven o'clock",
       "message",
