@@ -176,6 +176,11 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
         dockercompose_cmd exec -T -u $(id -u) dummy_skill_dialog python test.py
     fi
 
+    if container_is_started intent_catcher; then
+        echo "Run tests for comet"
+        dockercompose_cmd exec -T -u $(id -u) intent_catcher python test.py
+    fi
+
     if container_is_started comet; then
         echo "Run tests for comet"
         dockercompose_cmd exec -T -u $(id -u) comet python /comet/test.py
