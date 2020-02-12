@@ -78,10 +78,12 @@
     },
     "dont_understand": {
       "phrases": [
-        "(Sorry, ){0,1}I ((don't)|(do not)|(didn't)|(did not)) ((understand)|(get)|(know))( ((what you mean)|(what you say)|(what you want)|(what are you talking about)))",
-        "((I don't ((know)|(understand)|(get)) )|(I am not sure )|())what ((do)|(did)) you mean",
-        "((I don't ((know)|(understand)|(get)) )|(I am not sure )|())((what you mean)|(what you say)|(what you want)|(what are you talking about))",
-        "(What, ){0,1}it doesn't make (any ){0,1}sense"
+        "(I ((did not get)|(don't understand)|(don't get)) ){0,1}what do you mean( alexa){0,1}",
+        "(Sorry, ){0,1}I ((don't)|(do not)|(didn't)|(did not)) ((understand)|(get)|(know))( ((what you mean)|(what you say)|(what you want)|(what are you talking about)))( alexa){0,1}",
+        "((I don't ((know)|(understand)|(get)) )|(I am not sure )|())what ((do)|(did)) you mean( alexa){0,1}",
+        "((I don't ((know)|(understand)|(get)) )|(I am not sure )|())((what you mean)|(what you say)|(what you want)|(what are you talking about))( alexa){0,1}",
+        "(What, ){0,1}it doesn't make (any ){0,1}sense( alexa){0,1}",
+        "(alexa ){0,1}it ((don't)|(doesn't)) make any sense"
       ],
       "min_precision": 0.0,
       "punctuation": [
@@ -91,8 +93,8 @@
     },
     "tell_me_more": {
       "phrases": [
-        "(((Please)|(Well)|(That's ((neat)|(cool)|(great)|(funny)))), ){0,1}tell me more (about it){0,1}",
-        "What else ((do you know)|(can you tell me)) about it"
+        "(((Please)|(Well)|(That's ((neat)|(cool)|(great)|(funny)))), ){0,1}tell me more (about it){0,1}( alexa){0,1}",
+        "What else ((do you know)|(can you tell me)) about it( alexa){0,1}"
       ],
       "min_precision": 0.0,
       "punctuation": [
@@ -102,6 +104,7 @@
     },
     "weather_forecast_intent": {
       "phrases": [
+        "tell me the weather in my ((town)|(city)|(place)|(area))",
         "alexa can you forecast the weather?",
         "alexa can you tell me about the weather",
         "alexa check the weather",
@@ -363,6 +366,7 @@
     },
     "doing_well": {
       "phrases": [
+        "Doing ((fine)|(great)|(cool)|(okay))( ((thanks)|(thank you))){0,1}",
         "I(('m)|( am)) ((doing)|(all)) ((okay)|(right)|(fine)|(great)|(cool))( thanks){0,1}",
         "I(('m)|( am)) ((fine)|(good)|(well)|(happy)|(very kind as well)|(okay)|(great)|(cool))( thanks){0,1}"
       ],
@@ -571,7 +575,7 @@
       "let's chat kirk",
       "can you please i'm gonna talk for a while okay",
       "(let|please) continue this (good |interesting |fun |funny ){0,1}(topic|subject|talk)",
- 	  "(please ){0,1}(dont|do not|don't) (change|switch|finish|close|turn off) (the |this |current ){0,1}(good |interesting |fun |funny ){0,1}(topic|subject|talk)",
+ 	    "(please ){0,1}(dont|do not|don't) (change|switch|finish|close|turn off) (the |this |current ){0,1}(good |interesting |fun |funny ){0,1}(topic|subject|talk)",
       "[0-9]{1,10}",
       "stop ((hitting you)|(doing this)|(doing that))",
       "((repeat what)|(what do you want me to repeat))",
