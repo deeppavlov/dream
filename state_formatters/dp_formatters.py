@@ -202,7 +202,7 @@ def utt_sentrewrite_modified_last_dialog(dialog: Dict):
 
 
 def skill_with_attributes_formatter_service(payload: Dict):
-    # Used by: book_skill_formatter, skill_with_attributes_formatter, news_skill
+    # Used by: book_skill_formatter, skill_with_attributes_formatter, news_skill, meta_script_skill
     if len(payload) == 3:
         result = {"text": payload[0],
                   "confidence": payload[1]}

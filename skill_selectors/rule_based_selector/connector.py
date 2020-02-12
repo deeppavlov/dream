@@ -98,7 +98,8 @@ class RuleBasedSkillSelectorConnector:
                 v["detected"] == 1
                 for k, v in dialog["utterances"][-1]["annotations"]["intent_catcher"].items()
                 if k
-                not in {"opinion_request", "yes", "no", "tell_me_more", "doing_well", "weather_forecast_intent"}
+                not in {"opinion_request", "yes", "no", "tell_me_more", "doing_well", "weather_forecast_intent",
+                        "topic_switching"}
             ]
         )
         cobot_topics = set(dialog["utterances"][-1]["annotations"]["cobot_topics"]["text"])
@@ -162,9 +163,10 @@ class RuleBasedSkillSelectorConnector:
             # process intent with corresponding IntentResponder
             skills_for_uttr.append("intent_responder")
         elif blist_topics_detected or (sensitive_topics_detected and sensitive_dialogacts_detected):
-            # process user utterance with sensitive content
+            # process user utterance with sensitive content, "safe mode"
             skills_for_uttr.append("program_y_dangerous")
             skills_for_uttr.append("cobotqa")
+            skills_for_uttr.append("meta_script_skill")
             if about_news:
                 skills_for_uttr.append("news_skill")
         else:
@@ -177,6 +179,7 @@ class RuleBasedSkillSelectorConnector:
             skills_for_uttr.append("superbowl_skill")
             skills_for_uttr.append("oscar_skill")
             skills_for_uttr.append("personal_info_skill")
+            skills_for_uttr.append("meta_script_skill")
 
             if len(dialog["utterances"]) > 7:
                 skills_for_uttr.append("tfidf_retrieval")

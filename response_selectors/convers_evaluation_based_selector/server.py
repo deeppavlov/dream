@@ -6,6 +6,7 @@ import os
 import re
 import time
 import numpy as np
+from random import uniform
 
 import requests
 from flask import Flask, request, jsonify
@@ -13,6 +14,7 @@ from os import getenv
 from collections import Counter
 import sentry_sdk
 import pprint
+from nltk.tokenize import sent_tokenize
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -214,16 +216,24 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     confidences[ids] = 0.
 
     # check for repeatitions
-    bot_utterances = [uttr["text"].lower() for uttr in dialog["bot_utterances"]]
+    bot_utterances = [sent_tokenize(uttr["text"].lower()) for uttr in dialog["bot_utterances"]]
+    # flatten 2d list to 1d list of all appeared sentences of bot replies
+    bot_utterances = sum(bot_utterances, [])
     bot_utt_counter = Counter(bot_utterances)
+
     for i, cand in enumerate(candidates):
-        coeff = bot_utt_counter[cand["text"].lower()] + 1
+        cand_sents = sent_tokenize(cand["text"].lower())
+        coeff = 1
+        for cand_sent in cand_sents:
+            coeff += bot_utt_counter[cand_sent]
+
         confidences[i] /= coeff
         scores[i]['isResponseInteresting'] /= coeff
         scores[i]['responseEngagesUser'] /= coeff
 
     skill_names = [c['skill_name'] for c in candidates]
     how_are_you_spec = "I'm fine, thanks! Do you want to know what I can do?"
+    what_i_can_do_spec = "a newborn socialbot"
     psycho_help_spec = "If you or someone you know is in immediate danger"
     greeting_spec = "this is an Alexa Prize Socialbot"
     misheard_with_spec1 = "I misheard you"
@@ -243,7 +253,8 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             else:
                 candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + candidates[i]['text']
             curr_single_scores.append(very_big_score)
-        elif skill_names[i] == 'program_y' and candidates[i]['text'] == how_are_you_spec \
+        elif skill_names[i] == 'program_y' and (
+                candidates[i]['text'] == how_are_you_spec or what_i_can_do_spec in candidates[i]['text']) \
                 and len(dialog['utterances']) < 16:
             curr_single_scores.append(very_big_score)
         elif skill_names[i] == 'program_y_dangerous' and psycho_help_spec in candidates[i]['text']:
@@ -261,6 +272,18 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             curr_single_scores.append(very_big_score)
         elif skill_names[i] == 'program_y' and alexa_abilities_spec in candidates[i]['text']:
             curr_single_scores.append(very_big_score)
+        elif skill_names[i] == 'meta_script_skill' and len(dialog['utterances']) >= 2:
+            if len(dialog['utterances']) >= 5 and confidences[i] == 0.99:
+                # if meta_script returns starting phrase in the middle of dialog (conf 0.99)
+                # when faced topic switching intent or matched phrase,
+                # return it with probability 0.15
+                if uniform(0, 1.) < 0.15:
+                    curr_single_scores.append(very_big_score)
+            elif confidences[i] == 0.9:
+                # if meta_script returns starting phrase in the beginning of dialog (conf 0.9),
+                # return it with probability 0.1
+                if uniform(0, 1.) < 0.1:
+                    curr_single_scores.append(very_big_score)
         if skill_names[i] == 'dummy_skill' and "question" in candidates[i].get("type", ""):
             question = candidates[i]['text']
 
@@ -296,9 +319,10 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                              "Sorry, I don't have an answer for that!", "Let's talk about something else.",
                              "As you wish.", "All right.", "Right.", "Anyway.", "Oh, okay.", "Oh, come on.",
                              "Really?", "Okay. I got it.", "Well, okay.", "Well, as you wish."]:
-        logger.info(f"adding {question} to response.")
-        best_text += np.random.choice([f" Let me ask you something. {question}",
-                                       f" I would like to ask you a question. {question}"])
+        if question != "":
+            logger.info(f"adding {question} to response.")
+            best_text += np.random.choice([f" Let me ask you something. {question}",
+                                           f" I would like to ask you a question. {question}"])
 
     while candidates[best_id]["text"] == "" or candidates[best_id]["confidence"] == 0.:
         curr_single_scores[best_id] = 0.

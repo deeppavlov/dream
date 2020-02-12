@@ -12,13 +12,12 @@ from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
 #  import _pickle as cPickle
 
 
-def is_no(annotated_phrase):
-    y1 = annotated_phrase['annotations']['intent_catcher'].get('no', {}).get('detected') == 1
+def is_yes(annotated_phrase):
+    y1 = annotated_phrase['annotations']['intent_catcher'].get('yes', {}).get('detected') == 1
     user_phrase = annotated_phrase['text']
-    user_phrase = user_phrase.replace("n't", ' not ')
     for sign in punctuation:
         user_phrase = user_phrase.replace(sign, ' ')
-    y2 = ' no ' in user_phrase or ' not ' in user_phrase
+    y2 = ' yes ' in user_phrase
     return y1 or y2
 
 
@@ -109,7 +108,7 @@ class EmotionSkillScenario:
                         most_likely_emotion = emotion
                 assert most_likely_emotion is not None
                 if 'Can I tell you a joke' in bot_phrases[-1]:
-                    if not is_no(annotated_user_phrase):
+                    if is_yes(annotated_user_phrase):
                         attr["can_continue"] = CAN_CONTINUE
                         reply, confidence = random.choice(jokes), 1.0
                     else:
