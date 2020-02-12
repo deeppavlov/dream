@@ -1,0 +1,354 @@
+{
+  "go ice fishing": {
+    "xAttr": [
+      "outdoorsy",
+      "relaxed",
+      "adventurous",
+      "playful",
+      "fun"
+    ],
+    "xIntent": [
+      "to have fun",
+      "to catch fish",
+      "to catch a fish",
+      "to catch some fish",
+      "to relax"
+    ],
+    "xNeed": [
+      "to buy bait",
+      "to go to the lake",
+      "to buy bait and hooks",
+      "buy bait",
+      "to get fishing pole"
+    ],
+    "xEffect": [
+      "catches a fish",
+      "personx catches a fish",
+      "catches fish",
+      "person x catches a fish .",
+      "person x catches a fish"
+    ],
+    "xReact": [
+      "happy",
+      "relaxed",
+      "satisfied",
+      "tired",
+      "excited"
+    ],
+    "xWant": [
+      "to catch fish",
+      "to catch a fish",
+      "to catch some fish",
+      "to have fun",
+      "catch fish"
+    ]
+  },
+  "go skydiving": {
+    "xAttr": [
+      "brave",
+      "adventurous",
+      "daring",
+      "athletic",
+      "excited"
+    ],
+    "xIntent": [
+      "to have fun",
+      "to be adventurous",
+      "to experience something new",
+      "to see the sky",
+      "to have fun ."
+    ],
+    "xNeed": [
+      "to buy a parachute",
+      "to buy a plane ticket",
+      "buy a parachute",
+      "to buy a parachute .",
+      "to get a parachute"
+    ],
+    "xEffect": [
+      "gets hurt",
+      "falls down",
+      "personx gets hurt",
+      "personx gets a splinter",
+      "personx gets sick"
+    ],
+    "xReact": [
+      "excited",
+      "happy",
+      "exhilarated",
+      "proud",
+      "adventurous"
+    ],
+    "xWant": [
+      "to have fun",
+      "to see the sky",
+      "to go to the airport",
+      "to see the stars",
+      "to get a tan"
+    ]
+  },
+  "be a volunteer": {
+    "xAttr": [
+      "helpful",
+      "selfless",
+      "caring",
+      "kind",
+      "generous"
+    ],
+    "xIntent": [
+      "to be a good citizen",
+      "to help people",
+      "to be helpful",
+      "to be a good person",
+      "to help others"
+    ],
+    "xNeed": [
+      "none",
+      "to have a job",
+      "to get a job",
+      "to be a volunteer",
+      "to like helping people"
+    ],
+    "xEffect": [
+      "none",
+      "personx is thanked",
+      "gets paid",
+      "gets thanked",
+      "gets tired"
+    ],
+    "xReact": [
+      "proud",
+      "happy",
+      "helpful",
+      "satisfied",
+      "good"
+    ],
+    "xWant": [
+      "to help others",
+      "to help people",
+      "to be a good citizen",
+      "to volunteer",
+      "to get paid"
+    ]
+  },
+  "paint": {
+    "xAttr": [
+      "creative",
+      "artistic",
+      "talented",
+      "skilled",
+      "helpful"
+    ],
+    "xIntent": [
+      "to be creative",
+      "to make money",
+      "to make something beautiful",
+      "to make something",
+      "to paint"
+    ],
+    "xNeed": [
+      "to buy paint",
+      "buy paint",
+      "to get paint brushes",
+      "to get a brush",
+      "none"
+    ],
+    "xEffect": [
+      "gets dirty",
+      "gets paint on their hands",
+      "gets paint on their clothes",
+      "gets paint on hands",
+      "personx gets dirty"
+    ],
+    "xReact": [
+      "proud",
+      "satisfied",
+      "happy",
+      "accomplished",
+      "creative"
+    ],
+    "xWant": [
+      "to clean up the mess",
+      "to finish the job",
+      "to clean up",
+      "to finish painting",
+      "clean up"
+    ]
+  },
+  "practice yoga": {
+    "xAttr": [
+      "athletic",
+      "healthy",
+      "curious",
+      "motivated",
+      "flexible"
+    ],
+    "xIntent": [
+      "to be fit",
+      "to be healthy",
+      "to be healthier",
+      "to get better",
+      "to learn yoga"
+    ],
+    "xNeed": [
+      "to buy a yoga mat",
+      "buy a yoga mat",
+      "to buy a yoga mat .",
+      "to get a yoga mat",
+      "to buy yoga mat"
+    ],
+    "xEffect": [
+      "gets exercise",
+      "becomes fit",
+      "personx gets exercise",
+      "becomes healthier",
+      "sweats"
+    ],
+    "xReact": [
+      "healthy",
+      "healthier",
+      "fit",
+      "happy",
+      "tired"
+    ],
+    "xWant": [
+      "to get better at yoga",
+      "to take a break",
+      "to get better",
+      "to get fit",
+      "to get better at yoga ."
+    ]
+  },
+  "have a pet": {
+    "xAttr": [
+      "caring",
+      "loving",
+      "responsible",
+      "kind",
+      "happy"
+    ],
+    "xIntent": [
+      "to have a pet",
+      "to have a companion",
+      "to have a friend",
+      "to have company",
+      "to have fun"
+    ],
+    "xNeed": [
+      "to go to the pet store",
+      "none",
+      "to buy a cage",
+      "buy a cage",
+      "to have a pet"
+    ],
+    "xEffect": [
+      "none",
+      "feeds it",
+      "feeds the pet",
+      "feeds the animal",
+      "gets bitten"
+    ],
+    "xReact": [
+      "happy",
+      "responsible",
+      "loving",
+      "excited",
+      "loved"
+    ],
+    "xWant": [
+      "to feed it",
+      "to take care of the pet",
+      "to feed the pet",
+      "feed it",
+      "feed the pet"
+    ]
+  },
+  "go to the circus": {
+    "xAttr": [
+      "excited",
+      "entertained",
+      "fun",
+      "happy",
+      "adventurous"
+    ],
+    "xIntent": [
+      "to have fun",
+      "to have a good time",
+      "to be entertained",
+      "to see the circus",
+      "to have fun ."
+    ],
+    "xNeed": [
+      "to buy tickets",
+      "to buy a ticket",
+      "buy tickets",
+      "to buy ticket",
+      "none"
+    ],
+    "xEffect": [
+      "personx sees the circus",
+      "personx sees a circus",
+      "gets tired",
+      "laughs",
+      "smiles"
+    ],
+    "xReact": [
+      "happy",
+      "entertained",
+      "excited",
+      "satisfied",
+      "amused"
+    ],
+    "xWant": [
+      "to have fun",
+      "to have a good time",
+      "to go home",
+      "to watch the circus",
+      "to see the circus"
+    ]
+  },
+  "go mountain hiking": {
+    "xAttr": [
+      "outdoorsy",
+      "adventurous",
+      "athletic",
+      "brave",
+      "healthy"
+    ],
+    "xIntent": [
+      "to have fun",
+      "to be outdoors",
+      "to get exercise",
+      "to enjoy nature",
+      "to exercise"
+    ],
+    "xNeed": [
+      "to put on hiking boots",
+      "to get hiking gear",
+      "to buy hiking boots",
+      "to put on hiking shoes",
+      "to buy hiking gear"
+    ],
+    "xEffect": [
+      "gets exercise",
+      "gets tired",
+      "falls down",
+      "personx gets exercise",
+      "sweats"
+    ],
+    "xReact": [
+      "happy",
+      "tired",
+      "excited",
+      "satisfied",
+      "healthy"
+    ],
+    "xWant": [
+      "to take pictures",
+      "drink water",
+      "to enjoy nature",
+      "to relax",
+      "to take a break"
+    ]
+  }
+}

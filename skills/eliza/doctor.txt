@@ -244,18 +244,6 @@ key: you
     reasmb: Oh, I (2) ?
     reasmb: You're not really talking about me -- are you ?
     reasmb: What are your feelings now ?
-key: yes
-  decomp: *
-    reasmb: You seem to be quite positive.
-    reasmb: You are sure.
-    reasmb: I see.
-    reasmb: I understand.
-key: no
-  decomp: *
-    reasmb: Are you saying no just to be negative?
-    reasmb: You are being a bit negative.
-    reasmb: Why not ?
-    reasmb: Why 'no' ?
 key: my 2
   decomp: $ * my *
     reasmb: Lets discuss further why your (2) .

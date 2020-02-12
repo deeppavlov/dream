@@ -47,9 +47,9 @@ banned_words = ['Benjamin', 'misheard', 'cannot do this',
                 "you are first. tell me something about tronics."
                 "sum up the internet", "your favorite movie",
                 "without ever getting tired", "most ironic thing",
-                "fact about amazon", "beg your pardon",
-                "how stupid I am about", "a fruit machine in there"
-                ]
+                "a fact about", "beg your pardon",
+                "how stupid I am about", "a fruit machine in there",
+                "might answer your question"]
 vectorizer = get_vectorizer(vectorizer_file=vectorizer_file)
 dialog_list = get_dialogs(dialog_dir=dialog_dir, custom_dialog_dir=custom_dialog_dir,
                           full_dialog_dir=full_dialog_dir)

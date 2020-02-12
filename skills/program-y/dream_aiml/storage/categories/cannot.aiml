@@ -29,14 +29,6 @@
     </template>
   </category>
 
-
-  <category>
-    <pattern>PLEASE  *</pattern>
-    <template>
-      <srai><star/></srai>
-    </template>
-  </category>
-
   <category>
     <pattern>COULD YOU *</pattern>
     <template>
