@@ -83,6 +83,10 @@ def personality_catcher_formatter_dialog(dialog: Dict) -> Dict:
     return [{'personality': [dialog['utterances'][-1]['text']]}]
 
 
+def telegram_selector_formatter_in(dialog: Dict):
+    return [dialog['human']['attributes']['active_skill']]
+
+
 def personality_catcher_formatter_service(payload: List):
     # Used by: personality_catcher_formatter
     return [{

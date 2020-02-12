@@ -14,6 +14,7 @@ from core.log import LocalResponseLogger
 from core.pipeline import Pipeline
 from core.service import Service
 from core.state_manager import StateManager
+from core.telegram_client import run_tg
 from core.workflow_manager import WorkflowManager
 from http_api.api import init_app
 from parse_config import PipelineConfigParser
@@ -85,6 +86,9 @@ def main():
         elif args.channel == 'http_client':
             app = init_app(agent, pipeline_config.session, pipeline_config.workers, response_logger, args.debug)
             web.run_app(app, port=args.port)
+
+        elif args.channel == 'telegram':
+            run_tg(token=args.token, proxy=args.proxy, agent=agent, pipeline_data=pipeline_data)
     except Exception as e:
         raise e
     finally:
