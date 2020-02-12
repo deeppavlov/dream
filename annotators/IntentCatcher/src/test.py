@@ -10,11 +10,12 @@ def main_test():
     for test in tests:
         r = requests.post(url=url, json={'sentences': [[test['sentence']]]})
         assert r.ok
+        data = r.json()[0]
         if test['intent'] is not None:
-            assert r.json()[0].get(test['intent'], {'detected': 1}).get(
-                'detected', 0) == 1, print(f"TEST FAILED!\nTest: {test}\nResult:{r.json()}")
+            assert data.get(test['intent'], {'detected': 1}).get(
+                'detected', 0) == 1, print(f"TEST FAILED!\nTest: {test}\nResult:{data}")
         else:
-            assert all([intent['detected'] == 0 for intent in r.json().values()])
+            assert all([intent['detected'] == 0 for intent in data.values()])
     print("Success")
 
 
