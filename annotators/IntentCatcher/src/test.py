@@ -11,7 +11,7 @@ def main_test():
         r = requests.post(url=url, json={'sentences': [test['sentence']]})
         assert r.ok
         if test['intent'] is not None:
-            assert r.json()[0].get(test['intent'], {'detected': 1}).get('detected', 0) == 1
+            assert r.json()[0].get(test['intent'], {'detected': 1}).get('detected', 0) == 1, print(f"Test failed: {test}")
         else:
             assert all([intent['detected'] == 0 for intent in r.json().values()])
     print("Success")
