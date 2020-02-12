@@ -1,0 +1,27 @@
+services:
+  agent_tg:
+    image: ${DOCKER_REGISTRY}/agent:${VERSION}
+    command: sh -c 'bin/wait && python3 skill_selectors/telegram_selector/telegram_selector_to_pipeline.py && python3 run.py -ch telegram -t 670097199:AAGA7Lk9VJCG49_BnQ02c-BDThwE5ATAGBo -rl -d -pl alexa_pipeline_conf.json -db db_conf.json'
+    build:
+      context: ./
+      dockerfile: dockerfile_agent
+    environment:
+      WAIT_HOSTS: "cobotqa:8001, cobot_topics:8003, cobot_offensiveness:8005,
+        cobot_dialogact:8006, program_y:8008, sentseg:8011, convers_evaluation_selector:8009, personality_catcher:8010,
+        intent_responder:8012, intent_catcher:8014, cobot_nounphrases:8016, blacklisted_words:8018,
+        toxic_classification:8013, sentrewrite:8017, ner:8021,  program_y_dangerous:8022, movie_skill:8023,
+        sentiment_classification:8024, news_skill:8027, tfidf_retrieval:8028,
+        convert_reddit:8029, personal_info_skill:8030, asr:8031, book_skill:8032, misheard_asr:8033,
+        christmas_new_year_skill:8036, weather_skill:8037, emotion_classification:8038, alice:8000,
+        eliza:8047, emotion_skill:8049, dummy_skill_dialog:8052, comet:8053, meta_script_skill:8054, oscar_skill:8055"
+      WAIT_HOSTS_TIMEOUT: 480
+    env_file:
+      - ${ENV_FILE}
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+          - node.labels.is_agent == true
+version: "3.7"
