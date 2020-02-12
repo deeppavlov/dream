@@ -23,10 +23,12 @@ if [[ "$TARGET" == "prod" ]]; then
   ENV_FILE=".env.prod"
   DOCKER_HOST="localhost:2374"
   REGISTRY_AUTH="dream_prod"
+  TELEGRAM_AGENT=""
 elif [[ "$TARGET" == "dev" ]]; then
   ENV_FILE=".env.staging"
   DOCKER_HOST="localhost:2375"
   REGISTRY_AUTH="dream_staging"
+  TELEGRAM_AGENT=",telegram_agent.yml"
 else
   echo "Unknown TARGET: $TARGET"
   exit 1
@@ -57,7 +59,7 @@ if [[ "$MODE" == "agent" || "$MODE" == "all" ]]; then
   sleep 10;
 
   printf "\t Docker stack deploy\n"
-  VERSION="$(git rev-parse --short HEAD)" ENV_FILE=$ENV_FILE DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com DOCKER_HOST=$DOCKER_HOST docker stack deploy --prune --compose-file docker-compose.yml,staging.yml --with-registry-auth $REGISTRY_AUTH
+  VERSION="$(git rev-parse --short HEAD)" ENV_FILE=$ENV_FILE DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com DOCKER_HOST=$DOCKER_HOST docker stack deploy --prune --compose-file docker-compose.yml,staging.yml$TELEGRAM_AGENT --with-registry-auth $REGISTRY_AUTH
 fi
 
 echo "Successfully deployed"
