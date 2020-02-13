@@ -178,6 +178,7 @@ class RuleBasedSkillSelectorConnector:
             skills_for_uttr.append("christmas_new_year_skill")
             skills_for_uttr.append("superbowl_skill")
             skills_for_uttr.append("oscar_skill")
+            skills_for_uttr.append("valentines_day_skill")
             skills_for_uttr.append("personal_info_skill")
             skills_for_uttr.append("meta_script_skill")
 
