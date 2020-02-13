@@ -216,7 +216,7 @@ class Linker:
             phrase += self._react_to_user(user_reaction)  # React to user phrase
             if len(self.prev_entities) == 0:
                 self.logger.error("Dialog continuation but no previous entities found")
-                phrase = "",
+                phrase = ""
                 status = self.status_constants['cannot']
                 return phrase, status
             prev_entity = self.prev_entities[-1]
