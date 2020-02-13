@@ -15,7 +15,7 @@ def main_test():
             assert data.get(test['intent'], {'detected': 1}).get(
                 'detected', 0) == 1, print(f"TEST FAILED!\nTest: {test}\nResult:{data}")
         else:
-            assert all([intent['detected'] == 0 for intent in data.values()])
+            assert all([intent['detected'] == 0 for intent in data.values()]), f'test: {test}\nprediction: {data}'
     print("Success")
 
 

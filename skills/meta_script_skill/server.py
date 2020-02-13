@@ -139,6 +139,9 @@ def respond():
         topic_switch_detected = dialog["utterances"][-1].get("annotations", {}).get(
             "intent_catcher", {}).get("topic_switching", {}).get("detected", 0) == 1
 
+        lets_chat_about_detected = dialog["utterances"][-1].get("annotations", {}).get(
+            "intent_catcher", {}).get("lets_chat_about", {}).get("detected", 0) == 1
+
         if topic != "":
             # if no available topic - skip with empty response!!!
             attr["meta_script_topic"] = topic
@@ -153,7 +156,7 @@ def respond():
                     confidence = MATCHED_DIALOG_BEGIN_CONFIDENCE
             else:
                 # there were some script active before in the last several utterances
-                if topic_switch_detected:
+                if topic_switch_detected or lets_chat_about_detected:
                     response, confidence, attr = "", 0.0, {}
                 elif curr_meta_script_status == "comment":
                     response, confidence, attr = get_comment_phrase(dialog, attr)
