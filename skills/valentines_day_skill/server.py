@@ -185,7 +185,7 @@ def dialog_segment_handler(last_utter):
     logger.info(f"active_segments = {active_segments}")
     if active_segments:
         response = random.choice(dialog_segment_candidates[active_segments[0]])
-        confidence = 1.0 if len(active_segments) > 1 else 0.8
+        confidence = 0.99 if len(active_segments) > 1 else 0.8
     return response, confidence
 
 

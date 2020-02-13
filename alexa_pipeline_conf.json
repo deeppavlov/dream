@@ -346,6 +346,16 @@
                 "state_manager_method": "add_hypothesis"
 
             },
+            "reddit_ner_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://reddit_ner_skill:8035/respond"
+                },
+                "dialog_formatter": "reddit_ner_formatter_dialog",
+                "response_formatter": "skill_with_attributes_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
+            },
             "personal_info_skill": {
                 "connector": {
                     "protocol": "http",

@@ -262,6 +262,19 @@ def ner_formatter_dialog(dialog: Dict):
     return [{'last_utterances': [dialog['utterances'][-1]['annotations']['sentseg']['segments']]}]
 
 
+def reddit_ner_formatter_dialog(dialog: Dict):
+    # Used by: reddit_ner_skill
+    return [
+        {
+            'sentiment': [dialog['utterances'][-1]['annotations']['sentiment_classification']],
+            'intent': [dialog['utterances'][-1]['annotations']['intent_catcher']],
+            'ner': [dialog['utterances'][-1]['annotations']['ner']],
+            'continuation': [0 if len(dialog['utterances']) < 2
+                             else int(dialog['utterances'][-2]['active_skill'] == 'reddit_ner_skill')]
+        }
+    ]
+
+
 def attitude_formatter_service(payload: Dict):
     # Used by: attitude_formatter
     payload = payload[0]

@@ -1,6 +1,7 @@
 import asyncio
 import re
 import logging
+from itertools import chain
 from typing import Dict, Callable
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
@@ -102,6 +103,9 @@ class RuleBasedSkillSelectorConnector:
                         "topic_switching", "lets_chat_about"}
             ]
         )
+
+        ner_detected = len(list(chain.from_iterable(dialog["utterances"][-1]["annotations"]["ner"]))) > 0
+
         cobot_topics = set(dialog["utterances"][-1]["annotations"]["cobot_topics"]["text"])
         sensitive_topics_detected = any([t in self.sensitive_topics for t in cobot_topics])
         cobot_dialogacts = dialog["utterances"][-1]["annotations"]["cobot_dialogact"]["intents"]
@@ -181,6 +185,9 @@ class RuleBasedSkillSelectorConnector:
             skills_for_uttr.append("valentines_day_skill")
             skills_for_uttr.append("personal_info_skill")
             skills_for_uttr.append("meta_script_skill")
+
+            if ner_detected:
+                skills_for_uttr.append("reddit_ner_skill")
 
             if len(dialog["utterances"]) > 7:
                 skills_for_uttr.append("tfidf_retrieval")

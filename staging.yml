@@ -130,6 +130,10 @@ services:
     image: ${DOCKER_REGISTRY}/misheard_asr:${VERSION}
     env_file:
       - ${ENV_FILE}
+  reddit_ner_skill:
+    image: ${DOCKER_REGISTRY}/reddit_ner_skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   book_skill:
     image: ${DOCKER_REGISTRY}/book_skill:${VERSION}
     env_file:
