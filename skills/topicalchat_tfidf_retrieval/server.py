@@ -58,6 +58,7 @@ banned_words = [
     "I didn't get your homeland .  Could you ,  please ,  repeat it . ",
     "#+#",
     "you are first. tell me something about positronic.",
+    "she did for her role in Holocaust which earned her an Emmy?"
 ]
 vectorizer = get_vectorizer(vectorizer_file=VECTORIZER_FILE)
 dialog_list = get_dialogs(

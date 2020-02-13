@@ -87,7 +87,7 @@ def create_phraselist(dialog_list, donotknow_answers, todel_userphrases, banned_
         for i in range(0, len(utterances) - 1, 2):
             human_phrase = preprocess(utterances[i])
             bot_phrase = preprocess(utterances[i + 1])
-            no_wrongwords = all([banned_word not in bot_phrase for banned_word in banned_words])
+            no_wrongwords = all([banned_word.lower() not in bot_phrase.lower() for banned_word in banned_words])
             if bot_phrase not in donotknow_answers and human_phrase not in todel_userphrases and no_wrongwords:
                 good_phrase_list[human_phrase].append(bot_phrase)
                 good_total_count += 1
