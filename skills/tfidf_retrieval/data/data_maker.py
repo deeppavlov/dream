@@ -12,11 +12,12 @@ def process(dialog, gold_list, banned_words, ner_model):
     for i in range(len(utterances) - 1):
         if utterances[i] in gold_list:
             utterances[i + 1] = 'NO_ANSWER'
+        utterances[i] = utterances[i].replace(',', ' ')
         cond1 = ner_model is None or 'PER' in ''.join(ner_model([utterances[i]])[1][0]) or 'Dilyara' in utterances[i]
         cond2 = ([banned_word in utterances[i] for banned_word in banned_words])
         if i % 2 != 0 and (cond1 or cond2):
             utterances[i] = 'NO_ANSWER'
-    return {'conversation_id': dialog['utterances'][0]['attributes']['conversation_id'],
+    return {'id': dialog['utterances'][0]['attributes']['conversation_id'],
             'utterances': [utterance['text'] for utterance in dialog['utterances']]}
 
 
@@ -71,9 +72,12 @@ def main():
     gold_phrases = open(args.gold_phrase_file, 'r').readlines()[1:]
     gold_list = []
     for gold_phrase in gold_phrases:
+        gold_phrase = gold_phrase.strip()
         if gold_phrase[0] == '"':
             gold_phrase = gold_phrase[1:]
         gold_phrase = gold_phrase.split('"\n')[0].split('" "')[0].lower()
+        if '"' in gold_phrase:
+            gold_phrase = gold_phrase[:gold_phrase.find('"')]
         print(gold_phrase)
         gold_list.append(gold_phrase)
     old_output_file = args.output_file
@@ -106,6 +110,10 @@ def main():
         bad_output_file = old_bad_output_file
     print('Number of bad dialogs read from file: ' + str(len(bad_dialogs)))
     assert bad_output_file is not None
+    for i in range(len(good_dialogs)):
+        if 'conversation_id' in good_dialogs[i]:
+            good_dialogs[i]['id'] = good_dialogs[i]['conversation_id']
+            del good_dialogs[i]['conversation_id']
     used_good_ids = set([dialog['id'] for dialog in good_dialogs])
     used_bad_ids = set([dialog['id'] for dialog in bad_dialogs])
     print('Reading ratings from file ' + str(args.ratings_file))
@@ -149,6 +157,8 @@ def main():
     print('Total number of new good dialogs: ' + str(len(new_bad_dialogs)))
     new_good_dialogs = [process(dialog, gold_list, banned_words, ner_model)
                         for dialog in tqdm(new_good_dialogs)]
+    new_bad_dialogs = [process(dialog, gold_list, banned_words, ner_model=None)
+                       for dialog in tqdm(new_bad_dialogs)]
     good_dialogs = good_dialogs + new_good_dialogs
     bad_dialogs = bad_dialogs + new_bad_dialogs
     good_dialogs = good_dialogs + [{'id': 0, 'utterances': utts1}]

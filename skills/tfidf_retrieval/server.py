@@ -26,11 +26,6 @@ dialog_dir = "../global_data/dialog_list.json"
 full_dialog_dir = "data/full_dialog_list.json"  # We WRITE from this directory rather than read from it
 custom_dialog_dir = "data/custom_dialog_list.json"
 
-#  if USE_COBOT:  ### WE DO NOT USE IT
-#    dialog_dir = 'data/cobot_dialog_list.json'
-#    full_dialog_dir = "data/full_cobot_dialog_list.json"
-
-
 donotknow_answers = ["I really do not know what to answer.",
                      "Sorry, probably, I didn't get what you mean.",
                      "I didn't get it. Sorry.",
