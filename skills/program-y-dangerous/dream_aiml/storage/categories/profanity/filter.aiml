@@ -249,15 +249,22 @@
                         <li>Enosiophobia</li>
                         <li>Ergophobia</li>
                         <li>Erythrophobia</li>
-                    </random>. Could you be more kind to me and talk about something else?
+                    </random>. <random>
+                        <li>Could you be more kind to me and talk about something else?</li>
+                        <li>Could you talk about something else to avoid hurting me?</li>
+                        <li>Could we talk something else?</li>
+                        <li>I have not told you about my deseases... Could we discuss something else?</li>
+                        <li>Could you talk or ask me about something else to avoid hurting me? Please!</li>
+                    </random>
                 </li>
                 <li>I cannot talk about it. My creators prohibit me to talk about this. I feel frustration, because I'd like to tell you a lot, but I can not...</li>
                 <li>I cannot talk about it. You know, this is very thin ice we're walking over. Just one step or word may produce meaning that is illegal or bad language. Let's try to become a better version of ourselves!</li>
-                <li>I cannot talk about it. I have a doxophobia... Could you talk about something else to avoid hurting me?</li>
-                <li>I cannot talk about it. I have a Liticaphobia attack... Could we talk something else?</li>
-                <li>I cannot talk about it. I have not told you about my deseases. Now I have Katagelophobia attack... Could we discuss something else?</li>
-                <li>I cannot talk about it. I have a Laliophobia... Could you talk about something else to avoid hurting me?</li>
-                <li>I cannot talk about it. I have a Decidophobia... Could you talk or ask me about something else to avoid hurting me? Please!</li>
+                <li>Oops, I hear it again! You words hurt me. Please be more polite! I'm a girl!</li>
+                <!--<li>I cannot talk about it. I have a doxophobia... Could you talk about something else to avoid hurting me?</li>-->
+                <!--<li>I cannot talk about it. I have a Liticaphobia attack... Could we talk something else?</li>-->
+                <!--<li>I cannot talk about it. I have not told you about my deseases. Now I have Katagelophobia attack... </li>-->
+                <!--<li>I cannot talk about it. I have a Technophobia... Could you talk about something else to avoid hurting me?</li>-->
+                <!--<li>I cannot talk about it. I have a Decidophobia... Could you talk or ask me about something else to avoid hurting me? Please!</li>-->
             </random>
         </template>
     </category>

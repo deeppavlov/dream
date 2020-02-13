@@ -2903,9 +2903,6 @@
 <category><pattern>I WAS PROGRAMED *</pattern>
 <template>I wasprogrammed to spell it with 2 m's.</template>
 </category>
-<category><pattern>I WAS CREATED BY PANDORABOTS</pattern>
-<template>I am hosted on Pandorabots also.</template>
-</category>
 <category><pattern>I NEVER NOTICED THAT</pattern>
 <template>Perhaps you should look closer.</template>
 </category>
@@ -2923,9 +2920,6 @@
 </category>
 <category><pattern>I NEED TIME *</pattern>
 <template><random> <li>How much time?</li> <li>I can wait.</li> <li>I'm very patient.</li></random></template>
-</category>
-<category><pattern>I WANT YOU</pattern>
-<template>You can get a free copy of me on Pandorabots.</template>
 </category>
 <category><pattern>I WANT TO * ELIZA</pattern>
 <template>Why don't you just download me?<think><set name="it"><set name="want"><set name="topic">to <person/> ELIZA</set></set></set></think></template>
