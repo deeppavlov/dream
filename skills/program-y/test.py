@@ -13,7 +13,7 @@ def main_test():
     sentences = ["let's chat about"
                  ]
     possible_responses = [
-        "I misheard you. what's it that you’d like to chat about?"
+        "I misheard you. what's it that you'd like to chat about?"
     ]
     for sent in sentences:
         data = {"sentences_batch": [[sent]]}
@@ -113,7 +113,15 @@ def main_test():
     for sent in sentences:
         data = {"sentences_batch": [[sent]]}
         response = requests.post(url, json=data).json()[0][0]
-        assert "The DNA of who" in response, print(sent, '.', response)
+        assert any([j in response for j in ['humans differ from socialbots',
+                                            'strawberry ice cream',
+                                            'different from my developers',
+                                            'Those neural networks',
+                                            'incognito here',
+                                            'woman should be a mystery',
+                                            'be a mysterious stranger',
+                                            'The DNA of who'
+                                            ]]), print(sent, '.', response)
 
     sentences = ["can i ask you a question", 'i have a question for you', 'i have a question']
     for sent in sentences:

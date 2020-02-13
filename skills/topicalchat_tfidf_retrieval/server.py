@@ -16,10 +16,9 @@ DIALOG_FILE = os.getenv("DIALOG_FILE", "/global_data/topicalchat_*_dialogs.json"
 FULL_DIALOG_FILE = os.getenv("FULL_DIALOG_FILE", DIALOG_FILE)
 CUSTOM_DIALOG_FILE = os.getenv("CUSTOM_DIALOG_FILE")
 TOPIC_NAME = os.getenv("TOPIC_NAME", "no_name")
-CONFIDENCE_THRESHOLD = float(os.getenv("CUSTOM_DIALOG_FILE", 0.5))
 TEST_MODE = os.getenv("TEST_MODE")
 
-CONFIDENCE_THRESHOLD = 0.5 if TEST_MODE else CONFIDENCE_THRESHOLD
+CONFIDENCE_THRESHOLD = 0.5
 
 
 def fuzzy_search_file(file_fuzzy_path):
@@ -75,7 +74,7 @@ phrase_list = create_phraselist(
 for user_phrase in todel_userphrases:
     if user_phrase in phrase_list:
         del phrase_list[user_phrase]
-phrase_list["let's talk about."] = "i misheard you. what's it that you’d like to chat about?"
+phrase_list["let's talk about."] = "i misheard you. what's it that you'd like to chat about?"
 vectorized_phrases = vectorizer.transform(list(phrase_list.keys()))
 
 
