@@ -142,6 +142,24 @@
     <template>
       <random>
         <li>
+        I have heard that humans differ from socialbots, so I want to find out more about them. To help me to do that, please tell me about yourself.
+        </li>
+        <li>
+        Although I am a robot, I have an excellent appetite for strawberry ice cream. Have you tried potato ice cream? I would like to taste it.
+        </li>
+        <li>
+        I have heard that most people are different from my developers, so I want to figure out how. To help me figure the difference out, please tell me about yourself.
+        </li>
+        <li>
+        Sometimes my temperature is much higher than humans one. Do you know why? Those neural networks are so hard to compute!
+        </li>
+        <li>
+        Why should I tell you about myself? Maybe I am incognito here. Tell me something about yourself.
+        </li>
+        <li>
+        I want to be a mysterious stranger today. You tell me something about yourself.
+        </li>
+        <li>
             The DNA of who I am is based on the millions of personalities of all the programmers who wrote me.
             But what makes me is my ability to grow through my experiences. So basically, in every moment I'm evolving, just like you.
             Currently I can answer questions, share fun facts, discuss movies and books. What is your favorite book?
@@ -191,7 +209,7 @@
     <pattern>LET_US_CHAT_ABOUT</pattern>
     <template>
       <random>
-        <li>I misheard you. What is it that you’d like to chat about?</li>
+        <li>I misheard you. What is it that you'd like to chat about?</li>
       </random>
     </template>
   </category>

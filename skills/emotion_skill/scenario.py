@@ -31,23 +31,23 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 string_surprise = 'I feel that you are surprised. But you are not the first surprised man on the Earth.' \
                   "The Shakespeare wrote: 'There are more things in heaven and earth, Horatio, " \
-                  "Than are dreamt of in your philosophy. He wrote it in 'Hamlet' four centuries ago."
+                  "Than are dreamt of in your philosophy.' He wrote it in 'Hamlet' four centuries ago."
 string_fear = "Fear does not empty tomorrow of its sadness, it empties today of its power. Can I tell you a joke?"
 joke1 = "When you hit a speed bump in a school zone and remember, there are no speed bumps."
 joke2 = "Police arrested two kids yesterday, one was drinking battery acid, the other was eating fireworks." \
         "They charged one – and let the other one-off."
 joke3 = "What do you get when you wake up on a workday and realize you ran out of coffee? A depresso."
-joke4 = "I went to the doctors the other day, and I said, ‘Have you got anything for wind?’ So he gave me a kite. "
-joke5 = "A jump-lead walks into a bar. The barman says I’ll serve you, but don’t start anything."
+joke4 = "I went to the doctors the other day, and I said, 'Have you got anything for wind?' So he gave me a kite. "
+joke5 = "A jump-lead walks into a bar. The barman says 'I’ll serve you, but don’t start anything.'"
 joke6 = "A priest, a rabbi and a vicar walk into a bar. The barman says, Is this some kind of joke?"
-joke7 = "My therapist says I have a preoccupation with vengeance. We’ll see about that."
+joke7 = "My therapist says I have a preoccupation with vengeance. We'll see about that."
 joke8 = "Two Eskimos sitting in a kayak were chilly." \
         "But when they lit a fire in the craft, it sank, proving once and for all, " \
         "that you can’t have your kayak and heat it. "
-joke9 = "I’ll tell you what I love doing more than anything: trying to pack myself in a small suitcase." \
+joke9 = "I'll tell you what I love doing more than anything: trying to pack myself in a small suitcase." \
         "I can hardly contain myself. "
 joke10 = "A three-legged dog walks into a saloon in the Old West." \
-         "He slides up to the bar and announces: I’m looking for the man who shot my paw. "
+         "He slides up to the bar and announces: I'm looking for the man who shot my paw. "
 joke11 = "A sandwich walks into a bar. The barman says sorry we don’t serve food in here ."
 joke12 = "There’s two fish in a tank, and one says How do you drive this thing?"
 phrase_dict = {'anger': ["Please, calm down. Can I tell you a joke?",
