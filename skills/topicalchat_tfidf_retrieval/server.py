@@ -50,14 +50,16 @@ donotknow_answers = [
 ]
 donotknow_answers = [preprocess(j) for j in donotknow_answers]
 todel_userphrases = ["yes", "wow", "let's talk about.", "yeah", "politics"]
+
+# banned words are sensitive to tokenization in process.py:preprocess
 banned_words = [
     "Benjamin",
     "misheard",
     "cannot do this",
     "I didn't get your homeland .  Could you ,  please ,  repeat it . ",
     "#+#",
-    "you are first. tell me something about positronic.",
-    "she did for her role in Holocaust which earned her an Emmy?"
+    "tell me something about positronic",
+    "she did for her role in Holocaust which earned her an Emmy"
 ]
 vectorizer = get_vectorizer(vectorizer_file=VECTORIZER_FILE)
 dialog_list = get_dialogs(
