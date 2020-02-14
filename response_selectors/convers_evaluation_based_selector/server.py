@@ -46,7 +46,12 @@ def custom_request(url, headers, data, timeout, method='POST'):
 def respond():
     st_time = time.time()
     dialogs_batch = request.json["dialogs"]
-    response_candidates = [dialog["utterances"][-1]["hypotheses"] for dialog in dialogs_batch]
+    response_candidates_raw = [dialog["utterances"][-1]["hypotheses"] for dialog in dialogs_batch]
+    response_candidates = []
+    for hypots_list in response_candidates_raw:
+        new_hypots = [h for h in hypots_list if h['confidence'] > 0]
+        response_candidates.append(new_hypots)
+
     conversations = []
     dialog_ids = []
     selected_skill_names = []
