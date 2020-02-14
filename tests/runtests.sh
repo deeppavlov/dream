@@ -195,6 +195,11 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
         echo "Run tests for reddit_ner_skill"
         dockercompose_cmd exec -T -u $(id -u) reddit_ner_skill python test.py
     fi
+
+    if container_is_started convers_evaluation_selector; then
+        echo "Run tests for convers_evaluation_selector"
+        dockercompose_cmd exec -T -u $(id -u) convers_evaluation_selector python test.py
+    fi
 fi
 
 if [[ "$MODE" == "infer_questions" || "$MODE" == "all" ]]; then

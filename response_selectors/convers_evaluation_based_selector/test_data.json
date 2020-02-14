@@ -1,0 +1,274 @@
+{
+    "dialogs": [
+        {
+            "human_utterances": [
+                {
+                    "text": "let's chat"
+                }
+            ],
+            "bot_utterances": [],
+            "utterances": [
+                {
+                    "text": "let's chat",
+                    "user": {
+                        "id": "61fabe65d0894c659018dee50ffe49a6",
+                        "user_telegram_id": "amzn1.ask.account.AEWYXPP5QAP4N7ZG3FWMEPQDRGWX3ICWIMGGBJ4VWGUHCLSVIR57STGW3SHF4J7O2VKRQ6QHESNQP5BMFOE7SBXOPWDMAMCMQW6GTFUG5DC2OEYRLJNG3MNFYQRM55RNIRHIVG25V2TJB6YJLQWVBSFTJNAWT67JDNAMXNZWXRAPZN3A3AF25XFXDVAEQ3ZJUJJ4PZE54PF7F2Q",
+                        "persona": {},
+                        "profile": {
+                            "name": null,
+                            "gender": null,
+                            "birthdate": null,
+                            "location": null,
+                            "home_coordinates": null,
+                            "work_coordinates": null,
+                            "occupation": null,
+                            "income_per_year": null
+                        },
+                        "attributes": {},
+                        "user_type": "human"
+                    },
+                    "annotations": {
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "asr": {
+                            "asr_confidence": "high"
+                        },
+                        "toxic_classification": {
+                            "identity_hate": 0.0002440810203552246,
+                            "insult": 0.00030994415283203125,
+                            "obscene": 0.00016111135482788086,
+                            "severe_toxic": 8.00788402557373e-05,
+                            "sexual_explicit": 0.00016148835129570216,
+                            "threat": 0.0002444958663545549,
+                            "toxic": 0.0008366433321498334
+                        },
+                        "sentiment_classification": {
+                            "text": [
+                                "positive",
+                                0.7958860993385315
+                            ]
+                        },
+                        "sentseg": {
+                            "punct_sent": "let's chat.",
+                            "segments": [
+                                "let's chat."
+                            ]
+                        },
+                        "emotion_classification": {
+                            "text": {
+                                "anger": 0.24306878447532654,
+                                "fear": 0.2674534320831299,
+                                "joy": 0.253357470035553,
+                                "love": 0.3893212378025055,
+                                "sadness": 0.22046229243278503,
+                                "surprise": 0.26883628964424133,
+                                "neutral": 0.999222993850708
+                            }
+                        },
+                        "cobot_nounphrases": [],
+                        "intent_catcher": {
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "attitude_classification": {
+                            "text": "very_positive",
+                            "confidence": 0.5619882345199585
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_dialogact": {
+                            "intents": [
+                                "OtherIntent"
+                            ],
+                            "topics": [
+                                "Other"
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        },
+                        "cobot_offensiveness": {
+                            "text": [
+                                "non-toxic"
+                            ],
+                            "confidence": [
+                                7.830236e-08
+                            ],
+                            "is_blacklisted": [
+                                "not blacklist"
+                            ]
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "let's chat."
+                            ]
+                        }
+                    },
+                    "hypotheses": [
+                        {
+                            "skill_name": "dummy_skill",
+                            "annotations": {},
+                            "text": "Let's talk about something else.",
+                            "confidence": 0.5
+                        },
+                        {
+                            "skill_name": "dummy_skill",
+                            "annotations": {},
+                            "text": "how are you doing tonight?",
+                            "confidence": 0.6
+                        },
+                        {
+                            "skill_name": "oscar_skill",
+                            "annotations": {},
+                            "text": "",
+                            "confidence": 0.0
+                        },
+                        {
+                            "skill_name": "personal_info_skill",
+                            "annotations": {},
+                            "text": "",
+                            "confidence": 0.0,
+                            "human_attributes": {},
+                            "bot_attributes": {},
+                            "can_continue": "no"
+                        },
+                        {
+                            "skill_name": "superbowl_skill",
+                            "annotations": {},
+                            "text": "",
+                            "confidence": 0.0
+                        },
+                        {
+                            "skill_name": "program_y",
+                            "annotations": {},
+                            "text": "Hi, this is an Alexa Prize Socialbot! Oscars are coming: '1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night! How are you?",
+                            "confidence": 0.98
+                        },
+                        {
+                            "skill_name": "christmas_new_year_skill",
+                            "annotations": {},
+                            "text": "",
+                            "confidence": 0.0,
+                            "human_attributes": {},
+                            "bot_attributes": {},
+                            "working_xmas_scenario": ""
+                        },
+                        {
+                            "skill_name": "alice",
+                            "annotations": {},
+                            "text": "Should it be permitted?",
+                            "confidence": 0.65
+                        },
+                        {
+                            "skill_name": "eliza",
+                            "annotations": {},
+                            "text": "sorry",
+                            "confidence": 0.0
+                        },
+                        {
+                            "skill_name": "cobotqa",
+                            "annotations": {},
+                            "text": "",
+                            "confidence": 0.0
+                        }
+                    ],
+                    "date_time": "2020-02-10 10:25:45.460000",
+                    "attributes": {
+                        "device_id": "amzn1.ask.device.AHNGXUANUECR72EIU4MHUMFYUYXOVZKTEE5325MJJHWFBS25I3TTR7DP7VJI3M2XZV7U6B7SY2XIJ77HL4NSZS5SEVJ5747OF5KAYEXLPVBTDHJACMQEPPJ5T2EFMBBMWYL6UNOYIL23ZQZECTO7WA727Q3TQIHNZ62WLB2DBMDKL6ERSI3LE",
+                        "session_id": "amzn1.echo-api.session.80f2abe9-11fb-4ac1-a3d0-b06d17ca7dc1",
+                        "request_id": "amzn1.echo-api.request.f508d360-5c5d-417b-87a6-047b63d7f555",
+                        "conversation_id": "e14de59b3c5c25f61d939acdcb3eccef8f532ee9b44cbea1980613437ad0f007",
+                        "speech": {
+                            "hypotheses": [
+                                {
+                                    "tokens": [
+                                        {
+                                            "confidence": 0.945,
+                                            "value": "let's"
+                                        },
+                                        {
+                                            "confidence": 0.98,
+                                            "value": "chat"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                }
+            ],
+            "human": {
+                "profile": {}
+            }
+        }
+    ]
+}
