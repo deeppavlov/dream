@@ -147,6 +147,13 @@ def main_test():
         response = requests.post(url, json=data).json()[0][0]
         assert response.lower() in possible_responses, print(sent, '.', response)
 
+    sentences = ["play sade geronemo", 'alexa play set your nemo', "alexa set a timer to morning"]
+
+    for sent in sentences:
+        data = {"sentences_batch": [[sent]]}
+        response = requests.post(url, json=data).json()[0][0]
+        assert "Alexa, stop, and try again" in response, print(sent, '.', response)
+
 
 if __name__ == '__main__':
     main_test()
