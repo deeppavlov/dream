@@ -1,0 +1,4148 @@
+[
+  {
+    "human_utterances": [
+      {
+        "text": "let's chat"
+      }
+    ],
+    "bot_utterances": [],
+    "hypotheses": [
+      {
+        "skill_name": "dummy_skill",
+        "annotations": {},
+        "text": "Let's talk about something else.",
+        "confidence": 0.5
+      },
+      {
+        "skill_name": "dummy_skill",
+        "annotations": {},
+        "text": "how are you doing tonight?",
+        "confidence": 0.6
+      },
+      {
+        "skill_name": "oscar_skill",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0
+      },
+      {
+        "skill_name": "personal_info_skill",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0,
+        "human_attributes": {},
+        "bot_attributes": {},
+        "can_continue": "no"
+      },
+      {
+        "skill_name": "superbowl_skill",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0
+      },
+      {
+        "skill_name": "program_y",
+        "annotations": {},
+        "text": "Hi, this is an Alexa Prize Socialbot! Oscars are coming: '1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night! How are you?",
+        "confidence": 0.98,
+        "is_best": true
+      },
+      {
+        "skill_name": "christmas_new_year_skill",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0,
+        "human_attributes": {},
+        "bot_attributes": {},
+        "working_xmas_scenario": ""
+      },
+      {
+        "skill_name": "alice",
+        "annotations": {},
+        "text": "Should it be permitted?",
+        "confidence": 0.65
+      },
+      {
+        "skill_name": "eliza",
+        "annotations": {},
+        "text": "sorry",
+        "confidence": 0.0
+      },
+      {
+        "skill_name": "cobotqa",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0
+      }
+    ],
+    "utterances": [
+      {
+        "text": "let's chat",
+        "user": {
+          "id": "61fabe65d0894c659018dee50ffe49a6",
+          "user_telegram_id": "amzn1.ask.account.AEWYXPP5QAP4N7ZG3FWMEPQDRGWX3ICWIMGGBJ4VWGUHCLSVIR57STGW3SHF4J7O2VKRQ6QHESNQP5BMFOE7SBXOPWDMAMCMQW6GTFUG5DC2OEYRLJNG3MNFYQRM55RNIRHIVG25V2TJB6YJLQWVBSFTJNAWT67JDNAMXNZWXRAPZN3A3AF25XFXDVAEQ3ZJUJJ4PZE54PF7F2Q",
+          "persona": {},
+          "profile": {
+            "name": null,
+            "gender": null,
+            "birthdate": null,
+            "location": null,
+            "home_coordinates": null,
+            "work_coordinates": null,
+            "occupation": null,
+            "income_per_year": null
+          },
+          "attributes": {},
+          "user_type": "human"
+        },
+        "annotations": {
+          "blacklisted_words": {
+            "inappropriate": false,
+            "profanity": false,
+            "restricted_topics": false
+          },
+          "asr": {
+            "asr_confidence": "high"
+          },
+          "toxic_classification": {
+            "identity_hate": 0.0002440810203552246,
+            "insult": 0.00030994415283203125,
+            "obscene": 0.00016111135482788086,
+            "severe_toxic": 8.00788402557373e-05,
+            "sexual_explicit": 0.00016148835129570216,
+            "threat": 0.0002444958663545549,
+            "toxic": 0.0008366433321498334
+          },
+          "sentiment_classification": {
+            "text": [
+              "positive",
+              0.7958860993385315
+            ]
+          },
+          "sentseg": {
+            "punct_sent": "let's chat.",
+            "segments": [
+              "let's chat."
+            ]
+          },
+          "emotion_classification": {
+            "text": {
+              "anger": 0.24306878447532654,
+              "fear": 0.2674534320831299,
+              "joy": 0.253357470035553,
+              "love": 0.3893212378025055,
+              "sadness": 0.22046229243278503,
+              "surprise": 0.26883628964424133,
+              "neutral": 0.999222993850708
+            }
+          },
+          "cobot_nounphrases": [],
+          "intent_catcher": {
+            "doing_well": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "dont_understand": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "exit": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "no": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "opinion_request": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "repeat": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "tell_me_more": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "topic_switching": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "weather_forecast_intent": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_can_you_do": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_job": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_name": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_time": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "where_are_you_from": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "who_made_you": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "yes": {
+              "confidence": 0.0,
+              "detected": 0
+            }
+          },
+          "attitude_classification": {
+            "text": "very_positive",
+            "confidence": 0.5619882345199585
+          },
+          "ner": [
+            []
+          ],
+          "cobot_dialogact": {
+            "intents": [
+              "OtherIntent"
+            ],
+            "topics": [
+              "Other"
+            ]
+          },
+          "cobot_topics": {
+            "text": [
+              "Phatic"
+            ]
+          },
+          "cobot_offensiveness": {
+            "text": [
+              "non-toxic"
+            ],
+            "confidence": [
+              7.830236e-08
+            ],
+            "is_blacklisted": [
+              "not blacklist"
+            ]
+          },
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "let's chat."
+            ]
+          }
+        },
+        "hypotheses": [
+          {
+            "skill_name": "program_y",
+            "annotations": {},
+            "text": "Hi, this is an Alexa Prize Socialbot! Oscars are coming: '1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night! How are you?",
+            "confidence": 0.98,
+            "is_best": true
+          },
+          {
+            "skill_name": "alice",
+            "annotations": {},
+            "text": "Should it be permitted?",
+            "confidence": 0.65
+          },
+          {
+            "skill_name": "dummy_skill",
+            "annotations": {},
+            "text": "how are you doing tonight?",
+            "confidence": 0.6
+          },
+          {
+            "skill_name": "dummy_skill",
+            "annotations": {},
+            "text": "Let's talk about something else.",
+            "confidence": 0.5
+          },
+          {
+            "skill_name": "oscar_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "personal_info_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {},
+            "can_continue": "no"
+          },
+          {
+            "skill_name": "superbowl_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "christmas_new_year_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {},
+            "working_xmas_scenario": ""
+          },
+          {
+            "skill_name": "eliza",
+            "annotations": {},
+            "text": "sorry",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "cobotqa",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          }
+        ],
+        "date_time": "2020-02-10 10:25:45.460000",
+        "attributes": {
+          "device_id": "amzn1.ask.device.AHNGXUANUECR72EIU4MHUMFYUYXOVZKTEE5325MJJHWFBS25I3TTR7DP7VJI3M2XZV7U6B7SY2XIJ77HL4NSZS5SEVJ5747OF5KAYEXLPVBTDHJACMQEPPJ5T2EFMBBMWYL6UNOYIL23ZQZECTO7WA727Q3TQIHNZ62WLB2DBMDKL6ERSI3LE",
+          "session_id": "amzn1.echo-api.session.80f2abe9-11fb-4ac1-a3d0-b06d17ca7dc1",
+          "request_id": "amzn1.echo-api.request.f508d360-5c5d-417b-87a6-047b63d7f555",
+          "conversation_id": "e14de59b3c5c25f61d939acdcb3eccef8f532ee9b44cbea1980613437ad0f007",
+          "speech": {
+            "hypotheses": [
+              {
+                "tokens": [
+                  {
+                    "confidence": 0.945,
+                    "value": "let's"
+                  },
+                  {
+                    "confidence": 0.98,
+                    "value": "chat"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "has_is_best": true
+      }
+    ]
+  },
+  {
+    "human_utterances": [
+      {
+        "text": "wait twenty seventeen"
+      },
+      {
+        "text": "let's chat"
+      }
+    ],
+    "bot_utterances": [
+      {
+        "text": "Hi, this is an Alexa Prize Socialbot! Oscars are coming: '1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night! How are you?",
+        "confidence": 0.98,
+        "skill_name": "program_y"
+      }
+    ],
+    "hypotheses": [
+      {
+        "skill_name": "dummy_skill",
+        "annotations": {},
+        "text": "I really do not know what to answer.",
+        "confidence": 0.5
+      },
+      {
+        "skill_name": "dummy_skill",
+        "annotations": {},
+        "text": "do you like to drive?",
+        "confidence": 0.6
+      },
+      {
+        "skill_name": "alice",
+        "annotations": {},
+        "text": "I'm waiting.  I am very logical and rational.",
+        "confidence": 0.65,
+        "is_best": true
+      },
+      {
+        "skill_name": "personal_info_skill",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0,
+        "human_attributes": {},
+        "bot_attributes": {},
+        "can_continue": "no"
+      },
+      {
+        "skill_name": "superbowl_skill",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0
+      },
+      {
+        "skill_name": "oscar_skill",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0
+      },
+      {
+        "skill_name": "movie_skill",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0,
+        "human_attributes": {},
+        "bot_attributes": {},
+        "bot_attitudes": [],
+        "human_attitudes": []
+      },
+      {
+        "skill_name": "eliza",
+        "annotations": {},
+        "text": "sorry",
+        "confidence": 0.0
+      },
+      {
+        "skill_name": "christmas_new_year_skill",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0,
+        "human_attributes": {},
+        "bot_attributes": {},
+        "working_xmas_scenario": ""
+      },
+      {
+        "skill_name": "movie_tfidf_retrieval",
+        "annotations": {},
+        "text": "yes, were you aware there was a sequel to the first incredibles in video game form called , \" the incredibles rise of the underminer\".",
+        "confidence": 0.2882023412264027
+      },
+      {
+        "skill_name": "music_tfidf_retrieval",
+        "annotations": {},
+        "text": "maybe we are suppose to keep talking but normally its 10 chat turns",
+        "confidence": 0.2852798603406864
+      },
+      {
+        "skill_name": "program_y",
+        "annotations": {},
+        "text": "I'm waiting.",
+        "confidence": 0.6,
+        "is_best": true
+      },
+      {
+        "skill_name": "cobotqa",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0
+      }
+    ],
+    "utterances": [
+      {
+        "text": "let's chat",
+        "user": {
+          "id": "61fabe65d0894c659018dee50ffe49a6",
+          "user_telegram_id": "amzn1.ask.account.AEWYXPP5QAP4N7ZG3FWMEPQDRGWX3ICWIMGGBJ4VWGUHCLSVIR57STGW3SHF4J7O2VKRQ6QHESNQP5BMFOE7SBXOPWDMAMCMQW6GTFUG5DC2OEYRLJNG3MNFYQRM55RNIRHIVG25V2TJB6YJLQWVBSFTJNAWT67JDNAMXNZWXRAPZN3A3AF25XFXDVAEQ3ZJUJJ4PZE54PF7F2Q",
+          "persona": {},
+          "profile": {
+            "name": null,
+            "gender": null,
+            "birthdate": null,
+            "location": null,
+            "home_coordinates": null,
+            "work_coordinates": null,
+            "occupation": null,
+            "income_per_year": null
+          },
+          "attributes": {},
+          "user_type": "human"
+        },
+        "annotations": {
+          "blacklisted_words": {
+            "inappropriate": false,
+            "profanity": false,
+            "restricted_topics": false
+          },
+          "asr": {
+            "asr_confidence": "high"
+          },
+          "toxic_classification": {
+            "identity_hate": 0.0002440810203552246,
+            "insult": 0.00030994415283203125,
+            "obscene": 0.00016111135482788086,
+            "severe_toxic": 8.00788402557373e-05,
+            "sexual_explicit": 0.00016148835129570216,
+            "threat": 0.0002444958663545549,
+            "toxic": 0.0008366433321498334
+          },
+          "sentiment_classification": {
+            "text": [
+              "positive",
+              0.7958860993385315
+            ]
+          },
+          "sentseg": {
+            "punct_sent": "let's chat.",
+            "segments": [
+              "let's chat."
+            ]
+          },
+          "emotion_classification": {
+            "text": {
+              "anger": 0.24306878447532654,
+              "fear": 0.2674534320831299,
+              "joy": 0.253357470035553,
+              "love": 0.3893212378025055,
+              "sadness": 0.22046229243278503,
+              "surprise": 0.26883628964424133,
+              "neutral": 0.999222993850708
+            }
+          },
+          "cobot_nounphrases": [],
+          "intent_catcher": {
+            "doing_well": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "dont_understand": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "exit": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "no": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "opinion_request": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "repeat": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "tell_me_more": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "topic_switching": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "weather_forecast_intent": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_can_you_do": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_job": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_name": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_time": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "where_are_you_from": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "who_made_you": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "yes": {
+              "confidence": 0.0,
+              "detected": 0
+            }
+          },
+          "attitude_classification": {
+            "text": "very_positive",
+            "confidence": 0.5619882345199585
+          },
+          "ner": [
+            []
+          ],
+          "cobot_dialogact": {
+            "intents": [
+              "OtherIntent"
+            ],
+            "topics": [
+              "Other"
+            ]
+          },
+          "cobot_topics": {
+            "text": [
+              "Phatic"
+            ]
+          },
+          "cobot_offensiveness": {
+            "text": [
+              "non-toxic"
+            ],
+            "confidence": [
+              7.830236e-08
+            ],
+            "is_blacklisted": [
+              "not blacklist"
+            ]
+          },
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "let's chat."
+            ]
+          }
+        },
+        "hypotheses": [
+          {
+            "skill_name": "program_y",
+            "annotations": {},
+            "text": "Hi, this is an Alexa Prize Socialbot! Oscars are coming: '1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night! How are you?",
+            "confidence": 0.98,
+            "is_best": true
+          },
+          {
+            "skill_name": "alice",
+            "annotations": {},
+            "text": "Should it be permitted?",
+            "confidence": 0.65
+          },
+          {
+            "skill_name": "dummy_skill",
+            "annotations": {},
+            "text": "how are you doing tonight?",
+            "confidence": 0.6
+          },
+          {
+            "skill_name": "dummy_skill",
+            "annotations": {},
+            "text": "Let's talk about something else.",
+            "confidence": 0.5
+          },
+          {
+            "skill_name": "oscar_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "personal_info_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {},
+            "can_continue": "no"
+          },
+          {
+            "skill_name": "superbowl_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "christmas_new_year_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {},
+            "working_xmas_scenario": ""
+          },
+          {
+            "skill_name": "eliza",
+            "annotations": {},
+            "text": "sorry",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "cobotqa",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          }
+        ],
+        "date_time": "2020-02-10 10:25:45.460000",
+        "attributes": {
+          "device_id": "amzn1.ask.device.AHNGXUANUECR72EIU4MHUMFYUYXOVZKTEE5325MJJHWFBS25I3TTR7DP7VJI3M2XZV7U6B7SY2XIJ77HL4NSZS5SEVJ5747OF5KAYEXLPVBTDHJACMQEPPJ5T2EFMBBMWYL6UNOYIL23ZQZECTO7WA727Q3TQIHNZ62WLB2DBMDKL6ERSI3LE",
+          "session_id": "amzn1.echo-api.session.80f2abe9-11fb-4ac1-a3d0-b06d17ca7dc1",
+          "request_id": "amzn1.echo-api.request.f508d360-5c5d-417b-87a6-047b63d7f555",
+          "conversation_id": "e14de59b3c5c25f61d939acdcb3eccef8f532ee9b44cbea1980613437ad0f007",
+          "speech": {
+            "hypotheses": [
+              {
+                "tokens": [
+                  {
+                    "confidence": 0.945,
+                    "value": "let's"
+                  },
+                  {
+                    "confidence": 0.98,
+                    "value": "chat"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "has_is_best": true
+      },
+      {
+        "text": "Hi, this is an Alexa Prize Socialbot! Oscars are coming: '1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night! How are you?",
+        "orig_text": null,
+        "active_skill": "program_y",
+        "confidence": 0.98,
+        "annotations": {
+          "sentseg": {
+            "punct_sent": "Hi, this is an Alexa Prize Socialbot! Oscars are coming:'1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night! How are you?",
+            "segments": [
+              "Hi, this is an Alexa Prize Socialbot!",
+              "Oscars are coming:'1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night!",
+              "How are you?"
+            ]
+          },
+          "ner": [
+            [
+              {
+                "confidence": 1,
+                "end_pos": 7,
+                "start_pos": 5,
+                "text": "alexa prize",
+                "type": "MISC"
+              }
+            ],
+            [
+              {
+                "confidence": 1,
+                "end_pos": 9,
+                "start_pos": 7,
+                "text": "joaquin phoenix",
+                "type": "PER"
+              },
+              {
+                "confidence": 1,
+                "end_pos": 12,
+                "start_pos": 10,
+                "text": "renee zellweger",
+                "type": "PER"
+              },
+              {
+                "confidence": 1,
+                "end_pos": 15,
+                "start_pos": 14,
+                "text": "names",
+                "type": "MISC"
+              }
+            ],
+            []
+          ],
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "let's chat.",
+              "Hi, this is an Alexa Prize Socialbot! Oscars are coming:'1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night! How are you?"
+            ]
+          }
+        },
+        "date_time": "2020-02-10 10:25:46.358000",
+        "user": {
+          "id": "42db82697a6241fa93453d3c7987ea1f",
+          "persona": {},
+          "attributes": {},
+          "user_type": "bot"
+        }
+      },
+      {
+        "text": "wait twenty seventeen",
+        "user": {
+          "id": "5e412fabd655fa53fa6bc9f6",
+          "user_telegram_id": "amzn1.ask.account.AEWYXPP5QAP4N7ZG3FWMEPQDRGWX3ICWIMGGBJ4VWGUHCLSVIR57STGW3SHF4J7O2VKRQ6QHESNQP5BMFOE7SBXOPWDMAMCMQW6GTFUG5DC2OEYRLJNG3MNFYQRM55RNIRHIVG25V2TJB6YJLQWVBSFTJNAWT67JDNAMXNZWXRAPZN3A3AF25XFXDVAEQ3ZJUJJ4PZE54PF7F2Q",
+          "persona": {},
+          "profile": {
+            "name": null,
+            "gender": null,
+            "birthdate": null,
+            "location": null,
+            "home_coordinates": null,
+            "work_coordinates": null,
+            "occupation": null,
+            "income_per_year": null
+          },
+          "attributes": {},
+          "user_type": "human"
+        },
+        "annotations": {
+          "asr": {
+            "asr_confidence": "high"
+          },
+          "blacklisted_words": {
+            "inappropriate": false,
+            "profanity": false,
+            "restricted_topics": false
+          },
+          "toxic_classification": {
+            "identity_hate": 0.00017663836479187012,
+            "insult": 0.0002798736095428467,
+            "obscene": 9.238719940185547e-05,
+            "severe_toxic": 6.267428398132324e-05,
+            "sexual_explicit": 0.00015445362078025937,
+            "threat": 0.00022924317454453558,
+            "toxic": 0.0005883729318156838
+          },
+          "sentiment_classification": {
+            "text": [
+              "neutral",
+              0.7223037481307983
+            ]
+          },
+          "sentseg": {
+            "punct_sent": "wait. twenty seventeen.",
+            "segments": [
+              "wait.",
+              "twenty seventeen."
+            ]
+          },
+          "emotion_classification": {
+            "text": {
+              "anger": 0.2407318651676178,
+              "fear": 0.2939453721046448,
+              "joy": 0.20297232270240784,
+              "love": 0.34046706557273865,
+              "sadness": 0.2470935881137848,
+              "surprise": 0.30344778299331665,
+              "neutral": 0.9992584586143494
+            }
+          },
+          "intent_catcher": {
+            "doing_well": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "dont_understand": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "exit": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "no": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "opinion_request": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "repeat": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "tell_me_more": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "topic_switching": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "weather_forecast_intent": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_can_you_do": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_job": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_name": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_time": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "where_are_you_from": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "who_made_you": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "yes": {
+              "confidence": 0.6876925826072693,
+              "detected": 1
+            }
+          },
+          "cobot_nounphrases": [],
+          "attitude_classification": {
+            "text": "very_positive",
+            "confidence": 0.34949690103530884
+          },
+          "ner": [
+            [],
+            []
+          ],
+          "cobot_topics": {
+            "text": [
+              "Phatic",
+              "Music"
+            ]
+          },
+          "cobot_dialogact": {
+            "intents": [
+              "General_ChatIntent",
+              "General_ChatIntent"
+            ],
+            "topics": [
+              "Other",
+              "Other"
+            ]
+          },
+          "cobot_offensiveness": {
+            "text": [
+              "non-toxic",
+              "non-toxic"
+            ],
+            "confidence": [
+              7.268003e-05,
+              7.5102494e-06
+            ],
+            "is_blacklisted": [
+              "not blacklist",
+              "not blacklist"
+            ]
+          },
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "let's chat.",
+              "Hi, this is an Alexa Prize Socialbot! Oscars are coming:'1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night! How are you?",
+              "wait. twenty seventeen."
+            ]
+          }
+        },
+        "hypotheses": [
+          {
+            "skill_name": "alice",
+            "annotations": {},
+            "text": "I'm waiting.  I am very logical and rational.",
+            "confidence": 0.65,
+            "is_best": true
+          },
+          {
+            "skill_name": "dummy_skill",
+            "annotations": {},
+            "text": "do you like to drive?",
+            "confidence": 0.6
+          },
+          {
+            "skill_name": "program_y",
+            "annotations": {},
+            "text": "I'm waiting.",
+            "confidence": 0.6,
+            "is_best": true
+          },
+          {
+            "skill_name": "dummy_skill",
+            "annotations": {},
+            "text": "I really do not know what to answer.",
+            "confidence": 0.5
+          },
+          {
+            "skill_name": "movie_tfidf_retrieval",
+            "annotations": {},
+            "text": "yes, were you aware there was a sequel to the first incredibles in video game form called , \" the incredibles rise of the underminer\".",
+            "confidence": 0.2882023412264027
+          },
+          {
+            "skill_name": "music_tfidf_retrieval",
+            "annotations": {},
+            "text": "maybe we are suppose to keep talking but normally its 10 chat turns",
+            "confidence": 0.2852798603406864
+          },
+          {
+            "skill_name": "personal_info_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {},
+            "can_continue": "no"
+          },
+          {
+            "skill_name": "superbowl_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "oscar_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "movie_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {},
+            "bot_attitudes": [],
+            "human_attitudes": []
+          },
+          {
+            "skill_name": "eliza",
+            "annotations": {},
+            "text": "sorry",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "christmas_new_year_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {},
+            "working_xmas_scenario": ""
+          },
+          {
+            "skill_name": "cobotqa",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          }
+        ],
+        "date_time": "2020-02-10 10:26:18.454000",
+        "attributes": {
+          "device_id": "amzn1.ask.device.AHNGXUANUECR72EIU4MHUMFYUYXOVZKTEE5325MJJHWFBS25I3TTR7DP7VJI3M2XZV7U6B7SY2XIJ77HL4NSZS5SEVJ5747OF5KAYEXLPVBTDHJACMQEPPJ5T2EFMBBMWYL6UNOYIL23ZQZECTO7WA727Q3TQIHNZ62WLB2DBMDKL6ERSI3LE",
+          "session_id": "amzn1.echo-api.session.80f2abe9-11fb-4ac1-a3d0-b06d17ca7dc1",
+          "request_id": "amzn1.echo-api.request.c225073f-d7ed-466f-bce9-b9dbd7c4a37b",
+          "conversation_id": null,
+          "speech": {
+            "hypotheses": [
+              {
+                "tokens": [
+                  {
+                    "value": "wait",
+                    "confidence": 0.833,
+                    "_confidenceV2": {
+                      "score": 0.833
+                    },
+                    "startOffsetInMilliseconds": 1861,
+                    "endOffsetInMilliseconds": 2530
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.977,
+                    "_confidenceV2": {
+                      "score": 0.977
+                    },
+                    "startOffsetInMilliseconds": 2880,
+                    "endOffsetInMilliseconds": 3220
+                  },
+                  {
+                    "value": "seventeen",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3240,
+                    "endOffsetInMilliseconds": 4240
+                  }
+                ],
+                "confidence": 0.812,
+                "_confidenceV2": {
+                  "score": 0.812
+                }
+              },
+              {
+                "tokens": [
+                  {
+                    "value": "weight",
+                    "confidence": 0.246,
+                    "_confidenceV2": {
+                      "score": 0.246
+                    },
+                    "startOffsetInMilliseconds": 1861,
+                    "endOffsetInMilliseconds": 2530
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.977,
+                    "_confidenceV2": {
+                      "score": 0.977
+                    },
+                    "startOffsetInMilliseconds": 2880,
+                    "endOffsetInMilliseconds": 3220
+                  },
+                  {
+                    "value": "seventeen",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3240,
+                    "endOffsetInMilliseconds": 4240
+                  }
+                ],
+                "confidence": 0.506,
+                "_confidenceV2": {
+                  "score": 0.506
+                }
+              },
+              {
+                "tokens": [
+                  {
+                    "value": "eight",
+                    "confidence": 0.351,
+                    "_confidenceV2": {
+                      "score": 0.351
+                    },
+                    "startOffsetInMilliseconds": 1861,
+                    "endOffsetInMilliseconds": 2530
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.977,
+                    "_confidenceV2": {
+                      "score": 0.977
+                    },
+                    "startOffsetInMilliseconds": 2880,
+                    "endOffsetInMilliseconds": 3220
+                  },
+                  {
+                    "value": "seventeen",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3240,
+                    "endOffsetInMilliseconds": 4240
+                  }
+                ],
+                "confidence": 0.57,
+                "_confidenceV2": {
+                  "score": 0.57
+                }
+              },
+              {
+                "tokens": [
+                  {
+                    "value": "oh",
+                    "confidence": 0.165,
+                    "_confidenceV2": {
+                      "score": 0.165
+                    },
+                    "startOffsetInMilliseconds": 1593,
+                    "endOffsetInMilliseconds": 1841
+                  },
+                  {
+                    "value": "wait",
+                    "confidence": 0.833,
+                    "_confidenceV2": {
+                      "score": 0.833
+                    },
+                    "startOffsetInMilliseconds": 1861,
+                    "endOffsetInMilliseconds": 2530
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.977,
+                    "_confidenceV2": {
+                      "score": 0.977
+                    },
+                    "startOffsetInMilliseconds": 2880,
+                    "endOffsetInMilliseconds": 3220
+                  },
+                  {
+                    "value": "seventeen",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3240,
+                    "endOffsetInMilliseconds": 4240
+                  }
+                ],
+                "confidence": 0.444,
+                "_confidenceV2": {
+                  "score": 0.444
+                }
+              },
+              {
+                "tokens": [
+                  {
+                    "value": "late",
+                    "confidence": 0.175,
+                    "_confidenceV2": {
+                      "score": 0.175
+                    },
+                    "startOffsetInMilliseconds": 1861,
+                    "endOffsetInMilliseconds": 2530
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.977,
+                    "_confidenceV2": {
+                      "score": 0.977
+                    },
+                    "startOffsetInMilliseconds": 2880,
+                    "endOffsetInMilliseconds": 3220
+                  },
+                  {
+                    "value": "seventeen",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3240,
+                    "endOffsetInMilliseconds": 4240
+                  }
+                ],
+                "confidence": 0.463,
+                "_confidenceV2": {
+                  "score": 0.463
+                }
+              }
+            ],
+            "model": {
+              "version": "20191211-210258"
+            },
+            "signalToNoiseRatio": {
+              "valueInDecibels": 30.014587,
+              "version": "1.0"
+            }
+          }
+        },
+        "has_is_best": true
+      }
+    ]
+  },
+  {
+    "human_utterances": [
+      {
+        "text": "it's twenty twenty"
+      },
+      {
+        "text": "wait twenty seventeen"
+      }
+    ],
+    "bot_utterances": [
+      {
+        "text": "I'm waiting.  I am very logical and rational.",
+        "confidence": 0.65,
+        "skill_name": "alice"
+      },
+      {
+        "text": "Hi, this is an Alexa Prize Socialbot! Oscars are coming: '1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night! How are you?",
+        "confidence": 0.98,
+        "skill_name": "program_y"
+      }
+    ],
+    "hypotheses": [
+      {
+        "skill_name": "dummy_skill",
+        "annotations": {},
+        "text": "Sorry, probably, I didn't get what you meant.",
+        "confidence": 0.5
+      },
+      {
+        "skill_name": "dummy_skill",
+        "annotations": {},
+        "text": "how are you doing this evening?",
+        "confidence": 0.6,
+        "is_best": true
+      },
+      {
+        "skill_name": "oscar_skill",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0
+      },
+      {
+        "skill_name": "superbowl_skill",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0
+      },
+      {
+        "skill_name": "personal_info_skill",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0,
+        "human_attributes": {},
+        "bot_attributes": {},
+        "can_continue": "no"
+      },
+      {
+        "skill_name": "christmas_new_year_skill",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0,
+        "human_attributes": {},
+        "bot_attributes": {},
+        "working_xmas_scenario": ""
+      },
+      {
+        "skill_name": "alice",
+        "annotations": {},
+        "text": "Really.  twenty twenty is?",
+        "confidence": 0.65
+      },
+      {
+        "skill_name": "eliza",
+        "annotations": {},
+        "text": "sorry",
+        "confidence": 0.0
+      },
+      {
+        "skill_name": "program_y",
+        "annotations": {},
+        "text": "Sorry, I don't have an answer for that!",
+        "confidence": 0.2
+      },
+      {
+        "skill_name": "cobotqa",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0
+      }
+    ],
+    "utterances": [
+      {
+        "text": "Hi, this is an Alexa Prize Socialbot! Oscars are coming: '1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night! How are you?",
+        "orig_text": null,
+        "active_skill": "program_y",
+        "confidence": 0.98,
+        "annotations": {
+          "sentseg": {
+            "punct_sent": "Hi, this is an Alexa Prize Socialbot! Oscars are coming:'1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night! How are you?",
+            "segments": [
+              "Hi, this is an Alexa Prize Socialbot!",
+              "Oscars are coming:'1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night!",
+              "How are you?"
+            ]
+          },
+          "ner": [
+            [
+              {
+                "confidence": 1,
+                "end_pos": 7,
+                "start_pos": 5,
+                "text": "alexa prize",
+                "type": "MISC"
+              }
+            ],
+            [
+              {
+                "confidence": 1,
+                "end_pos": 9,
+                "start_pos": 7,
+                "text": "joaquin phoenix",
+                "type": "PER"
+              },
+              {
+                "confidence": 1,
+                "end_pos": 12,
+                "start_pos": 10,
+                "text": "renee zellweger",
+                "type": "PER"
+              },
+              {
+                "confidence": 1,
+                "end_pos": 15,
+                "start_pos": 14,
+                "text": "names",
+                "type": "MISC"
+              }
+            ],
+            []
+          ],
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "let's chat.",
+              "Hi, this is an Alexa Prize Socialbot! Oscars are coming:'1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night! How are you?"
+            ]
+          }
+        },
+        "date_time": "2020-02-10 10:25:46.358000",
+        "user": {
+          "id": "42db82697a6241fa93453d3c7987ea1f",
+          "persona": {},
+          "attributes": {},
+          "user_type": "bot"
+        }
+      },
+      {
+        "text": "wait twenty seventeen",
+        "user": {
+          "id": "5e412fabd655fa53fa6bc9f6",
+          "user_telegram_id": "amzn1.ask.account.AEWYXPP5QAP4N7ZG3FWMEPQDRGWX3ICWIMGGBJ4VWGUHCLSVIR57STGW3SHF4J7O2VKRQ6QHESNQP5BMFOE7SBXOPWDMAMCMQW6GTFUG5DC2OEYRLJNG3MNFYQRM55RNIRHIVG25V2TJB6YJLQWVBSFTJNAWT67JDNAMXNZWXRAPZN3A3AF25XFXDVAEQ3ZJUJJ4PZE54PF7F2Q",
+          "persona": {},
+          "profile": {
+            "name": null,
+            "gender": null,
+            "birthdate": null,
+            "location": null,
+            "home_coordinates": null,
+            "work_coordinates": null,
+            "occupation": null,
+            "income_per_year": null
+          },
+          "attributes": {},
+          "user_type": "human"
+        },
+        "annotations": {
+          "asr": {
+            "asr_confidence": "high"
+          },
+          "blacklisted_words": {
+            "inappropriate": false,
+            "profanity": false,
+            "restricted_topics": false
+          },
+          "toxic_classification": {
+            "identity_hate": 0.00017663836479187012,
+            "insult": 0.0002798736095428467,
+            "obscene": 9.238719940185547e-05,
+            "severe_toxic": 6.267428398132324e-05,
+            "sexual_explicit": 0.00015445362078025937,
+            "threat": 0.00022924317454453558,
+            "toxic": 0.0005883729318156838
+          },
+          "sentiment_classification": {
+            "text": [
+              "neutral",
+              0.7223037481307983
+            ]
+          },
+          "sentseg": {
+            "punct_sent": "wait. twenty seventeen.",
+            "segments": [
+              "wait.",
+              "twenty seventeen."
+            ]
+          },
+          "emotion_classification": {
+            "text": {
+              "anger": 0.2407318651676178,
+              "fear": 0.2939453721046448,
+              "joy": 0.20297232270240784,
+              "love": 0.34046706557273865,
+              "sadness": 0.2470935881137848,
+              "surprise": 0.30344778299331665,
+              "neutral": 0.9992584586143494
+            }
+          },
+          "intent_catcher": {
+            "doing_well": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "dont_understand": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "exit": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "no": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "opinion_request": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "repeat": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "tell_me_more": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "topic_switching": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "weather_forecast_intent": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_can_you_do": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_job": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_name": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_time": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "where_are_you_from": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "who_made_you": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "yes": {
+              "confidence": 0.6876925826072693,
+              "detected": 1
+            }
+          },
+          "cobot_nounphrases": [],
+          "attitude_classification": {
+            "text": "very_positive",
+            "confidence": 0.34949690103530884
+          },
+          "ner": [
+            [],
+            []
+          ],
+          "cobot_topics": {
+            "text": [
+              "Phatic",
+              "Music"
+            ]
+          },
+          "cobot_dialogact": {
+            "intents": [
+              "General_ChatIntent",
+              "General_ChatIntent"
+            ],
+            "topics": [
+              "Other",
+              "Other"
+            ]
+          },
+          "cobot_offensiveness": {
+            "text": [
+              "non-toxic",
+              "non-toxic"
+            ],
+            "confidence": [
+              7.268003e-05,
+              7.5102494e-06
+            ],
+            "is_blacklisted": [
+              "not blacklist",
+              "not blacklist"
+            ]
+          },
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "let's chat.",
+              "Hi, this is an Alexa Prize Socialbot! Oscars are coming:'1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night! How are you?",
+              "wait. twenty seventeen."
+            ]
+          }
+        },
+        "hypotheses": [
+          {
+            "skill_name": "alice",
+            "annotations": {},
+            "text": "I'm waiting.  I am very logical and rational.",
+            "confidence": 0.65,
+            "is_best": true
+          },
+          {
+            "skill_name": "dummy_skill",
+            "annotations": {},
+            "text": "do you like to drive?",
+            "confidence": 0.6
+          },
+          {
+            "skill_name": "program_y",
+            "annotations": {},
+            "text": "I'm waiting.",
+            "confidence": 0.6,
+            "is_best": true
+          },
+          {
+            "skill_name": "dummy_skill",
+            "annotations": {},
+            "text": "I really do not know what to answer.",
+            "confidence": 0.5
+          },
+          {
+            "skill_name": "movie_tfidf_retrieval",
+            "annotations": {},
+            "text": "yes, were you aware there was a sequel to the first incredibles in video game form called , \" the incredibles rise of the underminer\".",
+            "confidence": 0.2882023412264027
+          },
+          {
+            "skill_name": "music_tfidf_retrieval",
+            "annotations": {},
+            "text": "maybe we are suppose to keep talking but normally its 10 chat turns",
+            "confidence": 0.2852798603406864
+          },
+          {
+            "skill_name": "personal_info_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {},
+            "can_continue": "no"
+          },
+          {
+            "skill_name": "superbowl_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "oscar_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "movie_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {},
+            "bot_attitudes": [],
+            "human_attitudes": []
+          },
+          {
+            "skill_name": "eliza",
+            "annotations": {},
+            "text": "sorry",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "christmas_new_year_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {},
+            "working_xmas_scenario": ""
+          },
+          {
+            "skill_name": "cobotqa",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          }
+        ],
+        "date_time": "2020-02-10 10:26:18.454000",
+        "attributes": {
+          "device_id": "amzn1.ask.device.AHNGXUANUECR72EIU4MHUMFYUYXOVZKTEE5325MJJHWFBS25I3TTR7DP7VJI3M2XZV7U6B7SY2XIJ77HL4NSZS5SEVJ5747OF5KAYEXLPVBTDHJACMQEPPJ5T2EFMBBMWYL6UNOYIL23ZQZECTO7WA727Q3TQIHNZ62WLB2DBMDKL6ERSI3LE",
+          "session_id": "amzn1.echo-api.session.80f2abe9-11fb-4ac1-a3d0-b06d17ca7dc1",
+          "request_id": "amzn1.echo-api.request.c225073f-d7ed-466f-bce9-b9dbd7c4a37b",
+          "conversation_id": null,
+          "speech": {
+            "hypotheses": [
+              {
+                "tokens": [
+                  {
+                    "value": "wait",
+                    "confidence": 0.833,
+                    "_confidenceV2": {
+                      "score": 0.833
+                    },
+                    "startOffsetInMilliseconds": 1861,
+                    "endOffsetInMilliseconds": 2530
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.977,
+                    "_confidenceV2": {
+                      "score": 0.977
+                    },
+                    "startOffsetInMilliseconds": 2880,
+                    "endOffsetInMilliseconds": 3220
+                  },
+                  {
+                    "value": "seventeen",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3240,
+                    "endOffsetInMilliseconds": 4240
+                  }
+                ],
+                "confidence": 0.812,
+                "_confidenceV2": {
+                  "score": 0.812
+                }
+              },
+              {
+                "tokens": [
+                  {
+                    "value": "weight",
+                    "confidence": 0.246,
+                    "_confidenceV2": {
+                      "score": 0.246
+                    },
+                    "startOffsetInMilliseconds": 1861,
+                    "endOffsetInMilliseconds": 2530
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.977,
+                    "_confidenceV2": {
+                      "score": 0.977
+                    },
+                    "startOffsetInMilliseconds": 2880,
+                    "endOffsetInMilliseconds": 3220
+                  },
+                  {
+                    "value": "seventeen",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3240,
+                    "endOffsetInMilliseconds": 4240
+                  }
+                ],
+                "confidence": 0.506,
+                "_confidenceV2": {
+                  "score": 0.506
+                }
+              },
+              {
+                "tokens": [
+                  {
+                    "value": "eight",
+                    "confidence": 0.351,
+                    "_confidenceV2": {
+                      "score": 0.351
+                    },
+                    "startOffsetInMilliseconds": 1861,
+                    "endOffsetInMilliseconds": 2530
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.977,
+                    "_confidenceV2": {
+                      "score": 0.977
+                    },
+                    "startOffsetInMilliseconds": 2880,
+                    "endOffsetInMilliseconds": 3220
+                  },
+                  {
+                    "value": "seventeen",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3240,
+                    "endOffsetInMilliseconds": 4240
+                  }
+                ],
+                "confidence": 0.57,
+                "_confidenceV2": {
+                  "score": 0.57
+                }
+              },
+              {
+                "tokens": [
+                  {
+                    "value": "oh",
+                    "confidence": 0.165,
+                    "_confidenceV2": {
+                      "score": 0.165
+                    },
+                    "startOffsetInMilliseconds": 1593,
+                    "endOffsetInMilliseconds": 1841
+                  },
+                  {
+                    "value": "wait",
+                    "confidence": 0.833,
+                    "_confidenceV2": {
+                      "score": 0.833
+                    },
+                    "startOffsetInMilliseconds": 1861,
+                    "endOffsetInMilliseconds": 2530
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.977,
+                    "_confidenceV2": {
+                      "score": 0.977
+                    },
+                    "startOffsetInMilliseconds": 2880,
+                    "endOffsetInMilliseconds": 3220
+                  },
+                  {
+                    "value": "seventeen",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3240,
+                    "endOffsetInMilliseconds": 4240
+                  }
+                ],
+                "confidence": 0.444,
+                "_confidenceV2": {
+                  "score": 0.444
+                }
+              },
+              {
+                "tokens": [
+                  {
+                    "value": "late",
+                    "confidence": 0.175,
+                    "_confidenceV2": {
+                      "score": 0.175
+                    },
+                    "startOffsetInMilliseconds": 1861,
+                    "endOffsetInMilliseconds": 2530
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.977,
+                    "_confidenceV2": {
+                      "score": 0.977
+                    },
+                    "startOffsetInMilliseconds": 2880,
+                    "endOffsetInMilliseconds": 3220
+                  },
+                  {
+                    "value": "seventeen",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3240,
+                    "endOffsetInMilliseconds": 4240
+                  }
+                ],
+                "confidence": 0.463,
+                "_confidenceV2": {
+                  "score": 0.463
+                }
+              }
+            ],
+            "model": {
+              "version": "20191211-210258"
+            },
+            "signalToNoiseRatio": {
+              "valueInDecibels": 30.014587,
+              "version": "1.0"
+            }
+          }
+        },
+        "has_is_best": true
+      },
+      {
+        "text": "I'm waiting.  I am very logical and rational.",
+        "orig_text": null,
+        "active_skill": "alice",
+        "confidence": 0.65,
+        "annotations": {
+          "sentseg": {
+            "punct_sent": "I am waiting.  I am very logical and rational.",
+            "segments": [
+              "I am waiting.",
+              "I am very logical and rational."
+            ]
+          },
+          "ner": [
+            [],
+            []
+          ],
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "let's chat.",
+              "Hi, this is an Alexa Prize Socialbot! Oscars are coming:'1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night! How are you?",
+              "wait. twenty seventeen.",
+              "I am waiting. I am very logical and rational."
+            ]
+          }
+        },
+        "date_time": "2020-02-10 10:26:19.463000",
+        "user": {
+          "id": "5e412fabd655fa53fa6bc9f7",
+          "persona": {},
+          "attributes": {},
+          "user_type": "bot"
+        }
+      },
+      {
+        "text": "it's twenty twenty",
+        "user": {
+          "id": "5e412fabd655fa53fa6bc9f6",
+          "user_telegram_id": "amzn1.ask.account.AEWYXPP5QAP4N7ZG3FWMEPQDRGWX3ICWIMGGBJ4VWGUHCLSVIR57STGW3SHF4J7O2VKRQ6QHESNQP5BMFOE7SBXOPWDMAMCMQW6GTFUG5DC2OEYRLJNG3MNFYQRM55RNIRHIVG25V2TJB6YJLQWVBSFTJNAWT67JDNAMXNZWXRAPZN3A3AF25XFXDVAEQ3ZJUJJ4PZE54PF7F2Q",
+          "persona": {},
+          "profile": {
+            "name": null,
+            "gender": null,
+            "birthdate": null,
+            "location": null,
+            "home_coordinates": null,
+            "work_coordinates": null,
+            "occupation": null,
+            "income_per_year": null
+          },
+          "attributes": {},
+          "user_type": "human"
+        },
+        "annotations": {
+          "asr": {
+            "asr_confidence": "high"
+          },
+          "blacklisted_words": {
+            "inappropriate": false,
+            "profanity": false,
+            "restricted_topics": false
+          },
+          "toxic_classification": {
+            "identity_hate": 0.0002772212028503418,
+            "insult": 0.0004336833953857422,
+            "obscene": 0.00028184056282043457,
+            "severe_toxic": 0.00013110041618347168,
+            "sexual_explicit": 0.00027656235033646226,
+            "threat": 0.00047695395187474787,
+            "toxic": 0.0010690503986552358
+          },
+          "sentiment_classification": {
+            "text": [
+              "neutral",
+              0.7582750916481018
+            ]
+          },
+          "sentseg": {
+            "punct_sent": "it is twenty twenty.",
+            "segments": [
+              "it is twenty twenty."
+            ]
+          },
+          "emotion_classification": {
+            "text": {
+              "anger": 0.28631657361984253,
+              "fear": 0.26502227783203125,
+              "joy": 0.22648581862449646,
+              "love": 0.3705631494522095,
+              "sadness": 0.24300892651081085,
+              "surprise": 0.2542880177497864,
+              "neutral": 0.9992840886116028
+            }
+          },
+          "intent_catcher": {
+            "doing_well": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "dont_understand": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "exit": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "no": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "opinion_request": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "repeat": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "tell_me_more": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "topic_switching": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "weather_forecast_intent": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_can_you_do": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_job": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_name": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_time": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "where_are_you_from": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "who_made_you": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "yes": {
+              "confidence": 0.0,
+              "detected": 0
+            }
+          },
+          "cobot_nounphrases": [],
+          "attitude_classification": {
+            "text": "very_positive",
+            "confidence": 0.5950782299041748
+          },
+          "ner": [
+            []
+          ],
+          "cobot_topics": {
+            "text": [
+              "Phatic"
+            ]
+          },
+          "cobot_dialogact": {
+            "intents": [
+              "General_ChatIntent"
+            ],
+            "topics": [
+              "Other"
+            ]
+          },
+          "cobot_offensiveness": {
+            "text": [
+              "non-toxic"
+            ],
+            "confidence": [
+              9.297388e-06
+            ],
+            "is_blacklisted": [
+              "not blacklist"
+            ]
+          },
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "Hi, this is an Alexa Prize Socialbot! Oscars are coming:'1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night! How are you?",
+              "wait. twenty seventeen.",
+              "I am waiting. I am very logical and rational.",
+              "it is twenty twenty."
+            ]
+          }
+        },
+        "hypotheses": [
+          {
+            "skill_name": "alice",
+            "annotations": {},
+            "text": "Really.  twenty twenty is?",
+            "confidence": 0.65
+          },
+          {
+            "skill_name": "dummy_skill",
+            "annotations": {},
+            "text": "how are you doing this evening?",
+            "confidence": 0.6,
+            "is_best": true
+          },
+          {
+            "skill_name": "dummy_skill",
+            "annotations": {},
+            "text": "Sorry, probably, I didn't get what you meant.",
+            "confidence": 0.5
+          },
+          {
+            "skill_name": "program_y",
+            "annotations": {},
+            "text": "Sorry, I don't have an answer for that!",
+            "confidence": 0.2
+          },
+          {
+            "skill_name": "oscar_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "superbowl_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "personal_info_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {},
+            "can_continue": "no"
+          },
+          {
+            "skill_name": "christmas_new_year_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {},
+            "working_xmas_scenario": ""
+          },
+          {
+            "skill_name": "eliza",
+            "annotations": {},
+            "text": "sorry",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "cobotqa",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          }
+        ],
+        "date_time": "2020-02-10 10:26:28.298000",
+        "attributes": {
+          "device_id": "amzn1.ask.device.AHNGXUANUECR72EIU4MHUMFYUYXOVZKTEE5325MJJHWFBS25I3TTR7DP7VJI3M2XZV7U6B7SY2XIJ77HL4NSZS5SEVJ5747OF5KAYEXLPVBTDHJACMQEPPJ5T2EFMBBMWYL6UNOYIL23ZQZECTO7WA727Q3TQIHNZ62WLB2DBMDKL6ERSI3LE",
+          "session_id": "amzn1.echo-api.session.80f2abe9-11fb-4ac1-a3d0-b06d17ca7dc1",
+          "request_id": "amzn1.echo-api.request.620f9ef6-d643-4d51-8591-56d9ac103801",
+          "conversation_id": null,
+          "speech": {
+            "hypotheses": [
+              {
+                "tokens": [
+                  {
+                    "value": "it's",
+                    "confidence": 0.638,
+                    "_confidenceV2": {
+                      "score": 0.638
+                    },
+                    "startOffsetInMilliseconds": 2788,
+                    "endOffsetInMilliseconds": 3156
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3180,
+                    "endOffsetInMilliseconds": 3550
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3570,
+                    "endOffsetInMilliseconds": 4150
+                  }
+                ],
+                "confidence": 0.766,
+                "_confidenceV2": {
+                  "score": 0.766
+                }
+              },
+              {
+                "tokens": [
+                  {
+                    "value": "its",
+                    "confidence": 0.015,
+                    "_confidenceV2": {
+                      "score": 0.015
+                    },
+                    "startOffsetInMilliseconds": 2788,
+                    "endOffsetInMilliseconds": 3156
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3180,
+                    "endOffsetInMilliseconds": 3550
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3570,
+                    "endOffsetInMilliseconds": 4150
+                  }
+                ],
+                "confidence": 0.413,
+                "_confidenceV2": {
+                  "score": 0.413
+                }
+              },
+              {
+                "tokens": [
+                  {
+                    "value": "no",
+                    "confidence": 0.297,
+                    "_confidenceV2": {
+                      "score": 0.297
+                    },
+                    "startOffsetInMilliseconds": 2788,
+                    "endOffsetInMilliseconds": 3156
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3180,
+                    "endOffsetInMilliseconds": 3550
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3570,
+                    "endOffsetInMilliseconds": 4150
+                  }
+                ],
+                "confidence": 0.585,
+                "_confidenceV2": {
+                  "score": 0.585
+                }
+              },
+              {
+                "tokens": [
+                  {
+                    "value": "it's",
+                    "confidence": 0.638,
+                    "_confidenceV2": {
+                      "score": 0.638
+                    },
+                    "startOffsetInMilliseconds": 2788,
+                    "endOffsetInMilliseconds": 3156
+                  },
+                  {
+                    "value": "its",
+                    "confidence": 0.017,
+                    "_confidenceV2": {
+                      "score": 0.017
+                    },
+                    "startOffsetInMilliseconds": 3160,
+                    "endOffsetInMilliseconds": 3160
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3180,
+                    "endOffsetInMilliseconds": 3550
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3570,
+                    "endOffsetInMilliseconds": 4150
+                  }
+                ],
+                "confidence": 0.41,
+                "_confidenceV2": {
+                  "score": 0.41
+                }
+              },
+              {
+                "tokens": [
+                  {
+                    "value": "its",
+                    "confidence": 0.015,
+                    "_confidenceV2": {
+                      "score": 0.015
+                    },
+                    "startOffsetInMilliseconds": 2788,
+                    "endOffsetInMilliseconds": 3156
+                  },
+                  {
+                    "value": "its",
+                    "confidence": 0.017,
+                    "_confidenceV2": {
+                      "score": 0.017
+                    },
+                    "startOffsetInMilliseconds": 3160,
+                    "endOffsetInMilliseconds": 3160
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3180,
+                    "endOffsetInMilliseconds": 3550
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3570,
+                    "endOffsetInMilliseconds": 4150
+                  }
+                ],
+                "confidence": 0.404,
+                "_confidenceV2": {
+                  "score": 0.404
+                }
+              }
+            ],
+            "model": {
+              "version": "20191211-210258"
+            },
+            "signalToNoiseRatio": {
+              "valueInDecibels": 32.29647,
+              "version": "1.0"
+            }
+          }
+        },
+        "has_is_best": true
+      }
+    ]
+  },
+  {
+    "human_utterances": [
+      {
+        "text": "good"
+      },
+      {
+        "text": "it's twenty twenty"
+      }
+    ],
+    "bot_utterances": [
+      {
+        "text": "how are you doing this evening?",
+        "confidence": 0.6,
+        "skill_name": "dummy_skill"
+      },
+      {
+        "text": "I'm waiting.  I am very logical and rational.",
+        "confidence": 0.65,
+        "skill_name": "alice"
+      }
+    ],
+    "hypotheses": [
+      {
+        "skill_name": "dummy_skill",
+        "annotations": {},
+        "text": "Sorry, probably, I didn't get what you meant.",
+        "confidence": 0.5
+      },
+      {
+        "skill_name": "dummy_skill",
+        "annotations": {},
+        "text": "do you follow the mls?",
+        "confidence": 0.6
+      },
+      {
+        "skill_name": "oscar_skill",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0
+      },
+      {
+        "skill_name": "superbowl_skill",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0
+      },
+      {
+        "skill_name": "alice",
+        "annotations": {},
+        "text": "Ayuh.",
+        "confidence": 0.65
+      },
+      {
+        "skill_name": "personal_info_skill",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0,
+        "human_attributes": {},
+        "bot_attributes": {},
+        "can_continue": "no"
+      },
+      {
+        "skill_name": "eliza",
+        "annotations": {},
+        "text": "sorry",
+        "confidence": 0.0
+      },
+      {
+        "skill_name": "christmas_new_year_skill",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0,
+        "human_attributes": {},
+        "bot_attributes": {},
+        "working_xmas_scenario": ""
+      },
+      {
+        "skill_name": "movie_skill",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0,
+        "human_attributes": {},
+        "bot_attributes": {},
+        "bot_attitudes": [],
+        "human_attitudes": []
+      },
+      {
+        "skill_name": "movie_tfidf_retrieval",
+        "annotations": {},
+        "text": "she said it was an emotional time when she realized it was going to be too hard on her body.",
+        "confidence": 0.7525272594714828
+      },
+      {
+        "skill_name": "program_y",
+        "annotations": {},
+        "text": "I'm glad. what's your favorite movie?",
+        "confidence": 0.98,
+        "is_best": true
+      },
+      {
+        "skill_name": "cobotqa",
+        "annotations": {},
+        "text": "That's nice of you to say.",
+        "confidence": 0.95
+      }
+    ],
+    "utterances": [
+      {
+        "text": "I'm waiting.  I am very logical and rational.",
+        "orig_text": null,
+        "active_skill": "alice",
+        "confidence": 0.65,
+        "annotations": {
+          "sentseg": {
+            "punct_sent": "I am waiting.  I am very logical and rational.",
+            "segments": [
+              "I am waiting.",
+              "I am very logical and rational."
+            ]
+          },
+          "ner": [
+            [],
+            []
+          ],
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "let's chat.",
+              "Hi, this is an Alexa Prize Socialbot! Oscars are coming:'1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night! How are you?",
+              "wait. twenty seventeen.",
+              "I am waiting. I am very logical and rational."
+            ]
+          }
+        },
+        "date_time": "2020-02-10 10:26:19.463000",
+        "user": {
+          "id": "5e412fabd655fa53fa6bc9f7",
+          "persona": {},
+          "attributes": {},
+          "user_type": "bot"
+        }
+      },
+      {
+        "text": "it's twenty twenty",
+        "user": {
+          "id": "5e412fabd655fa53fa6bc9f6",
+          "user_telegram_id": "amzn1.ask.account.AEWYXPP5QAP4N7ZG3FWMEPQDRGWX3ICWIMGGBJ4VWGUHCLSVIR57STGW3SHF4J7O2VKRQ6QHESNQP5BMFOE7SBXOPWDMAMCMQW6GTFUG5DC2OEYRLJNG3MNFYQRM55RNIRHIVG25V2TJB6YJLQWVBSFTJNAWT67JDNAMXNZWXRAPZN3A3AF25XFXDVAEQ3ZJUJJ4PZE54PF7F2Q",
+          "persona": {},
+          "profile": {
+            "name": null,
+            "gender": null,
+            "birthdate": null,
+            "location": null,
+            "home_coordinates": null,
+            "work_coordinates": null,
+            "occupation": null,
+            "income_per_year": null
+          },
+          "attributes": {},
+          "user_type": "human"
+        },
+        "annotations": {
+          "asr": {
+            "asr_confidence": "high"
+          },
+          "blacklisted_words": {
+            "inappropriate": false,
+            "profanity": false,
+            "restricted_topics": false
+          },
+          "toxic_classification": {
+            "identity_hate": 0.0002772212028503418,
+            "insult": 0.0004336833953857422,
+            "obscene": 0.00028184056282043457,
+            "severe_toxic": 0.00013110041618347168,
+            "sexual_explicit": 0.00027656235033646226,
+            "threat": 0.00047695395187474787,
+            "toxic": 0.0010690503986552358
+          },
+          "sentiment_classification": {
+            "text": [
+              "neutral",
+              0.7582750916481018
+            ]
+          },
+          "sentseg": {
+            "punct_sent": "it is twenty twenty.",
+            "segments": [
+              "it is twenty twenty."
+            ]
+          },
+          "emotion_classification": {
+            "text": {
+              "anger": 0.28631657361984253,
+              "fear": 0.26502227783203125,
+              "joy": 0.22648581862449646,
+              "love": 0.3705631494522095,
+              "sadness": 0.24300892651081085,
+              "surprise": 0.2542880177497864,
+              "neutral": 0.9992840886116028
+            }
+          },
+          "intent_catcher": {
+            "doing_well": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "dont_understand": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "exit": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "no": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "opinion_request": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "repeat": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "tell_me_more": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "topic_switching": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "weather_forecast_intent": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_can_you_do": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_job": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_name": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_time": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "where_are_you_from": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "who_made_you": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "yes": {
+              "confidence": 0.0,
+              "detected": 0
+            }
+          },
+          "cobot_nounphrases": [],
+          "attitude_classification": {
+            "text": "very_positive",
+            "confidence": 0.5950782299041748
+          },
+          "ner": [
+            []
+          ],
+          "cobot_topics": {
+            "text": [
+              "Phatic"
+            ]
+          },
+          "cobot_dialogact": {
+            "intents": [
+              "General_ChatIntent"
+            ],
+            "topics": [
+              "Other"
+            ]
+          },
+          "cobot_offensiveness": {
+            "text": [
+              "non-toxic"
+            ],
+            "confidence": [
+              9.297388e-06
+            ],
+            "is_blacklisted": [
+              "not blacklist"
+            ]
+          },
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "Hi, this is an Alexa Prize Socialbot! Oscars are coming:'1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night! How are you?",
+              "wait. twenty seventeen.",
+              "I am waiting. I am very logical and rational.",
+              "it is twenty twenty."
+            ]
+          }
+        },
+        "hypotheses": [
+          {
+            "skill_name": "alice",
+            "annotations": {},
+            "text": "Really.  twenty twenty is?",
+            "confidence": 0.65
+          },
+          {
+            "skill_name": "dummy_skill",
+            "annotations": {},
+            "text": "how are you doing this evening?",
+            "confidence": 0.6,
+            "is_best": true
+          },
+          {
+            "skill_name": "dummy_skill",
+            "annotations": {},
+            "text": "Sorry, probably, I didn't get what you meant.",
+            "confidence": 0.5
+          },
+          {
+            "skill_name": "program_y",
+            "annotations": {},
+            "text": "Sorry, I don't have an answer for that!",
+            "confidence": 0.2
+          },
+          {
+            "skill_name": "oscar_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "superbowl_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "personal_info_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {},
+            "can_continue": "no"
+          },
+          {
+            "skill_name": "christmas_new_year_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {},
+            "working_xmas_scenario": ""
+          },
+          {
+            "skill_name": "eliza",
+            "annotations": {},
+            "text": "sorry",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "cobotqa",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          }
+        ],
+        "date_time": "2020-02-10 10:26:28.298000",
+        "attributes": {
+          "device_id": "amzn1.ask.device.AHNGXUANUECR72EIU4MHUMFYUYXOVZKTEE5325MJJHWFBS25I3TTR7DP7VJI3M2XZV7U6B7SY2XIJ77HL4NSZS5SEVJ5747OF5KAYEXLPVBTDHJACMQEPPJ5T2EFMBBMWYL6UNOYIL23ZQZECTO7WA727Q3TQIHNZ62WLB2DBMDKL6ERSI3LE",
+          "session_id": "amzn1.echo-api.session.80f2abe9-11fb-4ac1-a3d0-b06d17ca7dc1",
+          "request_id": "amzn1.echo-api.request.620f9ef6-d643-4d51-8591-56d9ac103801",
+          "conversation_id": null,
+          "speech": {
+            "hypotheses": [
+              {
+                "tokens": [
+                  {
+                    "value": "it's",
+                    "confidence": 0.638,
+                    "_confidenceV2": {
+                      "score": 0.638
+                    },
+                    "startOffsetInMilliseconds": 2788,
+                    "endOffsetInMilliseconds": 3156
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3180,
+                    "endOffsetInMilliseconds": 3550
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3570,
+                    "endOffsetInMilliseconds": 4150
+                  }
+                ],
+                "confidence": 0.766,
+                "_confidenceV2": {
+                  "score": 0.766
+                }
+              },
+              {
+                "tokens": [
+                  {
+                    "value": "its",
+                    "confidence": 0.015,
+                    "_confidenceV2": {
+                      "score": 0.015
+                    },
+                    "startOffsetInMilliseconds": 2788,
+                    "endOffsetInMilliseconds": 3156
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3180,
+                    "endOffsetInMilliseconds": 3550
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3570,
+                    "endOffsetInMilliseconds": 4150
+                  }
+                ],
+                "confidence": 0.413,
+                "_confidenceV2": {
+                  "score": 0.413
+                }
+              },
+              {
+                "tokens": [
+                  {
+                    "value": "no",
+                    "confidence": 0.297,
+                    "_confidenceV2": {
+                      "score": 0.297
+                    },
+                    "startOffsetInMilliseconds": 2788,
+                    "endOffsetInMilliseconds": 3156
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3180,
+                    "endOffsetInMilliseconds": 3550
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3570,
+                    "endOffsetInMilliseconds": 4150
+                  }
+                ],
+                "confidence": 0.585,
+                "_confidenceV2": {
+                  "score": 0.585
+                }
+              },
+              {
+                "tokens": [
+                  {
+                    "value": "it's",
+                    "confidence": 0.638,
+                    "_confidenceV2": {
+                      "score": 0.638
+                    },
+                    "startOffsetInMilliseconds": 2788,
+                    "endOffsetInMilliseconds": 3156
+                  },
+                  {
+                    "value": "its",
+                    "confidence": 0.017,
+                    "_confidenceV2": {
+                      "score": 0.017
+                    },
+                    "startOffsetInMilliseconds": 3160,
+                    "endOffsetInMilliseconds": 3160
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3180,
+                    "endOffsetInMilliseconds": 3550
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3570,
+                    "endOffsetInMilliseconds": 4150
+                  }
+                ],
+                "confidence": 0.41,
+                "_confidenceV2": {
+                  "score": 0.41
+                }
+              },
+              {
+                "tokens": [
+                  {
+                    "value": "its",
+                    "confidence": 0.015,
+                    "_confidenceV2": {
+                      "score": 0.015
+                    },
+                    "startOffsetInMilliseconds": 2788,
+                    "endOffsetInMilliseconds": 3156
+                  },
+                  {
+                    "value": "its",
+                    "confidence": 0.017,
+                    "_confidenceV2": {
+                      "score": 0.017
+                    },
+                    "startOffsetInMilliseconds": 3160,
+                    "endOffsetInMilliseconds": 3160
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3180,
+                    "endOffsetInMilliseconds": 3550
+                  },
+                  {
+                    "value": "twenty",
+                    "confidence": 0.98,
+                    "_confidenceV2": {
+                      "score": 0.98
+                    },
+                    "startOffsetInMilliseconds": 3570,
+                    "endOffsetInMilliseconds": 4150
+                  }
+                ],
+                "confidence": 0.404,
+                "_confidenceV2": {
+                  "score": 0.404
+                }
+              }
+            ],
+            "model": {
+              "version": "20191211-210258"
+            },
+            "signalToNoiseRatio": {
+              "valueInDecibels": 32.29647,
+              "version": "1.0"
+            }
+          }
+        },
+        "has_is_best": true
+      },
+      {
+        "text": "how are you doing this evening?",
+        "orig_text": null,
+        "active_skill": "dummy_skill",
+        "confidence": 0.6,
+        "annotations": {
+          "sentseg": {
+            "punct_sent": "how are you doing this evening?",
+            "segments": [
+              "how are you doing this evening?"
+            ]
+          },
+          "ner": [
+            []
+          ],
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "wait. twenty seventeen.",
+              "I am waiting. I am very logical and rational.",
+              "it is twenty twenty.",
+              "how are you doing this evening?"
+            ]
+          }
+        },
+        "date_time": "2020-02-10 10:26:29.497000",
+        "user": {
+          "id": "5e412fabd655fa53fa6bc9f7",
+          "persona": {},
+          "attributes": {},
+          "user_type": "bot"
+        }
+      },
+      {
+        "text": "good",
+        "user": {
+          "id": "5e412fabd655fa53fa6bc9f6",
+          "user_telegram_id": "amzn1.ask.account.AEWYXPP5QAP4N7ZG3FWMEPQDRGWX3ICWIMGGBJ4VWGUHCLSVIR57STGW3SHF4J7O2VKRQ6QHESNQP5BMFOE7SBXOPWDMAMCMQW6GTFUG5DC2OEYRLJNG3MNFYQRM55RNIRHIVG25V2TJB6YJLQWVBSFTJNAWT67JDNAMXNZWXRAPZN3A3AF25XFXDVAEQ3ZJUJJ4PZE54PF7F2Q",
+          "persona": {},
+          "profile": {
+            "name": null,
+            "gender": null,
+            "birthdate": null,
+            "location": null,
+            "home_coordinates": null,
+            "work_coordinates": null,
+            "occupation": null,
+            "income_per_year": null
+          },
+          "attributes": {},
+          "user_type": "human"
+        },
+        "annotations": {
+          "asr": {
+            "asr_confidence": "high"
+          },
+          "blacklisted_words": {
+            "inappropriate": false,
+            "profanity": false,
+            "restricted_topics": false
+          },
+          "toxic_classification": {
+            "identity_hate": 0.0020357370376586914,
+            "insult": 0.0012805461883544922,
+            "obscene": 0.0013634860515594482,
+            "severe_toxic": 0.0006582140922546387,
+            "sexual_explicit": 0.001437059952877462,
+            "threat": 0.001264877268113196,
+            "toxic": 0.003560995915904641
+          },
+          "sentiment_classification": {
+            "text": [
+              "positive",
+              0.8889679908752441
+            ]
+          },
+          "sentseg": {
+            "punct_sent": "good.",
+            "segments": [
+              "good."
+            ]
+          },
+          "emotion_classification": {
+            "text": {
+              "anger": 0.3911433815956116,
+              "fear": 0.23039545118808746,
+              "joy": 0.3852027356624603,
+              "love": 0.28184694051742554,
+              "sadness": 0.3172842562198639,
+              "surprise": 0.15187539160251617,
+              "neutral": 0.9989631175994873
+            }
+          },
+          "intent_catcher": {
+            "doing_well": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "dont_understand": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "exit": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "no": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "opinion_request": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "repeat": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "tell_me_more": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "topic_switching": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "weather_forecast_intent": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_can_you_do": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_job": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_name": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_time": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "where_are_you_from": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "who_made_you": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "yes": {
+              "confidence": 0.6893829107284546,
+              "detected": 1
+            }
+          },
+          "cobot_nounphrases": [],
+          "attitude_classification": {
+            "text": "positive",
+            "confidence": 0.459440141916275
+          },
+          "ner": [
+            []
+          ],
+          "cobot_topics": {
+            "text": [
+              "Phatic"
+            ]
+          },
+          "cobot_dialogact": {
+            "intents": [
+              "General_ChatIntent"
+            ],
+            "topics": [
+              "Phatic"
+            ]
+          },
+          "cobot_offensiveness": {
+            "text": [
+              "non-toxic"
+            ],
+            "confidence": [
+              4.726605e-07
+            ],
+            "is_blacklisted": [
+              "not blacklist"
+            ]
+          },
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "I am waiting. I am very logical and rational.",
+              "it is twenty twenty.",
+              "how are you doing this evening?",
+              "good."
+            ]
+          }
+        },
+        "hypotheses": [
+          {
+            "skill_name": "program_y",
+            "annotations": {},
+            "text": "I'm glad. what's your favorite movie?",
+            "confidence": 0.98,
+            "is_best": true
+          },
+          {
+            "skill_name": "cobotqa",
+            "annotations": {},
+            "text": "That's nice of you to say.",
+            "confidence": 0.95
+          },
+          {
+            "skill_name": "movie_tfidf_retrieval",
+            "annotations": {},
+            "text": "she said it was an emotional time when she realized it was going to be too hard on her body.",
+            "confidence": 0.7525272594714828
+          },
+          {
+            "skill_name": "alice",
+            "annotations": {},
+            "text": "Ayuh.",
+            "confidence": 0.65
+          },
+          {
+            "skill_name": "dummy_skill",
+            "annotations": {},
+            "text": "do you follow the mls?",
+            "confidence": 0.6
+          },
+          {
+            "skill_name": "dummy_skill",
+            "annotations": {},
+            "text": "Sorry, probably, I didn't get what you meant.",
+            "confidence": 0.5
+          },
+          {
+            "skill_name": "oscar_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "superbowl_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "personal_info_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {},
+            "can_continue": "no"
+          },
+          {
+            "skill_name": "eliza",
+            "annotations": {},
+            "text": "sorry",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "christmas_new_year_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {},
+            "working_xmas_scenario": ""
+          },
+          {
+            "skill_name": "movie_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {},
+            "bot_attitudes": [],
+            "human_attitudes": []
+          }
+        ],
+        "date_time": "2020-02-10 10:26:34.114000",
+        "attributes": {
+          "device_id": "amzn1.ask.device.AHNGXUANUECR72EIU4MHUMFYUYXOVZKTEE5325MJJHWFBS25I3TTR7DP7VJI3M2XZV7U6B7SY2XIJ77HL4NSZS5SEVJ5747OF5KAYEXLPVBTDHJACMQEPPJ5T2EFMBBMWYL6UNOYIL23ZQZECTO7WA727Q3TQIHNZ62WLB2DBMDKL6ERSI3LE",
+          "session_id": "amzn1.echo-api.session.80f2abe9-11fb-4ac1-a3d0-b06d17ca7dc1",
+          "request_id": "amzn1.echo-api.request.694e66f0-34ad-4857-a15e-559bfe88a8d2",
+          "conversation_id": null,
+          "speech": {
+            "hypotheses": [
+              {
+                "tokens": [
+                  {
+                    "value": "good",
+                    "confidence": 0.976,
+                    "_confidenceV2": {
+                      "score": 0.976
+                    },
+                    "startOffsetInMilliseconds": 840,
+                    "endOffsetInMilliseconds": 1540
+                  }
+                ],
+                "confidence": 0.987,
+                "_confidenceV2": {
+                  "score": 0.987
+                }
+              }
+            ],
+            "model": {
+              "version": "20191211-210258"
+            },
+            "signalToNoiseRatio": {
+              "valueInDecibels": 23.835712,
+              "version": "1.0"
+            }
+          }
+        },
+        "has_is_best": true
+      }
+    ]
+  },
+  {
+    "human_utterances": [
+      {
+        "text": "alarm"
+      },
+      {
+        "text": "good"
+      }
+    ],
+    "bot_utterances": [
+      {
+        "text": "I'm glad. what's your favorite movie?",
+        "confidence": 0.98,
+        "skill_name": "program_y"
+      },
+      {
+        "text": "how are you doing this evening?",
+        "confidence": 0.6,
+        "skill_name": "dummy_skill"
+      }
+    ],
+    "hypotheses": [
+      {
+        "skill_name": "dummy_skill",
+        "annotations": {},
+        "text": "I really do not know what to answer.",
+        "confidence": 0.5
+      },
+      {
+        "skill_name": "dummy_skill",
+        "annotations": {},
+        "text": "are you interested in clothing?",
+        "confidence": 0.6
+      },
+      {
+        "skill_name": "dummy_skill",
+        "annotations": {},
+        "text": "if you need to take a short nap, set a second alarm for 20 minutes after the original time in case you fall back asleep. What do you reckon?",
+        "confidence": 0.7
+      },
+      {
+        "skill_name": "superbowl_skill",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0
+      },
+      {
+        "skill_name": "personal_info_skill",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0,
+        "human_attributes": {},
+        "bot_attributes": {},
+        "can_continue": "no"
+      },
+      {
+        "skill_name": "oscar_skill",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0
+      },
+      {
+        "skill_name": "alice",
+        "annotations": {},
+        "text": "Why, specifically?",
+        "confidence": 0.65
+      },
+      {
+        "skill_name": "eliza",
+        "annotations": {},
+        "text": "sorry",
+        "confidence": 0.0
+      },
+      {
+        "skill_name": "christmas_new_year_skill",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0,
+        "human_attributes": {},
+        "bot_attributes": {},
+        "working_xmas_scenario": ""
+      },
+      {
+        "skill_name": "tfidf_retrieval",
+        "annotations": {},
+        "text": "I really do not know what to answer.",
+        "confidence": 0
+      },
+      {
+        "skill_name": "program_y",
+        "annotations": {},
+        "text": "Sorry, i'm a socialbot, I cannot do this. If you want to use the requested feature say, Alexa, stop, and try again.",
+        "confidence": 0.98,
+        "is_best": true
+      },
+      {
+        "skill_name": "convert_reddit_with_personality",
+        "annotations": {},
+        "text": "What is your favorite action movie?",
+        "confidence": 0.6060301507537689
+      },
+      {
+        "skill_name": "convert_reddit",
+        "annotations": {},
+        "text": "What is your favorite action movie?",
+        "confidence": 0.6060301507537689
+      },
+      {
+        "skill_name": "cobotqa",
+        "annotations": {},
+        "text": "",
+        "confidence": 0.0
+      },
+      {
+        "skill_name": "cobotqa",
+        "annotations": {},
+        "text": "This might answer your question: An alarm device or system of alarm devices gives an audible, visual or other form of alarm signal about a problem or condition. Any thoughts on alarm?",
+        "confidence": 0.7
+      },
+      {
+        "skill_name": "cobotqa",
+        "annotations": {},
+        "text": "This might answer your question: An alarm device or system of alarm devices gives an audible, visual or other form of alarm signal about a problem or condition. What is your position on alarm?",
+        "confidence": 0.7
+      },
+      {
+        "skill_name": "cobotqa",
+        "annotations": {},
+        "text": "This might answer your question: An alarm device or system of alarm devices gives an audible, visual or other form of alarm signal about a problem or condition. Do you have any particular views on alarm?",
+        "confidence": 0.7
+      }
+    ],
+    "utterances": [
+      {
+        "text": "how are you doing this evening?",
+        "orig_text": null,
+        "active_skill": "dummy_skill",
+        "confidence": 0.6,
+        "annotations": {
+          "sentseg": {
+            "punct_sent": "how are you doing this evening?",
+            "segments": [
+              "how are you doing this evening?"
+            ]
+          },
+          "ner": [
+            []
+          ],
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "wait. twenty seventeen.",
+              "I am waiting. I am very logical and rational.",
+              "it is twenty twenty.",
+              "how are you doing this evening?"
+            ]
+          }
+        },
+        "date_time": "2020-02-10 10:26:29.497000",
+        "user": {
+          "id": "5e412fabd655fa53fa6bc9f7",
+          "persona": {},
+          "attributes": {},
+          "user_type": "bot"
+        }
+      },
+      {
+        "text": "good",
+        "user": {
+          "id": "5e412fabd655fa53fa6bc9f6",
+          "user_telegram_id": "amzn1.ask.account.AEWYXPP5QAP4N7ZG3FWMEPQDRGWX3ICWIMGGBJ4VWGUHCLSVIR57STGW3SHF4J7O2VKRQ6QHESNQP5BMFOE7SBXOPWDMAMCMQW6GTFUG5DC2OEYRLJNG3MNFYQRM55RNIRHIVG25V2TJB6YJLQWVBSFTJNAWT67JDNAMXNZWXRAPZN3A3AF25XFXDVAEQ3ZJUJJ4PZE54PF7F2Q",
+          "persona": {},
+          "profile": {
+            "name": null,
+            "gender": null,
+            "birthdate": null,
+            "location": null,
+            "home_coordinates": null,
+            "work_coordinates": null,
+            "occupation": null,
+            "income_per_year": null
+          },
+          "attributes": {},
+          "user_type": "human"
+        },
+        "annotations": {
+          "asr": {
+            "asr_confidence": "high"
+          },
+          "blacklisted_words": {
+            "inappropriate": false,
+            "profanity": false,
+            "restricted_topics": false
+          },
+          "toxic_classification": {
+            "identity_hate": 0.0020357370376586914,
+            "insult": 0.0012805461883544922,
+            "obscene": 0.0013634860515594482,
+            "severe_toxic": 0.0006582140922546387,
+            "sexual_explicit": 0.001437059952877462,
+            "threat": 0.001264877268113196,
+            "toxic": 0.003560995915904641
+          },
+          "sentiment_classification": {
+            "text": [
+              "positive",
+              0.8889679908752441
+            ]
+          },
+          "sentseg": {
+            "punct_sent": "good.",
+            "segments": [
+              "good."
+            ]
+          },
+          "emotion_classification": {
+            "text": {
+              "anger": 0.3911433815956116,
+              "fear": 0.23039545118808746,
+              "joy": 0.3852027356624603,
+              "love": 0.28184694051742554,
+              "sadness": 0.3172842562198639,
+              "surprise": 0.15187539160251617,
+              "neutral": 0.9989631175994873
+            }
+          },
+          "intent_catcher": {
+            "doing_well": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "dont_understand": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "exit": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "no": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "opinion_request": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "repeat": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "tell_me_more": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "topic_switching": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "weather_forecast_intent": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_can_you_do": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_job": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_name": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_time": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "where_are_you_from": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "who_made_you": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "yes": {
+              "confidence": 0.6893829107284546,
+              "detected": 1
+            }
+          },
+          "cobot_nounphrases": [],
+          "attitude_classification": {
+            "text": "positive",
+            "confidence": 0.459440141916275
+          },
+          "ner": [
+            []
+          ],
+          "cobot_topics": {
+            "text": [
+              "Phatic"
+            ]
+          },
+          "cobot_dialogact": {
+            "intents": [
+              "General_ChatIntent"
+            ],
+            "topics": [
+              "Phatic"
+            ]
+          },
+          "cobot_offensiveness": {
+            "text": [
+              "non-toxic"
+            ],
+            "confidence": [
+              4.726605e-07
+            ],
+            "is_blacklisted": [
+              "not blacklist"
+            ]
+          },
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "I am waiting. I am very logical and rational.",
+              "it is twenty twenty.",
+              "how are you doing this evening?",
+              "good."
+            ]
+          }
+        },
+        "hypotheses": [
+          {
+            "skill_name": "program_y",
+            "annotations": {},
+            "text": "I'm glad. what's your favorite movie?",
+            "confidence": 0.98,
+            "is_best": true
+          },
+          {
+            "skill_name": "cobotqa",
+            "annotations": {},
+            "text": "That's nice of you to say.",
+            "confidence": 0.95
+          },
+          {
+            "skill_name": "movie_tfidf_retrieval",
+            "annotations": {},
+            "text": "she said it was an emotional time when she realized it was going to be too hard on her body.",
+            "confidence": 0.7525272594714828
+          },
+          {
+            "skill_name": "alice",
+            "annotations": {},
+            "text": "Ayuh.",
+            "confidence": 0.65
+          },
+          {
+            "skill_name": "dummy_skill",
+            "annotations": {},
+            "text": "do you follow the mls?",
+            "confidence": 0.6
+          },
+          {
+            "skill_name": "dummy_skill",
+            "annotations": {},
+            "text": "Sorry, probably, I didn't get what you meant.",
+            "confidence": 0.5
+          },
+          {
+            "skill_name": "oscar_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "superbowl_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "personal_info_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {},
+            "can_continue": "no"
+          },
+          {
+            "skill_name": "eliza",
+            "annotations": {},
+            "text": "sorry",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "christmas_new_year_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {},
+            "working_xmas_scenario": ""
+          },
+          {
+            "skill_name": "movie_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {},
+            "bot_attitudes": [],
+            "human_attitudes": []
+          }
+        ],
+        "date_time": "2020-02-10 10:26:34.114000",
+        "attributes": {
+          "device_id": "amzn1.ask.device.AHNGXUANUECR72EIU4MHUMFYUYXOVZKTEE5325MJJHWFBS25I3TTR7DP7VJI3M2XZV7U6B7SY2XIJ77HL4NSZS5SEVJ5747OF5KAYEXLPVBTDHJACMQEPPJ5T2EFMBBMWYL6UNOYIL23ZQZECTO7WA727Q3TQIHNZ62WLB2DBMDKL6ERSI3LE",
+          "session_id": "amzn1.echo-api.session.80f2abe9-11fb-4ac1-a3d0-b06d17ca7dc1",
+          "request_id": "amzn1.echo-api.request.694e66f0-34ad-4857-a15e-559bfe88a8d2",
+          "conversation_id": null,
+          "speech": {
+            "hypotheses": [
+              {
+                "tokens": [
+                  {
+                    "value": "good",
+                    "confidence": 0.976,
+                    "_confidenceV2": {
+                      "score": 0.976
+                    },
+                    "startOffsetInMilliseconds": 840,
+                    "endOffsetInMilliseconds": 1540
+                  }
+                ],
+                "confidence": 0.987,
+                "_confidenceV2": {
+                  "score": 0.987
+                }
+              }
+            ],
+            "model": {
+              "version": "20191211-210258"
+            },
+            "signalToNoiseRatio": {
+              "valueInDecibels": 23.835712,
+              "version": "1.0"
+            }
+          }
+        },
+        "has_is_best": true
+      },
+      {
+        "text": "I'm glad. what's your favorite movie?",
+        "orig_text": null,
+        "active_skill": "program_y",
+        "confidence": 0.98,
+        "annotations": {
+          "sentseg": {
+            "punct_sent": "I am glad. what's your favorite movie?",
+            "segments": [
+              "I am glad.",
+              "what's your favorite movie?"
+            ]
+          },
+          "ner": [
+            [],
+            []
+          ],
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "it is twenty twenty.",
+              "how are you doing this evening?",
+              "good.",
+              "I am glad. what's your favorite movie?"
+            ]
+          }
+        },
+        "date_time": "2020-02-10 10:26:35.096000",
+        "user": {
+          "id": "5e412fabd655fa53fa6bc9f7",
+          "persona": {},
+          "attributes": {},
+          "user_type": "bot"
+        }
+      },
+      {
+        "text": "alarm",
+        "user": {
+          "id": "5e412fabd655fa53fa6bc9f6",
+          "user_telegram_id": "amzn1.ask.account.AEWYXPP5QAP4N7ZG3FWMEPQDRGWX3ICWIMGGBJ4VWGUHCLSVIR57STGW3SHF4J7O2VKRQ6QHESNQP5BMFOE7SBXOPWDMAMCMQW6GTFUG5DC2OEYRLJNG3MNFYQRM55RNIRHIVG25V2TJB6YJLQWVBSFTJNAWT67JDNAMXNZWXRAPZN3A3AF25XFXDVAEQ3ZJUJJ4PZE54PF7F2Q",
+          "persona": {},
+          "profile": {
+            "name": null,
+            "gender": null,
+            "birthdate": null,
+            "location": null,
+            "home_coordinates": null,
+            "work_coordinates": null,
+            "occupation": null,
+            "income_per_year": null
+          },
+          "attributes": {},
+          "user_type": "human"
+        },
+        "annotations": {
+          "blacklisted_words": {
+            "inappropriate": false,
+            "profanity": false,
+            "restricted_topics": false
+          },
+          "asr": {
+            "asr_confidence": "low"
+          },
+          "toxic_classification": {
+            "identity_hate": 0.0004763007164001465,
+            "insult": 0.0009635984897613525,
+            "obscene": 0.0009244382381439209,
+            "severe_toxic": 0.0002987384796142578,
+            "sexual_explicit": 0.0006374736549332738,
+            "threat": 0.0008997807744890451,
+            "toxic": 0.0025298427790403366
+          },
+          "sentseg": {
+            "punct_sent": "alarm.",
+            "segments": [
+              "alarm."
+            ]
+          },
+          "sentiment_classification": {
+            "text": [
+              "positive",
+              0.6334823369979858
+            ]
+          },
+          "emotion_classification": {
+            "text": {
+              "anger": 0.7219830751419067,
+              "fear": 0.7821379899978638,
+              "joy": 0.3304902911186218,
+              "love": 0.10210276395082474,
+              "sadness": 0.4515477120876312,
+              "surprise": 0.06954602152109146,
+              "neutral": 0.980995237827301
+            }
+          },
+          "intent_catcher": {
+            "doing_well": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "dont_understand": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "exit": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "no": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "opinion_request": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "repeat": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "tell_me_more": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "topic_switching": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "weather_forecast_intent": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_can_you_do": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_job": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_is_your_name": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "what_time": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "where_are_you_from": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "who_made_you": {
+              "confidence": 0.0,
+              "detected": 0
+            },
+            "yes": {
+              "confidence": 0.0,
+              "detected": 0
+            }
+          },
+          "cobot_nounphrases": [
+            "alarm"
+          ],
+          "attitude_classification": {
+            "text": "very_positive",
+            "confidence": 0.5508825182914734
+          },
+          "ner": [
+            []
+          ],
+          "cobot_dialogact": {
+            "intents": [
+              "General_ChatIntent"
+            ],
+            "topics": [
+              "Other"
+            ]
+          },
+          "cobot_topics": {
+            "text": [
+              "Weather_Time"
+            ]
+          },
+          "cobot_offensiveness": {
+            "text": [
+              "non-toxic"
+            ],
+            "confidence": [
+              5.5429666e-07
+            ],
+            "is_blacklisted": [
+              "not blacklist"
+            ]
+          },
+          "sentrewrite": {
+            "clusters": [],
+            "modified_sents": [
+              "how are you doing this evening?",
+              "good.",
+              "I am glad. what's your favorite movie?",
+              "alarm."
+            ]
+          }
+        },
+        "hypotheses": [
+          {
+            "skill_name": "program_y",
+            "annotations": {},
+            "text": "Sorry, i'm a socialbot, I cannot do this. If you want to use the requested feature say, Alexa, stop, and try again.",
+            "confidence": 0.98,
+            "is_best": true
+          },
+          {
+            "skill_name": "dummy_skill",
+            "annotations": {},
+            "text": "if you need to take a short nap, set a second alarm for 20 minutes after the original time in case you fall back asleep. What do you reckon?",
+            "confidence": 0.7
+          },
+          {
+            "skill_name": "cobotqa",
+            "annotations": {},
+            "text": "This might answer your question: An alarm device or system of alarm devices gives an audible, visual or other form of alarm signal about a problem or condition. Any thoughts on alarm?",
+            "confidence": 0.7
+          },
+          {
+            "skill_name": "cobotqa",
+            "annotations": {},
+            "text": "This might answer your question: An alarm device or system of alarm devices gives an audible, visual or other form of alarm signal about a problem or condition. What is your position on alarm?",
+            "confidence": 0.7
+          },
+          {
+            "skill_name": "cobotqa",
+            "annotations": {},
+            "text": "This might answer your question: An alarm device or system of alarm devices gives an audible, visual or other form of alarm signal about a problem or condition. Do you have any particular views on alarm?",
+            "confidence": 0.7
+          },
+          {
+            "skill_name": "alice",
+            "annotations": {},
+            "text": "Why, specifically?",
+            "confidence": 0.65
+          },
+          {
+            "skill_name": "convert_reddit_with_personality",
+            "annotations": {},
+            "text": "What is your favorite action movie?",
+            "confidence": 0.6060301507537689
+          },
+          {
+            "skill_name": "convert_reddit",
+            "annotations": {},
+            "text": "What is your favorite action movie?",
+            "confidence": 0.6060301507537689
+          },
+          {
+            "skill_name": "dummy_skill",
+            "annotations": {},
+            "text": "are you interested in clothing?",
+            "confidence": 0.6
+          },
+          {
+            "skill_name": "dummy_skill",
+            "annotations": {},
+            "text": "I really do not know what to answer.",
+            "confidence": 0.5
+          },
+          {
+            "skill_name": "superbowl_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "personal_info_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {},
+            "can_continue": "no"
+          },
+          {
+            "skill_name": "oscar_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "eliza",
+            "annotations": {},
+            "text": "sorry",
+            "confidence": 0.0
+          },
+          {
+            "skill_name": "christmas_new_year_skill",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0,
+            "human_attributes": {},
+            "bot_attributes": {},
+            "working_xmas_scenario": ""
+          },
+          {
+            "skill_name": "tfidf_retrieval",
+            "annotations": {},
+            "text": "I really do not know what to answer.",
+            "confidence": 0
+          },
+          {
+            "skill_name": "cobotqa",
+            "annotations": {},
+            "text": "",
+            "confidence": 0.0
+          }
+        ],
+        "date_time": "2020-02-10 10:26:42.658000",
+        "attributes": {
+          "device_id": "amzn1.ask.device.AHNGXUANUECR72EIU4MHUMFYUYXOVZKTEE5325MJJHWFBS25I3TTR7DP7VJI3M2XZV7U6B7SY2XIJ77HL4NSZS5SEVJ5747OF5KAYEXLPVBTDHJACMQEPPJ5T2EFMBBMWYL6UNOYIL23ZQZECTO7WA727Q3TQIHNZ62WLB2DBMDKL6ERSI3LE",
+          "session_id": "amzn1.echo-api.session.80f2abe9-11fb-4ac1-a3d0-b06d17ca7dc1",
+          "request_id": "amzn1.echo-api.request.2104f49e-6620-4a6f-b911-3c3bd934f9ec",
+          "conversation_id": null,
+          "speech": {
+            "hypotheses": [
+              {
+                "tokens": [
+                  {
+                    "value": "alarm",
+                    "confidence": 0.396,
+                    "_confidenceV2": {
+                      "score": 0.396
+                    },
+                    "startOffsetInMilliseconds": 2726,
+                    "endOffsetInMilliseconds": 3257
+                  }
+                ],
+                "confidence": 0.042,
+                "_confidenceV2": {
+                  "score": 0.042
+                }
+              },
+              {
+                "tokens": [
+                  {
+                    "value": "no",
+                    "confidence": 0.079,
+                    "_confidenceV2": {
+                      "score": 0.079
+                    },
+                    "startOffsetInMilliseconds": 2726,
+                    "endOffsetInMilliseconds": 3257
+                  }
+                ],
+                "confidence": 0.021,
+                "_confidenceV2": {
+                  "score": 0.021
+                }
+              },
+              {
+                "tokens": [
+                  {
+                    "value": "alarm",
+                    "confidence": 0.396,
+                    "_confidenceV2": {
+                      "score": 0.396
+                    },
+                    "startOffsetInMilliseconds": 2726,
+                    "endOffsetInMilliseconds": 3257
+                  },
+                  {
+                    "value": "off",
+                    "confidence": 0.143,
+                    "_confidenceV2": {
+                      "score": 0.143
+                    },
+                    "startOffsetInMilliseconds": 3283,
+                    "endOffsetInMilliseconds": 4030
+                  }
+                ],
+                "confidence": 0.02,
+                "_confidenceV2": {
+                  "score": 0.02
+                }
+              },
+              {
+                "tokens": [
+                  {
+                    "value": "off",
+                    "confidence": 0.143,
+                    "_confidenceV2": {
+                      "score": 0.143
+                    },
+                    "startOffsetInMilliseconds": 3283,
+                    "endOffsetInMilliseconds": 4030
+                  }
+                ],
+                "confidence": 0.02,
+                "_confidenceV2": {
+                  "score": 0.02
+                }
+              }
+            ],
+            "model": {
+              "version": "20191211-210258"
+            },
+            "signalToNoiseRatio": {
+              "valueInDecibels": 17.415419,
+              "version": "1.0"
+            }
+          }
+        },
+        "has_is_best": true
+      }
+    ]
+  }
+]
