@@ -201,12 +201,12 @@
           </think>
           <condition name="time_of_day">
               <!--<li value="night">Good Night, this is an Alexa Prize Socialbot! Why don't you sleep so late?</li>-->
-              <li value="night">Good Evening, this is an Alexa Prize Socialbot! Happy Valentine's Day!</li>
-              <li value="morning">Good Morning, this is an Alexa Prize Socialbot! Happy Valentine's Day!</li>
-              <li value="day">Hello, this is an Alexa Prize Socialbot! Happy Valentine's Day!</li>
-              <li value="evening">Good Evening, this is an Alexa Prize Socialbot! Happy Valentine's Day!</li>
+              <li value="night">Good Evening, this is an Alexa Prize Socialbot!</li>
+              <li value="morning">Good Morning, this is an Alexa Prize Socialbot!</li>
+              <li value="day">Hello, this is an Alexa Prize Socialbot!</li>
+              <li value="evening">Good Evening, this is an Alexa Prize Socialbot!</li>
               <!--<li>Hi, this is an Alexa Prize Socialbot. What timezone do you use?</li>-->
-              <li>Hi, this is an Alexa Prize Socialbot! Happy Valentine's Day!</li>
+              <li>Hi, this is an Alexa Prize Socialbot!</li>
           </condition>
 
           <!-- How_are_you interaction starts here:-->
