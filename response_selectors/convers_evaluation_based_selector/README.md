@@ -1,6 +1,8 @@
-# Data Labelling
+# Labeled Data
 
-Use data_labelling.py script to label data.
+Labeled data is located in `response_selectors/convers_evaluation_based_selector/labeled_data/`.
+
+To label more data you can use data_labelling.py script.
 It takes `dialog_id` from http://ec2-3-90-214-142.compute-1.amazonaws.com/admin/conversation/
 and `save_dir` (should be labeled_data/ folder) as an input.
 It provides console interface to label the data for quality measuring for response selector.
@@ -37,6 +39,15 @@ When dialog ends it saves it into labeled_data folder.
 
 It takes `--data_dir` as an input (the same as save_dir from data labelling script).
 Outputs overall accuracy.
+
+Example of usage:
+
+```
+python response_selectors/convers_evaluation_based_selector/measure_quality.py \
+                   --data_dir response_selectors/convers_evaluation_based_selector/labeled_data/
+
+Overall accuracy: 0.5185185185185185
+```
 
 ## How to run conversation evaluator locally
 
