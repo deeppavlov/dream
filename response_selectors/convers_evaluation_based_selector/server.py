@@ -46,7 +46,12 @@ def custom_request(url, headers, data, timeout, method='POST'):
 def respond():
     st_time = time.time()
     dialogs_batch = request.json["dialogs"]
-    response_candidates = [dialog["utterances"][-1]["hypotheses"] for dialog in dialogs_batch]
+    response_candidates_raw = [dialog["utterances"][-1]["hypotheses"] for dialog in dialogs_batch]
+    response_candidates = []
+    for hypots_list in response_candidates_raw:
+        new_hypots = [h for h in hypots_list if h['confidence'] > 0]
+        response_candidates.append(new_hypots)
+
     conversations = []
     dialog_ids = []
     selected_skill_names = []
@@ -215,8 +220,10 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                    }
     confidences[ids] = 0.
 
-    # check for repeatitions
+    # check for repetitions
     bot_utterances = [sent_tokenize(uttr["text"].lower()) for uttr in dialog["bot_utterances"]]
+    prev_large_utterances = [utt for utt in bot_utterances[:-40] if len(utt) >= 40]
+    bot_utterances = prev_large_utterances + bot_utterances[-40:]
     # flatten 2d list to 1d list of all appeared sentences of bot replies
     bot_utterances = sum(bot_utterances, [])
     bot_utt_counter = Counter(bot_utterances)
@@ -226,7 +233,6 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
         coeff = 1
         for cand_sent in cand_sents:
             coeff += bot_utt_counter[cand_sent]
-
         confidences[i] /= coeff
         scores[i]['isResponseInteresting'] /= coeff
         scores[i]['responseEngagesUser'] /= coeff
@@ -290,11 +296,11 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
         cand_scores = scores[i]
         confidence = confidences[i]
         skill_name = skill_names[i]
-        score_conv_eval = cand_scores["isResponseOnTopic"] + \
-            cand_scores["isResponseInteresting"] + \
-            cand_scores["responseEngagesUser"] + \
-            cand_scores["isResponseComprehensible"] - \
-            cand_scores["isResponseErroneous"]
+        score_conv_eval = sum([cand_scores["isResponseOnTopic"],
+                               cand_scores["isResponseInteresting"],
+                               cand_scores["responseEngagesUser"],
+                               cand_scores["isResponseComprehensible"]])
+        score_conv_eval -= cand_scores["isResponseErroneous"]
         score = conv_eval_strength * score_conv_eval + confidence_strength * confidence
         logger.info(f'Skill {skill_name} has score: {score}. Toxicity: {toxicities[i]} '
                     f'Cand scores: {cand_scores}')
