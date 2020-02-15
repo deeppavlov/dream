@@ -72,6 +72,9 @@ def respond():
             # cobot recommends to take 2 last utt for conversation evaluation service
             conv["pastUtterances"] = [uttr["text"] for uttr in dialog["human_utterances"]][-3:-1]
             conv["pastResponses"] = [uttr["text"] for uttr in dialog["bot_utterances"]][-2:]
+            if len(dialog["utterances"]) > 1:
+                assert len(dialog["human_utterances"]) > 0
+                assert len(dialog["bot_utterances"]) > 0
             # collect all the conversations variants to evaluate them batch-wise
             conversations += [conv]
             dialog_ids += [i]
