@@ -2,8 +2,9 @@ from collections import defaultdict, Counter
 
 
 class Pipeline:
-    def __init__(self, services, input_service, responder_service, last_chance_service):
-        self.last_chance_service = None
+    def __init__(self, services, input_service, responder_service, last_chance_service, timeout_service):
+        self.last_chance_service = last_chance_service
+        self.timeout_service = timeout_service
         wrong_names = [k for k, v in Counter([i.name for i in services]).items() if v != 1]
         if wrong_names:
             raise ValueError(f'there are some duplicate service names presented {wrong_names}')
@@ -16,7 +17,6 @@ class Pipeline:
         self.add_input_service(input_service)
         self.add_responder_service(responder_service)
         self.fill_dependent_service_chains_and_required_services()
-        self.add_last_chance_service(last_chance_service)
 
     def get_service_by_name(self, service_name):
         if not service_name:
@@ -43,7 +43,8 @@ class Pipeline:
         waiting = waiting or set()
         skipped = skipped or set()
 
-        if self.last_chance_service and self.last_chance_service.name in done:
+        if (self.last_chance_service and self.last_chance_service.name in done) or \
+           (self.timeout_service and self.timeout_service.name in done):
             return [service for service in self.services.values() if service.is_responder()]
         completed_names = done | skipped
         service_names = set(self.services.keys())
@@ -121,8 +122,3 @@ class Pipeline:
                 req.dependent_services.add(service)
                 for ds in service.dependent_services:
                     req.dependent_services.add(ds)
-
-    def add_last_chance_service(self, service):
-        if not service.is_last_chance():
-            raise ValueError('service should be a last chance responder')
-        self.last_chance_service = service

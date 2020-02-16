@@ -24,11 +24,13 @@ if [[ "$TARGET" == "prod" ]]; then
   DOCKER_HOST="localhost:2374"
   REGISTRY_AUTH="dream_prod"
   TELEGRAM_AGENT=""
+  DP_AGENT_URL=`cat .env.prod | grep -oP "DP_AGENT_URL=\K.*"`
 elif [[ "$TARGET" == "dev" ]]; then
   ENV_FILE=".env.staging"
   DOCKER_HOST="localhost:2375"
   REGISTRY_AUTH="dream_staging"
   TELEGRAM_AGENT=",telegram_agent.yml"
+  DP_AGENT_URL=`cat .env.staging | grep -oP "DP_AGENT_URL=\K.*"`
 else
   echo "Unknown TARGET: $TARGET"
   exit 1
@@ -39,8 +41,8 @@ if [[ "$MODE" == "agent" || "$MODE" == "all" ]]; then
   printf "\t Pushing to ECR\n"
   VERSION="$(git rev-parse --short HEAD)" ENV_FILE=$ENV_FILE DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com ./push_to_ecr.sh
   printf "\t Docker stack rm\n"
-  DOCKER_HOST=$DOCKER_HOST docker stack rm $REGISTRY_AUTH 
-  
+  DOCKER_HOST=$DOCKER_HOST docker stack rm $REGISTRY_AUTH
+
   printf "\t Waiting till all down and network removed..\n"
   limit=15
   until [ -z "$(DOCKER_HOST=$DOCKER_HOST docker service ls --filter label=com.docker.stack.namespace=$REGISTRY_AUTH -q)" ] || [ "$limit" -lt 0 ]; do
@@ -60,6 +62,30 @@ if [[ "$MODE" == "agent" || "$MODE" == "all" ]]; then
 
   printf "\t Docker stack deploy\n"
   VERSION="$(git rev-parse --short HEAD)" ENV_FILE=$ENV_FILE DOCKER_REGISTRY=807746935730.dkr.ecr.us-east-1.amazonaws.com DOCKER_HOST=$DOCKER_HOST docker stack deploy --prune --compose-file docker-compose.yml,staging.yml$TELEGRAM_AGENT --with-registry-auth $REGISTRY_AUTH
+
+  echo "$TARGET: waiting till services loaded for 90 seconds"
+  sleep 90;
+
+  echo "$TARGET: waiting till agent is up...";
+  while [[ "$(curl -m 5 -s -o /dev/null -w ''%{http_code}'' $DP_AGENT_URL/ping)" != "200" ]]; do
+    echo "$TARGET: waiting till agent is up...";
+    sleep 5;
+  done
+  echo "$TARGET: /ping works";
+
+  echo "$TARGET: waiting till agent responded to /start";
+  while [[ "$(curl --header "Content-Type: application/json" --data '{"user_id":"deploy","payload":"/start", "ignore_deadline_timestamp": "true"}' --request POST -m 5 -s -o /dev/null -w ''%{http_code}'' $DP_AGENT_URL)" != "200" ]]; do
+    echo "$TARGET: waiting till agent responded to /start with 200 status code";
+    sleep 5;
+  done
+  echo "$TARGET: success response to /start";
+
+  echo "$TARGET: waiting till agent responded to QUERY";
+  while [[ "$(curl --header "Content-Type: application/json" --data '{"user_id":"deploy","payload":"after_deploy_warm", "ignore_deadline_timestamp": "true"}' --request POST -m 5 -s -o /dev/null -w ''%{http_code}'' $DP_AGENT_URL)" != "200" ]]; do
+    echo "$TARGET: waiting till agent responded to QUERY with 200 status code";
+    sleep 5;
+  done
+  echo "$TARGET success agent response to QUERY";
 fi
 
 echo "Successfully deployed"

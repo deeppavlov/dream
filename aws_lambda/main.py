@@ -69,7 +69,7 @@ def call_dp_agent(user_id, text, request_data):
             json={'user_id': user_id, 'payload': text, 'device_id': device_id,
                   'session_id': session_id, 'request_id': request_id,
                   'conversation_id': conversation_id, 'speech': speech},
-            timeout=4).json()
+            timeout=5).json()
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         sentry_sdk.capture_exception(e)
         logger.exception("AWS_LAMBDA Timeout")
