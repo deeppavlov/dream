@@ -1,4 +1,5 @@
 import asyncio
+from time import time
 from typing import Any, Hashable
 
 from core.log import BaseResponseLogger
@@ -32,6 +33,8 @@ class Agent:
 
     def flush_record(self, dialog_id: str):
         workflow_record = self.workflow_manager.flush_record(dialog_id)
+        if 'timeout_response_task' in workflow_record:
+            workflow_record['timeout_response_task'].cancel()
         return workflow_record
 
     async def register_msg(self, utterance: str, user_telegram_id: Hashable,
@@ -53,6 +56,10 @@ class Agent:
         task_id = self.workflow_manager.add_task(dialog_id, service, utterance, 0)
         self._response_logger.log_start(task_id, {'dialog': dialog}, service)
         asyncio.create_task(self.process(task_id, utterance, message_attrs=message_attrs))
+        if deadline_timestamp:
+            self.workflow_manager.set_timeout_response_task(
+                dialog_id, asyncio.create_task(self.timeout_process(dialog_id, deadline_timestamp))
+            )
 
         if require_response:
             await event.wait()
@@ -60,10 +67,10 @@ class Agent:
 
     async def process(self, task_id, response: Any = None, **kwargs):
         workflow_record, task_data = self.workflow_manager.complete_task(task_id, response, **kwargs)
+        if not workflow_record:
+            return
         service = task_data['service']
-
         logger.info(f"Service {service.label}: {response}")
-
         self._response_logger.log_end(task_id, workflow_record, service)
 
         if isinstance(response, Exception):
@@ -99,11 +106,32 @@ class Agent:
         done, waiting, skipped = self.workflow_manager.get_services_status(workflow_record['dialog'].id)
         next_services = self.pipeline.get_next_services(done, waiting, skipped)
 
+        await self.create_processing_tasks(workflow_record, next_services)
+
+    async def create_processing_tasks(self, workflow_record, next_services):
         for service in next_services:
             tasks = service.apply_dialog_formatter(workflow_record)
             for ind, task_data in enumerate(tasks):
                 task_id = self.workflow_manager.add_task(workflow_record['dialog'].id, service, task_data, ind)
                 self._response_logger.log_start(task_id, workflow_record, service)
-                asyncio.create_task(
-                    service.connector_func(payload={'task_id': task_id, 'payload': task_data}, callback=self.process)
+                self.workflow_manager.set_task_object(
+                    workflow_record['dialog'].id,
+                    task_id,
+                    asyncio.create_task(
+                        service.connector_func(
+                            payload={'task_id': task_id, 'payload': task_data}, callback=self.process
+                        )
+                    )
                 )
+
+    async def timeout_process(self, dialog_id, deadline_timestamp):
+        await asyncio.sleep(deadline_timestamp - time())
+        workflow_record = self.workflow_manager.get_workflow_record(dialog_id)
+        if not workflow_record:
+            return
+        next_services = [self.pipeline.timeout_service]
+        for k, v in self.workflow_manager.get_pending_tasks(dialog_id).items():
+            v['task_object'].cancel()
+            self._response_logger.log_end(k, workflow_record, v['task_data']['service'], True)
+
+        await self.create_processing_tasks(workflow_record, next_services)

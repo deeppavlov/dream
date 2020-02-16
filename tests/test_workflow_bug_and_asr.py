@@ -27,7 +27,7 @@ def test_asr_low_confidence():
 
     speech = {'hypotheses': [{'tokens': [{'confidence': 0.1, 'value': "yes"}]}]}
     response = requests.post(URL, json={"user_id": "test", "payload": "yes", "speech": speech}).json()
-    assert response['response'] in asr_responses
+    assert response['response'] in asr_responses, print(response)
     print("SUCCESS test_asr_low_confidence from agent")
 
 

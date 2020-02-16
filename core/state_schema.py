@@ -441,14 +441,14 @@ class Human:
             self._id = user_obj.inserted_id
             self.temp_id = None
         elif is_changed:
-            user_obj = await db[self.collection_name].update_one(
-                {'_id': self._id},
+            user_obj = await db[self.collection_name].update_one({
+                '_id': self._id},
                 {'$set': {
                     'persona': self.persona,
-                    'profile': self.profile, 'attributes': self.attributes
+                    'profile': self.profile,
+                    'attributes': self.attributes
                 }
-                }
-            )
+            })
         return self._id
 
 
@@ -509,10 +509,13 @@ class Bot:
             self._id = bot_obj.inserted_id
             self.temp_id = None
         elif is_changed:
-            bot_obj = await db[self.collection_name].update_one(
-                {'_id': self._id},
-                {'$set': {'persona': self.persona, 'attributes': self.attributes}}
-            )
+            bot_obj = await db[self.collection_name].update_one({
+                '_id': self._id},
+                {'$set': {
+                    'persona': self.persona,
+                    'attributes': self.attributes
+                }
+            })
         return self._id
 
 
