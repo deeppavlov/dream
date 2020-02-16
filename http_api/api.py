@@ -7,9 +7,9 @@ from aiohttp import web
 from http_api.handlers import ApiHandler, PagesHandler, WSstatsHandler
 
 
-async def init_app(agent, session, consumers, logger_stats, debug=False):
+async def init_app(agent, session, consumers, logger_stats, debug=False, response_time_limit=0):
     app = web.Application()
-    handler = ApiHandler(debug)
+    handler = ApiHandler(debug, response_time_limit)
     pages = PagesHandler(debug)
     stats = WSstatsHandler()
     consumers = [asyncio.ensure_future(i.call_service(agent.process)) for i in consumers]
@@ -27,6 +27,9 @@ async def init_app(agent, session, consumers, logger_stats, debug=False):
             c.cancel()
         if app['client_session']:
             await app['client_session'].close()
+        tasks = asyncio.all_tasks()
+        for task in tasks:
+            task.cancel()
 
     app.router.add_post('', handler.handle_api_request)
     app.router.add_get('/api/dialogs/{dialog_id}', handler.dialog)

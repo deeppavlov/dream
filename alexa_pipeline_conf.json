@@ -17,7 +17,7 @@
         "last_chance_service": {
             "connector": {
                 "protocol": "python",
-                "class_name": "core.connectors:LastChanceConnector",
+                "class_name": "core.connectors:PredefinedTextConnector",
                 "response_text": "Sorry, something went wrong inside. Please tell me, what did you say.",
                 "annotations": {
                   "sentseg": {
@@ -40,6 +40,33 @@
             },
             "state_manager_method": "add_bot_utterance_last_chance",
             "tags": ["last_chance"]
+        },
+        "timeout_service": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "core.connectors:PredefinedTextConnector",
+                "response_text": "Sorry, I need to think more on that. Let's talk about something else.",
+                "annotations": {
+                  "sentseg": {
+                    "punct_sent": "Sorry, I need to think more on that. Let's talk about something else.",
+                    "segments": [
+                      "Sorry, I need to think more on that.",
+                      "Let's talk about something else."
+                    ]
+                  },
+                  "sentrewrite": {
+                    "clusters": [],
+                    "modified_sents": [
+                      "Sorry, I need to think more on that. Let's talk about something else."
+                    ]
+                  },
+                  "ner": [
+                    []
+                  ]
+                }
+            },
+            "state_manager_method": "add_bot_utterance_last_chance",
+            "tags": ["timeout"]
         },
         "annotators_1": {
             "sentseg": {

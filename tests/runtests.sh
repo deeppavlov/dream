@@ -95,6 +95,9 @@ dockercompose_cmd logs -f --tail="all" --timestamps &
 wait_service "http://0.0.0.0:$AGENT_PORT/ping" pong
 
 if [[ "$MODE" == "test_dialog" || "$MODE" == "all" ]]; then
+    echo "Warmup for tests"
+    dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/test_response.py
+
     echo "Test workflow bug and asr"
     dockercompose_cmd exec -T -u $(id -u) agent python3 tests/test_workflow_bug_and_asr.py
 

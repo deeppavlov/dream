@@ -57,7 +57,7 @@ def respond():
                                   headers=headers,
                                   data=json.dumps({'conversations': conversations}),
                                   method='POST',
-                                  timeout=2)
+                                  timeout=1)
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         sentry_sdk.capture_exception(e)
         logger.error("CoBotDialogActClassification Timeout")
