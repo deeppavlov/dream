@@ -20,6 +20,7 @@ class PipelineConfigParser:
         self.services = []
         self.services_names = defaultdict(set)
         self.last_chance_service = None
+        self.timeout_service = None
         self.connectors = {}
         self.workers = []
         self.session = None
@@ -140,6 +141,8 @@ class PipelineConfigParser:
             response_formatter=response_formatter, label=name)
         if service.is_last_chance():
             self.last_chance_service = service
+        elif service.is_timeout():
+            self.timeout_service = service
         else:
             self.services.append(service)
 

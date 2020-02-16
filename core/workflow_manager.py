@@ -21,12 +21,17 @@ class WorkflowManager:
                                       f'"{self.workflow_records[str(dialog.id)]["dialog"].utterances[-1].text}"')
             self.get_services_status(str(dialog.id))
             raise ValueError(f'dialog with id {dialog.id} is already in workflow')
-        workflow_record = {'dialog': dialog, 'services': defaultdict(dict), 'tasks': set()}
+        workflow_record = {'dialog': dialog, 'services': defaultdict(dict), 'tasks': dict()}
         if deadline_timestamp:
             workflow_record['deadline_timestamp'] = deadline_timestamp
         workflow_record.update(kwargs)
-        workflow_logger.info(f'New workflow record for dialog {dialog.id} by {dialog.human.telegram_id} was added')
         self.workflow_records[str(dialog.id)] = workflow_record
+
+    def get_workflow_record(self, dialog_id):
+        workflow_record = self.workflow_records.get(dialog_id, None)
+        if workflow_record:
+            return workflow_record
+        return None
 
     def get_dialog_by_id(self, dialog_id: str) -> Dialog:
         workflow_record = self.workflow_records.get(dialog_id, None)
@@ -48,10 +53,24 @@ class WorkflowManager:
         }
 
         workflow_record['services'][service.name]['pending_tasks'].add(task_id)
-        workflow_record['tasks'].add(task_id)
+        workflow_record['tasks'][task_id] = {'task_data': task_data, 'task_object': None}
         self.tasks[task_id] = task_data
-        workflow_logger.info(f'New task {service.name} for dialog {dialog_id} was created')
         return task_id
+
+    def set_task_object(self, dialog_id, task_id, task_object):
+        workflow_record = self.workflow_records.get(dialog_id, None)
+        if workflow_record and task_id in workflow_record['tasks']:
+            workflow_record['tasks'][task_id]['task_object'] = task_object
+
+    def set_timeout_response_task(self, dialog_id, task_object):
+        workflow_record = self.workflow_records.get(dialog_id, None)
+        if workflow_record:
+            workflow_record['timeout_response_task'] = task_object
+
+    def get_pending_tasks(self, dialog_id):
+        workflow_record = self.workflow_records.get(dialog_id, None)
+        if workflow_record:
+            return workflow_record['tasks']
 
     def skip_service(self, dialog_id: str, service: Service) -> None:
         workflow_record = self.workflow_records.get(dialog_id, None)
@@ -92,7 +111,7 @@ class WorkflowManager:
                                   f"but corresponding workflow record was flushed earlier")
             return workflow_record, task
 
-        workflow_record['tasks'].discard(task_id)
+        workflow_record['tasks'].pop(task_id)
         workflow_record['services'][task['service'].name]['pending_tasks'].discard(task_id)
 
         if not workflow_record['services'][task['service'].name]['pending_tasks']:
@@ -113,7 +132,7 @@ class WorkflowManager:
         workflow_record = self.workflow_records.pop(dialog_id, None)
         if not workflow_record:
             return None
-        for i in workflow_record.pop('tasks', set()):
+        for i in workflow_record.pop('tasks', {}).keys():
             self.tasks[i]['workflow_record'] = workflow_record
         workflow_logger.info(f'A record for {dialog_id} was successfully flushed from workflow')
         return workflow_record

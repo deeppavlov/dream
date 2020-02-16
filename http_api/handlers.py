@@ -1,6 +1,7 @@
 import asyncio
 from datetime import datetime
 from string import hexdigits
+from time import time
 
 import aiohttp_jinja2
 from aiohttp import web
@@ -17,8 +18,9 @@ logger.setLevel(logging.INFO)
 
 
 class ApiHandler:
-    def __init__(self, debug=False):
+    def __init__(self, debug=False, response_time_limit=None):
         self.debug = debug
+        self.response_time_limit = response_time_limit
 
     async def handle_api_request(self, request):
         async def handle_command(payload, user_id, state_manager):
@@ -29,13 +31,21 @@ class ApiHandler:
         response = {}
         register_msg = request.app['agent'].register_msg
         if request.method == 'POST':
-            if 'content-type' not in request.headers or \
-                    not request.headers['content-type'].startswith('application/json'):
+            if 'content-type' not in request.headers \
+                    or not request.headers['content-type'].startswith('application/json'):
                 raise web.HTTPBadRequest(reason='Content-Type should be application/json')
             data = await request.json()
 
             user_id = data.pop('user_id')
             payload = data.pop('payload', '')
+            ignore_deadline_timestamp = data.pop('ignore_deadline_timestamp', False)
+
+            deadline_timestamp = None
+            if self.response_time_limit:
+                deadline_timestamp = time() + self.response_time_limit
+
+            if ignore_deadline_timestamp:
+                deadline_timestamp = None
 
             if not user_id:
                 raise web.HTTPBadRequest(reason='user_id key is required')
@@ -52,7 +62,8 @@ class ApiHandler:
                 date_time=datetime.now(),
                 location=data.pop('location', ''),
                 channel_type='http_client',
-                message_attrs=data, require_response=True
+                message_attrs=data, require_response=True,
+                deadline_timestamp=deadline_timestamp
             )
 
             if response is None:
@@ -85,20 +96,6 @@ class PagesHandler:
 
     async def ping(self, request):
         return web.json_response("pong")
-
-    @aiohttp_jinja2.template('dialogslist.html')
-    async def dialoglist(self, request):
-        def dialg_to_dict(dialog):
-            return {
-                'id': dialog.id,
-                'channel_type': dialog.channel_type,
-                'start': min([i.date_time for i in dialog.utterances]).strftime("%d-%m-%Y %H:%M"),
-                'finish': max([i.date_time for i in dialog.utterances])
-            }
-
-        state_manager = request.app['agent'].state_manager
-        dialogs = await state_manager.get_all_dialogs()
-        return {'dialogs': [dialg_to_dict(i) for i in dialogs]}
 
 
 class WSstatsHandler:

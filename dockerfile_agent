@@ -12,7 +12,9 @@ RUN apt-get update -y --fix-missing && \
         cron && \
     rm -rf /var/lib/apt/lists/*
 
-ENV PYTHONIOENCODING=utf-8
+ENV DEBIAN_FRONTEND noninteractive
+ENV PYTHONPATH "${PYTHONPATH}:/dp-agent"
+ENV DPA_LAUNCHING_ENV "docker"
 
 COPY requirements.txt /
 RUN pip install -r requirements.txt
