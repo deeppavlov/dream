@@ -32,6 +32,7 @@ all_formatters = {
     'ner_formatter_dialog': ner_formatter_dialog,
     'reddit_ner_formatter_dialog': reddit_ner_formatter_dialog,
     'telegram_selector_formatter_in': telegram_selector_formatter_in,
+    'full_utt_sentseg_punct_dialog': full_utt_sentseg_punct_dialog,
 
     'http_debug_output_formatter': http_debug_output_formatter,
     'http_api_output_formatter': http_api_output_formatter,
