@@ -297,9 +297,13 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                     curr_score = very_low_score
             elif confidences[i] == 0.6:
                 # if meta_script returns starting phrase in the middle of dialog (conf 0.6)
-                # when faced some user topic,
                 # return it with probability 0.1
                 if uniform(0, 1.) < 0.1:
+                    curr_score = very_big_score
+            elif confidences[i] == 0.7:
+                # if meta_script returns starting phrase in the middle of dialog (conf 0.7)
+                # when faced some USER topic
+                if uniform(0, 1.) < 0.3:
                     curr_score = very_big_score
         if skill_names[i] == 'dummy_skill' and "question" in candidates[i].get("type", ""):
             question = candidates[i]['text']
