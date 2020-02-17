@@ -147,10 +147,7 @@ with open("google-10000-english-no-swears.txt", "r") as f:
 
 
 def is_custom_topic(topic, TOPICS):
-    if topic in TOPICS:
-        return False
-    else:
-        return True
+    return not (topic in TOPICS)
 
 
 def remove_duplicates(values):
