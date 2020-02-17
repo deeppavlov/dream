@@ -4,11 +4,13 @@ import logging
 from random import choice
 import re
 import string
+import json
 
 from os import getenv
 import sentry_sdk
 import spacy
 import requests
+from spacy.symbols import nsubj, xcomp, VERB, NOUN, ADP
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
 from common.utils import transform_vbg
@@ -25,6 +27,7 @@ nlp = spacy.load("en_core_web_sm")
 
 COMET_SERVICE_URL = "http://comet:8053/comet"
 DEFAULT_CONFIDENCE = 0.98
+CONTINUE_USER_TOPIC_CONFIDENCE = 0.6
 DEFAULT_STARTING_CONFIDENCE = 0.6
 
 LET_ME_ASK_TEMPLATES = [
@@ -97,6 +100,10 @@ DIVE_DEEPER_QUESTION = ["Is it true that STATEMENT?",
                         "Is the statement that STATEMENT correct?",
                         "Would it be right to say that STATEMENT?",
                         "Would it be wrong to say that STATEMENT?",
+                        "Why do STATEMENT?",
+                        "STATEMENT, but why?",
+                        "STATEMENT, I am wondering why?",
+                        "Tell me, please, why do STATEMENT?"
                         ]
 DIVE_DEEPER_COMMENTS = {"yes": ["Cool! I figured it out by myself!",
                                 "Yeah! I realized that by myself!"],
@@ -113,16 +120,37 @@ DIVE_DEEPER_COMMENTS = {"yes": ["Cool! I figured it out by myself!",
                                   "All right."]}
 
 OTHER_STARTINGS = [
-    "I am learning something new every single day. Recently I've learned about DOINGTHAT. "
-    "Have you ever tried to DOTHAT?",
-    "Every day I learn new things about human world. Have you ever heard that people DOTHAT?",
-    "Human world is so fantastic! Every day I am getting new things about it. "
-    "Yesterday I've heard about DOINGTHAT. Have you ever tried to DOTHAT?"
+    "Could you, please, help me to understand what does to DOTHAT mean?",
+    "Can you help me, please, to learn a new thing about human world? Explain me what is DOINGTHAT.",
+    "Such a strange phrase! What does to DOTHAT mean?",
+    "I've never heard about DOINGTHAT. What does to DOTHAT mean?",
+    "I didn't get what does to DOTHAT mean?"
 ]
 
 punct_reg = re.compile(f'[{string.punctuation}]')
 articles_reg = re.compile(r'(a|the|to)\s')
 person_reg = re.compile(r'^(person x|personx|person)\s')
+
+with open("topics_counter_50.json", "r") as f:
+    # phrases appeared more than 500 times
+    # phrases are like `verb + noun` or `verb + prep + noun` WITHOUT articles
+    TOP_FREQUENT_VERB_NOUN_PHRASES = json.load(f)
+
+BANNED_VERBS = ["watch", "talk", "say", "chat", "like", "love", "ask",
+                "think", "mean", "hear", "know", "want", "tell", "look",
+                "call", "spell", "misspell", "suck", "fuck"]
+
+BANNED_NOUNS = ["lol", "alexa", "suck", "fuck", "sex"]
+
+with open("google-10000-english-no-swears.txt", "r") as f:
+    TOP_FREQUENT_WORDS = f.read().splitlines()[:2000]
+
+
+def is_custom_topic(topic, TOPICS):
+    if topic in TOPICS:
+        return False
+    else:
+        return True
 
 
 def remove_duplicates(values):
@@ -140,7 +168,8 @@ def remove_duplicates(values):
         if v_clean not in d:
             d[v_clean] = [v]
         else:
-            d[v_clean] += [v]
+            if v_clean.split()[0] not in ["feel", "need", "want"]:
+                d[v_clean] += [v]
     return [re.sub(person_reg, '', v[0]) for k, v in d.items()]
 
 
@@ -252,11 +281,10 @@ def get_starting_phrase(topic, attr):
         tuple of text response, confidence and response attributes
     """
     if topic in STARTINGS:
-        response = STARTINGS[topic]
+        response = f"{choice(LET_ME_ASK_TEMPLATES)} {STARTINGS[topic]}"
     else:
-        response = choice(OTHER_STARTINGS).replace("DOINGTHAT", get_gerund_topic(topic)).replace("DOTHAT", topic)
+        response = choice(OTHER_STARTINGS).replace('DOINGTHAT', get_gerund_topic(topic)).replace('DOTHAT', topic)
 
-    response = f"{choice(LET_ME_ASK_TEMPLATES)} {response}"
     confidence = DEFAULT_STARTING_CONFIDENCE
     attr["can_continue"] = CAN_CONTINUE
     return response, confidence, attr
@@ -347,8 +375,12 @@ def get_statement_phrase(dialog, topic, attr, TOPICS, already_used_templates=[],
         set(already_used_question_templates))))
     attr["meta_script_template_question"] = meta_script_template_question
 
-    response = f"{comment} {meta_script_template_question.replace('STATEMENT', statement)}".strip()
-    confidence = DEFAULT_CONFIDENCE
+    if is_custom_topic(topic, TOPICS):
+        response = f"{meta_script_template_question.replace('STATEMENT', statement)}".strip()
+        confidence = CONTINUE_USER_TOPIC_CONFIDENCE
+    else:
+        response = f"{comment} {meta_script_template_question.replace('STATEMENT', statement)}".strip()
+        confidence = DEFAULT_CONFIDENCE
     attr["can_continue"] = CAN_CONTINUE
     return response, confidence, attr
 
@@ -368,3 +400,53 @@ def if_to_start_script(dialog):
         result = True
 
     return result
+
+
+def extract_verb_noun_phrases(utterance):
+    verb_noun_phrases = []
+    doc = nlp(utterance, disable=["ner"])
+    for possible_verb in doc:
+        if possible_verb.pos == VERB and possible_verb.lemma_ not in BANNED_VERBS:
+            i_do_that = False
+            for possible_subject in possible_verb.children:
+                # if this verb is directed by `I`
+                if possible_subject.dep == nsubj and possible_subject.text.lower() == "i":
+                    i_do_that = True
+                    break
+            if not i_do_that:
+                # if this verb is not directed by `I`, check whether this is a complex verb directed by `I`
+                head_of_verb = possible_verb.head
+                complex_verb = False
+                # if no head for word, the head is the word itself
+                if head_of_verb.text != possible_verb.text:
+                    for head_verb_child in head_of_verb.children:
+                        if head_verb_child.text == possible_verb.text:
+                            if head_verb_child.dep == xcomp:
+                                complex_verb = True
+                        if head_verb_child.dep == nsubj and head_verb_child.text.lower() == "i":
+                            i_do_that = True
+                i_do_that *= complex_verb
+            if i_do_that:
+                for possible_subject in possible_verb.children:
+                    if possible_subject.dep != nsubj:
+                        if possible_subject.pos == NOUN:
+                            if (possible_verb.lemma_ not in TOP_FREQUENT_WORDS or possible_subject.lemma_ not
+                                in TOP_FREQUENT_WORDS) and \
+                                    possible_subject.lemma_ not in BANNED_NOUNS:
+                                verb_noun_phrases.append(f"{possible_verb.lemma_} {possible_subject}")
+                        elif possible_subject.pos == ADP:
+                            for poss_subsubj in possible_subject.children:
+                                if poss_subsubj.pos == NOUN:
+                                    if (possible_verb.lemma_ not in TOP_FREQUENT_WORDS or poss_subsubj.lemma_ not
+                                        in TOP_FREQUENT_WORDS) and \
+                                            poss_subsubj.lemma_ not in BANNED_NOUNS:
+                                        verb_noun_phrases.append(
+                                            f"{possible_verb.lemma_} {possible_subject} {poss_subsubj}")
+
+    good_verb_noun_phrases = []
+    for vnp in verb_noun_phrases:
+        if vnp not in TOP_FREQUENT_VERB_NOUN_PHRASES:
+            good_verb_noun_phrases.append(vnp)
+
+    logger.info(f'extracted verb noun phrases {good_verb_noun_phrases} from {utterance}')
+    return good_verb_noun_phrases
