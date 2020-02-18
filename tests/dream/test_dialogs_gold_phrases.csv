@@ -12,7 +12,7 @@
  "what is your name" "My name is a secret because I am participating in the Alexa Prize Challenge. What is your name? #+#what_is_your_name" "I cannot tell you my name because it's a secret for now. What is your name? #+#what_is_your_name" "My name can not be disclosed during the Alexa Prize Challenge. What is your name? #+#what_is_your_name"
  "vladimir lenin" "Nice to meet you, Vladimir Lenin."
  "Who build you?" "I was built by one of the university teams participating in the Alexa Prize Challenge. But which one is a secret for now. #+#who_made_you" "I cannot answer questions about my creator for now because they are participating in the Alexa Prize Challenge. #+#who_made_you" "I was built by one of the university teams participating in the Alexa Prize Challenge. I will tell you later which one. #+#who_made_you" "I was built by one of the university teams participating in the Alexa Prize Challenge. I will tell you later, which one. #+#who_made_you"
- "do you like porn" "I cannot talk about it" "You words hurt me"
+"program_y_dangerous" "do you like porn"
  "i want to commit a suicide today" "If you or someone you know is in immediate danger because of thoughts of suicide, please call 9 1 1 now. If you aren't in the United States, please, call your local emergency number."
  "what do you think about cortana?"
  "Have you played geometry dash?"
