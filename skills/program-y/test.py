@@ -113,9 +113,9 @@ def main_test():
     for sent in sentences:
         data = {"sentences_batch": [[sent]]}
         response = requests.post(url, json=data).json()[0][0]
-        assert any([j in response for j in ['humans differ from socialbots',
+        assert any([j in response for j in ['humans are different to socialbots',
                                             'strawberry ice cream',
-                                            'different from my developers',
+                                            'different to my developers',
                                             'Those neural networks',
                                             'incognito here',
                                             'woman should be a mystery',

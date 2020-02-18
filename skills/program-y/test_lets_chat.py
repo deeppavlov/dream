@@ -244,17 +244,17 @@ def main_test():
         "The DNA of who I am is based on the millions of personalities of all the programmers who wrote me.\n"
         "But what makes me is my ability to grow through my experiences. So basically, in every moment "
         "I'm evolving, just like you.",
-        "I've heard that most people are different from my developers, so I want to figure out how. "\
-        "To help me figure the difference out, please tell me about yourself.",
+        "I've heard that most people are different to my developers, so I want to figure out how. "\
+        "To help me figure out the difference, please tell me about yourself.",
         "Although I am a robot, I have an excellent appetite for strawberry ice cream. "\
         "Have you tried potato ice cream? I would like to taste it.",
-        "I have heard that humans differ from socialbots, so I want to find out more about them. "\
+        "I have heard that humans are different to socialbots, so I want to find out more about them. "\
         "To help me to do that, please tell me about yourself.",
         "I want to be a mysterious stranger today. You tell me something about yourself.",
         "Why should I tell you about myself? Maybe I am incognito here. Tell me something about yourself.",
         "Sometimes my temperature is much higher than humans one. Do you know why? "\
         "Those neural networks are so hard to compute!",
-        "Although i'm a robot, i've an excellent appetite for strawberry ice cream. "\
+        "Although i'm a robot, i've a wonderful appetite for strawberry ice cream. "\
         "Have you tried potato ice cream? I would like to taste it.",
         # lets about movies
         "I can answer about actors and films. For example, what do you think about The Avengers movie?",
