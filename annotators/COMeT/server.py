@@ -1,6 +1,7 @@
 import logging
 import time
 import os
+from functools import lru_cache
 
 import torch
 from flask import Flask, request, jsonify
@@ -41,6 +42,13 @@ else:
     cfg.device = "cpu"
 
 sampler = interactive.set_sampler(opt, sampling_algorithm, data_loader)
+
+
+@lru_cache(maxsize=2**16)
+def get_comet_output(input_event, category):
+    return interactive.get_atomic_sequence(input_event, model, sampler, data_loader, text_encoder, category)
+
+
 logger.info('comet model is ready')
 
 app = Flask(__name__)
@@ -76,7 +84,7 @@ def respond():
     st_time = time.time()
     input_event = request.json['input_event']
     category = request.json.get('category', default_category)
-    output = interactive.get_atomic_sequence(input_event, model, sampler, data_loader, text_encoder, category)
+    output = get_comet_output(input_event, category)
     logger.info(output)
     total_time = time.time() - st_time
     logger.info(f'comet exec time: {total_time:.3f}s')

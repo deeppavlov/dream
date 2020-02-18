@@ -146,8 +146,8 @@ with open("google-10000-english-no-swears.txt", "r") as f:
     TOP_FREQUENT_WORDS = f.read().splitlines()[:2000]
 
 
-def is_custom_topic(topic, TOPICS):
-    return not (topic in TOPICS)
+def is_custom_topic(topic):
+    return not (topic in STARTINGS)
 
 
 def remove_duplicates(values):
@@ -198,14 +198,13 @@ def get_comet(topic, relation, TOPICS):
 
     logger.info(f"Comet request on topic: {topic}.")
     if topic is None or topic == "" or relation == "" or relation is None:
-        return "", TOPICS
+        return ""
 
-    TOPICS[topic] = TOPICS.get(topic, {})
-    cached_relation = TOPICS[topic].get(relation, [])
+    predefined_relation = TOPICS.get(topic, {}).get(relation, [])
 
-    if len(cached_relation) > 0:
-        # already cached `topic & relation` pair
-        relation_phrases = cached_relation
+    if len(predefined_relation) > 0:
+        # already predefined `topic & relation` pair
+        relation_phrases = predefined_relation
     else:
         # send request to COMeT service on `topic & relation`
         try:
@@ -231,12 +230,10 @@ def get_comet(topic, relation, TOPICS):
 
     relation_phrases = correct_verb_form(relation, relation_phrases)
 
-    # cache
-    TOPICS[topic][relation] = relation_phrases
     if len(relation_phrases) > 0:
-        return choice(relation_phrases), TOPICS
+        return choice(relation_phrases)
     else:
-        return "", TOPICS
+        return ""
 
 
 def get_gerund_topic(topic):
@@ -277,7 +274,7 @@ def get_starting_phrase(topic, attr):
     Returns:
         tuple of text response, confidence and response attributes
     """
-    if topic in STARTINGS:
+    if is_custom_topic(topic):
         response = f"{choice(LET_ME_ASK_TEMPLATES)} {STARTINGS[topic]}"
     else:
         response = choice(OTHER_STARTINGS).replace('DOINGTHAT', get_gerund_topic(topic)).replace('DOTHAT', topic)
@@ -346,7 +343,7 @@ def get_statement_phrase(dialog, topic, attr, TOPICS, already_used_templates=[],
         set(already_used_templates))))
     attr["meta_script_template_relation"] = meta_script_template
     relation = DIVE_DEEPER_TEMPLATE_COMETS[meta_script_template]
-    prediction, TOPICS = get_comet(topic, relation, TOPICS)
+    prediction = get_comet(topic, relation, TOPICS)
 
     if prediction == "":
         return "", 0.0, {"can_continue": CAN_NOT_CONTINUE}
@@ -372,7 +369,7 @@ def get_statement_phrase(dialog, topic, attr, TOPICS, already_used_templates=[],
         set(already_used_question_templates))))
     attr["meta_script_template_question"] = meta_script_template_question
 
-    if is_custom_topic(topic, TOPICS):
+    if is_custom_topic(topic):
         response = f"{meta_script_template_question.replace('STATEMENT', statement)}".strip()
         confidence = CONTINUE_USER_TOPIC_CONFIDENCE
     else:

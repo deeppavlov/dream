@@ -115,7 +115,7 @@ def get_status_and_topic(dialog):
             logger.info(f"Found meta_script_status: `{curr_meta_script_status}` "
                         f"on previous meta_script_topic: `{curr_meta_script_topic}`")
             # getting the next dialog flow status
-            if is_custom_topic(curr_meta_script_topic, TOPICS):
+            if is_custom_topic(curr_meta_script_topic):
                 curr_meta_script_status = dialog_flow_user_topic[dialog_flow_user_topic.index(
                     curr_meta_script_status) + 1]
             else:
@@ -129,7 +129,7 @@ def get_status_and_topic(dialog):
     else:
         # start of the dialog, pick up a topic of meta script
         curr_meta_script_topic, _ = get_not_used_topic([], dialog)
-        if is_custom_topic(curr_meta_script_topic, TOPICS):
+        if is_custom_topic(curr_meta_script_topic):
             curr_meta_script_status = dialog_flow_user_topic[0]
         else:
             curr_meta_script_status = dialog_flow[0]
