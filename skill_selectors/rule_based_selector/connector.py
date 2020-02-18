@@ -171,6 +171,7 @@ class RuleBasedSkillSelectorConnector:
             skills_for_uttr.append("program_y_dangerous")
             skills_for_uttr.append("cobotqa")
             skills_for_uttr.append("meta_script_skill")
+            skills_for_uttr.append("personal_info_skill")
             if about_news:
                 skills_for_uttr.append("news_skill")
         else:
