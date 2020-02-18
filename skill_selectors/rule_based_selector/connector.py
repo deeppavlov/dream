@@ -100,7 +100,7 @@ class RuleBasedSkillSelectorConnector:
                 for k, v in dialog["utterances"][-1]["annotations"]["intent_catcher"].items()
                 if k
                 not in {"opinion_request", "yes", "no", "tell_me_more", "doing_well", "weather_forecast_intent",
-                        "topic_switching", "lets_chat_about"}
+                        "topic_switching", "lets_chat_about", "stupid"}
             ]
         )
 
