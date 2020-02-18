@@ -56,9 +56,8 @@ def main():
                 passed_gold_phrases = False
                 print("ERROR: {} not in {}".format(pred_r[-1], true_sents))
 
-        if passed_acceptable_skills:
-            assert passed_acceptable_skills or passed_gold_phrases, print(
-                f"ERROR: see above!")
+        assert passed_acceptable_skills or passed_gold_phrases, print(
+            f"ERROR: see above!")
 
 
 if __name__ == '__main__':
