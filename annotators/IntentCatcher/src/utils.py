@@ -23,7 +23,12 @@ def generate_phrases(template_phrases_re, punctuation, limit=500):
     x = Xeger(limit=limit)
     phrases = []
     for regex in template_phrases_re:
-        phrases += list({x.xeger(regex) for _ in range(limit)})
+        try:
+            phrases += list({x.xeger(regex) for _ in range(limit)})
+        except Exception as e:
+            print(e)
+            print(regex)
+            raise e
     phrases = [phrases] + [[phrase + punct for phrase in phrases] for punct in punctuation]
     return list(chain.from_iterable(phrases))
 
