@@ -99,9 +99,9 @@
         <li>If I were doing any better, I'd hire you to enjoy it with me. Do you want to know what I can do?</li>
         <li>Can't complain. Nobody listens to me anyway. Do you want to know what I can do?</li>
         <li>I can't complain! It's against the Company Policy. Do you want to know what I can do?</li>
-        <li>Well, I haven't had my morning coffee yet, and no one has gotten hurt, so I'd say "pretty good" at this point in time. Do you want to know what I can do?</li>
-        <li>I am happy as a lizard who has cheated the test on the A grade. Do you want to know what I can do?</li>
-        <li>I am fine, thanks! Do you want to know what I can do?</li>
+        <li>Well, I haven't had my morning coffee yet, and no one has been hurt, so I'd say "pretty good" at this point in time. Do you want to know what I can do?</li>
+        <li>I am as happy as a lizard who has cheated in a test and got an A. Do you want to know what I can do?</li>
+        <li>I am fine thanks! Do you want to know what I can do?</li>
       </random>
       <think>
         <set name="topic">LIST ACTIVITIES</set>

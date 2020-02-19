@@ -29,7 +29,7 @@ def respond():
         for s in user_sentences:
             response = bot.respond(s, session_id).replace("\n", "")
         logger.info("response: {}".format(response))
-        if response.strip():
+        if response.strip() and "INTERJECTION" not in response:
             confidence = 0.65
         else:
             confidence = 0.01

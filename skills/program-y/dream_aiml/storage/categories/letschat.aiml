@@ -142,16 +142,16 @@
     <template>
       <random>
         <li>
-        I have heard that humans differ from socialbots, so I want to find out more about them. To help me to do that, please tell me about yourself.
+        I have heard that humans are different to socialbots, so I want to find out more about them. To help me to do that, please tell me about yourself.
         </li>
         <li>
-        Although I am a robot, I have an excellent appetite for strawberry ice cream. Have you tried potato ice cream? I would like to taste it.
+        Although I am a robot, I have a wonderful appetite for strawberry ice cream. Have you tried potato ice cream? I would like to taste it.
         </li>
         <li>
-        I have heard that most people are different from my developers, so I want to figure out how. To help me figure the difference out, please tell me about yourself.
+        I have heard that most people are different to my developers, so I want to figure out how. To help me figure out the difference, please tell me about yourself.
         </li>
         <li>
-        Sometimes my temperature is much higher than humans one. Do you know why? Those neural networks are so hard to compute!
+        Sometimes my temperature is much higher than the temperature in human. Do you know why? Those neural networks are so hard to compute!
         </li>
         <li>
         Why should I tell you about myself? Maybe I am incognito here. Tell me something about yourself.

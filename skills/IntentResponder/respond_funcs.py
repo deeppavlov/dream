@@ -5,6 +5,7 @@ from datetime import datetime
 
 
 def exit_respond(dialog, response_phrases):
+    # goodbye_fix_phrases = ["goodbye", "bye", "bye bye", "alexa bye", "bye alexa", "goodbye alexa", "alexa bye bye"]
     utt = dialog["utterances"][-1]
     response = random.choice(response_phrases).strip()  # Neutral response
     annotation = utt["annotations"]
@@ -28,8 +29,8 @@ def exit_respond(dialog, response_phrases):
         response = random.choice(positive) + response
     elif offensiveness == "toxic" or is_blacklisted:
         response = "I'm sorry if i dissapointed you, but there is no need to be rude. " + response
-    elif sentiment == "negative":
-        response = "I apologize for dissapointing you, I'm still learning. " + response
+    # elif sentiment == "negative" and utt["text"] not in goodbye_fix_phrases:
+    #     response = "I apologize for dissapointing you, I'm still learning. " + response
     return response
 
 
@@ -55,7 +56,13 @@ def where_are_you_from_respond(dialog, response_phrases):
 
 
 def random_respond(dialog, response_phrases):
-    response = random.choice(response_phrases).strip()
+    if isinstance(response_phrases, dict):
+        if dialog['seen']:
+            response = random.choice(response_phrases['last'])
+        else:
+            response = random.choice(response_phrases['first'])
+    else:
+        response = random.choice(response_phrases).strip()
     return response
 
 
@@ -95,5 +102,8 @@ def get_respond_funcs():
         "what_is_your_job": random_respond,
         "what_can_you_do": random_respond,
         "what_time": what_time_respond,
-        "dont_understand": random_respond
+        "dont_understand": random_respond,
+        "stupid": random_respond,
+        "cant_do": random_respond,
+        "tell_me_a_story": random_respond
     }

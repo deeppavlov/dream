@@ -28,20 +28,36 @@ def main():
         f'Mean proc time: {mean_proc_time} > {args.time_limit}')
     for pred_r, true_r, skill in zip(pred_data, true_data, active_skills):
         true_sents = set([sent.lower().replace('\n', ' ').replace('  ', ' ') for sent in true_r[2:]])
-        true_skill_name = true_r[0]
+        acceptable_skill_names = true_r[0]
         assert skill != "exception", print("ERROR: exception in gold phrases".format(pred_r[-1], true_sents))
-        if true_skill_name.strip():
-            if true_skill_name[0] == "!":
-                true_skill_name = true_skill_name[1:]
-                assert true_skill_name != skill, print(f"True skill name: {true_skill_name} == pred skill: {skill}")
+
+        passed_acceptable_skills = True
+        passed_gold_phrases = True
+
+        if acceptable_skill_names.strip():
+            if acceptable_skill_names[0] == "!":
+                # отрицание возможно только для одного скилла!!!
+                skill_name = acceptable_skill_names[1:]
+                if skill != skill_name:
+                    passed_acceptable_skills = False
+                    print(f"ERROR: pred skill: {skill} is PROHIBITED: {skill_name}")
             else:
-                assert true_skill_name == skill, print(f"True skill name: {true_skill_name} != pred skill: {skill}")
+                acceptable_skill_names = acceptable_skill_names.split(";")
+                if skill not in acceptable_skill_names:
+                    passed_acceptable_skills = False
+                    print(f"ERROR: pred skill: {skill} NOT IN Acceptable skill names: {acceptable_skill_names}")
+
         if true_sents:
             checked = False
             for true_sent in true_sents:
                 if true_sent in pred_r[-1].lower().replace('\n', ' ').replace('  ', ' '):
                     checked = True
-            assert checked, print("ERROR: {} not in {}".format(pred_r[-1], true_sents))
+            if not checked:
+                passed_gold_phrases = False
+                print("ERROR: {} not in {}".format(pred_r[-1], true_sents))
+
+        assert passed_acceptable_skills or passed_gold_phrases, print(
+            f"ERROR: see above!")
 
 
 if __name__ == '__main__':
