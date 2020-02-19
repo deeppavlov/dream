@@ -123,11 +123,13 @@ def respond():
                        ]
         bad_subanswers = ["let's talk about", "i have lots of", "world of warcraft",
                           " wow ", " ok is", "coolness is ", "about nice",
-                          "\"let's talk\" is a 2002 drama", "visit amazon.com/"]
+                          "\"let's talk\" is a 2002 drama", "visit amazon.com/",
+                          'alexa, play my flash briefing.', "here's a fact about amazon alexas"]
 
         if len(response) > 0 and 'skill://amzn1' not in response:
             if response in bad_answers or any([bad_substr in response.lower() for bad_substr in bad_subanswers]):
-                confidence = 0.01
+                confidence = 0.
+                response = ""
             elif "fact about" in questions[i].lower() or "fact about" in response:
                 # this is a fact from cobotqa itself or requested fact
                 sentences = sent_tokenize(response.replace(".,", "."))
