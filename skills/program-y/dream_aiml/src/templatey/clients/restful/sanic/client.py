@@ -83,6 +83,9 @@ class SanicRestBotClient(RestBotClient):
                     answer = self.ask_question(userid, self.preprocesser.process(s))
                 if answer == NULL_RESPONSE:
                     confidence = 0.2
+                elif "unknown" in answer:
+                    confidence = 0.0
+                    answer = ""
                 elif len(answer.split()) <= 3:
                     confidence = 0.6
                 elif answer:
