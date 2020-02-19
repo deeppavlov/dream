@@ -12,7 +12,7 @@ import sentry_sdk
 from common.constants import CAN_NOT_CONTINUE
 from common.utils import get_skill_outputs_from_dialog
 from utils import get_starting_phrase, get_statement_phrase, get_opinion_phrase, get_comment_phrase, \
-    if_to_start_script, extract_verb_noun_phrases, DEFAULT_STARTING_CONFIDENCE, is_custom_topic
+    if_to_start_script, extract_verb_noun_phrases, DEFAULT_STARTING_CONFIDENCE, is_custom_topic, WIKI_DESCRIPTIONS
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -48,7 +48,7 @@ def get_not_used_topic(used_topics, dialog):
     verb_noun_phrases = extract_verb_noun_phrases(dialog["utterances"][-1]["text"])
 
     if len(dialog['utterances']) <= 3 or len(verb_noun_phrases) == 0:
-        all_topics = TOPICS.keys()
+        all_topics = set(TOPICS.keys()).union(set(WIKI_DESCRIPTIONS.keys()))
         available_topics = set(all_topics).difference(set(used_topics))
         if len(available_topics) > 0:
             return choice(list(available_topics)), False
@@ -69,8 +69,9 @@ def get_status_and_topic(dialog):
     Returns:
         tuple of current status and topic
     """
+    # deeper2 and deeper3 could be randomly skipped in dialog flow
     dialog_flow = ["starting", "deeper1", "deeper2", "deeper3", "opinion", "comment"]
-    dialog_flow_user_topic = ["deeper1", "opinion", "comment"]
+    dialog_flow_user_topic = ["deeper1", "deeper2", "opinion", "comment"]
 
     if len(dialog["utterances"]) >= 3:
         # if dialog is not empty
@@ -120,6 +121,11 @@ def get_status_and_topic(dialog):
                     curr_meta_script_status) + 1]
             else:
                 curr_meta_script_status = dialog_flow[dialog_flow.index(curr_meta_script_status) + 1]
+
+            if curr_meta_script_status == "deeper2":
+                # randomly skip third deeper question
+                if uniform(0, 1) <= 0.5:
+                    curr_meta_script_status = "opinion"
             if curr_meta_script_status == "deeper3":
                 # randomly skip third deeper question
                 if uniform(0, 1) <= 0.5:
