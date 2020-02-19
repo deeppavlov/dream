@@ -32,7 +32,8 @@ def respond():
         if response.strip() and "INTERJECTION" not in response:
             confidence = 0.65
         else:
-            confidence = 0.01
+            confidence = 0.
+            response = ""
         responses.append([response, confidence])
 
     total_time = time.time() - st_time

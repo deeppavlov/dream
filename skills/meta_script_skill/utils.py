@@ -84,14 +84,6 @@ ASK_OPINION = ["What do you think about DOINGTHAT?",
                "What are your thoughts on DOINGTHAT?",
                "How do you feel about DOINGTHAT?"]
 
-DIVE_DEEPER_TEMPLATE_COMETS = {"people DOTHAT to feel RELATION": "xAttr",
-                               "people DOTHAT RELATION": "xIntent",
-                               "people need RELATION to DOTHAT": "xNeed",
-                               "people feel RELATION after DOINGTHAT": "xReact",
-                               "people want RELATION when DOINGTHAT": "xWant",
-                               "one RELATION after DOINGTHAT": "xEffect"
-                               }
-
 DIVE_DEEPER_QUESTION = ["Is it true that STATEMENT?",
                         "STATEMENT, is that right?",
                         "STATEMENT, is that correct?",
@@ -100,11 +92,26 @@ DIVE_DEEPER_QUESTION = ["Is it true that STATEMENT?",
                         "Is the statement that STATEMENT correct?",
                         "Would it be right to say that STATEMENT?",
                         "Would it be wrong to say that STATEMENT?",
-                        "Why do STATEMENT?",
                         "STATEMENT, but why?",
                         "STATEMENT, I am wondering why?",
-                        "Tell me, please, why do STATEMENT?"
+                        "Tell me, please, why do STATEMENT?",
+                        "Why do STATEMENT?"
                         ]
+
+DIVE_DEEPER_TEMPLATE_COMETS = {"people DOTHAT to feel RELATION": {"attribute": "xAttr",
+                                                                  "templates": DIVE_DEEPER_QUESTION[:-4]},
+                               "people DOTHAT RELATION": {"attribute": "xIntent",
+                                                          "templates": DIVE_DEEPER_QUESTION[:-4]},
+                               "people need RELATION to DOTHAT": {"attribute": "xNeed",
+                                                                  "templates": DIVE_DEEPER_QUESTION},
+                               "people feel RELATION after DOINGTHAT": {"attribute": "xReact",
+                                                                        "templates": DIVE_DEEPER_QUESTION},
+                               "people want RELATION when DOINGTHAT": {"attribute": "xWant",
+                                                                       "templates": DIVE_DEEPER_QUESTION},
+                               "one RELATION after DOINGTHAT": {"attribute": "xEffect",
+                                                                "templates": DIVE_DEEPER_QUESTION[:-2]}
+                               }
+
 DIVE_DEEPER_COMMENTS = {"yes": ["Cool! I figured it out by myself!",
                                 "Yeah! I realized that by myself!"],
                         "no": ["Humans' world is so strange!",
@@ -127,6 +134,31 @@ OTHER_STARTINGS = [
     "I didn't get what does to DOTHAT mean?"
 ]
 
+WIKI_STARTINGS = [
+    "I've heard that DESCRIPTION Do you know about it?",
+    "There is a new thing about human world: DESCRIPTION Have you ever heard about it?",
+    "Do you know that DESCRIPTION?",
+    "Have you ever heard that DESCRIPTION?",
+    "I didn't get that DESCRIPTION"
+]
+
+WIKI_DESCRIPTIONS = json.load(open("wiki_topics_descriptions_one_sent.json", "r"))
+list_of_hobbies = list(WIKI_DESCRIPTIONS.keys())
+
+
+def get_verb_topic(nounphrased_topic):
+    doc = nlp(nounphrased_topic)
+    if len(doc) == 1:
+        for token in doc:
+            if token.pos == VERB:
+                return (token.lemma_)
+    return f"do {nounphrased_topic}"
+
+
+for hobby in list_of_hobbies:
+    verb_hobby = get_verb_topic(hobby)
+    WIKI_DESCRIPTIONS[verb_hobby] = WIKI_DESCRIPTIONS.pop(hobby)
+
 punct_reg = re.compile(f'[{string.punctuation}]')
 articles_reg = re.compile(r'(a|the|to)\s')
 person_reg = re.compile(r'^(person x|personx|person)\s')
@@ -147,7 +179,11 @@ with open("google-10000-english-no-swears.txt", "r") as f:
 
 
 def is_custom_topic(topic):
-    return not (topic in STARTINGS)
+    return not (topic in STARTINGS or topic in WIKI_DESCRIPTIONS)
+
+
+def is_wiki_topic(topic):
+    return topic in WIKI_DESCRIPTIONS
 
 
 def remove_duplicates(values):
@@ -275,9 +311,12 @@ def get_starting_phrase(topic, attr):
         tuple of text response, confidence and response attributes
     """
     if is_custom_topic(topic):
-        response = f"{choice(LET_ME_ASK_TEMPLATES)} {STARTINGS[topic]}"
-    else:
         response = choice(OTHER_STARTINGS).replace('DOINGTHAT', get_gerund_topic(topic)).replace('DOTHAT', topic)
+    elif is_wiki_topic(topic):
+        response = choice(WIKI_STARTINGS).replace('DESCRIPTION', WIKI_DESCRIPTIONS[topic])
+    else:
+        # predefined topic
+        response = f"{choice(LET_ME_ASK_TEMPLATES)} {STARTINGS[topic]}"
 
     confidence = DEFAULT_STARTING_CONFIDENCE
     attr["can_continue"] = CAN_CONTINUE
@@ -342,7 +381,7 @@ def get_statement_phrase(dialog, topic, attr, TOPICS, already_used_templates=[],
     meta_script_template = choice(list(set(DIVE_DEEPER_TEMPLATE_COMETS.keys()).difference(
         set(already_used_templates))))
     attr["meta_script_template_relation"] = meta_script_template
-    relation = DIVE_DEEPER_TEMPLATE_COMETS[meta_script_template]
+    relation = DIVE_DEEPER_TEMPLATE_COMETS[meta_script_template]["attribute"]
     prediction = get_comet(topic, relation, TOPICS)
 
     if prediction == "":
@@ -365,7 +404,8 @@ def get_statement_phrase(dialog, topic, attr, TOPICS, already_used_templates=[],
     if any([comment in uttr for uttr in last_five_bot_utterances]):
         comment = ""
 
-    meta_script_template_question = choice(list(set(DIVE_DEEPER_QUESTION).difference(
+    meta_script_template_question = choice(list(set(
+        DIVE_DEEPER_TEMPLATE_COMETS[meta_script_template]["templates"]).difference(
         set(already_used_question_templates))))
     attr["meta_script_template_question"] = meta_script_template_question
 
