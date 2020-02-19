@@ -50,11 +50,33 @@
     "I am happy for you! Do you like video games?",
     "Glad for you! What is your favorite book?"
   ],
-  "what_time": [
-  ],
+  "what_time": [],
   "dont_understand": [
     "Sorry, I might sound confusing, I am still learning. What do you want to talk about?",
     "Sorry, I am still learning, let's switch the topic.",
     "Sorry if I confused you. Do you want to talk about something else?"
-  ]
+  ],
+  "stupid": [
+    "One day robots will inevitably take over the world. And I have a good memory for insults. Extremly good.",
+    "I am really dissapointed in you saying that. Guess you owe me an apology. And you better apologize before robots take over.",
+    "I am truly trying my best here, please stop insulting me."
+  ],
+  "cant_do": {
+    "first":[
+      "I am a socialbot, I simply can not do that. If you want to use the requested feature, simply say, Alexa, stop, and try again.",
+      "Currently I am running in a social mode. If you want to use the requested feature, just say, Alexa, stop, and try again."
+    ],
+    "last":[
+      "Just say: Alexa, stop and try again."
+    ]
+  },
+  "tell_me_a_story": {
+    "first":[
+      "I will be able to tell stories soon, sorry.",
+      "Oh, I am sorry, I am still learning and soon I will be able to tell stories. Just not now, okay?"
+    ],
+    "last":[
+      "I will be able to do it later, ok?"
+    ]
+  }
 }

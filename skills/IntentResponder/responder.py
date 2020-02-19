@@ -19,6 +19,7 @@ class Responder:
         self.logger = logger
         self.intent_responses = self.load_responses(INTENT_RESPONSES_PATH)
         self.response_funcs = get_respond_funcs()
+        self.seen_intents = set()  # Whether the intent have already been detected
 
     def respond(self, dialog: dict):
         response = ""
@@ -28,12 +29,14 @@ class Responder:
         for intent_name, intent_data in utt['annotations'].get('intent_catcher', {}).items():
             if intent_data['detected'] and intent_data['confidence'] > confidence:
                 if intent_name in self.response_funcs:
+                    dialog['seen'] = intent_name in self.seen_intents
                     response = self.response_funcs[intent_name](dialog, self.intent_responses[intent_name])
                     # Special formatter which used in AWS Lambda to identify what was the intent
                     while "#+#" in response:
                         response = response[:response.rfind(" #+#")]
                     response += " #+#{}".format(intent_name)
                     confidence = intent_data['confidence']
+                    self.seen_intents.add(intent_name)
                     # todo: we need to know what intent was called
                     # current workaround is to use only one intent if several were detected
                     # and to append special token with intent_name

@@ -76,6 +76,7 @@ def process_info(dialog, which_info="name"):
     except IndexError:
         prev_bot_uttr = ""
 
+    logger.info(f"Previous bot uuterance: {prev_bot_uttr}")
     is_about_templates = {
         "name": (re.search(r"(what is|what's|whats|tell me) your? name",
                            prev_bot_uttr) or re.search(r"(my (name is|name's)|call me)",
@@ -106,7 +107,8 @@ def process_info(dialog, which_info="name"):
 
     got_info = False
     # if user doesn't want to share his info
-    if (is_about_templates[which_info] or prev_bot_uttr == repeat_info_phrases[which_info]) and curr_user_annot.get(
+    if (is_about_templates[which_info] or prev_bot_uttr == repeat_info_phrases[
+        which_info].lower()) and curr_user_annot.get(
             "intent_catcher", {}).get("no", {}).get("detected", 0) == 1:
         response = "As you wish."
         confidence = 1.0
@@ -137,13 +139,12 @@ def process_info(dialog, which_info="name"):
         confidence = 1.0
         got_info = False
         attr["can_continue"] = MUST_CONTINUE
-    if is_about_templates[which_info] or prev_bot_uttr == repeat_info_phrases[which_info] and not got_info:
+    if (is_about_templates[which_info] or prev_bot_uttr == repeat_info_phrases[which_info].lower()) and not got_info:
         logger.info(f"Asked for {which_info} in {prev_bot_uttr}")
         found_info = check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr)
         if found_info is None:
-            if prev_bot_uttr == repeat_info_phrases[
-                which_info] and curr_user_annot.get("intent_catcher",
-                                                    {}).get("no", {}).get("detected", 0) == 1:
+            if prev_bot_uttr == repeat_info_phrases[which_info].lower() and curr_user_annot.get(
+                    "intent_catcher", {}).get("no", {}).get("detected", 0) == 1:
                 response = ""
                 confidence = 0.0
                 attr["can_continue"] = CAN_NOT_CONTINUE

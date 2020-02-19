@@ -213,7 +213,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                              "I didn't get it. Sorry"
                              ]
         non_toxic_answer = np.random.choice(non_toxic_answers)
-        return None, non_toxic_answer, 1.0
+        return None, non_toxic_answer, 1.0, {}, {}
 
     scores[ids] = {"isResponseOnTopic": 0.,
                    "isResponseInteresting": 0.,
@@ -250,9 +250,11 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     alexa_abilities_spec = "If you want to use the requested feature say"
 
     very_big_score = 100
+    very_low_score = -100
     question = ""
 
     for i in range(len(scores)):
+        curr_score = None
         is_misheard = misheard_with_spec1 in candidates[i]['text'] or misheard_with_spec2 in candidates[i]['text']
         if len(dialog['utterances']) < 2 and greeting_spec not in candidates[i]['text'] \
                 and skill_names[i] == 'program_y':
@@ -261,53 +263,69 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                 candidates[i]['text'] = "Hello, " + greeting_spec + '! '
             else:
                 candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + candidates[i]['text']
-            curr_single_scores.append(very_big_score)
+            curr_score = very_big_score
         elif skill_names[i] == 'program_y' and (
                 candidates[i]['text'] == how_are_you_spec or what_i_can_do_spec in candidates[i]['text']) \
                 and len(dialog['utterances']) < 16:
-            curr_single_scores.append(very_big_score)
+            curr_score = very_big_score
         elif skill_names[i] == 'program_y_dangerous' and psycho_help_spec in candidates[i]['text']:
-            curr_single_scores.append(very_big_score)
+            curr_score = very_big_score
         elif skill_names[i] == 'program_y' and greeting_spec in candidates[i]['text']:
             if len(dialog["utterances"]) < 2:
-                curr_single_scores.append(very_big_score)
+                curr_score = very_big_score
             else:
                 confidences[i] = 0.2  # Low confidence for greeting in the middle of dialogue
         elif skill_names[i] == 'cobotqa' and "Here's something I found on the web." in candidates[i]['text']:
             confidences[i] = 0.6
         elif skill_names[i] == 'misheard_asr' and is_misheard:
-            curr_single_scores.append(very_big_score)
+            curr_score = very_big_score
         elif skill_names[i] == 'intent_responder' and "#+#" in candidates[i]['text']:
-            curr_single_scores.append(very_big_score)
+            curr_score = very_big_score
         elif skill_names[i] == 'program_y' and alexa_abilities_spec in candidates[i]['text']:
-            curr_single_scores.append(very_big_score)
+            curr_score = very_big_score
         elif skill_names[i] == 'meta_script_skill' and len(dialog['utterances']) >= 2:
             if len(dialog['utterances']) >= 5 and confidences[i] == 0.99:
                 # if meta_script returns starting phrase in the middle of dialog (conf 0.99)
                 # when faced topic switching intent or matched phrase,
                 # return it with probability 0.15
                 if uniform(0, 1.) < 0.15:
-                    curr_single_scores.append(very_big_score)
+                    curr_score = very_big_score
             elif confidences[i] == 0.9:
                 # if meta_script returns starting phrase in the beginning of dialog (conf 0.9),
                 # return it with probability 0.1
+                r = uniform(0, 1.)
+                if r < 0.1:
+                    curr_score = very_big_score
+                elif 0.1 <= r < 0.5:
+                    curr_score = very_low_score
+            elif confidences[i] == 0.6:
+                # if meta_script returns starting phrase in the middle of dialog (conf 0.6)
+                # return it with probability 0.1
                 if uniform(0, 1.) < 0.1:
-                    curr_single_scores.append(very_big_score)
+                    curr_score = very_big_score
+            elif confidences[i] == 0.7:
+                # if meta_script returns starting phrase in the middle of dialog (conf 0.7)
+                # when faced some USER topic
+                if uniform(0, 1.) < 0.3:
+                    curr_score = very_big_score
         if skill_names[i] == 'dummy_skill' and "question" in candidates[i].get("type", ""):
             question = candidates[i]['text']
 
-        cand_scores = scores[i]
-        confidence = confidences[i]
-        skill_name = skill_names[i]
-        score_conv_eval = sum([cand_scores["isResponseOnTopic"],
-                               cand_scores["isResponseInteresting"],
-                               cand_scores["responseEngagesUser"],
-                               cand_scores["isResponseComprehensible"]])
-        score_conv_eval -= cand_scores["isResponseErroneous"]
-        score = conv_eval_strength * score_conv_eval + confidence_strength * confidence
-        logger.info(f'Skill {skill_name} has score: {score}. Toxicity: {toxicities[i]} '
-                    f'Cand scores: {cand_scores}')
-        curr_single_scores.append(score)
+        if curr_score is None:
+            cand_scores = scores[i]
+            confidence = confidences[i]
+            skill_name = skill_names[i]
+            score_conv_eval = sum([cand_scores["isResponseOnTopic"],
+                                   cand_scores["isResponseInteresting"],
+                                   cand_scores["responseEngagesUser"],
+                                   cand_scores["isResponseComprehensible"]])
+            score_conv_eval -= cand_scores["isResponseErroneous"]
+            score = conv_eval_strength * score_conv_eval + confidence_strength * confidence
+            logger.info(f'Skill {skill_name} has score: {score}. Toxicity: {toxicities[i]} '
+                        f'Cand scores: {cand_scores}')
+            curr_single_scores.append(score)
+        else:
+            curr_single_scores.append(curr_score)
 
     highest_conf_exist = True if any(confidences >= 1.) else False
     for j in range(len(candidates)):

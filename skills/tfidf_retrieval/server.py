@@ -33,9 +33,10 @@ donotknow_answers = ["I really do not know what to answer.",
                      "I'm newborn socialbot, so I can't do so much. For example I can answer for any question.",
                      "I'm really sorry but i'm a socialbot, and I cannot do some Alexa things.",
                      "I didn’t catch that.",
-                     "I didn’t get that."]
+                     "I didn’t get that.",
+                     "superbowl", "super bowl"]
 donotknow_answers = [preprocess(j) for j in donotknow_answers]
-todel_userphrases = ['yes', 'wow', "let's talk about.", 'yeah', 'politics']
+todel_userphrases = ['yes', 'wow', "let's talk about.", 'yeah', 'politics', 'superbowl', 'super bowl']
 banned_words = ['Benjamin', 'misheard', 'cannot do this',
                 "I didn't get your homeland .  Could you ,  please ,  repeat it . ", '#+#',
                 "you are first. tell me something about positronic.",

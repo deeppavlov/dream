@@ -8,7 +8,7 @@
         "intent": "topic_switching"
     },
     {
-        "sentence": "bye alexa",
+        "sentence": "turn off",
         "intent": "exit"
     },
     {
@@ -148,7 +148,11 @@
         "intent": "lets_chat_about"
     },
     {
-        "sentence": "stop alexa play continue no",
+        "sentence": "chat alexa",
+        "intent": null
+    },
+    {
+        "sentence": "stop did you wanna chat",
         "intent": null
     },
     {
@@ -157,10 +161,6 @@
     },
     {
         "sentence": "i mean chat let me check right now",
-        "intent": null
-    },
-    {
-        "sentence": "set alarm for me to chat with you please",
         "intent": null
     },
     {
@@ -178,5 +178,29 @@
     {
         "sentence": "stop let's chat this way",
         "intent": null
+    },
+    {
+        "sentence": "can you tell me a bedtime story",
+        "intent": "tell_me_a_story"
+    },
+    {
+        "sentence": "please i want a story",
+        "intent": "tell_me_a_story"
+    },
+    {
+        "sentence": "why are you that stupid",
+        "intent": "stupid"
+    },
+    {
+        "sentence": "you're being stupid alexa",
+        "intent": "stupid"
+    },
+    {
+        "sentence": "remind me at 10 p.m. to clean the bedroom",
+        "intent": "cant_do"
+    },
+    {
+        "sentence": "can you sing alexa",
+        "intent": "cant_do"
     }
 ]
