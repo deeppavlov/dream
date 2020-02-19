@@ -224,4 +224,67 @@
     </template>
   </category>
 
+<!--  DO NOT WANT TO TALK ABOUT BLABLA   -->
+  <category>
+    <pattern># NOT # <set>wantto</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+
+  <category>
+    <pattern># NOT # <set>start</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # NOT # <set>start</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+
+  <category>
+    <pattern># NOT # <set>wantto</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # NOT # <set>wantto</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+
+  <category>
+    <pattern># NOT # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # NOT # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+
+  <category>
+    <pattern># NOT # <set>start</set> # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # NOT # <set>start</set> # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+
+  <category>
+    <pattern># NOT # <set>wantto</set> # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # NOT # <set>wantto</set> # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+
+  <category>
+    <pattern>DO_NOT_WANT_TO_TALK_ABOUT_IT</pattern>
+    <template>
+      <random>
+        <li>Okay. Then you pick up the topic.</li>
+        <li>As you wish. Let's chat about something you want. Pick up the topic, my friend.</li>
+        <li>Okay. So, it's your turn. Pick up the topic.</li>
+        <li>Let's chat about something you want. What do you want to talk about?</li>
+      </random>
+    </template>
+  </category>
+
 </aiml>

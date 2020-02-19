@@ -7,3 +7,7 @@ self kill
 die
 be killed
 be murdered
+killed
+died
+murdered
+dead
