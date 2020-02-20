@@ -35,8 +35,8 @@ def respond():
     confidences = []
 
     for dialog in dialogs:
-        user_uttr = dialog["utterances"][-1]["text"]
-        logger.info(f"User Utterance: {user_uttr}")
+        logger.info(f"User utterance: {dialog['utterances'][-1]['text']}")
+        logger.info(f"Called intents: {dialog['called_intents']}")
         response, confidence = responder.respond(dialog)
         logger.info(f"Response: {response}")
         responses.append(response)
