@@ -83,6 +83,7 @@ if [[ "$MODE" == "agent" || "$MODE" == "all" ]]; then
   echo "$TARGET: waiting till agent responded to QUERY";
   while [[ "$(curl --header "Content-Type: application/json" --data '{"user_id":"deploy","payload":"after_deploy_warm", "ignore_deadline_timestamp": "true"}' --request POST -m 5 -s -o /dev/null -w ''%{http_code}'' $DP_AGENT_URL)" != "200" ]]; do
     echo "$TARGET: waiting till agent responded to QUERY with 200 status code";
+    curl --header "Content-Type: application/json" --data '{"user_id":"deploy","payload":"/start", "ignore_deadline_timestamp": "true"}' --request POST -m 5 -s -o /dev/null $DP_AGENT_URL
     sleep 5;
   done
   echo "$TARGET success agent response to QUERY";

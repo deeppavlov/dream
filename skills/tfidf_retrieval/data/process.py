@@ -116,7 +116,7 @@ def check(human_phrase, vectorizer, vectorized_phrases, phrase_list, top_best=1)
             score = score / 1.5
         index = multiply_result.indices[ind]
         bot_answer = phrase_list[human_phrases[index]]
-        if bot_answer == 'NO_ANSWER':
+        if bot_answer == '':
             score = 0
         for sign in '!#$%&*+.,:;<>=?@[]^_{}|':
             bot_answer = bot_answer.replace(' ' + sign, sign)

@@ -11,12 +11,12 @@ def process(dialog, gold_list, banned_words, ner_model):
     utterances = [utterance['text'] for utterance in dialog['utterances']]
     for i in range(len(utterances) - 1):
         if utterances[i] in gold_list:
-            utterances[i + 1] = 'NO_ANSWER'
+            utterances[i + 1] = ''
         utterances[i] = utterances[i].replace(',', ' ')
         cond1 = ner_model is None or 'PER' in ''.join(ner_model([utterances[i]])[1][0]) or 'Dilyara' in utterances[i]
         cond2 = ([banned_word in utterances[i] for banned_word in banned_words])
         if i % 2 != 0 and (cond1 or cond2):
-            utterances[i] = 'NO_ANSWER'
+            utterances[i] = ''
     return {'id': dialog['utterances'][0]['attributes']['conversation_id'],
             'utterances': [utterance['text'] for utterance in dialog['utterances']]}
 
@@ -37,10 +37,10 @@ def filter_gold(good_dialogs, gold_phrases, banned_words):
         len1 = len(good_dialogs[i]['utterances'])
         for j in range(len1):
             if good_dialogs[i]['utterances'][j] in gold_phrases and j + 1 < len1:
-                good_dialogs[i]['utterances'][j + 1] = 'NO_ANSWER'
+                good_dialogs[i]['utterances'][j + 1] = ''
             elif any([banned_word in good_dialogs[i]['utterances'][j]
                       for banned_word in banned_words]):
-                good_dialogs[i]['utterances'][j] = 'NO_ANSWER'
+                good_dialogs[i]['utterances'][j] = ''
     return good_dialogs
 
 
@@ -96,7 +96,7 @@ def main():
     for gold_phrase in gold_list:
         for _ in range(10):
             utts1.append(gold_phrase)
-            utts1.append('NO_ANSWER')
+            utts1.append('')
     bad_ids, bad_output_file = None, None
     old_bad_output_file = args.bad_output_file
     while os.path.exists(increment(old_bad_output_file)):

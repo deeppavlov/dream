@@ -73,7 +73,10 @@ def collect_human_responses(dialog):
 
 
 def print_row(row, f, field='dialog', with_debug_info=False, with_skill_name=False):
-    print(f'--{row["conversation_id"]}----{row["rating_val"]}----{row["feedback_txt"]}---{row["start_time"]}',
+    print(
+        f'--{row["conversation_id"]}----{row["rating_val"]}----{row["feedback_txt"]}',
+        file=f)
+    print(f'---start_ratingtime--{row["start_rating_time"]}--start_utt--{row["start_utt"]}-end_utt-{row["end_utt"]}--',
           file=f)
     print_pretty(row[field], file=f, field=field, with_debug_info=with_debug_info, with_skill_name=with_skill_name)
     print("-----------------------", file=f)
@@ -83,7 +86,7 @@ def print_to_file(new_conversations, args):
     no_feedbacks = []
     with_feedbacks = []
     with open(f'./{args.output}_all.txt', 'w') as f:
-        for _, row in new_conversations.sort_values('start_time', ascending=False).iterrows():
+        for _, row in new_conversations.sort_values('start_rating_time', ascending=False).iterrows():
             if row["feedback_txt"] == 'no_feedback':
                 no_feedbacks.append(row)
             else:
@@ -100,7 +103,7 @@ def print_to_file(new_conversations, args):
 
     if args.with_requesting:
         with open(f'./{args.output}_with_requests.txt', 'w') as f:
-            for _, row in new_conversations.sort_values('start_time', ascending=False).iterrows():
+            for _, row in new_conversations.sort_values('start_rating_time', ascending=False).iterrows():
                 print_row(row, f, 'new_dialog', with_debug_info=args.with_debug_info)
 
 
@@ -139,7 +142,7 @@ async def main(args):
     ratings = pd.read_csv(args.ratings)
 
     new_conversations = []
-    for conv_id, dialog in conversations.items():
+    for conv_id, dialog in tqdm(conversations.items()):
         feedback_txt = feedback[feedback['conversation_id'] == conv_id]
         if len(feedback_txt):
             feedback_txt = feedback_txt['feedback'].iloc[0]
@@ -148,15 +151,21 @@ async def main(args):
         rating_val = ratings[ratings['Conversation ID'] == conv_id]
         if len(rating_val):
             start_time = rating_val['Approximate Start Time'].iloc[0]
+            start_utt_time = dialog['utterances'][0]['date_time']
+            end_utt_time = dialog['utterances'][-1]['date_time']
+            # print(type(end_utt_time))
+            # print(type(start_time))
             rating_val = rating_val['Rating'].iloc[0]
-            new_conversations.append({"conversation_id": conv_id, "rating_val": float(rating_val),
-                                      "feedback_txt": feedback_txt, "dialog": dialog,
-                                      "start_time": start_time})
-
+            data = {"conversation_id": conv_id, "rating_val": float(rating_val),
+                    "feedback_txt": feedback_txt, "dialog": dialog,
+                    "start_rating_time": start_time,
+                    "start_utt": start_utt_time, "end_utt": end_utt_time}
+            new_conversations.append(data)
     if len(new_conversations) > 0:
         new_conversations = pd.DataFrame(new_conversations)
-        new_conversations['start_time'] = pd.to_datetime(new_conversations['start_time'])
-        new_conversations = new_conversations.sort_values('start_time', ascending=False)
+        for time_name in ['start_rating_time', 'start_utt', 'end_utt']:
+            new_conversations[time_name] = pd.to_datetime(new_conversations[time_name])
+        new_conversations = new_conversations.sort_values('start_rating_time', ascending=False)
         args.first_n = int(args.first_n)
         new_conversations = new_conversations.head(args.first_n)
         if args.with_requesting:
