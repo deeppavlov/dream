@@ -362,17 +362,6 @@
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
             },
-            "convert_reddit_with_personality": {
-                "connector": {
-                    "protocol": "http",
-                    "url": "http://convert_reddit_with_personality:8048/respond"
-                },
-                "dialog_formatter": "convert_formatter_dialog",
-                "response_formatter": "base_formatter_service",
-                "previous_services": ["skill_selectors"],
-                "state_manager_method": "add_hypothesis"
-
-            },
             "reddit_ner_skill": {
                 "connector": {
                     "protocol": "http",

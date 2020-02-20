@@ -224,12 +224,6 @@ services:
       - "./skills/convert_reddit:/app"
     ports:
       - 8029:8029
-  convert_reddit_with_personality:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/convert_reddit_with_personality:/app"
-    ports:
-      - 8048:8048
   personal_info_skill:
     env_file: [.env.dev]
     volumes:
