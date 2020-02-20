@@ -58,9 +58,9 @@ def where_are_you_from_respond(dialog, response_phrases):
 def random_respond(dialog, response_phrases):
     if isinstance(response_phrases, dict):
         if dialog['seen']:
-            response = random.choice(response_phrases['last'])
+            response = random.choice(response_phrases['last']).strip()
         else:
-            response = random.choice(response_phrases['first'])
+            response = random.choice(response_phrases['first']).strip()
     else:
         response = random.choice(response_phrases).strip()
     return response
@@ -103,7 +103,7 @@ def get_respond_funcs():
         "what_can_you_do": random_respond,
         "what_time": what_time_respond,
         "dont_understand": random_respond,
-        "stupid": random_respond,
+        # "stupid": random_respond,
         "cant_do": random_respond,
         "tell_me_a_story": random_respond
     }

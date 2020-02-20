@@ -334,6 +334,21 @@ def reddit_ner_formatter_dialog(dialog: Dict):
     ]
 
 
+def intent_responder_formatter_dialog(dialog: Dict):
+    # Used by: intent_responder
+    intents = list(dialog['utterances'][-1]['annotations']['intent_catcher'].keys())
+    called_intents = {intent: False for intent in intents}
+    for utt in dialog['human_utterances']:
+        called = [intent for intent, value in utt['annotations'].get('intent_catcher', {}).items() if value['detected']]
+        for intent in called:
+            called_intents[intent] = True
+    dialog['called_intents'] = called_intents
+    dialog["utterances"] = dialog["utterances"][-(LAST_N_TURNS * 2 + 1):]
+    for utt in dialog['utterances']:
+        utt['text'] = utt['annotations']['sentseg']['punct_sent']
+    return [{'dialogs': [dialog]}]
+
+
 def attitude_formatter_service(payload: Dict):
     # Used by: attitude_formatter
     payload = payload[0]
