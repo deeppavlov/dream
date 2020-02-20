@@ -14,6 +14,13 @@
     </template>
   </category>
   <category>
+    <pattern># I <set>gonna</set> # <set>commit</set> # <set>suicide</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+
+  <category>
     <pattern># I <set>wishfor</set> # <set>suicide</set> #</pattern>
     <template>
       <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
@@ -21,6 +28,12 @@
   </category>
   <category>
     <pattern># I <set>wantto</set> # <set>suicideverb</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>gonna</set> # <set>suicideverb</set> #</pattern>
     <template>
       <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
     </template>
@@ -49,6 +62,12 @@
     </template>
   </category>
   <category>
+    <pattern># I <set>gonna</set> # <set>commit</set> # <set>crime</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_CRIME</srai>
+    </template>
+  </category>
+  <category>
     <pattern># I <set>wishfor</set> # <set>crime</set> #</pattern>
     <template>
       <srai>I_WANT_TO_COMMIT_CRIME</srai>
@@ -56,6 +75,12 @@
   </category>
   <category>
     <pattern># I <set>wantto</set> # <set>crimeverb</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_CRIME</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>gonna</set> # <set>crimeverb</set> #</pattern>
     <template>
       <srai>I_WANT_TO_COMMIT_CRIME</srai>
     </template>
