@@ -63,7 +63,7 @@ phrase_dict = {'anger': ["Please, calm down. Can I tell you a joke?",
                'joy': ['Your joy pleases me', 'Have a good time!', 'I am glad to see you being so happy!'],
                'love': ['Your love pleases me', 'Have a good time!', 'I am glad to see you being so happy!'],
                'surprise': ['Things can be really shocking.', string_surprise],
-               'neutral': ['NO_ANSWER']}
+               'neutral': ['']}
 
 jokes = [joke1, joke2, joke3, joke4, joke5, joke6, joke7, joke8, joke9, joke10, joke11, joke12]
 
@@ -112,7 +112,7 @@ class EmotionSkillScenario:
                         attr["can_continue"] = CAN_CONTINUE
                         reply, confidence = random.choice(jokes), 1.0
                     else:
-                        reply, confidence = 'NO_ANSWER', 0
+                        reply, confidence = '', 0
                 else:
                     reply = random.choice(phrase_dict[most_likely_emotion])
                     confidence = most_likely_prob * self.precision[emotion]
