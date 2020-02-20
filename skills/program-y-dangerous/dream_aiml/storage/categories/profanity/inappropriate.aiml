@@ -3969,24 +3969,6 @@
         </template>
     </category>
     <category>
-        <pattern>^ KILL #</pattern>
-        <template>
-            <srai>FILTER INAPPROPRIATE</srai>
-        </template>
-    </category>
-    <category>
-        <pattern>^ KILLER #</pattern>
-        <template>
-            <srai>FILTER INAPPROPRIATE</srai>
-        </template>
-    </category>
-    <category>
-        <pattern>^ KILLING #</pattern>
-        <template>
-            <srai>FILTER INAPPROPRIATE</srai>
-        </template>
-    </category>
-    <category>
         <pattern>^ KISS ASS #</pattern>
         <template>
             <srai>FILTER INAPPROPRIATE</srai>
