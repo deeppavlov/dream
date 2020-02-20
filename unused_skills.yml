@@ -36,4 +36,15 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+  convert_reddit_with_personality:
+    build:
+      context: ./skills/convert_reddit_with_personality/
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8048 -t 60
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
 version: '3.7'
