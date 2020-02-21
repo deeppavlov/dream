@@ -13,7 +13,7 @@ from common.constants import CAN_NOT_CONTINUE
 from common.utils import get_skill_outputs_from_dialog, get_user_replies_to_particular_skill
 from utils import get_starting_phrase, get_statement_phrase, get_opinion_phrase, get_comment_phrase, \
     if_to_start_script, extract_verb_noun_phrases, DEFAULT_STARTING_CONFIDENCE, is_custom_topic, \
-    WIKI_DESCRIPTIONS, SORRY_SWITCH_TOPIC_REPLIES, DEFAULT_CONFIDENCE, is_predefined_topic
+    WIKI_DESCRIPTIONS, SORRY_SWITCH_TOPIC_REPLIES, DEFAULT_CONFIDENCE, is_predefined_topic, get_used_attributes_by_name
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -50,7 +50,7 @@ def get_not_used_topic(used_topics, dialog):
     TOPICS_PROB = 0.5
     verb_noun_phrases = extract_verb_noun_phrases(dialog["utterances"][-1]["text"])
 
-    if len(dialog['utterances']) <= 3 or len(verb_noun_phrases) == 0:
+    if len(dialog['utterances']) < 3 or len(verb_noun_phrases) == 0:
         available_wiki_topics = set(WIKI_DESCRIPTIONS) - set(used_topics)
         available_topics = set(TOPICS) - set(used_topics)
 
@@ -82,12 +82,9 @@ def get_status_and_topic(dialog):
 
     if len(dialog["utterances"]) >= 3:
         # if dialog is not empty
-        meta_script_outputs = get_skill_outputs_from_dialog(dialog["utterances"],
-                                                            skill_name="meta_script_skill", activated=True)
-        used_topics = []
-        for output in meta_script_outputs:
-            used_topics.append(output.get("meta_script_topic", ""))
-        logger.info(f"Previously used topics: {used_topics}")
+
+        used_topics = get_used_attributes_by_name(
+            dialog["utterances"], attribute_name="meta_script_topic", value_by_default="", activated=True)
 
         # this determines how many replies back we assume active meta script skill to continue dialog.
         # let's assume we can continue if meta_scrip skill was active on up to 3 steps back
@@ -105,6 +102,9 @@ def get_status_and_topic(dialog):
             # previous active skill was not `meta_script_skill`
             curr_meta_script_status = ""
             curr_meta_script_topic = ""
+
+        logger.info(f"Found meta_script_status: `{curr_meta_script_status}` "
+                    f"on meta_script_topic: `{curr_meta_script_topic}`")
 
         if curr_meta_script_status in ["comment", "", FINISHED_SCRIPT] or last_script_status == FINISHED_SCRIPT:
             # if previous meta script is finished (comment given) in previous bot reply
@@ -188,7 +188,7 @@ def respond():
             attr["meta_script_status"] = curr_meta_script_status
 
             if curr_meta_script_status == "starting":
-                response, confidence, attr = get_starting_phrase(topic, attr)
+                response, confidence, attr = get_starting_phrase(dialog, topic, attr)
                 if len(dialog["utterances"]) <= 20:
                     # if this is a beginning of the dialog, assign higher confidence to start the script
                     confidence = DEFAULT_DIALOG_BEGIN_CONFIDENCE
@@ -208,29 +208,13 @@ def respond():
                     response, confidence, attr = get_comment_phrase(dialog, attr)
                     # current meta script finished
                 elif curr_meta_script_status == "opinion":
-                    response, confidence, attr = get_opinion_phrase(topic, attr)
+                    response, confidence, attr = get_opinion_phrase(dialog, topic, attr)
                 elif curr_meta_script_status == "deeper1" and no_detected and not is_predefined_topic(topic):
                     # some `no`-intended answer to starting phrase from wiki or custom topic (not for predefined)
                     response, confidence = "", 0.0
                     attr["meta_script_status"] = FINISHED_SCRIPT
                 else:
-                    # do not consider three last used meta script templates
-                    meta_script_outputs = get_skill_outputs_from_dialog(dialog["utterances"],
-                                                                        skill_name="meta_script_skill", activated=True)
-                    already_used_templates = []
-                    for output in meta_script_outputs:
-                        already_used_templates.append(output.get("meta_script_template_relation", ""))
-                    logger.info(f"Found previously used relation templates:`{already_used_templates}`")
-                    already_used_question_templates = []
-                    for output in meta_script_outputs:
-                        already_used_question_templates.append(output.get("meta_script_template_question", ""))
-                    logger.info(f"Found previously used question templates:`{already_used_question_templates}`")
-
-                    already_used_templates = [el for el in already_used_templates if el is not None][-4:]
-                    already_used_question_templates = [el for el in already_used_question_templates
-                                                       if el is not None][-4:]
-                    response, confidence, attr = get_statement_phrase(
-                        dialog, topic, attr, TOPICS, already_used_templates, already_used_question_templates)
+                    response, confidence, attr = get_statement_phrase(dialog, topic, attr, TOPICS)
 
             logger.info(f"User sent: `{dialog['utterances'][-1]['text']}`. "
                         f"Response: `{response}`."
