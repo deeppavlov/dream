@@ -81,3 +81,20 @@ def get_list_of_active_skills(utterances):
             result.append(uttr["active_skill"])
 
     return result
+
+
+def get_user_replies_to_particular_skill(utterances, skill_name):
+    """
+    Return user's responses to particular skill if it was active
+    Args:
+        utterances:
+        skill_name:
+
+    Returns:
+        list of string response
+    """
+    result = []
+    for i, uttr in enumerate(utterances):
+        if uttr.get("active_skill", "") == skill_name:
+            result.append(utterances[i - 1]["text"])
+    return result
