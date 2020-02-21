@@ -119,12 +119,13 @@ def respond():
                        'quiz. Just say: "Play the Harry Potter Quiz."',
                        "I can provide information, music, news, weather, and more.",
                        'For the latest in politics and other news, try asking "Alexa, play my Flash Briefing."',
-                       "I don't have an opinion on that."
+                       "I don't have an opinion on that.", "[GetMusicDetailsIntent:Music]"
                        ]
         bad_subanswers = ["let's talk about", "i have lots of", "world of warcraft",
                           " wow ", " ok is", "coolness is ", "about nice",
                           "\"let's talk\" is a 2002 drama", "visit amazon.com/",
-                          'alexa, play my flash briefing.', "here's a fact about amazon alexas"]
+                          'alexa, play my flash briefing.', "here's a fact about amazon alexas",
+                          "past tense", "plural form", "singular form", "present tense", "future tense", "bob cut"]
 
         if len(response) > 0 and 'skill://amzn1' not in response:
             if response in bad_answers or any([bad_substr in response.lower() for bad_substr in bad_subanswers]):
