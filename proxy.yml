@@ -1,0 +1,40 @@
+services:
+  toxic_classification:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    command: ["nginx", "-g", "daemon off;"]
+    volumes:
+    - ./dp/proxy/toxic_classification:/etc/nginx/conf.d
+  sentiment_classification:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    command: ["nginx", "-g", "daemon off;"]
+    volumes:
+    - ./dp/proxy/sentiment_classification:/etc/nginx/conf.d
+  sentseg:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    command: ["nginx", "-g", "daemon off;"]
+    volumes:
+    - ./dp/proxy/sentseg:/etc/nginx/conf.d
+  ner:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    command: ["nginx", "-g", "daemon off;"]
+    volumes:
+    - ./dp/proxy/ner:/etc/nginx/conf.d
+  sentrewrite:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    command: ["nginx", "-g", "daemon off;"]
+    volumes:
+    - ./dp/proxy/sentrewrite:/etc/nginx/conf.d
+  test:
+    image: centos
+    command: tail -f /dev/null
+version: '3.7'
