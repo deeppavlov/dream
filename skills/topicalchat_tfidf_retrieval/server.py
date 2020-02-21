@@ -44,7 +44,7 @@ donotknow_answers = [
     "I didn't get it. Sorry.",
     "Let's talk about something else.",
     "I'm newborn socialbot, so I can't do so much. For example I can answer for any question.",
-    "I'm really sorry but i'm a socialbot, and I cannot do some Alexa things.",
+    "I'm really sorry but i'm a socialbot, and I can't do some Alexa functions.",
     "I didn’t catch that.",
     "I didn’t get that.",
 ]

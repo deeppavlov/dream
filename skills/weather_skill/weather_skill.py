@@ -135,7 +135,7 @@ class WeatherSkill:
                     # request CITY SLOT
                     ############################################################
                     # ask question:
-                    current_reply = "For which city do you want to get weather forecast?"
+                    current_reply = "Which city would you like a weather forecast for?"
                     context_dict['weather_forecast_interaction_city_slot_requested'] = True
                     curr_confidence = QUESTION_CONFIDENCE
                     return current_reply, curr_confidence, human_attr, bot_attr, context_dict

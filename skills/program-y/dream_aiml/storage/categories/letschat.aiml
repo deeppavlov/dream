@@ -38,9 +38,13 @@
     <pattern>LETS_CHAT</pattern>
     <template>
       <random>
-        <li>It is always a pleasure to talk with a good person. What do you want to talk about?</li>
+        <li>It is always a pleasure to talk with a nice person. What do you want to talk about?</li>
         <li>Yeah, let's chat! What do you want to talk about?</li>
-        <li>Let's chat. I like to talk so much! What do you want to talk about?</li>
+        <li>Let's chat. I love talking! What do you want to talk about?</li>
+        <li>Hi, this is an Alexa Prize Socialbot! Yeah, let’s have a chat! What shall we talk about?</li>
+        <li>Hi there, this is an Alexa Prize Socialbot! Lovely to meet you! What do you want to talk about?</li>
+        <li>Hello there, this is an Alexa Prize Socialbot! Nice to meet you! What do you want to talk about?</li>
+
       </random>
     </template>
   </category>

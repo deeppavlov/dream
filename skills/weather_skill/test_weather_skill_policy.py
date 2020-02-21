@@ -39,7 +39,7 @@ class TestWeatherSKillPolicy(unittest.TestCase):
         dialogs = json_data
         # print(self.ws(dialogs))
         responses, confidences, _, _, _ = self.ws(dialogs)
-        self.assertEqual(responses[0], 'For which city do you want to get weather forecast?')
+        self.assertEqual(responses[0], 'Which city would you like a weather forecast for?')
 
     def test_response_to_location_question_with_next_forecast(self):
         """Test case when user answers with city entity after question about
