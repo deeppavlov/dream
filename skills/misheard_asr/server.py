@@ -16,7 +16,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-misheard_responses = np.array([("Excuse me, I misheard you. Sometimes it’s difficult for me to understand speech well. "
+misheard_responses = np.array([("Sorry, I misheard you. Sometimes it’s difficult for me to understand speech well. "
                                 "Sorry. It's just my usual dimness."),
                                "Sorry, I didn't catch that. Could you say it again, please?",
                                "I couldn't hear you. I beg your pardon?",

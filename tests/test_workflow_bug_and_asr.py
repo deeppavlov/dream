@@ -16,7 +16,7 @@ def test_workflow_bug():
 
 def test_asr_low_confidence():
     asr_responses = [
-        ("Excuse me, I misheard you. Sometimes it’s difficult for me to understand speech well. "
+        ("Sorry, I misheard you. Sometimes it’s difficult for me to understand speech well. "
          "Sorry. It's just my usual dimness."),
         "Sorry, I didn't catch that. Could you say it again, please?",
         "I couldn't hear you. I beg your pardon?",
