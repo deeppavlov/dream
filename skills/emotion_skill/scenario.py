@@ -99,6 +99,10 @@ class EmotionSkillScenario:
                 bot_phrases = [j for i, j in enumerate(text_utterances) if i % 2 == 1]
                 if len(bot_phrases) == 0:
                     bot_phrases.append('')
+                if any([j in bot_phrases[-1].lower() for j in ['how are you']]):
+                    conf_sure = 0.95
+                else:
+                    conf_sure = self.conf_sure
                 annotated_user_phrase = dialog['utterances'][-1]
                 emotion_probs = annotated_user_phrase['annotations']['emotion_classification']['text']
                 most_likely_prob = max(emotion_probs.values())
@@ -116,10 +120,10 @@ class EmotionSkillScenario:
                 else:
                     reply = random.choice(phrase_dict[most_likely_emotion])
                     confidence = most_likely_prob * self.precision[emotion]
-                if 'Can I tell you a joke' in reply and confidence < self.conf_sure:
+                if 'Can I tell you a joke' in reply and confidence < conf_sure:
                     attr["can_continue"] = CAN_CONTINUE
                     # Push reply with offering a joke forward
-                    confidence = self.conf_sure
+                    confidence = conf_sure
             except Exception as e:
                 logger.exception("exception in emotion skill")
                 sentry_sdk.capture_exception(e)
