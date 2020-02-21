@@ -104,6 +104,9 @@ def respond():
             scope.set_extra('last_utterances', last_utterances)
             sentry_sdk.capture_message("No response in tfidf_retrieve")
         response = [["sorry", 0]]
+    for i in range(len(response)):
+        if any([j in response[i][0].lower() for j in ['no_answer', 'unknown', 'interjection']]):
+            response[i][0] = ''
     assert len(response[0]) == 2
     total_time = time.time() - st_time
     logger.info(f"Tfidf exec time: {total_time:.3f}s")
