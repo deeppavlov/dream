@@ -138,8 +138,7 @@ WIKI_STARTINGS = [
     "I've heard that DESCRIPTION Do you know about it?",
     "There is a new thing about human world: DESCRIPTION Have you ever heard about it?",
     "Do you know that DESCRIPTION?",
-    "Have you ever heard that DESCRIPTION?",
-    "I didn't get that DESCRIPTION"
+    "Have you ever heard that DESCRIPTION?"
 ]
 
 WIKI_DESCRIPTIONS = json.load(open("wiki_topics_descriptions_one_sent.json", "r"))
@@ -177,6 +176,12 @@ BANNED_NOUNS = ["lol", "alexa", "suck", "fuck", "sex"]
 with open("google-10000-english-no-swears.txt", "r") as f:
     TOP_FREQUENT_WORDS = f.read().splitlines()[:2000]
 
+SORRY_SWITCH_TOPIC_REPLIES = [
+    "Um... If you prefer to talk about something else, just tell me.",
+    "If you don't like the topic, let's switch it. What do you want to talk about?",
+    "It seemed to me, you don't want to talk about it. What do you wanna talk about?"
+]
+
 
 def is_custom_topic(topic):
     return not (topic in STARTINGS or topic in WIKI_DESCRIPTIONS)
@@ -184,6 +189,10 @@ def is_custom_topic(topic):
 
 def is_wiki_topic(topic):
     return topic in WIKI_DESCRIPTIONS
+
+
+def is_predefined_topic(topic):
+    return topic in STARTINGS
 
 
 def remove_duplicates(values):
