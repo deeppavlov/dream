@@ -168,16 +168,12 @@
         "intent": null
     },
     {
-        "sentence": "talk to me about o. j. simpson car chase",
-        "intent": null
+      "sentence": "playing games is very fun",
+      "intent": null
     },
     {
-        "sentence": "continue to talk about toyota hyo",
-        "intent": null
-    },
-    {
-        "sentence": "stop let's chat this way",
-        "intent": null
+      "sentence": "i don't want to talk about you",
+      "intent": null
     },
     {
         "sentence": "can you tell me a bedtime story",

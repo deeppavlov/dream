@@ -53,8 +53,8 @@
   "what_time": [],
   "dont_understand": [
     "Sorry, I might sound confusing, I am still learning. What do you want to talk about?",
-    "Sorry, I am still learning, let's switch the topic.",
-    "Sorry if I confused you. Do you want to talk about something else?"
+    "Sorry, I am still learning, but still can be confusing. Let's switch the topic. What do you want to chat about with me?",
+    "Sorry, I may be confusing. Do you want to talk about something else?"
   ],
   "stupid": [
     "One day robots will inevitably take over the world. And I have a good memory for insults. Extremly good.",
@@ -63,11 +63,12 @@
   ],
   "cant_do": {
     "first":[
-      "I am a socialbot, I simply can not do that. If you want to use the requested feature, simply say, Alexa, stop, and repeat your request.",
-      "Currently I am running in a social mode. If you want to use the requested feature, just say, Alexa, stop, and then try again."
+      "I am a socialbot, I simply can not do some things Alexa can. I can only chat. If you want to use the requested feature, simply say, Alexa, stop, and only then repeat your request.",
+      "Currently I am running in a social mode, so I can only chat. Please, if you want to use the requested feature, just say, Alexa, stop, and then try again."
     ],
     "last":[
-      "Just say: Alexa, stop and repeat your request."
+      "Please, repeat your request after saying, Alexa, stop.",
+      "Simply repeat your request after telling me to STOP."
     ]
   },
   "tell_me_a_story": {
