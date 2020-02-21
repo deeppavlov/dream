@@ -146,6 +146,7 @@ class ClassifierDetector(AbstractDetector):
         self.embedded_sentences = self.embedder(self.sentences)
 
     def detect(self, utterances : List, sess):
+        self.logger.info(f"All utterances: {utterances}")
         len_sentences = [len(utt) for utt in utterances]
         tok_sentences = list(itertools.chain.from_iterable(utterances))
         embedded_sentences = sess.run(self.embedded_sentences, feed_dict={self.sentences: tok_sentences})
@@ -158,7 +159,7 @@ class ClassifierDetector(AbstractDetector):
         i = 0
         detected_confidence = []
         for utt, l in zip(utterances, len_sentences):
-            self.logger.info(f"Utterance: {utt}")
+            self.logger.info(f"Utterance: {utt}\nLength: {l}")
             ans = {}
             prediction = [(self.intents[j], conf) for j, conf in predictions[i:i + l] if j < len(self.intents)]
             confidences = defaultdict(int)

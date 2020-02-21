@@ -343,7 +343,7 @@ def intent_responder_formatter_dialog(dialog: Dict):
     # Used by: intent_responder
     intents = list(dialog['utterances'][-1]['annotations']['intent_catcher'].keys())
     called_intents = {intent: False for intent in intents}
-    for utt in dialog['human_utterances']:
+    for utt in dialog['human_utterances'][:-1]:
         called = [intent for intent, value in utt['annotations'].get('intent_catcher', {}).items() if value['detected']]
         for intent in called:
             called_intents[intent] = True
