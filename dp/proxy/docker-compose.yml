@@ -1,0 +1,55 @@
+services:
+  sentseg:
+    build:
+      context: ../../annotators/SentSeg/
+    command: bash -c "./setup.sh && gunicorn --workers=1 server:app -b 0.0.0.0:8011 -t 100"
+    volumes: []
+    ports:
+    - 8011:8011
+  toxic_classification:
+    build:
+      args:
+        skill_endpoint: toxicity_annotations
+        skillconfig: annotators/DeepPavlovToxicClassification/toxic_classification.json
+        skillhost: 0.0.0.0
+        skillport: 8013
+        skilldir: annotators/DeepPavlovToxicClassification/
+      context: ../../
+      dockerfile: dp/dockerfile_skill_gpu
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    runtime: nvidia
+    ports:
+    - 8013:8013
+  sentiment_classification:
+    build:
+      args:
+        skill_endpoint: sentiment_annotations
+        skillconfig: annotators/DeepPavlovSentimentClassification/sentiment_sst_conv_bert.json
+        skillhost: 0.0.0.0
+        skillport: 8024
+        skilldir: annotators/DeepPavlovSentimentClassification/
+      context: ../../
+      dockerfile: dp/dockerfile_skill_gpu
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    runtime: nvidia
+    ports:
+    - 8024:8024
+  sentrewrite:
+    build:
+      context: ../../annotators/SentRewrite/
+    command: bash -c "./setup.sh && gunicorn --workers=1 server:app -b 0.0.0.0:8017 -t 60"
+    ports:
+    - 8017:8017
+  ner:
+    build:
+      context: ../../annotators/NER/
+    environment:
+      DEVICE: cuda
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8021 -t 100
+    volumes: []
+    tty: true
+    ports:
+    - 8021:8021
+version: '2.4'
