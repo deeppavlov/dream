@@ -13,7 +13,7 @@ import requests
 from spacy.symbols import nsubj, xcomp, VERB, NOUN, ADP
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
-from common.utils import transform_vbg
+from common.utils import transform_vbg, get_skill_outputs_from_dialog
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -308,7 +308,52 @@ def get_gerund_topic(topic):
     return topic.replace(to_replace, gerund)
 
 
-def get_starting_phrase(topic, attr):
+def get_used_attributes_by_name(utterances, attribute_name="meta_script_topic", value_by_default=None, activated=True):
+    """
+    Find among given utterances values of particular attribute of `meta_script_skill` outputs.
+    `meta_script_skill` should be active skill if `activated`
+
+    Args:
+        utterances: list of utterances. the first one is user's one.
+        attribute_name: name of the attribute to collect
+        value_by_default: if not None will also be added to the returned list
+        activated: whether `meta_script_skill` should be active or not
+
+    Returns:
+        list of attribute values
+    """
+    used = []
+    meta_script_outputs = get_skill_outputs_from_dialog(
+        utterances, skill_name="meta_script_skill", activated=activated)
+
+    for output in meta_script_outputs:
+        value = output.get(attribute_name, value_by_default)
+        if value is not None:
+            used.append(value)
+
+    logger.info(f"Found used attribute `{attribute_name}` values:`{used}`")
+    return used
+
+
+def get_not_used_template(used_templates, all_templates):
+    """
+    Chooce not used template among all templates
+
+    Args:
+        used_templates: list of templates already used in the dialog
+        all_templates: list of all available templates
+
+    Returns:
+        string template
+    """
+    available = list(set(all_templates).difference(set(used_templates)))
+    if len(available) > 0:
+        return choice(available)
+    else:
+        return choice(all_templates)
+
+
+def get_starting_phrase(dialog, topic, attr):
     """
     For considered topic propose starting phrase for meta-script, assign attributes for dialog
 
@@ -319,13 +364,23 @@ def get_starting_phrase(topic, attr):
     Returns:
         tuple of text response, confidence and response attributes
     """
+    used_templates = get_used_attributes_by_name(
+        dialog["utterances"], attribute_name="meta_script_starting_template",
+        value_by_default=None, activated=True)[-3:]
+
     if is_custom_topic(topic):
-        response = choice(OTHER_STARTINGS).replace('DOINGTHAT', get_gerund_topic(topic)).replace('DOTHAT', topic)
+        template = get_not_used_template(used_templates, OTHER_STARTINGS)
+        attr["meta_script_starting_template"] = template
+        response = template.replace('DOINGTHAT', get_gerund_topic(topic)).replace('DOTHAT', topic)
     elif is_wiki_topic(topic):
-        response = choice(WIKI_STARTINGS).replace('DESCRIPTION', WIKI_DESCRIPTIONS[topic])
+        template = get_not_used_template(used_templates, WIKI_STARTINGS)
+        attr["meta_script_starting_template"] = template
+        response = template.replace('DESCRIPTION', WIKI_DESCRIPTIONS[topic])
     else:
         # predefined topic
-        response = f"{choice(LET_ME_ASK_TEMPLATES)} {STARTINGS[topic]}"
+        template = get_not_used_template(used_templates, LET_ME_ASK_TEMPLATES)
+        attr["meta_script_starting_template"] = template
+        response = f"{template} {STARTINGS[topic]}"
 
     confidence = DEFAULT_STARTING_CONFIDENCE
     attr["can_continue"] = CAN_CONTINUE
@@ -344,15 +399,21 @@ def get_comment_phrase(dialog, attr):
     Returns:
         tuple of text response, confidence and response attributes
     """
+    used_templates = get_used_attributes_by_name(
+        dialog["utterances"], attribute_name="meta_script_comment_template",
+        value_by_default=None, activated=True)[-2:]
+
     sentiment = dialog["utterances"][-1]["annotations"].get("sentiment_classification",
                                                             {'text': ['neutral', 1.]})["text"][0]
-    response = choice(COMMENTS[sentiment])
+    template = get_not_used_template(used_templates, COMMENTS[sentiment])
+    attr["meta_script_comment_template"] = template
+    response = template
     confidence = DEFAULT_CONFIDENCE
     attr["can_continue"] = CAN_NOT_CONTINUE
     return response, confidence, attr
 
 
-def get_opinion_phrase(topic, attr):
+def get_opinion_phrase(dialog, topic, attr):
     """
     For considered topic propose opinion request phrase (one after dive deeper multi-step stage)
     for meta-script, assign attributes for dialog.
@@ -364,13 +425,20 @@ def get_opinion_phrase(topic, attr):
     Returns:
         tuple of text response, confidence and response attributes
     """
-    response = choice(ASK_OPINION).replace("DOINGTHAT", get_gerund_topic(topic)).replace("DOTHAT", topic)
+    used_templates = get_used_attributes_by_name(
+        dialog["utterances"], attribute_name="meta_script_opinion_template",
+        value_by_default=None, activated=True)[-2:]
+
+    template = get_not_used_template(used_templates, ASK_OPINION)
+    attr["meta_script_opinion_template"] = template
+
+    response = template.replace("DOINGTHAT", get_gerund_topic(topic)).replace("DOTHAT", topic)
     confidence = DEFAULT_CONFIDENCE
     attr["can_continue"] = CAN_CONTINUE
     return response, confidence, attr
 
 
-def get_statement_phrase(dialog, topic, attr, TOPICS, already_used_templates=[], already_used_question_templates=[]):
+def get_statement_phrase(dialog, topic, attr, TOPICS):
     """
     For considered topic propose dive deeper questions
     for meta-script, assign attributes for dialog.
@@ -378,18 +446,19 @@ def get_statement_phrase(dialog, topic, attr, TOPICS, already_used_templates=[],
     Args:
         topic: current topic `verb + adj/adv/noun`
         attr: dictionary of current attributes
-        already_used_templates: last three templates of relation statements already used in the dialog
-        already_used_question_templates: last three templates of questions already used in the dialog
 
     Returns:
         tuple of text response, confidence and response attributes
     """
     last_uttr = dialog["utterances"][-1]
-    last_five_bot_utterances = [uttr["text"] for uttr in dialog["bot_utterances"][-5:]]
 
-    meta_script_template = choice(list(set(DIVE_DEEPER_TEMPLATE_COMETS.keys()).difference(
-        set(already_used_templates))))
-    attr["meta_script_template_relation"] = meta_script_template
+    # choose and fill template with relation from COMeT
+    used_templates = get_used_attributes_by_name(
+        dialog["utterances"], attribute_name="meta_script_relation_template",
+        value_by_default=None, activated=True)[-2:]
+    meta_script_template = get_not_used_template(used_templates, DIVE_DEEPER_TEMPLATE_COMETS)
+    attr["meta_script_relation_template"] = meta_script_template
+
     relation = DIVE_DEEPER_TEMPLATE_COMETS[meta_script_template]["attribute"]
     prediction = get_comet(topic, relation, TOPICS)
 
@@ -403,20 +472,30 @@ def get_statement_phrase(dialog, topic, attr, TOPICS, already_used_templates=[],
         "person x ", "").replace(
         "personx ", "")
 
+    # choose template for short comment
+    used_templates = get_used_attributes_by_name(
+        dialog["utterances"], attribute_name="meta_script_deeper_comment_template",
+        value_by_default=None, activated=True)[-2:]
     if last_uttr["annotations"].get("intent_catcher", {}).get("yes", {}).get("detected") == 1:
-        comment = choice(DIVE_DEEPER_COMMENTS["yes"] + DIVE_DEEPER_COMMENTS["other"])
+        comment = get_not_used_template(
+            used_templates, DIVE_DEEPER_COMMENTS["yes"] + DIVE_DEEPER_COMMENTS["other"])
+        attr["meta_script_deeper_comment_template"] = comment
     elif last_uttr["annotations"].get("intent_catcher", {}).get("no", {}).get("detected") == 1:
-        comment = choice(DIVE_DEEPER_COMMENTS["no"] + DIVE_DEEPER_COMMENTS["other"])
+        comment = get_not_used_template(
+            used_templates, DIVE_DEEPER_COMMENTS["no"] + DIVE_DEEPER_COMMENTS["other"])
+        attr["meta_script_deeper_comment_template"] = comment
     else:
-        comment = choice(DIVE_DEEPER_COMMENTS["other"])
+        comment = get_not_used_template(
+            used_templates, DIVE_DEEPER_COMMENTS["other"])
+        attr["meta_script_deeper_comment_template"] = comment
 
-    if any([comment in uttr for uttr in last_five_bot_utterances]):
-        comment = ""
-
-    meta_script_template_question = choice(list(set(
-        DIVE_DEEPER_TEMPLATE_COMETS[meta_script_template]["templates"]).difference(
-        set(already_used_question_templates))))
-    attr["meta_script_template_question"] = meta_script_template_question
+    # choose and fill template of question upon relation from COMeT
+    used_templates = get_used_attributes_by_name(
+        dialog["utterances"], attribute_name="meta_script_question_template",
+        value_by_default=None, activated=True)[-3:]
+    meta_script_template_question = get_not_used_template(
+        used_templates, DIVE_DEEPER_TEMPLATE_COMETS[meta_script_template]["templates"])
+    attr["meta_script_question_template"] = meta_script_template_question
 
     if is_custom_topic(topic):
         response = f"{meta_script_template_question.replace('STATEMENT', statement)}".strip()
