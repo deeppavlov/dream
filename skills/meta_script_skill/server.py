@@ -103,8 +103,7 @@ def get_status_and_topic(dialog):
             curr_meta_script_status = ""
             curr_meta_script_topic = ""
 
-        logger.info(f"Found meta_script_status: `{curr_meta_script_status}` "
-                    f"on meta_script_topic: `{curr_meta_script_topic}`")
+        logger.info(f"Found meta_script_status: `{curr_meta_script_status}`")
 
         if curr_meta_script_status in ["comment", "", FINISHED_SCRIPT] or last_script_status == FINISHED_SCRIPT:
             # if previous meta script is finished (comment given) in previous bot reply
