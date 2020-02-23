@@ -69,7 +69,7 @@ def call_dp_agent(user_id, text, request_data):
             json={'user_id': user_id, 'payload': text, 'device_id': device_id,
                   'session_id': session_id, 'request_id': request_id,
                   'conversation_id': conversation_id, 'speech': speech},
-            timeout=5).json()
+            timeout=5.5).json()
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         sentry_sdk.capture_exception(e)
         logger.exception("AWS_LAMBDA Timeout")
@@ -114,12 +114,6 @@ def get_text_from_speech(speech):
     text = ' '.join(tokens)
     logger.info(f'got text from speech: {text}')
     mean_proba = sum(probs) / len(probs)
-    if mean_proba < 0.75:
-        with sentry_sdk.push_scope() as scope:
-            token_with_probs = [(t, p) for t, p in zip(tokens, probs)]
-            scope.set_extra('token_with_probs', token_with_probs)
-            scope.set_extra('mean_proba', mean_proba)
-            sentry_sdk.capture_message(f'ASR top_1 hypotheses has mean proba < 0.75')
     return text, mean_proba
 
 
@@ -157,6 +151,7 @@ class StopIntentHandler(AbstractRequestHandler):
         # type: (HandlerInput) -> Response
         speak_output = ""
         user_id = ask_utils.get_user_id(handler_input)
+        call_dp_agent(user_id, '/alexa_stop_handler', request_data)
         call_dp_agent(user_id, '/close', request_data)
         return (
             handler_input.response_builder.speak(speak_output).set_should_end_session(True).response
@@ -170,10 +165,14 @@ class SessionEndedRequestHandler(AbstractRequestHandler):
         return ask_utils.is_request_type("SessionEndedRequest")(handler_input)
 
     def handle(self, handler_input):
+        user_id = ask_utils.get_user_id(handler_input)
         if request_data['request'].get('reason') == 'ERROR':
             with sentry_sdk.push_scope() as scope:
                 scope.set_extra('request_data', request_data)
                 sentry_sdk.capture_message('ERROR in SessionEndedRequestHandler!!!')
+            call_dp_agent(user_id, '/alexa_error_in_session_ending', request_data)
+        elif request_data['request'].get('reason') == 'EXCEEDED_MAX_REPROMPTS':
+            call_dp_agent(user_id, '/alexa_exceeded_max_reprompts', request_data)
         # Any cleanup logic goes here.
         return handler_input.response_builder.response
 
