@@ -11,10 +11,15 @@ from random import choice
 from typing import Callable, Dict
 
 from common.universal_templates import nounphrases_questions
+import sentry_sdk
+from os import getenv
+
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+sentry_sdk.init(getenv('SENTRY_DSN'))
 
 
 np_ignore_list = ["'s", 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're",
@@ -156,6 +161,7 @@ class DummySkillConnector:
             ))
         except Exception as e:
             logger.exception(e)
+            sentry_sdk.capture_exception(e)
             asyncio.create_task(callback(
                 task_id=payload['task_id'],
                 response=e
