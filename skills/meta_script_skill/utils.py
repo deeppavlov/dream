@@ -128,7 +128,7 @@ DIVE_DEEPER_COMMENTS = {"yes": ["Cool! I figured it out by myself!",
 
 OTHER_STARTINGS = [
     "Could you, please, help me to understand what does to DOTHAT mean?",
-    "Can you help me, please, to learn a new thing about human world? Explain me what is DOINGTHAT.",
+    "Can you help me, please, to learn a new thing about human world? Explain me what does DOINGTHAT mean.",
     "Such a strange phrase! What does to DOTHAT mean?",
     "I've never heard about DOINGTHAT. What does to DOTHAT mean?",
     "I didn't get what does to DOTHAT mean?"
@@ -136,7 +136,7 @@ OTHER_STARTINGS = [
 
 WIKI_STARTINGS = [
     "I've heard that DESCRIPTION Do you know about it?",
-    "There is a new thing about human world: DESCRIPTION Have you ever heard about it?",
+    "There is a new thing for me about human world: DESCRIPTION Have you ever heard about it?",
     "Do you know that DESCRIPTION?",
     "Have you ever heard that DESCRIPTION?"
 ]

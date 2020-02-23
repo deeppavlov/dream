@@ -188,11 +188,11 @@ def respond():
 
             if curr_meta_script_status == "starting":
                 response, confidence, attr = get_starting_phrase(dialog, topic, attr)
-                if len(dialog["utterances"]) <= 20:
+                if if_to_start_script(dialog) or topic_switch_detected:
+                    confidence = MATCHED_DIALOG_BEGIN_CONFIDENCE
+                elif len(dialog["utterances"]) <= 20 and "?" not in last_two_user_responses[-1]:
                     # if this is a beginning of the dialog, assign higher confidence to start the script
                     confidence = DEFAULT_DIALOG_BEGIN_CONFIDENCE
-                elif if_to_start_script(dialog) or topic_switch_detected:
-                    confidence = MATCHED_DIALOG_BEGIN_CONFIDENCE
                 else:
                     confidence = DEFAULT_STARTING_CONFIDENCE
             else:
