@@ -28,6 +28,10 @@ To run lightweight version with toxic, sentiment, ner, sentseg, sentrewrite runn
 ```
 $: docker-compose -f docker-compose.yml -f dev.yml -f one_worker.yml -f proxy.yml up --build
 ```
+, in case if docker GPU is not configured:
+```
+$: docker-compose -f docker-compose.yml -f dev.yml -f one_worker.yml -f cpu.yml -f proxy.yml up --build
+```
 
 Run agent:
 ```
@@ -179,5 +183,6 @@ docker stack deploy -c docker-compose.yml mon
 Инфраструктура
 ==============
 
-- setup cron to prune docker images on all machines: `0 3 * * * /usr/bin/docker system prune -f`
+- setup cron to prune docker images on all machines: `0 3 * * * /usr/bin/docker system prune -f -a`
+- make sure that cron daemon is running: `ps -ef | grep cron | grep -v grep`
 - setup service to remove stopped containers: `docker --host $DOCKER_HOST service create -d --name docker-rm --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock --mode=global --restart-condition none --update-parallelism 0 --update-failure-action continue docker /bin/sh -c "docker rm \$(docker ps -q -a); exit 0;"`
