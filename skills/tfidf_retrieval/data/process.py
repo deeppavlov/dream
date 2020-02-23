@@ -124,7 +124,7 @@ def check(human_phrase, vectorizer, vectorized_phrases, phrase_list, top_best=1)
         cond1 = all([banned_phrase not in bot_answer for banned_phrase in banned_phrases + misheard_phrases])
         cond2 = len(human_phrase) >= 7 and 'alexa play' not in human_phrase.lower()
         if cond1 and cond2:
-            ans.append((bot_answer, score))
+            ans.append([bot_answer, score])
         else:
-            ans.append(("I really do not know what to answer.", 0))
+            ans.append(["I really do not know what to answer.", 0])
     return ans
