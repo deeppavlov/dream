@@ -266,45 +266,49 @@ def utt_sentrewrite_modified_last_dialog(dialog: Dict):
 
 
 def skill_with_attributes_formatter_service(payload: Dict):
-    # Used by: book_skill_formatter, skill_with_attributes_formatter, news_skill, meta_script_skill
-    if len(payload) == 3:
-        result = {"text": payload[0],
-                  "confidence": payload[1]}
-        for key in payload[2]:
-            result[key] = payload[2][key]
-        return [result]
-    elif len(payload) == 4:
-        return [{
-            "text": payload[0],
-            "confidence": payload[1],
-            "human_attributes": payload[2],
-            "bot_attributes": payload[3]
-        }]
-    elif len(payload) == 5:
-        # payload[4] is a dictionary with additional keys-labels-annotations to the reply
-        # payload[4] = {"any_key" : "any_value"}
-        # for example, movie-skill
-        # Dp-formatter for movie-skill:
-        # {
-        #   'text': "It's a pleasure to know you better. I adore Brad Pitt!",
-        #   'confidence': 0.98, 'human_attributes': {}, 'bot_attributes': {},
-        #   'bot_attitudes': [['Brad Pitt', 'actor', 'very_positive']],
-        #   'human_attitudes': [['Brad Pitt', 'actor', 'positive']]
-        # }
-        result = {
-            "text": payload[0],
-            "confidence": payload[1],
-            "human_attributes": payload[2],
-            "bot_attributes": payload[3]
-        }
-        for key in payload[4]:
-            result[key] = payload[4][key]
-        return [result]
+    """
+    Formatter should use `"state_manager_method": "add_hypothesis"` in config!!!
+    Because it returns list of hypothesis even if the payload is returned for one sample!
+
+    Args:
+        payload: if one sample, list of the following structure:
+            (text, confidence, ^human_attributes, ^bot_attributes, attributes) [by ^ marked optional elements]
+                if several hypothesis, list of lists of the above structure
+
+    Returns:
+        list of dictionaries of the following structure:
+            {"text": text, "confidence": confidence_value,
+             ^"human_attributes": {}, ^"bot_attributes": {},
+             **attributes},
+             by ^ marked optional elements
+    """
+    # Used by: book_skill_formatter, skill_with_attributes_formatter, news_skill, meta_script_skill, dummy_skill
+    if isinstance(payload[0], list) and isinstance(payload[1], list):
+        result = [{"text": hyp[0],
+                   "confidence": hyp[1]} for hyp in zip(*payload)]
     else:
-        return [{
-            "text": payload[0],
-            "confidence": payload[1]
-        }]
+        result = [{"text": payload[0],
+                   "confidence": payload[1]}]
+
+    if len(payload) >= 4:
+        if isinstance(payload[2], dict) and isinstance(payload[3], dict):
+            result[0]["human_attributes"] = payload[2]
+            result[0]["bot_attributes"] = payload[3]
+        elif isinstance(payload[2], list) and isinstance(payload[3], list):
+            for i, hyp in enumerate(zip(*payload)):
+                result[i]["human_attributes"] = hyp[2]
+                result[i]["bot_attributes"] = hyp[3]
+
+    if len(payload) == 3 or len(payload) == 5:
+        if isinstance(payload[-1], dict):
+            for key in payload[-1]:
+                result[0][key] = payload[-1][key]
+        elif isinstance(payload[-1], list):
+            for i, hyp in enumerate(zip(*payload)):
+                for key in hyp[-1]:
+                    result[i][key] = hyp[-1][key]
+
+    return result
 
 
 def last_utt_sentseg_punct_dialog(dialog: Dict):
