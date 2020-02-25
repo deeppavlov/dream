@@ -52,4 +52,21 @@ services:
     tty: true
     ports:
     - 8021:8021
+  comet:
+    build:
+      context: ../../annotators/COMeT/
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8053
+    volumes: []
+    environment:
+      DEVICE: gpu_0
+    runtime: nvidia
+    ports:
+      - 8053:8053
+  weather_skill:
+    build:
+      context: ../../skills/weather_skill/
+    command: gunicorn --workers=4 server:app -b 0.0.0.0:8037
+    volumes: []
+    ports:
+      - 8037:8037
 version: '2.4'
