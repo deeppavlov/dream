@@ -34,7 +34,18 @@ services:
     command: ["nginx", "-g", "daemon off;"]
     volumes:
     - ./dp/proxy/sentrewrite:/etc/nginx/conf.d
-  test:
-    image: centos
-    command: tail -f /dev/null
+  comet:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    command: ["nginx", "-g", "daemon off;"]
+    volumes:
+      - ./dp/proxy/comet:/etc/nginx/conf.d
+  weather_skill:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    command: ["nginx", "-g", "daemon off;"]
+    volumes:
+      - ./dp/proxy/weather_skill:/etc/nginx/conf.d
 version: '3.7'
