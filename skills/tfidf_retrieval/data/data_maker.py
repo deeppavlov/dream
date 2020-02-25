@@ -65,7 +65,7 @@ def main():
     args = parser.parse_args()
     assert '_v' in args.output_file, 'Requires version in output'
     assert '_v' in args.bad_output_file, 'Requires version in bad output'
-    banned_words = ['my unknown', 'unknown is', 'INTERJECTION']
+    banned_words = ['my unknown', 'unknown is', 'INTERJECTION', 'no_', 'NO_ANSWER']
     for blacklist_file in os.listdir(args.blacklist_dir):
         banned_words1 = [j.strip() for j in open(args.blacklist_dir + '/' + blacklist_file, 'r').readlines()]
         banned_words = banned_words + banned_words1

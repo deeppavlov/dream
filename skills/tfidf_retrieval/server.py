@@ -105,7 +105,7 @@ def respond():
             sentry_sdk.capture_message("No response in tfidf_retrieve")
         response = [["sorry", 0]]
     for i in range(len(response)):
-        if any([j in response[i][0].lower() for j in ['no_answer', 'unknown', 'interjection']]):
+        if any([j in response[i][0].lower() for j in ['no_', 'unknown', 'interjection']]):
             response[i][0] = ''
     assert len(response[0]) == 2
     total_time = time.time() - st_time
