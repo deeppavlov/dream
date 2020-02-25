@@ -57,5 +57,6 @@ if __name__ == '__main__':
         for date in tqdm(bucket_dates - local_dates):
             dump_filename = f'time_interval_logs_{date}.json'
             cmd = f"{sys.executable} {args.dp_agent_alexa_path}/utils/collect_amazon_dialogs.py --input " \
-                f"{dump_folder + '/' + dump_filename} --output {args.output_txt_path + '/' + date} --with_skill_name"
+                f"{dump_folder + '/' + dump_filename} --output {args.output_txt_path + '/' + date}" \
+                " --with_skill_name --with_no_rating"
             os.system(cmd)

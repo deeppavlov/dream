@@ -27,10 +27,14 @@ parser.add_argument('--with_debug_info', action='store_true', default=False,
                     help='get debug info for with_requesting mode')
 parser.add_argument('--with_skill_name', action='store_true', default=False,
                     help='get active skill name for collected dialogs')
+parser.add_argument('--with_no_rating', action='store_true', default=False,
+                    help='get dialogs without rating or feedback')
 parser.add_argument('--url', help='url, used only when with_requesting is True', default='http://0.0.0.0:4242')
 parser.add_argument('--feedback', help='feedbacks csv', default='./ratings/conversation_feedback.csv')
 parser.add_argument('--ratings', help='ratings csv', default='./ratings/ratings.csv')
 parser.add_argument('--first_n', help='Number of dialogs for debug', default=999999)
+
+# _with_rating, _with_feedback, _all
 
 
 def print_pretty(dialog, file=sys.stdout, field='dialog', with_debug_info=False, with_skill_name=False):
@@ -76,29 +80,29 @@ def print_row(row, f, field='dialog', with_debug_info=False, with_skill_name=Fal
     print(
         f'--{row["conversation_id"]}----{row["rating_val"]}----{row["feedback_txt"]}',
         file=f)
-    print(f'---start_ratingtime--{row["start_rating_time"]}--start_utt--{row["start_utt"]}-end_utt-{row["end_utt"]}--',
+    print(f'---first_utt_time--{row["first_utt_time"]}-last_utt_time-{row["last_utt_time"]}--',
           file=f)
     print_pretty(row[field], file=f, field=field, with_debug_info=with_debug_info, with_skill_name=with_skill_name)
     print("-----------------------", file=f)
 
 
 def print_to_file(new_conversations, args):
-    no_feedbacks = []
-    with_feedbacks = []
+    with_rating = []
+    with_feedback = []
     with open(f'./{args.output}_all.txt', 'w') as f:
-        for _, row in new_conversations.sort_values('start_rating_time', ascending=False).iterrows():
-            if row["feedback_txt"] == 'no_feedback':
-                no_feedbacks.append(row)
-            else:
-                with_feedbacks.append(row)
+        for _, row in new_conversations.sort_values('first_utt_time', ascending=False).iterrows():
+            if row["feedback_txt"] != 'no_feedback':
+                with_feedback.append(row)
+            if row["rating_val"] != 'no_rating':
+                with_rating.append(row)
             print_row(row, f, with_skill_name=args.with_skill_name)
 
-    with open(f'./{args.output}_with_feedbacks.txt', 'w') as f:
-        for row in with_feedbacks:
+    with open(f'./{args.output}_with_rating.txt', 'w') as f:
+        for row in with_rating:
             print_row(row, f, with_skill_name=args.with_skill_name)
 
-    with open(f'./{args.output}_without_feedbacks.txt', 'w') as f:
-        for row in no_feedbacks:
+    with open(f'./{args.output}_with_feedback.txt', 'w') as f:
+        for row in with_feedback:
             print_row(row, f, with_skill_name=args.with_skill_name)
 
     if args.with_requesting:
@@ -141,31 +145,32 @@ async def main(args):
     feedback = pd.read_csv(args.feedback)
     ratings = pd.read_csv(args.ratings)
 
+    # to speed-up feedback/rating look up
+    feedback = dict(zip(feedback['conversation_id'], feedback['feedback']))
+    ratings = dict(zip(ratings['Conversation ID'], ratings['Rating']))
+
     new_conversations = []
     for conv_id, dialog in tqdm(conversations.items()):
-        feedback_txt = feedback[feedback['conversation_id'] == conv_id]
-        if len(feedback_txt):
-            feedback_txt = feedback_txt['feedback'].iloc[0]
-        else:
-            feedback_txt = 'no_feedback'
-        rating_val = ratings[ratings['Conversation ID'] == conv_id]
-        if len(rating_val):
-            start_time = rating_val['Approximate Start Time'].iloc[0]
-            start_utt_time = dialog['utterances'][0]['date_time']
-            end_utt_time = dialog['utterances'][-1]['date_time']
-            # print(type(end_utt_time))
-            # print(type(start_time))
-            rating_val = rating_val['Rating'].iloc[0]
-            data = {"conversation_id": conv_id, "rating_val": float(rating_val),
-                    "feedback_txt": feedback_txt, "dialog": dialog,
-                    "start_rating_time": start_time,
-                    "start_utt": start_utt_time, "end_utt": end_utt_time}
+        feedback_txt = feedback.get(conv_id, 'no_feedback')
+
+        rating_val = ratings.get(conv_id, 'no_rating')
+        rating_val = float(rating_val) if rating_val != 'no_rating' else rating_val
+
+        first_utt_time = dialog['utterances'][0]['date_time']
+        last_utt_time = dialog['utterances'][-1]['date_time']
+
+        data = {"conversation_id": conv_id, "rating_val": rating_val,
+                "feedback_txt": feedback_txt, "dialog": dialog,
+                "first_utt_time": first_utt_time, "last_utt_time": last_utt_time}
+
+        if (rating_val == 'no_rating' and args.with_no_rating) or rating_val != 'no_rating':
             new_conversations.append(data)
+
     if len(new_conversations) > 0:
         new_conversations = pd.DataFrame(new_conversations)
-        for time_name in ['start_rating_time', 'start_utt', 'end_utt']:
+        for time_name in ['first_utt_time', 'last_utt_time']:
             new_conversations[time_name] = pd.to_datetime(new_conversations[time_name])
-        new_conversations = new_conversations.sort_values('start_rating_time', ascending=False)
+        new_conversations = new_conversations.sort_values('first_utt_time', ascending=False)
         args.first_n = int(args.first_n)
         new_conversations = new_conversations.head(args.first_n)
         if args.with_requesting:
