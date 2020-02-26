@@ -94,7 +94,6 @@ class EmotionSkillScenario:
         for dialog in dialogs:
             try:
                 attr = {"can_continue": CAN_NOT_CONTINUE}
-                logging.info(dialog)
                 text_utterances = [j['text'] for j in dialog['utterances']]
                 bot_phrases = [j for i, j in enumerate(text_utterances) if i % 2 == 1]
                 if len(bot_phrases) == 0:
