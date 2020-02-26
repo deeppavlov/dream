@@ -1,4 +1,6 @@
 services:
+  agent:
+    command: sh -c 'bin/wait && gunicorn run_http:app_factory --bind 0.0.0.0:4242 --workers 1 --worker-class aiohttp.GunicornWebWorker'
   cobotqa:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8001 -t 15
   cobot_topics:

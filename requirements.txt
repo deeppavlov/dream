@@ -18,3 +18,4 @@ nltk==3.2.5
 requests==2.22.0
 tqdm==4.36.1
 aiohttp_cors==0.7.0
+gunicorn==20.0.4

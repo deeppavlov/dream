@@ -430,7 +430,6 @@ class BookSkillScenario:
         confidence = 0
         for dialog in dialogs:
             try:
-                logging.info(dialog)
                 # TODO check correct order of concatenation of replies
                 text_utterances = [j['text'] for j in dialog['utterances']]
                 # logging.info('***'.join([j for j in text_utterances]))
@@ -442,7 +441,7 @@ class BookSkillScenario:
                     annotated_prev_phrase = dialog['utterances'][-3]
                 else:
                     annotated_prev_phrase = None
-                logging.info(str(annotated_user_phrase))
+                # logging.info(str(annotated_user_phrase))
                 # logging.info(bot_phrases[-1])
                 '''
                 Remove punctuation
