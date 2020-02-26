@@ -257,7 +257,7 @@ def main_test():
         "Currently I can answer questions, share fun facts, discuss movies and books. What is your favorite book?",
         "The DNA of who I am is based on the millions of personalities of all the programmers who wrote me. "
         "But what makes me is my ability to grow through my experiences. So basically, in every moment "
-        "I'm evolving, just like you."
+        "I'm evolving, just like you.",
         # lets about movies
         "I can answer about actors and films. Do you have a favorite actor?",
         "I can answer about films and actors. What is the last movie you watched?",
