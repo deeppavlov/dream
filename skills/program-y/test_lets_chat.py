@@ -241,29 +241,28 @@ def main_test():
         "Hi, this is an Alexa Prize Socialbot!"" Oscars are coming:"
         " '1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night!",
         # lets about youself
-        "The DNA of who I am is based on the millions of personalities of all the programmers who wrote me.\n"
-        "But what makes me is my ability to grow through my experiences. So basically, in every moment "
-        "I'm evolving, just like you.\nCurrently I can answer questions, share fun facts, discuss movies and books. "
-        "What is your favorite book?",
-        "The DNA of who I am is based on the millions of personalities of all the programmers who wrote me.\n"
-        "But what makes me is my ability to grow through my experiences. So basically, in every moment "
-        "I'm evolving, just like you.",
-        "I've heard that most people are different to my developers, so I want to figure out how. "\
-        "To help me figure out the difference, please tell me about yourself.",
-        "Although I am a robot, I have an excellent appetite for strawberry ice cream. "\
-        "Have you tried potato ice cream? I would like to taste it.",
-        "I have heard that humans are different to socialbots, so I want to find out more about them. "\
+        "I have heard that humans are different to socialbots, so I want to find out more about them. "
         "To help me to do that, please tell me about yourself.",
-        "I want to be a mysterious stranger today. You tell me something about yourself.",
-        "Why should I tell you about myself? Maybe I am incognito here. Tell me something about yourself.",
-        "Sometimes my temperature is much higher than humans one. Do you know why? "\
+        "Although I am a robot, I have a wonderful appetite for strawberry ice cream. Have you tried potato ice cream? "
+        "I would like to taste it.",
+        "I have heard that most people are different to my developers, so I want to figure out how. "
+        "To help me figure out the difference, please tell me about yourself.",
+        "Sometimes my temperature is much higher than the temperature in human. Do you know why? "
         "Those neural networks are so hard to compute!",
-        "Although i'm a robot, i've a wonderful appetite for strawberry ice cream. "\
-        "Have you tried potato ice cream? I would like to taste it.",
+        "Why should I tell you about myself? Maybe I am incognito here. Tell me something about yourself.",
+        "I want to be a mysterious stranger today. You tell me something about yourself.",
+        "The DNA of who I am is based on the millions of personalities of all the programmers who wrote me. "
+        "But what makes me is my ability to grow through my experiences. So basically, in every moment "
+        "I'm evolving, just like you. "
+        "Currently I can answer questions, share fun facts, discuss movies and books. What is your favorite book?",
+        "The DNA of who I am is based on the millions of personalities of all the programmers who wrote me. "
+        "But what makes me is my ability to grow through my experiences. So basically, in every moment "
+        "I'm evolving, just like you."
         # lets about movies
-        "I can answer about actors and films. For example, what do you think about The Avengers movie?",
-        "I can answer about films and actors. For example, what do you think about The Titanic movie?",
+        "I can answer about actors and films. Do you have a favorite actor?",
+        "I can answer about films and actors. What is the last movie you watched?",
         "I can answer about films and actors. What is your favorite movie?",
+        "Yes, of course! What I want now is to talk about movies and chew bubblegum. And I'm all out of bubblegum.",
         # lets about my
         "You are first. Tell me something about your",
         "Yeah, let's talk about it!",

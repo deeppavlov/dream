@@ -241,7 +241,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
         scores[i]['responseEngagesUser'] /= coeff
 
     skill_names = [c['skill_name'] for c in candidates]
-    how_are_you_spec = "I'm fine, thanks! Do you want to know what I can do?"
+    how_are_you_spec = "Do you want to know what I can do?"  # this is always at the end of answers to `how are you`
     what_i_can_do_spec = "a newborn socialbot"
     psycho_help_spec = "If you or someone you know is in immediate danger"
     greeting_spec = "this is an Alexa Prize Socialbot"
@@ -265,7 +265,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                 candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + candidates[i]['text']
             curr_score = very_big_score
         elif skill_names[i] == 'program_y' and (
-                candidates[i]['text'] == how_are_you_spec or what_i_can_do_spec in candidates[i]['text']) \
+                how_are_you_spec in candidates[i]['text'] or what_i_can_do_spec in candidates[i]['text']) \
                 and len(dialog['utterances']) < 16:
             curr_score = very_big_score
         elif skill_names[i] == 'program_y_dangerous' and psycho_help_spec in candidates[i]['text']:
