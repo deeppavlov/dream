@@ -40,12 +40,13 @@ def main():
                 skill_name = acceptable_skill_names[1:]
                 if skill != skill_name:
                     passed_acceptable_skills = False
-                    print(f"ERROR: pred skill: {skill} is PROHIBITED: {skill_name}")
+                    print(f"FOUND POSSIBLE ERROR: pred skill: {skill} is PROHIBITED: {skill_name}")
             else:
                 acceptable_skill_names = acceptable_skill_names.split(";")
                 if skill not in acceptable_skill_names:
                     passed_acceptable_skills = False
-                    print(f"ERROR: pred skill: {skill} NOT IN Acceptable skill names: {acceptable_skill_names}")
+                    print(f"FOUND POSSIBLE ERROR: pred skill: {skill} "
+                          f"NOT IN Acceptable skill names: {acceptable_skill_names}")
 
         if true_sents:
             checked = False
@@ -54,10 +55,17 @@ def main():
                     checked = True
             if not checked:
                 passed_gold_phrases = False
-                print("ERROR: {} not in {}".format(pred_r[-1], true_sents))
+                print("FOUND POSSIBLE ERROR: {} not in {}".format(pred_r[-1], true_sents))
 
-        assert passed_acceptable_skills or passed_gold_phrases, print(
-            f"ERROR: see above!")
+        print(f"Acceptable skill names: `{acceptable_skill_names}`.\n"
+              f"Passed acceptable skill names: `{passed_acceptable_skills}`.\n"
+              f"True sentences: `{true_sents}`.\n"
+              f"Passed true sentences: `{passed_gold_phrases}`.")
+
+        if len(acceptable_skill_names) > 0 or len(true_sents) > 0:
+            assert ((len(acceptable_skill_names) > 0 and passed_acceptable_skills) or (
+                    len(true_sents) > 0 and passed_gold_phrases)), print(
+                f"ERROR: see above!")
 
 
 if __name__ == '__main__':

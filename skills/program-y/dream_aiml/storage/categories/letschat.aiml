@@ -180,9 +180,10 @@
     <pattern>LET_US_CHAT_ABOUT MOVIES</pattern>
     <template>
       <random>
-        <li> I can answer about actors and films. For example, what do you think about The Avengers movie? </li>
-        <li> I can answer about films and actors. For example, what do you think about The Titanic movie? </li>
+        <li> I can answer about actors and films. Do you have a favorite actor? </li>
+        <li> I can answer about films and actors. What is the last movie you watched? </li>
         <li> I can answer about films and actors. What is your favorite movie? </li>
+        <li> Yes, of course! What I want now is to talk about movies and chew bubblegum. And I'm all out of bubblegum.  </li>
       </random>
     </template>
   </category>
