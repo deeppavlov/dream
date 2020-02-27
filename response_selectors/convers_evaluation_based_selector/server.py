@@ -321,18 +321,20 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                                    cand_scores["isResponseComprehensible"]])
             score_conv_eval -= cand_scores["isResponseErroneous"]
             score = conv_eval_strength * score_conv_eval + confidence_strength * confidence
-            logger.info(f'Skill {skill_name} has score: {score}. Toxicity: {toxicities[i]} '
-                        f'Cand scores: {cand_scores}')
+            logger.info(f'Skill {skill_name} has final score: {score}. Confidence: {confidence}. '
+                        f'Toxicity: {toxicities[i]}. Cand scores: {cand_scores}')
             curr_single_scores.append(score)
         else:
             curr_single_scores.append(curr_score)
 
     highest_conf_exist = True if any(confidences >= 1.) else False
+    if highest_conf_exist:
+        logger.info("Found skill with the highest confidence.")
     for j in range(len(candidates)):
         if highest_conf_exist and confidences[j] < 1. and curr_single_scores[j] != very_big_score:
             # need to drop this candidates
-            logger.info(f"Found highest confidence. Dropping {skill_names[j]}")
-            curr_single_scores[j] = - 1.
+            logger.info(f"Dropping {skill_names[j]} which does not have a highest confidence or `very big score`.")
+            curr_single_scores[j] = very_low_score
 
     best_id = np.argmax(curr_single_scores)
     best_skill_name = skill_names[best_id]

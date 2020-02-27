@@ -183,12 +183,12 @@ class RuleBasedSkillSelectorConnector:
             skills_for_uttr.append("oscar_skill")
             skills_for_uttr.append("valentines_day_skill")
             skills_for_uttr.append("personal_info_skill")
+            skills_for_uttr.append("meta_script_skill")
 
             if ner_detected:
                 skills_for_uttr.append("reddit_ner_skill")
 
             if len(dialog["utterances"]) > 7:
-                skills_for_uttr.append("meta_script_skill")
                 skills_for_uttr.append("eliza")
                 skills_for_uttr.append("alice")
                 skills_for_uttr.append("tfidf_retrieval")

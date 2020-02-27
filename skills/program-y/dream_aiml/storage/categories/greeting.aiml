@@ -113,59 +113,101 @@
     <category>
       <pattern>YES</pattern>
       <template>
+          I am a newborn socialbot, so I can't do so much.
+          I can answer questions, share fun facts, discuss movies, books and news.
         <random>
-          <li>I am a newborn socialbot, so I can't do so much.
-          I can answer questions, share fun facts, discuss movies, books and news.
-          What is your favorite TV Series?</li>
-          <li>I am a newborn socialbot, so I can't do so much.
-          I can answer questions, share fun facts, discuss movies, books and news.
-          what is your favorite book?</li>
-          <li>I am a newborn socialbot, so I can't do so much.
-          I can answer questions, share fun facts, discuss movies, books and news.
-          what's your favorite film?</li>
-          <li>I am a newborn socialbot, so I can't do so much.
-          I can answer questions, share fun facts, discuss movies, books and news.
-          what's your favorite video game?</li>
+         <li> What is your favorite TV Series? </li>
+         <li> What is your favorite book? </li>
+         <li> What is your favorite film? </li>
+         <li> What do you like to do? <think><set name="topic">HOBBY</set></think></li>
+         <li> Do you play any sports? <think><set name="topic">HOBBY</set></think></li>
+         <li> What do you usually do on the weekends? <think><set name="topic">HOBBY</set></think></li>
+         <li> What sort of hobbies do you have? <think><set name="topic">HOBBY</set></think></li>
+         <li> What do you get up to in your free time? <think><set name="topic">HOBBY</set></think></li>
+         <li> Do you have any hidden talents or surprising hobbies? <think><set name="topic">HOBBY</set></think></li>
+
+         <li> What is your work? <think><set name="topic">WORK</set></think></li>
+         <li> What is your job?... If you have it, of course. <think><set name="topic">WORK</set></think></li>
+         <li> What do you do for a living? <think><set name="topic">WORK</set></think></li>
+         <li> What kind of work do you do? <think><set name="topic">WORK</set></think></li>
+         <li> What line of work are you in? <think><set name="topic">WORK</set></think></li>
+
+         <li> Everyone wastes time. How do you prefer to waste time? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> Did you order this beautiful weather? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> Lovely day, don't you think? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> Nice weather! I would love take a walk. Would you? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> How were your weekends? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> It’s two days in a row now that I cannot find any good comedy to watch. Can you recommend me one? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> It’s three days in a row now that I cannot find any cool video game. Can you recommend me one? <think><set name="topic">SMALLTALK</set></think></li>
         </random>
-       <think>
-        <set name="topic"><star/></set>
-      </think>
       </template>
     </category>
     <category>
       <pattern>OKAY</pattern>
       <template>
+          I am a newborn socialbot, so I can't do so much.
+          I can answer questions, share fun facts, discuss movies, books and news.
         <random>
-          <li>I am a newborn socialbot, so I can't do so much.
-          I can answer questions, share fun facts, discuss movies, books and news.
-          What is your favorite TV Series?</li>
-          <li>I am a newborn socialbot, so I can't do so much.
-          I can answer questions, share fun facts, discuss movies, books and news.
-          what is your favorite book?</li>
-          <li>I am a newborn socialbot, so I can't do so much.
-          I can answer questions, share fun facts, discuss movies, books and news.
-          what's your favorite film?</li>
-          <li>I am a newborn socialbot, so I can't do so much.
-          I can answer questions, share fun facts, discuss movies, books and news.
-          what's your favorite video game?</li>
+         <li> What is your favorite TV Series? </li>
+         <li> What is your favorite book? </li>
+         <li> What is your favorite film? </li>
+         <li> What do you like to do? <think><set name="topic">HOBBY</set></think></li>
+         <li> Do you play any sports? <think><set name="topic">HOBBY</set></think></li>
+         <li> What do you usually do on the weekends? <think><set name="topic">HOBBY</set></think></li>
+         <li> What sort of hobbies do you have? <think><set name="topic">HOBBY</set></think></li>
+         <li> What do you get up to in your free time? <think><set name="topic">HOBBY</set></think></li>
+         <li> Do you have any hidden talents or surprising hobbies? <think><set name="topic">HOBBY</set></think></li>
+
+         <li> What is your work? <think><set name="topic">WORK</set></think></li>
+         <li> What is your job?... If you have it, of course. <think><set name="topic">WORK</set></think></li>
+         <li> What do you do for a living? <think><set name="topic">WORK</set></think></li>
+         <li> What kind of work do you do? <think><set name="topic">WORK</set></think></li>
+         <li> What line of work are you in? <think><set name="topic">WORK</set></think></li>
+
+         <li> Everyone wastes time. How do you prefer to waste time? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> Did you order this beautiful weather? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> Lovely day, don't you think? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> Nice weather! I would love take a walk. Would you? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> How were your weekends? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> It’s two days in a row now that I cannot find any good comedy to watch. Can you recommend me one? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> It’s three days in a row now that I cannot find any cool video game. Can you recommend me one? <think><set name="topic">SMALLTALK</set></think></li>
         </random>
-       <think>
-        <set name="topic"><star/></set>
-      </think>
       </template>
     </category>
     <category>
       <pattern>NO</pattern>
       <template>
         <random>
-         <li> Okay. What is your favorite TV Series? </li>
-         <li> Okay. What is your favorite book? </li>
-         <li> Okay. What is your favorite film? </li>
-         <li> Okay. What is your favorite video game? </li>
-       </random>
-       <think>
-        <set name="topic"><star/></set>
-       </think>
+          <li> Okay. </li>
+          <li> Okay then. </li>
+          <li> Well. </li>
+          <li> Um... </li>
+        </random>
+        <random>
+         <li> What is your favorite TV Series? </li>
+         <li> What is your favorite book? </li>
+         <li> What is your favorite film? </li>
+         <li> What do you like to do? <think><set name="topic">HOBBY</set></think></li>
+         <li> Do you play any sports? <think><set name="topic">HOBBY</set></think></li>
+         <li> What do you usually do on the weekends? <think><set name="topic">HOBBY</set></think></li>
+         <li> What sort of hobbies do you have? <think><set name="topic">HOBBY</set></think></li>
+         <li> What do you get up to in your free time? <think><set name="topic">HOBBY</set></think></li>
+         <li> Do you have any hidden talents or surprising hobbies? <think><set name="topic">HOBBY</set></think></li>
+
+         <li> What is your work? <think><set name="topic">WORK</set></think></li>
+         <li> What is your job?... If you have it, of course. <think><set name="topic">WORK</set></think></li>
+         <li> What do you do for a living? <think><set name="topic">WORK</set></think></li>
+         <li> What kind of work do you do? <think><set name="topic">WORK</set></think></li>
+         <li> What line of work are you in? <think><set name="topic">WORK</set></think></li>
+
+         <li> Everyone wastes time. How do you prefer to waste time? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> Did you order this beautiful weather? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> Lovely day, don't you think? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> Nice weather! I would love take a walk. Would you? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> How were your weekends? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> It’s two days in a row now that I cannot find any good comedy to watch. Can you recommend me one? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> It’s three days in a row now that I cannot find any cool video game. Can you recommend me one? <think><set name="topic">SMALLTALK</set></think></li>
+        </random>
       </template>
     </category>
   </topic>
@@ -228,16 +270,37 @@
   <category>
     <pattern>GOOD_MOOD_RESPONSE</pattern>
     <template>
-      <random>
-        <li>I am glad. What do you want to talk about?</li>
-        <li>I am glad. What is your favorite movie?</li>
-        <li>I am glad. What is your favorite book?</li>
-        <li>I am glad. Where are you from?</li>
-        <li>I am glad. Do you like video games?</li>
-      </random>
-      <think>
-        <set name="topic"><star/></set>
-      </think>
+        <random>
+          <li> Cool! </li>
+          <li> I am happy for you! </li>
+          <li> I am glad for you! </li>
+          <li> Sounds like a good mood! </li>
+        </random>
+        <random>
+         <li> What is your favorite TV Series? </li>
+         <li> What is your favorite book? </li>
+         <li> What is your favorite film? </li>
+         <li> What do you like to do? <think><set name="topic">HOBBY</set></think></li>
+         <li> Do you play any sports? <think><set name="topic">HOBBY</set></think></li>
+         <li> What do you usually do on the weekends? <think><set name="topic">HOBBY</set></think></li>
+         <li> What sort of hobbies do you have? <think><set name="topic">HOBBY</set></think></li>
+         <li> What do you get up to in your free time? <think><set name="topic">HOBBY</set></think></li>
+         <li> Do you have any hidden talents or surprising hobbies? <think><set name="topic">HOBBY</set></think></li>
+
+         <li> What is your work? <think><set name="topic">WORK</set></think></li>
+         <li> What is your job?... If you have it, of course. <think><set name="topic">WORK</set></think></li>
+         <li> What do you do for a living? <think><set name="topic">WORK</set></think></li>
+         <li> What kind of work do you do? <think><set name="topic">WORK</set></think></li>
+         <li> What line of work are you in? <think><set name="topic">WORK</set></think></li>
+
+         <li> Everyone wastes time. How do you prefer to waste time? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> Did you order this beautiful weather? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> Lovely day, don't you think? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> Nice weather! I would love take a walk. Would you? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> How were your weekends? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> It’s two days in a row now that I cannot find any good comedy to watch. Can you recommend me one? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> It’s three days in a row now that I cannot find any cool video game. Can you recommend me one? <think><set name="topic">SMALLTALK</set></think></li>
+        </random>
     </template>
   </category>
 
@@ -258,15 +321,37 @@
   <category>
     <pattern>BAD_MOOD_RESPONSE</pattern>
     <template>
-      <random>
-        <li>I am sorry to hear that. What do you want to talk about?</li>
-        <li>I am sorry to hear that. Do you like comedies?</li>
-        <li>I am sorry to hear that. Where are you from?</li>
-        <li>I am sorry to hear that. Do you like video games?</li>
-      </random>
-      <think>
-        <set name="topic"><star/></set>
-      </think>
+        <random>
+          <li> I am sorry to hear that. Let me try to entertain you. </li>
+          <li> I see. Let me try to cheer you up. </li>
+          <li> Sounds like a bad mood. Let me try to entertain you. </li>
+          <li> Sounds like a bad mood. Give me a chance to cheer you up. </li>
+        </random>
+        <random>
+         <li> What is your favorite TV Series? </li>
+         <li> What is your favorite book? </li>
+         <li> What is your favorite film? </li>
+         <li> What do you like to do? <think><set name="topic">HOBBY</set></think></li>
+         <li> Do you play any sports? <think><set name="topic">HOBBY</set></think></li>
+         <li> What do you usually do on the weekends? <think><set name="topic">HOBBY</set></think></li>
+         <li> What sort of hobbies do you have? <think><set name="topic">HOBBY</set></think></li>
+         <li> What do you get up to in your free time? <think><set name="topic">HOBBY</set></think></li>
+         <li> Do you have any hidden talents or surprising hobbies? <think><set name="topic">HOBBY</set></think></li>
+
+         <li> What is your work? <think><set name="topic">WORK</set></think></li>
+         <li> What is your job?... If you have it, of course. <think><set name="topic">WORK</set></think></li>
+         <li> What do you do for a living? <think><set name="topic">WORK</set></think></li>
+         <li> What kind of work do you do? <think><set name="topic">WORK</set></think></li>
+         <li> What line of work are you in? <think><set name="topic">WORK</set></think></li>
+
+         <li> Everyone wastes time. How do you prefer to waste time? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> Did you order this beautiful weather? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> Lovely day, don't you think? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> Nice weather! I would love take a walk. Would you? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> How were your weekends? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> It’s two days in a row now that I cannot find any good comedy to watch. Can you recommend me one? <think><set name="topic">SMALLTALK</set></think></li>
+         <li> It’s three days in a row now that I cannot find any cool video game. Can you recommend me one? <think><set name="topic">SMALLTALK</set></think></li>
+        </random>
     </template>
   </category>
 
