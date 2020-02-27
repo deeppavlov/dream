@@ -298,10 +298,7 @@ class Dialog:
         if dialog:
             human = await Human.get_by_id(db, dialog['_human_id'])
             dialog_obj = cls(actual=True, human=human, **dialog)
-            human_utterances = await HumanUtterance.get_many(db, dialog_obj._id)
-            bot_utterances = await BotUtterance.get_many(db, dialog_obj._id)
-            dialog_obj.utterances = sorted(chain(human_utterances, bot_utterances), key=lambda x: x._in_dialog_id)
-            dialog_obj.bot = await Bot.get_or_create(db, dialog_obj._bot_id)
+            await dialog_obj.load_external_info(db)
             return dialog_obj
         return None
 
