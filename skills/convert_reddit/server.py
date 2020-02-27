@@ -118,13 +118,10 @@ def inference(utterances_histories):
 
     for ind in reversed(filtered_indices):
         tokenized_response = tokenize(responses[ind])
-        if len(tokenized_response) < 4 or len(tokenized_response) > 15:
-            filtered_indices.remove(ind)
-        else:
-            for utterance in clear_utterances_histories:
-                if len(tokenized_response & utterance) / len(tokenized_response) > 0.6:
-                    filtered_indices.remove(ind)
-                    break
+        for utterance in clear_utterances_histories:
+            if len(tokenized_response & utterance) / len(tokenized_response) > 0.6:
+                filtered_indices.remove(ind)
+                break
 
     if len(filtered_indices) > 0:
         return clear_answer(responses[filtered_indices[0]]), approximate_confidence(scores[filtered_indices[0]])

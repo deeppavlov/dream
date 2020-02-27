@@ -10,10 +10,10 @@ RUN apt-get update && \
     rm -rf /root/.cache
 
 RUN mkdir -p /root/convert_data && \
-    DATA_URL=http://files.deeppavlov.ai/alexaprize_data/convert_reddit.tar.gz && \
-    curl $DATA_URL > /root/convert_data/convert_reddit.tar.gz && \
+    DATA_URL=http://files.deeppavlov.ai/alexaprize_data/convert_reddit_v2.tar.gz && \
+    curl $DATA_URL > /root/convert_data/convert_reddit_v2.tar.gz && \
     cd /root/convert_data/ && \
-    tar -xvzf convert_reddit.tar.gz
+    tar -xvzf convert_reddit_v2.tar.gz
 
 ########## MODELS ###########
 
@@ -25,8 +25,8 @@ RUN pip install -r /app/requirements.txt
 ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 ENV MODEL_PATH /root/convert_data/convert
-ENV DATABASE_PATH /root/convert_data/replies.pkl
-ENV CONFIDENCE_PATH /root/convert_data/confidences.npy
+ENV DATABASE_PATH /root/convert_data/replies_v2.pkl
+ENV CONFIDENCE_PATH /root/convert_data/confidences_v2.npy
 ENV PYTHONPATH /usr/local/bin/python
 ENV DEVICE cpu
 
