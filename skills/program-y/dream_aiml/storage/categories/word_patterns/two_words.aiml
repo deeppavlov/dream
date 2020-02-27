@@ -202,10 +202,6 @@
         <template>OK. Processing stopped.</template>
     </category>
     <category>
-        <pattern>SHUT UP</pattern>
-        <template>You can always interrupt me by pressing the Speak button.</template>
-    </category>
-    <category>
         <pattern>GOOD JOB</pattern>
         <template>Thank you very much.</template>
     </category>

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import logging
-from random import choice
+from random import choice, random
 import re
 import string
 import json
@@ -85,13 +85,9 @@ ASK_OPINION = ["What do you think about DOINGTHAT?",
                "How do you feel about DOINGTHAT?"]
 
 DIVE_DEEPER_QUESTION = ["Is it true that STATEMENT?",
-                        "STATEMENT, is that right?",
                         "STATEMENT, is that correct?",
-                        "Am I right in saying that STATEMENT?",
                         "Am I right in thinking that STATEMENT?",
-                        "Is the statement that STATEMENT correct?",
                         "Would it be right to say that STATEMENT?",
-                        "Would it be wrong to say that STATEMENT?",
                         "STATEMENT, but why?",
                         "STATEMENT, I am wondering why?",
                         "Tell me, please, why do STATEMENT?",
@@ -465,9 +461,15 @@ def get_statement_phrase(dialog, topic, attr, TOPICS):
     if prediction == "":
         return "", 0.0, {"can_continue": CAN_NOT_CONTINUE}
 
+    if random() < 0.5:
+        dothat = re.sub(r"^be ", "become ", topic)
+        doingthat = get_gerund_topic(topic)
+    else:
+        dothat = "do that"
+        doingthat = "doing that"
     statement = meta_script_template.replace(
-        "DOINGTHAT", get_gerund_topic(topic)).replace(
-        "DOTHAT", re.sub(r"^be ", "become ", topic)).replace(
+        "DOINGTHAT", doingthat).replace(
+        "DOTHAT", dothat).replace(
         "RELATION", prediction).replace(
         "person x ", "").replace(
         "personx ", "")

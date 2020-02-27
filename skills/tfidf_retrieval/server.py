@@ -45,7 +45,10 @@ banned_words = ['Benjamin', 'misheard', 'cannot do this',
                 "without ever getting tired", "most ironic thing",
                 "a fact about", "beg your pardon",
                 "how stupid I am about", "a fruit machine in there",
-                "might answer your question"]
+                "might answer your question", "just to be negative",
+                "newborn socialbot", "no_ answer", "i don't have an opinion on that",
+                "super bowl", "let me ask you something", "i am glad to know you better",
+                "Alexa, stop"]
 vectorizer = get_vectorizer(vectorizer_file=vectorizer_file)
 dialog_list = get_dialogs(dialog_dir=dialog_dir, custom_dialog_dir=custom_dialog_dir,
                           full_dialog_dir=full_dialog_dir)

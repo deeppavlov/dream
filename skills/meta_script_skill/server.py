@@ -29,7 +29,7 @@ for _topic in TOPICS:
     for _relation in TOPICS[_topic]:
         TOPICS[_topic][_relation] = [el for el in TOPICS[_topic][_relation] if el != "none"]
 
-DEFAULT_DIALOG_BEGIN_CONFIDENCE = 0.9
+DEFAULT_DIALOG_BEGIN_CONFIDENCE = 0.8
 MATCHED_DIALOG_BEGIN_CONFIDENCE = 0.99
 FINISHED_SCRIPT = "finished"
 
@@ -178,6 +178,7 @@ def respond():
 
         no_detected = dialog["utterances"][-1].get("annotations", {}).get(
             "intent_catcher", {}).get("no", {}).get("detected", 0) == 1
+        never_detected = "never" in dialog["utterances"][-1]["text"].lower()
 
         last_two_user_responses = get_user_replies_to_particular_skill(dialog["utterances"], "meta_script_skill")[-2:]
 
@@ -198,9 +199,11 @@ def respond():
             else:
                 # there were some script active before in the last several utterances
                 if topic_switch_detected or lets_chat_about_detected:
+                    logger.info("Topic switching was detected. Finish script.")
                     response, confidence = "", 0.0
                     attr["meta_script_status"] = FINISHED_SCRIPT
                 elif last_two_user_responses == ["no.", "no."]:
+                    logger.info("Two consequent `no` answers were detected. Finish script.")
                     response, confidence = choice(SORRY_SWITCH_TOPIC_REPLIES), DEFAULT_CONFIDENCE
                     attr["meta_script_status"] = FINISHED_SCRIPT
                 elif curr_meta_script_status == "comment":
@@ -208,7 +211,8 @@ def respond():
                     # current meta script finished
                 elif curr_meta_script_status == "opinion":
                     response, confidence, attr = get_opinion_phrase(dialog, topic, attr)
-                elif curr_meta_script_status == "deeper1" and no_detected and not is_predefined_topic(topic):
+                elif curr_meta_script_status == "deeper1" and (
+                        no_detected or never_detected) and not is_predefined_topic(topic):
                     # some `no`-intended answer to starting phrase from wiki or custom topic (not for predefined)
                     response, confidence = "", 0.0
                     attr["meta_script_status"] = FINISHED_SCRIPT
