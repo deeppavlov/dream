@@ -59,11 +59,12 @@ def main():
 
         if len(acceptable_skill_names) > 0 or len(true_sents) > 0:
             assert ((len(acceptable_skill_names) > 0 and passed_acceptable_skills) or (
-                    len(true_sents) > 0 and passed_gold_phrases)), print(
-                f"ERROR!!!\nAcceptable skill names: `{acceptable_skill_names}`.\n"
+                    len(true_sents) > 0 and passed_gold_phrases)), (
+                f"\nERROR!!!\nAcceptable skill names: `{acceptable_skill_names}`.\n"
                 f"Passed acceptable skill names: `{passed_acceptable_skills}`.\n"
                 f"True sentences: `{true_sents}`.\n"
-                f"Passed true sentences: `{passed_gold_phrases}`.")
+                f"Passed true sentences: `{passed_gold_phrases}`.\n"
+                f"Skill: {skill}\nSkill output: {pred_r[-1]}")
 
 
 if __name__ == '__main__':

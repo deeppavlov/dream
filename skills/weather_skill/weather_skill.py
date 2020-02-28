@@ -77,7 +77,11 @@ class DialogDataManager():
 
         # TODO No NER detected location case?
         # TODO detect from keywords search
-        return city
+        logger.info(f"Extracted city `{city}` from user utterance.")
+        if city != "Is":
+            return city
+        else:
+            return None
 
 
 # default confidence

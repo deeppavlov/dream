@@ -235,10 +235,13 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
         cand_sents = sent_tokenize(cand["text"].lower())
         coeff = 1
         for cand_sent in cand_sents:
-            coeff += bot_utt_counter[cand_sent]
-        confidences[i] /= coeff
-        scores[i]['isResponseInteresting'] /= coeff
-        scores[i]['responseEngagesUser'] /= coeff
+            if len(cand_sent.split()) >= 3:
+                coeff += bot_utt_counter[cand_sent]
+
+        if confidences[i] < 1.:
+            confidences[i] /= coeff
+            scores[i]['isResponseInteresting'] /= coeff
+            scores[i]['responseEngagesUser'] /= coeff
 
     skill_names = [c['skill_name'] for c in candidates]
     how_are_you_spec = "Do you want to know what I can do?"  # this is always at the end of answers to `how are you`
