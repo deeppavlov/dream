@@ -105,7 +105,18 @@ def respond():
         dialog_ids.extend(facts_dialog_ids)
 
     executor = ThreadPoolExecutor(max_workers=ASYNC_SIZE)
+    responses_for_this_dialog = []
+    curr_dialog_id = dialog_ids[0]
     for i, response in enumerate(executor.map(send_cobotqa, questions)):
+        if curr_dialog_id != dialog_ids[i]:
+            curr_dialog_id = dialog_ids[i]
+            responses_for_this_dialog = []
+
+        if response in responses_for_this_dialog:
+            response = ""
+        else:
+            responses_for_this_dialog.append(response)
+
         logger.info("Question: {}".format(questions[i]))
         logger.info("Response: {}".format(response))
 
@@ -189,7 +200,7 @@ def respond():
             if j != 0:
                 # facts
                 if (("Opinion_RequestIntent" in intents) or opinion_request_detected or blist_topics_detected or (
-                        sensitive_topics_detected and sensitive_dialogacts_detected)):
+                        sensitive_topics_detected and sensitive_dialogacts_detected)) and len(resp_cands[j]) > 0:
                     resp_cands[j] = f"I don't have an opinion on that but I know some facts. {resp_cands[j]}"
 
         final_responses.append(resp_cands)
