@@ -166,13 +166,17 @@ class SessionEndedRequestHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         user_id = ask_utils.get_user_id(handler_input)
-        if request_data['request'].get('reason') == 'ERROR':
+        r = request_data['request']
+        # reason can be one of: ERROR, EXCEEDED_MAX_REPROMPTS, USER_INITIATED
+        if r.get('reason') == 'ERROR':
             with sentry_sdk.push_scope() as scope:
                 scope.set_extra('request_data', request_data)
                 sentry_sdk.capture_message('ERROR in SessionEndedRequestHandler!!!')
             call_dp_agent(user_id, '/alexa_error_in_session_ending', request_data)
-        elif request_data['request'].get('reason') == 'EXCEEDED_MAX_REPROMPTS':
+        elif r.get('reason') == 'EXCEEDED_MAX_REPROMPTS':
             call_dp_agent(user_id, '/alexa_exceeded_max_reprompts', request_data)
+        else:
+            call_dp_agent(user_id, f"/alexa_{r.get('reason', 'SessionEndedRequest')}", request_data)
         # Any cleanup logic goes here.
         return handler_input.response_builder.response
 
