@@ -182,6 +182,10 @@ services:
     image: ${DOCKER_REGISTRY}/coronavirus_skill:${VERSION}
     env_file:
       - ${ENV_FILE}  
+  topicalchat_convert_retrieval:
+    image: ${DOCKER_REGISTRY}/topicalchat_convert_retrieval:${VERSION}
+    env_file:
+      - ${ENV_FILE}
 volumes:
   external-logs:
   external-deeppavlov:
