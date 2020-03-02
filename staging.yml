@@ -178,6 +178,10 @@ services:
     image: ${DOCKER_REGISTRY}/meta_script_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
+  coronavirus_skill:
+    image: ${DOCKER_REGISTRY}/coronavirus_skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}  
 volumes:
   external-logs:
   external-deeppavlov:

@@ -285,6 +285,16 @@
                 "previous_services": ["skill_selectors", "annotators_3"],
                 "state_manager_method": "add_hypothesis"
             },
+            "coronavirus_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://coronavirus_skill:8061/coronavirus_skill"
+                },
+                "dialog_formatter": "utt_sentrewrite_modified_last_dialog",
+                "response_formatter": "skill_with_attributes_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
+            },
             "christmas_new_year_skill": {
                 "connector": {
                     "protocol": "http",
