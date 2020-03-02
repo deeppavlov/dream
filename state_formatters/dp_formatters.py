@@ -110,7 +110,8 @@ def convert_formatter_dialog(dialog: Dict) -> Dict:
             [utt['annotations']["sentseg"]["punct_sent"] for utt in dialog['utterances']]
         ],
         'personality': [dialog['bot']['persona']],
-        'topics': [dialog["utterances"][-1]["annotations"]["cobot_topics"]]
+        'topics': [dialog["utterances"][-1]["annotations"]["cobot_topics"]],
+        'dialogact_topics': [dialog["utterances"][-1]["annotations"]["cobot_dialogact"]["topics"]],
     }]
 
 

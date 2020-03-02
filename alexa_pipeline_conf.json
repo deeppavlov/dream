@@ -482,6 +482,16 @@
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
             },
+            "topicalchat_convert_retrieval": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://topicalchat_convert_retrieval:8060/respond"
+                },
+                "dialog_formatter": "convert_formatter_dialog",
+                "response_formatter": "skill_with_attributes_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
+            },
             "book_skill": {
                 "connector": {
                     "protocol": "http",

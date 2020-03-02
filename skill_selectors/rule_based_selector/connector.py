@@ -194,6 +194,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("alice")
                 skills_for_uttr.append("tfidf_retrieval")
                 skills_for_uttr.append("convert_reddit")
+                skills_for_uttr.append("topicalchat_convert_retrieval")
 
             if prev_bot_uttr.get("active_skill", "") in ["dummy_skill", "dummy_skill_dialog"] and \
                     len(dialog["utterances"]) > 4:
