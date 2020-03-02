@@ -303,4 +303,10 @@ services:
       - "./common:/src/common"
     ports:
       - 8054:8054
+  coronavirus_skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/coronavirus_skill:/src"
+    ports:
+      - 8061:8061
 version: "3.7"
