@@ -511,16 +511,20 @@ def get_statement_phrase(dialog, topic, attr, TOPICS):
 
 def if_to_start_script(dialog):
     result = False
-    t1 = re.compile(r"what (do|would|can) (you|we) (think|want to talk|like to talk) about[\.\?,!$]+")
+    t1 = re.compile(r"what (do|would|can) (you|we) (think|want to talk|like to talk|wanna|gonna|talk) about[\.\?,!$]+")
     t2 = re.compile(r"(ask|tell|say)( me)?( a)? (question|something|anything)[\.\?,!$]+")
     t3 = re.compile(r"(let('s| us)|can we|could we|can you|could you) (talk|have( a)? conversation)[\.\?,!$]+")
     t4 = re.compile(r"i don('t| not) know[\.\?,!$]+")
-    curr_user_uttr = dialog["utterances"][-1]["text"].lower()
-    if (re.search(
-            t1, curr_user_uttr) or re.search(
-            t2, curr_user_uttr) or re.search(
-            t3, curr_user_uttr) or re.search(
-            t4, curr_user_uttr) or len(dialog["utterances"]) < 12):
+    t5 = re.compile(r"pick up the topic")
+    t6 = re.compile(r"(anything|something|nothing|not know|don't know|you choose|you decide|what's up|what is up)")
+    curr_user_uttr = dialog["human_utterances"][-1]["text"].lower()
+    prev_bot_uttr = dialog["bot_utterances"][-1]["text"].lower()
+
+    user_asks = re.search(t1, curr_user_uttr) or re.search(t2, curr_user_uttr) or re.search(t3, curr_user_uttr)
+    user_dont_know = re.search(t4, curr_user_uttr)
+    bot_asks = re.search(t1, prev_bot_uttr) or re.search(t5, prev_bot_uttr)
+    user_anything = re.search(t6, curr_user_uttr)
+    if len(dialog["utterances"]) < 12 or user_asks or user_dont_know or (bot_asks and user_anything):
         result = True
 
     return result

@@ -135,7 +135,7 @@ def respond():
         bad_subanswers = ["let's talk about", "i have lots of", "world of warcraft",
                           " wow ", " ok is", "coolness is ", "about nice",
                           "\"let's talk\" is a 2002 drama", "visit amazon.com/",
-                          'alexa, play my flash briefing.', "here's a fact about amazon alexas",
+                          'alexa, play my flash briefing.', "amazon alexa",
                           "past tense", "plural form", "singular form", "present tense", "future tense", "bob cut",
                           "movie theater"]
 

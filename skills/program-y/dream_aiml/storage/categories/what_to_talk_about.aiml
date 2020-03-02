@@ -89,4 +89,37 @@
     </template>
   </category>
 
+
+  <category>
+    <pattern># NOT # WHAT I # ASKED YOU ABOUT #</pattern>
+    <template>
+      <srai>ASKED_ABOUT_SOMETHING_ELSE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># NOT # WHAT I ASK YOU ABOUT #</pattern>
+    <template>
+      <srai>ASKED_ABOUT_SOMETHING_ELSE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># NOT # WHAT I AM ASKING YOU ABOUT #</pattern>
+    <template>
+      <srai>ASKED_ABOUT_SOMETHING_ELSE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>ASKED_ABOUT_SOMETHING_ELSE</pattern>
+    <template>
+      Oh... I am sorry. Probably, I'm thinking too fast, so I switched the topic. Tell me again, please, what do you want to talk about?
+    </template>
+  </category>
+
+  <category>
+    <pattern>I ASKED YOU ABOUT #</pattern>
+    <template>
+      Hm... Sorry, I'm thinking too fast, so I switched the topic. Tell me what do you want to know about <star/>.
+    </template>
+  </category>
+
 </aiml>
