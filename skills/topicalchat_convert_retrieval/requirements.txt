@@ -1,0 +1,16 @@
+# models
+# tensorflow-gpu==1.14.0
+tensorflow==1.14.0
+tensorflow_text==0.1.0
+tensorflow-hub==0.7.0
+
+# web
+gunicorn==19.9.0
+flask==1.1.1
+flasgger==0.9.4.dev0
+
+# external
+sentry-sdk==0.13.4
+
+# tests
+requests==2.22.0
