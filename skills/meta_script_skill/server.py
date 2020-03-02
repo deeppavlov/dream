@@ -189,7 +189,7 @@ def respond():
 
             if curr_meta_script_status == "starting":
                 response, confidence, attr = get_starting_phrase(dialog, topic, attr)
-                if "?" in last_two_user_responses[-1]:
+                if len(last_two_user_responses) > 0 and "?" in last_two_user_responses[-1]:
                     # if some question was asked by user, do not start script at all!
                     confidence = 0.
                     response = ""
@@ -201,7 +201,7 @@ def respond():
                 else:
                     confidence = DEFAULT_STARTING_CONFIDENCE
             else:
-                if "?" in last_two_user_responses[-1]:
+                if len(last_two_user_responses) > 0 and "?" in last_two_user_responses[-1]:
                     logger.info("Question by user was detected. Don't continue the script on this turn.")
                     response, confidence = "", 0.0
                     # just for now let's try not to finish the script
