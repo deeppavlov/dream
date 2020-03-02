@@ -143,8 +143,7 @@ def process_info(dialog, which_info="name"):
         logger.info(f"Asked for {which_info} in {prev_bot_uttr}")
         found_info = check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr)
         if found_info is None:
-            if prev_bot_uttr == repeat_info_phrases[which_info].lower() and curr_user_annot.get(
-                    "intent_catcher", {}).get("no", {}).get("detected", 0) == 1:
+            if prev_bot_uttr == repeat_info_phrases[which_info].lower():
                 response = ""
                 confidence = 0.0
                 attr["can_continue"] = CAN_NOT_CONTINUE

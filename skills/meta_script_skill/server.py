@@ -189,16 +189,25 @@ def respond():
 
             if curr_meta_script_status == "starting":
                 response, confidence, attr = get_starting_phrase(dialog, topic, attr)
-                if if_to_start_script(dialog) or topic_switch_detected:
+                if "?" in last_two_user_responses[-1]:
+                    # if some question was asked by user, do not start script at all!
+                    confidence = 0.
+                    response = ""
+                elif if_to_start_script(dialog) or topic_switch_detected:
                     confidence = MATCHED_DIALOG_BEGIN_CONFIDENCE
-                elif len(dialog["utterances"]) <= 20 and "?" not in last_two_user_responses[-1]:
+                elif len(dialog["utterances"]) <= 20:
                     # if this is a beginning of the dialog, assign higher confidence to start the script
                     confidence = DEFAULT_DIALOG_BEGIN_CONFIDENCE
                 else:
                     confidence = DEFAULT_STARTING_CONFIDENCE
             else:
+                if "?" in last_two_user_responses[-1]:
+                    logger.info("Question by user was detected. Don't continue the script on this turn.")
+                    response, confidence = "", 0.0
+                    # just for now let's try not to finish the script
+                    # attr["meta_script_status"] = FINISHED_SCRIPT
                 # there were some script active before in the last several utterances
-                if topic_switch_detected or lets_chat_about_detected:
+                elif topic_switch_detected or lets_chat_about_detected:
                     logger.info("Topic switching was detected. Finish script.")
                     response, confidence = "", 0.0
                     attr["meta_script_status"] = FINISHED_SCRIPT

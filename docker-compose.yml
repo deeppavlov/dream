@@ -639,8 +639,7 @@ services:
           - node.labels.with_gpu != true
   coronavirus_skill:
     build:
-      context: .
-      dockerfile: skills/meta_script_skill/Dockerfile
+      context: ./skills/coronavirus_skill/
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8061
     volumes: []
     deploy:
