@@ -518,7 +518,10 @@ def if_to_start_script(dialog):
     t5 = re.compile(r"pick up the topic")
     t6 = re.compile(r"(anything|something|nothing|not know|don't know|you choose|you decide|what's up|what is up)")
     curr_user_uttr = dialog["human_utterances"][-1]["text"].lower()
-    prev_bot_uttr = dialog["bot_utterances"][-1]["text"].lower()
+    if len(dialog["bot_utterances"]) > 0:
+        prev_bot_uttr = dialog["bot_utterances"][-1]["text"].lower()
+    else:
+        prev_bot_uttr = ""
 
     user_asks = re.search(t1, curr_user_uttr) or re.search(t2, curr_user_uttr) or re.search(t3, curr_user_uttr)
     user_dont_know = re.search(t4, curr_user_uttr)
