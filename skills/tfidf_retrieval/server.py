@@ -25,30 +25,10 @@ vectorizer_file = "../global_data/new_vectorizer_2.zip"
 dialog_dir = "../global_data/dialog_list.json"
 full_dialog_dir = "data/full_dialog_list.json"  # We WRITE from this directory rather than read from it
 custom_dialog_dir = "data/custom_dialog_list.json"
-
-donotknow_answers = ["I really do not know what to answer.",
-                     "Sorry, probably, I didn't get what you mean.",
-                     "I didn't get it. Sorry.",
-                     "Let's talk about something else.",
-                     "I'm newborn socialbot, so I can't do so much. For example I can answer for any question.",
-                     "I'm really sorry but i'm a socialbot, and I can't do some Alexa functions.",
-                     "I didn’t catch that.",
-                     "I didn’t get that.",
-                     "superbowl", "super bowl"]
-donotknow_answers = [preprocess(j) for j in donotknow_answers]
+stop_phrases_dir = "data/stop_phrases.txt"
+todel_phrases = [j.strip() for j in open(stop_phrases_dir, 'r').readlines()]
+todel_phrases = [preprocess(j) for j in todel_phrases]
 todel_userphrases = ['yes', 'wow', "let's talk about.", 'yeah', 'politics', 'superbowl', 'super bowl']
-banned_words = ['Benjamin', 'misheard', 'cannot do this',
-                "I didn't get your homeland .  Could you ,  please ,  repeat it . ", '#+#',
-                "you are first. tell me something about positronic.",
-                "you are first. tell me something about tronics."
-                "sum up the internet", "your favorite movie",
-                "without ever getting tired", "most ironic thing",
-                "a fact about", "beg your pardon",
-                "how stupid I am about", "a fruit machine in there",
-                "might answer your question", "just to be negative",
-                "newborn socialbot", "no_ answer", "i don't have an opinion on that",
-                "super bowl", "let me ask you something", "i am glad to know you better",
-                "Alexa, stop"]
 vectorizer = get_vectorizer(vectorizer_file=vectorizer_file)
 dialog_list = get_dialogs(dialog_dir=dialog_dir, custom_dialog_dir=custom_dialog_dir,
                           full_dialog_dir=full_dialog_dir)
@@ -57,8 +37,8 @@ if TFIDF_BAD_FILTER:
     bad_dialog_list = get_dialogs(bad_dialog_dir, '', '', False)
 else:
     bad_dialog_list = None
-phrase_list = create_phraselist(dialog_list=dialog_list, donotknow_answers=donotknow_answers,
-                                todel_userphrases=todel_userphrases, banned_words=banned_words,
+phrase_list = create_phraselist(dialog_list=dialog_list, todel_phrases=todel_phrases,
+                                todel_userphrases=todel_userphrases,
                                 bad_dialog_list=bad_dialog_list)
 if USE_ASSESSMENT:
     goodbad_list = json.load(open('data/goodpoor.json', 'r'))[0]
@@ -108,7 +88,7 @@ def respond():
             sentry_sdk.capture_message("No response in tfidf_retrieve")
         response = [["sorry", 0]]
     for i in range(len(response)):
-        if any([j in response[i][0].lower() for j in ['no_', 'unknown', 'interjection']]):
+        if any([j in response[i][0].lower() for j in todel_phrases]):
             response[i][0] = ''
     assert len(response[0]) == 2
     total_time = time.time() - st_time

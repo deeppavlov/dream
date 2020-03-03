@@ -45,7 +45,7 @@ def count(good, bad):
     return good / (good + bad + 0.001)
 
 
-def create_phraselist(dialog_list, donotknow_answers, todel_userphrases, banned_words,
+def create_phraselist(dialog_list, todel_phrases, todel_userphrases,
                       bad_dialog_list=None):
     phrase_list = defaultdict(list)
     good_phrase_list = defaultdict(list)
@@ -57,8 +57,8 @@ def create_phraselist(dialog_list, donotknow_answers, todel_userphrases, banned_
         for i in range(0, len(utterances) - 1, 1):
             human_phrase = preprocess(utterances[i])
             bot_phrase = preprocess(utterances[i + 1])
-            no_wrongwords = all([banned_word not in bot_phrase for banned_word in banned_words])
-            if bot_phrase not in donotknow_answers and human_phrase not in todel_userphrases and no_wrongwords:
+            no_wrongwords = all([banned_phrase not in bot_phrase for banned_phrase in todel_phrases])
+            if bot_phrase not in todel_phrases and human_phrase not in todel_userphrases and no_wrongwords:
                 good_phrase_list[human_phrase].append(bot_phrase)
                 good_total_count += 1
     if bad_dialog_list is not None:
@@ -67,7 +67,7 @@ def create_phraselist(dialog_list, donotknow_answers, todel_userphrases, banned_
             for i in range(0, len(utterances) - 1, 1):
                 human_phrase = utterances[i]
                 bot_phrase = utterances[i + 1]
-                no_wrongwords = all([banned_word not in bot_phrase for banned_word in banned_words])
+                no_wrongwords = all([banned_phrase not in bot_phrase for banned_phrase in todel_phrases])
                 bad_phrase_list[human_phrase].append(bot_phrase)
                 bad_total_count += 1
     logging.info('Phrase list created')
@@ -81,21 +81,7 @@ def create_phraselist(dialog_list, donotknow_answers, todel_userphrases, banned_
 
 
 def check(human_phrase, vectorizer, vectorized_phrases, phrase_list, top_best=1):
-    banned_phrases = ['where are you from?',
-                      "hi, this is an alexa prize socialbot. yeah, let's chat! what do you want to talk about?",
-                      "you are first. tell me something about positronic.",
-                      "i'm made by amazon.",
-                      "favorite member of mouse rat?",
-                      "don't worry, our conversation is confidential.",
-                      "i appreciate your candor",
-                      "i imagine that's good for you.",
-                      "might answer your question"]
-    misheard_phrases = ["I misheard you",
-                        "Could you repeat that, please?",
-                        "Could you say that again, please?",
-                        "I couldn't hear you",
-                        "Sorry, I didn't catch that",
-                        "What is it that you'd like to chat about?"]
+
     human_phrase = preprocess(human_phrase)
     human_phrases = list(phrase_list.keys())
     assert vectorized_phrases.shape[0] > 0
@@ -121,9 +107,7 @@ def check(human_phrase, vectorizer, vectorized_phrases, phrase_list, top_best=1)
         for sign in '!#$%&*+.,:;<>=?@[]^_{}|':
             bot_answer = bot_answer.replace(' ' + sign, sign)
         bot_answer = bot_answer.replace('  ', ' ').lower().strip()
-        cond1 = all([banned_phrase not in bot_answer for banned_phrase in banned_phrases + misheard_phrases])
-        cond2 = len(human_phrase) >= 7 and 'alexa play' not in human_phrase.lower()
-        if cond1 and cond2:
+        if len(human_phrase) >= 7 and 'alexa play' not in human_phrase.lower():
             ans.append([bot_answer, score])
         else:
             ans.append(["I really do not know what to answer.", 0])
