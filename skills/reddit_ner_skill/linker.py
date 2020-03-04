@@ -209,7 +209,7 @@ class Linker:
                 phrase = ""
                 status = self.status_constants['cannot']
                 return phrase, status
-            phrase += self._get_start_phrase(post)
+            phrase += self._get_start_phrase(post) + " "
             phrase += self._get_engaging_phrase(post)
         else:
             self.logger.info("Dialog continuation")
@@ -227,9 +227,9 @@ class Linker:
                 phrase = ""
                 status = self.status_constants['cannot']
                 return phrase, status
-            phrase += self._get_connection_phrase(link)  # Connect to next entity
-            phrase += self._get_content_phrase(post)
-            phrase += self._get_engaging_phrase(post)
+            phrase += self._get_connection_phrase(link) + " "  # Connect to next entity
+            phrase += self._get_content_phrase(post) + " "
+            phrase += self._get_engaging_phrase(post) + " "
         self.logger.info(f"Entity:{entity}")
         self.logger.info(f"Post:{post}")
         self._add(entity, post)
