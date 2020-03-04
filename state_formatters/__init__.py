@@ -34,7 +34,8 @@ all_formatters = {
     'telegram_selector_formatter_in': telegram_selector_formatter_in,
     'full_utt_sentseg_punct_dialog': full_utt_sentseg_punct_dialog,
     'intent_responder_formatter_dialog': intent_responder_formatter_dialog,
-
+    'hypotheses_list': hypotheses_list,
+    'cobot_convers_evaluator_annotator_formatter': cobot_convers_evaluator_annotator_formatter,
     'http_debug_output_formatter': http_debug_output_formatter,
     'http_api_output_formatter': http_api_output_formatter,
 }

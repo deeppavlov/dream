@@ -73,11 +73,7 @@ blacklists = [Blacklist(file) for file in blacklist_files]
 logger.info(f'blacklisted_words initialized with following blacklists: {blacklists}')
 
 
-@app.route("/blacklisted_words", methods=['POST'])
-def respond():
-    """
-    responses with  [{blacklist_1_name: true}, ] if at least one blacklisted phrase is in utterance
-    """
+def get_result(request):
     st_time = time.time()
     sentences = request.json['sentences']
     result = []
@@ -86,7 +82,25 @@ def respond():
 
     total_time = time.time() - st_time
     logger.info(f'blacklisted_words exec time: {total_time:.3f}s')
+    return result
+
+
+@app.route("/blacklisted_words", methods=['POST'])
+def respond():
+    """
+    responses with  [{blacklist_1_name: true}, ] if at least one blacklisted phrase is in utterance
+    """
+    result = get_result(request)
     return jsonify(result)
+
+
+@app.route("/blacklisted_words_batch", methods=['POST'])
+def respond_batch():
+    """
+    responses with [{"batch": [{blacklist_1_name: true}, ]}]
+    """
+    result = get_result(request)
+    return jsonify([{"batch": result}])
 
 
 if __name__ == '__main__':

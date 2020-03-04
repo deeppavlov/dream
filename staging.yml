@@ -178,10 +178,14 @@ services:
     image: ${DOCKER_REGISTRY}/meta_script_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
+  cobot_convers_evaluator_annotator:
+    image: ${DOCKER_REGISTRY}/cobot_convers_evaluator_annotator:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   coronavirus_skill:
     image: ${DOCKER_REGISTRY}/coronavirus_skill:${VERSION}
     env_file:
-      - ${ENV_FILE}  
+      - ${ENV_FILE}
   topicalchat_convert_retrieval:
     image: ${DOCKER_REGISTRY}/topicalchat_convert_retrieval:${VERSION}
     env_file:

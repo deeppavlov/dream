@@ -1,6 +1,9 @@
 from typing import Dict
 
 from core.state_schema import Bot, BotUtterance, Dialog, Human, HumanUtterance
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class StateManager:
@@ -16,7 +19,8 @@ class StateManager:
     async def add_hypothesis(self, dialog: Dialog, payload: Dict, label: str, **kwargs):
         hypothesis = {'skill_name': label, 'annotations': {}}
         for h in payload:
-            dialog.utterances[-1].hypotheses.append({**hypothesis, **h})
+            if h['confidence'] > 0 and h['text']:
+                dialog.utterances[-1].hypotheses.append({**hypothesis, **h})
 
     async def add_annotation(self, dialog: Dialog, payload: Dict, label: str, **kwargs):
         dialog.utterances[-1].annotations[label] = payload
@@ -24,6 +28,11 @@ class StateManager:
     async def add_hypothesis_annotation(self, dialog: Dialog, payload: Dict, label: str, **kwargs):
         ind = kwargs['ind']
         dialog.utterances[-1].hypotheses[ind]['annotations'][label] = payload
+
+    async def add_hypothesis_annotation_batch(self, dialog: Dialog, payload: Dict, label: str, **kwargs):
+        assert len(dialog.utterances[-1].hypotheses) == len(payload["batch"])
+        for i in range(len(payload["batch"])):
+            dialog.utterances[-1].hypotheses[i]['annotations'][label] = payload["batch"][i]
 
     async def add_text(self, dialog: Dialog, payload: str, label: str, **kwargs):
         dialog.utterances[-1].text = payload

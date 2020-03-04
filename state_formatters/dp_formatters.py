@@ -202,6 +202,23 @@ def last_utt_dialog(dialog: Dict) -> Dict:
     return [{'sentences': [dialog['utterances'][-1]['text']]}]
 
 
+def hypotheses_list(dialog: Dict) -> Dict:
+    hypotheses = dialog["utterances"][-1]["hypotheses"]
+    hypots = [h["text"] for h in hypotheses]
+    return [{'sentences': hypots}]
+
+
+def cobot_convers_evaluator_annotator_formatter(dialog: Dict) -> Dict:
+    conv = dict()
+    hypotheses = dialog["utterances"][-1]["hypotheses"]
+    conv["hypotheses"] = [h["text"] for h in hypotheses]
+    conv["currentUtterance"] = dialog["utterances"][-1]["text"]
+    # cobot recommends to take 2 last utt for conversation evaluation service
+    conv["pastUtterances"] = [uttr["text"] for uttr in dialog["human_utterances"]][-3:-1]
+    conv["pastResponses"] = [uttr["text"] for uttr in dialog["bot_utterances"]][-2:]
+    return [conv]
+
+
 def last_utt_and_history_dialog(dialog: Dict) -> List:
     # Used by: topicalchat retrieval skills
     dialog = get_last_n_turns(dialog)
