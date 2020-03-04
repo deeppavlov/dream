@@ -648,6 +648,17 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+  cobot_convers_evaluator_annotator:
+    build:
+      context: ./annotators/CoBotConversationEvaluator/
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8063 -t 15
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   coronavirus_skill:
     build:
       context: ./skills/coronavirus_skill/

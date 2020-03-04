@@ -309,6 +309,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8054:8054
+  cobot_convers_evaluator_annotator:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/CoBotConversationEvaluator:/src"
+    ports:
+      - 8063:8063
   coronavirus_skill:
     env_file: [.env.dev]
     volumes:

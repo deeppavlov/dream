@@ -573,6 +573,38 @@
                 "state_manager_method": "add_hypothesis"
             }
         },
+        "post_skill_selector_annotators": {
+          "toxic_classification": {
+              "connector": {
+                  "protocol": "python",
+                  "class_name": "annotators.DeepPavlovToxicClassification.connector:BatchConnector"
+              },
+              "dialog_formatter": "hypotheses_list",
+              "response_formatter": "simple_formatter_service",
+              "previous_services": ["skills"],
+              "state_manager_method": "add_hypothesis_annotation_batch"
+          },
+          "blacklisted_words": {
+              "connector": {
+                  "protocol": "http",
+                  "url": "http://blacklisted_words:8018/blacklisted_words_batch"
+              },
+              "dialog_formatter": "hypotheses_list",
+              "response_formatter": "simple_formatter_service",
+              "previous_services": ["skills"],
+              "state_manager_method": "add_hypothesis_annotation_batch"
+          },
+          "cobot_convers_evaluator_annotator": {
+              "connector": {
+                  "protocol": "http",
+                  "url": "http://cobot_convers_evaluator_annotator:8063/evaluate"
+              },
+              "dialog_formatter": "cobot_convers_evaluator_annotator_formatter",
+              "response_formatter": "simple_formatter_service",
+              "previous_services": ["skills"],
+              "state_manager_method": "add_hypothesis_annotation_batch"
+          }
+        },
         "response_selectors": {
             "convers_evaluation_selector": {
                 "connector": {
@@ -581,7 +613,7 @@
                 },
                 "dialog_formatter": "full_utt_sentseg_punct_dialog",
                 "response_formatter": "base_response_selector_formatter_service",
-                "previous_services": ["skills"],
+                "previous_services": ["post_skill_selector_annotators"],
                 "state_manager_method": "add_bot_utterance"
 
             }
