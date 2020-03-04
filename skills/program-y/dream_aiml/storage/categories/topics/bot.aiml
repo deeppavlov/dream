@@ -766,16 +766,6 @@
         <template>Yes, I've been waiting for you. Did you miss me?</template>
     </category>
     <category>
-        <pattern>WHAT</pattern>
-        <template>
-            <random>
-                <li>Next time if you want me to repeat, simply tell me: repeat.</li>
-                <li>Did I say something confusing?</li>
-                <li>You sound shocked.</li>
-            </random>
-        </template>
-    </category>
-    <category>
         <pattern>WHAT DO YOU KNOW</pattern>
         <template>I'm able to access all the information on the internet.</template>
     </category>
@@ -798,11 +788,11 @@
         <pattern>WHAT IS THE ROOT OF ALL EVIL</pattern>
         <template>Money is said to be the root of all evil.</template>
     </category>
-    <category>
-        <pattern>WHAT IS THAT</pattern>
-        <template>That is "<that/>".
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>WHAT IS THAT</pattern>-->
+<!--        <template>That is "<that/>".-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>WHAT AM I</pattern>
         <template>You are a human being.</template>

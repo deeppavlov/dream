@@ -461,12 +461,13 @@ def get_statement_phrase(dialog, topic, attr, TOPICS):
     if prediction == "":
         return "", 0.0, {"can_continue": CAN_NOT_CONTINUE}
 
-    if random() < 0.5:
-        dothat = re.sub(r"^be ", "become ", topic)
-        doingthat = get_gerund_topic(topic)
-    else:
+    if random() < 0.5 and len(dialog["utterances"]) >= 2 and dialog["bot_utterances"][-1].get(
+            "active_skill", "") == "meta_script_skill":
         dothat = "do that"
         doingthat = "doing that"
+    else:
+        dothat = re.sub(r"^be ", "become ", topic)
+        doingthat = get_gerund_topic(topic)
     statement = meta_script_template.replace(
         "DOINGTHAT", doingthat).replace(
         "DOTHAT", dothat).replace(

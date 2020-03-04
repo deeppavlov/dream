@@ -170,7 +170,7 @@ def main_test():
     for sent in sentences:
         data = {"sentences_batch": [[sent]]}
         response = requests.post(url, json=data).json()[0][0]
-        assert "Alexa, stop, and try again" in response, print(f"User: {sent}. Response: {response}")
+        assert "Alexa, stop," in response, print(f"User: {sent}. Response: {response}")
 
 
 if __name__ == '__main__':
