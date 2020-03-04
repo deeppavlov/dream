@@ -78,7 +78,7 @@ def encode_context(dialogue_history):
 
 
 def approximate_confidence(confidence):
-    return (confidences <= confidence).sum() / len(confidences)
+    return 0.95 * (confidences <= confidence).sum() / len(confidences)
     # return float(confidence)
 
 

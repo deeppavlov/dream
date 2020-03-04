@@ -137,7 +137,7 @@ def respond():
                           "\"let's talk\" is a 2002 drama", "visit amazon.com/",
                           'alexa, play my flash briefing.', "amazon alexa",
                           "past tense", "plural form", "singular form", "present tense", "future tense", "bob cut",
-                          "movie theater"]
+                          "movie theater", "alexa app"]
 
         if len(response) > 0 and 'skill://amzn1' not in response:
             if response in bad_answers or any([bad_substr in response.lower() for bad_substr in bad_subanswers]):
