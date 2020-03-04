@@ -75,12 +75,6 @@ services:
       context: ./skills/program-y/
     working_dir: /src/dream_aiml/scripts/xnix
     command: ./sanic.sh
-    healthcheck:
-      test: ["CMD-SHELL", "curl -s --header \"Content-Type: application/json\" --request POST --data '{\"sentences_batch\":[[\"lets chat\"]],\"user_ids\":[123131]}' http://localhost:8008/api/rest/v1.0/ask || exit 1"]
-      interval: 10s
-      timeout: 2s
-      retries: 3
-      start_period: 1m
     deploy:
       mode: replicated
       replicas: 2
@@ -191,6 +185,7 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+          - node.labels.group == 1
       resources:
         limits:
           memory: 6G
@@ -209,12 +204,6 @@ services:
       context: ./skills/program-y-dangerous/
     working_dir: /src/dream_aiml/scripts/xnix
     command: ./sanic.sh
-    healthcheck:
-      test: ["CMD-SHELL", "curl -s --header \"Content-Type: application/json\" --request POST --data '{\"sentences_batch\":[[\"i want to commit a suicide\"]],\"user_ids\":[123131]}' http://localhost:8022/api/rest/v1.0/ask || exit 1"]
-      interval: 10s
-      timeout: 2s
-      retries: 3
-      start_period: 1m
     deploy:
       mode: replicated
       replicas: 2
@@ -562,7 +551,7 @@ services:
   weather_skill:
     build:
       context: ./skills/weather_skill/
-    command: gunicorn --workers=4 server:app -b 0.0.0.0:8037
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8037
     volumes: []
     deploy:
       mode: replicated
@@ -570,7 +559,6 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
-          - node.labels.group == 1
   emotion_skill:
     build:
       context: .
