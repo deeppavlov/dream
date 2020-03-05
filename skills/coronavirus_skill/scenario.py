@@ -61,7 +61,10 @@ class CoronavirusSkillScenario:
         confidences = []
         for dialog in dialogs:
             try:
-                last_bot_phrase = dialog['utterances'][-2]['text']
+                if len(dialog['utterances']) >= 2:
+                    last_bot_phrase = dialog['utterances'][-2]['text']
+                else:
+                    last_bot_phrase = ''
                 last_utterance = dialog['utterances'][-1]
                 if about_coronavirus(last_utterance):
                     reply, confidence = self.phrases[0], 0.95
