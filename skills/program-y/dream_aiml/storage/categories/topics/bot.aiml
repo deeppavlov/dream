@@ -766,6 +766,15 @@
         <template>Yes, I've been waiting for you. Did you miss me?</template>
     </category>
     <category>
+        <pattern>WHAT</pattern>
+        <template>
+            <random>
+                <li>Next time if you want me to repeat, simply tell me: repeat.</li>
+                <li>Probably, I said something confusing. What did we talk about?</li>
+            </random>
+        </template>
+    </category>
+    <category>
         <pattern>WHAT DO YOU KNOW</pattern>
         <template>I'm able to access all the information on the internet.</template>
     </category>

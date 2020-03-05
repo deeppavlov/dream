@@ -2,15 +2,6 @@
 <aiml version="2.0">
 
   <category>
-    <pattern>WHAT</pattern>
-    <template>
-      <random>
-        <li>Probably, I misunderstood you. What did you ask me about?</li>
-        <li>Probably, I misunderstood you. Could you, please, ask me in more simple way.</li>
-      </random>
-    </template>
-  </category>
-  <category>
     <pattern># I # NOT ASKED YOU #</pattern>
     <template>
       <random>
