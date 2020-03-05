@@ -126,11 +126,6 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
         dockercompose_cmd exec -T -u $(id -u) movie_skill python test.py
     fi
 
-    if container_is_started book_skill; then
-        echo "Run tests for book_skill"
-        dockercompose_cmd exec -T -u $(id -u) book_skill python test.py
-    fi
-
     if container_is_started asr; then
         echo "Run tests for asr container"
         dockercompose_cmd exec -T -u $(id -u) asr python test.py
