@@ -23,10 +23,8 @@ def main_test():
     sliced_data = [slice_(input_data, i) for i in range(1, 21, 2)]
     responses = [requests.post(url, json=tmp).json()[0][0] for tmp in sliced_data]
     gold_phrases = ["I've read it. It's an amazing book! Would you like to know some facts about it?",
-                    "The Little Prince is a novella by French aristocrat, writer, and aviator " + (
-                        "Antoine de Saint-Exupéry. It was first published in English and French in the US ") + (
-                        "by Reynal & Hitchcock in April 1943, and posthumously in France following the ") + (
-                        "liberation of France as Saint-Exupéry's works had been banned by the Vichy Regime."),
+                    "",
+                    # Facts can be really different.
                     'My favourite book is "The Old Man and the Sea" by Ernest Hemingway.',
                     "OK, let's talk about books. Do you love reading?",
                     "That's great. What is the last book you have read?",

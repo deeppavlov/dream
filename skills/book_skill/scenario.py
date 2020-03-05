@@ -372,7 +372,6 @@ def fact_about_book(annotated_user_phrase):
     try:
         bookname = get_name(annotated_user_phrase, 'book')
         reply = get_answer('fact about ' + bookname)
-        reply = reply.split('This might answer your question: ')[1]
         return reply
     except BaseException:
         return None
