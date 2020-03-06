@@ -35,8 +35,18 @@ def exit_respond(dialog, response_phrases):
 
 
 def repeat_respond(dialog, response_phrases):
+    WHAT_BOT_PHRASES = ['did i say something confusing', 'you sound shocked', 'if you want me to repeat']
+    bot_phrases = dialog['bot_utterances']
     if len(dialog["utterances"]) >= 2:
-        bot_utt = dialog["utterances"][-2]["text"]
+        responder_phrase = dialog['utterances'][-2]['text'].lower()
+        if any([j in responder_phrase for j in WHAT_BOT_PHRASES]):
+            bot_utt = ""
+            for bot_phrase in bot_phrases[::-1]:
+                if bot_phrase != bot_phrases[-1]:
+                    bot_utt = bot_phrase
+                    break
+        else:
+            bot_utt = dialog["utterances"][-2]["text"]
     else:
         bot_utt = ""
     return bot_utt if len(bot_utt) > 0 else "I did not say anything!"
