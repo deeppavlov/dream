@@ -1,0 +1,162 @@
+{
+  "animals": [
+    "animal",
+    "wild",
+    "leopard",
+    "lion",
+    "beast"
+  ],
+  "books": [
+    "book",
+    "reading",
+    "read",
+    "literature",
+    "journal",
+    "magazine",
+    "novel"
+  ],
+  "cars": [
+    "car",
+    "automobile"
+  ],
+  "family": [
+    "husband",
+    "wife",
+    "spouse",
+    "family",
+    "child",
+    "children"
+  ],
+  "food": [
+    "food",
+    "eat"
+  ],
+  "life": [
+    "life",
+    "life style",
+    "lifestyle"
+  ],
+  "love": [
+    "love",
+    "friend",
+    "relationship",
+    "relation",
+    "women",
+    "men",
+    "girlfriend",
+    "boyfriend"
+  ],
+  "me": [
+    "\bme\b",
+    "myself"
+  ],
+  "movies": [
+    "movie",
+    "cinema",
+    "cartoon",
+    "series",
+    "tv",
+    "cinematography",
+    "youtube",
+    "anime"
+  ],
+  "music": [
+    "music",
+    "song",
+    "singer",
+    "musician"
+  ],
+  "news": [
+    "news",
+    "new",
+    "tiding"
+  ],
+  "pets": [
+    "dog",
+    "cat",
+    "pets"
+  ],
+  "politics": [
+    "politics",
+    "politician",
+    "policy"
+  ],
+  "science": [
+    "science",
+    "research",
+    "survey",
+    "technology",
+    "discovery",
+    "opening",
+    "open",
+    "breakthrough",
+    "scitech",
+    "sci-tech"
+  ],
+  "school": [
+    "school",
+    "study",
+    "education",
+    "exam",
+    "examination",
+    "learn",
+    "learning"
+  ],
+  "sex": [
+    "sex",
+    "porn",
+    "porno"
+  ],
+  "sports": [
+    "sport",
+    "game",
+    "football",
+    "baseball",
+    "basketball",
+    "hockey"
+  ],
+  "star wars": [
+    "star war",
+    "star wars",
+    "sky walker",
+    "skywalker",
+    "yoda"
+  ],
+  "travel": [
+    "travel",
+    "journey",
+    "tour",
+    "trip",
+    "voyage"
+  ],
+  "donald trump": [
+    "trump",
+    "donald trump",
+    "american president",
+    "the president"
+  ],
+  "video games": [
+    "video game",
+    "videogame",
+    "play station",
+    "playstation",
+    "minecraft",
+    "gta"
+  ],
+  "weather": [
+    "weather",
+    "forecast"
+  ],
+  "work": [
+    "work",
+    "job",
+    "occupation",
+    "profession"
+  ],
+  "you": [
+    "\byou\b",
+    "yourself",
+    "socialbot",
+    "alexa"
+  ]
+}

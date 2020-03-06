@@ -262,6 +262,8 @@ class RuleBasedSkillSelectorConnector:
 
         # always add dummy_skill
         skills_for_uttr.append("dummy_skill")
+        skills_for_uttr.append("small_talk_skill")
+
         if "/alexa_" in dialog["utterances"][-1]["text"]:
             skills_for_uttr = ["alexa_handler"]
         asyncio.create_task(callback(
