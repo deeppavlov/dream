@@ -528,10 +528,21 @@ def if_to_start_script(dialog):
     user_dont_know = re.search(t4, curr_user_uttr)
     bot_asks = re.search(t1, prev_bot_uttr) or re.search(t5, prev_bot_uttr)
     user_anything = re.search(t6, curr_user_uttr)
-    if len(dialog["utterances"]) < 12 or user_asks or user_dont_know or (bot_asks and user_anything):
+    if user_asks or user_dont_know or (bot_asks and user_anything):
         result = True
 
     return result
+
+
+def user_wants_to_talk_about_his_topic(dialog):
+    lets_chat_about_detected = dialog["utterances"][-1].get("annotations", {}).get(
+        "intent_catcher", {}).get("lets_chat_about", {}).get("detected", 0) == 1
+    anything = re.compile(r"(anything|something|nothing|not know|don't know|"
+                          r"you choose|you decide|what's up|what is up)")
+    user_uttr = dialog["human_utterances"][-1]["text"].lower()
+    if lets_chat_about_detected and re.search(anything, user_uttr) is not None:
+        return True
+    return False
 
 
 def extract_verb_noun_phrases(utterance):

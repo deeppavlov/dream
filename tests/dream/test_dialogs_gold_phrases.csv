@@ -82,3 +82,7 @@
  "let's talk about something else"
 "alexa_handler" "/alexa_stop_handler" "command logged"
 "coronavirus_skill;cobotqa" "corona virus" "According to the most recent data"
+ "let's have a conversation about pets"
+ "yes I have two pets"
+ "tell me something about travelling"
+ "yeah many times"

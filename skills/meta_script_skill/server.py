@@ -13,7 +13,8 @@ from common.constants import CAN_NOT_CONTINUE
 from common.utils import get_skill_outputs_from_dialog, get_user_replies_to_particular_skill
 from utils import get_starting_phrase, get_statement_phrase, get_opinion_phrase, get_comment_phrase, \
     if_to_start_script, extract_verb_noun_phrases, DEFAULT_STARTING_CONFIDENCE, is_custom_topic, \
-    WIKI_DESCRIPTIONS, SORRY_SWITCH_TOPIC_REPLIES, DEFAULT_CONFIDENCE, is_predefined_topic, get_used_attributes_by_name
+    WIKI_DESCRIPTIONS, SORRY_SWITCH_TOPIC_REPLIES, DEFAULT_CONFIDENCE, is_predefined_topic, \
+    get_used_attributes_by_name, user_wants_to_talk_about_his_topic
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -189,7 +190,8 @@ def respond():
 
             if curr_meta_script_status == "starting":
                 response, confidence, attr = get_starting_phrase(dialog, topic, attr)
-                if len(last_two_user_responses) > 0 and "?" in last_two_user_responses[-1]:
+                if (len(last_two_user_responses) > 0 and "?" in last_two_user_responses[-1]) \
+                        or user_wants_to_talk_about_his_topic(dialog):
                     # if some question was asked by user, do not start script at all!
                     confidence = 0.
                     response = ""

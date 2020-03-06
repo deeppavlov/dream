@@ -328,4 +328,11 @@ services:
       - "./skills/coronavirus_skill:/src"
     ports:
       - 8061:8061
+  small_talk_skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/small_talk_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8062:8062
 version: "3.7"
