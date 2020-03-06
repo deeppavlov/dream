@@ -34,7 +34,12 @@ class Responder:
                     # Special formatter which used in AWS Lambda to identify what was the intent
                     while "#+#" in response:
                         response = response[:response.rfind(" #+#")]
-                    response += " #+#{}".format(intent_name)
+                    self.logger.info(f"Response: {response}; intent_name: {intent_name}")
+                    try:
+                        response += " #+#{}".format(intent_name)
+                    except TypeError:
+                        self.logger.error(f"TypeError intent_name: {intent_name} response: {response};")
+                        response = "Hmmm... #+#{}".format(intent_name)
                     confidence = intent_data['confidence']
                     self.seen_intents.add(intent_name)
                     # todo: we need to know what intent was called

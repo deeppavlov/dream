@@ -73,6 +73,13 @@ def random_respond(dialog, response_phrases):
             response = random.choice(response_phrases['first']).strip()
     else:
         response = random.choice(response_phrases).strip()
+
+    # TODO: somehow response sometimes is dict
+    if type(response) == dict:
+        if dialog['seen']:
+            response = random.choice(response['last']).strip()
+        else:
+            response = random.choice(response['first']).strip()
     return response
 
 
