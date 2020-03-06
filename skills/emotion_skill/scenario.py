@@ -7,6 +7,7 @@ from os import getenv
 from string import punctuation
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
 
+
 #  import os
 #  import zipfile
 #  import _pickle as cPickle
@@ -110,7 +111,7 @@ class EmotionSkillScenario:
                     if emotion_probs[emotion] == most_likely_prob:
                         most_likely_emotion = emotion
                 assert most_likely_emotion is not None
-                if 'Can I tell you a joke' in bot_phrases[-1]:
+                if any([j in bot_phrases[-1] for j in ['Can I tell you a joke', 'Do you want to hear a joke']]):
                     if is_yes(annotated_user_phrase):
                         attr["can_continue"] = CAN_CONTINUE
                         reply, confidence = random.choice(jokes), 1.0
@@ -118,8 +119,8 @@ class EmotionSkillScenario:
                         reply, confidence = '', 0
                 else:
                     reply = random.choice(phrase_dict[most_likely_emotion])
-                    confidence = most_likely_prob * self.precision[emotion]
-                if 'Can I tell you a joke' in reply and confidence < conf_sure:
+                    confidence = most_likely_prob * self.precision[most_likely_emotion]
+                if 'Can I tell you a joke' in reply and confidence < self.conf_sure:
                     attr["can_continue"] = CAN_CONTINUE
                     # Push reply with offering a joke forward
                     confidence = conf_sure

@@ -241,7 +241,12 @@ class RuleBasedSkillSelectorConnector:
             for emotion, prob in emotions.items():
                 if prob == max(emotions.values()):
                     found_emotion, found_prob = emotion, prob
-            should_run_emotion = found_emotion != 'neutral' and found_prob > emo_prob_threshold
+            cond1 = found_emotion != 'neutral' and found_prob > emo_prob_threshold
+            if 'text' in prev_bot_uttr:
+                cond2 = 'joke' in prev_bot_uttr['text']
+            else:
+                cond2 = False
+            should_run_emotion = cond1 or cond2
             if should_run_emotion:
                 skills_for_uttr.append('emotion_skill')
 
