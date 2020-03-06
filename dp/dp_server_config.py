@@ -37,5 +37,10 @@ settings['model_defaults']['EmotionClassificationModel'] = {
     "model_endpoint": "/emotion_annotations",
     "model_args_names": ["sentences"]
 }
+
+settings['model_defaults']['stop_detect'] = {
+    "model_endpoint": "/stop_probs",
+    "model_args_names": ["dialog"]
+}
 print(settings_path)
 save_json(settings, settings_path)

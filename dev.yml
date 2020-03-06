@@ -309,6 +309,13 @@ services:
       - "./common:/src/common"
     ports:
       - 8054:8054
+  stop_detect:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/stop_detect:/src"
+      - "./common:/src/common"
+    ports:
+      - 8056:8056
   cobot_convers_evaluator_annotator:
     env_file: [.env.dev]
     volumes:

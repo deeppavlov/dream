@@ -228,6 +228,19 @@ def last_utt_and_history_dialog(dialog: Dict) -> List:
     }]
 
 
+def stop_formatter_dialog(dialog: Dict) -> Dict:
+    # Used by: stop annotator
+    dialog = get_last_n_turns(dialog)
+    hypotheses = dialog["utterances"][-1]["hypotheses"]
+    utts = []
+    for h in hypotheses:
+        tmp_utts = [m['text'] for m in dialog['utterances']]
+        tmp_utts.append(h['text'])
+        tmp_utts = ' [SEP] '.join([j for j in tmp_utts])
+        utts.append(tmp_utts)
+    return [{'dialogs': utts}]
+
+
 def dp_toxic_formatter_service(payload: List):
     # Used by: dp_toxic_formatter
     return payload[0]

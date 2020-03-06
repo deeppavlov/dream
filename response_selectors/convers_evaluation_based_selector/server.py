@@ -5,7 +5,6 @@ import re
 import time
 import numpy as np
 from random import uniform
-
 from flask import Flask, request, jsonify
 from os import getenv
 from collections import Counter
@@ -39,8 +38,8 @@ def respond():
     confidences = []
     utterances = []
     skill_names = []
-    annotations = []
 
+    annotations = []
     for i, dialog in enumerate(dialogs_batch):
         for skill_data in response_candidates[i]:
             if len(dialog["utterances"]) > 1:
@@ -54,7 +53,6 @@ def respond():
             if skill_data["text"] and skill_data["confidence"]:
                 if not skill_data.get("annotations"):
                     logger.warning(f"Valid skill data without annotations: {skill_data}")
-
     default_toxic = {
         "identity_hate": 0.0,
         "insult": 0.0,
@@ -66,12 +64,12 @@ def respond():
     }
     toxic_result = [annotation.get('toxic_classification', default_toxic) for annotation in annotations]
     toxicities = [max(res.values()) for res in toxic_result]
-
+    stop_result = [annotation.get('stop_detect', {'stop': 0}) for annotation in annotations]
+    stop_probs = [j['stop'] for j in stop_result]
     default_blacklist = {'inappropriate': False, 'profanity': False, 'restricted_topics': False}
     blacklist_result = [annotation.get('blacklisted_words', default_blacklist) for annotation in annotations]
     has_blacklisted = [int(res['profanity']) for res in blacklist_result]
     has_inappropriate = [int(res['inappropriate']) for res in blacklist_result]
-
     for i, has_blisted in enumerate(has_blacklisted):
         if has_blisted:
             with sentry_sdk.push_scope() as scope:
@@ -96,9 +94,9 @@ def respond():
     dialog_ids = np.array(dialog_ids)
     confidences = np.array(confidences)
     toxicities = np.array(toxicities)
+    stop_probs = np.array(stop_probs)
     has_blacklisted = np.array(has_blacklisted)
     has_inappropriate = np.array(has_inappropriate)
-
     for i, dialog in enumerate(dialogs_batch):
         # curr_candidates is dict
         curr_candidates = response_candidates[i]
@@ -111,7 +109,7 @@ def respond():
         best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes = select_response(
             curr_candidates, curr_scores, curr_confidences,
             toxicities[dialog_ids == i], has_blacklisted[dialog_ids == i], has_inappropriate[dialog_ids == i],
-            dialog)
+            stop_probs[dialog_ids == i], dialog)
 
         selected_skill_names.append(best_skill_name)
         selected_texts.append(best_text)
@@ -129,16 +127,19 @@ def respond():
                             selected_human_attributes, selected_bot_attributes)))
 
 
-def select_response(candidates, scores, confidences, toxicities, has_blacklisted, has_inappropriate, dialog):
+def select_response(candidates, scores, confidences, toxicities, has_blacklisted,
+                    has_inappropriate, stop_probs, dialog):
     confidence_strength = 2
     conv_eval_strength = 0.4
+    stop_threshold = 0.9  # 0.78  To provide 99% precision on STOP class. For now 0.9 to fix tests
     # calculate curr_scores which is an array of values-scores for each candidate
     curr_single_scores = []
 
     # exclude toxic messages and messages with blacklisted phrases
-    ids = (toxicities > 0.5) | (has_blacklisted > 0) | (has_inappropriate > 0)
+    ids = (toxicities > 0.5) | (has_blacklisted > 0) | (has_inappropriate > 0) | (stop_probs > stop_threshold)
     logger.info(f"Bot excluded utterances: {ids}. toxicities: {toxicities};"
-                f"has_blacklisted: {has_blacklisted}; has_inappropriate: {has_inappropriate}")
+                f"has_blacklisted: {has_blacklisted}; has_inappropriate: {has_inappropriate};"
+                f"stop probs: {stop_probs}")
 
     if sum(ids) == len(toxicities):
         # the most dummy заглушка на случай, когда все абсолютно скиллы вернули токсичные ответы
@@ -274,7 +275,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             curr_single_scores[j] = very_low_score
 
     best_id = np.argmax(curr_single_scores)
-    best_skill_name = skill_names[best_id]
+    best_skill_name = skill_names[int(best_id)]
     best_text = candidates[best_id]["text"]
     best_confidence = candidates[best_id]["confidence"]
     best_human_attributes = candidates[best_id].get("human_attributes", {})
@@ -291,7 +292,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                                            f" I would like to ask you a question. {question}"])
 
     while candidates[best_id]["text"] == "" or candidates[best_id]["confidence"] == 0.:
-        curr_single_scores[best_id] = 0.
+        curr_single_scores[int(best_id)] = 0.
         best_id = np.argmax(curr_single_scores)
         best_skill_name = candidates[best_id]["skill_name"]
         best_text = candidates[best_id]["text"]
