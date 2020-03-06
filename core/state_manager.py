@@ -30,9 +30,13 @@ class StateManager:
         dialog.utterances[-1].hypotheses[ind]['annotations'][label] = payload
 
     async def add_hypothesis_annotation_batch(self, dialog: Dialog, payload: Dict, label: str, **kwargs):
-        assert len(dialog.utterances[-1].hypotheses) == len(payload["batch"])
-        for i in range(len(payload["batch"])):
-            dialog.utterances[-1].hypotheses[i]['annotations'][label] = payload["batch"][i]
+        if len(dialog.utterances[-1].hypotheses) != len(payload["batch"]):
+            logger.error(f'hypots len: {len(dialog.utterances[-1].hypotheses)} != batch len {len(payload["batch"])}')
+            for i in range(len(dialog.utterances[-1].hypotheses)):
+                dialog.utterances[-1].hypotheses[i]['annotations'][label] = {}
+        else:
+            for i in range(len(payload["batch"])):
+                dialog.utterances[-1].hypotheses[i]['annotations'][label] = payload["batch"][i]
 
     async def add_text(self, dialog: Dialog, payload: str, label: str, **kwargs):
         dialog.utterances[-1].text = payload

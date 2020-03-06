@@ -190,6 +190,10 @@ services:
     image: ${DOCKER_REGISTRY}/meta_script_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
+  stop_detect:
+    image: ${DOCKER_REGISTRY}/stop_detect:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   cobot_convers_evaluator_annotator:
     image: ${DOCKER_REGISTRY}/cobot_convers_evaluator_annotator:${VERSION}
     env_file:

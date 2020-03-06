@@ -5,6 +5,13 @@ import requests
 import json
 import argparse
 import logging
+import glob
+import os
+import sys
+sys.path.append(os.getcwd())
+
+from state_formatters.dp_formatters import cobot_convers_evaluator_annotator_formatter, \
+                                           stop_formatter_dialog  # noqa
 
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -14,6 +21,12 @@ logger = logging.getLogger(__name__)
 parser = argparse.ArgumentParser()
 parser.add_argument('--dialog_id', help='dialog id to label')
 parser.add_argument('--save_dir', help='directory to save labeled data')
+parser.add_argument('--mode', help='add_annotations|label', default='label')
+
+BLACKLIST_URL = "http://localhost:8018/blacklisted_words_batch"
+CONV_EVAL_URL = "http://localhost:8063/evaluate"
+TOXIC_URL = "http://localhost:8013/toxicity_annotations"
+STOP_DETECTOR_URL = "http://localhost:8056/model"
 
 
 def get_dialog_data(dialog_id):
@@ -96,6 +109,41 @@ def label_prepared_data(prepared_data):
     return prepared_data
 
 
+def add_annotations(dialogs):
+    new_dialogs = []
+    utt_hypots = {}
+    for dialog in dialogs:
+        hypots = [h["text"] for h in dialog['utterances'][-1]["hypotheses"]]
+        blacklist_result = requests.post(BLACKLIST_URL, json={"sentences": hypots}).json()[0]
+        toxic_result = requests.post(TOXIC_URL, json={"sentences": hypots}).json()
+        toxic_result = [res[0] for res in toxic_result]
+
+        conv_eval_format = cobot_convers_evaluator_annotator_formatter(dialog)
+        conv_eval_result = requests.post(CONV_EVAL_URL, json=conv_eval_format[0]).json()[0]
+
+        stop_format = stop_formatter_dialog(dialog)
+        stop_result = requests.post(STOP_DETECTOR_URL, json=stop_format[0]).json()
+        stop_result = [res[0] for res in stop_result]
+
+        for i in range(len(blacklist_result["batch"])):
+            annots = dialog['utterances'][-1]['hypotheses'][i]['annotations']
+            annots['blacklisted_words'] = blacklist_result["batch"][i]
+            annots['toxic_classification'] = toxic_result[i]
+            annots['cobot_convers_evaluator_annotator'] = conv_eval_result["batch"][i]
+            annots['stop_detect'] = stop_result[i]
+            dialog['hypotheses'][i]['annotations']['blacklisted_words'] = blacklist_result["batch"][i]
+            dialog['hypotheses'][i]['annotations']['toxic_classification'] = toxic_result[i]
+            dialog['hypotheses'][i]['annotations']['cobot_convers_evaluator_annotator'] = conv_eval_result["batch"][i]
+            dialog['hypotheses'][i]['annotations']['stop_detect'] = stop_result[i]
+            utt_hypots[dialog['utterances'][-1]['text']] = dialog['hypotheses']
+
+        for utt in dialog["utterances"]:
+            if utt['text'] in utt_hypots:
+                utt['hypotheses'] = utt_hypots[utt['text']]
+        new_dialogs.append(dict(dialog))
+    return new_dialogs
+
+
 def main(dialog_id, labeled_data_dir):
     dialog_data = get_dialog_data(dialog_id)
     prepared_data = prepare_data(dialog_data)
@@ -105,6 +153,19 @@ def main(dialog_id, labeled_data_dir):
         json.dump(labeled_data, f, ensure_ascii=False, indent=2)
 
 
+def main_add_annotations(labeled_data_dir):
+    for json_file in glob.glob(f"{labeled_data_dir}/*.json", recursive=False):
+        print("DEBUG", json_file)
+        with open(json_file, 'r') as f:
+            dialogs = json.load(f)
+        dialogs = add_annotations(dialogs)
+        with open(json_file, 'w') as f:
+            json.dump(dialogs, f, ensure_ascii=False, indent=2)
+
+
 if __name__ == '__main__':
     args = parser.parse_args()
-    main(args.dialog_id, args.save_dir)
+    if args.mode == 'add_annotations':
+        main_add_annotations(args.save_dir)
+    else:
+        main(args.dialog_id, args.save_dir)
