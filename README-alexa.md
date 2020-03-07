@@ -186,3 +186,16 @@ docker stack deploy -c docker-compose.yml mon
 - setup cron to prune docker images on all machines: `0 3 * * * /usr/bin/docker system prune -f -a`
 - make sure that cron daemon is running: `ps -ef | grep cron | grep -v grep`
 - setup service to remove stopped containers: `docker --host $DOCKER_HOST service create -d --name docker-rm --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock --mode=global --restart-condition none --update-parallelism 0 --update-failure-action continue docker /bin/sh -c "docker rm \$(docker ps -q -a); exit 0;"`
+
+A/B тесты
+=========
+Чтобы запустить A/B тесты нужно создать ветку под A/B тест с:
+
+1. В .env.prod задать переменными окружения `A_VERSION`, `A_AGENT_URL`, `A_AGENT_PORT`, `B_VERSION`, `B_AGENT_URL`, `B_AGENT_PORT`. Смотри пример в `.end.prod_ab_tests_example`. В версиях поддерживаются только теги (не коммиты, не ветки).
+2. Убедиться, что в версиях для тестирования в `.env.prod` нет конфигурации A/B тестов.
+3. Запушить ветку и перейти в нее на машине, с которой будут деплоится A/B тесты.
+4. Если A/B тесты деплоятся на prod кластер, на котором сейчас запущены A/B тесты, то запустить `./deploy_ab_tests.sh`
+5. Если A/B тесты деплоятся на prod кластер, на котором сейчас запущена одна релизная версия, то сначала надо снести `dream_prod` стак (через портейнер или `DOCKER_HOST=localhost:2374 docker stack rm dream_prod`) и перенаправить трафик на staging. Потом запустить `./deploy_ab_tests.sh` с закомментированными строками 50, 56 -- деплой версии A на staging (todo: если есть прод стак, то удалять его после деплоя A на staging).
+6. Если после A/B тестов нужно запустить одну релизную версию, то надо сначала снести стаки A/B тестов и перенаправить трафик на staging и запустить `./deploy.sh MODE=all TARGET=prod`.
+
+Версия пишется в аттрибуты `human_utterances`.

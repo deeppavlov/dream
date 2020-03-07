@@ -2,15 +2,13 @@
 
 set -e
 
-STAGING_DP_AGENT_URL=`cat .env.staging | grep -oP "DP_AGENT_URL=\K.*"`
-PROD_DP_AGENT_URL=`cat .env.prod | grep -oP "DP_AGENT_URL=\K.*"`
-
 echo "Deploying PROD version to staging cluster..."
 ./deploy.sh MODE=all TARGET=dev
 echo "Deploying PROD version to staging cluster... done"
 
 echo "Changing PROD lambda url to staging..."
 sed -i 's/DP_AGENT_URL=.*/'"$(printf '%s\n' "$(cat .env.staging | grep DP_AGENT_URL)" | sed 's:[][\/.^$*]:\\&:g')"'/g' .env.prod
+sed -i 's/DP_AGENT_PORT=.*/'"$(printf '%s\n' "$(cat .env.staging | grep DP_AGENT_PORT)" | sed 's:[][\/.^$*]:\\&:g')"'/g' .env.prod
 ./deploy.sh MODE=lambda TARGET=prod
 echo "Changing PROD lambda url to staging... done"
 

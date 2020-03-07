@@ -6,6 +6,7 @@ import ask_sdk_core.utils as ask_utils
 import requests
 import sentry_sdk
 import json
+import hashlib
 from ask_sdk_core.dispatch_components import AbstractExceptionHandler
 from ask_sdk_core.dispatch_components import AbstractRequestHandler
 from ask_sdk_core.handler_input import HandlerInput
@@ -19,6 +20,18 @@ load_dotenv()
 
 SENTRY_DSN = os.getenv('SENTRY_DSN')
 DP_AGENT_URL = os.getenv('DP_AGENT_URL')
+DP_AGENT_PORT = os.getenv('DP_AGENT_PORT')
+
+A_VERSION = os.getenv('A_VERSION')
+A_AGENT_URL = os.getenv('A_AGENT_URL')
+A_AGENT_PORT = os.getenv('A_AGENT_PORT')
+B_VERSION = os.getenv('B_VERSION')
+B_AGENT_URL = os.getenv('B_AGENT_URL')
+B_AGENT_PORT = os.getenv('B_AGENT_PORT')
+
+ab_tests_mode = False
+if A_AGENT_URL is not None and B_AGENT_URL is not None and A_AGENT_PORT != B_AGENT_PORT:
+    ab_tests_mode = True
 
 sentry_sdk.init(
     SENTRY_DSN,
@@ -26,6 +39,8 @@ sentry_sdk.init(
 )
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+
+logger.info(f"running in A/B tests mode: {ab_tests_mode}")
 
 request_data = None
 
@@ -63,12 +78,25 @@ def call_dp_agent(user_id, text, request_data):
     conversation_id = get_conversation_id(request_data)
 
     response, intent = None, None
+    dp_agent_url = f'{DP_AGENT_URL}:{DP_AGENT_PORT}'
+
+    # A/B tests logic
+    # currently if A/B tests are not runing version is set to None
+    version = None
+    if ab_tests_mode:
+        if hashlib.md5(user_id.encode()).digest()[-1] % 2 == 0:
+            dp_agent_url = f'{A_AGENT_URL}:{A_AGENT_PORT}'
+            version = A_VERSION
+        else:
+            dp_agent_url = f'{B_AGENT_URL}:{B_AGENT_PORT}'
+            version = B_VERSION
+        logger.info(f"User {user_id}\n sent to version {version} on {dp_agent_url}")
     try:
         r = requests.post(
-            DP_AGENT_URL,
+            dp_agent_url,
             json={'user_id': user_id, 'payload': text, 'device_id': device_id,
                   'session_id': session_id, 'request_id': request_id,
-                  'conversation_id': conversation_id, 'speech': speech},
+                  'conversation_id': conversation_id, 'speech': speech, 'version': version},
             timeout=5.5).json()
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         sentry_sdk.capture_exception(e)

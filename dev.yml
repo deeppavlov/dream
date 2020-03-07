@@ -5,6 +5,8 @@ services:
     env_file: [.env.dev]
     volumes:
       - ".:/dp-agent"
+    ports:
+      - 4242:4242
   cobotqa:
     env_file: [.env.dev]
     volumes:

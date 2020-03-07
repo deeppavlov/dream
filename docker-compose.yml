@@ -4,8 +4,6 @@ services:
     build:
       context: ./
       dockerfile: dockerfile_agent
-    ports:
-      - 4242:4242
     environment:
       WAIT_HOSTS: "cobotqa:8001, cobot_topics:8003, cobot_offensiveness:8005,
         cobot_dialogact:8006, program_y:8008, sentseg:8011, convers_evaluation_selector:8009, personality_catcher:8010,
