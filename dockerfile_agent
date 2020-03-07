@@ -35,5 +35,3 @@ COPY ./utils/agent_cronjobs /etc/cron.d/agent_cronjobs
 RUN chmod 0644 /etc/cron.d/agent_cronjobs
 RUN crontab /etc/cron.d/agent_cronjobs
 RUN touch /var/log/cron.log
-
-EXPOSE 4242

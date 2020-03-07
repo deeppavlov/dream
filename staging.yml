@@ -3,6 +3,8 @@ services:
     image: ${DOCKER_REGISTRY}/agent:${VERSION}
     env_file:
       - ${ENV_FILE}
+    ports:
+      - ${DP_AGENT_PORT}:4242
   cobotqa:
     image: ${DOCKER_REGISTRY}/cobotqa:${VERSION}
     env_file:

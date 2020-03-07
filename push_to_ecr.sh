@@ -6,6 +6,7 @@
 
 export VERSION=$VERSION
 export ENV_FILE=$ENV_FILE
+export DP_AGENT_PORT=$DP_AGENT_PORT
 eval $(aws ecr get-login --no-include-email)
 
 for r in $(grep 'image: \${DOCKER_REGISTRY}' staging.yml | sed -e 's|^.*/||' | sed -e 's|:.*||')
