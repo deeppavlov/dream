@@ -306,6 +306,7 @@
     <category>
         <pattern>NO</pattern>
         <template>
+            AMAZON_EMOTION_DISAPPOINTED_MEDIUM
             <random>
                 <li>As you wish.</li>
                 <li>All right.</li>
@@ -320,6 +321,7 @@
                 <li>Well, as you wish.</li>
                 <li>No way, really?</li>
             </random>
+            AMAZON_EMOTION_CLOSE
         </template>
     </category>
 

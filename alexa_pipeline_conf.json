@@ -248,7 +248,7 @@
                     "url": "http://program_y:8008/api/rest/v1.0/ask"
                 },
                 "dialog_formatter": "alice_formatter_dialog",
-                "response_formatter": "base_formatter_service",
+                "response_formatter": "skill_with_attributes_formatter_service",
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
             },

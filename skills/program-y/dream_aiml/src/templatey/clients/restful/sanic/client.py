@@ -25,6 +25,8 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 # Sanic is not supported on windows due to a dependency on
 # uvloop. This code will not run on Windows
 #
+import re
+
 from sanic import Sanic
 from sanic.response import json
 from sanic.exceptions import ServerError
@@ -44,6 +46,23 @@ NULL_RESPONSE = "Sorry, I don't have an answer for that!"
 
 def remove_punct(s):
     return ''.join([c for c in s if c not in string.punctuation])
+
+
+tags_map = [
+    (re.compile("AMAZON_EMOTION_DISAPPOINTED_MEDIUM"), "", '<amazon:emotion name="disappointed" intensity="medium">',),
+    (re.compile("AMAZON_EMOTION_EXCITED_MEDIUM"), "", '<amazon:emotion name="excited" intensity="medium">',),
+    (re.compile("AMAZON_EMOTION_CLOSE."), "", "</amazon:emotion>"),
+    (re.compile("AMAZON_EMOTION_CLOSE"), "", "</amazon:emotion>"),
+]
+
+
+def create_amazon_ssml_markup(text):
+    untagged_text = text
+    tagged_text = text
+    for reg, untag, tag in tags_map:
+        untagged_text = reg.sub(untag, untagged_text)
+        tagged_text = reg.sub(tag, tagged_text)
+    return untagged_text, tagged_text
 
 
 class SanicRestBotClient(RestBotClient):
@@ -73,27 +92,41 @@ class SanicRestBotClient(RestBotClient):
             if response is not None:
                 return response, status
             responses = []
-            for user_sentences in request.json['sentences_batch']:
+            for user_sentences in request.json["sentences_batch"]:
                 userid = uuid.uuid4().hex
                 # if user said let's chat at beginning of a dialogue, that we should response with greeting
-                if remove_punct(user_sentences[0]).lower() == remove_punct('let\'s chat'):
-                    user_sentences[0] = 'hello'
+                if remove_punct(user_sentences[0]).lower() == remove_punct("let's chat"):
+                    user_sentences[0] = "hello"
                 for i, s in enumerate(user_sentences):
                     # s = s if i != 0 else f"BEGIN_USER_UTTER {s}"
                     answer = self.ask_question(userid, self.preprocesser.process(s))
-                if answer == NULL_RESPONSE:
+
+                if "DEFAULT_SORRY_RESPONCE" in answer:
+                    answer = (
+                        "AMAZON_EMOTION_DISAPPOINTED_MEDIUM Sorry, I don't have an answer for that! "
+                        "AMAZON_EMOTION_CLOSE"
+                    )
+
+                untagged_text, ssml_tagged_text = create_amazon_ssml_markup(answer)
+
+                if untagged_text == NULL_RESPONSE:
                     confidence = 0.2
-                elif "unknown" in answer:
+                elif "unknown" in untagged_text:
                     confidence = 0.0
-                    answer = ""
-                elif len(answer.split()) <= 3:
+                    untagged_text = ""
+                elif len(untagged_text.split()) <= 3:
                     confidence = 0.6
-                elif answer:
+                elif untagged_text:
                     confidence = 0.98
                 else:
                     confidence = 0
-                print("user_id: {}; question: {}; answer: {}".format(userid, question, answer))
-                responses.append([answer, confidence])
+                print(
+                    "user_id: {}; question: {}; answer: {}; ssml_tagged_text: {}".format(
+                        userid, question, untagged_text, ssml_tagged_text
+                    )
+                )
+
+                responses.append([untagged_text, confidence, {"ssml_tagged_text": ssml_tagged_text}])
             return responses, 200
         except Exception as excep:
             sentry_sdk.capture_exception(excep)
