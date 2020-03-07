@@ -120,8 +120,10 @@ def call_dp_agent(user_id, text, request_data):
     logger.info("call_dp_agent user_id: {}; text: {}; repsonse: {}; intent: {}".format(
         user_id, text, response, intent
     ))
-
-    return {'response': response, 'intent': intent}
+    if r.get("ssml_tagged_response"):
+        return {'response': response, 'ssml_tagged_response': r["ssml_tagged_response"], 'intent': intent}
+    else:
+        return {'response': response, 'intent': intent}
 
 
 def process_dp_agent_response(agent_data, user_id, handler_input):
@@ -133,7 +135,10 @@ def process_dp_agent_response(agent_data, user_id, handler_input):
     else:
         logger.info(f"Normal output from DpAgent: {speak_output}")
         # TODO: Think how to validate invalid SSML responses!!!
-        speak_output = speak_output.replace(">", " ").replace("<", " ").replace("&", " and ")
+        if "ssml_tagged_response" in agent_data:
+            speak_output = agent_data["ssml_tagged_response"]
+        else:
+            speak_output = speak_output.replace(">", " ").replace("<", " ").replace("&", " and ")
         return handler_input.response_builder.speak(speak_output).ask(speak_output).response
 
 

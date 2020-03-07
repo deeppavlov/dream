@@ -25,12 +25,14 @@
     <category>
         <pattern>YES</pattern>
         <template>
+            AMAZON_EMOTION_EXCITED_MEDIUM
             <random>
                 <li>Okay.</li>
                 <li>Interesting.</li>
                 <li>Sounds interesting.</li>
                 <li>Cool!</li>
             </random>
+            AMAZON_EMOTION_CLOSE
         </template>
     </category>
    <category>

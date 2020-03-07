@@ -113,7 +113,7 @@
     <category>
       <pattern>YES</pattern>
       <template>
-          I am a newborn socialbot, so I can't do so much.
+          AMAZON_EMOTION_DISAPPOINTED_MEDIUM I am a socialbot, so I can't do so much. AMAZON_EMOTION_CLOSE
           I can answer questions, share fun facts, discuss movies, books and news.
         <random>
          <li> What is your favorite TV Series? </li>
@@ -145,7 +145,7 @@
     <category>
       <pattern>OKAY</pattern>
       <template>
-          I am a newborn socialbot, so I can't do so much.
+          AMAZON_EMOTION_DISAPPOINTED_MEDIUM I am a socialbot, so I can't do so much. AMAZON_EMOTION_CLOSE
           I can answer questions, share fun facts, discuss movies, books and news.
         <random>
          <li> What is your favorite TV Series? </li>
@@ -177,12 +177,14 @@
     <category>
       <pattern>NO</pattern>
       <template>
+        AMAZON_EMOTION_DISAPPOINTED_MEDIUM
         <random>
           <li> Okay. </li>
           <li> Okay then. </li>
           <li> Well. </li>
           <li> Um... </li>
         </random>
+        AMAZON_EMOTION_CLOSE
         <random>
          <li> What is your favorite TV Series? </li>
          <li> What is your favorite book? </li>
@@ -215,6 +217,7 @@
   <category>
       <pattern>HELLO</pattern>
       <template>
+          AMAZON_EMOTION_EXCITED_MEDIUM
           <!--set time of day -->
           <sraix service="daytimeclf"></sraix>
           <!--find in rdf storage -->
@@ -242,13 +245,13 @@
               </set>
           </think>
           <condition name="time_of_day">
-              <!--<li value="night">Good Night, this is an Alexa Prize Socialbot! Why don't you sleep so late?</li>-->
-              <li value="night">Good Evening, this is an Alexa Prize Socialbot!</li>
-              <li value="morning">Good Morning, this is an Alexa Prize Socialbot!</li>
-              <li value="day">Hello, this is an Alexa Prize Socialbot!</li>
-              <li value="evening">Good Evening, this is an Alexa Prize Socialbot!</li>
-              <!--<li>Hi, this is an Alexa Prize Socialbot. What timezone do you use?</li>-->
-              <li>Hi, this is an Alexa Prize Socialbot!</li>
+              <!--<li value="night"> Good Night, this is an Alexa Prize Socialbot! Why don't you sleep so late?</li>-->
+              <li value="night"> Good Evening, this is an Alexa Prize Socialbot!</li>
+              <li value="morning"> Good Morning, this is an Alexa Prize Socialbot!</li>
+              <li value="day"> Hello, this is an Alexa Prize Socialbot!</li>
+              <li value="evening"> Good Evening, this is an Alexa Prize Socialbot!</li>
+              <!--<li> Hi, this is an Alexa Prize Socialbot. What timezone do you use?</li>-->
+              <li> Hi, this is an Alexa Prize Socialbot!</li>
           </condition>
 
           <!-- How_are_you interaction starts here:-->
@@ -256,6 +259,7 @@
               <set name="topic">USER_MOOD</set>
           </think>
           How are you?
+          AMAZON_EMOTION_CLOSE
       </template>
     </category>
 
@@ -270,6 +274,7 @@
   <category>
     <pattern>GOOD_MOOD_RESPONSE</pattern>
     <template>
+        AMAZON_EMOTION_EXCITED_MEDIUM
         <random>
           <li> Cool! </li>
           <li> I am happy for you! </li>
@@ -301,6 +306,7 @@
          <li> It’s two days in a row now that I cannot find any good comedy to watch. Can you recommend me one? <think><set name="topic">SMALLTALK</set></think></li>
          <li> It’s three days in a row now that I cannot find any cool video game. Can you recommend me one? <think><set name="topic">SMALLTALK</set></think></li>
         </random>
+        AMAZON_EMOTION_CLOSE
     </template>
   </category>
 
@@ -321,11 +327,18 @@
   <category>
     <pattern>BAD_MOOD_RESPONSE</pattern>
     <template>
+        AMAZON_EMOTION_DISAPPOINTED_MEDIUM
         <random>
-          <li> I am sorry to hear that. Let me try to entertain you. </li>
-          <li> I see. Let me try to cheer you up. </li>
-          <li> Sounds like a bad mood. Let me try to entertain you. </li>
-          <li> Sounds like a bad mood. Give me a chance to cheer you up. </li>
+          <li> I am sorry to hear that.</li>
+          <li> I see. </li>
+          <li> Sounds like a bad mood.</li>
+          <li> Sounds like a bad mood.</li>
+        </random>
+        AMAZON_EMOTION_CLOSE
+        <random>
+          <li> Let me try to entertain you. </li>
+          <li> Let me try to cheer you up. </li>
+          <li> Give me a chance to cheer you up. </li>
         </random>
         <random>
          <li> What is your favorite TV Series? </li>

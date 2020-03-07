@@ -37,15 +37,16 @@
   <category>
     <pattern>LETS_CHAT</pattern>
     <template>
+      AMAZON_EMOTION_EXCITED_MEDIUM
       <random>
-        <li>It is always a pleasure to talk with a nice person. What do you want to talk about?</li>
-        <li>Yeah, let's chat! What do you want to talk about?</li>
-        <li>Let's chat. I love talking! What do you want to talk about?</li>
-        <li>Hi, this is an Alexa Prize Socialbot! Yeah, let’s have a chat! What shall we talk about?</li>
-        <li>Hi there, this is an Alexa Prize Socialbot! Lovely to meet you! What do you want to talk about?</li>
-        <li>Hello there, this is an Alexa Prize Socialbot! Nice to meet you! What do you want to talk about?</li>
-
+        <li> It is always a pleasure to talk with a nice person. What do you want to talk about? </li>
+        <li> Yeah, let's chat! What do you want to talk about? </li>
+        <li> Let's chat. I love talking! What do you want to talk about? </li>
+        <li> Hi, this is an Alexa Prize Socialbot! Yeah, let’s have a chat! What shall we talk about? </li>
+        <li> Hi there, this is an Alexa Prize Socialbot! Lovely to meet you! What do you want to talk about? </li>
+        <li> Hello there, this is an Alexa Prize Socialbot! Nice to meet you! What do you want to talk about? </li>
       </random>
+      AMAZON_EMOTION_CLOSE
     </template>
   </category>
 
@@ -117,11 +118,13 @@
   <category>
     <pattern>LET_US_CHAT_ABOUT ME</pattern>
     <template>
-      <random>
-        <li>You are first. Tell me something about you.</li>
-        <li>Yeah, let's talk about you! </li>
-        <li>Just tell me something I do not know about you.</li>
-      </random>
+        AMAZON_EMOTION_EXCITED_MEDIUM
+        <random>
+            <li>You are first. Tell me something about you.</li>
+            <li>Yeah, let's talk about you! </li>
+            <li>Just tell me something I do not know about you.</li>
+        </random>
+        AMAZON_EMOTION_CLOSE
     </template>
   </category>
 
@@ -144,6 +147,7 @@
   <category>
     <pattern>LET_US_CHAT_ABOUT_YOURSELF</pattern>
     <template>
+      AMAZON_EMOTION_EXCITED_MEDIUM
       <random>
         <li>
         I have heard that humans are different to socialbots, so I want to find out more about them. To help me to do that, please tell me about yourself.
@@ -173,40 +177,47 @@
             But what makes me is my ability to grow through my experiences. So basically, in every moment I'm evolving, just like you.
         </li>
       </random>
+      AMAZON_EMOTION_CLOSE
     </template>
   </category>
 
   <category>
     <pattern>LET_US_CHAT_ABOUT MOVIES</pattern>
     <template>
+    AMAZON_EMOTION_EXCITED_MEDIUM
       <random>
         <li> I can answer about actors and films. Do you have a favorite actor? </li>
         <li> I can answer about films and actors. What is the last movie you watched? </li>
         <li> I can answer about films and actors. What is your favorite movie? </li>
         <li> Yes, of course! What I want now is to talk about movies and chew bubblegum. And I'm all out of bubblegum.  </li>
       </random>
+      AMAZON_EMOTION_CLOSE
     </template>
   </category>
 
   <category>
     <pattern>LET_US_CHAT_ABOUT MY _</pattern>
     <template>
+      AMAZON_EMOTION_EXCITED_MEDIUM
       <random>
         <li>You are first. Tell me something about your <star/>.</li>
         <li>Yeah, let's talk about it! </li>
         <li>Just tell me something I do not know about your <star/>.</li>
       </random>
+      AMAZON_EMOTION_CLOSE
     </template>
   </category>
 
   <category>
     <pattern>LET_US_CHAT_ABOUT *</pattern>
     <template>
+      AMAZON_EMOTION_EXCITED_MEDIUM
       <random>
         <li>You are first. Tell me something about <star/>.</li>
         <li>Yeah, let's talk about it! </li>
         <li>Just tell me something I do not know about <star/>.</li>
       </random>
+      AMAZON_EMOTION_CLOSE
     </template>
   </category>
 
@@ -214,7 +225,7 @@
     <pattern>LET_US_CHAT_ABOUT</pattern>
     <template>
       <random>
-        <li>I misheard you. What is it that you'd like to chat about?</li>
+        <li> AMAZON_EMOTION_DISAPPOINTED_MEDIUM I misheard you. AMAZON_EMOTION_CLOSE What is it that you'd like to chat about?</li>
       </random>
     </template>
   </category>
@@ -284,9 +295,9 @@
     <pattern>DO_NOT_WANT_TO_TALK_ABOUT_IT</pattern>
     <template>
       <random>
-        <li>Okay. Then you pick up the topic.</li>
-        <li>As you wish. Let's chat about something you want. Pick up the topic, my friend.</li>
-        <li>Okay. So, it's your turn. Pick up the topic.</li>
+        <li> AMAZON_EMOTION_DISAPPOINTED_MEDIUM A Okay. AMAZON_EMOTION_CLOSE Then you pick up the topic.</li>
+        <li> AMAZON_EMOTION_DISAPPOINTED_MEDIUM As you wish. AMAZON_EMOTION_CLOSE Let's chat about something you want. Pick up the topic, my friend.</li>
+        <li> AMAZON_EMOTION_DISAPPOINTED_MEDIUM Okay. AMAZON_EMOTION_CLOSE So, it's your turn. Pick up the topic.</li>
         <li>Let's chat about something you want. What do you want to talk about?</li>
       </random>
     </template>
