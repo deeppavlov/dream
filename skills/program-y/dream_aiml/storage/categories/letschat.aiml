@@ -239,6 +239,24 @@
       </random>
     </template>
   </category>
+  <category>
+    <pattern>LET_US_CHAT_ABOUT SOMETHING</pattern>
+    <template>
+      <random>
+        <li>What about movies? What is the latest movie you've seen?</li>
+        <li>Let's chat about movies! What was the most unsettling film you’ve seen?</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern>LET_US_CHAT_ABOUT ANYTHING</pattern>
+    <template>
+      <random>
+        <li>What about movies? What is the latest movie you've seen?</li>
+        <li>Let's chat about movies! What was the most unsettling film you’ve seen?</li>
+      </random>
+    </template>
+  </category>
 
 <!--  DO NOT WANT TO TALK ABOUT BLABLA   -->
   <category>

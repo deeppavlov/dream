@@ -262,11 +262,16 @@
   ],
   "work": [
     "What do you do for a living?",
-    "Great occupation! How long have you been working there?",
-    "Nice! What surprised you the most about your current job?",
-    "Wow! It surprises me more than you. If you weren't working there, what would you probably be doing right now?",
-    "So, what is one thing you will leave your current job for?",
-    "Cool! Why not? I think you have a great dream!"
+    {
+      "yes": [
+        "Great occupation! How long have you been working there?",
+        "Nice! What surprised you the most about your current job?",
+        "Wow! It surprises me more than you. If you weren't working there, what would you probably be doing right now?",
+        "So, what is one thing you will leave your current job for?",
+        "Cool! Why not? I think you have a great dream!"
+      ],
+      "no": "Who do you want to become?"
+    }
   ],
   "you": [
     "I can not disclosure some details about my personality to avoid competition data leakage. I will tell you a statement, and you can try to guess is that true or not. Do you think I can have my own opinion?",

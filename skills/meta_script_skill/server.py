@@ -182,6 +182,8 @@ def respond():
         lets_chat_about_detected = dialog["utterances"][-1].get("annotations", {}).get(
             "intent_catcher", {}).get("lets_chat_about", {}).get("detected", 0) == 1
 
+        yes_detected = dialog["utterances"][-1].get("annotations", {}).get(
+            "intent_catcher", {}).get("yes", {}).get("detected", 0) == 1
         no_detected = dialog["utterances"][-1].get("annotations", {}).get(
             "intent_catcher", {}).get("no", {}).get("detected", 0) == 1
         never_detected = "never" in dialog["utterances"][-1]["text"].lower()
@@ -234,6 +236,10 @@ def respond():
                     attr["meta_script_status"] = FINISHED_SCRIPT
                 else:
                     response, confidence, attr = get_statement_phrase(dialog, topic, attr, TOPICS)
+
+            if confidence > 0.7 and (yes_detected or len(dialog["utterances"][-1]["text"].split()) > 7):
+                # if yes detected, confidence 1.0 - we like agreements!
+                confidence = 1.0
 
             logger.info(f"User sent: `{dialog['utterances'][-1]['text']}`. "
                         f"Response: `{response}`."

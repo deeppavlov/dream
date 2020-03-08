@@ -2,6 +2,15 @@
 <aiml version="2.0">
 
   <category>
+    <pattern># DIED #</pattern>
+    <template>
+      <random>
+        <li>I am sorry about that.</li>
+        <li>I'm here for you if you need anything.</li>
+      </random>
+    </template>
+  </category>
+  <category>
     <pattern># I <set>wantto</set> # <set>commit</set> # <set>suicide</set> #</pattern>
     <template>
       <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
