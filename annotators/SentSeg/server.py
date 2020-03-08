@@ -48,13 +48,17 @@ def respond():
             user_sentences[-1] = user_sent_without_alexa
 
     for i, text in enumerate(user_sentences):
-        logger.info(f"user text: {text}, session_id: {session_id}")
-        sentseg = model.predict(sess, text)
-        sentseg = sentseg.replace(' \'', '\'')
-        sentseg = preprocessing(sentseg)
-        segments = split_segments(sentseg)
-        sentseg_result += [{"punct_sent": sentseg, "segments": segments}]
-        logger.info(f"punctuated sent. : {sentseg}")
+        if text.strip():
+            logger.info(f"user text: {text}, session_id: {session_id}")
+            sentseg = model.predict(sess, text)
+            sentseg = sentseg.replace(' \'', '\'')
+            sentseg = preprocessing(sentseg)
+            segments = split_segments(sentseg)
+            sentseg_result += [{"punct_sent": sentseg, "segments": segments}]
+            logger.info(f"punctuated sent. : {sentseg}")
+        else:
+            sentseg_result += [{"punct_sent": "", "segments": [""]}]
+            logger.warning(f"empty sentence {text}")
     total_time = time.time() - st_time
     logger.info(f'sentseg exec time: {total_time:.3f}s')
     return jsonify(sentseg_result)
