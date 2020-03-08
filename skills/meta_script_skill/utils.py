@@ -172,12 +172,6 @@ BANNED_NOUNS = ["lol", "alexa", "suck", "fuck", "sex"]
 with open("google-10000-english-no-swears.txt", "r") as f:
     TOP_FREQUENT_WORDS = f.read().splitlines()[:2000]
 
-SORRY_SWITCH_TOPIC_REPLIES = [
-    "Um... If you prefer to talk about something else, just tell me.",
-    "If you don't like the topic, let's switch it. What do you want to talk about?",
-    "It seemed to me, you don't want to talk about it. What do you wanna talk about?"
-]
-
 
 def is_custom_topic(topic):
     return not (topic in STARTINGS or topic in WIKI_DESCRIPTIONS)

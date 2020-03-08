@@ -120,10 +120,10 @@ def main_test():
     ]
     for sent in sentences:
         data = {"sentences_batch": [[sent]]}
-        response = requests.post(url, json=data).json()[0][0]
+        response = requests.post(url, json=data).json()[0][0].lower().strip()
         contains_possib_response = False
         for p_resp in possible_responses:
-            if p_resp in response:
+            if p_resp.lower().strip() in response:
                 contains_possib_response = True
 
         assert contains_possib_response is True, print(f"User: {sent}. Response: {response}")
@@ -168,10 +168,10 @@ def main_test():
     ]
     for sent in sentences:
         data = {"sentences_batch": [[sent]]}
-        response = requests.post(url, json=data).json()[0][0]
+        response = requests.post(url, json=data).json()[0][0].lower().strip()
         assert any(
             [
-                j in response
+                j.lower().strip() in response
                 for j in [
                     "humans are different to socialbots",
                     "strawberry ice cream",
@@ -188,8 +188,8 @@ def main_test():
     sentences = ["can i ask you a question", "i have a question for you", "i have a question"]
     for sent in sentences:
         data = {"sentences_batch": [[sent]]}
-        response = requests.post(url, json=data).json()[0][0]
-        assert "You can ask me anything" in response, print(f"User: {sent}. Response: {response}")
+        response = requests.post(url, json=data).json()[0][0].lower().strip()
+        assert "You can ask me anything".lower().strip() in response, print(f"User: {sent}. Response: {response}")
 
     sentences = ["ask me a question", "do you wanna ask me a question"]
     possible_responses = [
@@ -206,15 +206,15 @@ def main_test():
     ]
     for sent in sentences:
         data = {"sentences_batch": [[sent]]}
-        response = requests.post(url, json=data).json()[0][0]
-        assert response.lower() in possible_responses, print(f"User: {sent}. Response: {response}")
+        response = requests.post(url, json=data).json()[0][0].lower().strip()
+        assert response in possible_responses, print(f"User: {sent}. Response: {response}")
 
     sentences = ["play sade geronemo", "alexa play set your nemo", "alexa set a timer to morning"]
 
     for sent in sentences:
         data = {"sentences_batch": [[sent]]}
         response = requests.post(url, json=data).json()[0][0]
-        assert "Alexa, stop," in response, print(f"User: {sent}. Response: {response}")
+        assert "Alexa, stop,".lower().strip() in response.lower().strip(), print(f"User: {sent}. Response: {response}")
 
 
 if __name__ == "__main__":
