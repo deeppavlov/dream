@@ -35,8 +35,11 @@ with open("small_talk_scripts.json", "r") as f:
     TOPIC_SCRIPTS = json.load(f)
 
 USER_TOPIC_START_CONFIDENCE = 0.99
+FOUND_WORD_START_CONFIDENCE = 0.5
 BOT_TOPIC_START_CONFIDENCE = 0.8
 CONTINUE_CONFIDENCE = 0.99
+LONG_ANSWER_CONTINUE_CONFIDENCE = 1.0
+YES_CONTINUE_CONFIDENCE = 1.0
 
 
 @app.route("/respond", methods=['POST'])
@@ -127,7 +130,10 @@ def get_next_response_on_topic(topic, curr_user_uttr, curr_step=0, topic_script=
         attr["can_continue"] = CAN_CONTINUE
         attr["small_talk_topic"] = topic
         attr["small_talk_step"] = curr_step
-        confidence = CONTINUE_CONFIDENCE
+        if len(curr_user_uttr["text"].split()) > 7:
+            confidence = LONG_ANSWER_CONTINUE_CONFIDENCE
+        else:
+            confidence = CONTINUE_CONFIDENCE
     elif isinstance(topic_script[curr_step], dict):
         yes_detected = curr_user_uttr["annotations"].get("intent_catcher", {}).get("yes", {}).get("detected", 0) == 1
         if yes_detected:
@@ -135,14 +141,17 @@ def get_next_response_on_topic(topic, curr_user_uttr, curr_step=0, topic_script=
             attr["can_continue"] = CAN_CONTINUE
             attr["small_talk_topic"] = topic
             attr["small_talk_step"] = curr_step
-            confidence = CONTINUE_CONFIDENCE
+            confidence = YES_CONTINUE_CONFIDENCE
         else:
             # consider all other answers as NO
             next_bot_uttr = topic_script[curr_step]["no"]
             attr["can_continue"] = CAN_CONTINUE
             attr["small_talk_topic"] = topic
             attr["small_talk_step"] = curr_step
-            confidence = CONTINUE_CONFIDENCE
+            if len(curr_user_uttr["text"].split()) > 7:
+                confidence = LONG_ANSWER_CONTINUE_CONFIDENCE
+            else:
+                confidence = CONTINUE_CONFIDENCE
     else:
         next_bot_uttr = ""
         confidence = 0.
@@ -295,9 +304,15 @@ def pickup_topic_and_start_small_talk(dialog):
                 logger.info(f"User initiates script but topic was not extracted.")
 
     else:
-        topic = ""
-        response = ""
-        confidence = 0.
+        topic = extract_topic_from_user_uttr(dialog)
+        if len(topic) > 0:
+            response = TOPIC_SCRIPTS.get(topic, [""])[0]
+            confidence = FOUND_WORD_START_CONFIDENCE
+            logger.info(f"Found word in user utterance on topic: `{topic}`.")
+        else:
+            topic = ""
+            response = ""
+            confidence = 0.
 
     return response, topic, confidence
 
