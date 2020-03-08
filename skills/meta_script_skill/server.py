@@ -13,7 +13,7 @@ from common.constants import CAN_NOT_CONTINUE
 from common.utils import get_skill_outputs_from_dialog, get_user_replies_to_particular_skill
 from utils import get_starting_phrase, get_statement_phrase, get_opinion_phrase, get_comment_phrase, \
     if_to_start_script, extract_verb_noun_phrases, DEFAULT_STARTING_CONFIDENCE, is_custom_topic, \
-    WIKI_DESCRIPTIONS, SORRY_SWITCH_TOPIC_REPLIES, DEFAULT_CONFIDENCE, is_predefined_topic, \
+    WIKI_DESCRIPTIONS, is_predefined_topic, \
     get_used_attributes_by_name, user_wants_to_talk_about_his_topic
 
 
@@ -32,6 +32,7 @@ for _topic in TOPICS:
 
 DEFAULT_DIALOG_BEGIN_CONFIDENCE = 0.8
 MATCHED_DIALOG_BEGIN_CONFIDENCE = 0.99
+FINISHED_SCRIPT_RESPONSE = "I see. Let's talk about something you want. Pick up the topic."
 FINISHED_SCRIPT = "finished"
 
 
@@ -88,13 +89,17 @@ def get_status_and_topic(dialog):
             dialog["utterances"], attribute_name="meta_script_topic", value_by_default="", activated=True)
 
         # this determines how many replies back we assume active meta script skill to continue dialog.
-        # let's assume we can continue if meta_scrip skill was active on up to 3 steps back
-        prev_reply_output = get_skill_outputs_from_dialog(dialog["utterances"][-7:],
+        # let's assume we can continue if meta_scrip skill was active on up to 2 steps back
+        prev_reply_output = get_skill_outputs_from_dialog(dialog["utterances"][-5:],
                                                           skill_name="meta_script_skill", activated=True)
-        # get last meta script output even if it was not activated
-        last_script_status = get_skill_outputs_from_dialog(
-            dialog["utterances"][-7:], skill_name="meta_script_skill", activated=False)[-1].get(
-            "meta_script_status", "")
+        # get last meta script output even if it was not activated but right after it was active
+        last_all_meta_script_outputs = get_skill_outputs_from_dialog(
+            dialog["utterances"][-5:], skill_name="meta_script_skill", activated=False)
+        prev_topic_finished = False
+        for out in last_all_meta_script_outputs:
+            if out.get("meta_script_status", "") == "finished":
+                logger.info(f"Found finished dialog on meta_script_topic: `{out.get('meta_script_status', '')}`")
+                prev_topic_finished = True
 
         if len(prev_reply_output) > 0:
             # previously active skill was `meta_script_skill`
@@ -106,7 +111,7 @@ def get_status_and_topic(dialog):
 
         logger.info(f"Found meta_script_status: `{curr_meta_script_status}`")
 
-        if curr_meta_script_status in ["comment", "", FINISHED_SCRIPT] or last_script_status == FINISHED_SCRIPT:
+        if curr_meta_script_status in ["comment", "", FINISHED_SCRIPT] or prev_topic_finished:
             # if previous meta script is finished (comment given) in previous bot reply
             # or if no meta script in previous reply or script was forcibly
             topic_switch_detected = dialog["utterances"][-1].get("annotations", {}).get(
@@ -190,7 +195,7 @@ def respond():
 
             if curr_meta_script_status == "starting":
                 response, confidence, attr = get_starting_phrase(dialog, topic, attr)
-                if (len(last_two_user_responses) > 0 and "?" in last_two_user_responses[-1]) \
+                if (len(dialog["human_utterances"]) > 0 and "?" in dialog["human_utterances"][-1]["text"]) \
                         or user_wants_to_talk_about_his_topic(dialog):
                     # if some question was asked by user, do not start script at all!
                     confidence = 0.
@@ -203,7 +208,7 @@ def respond():
                 else:
                     confidence = DEFAULT_STARTING_CONFIDENCE
             else:
-                if len(last_two_user_responses) > 0 and "?" in last_two_user_responses[-1]:
+                if len(dialog["human_utterances"]) > 0 and "?" in dialog["human_utterances"][-1]["text"]:
                     logger.info("Question by user was detected. Don't continue the script on this turn.")
                     response, confidence = "", 0.0
                     # just for now let's try not to finish the script
@@ -211,11 +216,11 @@ def respond():
                 # there were some script active before in the last several utterances
                 elif topic_switch_detected or lets_chat_about_detected:
                     logger.info("Topic switching was detected. Finish script.")
-                    response, confidence = "", 0.0
+                    response, confidence = FINISHED_SCRIPT_RESPONSE, 0.5
                     attr["meta_script_status"] = FINISHED_SCRIPT
                 elif last_two_user_responses == ["no.", "no."]:
                     logger.info("Two consequent `no` answers were detected. Finish script.")
-                    response, confidence = choice(SORRY_SWITCH_TOPIC_REPLIES), DEFAULT_CONFIDENCE
+                    response, confidence = FINISHED_SCRIPT_RESPONSE, 0.5
                     attr["meta_script_status"] = FINISHED_SCRIPT
                 elif curr_meta_script_status == "comment":
                     response, confidence, attr = get_comment_phrase(dialog, attr)
@@ -225,7 +230,7 @@ def respond():
                 elif curr_meta_script_status == "deeper1" and (
                         no_detected or never_detected) and not is_predefined_topic(topic):
                     # some `no`-intended answer to starting phrase from wiki or custom topic (not for predefined)
-                    response, confidence = "", 0.0
+                    response, confidence = FINISHED_SCRIPT_RESPONSE, 0.5
                     attr["meta_script_status"] = FINISHED_SCRIPT
                 else:
                     response, confidence, attr = get_statement_phrase(dialog, topic, attr, TOPICS)
