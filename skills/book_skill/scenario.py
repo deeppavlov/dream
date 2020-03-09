@@ -329,7 +329,7 @@ def get_genre(user_phrase, return_name=False):
     if return_name:
         genre_dict = {'memoir autobiography': 'memoir books',
                       'history biography': 'biography books',
-                      'science tehnology': 'technology books',
+                      'science technology': 'technology books',
                       'debut novel': 'debut novel books',
                       'graphic novels comics': 'comics',
                       'picture': 'picture books',
