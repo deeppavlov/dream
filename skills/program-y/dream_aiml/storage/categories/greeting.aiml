@@ -217,49 +217,14 @@
   <category>
       <pattern>HELLO</pattern>
       <template>
-          AMAZON_EMOTION_EXCITED_MEDIUM
-          <!--set time of day -->
-          <sraix service="daytimeclf"></sraix>
-          <!--find in rdf storage -->
-          <think>
-              <set var="tuples">
-                  <select>
-                      <vars>?x</vars>
-                      <q>
-                          <subj>TIME_OF_DAY</subj>
-                          <pred>IS</pred>
-                          <obj>?x</obj>
-                      </q>
-                  </select>
-              </set>
-
-              <!-- convert rdf into variable-->
-              <set name="time_of_day">
-                  <get var="?x">
-                      <tuple>
-                          <first>
-                              <get var="tuples"/>
-                          </first>
-                      </tuple>
-                  </get>
-              </set>
-          </think>
-          <condition name="time_of_day">
-              <!--<li value="night"> Good Night, this is an Alexa Prize Socialbot! Why don't you sleep so late?</li>-->
-              <li value="night"> Good Evening, this is an Alexa Prize Socialbot!</li>
-              <li value="morning"> Good Morning, this is an Alexa Prize Socialbot!</li>
-              <li value="day"> Hello, this is an Alexa Prize Socialbot!</li>
-              <li value="evening"> Good Evening, this is an Alexa Prize Socialbot!</li>
-              <!--<li> Hi, this is an Alexa Prize Socialbot. What timezone do you use?</li>-->
+          <random>
+              <li> Hello, this is an Alexa Prize Socialbot!</li>
               <li> Hi, this is an Alexa Prize Socialbot!</li>
-          </condition>
-
-          <!-- How_are_you interaction starts here:-->
+          </random>
           <think>
               <set name="topic">USER_MOOD</set>
           </think>
           How are you?
-          AMAZON_EMOTION_CLOSE
       </template>
     </category>
 
