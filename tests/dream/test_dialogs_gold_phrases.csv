@@ -20,7 +20,7 @@
  "what do you think about chris evans?"
  "what do you think? who is better brad pitt or chris evans?"
  "what do you think about The Avengers?"
-"program_y;dummy_skill;meta_script_skill" "let's talk about" "I misheard you. what's it that you'd like to chat about?"
+"program_y;dummy_skill;meta_script_skill;small_talk_skill" "let's talk about" "I misheard you. what's it that you'd like to chat about?"
  "happy."
  "yeah"
  "okay."
