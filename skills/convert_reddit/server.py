@@ -4,6 +4,7 @@ import random
 import pickle
 import time
 import json
+import difflib
 
 import tensorflow_hub as tfhub
 import tensorflow as tf
@@ -42,7 +43,18 @@ sess = tf.InteractiveSession(graph=tf.Graph())
 module = tfhub.Module(MODEL_PATH)
 response_encodings, responses = pickle.load(open(DATABASE_PATH, "rb"))
 confidences = np.load(CONFIDENCE_PATH)
+
+
+spaces_pat = re.compile(r"\s+")
+special_symb_pat = re.compile(r"[^A-Za-z0-9-!,.’?'\"’ ]")
+
+
+def clear_answer(text):
+    return special_symb_pat.sub("", spaces_pat.sub(" ", text.lower().replace("\n", " "))).strip()
+
+
 filter = json.load(open("./banned_responses.json"))
+filter = [clear_answer(utter) for utter in filter]
 
 text_placeholder = tf.placeholder(dtype=tf.string, shape=[None])
 extra_text_placeholder = tf.placeholder(dtype=tf.string, shape=[None])
@@ -82,44 +94,46 @@ def approximate_confidence(confidence):
     # return float(confidence)
 
 
-def tokenize(sentence):
+def get_BOW(sentence):
     filtered_sentence = re.sub("[^A-Za-z0-9]+", " ", sentence).split()
     filtered_sentence = [token for token in filtered_sentence if len(token) > 2]
     return set(filtered_sentence)
 
 
 unanswered_utters = ["let's talk about", "what else can you do?", "let's talk about books"]
-unanswered_utters = [tokenize(utter) for utter in unanswered_utters]
+unanswered_utters = [get_BOW(utter) for utter in unanswered_utters]
 
 
 def is_unanswerable_utters(history):
-    last_utter = tokenize(history[-1])
+    last_utter = get_BOW(history[-1])
     for utter in unanswered_utters:
         if len(last_utter & utter) / len(last_utter | utter) > 0.9:
             return True
-
-
-def clear_answer(answer):
-    answer = re.sub("[^A-Za-z0-9-!,.’?'\"’ ]+", "", answer).strip()
-    answer = re.sub(' +', ' ', answer)
-    return answer
 
 
 def inference(utterances_histories):
     context_encoding = encode_context(utterances_histories)
     scores = context_encoding.dot(response_encodings.T)
     indices = np.argsort(scores)[::-1][:10]
-    filtered_indices = [ind for ind in indices if responses[ind] not in filter]
+    filtered_indices = []
+    for ind in indices:
+        cand = responses[ind]
+        if not [
+            None
+            for f_utter in filter
+            if difflib.SequenceMatcher(None, f_utter.split(), clear_answer(cand).split()).ratio() > 0.9
+        ]:
+            filtered_indices.append(ind)
 
     if is_unanswerable_utters(utterances_histories):
         return "", 0.0
 
-    clear_utterances_histories = [tokenize(utt) for utt in utterances_histories[1::2]]
+    clear_utterances_histories = [clear_answer(utt).split() for utt in utterances_histories[::-1][1::2][::-1]]
 
     for ind in reversed(filtered_indices):
-        tokenized_response = tokenize(responses[ind])
+        cand = clear_answer(responses[ind]).split()
         for utterance in clear_utterances_histories:
-            if len(tokenized_response & utterance) / len(tokenized_response) > 0.6:
+            if difflib.SequenceMatcher(None, utterance, cand).ratio() > 0.6:
                 filtered_indices.remove(ind)
                 break
 
