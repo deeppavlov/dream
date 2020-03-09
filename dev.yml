@@ -337,4 +337,11 @@ services:
       - "./common:/src/common"
     ports:
       - 8062:8062
+  program_y_wide:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/program-y-wide:/src"
+      - "./skills/program-y-wide/logs:/tmp"
+    ports:
+      - 8064:8064
 version: "3.7"

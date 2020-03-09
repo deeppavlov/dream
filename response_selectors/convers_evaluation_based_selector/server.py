@@ -180,7 +180,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
 
     skill_names = [c['skill_name'] for c in candidates]
     how_are_you_spec = "Do you want to know what I can do?"  # this is always at the end of answers to `how are you`
-    what_i_can_do_spec = "a newborn socialbot"
+    what_i_can_do_spec = "a socialbot, so I can't"
     psycho_help_spec = "If you or someone you know is in immediate danger"
     greeting_spec = "this is an Alexa Prize Socialbot"
     misheard_with_spec1 = "I misheard you"
@@ -199,8 +199,24 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             # greet user in first utterance
             if "Sorry, I don't have an answer for that!" in candidates[i]['text']:
                 candidates[i]['text'] = "Hello, " + greeting_spec + '! '
+                curr_score = very_big_score
+            elif "about" in dialog['utterances'][-1]["text"]:  # user asked to chat about blabla
+                # candidates[i]['text'] = "Hello, " + greeting_spec + '! '
+                curr_score = very_low_score
             else:
                 candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + candidates[i]['text']
+                curr_score = very_big_score
+        elif len(dialog['utterances']) < 2 and skill_names[i] == 'cobotqa' \
+                and "about" in dialog['utterances'][-1]["text"] \
+                and all([word not in dialog['utterances'][-1]["text"] for word in ["something", "anything"]]):
+            # cobotqa in the first reply can answer if user asked `let's talk about particular thing` (not something)
+            candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + candidates[i]['text']
+            curr_score = very_big_score
+        elif len(dialog['utterances']) < 2 and skill_names[i] == 'small_talk_skill' \
+                and "about" in dialog['utterances'][-1]["text"] and len(candidates[i]['text']) > 0:
+            # small talk skill in the first reply can answer if user asked `let's talk about particular thing`
+            # and if user asked `let's talk about something/anything`
+            candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + candidates[i]['text']
             curr_score = very_big_score
         elif skill_names[i] == 'program_y' and (
                 how_are_you_spec in candidates[i]['text'] or what_i_can_do_spec in candidates[i]['text']) \

@@ -14,7 +14,7 @@ services:
         convert_reddit:8029, personal_info_skill:8030, asr:8031, book_skill:8032, misheard_asr:8033,
         christmas_new_year_skill:8036, weather_skill:8037, emotion_classification:8038, alice:8000,
         eliza:8047, emotion_skill:8049, dummy_skill_dialog:8052, comet:8053, meta_script_skill:8054, oscar_skill:8055,
-        small_talk_skill:8062"
+        small_talk_skill:8062, program_y_wide:8064"
       WAIT_HOSTS_TIMEOUT: 480
     env_file:
       - ${ENV_FILE}
