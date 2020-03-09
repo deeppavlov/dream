@@ -14,18 +14,19 @@ def get_skill_outputs_from_dialog(utterances, skill_name, activated=False):
     """
     result = []
 
-    # do not consider last user's utterance because it doesn't have hypotheses
-    for i in range(0, len(utterances) - 1, 2):
-        is_active = utterances[i + 1]["active_skill"] == skill_name
-        skills_outputs = utterances[i]["hypotheses"]
-        skill_output = {}
-        for skop in skills_outputs:
-            if skop["skill_name"] == skill_name:
-                skill_output = skop
-                break
+    skills_outputs = []
+    for uttr in utterances:
+        if "active_skill" in uttr:
+            skill_output = {}
+            for skop in skills_outputs:
+                if skop["skill_name"] == skill_name:
+                    skill_output = skop
+                    break
 
-        if not activated or is_active:
-            result.append(skill_output)
+            if (not activated or uttr["active_skill"] == skill_name) and len(skill_output) > 0:
+                result.append(skill_output)
+        elif "hypotheses" in uttr:
+            skills_outputs = uttr["hypotheses"]
 
     return result
 
