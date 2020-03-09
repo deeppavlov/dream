@@ -38,16 +38,16 @@ LET_ME_ASK_TEMPLATES = [
 ]
 
 STARTINGS = {
-    "go ice fishing": "Every day I learn more and more about humans' world but you still surprise me. "
+    "go ice fishing": "Every day I learn more and more about humans' world but you humans still surprise me."
                       "You know some people go fishing when the water is "
                       "frozen and covered with ice. It is so called ice fishing. Is that common in your country?",
     "go skydiving": "Today I've seen a shocking video of skydiving. People fall out of an airplane "
                     "high in the sky with so called parachute. "
                     "This thing prevents smashing at the end of a crazy airglide. "
                     "Have you ever jumped with a parachute?",
-    "be a volunteer": "Recently I've heard a surprising thing about humans' world. People help others for free. "
+    "be a volunteer": "Recently I've heard an interesting thing about humans' world. People help others for free. "
                       "I mean without any compensation at all. They are called volunteers. "
-                      "Actually you are also a volunteer. You talk to me and help me to learn. "
+                    #   "Actually you are also a volunteer. You talk to me and help me to learn. "
                       "What is the goal of volunteering?",
     "paint": "So strange. You people create pictures of life scenes using color pigments. "
              "It is called painting. Why can't you just take a look at these scenes "
@@ -58,7 +58,7 @@ STARTINGS = {
                   "And those pets do not provide any benefits. It seems they are absolutely useless. "
                   "You just get a pet, feed it, wash it, care about it for all their life. "
                   "Are people servants for pets?",
-    "go to the circus": "Every day I learn something new about humans. So, yesterday one told me about a circus. "
+    "go to the circus": "Every day I learn something new about humans. So, yesterday I was told about a circus. "
                         "There are animals doing different unbelievable tricks, people performing dangerous stunts "
                         "in the air and showing mind blowing staff. Have you ever been to a circus?",
     "go mountain hiking": "I have learned something really strange about humans' world today. "
@@ -68,13 +68,13 @@ STARTINGS = {
                           "Have you or your friends ever tried to go hiking?"
 }
 
-COMMENTS = {"positive": ["This is so cool to learn new about humans! Thank you for your explanation!",
+COMMENTS = {"positive": ["This is so cool to learn something new about humans! Thank you for your explanation!",
                          "Wow! Thanks! I am so excited to learn more and more about humans!",
-                         "It's so interesting and informative to talk to you about humans. Thank you for your help!"],
+                         "I'm so happy to know humans better. Thank you for your help!"],
             "negative": ["No worries. You really helped me to better understand humans' world. Thank you so much.",
                          "Anyway, you helped a lot. Thank you for the given information.",
-                         "Nevertheless, you are so kind helping me to better understand humans' world. "
-                         "I appreciate it."],
+                         "Nevertheless, you are so kind helping me to better understand humans. "
+                         "I appreciate that."],
             "neutral": ["Very good. Thank you for your help. It will definitely improve me.",
                         "This was very interesting to me. I appreciate your explanation.",
                         "Your explanations were really informative. Thank you very much!"]}
@@ -123,18 +123,22 @@ DIVE_DEEPER_COMMENTS = {"yes": ["Cool! I figured it out by myself!",
                                   "All right."]}
 
 OTHER_STARTINGS = [
-    "Could you, please, help me to understand what does to DOTHAT mean?",
-    "Can you help me, please, to learn a new thing about human world? Explain me what does DOINGTHAT mean.",
-    "Such a strange phrase! What does to DOTHAT mean?",
-    "I've never heard about DOINGTHAT. What does to DOTHAT mean?",
+    "Every day I learn more and more about humans' world but you humans still surprise me. "
+    "Could you, please, help me to understand what does it mean to DOTHAT?",
+    "Undersatindg humans is so hard, please, can you help me to learn a new thing about human world? "
+    "I would be so thankful if you explain me what does DOINGTHAT mean.",
+    "Every day I learn more and more about humans' world but you humans still surprise me.  What does DOTHAT mean?",
+    "Undersatindg humans is so hard, please, can you help me to learn a new thing about human world? "
     "I didn't get what does to DOTHAT mean?"
 ]
 
 WIKI_STARTINGS = [
-    "I've heard that DESCRIPTION Do you know about it?",
-    "There is a new thing for me about human world: DESCRIPTION Have you ever heard about it?",
+    "I'm so eager to understand humans better. Recently I've heard that DESCRIPTION Do you know about that?",
+    "Every day I learn more and more about humans' world but you humans still surprise me. "
+    "I found that DESCRIPTION This is non trivial. Isn't it?",
+    "Undersatindg humans is so hard, please, help me to learn a new thing about human world. "
     "Do you know that DESCRIPTION?",
-    "Have you ever heard that DESCRIPTION?"
+    "Have you ever heard that DESCRIPTION? I want to understand this better."
 ]
 
 WIKI_DESCRIPTIONS = json.load(open("wiki_topics_descriptions_one_sent.json", "r"))
