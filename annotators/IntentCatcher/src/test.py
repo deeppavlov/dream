@@ -12,8 +12,9 @@ def main_test():
         assert r.ok
         data = r.json()[0]
         if test['intent'] is not None:
-            assert data.get(test['intent'], {'detected': 1}).get(
-                'detected', 0) == 1, print(f"TEST FAILED!\nTest: {test}\nResult:{data}")
+            assert data.get(test['intent'], {'detected': 0}).get('detected', 0) == 1 and \
+                sum([v.get('detected', 0) for v in data.values()]) == 1, \
+                print(f"TEST FAILED!\nTest: {test}\nResult:{data}")
         else:
             assert all([intent['detected'] == 0 for intent in data.values()]), f'test: {test}\nprediction: {data}'
     print("Success")
