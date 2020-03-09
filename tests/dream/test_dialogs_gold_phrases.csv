@@ -65,7 +65,7 @@
 "news_skill" "yes"
  "what's new in new york"
  "yes tell me"
- "alexa can you just do your job and play music please" "If you want to use the requested feature say, Alexa, stop, and try again." "I am a socialbot, I simply can not do that. If you want to use the requested feature, simply say, Alexa, stop, and try again." "Currently I am running in a social mode. If you want to use the requested feature, just say, Alexa, stop, and try again." "Just say: Alexa, stop and try again." "#+#cant_do"
+"intent_responder;program_y" "alexa can you just do your job and play music please" "I am very sorry, but I can only chat. We can chat for a while, but if you want to do this right now, repeat the request after telling saying: Alexa, stop." "I am extremly sorry. Currently I am running in a social mode, so I can only chat. If you still want to do that, first say: Alexa, stop and then repeat the request." "#+#cant_do"
  "horrible" "Please, calm down. Can I tell you a joke?" "I feel your pain. Can I tell you a joke?" "I am ready to support you. Can I tell you a joke?" "You cannot prevent the birds of sadness from passing over your head, but you can prevent them from nesting in your hair. Can I tell you a joke?" "Please, cheer up. Can I tell you a joke?"
  "no thanks"
  "what do you think about"

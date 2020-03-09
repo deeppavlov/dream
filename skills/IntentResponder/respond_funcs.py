@@ -36,7 +36,7 @@ def exit_respond(dialog, response_phrases):
 
 def repeat_respond(dialog, response_phrases):
     WHAT_BOT_PHRASES = ['did i say something confusing', 'you sound shocked', 'if you want me to repeat']
-    bot_phrases = dialog['bot_utterances']
+    bot_phrases = [utt.get('text', '') if isinstance(utt, dict) else utt for utt in dialog['bot_utterances']]
     if len(dialog["utterances"]) >= 2:
         responder_phrase = dialog['utterances'][-2]['text'].lower()
         if any([j in responder_phrase for j in WHAT_BOT_PHRASES]):

@@ -7,7 +7,7 @@ import logging
 import sentry_sdk
 from flask import Flask, request, jsonify
 
-from detector import ClassifierDetector
+from detector import *
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -23,7 +23,7 @@ app = Flask(__name__)
 sess = tf.compat.v1.Session()
 
 logger.info('Creating detector...')
-detector = ClassifierDetector(logger)
+detector = MultilabelClassifierDetectorWithIntentHierarchy(logger)
 logger.info('Creating detector... finished')
 
 logger.info('Initializing tf variables...')

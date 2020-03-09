@@ -1,6 +1,4 @@
 tfhub_model/*
 metrics/*
-src/logs/*
+data/logs/*
 *.ipynb
-intent_data.json
-unused_intents.json
