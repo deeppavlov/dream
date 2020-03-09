@@ -178,6 +178,7 @@ class RuleBasedSkillSelectorConnector:
         else:
             # process regular utterances
             skills_for_uttr.append("program_y")
+            skills_for_uttr.append("program_y_wide")
             skills_for_uttr.append("cobotqa")
             skills_for_uttr.append("christmas_new_year_skill")
             skills_for_uttr.append("superbowl_skill")

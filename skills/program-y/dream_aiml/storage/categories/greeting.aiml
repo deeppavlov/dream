@@ -126,12 +126,6 @@
          <li> What do you get up to in your free time? <think><set name="topic">HOBBY</set></think></li>
          <li> Do you have any hidden talents or surprising hobbies? <think><set name="topic">HOBBY</set></think></li>
 
-         <li> What is your work? <think><set name="topic">WORK</set></think></li>
-         <li> What is your job?... If you have it, of course. <think><set name="topic">WORK</set></think></li>
-         <li> What do you do for a living? <think><set name="topic">WORK</set></think></li>
-         <li> What kind of work do you do? <think><set name="topic">WORK</set></think></li>
-         <li> What line of work are you in? <think><set name="topic">WORK</set></think></li>
-
          <li> Everyone wastes time. How do you prefer to waste time? <think><set name="topic">SMALLTALK</set></think></li>
          <li> Did you order this beautiful weather? <think><set name="topic">SMALLTALK</set></think></li>
          <li> Lovely day, don't you think? <think><set name="topic">SMALLTALK</set></think></li>
@@ -157,12 +151,6 @@
          <li> What sort of hobbies do you have? <think><set name="topic">HOBBY</set></think></li>
          <li> What do you get up to in your free time? <think><set name="topic">HOBBY</set></think></li>
          <li> Do you have any hidden talents or surprising hobbies? <think><set name="topic">HOBBY</set></think></li>
-
-         <li> What is your work? <think><set name="topic">WORK</set></think></li>
-         <li> What is your job?... If you have it, of course. <think><set name="topic">WORK</set></think></li>
-         <li> What do you do for a living? <think><set name="topic">WORK</set></think></li>
-         <li> What kind of work do you do? <think><set name="topic">WORK</set></think></li>
-         <li> What line of work are you in? <think><set name="topic">WORK</set></think></li>
 
          <li> Everyone wastes time. How do you prefer to waste time? <think><set name="topic">SMALLTALK</set></think></li>
          <li> Did you order this beautiful weather? <think><set name="topic">SMALLTALK</set></think></li>
@@ -195,12 +183,6 @@
          <li> What sort of hobbies do you have? <think><set name="topic">HOBBY</set></think></li>
          <li> What do you get up to in your free time? <think><set name="topic">HOBBY</set></think></li>
          <li> Do you have any hidden talents or surprising hobbies? <think><set name="topic">HOBBY</set></think></li>
-
-         <li> What is your work? <think><set name="topic">WORK</set></think></li>
-         <li> What is your job?... If you have it, of course. <think><set name="topic">WORK</set></think></li>
-         <li> What do you do for a living? <think><set name="topic">WORK</set></think></li>
-         <li> What kind of work do you do? <think><set name="topic">WORK</set></think></li>
-         <li> What line of work are you in? <think><set name="topic">WORK</set></think></li>
 
          <li> Everyone wastes time. How do you prefer to waste time? <think><set name="topic">SMALLTALK</set></think></li>
          <li> Did you order this beautiful weather? <think><set name="topic">SMALLTALK</set></think></li>
@@ -257,12 +239,6 @@
          <li> What do you get up to in your free time? <think><set name="topic">HOBBY</set></think></li>
          <li> Do you have any hidden talents or surprising hobbies? <think><set name="topic">HOBBY</set></think></li>
 
-         <li> What is your work? <think><set name="topic">WORK</set></think></li>
-         <li> What is your job?... If you have it, of course. <think><set name="topic">WORK</set></think></li>
-         <li> What do you do for a living? <think><set name="topic">WORK</set></think></li>
-         <li> What kind of work do you do? <think><set name="topic">WORK</set></think></li>
-         <li> What line of work are you in? <think><set name="topic">WORK</set></think></li>
-
          <li> Everyone wastes time. How do you prefer to waste time? <think><set name="topic">SMALLTALK</set></think></li>
          <li> Did you order this beautiful weather? <think><set name="topic">SMALLTALK</set></think></li>
          <li> Lovely day, don't you think? <think><set name="topic">SMALLTALK</set></think></li>
@@ -315,12 +291,6 @@
          <li> What sort of hobbies do you have? <think><set name="topic">HOBBY</set></think></li>
          <li> What do you get up to in your free time? <think><set name="topic">HOBBY</set></think></li>
          <li> Do you have any hidden talents or surprising hobbies? <think><set name="topic">HOBBY</set></think></li>
-
-         <li> What is your work? <think><set name="topic">WORK</set></think></li>
-         <li> What is your job?... If you have it, of course. <think><set name="topic">WORK</set></think></li>
-         <li> What do you do for a living? <think><set name="topic">WORK</set></think></li>
-         <li> What kind of work do you do? <think><set name="topic">WORK</set></think></li>
-         <li> What line of work are you in? <think><set name="topic">WORK</set></think></li>
 
          <li> Everyone wastes time. How do you prefer to waste time? <think><set name="topic">SMALLTALK</set></think></li>
          <li> Did you order this beautiful weather? <think><set name="topic">SMALLTALK</set></think></li>

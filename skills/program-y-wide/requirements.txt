@@ -1,0 +1,4 @@
+programy==3.8.5
+sanic==19.6.3
+sentry-sdk==0.12.3
+requests==2.22.0

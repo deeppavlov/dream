@@ -212,6 +212,16 @@ services:
     image: ${DOCKER_REGISTRY}/small_talk_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
+  program_y_wide:
+    image: ${DOCKER_REGISTRY}/program_y_wide:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s --header \"Content-Type: application/json\" --request POST --data '{\"sentences_batch\":[[\"lets chat\"]],\"user_ids\":[123131]}' http://localhost:8064/api/rest/v1.0/ask || exit 1"]
+      interval: 10s
+      timeout: 2s
+      retries: 3
+      start_period: 1m
 volumes:
   external-logs:
   external-deeppavlov:

@@ -39,7 +39,11 @@ np_ignore_list = ["'s", 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselv
                   'shan', "shan't", 'shouldn', "shouldn't", 'wasn', "wasn't", 'weren', "weren't", 'won', "won't",
                   'wouldn', "wouldn't", "my name", "your name", "wow", "yeah", "yes", "ya", "cool", "okay", "more",
                   "some more", " a lot", "a bit", "another one", "something else", "something", "anything",
-                  "someone", "anyone", "play", "mean", "a lot", "a little", "a little bit"]
+                  "someone", "anyone", "play", "mean", "a lot", "a little", "a little bit",
+                  "boring", "radio", "type", "call", "fun", "fall", "name", "names", "lgbtq families", "day", "murder",
+                  "amazon", "take", "interest", "days", "year", "years", "sort", "fan", "going", "death", "part", "end",
+                  "watching", "thought", "thoughts", "man", "men", "listening", "big fan", "fans", "rapping", "reading",
+                  "going", "thing", "hanging", "best thing"]
 
 np_ignore_expr = re.compile(r'\b(' + '|'.join(np_ignore_list) + r')\b')
 rm_spaces_expr = re.compile(r'\s\s+')

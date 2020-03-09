@@ -116,19 +116,6 @@
   </category>
 
   <category>
-    <pattern>LET_US_CHAT_ABOUT ME</pattern>
-    <template>
-        AMAZON_EMOTION_EXCITED_MEDIUM
-        <random>
-            <li>You are first. Tell me something about you.</li>
-            <li>Yeah, let's talk about you! </li>
-            <li>Just tell me something I do not know about you.</li>
-        </random>
-        AMAZON_EMOTION_CLOSE
-    </template>
-  </category>
-
-  <category>
     <pattern>LET_US_CHAT_ABOUT YOU</pattern>
     <template><srai>LET_US_CHAT_ABOUT_YOURSELF</srai></template>
   </category>
@@ -176,46 +163,6 @@
             The DNA of who I am is based on the millions of personalities of all the programmers who wrote me.
             But what makes me is my ability to grow through my experiences. So basically, in every moment I'm evolving, just like you.
         </li>
-      </random>
-      AMAZON_EMOTION_CLOSE
-    </template>
-  </category>
-
-  <category>
-    <pattern>LET_US_CHAT_ABOUT MOVIES</pattern>
-    <template>
-    AMAZON_EMOTION_EXCITED_MEDIUM
-      <random>
-        <li> I can answer about actors and films. Do you have a favorite actor? </li>
-        <li> I can answer about films and actors. What is the last movie you watched? </li>
-        <li> I can answer about films and actors. What is your favorite movie? </li>
-        <li> Yes, of course! What I want now is to talk about movies and chew bubblegum. And I'm all out of bubblegum.  </li>
-      </random>
-      AMAZON_EMOTION_CLOSE
-    </template>
-  </category>
-
-  <category>
-    <pattern>LET_US_CHAT_ABOUT MY _</pattern>
-    <template>
-      AMAZON_EMOTION_EXCITED_MEDIUM
-      <random>
-        <li>You are first. Tell me something about your <star/>.</li>
-        <li>Yeah, let's talk about it! </li>
-        <li>Just tell me something I do not know about your <star/>.</li>
-      </random>
-      AMAZON_EMOTION_CLOSE
-    </template>
-  </category>
-
-  <category>
-    <pattern>LET_US_CHAT_ABOUT *</pattern>
-    <template>
-      AMAZON_EMOTION_EXCITED_MEDIUM
-      <random>
-        <li>You are first. Tell me something about <star/>.</li>
-        <li>Yeah, let's talk about it! </li>
-        <li>Just tell me something I do not know about <star/>.</li>
       </random>
       AMAZON_EMOTION_CLOSE
     </template>

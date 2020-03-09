@@ -62,30 +62,30 @@ def main_test():
         assert assert_flag, print(f"User: {sent}. Response: {response}")
 
     # what to talk about
-    sentences = [
-        "what do you wanna talk about",
-        "what would you like to talk about",
-        "so what do you wanna talk about",
-        "what else do you wanna talk about",
-        "whatever you wanna talk about",
-        "what do you wanna talk about now",
-    ]
-    possible_responses = [
-        "We can talk on different topics, like movies, books, or I can answer you questions.",
-        "We can talk about movies. For example, what's the last movie you have seen?",
-        "We can talk about books. Do you love reading?",
-    ]
-    for sent in sentences:
-        data = {"sentences_batch": [[sent]]}
-        response = requests.post(url, json=data).json()[0][0]
-        possible_responses = [res.lower().strip() for res in possible_responses]
-        response = response.lower().strip()
-        assert_flag = [
-            None
-            for tgt_resp in possible_responses
-            if difflib.SequenceMatcher(None, tgt_resp.split(), response.split()).ratio() > 0.9
-        ]
-        assert assert_flag, print(f"User: {sent}. Response: {response}")
+    # sentences = [
+    #     "what do you wanna talk about",
+    #     "what would you like to talk about",
+    #     "so what do you wanna talk about",
+    #     "what else do you wanna talk about",
+    #     "whatever you wanna talk about",
+    #     "what do you wanna talk about now",
+    # ]
+    # possible_responses = [
+    #     "We can talk on different topics, like movies, books, or I can answer you questions.",
+    #     "We can talk about movies. For example, what's the last movie you have seen?",
+    #     "We can talk about books. Do you love reading?",
+    # ]
+    # for sent in sentences:
+    #     data = {"sentences_batch": [[sent]]}
+    #     response = requests.post(url, json=data).json()[0][0]
+    #     possible_responses = [res.lower().strip() for res in possible_responses]
+    #     response = response.lower().strip()
+    #     assert_flag = [
+    #         None
+    #         for tgt_resp in possible_responses
+    #         if difflib.SequenceMatcher(None, tgt_resp.split(), response.split()).ratio() > 0.9
+    #     ]
+    #     assert assert_flag, print(f"User: {sent}. Response: {response}")
 
     # do not want to talk about it
     sentences = ["i don't wanna talk about it", "i do not know what do you wanna talk about"]
@@ -108,49 +108,49 @@ def main_test():
         assert assert_flag, print(f"User: {sent}. Response: {response}")
 
     # talk about something
-    sentences = [
-        "let's chat about ducks",
-        "can we chat about ducks",
-        "let's have a conversation about ducks" "do you want to have a conversation about ducks",
-    ]
-    possible_responses = [
-        "You are first. Tell me something about",
-        "Yeah, let's talk about it!",
-        "Just tell me something I don't know about",
-    ]
-    for sent in sentences:
-        data = {"sentences_batch": [[sent]]}
-        response = requests.post(url, json=data).json()[0][0].lower().strip()
-        contains_possib_response = False
-        for p_resp in possible_responses:
-            if p_resp.lower().strip() in response:
-                contains_possib_response = True
-
-        assert contains_possib_response is True, print(f"User: {sent}. Response: {response}")
+    # sentences = [
+    #     "let's chat about ducks",
+    #     "can we chat about ducks",
+    #     "let's have a conversation about ducks" "do you want to have a conversation about ducks",
+    # ]
+    # possible_responses = [
+    #     "You are first. Tell me something about",
+    #     "Yeah, let's talk about it!",
+    #     "Just tell me something I don't know about",
+    # ]
+    # for sent in sentences:
+    #     data = {"sentences_batch": [[sent]]}
+    #     response = requests.post(url, json=data).json()[0][0].lower().strip()
+    #     contains_possib_response = False
+    #     for p_resp in possible_responses:
+    #         if p_resp.lower().strip() in response:
+    #             contains_possib_response = True
+    #
+    #     assert contains_possib_response is True, print(f"User: {sent}. Response: {response}")
 
     # talk about user
-    sentences = [
-        "let's chat about me",
-        "can we chat about me",
-        "let's have a conversation about me",
-        "do you want to have a conversation about me",
-    ]
-    possible_responses = [
-        "You are first. Tell me something about you.",
-        "Yeah, let's talk about you!",
-        "Just tell me something I don't know about you.",
-    ]
-    for sent in sentences:
-        data = {"sentences_batch": [[sent]]}
-        response = requests.post(url, json=data).json()[0][0]
-        possible_responses = [res.lower().strip() for res in possible_responses]
-        response = response.lower().strip()
-        assert_flag = [
-            None
-            for tgt_resp in possible_responses
-            if difflib.SequenceMatcher(None, tgt_resp.split(), response.split()).ratio() > 0.9
-        ]
-        assert assert_flag, print(f"User: {sent}. Response: {response}")
+    # sentences = [
+    #     "let's chat about me",
+    #     "can we chat about me",
+    #     "let's have a conversation about me",
+    #     "do you want to have a conversation about me",
+    # ]
+    # possible_responses = [
+    #     "You are first. Tell me something about you.",
+    #     "Yeah, let's talk about you!",
+    #     "Just tell me something I don't know about you.",
+    # ]
+    # for sent in sentences:
+    #     data = {"sentences_batch": [[sent]]}
+    #     response = requests.post(url, json=data).json()[0][0]
+    #     possible_responses = [res.lower().strip() for res in possible_responses]
+    #     response = response.lower().strip()
+    #     assert_flag = [
+    #         None
+    #         for tgt_resp in possible_responses
+    #         if difflib.SequenceMatcher(None, tgt_resp.split(), response.split()).ratio() > 0.9
+    #     ]
+    #     assert assert_flag, print(f"User: {sent}. Response: {response}")
 
     sentences = ["can you sing", "can you sing me a song"]
     for sent in sentences:
