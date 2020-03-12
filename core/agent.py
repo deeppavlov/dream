@@ -73,12 +73,18 @@ class Agent:
         logger.info(f"Service {service.label}: {response}")
         self._response_logger.log_end(task_id, workflow_record, service)
 
+        if service.label in set(['last_chance_service', 'timeout_service']):
+            sentry_sdk.capture_message(
+                f"{service.label} was called on {workflow_record['dialog'].human.telegram_id}: {response}"
+            )
+
         if isinstance(response, Exception):
             logger.exception(response)
             sentry_sdk.capture_exception(response)
-            # Skip all services, which are depends on failured one
-            for i in service.dependent_services:
-                self.workflow_manager.skip_service(workflow_record['dialog'].id, i)
+            # Skip all services, which are depends on failured one (if exception is not from task cancelling)
+            if not isinstance(response, asyncio.CancelledError):
+                for i in service.dependent_services:
+                    self.workflow_manager.skip_service(workflow_record['dialog'].id, i)
         else:
             response_data = service.apply_response_formatter(response)
             # Updating workflow with service response
@@ -134,4 +140,4 @@ class Agent:
             v['task_object'].cancel()
             self._response_logger.log_end(k, workflow_record, v['task_data']['service'], True)
 
-        await self.create_processing_tasks(workflow_record, next_services)
+        asyncio.ensure_future(self.create_processing_tasks(workflow_record, next_services))
