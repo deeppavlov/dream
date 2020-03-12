@@ -1,4 +1,5 @@
 from typing import Dict
+from copy import deepcopy
 
 from core.state_schema import Bot, BotUtterance, Dialog, Human, HumanUtterance
 import logging
@@ -36,7 +37,9 @@ class StateManager:
                 dialog.utterances[-1].hypotheses[i]['annotations'][label] = {}
         else:
             for i in range(len(payload["batch"])):
-                dialog.utterances[-1].hypotheses[i]['annotations'][label] = payload["batch"][i]
+                new_val = deepcopy(dialog.utterances[-1].hypotheses[i])
+                new_val['annotations'][label] = payload["batch"][i]
+                dialog.utterances[-1].hypotheses[i] = new_val
 
     async def add_text(self, dialog: Dialog, payload: str, label: str, **kwargs):
         dialog.utterances[-1].text = payload
