@@ -153,8 +153,6 @@ class PredefinedTextConnector:
         self.annotations = annotations or {}
 
     async def send(self, payload: Dict, callback: Callable):
-        logger.error("Last chance was called")
-        sentry_sdk.capture_event(payload, hint='Last chance was called')
         await callback(
             task_id=payload['task_id'],
             response={'text': self.response_text, 'annotations': self.annotations}
