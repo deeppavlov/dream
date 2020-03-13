@@ -81,7 +81,7 @@ def print_row(row, f, field='dialog', with_debug_info=False, with_skill_name=Fal
     print(
         f'--{row["conversation_id"]}----{row["rating_val"]}----{row["feedback_txt"]}',
         file=f)
-    print(f'---first_utt_time--{row["first_utt_time"]}-last_utt_time-{row["last_utt_time"]}--',
+    print(f'--{row["version"]}--first_utt_time--{row["first_utt_time"]}-last_utt_time-{row["last_utt_time"]}--',
           file=f)
     print_pretty(row[field], file=f, field=field, with_debug_info=with_debug_info, with_skill_name=with_skill_name)
     print("-----------------------", file=f)
@@ -156,13 +156,20 @@ async def main(args):
 
         rating_val = ratings.get(conv_id, 'no_rating')
         rating_val = float(rating_val) if rating_val != 'no_rating' else rating_val
+        version = None
+        if 'version' in dialog['utterances'][0]['attributes']:
+            version = dialog['utterances'][0]['attributes']['version']
+
+        if version is None:
+            version = 'no_info'
 
         first_utt_time = dialog['utterances'][0]['date_time']
         last_utt_time = dialog['utterances'][-1]['date_time']
 
         data = {"conversation_id": conv_id, "rating_val": rating_val,
                 "feedback_txt": feedback_txt, "dialog": dialog,
-                "first_utt_time": first_utt_time, "last_utt_time": last_utt_time}
+                "first_utt_time": first_utt_time, "last_utt_time": last_utt_time,
+                "version": version}
 
         if (rating_val == 'no_rating' and args.with_no_rating) or rating_val != 'no_rating':
             new_conversations.append(data)
