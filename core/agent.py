@@ -74,9 +74,11 @@ class Agent:
         self._response_logger.log_end(task_id, workflow_record, service)
 
         if service.label in set(['last_chance_service', 'timeout_service']):
-            sentry_sdk.capture_message(
-                f"{service.label} was called on {workflow_record['dialog'].human.telegram_id}: {response}"
-            )
+            with sentry_sdk.push_scope() as scope:
+                scope.set_extra('user_id', workflow_record['dialog'].human.telegram_id)
+                scope.set_extra('dialog_id', workflow_record['dialog'].id)
+                scope.set_extra('response', response)
+                sentry_sdk.capture_message(f"{service.label} was called")
 
         if isinstance(response, Exception):
             logger.exception(response)
