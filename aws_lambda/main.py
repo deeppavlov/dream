@@ -23,9 +23,11 @@ DP_AGENT_URL = os.getenv('DP_AGENT_URL')
 DP_AGENT_PORT = os.getenv('DP_AGENT_PORT')
 
 A_VERSION = os.getenv('A_VERSION')
+A_VERSION_RATIO = os.getenv('A_VERSION_RATIO')
 A_AGENT_URL = os.getenv('A_AGENT_URL')
 A_AGENT_PORT = os.getenv('A_AGENT_PORT')
 B_VERSION = os.getenv('B_VERSION')
+B_VERSION_RATIO = os.getenv('B_VERSION_RATIO')
 B_AGENT_URL = os.getenv('B_AGENT_URL')
 B_AGENT_PORT = os.getenv('B_AGENT_PORT')
 
@@ -41,6 +43,14 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 logger.info(f"running in A/B tests mode: {ab_tests_mode}")
+
+if ab_tests_mode:
+    if A_VERSION_RATIO is None or B_VERSION_RATIO is None:
+        logger.warning(f'A/B Tests versions rate is not set. Setting default A:B = 1:1 ratio.')
+        A_VERSION_RATIO = 1
+        B_VERSION_RATIO = 1
+    A_VERSION_RATIO = int(A_VERSION_RATIO)
+    B_VERSION_RATIO = int(B_VERSION_RATIO)
 
 request_data = None
 
@@ -84,7 +94,7 @@ def call_dp_agent(user_id, text, request_data):
     # currently if A/B tests are not runing version is set to None
     version = None
     if ab_tests_mode:
-        if hashlib.md5(user_id.encode()).digest()[-1] % 2 == 0:
+        if hashlib.md5(user_id.encode()).digest()[-1] % (A_VERSION_RATIO + B_VERSION_RATIO) < A_VERSION_RATIO:
             dp_agent_url = f'{A_AGENT_URL}:{A_AGENT_PORT}'
             version = A_VERSION
         else:
