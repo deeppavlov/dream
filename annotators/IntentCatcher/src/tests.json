@@ -216,14 +216,6 @@
       "intent": null
     },
     {
-      "sentence": "i don't want to talk about you",
-      "intent": null
-    },
-    {
-      "sentence": "i really do not want to talk to",
-      "intent": null
-    },
-    {
       "sentence": "i will listen",
       "intent": null
     },
@@ -257,6 +249,14 @@
     },
     {
         "sentence": "will you please turn off the lights",
+        "intent": "cant_do"
+    },
+    {
+        "sentence": "play some music",
+        "intent": "cant_do"
+    },
+    {
+        "sentence": "play music",
         "intent": "cant_do"
     }
 ]
