@@ -19,7 +19,7 @@ if USE_MODEL_PATH is None:
 
 INTENT_MODEL_PATH = os.environ.get('INTENT_MODEL_PATH', None)
 if INTENT_MODEL_PATH is None:
-    INTENT_MODEL_PATH = '/data/models/linear_classifier.h5'
+    INTENT_MODEL_PATH = '/data/models/linear_classifier_h0.h5'
 
 INTENT_DATA_PATH = os.environ.get('INTENT_DATA_PATH', None)
 if INTENT_DATA_PATH is None:

@@ -10,7 +10,7 @@
         "(i'm|i am) fed up with this (topic|talk|subject)",
 	"((would)|(can)) ((you)|(we))( please ){0,1}((talk)|(chat)) about ((something else)|(anything else)|(another thing)|(another topic)|(other topic)|(something other)|(something else)|(other things))"
       ],
-      "min_precision": 0.9,
+      "min_precision": 0.95,
       "punctuation": [
         ".",
         "!",
@@ -76,7 +76,7 @@
         "(alexa ){0,1}shut (the fuck ){0,1}up",
         "switch back to alexa"
       ],
-      "min_precision": 0.99,
+      "min_precision": 0.992,
       "punctuation": [
         ".",
         "!"
@@ -186,6 +186,11 @@
       "phrases": [
         "(alexa ){0,1}sing me a ((happy)|(sad)|(bedtime)) song",
         "(alexa ){0,1}can i change your name",
+	"(alexa ){0,1}can you sing( me){0,1} a song",
+	"(alexa ){0,1}play music",
+	"((could you )|(would you )){0,1}play music( for ((us)|(me))){0,1}",
+	"(alexa ){0,1}play ((country)|(rap)) music",
+	"(alexa ){0,1}(i ((need)|(want)) you to ){0,1}play ((me )|(us )){0,1}(some ){0,1}((country)|(reggae)|(modern)|(pop)|(soul)|(jazz)|(rap)|(rock)|(my)|(popular)|(my playlist) ){0,1}music",
         "(alexa ){0,1}volume ((up)|(down)|(nine)|(ten)|(eight)|(eleven)|(twenty)|(one)|(five))",
         "(alexa ){0,1}((brighten)|(dim)) the light",
         "(alexa ){0,1}((can you )|(i want you to )){0,1}stop ((the timer)|(playing music)|(the music)|(the country music))",
@@ -194,13 +199,13 @@
         "(alexa ){0,1}((can you )|(i want you to )){0,1}change (your ){0,1}((accent)|(voice))(  to ((indian)|(british)|(russian)|(hispanic)))",
         "(alexa ){0,1}((can you )|(i want you to )){0,1}turn ((on )|(up )){0,1}((the lights)|(light)|(the national anthem)|(xbox)|(the sound)|(voice recognition)|(living room)|(the bed)|(desk lamp)|(bedroom)|(youtube)|(main lamp)|(the fence)|(tv)|(the table)|(the fan)|(whisper mode)|(unicorn life)|(octonauts)|(music)|(film)|(anything)|(volume))( please){0,1}",
         "(alexa ){0,1}((did)|(have)) you set ((alarm)|(timer))(for ((one)|(twelve)|(ten))( o'clock){0,1}){0,1}(for my ((daughter)|(husband)|(wife)|(son)|(me))){0,1}",
-        "(alexa ){0,1}((can you )|(i want you to )){0,1}((play)|(sing)|(put on)) ((hustle song)|(the song memories)|(song)|(music)|(music in the eighties)|(relaxing music)|(some songs)|(a sara jeronimo))",
-        "(alexa ){0,1}(can you ){0,1}(please ){0,1}put on ((a song)|(bowyo)|(moana)|(the song roxanne)|(the song)|(a song ballin)|(that movie)|(the film)|(a talk show)|(kayley kayley)|(carey chewy)|(ariana grande)|(the song i'm more to pandora)|(monster binder)|(black and yellow)|(strange)|(talk about the ninja kids)|(old town road)|(your mama on the phone)|(let me talk about)|(some stilettos with nothing else that's hot)|(march third i will be here)|(something)|(a barbie song)|(my favorite song)|(chat about chris youtube channel)|(top tunes)|(the song alita franklin)|(lights)|(echo)|(a song with n. b. a. youngboy)|(spice and discuss)|(youtube italy talk about music video)|(kevin hart)|(katy songs)|(spain trinidad and tobago)|(chad wild clay songs)|(the video)|(taylor talk)|(a funny movie)|(some porno)|(feel invincible)|(kidz bop kids)|(adult porn hub)|(the spark)|(music on spotify))( thank you){0,1}",
+        "(alexa ){0,1}((can you )|(i want you to )){0,1}((play)|(sing)|(put on)) ((hustle song)|(the song memories)|(song)|(music)|(music in the eighties)|(relaxing music)|(some songs)|(a sara jeronimo)|(country music)|(rap)|(rock music)|(some music)|(my music)|(my playlist))",
+        "(alexa ){0,1}(can you ){0,1}(please ){0,1}((put on)|(play)) ((a song)|(bowyo)|(moana)|(the song roxanne)|(the song)|(a song ballin)|(that movie)|(the film)|(a talk show)|(kayley kayley)|(carey chewy)|(ariana grande)|(the song i'm more to pandora)|(monster binder)|(black and yellow)|(strange)|(talk about the ninja kids)|(old town road)|(your mama on the phone)|(let me talk about)|(some stilettos with nothing else that's hot)|(march third i will be here)|(something)|(a barbie song)|(my favorite song)|(chat about chris youtube channel)|(top tunes)|(the song alita franklin)|(lights)|(echo)|(a song with n. b. a. youngboy)|(spice and discuss)|(youtube italy talk about music video)|(kevin hart)|(katy songs)|(spain trinidad and tobago)|(chad wild clay songs)|(the video)|(taylor talk)|(a funny movie)|(some porno)|(feel invincible)|(kidz bop kids)|(adult porn hub)|(the spark)|(music on spotify))( thank you){0,1}",
         "(alexa ){0,1}((can you )|(would you )){0,1}(please ){0,1}play (me ){0,1}(some ){0,1}((hindi)|(christmas)|(the andy griffith)){0,1}((music)|(song))",
         "(alexa ){0,1}set timer( for ((ten)|(nine)|(seven)|(fifteen)|(twenty)|(twenty five)|(thirty))){0,1}((minutes)|(hours)){0,1}",
         "(alexa ){0,1}set alarm( for ((ten)|(nine)|(seven)|(eight)|(six)|(five)|(four)|(three)|(two)|(one))){0,1}((a.m.)|(p.m.)){0,1}"
       ],
-      "min_precision": 0.97,
+      "min_precision": 0.0,
       "punctuation": [
         ".",
         "?"
@@ -446,7 +451,7 @@
         "what do you do",
         "who do you work( as){0,1}",
         "who are you working( as){0,1}",
-        "do you have a job",
+        "do you have a ((job)|(profession)|(occupation))",
         "what are you doing for (a ){0,1}living",
         "what do you do for (a ){0,1}living",
         "what is your ((job)|(work)|(task))"
@@ -547,6 +552,9 @@
       "can you talk to me",
       "alexa talk to me",
       "stop looking takes time and it helps to be creative",
+      "i do not want to go",
+      "i do not want to do this",
+      "(alexa ){0,1}(((oh)|(hey)) ){0,1}i ((do not)|(don't)) want to go( anywhere){0,1}( alexa){0,1}",
       "you should add rhinoceros sounds",
       "alexa die in a hole",
       "it is a good story",

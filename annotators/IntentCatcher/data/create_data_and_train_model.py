@@ -12,12 +12,16 @@ MODEL_NAME = 'linear_classifier'
 INTENT_DATA_PATH = './intent_data.json'
 MULTILABEL = True
 TRAIN_SIZE = 0.5
+DENSE_LAYERS = 1
+MODEL_NAME += '_h' + str(DENSE_LAYERS)
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "--intent_phrases_path", help="file with phrases for embedding generation", default='intent_phrases.json')
 parser.add_argument(
     '--model_path', help='path where to save the model', default='./models/' + MODEL_NAME + '.h5')
+parser.add_argument(
+    '--epochs', help='number of epochs to train model', default=7)
 # Whereas to calc metrics or not (default value = True)
 args = parser.parse_args()
 
@@ -47,7 +51,8 @@ def main():
     print("Creating  data...")
     print("Intent: number of original phrases")
     with tf.compat.v1.Session() as sess:
-        sess.run([tf.compat.v1.global_variables_initializer(), tf.compat.v1.tables_initializer()])
+        sess.run([tf.compat.v1.global_variables_initializer(),
+                  tf.compat.v1.tables_initializer()])
 
         for intent, data in intent_phrases.items():
             phrases = generate_phrases(data['phrases'], data['punctuation'])
@@ -61,7 +66,8 @@ def main():
         intent_embeddings_op = {intent: use(sentences['generated_phrases'])
                                 for intent, sentences in intent_data.items()}
 
-        random_preembedded = generate_phrases(random_phrases['phrases'], random_phrases['punctuation'])
+        random_preembedded = generate_phrases(
+            random_phrases['phrases'], random_phrases['punctuation'])
         random_embeddings_op = use(random_preembedded)
 
         intent_embeddings = sess.run(intent_embeddings_op)
@@ -85,6 +91,7 @@ def main():
         intents,
         random_embeddings,
         samples=20,
+        dense_layers=DENSE_LAYERS,
         epochs=80,
         train_size=TRAIN_SIZE,
         multilabel=MULTILABEL
@@ -95,13 +102,17 @@ def main():
     print(metrics)
 
     print("Training model...")
-    train_data = get_train_data(intent_data, intents, random_embeddings, multilabel=MULTILABEL)
-    model = get_linear_classifier(intents, use_metrics=False, multilabel=MULTILABEL)
+    train_data = get_train_data(
+        intent_data, intents, random_embeddings, multilabel=MULTILABEL
+    )
+    model = get_linear_classifier(
+        intents, dense_layers=DENSE_LAYERS, use_metrics=False, multilabel=MULTILABEL
+    )
 
     model.fit(
         x=train_data['X'],
         y=train_data['y'],
-        epochs=100
+        epochs=int(args.epochs)
     )
     print(f"Saving model to: {args.model_path}")
     model.save(args.model_path)
