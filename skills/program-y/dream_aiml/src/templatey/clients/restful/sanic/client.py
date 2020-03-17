@@ -93,6 +93,11 @@ class SanicRestBotClient(RestBotClient):
                 return response, status
             responses = []
             for user_sentences in request.json["sentences_batch"]:
+                if ("thanks" in user_sentences[-1] and len(user_sentences[-1].split()) >= 2) \
+                        or ("thank you" in user_sentences[-1] and len(user_sentences[-1].split()) >= 3):
+                    user_sentences[-1] = user_sentences[-1].replace("thanks.", "")
+                    user_sentences[-1] = user_sentences[-1].replace("thank you.", "")
+                    user_sentences[-1] = user_sentences[-1].strip()
                 userid = uuid.uuid4().hex
                 # if user said let's chat at beginning of a dialogue, that we should response with greeting
                 if remove_punct(user_sentences[0]).lower() == remove_punct("let's chat"):
@@ -109,7 +114,7 @@ class SanicRestBotClient(RestBotClient):
 
                 untagged_text, ssml_tagged_text = create_amazon_ssml_markup(answer)
 
-                if untagged_text == NULL_RESPONSE:
+                if NULL_RESPONSE.lower() in untagged_text.lower():
                     confidence = 0.2
                 elif "unknown" in untagged_text:
                     confidence = 0.0
@@ -121,12 +126,12 @@ class SanicRestBotClient(RestBotClient):
                 else:
                     confidence = 0
                 print(
-                    "user_id: {}; question: {}; answer: {}; ssml_tagged_text: {}".format(
-                        userid, question, untagged_text, ssml_tagged_text
+                    "user_id: {}; user_sentences: {}; curr_user_sentence: {} answer: {}; ssml_tagged_text: {}".format(
+                        userid, user_sentences, user_sentences[-1], untagged_text, ssml_tagged_text
                     )
                 )
 
-                responses.append([untagged_text, confidence, {"ssml_tagged_text": ssml_tagged_text}])
+                responses.append([untagged_text.strip(), confidence, {"ssml_tagged_text": ssml_tagged_text}])
             return responses, 200
         except Exception as excep:
             sentry_sdk.capture_exception(excep)

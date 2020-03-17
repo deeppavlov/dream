@@ -160,6 +160,8 @@ def respond():
                     if len(subjects) > 0:
                         response += " " + nounphrases_questions(subjects[0])
                     confidence = 0.5
+            elif "Here’s something I found" in response:
+                confidence = 0.7
             else:
                 sentences = sent_tokenize(response.replace(".,", "."))
                 response = " ".join(sentences[:2])
