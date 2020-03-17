@@ -109,7 +109,7 @@ class SanicRestBotClient(RestBotClient):
 
                 untagged_text, ssml_tagged_text = create_amazon_ssml_markup(answer)
 
-                if untagged_text == NULL_RESPONSE:
+                if NULL_RESPONSE.lower() in untagged_text.lower():
                     confidence = 0.2
                 elif "unknown" in untagged_text:
                     confidence = 0.0
@@ -126,7 +126,7 @@ class SanicRestBotClient(RestBotClient):
                     )
                 )
 
-                responses.append([untagged_text, confidence, {"ssml_tagged_text": ssml_tagged_text}])
+                responses.append([untagged_text.strip(), confidence, {"ssml_tagged_text": ssml_tagged_text}])
             return responses, 200
         except Exception as excep:
             sentry_sdk.capture_exception(excep)

@@ -28,7 +28,7 @@ with open("topic_words.json", "r") as f:
 
 for topic in TOPIC_PATTERNS:
     words = TOPIC_PATTERNS[topic]
-    pattern = "(" + "|".join(words) + ")"
+    pattern = "(" + "|".join([r'\b%s\b' % word for word in words]) + ")"
     TOPIC_PATTERNS[topic] = re.compile(pattern)
 
 with open("small_talk_scripts.json", "r") as f:
@@ -72,10 +72,13 @@ def respond():
             script_step = 0
             script = []
 
-        _, new_user_topic, _ = pickup_topic_and_start_small_talk(dialog)
+        _, new_user_topic, new_conf = pickup_topic_and_start_small_talk(dialog)
         logger.info(f"From current user utterance: `{dialog['human_utterances'][-1]['text']}` "
                     f"extracted topic: `{new_user_topic}`.")
-        if len(topic) > 0 and len(new_user_topic) == 0 and len(script) > 0:
+        if len(topic) > 0 and len(script) > 0 and \
+                (len(new_user_topic) == 0 or new_conf == FOUND_WORD_START_CONFIDENCE):
+            # we continue dialog if new topic was not found or was found just as the key word in user sentence.
+            # because we can start a conversation picking up topic with key word with small proba
             response, confidence, attr = get_next_response_on_topic(
                 topic, dialog["human_utterances"][-1], curr_step=script_step + 1, topic_script=script)
             if response != "":
@@ -176,7 +179,11 @@ def offer_topic(dialog):
         string topic out of `TOPIC_WORDS.keys()`
     """
     used_topics = dialog["human"]["attributes"].get("small_talk_topics", [])
-    topic = choice(list(set(TOPIC_PATTERNS.keys()).difference(set(used_topics))))
+    topic_set = set(TOPIC_PATTERNS.keys()).difference(set(used_topics)).difference({"sex", "me", "politics"})
+    if len(topic_set) > 0:
+        topic = choice(list())
+    else:
+        topic = ""
     return topic
 
 
@@ -245,7 +252,7 @@ def pickup_topic_and_start_small_talk(dialog):
     what_to_talk_about = re.compile(r"what do you (want to|wanna) (talk|chat|have a conversation) about")
     switch_topic = re.compile(r"would you like to switch the topic")
     tell_me_about = re.compile(
-        r"(tell me( something| anything)?( about)?|ask me( something| anything)?( about)?)")
+        r"(tell me( something| anything)? about|ask me( something| anything)?( about)?)")
     lets_talk_about = re.compile(
         r"(talk|chat|(have|hold|carry|turn on)( a | the | some | )?conversation|have( a | the | some | )?discussion"
         r"|converse|discuss|speak|say|talk)")
