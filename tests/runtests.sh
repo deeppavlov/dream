@@ -55,7 +55,7 @@ function dockercompose_cmd() {
     if [[ "$DEVICE" == "cpu" ]]; then
         DOCKER_COMPOSE_CMD="docker-compose -f docker-compose.yml -f dev.yml -f cpu.yml -p test"
     else
-        DOCKER_COMPOSE_CMD="docker-compose -f docker-compose.yml -f dev.yml -p test"
+        DOCKER_COMPOSE_CMD="docker-compose -f docker-compose.yml -f dev.yml -f jenkins_cpu.yml -p test"
     fi
     eval '$DOCKER_COMPOSE_CMD "$@"'
     if [[ $? != 0 ]]; then
