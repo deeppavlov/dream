@@ -1,0 +1,6 @@
+version: '3.7'
+services:
+  comet_conceptnet:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
