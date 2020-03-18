@@ -185,13 +185,18 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
     fi
 
     if container_is_started intent_catcher; then
-        echo "Run tests for comet"
+        echo "Run tests for intent_catcher"
         dockercompose_cmd exec -T -u $(id -u) intent_catcher python test.py
     fi
 
-    if container_is_started comet; then
-        echo "Run tests for comet"
-        dockercompose_cmd exec -T -u $(id -u) comet python /comet/test.py
+    if container_is_started comet_atomic; then
+        echo "Run tests for comet_atomic"
+        dockercompose_cmd exec -T -u $(id -u) comet_atomic python /comet/test_atomic.py
+    fi
+
+    if container_is_started comet_conceptnet; then
+        echo "Run tests for comet_conceptnet"
+        dockercompose_cmd exec -T -u $(id -u) comet_conceptnet python /comet/test_conceptnet.py
     fi
 
     if container_is_started reddit_ner_skill; then

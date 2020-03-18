@@ -4,7 +4,7 @@ import requests
 def main():
     url = 'http://0.0.0.0:8053/comet'
 
-    request_data = {"input_event": "PersonX went to a mall", "category": "xWant"}
+    request_data = {"input": "PersonX went to a mall", "category": "xWant"}
 
     result = requests.post(url, json=request_data).json()
 

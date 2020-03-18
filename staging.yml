@@ -180,8 +180,12 @@ services:
     image: ${DOCKER_REGISTRY}/news_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
-  comet:
-    image: ${DOCKER_REGISTRY}/comet:${VERSION}
+  comet_atomic:
+    image: ${DOCKER_REGISTRY}/comet_atomic:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  comet_conceptnet:
+    image: ${DOCKER_REGISTRY}/comet_conceptnet:${VERSION}
     env_file:
       - ${ENV_FILE}
   dummy_skill_dialog:

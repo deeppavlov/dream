@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 nlp = spacy.load("en_core_web_sm")
 
-COMET_SERVICE_URL = "http://comet:8053/comet"
+COMET_SERVICE_URL = "http://comet_atomic:8053/comet"
 DEFAULT_CONFIDENCE = 0.98
 CONTINUE_USER_TOPIC_CONFIDENCE = 0.7
 DEFAULT_STARTING_CONFIDENCE = 0.6
@@ -247,7 +247,7 @@ def get_comet(topic, relation, TOPICS):
     else:
         # send request to COMeT service on `topic & relation`
         try:
-            comet_result = custom_request(COMET_SERVICE_URL, {"input_event": f"Person {topic}.",
+            comet_result = custom_request(COMET_SERVICE_URL, {"input": f"Person {topic}.",
                                                               "category": relation}, 1.5)
         except (requests.ConnectTimeout, requests.ReadTimeout) as e:
             logger.error("COMeT result Timeout")
