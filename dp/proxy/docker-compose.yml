@@ -52,13 +52,17 @@ services:
     tty: true
     ports:
     - 8021:8021
-  comet:
+  comet_atomic:
     build:
       context: ../../annotators/COMeT/
+      args:
+        GRAPH: atomic
+        PRETRAINED_MODEL: http://lnsigo.mipt.ru/export/alexaprize_data/comet/atomic_pretrained_model.pickle
+        PREPROCESS_DATA: http://lnsigo.mipt.ru/export/alexaprize_data/comet/categories_oEffect%23oReact%23oWant%23xAttr%23xEffect%23xIntent%23xNeed%23xReact%23xWant-maxe1_17-maxe2_35-maxr_1.pickle
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8053
     volumes: []
     environment:
-      DEVICE: gpu_0
+        DEVICE: gpu_0
     runtime: nvidia
     ports:
       - 8053:8053

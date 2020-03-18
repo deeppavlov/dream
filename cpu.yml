@@ -15,7 +15,11 @@ services:
   emotion_classification:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  comet:
+  comet_atomic:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  comet_conceptnet:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""

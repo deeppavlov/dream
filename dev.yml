@@ -300,10 +300,14 @@ services:
       - "./skills/dummy_skill_dialog:/app"
     ports:
       - 8052:8052
-  comet:
+  comet_atomic:
     env_file: [.env.dev]
     ports:
       - 8053:8053
+  comet_conceptnet:
+    env_file: [.env.dev]
+    ports:
+      - 8065:8065
   meta_script_skill:
     env_file: [.env.dev]
     volumes:

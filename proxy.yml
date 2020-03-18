@@ -34,13 +34,13 @@ services:
     command: ["nginx", "-g", "daemon off;"]
     volumes:
     - ./dp/proxy/sentrewrite:/etc/nginx/conf.d
-  comet:
+  comet_atomic:
     build:
       context: ./
       dockerfile: dp/proxy/Dockerfile
     command: ["nginx", "-g", "daemon off;"]
     volumes:
-      - ./dp/proxy/comet:/etc/nginx/conf.d
+      - ./dp/proxy/comet_atomic:/etc/nginx/conf.d
   weather_skill:
     build:
       context: ./
