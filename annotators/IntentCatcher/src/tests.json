@@ -4,6 +4,10 @@
         "intent": "topic_switching"
     },
     {
+        "sentence": "stop talking about that",
+        "intent": "topic_switching"
+    },
+    {
         "sentence": "that's enough about this",
         "intent": "topic_switching"
     },
@@ -72,6 +76,14 @@
         "intent": "dont_understand"
     },
     {
+        "sentence": "because you are being confusing.",
+        "intent": "dont_understand"
+    },
+    {
+        "sentence": "i am confused.",
+        "intent": "dont_understand"
+    },
+    {
         "sentence": "Please tell me more",
         "intent": "tell_me_more"
     },
@@ -84,6 +96,10 @@
         "intent": "tell_me_more"
     },
     {
+        "sentence": "tell me more about her baby.",
+        "intent": "tell_me_more"
+    },
+    {
         "sentence": "what is the weather in new hampshire",
         "intent": "weather_forecast_intent"
     },
@@ -93,6 +109,10 @@
     },
     {
         "sentence": "so whats your name then",
+        "intent": "what_is_your_name"
+    },
+    {
+        "sentence": "let's introduce yourself",
         "intent": "what_is_your_name"
     },
     {
@@ -121,6 +141,10 @@
     },
     {
         "sentence": "who programmed you",
+        "intent": "who_made_you"
+    },
+    {
+        "sentence": "who's your bot master?",
         "intent": "who_made_you"
     },
     {
@@ -160,11 +184,31 @@
         "intent": "lets_chat_about"
     },
     {
+        "sentence": "let's talk about soccer",
+        "intent": "lets_chat_about"
+    },
+    {
         "sentence": "lets chat about movies",
         "intent": "lets_chat_about"
     },
     {
+        "sentence": "wanna talk about portal two?",
+        "intent": "lets_chat_about"
+    },
+    {
+        "sentence": "can we talk about dreams?",
+        "intent": "lets_chat_about"
+    },
+    {
         "sentence": "chat alexa",
+        "intent": null
+    },
+    {
+        "sentence": "let's rewind.",
+        "intent": null
+    },
+    {
+        "sentence": "i have a great day with that.",
         "intent": null
     },
     {
@@ -181,6 +225,10 @@
     },
     {
         "sentence": "thank you alexa",
+        "intent": null
+    },
+    {
+        "sentence": "loved it as a child.",
         "intent": null
     },
     {
@@ -220,6 +268,10 @@
       "intent": null
     },
     {
+      "sentence": "and in the darkness bind them",
+      "intent": null
+    },
+    {
         "sentence": "tell me a story",
         "intent": "tell_me_a_story"
     },
@@ -241,6 +293,10 @@
     },
     {
         "sentence": "remind me at 10 p.m. to clean the bedroom",
+        "intent": "cant_do"
+    },
+    {
+        "sentence": "volume seven.",
         "intent": "cant_do"
     },
     {

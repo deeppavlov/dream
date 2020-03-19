@@ -46,8 +46,11 @@ class Responder:
                     # current workaround is to use only one intent if several were detected
                     # and to append special token with intent_name
                 else:
-                    self.logger.error(f'responder for intent_name: {intent_name} not found')
-
+                    # skip
+                    # self.logger.error(f'responder for intent_name: {intent_name} not found')
+                    continue
+        if response == "":
+            self.logger.error(f"response is empty for intents: {utt['annotations'].get('intent_catcher', {}).items()}")
         return response, confidence
 
     def load_responses(self, intent_responses_filename: str):
