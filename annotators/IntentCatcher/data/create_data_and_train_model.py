@@ -92,7 +92,7 @@ def main():
         random_embeddings,
         samples=20,
         dense_layers=DENSE_LAYERS,
-        epochs=80,
+        epochs=int(args.epochs),
         train_size=TRAIN_SIZE,
         multilabel=MULTILABEL
     )
