@@ -3,7 +3,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-LAST_N_TURNS = 5  # number of turns to consider in annotator/skill.
+LAST_N_TURNS = 15  # number of turns to consider in annotator/skill.
 
 
 def alice_formatter_dialog(dialog: Dict) -> Dict:

@@ -159,7 +159,7 @@ class RuleBasedSkillSelectorConnector:
         about_news = (self.news_cobot_topics & cobot_topics) or re.search(
             news_re_expr, reply
         )
-        about_coronavirus = all([j in dialog['utterances'][-1]['text'] for j in ['corona', 'virus']])
+        about_virus = 'virus' in dialog['utterances'][-1]['text']
         emotions = dialog['utterances'][-1]['annotations']['emotion_classification']['text']
         if "/new_persona" in dialog["utterances"][-1]["text"]:
             # process /new_persona command
@@ -206,8 +206,10 @@ class RuleBasedSkillSelectorConnector:
             if about_movies or prev_active_skill == 'movie_skill':
                 skills_for_uttr.append("movie_skill")
                 skills_for_uttr.append("movie_tfidf_retrieval")
-            if about_coronavirus or prev_active_skill == 'coronavirus_skill':
+            if about_virus or prev_active_skill == 'coronavirus_skill':
                 skills_for_uttr.append("coronavirus_skill")
+                #  if 'convert_reddit' in skills_for_uttr:
+                #    skills_for_uttr.remove('convert_reddit')
             if about_music and len(dialog["utterances"]) > 2:
                 skills_for_uttr.append("music_tfidf_retrieval")
 
