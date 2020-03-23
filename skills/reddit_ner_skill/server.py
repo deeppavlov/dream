@@ -91,7 +91,8 @@ def respond():
     logger.info(f"contuniations: {continuations}")
 
     responses = [linker.construct_phrase(r, ec, c) for r, ec, c in zip(reactions, ner, continuations)]
-    responses = [(phrase, 0.0 if phrase == "" else 0.95, {'can_continue': status}) for phrase, status in responses]
+    responses = [(phrase.strip(), 0.0 if len(phrase.strip()) == 0 else 0.90, {'can_continue': status})
+                 for phrase, status in responses]
     logger.info(f"Responses: {responses}")
 
     return jsonify(responses)
