@@ -152,14 +152,14 @@ def respond():
                     if len(subjects) > 0:
                         # cobotqa answer `Here's a fact about Hollywood. Hollywood blablabla.`
                         response += " " + nounphrases_questions(subjects[0])
-                    confidence = 0.5
+                    confidence = 0.7
                 else:
                     response = " ".join(sentences[:1])
                     # check this is requested `fact about NP/NE`
                     subjects = re.findall(r"fact about ([a-zA-Z ]+)", questions[i].lower())
                     if len(subjects) > 0:
                         response += " " + nounphrases_questions(subjects[0])
-                    confidence = 0.5
+                    confidence = 0.7
             elif "Here’s something I found" in response:
                 confidence = 0.7
             elif "is usually defined as" in response:
