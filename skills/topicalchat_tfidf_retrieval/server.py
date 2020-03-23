@@ -49,7 +49,7 @@ donotknow_answers = [
     "I didn’t get that.",
 ]
 donotknow_answers = [preprocess(j) for j in donotknow_answers]
-todel_userphrases = ["yes", "wow", "let's talk about.", "yeah", "politics"]
+todel_userphrases = ["yes", "wow", "let's talk about.", "yeah", "politics", "hi", "no"]
 
 # banned words are sensitive to tokenization in process.py:preprocess
 banned_words = [
