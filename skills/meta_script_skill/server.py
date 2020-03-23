@@ -49,7 +49,7 @@ def get_not_used_topic(used_topics, dialog):
         and
         True is topic was extracted from user utterance and False otherwise
     """
-    TOPICS_PROB = 0.5
+    TOPICS_PROB = 0.3
     verb_noun_phrases = extract_verb_noun_phrases(dialog["utterances"][-1]["text"])
 
     if len(dialog['utterances']) < 3 or len(verb_noun_phrases) == 0:
@@ -197,25 +197,25 @@ def respond():
 
             if curr_meta_script_status == "starting":
                 response, confidence, attr = get_starting_phrase(dialog, topic, attr)
-                if (len(dialog["human_utterances"]) > 0 and "?" in dialog["human_utterances"][-1]["text"]) \
+                if if_to_start_script(dialog) or topic_switch_detected:
+                    confidence = MATCHED_DIALOG_BEGIN_CONFIDENCE
+                elif (len(dialog["human_utterances"]) > 0 and "?" in dialog["human_utterances"][-1]["text"]) \
                         or user_wants_to_talk_about_his_topic(dialog):
                     # if some question was asked by user, do not start script at all!
                     confidence = 0.
                     response = ""
-                elif if_to_start_script(dialog) or topic_switch_detected:
-                    confidence = MATCHED_DIALOG_BEGIN_CONFIDENCE
                 elif len(dialog["utterances"]) <= 20:
                     # if this is a beginning of the dialog, assign higher confidence to start the script
                     confidence = DEFAULT_DIALOG_BEGIN_CONFIDENCE
                 else:
                     confidence = DEFAULT_STARTING_CONFIDENCE
             else:
+                # there were some script active before in the last several utterances
                 if len(dialog["human_utterances"]) > 0 and "?" in dialog["human_utterances"][-1]["text"]:
                     logger.info("Question by user was detected. Don't continue the script on this turn.")
                     response, confidence = "", 0.0
-                    # just for now let's try not to finish the script
-                    # attr["meta_script_status"] = FINISHED_SCRIPT
-                # there were some script active before in the last several utterances
+                    # we do not finish script on this step but hope that some other script will be able
+                    # to answer user's question
                 elif topic_switch_detected or lets_chat_about_detected:
                     logger.info("Topic switching was detected. Finish script.")
                     response, confidence = FINISHED_SCRIPT_RESPONSE, 0.5
