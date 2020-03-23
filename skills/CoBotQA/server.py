@@ -162,6 +162,8 @@ def respond():
                     confidence = 0.5
             elif "Here’s something I found" in response:
                 confidence = 0.7
+            elif "is usually defined as" in response:
+                confidence = 0.3
             else:
                 sentences = sent_tokenize(response.replace(".,", "."))
                 response = " ".join(sentences[:2])

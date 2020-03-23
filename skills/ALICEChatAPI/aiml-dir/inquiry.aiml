@@ -129,12 +129,6 @@
 <category><pattern>LOCATION INQUIRY *</pattern>
 <template>Are you still located in <star/>?</template>
 </category>
-<category><pattern>MOTHER INQUIRY UNKNOWN</pattern>
-<template>Tell me about your mother.</template>
-</category>
-<category><pattern>MOTHER INQUIRY OM</pattern>
-<template>Tell me about your mother.</template>
-</category>
 <category><pattern>MOTHER INQUIRY *</pattern>
 <template>Tell me more about your family.</template>
 </category>

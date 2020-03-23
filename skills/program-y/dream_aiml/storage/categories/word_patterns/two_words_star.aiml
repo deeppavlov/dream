@@ -311,11 +311,11 @@
             </random>
         </template>
     </category>
-    <category>
+    <!-- <category>
         <pattern>LET ME *</pattern>
         <template>Go ahead, try to *.
         </template>
-    </category>
+    </category> -->
 <!--    <category>-->
 <!--        <pattern>SHOW ME *</pattern>-->
 <!--        <template>Where do you want me to show you?</template>-->
