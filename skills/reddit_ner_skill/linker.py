@@ -77,11 +77,11 @@ class Linker:
         """
         return random.choice(self.phrases['reaction_phrases'][user_reaction])
 
-    def _status(self, user_reaction, entity):
+    def _status(self, user_reaction, entity, continuation):
         """
         Calculate status (can/must/cannot/etc.)
         """
-        if user_reaction == 'negative' or user_reaction == 'no':
+        if user_reaction == 'negative' or user_reaction == 'no' and continuation:
             return self.status_constants['cannot']
         candidates = self._get_related_entities(entity)
         next_entity, _, _ = self._choose_entity_and_post(candidates)
@@ -198,9 +198,9 @@ class Linker:
         phrase = ""
         user_reaction = self._get_reaction(reaction)
         self.logger.info(f"user_reaction: {user_reaction}")
-        if not continuation:  # Start of the dialog
-            self._reinit()
+        if not continuation or len(self.prev_entities) == 0:  # Start of the dialog
             self.logger.info("Dialog start")
+            self._reinit()
             prev_entity = None
             entity = self._get_entity_from_user(entity_candidates)
             post = self._get_post(entity)
@@ -214,11 +214,6 @@ class Linker:
         else:
             self.logger.info("Dialog continuation")
             phrase += self._react_to_user(user_reaction)  # React to user phrase
-            if len(self.prev_entities) == 0:
-                self.logger.error("Dialog continuation but no previous entities found")
-                phrase = ""
-                status = self.status_constants['cannot']
-                return phrase, status
             prev_entity = self.prev_entities[-1]
             candidates = self._get_related_entities(prev_entity)  # Get all related entities
             entity, link, post = self._choose_entity_and_post(candidates)  # Choose entity and post and connection
@@ -233,6 +228,6 @@ class Linker:
         self.logger.info(f"Entity:{entity}")
         self.logger.info(f"Post:{post}")
         self._add(entity, post)
-        status = self._status(user_reaction, entity)
+        status = self._status(user_reaction, entity, continuation)
         phrase = self._print_phrase(phrase, prev_entity, entity, post)
         return phrase, status
