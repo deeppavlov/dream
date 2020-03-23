@@ -246,12 +246,17 @@
   ],
   "video games": [
     "Do you like video games? Why or why not?",
-    "How much time per week do you spend playing video games?",
-    "What is your favorite all-time game?",
-    "Cool! Why was it great?",
-    "These days, some gamers make a living from playing video games. Do you think professional gamers are similar to the athletes in other sports?",
-    "I agree with you. Some people say that video games are a waste of time. Do you agree or disagree?",
-    "Thanks for sharing!"
+    {
+      "yes": [
+        "How much time per week do you spend playing video games?",
+        "What is your favorite all-time game?",
+        "Cool! Why was it great?",
+        "These days, some gamers make a living from playing video games. Do you think professional gamers are similar to the athletes in other sports?",
+        "I agree with you. Some people say that video games are a waste of time. Do you agree or disagree?",
+        "Thanks for sharing!"
+      ],
+      "no": []
+    }
   ],
   "weather": [
     "What's your favorite season and why?",

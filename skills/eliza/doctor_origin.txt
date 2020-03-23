@@ -197,7 +197,6 @@ key: i
   decomp: * i * @belief * you *
     reasmb: goto you
   decomp: * i am *
-    reasmb: Is it because you are (2) that you came to me ?
     reasmb: How long have you been (2) ?
     reasmb: Do you believe it is normal to be (2) ?
     reasmb: Do you enjoy being (2) ?
