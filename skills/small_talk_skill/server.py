@@ -160,6 +160,13 @@ def get_next_response_on_topic(topic, curr_user_uttr, curr_step=0, topic_script=
         confidence = 0.
 
     if isinstance(next_bot_uttr, list):
+        if len(next_bot_uttr) == 0:
+            logger.info("Script was finished.")
+            attr["can_continue"] = CAN_NOT_CONTINUE
+            attr["small_talk_topic"] = ""
+            attr["small_talk_step"] = 0
+            attr["small_talk_script"] = []
+            return "", 0.0, attr
         attr["small_talk_script"] = topic_script[:curr_step] + next_bot_uttr + topic_script[curr_step + 1:]
         next_bot_uttr = attr["small_talk_script"][curr_step]
     else:
