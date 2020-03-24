@@ -244,8 +244,8 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                 # return it with probability 0.15
                 if uniform(0, 1.) < 0.15:
                     curr_score = very_big_score
-            elif confidences[i] == 0.9:
-                # if meta_script returns starting phrase in the beginning of dialog (conf 0.9),
+            elif 0.98 > confidences[i] > 0.7:
+                # if meta_script returns starting phrase in the beginning of dialog (conf 0.8),
                 # return it with probability 0.1
                 r = uniform(0, 1.)
                 if r < 0.1:
