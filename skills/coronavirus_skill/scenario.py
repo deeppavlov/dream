@@ -68,7 +68,7 @@ def is_no(annotated_phrase):
 
 
 def about_virus(annotated_phrase):
-    return 'virus' in annotated_phrase['text']
+    return any([j in annotated_phrase['text'].lower() for j in ['virus', 'covid']])
 
 
 def about_coronavirus(annotated_phrase):
