@@ -214,7 +214,7 @@ def main_test():
     for sent in sentences:
         data = {"sentences_batch": [[sent]]}
         response = requests.post(url, json=data).json()[0][0]
-        assert "Alexa, stop,".lower().strip() in response.lower().strip(), print(f"User: {sent}. Response: {response}")
+        assert "stop".lower().strip() in response.lower().strip(), print(f"User: {sent}. Response: {response}")
 
 
 if __name__ == "__main__":
