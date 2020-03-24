@@ -3,6 +3,8 @@
 import json
 import requests
 import random
+import sentry_sdk
+from json import JSONDecodeError
 from itertools import chain
 
 
@@ -131,12 +133,26 @@ class Linker:
         mention = {'text': entity['text']}
         # Change class constrains in case of poor resolution perfomance
         classConstraints = self.classConstraintsTypes.get(entity['type'], [])
-        result = requests.request(
-            url=self.entity_resolution_url,
-            headers=headers,
-            data=json.dumps({'mention': mention, 'classConstraints': classConstraints}),
-            method='POST'
-        ).json()['resolvedEntities']
+        try:
+            resp = requests.request(
+                url=self.entity_resolution_url,
+                headers=headers,
+                data=json.dumps({'mention': mention, 'classConstraints': classConstraints}),
+                method='POST',
+                timeout=1)
+        except (requests.ConnectTimeout, requests.ReadTimeout) as e:
+            sentry_sdk.capture_exception(e)
+            self.logger.exception("Entity Linker service Timeout")
+            resp = requests.Response()
+            resp.status_code = 504
+        if not resp.ok:
+            self.logger.error(f"Request error: status_code={resp.status_code} while resolving entity.")
+            return None
+        try:
+            result = resp.json()['resolvedEntities']
+        except JSONDecodeError:
+            self.logger.error("JSONDecodeError while resolving entity.")
+            return None
         if len(result) > 0:
             return result[0]['value']
         else:
