@@ -20,8 +20,7 @@ class RuleBasedSkillSelectorConnector:
         "Entertainment_Movies",
         "Sports",
         "Entertainment_Music",
-        "Entertainment_General",
-        "Phatic",
+        "Entertainment_General"
     }
     movie_cobot_topics = {
         "Movies_TV",
