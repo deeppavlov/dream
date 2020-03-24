@@ -64,24 +64,20 @@ def replace_with_annotated_utterances(dialog, mode="punct_sent"):
     if mode == "punct_sent":
         for utt in dialog['utterances']:
             utt['text'] = utt['annotations']['sentseg']['punct_sent']
-        j = 0
-        for i, utt in enumerate(dialog['utterances']):
-            if utt['user']['user_type'] == 'human':
-                dialog['human_utterances'][j]["text"] = utt['annotations']['sentseg']['punct_sent']
-                j += 1
+        for utt in dialog['human_utterances']:
+            utt['text'] = utt['annotations']['sentseg']['punct_sent']
     elif mode == "segments":
-        for i, utt in enumerate(dialog['utterances']):
+        for utt in dialog['utterances']:
             utt['text'] = utt['annotations']['sentseg']['segments']
-        j = 0
-        for i, utt in enumerate(dialog['utterances']):
-            if utt['user']['user_type'] == 'human':
-                dialog['human_utterances'][j]["text"] = utt['annotations']['sentseg']['segments']
-                j += 1
-        j = 0
-        for i, utt in enumerate(dialog['utterances']):
-            if utt['user']['user_type'] == 'bot':
-                dialog['bot_utterances'][j]["text"] = utt['annotations']['sentseg']['segments']
-                j += 1
+        for utt in dialog['human_utterances']:
+            utt['text'] = utt['annotations']['sentseg']['segments']
+        for utt in dialog['bot_utterances']:
+            utt['text'] = utt['annotations']['sentseg']['segments']
+    elif mode == "modified_sents":
+        for utt in dialog['utterances']:
+            utt['text'] = utt['annotations']['sentrewrite']['modified_sents'][-1]
+        for utt in dialog['human_utterances']:
+            utt['text'] = utt['annotations']['sentrewrite']['modified_sents'][-1]
     return dialog
 
 
@@ -268,10 +264,7 @@ def utt_sentseg_punct_dialog(dialog: Dict):
     dummy_skill_formatter, base_response_selector_formatter
     '''
     dialog = get_last_n_turns(dialog)
-    for utt in dialog['utterances']:
-        utt['text'] = utt['annotations']['sentseg']['punct_sent']
-    for i, utt in enumerate(dialog['human_utterances']):
-        utt['text'] = dialog["utterances"][i * 2]['annotations']['sentseg']['punct_sent']
+    dialog = replace_with_annotated_utterances(dialog, mode="punct_sent")
     return [{'dialogs': [dialog]}]
 
 
@@ -279,20 +272,14 @@ def full_utt_sentseg_punct_dialog(dialog: Dict):
     '''
     Used ONLY by: base_response_selector_formatter
     '''
-    for utt in dialog['utterances']:
-        utt['text'] = utt['annotations']['sentseg']['punct_sent']
-    for i, utt in enumerate(dialog['human_utterances']):
-        utt['text'] = dialog["utterances"][i * 2]['annotations']['sentseg']['punct_sent']
+    dialog = replace_with_annotated_utterances(dialog, mode="punct_sent")
     return [{'dialogs': [dialog]}]
 
 
 def utt_sentrewrite_modified_last_dialog(dialog: Dict):
     # Used by: book_skill_formatter; misheard_asr_formatter, cobot_qa_formatter
     dialog = get_last_n_turns(dialog)
-    for utt in dialog['utterances']:
-        utt['text'] = utt['annotations']['sentrewrite']['modified_sents'][-1]
-    for i, utt in enumerate(dialog['human_utterances']):
-        utt['text'] = dialog["utterances"][i * 2]['annotations']['sentrewrite']['modified_sents'][-1]
+    dialog = replace_with_annotated_utterances(dialog, mode="modified_sents")
     return [{'dialogs': [dialog]}]
 
 
