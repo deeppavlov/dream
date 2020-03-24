@@ -130,12 +130,12 @@ class DummySkillConnector:
             if len(questions_same_nps) > 0:
                 logger.info("Found special nounphrases for questions. Return question with the same nounphrase.")
                 cands += [choice(questions_same_nps)]
-                confs += [0.5]
+                confs += [0.6]
                 attrs += [{"type": "nounphrase_question"}]
             else:
                 logger.info("No special nounphrases for questions. Return question of the same topic.")
                 cands += [questions_generator.get_random_text(curr_topics)]
-                confs += [0.5]
+                confs += [0.55]
                 attrs += [{"type": "topic_question"}]
 
             facts_same_nps = []
@@ -146,7 +146,7 @@ class DummySkillConnector:
             if len(facts_same_nps) > 0:
                 logger.info("Found special nounphrases for facts. Return fact with the same nounphrase.")
                 cands += [choice(facts_same_nps)]
-                confs += [0.5]
+                confs += [0.6]
                 attrs += [{"type": "nounphrase_fact"}]
             '''
             else:
