@@ -197,7 +197,11 @@ def respond():
 
             if curr_meta_script_status == "starting":
                 response, confidence, attr = get_starting_phrase(dialog, topic, attr)
-                if if_to_start_script(dialog) or topic_switch_detected:
+                if len(dialog["utterances"]) <= 7 and not is_custom_topic(topic):
+                    # in first 7 uttrs can start script only on user's topic
+                    logger.info("Not user topic. Do not start script.")
+                    response, confidence = "", 0.
+                elif if_to_start_script(dialog) or topic_switch_detected:
                     confidence = MATCHED_DIALOG_BEGIN_CONFIDENCE
                 elif (len(dialog["human_utterances"]) > 0 and "?" in dialog["human_utterances"][-1]["text"]) \
                         or user_wants_to_talk_about_his_topic(dialog):
