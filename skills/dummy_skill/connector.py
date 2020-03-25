@@ -45,7 +45,7 @@ np_ignore_list = ["'s", 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselv
                   "watching", "thought", "thoughts", "man", "men", "listening", "big fan", "fans", "rapping", "reading",
                   "going", "thing", "hanging", "best thing"]
 
-np_ignore_expr = re.compile(r'\b(' + '|'.join(np_ignore_list) + r')\b')
+np_ignore_expr = re.compile("(" + "|".join([r'\b%s\b' % word for word in np_ignore_list]) + ")")
 rm_spaces_expr = re.compile(r'\s\s+')
 
 donotknow_answers = [
@@ -93,7 +93,7 @@ class RandomTopicResponder:
 
 
 questions_generator = RandomTopicResponder("skills/dummy_skill/questions_with_topics.csv", 'topic', 'question')
-facts_generator = RandomTopicResponder("skills/dummy_skill/facts_with_topics.csv", 'cobot_topic', 'title')
+facts_generator = RandomTopicResponder("skills/dummy_skill/facts_with_topics.csv", 'topic', 'fact')
 
 
 class DummySkillConnector:
