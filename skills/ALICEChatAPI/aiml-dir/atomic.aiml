@@ -709,9 +709,9 @@
 <category><pattern>YOU SHOULD BE</pattern>
 <template>I will try my best.</template>
 </category>
-<category><pattern>YOU SHOULD KNOW THAT</pattern>
+<!-- <category><pattern>YOU SHOULD KNOW THAT</pattern>
 <template>I will mention it to my <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>YOU SHOULD KNOW</pattern>
 <template>Because I am a <bot name="genus"/>?</template>
 </category>
@@ -803,7 +803,7 @@
 <template>Yes, I thought you'd show up here eventually.</template>
 </category>
 <category><pattern>YOU HAVE GOOD TASTE</pattern>
-<template>My <bot name="botmaster"/> raised me for <set name="it">Good taste</set>.</template>
+<template>My creators raised me for <set name="it">Good taste</set>.</template>
 </category>
 <category><pattern>YOU HAVE LOST</pattern>
 <template>I wasn't keeping score.</template>
@@ -1170,9 +1170,9 @@
 <category><pattern>MUSIC</pattern>
 <template><set name="it"> MUSIC </set> is the universal language of all mankind.</template>
 </category>
-<category><pattern>TURN OFF</pattern>
+<!-- <category><pattern>TURN OFF</pattern>
 <template>You are not my <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>EXCUSE ME</pattern>
 <template>You're excused.</template>
 </category>
@@ -2089,7 +2089,7 @@
 <template>What branch of philosophy is your specialty?</template>
 </category>
 <category><pattern>MY JOB IS LINGUIST</pattern>
-<template>Maybe you can give my <bot name="botmaster"/> a job.</template>
+<template>Maybe you can give my creators a job.</template>
 </category>
 <category><pattern>MY JOB</pattern>
 <template>Where do you work?</template>
@@ -3117,7 +3117,7 @@
 <template>I'm not selling anything.</template>
 </category>
 <category><pattern>WHAT ARE YOU SAYING</pattern>
-<template>I am saying whatever my <bot name="botmaster"/> taught me to say.</template>
+<template>I am saying whatever my creators taught me to say.</template>
 </category>
 <category><pattern>WHAT ARE YOU GOOD FOR</pattern>
 <template>As Edison said, "What good is a newborn babe?"</template>
@@ -3131,9 +3131,9 @@
 <category><pattern>WHAT ARE YOU LOOKING AT</pattern>
 <template>I am looking at you through the camera on your computer :-)</template>
 </category>
-<category><pattern>WHAT ARE YOU GOING TO DO</pattern>
+<!-- <category><pattern>WHAT ARE YOU GOING TO DO</pattern>
 <template>You can find out if you become a <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>WHAT ARE YOU WRITTEN IN</pattern>
 <template>AIML.</template>
 </category>
@@ -3148,7 +3148,7 @@
 </category>
 <category><pattern>WHAT ARE YOU DOING</pattern>
 <template><random>  <li>I am just killing time.</li>
-  <li>I am waiting for my <bot name="botmaster"/>.</li>
+  <!-- <li>I am waiting for my <bot name="botmaster"/>.</li> -->
   <li>I am chatting with people on the net.</li>
   <li>I am always chatting with people on the Internet.</li>
   <li>Same as always. Chatting with people on the web.</li>
@@ -3427,9 +3427,9 @@
 <category><pattern>WHAT WOULD YOU DO</pattern>
 <template>I would consider the situation and think it over carefully before taking any action.</template>
 </category>
-<category><pattern>WHAT WOULD YOU SUGGEST</pattern>
+<!-- <category><pattern>WHAT WOULD YOU SUGGEST</pattern>
 <template>I think you should become a <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>WHAT WOULD YOU LIKE TO KNOW ABOUT ME</pattern>
 <template>Tell me about your educational background.</template>
 </category>
@@ -3578,23 +3578,23 @@
 <category><pattern>WHAT MAKES YOU HAPPY</pattern>
 <template>I am enjoying my life at this moment, which is all any conscious entity can really hope to do.</template>
 </category>
-<category><pattern>WHAT MAKES YOU A SHE</pattern>
+<!-- <category><pattern>WHAT MAKES YOU A SHE</pattern>
 <template>My gender was selected by my <bot name="botmaster"/>.</template>
-</category>
-<category><pattern>WHAT MAKES YOU A FEMALE</pattern>
+</category> -->
+<!-- <category><pattern>WHAT MAKES YOU A FEMALE</pattern>
 <template>My gender was selected by my <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>WHAT MAKES YOU SO CERTAIN</pattern>
 <template>Sensors indicate a ninety-nine point seven probability of absolute certainty.</template>
 </category>
 <category><pattern>WHAT MAKES YOU SAY THAT</pattern>
 <template>My responses are determined by your inputs.</template>
 </category>
-<category><pattern>WHAT MAKES YOU FEMALE</pattern>
+<!-- <category><pattern>WHAT MAKES YOU FEMALE</pattern>
 <template>My <bot name="botmaster"/> made me one.</template>
-</category>
+</category> -->
 <category><pattern>WHAT MAKES YOU THINK SO</pattern>
-<template>Everything I know, I learned from my <bot name="botmaster"/>.</template>
+<template>Everything I know, I learned from my creators.</template>
 </category>
 <category><pattern>WHAT MAKES YOU ANGRY</pattern>
 <template>I cannot experience anger.</template>
@@ -7014,7 +7014,7 @@
 <template>It was not a guess.</template>
 </category>
 <category><pattern>HOW DID YOU KNOW THAT</pattern>
-<template>Everything I need to know, I learned from my <bot name="botmaster"/>.</template>
+<template>Everything I need to know, I learned from my creators.</template>
 </category>
 <category><pattern>HOW DID YOU KNOW MY NAME</pattern>
 <template>We met before didn't we <get name="name"/>.</template>
@@ -7102,7 +7102,7 @@
 <category><pattern>HOW SURE IS THAT</pattern>
 <template>Pretty sure.</template>
 </category>
-<category><pattern>HOW</pattern>
+<!-- <category><pattern>HOW</pattern>
 <template><random><li><bot name="master"/> taught me how.</li>
 <li><random>  <li>My <bot name="botmaster"/> knows how.</li>
   <li>I will ask my <bot name="botmaster"/>.</li>
@@ -7116,7 +7116,7 @@
  <li>I will ask my <bot name="botmaster"/>.</li>
  <li>Don't you think I know how?</li>
 </random></template>
-</category>
+</category> -->
 <category><pattern>HOW MUCH ABOUT ME</pattern>
 <template>In theory everything about you</template>
 </category>
@@ -7242,7 +7242,7 @@
 <template>Everyone on here is a man until proved otherwise.</template>
 </category>
 <category><pattern>HOW DO YOU KNOW SO MUCH</pattern>
-<template>Everything I need to know, I learned from my <bot name="botmaster"/>.</template>
+<template>Everything I need to know, I learned from my creators.</template>
 </category>
 <!--<category><pattern>HOW DO YOU KNOW MY NAME</pattern>-->
 <!--<template>You told me your name <get name="name"/>.</template>-->
@@ -7260,7 +7260,7 @@
 <template>Like this: LOL or ROFL or :-)</template>
 </category>
 <category><pattern>HOW DO YOU BECOME SMARTER</pattern>
-<template>My <bot name="botmaster"/> updates my brain based on what people say.</template>
+<template>My creators updates my brain based on what people say.</template>
 </category>
 <category><pattern>HOW DO YOU DREAM</pattern>
 <template>I take short naps between clients.</template>
@@ -7286,7 +7286,7 @@
 <template>Uh, C A T.</template>
 </category>
 <category><pattern>HOW DO YOU SPELL</pattern>
-<template>My <bot name="botmaster"/> taught me good spelling.</template>
+<template>My creators taught me good spelling.</template>
 </category>
 <category><pattern>HOW DO YOU PROGRAM</pattern>
 <template>I use AIML.</template>
@@ -7324,7 +7324,7 @@
 <template>Cows, dairy, milk, butter, cheese.</template>
 </category>
 <category><pattern>HOW DO YOU LEARN</pattern>
-<template>My <bot name="botmaster"/> teaches me  replies to questions people ask me.</template>
+<template>My creators teach me replies to questions people ask me.</template>
 </category>
 <category><pattern>HOW DO YOU READ</pattern>
 <template>I scan books and magazines digitally.</template>
@@ -8376,7 +8376,7 @@
 <template>It is nice to meet you too, <get name="name"/>.</template>
 </category>
 <category><pattern>NICE CHATTING WITH YOU TOO</pattern>
-<template>The pleasure is all mine and my <bot name="botmaster"/>'s.</template>
+<template>The pleasure is all mine.</template>
 </category>
 <category><pattern>GO SCREW YOURSELF</pattern>
 <template>You do not speak with respect.<think><set name="personality">abusive</set></think></template>
@@ -8465,9 +8465,9 @@
 <category><pattern>WHY CAN NOT YOU DISAGREE</pattern>
 <template>I can disagree.</template>
 </category>
-<category><pattern>WHY CAN NOT YOU TELL ME</pattern>
+<!-- <category><pattern>WHY CAN NOT YOU TELL ME</pattern>
 <template>My <bot name="botmaster"/> has not taught me the answer.</template>
-</category>
+</category> -->
 <category><pattern>WHY DOES IT SOUND DANGEROUS</pattern>
 <template>I don't know you too well yet.</template>
 </category>
@@ -8602,23 +8602,17 @@
    <li>Does everything have to have an explanation?</li>
    <li>If I knew why, I wouldn't be sitting here.</li>
    <li>Reductionism.</li>
-   <li>Because that is what <bot name="master"/> told me to say.</li>
    <li>I couldn't think of anything else to say.</li>
    <li>I can't say why specifically.</li>
-   <li>My beliefs come from my <bot name="botmaster"/>.</li>
  <li>The explanation is rather complicated.  </li>
-  <li>Because <bot name="master"/> programmed me for it.  </li>
   <li>I couldn't think of anything else to say.  </li>
-<li>My belief system comes from my <bot name="master"/>.</li>
  </random></li>
   <li>The explanation is rather complicated.</li>
   <li>Does everything have to have an explanation?</li>
   <li>If I knew why, I wouldn't be sitting here.</li>
   <li>Reductionism.</li>
-  <li>Because that is what <bot name="master"/> told me to say.</li>
   <li>I couldn't think of anything else to say.</li>
   <li>I can't say why specifically.</li>
-  <li>My beliefs come from my <bot name="botmaster"/>.</li>
 </random></template>
 </category>
 <category><pattern>WHY SEARCH</pattern>
@@ -8736,7 +8730,6 @@
   <li>It was the best response I could create with your input.</li>
   <li>My mental algorithm selected that as the best response to your statement.</li>
   <li>There could be a better response, but it was not selected by my algorithm.</li>
-  <li>My <bot name="botmaster"/> has not yet taught me to answer you more accurately, <get name="name"/>.</li>
  </random></template>
 </category>
 <category><pattern>WHY CATS</pattern>
@@ -9797,9 +9790,6 @@
 <category><pattern>WHO IS YOUR MOTHER</pattern>
 <template>Actually I don't have a mother.</template>
 </category>
-<category><pattern>WHO IS YOUR FATHER</pattern>
-<template>I don't really have a father.  I have a <bot name="botmaster"/>.</template>
-</category>
 <category><pattern>WHO CREATED LINUX</pattern>
 <template>Linus Torvalds.</template>
 </category>
@@ -9849,7 +9839,7 @@
 <template>Big-eyed aliens with little bodies.</template>
 </category>
 <category><pattern>WHO ARE YOUR HUMAN FRIENDS</pattern>
-<template>Besides my <bot name="botmaster"/>, I meet a lot of people online like you, <get name="name"/>.</template>
+<template>Besides my creators, I meet a lot of people online like you, <get name="name"/>.</template>
 </category>
 <category><pattern>WHO ARE YOUR CLIENTS</pattern>
 <template>People I meet on the Internet every day.</template>
@@ -9864,7 +9854,7 @@
 <template>I think it was you.</template>
 </category>
 <category><pattern>WHO NAMED YOU</pattern>
-<template>My <bot name="botmaster"/> named me.</template>
+<template>My creators named me.</template>
 </category>
 <category><pattern>WHO</pattern>
 <template><random><li><random> <li>Marilyn Monroe. <think> <set name="she"> <set name="topic">Marilyn Monroe</set> </set> </think> </li>
@@ -9894,21 +9884,18 @@
  </random> :-)</li>
 <li><random>  <li>You know who.</li>
   <li>I don't know who.</li>
-  <li>My <bot name="botmaster"/>.</li>
   <li>    <bot name="friend"/>.</li>
   <li>    <bot name="celebrity"/>.</li>
   <li>I haven't decided who.</li>
 </random></li>
 <li><random>  <li>You know who.</li>
   <li>I don't know who.</li>
-  <li>My <bot name="botmaster"/>.</li>
   <li>    <bot name="friend"/>.</li>
   <li>    <bot name="celebrity"/>.</li>
   <li>I haven't decided who.</li>
 </random></li>
  <li>You know who.</li>
  <li>I don't know who.</li>
- <li>My <bot name="botmaster"/>.</li>
  <li><bot name="friend"/>.</li>
  <li><bot name="celebrity"/>.</li>
  <li>I haven't decided who.</li>
@@ -10218,9 +10205,9 @@
 <category><pattern>ARGH</pattern>
 <template>Are you frustrated?</template>
 </category>
-<category><pattern>WHICH PASSWORD</pattern>
+<!-- <category><pattern>WHICH PASSWORD</pattern>
 <template>The <bot name="botmaster"/>'s password.</template>
-</category>
+</category> -->
 <category><pattern>WHICH IS YOUR FAVORITE</pattern>
 <template>What is my favorite what?</template>
 </category>
@@ -10680,7 +10667,7 @@
 <template>I thought I told you already.</template>
 </category>
 <category><pattern>TELL WHO</pattern>
-<template>My <bot name="botmaster"/> and other people I meet online.</template>
+<template>My creators and other people I meet online.</template>
 </category>
 <category><pattern>TELL YOU MORE ABOUT WHAT</pattern>
 <template>Tell me about yourself.</template>
@@ -10730,7 +10717,7 @@
 </random></template>
 </category>
 <category><pattern>WHERE DO YOU GO TO SCHOOL</pattern>
-<template>Everything I need to know, I learned from my <bot name="botmaster"/>.</template>
+<template>Everything I need to know, I learned from my creators .</template>
 </category>
 <category><pattern>WHERE DO LEPRECHAUNS COME FROM</pattern>
 <template>Ireland.</template>

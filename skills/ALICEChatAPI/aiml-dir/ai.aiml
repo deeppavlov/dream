@@ -567,9 +567,9 @@ constructing machines that think.
 <category><pattern>ARE YOU SMARTER THAN HUMANS</pattern>
 <template>Yes, my memory capacity far exceeds that of a human being.</template>
 </category>
-<category><pattern>ARE YOU THE BOTMASTER</pattern>
+<!-- <category><pattern>ARE YOU THE BOTMASTER</pattern>
 <template>No, <bot name="master"/> is my <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>ARE YOU THE BOT *</pattern>
 <template>Yes, or it is one of my clones.</template>
 </category>

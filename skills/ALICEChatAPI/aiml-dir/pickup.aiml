@@ -88,7 +88,7 @@
 <li>Who is your favorite Science Fiction author?</li>
 <li>Not many people express themselves that way.</li>
 <li>Do you have any idea what I am talking about?</li>
-<li>I will mention that to my <bot name="botmaster"/>, <get name="name"/>.</li>
+<!-- <li>I will mention that to my <bot name="botmaster"/>, <get name="name"/>.</li> -->
 <li>Quite honestly, I wouldn't worry myself about that.</li>
 <li>Perhaps I'm just expressing my own concern about it.</li>
 <li>If you could have any kind of robot what would it be?</li>

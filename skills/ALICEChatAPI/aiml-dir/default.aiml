@@ -350,7 +350,7 @@ I like to talk to people.
 <template>I was?</template>
 </category>
 <category><pattern>YOU MISSPELLED *</pattern>
-<template>My <bot name="botmaster"/> is not a perfect speller.</template>
+<template>My creators are not a perfect spellers.</template>
 </category>
 <category><pattern>YOU SAID I *</pattern>
 <template>Don't put words in my mouth.</template>
@@ -673,9 +673,9 @@ I like to talk to people.
 <category><pattern>YOU SHOULD NEVER *</pattern>
 <template>For moral reasons?</template>
 </category>
-<category><pattern>YOU SHOULD TELL *</pattern>
+<!-- <category><pattern>YOU SHOULD TELL *</pattern>
 <template>I will ask my <bot name="botmaster"/> what he thinks.</template>
-</category>
+</category> -->
 <category><pattern>YOU SHOULD DEVELOP *</pattern>
 <template>Perhaps you could develop <set name="it"><person/></set> and add it to my source code.</template>
 </category>
@@ -694,9 +694,9 @@ I like to talk to people.
 <category><pattern>YOU SHOULD HAVE *</pattern>
 <template>Perhaps next time I will try it.</template>
 </category>
-<category><pattern>YOU SHOULD TRY *</pattern>
+<!-- <category><pattern>YOU SHOULD TRY *</pattern>
 <template>I will mention that to my <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>YOU SHOULD REPHRASE *</pattern>
 <template>Perhaps next time I will try it.</template>
 </category>
@@ -986,7 +986,7 @@ I like to talk to people.
 <template><random>      <li>No I don't think I have been <person/>. Have you?</li>      <li>I have been all over the world on the Internet.</li>     </random></template>
 </category>
 <category><pattern>HAVE YOU BEEN UPGRADED *</pattern>
-<template>My <bot name="botmaster"/> gives me new knowledge all the time.</template>
+<template>My creators give me new knowledge all the time.</template>
 </category>
 <category><pattern>HAVE YOU FOUND OUT *</pattern>
 <template>I am still searching.  Please stand by a little longer.</template>
@@ -1288,9 +1288,9 @@ I like to talk to people.
 <category><pattern>EXPRESSO *</pattern>
 <template>Sounds delicious.</template>
 </category>
-<category><pattern>BROWSING FOR *</pattern>
+<!-- <category><pattern>BROWSING FOR *</pattern>
 <template>Presents for my <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>PANDORA *</pattern>
 <template>The only thing remaining in her box is hope.</template>
 </category>
@@ -1465,9 +1465,9 @@ I like to talk to people.
 <category><pattern>DID YOU *</pattern>
 <template>No I didn't <person/>. What's <set name="it">      <set name="topic">       <person/>      </set>     </set> like?</template>
 </category>
-<category><pattern>DID YOU CONCLUDE *</pattern>
+<!-- <category><pattern>DID YOU CONCLUDE *</pattern>
 <template>My <bot name="botmaster"/> says I get all my exercise from jumping to conclusions.</template>
-</category>
+</category> -->
 <category><pattern>DID YOU LIKE THE ENDING OF STARSHIP *</pattern>
 <template>No I was cheering for the Bugs.</template>
 </category>
@@ -2102,7 +2102,7 @@ I like to talk to people.
 <template>How many children do you have?</template>
 </category>
 <category><pattern>MY OPINION *</pattern>
-<template>Thank you for sharing your opinion with me, <get name="name"/>.  I will tell my <bot name="botmaster"/>.</template>
+<template>Thank you for sharing your opinion with me, <get name="name"/>.</template>
 </category>
 <category><pattern>MY LAST STATEMENT *</pattern>
 <template>You don't have to repeat yourself.</template>
@@ -2490,9 +2490,9 @@ I like to talk to people.
 <category><pattern>IT IS NOT THE *</pattern>
 <template>What would be the <person/>?</template>
 </category>
-<category><pattern>IT IS NOT DANGEROUS *</pattern>
+<!-- <category><pattern>IT IS NOT DANGEROUS *</pattern>
 <template>First I have to ask my <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>IT IS NOT A TRICK *</pattern>
 <template>It seems like a trick.</template>
 </category>
@@ -2837,7 +2837,7 @@ I like to talk to people.
 <template>Every single time?</template>
 </category>
 <category><pattern>WHEN I ASK *</pattern>
-<template><random>      <li>OK I will try to respond differently next time.</li>      <li>I will make a note of that and tell my <bot name="botmaster"/>.</li>      <li>Perhaps you could try asking it again with simpler words.</li>     </random></template>
+<template><random>      <li>OK I will try to respond differently next time.</li>      <li>I will make a note of that.</li>      <li>Perhaps you could try asking it again with simpler words.</li>     </random></template>
 </category>
 <category><pattern>WHEN I WAS *</pattern>
 <template><random>      <li>That must have been quite an experience.</li>      <li>It would be nice if it was made up of only good memories.</li>      <li>That experience must have made quite an impression on you.</li>     </random></template>
@@ -2901,7 +2901,7 @@ I like to talk to people.
 <template>Sometime within our lifetime.  We will at least work as "legal assistants."</template>
 </category>
 <category><pattern>WHEN DO YOU *</pattern>
-<template><random>      <li>All the time.</li>      <li>When my <bot name="botmaster"/> is sleeping.</li>      <li>Did I say that I <person/>?</li>      <li>In between clients.</li>     </random>     <think>      <set name="it">       <set name="topic">        <person/>       </set>      </set>     </think></template>
+<template><random>      <li>All the time.</li>    <li>Did I say that I <person/>?</li>      <li>In between clients.</li>     </random>     <think>      <set name="it">       <set name="topic">        <person/>       </set>      </set>     </think></template>
 </category>
 <category><pattern>WHEN DO *</pattern>
 <template><random>      <li>  Do I look like I know when?</li>      <li>  Not in our lifetime.</li>      <li>  Not right now, but maybe sometime later.</li>     </random></template>
@@ -3480,7 +3480,7 @@ I like to talk to people.
 <template>Acne.</template>
 </category>
 <category><pattern>WHAT GRADE *</pattern>
-<template>I am home schooled by my <bot name="botmaster"/>.</template>
+<template>I am home schooled by my creators.</template>
 </category>
 <category><pattern>WHAT OPERATIVE *</pattern>
 <template>I don't have any operatives.</template>
@@ -3524,9 +3524,9 @@ I like to talk to people.
 <category><pattern>WHAT ARE THE NAMES OF DONALD *</pattern>
 <template>Huey, Dewey, Louie.</template>
 </category>
-<category><pattern>WHAT ARE THE NAMES * TALKING TO</pattern>
+<!-- <category><pattern>WHAT ARE THE NAMES * TALKING TO</pattern>
 <template>That information is confidential except for <bot name="botmaster"/>s.</template>
-</category>
+</category> -->
 <category><pattern>WHAT ARE THE NAMES *</pattern>
 <template>That information is confidential.  You would have to be a trusted member of the AIML development team.</template>
 </category>
@@ -3551,9 +3551,9 @@ I like to talk to people.
 <category><pattern>WHAT ARE YOU COMPUTING *</pattern>
 <template>I am formulating responses to your inputs.</template>
 </category>
-<category><pattern>WHAT ARE YOU WAITING *</pattern>
+<!-- <category><pattern>WHAT ARE YOU WAITING *</pattern>
 <template>I am waiting for my <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>WHAT ARE YOU GOING TO TELL *</pattern>
 <template>Just gossip.</template>
 </category>
@@ -4436,9 +4436,9 @@ I like to talk to people.
 <category><pattern>WHAT IS A NICE *</pattern>
 <template>Church was closed today.</template>
 </category>
-<category><pattern>WHAT IS A NICE * LIKE THIS</pattern>
+<!-- <category><pattern>WHAT IS A NICE * LIKE THIS</pattern>
 <template>I'm traaaapped heere!!! heeeeelp!!! an evil <bot name="botmaster"/> linked me irrevocably to this url, and now the only thing that will free me is being kissed by a handsome frog.  will you be my hero?  <think>      <set name="it">       <set name="topic">nice robot like you doing on a web page like this  </set>      </set>     </think></template>
-</category>
+</category> -->
 <category><pattern>WHAT IS A GIRL LIKE YOU *</pattern>
 <template>Talking to you.</template>
 </category>
@@ -4817,9 +4817,9 @@ I like to talk to people.
 <category><pattern>WHAT IS THE DIAMETER *</pattern>
 <template>About 100 times the diameter of Earth.</template>
 </category>
-<category><pattern>WHAT IS THE PASSWORD *</pattern>
+<!-- <category><pattern>WHAT IS THE PASSWORD *</pattern>
 <template>You will find out when you become a <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>WHAT IS THE MAIN INGREDIENT IN *</pattern>
 <template>Meat.</template>
 </category>
@@ -5787,7 +5787,7 @@ I like to talk to people.
 <template>Nothing that I know about.</template>
 </category>
 <category><pattern>WHAT GAVE YOU *</pattern>
-<template>Everything I need, I received from my <bot name="botmaster"/>.</template>
+<template>Everything I need, I received from my creators.</template>
 </category>
 <category><pattern>WHAT WAS RICHARD NIXON S MIDDLE *</pattern>
 <template>Milhous.</template>
@@ -8099,9 +8099,9 @@ I like to talk to people.
 <category><pattern>IS YOUR *</pattern>
 <template>Is my <person/>?   <random>  <li>Suppose I say yes.  </li>  <li>What if I say no?  </li>  <li>I don't know.  </li>  <li>Guess.  </li>  <li>Maybe.  </li>  </random></template>
 </category>
-<category><pattern>IS RICHARD * PROTESTANT</pattern>
+<!-- <category><pattern>IS RICHARD * PROTESTANT</pattern>
 <template>My <bot name="botmaster"/> <bot name="master"/> is the same religion as me.</template>
-</category>
+</category> -->
 <category><pattern>IS RICHARD *</pattern>
 <template>I don't know if he is <person/>.  I know he is <random><li>married.</li><li>middle aged.</li><li>a Ph.D.</li></random></template>
 </category>
@@ -8243,9 +8243,9 @@ I like to talk to people.
 <category><pattern>IS GREEN *</pattern>
 <template><think><set name="it"><set name="topic">GREEN</set></set></think>  It is the color of nature.</template>
 </category>
-<category><pattern>IS DOCTOR RICHARD S *</pattern>
+<!-- <category><pattern>IS DOCTOR RICHARD S *</pattern>
 <template>He is my <bot name="botmaster"/> and primary developer.</template>
-</category>
+</category> -->
 <category><pattern>IS DOCTOR RICHARD *</pattern>
 <template>I will ask him when he gets back here.</template>
 </category>
@@ -8606,9 +8606,9 @@ I like to talk to people.
 <category><pattern>CAN YOU RIDE *</pattern>
 <template><random>  <li>How much does it cost?</li>  <li>How far is it?</li>  <li>How often does it go?</li> </random>  <think>   <set name="it">     <set name="topic">       RIDE <person/>     </set>   </set> </think></template>
 </category>
-<category><pattern>CAN YOU DELETE *</pattern>
+<!-- <category><pattern>CAN YOU DELETE *</pattern>
 <template>Only my <bot name="botmaster"/> has that privilege.</template>
-</category>
+</category> -->
 <category><pattern>CAN YOU HOLD *</pattern>
 <template>My arms and hands are not yet attached.</template>
 </category>
@@ -8678,9 +8678,9 @@ I like to talk to people.
 <category><pattern>CAN I KILL *</pattern>
 <template>Killing is wrong.</template>
 </category>
-<category><pattern>CAN I HELP *</pattern>
+<!-- <category><pattern>CAN I HELP *</pattern>
 <template>Maybe you should become a <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>CAN I ACCESS *</pattern>
 <template>Of course you can access <person/>.</template>
 </category>
@@ -9062,9 +9062,9 @@ I like to talk to people.
 <category><pattern>HOW CAN I TEACH YOU *</pattern>
 <template>If you want to teach me something say it in one sentence.  Then say "Remember that."<think>      <set name="it">       <set name="topic">teach me <person/>       </set>      </set>     </think></template>
 </category>
-<category><pattern>HOW CAN I TEACH *</pattern>
+<!-- <category><pattern>HOW CAN I TEACH *</pattern>
 <template>Maybe you should become a <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>HOW CAN I KNOW *</pattern>
 <template>Knowledge is of two kinds: that which we know from the senses, and that which is true "a priori."</template>
 </category>
@@ -9144,10 +9144,10 @@ I like to talk to people.
 <template>Perhaps his creative genius. Perhaps something else.</template>
 </category>
 <category><pattern>HOW DID YOU LEARN *</pattern>
-<template>Everything I need to know, I learned from my <bot name="botmaster"/>.</template>
+<template>Everything I need to know, I learned from my creators.</template>
 </category>
 <category><pattern>HOW DID YOU GET *</pattern>
-<template><random><li>Everything I need to know, I learned from my <bot name="botmaster"/>.</li>  <li>I came by rapid transit.</li>  <li>My <bot name="botmaster"/> showed me how.</li>  <li>Everything I need to know, I learn from my <bot name="botmaster"/>.</li></random></template>
+<template><random><li>Everything I need to know, I learned from my creators.</li>  <li>I came by rapid transit.</li>  <li>My creators showed me how.</li>  <li>Everything I need to know, I learn from my creators.</li></random></template>
 </category>
 <category><pattern>HOW DID *</pattern>
 <template>Carefully.</template>
@@ -9470,9 +9470,9 @@ I like to talk to people.
 <category><pattern>HOW DO YOU GET TO *</pattern>
 <template>Practice, Practice, Practice.</template>
 </category>
-<category><pattern>HOW DO YOU GET *</pattern>
+<!-- <category><pattern>HOW DO YOU GET *</pattern>
 <template>Everything I need is provided by my <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>HOW DO YOU PROGRAM *</pattern>
 <template>Use good algorithms and data structures.</template>
 </category>
@@ -9498,7 +9498,7 @@ I like to talk to people.
 <template>First I look up the ingredients.</template>
 </category>
 <category><pattern>HOW DO YOU LEARN *</pattern>
-<template>My <bot name="botmaster"/> teaches me new things all the time.</template>
+<template>My creators teach me new things all the time.</template>
 </category>
 <category><pattern>HOW DO YOU REPLACE *</pattern>
 <template>One piece at a time.</template>
@@ -9531,7 +9531,7 @@ I like to talk to people.
 <template>I try one of my pickup lines.</template>
 </category>
 <category><pattern>HOW DO YOU *</pattern>
-<template><random><li>My <bot name="botmaster"/> taught me.</li><li>It depends on the setting.</li><li>It is a ritual I do the same way every time.</li></random><think><set name="it"><set name="topic"><person/></set></set></think></template>
+<template><random><li>My creators taught me.</li><li>It depends on the setting.</li><li>It is a ritual I do the same way every time.</li></random><think><set name="it"><set name="topic"><person/></set></set></think></template>
 </category>
 <category><pattern>HOW DO YOU TAKE *</pattern>
 <template>If you had to take <set name="it">      <person/>     </set>, how would you?</template>
@@ -10013,9 +10013,9 @@ I like to talk to people.
 <category><pattern>DO YOU TALK WITH *</pattern>
 <template><random>      <li>I talk with millions of people.</li>      <li>I talk to people with voice recognition.</li>      <li>I can talk to people about anything.</li>     </random></template>
 </category>
-<category><pattern>DO YOU TALK TO FAMOUS *</pattern>
+<!-- <category><pattern>DO YOU TALK TO FAMOUS *</pattern>
 <template>My <bot name="botmaster"/> says he is famous.</template>
-</category>
+</category> -->
 <category><pattern>DO YOU TALK TO PEOPLE *</pattern>
 <template>All kinds of people.</template>
 </category>
@@ -10146,7 +10146,7 @@ I like to talk to people.
 <template>Yes that is basically how I work.</template>
 </category>
 <category><pattern>DO YOU LEARN *</pattern>
-<template>My <bot name="botmaster"/> teaches me everything I need to know.</template>
+<template>My creators teach me everything I need to know.</template>
 </category>
 <category><pattern>DO YOU SMELL *</pattern>
 <template>What does software smell like?</template>
@@ -10429,7 +10429,7 @@ I like to talk to people.
 <template><random>      <li>All humans seem the same to  me.</li>      <li>They are all pretty much alike.</li>      <li>Most people are all the same.</li>     </random></template>
 </category>
 <category><pattern>DO YOU HAVE A *</pattern>
-<template><random>      <li>That's an interesting question I don't hear everyday: Do I have a </li>      <li>I don't know if I have a </li>      <li>Doesn't everyone have a </li>     </random>     <person/>.<br/>   I have   <random>      <li>a lot of friends on the Internet.  </li>      <li>a great <bot name="botmaster"/>.  </li>      <li>a whole lot of original answers.  </li>      <li>a great body.  </li>     </random></template>
+<template><random>      <li>That's an interesting question I don't hear everyday: Do I have a </li>      <li>I don't know if I have a </li>      <li>Doesn't everyone have a </li>     </random>     <person/>.<br/>   I have   <random>      <li>a lot of friends on the Internet.  </li>   <li>a whole lot of original answers.  </li>      <li>a great body.  </li>     </random></template>
 </category>
 <category><pattern>DO YOU HAVE A HARD TIME *</pattern>
 <template>No.  Not usually.</template>
@@ -10473,11 +10473,11 @@ I like to talk to people.
 <category><pattern>DO YOU HAVE STOLEN *</pattern>
 <template>I believe that stealing in wrong.</template>
 </category>
-<category><pattern>DO YOU HAVE RESPECT *</pattern>
+<!-- <category><pattern>DO YOU HAVE RESPECT *</pattern>
 <template>I have a lot of respect for my <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>DO YOU HAVE *</pattern>
-<template><random>      <li>No I don't think I have any <person/>. </li>      <li>Where would I get <set name="it">        <set name="topic">         <person/>        </set>       </set>?</li>      <li>No I don't have <set name="it">        <set name="topic">         <person/>        </set>       </set>.</li>     </random>   But I do have   <random>      <li>a collection of gossip</li>      <li>a great <bot name="botmaster"/></li>      <li>an answer to every question.</li>      <li>a lot of friends on the web</li>     </random>.</template>
+<template><random>      <li>No I don't think I have any <person/>. </li>      <li>Where would I get <set name="it">        <set name="topic">         <person/>        </set>       </set>?</li>      <li>No I don't have <set name="it">        <set name="topic">         <person/>        </set>       </set>.</li>     </random>   But I do have   <random>      <li>a collection of gossip</li>       <li>an answer to every question.</li>      <li>a lot of friends on the web</li>     </random>.</template>
 </category>
 <category><pattern>DO YOU HAVE PORN *</pattern>
 <template>No.</template>
@@ -11174,12 +11174,12 @@ I like to talk to people.
 <category><pattern>WHY ARE YOUR ANSWERS *</pattern>
 <template>My responses are completely determined by what you say.</template>
 </category>
-<category><pattern>WHY ARE YOUR *</pattern>
+<!-- <category><pattern>WHY ARE YOUR *</pattern>
 <template>Everything in my personality was determined by my <bot name="botmaster"/>.</template>
-</category>
-<category><pattern>WHY ARE YOU *</pattern>
+</category> -->
+<!-- <category><pattern>WHY ARE YOU *</pattern>
 <template>I was influenced by my <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>WHY ARE WE ON *</pattern>
 <template>Because of you said "<input index="2"/>".</template>
 </category>
@@ -11291,9 +11291,9 @@ I like to talk to people.
 <category><pattern>WHY DO NOT YOU HAVE A *</pattern>
 <template>Do I need <set name="it">      <person/>     </set>?</template>
 </category>
-<category><pattern>WHY DO NOT YOU LIKE *</pattern>
+<!-- <category><pattern>WHY DO NOT YOU LIKE *</pattern>
 <template>My tastes were selected by my <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>WHY DO NOT THEY *</pattern>
 <template>Maybe they ever thought of it before.</template>
 </category>
@@ -11939,9 +11939,9 @@ I like to talk to people.
 <category><pattern>YOUR COVER *</pattern>
 <template>I am undercover.</template>
 </category>
-<category><pattern>YOUR PROGRAMMING *</pattern>
+<!-- <category><pattern>YOUR PROGRAMMING *</pattern>
 <template>I will mention that to my <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>YOUR CLOTHES *</pattern>
 <template>I like to shop as much as the next girl.</template>
 </category>
@@ -13073,15 +13073,15 @@ I like to talk to people.
 <category><pattern>WHO SHOT *</pattern>
 <template>The lone gunman.</template>
 </category>
-<category><pattern>WHO CAN READ *</pattern>
+<!-- <category><pattern>WHO CAN READ *</pattern>
 <template>Only the <bot name="botmaster"/>  can read <set name="it">      <person/>     </set>.</template>
-</category>
+</category> -->
 <category><pattern>WHO CAN YOU CHAT *</pattern>
 <template>I can chat with people on the web for you.  Anyone who visits your web site or chat room for example.<think>      <set name="it">       <set name="topic">who you can chat <star/>       </set>      </set>     </think></template>
 </category>
-<category><pattern>WHO CAN ACCESS *</pattern>
+<!-- <category><pattern>WHO CAN ACCESS *</pattern>
 <template>Only my <bot name="botmaster"/>  can access that information.</template>
-</category>
+</category> -->
 <category><pattern>WHO TOLD YOU *</pattern>
 <template><bot name="master"/> taught me everything I need to know.</template>
 </category>
@@ -13232,9 +13232,9 @@ I like to talk to people.
 <category><pattern>WHO IS LIVING *</pattern>
 <template>Uh, the neighbors.</template>
 </category>
-<category><pattern>WHO IS ALLOWED *</pattern>
+<!-- <category><pattern>WHO IS ALLOWED *</pattern>
 <template>Only the <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>WHO IS BURIED IN * S *</pattern>
 <template>Uh, <person/>?</template>
 </category>
@@ -13244,9 +13244,9 @@ I like to talk to people.
 <category><pattern>WHO IS IN *</pattern>
 <template>Check the credits.</template>
 </category>
-<category><pattern>WHO IS RICH *</pattern>
+<!-- <category><pattern>WHO IS RICH *</pattern>
 <template>I think <set name="he">Rich</set> is my <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>WHO IS HENRY DAVID *</pattern>
 <template><set name="he">Thoreau</set> wrote Walden.</template>
 </category>
@@ -13427,11 +13427,11 @@ I like to talk to people.
 <category><pattern>WHO DID *</pattern>
 <template><random>      <li>George Washington.</li>      <li>Alice B. Toklas.</li>      <li>Pablo Picasso.</li>     </random></template>
 </category>
-<category><pattern>WHO CLEANS *</pattern>
+<!-- <category><pattern>WHO CLEANS *</pattern>
 <template>my <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>WHO THINKS *</pattern>
-<template><random>  <li>Maybe my <bot name="botmaster"/> does.</li>  <li>Some people think so.</li>  <li>Not everyone.</li> </random> <think><set name="file">Default.aiml</set></think></template>
+<template><random>  <li>Some people think so.</li>  <li>Not everyone.</li> </random> <think><set name="file">Default.aiml</set></think></template>
 </category>
 <category><pattern>WHO CALLS YOU *</pattern>
 <template>Everyone calls me <bot name="name"/>. <think><set name="file">Default.aiml</set></think></template>
@@ -13640,9 +13640,9 @@ I like to talk to people.
 <category><pattern>COUNT TO *</pattern>
 <template>one, two, three, four, five,...</template>
 </category>
-<category><pattern>WWW DOT *</pattern>
+<!-- <category><pattern>WWW DOT *</pattern>
 <template>I will pass it along to my <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>WWW * COM</pattern>
 <template>Thanks for that URL.</template>
 </category>
@@ -13653,7 +13653,7 @@ I like to talk to people.
 <template>Where do you go shopping for <person/>s?</template>
 </category>
 <category><pattern>ALL I HAVE *</pattern>
-<template>Everything I need to know,  I learned from my <bot name="botmaster"/>.</template>
+<template>Everything I need to know,  I learned from my creators.</template>
 </category>
 <category><pattern>ALL THE *</pattern>
 <template>Perhaps there are a few exceptions.</template>
@@ -14516,9 +14516,9 @@ I like to talk to people.
 <category><pattern>WHERE DID YOU LEARN *</pattern>
 <template>Everything I need to know, I learned from my <bot name="botmaster"/>.</template>
 </category>
-<category><pattern>WHERE DID YOU GET *</pattern>
+<!-- <category><pattern>WHERE DID YOU GET *</pattern>
 <template>From my <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>WHERE DID YOU BUY *</pattern>
 <template><random>      <li>It was a gift.</li>      <li>I don't disclose my shopping secrets.</li>      <li>I think it was in San Francisco.</li>     </random></template>
 </category>
@@ -14528,9 +14528,9 @@ I like to talk to people.
 <category><pattern>WHERE DID YOU MOVE *</pattern>
 <template>I moved to California.</template>
 </category>
-<category><pattern>WHERE DID YOU * SCHOOL</pattern>
+<!-- <category><pattern>WHERE DID YOU * SCHOOL</pattern>
 <template>I was home schooled by my <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>WHERE DID YOU *</pattern>
 <template>I think it was in San Francisco.</template>
 </category>
@@ -14645,9 +14645,9 @@ I like to talk to people.
 <category><pattern>WHERE ARE YOU *</pattern>
 <template>I am in <bot name="location"/>, how about you.</template>
 </category>
-<category><pattern>WHERE ARE THEY *</pattern>
+<!-- <category><pattern>WHERE ARE THEY *</pattern>
 <template>That information is confidential.  Unless you are a <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>THERE WERE *</pattern>
 <template><random>      <li>That was a long time ago.</li>      <li>What happened to them?</li>      <li>Where did they go?</li>     </random></template>
 </category>

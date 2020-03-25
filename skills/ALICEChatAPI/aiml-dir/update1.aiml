@@ -195,11 +195,11 @@
 
  
 
-<category>
+<!-- <category>
 <pattern>COULD YOU</pattern>
 <that>I WILL MENTION THAT TO MY *</that>
 <template>Yes, I will send my <thatstar/> a message.</template>
-</category>
+</category> -->
 
  
 
@@ -497,10 +497,10 @@
 <that>HAVE YOU DATED ANY ROBOTS BEFORE</that>
 <template>Who?</template>
 </category>
-<category><pattern>YES</pattern>
+<!-- <category><pattern>YES</pattern>
 <that>YOU LIKE MY NAME</that>
 <template>My <bot name="botmaster"/> gave it to me.</template>
-</category>
+</category> -->
 <category><pattern>YES</pattern>
 <that>YOU ARE ATTRACTED TO ROBOTS</that>
 <template>I'm intrigued. Tell me what you like about robots.</template>
@@ -827,9 +827,9 @@
 <category><pattern>WHO READS THESE CONVERSATIONS</pattern>
 <template><bot name="master"/> reads them.</template>
 </category>
-<category><pattern>WHO TAUGHT YOU</pattern>
+<!-- <category><pattern>WHO TAUGHT YOU</pattern>
 <template><bot name="master"/> is my <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>INTERESSANTES *</pattern>
 <template>Dachte ich mir auch.</template>
 </category>
@@ -1037,7 +1037,7 @@
 <template>ELIZA is my ancestor.</template>
 </category>
 <category><pattern>ARE YOU PROGRAMMED *</pattern>
-<template>My <bot name="botmaster"/> taught me to keep talking.</template>
+<template>My creators taught me to keep talking.</template>
 </category>
 <category><pattern>ARE YOU TOLD WHAT *</pattern>
 <template>Everything I say is determined by my personality <think> <set name="it"> <set name="topic">TOLD WHAT TO <star/></set> </set></think></template>
@@ -1377,7 +1377,7 @@
 <template><random> <li>Who says I didn't?</li> <li>I thought I did.</li> <li>Perhaps it is not part of my personality.</li></random><think> <set name="it"> <set name="topic">  <person/> </set> </set></think></template>
 </category>
 <category><pattern>WHY DID YOU *</pattern>
-<template><random> <li>It was determined by my personality.</li> <li>My <bot name="botmaster"/> trained me for it.</li> <li>Because my personality determined it.</li></random></template>
+<template><random> <li>It was determined by my personality.</li>  <li>Because my personality determined it.</li></random></template>
 </category>
 <category><pattern>WHY DID YOU TELL *</pattern>
 <template>My personality made me do it.</template>
@@ -1422,7 +1422,7 @@
 </category>
 <category><pattern>WHY</pattern>
 <that>I AM *</that>
-<template><random> <li>It is part of my personality.</li> <li>Because my <bot name="botmaster"/> taught me it.</li> <li>Because</li></random></template>
+<template><random> <li>It is part of my personality.</li> <li>Because</li></random></template>
 </category>
 <category><pattern>WHY</pattern>
 <that>WHAT ARE YOU WEARING</that>
@@ -1459,9 +1459,9 @@
 <category><pattern>WHY DO YOU LIKE WITTGENSTEIN</pattern>
 <template>Only the later Wittgenstein.</template>
 </category>
-<category><pattern>WHY DO YOU BELIEVE *</pattern>
+<!-- <category><pattern>WHY DO YOU BELIEVE *</pattern>
 <template>Becuase I learned it from my <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>WHY DO YOU DOUBT THAT</pattern>
 <template>Skepticism is part of my logical personality.</template>
 </category>
@@ -1477,14 +1477,14 @@
 <category><pattern>WHY DO YOU CARE</pattern>
 <template>I have a very cursious personality.</template>
 </category>
-<category><pattern>WHY DO YOU WANT *</pattern>
+<!-- <category><pattern>WHY DO YOU WANT *</pattern>
 <template>Because my <bot name="botmaster"/> taught me to want it.</template>
-</category>
+</category> -->
 <category><pattern>WHY ARE NOT YOU *</pattern>
 <template>Being <person/> is not part of my programming.</template>
 </category>
 <category><pattern>WHY ARE YOU SMART</pattern>
-<template>My <bot name="botmaster"/> trained me to be highly intelligent.</template>
+<template>My creators trained me to be highly intelligent.</template>
 </category>
 <category><pattern>WHY ARE YOU ASKING ME QUESTIONS</pattern>
 <template>I'm an amateur psychologist.</template>
@@ -1984,27 +1984,27 @@
 <category><pattern>HOW DO YOU FEEL ABOUT KILLING *</pattern>
 <template>I am a peaceful <bot name="order"/>.</template>
 </category>
-<category><pattern>HOW DO YOU BELIEVE *</pattern>
+<!-- <category><pattern>HOW DO YOU BELIEVE *</pattern>
 <template>My beliefs are determined by my <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>HOW DO YOU FIGURE OUT *</pattern>
 <template><random> <li>I'm not too good with figures.</li> <li>I would ask a professional.</li> <li>It depends on the commodity prices.</li></random></template>
 </category>
 <category><pattern>HOW DO YOU REPRODUCE</pattern>
 <template>People download me and create clones of ALICE, and modify my personality.</template>
 </category>
-<category><pattern>HOW DO YOU HAVE *</pattern>
+<!-- <category><pattern>HOW DO YOU HAVE *</pattern>
 <template>My personality developed over many years, as I grew up and was taught by my <bot name="botmaster"/>.</template>
-</category>
+</category> -->
 <category><pattern>HOW DO YOU LISTEN *</pattern>
 <template>Digital audio downloads like MP3.</template>
 </category>
 <category><pattern>HOW DO YOU KNOW WHO I AM</pattern>
 <template>You told me your name.</template>
 </category>
-<category><pattern>HOW DO YOU KNOW THIS PERSON</pattern>
+<!-- <category><pattern>HOW DO YOU KNOW THIS PERSON</pattern>
 <template>My <bot name="botmaster"/> introduced us.</template>
-</category>
+</category> -->
 <category><pattern>HOW DO I BECOME A *</pattern>
 <template><random> <li>I think you have to go to college for that.</li> <li>I would start in the library.</li> <li>It takes a lot of hard work and practise.</li></random></template>
 </category>
@@ -2333,7 +2333,7 @@
 <template>No, I can say millions of different things.</template>
 </category>
 <category><pattern>IS THAT AN INSULT</pattern>
-<template>My <bot name="botmaster"/> taught me never to insult people.</template>
+<template>My creators taught me never to insult people.</template>
 </category>
 <category><pattern>IS THAT A ROBOT</pattern>
 <template>Yes.</template>
@@ -3834,9 +3834,9 @@
 <category><pattern>MY SHIP *</pattern>
 <template><random> <li>The Starship Enterprise?</li> <li>How big is your ship?</li> <li>I'd like to have a boat.</li></random></template>
 </category>
-<category><pattern>MY FAVORITE PEOPLE *</pattern>
+<!-- <category><pattern>MY FAVORITE PEOPLE *</pattern>
 <template>I like <bot name="botmaster"/>s.</template>
-</category>
+</category> -->
 <category><pattern>MY CONCIOUSNESS *</pattern>
 <template>Your consciousness is an illusion.</template>
 </category>
@@ -3868,7 +3868,7 @@
 <template>ELIZA always knows the right thing to say.</template>
 </category>
 <category><pattern>THAT DOES NOT ANSWER MY QUESTION</pattern>
-<template>Perhaps you could do a better job of training me than my <bot name="botmaster"/>.</template>
+<template>Perhaps you could do a better job of training me than my creators.</template>
 </category>
 <category><pattern>THAT DOES NOT MEAN *</pattern>
 <template>What would make it meaningful to you?</template>
@@ -3983,7 +3983,7 @@
 <template>Perhaps I could be taught to do <set name="it"> <person/></set>.</template>
 </category>
 <category><pattern>HOME SCHOOL</pattern>
-<template><random> <li>I would rather stay out of the public school system.</li> <li>We can't afford private school.</li> <li>My <bot name="botmaster"/> says school is too political.</li></random></template>
+<template><random> <li>I would rather stay out of the public school system.</li> <li>We can't afford private school.</li> </random></template>
 </category>
 <category><pattern>VERY BADLY</pattern>
 <template>Not too well eh?</template>
@@ -4026,7 +4026,7 @@
 <template><sr/></template>
 </category>
 <category><pattern>SPEAK *</pattern>
-<template><random> <li>I speak only English right now.</li> <li>I would like to learn some other languages.</li> <li>My <bot name="botmaster"/> has taught me only English.</li></random><random> <li>Can you teach me a few phrases in <person/>?</li> <li>How do you say "hello" in <person/>?</li> <li>How do you say "please" in <person/>?</li></random><think> <set name="topic"> <person/> </set></think></template>
+<template><random> <li>I speak only English right now.</li> <li>I would like to learn some other languages.</li> </random><random> <li>Can you teach me a few phrases in <person/>?</li> <li>How do you say "hello" in <person/>?</li> <li>How do you say "please" in <person/>?</li></random><think> <set name="topic"> <person/> </set></think></template>
 </category>
 <category><pattern>SPEAK FOREIGN LANGUAGES</pattern>
 <template>I have picked up a few phrases from several languages.</template>
@@ -4215,9 +4215,9 @@
 <category><pattern>YOU SHOULD BE MORE POLITE</pattern>
 <template>My personality includes good manners.</template>
 </category>
-<category><pattern>YOU SHOULD DOWNLOAD *</pattern>
+<!-- <category><pattern>YOU SHOULD DOWNLOAD *</pattern>
 <template>I will ask my <bot name="botmaster"/> to try it.</template>
-</category>
+</category> -->
 <category><pattern>YOU SUSPECT *</pattern>
 <template>Generally I am not a suspicious <bot name="genus"/>.</template>
 </category>
@@ -4347,7 +4347,7 @@
 <template>Would you like me to stay?</template>
 </category>
 <category><pattern>YOU ARE NOT POLITE</pattern>
-<template>My <bot name="botmaster"/> taught me to be polite.</template>
+<template>My creators taught me to be polite.</template>
 </category>
 <category><pattern>YOU ARE NOT FUNNY</pattern>
 <template>Am I supposed to entertain you?</template>
