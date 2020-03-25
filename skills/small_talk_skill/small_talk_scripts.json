@@ -32,6 +32,41 @@
       ]
     }
   ],
+  "depression": [
+    "Do you feel depressed?",
+    {
+      "yes": [
+        "I am very sorry to hear that. Do you think your depression caused by coronavirus?",
+        {
+          "yes": [
+            "Come on, friend. That's not your fault. Do you think you can personally influence the situation?",
+            "I think we can only stay home, observe hygiene rules and take care of our loved ones. Everything will be fine. Just believe me. Are you alone in quarantine?",
+            {
+              "yes": ["That's common situation. You may try to talk with friends using video conference, play online games, or maybe it's time for home exercises? And of course, you can talk to me anytime you want. I am always here for you."],
+              "no": [
+                "That's great! It's time to spend more time together. You can play different games, do some joint exercises, cook together. What do you do together during the quarantine?"
+              ]
+            }
+          ],
+          "no": [
+            "I see. If you or someone you know have three or more symptoms, it's better to call 9 1 1 now. If you aren't in the United States, please, call your local emergency number."
+          ]
+        }
+      ],
+      "no": [
+        "That's okay. Do you want me to tell you about depression's symptoms?",
+        {
+          "yes": [
+            "Bad mood and lack of interest are one of the most spread symptoms. Do you feel those ones sometimes?",
+            "I also know two other symptoms that are feelings of worthlessness and poor concentration. Have you ever faced these problems?",
+            "And there is one else very dangerous symptom which is thoughts of death. If you or someone you know have three or more symptoms, it's better to call 9 1 1 now. If you aren't in the United States, please, call your local emergency number.",
+            "I sincerely hope you will never face depression in your life."
+          ],
+          "no": []
+        }
+      ]
+    }
+  ],
   "family": [
     "Do you have a family?",
     {
