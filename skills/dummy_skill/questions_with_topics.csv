@@ -9,7 +9,7 @@ have you ever played a virtual reality game?,Games
 what do you think of trump's plan to slash food stamps?,Food_Drink
 have you watched iron man?,Movies_TV
 do you sense that we now have a space race among private companies?,Other
-do you like colorful clothing?,Phatic
+do you like colorful clothing?,Other
 have you ever been to a concert?,Art_Event
 do you enjoy poetry?,Literature
 did you see that kanye is having another kid?,Celebrities
@@ -382,7 +382,7 @@ what broadway play did elaine may star in?,Celebrities
 did you happen to watch the nfl pro bowl?,Sports
 so do you care how bad russia's economy is or isn't?,Other
 do you enjoy watching drama on tv or at the box office?,Movies_TV
-you're netflix fan ?,Phatic
+you're netflix fan ?,Movies_TV
 what do you know about the nfl?,Movies_TV
 do you use the internet frequently?,Phatic
 do you watch fox news at all?,News
@@ -768,8 +768,6 @@ do you like to you facebook much?,SciTech
 do you know a lot about cars?,Games
 could you live without the internet?,SciTech
 do you like chewbacca from star wars?,Phatic
-do you know what does that mean ?,Phatic
-do you have children?,Phatic
 do you ever listen to the radio?,Phatic
 how often do you enjoy reading fiction?,Literature
 what do you think about golf?,Sports
@@ -1658,7 +1656,7 @@ do you how much about physics?,Other
 do you like how lebron james plays?,Sports
 did you know ny area code is 212 because its the easiest to dial on the rotarty?,SciTech
 do you enjoy driving a car?,SciTech
-are you a fan of the rockets of the warriors?,Phatic
+are you a fan of the rockets or the warriors?,Sports
 do you like watching basketball?,Sports
 do you follow politics much?,Politics
 did you kow the story behind new york's area code?,Literature
