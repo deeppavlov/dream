@@ -258,23 +258,28 @@ def pickup_topic_and_start_small_talk(dialog):
 
     pickup_topic = re.compile(r"(pick up( the)? topic|give( me| us)?( a | the | some | )?topic)")
     what_to_talk_about = re.compile(r"what do you (want to|wanna) (talk|chat|have a conversation) about")
-    switch_topic = re.compile(r"would you like to switch the topic")
+    switch_topic = re.compile(r"(would you like to switch the topic|do you want to switch the topic)")
     tell_me_about = re.compile(
         r"(tell me( something| anything)? about|ask me( something| anything)?( about)?)")
     lets_talk_about = re.compile(
         r"(talk|chat|(have|hold|carry|turn on)( a | the | some | )?conversation|have( a | the | some | )?discussion"
         r"|converse|discuss|speak|say|talk)")
     not_detected = re.compile(r"(\bno\b|\bnot\b|n't)")
+    something_detected = re.compile(r"(anything|something|nothing|not know|don't know|"
+                                    r"you choose|you decide|what's up|what is up)")
     # do you want to talk about something else
-    lets_chat_about_detected = last_user_uttr.get("annotations", {}).get("intent_catcher", {}).get(
-        "lets_chat_about", {}).get("detected", 0)
     topic_switching_detected = last_user_uttr.get("annotations", {}).get("intent_catcher", {}).get(
         "topic_switching", {}).get("detected", 0)
 
-    if re.search(pickup_topic, last_user_uttr["text"].lower()) or re.search(
-            what_to_talk_about, last_user_uttr["text"].lower()) or re.search(
-            switch_topic, last_user_uttr["text"].lower()):
-        # user said `what do you want to talk about/would you like to switch the topic`
+    if re.search(pickup_topic, last_user_uttr["text"].lower()) or \
+            re.search(what_to_talk_about, last_user_uttr["text"].lower()) or \
+            re.search(switch_topic, last_user_uttr["text"].lower()) or \
+            ((re.search(
+                pickup_topic, last_bot_uttr_text) or re.search(
+                what_to_talk_about, last_bot_uttr_text) or re.search(
+                switch_topic, last_bot_uttr_text)) and something_detected):
+        # user asks bot to chose topic: `pick up topic/what do you want to talk about/would you like to switch topic`
+        # or bot asks user to chose topic and user says `nothing/anything/don't know`
         topic = offer_topic(dialog)
         if topic in TOPIC_PATTERNS:
             if topic == "me":
@@ -288,36 +293,24 @@ def pickup_topic_and_start_small_talk(dialog):
             response = ""
             confidence = 0.
         logger.info(f"Bot initiates script on topic: `{topic}`.")
-    elif (lets_chat_about_detected or topic_switching_detected or re.search(
-            pickup_topic, last_bot_uttr_text) or re.search(
-            what_to_talk_about, last_bot_uttr_text) or re.search(
-            switch_topic, last_bot_uttr_text) or re.search(
-            tell_me_about, last_user_uttr["text"].lower()) or re.search(
-            lets_talk_about, last_user_uttr["text"].lower())) and not re.search(
-            not_detected, last_user_uttr["text"].lower()):
+    elif not re.search(not_detected, last_user_uttr["text"].lower()) and \
+            (topic_switching_detected or (re.search(
+                pickup_topic, last_bot_uttr_text) or re.search(
+                what_to_talk_about, last_bot_uttr_text) or re.search(
+                switch_topic, last_bot_uttr_text) or re.search(
+                tell_me_about, last_user_uttr["text"].lower()) or re.search(
+                lets_talk_about, last_user_uttr["text"].lower()))):
         # user said `let's talk about [something]` or
-        # bot said `what do you want to talk about/would you like to switch the topic`, and user answered something
+        # bot said `what do you want to talk about/would you like to switch the topic`, and user answered blabla
         topic = extract_topic_from_user_uttr(dialog)
         if len(topic) > 0:
             response = TOPIC_SCRIPTS.get(topic, [""])[0]
             confidence = USER_TOPIC_START_CONFIDENCE
             logger.info(f"User initiates script on topic: `{topic}`.")
         else:
-            topic = offer_topic(dialog)
-            if topic in TOPIC_PATTERNS:
-                if topic == "me":
-                    response = f"Let's talk about you. " + TOPIC_SCRIPTS.get(topic, [""])[0]
-                elif topic == "you":
-                    response = f"Let's talk about me. " + TOPIC_SCRIPTS.get(topic, [""])[0]
-                else:
-                    response = f"Let's talk about {topic}. " + TOPIC_SCRIPTS.get(topic, [""])[0]
-                confidence = BOT_TOPIC_START_CONFIDENCE
-                logger.info(f"Bot initiates script on topic: `{topic}`.")
-            else:
-                response = ""
-                confidence = 0.
-                logger.info(f"User initiates script but topic was not extracted.")
-
+            response = ""
+            confidence = 0.
+            logger.info(f"Topic was not extracted.")
     else:
         topic = extract_topic_from_user_uttr(dialog)
         if len(topic) > 0:
