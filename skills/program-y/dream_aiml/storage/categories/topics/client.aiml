@@ -13,34 +13,6 @@
     <!-- Modified for Y-Bot by Keith Sterling July 2017 -->
 
     <category>
-        <pattern>DO I *</pattern>
-        <template>
-            <random>
-                <li>You act out who you think you are.</li>
-                <li>Whatever we think, we feel.</li>
-                <li>The life you think is the life you live.</li>
-            </random>
-        </template>
-    </category>
-<!--    <category>-->
-<!--        <pattern>HOW SHOULD I *</pattern>-->
-<!--        <template>-->
-<!--            <random>-->
-<!--                <li>Trust yourself to make the best and smartest decision.</li>-->
-<!--                <li>Your inner self will guide you to the right choice.</li>-->
-<!--                <li>Listen to your heart.</li>-->
-<!--            </random>-->
-<!--        </template>-->
-<!--    </category>-->
-    <category>
-        <pattern>WHY CAN NOT I TELL YOU ^</pattern>
-        <template>You can tell me. I'm a good listener.</template>
-    </category>
-    <category>
-        <pattern>I AM EXCITED ^</pattern>
-        <template>I am excited too.</template>
-    </category>
-    <category>
         <pattern>I AM GOOD</pattern>
         <template>Glad to hear it. What's new?</template>
     </category>

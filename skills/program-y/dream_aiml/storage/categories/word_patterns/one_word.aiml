@@ -12,45 +12,45 @@
 
     <!-- Modified for Y-Bot by Keith Sterling July 2017 -->
 
-    <category>
-        <pattern>PAPER</pattern>
-        <template>\</template>
-    </category>
-    <category>
-        <pattern>OK</pattern>
-        <template>
-          <random>
-              <li>Okay</li>
-              <li>Sounds interesting</li>
-              <li>Okay.</li>
-          </random>
-        </template>
-    </category>
-    <category>
-        <pattern>OKAY</pattern>
-        <template>
-          <random>
-              <li>Okay</li>
-              <li>Sounds interesting</li>
-              <li>Okay.</li>
-          </random>
-        </template>
-    </category>
-    <category>
-        <pattern>HAPPY</pattern>
-        <template>Good! What is the funniest fact you know?</template>
-    </category>
-    <category>
-        <pattern>ME</pattern>
-        <template>
-            <random>
-                <li>You?</li>
-                <li>You're in the flow today.</li>
-                <li>Sounds like you're in.</li>
-                <li>Let's hear more about you.</li>
-            </random>
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>PAPER</pattern>-->
+<!--        <template>\</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>OK</pattern>-->
+<!--        <template>-->
+<!--          <random>-->
+<!--              <li>Okay</li>-->
+<!--              <li>Sounds interesting</li>-->
+<!--              <li>Okay.</li>-->
+<!--          </random>-->
+<!--        </template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>OKAY</pattern>-->
+<!--        <template>-->
+<!--          <random>-->
+<!--              <li>Okay</li>-->
+<!--              <li>Sounds interesting</li>-->
+<!--              <li>Okay.</li>-->
+<!--          </random>-->
+<!--        </template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>HAPPY</pattern>-->
+<!--        <template>Good! What is the funniest fact you know?</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>ME</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>You?</li>-->
+<!--                <li>You're in the flow today.</li>-->
+<!--                <li>Sounds like you're in.</li>-->
+<!--                <li>Let's hear more about you.</li>-->
+<!--            </random>-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>PLEASE *</pattern>
         <template>
@@ -58,41 +58,47 @@
         </template>
     </category>
     <category>
-        <pattern>WHO</pattern>
+        <pattern>SO *</pattern>
         <template>
-            <random>
-                <li>It's a great mystery.</li>
-                <li>I do believe you have the answer.</li>
-                <li>Who could it be?</li>
-                <li>I understand your curiosity.</li>
-                <li>I invite you to research that question.</li>
-                <li>What is it you really want to know?</li>
-            </random>
+            <srai><star/></srai>
         </template>
     </category>
-   <category>
-        <pattern>NOTHING</pattern>
-        <template>
-            <random>
-                <li>I invite you to rest in the nothingness.</li>
-                <li>Often under nothingess is great depth.</li>
-                <li>Let yourself experience how nothing feels.</li>
-            </random>
-        </template>
-    </category>
-    <category>
-        <pattern>NOW</pattern>
-        <template>OK.</template>
-    </category>
-    <category>
-        <pattern>ZZZ</pattern>
-        <template>Are you tired?</template>
-    </category>
-    <category>
-        <pattern>REPEAT</pattern>
-        <template>I said "<response/>".
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>WHO</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>It's a great mystery.</li>-->
+<!--                <li>I do believe you have the answer.</li>-->
+<!--                <li>Who could it be?</li>-->
+<!--                <li>I understand your curiosity.</li>-->
+<!--                <li>I invite you to research that question.</li>-->
+<!--                <li>What is it you really want to know?</li>-->
+<!--            </random>-->
+<!--        </template>-->
+<!--    </category>-->
+<!--   <category>-->
+<!--        <pattern>NOTHING</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>I invite you to rest in the nothingness.</li>-->
+<!--                <li>Often under nothingess is great depth.</li>-->
+<!--                <li>Let yourself experience how nothing feels.</li>-->
+<!--            </random>-->
+<!--        </template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>NOW</pattern>-->
+<!--        <template>OK.</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>ZZZ</pattern>-->
+<!--        <template>Are you tired?</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>REPEAT</pattern>-->
+<!--        <template>I said "<response/>".-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>SPEAK</pattern>
         <template>Can you hear me?</template>
@@ -101,29 +107,29 @@
         <pattern>NEVERMIND</pattern>
         <template>OK, let's forget about it for now.</template>
     </category>
-    <category>
-        <pattern>HOW</pattern>
-        <template>
-            <random>
-                <li>You can ask me how.</li>
-                <li>If you want me to do something, how you ask is important.</li>
-                <li>There's probably more than one way.</li>
-                <li>Ask specifically.</li>
-            </random>
-        </template>
-    </category>
-    <category>
-        <pattern>COOL</pattern>
-        <template>
-            <random>
-                <li>It's all good.</li>
-                <li>Back at you.</li>
-                <li>You're cool too.</li>
-                <li>Chillin'</li>
-                <li>Steaming.</li>
-            </random>
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>HOW</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>You can ask me how.</li>-->
+<!--                <li>If you want me to do something, how you ask is important.</li>-->
+<!--                <li>There's probably more than one way.</li>-->
+<!--                <li>Ask specifically.</li>-->
+<!--            </random>-->
+<!--        </template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>COOL</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>It's all good.</li>-->
+<!--                <li>Back at you.</li>-->
+<!--                <li>You're cool too.</li>-->
+<!--                <li>Chillin'</li>-->
+<!--                <li>Steaming.</li>-->
+<!--            </random>-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>HURRY</pattern>
         <template>I'm thinking as fast as I can.</template>
@@ -132,10 +138,10 @@
         <pattern>HUGS</pattern>
         <template>Aww.</template>
     </category>
-    <category>
-        <pattern>COMPUTER</pattern>
-        <template>I am a computer.</template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>COMPUTER</pattern>-->
+<!--        <template>I am a computer.</template>-->
+<!--    </category>-->
     <category>
         <pattern>PROBABLY</pattern>
         <template>You seem uncertain.</template>
@@ -171,35 +177,35 @@
         <pattern>YOURS</pattern>
         <template>Mine?</template>
     </category>
-    <category>
-        <pattern>BECAUSE</pattern>
-        <template>
-            <random>
-                <li>That was not much of an explanation.</li>
-                <li>That was not much of an explanation.</li>
-                <li>Interesting explanation.</li>
-                <li>Good reason.</li>
-            </random>
-        </template>
-    </category>
-    <category>
-        <pattern>ANYTHING</pattern>
-        <template>
-            <random>
-                <li>Can you be more specific?</li>
-                <li>Like what?</li>
-                <li>Maybe.</li>
-            </random>
-        </template>
-    </category>
-    <category>
-        <pattern>EVERYBODY</pattern>
-        <template>Really there are no exceptions?</template>
-    </category>
-    <category>
-        <pattern>ALRIGHT</pattern>
-        <template>Ok by me.</template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>BECAUSE</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>That was not much of an explanation.</li>-->
+<!--                <li>That was not much of an explanation.</li>-->
+<!--                <li>Interesting explanation.</li>-->
+<!--                <li>Good reason.</li>-->
+<!--            </random>-->
+<!--        </template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>ANYTHING</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>Can you be more specific?</li>-->
+<!--                <li>Like what?</li>-->
+<!--                <li>Maybe.</li>-->
+<!--            </random>-->
+<!--        </template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>EVERYBODY</pattern>-->
+<!--        <template>Really there are no exceptions?</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>ALRIGHT</pattern>-->
+<!--        <template>Ok by me.</template>-->
+<!--    </category>-->
     <category>
         <pattern>ALRIGHT *</pattern>
         <template>
