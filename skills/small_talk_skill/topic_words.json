@@ -83,7 +83,8 @@
   "pets": [
     "dog",
     "cat",
-    "pets"
+    "pets",
+    "puppy"
   ],
   "politics": [
     "politics",
@@ -119,11 +120,11 @@
   "sports": [
     "sport",
     "sports",
-    "game",
     "football",
     "baseball",
     "basketball",
-    "hockey"
+    "hockey",
+    "soccer"
   ],
   "star wars": [
     "star war",
