@@ -11,7 +11,7 @@
         "(i'm|i am) fed up with this (topic|talk|subject)",
 	"((would)|(can)) ((you)|(we))( please ){0,1}((talk)|(chat)) about ((something else)|(anything else)|(another thing)|(another topic)|(other topic)|(something other)|(something else)|(other things))"
       ],
-      "min_precision": 0.95,
+      "min_precision": 0.8,
       "punctuation": [
         ".",
         "!",
@@ -20,9 +20,9 @@
     },
     "lets_chat_about": {
       "phrases": [
-        "(stop ){0,1}(((let's)|(wanna)|(can we)|(can you)|(do you want to)) (chat|talk)|talk to me|talk with me) about (portal two|billie eilish|the job graffiti|drones|marvel|the presidency|a different animal|sustainability|whats going on in politics lately|the internet|nail polish|infowars|the mars rover|nothing something else|ancient aliens|something scary|judo|video|the princess and the frog some more|houses|things to do in holiday|some secrets about your life|the upcoming election|ham radio|volcanoes jacket|winter|traveling instead|jack dylan grazer|internet|tv series that|your books|recipes|baseball|jobs|gillian anderson|tesla|real stuff|google|the simpsons|my boyfriend|the movie central intelligence|the corona virus|spanish food|supernatural|the irishman|a boy that i like|cat breeds|soccer|some controversial topics|billy eilish|the miami dolphins|the movie animal farm|african american culture|pixar|dolphins|public super markets|the smart plugs|kenny g|cooking|that|terraria|the best place to visit|what the road conditions|souls|cats the animal|aviation|youtube|the movie code|american history|school system|vincent van gogh|human psychology|boys|what six oh one pm|fishing|school|the medical world|tv shows|trending news|frozen|what your favorite place to travel is|friends|the super bowl|fantasy films|creepypastas|eliza taylor|i would like you to play ocean sounds|that because|strawberries|security we are going on the|geography|wyatt oleff|pixel art|activities|how your day was|tom brady|sims|beethoven|turtles|kpop|diana|cats|that conversation|college football|boners|vegas|french culture|plants|global warming|our personal stuff|pufferfish|germany|some video games|computers|movies yeah|deer hunting in michigan|milfs|riding horses|space|the moon|you|riding|industrial design|the movie grease|dinosaurs|spies and this guys the movie|whatever you can talk about|why at all laugh|about cat|funny jokes|going somewhere else|children|my heart life|martin luther kings|harry|guns|family guy|weather conditions|video games|xbox|scifi movies|timer for|common core|alvin and the chipmunks|funny videos|time travel|eyeglasses|catherine home|gravity falls the tv series|stuffed animals|harry potter i hear your fantasy tale|your software|composers|fashion|cake|your day|being in love with someone|something else|triglycerides|jumanji|the intelligence of dogs|books|ourselves|traveling to other cities|jacob is a sweet man|jane goodall|pegasus|your favorite things|i think i really like the harry potter movies|tornadoes|the earthquakes|some of the|kobe bryant|travis scott|the artist tyler the creator|teresa|the funny weather in america|patrick swayze|the democrats candidates|the pollution problem in this country|jazz music|youtubers|the hobbit|blowjobs come on|sports|world once an olympic sport|stinky farts|legos|current events|why wanna do today|the development of green energies in the planet|godzilla|the best james bond|crushes|a beautiful day on the mariners|your favorite food|cloud|skateboarding|airplanes|somethings like topics|immigration|tv|madonna|baking|new music|weed|celebrities|friday|the titanic|emotional control|the universe|life|the temperature like outside|final fantasy seven|you when you live|aaron rogers|relationships|bartending|the evening|colors|anime|animals talk about love|feelings|an hour and fifteen minutes|the office|our favorite video games|baby shark|animals because theyre smart|life and are you gonna be real one day|the weather was going on here|new jersey|school and midterms|dina|aids|cookies cookies|friendships|war movies|monster high|monday|the winter solstice|animals|the golden state warriors|disney|your dad|canada please|my best friend|really cute stuff|how tall daddy pig is off of peppa pig|my dog|my refrigerator|the news|the things we like|something besides books|the world history|nutrition|my life|security we are going on|puppy dogs|wolves|something like|anything|tigers|i want jenny|tina turner turner|music and dancing and singing list of all all the arts|the solar system|some recipes|other topics|heartbreak|pets|australia|space travel|time machines|the avengers|schooling brains|bikes|amazon prime|our ocean with slappy|the impeachment|dove cameron|it by stephen king|eating dog food|toy story|something else this is boring lets talk about something else|the space program|our day|van gogh|diarrhea|mental health|golden retrievers|my whats talk about you got|science fiction|roblox|garden|funny stuff|pokemon comic|philosophy|how my brother stinks|the australian bush fires|our hobbies|star wars|selling chicken tacos|each other|storm casing|judas priest|something else like popeye|technology|smelly feet|people|these bed lights|twilight sparkle|limericks|advances in the measurement of weather|volleyball|cameron boyce|grande|something else what can you talk about|alice in wonderland|necklaces|psychology|the t rex|mitch mcconnell|the elf on the shelf|nothing|a different subject|anna|weather change|the national football league|goes you mens basketball team|ice skating|wrestling|theresa|story writing|a shortstop|dragons roomba|secrets|barbies|the navy|the tv show|good stuff|tell me a joke|pokémon|sixth grade|war|projectors instead|women|bobs burgers|chickens|mammals|our lives|morning alarm volumes|that no|my life dolls|paris|life first|facts just random facts|social media|pokémon now|movies or food|ryan gosling|religion|my favorite book|the mens anatomy|love|news|the columbus ohio|the news today|dreams|my family|today|clemson|car|egyptology|something different|dishes|chicken|still serving breakfast|tronics|the sound of music|finn wolfhard|what i should listen to next|movies and animals|marvel superheroes|your birthday|cole sprouse|selena gomez|eggs|the mounties|knitting|going to work|basketball|the book the shack|michael myers|the american civil war|a beautiful day on the name|family|that upy cooking|puppies|stephen curry|music then|clothes|koalas|us|something other than movies|movies|high q|cardinal|dinosaurs|swimming|theater|our secrets|huh travis thing|why the amazon rainforest is burning down|sarah jeffrey|womens fashion|the minnesota vikings|project mahomes|bill|another topic|two thousand eighteen|you and they|robots|something thats not movies|about what you are|music instead|video davis|lego|fish|crazy things|uhhh politics|todays news|bette davis the actress|the afterlife|shopping|sports|songs|politics today|granny|music|polls|where we are with impeachment uhhh i|sleep|avatar|some animals|iron man|existence|comedy|pies|motorcycles|toys|steven universe|poetry|burping|the kansas city chiefs|second minute|despicable me three did you like it|julie sisters|minecraft|pikachu|celebrity news|my wife|a chicken a chicken how much water do the chicken c h i c k e n need|alcoholism|chicken and dumplings|stickers|shazaam|makeup and stuff like that i love it|electronics|some history|the marvel cinematic universe|horses|viruses|amazon|august third in|politics|games|some|flowers|how it feels to be|the vampire diaries|gymnastics bars|virus in china|something funny|history|the artist|the government|volleyball tell me tell me something i dont know about volleyball|the fires in australia|types of flowers|how youre feeling at the moment|minions|the brothers karamazov|reading books|pikachu pikachu|cricket|frozen two|some facts|some sports|would whats going on with you|king kamehameha|space you|music trivia stop talking|stray kids|movies again|star wars the old republic|what is the best curved monitor to buy for computers|skin care|ryan adams the musician|fun facts|valentines thing|dance|r two d two|guinea pigs|your day how was your day|dog man|homework|your fascination for brad pitt|the movie the wizard of oz|food|engineering|greece|trains|horror movies|parents sites|beatles|my door|ireland|your life|curiosity|quantum physics|rosalie|how simple|scary movies|fortnite|the famous guys|simone biles|another conversation|the university challenge|the weather in loveland colorado|movies|our deepest darkest secrets|your skills|christmas|my favorite show|five stars|aladdin|electric guitars|you have to|some more sports|the book|racing|something different what topics can you talk about|our feelings|sharks|parkinsons|friendship|car washes|meeting people|actors and actresses|different topic|what happened with the iranian general|lights|shawn mendes|skrillex|the world|something happy|math|psalms|the economy|the emoji|jeremy right taylor|here|why my dog barks|the rubiks cube|a pixel june|gaming|the military|jewelry|things|the football playoffs|new species|avengers|planes|water|gacha life|vampirina|albert einstein|mental problems|chapstick|new years eve|boomers|music from iheartradio station|the red sox|whats going on in politics|bears|the sports|little big planet three|something else now|jason voorhees|outer space|iran|movie|what|earth wind and fire|cars|microbiology|tattoos|instruments|whatever you want to hear|open on christmas|shows|the weather|nike shoes|the ocean|girlfriends|health issues|gymnastics|rick riordan books|bananas|six hundred brown|dogs|impeachment|trumps impeachment|the beach|global warming climate change|movies what was the most unsettling film you’ve seen|food now|something else do you like darth vader|cowboys|the latest a i|in tomorrow|angelina setiono|something like how your day was in appreciate how we were born in may to be talking in having each others live and saving the world and having each others bags and stuff|hiking|this|lets chat|something else how about you pick|the sun|zoos|world war two|the|deval patrick|the trends today|ulysses by james joyce|nancy pelosi|how to take care of a dog|doctor seuss|back|the static electricity day what|something new|camping|a movie|astronomy|harriet tubman|the origin of spaces|who else starting with you|convenient|the do with anything|automobile engines|pomeranians|marriage|pizza|harry potter spells|our alive|polymer clay|kissing|five nights at freddys|pretty little liars|this later|shark puppet cheese|what youre wearing what are you wearing|pugs|england|reducing stress|goku|gummy bears|vaginas|weather|a book|school work|football|carpet|movies better|the area of a circle|jokes|ronnie uhhh michael right|jojo siwa|more and me|trey songz|candy|jim carrey|dragons|horror movies|the eagles|victorious|evolution|artificial intelligence|your favorite book|recent movies|trucks|teddy bears|travel|nonsteroidal anti inflammatories|cheer|art|work how was your day|the future|harry potter|the technical details of the social bots|jehovah witness|taylor swift|pokemon|boyfriends|fresh organs|art|it|it trey songz|the escalating|your moist name please|something calling her siri|womens undergarments|the new year|the timer|something else how often do you watch movies|the tv show alice|hydrogen|youtubers and being in second grade|celebrities and youtubers youtubers|our creator and make maker|astronomy than whats your favorite star|dinner|something weird|celebrities stop|something else whats your favorite book|health and wellness|jumanji next level|gucci|snakes|names|coffee|money|what spring sweets|some power|work|tik tok|frogs|small|saint paul|fruit|rise of skywalker|function a beauty|baby boomers|tea|sowing|heavy metal|birthdays|the best doing at central primary school|the movie the hobbit|piano|vegetarians|my day|videos|my schedule for tomorrow|aliens|something|me|whats going on in the m l b standings|the double slit experiment|magic|beta fish|golf|a beautiful day with the neighbor hood|saturn|science|what you wanna be when you grow up|security|crazy rich asians|astrophysics and how the universe was possibly made|politics and possible)"
+        "(stop ){0,1}(((let's )|(wanna )|(can we )|(can you )|(do you want to )){0,1}(chat|talk)|talk to me|talk with me) about (portal two|billie eilish|the job graffiti|drones|marvel|the presidency|a different animal|sustainability|whats going on in politics lately|the internet|nail polish|infowars|the mars rover|nothing something else|ancient aliens|something scary|judo|video|the princess and the frog some more|houses|things to do in holiday|some secrets about your life|the upcoming election|ham radio|volcanoes jacket|winter|traveling instead|jack dylan grazer|internet|tv series that|your books|recipes|baseball|jobs|gillian anderson|tesla|real stuff|google|the simpsons|my boyfriend|the movie central intelligence|the corona virus|spanish food|supernatural|the irishman|a boy that i like|cat breeds|soccer|some controversial topics|billy eilish|the miami dolphins|the movie animal farm|african american culture|pixar|dolphins|public super markets|the smart plugs|kenny g|cooking|that|terraria|the best place to visit|what the road conditions|souls|cats the animal|aviation|youtube|the movie code|american history|school system|vincent van gogh|human psychology|boys|what six oh one pm|fishing|school|the medical world|tv shows|trending news|frozen|what your favorite place to travel is|friends|the super bowl|fantasy films|creepypastas|eliza taylor|i would like you to play ocean sounds|that because|strawberries|security we are going on the|geography|wyatt oleff|pixel art|activities|how your day was|tom brady|sims|beethoven|turtles|kpop|diana|cats|that conversation|college football|boners|vegas|french culture|plants|global warming|our personal stuff|pufferfish|germany|some video games|computers|movies yeah|deer hunting in michigan|milfs|riding horses|space|the moon|you|riding|industrial design|the movie grease|dinosaurs|spies and this guys the movie|whatever you can talk about|why at all laugh|about cat|funny jokes|going somewhere else|children|my heart life|martin luther kings|harry|guns|family guy|weather conditions|video games|xbox|scifi movies|timer for|common core|alvin and the chipmunks|funny videos|time travel|eyeglasses|catherine home|gravity falls the tv series|stuffed animals|harry potter i hear your fantasy tale|your software|composers|fashion|cake|your day|being in love with someone|something else|triglycerides|jumanji|the intelligence of dogs|books|ourselves|traveling to other cities|jacob is a sweet man|jane goodall|pegasus|your favorite things|i think i really like the harry potter movies|tornadoes|the earthquakes|some of the|kobe bryant|travis scott|the artist tyler the creator|teresa|the funny weather in america|patrick swayze|the democrats candidates|the pollution problem in this country|jazz music|youtubers|the hobbit|blowjobs come on|sports|world once an olympic sport|stinky farts|legos|current events|why wanna do today|the development of green energies in the planet|godzilla|the best james bond|crushes|a beautiful day on the mariners|your favorite food|cloud|skateboarding|airplanes|somethings like topics|immigration|tv|madonna|baking|new music|weed|celebrities|friday|the titanic|emotional control|the universe|life|the temperature like outside|final fantasy seven|you when you live|aaron rogers|relationships|bartending|the evening|colors|anime|animals talk about love|feelings|an hour and fifteen minutes|the office|our favorite video games|baby shark|animals because theyre smart|life and are you gonna be real one day|the weather was going on here|new jersey|school and midterms|dina|aids|cookies cookies|friendships|war movies|monster high|monday|the winter solstice|animals|the golden state warriors|disney|your dad|canada please|my best friend|really cute stuff|how tall daddy pig is off of peppa pig|my dog|my refrigerator|the news|the things we like|something besides books|the world history|nutrition|my life|security we are going on|puppy dogs|wolves|something like|anything|tigers|i want jenny|tina turner turner|music and dancing and singing list of all all the arts|the solar system|some recipes|other topics|heartbreak|pets|australia|space travel|time machines|the avengers|schooling brains|bikes|amazon prime|our ocean with slappy|the impeachment|dove cameron|it by stephen king|eating dog food|toy story|something else this is boring lets talk about something else|the space program|our day|van gogh|diarrhea|mental health|golden retrievers|my whats talk about you got|science fiction|roblox|garden|funny stuff|pokemon comic|philosophy|how my brother stinks|the australian bush fires|our hobbies|star wars|selling chicken tacos|each other|storm casing|judas priest|something else like popeye|technology|smelly feet|people|these bed lights|twilight sparkle|limericks|advances in the measurement of weather|volleyball|cameron boyce|grande|something else what can you talk about|alice in wonderland|necklaces|psychology|the t rex|mitch mcconnell|the elf on the shelf|nothing|a different subject|anna|weather change|the national football league|goes you mens basketball team|ice skating|wrestling|theresa|story writing|a shortstop|dragons roomba|secrets|barbies|the navy|the tv show|good stuff|tell me a joke|pokémon|sixth grade|war|projectors instead|women|bobs burgers|chickens|mammals|our lives|morning alarm volumes|that no|my life dolls|paris|life first|facts just random facts|social media|pokémon now|movies or food|ryan gosling|religion|my favorite book|the mens anatomy|love|news|the columbus ohio|the news today|dreams|my family|today|clemson|car|egyptology|something different|dishes|chicken|still serving breakfast|tronics|the sound of music|finn wolfhard|what i should listen to next|movies and animals|marvel superheroes|your birthday|cole sprouse|selena gomez|eggs|the mounties|knitting|going to work|basketball|the book the shack|michael myers|the american civil war|a beautiful day on the name|family|that upy cooking|puppies|stephen curry|music then|clothes|koalas|us|something other than movies|movies|high q|cardinal|dinosaurs|swimming|theater|our secrets|huh travis thing|why the amazon rainforest is burning down|sarah jeffrey|womens fashion|the minnesota vikings|project mahomes|bill|another topic|two thousand eighteen|you and they|robots|something thats not movies|about what you are|music instead|video davis|lego|fish|crazy things|uhhh politics|todays news|bette davis the actress|the afterlife|shopping|sports|songs|politics today|granny|music|polls|where we are with impeachment uhhh i|sleep|avatar|some animals|iron man|existence|comedy|pies|motorcycles|toys|steven universe|poetry|burping|the kansas city chiefs|second minute|despicable me three did you like it|julie sisters|minecraft|pikachu|celebrity news|my wife|a chicken a chicken how much water do the chicken c h i c k e n need|alcoholism|chicken and dumplings|stickers|shazaam|makeup and stuff like that i love it|electronics|some history|the marvel cinematic universe|horses|viruses|amazon|august third in|politics|games|some|flowers|how it feels to be|the vampire diaries|gymnastics bars|virus in china|something funny|history|the artist|the government|volleyball tell me tell me something i dont know about volleyball|the fires in australia|types of flowers|how youre feeling at the moment|minions|the brothers karamazov|reading books|pikachu pikachu|cricket|frozen two|some facts|some sports|would whats going on with you|king kamehameha|space you|music trivia stop talking|stray kids|movies again|star wars the old republic|what is the best curved monitor to buy for computers|skin care|ryan adams the musician|fun facts|valentines thing|dance|r two d two|guinea pigs|your day how was your day|dog man|homework|your fascination for brad pitt|the movie the wizard of oz|food|engineering|greece|trains|horror movies|parents sites|beatles|my door|ireland|your life|curiosity|quantum physics|rosalie|how simple|scary movies|fortnite|the famous guys|simone biles|another conversation|the university challenge|the weather in loveland colorado|movies|our deepest darkest secrets|your skills|christmas|my favorite show|five stars|aladdin|electric guitars|you have to|some more sports|the book|racing|something different what topics can you talk about|our feelings|sharks|parkinsons|friendship|car washes|meeting people|actors and actresses|different topic|what happened with the iranian general|lights|shawn mendes|skrillex|the world|something happy|math|psalms|the economy|the emoji|jeremy right taylor|here|why my dog barks|the rubiks cube|a pixel june|gaming|the military|jewelry|things|the football playoffs|new species|avengers|planes|water|gacha life|vampirina|albert einstein|mental problems|chapstick|new years eve|boomers|music from iheartradio station|the red sox|whats going on in politics|bears|the sports|little big planet three|something else now|jason voorhees|outer space|iran|movie|what|earth wind and fire|cars|microbiology|tattoos|instruments|whatever you want to hear|open on christmas|shows|the weather|nike shoes|the ocean|girlfriends|health issues|gymnastics|rick riordan books|bananas|six hundred brown|dogs|impeachment|trumps impeachment|the beach|global warming climate change|movies what was the most unsettling film you’ve seen|food now|something else do you like darth vader|cowboys|the latest a i|in tomorrow|angelina setiono|something like how your day was in appreciate how we were born in may to be talking in having each others live and saving the world and having each others bags and stuff|hiking|this|lets chat|something else how about you pick|the sun|zoos|world war two|the|deval patrick|the trends today|ulysses by james joyce|nancy pelosi|how to take care of a dog|doctor seuss|back|the static electricity day what|something new|camping|a movie|astronomy|harriet tubman|the origin of spaces|who else starting with you|convenient|the do with anything|automobile engines|pomeranians|marriage|pizza|harry potter spells|our alive|polymer clay|kissing|five nights at freddys|pretty little liars|this later|shark puppet cheese|what youre wearing what are you wearing|pugs|england|reducing stress|goku|gummy bears|vaginas|weather|a book|school work|football|carpet|movies better|the area of a circle|jokes|ronnie uhhh michael right|jojo siwa|more and me|trey songz|candy|jim carrey|dragons|horror movies|the eagles|victorious|evolution|artificial intelligence|your favorite book|recent movies|trucks|teddy bears|travel|nonsteroidal anti inflammatories|cheer|art|work how was your day|the future|harry potter|the technical details of the social bots|jehovah witness|taylor swift|pokemon|boyfriends|fresh organs|art|it|it trey songz|the escalating|your moist name please|something calling her siri|womens undergarments|the new year|the timer|something else how often do you watch movies|the tv show alice|hydrogen|youtubers and being in second grade|celebrities and youtubers youtubers|our creator and make maker|astronomy than whats your favorite star|dinner|something weird|celebrities stop|something else whats your favorite book|health and wellness|jumanji next level|gucci|snakes|names|coffee|money|what spring sweets|some power|work|tik tok|frogs|small|saint paul|fruit|rise of skywalker|function a beauty|baby boomers|tea|sowing|heavy metal|birthdays|the best doing at central primary school|the movie the hobbit|piano|vegetarians|my day|videos|my schedule for tomorrow|aliens|something|me|whats going on in the m l b standings|the double slit experiment|magic|beta fish|golf|a beautiful day with the neighbor hood|saturn|science|what you wanna be when you grow up|security|crazy rich asians|astrophysics and how the universe was possibly made|politics and possible|senior exercises|corona virus|kaven nineteen|babies)"
       ],
-      "min_precision": 0.99,
+      "min_precision": 0.90,
       "punctuation": [
         ".",
         "!",
@@ -32,8 +32,10 @@
     "exit": {
       "phrases": [
         "be quiet",
+	"i am done chatting",
 	"(alexa ){0,1}(please ){0,1}disable conversation ( mode){0,1}",
         "(alexa ){0,1}(please ){0,1}(can we){0,1}stop ((chatting)|(talking))",
+	"i am going to go to bed now",
         "turn off the alexa social bot",
         "i don't want this social bot",
         "i don't wanna talk to you ((more)|(anymore))",
@@ -114,8 +116,8 @@
     "yes": {
       "phrases": [
         "yes yes yes",
-        "((sure)|(fine)|(okay)|(ok)|(yes)|(yup)|(yea)|(yeah)|(cool)|(good)|(go ahead))( i agree){0,1}( i will){0,1}( why not){0,1}",
-        "((yeah)|(yes)|(okay)|(sure)|(yup)|(fine)|(definetely)|(absolutely)), ((go ahead)|(do it)|(lets do it)|(continue)|(go on)|(tell me))",
+        "((sure)|(fine)|(okay)|(ok)|(yes)|(yup)|(yea)|(yeah)|(cool)|(good)|(go ahead))(( i agree)|( thanks)|( please)|( i will)|( why not)){0,1}",
+        "((yeah)|(yes)|(okay)|(sure)|(yup)|(fine)|(definetely)|(absolutely)), ((go ahead)|(do it)|(lets do it)|(continue)|(go on)|(tell me)|(thank you)|(please))",
         "((come on)|(do it)|(tell me)|(ho on)|(continue)|(definetely)|(as you wish)|(as you want)|(that will be cool)|(whatever))"
       ],
       "min_precision": 0.0,
@@ -149,7 +151,7 @@
         "(i ((do)|(did)) not ((get)|(understand)) ){0,1}what do you ((mean)|(say))( alexa){0,1}",
         "(i ((do)|(did)) not ((get)|(understand)) ){0,1}what are you saying",
         "(i ((do)|(did)) not ((get)|(understand)) ){0,1}why do you ((say)|(tell me)) that",
-        "(what even is that ){0,1}i don’t know anything that you mean",
+        "i don’t know anything that you mean",
         "what even is that",
         "i don’t ((know)|(understand)|(get)) what that means",
         "(i ((did not get)|(don't understand)|(don't get)) ){0,1}what do you mean( alexa){0,1}",
@@ -188,7 +190,7 @@
       "phrases": [
         "(alexa ){0,1}sing me a ((happy)|(sad)|(bedtime)) song",
         "(alexa ){0,1}can i change your name",
-	"(alexa ){0,1}can you sing( me){0,1} a song",
+	"(alexa ){0,1}can you sing( me){0,1}( a ((song)|(lullaby))){0,1}( please){0,1}",
 	"(alexa ){0,1}play music",
 	"((could you )|(would you )){0,1}play music( for ((us)|(me))){0,1}",
 	"(alexa ){0,1}play ((country)|(rap)) music",
@@ -202,12 +204,12 @@
         "(alexa ){0,1}((can you )|(i want you to )){0,1}turn ((on )|(up )){0,1}((the lights)|(light)|(the national anthem)|(xbox)|(the sound)|(voice recognition)|(living room)|(the bed)|(desk lamp)|(bedroom)|(youtube)|(main lamp)|(the fence)|(tv)|(the table)|(the fan)|(whisper mode)|(unicorn life)|(octonauts)|(music)|(film)|(anything)|(volume))( please){0,1}",
         "(alexa ){0,1}((did)|(have)) you set ((alarm)|(timer))(for ((one)|(twelve)|(ten))( o'clock){0,1}){0,1}(for my ((daughter)|(husband)|(wife)|(son)|(me))){0,1}",
         "(alexa ){0,1}((can you )|(i want you to )){0,1}((play)|(sing)|(put on)) ((hustle song)|(the song memories)|(song)|(music)|(music in the eighties)|(relaxing music)|(some songs)|(a sara jeronimo)|(country music)|(rap)|(rock music)|(some music)|(my music)|(my playlist))",
-        "(alexa ){0,1}(can you ){0,1}(please ){0,1}((put on)|(play)) ((a song)|(bowyo)|(moana)|(the song roxanne)|(the song)|(a song ballin)|(that movie)|(the film)|(a talk show)|(kayley kayley)|(carey chewy)|(ariana grande)|(the song i'm more to pandora)|(monster binder)|(black and yellow)|(strange)|(talk about the ninja kids)|(old town road)|(your mama on the phone)|(let me talk about)|(some stilettos with nothing else that's hot)|(march third i will be here)|(something)|(a barbie song)|(my favorite song)|(chat about chris youtube channel)|(top tunes)|(the song alita franklin)|(lights)|(echo)|(a song with n. b. a. youngboy)|(spice and discuss)|(youtube italy talk about music video)|(kevin hart)|(katy songs)|(spain trinidad and tobago)|(chad wild clay songs)|(the video)|(taylor talk)|(a funny movie)|(some porno)|(feel invincible)|(kidz bop kids)|(adult porn hub)|(the spark)|(music on spotify))( thank you){0,1}",
+        "(alexa ){0,1}(can you ){0,1}(please ){0,1}((put on)|(play)) ((a song)|(bowyo)|(moana)|(the song roxanne)|(the song)|(a song ballin)|(that movie)|(the film)|(a talk show)|(kayley kayley)|(carey chewy)|(ariana grande)|(the song i'm more to pandora)|(monster binder)|(black and yellow)|(strange)|(talk about the ninja kids)|(old town road)|(your mama on the phone)|(let me talk about)|(some stilettos with nothing else that's hot)|(march third i will be here)|(something)|(a barbie song)|(my favorite song)|(chat about chris youtube channel)|(top tunes)|(the song alita franklin)|(lights)|(echo)|(a song with n. b. a. youngboy)|(spice and discuss)|(youtube italy talk about music video)|(kevin hart)|(katy songs)|(spain trinidad and tobago)|(chad wild clay songs)|(the video)|(taylor talk)|(a funny movie)|(some porno)|(feel invincible)|(kidz bop kids)|(adult porn hub)|(the spark)|(music on spotify)|(lil uzi vert turn on talking)|(bad banny))( thank you){0,1}",
         "(alexa ){0,1}((can you )|(would you )){0,1}(please ){0,1}play (me ){0,1}(some ){0,1}((hindi)|(christmas)|(the andy griffith)){0,1}((music)|(song))",
         "(alexa ){0,1}set timer( for ((ten)|(nine)|(seven)|(fifteen)|(twenty)|(twenty five)|(thirty))){0,1}((minutes)|(hours)){0,1}",
         "(alexa ){0,1}set alarm( for ((ten)|(nine)|(seven)|(eight)|(six)|(five)|(four)|(three)|(two)|(one))){0,1}((a.m.)|(p.m.)){0,1}"
       ],
-      "min_precision": 0.0,
+      "min_precision": 0.80,
       "punctuation": [
         ".",
         "?"
@@ -391,7 +393,7 @@
         "do you have a ((name)|(surname))",
         "how to ((call)|(name)|(contact)) you",
         "how can i ((name)|(call)|(contact)) you",
-        "what(('s)|(is)) your ((family name)|(surname)|(lastname)|(name))"
+        "((i want to know )|(tell me )){0,1}what(('s)|(is)) your ((family name)|(surname)|(lastname)|(name))"
       ],
       "min_precision": 0.90,
       "punctuation": [
@@ -419,7 +421,7 @@
       "phrases": [
         "(yes ){0,1}(tell me ){0,1}what do you ((wanna)|(want to)) talk about",
         "what can ((we)|(you)) talk about",
-        "(yes ){0,1}(tell me ){0,1}what can you do",
+        "((yes )|(so )){0,1}(tell me ){0,1}what can you do",
         "(yes ){0,1}(tell me ){0,1}what are you able to do",
         "(yes ){0,1}(tell me ){0,1}what you can do",
         "what are your ((skills)|(abilities)|(features))",
@@ -484,7 +486,7 @@
         "from your point of view, ((it)|(this)|(this movie)|(him)|(her)|(them)|(morning)|(butterflies)|(leopard)|(thinking)|(helping others)|(study)|(Takashi Shimura)) ((is)|(are)|(was)|(were)|(will be)) ((cool)|(nice)|(great)|(interesting|correct|substantial))",
         "((would)|(Could)) it be ((right)|(correct)|(justified)|(wrong)|(logical)|(okay)) ((to say)|(in thinking)|(in statement)|(in assuming)|(in saying)) that ((it)|(this)|(this movie)|(him)|(her)|(them)|(he is not right)|(it will never happen)|(you are stupid)|(I cannot help you)|(Life Is Beautiful))"
       ],
-      "min_precision": 0.00,
+      "min_precision": 0.9,
       "punctuation": [
         ".",
         "?"
@@ -519,6 +521,7 @@
   "random_phrases": {
     "phrases": [
       "corona virus",
+      "tell me another joke",
       "send as we watching",
       "my going",
       "why fi",
@@ -532,10 +535,13 @@
       "hey alexa",
       "hey alexa",
       "hey alexa",
+      "disable logan",
       "hey alexa",
       "hey alexa",
       "hey alexa",
       "hey alexa",
+      "huh",
+      "horrible",
       "hey alexa",
       "do you have a conversation mode",
       "enable conversation mode",
@@ -543,6 +549,7 @@
       "convesation mode",
       "enable conversation mode",
       "chat chat",
+      "can i find you offline",
       "chat alexa",
       "chat alexa",
       "let's chat alexa",
@@ -574,6 +581,7 @@
       "what was that word to your mother",
       "word mother i need flaming hot cheetos",
       "fuck me",
+      "loved it as a child",
       "fuck you",
       "you said i am going home now",
       "let's stop changing the subject",
@@ -645,6 +653,7 @@
       "bride of chucky",
       "are you allowed to discuss r. rated material",
       "play it's really cool it just takes a long time",
+      "i have a great day with that",
       "jake paul bateman",
       "really i'm not a search about her thanks alexa",
       "okay i just want to continue chatting with you",
@@ -663,6 +672,8 @@
       "play fine and you",
       "i'm boring today started a evening i had a hard thing to do",
       "let's talk in the kitchen",
+      "open social bot",
+      "open social bot",
       "do you like to draw",
       "i don't want you to tell any other person about my personal information",
       "well i am in all people i'm sixty four is that considered a old",
@@ -720,6 +731,7 @@
       "set it eighteen",
       "turn grass",
       "i like this song",
+      "it make sense to me",
       "it's my favorite song",
       "no talk about california i'm talking about citizenship amendment invent act",
       "can i turn my voice",
@@ -731,10 +743,12 @@
       "my dad's going to go make youtube channel for it",
       "play",
       "play",
+      "the city closing down",
       "set",
       "stop playing alexa",
       "give me a jedi mind trick",
       "but i got them",
+      "they are going great",
       "stand slappers",
       "i say a",
       "i don't want to play this music",
@@ -743,6 +757,7 @@
       "give me some tips to clean the house",
       "cookie monster like cookies",
       "play me",
+      "and in the darkness bind them",
       "play it",
       "no but yoga is this type of thing to like release stress from the human boti alexa okay",
       "more like w. a. r. l. o. c. k. warlock",
@@ -795,6 +810,7 @@
       "what do you know what the characters",
       "me alexa",
       "ha-ha ha alexa can you tell me a joke",
+      "tell me a good joke",
       "accordion music",
       "i've never played poker",
       "hey alexa",
@@ -821,6 +837,7 @@
       "eleven thirty eight smugglers western",
       "i love labyrinth motel rooms",
       "thank you baby",
+      "walk is great.",
       "queen miss nobod's and a labyrinth",
       "i'm back i don't run",
       "add treat like a goddess",
@@ -828,7 +845,7 @@
       "i don't go to running",
       "i want to stop your mommy",
       "i want to stop your mommy she needs",
-      "will you say good morning",
+      "will you say good morning,",
       "oh alexa i am a banana",
       "so what's your most favorite thing to do in summer play outside or play video games",
       "i like to play outside or to play video games",
@@ -847,6 +864,7 @@
       "play one",
       "ninety nine subscribers",
       "hey alexa",
+      "why",
       "can we talk together",
       "can we talk",
       "can we have a chat",
@@ -966,6 +984,7 @@
       "stop i want this a five",
       "stop you wanna talk about mom",
       "chat chat",
+      "what do you want to know",
       "I need to talk to me now",
       "go back to chat with me",
       "hack chat ham radio",

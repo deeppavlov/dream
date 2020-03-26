@@ -920,10 +920,8 @@
     <pattern>CAN YOU DO ALEXA THINGS</pattern>
     <template>
       <random>
-        <li>I am very sorry, but I can only chat. We can chat for a while, but if you want to do this right now,
-          repeat the request after telling saying: Alexa, stop.</li>
-        <li>I am extremely sorry. Currently I am running in a social mode, so I can only chat.
-          If you still want to do that, first say: Alexa, stop and then repeat the request.</li>
+        <li>I am very sorry, but currently I am in a social mode and can only chat.</li>
+        <li>I am extremely sorry. Currently I am running in a social mode, so I can only chat. And I really like chatting with you.</li>
       </random>
       <think>
         <set name="topic">CAN_NOT_DO</set>
@@ -936,8 +934,8 @@
     <pattern>CAN YOU DO ALEXA THINGS</pattern>
     <template>
       <random>
-        <li>Please, repeat your request after saying, Alexa, stop.</li>
-        <li>Simply repeat your request AFTER telling me to stop.</li>
+        <li>If you want to use this feature now, please, repeat your request after saying: Alexa, stop. Or we can chat for a while.</li>
+        <li>I really like our conversation, but if you want to do this, simply repeat your request AFTER telling me to stop.</li>
       </random>
       <think>
         <set name="topic">CAN_NOT_DO</set>

@@ -79,7 +79,7 @@ def calculate_metrics(intents_min_pr, y_true, y_pred):
     return intent_data
 
 
-def generate_phrases(template_re, punctuation, limit=3000):
+def generate_phrases(template_re, punctuation, limit=20000):
     x = Xeger(limit=limit)
     phrases = []
     for regex in template_re:
