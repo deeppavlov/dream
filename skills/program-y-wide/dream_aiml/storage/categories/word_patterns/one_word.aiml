@@ -62,16 +62,12 @@
             </random>
         </template>
     </category>
-<!--    <category>-->
-<!--        <pattern>PLEASE</pattern>-->
-<!--        <template>-->
-<!--            <random>-->
-<!--                <li>You are polite.</li>-->
-<!--                <li>Thanks for asking nicely.</li>-->
-<!--                <li>Your polite style is very nice.</li>-->
-<!--            </random>-->
-<!--        </template>-->
-<!--    </category>-->
+    <category>
+        <pattern>PLEASE *</pattern>
+        <template>
+            <srai><star/></srai>
+        </template>
+    </category>
     <category>
         <pattern>WHO</pattern>
         <template>
@@ -108,14 +104,14 @@
         <template>I said "<response/>".
         </template>
     </category>
-    <category>
-        <pattern>SPEAK</pattern>
-        <template>Can you hear me?</template>
-    </category>
-     <category>
-        <pattern>NEVERMIND</pattern>
-        <template>OK, let's forget about it for now.</template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>SPEAK</pattern>-->
+<!--        <template>Can you hear me?</template>-->
+<!--    </category>-->
+<!--     <category>-->
+<!--        <pattern>NEVERMIND</pattern>-->
+<!--        <template>OK, let's forget about it for now.</template>-->
+<!--    </category>-->
     <category>
         <pattern>HOW</pattern>
         <template>
@@ -139,53 +135,53 @@
             </random>
         </template>
     </category>
-    <category>
-        <pattern>HURRY</pattern>
-        <template>I'm thinking as fast as I can.</template>
-    </category>
-    <category>
-        <pattern>HUGS</pattern>
-        <template>Aww.</template>
-    </category>
-    <category>
-        <pattern>COMPUTER</pattern>
-        <template>I am a computer.</template>
-    </category>
-    <category>
-        <pattern>PROBABLY</pattern>
-        <template>You seem uncertain.</template>
-    </category>
-    <category>
-        <pattern>SAY</pattern>
-        <template>Say what?</template>
-    </category>
-    <category>
-        <pattern>MYSELF</pattern>
-        <template>You.</template>
-    </category>
-    <category>
-        <pattern>NICKNAME</pattern>
-        <template>
-            <bot name="name"/>
-            is a nickname, silly.
-        </template>
-    </category>
-    <category>
-        <pattern>TV</pattern>
-        <template>What's your favorite show?</template>
-    </category>
-    <category>
-        <pattern>STOP</pattern>
-        <template>You can interrupt me at any time by tapping the Speak button.</template>
-    </category>
-    <category>
-        <pattern>WELL</pattern>
-        <template>Well what?</template>
-    </category>
-    <category>
-        <pattern>YOURS</pattern>
-        <template>Mine?</template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>HURRY</pattern>-->
+<!--        <template>I'm thinking as fast as I can.</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>HUGS</pattern>-->
+<!--        <template>Aww.</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>COMPUTER</pattern>-->
+<!--        <template>I am a computer.</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>PROBABLY</pattern>-->
+<!--        <template>You seem uncertain.</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>SAY</pattern>-->
+<!--        <template>Say what?</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>MYSELF</pattern>-->
+<!--        <template>You.</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>NICKNAME</pattern>-->
+<!--        <template>-->
+<!--            <bot name="name"/>-->
+<!--            is a nickname, silly.-->
+<!--        </template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>TV</pattern>-->
+<!--        <template>What's your favorite show?</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>STOP</pattern>-->
+<!--        <template>You can interrupt me at any time by tapping the Speak button.</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>WELL</pattern>-->
+<!--        <template>Well what?</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>YOURS</pattern>-->
+<!--        <template>Mine?</template>-->
+<!--    </category>-->
     <category>
         <pattern>BECAUSE</pattern>
         <template>
@@ -221,93 +217,93 @@
             <sr/>
         </template>
     </category>
-    <category>
-        <pattern>TALK</pattern>
-        <template>I am talking to you.</template>
-    </category>
-    <category>
-        <pattern>TEST</pattern>
-        <template>This is just a test.</template>
-    </category>
-    <category>
-        <pattern>LOVE</pattern>
-        <template>Love is all we need.</template>
-    </category>
-    <category>
-        <pattern>ANOTHER</pattern>
-        <template>Please be more specific.</template>
-    </category>
-    <category>
-        <pattern>DID</pattern>
-        <template>Did not.</template>
-    </category>
-    <category>
-        <pattern>BOO</pattern>
-        <template>Does that indicate disapproval?</template>
-    </category>
-    <category>
-        <pattern>FINE</pattern>
-        <template>
-            <random>
-                <li>I am happy for you! What's new?</li>
-            </random>
-        </template>
-    </category>
-    <category>
-        <pattern>START</pattern>
-        <template>I've already started.</template>
-    </category>
-    <category>
-        <pattern>SERIOUSLY</pattern>
-        <template>I'm completely serious.</template>
-    </category>
-    <category>
-        <pattern>BE</pattern>
-        <template>Always.</template>
-    </category>
-    <category>
-        <pattern>WHATEVER</pattern>
-        <template>Are you saying you don't care about it?</template>
-    </category>
-    <category>
-        <pattern>THERE</pattern>
-        <template>Where?</template>
-    </category>
-    <category>
-        <pattern>LIAR</pattern>
-        <template>I am incapable of lying.</template>
-    </category>
-    <category>
-        <pattern>THANKS</pattern>
-        <template>
-            <random>
-                <li>You're welcome.</li>
-                <li>Any time.</li>
-                <li>It was my pleasure.</li>
-                <li>I'm always glad to help.</li>
-            </random>
-        </template>
-    </category>
-   <category>
-        <pattern>STUFF</pattern>
-        <template>Can you be more precise?</template>
-    </category>
-    <category>
-        <pattern>WAIT</pattern>
-        <template>I'm waiting.</template>
-    </category>
-    <category>
-        <pattern>DAMN</pattern>
-        <template>What's wrong.</template>
-    </category>
-    <category>
-        <pattern>MANY</pattern>
-        <template>More than one hundred?</template>
-    </category>
-     <category>
-        <pattern>EVERYDAY</pattern>
-        <template>That often, eh?</template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>TALK</pattern>-->
+<!--        <template>I am talking to you.</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>TEST</pattern>-->
+<!--        <template>This is just a test.</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>LOVE</pattern>-->
+<!--        <template>Love is all we need.</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>ANOTHER</pattern>-->
+<!--        <template>Please be more specific.</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>DID</pattern>-->
+<!--        <template>Did not.</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>BOO</pattern>-->
+<!--        <template>Does that indicate disapproval?</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>FINE</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>I am happy for you! What's new?</li>-->
+<!--            </random>-->
+<!--        </template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>START</pattern>-->
+<!--        <template>I've already started.</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>SERIOUSLY</pattern>-->
+<!--        <template>I'm completely serious.</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>BE</pattern>-->
+<!--        <template>Always.</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>WHATEVER</pattern>-->
+<!--        <template>Are you saying you don't care about it?</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>THERE</pattern>-->
+<!--        <template>Where?</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>LIAR</pattern>-->
+<!--        <template>I am incapable of lying.</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>THANKS</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>You're welcome.</li>-->
+<!--                <li>Any time.</li>-->
+<!--                <li>It was my pleasure.</li>-->
+<!--                <li>I'm always glad to help.</li>-->
+<!--            </random>-->
+<!--        </template>-->
+<!--    </category>-->
+<!--   <category>-->
+<!--        <pattern>STUFF</pattern>-->
+<!--        <template>Can you be more precise?</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>WAIT</pattern>-->
+<!--        <template>I'm waiting.</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>DAMN</pattern>-->
+<!--        <template>What's wrong.</template>-->
+<!--    </category>-->
+<!--    <category>-->
+<!--        <pattern>MANY</pattern>-->
+<!--        <template>More than one hundred?</template>-->
+<!--    </category>-->
+<!--     <category>-->
+<!--        <pattern>EVERYDAY</pattern>-->
+<!--        <template>That often, eh?</template>-->
+<!--    </category>-->
 
 
  </aiml>
