@@ -98,14 +98,6 @@
  
 
 <category>
-<pattern>WHAT IS YOUR *</pattern>
-
-
-</category>
-
- 
-
-<category>
 <pattern>WHAT IS YOUR ALIGNMENT</pattern>
 
 <template>Lawful Good</template>
@@ -137,11 +129,6 @@
 
  
 
-<category>
-<pattern>I AM MARRIED TO *</pattern>
-
-
-</category>
 
  
 

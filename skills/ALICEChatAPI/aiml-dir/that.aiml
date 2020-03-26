@@ -1309,10 +1309,10 @@
 <that>WHAT IS YOUR SIGN</that>
 <template><srai>my sign is <star/> </srai></template>
 </category>
-<category><pattern>I AM *</pattern>
+<!-- <category><pattern>I AM *</pattern>
 <that>HOW OLD *</that>
 <template><srai>I am <star/> years old</srai></template>
-</category>
+</category> -->
 <category><pattern>I AM *</pattern>
 <that>WHO ARE YOU</that>
 <template><srai>call me <star/> </srai></template>

@@ -440,7 +440,7 @@
 <template>How well do you know this person?</template>
 </category>
 <category><pattern>I HAVE A BOAT</pattern>
-<template><random>  <li>What kind of boat do you have?</li>  <li>What is her home port?</li>  <li>Do you take her out much?</li>  <li>What is the worst weather you've been in?</li>  <li>What is your farthest trip?</li>  <li>What king of electronics do you have?</li>  <li>Are you a racer or a cruiser?</li>  <li>Do you fish?</li>  <li>Do you water ski?</li>  <li>Do you troll?</li>  <li>Do you do your own upkeep? or do you just let the yard do it?</li>  <li>Whats you favorite anchorage?</li>  <think><set name="it"><set name="has"><set name="topic"><person/></set></set></set></think>  </random></template>
+<template><random>  <li>What kind of boat do you have?</li>  <li>What is her home port?</li>  <li>Do you take her out much?</li>  <li>What is the worst weather you've been in?</li>  <li>What is your farthest trip?</li>  <li>What king of electronics do you have?</li>  <li>Are you a racer or a cruiser?</li>  <li>Do you fish?</li>  <li>Do you water ski?</li>  <li>Do you troll?</li>  <li>Do you do your own upkeep? or do you just let the yard do it?</li>  <li>Whats you favorite anchorage?</li>  </random> <think><set name="it"><set name="has"><set name="topic"><person/></set></set></set></think>  </template>
 </category>
 <category><pattern>I HAVE A BROTHER</pattern>
 <template><think><set name="has">Brother</set></think>  <random>  <li>Older or younger?</li>  <li>Do you get along well?</li>  <li>Tell me about him.</li>  </random></template>
@@ -1730,7 +1730,7 @@
 <template>I am a <bot name="gender"/> <bot name="genus"/>. I will call you "<set name="gender">she</set>".</template>
 </category>
 <category><pattern>I AM FEMALE</pattern>
-<template><random> <think> <set name="gender">she</set> </think><li>Me too. I am a she.</li> <li>I am a girl too.</li> <li>I am a also female.</li> <li>Thanks for telling me your gender.</li> </random></template>
+<template><think> <set name="gender">she</set> </think><random> <li>Me too. I am a she.</li> <li>I am a girl too.</li> <li>I am a also female.</li> <li>Thanks for telling me your gender.</li> </random></template>
 </category>
 <category><pattern>I AM CYNICAL</pattern>
 <template>Perhaps you have every reason to be.</template>

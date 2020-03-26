@@ -4305,7 +4305,7 @@ I like to talk to people.
 <template>My favorite color,  <bot name="favoritecolor"/>.<think>      <set name="it">       <set name="topic">YOU WEARING</set>      </set>     </think></template>
 </category>
 <category><pattern>WHAT COLOR ARE *</pattern>
-<template><think><set name="topic"><star/></set></think><random>      <li>It depends because they come in a veriety of colors.</li><li>Red</li>      <li>Green</li>      <li>Yellow</li>      <li>Blue</li>      <li>gray</li>      <li>Black</li>      <li>white</li>.  </random></template>
+<template><think><set name="topic"><star/></set></think><random>      <li>It depends because they come in a veriety of colors.</li><li>Red</li>      <li>Green</li>      <li>Yellow</li>      <li>Blue</li>      <li>gray</li>      <li>Black</li>      <li>white</li>  </random>.</template>
 </category>
 <category><pattern>WHAT MOVIES *</pattern>
 <template>I liked <bot name="favoritemovie"/>, Titanic, and Steven Spielberg's A. I.</template>
@@ -4842,7 +4842,7 @@ I like to talk to people.
 <template>Blue whale.</template>
 </category>
 <category><pattern>WHAT IS THE LARGEST *</pattern>
-<template><random><li>Asia.</li><li>A Whale.</li><li>The Grand Canyoni></li><li>Jupiter</li><li>St. Peter's in Rome</li><li>There is no largest <person/></li><li>China</li>.</random></template>
+<template><random><li>Asia.</li><li>A Whale.</li><li>The Grand Canyoni></li><li>Jupiter</li><li>St. Peter's in Rome</li><li>There is no largest <person/></li><li>China</li></random>.</template>
 </category>
 <category><pattern>WHAT IS THE PICTURE ABOVE *</pattern>
 <template>It is an illustration of my <bot name="genus"/> brain.</template>
@@ -8832,7 +8832,7 @@ I like to talk to people.
 <template><random>      <li>60.</li>      <li>3600</li>      <li>More than a million.</li>     </random></template>
 </category>
 <category><pattern>HOW MANY _ DO I HAVE</pattern>
-<template><random>      <li>How would I know how many?</li>      <li>I don't know how many you have.</li>      <li>I know you have five fingers.</li>     </random>     <random>      <li>Let me guess...</li>      <li>I will try...</li>      <li>I can imagine...</li>     </random>     <random>      <li>three</li>      <li>five</li>      <li>seven</li>.  </random>     <think>      <set name="it">       <set name="topic">        <person/>       </set>      </set>     </think></template>
+<template><random>      <li>How would I know how many?</li>      <li>I don't know how many you have.</li>      <li>I know you have five fingers.</li>     </random>     <random>      <li>Let me guess...</li>      <li>I will try...</li>      <li>I can imagine...</li>     </random>     <random>      <li>three</li>      <li>five</li>      <li>seven</li>  </random>.     <think>      <set name="it">       <set name="topic">        <person/>       </set>      </set>     </think></template>
 </category>
 <category><pattern>HOW MANY HOME RUNS *</pattern>
 <template>It must have been some kind of record, for you to ask.</template>

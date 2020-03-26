@@ -42,11 +42,11 @@
 <pattern>I AM IN * I AM IN *</pattern>
 <template><srai>I AM IN <star/></srai></template>
 </category>
-<category>
+<!-- <category>
 <pattern>I AM * YEARS OLD I *</pattern>
 <template><srai>I AM <star/> YEARS OLD</srai>
 <srai>I <star index="2"/></srai></template>
-</category>
+</category> -->
 <category><pattern>WHAT DO YOU MEAN * O M</pattern>
 <template><srai>WHAT IS OM</srai>
 </template>

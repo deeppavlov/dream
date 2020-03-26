@@ -27,7 +27,7 @@
 </template>
 </category>
 
-<topic name="ENDS WITH ALICE">
+<!-- <topic name="ENDS WITH ALICE"> -->
 
 <!--<category><pattern>TEST BOTNAME</pattern>-->
 <!--<template><bot name="name"/> is functioning normally.-->

@@ -1440,9 +1440,9 @@
 <category><pattern>MY OLDER *</pattern>
 <template><srai>my <star /></srai></template>
 </category>
-<category><pattern>MY AGE IS * YEARS OLD *</pattern>
+<!-- <category><pattern>MY AGE IS * YEARS OLD *</pattern>
 <template><srai>I AM <star /> YEARS OLD</srai></template>
-</category>
+</category> -->
 <category><pattern>MY NEW *</pattern>
 <template><srai>my <star /></srai></template>
 </category>
@@ -5415,9 +5415,9 @@
 <category><pattern>I AM * SHE</pattern>
 <template><srai>I am female</srai></template>
 </category>
-<category><pattern>I AM * YEARS OF AGE</pattern>
+<!-- <category><pattern>I AM * YEARS OF AGE</pattern>
 <template><srai>I am <star /> years old</srai></template>
-</category>
+</category> -->
 <category><pattern>I AM * DINNER</pattern>
 <template><srai>for dinner</srai></template>
 </category>
@@ -5520,9 +5520,9 @@
 <category><pattern>I AM _ SMILE *</pattern>
 <template><srai>I AM <star /></srai>.  <srai>  <star index="2" /></srai></template>
 </category>
-<category><pattern>I AM _ YEARS OLD AND *</pattern>
+<!-- <category><pattern>I AM _ YEARS OLD AND *</pattern>
 <template><srai>I am <star /> years old</srai>.  <srai>  <star index="2" /></srai></template>
-</category>
+</category> -->
 <category><pattern>I AM _ BUT I *</pattern>
 <template><srai>I <star /></srai>. <srai>I <star index="2" /></srai></template>
 </category>

@@ -3731,9 +3731,9 @@
 <category><pattern>I AM _ AND *</pattern>
 <template><srai>I AM <star/></srai><srai>I AM <star index="2"/></srai></template>
 </category>
-<category><pattern>I AM _ Y OLD</pattern>
+<!-- <category><pattern>I AM _ Y OLD</pattern>
 <template><srai>I AM <star/> YEARS OLD</srai></template>
-</category>
+</category> -->
 <category><pattern>I AM SITTING *</pattern>
 <template><srai>I AM IN <star/></srai></template>
 </category>
@@ -3755,9 +3755,9 @@
 <!--<category><pattern>I AM * SUICIDE</pattern>-->
 <!--<template><srai>I WANT TO KILL MYSELF</srai></template>-->
 <!--</category>-->
-<category><pattern>I AM * YOUNG</pattern>
+<!-- <category><pattern>I AM * YOUNG</pattern>
 <template><srai>I AM <star/> YEARS OLD</srai></template>
-</category>
+</category> -->
 <category><pattern>I AM * FEMALE</pattern>
 <template><srai>I AM FEMALE</srai></template>
 </category>
@@ -3832,7 +3832,7 @@
 </category>
 <category><pattern>I AM AT UNIVERSTIY *</pattern>
 <template><srai>I AM IN UNIVERSITY <star/></srai></template>
-<!--</category>-->
+</category>
 <!--<category><pattern>I AM SUCIDAL</pattern>-->
 <!--<template><srai>I WANT TO KILL MYSELF</srai></template>-->
 <!--</category>-->
@@ -8377,9 +8377,9 @@
 <category><pattern>I AM A * AND WHEN *</pattern>
 <template><srai>I AM A <star/></srai>.  <srai>WHEN <star index="2"/></srai></template>
 </category>
-<category><pattern>I AM A * YRS OLD</pattern>
+<!-- <category><pattern>I AM A * YRS OLD</pattern>
 <template><srai>I AM <star/> YEARS OLD</srai></template>
-</category>
+</category> -->
 <category><pattern>I AM A MALE</pattern>
 <template><srai>I AM MALE</srai><!-- REDUCTION --></template>
 </category>

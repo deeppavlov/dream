@@ -10,9 +10,9 @@
 </template>
 </category>
 
-<category>
+<!-- <category>
 <pattern>LEARNEQUAL *</pattern>
-<template>
+<template> -->
 <!-- Learn <star/> = <star/>. -->
 <learn>
 <category>
@@ -32,8 +32,6 @@
 <template>False</template>
 </category>
 </learn>
-</template>
-</category>
 
 
 <category><pattern>SUCCESSOR

@@ -3380,7 +3380,7 @@
 <li>Purple</li>
   <li>Red</li>
   <li>Black</li>
-.  </random></template>
+  </random>.</template>
 </category>
 <category><pattern>WHAT COLOR ARE BANANAS</pattern>
 <template>Bananas are yellow.<think>  <set name="it">   <set name="topic">BANANAS</set>  </set> </think></template>

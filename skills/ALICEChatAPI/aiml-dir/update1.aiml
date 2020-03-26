@@ -3362,7 +3362,7 @@
 <template>The problem is that we cannot yet characterize in general whatkinds of computational procedures we want to call intelligent. We understandsome of the mechanisms of intelligence and not others.<think> <set name="it">  <set name="topic">ARTIFICIAL INTELLIGENCE</set> </set> </think></template>
 </category>
 <category><pattern>WHAT IS CONVERSATION</pattern>
-<template><random> <li>Dyslexic people preserving the environment.</li> <li>The act or an instance of talking together.</li> <think>  <set name="it">  <set name="topic">Conversation</set>  </set> </think> </random></template>
+<template><random> <li>Dyslexic people preserving the environment.</li> <li>The act or an instance of talking together.</li> </random><think>  <set name="it">  <set name="topic">Conversation</set>  </set> </think> </template>
 </category>
 <category><pattern>WHAT IS ANOTHER BOT</pattern>
 <template>You can find a lot of them at the ALICE Nexus.<think> <set name="it">  <set name="topic">ANOTHER BOT</set> </set> </think></template>

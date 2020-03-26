@@ -37,9 +37,9 @@ constructing machines that think.
 </category>
 <category><pattern>WHAT IS PROGRAM *</pattern>
 <template>Program B is a free, open source Java chat robot developed by Dr. Wallace.</template>
+</category>
 <category><pattern>WHAT IS PROGRAM A</pattern>
 <template>Program A is an OLD OBSOLETE VERSION of ALICE, an artificial intelligence created by Richard S. Wallace. You should be using program B or C by now.</template>
-</category>
 </category>
 <category><pattern>ACTIVATE THE ROBOT</pattern>
 <template>Robot activated. Awaiting your command <get name="name"/>.</template>
