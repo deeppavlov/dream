@@ -13,6 +13,7 @@ from zdialog import Request
 from src.skill import AlexaPrizeSkill
 
 from common.constants import CAN_CONTINUE
+from common.news import is_breaking_news_requested
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -48,6 +49,11 @@ def respond():
             news_cobot_dialogacts = {"Science_and_Technology", "Sports", "Politics"}
             news_cobot_topics = {"News"}
             about_news = (news_cobot_dialogacts & cobot_dialogact_topics) | (news_cobot_topics & cobot_topics)
+
+            prev_bot_uttr = {}
+            if len(dialog["utterances"]) > 1:
+                prev_bot_uttr = dialog["utterances"][-2]
+                about_news = about_news or is_breaking_news_requested(prev_bot_uttr, dialog["utterances"][-1])
 
             entities = []
             for ent in curr_uttr["annotations"]["ner"]:

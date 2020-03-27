@@ -1,4 +1,4 @@
-sentry_sdk==0.13.0
+sentry_sdk==0.14.3
 flask==1.1.1
 numpy==1.17.3
 requests==2.22.0

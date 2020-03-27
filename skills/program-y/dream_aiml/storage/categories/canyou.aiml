@@ -25,4 +25,14 @@
     </template>
   </category>
 
+  <category>
+    <pattern>CAN YOU TALK ABOUT EMOTIONS</pattern>
+    <template>
+      <random>
+        <li>Yes! How do you feel?</li>
+      </random>
+    </template>
+  </category>
+
+
 </aiml>
