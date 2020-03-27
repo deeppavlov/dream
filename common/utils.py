@@ -1,3 +1,6 @@
+from string import punctuation
+
+
 def get_skill_outputs_from_dialog(utterances, skill_name, activated=False):
     """
     Extract list of dictionaries with already formatted outputs of `skill_name` from full dialog.
@@ -99,3 +102,20 @@ def get_user_replies_to_particular_skill(utterances, skill_name):
         if uttr.get("active_skill", "") == skill_name:
             result.append(utterances[i - 1]["text"])
     return result
+
+
+def is_yes(annotated_phrase):
+    y1 = annotated_phrase['annotations']['intent_catcher'].get('yes', {}).get('detected') == 1
+    user_phrase = annotated_phrase['text']
+    for sign in punctuation:
+        user_phrase = user_phrase.replace(sign, ' ')
+    y2 = ' yes ' in user_phrase
+    # TODO: intent catcher not catches 'yes thanks!'
+    return y1 or y2 or 'yes' in user_phrase.lower()
+
+
+def is_no(annotated_phrase):
+    user_phrase = annotated_phrase['text'].lower().strip().replace('.', '')
+    # TODO: intent catcher thinks that horrible is no intent'
+    is_not_horrible = 'horrible' != user_phrase
+    return is_not_horrible and annotated_phrase['annotations']['intent_catcher'].get('no', {}).get('detected') == 1

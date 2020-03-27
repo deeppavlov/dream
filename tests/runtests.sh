@@ -212,6 +212,10 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
         echo "Run tests for book_skill"
         dockercompose_cmd exec -T -u $(id -u) book_skill python test.py
     fi
+    if container_is_started emotion_skill; then
+        echo "Run tests for emotion_skill"
+        dockercompose_cmd exec -T -u $(id -u) emotion_skill python test.py
+    fi
 fi
 
 if [[ "$MODE" == "infer_questions" || "$MODE" == "all" ]]; then

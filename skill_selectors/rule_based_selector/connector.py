@@ -5,6 +5,8 @@ from itertools import chain
 from typing import Dict, Callable
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
+from common.emotion import detect_emotion
+from common.news import is_breaking_news_requested
 
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -13,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 class RuleBasedSkillSelectorConnector:
-    sensitive_topics = {"Politics", "Celebrities", "Religion", "Sex_Profanity", "Sports", "News", "Psychology"}
+    sensitive_topics = {"Politics", "Religion", "Sex_Profanity"}
     # `General_ChatIntent` sensitive in case when `?` in reply
     sensitive_dialogacts = {"Opinion_RequestIntent", "General_ChatIntent"}
     movie_cobot_dialogacts = {
@@ -158,6 +160,7 @@ class RuleBasedSkillSelectorConnector:
         about_news = (self.news_cobot_topics & cobot_topics) or re.search(
             news_re_expr, reply
         )
+        about_news = about_news or is_breaking_news_requested(prev_bot_uttr, dialog['utterances'][-1])
         about_virus = 'virus' in dialog['utterances'][-1]['text']
         emotions = dialog['utterances'][-1]['annotations']['emotion_classification']['text']
         if "/new_persona" in dialog["utterances"][-1]["text"]:
@@ -242,16 +245,12 @@ class RuleBasedSkillSelectorConnector:
             if about_news:
                 skills_for_uttr.append("news_skill")
 
-            emo_prob_threshold = 0.8  # to check if any emotion has at least this prob
+            emo_prob_threshold = 0.9  # to check if any emotion has at least this prob
             for emotion, prob in emotions.items():
                 if prob == max(emotions.values()):
                     found_emotion, found_prob = emotion, prob
             cond1 = found_emotion != 'neutral' and found_prob > emo_prob_threshold
-            if 'text' in prev_bot_uttr:
-                cond2 = 'joke' in prev_bot_uttr['text']
-            else:
-                cond2 = False
-            should_run_emotion = cond1 or cond2
+            should_run_emotion = cond1 or detect_emotion(prev_bot_uttr, dialog['utterances'][-1])
             if should_run_emotion:
                 skills_for_uttr.append('emotion_skill')
 

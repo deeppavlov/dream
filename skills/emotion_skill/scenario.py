@@ -4,22 +4,10 @@ import requests
 import json
 import logging
 from os import getenv
-from string import punctuation
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
-
-
-#  import os
-#  import zipfile
-#  import _pickle as cPickle
-
-
-def is_yes(annotated_phrase):
-    y1 = annotated_phrase['annotations']['intent_catcher'].get('yes', {}).get('detected') == 1
-    user_phrase = annotated_phrase['text']
-    for sign in punctuation:
-        user_phrase = user_phrase.replace(sign, ' ')
-    y2 = ' yes ' in user_phrase
-    return y1 or y2
+from common.news import BREAKING_NEWS
+from common.utils import is_yes, is_no
+from common.emotion import detect_emotion
 
 
 ENTITY_SERVICE_URL = getenv('COBOT_ENTITY_SERVICE_URL')
@@ -30,9 +18,17 @@ sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
+physical_activites = ('I read that physical activities increase '
+                      'your endorphins level! Have you ever heard about 7 minute workout?')
+feel_better = 'Hmm… What do you think may make you feel better?'
+seven_minute_descr = ('I suggest you to type 7-minute workout in youtube to see how it’s done. '
+                      'It’s a short, rapid-fire series of exercises that use your own body weight. '
+                      f'{BREAKING_NEWS}')
+user_knows_7minute = (f"The power of this workout is that it's simple to do. {BREAKING_NEWS}")
 string_surprise = 'I feel that you are surprised. But you are not the first surprised man on the Earth.' \
                   "The Shakespeare wrote: 'There are more things in heaven and earth, Horatio, " \
-                  "Than are dreamt of in your philosophy.' He wrote it in 'Hamlet' four centuries ago."
+                  "Than are dreamt of in your philosophy.' He wrote it in 'Hamlet' four centuries ago. " \
+                  "What is your favorite  Shakespeare's play?"
 string_fear = "Fear does not empty tomorrow of its sadness, it empties today of its power. Can I tell you a joke?"
 joke1 = "When you hit a speed bump in a school zone and remember, there are no speed bumps."
 joke2 = "Police arrested two kids yesterday, one was drinking battery acid, the other was eating fireworks." \
@@ -61,9 +57,11 @@ phrase_dict = {'anger': ["Please, calm down. Can I tell you a joke?",
                            "You cannot prevent the birds of sadness from passing over your head, " + (
                                "but you can prevent them from nesting in your hair. Can I tell you a joke?"),
                            "I feel your pain. Can I tell you a joke?"],
-               'joy': ['Your joy pleases me', 'Have a good time!', 'I am glad to see you being so happy!'],
-               'love': ['Your love pleases me', 'Have a good time!', 'I am glad to see you being so happy!'],
-               'surprise': ['Things can be really shocking.', string_surprise],
+               'joy': [f'Your joy pleases me. {physical_activites}',
+                       f'I am glad to see you being so happy! {physical_activites}'],
+               'love': [f'Your love pleases me. {physical_activites}',
+                        f'I am glad to see you being so happy! {physical_activites}'],
+               'surprise': [f'Things can be really suprising. {physical_activites}', string_surprise],
                'neutral': ['']}
 
 jokes = [joke1, joke2, joke3, joke4, joke5, joke6, joke7, joke8, joke9, joke10, joke11, joke12]
@@ -77,16 +75,55 @@ def get_answer(phrase):
 
 
 class EmotionSkillScenario:
-
     def __init__(self):
-        global phrase_dict
-        self.conf_unsure = 0.5
-        self.conf_sure = 0.9
-        self.default_reply = "I don't know what to answer"
-        self.genre_prob = 0.5
-        self.phrase_dict = phrase_dict
         self.precision = {'anger': 1, 'fear': 0.894, 'joy': 1,
                           'love': 0.778, 'sadness': 1, 'surprise': 0.745, 'neutral': 0}
+
+    def _get_user_emotion(self, annotated_user_phrase):
+        most_likely_emotion = None
+        emotion_probs = annotated_user_phrase['annotations']['emotion_classification']['text']
+        most_likely_prob = max(emotion_probs.values())
+        for emotion in emotion_probs.keys():
+            if emotion_probs[emotion] == most_likely_prob:
+                most_likely_emotion = emotion
+        return most_likely_emotion
+
+    def _get_reply_and_confidence(self, prev_bot_phrase, intent, most_likely_emotion):
+        is_joke_state = 'can i tell you a joke' in prev_bot_phrase
+        is_feel_better_now_state = 'do you feel better now' in prev_bot_phrase
+        is_what_make_feel_better_state = 'may make you feel better' in prev_bot_phrase
+        is_heard_7_minute_state = 'heard about 7 minute workout' in prev_bot_phrase
+
+        reply, confidence = "", 0
+        if intent == 'yes':
+            if is_joke_state:
+                reply, confidence = random.choice(jokes), 1.0
+                reply += '. Do you feel better now?'
+            elif is_feel_better_now_state:
+                reply = physical_activites
+                confidence = 1.0
+            elif is_what_make_feel_better_state:
+                reply = physical_activites
+                confidence = 1.0
+            elif is_heard_7_minute_state:
+                reply = user_knows_7minute
+                confidence = 1.0
+        elif intent == 'no':
+            if is_joke_state or is_feel_better_now_state:
+                reply, confidence = feel_better, 1.0
+            elif is_what_make_feel_better_state:
+                reply = physical_activites
+                confidence = 1.0
+            elif is_heard_7_minute_state:
+                reply = seven_minute_descr
+                confidence = 1.0
+        else:
+            if is_what_make_feel_better_state:
+                reply = physical_activites
+                confidence = 1.0
+        logger.info(f"_get_reply_and_confidence {prev_bot_phrase}; {intent}; {most_likely_emotion};"
+                    f" reply: {reply}")
+        return reply, confidence
 
     def __call__(self, dialogs):
         texts = []
@@ -94,41 +131,39 @@ class EmotionSkillScenario:
         attrs = []
         for dialog in dialogs:
             try:
-                attr = {"can_continue": CAN_NOT_CONTINUE}
-                text_utterances = [j['text'] for j in dialog['utterances']]
-                bot_phrases = [j for i, j in enumerate(text_utterances) if i % 2 == 1]
-                if len(bot_phrases) == 0:
-                    bot_phrases.append('')
-                if any([j in bot_phrases[-1].lower() for j in ['how are you']]):
-                    conf_sure = 0.95
-                else:
-                    conf_sure = self.conf_sure
+                attr = {"can_continue": CAN_CONTINUE}
                 annotated_user_phrase = dialog['utterances'][-1]
-                emotion_probs = annotated_user_phrase['annotations']['emotion_classification']['text']
-                most_likely_prob = max(emotion_probs.values())
-                most_likely_emotion = None
-                for emotion in emotion_probs.keys():
-                    if emotion_probs[emotion] == most_likely_prob:
-                        most_likely_emotion = emotion
-                assert most_likely_emotion is not None
-                if any([j in bot_phrases[-1] for j in ['Can I tell you a joke', 'Do you want to hear a joke']]):
-                    if is_yes(annotated_user_phrase):
-                        attr["can_continue"] = CAN_CONTINUE
-                        reply, confidence = random.choice(jokes), 1.0
-                    else:
-                        reply, confidence = '', 0
+                most_likely_emotion = self._get_user_emotion(annotated_user_phrase)
+                prev_replies_for_user = [u['text'].lower() for u in dialog['bot_utterances']]
+                prev_bot_phrase = prev_replies_for_user[-1]
+
+                logger.info(f"user sent: {annotated_user_phrase['text']}")
+                if is_yes(annotated_user_phrase):
+                    reply, confidence = self._get_reply_and_confidence(prev_bot_phrase, 'yes', most_likely_emotion)
+                elif is_no(annotated_user_phrase):
+                    reply, confidence = self._get_reply_and_confidence(prev_bot_phrase, 'no', most_likely_emotion)
                 else:
-                    reply = random.choice(phrase_dict[most_likely_emotion])
-                    confidence = most_likely_prob * self.precision[most_likely_emotion]
-                if 'Can I tell you a joke' in reply and confidence < self.conf_sure:
-                    attr["can_continue"] = CAN_CONTINUE
-                    # Push reply with offering a joke forward
-                    confidence = conf_sure
+                    reply, confidence = self._get_reply_and_confidence(prev_bot_phrase, 'other', most_likely_emotion)
+                    if not reply and most_likely_emotion:
+                        reply = random.choice(phrase_dict[most_likely_emotion])
+                        confidence = self.precision[most_likely_emotion]
+                        if len(dialog['utterances']) > 1:
+                            if detect_emotion(dialog['utterances'][-2], annotated_user_phrase):
+                                confidence = 1.0
+                        if confidence < 1 and confidence > 0:
+                            confidence = 0.98
+                        logger.info(f"__call__ reply: {reply}; conf: {confidence};"
+                                    f" user_phrase: {annotated_user_phrase['text']}")
             except Exception as e:
                 logger.exception("exception in emotion skill")
                 sentry_sdk.capture_exception(e)
-                reply = "sorry"
+                reply = ""
                 confidence = 0
+
+            if reply and reply.lower() in prev_replies_for_user:
+                confidence = 0.95
+            if not reply or confidence == 0:
+                attr['can_continue'] = CAN_NOT_CONTINUE
             texts.append(reply)
             confidences.append(confidence)
             attrs.append(attr)
