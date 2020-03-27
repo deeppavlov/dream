@@ -71,7 +71,8 @@ services:
           - node.labels.with_gpu != true
   program_y:
     build:
-      context: ./skills/program-y/
+      context: .
+      dockerfile: ./skills/program-y/Dockerfile
     working_dir: /src/dream_aiml/scripts/xnix
     command: ./sanic.sh
     deploy:
@@ -107,7 +108,8 @@ services:
           - node.labels.with_gpu != true
   convers_evaluation_selector:
     build:
-      context: ./response_selectors/convers_evaluation_based_selector/
+      context: .
+      dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8009 -t 15
     volumes: []
     deploy:

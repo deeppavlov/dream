@@ -11,10 +11,10 @@ import sentry_sdk
 
 from common.constants import CAN_NOT_CONTINUE
 from common.utils import get_skill_outputs_from_dialog, get_user_replies_to_particular_skill
+from common.universal_templates import if_choose_topic, if_switch_topic, if_lets_chat_about_topic
 from utils import get_starting_phrase, get_statement_phrase, get_opinion_phrase, get_comment_phrase, \
-    if_to_start_script, extract_verb_noun_phrases, DEFAULT_STARTING_CONFIDENCE, is_custom_topic, \
-    WIKI_DESCRIPTIONS, is_predefined_topic, \
-    get_used_attributes_by_name, user_wants_to_talk_about_his_topic
+    extract_verb_noun_phrases, DEFAULT_STARTING_CONFIDENCE, is_custom_topic, WIKI_DESCRIPTIONS, is_predefined_topic, \
+    get_used_attributes_by_name
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -121,7 +121,10 @@ def get_status_and_topic(dialog):
             if is_user_topic:
                 curr_meta_script_status = dialog_flow_user_topic[0]
                 curr_meta_script_topic = topic
-            elif if_to_start_script(dialog) or topic_switch_detected:
+            elif if_switch_topic(dialog["human_utterances"][-1]["text"].lower()) or \
+                    if_choose_topic(dialog["human_utterances"][-1]["text"].lower(),
+                                    prev_uttr=dialog["bot_utterances"][-1]["text"].lower()) or \
+                    topic_switch_detected:
                 curr_meta_script_status = dialog_flow[0]
                 curr_meta_script_topic = topic
             else:
@@ -197,14 +200,20 @@ def respond():
 
             if curr_meta_script_status == "starting":
                 response, confidence, attr = get_starting_phrase(dialog, topic, attr)
-                if len(dialog["utterances"]) <= 7 and not is_custom_topic(topic):
-                    # in first 7 uttrs can start script only on user's topic
-                    logger.info("Not user topic. Do not start script.")
-                    response, confidence = "", 0.
-                elif if_to_start_script(dialog) or topic_switch_detected:
+                if (len(dialog["bot_utterances"]) > 0 and if_choose_topic(
+                        dialog["human_utterances"][-1]["text"].lower(),
+                        prev_uttr=dialog["bot_utterances"][-1]["text"].lower())) or \
+                        (len(dialog["bot_utterances"]) == 0 and if_choose_topic(
+                            dialog["human_utterances"][-1]["text"].lower())) or \
+                        if_switch_topic(dialog["human_utterances"][-1]["text"].lower()) or \
+                        topic_switch_detected:
                     confidence = MATCHED_DIALOG_BEGIN_CONFIDENCE
-                elif (len(dialog["human_utterances"]) > 0 and "?" in dialog["human_utterances"][-1]["text"]) \
-                        or user_wants_to_talk_about_his_topic(dialog):
+                elif len(dialog["human_utterances"]) > 0 and \
+                        if_lets_chat_about_topic(dialog["human_utterances"][-1]["text"].lower()):
+                    # if person wants to talk about something particular - do not start script!
+                    confidence = 0.
+                    response = ""
+                elif len(dialog["human_utterances"]) > 0 and "?" in dialog["human_utterances"][-1]["text"]:
                     # if some question was asked by user, do not start script at all!
                     confidence = 0.
                     response = ""

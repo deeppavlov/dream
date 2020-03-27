@@ -61,12 +61,14 @@ services:
     volumes:
       - "./skills/program-y:/src"
       - "./skills/program-y/logs:/tmp"
+      - "./common:/src/common"
     ports:
       - 8008:8008
   convers_evaluation_selector:
     env_file: [.env.dev]
     volumes:
       - "./response_selectors/convers_evaluation_based_selector:/src"
+      - "./common:/src/common"
     ports:
       - 8009:8009
   mongo:

@@ -39,6 +39,7 @@ from sentry_sdk.integrations.logging import ignore_logger
 import string
 from templatey.processors.pre.normalizer import PreProcessor
 
+
 ignore_logger("root")
 # TODO: Get if from config.sanic.yml
 NULL_RESPONSE = "Sorry, I don't have an answer for that!"
@@ -100,8 +101,6 @@ class SanicRestBotClient(RestBotClient):
                     user_sentences[-1] = user_sentences[-1].strip()
                 userid = uuid.uuid4().hex
                 # if user said let's chat at beginning of a dialogue, that we should response with greeting
-                if remove_punct(user_sentences[0]).lower() == remove_punct("let's chat"):
-                    user_sentences[0] = "hello"
                 for i, s in enumerate(user_sentences):
                     # s = s if i != 0 else f"BEGIN_USER_UTTER {s}"
                     answer = self.ask_question(userid, self.preprocesser.process(s))

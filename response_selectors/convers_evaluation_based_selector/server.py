@@ -12,6 +12,8 @@ import sentry_sdk
 import pprint
 from nltk.tokenize import sent_tokenize
 
+from common.universal_templates import if_lets_chat_about_topic, if_choose_topic
+
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -194,30 +196,39 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     for i in range(len(scores)):
         curr_score = None
         is_misheard = misheard_with_spec1 in candidates[i]['text'] or misheard_with_spec2 in candidates[i]['text']
-        if len(dialog['utterances']) < 2 and greeting_spec not in candidates[i]['text'] \
-                and skill_names[i] == 'program_y':
-            # greet user in first utterance
-            if "Sorry, I don't have an answer for that!" in candidates[i]['text']:
-                candidates[i]['text'] = "Hello, " + greeting_spec + '! '
-                curr_score = very_big_score
-            elif "about" in dialog['utterances'][-1]["text"]:  # user asked to chat about blabla
-                # candidates[i]['text'] = "Hello, " + greeting_spec + '! '
-                curr_score = very_low_score
+        if len(dialog['human_utterances']) == 1 and greeting_spec not in candidates[i]['text']:
+            logger.info("Dialog Beginning detected.")
+            if if_lets_chat_about_topic(dialog['utterances'][0]["text"].lower()):
+                logger.info("User wants to talk about particular topic")
+                # if user says `let's chat about blablabla`
+                if skill_names[i] == 'cobotqa':
+                    logger.info("Particular topic. CoBotQA + Greeting to very big score.")
+                    # I don't have an opinion on that but I know some facts.
+                    resp = candidates[i]['text'].replace("I don't have an opinion on that but I know some facts.", "")
+                    candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + resp
+                    curr_score = very_big_score
+                elif skill_names[i] == 'small_talk_skill':
+                    logger.info("Particular topic. Small-talk + Greeting NOT to very big score.")
+                    # for now do not give small talk a very big score here
+                    candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + candidates[i]['text']
+                    # curr_score = very_big_score
+            elif if_choose_topic(dialog['utterances'][0]["text"].lower()):
+                logger.info("User wants bot to choose the topic")
+                # if user says `let's chat about something`
+                if skill_names[i] == 'small_talk_skill':
+                    logger.info("No topic. Small-talk + Greeting to very big score.")
+                    candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + candidates[i]['text']
+                    curr_score = very_big_score
+                elif skill_names[i] == 'meta_script_skill' and len(candidates[i]['text']) > 0:
+                    logger.info("No topic. Meta-script + Greeting to very big score.")
+                    candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + candidates[i]['text']
+                    curr_score = very_big_score
             else:
-                candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + candidates[i]['text']
-                curr_score = very_big_score
-        elif len(dialog['utterances']) < 2 and skill_names[i] == 'cobotqa' \
-                and "about" in dialog['utterances'][-1]["text"] \
-                and all([word not in dialog['utterances'][-1]["text"] for word in ["something", "anything"]]):
-            # cobotqa in the first reply can answer if user asked `let's talk about particular thing` (not something)
-            candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + candidates[i]['text']
-            curr_score = very_big_score
-        elif len(dialog['utterances']) < 2 and skill_names[i] == 'small_talk_skill' \
-                and "about" in dialog['utterances'][-1]["text"] and len(candidates[i]['text']) > 0:
-            # small talk skill in the first reply can answer if user asked `let's talk about particular thing`
-            # and if user asked `let's talk about something/anything`
-            candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + candidates[i]['text']
-            curr_score = very_big_score
+                logger.info("User just wants to talk.")
+                # if user says something else
+                if skill_names[i] == 'program_y' and greeting_spec in candidates[i]['text']:
+                    logger.info("Just chat. Program-y to very big score.")
+                    curr_score = very_big_score
         elif skill_names[i] == 'program_y' and (
                 how_are_you_spec in candidates[i]['text'] or what_i_can_do_spec in candidates[i]['text']) \
                 and len(dialog['utterances']) < 16:
@@ -306,6 +317,10 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             logger.info(f"adding {question} to response.")
             best_text += np.random.choice([f" Let me ask you something. {question}",
                                            f" I would like to ask you a question. {question}"])
+
+    if len(dialog["bot_utterances"]) == 0 and greeting_spec not in best_text:
+        # add greeting to the first bot uttr, if it's not already included
+        best_text = "Hello, " + greeting_spec + '! ' + best_text
 
     while candidates[best_id]["text"] == "" or candidates[best_id]["confidence"] == 0.:
         curr_single_scores[int(best_id)] = 0.

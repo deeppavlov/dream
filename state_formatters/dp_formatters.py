@@ -1,5 +1,6 @@
 from typing import Dict, List
 import logging
+from common.universal_templates import if_lets_chat_about_topic, if_switch_topic, if_choose_topic
 
 logger = logging.getLogger(__name__)
 
@@ -9,6 +10,13 @@ LAST_N_TURNS = 15  # number of turns to consider in annotator/skill.
 def alice_formatter_dialog(dialog: Dict) -> Dict:
     # Used by: alice_formatter
     last_n_sents = 5
+    if len(dialog["human_utterances"]) <= last_n_sents and \
+            not if_lets_chat_about_topic(dialog["utterances"][0]["text"].lower()) and \
+            not if_switch_topic(dialog["utterances"][0]["text"].lower()) and \
+            not if_choose_topic(dialog["utterances"][0]["text"].lower()):
+        # in all cases when not particular topic, not `about something/anything (else)`, not `switch topic`
+        # convert first phrase in the dialog to `hello!`
+        dialog["utterances"][0]['annotations']['sentseg']['punct_sent'] = "hello!"
     human_utts = [utt['annotations']['sentseg']['punct_sent']
                   for utt in dialog['utterances'] if utt['user']['user_type'] == 'human']
     return [{'sentences_batch': [human_utts[-last_n_sents:]]}]

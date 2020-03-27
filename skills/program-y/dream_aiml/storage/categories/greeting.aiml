@@ -86,6 +86,12 @@
     </template>
   </category>
   <category>
+    <pattern>AND YOU</pattern>
+    <template>
+      <srai>HOW_ARE_YOU</srai>
+    </template>
+  </category>
+  <category>
     <pattern>HOW YOU DOING</pattern>
     <template>
       <srai>HOW_ARE_YOU</srai>

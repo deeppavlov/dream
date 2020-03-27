@@ -508,41 +508,6 @@ def get_statement_phrase(dialog, topic, attr, TOPICS):
     return response, confidence, attr
 
 
-def if_to_start_script(dialog):
-    result = False
-    t1 = re.compile(r"what (do|would|can) (you|we) (think|want to talk|like to talk|wanna|gonna|talk) about[\.\?,!$]+")
-    t2 = re.compile(r"(ask|tell|say)( me)?( a)? (question|something|anything)[\.\?,!$]+")
-    t3 = re.compile(r"(let('s| us)|can we|could we|can you|could you) (talk|have( a)? conversation)[\.\?,!$]+")
-    t4 = re.compile(r"i don('t| not) know[\.\?,!$]+")
-    t5 = re.compile(r"pick up the topic")
-    t6 = re.compile(r"(anything|something|nothing|not know|don't know|you choose|you decide|what's up|what is up)")
-    curr_user_uttr = dialog["human_utterances"][-1]["text"].lower()
-    if len(dialog["bot_utterances"]) > 0:
-        prev_bot_uttr = dialog["bot_utterances"][-1]["text"].lower()
-    else:
-        prev_bot_uttr = ""
-
-    user_asks = re.search(t1, curr_user_uttr) or re.search(t2, curr_user_uttr) or re.search(t3, curr_user_uttr)
-    user_dont_know = re.search(t4, curr_user_uttr)
-    bot_asks = re.search(t1, prev_bot_uttr) or re.search(t5, prev_bot_uttr)
-    user_anything = re.search(t6, curr_user_uttr)
-    if user_asks or user_dont_know or (bot_asks and user_anything):
-        result = True
-
-    return result
-
-
-def user_wants_to_talk_about_his_topic(dialog):
-    lets_chat_about_detected = dialog["utterances"][-1].get("annotations", {}).get(
-        "intent_catcher", {}).get("lets_chat_about", {}).get("detected", 0) == 1
-    anything = re.compile(r"(anything|something|nothing|not know|don't know|"
-                          r"you choose|you decide|what's up|what is up)")
-    user_uttr = dialog["human_utterances"][-1]["text"].lower()
-    if lets_chat_about_detected and re.search(anything, user_uttr) is not None:
-        return True
-    return False
-
-
 def extract_verb_noun_phrases(utterance):
     verb_noun_phrases = []
     doc = nlp(utterance, disable=["ner"])
