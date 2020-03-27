@@ -189,11 +189,13 @@ class RuleBasedSkillSelectorConnector:
             if ner_detected:
                 skills_for_uttr.append("reddit_ner_skill")
 
+            if len(dialog["human_utterances"]) >= 3:
+                # can answer on 3-th user response
+                skills_for_uttr.append("convert_reddit")
             if len(dialog["utterances"]) > 7:
                 skills_for_uttr.append("eliza")
                 skills_for_uttr.append("alice")
                 skills_for_uttr.append("tfidf_retrieval")
-                skills_for_uttr.append("convert_reddit")
                 # Disable topicalchat_convert_retrieval v8.7.0
                 # skills_for_uttr.append("topicalchat_convert_retrieval")
 
@@ -266,7 +268,8 @@ class RuleBasedSkillSelectorConnector:
         # always add dummy_skill
         skills_for_uttr.append("dummy_skill")
         # (yura): do we really want to always turn small_talk_skill?
-        skills_for_uttr.append("small_talk_skill")
+        if len(dialog["utterances"]) > 14:
+            skills_for_uttr.append("small_talk_skill")
 
         if "/alexa_" in dialog["utterances"][-1]["text"]:
             skills_for_uttr = ["alexa_handler"]

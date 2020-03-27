@@ -77,7 +77,7 @@ phrase_list = create_phraselist(
 for user_phrase in todel_userphrases:
     if user_phrase in phrase_list:
         del phrase_list[user_phrase]
-phrase_list["let's talk about."] = "i misheard you. what's it that you'd like to chat about?"
+
 vectorized_phrases = vectorizer.transform(list(phrase_list.keys()))
 
 

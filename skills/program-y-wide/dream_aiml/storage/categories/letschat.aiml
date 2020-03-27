@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+
+<!--  let's chat about something-->
+
+  <category>
+    <pattern><set>talk</set> ABOUT *</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="2"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>talk</set> # ABOUT #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="3"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="5"/></srai></template>
+  </category>
+
+  <category>
+    <pattern><set>start</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="5"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>start</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="7"/></srai></template>
+  </category>
+
+  <category>
+    <pattern><set>wantto</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="5"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>wantto</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="7"/></srai></template>
+  </category>
+
+  <category>
+    <pattern><set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="3"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="5"/></srai></template>
+  </category>
+
+  <category>
+    <pattern><set>start</set> # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="5"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>start</set> # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="7"/></srai></template>
+  </category>
+
+  <category>
+    <pattern><set>wantto</set> # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="5"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>wantto</set> # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="7"/></srai></template>
+  </category>
+
+  <category>
+    <pattern>DISCUSS _</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star/></srai></template>
+  </category>
+
+  <category>
+    <pattern>LET_US_CHAT_ABOUT MOVIES</pattern>
+    <template>
+      <random>
+        <li> I can answer about actors and films. Do you have a favorite actor? </li>
+        <li> I can answer about films and actors. What is the last movie you watched? </li>
+        <li> I can answer about films and actors. What is your favorite movie? </li>
+        <li> Yes, of course! What I want now is to talk about movies and chew bubblegum. And I'm all out of bubblegum.  </li>
+      </random>
+    </template>
+  </category>
+
+  <category>
+    <pattern>LET_US_CHAT_ABOUT MY _</pattern>
+    <template>
+      <random>
+        <li>You are first. Tell me something about your <star/>.</li>
+        <li>Yeah, let's talk about it! </li>
+        <li>Just tell me something I do not know about your <star/>.</li>
+      </random>
+    </template>
+  </category>
+
+  <category>
+    <pattern>LET_US_CHAT_ABOUT *</pattern>
+    <template>
+      <random>
+        <li>You are first. Tell me something about <star/>.</li>
+        <li>Yeah, let's talk about it! </li>
+        <li>Just tell me something I do not know about <star/>.</li>
+      </random>
+    </template>
+  </category>
+
+</aiml>
