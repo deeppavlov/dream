@@ -5,12 +5,13 @@ import pickle
 import time
 import json
 import difflib
+import traceback
+import re
 
 import tensorflow_hub as tfhub
 import tensorflow as tf
 import tensorflow_text
 import numpy as np
-import re
 from flask import Flask, request, jsonify
 from flasgger import Swagger, swag_from
 import sentry_sdk
@@ -22,6 +23,7 @@ SEED = 31415
 MODEL_PATH = os.getenv("MODEL_PATH")
 DATABASE_PATH = os.getenv("DATABASE_PATH")
 CONFIDENCE_PATH = os.getenv("CONFIDENCE_PATH")
+SOFTMAX_TEMPERATURE = os.getenv("SOFTMAX_TEMPERATURE", 0.08)
 
 
 sentry_sdk.init(SENTRY_DSN)
@@ -49,12 +51,14 @@ spaces_pat = re.compile(r"\s+")
 special_symb_pat = re.compile(r"[^A-Za-z0-9-!,.’?'\"’ ]")
 
 
-def clear_answer(text):
-    return special_symb_pat.sub("", spaces_pat.sub(" ", text.lower().replace("\n", " "))).strip()
+def clear_text(text):
+    text = special_symb_pat.sub("", spaces_pat.sub(" ", text.lower().replace("\n", " "))).strip()
+    text = text.replace("\u2019", "'")
+    return text
 
 
 filter = json.load(open("./banned_responses.json"))
-filter = [clear_answer(utter) for utter in filter]
+filter = [clear_text(utter) for utter in filter]
 
 text_placeholder = tf.placeholder(dtype=tf.string, shape=[None])
 extra_text_placeholder = tf.placeholder(dtype=tf.string, shape=[None])
@@ -89,9 +93,11 @@ def encode_context(dialogue_history):
     )[0]
 
 
-def approximate_confidence(confidence):
-    return 0.9 * (confidences <= confidence).sum() / len(confidences)
-    # return float(confidence)
+def approximate_confidence(confidence, approximate_confidence_is_enabled=True):
+    if approximate_confidence_is_enabled:
+        return (confidences <= confidence).sum() / len(confidences)
+    else:
+        return float(confidence)
 
 
 def get_BOW(sentence):
@@ -111,7 +117,23 @@ def is_unanswerable_utters(history):
             return True
 
 
-def inference(utterances_histories):
+def softmax(x, t):
+    e_x = np.exp((x - np.max(x)) / t)
+    return e_x / e_x.sum(axis=0)
+
+
+def sample_candidates(candidates, choice_num=1, replace=False, softmax_temperature=1):
+    choice_num = min(choice_num, len(candidates))
+    confidences = [cand[1] for cand in candidates]
+    choice_probs = softmax(confidences, softmax_temperature)
+    one_dim_candidates = np.array(candidates)
+    one_dim_indices = np.arange(len(one_dim_candidates))
+    sampled_one_dim_indices = np.random.choice(one_dim_indices, choice_num, replace=replace, p=choice_probs)
+    sampled_candidates = one_dim_candidates[sampled_one_dim_indices]
+    return sampled_candidates.tolist()
+
+
+def inference(utterances_histories, approximate_confidence_is_enabled=True):
     context_encoding = encode_context(utterances_histories)
     scores = context_encoding.dot(response_encodings.T)
     indices = np.argsort(scores)[::-1][:10]
@@ -121,24 +143,34 @@ def inference(utterances_histories):
         if not [
             None
             for f_utter in filter
-            if difflib.SequenceMatcher(None, f_utter.split(), clear_answer(cand).split()).ratio() > 0.9
+            if difflib.SequenceMatcher(None, f_utter.split(), clear_text(cand).split()).ratio() > 0.9
         ]:
             filtered_indices.append(ind)
 
     if is_unanswerable_utters(utterances_histories):
         return "", 0.0
 
-    clear_utterances_histories = [clear_answer(utt).split() for utt in utterances_histories[::-1][1::2][::-1]]
+    clear_utterances_histories = [clear_text(utt).split() for utt in utterances_histories[::-1][1::2][::-1]]
 
     for ind in reversed(filtered_indices):
-        cand = clear_answer(responses[ind]).split()
+        cand = clear_text(responses[ind]).split()
         for utterance in clear_utterances_histories:
             if difflib.SequenceMatcher(None, utterance, cand).ratio() > 0.6:
                 filtered_indices.remove(ind)
                 break
 
     if len(filtered_indices) > 0:
-        return clear_answer(responses[filtered_indices[0]]), approximate_confidence(scores[filtered_indices[0]])
+        candidates = [
+            (clear_text(responses[ind]), approximate_confidence(scores[ind], approximate_confidence_is_enabled))
+            for ind in filtered_indices
+        ]
+        try:
+            candidate = sample_candidates(candidates, choice_num=1, softmax_temperature=SOFTMAX_TEMPERATURE)[0]
+            candidate = (candidate[0], float(candidate[1]))
+        except Exception:
+            logger.error(traceback.format_exc())
+            candidate = candidates[0]
+        return candidate
     else:
         return "", 0.0
 
@@ -148,7 +180,8 @@ def inference(utterances_histories):
 def convert_chitchat_model():
     st_time = time.time()
     utterances_histories = request.json["utterances_histories"]
-    response = [inference(hist) for hist in utterances_histories]
+    approximate_confidence_is_enabled = request.json.get("approximate_confidence_is_enabled", True)
+    response = [inference(hist, approximate_confidence_is_enabled) for hist in utterances_histories]
     total_time = time.time() - st_time
     logger.warning(f"convert_reddit exec time: {total_time:.3f}s")
     return jsonify(response)
