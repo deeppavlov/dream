@@ -32,6 +32,14 @@ def most_frequent(List):
     return max(set(List), key=List.count)
 
 
+spaces_pat = re.compile(r"\s+")
+special_symb_pat = re.compile(r"[^A-Za-z ]")
+
+
+def rm_spec_text_symls(text):
+    return special_symb_pat.sub("", spaces_pat.sub(" ", text.lower().replace("\n", " "))).strip()
+
+
 def preprocess(phrase):
     # return phrase
     for sign in "!$%.,:;?":
@@ -134,6 +142,8 @@ def check(
     confidence_threshold=0.5,
     utterances_history=[],
 ):
+    if len(rm_spec_text_symls(human_phrase).split()) < 2:
+        return [("I really do not know what to answer.", 0)]
     human_phrase = preprocess(human_phrase)
     human_phrases = list(phrase_list.keys())
     assert vectorized_phrases.shape[0] > 0
