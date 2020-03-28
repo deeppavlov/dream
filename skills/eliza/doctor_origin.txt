@@ -242,7 +242,6 @@ key: you
     reasmb: Suppose I did (2) you -- what would that mean ?
     reasmb: Does someone else believe I (2) you ?
   decomp: * you *
-    reasmb: We were discussing you -- not me.
     reasmb: Oh, I (2) ?
     reasmb: You're not really talking about me -- are you ?
     reasmb: What are your feelings now ?
