@@ -5,7 +5,6 @@ import json
 import logging
 from os import getenv
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
-from common.news import BREAKING_NEWS
 from common.utils import is_yes, is_no
 from common.emotion import detect_emotion
 
@@ -22,9 +21,8 @@ physical_activites = ('I read that physical activities increase '
                       'your endorphins level! Have you ever heard about 7 minute workout?')
 feel_better = 'Hmm… What do you think may make you feel better?'
 seven_minute_descr = ('I suggest you to type 7-minute workout in youtube to see how it’s done. '
-                      'It’s a short, rapid-fire series of exercises that use your own body weight. '
-                      f'{BREAKING_NEWS}')
-user_knows_7minute = (f"The power of this workout is that it's simple to do. {BREAKING_NEWS}")
+                      'It’s a short, rapid-fire series of exercises that use your own body weight. ')
+user_knows_7minute = (f"The power of this workout is that it's simple to do.")
 string_surprise = 'I feel that you are surprised. But you are not the first surprised man on the Earth.' \
                   "The Shakespeare wrote: 'There are more things in heaven and earth, Horatio, " \
                   "Than are dreamt of in your philosophy.' He wrote it in 'Hamlet' four centuries ago. " \
