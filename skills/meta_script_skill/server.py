@@ -79,7 +79,7 @@ def get_status_and_topic(dialog):
         tuple of current status and topic
     """
     # deeper2 and deeper3 could be randomly skipped in dialog flow
-    dialog_flow = ["starting", "deeper1", "deeper2", "deeper3", "opinion", "comment"]
+    dialog_flow = ["starting", "deeper1", "deeper2", "opinion", "comment"]
     dialog_flow_user_topic = ["deeper1", "deeper2", "opinion", "comment"]
 
     if len(dialog["utterances"]) >= 3:
@@ -142,11 +142,11 @@ def get_status_and_topic(dialog):
             else:
                 curr_meta_script_status = dialog_flow[dialog_flow.index(curr_meta_script_status) + 1]
 
-            if curr_meta_script_status == "deeper2":
+            if curr_meta_script_status == "opinion":
                 # randomly skip third deeper question
                 if uniform(0, 1) <= 0.5:
-                    curr_meta_script_status = "opinion"
-            if curr_meta_script_status == "deeper3":
+                    curr_meta_script_status = "comment"
+            if curr_meta_script_status == "deeper2":
                 # randomly skip third deeper question
                 if uniform(0, 1) <= 0.5:
                     curr_meta_script_status = "opinion"
