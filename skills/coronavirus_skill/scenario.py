@@ -10,7 +10,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 CORONAVIRUS_URL = 'https://www.worldometers.info/coronavirus/coronavirus-cases/'
-STATES_URL = 'https://edition.cnn.com/2020/03/03/health/us-coronavirus-cases-state-by-state/index.html'
+STATES_URL = 'https://www.worldometers.info/coronavirus/country/us/'
 STATES = {j.strip().lower().split(';')[0]: j.strip().lower().split(';')[1]
           for j in open('state_names.txt', 'r').readlines()}
 FACT_LIST = ['The children are almost invincible for coronavirus.',
@@ -100,17 +100,14 @@ def know_symptoms(annotated_phrase):
 
 def get_state_cases(states_url):
     data = requests.get(states_url).text.lower()
-    data = data.split('here are the rest of the cases, broken down by state')[1]
     state_data = dict()
     for state_name in STATES.keys():
-        number = data[data.find(state_name):].split('</div>')[0]
-        number = number.replace('</strong>', '').replace('<strong>', '')
-        for i in range(len(number)):
-            if number[i] in '0123456789':
-                number = number[i:]
-                break
-        if ':' in number:
-            number = number.split(':')[1]
+        numbers = data[data.find(state_name):].replace(',', '').split('</td>')
+        n_cases = numbers[1].split('>')[1].strip()
+        n_deaths = numbers[3].split('>')[1].strip()
+        number = n_cases + ' cases including ' + n_deaths + ' deaths'
+        if n_deaths == 1:
+            number = number.replace('deaths', 'death')
         state_data[state_name] = number
     return state_data
 
