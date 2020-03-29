@@ -196,7 +196,6 @@ class RuleBasedSkillSelectorConnector:
                 # can answer on 3-th user response
                 skills_for_uttr.append("convert_reddit")
             if len(dialog["utterances"]) > 7:
-                skills_for_uttr.append("eliza")
                 skills_for_uttr.append("alice")
                 skills_for_uttr.append("tfidf_retrieval")
                 # Disable topicalchat_convert_retrieval v8.7.0
