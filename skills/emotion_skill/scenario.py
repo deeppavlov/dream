@@ -133,7 +133,9 @@ class EmotionSkillScenario:
                 annotated_user_phrase = dialog['utterances'][-1]
                 most_likely_emotion = self._get_user_emotion(annotated_user_phrase)
                 prev_replies_for_user = [u['text'].lower() for u in dialog['bot_utterances']]
-                prev_bot_phrase = prev_replies_for_user[-1]
+                prev_bot_phrase = ''
+                if prev_replies_for_user:
+                    prev_bot_phrase = prev_replies_for_user[-1]
 
                 logger.info(f"user sent: {annotated_user_phrase['text']}")
                 if is_yes(annotated_user_phrase):
