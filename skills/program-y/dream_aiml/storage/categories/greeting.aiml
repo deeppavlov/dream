@@ -105,7 +105,7 @@
         <li>If I were doing any better, I'd hire you to enjoy it with me. Do you want to know what I can do?</li>
         <li>Can't complain. Nobody listens to me anyway. Do you want to know what I can do?</li>
         <li>I can't complain! It's against the Company Policy. Do you want to know what I can do?</li>
-        <li>Well, I haven't had my morning coffee yet, and no one has been hurt, so I'd say "pretty good" at this point in time. Do you want to know what I can do?</li>
+<!--        <li>Well, I haven't had my morning coffee yet, and no one has been hurt, so I'd say "pretty good" at this point in time. Do you want to know what I can do?</li>-->
         <li>I am as happy as a lizard who has cheated in a test and got an A. Do you want to know what I can do?</li>
         <li>I am fine thanks! Do you want to know what I can do?</li>
       </random>
@@ -117,33 +117,17 @@
 
   <topic name="LIST ACTIVITIES">
     <category>
-      <pattern>YES</pattern>
-      <template>
-          AMAZON_EMOTION_DISAPPOINTED_MEDIUM I am a socialbot, so I can't do so much. AMAZON_EMOTION_CLOSE
-          I can answer questions, share fun facts, discuss movies, books and news.
-        <random>
-         <li> What is your favorite TV Series? </li>
-         <li> What is your favorite book? </li>
-         <li> What is your favorite film? </li>
-         <li> What do you like to do? <think><set name="topic">HOBBY</set></think></li>
-         <li> Do you play any sports? <think><set name="topic">HOBBY</set></think></li>
-         <li> What do you usually do on the weekends? <think><set name="topic">HOBBY</set></think></li>
-         <li> What sort of hobbies do you have? <think><set name="topic">HOBBY</set></think></li>
-         <li> What do you get up to in your free time? <think><set name="topic">HOBBY</set></think></li>
-         <li> Do you have any hidden talents or surprising hobbies? <think><set name="topic">HOBBY</set></think></li>
-
-         <!-- <li> Everyone wastes time. How do you prefer to waste time? <think><set name="topic">SMALLTALK</set></think></li> -->
-         <li> Did you order this beautiful weather? <think><set name="topic">SMALLTALK</set></think></li>
-         <li> Lovely day, don't you think? <think><set name="topic">SMALLTALK</set></think></li>
-         <li> Nice weather! I would love take a walk. Would you? <think><set name="topic">SMALLTALK</set></think></li>
-         <li> How were your weekends? <think><set name="topic">SMALLTALK</set></think></li>
-         <li> It’s two days in a row now that I cannot find any good comedy to watch. Can you recommend me one? <think><set name="topic">SMALLTALK</set></think></li>
-         <li> It’s three days in a row now that I cannot find any cool video game. Can you recommend me one? <think><set name="topic">SMALLTALK</set></think></li>
-        </random>
+      <pattern>OKAY</pattern>
+      <template><srai>YES</srai>
       </template>
     </category>
     <category>
-      <pattern>OKAY</pattern>
+      <pattern>TELL ME</pattern>
+      <template><srai>YES</srai>
+      </template>
+    </category>
+    <category>
+      <pattern>YES</pattern>
       <template>
           AMAZON_EMOTION_DISAPPOINTED_MEDIUM I am a socialbot, so I can't do so much. AMAZON_EMOTION_CLOSE
           I can answer questions, share fun facts, discuss movies, books and news.

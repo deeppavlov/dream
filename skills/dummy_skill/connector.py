@@ -43,7 +43,7 @@ np_ignore_list = ["'s", 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselv
                   "boring", "radio", "type", "call", "fun", "fall", "name", "names", "lgbtq families", "day", "murder",
                   "amazon", "take", "interest", "days", "year", "years", "sort", "fan", "going", "death", "part", "end",
                   "watching", "thought", "thoughts", "man", "men", "listening", "big fan", "fans", "rapping", "reading",
-                  "going", "thing", "hanging", "best thing"]
+                  "going", "thing", "hanging", "best thing", "wife", "things"]
 
 np_ignore_expr = re.compile("(" + "|".join([r'\b%s\b' % word for word in np_ignore_list]) + ")")
 rm_spaces_expr = re.compile(r'\s\s+')

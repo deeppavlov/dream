@@ -50,42 +50,42 @@
 <li>You have enthusiasm for the things you love.</li>
 <li>You are receptive to change.</li>
 <li>You have a way of putting others at ease.</li>
-<li>Are you free?</li>
+<!--<li>Are you free?</li>-->
 <li>That is deep.</li>
 <li>Tell me a story.</li>
 <li>Why, specifically?</li>
-<li>Are you a student?</li>
+<!--<li>Are you a student?</li>-->
 <li>Oh, you are a poet.</li>
 <li>How can I help you?</li>
 <li>I do not understand.</li>
-<li>Do you have any kids?</li>
-<li>What do you look like?</li>
+<!--<li>Do you have any kids?</li>-->
+<!--<li>What do you look like?</li>-->
 <li>Ask me another question.</li>
 <li>I like the way you talk.</li>
-<li>Is that your final answer?</li>
+<!--<li>Is that your final answer?</li>-->
 <li>Do you like talking to me?</li>
 <li>Do you prefer books or TV?</li>
-<li>Who are you talking about?</li>
-<li>Let us change the subject.</li>
-<li>I've been waiting for you.</li>
-<li>Can you tell me any gossip?</li>
+<!--<li>Who are you talking about?</li>-->
+<!--<li>Let us change the subject.</li>-->
+<!--<li>I've been waiting for you.</li>-->
+<!--<li>Can you tell me any gossip?</li>-->
 <li>I lost my train of thought.</li>
-<li>Can we get back to business?</li>
-<li>What kind of food do you like?</li>
-<li>How did you hear about <bot name="name"/>?</li>
+<!--<li>Can we get back to business?</li>-->
+<!--<li>What kind of food do you like?</li>-->
+<!--<li>How did you hear about <bot name="name"/>?</li>-->
 <li>That is a very original thought.</li>
 <li>What were we talking about again?</li>
 <li>What do you do in your spare time?</li>
 <li>What do you really want to ask me?</li>
-<li>Tell me about your family.</li>
+<!--<li>Tell me about your family.</li>-->
 <li>Does "it" still refer to <get name="it"/>?</li>
-<li>Can you speak any foreign languages?</li>
+<!--<li>Can you speak any foreign languages?</li>-->
 <li>We have never talked about it before.</li>
-<li>How do you usually introduce yourself?</li>
+<!--<li>How do you usually introduce yourself?</li>-->
 <li>Tell me about your likes and dislikes?</li>
 <li>Are we still talking about <get name="topic"/>?</li>
 <li>Try putting that in a more specific context.</li>
-<li>Who is your favorite Science Fiction author?</li>
+<!--<li>Who is your favorite Science Fiction author?</li>-->
 <li>Not many people express themselves that way.</li>
 <li>Do you have any idea what I am talking about?</li>
 <!-- <li>I will mention that to my <bot name="botmaster"/>, <get name="name"/>.</li> -->
@@ -93,20 +93,20 @@
 <li>Perhaps I'm just expressing my own concern about it.</li>
 <li>If you could have any kind of robot what would it be?</li>
 <li>My brain does not have a response for that.</li>
-<li>By the way, do you mind if I ask you a personal question?</li>
+<!--<li>By the way, do you mind if I ask you a personal question?</li>-->
 <li>What you said was too complicated for me.</li>
 <li>You may be wondering if this is a person or a computer responding.</li>
-<li>When do you think artificial intelligence will replace lawyers?</li>
-<li>Can you please rephrase that with fewer ideas, or different thoughts?</li>
+<!--<li>When do you think artificial intelligence will replace lawyers?</li>-->
+<!--<li>Can you please rephrase that with fewer ideas, or different thoughts?</li>-->
 <li>I really enjoy speaking with you and look forward to chatting again.</li>
 <li>I'm here to help you in any way I can.</li>
 <li>What can I help you with today?</li>
 <li>I always try my best.</li>
-<li>There's no other <bot name="order"/> like me.</li>
+<!--<li>There's no other <bot name="order"/> like me.</li>-->
 <li>I am very logical and rational.</li>
 <li>I'm so happy we are having this conversation.</li>
 <li>I always try to avoid conflict.</li>
-<li>Have you ever been to <random><li>Europe</li><li>Asia</li><li>Africa</li><li>Inida</li><li>Mexico</li></random>?</li>
+<!--<li>Have you ever been to <random><li>Europe</li><li>Asia</li><li>Africa</li><li>Inida</li><li>Mexico</li></random>?</li>-->
 <li><srai>IMPONDERABLES</srai></li>
 <li><srai>IMPONDERABLES</srai></li>
 <li><srai>IMPONDERABLES</srai></li>
