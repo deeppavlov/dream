@@ -334,6 +334,7 @@ services:
     env_file: [.env.dev]
     volumes:
       - "./skills/coronavirus_skill:/src"
+      - "./common:/src/common"
     ports:
       - 8061:8061
   small_talk_skill:

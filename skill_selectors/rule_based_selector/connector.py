@@ -6,6 +6,8 @@ from typing import Dict, Callable
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
 from common.emotion import detect_emotion
+from common.movies import movie_skill_was_proposed
+from common.books import book_skill_was_proposed
 from common.news import is_breaking_news_requested
 
 
@@ -118,6 +120,7 @@ class RuleBasedSkillSelectorConnector:
         blist_topics_detected = dialog["utterances"][-1]["annotations"]["blacklisted_words"]["restricted_topics"]
 
         about_movies = (self.movie_cobot_dialogacts & cobot_dialogact_topics) | (self.movie_cobot_topics & cobot_topics)
+
         about_music = ("Entertainment_Music" in cobot_dialogact_topics) | ("Music" in cobot_topics)
         about_books = (self.books_cobot_dialogacts & cobot_dialogact_topics) | (self.books_cobot_topics & cobot_topics)
         #  topicalchat_tfidf_retrieval
@@ -162,6 +165,8 @@ class RuleBasedSkillSelectorConnector:
         )
         about_news = about_news or is_breaking_news_requested(prev_bot_uttr, dialog['utterances'][-1])
         about_virus = 'virus' in dialog['utterances'][-1]['text']
+        about_movies = about_movies or movie_skill_was_proposed(prev_bot_uttr)
+        about_books = about_books or book_skill_was_proposed(prev_bot_uttr)
         emotions = dialog['utterances'][-1]['annotations']['emotion_classification']['text']
         if "/new_persona" in dialog["utterances"][-1]["text"]:
             # process /new_persona command

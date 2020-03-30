@@ -1,4 +1,7 @@
 from string import punctuation
+from random import random
+from common.books import SWITCH_BOOK_SKILL_PHRASE
+from common.movies import SWITCH_MOVIE_SKILL_PHRASE
 
 
 def get_skill_outputs_from_dialog(utterances, skill_name, activated=False):
@@ -119,3 +122,13 @@ def is_no(annotated_phrase):
     # TODO: intent catcher thinks that horrible is no intent'
     is_not_horrible = 'horrible' != user_phrase
     return is_not_horrible and annotated_phrase['annotations']['intent_catcher'].get('no', {}).get('detected') == 1
+
+
+def corona_switch_skill_reply():
+    reply = "Okay! I believe that this coronavirus will disappear! Now it is better to stay home. "
+    r = random()
+    if r < 0.5:
+        reply = reply + SWITCH_BOOK_SKILL_PHRASE
+    else:
+        reply = reply + SWITCH_MOVIE_SKILL_PHRASE
+    return reply
