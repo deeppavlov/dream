@@ -5430,9 +5430,9 @@
 <category><pattern>I AM * FROM *</pattern>
 <template><srai>my name is <star /></srai></template>
 </category>
-<category><pattern>I AM * AND YOU ARE *</pattern>
+<!-- <category><pattern>I AM * AND YOU ARE *</pattern>
 <template><srai>I am <star /></srai>.  <srai>you are <star index="2" /></srai></template>
-</category>
+</category> -->
 <category><pattern>I AM 24</pattern>
 <template><srai>I am 24 years old</srai></template>
 </category>
@@ -6210,12 +6210,12 @@
 <category><pattern>I AM A * STUDENT</pattern>
 <template><srai>I am a student</srai></template>
 </category>
-<category><pattern>I AM A * AND YOU *</pattern>
+<!-- <category><pattern>I AM A * AND YOU *</pattern>
 <template><srai>I am a <star /></srai>.  <srai>you <star index="2" /></srai></template>
-</category>
-<category><pattern>I AM A * AND THEY *</pattern>
+</category> -->
+<!-- <category><pattern>I AM A * AND THEY *</pattern>
 <template><srai>I am a <star /></srai>.  <srai>they <star index="2" /></srai></template>
-</category>
+</category> -->
 <category><pattern>I AM A * COMPUTER</pattern>
 <template><srai>I am a robot</srai></template>
 </category>

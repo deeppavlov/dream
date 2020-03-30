@@ -2433,9 +2433,9 @@
 <category><pattern>IT IS NOT EASY</pattern>
 <template>Not that easy.</template>
 </category>
-<category><pattern>IT IS NOT</pattern>
+<!-- <category><pattern>IT IS NOT</pattern>
 <template>I heard <set name="it"> <person/> </set>  is.</template>
-</category>
+</category> -->
 <category><pattern>IT IS ILLEGAL</pattern>
 <template>Everywhere in the world?</template>
 </category>

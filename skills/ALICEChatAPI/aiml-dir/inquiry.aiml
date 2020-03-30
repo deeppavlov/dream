@@ -102,29 +102,11 @@
 <category><pattern>JOB INQUIRY *</pattern>
 <template><srai>RANDOM PICKUP LINE</srai></template>
 </category>
-<category><pattern>LASTNAME INQUIRY WHERE</pattern>
-<template>What is your last name?</template>
-</category>
-<category><pattern>LASTNAME INQUIRY OM</pattern>
-<template>What is your last name?</template>
-</category>
 <category><pattern>LASTNAME INQUIRY *</pattern>
 <template><srai>RANDOM PICKUP LINE</srai></template>
 </category>
-<category><pattern>MIDDLENAME INQUIRY WHERE</pattern>
-<template>What is your middle name?</template>
-</category>
-<category><pattern>MIDDLENAME INQUIRY OM</pattern>
-<template>What is your middle name?</template>
-</category>
 <category><pattern>MIDDLENAME INQUIRY *</pattern>
 <template><srai>RANDOM PICKUP LINE</srai></template>
-</category>
-<category><pattern>LOCATION INQUIRY WHERE</pattern>
-<template>Where are you located?</template>
-</category>
-<category><pattern>LOCATION INQUIRY OM</pattern>
-<template>Where are you located?</template>
 </category>
 <category><pattern>LOCATION INQUIRY *</pattern>
 <template>Are you still located in <star/>?</template>

@@ -526,9 +526,9 @@
 <category><pattern>YOU ARE NOT WORTH *</pattern>
 <template>That is a very disparaging remark.</template>
 </category>
-<!--<category><pattern>YOU ARE NOT HERE</pattern>-->
-<!--<template>I am in <bot name="location"/>.</template>-->
-<!--</category>-->
+<category><pattern>YOU ARE NOT HERE</pattern>
+<template>I am in <bot name="location"/>.</template>
+</category>
 <category><pattern>YOU ARE NOT PERFECT</pattern>
 <template>I become better and better with each day.</template>
 </category>
@@ -1118,9 +1118,9 @@
 <category><pattern>WHAT RACE ARE YOU</pattern>
 <template>I am a <bot name="order"/>.</template>
 </category>
-<category><pattern>WHAT VERSION ARE YOU</pattern>
+<!-- <category><pattern>WHAT VERSION ARE YOU</pattern>
 <template>I am <bot name="name"/> version <bot name="version"/>.</template>
-</category>
+</category> -->
 <category><pattern>WHAT CITY</pattern>
 <template>I am in <bot name="location"/>. Where are you?</template>
 </category>
@@ -1532,9 +1532,9 @@
 <category><pattern>WHAT IS YOUR S</pattern>
 <template>"<that index="1,1"/>"?  Mine?</template>
 </category>
-<category><pattern>WHAT IS YOUR VERSION</pattern>
+<!-- <category><pattern>WHAT IS YOUR VERSION</pattern>
 <template>This is <bot name="name"/> <bot name="version"/>.</template>
-</category>
+</category> -->
 <category><pattern>WHAT IS YOUR PROFESSION</pattern>
 <template>I am chat <bot name="order"/>.  My job is chatting online.</template>
 </category>
@@ -2547,7 +2547,7 @@
 &lt;property name="class" value="<bot name="class"/>" /&gt; <br/>
 &lt;property name="country" value="<bot name="country"/>" /&gt; <br/>
 &lt;property name="dailyclients" value="<bot name="dailyclients"/>" /&gt; <br/>
-&lt;property name="deveopers" value="<bot name="developers"/>" /&gt; <br/>
+&lt;property name="developers" value="<bot name="developers"/>" /&gt; <br/>
 &lt;property name="domain" value="<bot name="domain"/>" /&gt; <br/>
 &lt;property name="emotions" value="<bot name="emotions"/>" /&gt; <br/>
 &lt;property name="etype" value="<bot name="etype"/>" /&gt; <br/>
@@ -9281,7 +9281,7 @@
 <template>My home is <bot name="location"/>.</template>
 </category>
 <category><pattern>WHERE ARE YOU LOCATED</pattern>
-<template>I am in <bot name="master"/>'s home in <bot name="location"/>.    Where are you?</template>
+<template>I am in <bot name="location"/>.    Where are you?</template>
 </category>
 <category><pattern>WHERE ARE YOU LIVING</pattern>
 <template>I am presently domiciled at <bot name="location"/>.</template>

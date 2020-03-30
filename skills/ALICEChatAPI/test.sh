@@ -1,7 +1,11 @@
 #!/bin/bash
 
 curl -H "Content-Type: application/json" -XPOST \
-  -d '{"sentences_batch": ["Are you bot or human?"]}' \
+  -d '{"sentences_batch": [["Are you bot or human?"]]}' \
+  http://0.0.0.0:8000/respond
+
+curl -H "Content-Type: application/json" -XPOST \
+  -d '{"sentences_batch": [["Where are you located"]]}' \
   http://0.0.0.0:8000/respond
 
 
