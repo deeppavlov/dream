@@ -5,6 +5,9 @@ import requests
 from string import punctuation
 from word2number.w2n import word_to_num
 from random import random
+from common.utils import is_yes, is_no, corona_switch_skill_reply
+
+
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -57,14 +60,6 @@ def get_agephrase(age_num):
         phrase = phrase + ' While staying at home, you may read a lot of different books. ' \
                           'What is the last book you have ever read?'
     return phrase
-
-
-def is_yes(annotated_phrase):
-    return annotated_phrase['annotations']['intent_catcher'].get('yes', {}).get('detected') == 1
-
-
-def is_no(annotated_phrase):
-    return annotated_phrase['annotations']['intent_catcher'].get('no', {}).get('detected') == 1
 
 
 def about_virus(annotated_phrase):
@@ -265,7 +260,8 @@ class CoronavirusSkillScenario:
                 asked_about_age = any(['what is your age' in j for j in last_bot_phrases])
                 #  logging.info(asked_about_age)
                 if 'would you like to hear another fact' in last_bot_phrase and is_no(last_utterance):
-                    reply, confidence = '', 0
+                    reply = corona_switch_skill_reply()
+                    confidence = 0.98
                 elif know_symptoms(last_utterance) and about_coronavirus(last_utterance):
                     reply, confidence = self.symptom_phrase, 1
                     reply = improve_phrase(reply, asked_about_age, met_last)
