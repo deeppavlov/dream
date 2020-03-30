@@ -172,7 +172,7 @@ def check(
         )
         if confidence_threshold != 0.5:  # if not testing
             score = score / 2 if score < 0.5 else score
-        score = 1.0 if score > 0.999 else score
+        score = 0.95 if score > 0.95 else score
         score = score if is_available(bot_answer, utterances_history, 0.6) else 0.0
         ans.append((bot_answer, score))
     return sorted(ans, key=lambda x: -x[1])

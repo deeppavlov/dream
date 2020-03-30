@@ -12,7 +12,15 @@
       </random>
     </template>
   </category>
-
+  <category>
+    <pattern>CAN YOU ASK ME ABOUT MY RECENT OR FAVORITE BOOK</pattern>
+    <template>
+      <random>
+        <li> Of course! What is your favorite book?</li>
+        <li> Yes! What is the recent book you ve read?</li>
+      </random>
+    </template>
+  </category>
   <category>
     <pattern>CAN YOU READ # BOOKS</pattern>
     <template>

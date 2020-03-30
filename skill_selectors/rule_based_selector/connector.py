@@ -3,7 +3,7 @@ import re
 import logging
 from itertools import chain
 from typing import Dict, Callable
-
+from common.universal_templates import BOOK_TEMPLATES
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
 from common.emotion import detect_emotion
 from common.movies import movie_skill_was_proposed
@@ -220,8 +220,11 @@ class RuleBasedSkillSelectorConnector:
                 #    skills_for_uttr.remove('convert_reddit')
             if about_music and len(dialog["utterances"]) > 2:
                 skills_for_uttr.append("music_tfidf_retrieval")
-
-            if about_books or prev_active_skill == 'book_skill':
+            met_book_template = False
+            if len(dialog['utterances']) >= 2:
+                met_book_template = any([j.lower() in dialog['utterances'][-2]['text'].lower()
+                                        for j in BOOK_TEMPLATES])
+            if about_books or prev_active_skill == 'book_skill' or met_book_template:
                 skills_for_uttr.append("book_skill")
                 skills_for_uttr.append("book_tfidf_retrieval")
 
