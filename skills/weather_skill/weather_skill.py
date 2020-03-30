@@ -25,8 +25,8 @@ class DialogDataManager():
         sucks...
         :return: attrs dict
         """
-        if len(self.d['utterances']) > 2:
-            hypotheses_dicts_list = self.d["utterances"][-3]["hypotheses"]
+        if len(self.d['human_utterances']) > 1:
+            hypotheses_dicts_list = self.d["human_utterances"][-2]["hypotheses"]
             hypo_dict = self.find_hypothesis_of_skill(hypotheses_dicts_list)
             if hypo_dict:
                 attr = hypo_dict
