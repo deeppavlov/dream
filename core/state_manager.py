@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 from copy import deepcopy
 
 from core.state_schema import Bot, BotUtterance, Dialog, Human, HumanUtterance
@@ -17,7 +17,9 @@ class StateManager:
         dialog.utterances[-1].user = dialog.human.to_dict()
         dialog.utterances[-1].attributes = kwargs.get('message_attrs', {})
 
-    async def add_hypothesis(self, dialog: Dialog, payload: Dict, label: str, **kwargs):
+    async def add_hypothesis(self, dialog: Dialog, payload: List, label: str, **kwargs):
+        if not isinstance(payload, list):
+            raise ValueError(f'Payload should be list of dicts, {type(payload)} was provided')
         hypothesis = {'skill_name': label, 'annotations': {}}
         for h in payload:
             if h['confidence'] > 0 and h['text']:
@@ -31,6 +33,8 @@ class StateManager:
         dialog.utterances[-1].hypotheses[ind]['annotations'][label] = payload
 
     async def add_hypothesis_annotation_batch(self, dialog: Dialog, payload: Dict, label: str, **kwargs):
+        if isinstance(dialog.utterances[-1], BotUtterance):
+            return
         if len(dialog.utterances[-1].hypotheses) != len(payload["batch"]):
             logger.error(f'hypots len: {len(dialog.utterances[-1].hypotheses)} != batch len {len(payload["batch"])}')
             for i in range(len(dialog.utterances[-1].hypotheses)):
