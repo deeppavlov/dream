@@ -251,6 +251,7 @@ services:
     env_file: [.env.dev]
     volumes:
       - "./skills/book_skill:/src"
+      - "./common:/src/common"
     ports:
       - 8032:8032
   misheard_asr:

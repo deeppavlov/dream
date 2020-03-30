@@ -28,7 +28,8 @@ def main_test():
                     'My favourite book is "The Old Man and the Sea" by Ernest Hemingway.',
                     "OK, let's talk about books. Do you love reading?",
                     "That's great. What is the last book you have read?",
-                    "Interesting. Have you read ",
+                    "",
+                    #  As COBOTQA can be out of work
                     # This should be a beginning of the response - response needs to be randomized
                     "I've also read it. It's an amazing book!",
                     'What is your favorite book genre?',
