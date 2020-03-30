@@ -351,4 +351,11 @@ services:
       - "./skills/program-y-wide/logs:/tmp"
     ports:
       - 8064:8064
+  news_api_skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/news_api_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8066:8066
 version: "3.7"

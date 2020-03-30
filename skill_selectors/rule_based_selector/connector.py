@@ -181,7 +181,7 @@ class RuleBasedSkillSelectorConnector:
             skills_for_uttr.append("meta_script_skill")
             skills_for_uttr.append("personal_info_skill")
             if about_news:
-                skills_for_uttr.append("news_skill")
+                skills_for_uttr.append("news_api_skill")
         else:
             # process regular utterances
             skills_for_uttr.append("program_y")
@@ -247,7 +247,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("animals_tfidf_retrieval")
 
             if about_news:
-                skills_for_uttr.append("news_skill")
+                skills_for_uttr.append("news_api_skill")
 
             emo_prob_threshold = 0.9  # to check if any emotion has at least this prob
             for emotion, prob in emotions.items():
