@@ -226,6 +226,10 @@ services:
       timeout: 2s
       retries: 3
       start_period: 1m
+  news_api_skill:
+    image: ${DOCKER_REGISTRY}/news_api_skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
 volumes:
   external-logs:
   external-deeppavlov:
