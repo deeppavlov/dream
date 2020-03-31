@@ -4,7 +4,7 @@ import logging
 import re
 import time
 import numpy as np
-from random import uniform
+import random
 from flask import Flask, request, jsonify
 from os import getenv
 from collections import Counter
@@ -23,6 +23,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 CALL_BY_NAME_PROBABILITY = 0.5  # if name is already known
+ASK_DUMMY_QUESTION_PROB = 0.5
 
 
 @app.route("/respond", methods=['POST'])
@@ -253,12 +254,12 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                 # if meta_script returns starting phrase in the middle of dialog (conf 0.99)
                 # when faced topic switching intent or matched phrase,
                 # return it with probability 0.15
-                if uniform(0, 1.) < 0.15:
+                if random.random() < 0.15:
                     curr_score = very_big_score
             elif 0.98 > confidences[i] > 0.7:
                 # if meta_script returns starting phrase in the beginning of dialog (conf 0.8),
                 # return it with probability 0.1
-                r = uniform(0, 1.)
+                r = random.random()
                 if r < 0.1:
                     curr_score = very_big_score
                 elif 0.1 <= r < 0.5:
@@ -266,12 +267,12 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             elif confidences[i] == 0.6:
                 # if meta_script returns starting phrase in the middle of dialog (conf 0.6)
                 # return it with probability 0.1
-                if uniform(0, 1.) < 0.1:
+                if random.random() < 0.1:
                     curr_score = very_big_score
             elif confidences[i] == 0.7:
                 # if meta_script returns starting phrase in the middle of dialog (conf 0.7)
                 # when faced some USER topic
-                if uniform(0, 1.) < 0.3:
+                if random.random() < 0.3:
                     curr_score = very_big_score
         if skill_names[i] == 'dummy_skill' and "question" in candidates[i].get("type", ""):
             question = candidates[i]['text']
@@ -313,7 +314,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                              "Sorry, I don't have an answer for that!", "Let's talk about something else.",
                              "As you wish.", "All right.", "Right.", "Anyway.", "Oh, okay.", "Oh, come on.",
                              "Really?", "Okay. I got it.", "Well, okay.", "Well, as you wish."]:
-        if question != "":
+        if question != "" and random.random() < ASK_DUMMY_QUESTION_PROB:
             logger.info(f"adding {question} to response.")
             best_text += np.random.choice([f" Let me ask you something. {question}",
                                            f" I would like to ask you a question. {question}"])
@@ -339,11 +340,11 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             if re.search(r"\b" + name + r"\b", dialog["utterances"][-2]["text"]):
                 pass
             else:
-                if np.random.uniform() <= CALL_BY_NAME_PROBABILITY:
+                if random.random() <= CALL_BY_NAME_PROBABILITY:
                     best_text = f"{name}, {best_text}"
         else:
             # if dialog is just started (now it's impossible)
-            if np.random.uniform() <= CALL_BY_NAME_PROBABILITY:
+            if random.random() <= CALL_BY_NAME_PROBABILITY:
                 best_text = f"{name}, {best_text}"
 
     return best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes

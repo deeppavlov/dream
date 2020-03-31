@@ -7,6 +7,7 @@ import logging
 import re
 import time
 from collections import defaultdict
+import random
 from random import choice
 from typing import Callable, Dict
 
@@ -21,6 +22,7 @@ logger = logging.getLogger(__name__)
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
+ASK_QUESTION_PROB = 0.7
 
 np_ignore_list = ["'s", 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're",
                   "you've", "you'll", "you'd", 'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself',
@@ -141,7 +143,8 @@ class DummySkillConnector:
             facts_same_nps = []
             for i, nphrase in enumerate(curr_nounphrases):
                 for fact_id in NP_FACTS.get(nphrase, []):
-                    facts_same_nps += [FACTS_MAP[str(fact_id)] + ". " + nounphrases_questions(nphrase)]
+                    facts_same_nps += [FACTS_MAP[str(fact_id)] + ". " + (nounphrases_questions(nphrase)
+                                       if random.random() < ASK_QUESTION_PROB else "")]
 
             if len(facts_same_nps) > 0:
                 logger.info("Found special nounphrases for facts. Return fact with the same nounphrase.")

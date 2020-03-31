@@ -4,6 +4,7 @@ import logging
 import os
 import string
 from time import time
+import random
 import re
 
 import numpy as np
@@ -25,6 +26,8 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 N_FACTS_TO_CHOSE = 3
+ASK_QUESTION_PROB = 0.5
+
 ASYNC_SIZE = int(os.environ.get('ASYNC_SIZE', 6))
 COBOT_API_KEY = os.environ.get('COBOT_API_KEY')
 COBOT_QA_SERVICE_URL = os.environ.get('COBOT_QA_SERVICE_URL')
@@ -149,7 +152,8 @@ def respond():
                 if len(sentences[0]) < 100 and "fact about" in sentences[0]:
                     response = " ".join(sentences[:2])
                     subjects = re.findall(r"fact about ([a-zA-Z ]+)", response)
-                    if len(subjects) > 0:
+                    if len(subjects) > 0 and random.random() < ASK_QUESTION_PROB:
+                        # randomly append question about found NP
                         # cobotqa answer `Here's a fact about Hollywood. Hollywood blablabla.`
                         response += " " + nounphrases_questions(subjects[0])
                     confidence = 0.7
@@ -157,7 +161,8 @@ def respond():
                     response = " ".join(sentences[:1])
                     # check this is requested `fact about NP/NE`
                     subjects = re.findall(r"fact about ([a-zA-Z ]+)", questions[i].lower())
-                    if len(subjects) > 0:
+                    if len(subjects) > 0 and random.random() < ASK_QUESTION_PROB:
+                        # randomly append question about requested fact
                         response += " " + nounphrases_questions(subjects[0])
                     confidence = 0.7
             elif "Here’s something I found" in response:
