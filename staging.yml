@@ -176,10 +176,6 @@ services:
     image: ${DOCKER_REGISTRY}/emotion_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
-  news_skill:
-    image: ${DOCKER_REGISTRY}/news_skill:${VERSION}
-    env_file:
-      - ${ENV_FILE}
   comet_atomic:
     image: ${DOCKER_REGISTRY}/comet_atomic:${VERSION}
     env_file:
