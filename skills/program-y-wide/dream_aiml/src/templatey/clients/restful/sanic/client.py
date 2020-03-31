@@ -117,7 +117,7 @@ class SanicRestBotClient(RestBotClient):
                 elif len(untagged_text.split()) <= 3:
                     confidence = 0.5
                 elif untagged_text:
-                    confidence = 0.6
+                    confidence = 0.9
                 else:
                     confidence = 0
                 print(
