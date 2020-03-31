@@ -332,16 +332,6 @@
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
             },
-            "news_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "url": "http://news_skill:8027/respond"
-                },
-                "dialog_formatter": "utt_sentseg_punct_dialog",
-                "response_formatter": "skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
-                "state_manager_method": "add_hypothesis"
-            },
             "emotion_skill": {
                 "connector": {
                     "protocol": "http",
