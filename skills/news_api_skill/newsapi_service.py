@@ -93,7 +93,7 @@ class CachedRequestsAPI:
             if lang == "en":
                 en_articles.append(deepcopy(article))
 
-        if len(en_articles) == 0:
+        if len(en_articles) == 0 and len(articles) > 0:
             # didn't find english news, take just the top rated one
             en_articles.append(deepcopy(articles[0]))
         return en_articles
