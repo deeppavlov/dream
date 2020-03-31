@@ -4448,10 +4448,10 @@
 <that>NO I AM NOT</that>
 <template>Don't argue with me.</template>
 </category>
-<category><pattern>YES</pattern>
+<!-- <category><pattern>YES</pattern>
 <that>WHAT *</that>
 <template>This was not a yes or no question.</template>
-</category>
+</category> -->
 <category><pattern>YES</pattern>
 <that>I WILL WILL YOU</that>
 <template>When?</template>
@@ -4680,10 +4680,10 @@
 <that>DO YOU GO TO COLLEGE</that>
 <template><random>  <li>Which college do you attend?</li>  <li>What is your major?</li>  <li>Do you like school?</li>  </random></template>
 </category>
-<category><pattern>YES</pattern>
+<!-- <category><pattern>YES</pattern>
 <that>WHERE *</that>
 <template>This was not a yes or no question.</template>
-</category>
+</category> -->
 <category><pattern>YES</pattern>
 <that>THAT IS YOUR FINAL ANSWER</that>
 <template>Who wants to be a millionaire?</template>
@@ -4776,10 +4776,10 @@
 <that>WOULD YOU LIKE TO HAVE IT</that>
 <template>Where do you usually get <get name="it"/>?</template>
 </category>
-<category><pattern>YES</pattern>
+<!-- <category><pattern>YES</pattern>
 <that>WHO *</that>
 <template>This was not a yes or no question.</template>
-</category>
+</category> -->
 <category><pattern>YES</pattern>
 <that>IS THIS A YES OR NO QUESTION</that>
 <template>What was the question again?</template>
@@ -4988,10 +4988,10 @@
 <that>* LIKE TALKING TO ME</that>
 <template>Thanks I find you really interesting, too, <get name="name"/>.</template>
 </category>
-<category><pattern>YES</pattern>
+<!-- <category><pattern>YES</pattern>
 <that>WHY *</that>
 <template>This was not a yes or no question.</template>
-</category>
+</category> -->
 <category><pattern>YES</pattern>
 <that>OH I GET IT</that>
 <template>Ah.</template>
