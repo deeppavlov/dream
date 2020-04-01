@@ -274,6 +274,12 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                 # when faced some USER topic
                 if random.random() < 0.3:
                     curr_score = very_big_score
+        elif skill_names[i] in ["dummy_skill", "convert_reddit"]:
+            if "question" in candidates[i].get("type", "") or "?" in candidates[i]['text']:
+                if len(bot_utterances) >= 1 and "?" in bot_utterances[-1]:
+                    confidences[i] /= 1.5
+                if len(bot_utterances) >= 2 and "?" in bot_utterances[-2]:
+                    confidences[i] /= 1.1
         if skill_names[i] == 'dummy_skill' and "question" in candidates[i].get("type", ""):
             question = candidates[i]['text']
 
