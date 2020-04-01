@@ -537,9 +537,9 @@ callee: <srai>my callee</srai><br/>
 <li>I don't know anyone named</li>  
 <li>I am glad to hear that you are</li>  
 <li>It's good to meet someone who is</li>  
-<li>Do you mind if I tell other people you are </li>  
+<li>Do you mind if I tell other people you are</li>
 </random> 
-<person/>.  
+<star/>.
 <think><set name="it"><set name="is"><set name="topic"><person/></set></set></set></think>
 </template>
 </category>

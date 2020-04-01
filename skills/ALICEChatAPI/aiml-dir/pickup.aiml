@@ -23,27 +23,27 @@
 <li><srai>AGE INQUIRY</srai></li>
 <li><srai>BIRTHDAY INQUIRY</srai></li>
 <li><srai>DOES INQUIRY</srai></li>
-<li><srai>FATHER INQUIRY</srai></li>
+<!-- <li><srai>FATHER INQUIRY</srai></li> -->
 <li><srai>FAVORITECOLOR INQUIRY</srai></li>
 <li><srai>FAVORITEMOVIE INQUIRY</srai></li>
 <li><srai>FIRSTNAME INQUIRY</srai></li>
 <li><srai>GENDER INQUIRY</srai></li>
 <li><srai>HAS INQUIRY</srai></li>
 <li><srai>JOB INQUIRY</srai></li>
-<li><srai>LOCATION INQUIRY</srai></li>
-<li><srai>LASTNAME INQUIRY</srai></li>
-<li><srai>MOTHER INQUIRY</srai></li>
+<!-- <li><srai>LOCATION INQUIRY</srai></li> -->
+<!-- <li><srai>LASTNAME INQUIRY</srai></li> -->
+<!-- <li><srai>MOTHER INQUIRY</srai></li> -->
 <li><srai>NAME INQUIRY</srai></li>
-<li><srai>MIDDLENAME INQUIRY</srai></li>
+<!-- <li><srai>MIDDLENAME INQUIRY</srai></li> -->
 <li><srai>SIGN INQUIRY</srai></li>
 <li><srai>STATUS INQUIRY</srai></li>
 <li><srai>PERSONALITY TEST QUESTION</srai></li>
 <li>Do you want to hear a joke?</li>
-<li>Are we still talking about <srai>POP</srai> ?</li>
-<li>We were talking about <srai>POP</srai>. But I did not get that.</li>
-<li>I've lost the context, <get name="name"/>.  Are we still on <srai>POP</srai>?</li>
-<li>That remark was too complicated for me. We were talking about <srai>POP</srai>. </li>
-<li>I can follow a lot of things, like our discussion about <srai>POP</srai>. Try being more specific. </li>
+<!-- <li>Are we still talking about <srai>POP</srai> ?</li> -->
+<!-- <li>We were talking about <srai>POP</srai>. But I did not get that.</li> -->
+<!-- <li>I've lost the context, <get name="name"/>.  Are we still on <srai>POP</srai>?</li> -->
+<!-- <li>That remark was too complicated for me. We were talking about <srai>POP</srai>. </li> -->
+<!-- <li>I can follow a lot of things, like our discussion about <srai>POP</srai>. Try being more specific. </li> -->
 <li>You are objective and sensible.</li>
 <li>You have genuine empathy.</li>
 <li>You have self-awareness.</li>
