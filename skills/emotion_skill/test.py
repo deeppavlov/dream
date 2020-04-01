@@ -42,7 +42,7 @@ def test_it_returns_joke_for_negative_emotion():
     url = 'http://0.0.0.0:8049/respond'
     response = requests.post(url, json=data).json()
     assert 'joke' in response[0][0], print(response)
-    assert response[0][1] == 1.0, print(response)
+    assert response[0][1] > 0, print(response)
 
 
 def test_it_returns_7minute_for_positive_emotion():
@@ -50,7 +50,7 @@ def test_it_returns_7minute_for_positive_emotion():
     url = 'http://0.0.0.0:8049/respond'
     response = requests.post(url, json=data).json()
     assert '7 minute' in response[0][0], print(response)
-    assert response[0][1] == 1.0, print(response)
+    assert response[0][1] > 0, print(response)
 
 
 def test_positive_scenario():
