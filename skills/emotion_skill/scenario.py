@@ -148,12 +148,10 @@ class EmotionSkillScenario:
                     reply, confidence = self._get_reply_and_confidence(prev_bot_phrase, 'other', most_likely_emotion)
                     if not reply and most_likely_emotion:
                         reply = random.choice(phrase_dict[most_likely_emotion])
-                        confidence = self.precision[most_likely_emotion]
+                        confidence = min(0.98, self.precision[most_likely_emotion])
                         if len(dialog['utterances']) > 1:
                             if detect_emotion(dialog['utterances'][-2], annotated_user_phrase):
                                 confidence = 1.0
-                        if confidence < 1 and confidence > 0:
-                            confidence = 0.98
                         logger.info(f"__call__ reply: {reply}; conf: {confidence};"
                                     f" user_phrase: {annotated_user_phrase['text']}")
             except Exception as e:
