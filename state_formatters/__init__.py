@@ -3,6 +3,7 @@ from .output_formatters import *
 
 all_formatters = {
     'alice_formatter_dialog': alice_formatter_dialog,
+    'programy_formatter_dialog': programy_formatter_dialog,
     'eliza_formatter_dialog': eliza_formatter_dialog,
     'aiml_formatter_dialog': aiml_formatter_dialog,
     'cobot_qa_formatter_service': cobot_qa_formatter_service,

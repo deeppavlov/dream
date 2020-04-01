@@ -7,9 +7,7 @@ logger = logging.getLogger(__name__)
 LAST_N_TURNS = 15  # number of turns to consider in annotator/skill.
 
 
-def alice_formatter_dialog(dialog: Dict) -> Dict:
-    # Used by: alice_formatter
-    last_n_sents = 5
+def last_n_human_utt_dialog_formatter(dialog: Dict, last_n_sents: int) -> List:
     if len(dialog["human_utterances"]) <= last_n_sents and \
             not if_lets_chat_about_topic(dialog["utterances"][0]["text"].lower()) and \
             not if_switch_topic(dialog["utterances"][0]["text"].lower()) and \
@@ -20,6 +18,16 @@ def alice_formatter_dialog(dialog: Dict) -> Dict:
     human_utts = [utt['annotations']['sentseg']['punct_sent']
                   for utt in dialog['utterances'] if utt['user']['user_type'] == 'human']
     return [{'sentences_batch': [human_utts[-last_n_sents:]]}]
+
+
+def alice_formatter_dialog(dialog: Dict) -> List:
+    # Used by: alice
+    return last_n_human_utt_dialog_formatter(dialog, last_n_sents=2)
+
+
+def programy_formatter_dialog(dialog: Dict) -> List:
+    # Used by: program_y, program_y_dangerous, program_y_wide
+    return last_n_human_utt_dialog_formatter(dialog, last_n_sents=5)
 
 
 def eliza_formatter_dialog(dialog: Dict) -> Dict:
