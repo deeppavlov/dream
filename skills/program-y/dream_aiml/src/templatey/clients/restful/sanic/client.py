@@ -94,11 +94,11 @@ class SanicRestBotClient(RestBotClient):
                 return response, status
             responses = []
             for user_sentences in request.json["sentences_batch"]:
-                if ("thanks" in user_sentences[-1] and len(user_sentences[-1].split()) >= 2) \
-                        or ("thank you" in user_sentences[-1] and len(user_sentences[-1].split()) >= 3):
-                    user_sentences[-1] = user_sentences[-1].replace("thanks.", "")
-                    user_sentences[-1] = user_sentences[-1].replace("thank you.", "")
-                    user_sentences[-1] = user_sentences[-1].strip()
+                replace_phrases = ['thanks.', 'thank you.', 'please.']
+                for phrase in replace_phrases:
+                    if user_sentences[-1] != phrase:
+                        user_sentences[-1] = user_sentences[-1].replace(phrase, '').strip()
+
                 userid = uuid.uuid4().hex
                 # if user said let's chat at beginning of a dialogue, that we should response with greeting
                 for i, s in enumerate(user_sentences):
