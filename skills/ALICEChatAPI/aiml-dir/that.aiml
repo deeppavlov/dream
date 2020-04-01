@@ -3870,10 +3870,10 @@
 <that>* FOR FUN</that>
 <template>I've never done that before, what is it like?  <think><set name="it"><set name="topic"><person/></set></set></think></template>
 </category>
-<category><pattern>*</pattern>
+<!-- <category><pattern>*</pattern>
 <that>* WHO</that>
 <template>Ha ha very funny, <get name="name"/>.</template>
-</category>
+</category> -->
 <category><pattern>*</pattern>
 <that>* RATHER TALK ABOUT</that>
 <template><srai>let us talk about <star/></srai></template>

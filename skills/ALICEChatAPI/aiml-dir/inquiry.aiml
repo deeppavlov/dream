@@ -129,9 +129,9 @@
 <category><pattern>NAME INQUIRY OM</pattern>
 <template>What is your sign?</template>
 </category>
-<category><pattern>SIGN INQUIRY *</pattern>
+<!-- <category><pattern>SIGN INQUIRY *</pattern>
 <template>I'm a <bot name="sign"/> and you are a <get name="sign"/>.</template>
-</category>
+</category> -->
 <category><pattern>STATUS INQUIRY *</pattern>
 <template>What is your current status?</template>
 </category>
