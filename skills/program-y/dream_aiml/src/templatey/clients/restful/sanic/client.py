@@ -115,7 +115,7 @@ class SanicRestBotClient(RestBotClient):
 
                 if NULL_RESPONSE.lower() in untagged_text.lower():
                     confidence = 0.2
-                elif "unknown" in untagged_text:
+                elif "unknown" in untagged_text.lower():
                     confidence = 0.0
                     untagged_text = ""
                 elif len(untagged_text.split()) <= 3:
