@@ -663,6 +663,7 @@
                 "dialog_formatter": "ner_formatter_dialog",
                 "response_formatter": "simple_formatter_service",
                 "previous_services": ["post_annotators_1"],
+                "required_previous_services": ["post_annotators_1.sentseg"],
                 "state_manager_method": "add_annotation"
             }
         },
@@ -672,6 +673,7 @@
                 "dialog_formatter": "sent_rewrite_formatter_dialog",
                 "response_formatter": "simple_formatter_service",
                 "previous_services": ["post_annotators_2"],
+                "required_previous_services": ["post_annotators_2.ner"],
                 "state_manager_method": "add_annotation"
             }
         }
