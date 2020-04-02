@@ -145,6 +145,7 @@ async def main(args):
                 conversations[conversation_id] = d
     feedback = pd.read_csv(args.feedback)
     ratings = pd.read_csv(args.ratings)
+    ratings['Rating'] = ratings['Rating'].apply(lambda x: float(str(x).replace('*', '')))
 
     # to speed-up feedback/rating look up
     feedback = dict(zip(feedback['conversation_id'], feedback['feedback']))
