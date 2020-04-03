@@ -284,6 +284,7 @@ def return_fact(facts, last_bot_phrases, asked_about_age=False, met_last=False):
                 #        pr=True
                 fact = improve_phrase(fact, asked_about_age, met_last)
             return fact
+    return ''
 
 
 class CoronavirusSkillScenario:
@@ -383,7 +384,7 @@ class CoronavirusSkillScenario:
                         reply, confidence = return_fact(self.facts, last_bot_phrases,
                                                         asked_about_age, met_last), 1
                         logging.info('No fact returned')
-                        if reply is None:
+                        if not reply:
                             reply, confidence = '', 0
                     else:
                         logging.info('Answer is not YES')
@@ -446,7 +447,7 @@ class CoronavirusSkillScenario:
                                         logging.info('YES received - returning fact')
                                         reply, confidence = return_fact(self.facts, last_bot_phrases,
                                                                         asked_about_age, met_last), 1
-                                        if reply is None:
+                                        if not reply:
                                             logging.debug('No reply received')
                                             reply, confidence = '', 0
                                     elif asked_origin(last_utterance) and about_coronavirus(last_utterance):
@@ -483,7 +484,7 @@ class CoronavirusSkillScenario:
                                     logging.info('YES detected - returning fact')
                                     reply, confidence = return_fact(self.facts, last_bot_phrases,
                                                                     asked_about_age, met_last), 1
-                                    if reply is None:
+                                    if not reply:
                                         logging.info('NO detected - returning zero')
                                         reply, confidence = '', 0
                                 else:
