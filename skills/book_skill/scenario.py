@@ -226,6 +226,9 @@ def get_name(annotated_phrase, mode='author', return_plain=False, bookyear=False
                 pass
     logging.debug('entity detected')
     logging.debug(entityname)
+    banned_entities = ['tik tok', 'minecraft']
+    if entityname in banned_entities:
+        return None
     if not bookyear:
         return entityname
     else:
