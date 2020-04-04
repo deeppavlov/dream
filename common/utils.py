@@ -110,7 +110,7 @@ def get_user_replies_to_particular_skill(utterances, skill_name):
 def check_about_death(last_utterance):
     if type(last_utterance) == str:
         last_utterance = {'text': last_utterance}
-    return any([j in last_utterance['text'] for j in ['death', 'die', 'dying', 'mortality']])
+    return any([j in last_utterance['text'] for j in ['death', ' die', ' dying', 'mortality']])
 
 
 def quarantine_end(last_utterance):
