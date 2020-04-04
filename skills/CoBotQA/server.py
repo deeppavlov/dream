@@ -15,7 +15,7 @@ from os import getenv
 import sentry_sdk
 from cobotqa_service import send_cobotqa
 
-from common.universal_templates import nounphrases_questions
+from common.universal_templates import opinion_request_question
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -155,7 +155,7 @@ def respond():
                     if len(subjects) > 0 and random.random() < ASK_QUESTION_PROB:
                         # randomly append question about found NP
                         # cobotqa answer `Here's a fact about Hollywood. Hollywood blablabla.`
-                        response += " " + nounphrases_questions(subjects[0])
+                        response += " " + opinion_request_question()
                     confidence = 0.7
                 else:
                     response = " ".join(sentences[:1])
@@ -163,7 +163,7 @@ def respond():
                     subjects = re.findall(r"fact about ([a-zA-Z ]+)", questions[i].lower())
                     if len(subjects) > 0 and random.random() < ASK_QUESTION_PROB:
                         # randomly append question about requested fact
-                        response += " " + nounphrases_questions(subjects[0])
+                        response += " " + opinion_request_question()
                     confidence = 0.7
             elif "Here’s something I found" in response:
                 confidence = 0.7

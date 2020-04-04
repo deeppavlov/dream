@@ -25,7 +25,7 @@ NP_OPINION_REQUESTS = [
     "Any thoughts on NP?",
     "Do you have any thoughts on NP?",
     "What are your first thoughts on NP?",
-    "What is your position on NP?",
+    # "What is your position on NP?",
     "What would you say if I ask your opinion on NP?",
     "I'd like to hear your opinion on NP."
 ]
@@ -35,11 +35,15 @@ BOOK_TEMPLATES = ['talk about books', 'do you love reading']
 BOOK_CHANGE_PHRASE = "Okay! What would you prefer to discuss? Movies or an interesting fact from Wikipedia?"
 
 
+def opinion_request_question():
+    return choice(UNIVERSAL_OPINION_REQUESTS)
+
+
 def nounphrases_questions(nounphrase=None):
     if nounphrase and len(nounphrase) > 0:
         question = choice(NP_OPINION_REQUESTS + UNIVERSAL_OPINION_REQUESTS).replace("NP", nounphrase)
     else:
-        question = choice(UNIVERSAL_OPINION_REQUESTS)
+        question = opinion_request_question()
     return question
 
 
