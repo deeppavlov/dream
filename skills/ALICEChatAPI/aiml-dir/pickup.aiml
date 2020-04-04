@@ -36,7 +36,7 @@
 <li><srai>NAME INQUIRY</srai></li>
 <!-- <li><srai>MIDDLENAME INQUIRY</srai></li> -->
 <li><srai>SIGN INQUIRY</srai></li>
-<li><srai>STATUS INQUIRY</srai></li>
+<!-- <li><srai>STATUS INQUIRY</srai></li> -->
 <li><srai>PERSONALITY TEST QUESTION</srai></li>
 <li>Do you want to hear a joke?</li>
 <!-- <li>Are we still talking about <srai>POP</srai> ?</li> -->

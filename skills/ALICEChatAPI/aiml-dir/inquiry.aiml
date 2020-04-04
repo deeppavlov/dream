@@ -132,9 +132,9 @@
 <!-- <category><pattern>SIGN INQUIRY *</pattern>
 <template>I'm a <bot name="sign"/> and you are a <get name="sign"/>.</template>
 </category> -->
-<category><pattern>STATUS INQUIRY *</pattern>
+<!-- <category><pattern>STATUS INQUIRY *</pattern>
 <template>What is your current status?</template>
-</category>
+</category> -->
 <category><pattern>*</pattern>
 <that>WHAT IS YOUR FIRST NAME</that>
 <template>
