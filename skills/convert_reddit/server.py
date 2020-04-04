@@ -154,7 +154,7 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True):
 
     for ind in reversed(filtered_indices):
         cand = clear_text(responses[ind]).split()
-        if "schitt" in cand:
+        if "schitt" in cand or "trump" in cand:
             filtered_indices.remove(ind)
             continue
         for utterance in clear_utterances_histories:
