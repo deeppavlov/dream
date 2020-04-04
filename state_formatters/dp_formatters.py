@@ -69,10 +69,13 @@ def misheard_asr_formatter_service(payload):
     return hyps
 
 
-def get_last_n_turns(dialog: Dict):
-    dialog["utterances"] = dialog["utterances"][-(LAST_N_TURNS * 2 + 1):]
-    dialog["human_utterances"] = dialog["human_utterances"][-(LAST_N_TURNS + 1):]
-    dialog["bot_utterances"] = dialog["bot_utterances"][-LAST_N_TURNS:]
+def get_last_n_turns(dialog: Dict, bot_last_turns=None, human_last_turns=None, total_last_turns=None):
+    bot_last_turns = bot_last_turns or LAST_N_TURNS
+    human_last_turns = human_last_turns or LAST_N_TURNS + 1
+    total_last_turns = total_last_turns or LAST_N_TURNS * 2 + 1
+    dialog["utterances"] = dialog["utterances"][-total_last_turns:]
+    dialog["human_utterances"] = dialog["human_utterances"][-human_last_turns:]
+    dialog["bot_utterances"] = dialog["bot_utterances"][-bot_last_turns:]
     return dialog
 
 
@@ -295,6 +298,12 @@ def full_utt_sentseg_punct_dialog(dialog: Dict):
 def utt_sentrewrite_modified_last_dialog(dialog: Dict):
     # Used by: book_skill_formatter; misheard_asr_formatter, cobot_qa_formatter
     dialog = get_last_n_turns(dialog)
+    dialog = replace_with_annotated_utterances(dialog, mode="modified_sents")
+    return [{'dialogs': [dialog]}]
+
+
+def utt_sentrewrite_modified_last_dialog_emotion_skill(dialog: Dict):
+    dialog = get_last_n_turns(dialog, bot_last_turns=100)
     dialog = replace_with_annotated_utterances(dialog, mode="modified_sents")
     return [{'dialogs': [dialog]}]
 
