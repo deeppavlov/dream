@@ -11,7 +11,7 @@ import random
 from random import choice
 from typing import Callable, Dict
 
-from common.universal_templates import nounphrases_questions
+from common.universal_templates import opinion_request_question
 import sentry_sdk
 from os import getenv
 
@@ -143,7 +143,7 @@ class DummySkillConnector:
             facts_same_nps = []
             for i, nphrase in enumerate(curr_nounphrases):
                 for fact_id in NP_FACTS.get(nphrase, []):
-                    facts_same_nps += [FACTS_MAP[str(fact_id)] + ". " + (nounphrases_questions(nphrase)
+                    facts_same_nps += [FACTS_MAP[str(fact_id)] + ". " + (opinion_request_question()
                                        if random.random() < ASK_QUESTION_PROB else "")]
 
             if len(facts_same_nps) > 0:
