@@ -88,6 +88,19 @@ class EmotionSkillScenario:
                 most_likely_emotion = emotion
         return most_likely_emotion
 
+    def _check_for_repetition(self, reply, prev_replies_for_user):
+        reply = reply.lower()
+        lower_news = BREAKING_NEWS.lower()
+        lower_physical = physical_activites.lower()
+        if reply in prev_replies_for_user:
+            return True
+        for prev_reply in prev_replies_for_user:
+            if lower_news in prev_reply and lower_news in reply:
+                return True
+            if lower_physical in prev_reply and lower_physical in reply:
+                return True
+        return False
+
     def _get_reply_and_confidence(self, prev_bot_phrase, intent, most_likely_emotion):
         is_joke_state = 'can i tell you a joke' in prev_bot_phrase
         is_feel_better_now_state = 'do you feel better now' in prev_bot_phrase
@@ -160,7 +173,7 @@ class EmotionSkillScenario:
                 reply = ""
                 confidence = 0
 
-            if reply and reply.lower() in prev_replies_for_user:
+            if reply and self._check_for_repetition(reply, prev_replies_for_user):
                 confidence = 0.95
             if not reply or confidence == 0:
                 attr['can_continue'] = CAN_NOT_CONTINUE
