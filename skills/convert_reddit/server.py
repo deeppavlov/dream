@@ -23,7 +23,8 @@ SEED = 31415
 MODEL_PATH = os.getenv("MODEL_PATH")
 DATABASE_PATH = os.getenv("DATABASE_PATH")
 CONFIDENCE_PATH = os.getenv("CONFIDENCE_PATH")
-SOFTMAX_TEMPERATURE = os.getenv("SOFTMAX_TEMPERATURE", 0.08)
+SOFTMAX_TEMPERATURE = float(os.getenv("SOFTMAX_TEMPERATURE", 0.08))
+NUM_SAMPLE = int(os.getenv("NUM_SAMPLE", 3))
 
 
 sentry_sdk.init(SENTRY_DSN)
@@ -168,12 +169,16 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True):
             for ind in filtered_indices
         ]
         try:
-            candidate = sample_candidates(candidates, choice_num=1, softmax_temperature=SOFTMAX_TEMPERATURE)[0]
-            candidate = (candidate[0], float(candidate[1]))
+            selected_candidates = sample_candidates(
+                candidates, choice_num=NUM_SAMPLE, softmax_temperature=SOFTMAX_TEMPERATURE
+            )
+            answers = [cand[0] for cand in selected_candidates]
+            confidences = [float(cand[1]) for cand in selected_candidates]
+            return answers, confidences
         except Exception:
             logger.error(traceback.format_exc())
             candidate = candidates[0]
-        return candidate
+            return candidate
     else:
         return "", 0.0
 
