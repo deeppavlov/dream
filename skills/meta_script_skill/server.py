@@ -15,6 +15,7 @@ from common.universal_templates import if_choose_topic, if_switch_topic, if_lets
 from utils import get_starting_phrase, get_statement_phrase, get_opinion_phrase, get_comment_phrase, \
     extract_verb_noun_phrases, DEFAULT_STARTING_CONFIDENCE, is_custom_topic, WIKI_DESCRIPTIONS, is_predefined_topic, \
     get_used_attributes_by_name
+from comet_responses import ask_question_using_atomic, comment_using_atomic
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -167,15 +168,15 @@ def get_status_and_topic(dialog):
 def respond():
     st_time = time.time()
     dialogs_batch = request.json["dialogs"]
-    confidences = []
-    responses = []
-    human_attributes = []
-    bot_attributes = []
-    attributes = []
+    final_responses = []
+    final_confidences = []
+    final_attributes = []
 
     for dialog in dialogs_batch:
-        human_attr = {}
-        bot_attr = {}
+        curr_responses = []
+        curr_confidences = []
+        curr_attrs = []
+
         attr = {"can_continue": CAN_NOT_CONTINUE}
 
         curr_meta_script_status, topic = get_status_and_topic(dialog)
@@ -211,12 +212,10 @@ def respond():
                 elif len(dialog["human_utterances"]) > 0 and \
                         if_lets_chat_about_topic(dialog["human_utterances"][-1]["text"].lower()):
                     # if person wants to talk about something particular - do not start script!
-                    confidence = 0.
-                    response = ""
+                    response, confidence = "", 0.
                 elif len(dialog["human_utterances"]) > 0 and "?" in dialog["human_utterances"][-1]["text"]:
                     # if some question was asked by user, do not start script at all!
-                    confidence = 0.
-                    response = ""
+                    response, confidence = "", 0.
                 elif len(dialog["utterances"]) <= 20:
                     # if this is a beginning of the dialog, assign higher confidence to start the script
                     confidence = DEFAULT_DIALOG_BEGIN_CONFIDENCE
@@ -226,7 +225,7 @@ def respond():
                 # there were some script active before in the last several utterances
                 if len(dialog["human_utterances"]) > 0 and "?" in dialog["human_utterances"][-1]["text"]:
                     logger.info("Question by user was detected. Don't continue the script on this turn.")
-                    response, confidence = "", 0.0
+                    response, confidence, attr = "", 0., {}
                     # we do not finish script on this step but hope that some other script will be able
                     # to answer user's question
                 elif topic_switch_detected or lets_chat_about_detected:
@@ -259,18 +258,31 @@ def respond():
                         f"Attr: `{attr}.`")
         else:
             # if no available topic
-            response = ""
-            confidence = 0.0
+            response, confidence, attr = "", 0., {}
 
-        responses.append(response)
-        confidences.append(confidence)
-        human_attributes.append(human_attr)
-        bot_attributes.append(bot_attr)
-        attributes.append(attr)
+        curr_responses.append(response)
+        curr_confidences.append(confidence)
+        curr_attrs.append(attr)
+
+        comet_dialog_status = get_used_attributes_by_name(
+            dialog["utterances"][-3:], attribute_name="atomic_dialog",
+            value_by_default=None, activated=True)
+        if len(comet_dialog_status) > 0 and comet_dialog_status[-1] == "ask_question":
+            logger.info(f"Found previous comet dialog status: {comet_dialog_status}")
+            response, confidence, attr = comment_using_atomic(dialog)
+        else:
+            response, confidence, attr = ask_question_using_atomic(dialog)
+        curr_responses.append(response)
+        curr_confidences.append(confidence)
+        curr_attrs.append(attr)
+
+        final_responses.append(curr_responses)
+        final_confidences.append(curr_confidences)
+        final_attributes.append(curr_attrs)
 
     total_time = time.time() - st_time
     logger.info(f'meta_script_skill exec time: {total_time:.3f}s')
-    return jsonify(list(zip(responses, confidences, human_attributes, bot_attributes, attributes)))
+    return jsonify(list(zip(final_responses, final_confidences, final_attributes)))
 
 
 if __name__ == '__main__':

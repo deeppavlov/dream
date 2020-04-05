@@ -10,7 +10,7 @@ from os import getenv
 import sentry_sdk
 import spacy
 import requests
-from spacy.symbols import nsubj, xcomp, VERB, NOUN, ADP
+from spacy.symbols import nsubj, VERB, xcomp, NOUN, ADP
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
 from common.utils import transform_vbg, get_skill_outputs_from_dialog
@@ -26,6 +26,7 @@ logger = logging.getLogger(__name__)
 nlp = spacy.load("en_core_web_sm")
 
 COMET_SERVICE_URL = "http://comet_atomic:8053/comet"
+CONCEPTNET_SERVICE_URL = "http://comet_conceptnet:8065/comet"
 DEFAULT_CONFIDENCE = 0.98
 CONTINUE_USER_TOPIC_CONFIDENCE = 0.7
 DEFAULT_STARTING_CONFIDENCE = 0.6
@@ -94,19 +95,20 @@ DIVE_DEEPER_QUESTION = ["Is it true that STATEMENT?",
                         "Why do STATEMENT?"
                         ]
 
-DIVE_DEEPER_TEMPLATE_COMETS = {"people DOTHAT to feel RELATION": {"attribute": "xAttr",
-                                                                  "templates": DIVE_DEEPER_QUESTION[:-4]},
-                               "people DOTHAT RELATION": {"attribute": "xIntent",
-                                                          "templates": DIVE_DEEPER_QUESTION[:-4]},
-                               "people need RELATION to DOTHAT": {"attribute": "xNeed",
-                                                                  "templates": DIVE_DEEPER_QUESTION},
-                               "people feel RELATION after DOINGTHAT": {"attribute": "xReact",
-                                                                        "templates": DIVE_DEEPER_QUESTION},
-                               "people want RELATION when DOINGTHAT": {"attribute": "xWant",
-                                                                       "templates": DIVE_DEEPER_QUESTION},
-                               "one RELATION after DOINGTHAT": {"attribute": "xEffect",
-                                                                "templates": DIVE_DEEPER_QUESTION[:-2]}
-                               }
+DIVE_DEEPER_TEMPLATE_COMETS = {
+    "people DOTHAT to feel RELATION": {"attribute": "xAttr",  # adjective relation
+                                       "templates": DIVE_DEEPER_QUESTION[:-4]},
+    "people DOTHAT RELATION": {"attribute": "xIntent",  # to do something (relation)
+                               "templates": DIVE_DEEPER_QUESTION[:-4]},
+    "people need RELATION to DOTHAT": {"attribute": "xNeed",  # to do something (relation)
+                                       "templates": DIVE_DEEPER_QUESTION},
+    "people feel RELATION after DOINGTHAT": {"attribute": "xReact",  # adjective relation
+                                             "templates": DIVE_DEEPER_QUESTION},
+    "people want RELATION when DOINGTHAT": {"attribute": "xWant",  # to do something (relation)
+                                            "templates": DIVE_DEEPER_QUESTION},
+    "people are expected RELATION after DOINGTHAT": {"attribute": "xEffect",  # to do something (relation)
+                                                     "templates": DIVE_DEEPER_QUESTION}
+}
 
 DIVE_DEEPER_COMMENTS = {"yes": ["Cool! I figured it out by myself!",
                                 "Yeah! I realized that by myself!"],
@@ -214,16 +216,52 @@ def custom_request(url, data, timeout, method='POST'):
 
 
 def correct_verb_form(attr, values):
-    if attr in ["xIntent", "xNeed", "xWant"]:
+    """
+    Comet return "xEffect" - "does/will do something"
+                 "oEffect" - "hopes they do something" / "they do something"
+                 "xIntent", "xNeed", "xWant", "oWant" - "do something" / "to do something"
+    Convert these phrases to "to do something".
+
+    Args:
+        attr: relation attribute for comet
+        values: list of returned by comet values
+
+    Returns:
+        list of relation phrases in form "to do something"
+        for ["xIntent", "xNeed", "xWant", "oWant", "CapableOf", "Causes", "CausesDesire", "DesireOf",
+             "Desires", "HasFirstSubevent", "HasLastSubevent", "HasPainCharacter", "HasPainIntensity",
+             "HasPrerequisite", "HasSubevent", "MotivatedByGoal", "NotCapableOf", "NotDesires", "ReceivesAction"]
+    """
+    if attr in ["xIntent", "xNeed", "xWant", "oWant", "CapableOf", "Causes", "CausesDesire", "DesireOf",
+                "Desires", "HasFirstSubevent", "HasLastSubevent", "HasPainCharacter", "HasPainIntensity",
+                "HasPrerequisite", "HasSubevent", "MotivatedByGoal", "NotCapableOf", "NotDesires", "ReceivesAction"]:
         for i in range(len(values)):
             doc = nlp(values[i])
 
-            if values[i][:3] != "to " and doc[0].pos_ == "VERB":
+            if values[i][:3] != "to " and doc[0].pos == VERB:
+                values[i] = "to " + values[i]
+    if attr in ["xEffect", "oEffect"]:
+        for i in range(len(values)):
+            if values[i][:6] == "hopes ":
+                values[i] = values[i][6:]
+            if values[i][:5] == "they ":
+                values[i] = values[i][5:]
+            if values[i][:5] == "will ":
+                values[i] = values[i][5:]
+
+            doc = nlp(values[i])
+            if doc[0].pos == VERB:
+                # convert does something to do something
+                if len(doc) == 1:
+                    values[i] = doc[0].lemma_
+                else:
+                    values[i] = doc[0].lemma_ + values[i][values[i].find(" "):]
+            if values[i][:3] != "to " and doc[0].pos == VERB:
                 values[i] = "to " + values[i]
     return values
 
 
-def get_comet(topic, relation, TOPICS):
+def get_comet_atomic(topic, relation, TOPICS={}):
     """
     Get COMeT prediction for considered topic like `verb subj/adj/adv` of particular relation.
 
@@ -235,7 +273,7 @@ def get_comet(topic, relation, TOPICS):
         string, one of predicted by Comet relations
     """
 
-    logger.info(f"Comet request on topic: {topic}.")
+    logger.info(f"Comet Atomic request on topic: {topic}.")
     if topic is None or topic == "" or relation == "" or relation is None:
         return ""
 
@@ -250,13 +288,13 @@ def get_comet(topic, relation, TOPICS):
             comet_result = custom_request(COMET_SERVICE_URL, {"input": f"Person {topic}.",
                                                               "category": relation}, 1.5)
         except (requests.ConnectTimeout, requests.ReadTimeout) as e:
-            logger.error("COMeT result Timeout")
+            logger.error("COMeT Atomic result Timeout")
             sentry_sdk.capture_exception(e)
             comet_result = requests.Response()
             comet_result.status_code = 504
 
         if comet_result.status_code != 200:
-            msg = "COMeT: result status code is not 200: {}. result text: {}; result status: {}".format(
+            msg = "COMeT Atomic: result status code is not 200: {}. result text: {}; result status: {}".format(
                 comet_result, comet_result.text, comet_result.status_code)
             logger.warning(msg)
             relation_phrases = []
@@ -291,7 +329,7 @@ def get_gerund_topic(topic):
     gerund = ""
 
     for token in doc:
-        if token.pos_ == "VERB":
+        if token.pos == VERB:
             to_replace = token.text
             gerund = transform_vbg(token.lemma_)
             break
@@ -454,7 +492,7 @@ def get_statement_phrase(dialog, topic, attr, TOPICS):
     attr["meta_script_relation_template"] = meta_script_template
 
     relation = DIVE_DEEPER_TEMPLATE_COMETS[meta_script_template]["attribute"]
-    prediction = get_comet(topic, relation, TOPICS)
+    prediction = get_comet_atomic(topic, relation, TOPICS)
 
     if prediction == "":
         return "", 0.0, {"can_continue": CAN_NOT_CONTINUE}
