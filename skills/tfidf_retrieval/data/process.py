@@ -18,7 +18,7 @@ def most_frequent(List):
 def preprocess(phrase):
     for sign in '!$%&*.,:;<>=?@[]^_{}|':
         phrase = phrase.replace(sign, ' ' + sign + ' ')
-    return phrase
+    return phrase.lower().strip()
 
 
 def get_vectorizer(vectorizer_file='new_vectorizer_2.zip'):
