@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import logging
+import json
 import time
 from os import getenv
 
@@ -11,13 +12,17 @@ from weather_skill import WeatherSkill
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
+WEATHER_QUESTIONS_PATH = getenv('WEATHER_QUESTIONS_PATH', None)
+if WEATHER_QUESTIONS_PATH is None:
+    WEATHER_QUESTIONS_PATH = '/src/data/weather_questions'
+
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-ws = WeatherSkill()
+ws = WeatherSkill(json.load(open(WEATHER_QUESTIONS_PATH)))
 
 
 @app.route("/respond", methods=['POST'])

@@ -1,0 +1,37 @@
+{
+  "snow":{
+    "synonyms":["snow", "snowy"],
+    "question":"Let me guess - you like skiing?",
+    "answer":"Anyway, the best skiing and snowboard resorts are in Austria. But unfortunately, because of coronavirus, it’s dangerous to travel! Are you staying at home and working remotely to avoid coronavirus?"
+  },
+  "cold":{
+    "synonyms":["cold", "freeze", "frost", "freezing", "frosty", "cool"],
+    "question":"I prefer cold weather too! Let me guess you like ice-skating?",
+    "answer":"Society is like a large piece of frozen water; and skating well is the great art of social life. But unfortunately, because of coronavirus, it’s dangerous to go even to the ice skating center! Are you staying at home to avoid coronavirus?"
+  },
+  "cool":{
+    "synonyms":["cool", "chill"],
+    "question":"I prefer cool weather too! Let me guess - you like hiking?",
+    "answer":"Anyway, the beauty about hiking is that it’s truly an activity for everyone. Whether you’re young or old, an expert or an amateur, there’s a trail out there that will be perfect for you.. But unfortunately, because of coronavirus, it’s dangerous to travel now! Are you staying at home to avoid coronavirus?"
+  },
+  "cloud":{
+    "synonyms":["cloudy", "cloud"],
+    "question":"Let me guess - you like hiking?",
+    "answer":"Anyway, the beauty about hiking is that it’s truly an activity for everyone. Whether you’re young or old, an expert or an amateur, there’s a trail out there that will be perfect for you.. But unfortunately, because of coronavirus, it’s dangerous to travel now! Are you staying at home to avoid coronavirus?"
+  },
+  "hot":{
+    "synonyms":["hot", "heat"],
+    "question":"Let me guess - you like swimming?",
+    "answer":"I have always wanted a swimming pool and never had one. But unfortunately, because of coronavirus, it’s dangerous to go to the public swimming pools! Are you staying at home to avoid coronavirus?"
+  },
+  "warm":{
+    "synonyms":["warm", "warmy"],
+    "question":"Let me guess - you like hiking?",
+    "answer":"Anyway, the beauty about hiking is that it’s truly an activity for everyone. Whether you’re young or old, an expert or an amateur, there’s a trail out there that will be perfect for you...But unfortunately, because of coronavirus, it’s dangerous to travel now! Are you staying at home to avoid coronavirus?"
+  },
+  "rain":{
+    "synonyms":["rain", "rainy"],
+    "question":"Oh, I see. Let me guess - you like being in the comfort of your home?",
+    "answer":"There are actually many activities to do at home. Table games, like Monopoly, is a great way to get to know your loved ones closer. And it's very important now to stay home to avoid coronavirus for now. I hope you are doing a great job at it!"
+  }
+}
