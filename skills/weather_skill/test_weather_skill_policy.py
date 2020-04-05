@@ -68,7 +68,7 @@ class TestWeatherSKillPolicy(unittest.TestCase):
 
         dialogs = json_data
         responses, confidences, _, _, _ = self.ws(dialogs)
-        self.assertIn(responses[0], ['', "Sorry, I have no weather for the place. I can not understand the city..."])
+        self.assertIn(responses[0], ['', "Sorry, I have no weather for the place. I didn't recognize the city..."])
 
 
 if __name__ == '__main__':

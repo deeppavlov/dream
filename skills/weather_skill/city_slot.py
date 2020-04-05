@@ -24,7 +24,7 @@ class OWMCitySlot():
 
     def find_geo_names_in_utterance(self, utterance):
         """
-        Interfcae method for searching the first occurence of the geo name in utterance
+        Interface method for searching the first occurence of the geo name in utterance
         :param utterance: str with user utterance
         :return: None if nothing found, str with name of geo if something found.
         """
