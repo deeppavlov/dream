@@ -1,10 +1,17 @@
+import os
+#  os.chdir('C://Users//DK//Vivaldi')
 from argparse import ArgumentParser
 import pandas as pd
 import json
-import os
 from tqdm import tqdm
 from deeppavlov import configs, build_model
 import datetime
+from requests import post
+
+
+def is_negative(phrase):
+    result = post("http://0.0.0.0:8024/sentiment_annotations", json={"sentences": [phrase]}).json()
+    return result[0][0][0] == 'negative'
 
 
 def process(dialog, gold_list, banned_words, ner_model):
@@ -13,10 +20,15 @@ def process(dialog, gold_list, banned_words, ner_model):
         if utterances[i] in gold_list:
             utterances[i + 1] = ''
         utterances[i] = utterances[i].replace(',', ' ')
-        cond1 = ner_model is None or 'PER' in ''.join(ner_model([utterances[i]])[1][0]) or 'Dilyara' in utterances[i]
-        cond2 = ([banned_word in utterances[i] for banned_word in banned_words])
-        if i % 2 != 0 and (cond1 or cond2):
-            utterances[i] = ''
+        print('**')
+        print(utterances[i])
+        if utterances[i] != '':
+            cond1 = ner_model is None or 'PER' in ''.join(ner_model([utterances[i]])[1][0])
+            cond2 = ([banned_word in utterances[i] for banned_word in banned_words])
+            cond3 = is_negative(utterances[i])
+            cond4 = 'Dilyara' in utterances[i]
+            if i % 2 != 0 and (cond1 or cond2 or cond3 or cond4):
+                utterances[i] = ''
     return {'id': dialog['utterances'][0]['attributes']['conversation_id'],
             'utterances': [utterance['text'] for utterance in dialog['utterances']]}
 
@@ -118,6 +130,10 @@ def main():
     used_bad_ids = set([dialog['id'] for dialog in bad_dialogs])
     print('Reading ratings from file ' + str(args.ratings_file))
     ratings = pd.read_csv(args.ratings_file)
+    rating_list = list(ratings['Rating'])
+    for i in range(len(rating_list)):
+        rating_list[i] = float(rating_list[i].replace('*', ''))
+    ratings['Rating'] = rating_list
     good_ratings = ratings[ratings['Rating'] >= 5]
     good_ids = set(list(good_ratings['Conversation ID']))
     if args.bad_output_file:
@@ -129,15 +145,27 @@ def main():
     print('Total number of all dialogs: ' + str(len(dialogs)))
     print('Total number of good dialogs: ' + str(len(good_ids)))
     print('Total number of bad dialogs: ' + str(len(bad_ids)))
-    dialogs = [j for j in dialogs if 'conversation_id' in j['utterances'][0]['attributes']]
+    dialogs = [j for j in dialogs if 'attributes' in j['utterances'][0] and (
+               'conversation_id' in j['utterances'][0]['attributes'])]
     for i in range(len(dialogs)):
         dialogs[i]['id'] = dialogs[i]['utterances'][0]['attributes']['conversation_id']
+        if 'date_time' in dialogs[i]['utterances'][0]['attributes']:
+            dialogs[i]['date_time'] = dialogs[i]['utterances'][0]['attributes']['date_time']
+        else:
+            dialogs[i]['date_time'] = dialogs[i]['utterances'][0]['date_time']
     assert len(dialogs) > 0
     last_dialog_ids = set()
+    last_dialog_ids = set()
+    # n = list(set([g['date_time'][:10] for g in dialogs]))
+    # raise Exception(n)
     for dialog in dialogs:
-        date_info = dialog['utterances'][0]['date_time'][:10]
-        date = datetime.datetime.strptime(date_info, '%Y-%M-%d')
+        date_info = dialog['date_time'][:10]
+        # if '2020-04' in date_info:
+        #  print(date_info)
+        date = datetime.datetime.strptime(date_info, '%Y-%m-%d')
         not_long_ago = (datetime.datetime.now() - date).days < args.time_window
+        # if '2020-04' in date_info:
+        #    print(not_long_ago)
         if not_long_ago:
             last_dialog_ids.add(dialog['id'])
     print('Time window for good dialogs: ' + str(args.time_window) + ' DAYS')

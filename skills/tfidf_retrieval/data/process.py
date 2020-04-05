@@ -52,6 +52,8 @@ def create_phraselist(dialog_list, todel_phrases, todel_userphrases,
     bad_phrase_list = defaultdict(list)
     good_total_count = 0
     bad_total_count = 0
+    todel_phrases = [preprocess(j) for j in todel_phrases]
+    todel_userphrases = [preprocess(j) for j in todel_userphrases]
     for dialog in dialog_list:
         utterances = dialog['utterances']
         for i in range(0, len(utterances) - 1, 1):
@@ -59,8 +61,9 @@ def create_phraselist(dialog_list, todel_phrases, todel_userphrases,
             bot_phrase = preprocess(utterances[i + 1])
             no_wrongwords = all([banned_phrase not in bot_phrase for banned_phrase in todel_phrases])
             if bot_phrase not in todel_phrases and human_phrase not in todel_userphrases and no_wrongwords:
-                good_phrase_list[human_phrase].append(bot_phrase)
-                good_total_count += 1
+                if len(human_phrase) > 0 and len(bot_phrase) > 0:
+                    good_phrase_list[human_phrase].append(bot_phrase)
+                    good_total_count += 1
     if bad_dialog_list is not None:
         for dialog in bad_dialog_list:
             utterances = dialog['utterances']
@@ -68,8 +71,9 @@ def create_phraselist(dialog_list, todel_phrases, todel_userphrases,
                 human_phrase = utterances[i]
                 bot_phrase = utterances[i + 1]
                 no_wrongwords = all([banned_phrase not in bot_phrase for banned_phrase in todel_phrases])
-                bad_phrase_list[human_phrase].append(bot_phrase)
-                bad_total_count += 1
+                if len(human_phrase) > 0 and len(bot_phrase) > 0:
+                    bad_phrase_list[human_phrase].append(bot_phrase)
+                    bad_total_count += 1
     logging.info('Phrase list created')
     for phrase in good_phrase_list.keys():
         candidate = most_frequent(good_phrase_list[phrase])
