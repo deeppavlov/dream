@@ -108,7 +108,7 @@ def parse_author_best_book(annotated_phrase, default_phrase="Fabulous! And what 
     annotated_phrase['text'] = annotated_phrase['text'].lower()
     if ' is ' in annotated_phrase['text']:
         annotated_phrase['text'] = annotated_phrase['text'].split(' is ')[1]
-    last_bookname = get_name(annotated_phrase, 'book')
+    last_bookname, _ = get_name(annotated_phrase, 'book')
     if last_bookname is None:
         '''
         Look by author name
@@ -122,7 +122,7 @@ def parse_author_best_book(annotated_phrase, default_phrase="Fabulous! And what 
         Get author or this book using QUERY LANGUAGE !!!! Not get_answer
         '''
         headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': API_KEY}
-        aie_book = get_name(last_bookname, mode='book', return_plain=True)
+        aie_book, _ = get_name(last_bookname, mode='book', return_plain=True)
         answer = requests.request(url=QUERY_SERVICE_URL, headers=headers, timeout=2,
                                   data=json.dumps(
                                       {'query': {'text': 'query d|d' + ' <aio:isTheAuthorOf> ' + aie_book}}),
@@ -228,9 +228,9 @@ def get_name(annotated_phrase, mode='author', return_plain=False, bookyear=False
     logging.debug(entityname)
     banned_entities = ['tik tok', 'minecraft']
     if entityname in banned_entities:
-        return None
+        return None, None
     if not bookyear:
-        return entityname
+        return entityname, None
     else:
         return entityname, n_years
 
@@ -239,7 +239,7 @@ def asking_about_book(annotated_user_phrase):
     user_phrase = annotated_user_phrase['text'].lower()
     cond1 = (all([j in user_phrase for j in ['have', 'you', 'read']]) or 'you think about' in user_phrase)
     if cond1:
-        bookname = get_name(annotated_user_phrase, 'book')
+        bookname, _ = get_name(annotated_user_phrase, 'book')
         if bookname is not None:
             return True
     return False
@@ -416,7 +416,7 @@ def fact_about_book(annotated_user_phrase):
     logging.debug('fact about')
     logging.debug(annotated_user_phrase)
     try:
-        bookname = get_name(annotated_user_phrase, 'book')
+        bookname, _ = get_name(annotated_user_phrase, 'book')
         reply = get_answer('fact about ' + bookname)
         return reply
     except BaseException:
@@ -686,7 +686,7 @@ class BookSkillScenario:
                                 reply, confidence = self.default_reply, 0
                 else:
                     logging.debug('Getting whether phrase contains name of author, book or genre')
-                    author_name = get_name(annotated_user_phrase, 'author')
+                    author_name, _ = get_name(annotated_user_phrase, 'author')
                     bookname, n_years_ago = get_name(annotated_user_phrase, 'book', bookyear=True)
                     genre_name = get_genre(annotated_user_phrase['text'], return_name=True)
                     if author_name is not None:
