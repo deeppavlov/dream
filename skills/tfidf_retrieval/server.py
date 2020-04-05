@@ -89,7 +89,7 @@ def respond():
         response = [["sorry", 0]]
     for i in range(len(response)):
         if any([j in preprocess(response[i][0]) for j in todel_phrases]):
-            response[i][0] = ''
+            response[i] = ('', response[i][1])
     assert len(response[0]) == 2
     total_time = time.time() - st_time
     logger.info(f"Tfidf exec time: {total_time:.3f}s")
