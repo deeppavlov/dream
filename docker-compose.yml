@@ -253,7 +253,7 @@ services:
           - node.labels.group == 0
       resources:
         reservations:
-          memory: 5.5G
+          memory: 6G
   ner:
     build:
       context: ./annotators/NER/
@@ -641,7 +641,7 @@ services:
           - node.labels.with_gpu == true
       resources:
         reservations:
-          memory: 4.5G
+          memory: 5.5G
   comet_conceptnet:
     build:
       context: ./annotators/COMeT/
