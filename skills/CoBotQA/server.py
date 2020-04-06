@@ -15,7 +15,7 @@ from os import getenv
 import sentry_sdk
 from cobotqa_service import send_cobotqa
 
-from common.universal_templates import opinion_request_question
+from common.universal_templates import opinion_request_question, fact_about_replace, FACT_ABOUT_TEMPLATES
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -154,7 +154,7 @@ def respond():
                 # this is a fact from cobotqa itself or requested fact
                 sentences = sent_tokenize(response.replace(".,", "."))
                 if len(sentences[0]) < 100 and "fact about" in sentences[0]:
-                    response = " ".join(sentences[:2])
+                    response = fact_about_replace() + " " + " ".join(sentences[1:2])
                     subjects = re.findall(r"fact about ([a-zA-Z ]+)", response)
                     if len(subjects) > 0 and random.random() < ASK_QUESTION_PROB:
                         # randomly append question about found NP
@@ -214,7 +214,10 @@ def respond():
                 # facts
                 if (("Opinion_RequestIntent" in intents) or opinion_request_detected or blist_topics_detected or (
                         sensitive_topics_detected and sensitive_dialogacts_detected)) and len(resp_cands[j]) > 0:
-                    resp_cands[j] = f"I don't have an opinion on that but I know some facts. {resp_cands[j]}"
+                    if any([templ in resp_cands[j] for templ in FACT_ABOUT_TEMPLATES]):
+                        resp_cands[j] = f"I don't have an opinion on that but... {resp_cands[j]}"
+                    else:
+                        resp_cands[j] = f"I don't have an opinion on that but I've heard that {resp_cands[j]}"
 
         final_responses.append(resp_cands)
         final_confidences.append(conf_cands)
