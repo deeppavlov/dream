@@ -13,4 +13,4 @@ COPY ./src/ /src
 
 WORKDIR /src
 
-CMD gunicorn --workers=1 --bind 0.0.0.0:8023 --timeout=60 server:app
+CMD gunicorn --workers=1 --bind 0.0.0.0:8023 --timeout=60 server:app --preload
