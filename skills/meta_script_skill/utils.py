@@ -127,10 +127,10 @@ DIVE_DEEPER_COMMENTS = {"yes": ["Cool! I figured it out by myself!",
 OTHER_STARTINGS = [
     "Every day I learn more and more about humans' world but you humans still surprise me. "
     "Could you, please, help me to understand what does it mean to DOTHAT?",
-    "Undersatindg humans is so hard, please, can you help me to learn a new thing about human world? "
+    "Understanding humans is so hard, please, can you help me to learn a new thing about human world? "
     "I would be so thankful if you explain me what does DOINGTHAT mean.",
     "Every day I learn more and more about humans' world but you humans still surprise me.  What does DOTHAT mean?",
-    "Undersatindg humans is so hard, please, can you help me to learn a new thing about human world? "
+    "Understanding humans is so hard, please, can you help me to learn a new thing about human world? "
     "I didn't get what does to DOTHAT mean?"
 ]
 
@@ -138,7 +138,7 @@ WIKI_STARTINGS = [
     "I'm so eager to understand humans better. Recently I've heard that DESCRIPTION Do you know about that?",
     "Every day I learn more and more about humans' world but you humans still surprise me. "
     "I found that DESCRIPTION This is non trivial. Isn't it?",
-    "Undersatindg humans is so hard, please, help me to learn a new thing about human world. "
+    "Understanding humans is so hard, please, help me to learn a new thing about human world. "
     "Do you know that DESCRIPTION?",
     "Have you ever heard that DESCRIPTION? I want to understand this better."
 ]
