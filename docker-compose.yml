@@ -107,6 +107,11 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
   convers_evaluation_selector:
     build:
       context: .
@@ -137,6 +142,9 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu == true
+      resources:
+        reservations:
+          memory: 2.5G
   sentiment_classification:
     build:
       args:
@@ -155,6 +163,9 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu == true
+      resources:
+        reservations:
+          memory: 2.5G
   sentrewrite:
     build:
       context: ./annotators/SentRewrite/
@@ -190,7 +201,9 @@ services:
           - node.labels.group == 1
       resources:
         limits:
-          memory: 6G
+          memory: 4G
+        reservations:
+          memory: 3.5G
   blacklisted_words:
     build:
       context: ./annotators/BlacklistedWordsDetector/
@@ -239,8 +252,8 @@ services:
           - node.labels.with_gpu != true
           - node.labels.group == 0
       resources:
-        limits:
-          memory: 6G
+        reservations:
+          memory: 5.5G
   ner:
     build:
       context: ./annotators/NER/
@@ -265,6 +278,9 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+      resources:
+        reservations:
+          memory: 2G
   eliza:
     build:
       context: ./skills/eliza/
@@ -593,6 +609,9 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu == true
+      resources:
+        reservations:
+          memory: 2.5G
   dummy_skill_dialog:
     build:
       context: ./skills/dummy_skill_dialog/
@@ -620,6 +639,9 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu == true
+      resources:
+        reservations:
+          memory: 4.5G
   comet_conceptnet:
     build:
       context: ./annotators/COMeT/
@@ -637,6 +659,9 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu == true
+      resources:
+        reservations:
+          memory: 3.5G
   meta_script_skill:
     build:
       context: .
@@ -667,6 +692,9 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu == true
+      resources:
+        reservations:
+          memory: 2.5G    
   cobot_convers_evaluator_annotator:
     build:
       context: ./annotators/CoBotConversationEvaluator/
