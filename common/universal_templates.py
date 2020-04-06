@@ -39,6 +39,14 @@ def opinion_request_question():
     return choice(UNIVERSAL_OPINION_REQUESTS)
 
 
+FACT_ABOUT_TEMPLATES = ["Here's what I've heard.", "Hmm.. What do I know? Yes, this.", "I recall this.",
+                        "You know what?"]
+
+
+def fact_about_replace():
+    return choice(FACT_ABOUT_TEMPLATES)
+
+
 def nounphrases_questions(nounphrase=None):
     if nounphrase and len(nounphrase) > 0:
         question = choice(NP_OPINION_REQUESTS + UNIVERSAL_OPINION_REQUESTS).replace("NP", nounphrase)
