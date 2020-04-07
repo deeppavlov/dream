@@ -5,7 +5,6 @@ from os import getenv
 from datetime import datetime
 import sentry_sdk
 from langdetect import detect
-from copy import deepcopy
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -20,6 +19,8 @@ ALL_NEWS_SERVICE_URL = f"http://newsapi.org/v2/top-headlines?sources=bbc-news&ap
 if NEWS_API_KEY is None:
     raise RuntimeError('NEWS_API_KEY environment variable is not set')
 
+BLACKLIST_ANNOTATOR_URL = "http://blacklisted_words:8018/blacklisted_words_batch"
+
 
 class CachedRequestsAPI:
     def __init__(self, renew_freq_time=3600):
@@ -28,16 +29,19 @@ class CachedRequestsAPI:
         self.cached = {}
         logger.info(f"CachedRequestAPI initialized with renew_freq_time: {renew_freq_time} s")
 
-    def send(self, topic="all"):
+    def send(self, topic="all", status="", prev_news={}):
         """Get news using cache and NewsAPI requests
 
         Args:
             topic: string topic (i.g. sport news, putin, politics
+            status: string news skill status
+            prev_news: prev news sent to user (dictionary)
 
         Returns:
             dictionary with one top rated over latest news
         """
         topic = topic.lower()
+        top_news = []
 
         curr_time = datetime.now()
         if (curr_time - self.prev_renew_time).seconds > self.renew_freq_time:
@@ -48,7 +52,7 @@ class CachedRequestsAPI:
             topic = "all"
         # use cache
         if len(self.cached.get(topic, [])) > 0:
-            return self.cached[topic]
+            top_news = self.cached[topic]
 
         try:
             if topic == "all":
@@ -78,22 +82,71 @@ class CachedRequestsAPI:
                     f"News API! result status code is not `ok`")
             else:
                 response = response.get("articles", [])
-                self.cached[topic] = self.get_only_english_news(response) + self.cached.get(topic, [])
+                self.cached[topic] = response + self.cached.get(topic, [])
 
         if len(self.cached.get(topic, [])) == 0:
-            return [{}]
+            self.cached[topic] = []
+            top_news = [{}]
         else:
-            return self.cached[topic]
+            top_news = self.cached[topic]
 
-    def get_only_english_news(self, articles):
-        en_articles = []
+        if len(top_news) > 0:
+            if prev_news != {} and status == "headline":
+                # some prev discussed news detected
+                try:
+                    prev_index = self.cached[topic].index(prev_news)
+                except ValueError:
+                    # prev news is not stored anymore or from other topic
+                    prev_index = -1
+                if prev_index == len(self.cached[topic]) - 1:
+                    # out of available news
+                    result = {}
+                else:
+                    # return the next one news in top rating
+                    result = self.get_not_blacklisted_english_news(self.cached[topic][prev_index + 1:])
+            else:
+                result = self.get_not_blacklisted_english_news(top_news)
+        else:
+            result = {}
+        return result
 
+    @staticmethod
+    def get_not_blacklisted_english_news(articles):
         for article in articles:
+            title = article.get("title", "title")
+            description = article.get("description", "description")
             lang = detect(article.get("title", "title"))
-            if lang == "en":
-                en_articles.append(deepcopy(article))
+            if lang != "en":
+                continue
 
-        if len(en_articles) == 0 and len(articles) > 0:
-            # didn't find english news, take just the top rated one
-            en_articles.append(deepcopy(articles[0]))
-        return en_articles
+            to_check = [f"{title} {description}"]
+
+            try:
+                resp = requests.request(url=BLACKLIST_ANNOTATOR_URL, json={"sentences": to_check},
+                                        method="POST", timeout=1.5)
+            except (requests.ConnectTimeout, requests.ReadTimeout) as e:
+                sentry_sdk.capture_exception(e)
+                logger.exception("Blacklisted Annotator requests from News API skill Timeout")
+                resp = requests.Response()
+                resp.status_code = 504
+
+            if resp.status_code != 200:
+                logger.warning(
+                    f"result status code is not 200: {resp}. result text: {resp.text}; "
+                    f"result status: {resp.status_code}")
+                result = False
+                sentry_sdk.capture_message(
+                    f"Blacklisted Annotator requests from News API skill "
+                    f" result status code is not 200: {resp}. result text: {resp.text}; "
+                    f"result status: {resp.status_code}")
+            else:
+                # each element is like `{'inappropriate': False, 'profanity': False, 'restricted_topics': False}`
+                result = [d.get("inappropriate", False) or d.get("profanity", False)
+                          for d in resp.json()[0]["batch"]][0]
+
+            if not result:
+                return article
+            else:
+                continue
+
+        return {}

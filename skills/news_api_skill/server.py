@@ -184,27 +184,11 @@ def respond():
 
     # run asynchronous news requests
     executor = ThreadPoolExecutor(max_workers=ASYNC_SIZE)
-    for i, result in enumerate(executor.map(NEWS_API_REQUESTOR.send, topics)):
+    for i, result in enumerate(executor.map(NEWS_API_REQUESTOR.send, topics, statuses, prev_news_samples)):
         # result is a list of articles. the first one is top rated news.
         curr_topic = topics[i]
         curr_status = statuses[i]
-        prev_news = prev_news_samples[i]
-        if len(result) > 0:
-            if prev_news != {} and curr_status == "headline":
-                # some prev discussed news detected
-                try:
-                    prev_index = NEWS_API_REQUESTOR.cached[curr_topic].index(prev_news)
-                except ValueError:
-                    # prev news is not stored anymore or from other topic
-                    prev_index = -1
-                if prev_index == len(NEWS_API_REQUESTOR.cached[curr_topic]) - 1:
-                    # out of available news
-                    result = {}
-                else:
-                    # return the next one news in top taing
-                    result = NEWS_API_REQUESTOR.cached[curr_topic][prev_index + 1]
-            else:
-                result = result[0]
+        # the only difference is that result is laready is a dictionary with news.
 
         if len(result) > 0 and len(result.get("title", "")) > 0 and len(result.get("description", "")) > 0:
             logger.info("Topic: {}".format(curr_topic))
