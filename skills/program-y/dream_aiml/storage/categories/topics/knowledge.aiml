@@ -7456,7 +7456,8 @@
     </category>
     <category>
         <pattern>WHAT IS NEXT</pattern>
-        <template>On the first subsequent occasion.</template>
+        <template>I can answer questions, share fun facts, discuss movies, books and news.
+            What do you want to talk about?</template>
     </category>
     <category>
         <pattern>WHAT IS SUPPOSITION</pattern>
