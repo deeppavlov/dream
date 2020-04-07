@@ -17,17 +17,20 @@ def is_negative(phrase):
 def process(dialog, gold_list, banned_words, ner_model):
     utterances = [utterance['text'] for utterance in dialog['utterances']]
     for i in range(len(utterances) - 1):
+        annot = dialog['utterances'][i]
         if utterances[i] in gold_list:
             utterances[i + 1] = ''
         utterances[i] = utterances[i].replace(',', ' ')
         print('**')
         print(utterances[i])
+        banned_skills = ['dummy_skill', 'meta_script_skill', 'book_skill']
         if utterances[i] != '':
             cond1 = ner_model is None or 'PER' in ''.join(ner_model([utterances[i]])[1][0])
             cond2 = ([banned_word in utterances[i] for banned_word in banned_words])
             cond3 = is_negative(utterances[i])
             cond4 = 'Dilyara' in utterances[i]
-            if i % 2 != 0 and (cond1 or cond2 or cond3 or cond4):
+            cond5 = 'active_skill' in annot and annot['active_skill'] in banned_skills
+            if i % 2 != 0 and (cond1 or cond2 or cond3 or cond4 or cond5):
                 utterances[i] = ''
     return {'id': dialog['utterances'][0]['attributes']['conversation_id'],
             'utterances': [utterance['text'] for utterance in dialog['utterances']]}
