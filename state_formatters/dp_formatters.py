@@ -7,27 +7,40 @@ logger = logging.getLogger(__name__)
 LAST_N_TURNS = 15  # number of turns to consider in annotator/skill.
 
 
-def last_n_human_utt_dialog_formatter(dialog: Dict, last_n_sents: int) -> List:
-    if len(dialog["human_utterances"]) <= last_n_sents and \
+def last_n_human_utt_dialog_formatter(dialog: Dict, last_n_utts: int, only_last_sentence: bool = False) -> List:
+    """
+    Args:
+        dialog (Dict): full dialog state
+        last_n_utts (int): how many last user utterances to take
+        only_last_sentence (bool, optional): take only last sentence in each utterance. Defaults to False.
+    """
+    if len(dialog["human_utterances"]) <= last_n_utts and \
             not if_lets_chat_about_topic(dialog["utterances"][0]["text"].lower()) and \
             not if_switch_topic(dialog["utterances"][0]["text"].lower()) and \
             not if_choose_topic(dialog["utterances"][0]["text"].lower()):
         # in all cases when not particular topic, not `about something/anything (else)`, not `switch topic`
         # convert first phrase in the dialog to `hello!`
         dialog["utterances"][0]['annotations']['sentseg']['punct_sent'] = "hello!"
-    human_utts = [utt['annotations']['sentseg']['punct_sent']
-                  for utt in dialog['utterances'] if utt['user']['user_type'] == 'human']
-    return [{'sentences_batch': [human_utts[-last_n_sents:]]}]
+    human_utts = []
+    for utt in dialog['utterances']:
+        if utt['user']['user_type'] == 'human':
+            sentseg_ann = utt['annotations']['sentseg']
+            if only_last_sentence:
+                text = sentseg_ann['segments'][-1] if len(sentseg_ann['segments']) > 0 else ''
+            else:
+                text = sentseg_ann['punct_sent']
+            human_utts += [text]
+    return [{'sentences_batch': [human_utts[-last_n_utts:]]}]
 
 
 def alice_formatter_dialog(dialog: Dict) -> List:
     # Used by: alice
-    return last_n_human_utt_dialog_formatter(dialog, last_n_sents=2)
+    return last_n_human_utt_dialog_formatter(dialog, last_n_utts=2, only_last_sentence=True)
 
 
 def programy_formatter_dialog(dialog: Dict) -> List:
     # Used by: program_y, program_y_dangerous, program_y_wide
-    return last_n_human_utt_dialog_formatter(dialog, last_n_sents=5)
+    return last_n_human_utt_dialog_formatter(dialog, last_n_utts=5)
 
 
 def eliza_formatter_dialog(dialog: Dict) -> Dict:
