@@ -1,7 +1,6 @@
 import logging
 from os import getenv
 import sentry_sdk
-import requests
 from string import punctuation
 from word2number.w2n import word_to_num
 from random import random
@@ -18,7 +17,8 @@ sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.DEBUG)
 logger = logging.getLogger(__name__)
-CORONAVIRUS_URL = 'https://www.worldometers.info/coronavirus/coronavirus-cases/'
+CORONAVIRUS_URL = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/' \
+                  'csse_covid_19_data/csse_covid_19_time_series'
 STATES = {j.strip().lower().split(';')[0]: j.strip().lower().split(';')[1]
           for j in open('state_names.txt', 'r').readlines()}
 #  NYT_API_KEY = '1cc135af-30ab-4f9f-9bb6-76a457036152'
@@ -107,10 +107,13 @@ def about_coronavirus(annotated_phrase):
     return about_virus(annotated_phrase) and (contain_words or contain_related)
 
 
-def get_cases_deaths(coronavirus_url):
-    data = requests.get(coronavirus_url)
-    num_cases = data.text.split('<strong><a href="/coronavirus/">')[1].split(' ')[0].replace(',', '')
-    num_deaths = data.text.split('coronavirus/coronavirus-death-toll/"><strong>')[1].split(' ')[0].replace(',', '')
+def get_cases_deaths(coronavirus_url=CORONAVIRUS_URL):
+    death_url = CORONAVIRUS_URL + '/time_series_covid19_deaths_global.csv'
+    case_url = CORONAVIRUS_URL + '/time_series_covid19_confirmed_global.csv'
+    case_data = pd.read_csv(case_url, error_bad_lines=False)
+    death_data = pd.read_csv(death_url, error_bad_lines=False)
+    num_cases = case_data[case_data.columns[-1]].sum()
+    num_deaths = death_data[death_data.columns[-1]].sum()
     return int(num_cases), int(num_deaths)
 
 
