@@ -424,7 +424,7 @@ def fact_about_book(annotated_user_phrase):
 
 
 def is_previous_was_about_book(dialog):
-    return dialog["utterances"][-2]["active_skill"] == 'book_skill'
+    return len(dialog['utterances']) >= 2 and dialog["utterances"][-2]["active_skill"] == 'book_skill'
 
 
 pphrase1 = ["i'm currently reading sapiens have you heard of that",
@@ -718,6 +718,8 @@ class BookSkillScenario:
                 sentry_sdk.capture_exception(e)
                 reply = "sorry"
                 confidence = 0
+            if not is_previous_was_about_book(dialog) and confidence > 0.95:
+                confidence = 0.95
             texts.append(reply)
             confidences.append(confidence)
 
