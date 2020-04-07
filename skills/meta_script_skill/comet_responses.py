@@ -39,7 +39,7 @@ ATOMIC_PAST_QUESTION_TEMPLATES = {
 ATOMIC_FUTURE_QUESTION_TEMPLATES = {
     "Do you feel RELATION?": {"attribute": "xReact"},  # adjective relation
     "Did you RELATION?": {"attribute": "xNeed"},  # relation `do that`
-    "What about preparations? Did you RELATION?": {"attribute": "xNeed"},  # relation `do that`
+    "Did you prepared? Did you RELATION?": {"attribute": "xNeed"},  # relation `do that`
     "Are you ready for that? Did you RELATION?": {"attribute": "xNeed"},  # relation `do that`
     "You seem to be RELATION.": {"attribute": "xAttr"},  # adjective relation
     "You are RELATION enough to do that.": {"attribute": "xAttr"},  # adjective relation

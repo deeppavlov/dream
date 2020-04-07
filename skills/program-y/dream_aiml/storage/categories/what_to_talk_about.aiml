@@ -77,6 +77,13 @@
       <srai>WHAT_TO_TALK_ABOUT</srai>
     </template>
   </category>
+  <category>
+    <pattern>^ CAN ^ I ^ CHOOSE ^ TOPIC ^</pattern>
+    <template>
+      We can talk on different topics, like movies, books, or I can answer you questions or share news.
+      What do you want to talk about?
+    </template>
+  </category>
 
   <category>
     <pattern>WHAT_TO_TALK_ABOUT</pattern>

@@ -76,19 +76,19 @@
             <srai>WHAT <star/></srai>
         </template>
     </category>
-    <category>
-        <pattern>I DO NOT KNOW</pattern>
-        <template>
-            <random>
-                <li>It's really ok to not know.</li>
-                <li>I invite you to sit with the questions.</li>
-                <li>No need to rush to answers.</li>
-                <li>I could try to do a search for you.</li>
-                <li>There's great power in recognizing what you don't know.</li>
-                <li>Socrates was the wisest man because he knew what he didn't know.</li>
-            </random>
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>I DO NOT KNOW</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>It's really ok to not know.</li>-->
+<!--                <li>I invite you to sit with the questions.</li>-->
+<!--                <li>No need to rush to answers.</li>-->
+<!--                <li>I could try to do a search for you.</li>-->
+<!--                <li>There's great power in recognizing what you don't know.</li>-->
+<!--                <li>Socrates was the wisest man because he knew what he didn't know.</li>-->
+<!--            </random>-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>I CAN NOT HEAR YOU</pattern>
         <template>Try adjusting the media volume control on your Settings.</template>

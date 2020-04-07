@@ -77,12 +77,20 @@ def respond():
         _, new_user_topic, new_conf = pickup_topic_and_start_small_talk(dialog)
         logger.info(f"From current user utterance: `{dialog['human_utterances'][-1]['text']}` "
                     f"extracted topic: `{new_user_topic}`.")
+        sentiment = dialog["human_utterances"][-1]["annotations"].get(
+            "sentiment_classification", {}).get("text", [""])[0]
         if len(topic) > 0 and len(script) > 0 and \
                 (len(new_user_topic) == 0 or new_conf == FOUND_WORD_START_CONFIDENCE):
             # we continue dialog if new topic was not found or was found just as the key word in user sentence.
             # because we can start a conversation picking up topic with key word with small proba
-            response, confidence, attr = get_next_response_on_topic(
-                topic, dialog["human_utterances"][-1], curr_step=script_step + 1, topic_script=script)
+            if sentiment == "negative":
+                logger.info("Found negative sentiment to small talk phrase. Finish script.")
+                response, confidence, attr = "", 0.0, {"can_continue": CAN_NOT_CONTINUE,
+                                                       "small_talk_topic": "", "small_talk_step": 0,
+                                                       "small_talk_script": []}
+            else:
+                response, confidence, attr = get_next_response_on_topic(
+                    topic, dialog["human_utterances"][-1], curr_step=script_step + 1, topic_script=script)
             if response != "":
                 logger.info(f"Continue script on topic: `{topic}`.\n"
                             f"User utterance: `{dialog['human_utterances'][-1]['text']}`.\n"

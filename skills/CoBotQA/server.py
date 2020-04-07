@@ -144,7 +144,8 @@ def respond():
                           "\"let's talk\" is a 2002 drama", "visit amazon.com/",
                           'alexa, play my flash briefing.', "amazon alexa",
                           "past tense", "plural form", "singular form", "present tense", "future tense", "bob cut",
-                          "movie theater", "alexa app", "more news", "be here when you need me"]
+                          "movie theater", "alexa app", "more news", "be here when you need me", "the weeknd",
+                          "faktas"]
 
         if len(response) > 0 and 'skill://amzn1' not in response:
             if response in bad_answers or any([bad_substr in response.lower() for bad_substr in bad_subanswers]):
@@ -169,7 +170,8 @@ def respond():
                         # randomly append question about requested fact
                         response += " " + opinion_request_question()
                     confidence = 0.7
-            elif "Here’s something I found" in response:
+            elif any(substr in response for substr in
+                     ["Here’s something I found", "Here's what I found", "According to "]):
                 confidence = 0.7
             elif "is usually defined as" in response:
                 confidence = 0.3

@@ -7,7 +7,7 @@ import requests
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument("mode", help="questions or facts", type=str)
+parser.add_argument("--mode", help="questions or facts", type=str)
 args = parser.parse_args()
 mode = args.mode
 
@@ -98,7 +98,7 @@ for np in np_to_fact_map.keys():
         np = "---"
     try:
         np_to_fact_map_res.append(re.compile(r'(\b%s\b)' % np))
-    except TypeError or KeyError or ValueError:
+    except Exception:
         np_to_fact_map_res.append(re.compile(r'(\b%s\b)' % "---"))
 
 

@@ -186,7 +186,8 @@ def tell_my_info(dialog, which_info="name"):
                                            curr_user_uttr),
                          "location": re.search(r"((what is|what's|whats|tell me|you know|you remember|memorize|say) "
                                                r"my location|"
-                                               r"where (am i|i am)(\snow)?)",
+                                               r"where (am i|i am)(\snow)?|"
+                                               r"where( do)?i live|where( am)?i( am)? living)",
                                                curr_user_uttr),
                          "homeland": re.search(r"((what is|what's|whats|tell me|you know|you remember|memorize|say) "
                                                r"my (home\s?land|mother\s?land|native\s?land|birth\s?place)|"
@@ -214,8 +215,8 @@ def check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr):
         if not ent:
             continue
         ent = ent[0]
-        if (which_info == "name" and ent["type"] == "PER") or (
-                (which_info == "homeland" or which_info == "location") and ent["type"] == "LOC"):
+        if (which_info == "name" and ent["type"] in ["PER", "LOC"]) or (
+                (which_info == "homeland" or which_info == "location") and ent["type"] in ["PER", "LOC"]):
             if ent["text"].lower() == "alexa":
                 if (re.search(r"(my (name is|name's)|call me) alexa", curr_user_uttr) or (re.search(
                         r"(what is|what's|whats|tell me) your? name",

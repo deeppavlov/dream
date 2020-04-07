@@ -177,7 +177,7 @@ class IMDb:
                            "two", "film", "new", "next", "out", "love",
                            "like", "watch", "actress", "less", "want", "abortion",
                            "alexa", "you tell me", "movie movie", "tricks", "movies",
-                           "yes", "action", "i", "maybe", "do you know"
+                           "yes", "action", "i", "maybe", "do you know", "isolation"
                            ]:
             try:
                 self.with_ignored_movies_names.pop(proc_title)
