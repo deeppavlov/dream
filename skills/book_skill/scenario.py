@@ -718,7 +718,7 @@ class BookSkillScenario:
                 sentry_sdk.capture_exception(e)
                 reply = "sorry"
                 confidence = 0
-            if not is_previous_was_about_book(dialog) and confidence > 0.95:
+            if not is_previous_was_about_book(dialog) and confidence > 0.95 and reply != START_PHRASE:
                 confidence = 0.95
             texts.append(reply)
             confidences.append(confidence)
