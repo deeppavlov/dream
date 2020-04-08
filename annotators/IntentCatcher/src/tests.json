@@ -1,6 +1,6 @@
 [
     {
-        "sentence": "that's boring let's switch the topic",
+        "sentence": "let's switch the topic",
         "intent": "topic_switching"
     },
     {
@@ -16,7 +16,7 @@
         "intent": "topic_switching"
     },
     {
-        "sentence": "can we talk about something else",
+        "sentence": "can we talk about something else?",
         "intent": "topic_switching"
     },
     {
@@ -24,7 +24,15 @@
         "intent": "exit"
     },
     {
+        "sentence": "end this conversation",
+        "intent": "exit"
+    },
+    {
         "sentence": "i am done chatting",
+        "intent": "exit"
+    },
+    {
+        "sentence": "i am done talking now",
         "intent": "exit"
     },
     {
@@ -32,11 +40,15 @@
         "intent": "exit"
     },
     {
-        "sentence": "ok i have to go later alexa",
+        "sentence": "later alexa",
         "intent": "exit"
     },
     {
         "sentence": "bye alexa bye",
+        "intent": "exit"
+    },
+    {
+        "sentence": "end this conversation",
         "intent": "exit"
     },
     {
@@ -148,6 +160,10 @@
         "intent": "what_can_you_do"
     },
     {
+        "sentence": "what can you do?",
+        "intent": "what_can_you_do"
+    },
+    {
         "sentence": "tell me about your skills",
         "intent": "what_can_you_do"
     },
@@ -184,6 +200,10 @@
         "intent": "doing_well"
     },
     {
+        "sentence": "i am good",
+        "intent": "doing_well"
+    },
+    {
         "sentence": "doing fine thank you",
         "intent": "doing_well"
     },
@@ -204,6 +224,14 @@
         "intent": "lets_chat_about"
     },
     {
+        "sentence": "let's talk about the corona virus",
+        "intent": "lets_chat_about"
+    },
+    {
+        "sentence": "i want to talk about hardcore pornography",
+        "intent": "lets_chat_about"
+    },
+    {
         "sentence": "lets chat about movies",
         "intent": "lets_chat_about"
     },
@@ -220,7 +248,19 @@
         "intent": null
     },
     {
+        "sentence": "you talk?",
+        "intent": null
+    },
+    {
+        "sentence": "i am calling anyone",
+        "intent": null
+    },
+    {
         "sentence": "walk is great.",
+        "intent": null
+    },
+    {
+        "sentence": "it is once upon a time.",
         "intent": null
     },
     {
@@ -237,6 +277,42 @@
     },
     {
         "sentence": "chat alexa",
+        "intent": null
+    },
+    {
+        "sentence": "the wire",
+        "intent": null
+    },
+    {
+        "sentence": "prison break",
+        "intent": null
+    },
+    {
+        "sentence": "i have a good day",
+        "intent": null
+    },
+    {
+        "sentence": "i think you have a good day.",
+        "intent": null
+    },
+    {
+        "sentence": "tired good",
+        "intent": null
+    },
+    {
+        "sentence": "will you talk shit to me?",
+        "intent": null
+    },
+    {
+        "sentence": "he want you to talk quieter?",
+        "intent": null
+    },
+    {
+        "sentence": "can i ask you a question?",
+        "intent": null
+    },
+    {
+        "sentence": "wonderful",
         "intent": null
     },
     {
@@ -260,11 +336,27 @@
         "intent": null
     },
     {
+        "sentence": "they are going great.",
+        "intent": null
+    },
+    {
         "sentence": "can i find you online?",
         "intent": null
     },
     {
+        "sentence": "can i find you offline?",
+        "intent": null
+    },
+    {
         "sentence": "set",
+        "intent": null
+    },
+    {
+        "sentence": "drink beer",
+        "intent": null
+    },
+    {
+        "sentence": "listen music",
         "intent": null
     },
     {
@@ -344,11 +436,11 @@
         "intent": "cant_do"
     },
     {
-        "sentence": "volume seven.",
+        "sentence": "set volume seven.",
         "intent": "cant_do"
     },
     {
-        "sentence": "can you sing alexa",
+        "sentence": "can you sing?",
         "intent": "cant_do"
     },
     {
@@ -357,6 +449,14 @@
     },
     {
         "sentence": "play some music",
+        "intent": "cant_do"
+    },
+    {
+        "sentence": "let's play a game",
+        "intent": "cant_do"
+    },
+    {
+        "sentence": "can you whisper?",
         "intent": "cant_do"
     },
     {
