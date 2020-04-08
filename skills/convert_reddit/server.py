@@ -58,8 +58,9 @@ def clear_text(text):
     return text
 
 
-filter = json.load(open("./banned_responses.json"))
-filter = [clear_text(utter) for utter in filter]
+banned_responses = json.load(open("./banned_responses.json"))
+banned_responses = [clear_text(utter) for utter in banned_responses]
+banned_words = json.load(open("./banned_words.json"))
 
 text_placeholder = tf.placeholder(dtype=tf.string, shape=[None])
 extra_text_placeholder = tf.placeholder(dtype=tf.string, shape=[None])
@@ -143,7 +144,7 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True):
         cand = responses[ind]
         if not [
             None
-            for f_utter in filter
+            for f_utter in banned_responses
             if difflib.SequenceMatcher(None, f_utter.split(), clear_text(cand).split()).ratio() > 0.9
         ]:
             filtered_indices.append(ind)
@@ -156,33 +157,14 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True):
     for ind in reversed(filtered_indices):
         cand = clear_text(responses[ind]).split()
         raw_cand = responses[ind].lower()
-        hello_flag = any(
-            [
-                j in cand[:3]
-                for j in [
-                    "hi",
-                    "hello",
-                ]
-            ]
-        )
-        coronavirus_flag = any(
-            [
-                j in cand
-                for j in [
-                    "corona",
-                    "corana",
-                    "corono",
-                    "kroner",
-                    "corolla",
-                    "crown",
-                    "karuna",
-                    "toronow",
-                    "covid",
-                ]
-            ]
-        )
-        coronavirus_flag = coronavirus_flag or "code 19" in raw_cand or "code nineteen" in raw_cand
-        if "schitt" in cand or "trump" in cand or coronavirus_flag or hello_flag:
+        # hello ban
+        hello_flag = any([j in cand[:3] for j in ["hi", "hello"]])
+        # banned_words ban
+        banned_words_flag = any([j in cand for j in banned_words])
+        # coronavirus ban
+        coronavirus_flag = "code 19" in raw_cand or "code nineteen" in raw_cand
+
+        if hello_flag or banned_words_flag or coronavirus_flag:
             filtered_indices.remove(ind)
             continue
         for utterance in clear_utterances_histories:
