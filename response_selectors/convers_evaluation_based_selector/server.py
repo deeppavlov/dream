@@ -183,7 +183,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
 
     skill_names = [c['skill_name'] for c in candidates]
     how_are_you_spec = "Do you want to know what I can do?"  # this is always at the end of answers to `how are you`
-    what_i_can_do_spec = "a socialbot, so I can't"
+    what_i_can_do_spec = "socialbot running inside"
     psycho_help_spec = "If you or someone you know is in immediate danger"
     greeting_spec = "this is an Alexa Prize Socialbot"
     misheard_with_spec1 = "I misheard you"
@@ -274,12 +274,18 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                 # when faced some USER topic
                 if random.random() < 0.3:
                     curr_score = very_big_score
-        elif skill_names[i] in ["dummy_skill", "convert_reddit", "alice", "eliza", "tdidf_retrieval"]:
+        elif skill_names[i] in ["dummy_skill", "convert_reddit", "alice", "eliza", "tdidf_retrieval", "program_y"]:
             if "question" in candidates[i].get("type", "") or "?" in candidates[i]['text']:
-                if len(bot_utterances) >= 1 and "?" in bot_utterances[-1]:
-                    confidences[i] /= 1.5
-                if len(bot_utterances) >= 2 and "?" in bot_utterances[-2]:
-                    confidences[i] /= 1.1
+                if skill_names[i] == "program_y":
+                    if len(bot_utterances) >= 4 and "?" in bot_utterances[-1]:
+                        confidences[i] /= 1.5
+                    if len(bot_utterances) >= 5 and "?" in bot_utterances[-2]:
+                        confidences[i] /= 1.1
+                else:
+                    if len(bot_utterances) >= 1 and "?" in bot_utterances[-1]:
+                        confidences[i] /= 1.5
+                    if len(bot_utterances) >= 2 and "?" in bot_utterances[-2]:
+                        confidences[i] /= 1.1
         if skill_names[i] == 'dummy_skill' and "question" in candidates[i].get("type", ""):
             question = candidates[i]['text']
 

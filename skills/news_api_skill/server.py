@@ -194,7 +194,19 @@ def respond():
             logger.info("Topic: {}".format(curr_topic))
             logger.info("News found: {}".format(result))
             if curr_status == "headline":
-                if curr_topic == "all":
+                is_yes = dialogs[i]["human_utterances"][-1]["annotations"].get("intent_catcher", {}).get("yes", {}).get(
+                    "detected", 0) == 1 or re.search(YES_TEMPLATES, dialogs[i]["human_utterances"][-1]["text"].lower())
+                if len(dialogs[i]["bot_utterances"]) > 0:
+                    prev_bot_uttr_lower = dialogs[i]["bot_utterances"][-1]["text"].lower()
+                else:
+                    prev_bot_uttr_lower = ""
+
+                if BREAKING_NEWS.lower() in prev_bot_uttr_lower and is_yes:
+                    response = f"Here it is: {result['title']}. {OFFER_MORE}"
+                    confidence = DEFAULT_NEWS_OFFER_CONFIDENCE
+                    attr = {"news_status": OFFERED_NEWS_DETAILS_STATUS, "news_topic": curr_topic,
+                            "curr_news": result, "can_continue": CAN_CONTINUE}
+                elif curr_topic == "all":
                     response = f"Here is one of the latest news that I found: {result['title']}. {OFFER_MORE}"
                     confidence = DEFAULT_NEWS_OFFER_CONFIDENCE
                     attr = {"news_status": OFFERED_NEWS_DETAILS_STATUS, "news_topic": curr_topic,

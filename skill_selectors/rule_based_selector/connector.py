@@ -259,7 +259,7 @@ class RuleBasedSkillSelectorConnector:
                     found_emotion, found_prob = emotion, prob
             cond1 = found_emotion != 'neutral' and found_prob > emo_prob_threshold
             should_run_emotion = cond1 or detect_emotion(prev_bot_uttr, dialog['utterances'][-1])
-            if should_run_emotion:
+            if should_run_emotion or "how are you?" in prev_bot_uttr.get("text", "").lower():
                 skills_for_uttr.append('emotion_skill')
 
             for hyp in prev_user_uttr_hyp:

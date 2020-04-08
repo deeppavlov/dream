@@ -129,7 +129,8 @@
     <category>
       <pattern>YES</pattern>
       <template>
-          AMAZON_EMOTION_DISAPPOINTED_MEDIUM I am a socialbot, so I can't do so much. AMAZON_EMOTION_CLOSE
+          AMAZON_EMOTION_DISAPPOINTED_MEDIUM I'm a socialbot running inside Alexa, and I'm all about chatting with people like you.
+          AMAZON_EMOTION_CLOSE
           I can answer questions, share fun facts, discuss movies, books and news.
         <random>
          <li> What is your favorite TV Series? </li>

@@ -81,7 +81,7 @@ TALK_LIKE = ["talk", "chat", "converse", "discuss", "speak", "tell", "say", "gos
 WANT_LIKE = ["want to", "wanna", "wish to", "need to", "desire to", r"(would |'d )?(like|love|dream) to", "going to",
              "gonna", "will", "can", "could", "plan to", "in need to", "demand"]
 TO_ME_LIKE = [r"to me( now)?", r"with me( now)?", r"me( now)?", "now"]
-SOMETHING_LIKE = ["anything", "something", "nothing", "none"]
+SOMETHING_LIKE = ["anything", "something", "nothing", "none", "that"]
 DONOTKNOW_LIKE = [r"(i )?(do not|don't) know", "you (choose|decide|pick up)"]
 
 
