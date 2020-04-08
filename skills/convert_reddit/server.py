@@ -156,6 +156,15 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True):
     for ind in reversed(filtered_indices):
         cand = clear_text(responses[ind]).split()
         raw_cand = responses[ind].lower()
+        hello_flag = any(
+            [
+                j in cand[:3]
+                for j in [
+                    "hi",
+                    "hello",
+                ]
+            ]
+        )
         coronavirus_flag = any(
             [
                 j in cand
@@ -163,26 +172,17 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True):
                     "corona",
                     "corana",
                     "corono",
-                    # "clone a",
-                    # "colonel",
-                    # "chrono",
-                    # "quran",
-                    # "corvette",
-                    # "current",
                     "kroner",
                     "corolla",
                     "crown",
-                    # "volume",
                     "karuna",
                     "toronow",
-                    # "chrome",
-                    # "code nineteen",
                     "covid",
                 ]
             ]
         )
         coronavirus_flag = coronavirus_flag or "code 19" in raw_cand or "code nineteen" in raw_cand
-        if "schitt" in cand or "trump" in cand or coronavirus_flag:
+        if "schitt" in cand or "trump" in cand or coronavirus_flag or hello_flag:
             filtered_indices.remove(ind)
             continue
         for utterance in clear_utterances_histories:
