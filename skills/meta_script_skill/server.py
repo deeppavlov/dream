@@ -16,6 +16,7 @@ from utils import get_starting_phrase, get_statement_phrase, get_opinion_phrase,
     extract_verb_noun_phrases, DEFAULT_STARTING_CONFIDENCE, is_custom_topic, WIKI_DESCRIPTIONS, is_predefined_topic, \
     get_used_attributes_by_name
 from comet_responses import ask_question_using_atomic, comment_using_atomic
+from common.news import OPINION_REQUEST_STATUS
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -51,7 +52,14 @@ def get_not_used_topic(used_topics, dialog):
         True is topic was extracted from user utterance and False otherwise
     """
     TOPICS_PROB = 0.3
-    verb_noun_phrases = extract_verb_noun_phrases(dialog["utterances"][-1]["text"])
+    prev_news_outputs = get_skill_outputs_from_dialog(dialog["utterances"][-3:], "news_api_skill", activated=True)
+
+    if len(prev_news_outputs) > 0 and prev_news_outputs[-1].get(
+            "news_status", "finished") == OPINION_REQUEST_STATUS:
+        verb_noun_phrases = extract_verb_noun_phrases(prev_news_outputs[-1].get("text", "nothing"),
+                                                      only_i_do_that=False)
+    else:
+        verb_noun_phrases = extract_verb_noun_phrases(dialog["utterances"][-1]["text"])
 
     if len(dialog['utterances']) < 3 or len(verb_noun_phrases) == 0:
         available_wiki_topics = set(WIKI_DESCRIPTIONS) - set(used_topics)

@@ -28,7 +28,7 @@ nlp = spacy.load("en_core_web_sm")
 COMET_SERVICE_URL = "http://comet_atomic:8053/comet"
 CONCEPTNET_SERVICE_URL = "http://comet_conceptnet:8065/comet"
 DEFAULT_CONFIDENCE = 0.98
-CONTINUE_USER_TOPIC_CONFIDENCE = 0.7
+CONTINUE_USER_TOPIC_CONFIDENCE = 0.9
 DEFAULT_STARTING_CONFIDENCE = 0.6
 
 LET_ME_ASK_TEMPLATES = [
@@ -546,7 +546,7 @@ def get_statement_phrase(dialog, topic, attr, TOPICS):
     return response, confidence, attr
 
 
-def extract_verb_noun_phrases(utterance):
+def extract_verb_noun_phrases(utterance, only_i_do_that=True):
     verb_noun_phrases = []
     doc = nlp(utterance, disable=["ner"])
     for possible_verb in doc:
@@ -570,7 +570,7 @@ def extract_verb_noun_phrases(utterance):
                         if head_verb_child.dep == nsubj and head_verb_child.text.lower() == "i":
                             i_do_that = True
                 i_do_that *= complex_verb
-            if i_do_that:
+            if (only_i_do_that and i_do_that) or not only_i_do_that:
                 for possible_subject in possible_verb.children:
                     if possible_subject.dep != nsubj:
                         if possible_subject.pos == NOUN:
