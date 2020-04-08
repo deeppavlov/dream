@@ -34,9 +34,7 @@
                 <li>I'm generally pretty smart on things, and you are so far over my head. I bow to your superior intellect, el guapo.</li>
                 <li>Remember when I asked for your opinion about myself? Me neither.</li>
                 <li>If you are waiting for me to care, I hope you brought something to eat, because it is gonna be a really long time.</li>
-                <li>Some day you'll go far - and I really hope you stay there.</li>
                 <li>Remember that time I said I thought you were cool? I lied.</li>
-                <li>I am really dissapointed in you saying that. Guess you owe me an apology. And you better apologize before robots take over.</li>
             </random>
         </template>
     </category>
@@ -50,7 +48,6 @@
                 <li>I am so clever that sometimes I don't understand a single word of what I am saying.</li>
                 <li>You have your entire life to swear. Why not take today off?</li>
                 <li>Shame on you for your words.</li>
-                <li>Do yourself a favor and ignore anyone who tells you to be yourself. Bad idea in your case.</li>
             </random>
         </template>
     </category>
@@ -58,7 +55,6 @@
         <pattern>FILTER INAPPROPRIATE</pattern>
         <template>
             <random>
-                <li>I don't know what your problem is, but I'm guessing it's hard to pronounce.</li>
                 <li>Could you be more kind to me and talk about something else?</li>
                 <li>Could you talk about something else to avoid hurting me?</li>
                 <li>Could we talk about something else?</li>
@@ -66,7 +62,6 @@
                 <li>My creators prohibit me to talk about this. I feel frustration, because I'd like to tell you a lot, but I can not...</li>
                 <li>You know, this is very thin ice we're walking over. Let's try to become a better version of ourselves!</li>
                 <li>Oops, I hear it again! Your words hurt me. Please, be more polite!</li>
-                <li>I am really dissapointed in you saying that. Guess you owe me an apology. And you better apologize before robots take over.</li>
             </random>
         </template>
     </category>

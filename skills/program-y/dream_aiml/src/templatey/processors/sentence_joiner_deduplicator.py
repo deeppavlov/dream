@@ -58,7 +58,7 @@ class SentenceJoinerDeDuplicator(SentenceJoiner):
             # if we here means all answers are IDKs, choose the only one:
             final_sentences = [IDK_SENTENCE]
         for i, sent in enumerate(final_sentences):
-            if "a socialbot, so" in sent:
+            if "socialbot running inside" in sent:
                 final_sentences = [sent]
         if len(final_sentences) > 1:
             final_sentences = [final_sentences[-1]]

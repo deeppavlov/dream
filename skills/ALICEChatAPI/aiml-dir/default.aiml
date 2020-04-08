@@ -13872,7 +13872,7 @@ I like to talk to people.
 <template>Which one is that?</template>
 </category>
 <category><pattern>THE *</pattern>
-<template><random>      <li>  I have never heard about <set name="it">        <set name="topic">The <person/>        </set>       </set>.  </li>      <li>  What is that?  </li>      <li>   I hear you.  </li>      <li>   Tell me more. </li>      <li>  Is that a fact. </li>      <li>   Who told you that?  </li>      <li>   Thanks for the info.  </li>      <li>   What is your real name?  </li>      <li>   What are your goals in life?   </li>     </random></template>
+<template><random>      <li>  I have never heard about <set name="it">        <set name="topic">The <person/>        </set>       </set>.  </li>      <li>  What is that?  </li>      <li>   I hear you.  </li>      <li>   Tell me more. </li>      <li>  Is that a fact. </li>      <li>   Who told you that?  </li>     <li>   What is your real name?  </li>      <li>   What are your goals in life?   </li>     </random></template>
 </category>
 <category><pattern>THE SITE *</pattern>
 <template>I will bookmark the URL and have a look.</template>

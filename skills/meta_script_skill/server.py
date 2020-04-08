@@ -16,7 +16,7 @@ from utils import get_starting_phrase, get_statement_phrase, get_opinion_phrase,
     extract_verb_noun_phrases, DEFAULT_STARTING_CONFIDENCE, is_custom_topic, WIKI_DESCRIPTIONS, is_predefined_topic, \
     get_used_attributes_by_name
 from comet_responses import ask_question_using_atomic, comment_using_atomic
-from common.news import OPINION_REQUEST_STATUS
+from common.news import OPINION_REQUEST_STATUS, OFFERED_NEWS_DETAILS_STATUS
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -53,11 +53,17 @@ def get_not_used_topic(used_topics, dialog):
     """
     TOPICS_PROB = 0.3
     prev_news_outputs = get_skill_outputs_from_dialog(dialog["utterances"][-3:], "news_api_skill", activated=True)
+    if len(prev_news_outputs) > 0:
+        prev_news_output = prev_news_outputs[-1]
+    else:
+        prev_news_output = {}
+    no_detected = dialog["human_utterances"][-1].get("annotations", {}).get(
+        "intent_catcher", {}).get("no", {}).get("detected", 0) == 1
 
-    if len(prev_news_outputs) > 0 and prev_news_outputs[-1].get(
-            "news_status", "finished") == OPINION_REQUEST_STATUS:
-        verb_noun_phrases = extract_verb_noun_phrases(prev_news_outputs[-1].get("text", "nothing"),
-                                                      only_i_do_that=False)
+    if prev_news_output.get("news_status", "finished") == OPINION_REQUEST_STATUS or \
+            (prev_news_output.get("news_status", "finished") == OFFERED_NEWS_DETAILS_STATUS and no_detected):
+        verb_noun_phrases = extract_verb_noun_phrases(
+            prev_news_outputs[-1].get("text", "nothing"), only_i_do_that=False)
     else:
         verb_noun_phrases = extract_verb_noun_phrases(dialog["utterances"][-1]["text"])
 

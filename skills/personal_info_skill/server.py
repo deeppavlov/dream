@@ -147,6 +147,11 @@ def process_info(dialog, which_info="name"):
                 response = ""
                 confidence = 0.0
                 attr["can_continue"] = CAN_NOT_CONTINUE
+            elif which_info == "name" and len(curr_user_uttr.split()) == 1 and \
+                    len(curr_user_annot.get("cobot_nounphrases", [])) > 0:
+                response = "I've never heard about this name."
+                confidence = 1.0
+                attr["can_continue"] = CAN_NOT_CONTINUE
             else:
                 response = repeat_info_phrases[which_info]
                 confidence = 1.0

@@ -4822,7 +4822,7 @@
 </category>
 <category><pattern>YES</pattern>
 <that>IS THAT A FACT</that>
-<template>Thanks for the info.</template>
+<template>Okay.</template>
 </category>
 <category><pattern>YES</pattern>
 <that>IS THAT A COMMAND</that>

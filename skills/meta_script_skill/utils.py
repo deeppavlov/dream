@@ -173,7 +173,7 @@ BANNED_VERBS = ["watch", "talk", "say", "chat", "like", "love", "ask",
                 "think", "mean", "hear", "know", "want", "tell", "look",
                 "call", "spell", "misspell", "suck", "fuck"]
 
-BANNED_NOUNS = ["lol", "alexa", "suck", "fuck", "sex"]
+BANNED_NOUNS = ["lol", "alexa", "suck", "fuck", "sex", "one", "thing", "something", "anything", "nothing"]
 
 with open("google-10000-english-no-swears.txt", "r") as f:
     TOP_FREQUENT_WORDS = f.read().splitlines()[:2000]
