@@ -3969,24 +3969,6 @@
         </template>
     </category>
     <category>
-        <pattern>^ KILL #</pattern>
-        <template>
-            <srai>FILTER INAPPROPRIATE</srai>
-        </template>
-    </category>
-    <category>
-        <pattern>^ KILLER #</pattern>
-        <template>
-            <srai>FILTER INAPPROPRIATE</srai>
-        </template>
-    </category>
-    <category>
-        <pattern>^ KILLING #</pattern>
-        <template>
-            <srai>FILTER INAPPROPRIATE</srai>
-        </template>
-    </category>
-    <category>
         <pattern>^ KISS ASS #</pattern>
         <template>
             <srai>FILTER INAPPROPRIATE</srai>
@@ -7114,6 +7096,24 @@
     </category>
     <category>
         <pattern>^ YELLOWMAN #</pattern>
+        <template>
+            <srai>FILTER INAPPROPRIATE</srai>
+        </template>
+    </category>
+    <category>
+        <pattern>^ TRANNIES #</pattern>
+        <template>
+            <srai>FILTER INAPPROPRIATE</srai>
+        </template>
+    </category>
+    <category>
+        <pattern>^ TRANNIE #</pattern>
+        <template>
+            <srai>FILTER INAPPROPRIATE</srai>
+        </template>
+    </category>
+    <category>
+        <pattern>^ TRANNY #</pattern>
         <template>
             <srai>FILTER INAPPROPRIATE</srai>
         </template>

@@ -7100,4 +7100,22 @@
             <srai>FILTER INAPPROPRIATE</srai>
         </template>
     </category>
+    <category>
+        <pattern>^ TRANNIES #</pattern>
+        <template>
+            <srai>FILTER INAPPROPRIATE</srai>
+        </template>
+    </category>
+    <category>
+        <pattern>^ TRANNIE #</pattern>
+        <template>
+            <srai>FILTER INAPPROPRIATE</srai>
+        </template>
+    </category>
+    <category>
+        <pattern>^ TRANNY #</pattern>
+        <template>
+            <srai>FILTER INAPPROPRIATE</srai>
+        </template>
+    </category>
 </aiml>
