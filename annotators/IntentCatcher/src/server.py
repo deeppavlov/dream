@@ -23,7 +23,7 @@ app = Flask(__name__)
 sess = tf.compat.v1.Session()
 
 logger.info('Creating detector...')
-detector = MultilabelClassifierDetectorWithIntentHierarchy(logger)
+detector = RegMD(logger)
 logger.info('Creating detector... finished')
 
 logger.info('Initializing tf variables...')
