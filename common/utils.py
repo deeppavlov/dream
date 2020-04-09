@@ -1,4 +1,4 @@
-from string import punctuation
+import re
 from random import random
 from common.books import SWITCH_BOOK_SKILL_PHRASE
 from common.movies import SWITCH_MOVIE_SKILL_PHRASE
@@ -126,21 +126,24 @@ def about_virus(annotated_phrase):
                                                                 'code nineteen']])
 
 
+yes_templates = re.compile(r"(\byes\b|\bsure\b|go ahead|yeah|\bok\b|okay|why not|tell me)")
+
+
 def is_yes(annotated_phrase):
-    y1 = annotated_phrase['annotations']['intent_catcher'].get('yes', {}).get('detected') == 1
-    user_phrase = annotated_phrase['text']
-    for sign in punctuation:
-        user_phrase = user_phrase.replace(sign, ' ')
-    y2 = ' yes ' in user_phrase
+    yes_detected = annotated_phrase['annotations'].get('intent_catcher', {}).get('yes', {}).get('detected') == 1
     # TODO: intent catcher not catches 'yes thanks!'
-    return y1 or y2 or 'yes' in user_phrase.lower()
+    return yes_detected or re.search(yes_templates, annotated_phrase["text"].lower())
+
+
+no_templates = re.compile(r"(\bno\b|\bnot\b|no way|don't|no please)")
 
 
 def is_no(annotated_phrase):
-    user_phrase = annotated_phrase['text'].lower().strip().replace('.', '')
+    no_detected = annotated_phrase['annotations'].get('intent_catcher', {}).get('no', {}).get('detected') == 1
     # TODO: intent catcher thinks that horrible is no intent'
+    user_phrase = annotated_phrase['text'].lower().strip().replace('.', '')
     is_not_horrible = 'horrible' != user_phrase
-    return is_not_horrible and annotated_phrase['annotations']['intent_catcher'].get('no', {}).get('detected') == 1
+    return is_not_horrible and (no_detected or re.search(no_templates, annotated_phrase["text"].lower()))
 
 
 def corona_switch_skill_reply():

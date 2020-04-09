@@ -241,7 +241,8 @@ services:
           - node.labels.with_gpu != true
   movie_skill:
     build:
-      context: ./skills/movie_skill/
+      context: .
+      dockerfile: ./skills/movie_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8023 --timeout=300 --preload
     volumes: []
     deploy:
@@ -694,7 +695,7 @@ services:
           - node.labels.with_gpu == true
       resources:
         reservations:
-          memory: 2.5G    
+          memory: 2.5G
   cobot_convers_evaluator_annotator:
     build:
       context: ./annotators/CoBotConversationEvaluator/

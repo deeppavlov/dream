@@ -87,7 +87,7 @@ DONOTKNOW_LIKE = [r"(i )?(do not|don't) know", "you (choose|decide|pick up)"]
 
 # talk to me, talk with me, talk, talk with me now, talk now.
 TALK_TO_ME = join_words_in_or_pattern(TALK_LIKE) + r"(\s" + join_words_in_or_pattern(TO_ME_LIKE) + r")?"
-ABOUT_SOMETHING = join_words_in_or_pattern(ABOUT_LIKE) + r"\s" + join_words_in_or_pattern(SOMETHING_LIKE)
+ABOUT_SOMETHING = join_words_in_or_pattern(ABOUT_LIKE) + r"?\s" + join_words_in_or_pattern(SOMETHING_LIKE)
 ABOUT_TOPIC = join_words_in_or_pattern(ABOUT_LIKE) + r"\s" + ANY_WORDS
 
 # --------------- Let's talk. / Can we talk? / Talk to me. ------------
@@ -126,7 +126,10 @@ COMPILE_LETS_TALK_ABOUT_TOPIC = re.compile(join_sentences_in_or_pattern(
     [
         join_words_in_or_pattern(QUESTION_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_TOPIC + END,
         join_words_in_or_pattern(WANT_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_TOPIC + END,
-        join_words_in_or_pattern(START_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_TOPIC + END
+        join_words_in_or_pattern(START_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_TOPIC + END,
+        join_words_in_or_pattern(QUESTION_LIKE) + r"\s?" + "discuss" + r"\s" + ANY_WORDS + END,
+        join_words_in_or_pattern(WANT_LIKE) + r"\s?" + "discuss" + r"\s" + ANY_WORDS + END,
+        join_words_in_or_pattern(START_LIKE) + r"\s?" + "discuss" + r"\s" + ANY_WORDS + END
     ]))
 
 WHAT_TO_TALK_ABOUT = r"what (do|can|could|will|would|are) (you|we|i) " + join_words_in_or_pattern(WANT_LIKE) + \

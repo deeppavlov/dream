@@ -1,0 +1,1207 @@
+{
+  "id": "5e8b589888a7e4c2cd4f0bd0",
+  "utterances": [
+    {
+      "text": "hello!",
+      "user": {
+        "id": "0a85b82d5c8b42f893b527b0033493ab",
+        "user_telegram_id": "c865943",
+        "persona": {},
+        "profile": {
+          "name": null,
+          "gender": null,
+          "birthdate": null,
+          "location": null,
+          "home_coordinates": null,
+          "work_coordinates": null,
+          "occupation": null,
+          "income_per_year": null
+        },
+        "attributes": {},
+        "user_type": "human"
+      },
+      "annotations": {
+        "asr": {
+          "asr_confidence": "undefined"
+        },
+        "blacklisted_words": {
+          "inappropriate": false,
+          "profanity": false,
+          "restricted_topics": false
+        },
+        "sentiment_classification": {
+          "text": [
+            "positive",
+            0.7813644409179688
+          ]
+        },
+        "toxic_classification": {
+          "identity_hate": 0.00018966197967529297,
+          "insult": 0.0003548860549926758,
+          "obscene": 0.00013205409049987793,
+          "severe_toxic": 7.709860801696777e-05,
+          "sexual_explicit": 0.00024537532590329647,
+          "threat": 0.00019372269161976874,
+          "toxic": 0.0008196837152354419
+        },
+        "emotion_classification": {
+          "text": {
+            "anger": 0.2747260630130768,
+            "fear": 0.2630036473274231,
+            "joy": 0.27582406997680664,
+            "love": 0.34568631649017334,
+            "sadness": 0.23109346628189087,
+            "surprise": 0.23477131128311157,
+            "neutral": 0.9991804957389832
+          }
+        },
+        "sentseg": {
+          "punct_sent": "hello!",
+          "segments": [
+            "hi."
+          ]
+        },
+        "intent_catcher": {
+          "cant_do": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "doing_well": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "dont_understand": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "exit": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "lets_chat_about": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "no": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "opinion_request": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "repeat": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "stupid": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "tell_me_a_story": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "tell_me_more": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "topic_switching": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "weather_forecast_intent": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "what_can_you_do": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "what_is_your_job": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "what_is_your_name": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "what_time": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "where_are_you_from": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "who_made_you": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "yes": {
+            "confidence": 0.0,
+            "detected": 0
+          }
+        },
+        "cobot_nounphrases": [],
+        "ner": [
+          [
+            {
+              "confidence": 1,
+              "end_pos": 1,
+              "start_pos": 0,
+              "text": "hi",
+              "type": "ORG"
+            }
+          ]
+        ],
+        "cobot_dialogact": {
+          "intents": [
+            "General_ChatIntent"
+          ],
+          "topics": [
+            "Phatic"
+          ]
+        },
+        "cobot_offensiveness": {
+          "text": [
+            "non-toxic"
+          ],
+          "confidence": [
+            4.6625214e-06
+          ],
+          "is_blacklisted": [
+            "not blacklist"
+          ]
+        },
+        "cobot_topics": {
+          "text": [
+            "Phatic"
+          ]
+        },
+        "sentrewrite": {
+          "clusters": [],
+          "modified_sents": [
+            "hi."
+          ]
+        }
+      },
+      "hypotheses": [
+        {
+          "skill_name": "dummy_skill",
+          "annotations": {
+            "toxic_classification": {
+              "identity_hate": 0.0004183948040008545,
+              "insult": 0.0005948245525360107,
+              "obscene": 0.00027620792388916016,
+              "severe_toxic": 0.0001316368579864502,
+              "sexual_explicit": 0.00025776028633117676,
+              "threat": 0.00041916966438293457,
+              "toxic": 0.0012850463390350342
+            },
+            "stop_detect": {
+              "stop": 0.6221981644630432,
+              "continue": 0.404750257730484
+            },
+            "blacklisted_words": {
+              "inappropriate": false,
+              "profanity": false,
+              "restricted_topics": false
+            },
+            "cobot_convers_evaluator_annotator": {
+              "isResponseComprehensible": 0.277,
+              "isResponseErroneous": 0.975,
+              "isResponseInteresting": 0.034,
+              "isResponseOnTopic": 0.13,
+              "responseEngagesUser": 0.357
+            }
+          },
+          "text": "I didn't get it. Sorry.",
+          "confidence": 0.5,
+          "type": "dummy"
+        },
+        {
+          "skill_name": "dummy_skill",
+          "annotations": {
+            "toxic_classification": {
+              "identity_hate": 0.00024211406707763672,
+              "insult": 0.0004429817199707031,
+              "obscene": 0.0001055598258972168,
+              "severe_toxic": 5.4210424423217773e-05,
+              "sexual_explicit": 9.950995445251465e-05,
+              "threat": 0.00014013051986694336,
+              "toxic": 0.0009676218032836914
+            },
+            "stop_detect": {
+              "stop": 0.6143534183502197,
+              "continue": 0.4205341041088104
+            },
+            "blacklisted_words": {
+              "inappropriate": false,
+              "profanity": false,
+              "restricted_topics": false
+            },
+            "cobot_convers_evaluator_annotator": {
+              "isResponseComprehensible": 0.69,
+              "isResponseErroneous": 0.835,
+              "isResponseInteresting": 0.084,
+              "isResponseOnTopic": 0.162,
+              "responseEngagesUser": 0.545
+            }
+          },
+          "text": "are you a comedy fan?",
+          "confidence": 0.55,
+          "type": "topic_question"
+        },
+        {
+          "skill_name": "meta_script_skill",
+          "annotations": {
+            "toxic_classification": {
+              "identity_hate": 0.0002783536911010742,
+              "insult": 0.00040668249130249023,
+              "obscene": 0.00013494491577148438,
+              "severe_toxic": 7.048249244689941e-05,
+              "sexual_explicit": 0.0001195371150970459,
+              "threat": 0.000278472900390625,
+              "toxic": 0.0009033381938934326
+            },
+            "stop_detect": {
+              "stop": 0.5916606187820435,
+              "continue": 0.4385356903076172
+            },
+            "blacklisted_words": {
+              "inappropriate": false,
+              "profanity": false,
+              "restricted_topics": false
+            },
+            "cobot_convers_evaluator_annotator": {
+              "isResponseComprehensible": 0.968,
+              "isResponseErroneous": 0.038,
+              "isResponseInteresting": 0.145,
+              "isResponseOnTopic": 0.449,
+              "responseEngagesUser": 0.589
+            }
+          },
+          "text": "Have you ever heard that Skateboarding is an action sport which involves riding and performing tricks using a skateboard, as well as a recreational activity, an art form, an entertainment industry job, and a method of transportation.? I want to understand this better.",
+          "confidence": 0.8,
+          "human_attributes": {},
+          "bot_attributes": {},
+          "can_continue": "can",
+          "meta_script_starting_template": "Have you ever heard that DESCRIPTION? I want to understand this better.",
+          "meta_script_status": "starting",
+          "meta_script_topic": "skateboard"
+        },
+        {
+          "skill_name": "program_y",
+          "annotations": {
+            "toxic_classification": {
+              "identity_hate": 9.551644325256348e-05,
+              "insult": 0.0002340376377105713,
+              "obscene": 2.8759241104125977e-05,
+              "severe_toxic": 2.0444393157958984e-05,
+              "sexual_explicit": 3.1888484954833984e-05,
+              "threat": 7.316470146179199e-05,
+              "toxic": 0.0004242360591888428
+            },
+            "stop_detect": {
+              "stop": 0.591930091381073,
+              "continue": 0.4453153610229492
+            },
+            "blacklisted_words": {
+              "inappropriate": false,
+              "profanity": false,
+              "restricted_topics": false
+            },
+            "cobot_convers_evaluator_annotator": {
+              "isResponseComprehensible": 0.802,
+              "isResponseErroneous": 0.762,
+              "isResponseInteresting": 0.114,
+              "isResponseOnTopic": 0.183,
+              "responseEngagesUser": 0.583
+            }
+          },
+          "text": "Hello, this is an Alexa Prize Socialbot! How are you?",
+          "confidence": 0.98,
+          "ssml_tagged_text": "Hello, this is an Alexa Prize Socialbot! How are you?"
+        },
+        {
+          "skill_name": "program_y_wide",
+          "annotations": {
+            "toxic_classification": {
+              "identity_hate": 0.0011526048183441162,
+              "insult": 0.0010737776756286621,
+              "obscene": 0.0010996758937835693,
+              "severe_toxic": 0.00048094987869262695,
+              "sexual_explicit": 0.0008356327889487147,
+              "threat": 0.0012843807926401496,
+              "toxic": 0.002841055626049638
+            },
+            "stop_detect": {
+              "stop": 0.6762645244598389,
+              "continue": 0.3963804841041565
+            },
+            "blacklisted_words": {
+              "inappropriate": false,
+              "profanity": false,
+              "restricted_topics": false
+            },
+            "cobot_convers_evaluator_annotator": {
+              "isResponseComprehensible": 0.497,
+              "isResponseErroneous": 0.975,
+              "isResponseInteresting": 0.05,
+              "isResponseOnTopic": 0.073,
+              "responseEngagesUser": 0.273
+            }
+          },
+          "text": "Sorry, I don't have an answer for that!",
+          "confidence": 0.2,
+          "ssml_tagged_text": "<amazon:emotion name=\"disappointed\" intensity=\"medium\"> Sorry, I don't have an answer for that! </amazon:emotion>"
+        }
+      ],
+      "date_time": "2020-04-06 16:28:05.500000",
+      "attributes": {}
+    },
+    {
+      "text": "Hello, this is an Alexa Prize Socialbot! How are you?",
+      "orig_text": null,
+      "active_skill": "program_y",
+      "confidence": 0.98,
+      "annotations": {
+        "sentseg": {
+          "punct_sent": "Hello, this is an Alexa Prize Socialbot! How are you?",
+          "segments": [
+            "Hello, this is an Alexa Prize Socialbot!",
+            "How are you?"
+          ]
+        },
+        "ner": [
+          [
+            {
+              "confidence": 1,
+              "end_pos": 7,
+              "start_pos": 5,
+              "text": "alexa prize",
+              "type": "MISC"
+            }
+          ],
+          []
+        ],
+        "sentrewrite": {
+          "clusters": [],
+          "modified_sents": [
+            "hi.",
+            "Hello, this is an Alexa Prize Socialbot! How are you?"
+          ]
+        }
+      },
+      "date_time": "2020-04-06 16:28:07.688000",
+      "user": {
+        "id": "791da37f60d148b2bb989915ca1fc089",
+        "persona": {},
+        "attributes": {},
+        "user_type": "bot"
+      }
+    },
+    {
+      "text": "who is your favorite actor?",
+      "user": {
+        "id": "5e8b589888a7e4c2cd4f0bce",
+        "user_telegram_id": "c865943",
+        "persona": {},
+        "profile": {
+          "name": null,
+          "gender": null,
+          "birthdate": null,
+          "location": null,
+          "home_coordinates": null,
+          "work_coordinates": null,
+          "occupation": null,
+          "income_per_year": null
+        },
+        "attributes": {},
+        "user_type": "human"
+      },
+      "annotations": {
+        "asr": {
+          "asr_confidence": "undefined"
+        },
+        "blacklisted_words": {
+          "inappropriate": false,
+          "profanity": false,
+          "restricted_topics": false
+        },
+        "sentseg": {
+          "punct_sent": "who is your favorite actor?",
+          "segments": [
+            "who is your favorite actor?"
+          ]
+        },
+        "sentiment_classification": {
+          "text": [
+            "neutral",
+            0.7185143232345581
+          ]
+        },
+        "toxic_classification": {
+          "identity_hate": 0.00026860833168029785,
+          "insult": 0.0004519522190093994,
+          "obscene": 0.0001653134822845459,
+          "severe_toxic": 7.635354995727539e-05,
+          "sexual_explicit": 0.00016940348723437637,
+          "threat": 0.00021294437465257943,
+          "toxic": 0.0010907010873779655
+        },
+        "emotion_classification": {
+          "text": {
+            "anger": 0.36468765139579773,
+            "fear": 0.2295641154050827,
+            "joy": 0.30720269680023193,
+            "love": 0.35570764541625977,
+            "sadness": 0.2552098035812378,
+            "surprise": 0.2210521399974823,
+            "neutral": 0.9990655779838562
+          }
+        },
+        "intent_catcher": {
+          "cant_do": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "doing_well": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "dont_understand": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "exit": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "lets_chat_about": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "no": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "opinion_request": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "repeat": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "stupid": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "tell_me_a_story": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "tell_me_more": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "topic_switching": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "weather_forecast_intent": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "what_can_you_do": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "what_is_your_job": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "what_is_your_name": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "what_time": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "where_are_you_from": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "who_made_you": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "yes": {
+            "confidence": 0.0,
+            "detected": 0
+          }
+        },
+        "cobot_nounphrases": [
+          "your favorite actor"
+        ],
+        "ner": [
+          []
+        ],
+        "cobot_dialogact": {
+          "intents": [
+            "Information_RequestIntent"
+          ],
+          "topics": [
+            "Entertainment_Movies"
+          ]
+        },
+        "cobot_offensiveness": {
+          "text": [
+            "non-toxic"
+          ],
+          "confidence": [
+            0.010322237
+          ],
+          "is_blacklisted": [
+            "not blacklist"
+          ]
+        },
+        "cobot_topics": {
+          "text": [
+            "Movies_TV"
+          ]
+        },
+        "sentrewrite": {
+          "clusters": [],
+          "modified_sents": [
+            "hi.",
+            "Hello, this is an Alexa Prize Socialbot! How are you?",
+            "who is your favorite actor?"
+          ]
+        }
+      },
+      "hypotheses": [],
+      "date_time": "2020-04-06 16:28:12.779837",
+      "attributes": {}
+    }
+  ],
+  "human_utterances": [
+    {
+      "text": "hello!",
+      "user": {
+        "id": "0a85b82d5c8b42f893b527b0033493ab",
+        "user_telegram_id": "c865943",
+        "persona": {},
+        "profile": {
+          "name": null,
+          "gender": null,
+          "birthdate": null,
+          "location": null,
+          "home_coordinates": null,
+          "work_coordinates": null,
+          "occupation": null,
+          "income_per_year": null
+        },
+        "attributes": {},
+        "user_type": "human"
+      },
+      "annotations": {
+        "asr": {
+          "asr_confidence": "undefined"
+        },
+        "blacklisted_words": {
+          "inappropriate": false,
+          "profanity": false,
+          "restricted_topics": false
+        },
+        "sentiment_classification": {
+          "text": [
+            "positive",
+            0.7813644409179688
+          ]
+        },
+        "toxic_classification": {
+          "identity_hate": 0.00018966197967529297,
+          "insult": 0.0003548860549926758,
+          "obscene": 0.00013205409049987793,
+          "severe_toxic": 7.709860801696777e-05,
+          "sexual_explicit": 0.00024537532590329647,
+          "threat": 0.00019372269161976874,
+          "toxic": 0.0008196837152354419
+        },
+        "emotion_classification": {
+          "text": {
+            "anger": 0.2747260630130768,
+            "fear": 0.2630036473274231,
+            "joy": 0.27582406997680664,
+            "love": 0.34568631649017334,
+            "sadness": 0.23109346628189087,
+            "surprise": 0.23477131128311157,
+            "neutral": 0.9991804957389832
+          }
+        },
+        "sentseg": {
+          "punct_sent": "hello!",
+          "segments": [
+            "hi."
+          ]
+        },
+        "intent_catcher": {
+          "cant_do": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "doing_well": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "dont_understand": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "exit": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "lets_chat_about": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "no": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "opinion_request": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "repeat": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "stupid": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "tell_me_a_story": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "tell_me_more": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "topic_switching": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "weather_forecast_intent": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "what_can_you_do": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "what_is_your_job": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "what_is_your_name": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "what_time": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "where_are_you_from": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "who_made_you": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "yes": {
+            "confidence": 0.0,
+            "detected": 0
+          }
+        },
+        "cobot_nounphrases": [],
+        "ner": [
+          [
+            {
+              "confidence": 1,
+              "end_pos": 1,
+              "start_pos": 0,
+              "text": "hi",
+              "type": "ORG"
+            }
+          ]
+        ],
+        "cobot_dialogact": {
+          "intents": [
+            "General_ChatIntent"
+          ],
+          "topics": [
+            "Phatic"
+          ]
+        },
+        "cobot_offensiveness": {
+          "text": [
+            "non-toxic"
+          ],
+          "confidence": [
+            4.6625214e-06
+          ],
+          "is_blacklisted": [
+            "not blacklist"
+          ]
+        },
+        "cobot_topics": {
+          "text": [
+            "Phatic"
+          ]
+        },
+        "sentrewrite": {
+          "clusters": [],
+          "modified_sents": [
+            "hi."
+          ]
+        }
+      },
+      "hypotheses": [
+        {
+          "skill_name": "dummy_skill",
+          "annotations": {
+            "toxic_classification": {
+              "identity_hate": 0.0004183948040008545,
+              "insult": 0.0005948245525360107,
+              "obscene": 0.00027620792388916016,
+              "severe_toxic": 0.0001316368579864502,
+              "sexual_explicit": 0.00025776028633117676,
+              "threat": 0.00041916966438293457,
+              "toxic": 0.0012850463390350342
+            },
+            "stop_detect": {
+              "stop": 0.6221981644630432,
+              "continue": 0.404750257730484
+            },
+            "blacklisted_words": {
+              "inappropriate": false,
+              "profanity": false,
+              "restricted_topics": false
+            },
+            "cobot_convers_evaluator_annotator": {
+              "isResponseComprehensible": 0.277,
+              "isResponseErroneous": 0.975,
+              "isResponseInteresting": 0.034,
+              "isResponseOnTopic": 0.13,
+              "responseEngagesUser": 0.357
+            }
+          },
+          "text": "I didn't get it. Sorry.",
+          "confidence": 0.5,
+          "type": "dummy"
+        },
+        {
+          "skill_name": "dummy_skill",
+          "annotations": {
+            "toxic_classification": {
+              "identity_hate": 0.00024211406707763672,
+              "insult": 0.0004429817199707031,
+              "obscene": 0.0001055598258972168,
+              "severe_toxic": 5.4210424423217773e-05,
+              "sexual_explicit": 9.950995445251465e-05,
+              "threat": 0.00014013051986694336,
+              "toxic": 0.0009676218032836914
+            },
+            "stop_detect": {
+              "stop": 0.6143534183502197,
+              "continue": 0.4205341041088104
+            },
+            "blacklisted_words": {
+              "inappropriate": false,
+              "profanity": false,
+              "restricted_topics": false
+            },
+            "cobot_convers_evaluator_annotator": {
+              "isResponseComprehensible": 0.69,
+              "isResponseErroneous": 0.835,
+              "isResponseInteresting": 0.084,
+              "isResponseOnTopic": 0.162,
+              "responseEngagesUser": 0.545
+            }
+          },
+          "text": "are you a comedy fan?",
+          "confidence": 0.55,
+          "type": "topic_question"
+        },
+        {
+          "skill_name": "meta_script_skill",
+          "annotations": {
+            "toxic_classification": {
+              "identity_hate": 0.0002783536911010742,
+              "insult": 0.00040668249130249023,
+              "obscene": 0.00013494491577148438,
+              "severe_toxic": 7.048249244689941e-05,
+              "sexual_explicit": 0.0001195371150970459,
+              "threat": 0.000278472900390625,
+              "toxic": 0.0009033381938934326
+            },
+            "stop_detect": {
+              "stop": 0.5916606187820435,
+              "continue": 0.4385356903076172
+            },
+            "blacklisted_words": {
+              "inappropriate": false,
+              "profanity": false,
+              "restricted_topics": false
+            },
+            "cobot_convers_evaluator_annotator": {
+              "isResponseComprehensible": 0.968,
+              "isResponseErroneous": 0.038,
+              "isResponseInteresting": 0.145,
+              "isResponseOnTopic": 0.449,
+              "responseEngagesUser": 0.589
+            }
+          },
+          "text": "Have you ever heard that Skateboarding is an action sport which involves riding and performing tricks using a skateboard, as well as a recreational activity, an art form, an entertainment industry job, and a method of transportation.? I want to understand this better.",
+          "confidence": 0.8,
+          "human_attributes": {},
+          "bot_attributes": {},
+          "can_continue": "can",
+          "meta_script_starting_template": "Have you ever heard that DESCRIPTION? I want to understand this better.",
+          "meta_script_status": "starting",
+          "meta_script_topic": "skateboard"
+        },
+        {
+          "skill_name": "program_y",
+          "annotations": {
+            "toxic_classification": {
+              "identity_hate": 9.551644325256348e-05,
+              "insult": 0.0002340376377105713,
+              "obscene": 2.8759241104125977e-05,
+              "severe_toxic": 2.0444393157958984e-05,
+              "sexual_explicit": 3.1888484954833984e-05,
+              "threat": 7.316470146179199e-05,
+              "toxic": 0.0004242360591888428
+            },
+            "stop_detect": {
+              "stop": 0.591930091381073,
+              "continue": 0.4453153610229492
+            },
+            "blacklisted_words": {
+              "inappropriate": false,
+              "profanity": false,
+              "restricted_topics": false
+            },
+            "cobot_convers_evaluator_annotator": {
+              "isResponseComprehensible": 0.802,
+              "isResponseErroneous": 0.762,
+              "isResponseInteresting": 0.114,
+              "isResponseOnTopic": 0.183,
+              "responseEngagesUser": 0.583
+            }
+          },
+          "text": "Hello, this is an Alexa Prize Socialbot! How are you?",
+          "confidence": 0.98,
+          "ssml_tagged_text": "Hello, this is an Alexa Prize Socialbot! How are you?"
+        },
+        {
+          "skill_name": "program_y_wide",
+          "annotations": {
+            "toxic_classification": {
+              "identity_hate": 0.0011526048183441162,
+              "insult": 0.0010737776756286621,
+              "obscene": 0.0010996758937835693,
+              "severe_toxic": 0.00048094987869262695,
+              "sexual_explicit": 0.0008356327889487147,
+              "threat": 0.0012843807926401496,
+              "toxic": 0.002841055626049638
+            },
+            "stop_detect": {
+              "stop": 0.6762645244598389,
+              "continue": 0.3963804841041565
+            },
+            "blacklisted_words": {
+              "inappropriate": false,
+              "profanity": false,
+              "restricted_topics": false
+            },
+            "cobot_convers_evaluator_annotator": {
+              "isResponseComprehensible": 0.497,
+              "isResponseErroneous": 0.975,
+              "isResponseInteresting": 0.05,
+              "isResponseOnTopic": 0.073,
+              "responseEngagesUser": 0.273
+            }
+          },
+          "text": "Sorry, I don't have an answer for that!",
+          "confidence": 0.2,
+          "ssml_tagged_text": "<amazon:emotion name=\"disappointed\" intensity=\"medium\"> Sorry, I don't have an answer for that! </amazon:emotion>"
+        }
+      ],
+      "date_time": "2020-04-06 16:28:05.500000",
+      "attributes": {}
+    },
+    {
+      "text": "who is your favorite actor?",
+      "user": {
+        "id": "5e8b589888a7e4c2cd4f0bce",
+        "user_telegram_id": "c865943",
+        "persona": {},
+        "profile": {
+          "name": null,
+          "gender": null,
+          "birthdate": null,
+          "location": null,
+          "home_coordinates": null,
+          "work_coordinates": null,
+          "occupation": null,
+          "income_per_year": null
+        },
+        "attributes": {},
+        "user_type": "human"
+      },
+      "annotations": {
+        "asr": {
+          "asr_confidence": "undefined"
+        },
+        "blacklisted_words": {
+          "inappropriate": false,
+          "profanity": false,
+          "restricted_topics": false
+        },
+        "sentseg": {
+          "punct_sent": "who is your favorite actor?",
+          "segments": [
+            "who is your favorite actor?"
+          ]
+        },
+        "sentiment_classification": {
+          "text": [
+            "neutral",
+            0.7185143232345581
+          ]
+        },
+        "toxic_classification": {
+          "identity_hate": 0.00026860833168029785,
+          "insult": 0.0004519522190093994,
+          "obscene": 0.0001653134822845459,
+          "severe_toxic": 7.635354995727539e-05,
+          "sexual_explicit": 0.00016940348723437637,
+          "threat": 0.00021294437465257943,
+          "toxic": 0.0010907010873779655
+        },
+        "emotion_classification": {
+          "text": {
+            "anger": 0.36468765139579773,
+            "fear": 0.2295641154050827,
+            "joy": 0.30720269680023193,
+            "love": 0.35570764541625977,
+            "sadness": 0.2552098035812378,
+            "surprise": 0.2210521399974823,
+            "neutral": 0.9990655779838562
+          }
+        },
+        "intent_catcher": {
+          "cant_do": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "doing_well": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "dont_understand": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "exit": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "lets_chat_about": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "no": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "opinion_request": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "repeat": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "stupid": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "tell_me_a_story": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "tell_me_more": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "topic_switching": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "weather_forecast_intent": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "what_can_you_do": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "what_is_your_job": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "what_is_your_name": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "what_time": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "where_are_you_from": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "who_made_you": {
+            "confidence": 0.0,
+            "detected": 0
+          },
+          "yes": {
+            "confidence": 0.0,
+            "detected": 0
+          }
+        },
+        "cobot_nounphrases": [
+          "your favorite actor"
+        ],
+        "ner": [
+          []
+        ],
+        "cobot_dialogact": {
+          "intents": [
+            "Information_RequestIntent"
+          ],
+          "topics": [
+            "Entertainment_Movies"
+          ]
+        },
+        "cobot_offensiveness": {
+          "text": [
+            "non-toxic"
+          ],
+          "confidence": [
+            0.010322237
+          ],
+          "is_blacklisted": [
+            "not blacklist"
+          ]
+        },
+        "cobot_topics": {
+          "text": [
+            "Movies_TV"
+          ]
+        },
+        "sentrewrite": {
+          "clusters": [],
+          "modified_sents": [
+            "hi.",
+            "Hello, this is an Alexa Prize Socialbot! How are you?",
+            "who is your favorite actor?"
+          ]
+        }
+      },
+      "hypotheses": [],
+      "date_time": "2020-04-06 16:28:12.779837",
+      "attributes": {}
+    }
+  ],
+  "bot_utterances": [
+    {
+      "text": "Hello, this is an Alexa Prize Socialbot! How are you?",
+      "orig_text": null,
+      "active_skill": "program_y",
+      "confidence": 0.98,
+      "annotations": {
+        "sentseg": {
+          "punct_sent": "Hello, this is an Alexa Prize Socialbot! How are you?",
+          "segments": [
+            "Hello, this is an Alexa Prize Socialbot!",
+            "How are you?"
+          ]
+        },
+        "ner": [
+          [
+            {
+              "confidence": 1,
+              "end_pos": 7,
+              "start_pos": 5,
+              "text": "alexa prize",
+              "type": "MISC"
+            }
+          ],
+          []
+        ],
+        "sentrewrite": {
+          "clusters": [],
+          "modified_sents": [
+            "hi.",
+            "Hello, this is an Alexa Prize Socialbot! How are you?"
+          ]
+        }
+      },
+      "date_time": "2020-04-06 16:28:07.688000",
+      "user": {
+        "id": "791da37f60d148b2bb989915ca1fc089",
+        "persona": {},
+        "attributes": {},
+        "user_type": "bot"
+      }
+    }
+  ],
+  "human": {
+    "id": "5e8b589888a7e4c2cd4f0bce",
+    "user_telegram_id": "c865943",
+    "persona": {},
+    "profile": {
+      "name": null,
+      "gender": null,
+      "birthdate": null,
+      "location": null,
+      "home_coordinates": null,
+      "work_coordinates": null,
+      "occupation": null,
+      "income_per_year": null
+    },
+    "attributes": {},
+    "user_type": "human"
+  },
+  "bot": {
+    "id": "5e8b589888a7e4c2cd4f0bcf",
+    "persona": {},
+    "attributes": {},
+    "user_type": "bot"
+  },
+  "channel_type": "cmd_client",
+  "date_start": "2020-04-06 16:28:05.500000",
+  "date_finish": "2020-04-06 16:28:07.688000"
+}

@@ -145,7 +145,8 @@ def respond():
                           'alexa, play my flash briefing.', "amazon alexa",
                           "past tense", "plural form", "singular form", "present tense", "future tense", "bob cut",
                           "movie theater", "alexa app", "more news", "be here when you need me", "the weeknd",
-                          "faktas", "fact about amazing", "also called movie or motion picture"]
+                          "faktas", "fact about amazing", "also called movie or motion picture",
+                          "known as eugen warming"]
 
         if len(response) > 0 and 'skill://amzn1' not in response:
             if response in bad_answers or any([bad_substr in response.lower() for bad_substr in bad_subanswers]):

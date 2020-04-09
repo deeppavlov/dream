@@ -131,7 +131,9 @@ services:
   movie_skill:
     env_file: [.env.dev]
     volumes:
-      - "./skills/movie_skill/src:/src"
+      - "./common:/src/common"
+      - "./skills/movie_skill:/src"
+      - "./skills/CoBotQA:/src/CoBotQA"
     ports:
       - 8023:8023
   alice:
