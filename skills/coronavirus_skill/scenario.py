@@ -36,7 +36,7 @@ for county_name in COUNTIES:
     for city_name in COUNTIES[county_name][1:]:
         CITIES[city_name.lower()].append((county_name, COUNTIES[county_name][0]))
 STATE_DATA, COUNTY_DATA = None, None
-FACT_LIST = ['The children are almost invincible for coronavirus.',
+FACT_LIST = ['The origin of coronavirus, Wuhan, has fully canceled the quarantine.',
              'Only two dogs on the Earth have ever been diagnosed with coronavirus. '
              'Moreover, even dogs who have coronavirus cannot transmit coronavirus to the human.',
              'The coronavirus vaccine is already being tested in several countries. '
