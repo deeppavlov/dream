@@ -89,6 +89,9 @@ class RuleBasedSkillSelectorConnector:
     books_cobot_dialogacts = {"Entertainment_General", "Entertainment_Books"}
     books_cobot_topics = {"Entertainment", "Literature"}
     news_cobot_topics = {"News"}
+    about_movie_words = re.compile(r"(movie|film|picture|series|tv[ -]?show|reality[ -]?show|netflix|\btv\b|"
+                                   r"comedy|comedies|thriller|animation|anime|talk[ -]?show|cartoon|drama|"
+                                   r"fantasy)")
 
     async def send(self, payload: Dict, callback: Callable):
         dialog = payload['payload']['states_batch'][0]
@@ -145,8 +148,7 @@ class RuleBasedSkillSelectorConnector:
         if dialog['bot_utterances']:
             prev_bot_uttr = dialog["bot_utterances"][-1]
         prev_active_skill = prev_bot_uttr.get("active_skill", "")
-        about_books = about_books or book_skill_was_proposed(prev_bot_uttr)
-        about_movies = about_movies or movie_skill_was_proposed(prev_bot_uttr)
+
         weather_city_slot_requested = any(
             [
                 hyp.get("weather_forecast_interaction_city_slot_requested", False)
@@ -167,6 +169,9 @@ class RuleBasedSkillSelectorConnector:
         about_news = about_news or is_breaking_news_requested(prev_bot_uttr, dialog['utterances'][-1])
         enable_coronavirus = any([function(dialog['utterances'][-1]['text'])
                                   for function in [about_virus, quarantine_end, check_about_death]])
+        about_movies = (about_movies or movie_skill_was_proposed(prev_bot_uttr) or re.search(
+            self.about_movie_words, prev_bot_uttr.get("text", "").lower()))
+        about_books = about_books or book_skill_was_proposed(prev_bot_uttr)
         emotions = dialog['utterances'][-1]['annotations']['emotion_classification']['text']
         if "/new_persona" in dialog["utterances"][-1]["text"]:
             # process /new_persona command
@@ -216,9 +221,6 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("movie_tfidf_retrieval")
             if enable_coronavirus or prev_active_skill == 'coronavirus_skill':
                 skills_for_uttr.append("coronavirus_skill")
-                #  NO FUCKING CONVERT ON THIS TOPIC I AM SAYING
-                if 'convert_reddit' in skills_for_uttr:
-                    skills_for_uttr.remove('convert_reddit')
             if about_music and len(dialog["utterances"]) > 2:
                 skills_for_uttr.append("music_tfidf_retrieval")
             met_book_template = False
@@ -274,6 +276,10 @@ class RuleBasedSkillSelectorConnector:
 
         # always add dummy_skill
         skills_for_uttr.append("dummy_skill")
+        #  no convert when about coronavirus
+        if 'coronavirus_skill' in skills_for_uttr and 'convert_reddit' in skills_for_uttr:
+            skills_for_uttr.remove('convert_reddit')
+
         # (yura): do we really want to always turn small_talk_skill?
         if len(dialog["utterances"]) > 14:
             skills_for_uttr.append("small_talk_skill")

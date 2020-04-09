@@ -82,7 +82,7 @@ class MovieSkillTemplates:
                     pass
         return dialog_subjects
 
-    def extract_mentions(self, uttr, dialog=None):
+    def extract_mentions(self, uttr, dialog=None, find_ignored=False):
         """Extract movies titles, movie persons names and genres from the given utterance
 
         Args:
@@ -96,7 +96,7 @@ class MovieSkillTemplates:
             The third one is a list of mentioned genres or word `genre`.
         """
         # extracting movies titles, movie-persons names
-        movies_ids = self.imdb.find_name(uttr, "movie")
+        movies_ids = self.imdb.find_name(uttr, "movie", find_ignored=find_ignored)
 
         if not(dialog is None) and len(movies_ids) == 0:
             if len(dialog["utterances"]) > 1:
@@ -116,12 +116,12 @@ class MovieSkillTemplates:
         persons = {}
         for profession in self.imdb.professions:
             # profession = "actor" for example
-            persons[profession] = self.imdb.find_name(uttr, profession)
+            persons[profession] = self.imdb.find_name(uttr, profession, find_ignored=find_ignored)
         unique_persons = list_unique_values(persons)
         # e.g. unique_persons = {"name1": ["actor", "director"], "name2": ["actor"]}
 
         # find genres mentions
-        genres = self.imdb.find_name(uttr, "genre")
+        genres = self.imdb.find_name(uttr, "genre", find_ignored=find_ignored)
         if len(genres) > 0:
             genres = list(genres)
 
@@ -388,23 +388,6 @@ class MovieSkillTemplates:
                 found_profs.append(prof)
         return found_profs
 
-    def give_factual_answer(self, dialog):
-        # answer to InfoRequestIntent
-        # qa answers?
-        # TODO: remove "do you know", "tell me"
-        # uttr = dialog["utterances"][-1]["text"]
-        # nouns = dialog["utterances"][-1]["annotations"]["cobot_nounphrases"]
-        # # remove some `please`, "could you" and like this from user's question
-        # uttr = re.sub(r"(\s|,\s)?please,?", "", uttr.lower())
-        # uttr = re.sub(r"(can|could|would)\s(you)?\s?", "", uttr)
-        # # replace `do you know what` to `what`
-        # # replace `search for the genre of this movie` to `what the genre of this movie`
-        # uttr = re.sub(r"((tell\sme|say|guess)(\swhat)?|do\syou\sknow(\swhat)?|look\sfor|find|google|search\sfor)",
-        #               "what", uttr)
-
-        # return self.donotknow()
-        return ""
-
     def faq(self, dialog):
         logger.info("Movie skill FAQ is turned on.")
         response = ""
@@ -520,21 +503,6 @@ class MovieSkillTemplates:
             confidence = self.movie_highest_confidence
 
         return response, result, confidence
-
-    def ask_factual_question(self, dialog):
-        pass
-
-    def request_opinion(self, dialog):
-        pass
-
-    def request_personal_info(self, dialog):
-        pass
-
-    def give_comment(self, dialog):
-        pass
-
-    def recommend(self, dialog):
-        pass
 
     def give_opinion_about_movie(self, movies_ids, attitude_to_movie=None):
         if len(movies_ids) == 1:
@@ -834,20 +802,6 @@ class MovieSkillTemplates:
         confidence = self.zero_confidence
         reply = ""
         if genres == ["Genre"]:
-            # question about preferences only about preferred genres
-            # TODO: questions about favourite genres and not favourite
-            # if re.search(self.NOT_LIKE_PATTERN, uttr):
-            #     reply = self.opinion_about_genres(genres[0], attitude="negative")
-            #     curr_genres = self.imdb.genereate_opinion_about_genre("Genre", attitude="negative")
-            #     add_info = [[g, "genre", "negative"] for g in curr_genres]
-            #     confidence = self.movie_highest_confidence
-            # elif re.search(self.LIKE_PATTERN, uttr):
-            #     reply = self.opinion_about_genres(genres[0], attitude="very_positive")
-            #     curr_genres = self.imdb.genereate_opinion_about_genre("Genre", attitude="very_positive")
-            #     add_info = [[g, "genre", "very_positive"] for g in curr_genres]
-            #     confidence = self.movie_highest_confidence
-            # else:
-            #     reply = "Could you, please, ask in more simple way?"
             pass
         else:
             # assume word genre was mentioned just as context

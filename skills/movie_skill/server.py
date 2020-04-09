@@ -25,11 +25,11 @@ def respond():
     st_time = time.time()
     dialogs = request.json['dialogs']
 
-    responses, confidences, human_attributes, bot_attributes, attrubutes = scenario(dialogs)
+    responses, confidences, human_attributes, bot_attributes, attributes = scenario(dialogs)
     logger.info(responses)
     total_time = time.time() - st_time
     logger.info(f'movie_skill exec time: {total_time:.3f}s')
-    return jsonify(list(zip(responses, confidences, human_attributes, bot_attributes, attrubutes)))
+    return jsonify(list(zip(responses, confidences, human_attributes, bot_attributes, attributes)))
 
 
 if __name__ == '__main__':

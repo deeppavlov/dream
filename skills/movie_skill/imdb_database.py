@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 class IMDb:
     professions = ["actor", "director"]
 
-    def __init__(self, db_path="./databases/imdb_dataset_58k.json", save_folder="../data/"):
+    def __init__(self, db_path="./databases/database_main_info.json", save_folder="../data/"):
         t0 = time.time()
         self.with_ignored_movies_names = {}
         self.without_ignored_movies_names = {}
@@ -177,7 +177,9 @@ class IMDb:
                            "two", "film", "new", "next", "out", "love",
                            "like", "watch", "actress", "less", "want", "abortion",
                            "alexa", "you tell me", "movie movie", "tricks", "movies",
-                           "yes", "action", "i", "maybe", "do you know", "isolation"
+                           "yes", "action", "i", "maybe", "do you know", "isolation",
+                           "something", 'no', 'i am', "what", "is", "it", "what",
+                           "i did not know that"
                            ]:
             try:
                 self.with_ignored_movies_names.pop(proc_title)
@@ -544,6 +546,18 @@ class IMDb:
                 return identifiers
             else:
                 return []
+
+    def get_movie_type(self, movie_id):
+        curr_genres = self.__call__(movie_id).get("genre", [""])
+        curr_genres = [g.lower() for g in curr_genres]
+        if "show" in " ".join(curr_genres).lower():
+            return "show"
+        elif "animation" in curr_genres:
+            return "animation"
+        elif "series" in curr_genres:
+            return "series"
+        else:
+            return "movie"
 
     def generate_opinion_about_movie(self, name: str):
         """
