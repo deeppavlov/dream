@@ -6,6 +6,10 @@ def make_input_data(curr_sent, bot_sent, emotion={'neutral': 0}, intents={"yes":
         "dialogs": [
             {
                 "id": "test",
+                "bot": {"attributes": {}},
+                "human": {"attributes": {}},
+                "human_attributes": {},
+                "bot_attributes": {},
                 'utterances': [
                     {
                         "user_telegram_id": "test", "text": curr_sent,
@@ -69,7 +73,7 @@ def test_positive_scenario():
     data = make_input_data('yes', 'heard about 7 minute workout', intents={"yes": {"confidence": 1, "detected": 1}})
     url = 'http://0.0.0.0:8049/respond'
     response = requests.post(url, json=data).json()
-    assert 'Breaking news' in response[0][0], print(response)
+    assert 'workout' in response[0][0], print(response)
     assert response[0][1] == 1.0, print(response)
 
 

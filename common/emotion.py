@@ -17,9 +17,15 @@ NEGATIVE_EMOTIONS = set(['grief', 'sorrow', 'heartache', 'sadness', 'unhappiness
 POSITIVE_EMOTION = 'positive_emotion'
 NEGATIVE_EMOTION = 'negative_emotion'
 
+HOW_DO_YOU_FEEL = 'How do you feel?'
+
+
+def skill_trigger_phrases():
+    return [HOW_DO_YOU_FEEL]
+
 
 def detect_emotion(prev_bot_utt, user_utt):
-    if 'how do you feel' in prev_bot_utt.get('text', '').lower():
+    if HOW_DO_YOU_FEEL.lower() in prev_bot_utt.get('text', '').lower():
         for w in user_utt['text'].split(" "):
             w = re.sub(r"\W", " ", w.lower()).strip()
             if w in POSITIVE_EMOTIONS:

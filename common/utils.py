@@ -1,7 +1,4 @@
 import re
-from random import random
-from common.books import SWITCH_BOOK_SKILL_PHRASE
-from common.movies import SWITCH_MOVIE_SKILL_PHRASE
 
 
 def get_skill_outputs_from_dialog(utterances, skill_name, activated=False):
@@ -144,13 +141,3 @@ def is_no(annotated_phrase):
     user_phrase = annotated_phrase['text'].lower().strip().replace('.', '')
     is_not_horrible = 'horrible' != user_phrase
     return is_not_horrible and (no_detected or re.search(no_templates, annotated_phrase["text"].lower()))
-
-
-def corona_switch_skill_reply():
-    reply = "Okay! I believe that this coronavirus will disappear! Now it is better to stay home. "
-    r = random()
-    if r < 0.5:
-        reply = reply + SWITCH_BOOK_SKILL_PHRASE
-    else:
-        reply = reply + SWITCH_MOVIE_SKILL_PHRASE
-    return reply
