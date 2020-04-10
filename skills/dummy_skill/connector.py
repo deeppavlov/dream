@@ -125,7 +125,7 @@ def generate_question_not_from_last_responses(dialog):
                 to_remove += [quest]
             if len(linked_question) != 0 and linked_question in prev_bot_uttr["text"].lower():
                 linked_question = ""
-    for quest in to_remove:
+    for quest in set(to_remove):
         to_choose.remove(quest)
 
     if len(linked_question) > 0 and random.random() < LINK_TO_PROB:
