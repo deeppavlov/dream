@@ -37,9 +37,15 @@ def link_to(skills, used_links={}):
         Key is skill_name, value is used links phrases.
         Pass it to prevent selecting identical phrases.
     """
+    random_skill = ''
+    random_phrase = ''
     filtered_phrases_map = dict(skills_phrases_map)
     for skill_name, phrases in used_links:
         filtered_phrases_map[skill_name] = skills_phrases_map[skill_name].difference(set(phrases))
-    random_skill = choice(skills)
-    rand_phrase = choice(list(filtered_phrases_map[random_skill])) or ''
-    return {'phrase': rand_phrase, 'skill': random_skill}
+    if skills:
+        random_skill = choice(skills)
+
+    filtered_phrases = list(filtered_phrases_map[random_skill])
+    if filtered_phrases:
+        random_phrase = choice(filtered_phrases)
+    return {'phrase': random_phrase, 'skill': random_skill}
