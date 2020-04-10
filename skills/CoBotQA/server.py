@@ -9,6 +9,7 @@ import re
 
 import numpy as np
 from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.stem import WordNetLemmatizer
 from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, request, jsonify
 from os import getenv
@@ -44,12 +45,34 @@ with open("./google-english-no-swears.txt", "r") as f:
 
 
 def remove_punct_and_articles(s, lowecase=True):
-    articles = ['a', 'the']
+    articles = ['a', 'an', 'the']
     if lowecase:
         s = s.lower()
     no_punct = ''.join([c for c in s if c not in string.punctuation])
     no_articles = ' '.join([w for w in word_tokenize(no_punct) if w.lower() not in articles])
     return no_articles
+
+
+lemmatizer = WordNetLemmatizer()
+
+
+def get_common_words(a: str, b: str, lemmatize: bool = True) -> set:
+    """Returns set of common words (lemmatized) in strings a and b
+
+    Args:
+        a (str): string a
+        b (str): string b
+        lemmatize (bool, optional): Lemmatize each word. Defaults to True.
+
+    Returns:
+        set: common words in strings a and b
+    """
+    tokens_a = set(word_tokenize(remove_punct_and_articles(a).lower()))
+    tokens_b = set(word_tokenize(remove_punct_and_articles(b).lower()))
+    if lemmatize:
+        tokens_a = {lemmatizer.lemmatize(t) for t in tokens_a}
+        tokens_b = {lemmatizer.lemmatize(t) for t in tokens_b}
+    return tokens_a & tokens_b
 
 
 @app.route("/respond", methods=['POST'])
@@ -149,28 +172,39 @@ def respond():
                           "known as eugen warming"]
 
         if len(response) > 0 and 'skill://amzn1' not in response:
+            sentences = sent_tokenize(response.replace(".,", "."))
             if response in bad_answers or any([bad_substr in response.lower() for bad_substr in bad_subanswers]):
                 confidence = 0.
                 response = ""
-            elif "fact about" in questions[i].lower() or "fact about" in response:
-                # this is a fact from cobotqa itself or requested fact
-                sentences = sent_tokenize(response.replace(".,", "."))
-                if len(sentences[0]) < 100 and "fact about" in sentences[0]:
-                    response = fact_about_replace() + " " + " ".join(sentences[1:2])
-                    subjects = re.findall(r"fact about ([a-zA-Z ]+)", response)
-                    if len(subjects) > 0 and random.random() < ASK_QUESTION_PROB:
-                        # randomly append question about found NP
-                        # cobotqa answer `Here's a fact about Hollywood. Hollywood blablabla.`
-                        response += " " + opinion_request_question()
+            elif len(sentences[0]) < 100 and "fact about" in sentences[0]:
+                # this is a fact from cobotqa itself
+                # cobotqa answer `Here's a fact about Hollywood. Hollywood blablabla.`
+                subjects = re.findall(r"fact about (.+)\.", sentences[0].lower())
+                response = fact_about_replace() + " " + " ".join(sentences[1:2])
+
+                if len(subjects) > 0 and random.random() < ASK_QUESTION_PROB:
+                    # randomly append question about found NP
+                    response += " " + opinion_request_question()
+
+                if len(subjects) > 0 and len(get_common_words(subjects[0], questions[i])) > 0:
+                    # in case if subject in response is same as in user question
                     confidence = 0.7
                 else:
-                    response = " ".join(sentences[:1])
-                    # check this is requested `fact about NP/NE`
-                    subjects = re.findall(r"fact about ([a-zA-Z ]+)", questions[i].lower())
-                    if len(subjects) > 0 and random.random() < ASK_QUESTION_PROB:
-                        # randomly append question about requested fact
-                        response += " " + opinion_request_question()
+                    confidence = 0.3
+            elif "fact about" in questions[i].lower():
+                response = " ".join(sentences[:1])
+                # check this is requested `fact about NP/NE`
+                subjects = re.findall(r"fact about (.+)", questions[i].lower())
+
+                if len(subjects) > 0 and random.random() < ASK_QUESTION_PROB:
+                    # randomly append question about requested fact
+                    response += " " + opinion_request_question()
+
+                if len(subjects) > 0 and len(get_common_words(subjects[0], response)) > 0:
+                    # in case if requested subject is in response
                     confidence = 0.7
+                else:
+                    confidence = 0.3
             elif any(substr in response for substr in
                      ["Here’s something I found", "Here's what I found", "According to "]):
                 confidence = 0.7

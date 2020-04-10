@@ -5,7 +5,7 @@ RUN mkdir /src/common
 
 COPY ./skills/CoBotQA/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
-RUN python -c "import nltk; nltk.download('punkt')"
+RUN python -c "import nltk; nltk.download('punkt'); nltk.download('wordnet')"
 
 COPY ./skills/CoBotQA/ /src/
 COPY ./common/ /src/common/
