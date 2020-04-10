@@ -150,9 +150,9 @@
 <category><pattern>WHAT IS MY LOCATION</pattern>
 <template><get name="location"/>, Earth.</template>
 </category>
-<category><pattern>WHAT IS MY HOMETOWN</pattern>
+<!-- <category><pattern>WHAT IS MY HOMETOWN</pattern>
 <template>You told me you are in <get name="location"/>.</template>
-</category>
+</category> -->
 <category><pattern>WHAT IS MY JOB</pattern>
 <template>You work with computers.</template>
 </category>
@@ -201,9 +201,9 @@
 <category><pattern>WHAT IS MY IDEA</pattern>
 <template>It was your idea.</template>
 </category>
-<category><pattern>WHAT COUNTRY DO I *</pattern>
+<!-- <category><pattern>WHAT COUNTRY DO I *</pattern>
 <template>You told me you are in <get name="location"/>.</template>
-</category>
+</category> -->
 <category><pattern>WHAT DO I LOOK LIKE</pattern>
 <template><random><li>You look like a computer programmer.</li><li>You said you look like <get name="looklike"/>.</li></random></template>
 </category>
@@ -3265,9 +3265,9 @@
 <category><pattern>64 M *</pattern>
 <template><srai>I am 64 years old</srai> <srai>I am male</srai> <srai>I am in <star/></srai></template>
 </category>
-<category><pattern>WHICH COUNTRY DO I *</pattern>
+<!-- <category><pattern>WHICH COUNTRY DO I *</pattern>
 <template>You told me you are in <get name="location"/>.</template>
-</category>
+</category> -->
 <category><pattern>39 F *</pattern>
 <template><srai>I am 39 years old</srai> <srai>I am female</srai> <srai>I am in <star/></srai></template>
 </category>
@@ -3313,9 +3313,9 @@
 <category><pattern>56 M *</pattern>
 <template><srai>I am 56 years old</srai> <srai>I am male</srai> <srai>I am in <star/></srai></template>
 </category>
-<category><pattern>WHERE DO I LIVE</pattern>
+<!-- <category><pattern>WHERE DO I LIVE</pattern>
 <template>You told me you are in <get name="location"/>.</template>
-</category>
+</category> -->
 <category><pattern>WHERE DID I HEAR *</pattern>
 <template><get name="heard"/></template>
 </category>

@@ -194,12 +194,14 @@ def tell_my_info(dialog, which_info="name"):
                                            r"how( [a-zA-z ]+)?call me)",
                                            curr_user_uttr),
                          "location": re.search(r"((what is|what's|whats|tell me|you know|you remember|memorize|say) "
-                                               r"my location|"
+                                               r"my (location|country|city|town)|"
                                                r"where (am i|i am)(\snow)?|"
-                                               r"where( do)?i live|where( am)?i( am)? living)",
+                                               r"where( do)?i live|where( am)?i( am)? living)|"
+                                               r"(what|which) (country|city|town)( do)? (i|am i|i am)",
                                                curr_user_uttr),
                          "homeland": re.search(r"((what is|what's|whats|tell me|you know|you remember|memorize|say) "
-                                               r"my (home\s?land|mother\s?land|native\s?land|birth\s?place)|"
+                                               r"my (home\s?land|mother\s?land|home\s?town|native\s?land"
+                                               r"|birth\s?place)|"
                                                r"where (am i|i am) from)",
                                                curr_user_uttr)}
 
