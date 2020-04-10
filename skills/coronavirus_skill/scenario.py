@@ -339,6 +339,7 @@ class CoronavirusSkillScenario:
                     stay_home_request = is_staying_home_requested(dialog['utterances'][-2], dialog['utterances'][-1])
                 else:
                     last_bot_phrase = ''
+                    stay_home_request = False
                 last_utterance = dialog['utterances'][-1]
                 last_utterances = []
                 #  logging.info('*#*')
