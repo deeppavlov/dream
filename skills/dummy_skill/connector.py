@@ -10,6 +10,7 @@ from collections import defaultdict
 import random
 from random import choice
 from typing import Callable, Dict
+from copy import copy
 
 from common.universal_templates import opinion_request_question
 from common.link import link_to, skills_phrases_map
@@ -113,22 +114,27 @@ def generate_question_not_from_last_responses(dialog):
     if len(available_links) > 0:
         # if we still have skill to link to, try to generate linking question
         linked_question = link_to(list(available_links)).get("phrase", "")
-        to_choose = [linked_question] if len(linked_question) > 0 and random.random() < LINK_TO_PROB \
-            else NORMAL_QUESTIONS
     else:
-        to_choose = NORMAL_QUESTIONS
+        linked_question = ""
 
-    # remove questions used previously in the dialog
+    to_choose = copy(NORMAL_QUESTIONS)
     to_remove = []
-    bot_utterances = [uttr["text"].lower() for uttr in dialog["bot_utterances"]]
-    for prev_bot_uttr in bot_utterances:
+    for prev_bot_uttr in dialog["bot_utterances"]:
         for i, quest in enumerate(to_choose):
-            if quest.lower() in prev_bot_uttr:
+            if quest.lower() in prev_bot_uttr["text"].lower():
                 to_remove += [quest]
+            if len(linked_question) != 0 and linked_question in prev_bot_uttr["text"].lower():
+                linked_question = ""
     for quest in to_remove:
         to_choose.remove(quest)
 
-    result = choice(to_choose) if len(to_choose) > 0 else choice(NORMAL_QUESTIONS)
+    if len(linked_question) > 0 and random.random() < LINK_TO_PROB:
+        result = linked_question
+    else:
+        if len(to_choose) > 0:
+            result = choice(to_choose)
+        else:
+            result = choice(NORMAL_QUESTIONS)
     return result
 
 
