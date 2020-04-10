@@ -189,6 +189,11 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
         dockercompose_cmd exec -T -u $(id -u) intent_catcher python test.py
     fi
 
+    if container_is_started short_story_skill; then
+        echo "Run tests for short_story_skill"
+        dockercompose_cmd exec -T -u $(id -u) short_story_skill python /src/test.py
+    fi
+
     if container_is_started comet_atomic; then
         echo "Run tests for comet_atomic"
         dockercompose_cmd exec -T -u $(id -u) comet_atomic python /comet/test_atomic.py

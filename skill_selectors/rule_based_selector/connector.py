@@ -109,11 +109,13 @@ class RuleBasedSkillSelectorConnector:
                 for k, v in dialog["utterances"][-1]["annotations"]["intent_catcher"].items()
                 if k
                 not in {"opinion_request", "yes", "no", "tell_me_more", "doing_well", "weather_forecast_intent",
-                        "topic_switching", "lets_chat_about", "stupid"}
+                        "topic_switching", "lets_chat_about", "stupid", "tell_me_a_story"}
             ]
         )
 
         ner_detected = len(list(chain.from_iterable(dialog["utterances"][-1]["annotations"]["ner"]))) > 0
+        tell_me_a_story_detected = dialog["utterances"][-1]["annotations"]["intent_catcher"].get("tell_me_a_story", {
+        }).get("detected", 0)
 
         cobot_topics = set(dialog["utterances"][-1]["annotations"]["cobot_topics"]["text"])
         sensitive_topics_detected = any([t in self.sensitive_topics for t in cobot_topics])
@@ -280,6 +282,9 @@ class RuleBasedSkillSelectorConnector:
                 if dialog["utterances"][-1]["annotations"]["asr"]["asr_confidence"] == "very_low":
                     skills_for_uttr = ["misheard_asr"]
 
+            if tell_me_a_story_detected or prev_active_skill == 'short_story_skill':
+                # if it's detected - only telling story
+                skills_for_uttr = ["short_story_skill"]
         # always add dummy_skill
         skills_for_uttr.append("dummy_skill")
         #  no convert when about coronavirus

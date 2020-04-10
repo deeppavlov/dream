@@ -399,6 +399,18 @@ def reddit_ner_formatter_dialog(dialog: Dict):
     ]
 
 
+def short_story_formatter_dialog(dialog: Dict):
+    # Used by: short_story_skill
+    return [
+        {
+            'intents': dialog['human_utterances'][-1]['annotations']['intent_catcher'],
+            'human_sentence': dialog['human_utterances'][-1]['text'],
+            'bot_sentence': dialog["bot_utterances"][-1]['text']
+
+        }
+    ]
+
+
 def intent_responder_formatter_dialog(dialog: Dict):
     # Used by: intent_responder
     intents = list(dialog['utterances'][-1]['annotations']['intent_catcher'].keys())

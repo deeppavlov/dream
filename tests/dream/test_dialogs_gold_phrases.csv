@@ -29,6 +29,7 @@
  "no"
  "happy."
  "yeah"
+"short_story_skill;dummy_skill" "can you tell me a story?"
 "intent_responder" "what else can you do?" "I'm a newborn socialbot" "#+#what_can_you_do"
 "program_y;dummy_skill;meta_script_skill;small_talk_skill" "let's talk about" "I misheard you. what's it that you'd like to chat about?"
  "which 1"
