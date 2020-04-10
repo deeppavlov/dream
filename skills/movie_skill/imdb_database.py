@@ -179,7 +179,8 @@ class IMDb:
                            "alexa", "you tell me", "movie movie", "tricks", "movies",
                            "yes", "action", "i", "maybe", "do you know", "isolation",
                            "something", 'no', 'i am', "what", "is", "it", "what",
-                           "i did not know that"
+                           "i did not know that", "cage", "bean", "back", "games",
+                           "stronger", "see", "really"
                            ]:
             try:
                 self.with_ignored_movies_names.pop(proc_title)
