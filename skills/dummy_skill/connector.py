@@ -12,6 +12,7 @@ from random import choice
 from typing import Callable, Dict
 
 from common.universal_templates import opinion_request_question
+from common.link import link_to, skills_phrases_map
 import sentry_sdk
 from os import getenv
 
@@ -23,6 +24,8 @@ logger = logging.getLogger(__name__)
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
 ASK_QUESTION_PROB = 0.7
+ASK_NORMAL_QUESTION_PROB = 0.5
+LINK_TO_PROB = 0.5
 
 np_ignore_list = ["'s", 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're",
                   "you've", "you'll", "you'd", 'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself',
@@ -51,10 +54,10 @@ np_ignore_expr = re.compile("(" + "|".join([r'\b%s\b' % word for word in np_igno
 rm_spaces_expr = re.compile(r'\s\s+')
 
 donotknow_answers = [
-    "I really do not know what to answer.",
-    "Sorry, probably, I didn't get what you meant.",
-    "I didn't get it. Sorry.",
-    "Let's talk about something else."
+    "What do you want to talk about?",
+    "I am a bit confused. What would you like to chat about?",
+    "Sorry, probably, I didn't get what you meant. What do you want to talk about?",
+    "Sorry, I didn't catch that. What would you like to chat about?"
 ]
 
 with open("skills/dummy_skill/questions_map.json", "r") as f:
@@ -68,6 +71,9 @@ with open("skills/dummy_skill/facts_map.json", "r") as f:
 
 with open("skills/dummy_skill/nounphrases_facts_map.json", "r") as f:
     NP_FACTS = json.load(f)
+
+with open("skills/dummy_skill/normal_questions.json", "r") as f:
+    NORMAL_QUESTIONS = json.load(f)
 
 
 class RandomTopicResponder:
@@ -98,6 +104,34 @@ questions_generator = RandomTopicResponder("skills/dummy_skill/questions_with_to
 facts_generator = RandomTopicResponder("skills/dummy_skill/facts_with_topics.csv", 'topic', 'fact')
 
 
+def generate_question_not_from_last_responses(dialog):
+    # get previous active skills
+    prev_active_skills = [uttr.get("active_skill", "") for uttr in dialog["bot_utterances"]
+                          if uttr.get("active_skill", "") != ""]
+    # remove prev active skills from those we can link to
+    available_links = set(skills_phrases_map.keys()).difference(set(prev_active_skills))
+    if len(available_links) > 0:
+        # if we still have skill to link to, try to generate linking question
+        linked_question = link_to(list(available_links)).get("phrase", "")
+        to_choose = [linked_question] if len(linked_question) > 0 and random.random() < LINK_TO_PROB \
+            else NORMAL_QUESTIONS
+    else:
+        to_choose = NORMAL_QUESTIONS
+
+    # remove questions used previously in the dialog
+    to_remove = []
+    bot_utterances = [uttr["text"].lower() for uttr in dialog["bot_utterances"]]
+    for prev_bot_uttr in bot_utterances:
+        for i, quest in enumerate(to_choose):
+            if quest.lower() in prev_bot_uttr:
+                to_remove += [quest]
+    for quest in to_remove:
+        to_choose.remove(quest)
+
+    result = choice(to_choose) if len(to_choose) > 0 else choice(NORMAL_QUESTIONS)
+    return result
+
+
 class DummySkillConnector:
     async def send(self, payload: Dict, callback: Callable):
         try:
@@ -124,21 +158,33 @@ class DummySkillConnector:
             confs += [0.5]
             attrs += [{"type": "dummy"}]
 
-            questions_same_nps = []
-            for i, nphrase in enumerate(curr_nounphrases):
-                for q_id in NP_QUESTIONS.get(nphrase, []):
-                    questions_same_nps += [QUESTIONS_MAP[str(q_id)]]
+            if len(dialog["utterances"]) > 14:
+                questions_same_nps = []
+                for i, nphrase in enumerate(curr_nounphrases):
+                    for q_id in NP_QUESTIONS.get(nphrase, []):
+                        questions_same_nps += [QUESTIONS_MAP[str(q_id)]]
 
-            if len(questions_same_nps) > 0:
-                logger.info("Found special nounphrases for questions. Return question with the same nounphrase.")
-                cands += [choice(questions_same_nps)]
-                confs += [0.6]
-                attrs += [{"type": "nounphrase_question"}]
+                if len(questions_same_nps) > 0:
+                    logger.info("Found special nounphrases for questions. Return question with the same nounphrase.")
+                    cands += [choice(questions_same_nps)]
+                    confs += [0.6]
+                    attrs += [{"type": "nounphrase_question"}]
+                else:
+                    if random.random() < ASK_NORMAL_QUESTION_PROB:
+                        logger.info("No special nounphrases for questions. Return question of the same topic.")
+                        cands += [questions_generator.get_random_text(curr_topics)]
+                        confs += [0.55]
+                        attrs += [{"type": "topic_question"}]
+                    else:
+                        logger.info("No special nounphrases for questions. Return normal question.")
+                        cands += [generate_question_not_from_last_responses(dialog)]
+                        confs += [0.7]
+                        attrs += [{"type": "normal_question"}]
             else:
-                logger.info("No special nounphrases for questions. Return question of the same topic.")
-                cands += [questions_generator.get_random_text(curr_topics)]
-                confs += [0.55]
-                attrs += [{"type": "topic_question"}]
+                logger.info("Dialog begins. No special nounphrases for questions. Return normal question.")
+                cands += [generate_question_not_from_last_responses(dialog)]
+                confs += [0.7]
+                attrs += [{"type": "normal_question"}]
 
             facts_same_nps = []
             for i, nphrase in enumerate(curr_nounphrases):
