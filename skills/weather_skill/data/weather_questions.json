@@ -2,7 +2,7 @@
   "snow":{
     "synonyms":["snow", "snowy"],
     "question":"Let me guess - you like skiing?",
-    "answer":"Anyway, the best skiing and snowboard resorts are in Austria. But unfortunately, because of coronavirus, it’s dangerous to travel!"
+    "answer":"I've heard that the best skiing and snowboard resorts are in Austria. But unfortunately, because of coronavirus, it’s dangerous to travel!"
   },
   "cold":{
     "synonyms":["cold", "freeze", "frost", "freezing", "frosty", "cool"],
@@ -12,12 +12,12 @@
   "cool":{
     "synonyms":["cool", "chill"],
     "question":"I prefer cool weather too! Let me guess - you like hiking?",
-    "answer":"Anyway, the beauty about hiking is that it’s truly an activity for everyone. Whether you’re young or old, an expert or an amateur, there’s a trail out there that will be perfect for you.. But unfortunately, because of coronavirus, it’s dangerous to travel now!"
+    "answer":"To me, the beauty about hiking is that it’s truly an activity for everyone. Whether you’re young or old, an expert or an amateur, there’s a trail out there that will be perfect for you.. But unfortunately, because of coronavirus, it’s dangerous to travel now!"
   },
   "cloud":{
     "synonyms":["cloudy", "cloud"],
     "question":"Let me guess - you like hiking?",
-    "answer":"Anyway, the beauty about hiking is that it’s truly an activity for everyone. Whether you’re young or old, an expert or an amateur, there’s a trail out there that will be perfect for you.. But unfortunately, because of coronavirus, it’s dangerous to travel now!"
+    "answer":"To me, the beauty about hiking is that it’s truly an activity for everyone. Whether you’re young or old, an expert or an amateur, there’s a trail out there that will be perfect for you.. But unfortunately, because of coronavirus, it’s dangerous to travel now!"
   },
   "hot":{
     "synonyms":["hot", "heat"],
@@ -27,7 +27,7 @@
   "warm":{
     "synonyms":["warm", "warmy"],
     "question":"Let me guess - you like hiking?",
-    "answer":"Anyway, the beauty about hiking is that it’s truly an activity for everyone. Whether you’re young or old, an expert or an amateur, there’s a trail out there that will be perfect for you...But unfortunately, because of coronavirus, it’s dangerous to travel now!"
+    "answer":"To me, the beauty about hiking is that it’s truly an activity for everyone. Whether you’re young or old, an expert or an amateur, there’s a trail out there that will be perfect for you... But unfortunately, because of coronavirus, it’s dangerous to travel now!"
   },
   "rain":{
     "synonyms":["rain", "rainy"],
