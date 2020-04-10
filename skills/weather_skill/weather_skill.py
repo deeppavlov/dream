@@ -5,6 +5,9 @@ import sentry_sdk
 import pprint
 from city_slot import OWMCitySlot
 from common.constants import CAN_CONTINUE, MUST_CONTINUE
+from common.link import link_to
+from common.weather import is_weather_for_homeland_requested
+
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -130,6 +133,7 @@ class WeatherSkill:
         """Method of a dialog analysis"""
 
         question_phrase = "What weather do you prefer? Warm, cold, rain, snow, hot?"
+        city_slot_requested = 'weather_forecast_interaction_city_slot_requested'
 
         # 1. check intent of weather request in annotations
         # 2. retrieve a city slot from usermessage (use NER? or Personal Info skill)
@@ -137,6 +141,7 @@ class WeatherSkill:
         current_reply = ""
         human_attr = {}
         bot_attr = {}
+        weather_for_homeland_requested = False
         ######################################################################
         #
         d_man = DialogDataManager(dialog)
@@ -151,6 +156,10 @@ class WeatherSkill:
             # check if weather intent triggered in last utterance:
             ############################################################
             annotations = dialog["utterances"][-1]["annotations"]
+            if len(dialog["utterances"]) > 1:
+                prev_bot_utt = dialog["utterances"][-2]
+                user_utt = dialog["utterances"][-1]
+                weather_for_homeland_requested = is_weather_for_homeland_requested(prev_bot_utt, user_utt)
             if annotations.get("intent_catcher", {}).get("weather_forecast_intent", {}).get(
                     "detected", 0) == 1:
                 logger.warning("WEATHER FORECAST INTENT DETECTED")
@@ -164,7 +173,7 @@ class WeatherSkill:
                     ############################################################
 
                     context_dict['weather_forecast_interaction_city_slot_raw'] = city_str
-                    context_dict['weather_forecast_interaction_city_slot_requested'] = False
+                    context_dict[city_slot_requested] = False
                     context_dict['can_continue'] = MUST_CONTINUE
                     context_dict['weather_forecast_interaction_question_asked'] = True
 
@@ -177,16 +186,19 @@ class WeatherSkill:
                     ############################################################
                     # ask question:
                     current_reply = "Which city would you like a weather forecast for?"
-                    context_dict['weather_forecast_interaction_city_slot_requested'] = True
+                    context_dict[city_slot_requested] = True
                     curr_confidence = QUESTION_CONFIDENCE
                 return current_reply, curr_confidence, human_attr, bot_attr, context_dict
-            elif context_dict.get("weather_forecast_interaction_city_slot_requested", False):
+            elif context_dict.get(city_slot_requested, False) or weather_for_homeland_requested:
                 logger.warning("WEATHER FORECAST city_slot_requested already! Handling!")
                 ############################################################
                 # check if we handling response for the question about city slot
                 ############################################################
                 city = d_man.retrieve_location_entity_from_utterance()
-                context_dict['weather_forecast_interaction_city_slot_requested'] = False
+                context_dict[city_slot_requested] = False
+
+                if weather_for_homeland_requested:
+                    city = dialog["human"]["profile"].get('location')
 
                 if city:
                     # TODO announce fulfilled intent
@@ -244,7 +256,8 @@ class WeatherSkill:
                     curr_confidence = SMALLTALK_CONFIDENCE
                     weather = context_dict["weather_forecast_interaction_preferred_weather"]
                     context_dict['weather_forecast_interaction_preferred_weather'] = False
-                    current_reply = self.weather_dict[weather]['answer']
+                    link = link_to(['coronavirus_skill'], {})['phrase']
+                    current_reply = self.weather_dict[weather]['answer'] + " " + link
                 else:
                     # don't talk about hiking/swimming/skiing/etc.
                     pass

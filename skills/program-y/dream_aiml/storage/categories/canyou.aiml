@@ -42,5 +42,23 @@
     </template>
   </category>
 
+  <category>
+    <pattern>ASK ME WHERE I AM FROM</pattern>
+    <template>
+      <random>
+        <li>Where are you from?</li>
+      </random>
+    </template>
+  </category>
+
+  <category>
+    <pattern>ASK ME HOW AM I DOING AT HOME DURING CORONOVARIS</pattern>
+    <template>
+      <random>
+        <li>Are you staying at home and working remotely to avoid coronavirus?</li>
+      </random>
+    </template>
+  </category>
+
 
 </aiml>

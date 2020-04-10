@@ -5,9 +5,10 @@ import json
 import logging
 from os import getenv
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
-from common.news import BREAKING_NEWS
 from common.utils import is_yes, is_no
 from common.emotion import detect_emotion
+from common.link import link_to
+from collections import defaultdict
 
 
 ENTITY_SERVICE_URL = getenv('COBOT_ENTITY_SERVICE_URL')
@@ -22,9 +23,8 @@ physical_activites = ('I read that physical activities increase '
                       'your endorphins level! Have you ever heard about 7 minute workout?')
 feel_better = 'Hmm… What do you think may make you feel better?'
 seven_minute_descr = ('I suggest you to type 7-minute workout in youtube to see how it’s done. '
-                      'It’s a short, rapid-fire series of exercises that use your own body weight. '
-                      f'{BREAKING_NEWS}')
-user_knows_7minute = (f"The power of this workout is that it's simple to do. {BREAKING_NEWS}")
+                      'It’s a short, rapid-fire series of exercises that use your own body weight. ')
+user_knows_7minute = (f"The power of this workout is that it's simple to do. ")
 string_surprise = 'I feel that you are surprised. But you are not the first surprised man on the Earth.' \
                   "The Shakespeare wrote: 'There are more things in heaven and earth, Horatio, " \
                   "Than are dreamt of in your philosophy.' He wrote it in 'Hamlet' four centuries ago. " \
@@ -90,22 +90,20 @@ class EmotionSkillScenario:
 
     def _check_for_repetition(self, reply, prev_replies_for_user):
         reply = reply.lower()
-        lower_news = BREAKING_NEWS.lower()
         lower_physical = physical_activites.lower()
         if reply in prev_replies_for_user:
             return True
         for prev_reply in prev_replies_for_user:
-            if lower_news in prev_reply and lower_news in reply:
-                return True
             if lower_physical in prev_reply and lower_physical in reply:
                 return True
         return False
 
-    def _get_reply_and_confidence(self, prev_bot_phrase, intent, most_likely_emotion):
+    def _get_reply_and_conf(self, prev_bot_phrase, intent, most_likely_emotion, used_links):
         is_joke_state = 'can i tell you a joke' in prev_bot_phrase
         is_feel_better_now_state = 'do you feel better now' in prev_bot_phrase
         is_what_make_feel_better_state = 'may make you feel better' in prev_bot_phrase
         is_heard_7_minute_state = 'heard about 7 minute workout' in prev_bot_phrase
+        link = None
 
         reply, confidence = "", 0
         if intent == 'yes':
@@ -119,7 +117,8 @@ class EmotionSkillScenario:
                 reply = physical_activites
                 confidence = 1.0
             elif is_heard_7_minute_state:
-                reply = user_knows_7minute
+                link = link_to(['movie_skill', 'book_skill'], used_links)
+                reply = user_knows_7minute + link['phrase']
                 confidence = 1.0
         elif intent == 'no':
             if is_joke_state or is_feel_better_now_state:
@@ -128,22 +127,28 @@ class EmotionSkillScenario:
                 reply = physical_activites
                 confidence = 1.0
             elif is_heard_7_minute_state:
-                reply = seven_minute_descr
+                link = link_to(['movie_skill', 'book_skill'], used_links)
+                reply = seven_minute_descr + link['phrase']
                 confidence = 1.0
         else:
             if is_what_make_feel_better_state:
                 reply = physical_activites
                 confidence = 1.0
-        logger.info(f"_get_reply_and_confidence {prev_bot_phrase}; {intent}; {most_likely_emotion};"
+        logger.info(f"_get_reply_and_conf {prev_bot_phrase}; {intent}; {most_likely_emotion};"
                     f" reply: {reply}")
-        return reply, confidence
+        return reply, confidence, link
 
     def __call__(self, dialogs):
         texts = []
         confidences = []
         attrs = []
+        human_attrs = []
+        bot_attrs = []
         for dialog in dialogs:
             try:
+                bot_attributes = dialog["bot"]["attributes"]
+                bot_attributes["used_links"] = bot_attributes.get("used_links", defaultdict(list))
+                human_attributes = dialog["human"]["attributes"]
                 attr = {"can_continue": CAN_CONTINUE}
                 annotated_user_phrase = dialog['utterances'][-1]
                 most_likely_emotion = self._get_user_emotion(annotated_user_phrase)
@@ -154,11 +159,14 @@ class EmotionSkillScenario:
 
                 logger.info(f"user sent: {annotated_user_phrase['text']}")
                 if is_yes(annotated_user_phrase):
-                    reply, confidence = self._get_reply_and_confidence(prev_bot_phrase, 'yes', most_likely_emotion)
+                    reply, confidence, link = self._get_reply_and_conf(
+                        prev_bot_phrase, 'yes', most_likely_emotion, bot_attributes["used_links"])
                 elif is_no(annotated_user_phrase):
-                    reply, confidence = self._get_reply_and_confidence(prev_bot_phrase, 'no', most_likely_emotion)
+                    reply, confidence, link = self._get_reply_and_conf(
+                        prev_bot_phrase, 'no', most_likely_emotion, bot_attributes["used_links"])
                 else:
-                    reply, confidence = self._get_reply_and_confidence(prev_bot_phrase, 'other', most_likely_emotion)
+                    reply, confidence, link = self._get_reply_and_conf(
+                        prev_bot_phrase, 'other', most_likely_emotion, bot_attributes["used_links"])
                     if not reply and most_likely_emotion:
                         reply = random.choice(phrase_dict[most_likely_emotion])
                         confidence = min(0.98, self.precision[most_likely_emotion])
@@ -177,8 +185,12 @@ class EmotionSkillScenario:
                 confidence = 0.95
             if not reply or confidence == 0:
                 attr['can_continue'] = CAN_NOT_CONTINUE
+            if link:
+                bot_attributes["used_links"][link["skill"]].append(link['phrase'])
             texts.append(reply)
             confidences.append(confidence)
             attrs.append(attr)
+            human_attrs.append(human_attributes)
+            bot_attrs.append(bot_attributes)
 
-        return texts, confidences, attrs  # , human_attributes, bot_attributes, attributes
+        return texts, confidences, human_attrs, bot_attrs, attrs

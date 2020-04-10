@@ -11,7 +11,8 @@ import threading
 import time
 from datetime import datetime, timedelta
 from collections import defaultdict
-from common.utils import is_yes, is_no, corona_switch_skill_reply
+from common.coronavirus import corona_switch_skill_reply, is_staying_home_requested
+from common.utils import is_yes, is_no
 from common.utils import check_about_death, about_virus, quarantine_end
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -53,6 +54,12 @@ ORIGIN_PHRASE = 'According to the scientific data, coronavirus COVID 19 is a pro
 WHAT_PHRASE = 'Coronavirus COVID 19 is an infectious disease. ' \
               'Its common symptoms include fever, cough, and shortness of breath. ' \
               'While the majority of cases result in mild symptoms, some cases can be lethal.'
+WORK_AND_STAY_HOME_PHRASE = ("Every day that you practice social distancing during the pandemic, "
+                             "you are doing someone else (maybe hundreds or even thousands of someone elses) "
+                             "a great kindness. So if you can, stay home. It’s the easiest act of "
+                             "heroism you’ll ever do. Would you like to learn more about coronavirus?")
+CDC_STAY_HOME_RECOMMENDATION = ("CDC recommends Americans stay at home. "
+                                "If you absolutely have to go outside please wear masks.")
 
 for city_name in CITIES.keys():
     val_, i_ = 0, 0
@@ -329,6 +336,7 @@ class CoronavirusSkillScenario:
                 confidence = 0
                 if len(dialog['utterances']) >= 2:
                     last_bot_phrase = dialog['utterances'][-2]['text'].lower()
+                    stay_home_request = is_staying_home_requested(dialog['utterances'][-2], dialog['utterances'][-1])
                 else:
                     last_bot_phrase = ''
                 last_utterance = dialog['utterances'][-1]
@@ -392,7 +400,11 @@ class CoronavirusSkillScenario:
                     else:
                         logging.info('Answer is not YES')
                         reply, confidence = '', 0
-
+                elif stay_home_request:
+                    if is_yes(last_utterance):
+                        reply, confidence = WORK_AND_STAY_HOME_PHRASE, 1.0
+                    elif is_no(last_utterance):
+                        reply, confidence = CDC_STAY_HOME_RECOMMENDATION, 1.0
                 else:
                     detected_state = None
                     total_names = list(STATES.keys()) + [j[0].lower() for j in COUNTIES.keys()] + list(CITIES.keys())

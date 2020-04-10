@@ -6,9 +6,11 @@ import re
 
 from flask import Flask, request, jsonify
 from os import getenv
+from random import choice
 import sentry_sdk
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
+from common.link import link_to
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -99,10 +101,12 @@ def process_info(dialog, which_info="name"):
     }
     repeat_info_phrases = {"name": "I didn't get your name. Could you, please, repeat it.",
                            "location": "I didn't get your location. Could you, please, repeat it.",
-                           "homeland": "I didn't get your homeland. Could you, please, repeat it."}
+                           "homeland": "I didn't get where you have been born. Could you please repeat it?"}
 
     response_phrases = {"name": "Nice to meet you, ",
-                        "location": "Cool! What do you like about this place?",
+                        "location": choice(
+                            [link_to(["weather_skill"], {})['phrase']]
+                        ),
                         "homeland": "Is that where you live now?"}
 
     got_info = False
@@ -127,7 +131,7 @@ def process_info(dialog, which_info="name"):
                                             curr_user_annot=dialog["utterances"][-3]["annotations"],
                                             prev_bot_uttr=dialog["utterances"][-4]["text"].lower())
             human_attr["location"] = found_homeland
-        response = "Cool! What do you like about this place?"
+        response = response_phrases["location"]
         confidence = 1.0
         got_info = True
         attr["can_continue"] = CAN_NOT_CONTINUE
@@ -172,7 +176,7 @@ def process_info(dialog, which_info="name"):
                     confidence = 1.0
                     attr["can_continue"] = MUST_CONTINUE
                 else:
-                    response = f"Cool! What do you like about this place?"
+                    response = response_phrases["location"]
                     confidence = 1.0
                     attr["can_continue"] = CAN_NOT_CONTINUE
 
