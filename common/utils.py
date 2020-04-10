@@ -123,7 +123,8 @@ def about_virus(annotated_phrase):
                                                                 'code nineteen']])
 
 
-yes_templates = re.compile(r"(\byes\b|\bsure\b|go ahead|yeah|\bok\b|okay|why not|tell me)")
+yes_templates = re.compile(r"(\byes\b|\byup\b|\byep\b|\bsure\b|go ahead|\byeah\b|\bok\b|okay|"
+                           r"why not|tell me|i agree|i think so)")
 
 
 def is_yes(annotated_phrase):
@@ -132,7 +133,7 @@ def is_yes(annotated_phrase):
     return yes_detected or re.search(yes_templates, annotated_phrase["text"].lower())
 
 
-no_templates = re.compile(r"(\bno\b|\bnot\b|no way|don't|no please)")
+no_templates = re.compile(r"(\bno\b|\bnot\b|no way|don't|no please|i disagree)")
 
 
 def is_no(annotated_phrase):

@@ -408,10 +408,21 @@ class MovieSkillScenario:
                     response = "Great! All those people are from main cast."
                 else:
                     response = "Great! This person is from main cast."
+            elif is_yes(curr_user_uttr):
+                if "Sorry, I don't know" in result or len(result.strip()) == 0:
+                    response = f"Great! {result}"
+                else:
+                    response = f"Great! Because I don't know actually."
             elif is_no(curr_user_uttr):
-                response = f"{result}"
+                if "Sorry, I don't know" in result or len(result.strip()) == 0:
+                    response = f"Seems like I also can't find this information."
+                else:
+                    response = f"{result}"
             else:
-                response = f"Oops! No. {result}"
+                if "Sorry, I don't know" in result or len(result.strip()) == 0:
+                    response = f"Never mind, I can't verify this information now."
+                else:
+                    response = f"Oops! No. {result}"
         elif "the year of release of" in question_text:
             result = self.templates.imdb.get_info_about_movie(movie_title, "year")
             if result is not None:
@@ -426,11 +437,19 @@ class MovieSkillScenario:
                     year = "Haha! I actually also do not know it."
 
             if str(year) in curr_user_uttr["text"].lower():
-                response = "Exactly! You correctly named the release year."
+                response = "Exactly! Correct."
+            elif is_yes(curr_user_uttr):
+                response = f"Great! {result}"
             elif is_no(curr_user_uttr):
-                response = f"{result}"
+                if len(result) > 0:
+                    response = f"{result}"
+                else:
+                    response = f"{year}"
             else:
-                response = f"Oops! No. {result}"
+                if len(result) > 0:
+                    response = f"Oops! No. {result}"
+                else:
+                    response = f"{year}"
         elif "the genre of the" in question_text:
             result = self.templates.imdb.get_info_about_movie(movie_title, "genre")
             if result is not None:
@@ -442,10 +461,21 @@ class MovieSkillScenario:
                 result = send_cobotqa(f"genre of {movie_type} {movie_title}?")
             if len(mentioned_genres) > 0 and any([name in result for name in mentioned_genres]):
                 response = f"Great! {result}"
+            elif is_yes(curr_user_uttr):
+                if "Sorry, I don't know" in result or len(result.strip()) == 0:
+                    response = f"Great! Because I don't know actually."
+                else:
+                    response = f"Great! {result}"
             elif is_no(curr_user_uttr):
-                response = f"{result}"
+                if "Sorry, I don't know" in result or len(result.strip()) == 0:
+                    response = f"Seems like I also can't find this information."
+                else:
+                    response = f"{result}"
             else:
-                response = f"Oops! No. {result}"
+                if "Sorry, I don't know" in result or len(result.strip()) == 0:
+                    response = f"Never mind, I can't verify this information now."
+                else:
+                    response = f"Oops! No. {result}"
         else:
             response, confidence, attr = "", 0.0, {}
         return response, confidence, human_attr, bot_attr, attr
