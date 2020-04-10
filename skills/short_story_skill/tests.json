@@ -1,0 +1,192 @@
+[
+  {
+    "request":{
+      "human_sentence":"tell me a story",
+      "bot_sentence":"yes i know",
+      "intents":{
+        "cant_do": {"confidence": 0.0, "detected": 0},
+        "doing_well": {"confidence": 0.0, "detected": 0},
+        "dont_understand": {"confidence": 0.0, "detected": 0},
+        "exit": {"confidence": 0.0, "detected": 0},
+        "lets_chat_about": {"confidence": 0.0, "detected": 0},
+        "no": {"confidence": 0.0, "detected": 0},
+        "opinion_request": {"confidence": 0.0, "detected": 0},
+        "repeat": {"confidence": 0.0, "detected": 0},
+        "stupid": {"confidence": 0.0, "detected": 0},
+        "tell_me_a_story": {"confidence": 0.7950260639190674, "detected": 1},
+        "tell_me_more": {"confidence": 0.0, "detected": 0},
+        "topic_switching": {"confidence": 0.0, "detected": 0},
+        "weather_forecast_intent": {"confidence": 0.0, "detected": 0},
+        "what_can_you_do": {"confidence": 0.0, "detected": 0},
+        "what_is_your_job": {"confidence": 0.0, "detected": 0},
+        "what_is_your_name": {"confidence": 0.0, "detected": 0},
+        "what_time": {"confidence": 0.0, "detected": 0},
+        "where_are_you_from": {"confidence": 0.0, "detected": 0},
+        "who_made_you": {"confidence": 0.0, "detected": 0},
+        "yes": {"confidence": 0.0, "detected": 0}
+      }
+    },
+    "result":[
+      "Sure! I am glad you asked! What story do you want: funny, scary, or a bedtime one?",
+      "Sure! I am glad you asked! What type of story do you want: funny, scary, or a bedtime one?",
+      "Yes, sure. What story do you want: funny, scary, or a bedtime one?",
+      "Yes, sure. What type of story do you want: funny, scary, or a bedtime one?"
+    ]
+  },
+  {
+    "request":{
+      "human_sentence":"i definetely want a scary one",
+      "bot_sentence":"Sure! I am glad you asked! What type of story do you want: funny, scary, or a bedtime one?",
+      "intents":{
+        "cant_do": {"confidence": 0.0, "detected": 0},
+        "doing_well": {"confidence": 0.0, "detected": 0},
+        "dont_understand": {"confidence": 0.0, "detected": 0},
+        "exit": {"confidence": 0.0, "detected": 0},
+        "lets_chat_about": {"confidence": 0.0, "detected": 0},
+        "no": {"confidence": 0.0, "detected": 0},
+        "opinion_request": {"confidence": 0.0, "detected": 0},
+        "repeat": {"confidence": 0.0, "detected": 0},
+        "stupid": {"confidence": 0.0, "detected": 0},
+        "tell_me_a_story": {"confidence": 0.0, "detected": 0},
+        "tell_me_more": {"confidence": 0.0, "detected": 0},
+        "topic_switching": {"confidence": 0.0, "detected": 0},
+        "weather_forecast_intent": {"confidence": 0.0, "detected": 0},
+        "what_can_you_do": {"confidence": 0.0, "detected": 0},
+        "what_is_your_job": {"confidence": 0.0, "detected": 0},
+        "what_is_your_name": {"confidence": 0.0, "detected": 0},
+        "what_time": {"confidence": 0.0, "detected": 0},
+        "where_are_you_from": {"confidence": 0.0, "detected": 0},
+        "who_made_you": {"confidence": 0.0, "detected": 0},
+        "yes": {"confidence": 0.0, "detected": 0}
+      }
+    },
+    "result":[]
+  },
+  {
+    "request":{
+      "human_sentence":"yeah",
+      "bot_sentence":"I heard one, a father is laying in bed after just waking up, he grabs the baby monitor and walks to his desk in his office at home, he has his baby on the baby monitor and hears his wife singing to her, he cracks a smile as he hears his wife “Go to sleep… go to sleep…”...Wanna hear what happend next?",
+      "intents":{
+        "cant_do": {"confidence": 0.0, "detected": 0},
+        "doing_well": {"confidence": 0.0, "detected": 0},
+        "dont_understand": {"confidence": 0.0, "detected": 0},
+        "exit": {"confidence": 0.0, "detected": 0},
+        "lets_chat_about": {"confidence": 0.0, "detected": 0},
+        "no": {"confidence": 0.0, "detected": 0},
+        "opinion_request": {"confidence": 0.0, "detected": 0},
+        "repeat": {"confidence": 0.0, "detected": 0},
+        "stupid": {"confidence": 0.0, "detected": 0},
+        "tell_me_a_story": {"confidence": 0.0, "detected": 0},
+        "tell_me_more": {"confidence": 0.0, "detected": 0},
+        "topic_switching": {"confidence": 0.0, "detected": 0},
+        "weather_forecast_intent": {"confidence": 0.0, "detected": 0},
+        "what_can_you_do": {"confidence": 0.0, "detected": 0},
+        "what_is_your_job": {"confidence": 0.0, "detected": 0},
+        "what_is_your_name": {"confidence": 0.0, "detected": 0},
+        "what_time": {"confidence": 0.0, "detected": 0},
+        "where_are_you_from": {"confidence": 0.0, "detected": 0},
+        "who_made_you": {"confidence": 0.0, "detected": 0},
+        "yes": {"confidence": 1.0, "detected": 1}
+      }
+    },
+    "result":[
+      "When suddenly the front door opens up and his wife comes in with groceries."
+    ]
+  },
+  {
+    "request":{
+      "human_sentence":"no alexa no",
+      "bot_sentence":"I heard one, a father is laying in bed after just waking up, he grabs the baby monitor and walks to his desk in his office at home, he has his baby on the baby monitor and hears his wife singing to her, he cracks a smile as he hears his wife “Go to sleep… go to sleep…”...Are you still intrigued?",
+      "intents":{
+        "cant_do": {"confidence": 0.0, "detected": 0},
+        "doing_well": {"confidence": 0.0, "detected": 0},
+        "dont_understand": {"confidence": 0.0, "detected": 0},
+        "exit": {"confidence": 0.0, "detected": 0},
+        "lets_chat_about": {"confidence": 0.0, "detected": 0},
+        "no": {"confidence": 1.0, "detected": 1},
+        "opinion_request": {"confidence": 0.0, "detected": 0},
+        "repeat": {"confidence": 0.0, "detected": 0},
+        "stupid": {"confidence": 0.0, "detected": 0},
+        "tell_me_a_story": {"confidence": 0.0, "detected": 0},
+        "tell_me_more": {"confidence": 0.0, "detected": 0},
+        "topic_switching": {"confidence": 0.0, "detected": 0},
+        "weather_forecast_intent": {"confidence": 0.0, "detected": 0},
+        "what_can_you_do": {"confidence": 0.0, "detected": 0},
+        "what_is_your_job": {"confidence": 0.0, "detected": 0},
+        "what_is_your_name": {"confidence": 0.0, "detected": 0},
+        "what_time": {"confidence": 0.0, "detected": 0},
+        "where_are_you_from": {"confidence": 0.0, "detected": 0},
+        "who_made_you": {"confidence": 0.0, "detected": 0},
+        "yes": {"confidence": 0.0, "detected": 0}
+      }
+    },
+    "result":[
+      "Oh, okay, sorry. I guess it's boring. What do you want to talk about then?",
+      "Okay. What do you want then?"
+    ]
+  },
+  {
+    "request":{
+      "human_sentence":"i want the one about siri",
+      "bot_sentence":"Sure! I am glad you asked! What type of story do you want: funny, scary, or a bedtime one?",
+      "intents":{
+        "cant_do": {"confidence": 0.0, "detected": 0},
+        "doing_well": {"confidence": 0.0, "detected": 0},
+        "dont_understand": {"confidence": 0.0, "detected": 0},
+        "exit": {"confidence": 0.0, "detected": 0},
+        "lets_chat_about": {"confidence": 0.0, "detected": 0},
+        "no": {"confidence": 0.0, "detected": 0},
+        "opinion_request": {"confidence": 0.0, "detected": 0},
+        "repeat": {"confidence": 0.0, "detected": 0},
+        "stupid": {"confidence": 0.0, "detected": 0},
+        "tell_me_a_story": {"confidence": 0.0, "detected": 0},
+        "tell_me_more": {"confidence": 0.0, "detected": 0},
+        "topic_switching": {"confidence": 0.0, "detected": 0},
+        "weather_forecast_intent": {"confidence": 0.0, "detected": 0},
+        "what_can_you_do": {"confidence": 0.0, "detected": 0},
+        "what_is_your_job": {"confidence": 0.0, "detected": 0},
+        "what_is_your_name": {"confidence": 0.0, "detected": 0},
+        "what_time": {"confidence": 0.0, "detected": 0},
+        "where_are_you_from": {"confidence": 0.0, "detected": 0},
+        "who_made_you": {"confidence": 0.0, "detected": 0},
+        "yes": {"confidence": 0.0, "detected": 0}
+      }
+    },
+    "result":[
+      "I guess I don't have such stories.",
+      "I don't really have stories about that."
+    ]
+  },
+  {
+    "request":{
+      "human_sentence":"yeah go ahead",
+      "bot_sentence":"Do you mind if I tell you a story?",
+      "intents":{
+        "cant_do": {"confidence": 0.0, "detected": 0},
+        "doing_well": {"confidence": 0.0, "detected": 0},
+        "dont_understand": {"confidence": 0.0, "detected": 0},
+        "exit": {"confidence": 0.0, "detected": 0},
+        "lets_chat_about": {"confidence": 0.0, "detected": 0},
+        "no": {"confidence": 0.0, "detected": 0},
+        "opinion_request": {"confidence": 0.0, "detected": 0},
+        "repeat": {"confidence": 0.0, "detected": 0},
+        "stupid": {"confidence": 0.0, "detected": 0},
+        "tell_me_a_story": {"confidence": 0.0, "detected": 0},
+        "tell_me_more": {"confidence": 0.0, "detected": 0},
+        "topic_switching": {"confidence": 0.0, "detected": 0},
+        "weather_forecast_intent": {"confidence": 0.0, "detected": 0},
+        "what_can_you_do": {"confidence": 0.0, "detected": 0},
+        "what_is_your_job": {"confidence": 0.0, "detected": 0},
+        "what_is_your_name": {"confidence": 0.0, "detected": 0},
+        "what_time": {"confidence": 0.0, "detected": 0},
+        "where_are_you_from": {"confidence": 0.0, "detected": 0},
+        "who_made_you": {"confidence": 0.0, "detected": 0},
+        "yes": {"confidence": 1.0, "detected": 1}
+      }
+    },
+    "result":[
+      "What story do you want: funny, scary, or a bedtime one?",
+      "What type of story do you want: funny, scary, or a bedtime one?"
+    ]
+  }
+]

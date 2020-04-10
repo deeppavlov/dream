@@ -312,6 +312,13 @@ services:
       - "./common:/src/common"
     ports:
       - 8054:8054
+  short_story_skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/short_story_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8057:8057
   stop_detect:
     env_file: [.env.dev]
     volumes:

@@ -562,6 +562,16 @@
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
             },
+            "short_story_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://short_story_skill:8057/respond"
+                },
+                "dialog_formatter": "short_story_formatter_dialog",
+                "response_formatter": "skill_with_attributes_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
+            },
             "small_talk_skill": {
                 "connector": {
                     "protocol": "http",
