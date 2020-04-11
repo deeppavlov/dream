@@ -154,6 +154,7 @@ class EmotionSkillScenario:
                 most_likely_emotion = self._get_user_emotion(annotated_user_phrase)
                 prev_replies_for_user = [u['text'].lower() for u in dialog['bot_utterances']]
                 prev_bot_phrase = ''
+                link = ''
                 if prev_replies_for_user:
                     prev_bot_phrase = prev_replies_for_user[-1]
 
@@ -186,6 +187,8 @@ class EmotionSkillScenario:
             if not reply or confidence == 0:
                 attr['can_continue'] = CAN_NOT_CONTINUE
             if link:
+                if link["skill"] not in bot_attributes["used_links"]:
+                    bot_attributes["used_links"][link["skill"]] = []
                 bot_attributes["used_links"][link["skill"]].append(link['phrase'])
             texts.append(reply)
             confidences.append(confidence)

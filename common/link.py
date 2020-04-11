@@ -40,7 +40,7 @@ def link_to(skills, used_links={}):
     random_skill = ''
     random_phrase = ''
     filtered_phrases_map = dict(skills_phrases_map)
-    for skill_name, phrases in used_links:
+    for skill_name, phrases in used_links.items():
         filtered_phrases_map[skill_name] = skills_phrases_map[skill_name].difference(set(phrases))
     if skills:
         random_skill = choice(skills)
