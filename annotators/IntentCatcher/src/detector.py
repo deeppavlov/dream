@@ -204,7 +204,7 @@ class RegMD(MultilabelDetector):
 
     def __init__(self, logger):
         super().__init__(logger)
-        self.regexp = {intent: data['phrases']
+        self.regexp = {intent: data['phrases'] + data.get('reg_phrases', [])
                        for intent, data in json.load(open(INTENT_PHRASES_PATH))['intent_phrases'].items()}
         self.regexp = {intent: [re.compile(phrase) for phrase in phrases]
                        for intent, phrases in self.regexp.items()}

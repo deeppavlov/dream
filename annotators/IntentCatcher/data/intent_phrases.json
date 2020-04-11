@@ -32,6 +32,7 @@
     "exit": {
       "phrases": [
         "be quiet",
+	"leave me alone(, please){0,1}",
 	"i am done ((chatting)|(talking))( now){0,1}",
 	"(alexa ){0,1}(please ){0,1}disable conversation ( mode){0,1}",
         "(alexa ){0,1}(please ){0,1}(can we){0,1}stop ((chatting)|(talking))",
@@ -80,7 +81,7 @@
         "(alexa ){0,1}shut (the fuck ){0,1}up",
         "switch back to alexa"
       ],
-      "min_precision": 0.994,
+      "min_precision": 0.995,
       "punctuation": [
         ".",
         "!"
@@ -120,6 +121,9 @@
         "((sure)|(fine)|(okay)|(ok)|(yes)|(yup)|(yea)|(yeah)|(cool)|(good)|(go ahead))(( i agree)|( thanks)|( please)|( i will)|( why not)){0,1}",
         "((yeah)|(yes)|(okay)|(sure)|(yup)|(fine)|(definetely)|(absolutely)), ((go ahead)|(do it)|(lets do it)|(continue)|(go on)|(tell me)|(thank you)|(please))",
         "((come on)|(do it)|(tell me)|(ho on)|(continue)|(definetely)|(as you wish)|(as you want)|(that will be cool)|(whatever))"
+      ],
+      "reg_phrases": [
+      	"you bet(\\!|\\.)"
       ],
       "min_precision": 0.0,
       "punctuation": [
@@ -191,14 +195,14 @@
       "phrases": [
         "(alexa ){0,1}sing me a ((happy)|(sad)|(bedtime)) song",
         "(alexa ){0,1}can i change your name",
-	"let's play a game",
-	"can you whisper",
-	"whisper mode",
-	"(alexa ){0,1}can you sing( me){0,1}( a ((song)|(lullaby))){0,1}( please){0,1}",
-	"(alexa ){0,1}play music",
-	"((could you )|(would you )){0,1}play music( for ((us)|(me))){0,1}",
-	"(alexa ){0,1}play ((country)|(rap)) music",
-	"(alexa ){0,1}(i ((need)|(want)) you to ){0,1}play ((me )|(us )){0,1}(some ){0,1}((country)|(reggae)|(modern)|(pop)|(soul)|(jazz)|(rap)|(rock)|(my)|(popular)|(my playlist) ){0,1}music",
+      	"let's play a game",
+      	"can you whisper",
+      	"whisper mode",
+      	"(alexa ){0,1}can you sing( me){0,1}( a ((song)|(lullaby))){0,1}( please){0,1}",
+      	"(alexa ){0,1}play music",
+      	"((could you )|(would you )){0,1}play music( for ((us)|(me))){0,1}",
+      	"(alexa ){0,1}play ((country)|(rap)) music",
+	      "(alexa ){0,1}(i ((need)|(want)) you to ){0,1}play ((me )|(us )){0,1}(some ){0,1}((country)|(reggae)|(modern)|(pop)|(soul)|(jazz)|(rap)|(rock)|(my)|(popular)|(my playlist) ){0,1}music",
         "(alexa ){0,1}volume ((up)|(down)|(nine)|(ten)|(eight)|(eleven)|(twenty)|(one)|(five))",
         "(alexa ){0,1}((brighten)|(dim)) the light",
         "(alexa ){0,1}((can you )|(i want you to )){0,1}stop ((the timer)|(playing music)|(the music)|(the country music))",
@@ -212,6 +216,10 @@
         "(alexa ){0,1}((can you )|(would you )){0,1}(please ){0,1}play (me ){0,1}(some ){0,1}((hindi)|(christmas)|(the andy griffith)){0,1}((music)|(song))",
         "(alexa ){0,1}set timer( for ((ten)|(nine)|(seven)|(fifteen)|(twenty)|(twenty five)|(thirty))){0,1}((minutes)|(hours)){0,1}",
         "(alexa ){0,1}set alarm( for ((ten)|(nine)|(seven)|(eight)|(six)|(five)|(four)|(three)|(two)|(one))){0,1}((a.m.)|(p.m.)){0,1}"
+      ],
+      "reg_phrases":[
+        "let's play .*",
+	"can you whisper.*"
       ],
       "min_precision": 0.70,
       "punctuation": [
@@ -441,7 +449,7 @@
     },
     "who_made_you": {
       "phrases": [
-        "who ((did)|(created)|(made)|(make)|(create)|(build)|(owns)|(developed)|(designed)|(produced)|(programmed)) you",
+        "who ((did)|(created)|(made)|(make)|(create)|(build)|(owns)|(developed)|(designed)|(produced)|(programmed)|(is controlling)) you",
         "who is your ((botmaster)|(creator)|(developer)|(master)|(holder)|(host)|(team)|(bot master))",
         "which ((team)|(university)|(country)) ((made)|(developed)|(created)|(build)|(owns)) you",
         "who is your ((leader)|(teamleader)|(architect)|(author)|(builder)|(implementer)|(owner)|(skipper)|(trainer)|(manager)|(chief))",
@@ -547,6 +555,7 @@
       "huh",
       "horrible",
       "hey alexa",
+      "i am gonna buy a window song called",
       "do you have a conversation mode",
       "enable conversation mode",
       "conversation mode on",
@@ -668,6 +677,7 @@
       "play it's really cool it just takes a long time",
       "i have a great day with that",
       "jake paul bateman",
+      "the weather is (all right|fine|great|okay).",
       "really i'm not a search about her thanks alexa",
       "okay i just want to continue chatting with you",
       "stop have a conversation with me",
@@ -966,6 +976,9 @@
       "i will but can you elaborate",
       "swim a grandmother was born what's her my grandmother's from cook illinois",
       "hiking sucks",
+      "what's yours",
+      "inception",
+      "tarantino",
       "suck my fucking balls",
       "i don't want to tell you",
       "open just talk to you",
