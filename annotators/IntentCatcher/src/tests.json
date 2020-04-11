@@ -24,6 +24,10 @@
         "intent": "exit"
     },
     {
+        "sentence": "leave me alone",
+        "intent": "exit"
+    },
+    {
         "sentence": "end this conversation",
         "intent": "exit"
     },
@@ -168,11 +172,15 @@
         "intent": "what_can_you_do"
     },
     {
-        "sentence": "who made you",
+        "sentence": "who made you?",
         "intent": "who_made_you"
     },
     {
-        "sentence": "who programmed you",
+        "sentence": "who programmed you?",
+        "intent": "who_made_you"
+    },
+    {
+        "sentence": "who is controlling you?",
         "intent": "who_made_you"
     },
     {
@@ -192,7 +200,7 @@
         "intent": "opinion_request"
     },
     {
-        "sentence": "do you have an opinion on this",
+        "sentence": "do you have an opinion on this?",
         "intent": "opinion_request"
     },
     {
@@ -248,7 +256,23 @@
         "intent": null
     },
     {
+        "sentence": "inception",
+        "intent": null
+    },
+    {
+        "sentence": "the weather is all right.",
+        "intent": null
+    },
+    {
+        "sentence": "i love you alexa",
+        "intent": null
+    },
+    {
         "sentence": "you talk?",
+        "intent": null
+    },
+    {
+        "sentence": "what's yours?",
         "intent": null
     },
     {
@@ -257,6 +281,10 @@
     },
     {
         "sentence": "walk is great.",
+        "intent": null
+    },
+    {
+        "sentence": "i am gonna buy a window song called.",
         "intent": null
     },
     {
@@ -321,6 +349,10 @@
     },
     {
         "sentence": "let's rewind.",
+        "intent": null
+    },
+    {
+        "sentence": "curb your enthusiasm.",
         "intent": null
     },
     {
@@ -432,6 +464,10 @@
         "intent": "stupid"
     },
     {
+        "sentence": "let's play sudoku",
+        "intent": "cant_do"
+    },
+    {
         "sentence": "remind me at 10 p.m. to clean the bedroom",
         "intent": "cant_do"
     },
@@ -452,11 +488,11 @@
         "intent": "cant_do"
     },
     {
-        "sentence": "let's play a game",
+        "sentence": "can you whisper?",
         "intent": "cant_do"
     },
     {
-        "sentence": "can you whisper?",
+        "sentence": "let's play a game",
         "intent": "cant_do"
     },
     {
