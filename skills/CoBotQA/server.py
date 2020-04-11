@@ -43,6 +43,9 @@ headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COB
 with open("./google-english-no-swears.txt", "r") as f:
     UNIGRAMS = set(f.read().splitlines())
 
+with open("./common_user_phrases.txt", "r") as f:
+    COMMON_USER_PHRASES = set(f.read().splitlines())
+
 
 def remove_punct_and_articles(s, lowecase=True):
     articles = ['a', 'an', 'the']
@@ -87,6 +90,14 @@ def respond():
     for i, dialog in enumerate(dialogs):
         curr_uttr = dialog["utterances"][-1]
         curr_uttr_rewritten = curr_uttr["annotations"]["sentrewrite"]["modified_sents"][-1]
+        curr_uttr_clean = remove_punct_and_articles(curr_uttr_rewritten)
+        if curr_uttr_clean in COMMON_USER_PHRASES:
+            # do not add any fact about ... and
+            # replace human utterance by special string
+            # cobotqa will respond with ''
+            questions.append(f'[common_phrase_replaced: {curr_uttr_clean}]')
+            dialog_ids += [i]
+            continue
         # fix to question what is fact, cobotqa gives random fact on such question
         what_is_fact = 'what is fact'
         if remove_punct_and_articles(curr_uttr_rewritten)[-len(what_is_fact):] == what_is_fact:
@@ -160,7 +171,9 @@ def respond():
                        "Thank you!",
                        "Thanks!",
                        "That's really nice, thanks.",
-                       "That's nice of you to say."
+                       "That's nice of you to say.",
+                       "Kazuo Ishiguro, Gretchen Mol, Benjamin Wadsworth, Johann Mühlegg, Ramkumar Ramanathan"
+                       " and others.",
                        ]
         bad_subanswers = ["let's talk about", "i have lots of", "world of warcraft",
                           " wow ", " ok is", "coolness is ", "about nice",
