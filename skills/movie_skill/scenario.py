@@ -91,7 +91,8 @@ class MovieSkillScenario:
 
                     if self.is_opinion_expression(curr_user_uttr, prev_bot_uttr):
                         response, result, confidence = self.templates.get_user_opinion(dialog, attitude)
-                        if len(result) > 0 and result[0][1] == "movie":
+                        if len(result) > 0 and result[0][1] == "movie" and \
+                                self.is_about_movies(curr_user_uttr, prev_bot_uttr):
                             confidence = SUPER_CONFIDENCE
                             movie_id = result[0][0]
                             attr = {"movie_id": movie_id, "can_continue": CAN_CONTINUE,
@@ -108,7 +109,8 @@ class MovieSkillScenario:
                     if self.is_opinion_request(curr_user_uttr):
                         response, result, confidence = self.templates.give_opinion(dialog)
                         if response != "":
-                            if len(result) > 0 and result[0][1] == "movie":
+                            if len(result) > 0 and result[0][1] == "movie" and \
+                                    self.is_about_movies(curr_user_uttr, prev_bot_uttr):
                                 confidence = SUPER_CONFIDENCE
                                 movie_id = result[0][0]
                                 attr = {"movie_id": movie_id, "can_continue": CAN_CONTINUE,
@@ -262,9 +264,6 @@ class MovieSkillScenario:
                 response, confidence, human_attr, bot_attr, attr = self.get_next_response_movie_scenario(
                     curr_user_uttr, prev_bot_uttr, prev_movie_skill_outputs,
                     movies_ids, unique_persons, mentioned_genres, human_attr, bot_attr)
-        # elif len(movies_ids) > 0 and self.is_about_movies(curr_user_uttr, prev_bot_uttr):
-        #     response, confidence, human_attr, bot_attr, attr = self.first_reply_when_about_movies(
-        #         curr_user_uttr, movies_ids[-1], human_attr, bot_attr)
         elif self.lets_chat_about_movies(curr_user_uttr, prev_bot_uttr):
             # user wants to talk about movies. offer quesiton about movies
             offer = offer_talk_about_movies(human_attr)
@@ -272,6 +271,19 @@ class MovieSkillScenario:
             confidence = SUPER_CONFIDENCE
             attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
             human_attr["offer_talk_about_movies"] += [offer]
+        elif self.is_about_movies(curr_user_uttr, prev_bot_uttr) and len(movies_ids) > 0 and \
+            (self.is_opinion_expression(curr_user_uttr, prev_bot_uttr) or self.is_opinion_request(curr_user_uttr)):
+            curr_movie_id = movies_ids[-1]
+            if curr_movie_id not in human_attr["discussed_movie_ids"]:
+                response, confidence, human_attr, bot_attr, attr = self.first_reply_when_about_movies(
+                    curr_user_uttr, curr_movie_id, human_attr, bot_attr)
+            else:
+                offer = offer_talk_about_movies(human_attr)
+                response = f"We have talked about this movie previously. " \
+                           f"{get_movie_template('lets_talk_about_other_movie')} {offer}"
+                confidence = DEFAULT_CONFIDENCE
+                attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
+                human_attr["offer_talk_about_movies"] += [offer]
         else:
             response, confidence, human_attr, bot_attr, attr = "", 0.0, {}, {}, {}
 
@@ -424,7 +436,7 @@ class MovieSkillScenario:
                 else:
                     response = f"Oops! No. {result}"
         elif "the year of release of" in question_text:
-            result = self.templates.imdb.get_info_about_movie(movie_title, "year")
+            result = self.templates.imdb.get_info_about_movie(movie_title, "startYear")
             if result is not None:
                 year = int(result)
                 result = f"The release year is {int(result)}."
@@ -553,14 +565,9 @@ class MovieSkillScenario:
                 prev_movie_skill_outputs, unique_persons, mentioned_genres, human_attr, bot_attr)
         elif prev_status == "comment_to_question":  # -> fact
             logger.info("Generate one more fact.")
+            fact_type = choice(["awards of", "tagline of", "fact about"])
             response, confidence, human_attr, bot_attr, attr = self.generate_fact_from_cobotqa(
-                "awards of", movie_id, movie_title, movie_type, prev_status_line, human_attr, bot_attr)
-            if response == "":
-                response, confidence, human_attr, bot_attr, attr = self.generate_fact_from_cobotqa(
-                    "tagline of", movie_id, movie_title, movie_type, prev_status_line, human_attr, bot_attr)
-                if response == "":
-                    response, confidence, human_attr, bot_attr, attr = self.generate_fact_from_cobotqa(
-                        "fact about", movie_id, movie_title, movie_type, prev_status_line, human_attr, bot_attr)
+                fact_type, movie_id, movie_title, movie_type, prev_status_line, human_attr, bot_attr)
         elif prev_status == "fact" and random.random() < SECOND_FACT_PROBA:  # -> fact
             logger.info("Decided to generate one more fact.")
             response, confidence, human_attr, bot_attr, attr = self.generate_fact_from_cobotqa(
