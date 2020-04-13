@@ -138,11 +138,12 @@ class MovieSkillScenario:
                          "Entertainment_Movies" in annotations.get('cobot_dialogact', {}).get('topics', [])
 
         curr_uttr_is_about_movies = re.search(self.movie_pattern, uttr["text"].lower())
+        prev_uttr_is_about_movies = re.search(self.movie_pattern, prev_uttr["text"].lower())
         lets_talk_about_movies = if_lets_chat_about_topic(uttr=uttr["text"].lower()) and curr_uttr_is_about_movies
         chosed_topic = if_choose_topic(prev_uttr["text"].lower()) and curr_uttr_is_about_movies
 
-        if is_movie_topic or lets_talk_about_movies or chosed_topic or \
-                ("?" in prev_uttr["text"] and curr_uttr_is_about_movies):
+        if is_movie_topic or lets_talk_about_movies or chosed_topic or curr_uttr_is_about_movies or \
+                ("?" in prev_uttr["text"] and prev_uttr_is_about_movies):
             return True
         else:
             return False
@@ -272,8 +273,7 @@ class MovieSkillScenario:
             confidence = SUPER_CONFIDENCE
             attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
             human_attr["offer_talk_about_movies"] += [offer]
-        elif self.is_about_movies(curr_user_uttr, prev_bot_uttr) and len(movies_ids) > 0 and \
-                (self.is_opinion_expression(curr_user_uttr, prev_bot_uttr) or self.is_opinion_request(curr_user_uttr)):
+        elif len(movies_ids) > 0 and self.is_about_movies(curr_user_uttr, prev_bot_uttr):
             curr_movie_id = movies_ids[-1]
             if curr_movie_id not in human_attr["discussed_movie_ids"]:
                 response, confidence, human_attr, bot_attr, attr = self.first_reply_when_about_movies(
