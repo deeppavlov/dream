@@ -2,13 +2,9 @@ import json
 import time
 import re
 import logging
-import string
 from copy import deepcopy
-import pickle
-from pathlib import Path
 
 import numpy as np
-from ahocorapy.keywordtree import KeywordTree
 from nltk.tokenize import wordpunct_tokenize
 
 from utils import GENRES, ALL_GENRES
@@ -21,29 +17,59 @@ logger = logging.getLogger(__name__)
 class IMDb:
     professions = ["actor", "director"]
 
+    pairs = [(re.compile(r"\s?\-\s?"), " "),
+             (re.compile(r"\s?\+\s?"), " plus "),
+             (re.compile(r"\s?\*\s?"), " star "),
+             (re.compile(r"\s?\&\s?"), " and "),
+             (re.compile(r"\s?\'\s?"), ""),
+             (re.compile(r"\s?:\s?"), ""),
+             (re.compile(r"\s?ii\s?"), " 2 "),
+             (re.compile(r"\s?iii\s?"), " 3 "),
+             (re.compile(r"\s?II\s?"), " 2 "),
+             (re.compile(r"\s?III\s?"), " 3 "),
+             (re.compile(r"\s?IV\s?"), " 4 "),
+             (re.compile(r"\s?V\s?"), " 5 "),
+             (re.compile(r"\s?VI\s?"), " 6 "),
+             (re.compile(r"\s?VII\s?"), " 7 "),
+             (re.compile(r"\s?VII\s?"), " 8 "),
+             (re.compile(r"\s?IX\s?"), " 9 "),
+             (re.compile(r"\s?(the)?\s?first part\s?"), " part 1 "),
+             (re.compile(r"\s?(the)?\s?second part\s?"), " part 2 "),
+             (re.compile(r"\s?(the)?\s?third part\s?"), " part 3 "),
+             (re.compile(r"\s?(the)?\s?fourth part\s?"), " part 4 "),
+             (re.compile(r"\s?(the)?\s?fifth part\s?"), " part 5 "),
+             (re.compile(r"\s?(the)?\s?sixth part\s?"), " part 6 "),
+             (re.compile(r"\s?(the)?\s?seventh part\s?"), " part 7 "),
+             (re.compile(r"\s?(the)?\s?eighth part\s?"), " part 8 "),
+             (re.compile(r"\s?(the)?\s?ninth part\s?"), " part 9 "),
+             (re.compile(r"\s?(the)?\s?first\s?"), " part 1 "),
+             (re.compile(r"\s?(the)?\s?second\s?"), " part 2 "),
+             (re.compile(r"\s?(the)?\s?third\s?"), " part 3 "),
+             (re.compile(r"\s?(the)?\s?fourth\s?"), " part 4 "),
+             (re.compile(r"\s?(the)?\s?fifth\s?"), " part 5 "),
+             (re.compile(r"\s?(the)?\s?sixth\s?"), " part 6 "),
+             (re.compile(r"\s?(the)?\s?seventh\s?"), " part 7 "),
+             (re.compile(r"\s?(the)?\s?eighth\s?"), " part 8 "),
+             (re.compile(r"\s?(the)?\s?ninth\s?"), " part 9 "),
+             (re.compile(r"\bthe\b"), " "),
+             (re.compile(r"\ba\b"), " "),
+             (re.compile(r"\ban\b"), " "),
+             (re.compile(r'\W'), " "),
+             (re.compile(r"\s\s+"), " "),
+             ]
+
     def __init__(self, db_path="./databases/database_main_info.json", save_folder="../data/"):
         t0 = time.time()
         self.with_ignored_movies_names = {}
         self.without_ignored_movies_names = {}
         self.database = {}
         self.professionals = {}
-        self.without_ignored_movies_names_tree = None
-        self.with_ignored_movies_names_tree = None
-        self.names_tree = None
-        self.genres_tree = None
+        self.without_ignored_movies_names_pattern = None
+        self.with_ignored_movies_names_pattern = None
+        self.genres_pattern = None
+        self.names_pattern = {}
 
-        if (Path(save_folder).joinpath(
-                "with_ignored_movies_names.json").exists() and Path(save_folder).joinpath(
-                "without_ignored_movies_names.json").exists() and Path(save_folder).joinpath(
-                "database.json").exists() and Path(save_folder).joinpath(
-                "professionals.json").exists() and Path(save_folder).joinpath(
-                "without_ignored_movies_names_tree.pkl").exists() and Path(save_folder).joinpath(
-                "with_ignored_movies_names_tree.pkl").exists() and Path(save_folder).joinpath(
-                "names_tree.pkl").exists() and Path(save_folder).joinpath(
-                "genres_tree.pkl").exists()):
-            self.load(save_folder)
-        else:
-            self.train_and_save(db_path, save_folder)
+        self.create_database(db_path)
 
         logger.info(f"Initialized in {time.time() - t0} sec")
         logger.info(f"Search across {len(self.with_ignored_movies_names)} with ignored movies")
@@ -55,69 +81,8 @@ class IMDb:
                     npersons += 1
         logger.info(f"Search across {npersons} persons names")
 
-    def save(self, save_folder):
-        with open(Path(save_folder).joinpath("with_ignored_movies_names.json"), "w") as f:
-            json.dump(self.with_ignored_movies_names, f, indent=2)
-
-        with open(Path(save_folder).joinpath("without_ignored_movies_names.json"), "w") as f:
-            json.dump(self.without_ignored_movies_names, f, indent=2)
-
-        with open(Path(save_folder).joinpath("database.json"), "w") as f:
-            json.dump(self.database, f, indent=2)
-
-        with open(Path(save_folder).joinpath("professionals.json"), "w") as f:
-            json.dump(self.professionals, f, indent=2)
-
-        with open(Path(save_folder).joinpath("without_ignored_movies_names_tree.pkl"), "wb") as f:
-            pickle.dump(self.without_ignored_movies_names_tree, f)
-
-        with open(Path(save_folder).joinpath("with_ignored_movies_names_tree.pkl"), "wb") as f:
-            pickle.dump(self.with_ignored_movies_names_tree, f)
-
-        with open(Path(save_folder).joinpath("names_tree.pkl"), "wb") as f:
-            pickle.dump(self.names_tree, f)
-
-        with open(Path(save_folder).joinpath("genres_tree.pkl"), "wb") as f:
-            pickle.dump(self.genres_tree, f)
-
-    def load(self, save_folder):
-        start_time = time.time()
-        logger.info(f"Loading models")
-        with open(Path(save_folder).joinpath("with_ignored_movies_names.json"), "r") as f:
-            self.with_ignored_movies_names = json.load(f)
-
-        with open(Path(save_folder).joinpath("without_ignored_movies_names.json"), "r") as f:
-            self.without_ignored_movies_names = json.load(f)
-
-        with open(Path(save_folder).joinpath("database.json"), "r") as f:
-            self.database = json.load(f)
-
-        with open(Path(save_folder).joinpath("professionals.json"), "r") as f:
-            self.professionals = json.load(f)
-
-        with open(Path(save_folder).joinpath("without_ignored_movies_names_tree.pkl"), "rb") as f:
-            self.without_ignored_movies_names_tree = pickle.load(f)
-
-        with open(Path(save_folder).joinpath("with_ignored_movies_names_tree.pkl"), "rb") as f:
-            self.with_ignored_movies_names_tree = pickle.load(f)
-
-        with open(Path(save_folder).joinpath("names_tree.pkl"), "rb") as f:
-            self.names_tree = pickle.load(f)
-
-        with open(Path(save_folder).joinpath("genres_tree.pkl"), "rb") as f:
-            self.genres_tree = pickle.load(f)
-
-        logger.info(f"Loading models time {time.time() - start_time}")
-
-    def train_and_save(self, db_path, save_folder):
+    def create_database(self, db_path):
         t0 = time.time()
-        self.without_ignored_movies_names_tree = KeywordTree(case_insensitive=True)
-        self.with_ignored_movies_names_tree = KeywordTree(case_insensitive=True)
-        self.genres_tree = KeywordTree(case_insensitive=True)
-        self.names_tree = {}
-        for prof in self.professions:
-            self.names_tree[prof] = KeywordTree(case_insensitive=True)
-
         with open(db_path, "r") as f:
             self.database = json.load(f)
 
@@ -154,15 +119,10 @@ class IMDb:
         with open("databases/google-10000-english-no-swears.txt", "r") as f:
             self.frequent_unigrams = f.read().splitlines()[:5000]
 
-        with open("databases/w2_.txt", "r", encoding="cp1251") as f:
-            bigrams = f.read().splitlines()
-
-        for i in range(len(bigrams)):
-            bigrams[i] = bigrams[i].split("\t")
-        self.frequent_bigrams = []
-        for bigram in bigrams:
-            if int(bigram[0]) > 1000 and "a" not in bigram and "the" not in bigram:
-                self.frequent_bigrams.append(bigram[1] + " " + bigram[2])
+        with open("databases/topics_counter_50.json", "r") as f:
+            # phrases are like `verb + noun` or `verb + prep + noun` WITHOUT articles
+            self.frequent_bigrams = json.load(f)
+        self.frequent_bigrams = [bigram for bigram in self.frequent_bigrams if self.frequent_bigrams[bigram] > 200]
 
         movie_titles_to_ignore = self.get_processed_movies_titles_to_ignore()
         for proc_title in movie_titles_to_ignore:
@@ -192,7 +152,7 @@ class IMDb:
                 pass
         to_remove = []
         for proc_title in self.with_ignored_movies_names.keys():
-            if re.match(f"^[{string.digits}]+$", proc_title):
+            if re.match(f"^[0-9 ]+$", proc_title):
                 to_remove.append(proc_title)
         for proc_title in to_remove:
             self.with_ignored_movies_names.pop(proc_title)
@@ -203,7 +163,7 @@ class IMDb:
             for profession in self.professions:
                 if f"{profession}s" in self.database[imdb_id]:
                     self.database[imdb_id][f"lowercased_{profession}s"] = [
-                        name.lower() for name in self.database[imdb_id][f"{profession}s"]
+                        self.process_person_name(name) for name in self.database[imdb_id][f"{profession}s"]
                         if len(name.split()) > 1]
                 else:
                     self.database[imdb_id][f"lowercased_{profession}s"] = []
@@ -217,95 +177,34 @@ class IMDb:
         for prof in self.professions:
             self.collect_persons_and_movies(profession=prof)
 
-        logger.info(f"Everything's except trees were done in {time.time() - t0} sec")
+        logger.info(f"Everything's except patterns were done in {time.time() - t0} sec")
 
-        # compose trees
-        # add whitespaces to find thise words only as tokens not as a part of other words
-        for movie in self.without_ignored_movies_names:
-            self.without_ignored_movies_names_tree.add(f" {movie} ")
-        self.without_ignored_movies_names_tree.finalize()
-
-        for movie in self.with_ignored_movies_names:
-            self.with_ignored_movies_names_tree.add(f" {movie} ")
-        self.with_ignored_movies_names_tree.finalize()
+        # compose patterns for re.findall // make insensitive!
+        self.without_ignored_movies_names_pattern = re.compile(
+            "(" + "|".join([r'\b%s\b' % movie for movie in self.without_ignored_movies_names]) + ")", re.IGNORECASE)
+        self.with_ignored_movies_names_pattern = re.compile(
+            "(" + "|".join([r'\b%s\b' % movie for movie in self.with_ignored_movies_names]) + ")", re.IGNORECASE)
 
         for prof in self.professions:
-            for person in self.professionals[f"lowercased_{prof}s"]:
-                if len(person.split()) > 1:
-                    self.names_tree[prof].add(f" {person} ")
-            self.names_tree[prof].finalize()
+            self.names_pattern[prof] = re.compile(
+                "(" + "|".join([r'\b%s\b' % name for name in self.professionals[f"lowercased_{prof}s"]]) + ")",
+                re.IGNORECASE)
+        self.genres_pattern = re.compile(
+            "(" + "|".join([r'\b%s\b' % genre for genre in ALL_GENRES]) + ")", re.IGNORECASE)
 
-        # genres without whitespaces to include subwording genres
-        self.genres_tree.add("genre")
-        for genre in ALL_GENRES:
-            self.genres_tree.add(f"{genre}")
-        self.genres_tree.finalize()
-        logger.info(f"Trained in {time.time() - t0} sec")
-        self.save(save_folder)
+        logger.info(f"Created db in {time.time() - t0} sec")
 
-    @staticmethod
-    def process_movie_name(movie):
-        """
-        Process given string (which is mostly about movie names), lowercases,
-        removes punctuation from title
-
-        Args:
-            movie: movie title
-
-        Returns:
-
-        """
-        pairs = [(r"\s?\-\s?", " "),
-                 (r"\s?\+\s?", " plus "),
-                 (r"\s?\*\s?", " star "),
-                 (r"\s?\&\s?", " and "),
-                 (r"\s?\'\s?", ""),
-                 (r"\s?:\s?", ""),
-                 (r"\s?ii\s?", " 2 "),
-                 (r"\s?iii\s?", " 3 "),
-                 (r"\s?II\s?", " 2 "),
-                 (r"\s?III\s?", " 3 "),
-                 (r"\s?IV\s?", " 4 "),
-                 (r"\s?V\s?", " 5 "),
-                 (r"\s?VI\s?", " 6 "),
-                 (r"\s?VII\s?", " 7 "),
-                 (r"\s?VII\s?", " 8 "),
-                 (r"\s?IX\s?", " 9 "),
-                 (r"\s?(the)?\s?first part\s?", " part 1 "),
-                 (r"\s?(the)?\s?second part\s?", " part 2 "),
-                 (r"\s?(the)?\s?third part\s?", " part 3 "),
-                 (r"\s?(the)?\s?fourth part\s?", " part 4 "),
-                 (r"\s?(the)?\s?fifth part\s?", " part 5 "),
-                 (r"\s?(the)?\s?sixth part\s?", " part 6 "),
-                 (r"\s?(the)?\s?seventh part\s?", " part 7 "),
-                 (r"\s?(the)?\s?eighth part\s?", " part 8 "),
-                 (r"\s?(the)?\s?ninth part\s?", " part 9 "),
-                 (r"\s?(the)?\s?first\s?", " part 1 "),
-                 (r"\s?(the)?\s?second\s?", " part 2 "),
-                 (r"\s?(the)?\s?third\s?", " part 3 "),
-                 (r"\s?(the)?\s?fourth\s?", " part 4 "),
-                 (r"\s?(the)?\s?fifth\s?", " part 5 "),
-                 (r"\s?(the)?\s?sixth\s?", " part 6 "),
-                 (r"\s?(the)?\s?seventh\s?", " part 7 "),
-                 (r"\s?(the)?\s?eighth\s?", " part 8 "),
-                 (r"\s?(the)?\s?ninth\s?", " part 9 "),
-                 (r"\s+the\s+", " "),
-                 (r"\s+a\s+", " "),
-                 (r"^the\s+", ""),
-                 (r"^a\s+", ""),
-                 (r"\s+the$", ""),
-                 (r"\s+a$", ""),
-                 ]
-
+    def process_movie_name(self, movie):
         movie_name = movie.lower()
-        for pair in pairs:
+        for pair in self.pairs:
             movie_name = re.sub(pair[0], pair[1], movie_name)
-        puncts = string.punctuation
-        for p in puncts:
-            movie_name = movie_name.replace(p, " ")
-        movie_name = re.sub(r"\s\s+", ' ', movie_name).strip()
+        return movie_name.strip()
 
-        return movie_name
+    def process_person_name(self, name):
+        name = name.lower()
+        for pair in self.pairs[-2:]:
+            name = re.sub(pair[0], pair[1], name)
+        return name.strip()
 
     def get_processed_movies_titles_to_ignore(self):
         to_ignore = list(set(self.without_ignored_movies_names.keys()).intersection(
@@ -320,11 +219,12 @@ class IMDb:
 
         for imdb_id in self.database:
             for name in self.database[imdb_id][f"{profession}s"]:
-                if name in self.professionals[f"{profession}s"].keys():
-                    self.professionals[f"{profession}s"][name] += [imdb_id]
-                else:
-                    self.professionals[f"{profession}s"][name] = [imdb_id]
-                    self.professionals[f"lowercased_{profession}s"][name.lower()] = name
+                if len(name.split()) > 1:
+                    if name in self.professionals[f"{profession}s"].keys():
+                        self.professionals[f"{profession}s"][name] += [imdb_id]
+                    else:
+                        self.professionals[f"{profession}s"][name] = [imdb_id]
+                        self.professionals[f"lowercased_{profession}s"][self.process_person_name(name)] = name
 
     def get_movie_name(self, imdb_id):
         """
@@ -458,7 +358,7 @@ class IMDb:
             # exception if name_or_id == None or name_or_id not in database
             return {}
 
-    def find_name(self, reply, subject="movie", find_ignored=False):
+    def find_name(self, reply, subject="movie", find_ignored=False, return_longest=True):
         """
         Find name in the given reply (across preprocessed movies names from the database
         or lower-cased names of people of the given profession)
@@ -471,16 +371,13 @@ class IMDb:
         Returns:
             imdb-ids if `movie`, full cased name if `actor` or any profession
         """
-        lengths = []
-        identifiers = []
-        starts = []
 
         lower_cased_reply = f" {self.process_movie_name(reply.lower())} "
         if subject == "movie":
-            results = self.without_ignored_movies_names_tree.search_all(lower_cased_reply)
+            results = re.findall(self.without_ignored_movies_names_pattern, lower_cased_reply)
             results = list(results)
             if find_ignored:
-                results = self.with_ignored_movies_names_tree.search_all(lower_cased_reply)
+                results = re.findall(self.with_ignored_movies_names_pattern, lower_cased_reply)
             elif len(results) == 0:
                 for target_name in ["film", "series", "movie"]:
                     start_movie_name = reply.lower().find(target_name)
@@ -489,61 +386,44 @@ class IMDb:
                             tokens = wordpunct_tokenize(lower_cased_reply)
                             new_lower_cased_reply = f" {self.process_movie_name(' '.join(tokens[-3:]))} "
                             logger.info(f"1. Trying to find movie title in `{new_lower_cased_reply}`")
-                            results = self.with_ignored_movies_names_tree.search_all(new_lower_cased_reply)
+                            results = re.findall(self.with_ignored_movies_names_pattern, new_lower_cased_reply)
                         else:
                             tokens = wordpunct_tokenize(reply[start_movie_name:])
                             new_lower_cased_reply = f" {self.process_movie_name(' '.join(tokens[:3]))} "
                             logger.info(f"2. Trying to find movie title in `{new_lower_cased_reply}`")
-                            results = self.with_ignored_movies_names_tree.search_all(new_lower_cased_reply)
-
+                            results = re.findall(self.with_ignored_movies_names_pattern, new_lower_cased_reply)
         elif subject in self.professions:
-            results = self.names_tree[subject].search_all(lower_cased_reply)
+            results = re.findall(self.names_pattern[subject], lower_cased_reply)
         elif subject == "genre":
-            results = self.genres_tree.search_all(lower_cased_reply)
+            results = re.findall(self.genres_pattern, lower_cased_reply)
         else:
             results = []
 
+        logger.info(f"Curr found results: {results}")
         results = list(results)
-        bad_ids = []
+        identifiers = []
+        highest_length = 0
         for result in results:
-            # each result = ("name", start_index)
-            found_substring = result[0]  # including whitespaces for `movie` and professions
-            start = result[1]
-
-            for i, length in enumerate(lengths):
-                if len(found_substring) > length:
-                    if start <= starts[i] < start + len(found_substring):
-                        # e.g. found `Morgan` and `Morgan Freeman` -> let's get rid from Morgan
-                        bad_ids.append(i)
-
-            if found_substring[0] == " ":
-                lengths.append(len(found_substring[1:-1]))  # exclude whitespaces
-            else:
-                lengths.append(len(found_substring))  # where no whitespaces - `genre`
             if subject == "movie":
-                # found = self.with_ignored_movies_names[found_substring[1:-1]]  # exclude whitespaces
-                found = self.get_imdb_id(found_substring[1:-1])  # exclude whitespaces
+                found = self.get_imdb_id(result)
             elif subject in self.professions:
-                found = self.professionals[f"lowercased_{subject}s"][found_substring[1:-1]]  # exclude whitespaces
+                found = self.professionals[f"lowercased_{subject}s"][result]
             elif subject == "genre":
                 for genre in GENRES:
-                    if found_substring in GENRES[genre]:
-                        found = genre  # cased genre title
+                    if result in GENRES[genre]:
+                        found = genre
             else:
                 found = ""
+            if subject == "movie" and len(result) >= highest_length:
+                identifiers = [found]
+                highest_length = len(result)
+            elif subject != "movie":
+                identifiers.append(found)
 
-            identifiers.append(found)
-            starts.append(start)
-
-        if len(lengths) == 0:
+        if len(identifiers) == 0:
             return []
         else:
-            lengths = np.array(lengths)
-            identifiers = np.array(identifiers)
-            lengths = np.delete(lengths, list(set(bad_ids)))
-            identifiers = np.delete(identifiers, list(set(bad_ids)))
-
-            if len(lengths) <= 3:
+            if len(identifiers) <= 3:
                 return identifiers
             else:
                 return []
@@ -628,9 +508,9 @@ class IMDb:
         else:
             rating = np.mean([float(self.get_info_about_movie(imdb_id, "imdb_rating")) for imdb_id in movies])
 
-            if rating >= 7.75:
+            if rating >= 7.5:
                 return "very_positive"
-            elif rating >= 7.0:
+            elif rating >= 6.0:
                 return "positive"
             else:
                 return "neutral"
