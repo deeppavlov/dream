@@ -19,18 +19,19 @@ sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
-physical_activites = ('I read that physical activities increase '
+physical_activites = ('I have read that physical activities increase '
                       'your endorphins level! Have you ever heard about 7 minute workout?')
 feel_better = 'Hmm… What do you think may make you feel better?'
 seven_minute_descr = ('I suggest you to type 7-minute workout in youtube to see how it’s done. '
-                      'It’s a short, rapid-fire series of exercises that use your own body weight. ')
+                      'It’s a short, rapid-fire series of exercises that use your own body weight.'
+                      'They’ll give you a lot of new energy and feeling of accomplishment.')
 user_knows_7minute = (f"The power of this workout is that it's simple to do. ")
-string_surprise = 'I feel that you are surprised. But you are not the first surprised man on the Earth.' \
+string_surprise = 'I feel that you are surprised. But you are not the first man ever to be suprised.' \
                   "The Shakespeare wrote: 'There are more things in heaven and earth, Horatio, " \
                   "Than are dreamt of in your philosophy.' He wrote it in 'Hamlet' four centuries ago. " \
                   "What is your favorite  Shakespeare's play?"
 string_fear = "Fear does not empty tomorrow of its sadness, it empties today of its power. Can I tell you a joke?"
-joke1 = "When you hit a speed bump in a school zone and remember, there are no speed bumps."
+# joke1 = "When you hit a speed bump in a school zone and remember, there are no speed bumps."
 joke2 = "Police arrested two kids yesterday, one was drinking battery acid, the other was eating fireworks." \
         "They charged one – and let the other one-off."
 joke3 = "What do you get when you wake up on a workday and realize you ran out of coffee? A depresso."
@@ -44,13 +45,13 @@ joke8 = "Two Eskimos sitting in a kayak were chilly." \
 joke9 = "I'll tell you what I love doing more than anything: trying to pack myself in a small suitcase." \
         "I can hardly contain myself. "
 joke10 = "A three-legged dog walks into a saloon in the Old West." \
-         "He slides up to the bar and announces: I'm looking for the man who shot my paw. "
+         "It slides up to the bar and announces: I'm looking for the man who shot my paw. "
 joke11 = "A sandwich walks into a bar. The barman says sorry we don’t serve food in here ."
 joke12 = "There’s two fish in a tank, and one says How do you drive this thing?"
-phrase_dict = {'anger': ["Please, calm down. Can I tell you a joke?",
+phrase_dict = {'anger': ["I’m so sorry to see you being angry. Can I tell you a joke?",
                          "I feel your pain. Can I tell you a joke?",
                          "I am ready to support you. Can I tell you a joke?"],
-               'fear': ["Please, calm down. Can I tell you a joke?",
+               'fear': ["I’m so sorry to see you feeling this. Can I tell you a joke?",
                         'It is better to face danger once than be always in fear. Can I tell you a joke?',
                         string_fear],
                'sadness': ["Please, cheer up. Can I tell you a joke?",
@@ -61,10 +62,10 @@ phrase_dict = {'anger': ["Please, calm down. Can I tell you a joke?",
                        f'I am glad to see you being so happy! {physical_activites}'],
                'love': [f'Your love pleases me. {physical_activites}',
                         f'I am glad to see you being so happy! {physical_activites}'],
-               'surprise': [f'Things can be really suprising. {physical_activites}', string_surprise],
+               'surprise': [f'Things can be really surprising. {physical_activites}', string_surprise],
                'neutral': ['']}
 
-jokes = [joke1, joke2, joke3, joke4, joke5, joke6, joke7, joke8, joke9, joke10, joke11, joke12]
+jokes = [joke2, joke3, joke4, joke5, joke6, joke7, joke8, joke9, joke10, joke11, joke12]
 
 
 def get_answer(phrase):
