@@ -198,7 +198,6 @@ class RuleBasedSkillSelectorConnector:
         else:
             # process regular utterances
             skills_for_uttr.append("program_y")
-            skills_for_uttr.append("program_y_wide")
             skills_for_uttr.append("cobotqa")
             skills_for_uttr.append("christmas_new_year_skill")
             skills_for_uttr.append("superbowl_skill")
@@ -213,8 +212,10 @@ class RuleBasedSkillSelectorConnector:
             if len(dialog["human_utterances"]) >= 3:
                 # can answer on 3-th user response
                 skills_for_uttr.append("convert_reddit")
-            if len(dialog["utterances"]) > 7:
+            if len(dialog["utterances"]) > 14:
                 skills_for_uttr.append("alice")
+                skills_for_uttr.append("program_y_wide")
+            if len(dialog["utterances"]) > 7:
                 skills_for_uttr.append("tfidf_retrieval")
                 # Disable topicalchat_convert_retrieval v8.7.0
                 # skills_for_uttr.append("topicalchat_convert_retrieval")
