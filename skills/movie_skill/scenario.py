@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 
 SUPER_CONFIDENCE = 1.
 DEFAULT_CONFIDENCE = 0.95
+OFFER_TALK_ABOUT_MOVIES_CONFIDENCE = 0.65
 NOT_SURE_CONFIDENCE = 0.5
 SECOND_FACT_PROBA = 0.5
 
@@ -256,7 +257,7 @@ class MovieSkillScenario:
                 else:
                     offer = offer_talk_about_movies(human_attr)
                     response = f"{offer}"
-                    confidence = DEFAULT_CONFIDENCE
+                    confidence = OFFER_TALK_ABOUT_MOVIES_CONFIDENCE
                     attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
                     human_attr["offer_talk_about_movies"] += [offer]
             else:
@@ -272,7 +273,7 @@ class MovieSkillScenario:
             attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
             human_attr["offer_talk_about_movies"] += [offer]
         elif self.is_about_movies(curr_user_uttr, prev_bot_uttr) and len(movies_ids) > 0 and \
-            (self.is_opinion_expression(curr_user_uttr, prev_bot_uttr) or self.is_opinion_request(curr_user_uttr)):
+                (self.is_opinion_expression(curr_user_uttr, prev_bot_uttr) or self.is_opinion_request(curr_user_uttr)):
             curr_movie_id = movies_ids[-1]
             if curr_movie_id not in human_attr["discussed_movie_ids"]:
                 response, confidence, human_attr, bot_attr, attr = self.first_reply_when_about_movies(
@@ -313,13 +314,15 @@ class MovieSkillScenario:
         movie_title = self.templates.imdb(movie_id)["title"]
         logger.info(f"First reply on extracted movie `{movie_title}` from user utterance "
                     f"`{curr_user_uttr['text']}`.")
-        if self.remove_punct_and_articles(curr_user_uttr["text"]) == self.remove_punct_and_articles(movie_title):
+        numvotes = self.templates.imdb.get_info_about_movie(movie_title, "numVotes")
+        numvotes = 0 if numvotes is None else numvotes
+        if numvotes > 10000:
             # full user utterance is a movie title -> consider full match
-            logger.info("Full match of user uttr and movie title.")
+            logger.info("Found movie title with more than 10k votes. Don't clarify the title.")
             response, confidence, human_attr, bot_attr, attr = self.opinion_expression_and_request(
                 movie_id, [], human_attr, bot_attr)
         else:
-            logger.info("Not full match of user uttr and movie title. Clarify title.")
+            logger.info("Found movie title with less than 10k votes. Clarify title.")
             response, confidence, attr = self.clarify_movie_title(curr_user_uttr, movie_id)
 
         return response, confidence, human_attr, bot_attr, attr
@@ -515,7 +518,7 @@ class MovieSkillScenario:
         offer = offer_talk_about_movies(human_attr)
         logger.info(f"Offer quesiton about movie `{offer}`.")
         response = f"{offer}"
-        confidence = DEFAULT_CONFIDENCE
+        confidence = OFFER_TALK_ABOUT_MOVIES_CONFIDENCE
         attr = {"status_line": prev_status_line + ["finished"], "can_continue": CAN_CONTINUE}
         human_attr["offer_talk_about_movies"] += [offer]
 
