@@ -251,10 +251,9 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
-          - node.labels.group == 0
       resources:
         reservations:
-          memory: 6G
+          memory: 1.5G
   ner:
     build:
       context: ./annotators/NER/
@@ -459,6 +458,7 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+          - node.labels.group == 0
   convert_reddit:
     build:
       context: ./skills/convert_reddit/
