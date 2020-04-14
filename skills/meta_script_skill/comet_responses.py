@@ -1,17 +1,16 @@
 #!/usr/bin/env python
 
 import logging
-
+import re
 from os import getenv
-from random import choice
 import sentry_sdk
-import requests
 import spacy
 from spacy.symbols import nsubj, VERB  # , xcomp, NOUN, ADP
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
 from utils import get_used_attributes_by_name, get_not_used_template, get_comet_atomic, \
-    remove_duplicates, custom_request, correct_verb_form
+    TOP_FREQUENT_WORDS
+from constants import idopattern
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -26,35 +25,34 @@ nlp = spacy.load("en_core_web_sm")
 CONCEPTNET_SERVICE_URL = "http://comet_conceptnet:8065/comet"
 
 ATOMIC_PAST_QUESTION_TEMPLATES = {
-    "So, do you feel RELATION?": {"attribute": "xReact"},  # adjective relation
-    "So, did you RELATION?": {"attribute": "xNeed"},  # relation `do that`
-    "You seem to be RELATION.": {"attribute": "xAttr"},  # adjective relation
-    "You are so RELATION.": {"attribute": "xAttr"},  # adjective relation
-    "Did you RELATION as a result?": {"attribute": "xEffect"},  # relation `do that`
-    "So, will you RELATION?": {"attribute": "xIntent"},  # relation `do that`
-    "Do you want to RELATION now?": {"attribute": "xWant"}  # relation `do that`
+    "So, I am wondering if you feel RELATION?": {"attribute": "xReact"},  # adjective relation
+    "So, did you RELATION before that?": {"attribute": "xNeed"},  # relation `do that`
+    "You seem to be RELATION now.": {"attribute": "xAttr"},  # adjective relation
+    "I suppose you may feel RELATION now.": {"attribute": "xAttr"},  # adjective relation
+    "It seems to me you RELATION as a result?": {"attribute": "xEffect"},  # relation `do that`
+    "So, I am wondering did you RELATION?": {"attribute": "xIntent"},  # relation `do that`
+    "Did you want to RELATION?": {"attribute": "xWant"}  # relation `do that`
 }
 
 
 ATOMIC_FUTURE_QUESTION_TEMPLATES = {
-    "Do you feel RELATION?": {"attribute": "xReact"},  # adjective relation
-    "Did you RELATION?": {"attribute": "xNeed"},  # relation `do that`
-    "Did you prepared? Did you RELATION?": {"attribute": "xNeed"},  # relation `do that`
-    "Are you ready for that? Did you RELATION?": {"attribute": "xNeed"},  # relation `do that`
-    "You seem to be RELATION.": {"attribute": "xAttr"},  # adjective relation
-    "You are RELATION enough to do that.": {"attribute": "xAttr"},  # adjective relation
-    "So, will you RELATION as a result?": {"attribute": "xEffect"},  # relation `do that`
-    "So, will you RELATION?": {"attribute": "xIntent"},  # relation `do that`
-    "Do you expect to RELATION now?": {"attribute": "xWant"}  # relation `do that`
+    "I suppose it could be RELATION?": {"attribute": "xReact"},  # adjective relation
+    "It seems to me you need to RELATION?": {"attribute": "xNeed"},  # relation `do that`
+    "I suppose you need to RELATION?": {"attribute": "xNeed"},  # relation `do that`
+    "It seem to be RELATION, isn't it?.": {"attribute": "xAttr"},  # adjective relation
+    "I imagine it could be RELATION, couldn't it?": {"attribute": "xAttr"},  # adjective relation
+    "I am wondering will you RELATION as a result?": {"attribute": "xEffect"},  # relation `do that`
+    "I suppose you will RELATION, aren't you?": {"attribute": "xIntent"},  # relation `do that`
+    "I suppose you expect to RELATION, aren't you?": {"attribute": "xWant"}  # relation `do that`
 }
 
 ATOMIC_COMMENT_TEMPLATES = {
-    "I feel RELATION for you.": {"attribute": "oReact"},  # adjective relation
-    "I am RELATION for you.": {"attribute": "oReact"},  # adjective relation
+    "Others will feel RELATION after that, won't they?": {"attribute": "oReact"},  # adjective relation
+    "I suppose some people may feel RELATION, what do you think?": {"attribute": "oReact"},  # adjective relation
     "I am RELATION to hear that.": {"attribute": "oReact"},  # adjective relation
-    "I hope you RELATION.": {"attribute": "oEffect"},  # relation `do that`
-    "I believe you will RELATION.": {"attribute": "oEffect"},  # relation `do that`
-    "I am sure you will RELATION.": {"attribute": "oEffect"}  # relation `do that`
+    "It seems others want to RELATION.": {"attribute": "oEffect"},  # relation `do that`
+    "I suppose somebody wants to RELATION, am I right?": {"attribute": "oEffect"},  # relation `do that`
+    "I am wondering if other RELATION.": {"attribute": "oEffect"}  # relation `do that`
 }
 
 CONCEPTNET_PAST_QUESTION_TEMPLATES = {
@@ -96,7 +94,18 @@ def ask_question_using_atomic(dialog):
     confidence = 0.
 
     curr_user_uttr = dialog["human_utterances"][-1]["text"]
-    if len(curr_user_uttr.split()) <= 3 or len(curr_user_uttr.split()) > 10:
+    idosents = re.findall(idopattern, curr_user_uttr.lower())
+    best_sent = ""
+    if len(idosents) > 0:
+        best_freq_portion = 0.8
+        for sent in idosents:
+            words = sent.split()
+            freq_words_portion = sum([1 if word in TOP_FREQUENT_WORDS else 0 for word in words]) * 1. / len(words)
+            if freq_words_portion <= best_freq_portion:
+                best_freq_portion = freq_words_portion
+                best_sent = sent
+
+    if len(best_sent.split()) <= 4 or len(best_sent.split()) > 10:
         return "", 0.0, {"can_continue": CAN_NOT_CONTINUE}
 
     used_templates = get_used_attributes_by_name(
@@ -105,6 +114,7 @@ def ask_question_using_atomic(dialog):
     tense = get_main_verb_tense_for_user_doings(curr_user_uttr)
     if tense:
         logger.info(f"Found user action of {tense} tense.")
+
     if tense == "past":
         comet_question_template = get_not_used_template(used_templates, ATOMIC_PAST_QUESTION_TEMPLATES)
         attr["atomic_question_template"] = comet_question_template
@@ -176,53 +186,6 @@ def comment_using_atomic(dialog):
         attr["can_continue"] = CAN_CONTINUE
         attr["atomic_dialog"] = "comment"
     return response, confidence, attr
-
-
-def get_comet_conceptnet(topic, relation):
-    """
-    Get COMeT ConceptNet prediction for considered topic like `verb subj/adj/adv` of particular relation.
-
-    Args:
-        topic: string in form of nounphrase
-        relation:  considered comet relations, out of ["xAttr", "xIntent", "xNeed", "xEffect", "xReact", "xWant"]
-
-    Returns:
-        string, one of predicted by Comet relations
-    """
-
-    logger.info(f"Comet ConceptNet request on topic: {topic}.")
-    if topic is None or topic == "" or relation == "" or relation is None:
-        return ""
-
-    # send request to COMeT ConceptNet service on `topic & relation`
-    try:
-        comet_result = custom_request(CONCEPTNET_SERVICE_URL, {"input": f"{topic}.",
-                                                               "category": relation}, 1.5)
-    except (requests.ConnectTimeout, requests.ReadTimeout) as e:
-        logger.error("COMeT ConceptNet result Timeout")
-        sentry_sdk.capture_exception(e)
-        comet_result = requests.Response()
-        comet_result.status_code = 504
-
-    if comet_result.status_code != 200:
-        msg = "COMeT ConceptNet: result status code is not 200: {}. result text: {}; result status: {}".format(
-            comet_result, comet_result.text, comet_result.status_code)
-        logger.warning(msg)
-        relation_phrases = []
-    else:
-        relation_phrases = comet_result.json().get(relation, {}).get("beams", [])
-    # remove `none` relation phrases (it's sometimes returned by COMeT)
-    relation_phrases = [el for el in relation_phrases if el != "none"]
-
-    banned = [topic, f"be {topic}", f"be a {topic}"]
-    relation_phrases = remove_duplicates(banned + relation_phrases)[len(banned):]
-
-    relation_phrases = correct_verb_form(relation, relation_phrases)
-
-    if len(relation_phrases) > 0:
-        return choice(relation_phrases)
-    else:
-        return ""
 
 
 # def ask_question_using_conceptnet(dialog):
