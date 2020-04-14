@@ -13,6 +13,7 @@ import pprint
 from nltk.tokenize import sent_tokenize
 
 from common.universal_templates import if_lets_chat_about_topic, if_choose_topic
+from common.utils import scenario_skills, retrieve_skills, okay_statements, is_question
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -24,6 +25,7 @@ app = Flask(__name__)
 
 CALL_BY_NAME_PROBABILITY = 0.5  # if name is already known
 ASK_DUMMY_QUESTION_PROB = 0.5
+ASK_LINK_TO_FOR_RETRIEVE_PROB = 0.5
 
 
 @app.route("/respond", methods=['POST'])
@@ -130,6 +132,48 @@ def respond():
                             selected_human_attributes, selected_bot_attributes)))
 
 
+def add_question_to_statement(best_text, best_skill_name, question, link_to_question):
+    if best_text.strip() in okay_statements:
+        if question != "" and random.random() < ASK_DUMMY_QUESTION_PROB:
+            logger.info(f"adding {question} to response.")
+            best_text += np.random.choice([f" Let me ask you something. {question}",
+                                           f" I would like to ask you a question. {question}"])
+    elif best_skill_name in retrieve_skills:
+        if not is_question(best_text) and random.random() < ASK_LINK_TO_FOR_RETRIEVE_PROB:
+            logger.info(f"adding link_to {link_to_question} to response.")
+            best_text += f". {link_to_question}"
+
+    return best_text
+
+
+def lower_duplicates_score(candidates, bot_utt_counter, scores, confidences):
+    for i, cand in enumerate(candidates):
+        cand_sents = sent_tokenize(cand["text"].lower())
+        coeff = 1
+        for cand_sent in cand_sents:
+            if len(cand_sent.split()) >= 3:
+                coeff += bot_utt_counter[cand_sent]
+
+        if confidences[i] < 1.:
+            confidences[i] /= coeff
+            scores[i]['isResponseInteresting'] /= coeff
+            scores[i]['responseEngagesUser'] /= coeff
+
+
+def lower_retrieve_skills_confidence_if_scenario_exist(candidates, scores, confidences):
+    has_scenario_skill = False
+    lower_coeff = 0.25  # Lower confidence and isResponseInteresting for retrieve skills to 25%
+    for cand in candidates:
+        if cand['skill_name'] in scenario_skills and cand['text'] and cand['confidence'] >= 0.9:
+            has_scenario_skill = True
+            break
+    if has_scenario_skill:
+        for i, cand in enumerate(candidates):
+            if cand['skill_name'] in retrieve_skills:
+                confidences[i] *= lower_coeff
+                scores[i]['isResponseInteresting'] *= lower_coeff
+
+
 def select_response(candidates, scores, confidences, toxicities, has_blacklisted,
                     has_inappropriate, stop_probs, dialog):
     confidence_strength = 2
@@ -169,17 +213,8 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     bot_utterances = sum(bot_utterances, [])
     bot_utt_counter = Counter(bot_utterances)
 
-    for i, cand in enumerate(candidates):
-        cand_sents = sent_tokenize(cand["text"].lower())
-        coeff = 1
-        for cand_sent in cand_sents:
-            if len(cand_sent.split()) >= 3:
-                coeff += bot_utt_counter[cand_sent]
-
-        if confidences[i] < 1.:
-            confidences[i] /= coeff
-            scores[i]['isResponseInteresting'] /= coeff
-            scores[i]['responseEngagesUser'] /= coeff
+    lower_duplicates_score(candidates, bot_utt_counter, scores, confidences)
+    lower_retrieve_skills_confidence_if_scenario_exist(candidates, scores, confidences)
 
     skill_names = [c['skill_name'] for c in candidates]
     how_are_you_spec = "Do you want to know what I can do?"  # this is always at the end of answers to `how are you`
@@ -193,6 +228,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     very_big_score = 100
     very_low_score = -100
     question = ""
+    link_to_question = ""
 
     for i in range(len(scores)):
         curr_score = None
@@ -286,6 +322,8 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                         confidences[i] /= 1.5
                     if len(bot_utterances) >= 2 and "?" in bot_utterances[-2]:
                         confidences[i] /= 1.1
+            if "link_to_for_response_selector" in candidates[i].get("type", ""):
+                link_to_question = candidates[i]['text']
         if skill_names[i] == 'dummy_skill' and "question" in candidates[i].get("type", ""):
             question = candidates[i]['text']
 
@@ -321,15 +359,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     best_human_attributes = candidates[best_id].get("human_attributes", {})
     best_bot_attributes = candidates[best_id].get("bot_attributes", {})
 
-    if best_text.strip() in ["Okay.", "That's cool!", "Interesting.", "Sounds interesting.", "Sounds interesting!",
-                             "OK.", "Cool!", "Thanks!", "Okay, thanks.", "I'm glad you think so!",
-                             "Sorry, I don't have an answer for that!", "Let's talk about something else.",
-                             "As you wish.", "All right.", "Right.", "Anyway.", "Oh, okay.", "Oh, come on.",
-                             "Really?", "Okay. I got it.", "Well, okay.", "Well, as you wish."]:
-        if question != "" and random.random() < ASK_DUMMY_QUESTION_PROB:
-            logger.info(f"adding {question} to response.")
-            best_text += np.random.choice([f" Let me ask you something. {question}",
-                                           f" I would like to ask you a question. {question}"])
+    best_text = add_question_to_statement(best_text, best_skill_name, question, link_to_question)
 
     if len(dialog["bot_utterances"]) == 0 and greeting_spec not in best_text:
         # add greeting to the first bot uttr, if it's not already included

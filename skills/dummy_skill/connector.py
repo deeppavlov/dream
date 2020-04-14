@@ -105,7 +105,7 @@ questions_generator = RandomTopicResponder("skills/dummy_skill/questions_with_to
 facts_generator = RandomTopicResponder("skills/dummy_skill/facts_with_topics.csv", 'topic', 'fact')
 
 
-def generate_question_not_from_last_responses(dialog):
+def get_link_to_question(dialog):
     # get previous active skills
     prev_active_skills = [uttr.get("active_skill", "") for uttr in dialog["bot_utterances"]
                           if uttr.get("active_skill", "") != ""]
@@ -117,14 +117,21 @@ def generate_question_not_from_last_responses(dialog):
     else:
         linked_question = ""
 
+    for prev_bot_uttr in dialog["bot_utterances"]:
+        if linked_question and linked_question.lower() in prev_bot_uttr["text"].lower():
+            linked_question = ""
+    return linked_question
+
+
+def generate_question_not_from_last_responses(dialog):
+    linked_question = get_link_to_question(dialog)
+
     to_choose = copy(NORMAL_QUESTIONS)
     to_remove = []
     for prev_bot_uttr in dialog["bot_utterances"]:
         for i, quest in enumerate(to_choose):
             if quest.lower() in prev_bot_uttr["text"].lower():
                 to_remove += [quest]
-            if len(linked_question) != 0 and linked_question in prev_bot_uttr["text"].lower():
-                linked_question = ""
     for quest in set(to_remove):
         to_choose.remove(quest)
 
@@ -192,6 +199,12 @@ class DummySkillConnector:
                 confs += [0.7]
                 attrs += [{"type": "normal_question"}]
 
+            link_to_question = get_link_to_question(dialog)
+            if link_to_question:
+                cands += [link_to_question]
+                confs += [0.05]  # Use it only as response selector retrieve skill output modifier
+                attrs += [{"type": "link_to_for_response_selector"}]
+
             facts_same_nps = []
             for i, nphrase in enumerate(curr_nounphrases):
                 for fact_id in NP_FACTS.get(nphrase, []):
@@ -203,14 +216,6 @@ class DummySkillConnector:
                 cands += [choice(facts_same_nps)]
                 confs += [0.6]
                 attrs += [{"type": "nounphrase_fact"}]
-            '''
-            else:
-                logger.info("No special nounphrases for facts. Return fact of the same topic.")
-                cands += [f"Listen what I found on Reddit: {facts_generator.get_random_text(curr_topics)}"
-                          f". What do you think about it?"]
-                confs += [0.6]
-                attrs += [{"type": "topic_fact"}]
-            '''
 
             total_time = time.time() - st_time
             logger.info(f'dummy_skill exec time: {total_time:.3f}s')

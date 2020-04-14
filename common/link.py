@@ -10,6 +10,9 @@ import common.movies as movies
 import common.emotion as emotion
 import common.weather as weather
 import common.coronavirus as coronavirus
+import common.personal_info as personal_info
+import common.meta_script as meta_script
+import common.short_story as short_story
 
 
 # Each common skill module should define +skill_trigger_phrases()+ function
@@ -21,6 +24,10 @@ skills_phrases_map = {
     'emotion_skill': set(emotion.skill_trigger_phrases()),
     'coronavirus_skill': set(coronavirus.skill_trigger_phrases()),
     'weather_skill': set(weather.skill_trigger_phrases()),
+    'personal_info_skill': set(personal_info.skill_trigger_phrases()),
+    'meta_script_skill': set(meta_script.skill_trigger_phrases()),
+    'short_story_skill': set(short_story.skill_trigger_phrases()),
+    # TODO: Add smalltalk skill phrases that is not identical to meta_script_skill
 }
 
 

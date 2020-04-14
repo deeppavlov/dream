@@ -1,6 +1,25 @@
 import re
 
 
+other_skills = {'intent_responder', 'program_y_dangerous', 'misheard_asr', 'christmas_new_year_skill',
+                'superbowl_skill', 'oscar_skill', 'valentines_day_skill'}
+scenario_skills = {'movie_skill', 'personal_info_skill', 'reddit_ner_skill', 'short_story_skill',
+                   'book_skill', 'weather_skill', 'emotion_skill', 'dummy_skill_dialog',
+                   'meta_script_skill', 'coronavirus_skill', 'small_talk_skill',
+                   'news_api_skill'}
+retrieve_skills = {'cobotqa', 'program_y', 'alice', 'eliza', 'tfidf_retrieval', 'book_tfidf_retrieval',
+                   'entertainment_tfidf_retrieval', 'fashion_tfidf_retrieval', 'movie_tfidf_retrieval',
+                   'music_tfidf_retrieval', 'politics_tfidf_retrieval', 'science_technology_tfidf_retrieval',
+                   'sport_tfidf_retrieval', 'animals_tfidf_retrieval', 'convert_reddit',
+                   'topicalchat_convert_retrieval', 'program_y_wide'}
+
+okay_statements = {"Okay.", "That's cool!", "Interesting.", "Sounds interesting.", "Sounds interesting!",
+                   "OK.", "Cool!", "Thanks!", "Okay, thanks.", "I'm glad you think so!",
+                   "Sorry, I don't have an answer for that!", "Let's talk about something else.",
+                   "As you wish.", "All right.", "Right.", "Anyway.", "Oh, okay.", "Oh, come on.",
+                   "Really?", "Okay. I got it.", "Well, okay.", "Well, as you wish."}
+
+
 def get_skill_outputs_from_dialog(utterances, skill_name, activated=False):
     """
     Extract list of dictionaries with already formatted outputs of `skill_name` from full dialog.
@@ -142,3 +161,7 @@ def is_no(annotated_phrase):
     user_phrase = annotated_phrase['text'].lower().strip().replace('.', '')
     is_not_horrible = 'horrible' != user_phrase
     return is_not_horrible and (no_detected or re.search(no_templates, annotated_phrase["text"].lower()))
+
+
+def is_question(text):
+    return '?' in text

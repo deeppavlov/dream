@@ -97,7 +97,7 @@ class Teller:
             else:  # The type of story is already specified in intial intent
                 phrase = random.choice(self.phrases["sure"]) + " " + random.choice(self.phrases["which_story"])
                 story = random.choice(self.stories[story_type])
-                phrase = story["setup"] + random.choice(self.phrases['what_happend_next'])
+                phrase = story["setup"] + '... ' + random.choice(self.phrases['what_happend_next'])
                 status = self.status_constants["must"]
         else:  # Start of a dialog
             phrase = random.choice(self.phrases['start_phrases'])

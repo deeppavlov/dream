@@ -85,9 +85,7 @@
         <pattern>NOTHING</pattern>
         <template>
             <random>
-                <li>I invite you to rest in the nothingness.</li>
                 <li>Often under nothingess is great depth.</li>
-                <li>Let yourself experience how nothing feels.</li>
             </random>
         </template>
     </category>

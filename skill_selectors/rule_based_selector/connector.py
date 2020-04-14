@@ -10,7 +10,7 @@ from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
 from common.emotion import detect_emotion
 from common.news import is_breaking_news_requested
 from common.utils import check_about_death, about_virus, quarantine_end
-from common.weather import is_weather_for_homeland_requested
+from common.weather import is_weather_requested
 from common.coronavirus import is_staying_home_requested
 
 
@@ -166,7 +166,7 @@ class RuleBasedSkillSelectorConnector:
         ).get("detected", False) or (
             prev_bot_uttr.get("active_skill", "") == "weather_skill" and weather_city_slot_requested
         )
-        about_weather = about_weather or is_weather_for_homeland_requested(prev_bot_uttr, dialog['utterances'][-1])
+        about_weather = about_weather or is_weather_requested(prev_bot_uttr, dialog['utterances'][-1])
         news_re_expr = re.compile(r"(news|(what is|what's)( the)? new|something new)")
         about_news = (self.news_cobot_topics & cobot_topics) or re.search(
             news_re_expr, reply
