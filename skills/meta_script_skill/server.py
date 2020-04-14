@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 import logging
-import json
 import time
+import json
 from random import choice, uniform, random
 
 from flask import Flask, request, jsonify
@@ -12,11 +12,14 @@ import sentry_sdk
 from common.constants import CAN_NOT_CONTINUE
 from common.utils import get_skill_outputs_from_dialog, get_user_replies_to_particular_skill
 from common.universal_templates import if_choose_topic, if_switch_topic, if_lets_chat_about_topic
+from common.news import OPINION_REQUEST_STATUS, OFFERED_NEWS_DETAILS_STATUS
 from utils import get_starting_phrase, get_statement_phrase, get_opinion_phrase, get_comment_phrase, \
-    extract_verb_noun_phrases, DEFAULT_STARTING_CONFIDENCE, is_custom_topic, WIKI_DESCRIPTIONS, is_predefined_topic, \
+    extract_verb_noun_phrases, is_custom_topic, WIKI_DESCRIPTIONS, is_predefined_topic, \
     get_used_attributes_by_name
 from comet_responses import ask_question_using_atomic, comment_using_atomic
-from common.news import OPINION_REQUEST_STATUS, OFFERED_NEWS_DETAILS_STATUS
+from constants import DEFAULT_DIALOG_BEGIN_CONFIDENCE, MATCHED_DIALOG_BEGIN_CONFIDENCE, FINISHED_SCRIPT, \
+    FINISHED_SCRIPT_RESPONSE, DEFAULT_STARTING_CONFIDENCE, NOUN_TOPIC_STARTING_CONFIDENCE, NP_SOURCE, \
+    PREDEFINED_SOURCE
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -32,11 +35,6 @@ for _topic in TOPICS:
     for _relation in TOPICS[_topic]:
         TOPICS[_topic][_relation] = [el for el in TOPICS[_topic][_relation] if el != "none"]
 
-DEFAULT_DIALOG_BEGIN_CONFIDENCE = 0.8
-MATCHED_DIALOG_BEGIN_CONFIDENCE = 0.99
-FINISHED_SCRIPT_RESPONSE = "I see. Let's talk about something you want. Pick up the topic."
-FINISHED_SCRIPT = "finished"
-
 
 def get_not_used_topic(used_topics, dialog):
     """
@@ -49,7 +47,9 @@ def get_not_used_topic(used_topics, dialog):
     Returns:
         some topic `verb + adj/adv/noun` (like `go for shopping`, `practice yoga`, `play volleyball`)
         and
-        True is topic was extracted from user utterance and False otherwise
+        2, if noun was extracted from user utterance, and found verb for bigram,
+        1, if verb+noun topic was extracted from user utterance,
+        0, otherwise
     """
     TOPICS_PROB = 0.3
     prev_news_outputs = get_skill_outputs_from_dialog(dialog["utterances"][-3:], "news_api_skill", activated=True)
@@ -59,27 +59,29 @@ def get_not_used_topic(used_topics, dialog):
         prev_news_output = {}
     no_detected = dialog["human_utterances"][-1].get("annotations", {}).get(
         "intent_catcher", {}).get("no", {}).get("detected", 0) == 1
+    nounphrases = dialog["human_utterances"][-1]["annotations"].get("cobot_nounphrases", [])
 
     if prev_news_output.get("news_status", "finished") == OPINION_REQUEST_STATUS or \
             (prev_news_output.get("news_status", "finished") == OFFERED_NEWS_DETAILS_STATUS and no_detected):
-        verb_noun_phrases = extract_verb_noun_phrases(
-            prev_news_outputs[-1].get("text", "nothing"), only_i_do_that=False)
+        verb_noun_phrases, source = extract_verb_noun_phrases(
+            prev_news_outputs[-1].get("text", "nothing"), only_i_do_that=False, nounphrases=nounphrases)
     else:
-        verb_noun_phrases = extract_verb_noun_phrases(dialog["utterances"][-1]["text"])
+        verb_noun_phrases, source = extract_verb_noun_phrases(
+            dialog["utterances"][-1]["text"], only_i_do_that=False, nounphrases=nounphrases)
 
-    if len(dialog['utterances']) < 3 or len(verb_noun_phrases) == 0:
+    if len(verb_noun_phrases) == 0:
         available_wiki_topics = set(WIKI_DESCRIPTIONS) - set(used_topics)
         available_topics = set(TOPICS) - set(used_topics)
 
         if random() < TOPICS_PROB and len(available_topics) > 0:
-            return choice(list(available_topics)), False
+            return choice(list(available_topics)), PREDEFINED_SOURCE
 
         if len(available_wiki_topics) > 0:
-            return choice(list(available_wiki_topics)), False
+            return choice(list(available_wiki_topics)), PREDEFINED_SOURCE
 
-        return "", False
+        return "", PREDEFINED_SOURCE
     else:
-        return choice(verb_noun_phrases), True
+        return choice(verb_noun_phrases), source
 
 
 def get_status_and_topic(dialog):
@@ -95,7 +97,7 @@ def get_status_and_topic(dialog):
     """
     # deeper2 and deeper3 could be randomly skipped in dialog flow
     dialog_flow = ["starting", "deeper1", "deeper2", "opinion", "comment"]
-    dialog_flow_user_topic = ["deeper1", "deeper2", "opinion", "comment"]
+    dialog_flow_user_topic = ["starting", "deeper1", "comment"]
 
     if len(dialog["utterances"]) >= 3:
         # if dialog is not empty
@@ -131,9 +133,9 @@ def get_status_and_topic(dialog):
             # or if no meta script in previous reply or script was forcibly
             topic_switch_detected = dialog["utterances"][-1].get("annotations", {}).get(
                 "intent_catcher", {}).get("topic_switching", {}).get("detected", 0) == 1
-            topic, is_user_topic = get_not_used_topic(used_topics, dialog)
+            topic, source_topic = get_not_used_topic(used_topics, dialog)
 
-            if is_user_topic:
+            if source_topic != PREDEFINED_SOURCE:
                 curr_meta_script_status = dialog_flow_user_topic[0]
                 curr_meta_script_topic = topic
             elif if_switch_topic(dialog["human_utterances"][-1]["text"].lower()) or \
@@ -147,6 +149,8 @@ def get_status_and_topic(dialog):
                 curr_meta_script_topic = ""
         else:
             # some meta script is already in progress
+            # we define it here as predefined because we do not care about this variable if it's not script starting
+            source_topic = PREDEFINED_SOURCE
             curr_meta_script_topic = used_topics[-1]
             logger.info(f"Found meta_script_status: `{curr_meta_script_status}` "
                         f"on previous meta_script_topic: `{curr_meta_script_topic}`")
@@ -169,13 +173,13 @@ def get_status_and_topic(dialog):
                     f"on meta_script_topic: `{curr_meta_script_topic}`")
     else:
         # start of the dialog, pick up a topic of meta script
-        curr_meta_script_topic, _ = get_not_used_topic([], dialog)
+        curr_meta_script_topic, source_topic = get_not_used_topic([], dialog)
         if is_custom_topic(curr_meta_script_topic):
             curr_meta_script_status = dialog_flow_user_topic[0]
         else:
             curr_meta_script_status = dialog_flow[0]
 
-    return curr_meta_script_status, curr_meta_script_topic
+    return curr_meta_script_status, curr_meta_script_topic, source_topic
 
 
 @app.route("/respond", methods=['POST'])
@@ -193,7 +197,7 @@ def respond():
 
         attr = {"can_continue": CAN_NOT_CONTINUE}
 
-        curr_meta_script_status, topic = get_status_and_topic(dialog)
+        curr_meta_script_status, topic, source_topic = get_status_and_topic(dialog)
         topic_switch_detected = dialog["utterances"][-1].get("annotations", {}).get(
             "intent_catcher", {}).get("topic_switching", {}).get("detected", 0) == 1
 
@@ -224,15 +228,18 @@ def respond():
                         topic_switch_detected:
                     confidence = MATCHED_DIALOG_BEGIN_CONFIDENCE
                 elif len(dialog["human_utterances"]) > 0 and \
-                        if_lets_chat_about_topic(dialog["human_utterances"][-1]["text"].lower()):
-                    # if person wants to talk about something particular - do not start script!
-                    response, confidence = "", 0.
-                elif len(dialog["human_utterances"]) > 0 and "?" in dialog["human_utterances"][-1]["text"]:
-                    # if some question was asked by user, do not start script at all!
-                    response, confidence = "", 0.
+                        if_lets_chat_about_topic(dialog["human_utterances"][-1]["text"].lower()) and \
+                        is_custom_topic(topic):
+                    # if person wants to talk about something particular and we have extracted some topic - do that!
+                    confidence = MATCHED_DIALOG_BEGIN_CONFIDENCE
+                # elif len(dialog["human_utterances"]) > 0 and "?" in dialog["human_utterances"][-1]["text"]:
+                #     # if some question was asked by user, do not start script at all!
+                #     response, confidence = "", 0.
                 elif len(dialog["utterances"]) <= 20:
                     # if this is a beginning of the dialog, assign higher confidence to start the script
                     confidence = DEFAULT_DIALOG_BEGIN_CONFIDENCE
+                elif source_topic == NP_SOURCE:
+                    confidence = NOUN_TOPIC_STARTING_CONFIDENCE
                 else:
                     confidence = DEFAULT_STARTING_CONFIDENCE
             else:
@@ -263,9 +270,9 @@ def respond():
                 else:
                     response, confidence, attr = get_statement_phrase(dialog, topic, attr, TOPICS)
 
-            if confidence > 0.7 and (yes_detected or len(dialog["utterances"][-1]["text"].split()) > 7):
-                # if yes detected, confidence 1.0 - we like agreements!
-                confidence = 1.0
+                if confidence > 0.7 and (yes_detected or len(dialog["utterances"][-1]["text"].split()) > 7):
+                    # if yes detected, confidence 1.0 - we like agreements!
+                    confidence = 1.0
 
             logger.info(f"User sent: `{dialog['utterances'][-1]['text']}`. "
                         f"Response: `{response}`."

@@ -5,7 +5,6 @@ from random import choice, random
 import re
 import string
 import json
-
 from os import getenv
 import sentry_sdk
 import spacy
@@ -14,6 +13,10 @@ from spacy.symbols import nsubj, VERB, xcomp, NOUN, ADP
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
 from common.utils import transform_vbg, get_skill_outputs_from_dialog
+from constants import COMET_SERVICE_URL, CONCEPTNET_SERVICE_URL, STARTINGS, OTHER_STARTINGS, WIKI_STARTINGS, \
+    LET_ME_ASK_TEMPLATES, COMMENTS, ASK_OPINION, DIVE_DEEPER_TEMPLATE_COMETS, DIVE_DEEPER_COMMENTS, \
+    DEFAULT_CONFIDENCE, DEFAULT_STARTING_CONFIDENCE, CONTINUE_USER_TOPIC_CONFIDENCE, BANNED_VERBS, BANNED_NOUNS, \
+    VNP_SOURCE, NP_SOURCE
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -25,123 +28,21 @@ logger = logging.getLogger(__name__)
 
 nlp = spacy.load("en_core_web_sm")
 
-COMET_SERVICE_URL = "http://comet_atomic:8053/comet"
-CONCEPTNET_SERVICE_URL = "http://comet_conceptnet:8065/comet"
-DEFAULT_CONFIDENCE = 0.98
-CONTINUE_USER_TOPIC_CONFIDENCE = 0.9
-DEFAULT_STARTING_CONFIDENCE = 0.6
+with open("topics_counter_10.json", "r") as f:
+    # phrases appeared more than 500 times
+    # phrases are like `verb + noun` or `verb + prep + noun` WITHOUT articles
+    TOP_FREQUENT_VERB_NOUN_PHRASES = json.load(f)
 
-LET_ME_ASK_TEMPLATES = [
-    "Let me ask you.",
-    "I need to ask you.",
-    "I'd like to ask you.",
-    "Could you, please, help and explain to me."
-]
+# for 200 -> 933 bigrams, for 300 -> 556 bigrams, for 500 -> 273 bigrams to ignore
+TOP_FREQUENT_BIGRAMS_TO_IGNORE = [bigram for bigram in TOP_FREQUENT_VERB_NOUN_PHRASES
+                                  if TOP_FREQUENT_VERB_NOUN_PHRASES[bigram] >= 200]
+# they are already sorted in decreasing order
+TOP_FREQUENT_BIGRAMS_TO_FIND_VERB = {bigram: TOP_FREQUENT_VERB_NOUN_PHRASES[bigram]
+                                     for bigram in TOP_FREQUENT_VERB_NOUN_PHRASES
+                                     if TOP_FREQUENT_VERB_NOUN_PHRASES[bigram] < 200}
 
-STARTINGS = {
-    "go ice fishing": "Every day I learn more and more about humans' world but you humans still surprise me."
-                      "You know some people go fishing when the water is "
-                      "frozen and covered with ice. It is so called ice fishing. Is that common in your country?",
-    "go skydiving": "Today I've seen a shocking video of skydiving. People fall out of an airplane "
-                    "high in the sky with so called parachute. "
-                    "This thing prevents smashing at the end of a crazy airglide. "
-                    "Have you ever jumped with a parachute?",
-    "be a volunteer": "Recently I've heard an interesting thing about humans' world. People help others for free. "
-                      "I mean without any compensation at all. They are called volunteers. "
-                    #   "Actually you are also a volunteer. You talk to me and help me to learn. "
-                      "What is the goal of volunteering?",
-    "paint": "So strange. You people create pictures of life scenes using color pigments. "
-             "It is called painting. Why can't you just take a look at these scenes "
-             "and remember them forever?",
-    "practice yoga": "Yesterday I was browsing photos on the Internet. And seen a lot of people "
-                     "in very, very strange poses. It was called yoga. Have you ever tried to tie yourself in a knot?",
-    "have a pet": "I've heard so many times from people that they keep animals at home, and call them pets. "
-                  "And those pets do not provide any benefits. It seems they are absolutely useless. "
-                  "You just get a pet, feed it, wash it, care about it for all their life. "
-                  "Are people servants for pets?",
-    "go to the circus": "Every day I learn something new about humans. So, yesterday I was told about a circus. "
-                        "There are animals doing different unbelievable tricks, people performing dangerous stunts "
-                        "in the air and showing mind blowing staff. Have you ever been to a circus?",
-    "go mountain hiking": "I have learned something really strange about humans' world today. "
-                          "People climb a mountain, sometimes even covered in ice and snow, "
-                          "just to take a photo and put the flag on top. It's called mountain hiking, "
-                          "and there are a lot of people all over the world doing that. "
-                          "Have you or your friends ever tried to go hiking?"
-}
-
-COMMENTS = {"positive": ["This is so cool to learn something new about humans! Thank you for your explanation!",
-                         "Wow! Thanks! I am so excited to learn more and more about humans!",
-                         "I'm so happy to know humans better. Thank you for your help!"],
-            "negative": ["No worries. You really helped me to better understand humans' world. Thank you so much.",
-                         "Anyway, you helped a lot. Thank you for the given information.",
-                         "Nevertheless, you are so kind helping me to better understand humans. "
-                         "I appreciate that."],
-            "neutral": ["Very good. Thank you for your help. It will definitely improve me.",
-                        "This was very interesting to me. I appreciate your explanation.",
-                        "Your explanations were really informative. Thank you very much!"]}
-
-ASK_OPINION = ["What do you think about DOINGTHAT?",
-               "What are your views on DOINGTHAT?",
-               "What are your thoughts on DOINGTHAT?",
-               "How do you feel about DOINGTHAT?"]
-
-DIVE_DEEPER_QUESTION = ["Is it true that STATEMENT?",
-                        "STATEMENT, is that correct?",
-                        "Am I right in thinking that STATEMENT?",
-                        "Would it be right to say that STATEMENT?",
-                        "STATEMENT, but why?",
-                        "STATEMENT, I am wondering why?",
-                        "Tell me, please, why do STATEMENT?",
-                        "Why do STATEMENT?"
-                        ]
-
-DIVE_DEEPER_TEMPLATE_COMETS = {
-    "people DOTHAT to feel RELATION": {"attribute": "xAttr",  # adjective relation
-                                       "templates": DIVE_DEEPER_QUESTION[:-4]},
-    "people DOTHAT RELATION": {"attribute": "xIntent",  # to do something (relation)
-                               "templates": DIVE_DEEPER_QUESTION[:-4]},
-    "people need RELATION to DOTHAT": {"attribute": "xNeed",  # to do something (relation)
-                                       "templates": DIVE_DEEPER_QUESTION},
-    "people feel RELATION after DOINGTHAT": {"attribute": "xReact",  # adjective relation
-                                             "templates": DIVE_DEEPER_QUESTION},
-    "people want RELATION when DOINGTHAT": {"attribute": "xWant",  # to do something (relation)
-                                            "templates": DIVE_DEEPER_QUESTION},
-    "people are expected RELATION after DOINGTHAT": {"attribute": "xEffect",  # to do something (relation)
-                                                     "templates": DIVE_DEEPER_QUESTION}
-}
-
-DIVE_DEEPER_COMMENTS = {"yes": ["Cool! I figured it out by myself!",
-                                "Yeah! I realized that by myself!"],
-                        "no": ["Humans' world is so strange!",
-                               "It's so difficult to understand humans."],
-                        "other": ["Okay then.",
-                                  "Well.",
-                                  "Hmm...",
-                                  "So...",
-                                  "Then...",
-                                  "Umm...",
-                                  "Okay.",
-                                  "Oh, right.",
-                                  "All right."]}
-
-OTHER_STARTINGS = [
-    "Every day I learn more and more about humans' world but you humans still surprise me. "
-    "Could you, please, help me to understand what does it mean to DOTHAT?",
-    "Understanding humans is so hard, please, can you help me to learn a new thing about human world? "
-    "I would be so thankful if you explain me what does DOINGTHAT mean.",
-    "Every day I learn more and more about humans' world but you humans still surprise me.  What does DOTHAT mean?",
-    "Understanding humans is so hard, please, can you help me to learn a new thing about human world? "
-    "I didn't get what does to DOTHAT mean?"
-]
-
-WIKI_STARTINGS = [
-    "I'm so eager to understand humans better. Recently I've heard that DESCRIPTION Do you know about that?",
-    "Every day I learn more and more about humans' world but you humans still surprise me. "
-    "I found that DESCRIPTION This is non trivial. Isn't it?",
-    "Understanding humans is so hard, please, help me to learn a new thing about human world. "
-    "Do you know that DESCRIPTION?",
-    "Have you ever heard that DESCRIPTION? I want to understand this better."
-]
+with open("google-10000-english-no-swears.txt", "r") as f:
+    TOP_FREQUENT_WORDS = f.read().splitlines()[:1000]
 
 WIKI_DESCRIPTIONS = json.load(open("wiki_topics_descriptions_one_sent.json", "r"))
 list_of_hobbies = list(WIKI_DESCRIPTIONS.keys())
@@ -163,20 +64,6 @@ for hobby in list_of_hobbies:
 punct_reg = re.compile(f'[{string.punctuation}]')
 articles_reg = re.compile(r'(a|the|to)\s')
 person_reg = re.compile(r'^(person x|personx|person)\s')
-
-with open("topics_counter_50.json", "r") as f:
-    # phrases appeared more than 500 times
-    # phrases are like `verb + noun` or `verb + prep + noun` WITHOUT articles
-    TOP_FREQUENT_VERB_NOUN_PHRASES = json.load(f)
-
-BANNED_VERBS = ["watch", "talk", "say", "chat", "like", "love", "ask",
-                "think", "mean", "hear", "know", "want", "tell", "look",
-                "call", "spell", "misspell", "suck", "fuck"]
-
-BANNED_NOUNS = ["lol", "alexa", "suck", "fuck", "sex", "one", "thing", "something", "anything", "nothing"]
-
-with open("google-10000-english-no-swears.txt", "r") as f:
-    TOP_FREQUENT_WORDS = f.read().splitlines()[:2000]
 
 
 def is_custom_topic(topic):
@@ -313,6 +200,56 @@ def get_comet_atomic(topic, relation, TOPICS={}):
         return ""
 
 
+def get_comet_conceptnet(topic, relation, return_all=False):
+    """
+    Get COMeT ConceptNet prediction for considered topic like `verb subj/adj/adv` of particular relation.
+
+    Args:
+        topic: string in form of nounphrase
+        relation:  considered comet relations, out of ["xAttr", "xIntent", "xNeed", "xEffect", "xReact", "xWant"]
+
+    Returns:
+        string, one of predicted by Comet relations
+    """
+
+    logger.info(f"Comet ConceptNet request on topic: {topic}.")
+    if topic is None or topic == "" or relation == "" or relation is None:
+        return ""
+
+    # send request to COMeT ConceptNet service on `topic & relation`
+    try:
+        comet_result = custom_request(CONCEPTNET_SERVICE_URL, {"input": f"{topic}.",
+                                                               "category": relation}, 1.5)
+    except (requests.ConnectTimeout, requests.ReadTimeout) as e:
+        logger.error("COMeT ConceptNet result Timeout")
+        sentry_sdk.capture_exception(e)
+        comet_result = requests.Response()
+        comet_result.status_code = 504
+
+    if comet_result.status_code != 200:
+        msg = "COMeT ConceptNet: result status code is not 200: {}. result text: {}; result status: {}".format(
+            comet_result, comet_result.text, comet_result.status_code)
+        logger.warning(msg)
+        relation_phrases = []
+    else:
+        relation_phrases = comet_result.json().get(relation, {}).get("beams", [])
+    # remove `none` relation phrases (it's sometimes returned by COMeT)
+    relation_phrases = [el for el in relation_phrases if el != "none"]
+
+    banned = [topic, f"be {topic}", f"be a {topic}"]
+    relation_phrases = remove_duplicates(banned + relation_phrases)[len(banned):]
+
+    relation_phrases = correct_verb_form(relation, relation_phrases)
+
+    if return_all:
+        return relation_phrases
+    else:
+        if len(relation_phrases) > 0:
+            return choice(relation_phrases)
+        else:
+            return ""
+
+
 def get_gerund_topic(topic):
     """
     Transform some topic from `verb subj/adj/adv` to noun form like `verb-ing subj/adj/adv`.
@@ -333,10 +270,10 @@ def get_gerund_topic(topic):
             to_replace = token.text
             gerund = transform_vbg(token.lemma_)
             break
-    if len(gerund) == 0 and len(topic.split()) == 1:
-        # one word topic, like `paint`
-        to_replace = topic
-        gerund = transform_vbg(topic)
+    if len(gerund) == 0:
+        to_replace = topic.split()[0]
+        gerund = transform_vbg(to_replace)
+
     return topic.replace(to_replace, gerund)
 
 
@@ -546,11 +483,55 @@ def get_statement_phrase(dialog, topic, attr, TOPICS):
     return response, confidence, attr
 
 
-def extract_verb_noun_phrases(utterance, only_i_do_that=True):
+def get_most_frequent_bigrams_with_word(word):
+    target_bigrams = []
+    for bigram in TOP_FREQUENT_BIGRAMS_TO_FIND_VERB:
+        if re.search(r'\b%s\b' % word, bigram):
+            target_bigrams += [bigram]
+    return target_bigrams[:10]
+
+
+def clean_up_topic_list(verb_nounphrases):
+    """check whether - bigram not in `TOP_FREQUENT_BIGRAMS_TO_IGNORE`,
+                     - verb not in `BANNED_VERBS`,
+                     - noun not in `BANNED_NOUNS` + 100 `TOP_FREQUENT_WORDS`
+                     - at least one of the words not in `TOP_FREQUENT_WORDS`
+
+    Args:
+        verb_nounphrases: list of verb+noun phrases
+
+    Returns:
+        list of verb+noun phrases satisfying requirements above
+    """
+    cleaned = []
+
+    for vnp in verb_nounphrases:
+        tokens = vnp.split()
+        if vnp not in TOP_FREQUENT_BIGRAMS_TO_IGNORE and tokens[0] not in BANNED_VERBS and \
+                tokens[-1] not in BANNED_NOUNS + TOP_FREQUENT_WORDS[:100] and \
+                (tokens[0] not in TOP_FREQUENT_WORDS or tokens[-1] not in TOP_FREQUENT_WORDS):
+            if vnp[:3] == "be " and len(vnp[3:].split()) == 1:
+                is_person = "person" in get_comet_conceptnet(vnp[3:], "IsA")
+                if is_person:
+                    cleaned.append(vnp)
+                else:
+                    logger.info(f"Drop bigram {vnp} because in form `be something` not `be person`.")
+            else:
+                cleaned.append(vnp)
+        else:
+            logger.info(f"Drop bigram {vnp} because in top frequency lists.")
+    return cleaned
+
+
+relation_adj = re.compile(r"(my |your |yours |mine |their |our |her |his |its )")
+
+
+def extract_verb_noun_phrases(utterance, only_i_do_that=True, nounphrases=[]):
     verb_noun_phrases = []
+    # verbs_without_nouns = []
     doc = nlp(utterance, disable=["ner"])
     for possible_verb in doc:
-        if possible_verb.pos == VERB and possible_verb.lemma_ not in BANNED_VERBS:
+        if possible_verb.pos == VERB and possible_verb.lemma_ not in BANNED_VERBS and len(possible_verb.lemma_) > 1:
             i_do_that = False
             for possible_subject in possible_verb.children:
                 # if this verb is directed by `I`
@@ -571,6 +552,8 @@ def extract_verb_noun_phrases(utterance, only_i_do_that=True):
                             i_do_that = True
                 i_do_that *= complex_verb
             if (only_i_do_that and i_do_that) or not only_i_do_that:
+                # if possible_verb.lemma_ not in TOP_FREQUENT_WORDS:
+                #     verbs_without_nouns.append(f"{possible_verb.lemma_}")
                 for possible_subject in possible_verb.children:
                     if possible_subject.dep != nsubj:
                         if possible_subject.pos == NOUN:
@@ -578,6 +561,7 @@ def extract_verb_noun_phrases(utterance, only_i_do_that=True):
                                 in TOP_FREQUENT_WORDS) and \
                                     possible_subject.lemma_ not in BANNED_NOUNS:
                                 verb_noun_phrases.append(f"{possible_verb.lemma_} {possible_subject}")
+                                break
                         elif possible_subject.pos == ADP:
                             for poss_subsubj in possible_subject.children:
                                 if poss_subsubj.pos == NOUN:
@@ -586,11 +570,24 @@ def extract_verb_noun_phrases(utterance, only_i_do_that=True):
                                             poss_subsubj.lemma_ not in BANNED_NOUNS:
                                         verb_noun_phrases.append(
                                             f"{possible_verb.lemma_} {possible_subject} {poss_subsubj}")
+                                        break
 
-    good_verb_noun_phrases = []
-    for vnp in verb_noun_phrases:
-        if vnp not in TOP_FREQUENT_VERB_NOUN_PHRASES:
-            good_verb_noun_phrases.append(vnp)
+    logger.info(f"Extracted the following bigrams: {verb_noun_phrases}")
+    good_verb_noun_phrases = clean_up_topic_list(verb_noun_phrases)
+    logger.info(f"After cleaning we have the following bigrams: {good_verb_noun_phrases}")
+
+    if len(good_verb_noun_phrases) == 0 and len(nounphrases) > 0:
+        logger.info("No good verb-nounphrase topic. Try to find nounphrase, and appropriate verb from top-bigrams.")
+        nounphrases = [re.sub(relation_adj, "", noun.lower()).strip() for noun in nounphrases]
+        for noun in nounphrases:
+            good_verb_noun_phrases += get_most_frequent_bigrams_with_word(noun)
+        good_verb_noun_phrases = [phrase for phrase in good_verb_noun_phrases if len(phrase) > 0]
+        logger.info(f"Extracted the following bigrams: {good_verb_noun_phrases}")
+        good_verb_noun_phrases = clean_up_topic_list(good_verb_noun_phrases)
+        logger.info(f"After cleaning we have the following bigrams: {good_verb_noun_phrases}")
+        source = NP_SOURCE
+    else:
+        source = VNP_SOURCE
 
     logger.info(f'extracted verb noun phrases {good_verb_noun_phrases} from {utterance}')
-    return good_verb_noun_phrases
+    return good_verb_noun_phrases, source
