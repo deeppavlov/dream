@@ -24,7 +24,7 @@ def test_one_step_responses():
     print("check_movie")
     input_data = get_input_json("test_configs/check_movie.json")
     response = requests.post(url, json=input_data).json()[0]
-    assert 'The Avengers' in response[0] and response[1] == 1., print(response)
+    assert 'The Avengers' in response[0] and response[1] > 0.8, print(response)
 
     print("check_persons_comparison")
     input_data = get_input_json("test_configs/check_persons_comparison.json")
