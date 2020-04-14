@@ -627,7 +627,7 @@ class BookSkillScenario:
                             logging.debug('Last phrase is GENRE_PHRASE_1 : getting genre book for ')
                             logging.debug(str(annotated_user_phrase['text']))
                             book = get_genre_book(annotated_user_phrase)
-                            if book is None:
+                            if book is None or is_no(annotated_user_phrase):
                                 logging.debug('No book found')
                                 reply, confidence = self.default_reply, 0
                             else:
