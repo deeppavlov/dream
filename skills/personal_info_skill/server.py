@@ -6,11 +6,10 @@ import re
 
 from flask import Flask, request, jsonify
 from os import getenv
-from random import choice
 import sentry_sdk
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
-from common.link import link_to
+from common.weather import ASK_WEATHER_SKILL_FOR_HOMELAND_PHRASE
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -104,9 +103,7 @@ def process_info(dialog, which_info="name"):
                            "homeland": "I didn't get where you have been born. Could you please repeat it?"}
 
     response_phrases = {"name": "Nice to meet you, ",
-                        "location": choice(
-                            [link_to(["weather_skill"], {})['phrase']]
-                        ),
+                        "location": ASK_WEATHER_SKILL_FOR_HOMELAND_PHRASE,
                         "homeland": "Is that where you live now?"}
 
     got_info = False

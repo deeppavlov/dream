@@ -6,7 +6,7 @@ import pprint
 from city_slot import OWMCitySlot
 from common.constants import CAN_CONTINUE, MUST_CONTINUE
 from common.link import link_to
-from common.weather import is_weather_for_homeland_requested
+from common.weather import is_weather_for_homeland_requested, is_weather_without_city_requested
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -160,8 +160,9 @@ class WeatherSkill:
                 prev_bot_utt = dialog["utterances"][-2]
                 user_utt = dialog["utterances"][-1]
                 weather_for_homeland_requested = is_weather_for_homeland_requested(prev_bot_utt, user_utt)
+                weather_without_city_requested = is_weather_without_city_requested(prev_bot_utt, user_utt)
             if annotations.get("intent_catcher", {}).get("weather_forecast_intent", {}).get(
-                    "detected", 0) == 1:
+                    "detected", 0) == 1 or weather_without_city_requested:
                 logger.warning("WEATHER FORECAST INTENT DETECTED")
                 ############################################################
                 # retrieve city slot or enqueue question into agenda

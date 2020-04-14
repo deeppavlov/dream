@@ -1,4 +1,5 @@
 from common.universal_templates import BOOK_CHANGE_PHRASE
+from common.tutor import get_tutor_phrase
 import logging
 from os import getenv
 from string import punctuation
@@ -457,7 +458,7 @@ class BookSkillScenario:
         YES_PHRASE_2 = "Fabulous! And what book did impress you the most?"
         YES_PHRASE_3_1 = "I've also read it. It's an amazing book! Do you know when it was first published?"
         YES_PHRASE_3_FACT = "I've read it. It's an amazing book! Would you like to know some facts about it?"
-        YES_PHRASE_4 = " years ago! I didn't exist in that time."
+        YES_PHRASE_4 = " years ago! I didn't exist in that time. " + get_tutor_phrase()
         FAVOURITE_GENRE_ANSWERS = list(GENRE_PHRASES.values())
         FAVOURITE_BOOK_ANSWERS = ['My favourite book is "The Old Man and the Sea" by Ernest Hemingway.']
         GENRE_PHRASE_1 = 'What is your favorite book genre?'
