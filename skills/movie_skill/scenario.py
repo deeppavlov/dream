@@ -297,7 +297,7 @@ class MovieSkillScenario:
                     f"`{curr_user_uttr['text']}`.")
         response = f"{get_movie_template('clarification_template', movie_type=movie_type)} " \
                    f"{movie_type} '{movie_title}'?"
-        confidence = 1.
+        confidence = 0.85
         attr = {"movie_id": movie_id, "status_line": ["clarification"], "can_continue": CAN_CONTINUE}
         return response, confidence, attr
 
