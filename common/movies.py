@@ -73,7 +73,7 @@ def get_movie_template(category, subcategory=None, movie_type="movie"):
             "Sorry, I didn't get the title, can you, please, repeat it."],
         "dont_know_movie_title_at_all": [
             "Sorry, probably I've never heard about this TYPE.",
-            "Sorry, maybe I just have never heard about this TYPE."
+            "Sorry, maybe I just have never heard about this TYPE.",
             "Well, probably I've never heard about this TYPE."]
     }
     if subcategory is not None:

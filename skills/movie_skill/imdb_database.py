@@ -140,7 +140,8 @@ class IMDb:
                 "alexa", "you tell me", "movie movie", "tricks", "movies", "yes", "action", "i", "maybe", "do you know",
                 "isolation", "something", 'no', 'i am', "what", "is", "it", "what", "i did not know that", "cage",
                 "back", "games", "stronger", "see", "really", "judy", "my favorite movie", "i do", "what happened",
-                "me", "live", "lunch", "weekend", "gays", "bean", "off"]:
+                "me", "live", "lunch", "weekend", "gays", "bean", "off", "nothing", "talk to her", "boy a", "play",
+                "eat"]:
             try:
                 self.with_ignored_movies_names.pop(proc_title)
             except KeyError:

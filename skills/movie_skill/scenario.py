@@ -138,12 +138,13 @@ class MovieSkillScenario:
         is_movie_topic = "Entertainment_Movies" in annotations.get('cobot_dialogact', {}).get('topics', [])
 
         curr_uttr_is_about_movies = re.search(self.movie_pattern, uttr["text"].lower())
-        prev_uttr_is_about_movies = re.search(self.movie_pattern, prev_uttr["text"].lower())
+        prev_uttr_last_sent = prev_uttr.get("annotations", {}).get("sentseg", {}).get("segments", [""])[-1].lower()
+        prev_uttr_is_about_movies = re.search(self.movie_pattern, prev_uttr_last_sent)
         lets_talk_about_movies = if_lets_chat_about_topic(uttr=uttr["text"].lower()) and curr_uttr_is_about_movies
         chosed_topic = if_choose_topic(prev_uttr["text"].lower()) and curr_uttr_is_about_movies
 
         if is_movie_topic or lets_talk_about_movies or chosed_topic or curr_uttr_is_about_movies or \
-                ("?" in prev_uttr["text"] and prev_uttr_is_about_movies):
+                ("?" in prev_uttr_last_sent and prev_uttr_is_about_movies):
             return True
         else:
             return False
@@ -319,7 +320,7 @@ class MovieSkillScenario:
                     f"`{curr_user_uttr['text']}`.")
         numvotes = self.templates.imdb.get_info_about_movie(movie_title, "numVotes")
         numvotes = 0 if numvotes is None else numvotes
-        if numvotes > 10000:
+        if numvotes > 50000:
             # full user utterance is a movie title -> consider full match
             logger.info("Found movie title with more than 10k votes. Don't clarify the title.")
             response, confidence, human_attr, bot_attr, attr = self.opinion_expression_and_request(
@@ -398,8 +399,8 @@ class MovieSkillScenario:
         logger.info(f"Asking question about `{movie_title}` of type `{question_type}`.")
         if question_type == "cast":
             response = f"Do you know who are the leading actors of the {movie_type} {movie_title}?"
-        elif question_type == "year":
-            response = f"Do you know the year of release of the {movie_type} {movie_title}?"
+        # elif question_type == "year":
+        #     response = f"Do you know the year of release of the {movie_type} {movie_title}?"
         else:
             response = f"Do you know the genre of the {movie_type} {movie_title}?"
         confidence = SUPER_CONFIDENCE
