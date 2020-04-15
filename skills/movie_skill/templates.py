@@ -652,9 +652,7 @@ class MovieSkillTemplates:
         """
         Generate templated reply about `names` in the given movie and attributes dictionary
         """
-        movie = np.random.choice(
-            ["this movie", "this film", "this pic", "this picture"] + [
-                "this " + g.lower() + " movie" for g in self.imdb(movie_id)["genre"]] + [self.imdb(movie_id)["title"]])
+        movie = self.imdb(movie_id)["title"]
         if len(names) == 1:
             name = names[0]
             for prof in self.imdb.professions:
@@ -919,10 +917,6 @@ class MovieSkillTemplates:
                        f"I like {name} a lot!",
                        f"I love {name}!",
                        f"I adore {name}!",
-                       f"I like this {subject} so much!",
-                       f"I like this {subject} a lot!",
-                       f"I love this {subject}!",
-                       f"I adore this {subject}!",
                        f"{name} is my favorite {subject}!",
                        f"{name} is one of the best {subject}s!",
                        f"{name} is an awesome {subject}!",
@@ -946,10 +940,10 @@ class MovieSkillTemplates:
             return np.random.choice(replies)
         if attitude == "unseen":
             replies = [f"I have never heard of {name}.",
-                       f"I have never heard of this {subject}.",
+                       f"I have never heard of {name}.",
                        f"I have never seen {name}.",
-                       f"I have never seen this {subject}.",
-                       f"I don't know this {subject}."
+                       f"I have never seen {name}.",
+                       f"I don't know {name}."
                        ]
             return np.random.choice(replies)
 
