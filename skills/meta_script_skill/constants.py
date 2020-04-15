@@ -133,6 +133,7 @@ BANNED_VERBS = ["watch", "talk", "say", "chat", "like", "love", "ask",
 
 BANNED_NOUNS = ["lol", "alexa", "suck", "fuck", "sex", "one", "thing", "something", "anything", "nothing", "topic",
                 "today", "yesterday", "tomorrow", "now", "shopping", "mine", "talk", "chat", "me", "favorite",
-                "past", "future", "suggest", "suppose", "i'll", "book", "books", "movie", "movies", "weather"]
+                "past", "future", "suggest", "suppose", "i'll", "book", "books", "movie", "movies", "weather",
+                "mom", "mother", "mummy", "mum", "mama", "mamma", "daddy", "dad", "father", "sister", "brother"]
 
 idopattern = re.compile(r"i [a-zA-Z ,0-9]", re.IGNORECASE)

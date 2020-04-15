@@ -244,7 +244,11 @@ def respond():
                     confidence = DEFAULT_STARTING_CONFIDENCE
             else:
                 # there were some script active before in the last several utterances
-                if len(dialog["human_utterances"]) > 0 and "?" in dialog["human_utterances"][-1]["text"]:
+                if curr_meta_script_status == "deeper1" and len(dialog["human_utterances"]) > 0 and \
+                        "?" in dialog["human_utterances"][-1]["text"] and \
+                        "what" not in dialog["human_utterances"][-1]["text"].lower():
+                    response, confidence, attr = "", 0., {}
+                elif len(dialog["human_utterances"]) > 0 and "?" in dialog["human_utterances"][-1]["text"]:
                     logger.info("Question by user was detected. Don't continue the script on this turn.")
                     response, confidence, attr = "", 0., {}
                     # we do not finish script on this step but hope that some other script will be able

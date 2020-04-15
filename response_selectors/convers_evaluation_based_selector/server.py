@@ -235,7 +235,8 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
         is_misheard = misheard_with_spec1 in candidates[i]['text'] or misheard_with_spec2 in candidates[i]['text']
         if len(dialog['human_utterances']) == 1 and greeting_spec not in candidates[i]['text']:
             logger.info("Dialog Beginning detected.")
-            if if_lets_chat_about_topic(dialog['utterances'][0]["text"].lower()):
+            if if_lets_chat_about_topic(dialog['utterances'][0]["text"].lower()) and \
+                    "about it" not in dialog['utterances'][0]["text"].lower():
                 logger.info("User wants to talk about particular topic")
                 # if user says `let's chat about blablabla`
                 if skill_names[i] == 'cobotqa':
@@ -256,7 +257,8 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                     # for now do not give small talk a very big score here
                     candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + candidates[i]['text']
                     # curr_score = very_big_score
-            elif if_choose_topic(dialog['utterances'][0]["text"].lower()):
+            elif if_choose_topic(dialog['utterances'][0]["text"].lower()) and \
+                    "about it" not in dialog['utterances'][0]["text"].lower():
                 logger.info("User wants bot to choose the topic")
                 # if user says `let's chat about something`
                 if skill_names[i] == 'small_talk_skill':
