@@ -25,6 +25,7 @@ logger = logging.getLogger(__name__)
 SUPER_CONFIDENCE = 1.
 DEFAULT_CONFIDENCE = 0.95
 OFFER_TALK_ABOUT_MOVIES_CONFIDENCE = 0.65
+CLARIFICATION_CONFIDENCE = 0.85
 NOT_SURE_CONFIDENCE = 0.5
 SECOND_FACT_PROBA = 0.5
 
@@ -134,8 +135,7 @@ class MovieSkillScenario:
 
     def is_about_movies(self, uttr, prev_uttr={}):
         annotations = uttr.get("annotations", {})
-        is_movie_topic = "Movies_TV" in annotations.get('cobot_topics', {}).get('text', []) or \
-                         "Entertainment_Movies" in annotations.get('cobot_dialogact', {}).get('topics', [])
+        is_movie_topic = "Entertainment_Movies" in annotations.get('cobot_dialogact', {}).get('topics', [])
 
         curr_uttr_is_about_movies = re.search(self.movie_pattern, uttr["text"].lower())
         prev_uttr_is_about_movies = re.search(self.movie_pattern, prev_uttr["text"].lower())
@@ -274,17 +274,20 @@ class MovieSkillScenario:
             attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
             human_attr["offer_talk_about_movies"] += [offer]
         elif len(movies_ids) > 0 and self.is_about_movies(curr_user_uttr, prev_bot_uttr):
-            curr_movie_id = movies_ids[-1]
-            if curr_movie_id not in human_attr["discussed_movie_ids"]:
-                response, confidence, human_attr, bot_attr, attr = self.first_reply_when_about_movies(
-                    curr_user_uttr, curr_movie_id, human_attr, bot_attr)
+            if is_no(curr_user_uttr) and "?" in prev_bot_uttr.get("text", ""):
+                response, confidence, human_attr, bot_attr, attr = "", 0.0, {}, {}, {}
             else:
-                offer = offer_talk_about_movies(human_attr)
-                response = f"We have talked about this movie previously. " \
-                           f"{get_movie_template('lets_talk_about_other_movie')} {offer}"
-                confidence = DEFAULT_CONFIDENCE
-                attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
-                human_attr["offer_talk_about_movies"] += [offer]
+                curr_movie_id = movies_ids[-1]
+                if curr_movie_id not in human_attr["discussed_movie_ids"]:
+                    response, confidence, human_attr, bot_attr, attr = self.first_reply_when_about_movies(
+                        curr_user_uttr, curr_movie_id, human_attr, bot_attr)
+                else:
+                    offer = offer_talk_about_movies(human_attr)
+                    response = f"We have talked about this movie previously. " \
+                               f"{get_movie_template('lets_talk_about_other_movie')} {offer}"
+                    confidence = DEFAULT_CONFIDENCE
+                    attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
+                    human_attr["offer_talk_about_movies"] += [offer]
         else:
             response, confidence, human_attr, bot_attr, attr = "", 0.0, {}, {}, {}
 
@@ -297,7 +300,7 @@ class MovieSkillScenario:
                     f"`{curr_user_uttr['text']}`.")
         response = f"{get_movie_template('clarification_template', movie_type=movie_type)} " \
                    f"{movie_type} '{movie_title}'?"
-        confidence = 0.85
+        confidence = CLARIFICATION_CONFIDENCE
         attr = {"movie_id": movie_id, "status_line": ["clarification"], "can_continue": CAN_CONTINUE}
         return response, confidence, attr
 
@@ -467,7 +470,7 @@ class MovieSkillScenario:
                     response = f"{year}"
         elif "the genre of the" in question_text:
             result = self.templates.imdb.get_info_about_movie(movie_title, "genre")
-            if result is not None:
+            if result is not None and len(result) > 0 and len(result[0]) > 0:
                 if len(result) == 1:
                     result = f"The genre of the {movie_type} is {', '.join(result)}."
                 else:
