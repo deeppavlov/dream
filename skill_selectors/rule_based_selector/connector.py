@@ -127,7 +127,7 @@ class RuleBasedSkillSelectorConnector:
 
         blist_topics_detected = dialog["utterances"][-1]["annotations"]["blacklisted_words"]["restricted_topics"]
 
-        about_movies = (self.movie_cobot_dialogacts & cobot_dialogact_topics) | (self.movie_cobot_topics & cobot_topics)
+        about_movies = (self.movie_cobot_dialogacts & cobot_dialogact_topics)
         about_music = ("Entertainment_Music" in cobot_dialogact_topics) | ("Music" in cobot_topics)
         about_books = (self.books_cobot_dialogacts & cobot_dialogact_topics) | (self.books_cobot_topics & cobot_topics)
         #  topicalchat_tfidf_retrieval

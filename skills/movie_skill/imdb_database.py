@@ -58,7 +58,7 @@ class IMDb:
              (re.compile(r"\s\s+"), " "),
              ]
 
-    def __init__(self, db_path="./databases/database_main_info.json", save_folder="../data/"):
+    def __init__(self, db_path="./databases/database_100k_main_info.json"):
         t0 = time.time()
         self.with_ignored_movies_names = {}
         self.without_ignored_movies_names = {}
@@ -114,6 +114,9 @@ class IMDb:
 
         self.without_ignored_movies_names = {self.process_movie_name(movie): self.movies_names[movie]
                                              for movie in self.movies_names.keys()}
+        # отсортируем по длине чтобы искать потом предпочтительно самое длинное вхождение сначала
+        self.without_ignored_movies_names = {el: self.without_ignored_movies_names[el]
+                                             for el in sorted(self.without_ignored_movies_names, key=len, reverse=True)}
         self.with_ignored_movies_names = deepcopy(self.without_ignored_movies_names)
 
         with open("databases/google-10000-english-no-swears.txt", "r") as f:
@@ -130,18 +133,14 @@ class IMDb:
                 self.without_ignored_movies_names.pop(proc_title)
             except KeyError:
                 pass
-        for proc_title in ["movie", "tragedy", "favorite", "favourite", "angela",
-                           "attitude", "do you believe", "earthquake", "gays",
-                           "no matter what", "talk to me", "you", "lets talk",
-                           "lets chat", "in", "if", "can", "o", "ok", "one",
-                           "two", "film", "new", "next", "out", "love",
-                           "like", "watch", "actress", "less", "want", "abortion",
-                           "alexa", "you tell me", "movie movie", "tricks", "movies",
-                           "yes", "action", "i", "maybe", "do you know", "isolation",
-                           "something", 'no', 'i am', "what", "is", "it", "what",
-                           "i did not know that", "cage", "bean", "back", "games",
-                           "stronger", "see", "really", "judy", "my favorite movie"
-                           ]:
+        for proc_title in [
+                "movie", "tragedy", "favorite", "favourite", "angela", "attitude", "do you believe", "earthquake",
+                "no matter what", "talk to me", "you", "lets talk", "lets chat", "in", "if", "can", "o", "ok", "one",
+                "two", "film", "new", "next", "out", "love", "like", "watch", "actress", "less", "want", "abortion",
+                "alexa", "you tell me", "movie movie", "tricks", "movies", "yes", "action", "i", "maybe", "do you know",
+                "isolation", "something", 'no', 'i am', "what", "is", "it", "what", "i did not know that", "cage",
+                "back", "games", "stronger", "see", "really", "judy", "my favorite movie", "i do", "what happened",
+                "me", "live", "lunch", "weekend", "gays", "bean", "off"]:
             try:
                 self.with_ignored_movies_names.pop(proc_title)
             except KeyError:
@@ -371,14 +370,14 @@ class IMDb:
         Returns:
             imdb-ids if `movie`, full cased name if `actor` or any profession
         """
-
         lower_cased_reply = f" {self.process_movie_name(reply.lower())} "
         if subject == "movie":
-            results = re.findall(self.without_ignored_movies_names_pattern, lower_cased_reply)
-            results = list(results)
             if find_ignored:
                 results = re.findall(self.with_ignored_movies_names_pattern, lower_cased_reply)
-            elif len(results) == 0:
+            else:
+                results = re.findall(self.without_ignored_movies_names_pattern, lower_cased_reply)
+            results = list(results)
+            if len(results) == 0:
                 for target_name in ["film", "series", "movie"]:
                     start_movie_name = reply.lower().find(target_name)
                     if start_movie_name != -1:
@@ -414,9 +413,14 @@ class IMDb:
                         found = genre
             else:
                 found = ""
-            if subject == "movie" and len(result) >= highest_length:
-                identifiers = [found]
-                highest_length = len(result)
+
+            if subject == "movie":
+                if return_longest:
+                    if len(result) >= highest_length:
+                        identifiers = [found]
+                        highest_length = len(result)
+                else:
+                    identifiers.append(found)
             elif subject != "movie":
                 identifiers.append(found)
 
