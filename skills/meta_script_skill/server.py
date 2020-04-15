@@ -232,9 +232,9 @@ def respond():
                         is_custom_topic(topic):
                     # if person wants to talk about something particular and we have extracted some topic - do that!
                     confidence = MATCHED_DIALOG_BEGIN_CONFIDENCE
-                # elif len(dialog["human_utterances"]) > 0 and "?" in dialog["human_utterances"][-1]["text"]:
-                #     # if some question was asked by user, do not start script at all!
-                #     response, confidence = "", 0.
+                elif len(dialog["human_utterances"]) > 0 and "?" in dialog["human_utterances"][-1]["text"]:
+                    # if some question was asked by user, do not start script at all!
+                    response, confidence = "", 0.
                 elif len(dialog["utterances"]) <= 20:
                     # if this is a beginning of the dialog, assign higher confidence to start the script
                     confidence = DEFAULT_DIALOG_BEGIN_CONFIDENCE
