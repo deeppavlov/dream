@@ -195,6 +195,8 @@ class RuleBasedSkillSelectorConnector:
             skills_for_uttr.append("personal_info_skill")
             if about_news:
                 skills_for_uttr.append("news_api_skill")
+            if enable_coronavirus or prev_active_skill == 'coronavirus_skill':
+                skills_for_uttr.append("coronavirus_skill")
         else:
             # process regular utterances
             skills_for_uttr.append("program_y")

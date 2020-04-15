@@ -47,8 +47,9 @@ FACT_LIST = ['The origin of coronavirus, Wuhan, has fully canceled the quarantin
              'Can you tell me what people love doing  when people are self-isolating?']
 #  NOTE!!!! YOU SHOULD CHECK THAT FACTS ARE NOT BEING CHANGED BY SENTREWRITE!
 #  FORMULATE FACTS IN THIS WAY THAT THEY ARE NOT CHANGED!!! OTHERWISE THERE WILL BE BUG!!!!
-QUARANTINE_END_PHRASE = 'In the United States of America, the full quarantine is expected to last ' \
-                        'at least until the Easter. After that, we will decide what to do next.'
+QUARANTINE_END_PHRASE = ("In the United States of America, the full quarantine is expected to last at least until "
+                         "the beginning of May. After that, US Government and US States will together decide "
+                         "what to do next.")
 ORIGIN_PHRASE = 'According to the scientific data, coronavirus COVID 19 is a product of natural evolution. ' \
                 'The first place where it caused an outbreak is the city of Wuhan, China.'
 WHAT_PHRASE = 'Coronavirus COVID 19 is an infectious disease. ' \
@@ -56,11 +57,17 @@ WHAT_PHRASE = 'Coronavirus COVID 19 is an infectious disease. ' \
               'While the majority of cases result in mild symptoms, some cases can be lethal.'
 WORK_AND_STAY_HOME_PHRASE = ("Every day that you practice social distancing during the pandemic, "
                              "you are doing someone else (maybe hundreds or even thousands of someone elses) "
-                             "a great kindness. So if you can, stay home. It’s the easiest act of "
-                             "heroism you’ll ever do. Would you like to learn more about coronavirus?")
-CDC_STAY_HOME_RECOMMENDATION = ("CDC recommends Americans stay at home. "
-                                "If you absolutely have to go outside please wear masks.")
-
+                             "a great kindness. So if you can, stay home. It's the easiest act of "
+                             "heroism you'll ever do. Would you like to learn more about coronavirus?")
+CDC_STAY_HOME_RECOMMENDATION = "CDC recommends Americans stay at home. If you absolutely have to go outside" \
+                               " please wear masks, practice social distancing, and minimize time you have to spend " \
+                               "outside of your home."
+FEAR_HATE_REPLY1 = 'Please, calm down. We are a strong nation, we are flattening the curve ' \
+                   'and we will overcome this disease one day.'
+FEAR_HATE_REPLY2 = 'Please, chin up. We have already defeated a hell lot of diseases, ' \
+                   'and I am sure that coronavirus will be the next one.'
+CURE_REPLY = "There is no cure designed for COVID-19 yet. " \
+             "You can consult with CDC.gov website for detailed information about the ongoing work on the cure."
 for city_name in CITIES.keys():
     val_, i_ = 0, 0
     for i, value in enumerate(CITIES[city_name]):
@@ -187,6 +194,9 @@ def get_statephrase(state_name, state_data, county_data):
                  'which is way larger than ' \
                  'the number of cases'.format(*data1)
     elif state_name in county_names:
+        for county in COUNTIES.keys():
+            if county[0] == state_name:
+                state_name = county
         data1 = [','.join([j for j in state_name]),
                  county_data[state_name][0],
                  county_data[state_name][1],
@@ -245,6 +255,14 @@ def make_phrases(n_cases, n_deaths, num_flu_deaths, millionair_number):
     return [phrase1, phrase2]
 
 
+def emotion_detected(annotated_phrase, name='fear'):
+    threshold = 0.8
+    emotion_probs = annotated_phrase['annotations']['emotion_classification']['text']
+    logging.debug(emotion_probs)
+    assert name in emotion_probs.keys()
+    return emotion_probs[name] > threshold
+
+
 def improve_phrase(phrase, asked_about_age=True, met_last=True):
     if met_last and asked_about_age:
         return phrase
@@ -259,6 +277,10 @@ def improve_phrase(phrase, asked_about_age=True, met_last=True):
 
 def asked_origin(last_utterance):
     return any([j in last_utterance['text'].lower() for j in ['origin', 'come from']])
+
+
+def asked_cure(last_utterance):
+    return any([j in last_utterance['text'].lower() for j in ['cure', 'treatment', 'vaccine']])
 
 
 def asked_whatvirus(last_utterance):
@@ -315,14 +337,10 @@ class CoronavirusSkillScenario:
                                   'new confusion or inability to arouse, ' \
                                   'bluish lips or face. If you develop any of these signs,' \
                                   'get a medical attention. '
-            self.advice_phrase = 'According to the CDC website, ' \
-                                 'To protect yourself and others from the coronavirus, ' \
-                                 'you should do the following: ' \
-                                 'clean your hands often, ' \
-                                 'avoid close contact with people, especially elderly ones, ' \
-                                 'clean and disinfect frequently touched surfaces, ' \
-                                 'cover your coughs and sneeses.' \
-                                 'If you are sick, wear a face mask and try to stay at home as much as possible.'
+            self.advice_phrase = "Unfortunately, I am not allowed to give any recommendations " \
+                                 "about coronavirus. You can check the CDC website for more info"
+            self.advice_asthma_phrase = "As you have asthma, I know that you should be especially cautious " \
+                                        "about coronavirus. " + self.advice_phrase
         except Exception as e:
             logger.exception('Exception while retrieving new info about coronavirus')
             sentry_sdk.capture_exception(e)
@@ -364,6 +382,13 @@ class CoronavirusSkillScenario:
                 if quarantine_end(last_utterance):
                     logging.info('Quarantine end detected')
                     reply, confidence = QUARANTINE_END_PHRASE, 0.95
+                elif emotion_detected(last_utterance, 'fear') or emotion_detected(last_utterance, 'anger'):
+                    r = random()
+                    if r < 0.5:
+                        reply, confidence = FEAR_HATE_REPLY1, 0.95
+                    else:
+                        reply, confidence = FEAR_HATE_REPLY2, 0.95
+                    reply = improve_phrase(reply)
                 elif 'would you like to learn more' in last_bot_phrase:
                     fear_prob = dialog['utterances'][-1]['annotations']['emotion_classification']['text']['fear']
                     logging.debug('Fear prob ' + str(fear_prob))
@@ -384,6 +409,12 @@ class CoronavirusSkillScenario:
                 elif know_symptoms(last_utterance) and about_coronavirus(last_utterance):
                     logging.info('Symptom request detected')
                     reply, confidence = self.symptom_phrase, 1
+                    reply = improve_phrase(reply, asked_about_age, met_last)
+                elif asked_cure(last_utterance):
+                    reply, confidence = CURE_REPLY, 0.9
+                    reply = improve_phrase(reply, asked_about_age, met_last)
+                elif 'asthma' in last_utterance['text']:
+                    reply, utterance = self.advice_asthma_phrase, 1
                     reply = improve_phrase(reply, asked_about_age, met_last)
                 elif wants_advice(last_utterance) and about_coronavirus(last_utterance):
                     logging.info('Advice request detected')
@@ -507,7 +538,7 @@ class CoronavirusSkillScenario:
                                     logging.debug('Final point')
                                     reply, confidence = '', 0
                 if reply.lower() == last_utterance['text'].lower():
-                    logging.info('Not to selfrepeat, drop confidence to 0')
+                    logging.info('Not to self repeat, drop confidence to 0')
                     confidence = 0
                 elif reply.lower() in last_utterances and confidence == 1:
                     logging.debug('I have said that before, a bit less confident')
