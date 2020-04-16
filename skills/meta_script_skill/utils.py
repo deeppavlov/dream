@@ -9,10 +9,10 @@ from os import getenv
 import sentry_sdk
 import spacy
 import requests
-from spacy.symbols import nsubj, VERB, xcomp, NOUN, ADP
+from spacy.symbols import nsubj, VERB, xcomp, NOUN, ADP, dobj
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
-from common.utils import transform_vbg, get_skill_outputs_from_dialog
+from common.utils import transform_vbg, get_skill_outputs_from_dialog, is_yes, is_no
 from constants import COMET_SERVICE_URL, CONCEPTNET_SERVICE_URL, STARTINGS, OTHER_STARTINGS, WIKI_STARTINGS, \
     LET_ME_ASK_TEMPLATES, COMMENTS, ASK_OPINION, DIVE_DEEPER_TEMPLATE_COMETS, DIVE_DEEPER_COMMENTS, \
     DEFAULT_CONFIDENCE, DEFAULT_STARTING_CONFIDENCE, CONTINUE_USER_TOPIC_CONFIDENCE, BANNED_VERBS, BANNED_NOUNS, \
@@ -452,11 +452,11 @@ def get_statement_phrase(dialog, topic, attr, TOPICS):
     used_templates = get_used_attributes_by_name(
         dialog["utterances"], attribute_name="meta_script_deeper_comment_template",
         value_by_default=None, activated=True)[-2:]
-    if last_uttr["annotations"].get("intent_catcher", {}).get("yes", {}).get("detected") == 1:
+    if is_yes(last_uttr):
         comment = get_not_used_template(
             used_templates, DIVE_DEEPER_COMMENTS["yes"] + DIVE_DEEPER_COMMENTS["other"])
         attr["meta_script_deeper_comment_template"] = comment
-    elif last_uttr["annotations"].get("intent_catcher", {}).get("no", {}).get("detected") == 1:
+    elif is_no(last_uttr):
         comment = get_not_used_template(
             used_templates, DIVE_DEEPER_COMMENTS["no"] + DIVE_DEEPER_COMMENTS["other"])
         attr["meta_script_deeper_comment_template"] = comment
@@ -508,7 +508,7 @@ def clean_up_topic_list(verb_nounphrases):
     for vnp in verb_nounphrases:
         tokens = vnp.split()
         if vnp not in TOP_FREQUENT_BIGRAMS_TO_IGNORE and tokens[0] not in BANNED_VERBS and \
-                tokens[-1] not in BANNED_NOUNS + TOP_FREQUENT_WORDS[:100] and \
+                tokens[-1] not in BANNED_NOUNS + TOP_FREQUENT_WORDS[:100] and len(tokens[-1]) > 2 and \
                 (tokens[0] not in TOP_FREQUENT_WORDS or tokens[-1] not in TOP_FREQUENT_WORDS):
             if vnp[:3] == "be " and len(vnp[3:].split()) == 1:
                 is_person = "person" in get_comet_conceptnet(vnp[3:], "IsA")
@@ -556,7 +556,7 @@ def extract_verb_noun_phrases(utterance, only_i_do_that=True, nounphrases=[]):
                 #     verbs_without_nouns.append(f"{possible_verb.lemma_}")
                 for possible_subject in possible_verb.children:
                     if possible_subject.dep != nsubj:
-                        if possible_subject.pos == NOUN:
+                        if possible_subject.pos == NOUN and possible_subject.dep == dobj:
                             if (possible_verb.lemma_ not in TOP_FREQUENT_WORDS or possible_subject.lemma_ not
                                 in TOP_FREQUENT_WORDS) and \
                                     possible_subject.lemma_ not in BANNED_NOUNS:
@@ -564,7 +564,7 @@ def extract_verb_noun_phrases(utterance, only_i_do_that=True, nounphrases=[]):
                                 break
                         elif possible_subject.pos == ADP:
                             for poss_subsubj in possible_subject.children:
-                                if poss_subsubj.pos == NOUN:
+                                if poss_subsubj.pos == NOUN and poss_subsubj.dep == dobj:
                                     if (possible_verb.lemma_ not in TOP_FREQUENT_WORDS or poss_subsubj.lemma_ not
                                         in TOP_FREQUENT_WORDS) and \
                                             poss_subsubj.lemma_ not in BANNED_NOUNS:
@@ -591,3 +591,21 @@ def extract_verb_noun_phrases(utterance, only_i_do_that=True, nounphrases=[]):
 
     logger.info(f'extracted verb noun phrases {good_verb_noun_phrases} from {utterance}')
     return good_verb_noun_phrases, source
+
+
+def get_verb_noun_lemmas(topic):
+    doc = nlp(topic, disable=["ner"])
+    return [doc[0].lemma_, doc[-1].lemma_]
+
+
+def check_topic_lemmas_in_sentence(sentence, topic):
+    vn_lemmas = get_verb_noun_lemmas(topic.lower())
+    sent_lemmas = [word.lemma_ for word in nlp(sentence.lower(), disable=["ner"])]
+    vn_lemmas = set(vn_lemmas)
+    for top_word in TOP_FREQUENT_WORDS[:100]:
+        vn_lemmas.discard(top_word)
+
+    for word in vn_lemmas:
+        if word in sent_lemmas:
+            return True
+    return False

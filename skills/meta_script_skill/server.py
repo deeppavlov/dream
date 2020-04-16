@@ -10,16 +10,16 @@ from os import getenv
 import sentry_sdk
 
 from common.constants import CAN_NOT_CONTINUE
-from common.utils import get_skill_outputs_from_dialog, get_user_replies_to_particular_skill
+from common.utils import get_skill_outputs_from_dialog, get_user_replies_to_particular_skill, is_no, is_yes
 from common.universal_templates import if_choose_topic, if_switch_topic, if_lets_chat_about_topic
 from common.news import OPINION_REQUEST_STATUS, OFFERED_NEWS_DETAILS_STATUS
 from utils import get_starting_phrase, get_statement_phrase, get_opinion_phrase, get_comment_phrase, \
     extract_verb_noun_phrases, is_custom_topic, WIKI_DESCRIPTIONS, is_predefined_topic, \
-    get_used_attributes_by_name
+    get_used_attributes_by_name, check_topic_lemmas_in_sentence
 from comet_responses import ask_question_using_atomic, comment_using_atomic
 from constants import DEFAULT_DIALOG_BEGIN_CONFIDENCE, MATCHED_DIALOG_BEGIN_CONFIDENCE, FINISHED_SCRIPT, \
     FINISHED_SCRIPT_RESPONSE, DEFAULT_STARTING_CONFIDENCE, NOUN_TOPIC_STARTING_CONFIDENCE, NP_SOURCE, \
-    PREDEFINED_SOURCE
+    PREDEFINED_SOURCE, BROKEN_DIALOG_CONTINUE_CONFIDENCE
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -57,8 +57,7 @@ def get_not_used_topic(used_topics, dialog):
         prev_news_output = prev_news_outputs[-1]
     else:
         prev_news_output = {}
-    no_detected = dialog["human_utterances"][-1].get("annotations", {}).get(
-        "intent_catcher", {}).get("no", {}).get("detected", 0) == 1
+    no_detected = is_no(dialog["human_utterances"][-1])
     nounphrases = dialog["human_utterances"][-1]["annotations"].get("cobot_nounphrases", [])
 
     if prev_news_output.get("news_status", "finished") == OPINION_REQUEST_STATUS or \
@@ -204,10 +203,8 @@ def respond():
         lets_chat_about_detected = dialog["utterances"][-1].get("annotations", {}).get(
             "intent_catcher", {}).get("lets_chat_about", {}).get("detected", 0) == 1
 
-        yes_detected = dialog["utterances"][-1].get("annotations", {}).get(
-            "intent_catcher", {}).get("yes", {}).get("detected", 0) == 1
-        no_detected = dialog["utterances"][-1].get("annotations", {}).get(
-            "intent_catcher", {}).get("no", {}).get("detected", 0) == 1
+        yes_detected = is_yes(dialog["utterances"][-1])
+        no_detected = is_no(dialog["utterances"][-1])
         never_detected = "never" in dialog["utterances"][-1]["text"].lower()
 
         last_two_user_responses = get_user_replies_to_particular_skill(dialog["utterances"], "meta_script_skill")[-2:]
@@ -248,8 +245,10 @@ def respond():
                         "?" in dialog["human_utterances"][-1]["text"] and \
                         "what" not in dialog["human_utterances"][-1]["text"].lower():
                     response, confidence, attr = "", 0., {}
-                elif len(dialog["human_utterances"]) > 0 and "?" in dialog["human_utterances"][-1]["text"]:
-                    logger.info("Question by user was detected. Don't continue the script on this turn.")
+                elif len(dialog["human_utterances"]) > 0 and "?" in dialog["human_utterances"][-1]["text"] and \
+                        not check_topic_lemmas_in_sentence(dialog["human_utterances"][-1]["text"], topic):
+                    logger.info("Question by user was detected. Without any word from topic in it. "
+                                "Don't continue the script on this turn.")
                     response, confidence, attr = "", 0., {}
                     # we do not finish script on this step but hope that some other script will be able
                     # to answer user's question
@@ -277,6 +276,9 @@ def respond():
                 if confidence > 0.7 and (yes_detected or len(dialog["utterances"][-1]["text"].split()) > 7):
                     # if yes detected, confidence 1.0 - we like agreements!
                     confidence = 1.0
+                if confidence > 0.7 and len(dialog["bot_utterances"]) > 0 and \
+                        dialog["bot_utterances"][-1]["active_skill"] != "meta_script_skill":
+                    confidence = BROKEN_DIALOG_CONTINUE_CONFIDENCE
 
             logger.info(f"User sent: `{dialog['utterances'][-1]['text']}`. "
                         f"Response: `{response}`."

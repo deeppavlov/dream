@@ -34,7 +34,7 @@ ASYNC_SIZE = int(os.environ.get('ASYNC_SIZE', 6))
 BANNED_UNIGRAMS = ["I", 'i', "news", "something", "anything"]
 NEWS_TOPICS = ["Sports", "Politics", "Economy", "Science", "Arts", "Health", "Education"]
 
-NEWS_API_REQUESTOR = CachedRequestsAPI(renew_freq_time=3600)  # time in seconds
+NEWS_API_REQUESTOR = CachedRequestsAPI(renew_freq_time=10800)  # time in seconds
 DEFAULT_NEWS_OFFER_CONFIDENCE = 1.
 WHAT_TYPE_OF_NEWS_CONFIDENCE = 0.9
 NOT_SPECIFIC_NEWS_OFFER_CONFIDENCE = 0.95

@@ -294,7 +294,8 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             curr_score = very_big_score
         elif skill_names[i] == 'program_y' and alexa_abilities_spec in candidates[i]['text']:
             curr_score = very_big_score
-        elif skill_names[i] == 'meta_script_skill' and len(dialog['utterances']) >= 2:
+        elif skill_names[i] == 'meta_script_skill' and len(dialog['utterances']) >= 2 and \
+                candidates[i].get("meta_script_status", "") == "starting":
             if len(dialog['utterances']) >= 5 and confidences[i] == 0.99:
                 # if meta_script returns starting phrase in the middle of dialog (conf 0.99)
                 # when faced topic switching intent or matched phrase,
