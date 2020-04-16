@@ -182,11 +182,13 @@ def respond():
                           "past tense", "plural form", "singular form", "present tense", "future tense", "bob cut",
                           "movie theater", "alexa app", "more news", "be here when you need me", "the weeknd",
                           "faktas", "fact about amazing", "also called movie or motion picture",
-                          "known as eugen warming"]
+                          "known as eugen warming", "select a chat program that fits your needs"]
 
         if len(response) > 0 and 'skill://amzn1' not in response:
             sentences = sent_tokenize(response.replace(".,", "."))
-            if response in bad_answers or any([bad_substr in response.lower() for bad_substr in bad_subanswers]):
+            full_resp = response
+            response = " ".join(sentences[:2])
+            if full_resp in bad_answers or any([bad_substr in full_resp.lower() for bad_substr in bad_subanswers]):
                 confidence = 0.
                 response = ""
             elif len(sentences[0]) < 100 and "fact about" in sentences[0]:
@@ -218,14 +220,12 @@ def respond():
                     confidence = 0.7
                 else:
                     confidence = 0.3
-            elif any(substr in response for substr in
+            elif any(substr in full_resp for substr in
                      ["Here’s something I found", "Here's what I found", "According to "]):
                 confidence = 0.7
-            elif "is usually defined as" in response:
+            elif "is usually defined as" in full_resp:
                 confidence = 0.3
             else:
-                sentences = sent_tokenize(response.replace(".,", "."))
-                response = " ".join(sentences[:2])
                 confidence = 0.95
         else:
             confidence = 0.00
