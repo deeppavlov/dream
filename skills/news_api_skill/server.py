@@ -14,7 +14,7 @@ from os import getenv
 import sentry_sdk
 from newsapi_service import CachedRequestsAPI
 
-from common.news import OFFER_BREAKING_NEWS, BREAKING_NEWS, OFFERED_BREAKING_NEWS_STATUS, \
+from common.news import BREAKING_NEWS, OFFERED_BREAKING_NEWS_STATUS, \
     OFFERED_NEWS_DETAILS_STATUS, OPINION_REQUEST_STATUS
 from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, COMPILE_SWITCH_TOPIC
 from common.utils import get_skill_outputs_from_dialog, is_yes, is_no
@@ -323,7 +323,8 @@ def respond():
                 attr = {"news_status": OFFERED_NEWS_DETAILS_STATUS, "news_topic": "all", "can_continue": CAN_CONTINUE}
             else:
                 logger.info("No latest news found.")
-                response = f"I could not find some specific news. {OFFER_BREAKING_NEWS}"
+                response = f"Sorry, seems like all the news slipped my mind. Let's chat about something else." \
+                           f"What do you want to talk about?"
                 confidence = NOT_SPECIFIC_NEWS_OFFER_CONFIDENCE
                 attr = {"news_status": OFFERED_BREAKING_NEWS_STATUS, "can_continue": CAN_CONTINUE}
 
