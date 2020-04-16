@@ -25,35 +25,13 @@ BLACKLIST_ANNOTATOR_URL = "http://blacklisted_words:8018/blacklisted_words_batch
 class CachedRequestsAPI:
     def __init__(self, renew_freq_time=3600):
         self.renew_freq_time = renew_freq_time
-        self.prev_renew_time = datetime.now()
+        self.first_renew_time = datetime.now()
+        self.prev_renew_times = {}
         self.cached = {}
         logger.info(f"CachedRequestAPI initialized with renew_freq_time: {renew_freq_time} s")
 
-    def send(self, topic="all", status="", prev_news={}):
-        """Get news using cache and NewsAPI requests
-
-        Args:
-            topic: string topic (i.g. sport news, putin, politics
-            status: string news skill status
-            prev_news: prev news sent to user (dictionary)
-
-        Returns:
-            dictionary with one top rated over latest news
-        """
-        topic = topic.lower()
-        top_news = []
-
-        curr_time = datetime.now()
-        if (curr_time - self.prev_renew_time).seconds > self.renew_freq_time:
-            self.cached = {}
-            self.prev_renew_time = curr_time
-
-        if len(topic) == 0:
-            topic = "all"
-        # use cache
-        if len(self.cached.get(topic, [])) > 0:
-            top_news = self.cached[topic]
-
+    def get_new_topic_news(self, topic):
+        result = []
         try:
             if topic == "all":
                 request_address = ALL_NEWS_SERVICE_URL
@@ -82,13 +60,29 @@ class CachedRequestsAPI:
                     f"News API! result status code is not `ok`")
             else:
                 response = response.get("articles", [])
-                self.cached[topic] = response + self.cached.get(topic, [])
+                result = response
+        return result
 
-        if len(self.cached.get(topic, [])) == 0:
-            self.cached[topic] = []
-            top_news = [{}]
-        else:
-            top_news = self.cached[topic]
+    def send(self, topic="all", status="", prev_news={}):
+        """Get news using cache and NewsAPI requests
+
+        Args:
+            topic: string topic (i.g. sport news, putin, politics
+            status: string news skill status
+            prev_news: prev news sent to user (dictionary)
+
+        Returns:
+            dictionary with one top rated over latest news
+        """
+        topic = topic.lower() if len(topic) > 0 else "all"
+        curr_time = datetime.now()
+
+        if len(self.cached.get(topic, [])) == 0 or \
+                (curr_time - self.prev_renew_times.get(topic, self.first_renew_time)).seconds > self.renew_freq_time:
+            self.cached[topic] = self.get_new_topic_news(topic) + self.cached.get(topic, [])
+            self.prev_renew_times[topic] = curr_time
+
+        top_news = self.cached.get(topic, [])
 
         if len(top_news) > 0:
             if prev_news != {} and status == "headline":
