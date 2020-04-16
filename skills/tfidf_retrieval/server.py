@@ -77,7 +77,7 @@ def respond():
     stopwords = [j.strip() for j in open('data/stopwords.txt', 'r').readlines()[1:]]
     for last_utterance in last_utterances:
         words = [j for j in nopunct(last_utterance).lower().split(' ') if len(j.strip()) > 0]
-        if all([j in stopwords for j in words]):
+        if any([j in stopwords for j in words]):
             response = response + [['', 0]]
         else:
             response = response + check(last_utterance, vectorizer=vectorizer,
