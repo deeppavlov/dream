@@ -1,7 +1,7 @@
 from typing import Dict, List
 import logging
 from copy import deepcopy
-from common.universal_templates import if_lets_chat_about_topic, if_switch_topic, if_choose_topic
+from common.universal_templates import if_lets_chat_about_topic
 
 logger = logging.getLogger(__name__)
 
@@ -61,11 +61,8 @@ def last_n_human_utt_dialog_formatter(dialog: Dict, last_n_utts: int, only_last_
         only_last_sentence (bool, optional): take only last sentence in each utterance. Defaults to False.
     """
     if len(dialog["human_utterances"]) <= last_n_utts and \
-            not if_lets_chat_about_topic(dialog["utterances"][0]["text"].lower()) and \
-            not if_switch_topic(dialog["utterances"][0]["text"].lower()) and \
-            not if_choose_topic(dialog["utterances"][0]["text"].lower()):
-        # in all cases when not particular topic, not `about something/anything (else)`, not `switch topic`
-        # convert first phrase in the dialog to `hello!`
+            not if_lets_chat_about_topic(dialog["utterances"][0]["text"].lower()):
+        # in all cases when not particular topic, convert first phrase in the dialog to `hello!`
         dialog["utterances"][0]['annotations']['sentseg']['punct_sent'] = "hello!"
     human_utts = []
     for utt in dialog['utterances']:

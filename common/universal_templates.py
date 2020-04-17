@@ -81,7 +81,7 @@ TALK_LIKE = ["talk", "chat", "converse", "discuss", "speak", "tell", "say", "gos
 WANT_LIKE = ["want to", "wanna", "wish to", "need to", "desire to", r"(would |'d )?(like|love|dream) to", "going to",
              "gonna", "will", "can", "could", "plan to", "in need to", "demand"]
 TO_ME_LIKE = [r"to me( now)?", r"with me( now)?", r"me( now)?", "now"]
-SOMETHING_LIKE = ["anything", "something", "nothing", "none", "that"]
+SOMETHING_LIKE = ["anything", "something", "nothing", "none", "that", "everything"]
 DONOTKNOW_LIKE = [r"(i )?(do not|don't) know", "you (choose|decide|pick up)"]
 
 
@@ -93,6 +93,7 @@ ABOUT_TOPIC = join_words_in_or_pattern(ABOUT_LIKE) + r"\s" + ANY_WORDS
 # --------------- Let's talk. / Can we talk? / Talk to me. ------------
 COMPILE_LETS_TALK = re.compile(join_sentences_in_or_pattern(
     [
+        r"^" + TALK_TO_ME + END,
         join_words_in_or_pattern(QUESTION_LIKE) + r"\s?" + TALK_TO_ME + END,
         join_words_in_or_pattern(WANT_LIKE) + r"\s?" + TALK_TO_ME + END,
         join_words_in_or_pattern(START_LIKE) + r"\s?" + TALK_TO_ME + END
@@ -105,6 +106,7 @@ COMPILE_NOT_WANT_TO_TALK_ABOUT_IT = re.compile(
 # ----- Let's talk about something. / Can we talk about something? / Talk to me about something. ----
 COMPILE_LETS_TALK_ABOUT_SOMETHING = re.compile(join_sentences_in_or_pattern(
     [
+        r"^" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END,
         join_words_in_or_pattern(QUESTION_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END,
         join_words_in_or_pattern(WANT_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END,
         join_words_in_or_pattern(START_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END
@@ -114,6 +116,7 @@ COMPILE_LETS_TALK_ABOUT_SOMETHING = re.compile(join_sentences_in_or_pattern(
 # ----- .. switch the topic. / .. next topic. / .. switch topic. / Next. ----
 COMPILE_SWITCH_TOPIC = re.compile(join_sentences_in_or_pattern(
     [
+        r"^" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + " else" + END,
         join_words_in_or_pattern(QUESTION_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + " else" + END,
         join_words_in_or_pattern(WANT_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + " else" + END,
         join_words_in_or_pattern(START_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + " else" + END,
@@ -124,9 +127,11 @@ COMPILE_SWITCH_TOPIC = re.compile(join_sentences_in_or_pattern(
 # ----- Let's talk about TOPIC. / Can we talk about TOPIC? / Talk to me about TOPIC. ----
 COMPILE_LETS_TALK_ABOUT_TOPIC = re.compile(join_sentences_in_or_pattern(
     [
+        r"^" + TALK_TO_ME + r"\s?" + ABOUT_TOPIC + END,
         join_words_in_or_pattern(QUESTION_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_TOPIC + END,
         join_words_in_or_pattern(WANT_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_TOPIC + END,
         join_words_in_or_pattern(START_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_TOPIC + END,
+        r"^" + "discuss" + r"\s" + ANY_WORDS + END,
         join_words_in_or_pattern(QUESTION_LIKE) + r"\s?" + "discuss" + r"\s" + ANY_WORDS + END,
         join_words_in_or_pattern(WANT_LIKE) + r"\s?" + "discuss" + r"\s" + ANY_WORDS + END,
         join_words_in_or_pattern(START_LIKE) + r"\s?" + "discuss" + r"\s" + ANY_WORDS + END
@@ -159,6 +164,8 @@ def if_lets_chat_about_topic(uttr):
     # True if `let's talk about particular-topic`
     if not re.search(COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, uttr_):
         if re.search(COMPILE_LETS_TALK_ABOUT_SOMETHING, uttr_):
+            return False
+        elif re.search(COMPILE_SWITCH_TOPIC, uttr_):
             return False
         elif re.search(COMPILE_LETS_TALK_ABOUT_TOPIC, uttr_):
             return True
