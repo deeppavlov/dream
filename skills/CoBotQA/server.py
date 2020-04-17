@@ -182,7 +182,9 @@ def respond():
                           "past tense", "plural form", "singular form", "present tense", "future tense", "bob cut",
                           "movie theater", "alexa app", "more news", "be here when you need me", "the weeknd",
                           "faktas", "fact about amazing", "also called movie or motion picture",
-                          "known as eugen warming", "select a chat program that fits your needs"]
+                          "known as eugen warming", "select a chat program that fits your needs",
+                          "is usually defined as a humorous anecdote or remark intended to provoke laughter",
+                          "joke is a display of humour in which words are used within a specific"]
 
         if len(response) > 0 and 'skill://amzn1' not in response:
             sentences = sent_tokenize(response.replace(".,", "."))
