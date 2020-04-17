@@ -43,7 +43,7 @@ OFFER_MORE = "Do you want to hear more?"
 ASK_OPINION = "What do you think about it?"
 
 NEWS_TEMPLATES = re.compile(r"(news|(what is|what's)( the)? new|something new)")
-TELL_MORE_NEWS_TEMPLATES = re.compile(r"(tell me more|tell me next|more news|next news|other news)")
+TELL_MORE_NEWS_TEMPLATES = re.compile(r"(tell me more|tell me next|more news|next news|other news|learn more)")
 
 OFFERED_SPECIFIC_NEWS_STATUS = "offered_news"
 
@@ -71,11 +71,13 @@ def extract_topics(curr_uttr):
         if not ent:
             continue
         ent = ent[0]
-        if not (ent["text"].lower() == "alexa" and curr_uttr["text"].lower()[:5] == "alexa"):
+        if not (ent["text"].lower() == "alexa" and curr_uttr["text"].lower()[:5] == "alexa") and \
+                "news" not in ent["text"].lower():
             entities.append(ent["text"].lower())
     if len(entities) == 0:
         for ent in curr_uttr["annotations"]["cobot_nounphrases"]:
-            if ent.lower() not in BANNED_UNIGRAMS:
+            logger.info(f"entity: {ent}")
+            if ent.lower() not in BANNED_UNIGRAMS and "news" not in ent.lower():
                 if ent in entities:
                     pass
                 else:
@@ -141,7 +143,8 @@ def collect_topics_and_statuses(dialogs):
             elif prev_status == OFFERED_SPECIFIC_NEWS_STATUS:
                 if not (news_rejection(curr_uttr["text"].lower()) or is_no(curr_uttr)):
                     logger.info(f"User chose the topic for news")
-                    if "first" in curr_uttr["text"].lower() or "any" in curr_uttr["text"].lower():
+                    if "first" in curr_uttr["text"].lower() or "any" in curr_uttr["text"].lower() or \
+                            "both" in curr_uttr["text"].lower():
                         topics.append(prev_topic.split()[0])
                     elif "second" in curr_uttr["text"].lower() or "last" in curr_uttr["text"].lower():
                         topics.append(prev_topic.split()[1])
@@ -253,10 +256,19 @@ def respond():
                     attr = {"news_status": OFFERED_NEWS_DETAILS_STATUS, "news_topic": curr_topic,
                             "curr_news": result, "can_continue": CAN_CONTINUE}
                 elif curr_topic == "all":
-                    response = f"Here is one of the latest news that I found: {result['title']}.. {OFFER_MORE}"
-                    confidence = DEFAULT_NEWS_OFFER_CONFIDENCE
-                    attr = {"news_status": OFFERED_NEWS_DETAILS_STATUS, "news_topic": curr_topic,
-                            "curr_news": result, "can_continue": CAN_CONTINUE}
+                    prev_news_skill_output = get_skill_outputs_from_dialog(
+                        dialogs[i]["utterances"][-3:], skill_name="news_api_skill", activated=True)
+                    if len(prev_news_skill_output) > 0 and \
+                            prev_news_skill_output[-1].get("news_status", "") == OFFERED_SPECIFIC_NEWS_STATUS:
+                        # topic was not detected
+                        response = ""
+                        confidence = 0.
+                        attr = {}
+                    else:
+                        response = f"Here is one of the latest news that I found: {result['title']}.. {OFFER_MORE}"
+                        confidence = DEFAULT_NEWS_OFFER_CONFIDENCE
+                        attr = {"news_status": OFFERED_NEWS_DETAILS_STATUS, "news_topic": curr_topic,
+                                "curr_news": result, "can_continue": CAN_CONTINUE}
                 else:
                     response = f"Here is one of the latest news on topic {curr_topic}: {result['title']}.. {OFFER_MORE}"
                     confidence = DEFAULT_NEWS_OFFER_CONFIDENCE
