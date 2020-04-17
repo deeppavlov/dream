@@ -486,6 +486,7 @@ class BookSkillScenario:
                 logging.debug('bot phrases')
                 logging.debug(bot_phrases)
                 user_phrases = []
+                prev_reply = ''
                 annotated_user_phrase = dialog['utterances'][-1]
                 annotated_user_phrase['text'] = annotated_user_phrase['text'].replace('.', '')
                 user_phrases.append(annotated_user_phrase['text'])
@@ -493,6 +494,7 @@ class BookSkillScenario:
                     annotated_prev_phrase = dialog['utterances'][-3]
                     annotated_prev_phrase['text'] = annotated_prev_phrase['text'].replace('.', '')
                     user_phrases.append(annotated_prev_phrase['text'])
+                    prev_reply = annotated_prev_phrase['text']
                 else:
                     annotated_prev_phrase = None
                 # logging.debug(str(annotated_user_phrase))
@@ -721,6 +723,8 @@ class BookSkillScenario:
                 confidence = 0
             if not is_previous_was_about_book(dialog) and confidence > 0.95 and reply != START_PHRASE:
                 confidence = 0.95
+            if reply == prev_reply:
+                confidence = 0.5
             texts.append(reply)
             confidences.append(confidence)
 
