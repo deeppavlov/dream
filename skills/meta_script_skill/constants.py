@@ -130,11 +130,12 @@ WIKI_STARTINGS = [
 BANNED_VERBS = ["watch", "talk", "say", "chat", "like", "love", "ask",
                 "think", "mean", "hear", "know", "want", "tell", "look",
                 "call", "spell", "misspell", "suck", "fuck", "switch", "kill",
-                "eat", "re", "s", "see", "bear", "read"]
+                "eat", "re", "s", "see", "bear", "read", "ruin"]
 
 BANNED_NOUNS = ["lol", "alexa", "suck", "fuck", "sex", "one", "thing", "something", "anything", "nothing", "topic",
                 "today", "yesterday", "tomorrow", "now", "shopping", "mine", "talk", "chat", "me", "favorite",
                 "past", "future", "suggest", "suppose", "i'll", "book", "books", "movie", "movies", "weather",
-                "mom", "mother", "mummy", "mum", "mama", "mamma", "daddy", "dad", "father", "sister", "brother"]
+                "mom", "mother", "mummy", "mum", "mama", "mamma", "daddy", "dad", "father", "sister", "brother",
+                "everything"]
 
 idopattern = re.compile(r"i [a-zA-Z ,0-9]", re.IGNORECASE)

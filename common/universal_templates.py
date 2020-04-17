@@ -75,7 +75,7 @@ QUESTION_LIKE = ["let us", "let's", "lets", "let me", "do we", "do i", "do you",
                  "will we", "will i", "will you", "would we", "would i", "would you"]
 START_LIKE = ["start", "begin", "launch", "initiate", "go on", "go ahead", "onset"]
 TALK_LIKE = ["talk", "chat", "converse", "discuss", "speak", "tell", "say", "gossip", "commune", "chatter",
-             "prattle", "confab", "confabulate", "chin",
+             "prattle", "confab", "confabulate", "chin", "talk smack",
              r"(have|hold|carry on|change|make|take|give me|turn on|"
              r"go into)" + ARTICLES + r"(conversation|talk|chat|discussion|converse|dialog|dialogue|"
                                       r"speaking|chatter|chitchat|chit chat)"]

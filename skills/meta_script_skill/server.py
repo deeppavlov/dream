@@ -72,7 +72,7 @@ def get_not_used_topic(used_topics, dialog):
         available_wiki_topics = set(WIKI_DESCRIPTIONS) - set(used_topics)
         available_topics = set(TOPICS) - set(used_topics)
 
-        if random() < TOPICS_PROB and len(available_topics) > 0:
+        if (random() < TOPICS_PROB or len(dialog["utterances"]) == 1) and len(available_topics) > 0:
             return choice(list(available_topics)), PREDEFINED_SOURCE
 
         if len(available_wiki_topics) > 0:
