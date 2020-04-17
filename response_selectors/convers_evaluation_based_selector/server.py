@@ -225,6 +225,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     lower_duplicates_score(candidates, bot_utt_counter, scores, confidences)
     lower_retrieve_skills_confidence_if_scenario_exist(candidates, scores, confidences)
 
+    prev_active_skill = dialog["bot_utterances"][-1]['active_skill'] if len(dialog["bot_utterances"]) > 0 else ''
     skill_names = [c['skill_name'] for c in candidates]
     how_are_you_spec = "Do you want to know what I can do?"  # this is always at the end of answers to `how are you`
     what_i_can_do_spec = "socialbot running inside"
@@ -284,7 +285,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                 if skill_names[i] == 'program_y' and greeting_spec in candidates[i]['text']:
                     logger.info("Just chat. Program-y to very big score.")
                     curr_score = very_big_score
-        elif skill_names[i] == 'program_y' and (
+        elif skill_names[i] == 'program_y' and prev_active_skill == 'program_y' and (
                 how_are_you_spec in candidates[i]['text'] or what_i_can_do_spec in candidates[i]['text']) \
                 and len(dialog['utterances']) < 16:
             curr_score = very_big_score
