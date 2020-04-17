@@ -178,7 +178,7 @@ class RuleBasedSkillSelectorConnector:
         enable_coronavirus = enable_coronavirus or is_staying_home_requested(prev_bot_uttr, dialog['utterances'][-1])
         about_movies = (about_movies or movie_skill_was_proposed(prev_bot_uttr) or re.search(
             self.about_movie_words, prev_bot_uttr.get("text", "").lower()))
-        about_books = about_books or book_skill_was_proposed(prev_bot_uttr)
+        about_books = about_books or book_skill_was_proposed(prev_bot_uttr) or 'book' in reply
 
         emotions = dialog['utterances'][-1]['annotations']['emotion_classification']['text']
         if "/new_persona" in dialog["utterances"][-1]["text"]:
