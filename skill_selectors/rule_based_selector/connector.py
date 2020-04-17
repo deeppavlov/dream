@@ -99,33 +99,33 @@ class RuleBasedSkillSelectorConnector:
         dialog = payload['payload']['states_batch'][0]
 
         skills_for_uttr = []
-        reply = dialog["utterances"][-1]["text"].replace("'", " '").lower()
-        # tokens = reply.split()
+        user_uttr_text = dialog["human_utterances"][-1]["text"].lower()
+        user_uttr_annotations = dialog["human_utterances"][-1]["annotations"]
 
         # TODO: opinion_request/yes/no response
         intent_detected = any(
             [
                 v["detected"] == 1
-                for k, v in dialog["utterances"][-1]["annotations"]["intent_catcher"].items()
+                for k, v in user_uttr_annotations["intent_catcher"].items()
                 if k
                 not in {"opinion_request", "yes", "no", "tell_me_more", "doing_well", "weather_forecast_intent",
                         "topic_switching", "lets_chat_about", "stupid", "tell_me_a_story"}
             ]
         )
 
-        ner_detected = len(list(chain.from_iterable(dialog["utterances"][-1]["annotations"]["ner"]))) > 0
-        tell_me_a_story_detected = dialog["utterances"][-1]["annotations"]["intent_catcher"].get("tell_me_a_story", {
+        ner_detected = len(list(chain.from_iterable(user_uttr_annotations["ner"]))) > 0
+        tell_me_a_story_detected = user_uttr_annotations["intent_catcher"].get("tell_me_a_story", {
         }).get("detected", 0)
 
-        cobot_topics = set(dialog["utterances"][-1]["annotations"]["cobot_topics"]["text"])
+        cobot_topics = set(user_uttr_annotations["cobot_topics"]["text"])
         sensitive_topics_detected = any([t in self.sensitive_topics for t in cobot_topics])
-        cobot_dialogacts = dialog["utterances"][-1]["annotations"]["cobot_dialogact"]["intents"]
-        cobot_dialogact_topics = set(dialog["utterances"][-1]["annotations"]["cobot_dialogact"]["topics"])
+        cobot_dialogacts = user_uttr_annotations["cobot_dialogact"]["intents"]
+        cobot_dialogact_topics = set(user_uttr_annotations["cobot_dialogact"]["topics"])
         sensitive_dialogacts_detected = any(
-            [(t in self.sensitive_dialogacts and "?" in reply) for t in cobot_dialogacts]
+            [(t in self.sensitive_dialogacts and "?" in user_uttr_text) for t in cobot_dialogacts]
         )
 
-        blist_topics_detected = dialog["utterances"][-1]["annotations"]["blacklisted_words"]["restricted_topics"]
+        blist_topics_detected = user_uttr_annotations["blacklisted_words"]["restricted_topics"]
 
         about_movies = (self.movie_cobot_dialogacts & cobot_dialogact_topics)
         about_music = ("Entertainment_Music" in cobot_dialogact_topics) | ("Music" in cobot_topics)
@@ -161,33 +161,32 @@ class RuleBasedSkillSelectorConnector:
             ]
         )
 
-        about_weather = dialog["utterances"][-1]["annotations"]["intent_catcher"].get(
+        about_weather = user_uttr_annotations["intent_catcher"].get(
             "weather_forecast_intent", {}
         ).get("detected", False) or (
             prev_bot_uttr.get("active_skill", "") == "weather_skill" and weather_city_slot_requested
         )
-        about_weather = about_weather or is_weather_requested(prev_bot_uttr, dialog['utterances'][-1])
-        news_re_expr = re.compile(r"(news|(what is|what's)( the)? new|something new)")
-        about_news = (self.news_cobot_topics & cobot_topics) or re.search(
-            news_re_expr, reply
-        )
-        about_news = about_news or is_breaking_news_requested(prev_bot_uttr, dialog['utterances'][-1])
+        about_weather = about_weather or is_weather_requested(prev_bot_uttr, dialog['human_utterances'][-1])
+        news_re_expr = re.compile(r"(news|(what is|what ?'s)( the)? new|something new)")
+        about_news = (self.news_cobot_topics & cobot_topics) or re.search(news_re_expr, user_uttr_text)
+        about_news = about_news or is_breaking_news_requested(prev_bot_uttr, dialog['human_utterances'][-1])
         virus_prev = False
         for i in [3, 5]:
             if len(dialog['utterances']) >= i:
                 virus_prev = virus_prev or any([function(dialog['utterances'][-i]['text'])
                                                 for function in [about_virus, quarantine_end]])
-        enable_coronavirus_death = check_about_death(dialog['utterances'][-1]['text'])
-        enable_coronavirus = any([function(dialog['utterances'][-1]['text'])
+        enable_coronavirus_death = check_about_death(user_uttr_text)
+        enable_coronavirus = any([function(user_uttr_text)
                                   for function in [about_virus, quarantine_end]])
         enable_coronavirus = enable_coronavirus or (enable_coronavirus_death and virus_prev)
-        enable_coronavirus = enable_coronavirus or is_staying_home_requested(prev_bot_uttr, dialog['utterances'][-1])
+        enable_coronavirus = enable_coronavirus or is_staying_home_requested(
+            prev_bot_uttr, dialog['human_utterances'][-1])
         about_movies = (about_movies or movie_skill_was_proposed(prev_bot_uttr) or re.search(
             self.about_movie_words, prev_bot_uttr.get("text", "").lower()))
-        about_books = about_books or book_skill_was_proposed(prev_bot_uttr) or 'book' in reply
+        about_books = about_books or book_skill_was_proposed(prev_bot_uttr) or 'book' in user_uttr_text
 
-        emotions = dialog['utterances'][-1]['annotations']['emotion_classification']['text']
-        if "/new_persona" in dialog["utterances"][-1]["text"]:
+        emotions = user_uttr_annotations['emotion_classification']['text']
+        if "/new_persona" in user_uttr_text:
             # process /new_persona command
             skills_for_uttr.append("personality_catcher")  # TODO: rm crutch of personality_catcher
         elif intent_detected:
@@ -277,7 +276,7 @@ class RuleBasedSkillSelectorConnector:
                 if prob == max(emotions.values()):
                     found_emotion, found_prob = emotion, prob
             cond1 = found_emotion != 'neutral' and found_prob > emo_prob_threshold
-            should_run_emotion = cond1 or detect_emotion(prev_bot_uttr, dialog['utterances'][-1])
+            should_run_emotion = cond1 or detect_emotion(prev_bot_uttr, dialog['human_utterances'][-1])
             if should_run_emotion or "how are you?" in prev_bot_uttr.get("text", "").lower():
                 skills_for_uttr.append('emotion_skill')
 
@@ -288,7 +287,7 @@ class RuleBasedSkillSelectorConnector:
 
             if len(dialog["utterances"]) > 1:
                 # Use only misheard asr skill if asr is not confident and skip it for greeting
-                if dialog["utterances"][-1]["annotations"]["asr"]["asr_confidence"] == "very_low":
+                if user_uttr_annotations["asr"]["asr_confidence"] == "very_low":
                     skills_for_uttr = ["misheard_asr"]
 
             if tell_me_a_story_detected or prev_active_skill == 'short_story_skill':
@@ -304,7 +303,7 @@ class RuleBasedSkillSelectorConnector:
         if len(dialog["utterances"]) > 14:
             skills_for_uttr.append("small_talk_skill")
 
-        if "/alexa_" in dialog["utterances"][-1]["text"]:
+        if "/alexa_" in user_uttr_text:
             skills_for_uttr = ["alexa_handler"]
         asyncio.create_task(callback(
             task_id=payload['task_id'],
