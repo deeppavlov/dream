@@ -34,7 +34,7 @@ np_ignore_list = ["'s", 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselv
                   "boring", "radio", "type", "call", "fun", "fall", "name", "names", "lgbtq families", "day", "murder",
                   "amazon", "take", "interest", "days", "year", "years", "sort", "fan", "going", "death", "part", "end",
                   "watching", "thought", "thoughts", "man", "men", "listening", "big fan", "fans", "rapping", "reading",
-                  "going", "thing", "hanging", "best thing", "wife", "things"]
+                  "going", "thing", "hanging", "best thing", "wife", "things", "guy", "guys"]
 
 df = pd.read_csv(f"{mode}_with_topics.csv")
 print(df.head())
