@@ -172,9 +172,15 @@ class RuleBasedSkillSelectorConnector:
             news_re_expr, reply
         )
         about_news = about_news or is_breaking_news_requested(prev_bot_uttr, dialog['utterances'][-1])
+        virus_prev = False
+        for i in [3, 5]:
+            if len(dialog['utterances']) >= i:
+                virus_prev = virus_prev or any([function(dialog['utterances'][-i]['text'])
+                                                for function in [about_virus, quarantine_end]])
+        enable_coronavirus_death = check_about_death(dialog['utterances'][-1]['text'])
         enable_coronavirus = any([function(dialog['utterances'][-1]['text'])
-                                  for function in [about_virus, quarantine_end, check_about_death]])
-
+                                  for function in [about_virus, quarantine_end]])
+        enable_coronavirus = enable_coronavirus or (enable_coronavirus_death and virus_prev)
         enable_coronavirus = enable_coronavirus or is_staying_home_requested(prev_bot_uttr, dialog['utterances'][-1])
         about_movies = (about_movies or movie_skill_was_proposed(prev_bot_uttr) or re.search(
             self.about_movie_words, prev_bot_uttr.get("text", "").lower()))

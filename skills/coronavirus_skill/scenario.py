@@ -279,6 +279,13 @@ def asked_origin(last_utterance):
     return any([j in last_utterance['text'].lower() for j in ['origin', 'come from']])
 
 
+def dontlike(last_utterance):
+    return any([j in last_utterance['text'].lower() for j in ["don't like" , "don't want to talk",
+                                                              "not concerned about", "over the coronavirus",
+                                                              "don't wanna talk", "no coronavirus",
+                                                              "no more coronavirus"]])
+
+
 def asked_cure(last_utterance):
     return any([j in last_utterance['text'].lower() for j in ['cure', 'treatment', 'vaccine']])
 
@@ -382,6 +389,8 @@ class CoronavirusSkillScenario:
                 if quarantine_end(last_utterance):
                     logging.info('Quarantine end detected')
                     reply, confidence = QUARANTINE_END_PHRASE, 0.95
+                elif dontlike(last_utterance):
+                    reply, confidence = '', 0
                 elif emotion_detected(last_utterance, 'fear') or emotion_detected(last_utterance, 'anger'):
                     r = random()
                     if r < 0.5:
@@ -542,7 +551,7 @@ class CoronavirusSkillScenario:
                     confidence = 0
                 elif reply.lower() in last_utterances and confidence == 1:
                     logging.debug('I have said that before, a bit less confident')
-                    confidence = 0.95
+                    confidence = 0.5
 
             except Exception as e:
                 logger.exception("exception in coronavirus skill")
