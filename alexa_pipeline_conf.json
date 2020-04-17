@@ -327,7 +327,7 @@
                     "protocol": "http",
                     "url": "http://movie_skill:8023/movie_skill"
                 },
-                "dialog_formatter": "utt_sentseg_punct_dialog",
+                "dialog_formatter": "utt_sentrewrite_modified_last_dialog",
                 "response_formatter": "skill_with_attributes_formatter_service",
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"

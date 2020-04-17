@@ -503,7 +503,7 @@ class MovieSkillScenario:
                                    human_attr, bot_attr):
         fact = send_cobotqa(f"{request_about} {movie_type} {movie_title}?")
         logger.info(f"Generated fact about `{movie_title}`: {fact}.")
-        if len(fact) > 0:
+        if len(fact) > 0 and "Sorry, I don't know" not in fact and "This might answer your question" not in fact:
             sentences = sent_tokenize(fact.replace(".,", "."))
             if len(sentences[0]) < 100 and "fact about" in sentences[0]:
                 fact = " ".join(sentences[1:3])
