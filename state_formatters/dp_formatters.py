@@ -458,8 +458,7 @@ def short_story_formatter_dialog(dialog: Dict):
         {
             'intents': dialog['human_utterances'][-1]['annotations']['intent_catcher'],
             'human_sentence': dialog['human_utterances'][-1]['text'],
-            'bot_sentence': dialog["bot_utterances"][-1]['text']
-
+            'state': dialog["bot"]["attributes"].get("short_story_skill_attributes", {})
         }
     ]
 

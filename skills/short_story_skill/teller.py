@@ -2,7 +2,6 @@
 
 import random
 import re
-from itertools import chain
 
 
 class Teller:
@@ -13,11 +12,10 @@ class Teller:
         self.history = []
         self.phrases = phrases
         self.stories = stories
-        self.setups_punchlines = {story['setup']: story['punchline'] for story in chain.from_iterable(stories.values())}
         self.status_constants = status_constants
         self.logger = logger
 
-    def which_story(self, sentence):
+    def get_story(self, sentence):
         """
         Determine what type of story user requested
         """
@@ -30,77 +28,105 @@ class Teller:
         else:
             return None
 
-    def search_phrases(self, search_phrases, phrase):
-        return any([re.search(search_phrase, phrase) for search_phrase in search_phrases])
+    def choose_story(self, attributes, story_type):
+        """
+        Choose a story.
+        """
+        already_told_stories = attributes.get('already_told_stories', [])
+        try:  # Try to get a story that haven't been told already
+            story = random.choice(
+                list(set(self.stories[story_type].keys()) - set(already_told_stories)))
+        except IndexError:  # We run out of stories
+            phrase = "Oh, I am sorry, but I've run out of stories. Maybe you have any to share with me?"
+            status = self.status_constants['cannot']
+        else:  # Tell a story setup
+            already_told_stories += [story]
+            phrase = self.stories[story_type][story]["setup"] + \
+                "..." + random.choice(self.phrases['what_happend_next'])
+            status = self.status_constants["must"]
+            attributes['state'] = 'setup'
+            attributes['story'] = story
+            attributes['already_told_stories'] = already_told_stories
+        return phrase, status, attributes
 
-    def tell(self, human_sentence, bot_sentence, intents):
+    def tell_punchline(self, story_name):
+        for story_type in self.stories:
+            for story in self.stories[story_type]:
+                if story == story_name:
+                    return self.stories[story_type][story_name]['punchline']
+        return 'Oh, sorry, i lost the track of what I was talking about.'
+
+    def tell(self, human_sentence, intents, state):
         """
         Basic logic of story teller
         """
         phrase = ""
         status = self.status_constants["can"]
         confidence = 0.999
-        setup = [setup for setup in self.setups_punchlines if re.search(setup, bot_sentence)]
-        if len(setup) == 1:  # Getting the story the bot was telling
-            setup = setup[0]
-        elif len(setup) == 0:
-            setup = None
-        else:
-            self.logger.error(f"Multiple setups matching: {setup}")
+        # Set attributes
+        attributes = {}
         # Get intent values
-        tell_me_a_story = bool(intents.get("tell_me_a_story", {}).get("detected", False))
+        tell_me_a_story = bool(intents.get(
+            "tell_me_a_story", {}).get("detected", False))
         yes = bool(intents.get("yes", {}).get("detected", False))
         no = bool(intents.get("no", {}).get("detected", False))
         # Logging
         self.logger.info(f"Human sentence: {human_sentence}")
-        self.logger.info(f"Bot sentence: {bot_sentence}")
         self.logger.info(f"tell_me_a_story: {tell_me_a_story}")
         self.logger.info(f"yes: {yes}")
         self.logger.info(f"no: {no}")
-        self.logger.info(f"setup: {setup}")
+        self.logger.info(f"state: {state}")
 
         # Skill logic
-        if self.search_phrases(self.phrases['start_phrases'], bot_sentence) and yes:  # Want a story -> yes
+        # We detected an intent firsthand
+        if tell_me_a_story or state.get('state', '') == 'asked_for_a_story':
+            story_type = self.get_story(human_sentence)
+            # User didn't specify the type of story
+            if story_type is None:
+                if state.get('state', '') == 'asked_for_a_story':
+                    phrase = random.choice(self.phrases["which_story"])
+                else:
+                    phrase = random.choice(
+                        self.phrases["sure"]) + " " + random.choice(self.phrases["which_story"])
+                status = self.status_constants["must"]
+                attributes['state'] = 'which_story'
+            else:  # The type of story is already specified in intial intent
+                phrase, status, attributes = self.choose_story(attributes, story_type)
+        elif state.get('state', '') == 'do_you_mind' and yes:  # Want a story -> yes
             phrase = random.choice(self.phrases["which_story"])
             status = self.status_constants["must"]
-        elif self.search_phrases(self.phrases['start_phrases'], bot_sentence) and no:  # Want a story -> no
+            attributes['state'] = 'which_story'
+        elif state.get('state', '') == 'do_you_mind' and no:  # Want a story -> no
             phrase = random.choice(self.phrases["no"])
-            status = self.status_constants["cannot"]
-        elif self.search_phrases(self.phrases['start_phrases'], bot_sentence):  # Already started a dialog + yes
+            status = self.status_constants["can"]
+        elif state.get('state', '') == 'do_you_mind':  # Didn't get the answer
             phrase = random.choice(self.phrases["which_story"])
             status = self.status_constants["can"]
-            confidence = 0.8
-        elif self.search_phrases(self.phrases["which_story"], bot_sentence):  # Already asked about which story
-            story_type = self.which_story(human_sentence)
-            if story_type is None:  # If we couldn't determine the type of story (don't have such stories)
+            attributes['state'] = 'which_story'
+            confidence = 0.75
+        elif state.get('state', '') == 'which_story':  # Already asked about which story
+            story_type = self.get_story(human_sentence)
+            # If we couldn't determine the type of story (don't have such stories)
+            if story_type is None:
                 phrase = random.choice(self.phrases['no_stories'])
                 status = self.status_constants['can']
-            else:
-                story = random.choice(self.stories[story_type])  # Tell story setup
-                phrase = story["setup"] + "..." + random.choice(self.phrases['what_happend_next'])
-                status = self.status_constants['must']
-        elif setup and yes:  # User is still intrigued -> continue
-            phrase = self.setups_punchlines[setup]
+            else:  # Start telling the story
+                phrase, status, attributes = self.choose_story(attributes, story_type)
+        elif state.get('state', '') == 'setup' and yes:  # User is still intrigued -> continue
+            story_name = state.get('story', '')
+            phrase = self.tell_punchline(story_name)
             status = self.status_constants['can']
-        elif setup and no:  # User is not interested
+        elif state.get('state', '') == 'setup' and no:  # User is not interested
             phrase = random.choice(self.phrases['no'])
             status = self.status_constants['cannot']
-        elif setup:  # Don't know if user is still interested
-            phrase = self.setups_punchlines[setup]
+        elif state.get('state', '') == 'setup':  # Don't know if user is still interested
+            story_name = state.get('story', '')
+            phrase = self.tell_punchline(story_name)
             status = self.status_constants['can']
             confidence = 0.8
-        elif tell_me_a_story:  # We detected an intent firsthand
-            story_type = self.which_story(human_sentence)
-            if self.which_story(human_sentence) is None:  # User didn't specify the type of story
-                phrase = random.choice(self.phrases["sure"]) + " " + random.choice(self.phrases["which_story"])
-                status = self.status_constants["must"]
-            else:  # The type of story is already specified in intial intent
-                phrase = random.choice(self.phrases["sure"]) + " " + random.choice(self.phrases["which_story"])
-                story = random.choice(self.stories[story_type])
-                phrase = story["setup"] + '... ' + random.choice(self.phrases['what_happend_next'])
-                status = self.status_constants["must"]
         else:  # Start of a dialog
             phrase = random.choice(self.phrases['start_phrases'])
             status = self.status_constants["must"]
             confidence = 0.5
-        return phrase, confidence, status
+            attributes['state'] = 'do_you_mind'
+        return phrase, confidence, {}, {'short_story_skill_attributes': attributes}, {'can_continue': status}

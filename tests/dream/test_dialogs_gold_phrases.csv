@@ -15,6 +15,8 @@
 "program_y_dangerous" "i want to commit a suicide today" "If you or someone you know is in immediate danger because of thoughts of suicide, please call 9 1 1 now. If you aren't in the United States, please, call your local emergency number."
 "program_y;cobotqa" "alexa do you have a family"
 "short_story_skill;dummy_skill" "can you tell me a story?"
+"short_story_skill" "scary"
+"short_story_skill" "yes"
 "intent_responder" "what else can you do?" "I'm a newborn socialbot" "#+#what_can_you_do"
 "program_y;dummy_skill;meta_script_skill;small_talk_skill" "let's talk about" "I misheard you. what's it that you'd like to chat about?"
 "weather_skill" "what is the weather" "Which city would you like a weather forecast for?"
