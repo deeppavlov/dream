@@ -5,6 +5,7 @@ from os import getenv
 from datetime import datetime
 import sentry_sdk
 from langdetect import detect
+from collections import deque
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -12,37 +13,63 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-NEWS_API_KEY = os.environ.get('NEWS_API_KEY')
-NEWS_SERVICE_URL = f"http://newsapi.org/v2/top-headlines?q=TOPIC&sortBy=popularity&apiKey={NEWS_API_KEY}"
-ALL_NEWS_SERVICE_URL = f"http://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey={NEWS_API_KEY}"
-
-if NEWS_API_KEY is None:
-    raise RuntimeError('NEWS_API_KEY environment variable is not set')
 
 BLACKLIST_ANNOTATOR_URL = "http://blacklisted_words:8018/blacklisted_words_batch"
 
 
 class CachedRequestsAPI:
+    NEWS_SERVICE_URL = f"http://newsapi.org/v2/top-headlines?q=TOPIC&sortBy=popularity&apiKey="
+    ALL_NEWS_SERVICE_URL = f"http://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey="
+
     def __init__(self, renew_freq_time=3600):
         self.renew_freq_time = renew_freq_time
         self.first_renew_time = datetime.now()
         self.prev_renew_times = {}
         self.cached = {}
-        logger.info(f"CachedRequestAPI initialized with renew_freq_time: {renew_freq_time} s")
+        self._api_keys = self._collect_api_keys()
+        logger.info(f"CachedRequestAPI initialized with renew_freq_time: {renew_freq_time} s;"
+                    f"api keys: {self._api_keys}")
+
+    def _collect_api_keys(self):
+        api_keys_count = 5
+        api_keys = []
+        for i in range(1, api_keys_count + 1):
+            key = f"NEWS_API_KEY_{i}"
+            if key in os.environ:
+                api_keys.append(os.environ[key])
+        assert len(api_keys) > 0, print(f"news skill api keys is empty! api_keys {api_keys}")
+        return deque(api_keys)
+
+    def _construct_address(self, topic, api_key):
+        if topic == "all":
+            request_address = self.ALL_NEWS_SERVICE_URL + api_key
+        else:
+            request_address = self.NEWS_SERVICE_URL + api_key
+            request_address = request_address.replace("TOPIC", topic)
+        return request_address
+
+    def _make_request(self, topic):
+        for ind, api_key in enumerate(self._api_keys):
+            try:
+                request_address = self._construct_address(topic, api_key)
+                resp = requests.get(url=request_address)
+            except (requests.ConnectTimeout, requests.ReadTimeout) as e:
+                sentry_sdk.capture_exception(e)
+                logger.exception("NewsAPI Timeout")
+                resp = requests.Response()
+                resp.status_code = 504
+            if resp.status_code == 429:
+                msg = f"News API Response status code 429 with api key {api_key}"
+                logger.warning(msg)
+            else:
+                # Change order of api_keys to use first success next time
+                self._api_keys.rotate(-ind)
+                break
+        return resp
 
     def get_new_topic_news(self, topic):
         result = []
-        try:
-            if topic == "all":
-                request_address = ALL_NEWS_SERVICE_URL
-            else:
-                request_address = NEWS_SERVICE_URL.replace("TOPIC", topic)
-            resp = requests.get(url=request_address)
-        except (requests.ConnectTimeout, requests.ReadTimeout) as e:
-            sentry_sdk.capture_exception(e)
-            logger.exception("NewsAPI Timeout")
-            resp = requests.Response()
-            resp.status_code = 504
+        resp = self._make_request(topic)
 
         if resp.status_code != 200:
             logger.warning(
