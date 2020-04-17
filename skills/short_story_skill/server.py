@@ -53,6 +53,6 @@ logger.info("All done!")
 @app.route("/respond", methods=['POST'])
 def respond():
     human_sentence = request.json['human_sentence']
-    bot_sentence = request.json['bot_sentence']
     intents = request.json['intents']
-    return jsonify([teller.tell(human_sentence, bot_sentence, intents)])
+    state = request.json['state']
+    return jsonify([teller.tell(human_sentence, intents, state)])

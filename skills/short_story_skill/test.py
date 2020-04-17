@@ -12,8 +12,11 @@ def main_test():
         assert req.ok, print(f"TEST FAILED! Status not OK.\nTest: {test}\nResult:{req.status_code}")
         if len(test['result']) > 0:
             phrase = req.json()[0][0]
-            assert phrase in test['result'] , print(
-                f"TEST FAILED! Unsatisfying result.\nTest: {test}\nResult:{phrase}")
+            state = req.json()[0][3].get("short_story_skill_attributes", {})
+            assert phrase in test['result']['phrases'], print(
+                f"TEST FAILED! Wrong phrase.\nTest: {test}\nResult:{phrase}")
+            assert state in test['result']['states'], print(
+                f"TEST FAILED! Wrong state.\nTest: {test}\nResult:{state}")
     print("Success!")
 
 
