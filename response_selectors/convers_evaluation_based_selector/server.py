@@ -174,6 +174,15 @@ def lower_retrieve_skills_confidence_if_scenario_exist(candidates, scores, confi
                 scores[i]['isResponseInteresting'] *= lower_coeff
 
 
+def calculate_single_convers_evaluator_score(cand_scores):
+    score_conv_eval = sum([cand_scores["isResponseOnTopic"],
+                           cand_scores["isResponseInteresting"],
+                           cand_scores["responseEngagesUser"],
+                           cand_scores["isResponseComprehensible"]])
+    score_conv_eval -= cand_scores["isResponseErroneous"]
+    return score_conv_eval
+
+
 def select_response(candidates, scores, confidences, toxicities, has_blacklisted,
                     has_inappropriate, stop_probs, dialog):
     confidence_strength = 2
@@ -341,23 +350,25 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             cand_scores = scores[i]
             confidence = confidences[i]
             skill_name = skill_names[i]
-            score_conv_eval = sum([cand_scores["isResponseOnTopic"],
-                                   cand_scores["isResponseInteresting"],
-                                   cand_scores["responseEngagesUser"],
-                                   cand_scores["isResponseComprehensible"]])
-            score_conv_eval -= cand_scores["isResponseErroneous"]
+            score_conv_eval = calculate_single_convers_evaluator_score(cand_scores)
             score = conv_eval_strength * score_conv_eval + confidence_strength * confidence
             logger.info(f'Skill {skill_name} has final score: {score}. Confidence: {confidence}. '
                         f'Toxicity: {toxicities[i]}. Cand scores: {cand_scores}')
             curr_single_scores.append(score)
         else:
-            curr_single_scores.append(curr_score)
+            cand_scores = scores[i]
+            skill_name = skill_names[i]
+            score_conv_eval = calculate_single_convers_evaluator_score(cand_scores)
+            score = conv_eval_strength * score_conv_eval + curr_score
+            logger.info(f'Skill {skill_name} has final score: {score}. '
+                        f'Toxicity: {toxicities[i]}. Cand scores: {cand_scores}')
+            curr_single_scores.append(score)
 
     highest_conf_exist = True if any(confidences >= 1.) else False
     if highest_conf_exist:
         logger.info("Found skill with the highest confidence.")
     for j in range(len(candidates)):
-        if highest_conf_exist and confidences[j] < 1. and curr_single_scores[j] != very_big_score:
+        if highest_conf_exist and confidences[j] < 1. and curr_single_scores[j] < very_big_score:
             # need to drop this candidates
             logger.info(f"Dropping {skill_names[j]} which does not have a highest confidence or `very big score`.")
             curr_single_scores[j] = very_low_score
