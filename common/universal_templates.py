@@ -184,6 +184,17 @@ def if_switch_topic(uttr):
         return False
 
 
+def is_switch_topic(annotated_uttr):
+    annotations = annotated_uttr.get("annotations", {})
+    topic_switch_detected = annotations.get("intent_catcher", {}).get("topic_switching", {}).get("detected", 0) == 1
+    intents = annotations.get("cobot_dialogact", {}).get("intents", [])
+    intent_detected = "Topic_SwitchIntent" in intents
+    if intent_detected or topic_switch_detected or if_switch_topic(annotated_uttr["text"].lower()):
+        return True
+    else:
+        return False
+
+
 def if_choose_topic(uttr, prev_uttr="---"):
     uttr_ = uttr.lower()
     prev_uttr_ = prev_uttr.lower()

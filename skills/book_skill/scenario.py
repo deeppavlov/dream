@@ -1,4 +1,4 @@
-from common.universal_templates import BOOK_CHANGE_PHRASE
+from common.universal_templates import BOOK_CHANGE_PHRASE, is_switch_topic
 from common.tutor import get_tutor_phrase
 import logging
 from os import getenv
@@ -511,6 +511,8 @@ class BookSkillScenario:
                 if cond1 and not is_no(annotated_user_phrase):
                     logging.debug('Detected talk about books. Calling start phrase')
                     reply, confidence = START_PHRASE, 1
+                elif is_switch_topic(annotated_user_phrase):
+                    reply, confidence = BOOK_CHANGE_PHRASE, 0.9
                 elif fact_request_detected(annotated_user_phrase):
                     logging.debug('Detected fact request')
                     reply, confidence = YES_PHRASE_3_FACT, self.default_conf

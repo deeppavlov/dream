@@ -9,7 +9,7 @@ from templates import MovieSkillTemplates
 from nltk.tokenize import sent_tokenize, word_tokenize
 from common.utils import get_skill_outputs_from_dialog, is_yes, is_no
 from common.constants import CAN_CONTINUE
-from common.universal_templates import if_switch_topic, if_lets_chat_about_topic, if_choose_topic
+from common.universal_templates import if_switch_topic, is_switch_topic, if_lets_chat_about_topic, if_choose_topic
 from common.movies import get_movie_template, offer_talk_about_movies, ABOUT_MOVIE_TITLES_PHRASES
 
 from CoBotQA.cobotqa_service import send_cobotqa
@@ -180,14 +180,7 @@ class MovieSkillScenario:
             return False
 
     def is_switch_topic(self, uttr):
-        annotations = uttr.get("annotations", {})
-        topic_switch_detected = annotations.get("intent_catcher", {}).get("topic_switching", {}).get("detected", 0) == 1
-        intents = annotations.get("cobot_dialogact", {}).get("intents", [])
-        intent_detected = "Topic_SwitchIntent" in intents
-        if intent_detected or topic_switch_detected or if_switch_topic(uttr["text"].lower()):
-            return True
-        else:
-            return False
+        return is_switch_topic(uttr)
 
     def is_unclear_switch_topic(self, uttr):
         annotations = uttr.get("annotations", {})
