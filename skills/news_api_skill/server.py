@@ -237,7 +237,7 @@ def respond():
         curr_status = statuses[i]
         # the only difference is that result is laready is a dictionary with news.
 
-        if len(result) > 0 and len(result.get("title", "")) > 0 and len(result.get("description", "")) > 0:
+        if result and result.get("title") and result.get("description"):
             logger.info("Topic: {}".format(curr_topic))
             logger.info("News found: {}".format(result))
             if curr_status == "headline":
