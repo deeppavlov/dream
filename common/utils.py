@@ -143,7 +143,7 @@ def about_virus(annotated_phrase):
 
 
 yes_templates = re.compile(r"(\byes\b|\byup\b|\byep\b|\bsure\b|go ahead|\byeah\b|\bok\b|okay|"
-                           r"why not|tell me|i agree|i think so)")
+                           r"^why not\.?$|^tell me\.?$|^i agree\.?$|^i think so\.?$)")
 
 
 def is_yes(annotated_phrase):
