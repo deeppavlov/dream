@@ -80,9 +80,11 @@ class EmotionSkillScenario:
         self.precision = {'anger': 1, 'fear': 0.894, 'joy': 1,
                           'love': 0.778, 'sadness': 1, 'surprise': 0.745, 'neutral': 0}
 
-    def _get_user_emotion(self, annotated_user_phrase):
+    def _get_user_emotion(self, annotated_user_phrase, discard_emotion=None):
         most_likely_emotion = None
         emotion_probs = annotated_user_phrase['annotations']['emotion_classification']['text']
+        if discard_emotion:
+            emotion_probs.pop(discard_emotion)
         most_likely_prob = max(emotion_probs.values())
         for emotion in emotion_probs.keys():
             if emotion_probs[emotion] == most_likely_prob:
@@ -153,6 +155,7 @@ class EmotionSkillScenario:
                 attr = {"can_continue": CAN_CONTINUE}
                 annotated_user_phrase = dialog['utterances'][-1]
                 most_likely_emotion = self._get_user_emotion(annotated_user_phrase)
+                not_neutral_emotion = self._get_user_emotion(annotated_user_phrase, 'neutral')
                 prev_replies_for_user = [u['text'].lower() for u in dialog['bot_utterances']]
                 prev_bot_phrase = ''
                 link = ''
@@ -174,6 +177,7 @@ class EmotionSkillScenario:
                         confidence = min(0.98, self.precision[most_likely_emotion])
                         if len(dialog['utterances']) > 1:
                             if detect_emotion(dialog['utterances'][-2], annotated_user_phrase):
+                                reply = random.choice(phrase_dict[not_neutral_emotion])
                                 confidence = 1.0
                         logger.info(f"__call__ reply: {reply}; conf: {confidence};"
                                     f" user_phrase: {annotated_user_phrase['text']}")
