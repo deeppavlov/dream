@@ -61,6 +61,7 @@ def clear_text(text):
 banned_responses = json.load(open("./banned_responses.json"))
 banned_responses = [clear_text(utter) for utter in banned_responses]
 banned_words = json.load(open("./banned_words.json"))
+banned_words_for_questions = json.load(open("./banned_words_for_questions.json"))
 
 text_placeholder = tf.placeholder(dtype=tf.string, shape=[None])
 extra_text_placeholder = tf.placeholder(dtype=tf.string, shape=[None])
@@ -161,10 +162,15 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True):
         hello_flag = any([j in cand[:3] for j in ["hi", "hello"]])
         # banned_words ban
         banned_words_flag = any([j in cand for j in banned_words])
+        banned_words_for_questions_flag = any([(j in cand and "?" in cand) for j in banned_words_for_questions])
+
         # coronavirus ban
         coronavirus_flag = "code 19" in raw_cand or "code nineteen" in raw_cand
 
-        if hello_flag or banned_words_flag or coronavirus_flag:
+        # web_hyper_ref ban
+        web_hyper_ref_flag = any([j in raw_cand for j in ["youtu.be", "wikipedia.org", "listacademicearth.org"]])
+
+        if hello_flag or banned_words_flag or banned_words_for_questions_flag or coronavirus_flag or web_hyper_ref_flag:
             filtered_indices.remove(ind)
             continue
         for utterance in clear_utterances_histories:
