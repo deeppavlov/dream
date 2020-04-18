@@ -508,7 +508,8 @@ def clean_up_topic_list(verb_nounphrases):
     for vnp in verb_nounphrases:
         tokens = vnp.split()
         if vnp not in TOP_FREQUENT_BIGRAMS_TO_IGNORE and tokens[0] not in BANNED_VERBS and \
-                tokens[-1] not in BANNED_NOUNS + TOP_FREQUENT_WORDS[:100] and len(tokens[-1]) > 2 and \
+                tokens[-1] not in BANNED_NOUNS + TOP_FREQUENT_WORDS[:100] and \
+                len(tokens[0]) >= 2 and len(tokens[-1]) > 2 and \
                 (tokens[0] not in TOP_FREQUENT_WORDS or tokens[-1] not in TOP_FREQUENT_WORDS):
             if vnp[:3] == "be " and len(vnp[3:].split()) == 1:
                 is_person = "person" in get_comet_conceptnet(vnp[3:], "IsA")
