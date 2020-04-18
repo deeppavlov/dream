@@ -68,6 +68,7 @@ FEAR_HATE_REPLY2 = 'Please, chin up. We have already defeated a hell lot of dise
                    'and I am sure that coronavirus will be the next one.'
 CURE_REPLY = "There is no cure designed for COVID-19 yet. " \
              "You can consult with CDC.gov website for detailed information about the ongoing work on the cure."
+BOT_CORONAVIRUS_PHRASE = "As a socialbot, I don't have coronavirus. I hope you won't have it either."
 for city_name in CITIES.keys():
     val_, i_ = 0, 0
     for i, value in enumerate(CITIES[city_name]):
@@ -294,6 +295,13 @@ def asked_whatvirus(last_utterance):
     return any([j in last_utterance['text'].lower() for j in ['what is corona', "what's corona"]])
 
 
+def asked_have(last_utterance):
+    cond1 = any([j in last_utterance['text'].lower() for j in ["do you have", "have you got",
+                                                               "are you getting", "have you ever got",
+                                                               "are you sick with", "have you come down with"]])
+    return cond1 and about_virus(last_utterance)
+
+
 def return_fact(facts, last_bot_phrases, asked_about_age=False, met_last=False):
     last_bot_phrases = [j.lower() for j in last_bot_phrases]
     phrase_ends = ['anyway, i can tell', 'do you want to know']
@@ -391,6 +399,9 @@ class CoronavirusSkillScenario:
                     reply, confidence = QUARANTINE_END_PHRASE, 0.95
                 elif dontlike(last_utterance):
                     reply, confidence = '', 0
+                elif asked_have(last_utterance):
+                    reply, confidence = BOT_CORONAVIRUS_PHRASE, 0.95
+                    reply = improve_phrase(reply)
                 elif emotion_detected(last_utterance, 'fear') or emotion_detected(last_utterance, 'anger'):
                     r = random()
                     if r < 0.5:
