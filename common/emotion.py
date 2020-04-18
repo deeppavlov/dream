@@ -13,7 +13,7 @@ NEGATIVE_EMOTIONS = set(['grief', 'sorrow', 'heartache', 'sadness', 'unhappiness
                          'anger', 'fury', 'hostility', 'hate', 'shame', 'insecurity', 'self-consciousness',
                          'bravado', 'embarrassment', 'worry', 'panic', 'frustration', 'pessimistic',
                          'cynicism', 'jealousy', 'weariness', 'pain', 'anxiety', 'fright', 'fear', 'sad',
-                         'bored', 'sick'])
+                         'bored', 'sick', 'bad'])
 POSITIVE_EMOTION = 'positive_emotion'
 NEGATIVE_EMOTION = 'negative_emotion'
 
@@ -32,6 +32,4 @@ def detect_emotion(prev_bot_utt, user_utt):
                 return POSITIVE_EMOTION
             elif w in NEGATIVE_EMOTIONS:
                 return NEGATIVE_EMOTION
-            else:
-                return None
     return None
