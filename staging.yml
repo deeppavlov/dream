@@ -216,6 +216,10 @@ services:
     image: ${DOCKER_REGISTRY}/small_talk_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
+  game_cooperative_skill:
+    image: ${DOCKER_REGISTRY}/game_cooperative_skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   program_y_wide:
     image: ${DOCKER_REGISTRY}/program_y_wide:${VERSION}
     env_file:

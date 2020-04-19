@@ -129,6 +129,7 @@ class RuleBasedSkillSelectorConnector:
 
         about_movies = (self.movie_cobot_dialogacts & cobot_dialogact_topics)
         about_music = ("Entertainment_Music" in cobot_dialogact_topics) | ("Music" in cobot_topics)
+        about_games = ("Games" in cobot_topics and "Entertainment_General" in cobot_dialogact_topics)
         about_books = (self.books_cobot_dialogacts & cobot_dialogact_topics) | (self.books_cobot_topics & cobot_topics)
         #  topicalchat_tfidf_retrieval
         about_entertainments = (self.entertainment_cobot_dialogacts & cobot_dialogact_topics) | (
@@ -246,6 +247,9 @@ class RuleBasedSkillSelectorConnector:
             if about_books or prev_active_skill == 'book_skill' or met_book_template:
                 skills_for_uttr.append("book_skill")
                 skills_for_uttr.append("book_tfidf_retrieval")
+
+            if about_games:
+                skills_for_uttr.append("game_cooperative_skill")
 
             if about_weather:
                 skills_for_uttr.append("weather_skill")

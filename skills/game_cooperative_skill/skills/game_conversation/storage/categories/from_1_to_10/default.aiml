@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml>
+    <category>
+        <pattern> ^ <set>feelings_awesome</set> ^</pattern>
+        <template>
+            <srai>ten</srai>
+        </template>
+    </category>
+    <category>
+        <pattern> ^ <set>feelings_neutral</set> ^</pattern>
+        <template>
+            <srai>five</srai>
+        </template>
+    </category>
+    <category>
+        <pattern> ^ <set>feelings_awful</set> ^</pattern>
+        <template>
+            <srai>one</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern> ^ <set>num_ten</set> ^</pattern>
+        <template>
+            TEN_ANSWER
+        </template>
+    </category>
+    <category>
+        <pattern> ^ <set>num_nine</set> ^</pattern>
+        <template>
+            NINE_ANSWER
+        </template>
+    </category>
+    <category>
+        <pattern> ^ <set>num_eight</set> ^</pattern>
+        <template>
+            EIGHT_ANSWER
+        </template>
+    </category>
+    <category>
+        <pattern> ^ <set>num_seven</set> ^</pattern>
+        <template>
+            SEVEN_ANSWER
+        </template>
+    </category>
+    <category>
+        <pattern> ^ <set>num_six</set> ^</pattern>
+        <template>
+            SIX_ANSWER
+        </template>
+    </category>
+    <category>
+        <pattern> ^ <set>num_five</set> ^</pattern>
+        <template>
+            FIVE_ANSWER
+        </template>
+    </category>
+    <category>
+        <pattern> ^ <set>num_four</set> ^</pattern>
+        <template>
+            FOUR_ANSWER
+        </template>
+    </category>
+    <category>
+        <pattern> ^ <set>num_three</set> ^</pattern>
+        <template>
+            THREE_ANSWER
+        </template>
+    </category>
+    <category>
+        <pattern> ^ <set>num_two</set> ^</pattern>
+        <template>
+            TWO_ANSWER
+        </template>
+    </category>
+    <category>
+        <pattern> ^ <set>num_one</set> ^</pattern>
+        <template>
+            ONE_ANSWER
+        </template>
+    </category>
+</aiml>

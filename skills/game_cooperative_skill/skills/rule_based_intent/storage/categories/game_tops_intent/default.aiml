@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml>
+    <category>
+        <pattern> ^ THE BEST GAMES ^ </pattern>
+        <template>
+            GAME_TOPS_INTENT
+        </template>
+    </category>
+    <category>
+        <pattern> ^ GAME ^ TOP ^</pattern>
+        <template>
+            <srai>THE BEST GAMES</srai>
+        </template>
+    </category>
+    <category>
+        <pattern> ^ POPULAR ^ GAMES ^</pattern>
+        <template>
+            <srai>THE BEST GAMES</srai>
+        </template>
+    </category>
+    <category>
+        <pattern> ^ BEST ^ GAMES ^</pattern>
+        <template>
+            <srai>THE BEST GAMES</srai>
+        </template>
+    </category>
+    <category>
+        <pattern> ^ POPULAR GAME ^</pattern>
+        <template>
+            <srai>THE BEST GAMES</srai>
+        </template>
+    </category>
+    <category>
+        <pattern> ^ COOLEST ^ GAME ^</pattern>
+        <template>
+            <srai>THE BEST GAMES</srai>
+        </template>
+    </category>
+    <category>
+        <pattern> ^ COOLEST ^ GAMES ^</pattern>
+        <template>
+            <srai>THE BEST GAMES</srai>
+        </template>
+    </category>
+    <category>
+        <pattern> ^ BEST ^ GAME ^</pattern>
+        <template>
+            <srai>THE BEST GAMES</srai>
+        </template>
+    </category>
+    <category>
+        <pattern> ^ TOP ^</pattern>
+        <template>
+            <srai>THE BEST GAMES</srai>
+        </template>
+    </category>
+</aiml>

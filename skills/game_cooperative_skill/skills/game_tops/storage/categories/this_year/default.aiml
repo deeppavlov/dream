@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml>
+    <category>
+        <pattern> ^ <set>this_year</set> ^</pattern>
+        <template>
+            YEAR_ANSWER
+        </template>
+    </category>
+</aiml>
