@@ -10,7 +10,7 @@ from collections import defaultdict
 import random
 from random import choice
 from typing import Callable, Dict
-from copy import copy
+from copy import copy, deepcopy
 
 from common.universal_templates import opinion_request_question
 from common.link import link_to, skills_phrases_map
@@ -149,7 +149,7 @@ class DummySkillConnector:
     async def send(self, payload: Dict, callback: Callable):
         try:
             st_time = time.time()
-            dialog = payload['payload']["dialogs"][0]
+            dialog = deepcopy(payload['payload']["dialogs"][0])
 
             curr_topics = dialog["utterances"][-1]["annotations"]["cobot_topics"].get("text", [])
             curr_nounphrases = dialog["utterances"][-1]["annotations"]["cobot_nounphrases"]

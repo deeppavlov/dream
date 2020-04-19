@@ -580,6 +580,7 @@ def extract_verb_noun_phrases(utterance, only_i_do_that=True, nounphrases=[]):
     if len(good_verb_noun_phrases) == 0 and len(nounphrases) > 0:
         logger.info("No good verb-nounphrase topic. Try to find nounphrase, and appropriate verb from top-bigrams.")
         nounphrases = [re.sub(relation_adj, "", noun.lower()).strip() for noun in nounphrases]
+        nounphrases = [noun for noun in nounphrases if len(noun) > 0]
         for noun in nounphrases:
             good_verb_noun_phrases += get_most_frequent_bigrams_with_word(noun)
         good_verb_noun_phrases = [phrase for phrase in good_verb_noun_phrases if len(phrase) > 0]

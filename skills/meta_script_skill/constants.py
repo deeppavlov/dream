@@ -136,6 +136,6 @@ BANNED_NOUNS = ["lol", "alexa", "suck", "fuck", "sex", "one", "thing", "somethin
                 "today", "yesterday", "tomorrow", "now", "shopping", "mine", "talk", "chat", "me", "favorite",
                 "past", "future", "suggest", "suppose", "i'll", "book", "books", "movie", "movies", "weather",
                 "mom", "mother", "mummy", "mum", "mama", "mamma", "daddy", "dad", "father", "sister", "brother",
-                "everything", "way", "minute"]
+                "everything", "way", "minute", "lot", "lots", "things"]
 
 idopattern = re.compile(r"i [a-zA-Z ,0-9]", re.IGNORECASE)
