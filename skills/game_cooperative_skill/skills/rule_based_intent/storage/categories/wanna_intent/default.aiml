@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml>
+    <category>
+        <pattern> ^ <set>want_to</set> ^ </pattern>
+        <template>
+            WANT_TO_ANSWER
+        </template>
+    </category>
+</aiml>

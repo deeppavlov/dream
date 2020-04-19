@@ -582,6 +582,16 @@
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
             },
+            "game_cooperative_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://game_cooperative_skill:8068/respond"
+                },
+                "dialog_formatter": "full_utt_sentseg_punct_dialog",
+                "response_formatter": "skill_with_attributes_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
+            },
             "program_y_wide": {
                 "connector": {
                     "protocol": "http",

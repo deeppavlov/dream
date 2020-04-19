@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml>
+    <category>
+        <pattern> ^ <set>talk_about</set> ^ </pattern>
+        <template>
+            TO_TALK_ABOUT
+        </template>
+    </category>
+    <category>
+        <pattern> ^ INTERESTING ^ </pattern>
+        <template>
+            <srai>TALK ABOUT</srai>
+        </template>
+    </category>
+</aiml>

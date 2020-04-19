@@ -13,8 +13,8 @@ services:
         convert_reddit:8029, personal_info_skill:8030, asr:8031, book_skill:8032, misheard_asr:8033,
         christmas_new_year_skill:8036, weather_skill:8037, emotion_classification:8038, alice:8000,
         reddit_ner_skill:8035, eliza:8047, emotion_skill:8049, dummy_skill_dialog:8052, comet_atomic:8053, meta_script_skill:8054,
-        oscar_skill:8055, coronavirus_skill:8061, small_talk_skill:8062, program_y_wide:8064, comet_conceptnet:8065,
-        news_api_skill:8066, short_story_skill:8057"
+        oscar_skill:8055, coronavirus_skill:8061, small_talk_skill:8062, game_cooperative_skill:8068, program_y_wide:8064,
+        comet_conceptnet:8065, news_api_skill:8066, short_story_skill:8057"
       WAIT_HOSTS_TIMEOUT: 480
     deploy:
       mode: replicated
@@ -729,6 +729,18 @@ services:
       context: .
       dockerfile: ./skills/small_talk_skill/Dockerfile
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8062
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+  game_cooperative_skill:
+    build:
+      context: .
+      dockerfile: ./skills/game_cooperative_skill/Dockerfile
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8068
     volumes: []
     deploy:
       mode: replicated

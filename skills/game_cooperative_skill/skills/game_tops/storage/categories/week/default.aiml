@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml>
+    <category>
+        <pattern> ^ WEEK ^</pattern>
+        <template>
+            WEEK_ANSWER
+        </template>
+    </category>
+
+   <category>
+        <pattern> ^ WEEKLY ^ </pattern>
+        <template>
+            <srai>WEEK</srai>
+        </template>
+    </category>
+   <category>
+        <pattern> ^ HOTTIES ^ </pattern>
+        <template>
+            <srai>WEEK</srai>
+        </template>
+    </category>
+</aiml>

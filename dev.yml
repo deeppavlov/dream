@@ -346,6 +346,13 @@ services:
       - "./common:/src/common"
     ports:
       - 8062:8062
+  game_cooperative_skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/game_cooperative_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8068:8068
   program_y_wide:
     env_file: [.env.dev]
     volumes:
