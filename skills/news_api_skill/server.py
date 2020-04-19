@@ -6,6 +6,7 @@ import string
 from time import time
 import re
 import random
+from collections import defaultdict
 
 from nltk.tokenize import word_tokenize
 from concurrent.futures import ThreadPoolExecutor
@@ -19,6 +20,7 @@ from common.news import BREAKING_NEWS, OFFERED_BREAKING_NEWS_STATUS, \
 from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, COMPILE_SWITCH_TOPIC
 from common.utils import get_skill_outputs_from_dialog, is_yes, is_no
 from common.constants import CAN_CONTINUE
+from common.link import link_to
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -39,6 +41,7 @@ DEFAULT_NEWS_OFFER_CONFIDENCE = 1.
 WHAT_TYPE_OF_NEWS_CONFIDENCE = 0.9
 NOT_SPECIFIC_NEWS_OFFER_CONFIDENCE = 0.95
 DEFAULT_NEWS_DETAILS_CONFIDENCE = 1.
+LINKTO_CONFIDENCE = 0.7
 OFFER_MORE = "Do you want to hear more?"
 ASK_OPINION = "What do you think about it?"
 
@@ -219,12 +222,25 @@ def collect_topics_and_statuses(dialogs):
     return topics, statuses, prev_news_samples
 
 
+def link_to_other_skills(human_attr, bot_attr):
+    link = link_to(['movie_skill', 'book_skill', "short_story_skill"], bot_attr["used_links"])
+    response = link['phrase']
+    confidence = LINKTO_CONFIDENCE
+    if link["skill"] not in bot_attr["used_links"]:
+        bot_attr["used_links"][link["skill"]] = []
+    bot_attr["used_links"][link["skill"]].append(link['phrase'])
+    attr = {}
+    return response, confidence, human_attr, bot_attr, attr
+
+
 @app.route("/respond", methods=['POST'])
 def respond():
     st_time = time()
     dialogs = request.json['dialogs']
     responses = []
     confidences = []
+    human_attributes = []
+    bot_attributes = []
     attributes = []
 
     topics, statuses, prev_news_samples = collect_topics_and_statuses(dialogs)
@@ -235,7 +251,11 @@ def respond():
         # result is a list of articles. the first one is top rated news.
         curr_topic = topics[i]
         curr_status = statuses[i]
-        # the only difference is that result is laready is a dictionary with news.
+
+        bot_attr = dialogs[i]["bot"]["attributes"]
+        bot_attr["used_links"] = bot_attr.get("used_links", defaultdict(list))
+        human_attr = {}
+        # the only difference is that result is already is a dictionary with news.
 
         if result and result.get("title") and result.get("description"):
             logger.info("Topic: {}".format(curr_topic))
@@ -287,9 +307,8 @@ def respond():
                 prev_news_skill_output = get_skill_outputs_from_dialog(
                     dialogs[i]["utterances"][-3:], skill_name="news_api_skill", activated=True)
                 # status finished is here
-                if len(prev_news_skill_output) > 0 and (prev_news_skill_output[-1].get(
-                        "news_status", "") == OFFERED_NEWS_DETAILS_STATUS or prev_news_skill_output[-1].get(
-                        "news_status", "") != OFFERED_SPECIFIC_NEWS_STATUS):
+                if len(prev_news_skill_output) > 0 and prev_news_skill_output[-1].get(
+                        "news_status", "") not in [OFFERED_NEWS_DETAILS_STATUS, OFFERED_SPECIFIC_NEWS_STATUS]:
                     result = prev_news_skill_output[-1].get("curr_news", {})
                     # try to offer more news
                     topics_list = NEWS_TOPICS[:]
@@ -313,14 +332,10 @@ def respond():
                                 "news_topic": " ".join(offered_topics), "curr_news": result}
                     else:
                         # can't find enough topics for the user to offer
-                        response = ""
-                        confidence = 0.
-                        attr = {}
+                        response, confidence, human_attr, bot_attr, attr = link_to_other_skills(human_attr, bot_attr)
                 else:
                     # news was offered previously but the user refuse to get it
-                    response = ""
-                    confidence = 0.
-                    attr = {}
+                    response, confidence, human_attr, bot_attr, attr = link_to_other_skills(human_attr, bot_attr)
         else:
             # no found news
             logger.info("No particular news found.")
@@ -342,11 +357,13 @@ def respond():
 
         responses.append(response)
         confidences.append(confidence)
+        human_attributes.append(human_attr)
+        bot_attributes.append(bot_attr)
         attributes.append(attr)
 
     total_time = time() - st_time
     logger.info(f'news_api_skill exec time: {total_time:.3f}s')
-    return jsonify(list(zip(responses, confidences, attributes)))
+    return jsonify(list(zip(responses, confidences, human_attributes, bot_attributes, attributes)))
 
 
 if __name__ == '__main__':
