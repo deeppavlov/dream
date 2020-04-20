@@ -19,6 +19,10 @@ okay_statements = {"Okay.", "That's cool!", "Interesting.", "Sounds interesting.
                    "As you wish.", "All right.", "Right.", "Anyway.", "Oh, okay.", "Oh, come on.",
                    "Really?", "Okay. I got it.", "Well, okay.", "Well, as you wish."}
 
+service_intents = {'lets_chat_about', 'tell_me_more', 'topic_switching', 'yes', 'opinion_request', 'dont_understand',
+                   'no', 'stupid', 'weather_forecast_intent', 'doing_well', 'tell_me_a_story'}
+low_priority_intents = {'dont_understand'}
+
 
 def get_skill_outputs_from_dialog(utterances, skill_name, activated=False):
     """
@@ -165,3 +169,12 @@ def is_no(annotated_phrase):
 
 def is_question(text):
     return '?' in text
+
+
+def get_intent_name(text):
+    splitter = "#+#"
+    if splitter not in text:
+        return None
+    intent_name = text.split(splitter)[-1]
+    intent_name = re.sub(r"\W", " ", intent_name.lower()).strip()
+    return intent_name

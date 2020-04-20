@@ -9,7 +9,7 @@ from common.books import book_skill_was_proposed
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
 from common.emotion import detect_emotion
 from common.news import is_breaking_news_requested
-from common.utils import check_about_death, about_virus, quarantine_end
+from common.utils import check_about_death, about_virus, quarantine_end, service_intents, low_priority_intents
 from common.weather import is_weather_requested
 from common.coronavirus import is_staying_home_requested
 
@@ -102,14 +102,19 @@ class RuleBasedSkillSelectorConnector:
         user_uttr_text = dialog["human_utterances"][-1]["text"].lower()
         user_uttr_annotations = dialog["human_utterances"][-1]["annotations"]
 
-        # TODO: opinion_request/yes/no response
-        intent_detected = any(
+        high_priority_intent_detected = any(
             [
                 v["detected"] == 1
                 for k, v in user_uttr_annotations["intent_catcher"].items()
                 if k
-                not in {"opinion_request", "yes", "no", "tell_me_more", "doing_well", "weather_forecast_intent",
-                        "topic_switching", "lets_chat_about", "stupid", "tell_me_a_story"}
+                not in service_intents
+            ]
+        )
+        low_priority_intent_detected = any(
+            [
+                v["detected"] == 1
+                for k, v in user_uttr_annotations["intent_catcher"].items()
+                if k in low_priority_intents
             ]
         )
 
@@ -190,7 +195,7 @@ class RuleBasedSkillSelectorConnector:
         if "/new_persona" in user_uttr_text:
             # process /new_persona command
             skills_for_uttr.append("personality_catcher")  # TODO: rm crutch of personality_catcher
-        elif intent_detected:
+        elif high_priority_intent_detected:
             # process intent with corresponding IntentResponder
             skills_for_uttr.append("intent_responder")
         elif blist_topics_detected or (sensitive_topics_detected and sensitive_dialogacts_detected):
@@ -204,6 +209,8 @@ class RuleBasedSkillSelectorConnector:
             if enable_coronavirus or prev_active_skill == 'coronavirus_skill':
                 skills_for_uttr.append("coronavirus_skill")
         else:
+            if low_priority_intent_detected:
+                skills_for_uttr.append("intent_responder")
             # process regular utterances
             skills_for_uttr.append("program_y")
             skills_for_uttr.append("cobotqa")

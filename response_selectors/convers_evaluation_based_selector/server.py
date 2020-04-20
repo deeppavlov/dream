@@ -13,7 +13,8 @@ import pprint
 from nltk.tokenize import sent_tokenize
 
 from common.universal_templates import if_lets_chat_about_topic, if_choose_topic
-from common.utils import scenario_skills, retrieve_skills, okay_statements, is_question
+from common.utils import scenario_skills, retrieve_skills, okay_statements, is_question, \
+    get_intent_name, low_priority_intents
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -243,6 +244,10 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     for i in range(len(scores)):
         curr_score = None
         is_misheard = misheard_with_spec1 in candidates[i]['text'] or misheard_with_spec2 in candidates[i]['text']
+        intent_name = get_intent_name(candidates[i]['text'])
+        is_intent_candidate = (skill_names[i] == 'intent_responder' or skill_names[i] == 'program_y') and intent_name
+        is_intent_candidate = is_intent_candidate and intent_name not in low_priority_intents
+
         if len(dialog['human_utterances']) == 1 and greeting_spec not in candidates[i]['text']:
             logger.info("Dialog Beginning detected.")
             if if_lets_chat_about_topic(dialog['utterances'][0]["text"].lower()) and \
@@ -300,7 +305,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             confidences[i] = 0.6
         elif skill_names[i] == 'misheard_asr' and is_misheard:
             curr_score = very_big_score
-        elif (skill_names[i] == 'intent_responder' or skill_names[i] == 'program_y') and "#+#" in candidates[i]['text']:
+        elif is_intent_candidate:
             curr_score = very_big_score
         elif skill_names[i] == 'program_y' and alexa_abilities_spec in candidates[i]['text']:
             curr_score = very_big_score
