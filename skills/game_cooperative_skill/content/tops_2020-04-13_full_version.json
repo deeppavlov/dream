@@ -360,6 +360,73 @@
             ]
         },
         {
+            "id": 58755,
+            "name": "Devil May Cry 5",
+            "name_original": "Devil May Cry 5",
+            "description": "<p>Devil May Cry 5 is the sixth game in the Devil May Cry franchise and the fifth in its main series. </p>\n<h3>Plot</h3>\n<p>The game continues the plot of Devil May Cry 2. The demonic threat seems to have been forgotten, but the demons return, and there are new accidents around the world. Nero and Dante have parted ways, and Nero established his own agency. He also received a new robotic arm made by his engineer Nico. It replaces his Devil Bringer prosthetic that was stolen by a villain. At the beginning of the game, Nero rides his van to Red Grave City in which a demonic tree appeared. At the same time, Dante has a new client, a mysterious V, who hires him to investigate the demonic attacks.</p>\n<h3>Gameplay</h3>\n<p>As usual in the Devil May Cry series, the player controls his or her character from the third person view. The game features three playable characters. Dante and Nero make a return, and V is newly introduced. Each of the three characters has a unique fighting style. Nero&#39;s prosthetic hand allows him to use a variety of options, such as pulling his enemies closer. Nero also uses his legendary weapons, the gun called “Blue Rose” and the sword named “Red Queen”. Dante, as usual, fights with his swords Rebellion and Sparda, as well as a variety of new weapons, such as chainsaws and a motorcycle. V uses a walking cane as a weapon.</p>",
+            "released": "2019-03-08",
+            "rating": 4.25,
+            "rating_top": 5,
+            "ratings": [
+                {
+                    "id": 5,
+                    "title": "exceptional",
+                    "count": 346,
+                    "percent": 47.99
+                },
+                {
+                    "id": 4,
+                    "title": "recommended",
+                    "count": 269,
+                    "percent": 37.31
+                },
+                {
+                    "id": 3,
+                    "title": "meh",
+                    "count": 77,
+                    "percent": 10.68
+                },
+                {
+                    "id": 1,
+                    "title": "skip",
+                    "count": 29,
+                    "percent": 4.02
+                }
+            ],
+            "reddit_url": "https://www.reddit.com/r/DevilMayCry/",
+            "reddit_name": "Devil May Cry",
+            "reddit_description": "Where we celebrate the Devil May Cry series...",
+            "description_raw": "Devil May Cry 5 is the sixth game in the Devil May Cry franchise and the fifth in its main series. \n\n###Plot\nThe game continues the plot of Devil May Cry 2. The demonic threat seems to have been forgotten, but the demons return, and there are new accidents around the world. Nero and Dante have parted ways, and Nero established his own agency. He also received a new robotic arm made by his engineer Nico. It replaces his Devil Bringer prosthetic that was stolen by a villain. At the beginning of the game, Nero rides his van to Red Grave City in which a demonic tree appeared. At the same time, Dante has a new client, a mysterious V, who hires him to investigate the demonic attacks.\n\n###Gameplay\nAs usual in the Devil May Cry series, the player controls his or her character from the third person view. The game features three playable characters. Dante and Nero make a return, and V is newly introduced. Each of the three characters has a unique fighting style. Nero's prosthetic hand allows him to use a variety of options, such as pulling his enemies closer. Nero also uses his legendary weapons, the gun called “Blue Rose” and the sword named “Red Queen”. Dante, as usual, fights with his swords Rebellion and Sparda, as well as a variety of new weapons, such as chainsaws and a motorcycle. V uses a walking cane as a weapon.",
+            "publishers": [
+                {
+                    "id": 2150,
+                    "name": "Capcom",
+                    "slug": "capcom",
+                    "games_count": 535,
+                    "image_background": "https://media.rawg.io/media/games/89a/89ac2742fcfeba3b95ac94457af766ef.jpg"
+                }
+            ],
+            "genres": [
+                {
+                    "id": 4,
+                    "name": "Action",
+                    "slug": "action",
+                    "games_count": 82971,
+                    "image_background": "https://media.rawg.io/media/games/c4b/c4b0cab189e73432de3a250d8cf1c84e.jpg"
+                }
+            ],
+            "user_game": null,
+            "developers": [
+                {
+                    "id": 3678,
+                    "name": "Capcom",
+                    "slug": "capcom",
+                    "games_count": 382,
+                    "image_background": "https://media.rawg.io/media/games/9fb/9fbf956a16249def7625ab5dc3d09515.jpg"
+                }
+            ]
+        },
+        {
             "id": 257201,
             "name": "Star Wars Jedi: Fallen Order",
             "name_original": "Star Wars Jedi: Fallen Order",

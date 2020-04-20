@@ -5,6 +5,7 @@ import json
 import pathlib
 import os
 import traceback
+import random
 
 from utils.programy_extention import MindfulDataFileBot
 from utils.programy_model import run_models, cmd_postprocessing
@@ -27,7 +28,8 @@ aiml_files = {
 }
 
 # load content
-latest_json_file = list(sorted(content_dir.glob("./*.json")))[-1]
+# latest_json_file = list(sorted(content_dir.glob("./*.json")))[-1]
+latest_json_file = list(sorted(content_dir.glob("./tops_2020-04-13.json")))[-1]
 tops = json.load(latest_json_file.open())
 # init models
 {model_name: print(files) for model_name, files in aiml_files.items()}
@@ -76,7 +78,7 @@ def describe_top_handler(state, skill_state, true_model_names, true_cmds):
         if current_game.get("released"):
             try:
                 year, month, day = current_game.get("released").split("-")
-                text += f"It was released on {day} {month_d2s[month]} {year}. "
+                text += f"It was released on {month_d2s[month]} {day} {year}. "
             except Exception:
                 print(traceback.format_exc())
 
@@ -105,23 +107,50 @@ def describe_top_handler(state, skill_state, true_model_names, true_cmds):
                 print(traceback.format_exc())
 
         if len(top) - 1 != top_index:
-            text += "If you want to discuss it in details say I want to talk about it. "
-            "Otherwise we can always talk about other things."
             skill_state_update = {"next_step": "describe_top", "top_index": top_index + 1}
         else:
             if "previous_yearly_top" == top_name:
-                text += "These are all the games from last year. "
+                text += " These are all the games from last year. "
             elif "yearly_top" == top_name:
-                text += "These are all the games from this year. "
+                text += " These are all the games from this year. "
             elif "monthly_top" == top_name:
-                text += "These are all the games from the past month. "
+                text += " These are all the games from the past month. "
             elif "weekly_top" == top_name:
-                text += "These are all the games from the past week. "
+                text += " These are all the games from the past week. "
             else:
-                text += "These are all the games. "
-            text += "Let's talk about something else. "
+                text += " These are all the games. "
             skill_state_update = {"next_step": ""}
             scenario = False
+
+        if top_index not in [0, len(top) - 1]:
+            text += random.choice(
+                [
+                    " Let me know if we should talk about the next one or discuss this one ",
+                    " Discussing it or moving on? ",
+                    " Talking about it or going on? ",
+                    " Chatting about it or the next one? ",
+                    " Wanna hear more about it or the next one? ",
+                    " Do you want to learn more about it, or shall we move on? ",
+                ]
+            )
+        elif top_index == 0 and top_index != len(top) - 1:
+            text += " If you want to discuss it in details say I want to talk about it. "
+            text += random.choice(
+                [
+                    " Let me know if we should talk about the next one or discuss this one ",
+                    " Discussing it or moving on? ",
+                    " Talking about it or going on? ",
+                    " Chatting about it or the next one? ",
+                    " Wanna hear more about it or the next one? ",
+                    " Do you want to learn more about it, or shall we move on? ",
+                ]
+            )
+        else:
+            text += (
+                " If you want to discuss it in details say I want to talk about it. "
+                " Otherwise we can always talk about other things."
+            )
+
     elif "NO_ANSWER" in true_cmds:
         text = "You can always talk to me about other popular games. What do you want to talk about?"
         skill_state_update = {"next_step": ""}
