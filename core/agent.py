@@ -74,10 +74,18 @@ class Agent:
         self._response_logger.log_end(task_id, workflow_record, service)
 
         if service.label in set(['last_chance_service', 'timeout_service']):
+            # extract services from workflow_record and group them by status
+            done = [k for k, v in workflow_record['services'].items() if v['done'] and not v.get('error', False)]
+            in_progress = [k for k, v in workflow_record['services'].items()
+                           if not v['done'] and not v.get('error', False)]
+            with_errors = [k for k, v in workflow_record['services'].items() if v.get('error', False)]
             with sentry_sdk.push_scope() as scope:
                 scope.set_extra('user_id', workflow_record['dialog'].human.telegram_id)
                 scope.set_extra('dialog_id', workflow_record['dialog'].id)
                 scope.set_extra('response', response)
+                scope.set_extra('done', done)
+                scope.set_extra('in_progress', in_progress)
+                scope.set_extra('with_errors', with_errors)
                 sentry_sdk.capture_message(f"{service.label} was called")
 
         if isinstance(response, Exception):
