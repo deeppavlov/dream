@@ -180,7 +180,7 @@ def test_skill():
             print(f"req_utter = {req_utter}")
             print(f"true_resp_utter = {true_resp_utter}")
             print(f"cand_resp_utter = {text}")
-        if difflib.SequenceMatcher(None, true_resp_utter.split(), text.split()).ratio() < 0.7:
+        if difflib.SequenceMatcher(None, true_resp_utter.split(), text.split()).ratio() < 0.6:
             warnings += 1
         print(difflib.SequenceMatcher(None, true_resp_utter.split(), text.split()).ratio())
     assert warnings == 0
