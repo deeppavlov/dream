@@ -14,7 +14,7 @@ from nltk.tokenize import sent_tokenize
 
 from common.universal_templates import if_lets_chat_about_topic, if_choose_topic
 from common.utils import scenario_skills, retrieve_skills, okay_statements, is_question, \
-    get_intent_name, low_priority_intents
+    get_intent_name, low_priority_intents, substitute_nonwords
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -153,6 +153,7 @@ def lower_duplicates_score(candidates, bot_utt_counter, scores, confidences):
         coeff = 1
         for cand_sent in cand_sents:
             if len(cand_sent.split()) >= 3:
+                cand_sent = substitute_nonwords(cand_sent)
                 coeff += bot_utt_counter[cand_sent]
 
         if confidences[i] < 1.:
@@ -221,6 +222,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     bot_utterances = prev_large_utterances + bot_utterances[-40:]
     # flatten 2d list to 1d list of all appeared sentences of bot replies
     bot_utterances = sum(bot_utterances, [])
+    bot_utterances = [substitute_nonwords(utt) for utt in bot_utterances]
     bot_utt_counter = Counter(bot_utterances)
 
     lower_duplicates_score(candidates, bot_utt_counter, scores, confidences)

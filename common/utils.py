@@ -171,6 +171,10 @@ def is_question(text):
     return '?' in text
 
 
+def substitute_nonwords(text):
+    return re.sub(r"\W+", " ", text).strip()
+
+
 def get_intent_name(text):
     splitter = "#+#"
     if splitter not in text:
