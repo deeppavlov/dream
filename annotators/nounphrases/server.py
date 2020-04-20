@@ -2,6 +2,7 @@
 
 import logging
 import time
+import re
 
 from flask import Flask, request, jsonify
 from os import getenv
@@ -18,6 +19,9 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
+symbols_for_nounphrases = re.compile(r"[^0-9a-zA-Z \-]+")
+spaces = re.compile(r"\s\s+")
+
 
 @app.route("/nounphrases", methods=['POST'])
 def respond():
@@ -31,7 +35,10 @@ def respond():
         logger.info(f"user_sentence: {sent}")
         if nounphrases[i] is None:
             nounphrases[i] = []
-
+        for j in range(len(nounphrases[i])):
+            nounphrases[i][j] = re.sub(symbols_for_nounphrases, "", nounphrases[i][j]).strip()
+            nounphrases[i][j] = re.sub(spaces, " ", nounphrases[i][j])
+        nounphrases[i] = [el for el in nounphrases[i] if len(el) > 0]
         logger.info(f"Nouns: {nounphrases[i]}")
 
     total_time = time.time() - st_time
