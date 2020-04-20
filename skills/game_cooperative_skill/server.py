@@ -52,7 +52,7 @@ def respond():
         confidence *= 0.8 if "I like to talk about games." in response.get("text") else 1.0
 
         can_continue = CAN_CONTINUE if confidence else CAN_NOT_CONTINUE
-        attr = {"can_continue": can_continue, "state": state}
+        attr = {"can_continue": can_continue, "state": state, "agent_intents": agent_intents}
         responses.append((text, confidence, attr))
 
     total_time = time.time() - st_time

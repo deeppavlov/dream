@@ -57,7 +57,8 @@ def test_skill():
         response = requests.post(url, json=input_data).json()[0]
         utterances = update_utterances(utterances=utterances, response=response)
         text, confidence, attr = response
-        print(f"state:{attr['state']}")
+        # print(f"state:{attr['state']}")
+        print(f"agent_intents:{attr['agent_intents']}")
         print(f"confidence:{confidence}")
         print(f"text:{text}")
     print("SUCCESS!")

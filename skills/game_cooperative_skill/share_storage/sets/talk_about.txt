@@ -5,6 +5,7 @@ repeat
 talk about
 discuss
 deep dive
+discuss
 
 clarify
 debate

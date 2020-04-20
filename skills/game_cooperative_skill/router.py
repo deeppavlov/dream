@@ -67,8 +67,10 @@ def run_skills(history: List, state: Dict, agent_intents: Dict = {}):
         # talk about a top
         scheduled_skills.append((game_tops_attrs.skill_name, [game_tops_attrs.modes.intro]))
 
-    elif ("stop_intent" in state.intents or "switch_topic_intent" in agent_intents) and (
-        "next_game_intent" not in state.intents
+    elif (
+        ("stop_intent" in state.intents or "switch_topic_intent" in agent_intents)
+        and ("next_game_intent" not in state.intents)
+        and ("to_talk_about_intent" not in state.intents)
     ):
         scheduled_skills.append((tutor_attrs.skill_name, [tutor_attrs.modes.stop]))
         state.interrupt_scenario()
