@@ -4,6 +4,10 @@
         "intent": "topic_switching"
     },
     {
+        "sentence": "tell me something else.",
+        "intent": "topic_switching"
+    },
+    {
         "sentence": "stop talking about that",
         "intent": "topic_switching"
     },
@@ -22,6 +26,14 @@
     {
         "sentence": "off",
         "intent": "exit"
+    },
+    {   
+        "sentence": "stop this bot.",
+        "intent": "exit"
+    },
+     {   
+         "sentence": "end the chat.",
+	 "intent": "exit"
     },
     {
         "sentence": "leave me alone",
@@ -160,6 +172,10 @@
         "intent": "where_are_you_from"
     },
     {
+        "sentence": "what do you want to talk about?",
+        "intent": "choose_topic"
+    },
+    {
         "sentence": "so what can you do",
         "intent": "what_can_you_do"
     },
@@ -256,6 +272,10 @@
         "intent": null
     },
     {
+        "sentence": "thank you",
+        "intent": null
+    },
+    {
         "sentence": "inception",
         "intent": null
     },
@@ -277,6 +297,14 @@
     },
     {
         "sentence": "i am calling anyone",
+        "intent": null
+    },
+    {
+        "sentence": "have fun",
+        "intent": null
+    },
+    {
+        "sentence": "can you not answer the question?",
         "intent": null
     },
     {
@@ -448,6 +476,10 @@
         "intent": "tell_me_a_story"
     },
     {
+        "sentence": "tell me another story",
+        "intent": "tell_me_a_story"
+    },
+    {
         "sentence": "can you tell me a bedtime story",
         "intent": "tell_me_a_story"
     },
@@ -465,6 +497,14 @@
     },
     {
         "sentence": "let's play sudoku",
+        "intent": "cant_do"
+    },
+    {   
+	"sentence": "can you stop music while we chat?",
+	"intent": "cant_do"
+    },
+    {   
+        "sentence": "turn off light.",
         "intent": "cant_do"
     },
     {
