@@ -141,7 +141,8 @@ class IMDb:
                 "isolation", "something", 'no', 'i am', "what", "is", "it", "what", "i did not know that", "cage",
                 "back", "games", "stronger", "see", "really", "judy", "my favorite movie", "i do", "what happened",
                 "me", "live", "lunch", "weekend", "gays", "bean", "off", "nothing", "talk to her", "boy a", "play",
-                "eat", "she", "thing", "i feel", "question"]:
+                "eat", "she", "thing", "i feel", "question", "thank you", "singing", "program", "other",
+                "conversation"]:
             try:
                 self.with_ignored_movies_names.pop(proc_title)
             except KeyError:

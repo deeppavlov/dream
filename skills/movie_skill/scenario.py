@@ -47,14 +47,17 @@ class MovieSkillScenario:
                                           r"(like|dislike|adore|hate|love|believe|consider|get|know|taste|think|"
                                           r"recognize|sure|understand|feel|fond of|care for|fansy|appeal|suppose|"
                                           r"imagine|guess)")
-        self.opinion_expression = re.compile(r"(\bi\b)?\s?(don't|do not|not|am not|'m not|am|do)?\s?"
+        self.opinion_expression = re.compile(r"(\bi\b) (don't|do not|not|am not|'m not|am|do)?\s?"
                                              r"(like|dislike|adore|hate|love|believe|consider|get|know|taste|think|"
                                              r"recognize|sure|understand|feel|fond of|care for|fansy|appeal|suppose|"
                                              r"imagine|guess)")
         self.movie_pattern = re.compile(r"(movie|film|picture|series|tv[ -]?show|reality[ -]?show|netflix|\btv\b|"
-                                        r"comedy|comedies|thriller|animation|anime|talk[ -]?show|cartoon|drama|"
-                                        r"fantasy)")
-        self.year_template = re.compile(r"([0-9][0-9][0-9][0-9])")
+                                        r"comedy|comedies|thriller|animation|anime|talk[ -]?show|cartoon)",
+                                        re.IGNORECASE)
+        self.year_template = re.compile(r"([0-9][0-9][0-9][0-9])", re.IGNORECASE)
+        self.no_movies_template = re.compile(r"(don't|do not|not) (watch|watching|like) (movie|film|picture|series|"
+                                             r"tv[ -]?show|reality[ -]?show|netflix|\btv\b|comedy|comedies|thriller|"
+                                             r"animation|anime|talk[ -]?show|cartoon)", re.IGNORECASE)
 
         self.extra_space_template = re.compile(r"\s\s+")
 
@@ -82,7 +85,8 @@ class MovieSkillScenario:
                 f"Persons: {unique_persons.keys()}, "
                 f"Genres: {mentioned_genres}")
 
-            if self.donot_chat_about_movies(curr_user_uttr):
+            if self.donot_chat_about_movies(curr_user_uttr) or re.search(
+                    self.no_movies_template, curr_user_uttr["text"]):
                 response, confidence, human_attr, bot_attr, attr = self.link_to_other_skills(human_attr, bot_attr)
             if response == "":
                 response, _, confidence = self.templates.faq(dialog)
@@ -100,7 +104,7 @@ class MovieSkillScenario:
                 else:
                     prev_bot_uttr = {"text": ""}
 
-                if self.is_opinion_expression(curr_user_uttr, prev_bot_uttr):
+                if self.is_opinion_expression(curr_user_uttr):
                     response, result, confidence = self.templates.get_user_opinion(dialog, attitude)
                     if len(result) > 0 and result[0][1] == "movie" and \
                             self.is_about_movies(curr_user_uttr, prev_bot_uttr):
@@ -191,17 +195,18 @@ class MovieSkillScenario:
         intents = annotations.get("cobot_dialogact", {}).get("intents", [])
         intent_detected = annotations.get("intent_catcher", {}).get(
             "opinion_request", {}).get("detected") == 1 or "Opinion_RequestIntent" in intents
-        if intent_detected or re.search(self.opinion_request, uttr["text"].lower()):
+        opinion_detected = "Opinion_ExpressionIntent" in intents
+        if intent_detected or (re.search(self.opinion_request, uttr["text"].lower()) and not opinion_detected):
             return True
         else:
             return False
 
-    def is_opinion_expression(self, uttr, prev_uttr={}):
+    def is_opinion_expression(self, uttr):
         annotations = uttr.get("annotations", {})
         intents = annotations.get("cobot_dialogact", {}).get("intents", [])
         intent_detected = "Opinion_ExpressionIntent" in intents
-        if intent_detected or re.search(self.opinion_expression, uttr["text"].lower()) or \
-                re.search(self.opinion_request, prev_uttr.get("text", "").lower()):
+        info_request_detected = "Information_RequestIntent" in intents
+        if intent_detected or (re.search(self.opinion_expression, uttr["text"].lower()) and not info_request_detected):
             return True
         else:
             return False
@@ -288,6 +293,9 @@ class MovieSkillScenario:
                 response, confidence, human_attr, bot_attr, attr = self.get_next_response_movie_scenario(
                     curr_user_uttr, prev_bot_uttr, prev_movie_skill_outputs,
                     movies_ids, unique_persons, mentioned_genres, human_attr, bot_attr)
+                # decrease confidence if movie_skill was not active on prev step
+                if prev_bot_uttr.get("active_skill", "") != "movie_skill":
+                    confidence *= 0.8
         elif self.lets_chat_about_movies(curr_user_uttr, prev_bot_uttr):
             # user wants to talk about movies. offer quesiton about movies
             offer = offer_talk_about_movies(human_attr)
@@ -520,10 +528,11 @@ class MovieSkillScenario:
         return response, confidence, human_attr, bot_attr, attr
 
     def generate_fact_from_cobotqa(self, request_about, movie_id, movie_title, movie_type, prev_status_line,
-                                   human_attr, bot_attr):
+                                   human_attr, bot_attr, prev_movie_skill_text=""):
         fact = send_cobotqa(f"{request_about} {movie_type} {movie_title}?")
         logger.info(f"Generated fact about `{movie_title}`: {fact}.")
-        if len(fact) > 0 and "Sorry, I don't know" not in fact and "This might answer your question" not in fact:
+        if len(fact) > 0 and "Sorry, I don't know" not in fact and "This might answer your question" not in fact and \
+                fact not in prev_movie_skill_text:
             sentences = sent_tokenize(fact.replace(".,", "."))
             if len(sentences[0]) < 100 and "fact about" in sentences[0]:
                 fact = " ".join(sentences[1:3])
@@ -595,10 +604,11 @@ class MovieSkillScenario:
             fact_type = choice(["awards of", "tagline of", "fact about"])
             response, confidence, human_attr, bot_attr, attr = self.generate_fact_from_cobotqa(
                 fact_type, movie_id, movie_title, movie_type, prev_status_line, human_attr, bot_attr)
-        elif prev_status == "fact" and random.random() < SECOND_FACT_PROBA:  # -> fact
+        elif prev_status_line[-2:] == ["comment_to_question", "fact"] and random.random() < SECOND_FACT_PROBA:  # ->fact
             logger.info("Decided to generate one more fact.")
             response, confidence, human_attr, bot_attr, attr = self.generate_fact_from_cobotqa(
-                "fact about", movie_id, movie_title, movie_type, prev_status_line, human_attr, bot_attr)
+                "fact about", movie_id, movie_title, movie_type, prev_status_line, human_attr, bot_attr,
+                prev_movie_skill_outputs[-1].get("text", ""))
             if response.lower() == prev_bot_uttr["text"].lower():
                 response, confidence, human_attr, bot_attr, attr = self.lets_talk_about_movie_offer(
                     prev_status_line, human_attr, bot_attr)
