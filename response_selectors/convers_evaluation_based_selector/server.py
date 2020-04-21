@@ -12,6 +12,7 @@ import sentry_sdk
 import pprint
 from nltk.tokenize import sent_tokenize
 
+from common.duplicates import NOT_LOWER_DUPLICATES_SENTS
 from common.universal_templates import if_lets_chat_about_topic, if_choose_topic
 from common.utils import scenario_skills, retrieve_skills, okay_statements, is_question, \
     get_intent_name, low_priority_intents, substitute_nonwords
@@ -152,7 +153,7 @@ def lower_duplicates_score(candidates, bot_utt_counter, scores, confidences):
         cand_sents = sent_tokenize(cand["text"].lower())
         coeff = 1
         for cand_sent in cand_sents:
-            if len(cand_sent.split()) >= 3:
+            if len(cand_sent.split()) >= 3 and cand_sent not in NOT_LOWER_DUPLICATES_SENTS:
                 cand_sent = substitute_nonwords(cand_sent)
                 coeff += bot_utt_counter[cand_sent]
 

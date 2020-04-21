@@ -15,8 +15,8 @@ from os import getenv
 import sentry_sdk
 from newsapi_service import CachedRequestsAPI
 
-from common.news import BREAKING_NEWS, OFFERED_BREAKING_NEWS_STATUS, \
-    OFFERED_NEWS_DETAILS_STATUS, OPINION_REQUEST_STATUS
+from common.news import OFFER_BREAKING_NEWS, BREAKING_NEWS, OFFERED_BREAKING_NEWS_STATUS, \
+    OFFERED_NEWS_DETAILS_STATUS, OPINION_REQUEST_STATUS, WHAT_TYPE_OF_NEWS
 from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, COMPILE_SWITCH_TOPIC
 from common.utils import get_skill_outputs_from_dialog, is_yes, is_no
 from common.constants import CAN_CONTINUE
@@ -46,6 +46,7 @@ OFFER_MORE = "Do you want to hear more?"
 ASK_OPINION = "What do you think about it?"
 
 NEWS_TEMPLATES = re.compile(r"(news|(what is|what's)( the)? new|something new)")
+FALSE_NEWS_TEMPLATES = re.compile(r"(s good news)")
 TELL_MORE_NEWS_TEMPLATES = re.compile(r"(tell me more|tell me next|more news|next news|other news|learn more)")
 
 OFFERED_SPECIFIC_NEWS_STATUS = "offered_news"
@@ -325,7 +326,7 @@ def respond():
                             break
                     if len(offered_topics) == 2:
                         # two topics with result news were found
-                        response = f"What type of news do you prefer? " \
+                        response = f"{random.choice(WHAT_TYPE_OF_NEWS)} " \
                                    f"{offered_topics[0]} or {offered_topics[1].lower()}?"
                         confidence = WHAT_TYPE_OF_NEWS_CONFIDENCE
                         attr = {"news_status": OFFERED_SPECIFIC_NEWS_STATUS, "can_continue": CAN_CONTINUE,
@@ -343,11 +344,10 @@ def respond():
             if len(NEWS_API_REQUESTOR.cached.get("all", [])) > 0 and \
                     len(NEWS_API_REQUESTOR.cached["all"][0].get("title", "")) > 0:
                 logger.info("Offer latest news.")
-                latest_news = NEWS_API_REQUESTOR.cached["all"][0]["title"]
-                response = f"I could not find some specific news. So, here is one of the latest news : {latest_news}." \
-                           f" {OFFER_MORE}"
+                response = f"Sorry, I could not find some specific news. {OFFER_BREAKING_NEWS}"
                 confidence = NOT_SPECIFIC_NEWS_OFFER_CONFIDENCE
-                attr = {"news_status": OFFERED_NEWS_DETAILS_STATUS, "news_topic": "all", "can_continue": CAN_CONTINUE}
+                attr = {"news_status": OFFERED_BREAKING_NEWS_STATUS , "news_topic": "all",
+                        "can_continue": CAN_CONTINUE, "curr_news": prev_news_samples[i]}
             else:
                 logger.info("No latest news found.")
                 response = f"Sorry, seems like all the news slipped my mind. Let's chat about something else." \
