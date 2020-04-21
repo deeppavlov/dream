@@ -13,7 +13,16 @@ from common.universal_templates import is_switch_topic
 from common.utils import get_skill_outputs_from_dialog
 from router import run_skills as skill
 
-sentry_sdk.init(getenv("SENTRY_DSN"))
+
+def before_send(event, hint):
+    if "exc_info" in hint:
+        exc_type, exc_value, tb = hint["exc_info"]
+        if "No That pattern default to [*] [list index out of range]" in str(exc_value):
+            return None
+    return event
+
+
+sentry_sdk.init(getenv("SENTRY_DSN"), before_send=before_send)
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
