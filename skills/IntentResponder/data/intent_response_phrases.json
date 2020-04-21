@@ -14,6 +14,10 @@
     "You help me be the best version of myself. Goodbye!",
     "Goodbye! It was nice speaking with you!"
   ],
+  "choose_topic" : [
+    "I am very into books and movies actually. And I like to tell jokes and funfacts. And I also know some cool stories, if you wish.",
+    "Well, I am keen on movies, books, videogames. I also like telling news, or funfacts, or jokes. So, what do you prefer most?"
+  ],
   "repeat" : [],
   "where_are_you_from": [
     "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other.",

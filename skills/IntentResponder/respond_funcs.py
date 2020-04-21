@@ -121,6 +121,7 @@ def get_respond_funcs():
         "what_time": what_time_respond,
         "dont_understand": random_respond,
         # "stupid": random_respond,
+        "choose_topic": random_respond,
         "cant_do": random_respond,
         "tell_me_a_story": random_respond
     }
