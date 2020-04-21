@@ -134,9 +134,13 @@ class CachedRequestsAPI:
     @staticmethod
     def get_not_blacklisted_english_news(articles):
         for article in articles:
-            title = article.get("title", "title")
-            description = article.get("description", "description")
-            lang = detect(article.get("title", "title"))
+            title = article.get("title", "")
+            if len(title) == 0:
+                continue
+            description = article.get("description", "")
+            if len(description) == 0:
+                continue
+            lang = detect(article.get("title", ""))
             if lang != "en":
                 continue
 
