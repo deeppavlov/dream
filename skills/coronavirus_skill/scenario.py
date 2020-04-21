@@ -20,6 +20,8 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 CORONAVIRUS_URL = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/' \
                   'csse_covid_19_data/csse_covid_19_time_series'
+DEATH_URL = CORONAVIRUS_URL + '/time_series_covid19_deaths_global.csv'
+CASE_URL = CORONAVIRUS_URL + '/time_series_covid19_confirmed_global.csv'
 STATES = {j.strip().lower().split(';')[0]: j.strip().lower().split(';')[1]
           for j in open('state_names.txt', 'r').readlines()}
 #  NYT_API_KEY = '1cc135af-30ab-4f9f-9bb6-76a457036152'
@@ -36,7 +38,7 @@ CITIES = defaultdict(list)
 for county_name in COUNTIES:
     for city_name in COUNTIES[county_name][1:]:
         CITIES[city_name.lower()].append((county_name, COUNTIES[county_name][0]))
-STATE_DATA, COUNTY_DATA = None, None
+STATE_DATA, COUNTY_DATA, NATION_DATA = None, None, None
 FACT_LIST = ['The origin of coronavirus, Wuhan, has fully canceled the quarantine.',
              'Only two dogs on the Earth have ever been diagnosed with coronavirus. '
              'Moreover, even dogs who have coronavirus cannot transmit coronavirus to the human.',
@@ -122,11 +124,9 @@ def about_coronavirus(annotated_phrase):
     return about_virus(annotated_phrase) and (contain_words or contain_related)
 
 
-def get_cases_deaths(coronavirus_url=CORONAVIRUS_URL):
-    death_url = CORONAVIRUS_URL + '/time_series_covid19_deaths_global.csv'
-    case_url = CORONAVIRUS_URL + '/time_series_covid19_confirmed_global.csv'
-    case_data = pd.read_csv(case_url, error_bad_lines=False)
-    death_data = pd.read_csv(death_url, error_bad_lines=False)
+def get_cases_deaths():
+    case_data = pd.read_csv(CASE_URL, error_bad_lines=False)
+    death_data = pd.read_csv(DEATH_URL, error_bad_lines=False)
     num_cases = case_data[case_data.columns[-1]].sum()
     num_deaths = death_data[death_data.columns[-1]].sum()
     return int(num_cases), int(num_deaths)
@@ -142,18 +142,19 @@ def know_symptoms(annotated_phrase):
     return any([j in request for j in ['symptoms', 'do i have', 'tell from', 'if i get']])
 
 
-def get_state_cases(data_url=DATA_URL):
-    global STATE_DATA, COUNTY_DATA
+def get_state_cases():
+    global STATE_DATA, COUNTY_DATA, NATION_DATA
     while True:
         current_date = datetime.now().strftime('%m-%d-%Y') + '.csv'
         prev_date = (datetime.now() - timedelta(days=1)).strftime('%m-%d-%Y') + '.csv'
         try:
-            current_data = pd.read_csv((data_url + current_date), error_bad_lines=False)
+            current_data = pd.read_csv((DATA_URL + current_date), error_bad_lines=False)
         except BaseException:
-            current_data = pd.read_csv((data_url + prev_date), error_bad_lines=False)
+            current_data = pd.read_csv((DATA_URL + prev_date), error_bad_lines=False)
         current_data = current_data[current_data['Country_Region'] == 'US']
         state_data = defaultdict(lambda: (0, 0))
         county_data = defaultdict(lambda: (0, 0))  # (state, county)
+        nation_data = defaultdict(lambda: (0, 0))  # cases, deaths
         for i in current_data.index:
             state = current_data['Province_State'][i].lower()
             deaths = current_data['Deaths'][i]
@@ -165,11 +166,19 @@ def get_state_cases(data_url=DATA_URL):
                 county_data[(county, state)] = (cases, deaths)
             except BaseException:
                 pass
-        STATE_DATA, COUNTY_DATA = state_data, county_data
+        case_data = pd.read_csv(CASE_URL, error_bad_lines=False)
+        death_data = pd.read_csv(DEATH_URL, error_bad_lines=False)
+        case_data = case_data.groupby('Country/Region').sum()
+        death_data = death_data.groupby('Country/Region').sum()
+        for nation_name in case_data.index:
+            case_num = case_data[case_data.columns[-1]][nation_name]
+            death_num = death_data[death_data.columns[-1]][nation_name]
+            nation_data[nation_name.lower()] = case_num, death_num
+        STATE_DATA, COUNTY_DATA, NATION_DATA = state_data, county_data, nation_data
         time.sleep(60 * 60 * 12)
 
 
-def get_statephrase(state_name, state_data, county_data):
+def get_statephrase(state_name, state_data, county_data, nation_data):
     # state_data, county_data = get_state_cases(STATES_URL, COUNTIES_URL)
     # state_name = 'houston'
     if type(state_name) == str:
@@ -178,6 +187,11 @@ def get_statephrase(state_name, state_data, county_data):
     county_names = [j[0] for j in COUNTIES.keys()]
     if state_name in STATES.keys():
         data1 = [state_name, state_data[state_name][0], state_data[state_name][1], STATES[state_name]]
+        phrase = 'The total number of registered coronavirus cases in {0} is {1} including {2} deaths. ' \
+                 'By the way, the population of {0} is {3} persons, which is way larger than ' \
+                 'the number of cases. '.format(*data1)
+    elif state_name in nation_data.keys():
+        data1 = [state_name, nation_data[state_name][0], nation_data[state_name][1], nation_data[state_name]]
         phrase = 'The total number of registered coronavirus cases in {0} is {1} including {2} deaths. ' \
                  'By the way, the population of {0} is {3} persons, which is way larger than ' \
                  'the number of cases. '.format(*data1)
@@ -338,7 +352,7 @@ class CoronavirusSkillScenario:
 
     def __init__(self):
         try:
-            num_cases, num_cv_deaths = get_cases_deaths(CORONAVIRUS_URL)
+            num_cases, num_cv_deaths = get_cases_deaths()
             num_flu_deaths = 560000
             millionaire_number = 46800000
             self.phrases = make_phrases(num_cases, num_cv_deaths, num_flu_deaths, millionaire_number)
@@ -361,7 +375,7 @@ class CoronavirusSkillScenario:
             sentry_sdk.capture_exception(e)
 
     def __call__(self, dialogs):
-        global STATE_DATA, COUNTY_DATA
+        global STATE_DATA, COUNTY_DATA, NATION_DATA
         texts = []
         confidences = []
         for dialog in dialogs:
@@ -459,7 +473,11 @@ class CoronavirusSkillScenario:
                         reply, confidence = CDC_STAY_HOME_RECOMMENDATION, 1.0
                 else:
                     detected_state = None
-                    total_names = list(STATES.keys()) + [j[0].lower() for j in COUNTIES.keys()] + list(CITIES.keys())
+                    nation_names = list(NATION_DATA.keys())
+                    state_names = list(STATES.keys())
+                    county_names = [j[0].lower() for j in COUNTIES.keys()]
+                    city_names = list(CITIES.keys())
+                    total_names = nation_names + state_names + county_names + city_names
                     if 'suppose you are asking about' in last_bot_phrase and is_yes(last_utterance):
                         logging.info('Detecting state by 1st&2nd utt')
                         tolook_utterances = last_utterances
@@ -544,7 +562,7 @@ class CoronavirusSkillScenario:
                             elif (wants_cv or about_coronavirus(last_utterance)) and wasnot_first:
                                 logging.info('Returning state phrase')
                                 reply, confidence = get_statephrase(detected_state, STATE_DATA,
-                                                                    COUNTY_DATA), 1
+                                                                    COUNTY_DATA, NATION_DATA), 1
                                 reply = improve_phrase(reply, asked_about_age, met_last)
                             else:
                                 if is_yes(last_utterance):
