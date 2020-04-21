@@ -341,12 +341,12 @@ def respond():
             # no found news
             logger.info("No particular news found.")
 
-            if len(NEWS_API_REQUESTOR.cached.get("all", [])) > 0 and \
+            if curr_topic != "all" and len(NEWS_API_REQUESTOR.cached.get("all", [])) > 0 and \
                     len(NEWS_API_REQUESTOR.cached["all"][0].get("title", "")) > 0:
                 logger.info("Offer latest news.")
                 response = f"Sorry, I could not find some specific news. {OFFER_BREAKING_NEWS}"
                 confidence = NOT_SPECIFIC_NEWS_OFFER_CONFIDENCE
-                attr = {"news_status": OFFERED_BREAKING_NEWS_STATUS , "news_topic": "all",
+                attr = {"news_status": OFFERED_BREAKING_NEWS_STATUS, "news_topic": "all",
                         "can_continue": CAN_CONTINUE, "curr_news": prev_news_samples[i]}
             else:
                 logger.info("No latest news found.")
