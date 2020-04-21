@@ -311,32 +311,6 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             curr_score = very_big_score
         elif skill_names[i] == 'program_y' and alexa_abilities_spec in candidates[i]['text']:
             curr_score = very_big_score
-        elif skill_names[i] == 'meta_script_skill' and len(dialog['utterances']) >= 2 and \
-                candidates[i].get("meta_script_status", "") == "starting":
-            if len(dialog['utterances']) >= 5 and confidences[i] == 0.99:
-                # if meta_script returns starting phrase in the middle of dialog (conf 0.99)
-                # when faced topic switching intent or matched phrase,
-                # return it with probability 0.15
-                if random.random() < 0.15:
-                    curr_score = very_big_score
-            elif 0.98 > confidences[i] > 0.7:
-                # if meta_script returns starting phrase in the beginning of dialog (conf 0.8),
-                # return it with probability 0.1
-                r = random.random()
-                if r < 0.1:
-                    curr_score = very_big_score
-                elif 0.1 <= r < 0.5:
-                    curr_score = very_low_score
-            elif confidences[i] == 0.6:
-                # if meta_script returns starting phrase in the middle of dialog (conf 0.6)
-                # return it with probability 0.1
-                if random.random() < 0.1:
-                    curr_score = very_big_score
-            elif confidences[i] == 0.7:
-                # if meta_script returns starting phrase in the middle of dialog (conf 0.7)
-                # when faced some USER topic
-                if random.random() < 0.3:
-                    curr_score = very_big_score
         elif skill_names[i] in ["dummy_skill", "convert_reddit", "alice", "eliza", "tdidf_retrieval", "program_y"]:
             if "question" in candidates[i].get("type", "") or "?" in candidates[i]['text']:
                 if skill_names[i] == "program_y":
