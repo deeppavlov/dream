@@ -100,12 +100,12 @@ def fill_comet_atomic_template(curr_user_uttr, template, relation):
 
 grammar_compiled = [[re.compile("did you not be", re.IGNORECASE), "were not you"],
                     [re.compile("did you be", re.IGNORECASE), "were you"],
-                    []]
+                    [re.compile("(\bhis\b|\bher\b|\btheir\b)", re.IGNORECASE), "your"]]
 
 
 def grammar_fixes(uttr):
-    for gram_template, replacement in grammar_compiled:
-        uttr = re.sub(grammar_compiled, replacement, uttr)
+    for pair in grammar_compiled:
+        uttr = re.sub(pair[0], pair[1], uttr)
 
     return uttr
 
