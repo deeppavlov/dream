@@ -43,7 +43,7 @@ class MovieSkillTemplates:
     notsure_confidence = 0.5
     zero_confidence = 0.0
 
-    def __init__(self, db_path="./databases/database_100k_main_info.json"):
+    def __init__(self, db_path="./databases/database_most_popular_main_info.json"):
         np.random.seed(42)
         self.imdb = IMDb(db_path)
 
