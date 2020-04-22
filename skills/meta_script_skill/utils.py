@@ -13,6 +13,7 @@ from spacy.symbols import nsubj, VERB, xcomp, NOUN, ADP, dobj
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
 from common.utils import transform_vbg, get_skill_outputs_from_dialog, is_yes, is_no
+from common.universal_templates import if_switch_topic
 from constants import COMET_SERVICE_URL, CONCEPTNET_SERVICE_URL, STARTINGS, OTHER_STARTINGS, WIKI_STARTINGS, \
     LET_ME_ASK_TEMPLATES, COMMENTS, ASK_OPINION, DIVE_DEEPER_TEMPLATE_COMETS, DIVE_DEEPER_COMMENTS, \
     DEFAULT_CONFIDENCE, DEFAULT_STARTING_CONFIDENCE, CONTINUE_USER_TOPIC_CONFIDENCE, BANNED_VERBS, BANNED_NOUNS, \
@@ -322,6 +323,24 @@ def get_not_used_template(used_templates, all_templates):
         return choice(all_templates)
 
 
+def get_all_not_used_templates(used_templates, all_templates):
+    """
+    Chooce not used template among all templates
+
+    Args:
+        used_templates: list of templates already used in the dialog
+        all_templates: list of all available templates
+
+    Returns:
+        string template
+    """
+    available = list(set(all_templates).difference(set(used_templates)))
+    if len(available) > 0:
+        return available
+    else:
+        return all_templates
+
+
 def get_starting_phrase(dialog, topic, attr):
     """
     For considered topic propose starting phrase for meta-script, assign attributes for dialog
@@ -507,12 +526,17 @@ def clean_up_topic_list(verb_nounphrases):
 
     for vnp in verb_nounphrases:
         tokens = vnp.split()
-        if vnp not in TOP_FREQUENT_BIGRAMS_TO_IGNORE and tokens[0] not in BANNED_VERBS and \
-                tokens[-1] not in BANNED_NOUNS + TOP_FREQUENT_WORDS[:100] and \
-                len(tokens[0]) >= 2 and len(tokens[-1]) > 2 and \
-                (tokens[0] not in TOP_FREQUENT_WORDS or tokens[-1] not in TOP_FREQUENT_WORDS):
+        vnp_is_frequent = (vnp in TOP_FREQUENT_BIGRAMS_TO_IGNORE or tokens[0] in BANNED_VERBS or tokens[-1] in
+                           BANNED_NOUNS.union(set(TOP_FREQUENT_WORDS[:100])))
+        length_is_enough = len(tokens[0]) >= 2 and len(tokens[-1]) > 2
+        one_of_verb_noun_not_frequent = tokens[0] not in TOP_FREQUENT_WORDS or tokens[-1] not in TOP_FREQUENT_WORDS
+        verb_exceptions = ["play", "practice", "be"]
+
+        if vnp in verb_exceptions or (not vnp_is_frequent and length_is_enough and one_of_verb_noun_not_frequent):
             if vnp[:3] == "be " and len(vnp[3:].split()) == 1:
-                is_person = "person" in get_comet_conceptnet(vnp[3:], "IsA")
+                tokenized_comet_prediction = [ch.split() for ch in get_comet_conceptnet(vnp[3:], "IsA") if len(ch) > 0]
+                tokenized_comet_prediction = [ch for ch in tokenized_comet_prediction if len(ch) > 0]
+                is_person = any([ch[0] == "person" for ch in tokenized_comet_prediction])
                 if is_person:
                     cleaned.append(vnp)
                 else:
@@ -573,26 +597,27 @@ def extract_verb_noun_phrases(utterance, only_i_do_that=True, nounphrases=[]):
                                             f"{possible_verb.lemma_} {possible_subject} {poss_subsubj}")
                                         break
 
-    logger.info(f"Extracted the following bigrams: {verb_noun_phrases}")
+    logger.info(f"Extracted the following verb-noun-based bigrams: {verb_noun_phrases}")
     good_verb_noun_phrases = clean_up_topic_list(verb_noun_phrases)
-    logger.info(f"After cleaning we have the following bigrams: {good_verb_noun_phrases}")
+    sources = [VNP_SOURCE] * len(good_verb_noun_phrases)
+    logger.info(f"After cleaning we have the following verb-noun-based bigrams: {good_verb_noun_phrases}")
 
-    if len(good_verb_noun_phrases) == 0 and len(nounphrases) > 0:
+    if len(nounphrases) > 0:
         logger.info("No good verb-nounphrase topic. Try to find nounphrase, and appropriate verb from top-bigrams.")
         nounphrases = [re.sub(relation_adj, "", noun.lower()).strip() for noun in nounphrases]
         nounphrases = [noun for noun in nounphrases if len(noun) > 0]
+        noun_based_phrases = []
         for noun in nounphrases:
-            good_verb_noun_phrases += get_most_frequent_bigrams_with_word(noun)
-        good_verb_noun_phrases = [phrase for phrase in good_verb_noun_phrases if len(phrase) > 0]
-        logger.info(f"Extracted the following bigrams: {good_verb_noun_phrases}")
-        good_verb_noun_phrases = clean_up_topic_list(good_verb_noun_phrases)
-        logger.info(f"After cleaning we have the following bigrams: {good_verb_noun_phrases}")
-        source = NP_SOURCE
-    else:
-        source = VNP_SOURCE
+            noun_based_phrases += get_most_frequent_bigrams_with_word(noun)
+        noun_based_phrases = [phrase for phrase in noun_based_phrases if len(phrase) > 0]
+        logger.info(f"Extracted the following noun-based bigrams: {noun_based_phrases}")
+        noun_based_phrases = clean_up_topic_list(noun_based_phrases)
+        logger.info(f"After cleaning we have the following noun-based bigrams: {noun_based_phrases}")
+        sources += [NP_SOURCE] * len(noun_based_phrases)
+        good_verb_noun_phrases += noun_based_phrases
 
     logger.info(f'extracted verb noun phrases {good_verb_noun_phrases} from {utterance}')
-    return good_verb_noun_phrases, source
+    return good_verb_noun_phrases, sources
 
 
 def get_verb_noun_lemmas(topic):
@@ -610,4 +635,12 @@ def check_topic_lemmas_in_sentence(sentence, topic):
     for word in vn_lemmas:
         if word in sent_lemmas:
             return True
+    return False
+
+
+def switch_topic_uttr(uttr):
+    topic_switch_detected = uttr.get("annotations", {}).get(
+        "intent_catcher", {}).get("topic_switching", {}).get("detected", 0) == 1
+    if if_switch_topic(uttr["text"].lower()) or topic_switch_detected:
+        return True
     return False

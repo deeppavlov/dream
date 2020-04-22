@@ -4,6 +4,10 @@ PREDEFINED_SOURCE = "predefined"
 VNP_SOURCE = "verb_nouns"
 NP_SOURCE = "nouns"
 
+NUMBER_OF_STARTING_HYPOTHESES_META_SCRIPT = 1
+NUMBER_OF_HYPOTHESES_COMET_DIALOG = 2
+
+
 DEFAULT_CONFIDENCE = 0.98
 CONTINUE_USER_TOPIC_CONFIDENCE = 0.85
 DEFAULT_STARTING_CONFIDENCE = 0.9
@@ -13,6 +17,9 @@ MATCHED_DIALOG_BEGIN_CONFIDENCE = 0.99
 BROKEN_DIALOG_CONTINUE_CONFIDENCE = 0.8
 FINISHED_SCRIPT_RESPONSE = "I see. Let's talk about something you want. Pick up the topic."
 FINISHED_SCRIPT = "finished"
+
+DEFAULT_ASK_ATOMIC_QUESTION_CONFIDENCE = 0.95
+DEFAULT_ATOMIC_CONTINUE_CONFIDENCE = 0.98
 
 COMET_SERVICE_URL = "http://comet_atomic:8053/comet"
 CONCEPTNET_SERVICE_URL = "http://comet_conceptnet:8065/comet"
@@ -127,15 +134,15 @@ WIKI_STARTINGS = [
     "Have you ever heard that DESCRIPTION? I want to understand this better."
 ]
 
-BANNED_VERBS = ["watch", "talk", "say", "chat", "like", "love", "ask",
+BANNED_VERBS = {"watch", "talk", "say", "chat", "like", "love", "ask",
                 "think", "mean", "hear", "know", "want", "tell", "look",
                 "call", "spell", "misspell", "suck", "fuck", "switch", "kill",
-                "eat", "re", "s", "see", "bear", "read", "ruin"]
+                "eat", "re", "s", "see", "bear", "read", "ruin", "die", "get", "have"}
 
-BANNED_NOUNS = ["lol", "alexa", "suck", "fuck", "sex", "one", "thing", "something", "anything", "nothing", "topic",
+BANNED_NOUNS = {"lol", "alexa", "suck", "fuck", "sex", "one", "thing", "something", "anything", "nothing", "topic",
                 "today", "yesterday", "tomorrow", "now", "shopping", "mine", "talk", "chat", "me", "favorite",
                 "past", "future", "suggest", "suppose", "i'll", "book", "books", "movie", "movies", "weather",
                 "mom", "mother", "mummy", "mum", "mama", "mamma", "daddy", "dad", "father", "sister", "brother",
-                "everything", "way", "minute", "lot", "lots", "things"]
+                "everything", "way", "minute", "lot", "lots", "things"}
 
-idopattern = re.compile(r"i [a-zA-Z ,0-9]", re.IGNORECASE)
+idopattern = re.compile(r"i [a-zA-Z ,0-9]+", re.IGNORECASE)
