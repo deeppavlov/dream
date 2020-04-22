@@ -55,8 +55,11 @@ def run_skills(history: List, state: Dict, agent_intents: Dict = {}):
 
     elif (
         is_last_skill(tutor_attrs.skill_name, state)
-        and ("stop_intent" in state.intents or "switch_topic_intent" in agent_intents)
-        and ("next_game_intent" not in state.intents)
+        and ("no_intent" in state.intents or "stop_intent" in state.intents or "switch_topic_intent" in agent_intents)
+        and (
+            "next_game_intent" not in state.intents
+            or ("next_game_intent" in state.intents and "no_intent" in state.intents)
+        )
     ):
         # switch the topic
         pass
@@ -66,7 +69,6 @@ def run_skills(history: List, state: Dict, agent_intents: Dict = {}):
     ):
         # talk about a top
         scheduled_skills.append((game_tops_attrs.skill_name, [game_tops_attrs.modes.intro]))
-
     elif (
         ("stop_intent" in state.intents or "switch_topic_intent" in agent_intents)
         and ("next_game_intent" not in state.intents)

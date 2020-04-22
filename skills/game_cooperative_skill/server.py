@@ -32,9 +32,6 @@ def respond():
         st_time = time.time()
         dialogs_batch = request.json["dialogs"]
         rand_seed = request.json.get("rand_seed")
-        # for tests
-        if rand_seed:
-            random.seed(int(rand_seed))
         responses = []
 
         for dialog in dialogs_batch:
@@ -48,6 +45,10 @@ def respond():
 
             last_utter_text = last_utter["text"].lower()
             agent_intents = {"switch_topic_intent": True} if is_switch_topic(last_utter) else {}
+
+            # for tests
+            if rand_seed:
+                random.seed(int(rand_seed))
             response, state = skill([last_utter_text], state, agent_intents)
 
             logger.info(f"state = {state}")
