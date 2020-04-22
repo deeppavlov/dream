@@ -34,7 +34,7 @@ def test_one_step_responses():
     print("check_persons_comparison2")
     input_data = get_input_json("test_configs/check_persons_comparison2.json")
     response = requests.post(url, json=input_data).json()[0]
-    assert "Brad Pitt" in response[0], print(response)
+    assert "Fred Armisen" in response[0], print(response)
 
     print("check_genre")
     input_data = get_input_json("test_configs/check_genre.json")

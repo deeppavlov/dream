@@ -23,42 +23,44 @@ class IMDb:
              (re.compile(r"\s?\&\s?"), " and "),
              (re.compile(r"\s?\'\s?"), ""),
              (re.compile(r"\s?:\s?"), ""),
-             (re.compile(r"\s?ii\s?"), " 2 "),
-             (re.compile(r"\s?iii\s?"), " 3 "),
-             (re.compile(r"\s?II\s?"), " 2 "),
-             (re.compile(r"\s?III\s?"), " 3 "),
-             (re.compile(r"\s?IV\s?"), " 4 "),
-             (re.compile(r"\s?V\s?"), " 5 "),
-             (re.compile(r"\s?VI\s?"), " 6 "),
-             (re.compile(r"\s?VII\s?"), " 7 "),
-             (re.compile(r"\s?VII\s?"), " 8 "),
-             (re.compile(r"\s?IX\s?"), " 9 "),
-             (re.compile(r"\s?(the)?\s?first part\s?"), " part 1 "),
-             (re.compile(r"\s?(the)?\s?second part\s?"), " part 2 "),
-             (re.compile(r"\s?(the)?\s?third part\s?"), " part 3 "),
-             (re.compile(r"\s?(the)?\s?fourth part\s?"), " part 4 "),
-             (re.compile(r"\s?(the)?\s?fifth part\s?"), " part 5 "),
-             (re.compile(r"\s?(the)?\s?sixth part\s?"), " part 6 "),
-             (re.compile(r"\s?(the)?\s?seventh part\s?"), " part 7 "),
-             (re.compile(r"\s?(the)?\s?eighth part\s?"), " part 8 "),
-             (re.compile(r"\s?(the)?\s?ninth part\s?"), " part 9 "),
-             (re.compile(r"\s?(the)?\s?first\s?"), " part 1 "),
-             (re.compile(r"\s?(the)?\s?second\s?"), " part 2 "),
-             (re.compile(r"\s?(the)?\s?third\s?"), " part 3 "),
-             (re.compile(r"\s?(the)?\s?fourth\s?"), " part 4 "),
-             (re.compile(r"\s?(the)?\s?fifth\s?"), " part 5 "),
-             (re.compile(r"\s?(the)?\s?sixth\s?"), " part 6 "),
-             (re.compile(r"\s?(the)?\s?seventh\s?"), " part 7 "),
-             (re.compile(r"\s?(the)?\s?eighth\s?"), " part 8 "),
-             (re.compile(r"\s?(the)?\s?ninth\s?"), " part 9 "),
-             (re.compile(r"\bthe\b"), " "),
-             (re.compile(r"\ba\b"), " "),
-             (re.compile(r"\ban\b"), " "),
+             (re.compile(r"\bii\b"), "2"),
+             (re.compile(r"\biii\b"), "3"),
+             (re.compile(r"\bII\b"), "2"),
+             (re.compile(r"\bIII\b"), "3"),
+             (re.compile(r"\bIV\b"), "4"),
+             (re.compile(r"\bV\b"), "5"),
+             (re.compile(r"\bVI\b"), "6"),
+             (re.compile(r"\bVII\b"), "7"),
+             (re.compile(r"\bVII\b"), "8"),
+             (re.compile(r"\bIX\b"), "9"),
+             (re.compile(r"\bfirst part\b"), "part 1"),
+             (re.compile(r"\bsecond part\b"), "part 2"),
+             (re.compile(r"\bthird part\b"), "part 3"),
+             (re.compile(r"\bfourth part\b"), "part 4"),
+             (re.compile(r"\bfifth part\b"), "part 5"),
+             (re.compile(r"\bsixth part\b"), "part 6"),
+             (re.compile(r"\bseventh part\b"), "part 7"),
+             (re.compile(r"\beighth part\b"), "part 8"),
+             (re.compile(r"\bninth part\b"), "part 9"),
+             (re.compile(r"\bthe\b"), ""),
+             (re.compile(r"\ba\b"), ""),
+             (re.compile(r"\ban\b"), ""),
              (re.compile(r'\W'), " "),
              (re.compile(r"\s\s+"), " "),
              ]
 
-    def __init__(self, db_path="./databases/database_100k_main_info.json"):
+    number_pairs = [(re.compile(r"\b1\b"), "one"),
+                    (re.compile(r"\b2\b"), "two"),
+                    (re.compile(r"\b3\b"), "three"),
+                    (re.compile(r"\b4\b"), "four"),
+                    (re.compile(r"\b5\b"), "five"),
+                    (re.compile(r"\b6\b"), "six"),
+                    (re.compile(r"\b7\b"), "seven"),
+                    (re.compile(r"\b8\b"), "eight"),
+                    (re.compile(r"\b9\b"), "nine")
+                    ]
+
+    def __init__(self, db_path="./databases/database_most_popular_main_info.json"):
         t0 = time.time()
         self.with_ignored_movies_names = {}
         self.without_ignored_movies_names = {}
@@ -113,7 +115,25 @@ class IMDb:
             self.movies_names[self.database[imdb_id]["title"]].append(imdb_id)
 
         self.without_ignored_movies_names = {self.process_movie_name(movie): self.movies_names[movie]
-                                             for movie in self.movies_names.keys()}
+                                             for movie in self.movies_names.keys()
+                                             if len(self.process_movie_name(movie)) > 0}
+        # add processed alternative titles
+        for imdb_id in self.database:
+            original_title = self.database[imdb_id]["title"]
+            processed_original_title = self.process_movie_name(original_title)
+            processed_numbers = self.process_numbers_in_movie_name(processed_original_title)
+            if processed_original_title != processed_numbers:
+                self.without_ignored_movies_names[processed_numbers] = self.without_ignored_movies_names[
+                    processed_original_title]
+            for alt_title in self.database[imdb_id].get("all_titles", []):
+                processed_alt_title = self.process_movie_name(alt_title)
+                if len(processed_alt_title) > 0:
+                    self.without_ignored_movies_names[processed_alt_title] = self.movies_names[original_title]
+
+                    processed_numbers = self.process_numbers_in_movie_name(processed_alt_title)
+                    if processed_alt_title != processed_numbers:
+                        self.without_ignored_movies_names[processed_numbers] = self.movies_names[original_title]
+
         # отсортируем по длине чтобы искать потом предпочтительно самое длинное вхождение сначала
         self.without_ignored_movies_names = {el: self.without_ignored_movies_names[el]
                                              for el in sorted(self.without_ignored_movies_names, key=len, reverse=True)}
@@ -198,6 +218,12 @@ class IMDb:
     def process_movie_name(self, movie):
         movie_name = movie.lower()
         for pair in self.pairs:
+            movie_name = re.sub(pair[0], pair[1], movie_name)
+        return movie_name.strip()
+
+    def process_numbers_in_movie_name(self, movie):
+        movie_name = movie.lower()
+        for pair in self.number_pairs:
             movie_name = re.sub(pair[0], pair[1], movie_name)
         return movie_name.strip()
 
@@ -514,9 +540,9 @@ class IMDb:
         else:
             rating = np.mean([float(self.get_info_about_movie(imdb_id, "imdb_rating")) for imdb_id in movies])
 
-            if rating >= 7.5:
+            if rating >= 7.:
                 return "very_positive"
-            elif rating >= 6.0:
+            elif rating >= 6.:
                 return "positive"
             else:
                 return "neutral"
