@@ -23,7 +23,7 @@ def process(dialog, gold_list, banned_words, ner_model):
         utterances[i] = utterances[i].replace(',', ' ')
         print('**')
         print(utterances[i])
-        banned_skills = ['dummy_skill', 'meta_script_skill', 'book_skill', 'tfidf_retrieval']
+        banned_skills = ['dummy_skill', 'meta_script_skill', 'comet_dialog_skill', 'book_skill', 'tfidf_retrieval']
         if utterances[i] != '':
             cond1 = ner_model is None or 'PER' in ''.join(ner_model([utterances[i]])[1][0])
             cond2 = ([banned_word in utterances[i] for banned_word in banned_words])
