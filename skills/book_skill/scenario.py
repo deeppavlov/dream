@@ -458,7 +458,7 @@ class BookSkillScenario:
         YES_PHRASE_2 = "Fabulous! And what book did impress you the most?"
         YES_PHRASE_3_1 = "I've also read it. It's an amazing book! Do you know when it was first published?"
         YES_PHRASE_3_FACT = "I've read it. It's an amazing book! Would you like to know some facts about it?"
-        YES_PHRASE_4 = " years ago! I didn't exist in that time. " + get_tutor_phrase()
+        YES_PHRASE_4 = " I didn't exist in that time. " + get_tutor_phrase()
         FAVOURITE_GENRE_ANSWERS = list(GENRE_PHRASES.values())
         FAVOURITE_BOOK_ANSWERS = ['My favourite book is "The Old Man and the Sea" by Ernest Hemingway.']
         GENRE_PHRASE_1 = 'What is your favorite book genre?'
@@ -551,7 +551,11 @@ class BookSkillScenario:
                         reply, confidence = '', 0
                     else:
                         logging.debug('Bookname detected')
-                        reply, confidence = str(n_years_ago) + YES_PHRASE_4, self.default_conf
+                        if n_years_ago > 0:
+                            recency_phrase = str(n_years_ago) + " years ago! "
+                        else:
+                            recency_phrase = 'Just recently! '
+                        reply, confidence = recency_phrase + YES_PHRASE_4, self.default_conf
                 elif START_PHRASE in bot_phrases:
                     logging.debug('We have already said starting phrase')
                     if repeat(annotated_user_phrase):
