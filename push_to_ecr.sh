@@ -16,14 +16,14 @@ for r in $(grep 'image: \${DOCKER_REGISTRY}' staging.yml | sed -e 's|^.*/||' | s
   aws ecr create-repository --repository-name "$r"
  done
 
-docker-compose -f docker-compose.yml -f staging.yml build
+docker-compose -f docker-compose.yml -f staging.yml -f s3.yml build
 
 RET=1
 MAX_N_TRIES=15
 N_TRY=1
 until [ "$N_TRY" -gt "$MAX_N_TRIES" ] || [ "$RET" -eq 0 ]; do
     echo "Trying to push to ECR, try number: $N_TRY"
-    docker-compose -f docker-compose.yml -f staging.yml push
+    docker-compose -f docker-compose.yml -f staging.yml -f s3.yml push
     RET=$?
     N_TRY=$((N_TRY + 1))
     sleep 5

@@ -1,13 +1,16 @@
 FROM python:3.7.4
 
+ARG DATA_URL=files.deeppavlov.ai/alexaprize_data/elmo2.tar.gz
+ARG NER_URL=files.deeppavlov.ai/alexaprize_data/ner.tar.xz
+
 RUN mkdir /src
 
-RUN curl files.deeppavlov.ai/alexaprize_data/ner.tar.xz > /ner.tar.xz
+RUN curl $NER_URL > /ner.tar.xz
 RUN tar -xf ner.tar.xz
 RUN rm ner.tar.xz
 
 RUN mkdir /elmo2
-RUN curl files.deeppavlov.ai/alexaprize_data/elmo2.tar.gz > /elmo2/elmo2.tar.gz
+RUN curl $DATA_URL > /elmo2/elmo2.tar.gz
 RUN tar -xvzf /elmo2/elmo2.tar.gz -C /elmo2
 RUN rm /elmo2/elmo2.tar.gz
 RUN mkdir /src/tfhub_cache_dir

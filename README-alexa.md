@@ -32,6 +32,7 @@ $: docker-compose -f docker-compose.yml -f dev.yml -f one_worker.yml -f proxy.ym
 ```
 $: docker-compose -f docker-compose.yml -f dev.yml -f one_worker.yml -f cpu.yml -f proxy.yml up --build
 ```
+Use `-f s3.yml` if you want to download models from s3 and not from DeepPavlov share.
 
 Run agent:
 ```

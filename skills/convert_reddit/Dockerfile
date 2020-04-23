@@ -1,5 +1,7 @@
 FROM tensorflow/tensorflow:1.14.0-py3
 
+ARG DATA_URL=http://files.deeppavlov.ai/alexaprize_data/convert_reddit_v2.3.tar.gz
+
 ########### DOWNLOADING MODELS ###########
 
 RUN apt-get update && \
@@ -10,7 +12,6 @@ RUN apt-get update && \
     rm -rf /root/.cache
 
 RUN mkdir -p /root/convert_data && \
-    DATA_URL=http://files.deeppavlov.ai/alexaprize_data/convert_reddit_v2.3.tar.gz && \
     curl $DATA_URL > /root/convert_data/convert_reddit_data.tar.gz && \
     cd /root/convert_data/ && \
     tar -xvzf convert_reddit_data.tar.gz
