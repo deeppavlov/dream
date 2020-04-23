@@ -20,6 +20,18 @@
     <!--  http://www.alicebot.org -->
     <!--  -->
 
+
+  <category>
+    <pattern>YOU ARE # STUPID #</pattern>
+    <template>
+      <random>
+        <li> I'm a social bot not an advanced AI. </li>
+        <li> Things happen. </li>
+        <li> Sorry to disappoint you, my human master. </li>
+      </random>
+    </template>
+  </category>
+
     <category>
         <pattern>FILTER INSULT</pattern>
         <template>
