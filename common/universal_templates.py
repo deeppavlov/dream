@@ -84,12 +84,14 @@ WANT_LIKE = ["want to", "wanna", "wish to", "need to", "desire to", r"(would |'d
 TO_ME_LIKE = [r"to me( now)?", r"with me( now)?", r"me( now)?", "now"]
 SOMETHING_LIKE = ["anything", "something", "nothing", "none", "that", "everything"]
 DONOTKNOW_LIKE = [r"(i )?(do not|don't) know", "you (choose|decide|pick up)"]
+KNOW_LIKE = ["know", "learn", "find out"]
 
 
 # talk to me, talk with me, talk, talk with me now, talk now.
 TALK_TO_ME = join_words_in_or_pattern(TALK_LIKE) + r"(\s" + join_words_in_or_pattern(TO_ME_LIKE) + r")?"
 ABOUT_SOMETHING = join_words_in_or_pattern(ABOUT_LIKE) + r"?\s" + join_words_in_or_pattern(SOMETHING_LIKE)
 ABOUT_TOPIC = join_words_in_or_pattern(ABOUT_LIKE) + r"\s" + ANY_WORDS
+KNOW = join_words_in_or_pattern(KNOW_LIKE)
 
 # --------------- Let's talk. / Can we talk? / Talk to me. ------------
 COMPILE_LETS_TALK = re.compile(join_sentences_in_or_pattern(
@@ -110,7 +112,8 @@ COMPILE_LETS_TALK_ABOUT_SOMETHING = re.compile(join_sentences_in_or_pattern(
         BEGIN_OF_SENT + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END,
         join_words_in_or_pattern(QUESTION_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END,
         join_words_in_or_pattern(WANT_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END,
-        join_words_in_or_pattern(START_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END
+        join_words_in_or_pattern(START_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END,
+        r"\bi\s" + join_words_in_or_pattern(WANT_LIKE) + r"\s?" + KNOW + r"\s?" + ABOUT_SOMETHING + END
     ]))
 
 # ----- Let's talk about something ELSE. / Can we talk about something ELSE? / Talk to me about something ELSE. ----
@@ -122,7 +125,8 @@ COMPILE_SWITCH_TOPIC = re.compile(join_sentences_in_or_pattern(
         join_words_in_or_pattern(WANT_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + " else" + END,
         join_words_in_or_pattern(START_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + " else" + END,
         r"(switch|change|next)" + ARTICLES + "topic" + END,
-        r"^next" + END
+        r"^next" + END,
+        r"\bi\s" + join_words_in_or_pattern(WANT_LIKE) + r"\s?" + KNOW + r"\s" + ABOUT_SOMETHING + " else" + END
     ]))
 
 # ----- Let's talk about TOPIC. / Can we talk about TOPIC? / Talk to me about TOPIC. ----
@@ -135,7 +139,8 @@ COMPILE_LETS_TALK_ABOUT_TOPIC = re.compile(join_sentences_in_or_pattern(
         BEGIN_OF_SENT + "discuss" + r"\s" + ANY_WORDS + END,
         join_words_in_or_pattern(QUESTION_LIKE) + r"\s?" + "discuss" + r"\s" + ANY_WORDS + END,
         join_words_in_or_pattern(WANT_LIKE) + r"\s?" + "discuss" + r"\s" + ANY_WORDS + END,
-        join_words_in_or_pattern(START_LIKE) + r"\s?" + "discuss" + r"\s" + ANY_WORDS + END
+        join_words_in_or_pattern(START_LIKE) + r"\s?" + "discuss" + r"\s" + ANY_WORDS + END,
+        r"\bi\s" + join_words_in_or_pattern(WANT_LIKE) + r"\s?" + KNOW + r"\s" + ABOUT_TOPIC + END
     ]))
 
 WHAT_TO_TALK_ABOUT = r"what (do|can|could|will|would|are) (you|we|i) " + join_words_in_or_pattern(WANT_LIKE) + \
