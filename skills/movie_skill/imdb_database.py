@@ -148,21 +148,25 @@ class IMDb:
         self.frequent_bigrams = [bigram for bigram in self.frequent_bigrams if self.frequent_bigrams[bigram] > 200]
 
         movie_titles_to_ignore = self.get_processed_movies_titles_to_ignore()
-        for proc_title in movie_titles_to_ignore:
+        # WITHOUT WORD MOVIE IGNORED MOVIES
+        for proc_title in movie_titles_to_ignore + [
+                "angela", "earthquake", "abortion", "tricks", "isolation", "cage", "back", "stronger", "judy",
+                "live", "lunch", "weekend", "gays", "bean", "her", "eat", "she", "he", "thing"]:
             try:
                 self.without_ignored_movies_names.pop(proc_title)
             except KeyError:
                 pass
+        # TOTALLY REMOVED MOVIES
         for proc_title in [
-                "movie", "tragedy", "favorite", "favourite", "angela", "attitude", "do you believe", "earthquake",
+                "movie", "tragedy", "favorite", "favourite", "attitude", "do you believe",
                 "no matter what", "talk to me", "you", "lets talk", "lets chat", "in", "if", "can", "o", "ok", "one",
-                "two", "film", "new", "next", "out", "love", "like", "watch", "actress", "less", "want", "abortion",
-                "alexa", "you tell me", "movie movie", "tricks", "movies", "yes", "action", "i", "maybe", "do you know",
-                "isolation", "something", 'no', 'i am', "what", "is", "it", "what", "i did not know that", "cage",
-                "back", "games", "stronger", "see", "really", "judy", "my favorite movie", "i do", "what happened",
-                "me", "live", "lunch", "weekend", "gays", "bean", "off", "nothing", "talk to her", "boy a", "play",
-                "eat", "she", "thing", "i feel", "question", "thank you", "singing", "program", "other",
-                "conversation"]:
+                "two", "film", "new", "next", "out", "love", "like", "watch", "actress", "less", "want",
+                "alexa", "you tell me", "movie movie", "movies", "yes", "action", "i", "maybe", "do you know",
+                "something", 'no', 'i am', "what", "is", "it", "what", "i did not know that",
+                "games", "see", "really", "my favorite movie", "i do", "what happened",
+                "me", "off", "nothing", "talk to her", "boy a", "play",
+                "i feel", "question", "thank you", "singing", "program", "other",
+                "conversation", "good"]:
             try:
                 self.with_ignored_movies_names.pop(proc_title)
             except KeyError:
