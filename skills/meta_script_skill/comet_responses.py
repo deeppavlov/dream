@@ -114,8 +114,7 @@ def ask_question_using_atomic(dialog):
     responses, confidences, attrs = [], [], []
     default_return = [""], [0.0], [{"can_continue": CAN_NOT_CONTINUE}]
 
-    curr_user_uttr = dialog["human_utterances"][-1]["text"]
-    idosents = re.findall(idopattern, curr_user_uttr.lower())
+    idosents = re.findall(idopattern, dialog["human_utterances"][-1]["text"].lower())
     logger.info(f"Found `I do` - like sentences: {idosents}")
     best_sent = ""
     best_freq_portion = 0.
@@ -134,7 +133,7 @@ def ask_question_using_atomic(dialog):
 
     used_templates = get_used_attributes_by_name(
         dialog["utterances"], attribute_name="atomic_question_template", value_by_default=None, activated=True)[-4:]
-    tense = get_main_verb_tense_for_user_doings(curr_user_uttr)
+    tense = get_main_verb_tense_for_user_doings(best_sent)
     if tense:
         logger.info(f"Found user action of {tense} tense.")
 
@@ -156,7 +155,7 @@ def ask_question_using_atomic(dialog):
         else:
             relation = ""
         logger.info(f"Choose template: {template}")
-        response = fill_comet_atomic_template(curr_user_uttr, template, relation)
+        response = fill_comet_atomic_template(best_sent, template, relation)
         if response == "":
             return default_return
 
