@@ -13,7 +13,7 @@ import common.coronavirus as coronavirus
 import common.personal_info as personal_info
 import common.meta_script as meta_script
 import common.short_story as short_story
-# import common.game_cooperative_skill as game_cooperative_skill
+import common.game_cooperative_skill as game_cooperative_skill
 
 
 # Each common skill module should define +skill_trigger_phrases()+ function
@@ -28,7 +28,7 @@ skills_phrases_map = {
     'personal_info_skill': set(personal_info.skill_trigger_phrases()),
     'meta_script_skill': set(meta_script.skill_trigger_phrases()),
     'short_story_skill': set(short_story.skill_trigger_phrases()),
-    # 'game_cooperative_skill': set(game_cooperative_skill.skill_trigger_phrases()),
+    'game_cooperative_skill': set(game_cooperative_skill.skill_trigger_phrases()),
     # TODO: Add smalltalk skill phrases that is not identical to meta_script_skill
 }
 

@@ -56,7 +56,7 @@ def respond():
             logger.info(f"response = {response}")
             text = response.get("text", "Sorry")
             confidence = 1.0 if response.get("confidence") else 0.0
-            confidence *= 0.8 if "I like to talk about games." in response.get("text") else 1.0
+            confidence *= 0.9 if "I like to talk about games." in response.get("text") else 1.0
 
             can_continue = CAN_CONTINUE if confidence else CAN_NOT_CONTINUE
             attr = {"can_continue": can_continue, "state": state, "agent_intents": agent_intents}
