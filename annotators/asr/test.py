@@ -18,7 +18,7 @@ def main():
                   ]
                   }
         ]
-    }]
+    }], 'human_utterances': [[{'text': "let\'s chat"}]]
     }
     result = requests.post(url, json=input_data)
     print(result.json())
@@ -39,7 +39,7 @@ def main():
                   ]
                   }
         ]
-    }]
+    }], 'human_utterances': [[{'text': "let\'s chat"}]]
     }
 
     result = requests.post(url, json=input_data)
@@ -60,16 +60,16 @@ def main():
                   ]
                   }
         ]
-    }]
+    }], 'human_utterances': [[{'text': "let\'s chat"}]]
     }
     result = requests.post(url, json=input_data)
     assert result.json()[0]['asr_confidence'] == 'very_low'
 
-    result = requests.post(url, json={'speeches': [[]]})
+    result = requests.post(url, json={'speeches': [[]], 'human_utterances': [[]]})
     assert result.json()[0]['asr_confidence'] == 'undefined'
 
     empty_json = {'hypotheses': [{'tokens': []}]}
-    result = requests.post(url, json={'speeches': [empty_json]})
+    result = requests.post(url, json={'speeches': [empty_json], 'human_utterances': [[]]})
     assert result.json()[0]['asr_confidence'] == 'undefined'
 
 
