@@ -12,6 +12,7 @@ import time
 from datetime import datetime, timedelta
 from collections import defaultdict
 from common.coronavirus import corona_switch_skill_reply, is_staying_home_requested
+from common.link import link_to
 from common.utils import is_yes, is_no
 from common.utils import check_about_death, about_virus, quarantine_end
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -105,11 +106,11 @@ def get_agephrase(age_num):
                       'to make older people safer.'
     r = random()
     if r < 0.5:
-        phrase = phrase + ' While staying at home, you may use a lot of different online cinema. ' \
-                          'What is the last movie you have seen?'
+        phrase = phrase + ' While staying at home, you may use a lot of different online cinema. '
+        phrase = phrase + link_to(['movie_skill'])['phrase']
     else:
-        phrase = phrase + ' While staying at home, you may read a lot of different books. ' \
-                          'What is the last book you have ever read?'
+        phrase = phrase + ' While staying at home, you may read a lot of different books. '
+        phrase = phrase + link_to(['book_skill'])['phrase']
     return phrase
 
 

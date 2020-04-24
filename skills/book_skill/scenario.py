@@ -1,5 +1,6 @@
 from common.universal_templates import BOOK_CHANGE_PHRASE, is_switch_topic
 from common.tutor import get_tutor_phrase
+from common.books import BOOK_SKILL_CHECK_PHRASES
 import logging
 from os import getenv
 from string import punctuation
@@ -712,7 +713,10 @@ class BookSkillScenario:
                         reply = bookname + ' is an amazing book! '
                         if n_years_ago is not None:
                             reply = reply + 'Do you know when it was first published?'
-                        confidence = self.default_conf
+                        if any([j.lower() in bot_phrases[-1].lower() for j in BOOK_SKILL_CHECK_PHRASES]):
+                            confidence = 0.99
+                        else:
+                            confidence = self.default_conf
                     elif genre_name is not None:
                         logging.debug('Phrase contains name of genre ' + str(genre_name))
                         reply, confidence = GENRE_PHRASES[genre_name], self.default_conf
