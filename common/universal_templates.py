@@ -90,6 +90,7 @@ KNOW_LIKE = ["know", "learn", "find out"]
 # talk to me, talk with me, talk, talk with me now, talk now.
 TALK_TO_ME = join_words_in_or_pattern(TALK_LIKE) + r"(\s" + join_words_in_or_pattern(TO_ME_LIKE) + r")?"
 ABOUT_SOMETHING = join_words_in_or_pattern(ABOUT_LIKE) + r"?\s" + join_words_in_or_pattern(SOMETHING_LIKE)
+SOMETHING_WITH_SPACES = r"\s?" + join_words_in_or_pattern(SOMETHING_LIKE) + r"?\s?"
 ABOUT_TOPIC = join_words_in_or_pattern(ABOUT_LIKE) + r"\s" + ANY_WORDS
 KNOW = join_words_in_or_pattern(KNOW_LIKE)
 
@@ -132,15 +133,15 @@ COMPILE_SWITCH_TOPIC = re.compile(join_sentences_in_or_pattern(
 # ----- Let's talk about TOPIC. / Can we talk about TOPIC? / Talk to me about TOPIC. ----
 COMPILE_LETS_TALK_ABOUT_TOPIC = re.compile(join_sentences_in_or_pattern(
     [
-        BEGIN_OF_SENT + TALK_TO_ME + r"\s?" + ABOUT_TOPIC + END,
-        join_words_in_or_pattern(QUESTION_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_TOPIC + END,
-        join_words_in_or_pattern(WANT_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_TOPIC + END,
-        join_words_in_or_pattern(START_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_TOPIC + END,
+        BEGIN_OF_SENT + TALK_TO_ME + SOMETHING_WITH_SPACES + ABOUT_TOPIC + END,
+        join_words_in_or_pattern(QUESTION_LIKE) + r"\s?" + TALK_TO_ME + SOMETHING_WITH_SPACES + ABOUT_TOPIC + END,
+        join_words_in_or_pattern(WANT_LIKE) + r"\s?" + TALK_TO_ME + SOMETHING_WITH_SPACES + ABOUT_TOPIC + END,
+        join_words_in_or_pattern(START_LIKE) + r"\s?" + TALK_TO_ME + SOMETHING_WITH_SPACES + ABOUT_TOPIC + END,
         BEGIN_OF_SENT + "discuss" + r"\s" + ANY_WORDS + END,
         join_words_in_or_pattern(QUESTION_LIKE) + r"\s?" + "discuss" + r"\s" + ANY_WORDS + END,
         join_words_in_or_pattern(WANT_LIKE) + r"\s?" + "discuss" + r"\s" + ANY_WORDS + END,
         join_words_in_or_pattern(START_LIKE) + r"\s?" + "discuss" + r"\s" + ANY_WORDS + END,
-        r"\bi\s" + join_words_in_or_pattern(WANT_LIKE) + r"\s?" + KNOW + r"\s" + ABOUT_TOPIC + END
+        r"\bi\s" + join_words_in_or_pattern(WANT_LIKE) + r"\s?" + KNOW + SOMETHING_WITH_SPACES + ABOUT_TOPIC + END
     ]))
 
 WHAT_TO_TALK_ABOUT = r"what (do|can|could|will|would|are) (you|we|i) " + join_words_in_or_pattern(WANT_LIKE) + \
