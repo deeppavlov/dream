@@ -4,3 +4,4 @@ requests==2.22.0
 numpy==1.17.2
 sentry-sdk==0.14.1
 spacy==2.1.0
+nltk==3.2.5

@@ -182,3 +182,22 @@ def get_intent_name(text):
     intent_name = text.split(splitter)[-1]
     intent_name = re.sub(r"\W", " ", intent_name.lower()).strip()
     return intent_name
+
+
+def is_opinion_request(annotated_phrase):
+    annotations = annotated_phrase.get("annotations", {})
+    intents = annotations.get("cobot_dialogact", {}).get("intents", [])
+    intent_detected = annotations.get("intent_catcher", {}).get("opinion_request", {}).get(
+        "detected") == 1 or "Opinion_RequestIntent" in intents
+    opinion_detected = "Opinion_ExpressionIntent" in intents
+
+    opinion_request_pattern = re.compile(r"(don't|do not|not|are not|are|do)?\s?you\s"
+                                         r"(like|dislike|adore|hate|love|believe|consider|get|know|taste|think|"
+                                         r"recognize|sure|understand|feel|fond of|care for|fansy|appeal|suppose|"
+                                         r"imagine|guess)")
+    if intent_detected or \
+            (re.search(opinion_request_pattern,
+                       annotated_phrase["text"].lower()) and not opinion_detected and "?" in annotated_phrase["text"]):
+        return True
+    else:
+        return False

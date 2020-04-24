@@ -131,15 +131,15 @@ def get_statuses_and_topics(dialog):
             # if previous meta script is finished (comment given) in previous bot reply
             # or if no meta script in previous reply or script was forcibly
             topics, curr_source_topics = get_not_used_topics(used_topics, dialog)
-
+            last_user_sent_text = dialog["human_utterances"][-1].get("annotations", {}).get("sentseg", {}).get(
+                "segments", [""])[-1].lower()
             if curr_source_topics != [PREDEFINED_SOURCE]:
                 # if topic is extracted from utterances
                 curr_meta_script_statuses += [dialog_flow_user_topic[0]] * len(topics)
                 curr_meta_script_topics += topics
                 source_topics += curr_source_topics
             elif switch_topic_uttr(dialog["human_utterances"][-1]) or \
-                    if_choose_topic(dialog["human_utterances"][-1]["text"].lower(),
-                                    prev_uttr=dialog["bot_utterances"][-1]["text"].lower()):
+                    if_choose_topic(last_user_sent_text, prev_uttr=dialog["bot_utterances"][-1]["text"].lower()):
                 # one of the predefined topics (wiki or hand-written)
                 curr_meta_script_statuses += [dialog_flow[0]] * len(topics)
                 curr_meta_script_topics += topics
@@ -192,9 +192,12 @@ def get_response_for_particular_topic_and_status(topic, curr_meta_script_status,
     if len(dialog["human_utterances"]) > 0:
         user_uttr = dialog["human_utterances"][-1]
         text_user_uttr = dialog["human_utterances"][-1]["text"].lower()
+        last_user_sent_text = dialog["human_utterances"][-1].get("annotations", {}).get("sentseg", {}).get(
+            "segments", [""])[-1].lower()
     else:
         user_uttr = {"text": ""}
         text_user_uttr = ""
+        last_user_sent_text = ""
     if len(dialog["bot_utterances"]) > 0:
         bot_uttr = dialog["bot_utterances"][-1]
         text_bot_uttr = dialog["bot_utterances"][-1]["text"].lower()
@@ -204,11 +207,11 @@ def get_response_for_particular_topic_and_status(topic, curr_meta_script_status,
 
     if curr_meta_script_status == "starting":
         response, confidence, attr = get_starting_phrase(dialog, topic, attr)
-        if if_choose_topic(text_user_uttr, prev_uttr=text_bot_uttr) or switch_topic_uttr(user_uttr) or \
+        if if_choose_topic(last_user_sent_text, prev_uttr=text_bot_uttr) or switch_topic_uttr(user_uttr) or \
                 (is_custom_topic(topic) and if_lets_chat_about_topic(text_user_uttr)):
             # if person wants to talk about something particular and we have extracted some topic - do that!
             confidence = MATCHED_DIALOG_BEGIN_CONFIDENCE
-        elif "?" in text_user_uttr:
+        elif "?" in last_user_sent_text:
             # if some question was asked by user, do not start script at all!
             response, confidence = "", 0.
         elif len(dialog["utterances"]) <= 20:
@@ -218,9 +221,9 @@ def get_response_for_particular_topic_and_status(topic, curr_meta_script_status,
         else:
             confidence = DEFAULT_STARTING_CONFIDENCE
     else:
-        if curr_meta_script_status == "deeper1" and "?" in text_user_uttr and "what" not in text_user_uttr:
+        if curr_meta_script_status == "deeper1" and "?" in last_user_sent_text and "what" not in text_user_uttr:
             response, confidence, attr = "", 0., {}
-        elif "?" in text_user_uttr and not check_topic_lemmas_in_sentence(text_user_uttr, topic):
+        elif "?" in last_user_sent_text and not check_topic_lemmas_in_sentence(text_user_uttr, topic):
             logger.info("Question by user was detected. Without any word from topic in it. "
                         "Don't continue the script on this turn.")
             response, confidence, attr = "", 0., {}
