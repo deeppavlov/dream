@@ -10,6 +10,7 @@ import sentry_sdk
 import spacy
 import requests
 from spacy.symbols import nsubj, VERB, xcomp, NOUN, ADP, dobj
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
 from common.utils import transform_vbg, get_skill_outputs_from_dialog, is_yes, is_no
@@ -17,7 +18,7 @@ from common.universal_templates import if_switch_topic
 from constants import COMET_SERVICE_URL, CONCEPTNET_SERVICE_URL, STARTINGS, OTHER_STARTINGS, WIKI_STARTINGS, \
     LET_ME_ASK_TEMPLATES, COMMENTS, ASK_OPINION, DIVE_DEEPER_TEMPLATE_COMETS, DIVE_DEEPER_COMMENTS, \
     DEFAULT_CONFIDENCE, DEFAULT_STARTING_CONFIDENCE, CONTINUE_USER_TOPIC_CONFIDENCE, BANNED_VERBS, BANNED_NOUNS, \
-    VNP_SOURCE, NP_SOURCE
+    VNP_SOURCE, NP_SOURCE, possessive_pronouns
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -96,7 +97,20 @@ def remove_duplicates(values):
         else:
             if v_clean.split()[0] not in ["feel", "need", "want"]:
                 d[v_clean] += [v]
+
     return [re.sub(person_reg, '', v[0]) for k, v in d.items()]
+
+
+def remove_all_phrases_containing_word(word, phrases):
+    cleaned_phrases = []
+    doc = nlp(word)
+
+    for phrase in phrases:
+        if re.search(r"\b%s\b" % doc[0].lemma_, phrase) or re.search(r"\b%s\b" % word, phrase):
+            pass
+        else:
+            cleaned_phrases.append(phrase)
+    return cleaned_phrases
 
 
 def custom_request(url, data, timeout, method='POST'):
@@ -116,18 +130,39 @@ def correct_verb_form(attr, values):
 
     Returns:
         list of relation phrases in form "to do something"
-        for ["xIntent", "xNeed", "xWant", "oWant", "CapableOf", "Causes", "CausesDesire", "DesireOf",
+        for ["xIntent", "xNeed", "xWant", "oWant", "CapableOf", "CausesDesire",
              "Desires", "HasFirstSubevent", "HasLastSubevent", "HasPainCharacter", "HasPainIntensity",
              "HasPrerequisite", "HasSubevent", "MotivatedByGoal", "NotCapableOf", "NotDesires", "ReceivesAction"]
     """
-    if attr in ["xIntent", "xNeed", "xWant", "oWant", "CapableOf", "Causes", "CausesDesire", "DesireOf",
+    if attr in ["xIntent", "xNeed", "xWant", "oWant", "CapableOf", "CausesDesire", "DesireOf",
                 "Desires", "HasFirstSubevent", "HasLastSubevent", "HasPainCharacter", "HasPainIntensity",
                 "HasPrerequisite", "HasSubevent", "MotivatedByGoal", "NotCapableOf", "NotDesires", "ReceivesAction"]:
         for i in range(len(values)):
-            doc = nlp(values[i])
+            if values[i][:4] == "you ":
+                values[i] = values[i][4:]
+            if values[i][:3] == "it ":
+                values[i] = values[i][3:]
 
+            doc = nlp(values[i])
             if values[i][:3] != "to " and doc[0].pos == VERB:
                 values[i] = "to " + values[i]
+
+    if attr in ["Causes", "DesireOf"]:
+        for i in range(len(values)):
+            if values[i][:4] == "you ":
+                values[i] = get_gerund_topic(values[i][4:])
+            elif values[i][:3] == "it ":
+                values[i] = get_gerund_topic(values[i][3:])
+            elif values[i][:7] == "person ":
+                values[i] = get_gerund_topic(values[i][3:])
+
+            if values[i][:3] == "to ":
+                values[i] = values[i][3:]
+
+            doc = nlp(values[i])
+            if doc[0].pos == VERB:
+                values[i] = get_gerund_topic(values[i])
+
     if attr in ["xEffect", "oEffect"]:
         for i in range(len(values)):
             if values[i][:6] == "hopes ":
@@ -173,7 +208,7 @@ def get_comet_atomic(topic, relation, TOPICS={}):
     else:
         # send request to COMeT service on `topic & relation`
         try:
-            comet_result = custom_request(COMET_SERVICE_URL, {"input": f"Person {topic}.",
+            comet_result = custom_request(COMET_SERVICE_URL, {"input": f"{topic}",
                                                               "category": relation}, 1.5)
         except (requests.ConnectTimeout, requests.ReadTimeout) as e:
             logger.error("COMeT Atomic result Timeout")
@@ -201,7 +236,7 @@ def get_comet_atomic(topic, relation, TOPICS={}):
         return ""
 
 
-def get_comet_conceptnet(topic, relation, return_all=False):
+def get_comet_conceptnet(topic, relation, return_all=False, return_not_filtered=False):
     """
     Get COMeT ConceptNet prediction for considered topic like `verb subj/adj/adv` of particular relation.
 
@@ -237,8 +272,11 @@ def get_comet_conceptnet(topic, relation, return_all=False):
     # remove `none` relation phrases (it's sometimes returned by COMeT)
     relation_phrases = [el for el in relation_phrases if el != "none"]
 
-    banned = [topic, f"be {topic}", f"be a {topic}"]
-    relation_phrases = remove_duplicates(banned + relation_phrases)[len(banned):]
+    if return_not_filtered and return_all:
+        return relation_phrases
+
+    relation_phrases = remove_duplicates([topic] + relation_phrases)[1:]  # the first element is topic
+    relation_phrases = remove_all_phrases_containing_word(topic, relation_phrases)
 
     relation_phrases = correct_verb_form(relation, relation_phrases)
 
@@ -448,7 +486,7 @@ def get_statement_phrase(dialog, topic, attr, TOPICS):
     attr["meta_script_relation_template"] = meta_script_template
 
     relation = DIVE_DEEPER_TEMPLATE_COMETS[meta_script_template]["attribute"]
-    prediction = get_comet_atomic(topic, relation, TOPICS)
+    prediction = get_comet_atomic("person " + topic, relation, TOPICS)
 
     if prediction == "":
         return "", 0.0, {"can_continue": CAN_NOT_CONTINUE}
@@ -548,9 +586,6 @@ def clean_up_topic_list(verb_nounphrases):
     return cleaned
 
 
-relation_adj = re.compile(r"(my |your |yours |mine |their |our |her |his |its )")
-
-
 def extract_verb_noun_phrases(utterance, only_i_do_that=True, nounphrases=[]):
     verb_noun_phrases = []
     # verbs_without_nouns = []
@@ -604,7 +639,7 @@ def extract_verb_noun_phrases(utterance, only_i_do_that=True, nounphrases=[]):
 
     if len(nounphrases) > 0:
         logger.info("No good verb-nounphrase topic. Try to find nounphrase, and appropriate verb from top-bigrams.")
-        nounphrases = [re.sub(relation_adj, "", noun.lower()).strip() for noun in nounphrases]
+        nounphrases = [re.sub(possessive_pronouns, "", noun.lower()).strip() for noun in nounphrases]
         nounphrases = [noun for noun in nounphrases if len(noun) > 0]
         noun_based_phrases = []
         for noun in nounphrases:
@@ -644,3 +679,16 @@ def switch_topic_uttr(uttr):
     if if_switch_topic(uttr["text"].lower()) or topic_switch_detected:
         return True
     return False
+
+
+nltk_sentiment_classifier = SentimentIntensityAnalyzer()
+
+
+def get_nltk_sentiment(text):
+    result = nltk_sentiment_classifier.polarity_scores(text)
+    if result.get("pos", 0.) >= 0.5:
+        return "positive"
+    elif result.get("neg", 0.) >= 0.5:
+        return "negative"
+    else:
+        return "neutral"

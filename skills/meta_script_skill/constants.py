@@ -6,7 +6,8 @@ NP_SOURCE = "nouns"
 
 NUMBER_OF_STARTING_HYPOTHESES_META_SCRIPT = 1
 NUMBER_OF_HYPOTHESES_COMET_DIALOG = 2
-
+NUMBER_OF_HYPOTHESES_OPINION_COMET_DIALOG = 2
+MAX_NUMBER_OF_HYPOTHESES_BY_SKILL = 2
 
 DEFAULT_CONFIDENCE = 0.98
 CONTINUE_USER_TOPIC_CONFIDENCE = 0.85
@@ -15,14 +16,18 @@ NOUN_TOPIC_STARTING_CONFIDENCE = 0.8
 DEFAULT_DIALOG_BEGIN_CONFIDENCE = 0.8
 MATCHED_DIALOG_BEGIN_CONFIDENCE = 0.99
 BROKEN_DIALOG_CONTINUE_CONFIDENCE = 0.8
+
 FINISHED_SCRIPT_RESPONSE = "I see. Let's talk about something you want. Pick up the topic."
 FINISHED_SCRIPT = "finished"
 
 DEFAULT_ASK_ATOMIC_QUESTION_CONFIDENCE = 0.95
 DEFAULT_ATOMIC_CONTINUE_CONFIDENCE = 0.98
+REQUESTED_CONCEPTNET_OPINION_CONFIDENCE = 0.99
+NOT_REQUESTED_CONCEPTNET_OPINION_CONFIDENCE = 0.8
 
 COMET_SERVICE_URL = "http://comet_atomic:8053/comet"
 CONCEPTNET_SERVICE_URL = "http://comet_conceptnet:8065/comet"
+SENTIMENT_CLASSIFICATION_SERVICE_URL = "http://sentiment_classification:8024/sentiment_annotations"
 
 LET_ME_ASK_TEMPLATES = [
     "Let me ask you.",
@@ -137,12 +142,86 @@ WIKI_STARTINGS = [
 BANNED_VERBS = {"watch", "talk", "say", "chat", "like", "love", "ask",
                 "think", "mean", "hear", "know", "want", "tell", "look",
                 "call", "spell", "misspell", "suck", "fuck", "switch", "kill",
-                "eat", "re", "s", "see", "bear", "read", "ruin", "die", "get", "have"}
+                "eat", "re", "s", "see", "bear", "read", "ruin", "die", "get", "have", "loose"}
 
 BANNED_NOUNS = {"lol", "alexa", "suck", "fuck", "sex", "one", "thing", "something", "anything", "nothing", "topic",
                 "today", "yesterday", "tomorrow", "now", "shopping", "mine", "talk", "chat", "me", "favorite",
                 "past", "future", "suggest", "suppose", "i'll", "book", "books", "movie", "movies", "weather",
                 "mom", "mother", "mummy", "mum", "mama", "mamma", "daddy", "dad", "father", "sister", "brother",
-                "everything", "way", "minute", "lot", "lots", "things"}
+                "everything", "way", "minute", "lot", "lots", "things", "wanna",
+                "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",
+                "january", "february", "march", "april", "may", "june", "july", "august", "september",
+                "october", "november", "december", "morning", "day", "evening", "night", "afternoon", "hour",
+                "minute", "second", "times"}
 
 idopattern = re.compile(r"i [a-zA-Z ,0-9]+", re.IGNORECASE)
+possessive_pronouns = re.compile(r"(my |your |yours |mine |their |our |her |his |its )", re.IGNORECASE)
+
+
+ATOMIC_PAST_QUESTION_TEMPLATES = {
+    "I guess you are RELATION now?": {"attribute": "xReact"},  # adjective relation
+    "Well, did you RELATION?": {"attribute": "xNeed"},  # relation `do that`
+    "Oh, now you may feel quite RELATION.": {"attribute": "xAttr"},  # adjective relation
+    "Sounds quite RELATION to me.": {"attribute": "xAttr"},  # adjective relation
+    "Did you want to RELATION?": {"attribute": "xWant"},  # relation `do that`
+    "In my case, I'd RELATION, too.": {"attribute": "oEffect"}  # relation `do that`
+}
+
+ATOMIC_FUTURE_QUESTION_TEMPLATES = {
+    "Hope you will be RELATION": {"attribute": "xReact"},  # adjective relation
+    "Don't forget RELATION": {"attribute": "xNeed"},  # relation `do that`
+    "Sounds RELATION to me!": {"attribute": "xAttr"},  # adjective relation
+    "Feels RELATION.": {"attribute": "xAttr"},  # adjective relation
+    "Guess you're gonna RELATION?": {"attribute": "xIntent"},  # relation `do that`
+    "Will you RELATION after that?": {"attribute": "xWant"}  # relation `do that`
+}
+
+ATOMIC_COMMENT_TEMPLATES = {
+    "Others will feel RELATION after that, won't they?": {"attribute": "oReact"},  # adjective relation
+    "I suppose some people may feel RELATION, what do you think?": {"attribute": "oReact"},  # adjective relation
+    "I am RELATION to hear that.": {"attribute": "oReact"},  # adjective relation
+    "It seems others want to RELATION.": {"attribute": "oEffect"},  # relation `do that`
+    "I suppose somebody wants to RELATION, am I right?": {"attribute": "oEffect"},  # relation `do that`
+    "I am wondering if other RELATION.": {"attribute": "oEffect"}  # relation `do that`
+}
+
+CONCEPTNET_OPINION_TEMPLATES = {
+    "For some of us, OBJECT can be seen as a sign of RELATION.": {"attribute": "SymbolOf"},  # noun
+    "RELATION, you know? Huh.": {"attribute": "HasProperty"},  # adjective
+    "RELATION, for all I know!": {"attribute": "HasProperty"},  # adjective
+    "RELATION, to me.": {"attribute": "HasProperty"},  # adjective
+    "OBJECT might cause RELATION.": {"attribute": "Causes"},  # noun
+    "Makes me want RELATION.": {"attribute": "CausesDesire"}  # to do that
+}
+
+OPINION_EXPRESSION_TEMPLATES = {  # обязательно не меньше 3 на каждый!
+    "positive": [
+        "I think... Well, I think I love OBJECT!",
+        "I adore OBJECT!",
+        "I like OBJECT!",
+        "I think... Well, I believe I like OBJECT!"
+    ],
+    "negative": [
+        "I think I dislike OBJECT.",
+        "I don't really care about OBJECT.",
+        "I don't like OBJECT.",
+        "I feel a bit bad about OBJECT.",
+        "I'm not fond of OBJECT."
+    ],
+    "neutral": [
+        "I think I'm okay with OBJECT.",
+        "I'm not sure whether I like OBJECT or not.",
+        "I can't say whether I like OBJECT or not.",
+        "I got nothing against OBJECT.",
+        "I don't mind against OBJECT."
+    ]
+}
+
+BANNED_PROPERTIES = {"gay", "dead", "liar", "death", "terror"}
+
+BANNED_NOUNS_FOR_OPINION_EXPRESSION = {
+    "trump", "putin", "coronavirus", "corona virus", "virus", "me", "it", "her", "him", "them", "wanna",
+    "no thanks", "thanks", "lol", "alexa", "suck", "fuck", "sex", "one", "thing", "something", "anything", "nothing",
+    "topic", "today", "yesterday", "tomorrow", "now", "mine", "talk", "chat", "me", "favorite",
+    "everything", "way", "minute", "lot", "lots", "things", "wanna", "times"
+}
