@@ -25,9 +25,49 @@ def test_asr_low_confidence():
          "I open my mouth, and I never know "
          "if it’s going to come out three oranges or two lemons and a banana.")]
 
-    speech = {'hypotheses': [{'tokens': [{'confidence': 0.1, 'value': "yes"}]}]}
-    response = requests.post(URL, json={"user_id": "test", "payload": "yes", "speech": speech}).json()
-    assert response['response'] in asr_responses, print(response)
+    def test_one_utt():
+        # low asr should cause running misheard_asr
+        requests.post(URL, json={"user_id": "test", "payload": "/start"}).json()
+        requests.post(URL, json={"user_id": "test", "payload": "hey"}).json()
+
+        speech = {'hypotheses': [{'tokens': [{'confidence': 0.1, 'value': "yes"}]}]}
+        response = requests.post(URL, json={"user_id": "test", "payload": "yes", "speech": speech}).json()
+        assert response['response'] in asr_responses, print(response)
+        assert response['active_skill'] == 'misheard_asr'
+
+    def test_two_identical_utts():
+        # 2 identical user utts after misheard asr should not cause running misheard asr
+        requests.post(URL, json={"user_id": "test2", "payload": "/start"}).json()
+        requests.post(URL, json={"user_id": "test2", "payload": "hey"}).json()
+
+        speech = {'hypotheses': [{'tokens': [{'confidence': 0.1, 'value': "yes"}]}]}
+        response = requests.post(URL, json={"user_id": "test2", "payload": "yes", "speech": speech}).json()
+        assert response['response'] in asr_responses, print(response)
+        assert response['active_skill'] == 'misheard_asr'
+
+        response = requests.post(URL, json={"user_id": "test2", "payload": "yes", "speech": speech}).json()
+        assert response['response'] not in asr_responses, print(response)
+        assert response['active_skill'] != 'misheard_asr'
+
+    def test_two_misheard_asr_utts():
+        # 2 low asr should not cause running misheard_asr
+        requests.post(URL, json={"user_id": "test3", "payload": "/start"}).json()
+        requests.post(URL, json={"user_id": "test3", "payload": "hey"}).json()
+
+        speech = {'hypotheses': [{'tokens': [{'confidence': 0.1, 'value': "yes 4232"}]}]}
+        response = requests.post(URL, json={"user_id": "test3", "payload": "yes 4232", "speech": speech}).json()
+        assert response['response'] in asr_responses, print(response)
+        assert response['active_skill'] == 'misheard_asr'
+
+        speech = {'hypotheses': [{'tokens': [{'confidence': 0.1, 'value': "no 123ss"}]}]}
+        response = requests.post(URL, json={"user_id": "test3", "payload": "no 123ss", "speech": speech}).json()
+        assert response['response'] not in asr_responses, print(response)
+        assert response['active_skill'] != 'misheard_asr'
+
+    test_one_utt()
+    test_two_identical_utts()
+    test_two_misheard_asr_utts()
+
     print("SUCCESS test_asr_low_confidence from agent")
 
 

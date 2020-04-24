@@ -268,7 +268,8 @@ def sent_rewrite_formatter_dialog(dialog: Dict) -> Dict:
 
 def asr_formatter_dialog(dialog: Dict) -> Dict:
     # Used by: asr_formatter
-    return [{'speeches': [dialog['utterances'][-1].get('attributes', {}).get('speech', {})]}]
+    return [{'speeches': [dialog['utterances'][-1].get('attributes', {}).get('speech', {})],
+             'human_utterances': [dialog['human_utterances'][-3:]]}]
 
 
 def last_utt_dialog(dialog: Dict) -> Dict:

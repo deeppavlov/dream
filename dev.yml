@@ -238,6 +238,7 @@ services:
     env_file: [.env.dev]
     volumes:
       - "./annotators/asr:/src"
+      - "./common:/src/common"
     ports:
       - 8031:8031
   book_skill:
