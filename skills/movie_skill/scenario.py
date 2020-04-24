@@ -28,7 +28,8 @@ logger = logging.getLogger(__name__)
 SUPER_CONFIDENCE = 1.
 DEFAULT_CONFIDENCE = 0.95
 OFFER_TALK_ABOUT_MOVIES_CONFIDENCE = 0.65
-CLARIFICATION_CONFIDENCE = 0.85
+END_SCENARIO_OFFER_CONFIDENCE = 0.98
+CLARIFICATION_CONFIDENCE = 0.98
 NOT_SURE_CONFIDENCE = 0.5
 SECOND_FACT_PROBA = 0.5
 LINKTO_CONFIDENCE = 0.7
@@ -262,7 +263,7 @@ class MovieSkillScenario:
                         offer = offer_talk_about_movies(human_attr)
                         response = f"We have talked about this movie previously. " \
                                    f"{get_movie_template('lets_talk_about_other_movie')} {offer}"
-                        confidence = DEFAULT_CONFIDENCE
+                        confidence = END_SCENARIO_OFFER_CONFIDENCE
                         attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
                         human_attr["offer_talk_about_movies"] += [offer]
                 elif is_no(curr_user_uttr) or if_switch_topic(curr_user_uttr["text"].lower()):
@@ -274,7 +275,7 @@ class MovieSkillScenario:
                         prev_movie_skill_outputs[-2].get("status_line", [""]) == ["finished"]:
                     response = f"{get_movie_template('dont_know_movie_title_at_all')} " \
                                f"{get_movie_template('lets_talk_about_other_movie')}"
-                    confidence = DEFAULT_CONFIDENCE
+                    confidence = END_SCENARIO_OFFER_CONFIDENCE
                     attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
                 elif len(prev_movie_skill_outputs) > 1 and \
                         prev_movie_skill_outputs[-2].get("status_line", [""]) == ["finished"]:
@@ -285,7 +286,7 @@ class MovieSkillScenario:
                 else:
                     offer = offer_talk_about_movies(human_attr)
                     response = f"{offer}"
-                    confidence = OFFER_TALK_ABOUT_MOVIES_CONFIDENCE
+                    confidence = END_SCENARIO_OFFER_CONFIDENCE
                     attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
                     human_attr["offer_talk_about_movies"] += [offer]
             else:
@@ -377,7 +378,7 @@ class MovieSkillScenario:
             offer = offer_talk_about_movies(human_attr)
             response = f"{get_movie_template('dont_know_movie_title_at_all', movie_type=movie_type)} " \
                        f"{get_movie_template('lets_talk_about_other_movie', movie_type=movie_type)} {offer}"
-            confidence = DEFAULT_CONFIDENCE
+            confidence = END_SCENARIO_OFFER_CONFIDENCE
             attr = {"status_line": prev_status_line + ["finished"], "can_continue": CAN_CONTINUE}
             human_attr["offer_talk_about_movies"] += [offer]
         return response, confidence, human_attr, bot_attr, attr
@@ -409,7 +410,7 @@ class MovieSkillScenario:
             offer = offer_talk_about_movies(human_attr)
             response = f"{get_movie_template('dont_know_movie_title_at_all')} " \
                        f"{get_movie_template('lets_talk_about_other_movie')} {offer}"
-            confidence = DEFAULT_CONFIDENCE
+            confidence = END_SCENARIO_OFFER_CONFIDENCE
             attr = {"status_line": prev_status_line + ["finished"], "can_continue": CAN_CONTINUE}
             human_attr["offer_talk_about_movies"] += [offer]
         else:
@@ -417,20 +418,32 @@ class MovieSkillScenario:
             offer = offer_talk_about_movies(human_attr)
             response = f"{get_movie_template('dont_know_movie_title_at_all')} " \
                        f"{get_movie_template('lets_talk_about_other_movie')} {offer}"
-            confidence = DEFAULT_CONFIDENCE
+            confidence = END_SCENARIO_OFFER_CONFIDENCE
             attr = {"status_line": prev_status_line + ["finished"], "can_continue": CAN_CONTINUE}
             human_attr["offer_talk_about_movies"] += [offer]
         return response, confidence, human_attr, bot_attr, attr
 
     def ask_do_you_know_question(self, movie_id, movie_title, movie_type, prev_status_line, human_attr, bot_attr):
-        question_type = choice(["cast", "year", "genre"])
+        question_type = choice(["cast", "genre", "like_genres", "like_actor"])
         logger.info(f"Asking question about `{movie_title}` of type `{question_type}`.")
         if question_type == "cast":
             response = f"Do you know who are the leading actors of the {movie_type} {movie_title}?"
-        # elif question_type == "year":
-        #     response = f"Do you know the year of release of the {movie_type} {movie_title}?"
-        else:
+        elif question_type == "genre":
             response = f"Do you know the genre of the {movie_type} {movie_title}?"
+        elif question_type == "like_genres":
+            result = self.templates.imdb.get_info_about_movie(movie_title, "genre")
+            if result is not None and len(result) > 0 and len(result[0]) > 0:
+                result = f", {' and '.join(result[:2])}"
+                response = f"Do you like the genres of this {movie_type}{result}?"
+            else:
+                response = f"Do you like the genres of this {movie_type}?"
+        elif question_type == "like_actor":
+            result = self.templates.imdb.get_info_about_movie(movie_title, "actors")
+            if result is not None and len(result) > 0:
+                response = f"What do you think about character of {result[0]} in this {movie_type}?"
+            else:
+                response = f"Who is your favorite character in this {movie_type}?"
+
         confidence = SUPER_CONFIDENCE
         attr = {"movie_id": movie_id, "can_continue": CAN_CONTINUE,
                 "status_line": prev_status_line + ["do_you_know_question"]}
@@ -459,7 +472,7 @@ class MovieSkillScenario:
                 if "Sorry, I don't know" in result or len(result.strip()) == 0:
                     response = f"Great! {result}"
                 else:
-                    response = f"Great! Because I don't know actually."
+                    response = f"Great!"
             elif is_no(curr_user_uttr):
                 if "Sorry, I don't know" in result or len(result.strip()) == 0:
                     response = f"Seems like I also can't find this information."
@@ -470,33 +483,6 @@ class MovieSkillScenario:
                     response = f"Never mind, I can't verify this information now."
                 else:
                     response = f"Oops! No. {result}"
-        elif "the year of release of" in question_text:
-            result = self.templates.imdb.get_info_about_movie(movie_title, "startYear")
-            if result is not None:
-                year = int(result)
-                result = f"The release year is {int(result)}."
-            else:
-                result = send_cobotqa(f"release year of {movie_type} {movie_title}?")
-                year = re.search(self.year_template, result)
-                if year:
-                    year = year[0]
-                else:
-                    year = "Haha! I actually also do not know it."
-
-            if str(year) in curr_user_uttr["text"].lower():
-                response = "Exactly! Correct."
-            elif is_yes(curr_user_uttr):
-                response = f"Great! {result}"
-            elif is_no(curr_user_uttr):
-                if len(result) > 0:
-                    response = f"{result}"
-                else:
-                    response = f"{year}"
-            else:
-                if len(result) > 0:
-                    response = f"Oops! No. {result}"
-                else:
-                    response = f"{year}"
         elif "the genre of the" in question_text:
             result = self.templates.imdb.get_info_about_movie(movie_title, "genre")
             if result is not None and len(result) > 0 and len(result[0]) > 0:
@@ -510,7 +496,7 @@ class MovieSkillScenario:
                 response = f"Great! {result}"
             elif is_yes(curr_user_uttr):
                 if "Sorry, I don't know" in result or len(result.strip()) == 0:
-                    response = f"Great! Because I don't know actually."
+                    response = f"Great!"
                 else:
                     response = f"Great! {result}"
             elif is_no(curr_user_uttr):
@@ -523,6 +509,8 @@ class MovieSkillScenario:
                     response = f"Never mind, I can't verify this information now."
                 else:
                     response = f"Oops! No. {result}"
+        # elif "like the genres":
+        # elif "character":
         else:
             response, confidence, attr = "", 0.0, {}
         return response, confidence, human_attr, bot_attr, attr
@@ -536,13 +524,18 @@ class MovieSkillScenario:
             sentences = sent_tokenize(fact.replace(".,", "."))
             if len(sentences[0]) < 100 and "fact about" in sentences[0]:
                 fact = " ".join(sentences[1:3])
+            else:
+                fact = " ".join(sentences[:2])
 
             response = "Did you know that " + fact
             confidence = SUPER_CONFIDENCE
             attr = {"movie_id": movie_id, "can_continue": CAN_CONTINUE,
                     "status_line": prev_status_line + ["fact"]}
         else:
-            response, confidence, attr = "", 0.0, {}
+            comment = choice(["That's okay.", "Let's move on.", "Let's change the subject."])
+            response, confidence, human_attr, bot_attr, attr = self.lets_talk_about_movie_offer(
+                prev_status_line, human_attr, bot_attr)
+            response = f"{comment} {get_movie_template('lets_talk_about_other_movie')} " + response
 
         return response, confidence, human_attr, bot_attr, attr
 
@@ -551,7 +544,7 @@ class MovieSkillScenario:
         offer = offer_talk_about_movies(human_attr)
         logger.info(f"Offer quesiton about movie `{offer}`.")
         response = f"{offer}"
-        confidence = OFFER_TALK_ABOUT_MOVIES_CONFIDENCE
+        confidence = END_SCENARIO_OFFER_CONFIDENCE
         attr = {"status_line": prev_status_line + ["finished"], "can_continue": CAN_CONTINUE}
         human_attr["offer_talk_about_movies"] += [offer]
 
@@ -595,11 +588,14 @@ class MovieSkillScenario:
         elif prev_status == "user_opinion_comment":  # -> do_you_know_question
             response, confidence, human_attr, bot_attr, attr = self.ask_do_you_know_question(
                 movie_id, movie_title, movie_type, prev_status_line, human_attr, bot_attr)
-        elif prev_status == "do_you_know_question":  # -> comment_to_question
+        elif prev_status == "do_you_know_question" and "like the genres" not in prev_bot_uttr["text"] and \
+                "character" not in prev_bot_uttr["text"]:  # -> comment_to_question
             response, confidence, human_attr, bot_attr, attr = self.check_answer_to_do_you_know_question(
                 curr_user_uttr, movie_id, movie_title, movie_type, prev_status_line,
                 prev_movie_skill_outputs, unique_persons, mentioned_genres, human_attr, bot_attr)
-        elif prev_status == "comment_to_question":  # -> fact
+        elif prev_status == "comment_to_question" or (
+                prev_status == "do_you_know_question" and (
+                "like the genres" in prev_bot_uttr["text"] or "character" in prev_bot_uttr["text"])):  # -> fact
             logger.info("Generate one more fact.")
             fact_type = choice(["awards of", "tagline of", "fact about"])
             response, confidence, human_attr, bot_attr, attr = self.generate_fact_from_cobotqa(
