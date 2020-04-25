@@ -5,7 +5,7 @@ from common.universal_templates import if_lets_chat_about_topic
 
 logger = logging.getLogger(__name__)
 
-LAST_N_TURNS = 15  # number of turns to consider in annotator/skill.
+LAST_N_TURNS = 5  # number of turns to consider in annotator/skill.
 
 
 def is_human_uttr_repeat_request_or_misheard(utt):
@@ -367,8 +367,16 @@ def utt_sentrewrite_modified_last_dialog(dialog: Dict):
     return [{'dialogs': [dialog]}]
 
 
+def utt_sentrewrite_modified_last_dialog_15_turns(dialog: Dict):
+    # Used by: coronavirus
+    dialog = get_last_n_turns(dialog, bot_last_turns=15, human_last_turns=16, total_last_turns=31)
+    dialog = remove_clarification_turns_from_dialog(dialog)
+    dialog = replace_with_annotated_utterances(dialog, mode="modified_sents")
+    return [{'dialogs': [dialog]}]
+
+
 def utt_sentrewrite_modified_last_dialog_emotion_skill(dialog: Dict):
-    dialog = get_last_n_turns(dialog, bot_last_turns=100)
+    dialog = get_last_n_turns(dialog, bot_last_turns=25)
     dialog = remove_clarification_turns_from_dialog(dialog)
     dialog = replace_with_annotated_utterances(dialog, mode="modified_sents")
     return [{'dialogs': [dialog]}]

@@ -487,7 +487,7 @@
                     "protocol": "http",
                     "url": "http://book_skill:8032/book_skill"
                 },
-                "dialog_formatter": "utt_sentrewrite_modified_last_dialog",
+                "dialog_formatter": "utt_sentrewrite_modified_last_dialog_15_turns",
                 "response_formatter": "skill_with_attributes_formatter_service",
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
@@ -497,7 +497,7 @@
                     "protocol": "http",
                     "url": "http://coronavirus_skill:8061/coronavirus_skill"
                 },
-                "dialog_formatter": "utt_sentrewrite_modified_last_dialog",
+                "dialog_formatter": "utt_sentrewrite_modified_last_dialog_15_turns",
                 "response_formatter": "skill_with_attributes_formatter_service",
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
@@ -557,7 +557,7 @@
                     "protocol": "http",
                     "url": "http://meta_script_skill:8054/meta_script"
                 },
-                "dialog_formatter": "full_utt_sentseg_punct_dialog",
+                "dialog_formatter": "utt_sentseg_punct_dialog",
                 "response_formatter": "skill_with_attributes_formatter_service",
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
