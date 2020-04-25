@@ -41,5 +41,6 @@ all_formatters = {
     'cobot_convers_evaluator_annotator_formatter': cobot_convers_evaluator_annotator_formatter,
     'http_debug_output_formatter': http_debug_output_formatter,
     'http_api_output_formatter': http_api_output_formatter,
-    'utt_sentrewrite_modified_last_dialog_emotion_skill': utt_sentrewrite_modified_last_dialog_emotion_skill
+    'utt_sentrewrite_modified_last_dialog_emotion_skill': utt_sentrewrite_modified_last_dialog_emotion_skill,
+    'utt_sentrewrite_modified_last_dialog_15_turns': utt_sentrewrite_modified_last_dialog_15_turns
 }
