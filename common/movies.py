@@ -14,17 +14,17 @@ def movie_skill_was_proposed(prev_bot_utt):
 
 ABOUT_MOVIE_TITLES_PHRASES = [
     "What is your all-time favorite movie?",
-    "What is your favorite movie?",
+    # "What is your favorite movie?",
     "What is the best movie you have ever seen?",
     "What is the scariest movie you have ever seen?",
     "What is the funniest movie you have ever seen?",
     "What is the most romantic movie you have ever seen?",
     "Is there a movie you could watch over and over again?",
-    "Have you seen any good movies lately?",
-    "What was the last movie you watched?",
+    # "Have you seen any good movies lately?",
+    # "What was the last movie you watched?",
     "What is your favorite TV-series?",
-    "What is your favorite TV-show?",
-    "What was the last TV-series you watched?",
+    # "What is your favorite TV-show?",
+    # "What was the last TV-series you watched?",
 ]
 ABOUT_MOVIE_PERSONS_PHRASES = [
     "What movie star would you most like to meet?",

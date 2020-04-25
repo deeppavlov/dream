@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 SUPER_CONFIDENCE = 1.
 DEFAULT_CONFIDENCE = 0.95
 OFFER_TALK_ABOUT_MOVIES_CONFIDENCE = 0.65
-END_SCENARIO_OFFER_CONFIDENCE = 0.98
+END_SCENARIO_OFFER_CONFIDENCE = 0.85
 CLARIFICATION_CONFIDENCE = 0.98
 NOT_SURE_CONFIDENCE = 0.5
 SECOND_FACT_PROBA = 0.5
@@ -424,7 +424,10 @@ class MovieSkillScenario:
         return response, confidence, human_attr, bot_attr, attr
 
     def ask_do_you_know_question(self, movie_id, movie_title, movie_type, prev_status_line, human_attr, bot_attr):
-        question_type = choice(["cast", "genre", "like_genres", "like_actor"])
+        quest_types = ["like_genres", "like_actor", "genre", "cast"]
+        # question_type = choice(quest_types)
+        n_discussed_movies = len(human_attr.get("discussed_movie_titles", []))
+        question_type = quest_types[n_discussed_movies % len(quest_types)]
         logger.info(f"Asking question about `{movie_title}` of type `{question_type}`.")
         if question_type == "cast":
             response = f"Do you know who are the leading actors of the {movie_type} {movie_title}?"
