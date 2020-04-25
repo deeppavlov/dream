@@ -5,8 +5,7 @@ from os import getenv
 import sentry_sdk
 
 from utils import get_used_attributes_by_name
-from comet_responses import ask_question_using_atomic, comment_using_atomic, express_opinion_using_conceptnet
-from constants import MAX_NUMBER_OF_HYPOTHESES_BY_SKILL
+from comet_responses import ask_question_using_atomic, comment_using_atomic
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -39,17 +38,17 @@ def respond_comet_dialog(dialogs_batch):
         curr_confidences.extend(confidences)
         curr_attrs.extend(attrs)
 
-        responses, confidences, attrs = express_opinion_using_conceptnet(dialog)
-        logger.info(f"Comet opinion hypotheses: {list(zip(responses, confidences, attrs))}")
-        curr_responses.extend(responses)
-        curr_confidences.extend(confidences)
-        curr_attrs.extend(attrs)
-
-        sorted_pairs = sorted(zip(curr_responses, curr_confidences, curr_attrs),
-                              key=lambda x: x[1], reverse=True)[:MAX_NUMBER_OF_HYPOTHESES_BY_SKILL]
-        curr_responses, curr_confidences, curr_attrs = [pair[0] for pair in sorted_pairs], \
-                                                       [pair[1] for pair in sorted_pairs], \
-                                                       [pair[2] for pair in sorted_pairs]
+        # responses, confidences, attrs = express_opinion_using_conceptnet(dialog)
+        # logger.info(f"Comet opinion hypotheses: {list(zip(responses, confidences, attrs))}")
+        # curr_responses.extend(responses)
+        # curr_confidences.extend(confidences)
+        # curr_attrs.extend(attrs)
+        #
+        # sorted_pairs = sorted(zip(curr_responses, curr_confidences, curr_attrs),
+        #                       key=lambda x: x[1], reverse=True)[:MAX_NUMBER_OF_HYPOTHESES_BY_SKILL]
+        # curr_responses, curr_confidences, curr_attrs = [pair[0] for pair in sorted_pairs], \
+        #                                                [pair[1] for pair in sorted_pairs], \
+        #                                                [pair[2] for pair in sorted_pairs]
 
         # here will be other variants
         final_responses.append(curr_responses)
