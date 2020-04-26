@@ -79,6 +79,8 @@ cp ../dp-agent-alexa/deploy.sh ../dp-agent-alexa-A/
 cp ../dp-agent-alexa/deploy.sh ../dp-agent-alexa-B/
 cp ../dp-agent-alexa/push_to_ecr.sh ../dp-agent-alexa-A/
 cp ../dp-agent-alexa/push_to_ecr.sh ../dp-agent-alexa-B/
+cp -n ../dp-agent-alexa/s3.yml ../dp-agent-alexa-A/ || true
+cp -n ../dp-agent-alexa/s3.yml ../dp-agent-alexa-B/ || true
 python3 ../dp-agent-alexa/utils/clean_ports_docker_compose.py --dc ../dp-agent-alexa-A/docker-compose.yml --staging ../dp-agent-alexa-A/staging.yml
 python3 ../dp-agent-alexa/utils/clean_ports_docker_compose.py --dc ../dp-agent-alexa-B/docker-compose.yml --staging ../dp-agent-alexa-B/staging.yml
 
