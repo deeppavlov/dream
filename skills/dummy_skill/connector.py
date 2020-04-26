@@ -191,12 +191,12 @@ class DummySkillConnector:
                     else:
                         logger.info("No special nounphrases for questions. Return normal question.")
                         cands += [generate_question_not_from_last_responses(dialog)]
-                        confs += [0.7]
+                        confs += [0.5]
                         attrs += [{"type": "normal_question"}]
             else:
                 logger.info("Dialog begins. No special nounphrases for questions. Return normal question.")
                 cands += [generate_question_not_from_last_responses(dialog)]
-                confs += [0.7]
+                confs += [0.5]
                 attrs += [{"type": "normal_question"}]
 
             link_to_question = get_link_to_question(dialog)
