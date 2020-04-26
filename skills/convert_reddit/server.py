@@ -163,7 +163,7 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True):
         hello_flag = any([j in cand[:3] for j in ["hi", "hello"]])
         # banned_words ban
         banned_words_flag = any([j in cand for j in banned_words])
-        banned_words_for_questions_flag = any([(j in cand and "?" in cand) for j in banned_words_for_questions])
+        banned_words_for_questions_flag = any([(j in cand and "?" in raw_cand) for j in banned_words_for_questions])
 
         # banned_phrases ban
         banned_phrases_flag = any([j in raw_cand for j in banned_phrases])
