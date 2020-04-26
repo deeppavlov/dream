@@ -228,7 +228,7 @@ def get_name(annotated_phrase, mode='author', return_plain=False, bookyear=False
                 pass
     logging.debug('entity detected')
     logging.debug(entityname)
-    banned_entities = ['tik tok', 'minecraft']
+    banned_entities = ['tik tok', 'minecraft', 'the days']
     if entityname in banned_entities:
         return None, None
     if not bookyear:
@@ -461,7 +461,9 @@ class BookSkillScenario:
         YES_PHRASE_3_FACT = "I've read it. It's an amazing book! Would you like to know some facts about it?"
         YES_PHRASE_4 = " I didn't exist in that time. " + get_tutor_phrase()
         FAVOURITE_GENRE_ANSWERS = list(GENRE_PHRASES.values())
-        FAVOURITE_BOOK_ANSWERS = ['My favourite book is "The Old Man and the Sea" by Ernest Hemingway.']
+        FAVOURITE_BOOK_ANSWERS = ['My favourite book is "The Old Man and the Sea" by Ernest Hemingway.',
+                                  'The Old Man and the Sea tells the story of a battle between a fisherman '
+                                  'and a large marlin. This is my favourite story, it is truly fascinating.']
         GENRE_PHRASE_1 = 'What is your favorite book genre?'
 
         def GENRE_PHRASE_2(book):
@@ -522,7 +524,13 @@ class BookSkillScenario:
                     reply, confidence = random.choice(FAVOURITE_GENRE_ANSWERS), self.default_conf
                 elif book_request_detected(annotated_user_phrase):
                     logging.debug('Detected book request')
-                    reply, confidence = random.choice(FAVOURITE_BOOK_ANSWERS), self.default_conf
+                    if FAVOURITE_BOOK_ANSWERS[0] not in bot_phrases:
+                        reply = FAVOURITE_BOOK_ANSWERS[0]
+                    elif FAVOURITE_BOOK_ANSWERS[1] not in bot_phrases:
+                        reply = FAVOURITE_BOOK_ANSWERS[1]
+                    else:
+                        reply = random.choice(FAVOURITE_BOOK_ANSWERS)
+                    confidence = self.default_conf
                 elif (YES_PHRASE_3_FACT.lower() == bot_phrases[-1].lower()):
                     logging.debug('Previous bot phrase was fact request')
                     if is_no(annotated_user_phrase):
