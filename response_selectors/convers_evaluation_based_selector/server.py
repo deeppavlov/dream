@@ -314,16 +314,21 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             curr_score = very_big_score
         elif skill_names[i] in ["dummy_skill", "convert_reddit", "alice", "eliza", "tdidf_retrieval", "program_y"]:
             if "question" in candidates[i].get("type", "") or "?" in candidates[i]['text']:
+                penalty_start_utt = 1
                 if skill_names[i] == "program_y":
-                    if len(bot_utterances) >= 4 and "?" in bot_utterances[-1]:
-                        confidences[i] /= 1.5
-                    if len(bot_utterances) >= 5 and "?" in bot_utterances[-2]:
-                        confidences[i] /= 1.1
-                else:
-                    if len(bot_utterances) >= 1 and "?" in bot_utterances[-1]:
-                        confidences[i] /= 1.5
-                    if len(bot_utterances) >= 2 and "?" in bot_utterances[-2]:
-                        confidences[i] /= 1.1
+                    penalty_start_utt = 4
+
+                n_questions = 0
+                if len(bot_utterances) >= penalty_start_utt and "?" in bot_utterances[-1]:
+                    confidences[i] /= 1.5
+                    n_questions += 1
+                if len(bot_utterances) >= penalty_start_utt + 1 and "?" in bot_utterances[-2]:
+                    confidences[i] /= 1.1
+                    n_questions += 1
+                if n_questions == 2:
+                    # two subsequent questions (1 / (1.5 * 1.1 * 1.2) = ~0.5)
+                    confidences[i] /= 1.2
+
             if "link_to_for_response_selector" in candidates[i].get("type", ""):
                 link_to_question = candidates[i]['text']
         if skill_names[i] == 'dummy_skill' and "question" in candidates[i].get("type", ""):
