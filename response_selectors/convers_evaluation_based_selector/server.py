@@ -11,6 +11,8 @@ from collections import Counter
 import sentry_sdk
 import pprint
 from nltk.tokenize import sent_tokenize
+from copy import deepcopy
+from collections import defaultdict
 
 from common.duplicates import NOT_LOWER_DUPLICATES_SENTS
 from common.universal_templates import if_lets_chat_about_topic, if_choose_topic
@@ -134,18 +136,34 @@ def respond():
                             selected_human_attributes, selected_bot_attributes)))
 
 
-def add_question_to_statement(best_text, best_skill_name, question, link_to_question):
-    if best_text.strip() in okay_statements:
-        if question != "" and random.random() < ASK_DUMMY_QUESTION_PROB:
-            logger.info(f"adding {question} to response.")
-            best_text += np.random.choice([f" Let me ask you something. {question}",
-                                           f" I would like to ask you a question. {question}"])
-    elif best_skill_name in retrieve_skills:
-        if not is_question(best_text) and random.random() < ASK_LINK_TO_FOR_RETRIEVE_PROB:
-            logger.info(f"adding link_to {link_to_question} to response.")
-            best_text += f". {link_to_question}"
+def join_used_links_in_bot_attributes(main_bot_attrs, add_bot_attrs):
+    result = deepcopy(main_bot_attrs)
+    result["used_links"] = result.get("used_links", defaultdict(list))
 
-    return best_text
+    for skill_name in add_bot_attrs.get("used_links", defaultdict(list)):
+        result["used_links"][skill_name] = result["used_links"].get(
+            skill_name, []) + add_bot_attrs["used_links"].get(skill_name, [])
+    return result
+
+
+def add_question_to_statement(best_candidate, best_skill_name, dummy_question, dummy_question_bot_attr,
+                              link_to_question, link_to_bot_attrs):
+    if best_candidate["text"].strip() in okay_statements:
+        if dummy_question != "" and random.random() < ASK_DUMMY_QUESTION_PROB:
+            logger.info(f"adding {dummy_question} to response.")
+            best_candidate["text"] += np.random.choice([f" Let me ask you something. {dummy_question}",
+                                                        f" I would like to ask you a question. {dummy_question}"])
+            # if this is not a link-to question, bot attributes will be still empty
+            best_candidate["bot_attributes"] = join_used_links_in_bot_attributes(
+                best_candidate.get("bot_attributes", {}), dummy_question_bot_attr)
+    elif best_skill_name in retrieve_skills:
+        if not is_question(best_candidate["text"]) and random.random() < ASK_LINK_TO_FOR_RETRIEVE_PROB:
+            logger.info(f"adding link_to {link_to_question} to response.")
+            best_candidate["text"] += f". {link_to_question}"
+            best_candidate["bot_attributes"] = join_used_links_in_bot_attributes(
+                best_candidate.get("bot_attributes", {}), link_to_bot_attrs)
+
+    return best_candidate
 
 
 def lower_duplicates_score(candidates, bot_utt_counter, scores, confidences):
@@ -248,8 +266,10 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
 
     very_big_score = 100
     very_low_score = -100
-    question = ""
+    dummy_question = ""
+    dummy_question_bot_attr = {}
     link_to_question = ""
+    link_to_bot_attrs = {}
 
     for i in range(len(scores)):
         curr_score = None
@@ -335,11 +355,13 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                 if n_questions == 2:
                     # two subsequent questions (1 / (1.5 * 1.1 * 1.2) = ~0.5)
                     confidences[i] /= 1.2
-
+            # this is only about `dummy_skill`
             if "link_to_for_response_selector" in candidates[i].get("type", ""):
                 link_to_question = candidates[i]['text']
+                link_to_bot_attrs = candidates[i].get("bot_attributes", {})
         if skill_names[i] == 'dummy_skill' and "question" in candidates[i].get("type", ""):
-            question = candidates[i]['text']
+            dummy_question = candidates[i]['text']
+            dummy_question_bot_attr = candidates[i].get("bot_attributes", {})
 
         if curr_score is None:
             cand_scores = scores[i]
@@ -369,13 +391,16 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             curr_single_scores[j] = very_low_score
 
     best_id = np.argmax(curr_single_scores)
+    best_candidate = candidates[best_id]
     best_skill_name = skill_names[int(best_id)]
-    best_text = candidates[best_id]["text"]
-    best_confidence = candidates[best_id]["confidence"]
-    best_human_attributes = candidates[best_id].get("human_attributes", {})
-    best_bot_attributes = candidates[best_id].get("bot_attributes", {})
 
-    best_text = add_question_to_statement(best_text, best_skill_name, question, link_to_question)
+    best_candidate = add_question_to_statement(
+        best_candidate, best_skill_name, dummy_question, dummy_question_bot_attr, link_to_question, link_to_bot_attrs)
+
+    best_text = best_candidate["text"]
+    best_confidence = best_candidate["confidence"]
+    best_human_attributes = best_candidate.get("human_attributes", {})
+    best_bot_attributes = best_candidate.get("bot_attributes", {})
 
     if len(dialog["bot_utterances"]) == 0 and greeting_spec not in best_text:
         # add greeting to the first bot uttr, if it's not already included

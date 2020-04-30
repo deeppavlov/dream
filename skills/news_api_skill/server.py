@@ -224,12 +224,10 @@ def collect_topics_and_statuses(dialogs):
 
 
 def link_to_other_skills(human_attr, bot_attr):
-    link = link_to(['movie_skill', 'book_skill', "short_story_skill"], bot_attr["used_links"])
+    link = link_to(['movie_skill', 'book_skill', "short_story_skill"], used_links=bot_attr["used_links"])
+    bot_attr["used_links"][link["skill"]] = bot_attr["used_links"].get(link["skill"], []) + [link['phrase']]
     response = link['phrase']
     confidence = LINKTO_CONFIDENCE
-    if link["skill"] not in bot_attr["used_links"]:
-        bot_attr["used_links"][link["skill"]] = []
-    bot_attr["used_links"][link["skill"]].append(link['phrase'])
     attr = {}
     return response, confidence, human_attr, bot_attr, attr
 

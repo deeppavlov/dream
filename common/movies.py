@@ -82,13 +82,3 @@ def get_movie_template(category, subcategory=None, movie_type="movie"):
     else:
         return choice(templates[category]).replace(
             "TYPE", movie_type).replace("SUBJECT", choice(["it", f"this {movie_type}"]))
-
-
-def offer_talk_about_movies(human_attr):
-    # human_attr = dialog["human"]["attributes"]
-    used_templates = human_attr.get("offer_talk_about_movies", [])
-    avail_list = list(set(ABOUT_MOVIE_TITLES_PHRASES).difference(set(used_templates)))
-    if len(avail_list) > 0:
-        return choice(avail_list)
-    else:
-        return "If you want to discuss some movie, go ahead, tell me its title."

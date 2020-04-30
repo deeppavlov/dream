@@ -80,7 +80,7 @@ for city_name in CITIES.keys():
     CITIES[city_name] = CITIES[city_name][i_]
 
 
-def get_agephrase(age_num):
+def get_agephrase(age_num, bot_attr):
     if age_num < 20:
         phrase = 'According to the statistical data, 999 persons from 1000 in your age ' \
                  'recover after contacting coronavirus.'
@@ -107,11 +107,15 @@ def get_agephrase(age_num):
     r = random()
     if r < 0.5:
         phrase = phrase + ' While staying at home, you may use a lot of different online cinema. '
-        phrase = phrase + link_to(['movie_skill'])['phrase']
+        link = link_to(['movie_skill'], used_links=bot_attr["used_links"])
+        bot_attr["used_links"][link["skill"]] = bot_attr["used_links"].get(link["skill"], []) + [link['phrase']]
+        phrase = phrase + link['phrase']
     else:
         phrase = phrase + ' While staying at home, you may read a lot of different books. '
-        phrase = phrase + link_to(['book_skill'])['phrase']
-    return phrase
+        link = link_to(['book_skill'], used_links=bot_attr["used_links"])
+        bot_attr["used_links"][link["skill"]] = bot_attr["used_links"].get(link["skill"], []) + [link['phrase']]
+        phrase = phrase + link['phrase']
+    return phrase, bot_attr
 
 
 def about_coronavirus(annotated_phrase):
@@ -231,7 +235,7 @@ def get_statephrase(state_name, state_data, county_data, nation_data):
     return phrase
 
 
-def get_age_answer(last_utterance):
+def get_age_answer(last_utterance, bot_attr):
     try:
         age_num = None
         user_phrase = last_utterance['text']
@@ -245,11 +249,11 @@ def get_age_answer(last_utterance):
                 age_num = int(user_word)
         if age_num is None:
             age_num = word_to_num(user_phrase)
-        reply = get_agephrase(age_num)
+        reply, bot_attr = get_agephrase(age_num, bot_attr)
     except BaseException:
         reply = "I didn't get your age. Could you, please, repeat it."
     logging.debug(reply)
-    return reply
+    return reply, bot_attr
 
 
 def make_phrases(n_cases, n_deaths, num_flu_deaths, millionair_number):
@@ -379,7 +383,13 @@ class CoronavirusSkillScenario:
         global STATE_DATA, COUNTY_DATA, NATION_DATA
         texts = []
         confidences = []
+        human_attributes, bot_attributes, attributes = [], [], []
+
         for dialog in dialogs:
+            human_attr = {}
+            bot_attr = dialog["bot"]["attributes"]
+            bot_attr["used_links"] = bot_attr.get("used_links", defaultdict(list))
+            attr = {}
             try:
                 confidence = 0
                 if len(dialog['utterances']) >= 2:
@@ -513,7 +523,8 @@ class CoronavirusSkillScenario:
                             is_age = False
                             if 'is your age' in last_bot_phrase or "didn't get your age" in last_bot_phrase:
                                 logging.info('I have just asked about age, returning age phrase')
-                                reply, confidence = get_age_answer(last_utterance), 1
+                                reply, bot_attr = get_age_answer(last_utterance, bot_attr)
+                                confidence = 1
                                 if 'repeat it' in reply:
                                     logging.info('Could not detect age. Looking for something else')
                                     repeat_in_reply = True
@@ -559,7 +570,8 @@ class CoronavirusSkillScenario:
                             wasnot_first = 'of registered coronavirus' not in last_bot_phrase
                             if 'is your age' in last_bot_phrase or "didn't get your age" in last_bot_phrase:
                                 logging.info('After asking about age returning age phrase')
-                                reply, confidence = get_age_answer(last_utterance), 1
+                                reply, bot_attr = get_age_answer(last_utterance, bot_attr)
+                                confidence = 1
                                 if 'repeat it' in reply:
                                     confidence = 0
                             elif (wants_cv or about_coronavirus(last_utterance)) and wasnot_first:
@@ -595,5 +607,8 @@ class CoronavirusSkillScenario:
                 confidence = 0
             texts.append(reply)
             confidences.append(confidence)
+            human_attributes.append(human_attr)
+            bot_attributes.append(bot_attr)
+            attributes.append(attr)
 
-        return texts, confidences  # , human_attributes, bot_attributes, attributes
+        return texts, confidences, human_attributes, bot_attributes, attributes

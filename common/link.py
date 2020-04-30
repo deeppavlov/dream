@@ -32,6 +32,11 @@ skills_phrases_map = {
     # TODO: Add smalltalk skill phrases that is not identical to meta_script_skill
 }
 
+high_rated_skills_for_linking = {
+    "news_skill", "movie_skill", "book_skill", "coronavirus_skill", "short_story_skill",
+    "game_cooperative_skill", "personal_info_skill", "meta_script_skill", "emotion_skill"
+}
+
 
 def link_to(skills, used_links={}):
     """
