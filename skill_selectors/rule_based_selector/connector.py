@@ -310,6 +310,8 @@ class RuleBasedSkillSelectorConnector:
         #  no convert when about coronavirus
         if 'coronavirus_skill' in skills_for_uttr and 'convert_reddit' in skills_for_uttr:
             skills_for_uttr.remove('convert_reddit')
+        if 'coronavirus_skill' in skills_for_uttr and 'comet_dialog_skill' in skills_for_uttr:
+            skills_for_uttr.remove('comet_dialog_skill')
 
         # (yura): do we really want to always turn small_talk_skill?
         if len(dialog["utterances"]) > 14:

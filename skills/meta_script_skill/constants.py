@@ -223,5 +223,6 @@ BANNED_NOUNS_FOR_OPINION_EXPRESSION = {
     "trump", "putin", "coronavirus", "corona virus", "virus", "me", "it", "her", "him", "them", "wanna",
     "no thanks", "thanks", "lol", "alexa", "suck", "fuck", "sex", "one", "thing", "something", "anything", "nothing",
     "topic", "today", "yesterday", "tomorrow", "now", "mine", "talk", "chat", "me", "favorite",
-    "everything", "way", "minute", "lot", "lots", "things", "wanna", "times"
+    "everything", "way", "minute", "lot", "lots", "things", "wanna", "times", "subject", "object", "none",
+    "question", "conversation", "problem", "no problem", "please", "human", "people", "humanity"
 }
