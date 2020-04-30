@@ -24,6 +24,7 @@ NOT_LIKE_PATTERN = r"(dislike|not like|not love|not prefer|hate|n't like|" \
 LIKE_PATTERN = r"(like|love|prefer|adore|enjoy|fond of|passionate of|fan of|interested in|" \
                r"into|for you|for me)"
 FAVORITE_PATTERN = r"(favorite|loved|beloved|fondling|best|most interesting)"
+GENRE_PHRASES = json.load(open('genre_phrases.json', 'r'))[0]
 ENTITY_SERVICE_URL = getenv('COBOT_ENTITY_SERVICE_URL')
 QUERY_SERVICE_URL = getenv('COBOT_QUERY_SERVICE_URL')
 QA_SERVICE_URL = getenv('COBOT_QA_SERVICE_URL')
@@ -200,6 +201,9 @@ def get_name(annotated_phrase, mode='author', return_plain=False, bookyear=False
                 entity = entity.split('when')[1].split('was first published')[0]
             except BaseException:
                 logging.debug('Strange entity ' + entity)
+        for pattern in ['read was', 'book is', 'book was']:
+            if pattern in entity:
+                entity = entity.split(pattern)[1]
         if entityname is None:
             try:
                 answer = requests.request(url=ENTITY_SERVICE_URL, headers=headers,
@@ -427,13 +431,6 @@ def fact_about_book(annotated_user_phrase):
 
 def is_previous_was_about_book(dialog):
     return len(dialog['utterances']) >= 2 and dialog["utterances"][-2]["active_skill"] == 'book_skill'
-
-
-pphrase1 = ["i'm currently reading sapiens have you heard of that",
-            "that's sweet thank you can you tell me about the book sapiens",
-            "i don't really read a handmaid's tale have you read sapiens"]
-
-GENRE_PHRASES = json.load(open('genre_phrases.json', 'r'))[0]
 
 
 class BookSkillScenario:
