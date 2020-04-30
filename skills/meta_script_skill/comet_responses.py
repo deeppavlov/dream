@@ -15,7 +15,7 @@ from utils import get_used_attributes_by_name, get_comet_atomic, TOP_FREQUENT_WO
 from constants import idopattern, DEFAULT_ASK_ATOMIC_QUESTION_CONFIDENCE, DEFAULT_ATOMIC_CONTINUE_CONFIDENCE, \
     ATOMIC_PAST_QUESTION_TEMPLATES, ATOMIC_FUTURE_QUESTION_TEMPLATES, \
     ATOMIC_COMMENT_TEMPLATES, CONCEPTNET_OPINION_TEMPLATES, OPINION_EXPRESSION_TEMPLATES, \
-    REQUESTED_CONCEPTNET_OPINION_CONFIDENCE, NOT_REQUESTED_CONCEPTNET_OPINION_CONFIDENCE, \
+    REQUESTED_CONCEPTNET_OPINION_CONFIDENCE, \
     NUMBER_OF_HYPOTHESES_COMET_DIALOG, possessive_pronouns, BANNED_NOUNS_FOR_OPINION_EXPRESSION, BANNED_PROPERTIES, \
     NUMBER_OF_HYPOTHESES_OPINION_COMET_DIALOG
 
@@ -248,11 +248,13 @@ def express_opinion_using_conceptnet(dialog):
         if is_opinion_request(dialog["human_utterances"][-1]):
             confidence = REQUESTED_CONCEPTNET_OPINION_CONFIDENCE
         else:
-            if "time" in get_comet_conceptnet(nounphrase, "IsA", return_all=True, return_not_filtered=True):
-                logger.info("Noun is defined as `time`. Skip it.")
-                continue
-            else:
-                confidence = NOT_REQUESTED_CONCEPTNET_OPINION_CONFIDENCE
+            response = ""
+            confidence = 0.
+            # if "time" in get_comet_conceptnet(nounphrase, "IsA", return_all=True, return_not_filtered=True):
+            #     logger.info("Noun is defined as `time`. Skip it.")
+            #     continue
+            # else:
+            #     confidence = NOT_REQUESTED_CONCEPTNET_OPINION_CONFIDENCE
 
         attr["conceptnet_dialog"] = "express_opinion"
         attr["conceptnet_opinion_object"] = nounphrase

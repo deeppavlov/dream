@@ -101,14 +101,17 @@ def remove_duplicates(values):
     return [re.sub(person_reg, '', v[0]) for k, v in d.items()]
 
 
-def remove_all_phrases_containing_word(word, phrases):
+def remove_all_phrases_containing_word(topic, phrases):
     cleaned_phrases = []
-    doc = nlp(word)
+    doc = nlp(topic)
 
     for phrase in phrases:
-        if re.search(r"\b%s\b" % doc[0].lemma_, phrase) or re.search(r"\b%s\b" % word, phrase):
-            pass
-        else:
+        not_included = True
+        for token in doc:
+            if re.search(r"\b%s" % token.lemma_, phrase) or \
+                    (token.text[-1] == "y" and re.search(r"\b%s" % token.text[:-1], phrase)):
+                not_included = False
+        if not_included:
             cleaned_phrases.append(phrase)
     return cleaned_phrases
 
@@ -227,6 +230,7 @@ def get_comet_atomic(topic, relation, TOPICS={}):
     relation_phrases = [el for el in relation_phrases if el != "none"]
 
     relation_phrases = remove_duplicates([topic] + relation_phrases)[1:]  # the first element is topic
+    relation_phrases = remove_all_phrases_containing_word(topic, relation_phrases)
 
     relation_phrases = correct_verb_form(relation, relation_phrases)
 
