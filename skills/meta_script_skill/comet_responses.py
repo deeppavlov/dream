@@ -6,7 +6,7 @@ from os import getenv
 import sentry_sdk
 import spacy
 from spacy.symbols import nsubj, VERB, PROPN, NOUN
-from random import choice
+from random import choice, shuffle
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
 from common.utils import is_opinion_request
@@ -175,6 +175,7 @@ def comment_using_atomic(dialog):
 def filter_nouns_for_conceptnet(annotated_phrase):
     subjects = annotated_phrase["annotations"].get("cobot_nounphrases", [])
     subjects = [re.sub(possessive_pronouns, "", noun) for noun in subjects]
+    subjects = [re.sub(r"(\bthe\b|\ba\b|\ban\b)", "", noun) for noun in subjects]
     subjects = [noun for noun in subjects if noun not in BANNED_NOUNS_FOR_OPINION_EXPRESSION]
     for ent in annotated_phrase["annotations"]["ner"]:
         if not ent:
@@ -214,6 +215,7 @@ def express_opinion_using_conceptnet(dialog):
     used_templates = get_used_attributes_by_name(
         dialog["utterances"], attribute_name="conceptnet_opinion_template", value_by_default=None, activated=True)[-4:]
     comet_templates = get_all_not_used_templates(used_templates, CONCEPTNET_OPINION_TEMPLATES)
+    shuffle(comet_templates)
 
     for template in comet_templates[:NUMBER_OF_HYPOTHESES_OPINION_COMET_DIALOG]:
         confidence, attr = 0., {}
