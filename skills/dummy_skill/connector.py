@@ -10,7 +10,7 @@ from collections import defaultdict
 import random
 from random import choice
 from typing import Callable, Dict
-from copy import copy, deepcopy
+from copy import deepcopy
 
 from common.universal_templates import opinion_request_question
 from common.link import link_to, high_rated_skills_for_linking
@@ -28,7 +28,7 @@ ASK_QUESTION_PROB = 0.7
 ASK_NORMAL_QUESTION_PROB = 0.5
 LINK_TO_PROB = 0.5
 
-np_ignore_list = ["'s", 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're",
+np_remove_list = ["'s", 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're",
                   "you've", "you'll", "you'd", 'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself',
                   'she', "she's", 'her', 'hers', 'herself', 'it', "it's", 'its', 'itself', 'they', 'them', 'their',
                   'theirs', 'themselves', 'what', 'which', 'who', 'whom', 'this', 'that', "that'll", 'these', 'those',
@@ -45,13 +45,19 @@ np_ignore_list = ["'s", 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselv
                   'shan', "shan't", 'shouldn', "shouldn't", 'wasn', "wasn't", 'weren', "weren't", 'won', "won't",
                   'wouldn', "wouldn't", "my name", "your name", "wow", "yeah", "yes", "ya", "cool", "okay", "more",
                   "some more", " a lot", "a bit", "another one", "something else", "something", "anything",
-                  "someone", "anyone", "play", "mean", "a lot", "a little", "a little bit",
-                  "boring", "radio", "type", "call", "fun", "fall", "name", "names", "lgbtq families", "day", "murder",
+                  "someone", "anyone", "play", "mean", "a lot", "a little", "a little bit"]
+
+np_ignore_list = ["boring", "radio", "type", "call", "fun", "fall", "name", "names", "lgbtq families", "day", "murder",
                   "amazon", "take", "interest", "days", "year", "years", "sort", "fan", "going", "death", "part", "end",
                   "watching", "thought", "thoughts", "man", "men", "listening", "big fan", "fans", "rapping", "reading",
-                  "going", "thing", "hanging", "best thing", "wife", "things"]
+                  "going", "thing", "hanging", "best thing", "wife", "things", "nothing", "everything"]
 
-np_ignore_expr = re.compile("(" + "|".join([r'\b%s\b' % word for word in np_ignore_list]) + ")")
+with open("skills/dummy_skill/google-english-no-swears.txt", "r") as f:
+    TOP_FREQUENT_UNIGRAMS = f.read().splitlines()[:1000]
+
+np_ignore_expr = re.compile("(" + "|".join([r'\b%s\b' % word for word in np_ignore_list + TOP_FREQUENT_UNIGRAMS]) + ")",
+                            re.IGNORECASE)
+np_remove_expr = re.compile("(" + "|".join([r'\b%s\b' % word for word in np_remove_list]) + ")", re.IGNORECASE)
 rm_spaces_expr = re.compile(r'\s\s+')
 
 donotknow_answers = [
@@ -72,9 +78,6 @@ with open("skills/dummy_skill/facts_map.json", "r") as f:
 
 with open("skills/dummy_skill/nounphrases_facts_map.json", "r") as f:
     NP_FACTS = json.load(f)
-
-with open("skills/dummy_skill/normal_questions.json", "r") as f:
-    NORMAL_QUESTIONS = json.load(f)
 
 
 class RandomTopicResponder:
@@ -138,24 +141,11 @@ def get_link_to_question(dialog):
 def generate_question_not_from_last_responses(dialog):
     linked_question, bot_attr = get_link_to_question(dialog)
 
-    to_choose = copy(NORMAL_QUESTIONS)
-    to_remove = []
-    for prev_bot_uttr in dialog["bot_utterances"]:
-        for i, quest in enumerate(to_choose):
-            if quest.lower() in prev_bot_uttr["text"].lower():
-                to_remove += [quest]
-    for quest in set(to_remove):
-        to_choose.remove(quest)
-
     if len(linked_question) > 0 and random.random() < LINK_TO_PROB:
         result = linked_question
     else:
-        if len(to_choose) > 0:
-            result = choice(to_choose)
-        else:
-            result = choice(NORMAL_QUESTIONS)
-
-    return result, bot_attr
+        result = "What would you like to talk about?"
+    return result
 
 
 class DummySkillConnector:
@@ -171,8 +161,14 @@ class DummySkillConnector:
                 curr_topics = ["Phatic"]
             logger.info(f"Found topics: {curr_topics}")
             for i in range(len(curr_nounphrases)):
-                curr_nounphrases[i] = re.sub(rm_spaces_expr, ' ',
-                                             re.sub(np_ignore_expr, ' ', curr_nounphrases[i])).strip()
+                np = re.sub(np_remove_expr, "", curr_nounphrases[i])
+                np = re.sub(rm_spaces_expr, " ", np)
+                if re.search(np_ignore_expr, np):
+                    curr_nounphrases[i] = ""
+                else:
+                    curr_nounphrases[i] = np.strip()
+
+            curr_nounphrases = [np for np in curr_nounphrases if len(np) > 0]
 
             logger.info(f"Found nounphrases: {curr_nounphrases}")
 
@@ -197,7 +193,7 @@ class DummySkillConnector:
                 if len(questions_same_nps) > 0:
                     logger.info("Found special nounphrases for questions. Return question with the same nounphrase.")
                     cands += [choice(questions_same_nps)]
-                    confs += [0.6]
+                    confs += [0.5]
                     attrs += [{"type": "nounphrase_question"}]
                     human_attrs += [{}]
                     bot_attrs += [{}]
@@ -205,23 +201,23 @@ class DummySkillConnector:
                     if random.random() < ASK_NORMAL_QUESTION_PROB:
                         logger.info("No special nounphrases for questions. Return question of the same topic.")
                         cands += [questions_generator.get_random_text(curr_topics)]
-                        confs += [0.55]
+                        confs += [0.5]
                         attrs += [{"type": "topic_question"}]
                         human_attrs += [{}]
                         bot_attrs += [{}]
                     else:
-                        logger.info("No special nounphrases for questions. Return normal question.")
+                        logger.info("No special nounphrases for questions. Return link-to question.")
                         question, bot_attr = generate_question_not_from_last_responses(dialog)
                         cands += [question]
-                        confs += [0.5]
+                        confs += [0.55]
                         attrs += [{"type": "normal_question"}]
                         human_attrs += [{}]
                         bot_attrs += [bot_attr]
             else:
-                logger.info("Dialog begins. No special nounphrases for questions. Return normal question.")
+                logger.info("Dialog begins. No special nounphrases for questions. Return link-to question.")
                 question, bot_attr = generate_question_not_from_last_responses(dialog)
                 cands += [question]
-                confs += [0.5]
+                confs += [0.55]
                 attrs += [{"type": "normal_question"}]
                 human_attrs += [{}]
                 bot_attrs += [bot_attr]
@@ -237,13 +233,14 @@ class DummySkillConnector:
             facts_same_nps = []
             for i, nphrase in enumerate(curr_nounphrases):
                 for fact_id in NP_FACTS.get(nphrase, []):
-                    facts_same_nps += [FACTS_MAP[str(fact_id)] + ". " + (opinion_request_question()
-                                       if random.random() < ASK_QUESTION_PROB else "")]
+                    facts_same_nps += [
+                        f"Well, now that you've mentioned {nphrase}, I've remembered this. {FACTS_MAP[str(fact_id)]}. "
+                        f"{(opinion_request_question() if random.random() < ASK_QUESTION_PROB else '')}"]
 
             if len(facts_same_nps) > 0:
                 logger.info("Found special nounphrases for facts. Return fact with the same nounphrase.")
                 cands += [choice(facts_same_nps)]
-                confs += [0.6]
+                confs += [0.5]
                 attrs += [{"type": "nounphrase_fact"}]
                 human_attrs += [{}]
                 bot_attrs += [{}]
