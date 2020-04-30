@@ -266,6 +266,20 @@ def sent_rewrite_formatter_dialog(dialog: Dict) -> Dict:
     }]
 
 
+def sent_rewrite_formatter_w_o_last_dialog(dialog: Dict) -> Dict:
+    dialog = get_last_n_turns(dialog, LAST_N_TURNS + 1, LAST_N_TURNS + 2, LAST_N_TURNS * 2 + 3)
+    dialog = remove_clarification_turns_from_dialog(dialog)
+    utterances_histories = []
+    annotation_histories = []
+    for utt in dialog['utterances'][:-1]:
+        annotation_histories.append(utt['annotations'])
+        utterances_histories.append(utt['annotations']['sentseg']['segments'])
+    return [{
+        'utterances_histories': [utterances_histories],
+        'annotation_histories': [annotation_histories]
+    }]
+
+
 def asr_formatter_dialog(dialog: Dict) -> Dict:
     # Used by: asr_formatter
     return [{'speeches': [dialog['utterances'][-1].get('attributes', {}).get('speech', {})],
@@ -275,6 +289,10 @@ def asr_formatter_dialog(dialog: Dict) -> Dict:
 def last_utt_dialog(dialog: Dict) -> Dict:
     # Used by: dp_toxic_formatter, sent_segm_formatter, tfidf_formatter, sentiment_classification
     return [{'sentences': [dialog['utterances'][-1]['text']]}]
+
+
+def last_bot_utt_dialog(dialog: Dict) -> Dict:
+    return [{'sentences': [dialog['bot_utterances'][-1]['text']]}]
 
 
 def hypotheses_list(dialog: Dict) -> Dict:
@@ -441,6 +459,10 @@ def last_utt_sentseg_segments_dialog(dialog: Dict):
 def ner_formatter_dialog(dialog: Dict):
     # Used by: ner_formatter
     return [{'last_utterances': [dialog['utterances'][-1]['annotations']['sentseg']['segments']]}]
+
+
+def ner_formatter_last_bot_dialog(dialog: Dict):
+    return [{'last_utterances': [dialog['bot_utterances'][-1]['annotations']['sentseg']['segments']]}]
 
 
 def reddit_ner_formatter_dialog(dialog: Dict):

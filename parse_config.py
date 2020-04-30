@@ -117,7 +117,7 @@ class PipelineConfigParser:
         dialog_formatter_name = data.get('dialog_formatter', None)
         response_formatter_name = data.get('response_formatter', None)
         if dialog_formatter_name:
-            if dialog_formatter_name in dialog_formatter_name:
+            if dialog_formatter_name in all_formatters:
                 dialog_formatter = all_formatters[dialog_formatter_name]
             else:
                 raise ValueError(f"formatter {dialog_formatter_name} doesn't exist (declared in {service_name})")

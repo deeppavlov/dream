@@ -42,5 +42,8 @@ all_formatters = {
     'http_debug_output_formatter': http_debug_output_formatter,
     'http_api_output_formatter': http_api_output_formatter,
     'utt_sentrewrite_modified_last_dialog_emotion_skill': utt_sentrewrite_modified_last_dialog_emotion_skill,
-    'utt_sentrewrite_modified_last_dialog_15_turns': utt_sentrewrite_modified_last_dialog_15_turns
+    'utt_sentrewrite_modified_last_dialog_15_turns': utt_sentrewrite_modified_last_dialog_15_turns,
+    'last_bot_utt_dialog': last_bot_utt_dialog,
+    'sent_rewrite_formatter_w_o_last_dialog': sent_rewrite_formatter_w_o_last_dialog,
+    'ner_formatter_last_bot_dialog': ner_formatter_last_bot_dialog,
 }

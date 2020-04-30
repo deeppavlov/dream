@@ -28,6 +28,11 @@ class StateManager:
     async def add_annotation(self, dialog: Dialog, payload: Dict, label: str, **kwargs):
         dialog.utterances[-1].annotations[label] = payload
 
+    async def add_annotation_prev_bot_utt(self, dialog: Dialog, payload: Dict, label: str, **kwargs):
+        if len(dialog.utterances) > 1:
+            dialog.utterances[-2].annotations[label] = payload
+            dialog.utterances[-2].actual = False
+
     async def add_hypothesis_annotation(self, dialog: Dialog, payload: Dict, label: str, **kwargs):
         ind = kwargs['ind']
         dialog.utterances[-1].hypotheses[ind]['annotations'][label] = payload
