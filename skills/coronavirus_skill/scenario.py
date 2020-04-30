@@ -544,7 +544,9 @@ class CoronavirusSkillScenario:
                                         reply, confidence = WHAT_PHRASE, 0.98
                                         reply = improve_phrase(reply, asked_about_age, met_last)
                                     else:
-                                        reply, confidence = '', 0
+                                        logging.info('Final point detected. Return smth')
+                                        reply, confidence = return_fact(self.facts, last_bot_phrases,
+                                                                        asked_about_age, met_last), 0.9
                     else:  # Detected some state
                         if about_virus(last_utterance) and not about_coronavirus(last_utterance):
                             logging.info('Detected some state, received question about virus')
@@ -579,8 +581,11 @@ class CoronavirusSkillScenario:
                 if reply.lower() == last_utterance['text'].lower():
                     logging.info('Not to self repeat, drop confidence to 0')
                     confidence = 0
+                elif reply == '':
+                    logging.info('reply is empty, drop confidence to 0')
+                    confidence = 0
                 elif reply.lower() in last_utterances and confidence == 1:
-                    logging.debug('I have said that before, a bit less confident')
+                    logging.info('I have said that before, a bit less confident')
                     confidence = 0.5
 
             except Exception as e:
