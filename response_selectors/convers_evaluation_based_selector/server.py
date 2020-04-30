@@ -150,14 +150,21 @@ def add_question_to_statement(best_text, best_skill_name, question, link_to_ques
 
 def lower_duplicates_score(candidates, bot_utt_counter, scores, confidences):
     for i, cand in enumerate(candidates):
+        # no penalties for repeat intent
+        if cand['skill_name'] == 'intent_responder' and '#+#repeat' in cand['text']:
+            continue
+
         cand_sents = sent_tokenize(cand["text"].lower())
         coeff = 1
+        n_duplicates = 0
         for cand_sent in cand_sents:
             if len(cand_sent.split()) >= 3 and cand_sent not in NOT_LOWER_DUPLICATES_SENTS:
                 cand_sent = substitute_nonwords(cand_sent)
                 coeff += bot_utt_counter[cand_sent]
+                n_duplicates += 1
 
-        if confidences[i] < 1.:
+        # apply penalties to non-script skills and in case if response consists only from duplicates
+        if confidences[i] < 1. or n_duplicates == len(cand_sents):
             confidences[i] /= coeff
             scores[i]['isResponseInteresting'] /= coeff
             scores[i]['responseEngagesUser'] /= coeff
@@ -219,8 +226,8 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
 
     # check for repetitions
     bot_utterances = [sent_tokenize(uttr["text"].lower()) for uttr in dialog["bot_utterances"]]
-    prev_large_utterances = [utt for utt in bot_utterances[:-40] if len(utt) >= 40]
-    bot_utterances = prev_large_utterances + bot_utterances[-40:]
+    prev_large_utterances = [[sent] for utt in bot_utterances[:-15] for sent in utt if len(sent) >= 40]
+    bot_utterances = prev_large_utterances + bot_utterances[-15:]
     # flatten 2d list to 1d list of all appeared sentences of bot replies
     bot_utterances = sum(bot_utterances, [])
     bot_utterances = [substitute_nonwords(utt) for utt in bot_utterances]
