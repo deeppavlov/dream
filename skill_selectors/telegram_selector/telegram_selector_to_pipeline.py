@@ -21,7 +21,7 @@ def main():
                 if isinstance(value, dict):
                     replace_selector(value)
 
-    replace_selector(pipeline_conf)
+    replace_selector(pipeline_conf['services']['skill_selectors'])
 
     with open(pipeline_path, 'w') as file:
         json.dump(pipeline_conf, file, indent=4)
