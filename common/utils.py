@@ -43,16 +43,16 @@ def get_skill_outputs_from_dialog(utterances, skill_name, activated=False):
     skills_outputs = []
     for uttr in utterances:
         if "active_skill" in uttr:
-            skill_output = {}
             final_response = uttr["text"]
             for skop in skills_outputs:
                 # need to check text-response for skills with several hypotheses
-                if skop["skill_name"] == skill_name and skop["text"] in final_response:
-                    skill_output = skop
-                    break
-
-            if (not activated or uttr["active_skill"] == skill_name) and len(skill_output) > 0:
-                result.append(skill_output)
+                if skop["skill_name"] == skill_name:
+                    if activated and skop["text"] in final_response and uttr["active_skill"] == skill_name and \
+                            len(skop) > 0:
+                        result.append(skop)
+                    else:
+                        if not activated and len(skop) > 0:
+                            result.append(skop)
         elif "hypotheses" in uttr:
             skills_outputs = uttr["hypotheses"]
 

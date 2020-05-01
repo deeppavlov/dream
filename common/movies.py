@@ -74,7 +74,13 @@ def get_movie_template(category, subcategory=None, movie_type="movie"):
         "dont_know_movie_title_at_all": [
             "Sorry, probably I've never heard about this TYPE.",
             "Sorry, maybe I just have never heard about this TYPE.",
-            "Well, probably I've never heard about this TYPE."]
+            "Well, probably I've never heard about this TYPE."],
+        "lets_move_on": [
+            "Let's move on.",
+            "Okay.",
+            "Let me ask you a question.",
+            "Let me ask you.",
+            ""]
     }
     if subcategory is not None:
         return choice(templates[category].get(subcategory, "")).replace(

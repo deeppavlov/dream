@@ -245,6 +245,7 @@ class MovieSkillScenario:
         curr_user_uttr = dialog["human_utterances"][-1]
         prev_movie_skill_outputs = get_skill_outputs_from_dialog(
             dialog["utterances"][-self.turns_memory * 2 - 1:], "movie_skill", activated=True)
+        logger.info(f"Movie scenario. prev_movie_skill_outputs: {prev_movie_skill_outputs}")
         if len(dialog["bot_utterances"]) > 0:
             prev_bot_uttr = dialog["bot_utterances"][-1]
         else:
@@ -272,7 +273,7 @@ class MovieSkillScenario:
                         offer, confidence, human_attr, bot_attr, attr = self.link_to_other_skills(
                             human_attr, bot_attr, to_skills=['movie_skill', 'book_skill', "short_story_skill"])
                         response = f"We have talked about this movie previously. " \
-                                   f"{get_movie_template('lets_talk_about_other_movie')} {offer}"
+                                   f"{get_movie_template('lets_move_on')} {offer}"
                         confidence = END_SCENARIO_OFFER_CONFIDENCE
                         attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
                 elif is_no(curr_user_uttr) or if_switch_topic(curr_user_uttr["text"].lower()):
@@ -306,13 +307,6 @@ class MovieSkillScenario:
                 # decrease confidence if movie_skill was not active on prev step
                 if prev_bot_uttr.get("active_skill", "") != "movie_skill":
                     confidence *= 0.8
-        elif self.lets_chat_about_movies(curr_user_uttr, prev_bot_uttr):
-            # user wants to talk about movies. offer quesiton about movies
-            offer, confidence, human_attr, bot_attr, attr = self.link_to_other_skills(
-                human_attr, bot_attr, to_skills=['movie_skill', 'book_skill', "short_story_skill"])
-            response = offer
-            confidence = SUPER_CONFIDENCE
-            attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
         elif len(movies_ids) > 0 and self.is_about_movies(curr_user_uttr, prev_bot_uttr):
             if is_no(curr_user_uttr) and "?" in prev_bot_uttr.get("text", ""):
                 response, confidence, human_attr, bot_attr, attr = "", 0.0, {}, {}, {}
@@ -323,11 +317,18 @@ class MovieSkillScenario:
                         curr_user_uttr, curr_movie_id, human_attr, bot_attr)
                 else:
                     offer, confidence, human_attr, bot_attr, attr = self.link_to_other_skills(
-                        human_attr, bot_attr, to_skills=['movie_skill', 'book_skill', "short_story_skill"])
+                        human_attr, bot_attr, to_skills=['movie_skill', "book_skill", "short_story_skill"])
                     response = f"We have talked about this movie previously. " \
-                               f"{get_movie_template('lets_talk_about_other_movie')} {offer}"
+                               f"{get_movie_template('lets_move_on')} {offer}"
                     confidence = DEFAULT_CONFIDENCE
                     attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
+        elif self.lets_chat_about_movies(curr_user_uttr, prev_bot_uttr):
+            # user wants to talk about movies. offer quesiton about movies
+            offer, confidence, human_attr, bot_attr, attr = self.link_to_other_skills(
+                human_attr, bot_attr, to_skills=['movie_skill'])
+            response = offer
+            confidence = SUPER_CONFIDENCE
+            attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
         else:
             response, confidence, human_attr, bot_attr, attr = "", 0.0, {}, {}, {}
 
@@ -385,7 +386,7 @@ class MovieSkillScenario:
             human_attr["discussed_movie_ids"] += [movie_id]
         else:
             offer, confidence, human_attr, bot_attr, attr = self.link_to_other_skills(
-                human_attr, bot_attr, to_skills=['movie_skill', 'book_skill', "short_story_skill"])
+                human_attr, bot_attr, to_skills=['movie_skill'])
             response = f"{get_movie_template('dont_know_movie_title_at_all', movie_type=movie_type)} " \
                        f"{get_movie_template('lets_talk_about_other_movie', movie_type=movie_type)} {offer}"
             confidence = END_SCENARIO_OFFER_CONFIDENCE
@@ -404,7 +405,7 @@ class MovieSkillScenario:
             if len(movies_ids) == 0:
                 logger.info(f"Extracted the same movie title after clarification. Offer talk about movies.")
                 offer, confidence, human_attr, bot_attr, attr = self.link_to_other_skills(
-                    human_attr, bot_attr, to_skills=['movie_skill', 'book_skill', "short_story_skill"])
+                    human_attr, bot_attr, to_skills=['movie_skill'])
                 response = f"{get_movie_template('dont_know_movie_title_at_all')} " \
                            f"{get_movie_template('lets_talk_about_other_movie')} {offer}"
                 confidence = DEFAULT_CONFIDENCE
@@ -417,7 +418,7 @@ class MovieSkillScenario:
         else:
             logger.info(f"Didn't extracted movie title after the first clarification. Offer talk about movies.")
             offer, confidence, human_attr, bot_attr, attr = self.link_to_other_skills(
-                human_attr, bot_attr, to_skills=['movie_skill', 'book_skill', "short_story_skill"])
+                human_attr, bot_attr, to_skills=['movie_skill'])
             response = f"{get_movie_template('dont_know_movie_title_at_all')} " \
                        f"{get_movie_template('lets_talk_about_other_movie')} {offer}"
             confidence = END_SCENARIO_OFFER_CONFIDENCE
@@ -536,18 +537,17 @@ class MovieSkillScenario:
             attr = {"movie_id": movie_id, "can_continue": CAN_CONTINUE,
                     "status_line": prev_status_line + ["fact"]}
         else:
-            comment = choice(["That's okay.", "Let's move on.", "Let's change the subject."])
-            response, confidence, human_attr, bot_attr, attr = self.lets_talk_about_movie_offer(
+            response, confidence, human_attr, bot_attr, attr = self.lets_talk_about_offer(
                 prev_status_line, human_attr, bot_attr)
-            response = f"{comment} {get_movie_template('lets_talk_about_other_movie')} " + response
+            response = f"{get_movie_template('lets_move_on')} " + response
 
         return response, confidence, human_attr, bot_attr, attr
 
-    def lets_talk_about_movie_offer(self, prev_status_line, human_attr, bot_attr):
+    def lets_talk_about_offer(self, prev_status_line, human_attr, bot_attr):
         # facts are done. offer to talk about other movie.
         offer, confidence, human_attr, bot_attr, attr = self.link_to_other_skills(
             human_attr, bot_attr, to_skills=['movie_skill', 'book_skill', "short_story_skill"])
-        logger.info(f"Offer quesiton about movie `{offer}`.")
+        logger.info(f"Offer question about something: `{offer}`.")
         response = f"{offer}"
         confidence = END_SCENARIO_OFFER_CONFIDENCE
         attr = {"status_line": prev_status_line + ["finished"], "can_continue": CAN_CONTINUE}
@@ -610,15 +610,14 @@ class MovieSkillScenario:
                 "fact about", movie_id, movie_title, movie_type, prev_status_line, human_attr, bot_attr,
                 prev_movie_skill_outputs[-1].get("text", ""))
             if response.lower() == prev_bot_uttr["text"].lower():
-                response, confidence, human_attr, bot_attr, attr = self.lets_talk_about_movie_offer(
+                response, confidence, human_attr, bot_attr, attr = self.lets_talk_about_offer(
                     prev_status_line, human_attr, bot_attr)
-                response = f"{get_movie_template('lets_talk_about_other_movie')} " + response
+                response = f"{get_movie_template('lets_move_on')} " + response
         else:  # -> finished + offer talk about movies
             logger.info("Finish chat about considered movie. Offer new one.")
-            response, confidence, human_attr, bot_attr, attr = self.lets_talk_about_movie_offer(
+            response, confidence, human_attr, bot_attr, attr = self.lets_talk_about_offer(
                 prev_status_line, human_attr, bot_attr)
-            comment = choice(["That's okay.", "Let's move on.", "Let's change the subject."])
-            response = f"{comment} {get_movie_template('lets_talk_about_other_movie')} " + response
+            response = f"{get_movie_template('lets_move_on')} " + response
 
         return response, confidence, human_attr, bot_attr, attr
 
