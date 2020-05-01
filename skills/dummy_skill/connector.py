@@ -145,7 +145,7 @@ def generate_question_not_from_last_responses(dialog):
         result = linked_question
     else:
         result = "What would you like to talk about?"
-    return result
+    return result, bot_attr
 
 
 class DummySkillConnector:
