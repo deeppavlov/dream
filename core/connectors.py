@@ -2,6 +2,7 @@ import asyncio
 import logging
 from collections import defaultdict
 from os import getenv
+from signal import signal, SIGPIPE, SIG_DFL
 from typing import Any, Callable, Dict, List
 
 import aiohttp
@@ -9,6 +10,8 @@ import sentry_sdk
 from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 
 from core.transport.base import ServiceGatewayConnectorBase
+
+signal(SIGPIPE, SIG_DFL)
 
 sentry_sdk.init(dsn=getenv('SENTRY_DSN'), integrations=[AioHttpIntegration()])
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',

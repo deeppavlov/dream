@@ -5,8 +5,11 @@ import csv
 import json
 from time import time
 from random import randrange
+from signal import signal, SIGPIPE, SIG_DFL
 import uuid
 import logging
+
+signal(SIGPIPE, SIG_DFL)
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.DEBUG)
