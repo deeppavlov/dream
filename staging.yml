@@ -208,10 +208,6 @@ services:
     image: ${DOCKER_REGISTRY}/coronavirus_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
-  topicalchat_convert_retrieval:
-    image: ${DOCKER_REGISTRY}/topicalchat_convert_retrieval:${VERSION}
-    env_file:
-      - ${ENV_FILE}
   small_talk_skill:
     image: ${DOCKER_REGISTRY}/small_talk_skill:${VERSION}
     env_file:
