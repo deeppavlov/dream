@@ -180,6 +180,7 @@ def transfertransfo_formatter_dialog(dialog: Dict) -> Dict:
 
 
 def convert_formatter_dialog(dialog: Dict) -> Dict:
+    # Used by: topicalchat_convert_retrieval
     dialog = get_last_n_turns(dialog)
     dialog = remove_clarification_turns_from_dialog(dialog)
     return [{

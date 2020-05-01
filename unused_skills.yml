@@ -59,4 +59,16 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+  topicalchat_convert_retrieval:
+    build:
+      context: ./skills/topicalchat_convert_retrieval/
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8060 -t 60
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+          - node.labels.group == 0
 version: '3.7'
