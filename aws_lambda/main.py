@@ -222,6 +222,7 @@ class SessionEndedRequestHandler(AbstractRequestHandler):
             call_dp_agent(user_id, '/alexa_exceeded_max_reprompts', request_data)
         else:
             call_dp_agent(user_id, f"/alexa_{r.get('reason', 'SessionEndedRequest')}", request_data)
+        call_dp_agent(user_id, '/close', request_data)
         # Any cleanup logic goes here.
         return handler_input.response_builder.response
 
