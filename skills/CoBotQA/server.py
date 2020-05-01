@@ -88,7 +88,7 @@ def respond():
     questions = []
     dialog_ids = []
     for i, dialog in enumerate(dialogs):
-        curr_uttr = dialog["utterances"][-1]
+        curr_uttr = dialog["human_utterances"][-1]
         curr_uttr_rewritten = curr_uttr["annotations"]["sentrewrite"]["modified_sents"][-1]
         curr_uttr_clean = remove_punct_and_articles(curr_uttr_rewritten)
         if curr_uttr_clean in COMMON_USER_PHRASES:
@@ -186,6 +186,7 @@ def respond():
                           "is usually defined as a humorous anecdote or remark intended to provoke laughter",
                           "joke is a display of humour in which words are used within a specific"]
 
+        curr_nounphrases = dialogs[curr_dialog_id]["human_utterances"][-1]["annotations"].get("cobot_nounphrases", [])
         if len(response) > 0 and 'skill://amzn1' not in response:
             sentences = sent_tokenize(response.replace(".,", "."))
             full_resp = response
@@ -223,10 +224,12 @@ def respond():
                 else:
                     confidence = 0.3
             elif any(substr in full_resp for substr in
-                     ["Here’s something I found", "Here's what I found", "According to "]):
+                     ["Here's something I found", "Here's what I found", "According to "]):
                 confidence = 0.7
             elif "is usually defined as" in full_resp:
                 confidence = 0.3
+            elif len(full_resp.split()) > 10 and any([noun.lower() in full_resp.lower() for noun in curr_nounphrases]):
+                confidence = 0.7
             else:
                 confidence = 0.95
         else:
