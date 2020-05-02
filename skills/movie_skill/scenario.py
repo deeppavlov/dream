@@ -340,7 +340,7 @@ class MovieSkillScenario:
         logger.info(f"Clarify movie title `{movie_title}` from user utterance "
                     f"`{curr_user_uttr['text']}`.")
         response = f"{get_movie_template('clarification_template', movie_type=movie_type)} " \
-                   f"{movie_type} '{movie_title}'?"
+                   f"{movie_type} {movie_title}?"
         confidence = CLARIFICATION_CONFIDENCE
         attr = {"movie_id": movie_id, "status_line": ["clarification"], "can_continue": CAN_CONTINUE}
         return response, confidence, attr
