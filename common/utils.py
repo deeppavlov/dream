@@ -1,5 +1,7 @@
 import re
 
+from common.universal_templates import join_sentences_in_or_pattern, DONOTKNOW_LIKE
+
 
 other_skills = {'intent_responder', 'program_y_dangerous', 'misheard_asr', 'christmas_new_year_skill',
                 'superbowl_skill', 'oscar_skill', 'valentines_day_skill'}
@@ -166,7 +168,10 @@ def is_no(annotated_phrase):
     # TODO: intent catcher thinks that horrible is no intent'
     user_phrase = annotated_phrase['text'].lower().strip().replace('.', '')
     is_not_horrible = 'horrible' != user_phrase
-    return is_not_horrible and (no_detected or re.search(no_templates, annotated_phrase["text"].lower()))
+    no_regexp_detected = re.search(no_templates, annotated_phrase["text"].lower())
+    is_not_idontknow = not re.search(join_sentences_in_or_pattern(DONOTKNOW_LIKE), annotated_phrase["text"].lower())
+
+    return is_not_horrible and (no_detected or no_regexp_detected) and is_not_idontknow
 
 
 def is_question(text):
