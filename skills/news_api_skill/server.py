@@ -41,12 +41,13 @@ DEFAULT_NEWS_OFFER_CONFIDENCE = 1.
 WHAT_TYPE_OF_NEWS_CONFIDENCE = 0.9
 NOT_SPECIFIC_NEWS_OFFER_CONFIDENCE = 0.95
 DEFAULT_NEWS_DETAILS_CONFIDENCE = 1.
-LINKTO_CONFIDENCE = 0.7
+LINKTO_CONFIDENCE = 0.9
+LINKTO_FOR_LONG_RESPONSE_CONFIDENCE = 0.7
 OFFER_MORE = "Do you want to hear more?"
 ASK_OPINION = "What do you think about it?"
 
 NEWS_TEMPLATES = re.compile(r"(news|(what is|what's)( the)? new|something new)")
-FALSE_NEWS_TEMPLATES = re.compile(r"(s good news)")
+FALSE_NEWS_TEMPLATES = re.compile(r"(s good news|s bad news|s sad news|s awful news|s terrible news)")
 TELL_MORE_NEWS_TEMPLATES = re.compile(r"(tell me more|tell me next|more news|next news|other news|learn more)")
 
 OFFERED_SPECIFIC_NEWS_STATUS = "offered_news"
@@ -172,8 +173,9 @@ def collect_topics_and_statuses(dialogs):
                 statuses.append("finished")
                 prev_news_samples.append(prev_news)
         else:
-            about_news = ({"News"} & set(curr_uttr["annotations"].get("cobot_topics", {}).get(
-                "text", ""))) or re.search(NEWS_TEMPLATES, curr_uttr["text"].lower())
+            about_news = (({"News"} & set(curr_uttr["annotations"].get("cobot_topics", {}).get(
+                "text", ""))) or re.search(NEWS_TEMPLATES, curr_uttr["text"].lower())) and \
+                not re.search(FALSE_NEWS_TEMPLATES, curr_uttr["text"].lower())
             if BREAKING_NEWS.lower() in prev_bot_uttr_lower and is_yes:
                 # news skill was not previously active
                 logger.info(f"Detected topic for news: all.")
@@ -223,11 +225,19 @@ def collect_topics_and_statuses(dialogs):
     return topics, statuses, prev_news_samples
 
 
-def link_to_other_skills(human_attr, bot_attr):
-    link = link_to(['movie_skill', 'book_skill', "short_story_skill"], used_links=bot_attr["used_links"])
-    bot_attr["used_links"][link["skill"]] = bot_attr["used_links"].get(link["skill"], []) + [link['phrase']]
+def link_to_other_skills(human_attr, bot_attr, curr_uttr):
+    link = link_to(['movie_skill', 'book_skill', "short_story_skill"], bot_attr["used_links"])
     response = link['phrase']
-    confidence = LINKTO_CONFIDENCE
+    if len(curr_uttr['text'].split()) <= 5 and not re.search(FALSE_NEWS_TEMPLATES, curr_uttr['text']):
+        confidence = LINKTO_CONFIDENCE
+    elif re.search(FALSE_NEWS_TEMPLATES, curr_uttr['text']):
+        response = ""
+        confidence = 0.
+    else:
+        confidence = LINKTO_FOR_LONG_RESPONSE_CONFIDENCE
+    if link["skill"] not in bot_attr["used_links"]:
+        bot_attr["used_links"][link["skill"]] = []
+    bot_attr["used_links"][link["skill"]].append(link['phrase'])
     attr = {}
     return response, confidence, human_attr, bot_attr, attr
 
@@ -305,6 +315,7 @@ def respond():
             else:
                 prev_news_skill_output = get_skill_outputs_from_dialog(
                     dialogs[i]["utterances"][-3:], skill_name="news_api_skill", activated=True)
+                curr_uttr = dialogs[i]["human_utterances"][-1]
                 # status finished is here
                 if len(prev_news_skill_output) > 0 and prev_news_skill_output[-1].get(
                         "news_status", "") not in [OFFERED_NEWS_DETAILS_STATUS, OFFERED_SPECIFIC_NEWS_STATUS]:
@@ -331,10 +342,14 @@ def respond():
                                 "news_topic": " ".join(offered_topics), "curr_news": result}
                     else:
                         # can't find enough topics for the user to offer
-                        response, confidence, human_attr, bot_attr, attr = link_to_other_skills(human_attr, bot_attr)
+                        response, confidence, human_attr, bot_attr, attr = link_to_other_skills(
+                            human_attr, bot_attr, curr_uttr)
                 else:
                     # news was offered previously but the user refuse to get it
-                    response, confidence, human_attr, bot_attr, attr = link_to_other_skills(human_attr, bot_attr)
+                    # or false news request was detected
+                    response, confidence, human_attr, bot_attr, attr = link_to_other_skills(
+                        human_attr, bot_attr, curr_uttr)
+
         else:
             # no found news
             logger.info("No particular news found.")
