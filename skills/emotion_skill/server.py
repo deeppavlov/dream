@@ -3,6 +3,7 @@
 import logging
 import time
 from os import getenv
+import json
 
 import sentry_sdk
 from flask import Flask, request, jsonify
@@ -16,7 +17,11 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-scenario = EmotionSkillScenario()
+data = json.load(open('/src/data/data.json'))
+steps = data['steps']
+jokes = data['jokes']
+advices = data['advices']
+scenario = EmotionSkillScenario(steps, jokes, advices, logger)
 logger.info("Scenario done")
 
 
