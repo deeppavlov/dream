@@ -183,6 +183,12 @@ class EmotionSkillScenario:
                 link = ''
                 if prev_replies_for_user:
                     prev_bot_phrase = prev_replies_for_user[-1]
+                if len(dialog['utterances']) > 1:
+                    # Check if we were interrupted
+                    active_skill = dialog['utterances'][-2]['active_skill'] == 'emotion_skill'
+                    if not active_skill and state != "":
+                        state = ""
+                        emotion_skill_attributes['state'] = ""
                 logger.info(f"user sent: {annotated_user_phrase['text']}")
                 if emotion == "" or state == "":
                     emotion = most_likely_emotion
