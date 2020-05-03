@@ -102,6 +102,7 @@ class EmotionSkillScenario:
                 else:
                     # Add joke to list of already told jokes and advices
                     prev_jokes_advices.append(reply)
+                confidence = 1.0
             elif is_no:
                 # User doesn't want a joke
                 if emotion in {'sadness', 'fear', 'anger', 'surprise'}:
@@ -116,7 +117,7 @@ class EmotionSkillScenario:
                     reply += link['phrase']
                 if len(step['next_step']):
                     state = random.choice(step['next_step'])
-            confidence = 0.99
+                confidence = 1.0
         elif state == 'offered_advice':
             # we offered an advice
             if is_yes:
@@ -129,6 +130,7 @@ class EmotionSkillScenario:
                         what is on your mind and I am here to listen."
                 else:
                     prev_jokes_advices.append(reply)
+                confidence = 1.0
             elif is_no:
                 state = 'no'
                 step = self.steps[state]
@@ -137,7 +139,7 @@ class EmotionSkillScenario:
                     state = random.choice(step['next_step'])
                 else:
                     state = ""
-            confidence = 0.99
+                confidence = 1.0
         else:
             step = self.steps[state]
             reply = random.choice(step['answers'])
@@ -148,7 +150,7 @@ class EmotionSkillScenario:
                 link = link_to([link], used_links)
                 link['phrase'] = reply
                 # reply += link['phrase']
-            confidence = 0.99
+            confidence = 1.0
         emotion_skill_attributes = {
             "state": state,
             "emotion": emotion,
