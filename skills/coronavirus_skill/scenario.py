@@ -25,6 +25,8 @@ DEATH_URL = CORONAVIRUS_URL + '/time_series_covid19_deaths_global.csv'
 CASE_URL = CORONAVIRUS_URL + '/time_series_covid19_confirmed_global.csv'
 STATES = {j.strip().lower().split(';')[0]: j.strip().lower().split(';')[1]
           for j in open('state_names.txt', 'r').readlines()}
+NATIONS = {j.strip().lower().split(';')[0]: j.strip().lower().split(';')[1]
+           for j in open('nation_names.txt', 'r').readlines()}
 #  NYT_API_KEY = '1cc135af-30ab-4f9f-9bb6-76a457036152'
 #  counties_url = 'https://www.nytimes.com/interactive/2020/us/coronavirus-us-cases.html?api-key=' + NYT_API_KEY
 #  os.chdir('C://Users//DK//Documents//DATA')
@@ -65,6 +67,11 @@ WORK_AND_STAY_HOME_PHRASE = ("Every day that you practice social distancing duri
 CDC_STAY_HOME_RECOMMENDATION = "CDC recommends Americans stay at home. If you absolutely have to go outside" \
                                " please wear masks, practice social distancing, and minimize time you have to spend " \
                                "outside of your home."
+EXPLAIN_PHRASE = 'If you are outside your home, you can get a coronavirus. ' \
+                 'Even if you easily overcome it, you can begin a chain of many new infections, ' \
+                 'which can be critical or deadly for some.' \
+                 'So unless you work in healthcare or other essential industries,' \
+                 'social distancing is your best bet.'
 FEAR_HATE_REPLY1 = 'Please, calm down. We are a strong nation, we are flattening the curve ' \
                    'and we will overcome this disease one day.'
 FEAR_HATE_REPLY2 = 'Please, chin up. We have already defeated a hell lot of diseases, ' \
@@ -196,7 +203,7 @@ def get_statephrase(state_name, state_data, county_data, nation_data):
                  'By the way, the population of {0} is {3} persons, which is way larger than ' \
                  'the number of cases. '.format(*data1)
     elif state_name in nation_data.keys():
-        data1 = [state_name, nation_data[state_name][0], nation_data[state_name][1], nation_data[state_name]]
+        data1 = [state_name, nation_data[state_name][0], nation_data[state_name][1], NATIONS[state_name]]
         phrase = 'The total number of registered coronavirus cases in {0} is {1} including {2} deaths. ' \
                  'By the way, the population of {0} is {3} persons, which is way larger than ' \
                  'the number of cases. '.format(*data1)
@@ -398,7 +405,7 @@ class CoronavirusSkillScenario:
                 else:
                     last_bot_phrase = ''
                     stay_home_request = False
-                last_utterance = dialog['utterances'][-1]
+                last_utterance = dialog['utterances'][-1].lower()
                 last_utterances = []
                 #  logging.info('*#*')
                 #  logging.info([j['text'] for j in dialog['utterances']])
@@ -422,6 +429,9 @@ class CoronavirusSkillScenario:
                 if quarantine_end(last_utterance):
                     logging.info('Quarantine end detected')
                     reply, confidence = QUARANTINE_END_PHRASE, 0.95
+                elif last_bot_phrase in [WORK_AND_STAY_HOME_PHRASE, CDC_STAY_HOME_RECOMMENDATION]:
+                    if ' why ' in last_utterance or last_utterance[:3] == 'why':
+                        reply, confidence = EXPLAIN_PHRASE, 0.95
                 elif dontlike(last_utterance):
                     reply, confidence = '', 0
                 elif asked_have(last_utterance):
