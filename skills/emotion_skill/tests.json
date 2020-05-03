@@ -1,0 +1,110 @@
+[
+  {
+    "curr_sent": "hey",
+    "bot_sent":"",
+    "intents":{
+      "no": {"confidence": 0.0, "detected": 0},
+      "yes": {"confidence": 0.0, "detected": 0}
+    },
+    "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
+    "results":{"text":"", "confidence":0.0}
+  },
+  {
+    "curr_sent": "i am feeling depressed",
+    "bot_sent":"",
+    "intents":{
+      "no": {"confidence": 0.0, "detected": 0},
+      "yes": {"confidence": 0.0, "detected": 0}
+    },
+    "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.9, "surprise": 0, "neutral": 0},
+    "results":{"state":["offered_joke"]}
+  },
+  {
+    "curr_sent": "sure",
+    "bot_sent":"Can I tell you a joke?",
+    "intents":{
+      "no": {"confidence": 0.0, "detected": 0},
+      "yes": {"confidence": 1.0, "detected": 1}
+    },
+    "bot_attributes":{"emotion_skill_attributes":{"state":"offered_joke", "emotion":"sadness"}},
+    "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
+    "results":{"state":["offer_another_joke"], "emotion":"sadness"}
+  },
+  {
+    "curr_sent": "ahaha very funny",
+    "bot_sent":"A man in a bar la-la-la",
+    "intents":{
+      "no": {"confidence": 0.0, "detected": 0},
+      "yes": {"confidence": 0.0, "detected": 0}
+    },
+    "bot_attributes":{"emotion_skill_attributes":{"state":"offer_another_joke", "emotion":"sadness"}},
+    "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
+    "results":{"state":["offered_joke"], "emotion":"sadness"}
+  },
+  {
+    "curr_sent": "no",
+    "bot_sent":"Wanna hear another one?",
+    "intents":{
+      "no": {"confidence": 1.0, "detected": 1},
+      "yes": {"confidence": 0.0, "detected": 0}
+    },
+    "bot_attributes":{"emotion_skill_attributes":{"state":"offered_joke", "emotion":"sadness"}},
+    "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
+    "results":{"text": "Do you think that some advices might help? I know a lot.", "state":["offered_advice"], "emotion":"sadness"}
+  },
+  {
+    "curr_sent": "yes go on",
+    "bot_sent":"Do you think that some advices might help? I know a lot.",
+    "intents":{
+      "no": {"confidence": 0.0, "detected": 0},
+      "yes": {"confidence": 1.0, "detected": 1}
+    },
+    "bot_attributes":{"emotion_skill_attributes":{"state":"offered_advice", "emotion":"sadness"}},
+    "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
+    "results":{"state":["offer_another_advice"], "emotion":"sadness"}
+  },
+  {
+    "curr_sent": "thanks",
+    "bot_sent":"an advice",
+    "intents":{
+      "no": {"confidence": 0.0, "detected": 0},
+      "yes": {"confidence": 0.0, "detected": 0}
+    },
+    "bot_attributes":{"emotion_skill_attributes":{"state":"offer_another_advice", "emotion":"sadness"}},
+    "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
+    "results":{"state":["offered_advice"], "emotion":"sadness"}
+  },
+  {
+    "curr_sent": "no",
+    "bot_sent":"Maybe another advice will help?",
+    "intents":{
+      "no": {"confidence": 1.0, "detected": 1},
+      "yes": {"confidence": 0.0, "detected": 0}
+    },
+    "bot_attributes":{"emotion_skill_attributes":{"state":"offered_advice", "emotion":"sadness"}},
+    "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
+    "results":{"state":[""], "emotion":"sadness"}
+  },
+  {
+    "curr_sent": "i feel wonderful",
+    "bot_sent":"lalala",
+    "intents":{
+      "no": {"confidence": 0.0, "detected": 0},
+      "yes": {"confidence": 0.0, "detected": 0}
+    },
+    "bot_attributes":{"emotion_skill_attributes":{}},
+    "emotion": {"anger": 0, "fear": 0, "joy": 1, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
+    "results":{"states":["joy_link_to_joke", "joy_link_to_story"], "emotion":"joy"}
+  },
+  {
+    "curr_sent": "All right",
+    "bot_sent":"",
+    "intents":{
+      "no": {"confidence": 0.0, "detected": 0},
+      "yes": {"confidence": 0.0, "detected": 0}
+    },
+    "bot_attributes":{"emotion_skill_attributes":{"state": "joy_link_to_joke", "emotion":"joy"}},
+    "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
+    "results":{"states":["offered_joke"], "emotion":"joy"}
+  }
+]

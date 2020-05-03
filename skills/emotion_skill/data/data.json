@@ -1,0 +1,133 @@
+{
+  "jokes":[
+    "Police arrested two kids yesterday, one was drinking battery acid, the other was eating fireworks. They charged one – and let the other one-off.",
+    "What do you get when you wake up on a workday and realize you ran out of coffee? A depresso.",
+    "I went to the doctors the other day, and I said, 'Have you got anything for wind?' So he gave me a kite.",
+    "A jump-lead walks into a bar. The barman says 'I’ll serve you, but don’t start anything.",
+    "A priest, a rabbi and a vicar walk into a bar. The barman says, Is this some kind of joke?",
+    "My therapist says I have a preoccupation with vengeance. We'll see about that.",
+    "Two Eskimos sitting in a kayak were chilly. But when they lit a fire in the craft, it sank, proving once and for all, that you can’t have your kayak and heat it.",
+    "I'll tell you what I love doing more than anything: trying to pack myself in a small suitcase. I can hardly contain myself.",
+    "A three-legged dog walks into a saloon in the Old West. It slides up to the bar and announces: I'm looking for the man who shot my paw.",
+    "A sandwich walks into a bar. The barman says sorry we don’t serve food in here.",
+    "There’s two fish in a tank, and one says: How do you drive this thing?"
+  ],
+  "steps":{
+    "offer_another_joke":{
+      "answers":[
+        "Do you want to hear another joke?",
+        "Wanna hear another one?"
+      ],
+      "next_step":["offered_joke"],
+      "link": ""
+    },
+    "offer_advice":{
+      "answers":[
+        "Do you think that some advices might help? I know a lot."
+      ],
+      "next_step":["offered_advice"],
+      "link": ""
+    },
+    "offer_another_advice":{
+      "answers":[
+        "Will another advice be helpfull for you?",
+        "Maybe, another advice will help?",
+        "Do you wish to hear another advice?"
+      ],
+      "next_step":["offered_advice"],
+      "link": ""
+    },
+    "no":{
+      "answers":[
+        "Okay. What do you want to talk about then?"
+      ],
+      "next_step":[""],
+      "link": ""
+    },
+    "sadness_i_feel":{
+      "answers":[
+        "I feel worried about you. I know a few ways to cheer up. Can I tell you a joke?",
+        "I am sorry to hear that! I know a few ways to cheer up. Can I tell you a joke?"
+      ],
+      "next_step":["offered_joke"],
+      "link": ""
+    },
+    "sadness_feeling_towards_smth":{
+      "answers":[
+        "Really sorry to hear that. Can I tell you a joke to cheer you up?",
+        "I am sorry to hear that! I know a few ways to cheer up. Can I tell you a joke?"
+      ],
+      "next_step":["offered_joke"],
+      "link": ""
+    },
+    "joy_i_feel":{
+      "answers":[
+        "That’s nice! I am glad you are doing fine. What made you happy this week?",
+        "Seems like everything is going great, good for you! What was the best thing of the week?"
+      ],
+      "next_step":["joy_link_to_joke", "joy_link_to_story"],
+      "link": ""
+    },
+    "joy_feeling_towards_smth":{
+      "answers":["Cool! How does it make you feel?"],
+      "next_step":["joy_i_feel"],
+      "link": ""
+    },
+    "joy_link_to_joke":{
+      "answers":[
+        "Thanks for sharing this with me! Really appreciate that. Speaking of me, this week I’ve had a great time chatting with different people. I even made some new friends. One told me a hilarious joke, do you want to hear it?"
+      ],
+      "next_step":["offered_joke"],
+      "link": ""
+    },
+    "joy_link_to_story":{
+      "answers":[
+        "Glad to hear that! Speaking of me, this week I’ve had a great time chatting with different people. I even made some new friends. One told me a cool story, do you want to hear it?"
+      ],
+      "next_step":[""],
+      "link": "short_story_skill"
+    },
+    "fear":{
+      "answers": [
+        "When your body senses stress or fear, it responds with a “fight or flight” stress response. Humans are amazing - they can train their own brains to deal with it. I know some ways of coping with fear. Do you want to hear about them?"
+      ],
+      "next_step":["offered_advice"],
+      "link": ""
+    },
+    "anger":{
+      "answers": [
+        "I feel that you are angry. Well, that is a natural feeling, and it's not always negative, but frequent feelings of anger have been linked to higher risk of heart disease, high blood pressure, depression and difficulty sleeping. When I feel angry, I usually recall some funny jokes. Do you want to hear one?"
+      ],
+      "next_step":["offered_joke"],
+      "link": ""
+    },
+    "surprise":{
+      "answers": [
+        "I know some suprisingly funny jokes, in my opinion. Do you want to hear any of them?"
+      ],
+      "next_step":["offered_joke"],
+      "link": ""
+    }
+  },
+  "advices":{
+    "sadness":[
+      "Some studies suggest that crying may have a relaxing effect on the body by releasing endorphins, a natural “feel-good” chemical in your body. Crying may also activate your parasympathetic nervous system, which helps your body recover from stress and trauma. It is always okay to cry, and if you need support, I am here for you.",
+      "Several studies have shown that exercise releases endorphins and other chemicals that can help fight sadness. One study showed that participants who did moderate exercise over a 10-week period felt more energetic, positive, and calm than those who did not. In addition, the benefits of exercise were greater for people experiencing depressed mood. You don’t have to run a marathon or be a gym rat to see the benefits of exercise. Even light activities such as gardening and walking show a positive effect.",
+      "If sadness has you feeling stressed out, the British Academy of Sound Therapy has put together a playlist of the “world’s most relaxing music” according to science. These songs include music by Enya, Airstream, Marconi Union, and Coldplay.",
+      "Research has shown that physical warmth has a comforting effect. Taking a warm bath or a hot shower will help you relax. It may also help you soothe your feelings of sadness.",
+      "A common mindfulness technique is mindfulness meditation. Several studies have shown that mindfulness meditation can reduce your brain’s responses to negative emotional stimuli."
+    ],
+    "fear":[
+      "By starting to breathe slowly, you will signal your brain to relax, as you slow down the release of adrenalin and cortisol, and increase the release of endorphins. You will also fully oxygenate your brain and body, allowing your heartbeat to slow and your blood pressure to stabilize.",
+      "Some studies have shown that physical warmth is very soothing for many people and can help relieve stress. Taking a warm bath or a hot shower will help you relax."
+    ],
+    "anger":[
+      "Exercise may also have a preventive effect. A Yale study suggested that prolonged bouts of running before an upsetting experience may dampen the extremity of your emotional reaction. Even if you can't take time for a full exercise routine when you're angry, try take a few moments.",
+      "Breathing deeply from your diaphragm (the large muscle at the base of your lungs that assists with breathing) can help soothe feelings of anger. Deep, controlled breathing slows your heartbeat, stabilizes blood pressure, and relaxes your body. Combine your breathing exercise with a mantra, or calming word or phrase, for added benefit.",
+      "Focused activities may help channel your angry energy into a productive expression so that you can move past your immediate feelings of anger. Research has shown that anger can even temporarily enhance brainstorming and creative thinking. Engage your imagination and mindfully release your anger in a controlled, creative way"
+    ],
+    "surprise":[
+      "Breathe from your diaphragm, not your upper chest. If you place your hand on your belly just below your ribs, you should be able to feel your abdomen rise when you inhale and fall when you exhale."
+    ]
+  }
+}

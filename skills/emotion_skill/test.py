@@ -1,85 +1,119 @@
 import requests
+import json
 
 
-def make_input_data(curr_sent, bot_sent, emotion={'neutral': 0}, intents={"yes": {"confidence": 0, "detected": 0}}):
+def make_input_data(curr_sent, bot_sent, bot_attributes={},
+                    emotion={'neutral': 0}, intents={"yes": {"confidence": 0, "detected": 0}}):
     input_data = {
         "dialogs": [
             {
                 "id": "test",
-                "bot": {"attributes": {}},
+                "bot": {"attributes": bot_attributes},
                 "human": {"attributes": {}},
                 "human_attributes": {},
-                "bot_attributes": {},
-                'utterances': [
+                "bot_attributes": bot_attributes,
+                "utterances": [
                     {
-                        "user_telegram_id": "test", "text": curr_sent,
+                        "user_telegram_id": "test",
+                        "text": curr_sent,
                         "annotations": {
                             "emotion_classification": {
                                 "text": {"anger": 0, "fear": 0,
                                          "joy": 0, "love": 0,
-                                         "sadness": 0, "surprise": 0,
+                                         "sadness": 0.9, "surprise": 0,
                                          "neutral": 0}},
                             "intent_catcher": {"no": {"confidence": 0.0, "detected": 0},
                                                "yes": {"confidence": 0.0, "detected": 0}}
                         }
                     }
                 ],
-                'bot_utterances': [{'text': bot_sent}]
+                "bot_utterances": [{"text": bot_sent}]
             }
-        ]
+        ],
     }
     input_data['dialogs'][-1]['utterances'][-1]['annotations']['emotion_classification']['text'].update(emotion)
     input_data['dialogs'][-1]['utterances'][-1]['annotations']['intent_catcher'].update(intents)
     return input_data
-
-
-def test_it_returns_empty_for_some_random_text():
-    data = make_input_data('hey', '')
-    url = 'http://0.0.0.0:8049/respond'
-    response = requests.post(url, json=data).json()
-    assert response[0][0] == '', print(response)
-    assert response[0][1] == 0, print(response)
-
-
-def test_it_returns_joke_for_negative_emotion():
-    data = make_input_data('i am feeling depressed', '', {'sadness': 0.9})
-    url = 'http://0.0.0.0:8049/respond'
-    response = requests.post(url, json=data).json()
-    assert 'joke' in response[0][0], print(response)
-    assert response[0][1] > 0, print(response)
-
-
-def test_it_returns_7minute_for_positive_emotion():
-    data = make_input_data('i am feeling joyful', '', {'joy': 0.9})
-    url = 'http://0.0.0.0:8049/respond'
-    response = requests.post(url, json=data).json()
-    assert '7 minute' in response[0][0], print(response)
-    assert response[0][1] > 0, print(response)
-
-
-def test_positive_scenario():
-    data = make_input_data('yes', 'can i tell you a joke?', intents={"yes": {"confidence": 1, "detected": 1}})
-    url = 'http://0.0.0.0:8049/respond'
-    response = requests.post(url, json=data).json()
-    assert 'feel better now?' in response[0][0], print(response)
-    assert response[0][1] == 1.0, print(response)
-
-    data = make_input_data('yes', 'do you feel better now?', intents={"yes": {"confidence": 1, "detected": 1}})
-    url = 'http://0.0.0.0:8049/respond'
-    response = requests.post(url, json=data).json()
-    assert '7 minute' in response[0][0], print(response)
-    assert response[0][1] == 1.0, print(response)
-
-    data = make_input_data('yes', 'heard about 7 minute workout', intents={"yes": {"confidence": 1, "detected": 1}})
-    url = 'http://0.0.0.0:8049/respond'
-    response = requests.post(url, json=data).json()
-    assert 'workout' in response[0][0], print(response)
-    assert response[0][1] == 1.0, print(response)
+#
+#
+# def test_it_returns_empty_for_some_random_text():
+#     data = make_input_data('hey', '')
+#     url = 'http://0.0.0.0:8049/respond'
+#     response = requests.post(url, json=data).json()
+#     assert response[0][0] == '', print(response)
+#     assert response[0][1] == 0, print(response)
+#
+#
+# def test_it_returns_joke_for_negative_emotion():
+#     data = make_input_data('i am feeling depressed', '', {'sadness': 0.9})
+#     url = 'http://0.0.0.0:8049/respond'
+#     response = requests.post(url, json=data).json()
+#     assert 'joke' in response[0][0], print(response)
+#     assert response[0][1] > 0, print(response)
+#
+#
+# def test_it_returns_7minute_for_positive_emotion():
+#     data = make_input_data('i am feeling joyful', '', {'joy': 0.9})
+#     url = 'http://0.0.0.0:8049/respond'
+#     response = requests.post(url, json=data).json()
+#     assert '7 minute' in response[0][0], print(response)
+#     assert response[0][1] > 0, print(response)
+#
+#
+# def test_positive_scenario():
+#     data = make_input_data('yes', 'can i tell you a joke?', intents={"yes": {"confidence": 1, "detected": 1}})
+#     url = 'http://0.0.0.0:8049/respond'
+#     response = requests.post(url, json=data).json()
+#     assert 'feel better now?' in response[0][0], print(response)
+#     assert response[0][1] == 1.0, print(response)
+#
+#     data = make_input_data('yes', 'do you feel better now?', intents={"yes": {"confidence": 1, "detected": 1}})
+#     url = 'http://0.0.0.0:8049/respond'
+#     response = requests.post(url, json=data).json()
+#     assert '7 minute' in response[0][0], print(response)
+#     assert response[0][1] == 1.0, print(response)
+#
+#     data = make_input_data('yes', 'heard about 7 minute workout', intents={"yes": {"confidence": 1, "detected": 1}})
+#     url = 'http://0.0.0.0:8049/respond'
+#     response = requests.post(url, json=data).json()
+#     assert 'workout' in response[0][0], print(response)
+#     assert response[0][1] == 1.0, print(response)
 
 
 if __name__ == '__main__':
-    test_it_returns_empty_for_some_random_text()
-    test_it_returns_joke_for_negative_emotion()
-    test_it_returns_7minute_for_positive_emotion()
-    test_positive_scenario()
+    url = 'http://0.0.0.0:8049/respond'
+    with open("tests.json") as fp:
+        tests = json.load(fp)
+    for test in tests:
+        results = test.pop('results')
+        test = make_input_data(
+            test.get('curr_sent', ""),
+            test.get('bot_sent', ""),
+            test.get('bot_attributes', {}),
+            test.get("emotion", {'neutral': 0}),
+            test.get("intents", {"yes": {"confidence": 0, "detected": 0}})
+        )
+        try:
+            phrase, confidence, human_attributes, \
+                bot_attributes, attributes = requests.post(url, json=test).json()[0]
+        except Exception as e:
+            print(f"Exception:\n test: {test}\nresult: {results}")
+            raise e
+        state = bot_attributes.get("emotion_skill_attributes", {}).get("state", "")
+        emotion = bot_attributes.get("emotion_skill_attributes", {}).get("emotion", "")
+        try:
+            assert results.get("text", "") in phrase, print(phrase)
+            assert results.get("confidence", confidence) == confidence, print(confidence)
+            assert state in results.get("states", [state]), print(state)
+            assert results.get("emotion", emotion) == emotion, print(emotion)
+        except AssertionError as e:
+            print(f"AssertionError at test: \n{test}\n")
+            print("-" * 30)
+            print(f"results: {results}")
+            print(
+                f"phrase: {phrase}; confidence: {confidence};"
+                f"bot_attributes: {bot_attributes}; human_attributes: {human_attributes}"
+                f"attributes: {attributes}"
+            )
+            raise e
     print("EMO SKILL TESTS: SUCCESS")
