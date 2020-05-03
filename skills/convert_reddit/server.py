@@ -49,7 +49,7 @@ confidences = np.load(CONFIDENCE_PATH)
 
 
 spaces_pat = re.compile(r"\s+")
-special_symb_pat = re.compile(r"[^A-Za-z0-9-!,.’?'\"’ ]")
+special_symb_pat = re.compile(r"[^A-Za-z0-9 ]")
 
 
 def clear_text(text):
@@ -168,7 +168,10 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True):
         # banned_phrases ban
         banned_phrases_flag = any([j in raw_cand for j in banned_phrases])
 
-        if hello_flag or banned_words_flag or banned_words_for_questions_flag or banned_phrases_flag:
+        # ban long words
+        long_words_flag = any([len(j) > 30 for j in cand])
+
+        if hello_flag or banned_words_flag or banned_words_for_questions_flag or banned_phrases_flag or long_words_flag:
             filtered_indices.remove(ind)
             continue
         for utterance in clear_utterances_histories:

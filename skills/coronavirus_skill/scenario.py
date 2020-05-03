@@ -405,7 +405,8 @@ class CoronavirusSkillScenario:
                 else:
                     last_bot_phrase = ''
                     stay_home_request = False
-                last_utterance = dialog['utterances'][-1].lower()
+                last_utterance = dialog['utterances'][-1]
+                last_utterance_text = last_utterance['text'].lower()
                 last_utterances = []
                 #  logging.info('*#*')
                 #  logging.info([j['text'] for j in dialog['utterances']])
@@ -430,7 +431,7 @@ class CoronavirusSkillScenario:
                     logging.info('Quarantine end detected')
                     reply, confidence = QUARANTINE_END_PHRASE, 0.95
                 elif last_bot_phrase in [WORK_AND_STAY_HOME_PHRASE, CDC_STAY_HOME_RECOMMENDATION]:
-                    if ' why ' in last_utterance or last_utterance[:3] == 'why':
+                    if ' why ' in last_utterance_text or last_utterance_text[:3] == 'why':
                         reply, confidence = EXPLAIN_PHRASE, 0.95
                 elif dontlike(last_utterance):
                     reply, confidence = '', 0
