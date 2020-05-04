@@ -170,6 +170,10 @@ def best_book_by_author(author, last_bookname=None,
         return default_phrase
 
 
+def what_genre(annotated_phrase):
+    return any([j in annotated_phrase['text'] for j in ['what is', 'what was']])
+
+
 def get_name(annotated_phrase, mode='author', return_plain=False, bookyear=False):
     logging.debug('Getting name for ')
     logging.debug(annotated_phrase['text'])
@@ -723,8 +727,13 @@ class BookSkillScenario:
                         else:
                             confidence = self.default_conf
                     elif genre_name is not None:
+                        prev_genre = get_genre(annotated_prev_phrase['text'], return_name=True)
+                        only_one_phrase = len(GENRE_PHRASES[genre_name]) == 1
                         logging.debug('Phrase contains name of genre ' + str(genre_name))
-                        reply, confidence = GENRE_PHRASES[genre_name], self.default_conf
+                        if prev_genre != genre_name or only_one_phrase:
+                            reply, confidence = GENRE_PHRASES[genre_name][0], self.default_conf
+                        else:
+                            reply, confidence = GENRE_PHRASES[genre_name][1], self.default_conf
                     else:
                         logging.debug('Phrase contains nothing - returning default_reply')
                         reply, confidence = self.default_reply, 0
