@@ -362,4 +362,11 @@ services:
       - "./common:/src/common"
     ports:
       - 8066:8066
+  greeting_skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./common:/src/common"
+      - "./skills/greeting_skill:/src"
+    ports:
+      - 8070:8070
 version: "3.7"

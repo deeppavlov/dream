@@ -7,9 +7,11 @@ from random import choice, uniform, random
 from os import getenv
 import sentry_sdk
 
-from common.utils import get_skill_outputs_from_dialog, get_user_replies_to_particular_skill, is_no, is_yes
+from common.utils import get_skill_outputs_from_dialog, get_user_replies_to_particular_skill, is_no, is_yes, \
+    get_outputs_with_response_from_dialog
 from common.universal_templates import if_choose_topic, if_lets_chat_about_topic
 from common.news import OPINION_REQUEST_STATUS, OFFERED_NEWS_DETAILS_STATUS
+from common.greeting import GREETING_QUESTIONS
 from utils import get_starting_phrase, get_statement_phrase, get_opinion_phrase, get_comment_phrase, \
     extract_verb_noun_phrases, is_custom_topic, WIKI_DESCRIPTIONS, \
     get_used_attributes_by_name, check_topic_lemmas_in_sentence, switch_topic_uttr
@@ -207,11 +209,21 @@ def get_response_for_particular_topic_and_status(topic, curr_meta_script_status,
 
     if curr_meta_script_status == "starting":
         response, confidence, attr = get_starting_phrase(dialog, topic, attr)
-        if if_choose_topic(last_user_sent_text, prev_uttr=text_bot_uttr) or switch_topic_uttr(user_uttr) or \
-                (is_custom_topic(topic) and if_lets_chat_about_topic(text_user_uttr)):
+        can_offer_topic = if_choose_topic(last_user_sent_text, prev_uttr=text_bot_uttr) or switch_topic_uttr(user_uttr)
+        talk_about_user_topic = is_custom_topic(topic) and if_lets_chat_about_topic(text_user_uttr)
+
+        prev_what_to_talk_about_outputs = [get_outputs_with_response_from_dialog(
+            dialog["utterances"][-3:], response=response, activated=True)
+            for response in GREETING_QUESTIONS[list(GREETING_QUESTIONS.keys())[0]]]
+        prev_what_to_talk_about_outputs = sum([list_of_outputs for list_of_outputs in prev_what_to_talk_about_outputs
+                                               if len(list_of_outputs) > 0], [])
+        prev_what_to_talk_about_greeting = (len(prev_what_to_talk_about_outputs) > 0 and bot_uttr.get(
+            "active_skill", "") in ["greeting_skill", "program_y"])
+
+        if (not prev_what_to_talk_about_greeting and can_offer_topic) or talk_about_user_topic:
             # if person wants to talk about something particular and we have extracted some topic - do that!
             confidence = MATCHED_DIALOG_BEGIN_CONFIDENCE
-        elif "?" in last_user_sent_text:
+        elif "?" in last_user_sent_text or prev_what_to_talk_about_greeting:
             # if some question was asked by user, do not start script at all!
             response, confidence = "", 0.
         elif len(dialog["utterances"]) <= 20:

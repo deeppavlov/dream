@@ -230,6 +230,10 @@ services:
     image: ${DOCKER_REGISTRY}/news_api_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
+  greeting_skill:
+    image: ${DOCKER_REGISTRY}/greeting_skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
 volumes:
   external-logs:
   external-deeppavlov:

@@ -221,6 +221,7 @@ class RuleBasedSkillSelectorConnector:
             skills_for_uttr.append("personal_info_skill")
             skills_for_uttr.append("meta_script_skill")
             skills_for_uttr.append("comet_dialog_skill")
+            skills_for_uttr.append("greeting_skill")
 
             if ner_detected:
                 skills_for_uttr.append("reddit_ner_skill")

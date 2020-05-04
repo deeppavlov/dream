@@ -224,7 +224,8 @@ def respond():
                 else:
                     confidence = 0.3
             elif any(substr in full_resp for substr in
-                     ["Here's something I found", "Here's what I found", "According to "]):
+                     ["Here's something I found", "Here's what I found", "According to ",
+                      "This might answer your question"]):
                 confidence = 0.7
             elif "is usually defined as" in full_resp:
                 confidence = 0.3

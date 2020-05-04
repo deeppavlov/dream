@@ -161,23 +161,12 @@
           AMAZON_EMOTION_CLOSE
           I can answer questions, share fun facts, discuss movies, books and news.
         <random>
-         <li> What is your favorite TV Series? </li>
-         <li> What is your favorite book? </li>
-         <li> What is your favorite film? </li>
-         <li> What do you like to do? </li>
-         <li> Do you play any sports? </li>
-         <li> What do you usually do on the weekends? </li>
-         <li> What sort of hobbies do you have? </li>
-         <li> What do you get up to in your free time? </li>
-         <li> Do you have any hidden talents or surprising hobbies? </li>
-
-         <!-- <li> Everyone wastes time. How do you prefer to waste time? <think><set name="topic">SMALLTALK</set></think></li> -->
-         <li> Did you order this beautiful weather? </li>
-         <li> Lovely day, don't you think? </li>
-         <li> Nice weather! I would love take a walk. Would you? </li>
-         <li> How was your weekend? </li>
-         <li> It’s two days in a row now that I cannot find any good comedy to watch. Can you recommend me one? </li>
-         <li> It’s three days in a row now that I cannot find any cool video game. Can you recommend me one? </li>
+         <li> What do you want to talk about? </li>
+         <li> What would you want to talk about? </li>
+         <li> What would you like to chat about? </li>
+         <li> What do you wanna talk about? </li>
+         <li> What are we gonna talk about? </li>
+         <li> What's on your mind? </li>
         </random>
         <think><set name="topic">SMALLTALK</set></think>
       </template>
@@ -194,23 +183,12 @@
         </random>
         AMAZON_EMOTION_CLOSE
         <random>
-         <li> What is your favorite TV Series? </li>
-         <li> What is your favorite book? </li>
-         <li> What is your favorite film? </li>
-         <li> What do you like to do? </li>
-         <li> Do you play any sports? </li>
-         <li> What do you usually do on the weekends? </li>
-         <li> What sort of hobbies do you have? </li>
-         <li> What do you get up to in your free time? </li>
-         <li> Do you have any hidden talents or surprising hobbies? </li>
-
-         <!-- <li> Everyone wastes time. How do you prefer to waste time? <think><set name="topic">SMALLTALK</set></think></li> -->
-<!--         <li> Did you order this beautiful weather? </li>-->
-<!--         <li> Lovely day, don't you think? </li>-->
-<!--         <li> Nice weather! I would love take a walk. Would you? </li>-->
-         <li> How was your weekend? </li>
-         <li> It’s two days in a row now that I cannot find any good comedy to watch. Can you recommend me one? </li>
-         <li> It’s three days in a row now that I cannot find any cool video game. Can you recommend me one? </li>
+         <li> What do you want to talk about? </li>
+         <li> What would you want to talk about? </li>
+         <li> What would you like to chat about? </li>
+         <li> What do you wanna talk about? </li>
+         <li> What are we gonna talk about? </li>
+         <li> What's on your mind? </li>
         </random>
         <think><set name="topic">SMALLTALK</set></think>
       </template>
@@ -250,23 +228,12 @@
           <li> Sounds like a good mood! </li>
         </random>
         <random>
-         <li> What is your favorite TV Series? </li>
-         <li> What is your favorite book? </li>
-         <li> What is your favorite film? </li>
-         <li> What do you like to do? </li>
-         <li> Do you play any sports? </li>
-         <li> What do you usually do on the weekends? </li>
-         <li> What sort of hobbies do you have? </li>
-         <li> What do you get up to in your free time? </li>
-         <li> Do you have any hidden talents or surprising hobbies? </li>
-
-         <!-- <li> Everyone wastes time. How do you prefer to waste time? <think><set name="topic">SMALLTALK</set></think></li> -->
-<!--         <li> Did you order this beautiful weather? </li>-->
-<!--         <li> Lovely day, don't you think? </li>-->
-<!--         <li> Nice weather! I would love take a walk. Would you? </li>-->
-         <li> How was your weekend? </li>
-         <li> It’s two days in a row now that I cannot find any good comedy to watch. Can you recommend me one? </li>
-         <li> It’s three days in a row now that I cannot find any cool video game. Can you recommend me one? </li>
+         <li> What do you want to talk about? </li>
+         <li> What would you want to talk about? </li>
+         <li> What would you like to chat about? </li>
+         <li> What do you wanna talk about? </li>
+         <li> What are we gonna talk about? </li>
+         <li> What's on your mind? </li>
         </random>
         <think><set name="topic">SMALLTALK</set></think>
         AMAZON_EMOTION_CLOSE
@@ -304,23 +271,12 @@
           <li> Give me a chance to cheer you up. </li>
         </random>
         <random>
-         <li> What is your favorite TV Series? </li>
-         <li> What is your favorite book? </li>
-         <li> What is your favorite film? </li>
-         <li> What do you like to do? </li>
-         <li> Do you play any sports? </li>
-         <li> What do you usually do on the weekends? </li>
-         <li> What sort of hobbies do you have? </li>
-         <li> What do you get up to in your free time? </li>
-         <li> Do you have any hidden talents or surprising hobbies? </li>
-
-         <!-- <li> Everyone wastes time. How do you prefer to waste time? <think><set name="topic">SMALLTALK</set></think></li> -->
-<!--         <li> Did you order this beautiful weather? </li>-->
-<!--         <li> Lovely day, don't you think? </li>-->
-<!--         <li> Nice weather! I would love take a walk. Would you? </li>-->
-         <li> How was your weekend? </li>
-         <li> It’s two days in a row now that I cannot find any good comedy to watch. Can you recommend me one? </li>
-         <li> It’s three days in a row now that I cannot find any cool video game. Can you recommend me one? </li>
+         <li> What do you want to talk about? </li>
+         <li> What would you want to talk about? </li>
+         <li> What would you like to chat about? </li>
+         <li> What do you wanna talk about? </li>
+         <li> What are we gonna talk about? </li>
+         <li> What's on your mind? </li>
         </random>
         <think><set name="topic">SMALLTALK</set></think>
     </template>

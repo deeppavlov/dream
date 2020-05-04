@@ -10,12 +10,13 @@ from random import choice, shuffle
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
 from common.utils import is_opinion_request
+from common.greeting import dont_tell_you_answer
 from utils import get_used_attributes_by_name, get_comet_atomic, TOP_FREQUENT_WORDS, get_all_not_used_templates, \
     get_comet_conceptnet, get_nltk_sentiment, get_not_used_template
 from constants import idopattern, DEFAULT_ASK_ATOMIC_QUESTION_CONFIDENCE, DEFAULT_ATOMIC_CONTINUE_CONFIDENCE, \
     ATOMIC_PAST_QUESTION_TEMPLATES, ATOMIC_FUTURE_QUESTION_TEMPLATES, \
     ATOMIC_COMMENT_TEMPLATES, CONCEPTNET_OPINION_TEMPLATES, OPINION_EXPRESSION_TEMPLATES, \
-    REQUESTED_CONCEPTNET_OPINION_CONFIDENCE, \
+    REQUESTED_CONCEPTNET_OPINION_CONFIDENCE, NOT_REQUESTED_CONCEPTNET_OPINION_CONFIDENCE, \
     NUMBER_OF_HYPOTHESES_COMET_DIALOG, possessive_pronouns, BANNED_NOUNS_FOR_OPINION_EXPRESSION, BANNED_PROPERTIES, \
     NUMBER_OF_HYPOTHESES_OPINION_COMET_DIALOG
 
@@ -41,6 +42,8 @@ def get_main_verb_tense_for_user_doings(utterance):
             if token.tag_ == "VBD" and token.dep_ == "ROOT":
                 return "past"
             elif token.tag_ == "VBZ" and token.dep_ == "ROOT":
+                return "present"
+            elif token.tag_ == "VBP" and token.dep_ == "ROOT":
                 return "present"
             elif token.dep_ == "aux" and token.pos == VERB and token.tag_ == "VBD":
                 return "past"
@@ -87,6 +90,14 @@ def ask_question_using_atomic(dialog):
     logger.info(f"Found `I do` - like sentences: {idosents}")
     best_sent = ""
     best_freq_portion = 0.
+    if len(idosents) == 0:
+        if not dont_tell_you_answer(dialog["human_utterances"][-1]) and len(dialog["bot_utterances"]) > 0 and \
+                dialog["bot_utterances"][-1]["active_skill"] == "greeting_skill":
+            logger.info("Greeting skill asked personal questions and answer was not like `nothing`.")
+            idosents = dialog["human_utterances"][-1]["annotations"].get("sentseg", {}).get("segments", [""])
+            if len(idosents) == 1 and len(idosents[0].split()) <= 2:
+                idosents = ["I like " + idosents[0]]
+
     if len(idosents) > 0:
         # all i do sents are without punctuation
         best_freq_portion = 0.75
@@ -99,11 +110,12 @@ def ask_question_using_atomic(dialog):
                 best_sent = sent
 
     logger.info(f"Best sentence to answer: {best_sent} with frequent words portion: {best_freq_portion}")
-    if len(best_sent.split()) <= 4 or len(best_sent.split()) > 10:
+    if len(best_sent.split()) <= 2 or len(best_sent.split()) > 15:
         return default_return
 
     used_templates = get_used_attributes_by_name(
-        dialog["utterances"], attribute_name="atomic_question_template", value_by_default=None, activated=True)[-4:]
+        dialog["utterances"], attribute_name="atomic_question_template", value_by_default=None, activated=True,
+        skill_name="comet_dialog_skill")[-4:]
     tense = get_main_verb_tense_for_user_doings(best_sent)
     if tense:
         logger.info(f"Found user action of {tense} tense.")
@@ -147,7 +159,7 @@ def comment_using_atomic(dialog):
 
     used_templates = get_used_attributes_by_name(
         dialog["utterances"], attribute_name="atomic_comment_template",
-        value_by_default=None, activated=True)[-3:]
+        value_by_default=None, activated=True, skill_name="comet_dialog_skill")[-3:]
 
     prev_user_uttr = dialog["human_utterances"][-2]["text"].lower()
     comet_comment_templates = get_all_not_used_templates(used_templates, ATOMIC_COMMENT_TEMPLATES)
@@ -213,7 +225,8 @@ def express_opinion_using_conceptnet(dialog):
         return default_return
 
     used_templates = get_used_attributes_by_name(
-        dialog["utterances"], attribute_name="conceptnet_opinion_template", value_by_default=None, activated=True)[-4:]
+        dialog["utterances"], attribute_name="conceptnet_opinion_template", value_by_default=None, activated=True,
+        skill_name="comet_dialog_skill")[-4:]
     comet_templates = get_all_not_used_templates(used_templates, CONCEPTNET_OPINION_TEMPLATES)
     shuffle(comet_templates)
 
@@ -236,7 +249,7 @@ def express_opinion_using_conceptnet(dialog):
         logger.info(f"Composed phrase `{response}` has sentiment `{sentiment}`")
         used_templates = get_used_attributes_by_name(
             dialog["utterances"], attribute_name="conceptnet_opinion_expr_template",
-            value_by_default=None, activated=True)[-2:]
+            value_by_default=None, activated=True, skill_name="comet_dialog_skill")[-2:]
         opinion_expr_template = get_not_used_template(used_templates, OPINION_EXPRESSION_TEMPLATES[sentiment])
         attr["conceptnet_opinion_expr_template"] = opinion_expr_template
         response = opinion_expr_template + " " + response
@@ -247,6 +260,9 @@ def express_opinion_using_conceptnet(dialog):
 
         if is_opinion_request(dialog["human_utterances"][-1]):
             confidence = REQUESTED_CONCEPTNET_OPINION_CONFIDENCE
+        elif not dont_tell_you_answer(dialog["human_utterances"][-1]) and len(dialog["bot_utterances"]) > 0 and \
+                dialog["bot_utterances"][-1]["active_skill"] == "greeting_skill":
+            confidence = NOT_REQUESTED_CONCEPTNET_OPINION_CONFIDENCE
         else:
             response = ""
             confidence = 0.

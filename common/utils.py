@@ -1,4 +1,5 @@
 import re
+from random import choice
 
 from common.universal_templates import join_sentences_in_or_pattern, DONOTKNOW_LIKE
 
@@ -208,3 +209,56 @@ def is_opinion_request(annotated_phrase):
         return True
     else:
         return False
+
+
+def get_outputs_with_response_from_dialog(utterances, response, activated=False):
+    """
+    Extract list of dictionaries with already formatted outputs of different skills from full dialog
+    which replies containe `response`.
+    If `activated=True`, skill also should be chosen as `active_skill`;
+    otherwise, empty list.
+
+    Args:
+        utterances: utterances, the first one is user's reply
+        response: target text to search among bot utterances
+        activated: if target skill should be chosen by response selector on previous step or not
+
+    Returns:
+        list of dictionaries with formatted outputs of skill
+    """
+    result = []
+
+    skills_outputs = []
+    for uttr in utterances:
+        if "active_skill" in uttr:
+            final_response = uttr["text"]
+            for skop in skills_outputs:
+                # need to check text-response for skills with several hypotheses
+                if response in skop["text"]:
+                    if activated and skop["text"] in final_response and len(skop) > 0:
+                        result.append(skop)
+                    else:
+                        if not activated and len(skop) > 0:
+                            result.append(skop)
+        elif "hypotheses" in uttr:
+            skills_outputs = uttr["hypotheses"]
+
+    return result
+
+
+def get_not_used_template(used_templates, all_templates):
+    """
+    Chooce not used template among all templates
+
+    Args:
+        used_templates: list of templates already used in the dialog
+        all_templates: list of all available templates
+
+    Returns:
+        string template
+    """
+    available = list(set(all_templates).difference(set(used_templates)))
+    if len(available) > 0:
+        return choice(available)
+    else:
+        return choice(all_templates)
