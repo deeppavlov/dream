@@ -28,7 +28,7 @@ def respond_comet_dialog(dialogs_batch):
 
         comet_dialog_status = get_used_attributes_by_name(
             dialog["utterances"][-3:], attribute_name="atomic_dialog",
-            value_by_default=None, activated=True)
+            value_by_default=None, activated=True, skill_name="comet_dialog_skill")
         if len(comet_dialog_status) > 0 and comet_dialog_status[-1] == "ask_question":
             logger.info(f"Found previous comet dialog status: {comet_dialog_status}")
             responses, confidences, attrs = comment_using_atomic(dialog)

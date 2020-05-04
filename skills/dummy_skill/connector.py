@@ -141,10 +141,10 @@ def get_link_to_question(dialog):
 def generate_question_not_from_last_responses(dialog):
     linked_question, bot_attr = get_link_to_question(dialog)
 
-    if len(linked_question) > 0 and random.random() < LINK_TO_PROB:
+    if len(linked_question) > 0:
         result = linked_question
     else:
-        result = "What would you like to talk about?"
+        result = ""
     return result, bot_attr
 
 
@@ -208,11 +208,12 @@ class DummySkillConnector:
                     else:
                         logger.info("No special nounphrases for questions. Return link-to question.")
                         question, bot_attr = generate_question_not_from_last_responses(dialog)
-                        cands += [question]
-                        confs += [0.55]
-                        attrs += [{"type": "normal_question"}]
-                        human_attrs += [{}]
-                        bot_attrs += [bot_attr]
+                        if len(question) > 0:
+                            cands += [question]
+                            confs += [0.55]
+                            attrs += [{"type": "normal_question"}]
+                            human_attrs += [{}]
+                            bot_attrs += [bot_attr]
             else:
                 logger.info("Dialog begins. No special nounphrases for questions. Return link-to question.")
                 question, bot_attr = generate_question_not_from_last_responses(dialog)

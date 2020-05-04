@@ -108,8 +108,9 @@ def remove_all_phrases_containing_word(topic, phrases):
     for phrase in phrases:
         not_included = True
         for token in doc:
-            if re.search(r"\b%s" % token.lemma_, phrase) or \
-                    (token.text[-1] == "y" and re.search(r"\b%s" % token.text[:-1], phrase)):
+            if len(token.lemma_) > 2 and token.lemma_ not in set(TOP_FREQUENT_WORDS[:100]) and (
+                    re.search(r"\b%s" % token.lemma_, phrase) or (
+                    token.text[-1] == "y" and re.search(r"\b%s" % token.text[:-1], phrase))):
                 not_included = False
         if not_included:
             cleaned_phrases.append(phrase)
@@ -192,7 +193,7 @@ def get_comet_atomic(topic, relation, TOPICS={}):
     Get COMeT prediction for considered topic like `verb subj/adj/adv` of particular relation.
 
     Args:
-        topic: string in form `verb subj/adj/adv`
+        topic: string in form `subj verb subj/adj/adv`
         relation:  considered comet relations, out of ["xAttr", "xIntent", "xNeed", "xEffect", "xReact", "xWant"]
 
     Returns:
@@ -227,12 +228,17 @@ def get_comet_atomic(topic, relation, TOPICS={}):
         else:
             relation_phrases = comet_result.json().get(relation, {}).get("beams", [])
     # remove `none` relation phrases (it's sometimes returned by COMeT)
+    logger.info(f"Before cleaning got relation phrases from COMeT Atomic: {relation_phrases}")
     relation_phrases = [el for el in relation_phrases if el != "none"]
 
     relation_phrases = remove_duplicates([topic] + relation_phrases)[1:]  # the first element is topic
+    logger.info(f"After removing duplicates relation phrases from COMeT Atomic: {relation_phrases}")
     relation_phrases = remove_all_phrases_containing_word(topic, relation_phrases)
+    logger.info(f"After removing all phrases containing topic words "
+                f"relation phrases from COMeT Atomic: {relation_phrases}")
 
     relation_phrases = correct_verb_form(relation, relation_phrases)
+    logger.info(f"After correcting verb form relation phrases from COMeT Atomic: {relation_phrases}")
 
     if len(relation_phrases) > 0:
         return choice(relation_phrases)
@@ -320,7 +326,8 @@ def get_gerund_topic(topic):
     return topic.replace(to_replace, gerund)
 
 
-def get_used_attributes_by_name(utterances, attribute_name="meta_script_topic", value_by_default=None, activated=True):
+def get_used_attributes_by_name(utterances, attribute_name="meta_script_topic", value_by_default=None, activated=True,
+                                skill_name="meta_script_skill"):
     """
     Find among given utterances values of particular attribute of `meta_script_skill` outputs.
     `meta_script_skill` should be active skill if `activated`
@@ -336,7 +343,7 @@ def get_used_attributes_by_name(utterances, attribute_name="meta_script_topic", 
     """
     used = []
     meta_script_outputs = get_skill_outputs_from_dialog(
-        utterances, skill_name="meta_script_skill", activated=activated)
+        utterances, skill_name=skill_name, activated=activated)
 
     for output in meta_script_outputs:
         value = output.get(attribute_name, value_by_default)

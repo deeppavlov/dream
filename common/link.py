@@ -28,7 +28,7 @@ skills_phrases_map = {
     'personal_info_skill': set(personal_info.skill_trigger_phrases()),
     'meta_script_skill': set(meta_script.skill_trigger_phrases()),
     'short_story_skill': set(short_story.skill_trigger_phrases()),
-    'game_cooperative_skill': set(game_cooperative_skill.skill_trigger_phrases()),
+    'game_cooperative_skill': set(game_cooperative_skill.skill_trigger_phrases())
     # TODO: Add smalltalk skill phrases that is not identical to meta_script_skill
 }
 
