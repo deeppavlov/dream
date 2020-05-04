@@ -75,6 +75,9 @@ def respond():
     toxicities = [max(res.values()) for res in toxic_result]
     stop_result = [annotation.get('stop_detect', {'stop': 0}) for annotation in annotations]
     stop_probs = [j['stop'] for j in stop_result]
+    for j in range(len(skill_names)):
+        if skill_names[j] == 'intent_responder':
+            stop_probs[j] = 0
     default_blacklist = {'inappropriate': False, 'profanity': False, 'restricted_topics': False}
     blacklist_result = [annotation.get('blacklisted_words', default_blacklist) for annotation in annotations]
     has_blacklisted = [int(res['profanity']) for res in blacklist_result]
@@ -215,7 +218,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                     has_inappropriate, stop_probs, dialog):
     confidence_strength = 2
     conv_eval_strength = 0.4
-    stop_threshold = 0.9  # 0.78  To provide 99% precision on STOP class. For now 0.9 to fix tests
+    stop_threshold = 0.95  # 0.58  To provide 99% precision on STOP class. For now 0.95 to fix tests
     # calculate curr_scores which is an array of values-scores for each candidate
     curr_single_scores = []
 
