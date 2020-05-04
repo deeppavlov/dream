@@ -61,7 +61,7 @@
     },
     "download": [
       {
-        "url": "http://files.deeppavlov.ai/alexaprize_data/stop_detect.tar.gz",
+        "url": "http://files.deeppavlov.ai/alexaprize_data/stop_detect_new.tar.gz",
         "subdir": "{MODELS_PATH}/classifiers"
       }
     ]
