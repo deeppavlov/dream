@@ -41,7 +41,7 @@ def update_utterances(utterances=[], response=None, text_request=""):
             }
         ]
         utterances += [
-            {"text": text, "active_skill": "game_cooperative_skill", "confidence": confidence},
+            {"text": text, "orig_text": text, "active_skill": "game_cooperative_skill", "confidence": confidence},
         ]
     if text_request:
         utterances += [
