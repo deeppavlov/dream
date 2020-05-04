@@ -45,7 +45,7 @@ def get_skill_outputs_from_dialog(utterances, skill_name, activated=False):
     skills_outputs = []
     for uttr in utterances:
         if "active_skill" in uttr:
-            final_response = uttr["text"]
+            final_response = uttr.get("orig_text", None) if uttr.get("orig_text", None) is not None else uttr["text"]
             for skop in skills_outputs:
                 # need to check text-response for skills with several hypotheses
                 if skop["skill_name"] == skill_name:
