@@ -32,13 +32,14 @@ def noun_phrase_extraction(input_text):
         doc = nlp(input_text)
         noun_chunks = []
         for np in doc.noun_chunks:
-            if str(np) not in np_ignore_list:
+            if str(np).lower() not in np_ignore_list:
                 noun_chunks.append(str(np))
 
         # based on dependency parsing these should be the most likely topics
         augmented_noun_chunks = []
 
-        subjects = [token for token in doc if ("obj" in token.dep_ or "subj" in token.dep_ or "comp" in token.dep_)]
+        subjects = [token for token in doc
+                    if (("obj" in token.dep_ or "subj" in token.dep_ or "comp" in token.dep_) and not token.is_stop)]
         for subject in subjects:
             subject = str(subject)
             for np in noun_chunks:
