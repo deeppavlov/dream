@@ -16,6 +16,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 city_slot_obj = OWMCitySlot()
+blacklist_cities = {'is', 'none'}
 
 
 class DialogDataManager():
@@ -107,7 +108,8 @@ class DialogDataManager():
         # TODO No NER detected location case?
         # TODO detect from keywords search
         logger.info(f"Extracted city `{city}` from user utterance.")
-        if city != "Is":
+        city = city or ''
+        if city.lower().strip() not in blacklist_cities:
             return city
         else:
             return None
