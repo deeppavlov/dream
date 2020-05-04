@@ -3,6 +3,7 @@ import logging
 import os
 
 import ask_sdk_core.utils as ask_utils
+import random
 import requests
 import sentry_sdk
 import json
@@ -44,6 +45,20 @@ logger.setLevel(logging.INFO)
 
 logger.info(f"running in A/B tests mode: {ab_tests_mode}")
 
+
+def get_seed(a, b):
+    """get random seed from versions names
+
+    Args:
+        a: version A
+        b: version B
+
+    Returns:
+        random seed as sum of characters in A+B string
+    """
+    return sum([ord(x) for x in a + b])
+
+
 if ab_tests_mode:
     if A_VERSION_RATIO is None or B_VERSION_RATIO is None:
         logger.warning(f'A/B Tests versions rate is not set. Setting default A:B = 1:1 ratio.')
@@ -51,6 +66,10 @@ if ab_tests_mode:
         B_VERSION_RATIO = 1
     A_VERSION_RATIO = int(A_VERSION_RATIO)
     B_VERSION_RATIO = int(B_VERSION_RATIO)
+
+    random.seed(get_seed(A_VERSION, B_VERSION))
+    buckets = list(range(A_VERSION_RATIO + B_VERSION_RATIO))
+    random.shuffle(buckets)
 
 request_data = None
 
@@ -94,7 +113,7 @@ def call_dp_agent(user_id, text, request_data):
     # currently if A/B tests are not runing version is set to None
     version = None
     if ab_tests_mode:
-        if hashlib.md5(user_id.encode()).digest()[-1] % (A_VERSION_RATIO + B_VERSION_RATIO) < A_VERSION_RATIO:
+        if buckets[hashlib.md5(user_id.encode()).digest()[-1] % (A_VERSION_RATIO + B_VERSION_RATIO)] < A_VERSION_RATIO:
             dp_agent_url = f'{A_AGENT_URL}:{A_AGENT_PORT}'
             version = A_VERSION
         else:
