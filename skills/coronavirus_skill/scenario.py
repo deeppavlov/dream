@@ -307,10 +307,12 @@ def asked_origin(last_utterance):
 
 
 def dontlike(last_utterance):
-    return any([j in last_utterance['text'].lower() for j in ["don't like" , "don't want to talk",
-                                                              "not concerned about", "over the coronavirus",
-                                                              "don't wanna talk", "no coronavirus",
-                                                              "no more coronavirus"]])
+    last_uttr_text = last_utterance['text'].lower()
+    last_uttr_text = last_uttr_text.replace('wanna', 'want to')
+    return any([j in last_uttr_text for j in ["don't like", "don't want to talk", "don't want to hear",
+                                              "not concerned about", "over the coronavirus",
+                                              "no coronavirus", "stop talking about",
+                                              "no more coronavirus", "don't want to listen"]])
 
 
 def asked_cure(last_utterance):
