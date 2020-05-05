@@ -4,6 +4,7 @@ import logging
 from os import getenv
 from common.constants import MUST_CONTINUE, CAN_CONTINUE
 from common.link import link_to
+from common.universal_templates import book_movie_music_found
 from collections import defaultdict
 import re
 
@@ -151,11 +152,13 @@ class EmotionSkillScenario:
                 link['phrase'] = reply
                 # reply += link['phrase']
             confidence = 1.0
+
         emotion_skill_attributes = {
             "state": state,
             "emotion": emotion,
             "prev_jokes_advices": prev_jokes_advices
         }
+
         return reply, confidence, link, emotion_skill_attributes
 
     def __call__(self, dialogs):
@@ -202,6 +205,9 @@ class EmotionSkillScenario:
                         bot_attributes["used_links"]
                     )
                     bot_attributes['emotion_skill_attributes'] = emotion_skill_attributes
+                    if book_movie_music_found(annotated_user_phrase):
+                        logging.info('Found named topic in user utterance - dropping confidence')
+                        confidence = min(confidence, 0.9)
                 else:
                     reply = ""
                     confidence = 0.0
