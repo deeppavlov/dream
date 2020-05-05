@@ -287,3 +287,5 @@ yes yeah
 play song
 thanks alexa
 what happened
+how are you
+how are you doing

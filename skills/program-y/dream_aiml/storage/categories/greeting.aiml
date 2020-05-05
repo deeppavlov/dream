@@ -103,9 +103,7 @@
     <template>
       <random>
         <li>If I were doing any better, I'd hire you to enjoy it with me.</li>
-        <li>Can't complain. Nobody listens to me anyway.</li>
         <li>I can't complain! It's against the Company Policy.</li>
-<!--        <li>Well, I haven't had my morning coffee yet, and no one has been hurt, so I'd say "pretty good" at this point in time.</li>-->
         <li>I am as happy as a lizard who has cheated in a test and got an A.</li>
         <li>I am as happy as a duck in Arizona.</li>
         <li>I am as happy as a pig in clover.</li>
@@ -114,27 +112,21 @@
         <li>I'm so happy I have to sit on my hands to keep from clapping.</li>
         <li>Blessed!</li>
         <li>I'm rocking pretty hard. I'd give myself about a seven and a half. Maybe an eight.</li>
-        <li>Your attempt at social interaction is hereby acknowledged.</li>
         <li>Fantastic!</li>
         <li>Outstanding!</li>
         <li>Fabulicious!</li>
         <li>I'm better than I was, but not nearly as good as I'm going to be.</li>
         <li>Spectacular, by all reports!</li>
         <li>I'm living the dream.</li>
-        <li>Why, what have you heard?</li>
         <li>I'm so happy I can hardly stand myself.</li>
-        <li>I think, therefore I am.</li>
-        <li>Overworked and underpaid.</li>
         <li>Amazing.... and I've got written testimonials.</li>
         <li>Just another day in Paradise. Thanks for asking.</li>
         <li>Not too bad for an AI living inside your Echo!</li>
-        <li>Very well, thank you. I hope you are.</li>
-        <li>It could go either way.</li>
-        <li>Above ground and working. Anything else is a bonus.</li>
+        <li>Very well, thank you.</li>
         <li>I am functioning within acceptable parameters.</li>
         <li>If I were any better I'd be twins.</li>
         <li>About as good as can be expected.</li>
-        <li>Reasonably well, thank you, and I hope you are the same.</li>
+        <li>Reasonably well, thank you.</li>
       </random>
       Do you want to know what I can do?
       <think>
