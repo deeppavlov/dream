@@ -34,4 +34,7 @@ RUN python -m spacy download en
 COPY . /comet/
 WORKDIR /comet
 
+# apply patch to fix error in src/interactive/functions.py
+RUN git apply /comet/functions.diff
+
 CMD gunicorn --workers=1 server:app -b 0.0.0.0:8053

@@ -1,0 +1,15 @@
+diff --git a/src/interactive/functions.py b/src/interactive/functions.py
+index 894e680..b66eab0 100644
+--- a/src/interactive/functions.py
++++ b/src/interactive/functions.py
+@@ -147,8 +147,9 @@ def print_atomic_sequence(sequence_object):
+ def set_atomic_inputs(input_event, category, data_loader, text_encoder):
+     XMB = torch.zeros(1, data_loader.max_event + 1).long().to(cfg.device)
+     prefix, suffix = data.atomic_data.do_example(text_encoder, input_event, None, True, None)
++    max_len = min(len(prefix), data_loader.max_event + 1)
+ 
+-    XMB[:, :len(prefix)] = torch.LongTensor(prefix)
++    XMB[:, :max_len] = torch.LongTensor(prefix[:max_len])
+     XMB[:, -1] = torch.LongTensor([text_encoder.encoder["<{}>".format(category)]])
+ 
+     batch = {}
