@@ -34,7 +34,8 @@ skills_phrases_map = {
 
 high_rated_skills_for_linking = {
     "news_skill", "movie_skill", "book_skill", "coronavirus_skill", "short_story_skill",
-    "game_cooperative_skill", "personal_info_skill", "meta_script_skill", "emotion_skill"
+    "game_cooperative_skill", "personal_info_skill", "meta_script_skill", "emotion_skill",
+    "weather_skill"
 }
 
 
