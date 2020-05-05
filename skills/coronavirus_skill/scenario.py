@@ -15,6 +15,7 @@ from common.coronavirus import corona_switch_skill_reply, is_staying_home_reques
 from common.link import link_to
 from common.utils import is_yes, is_no
 from common.utils import check_about_death, about_virus, quarantine_end
+from common.universal_templates import book_movie_music_found
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.DEBUG)
@@ -362,6 +363,14 @@ def return_fact(facts, last_bot_phrases, asked_about_age=False, met_last=False):
     return ''
 
 
+def book_movie_music_confidence(confidence, last_utterance):
+    threshold = 0.9
+    if book_movie_music_found(last_utterance):
+        logging.info('Found book/movie/music in user utterance - dropping confidence')
+        confidence = min(confidence, threshold)
+    return confidence
+
+
 class CoronavirusSkillScenario:
 
     def __init__(self):
@@ -603,6 +612,7 @@ class CoronavirusSkillScenario:
                                 else:
                                     logging.debug('Final point')
                                     reply, confidence = '', 0
+                confidence = book_movie_music_confidence(confidence, last_utterance)
                 if reply.lower() == last_utterance['text'].lower():
                     logging.info('Not to self repeat, drop confidence to 0')
                     confidence = 0
@@ -612,6 +622,8 @@ class CoronavirusSkillScenario:
                 elif reply.lower() in last_utterances and confidence == 1:
                     logging.info('I have said that before, a bit less confident')
                     confidence = 0.5
+                else:
+                    logging.info('No special cases')
 
             except Exception as e:
                 logger.exception("exception in coronavirus skill")
