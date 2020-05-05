@@ -258,8 +258,15 @@ def express_opinion_using_conceptnet(dialog):
         if response == "":
             continue
 
-        if is_opinion_request(dialog["human_utterances"][-1]):
+        cobot_dialogact_topics = dialog['human_utterances'][-1]['annotations'].get(
+            'cobot_dialogact', {}).get('topics', [])
+        is_scripted_topic = any([topic in cobot_dialogact_topics
+                                 for topic in ["Entertainment_Movies", "Entertainment_Books"]])
+        if is_opinion_request(dialog["human_utterances"][-1]) and not is_scripted_topic:
             confidence = REQUESTED_CONCEPTNET_OPINION_CONFIDENCE
+        elif is_opinion_request(dialog["human_utterances"][-1]):
+            # opinion request on scripted topics
+            confidence = NOT_REQUESTED_CONCEPTNET_OPINION_CONFIDENCE
         elif not dont_tell_you_answer(dialog["human_utterances"][-1]) and len(dialog["bot_utterances"]) > 0 and \
                 dialog["bot_utterances"][-1]["active_skill"] == "greeting_skill":
             confidence = NOT_REQUESTED_CONCEPTNET_OPINION_CONFIDENCE
