@@ -64,8 +64,8 @@ for hobby in list_of_hobbies:
     WIKI_DESCRIPTIONS[verb_hobby] = WIKI_DESCRIPTIONS.pop(hobby)
 
 punct_reg = re.compile(f'[{string.punctuation}]')
-articles_reg = re.compile(r'(a|the|to)\s')
-person_reg = re.compile(r'^(person x|personx|person)\s')
+articles_reg = re.compile(r'(\ba\b|\bthe\b|\bto\b)\s')
+person_reg = re.compile(r'(\bperson x\b|\bpersonx\b|\bperson\b)')
 
 
 def is_custom_topic(topic):
@@ -237,6 +237,7 @@ def get_comet_atomic(topic, relation, TOPICS={}):
     logger.info(f"After removing all phrases containing topic words "
                 f"relation phrases from COMeT Atomic: {relation_phrases}")
 
+    relation_phrases = [ph for ph in relation_phrases if len(ph) > 0]
     relation_phrases = correct_verb_form(relation, relation_phrases)
     logger.info(f"After correcting verb form relation phrases from COMeT Atomic: {relation_phrases}")
 
@@ -288,6 +289,7 @@ def get_comet_conceptnet(topic, relation, return_all=False, return_not_filtered=
     relation_phrases = remove_duplicates([topic] + relation_phrases)[1:]  # the first element is topic
     relation_phrases = remove_all_phrases_containing_word(topic, relation_phrases)
 
+    relation_phrases = [ph for ph in relation_phrases if len(ph) > 0]
     relation_phrases = correct_verb_form(relation, relation_phrases)
 
     if return_all:
@@ -512,9 +514,7 @@ def get_statement_phrase(dialog, topic, attr, TOPICS):
     statement = meta_script_template.replace(
         "DOINGTHAT", doingthat).replace(
         "DOTHAT", dothat).replace(
-        "RELATION", prediction).replace(
-        "person x ", "").replace(
-        "personx ", "")
+        "RELATION", prediction)
 
     # choose template for short comment
     used_templates = get_used_attributes_by_name(
