@@ -9,7 +9,7 @@ from spacy.symbols import nsubj, VERB, PROPN, NOUN
 from random import choice, shuffle
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
-from common.utils import is_opinion_request
+from common.utils import is_opinion_request, get_skill_outputs_from_dialog
 from common.greeting import dont_tell_you_answer
 from utils import get_used_attributes_by_name, get_comet_atomic, TOP_FREQUENT_WORDS, get_all_not_used_templates, \
     get_comet_conceptnet, get_nltk_sentiment, get_not_used_template
@@ -147,6 +147,7 @@ def ask_question_using_atomic(dialog):
         attr["can_continue"] = CAN_CONTINUE
         attr["atomic_dialog"] = "ask_question"
         attr["tense"] = tense
+        attr["atomic_best_sent"] = best_sent
         responses.append(response)
         confidences.append(confidence)
         attrs.append(attr)
@@ -161,7 +162,9 @@ def comment_using_atomic(dialog):
         dialog["utterances"], attribute_name="atomic_comment_template",
         value_by_default=None, activated=True, skill_name="comet_dialog_skill")[-3:]
 
-    prev_user_uttr = dialog["human_utterances"][-2]["text"].lower()
+    prev_comet_outputs = get_skill_outputs_from_dialog(
+        dialog["utterances"][-3:], skill_name="comet_dialog_skill", activated=True)
+    prev_best_sent = prev_comet_outputs[-1].get("atomic_best_sent", "") if len(prev_comet_outputs) > 0 else ""
     comet_comment_templates = get_all_not_used_templates(used_templates, ATOMIC_COMMENT_TEMPLATES)
 
     for template in comet_comment_templates[:NUMBER_OF_HYPOTHESES_COMET_DIALOG]:
@@ -170,13 +173,14 @@ def comment_using_atomic(dialog):
         attr["atomic_comment_template"] = template
         relation = ATOMIC_COMMENT_TEMPLATES[template]["attribute"]
         logger.info(f"Choose template: {template}")
-        response = fill_comet_atomic_template(prev_user_uttr, template, relation)
+        response = fill_comet_atomic_template(prev_best_sent, template, relation)
         if response == "":
             continue
 
         confidence = DEFAULT_ATOMIC_CONTINUE_CONFIDENCE
         attr["can_continue"] = CAN_CONTINUE
         attr["atomic_dialog"] = "comment"
+        attr["atomic_best_sent"] = prev_best_sent
         responses.append(response)
         confidences.append(confidence)
         attrs.append(attr)
