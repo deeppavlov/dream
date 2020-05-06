@@ -72,8 +72,10 @@ def respond():
         response = ""
         confidence = 0.0
 
+        user_utterance = dialog["human_utterances"][-1]
+
         # skill gets full dialog, so we can take into account length_of_the dialog
-        if len(dialog["utterances"]) <= 20:
+        if len(dialog["utterances"]) <= 20 and "?" not in user_utterance["text"]:
             logger.info(f"Dialog beginning.")
             prev_skill_outputs = get_skill_outputs_from_dialog(
                 dialog["utterances"], skill_name="greeting_skill", activated=True)
@@ -85,8 +87,6 @@ def respond():
             # 2d list to 1d list of dictionaries with hypotheses
             prev_response_outputs = sum(prev_response_outputs, [])
 
-            user_utterance = dialog["human_utterances"][-1]
-
             if len(prev_skill_outputs) > 0:
                 greeting_step = prev_skill_outputs[-1]["greeting_step"]
                 logger.info(f"Found previous greeting step: `{greeting_step}`.")
@@ -97,7 +97,7 @@ def respond():
             elif len(prev_response_outputs) > 0:
                 logger.info(f"Other skills previously asked question from 1st greeting step. Start.")
                 response, confidence, attr = get_next_step(user_utterance, next_step_id=1, last_comments=[])
-            elif len(dialog["utterances"]) >= 3 and "?" not in user_utterance["text"]:
+            elif len(dialog["utterances"]) >= 3:
                 logger.info(f"No previous greeting steps.")
                 response, confidence, attr = get_next_step(user_utterance, next_step_id=0, last_comments=[])
         # TODO: turn on in the middle of the dialog
