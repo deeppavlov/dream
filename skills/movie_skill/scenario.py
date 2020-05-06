@@ -341,7 +341,13 @@ class MovieSkillScenario:
                     f"`{curr_user_uttr['text']}`.")
         response = f"{get_movie_template('clarification_template', movie_type=movie_type)} " \
                    f"{movie_type} {movie_title}?"
-        confidence = CLARIFICATION_CONFIDENCE
+
+        numvotes = self.templates.imdb.get_info_about_movie(movie_title, "numVotes")
+        numvotes = 0 if numvotes is None else numvotes
+        if numvotes > 1000:
+            confidence = SUPER_CONFIDENCE
+        else:
+            confidence = CLARIFICATION_CONFIDENCE
         attr = {"movie_id": movie_id, "status_line": ["clarification"], "can_continue": CAN_CONTINUE}
         return response, confidence, attr
 

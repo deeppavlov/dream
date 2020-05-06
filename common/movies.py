@@ -19,7 +19,7 @@ ABOUT_MOVIE_TITLES_PHRASES = [
     "What is the scariest movie you have ever seen?",
     "What is the funniest movie you have ever seen?",
     "What is the most romantic movie you have ever seen?",
-    "Is there a movie you could watch over and over again?",
+    "What movie you could watch over and over again?",
     # "Have you seen any good movies lately?",
     # "What was the last movie you watched?",
     "What is your favorite TV-series?",
