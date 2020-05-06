@@ -477,6 +477,11 @@ class BookSkillScenario:
         GENRE_HATE_PHRASE_PART2 = " It's OK. Maybe some other books will fit you better."
         GENRE_HATE_PHRASE = GENRE_HATE_PHRASE_PART1 + GENRE_HATE_PHRASE_PART2
         GENRE_NOTSURE_PHRASE = "Did you enjoy this book?"
+        UNKNOWNBOOK_QUESTIONS = ["Sorry I've never heard about this book. What is it about?",
+                                 "Not sure if I've heard of this book before. What is it about?",
+                                 "I suppose I've never heard about this book before. What did you like about it?",
+                                 "Oops. I guess I've never heard about this book before. "
+                                 "What caught your attention in this book?"]
         reply = ""
         confidence = 0
         for dialog in dialogs:
@@ -734,8 +739,12 @@ class BookSkillScenario:
                             reply, confidence = GENRE_PHRASES[genre_name][0], self.default_conf
                         else:
                             reply, confidence = GENRE_PHRASES[genre_name][1], self.default_conf
+                    elif any([j.lower() in bot_phrases[-1].lower() for j in BOOK_SKILL_CHECK_PHRASES]):
+                        logger.info('The answer probably was about book, but we cant find this book')
+                        reply = random.choice(UNKNOWNBOOK_QUESTIONS)
+                        confidence = 0.9
                     else:
-                        logging.debug('Phrase contains nothing - returning default_reply')
+                        logger.debug('Final branch')
                         reply, confidence = self.default_reply, 0
                 if reply in bot_phrases[:-2]:
                     confidence = confidence * 0.5
