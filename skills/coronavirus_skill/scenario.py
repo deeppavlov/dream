@@ -53,9 +53,9 @@ FACT_LIST = ['The origin of coronavirus, Wuhan, has fully canceled the quarantin
              'Can you tell me what people love doing  when people are self-isolating?']
 #  NOTE!!!! YOU SHOULD CHECK THAT FACTS ARE NOT BEING CHANGED BY SENTREWRITE!
 #  FORMULATE FACTS IN THIS WAY THAT THEY ARE NOT CHANGED!!! OTHERWISE THERE WILL BE BUG!!!!
-QUARANTINE_END_PHRASE = ("In the United States of America, the full quarantine is expected to last at least until "
-                         "the beginning of May. After that, US Government and US States will together decide "
-                         "what to do next.")
+QUARANTINE_END_PHRASE = ("Although most American states are easing the restrictions, "
+                         "the date of the total end of quarantine is yet unknown. "
+                         "If you want to help ending it faster, please continue social distancing as much as you can. ")
 ORIGIN_PHRASE = 'According to the scientific data, coronavirus COVID 19 is a product of natural evolution. ' \
                 'The first place where it caused an outbreak is the city of Wuhan, China.'
 WHAT_PHRASE = 'Coronavirus COVID 19 is an infectious disease. ' \
