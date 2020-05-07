@@ -744,8 +744,8 @@ class BookSkillScenario:
                         reply = random.choice(UNKNOWNBOOK_QUESTIONS)
                         confidence = 0.9
                     else:
-                        logger.debug('Final branch')
-                        reply, confidence = self.default_reply, 0
+                        logger.debug('Final branch. Say starting phrase.')
+                        reply, confidence = START_PHRASE, 0.85
                 if reply in bot_phrases[:-2]:
                     confidence = confidence * 0.5
                 assert reply is not None
