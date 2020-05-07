@@ -148,7 +148,9 @@ def about_virus(annotated_phrase):
     if type(annotated_phrase) == str:
         annotated_phrase = {'text': annotated_phrase}
     return any([j in annotated_phrase['text'].lower() for j in ['virus', 'covid', ' ill ', 'infect',
-                                                                'code nineteen']])
+                                                                'code nineteen', 'corona', 'corana', 'corono',
+                                                                'colonel', 'chrono ', 'corvette',
+                                                                'kroner', 'karuna', 'toronow']])
 
 
 yes_templates = re.compile(r"(\byes\b|\byup\b|\byep\b|\bsure\b|go ahead|\byeah\b|\bok\b|okay|"
