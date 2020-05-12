@@ -7,7 +7,7 @@ from common.universal_templates import BOOK_TEMPLATES
 from common.movies import movie_skill_was_proposed
 from common.books import book_skill_was_proposed
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
-from common.emotion import detect_emotion
+from common.emotion import detect_emotion, is_joke_requested
 from common.news import is_breaking_news_requested
 from common.utils import check_about_death, about_virus, quarantine_end, service_intents, low_priority_intents
 from common.weather import is_weather_requested
@@ -283,6 +283,12 @@ class RuleBasedSkillSelectorConnector:
 
             if about_news:
                 skills_for_uttr.append("news_api_skill")
+
+            if is_joke_requested(dialog['human_utterances'][-1]):  # joke requested
+                emotion_skill_attributes = dialog['bot_attributes'].get("emotion_skill_attributes", {})
+                emotion_skill_attributes['state'] = "joke_requested"
+                dialog['bot_attributes']['emotion_skill_attributes'] = emotion_skill_attributes
+                skills_for_uttr.append("joke")
 
             emo_prob_threshold = 0.9  # to check if any emotion has at least this prob
             for emotion, prob in emotions.items():

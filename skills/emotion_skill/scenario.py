@@ -69,7 +69,8 @@ class EmotionSkillScenario:
             else 'sadness_feeling_towards_smth',
             "fear": 'fear',
             "anger": 'anger',
-            "surprise": 'surprise'
+            "surprise": 'surprise',
+            "love": 'love'
         }
 
         state = emotion_skill_attributes.get("state", "")
@@ -91,6 +92,17 @@ class EmotionSkillScenario:
             confidence = min(0.98, self.emotion_precision[emotion])
             if len(step['next_step']):
                 state = random.choice(step['next_step'])
+        elif state == "joke_requested":
+            # got joke request
+            reply = self._random_choice(self.jokes, prev_jokes_advices)
+            state = 'offer_another_joke'
+            if reply == "":
+                state = ""  # We are run out of jokes
+                reply = "I guess I am out of jokes, sorry. Do you know any good jokes?"
+            else:
+                # Add joke to list of already told jokes and advices
+                prev_jokes_advices.append(reply)
+            confidence = 1.0
         elif state == 'offered_joke':
             # we offered a joke
             if is_yes:

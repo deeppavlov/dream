@@ -20,6 +20,10 @@ NEGATIVE_EMOTION = 'negative_emotion'
 HOW_DO_YOU_FEEL = 'How do you feel?'
 
 
+def is_joke_requested(prev_user_uttr):
+    return bool(re.match("tell me .*joke(s){0,1}", prev_user_uttr.get('text', '').lower()))
+
+
 def skill_trigger_phrases():
     return [HOW_DO_YOU_FEEL]
 
