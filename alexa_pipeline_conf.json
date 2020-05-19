@@ -178,50 +178,6 @@
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators_1.sentseg"],
                 "previous_services": ["annotators_1"]
-            },
-            "cobot_topics": {
-                "connector": {
-                    "protocol": "http",
-                    "url": "http://cobot_topics:8003/topics"
-                },
-                "dialog_formatter": "last_utt_sentseg_segments_dialog",
-                "response_formatter": "cobot_classifiers_formatter_service",
-                "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators_1.sentseg"],
-                "previous_services": ["annotators_1"]
-            },
-            "cobot_dialogact": {
-                "connector": {
-                    "protocol": "http",
-                    "url": "http://cobot_dialogact:8006/dialogact"
-                },
-                "dialog_formatter": "cobot_formatter_dialog",
-                "response_formatter": "cobot_dialogact_formatter_service",
-                "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators_1.sentseg"],
-                "previous_services": ["annotators_1"]
-            },
-            "cobot_nounphrases": {
-                "connector": {
-                    "protocol": "http",
-                    "url": "http://cobot_nounphrases:8016/nounphrases"
-                },
-                "dialog_formatter": "utt_sentseg_punct_dialog",
-                "response_formatter": "simple_formatter_service",
-                "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators_1.sentseg"],
-                "previous_services": ["annotators_1"]
-            },
-            "cobot_offensiveness": {
-                "connector": {
-                    "protocol": "http",
-                    "url": "http://cobot_offensiveness:8005/offensiveness"
-                },
-                "dialog_formatter": "last_utt_sentseg_segments_dialog",
-                "response_formatter": "cobot_classifiers_formatter_service",
-                "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators_1.sentseg"],
-                "previous_services": ["annotators_1"]
             }
         },
         "annotators_3": {
@@ -243,8 +199,8 @@
                 "dialog_formatter": "base_skill_selector_formatter_dialog",
                 "response_formatter": "simple_formatter_service",
                 "previous_services": ["annotators_3"],
-                "required_previous_services": ["annotators_2.intent_catcher", "annotators_2.cobot_topics",
-                   "annotators_2.cobot_dialogact", "annotators_2.blacklisted_words", "annotators_1.asr",
+                "required_previous_services": ["annotators_2.intent_catcher",
+                   "annotators_2.blacklisted_words", "annotators_1.asr",
                    "annotators_3.sentrewrite"],
                 "tags": ["selector"]
             }
@@ -267,16 +223,6 @@
                 },
                 "dialog_formatter": "eliza_formatter_dialog",
                 "response_formatter": "base_formatter_service",
-                "previous_services": ["skill_selectors"],
-                "state_manager_method": "add_hypothesis"
-            },
-            "cobotqa": {
-                "connector": {
-                    "protocol": "http",
-                    "url": "http://cobotqa:8001/respond"
-                },
-                "dialog_formatter": "utt_sentrewrite_modified_last_dialog",
-                "response_formatter": "cobot_qa_formatter_service",
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
             },
@@ -682,26 +628,16 @@
               "previous_services": ["skills"],
               "state_manager_method": "add_hypothesis_annotation_batch"
           },
-          "cobot_convers_evaluator_annotator": {
+          "stop_detect": {
               "connector": {
-                  "protocol": "http",
-                  "url": "http://cobot_convers_evaluator_annotator:8063/evaluate"
+                  "protocol": "python",
+                  "class_name": "annotators.stop_detect.connector:BatchConnector"
               },
-              "dialog_formatter": "cobot_convers_evaluator_annotator_formatter",
+              "dialog_formatter": "stop_formatter_dialog",
               "response_formatter": "simple_formatter_service",
               "previous_services": ["skills"],
               "state_manager_method": "add_hypothesis_annotation_batch"
-          },
-            "stop_detect": {
-                "connector": {
-                    "protocol": "python",
-                    "class_name": "annotators.stop_detect.connector:BatchConnector"
-                },
-                "dialog_formatter": "stop_formatter_dialog",
-                "response_formatter": "simple_formatter_service",
-                "previous_services": ["skills"],
-                "state_manager_method": "add_hypothesis_annotation_batch"
-            }
+          }
         },
         "response_selectors": {
             "convers_evaluation_selector": {
