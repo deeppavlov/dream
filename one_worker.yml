@@ -2,11 +2,11 @@ services:
   agent:
     command: sh -c 'bin/wait && gunicorn run_http:app_factory --bind 0.0.0.0:4242 --workers 1 --worker-class aiohttp.GunicornWebWorker'
   cobot_topics:
-    command: uvicorn server:app --host 0.0.0.0 --port 8001
+    command: gunicorn server:app --host 0.0.0.0 --port 8001
   cobot_dialogact_topics:
-    command: uvicorn server:app --host 0.0.0.0 --port 8002    
+    command: gunicorn server:app --host 0.0.0.0 --port 8002    
   cobot_dialogact_intents:
-    command: uvicorn server:app --host 0.0.0.0 --port 8003    
+    command: gunicorn server:app --host 0.0.0.0 --port 8003    
   personality_catcher:
     command: uvicorn server:app --host 0.0.0.0 --port 8010
   sentseg:
