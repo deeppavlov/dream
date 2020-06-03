@@ -25,37 +25,67 @@ services:
           - node.labels.is_agent == true
   cobot_topics:
     build:
-      context: ./annotators/cobot_topics/
-    command: gunicorn --workers=4 server:app -b 0.0.0.0:8001 -t 15
-    volumes: []
+      args:
+        skill_endpoint: cobot_topics
+        skillconfig: annotators/cobot_topics/cobot_bert.json
+        skillhost: 0.0.0.0
+        skillport: 8001
+        skilldir: annotators/cobot_topics/
+      context: ./
+      dockerfile: dp/dockerfile_skill_gpu
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 1
       placement:
         constraints:
-          - node.labels.with_gpu != true
+          - node.labels.with_gpu == true
+      resources:
+        reservations:
+          memory: 2.5G
   cobot_dialogact_topics:
     build:
-      context: ./annotators/cobot_dialogact_topics/
-    command: gunicorn --workers=4 server:app -b 0.0.0.0:8002 -t 15
-    volumes: []
+      args:
+        skill_endpoint: cobot_dialogact_topics
+        skillconfig: annotators/cobot_dialogact_topics/cobot_bert.json
+        skillhost: 0.0.0.0
+        skillport: 8002
+        skilldir: annotators/cobot_dialogact_topics/
+      context: ./
+      dockerfile: dp/dockerfile_skill_gpu
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 1
       placement:
         constraints:
-          - node.labels.with_gpu != true
+          - node.labels.with_gpu == true
+      resources:
+        reservations:
+          memory: 2.5G
   cobot_dialogact_intents:
     build:
-      context: ./annotators/cobot_dialogact_intents/
-    command: gunicorn --workers=4 server:app -b 0.0.0.0:8003 -t 15
-    volumes: []
+      args:
+        skill_endpoint: cobot_dialogact_intents
+        skillconfig: annotators/cobot_dialogact_intents/cobot_bert.json
+        skillhost: 0.0.0.0
+        skillport: 8003
+        skilldir: annotators/cobot_dialogact_intents/
+      context: ./
+      dockerfile: dp/dockerfile_skill_gpu
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 1
       placement:
         constraints:
-          - node.labels.with_gpu != true
+          - node.labels.with_gpu == true
+      resources:
+        reservations:
+          memory: 2.5G
   program_y:
     build:
       context: .
