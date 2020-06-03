@@ -49,11 +49,11 @@
         "save_path": "{MODEL_PATH}/classes.dict",
         "load_path": "{MODEL_PATH}/classes.dict",
         "in": "topic_pred_ids",
-        "out": "cobot_topics"
+        "out": "{MODEL_NAME}"
       }
     ],
     "out": [
-      "cobot_topics"
+      "{MODEL_NAME}"
     ]
   },
   "metadata": {
@@ -66,11 +66,12 @@
       "ROOT_PATH": "~/deeppavlov",
       "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
       "MODELS_PATH": "{ROOT_PATH}/models",
-      "MODEL_PATH": "{MODELS_PATH}/classifiers"
+      "MODEL_PATH": "{MODELS_PATH}/classifiers",
+      "MODEL_NAME": "cobot_topics"
     },
     "download": [
       {
-        "url": "http://files.deeppavlov.ai/alexaprize_data/cobot_topics.tar.gz",
+        "url": "http://files.deeppavlov.ai/alexaprize_data/{MODEL_NAME}.tar.gz",
         "subdir": "{MODELS_PATH}/classifiers"
       }
     ]
