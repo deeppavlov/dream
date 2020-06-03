@@ -13,16 +13,16 @@ services:
       - "./annotators/cobot_topics:/src"
     ports:
       - 8001:8001
-  cobot_dialogact_intents:
-    env_file: [.env.dev]
-    volumes:
-      - "./annotators/cobot_dialogact_intents:/src"
-    ports:
-      - 8002:8002
   cobot_dialogact_topics:
     env_file: [.env.dev]
     volumes:
       - "./annotators/cobot_dialogact_topics:/src"
+    ports:
+      - 8002:8002
+  cobot_dialogact_intents:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/cobot_dialogact_intents:/src"
     ports:
       - 8003:8003
   sentseg:
