@@ -50,7 +50,7 @@
         "load_path": "{MODEL_PATH}/classes.dict",
         "in": "topic_pred_ids",
         "out": "cobot_dialogact_topics"
-      },
+      }
     ],
     "out": [
       "cobot_dialogact_topics"
