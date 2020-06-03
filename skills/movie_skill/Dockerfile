@@ -12,7 +12,6 @@ RUN python -c "import nltk; nltk.download('punkt')"
 # RUN tar -zxvf /data/imdb_database_and_models.tar.gz -C /data/
 
 COPY ./skills/movie_skill/ /src/
-COPY ./skills/CoBotQA/ /src/CoBotQA/
 
 COPY ./common/ /src/common/
 WORKDIR /src

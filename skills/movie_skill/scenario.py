@@ -15,8 +15,6 @@ from common.universal_templates import if_switch_topic, is_switch_topic, if_lets
 from common.movies import get_movie_template
 from common.link import link_to
 
-from CoBotQA.cobotqa_service import send_cobotqa
-
 from os import getenv
 import sentry_sdk
 
