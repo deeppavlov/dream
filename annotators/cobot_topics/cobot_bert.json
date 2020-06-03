@@ -37,7 +37,7 @@
         ]
       },
       {
-        "in": topic_pred_probas",
+        "in": "topic_pred_probas",
         "out": "topic_pred_ids",
         "class_name": "proba2labels",
         "max_proba": false,
