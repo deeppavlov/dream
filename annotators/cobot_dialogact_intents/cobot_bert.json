@@ -37,7 +37,7 @@
         ]
       },
       {
-        "in": topic_pred_probas",
+        "in": "topic_pred_probas",
         "out": "topic_pred_ids",
         "class_name": "proba2labels",
         "max_proba": false,
@@ -60,7 +60,7 @@
     "requirements": [
       "{DEEPPAVLOV_PATH}/requirements/tf.txt",
       "{DEEPPAVLOV_PATH}/requirements/bert_dp.txt",
-      "annotators/cobot_topics/requirements.txt"
+      "annotators/cobot_intents/requirements.txt"
     ],
     "variables": {
       "ROOT_PATH": "~/deeppavlov",
