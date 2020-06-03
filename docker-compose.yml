@@ -5,7 +5,8 @@ services:
       context: ./
       dockerfile: dockerfile_agent
     environment:
-      WAIT_HOSTS: "program_y:8008, sentseg:8011, convers_evaluation_selector:8009, personality_catcher:8010,
+      WAIT_HOSTS: "cobot_topics:8001, cobot_dialogact_topics:8002, cobot_dialogact_intents:8003,
+        program_y:8008, sentseg:8011, convers_evaluation_selector:8009, personality_catcher:8010,
         intent_responder:8012, intent_catcher:8014, blacklisted_words:8018,
         toxic_classification:8013, sentrewrite:8017, ner:8021,  program_y_dangerous:8022, movie_skill:8023,
         sentiment_classification:8024, tfidf_retrieval:8028,
@@ -22,6 +23,39 @@ services:
         constraints:
           - node.labels.with_gpu != true
           - node.labels.is_agent == true
+  cobot_topics:
+    build:
+      context: ./annotators/cobot_topics/
+    command: gunicorn --workers=4 server:app -b 0.0.0.0:8001 -t 15
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+  cobot_dialogact_topics:
+    build:
+      context: ./annotators/cobot_dialogact_topics/
+    command: gunicorn --workers=4 server:app -b 0.0.0.0:8002 -t 15
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+  cobot_dialogact_intents:
+    build:
+      context: ./annotators/cobot_dialogact_intents/
+    command: gunicorn --workers=4 server:app -b 0.0.0.0:8003 -t 15
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   program_y:
     build:
       context: .
