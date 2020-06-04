@@ -189,7 +189,7 @@ def convert_formatter_dialog(dialog: Dict) -> Dict:
         ],
         'personality': [dialog['bot']['persona']],
         'topics': [dialog["utterances"][-1]["annotations"]["cobot_topics"]],
-        'dialogact_topics': [dialog["utterances"][-1]["annotations"]["cobot_dialogact"]["topics"]],
+        'dialogact_topics': [dialog["utterances"][-1]["annotations"]["cobot_dialogact_topics"]],
     }]
 
 
