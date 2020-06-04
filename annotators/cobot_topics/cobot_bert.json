@@ -7,6 +7,8 @@
       {
         "id": "classes_vocab",
         "class_name": "simple_vocab",
+        "save_path": "{MODEL_PATH}/{MODEL_NAME}/classes.dict",
+        "load_path": "{MODEL_PATH}/{MODEL_NAME}/classes.dict",
       },
       {
         "class_name": "bert_preprocessor",
