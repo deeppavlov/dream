@@ -192,7 +192,7 @@ def if_switch_topic(uttr):
 
 def book_movie_music_found(annotated_uttr):
     user_uttr_annotations = annotated_uttr['annotations']
-    cobot_dialogacts = set(user_uttr_annotations.get("cobot_dialogact", {}).get("topics", []))
+    cobot_dialogacts = set(user_uttr_annotations.get("cobot_dialogact_topics", []))
     named_cobot_dialogacts = {"Entertainment_Books", "Entertainment_Movies", "Entertainment_Music"}
     dialogact_met = len(named_cobot_dialogacts & cobot_dialogacts) > 0
     return dialogact_met
@@ -201,7 +201,7 @@ def book_movie_music_found(annotated_uttr):
 def is_switch_topic(annotated_uttr):
     annotations = annotated_uttr.get("annotations", {})
     topic_switch_detected = annotations.get("intent_catcher", {}).get("topic_switching", {}).get("detected", 0) == 1
-    intents = annotations.get("cobot_dialogact", {}).get("intents", [])
+    intents = annotations.get("cobot_dialogact_intents", [])
     intent_detected = "Topic_SwitchIntent" in intents
     if intent_detected or topic_switch_detected or if_switch_topic(annotated_uttr["text"].lower()):
         return True
