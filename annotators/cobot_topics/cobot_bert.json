@@ -5,6 +5,14 @@
     ],
     "pipe": [
       {
+        "id": "classes_vocab",
+        "class_name": "simple_vocab",
+        "save_path": "{MODEL_PATH}/{MODEL_NAME}/classes.dict",
+        "load_path": "{MODEL_PATH}/{MODEL_NAME}/classes.dict",
+        "in": "topic_pred_ids",
+        "out": "{MODEL_NAME}"
+      },
+      {
         "class_name": "bert_preprocessor",
         "vocab_file": "{MODEL_PATH}/{MODEL_NAME}/vocab.txt",
         "do_lower_case": false,
@@ -42,14 +50,6 @@
         "class_name": "proba2labels",
         "max_proba": false,
         "confident_threshold":0.5
-      },
-      {
-        "id": "classes_vocab",
-        "class_name": "simple_vocab",
-        "save_path": "{MODEL_PATH}/{MODEL_NAME}/classes.dict",
-        "load_path": "{MODEL_PATH}/{MODEL_NAME}/classes.dict",
-        "in": "topic_pred_ids",
-        "out": "{MODEL_NAME}"
       }
     ],
     "out": [
