@@ -45,7 +45,7 @@ def respond():
             logger.info(f"User uttr: {curr_uttr['text']}")
 
             cobot_topics = set(dialog['utterances'][-1]['annotations']['cobot_topics']['text'])
-            cobot_dialogact_topics = set(dialog['utterances'][-1]['annotations']['cobot_dialogact']['topics'])
+            cobot_dialogact_topics = set(dialog['utterances'][-1]['annotations']['cobot_dialogact_topics'])
             news_cobot_dialogacts = {"Science_and_Technology", "Sports", "Politics"}
             news_cobot_topics = {"News"}
             about_news = (news_cobot_dialogacts & cobot_dialogact_topics) | (news_cobot_topics & cobot_topics)
