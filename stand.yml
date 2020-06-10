@@ -1,6 +1,9 @@
 services:
   agent:
-    command: sh -c 'bin/wait && gunicorn run_http:app_factory --bind 0.0.0.0:4242 --workers 4 --worker-class aiohttp.GunicornWebWorker'
+    build:
+      context: ./
+      dockerfile: dockerfile_pip_agent
+    command: sh -c 'python -m deeppavlov_agent.run -pl demo_stand_pipeline_conf.json -ch http_client'
     env_file: [.env.stand]
     environment:
       WAIT_HOSTS: "10.11.1.251:8008, 10.11.1.251:8011, 10.11.1.251:8009, 10.11.1.251:8010, 10.11.1.251:8012,
