@@ -1,0 +1,41 @@
+FROM python:3.7-slim-stretch
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update -y --fix-missing && \
+    apt-get install -y -q \
+        build-essential \
+        openssl \
+        git \
+        libssl-dev \
+        libffi-dev \
+        cron && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV DEBIAN_FRONTEND noninteractive
+ENV PYTHONPATH "${PYTHONPATH}:/dp-agent"
+ENV DPA_LAUNCHING_ENV "docker"
+
+RUN mkdir dp-agent
+WORKDIR /dp-agent
+# TODO: Copy only necessary dirs and files
+COPY . /dp-agent/.
+
+COPY requirements.txt /
+RUN pip install -r requirements.txt
+
+RUN pip install deeppavlov_agent==2.1.1
+
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+ENV PYTHONPATH "${PYTHONPATH}:/dp-agent"
+ENV DPA_LAUNCHING_ENV "docker"
+RUN echo 'debug = False' > /dp-agent/dp_agent_settings.py
+
+# cronjobs
+RUN mkdir /cron_env
+COPY ./utils/agent_cronjobs /etc/cron.d/agent_cronjobs
+RUN chmod 0644 /etc/cron.d/agent_cronjobs
+RUN crontab /etc/cron.d/agent_cronjobs
+RUN touch /var/log/cron.log
+COPY ./state_manager.py /usr/local/lib/python3.7/site-packages/deeppavlov_agent/core/state_manager.py
