@@ -14,16 +14,18 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
-STOP_DETECTOR_URL = "http://stop_detect:8056/model"
 headers = {'Content-Type': 'application/json;charset=utf-8'}
 
 
 class BatchConnector:
+    def __init__(self, url: str):
+        self._url = url
+
     async def send(self, payload: Dict, callback: Callable):
         try:
             st_time = time.time()
             stop_result = requests.request(
-                url=STOP_DETECTOR_URL,
+                url=self._url,
                 headers=headers,
                 json=payload['payload'],
                 method='POST',

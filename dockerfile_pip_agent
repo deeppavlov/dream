@@ -30,7 +30,7 @@ ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 ENV PYTHONPATH "${PYTHONPATH}:/dp-agent"
 ENV DPA_LAUNCHING_ENV "docker"
-RUN echo 'debug = False' > /dp-agent/dp_agent_settings.py
+RUN printf 'debug = False\nresponse_logger = False' > /dp-agent/dp_agent_settings.py
 
 # cronjobs
 RUN mkdir /cron_env
@@ -39,3 +39,4 @@ RUN chmod 0644 /etc/cron.d/agent_cronjobs
 RUN crontab /etc/cron.d/agent_cronjobs
 RUN touch /var/log/cron.log
 COPY ./state_manager.py /usr/local/lib/python3.7/site-packages/deeppavlov_agent/core/state_manager.py
+RUN sed -i "s|RESPONSE_LOGGER = True|RESPONSE_LOGGER = setup_parameter('response_logger', user_settings)|g" /usr/local/lib/python3.7/site-packages/deeppavlov_agent/settings.py

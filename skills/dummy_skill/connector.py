@@ -154,8 +154,8 @@ class DummySkillConnector:
             st_time = time.time()
             dialog = deepcopy(payload['payload']["dialogs"][0])
 
-            curr_topics = dialog["utterances"][-1]["annotations"]["cobot_topics"].get("text", [])
-            curr_nounphrases = dialog["utterances"][-1]["annotations"]["cobot_nounphrases"]
+            curr_topics = dialog["utterances"][-1]["annotations"].get("cobot_topics", {}).get("text", [])
+            curr_nounphrases = dialog["utterances"][-1]["annotations"].get("cobot_nounphrases", [])
 
             if len(curr_topics) == 0:
                 curr_topics = ["Phatic"]
