@@ -182,7 +182,7 @@
             "cobot_topics": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://cobot_topics:8001/cobot_topics"
+                    "url": "http://cobot_topics:8001/model"
                 },
                 "dialog_formatter": "last_utt_sentseg_segments_dialog",
                 "response_formatter": "cobot_classifiers_formatter_service",
