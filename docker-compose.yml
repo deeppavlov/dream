@@ -147,7 +147,10 @@ services:
         constraints:
           - node.labels.with_gpu == true
       resources:
+        limits:
+          memory: 2G
         reservations:
+          memory: 2G
   toxic_classification:
     build:
       args:
