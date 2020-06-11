@@ -121,15 +121,14 @@ class RuleBasedSkillSelectorConnector:
         ner_detected = len(list(chain.from_iterable(user_uttr_annotations["ner"]))) > 0
         tell_me_a_story_detected = user_uttr_annotations["intent_catcher"].get("tell_me_a_story", {
         }).get("detected", 0)
-
-        cobot_topics = set(user_uttr_annotations["cobot_topics"]["text"])
+        cobot_topics = set(user_uttr_annotations.get("cobot_topics", {}).get("text", []))
         sensitive_topics_detected = any([t in self.sensitive_topics for t in cobot_topics])
+
         cobot_dialogacts = user_uttr_annotations["cobot_dialogact_intents"]
         cobot_dialogact_topics = set(user_uttr_annotations["cobot_dialogact_topics"])
         sensitive_dialogacts_detected = any(
             [(t in self.sensitive_dialogacts and "?" in user_uttr_text) for t in cobot_dialogacts]
         )
-
         blist_topics_detected = user_uttr_annotations["blacklisted_words"]["restricted_topics"]
 
         about_movies = (self.movie_cobot_dialogacts & cobot_dialogact_topics)
@@ -201,7 +200,7 @@ class RuleBasedSkillSelectorConnector:
         elif blist_topics_detected or (sensitive_topics_detected and sensitive_dialogacts_detected):
             # process user utterance with sensitive content, "safe mode"
             skills_for_uttr.append("program_y_dangerous")
-            skills_for_uttr.append("cobotqa")
+#            skills_for_uttr.append("cobotqa")
             skills_for_uttr.append("meta_script_skill")
             skills_for_uttr.append("personal_info_skill")
             if about_news:
@@ -213,7 +212,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("intent_responder")
             # process regular utterances
             skills_for_uttr.append("program_y")
-            skills_for_uttr.append("cobotqa")
+#            skills_for_uttr.append("cobotqa")
             skills_for_uttr.append("christmas_new_year_skill")
             skills_for_uttr.append("superbowl_skill")
             skills_for_uttr.append("oscar_skill")
