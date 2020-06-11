@@ -67,7 +67,7 @@
     "requirements": [
       "{DEEPPAVLOV_PATH}/requirements/tf.txt",
       "{DEEPPAVLOV_PATH}/requirements/bert_dp.txt",
-      "annotators/cobot_topics/requirements.txt"
+      "annotators/{MODEL_NAME}/requirements.txt"
     ],
     "variables": {
       "ROOT_PATH": "~/deeppavlov",
