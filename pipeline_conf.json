@@ -41,7 +41,7 @@
             "cobot_topics": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://cobot_topics:8001/model"
+                    "url": "http://cobot_topics:8001/cobot_topics"
                 },
                 "dialog_formatter": "cobot_formatter_dialog",
                 "response_formatter": "cobot_classifiers_formatter_service",
