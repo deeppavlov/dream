@@ -176,7 +176,7 @@
                     "protocol": "http",
                     "url": "http://cobot_topics:8001/model"
                 },
-                "dialog_formatter": "cobot_formatter_dialog",
+                "dialog_formatter": "last_utt_dialog",
                 "response_formatter": "cobot_classifiers_formatter_service",
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators_1.sentseg"],
@@ -187,7 +187,7 @@
                     "protocol": "http",
                     "url": "http://cobot_dialogact_topics:8002/cobot_dialogact_topics"
                 },
-                "dialog_formatter": "cobot_formatter_dialog",
+                "dialog_formatter": "last_utt_dialog",
                 "response_formatter": "cobot_dialogact_formatter_service",
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators_1.sentseg"],
@@ -198,7 +198,7 @@
                     "protocol": "http",
                     "url": "http://cobot_dialogact_intents:8003/cobot_dialogact_intents"
                 },
-                "dialog_formatter": "cobot_formatter_dialog",
+                "dialog_formatter": "last_utt_dialog",
                 "response_formatter": "cobot_dialogact_formatter_service",
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators_1.sentseg"],
