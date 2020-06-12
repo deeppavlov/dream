@@ -240,7 +240,7 @@ def cobot_formatter_dialog(dialog: Dict):
     utterances_histories = []
     for utt in dialog['utterances']:
         utterances_histories.append(utt['annotations']['sentseg']['segments'])
-    return [{'utterances_histories': [utterances_histories]}]
+    return [{'sentences': [utterances_histories]}]
 
 
 def base_response_selector_formatter_service(payload: List):
