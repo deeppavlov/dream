@@ -184,7 +184,7 @@
                     "protocol": "http",
                     "url": "http://cobot_topics:8001/model"
                 },
-                "dialog_formatter": "last_utt_sentseg_segments_dialog",
+                "dialog_formatter": "cobot_formatter_dialog",
                 "response_formatter": "cobot_classifiers_formatter_service",
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators_1.sentseg"],
