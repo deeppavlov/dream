@@ -130,27 +130,16 @@ services:
           memory: 2G
   convers_evaluation_selector:
     build:
-      args:
-        skill_endpoint: convers_evaluation_scores
-        skillconfig: response_selectors/convers_evaluation_based_selector/selector.json
-        skillhost: 0.0.0.0
-        skillport: 8009
-        skilldir:  response_selectors/convers_evaluation_based_selector
-      context: ./
-      dockerfile: dp/dockerfile_skill_gpu
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
+      context: .
+      dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
+    command: gunicorn --workers=4 server:app -b 0.0.0.0:8009 -t 15
+    volumes: []
     deploy:
       mode: replicated
-      replicas: 1
+      replicas: 2
       placement:
         constraints:
-          - node.labels.with_gpu == true
-      resources:
-        limits:
-          memory: 2G
-        reservations:
-          memory: 2G
+          - node.labels.with_gpu != true
   toxic_classification:
     build:
       args:
