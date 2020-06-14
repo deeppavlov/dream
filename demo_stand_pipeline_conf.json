@@ -644,7 +644,8 @@
           "toxic_classification": {
               "connector": {
                   "protocol": "python",
-                  "class_name": "annotators.DeepPavlovToxicClassification.connector:BatchConnector"
+                  "class_name": "annotators.DeepPavlovToxicClassification.connector:BatchConnector",
+                  "url": "http://10.11.1.251:8013/toxicity_annotations"
               },
               "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
               "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -664,7 +665,8 @@
           "stop_detect": {
               "connector": {
                   "protocol": "python",
-                  "class_name": "annotators.stop_detect.connector:BatchConnector"
+                  "class_name": "annotators.stop_detect.connector:BatchConnector",
+                  "url": "http://10.11.1.251:8056/model"
               },
               "dialog_formatter": "state_formatters.dp_formatters:stop_formatter_dialog",
               "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
