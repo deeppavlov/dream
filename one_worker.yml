@@ -1,18 +1,8 @@
 services:
   agent:
-    command: sh -c 'bin/wait && gunicorn run_http:app_factory --bind 0.0.0.0:4242 --workers 1 --worker-class aiohttp.GunicornWebWorker'
-  cobot_topics:
-    command: gunicorn server:app --host 0.0.0.0 --port 8001
-  cobot_dialogact_topics:
-    command: uvicorn server:app --host 0.0.0.0 --port 8002    
-  cobot_dialogact_intents:
-    command: uvicorn server:app --host 0.0.0.0 --port 8003    
+    command: sh -c 'bin/wait && gunicorn run_http:app_factory --bind 0.0.0.0:4242 --workers 1 --worker-class aiohttp.GunicornWebWorker'  
   personality_catcher:
     command: uvicorn server:app --host 0.0.0.0 --port 8010
-  emotion_classification:
-    command: uvicorn --workers=1 server:app -b 0.0.0.0:8038
-  stop_detect:
-    command: uvicorn --workers=1 server:app -b 0.0.0.0:8056
   ner:
     command: uvicorn --workers=1 server:app -b 0.0.0.0:8021 -t 100
   weather_skill:
