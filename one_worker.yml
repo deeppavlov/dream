@@ -1,20 +1,24 @@
 services:
   agent:
     command: sh -c 'bin/wait && gunicorn run_http:app_factory --bind 0.0.0.0:4242 --workers 1 --worker-class aiohttp.GunicornWebWorker'
-  convers_evaluation_selector:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8009 -t 15
   cobot_topics:
-    command: gunicorn server:app --host 0.0.0.0 --port 8001
+    command: uvicorn server:app --host 0.0.0.0 --port 8001
   cobot_dialogact_topics:
-    command: gunicorn server:app --host 0.0.0.0 --port 8002    
+    command: uvicorn server:app --host 0.0.0.0 --port 8002    
   cobot_dialogact_intents:
-    command: gunicorn server:app --host 0.0.0.0 --port 8003    
+    command: uvicorn server:app --host 0.0.0.0 --port 8003    
   personality_catcher:
     command: uvicorn server:app --host 0.0.0.0 --port 8010
+  emotion_classification:
+    command: uvicorn --workers=1 server:app -b 0.0.0.0:8038
+  stop_detect:
+    command: uvicorn --workers=1 server:app -b 0.0.0.0:8056
   sentseg:
     command: bash -c "./setup.sh && gunicorn --workers=1 server:app -b 0.0.0.0:8011 -t 100"
   sentrewrite:
     command: bash -c "./setup.sh && gunicorn --workers=1 server:app -b 0.0.0.0:8017 -t 60"
+  convers_evaluation_selector:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8009 -t 15
   intent_responder:
     command: gunicorn --workers=1 --name=responder --bind 0.0.0.0:8012 --timeout=100 server:app
   intent_catcher:
@@ -67,14 +71,10 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8058
   weather_skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8037
-  emotion_classification:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8038
   emotion_skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8049
   meta_script_skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8054
-  stop_detect:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8056
   coronavirus_skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8061
   small_talk_skill:
