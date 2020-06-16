@@ -61,14 +61,10 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8058
   weather_skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8037
-  emotion_classification:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8038
   emotion_skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8049
   meta_script_skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8054
-  stop_detect:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8056
   coronavirus_skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8061
   small_talk_skill:
