@@ -24,7 +24,7 @@ COPY . /dp-agent/.
 COPY requirements.txt /
 RUN pip install -r requirements.txt
 
-RUN pip install deeppavlov_agent==2.1.1
+RUN pip install https://github.com/deepmipt/dp-agent/archive/feat/cors.zip
 
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
@@ -38,5 +38,3 @@ COPY ./utils/agent_cronjobs /etc/cron.d/agent_cronjobs
 RUN chmod 0644 /etc/cron.d/agent_cronjobs
 RUN crontab /etc/cron.d/agent_cronjobs
 RUN touch /var/log/cron.log
-COPY ./state_manager.py /usr/local/lib/python3.7/site-packages/deeppavlov_agent/core/state_manager.py
-RUN sed -i "s|RESPONSE_LOGGER = True|RESPONSE_LOGGER = setup_parameter('response_logger', user_settings)|g" /usr/local/lib/python3.7/site-packages/deeppavlov_agent/settings.py
