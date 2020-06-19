@@ -96,6 +96,7 @@ class RuleBasedSkillSelectorConnector:
                                    r"fantasy)")
 
     async def send(self, payload: Dict, callback: Callable):
+        logging.info('sending')
         dialog = payload['payload']['states_batch'][0]
 
         skills_for_uttr = []
@@ -117,7 +118,7 @@ class RuleBasedSkillSelectorConnector:
                 if k in low_priority_intents
             ]
         )
-
+        logging.info('before ner')
         ner_detected = len(list(chain.from_iterable(user_uttr_annotations["ner"]))) > 0
         tell_me_a_story_detected = user_uttr_annotations["intent_catcher"].get("tell_me_a_story", {
         }).get("detected", 0)
@@ -130,7 +131,7 @@ class RuleBasedSkillSelectorConnector:
             [(t in self.sensitive_dialogacts and "?" in user_uttr_text) for t in cobot_dialogacts]
         )
         blist_topics_detected = user_uttr_annotations["blacklisted_words"]["restricted_topics"]
-
+        logging.info('before blist')
         about_movies = (self.movie_cobot_dialogacts & cobot_dialogact_topics)
         about_music = ("Entertainment_Music" in cobot_dialogact_topics) | ("Music" in cobot_topics)
         about_games = ("Games" in cobot_topics and "Entertainment_General" in cobot_dialogact_topics)
@@ -191,6 +192,7 @@ class RuleBasedSkillSelectorConnector:
         about_books = about_books or book_skill_was_proposed(prev_bot_uttr) or 'book' in user_uttr_text
 
         emotions = user_uttr_annotations['emotion_classification']['text']
+        logging.info('appending')
         if "/new_persona" in user_uttr_text:
             # process /new_persona command
             skills_for_uttr.append("personality_catcher")  # TODO: rm crutch of personality_catcher
@@ -325,6 +327,7 @@ class RuleBasedSkillSelectorConnector:
 
         if "/alexa_" in user_uttr_text:
             skills_for_uttr = ["alexa_handler"]
+        logging.info('creating task')
         asyncio.create_task(callback(
             task_id=payload['task_id'],
             response=list(set(skills_for_uttr))
