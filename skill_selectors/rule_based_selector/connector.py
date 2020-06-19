@@ -129,8 +129,8 @@ class RuleBasedSkillSelectorConnector:
             cobot_topics = set(user_uttr_annotations.get("cobot_topics", {}).get("text", []))
             sensitive_topics_detected = any([t in self.sensitive_topics for t in cobot_topics])
 
-            cobot_dialogacts = user_uttr_annotations["cobot_dialogact_intents"]
-            cobot_dialogact_topics = set(user_uttr_annotations["cobot_dialogact_topics"])
+            cobot_dialogacts = user_uttr_annotations.get("cobot_dialogact_intents", [])
+            cobot_dialogact_topics = set(user_uttr_annotations.get("cobot_dialogact_topics", []))
             sensitive_dialogacts_detected = any(
                 [(t in self.sensitive_dialogacts and "?" in user_uttr_text) for t in cobot_dialogacts]
             )
@@ -139,7 +139,8 @@ class RuleBasedSkillSelectorConnector:
             about_movies = (self.movie_cobot_dialogacts & cobot_dialogact_topics)
             about_music = ("Entertainment_Music" in cobot_dialogact_topics) | ("Music" in cobot_topics)
             about_games = ("Games" in cobot_topics and "Entertainment_General" in cobot_dialogact_topics)
-            about_books = (self.books_cobot_dialogacts & cobot_dialogact_topics) | (self.books_cobot_topics & cobot_topics)
+            about_books = (self.books_cobot_dialogacts & cobot_dialogact_topics) | (
+                    self.books_cobot_topics & cobot_topics)
             #  topicalchat_tfidf_retrieval
             about_entertainments = (self.entertainment_cobot_dialogacts & cobot_dialogact_topics) | (
                 self.entertainment_cobot_topics & cobot_topics
