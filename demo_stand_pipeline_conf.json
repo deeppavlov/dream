@@ -185,7 +185,7 @@
                     "url": "http://cobot_topics:8001/model"
                 },
                 "dialog_formatter": "cobot_formatter_dialog",
-                "response_formatter": "cobot_classifiers_formatter_service",
+                "response_formatter": "cobot_topics_formatter_service",
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators_1.sentseg"],
                 "previous_services": ["annotators_1"]
@@ -196,7 +196,7 @@
                     "url": "http://cobot_dialogact_topics:8002/model"
                 },
                 "dialog_formatter": "cobot_formatter_dialog",
-                "response_formatter": "cobot_dialogact_formatter_service",
+                "response_formatter": "cobot_dialogact_topics_formatter_service",
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators_1.sentseg"],
                 "previous_services": ["annotators_1"]
@@ -207,7 +207,7 @@
                     "url": "http://cobot_dialogact_intents:8003/model"
                 },
                 "dialog_formatter": "cobot_formatter_dialog",
-                "response_formatter": "cobot_dialogact_formatter_service",
+                "response_formatter": "cobot_dialogact_intents_formatter_service",
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators_1.sentseg"],
                 "previous_services": ["annotators_1"]

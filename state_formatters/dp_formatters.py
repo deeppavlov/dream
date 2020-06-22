@@ -227,10 +227,17 @@ def cobot_classifiers_formatter_service(payload: List):
         return {"text": []}
 
 
-def cobot_dialogact_formatter_service(payload: List):
+def cobot_dialogact_intents_formatter_service(payload: List):
     # Used by: cobot_dialogact_formatter
-    return {"intents": payload[0],
-            "topics": payload[1]}
+    return {"cobot_dialogact_intents": [j[0][0] for j in payload]}
+
+def cobot_dialogact_topics_formatter_service(payload: List):
+    # Used by: cobot_dialogact_formatter
+    return {"cobot_dialogact_topics": [j[0][0] for j in payload]}
+
+def cobot_topics_formatter_service(payload: List):
+    # Used by: cobot_dialogact_formatter
+    return {"cobot_topics": [j[0][0] for j in payload]}
 
 
 def cobot_formatter_dialog(dialog: Dict):
