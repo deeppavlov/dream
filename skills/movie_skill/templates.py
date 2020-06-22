@@ -205,7 +205,7 @@ class MovieSkillTemplates:
 
     def give_opinion(self, dialog):
         annotations = dialog["utterances"][-1]["annotations"]
-        intents = annotations["cobot_dialogact"]["intents"]
+        intents = annotations["cobot_dialogact_intents"]
 
         dialog_subjects = self.extract_previous_dialog_subjects(dialog)
         logger.info("Found in the previous dialog the following: {}".format(dialog_subjects))
@@ -396,7 +396,7 @@ class MovieSkillTemplates:
 
         user_uttr = dialog["utterances"][-1]["text"].lower()
         annotations = dialog["utterances"][-1]["annotations"]
-        intents = annotations["cobot_dialogact"]["intents"]
+        intents = annotations["cobot_dialogact_intents"]
         opinion_request_detected = annotations["intent_catcher"].get(
             "opinion_request", {}).get("detected") == 1
 

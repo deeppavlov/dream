@@ -46,12 +46,12 @@ def was_question_about_book(phrase):
 
 def opinion_request_detected(annotated_utterance):
     y1 = annotated_utterance['annotations']['intent_catcher'].get('opinion_request', {}).get('detected') == 1
-    y2 = 'Opinion_RequestIntent' in annotated_utterance['annotations']['cobot_dialogact']['intents']
+    y2 = 'Opinion_RequestIntent' in annotated_utterance['annotations']['cobot_dialogact_intents']
     return y1 or y2
 
 
 def information_request_detected(annotated_utterance):
-    return 'Information_RequestIntent' in annotated_utterance['annotations']['cobot_dialogact']['intents']
+    return 'Information_RequestIntent' in annotated_utterance['annotations']['cobot_dialogact_intents']
 
 
 def request_detected(annotated_utterance):
@@ -59,8 +59,8 @@ def request_detected(annotated_utterance):
 
 
 def opinion_expression_detected(annotated_utterance):
-    y1 = 'Opinion_ExpressionIntent' in annotated_utterance['annotations']['cobot_dialogact']['intents']
-    y2 = 'Information_DeliveryIntent' in annotated_utterance['annotations']['cobot_dialogact']['intents']
+    y1 = 'Opinion_ExpressionIntent' in annotated_utterance['annotations']['cobot_dialogact_intents']
+    y2 = 'Information_DeliveryIntent' in annotated_utterance['annotations']['cobot_dialogact_intents']
     y3 = was_question_about_book(annotated_utterance['text'])
     return y1 or y2 or y3
 
@@ -68,8 +68,8 @@ def opinion_expression_detected(annotated_utterance):
 def about_book(annotated_utterance):
     # logging.debug('aboutg book')
     # logging.debug(annotated_utterance)
-    y1 = "Entertainment_Books" in annotated_utterance['annotations']['cobot_dialogact']['intents']
-    y2 = 'Information_RequestIntent' in annotated_utterance['annotations']['cobot_topics']['text']
+    y1 = "Entertainment_Books" in annotated_utterance['annotations']['cobot_dialogact_intents']
+    y2 = 'Information_RequestIntent' in annotated_utterance['annotations']['cobot_topics_text']
     # logging.debug('ok')
     return y1 or y2
 
@@ -258,7 +258,7 @@ def asking_about_book(annotated_user_phrase):
 def is_stop(annotated_phrase):
     y0 = annotated_phrase['annotations']['intent_catcher'].get('exit', {}).get('detected') == 1
     try:
-        y1 = 'Topic_SwitchIntent' in annotated_phrase['annotations']['cobot_dialogact']['intents']
+        y1 = 'Topic_SwitchIntent' in annotated_phrase['annotations']['cobot_dialogact_intents']
     except BaseException:
         y1 = False
     user_phrase = annotated_phrase['text']
