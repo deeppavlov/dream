@@ -234,6 +234,8 @@
                 "previous_services": ["annotators_3"],
                 "required_previous_services": ["annotators_2.intent_catcher",
                    "annotators_2.blacklisted_words", "annotators_1.asr",
+                   "annotators_2.cobot_topics", "annotators_2.cobot_dialogact_topics",
+                   "annotators_2.cobot_dialogact_intents",
                    "annotators_3.sentrewrite"],
                 "tags": ["selector"]
             }
