@@ -263,7 +263,7 @@ def express_opinion_using_conceptnet(dialog):
             continue
 
         cobot_dialogact_topics = dialog['human_utterances'][-1]['annotations'].get(
-            'cobot_dialogact', {}).get('topics', [])
+            'cobot_dialogact_topics', [])
         is_scripted_topic = any([topic in cobot_dialogact_topics
                                  for topic in ["Entertainment_Movies", "Entertainment_Books"]])
         if is_opinion_request(dialog["human_utterances"][-1]) and not is_scripted_topic:
