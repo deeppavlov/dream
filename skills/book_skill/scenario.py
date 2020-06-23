@@ -73,10 +73,8 @@ def opinion_expression_detected(annotated_utterance):
 def about_book(annotated_utterance):
     # logging.debug('aboutg book')
     # logging.debug(annotated_utterance)
-    y1 = "Entertainment_Books" in annotated_utterance['annotations'].get("cobot_dialogact_topics",
-                                                                         {}).get('text', [])
-    y2 = 'Information_RequestIntent' in annotated_utterance['annotations'].get("cobot_dialogact_intents",
-                                                                               {}).get('text', [])
+    y1 = "Entertainment_Books" in annotated_utterance['annotations']['cobot_dialogact_intents']['text']
+    y2 = 'Information_RequestIntent' in annotated_utterance['annotations']['cobot_topics']['text']
     # logging.debug('ok')
     return y1 or y2
 
