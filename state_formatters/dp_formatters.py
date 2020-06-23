@@ -237,7 +237,8 @@ def cobot_dialogact_topics_formatter_service(payload: List):
 
 def cobot_topics_formatter_service(payload: List):
     # Used by: cobot_dialogact_formatter
-    return {"cobot_topics": [j[0][0][0] for j in payload]}
+    #raise Exception(str(payload))
+    return {"cobot_topics": []}
 
 
 def cobot_formatter_dialog(dialog: Dict):
