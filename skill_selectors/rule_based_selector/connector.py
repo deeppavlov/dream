@@ -126,6 +126,7 @@ class RuleBasedSkillSelectorConnector:
             ner_detected = len(list(chain.from_iterable(user_uttr_annotations["ner"]))) > 0
             tell_me_a_story_detected = user_uttr_annotations["intent_catcher"].get(
                 "tell_me_a_story", {}).get("detected", 0)
+            logging.info(str(user_uttr_annotations))
             cobot_topics = set(user_uttr_annotations.get("cobot_topics", {}).get("text", []))
             sensitive_topics_detected = any([t in self.sensitive_topics for t in cobot_topics])
 
