@@ -228,21 +228,17 @@ def cobot_classifiers_formatter_service(payload: List):
 
 
 def cobot_dialogact_intents_formatter_service(payload: List):
-    # Used by: cobot_dialogact_formatter
     return {"cobot_dialogact_intents": [j[0][0][0] for j in payload]}
 
 def cobot_dialogact_topics_formatter_service(payload: List):
-    # Used by: cobot_dialogact_formatter
     return {"cobot_dialogact_topics": [j[0][0][0] for j in payload]}
 
 def cobot_topics_formatter_service(payload: List):
-    # Used by: cobot_dialogact_formatter
     #raise Exception(str(payload))
     return {"cobot_topics": []}
 
 
 def cobot_formatter_dialog(dialog: Dict):
-    # Used by: cobot_dialogact_formatter, cobot_classifiers_formatter
     dialog = get_last_n_turns(dialog)
     dialog = remove_clarification_turns_from_dialog(dialog)
     utterances_histories = []
