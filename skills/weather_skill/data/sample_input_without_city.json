@@ -105,11 +105,11 @@
                         "text": "very_positive",
                         "confidence": 0.5619882941246033
                     },
-                    "cobot_dialogact": {
-                        "intents": [
+                    "cobot_dialogact_intents": {
+                        "text": [
                             "OtherIntent"
-                        ],
-                        "topics": [
+                        ]},
+                        "cobot_dialogact_topics":{"text":[
                             "Other"
                         ]
                     },
@@ -296,11 +296,13 @@
                         "confidence": 0.7951676845550537
                     },
                     "ner": [],
-                    "cobot_dialogact": {
-                        "intents": [
+                    "cobot_dialogact_intents": {
+                        "text": [
                             "Opinion_RequestIntent"
-                        ],
-                        "topics": [
+                        ]
+                    },
+                    "cobot_dialogact_topics": {
+                        "text": [
                             "Other"
                         ]
                     },
@@ -461,11 +463,12 @@
                         "text": "very_positive",
                         "confidence": 0.5619882941246033
                     },
-                    "cobot_dialogact": {
-                        "intents": [
+                    "cobot_dialogact_intents": {
+                        "text": [
                             "OtherIntent"
-                        ],
-                        "topics": [
+                        ]},
+                    "cobot_dialogact_topics": {
+                         "text": [
                             "Other"
                         ]
                     },
@@ -611,11 +614,11 @@
                         "confidence": 0.7951676845550537
                     },
                     "ner": [],
-                    "cobot_dialogact": {
-                        "intents": [
+                    "cobot_dialogact_intents": {
+                        "text": [
                             "Opinion_RequestIntent"
-                        ],
-                        "topics": [
+                        ]},
+                        "cobot_dialogact_topics":{"text": [
                             "Other"
                         ]
                     },

@@ -554,14 +554,15 @@
               "not blacklist"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "OtherIntent"
-            ],
-            "topics": [
-              "Other"
-            ]
-          },
+                    "cobot_dialogact_intents": {
+                        "text": [
+                            "OtherIntent"
+                        ]},
+                    "cobot_dialogact_topics": {
+                         "text": [
+                            "Other"
+                        ]
+                    },
           "sentrewrite": {
             "clusters": [],
             "modified_sents": [
@@ -1558,14 +1559,15 @@
               "not blacklist"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "OtherIntent"
-            ],
-            "topics": [
-              "Other"
-            ]
-          },
+                    "cobot_dialogact_intents": {
+                        "text": [
+                            "OtherIntent"
+                        ]},
+                    "cobot_dialogact_topics": {
+                         "text": [
+                            "Other"
+                        ]
+                    },
           "sentrewrite": {
             "clusters": [],
             "modified_sents": [
@@ -2179,16 +2181,15 @@
               "Religion"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "User_InstructionIntent",
-              "User_InstructionIntent"
-            ],
-            "topics": [
-              "Other",
-              "Other"
-            ]
-          },
+                    "cobot_dialogact_intents": {
+                        "text": [
+                            "User_InstructionIntent"
+                        ]},
+                    "cobot_dialogact_topics": {
+                         "text": [
+                            "Other"
+                        ]
+                    },
           "cobot_offensiveness": {
             "text": [
               "non-toxic",
@@ -3320,16 +3321,13 @@
               "Religion"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "User_InstructionIntent",
-              "User_InstructionIntent"
-            ],
-            "topics": [
-              "Other",
-              "Other"
-            ]
-          },
+        "cobot_dialogact_intents": {
+          "text": [
+            "User_InstructionIntent"
+          ]},
+          "cobot_dialogact_topics":{"text": [
+            "Other"
+          ]},
           "cobot_offensiveness": {
             "text": [
               "non-toxic",
@@ -4031,14 +4029,13 @@
               "Phatic"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "User_InstructionIntent"
-            ],
-            "topics": [
-              "Other"
-            ]
-          },
+        "cobot_dialogact_intents": {
+          "text": [
+            "User_InstructionIntent"
+          ]},
+          "cobot_dialogact_topics":{"text": [
+            "Other"
+          ]},
           "cobot_offensiveness": {
             "text": [
               "non-toxic"
@@ -5129,14 +5126,13 @@
               "Phatic"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "User_InstructionIntent"
-            ],
-            "topics": [
-              "Other"
-            ]
-          },
+        "cobot_dialogact_intents": {
+          "text": [
+            "User_InstructionIntent"
+          ]},
+          "cobot_dialogact_topics":{"text": [
+            "Other"
+          ]},
           "cobot_offensiveness": {
             "text": [
               "non-toxic"
@@ -5796,14 +5792,13 @@
               "Phatic"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "Information_DeliveryIntent"
-            ],
-            "topics": [
-              "Other"
-            ]
-          },
+        "cobot_dialogact_intents": {
+          "text": [
+            "Information_DeliveryIntent"
+          ]},
+          "cobot_dialogact_topics":{"text": [
+            "Other"
+          ]},
           "cobot_offensiveness": {
             "text": [
               "non-toxic"
@@ -6975,14 +6970,13 @@
               "Phatic"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "Information_DeliveryIntent"
-            ],
-            "topics": [
-              "Other"
-            ]
-          },
+        "cobot_dialogact_intents": {
+          "text": [
+            "Information_DeliveryIntent"
+          ]},
+          "cobot_dialogact_topics":{"text": [
+            "Other"
+          ]},
           "cobot_offensiveness": {
             "text": [
               "non-toxic"
@@ -7632,14 +7626,13 @@
               "Phatic"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "Information_DeliveryIntent"
-            ],
-            "topics": [
-              "Other"
-            ]
-          },
+        "cobot_dialogact_intents": {
+          "text": [
+            "Information_DeliveryIntent"
+          ]},
+          "cobot_dialogact_topics":{"text": [
+            "Other"
+          ]},
           "cobot_offensiveness": {
             "text": [
               "non-toxic"
@@ -8988,14 +8981,13 @@
               "Phatic"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "Information_DeliveryIntent"
-            ],
-            "topics": [
-              "Other"
-            ]
-          },
+        "cobot_dialogact_intents": {
+          "text": [
+            "Information_DeliveryIntent"
+          ]},
+          "cobot_dialogact_topics":{"text": [
+            "Other"
+          ]},
           "cobot_offensiveness": {
             "text": [
               "non-toxic"
@@ -9839,14 +9831,13 @@
               "not blacklist"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "Information_DeliveryIntent"
-            ],
-            "topics": [
-              "Other"
-            ]
-          },
+        "cobot_dialogact_intents": {
+          "text": [
+            "Information_DeliveryIntent"
+          ]},
+          "cobot_dialogact_topics":{"text": [
+            "Other"
+          ]},
           "sentrewrite": {
             "clusters": [],
             "modified_sents": [
@@ -11255,14 +11246,13 @@
               "not blacklist"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "Information_DeliveryIntent"
-            ],
-            "topics": [
-              "Other"
-            ]
-          },
+        "cobot_dialogact_intents": {
+          "text": [
+            "Information_DeliveryIntent"
+          ]},
+          "cobot_dialogact_topics":{"text": [
+            "Other"
+          ]},
           "sentrewrite": {
             "clusters": [],
             "modified_sents": [
@@ -11978,14 +11968,13 @@
               "Pets_Animals"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "Information_DeliveryIntent"
-            ],
-            "topics": [
-              "Other"
-            ]
-          },
+        "cobot_dialogact_intents": {
+          "text": [
+            "Information_DeliveryIntent"
+          ]},
+          "cobot_dialogact_topics":{"text": [
+            "Other"
+          ]},
           "cobot_offensiveness": {
             "text": [
               "non-toxic"
@@ -13610,14 +13599,13 @@
               "Pets_Animals"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "Information_DeliveryIntent"
-            ],
-            "topics": [
-              "Other"
-            ]
-          },
+        "cobot_dialogact_intents": {
+          "text": [
+            "Information_DeliveryIntent"
+          ]},
+          "cobot_dialogact_topics":{"text": [
+            "Other"
+          ]},
           "cobot_offensiveness": {
             "text": [
               "non-toxic"
@@ -14595,14 +14583,13 @@
               }
             ]
           ],
-          "cobot_dialogact": {
-            "intents": [
-              "General_ChatIntent"
-            ],
-            "topics": [
-              "Other"
-            ]
-          },
+        "cobot_dialogact_intents": {
+          "text": [
+            "General_ChatIntent"
+          ]},
+          "cobot_dialogact_topics":{"text": [
+            "Other"
+          ]},
           "cobot_offensiveness": {
             "text": [
               "non-toxic"
@@ -15657,11 +15644,11 @@
               }
             ]
           ],
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "General_ChatIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Other"
             ]
           },
@@ -16592,14 +16579,13 @@
           "ner": [
             []
           ],
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "ClarificationIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Other"
-            ]
-          },
+            ]},
           "cobot_topics": {
             "text": [
               "Phatic"
@@ -17518,14 +17504,13 @@
           "ner": [
             []
           ],
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "ClarificationIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Other"
-            ]
-          },
+            ]},
           "cobot_topics": {
             "text": [
               "Phatic"
@@ -17864,11 +17849,11 @@
               "Phatic"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "General_ChatIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Phatic"
             ]
           },
@@ -19509,11 +19494,11 @@
               "Phatic"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "General_ChatIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Phatic"
             ]
           },
@@ -20441,9 +20426,11 @@
               "Sports"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [],
-            "topics": []
+          "cobot_dialogact_intents": {
+            "text": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
+            ]
           },
           "cobot_offensiveness": {
             "text": [

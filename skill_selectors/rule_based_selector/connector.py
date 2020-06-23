@@ -129,8 +129,8 @@ class RuleBasedSkillSelectorConnector:
             cobot_topics = set(user_uttr_annotations.get("cobot_topics", {}).get("text", []))
             sensitive_topics_detected = any([t in self.sensitive_topics for t in cobot_topics])
 
-            cobot_dialogacts = user_uttr_annotations.get("cobot_dialogact_intents", [])
-            cobot_dialogact_topics = set(user_uttr_annotations.get("cobot_dialogact_topics", []))
+            cobot_dialogacts = user_uttr_annotations.get("cobot_dialogact_intents", {}).get("text", [])
+            cobot_dialogact_topics = set(user_uttr_annotations.get("cobot_dialogact_topics", {}).get("text", []))
             sensitive_dialogacts_detected = any(
                 [(t in self.sensitive_dialogacts and "?" in user_uttr_text) for t in cobot_dialogacts]
             )

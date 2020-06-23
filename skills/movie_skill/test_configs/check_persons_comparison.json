@@ -160,14 +160,13 @@
             "Phatic"
           ]
         },
-        "cobot_dialogact": {
-          "intents": [
+        "cobot_dialogact_intents": {
+          "text": [
             "General_ChatIntent"
-          ],
-          "topics": [
+          ]},
+          "cobot_dialogact_topics":{"text": [
             "Phatic"
-          ]
-        },
+          ]},
         "cobot_offensiveness": {
           "text": [
             "non-toxic"
@@ -570,18 +569,17 @@
             }
           ]
         ],
-        "cobot_dialogact": {
-          "intents": [
+        "cobot_dialogact_intents": {
+          "text": [
             "Opinion_RequestIntent",
             "Information_RequestIntent",
             "General_ChatIntent"
-          ],
-          "topics": [
+          ]},
+          "cobot_dialogacttopics":{"text": [
             "Other",
             "Other",
             "Phatic"
-          ]
-        },
+          ]},
         "cobot_topics": {
           "text": [
             "Phatic",
@@ -780,14 +778,13 @@
             "Phatic"
           ]
         },
-        "cobot_dialogact": {
-          "intents": [
+        "cobot_dialogact_intents": {
+          "text": [
             "General_ChatIntent"
-          ],
-          "topics": [
+          ]},
+          "cobot_dialogact_topics":{"text": [
             "Phatic"
-          ]
-        },
+          ]},
         "cobot_offensiveness": {
           "text": [
             "non-toxic"
@@ -1149,18 +1146,19 @@
             }
           ]
         ],
-        "cobot_dialogact": {
-          "intents": [
+        "cobot_dialogact_intents": {
+          "text": [
             "Opinion_RequestIntent",
             "Information_RequestIntent",
             "General_ChatIntent"
-          ],
-          "topics": [
+          ]
+        },
+          "cobot_dialogact_topics":{"text": [
             "Other",
             "Other",
             "Phatic"
-          ]
-        },
+          ]},
+
         "cobot_topics": {
           "text": [
             "Phatic",
