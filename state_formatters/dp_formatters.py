@@ -230,8 +230,10 @@ def cobot_classifiers_formatter_service(payload: List):
 def cobot_dialogact_intents_formatter_service(payload: List):
     return {"text": [j[0] for j in payload]}
 
+
 def cobot_dialogact_topics_formatter_service(payload: List):
     return {"text": [j[0] for j in payload]}
+
 
 def cobot_topics_formatter_service(payload: List):
     return {"text": [j[0] for j in payload]}

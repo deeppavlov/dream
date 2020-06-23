@@ -224,7 +224,7 @@ class MovieSkillScenario:
     def is_unclear_switch_topic(self, uttr):
         annotations = uttr.get("annotations", {})
         topic_switch_detected = annotations.get("intent_catcher", {}).get("topic_switching", {}).get("detected", 0) == 1
-        intents = annotations.get("cobot_dialogact_intents", {}).get("text",[])
+        intents = annotations.get("cobot_dialogact_intents", {}).get("text", [])
         intent_detected = "Topic_SwitchIntent" in intents
         if intent_detected or topic_switch_detected or if_lets_chat_about_topic(uttr["text"].lower()) or \
                 if_switch_topic(uttr["text"].lower()):

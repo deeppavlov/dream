@@ -196,7 +196,7 @@ def get_intent_name(text):
 
 def is_opinion_request(annotated_phrase):
     annotations = annotated_phrase.get("annotations", {})
-    intents = annotations.get("cobot_dialogact_intents", {}).get("text",{})
+    intents = annotations.get("cobot_dialogact_intents", {}).get("text", {})
     intent_detected = annotations.get("intent_catcher", {}).get("opinion_request", {}).get(
         "detected") == 1 or "Opinion_RequestIntent" in intents
     opinion_detected = "Opinion_ExpressionIntent" in intents

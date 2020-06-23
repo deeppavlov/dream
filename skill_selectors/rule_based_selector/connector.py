@@ -140,18 +140,19 @@ class RuleBasedSkillSelectorConnector:
             about_music = ("Entertainment_Music" in cobot_dialogact_topics) | ("Music" in cobot_topics)
             about_games = ("Games" in cobot_topics and "Entertainment_General" in cobot_dialogact_topics)
             about_books = (self.books_cobot_dialogacts & cobot_dialogact_topics) | (
-                    self.books_cobot_topics & cobot_topics)
+                self.books_cobot_topics & cobot_topics)
             #  topicalchat_tfidf_retrieval
             about_entertainments = (self.entertainment_cobot_dialogacts & cobot_dialogact_topics) | (
                 self.entertainment_cobot_topics & cobot_topics
             )
             about_fashions = (self.fashion_cobot_dialogacts & cobot_dialogact_topics) | \
-                (self.fashion_cobot_topics & cobot_topics)
+                             (self.fashion_cobot_topics & cobot_topics)
             # about_politics = (politic_cobot_dialogacts & cobot_dialogact_topics) | (sport_cobot_topics & cobot_topics)
             about_science_technology = (self.science_cobot_dialogacts & cobot_dialogact_topics) | (
                 self.science_cobot_topics & cobot_topics
             )
-            about_sports = (self.sport_cobot_dialogacts & cobot_dialogact_topics) | (self.sport_cobot_topics & cobot_topics)
+            about_sports = (self.sport_cobot_dialogacts & cobot_dialogact_topics) | (
+                self.sport_cobot_topics & cobot_topics)
             about_animals = self.animals_cobot_topics & cobot_topics
 
             prev_user_uttr_hyp = []

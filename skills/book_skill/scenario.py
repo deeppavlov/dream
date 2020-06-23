@@ -225,10 +225,11 @@ def get_name(annotated_phrase, mode='author', return_plain=False, bookyear=False
                 entityname_plain = '<' + entityname_plain + '>'
                 logging.debug(entityname_plain)
                 if mode == 'book' and bookyear is True:
-                    answer = requests.request(url=QUERY_SERVICE_URL, headers=headers, data=json.dumps(
-                        {'query': {'text': ' '.join(
-                            ['query label|', entityname_plain,
-                             '<aio:wasPublishedAtTimepoint>', 'label'])}}),
+                    answer = requests.request(url=QUERY_SERVICE_URL,
+                                              headers=headers,
+                                              data=json.dumps({'query': {'text': ' '.join(
+                                                  ['query label|', entityname_plain,
+                                                   '<aio:wasPublishedAtTimepoint>', 'label'])}}),
                                               method='POST', timeout=2).json()
                     if len(answer) > 1:
                         date_str = answer['results'][0]['bindingList'][0]['value']
