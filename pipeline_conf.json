@@ -71,8 +71,7 @@
                 "required_previous_services": ["annotators_1.sentseg"],
                 "previous_services": ["annotators_1"]
             } 
-        },
-        
+        }, 
         "chitchat_odqa":{
             "dialog_formatter": "base_last_utterances_formatter_in",
             "response_formatter": "chitchat_odqa_formatter_out",
