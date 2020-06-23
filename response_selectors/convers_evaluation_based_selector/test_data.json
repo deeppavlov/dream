@@ -157,13 +157,15 @@
                 }
               ]
             ],
-            "cobot_dialogact": {
-              "intents": [
-                "General_ChatIntent"
-              ],
-              "topics": [
-                "Phatic"
-              ]
+            "cobot_dialogact_intents": {
+                "text": [
+                    "General_ChatIntent"
+                ]
+            },
+            "cobot_dialogact_topics": {
+                "text": [
+                    "Phatic"
+                ]
             },
             "cobot_offensiveness": {
               "text": [
@@ -479,14 +481,15 @@
                 }
               ]
             ],
-            "cobot_dialogact": {
-              "intents": [
-                "General_ChatIntent"
-              ],
-              "topics": [
-                "Phatic"
-              ]
-            },
+            "cobot_dialogact_intents": {
+                        "text": [
+                            "General_ChatIntent"
+                        ]},
+            "cobot_dialogact_topics": {
+                         "text": [
+                            "Phatic"
+                        ]
+                    },
             "cobot_offensiveness": {
               "text": [
                 "non-toxic"

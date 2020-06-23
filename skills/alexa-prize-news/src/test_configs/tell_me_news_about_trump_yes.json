@@ -129,13 +129,16 @@
               }
             ]
           ],
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "General_ChatIntent"
-            ],
-            "topics": [
-              "Phatic"
             ]
+          },
+            "cobot_dialogact_topics": {
+             "text":
+             [
+              "Phatic"
+             ]
           },
           "cobot_offensiveness": {
             "text": [
@@ -383,14 +386,15 @@
               "News"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "Information_RequestIntent"
-            ],
-            "topics": [
-              "Politics"
-            ]
-          },
+                    "cobot_dialogact_intents": {
+                        "text": [
+                            "Information_RequestIntent"
+                        ]},
+                    "cobot_dialogact_topics": {
+                         "text": [
+                            "Politics"
+                        ]
+                    },
           "cobot_offensiveness": {
             "text": [
               "non-toxic"
@@ -658,16 +662,15 @@
             "text": "very_positive",
             "confidence": 0.6857984066009521
           },
-          "cobot_dialogact": {
-            "intents": [
-              "Information_RequestIntent",
-              "Information_RequestIntent"
-            ],
-            "topics": [
-              "Politics",
-              "Other"
-            ]
-          },
+                    "cobot_dialogact_intents": {
+                        "text": [
+                            "Information_RequestIntent"
+                        ]},
+                    "cobot_dialogact_topics": {
+                         "text": [
+                            "Politics","Other"
+                        ]
+                    },
           "cobot_topics": {
             "text": [
               "Phatic",

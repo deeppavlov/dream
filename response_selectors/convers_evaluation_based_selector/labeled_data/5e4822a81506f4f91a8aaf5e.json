@@ -739,12 +739,12 @@
               "Movies_TV"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "User_InstructionIntent",
               "Information_RequestIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Other",
               "Other"
             ]
@@ -2013,12 +2013,12 @@
               "Movies_TV"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "User_InstructionIntent",
               "Information_RequestIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics": {"text": [
               "Other",
               "Other"
             ]
@@ -2884,11 +2884,11 @@
               "Phatic"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "General_ChatIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Other"
             ]
           },
@@ -4017,11 +4017,11 @@
               "Phatic"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "General_ChatIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Other"
             ]
           },
@@ -4728,11 +4728,11 @@
               "Phatic"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "General_ChatIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Other"
             ]
           },
@@ -5832,11 +5832,11 @@
               "Phatic"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "General_ChatIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Other"
             ]
           },
@@ -6534,11 +6534,11 @@
               "not blacklist"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "General_ChatIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Other"
             ]
           },
@@ -8001,11 +8001,11 @@
               "not blacklist"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "General_ChatIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Other"
             ]
           },
@@ -8663,11 +8663,11 @@
               "Literature"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "Information_DeliveryIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Entertainment_Books"
             ]
           },
@@ -10357,11 +10357,11 @@
               "Literature"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "Information_DeliveryIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Entertainment_Books"
             ]
           },
@@ -11471,13 +11471,11 @@
               "Phatic"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "Information_DeliveryIntent",
+          "cobot_dialogact_intents": {
+            "text": [
               "Information_DeliveryIntent"
-            ],
-            "topics": [
-              "Entertainment_Books",
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Entertainment_Books"
             ]
           },
@@ -13149,13 +13147,11 @@
               "Phatic"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "Information_DeliveryIntent",
+          "cobot_dialogact_intents": {
+            "text": [
               "Information_DeliveryIntent"
-            ],
-            "topics": [
-              "Entertainment_Books",
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Entertainment_Books"
             ]
           },
@@ -14162,11 +14158,11 @@
           "ner": [
             []
           ],
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "Information_DeliveryIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Other"
             ]
           },
@@ -15578,11 +15574,11 @@
           "ner": [
             []
           ],
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "Information_DeliveryIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Other"
             ]
           },
@@ -16662,11 +16658,11 @@
           "ner": [
             []
           ],
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "General_ChatIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Other"
             ]
           },
@@ -17933,11 +17929,11 @@
           "ner": [
             []
           ],
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "General_ChatIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Other"
             ]
           },
@@ -18546,11 +18542,11 @@
               "Music"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "User_InstructionIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Other"
             ]
           },
@@ -19682,11 +19678,11 @@
               "Music"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "User_InstructionIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Other"
             ]
           },
@@ -20624,11 +20620,11 @@
           "ner": [
             []
           ],
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "User_InstructionIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Other"
             ]
           },
@@ -21909,11 +21905,11 @@
           "ner": [
             []
           ],
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "User_InstructionIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Other"
             ]
           },
@@ -22642,11 +22638,11 @@
               "Phatic"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "Information_DeliveryIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Other"
             ]
           },
@@ -24235,11 +24231,11 @@
               "Phatic"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "Information_DeliveryIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Other"
             ]
           },
@@ -25092,11 +25088,11 @@
               "Music"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "User_InstructionIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Other"
             ]
           },
@@ -26229,11 +26225,11 @@
               "Music"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "User_InstructionIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Other"
             ]
           },
@@ -27282,11 +27278,11 @@
               "Religion"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
+          "cobot_dialogact_intents": {
+            "text": [
               "User_InstructionIntent"
-            ],
-            "topics": [
+            ]},
+            "cobot_dialogact_topics":{"text": [
               "Other"
             ]
           },

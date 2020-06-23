@@ -171,10 +171,12 @@
             "Phatic"
           ]
         },
-        "cobot_dialogact": {
-          "intents": [],
-          "topics": []
+        "cobot_dialogact_intents": {
+          "text": []
         },
+          "cobot_dialogact_topics":{
+          "text": []
+          },
         "sentrewrite": {
           "clusters": [],
           "modified_sents": [
@@ -547,14 +549,15 @@
         "ner": [
           []
         ],
-        "cobot_dialogact": {
-          "intents": [
-            "Information_RequestIntent"
-          ],
-          "topics": [
-            "Entertainment_Movies"
-          ]
-        },
+                    "cobot_dialogact_intents": {
+                        "text": [
+                            "Information_RequestIntent"
+                        ]},
+                    "cobot_dialogact_topics": {
+                         "text": [
+                            "Entertainment_Movies"
+                        ]
+                    },
         "cobot_offensiveness": {
           "text": [
             "non-toxic"
@@ -756,10 +759,11 @@
             "Phatic"
           ]
         },
-        "cobot_dialogact": {
-          "intents": [],
-          "topics": []
-        },
+                    "cobot_dialogact_intents": {
+                        "text": []},
+                    "cobot_dialogact_topics": {
+                         "text": []
+                    },
         "sentrewrite": {
           "clusters": [],
           "modified_sents": [
@@ -1091,14 +1095,15 @@
         "ner": [
           []
         ],
-        "cobot_dialogact": {
-          "intents": [
-            "Information_RequestIntent"
-          ],
-          "topics": [
-            "Entertainment_Movies"
-          ]
-        },
+                    "cobot_dialogact_intents": {
+                        "text": [
+                            "Information_RequestIntent"
+                        ]},
+                    "cobot_dialogact_topics": {
+                         "text": [
+                            "Entertainment_Movies"
+                        ]
+                    },
         "cobot_offensiveness": {
           "text": [
             "non-toxic"
