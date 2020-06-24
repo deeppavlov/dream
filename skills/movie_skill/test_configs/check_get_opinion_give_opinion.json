@@ -105,15 +105,16 @@
             "text": "very_positive",
             "confidence": 0.5619882941246033
           },
-                    "cobot_dialogact_intents": {
-                        "text": [
-                            "OtherIntent"
-                        ]},
-                    "cobot_dialogact_topics": {
-                         "text": [
-                            "Other"
-                        ]
-                    },
+          "cobot_dialogact_intents": {
+            "text": [
+              "OtherIntent"
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
+              "Other"
+            ]
+          },
           "cobot_offensiveness": {
             "text": [
               "non-toxic"
@@ -327,11 +328,14 @@
             "text": [
               "Information_DeliveryIntent",
               "General_ChatIntent"
-            ]},
-            "cobot_dialogact_topics": {"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Entertainment_Movies",
               "Other"
-            ]},
+            ]
+          },
           "cobot_topics": {
             "text": [
               "Movies_TV",

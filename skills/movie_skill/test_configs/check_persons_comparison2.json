@@ -161,15 +161,15 @@
           ]
         },
         "cobot_dialogact_intents": {
-                        "text": [
-                            "General_ChatIntent"
-                        ]
-                    },
+          "text": [
+            "General_ChatIntent"
+          ]
+        },
         "cobot_dialogact_topics": {
-                         "text": [
-                            "Phatic"
-                        ]
-                    },
+          "text": [
+            "Phatic"
+          ]
+        },
         "cobot_offensiveness": {
           "text": [
             "non-toxic"
@@ -575,10 +575,13 @@
         "cobot_dialogact_intents": {
           "text": [
             "Information_DeliveryIntent"
-          ]},
-          "cobot_dialogact_topics":{"text": [
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
             "Other"
-          ]},
+          ]
+        },
         "cobot_offensiveness": {
           "text": [
             "non-toxic"
@@ -764,15 +767,16 @@
             "Phatic"
           ]
         },
-                    "cobot_dialogact_intents": {
-                        "text": [
-                            "General_ChatIntent"
-                        ]},
-                    "cobot_dialogact_topics": {
-                         "text": [
-                            "Phatic"
-                        ]
-                    },
+        "cobot_dialogact_intents": {
+          "text": [
+            "General_ChatIntent"
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
+            "Phatic"
+          ]
+        },
         "cobot_offensiveness": {
           "text": [
             "non-toxic"
@@ -1134,15 +1138,16 @@
             "Celebrities"
           ]
         },
-                    "cobot_dialogact_intents": {
-                        "text": [
-                            "Information_RequestIntent"
-                        ]},
-                    "cobot_dialogact_topics": {
-                         "text": [
-                            "Other"
-                        ]
-                    },
+        "cobot_dialogact_intents": {
+          "text": [
+            "Information_RequestIntent"
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
+            "Other"
+          ]
+        },
         "cobot_offensiveness": {
           "text": [
             "non-toxic"

@@ -155,15 +155,16 @@
             }
           ]
         ],
-                    "cobot_dialogact_intents": {
-                        "text": [
-                            "General_ChatIntent"
-                        ]},
-                    "cobot_dialogact_topics": {
-                         "text": [
-                            "Phatic"
-                        ]
-                    },
+        "cobot_dialogact_intents": {
+          "text": [
+            "General_ChatIntent"
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
+            "Phatic"
+          ]
+        },
         "cobot_offensiveness": {
           "text": [
             "non-toxic"
@@ -551,15 +552,16 @@
         "ner": [
           []
         ],
-                    "cobot_dialogact_intents": {
-                        "text": [
-                            "Information_RequestIntent"
-                        ]},
-                    "cobot_dialogact_topics": {
-                         "text": [
-                            "Entertainment_Movies"
-                        ]
-                    },
+        "cobot_dialogact_intents": {
+          "text": [
+            "Information_RequestIntent"
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
+            "Entertainment_Movies"
+          ]
+        },
         "cobot_offensiveness": {
           "text": [
             "non-toxic"
@@ -745,15 +747,16 @@
             }
           ]
         ],
-                    "cobot_dialogact_intents": {
-                        "text": [
-                            "General_ChatIntent"
-                        ]},
-                    "cobot_dialogact_topics": {
-                         "text": [
-                            "Phatic"
-                        ]
-                    },
+        "cobot_dialogact_intents": {
+          "text": [
+            "General_ChatIntent"
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
+            "Phatic"
+          ]
+        },
         "cobot_offensiveness": {
           "text": [
             "non-toxic"
@@ -1100,15 +1103,16 @@
         "ner": [
           []
         ],
-                    "cobot_dialogact_intents": {
-                        "text": [
-                            "Information_RequestIntent"
-                        ]},
-                    "cobot_dialogact_topics": {
-                         "text": [
-                            "Entertainment_Movies"
-                        ]
-                    },
+        "cobot_dialogact_intents": {
+          "text": [
+            "Information_RequestIntent"
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
+            "Entertainment_Movies"
+          ]
+        },
         "cobot_offensiveness": {
           "text": [
             "non-toxic"

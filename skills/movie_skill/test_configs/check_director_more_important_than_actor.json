@@ -155,15 +155,16 @@
             }
           ]
         ],
-                    "cobot_dialogact_intents": {
-                        "text": [
-                            "General_ChatIntent"
-                        ]},
-                    "cobot_dialogact_topics": {
-                         "text": [
-                            "Phatic"
-                        ]
-                    },
+        "cobot_dialogact_intents": {
+          "text": [
+            "General_ChatIntent"
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
+            "Phatic"
+          ]
+        },
         "cobot_topics": {
           "text": [
             "Phatic"
@@ -575,15 +576,16 @@
             "not blacklist"
           ]
         },
-                    "cobot_dialogact_intents": {
-                        "text": [
-                            "Opinion_RequestIntent"
-                        ]},
-                    "cobot_dialogact_topics": {
-                         "text": [
-                            "Other"
-                        ]
-                    },
+        "cobot_dialogact_intents": {
+          "text": [
+            "Opinion_RequestIntent"
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
+            "Other"
+          ]
+        },
         "sentrewrite": {
           "clusters": [],
           "modified_sents": [
@@ -753,15 +755,16 @@
             }
           ]
         ],
-                    "cobot_dialogact_intents": {
-                        "text": [
-                            "General_ChatIntent"
-                        ]},
-                    "cobot_dialogact_topics": {
-                         "text": [
-                            "Phatic"
-                        ]
-                    },
+        "cobot_dialogact_intents": {
+          "text": [
+            "General_ChatIntent"
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
+            "Phatic"
+          ]
+        },
         "cobot_topics": {
           "text": [
             "Phatic"
@@ -1132,15 +1135,16 @@
             "not blacklist"
           ]
         },
-                    "cobot_dialogact_intents": {
-                        "text": [
-                            "Opinion_RequestIntent"
-                        ]},
-                    "cobot_dialogact_topics": {
-                         "text": [
-                            "Other"
-                        ]
-                    },
+        "cobot_dialogact_intents": {
+          "text": [
+            "Opinion_RequestIntent"
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
+            "Other"
+          ]
+        },
         "sentrewrite": {
           "clusters": [],
           "modified_sents": [

@@ -166,7 +166,7 @@
             "not blacklist"
           ]
         },
-          "cobot_dialogact_intents": {
+        "cobot_dialogact_intents": {
           "text": [
             "General_ChatIntent"
           ]
@@ -555,8 +555,10 @@
         "cobot_dialogact_intents": {
           "text": [
             "Opinion_RequestIntent"
-          ]},
-          "cobot_dialogact_topics":{"text": [
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
             "Entertainment_Movies"
           ]
         },
@@ -759,8 +761,10 @@
         "cobot_dialogact_intents": {
           "text": [
             "General_ChatIntent"
-          ]},
-          "cobot_dialogact_topics": {"text":[
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
             "Phatic"
           ]
         },
@@ -1102,9 +1106,10 @@
         "cobot_dialogact_intents": {
           "text": [
             "Opinion_RequestIntent"
-          ]},
-          "cobot_dialogact_topics": {
-            "text": [
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
             "Entertainment_Movies"
           ]
         },

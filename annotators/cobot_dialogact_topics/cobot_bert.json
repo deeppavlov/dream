@@ -1,5 +1,5 @@
 {
-"chainer": {
+  "chainer": {
     "in": [
       "sentences"
     ],
@@ -47,7 +47,7 @@
         "out": "topic_pred_ids",
         "class_name": "proba2labels",
         "max_proba": false,
-        "confident_threshold":0.5
+        "confident_threshold": 0.5
       },
       {
         "id": "classes_vocab",
@@ -74,7 +74,7 @@
       "MODELS_PATH": "{ROOT_PATH}/models",
       "MODEL_NAME": "cobot_dialogact_topics",
       "MODEL_PATH": "{MODELS_PATH}/classifiers/{MODEL_NAME}"
-    },      
+    },
     "download": [
       {
         "url": "http://files.deeppavlov.ai/alexaprize_data/{MODEL_NAME}.tar.gz",
