@@ -160,11 +160,11 @@
             "General_ChatIntent"
           ]
         },
-          "cobot_dialogact_topics":{
+        "cobot_dialogact_topics": {
           "text": [
             "Phatic"
           ]
-          },
+        },
         "cobot_topics": {
           "text": [
             "Phatic"
@@ -568,15 +568,16 @@
             "not blacklist"
           ]
         },
-                    "cobot_dialogact_intents": {
-                        "text": [
-                            "Information_RequestIntent"
-                        ]},
-                    "cobot_dialogact_topics": {
-                         "text": [
-                            "Entertainment_Movies"
-                        ]
-                    },
+        "cobot_dialogact_intents": {
+          "text": [
+            "Information_RequestIntent"
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
+            "Entertainment_Movies"
+          ]
+        },
         "sentrewrite": {
           "clusters": [],
           "modified_sents": [
@@ -751,11 +752,11 @@
             "General_ChatIntent"
           ]
         },
-          "cobot_dialogact_topics":{
+        "cobot_dialogact_topics": {
           "text": [
             "Phatic"
           ]
-          },
+        },
         "cobot_topics": {
           "text": [
             "Phatic"
@@ -1118,15 +1119,16 @@
             "not blacklist"
           ]
         },
-                    "cobot_dialogact_intents": {
-                        "text": [
-                            "Information_RequestIntent"
-                        ]},
-                    "cobot_dialogact_topics": {
-                         "text": [
-                            "Entertainment_Movies"
-                        ]
-                    },
+        "cobot_dialogact_intents": {
+          "text": [
+            "Information_RequestIntent"
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
+            "Entertainment_Movies"
+          ]
+        },
         "sentrewrite": {
           "clusters": [],
           "modified_sents": [

@@ -743,8 +743,10 @@
             "text": [
               "User_InstructionIntent",
               "Information_RequestIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Other",
               "Other"
             ]
@@ -2017,8 +2019,10 @@
             "text": [
               "User_InstructionIntent",
               "Information_RequestIntent"
-            ]},
-            "cobot_dialogact_topics": {"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Other",
               "Other"
             ]
@@ -2887,8 +2891,10 @@
           "cobot_dialogact_intents": {
             "text": [
               "General_ChatIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Other"
             ]
           },
@@ -4020,8 +4026,10 @@
           "cobot_dialogact_intents": {
             "text": [
               "General_ChatIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Other"
             ]
           },
@@ -4731,8 +4739,10 @@
           "cobot_dialogact_intents": {
             "text": [
               "General_ChatIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Other"
             ]
           },
@@ -5835,8 +5845,10 @@
           "cobot_dialogact_intents": {
             "text": [
               "General_ChatIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Other"
             ]
           },
@@ -6537,8 +6549,10 @@
           "cobot_dialogact_intents": {
             "text": [
               "General_ChatIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Other"
             ]
           },
@@ -8004,8 +8018,10 @@
           "cobot_dialogact_intents": {
             "text": [
               "General_ChatIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Other"
             ]
           },
@@ -8666,8 +8682,10 @@
           "cobot_dialogact_intents": {
             "text": [
               "Information_DeliveryIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Entertainment_Books"
             ]
           },
@@ -10360,8 +10378,10 @@
           "cobot_dialogact_intents": {
             "text": [
               "Information_DeliveryIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Entertainment_Books"
             ]
           },
@@ -11474,8 +11494,10 @@
           "cobot_dialogact_intents": {
             "text": [
               "Information_DeliveryIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Entertainment_Books"
             ]
           },
@@ -13150,8 +13172,10 @@
           "cobot_dialogact_intents": {
             "text": [
               "Information_DeliveryIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Entertainment_Books"
             ]
           },
@@ -14161,8 +14185,10 @@
           "cobot_dialogact_intents": {
             "text": [
               "Information_DeliveryIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Other"
             ]
           },
@@ -15577,8 +15603,10 @@
           "cobot_dialogact_intents": {
             "text": [
               "Information_DeliveryIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Other"
             ]
           },
@@ -16661,8 +16689,10 @@
           "cobot_dialogact_intents": {
             "text": [
               "General_ChatIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Other"
             ]
           },
@@ -17932,8 +17962,10 @@
           "cobot_dialogact_intents": {
             "text": [
               "General_ChatIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Other"
             ]
           },
@@ -18545,8 +18577,10 @@
           "cobot_dialogact_intents": {
             "text": [
               "User_InstructionIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Other"
             ]
           },
@@ -19681,8 +19715,10 @@
           "cobot_dialogact_intents": {
             "text": [
               "User_InstructionIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Other"
             ]
           },
@@ -20623,8 +20659,10 @@
           "cobot_dialogact_intents": {
             "text": [
               "User_InstructionIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Other"
             ]
           },
@@ -21908,8 +21946,10 @@
           "cobot_dialogact_intents": {
             "text": [
               "User_InstructionIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Other"
             ]
           },
@@ -22641,8 +22681,10 @@
           "cobot_dialogact_intents": {
             "text": [
               "Information_DeliveryIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Other"
             ]
           },
@@ -24234,8 +24276,10 @@
           "cobot_dialogact_intents": {
             "text": [
               "Information_DeliveryIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Other"
             ]
           },
@@ -25091,8 +25135,10 @@
           "cobot_dialogact_intents": {
             "text": [
               "User_InstructionIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Other"
             ]
           },
@@ -26228,8 +26274,10 @@
           "cobot_dialogact_intents": {
             "text": [
               "User_InstructionIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Other"
             ]
           },
@@ -27281,8 +27329,10 @@
           "cobot_dialogact_intents": {
             "text": [
               "User_InstructionIntent"
-            ]},
-            "cobot_dialogact_topics":{"text": [
+            ]
+          },
+          "cobot_dialogact_topics": {
+            "text": [
               "Other"
             ]
           },
