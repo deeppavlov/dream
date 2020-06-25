@@ -1,0 +1,23 @@
+services:
+  cobot_topics:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    command: ["nginx", "-g", "daemon off;"]
+    volumes:
+    - ./dp/proxy/cobot_topics:/etc/nginx/conf.d
+  cobot_dialogact_topics:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    command: ["nginx", "-g", "daemon off;"]
+    volumes:
+    - ./dp/proxy/cobot_dialogact_topics:/etc/nginx/conf.d
+  cobot_dialogact_intents:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    command: ["nginx", "-g", "daemon off;"]
+    volumes:
+    - ./dp/proxy/cobot_dialogact_intents:/etc/nginx/conf.d
+version: '3.7'
