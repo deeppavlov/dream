@@ -174,7 +174,7 @@
             "cobot_topics": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://cobot_topics:8001/model"
+                    "url": "http://10.11.1.251:8001/model"
                 },
                 "dialog_formatter": "last_utt_dialog",
                 "response_formatter": "cobot_topics_formatter_service",
@@ -185,7 +185,7 @@
             "cobot_dialogact_topics": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://cobot_dialogact_topics:8002/model"
+                    "url": "http://10.11.1.251:8002/model"
                 },
                 "dialog_formatter": "last_utt_dialog",
                 "response_formatter": "cobot_dialogact_topics_formatter_service",
@@ -196,7 +196,7 @@
             "cobot_dialogact_intents": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://cobot_dialogact_intents:8003/model"
+                    "url": "http://10.11.1.251:8003/model"
                 },
                 "dialog_formatter": "last_utt_dialog",
                 "response_formatter": "cobot_dialogact_intents_formatter_service",
