@@ -3,7 +3,7 @@ services:
     build:
       context: ./
       dockerfile: dockerfile_pip_agent
-    command: sh -c 'python -m deeppavlov_agent.run -pl alexa_pipeline_conf_w_stand_cobot.json -ch http_client'
+    command: sh -c 'python -m deeppavlov_agent.run -pl alexa_pipeline_conf_w_stand_cobot.json -ch http_client --cors'
     env_file: [.env.stand_proxy]
   cobot_topics:
     build:
