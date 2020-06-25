@@ -1,4 +1,6 @@
 services:
+  agent:
+    env_file: [.env.stand_proxy]
   cobot_topics:
     build:
       context: ./
