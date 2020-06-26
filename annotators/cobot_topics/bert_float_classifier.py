@@ -14,7 +14,7 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
+@register("bert_float_classifier")
 class BertFloatClassifierModel(BertClassifierModel):
     @overrides
     def __call__(self, features: List[InputFeatures]) -> Union[List[int], List[List[float]]]:
@@ -38,9 +38,6 @@ class BertFloatClassifierModel(BertClassifierModel):
             pred = self.sess.run(self.y_predictions, feed_dict=feed_dict)
         else:
             pred = self.sess.run(self.y_probas, feed_dict=feed_dict)
-        batch_predictions = [{column: prob
-                              for column, prob in zip(self.used_columns, curr_pred)}
-                             for curr_pred in pred]
-        logging.info('Predictions are made')
-        return batch_predictions
+        logging.info('Predictions from cobot topics are '+str(pred))
+        return pred
 
