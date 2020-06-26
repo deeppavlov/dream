@@ -675,6 +675,17 @@
               "response_formatter": "simple_formatter_service",
               "previous_services": ["skills"],
               "state_manager_method": "add_hypothesis_annotation_batch"
+          },
+            "cobot_conversation_evaluator": {
+              "connector": {
+                  "protocol": "python",
+                  "class_name": "annotators.cobot_conversation_evaluator.connector:BatchConnector",
+                  "url": "http://cobot_conv_eval:8004/model"
+              },
+              "dialog_formatter": "cobot_conv_eval_formatter_dialog",
+              "response_formatter": "simple_formatter_service",
+              "previous_services": ["skills"],
+              "state_manager_method": "add_hypothesis_annotation_batch"
           }
         },
         "response_selectors": {
