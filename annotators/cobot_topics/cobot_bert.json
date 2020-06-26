@@ -23,7 +23,7 @@
         ]
       },
       {
-        "class_name": "bert_classifier",
+        "class_name": "bert_float_classifier",
         "n_classes": "#classes_vocab.len",
         "return_probas": true,
         "one_hot_labels": true,
@@ -67,6 +67,9 @@
       "{DEEPPAVLOV_PATH}/requirements/tf.txt",
       "{DEEPPAVLOV_PATH}/requirements/bert_dp.txt",
       "annotators/{MODEL_NAME}/requirements.txt"
+    ],
+    "imports": [
+      "annotators.cobot_topics.bert_float_classifier"
     ],
     "variables": {
       "ROOT_PATH": "~/deeppavlov",
