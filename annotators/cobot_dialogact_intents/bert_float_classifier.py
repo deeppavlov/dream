@@ -38,6 +38,6 @@ class BertFloatClassifierModel(BertClassifierModel):
             pred = self.sess.run(self.y_predictions, feed_dict=feed_dict)
         else:
             pred = self.sess.run(self.y_probas, feed_dict=feed_dict)
-        logging.info('Predictions cobot dialogact intents are made')
+        logging.info('Predictions from cobot dialogact intents are ' +str(pred))
         return pred
 
