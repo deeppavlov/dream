@@ -15,6 +15,7 @@ all_formatters = {
     'personality_catcher_formatter_service': personality_catcher_formatter_service,
     'cobot_classifiers_formatter_service': cobot_classifiers_formatter_service,
     'cobot_topics_formatter_service': cobot_topics_formatter_service,
+    'cobot_conv_eval_formatter_dialog': conv_eval_formatter_dialog,
     'cobot_dialogact_intents_formatter_service': cobot_dialogact_intents_formatter_service,
     'cobot_dialogact_topics_formatter_service': cobot_dialogact_topics_formatter_service,
     'cobot_formatter_dialog': cobot_formatter_dialog,

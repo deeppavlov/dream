@@ -193,6 +193,12 @@ def convert_formatter_dialog(dialog: Dict) -> Dict:
     }]
 
 
+def cobot_conv_eval_formatter_dialog(dialog: Dict) -> Dict:
+    dialog = get_last_n_turns(dialog, n = 2)
+    utts = ' [SEP] '.join([utt['text'] for utt in dialog['utterances']])
+    return [{'utterances_histories': utts}]
+
+
 def personality_catcher_formatter_dialog(dialog: Dict) -> Dict:
     # Used by: personality_catcher_formatter
     return [{'personality': [dialog['utterances'][-1]['text']]}]
@@ -305,19 +311,6 @@ def hypotheses_list(dialog: Dict) -> Dict:
     hypotheses = dialog["utterances"][-1]["hypotheses"]
     hypots = [h["text"] for h in hypotheses]
     return [{'sentences': hypots}]
-
-
-def cobot_convers_evaluator_annotator_formatter(dialog: Dict) -> Dict:
-    dialog = get_last_n_turns(dialog)
-    dialog = remove_clarification_turns_from_dialog(dialog)
-    conv = dict()
-    hypotheses = dialog["utterances"][-1]["hypotheses"]
-    conv["hypotheses"] = [h["text"] for h in hypotheses]
-    conv["currentUtterance"] = dialog["utterances"][-1]["text"]
-    # cobot recommends to take 2 last utt for conversation evaluation service
-    conv["pastUtterances"] = [uttr["text"] for uttr in dialog["human_utterances"]][-3:-1]
-    conv["pastResponses"] = [uttr["text"] for uttr in dialog["bot_utterances"]][-2:]
-    return [conv]
 
 
 def last_utt_and_history_dialog(dialog: Dict) -> List:

@@ -21,6 +21,10 @@ services:
      image: ${DOCKER_REGISTRY}/cobot_dialogact_topics:${VERSION}
      env_file:
        - ${ENV_FILE}
+  cobot_conversation_evaluator:
+     image: ${DOCKER_REGISTRY}/cobot_conversation_evaluator:${VERSION}
+     env_file:
+       - ${ENV_FILE}
   sentrewrite:
     image: ${DOCKER_REGISTRY}/sentrewrite:${VERSION}
     env_file:

@@ -18,6 +18,9 @@ services:
   cobot_topics:
     environment:
       CUDA_VISIBLE_DEVICES: ""
+  cobot_conversation_evaluator:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
   cobot_dialogact_topics:
     environment:
       CUDA_VISIBLE_DEVICES: ""

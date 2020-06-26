@@ -1,0 +1,68 @@
+{
+  "chainer": {
+    "in": [
+      "dialogs"
+    ],
+    "out": [
+      "model"
+    ],
+    "pipe": [
+      {
+        "class_name": "bert_preprocessor",
+        "vocab_file": "{DOWNLOADS_PATH}/bert_models/uncased_L-12_H-768_A-12/vocab.txt",
+        "do_lower_case": false,
+        "max_seq_length": 256,
+        "in": [
+          "x"
+        ],
+        "out": [
+          "bert_features"
+        ]
+      },
+      {
+        "class_name": "bert_classifier",
+        "n_classes": 5,
+        "return_probas": true,
+        "one_hot_labels": true,
+        "multilabel": true,
+        "bert_config_file": "{DOWNLOADS_PATH}/bert_models/uncased_L-12_H-768_A-12/bert_config.json",
+        "pretrained_bert": "{DOWNLOADS_PATH}/bert_models/uncased_L-12_H-768_A-12/bert_model.ckpt",
+        "save_path": "{MODEL_PATH}/{MODEL_NAME}/{MODEL_NAME}",
+        "load_path": "{MODEL_PATH}/{MODEL_NAME}/{MODEL_NAME}",
+        "keep_prob": 0.5,
+        "learning_rate": 1e-05,
+        "learning_rate_drop_patience": 5,
+        "learning_rate_drop_div": 2.0,
+        "in": [
+          "bert_features"
+        ],
+        "in_y": [
+          "y"
+        ],
+        "out": [
+          "model"
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "variables": {
+      "ROOT_PATH": "~/.deeppavlov",
+      "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
+      "MODELS_PATH": "{DOWNLOADS_PATH}/bert_models",
+      "MODEL_PATH": "{MODELS_PATH}/uncased_L-12_H-768_A-12/",
+      "MODEL_NAME": "cobot_conveval"
+    },
+    "imports":["annotators.cobot_conversation_evaluator.cobot_utils"],
+    "requirements": [
+      "{DEEPPAVLOV_PATH}/requirements/tf.txt",
+      "{DEEPPAVLOV_PATH}/requirements/bert_dp.txt"
+    ],
+    "download": [
+      {
+        "url": "http://files.deeppavlov.ai/alexaprize_data/cobot_conv_eval.tar.gz",
+        "subdir": "{DOWNLOADS_PATH}/bert_models"
+      }
+    ]
+  }
+}
