@@ -194,7 +194,7 @@ def convert_formatter_dialog(dialog: Dict) -> Dict:
 
 
 def cobot_conv_eval_formatter_dialog(dialog: Dict) -> Dict:
-    dialog = get_last_n_turns(dialog, n = 2)
+    dialog = get_last_n_turns(dialog, total_last_turns = 4)
     utts = ' [SEP] '.join([utt['text'] for utt in dialog['utterances']])
     return [{'utterances_histories': utts}]
 
