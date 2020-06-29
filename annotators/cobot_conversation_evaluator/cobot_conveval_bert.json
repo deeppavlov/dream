@@ -11,7 +11,7 @@
         "class_name": "bert_preprocessor",
         "vocab_file": "{MODEL_PATH}/vocab.txt",
         "do_lower_case": false,
-        "max_seq_length": 256,
+        "max_seq_length": 128,
         "in": [
           "dialogs"
         ],
