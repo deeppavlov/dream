@@ -14,6 +14,7 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 @register("bert_float_classifier")
 class BertFloatClassifierModel(BertClassifierModel):
     @overrides
@@ -38,6 +39,23 @@ class BertFloatClassifierModel(BertClassifierModel):
             pred = self.sess.run(self.y_predictions, feed_dict=feed_dict)
         else:
             pred = self.sess.run(self.y_probas, feed_dict=feed_dict)
-        logging.info('Predictions from cobot topics are '+str(pred))
+        topics = ['Phatic', 'Movies_TV',
+                  'Other', 'Music', 'Literature', 'SciTech',
+                  'Travel_Geo', 'Celebrities', 'Games', 'Pets_Animals',
+                  'Sports', 'Weather_Time', 'Food_Drink', 'Psychology',
+                  'Religion', 'Sex_Profanity', 'Politics', 'nan',
+                  'Art_Event', 'Math', 'News', 'Entertainment',
+                  'Fashion']
+        # order DOES matter
+        prediction_list = []
+        alpha = 1.1  # we introduce alpha to increase the probability of rare classes
+        for i in range(len(pred)):
+            pred[i] = [min(alpha * j, 0.99) for j in pred[i]]
+        for prediction in pred:
+            topic_list = []
+            for i in range(len(prediction)):
+                if prediction[i] > 0.5:
+                    topic_list.append(topics[i])
+            prediction_list.append(topic_list)
+        logging.info('Predictions from cobot dialogact topics are ' + str(prediction_list))
         return pred
-
