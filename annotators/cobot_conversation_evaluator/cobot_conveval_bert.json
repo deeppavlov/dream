@@ -9,11 +9,11 @@
     "pipe": [
       {
         "class_name": "bert_preprocessor",
-        "vocab_file": "{DOWNLOADS_PATH}/bert_models/uncased_L-12_H-768_A-12/vocab.txt",
+        "vocab_file": "{MODEL_PATH}/vocab.txt",
         "do_lower_case": false,
         "max_seq_length": 256,
         "in": [
-          "x"
+          "dialogs"
         ],
         "out": [
           "bert_features"
@@ -25,19 +25,15 @@
         "return_probas": true,
         "one_hot_labels": true,
         "multilabel": true,
-        "bert_config_file": "{DOWNLOADS_PATH}/bert_models/uncased_L-12_H-768_A-12/bert_config.json",
-        "pretrained_bert": "{DOWNLOADS_PATH}/bert_models/uncased_L-12_H-768_A-12/bert_model.ckpt",
-        "save_path": "{MODEL_PATH}/{MODEL_NAME}/{MODEL_NAME}",
-        "load_path": "{MODEL_PATH}/{MODEL_NAME}/{MODEL_NAME}",
+        "bert_config_file": "{MODEL_PATH}/bert_config.json",
+        "save_path": "{MODEL_PATH}/model",
+        "load_path": "{MODEL_PATH}/model",
         "keep_prob": 0.5,
         "learning_rate": 1e-05,
         "learning_rate_drop_patience": 5,
         "learning_rate_drop_div": 2.0,
         "in": [
           "bert_features"
-        ],
-        "in_y": [
-          "y"
         ],
         "out": [
           "model"
@@ -46,12 +42,12 @@
     ]
   },
   "metadata": {
-    "variables": {
-      "ROOT_PATH": "~/.deeppavlov",
+      "variables": {
+      "ROOT_PATH": "~/deeppavlov",
       "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
-      "MODELS_PATH": "{DOWNLOADS_PATH}/bert_models",
-      "MODEL_PATH": "{MODELS_PATH}/uncased_L-12_H-768_A-12/",
-      "MODEL_NAME": "cobot_conveval"
+      "MODELS_PATH": "{ROOT_PATH}/models",
+      "MODEL_NAME": "cobot_conveval",
+      "MODEL_PATH": "{MODELS_PATH}/classifiers/{MODEL_NAME}"
     },
     "imports":["annotators.cobot_conversation_evaluator.cobot_utils"],
     "requirements": [
@@ -60,8 +56,8 @@
     ],
     "download": [
       {
-        "url": "http://files.deeppavlov.ai/alexaprize_data/cobot_conv_eval.tar.gz",
-        "subdir": "{DOWNLOADS_PATH}/bert_models"
+        "url": "http://files.deeppavlov.ai/alexaprize_data/cobot_conveval.tar.gz",
+        "subdir": "{MODELS_PATH}/classifiers"
       }
     ]
   }
