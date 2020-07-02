@@ -680,7 +680,7 @@
               "connector": {
                   "protocol": "python",
                   "class_name": "annotators.cobot_conversation_evaluator.connector:BatchConnector",
-                  "url": "http://cobot_conv_eval:8004/model"
+                  "url": "http://cobot_conversation_evaluator:8004/model"
               },
               "dialog_formatter": "cobot_conv_eval_formatter_dialog",
               "response_formatter": "simple_formatter_service",
