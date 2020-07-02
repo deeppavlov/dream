@@ -26,4 +26,11 @@ services:
     command: ["nginx", "-g", "daemon off;"]
     volumes:
     - ./dp/proxy/cobot_dialogact_intents:/etc/nginx/conf.d
+  cobot_conversation_evaluator:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    command: ["nginx", "-g", "daemon off;"]
+    volumes:
+    - ./dp/proxy/cobot_conversation_evaluator:/etc/nginx/conf.d
 version: '3.7'
