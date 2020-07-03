@@ -20,7 +20,7 @@ def run_skill(state: State, modes: List = [skill_attrs.modes.intro]):
             # text="I like to talk about games. "
             # "We can talk about games of tops or about you or my favorite games, what do you want to talk about?",
             # "We can talk about top games, just say: tell me about the best games",
-            text="I like to talk about games. Got a list of the top released games, wanna discuss it? "
+            text="Love games. Got a list of the top released games, wanna discuss it? "
             "Say tell me about the best games",
             confidence=1.0,
         )
