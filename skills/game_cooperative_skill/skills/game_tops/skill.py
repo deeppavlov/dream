@@ -152,7 +152,7 @@ def describe_top_handler(state, skill_state, true_model_names, true_cmds):
             )
 
     elif "NO_ANSWER" in true_cmds:
-        text = "You can always talk to me about other popular games. What do you want to talk about?"
+        text = "You can always chat with me about other popular games. What do you want to talk about?"
         skill_state_update = {"next_step": ""}
         scenario = False
     else:
@@ -162,7 +162,7 @@ def describe_top_handler(state, skill_state, true_model_names, true_cmds):
         else:
             current_game = {}
         text = "I didn't get what you've just said. "
-        text += f"I talked about {current_game.get('name_original', 'games')}, do you want to continue. "
+        text += f"I was talking about {current_game.get('name_original', 'games')}, do you want to continue? "
         text += "For example, you can say:  go on "
         text += "Or do you want to stop for now? "
         skill_state_update = {"next_step": "describe_top"}
@@ -200,7 +200,7 @@ def select_top_handler(state, skill_state, true_model_names, true_cmds):
         scenario = False
     elif undefined_request:
         text = "I didn't get what you've just said. "
-        text += "Do you want to talk about the best games of the past year, this year, last month or week? "
+        text += "Do you want to chat about the best games of the past year, this year, last month or week? "
         text += "For example, you can say: show me the best games of this year. "
         text += "Or do you want to stop for now? "
         skill_state_update = {"next_step": "select_top"}
@@ -218,17 +218,17 @@ def intro_handler(state, skill_state, true_model_names, true_cmds):
     confidence = 1.0
     scenario = True
     if skill_state.get("top_name") == "previous_yearly_top":
-        text = "Last time we talked about the best games of last year. "
+        text = "Last time we were talking about the best games of last year. "
     elif skill_state.get("top_name") == "yearly_top":
-        text = "Last time we talked about the best games of this year. "
+        text = "Last time we were discussing the best games of this year. "
     elif skill_state.get("top_name") == "monthly_top":
-        text = "Last time we talked about the best games of the last month. "
+        text = "Last time we had a conversation about the best games of the last month. "
     elif skill_state.get("top_name") == "weekly_top":
-        text = "Last time we talked about the best games of the last week. "
+        text = "Last time we chatted about the best games of the last week. "
     else:
-        text = "I can tell you about popular games. "
+        text = "I can tell you a few things about popular games. "
 
-    text += "For now, I can talk about the most popular games for this or last year "
+    text += "For now, I can talk about the most popular games for this or last year"
     if tops.get("weekly_top"):
         text += ", last month, or even the last week (hotties!). "
     elif tops.get("monthly_top"):
@@ -245,7 +245,7 @@ def run_skill(state: State, modes: List = [skill_attrs.modes.intro]):
     model_results = run_models(models, state.human_utterances)
     true_model_names = cmd_postprocessing(model_results, model_name_only=True)
     true_cmds = cmd_postprocessing(model_results, cmd_only=True)
-    text = "Sorry, i can not answer."
+    text = "Sorry, have no idea what to say."
     confidence = 0.0
     scenario = False
     skill_state_update = {}
