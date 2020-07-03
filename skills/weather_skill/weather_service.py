@@ -14,8 +14,6 @@ def weather_forecast_now(city_str):
     """
     Interface method encapsulating implementation of weather service
     Return a weather forecast in some city"""
-    # to use CoBotQA as weather provider:
-    # return cobotqa_weather_forecast_now(city_str)
     # to use openweathermap.org as weather provider:
     # return openweathermap_pure_url_weather_forecast_now(city_str)
     return owm_requests_weather_forecast_now(city_str)
@@ -24,35 +22,6 @@ def weather_forecast_now(city_str):
 def dummy_weather_forecast_now(city_str):
     """Return a weather forecast in some city"""
     return "Weather in %s is good. 5 above zero" % city_str
-
-
-def cobotqa_weather_forecast_now(city_str, timeperiod=None):
-    """Warpper that requests cobotQA for weather
-    But cobot is often fails...
-    """
-    # TODO add support of tomorrow requests
-    question_string = "what is the weather in %s" % city_str
-
-    ##########################################################################################
-    # setup CoBotQA envs and import it
-    import sys
-    import os
-    # os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ruler_bot.settings")
-    SELF_DIR = os.path.dirname(os.path.abspath(__file__))
-    SKILLS_DIR = os.path.dirname(SELF_DIR)
-    COBOTQA_DIR = SKILLS_DIR + "/CoBotQA"
-    sys.path.append(COBOTQA_DIR)
-
-    os.environ.setdefault("COBOT_API_KEY", "MYF6T5vloa7UIfT1LwftY3I33JmzlTaA86lwlVGm")
-    os.environ.setdefault("COBOT_QA_SERVICE_URL",
-                          "https://06421kpunk.execute-api.us-east-1.amazonaws.com/prod/qa/v1/answer")
-    ##########################################################################################
-
-    from cobotqa_service import send_cobotqa
-    print("requesting cobot for: %s" % question_string)
-    response = send_cobotqa(question_string)
-    print("cobot response: %s" % response)
-    return response
 
 
 SORRY_TEMPLATE = "Sorry, we have a problem with the weather service. Try again a little bit later."
