@@ -191,8 +191,7 @@
       <pattern>HELLO</pattern>
       <template>
           <random>
-              <li> Hello, this is an experimental Socialbot created by DeepPavlov.ai research team!</li>
-              <li> Hi, this is an DeepPavlov.ai experimental Socialbot!</li>
+              <li> Hello, this is a DeepPAvlov experimental Socialbot!</li>
           </random>
           <think>
               <set name="topic">USER_MOOD</set>
