@@ -174,6 +174,9 @@ def lower_duplicates_score(candidates, bot_utt_counter, scores, confidences):
         # no penalties for repeat intent
         if cand['skill_name'] == 'intent_responder' and '#+#repeat' in cand['text']:
             continue
+        # TODO: remove the quick fix of gcs petitions, issue is https://github.com/deepmipt/assistant/issues/80
+        if cand['skill_name'] == 'game_cooperative_skill':
+            continue
 
         cand_sents = sent_tokenize(cand["text"].lower())
         coeff = 1
