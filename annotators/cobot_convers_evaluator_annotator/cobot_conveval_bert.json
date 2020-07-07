@@ -49,7 +49,7 @@
       "MODEL_NAME": "cobot_conveval",
       "MODEL_PATH": "{MODELS_PATH}/classifiers/{MODEL_NAME}"
     },
-    "imports":["annotators.cobot_conversation_evaluator.cobot_utils"],
+    "imports":["annotators.cobot_convers_evaluator_annotator.cobot_utils"],
     "requirements": [
       "{DEEPPAVLOV_PATH}/requirements/tf.txt",
       "{DEEPPAVLOV_PATH}/requirements/bert_dp.txt"

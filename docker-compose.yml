@@ -86,14 +86,14 @@ services:
       resources:
         reservations:
           memory: 2.5G
-  cobot_conversation_evaluator:
+  cobot_convers_evaluator_annotator:
     build:
       args:
         skill_endpoint: model
-        skillconfig: annotators/cobot_conversation_evaluator/cobot_conveval_bert.json
+        skillconfig: annotators/cobot_convers_evaluator_annotator/cobot_conveval_bert.json
         skillhost: 0.0.0.0
         skillport: 8004
-        skilldir: annotators/cobot_conversation_evaluator
+        skilldir: annotators/cobot_convers_evaluator_annotator
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
