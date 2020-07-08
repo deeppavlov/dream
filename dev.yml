@@ -331,4 +331,11 @@ services:
       - "./skills/greeting_skill:/src"
     ports:
       - 8070:8070
+  factoid_qa:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/factoid_qa:/src"
+      - "./common:/src/common"
+    ports:
+      - 8071:8071
 version: "3.7"

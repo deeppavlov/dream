@@ -122,12 +122,12 @@ class RuleBasedSkillSelectorConnector:
         tell_me_a_story_detected = user_uttr_annotations["intent_catcher"].get("tell_me_a_story", {
         }).get("detected", 0)
         cobot_topics = set(user_uttr_annotations.get("cobot_topics", {}).get("text", []))
-        sensitive_topics_detected = any([t in self.sensitive_topics for t in cobot_topics])
-        cobot_dialogacts = user_uttr_annotations.get("cobot_dialogact", {}).get("intents", [])
+        # sensitive_topics_detected = any([t in self.sensitive_topics for t in cobot_topics])
+        # cobot_dialogacts = user_uttr_annotations.get("cobot_dialogact", {}).get("intents", [])
         cobot_dialogact_topics = set(user_uttr_annotations.get("cobot_dialogact", {}).get("topics", []))
-        sensitive_dialogacts_detected = any(
-            [(t in self.sensitive_dialogacts and "?" in user_uttr_text) for t in cobot_dialogacts]
-        )
+        # sensitive_dialogacts_detected = any(
+        #     [(t in self.sensitive_dialogacts and "?" in user_uttr_text) for t in cobot_dialogacts]
+        # )
         blist_topics_detected = user_uttr_annotations["blacklisted_words"]["restricted_topics"]
 
         about_movies = (self.movie_cobot_dialogacts & cobot_dialogact_topics)
@@ -206,6 +206,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("news_api_skill")
             if enable_coronavirus or prev_active_skill == 'coronavirus_skill':
                 skills_for_uttr.append("coronavirus_skill")
+            skills_for_uttr.append("factoid_qa")
         else:
             if low_priority_intent_detected:
                 skills_for_uttr.append("intent_responder")
@@ -220,6 +221,7 @@ class RuleBasedSkillSelectorConnector:
             skills_for_uttr.append("meta_script_skill")
             skills_for_uttr.append("comet_dialog_skill")
             skills_for_uttr.append("greeting_skill")
+            skills_for_uttr.append("factoid_qa")
 
             if ner_detected:
                 skills_for_uttr.append("reddit_ner_skill")

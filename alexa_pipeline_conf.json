@@ -605,6 +605,16 @@
                 "response_formatter": "skill_with_attributes_formatter_service",
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
+            },
+            "factoid_qa": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://factoid_qa:8071/respond"
+                },
+                "dialog_formatter": "utt_sentseg_punct_dialog",
+                "response_formatter": "skill_with_attributes_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
             }
         },
         "post_skill_selector_annotators": {
