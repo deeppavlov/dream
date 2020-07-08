@@ -171,9 +171,11 @@
             "Phatic"
           ]
         },
-        "cobot_dialogact": {
-          "intents": [],
-          "topics": []
+        "cobot_dialogact_intents": {
+          "text": []
+        },
+        "cobot_dialogact_topics": {
+          "text": []
         },
         "sentrewrite": {
           "clusters": [],
@@ -547,11 +549,13 @@
         "ner": [
           []
         ],
-        "cobot_dialogact": {
-          "intents": [
+        "cobot_dialogact_intents": {
+          "text": [
             "Information_RequestIntent"
-          ],
-          "topics": [
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
             "Entertainment_Movies"
           ]
         },
@@ -756,9 +760,11 @@
             "Phatic"
           ]
         },
-        "cobot_dialogact": {
-          "intents": [],
-          "topics": []
+        "cobot_dialogact_intents": {
+          "text": []
+        },
+        "cobot_dialogact_topics": {
+          "text": []
         },
         "sentrewrite": {
           "clusters": [],
@@ -1091,11 +1097,13 @@
         "ner": [
           []
         ],
-        "cobot_dialogact": {
-          "intents": [
+        "cobot_dialogact_intents": {
+          "text": [
             "Information_RequestIntent"
-          ],
-          "topics": [
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
             "Entertainment_Movies"
           ]
         },

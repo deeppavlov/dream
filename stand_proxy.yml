@@ -1,0 +1,36 @@
+services:
+  agent:
+    build:
+      context: ./
+      dockerfile: dockerfile_pip_agent
+    command: sh -c 'python -m deeppavlov_agent.run -pl alexa_pipeline_conf_w_stand_cobot.json -ch http_client --cors'
+    env_file: [.env.stand_proxy]
+  cobot_topics:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    command: ["nginx", "-g", "daemon off;"]
+    volumes:
+    - ./dp/proxy/cobot_topics:/etc/nginx/conf.d
+  cobot_dialogact_topics:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    command: ["nginx", "-g", "daemon off;"]
+    volumes:
+    - ./dp/proxy/cobot_dialogact_topics:/etc/nginx/conf.d
+  cobot_dialogact_intents:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    command: ["nginx", "-g", "daemon off;"]
+    volumes:
+    - ./dp/proxy/cobot_dialogact_intents:/etc/nginx/conf.d
+  cobot_conversation_evaluator:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    command: ["nginx", "-g", "daemon off;"]
+    volumes:
+    - ./dp/proxy/cobot_conversation_evaluator:/etc/nginx/conf.d
+version: '3.7'

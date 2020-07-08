@@ -10,7 +10,7 @@ import os
 import sys
 sys.path.append(os.getcwd())
 
-from state_formatters.dp_formatters import cobot_convers_evaluator_annotator_formatter, \
+from state_formatters.dp_formatters import cobot_conv_eval_formatter_dialog, \
                                            stop_formatter_dialog  # noqa
 
 
@@ -24,7 +24,7 @@ parser.add_argument('--save_dir', help='directory to save labeled data')
 parser.add_argument('--mode', help='add_annotations|label', default='label')
 
 BLACKLIST_URL = "http://localhost:8018/blacklisted_words_batch"
-CONV_EVAL_URL = "http://localhost:8063/evaluate"
+CONV_EVAL_URL = "http://localhost:8004/model"
 TOXIC_URL = "http://localhost:8013/toxicity_annotations"
 STOP_DETECTOR_URL = "http://localhost:8056/model"
 
@@ -118,7 +118,7 @@ def add_annotations(dialogs):
         toxic_result = requests.post(TOXIC_URL, json={"sentences": hypots}).json()
         toxic_result = [res[0] for res in toxic_result]
 
-        conv_eval_format = cobot_convers_evaluator_annotator_formatter(dialog)
+        conv_eval_format = cobot_conv_eval_formatter_dialog(dialog)
         conv_eval_result = requests.post(CONV_EVAL_URL, json=conv_eval_format[0]).json()[0]
 
         stop_format = stop_formatter_dialog(dialog)

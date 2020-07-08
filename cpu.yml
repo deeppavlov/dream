@@ -15,6 +15,18 @@ services:
   emotion_classification:
     environment:
       CUDA_VISIBLE_DEVICES: ""
+  cobot_topics:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  cobot_conversation_evaluator:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  cobot_dialogact_topics:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  cobot_dialogact_intents:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
   comet_atomic:
     environment:
       DEVICE: cpu

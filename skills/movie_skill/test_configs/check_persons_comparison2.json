@@ -160,11 +160,13 @@
             "Phatic"
           ]
         },
-        "cobot_dialogact": {
-          "intents": [
+        "cobot_dialogact_intents": {
+          "text": [
             "General_ChatIntent"
-          ],
-          "topics": [
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
             "Phatic"
           ]
         },
@@ -570,11 +572,13 @@
             "Celebrities"
           ]
         },
-        "cobot_dialogact": {
-          "intents": [
-            "Information_RequestIntent"
-          ],
-          "topics": [
+        "cobot_dialogact_intents": {
+          "text": [
+            "Information_DeliveryIntent"
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
             "Other"
           ]
         },
@@ -763,11 +767,13 @@
             "Phatic"
           ]
         },
-        "cobot_dialogact": {
-          "intents": [
+        "cobot_dialogact_intents": {
+          "text": [
             "General_ChatIntent"
-          ],
-          "topics": [
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
             "Phatic"
           ]
         },
@@ -1132,11 +1138,13 @@
             "Celebrities"
           ]
         },
-        "cobot_dialogact": {
-          "intents": [
+        "cobot_dialogact_intents": {
+          "text": [
             "Information_RequestIntent"
-          ],
-          "topics": [
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
             "Other"
           ]
         },

@@ -129,14 +129,15 @@
             "text": "very_positive",
             "confidence": 0.6038849353790283
           },
-          "cobot_dialogact": {
-            "intents": [
-              "General_ChatIntent"
-            ],
-            "topics": [
-              "Phatic"
-            ]
-          },
+                    "cobot_dialogact_intents": {
+                        "text": [
+                            "General_ChatIntent"
+                        ]},
+                    "cobot_dialogact_topics": {
+                         "text": [
+                            "Phatic"
+                        ]
+                    },
           "cobot_offensiveness": {
             "text": [
               "non-toxic"
@@ -382,14 +383,15 @@
               "News"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "Information_RequestIntent"
-            ],
-            "topics": [
-              "Other"
-            ]
-          },
+                    "cobot_dialogact_intents": {
+                        "text": [
+                            "Information_RequestIntent"
+                        ]},
+                    "cobot_dialogact_topics": {
+                         "text": [
+                            "Other"
+                        ]
+                    },
           "cobot_offensiveness": {
             "text": [
               "non-toxic"
@@ -690,16 +692,15 @@
               "Phatic"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "Information_RequestIntent",
-              "Information_RequestIntent"
-            ],
-            "topics": [
-              "Other",
-              "Other"
-            ]
-          },
+                    "cobot_dialogact_intents": {
+                        "text": [
+                            "Information_RequestIntent"
+                        ]},
+                    "cobot_dialogact_topics": {
+                         "text": [
+                            "Other"
+                        ]
+                    },
           "cobot_offensiveness": {
             "text": [
               "non-toxic",

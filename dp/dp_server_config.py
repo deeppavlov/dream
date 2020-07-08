@@ -6,6 +6,22 @@ from deeppavlov.core.common.file import read_json, save_json
 settings_path = Path(settings.__path__[0]) / 'server_config.json'
 
 settings = read_json(settings_path)
+
+settings['model_defaults']['cobot_topics'] = {
+    "model_endpoint": "/model",
+    "model_args_names": ["sentences"]
+}
+
+settings['model_defaults']['cobot_dialogact_topics'] = {
+    "model_endpoint": "/model",
+    "model_args_names": ["sentences"]
+}
+
+settings['model_defaults']['cobot_dialogact_intents'] = {
+    "model_endpoint": "/model",
+    "model_args_names": ["sentences"]
+}
+
 settings['model_defaults']['Chitchat'] = {
     "host": "",
     "port": "",
