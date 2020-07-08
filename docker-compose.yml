@@ -13,7 +13,7 @@ services:
         christmas_new_year_skill:8036, weather_skill:8037, emotion_classification:8038, alice:8000,
         reddit_ner_skill:8035, eliza:8047, emotion_skill:8049, dummy_skill_dialog:8052, comet_atomic:8053, meta_script_skill:8054,
         oscar_skill:8055, coronavirus_skill:8061, small_talk_skill:8062, game_cooperative_skill:8068, program_y_wide:8064,
-        comet_conceptnet:8065, news_api_skill:8066, short_story_skill:8057, greeting_skill:8070"
+        comet_conceptnet:8065, news_api_skill:8066, short_story_skill:8057, greeting_skill:8070, factoid_qa:8071"
       WAIT_HOSTS_TIMEOUT: 480
     deploy:
       mode: replicated
@@ -700,6 +700,18 @@ services:
       context: .
       dockerfile: ./skills/greeting_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8070 --timeout=60 --preload
+    volumes: []
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+  factoid_qa:
+    build:
+      context: .
+      dockerfile: ./skills/factoid_qa/Dockerfile
+    command: gunicorn --workers=2 server:app -b 0.0.0.0:8071
     volumes: []
     deploy:
       mode: replicated

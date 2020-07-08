@@ -75,4 +75,6 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8066 -t 15
   greeting_skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8070 --timeout=60 --preload
+  factoid_qa:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8071
 version: '3.7'
