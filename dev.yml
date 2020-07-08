@@ -25,10 +25,10 @@ services:
       - "./annotators/cobot_dialogact_intents:/src"
     ports:
       - 8003:8003
-  cobot_conversation_evaluator:
+  cobot_convers_evaluator_annotator:
     env_file: [.env.dev]
     volumes:
-      - "./annotators/cobot_conversation_evaluator:/src"
+      - "./annotators/cobot_convers_evaluator_annotator:/src"
     ports:
       - 8004:8004
   sentseg:
