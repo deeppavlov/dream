@@ -75,6 +75,39 @@
                 "response_formatter": "simple_formatter_service",
                 "previous_services": ["annotators_1.sentseg"],
                 "state_manager_method": "add_annotation"
+            },
+            "cobot_topics": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://cobot_topics:8001/model"
+                },
+                "dialog_formatter": "cobot_formatter_dialog",
+                "response_formatter": "cobot_topics_formatter_service",
+                "state_manager_method": "add_annotation",
+                "required_previous_services": ["annotators_1.sentseg"],
+                "previous_services": ["annotators_1"]
+            },
+            "cobot_dialogact_topics": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://cobot_dialogact_topics:8002/model"
+                },
+                "dialog_formatter": "cobot_formatter_dialog",
+                "response_formatter": "cobot_dialogact_topics_formatter_service",
+                "state_manager_method": "add_annotation",
+                "required_previous_services": ["annotators_1.sentseg"],
+                "previous_services": ["annotators_1"]
+            },
+            "cobot_dialogact_intents": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://cobot_dialogact_intents:8003/model"
+                },
+                "dialog_formatter": "cobot_formatter_dialog",
+                "response_formatter": "cobot_dialogact_intents_formatter_service",
+                "state_manager_method": "add_annotation",
+                "required_previous_services": ["annotators_1.sentseg"],
+                "previous_services": ["annotators_1"]
             }
         },
         "annotators_3": {
@@ -94,11 +127,12 @@
                 },
                 "dialog_formatter": "base_skill_selector_formatter_dialog",
                 "response_formatter": "simple_formatter_service",
-                "previous_services": [
-                    "annotators_1.asr",
-                    "annotators_1.blacklisted_words",
-                    "annotators_2.intent_catcher"
-                ],
+                "previous_services": ["annotators_2.intent_catcher",
+                   "annotators_2.blacklisted_words", "annotators_1.asr",
+                   "annotators_1.toxic_classification",
+                   "annotators_2.cobot_topics", "annotators_2.cobot_dialogact_topics",
+                   "annotators_2.cobot_dialogact_intents",
+                   "annotators_3.sentrewrite"],
                 "tags": ["selector"]
             }
         },

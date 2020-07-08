@@ -174,7 +174,7 @@ def collect_topics_and_statuses(dialogs):
                 prev_news_samples.append(prev_news)
         else:
             about_news = (({"News"} & set(curr_uttr["annotations"].get("cobot_topics", {}).get(
-                "text", ""))) or re.search(NEWS_TEMPLATES, curr_uttr["text"].lower())) and \
+                "text", []))) or re.search(NEWS_TEMPLATES, curr_uttr["text"].lower())) and \
                 not re.search(FALSE_NEWS_TEMPLATES, curr_uttr["text"].lower())
             if BREAKING_NEWS.lower() in prev_bot_uttr_lower and is_yes:
                 # news skill was not previously active

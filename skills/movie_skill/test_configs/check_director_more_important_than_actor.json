@@ -155,11 +155,13 @@
             }
           ]
         ],
-        "cobot_dialogact": {
-          "intents": [
+        "cobot_dialogact_intents": {
+          "text": [
             "General_ChatIntent"
-          ],
-          "topics": [
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
             "Phatic"
           ]
         },
@@ -574,11 +576,13 @@
             "not blacklist"
           ]
         },
-        "cobot_dialogact": {
-          "intents": [
+        "cobot_dialogact_intents": {
+          "text": [
             "Opinion_RequestIntent"
-          ],
-          "topics": [
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
             "Other"
           ]
         },
@@ -751,11 +755,13 @@
             }
           ]
         ],
-        "cobot_dialogact": {
-          "intents": [
+        "cobot_dialogact_intents": {
+          "text": [
             "General_ChatIntent"
-          ],
-          "topics": [
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
             "Phatic"
           ]
         },
@@ -1129,11 +1135,13 @@
             "not blacklist"
           ]
         },
-        "cobot_dialogact": {
-          "intents": [
+        "cobot_dialogact_intents": {
+          "text": [
             "Opinion_RequestIntent"
-          ],
-          "topics": [
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
             "Other"
           ]
         },

@@ -155,11 +155,13 @@
             }
           ]
         ],
-        "cobot_dialogact": {
-          "intents": [
+        "cobot_dialogact_intents": {
+          "text": [
             "General_ChatIntent"
-          ],
-          "topics": [
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
             "Phatic"
           ]
         },
@@ -566,11 +568,13 @@
             "not blacklist"
           ]
         },
-        "cobot_dialogact": {
-          "intents": [
+        "cobot_dialogact_intents": {
+          "text": [
             "Information_RequestIntent"
-          ],
-          "topics": [
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
             "Entertainment_Movies"
           ]
         },
@@ -743,11 +747,13 @@
             }
           ]
         ],
-        "cobot_dialogact": {
-          "intents": [
+        "cobot_dialogact_intents": {
+          "text": [
             "General_ChatIntent"
-          ],
-          "topics": [
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
             "Phatic"
           ]
         },
@@ -1113,11 +1119,13 @@
             "not blacklist"
           ]
         },
-        "cobot_dialogact": {
-          "intents": [
+        "cobot_dialogact_intents": {
+          "text": [
             "Information_RequestIntent"
-          ],
-          "topics": [
+          ]
+        },
+        "cobot_dialogact_topics": {
+          "text": [
             "Entertainment_Movies"
           ]
         },

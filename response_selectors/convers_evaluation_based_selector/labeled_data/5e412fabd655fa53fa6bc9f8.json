@@ -470,14 +470,15 @@
           "ner": [
             []
           ],
-          "cobot_dialogact": {
-            "intents": [
-              "OtherIntent"
-            ],
-            "topics": [
-              "Other"
-            ]
-          },
+                    "cobot_dialogact_intents": {
+                        "text": [
+                            "OtherIntent"
+                        ]},
+                    "cobot_dialogact_topics": {
+                         "text": [
+                            "Other"
+                        ]
+                    },
           "cobot_topics": {
             "text": [
               "Phatic"
@@ -1438,14 +1439,15 @@
           "ner": [
             []
           ],
-          "cobot_dialogact": {
-            "intents": [
-              "OtherIntent"
-            ],
-            "topics": [
-              "Other"
-            ]
-          },
+                    "cobot_dialogact_intents": {
+                        "text": [
+                            "OtherIntent"
+                        ]},
+                    "cobot_dialogact_topics": {
+                         "text": [
+                            "Other"
+                        ]
+                    },
           "cobot_topics": {
             "text": [
               "Phatic"
@@ -2030,16 +2032,15 @@
               "Music"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "General_ChatIntent",
-              "General_ChatIntent"
-            ],
-            "topics": [
-              "Other",
-              "Other"
-            ]
-          },
+                    "cobot_dialogact_intents": {
+                        "text": [
+                            "General_ChatIntent"
+                        ]},
+                    "cobot_dialogact_topics": {
+                         "text": [
+                            "Other"
+                        ]
+                    },
           "cobot_offensiveness": {
             "text": [
               "non-toxic",
@@ -3257,16 +3258,15 @@
               "Music"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "General_ChatIntent",
-              "General_ChatIntent"
-            ],
-            "topics": [
-              "Other",
-              "Other"
-            ]
-          },
+                    "cobot_dialogact_intents": {
+                        "text": [
+                            "General_ChatIntent"
+                        ]},
+                    "cobot_dialogact_topics": {
+                         "text": [
+                            "Other"
+                        ]
+                    },
           "cobot_offensiveness": {
             "text": [
               "non-toxic",
@@ -4098,14 +4098,13 @@
               "Phatic"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "General_ChatIntent"
-            ],
-            "topics": [
-              "Other"
-            ]
-          },
+        "cobot_dialogact_intents": {
+          "text": [
+            "General_ChatIntent"
+          ]},
+          "cobot_dialogact_topics":{"text": [
+            "Other"
+          ]},
           "cobot_offensiveness": {
             "text": [
               "non-toxic"
@@ -5264,14 +5263,13 @@
               "Phatic"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "General_ChatIntent"
-            ],
-            "topics": [
-              "Other"
-            ]
-          },
+        "cobot_dialogact_intents": {
+          "text": [
+            "General_ChatIntent"
+          ]},
+          "cobot_dialogact_topics":{"text": [
+            "Other"
+          ]},
           "cobot_offensiveness": {
             "text": [
               "non-toxic"
@@ -6007,14 +6005,13 @@
               "Phatic"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "General_ChatIntent"
-            ],
-            "topics": [
-              "Phatic"
-            ]
-          },
+        "cobot_dialogact_intents": {
+          "text": [
+            "General_ChatIntent"
+          ]},
+          "cobot_dialogact_topics":{"text": [
+            "Phatic"
+          ]},
           "cobot_offensiveness": {
             "text": [
               "non-toxic"
@@ -7219,14 +7216,13 @@
               "Phatic"
             ]
           },
-          "cobot_dialogact": {
-            "intents": [
-              "General_ChatIntent"
-            ],
-            "topics": [
-              "Phatic"
-            ]
-          },
+        "cobot_dialogact_intents": {
+          "text": [
+            "General_ChatIntent"
+          ]},
+          "cobot_dialogact_topics":{"text": [
+            "Phatic"
+          ]},
           "cobot_offensiveness": {
             "text": [
               "non-toxic"
@@ -7853,14 +7849,13 @@
           "ner": [
             []
           ],
-          "cobot_dialogact": {
-            "intents": [
-              "General_ChatIntent"
-            ],
-            "topics": [
-              "Other"
-            ]
-          },
+        "cobot_dialogact_intents": {
+          "text": [
+            "General_ChatIntent"
+          ]},
+          "cobot_dialogact_topics":{"text": [
+            "Other"
+          ]},
           "cobot_topics": {
             "text": [
               "Weather_Time"
