@@ -149,7 +149,7 @@
     <category>
       <pattern>YES</pattern>
       <template>
-          AMAZON_EMOTION_DISAPPOINTED_MEDIUM I'm a socialbot running inside Alexa, and I'm all about chatting with people like you.
+          AMAZON_EMOTION_DISAPPOINTED_MEDIUM I'm a socialbot running in the cloud, and I'm all about chatting with people like you.
           AMAZON_EMOTION_CLOSE
           I can answer questions, share fun facts, discuss movies, books and news.
         <random>
@@ -191,8 +191,7 @@
       <pattern>HELLO</pattern>
       <template>
           <random>
-              <li> Hello, this is an Alexa Prize Socialbot!</li>
-              <li> Hi, this is an Alexa Prize Socialbot!</li>
+              <li> Hello, this is a DeepPavlov experimental Socialbot!</li>
           </random>
           <think>
               <set name="topic">USER_MOOD</set>
