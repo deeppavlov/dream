@@ -107,7 +107,7 @@ def are_you_ask_handler(previous_handler_state, skill_state, state, true_model_n
         current_game = games[-1]
 
         if current_game:
-            text += [f"Do you want to talk in more detail about the game called {current_game.get('name_original')}?"]
+            text += [f"Do you want to talk in more detail about {current_game.get('name_original')}?"]
             skill_state_update = {"next_step": "are_you_ask", "current_game": current_game}
         else:
             scenario = False
@@ -188,7 +188,7 @@ def have_you_played_handler(previous_handler_state, skill_state, state, true_mod
                 f"I didn't get what you've just said.",
             ]
             if current_game:
-                text += [f"I asked if you played {current_game.get('name_original')}."]
+                text += [f"I wonder if you played {current_game.get('name_original')}."]
                 text += ["For example, you can say: yes or no ."]
             text += [f"Or do you want to stop for now?"]
             skill_state_update = {"next_step": "have_you_played"}
