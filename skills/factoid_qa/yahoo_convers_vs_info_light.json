@@ -145,17 +145,17 @@
   },
   "metadata": {
     "variables": {
-      "ROOT_PATH": "./",
-      "DOWNLOADS_PATH": "./",
-      "MODELS_PATH": "./",
-      "MODEL_PATH": "./yahoo_convers_vs_info_light_v0"
+      "ROOT_PATH": "/",
+      "DOWNLOADS_PATH": "/",
+      "MODELS_PATH": "/",
+      "MODEL_PATH": "/yahoo_convers_vs_info_light_v0"
     },
     "requirements": [
     ],
     "download": [
       {
         "url": "http://files.deeppavlov.ai/deeppavlov_data/classifiers/yahoo_convers_vs_info_light_v0.tar.gz",
-        "subdir": "./"
+        "subdir": "/"
       }
     ]
   }
