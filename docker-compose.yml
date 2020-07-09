@@ -1,6 +1,6 @@
 services:
   agent:
-    command: sh -c './utils/setup_cron.sh && bin/wait && gunicorn run_http:app_factory --bind 0.0.0.0:4242 --workers 4 --worker-class aiohttp.GunicornWebWorker'
+    command: sh -c 'python -m deeppavlov_agent.run -pl alexa_pipeline_conf.json -ch http_client --cors'
     build:
       context: ./
       dockerfile: dockerfile_agent
