@@ -100,7 +100,7 @@ def respond():
         "isResponseComprehensible": 0.,
         "isResponseErroneous": 0.
     }
-    result = [annotation.get('cobot_convers_evaluator_annotator', default_conv_eval) for annotation in annotations]
+    result = [annotation.get('cobot_convers_evaluator_annotator', default_conv_eval) or default_conv_eval for annotation in annotations]
     result = np.array(result)
 
     dialog_ids = np.array(dialog_ids)
