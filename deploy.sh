@@ -15,11 +15,6 @@ done
 
 set -e
 
-if [[ "$MODE" == "lambda" || "$MODE" == "all" ]]; then
-  echo "Deploying lambda"
-  ./aws_lambda/deploy.sh TARGET=$TARGET
-fi
-
 if [[ "$TARGET" == "prod" ]]; then
   ENV_FILE=".env.prod"
   DOCKER_HOST="localhost:2374"

@@ -99,12 +99,6 @@ Deploy to prod and staging
 - Ports exposed with --publish are automatically exposed through the platform load balancer
 
 
-Deploy to Alexa Lambda
-=======================
-
-- [Deploy to Alexa Lambda README](aws_lambda/README.md)
-
-
 Deploy Machine
 =======================
 Поднята деплой машина на амазоне. Через нее можно быстро собрать и запушить имейджи в регистри и сделать деплой.
