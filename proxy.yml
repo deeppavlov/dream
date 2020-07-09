@@ -3,49 +3,49 @@ services:
     build:
       context: ./
       dockerfile: dp/proxy/Dockerfile
-    command: ["nginx", "-g", "daemon off;"]
-    volumes:
-    - ./dp/proxy/toxic_classification:/etc/nginx/conf.d
+    environment:
+      - HOST=10.11.1.5
+      - PORT=8013
   sentiment_classification:
     build:
       context: ./
       dockerfile: dp/proxy/Dockerfile
-    command: ["nginx", "-g", "daemon off;"]
-    volumes:
-    - ./dp/proxy/sentiment_classification:/etc/nginx/conf.d
+    environment:
+      - HOST=10.11.1.5
+      - PORT=8024
   sentseg:
     build:
       context: ./
       dockerfile: dp/proxy/Dockerfile
-    command: ["nginx", "-g", "daemon off;"]
-    volumes:
-    - ./dp/proxy/sentseg:/etc/nginx/conf.d
+    environment:
+      - HOST=10.11.1.5
+      - PORT=8011
   ner:
     build:
       context: ./
       dockerfile: dp/proxy/Dockerfile
-    command: ["nginx", "-g", "daemon off;"]
-    volumes:
-    - ./dp/proxy/ner:/etc/nginx/conf.d
+    environment:
+      - HOST=10.11.1.5
+      - PORT=8021
   sentrewrite:
     build:
       context: ./
       dockerfile: dp/proxy/Dockerfile
-    command: ["nginx", "-g", "daemon off;"]
-    volumes:
-    - ./dp/proxy/sentrewrite:/etc/nginx/conf.d
+    environment:
+      - HOST=10.11.1.5
+      - PORT=8017
   comet_atomic:
     build:
       context: ./
       dockerfile: dp/proxy/Dockerfile
-    command: ["nginx", "-g", "daemon off;"]
-    volumes:
-      - ./dp/proxy/comet_atomic:/etc/nginx/conf.d
+    environment:
+      - HOST=10.11.1.5
+      - PORT=8053
   weather_skill:
     build:
       context: ./
       dockerfile: dp/proxy/Dockerfile
-    command: ["nginx", "-g", "daemon off;"]
-    volumes:
-      - ./dp/proxy/weather_skill:/etc/nginx/conf.d
+    environment:
+      - HOST=10.11.1.5
+      - PORT=8037
 version: '3.7'
