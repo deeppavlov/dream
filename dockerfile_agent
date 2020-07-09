@@ -16,18 +16,18 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV PYTHONPATH "${PYTHONPATH}:/dp-agent"
 ENV DPA_LAUNCHING_ENV "docker"
 
-COPY requirements.txt /
-RUN pip install -r requirements.txt
-
 RUN mkdir dp-agent
 WORKDIR /dp-agent
 # TODO: Copy only necessary dirs and files
 COPY . /dp-agent/.
 
+RUN pip install deeppavlov_agent
+
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 ENV PYTHONPATH "${PYTHONPATH}:/dp-agent"
 ENV DPA_LAUNCHING_ENV "docker"
+RUN printf 'debug = False\nresponse_logger = False' > /dp-agent/dp_agent_settings.py
 
 # cronjobs
 RUN mkdir /cron_env

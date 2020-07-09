@@ -607,7 +607,7 @@ services:
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
-      CUDA_VISIBLE_DEVICES: ""
+      - CUDA_VISIBLE_DEVICES=0
     deploy:
       mode: replicated
       replicas: 1
