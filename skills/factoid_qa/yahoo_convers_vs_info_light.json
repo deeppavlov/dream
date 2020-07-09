@@ -145,7 +145,7 @@
   },
   "metadata": {
     "variables": {
-      "ROOT_PATH": "/",
+      "ROOT_PATH": "/deeppavlov",
       "DOWNLOADS_PATH": "/",
       "MODELS_PATH": "/",
       "MODEL_PATH": "/yahoo_convers_vs_info_light_v0"
