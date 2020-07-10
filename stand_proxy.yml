@@ -20,7 +20,7 @@ services:
     environment:
       - HOST=10.11.1.251
       - PORT=8003
-  cobot_conversation_evaluator:
+  cobot_convers_evaluator_annotator:
     build:
       context: ./
       dockerfile: dp/proxy/Dockerfile
