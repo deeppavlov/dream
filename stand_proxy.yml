@@ -27,4 +27,16 @@ services:
     environment:
       - HOST=10.11.1.1
       - PORT=8004
+  emotion_classification:
+    environment:
+      - CUDA_VISIBLE_DEVICES=1
+  comet_atomic:
+    environment:
+      - CUDA_VISIBLE_DEVICES=1
+  comet_conceptnet:
+    environment:
+      - CUDA_VISIBLE_DEVICES=2
+  stop_detect:
+    environment:
+      - CUDA_VISIBLE_DEVICES=2
 version: '3.7'
