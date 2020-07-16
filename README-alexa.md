@@ -36,7 +36,7 @@ $: docker-compose -f docker-compose.yml -f dev.yml -f proxy.yml up --build
 Run agent:
 ```
 $: docker-compose -f docker-compose.yml -f dev.yml exec agent bash
-$(inside docker): python deeppavlov_agent.run
+$(inside docker): python -m deeppavlov_agent.run
 ```
 
 Автотесты
