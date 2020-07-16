@@ -24,20 +24,19 @@ To run on single machine without GPU:
 $: docker-compose -f docker-compose.yml -f dev.yml -f cpu.yml -f one_worker.yml up --build
 ```
 
-To run lightweight version with toxic, sentiment, ner, sentseg, sentrewrite running on MIPT cluster:
+To run lightweight version with all sevices except agent and mongo running on MIPT cluster:
 ```
-$: docker-compose -f docker-compose.yml -f dev.yml -f one_worker.yml -f proxy.yml up --build
+$: docker-compose -f docker-compose.yml -f dev.yml -f proxy.yml up --build
 ```
-, in case if docker GPU is not configured:
-```
-$: docker-compose -f docker-compose.yml -f dev.yml -f one_worker.yml -f cpu.yml -f proxy.yml up --build
-```
-Use `-f s3.yml` if you want to download models from s3 and not from DeepPavlov share.
+
+Если был изменён какой-то сервис и ты хочешь его отлаживать, убери этот сервис из proxy.yml (не закоммить случайно).
+Можено ещё добавить этот сервис в свой локальный .yml (по образу и подобию docker-compose.yml) и добавить `-f твой.yml`
+после `-f proxy.yml`.
 
 Run agent:
 ```
 $: docker-compose -f docker-compose.yml -f dev.yml exec agent bash
-$(inside docker): python3 run.py -rl -pl alexa_pipeline_conf.json
+$(inside docker): python deeppavlov_agent.run
 ```
 
 Автотесты

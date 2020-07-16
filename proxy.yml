@@ -1,51 +1,380 @@
 services:
+  cobot_topics:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8001
+  cobot_dialogact_topics:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8002
+  cobot_dialogact_intents:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8003
+  cobot_convers_evaluator_annotator:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8004
+  program_y:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8008
+  personality_catcher:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8010
+  sentseg:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8011
+  convers_evaluation_selector:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8009
   toxic_classification:
     build:
       context: ./
       dockerfile: dp/proxy/Dockerfile
     environment:
-      - HOST=10.11.1.5
+      - HOST=10.11.1.1
       - PORT=8013
   sentiment_classification:
     build:
       context: ./
       dockerfile: dp/proxy/Dockerfile
     environment:
-      - HOST=10.11.1.5
+      - HOST=10.11.1.1
       - PORT=8024
-  sentseg:
-    build:
-      context: ./
-      dockerfile: dp/proxy/Dockerfile
-    environment:
-      - HOST=10.11.1.5
-      - PORT=8011
-  ner:
-    build:
-      context: ./
-      dockerfile: dp/proxy/Dockerfile
-    environment:
-      - HOST=10.11.1.5
-      - PORT=8021
   sentrewrite:
     build:
       context: ./
       dockerfile: dp/proxy/Dockerfile
     environment:
-      - HOST=10.11.1.5
+      - HOST=10.11.1.1
       - PORT=8017
-  comet_atomic:
+  intent_responder:
     build:
       context: ./
       dockerfile: dp/proxy/Dockerfile
     environment:
-      - HOST=10.11.1.5
-      - PORT=8053
+      - HOST=10.11.1.1
+      - PORT=8012
+  intent_catcher:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8014
+  blacklisted_words:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8018
+  program_y_dangerous:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8022
+  movie_skill:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8023
+  ner:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8021
+  alice:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8000
+  eliza:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8047
+  tfidf_retrieval:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8028
+  book_tfidf_retrieval:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8039
+  entertainment_tfidf_retrieval:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8040
+  fashion_tfidf_retrieval:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8041
+  movie_tfidf_retrieval:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8042
+  music_tfidf_retrieval:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8034
+  politics_tfidf_retrieval:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8043
+  science_technology_tfidf_retrieval:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8044
+  sport_tfidf_retrieval:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8045
+  animals_tfidf_retrieval:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8050
+  convert_reddit:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8029
+  personal_info_skill:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8030
+  asr:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8031
+  misheard_asr:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8033
+  book_skill:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8032
+  christmas_new_year_skill:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8036
+  superbowl_skill:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8051
+  oscar_skill:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8055
+  valentines_day_skill:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8058
   weather_skill:
     build:
       context: ./
       dockerfile: dp/proxy/Dockerfile
     environment:
-      - HOST=10.11.1.5
+      - HOST=10.11.1.1
       - PORT=8037
+  emotion_skill:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8049
+  emotion_classification:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8038
+  dummy_skill_dialog:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8052
+  comet_atomic:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8053
+  comet_conceptnet:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8065
+  meta_script_skill:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8054
+  short_story_skill:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8057
+  stop_detect:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8056
+  coronavirus_skill:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8061
+  small_talk_skill:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8062
+  game_cooperative_skill:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8068
+  program_y_wide:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8064
+  news_api_skill:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8066
+  greeting_skill:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8070
+  factoid_qa:
+    build:
+      context: ./
+      dockerfile: dp/proxy/Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8071
 version: '3.7'

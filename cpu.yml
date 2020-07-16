@@ -1,7 +1,5 @@
 version: '3.7'
 services:
-  agent:
-    command: sh -c 'bin/wait && python3 run.py -ch http_client -rl -d -pl alexa_pipeline_conf.json -db db_conf.json -tl 60'
   ner:
     environment:
       DEVICE: cpu

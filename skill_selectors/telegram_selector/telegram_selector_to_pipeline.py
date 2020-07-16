@@ -1,5 +1,5 @@
 """
-This script replaces skill selector in `alexa_pipeline_conf.json` to telegram selector.
+This script replaces skill selector in `pipeline_conf.json` to telegram selector.
 """
 
 import json
@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 def main():
-    pipeline_path = Path(__file__).resolve().parents[2] / 'alexa_pipeline_conf.json'
+    pipeline_path = Path(__file__).resolve().parents[2] / 'pipeline_conf.json'
     with open(pipeline_path) as file:
         pipeline_conf = json.loads(file.read())
 
