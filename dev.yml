@@ -76,8 +76,9 @@ services:
     image: mongo:4.0.0
     ports:
       - 27017:27017
-    volumes:
-      - /data/db_new:/root/data/db
+    # # you can use persistent local volume if you need
+    # volumes:
+    #   - ./venv/data/db_data:/root/data/db
   toxic_classification:
     env_file: [.env.dev]
     volumes:
