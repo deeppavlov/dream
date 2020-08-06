@@ -1,10 +1,11 @@
 import asyncio
-import re
 import logging
+import re
 from itertools import chain
-from typing import Dict, Callable
-import sentry_sdk
 from os import getenv
+from typing import Dict, Callable
+
+import sentry_sdk
 
 from common.universal_templates import BOOK_TEMPLATES
 from common.movies import movie_skill_was_proposed
@@ -227,9 +228,11 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("valentines_day_skill")
                 skills_for_uttr.append("personal_info_skill")
                 skills_for_uttr.append("meta_script_skill")
-                skills_for_uttr.append("comet_dialog_skill")
                 skills_for_uttr.append("greeting_skill")
                 skills_for_uttr.append("factoid_qa")
+                # don't call comet dialog for expressing opinion on sensitive topics
+                if sensitive_topics_detected and sensitive_dialogacts_detected:
+                    skills_for_uttr.append("comet_dialog_skill")
 
                 if ner_detected:
                     skills_for_uttr.append("reddit_ner_skill")
