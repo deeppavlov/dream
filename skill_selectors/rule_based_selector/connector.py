@@ -231,7 +231,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("greeting_skill")
                 skills_for_uttr.append("factoid_qa")
                 # don't call comet dialog for expressing opinion on sensitive topics
-                if sensitive_topics_detected and sensitive_dialogacts_detected:
+                if not(sensitive_topics_detected and sensitive_dialogacts_detected):
                     skills_for_uttr.append("comet_dialog_skill")
 
                 if ner_detected:
