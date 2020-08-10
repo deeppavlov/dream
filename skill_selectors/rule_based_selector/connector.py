@@ -220,8 +220,8 @@ class RuleBasedSkillSelectorConnector:
                 if low_priority_intent_detected:
                     skills_for_uttr.append("intent_responder")
                 # process regular utterances
-                skills_for_uttr.append("program_y")
-    #            skills_for_uttr.append("cobotqa")
+                skills_for_uttr.append("program_y")								
+                # skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("christmas_new_year_skill")
                 skills_for_uttr.append("superbowl_skill")
                 skills_for_uttr.append("oscar_skill")
@@ -234,8 +234,8 @@ class RuleBasedSkillSelectorConnector:
                 if not(sensitive_topics_detected and sensitive_dialogacts_detected):
                     skills_for_uttr.append("comet_dialog_skill")
 
-                if ner_detected:
-                    skills_for_uttr.append("reddit_ner_skill")
+                # if ner_detected:
+                #     skills_for_uttr.append("reddit_ner_skill")
 
                 if len(dialog["human_utterances"]) >= 3:
                     # can answer on 3-th user response
@@ -243,8 +243,8 @@ class RuleBasedSkillSelectorConnector:
                 if len(dialog["utterances"]) > 14:
                     skills_for_uttr.append("alice")
                     skills_for_uttr.append("program_y_wide")
-                if len(dialog["utterances"]) > 7:
-                    skills_for_uttr.append("tfidf_retrieval")
+                # if len(dialog["utterances"]) > 7:
+															 
                     # Disable topicalchat_convert_retrieval v8.7.0
                     # skills_for_uttr.append("topicalchat_convert_retrieval")
 
@@ -295,10 +295,20 @@ class RuleBasedSkillSelectorConnector:
                 if about_news:
                     skills_for_uttr.append("news_api_skill")
 
-                if is_joke_requested(dialog['human_utterances'][-1]):  # joke requested
-                    emotion_skill_attributes = dialog['bot_attributes'].get("emotion_skill_attributes", {})
+                if is_joke_requested(dialog["human_utterances"][-1]):  # joke requested 
+                    # if there is no "bot" key in our dictionary, we manually create it
+                    if "bot" not in dialog:
+                        dialog['bot'] = {}
+                    # if there is no "attributes" key in our dictionary, we manually create it
+                    if "attributes" not in dialog['bot']:
+                        dialog['bot']['attributes'] = {}
+                    # if there is no "emotion_skill_attributes" in our dictionary, we manually create it
+                    if "emotion_skill_attributes" not in dialog['bot']['attributes']:
+                        dialog['bot']['attributes']['emotion_skill_attributes'] = {}
+
+                    emotion_skill_attributes = dialog['bot']['attributes']['emotion_skill_attributes']
                     emotion_skill_attributes['state'] = "joke_requested"
-                    dialog['bot_attributes']['emotion_skill_attributes'] = emotion_skill_attributes
+                    dialog['bot']['attributes']['emotion_skill_attributes'] = emotion_skill_attributes
                     skills_for_uttr.append("joke")
 
                 emo_prob_threshold = 0.9  # to check if any emotion has at least this prob
@@ -335,9 +345,13 @@ class RuleBasedSkillSelectorConnector:
             if len(dialog["utterances"]) > 14:
                 skills_for_uttr.append("small_talk_skill")
 
-            if "/alexa_" in user_uttr_text:
-                skills_for_uttr = ["alexa_handler"]
+										   
+												   
 
+            # if "/alexa_" in user_uttr_text:
+            #     skills_for_uttr = ["alexa_handler"]
+            logger.info(f"Selected skills: {skills_for_uttr}")
+            # print(f"Selected skills: {skills_for_uttr}", flush=True)
             asyncio.create_task(callback(
                 task_id=payload['task_id'],
                 response=list(set(skills_for_uttr))
