@@ -3,6 +3,8 @@ services:
     command: sh -c 'bin/wait && gunicorn run_http:app_factory --bind 0.0.0.0:4242 --workers 1 --worker-class aiohttp.GunicornWebWorker'
   personality_catcher:
     command: uvicorn server:app --host 0.0.0.0 --port 8010
+  cobot_nounphrases: 
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8006 -t 60
   sentseg:
     command: bash -c "./setup.sh && gunicorn --workers=1 server:app -b 0.0.0.0:8011 -t 100"
   convers_evaluation_selector:
@@ -25,8 +27,6 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8000
   eliza:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8047
-  tfidf_retrieval:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8028
   book_tfidf_retrieval:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8039
   entertainment_tfidf_retrieval:
@@ -75,4 +75,6 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8070 --timeout=60 --preload
   factoid_qa:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8071
+  kbqa:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8072
 version: '3.7'

@@ -193,12 +193,6 @@ def convert_formatter_dialog(dialog: Dict) -> Dict:
     }]
 
 
-def cobot_conv_eval_formatter_dialog(dialog: Dict) -> Dict:
-    dialog = get_last_n_turns(dialog, total_last_turns = 2)
-    utts = ' [SEP] '.join([utt['text'] for utt in dialog['utterances']])
-    return [{'utterances_histories': utts}]
-
-
 def personality_catcher_formatter_dialog(dialog: Dict) -> Dict:
     # Used by: personality_catcher_formatter
     return [{'personality': [dialog['utterances'][-1]['text']]}]
@@ -324,7 +318,7 @@ def last_utt_and_history_dialog(dialog: Dict) -> List:
 
 
 def stop_formatter_dialog(dialog: Dict) -> Dict:
-    # Used by: stop annotator
+    # Used by: stop annotator, conv eval annotator
     hypotheses = dialog["utterances"][-1]["hypotheses"]
     utts = []
     for h in hypotheses:
@@ -333,6 +327,13 @@ def stop_formatter_dialog(dialog: Dict) -> Dict:
         tmp_utts = ' [SEP] '.join([j for j in tmp_utts])
         utts.append(tmp_utts)
     return [{'dialogs': utts}]
+
+
+def cobot_conv_eval_formatter_dialog(dialog: Dict) -> Dict:
+    dialog = get_last_n_turns(dialog, total_last_turns=4)
+    payload = stop_formatter_dialog(dialog)
+    # print(f"formatter {payload}", flush=True)
+    return payload
 
 
 def dp_toxic_formatter_service(payload: List):
@@ -353,6 +354,7 @@ def simple_formatter_service(payload: List):
     Used by: punct_dialogs_formatter, intent_catcher_formatter, asr_formatter,
     sent_rewrite_formatter, sent_segm_formatter, base_skill_selector_formatter
     '''
+    logging.info('answer ' + str(payload))
     return payload
 
 
@@ -464,19 +466,19 @@ def ner_formatter_last_bot_dialog(dialog: Dict):
     return [{'last_utterances': [dialog['bot_utterances'][-1]['annotations']['sentseg']['segments']]}]
 
 
-def reddit_ner_formatter_dialog(dialog: Dict):
-    # Used by: reddit_ner_skill
-    dialog = get_last_n_turns(dialog)
-    dialog = remove_clarification_turns_from_dialog(dialog)
-    return [
-        {
-            'sentiment': [dialog['utterances'][-1]['annotations']['sentiment_classification']],
-            'intent': [dialog['utterances'][-1]['annotations']['intent_catcher']],
-            'ner': [dialog['utterances'][-1]['annotations']['ner']],
-            'continuation': [0 if len(dialog['utterances']) < 2
-                             else int(dialog['utterances'][-2]['active_skill'] == 'reddit_ner_skill')]
-        }
-    ]
+# def reddit_ner_formatter_dialog(dialog: Dict):
+#     # Used by: reddit_ner_skill
+#     dialog = get_last_n_turns(dialog)
+#     dialog = remove_clarification_turns_from_dialog(dialog)
+#     return [
+#         {
+#             'sentiment': [dialog['utterances'][-1]['annotations']['sentiment_classification']],
+#             'intent': [dialog['utterances'][-1]['annotations']['intent_catcher']],
+#             'ner': [dialog['utterances'][-1]['annotations']['ner']],
+#             'continuation': [0 if len(dialog['utterances']) < 2
+#                              else int(dialog['utterances'][-2]['active_skill'] == 'reddit_ner_skill')]
+#         }
+#     ]
 
 
 def short_story_formatter_dialog(dialog: Dict):

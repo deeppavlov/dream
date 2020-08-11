@@ -35,7 +35,6 @@ all_formatters = {
     'attitude_formatter_service': attitude_formatter_service,
     'ner_formatter_dialog': ner_formatter_dialog,
     'stop_formatter_dialog': stop_formatter_dialog,
-    'reddit_ner_formatter_dialog': reddit_ner_formatter_dialog,
     'telegram_selector_formatter_in': telegram_selector_formatter_in,
     'full_utt_sentseg_punct_dialog': full_utt_sentseg_punct_dialog,
     'short_story_formatter_dialog': short_story_formatter_dialog,

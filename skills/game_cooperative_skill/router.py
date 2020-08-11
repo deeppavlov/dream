@@ -44,8 +44,8 @@ def run_skills(history: List, state: Dict, agent_intents: Dict = {}):
     # step 1
     # try to find an intention
     state = rule_based_intent(state)
-    print(f"<main> state.intents: {state.intents}")
-    print(f"<main> state.st2_policy: {state.st2_policy}")
+    # print(f"<main> state.intents: {state.intents}")
+    # print(f"<main> state.st2_policy: {state.st2_policy}")
 
     # step 2
     # skill requesting policy

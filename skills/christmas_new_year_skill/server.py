@@ -70,6 +70,7 @@ def respond():
 
 
 def xmas_scenario(dialog, topic=""):
+    print("Beginning of xmas_scenario, topic=" + topic, flush=True)
     response, confidence = "", 0.0
     high_confidence = 1.1
     curr_scenario = ""
@@ -108,7 +109,7 @@ def xmas_scenario(dialog, topic=""):
         "wishes": [
             "I make wishes every time I have an opportunity. "
             "Was two thousand nineteenth a good year for you? What were some of your highlights?",
-            "For me this year was also so cool. I was selected for Alexa Prize Challenge! Let me ask you: "
+            "For me last year was so cool, too. My sis got into Alexa Prize Challenge! Let me ask you: ",
             "Did you achieve any goals in two thousand nineteenth? ",
             'I am happy for your. This is so nice to feel the fulfillment of the goals. '
             'Some people complain they are "expected to be happy" over Holidays, '
@@ -139,8 +140,11 @@ def xmas_scenario(dialog, topic=""):
     else:
         prev_bot_uttr = ""
 
+    print("Checking if user starts scenario or not, topic=" + topic, flush=True)
+
     # if user initiates talk about x-mas
     if re.search(user_starts_scenario, curr_user_uttr) and topic == "":
+        print("User starts scenario. No current scenarios found.", flush=True)
         logger.info("User starts scenario. No current scenarios found.")
         all_bot_uttrs = [uttr["text"] for uttr in dialog["utterances"][1::2]]
         questions = copy(STARTING_SCENARIO)
@@ -179,8 +183,8 @@ def xmas_faq(dialog):
     XMAS_PATTERN = r"(christmas|xmas|x-mas|x mas|new year|holiday|hanukkah)"
     templates = {
         "santa": [f"(do|does|whether|if) you (believe|trust|credit){ANY_PATTERN}"
-                  f"(santa|father frost|father christmas|elf|elves)",
-                  f"(do|does|whether|if) (santa|father frost|father christmas|elf|elves) exist"],
+                  "(santa|father frost|father christmas|elf|elves)",
+                  "(do|does|whether|if) (santa|father frost|father christmas|elf|elves) exist"],
         "bot_holiday": [f"(how|with whom|where|what){ANY_PATTERN}you{ANY_PATTERN}"
                         f"(spend|spent|do|engage|work){ANY_PATTERN}{XMAS_PATTERN}"],
         "love_xmas": [f"(do|does|whether|if|what){ANY_PATTERN}you (love|like|adore|feel|opinion)"
@@ -208,12 +212,18 @@ def xmas_faq(dialog):
     }
 
     for topic in templates.keys():
+        print("xmas_faq: topic=" + topic, flush=True)
+        print("xmas_faq: curr_user_attr: " + curr_user_uttr, flush=True)
         is_about_topic = any([re.search(t, curr_user_uttr) for t in templates[topic]])
+        print("xmas_faq: is about topic? " + str(is_about_topic), flush=True)
         if is_about_topic:
+            print("xmas_faq: is about topic " + topic + "? Yes!", flush=True)
             response = np.random.choice(responses[topic])
             confidence = high_confidence
             if topic == "santa":
                 confidence *= 2
+
+    print("xmas_faq: response=" + response, flush=True)
 
     return response, confidence
 

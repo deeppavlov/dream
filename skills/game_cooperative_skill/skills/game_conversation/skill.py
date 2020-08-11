@@ -27,7 +27,7 @@ aiml_files = {
 }
 
 # init models
-{model_name: print(files) for model_name, files in aiml_files.items()}
+# {model_name: print(files) for model_name, files in aiml_files.items()}
 models = {model_name: MindfulDataFileBot(files) for model_name, files in aiml_files.items()}
 
 # %%
@@ -302,8 +302,8 @@ def run_skill(state: State, modes: List = [skill_attrs.modes.intro]):
 
     skill_state_update = {}
     # print(f"<{skill_attrs.skill_name}> skill_state: {skill_state}")
-    print(f"<{skill_attrs.skill_name}> true_model_names: {true_model_names}")
-    print(f"<{skill_attrs.skill_name}> true_cmds: {true_cmds}")
+    # print(f"<{skill_attrs.skill_name}> true_model_names: {true_model_names}")
+    # print(f"<{skill_attrs.skill_name}> true_cmds: {true_cmds}")
 
     # handle loop
     proceed = True
@@ -332,7 +332,7 @@ def run_skill(state: State, modes: List = [skill_attrs.modes.intro]):
             )
 
         state.update_skill_state(skill_attrs.skill_name, skill_state_update)
-        print(f"{i}: next_step = {next_step}")
+        # print(f"{i}: next_step = {next_step}")
 
     # print(f"skill_state_update = {skill_state_update}")
 

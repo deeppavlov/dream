@@ -52,11 +52,11 @@ function logger() {
 }
 
 function dockercompose_cmd() {
-    if [[ "$DEVICE" == "cpu" ]]; then
-        DOCKER_COMPOSE_CMD="docker-compose -f docker-compose.yml -f dev.yml -f cpu.yml -f proxy.yml -f s3.yml -p test"
-    else
-        DOCKER_COMPOSE_CMD="docker-compose -f docker-compose.yml -f dev.yml -f jenkins_cpu.yml -f proxy.yml -f s3.yml -p test"
-    fi
+    # if [[ "$DEVICE" == "cpu" ]]; then
+    #     DOCKER_COMPOSE_CMD="docker-compose -f docker-compose.yml -f dev.yml -f cpu.yml -f proxy.yml -f s3.yml -p test"
+    # else
+        DOCKER_COMPOSE_CMD="docker-compose -f docker-compose.yml -f dev.yml -f proxy.yml -f local.yml -p test"
+    # fi
     eval '$DOCKER_COMPOSE_CMD "$@"'
     if [[ $? != 0 ]]; then
         logger "FAILED dockercompose_cmd: $@"
@@ -209,10 +209,10 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
         dockercompose_cmd exec -T -u $(id -u) comet_conceptnet python /comet/test_conceptnet.py
     fi
 
-    if container_is_started reddit_ner_skill; then
-        echo "Run tests for reddit_ner_skill"
-        dockercompose_cmd exec -T -u $(id -u) reddit_ner_skill python test.py
-    fi
+    # if container_is_started reddit_ner_skill; then
+    #     echo "Run tests for reddit_ner_skill"
+    #     dockercompose_cmd exec -T -u $(id -u) reddit_ner_skill python test.py
+    # fi
 
     if container_is_started convers_evaluation_selector; then
         echo "Run tests for convers_evaluation_selector"

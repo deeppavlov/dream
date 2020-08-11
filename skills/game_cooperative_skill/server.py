@@ -11,6 +11,7 @@ from sentry_sdk.integrations.logging import ignore_logger
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
 from common.universal_templates import is_switch_topic
+
 from common.utils import get_skill_outputs_from_dialog
 from router import run_skills as skill
 
@@ -40,6 +41,7 @@ def respond():
             )
             prev_news_output = prev_news_outputs[-1] if len(prev_news_outputs) > 0 else {}
             state = prev_news_output.get("state", {})
+            # pre_len = len(state.get("messages", []))
 
             last_utter = dialog["human_utterances"][-1]
 
@@ -51,7 +53,7 @@ def respond():
                 random.seed(int(rand_seed))
             response, state = skill([last_utter_text], state, agent_intents)
 
-            logger.info(f"state = {state}")
+            # logger.info(f"state = {state}")
             logger.info(f"last_utter_text = {last_utter_text}")
             logger.info(f"response = {response}")
             text = response.get("text", "Sorry")
@@ -66,6 +68,7 @@ def respond():
         logger.info(f"game_cooperative_skill exec time = {total_time:.3f}s")
 
     except Exception as exc:
+        logger.error(exc)
         sentry_sdk.capture_exception(exc)
         abort(500, description=str(exc))
     return jsonify(responses)

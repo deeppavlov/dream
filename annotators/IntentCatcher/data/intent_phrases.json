@@ -41,6 +41,7 @@
     "exit": {
       "phrases": [
         "be quiet",
+	"(see you ){0,1}later",
 	"leave me alone(, please){0,1}",
 	"i am done ((chatting)|(talking))( now){0,1}",
 	"(please ){0,1}disable conversation ( mode){0,1}",
@@ -57,8 +58,7 @@
         "off",
 	"off",
         "off",
-        "((dismiss)|(disable)) social ((bot)|(chat))",
-        "stop this social chat",
+        "((dismiss)|(disable)|(stop)) (this ){0,1}(social ){0,1}((bot)|(chat))",
         "stop ((chatting)|(talking)|(chat)|(talk)|(conversation))",
         "let’s ((not)|(stop)) ((chat)|(talk)|(chatting)|(talking))",
         "let’s ((chat)|(talk)) later",
@@ -100,7 +100,7 @@
       "reg_phrases": [
       	"(can you ){0,1}tell me a .* story\\?"
       ],
-      "min_precision": 0.9,
+      "min_precision": 0.99,
       "punctuation": [
         ".",
         "?"
@@ -112,11 +112,12 @@
         "what come again",
         "what did you say",
         "repeat  ((that)|(the question)|(what you said))",
-        "repeat(, please){0,1}",
+        "repeat( please){0,1}",
+	"(please ){0,1}repeat",
         "((can)|(would)|(could)) you (please ){0,1}((repeat)|(say))( ((that)|(the question)|(what you said))){0,1}( again){0,1}( please){0,1}",
         "i did not hear you, well please repeat."
       ],
-      "min_precision": 0.9,
+      "min_precision": 0.94,
       "punctuation": [
         ".",
         "!"
@@ -546,7 +547,7 @@
         "what time is it",
         "((tell)|(say))( me){0,1} the time"
       ],
-      "min_precision": 0.00,
+      "min_precision": 0.90,
       "punctuation": [
         ".",
         "?"
@@ -556,6 +557,10 @@
   "random_phrases": {
     "phrases": [
       "corona virus",
+      "it's a thought-provoking story",
+      "he told me a funny story",
+      "good story to be told",
+      "it is a ((funny)|(cool)|(thought-provoking)) story( to me){0,1}",
       "tell me another joke",
       "send as we watching",
       "my going",
@@ -618,6 +623,7 @@
       "he want you to talk quieter",
       "you said i am going home now",
       "let's stop changing the subject",
+      "drink ((beer)|(vodka))",
       "i did not say goodbye",
       "let’s go",
       "will we talk to you do you record us",
@@ -725,12 +731,12 @@
       "can can you stop him",
       "can you stop",
       "what else",
+      "set",
       "how can i assist you",
       "shadows of the apt",
       "robot",
       "scared",
       "tell me a little bit on the chilly side",
-      "turn on",
       "this is the question",
       "i asked you a question",
       "my name is john",
@@ -739,13 +745,9 @@
       "stop saying that",
       "i said i do not want to",
       "we solo trailer.",
-      "oh digital",
-      "the wire",
-      "prison break",
       "i think it would be fun if i played it with my auntie and my friend murphy.",
       "can i have to read",
-      "rated movie",
-      "cool",
+      "((cool)|(wonderful)|(rated move)|(prison break)|(oh digital)|(the wire)|(nice)|(turn on))",
       "enter conversation mode",
       "turn it do you about pop smoke",
       "i would like a campaign",
@@ -798,6 +800,7 @@
       "and in the darkness bind them",
       "play it",
       "no but yoga is this type of thing to like release stress from the human boti okay",
+      "can you not answer the question?",
       "more like w. a. r. l. o. c. k. warlock",
       "can you talk me in",
       "fuller house",

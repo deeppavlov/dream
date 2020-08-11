@@ -20,7 +20,7 @@ aiml_files = {
     category_path.name: {"aiml": [category_path], "sets": [share_set_path]} for category_path in category_pathes
 }
 # init models
-{model_name: print(files) for model_name, files in aiml_files.items()}
+# {model_name: print(files) for model_name, files in aiml_files.items()}
 models = {model_name: MindfulDataFileBot(files) for model_name, files in aiml_files.items()}
 
 skill_attrs = types.SimpleNamespace()
