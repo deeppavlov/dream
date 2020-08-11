@@ -73,4 +73,19 @@ services:
     volumes: []
     ports:
       - 8037:8037
+  factoid_classification:
+    build:
+      args:
+        skill_endpoint: factoid_annotations
+        skillconfig: annotators/DeepPavlovFactoidClassification/factoid_classification.json
+        skillhost: 0.0.0.0
+        skillport: 8073
+        skilldir: annotators/DeepPavlovFactoidClassification/
+      context: ../../
+      dockerfile: dp/dockerfile_skill_gpu
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    runtime: nvidia
+    ports:
+      - 8073:8073
 version: '2.4'

@@ -134,3 +134,5 @@ skills/alexa-prize-news/AlexaPrize/topic_modeling/subtopics.dict
 skills/alexa-prize-news/AlexaPrize/topic_modeling/dictionary.dict
 skills/alexa-prize-news/experiments/.ipynb_checkpoints/
 intent_data_train.json
+
+local.yml

@@ -14,6 +14,7 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 @register("bert_float_classifier")
 class BertFloatClassifierModel(BertClassifierModel):
     @overrides
@@ -38,7 +39,7 @@ class BertFloatClassifierModel(BertClassifierModel):
                    'nan', 'ClarificationIntent',
                    'Opinion_ExpressionIntent', 'Topic_SwitchIntent',
                    'Opinion_RequestIntent', 'Multiple_GoalsIntent']
-        #order DOES matter.
+        # order DOES matter.
         feed_dict = self._build_feed_dict(input_ids, input_masks, input_type_ids)
         if not self.return_probas:
             pred = self.sess.run(self.y_predictions, feed_dict=feed_dict)

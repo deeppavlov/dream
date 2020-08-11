@@ -17,7 +17,6 @@ from common.utils import check_about_death, about_virus, quarantine_end, service
 from common.weather import is_weather_requested
 from common.coronavirus import is_staying_home_requested
 
-
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.DEBUG)
@@ -125,8 +124,10 @@ class RuleBasedSkillSelectorConnector:
             )
 
             ner_detected = len(list(chain.from_iterable(user_uttr_annotations["ner"]))) > 0
-            tell_me_a_story_detected = user_uttr_annotations["intent_catcher"].get(
-                "tell_me_a_story", {}).get("detected", 0)
+            logger.info(f"Detected Entities: {ner_detected}")
+
+            tell_me_a_story_detected = user_uttr_annotations["intent_catcher"].get("tell_me_a_story",
+                                                                                   {}).get("detected", 0)
             cobot_topics = set(user_uttr_annotations.get("cobot_topics", {}).get("text", []))
             sensitive_topics_detected = any([t in self.sensitive_topics for t in cobot_topics])
 
@@ -199,6 +200,9 @@ class RuleBasedSkillSelectorConnector:
             about_books = about_books or book_skill_was_proposed(prev_bot_uttr) or 'book' in user_uttr_text
 
             emotions = user_uttr_annotations['emotion_classification']['text']
+
+            # print(f"Skill Selector: did we select game_cooperative_skill? {about_games}", flush=True)
+
             if "/new_persona" in user_uttr_text:
                 # process /new_persona command
                 skills_for_uttr.append("personality_catcher")  # TODO: rm crutch of personality_catcher
@@ -208,7 +212,8 @@ class RuleBasedSkillSelectorConnector:
             elif blist_topics_detected:
                 # process user utterance with sensitive content, "safe mode"
                 skills_for_uttr.append("program_y_dangerous")
-    #            skills_for_uttr.append("cobotqa")
+                skills_for_uttr.append("factoid_qa")
+                # skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("meta_script_skill")
                 skills_for_uttr.append("personal_info_skill")
                 if about_news:
@@ -220,7 +225,8 @@ class RuleBasedSkillSelectorConnector:
                 if low_priority_intent_detected:
                     skills_for_uttr.append("intent_responder")
                 # process regular utterances
-                skills_for_uttr.append("program_y")								
+                skills_for_uttr.append("program_y")
+                skills_for_uttr.append("factoid_qa")
                 # skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("christmas_new_year_skill")
                 skills_for_uttr.append("superbowl_skill")
@@ -244,9 +250,8 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("alice")
                     skills_for_uttr.append("program_y_wide")
                 # if len(dialog["utterances"]) > 7:
-															 
-                    # Disable topicalchat_convert_retrieval v8.7.0
-                    # skills_for_uttr.append("topicalchat_convert_retrieval")
+                # Disable topicalchat_convert_retrieval v8.7.0
+                # skills_for_uttr.append("topicalchat_convert_retrieval")
 
                 if prev_bot_uttr.get("active_skill", "") in ["dummy_skill", "dummy_skill_dialog"] and \
                         len(dialog["utterances"]) > 4:
@@ -295,7 +300,8 @@ class RuleBasedSkillSelectorConnector:
                 if about_news:
                     skills_for_uttr.append("news_api_skill")
 
-                if is_joke_requested(dialog["human_utterances"][-1]):  # joke requested 
+                # joke requested
+                if is_joke_requested(dialog["human_utterances"][-1]):
                     # if there is no "bot" key in our dictionary, we manually create it
                     if "bot" not in dialog:
                         dialog['bot'] = {}
@@ -344,9 +350,6 @@ class RuleBasedSkillSelectorConnector:
             # (yura): do we really want to always turn small_talk_skill?
             if len(dialog["utterances"]) > 14:
                 skills_for_uttr.append("small_talk_skill")
-
-										   
-												   
 
             # if "/alexa_" in user_uttr_text:
             #     skills_for_uttr = ["alexa_handler"]

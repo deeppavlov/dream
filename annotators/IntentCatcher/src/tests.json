@@ -56,11 +56,11 @@
         "intent": "exit"
     },
     {
-        "sentence": "later alexa",
+        "sentence": "later",
         "intent": "exit"
     },
     {
-        "sentence": "bye alexa bye",
+        "sentence": "bye bye",
         "intent": "exit"
     },
     {
@@ -72,7 +72,7 @@
         "intent": "exit"
     },
     {
-        "sentence": "shut off alexa",
+        "sentence": "shut off",
         "intent": "exit"
     },
     {
@@ -112,11 +112,11 @@
         "intent": "no"
     },
     {
-        "sentence": "I did not get what do you mean alexa",
+        "sentence": "I did not get what do you mean",
         "intent": "dont_understand"
     },
     {
-        "sentence": "alexa it dont make any sense",
+        "sentence": "it dont make any sense",
         "intent": "dont_understand"
     },
     {
@@ -132,7 +132,7 @@
         "intent": "tell_me_more"
     },
     {
-        "sentence": "tell me more about it alexa",
+        "sentence": "tell me more about it",
         "intent": "tell_me_more"
     },
     {
@@ -252,10 +252,6 @@
         "intent": "lets_chat_about"
     },
     {
-        "sentence": "i want to talk about hardcore pornography",
-        "intent": "lets_chat_about"
-    },
-    {
         "sentence": "lets chat about movies",
         "intent": "lets_chat_about"
     },
@@ -284,7 +280,7 @@
         "intent": null
     },
     {
-        "sentence": "i love you alexa",
+        "sentence": "i love you",
         "intent": null
     },
     {
@@ -332,7 +328,7 @@
         "intent": null
     },
     {
-        "sentence": "chat alexa",
+        "sentence": "chat",
         "intent": null
     },
     {
@@ -424,7 +420,7 @@
         "intent": null
     },
     {
-        "sentence": "thank you alexa",
+        "sentence": "thank you",
         "intent": null
     },
     {
@@ -440,7 +436,7 @@
         "intent": null
     },
     {
-        "sentence": "play alexa",
+        "sentence": "play",
         "intent": null
     },
     {
@@ -456,7 +452,7 @@
         "intent": null
     },
     {
-        "sentence": "hey alexa",
+        "sentence": "hey",
         "intent": null
     },
     {
@@ -469,6 +465,10 @@
     },
     {
       "sentence": "and in the darkness bind them",
+      "intent": null
+    },
+    {   
+      "sentence": "it is a thought-provoking story to me",
       "intent": null
     },
     {
@@ -492,7 +492,7 @@
         "intent": "stupid"
     },
     {
-        "sentence": "you're being stupid alexa",
+        "sentence": "you're being stupid",
         "intent": "stupid"
     },
     {
