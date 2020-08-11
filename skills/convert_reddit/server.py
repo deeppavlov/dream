@@ -139,19 +139,12 @@ def sample_candidates(candidates, choice_num=1, replace=False, softmax_temperatu
 
 def is_do_you_question(answer):
     # search using regex
-    x = re.search('^do you', answer)
-    if(x is not None):
-        return True
-    else:
-        return False
+    return re.search('^do you', answer)
 
 
 def is_single_phrase(phrases):
     results = re.split(r'[.!?]+', phrases)
-    if (len(results) == 2 and len(results[1]) == 0):
-        return True
-    else:
-        return False
+    return len(results) == 2 and len(results[1]) == 0
 
 
 def transform_into_do_you_question(phrase):
@@ -182,10 +175,8 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True):
         cand = clear_text(responses[ind]).split()
         # checking for case "Do you ... ?"
         mid_cand = cand.lower()
-        if (is_do_you_question(mid_cand) is True):
-            if (is_single_phrase(mid_cand) is True):
-                if (str(mid_cand).endswith(".") is True):
-                    cand = transform_into_do_you_question(cand)
+        if is_do_you_question(mid_cand) and is_single_phrase(mid_cand) and mid_cand.endswith("."):
+            cand = transform_into_do_you_question(cand)
         raw_cand = responses[ind].lower()
         # hello ban
         hello_flag = any([j in cand[:3] for j in ["hi", "hello"]])
