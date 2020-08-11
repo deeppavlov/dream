@@ -68,7 +68,7 @@ services:
   small_talk_skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8062
   game_cooperative_skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8068
+    command: bash server_run.sh "gunicorn --workers=1 server:app -b 0.0.0.0:8068"
   news_api_skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8066 -t 15
   greeting_skill:
