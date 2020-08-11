@@ -34,13 +34,19 @@ health = HealthCheck(app, "/healthcheck")
 def db_is_updated():
     curr_date = datetime.datetime.now()
     min_update_time = datetime.timedelta(hours=25)
-    file_modification_time = datetime.datetime.fromtimestamp(DB_FILE.lstat().st_mtime if DB_FILE.exists() else 0)
-    data_is_expired = curr_date - min_update_time > file_modification_time
-    msg = "db is expired" if data_is_expired else "db is updated"
-    msg += f", last modified date of db is {file_modification_time.strftime('%m/%d/%Y, %H:%M:%S')}"
-    if data_is_expired:
+    if DB_FILE.exists():
+        file_modification_time = datetime.datetime.fromtimestamp(DB_FILE.lstat().st_mtime)
+        data_is_expired = curr_date - min_update_time > file_modification_time
+        msg = "db is expired" if data_is_expired else "db is updated"
+        msg += f", last modified date of db is {file_modification_time.strftime('%m/%d/%Y, %H:%M:%S')}"
+        if data_is_expired:
+            sentry_sdk.capture_message(msg)
+        return True, msg
+    else:
+        msg = "db file is not created"
+        logger.error(msg)
         sentry_sdk.capture_message(msg)
-    return True, msg
+        return False, msg
 
 
 health.add_check(db_is_updated)
