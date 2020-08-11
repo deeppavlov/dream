@@ -15,7 +15,7 @@ from state_formatters.dp_formatters import cobot_conv_eval_formatter_dialog, \
 
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+                    level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 parser = argparse.ArgumentParser()
@@ -117,20 +117,15 @@ def add_annotations(dialogs):
         blacklist_result = requests.post(BLACKLIST_URL, json={"sentences": hypots}).json()[0]
         toxic_result = requests.post(TOXIC_URL, json={"sentences": hypots}).json()
         toxic_result = [res[0] for res in toxic_result]
-
         conv_eval_format = cobot_conv_eval_formatter_dialog(dialog)
         conv_eval_result = requests.post(CONV_EVAL_URL, json=conv_eval_format[0]).json()[0]
-
+        logging.debug("***************conv result")
+        logging.debug(str(conv_eval_result))
         stop_format = stop_formatter_dialog(dialog)
         stop_result = requests.post(STOP_DETECTOR_URL, json=stop_format[0]).json()
         stop_result = [res[0] for res in stop_result]
 
         for i in range(len(blacklist_result["batch"])):
-            annots = dialog['utterances'][-1]['hypotheses'][i]['annotations']
-            annots['blacklisted_words'] = blacklist_result["batch"][i]
-            annots['toxic_classification'] = toxic_result[i]
-            annots['cobot_convers_evaluator_annotator'] = conv_eval_result["batch"][i]
-            annots['stop_detect'] = stop_result[i]
             dialog['hypotheses'][i]['annotations']['blacklisted_words'] = blacklist_result["batch"][i]
             dialog['hypotheses'][i]['annotations']['toxic_classification'] = toxic_result[i]
             dialog['hypotheses'][i]['annotations']['cobot_convers_evaluator_annotator'] = conv_eval_result["batch"][i]

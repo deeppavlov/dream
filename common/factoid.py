@@ -1,3 +1,4 @@
+FACTOID_NOTSURE_CONFIDENCE = 0.1
 
 DONT_KNOW_ANSWER = [
     "Sorry I can't answer these kinds of questions yet. My engineers are hard at work to bring me the necessary "

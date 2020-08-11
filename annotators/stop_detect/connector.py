@@ -24,6 +24,7 @@ class BatchConnector:
     async def send(self, payload: Dict, callback: Callable):
         try:
             st_time = time.time()
+
             stop_result = requests.request(
                 url=self._url,
                 headers=headers,

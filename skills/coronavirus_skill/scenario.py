@@ -44,30 +44,34 @@ for county_name in COUNTIES:
         CITIES[city_name.lower()].append((county_name, COUNTIES[county_name][0]))
 STATE_DATA, COUNTY_DATA, NATION_DATA = None, None, None
 FACT_LIST = ['The origin of coronavirus, Wuhan, has fully canceled the quarantine.',
-             'Only two dogs on the Earth have ever been diagnosed with coronavirus. '
-             'Moreover, even dogs who have coronavirus cannot transmit coronavirus to the human.',
-             'The coronavirus vaccine is already being tested in several countries. '
-             'The vaccine is going to be available this year, so a coronavirus will disappear one day.',
+             'Only two dogs and two cats on the Earth have ever been diagnosed with coronavirus. '
+             'Moreover, even dogs and cats who have coronavirus cannot transmit coronavirus to the human.',
+             'The coronavirus vaccines ale already being tested in several countries. '
+             'The vaccine is going to be available this year, so coronavirus will disappear one day.',
              'Someone who has completed quarantine or has been released from isolation '
              'does not pose a risk of coronavirus infection to other people. '
              'Can you tell me what people love doing  when people are self-isolating?']
 #  NOTE!!!! YOU SHOULD CHECK THAT FACTS ARE NOT BEING CHANGED BY SENTREWRITE!
 #  FORMULATE FACTS IN THIS WAY THAT THEY ARE NOT CHANGED!!! OTHERWISE THERE WILL BE BUG!!!!
 QUARANTINE_END_PHRASE = ("Although most American states are easing the restrictions, "
-                         "the date of the total end of quarantine is yet unknown. "
+                         "the Coronavirus peak in the majority of the states hasn't been reached yet. "
                          "If you want to help ending it faster, please continue social distancing as much as you can. ")
 ORIGIN_PHRASE = 'According to the scientific data, coronavirus COVID 19 is a product of natural evolution. ' \
                 'The first place where it caused an outbreak is the city of Wuhan, China.'
-WHAT_PHRASE = 'Coronavirus COVID 19 is an infectious disease. ' \
-              'Its common symptoms include fever, cough, and shortness of breath. ' \
-              'While the majority of cases result in mild symptoms, some cases can be lethal.'
+WHAT_PHRASE = ("Coronavirus COVID 19 is an infectious disease. "
+               "Its common symptoms include fever, cough, shortness of breath, and many others."
+               "Anyone can have mild to severe symptoms. While the majority of cases result in mild symptoms,"
+               "some cases can be lethal. Older adults and people who have severe underlying medical conditions"
+               "like heart or lung disease or diabetes seem to be at higher risk for developing more serious"
+               "complications from COVID-19 illness.")
 WORK_AND_STAY_HOME_PHRASE = ("Every day that you practice social distancing during the pandemic, "
                              "you are doing someone else (maybe hundreds or even thousands of someone elses) "
                              "a great kindness. So if you can, stay home. It's the easiest act of "
                              "heroism you'll ever do. Would you like to learn more about coronavirus?")
-CDC_STAY_HOME_RECOMMENDATION = "CDC recommends Americans stay at home. If you absolutely have to go outside" \
-                               " please wear masks, practice social distancing, and minimize time you have to spend " \
-                               "outside of your home."
+CDC_STAY_HOME_RECOMMENDATION = ("While some of the communities and businesses are re-opening, CDC recommends Americans"
+                                "to understand potential risks and use different measures to maximize their own safety."
+                                "If you absolutely have to go outside please wear masks, practice social distancing,"
+                                "and minimize time you have to spend outside of your home.")
 EXPLAIN_PHRASE = 'If you are outside your home, you can get a coronavirus. ' \
                  'Even if you easily overcome it, you can begin a chain of many new infections, ' \
                  'which can be critical or deadly for some.' \
@@ -200,14 +204,10 @@ def get_statephrase(state_name, state_data, county_data, nation_data):
     county_names = [j[0] for j in COUNTIES.keys()]
     if state_name in STATES.keys():
         data1 = [state_name, state_data[state_name][0], state_data[state_name][1], STATES[state_name]]
-        phrase = 'The total number of registered coronavirus cases in {0} is {1} including {2} deaths. ' \
-                 'By the way, the population of {0} is {3} persons, which is way larger than ' \
-                 'the number of cases. '.format(*data1)
+        phrase = 'The total number of registered coronavirus cases in {0} is {1} including {2} deaths.'.format(*data1)
     elif state_name in nation_data.keys():
         data1 = [state_name, nation_data[state_name][0], nation_data[state_name][1], NATIONS[state_name]]
-        phrase = 'The total number of registered coronavirus cases in {0} is {1} including {2} deaths. ' \
-                 'By the way, the population of {0} is {3} persons, which is way larger than ' \
-                 'the number of cases. '.format(*data1)
+        phrase = 'The total number of registered coronavirus cases in {0} is {1} including {2} deaths.'.format(*data1)
     elif state_name in CITIES.keys():
         county_name = CITIES[state_name][0]
         data1 = [state_name,
@@ -217,10 +217,7 @@ def get_statephrase(state_name, state_data, county_data, nation_data):
                  COUNTIES[county_name][0]]
         phrase = '{0} is located in {1}. ' \
                  'In this county, the total number of registered coronavirus cases ' \
-                 'is {2} including {3} deaths. ' \
-                 'By the way, the population of this county is {4} persons, ' \
-                 'which is way larger than ' \
-                 'the number of cases'.format(*data1)
+                 'is {2} including {3} deaths.'.format(*data1)
     elif state_name in county_names:
         for county in COUNTIES.keys():
             if county[0] == state_name:
@@ -230,10 +227,7 @@ def get_statephrase(state_name, state_data, county_data, nation_data):
                  county_data[state_name][1],
                  COUNTIES[state_name][0]]
         phrase = 'In the {0}, the total number of registered coronavirus cases ' \
-                 'is {1} including {2} deaths.' \
-                 'By the way, the population of this county is {3} persons, ' \
-                 'which is way larger than ' \
-                 'the number of cases'.format(*data1)
+                 'is {1} including {2} deaths.'.format(*data1)
     else:
         raise Exception(str(state_name) + ' not in names')
     if data1[2] == 1:
@@ -273,13 +267,8 @@ def make_phrases(n_cases, n_deaths, num_flu_deaths, millionair_number):
     assert len(nums1) == 2
     assert len(nums2) == 2
     phrase1 = 'According to the recent data, there are  {0} confirmed cases of coronavirus. ' \
-              'This is about {1} times less than the number of millionaires, ' \
-              'so you are not likely to catch it any time soon. ' \
-              ' Would you like to learn more about coronavirus?'.format(*nums1)
-    phrase2 = 'According to the recent data, there are {0} confirmed deaths from coronavirus. ' \
-              'This is  about {1} times less than the number of people ' \
-              'died from flu last year, so you are not likely to die from it any time soon. ' \
-              'After all, you have lived through the last winter somehow! '.format(*nums2)
+              ' Shall I tell you more?'.format(*nums1)
+    phrase2 = 'According to the recent data, there are {0} confirmed deaths from coronavirus.'.format(*nums2)
     return [phrase1, phrase2]
 
 
@@ -295,7 +284,7 @@ def improve_phrase(phrase, asked_about_age=True, met_last=True):
     if met_last and asked_about_age:
         return phrase
     if asked_about_age:
-        phrase = phrase + ' Would you like to learn more about coronavirus?'
+        phrase = phrase + ' Would you want to learn more?'
     else:
         phrase = phrase + ' Anyway, I can tell you how likely you are ' \
                           'to recover from coronavirus if you get it. ' \
@@ -381,7 +370,8 @@ class CoronavirusSkillScenario:
             self.phrases = make_phrases(num_cases, num_cv_deaths, num_flu_deaths, millionaire_number)
             self._updating_thread = threading.Thread(target=get_state_cases)
             self._updating_thread.start()
-            self.facts = [j.lower() for j in FACT_LIST]
+            # self.facts = [j.lower() for j in FACT_LIST]
+            self.facts = [j for j in FACT_LIST]
             self.symptom_phrase = 'According to the CDC website, ' \
                                   'The main warning signs of coronavirus are: ' \
                                   'difficulty breathing or shortness of breath, ' \
@@ -433,6 +423,7 @@ class CoronavirusSkillScenario:
                 last_bot_phrase = ''
                 if len(last_bot_phrases) > 0:
                     last_bot_phrase = last_bot_phrases[0]
+                # this is questionable: it is wrong to lowercase responses, but needed to match data.
                 met_last = any([self.facts[-1].lower() in j.lower() for j in last_bot_phrases])
                 logging.info(last_bot_phrases)
                 logging.info(met_last)

@@ -98,10 +98,6 @@ services:
     image: ${DOCKER_REGISTRY}/eliza:${VERSION}
     env_file:
       - ${ENV_FILE}
-  tfidf_retrieval:
-    image: ${DOCKER_REGISTRY}/tfidf_retrieval:${VERSION}
-    env_file:
-      - ${ENV_FILE}
   book_tfidf_retrieval:
     image: ${DOCKER_REGISTRY}/book_tfidf_retrieval:${VERSION}
   entertainment_tfidf_retrieval:
@@ -202,6 +198,10 @@ services:
       - ${ENV_FILE}
   game_cooperative_skill:
     image: ${DOCKER_REGISTRY}/game_cooperative_skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  kbqa:
+    image: ${DOCKER_REGISTRY}/kbqa:${VERSION}
     env_file:
       - ${ENV_FILE}
   program_y_wide:

@@ -4,7 +4,6 @@ import types
 import json
 import pathlib
 import os
-import traceback
 import random
 
 from utils.programy_extention import MindfulDataFileBot
@@ -36,7 +35,7 @@ def get_game_db():
 
 
 # init models
-{model_name: print(files) for model_name, files in aiml_files.items()}
+# {model_name: print(files) for model_name, files in aiml_files.items()}
 models = {model_name: MindfulDataFileBot(files) for model_name, files in aiml_files.items()}
 
 # %%
@@ -84,7 +83,8 @@ def describe_top_handler(state, skill_state, true_model_names, true_cmds):
                 year, month, day = current_game.get("released").split("-")
                 text += f"It was released on {month_d2s[month]} {day} {year}. "
             except Exception:
-                print(traceback.format_exc())
+                # print(traceback.format_exc())
+                pass
 
         # genres
         if current_game.get("genres"):
@@ -98,7 +98,8 @@ def describe_top_handler(state, skill_state, true_model_names, true_cmds):
                     genres = " ".join(genres)
                     text += f"It's a combination of {genres}. "
             except Exception:
-                print(traceback.format_exc())
+                # print(traceback.format_exc())
+                pass
 
         # ratings
         if current_game.get("ratings"):
@@ -108,7 +109,8 @@ def describe_top_handler(state, skill_state, true_model_names, true_cmds):
                 percent = int(rating["percent"])
                 text += f"{percent} percent of people marked {current_game.get('name_original')} as {title}. "
             except Exception:
-                print(traceback.format_exc())
+                # print(traceback.format_exc())
+                pass
 
         if len(top) - 1 != top_index:
             skill_state_update = {"next_step": "describe_top", "top_index": top_index + 1}
@@ -254,8 +256,8 @@ def run_skill(state: State, modes: List = [skill_attrs.modes.intro]):
     scenario = False
     skill_state_update = {}
 
-    print(f"<{skill_attrs.skill_name}> true_model_names: {true_model_names}")
-    print(f"<{skill_attrs.skill_name}> true_cmds: {true_cmds}")
+    # print(f"<{skill_attrs.skill_name}> true_model_names: {true_model_names}")
+    # print(f"<{skill_attrs.skill_name}> true_cmds: {true_cmds}")
 
     if skill_attrs.modes.intro in modes:
         if set(true_model_names) & set(["last_year", "this_year", "month", "week"]):
