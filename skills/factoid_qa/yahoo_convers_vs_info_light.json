@@ -109,7 +109,7 @@
       }
     ],
     "out": [
-      "y_pred_labels"
+      "y_pred_probas"
     ]
   },
   "train": {
@@ -145,7 +145,7 @@
   },
   "metadata": {
     "variables": {
-      "ROOT_PATH": "/deeppavlov",
+      "ROOT_PATH": "/",
       "DOWNLOADS_PATH": "/",
       "MODELS_PATH": "/",
       "MODEL_PATH": "/yahoo_convers_vs_info_light_v0"

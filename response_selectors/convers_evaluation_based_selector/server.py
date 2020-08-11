@@ -13,7 +13,6 @@ import pprint
 from nltk.tokenize import sent_tokenize
 from copy import deepcopy
 from collections import defaultdict
-
 from common.duplicates import NOT_LOWER_DUPLICATES_SENTS
 from common.universal_templates import if_lets_chat_about_topic, if_choose_topic
 from common.utils import scenario_skills, retrieve_skills, okay_statements, is_question, \
@@ -22,7 +21,7 @@ from common.utils import scenario_skills, retrieve_skills, okay_statements, is_q
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+                    level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
@@ -34,6 +33,8 @@ ASK_LINK_TO_FOR_RETRIEVE_PROB = 0.5
 
 @app.route("/respond", methods=['POST'])
 def respond():
+    print("Convers_Evaluation_Based_Response_Selector: Beginning", flush=True)
+
     st_time = time.time()
     dialogs_batch = request.json["dialogs"]
     response_candidates = [dialog["utterances"][-1]["hypotheses"] for dialog in dialogs_batch]
@@ -100,9 +101,11 @@ def respond():
         "isResponseComprehensible": 0.,
         "isResponseErroneous": 0.
     }
-    result = [annotation.get('cobot_convers_evaluator_annotator', default_conv_eval) or default_conv_eval for annotation in annotations]
+    assert 'cobot_convers_evaluator_annotator' in annotations[0]
+    result = [annotation.get('cobot_convers_evaluator_annotator', default_conv_eval)
+              for annotation in annotations]
+    # raise Exception('Sample annotation is '+str(annotations[0]))
     result = np.array(result)
-
     dialog_ids = np.array(dialog_ids)
     confidences = np.array(confidences)
     toxicities = np.array(toxicities)
@@ -112,7 +115,7 @@ def respond():
     for i, dialog in enumerate(dialogs_batch):
         # curr_candidates is dict
         curr_candidates = response_candidates[i]
-        logger.info(f"Curr candidates:")
+        logger.info("Curr candidates:")
         logger.info(pprint.pformat(curr_candidates, compact=False))
         # choose results which correspond curr candidates
         curr_scores = result[dialog_ids == i]  # array of dictionaries
@@ -150,7 +153,10 @@ def join_used_links_in_bot_attributes(main_bot_attrs, add_bot_attrs):
 
 
 def add_question_to_statement(best_candidate, best_skill_name, dummy_question, dummy_question_bot_attr,
-                              link_to_question, link_to_bot_attrs):
+                              link_to_question, link_to_bot_attrs, not_sure_factoid):
+
+    if not_sure_factoid and "factoid_qa" in best_skill_name:
+        best_candidate["text"] = "I am not sure in my answer but I can try. " + best_candidate["text"]
     if best_candidate["text"].strip() in okay_statements:
         if dummy_question != "" and random.random() < ASK_DUMMY_QUESTION_PROB:
             logger.info(f"adding {dummy_question} to response.")
@@ -265,18 +271,23 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     how_are_you_spec = "Do you want to know what I can do?"  # this is always at the end of answers to `how are you`
     what_i_can_do_spec = "socialbot running inside"
     psycho_help_spec = "If you or someone you know is in immediate danger"
-    greeting_spec = "this is an Alexa Prize Socialbot"
+    greeting_spec = "this is an experimental DeepPavlov Socialbot"
     misheard_with_spec1 = "I misheard you"
     misheard_with_spec2 = "like to chat about"
     alexa_abilities_spec = "If you want to use the requested feature say"
-
     very_big_score = 100
     very_low_score = -100
     dummy_question = ""
     dummy_question_bot_attr = {}
     link_to_question = ""
     link_to_bot_attrs = {}
-
+    not_sure_factoid = False
+    if "factoid_qa" in skill_names:
+        factoid_index = skill_names.index("factoid_qa")
+        logging.debug('factoid')
+        logging.debug(str(candidates[factoid_index]))
+        if 'not sure' in candidates[factoid_index] and candidates[factoid_index]['not sure']:
+            not_sure_factoid = True
     for i in range(len(scores)):
         curr_score = None
         is_misheard = misheard_with_spec1 in candidates[i]['text'] or misheard_with_spec2 in candidates[i]['text']
@@ -290,13 +301,13 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                     "about it" not in dialog['utterances'][0]["text"].lower():
                 logger.info("User wants to talk about particular topic")
                 # if user says `let's chat about blablabla`
-                if skill_names[i] == 'cobotqa':
-                    logger.info("Particular topic. CoBotQA + Greeting to very big score.")
-                    # I don't have an opinion on that but I know some facts.
-                    resp = candidates[i]['text'].replace("I don't have an opinion on that but I know some facts.", "")
-                    candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + resp
-                    curr_score = very_big_score
-                elif skill_names[i] == 'meta_script_skill' and len(candidates[i]['text']) > 0 and \
+                # if skill_names[i] == 'cobotqa':
+                #     logger.info("Particular topic. CoBotQA + Greeting to very big score.")
+                #     # I don't have an opinion on that but I know some facts.
+                #     resp = candidates[i]['text'].replace("I don't have an opinion on that but I know some facts.", "")
+                #     candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + resp
+                #     curr_score = very_big_score
+                if skill_names[i] == 'meta_script_skill' and len(candidates[i]['text']) > 0 and \
                         confidences[i] > 0.98:
                     logger.info("Particular topic. meta_script_skill + Greeting to very big score.")
                     # I don't have an opinion on that but I know some facts.
@@ -337,7 +348,8 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                 curr_score = very_big_score
             else:
                 confidences[i] = 0.2  # Low confidence for greeting in the middle of dialogue
-        elif skill_names[i] == 'cobotqa' and "Here's something I found on the web." in candidates[i]['text']:
+        # we don't have 'cobotqa' anymore; instead we have factoid_qa
+        elif skill_names[i] == 'factoid_qa' and "Here's something I found on the web." in candidates[i]['text']:
             confidences[i] = 0.6
         elif skill_names[i] == 'misheard_asr' and is_misheard:
             curr_score = very_big_score
@@ -401,7 +413,8 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     best_skill_name = skill_names[int(best_id)]
 
     best_candidate = add_question_to_statement(
-        best_candidate, best_skill_name, dummy_question, dummy_question_bot_attr, link_to_question, link_to_bot_attrs)
+        best_candidate, best_skill_name, dummy_question, dummy_question_bot_attr,
+        link_to_question, link_to_bot_attrs, not_sure_factoid)
 
     best_text = best_candidate["text"]
     best_confidence = best_candidate["confidence"]
@@ -435,6 +448,9 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             # if dialog is just started (now it's impossible)
             if random.random() <= CALL_BY_NAME_PROBABILITY:
                 best_text = f"{name}, {best_text}"
+
+    # adding capitalization of only the first letter to any final answer
+    best_text = re.sub('([a-zA-Z])', lambda x: x.groups()[0].upper(), best_text, 1)
 
     return best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes
 

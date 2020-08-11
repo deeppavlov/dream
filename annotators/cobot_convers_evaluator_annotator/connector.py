@@ -22,26 +22,33 @@ class BatchConnector:
     async def send(self, payload: Dict, callback: Callable):
         try:
             st_time = time.time()
-            conv_eval_result = requests.request(
+            # print(f"p{payload}", flush=True)
+            # raise Exception(str(payload['payload']) + ' * ' + self._url)
+            conv_eval_results = requests.request(
                 url=self._url,
                 headers=headers,
                 json=payload['payload'],
                 method='POST',
-                timeout=1.0
+                timeout=10.0
             ).json()
+
             key_annotations = ['isResponseComprehensible',
                                'isResponseErroneous',
                                'isResponseInteresting',
                                'isResponseOnTopic',
                                'responseEngagesUser']
             result = []
-            for scores in conv_eval_result:
-                result.append({annotation: score
-                               for annotation, score in zip(key_annotations,scores)})
+            for conv_eval_result in conv_eval_results:
+                for scores in conv_eval_result:
+                    result.append({annotation: score for annotation, score
+                                  in zip(key_annotations, scores)})
+            assert len(result) > 1
             total_time = time.time() - st_time
             logger.info(f'conv_eval batch connector exec time: {total_time:.3f}s')
             # In connector [result] leads to bug, so it is not inside array like on
             # conv eval and blacklist annotator
+            # print(f"r{result}", flush=True)
+
             asyncio.create_task(callback(
                 task_id=payload['task_id'],
                 response={"batch": result}

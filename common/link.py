@@ -18,6 +18,10 @@ import common.game_cooperative_skill as game_cooperative_skill
 
 # Each common skill module should define +skill_trigger_phrases()+ function
 # that contains all phrases to trigger specific skill
+
+# removing per #99
+# 'book_skill': set(books.skill_trigger_phrases()),
+
 skills_phrases_map = {
     'news_skill': set(news.skill_trigger_phrases()),
     'movie_skill': set(movies.skill_trigger_phrases()),
