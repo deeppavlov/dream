@@ -13,7 +13,7 @@ from utils.state import State
 
 # configuration
 STORAGE_PATH = os.getenv("STORAGE_PATH")
-content_dir = pathlib.Path(os.getenv("CONTENT_PATH", "content"))
+DB_FILE = pathlib.Path(os.getenv("DB_FILE", "/tmp/game_db.json"))
 
 
 # load programy models
@@ -29,8 +29,12 @@ aiml_files = {
 
 # load content
 # latest_json_file = list(sorted(content_dir.glob("./*.json")))[-1]
-latest_json_file = list(sorted(content_dir.glob("./tops_2020-04-13.json")))[-1]
-tops = json.load(latest_json_file.open())
+# latest_json_file = list(sorted(content_dir.glob("./tops_2020-04-13.json")))[-1]
+# tops = json.load(DB_FILE.open())
+def get_game_db():
+    return json.load(DB_FILE.open())
+
+
 # init models
 {model_name: print(files) for model_name, files in aiml_files.items()}
 models = {model_name: MindfulDataFileBot(files) for model_name, files in aiml_files.items()}
@@ -176,19 +180,19 @@ def select_top_handler(state, skill_state, true_model_names, true_cmds):
     undefined_request = False
 
     if "last_year" in true_model_names:
-        current_top = tops.get("previous_yearly_top", [])
+        current_top = get_game_db().get("previous_yearly_top", [])
         period_plh = "the last year"
         top_name = "previous_yearly_top"
     elif "this_year" in true_model_names:
-        current_top = tops.get("yearly_top", [])
+        current_top = get_game_db().get("yearly_top", [])
         period_plh = "this year"
         top_name = "yearly_top"
     elif "month" in true_model_names:
-        current_top = tops.get("monthly_top", [])
+        current_top = get_game_db().get("monthly_top", [])
         period_plh = "the last month"
         top_name = "monthly_top"
     elif "week" in true_model_names:
-        current_top = tops.get("weekly_top", [])
+        current_top = get_game_db().get("weekly_top", [])
         period_plh = "the last week"
         top_name = "weekly_top"
     else:
@@ -229,9 +233,9 @@ def intro_handler(state, skill_state, true_model_names, true_cmds):
         text = "I can tell you a few things about popular games. "
 
     text += "For now, I can talk about the most popular games for this or last year"
-    if tops.get("weekly_top"):
+    if get_game_db().get("weekly_top"):
         text += ", last month, or even the last week (hotties!). "
-    elif tops.get("monthly_top"):
+    elif get_game_db().get("monthly_top"):
         text += " or even the last month (hotties!). "
     text += "Which of these time periods is of interest for you?"
     skill_state_update = {"next_step": "select_top"}

@@ -4,8 +4,11 @@ import logging
 import time
 from os import getenv
 import random
+import pathlib
+import datetime
 
 from flask import Flask, request, jsonify, abort
+from healthcheck import HealthCheck
 import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
 
@@ -18,11 +21,28 @@ from router import run_skills as skill
 ignore_logger("root")
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
+DB_FILE = pathlib.Path(getenv("DB_FILE", "/tmp/game_db.json"))
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+health = HealthCheck(app, "/healthcheck")
+
+# add your own check function to the healthcheck
+def db_is_updated():
+    curr_date = datetime.datetime.now()
+    min_update_time = datetime.timedelta(hours=25)
+    file_modification_time = datetime.datetime.fromtimestamp(DB_FILE.lstat().st_mtime if DB_FILE.exists() else 0)
+    if curr_date - min_update_time > file_modification_time:
+        return False, ("db is out of date"
+        f", latest update date is {file_modification_time.strftime('%m/%d/%Y, %H:%M:%S')}")
+    else:
+        return True, ("db is updated"
+        f", latest update date is {file_modification_time.strftime('%m/%d/%Y, %H:%M:%S')}")
+
+
+health.add_check(db_is_updated)
 
 
 @app.route("/respond", methods=["POST"])
