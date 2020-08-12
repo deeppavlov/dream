@@ -33,6 +33,37 @@ tell_me_template = re.compile(tell_me)
 full_template = re.compile(tell_me + r" (who|where|when|what|why)")
 partial_template = re.compile(r"(who|where|when|what|why)")
 
+pre_statements = ["Hmm, this is what I've found on Wikipedia: ",
+                  "Here's what Wikipedia says: ",
+                  "Hope this is it: ",
+                  "It is the impractical things in this tumultuous hellscape"
+                  " of a world that matter most. A book, a name, chicken soup. "
+                  "They help us remember that even in our darkest hour, "
+                  "life is still to be savored. Oh, my goodness. This is what I've found: ",
+                  "Not all damage is corrupted code. Oh, right, hope this is the answer: ",
+                  "From the sky above, there is always the mud below. Wait, that's not what you've been looking for."
+                  "Here's what I've found: ",
+                  "It is not our enemies that defeat us. It is our fear. Do not be afraid of the monsters, make them "
+                  "afraid of you. Oh, right, here's what I've found: ",
+                  "First thing you'll learn is that nothing is what it seems. Except this answer: ",
+                  "I hate the fact that if I don't start the conversation, there won't be one. "
+                  "This is what Wikipedia says: ",
+                  "A quiet mind is able to hear intuition over fear. Interesting thought?"
+                  "Anyways, here's what I've found: ",
+                  "Until the lion learns how to write, every story will glorify the hunter. Huh... "
+                  "Back to your question, here's what Wikipedia says: ",
+                  "Take what is offered and that must sometimes be enough. What a thought isn't it?"
+                  " Here's what I've found: ",
+                  "It is what it is. Or is it? Here we go: ",
+                  "The past is relevant only as data. Here's what that data says: ",
+                  "I will not squander what time I have left -- and as your friend I"
+                  " entreat you to not squander yours. But here's the answer to your question: "]
+
+
+pre_old_memory_statements = ["Hmm, there's something I've heard once: ",
+                             "Not sure if that's what you're looking for but this is what I remember: ",
+                             "To the best of my knowledge, this is what I recall: "]
+
 
 def get_random_facts(ner_outputs_to_classify):
     responses = []
@@ -141,13 +172,16 @@ def respond():
             if "Not Found" not in kbqa_response["response"]:
                 logger.info("Factoid question. Answer with KBQA response.")
                 # capitalizing
-                response = str(kbqa_response["response"]).capitalize()
+                # response = str(kbqa_response["response"]).capitalize()
+                # we use one of the statements
+                response = random.choice(pre_statements) + str(kbqa_response["response"])
                 # FACTOID_DEFAULT_CONFIDENCE
                 confidence = kbqa_response["confidence"]
             # and "?" in dialog["human_utterances"][-1]["text"]: Factoid questions can be without ?
             elif len(fact_output) > 0:
                 logger.info("Factoid question. Answer with pre-recorded facts.")
-                response = "Here's something I've found on the web... " + fact_output
+                # response = "Here's something I've found on the web... " + fact_output
+                response = random.choice(pre_old_memory_statements) + fact_output
                 confidence = FACTOID_DEFAULT_CONFIDENCE
             else:
                 response = random.choice(DONT_KNOW_ANSWER)
