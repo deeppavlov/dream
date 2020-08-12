@@ -46,10 +46,11 @@ def get_random_facts(ner_outputs_to_classify):
         for name in names:
             if len(fact_dict[name]) == max_fact_num:
                 # phrase_start = 'Here is a fact about {}'.format(name) + '. '
-                phrase_start = name
-                phrase_end = random.choice(fact_dict[name])
+                # phrase_start = name
+                random_fact = random.choice(fact_dict[name])
                 if response == '':
-                    response = phrase_start + phrase_end
+                    # response = phrase_start + phrase_end
+                    response = random_fact
         responses.append(response)
     return responses
 
