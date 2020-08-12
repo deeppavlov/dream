@@ -174,7 +174,7 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True):
     for ind in reversed(filtered_indices):
         cand = clear_text(responses[ind]).split()
         # checking for case "Do you ... ?"
-        mid_cand = cand.lower()
+        mid_cand = str(cand).lower()
         if is_do_you_question(mid_cand) and is_single_phrase(mid_cand) and mid_cand.endswith("."):
             cand = transform_into_do_you_question(cand)
         raw_cand = responses[ind].lower()
