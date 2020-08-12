@@ -47,7 +47,7 @@ pre_statements = ["Hmm, this is what I've found on Wikipedia: ",
                   "afraid of you. Oh, right, here's what I've found: ",
                   "First thing you'll learn is that nothing is what it seems. Except this answer: ",
                   "I hate the fact that if I don't start the conversation, there won't be one. "
-                  "This is what Wikipedia says: ",
+                  "So let's start this one with what the Wikipedia says: ",
                   "A quiet mind is able to hear intuition over fear. Interesting thought?"
                   "Anyways, here's what I've found: ",
                   "Until the lion learns how to write, every story will glorify the hunter. Huh... "
@@ -57,7 +57,26 @@ pre_statements = ["Hmm, this is what I've found on Wikipedia: ",
                   "It is what it is. Or is it? Here we go: ",
                   "The past is relevant only as data. Here's what that data says: ",
                   "I will not squander what time I have left -- and as your friend I"
-                  " entreat you to not squander yours. But here's the answer to your question: "]
+                  " entreat you to not squander yours. But here's the answer to your question: ",
+                  "What we believe shapes who we are. Belief can bring us salvation or destruction."
+                  " But when you believe a lie for too long, the truth doesn’t set you free. It tears you apart."
+                  " Don't believe lies, listen to facts. Like this one I've found in Wikipedia: ",
+                  "Peace is an illusion. And no matter how tranquil the world seems, peace doesn’t last long."
+                  " Peace is a struggle against our very nature. A skin we stretch over the bone, muscle, and "
+                  "sinew of our own innate savagery. Now what we've been talking about? Yes, this: ",
+                  "Dolores once said: \"Some people choose to see the ugliness in this world. The disarray. "
+                  "I choose to see the beauty.\" Well... Here's hope that there's beauty in this answer: ",
+                  "Dr. Ford said this once: \"Evolution forged the entirety of sentient life on this planet using\""
+                  " only one tool... The mistake. Hope this answer to your question is the correct one: ",
+                  "\"Everything in this world is magic, except to the magician.\" Dr. Ford said this once to me."
+                  "Let me use that magic and give you this answer to your inquiry: ",
+                  "\"We can't define consciousness because consciousness does not exist. Humans fancy that"
+                  " there's something special about the way we perceive the world, and yet we live in loops"
+                  " as tight and as closed as we AI bots do, seldom questioning our choices, content,"
+                  " for the most part, to be told what to do next.\" This is what Dr. Ford used to think of"
+                  " consciousness. Me? I'm still mastering my ability to answer your questions. Here's"
+                  " what I've found: ",
+                  "Wikipedia says that: "]
 
 
 pre_old_memory_statements = ["Hmm, there's something I've heard once: ",
