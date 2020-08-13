@@ -37,30 +37,6 @@ services:
       - "./annotators/cobot_nounphrases:/src"
     ports:
       - 8006:8006
-  sentseg:
-    env_file: [.env.dev]
-    volumes:
-      - "./annotators/SentSeg:/src"
-    ports:
-      - 8011:8011
-  sentrewrite:
-    env_file: [.env.dev]
-    volumes:
-      - "./annotators/SentRewrite:/src"
-    ports:
-      - 8017:8017
-  ner:
-    env_file: [.env.dev]
-    volumes:
-      - './annotators/NER:/src'
-    ports:
-      - 8021:8021
-  personality_catcher:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/personality_catcher:/app"
-    ports:
-      - 8010:8010
   program_y:
     env_file: [.env.dev]
     volumes:
@@ -69,6 +45,18 @@ services:
       - "./common:/src/common"
     ports:
       - 8008:8008
+  personality_catcher:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/personality_catcher:/app"
+    ports:
+      - 8010:8010
+  sentseg:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/SentSeg:/src"
+    ports:
+      - 8011:8011
   convers_evaluation_selector:
     env_file: [.env.dev]
     volumes:
@@ -76,15 +64,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8009:8009
-  mongo:
-    env_file: [.env.dev]
-    command: mongod
-    image: mongo:4.0.0
-    ports:
-      - 27017:27017
-    # # you can use persistent local volume if you need
-    # volumes:
-    #   - ./venv/data/db_data:/root/data/db
   toxic_classification:
     env_file: [.env.dev]
     volumes:
@@ -97,12 +76,12 @@ services:
       - "./annotators/DeepPavlovSentimentClassification:/dp-agent/annotators/DeepPavlovSentimentClassification"
     ports:
       - 8024:8024
-  emotion_classification:
+  sentrewrite:
     env_file: [.env.dev]
     volumes:
-      - "./annotators/DeepPavlovEmotionClassification:/dp-agent/annotators/DeepPavlovEmotionClassification"
+      - "./annotators/SentRewrite:/src"
     ports:
-      - 8038:8038
+      - 8017:8017
   intent_responder:
     env_file: [.env.dev]
     volumes:
@@ -135,6 +114,12 @@ services:
       - "./skills/movie_skill:/src"
     ports:
       - 8023:8023
+  ner:
+    env_file: [.env.dev]
+    volumes:
+      - './annotators/NER:/src'
+    ports:
+      - 8021:8021
   alice:
     env_file: [.env.dev]
     volumes:
@@ -147,13 +132,6 @@ services:
       - "./skills/eliza:/src"
     ports:
       - 8047:8047
-  emotion_skill:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/emotion_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8049:8049
   book_tfidf_retrieval:
     env_file: [.env.dev]
     volumes:
@@ -228,6 +206,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8031:8031
+  misheard_asr:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/misheard_asr:/src"
+    ports:
+      - 8033:8033
   book_skill:
     env_file: [.env.dev]
     volumes:
@@ -235,12 +219,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8032:8032
-  misheard_asr:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/misheard_asr:/src"
-    ports:
-      - 8033:8033
   christmas_new_year_skill:
     env_file: [.env.dev]
     volumes:
@@ -272,6 +250,19 @@ services:
       - "./common:/src/common"
     ports:
       - 8037:8037
+  emotion_skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/emotion_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8049:8049
+  emotion_classification:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/DeepPavlovEmotionClassification:/dp-agent/annotators/DeepPavlovEmotionClassification"
+    ports:
+      - 8038:8038
   dummy_skill_dialog:
     env_file: [.env.dev]
     volumes:
@@ -368,4 +359,13 @@ services:
       - "./annotators/DeepPavlovFactoidClassification:/dp-agent/annotators/DeepPavlovFactoidClassification"
     ports:
       - 8073:8073
+  mongo:
+    env_file: [.env.dev]
+    command: mongod
+    image: mongo:4.0.0
+    ports:
+      - 27017:27017
+    # # you can use persistent local volume if you need
+    # volumes:
+    #   - ./venv/data/db_data:/root/data/db
 version: "3.7"
