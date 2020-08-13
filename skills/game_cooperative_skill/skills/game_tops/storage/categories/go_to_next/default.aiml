@@ -8,6 +8,12 @@
     </category>
 
    <category>
+        <pattern> ^ MOVING ON ^ </pattern>
+        <template>
+            <srai>NEXT</srai>
+        </template>
+    </category>
+   <category>
         <pattern> ^ GO ON ^ </pattern>
         <template>
             <srai>NEXT</srai>
