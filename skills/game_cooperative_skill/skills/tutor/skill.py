@@ -29,6 +29,6 @@ def run_skill(state: State, modes: List = [skill_attrs.modes.intro]):
             skill_name=skill_attrs.skill_name,
             text="OK, I won’t continue, but if you want to talk about the best games, "
             "Say tell me about the coolest games",
-            confidence=1.0,
+            confidence=0.0,
         )
     return state

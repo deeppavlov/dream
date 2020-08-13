@@ -3,7 +3,7 @@ This module consolidates possible phrases that links to specific skill.
 Also it contains +link_to+ function that returns phrase to link to specific skill
 """
 
-from random import choice
+from random import choice, choices
 import common.news as news
 import common.books as books
 import common.movies as movies
@@ -42,6 +42,12 @@ high_rated_skills_for_linking = {
     "weather_skill"
 }
 
+# assuming that all skills weights are equal to 1 by default
+# it is used to control amount of link_to phrases to specific skills
+skills_link_to_weights = {
+    'coronavirus_skill': 0.25,
+}
+
 
 def link_to(skills, used_links={}):
     """
@@ -55,14 +61,24 @@ def link_to(skills, used_links={}):
     used_links : dict
         Key is skill_name, value is used links phrases.
         Pass it to prevent selecting identical phrases.
+        It will try to link_to skills that were not linked before.
     """
     random_skill = ''
     random_phrase = ''
     filtered_phrases_map = dict(skills_phrases_map)
+    filtered_skills = set(skills)
     for skill_name, phrases in used_links.items():
         filtered_phrases_map[skill_name] = skills_phrases_map[skill_name].difference(set(phrases))
-    if skills:
-        random_skill = choice(skills)
+        if len(phrases) > 0:
+            filtered_skills.discard(skill_name)
+
+    # all skills were linked before, use original list of skills
+    if len(filtered_skills) == 0:
+        filtered_skills = skills
+
+    if filtered_skills:
+        skills_weights = [skills_link_to_weights.get(s, 1.0) for s in filtered_skills]
+        random_skill = choices(list(filtered_skills), weights=skills_weights, k=1)[0]
 
     filtered_phrases = list(filtered_phrases_map[random_skill])
     if filtered_phrases:

@@ -79,17 +79,20 @@ def run_skills(history: List, state: Dict, agent_intents: Dict = {}):
     elif "game_tops_intent" in state.intents:
         scheduled_skills.append((game_tops_attrs.skill_name, [game_tops_attrs.modes.intro]))
     elif "to_talk_about_intent" in state.intents and state.get_content("games"):
-        scheduled_skills.append(
-            (
-                game_conversation_attrs.skill_name,
+        if is_last_skill(game_conversation_attrs.skill_name, state):
+            scheduled_skills.append((game_tops_attrs.skill_name, [game_tops_attrs.modes.intro]))
+        else:
+            scheduled_skills.append(
                 (
-                    []
-                    if is_last_skill(game_conversation_attrs.skill_name, state)
-                    else [game_conversation_attrs.modes.intro]
-                ),
+                    game_conversation_attrs.skill_name,
+                    (
+                        []
+                        if is_last_skill(game_conversation_attrs.skill_name, state)
+                        else [game_conversation_attrs.modes.intro]
+                    ),
+                )
             )
-        )
-        state.interrupt_scenario()
+            state.interrupt_scenario()
     elif state.current_scenario_skill:
         scheduled_skills.append((state.current_scenario_skill, []))
     elif is_last_skill(game_conversation_attrs.skill_name, state) and "next_game_intent" in state.intents:
