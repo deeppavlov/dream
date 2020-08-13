@@ -12,6 +12,7 @@ import tensorflow_hub as tfhub
 import tensorflow as tf
 import tensorflow_text
 import numpy as np
+import spacy
 from flask import Flask, request, jsonify
 from flasgger import Swagger, swag_from
 import sentry_sdk
@@ -47,6 +48,7 @@ module = tfhub.Module(MODEL_PATH)
 response_encodings, responses = pickle.load(open(DATABASE_PATH, "rb"))
 confidences = np.load(CONFIDENCE_PATH)
 
+nlp = spacy.load("en_core_web_sm")
 
 spaces_pat = re.compile(r"\s+")
 special_symb_pat = re.compile(r"[^A-Za-z0-9 ]")
@@ -137,21 +139,24 @@ def sample_candidates(candidates, choice_num=1, replace=False, softmax_temperatu
     return sampled_candidates.tolist()
 
 
-def is_do_you_question(answer):
-    # search using regex
-    # return re.search('^(do i|do we|do you|can i|can we|can you|could i|could we|could you
-    # |will i|will we|will you|would i|would we|would you|how|who|where|when|what|why)', answer)
-    return re.search('^(do|can|could|will|would|how|who|where|when|what|why)', answer)
+def is_question(sent):
+    return re.search("^(do|can|could|will|would|how|who|where|when|what|why)", sent.lower())
 
 
-def is_single_phrase(phrases):
-    results = re.split(r'[.!?]+', phrases)
-    return len(results) == 2 and len(results[1]) == 0
+def add_question_mark(sent):
+    sent = sent.strip()
+    if re.findall("[a-z ][.!?]$", sent.lower()):
+        sent = sent[:-1] + "?"
+    else:
+        sent = sent + "?"
+    return sent
 
 
-def transform_into_do_you_question(phrase):
-    result = phrase[:-1] + "?"
-    return result
+def format_cand(cand):
+    cand = " ".join(
+        [(add_question_mark(sent.text) if is_question(sent.text) else sent.text) for sent in nlp(cand).sents]
+    )
+    return cand
 
 
 def inference(utterances_histories, approximate_confidence_is_enabled=True):
@@ -174,12 +179,7 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True):
     clear_utterances_histories = [clear_text(utt).split() for utt in utterances_histories[::-1][1::2][::-1]]
 
     for ind in reversed(filtered_indices):
-        intermed_cand = clear_text(responses[ind])
-        mid_cand = intermed_cand.lower()
-        cand = intermed_cand.split()
-        # checking for case "Do you ... ?"
-        if is_do_you_question(mid_cand) and is_single_phrase(mid_cand) and mid_cand.endswith("."):
-            cand = transform_into_do_you_question(cand)
+        cand = clear_text(responses[ind]).split()
         raw_cand = responses[ind].lower()
         # hello ban
         hello_flag = any([j in cand[:3] for j in ["hi", "hello"]])
@@ -210,7 +210,7 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True):
             selected_candidates = sample_candidates(
                 candidates, choice_num=NUM_SAMPLE, softmax_temperature=SOFTMAX_TEMPERATURE
             )
-            answers = [cand[0] for cand in selected_candidates]
+            answers = [format_cand(cand[0]) for cand in selected_candidates]
             confidences = [float(cand[1]) for cand in selected_candidates]
             return answers, confidences
         except Exception:
@@ -229,5 +229,6 @@ def convert_chitchat_model():
     approximate_confidence_is_enabled = request.json.get("approximate_confidence_is_enabled", True)
     response = [inference(hist, approximate_confidence_is_enabled) for hist in utterances_histories]
     total_time = time.time() - st_time
+    logger.warning(f"convert_redditresponse: {response}")
     logger.warning(f"convert_reddit exec time: {total_time:.3f}s")
     return jsonify(response)
