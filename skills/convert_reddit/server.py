@@ -139,7 +139,9 @@ def sample_candidates(candidates, choice_num=1, replace=False, softmax_temperatu
 
 def is_do_you_question(answer):
     # search using regex
-    return re.search('^(do you|who|where|when|what|why)', answer)
+    # return re.search('^(do i|do we|do you|can i|can we|can you|could i|could we|could you
+    # |will i|will we|will you|would i|would we|would you|how|who|where|when|what|why)', answer)
+    return re.search('^(do|can|could|will|would|how|who|where|when|what|why)', answer)
 
 
 def is_single_phrase(phrases):
