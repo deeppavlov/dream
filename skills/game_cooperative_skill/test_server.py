@@ -64,6 +64,7 @@ request_utters = [
     "next",
     "top of month",
     "no",
+    "top",
 ]
 true_response_utters = [
     "Love games. Got a list of the top released games, wanna discuss it? Say tell me about the best games",
@@ -79,6 +80,7 @@ true_response_utters = [
     "The next game is DOOM Eternal. It was released on March 20 2020. It's a combination of  Action & Shooter. 59 percent of people marked DOOM Eternal as exceptional.  Discussing it or moving on? ",
     " There were 3 newly released games highly rated in the last month. Do you want to learn more? ",
     "You can always chat with me about other popular games. What do you want to talk about?",
+    "Last time we had a conversation about the best games of the last month. For now, I can talk about the most popular games for this or last year, last month, or even the last week (hotties!). Which of these time periods is of interest for you?",
 ]
 
 
