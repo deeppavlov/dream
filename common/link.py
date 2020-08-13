@@ -3,7 +3,7 @@ This module consolidates possible phrases that links to specific skill.
 Also it contains +link_to+ function that returns phrase to link to specific skill
 """
 
-from random import choice
+from random import choice, choices
 import common.news as news
 import common.books as books
 import common.movies as movies
@@ -42,6 +42,12 @@ high_rated_skills_for_linking = {
     "weather_skill"
 }
 
+# assuming that all skills weights are equal to 1 by default
+# it is used to control amount of link_to phrases to specific skills
+skills_link_to_weights = {
+    'coronavirus_skill': 0.25,
+}
+
 
 def link_to(skills, used_links={}):
     """
@@ -62,7 +68,8 @@ def link_to(skills, used_links={}):
     for skill_name, phrases in used_links.items():
         filtered_phrases_map[skill_name] = skills_phrases_map[skill_name].difference(set(phrases))
     if skills:
-        random_skill = choice(skills)
+        skills_weights = [skills_link_to_weights.get(s, 1.0) for s in skills]
+        random_skill = choices(skills, weights=skills_weights, k=1)[0]
 
     filtered_phrases = list(filtered_phrases_map[random_skill])
     if filtered_phrases:
