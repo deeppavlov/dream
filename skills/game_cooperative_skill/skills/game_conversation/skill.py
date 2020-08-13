@@ -16,7 +16,7 @@ from utils.state import State
 # configuration
 STORAGE_PATH = os.getenv("STORAGE_PATH")
 
-logger = logging.getLogger(__name__)
+# logger = logging.getLogger(__name__)
 
 # load programy models
 storage_path = pathlib.Path(STORAGE_PATH) if STORAGE_PATH else pathlib.Path(__file__).parent / "storage"
@@ -337,9 +337,8 @@ def run_skill(state: State, modes: List = [skill_attrs.modes.intro]):
             )
 
         state.update_skill_state(skill_attrs.skill_name, skill_state_update)
-        logger.info(f"{i}: next_step = {next_step}")
-        logger.info(skill_state_update)
-
+        # logger.info(f"{i}: next_step = {next_step}")
+        # logger.info(skill_state_update)
 
     # print(f"skill_state_update = {skill_state_update}")
 

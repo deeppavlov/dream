@@ -54,6 +54,7 @@ def get_game_top(from_data="2019-01-01", to_data="2019-12-31"):
     games = [get_game(game["id"]) for game in games if "id" in game]
     return games
 
+
 # it takes about 30 seconds
 def download_data():
     curr_date = datetime.datetime.now()
@@ -80,6 +81,7 @@ def download_data():
         for time_range, games in data.items()
     }
     return data
+
 
 def update_db_file(db_file_path):
     curr_date = datetime.datetime.now()
