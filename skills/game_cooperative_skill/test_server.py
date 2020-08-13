@@ -94,13 +94,15 @@ def test_skill():
         response = requests.post(url, json=input_data).json()[0]
         utterances = update_utterances(utterances=utterances, response=response)
         text, confidence, attr = response
-        if difflib.SequenceMatcher(None, true_resp_utter.split(), text.split()).ratio() != 1.0:
+        ratio = difflib.SequenceMatcher(None, true_resp_utter.split(), text.split()).ratio()
+        if ratio != 1.0:
             print("----------------------------------------")
             print(f"req_utter = {req_utter}")
             print(f"true_resp_utter = {true_resp_utter}")
             print(f"cand_resp_utter = {text}")
-        # elif difflib.SequenceMatcher(None, true_resp_utter.split(), text.split()).ratio() < 0.4:
-            warnings += 1
+            print(f"ratio = {ratio}")
+            if ratio < 0.8:
+                warnings += 1
         print(difflib.SequenceMatcher(None, true_resp_utter.split(), text.split()).ratio())
     assert warnings == 0
     print("SUCCESS!")
