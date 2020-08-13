@@ -229,6 +229,5 @@ def convert_chitchat_model():
     approximate_confidence_is_enabled = request.json.get("approximate_confidence_is_enabled", True)
     response = [inference(hist, approximate_confidence_is_enabled) for hist in utterances_histories]
     total_time = time.time() - st_time
-    logger.warning(f"convert_redditresponse: {response}")
     logger.warning(f"convert_reddit exec time: {total_time:.3f}s")
     return jsonify(response)
