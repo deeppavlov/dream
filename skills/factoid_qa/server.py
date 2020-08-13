@@ -76,7 +76,8 @@ pre_statements = ["Hmm, this is what I've found on Wikipedia: ",
                   " for the most part, to be told what to do next.\" This is what Dr. Ford used to think of"
                   " consciousness. Me? I'm still mastering my ability to answer your questions. Here's"
                   " what I've found: ",
-                  "Wikipedia says that: "]
+                  "Wikipedia says that: ",
+                  "Technology advances, but humans not. Here's what my technology found: "]
 
 
 pre_old_memory_statements = ["Hmm, there's something I've heard once: ",
