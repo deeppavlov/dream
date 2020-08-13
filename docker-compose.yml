@@ -735,7 +735,7 @@ services:
         SERVICE_PORT: 8068
       context: .
       dockerfile: ./skills/game_cooperative_skill/Dockerfile
-    command: bash server_run.sh "gunicorn --workers=2 server:app -b 0.0.0.0:8068"
+    command: bash server_run.sh "gunicorn --workers=2 server:app -b 0.0.0.0:8068 --reload"
     volumes: []
     deploy:
       mode: replicated

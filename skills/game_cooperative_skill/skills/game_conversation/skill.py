@@ -4,6 +4,7 @@ import types
 import pathlib
 import os
 import random
+import logging
 
 # import traceback
 # import random
@@ -14,6 +15,8 @@ from utils.state import State
 
 # configuration
 STORAGE_PATH = os.getenv("STORAGE_PATH")
+
+logger = logging.getLogger(__name__)
 
 # load programy models
 storage_path = pathlib.Path(STORAGE_PATH) if STORAGE_PATH else pathlib.Path(__file__).parent / "storage"
@@ -92,106 +95,106 @@ def rating2comparative_degree(user_rating, public_rating):
         return "way higher"
 
 
-def are_you_ask_handler(previous_handler_state, skill_state, state, true_model_names, true_cmds):
-    confidence = 1.0
-    scenario = True
-    # previous_handler_name = previous_handler_state.get("handler_name", "")
-    skill_name = skill_state.get("next_step", "")
-    skill_name = skill_state.get("next_step", "")
-    text = previous_handler_state.get("text", [])
-    proceed = False
+# def are_you_ask_handler(previous_handler_state, skill_state, state, true_model_names, true_cmds):
+#     confidence = 1.0
+#     scenario = True
+#     # previous_handler_name = previous_handler_state.get("handler_name", "")
+#     skill_name = skill_state.get("next_step", "")
+#     skill_name = skill_state.get("next_step", "")
+#     text = previous_handler_state.get("text", [])
+#     proceed = False
 
-    if not skill_name:
+#     if not skill_name:
 
-        games = state.get_content("games")
-        current_game = games[-1]
+#         games = state.get_content("games")
+#         current_game = games[-1]
 
-        if current_game:
-            text += [f"Do you want to talk in more detail about {current_game.get('name_original')}?"]
-            skill_state_update = {"next_step": "are_you_ask", "current_game": current_game}
-        else:
-            scenario = False
-            text += ["Sory, i can not do that."]
-            skill_state_update = {"next_step": ""}
-        skill_state_update
+#         if current_game:
+#             text += [f"Do you want to talk in more detail about {current_game.get('name_original')}?"]
+#             skill_state_update = {"next_step": "are_you_ask", "current_game": current_game}
+#         else:
+#             scenario = False
+#             text += ["Sory, i can not do that."]
+#             skill_state_update = {"next_step": ""}
+#         skill_state_update
 
-    elif skill_name == "are_you_ask":
-        if "YES_ANSWER" in true_cmds:
-            skill_state_update = {"next_step": "have_you_played"}
-            proceed = True
-        elif "NO_ANSWER" in true_cmds:
-            text += ["You can always talk to me about other popular games. What do you want to talk about?"]
-            skill_state_update = {"next_step": ""}
-            scenario = False
-        else:
-            current_game = skill_state.get("current_game", {})
-            # text += ["I can’t recognize the request, you can reformulate it."]
-            # if current_game:
-            #     text += [f"I asked if you were interested in talking about {current_game.get('name_original')}."]
-            #     text += ["For example, you can say: yes or no ."]
-            # text += [f"Or do you want to stop for now?"]
-            text += [
-                f"I didn't get what you've just said.",
-                f"As far as I understand we've discussed the {current_game.get('name_original', 'game')}.",
-                f"Shall we keep talking about it?",
-                # f"Or do you want to stop for now?",
-            ]
-            skill_state_update = {"next_step": "are_you_ask"}
-    handler_state = {}
-    handler_state["text"] = text
-    handler_state["confidence"] = confidence
-    handler_state["scenario"] = scenario
-    handler_state["handler_name"] = "are_you_ask"
+#     elif skill_name == "are_you_ask":
+#         if "YES_ANSWER" in true_cmds:
+#             skill_state_update = {"next_step": "have_you_played"}
+#             proceed = True
+#         elif "NO_ANSWER" in true_cmds:
+#             text += ["You can always talk to me about other popular games. What do you want to talk about?"]
+#             skill_state_update = {"next_step": ""}
+#             scenario = False
+#         else:
+#             current_game = skill_state.get("current_game", {})
+#             # text += ["I can’t recognize the request, you can reformulate it."]
+#             # if current_game:
+#             #     text += [f"I asked if you were interested in talking about {current_game.get('name_original')}."]
+#             #     text += ["For example, you can say: yes or no ."]
+#             # text += [f"Or do you want to stop for now?"]
+#             text += [
+#                 f"I didn't get what you've just said.",
+#                 f"As far as I understand we've discussed the {current_game.get('name_original', 'game')}.",
+#                 f"Shall we keep talking about it?",
+#                 # f"Or do you want to stop for now?",
+#             ]
+#             skill_state_update = {"next_step": "are_you_ask"}
+#     handler_state = {}
+#     handler_state["text"] = text
+#     handler_state["confidence"] = confidence
+#     handler_state["scenario"] = scenario
+#     handler_state["handler_name"] = "are_you_ask"
 
-    return proceed, handler_state, skill_state_update, state
+#     return proceed, handler_state, skill_state_update, state
 
 
 def have_you_played_handler(previous_handler_state, skill_state, state, true_model_names, true_cmds):
     confidence = 1.0
     scenario = True
     previous_handler_name = previous_handler_state.get("handler_name", "")
+    logger.info(f"previous_handler_state = {previous_handler_state}")
+    logger.info(f"previous_handler_name = {previous_handler_name}")
     skill_name = skill_state.get("next_step", "")
     text = previous_handler_state.get("text", [])
     proceed = False
+    skill_state_update = {}
 
-    if previous_handler_name in ["are_you_ask"]:
+    current_game = skill_state.get("current_game")
+    if current_game is None:
+        current_game = state.get_content("games")[-1]
+        skill_state_update.update({"current_game": current_game})
 
-        text += [f"Have you played it before? "]
-        skill_state_update = {"next_step": "have_you_played"}
+    if skill_name in [""]:
+
+        text += ["Have you played it before? "]
+        skill_state_update.update({"next_step": "have_you_played"})
 
     elif skill_name == "have_you_played":
-        current_game = skill_state.get("current_game")
         game_id = str(current_game["id"])
         game_state = skill_state.get(game_id, {})
         if "YES_ANSWER" in true_cmds:
             game_state["game_is_played"] = True
-            skill_state_update = {
-                "next_step": "do_you_like",
-            }
+            skill_state_update.update(
+                {"next_step": "do_you_like",}
+            )
             proceed = True
         elif "NO_ANSWER" in true_cmds:
             game_state["game_is_played"] = False
-            skill_state_update = {
-                "next_step": "do_you_like",
-            }
+            skill_state_update.update(
+                {"next_step": "do_you_like",}
+            )
             proceed = True
         else:
             current_game = skill_state.get("current_game")
-            # text += [
-            #     f"I didn't get what you've just said.",
-            #     f"As far as I understand we've discussed the {current_game.get('name_original', 'game')}.",
-            #     f"Shall we keep talking about it?",
-            #     # f"Or do you want to stop for now?",
-            # ]
-            # text += ["I can’t recognize the request, you can reformulate it."]
             text += [
-                f"I didn't get what you've just said.",
+                "I didn't get what you've just said.",
             ]
             if current_game:
                 text += [f"I wonder if you played {current_game.get('name_original')}."]
                 text += ["For example, you can say: yes or no ."]
-            text += [f"Or do you want to stop for now?"]
-            skill_state_update = {"next_step": "have_you_played"}
+            text += ["Or do you want to stop for now?"]
+            skill_state_update.update({"next_step": "have_you_played"})
         skill_state_update[game_id] = game_state
 
     handler_state = {}
@@ -318,11 +321,13 @@ def run_skill(state: State, modes: List = [skill_attrs.modes.intro]):
             skill_state = state.get_skill_state(skill_attrs.skill_name)
             next_step = skill_state.get("next_step", "")
 
-        if next_step in ["", "are_you_ask"]:
-            proceed, handler_state, skill_state_update, state = are_you_ask_handler(
-                handler_state, skill_state, state, true_model_names, true_cmds
-            )
-        elif next_step in ["have_you_played"]:
+        # # if next_step in ["", "are_you_ask"]:
+
+        # if next_step in ["are_you_ask"]:
+        #     proceed, handler_state, skill_state_update, state = are_you_ask_handler(
+        #         handler_state, skill_state, state, true_model_names, true_cmds
+        #     )
+        if next_step in ["", "have_you_played"]:
             proceed, handler_state, skill_state_update, state = have_you_played_handler(
                 handler_state, skill_state, state, true_model_names, true_cmds
             )
@@ -332,7 +337,9 @@ def run_skill(state: State, modes: List = [skill_attrs.modes.intro]):
             )
 
         state.update_skill_state(skill_attrs.skill_name, skill_state_update)
-        # print(f"{i}: next_step = {next_step}")
+        logger.info(f"{i}: next_step = {next_step}")
+        logger.info(skill_state_update)
+
 
     # print(f"skill_state_update = {skill_state_update}")
 

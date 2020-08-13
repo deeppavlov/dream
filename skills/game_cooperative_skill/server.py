@@ -6,6 +6,7 @@ from os import getenv
 import random
 import pathlib
 import datetime
+import traceback
 
 from flask import Flask, request, jsonify, abort
 from healthcheck import HealthCheck
@@ -24,7 +25,7 @@ ignore_logger("root")
 sentry_sdk.init(getenv("SENTRY_DSN"))
 DB_FILE = pathlib.Path(getenv("DB_FILE", "/tmp/game_db.json"))
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(format="%(asctime)s - %(pathname)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
@@ -93,10 +94,10 @@ def respond():
         total_time = time.time() - st_time
         logger.info(f"game_cooperative_skill exec time = {total_time:.3f}s")
 
-    except Exception as exc:
-        logger.error(exc)
-        sentry_sdk.capture_exception(exc)
-        abort(500, description=str(exc))
+    except Exception:
+        logger.error(traceback.format_exc())
+        sentry_sdk.capture_exception(traceback.format_exc())
+        abort(500, description=str(traceback.format_exc()))
     return jsonify(responses)
 
 
