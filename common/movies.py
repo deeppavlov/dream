@@ -78,8 +78,9 @@ def get_movie_template(category, subcategory=None, movie_type="movie"):
         "lets_move_on": [
             "Let's move on.",
             "Okay.",
-            "Let me ask you a question.",
-            "Let me ask you.",
+            "Hmmm.",
+            "Huh.",
+            "Aha.",
             ""]
     }
     if subcategory is not None:
