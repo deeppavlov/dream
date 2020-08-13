@@ -3,6 +3,7 @@
 tensorflow==1.14.0
 tensorflow_text==0.1.0
 tensorflow-hub==0.7.0
+spacy==2.3.2
 
 # web
 gunicorn==19.9.0

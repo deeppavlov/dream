@@ -12,6 +12,7 @@ import tensorflow_hub as tfhub
 import tensorflow as tf
 import tensorflow_text
 import numpy as np
+import spacy
 from flask import Flask, request, jsonify
 from flasgger import Swagger, swag_from
 import sentry_sdk
@@ -47,6 +48,7 @@ module = tfhub.Module(MODEL_PATH)
 response_encodings, responses = pickle.load(open(DATABASE_PATH, "rb"))
 confidences = np.load(CONFIDENCE_PATH)
 
+nlp = spacy.load("en_core_web_sm")
 
 spaces_pat = re.compile(r"\s+")
 special_symb_pat = re.compile(r"[^A-Za-z0-9 ]")
@@ -137,6 +139,26 @@ def sample_candidates(candidates, choice_num=1, replace=False, softmax_temperatu
     return sampled_candidates.tolist()
 
 
+def is_question(sent):
+    return re.search("^(do|can|could|will|would|how|who|where|when|what|why)", sent.lower())
+
+
+def add_question_mark(sent):
+    sent = sent.strip()
+    if re.findall("[a-z ][.!?]$", sent.lower()):
+        sent = sent[:-1] + "?"
+    else:
+        sent = sent + "?"
+    return sent
+
+
+def format_cand(cand):
+    cand = " ".join(
+        [(add_question_mark(sent.text) if is_question(sent.text) else sent.text) for sent in nlp(cand).sents]
+    )
+    return cand
+
+
 def inference(utterances_histories, approximate_confidence_is_enabled=True):
     context_encoding = encode_context(utterances_histories)
     scores = context_encoding.dot(response_encodings.T)
@@ -188,7 +210,7 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True):
             selected_candidates = sample_candidates(
                 candidates, choice_num=NUM_SAMPLE, softmax_temperature=SOFTMAX_TEMPERATURE
             )
-            answers = [cand[0] for cand in selected_candidates]
+            answers = [format_cand(cand[0]) for cand in selected_candidates]
             confidences = [min(float(cand[1]) * 1.7, 0.99) for cand in selected_candidates]
             return answers, confidences
         except Exception:
