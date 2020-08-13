@@ -22,6 +22,7 @@ RUN mkdir /app
 
 COPY requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt
+RUN python -m spacy download en_core_web_sm
 
 ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
