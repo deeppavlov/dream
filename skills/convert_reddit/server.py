@@ -189,7 +189,7 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True):
                 candidates, choice_num=NUM_SAMPLE, softmax_temperature=SOFTMAX_TEMPERATURE
             )
             answers = [cand[0] for cand in selected_candidates]
-            confidences = [float(cand[1]) for cand in selected_candidates]
+            confidences = [min(float(cand[1]) * 1.7, 0.99) for cand in selected_candidates]
             return answers, confidences
         except Exception:
             logger.error(traceback.format_exc())
@@ -207,5 +207,6 @@ def convert_chitchat_model():
     approximate_confidence_is_enabled = request.json.get("approximate_confidence_is_enabled", True)
     response = [inference(hist, approximate_confidence_is_enabled) for hist in utterances_histories]
     total_time = time.time() - st_time
+    logger.warning(f"convert_reddit answ: {response}")
     logger.warning(f"convert_reddit exec time: {total_time:.3f}s")
     return jsonify(response)
