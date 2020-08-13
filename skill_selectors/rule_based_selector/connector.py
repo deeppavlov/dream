@@ -135,10 +135,8 @@ class RuleBasedSkillSelectorConnector:
             cobot_dialogact_topics = set(user_uttr_annotations.get("cobot_dialogact_topics", {}).get("text", []))
             # factoid
             factoid_classification = user_uttr_annotations['factoid_classification']['factoid']
-            print("Factoid classification: " + str(factoid_classification))
             # using factoid
             factoid_prob_threshold = 0.9  # to check if factoid probability has at least this prob
-            print("Factoid probability threshold: " + str(factoid_prob_threshold))
             sensitive_dialogacts_detected = any(
                 [(t in self.sensitive_dialogacts and "?" in user_uttr_text) for t in cobot_dialogacts]
             )
