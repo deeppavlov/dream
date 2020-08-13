@@ -149,7 +149,7 @@ class RuleBasedSkillSelectorConnector:
             about_games = ("Games" in cobot_topics and "Entertainment_General" in cobot_dialogact_topics)
             about_books = (self.books_cobot_dialogacts & cobot_dialogact_topics) | (
                 self.books_cobot_topics & cobot_topics)
-            
+
             #  topicalchat_tfidf_retrieval
             about_entertainments = (self.entertainment_cobot_dialogacts & cobot_dialogact_topics) | (
                 self.entertainment_cobot_topics & cobot_topics
