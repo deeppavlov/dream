@@ -31,6 +31,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 health = HealthCheck(app, "/healthcheck")
 
+
 # add your own check function to the healthcheck
 def db_is_updated():
     curr_date = datetime.datetime.now()

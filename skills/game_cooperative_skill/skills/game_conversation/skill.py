@@ -4,7 +4,8 @@ import types
 import pathlib
 import os
 import random
-import logging
+
+# import logging
 
 # import traceback
 # import random
@@ -152,9 +153,9 @@ def rating2comparative_degree(user_rating, public_rating):
 def have_you_played_handler(previous_handler_state, skill_state, state, true_model_names, true_cmds):
     confidence = 1.0
     scenario = True
-    previous_handler_name = previous_handler_state.get("handler_name", "")
-    logger.info(f"previous_handler_state = {previous_handler_state}")
-    logger.info(f"previous_handler_name = {previous_handler_name}")
+    # previous_handler_name = previous_handler_state.get("handler_name", "")
+    # logger.info(f"previous_handler_state = {previous_handler_state}")
+    # logger.info(f"previous_handler_name = {previous_handler_name}")
     skill_name = skill_state.get("next_step", "")
     text = previous_handler_state.get("text", [])
     proceed = False
@@ -175,15 +176,11 @@ def have_you_played_handler(previous_handler_state, skill_state, state, true_mod
         game_state = skill_state.get(game_id, {})
         if "YES_ANSWER" in true_cmds:
             game_state["game_is_played"] = True
-            skill_state_update.update(
-                {"next_step": "do_you_like",}
-            )
+            skill_state_update.update({"next_step": "do_you_like"})
             proceed = True
         elif "NO_ANSWER" in true_cmds:
             game_state["game_is_played"] = False
-            skill_state_update.update(
-                {"next_step": "do_you_like",}
-            )
+            skill_state_update.update({"next_step": "do_you_like"})
             proceed = True
         else:
             current_game = skill_state.get("current_game")
