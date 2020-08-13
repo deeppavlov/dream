@@ -133,6 +133,10 @@ class RuleBasedSkillSelectorConnector:
 
             cobot_dialogacts = user_uttr_annotations.get("cobot_dialogact_intents", {}).get("text", [])
             cobot_dialogact_topics = set(user_uttr_annotations.get("cobot_dialogact_topics", {}).get("text", []))
+            # factoid
+            factoid_classification = user_uttr_annotations['factoid_classification']['factoid']
+            # using factoid
+            factoid_prob_threshold = 0.9  # to check if factoid probability has at least this prob
             sensitive_dialogacts_detected = any(
                 [(t in self.sensitive_dialogacts and "?" in user_uttr_text) for t in cobot_dialogacts]
             )
@@ -143,6 +147,7 @@ class RuleBasedSkillSelectorConnector:
             about_games = ("Games" in cobot_topics and "Entertainment_General" in cobot_dialogact_topics)
             about_books = (self.books_cobot_dialogacts & cobot_dialogact_topics) | (
                 self.books_cobot_topics & cobot_topics)
+
             #  topicalchat_tfidf_retrieval
             about_entertainments = (self.entertainment_cobot_dialogacts & cobot_dialogact_topics) | (
                 self.entertainment_cobot_topics & cobot_topics
@@ -212,7 +217,6 @@ class RuleBasedSkillSelectorConnector:
             elif blist_topics_detected:
                 # process user utterance with sensitive content, "safe mode"
                 skills_for_uttr.append("program_y_dangerous")
-                skills_for_uttr.append("factoid_qa")
                 # skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("meta_script_skill")
                 skills_for_uttr.append("personal_info_skill")
@@ -226,7 +230,6 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("intent_responder")
                 # process regular utterances
                 skills_for_uttr.append("program_y")
-                skills_for_uttr.append("factoid_qa")
                 # skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("christmas_new_year_skill")
                 skills_for_uttr.append("superbowl_skill")
@@ -235,7 +238,10 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("personal_info_skill")
                 skills_for_uttr.append("meta_script_skill")
                 skills_for_uttr.append("greeting_skill")
-                skills_for_uttr.append("factoid_qa")
+                # hiding factoid by default, adding check for factoid classification instead
+                # skills_for_uttr.append("factoid_qa")
+                if (factoid_classification > factoid_prob_threshold):
+                    skills_for_uttr.append("factoid_qa")
                 # don't call comet dialog for expressing opinion on sensitive topics
                 if not(sensitive_topics_detected and sensitive_dialogacts_detected):
                     skills_for_uttr.append("comet_dialog_skill")
