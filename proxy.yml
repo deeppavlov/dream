@@ -27,6 +27,13 @@ services:
     environment:
       - HOST=10.11.1.1
       - PORT=8004
+  cobot_nounphrases:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8006
   program_y:
     build:
       context: dp/proxy/
@@ -370,4 +377,18 @@ services:
     environment:
       - HOST=10.11.1.1
       - PORT=8071
+  kbqa:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8072
+  factoid_classification:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - HOST=10.11.1.1
+      - PORT=8073
 version: '3.7'
