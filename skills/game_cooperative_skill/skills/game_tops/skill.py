@@ -26,6 +26,7 @@ aiml_files = {
     category_path.name: {"aiml": [category_path], "sets": [share_set_path]} for category_path in category_pathes
 }
 
+
 # load content
 # latest_json_file = list(sorted(content_dir.glob("./*.json")))[-1]
 # latest_json_file = list(sorted(content_dir.glob("./tops_2020-04-13.json")))[-1]
@@ -37,8 +38,6 @@ def get_game_db():
 # init models
 # {model_name: print(files) for model_name, files in aiml_files.items()}
 models = {model_name: MindfulDataFileBot(files) for model_name, files in aiml_files.items()}
-
-# %%
 
 
 skill_attrs = types.SimpleNamespace()
