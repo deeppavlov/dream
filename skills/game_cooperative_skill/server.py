@@ -24,6 +24,7 @@ ignore_logger("root")
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 DB_FILE = pathlib.Path(getenv("DB_FILE", "/tmp/game_db.json"))
+MEMORY_LENGTH = 2
 
 logging.basicConfig(format="%(asctime)s - %(pathname)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -65,7 +66,7 @@ def respond():
 
         for dialog in dialogs_batch:
             prev_news_outputs = get_skill_outputs_from_dialog(
-                dialog["utterances"], "game_cooperative_skill", activated=True
+                dialog["utterances"][-MEMORY_LENGTH:], "game_cooperative_skill", activated=True
             )
             prev_news_output = prev_news_outputs[-1] if len(prev_news_outputs) > 0 else {}
             state = prev_news_output.get("state", {})
