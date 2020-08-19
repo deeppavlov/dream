@@ -29,7 +29,7 @@ app = Flask(__name__)
 CALL_BY_NAME_PROBABILITY = 0.5  # if name is already known
 ASK_DUMMY_QUESTION_PROB = 0.5
 ASK_LINK_TO_FOR_RETRIEVE_PROB = 0.2
-
+SHOW_DIALOG_ID = True
 
 @app.route("/respond", methods=['POST'])
 def respond():
@@ -455,7 +455,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
 
     # print("looking for dialog beginning...", flush=True)
     # if it's a dialog beginning, we shall tell user the current dialog's id:
-    if len(dialog['human_utterances']) == 1:
+    if (len(dialog['human_utterances']) == 1 and SHOW_DIALOG_ID is True):
         # print("dialog beginning. Adding dialog id", flush=True)
         # print("dialog id: " + str(dialog["dialog_id"]), flush=True)
         best_text = best_text + "\n\n" + "Oh, and remember this dialog's id: " + str(dialog["dialog_id"])
