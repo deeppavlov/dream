@@ -31,6 +31,7 @@ ASK_DUMMY_QUESTION_PROB = 0.5
 ASK_LINK_TO_FOR_RETRIEVE_PROB = 0.2
 SHOW_DIALOG_ID = True
 
+
 @app.route("/respond", methods=['POST'])
 def respond():
     print("Convers_Evaluation_Based_Response_Selector: Beginning", flush=True)
