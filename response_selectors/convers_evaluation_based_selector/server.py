@@ -294,6 +294,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
         intent_name = get_intent_name(candidates[i]['text'])
         is_intent_candidate = (skill_names[i] == 'intent_responder' or skill_names[i] == 'program_y') and intent_name
         is_intent_candidate = is_intent_candidate and intent_name not in low_priority_intents
+        # print("is intent candidate? " + str(is_intent_candidate), flush=True)
 
         if len(dialog['human_utterances']) == 1 and greeting_spec not in candidates[i]['text']:
             logger.info("Dialog Beginning detected.")
@@ -451,6 +452,13 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
 
     # adding capitalization of only the first letter to any final answer
     best_text = re.sub('([a-zA-Z])', lambda x: x.groups()[0].upper(), best_text, 1)
+
+    # print("looking for dialog beginning...", flush=True)
+    # if it's a dialog beginning, we shall tell user the current dialog's id:
+    if len(dialog['human_utterances']) == 1:
+        # print("dialog beginning. Adding dialog id", flush=True)
+        # print("dialog id: " + str(dialog["dialog_id"]), flush=True)
+        best_text = best_text + "\n\n" + "Oh, and remember this dialog's id: " + str(dialog["dialog_id"])
 
     return best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes
 
