@@ -1,26 +1,26 @@
 import yaml
-import re
 from pathlib import Path
 
 
 def foo():
-    with open(Path(__file__).resolve().parents[1] / 'docker-compose.yml') as f:
-        x = yaml.load(f)
+    with open(Path(__file__).resolve().parents[1] / 'docker-compose.yml') as fin:
+        x = yaml.load(fin)
         return x['services']
 
 
 def ports():
-    with open(Path(__file__).resolve().parents[1] / 'dev.yml') as f:
-        x = yaml.load(f)['services']
-    resp = {}
-    for name, body in x.items():
-        if len(body['ports']) > 1:
+    with open(Path(__file__).resolve().parents[1] / 'dev.yml') as fin:
+        x = yaml.load(fin)['services']
+    response = {}
+    for name, bod in x.items():
+        if len(bod['ports']) > 1:
             raise ValueError(f'len > 1 for {name}')
-        a, b = body['ports'][0].split(':')
-        if (a != b):
-             raise ValueError(name)
-        resp[name] = int(a)
-    return resp
+        a, b = bod['ports'][0].split(':')
+        if a != b:
+            raise ValueError(name)
+        response[name] = int(a)
+    return response
+
 
 if __name__ == '__main__':
     resp = {}
@@ -34,12 +34,13 @@ if __name__ == '__main__':
 
         script = body.get('command')
         if script is None:
-            if body['build']['dockerfile'] != 'dp/dockerfile_skill_gpu':
+            if body['build']['dockerfile'] not in {'dp/dockerfile_skill_gpu', 'annotators/kbqa/Dockerfile'}:
                 raise ValueError(f"{body['build']['dockerfile']} in {s_name}")
-            script = f'python -m deeppavlov riseapi {body["build"]["args"]["skillconfig"]} -p {body["build"]["args"]["skillport"]}'
+            script = f'python -m deeppavlov riseapi {body["build"]["args"]["skillconfig"]} '\
+                     f'-p {body["build"]["args"]["skillport"]}'
         resp[f'socialbot_{s_name}'] = {
             'TEMPLATE': 'socialbot_service',
-            'BASE_IMAGE': f'dp-agent-alexa_{s_name}',
+            'BASE_IMAGE': f'assistant_{s_name}',
             'CMD_SCRIPT': script,
             'CLUSTER_PORT': ports[s_name],
             'PORT': ports[s_name]
@@ -52,4 +53,6 @@ if __name__ == '__main__':
     print(f'total gpu containers {gpu}')
 
     with open('kuber.yml', 'w') as f:
-        yaml.dump(resp, f, default_flow_style=False)
+        yaml.dump(resp, f, default_flow_style=False, sort_keys=False)
+    for key in resp:
+        print(f'  - {key}')

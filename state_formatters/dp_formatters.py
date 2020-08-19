@@ -2,6 +2,7 @@ from typing import Dict, List
 import logging
 from copy import deepcopy
 from common.universal_templates import if_lets_chat_about_topic
+from common.utils import service_intents
 
 logger = logging.getLogger(__name__)
 
@@ -65,6 +66,7 @@ def last_n_human_utt_dialog_formatter(dialog: Dict, last_n_utts: int, only_last_
         # in all cases when not particular topic, convert first phrase in the dialog to `hello!`
         dialog["utterances"][0]['annotations']['sentseg']['punct_sent'] = "hello!"
     human_utts = []
+    detected_intents = []
     for utt in dialog['utterances']:
         if utt['user']['user_type'] == 'human':
             sentseg_ann = utt['annotations']['sentseg']
@@ -73,7 +75,9 @@ def last_n_human_utt_dialog_formatter(dialog: Dict, last_n_utts: int, only_last_
             else:
                 text = sentseg_ann['punct_sent']
             human_utts += [text]
-    return [{'sentences_batch': [human_utts[-last_n_utts:]]}]
+            detected_intents += [[intent for intent, value in utt['annotations'].get('intent_catcher', {}).items()
+                                 if value['detected']]]
+    return [{'sentences_batch': [human_utts[-last_n_utts:]], 'intents': [detected_intents[-last_n_utts:]]}]
 
 
 def alice_formatter_dialog(dialog: Dict) -> List:
@@ -85,7 +89,21 @@ def alice_formatter_dialog(dialog: Dict) -> List:
 def programy_formatter_dialog(dialog: Dict) -> List:
     # Used by: program_y, program_y_dangerous, program_y_wide
     dialog = remove_clarification_turns_from_dialog(dialog)
-    return last_n_human_utt_dialog_formatter(dialog, last_n_utts=5)
+    dialog = last_n_human_utt_dialog_formatter(dialog, last_n_utts=5)[0]
+    sentences = dialog['sentences_batch'][0]
+    intents = dialog['intents'][0]
+
+    # modify sentences with yes/no intents to yes/no phrase
+    # todo: sent may contain multiple sentence, logic here could be improved
+    prioritized_intents = service_intents - {'yes', 'no'}
+    for i, (sent, ints) in enumerate(zip(sentences, intents)):
+        ints = set(ints)
+        if '?' not in sent and len(ints & prioritized_intents) == 0:
+            if 'yes' in ints:
+                sentences[i] = 'yes.'
+            elif 'no' in ints:
+                sentences[i] = 'no.'
+    return [{'sentences_batch': [sentences]}]
 
 
 def eliza_formatter_dialog(dialog: Dict) -> Dict:
