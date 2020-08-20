@@ -183,7 +183,7 @@ def respond():
     # logging.info('Factoid classes ' + str(factoid_classes))
 
     kbqa_response = dict()
-    
+
     for dialog, is_factoid, fact_output in zip(dialogs_batch,
                                                is_factoid_sents,
                                                fact_outputs):
