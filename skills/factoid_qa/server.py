@@ -13,6 +13,7 @@ from flask import Flask, request, jsonify
 from os import getenv
 
 from common.factoid import DONT_KNOW_ANSWER, FACTOID_NOTSURE_CONFIDENCE
+from common.universal_templates import if_lets_chat_about_topic
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -187,7 +188,11 @@ def respond():
                                                is_factoid_sents,
                                                fact_outputs):
         attr = {}
-        if is_factoid:
+        curr_ann_uttr = dialog["human_utterances"][-1]
+        tell_me_about_intent = curr_ann_uttr["annotations"].get("intent_catcher", {}).get("lets_chat_about", {}).get(
+            "detected", 0) == 1 or if_lets_chat_about_topic(curr_ann_uttr["text"])
+        is_question = "?" in curr_ann_uttr['annotations']['sentrewrite']['modified_sents'][-1]
+        if is_factoid and (tell_me_about_intent or is_question):
             logger.info("Question is classified as factoid.")
             if "Not Found" not in kbqa_response["response"]:
                 logger.info("Factoid question. Answer with KBQA response.")
