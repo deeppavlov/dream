@@ -148,6 +148,7 @@ def test():
 @app.route("/respond", methods=['POST'])
 def respond():
     st_time = time.time()
+    # to clarify, there's just one (1) dialog returned, not multiple
     dialogs_batch = request.json["dialogs"]
     confidences = []
     responses = []
@@ -182,8 +183,7 @@ def respond():
     # logging.info('Factoid classes ' + str(factoid_classes))
 
     kbqa_response = dict()
-    kbqa_response = getKbqaResponse(query=last_phrase)
-
+    
     for dialog, is_factoid, fact_output in zip(dialogs_batch,
                                                is_factoid_sents,
                                                fact_outputs):
@@ -193,7 +193,9 @@ def respond():
             "detected", 0) == 1 or if_lets_chat_about_topic(curr_ann_uttr["text"])
         is_question = "?" in curr_ann_uttr['annotations']['sentrewrite']['modified_sents'][-1]
         if is_factoid and (tell_me_about_intent or is_question):
-            logger.info("Question is classified as factoid.")
+            logger.info("Question is classified as factoid. Querying KBQA.")
+            print("Question is classified as factoid. Querying KBQA...", flush=True)
+            kbqa_response = getKbqaResponse(query=last_phrase)
             if "Not Found" not in kbqa_response["response"]:
                 logger.info("Factoid question. Answer with KBQA response.")
                 # capitalizing
