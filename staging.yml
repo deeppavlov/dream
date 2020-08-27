@@ -222,6 +222,10 @@ services:
     image: ${DOCKER_REGISTRY}/greeting_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
+  spelling_preprocessing:
+    image: ${DOCKER_REGISTRY}/spelling_preprocessing:${VERSION}
+    env_file:
+      - ${ENV_FILE}
 volumes:
   external-logs:
   external-deeppavlov:

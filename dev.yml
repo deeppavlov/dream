@@ -368,4 +368,10 @@ services:
     # # you can use persistent local volume if you need
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
+  spelling_preprocessing:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/spelling_preprocessing:/src"
+    ports:
+      - 8074:8074
 version: "3.7"
