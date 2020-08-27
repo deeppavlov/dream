@@ -119,13 +119,13 @@ def piecewise_approximation(confidence):
 
 
 def approximate_confidence(confidence, approximate_confidence_is_enabled=True, topic_restriction_is_enabled=False):
-    print(f"origin_confidence = {confidence}", flush=True)
+    # print(f"origin_confidence = {confidence}", flush=True)
     confidence = float(confidence)
     confidence = norm_approximation(confidence) if approximate_confidence_is_enabled else confidence
-    print(f"norm_confidence = {confidence}", flush=True)
+    # print(f"norm_confidence = {confidence}", flush=True)
     confidence = piecewise_approximation(confidence) if approximate_confidence_is_enabled else confidence
     confidence = 0.8 * confidence if topic_restriction_is_enabled else confidence
-    print(f"approximated_confidence = {confidence}", flush=True)
+    # print(f"approximated_confidence = {confidence}", flush=True)
     return confidence
 
 
