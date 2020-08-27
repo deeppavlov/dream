@@ -391,4 +391,11 @@ services:
     environment:
       - HOST=10.11.1.251
       - PORT=8073
+  spelling_preprocessing:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - HOST=10.11.1.251
+      - PORT=8074
 version: '3.7'
