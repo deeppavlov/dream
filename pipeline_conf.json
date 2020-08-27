@@ -129,7 +129,7 @@
         "annotators_1": {
             "sentseg": {
                 "connector": "connectors.sentseg",
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "required_previous_services": ["annotators_0.spelling_preprocessing"],
                 "state_manager_method": "add_annotation"
