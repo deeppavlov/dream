@@ -115,11 +115,23 @@
                 "state_manager_method": "add_annotation_prev_bot_utt"
             }
         },
+        "annotators_0": {
+            "spelling_preprocessing": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://spelling_preprocessing:8074/response"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation"
+            }
+        },
         "annotators_1": {
             "sentseg": {
                 "connector": "connectors.sentseg",
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "required_previous_services": ["annotators_0.spelling_preprocessing"],
                 "state_manager_method": "add_annotation"
             },
             "toxic_classification": {
