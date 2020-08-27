@@ -315,6 +315,11 @@ def last_utt_dialog(dialog: Dict) -> Dict:
     return [{'sentences': [dialog['utterances'][-1]['text']]}]
 
 
+def preproc_last_human_utt_dialog(dialog: Dict) -> Dict:
+    # Used by: sentseg over human uttrs
+    return [{'sentences': [dialog['human_utterances'][-1]['annotations']["spelling_preprocessing"]]}]
+
+
 def last_bot_utt_dialog(dialog: Dict) -> Dict:
     return [{'sentences': [dialog['bot_utterances'][-1]['text']]}]
 
