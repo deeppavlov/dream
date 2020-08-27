@@ -225,7 +225,7 @@ class WeatherSkill:
                     ############################################################
                     current_reply = "Sorry, I have no weather for the place. I didn't recognize the city..."
                     context_dict['can_continue'] = CAN_CONTINUE
-                    curr_confidence = 0.5
+                    curr_confidence = 0.9
             elif context_dict.get("weather_forecast_interaction_question_asked", False):
                 logger.warning("WEATHER INTERACTION QUESTION ASKED")
                 weather = d_man.get_preferred_weather(self.weather_dict)
