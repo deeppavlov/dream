@@ -8,13 +8,9 @@ from typing import Dict, Callable
 import sentry_sdk
 
 from common.universal_templates import BOOK_TEMPLATES
-from common.movies import movie_skill_was_proposed
-from common.books import book_skill_was_proposed
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
 from common.emotion import detect_emotion, is_joke_requested
-from common.news import is_breaking_news_requested
 from common.utils import check_about_death, about_virus, quarantine_end, service_intents, low_priority_intents
-from common.weather import is_weather_requested
 from common.coronavirus import is_staying_home_requested
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -105,6 +101,7 @@ class RuleBasedSkillSelectorConnector:
 
             skills_for_uttr = []
             user_uttr_text = dialog["human_utterances"][-1]["text"].lower()
+
             user_uttr_annotations = dialog["human_utterances"][-1]["annotations"]
 
             high_priority_intent_detected = any(
@@ -132,7 +129,6 @@ class RuleBasedSkillSelectorConnector:
             sensitive_topics_detected = any([t in self.sensitive_topics for t in cobot_topics])
 
             cobot_dialogacts = user_uttr_annotations.get("cobot_dialogact_intents", {}).get("text", [])
-            cobot_dialogact_topics = set(user_uttr_annotations.get("cobot_dialogact_topics", {}).get("text", []))
             # factoid
             factoid_classification = user_uttr_annotations['factoid_classification']['factoid']
             # using factoid
@@ -141,26 +137,6 @@ class RuleBasedSkillSelectorConnector:
                 [(t in self.sensitive_dialogacts and "?" in user_uttr_text) for t in cobot_dialogacts]
             )
             blist_topics_detected = user_uttr_annotations["blacklisted_words"]["restricted_topics"]
-
-            about_movies = (self.movie_cobot_dialogacts & cobot_dialogact_topics)
-            about_music = ("Entertainment_Music" in cobot_dialogact_topics) | ("Music" in cobot_topics)
-            about_games = ("Games" in cobot_topics and "Entertainment_General" in cobot_dialogact_topics)
-            about_books = (self.books_cobot_dialogacts & cobot_dialogact_topics) | (
-                self.books_cobot_topics & cobot_topics)
-
-            #  topicalchat_tfidf_retrieval
-            about_entertainments = (self.entertainment_cobot_dialogacts & cobot_dialogact_topics) | (
-                self.entertainment_cobot_topics & cobot_topics
-            )
-            about_fashions = (self.fashion_cobot_dialogacts & cobot_dialogact_topics) | \
-                             (self.fashion_cobot_topics & cobot_topics)
-            # about_politics = (politic_cobot_dialogacts & cobot_dialogact_topics) | (sport_cobot_topics & cobot_topics)
-            about_science_technology = (self.science_cobot_dialogacts & cobot_dialogact_topics) | (
-                self.science_cobot_topics & cobot_topics
-            )
-            about_sports = (self.sport_cobot_dialogacts & cobot_dialogact_topics) | (
-                self.sport_cobot_topics & cobot_topics)
-            about_animals = self.animals_cobot_topics & cobot_topics
 
             prev_user_uttr_hyp = []
             prev_bot_uttr = {}
@@ -172,23 +148,6 @@ class RuleBasedSkillSelectorConnector:
                 prev_bot_uttr = dialog["bot_utterances"][-1]
             prev_active_skill = prev_bot_uttr.get("active_skill", "")
 
-            weather_city_slot_requested = any(
-                [
-                    hyp.get("weather_forecast_interaction_city_slot_requested", False)
-                    for hyp in prev_user_uttr_hyp
-                    if hyp["skill_name"] == "weather_skill"
-                ]
-            )
-
-            about_weather = user_uttr_annotations["intent_catcher"].get(
-                "weather_forecast_intent", {}
-            ).get("detected", False) or (
-                prev_bot_uttr.get("active_skill", "") == "weather_skill" and weather_city_slot_requested
-            )
-            about_weather = about_weather or is_weather_requested(prev_bot_uttr, dialog['human_utterances'][-1])
-            news_re_expr = re.compile(r"(news|(what is|what ?'s)( the)? new|something new)")
-            about_news = (self.news_cobot_topics & cobot_topics) or re.search(news_re_expr, user_uttr_text)
-            about_news = about_news or is_breaking_news_requested(prev_bot_uttr, dialog['human_utterances'][-1])
             virus_prev = False
             for i in [3, 5]:
                 if len(dialog['utterances']) >= i:
@@ -200,11 +159,21 @@ class RuleBasedSkillSelectorConnector:
             enable_coronavirus = enable_coronavirus or (enable_coronavirus_death and virus_prev)
             enable_coronavirus = enable_coronavirus or is_staying_home_requested(
                 prev_bot_uttr, dialog['human_utterances'][-1])
-            about_movies = (about_movies or movie_skill_was_proposed(prev_bot_uttr) or re.search(
-                self.about_movie_words, prev_bot_uttr.get("text", "").lower()))
-            about_books = about_books or book_skill_was_proposed(prev_bot_uttr) or 'book' in user_uttr_text
 
             emotions = user_uttr_annotations['emotion_classification']['text']
+
+            agent_topics = user_uttr_annotations.get("agent_topics", {})
+            about_news = agent_topics["news"]
+            about_movies = agent_topics["movies"]
+            about_music = agent_topics["music"]
+            about_books = agent_topics["books"]
+            about_games = agent_topics["games"]
+            about_weather = agent_topics["weather"]
+            about_entertainments = agent_topics["entertainments"]
+            about_fashions = agent_topics["fashions"]
+            about_science_technology = agent_topics["science_technology"]
+            about_sports = agent_topics["sports"]
+            about_animals = agent_topics["animals"]
 
             # print(f"Skill Selector: did we select game_cooperative_skill? {about_games}", flush=True)
 

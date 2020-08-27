@@ -185,20 +185,8 @@ def base_skill_selector_formatter_dialog(dialog: Dict) -> Dict:
     return [{"states_batch": [dialog]}]
 
 
-def transfertransfo_formatter_dialog(dialog: Dict) -> Dict:
-    # Used by: transfertransfo_formatter
-    dialog = get_last_n_turns(dialog)
-    dialog = remove_clarification_turns_from_dialog(dialog)
-    return [{
-        'utterances_histories': [
-            [utt['annotations']["sentseg"]["punct_sent"] for utt in dialog['utterances']]
-        ],
-        'personality': [dialog['bot']['persona']]
-    }]
-
-
 def convert_formatter_dialog(dialog: Dict) -> Dict:
-    # Used by: topicalchat_convert_retrieval
+    # Used by: topicalchat_convert_retrieval and convert_reddit
     dialog = get_last_n_turns(dialog)
     dialog = remove_clarification_turns_from_dialog(dialog)
     return [{
@@ -206,8 +194,7 @@ def convert_formatter_dialog(dialog: Dict) -> Dict:
             [utt['annotations']["sentseg"]["punct_sent"] for utt in dialog['utterances']]
         ],
         'personality': [dialog['bot']['persona']],
-        'topics': [dialog["utterances"][-1]["annotations"]["cobot_topics"]['text']],
-        'dialogact_topics': [dialog["utterances"][-1]["annotations"]["cobot_dialogact_topics"]['text']],
+        'agent_topics': [dialog["utterances"][-1]["annotations"]["agent_topics"]]
     }]
 
 
