@@ -130,6 +130,7 @@ SMALLTALK_CONFIDENCE = 0.999
 # when we asked the city, but can not recognize city by NER nor by
 MISSED_CITY_CONFIDENCE = 0.9
 
+
 class WeatherSkill:
     def __init__(self, weather_dict={}):
         self.weather_dict = weather_dict
