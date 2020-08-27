@@ -214,7 +214,7 @@ class RuleBasedSkillSelectorConnector:
             elif high_priority_intent_detected:
                 # process intent with corresponding IntentResponder
                 skills_for_uttr.append("intent_responder")
-            elif blist_topics_detected:
+            elif blist_topics_detected or (sensitive_topics_detected and sensitive_dialogacts_detected):
                 # process user utterance with sensitive content, "safe mode"
                 skills_for_uttr.append("program_y_dangerous")
                 # skills_for_uttr.append("cobotqa")
@@ -242,9 +242,8 @@ class RuleBasedSkillSelectorConnector:
                 # skills_for_uttr.append("factoid_qa")
                 if (factoid_classification > factoid_prob_threshold):
                     skills_for_uttr.append("factoid_qa")
-                # don't call comet dialog for expressing opinion on sensitive topics
-                if not(sensitive_topics_detected and sensitive_dialogacts_detected):
-                    skills_for_uttr.append("comet_dialog_skill")
+
+                skills_for_uttr.append("comet_dialog_skill")
 
                 # if ner_detected:
                 #     skills_for_uttr.append("reddit_ner_skill")
