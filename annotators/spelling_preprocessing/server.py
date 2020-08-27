@@ -70,6 +70,8 @@ templates += [(re.compile(r"\bplz\b"), "please")]
 templates += [(re.compile(r"\bzup\b"), "what's up")]
 templates += [(re.compile(r"\bwazzup\b"), "what's up")]
 templates += [(re.compile(r"\bwhatsup\b"), "what's up")]
+templates += [(re.compile(r"\bwanna\b"), "want to")]
+templates += [(re.compile(r"\bgonna\b"), "going to")]
 
 templates += [(re.compile(r"\s+"), " ")]
 
