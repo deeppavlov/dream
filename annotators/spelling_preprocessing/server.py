@@ -1,15 +1,13 @@
 import logging
-import os
 import re
-import string
 import time
+from os import getenv
 
 from deeppavlov import build_model
 from flask import Flask, request, jsonify
-from sentry_sdk.integrations.flask import FlaskIntegration
 import sentry_sdk
 
-sentry_sdk.init(dsn=os.getenv('SENTRY_DSN'), integrations=[FlaskIntegration()])
+sentry_sdk.init(getenv('SENTRY_DSN'))
 
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
