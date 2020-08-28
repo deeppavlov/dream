@@ -76,7 +76,7 @@ templates += [(re.compile(r"\s+"), " ")]
 
 def preprocess(text):
     for templ, new_str in templates:
-        text = re.sub(templ, new_str, re.IGNORECASE)
+        text = re.sub(templ, new_str, text, flags=re.IGNORECASE)
     return text.strip()
 
 
