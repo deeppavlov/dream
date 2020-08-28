@@ -113,11 +113,11 @@ def eliza_formatter_dialog(dialog: Dict) -> Dict:
     prev_human_utterance = None
     for utt in dialog['utterances']:
         if utt["user"]["user_type"] == "human":
-            prev_human_utterance = utt['text']
+            prev_human_utterance = utt['annotations']["spelling_preprocessing"]
         elif utt["user"]["user_type"] == "bot" and utt["active_skill"] == "eliza" and prev_human_utterance is not None:
             history.append(prev_human_utterance)
     return [{
-        "last_utterance_batch": [dialog['utterances'][-1]['text']],
+        "last_utterance_batch": [dialog['utterances'][-1]['annotations']["spelling_preprocessing"]],
         "human_utterance_history_batch": [history],
     }]
 
@@ -213,7 +213,7 @@ def convert_formatter_dialog(dialog: Dict) -> Dict:
 
 def personality_catcher_formatter_dialog(dialog: Dict) -> Dict:
     # Used by: personality_catcher_formatter
-    return [{'personality': [dialog['utterances'][-1]['text']]}]
+    return [{'personality': [dialog['human_utterances'][-1]['annotations']["spelling_preprocessing"]]}]
 
 
 def telegram_selector_formatter_in(dialog: Dict):
@@ -335,7 +335,7 @@ def last_utt_and_history_dialog(dialog: Dict) -> List:
     dialog = get_last_n_turns(dialog)
     dialog = remove_clarification_turns_from_dialog(dialog)
     return [{
-        'sentences': [dialog['utterances'][-1]['text']],
+        'sentences': [dialog['human_utterances'][-1]['annotations']["spelling_preprocessing"]],
         'utterances_histories': [[utt['annotations']['sentseg']['punct_sent'] for utt in dialog['utterances']]]
     }]
 
@@ -509,7 +509,7 @@ def short_story_formatter_dialog(dialog: Dict):
     return [
         {
             'intents': dialog['human_utterances'][-1]['annotations']['intent_catcher'],
-            'human_sentence': dialog['human_utterances'][-1]['text'],
+            'human_sentence': dialog['human_utterances'][-1]['annotations']["spelling_preprocessing"],
             'state': dialog["bot"]["attributes"].get("short_story_skill_attributes", {})
         }
     ]
