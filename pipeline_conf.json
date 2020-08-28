@@ -92,7 +92,7 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation"
+                "state_manager_method": "add_annotation_prev_bot_utt"
             },
             "ner": {
                 "connector": "connectors.ner",
