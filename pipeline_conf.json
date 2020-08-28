@@ -115,7 +115,7 @@
                 "state_manager_method": "add_annotation_prev_bot_utt"
             }
         },
-        "annotators_0": {
+        "annotators": {
             "spelling_preprocessing": {
                 "connector": {
                     "protocol": "http",
@@ -124,14 +124,12 @@
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation"
-            }
-        },
-        "annotators_1": {
+            },
             "sentseg": {
                 "connector": "connectors.sentseg",
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": ["annotators_0.spelling_preprocessing"],
+                "required_previous_services": ["annotators.spelling_preprocessing"],
                 "state_manager_method": "add_annotation"
             },
             "toxic_classification": {
@@ -139,8 +137,9 @@
                     "protocol": "http",
                     "url": "http://toxic_classification:8013/toxicity_annotations"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:dp_toxic_formatter_service",
+                "required_previous_services": ["annotators.spelling_preprocessing"],
                 "state_manager_method": "add_annotation"
             },
             "sentiment_classification": {
@@ -148,8 +147,9 @@
                     "protocol": "http",
                     "url": "http://sentiment_classification:8024/sentiment_annotations"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:cobot_classifiers_formatter_service",
+                "required_previous_services": ["annotators.spelling_preprocessing"],
                 "state_manager_method": "add_annotation"
             },
             "emotion_classification": {
@@ -157,8 +157,9 @@
                     "protocol": "http",
                     "url": "http://emotion_classification:8038/emotion_annotations"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:cobot_classifiers_formatter_service",
+                "required_previous_services": ["annotators.spelling_preprocessing"],
                 "state_manager_method": "add_annotation"
             },
             "blacklisted_words": {
@@ -166,8 +167,9 @@
                     "protocol": "http",
                     "url": "http://blacklisted_words:8018/blacklisted_words"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "required_previous_services": ["annotators.spelling_preprocessing"],
                 "state_manager_method": "add_annotation"
             },
             "asr": {
@@ -184,12 +186,11 @@
                     "protocol": "http",
                     "url": "http://factoid_classification:8073/factoid_annotations"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:dp_toxic_formatter_service",
+                "required_previous_services": ["annotators.spelling_preprocessing"],
                 "state_manager_method": "add_annotation"
-            }
-        },
-        "annotators_2": {
+            },
             "intent_catcher": {
                 "connector": {
                     "protocol": "http",
@@ -198,70 +199,61 @@
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators_1.sentseg"],
-                "previous_services": ["annotators_1"]
+                "required_previous_services": ["annotators.sentseg"]
             },
             "cobot_topics": {
                 "connector": {
                     "protocol": "http",
                     "url": "http://cobot_topics:8001/model"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:cobot_topics_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators_1.sentseg"],
-                "previous_services": ["annotators_1"]
+                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
             },
             "cobot_dialogact_topics": {
                 "connector": {
                     "protocol": "http",
                     "url": "http://cobot_dialogact_topics:8002/model"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:cobot_dialogact_topics_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators_1.sentseg"],
-                "previous_services": ["annotators_1"]
+                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
             },
             "cobot_dialogact_intents": {
                 "connector": {
                     "protocol": "http",
                     "url": "http://cobot_dialogact_intents:8003/model"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:cobot_dialogact_intents_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators_1.sentseg"],
-                "previous_services": ["annotators_1"]
+                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
             },
             "kbqa": {
                 "connector": {
                     "protocol": "http",
                     "url": "http://0.0.0.0:8072/answers"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators_1.sentseg"],
-                "previous_services": ["annotators_1"]
+                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
             },
             "ner": {
                 "connector": "connectors.ner",
                 "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators_1.sentseg"],
-                "previous_services": ["annotators_1"]
-            }
-        },
-        "annotators_3": {
+                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
+            },
             "sentrewrite": {
                 "connector": "connectors.sentrewrite",
                 "dialog_formatter": "state_formatters.dp_formatters:sent_rewrite_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators_1.sentseg", "annotators_2.ner"],
-                "previous_services": ["annotators_2", "post_annotators_3.sentrewrite"]
+                "required_previous_services": ["annotators.sentseg", "annotators.ner"]
             }
         },
         "skill_selectors": {
@@ -272,13 +264,13 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": ["annotators_3"],
-                "required_previous_services": ["annotators_2.intent_catcher",
-                   "annotators_2.blacklisted_words", "annotators_1.asr",
-                   "annotators_1.toxic_classification",
-                   "annotators_2.cobot_topics", "annotators_2.cobot_dialogact_topics",
-                   "annotators_2.cobot_dialogact_intents",
-                   "annotators_3.sentrewrite"],
+                "previous_services": ["annotators"],
+                "required_previous_services": ["annotators.intent_catcher",
+                   "annotators.blacklisted_words", "annotators.asr",
+                   "annotators.toxic_classification",
+                   "annotators.cobot_topics", "annotators.cobot_dialogact_topics",
+                   "annotators.cobot_dialogact_intents",
+                   "annotators.sentrewrite"],
                 "tags": ["selector"]
             }
         },
@@ -348,7 +340,7 @@
                     "protocol": "python",
                     "class_name": "skills.alexa_handler.connector:AlexaHandlerConnector"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:cobot_qa_formatter_service",
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
@@ -548,7 +540,7 @@
                     "protocol": "http",
                     "url": "http://superbowl_skill:8051/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_formatter_service",
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
@@ -558,7 +550,7 @@
                     "protocol": "http",
                     "url": "http://oscar_skill:8055/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_formatter_service",
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
@@ -568,7 +560,7 @@
                     "protocol": "http",
                     "url": "http://valentines_day_skill:8058/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_formatter_service",
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
