@@ -90,7 +90,7 @@
                     "protocol": "http",
                     "url": "http://cobot_nounphrases:8006/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation"
             },
@@ -105,7 +105,8 @@
                 "connector": "connectors.sentrewrite",
                 "dialog_formatter": "state_formatters.dp_formatters:sent_rewrite_formatter_w_o_last_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": ["bot_annotator_selector", "post_annotators.ner"],
+                "required_previous_services": ["bot_annotator_selector", "post_annotators.sentseg",
+                    "post_annotators.ner"],
                 "state_manager_method": "add_annotation_prev_bot_utt"
             }
         },
@@ -193,7 +194,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.sentseg"]
+                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
             },
             "cobot_topics": {
                 "connector": {
@@ -203,7 +204,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:cobot_topics_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
+                "required_previous_services": ["annotators.spelling_preprocessing"]
             },
             "cobot_dialogact_topics": {
                 "connector": {
@@ -213,7 +214,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:cobot_dialogact_topics_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
+                "required_previous_services": ["annotators.spelling_preprocessing"]
             },
             "cobot_dialogact_intents": {
                 "connector": {
@@ -223,7 +224,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:cobot_dialogact_intents_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
+                "required_previous_services": ["annotators.spelling_preprocessing"]
             },
             "kbqa": {
                 "connector": {
@@ -233,7 +234,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
+                "required_previous_services": ["annotators.spelling_preprocessing"]
             },
             "ner": {
                 "connector": "connectors.ner",
@@ -247,7 +248,8 @@
                 "dialog_formatter": "state_formatters.dp_formatters:sent_rewrite_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.sentseg", "annotators.ner"]
+                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg",
+                    "annotators.ner"]
             }
         },
         "skill_selectors": {
