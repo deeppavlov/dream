@@ -119,9 +119,10 @@ class RuleBasedSkillSelectorConnector:
                     if k in low_priority_intents
                 ]
             )
-
             ner_detected = len(list(chain.from_iterable(user_uttr_annotations["ner"]))) > 0
             logger.info(f"Detected Entities: {ner_detected}")
+
+            yes_detected = user_uttr_annotations["intent_catcher"].get("yes", {}).get("detected", 0)
 
             tell_me_a_story_detected = user_uttr_annotations["intent_catcher"].get("tell_me_a_story",
                                                                                    {}).get("detected", 0)
@@ -146,6 +147,31 @@ class RuleBasedSkillSelectorConnector:
 
             if dialog['bot_utterances']:
                 prev_bot_uttr = dialog["bot_utterances"][-1]
+
+                if prev_bot_uttr:
+                    # temporary hack
+                    last_bot_text = prev_bot_uttr["text"].lower()
+
+                    how_are_you_spec = "Do you want to know what I can do?"
+                    # this is always at the end of answers to `how are you`
+
+                    # SUPER DIRTY HACK
+                    if (yes_detected == 1 and how_are_you_spec.lower() in last_bot_text):
+                        # we shall not do that usually!!!
+                        # user_uttr_text = "tell me what can you do"
+                        print("Transformed intent from \"yes\" into \"what_can_you_do\"", flush=True)
+                        # saying that high priority intent detected
+                        high_priority_intent_detected = True
+                        # also
+                        try:
+                            user_uttr_annotations["intent_catcher"]["what_can_you_do"]["confidence"] = 1.0
+                            user_uttr_annotations["intent_catcher"]["what_can_you_do"]["detected"] = 1
+                            # and
+                            user_uttr_annotations["intent_catcher"]["yes"]["confidence"] = 0
+                            user_uttr_annotations["intent_catcher"]["yes"]["detected"] = 0
+                        except Exception as ex:
+                            print("error after transforming:" + str(ex), flush=True)
+
             prev_active_skill = prev_bot_uttr.get("active_skill", "")
 
             virus_prev = False
@@ -183,6 +209,7 @@ class RuleBasedSkillSelectorConnector:
             elif high_priority_intent_detected:
                 # process intent with corresponding IntentResponder
                 skills_for_uttr.append("intent_responder")
+                print("High-Pri intent detected: Added \"intent_responder\" to skills list", flush=True)
             elif blist_topics_detected:
                 # process user utterance with sensitive content, "safe mode"
                 skills_for_uttr.append("program_y_dangerous")
@@ -197,6 +224,7 @@ class RuleBasedSkillSelectorConnector:
             else:
                 if low_priority_intent_detected:
                     skills_for_uttr.append("intent_responder")
+                    print("Added \"intent_responder\" to skills list", flush=True)
                 # process regular utterances
                 skills_for_uttr.append("program_y")
                 # skills_for_uttr.append("cobotqa")
