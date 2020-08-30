@@ -77,4 +77,6 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8071
   kbqa:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8072
+  spelling_preprocessing:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8074 --timeout=100
 version: '3.7'
