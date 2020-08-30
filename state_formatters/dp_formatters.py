@@ -148,8 +148,8 @@ def misheard_asr_formatter_service(payload):
 
 def get_last_n_turns(dialog: Dict, bot_last_turns=None, human_last_turns=None, total_last_turns=None):
     bot_last_turns = bot_last_turns or LAST_N_TURNS
-    human_last_turns = human_last_turns or LAST_N_TURNS + 1
-    total_last_turns = total_last_turns or LAST_N_TURNS * 2 + 1
+    human_last_turns = human_last_turns or bot_last_turns + 1
+    total_last_turns = total_last_turns or bot_last_turns * 2 + 1
     dialog["utterances"] = dialog["utterances"][-total_last_turns:]
     dialog["human_utterances"] = dialog["human_utterances"][-human_last_turns:]
     dialog["bot_utterances"] = dialog["bot_utterances"][-bot_last_turns:]
@@ -179,7 +179,7 @@ def replace_with_annotated_utterances(dialog, mode="punct_sent"):
 
 def base_skill_selector_formatter_dialog(dialog: Dict) -> Dict:
     # Used by: base_skill_selector_formatter
-    dialog = get_last_n_turns(dialog)
+    dialog = get_last_n_turns(dialog, bot_last_turns=10)
     dialog = remove_clarification_turns_from_dialog(dialog)
     dialog = replace_with_annotated_utterances(dialog, mode="punct_sent")
     return [{"states_batch": [dialog]}]
@@ -291,7 +291,7 @@ def sent_rewrite_formatter_dialog(dialog: Dict) -> Dict:
 
 
 def sent_rewrite_formatter_w_o_last_dialog(dialog: Dict) -> Dict:
-    dialog = get_last_n_turns(dialog, LAST_N_TURNS + 1, LAST_N_TURNS + 2, LAST_N_TURNS * 2 + 3)
+    dialog = get_last_n_turns(dialog, LAST_N_TURNS + 1)
     dialog = remove_clarification_turns_from_dialog(dialog)
     utterances_histories = []
     annotation_histories = []
@@ -411,7 +411,7 @@ def utt_sentrewrite_modified_last_dialog(dialog: Dict):
 
 def utt_sentrewrite_modified_last_dialog_15_turns(dialog: Dict):
     # Used by: coronavirus
-    dialog = get_last_n_turns(dialog, bot_last_turns=15, human_last_turns=16, total_last_turns=31)
+    dialog = get_last_n_turns(dialog, bot_last_turns=15)
     dialog = remove_clarification_turns_from_dialog(dialog)
     dialog = replace_with_annotated_utterances(dialog, mode="modified_sents")
     return [{'dialogs': [dialog]}]
