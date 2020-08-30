@@ -250,19 +250,6 @@
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators_1.sentseg", "annotators_2.ner"],
                 "previous_services": ["annotators_2", "post_annotators_3.sentrewrite"]
-            },
-            "agent_topics": {
-                "connector": {
-                    "protocol": "python",
-                    "class_name": "annotators.agent_topics.connector:RuleBasedTopicAnnotatorConnector"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation",
-                "required_previous_services": [
-                    "annotators_2.intent_catcher",
-                    "annotators_2.cobot_dialogact_topics"
-                ]
             }
         },
         "skill_selectors": {
@@ -279,7 +266,6 @@
                    "annotators_1.toxic_classification",
                    "annotators_2.cobot_topics", "annotators_2.cobot_dialogact_topics",
                    "annotators_2.cobot_dialogact_intents",
-                   "annotators_3.agent_topics",
                    "annotators_3.sentrewrite"],
                 "tags": ["selector"]
             }
@@ -410,10 +396,9 @@
                     "protocol": "http",
                     "url": "http://convert_reddit:8029/convert_reddit"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:convert_formatter_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:transfertransfo_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": ["skill_selectors"],
-                "required_previous_services": ["annotators_3.agent_topics"],
                 "state_manager_method": "add_hypothesis"
             },
             "personal_info_skill": {
