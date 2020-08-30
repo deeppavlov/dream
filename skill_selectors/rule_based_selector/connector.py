@@ -269,8 +269,7 @@ class RuleBasedSkillSelectorConnector:
                 # skills_for_uttr.append("factoid_qa")
                 if (factoid_classification > factoid_prob_threshold):
                     skills_for_uttr.append("factoid_qa")
-
-                    skills_for_uttr.append("comet_dialog_skill")
+                skills_for_uttr.append("comet_dialog_skill")
 
                 # if ner_detected:
                 #     skills_for_uttr.append("reddit_ner_skill")
