@@ -99,34 +99,11 @@ def encode_context(dialogue_history):
     )[0]
 
 
-def norm_approximation(confidence):
-    return (confidences <= confidence).sum() / len(confidences)
-
-
-def step_func(x_val, min_x_val, max_x_val, min_y_val, max_y_val):
-    if min_x_val <= x_val and x_val <= max_x_val:
-        return (x_val - min_x_val) / (max_x_val - min_x_val) * (max_y_val - min_y_val) + min_y_val
+def approximate_confidence(confidence, approximate_confidence_is_enabled=True):
+    if approximate_confidence_is_enabled:
+        return 0.85 * (confidences <= confidence).sum() / len(confidences)
     else:
-        return 0
-
-
-def piecewise_approximation(confidence):
-    res_confidence = 0.0
-    res_confidence = max(res_confidence, step_func(confidence, 0.0, 0.2, 0.0, 0.85))
-    res_confidence = max(res_confidence, step_func(confidence, 0.2, 0.4, 0.85, 0.9))
-    res_confidence = max(res_confidence, step_func(confidence, 0.4, 1.0, 0.9, 0.95))
-    return res_confidence
-
-
-def approximate_confidence(confidence, approximate_confidence_is_enabled=True, topic_restriction_is_enabled=False):
-    # print(f"origin_confidence = {confidence}", flush=True)
-    confidence = float(confidence)
-    confidence = norm_approximation(confidence) if approximate_confidence_is_enabled else confidence
-    # print(f"norm_confidence = {confidence}", flush=True)
-    confidence = piecewise_approximation(confidence) if approximate_confidence_is_enabled else confidence
-    confidence = 0.8 * confidence if topic_restriction_is_enabled else confidence
-    # print(f"approximated_confidence = {confidence}", flush=True)
-    return confidence
+        return float(confidence)
 
 
 def get_BOW(sentence):
@@ -182,28 +159,7 @@ def format_cand(cand):
     return cand
 
 
-restricted_topics = set(
-    [
-        "news",
-        "movies",
-        "books",
-        "weather",
-        "games",
-        # "music",
-        # "entertainments",
-        # "fashions",
-        # "science_technology",
-        # "sports",
-        # "animals",
-    ]
-)
-
-
-def is_restricted_topic(agent_topics):
-    return bool(set([k for k, v in agent_topics.items() if v]) & restricted_topics)
-
-
-def inference(utterances_histories, approximate_confidence_is_enabled=True, topic_restriction_is_enabled=False):
+def inference(utterances_histories, approximate_confidence_is_enabled=True):
     context_encoding = encode_context(utterances_histories)
     scores = context_encoding.dot(response_encodings.T)
     indices = np.argsort(scores)[::-1][:10]
@@ -247,10 +203,7 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True, topi
 
     if len(filtered_indices) > 0:
         candidates = [
-            (
-                clear_text(responses[ind]),
-                approximate_confidence(scores[ind], approximate_confidence_is_enabled, topic_restriction_is_enabled),
-            )
+            (clear_text(responses[ind]), approximate_confidence(scores[ind], approximate_confidence_is_enabled))
             for ind in filtered_indices
         ]
         try:
@@ -258,7 +211,7 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True, topi
                 candidates, choice_num=NUM_SAMPLE, softmax_temperature=SOFTMAX_TEMPERATURE
             )
             answers = [format_cand(cand[0]) for cand in selected_candidates]
-            confidences = [float(cand[1]) for cand in selected_candidates]
+            confidences = [min(float(cand[1]) * 1.7, 0.99) for cand in selected_candidates]
             return answers, confidences
         except Exception:
             logger.error(traceback.format_exc())
@@ -273,12 +226,8 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True, topi
 def convert_chitchat_model():
     st_time = time.time()
     utterances_histories = request.json["utterances_histories"]
-    topic_batch = request.json["agent_topics"]
     approximate_confidence_is_enabled = request.json.get("approximate_confidence_is_enabled", True)
-    response = [
-        inference(hist, approximate_confidence_is_enabled, is_restricted_topic(topics))
-        for hist, topics in zip(utterances_histories, topic_batch)
-    ]
+    response = [inference(hist, approximate_confidence_is_enabled) for hist in utterances_histories]
     total_time = time.time() - st_time
     logger.warning(f"convert_reddit answ: {response}")
     logger.warning(f"convert_reddit exec time: {total_time:.3f}s")
