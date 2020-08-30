@@ -122,6 +122,7 @@ class RuleBasedSkillSelectorConnector:
                     if k in low_priority_intents
                 ]
             )
+
             ner_detected = len(list(chain.from_iterable(user_uttr_annotations["ner"]))) > 0
             logger.info(f"Detected Entities: {ner_detected}")
 
@@ -240,8 +241,7 @@ class RuleBasedSkillSelectorConnector:
             elif high_priority_intent_detected:
                 # process intent with corresponding IntentResponder
                 skills_for_uttr.append("intent_responder")
-                print("High-Pri intent detected: Added \"intent_responder\" to skills list", flush=True)
-            elif blist_topics_detected:
+            elif blist_topics_detected or (sensitive_topics_detected and sensitive_dialogacts_detected):
                 # process user utterance with sensitive content, "safe mode"
                 skills_for_uttr.append("program_y_dangerous")
                 # skills_for_uttr.append("cobotqa")
@@ -255,7 +255,6 @@ class RuleBasedSkillSelectorConnector:
             else:
                 if low_priority_intent_detected:
                     skills_for_uttr.append("intent_responder")
-                    print("Added \"intent_responder\" to skills list", flush=True)
                 # process regular utterances
                 skills_for_uttr.append("program_y")
                 # skills_for_uttr.append("cobotqa")
@@ -270,9 +269,7 @@ class RuleBasedSkillSelectorConnector:
                 # skills_for_uttr.append("factoid_qa")
                 if (factoid_classification > factoid_prob_threshold):
                     skills_for_uttr.append("factoid_qa")
-                # don't call comet dialog for expressing opinion on sensitive topics
-                if not(sensitive_topics_detected and sensitive_dialogacts_detected):
-                    skills_for_uttr.append("comet_dialog_skill")
+                skills_for_uttr.append("comet_dialog_skill")
 
                 # if ner_detected:
                 #     skills_for_uttr.append("reddit_ner_skill")
