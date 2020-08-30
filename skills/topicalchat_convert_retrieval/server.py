@@ -125,90 +125,18 @@ def clear_answer(answer):
     return answer
 
 
-movie_cobot_dialogacts = {
-    "Entertainment_Movies",
-    "Sports",
-    "Entertainment_Music",
-    "Entertainment_General",
-    "Phatic",
-}
-movie_cobot_topics = {
-    "Movies_TV",
-    "Celebrities",
-    "Art_Event",
-    "Entertainment",
-    "Fashion",
-    "Games",
-    "Music",
-    "Sports",
-}
-entertainment_cobot_dialogacts = {
-    "Entertainment_Movies",
-    "Entertainment_Music",
-    "Entertainment_General",
-    "Entertainment_Books",
-}
-entertainment_cobot_topics = {
-    "Art_Event",
-    "Celebrities",
-    "Entertainment",
-    "Games",
-}
-fashion_cobot_dialogacts = set()
-fashion_cobot_topics = {
-    "Fashion",
-}
-science_cobot_dialogacts = {
-    "Science_and_Technology",
-    "Entertainment_Books",
-}
-science_cobot_topics = {
-    "Literature",
-    "Math",
-    "SciTech",
-}
-science_cobot_dialogacts = {
-    "Science_and_Technology",
-    "Entertainment_Books",
-}
-science_cobot_topics = {
-    "Literature",
-    "Math",
-    "SciTech",
-}
-politic_cobot_dialogacts = {
-    "Politics",
-}
-politic_cobot_topics = {
-    "Politics",
-}
-sport_cobot_dialogacts = {
-    "Sports",
-}
-sport_cobot_topics = {
-    "Sports",
-}
-animals_cobot_topics = {
-    "Pets_Animals",
-}
-books_cobot_dialogacts = {"Entertainment_General", "Entertainment_Books"}
-books_cobot_topics = {"Entertainment", "Literature"}
-news_cobot_topics = {"News"}
-
-
-def select_topics(agent_dialogacts, agent_topics):
-    agent_dialogacts, agent_topics = set(agent_dialogacts), set(agent_topics)
-    about_movies = (movie_cobot_dialogacts & agent_dialogacts) | (movie_cobot_topics & agent_topics)
-    about_music = ("Entertainment_Music" in agent_dialogacts) | ("Music" in agent_topics)
-    about_books = (books_cobot_dialogacts & agent_dialogacts) | (books_cobot_topics & agent_topics)
-    about_entertainments = (entertainment_cobot_dialogacts & agent_dialogacts) | (
-        entertainment_cobot_topics & agent_topics
-    )
-    about_fashions = (fashion_cobot_dialogacts & agent_dialogacts) | (fashion_cobot_topics & agent_topics)
-    # about_politics = (politic_cobot_dialogacts & agent_dialogacts) | (sport_cobot_topics & agent_topics)
-    about_science_technology = (science_cobot_dialogacts & agent_dialogacts) | (science_cobot_topics & agent_topics)
-    about_sports = (sport_cobot_dialogacts & agent_dialogacts) | (sport_cobot_topics & agent_topics)
-    about_animals = animals_cobot_topics & agent_topics
+def select_topics(agent_topics):
+    # about_news = agent_topics.get("news")
+    about_movies = agent_topics.get("movies")
+    about_music = agent_topics.get("music")
+    about_books = agent_topics.get("books")
+    # about_games = agent_topics.get("games")
+    # about_weather = agent_topics.get("weather")
+    about_entertainments = agent_topics.get("entertainments")
+    about_fashions = agent_topics.get("fashions")
+    about_science_technology = agent_topics.get("science_technology")
+    about_sports = agent_topics.get("sports")
+    about_animals = agent_topics.get("animals")
     topics = []
     if about_movies:
         topics.append("movie")
@@ -282,18 +210,15 @@ def convert_chitchat_model():
     logger.warning(f"request.json = {request.json}")
     # get utterances_histories
     utterances_histories = request.json["utterances_histories"]
-    # get dialogact_topics
-    act_topic_batch = request.json["dialogact_topics"]
     # get topics
-    topic_batch = [topics["text"] for topics in request.json["topics"]]
+    topic_batch = request.json["agent_topics"]
     # get approximate_confidence_is_enabled
     approximate_confidence_is_enabled = request.json.get("approximate_confidence_is_enabled", True)
     # logger.warning(f"utterances_histories {utterances_histories}")
-    # logger.warning(f"act_topic_batch {act_topic_batch}")
     # logger.warning(f"topic_batch {topic_batch}")
     response = [
-        choose_best_answer(hist, select_topics(act_topic, topics), approximate_confidence_is_enabled)
-        for hist, act_topic, topics in zip(utterances_histories, act_topic_batch, topic_batch)
+        choose_best_answer(hist, select_topics(topics), approximate_confidence_is_enabled)
+        for hist, topics in zip(utterances_histories, topic_batch)
     ]
     total_time = time.time() - st_time
     logger.warning(f"response {response}")
