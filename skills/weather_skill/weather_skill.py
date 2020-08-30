@@ -127,6 +127,9 @@ QUESTION_CONFIDENCE = 0.999
 # confindce when asking smalltalk questions, e.g. "Let me guess - you like skiing?"
 SMALLTALK_CONFIDENCE = 0.999
 
+# when we asked the city, but can not recognize city by NER nor by
+MISSED_CITY_CONFIDENCE = 0.9
+
 
 class WeatherSkill:
     def __init__(self, weather_dict={}):
@@ -225,7 +228,7 @@ class WeatherSkill:
                     ############################################################
                     current_reply = "Sorry, I have no weather for the place. I didn't recognize the city..."
                     context_dict['can_continue'] = CAN_CONTINUE
-                    curr_confidence = 0.5
+                    curr_confidence = MISSED_CITY_CONFIDENCE
             elif context_dict.get("weather_forecast_interaction_question_asked", False):
                 logger.warning("WEATHER INTERACTION QUESTION ASKED")
                 weather = d_man.get_preferred_weather(self.weather_dict)

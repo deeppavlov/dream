@@ -143,10 +143,14 @@ def owm_requests_weather_forecast_now(city_str):
             # hPa
             # pressure = json_data['main']['pressure']
             # humidity = json_data['main']['humidity']
-
-            response_template = "It is %s, temperature is around %0.1f in %s. " \
+            # plural or singular form in fahrenheits?
+            if int(temperature) % 10 in [0, 1]:
+                scale_str = "Fahrenheit"
+            else:
+                scale_str = "Fahrenheits"
+            response_template = "It is %s, temperature is around %0.1f %s in %s. " \
                                 "Wind speed is about %0.1f meters per second" % (
-                                    description, temperature, city_name, wind_speed)
+                                    description, temperature, scale_str, city_name, wind_speed)
         except Exception as e:
             # we have problems with weather service:
             # soltions:
