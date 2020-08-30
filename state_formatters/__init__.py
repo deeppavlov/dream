@@ -9,7 +9,6 @@ all_formatters = {
     'cobot_qa_formatter_service': cobot_qa_formatter_service,
     'misheard_asr_formatter_service': misheard_asr_formatter_service,
     'base_skill_selector_formatter_dialog': base_skill_selector_formatter_dialog,
-    'transfertransfo_formatter_dialog': transfertransfo_formatter_dialog,
     'convert_formatter_dialog': convert_formatter_dialog,
     'personality_catcher_formatter_dialog': personality_catcher_formatter_dialog,
     'personality_catcher_formatter_service': personality_catcher_formatter_service,
