@@ -55,6 +55,11 @@ def db_is_updated():
 health.add_check(db_is_updated)
 
 
+def is_hard_switch_topic(last_utter):
+    annotations = last_utter.get("annotations", {})
+    return annotations.get("intent_catcher", {}).get("topic_switching", {}).get("detected", 0) == 1
+
+
 @app.route("/respond", methods=["POST"])
 def respond():
     dialogs_batch = [None]
@@ -76,6 +81,8 @@ def respond():
 
             last_utter_text = last_utter["text"].lower()
             agent_intents = {"switch_topic_intent": True} if is_switch_topic(last_utter) else {}
+            if is_hard_switch_topic(last_utter):
+                agent_intents["hard_switch_topic_intent"] = True
 
             # for tests
             if rand_seed:
