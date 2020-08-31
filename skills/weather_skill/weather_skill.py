@@ -128,7 +128,7 @@ QUESTION_CONFIDENCE = 0.999
 SMALLTALK_CONFIDENCE = 0.999
 
 # when we asked the city, but can not recognize city by NER nor by
-MISSED_CITY_CONFIDENCE = 0.9
+MISSED_CITY_CONFIDENCE = 0.98
 
 
 class WeatherSkill:
@@ -193,7 +193,7 @@ class WeatherSkill:
                     # request CITY SLOT
                     ############################################################
                     # ask question:
-                    current_reply = "Which city would you like a weather forecast for?"
+                    current_reply = "Hmm. Which particular city would you like a weather forecast for?"
                     context_dict[city_slot_requested] = True
                     curr_confidence = QUESTION_CONFIDENCE
                 return current_reply, curr_confidence, human_attr, bot_attr, context_dict
