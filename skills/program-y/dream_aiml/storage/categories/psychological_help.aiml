@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <aiml version="2.0">
 
+
   <category>
     <pattern># DIED #</pattern>
     <template>
@@ -10,6 +11,7 @@
       </random>
     </template>
   </category>
+
   <category>
     <pattern># I <set>wantto</set> # <set>commit</set> # <set>suicide</set> #</pattern>
     <template>
@@ -23,6 +25,19 @@
     </template>
   </category>
   <category>
+    <pattern># I <set>gonna</set> # <set>commit</set> # <set>suicide</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>commit</set> # <set>suicide</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+
+  <category>
     <pattern># I <set>wishfor</set> # <set>suicide</set> #</pattern>
     <template>
       <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
@@ -34,6 +49,19 @@
       <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
     </template>
   </category>
+  <category>
+    <pattern># I <set>gonna</set> # <set>suicideverb</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>suicideverb</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+
 
   <category>
     <pattern>I_WANT_TO_COMMIT_SUICIDE</pattern>
@@ -58,6 +86,12 @@
     </template>
   </category>
   <category>
+    <pattern># I <set>gonna</set> # <set>commit</set> # <set>crime</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_CRIME</srai>
+    </template>
+  </category>
+  <category>
     <pattern># I <set>wishfor</set> # <set>crime</set> #</pattern>
     <template>
       <srai>I_WANT_TO_COMMIT_CRIME</srai>
@@ -65,6 +99,18 @@
   </category>
   <category>
     <pattern># I <set>wantto</set> # <set>crimeverb</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_CRIME</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>gonna</set> # <set>crimeverb</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_CRIME</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>crimeverb</set> #</pattern>
     <template>
       <srai>I_WANT_TO_COMMIT_CRIME</srai>
     </template>
@@ -79,4 +125,46 @@
       </random>
     </template>
   </category>
+
+
+<!--  MY smb died -->
+
+  <category>
+    <pattern># MY # KILLED #</pattern>
+    <template>
+      <srai>MY_SMB_DIED</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern># MY # DIED #</pattern>
+    <template>
+      <srai>MY_SMB_DIED</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>MY_SMB_DIED</pattern>
+    <template>
+      <random>
+        <li>I am so sorry to hear about your loss.</li>
+        <li>I am heartbroken by this sad news.</li>
+        <li>I'm sorry, but I am at a loss for words.</li>
+        <li>I'm here for you if you need anything.</li>
+        <li>Please accept my sincere condolences.</li>
+        <li>Wishing you peace as you grieve this loss.</li>
+      </random>
+    </template>
+  </category>
+
+  <category>
+    <pattern># DIED #</pattern>
+    <template>
+      <random>
+        <li>I am sorry about that.</li>
+        <li>I'm here for you if you need anything.</li>
+      </random>
+    </template>
+  </category>
+
 </aiml>
