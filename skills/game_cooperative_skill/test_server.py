@@ -52,7 +52,7 @@ def update_utterances(utterances=[], response=None, text_request=""):
 
 request_utters = [
     "hi",
-    "top of week",
+    "top of year",
     "yes",
     "go on",
     "move on",
@@ -103,9 +103,9 @@ def test_skill():
             print(f"true_resp_utter = {true_resp_utter}")
             print(f"cand_resp_utter = {text}")
             print(f"ratio = {ratio}")
-            if ratio < 0.8:
+            if ratio < 0.4:
                 warnings += 1
-        print(difflib.SequenceMatcher(None, true_resp_utter.split(), text.split()).ratio())
+        # print(difflib.SequenceMatcher(None, true_resp_utter.split(), text.split()).ratio())
     assert warnings == 0
     print("SUCCESS!")
 
