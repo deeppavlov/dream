@@ -58,6 +58,9 @@ class MovieSkillScenario:
                                              r"tv[ -]?show|reality[ -]?show|netflix|\btv\b|comedy|comedies|thriller|"
                                              r"animation|anime|talk[ -]?show|cartoon)", re.IGNORECASE)
 
+        self.not_watched_template = re.compile(r"(n't|not) (watch|watching|watched|seen)( it| this| them| these|$|\.)",
+                                               re.IGNORECASE)
+
         self.extra_space_template = re.compile(r"\s\s+")
 
     def __call__(self, dialogs):
@@ -259,6 +262,10 @@ class MovieSkillScenario:
                 # user wants to switch the topic while we are in the script
                 response, confidence = "What do you want to talk about?", NOT_SURE_CONFIDENCE
                 attr = {"status_line": prev_status_line + ["finished"], "can_continue": CAN_CONTINUE}
+            elif re.search(self.not_watched_template, curr_user_uttr["text"]):
+                response = f"{get_movie_template('lets_talk_about_other_movie')}"
+                confidence = END_SCENARIO_OFFER_CONFIDENCE
+                attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
             elif prev_status == "finished" or prev_status == "":
                 if len(movies_ids) > 0:
                     curr_movie_id = movies_ids[-1]

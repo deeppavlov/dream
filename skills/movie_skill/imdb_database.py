@@ -165,7 +165,7 @@ class IMDb:
                 "something", 'no', 'i am', "what", "is", "it", "what", "i did not know that",
                 "games", "see", "really", "my favorite movie", "i do", "what happened",
                 "me", "off", "nothing", "talk to her", "boy a", "play",
-                "i feel", "question", "thank you", "singing", "program", "other",
+                "i feel", "question", "thank you", "singing", "program", "other", "lets talk about",
                 "conversation", "good", "they", "hello", "make", "pretty good", "talk", "happy days"]:
             try:
                 self.with_ignored_movies_names.pop(proc_title)
