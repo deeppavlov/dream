@@ -210,7 +210,7 @@
             "cobot_topics": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://cobot_topics:8002/model"
+                    "url": "http://cobot_topics:8002/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:cobot_intent_topics_annot_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -220,7 +220,7 @@
             "cobot_dialogact_topics": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://cobot_dialogact_topics:8003/model"
+                    "url": "http://cobot_dialogact_topics:8003/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:cobot_intent_topics_annot_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -230,7 +230,7 @@
             "cobot_dialogact_intents": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://cobot_dialogact_intents:8005/model"
+                    "url": "http://cobot_dialogact_intents:8005/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:cobot_intent_topics_annot_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -275,7 +275,9 @@
                 "required_previous_services": ["annotators.intent_catcher",
                    "annotators.blacklisted_words", "annotators.asr",
                    "annotators.toxic_classification",
-                   "annotators.cobot_intent_topics",
+                   "annotators.cobot_topics",
+                   "annotators.cobot_dialogact_topics",
+                   "annotators.cobot_dialogact_intents",
                    "annotators.sentrewrite"],
                 "tags": ["selector"]
             }
