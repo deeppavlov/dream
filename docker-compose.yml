@@ -32,7 +32,7 @@ services:
         skillport: 8001
         skilldir: annotators/cobot_intenttopics/
       context: ./
-      dockerfile: dp/dockerfile_skill_gpu12
+      dockerfile: dp/dockerfile_skill_gpu
     environment:
       - CUDA_VISIBLE_DEVICES=0
     deploy:
