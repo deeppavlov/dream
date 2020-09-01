@@ -92,7 +92,7 @@
     ],
     "download": [
       {
-        "url": "http://files.deeppavlov.ai/alexaprize_data/bert/cobot_intenttopics.zip",
+        "url": "http://files.deeppavlov.ai/alexaprize_data/bert/cobot_intent_topics.zip",
         "subdir": "{DOWNLOADS_PATH}/bert_models"
       }
     ]
