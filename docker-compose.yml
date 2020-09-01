@@ -28,9 +28,9 @@ services:
     build:
       args:
         skill_endpoint: model
-        skillconfig: annotators/cobot_intenttopics/cobot_intenttopics.json
+        skillconfig: annotators/cobot_intent_topics/cobot_intent_topics.json
         skillport: 8001
-        skilldir: annotators/cobot_intenttopics/
+        skilldir: annotators/cobot_intent_topics/
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
