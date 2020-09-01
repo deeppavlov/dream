@@ -22,6 +22,7 @@ def respond():
     sentences = request.json['sentences']
     result = [answer['cobot_topics'] for answer in sentences]
     total_time = time.time() - st_time
+    logging.info('Cobot topics '+str(result))
     logger.info(f'nounphrase annotator exec time: {total_time:.3f}s')
     return jsonify(result)
 
