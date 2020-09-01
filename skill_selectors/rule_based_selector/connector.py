@@ -106,7 +106,7 @@ class RuleBasedSkillSelectorConnector:
             skills_for_uttr = []
             user_uttr_text = dialog["human_utterances"][-1]["text"].lower()
             user_uttr_annotations = dialog["human_utterances"][-1]["annotations"]
-
+            raise Exception(str(user_uttr_annotations))
             high_priority_intent_detected = any(
                 [
                     v["detected"] == 1

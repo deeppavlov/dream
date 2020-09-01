@@ -246,10 +246,8 @@ def cobot_classifiers_formatter_service(payload: List):
 
 
 def cobot_intent_topics_formatter_service(payload: List):
-    ###
-    ###REWRITE!!!
-    logging.info('Payload '+str(payload))
     ans = {'cobot_topics':[], 'cobot_dialogact_topics':[], 'cobot_dialogact_intents':[]}
+    payload = payload[0]
     for i in range(len(payload)): # we iterate over payload. I forgot how to do it
         if '_ct' in payload[i]:
             topic_name = payload[i].split('_ct')[0]
@@ -260,7 +258,6 @@ def cobot_intent_topics_formatter_service(payload: List):
         elif '_dci' in payload[i]:
             topic_name = payload[i].split('_dci')[0]
             ans['cobot_dialogact_intents'].append(topic_name)
-    logging.info('Ans '+str(ans))
     return ans
 
 
