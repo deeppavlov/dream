@@ -1,38 +1,32 @@
 services:
-  cobot_topics:
+  cobot_intent_topics:
     environment:
       - CUDA_VISIBLE_DEVICES=0
-  cobot_dialogact_topics:
-    environment:
-      - CUDA_VISIBLE_DEVICES=1
-  cobot_dialogact_intents:
-    environment:
-      - CUDA_VISIBLE_DEVICES=2
   cobot_convers_evaluator_annotator:
     environment:
-      - CUDA_VISIBLE_DEVICES=3
+      - CUDA_VISIBLE_DEVICES=1
   toxic_classification:
     environment:
-      - CUDA_VISIBLE_DEVICES=4
+      - CUDA_VISIBLE_DEVICES=2
   sentiment_classification:
     environment:
-      - CUDA_VISIBLE_DEVICES=5
+      - CUDA_VISIBLE_DEVICES=3
   emotion_classification:
     environment:
-      - CUDA_VISIBLE_DEVICES=6
+      - CUDA_VISIBLE_DEVICES=4
   comet_atomic:
     environment:
-      - CUDA_VISIBLE_DEVICES=7
+      - CUDA_VISIBLE_DEVICES=5
   comet_conceptnet:
     environment:
-      - CUDA_VISIBLE_DEVICES=8
+      - CUDA_VISIBLE_DEVICES=6
   stop_detect:
     environment:
-      - CUDA_VISIBLE_DEVICES=9
+      - CUDA_VISIBLE_DEVICES=7
   kbqa:
     environment:
-      - CUDA_VISIBLE_DEVICES=7
+      - CUDA_VISIBLE_DEVICES=8
   factoid_classification:
     environment:
-      - CUDA_VISIBLE_DEVICES=8
+      - CUDA_VISIBLE_DEVICES=9
 version: '3.7'
