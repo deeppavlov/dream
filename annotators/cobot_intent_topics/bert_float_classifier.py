@@ -21,13 +21,11 @@ class BertFloatClassifierModel(BertClassifierModel):
     def __call__(self, features: List[InputFeatures]) -> Union[List[int], List[List[float]]]:
         """
         Make prediction for given features (texts).
-
         Args:
             features: batch of InputFeatures
-
+        REWRITE!!! OTHER CLASSES!!!
         Returns:
             predicted classes or probabilities of each class
-
         """
         logging.info(features)
         input_ids = [f.input_ids for f in features]
@@ -39,13 +37,19 @@ class BertFloatClassifierModel(BertClassifierModel):
             pred = self.sess.run(self.y_predictions, feed_dict=feed_dict)
         else:
             pred = self.sess.run(self.y_probas, feed_dict=feed_dict)
-        topics = ['Phatic', 'Movies_TV',
-                  'Other', 'Music', 'Literature', 'SciTech',
-                  'Travel_Geo', 'Celebrities', 'Games', 'Pets_Animals',
-                  'Sports', 'Weather_Time', 'Food_Drink', 'Psychology',
-                  'Religion', 'Sex_Profanity', 'Politics', 'nan',
-                  'Art_Event', 'Math', 'News', 'Entertainment',
-                  'Fashion']
+        topics = ['Other_dct', 'Phatic_ct', 'Information_DeliveryIntent_dci',
+                  'General_ChatIntent_dci', 'Information_RequestIntent_dci', 'Phatic_dct',
+                  'Entertainment_Movies_dct', 'Other_ct', 'Movies_TV_ct', 'Music_ct',
+                  'User_InstructionIntent_dci', 'SciTech_ct', 'Entertainment_Books_dct',
+                  'Literature_ct', 'Travel_Geo_ct', 'Celebrities_ct', 'Games_ct', 'Entertainment_General_dct',
+                  'Pets_Animals_ct',
+                  'InteractiveIntent_dci', 'Sports_ct', 'Psychology_ct', 'Religion_ct', 'Weather_Time_ct',
+                  'Food_Drink_ct',
+                  'Opinion_ExpressionIntent_dci', 'Interactive_dct', 'OtherIntent_dci', 'Politics_ct',
+                  'Sex_Profanity_ct',
+                  'Entertainment_Music_dct', 'Science_and_Technology_dct', 'Sports_dct', 'ClarificationIntent_dci',
+                  'Topic_SwitchIntent_dci', 'Art_Event_ct', 'Math_ct', 'Opinion_RequestIntent_dci', 'Politics_dct',
+                  'News_ct', 'Entertainment_ct', 'Multiple_GoalsIntent_dci', 'Fashion_ct']
         # order DOES matter
         prediction_list = []
         alpha = 1.1  # we introduce alpha to increase the probability of rare classes

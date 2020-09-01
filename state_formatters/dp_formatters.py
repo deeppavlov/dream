@@ -245,16 +245,22 @@ def cobot_classifiers_formatter_service(payload: List):
         return {"text": []}
 
 
-def cobot_dialogact_intents_formatter_service(payload: List):
-    return {"text": [j[0] for j in payload]}
-
-
-def cobot_dialogact_topics_formatter_service(payload: List):
-    return {"text": [j[0] for j in payload]}
-
-
-def cobot_topics_formatter_service(payload: List):
-    return {"text": [j[0] for j in payload]}
+def cobot_intent_topics_formatter_service(payload: List):
+    ###
+    ###REWRITE!!!
+    raise Exception(payload)
+    ans = {'cobot_topics':[], 'cobot_dialogact_topics':[], 'cobot_dialogact_intents':[]}
+    for i in range(len(payload)): # we iterate over payload. I forgot how to do it
+        if '_ct' in payload[i]:
+            topic_name = payload[i].split('_ct')[0]
+            ans['cobot_topics'].append(topic_name)
+        elif '_dct' in payload[i]:
+            topic_name = payload[i].split('_dct')[0]
+            ans['cobot_dialogact_topics'].append(topic_name)
+        elif '_dci' in payload[i]:
+            topic_name = payload[i].split('_dci')[0]
+            ans['cobot_dialogact_intents'].append(topic_name)
+    return ans
 
 
 def cobot_formatter_dialog(dialog: Dict):
