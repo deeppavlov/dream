@@ -246,18 +246,20 @@ def cobot_classifiers_formatter_service(payload: List):
 
 
 def cobot_intent_topics_formatter_service(payload: List):
-    ans = {'cobot_topics':[], 'cobot_dialogact_topics':[], 'cobot_dialogact_intents':[]}
+    ans = {'cobot_topics': {'text':[]}, 
+           'cobot_dialogact_topics': {'text':[]},
+           'cobot_dialogact_intents': {'text':[]}}
     payload = payload[0]
     for i in range(len(payload)): # we iterate over payload. I forgot how to do it
         if '_ct' in payload[i]:
             topic_name = payload[i].split('_ct')[0]
-            ans['cobot_topics'].append(topic_name)
+            ans['cobot_topics']['text'].append(topic_name)
         elif '_dct' in payload[i]:
             topic_name = payload[i].split('_dct')[0]
-            ans['cobot_dialogact_topics'].append(topic_name)
+            ans['cobot_dialogact_topics']['text'].append(topic_name)
         elif '_dci' in payload[i]:
             topic_name = payload[i].split('_dci')[0]
-            ans['cobot_dialogact_intents'].append(topic_name)
+            ans['cobot_dialogact_intents']['text'].append(topic_name)
     return ans
 
 
