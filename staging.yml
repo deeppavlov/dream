@@ -13,6 +13,18 @@ services:
      image: ${DOCKER_REGISTRY}/cobot_intent_topics:${VERSION}
      env_file:
        - ${ENV_FILE}
+  cobot_topics:
+    image: ${DOCKER_REGISTRY}/cobot_intent_topics:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  cobot_dialogact_topics:
+    image: ${DOCKER_REGISTRY}/cobot_intent_topics:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  cobot_dialogact_intents:
+    image: ${DOCKER_REGISTRY}/cobot_intent_topics:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   cobot_convers_evaluator_annotator:
      image: ${DOCKER_REGISTRY}/cobot_convers_evaluator_annotator:${VERSION}
      env_file:

@@ -207,6 +207,36 @@
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators.spelling_preprocessing"]
             },
+            "cobot_topics": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://cobot_topics:8002/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:cobot_intent_topics_annot_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "required_previous_services": ["annotators.cobot_intent_topics"]
+            },
+            "cobot_dialogact_topics": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://cobot_dialogact_topics:8003/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:cobot_intent_topics_annot_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "required_previous_services": ["annotators.cobot_intent_topics"]
+            },
+            "cobot_dialogact_intents": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://cobot_dialogact_intents:8005/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:cobot_intent_topics_annot_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "required_previous_services": ["annotators.cobot_intent_topics"]
+            },
             "kbqa": {
                 "connector": {
                     "protocol": "http",

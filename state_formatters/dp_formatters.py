@@ -324,6 +324,10 @@ def preproc_last_human_utt_dialog(dialog: Dict) -> Dict:
     return [{'sentences': [dialog['human_utterances'][-1]['annotations']["spelling_preprocessing"]]}]
 
 
+def cobot_intent_topics_annot_dialog(dialog: Dict) -> Dict:
+    return [{'sentences': [dialog['human_utterances'][-1]['annotations']["cobot_intent_topics"]]}]
+
+
 def last_bot_utt_dialog(dialog: Dict) -> Dict:
     return [{'sentences': [dialog['bot_utterances'][-1]['text']]}]
 
