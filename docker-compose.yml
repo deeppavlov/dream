@@ -44,6 +44,26 @@ services:
       resources:
         reservations:
           memory: 2.5G
+  cobot_topics:
+    build:
+      context: ./annotators/cobot_topics/
+    command: bash -c "gunicorn --workers=1 server:app -b 0.0.0.0:8002 -t 60"
+    deploy:
+      mode: replicated
+      replicas: 4
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+  cobot_dialogact_topics:
+    build:
+      context: ./annotators/cobot_dialogact_topics/
+    command: bash -c "gunicorn --workers=1 server:app -b 0.0.0.0:8003 -t 60"
+    deploy:
+      mode: replicated
+      replicas: 4
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   cobot_convers_evaluator_annotator:
     build:
       args:
@@ -65,6 +85,16 @@ services:
       resources:
         reservations:
           memory: 2.5G
+  cobot_dialogact_intents:
+    build:
+      context: ./annotators/cobot_dialogact_intents/
+    command: bash -c "gunicorn --workers=1 server:app -b 0.0.0.0:8005 -t 60"
+    deploy:
+      mode: replicated
+      replicas: 4
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
   cobot_nounphrases:
     build:
       context: ./annotators/cobot_nounphrases/

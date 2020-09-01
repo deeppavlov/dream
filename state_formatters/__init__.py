@@ -16,7 +16,7 @@ all_formatters = {
     'cobot_classifiers_formatter_service': cobot_classifiers_formatter_service,
     'cobot_intent_topics_formatter_service': cobot_intent_topics_formatter_service,
     'cobot_conv_eval_formatter_dialog': cobot_conv_eval_formatter_dialog,
-    'cobot_intent_topics_formatter_service': cobot_intent_topics_formatter_service,
+    'cobot_intent_topics_annot_dialog': cobot_intent_topics_annot_dialog,
     'cobot_formatter_dialog': cobot_formatter_dialog,
     'base_response_selector_formatter_service': base_response_selector_formatter_service,
     'sent_rewrite_formatter_dialog': sent_rewrite_formatter_dialog,
