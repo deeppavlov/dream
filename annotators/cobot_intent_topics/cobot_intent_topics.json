@@ -1,7 +1,7 @@
 {
   "chainer": {
     "in": [
-      "x"
+      "sentences"
     ],
     "in_y": [
       "y"
@@ -9,11 +9,11 @@
     "pipe": [
       {
         "class_name": "bert_preprocessor",
-        "vocab_file": "{DOWNLOADS_PATH}/bert_models/uncased_L-12_H-768_A-12/vocab.txt",
+        "vocab_file": "{MODEL_PATH}/vocab.txt",
         "do_lower_case": false,
         "max_seq_length": 64,
         "in": [
-          "x"
+          "sentences"
         ],
         "out": [
           "bert_features"
@@ -25,8 +25,8 @@
         "fit_on": [
           "y"
         ],
-        "save_path": "{MODEL_PATH}/{MODEL_NAME}/classes.dict",
-        "load_path": "{MODEL_PATH}/{MODEL_NAME}/classes.dict",
+        "save_path": "{MODEL_PATH}/classes.dict",
+        "load_path": "{MODEL_PATH}/classes.dict",
         "in": "y",
         "out": "y_ids"
       },
@@ -43,10 +43,10 @@
         "return_probas": true,
         "one_hot_labels": true,
         "multilabel": true,
-        "bert_config_file": "{DOWNLOADS_PATH}/bert_models/uncased_L-12_H-768_A-12/bert_config.json",
-        "pretrained_bert": "{DOWNLOADS_PATH}/bert_models/uncased_L-12_H-768_A-12/bert_model.ckpt",
-        "save_path": "{MODEL_PATH}/{MODEL_NAME}/{MODEL_NAME}",
-        "load_path": "{MODEL_PATH}/{MODEL_NAME}/{MODEL_NAME}",
+        "bert_config_file": "{MODEL_PATH}/bert_config.json",
+        "pretrained_bert": "{MODEL_PATH}/bert_model.ckpt",
+        "save_path": "{MODEL_PATH}/model",
+        "load_path": "{MODEL_PATH}/model",
         "keep_prob": 0.5,
         "learning_rate": 1e-05,
         "learning_rate_drop_patience": 5,
@@ -92,8 +92,8 @@
     ],
     "download": [
       {
-        "url": "http://files.deeppavlov.ai/alexaprize_data/bert/cobot_intent_topics.zip",
-        "subdir": "{DOWNLOADS_PATH}/bert_models"
+        "url": "http://files.deeppavlov.ai/alexaprize_data/cobot_intent_topics.tar.gz",
+        "subdir": "{MODEL_PATH}"
       }
     ]
   }
