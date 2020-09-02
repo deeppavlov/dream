@@ -39,7 +39,7 @@ NEWS_TOPICS = ["Sports", "Politics", "Economy", "Science", "Arts", "Health", "Ed
 NEWS_API_REQUESTOR = CachedRequestsAPI(renew_freq_time=10800)  # time in seconds
 DEFAULT_NEWS_OFFER_CONFIDENCE = 1.
 WHAT_TYPE_OF_NEWS_CONFIDENCE = 0.9
-NOT_SPECIFIC_NEWS_OFFER_CONFIDENCE = 0.95
+NOT_SPECIFIC_NEWS_OFFER_CONFIDENCE = 1.
 DEFAULT_NEWS_DETAILS_CONFIDENCE = 1.
 LINKTO_CONFIDENCE = 0.9
 LINKTO_FOR_LONG_RESPONSE_CONFIDENCE = 0.7
@@ -77,7 +77,7 @@ def extract_topics(curr_uttr):
             continue
         ent = ent[0]
         # if not (ent["text"].lower() == "alexa" and curr_uttr["text"].lower()[:5] == "alexa") and \
-        if "news" not in ent["text"].lower():
+        if "news" not in ent["text"].lower() and ent["text"].lower() not in ["me"]:
             entities.append(ent["text"].lower())
     if len(entities) == 0:
         for ent in curr_uttr["annotations"].get("cobot_nounphrases", []):
