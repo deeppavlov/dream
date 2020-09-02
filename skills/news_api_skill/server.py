@@ -33,7 +33,7 @@ app = Flask(__name__)
 N_FACTS_TO_CHOSE = 3
 ASYNC_SIZE = int(os.environ.get('ASYNC_SIZE', 6))
 
-BANNED_UNIGRAMS = ["I", 'i', "news", "something", "anything"]
+BANNED_UNIGRAMS = ["I", 'i', "news", "something", "anything", "me"]
 NEWS_TOPICS = ["Sports", "Politics", "Economy", "Science", "Arts", "Health", "Education"]
 
 NEWS_API_REQUESTOR = CachedRequestsAPI(renew_freq_time=10800)  # time in seconds
@@ -77,11 +77,10 @@ def extract_topics(curr_uttr):
             continue
         ent = ent[0]
         # if not (ent["text"].lower() == "alexa" and curr_uttr["text"].lower()[:5] == "alexa") and \
-        if "news" not in ent["text"].lower() and ent["text"].lower() not in ["me"]:
+        if "news" not in ent["text"].lower():
             entities.append(ent["text"].lower())
     if len(entities) == 0:
         for ent in curr_uttr["annotations"].get("cobot_nounphrases", []):
-            logger.info(f"entity: {ent}")
             if ent.lower() not in BANNED_UNIGRAMS and "news" not in ent.lower():
                 if ent in entities:
                     pass
@@ -115,6 +114,7 @@ def collect_topics_and_statuses(dialogs):
         prev_news_skill_output = get_skill_outputs_from_dialog(
             dialog["utterances"][-3:], skill_name="news_api_skill", activated=True)
         if len(prev_news_skill_output) > 0 and len(prev_news_skill_output[-1]) > 0:
+            logger.info(f"News skill was prev active.")
             prev_news_skill_output = prev_news_skill_output[-1]
             prev_status = prev_news_skill_output.get("news_status", "")
             prev_topic = prev_news_skill_output.get("news_topic", "")
@@ -141,7 +141,7 @@ def collect_topics_and_statuses(dialogs):
                 for prev_news_out in prev_news_skill_output:
                     if prev_news_out.get("curr_news", {}) != {}:
                         prev_news = prev_news_out.get("curr_news", {})
-                logger.info(f"News skill was prev active. User requested more news. Prev news was: {prev_news}")
+                logger.info(f"User requested more news. Prev news was: {prev_news}")
                 topics.append(prev_topic)
                 statuses.append("headline")
                 prev_news_samples.append(prev_news)
@@ -173,6 +173,7 @@ def collect_topics_and_statuses(dialogs):
                 statuses.append("finished")
                 prev_news_samples.append(prev_news)
         else:
+            logger.info(f"News skill was NOT active.")
             about_news = (({"News"} & set(curr_uttr["annotations"].get("cobot_topics", {}).get(
                 "text", []))) or re.search(NEWS_TEMPLATES, curr_uttr["text"].lower())) and \
                 not re.search(FALSE_NEWS_TEMPLATES, curr_uttr["text"].lower())
@@ -185,7 +186,7 @@ def collect_topics_and_statuses(dialogs):
             elif about_news:
                 # the request contains something about news
                 entities = extract_topics(curr_uttr)
-                logger.info(f"Found entities: `{entities}`")
+                logger.info(f"News request on entities: `{entities}`")
                 if re.search(TELL_MORE_NEWS_TEMPLATES, curr_uttr["text"].lower()):
                     # user requestd more news.
                     # look for the last 3 turns and find last discussed news sample
@@ -260,6 +261,8 @@ def respond():
         # result is a list of articles. the first one is top rated news.
         curr_topic = topics[i]
         curr_status = statuses[i]
+        logger.info(f"Composing answer for topic: {curr_topic} and status: {curr_status}.")
+        logger.info(f"Result: {result}.")
 
         bot_attr = dialogs[i]["bot"]["attributes"]
         bot_attr["used_links"] = bot_attr.get("used_links", defaultdict(list))
