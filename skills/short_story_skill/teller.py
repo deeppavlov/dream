@@ -93,6 +93,7 @@ class Teller:
             else:  # The type of story is already specified in intial intent
                 phrase, status, attributes = self.choose_story(attributes, story_type)
         elif state.get('state', '') == 'do_you_mind' and yes:  # Want a story -> yes
+            confidence = 1.0
             phrase = random.choice(self.phrases["which_story"])
             status = self.status_constants["must"]
             attributes['state'] = 'which_story'
