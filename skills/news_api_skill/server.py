@@ -72,15 +72,15 @@ def extract_topics(curr_uttr):
         list of mentioned entities/nounphrases
     """
     entities = []
-    for ent in curr_uttr["annotations"]["ner"]:
+    for ent in curr_uttr["annotations"].get("ner", []):
         if not ent:
             continue
         ent = ent[0]
-        if not (ent["text"].lower() == "alexa" and curr_uttr["text"].lower()[:5] == "alexa") and \
-                "news" not in ent["text"].lower():
+        # if not (ent["text"].lower() == "alexa" and curr_uttr["text"].lower()[:5] == "alexa") and \
+        if "news" not in ent["text"].lower():
             entities.append(ent["text"].lower())
     if len(entities) == 0:
-        for ent in curr_uttr["annotations"]["cobot_nounphrases"]:
+        for ent in curr_uttr["annotations"].get("cobot_nounphrases", []):
             logger.info(f"entity: {ent}")
             if ent.lower() not in BANNED_UNIGRAMS and "news" not in ent.lower():
                 if ent in entities:
@@ -125,13 +125,13 @@ def collect_topics_and_statuses(dialogs):
                 statuses.append("details")
                 prev_news_samples.append(prev_news)
             elif prev_status == OFFERED_NEWS_DETAILS_STATUS and is_no(curr_uttr):
-                logger.info(f"User refuse to get news details")
+                logger.info("User refuse to get news details")
                 topics.append(prev_topic)
                 statuses.append("finished")
                 prev_news_samples.append(prev_news)
             elif (prev_status == OFFERED_BREAKING_NEWS_STATUS or BREAKING_NEWS.lower() in prev_bot_uttr_lower) and \
                     is_yes(curr_uttr):
-                logger.info(f"Detected topic for news: all.")
+                logger.info("Detected topic for news: all.")
                 topics.append("all")
                 statuses.append("headline")
                 prev_news_samples.append(prev_news)
@@ -147,7 +147,7 @@ def collect_topics_and_statuses(dialogs):
                 prev_news_samples.append(prev_news)
             elif prev_status == OFFERED_SPECIFIC_NEWS_STATUS:
                 if not (news_rejection(curr_uttr["text"].lower()) or is_no(curr_uttr)):
-                    logger.info(f"User chose the topic for news")
+                    logger.info("User chose the topic for news")
                     if "first" in curr_uttr["text"].lower() or "any" in curr_uttr["text"].lower() or \
                             "both" in curr_uttr["text"].lower():
                         topics.append(prev_topic.split()[0])
@@ -168,7 +168,7 @@ def collect_topics_and_statuses(dialogs):
                     statuses.append("finished")
                     prev_news_samples.append(prev_news)
             else:
-                logger.info(f"News skill was active and now can offer more news.")
+                logger.info("News skill was active and now can offer more news.")
                 topics.append("all")
                 statuses.append("finished")
                 prev_news_samples.append(prev_news)
@@ -178,7 +178,7 @@ def collect_topics_and_statuses(dialogs):
                 not re.search(FALSE_NEWS_TEMPLATES, curr_uttr["text"].lower())
             if BREAKING_NEWS.lower() in prev_bot_uttr_lower and is_yes:
                 # news skill was not previously active
-                logger.info(f"Detected topic for news: all.")
+                logger.info("Detected topic for news: all.")
                 topics.append("all")
                 statuses.append("headline")
                 prev_news_samples.append({})
@@ -218,7 +218,7 @@ def collect_topics_and_statuses(dialogs):
                     statuses.append("headline")
                     prev_news_samples.append({})
             else:
-                logger.info(f"Didn't detected news request.")
+                logger.info("Didn't detected news request.")
                 topics.append("all")
                 statuses.append("finished")
                 prev_news_samples.append({})
@@ -363,8 +363,8 @@ def respond():
                         "can_continue": CAN_CONTINUE, "curr_news": prev_news_samples[i]}
             else:
                 logger.info("No latest news found.")
-                response = f"Sorry, seems like all the news slipped my mind. Let's chat about something else." \
-                           f"What do you want to talk about?"
+                response = "Sorry, seems like all the news slipped my mind. Let's chat about something else." \
+                           "What do you want to talk about?"
                 confidence = NOT_SPECIFIC_NEWS_OFFER_CONFIDENCE
                 attr = {"news_status": OFFERED_BREAKING_NEWS_STATUS, "can_continue": CAN_CONTINUE}
 
