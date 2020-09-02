@@ -97,7 +97,7 @@ def respond():
     sentences = request.json["sentences"]
 
     corrected_sentences = [preprocess(text) for text in sentences]
-    corrected_sentences = SPELL_CHECK_MODEL(corrected_sentences)
+    # corrected_sentences = SPELL_CHECK_MODEL(corrected_sentences)
 
     total_time = time.time() - st_time
     logger.info(f'Spelling Preprocessing exec time: {total_time:.3f}s')
