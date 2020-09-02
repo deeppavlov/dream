@@ -19,6 +19,7 @@ class Teller:
         """
         Determine what type of story user requested
         """
+        sentence = sentence.lower()
         if re.search("fun((ny)|(niest)){0,1}", sentence):
             return "funny"
         elif re.search("(horror)|(scary)|(frightening)|(spooky)", sentence):
