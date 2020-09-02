@@ -52,8 +52,8 @@ def update_utterances(utterances=[], response=None, text_request=""):
 
 request_utters = [
     "hi",
-    "top of year",
     "yes",
+    "top of year",
     "go on",
     "move on",
     "top of year",
@@ -67,11 +67,11 @@ request_utters = [
     "top",
 ]
 true_response_utters = [
-    "Love games. Got a list of the top released games, wanna discuss it? Say tell me about the best games",
+    "Love games. Got a list of the top released games, wanna discuss it?",
+    "I can tell you a few things about popular games. For now, I can talk about the most popular games for this or last year, last month, or even the last week (hotties!). Which of these time periods is of interest for you?",
     " There were 3 newly released games highly rated in the last week. Do you want to learn more? ",
     "The game with the highest rating is Risk of Rain 2. It was released on August 11 2020. It's a combination of Action Shooter & Arcade. 48 percent of people marked Risk of Rain 2 as recommended.  If you want to discuss it in details say I want to talk about it.  Talking about it or going on? ",
     "The next game is Ghostrunner. It's Action. 33 percent of people marked Ghostrunner as skip.  Chatting about it or the next one? ",
-    "The next game is UnderMine. It was released on August 06 2020. It's a combination of Action, Adventure RPG & Indie. 53 percent of people marked UnderMine as recommended.  These are all the games from the past week.  If you want to discuss it in details say I want to talk about it.  Otherwise we can always talk about other things.",
     " There were 20 newly released games highly rated in this year. Do you want to learn more? ",
     "The game with the highest rating is The Last of Us Part II. It was released on June 19 2020. It's a combination of Action Shooter & Adventure. 72 percent of people marked The Last of Us Part II as exceptional.  If you want to discuss it in details say I want to talk about it.  Discussing it or moving on? ",
     "Have you played it before? ",
@@ -103,7 +103,7 @@ def test_skill():
             print(f"true_resp_utter = {true_resp_utter}")
             print(f"cand_resp_utter = {text}")
             print(f"ratio = {ratio}")
-            if ratio < 0.4:
+            if ratio < 0.35:
                 warnings += 1
         # print(difflib.SequenceMatcher(None, true_resp_utter.split(), text.split()).ratio())
     assert warnings == 0

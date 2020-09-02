@@ -26,7 +26,7 @@ request_utters = [
     "top",
 ]
 true_response_utters = [
-    "Love games. Got a list of the top released games, wanna discuss it? Say tell me about the best games",
+    "Love games. Got a list of the top released games, wanna discuss it?",
     " There were 3 newly released games highly rated in the last week. Do you want to learn more? ",
     "The game with the highest rating is Risk of Rain 2. It was released on August 11 2020. It's a combination of Action Shooter & Arcade. 48 percent of people marked Risk of Rain 2 as recommended.  If you want to discuss it in details say I want to talk about it.  Talking about it or going on? ",
     "The next game is Ghostrunner. It's Action. 33 percent of people marked Ghostrunner as skip.  Chatting about it or the next one? ",
