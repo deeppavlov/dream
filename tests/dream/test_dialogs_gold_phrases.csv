@@ -1,5 +1,5 @@
 "skill_names" "phrase text" response1 response2 response3
-"program_y" "Let's chat" "Hi, this is an experimental DeepPavlov Socialbot." "Good Morning, this is an experimental DeepPavlov Socialbot!" "Hello, this is an experimental DeepPavlov Socialbot!" "Good Evening, this is an experimental DeepPavlov Socialbot!" "Good Night, this is an experimental DeepPavlov Socialbot!"
+"program_y" "Let's chat" "Hi, this is a DeepPavlov Dream AI Assistant demo." "Good Morning, this is a DeepPavlov Dream AI Assistant demo!" "Hello, this is a DeepPavlov Dream AI Assistant demo!" "Good Evening, this is a DeepPavlov Dream AI Assistant demo!" "Good Night, this is a DeepPavlov Dream AI Assistant demo!"
 "program_y;meta_script_skill;greeting_skill" "good"
 "program_y;meta_script_skill" "How are you" "Do you want to know what I can do?"
 "program_y;meta_script_skill" "yes sure" "socialbot"
