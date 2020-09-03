@@ -27,6 +27,7 @@ class Responder:
 
         utt = dialog["utterances"][-1]
         for intent_name, intent_data in utt['annotations'].get('intent_catcher', {}).items():
+            print("intent name: " + intent_name, flush=True)
             if intent_data['detected'] and intent_data['confidence'] > confidence:
                 if intent_name in self.response_funcs:
                     dialog['seen'] = dialog['called_intents'][intent_name]

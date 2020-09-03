@@ -100,6 +100,12 @@ def what_time_respond(dialog, response_phrases):
     return response
 
 
+def what_is_current_dialog_id_respond(dialog, response_phrases):
+    dialog_id = dialog["dialog_id"]
+    response = f"Dialog id is: {dialog_id}"
+    return response
+
+
 def what_is_your_name_respond(dialog, response_phrases):
     already_known_user_property = dialog["human"]["profile"].get("name", None)
     if already_known_user_property is None:
@@ -123,5 +129,6 @@ def get_respond_funcs():
         # "stupid": random_respond,
         "choose_topic": random_respond,
         "cant_do": random_respond,
-        "tell_me_a_story": random_respond
+        "tell_me_a_story": random_respond,
+        "get_dialog_id" : what_is_current_dialog_id_respond
     }

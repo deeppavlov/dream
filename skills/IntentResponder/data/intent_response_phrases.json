@@ -80,5 +80,6 @@
     "last":[
       "I will be able to do it later, ok?"
     ]
-  }
+  },
+  "get_dialog_id": []
 }
