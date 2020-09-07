@@ -197,35 +197,45 @@
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
             },
+            "cobot_intent_topics": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://cobot_intent_topics:8001/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:cobot_intent_topics_formatter_service",
+                "state_manager_method": "add_annotation",
+                "required_previous_services": ["annotators.spelling_preprocessing"]
+            },
             "cobot_topics": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://cobot_topics:8001/model"
+                    "url": "http://cobot_topics:8002/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:cobot_topics_formatter_service",
+                "dialog_formatter": "state_formatters.dp_formatters:cobot_intent_topics_annot_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.spelling_preprocessing"]
+                "required_previous_services": ["annotators.cobot_intent_topics"]
             },
             "cobot_dialogact_topics": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://cobot_dialogact_topics:8002/model"
+                    "url": "http://cobot_dialogact_topics:8003/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:cobot_dialogact_topics_formatter_service",
+                "dialog_formatter": "state_formatters.dp_formatters:cobot_intent_topics_annot_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.spelling_preprocessing"]
+                "required_previous_services": ["annotators.cobot_intent_topics"]
             },
             "cobot_dialogact_intents": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://cobot_dialogact_intents:8003/model"
+                    "url": "http://cobot_dialogact_intents:8005/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:cobot_dialogact_intents_formatter_service",
+                "dialog_formatter": "state_formatters.dp_formatters:cobot_intent_topics_annot_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.spelling_preprocessing"]
+                "required_previous_services": ["annotators.cobot_intent_topics"]
             },
             "kbqa": {
                 "connector": {
@@ -265,7 +275,8 @@
                 "required_previous_services": ["annotators.intent_catcher",
                    "annotators.blacklisted_words", "annotators.asr",
                    "annotators.toxic_classification",
-                   "annotators.cobot_topics", "annotators.cobot_dialogact_topics",
+                   "annotators.cobot_topics",
+                   "annotators.cobot_dialogact_topics",
                    "annotators.cobot_dialogact_intents",
                    "annotators.sentrewrite"],
                 "tags": ["selector"]
