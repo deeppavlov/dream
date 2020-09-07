@@ -7,22 +7,22 @@ services:
       - ".:/dp-agent"
     ports:
       - 4242:4242
-  cobot_intent_topics:
-    env_file: [.env.dev]
-    volumes:
-      - "./annotators/cobot_intent_topics:/src"
-    ports:
-      - 8001:8001
   cobot_topics:
     env_file: [.env.dev]
     volumes:
       - "./annotators/cobot_topics:/src"
     ports:
-      - 8002:8002
+      - 8001:8001
   cobot_dialogact_topics:
     env_file: [.env.dev]
     volumes:
       - "./annotators/cobot_dialogact_topics:/src"
+    ports:
+      - 8002:8002
+  cobot_dialogact_intents:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/cobot_dialogact_intents:/src"
     ports:
       - 8003:8003
   cobot_convers_evaluator_annotator:
@@ -31,12 +31,6 @@ services:
       - "./annotators/cobot_convers_evaluator_annotator:/src"
     ports:
       - 8004:8004
-  cobot_dialogact_intents:
-    env_file: [.env.dev]
-    volumes:
-      - "./annotators/cobot_dialogact_intents:/src"
-    ports:
-      - 8005:8005
   cobot_nounphrases:
     env_file: [.env.dev]
     volumes:
