@@ -245,16 +245,22 @@ def cobot_classifiers_formatter_service(payload: List):
         return {"text": []}
 
 
-def cobot_dialogact_intents_formatter_service(payload: List):
-    return {"text": [j[0] for j in payload]}
-
-
-def cobot_dialogact_topics_formatter_service(payload: List):
-    return {"text": [j[0] for j in payload]}
-
-
-def cobot_topics_formatter_service(payload: List):
-    return {"text": [j[0] for j in payload]}
+def cobot_intent_topics_formatter_service(payload: List):
+    ans = {'cobot_topics': {'text':[]}, 
+           'cobot_dialogact_topics': {'text':[]},
+           'cobot_dialogact_intents': {'text':[]}}
+    payload = payload[0]
+    for i in range(len(payload)): # we iterate over payload. I forgot how to do it
+        if '_ct' in payload[i]:
+            topic_name = payload[i].split('_ct')[0]
+            ans['cobot_topics']['text'].append(topic_name)
+        elif '_dct' in payload[i]:
+            topic_name = payload[i].split('_dct')[0]
+            ans['cobot_dialogact_topics']['text'].append(topic_name)
+        elif '_dci' in payload[i]:
+            topic_name = payload[i].split('_dci')[0]
+            ans['cobot_dialogact_intents']['text'].append(topic_name)
+    return ans
 
 
 def cobot_formatter_dialog(dialog: Dict):
@@ -318,6 +324,10 @@ def last_utt_dialog(dialog: Dict) -> Dict:
 def preproc_last_human_utt_dialog(dialog: Dict) -> Dict:
     # Used by: sentseg over human uttrs
     return [{'sentences': [dialog['human_utterances'][-1]['annotations']["spelling_preprocessing"]]}]
+
+
+def cobot_intent_topics_annot_dialog(dialog: Dict) -> Dict:
+    return [{'sentences': [dialog['human_utterances'][-1]['annotations']["cobot_intent_topics"]]}]
 
 
 def last_bot_utt_dialog(dialog: Dict) -> Dict:
