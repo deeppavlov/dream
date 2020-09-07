@@ -1,4 +1,25 @@
 services:
+  cobot_topics:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - HOST=10.11.1.251
+      - PORT=8001
+  cobot_dialogact_topics:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - HOST=10.11.1.251
+      - PORT=8002
+  cobot_dialogact_intents:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - HOST=10.11.1.251
+      - PORT=8003
   cobot_convers_evaluator_annotator:
     build:
       context: dp/proxy/

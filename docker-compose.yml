@@ -5,9 +5,8 @@ services:
       context: ./
       dockerfile: dockerfile_agent
     environment:
-      WAIT_HOSTS: "cobot_intent_topics:8001, cobot_topics:8002,cobot_dialogact_topics:8003,
-        cobot_dialogact_intents:8005, cobot_nounphrases:8006,program_y:8008, sentseg:8011,
-        convers_evaluation_selector:8009, personality_catcher:8010,
+      WAIT_HOSTS: "cobot_topics:8001, cobot_dialogact_topics:8002, cobot_dialogact_intents:8003,
+        cobot_nounphrases:8006,program_y:8008, sentseg:8011, convers_evaluation_selector:8009, personality_catcher:8010,
         intent_responder:8012, intent_catcher:8014, blacklisted_words:8018,
         toxic_classification:8013, sentrewrite:8017, ner:8021,  program_y_dangerous:8022, movie_skill:8023,
         sentiment_classification:8024,
@@ -25,13 +24,14 @@ services:
         constraints:
           - node.labels.with_gpu != true
           - node.labels.is_agent == true
-  cobot_intent_topics:
+  cobot_topics:
     build:
       args:
-        skill_endpoint: model
-        skillconfig: annotators/cobot_intent_topics/cobot_intent_topics.json
+        skill_endpoint: cobot_topics
+        skillconfig: annotators/cobot_topics/cobot_bert.json
+        skillhost: 0.0.0.0
         skillport: 8001
-        skilldir: annotators/cobot_intent_topics/
+        skilldir: annotators/cobot_topics/
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -45,26 +45,48 @@ services:
       resources:
         reservations:
           memory: 2.5G
-  cobot_topics:
-    build:
-      context: ./annotators/cobot_topics/
-    command: bash -c "gunicorn --workers=1 server:app -b 0.0.0.0:8002 -t 60"
-    deploy:
-      mode: replicated
-      replicas: 4
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
   cobot_dialogact_topics:
     build:
-      context: ./annotators/cobot_dialogact_topics/
-    command: bash -c "gunicorn --workers=1 server:app -b 0.0.0.0:8003 -t 60"
+      args:
+        skill_endpoint: cobot_dialogact_topics
+        skillconfig: annotators/cobot_dialogact_topics/cobot_bert.json
+        skillhost: 0.0.0.0
+        skillport: 8002
+        skilldir: annotators/cobot_dialogact_topics/
+      context: ./
+      dockerfile: dp/dockerfile_skill_gpu
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 1
       placement:
         constraints:
-          - node.labels.with_gpu != true
+          - node.labels.with_gpu == true
+      resources:
+        reservations:
+          memory: 2.5G
+  cobot_dialogact_intents:
+    build:
+      args:
+        skill_endpoint: cobot_dialogact_intents
+        skillconfig: annotators/cobot_dialogact_intents/cobot_bert.json
+        skillhost: 0.0.0.0
+        skillport: 8003
+        skilldir: annotators/cobot_dialogact_intents/
+      context: ./
+      dockerfile: dp/dockerfile_skill_gpu
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu == true
+      resources:
+        reservations:
+          memory: 2.5G
   cobot_convers_evaluator_annotator:
     build:
       args:
@@ -86,16 +108,6 @@ services:
       resources:
         reservations:
           memory: 2.5G
-  cobot_dialogact_intents:
-    build:
-      context: ./annotators/cobot_dialogact_intents/
-    command: bash -c "gunicorn --workers=1 server:app -b 0.0.0.0:8005 -t 60"
-    deploy:
-      mode: replicated
-      replicas: 4
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
   cobot_nounphrases:
     build:
       context: ./annotators/cobot_nounphrases/
