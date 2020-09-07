@@ -9,11 +9,20 @@ settings = read_json(settings_path)
 
 settings['model_defaults'] = settings.get('model_defaults', {})
 
-settings['model_defaults']['cobot_intent_topics'] = {
+settings['model_defaults']['cobot_topics'] = {
     "model_endpoint": "/model",
     "model_args_names": ["sentences"]
 }
 
+settings['model_defaults']['cobot_dialogact_topics'] = {
+    "model_endpoint": "/model",
+    "model_args_names": ["sentences"]
+}
+
+settings['model_defaults']['cobot_dialogact_intents'] = {
+    "model_endpoint": "/model",
+    "model_args_names": ["sentences"]
+}
 
 settings['model_defaults']['kbqa'] = {
     "model_endpoint": "/answers",
