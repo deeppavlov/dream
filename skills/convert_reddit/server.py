@@ -7,6 +7,7 @@ import json
 import difflib
 import traceback
 import re
+import pathlib
 
 import tensorflow_hub as tfhub
 import tensorflow as tf
@@ -16,6 +17,8 @@ import spacy
 from flask import Flask, request, jsonify
 from flasgger import Swagger, swag_from
 import sentry_sdk
+
+import utils
 
 tensorflow_text.__name__
 
@@ -45,26 +48,19 @@ random.seed(SEED)
 sess = tf.InteractiveSession(graph=tf.Graph())
 
 module = tfhub.Module(MODEL_PATH)
-response_encodings, responses = pickle.load(open(DATABASE_PATH, "rb"))
+response_encodings, responses = pickle.load(pathlib.Path(DATABASE_PATH).open("rb"))
+response_encodings = np.array(response_encodings)
 confidences = np.load(CONFIDENCE_PATH)
 
 nlp = spacy.load("en_core_web_sm")
 
-spaces_pat = re.compile(r"\s+")
-special_symb_pat = re.compile(r"[^A-Za-z0-9 ]")
+local_data_dir = pathlib.Path("data")
+banned_responses = json.load((local_data_dir / "banned_responses_v3.json").open())
+banned_phrases = json.load((local_data_dir / "banned_phrases.json").open())
+banned_words = json.load((local_data_dir / "banned_words.json").open())
+banned_words_for_questions = json.load((local_data_dir / "banned_words_for_questions.json").open())
 
-
-def clear_text(text):
-    text = special_symb_pat.sub("", spaces_pat.sub(" ", text.lower().replace("\n", " "))).strip()
-    text = text.replace("\u2019", "'")
-    return text
-
-
-banned_responses = json.load(open("./banned_responses.json"))
-banned_responses = [clear_text(utter) for utter in banned_responses]
-banned_phrases = json.load(open("./banned_phrases.json"))
-banned_words = json.load(open("./banned_words.json"))
-banned_words_for_questions = json.load(open("./banned_words_for_questions.json"))
+banned_responses = [utils.clear_text(utter) for utter in banned_responses]
 
 text_placeholder = tf.placeholder(dtype=tf.string, shape=[None])
 extra_text_placeholder = tf.placeholder(dtype=tf.string, shape=[None])
@@ -139,26 +135,6 @@ def sample_candidates(candidates, choice_num=1, replace=False, softmax_temperatu
     return sampled_candidates.tolist()
 
 
-def is_question(sent):
-    return re.search("^(do|can|could|will|would|how|who|where|when|what|why)", sent.lower())
-
-
-def add_question_mark(sent):
-    sent = sent.strip()
-    if re.findall("[a-z ][.!?]$", sent.lower()):
-        sent = sent[:-1] + "?"
-    else:
-        sent = sent + "?"
-    return sent
-
-
-def format_cand(cand):
-    cand = " ".join(
-        [(add_question_mark(sent.text) if is_question(sent.text) else sent.text) for sent in nlp(cand).sents]
-    )
-    return cand
-
-
 def inference(utterances_histories, approximate_confidence_is_enabled=True):
     context_encoding = encode_context(utterances_histories)
     scores = context_encoding.dot(response_encodings.T)
@@ -169,17 +145,17 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True):
         if not [
             None
             for f_utter in banned_responses
-            if difflib.SequenceMatcher(None, f_utter.split(), clear_text(cand).split()).ratio() > 0.9
+            if difflib.SequenceMatcher(None, f_utter.split(), utils.clear_text(cand).split()).ratio() > 0.9
         ]:
             filtered_indices.append(ind)
 
     if is_unanswerable_utters(utterances_histories):
-        return "", 0.0
+        return [""], [0.0]
 
-    clear_utterances_histories = [clear_text(utt).split() for utt in utterances_histories[::-1][1::2][::-1]]
+    clear_utterances_histories = [utils.clear_text(utt).split() for utt in utterances_histories[::-1][1::2][::-1]]
 
     for ind in reversed(filtered_indices):
-        cand = clear_text(responses[ind]).split()
+        cand = utils.clear_text(responses[ind]).split()
         raw_cand = responses[ind].lower()
         # hello ban
         hello_flag = any([j in cand[:3] for j in ["hi", "hello"]])
@@ -203,22 +179,22 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True):
 
     if len(filtered_indices) > 0:
         candidates = [
-            (clear_text(responses[ind]), approximate_confidence(scores[ind], approximate_confidence_is_enabled))
+            (utils.clear_text(responses[ind]), approximate_confidence(scores[ind], approximate_confidence_is_enabled))
             for ind in filtered_indices
         ]
         try:
             selected_candidates = sample_candidates(
                 candidates, choice_num=NUM_SAMPLE, softmax_temperature=SOFTMAX_TEMPERATURE
             )
-            answers = [format_cand(cand[0]) for cand in selected_candidates]
+            answers = [cand[0] for cand in selected_candidates]
             confidences = [min(float(cand[1]) * 1.7, 0.99) for cand in selected_candidates]
             return answers, confidences
         except Exception:
             logger.error(traceback.format_exc())
             candidate = candidates[0]
-            return candidate
+            return [candidate[0]], [candidate[1]]
     else:
-        return "", 0.0
+        return [""], [0.0]
 
 
 @app.route("/convert_reddit", methods=["POST"])
