@@ -22,6 +22,8 @@ from common.utils import get_skill_outputs_from_dialog, is_yes, is_no
 from common.constants import CAN_CONTINUE
 from common.link import link_to
 
+from core.metrics import setup_metrics
+
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -29,6 +31,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+setup_metrics(app)
 
 N_FACTS_TO_CHOSE = 3
 ASYNC_SIZE = int(os.environ.get('ASYNC_SIZE', 6))
