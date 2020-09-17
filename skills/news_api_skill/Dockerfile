@@ -1,14 +1,13 @@
 FROM python:3.7.4
 
-RUN mkdir /src
-RUN mkdir /src/common
+WORKDIR /src
 
-COPY ./skills/news_api_skill/requirements.txt /src/requirements.txt
+COPY ./skills/news_api_skill/requirements.txt requirements.txt
 RUN pip install -r /src/requirements.txt
 RUN python -c "import nltk; nltk.download('punkt')"
 
-COPY ./skills/news_api_skill/ /src/
-COPY ./common/ /src/common/
-WORKDIR /src
+COPY ./skills/news_api_skill/ ./
+COPY ./common/ ./common/
+COPY ./core ./core
 
-CMD gunicorn --workers=1 server:app
+CMD gunicorn --workers=1 server:app --bind 0.0.0.0:8000
