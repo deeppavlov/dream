@@ -22,7 +22,7 @@ from common.utils import get_skill_outputs_from_dialog, is_yes, is_no
 from common.constants import CAN_CONTINUE
 from common.link import link_to
 
-from core.metrics import setup_metrics
+from common.metrics import setup_metrics
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
