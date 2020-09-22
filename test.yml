@@ -1,0 +1,47 @@
+services:
+  cobot_topics:
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  cobot_dialogact_topics:
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  cobot_dialogact_intents:
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
+  cobot_convers_evaluator_annotator:
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
+  toxic_classification:
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
+  sentiment_classification:
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
+  emotion_classification:
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
+  stop_detect:
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
+  kbqa:
+    build:
+      args:
+        skill_endpoint: answers
+        skillconfig: annotators/kbqa/kbqa_cq.json
+        skillhost: 0.0.0.0
+        skillport: 8072
+        skilldir: annotators/kbqa/
+        skip_download: 'true'
+      context: ./
+      dockerfile: annotators/kbqa/Dockerfile
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
+      - DOWNLOAD_AT_START=yes
+    volumes:
+      - "./annotators/kbqa:/src"
+      - "/cephfs/home/ignatov/kbqa_data:/root/.deeppavlov"
+  factoid_classification:
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
+version: '3.7'
+
