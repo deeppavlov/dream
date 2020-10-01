@@ -7,4 +7,4 @@ Please refer to our [readthedocs documentation](https://deeppavlov-agent.readthe
 
 - [Alexa Bot README](README-alexa.md)
 - Travis Tests Status on dev branch: [![Build Status](https://travis-ci.com/sld/dp-agent-alexa.svg?token=iYvsyXT3Gi1yjduLqC6t&branch=dev)](https://travis-ci.com/sld/dp-agent-alexa)
-- Jenkins Tests Status on dev branch: [![Build Status](http://ec2-3-231-163-236.compute-1.amazonaws.com:8080/buildStatus/icon?job=dp-agent-alexa%2Fdev)](http://ec2-3-231-163-236.compute-1.amazonaws.com:8080/blue/organizations/jenkins/dp-agent-alexa/branches)
+- Jenkins Tests Status on dev branch: [![Build Status](http://lnsigo.mipt.ru:8080/buildStatus/icon?job=assistant%2Fdev)](http://lnsigo.mipt.ru:8080/job/dp-multibranch/job/dev/)

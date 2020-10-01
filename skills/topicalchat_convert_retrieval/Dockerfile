@@ -3,10 +3,10 @@ FROM tensorflow/tensorflow:1.14.0-py3
 ########### DOWNLOADING MODELS ###########
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+    apt-get install -qy --no-install-recommends \
         curl &&\
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
-	rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/lib/apt/lists/* && \
     rm -rf /root/.cache
 
 RUN mkdir -p /root/convert_data && \

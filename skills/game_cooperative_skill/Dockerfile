@@ -1,9 +1,9 @@
 FROM python:3.7.4
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends cron && \
+    apt-get install -qy --no-install-recommends cron && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false &&  \
-	rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/lib/apt/lists/* && \
     rm -rf /root/.cache
 
 RUN mkdir /src

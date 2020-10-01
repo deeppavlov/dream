@@ -5,10 +5,10 @@ EXPOSE 5000
 WORKDIR /base
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+    apt-get install -qy --no-install-recommends \
         dpkg-dev \
         gcc \
-        git	\
+        git \
         libbz2-dev \
         libc6-dev \
         libcudnn7=7.6.2.24-1+cuda${CUDA_VERSION%.*} \
@@ -32,20 +32,20 @@ RUN apt-get update && \
     locale-gen ru_RU.UTF-8 && \
     wget --no-check-certificate -O python.tar.xz https://www.python.org/ftp/python/3.7.4/Python-3.7.4.tar.xz && \
     mkdir -p /usr/src/python && \
-	tar -xC /usr/src/python --strip-components=1 -f python.tar.xz && \
+    tar -xC /usr/src/python --strip-components=1 -f python.tar.xz && \
     rm python.tar.xz && \
     cd /usr/src/python && \
-	./configure && \
-	make -j "$(nproc)" altinstall && \
-	ln -s /usr/local/bin/python3.7 /usr/local/bin/python && \
+    ./configure && \
+    make -j "$(nproc)" altinstall && \
+    ln -s /usr/local/bin/python3.7 /usr/local/bin/python && \
     ln -s /usr/local/bin/pip3.7 /usr/local/bin/pip && \
     pip install virtualenv==16.7.5 && \
     virtualenv /base/venv && \
-	mkdir -p /venv/dp_internal_token_dir && \
+    mkdir -p /venv/dp_internal_token_dir && \
     cd /base && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
-	rm -rf /usr/src/python \
-	    /var/lib/apt/lists/*
+    rm -rf /usr/src/python \
+      /var/lib/apt/lists/*
 
 ENV PATH=/base/venv/bin:$PATH
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US.UTF-8' LC_ALL='en_US.UTF-8'

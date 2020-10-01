@@ -1,0 +1,6 @@
+server {
+  listen ${PORT};
+  location / {
+    proxy_pass http://${HOST}:${PORT};
+  }
+}

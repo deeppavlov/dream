@@ -6,7 +6,7 @@ services:
       dockerfile: dockerfile_agent
     environment:
       WAIT_HOSTS: "cobot_topics:8001, cobot_dialogact_topics:8002, cobot_dialogact_intents:8003,
-        cobot_nounphrases:8006,program_y:8008, sentseg:8011, convers_evaluation_selector:8009, personality_catcher:8010,
+        cobot_nounphrases:8006, program_y:8008, sentseg:8011, convers_evaluation_selector:8009, personality_catcher:8010,
         intent_responder:8012, intent_catcher:8014, blacklisted_words:8018,
         toxic_classification:8013, sentrewrite:8017, ner:8021,  program_y_dangerous:8022, movie_skill:8023,
         sentiment_classification:8024,
@@ -16,14 +16,8 @@ services:
         oscar_skill:8055, coronavirus_skill:8061, small_talk_skill:8062, game_cooperative_skill:8068, program_y_wide:8064,
         comet_conceptnet:8065, news_api_skill:8066, short_story_skill:8057, greeting_skill:8070, factoid_qa:8071, kbqa:8072,
         factoid_classification:8073, spelling_preprocessing:8074"
-      WAIT_HOSTS_TIMEOUT: 480
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
-          - node.labels.is_agent == true
+      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT}
+
   cobot_topics:
     build:
       args:
@@ -36,15 +30,7 @@ services:
       dockerfile: dp/dockerfile_skill_gpu
     environment:
       - CUDA_VISIBLE_DEVICES=0
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.with_gpu == true
-      resources:
-        reservations:
-          memory: 2.5G
+
   cobot_dialogact_topics:
     build:
       args:
@@ -57,15 +43,7 @@ services:
       dockerfile: dp/dockerfile_skill_gpu
     environment:
       - CUDA_VISIBLE_DEVICES=0
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.with_gpu == true
-      resources:
-        reservations:
-          memory: 2.5G
+
   cobot_dialogact_intents:
     build:
       args:
@@ -78,15 +56,7 @@ services:
       dockerfile: dp/dockerfile_skill_gpu
     environment:
       - CUDA_VISIBLE_DEVICES=0
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.with_gpu == true
-      resources:
-        reservations:
-          memory: 2.5G
+
   cobot_convers_evaluator_annotator:
     build:
       args:
@@ -99,79 +69,38 @@ services:
       dockerfile: dp/dockerfile_skill_gpu
     environment:
       - CUDA_VISIBLE_DEVICES=0
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.with_gpu == true
-      resources:
-        reservations:
-          memory: 2.5G
+
   cobot_nounphrases:
     build:
       context: ./annotators/cobot_nounphrases/
     command: bash -c "gunicorn --workers=1 server:app -b 0.0.0.0:8006 -t 60"
-    deploy:
-      mode: replicated
-      replicas: 4
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   program_y:
     build:
       context: .
       dockerfile: ./skills/program-y/Dockerfile
     working_dir: /src/dream_aiml/scripts/xnix
     command: ./sanic.sh
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
-      resources:
-        limits:
-          memory: 1G
+
   personality_catcher:
     build:
       context: ./skills/personality_catcher/
     command: uvicorn server:app --host 0.0.0.0 --port 8010
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   sentseg:
     build:
       context: ./annotators/SentSeg/
     command: bash -c "./setup.sh && gunicorn --workers=1 server:app -b 0.0.0.0:8011 -t 100"
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 4
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
-      resources:
-        limits:
-          memory: 2G
-        reservations:
-          memory: 2G
+
   convers_evaluation_selector:
     build:
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8009 -t 15
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   toxic_classification:
     build:
       args:
@@ -184,15 +113,7 @@ services:
       dockerfile: dp/dockerfile_skill_gpu
     environment:
       - CUDA_VISIBLE_DEVICES=0
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.with_gpu == true
-      resources:
-        reservations:
-          memory: 2.5G
+
   sentiment_classification:
     build:
       args:
@@ -205,92 +126,42 @@ services:
       dockerfile: dp/dockerfile_skill_gpu
     environment:
       - CUDA_VISIBLE_DEVICES=0
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.with_gpu == true
-      resources:
-        reservations:
-          memory: 2.5G
+
   sentrewrite:
     build:
       context: ./annotators/SentRewrite/
     command: bash -c "./setup.sh && gunicorn --workers=1 server:app -b 0.0.0.0:8017 -t 60"
-    deploy:
-      mode: replicated
-      replicas: 4
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   intent_responder:
     build:
       context: ./skills/IntentResponder/
     command: gunicorn --workers=1 --name=responder --bind 0.0.0.0:8012 --timeout=100 server:app
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 4
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   intent_catcher:
     build:
       context: ./annotators/IntentCatcher/
     command: gunicorn --workers=1 --name=catcher --bind 0.0.0.0:8014 --timeout=100 server:app
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
-          - node.labels.group == 1
-      resources:
-        limits:
-          memory: 4G
-        reservations:
-          memory: 3.5G
+
   blacklisted_words:
     build:
       context: ./annotators/BlacklistedWordsDetector/
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8018
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   program_y_dangerous:
     build:
       context: ./skills/program-y-dangerous/
     working_dir: /src/dream_aiml/scripts/xnix
     command: ./sanic.sh
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
-      resources:
-        limits:
-          memory: 1G
+
   movie_skill:
     build:
       context: .
       dockerfile: ./skills/movie_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8023 --timeout=300 --preload
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
-      resources:
-        reservations:
-          memory: 1.5G
+
   ner:
     build:
       context: ./annotators/NER/
@@ -299,36 +170,18 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8021 -t 100
     volumes: []
     tty: true
-    deploy:
-      mode: replicated
-      replicas: 4
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   alice:
     build:
       context: ./skills/ALICEChatAPI/
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8000
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
-      resources:
-        reservations:
-          memory: 2G
+
   eliza:
     build:
       context: ./skills/eliza/
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8047
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   book_tfidf_retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
@@ -339,12 +192,7 @@ services:
         CONFIDENCE_THRESHOLD: 0.51
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8039
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   entertainment_tfidf_retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
@@ -355,12 +203,7 @@ services:
         CONFIDENCE_THRESHOLD: 0.59
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8040
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   fashion_tfidf_retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
@@ -371,12 +214,7 @@ services:
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8041
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   movie_tfidf_retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
@@ -387,12 +225,7 @@ services:
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8042
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   music_tfidf_retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
@@ -403,12 +236,7 @@ services:
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8034
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   politics_tfidf_retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
@@ -419,12 +247,7 @@ services:
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8043
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   science_technology_tfidf_retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
@@ -435,12 +258,7 @@ services:
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8044
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   sport_tfidf_retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
@@ -451,12 +269,7 @@ services:
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8045
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   animals_tfidf_retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
@@ -467,135 +280,75 @@ services:
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8050
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   convert_reddit:
     build:
       context: ./skills/convert_reddit/
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8029 -t 60
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   personal_info_skill:
     build:
       context: .
       dockerfile: ./skills/personal_info_skill/Dockerfile
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8030
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   asr:
     build:
       context: .
       dockerfile: ./annotators/asr/Dockerfile
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8031
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   misheard_asr:
     build:
       context: ./skills/misheard_asr/
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8033
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   book_skill:
     build:
       context: .
       dockerfile: ./skills/book_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8032
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   christmas_new_year_skill:
     build:
       context: ./skills/christmas_new_year_skill/
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8036
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   superbowl_skill:
     build:
       context: ./skills/superbowl_skill/
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8051
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   oscar_skill:
     build:
       context: ./skills/oscar_skill/
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8055
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   valentines_day_skill:
     build:
       context: ./skills/valentines_day_skill/
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8058
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   weather_skill:
     build:
             context: .
             dockerfile: ./skills/weather_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8037
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   emotion_skill:
     build:
       context: .
       dockerfile: ./skills/emotion_skill/Dockerfile
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8049
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   emotion_classification:
     build:
       args:
@@ -608,45 +361,24 @@ services:
       dockerfile: dp/dockerfile_skill_gpu
     environment:
       - CUDA_VISIBLE_DEVICES=0
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.with_gpu == true
-      resources:
-        reservations:
-          memory: 2.5G
+
   dummy_skill_dialog:
     build:
       context: ./skills/dummy_skill_dialog/
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8052
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   comet_atomic:
     build:
       context: ./annotators/COMeT/
       args:
         GRAPH: atomic
         PRETRAINED_MODEL: http://lnsigo.mipt.ru/export/alexaprize_data/comet/atomic_pretrained_model.pickle
-        PREPROCESS_DATA: http://lnsigo.mipt.ru/export/alexaprize_data/comet/categories_oEffect%23oReact%23oWant%23xAttr%23xEffect%23xIntent%23xNeed%23xReact%23xWant-maxe1_17-maxe2_35-maxr_1.pickle
+        PREPROCESS_DATA: http://lnsigo.mipt.ru/export/alexaprize_data/comet/categories_oEffect%%23oReact%%23oWant%%23xAttr%%23xEffect%%23xIntent%%23xNeed%%23xReact%%23xWant-maxe1_17-maxe2_35-maxr_1.pickle
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8053
     volumes: []
     environment:
       - CUDA_VISIBLE_DEVICES=0
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.with_gpu == true
-      resources:
-        reservations:
-          memory: 5.5G
+
   comet_conceptnet:
     build:
       context: ./annotators/COMeT/
@@ -658,27 +390,14 @@ services:
     volumes: []
     environment:
       - CUDA_VISIBLE_DEVICES=0
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.with_gpu == true
-      resources:
-        reservations:
-          memory: 3.5G
+
   meta_script_skill:
     build:
       context: .
       dockerfile: skills/meta_script_skill/Dockerfile
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8054
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   short_story_skill:
     build:
       context: .
@@ -696,39 +415,21 @@ services:
       dockerfile: dp/dockerfile_skill_gpu
     environment:
       - CUDA_VISIBLE_DEVICES=0
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.with_gpu == true
-      resources:
-        reservations:
-          memory: 2.5G
+
   coronavirus_skill:
     build:
       context: .
       dockerfile: ./skills/coronavirus_skill/Dockerfile
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8061
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   small_talk_skill:
     build:
       context: .
       dockerfile: ./skills/small_talk_skill/Dockerfile
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8062
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   game_cooperative_skill:
     build:
       args:
@@ -737,26 +438,13 @@ services:
       dockerfile: ./skills/game_cooperative_skill/Dockerfile
     command: bash server_run.sh "gunicorn --workers=2 server:app -b 0.0.0.0:8068 --reload"
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   program_y_wide:
     build:
       context: ./skills/program-y-wide/
     working_dir: /src/dream_aiml/scripts/xnix
     command: ./sanic.sh
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
-      resources:
-        limits:
-          memory: 1G
+
   news_api_skill:
     build:
       context: .
@@ -765,36 +453,21 @@ services:
       - ASYNC_SIZE=3
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8066 -t 15
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   greeting_skill:
     build:
       context: .
       dockerfile: ./skills/greeting_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8070 --timeout=60 --preload
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   factoid_qa:
     build:
       context: .
       dockerfile: ./skills/factoid_qa/Dockerfile
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8071
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
   kbqa:
     build:
       args:
@@ -807,15 +480,7 @@ services:
       dockerfile: annotators/kbqa/Dockerfile
     environment:
       - CUDA_VISIBLE_DEVICES=0
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.with_gpu == true
-      resources:
-        reservations:
-          memory: 2.5G
+
   factoid_classification:
     build:
       args:
@@ -828,24 +493,11 @@ services:
       dockerfile: dp/dockerfile_skill_gpu
     environment:
       - CUDA_VISIBLE_DEVICES=0
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.with_gpu == true
-      resources:
-        reservations:
-          memory: 2.5G
+
   spelling_preprocessing:
     build:
       context: ./annotators/spelling_preprocessing/
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8074 --timeout=100
     volumes: []
-    deploy:
-      mode: replicated
-      replicas: 4
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
+
 version: '3.7'
