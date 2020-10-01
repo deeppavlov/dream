@@ -1,7 +1,8 @@
 FROM nginx:1.17.8
 
-RUN echo "server {listen PORT;location / {proxy_pass http://HOST:PORT/;}}" > /etc/nginx/conf.d/nginx.conf
+COPY default.template /etc/nginx/templates/
 
-ENTRYPOINT sed -i 's/PORT/'$PORT'/g' /etc/nginx/conf.d/nginx.conf && \
-           sed -i 's/HOST/'$HOST'/g' /etc/nginx/conf.d/nginx.conf && \
-           nginx -g 'daemon off;'
+#RUN echo "server {listen PORT;location / {proxy_pass http://HOST:PORT/;}}" > /etc/nginx/conf.d/nginx.conf
+#ENTRYPOINT sed -i 's/PORT/'$PORT'/g' /etc/nginx/conf.d/nginx.conf && \
+#           sed -i 's/HOST/'$HOST'/g' /etc/nginx/conf.d/nginx.conf && \
+#           nginx -g 'daemon off;'

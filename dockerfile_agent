@@ -22,7 +22,7 @@ WORKDIR /dp-agent
 COPY . /dp-agent/.
 
 # RUN pip install deeppavlov_agent==2.2.0 sentry-sdk==0.16.0 requests==2.24.0
-RUN pip install sentry-sdk==0.16.0 requests==2.24.0
+RUN pip install sentry-sdk==0.16.0 requests==2.24.0 pandas
 RUN pip install https://github.com/deepmipt/dp-agent/archive/dev.zip
 
 ENV LANG C.UTF-8

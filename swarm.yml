@@ -1,0 +1,526 @@
+services:
+  agent:
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+          - node.labels.is_agent == true
+
+  cobot_topics:
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu == true
+      resources:
+        reservations:
+          memory: 2.5G
+
+  cobot_dialogact_topics:
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu == true
+      resources:
+        reservations:
+          memory: 2.5G
+
+  cobot_dialogact_intents:
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu == true
+      resources:
+        reservations:
+          memory: 2.5G
+
+  cobot_convers_evaluator_annotator:
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu == true
+      resources:
+        reservations:
+          memory: 2.5G
+
+  cobot_nounphrases:
+    deploy:
+      mode: replicated
+      replicas: 4
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  program_y:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+      resources:
+        limits:
+          memory: 1G
+
+  personality_catcher:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  sentseg:
+    deploy:
+      mode: replicated
+      replicas: 4
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
+
+  convers_evaluation_selector:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  toxic_classification:
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu == true
+      resources:
+        reservations:
+          memory: 2.5G
+
+  sentiment_classification:
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu == true
+      resources:
+        reservations:
+          memory: 2.5G
+
+  sentrewrite:
+    deploy:
+      mode: replicated
+      replicas: 4
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  intent_responder:
+    deploy:
+      mode: replicated
+      replicas: 4
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  intent_catcher:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+          - node.labels.group == 1
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 3.5G
+
+  blacklisted_words:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  program_y_dangerous:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+      resources:
+        limits:
+          memory: 1G
+
+  movie_skill:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+      resources:
+        reservations:
+          memory: 1.5G
+
+  ner:
+    deploy:
+      mode: replicated
+      replicas: 4
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  alice:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+      resources:
+        reservations:
+          memory: 2G
+
+  eliza:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  book_tfidf_retrieval:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  entertainment_tfidf_retrieval:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  fashion_tfidf_retrieval:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  movie_tfidf_retrieval:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  music_tfidf_retrieval:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  politics_tfidf_retrieval:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  science_technology_tfidf_retrieval:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  sport_tfidf_retrieval:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  animals_tfidf_retrieval:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  convert_reddit:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  personal_info_skill:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  asr:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  misheard_asr:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  book_skill:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  christmas_new_year_skill:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  superbowl_skill:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  oscar_skill:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  valentines_day_skill:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  weather_skill:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  emotion_skill:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  emotion_classification:
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu == true
+      resources:
+        reservations:
+          memory: 2.5G
+
+  dummy_skill_dialog:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  comet_atomic:
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu == true
+      resources:
+        reservations:
+          memory: 5.5G
+
+  comet_conceptnet:
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu == true
+      resources:
+        reservations:
+          memory: 3.5G
+
+  meta_script_skill:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  short_story_skill:
+    build:
+      context: .
+      dockerfile: ./skills/short_story_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8057
+  stop_detect:
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu == true
+      resources:
+        reservations:
+          memory: 2.5G
+
+  coronavirus_skill:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  small_talk_skill:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  game_cooperative_skill:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  program_y_wide:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+      resources:
+        limits:
+          memory: 1G
+
+  news_api_skill:
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  greeting_skill:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  factoid_qa:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+  kbqa:
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu == true
+      resources:
+        reservations:
+          memory: 2.5G
+
+  factoid_classification:
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.with_gpu == true
+      resources:
+        reservations:
+          memory: 2.5G
+
+  spelling_preprocessing:
+    deploy:
+      mode: replicated
+      replicas: 4
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
+version: '3.7'

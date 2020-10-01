@@ -13,7 +13,8 @@ for ARGUMENT in "$@"; do
 done
 
 function wait_service() {
-    local timeout=480
+    local timeout=${WAIT_TIMEOUT:-480}
+    local interval=${WAIT_INTERVAL:-10}
     local url=$1
     local reply_keyword=$2
     while [[ $timeout -gt 0 ]]; do
@@ -23,8 +24,8 @@ function wait_service() {
             echo REPLY: $res
             return 0
         fi
-        sleep 1
-        ((timeout--))
+        sleep $interval
+        ((timeout-=interval))
         echo wait_service $url timeout in $timeout sec..
     done
     echo ERROR: $url is not responding
@@ -55,7 +56,7 @@ function dockercompose_cmd() {
     # if [[ "$DEVICE" == "cpu" ]]; then
     #     DOCKER_COMPOSE_CMD="docker-compose -f docker-compose.yml -f dev.yml -f cpu.yml -f proxy.yml -f s3.yml -p test"
     # else
-        DOCKER_COMPOSE_CMD="docker-compose -f docker-compose.yml -f dev.yml -f test.yml -p test"
+        DOCKER_COMPOSE_CMD="docker-compose --no-ansi -f docker-compose.yml -f dev.yml -f test.yml -p test"
     # fi
     eval '$DOCKER_COMPOSE_CMD "$@"'
     if [[ $? != 0 ]]; then
@@ -80,21 +81,30 @@ fi
 
 set -e
 
-DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-trap cleanup EXIT
+#DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DIR=$(dirname $(realpath -s $0))
+#trap cleanup EXIT
 
 echo running tests on $DEVICE in mode: $MODE
 
 echo Loading testing env..
-AGENT_PORT=4242
-export AGENT_PORT=$AGENT_PORT
+AGENT_PORT=${AGENT_PORT:-4242}
 
-dockercompose_cmd up -d --build
-dockercompose_cmd logs -f --tail="all" --timestamps &
+if [[ "$MODE" == "build" ]]; then
+  dockercompose_cmd build --parallel --quiet
+  exit 0
+fi
+#dockercompose_cmd logs -f --tail="all" --timestamps &
 
-wait_service "http://0.0.0.0:$AGENT_PORT/ping" pong
+if [[ "$MODE" == "start" ]]; then
+  dockercompose_cmd up -d
+  dockercompose_cmd logs --no-color -f --tail="all" --timestamps &
+  wait_service "http://0.0.0.0:$AGENT_PORT/ping" pong
+  exit 0
+fi
 
 if [[ "$MODE" == "test_dialog" || "$MODE" == "all" ]]; then
+    dockercompose_cmd logs --no-color -f --tail="all" --timestamps &
     echo "Warmup for tests"
     dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/test_response.py
 
@@ -114,6 +124,7 @@ if [[ "$MODE" == "test_dialog" || "$MODE" == "all" ]]; then
 fi
 
 if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
+    dockercompose_cmd logs --no-color -f --tail="all" --timestamps &
     echo "Passing test data to each skill selected for testing"
 
     if container_is_started sentiment_classification; then
@@ -229,6 +240,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
 fi
 
 if [[ "$MODE" == "infer_questions" || "$MODE" == "all" ]]; then
+    dockercompose_cmd logs --no-color -f --tail="all" --timestamps &
     echo "Passing questions to Alexa"
     dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/test_response.py
     dockercompose_cmd exec -T -u $(id -u) agent python3 \
