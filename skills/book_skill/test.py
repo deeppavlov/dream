@@ -31,7 +31,7 @@ def main_test():
                     "",
                     #  As COBOTQA can be out of work
                     # This should be a beginning of the response - response needs to be randomized
-                    "I've also read it. It's an amazing book!",
+                    'What is your favorite book genre?',
                     'What is your favorite book genre?',
                     'Amazing! Have you read The Testaments ? And if you have read it, what do you think about it?',
                     json.load(open('bookreads_data.json', 'r'))[0]['fiction']['description']]

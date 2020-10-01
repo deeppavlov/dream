@@ -111,132 +111,132 @@ if [[ "$MODE" == "test_dialog" || "$MODE" == "all" ]]; then
     echo "Test workflow bug and asr"
     dockercompose_cmd exec -T -u $(id -u) agent python3 tests/test_workflow_bug_and_asr.py
 
-    echo "Pass dialogs from dp-agent"
-    dockercompose_cmd exec -T -u $(id -u) agent python3 \
-        utils/http_api_test.py -u http://0.0.0.0:4242 -cf tests/dream/test_dialogs_gold_phrases.csv -of tests/dream/output/test_dialogs_output.csv
+#    echo "Pass dialogs from dp-agent"
+#    dockercompose_cmd exec -T -u $(id -u) agent python3 \
+#        utils/http_api_test.py -u http://0.0.0.0:4242 -cf tests/dream/test_dialogs_gold_phrases.csv -of tests/dream/output/test_dialogs_output.csv
 
-    echo "Assert passed dialogs"
-    if [[ "$DEVICE" == "cpu" ]]; then
-        dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/assert_test_dialogs.py -pred_f tests/dream/output/test_dialogs_output.csv -true_f tests/dream/test_dialogs_gold_phrases.csv -time_limit 20
-    else
-        dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/assert_test_dialogs.py -pred_f tests/dream/output/test_dialogs_output.csv -true_f tests/dream/test_dialogs_gold_phrases.csv
-    fi
+#    echo "Assert passed dialogs"
+#    if [[ "$DEVICE" == "cpu" ]]; then
+#        dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/assert_test_dialogs.py -pred_f tests/dream/output/test_dialogs_output.csv -true_f tests/dream/test_dialogs_gold_phrases.csv -time_limit 20
+#    else
+#        dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/assert_test_dialogs.py -pred_f tests/dream/output/test_dialogs_output.csv -true_f tests/dream/test_dialogs_gold_phrases.csv
+#    fi
 fi
 
 if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
     dockercompose_cmd logs --no-color -f --tail="all" --timestamps &
     echo "Passing test data to each skill selected for testing"
 
-    if container_is_started sentiment_classification; then
-        echo "Passing test data to sentiment_classification"
-        dockercompose_cmd exec -T -u $(id -u) sentiment_classification python annotators/DeepPavlovSentimentClassification/tests/run_test.py
-    fi
 
-    if container_is_started movie_skill; then
-        echo "Run tests for movie_skill"
-        dockercompose_cmd exec -T -u $(id -u) movie_skill python test.py
-    fi
+    echo "Passing test data to sentiment_classification"
+    dockercompose_cmd exec -T -u $(id -u) sentiment_classification python annotators/DeepPavlovSentimentClassification/tests/run_test.py
 
-    if container_is_started asr; then
-        echo "Run tests for asr container"
-        dockercompose_cmd exec -T -u $(id -u) asr python test.py
-    fi
 
-    if container_is_started weather_skill; then
-        echo "Run tests for weather_skill container"
-        dockercompose_cmd exec -T -u $(id -u) weather_skill python test_weather_skill_policy.py
-    fi
 
-    if container_is_started program_y; then
-        echo "Run tests for program_y container"
-        dockercompose_cmd exec -T -u $(id -u) program_y python /src/test.py
+    echo "Run tests for movie_skill"
+    dockercompose_cmd exec -T -u $(id -u) movie_skill python test.py
 
-        echo "Run lets_chat tests for program_y container"
-        dockercompose_cmd exec -T -u $(id -u) program_y python /src/test_lets_chat.py
-    fi
 
-    if container_is_started program_y_dangerous; then
-        echo "Run tests for program_y_dangerous container"
-        dockercompose_cmd exec -T -u $(id -u) program_y_dangerous python /src/test.py
-    fi
 
-    if container_is_started superbowl_skill; then
-        echo "Run tests for superbowl_skill container"
-        dockercompose_cmd exec -T -u $(id -u) superbowl_skill python /src/test_server.py
-    fi
+    echo "Run tests for asr container"
+    dockercompose_cmd exec -T -u $(id -u) asr python test.py
 
-    if container_is_started oscar_skill; then
-        echo "Run tests for oscar_skill container"
-        dockercompose_cmd exec -T -u $(id -u) oscar_skill python /src/test_server.py
-    fi
 
-    if container_is_started topicalchat_convert_retrieval; then
-        echo "Run tests for topicalchat_convert_retrieval container"
-        dockercompose_cmd exec -T -u $(id -u) topicalchat_convert_retrieval python /src/test_server.py
-    fi
 
-    if container_is_started valentines_day_skill; then
-        echo "Run tests for valentines_day_skill container"
-        dockercompose_cmd exec -T -u $(id -u) valentines_day_skill python /src/test_server.py
-    fi
+    echo "Run tests for weather_skill container"
+    dockercompose_cmd exec -T -u $(id -u) weather_skill python test_weather_skill_policy.py
 
-    if container_is_started eliza; then
-        echo "Run tests for eliza container"
-        dockercompose_cmd exec -T -u $(id -u) eliza python /src/test_server.py
-    fi
 
-    if container_is_started game_cooperative_skill; then
-        echo "Run tests for game_cooperative_skill container"
-        dockercompose_cmd exec -T -u $(id -u) game_cooperative_skill python /src/test_server.py
-    fi
 
-    # if container_is_started news_skill; then
+    echo "Run tests for program_y container"
+    dockercompose_cmd exec -T -u $(id -u) program_y python /src/test.py
+
+    echo "Run lets_chat tests for program_y container"
+    dockercompose_cmd exec -T -u $(id -u) program_y python /src/test_lets_chat.py
+
+
+
+    echo "Run tests for program_y_dangerous container"
+    dockercompose_cmd exec -T -u $(id -u) program_y_dangerous python /src/test.py
+
+
+
+    echo "Run tests for superbowl_skill container"
+    dockercompose_cmd exec -T -u $(id -u) superbowl_skill python /src/test_server.py
+
+
+
+    echo "Run tests for oscar_skill container"
+    dockercompose_cmd exec -T -u $(id -u) oscar_skill python /src/test_server.py
+
+
+#
+#        echo "Run tests for topicalchat_convert_retrieval container"
+#        dockercompose_cmd exec -T -u $(id -u) topicalchat_convert_retrieval python /src/test_server.py
+
+
+
+    echo "Run tests for valentines_day_skill container"
+    dockercompose_cmd exec -T -u $(id -u) valentines_day_skill python /src/test_server.py
+
+
+
+    echo "Run tests for eliza container"
+    dockercompose_cmd exec -T -u $(id -u) eliza python /src/test_server.py
+
+
+
+    echo "Run tests for game_cooperative_skill container"
+    dockercompose_cmd exec -T -u $(id -u) game_cooperative_skill python /src/test_server.py
+
+
+    #
     #     echo "Run tests for news_skill"
     #     dockercompose_cmd exec -T -u $(id -u) news_skill python /src/src/test.py
-    # fi
+    #
 
-    if container_is_started dummy_skill_dialog; then
-        echo "Run tests for dummy_skill_dialog"
-        dockercompose_cmd exec -T -u $(id -u) dummy_skill_dialog python test.py
-    fi
 
-    if container_is_started intent_catcher; then
-        echo "Run tests for intent_catcher"
-        dockercompose_cmd exec -T -u $(id -u) intent_catcher python test.py
-    fi
+    echo "Run tests for dummy_skill_dialog"
+    dockercompose_cmd exec -T -u $(id -u) dummy_skill_dialog python test.py
 
-    if container_is_started short_story_skill; then
-        echo "Run tests for short_story_skill"
-        dockercompose_cmd exec -T -u $(id -u) short_story_skill python /src/test.py
-    fi
 
-    if container_is_started comet_atomic; then
-        echo "Run tests for comet_atomic"
-        dockercompose_cmd exec -T -u $(id -u) comet_atomic python /comet/test_atomic.py
-    fi
 
-    if container_is_started comet_conceptnet; then
-        echo "Run tests for comet_conceptnet"
-        dockercompose_cmd exec -T -u $(id -u) comet_conceptnet python /comet/test_conceptnet.py
-    fi
+    echo "Run tests for intent_catcher"
+    dockercompose_cmd exec -T -u $(id -u) intent_catcher python test.py
 
-    # if container_is_started reddit_ner_skill; then
+
+
+    echo "Run tests for short_story_skill"
+    dockercompose_cmd exec -T -u $(id -u) short_story_skill python /src/test.py
+
+
+
+    echo "Run tests for comet_atomic"
+    dockercompose_cmd exec -T -u $(id -u) comet_atomic python /comet/test_atomic.py
+
+
+
+    echo "Run tests for comet_conceptnet"
+    dockercompose_cmd exec -T -u $(id -u) comet_conceptnet python /comet/test_conceptnet.py
+
+
+    #
     #     echo "Run tests for reddit_ner_skill"
     #     dockercompose_cmd exec -T -u $(id -u) reddit_ner_skill python test.py
-    # fi
+    #
 
-    if container_is_started convers_evaluation_selector; then
-        echo "Run tests for convers_evaluation_selector"
-        dockercompose_cmd exec -T -u $(id -u) convers_evaluation_selector python test.py
-    fi
-    if container_is_started book_skill; then
-        echo "Run tests for book_skill"
-        dockercompose_cmd exec -T -u $(id -u) book_skill python test.py
-    fi
-    if container_is_started emotion_skill; then
-        echo "Run tests for emotion_skill"
-        dockercompose_cmd exec -T -u $(id -u) emotion_skill python test.py
-    fi
+
+    echo "Run tests for convers_evaluation_selector"
+    dockercompose_cmd exec -T -u $(id -u) convers_evaluation_selector python test.py
+
+
+    echo "Run tests for book_skill"
+    dockercompose_cmd exec -T -u $(id -u) book_skill python test.py
+
+
+    echo "Run tests for emotion_skill"
+    dockercompose_cmd exec -T -u $(id -u) emotion_skill python test.py
+
 fi
 
 if [[ "$MODE" == "infer_questions" || "$MODE" == "all" ]]; then

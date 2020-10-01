@@ -16,7 +16,7 @@ services:
         oscar_skill:8055, coronavirus_skill:8061, small_talk_skill:8062, game_cooperative_skill:8068, program_y_wide:8064,
         comet_conceptnet:8065, news_api_skill:8066, short_story_skill:8057, greeting_skill:8070, factoid_qa:8071, kbqa:8072,
         factoid_classification:8073, spelling_preprocessing:8074"
-      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT}
+      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
 
   cobot_topics:
     build:

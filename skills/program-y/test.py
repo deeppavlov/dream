@@ -48,6 +48,9 @@ def main_test():
         "Hi, this is an Alexa Prize Socialbot! Yeah, let’s have a chat! What shall we talk about?",
         "Hi there, this is an Alexa Prize Socialbot! Lovely to meet you! What do you want to talk about?",
         "Hello there, this is an Alexa Prize Socialbot! Nice to meet you! What do you want to talk about?",
+        "Hello, this is a DeepPavlov Dream AI Assistant demo! Yeah, let’s have a chat! What shall we talk about?",
+        "Hello, this is a DeepPavlov Dream AI Assistant demo! Lovely to meet you! What do you want to talk about?",
+        "Hello, this is a DeepPavlov Dream AI Assistant demo! Nice to meet you! What do you want to talk about?"
     ]
     for sent in sentences:
         data = {"sentences_batch": [[sent]]}
@@ -59,7 +62,7 @@ def main_test():
             for tgt_resp in possible_responses
             if difflib.SequenceMatcher(None, tgt_resp.split(), response.split()).ratio() > 0.9
         ]
-        assert assert_flag, print(f"User: {sent}. Response: {response}")
+        assert assert_flag, f"User: {sent}. Response: {response}"
 
     # what to talk about
     # sentences = [
