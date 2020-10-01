@@ -1,6 +1,6 @@
-FROM nginx:1.17.8
+FROM nginx:latest
 
-COPY default.template /etc/nginx/templates/
+COPY default.conf.template /etc/nginx/templates/
 
 #RUN echo "server {listen PORT;location / {proxy_pass http://HOST:PORT/;}}" > /etc/nginx/conf.d/nginx.conf
 #ENTRYPOINT sed -i 's/PORT/'$PORT'/g' /etc/nginx/conf.d/nginx.conf && \
