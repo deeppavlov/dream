@@ -1,5 +1,6 @@
 services:
   cobot_topics:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -7,6 +8,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8001
   cobot_dialogact_topics:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -14,6 +16,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8002
   cobot_dialogact_intents:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -21,6 +24,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8003
   cobot_convers_evaluator_annotator:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -28,6 +32,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8004
   cobot_nounphrases:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -35,6 +40,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8006
   program_y:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -42,6 +48,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8008
   personality_catcher:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -49,6 +56,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8010
   sentseg:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -56,6 +64,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8011
   convers_evaluation_selector:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -63,6 +72,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8009
   toxic_classification:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -70,6 +80,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8013
   sentiment_classification:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -77,6 +88,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8024
   sentrewrite:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -84,6 +96,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8017
   intent_responder:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -91,6 +104,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8012
   intent_catcher:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -98,6 +112,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8014
   blacklisted_words:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -105,6 +120,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8018
   program_y_dangerous:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -112,6 +128,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8022
   movie_skill:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -119,6 +136,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8023
   ner:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -126,6 +144,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8021
   alice:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -133,6 +152,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8000
   eliza:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -140,6 +160,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8047
   book_tfidf_retrieval:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -147,6 +168,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8039
   entertainment_tfidf_retrieval:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -154,6 +176,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8040
   fashion_tfidf_retrieval:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -161,6 +184,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8041
   movie_tfidf_retrieval:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -168,6 +192,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8042
   music_tfidf_retrieval:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -175,6 +200,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8034
   politics_tfidf_retrieval:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -182,6 +208,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8043
   science_technology_tfidf_retrieval:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -189,6 +216,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8044
   sport_tfidf_retrieval:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -196,6 +224,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8045
   animals_tfidf_retrieval:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -203,6 +232,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8050
   convert_reddit:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -210,6 +240,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8029
   personal_info_skill:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -217,6 +248,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8030
   asr:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -224,6 +256,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8031
   misheard_asr:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -231,6 +264,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8033
   book_skill:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -238,6 +272,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8032
   christmas_new_year_skill:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -245,6 +280,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8036
   superbowl_skill:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -252,6 +288,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8051
   oscar_skill:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -259,6 +296,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8055
   valentines_day_skill:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -266,6 +304,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8058
   weather_skill:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -273,6 +312,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8037
   emotion_skill:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -280,6 +320,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8049
   emotion_classification:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -287,6 +328,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8038
   dummy_skill_dialog:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -294,6 +336,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8052
   comet_atomic:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -301,6 +344,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8053
   comet_conceptnet:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -308,6 +352,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8065
   meta_script_skill:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -315,6 +360,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8054
   short_story_skill:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -322,6 +368,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8057
   stop_detect:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -329,6 +376,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8056
   coronavirus_skill:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -336,6 +384,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8061
   small_talk_skill:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -343,6 +392,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8062
   game_cooperative_skill:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -350,6 +400,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8068
   program_y_wide:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -357,6 +408,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8064
   news_api_skill:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -364,6 +416,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8066
   greeting_skill:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -371,6 +424,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8070
   factoid_qa:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -378,6 +432,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8071
   kbqa:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -385,6 +440,7 @@ services:
       - HOST=10.11.1.251
       - PORT=8072
   factoid_classification:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -398,4 +454,5 @@ services:
     environment:
       - HOST=10.11.1.251
       - PORT=8074
+    command: ["nginx", "-g", "daemon off;"]
 version: '3.7'
