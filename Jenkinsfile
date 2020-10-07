@@ -255,15 +255,6 @@ pipeline {
           }
         }*/
       }
-
-      /*post {
-        cleanup {
-          script {
-            notify('cleanup')
-            sh './tests/runtests.sh MODE=clean'
-          }
-        }
-      }*/
     }
   }
 
