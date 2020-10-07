@@ -19,7 +19,7 @@ def notify(status, e = "") {
     stages["${env.STAGE_NAME}"] = 'running ▶'
   }
   else if (status == 'failed') {
-    stages["${env.STAGE_NAME}"] = "failed ❌ ${currentBuild.durationString.replace(' and counting', '')} with ${e}"
+    stages["${env.STAGE_NAME}"] = "failed ❌ ${duration}s with ${e}"
   }
   else if (status == 'success') {
     stages["${env.STAGE_NAME}"] = "success ✅ ${currentBuild.durationString.replace(' and counting', '')}"
