@@ -13,6 +13,7 @@ def generateMsg(stages) {
 }
 
 slackResponse = slackSend(message: generateMsg(stages))
+started = false
 
 def notify(status, e = "") {
   if (status == 'start') {
@@ -43,6 +44,11 @@ pipeline {
     COMPOSE_DOCKER_CLI_BUILD=1
     DOCKER_BUILDKIT=1
     COMPOSE_HTTP_TIMEOUT=120
+  }
+
+  when {
+    changeRequest target: '*', comparator: 'GLOB'
+    beforeAgent true
   }
 
   stages {
@@ -95,7 +101,6 @@ pipeline {
           }
         }
       }
-
     }
 
     stage('Start') {
@@ -120,6 +125,7 @@ pipeline {
           }
         }
         success {
+          started = true
           script {
             notify('success')
           }
@@ -134,7 +140,7 @@ pipeline {
         beforeAgent true
       }
 
-      parallel {
+      stages {
 
         stage('Test dialog') {
           steps {
@@ -214,7 +220,7 @@ pipeline {
         }*/
       }
 
-      post {
+      /*post {
         failure {
           script {
             sh 'tests/runtests.sh MODE=clean'
@@ -225,7 +231,7 @@ pipeline {
             sh 'tests/runtests.sh MODE=clean'
           }
         }
-      }
+      }*/
     }
 
     /*stage('Cleanup') {
@@ -253,7 +259,9 @@ pipeline {
 //    }
     cleanup {
       script {
-        sh './tests/runtests.sh MODE=clean'
+        if (started) {
+          sh './tests/runtests.sh MODE=clean'
+        }
       }
     }
   }
