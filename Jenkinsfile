@@ -50,11 +50,6 @@ pipeline {
     COMPOSE_HTTP_TIMEOUT=120
   }
 
-  when {
-    changeRequest target: '*', comparator: 'GLOB'
-    beforeAgent true
-  }
-
   stages {
 
     stage('Checkout') {
