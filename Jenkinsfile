@@ -12,21 +12,25 @@ def generateMsg(stages) {
   return msg
 }
 
+startTime = currentBuild.duration
 slackResponse = slackSend(message: generateMsg(stages))
 started = false
 
-def notify(status, e = "") {
+def notify(status, duration = 0, e = "") {
   if (status == 'start') {
     stages["${env.STAGE_NAME}"] = 'running ▶'
   }
   else if (status == 'failed') {
-    stages["${env.STAGE_NAME}"] = "failed ❌ ${duration}s with ${e}"
+    stages["${env.STAGE_NAME}"] = "failed ❌ ${duration} with ${e}"
   }
   else if (status == 'success') {
-    stages["${env.STAGE_NAME}"] = "success ✅ ${currentBuild.durationString.replace(' and counting', '')}"
+    stages["${env.STAGE_NAME}"] = "success ✅ ${duration}s"
   }
   else if (status == 'aborted') {
-    stages["$env.STAGE_NAME}"] = "aborted ⏹"
+    stages["${env.STAGE_NAME}"] = "aborted ⏹"
+  }
+  else if (status == 'cleanup') {
+    stages["${env.STAGE_NAME}"] = "cleanup ♻"
   }
   slackSend(channel: slackResponse.channelId, message: generateMsg(stages), timestamp: slackResponse.ts)
 }
@@ -83,24 +87,36 @@ pipeline {
 
       steps {
         script{
+          startTime = currentBuild.duration
           notify('start')
-          sh 'tests/runtests.sh MODE=build'
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh 'tests/runtests.sh MODE=build'
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              notify('failed', e.getMessage(), duration)
+              throw e
+            }
+          }
         }
       }
 
       post {
         failure {
           script {
-            notify('failed')
             sh 'tests/runtests.sh MODE=clean'
           }
         }
         success {
           script {
-            notify('success')
+            int duration = (currentBuild.duration - startTime) / 1000
+            notify('success', duration)
           }
         }
       }
+
     }
 
     stage('Start') {
@@ -112,22 +128,33 @@ pipeline {
 
       steps {
         script {
+          startTime = currentBuild.duration
           notify('start')
-          sh 'tests/runtests.sh MODE=start'
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh 'tests/runtests.sh MODE=start'
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              notify('failed', e.getMessage(), duration)
+              throw e
+            }
+          }
         }
       }
 
       post {
         failure {
           script {
-            notify('failed')
             sh 'tests/runtests.sh MODE=clean'
           }
         }
         success {
-          started = true
           script {
-            notify('success')
+            started = true
+            int duration = (currentBuild.duration - startTime) / 1000
+            notify('success', duration)
           }
         }
       }
@@ -145,6 +172,7 @@ pipeline {
         stage('Test dialog') {
           steps {
             script {
+              startTime = currentBuild.duration
               notify('start')
               Exception ex = null
               catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
@@ -152,7 +180,8 @@ pipeline {
                   sh 'tests/runtests.sh MODE=test_dialog'
                 }
                 catch (Exception e) {
-                  notify('failed', e.getMessage())
+                  int duration = (currentBuild.duration - startTime) / 1000
+                  notify('failed', duration, e.getMessage())
                   throw e
                 }
               }
@@ -161,7 +190,8 @@ pipeline {
           post {
             success {
               script {
-                notify('success')
+                int duration = (currentBuild.duration - startTime) / 1000
+                notify('success', duration)
               }
             }
           }
@@ -171,6 +201,7 @@ pipeline {
 
           steps {
             script {
+              startTime = currentBuild.duration
               notify('start')
               Exception ex = null
               catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
@@ -178,7 +209,8 @@ pipeline {
                   sh 'tests/runtests.sh MODE=test_skills'
                 }
                 catch (Exception e) {
-                  notify('failed', e.getMessage())
+                  int duration = (currentBuild.duration - startTime) / 1000
+                  notify('failed', duration, e.getMessage())
                   throw e
                 }
               }
@@ -187,7 +219,8 @@ pipeline {
           post {
             success {
               script {
-                notify('success')
+                int duration = (currentBuild.duration - startTime) / 1000
+                notify('success', duration)
               }
             }
           }
@@ -197,6 +230,7 @@ pipeline {
 
           steps {
             script {
+              startTime = currentBuild.duration
               notify('start')
               Exception ex = null
               catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
@@ -204,7 +238,8 @@ pipeline {
                   sh './tests/runtests.sh MODE=infer_questions'
                 }
                 catch (Exception e) {
-                  notify('failed', e.getMessage())
+                  int duration = (currentBuild.duration - startTime) / 1000
+                  notify('failed', duration, e.getMessage())
                   throw e
                 }
               }
@@ -213,7 +248,8 @@ pipeline {
           post {
             success {
               script {
-                notify('success')
+                int duration = (currentBuild.duration - startTime) / 1000
+                notify('success', duration)
               }
             }
           }
@@ -221,27 +257,14 @@ pipeline {
       }
 
       /*post {
-        failure {
+        cleanup {
           script {
-            sh 'tests/runtests.sh MODE=clean'
-          }
-        }
-        success {
-          script {
-            sh 'tests/runtests.sh MODE=clean'
+            notify('cleanup')
+            sh './tests/runtests.sh MODE=clean'
           }
         }
       }*/
     }
-
-    /*stage('Cleanup') {
-
-      steps {
-        script {
-          sh './tests/runtests.sh MODE=clean'
-        }
-      }
-    }*/
   }
 
   post {
@@ -250,16 +273,10 @@ pipeline {
         notify('aborted')
       }
     }
-//    failure {
-//      script {
-//        if (isPullRequest) {
-//          pullRequest.setLabels(['Failure'])
-//        }
-//      }
-//    }
     cleanup {
       script {
         if (started) {
+          notify('cleanup')
           sh './tests/runtests.sh MODE=clean'
         }
       }
