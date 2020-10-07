@@ -19,7 +19,6 @@ ENV DPA_LAUNCHING_ENV "docker"
 RUN mkdir dp-agent
 WORKDIR /dp-agent
 # TODO: Copy only necessary dirs and files
-COPY . /dp-agent/.
 
 # RUN pip install deeppavlov_agent==2.2.0 sentry-sdk==0.16.0 requests==2.24.0
 RUN pip install sentry-sdk==0.16.0 requests==2.24.0 pandas
@@ -29,6 +28,8 @@ ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 ENV PYTHONPATH "${PYTHONPATH}:/dp-agent"
 ENV DPA_LAUNCHING_ENV "docker"
+
+COPY . /dp-agent/.
 RUN printf 'debug = False\nresponse_logger = False' > /dp-agent/dp_agent_settings.py
 
 # cronjobs

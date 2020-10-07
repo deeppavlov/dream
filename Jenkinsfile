@@ -14,13 +14,14 @@ def generateMsg(stages) {
 
 startTime = currentBuild.duration
 slackResponse = slackSend(message: generateMsg(stages))
+started = false
 
 def notify(status, duration = 0, e = "") {
   if (status == 'start') {
     stages["${env.STAGE_NAME}"] = 'running ▶'
   }
   else if (status == 'failed') {
-    stages["${env.STAGE_NAME}"] = "failed ❌ ${currentBuild.durationString.replace(' and counting', '')} with ${e}"
+    stages["${env.STAGE_NAME}"] = "failed ❌ ${duration} with ${e}"
   }
   else if (status == 'success') {
     stages["${env.STAGE_NAME}"] = "success ✅ ${duration}s"
@@ -146,6 +147,7 @@ pipeline {
         }
         success {
           script {
+            started = true
             int duration = (currentBuild.duration - startTime) / 1000
             notify('success', duration)
           }
@@ -160,7 +162,7 @@ pipeline {
         beforeAgent true
       }
 
-      parallel {
+      stages {
 
         stage('Test dialog') {
           steps {
@@ -248,15 +250,6 @@ pipeline {
           }
         }*/
       }
-
-      post {
-        cleanup {
-          script {
-            notify('cleanup')
-            sh './tests/runtests.sh MODE=clean'
-          }
-        }
-      }
     }
   }
 
@@ -264,6 +257,14 @@ pipeline {
     aborted {
       script {
         notify('aborted')
+      }
+    }
+    cleanup {
+      script {
+        if (started) {
+          notify('cleanup')
+          sh './tests/runtests.sh MODE=clean'
+        }
       }
     }
   }
