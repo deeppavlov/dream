@@ -1,4 +1,7 @@
 services:
+  agent:
+    volumes:
+      - "/cephfs/home/ignatov/artifacts:/output"
   cobot_topics:
     environment:
       - CUDA_VISIBLE_DEVICES=5

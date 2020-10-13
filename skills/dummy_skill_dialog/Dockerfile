@@ -1,6 +1,6 @@
 FROM tensorflow/tensorflow:1.14.0-py3
 
-RUN mkdir /app
+WORKDIR /app
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -14,14 +14,13 @@ RUN mkdir -p /root/model && \
     cd /root/model/ && \
     tar -xvzf dummy_skill_dialog.tar.gz
 
-COPY ./requirements.txt /app/requirements.txt
-RUN pip install -r /app/requirements.txt
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
 
 ENV MODEL_PATH /root/model/convert_single_context
 ENV TOPIC_DIALOGS_PATH /root/model/dialogs_topic.json
 ENV NP_DIALOGS_PATH /root/model/dialogs_np.json
 
-COPY . /app/
-WORKDIR /app
+COPY . .
 
 CMD gunicorn --workers=2 server:app --timeout 120
