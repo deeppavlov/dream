@@ -37,4 +37,6 @@ RUN sed -i "/uvicorn.run/s/app,/app, timeout_keep_alive=20,/g" "/base/DeepPavlov
 
 RUN pip install sentry-sdk==0.13.0 # TODO: Move it to separate requirements
 
+COPY $DIR/test.sh .
+
 CMD python -m deeppavlov riseapi $CONFIG -p $PORT

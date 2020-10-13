@@ -79,8 +79,6 @@ services:
     build:
       context: .
       dockerfile: ./skills/program-y/Dockerfile
-    working_dir: /src/dream_aiml/scripts/xnix
-    command: ./sanic.sh
 
   personality_catcher:
     build:
@@ -152,8 +150,6 @@ services:
   program_y_dangerous:
     build:
       context: ./skills/program-y-dangerous/
-    working_dir: /src/dream_aiml/scripts/xnix
-    command: ./sanic.sh
 
   movie_skill:
     build:
@@ -374,6 +370,7 @@ services:
         GRAPH: atomic
         PRETRAINED_MODEL: http://lnsigo.mipt.ru/export/alexaprize_data/comet/atomic_pretrained_model.pickle
         PREPROCESS_DATA: http://lnsigo.mipt.ru/export/alexaprize_data/comet/categories_oEffect%%23oReact%%23oWant%%23xAttr%%23xEffect%%23xIntent%%23xNeed%%23xReact%%23xWant-maxe1_17-maxe2_35-maxr_1.pickle
+        TEST_SCRIPT: test_atomic.py
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8053
     volumes: []
     environment:
@@ -386,6 +383,7 @@ services:
         GRAPH: conceptnet
         PRETRAINED_MODEL: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/conceptnet_pretrained_model.pickle
         PREPROCESS_DATA: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/rel_language-trainsize_100-devversion_12-maxe1_10-maxe2_15-maxr_5.pickle
+        TEST_SCRIPT: test_conceptnet.py
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8065
     volumes: []
     environment:

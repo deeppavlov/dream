@@ -104,6 +104,7 @@ if [[ "$MODE" == "start" ]]; then
 fi
 
 if [[ "$MODE" == "test_dialog" || "$MODE" == "all" ]]; then
+    GOLD_OUTPUT_FILE="GOLD-"$(date '+%Y-%m-%d_%H-%M-%S')".csv"
     dockercompose_cmd logs --no-color -f --tail="all" --timestamps &
     echo "Warmup for tests"
     dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/test_response.py
@@ -113,81 +114,34 @@ if [[ "$MODE" == "test_dialog" || "$MODE" == "all" ]]; then
 
     echo "Pass dialogs from dp-agent"
     dockercompose_cmd exec -T -u $(id -u) agent python3 \
-        utils/http_api_test.py -u http://0.0.0.0:4242 -cf tests/dream/test_dialogs_gold_phrases.csv -of tests/dream/output/test_dialogs_output.csv
+        utils/http_api_test.py -u http://0.0.0.0:4242 -cf tests/dream/test_dialogs_gold_phrases.csv -of /output/$GOLD_OUTPUT_FILE
 
     echo "Assert passed dialogs"
     if [[ "$DEVICE" == "cpu" ]]; then
-        dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/assert_test_dialogs.py -pred_f tests/dream/output/test_dialogs_output.csv -true_f tests/dream/test_dialogs_gold_phrases.csv -time_limit 20
+        dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/assert_test_dialogs.py -pred_f /output/$GOLD_OUTPUT_FILE -true_f tests/dream/test_dialogs_gold_phrases.csv -time_limit 20
     else
-        dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/assert_test_dialogs.py -pred_f tests/dream/output/test_dialogs_output.csv -true_f tests/dream/test_dialogs_gold_phrases.csv
+        dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/assert_test_dialogs.py -pred_f /output/$GOLD_OUTPUT_FILE -true_f tests/dream/test_dialogs_gold_phrases.csv -time_limit 4
     fi
 fi
 
 if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
+    # docker-compose -f docker-compose.yml -f dev.yml ps --services | grep -wv -e agent -e mongo
+
     dockercompose_cmd logs --no-color -f --tail="all" --timestamps &
     echo "Passing test data to each skill selected for testing"
 
-
-    echo "Passing test data to sentiment_classification"
-    dockercompose_cmd exec -T -u $(id -u) sentiment_classification python annotators/DeepPavlovSentimentClassification/tests/run_test.py
-
-
-
-    echo "Run tests for movie_skill"
-    dockercompose_cmd exec -T -u $(id -u) movie_skill python test.py
-
-
-
-    echo "Run tests for asr container"
-    dockercompose_cmd exec -T -u $(id -u) asr python test.py
-
-
-
-    echo "Run tests for weather_skill container"
-    dockercompose_cmd exec -T -u $(id -u) weather_skill python test_weather_skill_policy.py
-
-
-
-    echo "Run tests for program_y container"
-    dockercompose_cmd exec -T -u $(id -u) program_y python /src/test.py
-
-    echo "Run lets_chat tests for program_y container"
-    dockercompose_cmd exec -T -u $(id -u) program_y python /src/test_lets_chat.py
-
-
-
-    echo "Run tests for program_y_dangerous container"
-    dockercompose_cmd exec -T -u $(id -u) program_y_dangerous python /src/test.py
-
-
-
-    echo "Run tests for superbowl_skill container"
-    dockercompose_cmd exec -T -u $(id -u) superbowl_skill python /src/test_server.py
-
-
-
-    echo "Run tests for oscar_skill container"
-    dockercompose_cmd exec -T -u $(id -u) oscar_skill python /src/test_server.py
+    for container in sentiment_classification movie_skill asr weather_skill program_y \
+                     program_y_dangerous superbowl_skill oscar_skill valentines_day_skill eliza \
+                     game_cooperative_skill dummy_skill_dialog intent_catcher short_story_skill comet_atomic \
+                     comet_conceptnet convers_evaluation_selector emotion_skill book_skill; do
+        echo "Run tests for $container"
+        dockercompose_cmd exec -T -u $(id -u) $container ./test.sh
+    done
 
 
 #
 #        echo "Run tests for topicalchat_convert_retrieval container"
 #        dockercompose_cmd exec -T -u $(id -u) topicalchat_convert_retrieval python /src/test_server.py
-
-
-
-    echo "Run tests for valentines_day_skill container"
-    dockercompose_cmd exec -T -u $(id -u) valentines_day_skill python /src/test_server.py
-
-
-
-    echo "Run tests for eliza container"
-    dockercompose_cmd exec -T -u $(id -u) eliza python /src/test_server.py
-
-
-
-    echo "Run tests for game_cooperative_skill container"
-    dockercompose_cmd exec -T -u $(id -u) game_cooperative_skill python /src/test_server.py
 
 
     #
@@ -196,46 +150,10 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
     #
 
 
-    echo "Run tests for dummy_skill_dialog"
-    dockercompose_cmd exec -T -u $(id -u) dummy_skill_dialog python test.py
-
-
-
-    echo "Run tests for intent_catcher"
-    dockercompose_cmd exec -T -u $(id -u) intent_catcher python test.py
-
-
-
-    echo "Run tests for short_story_skill"
-    dockercompose_cmd exec -T -u $(id -u) short_story_skill python /src/test.py
-
-
-
-    echo "Run tests for comet_atomic"
-    dockercompose_cmd exec -T -u $(id -u) comet_atomic python /comet/test_atomic.py
-
-
-
-    echo "Run tests for comet_conceptnet"
-    dockercompose_cmd exec -T -u $(id -u) comet_conceptnet python /comet/test_conceptnet.py
-
-
     #
     #     echo "Run tests for reddit_ner_skill"
     #     dockercompose_cmd exec -T -u $(id -u) reddit_ner_skill python test.py
     #
-
-
-    echo "Run tests for convers_evaluation_selector"
-    dockercompose_cmd exec -T -u $(id -u) convers_evaluation_selector python test.py
-
-
-    echo "Run tests for book_skill"
-    dockercompose_cmd exec -T -u $(id -u) book_skill python test.py
-
-
-    echo "Run tests for emotion_skill"
-    dockercompose_cmd exec -T -u $(id -u) emotion_skill python test.py
 
 fi
 

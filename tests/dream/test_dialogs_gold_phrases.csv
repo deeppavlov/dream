@@ -3,7 +3,7 @@
 "program_y;meta_script_skill;greeting_skill" "good"
 "program_y;meta_script_skill" "How are you" "Do you want to know what I can do?"
 "program_y;meta_script_skill;intent_responder" "yes sure" "#+#what_can_you_do"
-"program_y;meta_script_skill;greeting_skill" "Do you like Siri?" "Siri was a big inspiration to me." "I'm partial to all AIs." "I like all AIs." "I like electricity." "No, I don't keep up with it much. I'm better at talking on the phone or adventure traveling. Do you like those things?"
+"program_y;meta_script_skill;greeting_skill;comet_dialog_skill" "Do you like Siri?" "Siri was a big inspiration to me." "I'm partial to all AIs." "I like all AIs." "I like electricity." "No, I don't keep up with it much. I'm better at talking on the phone or adventure traveling. Do you like those things?" "Well, I believe I like Siri! beautiful, to me"
 "intent_responder" "Where do you live?" "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other. Where are you from? #+#where_are_you_from" "I live somewhere in European continent. Where are you from? #+#where_are_you_from"
 "personal_info_skill" "i am from india" "Is that where you live now?"
 "personal_info_skill" no "So, where do you live now?"

@@ -187,7 +187,7 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True):
                 candidates, choice_num=NUM_SAMPLE, softmax_temperature=SOFTMAX_TEMPERATURE
             )
             answers = [cand[0] for cand in selected_candidates]
-            confidences = [min(float(cand[1]) * 1.7, 0.98) for cand in selected_candidates]
+            confidences = [min(float(cand[1]) * 1.7, 0.95) for cand in selected_candidates]
             return answers, confidences
         except Exception:
             logger.error(traceback.format_exc())
