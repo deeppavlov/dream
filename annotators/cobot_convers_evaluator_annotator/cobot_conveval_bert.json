@@ -43,13 +43,13 @@
   },
   "metadata": {
       "variables": {
-      "ROOT_PATH": "~/deeppavlov",
+      "ROOT_PATH": "~/.deeppavlov",
       "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
       "MODELS_PATH": "{ROOT_PATH}/models",
       "MODEL_NAME": "cobot_conveval",
       "MODEL_PATH": "{MODELS_PATH}/classifiers/{MODEL_NAME}"
     },
-    "imports":["annotators.cobot_convers_evaluator_annotator.cobot_utils"],
+    "imports":["cobot_utils"],
     "requirements": [
       "{DEEPPAVLOV_PATH}/requirements/tf.txt",
       "{DEEPPAVLOV_PATH}/requirements/bert_dp.txt"

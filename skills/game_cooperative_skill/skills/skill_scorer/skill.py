@@ -8,7 +8,7 @@ import pathlib
 from utils.state import State
 
 
-# url = "http://0.0.0.0:8038/emotion_annotations"
+# url = "http://0.0.0.0:8038/model"
 def get_emo_scores(utterances):
     # input_data = {"sentences": [text]}
     # try:

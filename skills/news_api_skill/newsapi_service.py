@@ -14,7 +14,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 
-BLACKLIST_ANNOTATOR_URL = "http://blacklisted_words:8018/blacklisted_words_batch"
+BLACKLIST_ANNOTATOR_URL = getenv('BLACKLIST_ANNOTATOR_URL')
 
 
 class CachedRequestsAPI:

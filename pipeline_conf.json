@@ -131,7 +131,7 @@
             "toxic_classification": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://toxic_classification:8013/toxicity_annotations"
+                    "url": "http://toxic_classification:8013/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:dp_toxic_formatter_service",
@@ -141,7 +141,7 @@
             "sentiment_classification": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://sentiment_classification:8024/sentiment_annotations"
+                    "url": "http://sentiment_classification:8024/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:cobot_classifiers_formatter_service",
@@ -151,7 +151,7 @@
             "emotion_classification": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://emotion_classification:8038/emotion_annotations"
+                    "url": "http://emotion_classification:8038/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:cobot_classifiers_formatter_service",
@@ -180,7 +180,7 @@
             "factoid_classification": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://factoid_classification:8073/factoid_annotations"
+                    "url": "http://factoid_classification:8073/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:dp_toxic_formatter_service",
@@ -230,7 +230,7 @@
             "kbqa": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://0.0.0.0:8072/answers"
+                    "url": "http://0.0.0.0:8072/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -668,7 +668,7 @@
               "connector": {
                   "protocol": "python",
                   "class_name": "annotators.DeepPavlovToxicClassification.connector:BatchConnector",
-                  "url": "http://toxic_classification:8013/toxicity_annotations"
+                  "url": "http://toxic_classification:8013/model"
               },
               "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
               "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",

@@ -11,24 +11,28 @@ services:
     env_file: [.env.dev]
     volumes:
       - "./annotators/cobot_topics:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8001:8001
   cobot_dialogact_topics:
     env_file: [.env.dev]
     volumes:
       - "./annotators/cobot_dialogact_topics:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8002:8002
   cobot_dialogact_intents:
     env_file: [.env.dev]
     volumes:
       - "./annotators/cobot_dialogact_intents:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8003:8003
   cobot_convers_evaluator_annotator:
     env_file: [.env.dev]
     volumes:
       - "./annotators/cobot_convers_evaluator_annotator:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8004:8004
   cobot_nounphrases:
@@ -67,13 +71,15 @@ services:
   toxic_classification:
     env_file: [.env.dev]
     volumes:
-      - "./annotators/DeepPavlovToxicClassification:/dp-agent/annotators/DeepPavlovToxicClassification"
+      - "./annotators/DeepPavlovToxicClassification:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8013:8013
   sentiment_classification:
     env_file: [.env.dev]
     volumes:
-      - "./annotators/DeepPavlovSentimentClassification:/dp-agent/annotators/DeepPavlovSentimentClassification"
+      - "./annotators/DeepPavlovSentimentClassification:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8024:8024
   sentrewrite:
@@ -260,7 +266,8 @@ services:
   emotion_classification:
     env_file: [.env.dev]
     volumes:
-      - "./annotators/DeepPavlovEmotionClassification:/dp-agent/annotators/DeepPavlovEmotionClassification"
+      - "./annotators/DeepPavlovEmotionClassification:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8038:8038
   dummy_skill_dialog:
@@ -296,6 +303,7 @@ services:
     volumes:
       - "./annotators/stop_detect:/src"
       - "./common:/src/common"
+      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8056:8056
   coronavirus_skill:
@@ -351,12 +359,14 @@ services:
     env_file: [.env.dev]
     volumes:
       - "./annotators/kbqa:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8072:8072
   factoid_classification:
     env_file: [.env.dev]
     volumes:
-      - "./annotators/DeepPavlovFactoidClassification:/dp-agent/annotators/DeepPavlovFactoidClassification"
+      - "./annotators/DeepPavlovFactoidClassification:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8073:8073
   mongo:

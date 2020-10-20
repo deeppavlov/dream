@@ -16,7 +16,7 @@ def __main__():
     parser = ArgumentParser()
     parser.add_argument("--dialogs", type=str, default="amazon_dialogs_all.txt",
                         help="Dialog file")
-    parser.add_argument("--request_url", type=str, default='http://10.11.1.5:8024/sentiment_annotations',
+    parser.add_argument("--request_url", type=str, default='http://10.11.1.5:8024/model',
                         help='url with sentiment model')
     parser.add_argument('--save_with_sentiment', action='store_true', default=False,
                         help='save dialogs file with sentiment labels')

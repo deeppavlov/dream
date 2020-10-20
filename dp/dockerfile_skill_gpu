@@ -1,42 +1,34 @@
-FROM deeppavlov/base-gpu:0.6.1
+FROM deeppavlov/base-gpu:0.12.1
 
-ARG skillconfig
-ARG skillport
-ARG skill_endpoint
-ARG skillhost
-ARG skilldir
-ARG SED_ARG=" | "
+ARG CONFIG
+ARG COMMIT
+ARG PORT
+ARG SRC_DIR
 
-ENV CONFIG=$skillconfig
-ENV PORT=$skillport
-ENV HOST=$skillhost
-ENV ENDPOINT=$skill_endpoint
-ENV TFHUB_CACHE_DIR=/tmp/tfhub
-ENV DIR=$skilldir
+ENV CONFIG=$CONFIG
+ENV PORT=$PORT
 
-VOLUME /tmp/tfhub
+RUN pip install sentry-sdk==0.13.0
 
-RUN mkdir dp-agent
-WORKDIR /dp-agent
-ENV PYTHONPATH "${PYTONPATH}:/dp-agent"
+#RUN if [ ! -z $COMMIT ]; then \
+#        cd DeepPavlov && \
+#        git fetch --all --tags --prune && \
+#        git checkout $COMMIT; \
+#    fi
 
-COPY $CONFIG /dp-agent/$CONFIG
-RUN sed -i "s|$SED_ARG|g" "$CONFIG"
-RUN python -m deeppavlov download $CONFIG
-RUN pip install -r /base/DeepPavlov/deeppavlov/requirements/tf-gpu.txt
+RUN cd DeepPavlov && \
+    git config --global user.email "you@example.com" && \
+    git config --global user.name "Your Name" && \
+    git fetch --all --tags --prune && \
+    git checkout 0.12.1 && \
+    git merge 16759efdc5a12583a6c19af7f3de5b7673a7591e -m 'merging metrics' && \
+    git merge 9215c4f22a0f49f28826d3b3a048e78bce1629d2 -m 'merging lockfile' && \
+    pip install -e .
 
-RUN mkdir -p /dp-agent/$DIR
-COPY $DIR /dp-agent/$DIR
+COPY $SRC_DIR /src
+
+WORKDIR /src
 
 RUN python -m deeppavlov install $CONFIG
 
-COPY dp/ /dp-agent/dp
-RUN python dp/dp_server_config.py
-
-RUN sed -i "/uvicorn.run/s/app,/app, timeout_keep_alive=20,/g" "/base/DeepPavlov/deeppavlov/utils/server/server.py"
-
-RUN pip install sentry-sdk==0.13.0 # TODO: Move it to separate requirements
-
-COPY $DIR/test.sh .
-
-CMD python -m deeppavlov riseapi $CONFIG -p $PORT
+CMD python -m deeppavlov riseapi $CONFIG -p $PORT -d
