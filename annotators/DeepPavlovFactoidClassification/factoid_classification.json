@@ -1,7 +1,7 @@
 {
   "chainer": {
     "in": [
-      "x"
+      "sentences"
     ],
     "in_y": [
       "y"
@@ -13,7 +13,7 @@
         "do_lower_case": false,
         "max_seq_length": 64,
         "in": [
-          "x"
+          "sentences"
         ],
         "out": [
           "bert_features"
@@ -76,7 +76,7 @@
   },
   "metadata": {
     "imports": [
-      "annotators.DeepPavlovFactoidClassification.bert_float_classifier"
+      "bert_float_classifier"
     ],
     "variables": {
       "ROOT_PATH": "~/.deeppavlov",

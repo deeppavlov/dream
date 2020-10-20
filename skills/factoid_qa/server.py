@@ -23,6 +23,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
+KBQA_URL = getenv('KBQA_URL')
 FACTOID_DEFAULT_CONFIDENCE = 0.99  # otherwise dummy often beats it
 ASKED_ABOUT_FACT_PROB = 0.99
 FACTOID_CLASS_THRESHOLD = 0.5
@@ -125,7 +126,7 @@ def getKbqaResponse(query):
         # kbqa_request = "{ \"x\": [" + last_phrase + "] }"
         logging.info('Preparing to run query against KBQA DP Model: ' + str(kbqa_request))
         # kbqa_request = kbqa_request.encode(encoding='utf-8')
-        resp = requests.post('http://kbqa:8072/model', data=kbqa_request)
+        resp = requests.post(KBQA_URL, data=kbqa_request)
         if resp.status_code != 200:
             logging.info('API Error: KBQA DP Model inaccessible, status code: ' + str(resp.status_code))
         else:

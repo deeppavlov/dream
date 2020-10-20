@@ -43,25 +43,25 @@
   },
   "metadata": {
     "imports": [
-      "annotators.DeepPavlovEmotionClassification.bert_float_classifier"
+      "bert_float_classifier"
     ],
     "requirements": [
       "{DEEPPAVLOV_PATH}/requirements/tf.txt",
       "{DEEPPAVLOV_PATH}/requirements/bert_dp.txt",
-      "annotators/DeepPavlovEmotionClassification/requirements.txt"
+      "requirements.txt"
     ],
     "variables": {
-      "ROOT_PATH": "~/deeppavlov",
+      "ROOT_PATH": "~/.deeppavlov",
       "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
       "MODELS_PATH": "{ROOT_PATH}/models",
-      "MODEL_PATH": "{MODELS_PATH}/classifiers"
+      "MODEL_PATH": "{MODELS_PATH}/classifiers/emo_bert3_v1"
     },
     "labels": {
       "server_utils": "EmotionClassificationModel"
     },
     "download": [
       {
-        "url": "http://files.deeppavlov.ai/alexaprize_data/emo_bert3.tar.gz",
+        "url": "http://files.deeppavlov.ai/alexaprize_data/emo_bert3_v1.tar.gz",
         "subdir": "{MODELS_PATH}/classifiers"
       }
     ]

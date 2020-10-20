@@ -66,13 +66,13 @@
     "requirements": [
       "{DEEPPAVLOV_PATH}/requirements/tf.txt",
       "{DEEPPAVLOV_PATH}/requirements/bert_dp.txt",
-      "annotators/{MODEL_NAME}/requirements.txt"
+      "requirements.txt"
     ],
     "imports": [
-      "annotators.cobot_dialogact_intents.bert_float_classifier"
+      "bert_float_classifier"
     ],
     "variables": {
-      "ROOT_PATH": "~/deeppavlov",
+      "ROOT_PATH": "~/.deeppavlov",
       "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
       "MODELS_PATH": "{ROOT_PATH}/models",
       "MODEL_NAME": "cobot_dialogact_intents",

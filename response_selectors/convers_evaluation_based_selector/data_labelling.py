@@ -25,7 +25,7 @@ parser.add_argument('--mode', help='add_annotations|label', default='label')
 
 BLACKLIST_URL = "http://localhost:8018/blacklisted_words_batch"
 CONV_EVAL_URL = "http://localhost:8004/model"
-TOXIC_URL = "http://localhost:8013/toxicity_annotations"
+TOXIC_URL = "http://localhost:8013/model"
 STOP_DETECTOR_URL = "http://localhost:8056/model"
 
 

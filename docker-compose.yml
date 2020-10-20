@@ -21,11 +21,9 @@ services:
   cobot_topics:
     build:
       args:
-        skill_endpoint: cobot_topics
-        skillconfig: annotators/cobot_topics/cobot_bert.json
-        skillhost: 0.0.0.0
-        skillport: 8001
-        skilldir: annotators/cobot_topics/
+        CONFIG: cobot_bert.json
+        SRC_DIR: annotators/cobot_topics
+        PORT: 8001
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -34,11 +32,9 @@ services:
   cobot_dialogact_topics:
     build:
       args:
-        skill_endpoint: cobot_dialogact_topics
-        skillconfig: annotators/cobot_dialogact_topics/cobot_bert.json
-        skillhost: 0.0.0.0
-        skillport: 8002
-        skilldir: annotators/cobot_dialogact_topics/
+        CONFIG: cobot_bert.json
+        PORT: 8002
+        SRC_DIR: annotators/cobot_dialogact_topics
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -47,11 +43,9 @@ services:
   cobot_dialogact_intents:
     build:
       args:
-        skill_endpoint: cobot_dialogact_intents
-        skillconfig: annotators/cobot_dialogact_intents/cobot_bert.json
-        skillhost: 0.0.0.0
-        skillport: 8003
-        skilldir: annotators/cobot_dialogact_intents/
+        CONFIG: cobot_bert.json
+        PORT: 8003
+        SRC_DIR: annotators/cobot_dialogact_intents
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -60,11 +54,9 @@ services:
   cobot_convers_evaluator_annotator:
     build:
       args:
-        skill_endpoint: model
-        skillconfig: annotators/cobot_convers_evaluator_annotator/cobot_conveval_bert.json
-        skillhost: 0.0.0.0
-        skillport: 8004
-        skilldir: annotators/cobot_convers_evaluator_annotator
+        CONFIG: cobot_conveval_bert.json
+        PORT: 8004
+        SRC_DIR: annotators/cobot_convers_evaluator_annotator
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -74,7 +66,6 @@ services:
     build:
       context: ./annotators/cobot_nounphrases/
     command: bash -c "gunicorn --workers=1 server:app -b 0.0.0.0:8006 -t 60"
-
   program_y:
     build:
       context: .
@@ -84,29 +75,24 @@ services:
     build:
       context: ./skills/personality_catcher/
     command: uvicorn server:app --host 0.0.0.0 --port 8010
-    volumes: []
 
   sentseg:
     build:
       context: ./annotators/SentSeg/
     command: bash -c "./setup.sh && gunicorn --workers=1 server:app -b 0.0.0.0:8011 -t 100"
-    volumes: []
 
   convers_evaluation_selector:
     build:
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8009 -t 15
-    volumes: []
 
   toxic_classification:
     build:
       args:
-        skill_endpoint: toxicity_annotations
-        skillconfig: annotators/DeepPavlovToxicClassification/toxic_classification.json
-        skillhost: 0.0.0.0
-        skillport: 8013
-        skilldir: annotators/DeepPavlovToxicClassification/
+        CONFIG: toxic_classification.json
+        PORT: 8013
+        SRC_DIR: annotators/DeepPavlovToxicClassification
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -115,11 +101,9 @@ services:
   sentiment_classification:
     build:
       args:
-        skill_endpoint: sentiment_annotations
-        skillconfig: annotators/DeepPavlovSentimentClassification/sentiment_sst_conv_bert.json
-        skillhost: 0.0.0.0
-        skillport: 8024
-        skilldir: annotators/DeepPavlovSentimentClassification/
+        CONFIG: sentiment_sst_conv_bert.json
+        PORT: 8024
+        SRC_DIR: annotators/DeepPavlovSentimentClassification
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -134,13 +118,11 @@ services:
     build:
       context: ./skills/IntentResponder/
     command: gunicorn --workers=1 --name=responder --bind 0.0.0.0:8012 --timeout=100 server:app
-    volumes: []
 
   intent_catcher:
     build:
       context: ./annotators/IntentCatcher/
     command: gunicorn --workers=1 --name=catcher --bind 0.0.0.0:8014 --timeout=100 server:app
-    volumes: []
 
   blacklisted_words:
     build:
@@ -156,7 +138,6 @@ services:
       context: .
       dockerfile: ./skills/movie_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8023 --timeout=300 --preload
-    volumes: []
 
   ner:
     build:
@@ -164,7 +145,6 @@ services:
     environment:
       DEVICE: cuda
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8021 -t 100
-    volumes: []
     tty: true
 
   alice:
@@ -176,7 +156,6 @@ services:
     build:
       context: ./skills/eliza/
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8047
-    volumes: []
 
   book_tfidf_retrieval:
     build:
@@ -187,7 +166,6 @@ services:
         TOPIC_NAME: book
         CONFIDENCE_THRESHOLD: 0.51
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8039
-    volumes: []
 
   entertainment_tfidf_retrieval:
     build:
@@ -198,7 +176,6 @@ services:
         TOPIC_NAME: entertainment
         CONFIDENCE_THRESHOLD: 0.59
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8040
-    volumes: []
 
   fashion_tfidf_retrieval:
     build:
@@ -209,7 +186,6 @@ services:
         TOPIC_NAME: fashion
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8041
-    volumes: []
 
   movie_tfidf_retrieval:
     build:
@@ -220,7 +196,6 @@ services:
         TOPIC_NAME: movie
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8042
-    volumes: []
 
   music_tfidf_retrieval:
     build:
@@ -231,7 +206,6 @@ services:
         TOPIC_NAME: music
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8034
-    volumes: []
 
   politics_tfidf_retrieval:
     build:
@@ -242,7 +216,6 @@ services:
         TOPIC_NAME: politics
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8043
-    volumes: []
 
   science_technology_tfidf_retrieval:
     build:
@@ -253,7 +226,6 @@ services:
         TOPIC_NAME: science_technology
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8044
-    volumes: []
 
   sport_tfidf_retrieval:
     build:
@@ -264,7 +236,6 @@ services:
         TOPIC_NAME: sport
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8045
-    volumes: []
 
   animals_tfidf_retrieval:
     build:
@@ -275,20 +246,17 @@ services:
         TOPIC_NAME: animals
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8050
-    volumes: []
 
   convert_reddit:
     build:
       context: ./skills/convert_reddit/
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8029 -t 60
-    volumes: []
 
   personal_info_skill:
     build:
       context: .
       dockerfile: ./skills/personal_info_skill/Dockerfile
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8030
-    volumes: []
 
   asr:
     build:
@@ -311,48 +279,40 @@ services:
     build:
       context: ./skills/christmas_new_year_skill/
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8036
-    volumes: []
 
   superbowl_skill:
     build:
       context: ./skills/superbowl_skill/
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8051
-    volumes: []
 
   oscar_skill:
     build:
       context: ./skills/oscar_skill/
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8055
-    volumes: []
 
   valentines_day_skill:
     build:
       context: ./skills/valentines_day_skill/
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8058
-    volumes: []
 
   weather_skill:
     build:
             context: .
             dockerfile: ./skills/weather_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8037
-    volumes: []
 
   emotion_skill:
     build:
       context: .
       dockerfile: ./skills/emotion_skill/Dockerfile
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8049
-    volumes: []
 
   emotion_classification:
     build:
       args:
-        skill_endpoint: emotion_annotations
-        skillconfig: annotators/DeepPavlovEmotionClassification/emo_bert.json
-        skillhost: 0.0.0.0
-        skillport: 8038
-        skilldir: annotators/DeepPavlovEmotionClassification/
+        CONFIG: emo_bert.json
+        PORT: 8038
+        SRC_DIR: annotators/DeepPavlovEmotionClassification
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -372,7 +332,6 @@ services:
         PREPROCESS_DATA: http://lnsigo.mipt.ru/export/alexaprize_data/comet/categories_oEffect%%23oReact%%23oWant%%23xAttr%%23xEffect%%23xIntent%%23xNeed%%23xReact%%23xWant-maxe1_17-maxe2_35-maxr_1.pickle
         TEST_SCRIPT: test_atomic.py
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8053
-    volumes: []
     environment:
       - CUDA_VISIBLE_DEVICES=0
 
@@ -385,7 +344,6 @@ services:
         PREPROCESS_DATA: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/rel_language-trainsize_100-devversion_12-maxe1_10-maxe2_15-maxr_5.pickle
         TEST_SCRIPT: test_conceptnet.py
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8065
-    volumes: []
     environment:
       - CUDA_VISIBLE_DEVICES=0
 
@@ -394,21 +352,19 @@ services:
       context: .
       dockerfile: skills/meta_script_skill/Dockerfile
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8054
-    volumes: []
 
   short_story_skill:
     build:
       context: .
       dockerfile: ./skills/short_story_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8057
+
   stop_detect:
     build:
       args:
-        skill_endpoint: model
-        skillconfig: annotators/stop_detect/stop_detect.json
-        skillhost: 0.0.0.0
-        skillport: 8056
-        skilldir: annotators/stop_detect
+        CONFIG: stop_detect.json
+        PORT: 8056
+        SRC_DIR: annotators/stop_detect
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -419,14 +375,12 @@ services:
       context: .
       dockerfile: ./skills/coronavirus_skill/Dockerfile
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8061
-    volumes: []
 
   small_talk_skill:
     build:
       context: .
       dockerfile: ./skills/small_talk_skill/Dockerfile
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8062
-    volumes: []
 
   game_cooperative_skill:
     build:
@@ -435,7 +389,6 @@ services:
       context: .
       dockerfile: ./skills/game_cooperative_skill/Dockerfile
     command: bash server_run.sh "gunicorn --workers=2 server:app -b 0.0.0.0:8068 --reload"
-    volumes: []
 
   program_y_wide:
     build:
@@ -450,43 +403,36 @@ services:
     environment:
       - ASYNC_SIZE=3
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8066 -t 15
-    volumes: []
 
   greeting_skill:
     build:
       context: .
       dockerfile: ./skills/greeting_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8070 --timeout=60 --preload
-    volumes: []
 
   factoid_qa:
     build:
       context: .
       dockerfile: ./skills/factoid_qa/Dockerfile
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8071
-    volumes: []
 
   kbqa:
     build:
       args:
-        skill_endpoint: answers
-        skillconfig: annotators/kbqa/kbqa_cq.json
-        skillhost: 0.0.0.0
-        skillport: 8072
-        skilldir: annotators/kbqa/
+        CONFIG: kbqa_cq.json
+        PORT: 8072
+        SRC_DIR: annotators/kbqa/
       context: ./
-      dockerfile: annotators/kbqa/Dockerfile
+      dockerfile: dp/dockerfile_skill_gpu
     environment:
       - CUDA_VISIBLE_DEVICES=0
 
   factoid_classification:
     build:
       args:
-        skill_endpoint: factoid_annotations
-        skillconfig: annotators/DeepPavlovFactoidClassification/factoid_classification.json
-        skillhost: 0.0.0.0
-        skillport: 8073
-        skilldir: annotators/DeepPavlovFactoidClassification/
+        CONFIG: factoid_classification.json
+        PORT: 8073
+        SRC_DIR: annotators/DeepPavlovFactoidClassification
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -496,6 +442,5 @@ services:
     build:
       context: ./annotators/spelling_preprocessing/
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8074 --timeout=100
-    volumes: []
 
 version: '3.7'

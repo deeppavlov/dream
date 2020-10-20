@@ -10,7 +10,7 @@ import sentry_sdk
 
 SENTRY_DSN = os.getenv("SENTRY_DSN")
 SENTIMENT_CLASSIFICATION_SERVICE_URL = os.getenv(
-    "SENTIMENT_CLASSIFICATION_SERVICE_URL", "http://sentiment_classification:8024/sentiment_annotations"
+    "SENTIMENT_CLASSIFICATION_SERVICE_URL", "http://sentiment_classification:8024/model"
 )
 
 sentry_sdk.init(SENTRY_DSN)

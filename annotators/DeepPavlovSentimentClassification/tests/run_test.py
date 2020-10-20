@@ -13,7 +13,7 @@ selected_classes = ['positive', 'positive', 'negative',
 
 
 def test_one_step_responses():
-    url = "http://0.0.0.0:8024/sentiment_annotations"
+    url = "http://0.0.0.0:8024/model"
     input_data = {"sentences": ["ok", "i love you", "i hate you",
                                 "yes", "no", "please",
                                 "tell me something",
