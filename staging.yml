@@ -100,6 +100,10 @@ services:
       - ${ENV_FILE}
   book_tfidf_retrieval:
     image: ${DOCKER_REGISTRY}/book_tfidf_retrieval:${VERSION}
+  book_skill:
+    image: ${DOCKER_REGISTRY}/book_skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   entertainment_tfidf_retrieval:
     image: ${DOCKER_REGISTRY}/entertainment_tfidf_retrieval:${VERSION}
   fashion_tfidf_retrieval:
@@ -224,6 +228,14 @@ services:
       - ${ENV_FILE}
   spelling_preprocessing:
     image: ${DOCKER_REGISTRY}/spelling_preprocessing:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  wiki_parser:
+    image: ${DOCKER_REGISTRY}/wiki_parser:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  kbqa_entity_linker:
+    image: ${DOCKER_REGISTRY}/kbqa_entity_linker:${VERSION}
     env_file:
       - ${ENV_FILE}
 volumes:

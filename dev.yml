@@ -362,6 +362,20 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8072:8072
+  entity_linking:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/entity_linking:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8075:8075
+  wiki_parser:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/wiki_parser:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8077:8077
   factoid_classification:
     env_file: [.env.dev]
     volumes:

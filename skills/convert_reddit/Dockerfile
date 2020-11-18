@@ -6,8 +6,7 @@ FROM tensorflow/tensorflow:1.14.0-py3
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         curl &&\
-    apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
-	rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/lib/apt/lists/* && \
     rm -rf /root/.cache
 
 ARG DATA_URL=http://files.deeppavlov.ai/alexaprize_data/convert_reddit_v2.4.tar.gz

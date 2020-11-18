@@ -121,7 +121,7 @@ def getKbqaResponse(query):
     # adding experimental KBQA support
     try:
         x = [query]
-        kbqa_request_dict = dict([('x', x)])
+        kbqa_request_dict = dict([('x_init', x)])
         kbqa_request = json.dumps(kbqa_request_dict, ensure_ascii=False).encode('utf8')
         # kbqa_request = "{ \"x\": [" + last_phrase + "] }"
         logging.info('Preparing to run query against KBQA DP Model: ' + str(kbqa_request))
@@ -144,7 +144,8 @@ def getKbqaResponse(query):
 @app.route("/test", methods=['POST'])
 def test():
     last_phrase = request.json["query"]
-    return getKbqaResponse(last_phrase)
+    response_dict = getKbqaResponse(last_phrase)
+    return response_dict["response"]
 
 
 @app.route("/respond", methods=['POST'])
