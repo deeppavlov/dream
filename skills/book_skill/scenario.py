@@ -38,19 +38,20 @@ if "author_namesbooks.pkl" not in os.listdir(os.getcwd()):
         zip_ref.extractall(os.getcwd())
 author_names, author_books = cPickle.load(open('author_namesbooks.pkl', 'rb'))
 
-if any([kbqa_file not in os.listdir(os.getcwd()) for kbqa_file in kbqa_files]):
-    with tarfile.open('../global_data/wikidata_eng/wiki_eng_files.tar.gz', "r:gz") as tar_ref:
-        tar_ref.extractall(os.getcwd())
-logging.info('Creating linker')
-linker = entity_linking.KBEntityLinker(load_path=os.getcwd(), save_path=os.getcwd(),
-                                       inverted_index_filename="inverted_index_eng.pickle",
-                                       entities_list_filename="entities_list.pickle",
-                                       q2name_filename="wiki_eng_q_to_name.pickle",
-                                       who_entities_filename="kwho_entities.pickle")
-logging.info('Loading wikidata file')
-wikidata_file = HDTDocument('../global_data/wikidata/wikidata.hdt')
+# if any([kbqa_file not in os.listdir(os.getcwd()) for kbqa_file in kbqa_files]):
+#    with tarfile.open('../global_data/wikidata_eng/wiki_eng_files.tar.gz', "r:gz") as tar_ref:
+#        tar_ref.extractall(os.getcwd())
+# logging.info('Creating linker')
+# linker = entity_linking.KBEntityLinker(load_path=os.getcwd(), save_path=os.getcwd(),
+#                                       inverted_index_filename="inverted_index_eng.pickle",
+#                                       entities_list_filename="entities_list.pickle",
+#                                       q2name_filename="wiki_eng_q_to_name.pickle",
+#                                       who_entities_filename="who_entities.pickle")
+# logging.info('Loading wikidata file')
+# wikidata_file = HDTDocument('../global_data/wikidata/wikidata.hdt')
 
 logging.info('All files successfully created')
+
 
 def was_question_about_book(phrase):
     if type(phrase) == list:
@@ -281,6 +282,55 @@ def fact_about_book(annotated_user_phrase):
     pass
 
 
+def get_triples(part1, part2, part3):
+    logging.debug('Calling get_triples for ' + ' '.join([part1, part2, part3]))
+    WIKIDATA_URL = os.getenv("WIKIDATA_URL")
+    if '/' in part1:
+        part1 = part1.split('/')[-1]
+    if '/' in part2:
+        part2 = part2.split('/')[-1]
+    if '/' in part3:
+        part3 = part3.split('/')[-1]
+    assert part2 != ""
+    if part1 == "" and part3 == "":
+        raise Exception('Specify part1 or part3')
+    known_part1 = None
+    if part3 == "" and part1 != "":
+        known_part, mode = part1, "forw"
+    elif part3 != "":
+        known_part, mode = part3, "backw"
+        if part1 != "":
+            known_part1 = part1
+    response = requests.post(WIKIDATA_URL, json={"query": [known_part]}).json()
+    response = response[0][0][mode]
+    for relation_entities in response:
+        relation = relation_entities[0]
+        if relation == part2:
+            answer = relation_entities[1:]
+            if known_part1 is None:
+                logging.debug('Returning ' + str(answer) + ',1')
+                return answer, 1
+            elif known_part1 in answer:
+                logging.debug('Returning True,1')
+                return True, 1
+            else:
+                logging.debug('Returning False,0')
+                return False, 0
+    logging.debug('Returning [],0')
+    return [], 0  # entities, bool
+
+
+def request_entities(entity):
+    logging.debug('Calling request_entities for '+str(entity))
+    ENTITY_LINKING_URL = os.getenv("ENTITY_LINKING_URL")
+    assert type(entity) == str
+    response = requests.post(ENTITY_LINKING_URL, json={"entity_substr": [[entity]], "template_found": [""]}).json()
+    logging.debug('Response is '+str(response))
+    entities = response[0][0][0]
+    probs = response[0][1]
+    return entities, probs
+
+
 def is_previous_was_about_book(dialog):
     return len(dialog['utterances']) >= 2 and dialog["utterances"][-2]["active_skill"] == 'book_skill'
 
@@ -298,6 +348,7 @@ def get_entities(annotated_phrase):
 
 
 def preprocess_entities(named_entities):
+    logging.debug('Calling preprocess_entities for '+str(named_entities))
     # auhillary function from get_name aimed at enitites processing
     processed_entities = []
     banned_entities = ['tik tok', 'minecraft', 'the days']
@@ -327,6 +378,7 @@ def get_name(annotated_phrase, mode='author', bookyear=True, return_plain=False)
     logging.debug('Mode ' + mode)
     if return_plain:
         logging.debug("With plain")
+    named_entities = prepare_entities(annotated_phrase)
     named_entities = get_entities(annotated_phrase)
     processed_entities = preprocess_entities(named_entities)
     logging.debug('named entities')
@@ -349,9 +401,8 @@ def who_wrote_book(book, return_plain=False):
         plain_book_entity, _ = wikidata_process_entities(book, mode='book',
                                                          bookyear=False, return_plain=True)
     logging.debug('Search author with entity ' + plain_book_entity.upper())
-    triplets, num = wikidata_file.search_triples("http://www.wikidata.org/entity/" + plain_book_entity.upper(),
-                                                 "http://www.wikidata.org/prop/direct/P50", "")
-    author_list = [j[2] for j in triplets]
+    author_list, num = get_triples("http://www.wikidata.org/entity/" + plain_book_entity.upper(),
+                                   "http://www.wikidata.org/prop/direct/P50", "")
     logging.debug('Author list received ' + str(author_list))
     author_list = [x[x.find('Q'):] for x in author_list]  # to unify representations
     sorted_author_list = sorted(author_list, key=lambda x: int(x[1:]))  # Sort entities by frequency
@@ -365,52 +416,48 @@ def who_wrote_book(book, return_plain=False):
         return author_name
 
 
-def get_wikidata_entities(entity_list, linker=linker):
+def get_wikidata_entities(entity_list):
     logging.debug('Calling get_wikidata_entities for ' + str(entity_list))
     if type(entity_list) == str:
         entity_list = [entity_list]
-    wikidata_entities = []  # All found wikidata entitites
+    answer_entities = []  # All found wikidata entitites
     for entity in entity_list:  # We search for wikidata entities in each entity provided
-        entities, probs = linker([[entity]])
-        entities = entities[0][0]
-        probs = probs[0][0]
+        wikidata_entities, probs = request_entities(entity)
+        logging.debug(wikidata_entities[:2])
+        logging.debug(probs[:2])
         if len(probs) > 0:
             max_prob = max(probs)
-            found_wikidata_entities = [entity for i, entity in enumerate(entities) if probs[i] == max(probs)]
-            wikidata_entities = wikidata_entities + found_wikidata_entities
-    logging.debug('Answer ' + str(wikidata_entities))
-    return wikidata_entities
+            found_wikidata_entities = [entity for i, entity in enumerate(wikidata_entities) if probs[i] == max_prob]
+            answer_entities = answer_entities + found_wikidata_entities
+    logging.debug('Answer ' + str(answer_entities))
+    return answer_entities
 
 
-def get_published_year(book_entity, wikidata_file=wikidata_file):
+def get_published_year(book_entity):
     # print('Entity '+book_entity)
     logging.debug('Calling get_published_year for ' + str(book_entity))
     assert type(book_entity) == str and book_entity[0] == 'Q'
     book_entity = book_entity.strip()
-    answer_list, _ = wikidata_file.search_triples("http://www.wikidata.org/entity/" + book_entity,
-                                                  "http://www.wikidata.org/prop/direct/P577",
-                                                  "")
+    published_year, _ = get_triples("http://www.wikidata.org/entity/" + book_entity,
+                                    "http://www.wikidata.org/prop/direct/P577",
+                                    "")
 
     try:
-        answer_list = [k for k in answer_list]
-        logging.debug('Answer list ' + str(answer_list))
-        published_year = [k[2] for k in answer_list]
-        # print(published_year)
+        logging.debug('Answer list ' + str(published_year))
         published_year = published_year[0][1:5]
         logging.debug('Answer ' + str(published_year))
         return int(published_year)
     except:
-        raise Exception(f'Could not obtain published year from {answer_list}')
+        raise Exception(f'Could not obtain published year from {published_year}')
 
 
-def entity_to_label(entity, wikidata_file=wikidata_file):
+def entity_to_label(entity):
     logging.debug('Calling entity_to_label for ' + str(entity))
     assert type(entity) == str and entity[0] == 'Q'
-    labels, _ = wikidata_file.search_triples('http://www.wikidata.org/entity/' + entity,
-                                             "http://www.w3.org/2000/01/rdf-schema#label", "")
+    labels, _ = get_triples('http://www.wikidata.org/entity/' + entity,
+                            "name_en", "")
     try:
-        label = [j[2] for j in labels if j[2][-3:] == '@en']
-        label = label[0].split('"')[1]
+        label = labels[0].split('"')[1]
         logging.debug('Answer ' + str(label))
         return label
     except:
@@ -429,25 +476,25 @@ def wikidata_process_entities(entity_list, mode='author', bookyear=False,
     requested_entities = []  # All found wikidata entities OF REQUESTED TYPE
     if mode == 'author':
         for entity in all_found_entities:
-            _, bool_number = wikidata_file.search_triples("http://www.wikidata.org/entity/" + entity,
-                                                          "http://www.wikidata.org/prop/direct/P106",  # the instance of
-                                                          "http://www.wikidata.org/entity/Q36180")  # Author
+            _, bool_number = get_triples("http://www.wikidata.org/entity/" + entity,
+                                         "http://www.wikidata.org/prop/direct/P106",  # the instance of
+                                         "http://www.wikidata.org/entity/Q36180")  # Author
             if bool_number == 1:
                 logging.debug('It is author')
                 requested_entities.append(entity)
     elif mode == 'book':
         for entity in all_found_entities:
-            _, bool_number = wikidata_file.search_triples("http://www.wikidata.org/entity/" + entity,
-                                                          "http://www.wikidata.org/prop/direct/P31",  # the instance of
-                                                          "http://www.wikidata.org/entity/Q571")  # book
+            _, bool_number = get_triples("http://www.wikidata.org/entity/" + entity,
+                                         "http://www.wikidata.org/prop/direct/P31",  # the instance of
+                                         "http://www.wikidata.org/entity/Q571")  # book
             if bool_number == 1:
                 logging.debug('It is book')
                 requested_entities.append(entity)
             else:
-                _, bool_number = wikidata_file.search_triples("http://www.wikidata.org/entity/" + entity,
-                                                              "http://www.wikidata.org/prop/direct/P31",
-                                                              # the instance of
-                                                              "http://www.wikidata.org/entity/Q2779")  # book
+                _, bool_number = get_triples("http://www.wikidata.org/entity/" + entity,
+                                             "http://www.wikidata.org/prop/direct/P31",
+                                             # the instance of
+                                             "http://www.wikidata.org/entity/Q7725634")  # book
                 if bool_number == 1:
                     logging.debug('It is book serie')
                     requested_entities.append(entity)
@@ -473,18 +520,16 @@ def wikidata_process_entities(entity_list, mode='author', bookyear=False,
 
 def best_book_by_author(plain_author_name, plain_last_bookname=None,
                         top_n_best_books=1,
-                        wikidata_file=wikidata_file,
                         default_phrase="Fabulous! And what book did impress you the most?"):
     logging.debug('Calling best_book_by_author for ' + str(plain_author_name) + ' ' + str(plain_last_bookname))
-    book_list, book_numbers = wikidata_file.search_triples("http://www.wikidata.org/entity/" + plain_author_name,
-                                                           # authorname
-                                                           "http://www.wikidata.org/prop/direct/P800",
-                                                           # best books
-                                                           "")
+    book_list, book_numbers = get_triples("http://www.wikidata.org/entity/" + plain_author_name,
+                                          # authorname
+                                          "http://www.wikidata.org/prop/direct/P800",
+                                          # best books
+                                          "")
     try:
         logging.debug('List of returned books')
         logging.debug(book_list)
-        book_list = [j[2] for j in book_list]
         if plain_last_bookname is not None:
             book_list = [j for j in book_list if plain_last_bookname not in j]
         book_list = [x[x.find('Q'):] for x in book_list]  # to unify representations
@@ -549,12 +594,12 @@ class BookSkillScenario:
         NO_PHRASE_1 = "Why don't you love reading?"
         NO_PHRASE_2 = BOOK_CHANGE_PHRASE
         # NO_PHRASE_3 = 'I agree. But there are some better books.'
-        NO_PHRASE_4 = BOOK_CHANGE_PHRASE
+        # NO_PHRASE_4 = BOOK_CHANGE_PHRASE
         YES_PHRASE_1 = "That's great. What is the last book you have read?"
         YES_PHRASE_2_NO = "That's OK. I can't name it either."
         YES_PHRASE_2 = "Fabulous! And what book did impress you the most?"
         YES_PHRASE_3_1 = "I've also read it. It's an amazing book! Do you know when it was first published?"
-        YES_PHRASE_3_FACT = "I've read it. It's an amazing book! Would you like to know some facts about it?"
+        # YES_PHRASE_3_FACT = "I've read it. It's an amazing book! Would you like to know some facts about it?"
         YES_PHRASE_4 = " I didn't exist in that time. " + get_tutor_phrase()
         FAVOURITE_GENRE_ANSWERS = list(GENRE_PHRASES.values())
         FAVOURITE_BOOK_ANSWERS = ['My favourite book is "The Old Man and the Sea" by Ernest Hemingway.',
