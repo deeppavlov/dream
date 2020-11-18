@@ -10,8 +10,11 @@ import requests
 import json
 import os
 import zipfile
+import tarfile
+from datetime import datetime
 import _pickle as cPickle
-import datetime
+from hdt import HDTDocument
+from deeppavlov.models.kbqa import kbqa_entity_linking as entity_linking
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -26,18 +29,28 @@ LIKE_PATTERN = r"(like|love|prefer|adore|enjoy|fond of|passionate of|fan of|inte
                r"into|for you|for me)"
 FAVORITE_PATTERN = r"(favorite|loved|beloved|fondling|best|most interesting)"
 GENRE_PHRASES = json.load(open('genre_phrases.json', 'r'))[0]
-ENTITY_SERVICE_URL = getenv('COBOT_ENTITY_SERVICE_URL')
-QUERY_SERVICE_URL = getenv('COBOT_QUERY_SERVICE_URL')
-QA_SERVICE_URL = getenv('COBOT_QA_SERVICE_URL')
-API_KEY = getenv('COBOT_API_KEY')
-# ENTITY_SERVICE_URL = 'https://746y2ig586.execute-api.us-east-1.amazonaws.com/prod//knowledge/v1/entityResolution'
-# QUERY_SERVICE_URL = 'https://ssy3pe4ema.execute-api.us-east-1.amazonaws.com/prod/knowledge/v1/query'
-#  API_KEY = 'MYF6T5vloa7UIfT1LwftY3I33JmzlTaA86lwlVGm'
+kbqa_files = ['inverted_index_eng.pickle',
+              'entities_list.pickle',
+              'wiki_eng_q_to_name.pickle',
+              'who_entities.pickle']
 if "author_namesbooks.pkl" not in os.listdir(os.getcwd()):
     with zipfile.ZipFile("../global_data/author_namesbooks.zip", "r") as zip_ref:
         zip_ref.extractall(os.getcwd())
 author_names, author_books = cPickle.load(open('author_namesbooks.pkl', 'rb'))
 
+if any([kbqa_file not in os.listdir(os.getcwd()) for kbqa_file in kbqa_files]):
+    with tarfile.open('../global_data/wikidata_eng/wiki_eng_files.tar.gz', "r:gz") as tar_ref:
+        tar_ref.extractall(os.getcwd())
+logging.info('Creating linker')
+linker = entity_linking.KBEntityLinker(load_path=os.getcwd(), save_path=os.getcwd(),
+                                       inverted_index_filename="inverted_index_eng.pickle",
+                                       entities_list_filename="entities_list.pickle",
+                                       q2name_filename="wiki_eng_q_to_name.pickle",
+                                       who_entities_filename="kwho_entities.pickle")
+logging.info('Loading wikidata file')
+wikidata_file = HDTDocument('../global_data/wikidata/wikidata.hdt')
+
+logging.info('All files successfully created')
 
 def was_question_about_book(phrase):
     if type(phrase) == list:
@@ -77,178 +90,6 @@ def about_book(annotated_utterance):
     y2 = 'Information_RequestIntent' in annotated_utterance['annotations']['cobot_topics']['text']
     # logging.debug('ok')
     return y1 or y2
-
-
-def get_answer(phrase):
-    logging.debug('Getting COBOT anwer for phrase')
-    logging.debug(phrase)
-    headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': API_KEY}
-    answer = requests.request(url=QA_SERVICE_URL, headers=headers, timeout=2,
-                              data=json.dumps({'question': phrase}), method='POST').json()
-    logging.debug('Response obtained')
-    logging.debug(answer['response'])
-    return answer['response']
-
-
-def fan_parse(phrase):
-    patterns = ['ever read', 'read', 'ever heard of', 'heard', 'been into', 'interested in',
-                'do you like', 'do you enjoy', 'do you prefer', 'a fan of', 'are you familiar with',
-                'do you subscribe to', 'the story of', 'are you aware of']
-    spl = False
-    for pattern in patterns:
-        if pattern in phrase:
-            phrase = phrase.split(pattern)[1]
-            spl = True
-    if 'you' in phrase and 'fan?' in phrase and not spl:
-        phrase = phrase.split('you')[1]
-        if ' fan?' in phrase:
-            phrase = phrase.split('fan?')[0]
-    phrase = phrase.replace('?', '')
-    if 'book' in phrase:
-        phrase = phrase.split('book')[0] + 'book'
-    return phrase
-
-
-def parse_author_best_book(annotated_phrase, default_phrase="Fabulous! And what book did impress you the most?"):
-    global author_names
-    logging.debug('Parse author best book for ')
-    logging.debug(annotated_phrase['text'])
-    annotated_phrase['text'] = annotated_phrase['text'].lower()
-    if ' is ' in annotated_phrase['text']:
-        annotated_phrase['text'] = annotated_phrase['text'].split(' is ')[1]
-    last_bookname, _ = get_name(annotated_phrase, 'book')
-    if last_bookname is None:
-        '''
-        Look by author name
-        '''
-        return default_phrase
-    else:
-        last_bookname = last_bookname.lower()
-    try:
-        last_bookname = last_bookname.lower()
-        '''
-        Get author or this book using QUERY LANGUAGE !!!! Not get_answer
-        '''
-        headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': API_KEY}
-        aie_book, _ = get_name(last_bookname, mode='book', return_plain=True)
-        answer = requests.request(url=QUERY_SERVICE_URL, headers=headers, timeout=2,
-                                  data=json.dumps(
-                                      {'query': {'text': 'query d|d' + ' <aio:isTheAuthorOf> ' + aie_book}}),
-                                  method='POST').json()
-        authorname_plain = '<' + answer['results'][0]['bindingList'][0]['value'] + '>'
-        logging.debug('authorname detected')
-        logging.debug(authorname_plain)
-        if authorname_plain in author_names:
-            author = author_names[authorname_plain]
-        else:
-            answer = requests.request(
-                url=QUERY_SERVICE_URL, headers=headers, data=json.dumps(
-                    {'query': {'text': 'query label|' + authorname_plain + ' <aio:prefLabel> ' + 'label'}}),
-                method='POST', timeout=2).json()
-            author = answer['results'][0]['bindingList'][0]['value']
-    except BaseException:
-        return default_phrase
-    logging.debug('author detected')
-    logging.debug(author)
-    return best_book_by_author(author, last_bookname, default_phrase=default_phrase)
-    # Receiving info about the last book ever read, we process info about author
-
-
-def best_book_by_author(author, last_bookname=None,
-                        default_phrase="Fabulous! And what book did impress you the most?"):
-    global author_books
-    try:
-        if author in author_books:
-            answer1 = author_books[author]
-        else:
-            answer1 = get_answer('books of ' + author)
-        book_list = answer1.split('include: ')[1].split(',')
-        book_list[-1] = book_list[-1][5:-1]
-        book_list = [j for j in book_list if all([ban_sign not in j for ban_sign in '[]()'])]
-        random.shuffle(book_list)
-        if last_bookname is None:
-            return book_list[0]
-        for book in book_list:
-            if book not in last_bookname and last_bookname not in book:
-                return book
-    except BaseException:
-        return default_phrase
-
-
-def what_genre(annotated_phrase):
-    return any([j in annotated_phrase['text'] for j in ['what is', 'what was']])
-
-
-def get_name(annotated_phrase, mode='author', return_plain=False, bookyear=False):
-    logging.debug('Getting name for ')
-    logging.debug(annotated_phrase['text'])
-    if type(annotated_phrase) == str:
-        annotated_phrase = {'text': annotated_phrase}
-    if mode == 'author':
-        class_constraints = [{'dataType': 'aio:Entity', 'value': 'aio:Poet'},
-                             {'dataType': 'aio:Entity', 'value': 'aio:BookAuthor'}]
-    elif mode == 'book':
-        class_constraints = [{'dataType': 'aio:Entity', 'value': 'aio:Book'}]
-    else:
-        raise Exception('Wrong mode')
-    headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': API_KEY}
-    named_entities = [annotated_phrase['text']]
-    if 'annotations' in annotated_phrase:
-        for tmp in annotated_phrase['annotations']['ner']:
-            if len(tmp) > 0 and 'text' in tmp[0] and tmp[0]['text'] not in named_entities:
-                named_entities.append(tmp[0]['text'])
-        for nounphrase in annotated_phrase['annotations']['cobot_nounphrases']:
-            if nounphrase not in named_entities:
-                named_entities.append(nounphrase)
-    entityname = None
-    n_years = None
-    logging.debug('named entities')
-    logging.debug(named_entities)
-    for entity in named_entities:
-        if 'when' in entity and 'was first published' in entity:
-            try:
-                entity = entity.split('when')[1].split('was first published')[0]
-            except BaseException:
-                logging.debug('Strange entity ' + entity)
-        for pattern in ['read was', 'book is', 'book was']:
-            if pattern in entity:
-                entity = entity.split(pattern)[1]
-        if entityname is None:
-            try:
-                answer = requests.request(url=ENTITY_SERVICE_URL, headers=headers,
-                                          data=json.dumps({'mention': {'text': entity},
-                                                           'classConstraints': class_constraints}),
-                                          method='POST', timeout=2).json()
-                entityname_plain = answer['resolvedEntities'][0]['value']
-                entityname_plain = '<' + entityname_plain + '>'
-                logging.debug(entityname_plain)
-                if mode == 'book' and bookyear is True:
-                    answer = requests.request(url=QUERY_SERVICE_URL,
-                                              headers=headers,
-                                              data=json.dumps({'query': {'text': ' '.join(
-                                                  ['query label|', entityname_plain,
-                                                   '<aio:wasPublishedAtTimepoint>', 'label'])}}),
-                                              method='POST', timeout=2).json()
-                    if len(answer) > 1:
-                        date_str = answer['results'][0]['bindingList'][0]['value']
-                        date_object = int(date_str[:4])
-                        delta = datetime.datetime.now().year - date_object
-                        n_years = delta
-                if return_plain:
-                    entityname = entityname_plain
-                else:
-                    entityname = entity
-            except BaseException:
-                pass
-    logging.debug('entity detected')
-    logging.debug(entityname)
-    banned_entities = ['tik tok', 'minecraft', 'the days']
-    if entityname in banned_entities:
-        return None, None
-    if not bookyear:
-        return entityname, None
-    else:
-        return entityname, n_years
 
 
 def asking_about_book(annotated_user_phrase):
@@ -427,20 +268,268 @@ def book_request_detected(annotated_user_phrase):
 
 def fact_about_book(annotated_user_phrase):
     '''
-    Edit getting bookname
+    The function was disabled after Cobot disconnection
     '''
-    logging.debug('fact about')
-    logging.debug(annotated_user_phrase)
-    try:
-        bookname, _ = get_name(annotated_user_phrase, 'book')
-        reply = get_answer('fact about ' + bookname)
-        return reply
-    except BaseException:
-        return None
+    # logging.debug('fact about')
+    # logging.debug(annotated_user_phrase)
+    # try:
+    #    bookname, _ = get_name(annotated_user_phrase, 'book')
+    #    reply = get_answer('fact about ' + bookname)
+    #    return reply
+    # except BaseException:
+    #    return None
+    pass
 
 
 def is_previous_was_about_book(dialog):
     return len(dialog['utterances']) >= 2 and dialog["utterances"][-2]["active_skill"] == 'book_skill'
+
+
+def get_entities(annotated_phrase):
+    named_entities = [annotated_phrase['text']]
+    if 'annotations' in annotated_phrase:
+        for tmp in annotated_phrase['annotations']['ner']:
+            if len(tmp) > 0 and 'text' in tmp[0] and tmp[0]['text'] not in named_entities:
+                named_entities.append(tmp[0]['text'])
+        for nounphrase in annotated_phrase['annotations']['cobot_nounphrases']:
+            if nounphrase not in named_entities:
+                named_entities.append(nounphrase)
+    return named_entities
+
+
+def preprocess_entities(named_entities):
+    # auhillary function from get_name aimed at enitites processing
+    processed_entities = []
+    banned_entities = ['tik tok', 'minecraft', 'the days']
+    for entity in named_entities:
+        if 'when' in entity and 'was first published' in entity:
+            try:
+                entity = entity.split('when')[1].split('was first published')[0]
+            except BaseException:
+                logging.debug('Strange entity ' + entity)
+        for pattern in ['read was', 'book is', 'book was']:
+            if pattern in entity:
+                entity = entity.split(pattern)[1]
+        if entity not in banned_entities:
+            processed_entities.append(entity)
+    return processed_entities
+
+
+def get_name(annotated_phrase, mode='author', bookyear=True, return_plain=False):
+    # Annotated phrase: str or dict
+    # Getting author name or book name
+    # Returning entity name and(on request) when the book was published
+    logging.debug('Calling get_name for')
+
+    if type(annotated_phrase) == str:
+        annotated_phrase = {'text': annotated_phrase}
+    logging.debug(annotated_phrase['text'])
+    logging.debug('Mode ' + mode)
+    if return_plain:
+        logging.debug("With plain")
+    named_entities = get_entities(annotated_phrase)
+    processed_entities = preprocess_entities(named_entities)
+    logging.debug('named entities')
+    logging.debug(named_entities)
+    logging.debug('processed entities')
+    logging.debug(processed_entities)
+
+    entityname, n_years = wikidata_process_entities(processed_entities, mode=mode, bookyear=bookyear,
+                                                    return_plain=return_plain)
+    logging.debug('Answer ' + str(entityname) + ' ' + str(n_years))
+    return entityname, n_years
+
+
+def who_wrote_book(book, return_plain=False):
+    # Input bookname output author name
+    logging.debug('Calling who_wrote_book for ' + str(book))
+    if book[0].upper() == 'Q' and all([j in '1234567890' for j in book[1:]]):  # it is plain
+        plain_book_entity = book
+    else:
+        plain_book_entity, _ = wikidata_process_entities(book, mode='book',
+                                                         bookyear=False, return_plain=True)
+    logging.debug('Search author with entity ' + plain_book_entity.upper())
+    triplets, num = wikidata_file.search_triples("http://www.wikidata.org/entity/" + plain_book_entity.upper(),
+                                                 "http://www.wikidata.org/prop/direct/P50", "")
+    author_list = [j[2] for j in triplets]
+    logging.debug('Author list received ' + str(author_list))
+    author_list = [x[x.find('Q'):] for x in author_list]  # to unify representations
+    sorted_author_list = sorted(author_list, key=lambda x: int(x[1:]))  # Sort entities by frequency
+    author_entity = sorted_author_list[0]
+    if return_plain:
+        logging.debug('Answer ' + str(author_entity))
+        return author_entity
+    else:
+        author_name = entity_to_label(author_entity)
+        logging.debug('Answer ' + str(author_name))
+        return author_name
+
+
+def get_wikidata_entities(entity_list, linker=linker):
+    logging.debug('Calling get_wikidata_entities for ' + str(entity_list))
+    if type(entity_list) == str:
+        entity_list = [entity_list]
+    wikidata_entities = []  # All found wikidata entitites
+    for entity in entity_list:  # We search for wikidata entities in each entity provided
+        entities, probs = linker([[entity]])
+        entities = entities[0][0]
+        probs = probs[0][0]
+        if len(probs) > 0:
+            max_prob = max(probs)
+            found_wikidata_entities = [entity for i, entity in enumerate(entities) if probs[i] == max(probs)]
+            wikidata_entities = wikidata_entities + found_wikidata_entities
+    logging.debug('Answer ' + str(wikidata_entities))
+    return wikidata_entities
+
+
+def get_published_year(book_entity, wikidata_file=wikidata_file):
+    # print('Entity '+book_entity)
+    logging.debug('Calling get_published_year for ' + str(book_entity))
+    assert type(book_entity) == str and book_entity[0] == 'Q'
+    book_entity = book_entity.strip()
+    answer_list, _ = wikidata_file.search_triples("http://www.wikidata.org/entity/" + book_entity,
+                                                  "http://www.wikidata.org/prop/direct/P577",
+                                                  "")
+
+    try:
+        answer_list = [k for k in answer_list]
+        logging.debug('Answer list ' + str(answer_list))
+        published_year = [k[2] for k in answer_list]
+        # print(published_year)
+        published_year = published_year[0][1:5]
+        logging.debug('Answer ' + str(published_year))
+        return int(published_year)
+    except:
+        raise Exception(f'Could not obtain published year from {answer_list}')
+
+
+def entity_to_label(entity, wikidata_file=wikidata_file):
+    logging.debug('Calling entity_to_label for ' + str(entity))
+    assert type(entity) == str and entity[0] == 'Q'
+    labels, _ = wikidata_file.search_triples('http://www.wikidata.org/entity/' + entity,
+                                             "http://www.w3.org/2000/01/rdf-schema#label", "")
+    try:
+        label = [j[2] for j in labels if j[2][-3:] == '@en']
+        label = label[0].split('"')[1]
+        logging.debug('Answer ' + str(label))
+        return label
+    except:
+        raise Exception('Exception in converstion of labels ' + str(labels))
+
+
+def wikidata_process_entities(entity_list, mode='author', bookyear=False,
+                              return_plain=False):
+    '''
+    Processes list of entity candidates(entity_list) using wikidata
+    Entities are NOT wikidata objects!!!
+    Returns a single name of book or author if it exists.
+    '''
+    all_found_entities = get_wikidata_entities(entity_list)
+    logging.debug('Calling wikidata_process_entities for ' + str(all_found_entities) + ' mode ' + mode)
+    requested_entities = []  # All found wikidata entities OF REQUESTED TYPE
+    if mode == 'author':
+        for entity in all_found_entities:
+            _, bool_number = wikidata_file.search_triples("http://www.wikidata.org/entity/" + entity,
+                                                          "http://www.wikidata.org/prop/direct/P106",  # the instance of
+                                                          "http://www.wikidata.org/entity/Q36180")  # Author
+            if bool_number == 1:
+                logging.debug('It is author')
+                requested_entities.append(entity)
+    elif mode == 'book':
+        for entity in all_found_entities:
+            _, bool_number = wikidata_file.search_triples("http://www.wikidata.org/entity/" + entity,
+                                                          "http://www.wikidata.org/prop/direct/P31",  # the instance of
+                                                          "http://www.wikidata.org/entity/Q571")  # book
+            if bool_number == 1:
+                logging.debug('It is book')
+                requested_entities.append(entity)
+            else:
+                _, bool_number = wikidata_file.search_triples("http://www.wikidata.org/entity/" + entity,
+                                                              "http://www.wikidata.org/prop/direct/P31",
+                                                              # the instance of
+                                                              "http://www.wikidata.org/entity/Q2779")  # book
+                if bool_number == 1:
+                    logging.debug('It is book serie')
+                    requested_entities.append(entity)
+
+    else:
+        raise Exception(f'Wrong mode: {mode}')
+    requested_entities = sorted(requested_entities, key=lambda x: int(x[1:]))  # Sort entities by frequency
+    found_entity, n_years_ago = None, None
+    if len(requested_entities) > 0:
+        found_entity = requested_entities[0]  # Found entity
+        n_years_ago = None
+        logging.info('Found entity ' + str(found_entity))
+        if bookyear and mode == 'book':
+            logging.debug('Getting published year for ' + str(found_entity))
+            publication_year = get_published_year(found_entity)
+            n_years_ago = datetime.now().year - int(publication_year)
+            logging.debug('Years ago ' + str(n_years_ago))
+        if not return_plain:
+            found_entity = entity_to_label(found_entity)
+    logging.debug('Answer ' + str(found_entity) + ' ' + str(n_years_ago))
+    return found_entity, n_years_ago
+
+
+def best_book_by_author(plain_author_name, plain_last_bookname=None,
+                        top_n_best_books=1,
+                        wikidata_file=wikidata_file,
+                        default_phrase="Fabulous! And what book did impress you the most?"):
+    logging.debug('Calling best_book_by_author for ' + str(plain_author_name) + ' ' + str(plain_last_bookname))
+    book_list, book_numbers = wikidata_file.search_triples("http://www.wikidata.org/entity/" + plain_author_name,
+                                                           # authorname
+                                                           "http://www.wikidata.org/prop/direct/P800",
+                                                           # best books
+                                                           "")
+    try:
+        logging.debug('List of returned books')
+        logging.debug(book_list)
+        book_list = [j[2] for j in book_list]
+        if plain_last_bookname is not None:
+            book_list = [j for j in book_list if plain_last_bookname not in j]
+        book_list = [x[x.find('Q'):] for x in book_list]  # to unify representations
+        logging.debug('List of returned books - processed')
+        logging.debug(book_list)
+        sorted_book_list = sorted(book_list, key=lambda x: int(x[1:]))  # Sort entities by frequency
+        logging.debug(sorted_book_list)
+        logging.debug('Best entity')
+        best_book_entity = random.choice(sorted_book_list[:top_n_best_books])
+        logging.debug(best_book_entity)
+        best_bookname = entity_to_label(best_book_entity)
+        logging.debug('Answer ' + best_bookname)
+        return best_bookname
+    except:
+        logging.debug('Answer not obtained')
+        return default_phrase
+
+
+def parse_author_best_book(annotated_phrase, default_phrase="Fabulous! And what book did impress you the most?"):
+    global author_names
+    assert type(annotated_phrase['text']) == str
+    logging.debug('Calling parse_author_best_book for ')
+    logging.debug(annotated_phrase['text'])
+    annotated_phrase['text'] = annotated_phrase['text'].lower()
+    if ' is ' in annotated_phrase['text']:
+        annotated_phrase['text'] = annotated_phrase['text'].split(' is ')[1]
+    plain_bookname, _ = get_name(annotated_phrase, 'book', return_plain=True)
+    if plain_bookname is None:
+        author, _ = get_name(annotated_phrase, 'author')
+        if author is None:
+            logging.debug('Answer not obtained(no bookname no author)')
+            return default_phrase
+    else:
+        logging.info('Processing bookname ' + plain_bookname)
+        plain_author = who_wrote_book(plain_bookname, return_plain=True)
+        if plain_author is not None:
+            logging.debug('author detected')
+            logging.debug(plain_author)
+            logging.debug('bookname ' + plain_bookname)
+        else:
+            logging.debug('No author found')
+        answer = best_book_by_author(plain_author_name=plain_author, plain_last_bookname=plain_bookname,
+                                     default_phrase=default_phrase)
+        logging.debug('Answer is ' + str(answer))
+        return answer
 
 
 class BookSkillScenario:
@@ -528,9 +617,9 @@ class BookSkillScenario:
                     reply, confidence = START_PHRASE, 1
                 elif is_switch_topic(annotated_user_phrase):
                     reply, confidence = BOOK_CHANGE_PHRASE, 0.9
-                elif fact_request_detected(annotated_user_phrase):
-                    logging.debug('Detected fact request')
-                    reply, confidence = YES_PHRASE_3_FACT, self.default_conf
+                # elif fact_request_detected(annotated_user_phrase):
+                #     logging.debug('Detected fact request')
+                #     reply, confidence = YES_PHRASE_3_FACT, self.default_conf
                 elif genre_request_detected(annotated_user_phrase):
                     logging.debug('Detected genre request')
                     reply, confidence = random.choice(FAVOURITE_GENRE_ANSWERS), self.default_conf
@@ -543,26 +632,26 @@ class BookSkillScenario:
                     else:
                         reply = random.choice(FAVOURITE_BOOK_ANSWERS)
                     confidence = self.default_conf
-                elif (YES_PHRASE_3_FACT.lower() == bot_phrases[-1].lower()):
-                    logging.debug('Previous bot phrase was fact request')
-                    if is_no(annotated_user_phrase):
-                        logging.debug('Detected is_no answer')
-                        reply, confidence = NO_PHRASE_4, self.default_conf
-                    else:
-                        '''
-                        DEFINE PREV PHRASE
-                        '''
-                        # logging.debug('a')
-                        for phrase in [annotated_user_phrase, annotated_prev_phrase]:
-                            # logging.debug(str(phrase))
-                            logging.debug('Finding fact about book')
-                            reply, confidence = fact_about_book(phrase), self.default_conf
-                            if reply is not None:
-                                logging.debug('Found a bookfact')
-                                break
-                        if reply is None:
-                            logging.debug('Fact about book returned None')
-                            reply = self.default_reply
+                #                elif (YES_PHRASE_3_FACT.lower() == bot_phrases[-1].lower()):
+                #                    logging.debug('Previous bot phrase was fact request')
+                #                    if is_no(annotated_user_phrase):
+                #                        logging.debug('Detected is_no answer')
+                #                        reply, confidence = NO_PHRASE_4, self.default_conf
+                #                    else:
+                #                        '''
+                #                        DEFINE PREV PHRASE
+                #                        '''
+                #                        # logging.debug('a')
+                #                        for phrase in [annotated_user_phrase, annotated_prev_phrase]:
+                #                            # logging.debug(str(phrase))
+                #                            logging.debug('Finding fact about book')
+                #                            reply, confidence = fact_about_book(phrase), self.default_conf
+                #                            if reply is not None:
+                #                                logging.debug('Found a bookfact')
+                #                                break
+                #                        if reply is None:
+                #                            logging.debug('Fact about book returned None')
+                #                            reply = self.default_reply
                 elif 'was first published' in bot_phrases[-1]:
                     logging.debug('We have just asked when the book was published: getting name for')
                     logging.debug(annotated_prev_phrase['text'])
@@ -619,7 +708,7 @@ class BookSkillScenario:
                                 reply = 'Interesting. Have you read ' + book + '?'
                                 confidence = 0.9
                             else:
-                                logging.debug('Best book for ' + str(annotated_user_phrase) + ' not retrieved')
+                                logging.debug('Best book for ' + str(annotated_user_phrase['text']) + ' not retrieved')
                                 reply, confidence = YES_PHRASE_2, 0.9
                     elif YES_PHRASE_2 == bot_phrases[-1]:
                         logging.debug('We have just said YES_PHRASE_2')
@@ -641,10 +730,10 @@ class BookSkillScenario:
                             else:
                                 logging.debug('Bookname detected: returning YES_PHRASE_3_1')
                                 reply, confidence = YES_PHRASE_3_1, self.default_conf
-                    elif fact_request_detected(annotated_user_phrase):
-                        logging.debug('Fact request detected: returning fact about book')
-                        logging.debug(annotated_user_phrase['text'])
-                        reply, confidence = fact_about_book(annotated_user_phrase), self.default_conf
+                    # elif fact_request_detected(annotated_user_phrase):
+                    #    logging.debug('Fact request detected: returning fact about book')
+                    #    logging.debug(annotated_user_phrase['text'])
+                    #    reply, confidence = fact_about_book(annotated_user_phrase), self.default_conf
                     else:
                         logging.debug('Asserting we have returned no reply')
                         assert reply in [self.default_reply, ""]

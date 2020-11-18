@@ -10,12 +10,12 @@ services:
         intent_responder:8012, intent_catcher:8014, blacklisted_words:8018,
         toxic_classification:8013, sentrewrite:8017, ner:8021,  program_y_dangerous:8022, movie_skill:8023,
         sentiment_classification:8024,
-        convert_reddit:8029, personal_info_skill:8030, asr:8031, book_skill:8032, misheard_asr:8033,
+        convert_reddit:8029, personal_info_skill:8030, asr:8031, misheard_asr:8033,
         christmas_new_year_skill:8036, weather_skill:8037, emotion_classification:8038, alice:8000,
         eliza:8047, emotion_skill:8049, dummy_skill_dialog:8052, comet_atomic:8053, meta_script_skill:8054,
         oscar_skill:8055, coronavirus_skill:8061, small_talk_skill:8062, game_cooperative_skill:8068, program_y_wide:8064,
         comet_conceptnet:8065, news_api_skill:8066, short_story_skill:8057, greeting_skill:8070, factoid_qa:8071, kbqa:8072,
-        factoid_classification:8073, spelling_preprocessing:8074"
+        factoid_classification:8073, spelling_preprocessing:8074, entity_linking:8075, wiki_parser:8077"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
 
   cobot_topics:
@@ -415,6 +415,28 @@ services:
       context: .
       dockerfile: ./skills/factoid_qa/Dockerfile
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8071
+
+  entity_linking:
+    build:
+      args:
+        CONFIG: kbqa_entity_linking.json
+        PORT: 8075
+        SRC_DIR: annotators/entity_linking
+      context: ./
+      dockerfile: dp/dockerfile_skill_gpu
+    environment:
+      - CUDA_VISIBLE_DEVICES=''
+
+  wiki_parser:
+    build:
+      args:
+        CONFIG: wiki_parser.json
+        PORT: 8077
+        SRC_DIR: annotators/wiki_parser
+      context: ./
+      dockerfile: dp/dockerfile_skill_gpu
+    environment:
+      - CUDA_VISIBLE_DEVICES=''
 
   kbqa:
     build:

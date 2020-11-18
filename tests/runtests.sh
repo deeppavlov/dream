@@ -120,7 +120,7 @@ if [[ "$MODE" == "test_dialog" || "$MODE" == "all" ]]; then
     if [[ "$DEVICE" == "cpu" ]]; then
         dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/assert_test_dialogs.py -pred_f /output/$GOLD_OUTPUT_FILE -true_f tests/dream/test_dialogs_gold_phrases.csv -time_limit 20
     else
-        dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/assert_test_dialogs.py -pred_f /output/$GOLD_OUTPUT_FILE -true_f tests/dream/test_dialogs_gold_phrases.csv -time_limit 4
+        dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/assert_test_dialogs.py -pred_f /output/$GOLD_OUTPUT_FILE -true_f tests/dream/test_dialogs_gold_phrases.csv -time_limit 10
     fi
 fi
 
@@ -133,7 +133,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
     for container in sentiment_classification movie_skill asr weather_skill program_y \
                      program_y_dangerous superbowl_skill oscar_skill valentines_day_skill eliza \
                      game_cooperative_skill dummy_skill_dialog intent_catcher short_story_skill comet_atomic \
-                     comet_conceptnet convers_evaluation_selector emotion_skill book_skill; do
+                     comet_conceptnet convers_evaluation_selector emotion_skill; do
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh
     done

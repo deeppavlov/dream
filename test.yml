@@ -32,4 +32,12 @@ services:
   factoid_classification:
     environment:
       - CUDA_VISIBLE_DEVICES=9
+  wiki_parser:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=10.11.1.1:9077
+      - PORT=8077
 version: '3.7'

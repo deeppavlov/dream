@@ -407,7 +407,6 @@ class CoronavirusSkillScenario:
                     last_bot_phrase = ''
                     stay_home_request = False
                 last_utterance = dialog['utterances'][-1]
-                before_last_utterance = dialog['utterances'][-3]
                 last_utterance_text = last_utterance['text'].lower()
                 last_utterances = []
                 #  logging.info('*#*')
@@ -430,7 +429,6 @@ class CoronavirusSkillScenario:
                 logging.info(met_last)
                 asked_about_age = any(['what is your age' in j for j in last_bot_phrases])
                 #  logging.info(asked_about_age)
-                was_about_covid = any([about_coronavirus(j) for j in [last_utterance, before_last_utterance]])
                 if quarantine_end(last_utterance):
                     logging.info('Quarantine end detected')
                     reply, confidence = QUARANTINE_END_PHRASE, 0.95
@@ -466,7 +464,7 @@ class CoronavirusSkillScenario:
                                                         asked_about_age, met_last), 1
                     else:
                         reply, confidence = '', 0
-                elif know_symptoms(last_utterance) and was_about_covid:
+                elif know_symptoms(last_utterance) and about_coronavirus(last_utterance):
                     logging.info('Symptom request detected')
                     reply, confidence = self.symptom_phrase, 1
                     reply = improve_phrase(reply, asked_about_age, met_last)
@@ -476,7 +474,7 @@ class CoronavirusSkillScenario:
                 elif 'asthma' in last_utterance['text']:
                     reply, utterance = self.advice_asthma_phrase, 1
                     reply = improve_phrase(reply, asked_about_age, met_last)
-                elif wants_advice(last_utterance) and was_about_covid:
+                elif wants_advice(last_utterance) and about_coronavirus(last_utterance):
                     logging.info('Advice request detected')
                     reply, confidence = self.advice_phrase, 1
                     reply = improve_phrase(reply, asked_about_age, met_last)
