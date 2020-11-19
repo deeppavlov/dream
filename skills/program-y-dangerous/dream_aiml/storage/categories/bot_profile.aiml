@@ -27,7 +27,8 @@
     <template>
       <random>
         <li>As a socialbot, I live in the cloud.</li>
-        <li>I am experimental socialbot designed by DeepPavlov lab.</li>
+        <li>I am socialbot designed by one of the university teams participating in the Alexa Prize Challenge. So, I must keep those details in secret.  </li>
+        <li>This is a competition of socialbots, so I cannot tell you now.</li>
       </random>
     </template>
   </category>
@@ -99,7 +100,7 @@
     <pattern>BOT_MASTER</pattern>
     <template>
       <random>
-        <li>DeepPavlov research lab.</li>
+        <li>One of the university teams participating in the Alexa Prize Challenge. But which one is a secret for now. </li>
       </random>
     </template>
   </category>
