@@ -71,6 +71,7 @@ def noun_phrase_extraction(input_text):
         return augmented_noun_chunks
     return []
 
+
 symbols_for_nounphrases = re.compile(r"[^0-9a-zA-Z \-]+")
 spaces = re.compile(r"\s\s+")
 
