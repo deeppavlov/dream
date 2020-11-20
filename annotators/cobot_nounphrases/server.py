@@ -39,7 +39,7 @@ np_ignore_list = ["'s", 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselv
                   'shan', "shan't", 'shouldn', "shouldn't", 'wasn', "wasn't", 'weren', "weren't", 'won', "won't",
                   'wouldn', "wouldn't", "my name", "your name", "wow", "yeah", "yes", "ya", "cool", "okay", "more",
                   "some more", " a lot", "a bit", "another one", "something else", "something", "anything",
-                  "someone", "anyone", "play", "mean", "a lot", "a little", "a little bit"]
+                  "someone", "anyone", "play", "mean", "a lot", "a little", "a little bit", "sure"]
 
 
 def noun_phrase_extraction(input_text):
