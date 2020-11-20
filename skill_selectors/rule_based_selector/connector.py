@@ -391,8 +391,8 @@ class RuleBasedSkillSelectorConnector:
             if len(dialog["utterances"]) > 14:
                 skills_for_uttr.append("small_talk_skill")
 
-            # if "/alexa_" in user_uttr_text:
-            #     skills_for_uttr = ["alexa_handler"]
+            if "/alexa_" in user_uttr_text:
+                skills_for_uttr = ["alexa_handler"]
             logger.info(f"Selected skills: {skills_for_uttr}")
             # print(f"Selected skills: {skills_for_uttr}", flush=True)
             asyncio.create_task(callback(
