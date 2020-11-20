@@ -29,7 +29,7 @@ app = Flask(__name__)
 CALL_BY_NAME_PROBABILITY = 0.5  # if name is already known
 ASK_DUMMY_QUESTION_PROB = 0.5
 ASK_LINK_TO_FOR_RETRIEVE_PROB = 0.2
-SHOW_DIALOG_ID = True
+SHOW_DIALOG_ID = False
 
 
 @app.route("/respond", methods=['POST'])
