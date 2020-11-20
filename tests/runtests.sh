@@ -122,6 +122,10 @@ if [[ "$MODE" == "test_dialog" || "$MODE" == "all" ]]; then
     else
         dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/assert_test_dialogs.py -pred_f /output/$GOLD_OUTPUT_FILE -true_f tests/dream/test_dialogs_gold_phrases.csv -time_limit 10
     fi
+
+    echo "Testing file conflicts"
+    dockercompose_cmd exec -T -u $(id -u) agent pip install deeppavlov==0.13.0 pyaml
+    dockercompose_cmd exec -T -u $(id -u) agent python utils/utils/analyze_downloads.py
 fi
 
 if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
