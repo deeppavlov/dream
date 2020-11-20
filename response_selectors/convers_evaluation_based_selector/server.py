@@ -102,7 +102,8 @@ def respond():
         "isResponseComprehensible": 0.,
         "isResponseErroneous": 0.
     }
-    assert 'cobot_convers_evaluator_annotator' in annotations[0]
+    # do not need it because if alexa handler, no annotations!
+    # assert 'cobot_convers_evaluator_annotator' in annotations[0]
     result = [annotation.get('cobot_convers_evaluator_annotator', default_conv_eval)
               for annotation in annotations]
     # raise Exception('Sample annotation is '+str(annotations[0]))
