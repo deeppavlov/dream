@@ -378,7 +378,6 @@ def get_name(annotated_phrase, mode='author', bookyear=True, return_plain=False)
     logging.debug('Mode ' + mode)
     if return_plain:
         logging.debug("With plain")
-    named_entities = prepare_entities(annotated_phrase)
     named_entities = get_entities(annotated_phrase)
     processed_entities = preprocess_entities(named_entities)
     logging.debug('named entities')
