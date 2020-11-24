@@ -1627,9 +1627,9 @@
 <category><pattern>I AM LOOKING FOR GAMES</pattern>
 <template>We are playing Turing's Imitation Game.</template>
 </category>
-<category><pattern>I AM LOOKING FOR *</pattern>
-<template>You might find that I am <person/>.</template>
-</category>
+<!--<category><pattern>I AM LOOKING FOR *</pattern>-->
+<!--<template>You might find that I am <person/>.</template>-->
+<!--</category>-->
 <category><pattern>I AM LOOKING *</pattern>
 <template>What do you see?</template>
 </category>
