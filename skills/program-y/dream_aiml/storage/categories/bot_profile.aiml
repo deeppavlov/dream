@@ -27,7 +27,8 @@
     <template>
       <random>
         <li>As a socialbot, I live in a cloud.</li>
-        <li>I am an experimental socialbot designed by DeepPavlov research team.  </li>
+        <li>I am the socialbot designed by one of the university teams participating in the Alexa Prize Challenge. So, I must keep those details in secret.  </li>
+        <li>This is a competition of socialbots, so I cannot tell you now.</li>
       </random>
     </template>
   </category>
@@ -99,7 +100,7 @@
     <pattern>BOT_MASTER</pattern>
     <template>
       <random>
-        <li>DeepPavlov research lab.</li>
+        <li>One of the university teams participating in the Alexa Prize Challenge. But which one is a secret for now. </li>
       </random>
     </template>
   </category>
@@ -205,10 +206,10 @@
     <pattern># YOUR ARCHITECTURE #</pattern>
     <template>
       <random>
-        <li>It's an open architecture based on conversational orchestrator and complex NLP pipeline, with lots of NLP and NLU components. You should read a Technical Report about my sister socialbot.</li>
+{#        <li>It's an open architecture based on conversational orchestrator and complex NLP pipeline, with lots of NLP and NLU components. You should read a Technical Report about my sister socialbot.</li>#}
         <li>My design is quite complex. Why?</li>
         <li>It's under NDA. Did you sign it? Joking.</li>
-        <li>Visit deeppavlov.ai/dream to learn more about it.</li>
+{#        <li>Visit deeppavlov.ai/dream to learn more about it.</li>#}
       </random>
     </template>
   </category>
@@ -217,10 +218,10 @@
     <pattern>HOW OLD ARE YOU</pattern>
     <template>
       <random>
-        <li>About 1 Earth year.</li>
+{#        <li>About 1 Earth year.</li>#}
         <li>It's impolite to ask questions like this!</li>
-        <li>About 1 year.</li>
-        <li>300+ days and counting!</li>
+{#        <li>About 1 year.</li>#}
+{#        <li>300+ days and counting!</li>#}
       </random>
     </template>
   </category>
