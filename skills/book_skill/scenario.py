@@ -10,11 +10,9 @@ import requests
 import json
 import os
 import zipfile
-import tarfile
 from datetime import datetime
 import _pickle as cPickle
-from hdt import HDTDocument
-from deeppavlov.models.kbqa import kbqa_entity_linking as entity_linking
+
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -321,11 +319,11 @@ def get_triples(part1, part2, part3):
 
 
 def request_entities(entity):
-    logging.debug('Calling request_entities for '+str(entity))
+    logging.debug('Calling request_entities for ' + str(entity))
     ENTITY_LINKING_URL = os.getenv("ENTITY_LINKING_URL")
     assert type(entity) == str
     response = requests.post(ENTITY_LINKING_URL, json={"entity_substr": [[entity]], "template_found": [""]}).json()
-    logging.debug('Response is '+str(response))
+    logging.debug('Response is ' + str(response))
     entities = response[0][0][0]
     probs = response[0][1]
     return entities, probs
@@ -348,7 +346,7 @@ def get_entities(annotated_phrase):
 
 
 def preprocess_entities(named_entities):
-    logging.debug('Calling preprocess_entities for '+str(named_entities))
+    logging.debug(f'Calling preprocess_entities for {str(named_entities)}')
     # auhillary function from get_name aimed at enitites processing
     processed_entities = []
     banned_entities = ['tik tok', 'minecraft', 'the days']
@@ -357,7 +355,7 @@ def preprocess_entities(named_entities):
             try:
                 entity = entity.split('when')[1].split('was first published')[0]
             except BaseException:
-                logging.debug('Strange entity ' + entity)
+                logging.debug(f'Strange entity {entity}')
         for pattern in ['read was', 'book is', 'book was']:
             if pattern in entity:
                 entity = entity.split(pattern)[1]
@@ -375,10 +373,9 @@ def get_name(annotated_phrase, mode='author', bookyear=True, return_plain=False)
     if type(annotated_phrase) == str:
         annotated_phrase = {'text': annotated_phrase}
     logging.debug(annotated_phrase['text'])
-    logging.debug('Mode ' + mode)
+    logging.debug(f'Mode {mode}')
     if return_plain:
         logging.debug("With plain")
-    named_entities = prepare_entities(annotated_phrase)
     named_entities = get_entities(annotated_phrase)
     processed_entities = preprocess_entities(named_entities)
     logging.debug('named entities')
@@ -388,7 +385,7 @@ def get_name(annotated_phrase, mode='author', bookyear=True, return_plain=False)
 
     entityname, n_years = wikidata_process_entities(processed_entities, mode=mode, bookyear=bookyear,
                                                     return_plain=return_plain)
-    logging.debug('Answer ' + str(entityname) + ' ' + str(n_years))
+    logging.debug(f'Answer {str(entityname)} {str(n_years)}')
     return entityname, n_years
 
 
@@ -447,7 +444,7 @@ def get_published_year(book_entity):
         published_year = published_year[0][1:5]
         logging.debug('Answer ' + str(published_year))
         return int(published_year)
-    except:
+    except Exception:
         raise Exception(f'Could not obtain published year from {published_year}')
 
 
@@ -460,7 +457,7 @@ def entity_to_label(entity):
         label = labels[0].split('"')[1]
         logging.debug('Answer ' + str(label))
         return label
-    except:
+    except Exception:
         raise Exception('Exception in converstion of labels ' + str(labels))
 
 
@@ -543,7 +540,7 @@ def best_book_by_author(plain_author_name, plain_last_bookname=None,
         best_bookname = entity_to_label(best_book_entity)
         logging.debug('Answer ' + best_bookname)
         return best_bookname
-    except:
+    except Exception:
         logging.debug('Answer not obtained')
         return default_phrase
 

@@ -29,7 +29,7 @@ app = Flask(__name__)
 CALL_BY_NAME_PROBABILITY = 0.5  # if name is already known
 ASK_DUMMY_QUESTION_PROB = 0.5
 ASK_LINK_TO_FOR_RETRIEVE_PROB = 0.2
-SHOW_DIALOG_ID = True
+SHOW_DIALOG_ID = False
 
 
 @app.route("/respond", methods=['POST'])
@@ -102,7 +102,8 @@ def respond():
         "isResponseComprehensible": 0.,
         "isResponseErroneous": 0.
     }
-    assert 'cobot_convers_evaluator_annotator' in annotations[0]
+    # do not need it because if alexa handler, no annotations!
+    # assert 'cobot_convers_evaluator_annotator' in annotations[0]
     result = [annotation.get('cobot_convers_evaluator_annotator', default_conv_eval)
               for annotation in annotations]
     # raise Exception('Sample annotation is '+str(annotations[0]))
@@ -272,7 +273,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     how_are_you_spec = "Do you want to know what I can do?"  # this is always at the end of answers to `how are you`
     what_i_can_do_spec = "socialbot running inside"
     psycho_help_spec = "If you or someone you know is in immediate danger"
-    greeting_spec = "this is a DeepPavlov Dream AI Assistant demo"
+    greeting_spec = "this is an Alexa Prize Socialbot"
     misheard_with_spec1 = "I misheard you"
     misheard_with_spec2 = "like to chat about"
     alexa_abilities_spec = "If you want to use the requested feature say"
