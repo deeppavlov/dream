@@ -9,7 +9,7 @@ import random
 import requests
 import json
 import os
-import zipfile
+import zipfilej
 import tarfile
 from datetime import datetime
 import _pickle as cPickle
@@ -328,6 +328,7 @@ def request_entities(entity):
     logging.debug('Response is '+str(response))
     entities = response[0][0][0]
     probs = response[0][1]
+    assert len(entities)==len(probs)
     return entities, probs
 
 
@@ -378,7 +379,6 @@ def get_name(annotated_phrase, mode='author', bookyear=True, return_plain=False)
     logging.debug('Mode ' + mode)
     if return_plain:
         logging.debug("With plain")
-    named_entities = prepare_entities(annotated_phrase)
     named_entities = get_entities(annotated_phrase)
     processed_entities = preprocess_entities(named_entities)
     logging.debug('named entities')
