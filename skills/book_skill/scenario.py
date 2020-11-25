@@ -326,7 +326,7 @@ def request_entities(entity):
     response = requests.post(ENTITY_LINKING_URL, json={"entity_substr": [[entity]], "template_found": [""]}).json()
     logging.debug('Response is ' + str(response))
     entities = response[0][0][0]
-    probs = response[0][1]
+    probs = response[0][1][0]
     assert len(entities)==len(probs)
     return entities, probs
 
