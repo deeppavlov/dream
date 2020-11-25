@@ -6,7 +6,7 @@
         "class_name": "kbqa_entity_linker",
         "in": ["entity_substr"],
         "out": ["entity_ids", "confidences"],
-        "load_path": "{DOWNLOADS_PATH}/wikidata_eng",
+        "load_path": "{DOWNLOADS_PATH}/wikidata_entity_linking",
         "inverted_index_filename": "inverted_index_eng.pickle",
         "entities_list_filename": "entities_list.pickle",
         "q2name_filename": "wiki_eng_q_to_name.pickle",
@@ -36,7 +36,7 @@
     "download": [
       {
         "url": "http://files.deeppavlov.ai/kbqa/wikidata/kbqa_entity_linking_eng.tar.gz",
-        "subdir": "{DOWNLOADS_PATH}/wikidata_eng"
+        "subdir": "{DOWNLOADS_PATH}/wikidata_entity_linking"
       }
     ]
   }
