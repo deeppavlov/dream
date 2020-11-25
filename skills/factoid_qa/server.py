@@ -204,7 +204,11 @@ def respond():
                 # capitalizing
                 # response = str(kbqa_response["response"]).capitalize()
                 # we use one of the statements
-                str_response = str(kbqa_response["response"])
+                answer = kbqa_response["response"]
+                if isinstance(answer, list):
+                    str_response = ', '.join(answer)
+                else:
+                    str_response = answer
                 count = len(re.findall(r'\w+', str_response))
                 if (count > 3):
                     response = random.choice(long_pre_stmts) + str_response

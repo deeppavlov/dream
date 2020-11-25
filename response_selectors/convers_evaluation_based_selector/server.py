@@ -354,6 +354,9 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
         # we don't have 'cobotqa' anymore; instead we have factoid_qa
         elif skill_names[i] == 'factoid_qa' and "Here's something I found on the web." in candidates[i]['text']:
             confidences[i] = 0.6
+        elif skill_names[i] == 'factoid_qa' and dialog['human_utterances'][-1]["annotations"].get(
+                "intent_catcher", {}).get("weather_forecast_intent", {}).get("detected", 0) == 1:
+            confidences[i] = 0.8
         elif skill_names[i] == 'misheard_asr' and is_misheard:
             curr_score = very_big_score
         elif is_intent_candidate:

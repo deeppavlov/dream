@@ -444,6 +444,7 @@ services:
         CONFIG: kbqa_cq.json
         PORT: 8072
         SRC_DIR: annotators/kbqa/
+        COMMIT: kbqa_update
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
