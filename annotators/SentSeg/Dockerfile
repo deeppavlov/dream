@@ -1,9 +1,16 @@
 FROM python:3.7.4
 
+ARG DATA_URL=files.deeppavlov.ai/alexaprize_data/sentseg/elmo2.tar.gz
+ARG MODEL_META_URL=files.deeppavlov.ai/alexaprize_data/sentseg/model.meta
+ARG MODEL_DATA_URL=files.deeppavlov.ai/alexaprize_data/sentseg/model.data-00000-of-00001
+
 RUN mkdir /src
 
 RUN mkdir /elmo2
-RUN curl https://storage.googleapis.com/tfhub-modules/google/elmo/3.tar.gz > /elmo2/elmo2.tar.gz
+RUN curl $DATA_URL > /elmo2/elmo2.tar.gz
+RUN curl $MODEL_META_URL > /src/model.meta
+RUN curl $MODEL_DATA_URL > /src/model.data-00000-of-00001
+
 RUN tar -xvzf /elmo2/elmo2.tar.gz -C /elmo2
 RUN rm /elmo2/elmo2.tar.gz
 

@@ -1,7 +1,7 @@
 FROM deeppavlov/base-gpu:0.12.1
 
 ARG CONFIG
-ARG COMMIT
+ARG COMMIT=0.13.0
 ARG PORT
 ARG SRC_DIR
 
@@ -10,17 +10,11 @@ ENV PORT=$PORT
 
 RUN pip install sentry-sdk==0.13.0
 
-#RUN if [ ! -z $COMMIT ]; then \
-#        cd DeepPavlov && \
-#        git fetch --all --tags --prune && \
-#        git checkout $COMMIT; \
-#    fi
-
 RUN cd DeepPavlov && \
     git config --global user.email "you@example.com" && \
     git config --global user.name "Your Name" && \
     git fetch --all --tags --prune && \
-    git checkout 0.13.0 && \
+    git checkout $COMMIT && \
     pip install -e .
 
 COPY $SRC_DIR /src
