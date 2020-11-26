@@ -301,7 +301,7 @@ def get_triples(part1, part2, part3):
         if part1 != "":
             known_part1 = part1
     logging.debug('Calling get_triples for  known part' + known_part1)
-    response = requests.post(WIKIDATA_URL, json={"query": [known_part]}).json()
+    response = requests.post(WIKIDATA_URL, json={"query": [known_part],"parser_info": ["find_triplets"]}).json()
     response = response[0][0][mode]
     for relation_entities in response:
         relation = relation_entities[0]
