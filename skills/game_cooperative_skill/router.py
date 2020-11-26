@@ -50,15 +50,15 @@ def run_skills(history: List, state: Dict, agent_intents: Dict = {}):
     # step 2
     # skill requesting policy
     scheduled_skills = []
-    if len(state.utterances) < 2:
+    if len(state.utterances) <= 1:
         scheduled_skills.append((tutor_attrs.skill_name, [tutor_attrs.modes.intro]))
 
-    elif "hard_switch_topic_intent" in agent_intents:
+    elif "topic_switching" in agent_intents:
         # switch the topic
         pass
     elif (
         is_last_skill(tutor_attrs.skill_name, state)
-        and ("no_intent" in state.intents or "stop_intent" in state.intents or "switch_topic_intent" in agent_intents)
+        and ("no_intent" in state.intents or "stop_intent" in state.intents or "topic_switching" in agent_intents)
         and (
             "next_game_intent" not in state.intents
             or ("next_game_intent" in state.intents and "no_intent" in state.intents)
@@ -68,12 +68,15 @@ def run_skills(history: List, state: Dict, agent_intents: Dict = {}):
         pass
 
     elif is_last_skill(tutor_attrs.skill_name, state) and (
-        "yes_intent" in state.intents or "wanna_intent" in state.intents or "to_talk_about_intent" in agent_intents
+        "yes_intent" in state.intents
+        or "wanna_intent" in state.intents
+        or "to_talk_about_intent" in agent_intents
+        or "tell_me_more" in agent_intents
     ):
         # talk about a top
         scheduled_skills.append((game_tops_attrs.skill_name, [game_tops_attrs.modes.intro]))
     elif (
-        ("stop_intent" in state.intents or "switch_topic_intent" in agent_intents)
+        ("stop_intent" in state.intents or "topic_switching" in agent_intents)
         and ("next_game_intent" not in state.intents)
         and ("to_talk_about_intent" not in state.intents)
     ):
