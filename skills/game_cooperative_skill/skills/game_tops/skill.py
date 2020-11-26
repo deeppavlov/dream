@@ -209,6 +209,12 @@ def select_top_handler(state, skill_state, true_model_names, true_cmds):
         text += "For example, you can say: show me the best games of this year. "
         text += "Or do you want to stop for now? "
         skill_state_update = {"next_step": "select_top"}
+    elif not current_top:
+        text = f"I haven't heard of any hot new games in {period_plh}. "
+        text += "Do you want to chat about the best games of the past year, this year? "
+        text += "For example, you can say: show me the best games of this year. "
+        text += "Or do you want to stop for now? "
+        skill_state_update = {"next_step": "select_top"}
     else:
         is_plh = "was" if len(current_top) == 1 else "were"
         game_plh = "game" if len(current_top) == 1 else "games"
@@ -235,10 +241,10 @@ def intro_handler(state, skill_state, true_model_names, true_cmds):
 
     text += "For now, I can talk about the most popular games for this or last year"
     if get_game_db().get("weekly_top"):
-        text += ", last month, or even the last week (hotties!). "
+        text += ", last month, or even the last week (hotties!)"
     elif get_game_db().get("monthly_top"):
-        text += " or even the last month (hotties!). "
-    text += "Which of these time periods is of interest for you?"
+        text += " or even the last month (hotties!)"
+    text += ". Which of these time periods is of interest for you?"
     skill_state_update = {"next_step": "select_top"}
 
     return state, text, confidence, skill_state_update, scenario

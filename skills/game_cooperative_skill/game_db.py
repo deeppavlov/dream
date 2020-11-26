@@ -4,8 +4,17 @@ import json
 import pathlib
 import os
 import datetime
+import traceback
+from os import getenv
+import logging
 
 import requests
+import sentry_sdk
+
+sentry_sdk.init(getenv("SENTRY_DSN"))
+
+logging.basicConfig(format="%(asctime)s - %(pathname)s - %(levelname)s - %(message)s", level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 DB_FILE = pathlib.Path(os.getenv("DB_FILE", "/tmp/game_db.json"))
 REQ_TIME_FORMAT = "%Y-%m-%d"
@@ -36,7 +45,9 @@ game_fields = [
 def get_game(game_id="99999999999"):
     try:
         game = requests.get(f"https://api.rawg.io/api/games/{game_id}").json()
-    except Exception:
+    except Exception as exc:
+        logger.error(traceback.format_exc())
+        sentry_sdk.capture_exception(exc)
         game = {}
     game = {field: game[field] for field in game_fields if field in game}
     return game
@@ -49,7 +60,9 @@ def get_game_top(from_data="2019-01-01", to_data="2019-12-31"):
             .json()
             .get("results", [])
         )
-    except Exception:
+    except Exception as exc:
+        logger.error(traceback.format_exc())
+        sentry_sdk.capture_exception(exc)
         games = []
     games = [get_game(game["id"]) for game in games if "id" in game]
     return games
@@ -61,8 +74,9 @@ def download_data():
     data = {}
     curr_year_begin = datetime.datetime(curr_date.now().year, 1, 1)
     previous_year_begin = curr_year_begin - datetime.timedelta(365)
-    month_begin = curr_date - datetime.timedelta(31)
-    week_begin = curr_date - datetime.timedelta(7)
+    month_begin = curr_date - datetime.timedelta(31 + 7)
+    # ep, there are 2 weeks instead one week because delay
+    week_begin = curr_date - datetime.timedelta(7 + 7)
     curr_year_begin, previous_year_begin, month_begin, week_begin
     data["previous_yearly_top"] = get_game_top(
         from_data=previous_year_begin.strftime(REQ_TIME_FORMAT), to_data=curr_year_begin.strftime(REQ_TIME_FORMAT)
@@ -71,7 +85,7 @@ def download_data():
         from_data=curr_year_begin.strftime(REQ_TIME_FORMAT), to_data=curr_date.strftime(REQ_TIME_FORMAT)
     )
     data["monthly_top"] = get_game_top(
-        from_data=week_begin.strftime(REQ_TIME_FORMAT), to_data=curr_date.strftime(REQ_TIME_FORMAT)
+        from_data=month_begin.strftime(REQ_TIME_FORMAT), to_data=curr_date.strftime(REQ_TIME_FORMAT)
     )
     data["weekly_top"] = get_game_top(
         from_data=week_begin.strftime(REQ_TIME_FORMAT), to_data=curr_date.strftime(REQ_TIME_FORMAT)

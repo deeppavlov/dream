@@ -55,9 +55,27 @@ def db_is_updated():
 health.add_check(db_is_updated)
 
 
-def is_hard_switch_topic(last_utter):
+def get_agent_intents(last_utter):
     annotations = last_utter.get("annotations", {})
-    return annotations.get("intent_catcher", {}).get("topic_switching", {}).get("detected", 0) == 1
+    agent_intents = {}
+    for intent_name, intent_detector in annotations.get("intent_catcher", {}).items():
+        if intent_detector.get("detected", 0) == 1:
+            agent_intents[intent_name] = True
+
+    if not agent_intents.get("topic_switching") and (
+        is_switch_topic(last_utter)
+        or agent_intents.get("exit")
+        or agent_intents.get("stupid")
+        or agent_intents.get("cant_do")
+        or agent_intents.get("tell_me_a_story")
+        or agent_intents.get("weather_forecast_intent")
+        or agent_intents.get("what_can_you_do")
+        or agent_intents.get("what_is_your_job")
+        or agent_intents.get("what_is_your_name")
+        or agent_intents.get("what_time")
+    ):
+        agent_intents["topic_switching"] = True
+    return agent_intents
 
 
 @app.route("/respond", methods=["POST"])
@@ -74,16 +92,21 @@ def respond():
                 dialog["utterances"][-MEMORY_LENGTH:], "game_cooperative_skill", activated=True
             )
             is_active_last_answer = bool(prev_news_outputs)
-            prev_news_output = prev_news_outputs[-1] if len(prev_news_outputs) > 0 else {}
+            prev_news_outputs = (
+                prev_news_outputs
+                if is_active_last_answer
+                else get_skill_outputs_from_dialog(dialog["utterances"], "game_cooperative_skill", activated=True)
+            )
+            prev_news_output = prev_news_outputs[-1] if prev_news_outputs else {}
             state = prev_news_output.get("state", {})
+            if state and not is_active_last_answer:
+                state["messages"] = []
             # pre_len = len(state.get("messages", []))
 
             last_utter = dialog["human_utterances"][-1]
 
             last_utter_text = last_utter["text"].lower()
-            agent_intents = {"switch_topic_intent": True} if is_switch_topic(last_utter) else {}
-            if is_hard_switch_topic(last_utter):
-                agent_intents["hard_switch_topic_intent"] = True
+            agent_intents = get_agent_intents(last_utter)
 
             # for tests
             if rand_seed:
@@ -105,9 +128,9 @@ def respond():
         total_time = time.time() - st_time
         logger.info(f"game_cooperative_skill exec time = {total_time:.3f}s")
 
-    except Exception:
+    except Exception as exc:
         logger.error(traceback.format_exc())
-        sentry_sdk.capture_exception(traceback.format_exc())
+        sentry_sdk.capture_exception(exc)
         abort(500, description=str(traceback.format_exc()))
     return jsonify(responses)
 
