@@ -2,6 +2,7 @@ from common.universal_templates import BOOK_CHANGE_PHRASE, is_switch_topic
 from common.tutor import get_tutor_phrase
 from common.books import BOOK_SKILL_CHECK_PHRASES
 import logging
+import time
 from os import getenv
 from string import punctuation
 import sentry_sdk
@@ -282,7 +283,7 @@ def fact_about_book(annotated_user_phrase):
 
 
 def get_triples(part1, part2, part3):
-    logging.debug('Calling get_triples for ' + ' '.join([part1, part2, part3]))
+    logging.debug('Calling get_triples for ' + ' '.join([str(k) for k in [part1, part2, part3]]))
     WIKIDATA_URL = os.getenv("WIKIDATA_URL")
     if '/' in part1:
         part1 = part1.split('/')[-1]
@@ -290,6 +291,10 @@ def get_triples(part1, part2, part3):
         part2 = part2.split('/')[-1]
     if '/' in part3:
         part3 = part3.split('/')[-1]
+        parts3=[]
+    elif type(part3)==list:
+        parts3=[j.split('/')[-1] for j in part3.copy()]
+        part3 = ""
     assert part2 != ""
     if part1 == "" and part3 == "":
         raise Exception('Specify part1 or part3')
@@ -300,9 +305,13 @@ def get_triples(part1, part2, part3):
         known_part, mode = part3, "backw"
         if part1 != "":
             known_part1 = part1
-    logging.debug('Calling get_triples for  known part' + known_part1)
+    logging.debug('Calling get_triples for  known part' + known_part)
+    t=time.time()
     response = requests.post(WIKIDATA_URL, json={"query": [known_part],"parser_info": ["find_triplets"]}).json()
     response = response[0][0][mode]
+    exec_time = round(time.time()-t,2)
+    logging.debug('Response obtained with exec time ' + str(exec_time))
+    
     for relation_entities in response:
         relation = relation_entities[0]
         if relation == part2:
@@ -310,7 +319,7 @@ def get_triples(part1, part2, part3):
             if known_part1 is None:
                 logging.debug('Returning ' + str(answer) + ',1')
                 return answer, 1
-            elif known_part1 in answer:
+            elif known_part1 in answer or any([j in answer for j in parts3]):
                 logging.debug('Returning True,1')
                 return True, 1
             else:
@@ -324,8 +333,11 @@ def request_entities(entity):
     logging.debug('Calling request_entities for ' + str(entity))
     ENTITY_LINKING_URL = os.getenv("ENTITY_LINKING_URL")
     assert type(entity) == str
+    t=time.time()
     response = requests.post(ENTITY_LINKING_URL, json={"entity_substr": [[entity]], "template_found": [""]}).json()
-    logging.debug('Response is ' + str(response))
+    exec_time = round(time.time()-t,2)
+    logging.debug('Response is ' + str(response) + ' with exec time ' + str(exec_time))
+    
     entities = response[0][0][0]
     probs = response[0][1][0]
     assert len(entities)==len(probs)
@@ -457,7 +469,11 @@ def entity_to_label(entity):
     labels, _ = get_triples('http://www.wikidata.org/entity/' + entity,
                             "name_en", "")
     try:
-        label = labels[0].split('"')[1]
+        sep = '"'
+        if sep in labels[0]:
+            label = labels[0].split('"')[1]
+        else:
+            label=labels[0]
         logging.debug('Answer ' + str(label))
         return label
     except Exception:
@@ -494,7 +510,8 @@ def wikidata_process_entities(entity_list, mode='author', bookyear=False,
                 _, bool_number = get_triples("http://www.wikidata.org/entity/" + entity,
                                              "http://www.wikidata.org/prop/direct/P31",
                                              # the instance of
-                                             "http://www.wikidata.org/entity/Q7725634")  # book
+                                             ["http://www.wikidata.org/entity/Q7725634",
+                                              "http://www.wikidata.org/entity/Q1667921"])  # book serie
                 if bool_number == 1:
                     logging.debug('It is book serie')
                     requested_entities.append(entity)
