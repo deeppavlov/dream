@@ -11,10 +11,8 @@ import requests
 import json
 import os
 import zipfile
-import tarfile
 from datetime import datetime
 import _pickle as cPickle
-
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -291,9 +289,9 @@ def get_triples(part1, part2, part3):
         part2 = part2.split('/')[-1]
     if '/' in part3:
         part3 = part3.split('/')[-1]
-        parts3=[]
-    elif type(part3)==list:
-        parts3=[j.split('/')[-1] for j in part3.copy()]
+        parts3 = []
+    elif type(part3) == list:
+        parts3 = [j.split('/')[-1] for j in part3.copy()]
         part3 = ""
     assert part2 != ""
     if part1 == "" and part3 == "":
@@ -306,12 +304,12 @@ def get_triples(part1, part2, part3):
         if part1 != "":
             known_part1 = part1
     logging.debug('Calling get_triples for  known part' + known_part)
-    t=time.time()
-    response = requests.post(WIKIDATA_URL, json={"query": [known_part],"parser_info": ["find_triplets"]}).json()
+    t = time.time()
+    response = requests.post(WIKIDATA_URL, json={"query": [known_part], "parser_info": ["find_triplets"]}).json()
     response = response[0][0][mode]
-    exec_time = round(time.time()-t,2)
+    exec_time = round(time.time() - t, 2)
     logging.debug('Response obtained with exec time ' + str(exec_time))
-    
+
     for relation_entities in response:
         relation = relation_entities[0]
         if relation == part2:
@@ -333,14 +331,14 @@ def request_entities(entity):
     logging.debug('Calling request_entities for ' + str(entity))
     ENTITY_LINKING_URL = os.getenv("ENTITY_LINKING_URL")
     assert type(entity) == str
-    t=time.time()
+    t = time.time()
     response = requests.post(ENTITY_LINKING_URL, json={"entity_substr": [[entity]], "template_found": [""]}).json()
-    exec_time = round(time.time()-t,2)
+    exec_time = round(time.time() - t, 2)
     logging.debug('Response is ' + str(response) + ' with exec time ' + str(exec_time))
-    
+
     entities = response[0][0][0]
     probs = response[0][1][0]
-    assert len(entities)==len(probs)
+    assert len(entities) == len(probs)
     return entities, probs
 
 
@@ -473,7 +471,7 @@ def entity_to_label(entity):
         if sep in labels[0]:
             label = labels[0].split('"')[1]
         else:
-            label=labels[0]
+            label = labels[0]
         logging.debug('Answer ' + str(label))
         return label
     except Exception:
