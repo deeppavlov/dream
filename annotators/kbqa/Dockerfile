@@ -22,4 +22,5 @@ COPY $SRC_DIR /src
 WORKDIR /src
 
 RUN python -m deeppavlov install $CONFIG
+RUN python -m spacy download en_core_web_sm
 CMD python -m deeppavlov riseapi $CONFIG -p $PORT -d
