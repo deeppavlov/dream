@@ -24,13 +24,8 @@ services:
       - PROXY_PASS=10.11.1.9:9038
       - PORT=8038
   kbqa:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=10.11.1.9:9072
-      - PORT=8072
+      - CUDA_VISIBLE_DEVICES=5
   stop_detect:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
@@ -48,8 +43,13 @@ services:
       - PROXY_PASS=10.11.1.9:9073
       - PORT=8073
   cobot_topics:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
     environment:
-      - CUDA_VISIBLE_DEVICES=5
+      - PROXY_PASS=10.11.1.9:9001
+      - PORT=8001
   cobot_dialogact_topics:
     environment:
       - CUDA_VISIBLE_DEVICES=5
