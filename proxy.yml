@@ -468,7 +468,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=10.11.1.1:8076
-      - PORT=8076
+      - PROXY_PASS=10.11.1.1:8077
+      - PORT=8077
     command: ["nginx", "-g", "daemon off;"]
 version: '3.7'
