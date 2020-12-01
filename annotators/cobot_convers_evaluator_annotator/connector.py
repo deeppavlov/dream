@@ -42,7 +42,7 @@ class BatchConnector:
                 for scores in conv_eval_result:
                     result.append({annotation: score for annotation, score
                                   in zip(key_annotations, scores)})
-            assert len(result) > 1
+            assert len(result) >= 1
             total_time = time.time() - st_time
             logger.info(f'conv_eval batch connector exec time: {total_time:.3f}s')
             # In connector [result] leads to bug, so it is not inside array like on
