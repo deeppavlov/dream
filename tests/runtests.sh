@@ -135,7 +135,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
 
     for container in sentiment_classification movie_skill asr weather_skill program_y \
                      program_y_dangerous superbowl_skill oscar_skill valentines_day_skill eliza \
-                     game_cooperative_skill dummy_skill_dialog intent_catcher short_story_skill comet_atomic \
+                     dummy_skill_dialog intent_catcher short_story_skill comet_atomic \
                      comet_conceptnet convers_evaluation_selector emotion_skill; do
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh
