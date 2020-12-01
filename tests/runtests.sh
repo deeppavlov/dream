@@ -124,8 +124,7 @@ if [[ "$MODE" == "test_dialog" || "$MODE" == "all" ]]; then
     fi
 
     echo "Testing file conflicts"
-    dockercompose_cmd exec -T -u $(id -u) agent pip install deeppavlov==0.13.0 pyaml
-    dockercompose_cmd exec -T -u $(id -u) agent python utils/utils/analyze_downloads.py
+    dockercompose_cmd exec -T -u $(id -u) agent python utils/analyze_downloads.py
 fi
 
 if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
@@ -136,7 +135,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
 
     for container in sentiment_classification movie_skill asr weather_skill program_y \
                      program_y_dangerous superbowl_skill oscar_skill valentines_day_skill eliza \
-                     game_cooperative_skill dummy_skill_dialog intent_catcher short_story_skill comet_atomic \
+                     dummy_skill_dialog intent_catcher short_story_skill comet_atomic \
                      comet_conceptnet convers_evaluation_selector emotion_skill; do
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh
