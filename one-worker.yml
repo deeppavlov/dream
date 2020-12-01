@@ -6,7 +6,7 @@ services:
   cobot_nounphrases: 
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8006 -t 60
   sentseg:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8011 -t 100
+    command: bash -c "./setup.sh && gunicorn --workers=1 server:app -b 0.0.0.0:8011 -t 100"
   convers_evaluation_selector:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8009 -t 15
   sentrewrite:
