@@ -23,7 +23,7 @@ RUN pip install -r /src/requirements.txt
 RUN python -c "import nltk; nltk.download('punkt')"
 
 COPY . /src/
-COPY /src/model.index /data/model.index
+COPY model.index /data/
 WORKDIR /src
 
 CMD gunicorn --workers=1 server:app
