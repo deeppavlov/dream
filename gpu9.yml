@@ -72,7 +72,7 @@ services:
         SRC_DIR: annotators/kbqa/
         COMMIT: 4b6ff60b01a15dd041b0702589caff73a69e37e8
       context: ./
-      dockerfile: annotators/kbqa/Dockerfile
+      dockerfile: dp/dockerfile_skill_gpu
     environment:
       - CUDA_VISIBLE_DEVICES=2
     env_file: [.env.dev]
