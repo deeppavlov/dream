@@ -5,11 +5,12 @@ ARG MODEL_META_URL=files.deeppavlov.ai/alexaprize_data/sentseg/model.meta
 ARG MODEL_DATA_URL=files.deeppavlov.ai/alexaprize_data/sentseg/model.data-00000-of-00001
 
 RUN mkdir /src
+RUN mkdir /data
 
 RUN mkdir /elmo2
 RUN curl $DATA_URL > /elmo2/elmo2.tar.gz
-RUN curl $MODEL_META_URL > /src/model.meta
-RUN curl $MODEL_DATA_URL > /src/model.data-00000-of-00001
+RUN curl $MODEL_META_URL > /data/model.meta
+RUN curl $MODEL_DATA_URL > /data/model.data-00000-of-00001
 
 RUN tar -xvzf /elmo2/elmo2.tar.gz -C /elmo2
 RUN rm /elmo2/elmo2.tar.gz
