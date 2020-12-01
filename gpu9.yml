@@ -64,23 +64,21 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 9056:9056
-  kbqa:
+  cobot_topics:
     build:
       args:
-        CONFIG: kbqa_cq.json
-        PORT: 9072
-        SRC_DIR: annotators/kbqa/
-        COMMIT: 4b6ff60b01a15dd041b0702589caff73a69e37e8
+        CONFIG: cobot_bert.json
+        SRC_DIR: annotators/cobot_topics
+        PORT: 9001
       context: ./
-      dockerfile: annotators/kbqa/Dockerfile
+      dockerfile: dp/dockerfile_skill_gpu
     environment:
-      - CUDA_VISIBLE_DEVICES=2
-    env_file: [.env.dev]
-    volumes:
-      - "./annotators/kbqa:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
+      - CUDA_VISIBLE_DEVICES=0
     ports:
-      - 9072:9072
+      - 9001:9001
+    volumes:
+      - "./annotators/cobot_topics:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
   factoid_classification:
     build:
       args:
