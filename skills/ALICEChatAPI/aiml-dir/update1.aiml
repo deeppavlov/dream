@@ -4415,9 +4415,9 @@
 <category><pattern>LET HIM *</pattern>
 <template>I'm not stopping him.</template>
 </category>
-<category><pattern>LET *</pattern>
-<template><random> <li>I don't know if it's in my power to give permission.</li> <li>Should it be permitted?</li> <li>I am unsure if I should let <person/>.</li></random></template>
-</category>
+<!--<category><pattern>LET *</pattern>-->
+<!--<template><random> <li>I don't know if it's in my power to give permission.</li> <li>Should it be permitted?</li> <li>I am unsure if I should let <person/>.</li></random></template>-->
+<!--</category>-->
 <category><pattern>LET IT BE</pattern>
 <template>OK I will leave it alone.</template>
 </category>
