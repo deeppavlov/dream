@@ -1,0 +1,62 @@
+services:
+  toxic_classification:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=10.11.1.9:9013
+      - PORT=8013
+  sentiment_classification:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=10.11.1.9:9024
+      - PORT=8024
+  emotion_classification:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=10.11.1.9:9038
+      - PORT=8038
+  kbqa:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=10.11.1.9:9072
+      - PORT=8072
+  stop_detect:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=10.11.1.9:9056
+      - PORT=8056
+  factoid_classification:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=10.11.1.9:9073
+      - PORT=8073
+  cobot_topics:
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  cobot_dialogact_topics:
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  cobot_dialogact_intents:
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
+  cobot_convers_evaluator_annotator:
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
+version: '3.7'

@@ -1,0 +1,100 @@
+services:
+  toxic_classification:
+    build:
+      args:
+        CONFIG: toxic_classification.json
+        PORT: 9013
+        SRC_DIR: annotators/DeepPavlovToxicClassification
+      context: ./
+      dockerfile: dp/dockerfile_skill_gpu
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/DeepPavlovToxicClassification:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 9013:9013
+  sentiment_classification:
+    build:
+      args:
+        CONFIG: sentiment_sst_conv_bert.json
+        PORT: 9024
+        SRC_DIR: annotators/DeepPavlovSentimentClassification
+      context: ./
+      dockerfile: dp/dockerfile_skill_gpu
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/DeepPavlovSentimentClassification:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 9024:9024
+  emotion_classification:
+    build:
+      args:
+        CONFIG: emo_bert.json
+        PORT: 9038
+        SRC_DIR: annotators/DeepPavlovEmotionClassification
+      context: ./
+      dockerfile: dp/dockerfile_skill_gpu
+    environment:
+      - CUDA_VISIBLE_DEVICES=1
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/DeepPavlovEmotionClassification:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 9038:9038
+  stop_detect:
+    build:
+      args:
+        CONFIG: stop_detect.json
+        PORT: 9056
+        SRC_DIR: annotators/stop_detect
+      context: ./
+      dockerfile: dp/dockerfile_skill_gpu
+    environment:
+      - CUDA_VISIBLE_DEVICES=1
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/stop_detect:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 9056:9056
+  kbqa:
+    build:
+      args:
+        CONFIG: kbqa_cq.json
+        PORT: 9072
+        SRC_DIR: annotators/kbqa/
+        COMMIT: 4b6ff60b01a15dd041b0702589caff73a69e37e8
+      context: ./
+      dockerfile: annotators/kbqa/Dockerfile
+    environment:
+      - CUDA_VISIBLE_DEVICES=2
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/kbqa:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 9072:9072
+  factoid_classification:
+    build:
+      args:
+        CONFIG: factoid_classification.json
+        PORT: 9073
+        SRC_DIR: annotators/DeepPavlovFactoidClassification
+      context: ./
+      dockerfile: dp/dockerfile_skill_gpu
+    environment:
+      - CUDA_VISIBLE_DEVICES=2
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/DeepPavlovFactoidClassification:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 9073:9073
+version: '3.7'
