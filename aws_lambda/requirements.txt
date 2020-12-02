@@ -1,0 +1,3 @@
+ask-sdk-core>=1.10.2
+sentry-sdk==0.14.1
+python-dotenv==0.10.3
