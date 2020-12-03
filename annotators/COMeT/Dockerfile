@@ -38,7 +38,13 @@ RUN python -m spacy download en
 COPY . /comet/
 WORKDIR /comet
 
-# apply patch to fix error in src/interactive/functions.py
+# apply patch to:
+# 1. fix error in src/interactive/functions.py
+# 2. remove unnecessary prints
+# 3. allow to pass tuples as category
 RUN git apply /comet/functions.diff
+
+ARG DECODING_ALGO
+ENV DECODING_ALGO ${DECODING_ALGO}
 
 CMD gunicorn --workers=1 server:app -b 0.0.0.0:8053

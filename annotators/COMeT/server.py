@@ -24,8 +24,13 @@ graph = os.environ.get('GRAPH', 'atomic')
 logger.info(f'comet is set to run on {device} with {graph} graph')
 
 model_file = f'pretrained_models/{graph}_pretrained_model.pickle'
-beam_size = 5
-sampling_algorithm = f'beam-{beam_size}'
+
+# decoding algorithm should be one of:
+# beam-N, e.g., beam-5
+# topk-K, e.g., topk-5, topk-1 == greedy
+# otherwise -- greedy decoding
+decoding_algorithm = os.environ.get('DECODING_ALGO', 'greedy')
+logger.info(f'comet decoding algo: {decoding_algorithm}')
 default_category = "all"
 
 logger.info('comet model is preparing...')
@@ -50,7 +55,7 @@ if device != "cpu":
 else:
     cfg.device = "cpu"
 
-sampler = interactive.set_sampler(opt, sampling_algorithm, data_loader)
+sampler = interactive.set_sampler(opt, decoding_algorithm, data_loader)
 
 
 @lru_cache(maxsize=2**16)
@@ -123,6 +128,9 @@ def respond():
     input_event = request.json['input']
     category = request.json.get('category', default_category)
 
+    if isinstance(category, list):
+        category = tuple(category)
+
     if graph == 'atomic':
         output = get_comet_atomic_output(input_event, category)
     elif graph == 'conceptnet':
@@ -133,6 +141,42 @@ def respond():
     logger.info(output)
     total_time = time.time() - st_time
     logger.info(f'comet exec time: {total_time:.3f}s')
+    return jsonify(output)
+
+
+def atomic_annotator():
+    raise NotImplementedError
+
+
+def conceptnet_annotator(request, category=("SymbolOf", "HasProperty", "Causes", "CausesDesire")):
+    batch = []
+    for nounphrases in request['nounphrases']:
+        result = {}
+        for np in nounphrases:
+            cn_result = get_comet_conceptnet_output(np, category=category)
+            np_conceptnet_rels = {}
+            for rel in cn_result:
+                np_conceptnet_rels[rel] = [b for b in cn_result[rel]['beams'] if b != 'none']
+            result[np] = np_conceptnet_rels
+        batch += [result]
+    return batch
+
+
+if graph == 'atomic':
+    annotator_fn = atomic_annotator
+elif graph == 'conceptnet':
+    annotator_fn = conceptnet_annotator
+else:
+    raise RuntimeError('Graph {graph} is not in ["atomic", "conceptnet"]')
+
+
+@app.route("/comet_annotator", methods=['POST'])
+def annotator_respond():
+    st_time = time.time()
+    output = annotator_fn(request.json)
+    logger.info(output)
+    total_time = time.time() - st_time
+    logger.info(f'comet_{graph}_annotator exec time: {total_time:.3f}s')
     return jsonify(output)
 
 
