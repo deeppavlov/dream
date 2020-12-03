@@ -123,11 +123,11 @@ DIVE_DEEPER_COMMENTS = {"yes": ["Cool! I figured it out by myself!",
                                   "All right."]}
 
 OTHER_STARTINGS = [
-    "I didn't get what does DOINGTHAT mean?",
-    "What does it mean to DOTHAT?",
-    "What does DOINGTHAT mean?",
+    "Could you, please, help me and explain what does DOINGTHAT mean?",
+    "Could you explain to me what does it mean to DOTHAT?",
+    "Could you, please, explain what does DOINGTHAT mean?",
     "Can I ask something about DOINGTHAT?",
-    "Hey, I have a question about DOINGTHAT?",
+    "Hey, it's something unclear to me  what does DOINGTHAT mean?",
     "Would you answer some question about DOINGTHAT?"
 ]
 

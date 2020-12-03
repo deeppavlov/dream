@@ -13,6 +13,7 @@ from common.books import book_skill_was_proposed
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
 from common.emotion import detect_emotion, is_joke_requested
 from common.news import is_breaking_news_requested
+from common.universal_templates import if_lets_chat_about_topic
 from common.utils import check_about_death, about_virus, quarantine_end, service_intents, low_priority_intents
 from common.weather import is_weather_requested
 from common.coronavirus import is_staying_home_requested
@@ -106,6 +107,7 @@ class RuleBasedSkillSelectorConnector:
             skills_for_uttr = []
             user_uttr_text = dialog["human_utterances"][-1]["text"].lower()
             user_uttr_annotations = dialog["human_utterances"][-1]["annotations"]
+            lets_chat_about_particular_topic = if_lets_chat_about_topic(user_uttr_text)
 
             high_priority_intent_detected = any(
                 [
@@ -256,7 +258,7 @@ class RuleBasedSkillSelectorConnector:
                 # skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("meta_script_skill")
                 skills_for_uttr.append("personal_info_skill")
-                if about_news:
+                if about_news or lets_chat_about_particular_topic:
                     skills_for_uttr.append("news_api_skill")
                 if enable_coronavirus or prev_active_skill == 'coronavirus_skill':
                     skills_for_uttr.append("coronavirus_skill")
@@ -268,9 +270,9 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("program_y")
                 # skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("christmas_new_year_skill")
-                skills_for_uttr.append("superbowl_skill")
-                skills_for_uttr.append("oscar_skill")
-                skills_for_uttr.append("valentines_day_skill")
+                # skills_for_uttr.append("superbowl_skill")
+                # skills_for_uttr.append("oscar_skill")
+                # skills_for_uttr.append("valentines_day_skill")
                 skills_for_uttr.append("personal_info_skill")
                 skills_for_uttr.append("meta_script_skill")
                 skills_for_uttr.append("greeting_skill")
@@ -337,7 +339,7 @@ class RuleBasedSkillSelectorConnector:
                 if about_animals and len(dialog["utterances"]) > 2:
                     skills_for_uttr.append("animals_tfidf_retrieval")
 
-                if about_news:
+                if about_news or lets_chat_about_particular_topic:
                     skills_for_uttr.append("news_api_skill")
 
                 # joke requested
@@ -388,7 +390,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.remove('comet_dialog_skill')
 
             # (yura): do we really want to always turn small_talk_skill?
-            if len(dialog["utterances"]) > 14:
+            if len(dialog["utterances"]) > 14 or lets_chat_about_particular_topic:
                 skills_for_uttr.append("small_talk_skill")
 
             if "/alexa_" in user_uttr_text:

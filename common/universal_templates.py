@@ -78,7 +78,8 @@ TALK_LIKE = ["talk", "chat", "converse", "discuss", "speak", "tell", "say", "gos
              "prattle", "confab", "confabulate", "chin", "talk smack",
              r"(have|hold|carry on|change|make|take|give me|turn on|"
              r"go into)" + ARTICLES + r"(conversation|talk|chat|discussion|converse|dialog|dialogue|"
-                                      r"speaking|chatter|chitchat|chit chat)"]
+                                      r"speaking|chatter|chitchat|chit chat)",
+             f"tell {ANY_WORDS}"]
 WANT_LIKE = ["want to", "wanna", "wish to", "need to", "desire to", r"(would |'d )?(like|love|dream) to", "going to",
              "gonna", "will", "can", "could", "plan to", "in need to", "demand"]
 TO_ME_LIKE = [r"to me( now)?", r"with me( now)?", r"me( now)?", "now"]

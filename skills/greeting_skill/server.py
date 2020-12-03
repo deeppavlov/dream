@@ -10,6 +10,7 @@ from os import getenv
 import sentry_sdk
 
 from common.constants import CAN_CONTINUE
+from common.universal_templates import if_lets_chat_about_topic
 from common.utils import get_skill_outputs_from_dialog, get_outputs_with_response_from_dialog, get_not_used_template
 from common.greeting import GREETING_QUESTIONS, dont_tell_you_answer
 
@@ -73,9 +74,11 @@ def respond():
         confidence = 0.0
 
         user_utterance = dialog["human_utterances"][-1]
+        lets_chat_about_particular_topic = if_lets_chat_about_topic(user_utterance["text"].lower())
 
         # skill gets full dialog, so we can take into account length_of_the dialog
-        if len(dialog["utterances"]) <= 20 and "?" not in user_utterance["text"]:
+        if len(dialog["utterances"]) <= 20 and "?" not in user_utterance["text"] and \
+                not lets_chat_about_particular_topic:
             logger.info(f"Dialog beginning.")
             prev_skill_outputs = get_skill_outputs_from_dialog(
                 dialog["utterances"], skill_name="greeting_skill", activated=True)
