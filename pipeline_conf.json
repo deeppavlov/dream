@@ -128,6 +128,16 @@
                 "required_previous_services": ["annotators.spelling_preprocessing"],
                 "state_manager_method": "add_annotation"
             },
+            "conceptnet": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://comet_conceptnet:8065/comet_annotator"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_human_utt_nounphrases",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.cobot_nounphrases"],
+                "state_manager_method": "add_annotation"
+            },
             "toxic_classification": {
                 "connector": {
                     "protocol": "http",

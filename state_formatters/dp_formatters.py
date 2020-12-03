@@ -324,6 +324,11 @@ def last_bot_utt_dialog(dialog: Dict) -> Dict:
     return [{'sentences': [dialog['bot_utterances'][-1]['text']]}]
 
 
+def last_human_utt_nounphrases(dialog: Dict) -> Dict:
+    # Used by: comet_conceptnet_annotator
+    return [{'nounphrases': [dialog['human_utterances'][-1]['annotations']['cobot_nounphrases']]}]
+
+
 def hypotheses_list(dialog: Dict) -> Dict:
     hypotheses = dialog["utterances"][-1]["hypotheses"]
     hypots = [h["text"] for h in hypotheses]
