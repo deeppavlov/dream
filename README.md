@@ -20,7 +20,7 @@ M0
 (existing one)
 
 ### Weather Skill
-M0
+M1
 (existing one for now, then rewrite using Go-Bot)
 
 ### News Skill
@@ -50,10 +50,17 @@ M1
 ### Intent Catcher
 M0
 (existing one)
+M1
+(ship as part of DP Library)
+(use from DP Library)
 
 ### Emotional Classification
 M0
 (existing one)
+M1
+(research whether we can or can't use it as is, or should re-train on more open data)
+(refactor)
+(ship as part of DP Library)
 
 ### Sentiment Classification
 M1
@@ -75,3 +82,9 @@ cobot_inspired naive dialog act classifier (existing one)
 ### Topic Classification
 M1
 cobot_inspired topics classifier (existing one)
+
+# Dev Tools
+## Intent Editor
+M1
+(standalone repository; container)
+(deploy as container, then use container env params in docker-compose as default settings;) <-- research
