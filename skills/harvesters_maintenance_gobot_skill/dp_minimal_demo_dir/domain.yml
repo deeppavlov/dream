@@ -1,0 +1,83 @@
+
+slots:
+  number:
+    type: int
+
+intents:
+  - all_statuses_request
+  - status_request
+  - broken_ids_request
+  - full_ids_request
+  - working_ids_request
+  - inactive_ids_request
+  - available_rover_ids_request
+  - broken_rover_ids_request
+  - inactive_rover_ids_request
+  - trip_request
+
+responses:
+  utter_all_statuses_request:
+  - text: "Of {total_harvesters_number} harvesters, harvester {full_ids} is full, harvester {working_ids} is working, harvester {broken_ids} is awaiting repaires, harvester {inactive_ids} is inactive."
+
+  utter_status_request:
+  - text: "The harvester {harvester_id} is {harvester_status}."
+
+  utter_broken_ids_request:
+  - text: "Reporting: harvester {broken_ids} is broken."
+
+  utter_no_broken_ids_request:
+  - text: "No broken harvesters found."
+
+  utter_full_ids_request:
+  - text: "Reporting: harvester {full_ids} is full."
+
+  utter_no_full_ids_request:
+  - text: "No full harvesters found."
+
+  utter_working_ids_request:
+  - text: "Reporting: harvester {working_ids} is working."
+
+  utter_no_working_ids_request:
+  - text: "No working harvesters found."
+
+  utter_inactive_ids_request:
+  - text: "Reporting: harvester {inactive_ids} is inactive."
+
+  utter_no_inactive_ids_request:
+  - text: "No inactive harvesters found."
+
+  utter_available_rover_ids_request:
+  - text: "Reporting: rover {available_rover_ids} is available."
+
+  utter_no_available_rover_ids_request:
+  - text: "No available rovers found."
+
+  utter_broken_rover_ids_request:
+  - text: "Reporting: rover {broken_rover_ids} is broken."
+
+  utter_no_broken_rover_ids_request:
+  - text: "No broken rovers found."
+
+  utter_inactive_rover_ids_request:
+  - text: "Reporting: rover {inactive_rover_ids} is inactive."
+
+  utter_no_inactive_rover_ids_request:
+  - text: "No inactive rovers found."
+
+  utter_trip_request:
+  - text: "Preparing rover {rover_for_trip_id} for a trip."
+
+  utter_trip_request_failed:
+  - text: "Can't prepare a rover for a trip, no available rovers."
+
+actions:
+- action_get_harvesters_status
+- action_get_harvester_status
+- action_get_full_harvesters_list
+- action_get_broken_harvesters_list
+- action_get_working_harvesters_list
+- action_get_available_rovers_status
+- action_get_working_rovers_list
+- action_get_broken_rovers_list
+- action_get_inactive_rovers_list
+- action_prepare_rover_for_trip
