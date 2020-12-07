@@ -1,0 +1,51 @@
+{
+  "embedding_size": 100,
+  "n_classes": 11,
+  "model_name": "cnn_model",
+  "optimizer": "Adam",
+  "loss": "binary_crossentropy",
+  "learning_rate": 0.1,
+  "learning_rate_decay": 0.1,
+  "last_layer_activation": "sigmoid",
+  "restore_lr": false,
+  "classes": [
+    "<UNK>",
+    "available_rover_ids_request",
+    "all_statuses_request",
+    "trip_request",
+    "broken_rover_ids_request",
+    "inactive_rover_ids_request",
+    "status_request_number",
+    "broken_ids_request",
+    "full_ids_request",
+    "working_ids_request",
+    "inactive_ids_request"
+  ],
+  "text_size": null,
+  "padding": "pre",
+  "in": [
+    "x_emb"
+  ],
+  "in_y": [
+    "y_onehot"
+  ],
+  "out": [
+    "y_pred_probas"
+  ],
+  "main": true,
+  "save_path": "dp_minimal_demo_dir/model",
+  "load_path": "dp_minimal_demo_dir/model",
+  "kernel_sizes_cnn": [
+    3,
+    5,
+    7
+  ],
+  "filters_cnn": 512,
+  "coef_reg_cnn": 0.0001,
+  "coef_reg_den": 0.0001,
+  "dropout_rate": 0.5,
+  "dense_size": 100,
+  "mode": "train",
+  "epochs_done": 0,
+  "final_learning_rate": 0.10000000149011612
+}
