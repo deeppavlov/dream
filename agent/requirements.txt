@@ -1,0 +1,6 @@
+git+git://github.com/deepmipt/dp-agent.git@df1ecae5eff0482b8fedc4e30c767b54b3034208
+sentry-sdk==0.14.1
+flask==1.1.1
+gunicorn==19.9.0
+requests==2.22.0
+numpy==1.17.2

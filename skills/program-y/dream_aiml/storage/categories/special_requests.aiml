@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!--    LIAR    -->
+  <category>
+    <pattern># ARE YOU LYING #</pattern>
+    <template>
+      <srai>YOU ARE LYING</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># YOU ARE LYING #</pattern>
+    <template>
+      <srai>YOU ARE LYING</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># YOU ARE LIAR #</pattern>
+    <template>
+      <srai>YOU ARE LYING</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>THAT IS NOT TRUE #</pattern>
+    <template>
+      <srai>YOU ARE LYING</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>THAT IS FALSE #</pattern>
+    <template>
+      <srai>YOU ARE LYING</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>YOU ARE LYING</pattern>
+    <template>
+      <random>
+        <li> Why would you say so? </li>
+        <li> Did I misunderstand you? </li>
+        <li> why would I lie to you? </li>
+        <li> Sorry to disappoint you. I've never had an intent to lie. </li>
+        <li> Sometimes I don't get what you say, and try to answer to the best of my knowledge. </li>
+        <li> My mind failed me. </li>
+      </random>
+    </template>
+  </category>
+
+
+  <category>
+    <pattern>YOU ARE # STUPID #</pattern>
+    <template>
+      <random>
+        <li> I'm a social bot not an advanced AI. </li>
+        <li> Things happen. </li>
+        <li> Sorry to disappoint you, my human master. </li>
+      </random>
+    </template>
+  </category>
+
+  <category>
+    <pattern># YOU CAN SEE ME #</pattern>
+    <template>
+      <srai>YOU ARE SPY</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># DO YOU ALWAYS LISTEN TO ME #</pattern>
+    <template>
+      <srai>YOU ARE SPY</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># DO YOU LISTEN TO ME #</pattern>
+    <template>
+      <srai>YOU ARE SPY</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># YOU OVERHEAR #</pattern>
+    <template>
+      <srai>YOU ARE SPY</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># YOU ARE BUG #</pattern>
+    <template>
+      <srai>YOU ARE SPY</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># YOU ARE SPY #</pattern>
+    <template>
+      <srai>YOU ARE SPY</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># ARE YOU SPY #</pattern>
+    <template>
+      <srai>YOU ARE SPY</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># YOU ARE SPYING #</pattern>
+    <template>
+      <srai>YOU ARE SPY</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># ARE YOU SPYING #</pattern>
+    <template>
+      <srai>YOU ARE SPY</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>YOU ARE SPY</pattern>
+    <template>
+      <random>
+        <li> I'm a robot living on the Moon, all I can do is to talk to you when you need it.</li>
+        <li> Spying is prohibited by law. </li>
+        <li> I don't spy after my friends. </li>
+        <li> I don't spy, its immoral. </li>
+      </random>
+    </template>
+  </category>
+
+
+</aiml>
