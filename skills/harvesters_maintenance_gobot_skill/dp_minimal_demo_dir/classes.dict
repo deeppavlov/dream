@@ -1,0 +1,11 @@
+<UNK>	0
+available_rover_ids_request	56
+all_statuses_request	40
+trip_request	24
+broken_rover_ids_request	24
+inactive_rover_ids_request	16
+status_request_number	8
+broken_ids_request	8
+full_ids_request	8
+working_ids_request	8
+inactive_ids_request	8
