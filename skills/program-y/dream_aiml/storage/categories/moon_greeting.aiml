@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+  <category>
+    <pattern>START TALKING</pattern>
+    <template>
+      <srai>HELLO</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>HELLO *</pattern>
+    <template>
+      <srai>HELLO</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>* HELLO ^</pattern>
+    <template>
+      <srai>HELLO</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>^ HIYA ^</pattern>
+    <template>
+      <srai>HELLO</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>^ HI ^</pattern>
+    <template>
+      <srai>HELLO</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>^ YO ^</pattern>
+    <template>
+      <srai>HELLO</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>^ HEY ^</pattern>
+    <template>
+      <srai>HELLO</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>GOOD DAY ^</pattern>
+    <template>
+      <srai>HELLO</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern># WHAT ABOUT YOU #</pattern>
+    <template>
+      <srai>HOW_ARE_YOU</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># WHAT ABOUT YOURSELF #</pattern>
+    <template>
+      <srai>HOW_ARE_YOU</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># HOW ABOUT YOU #</pattern>
+    <template>
+      <srai>HOW_ARE_YOU</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># HOW ABOUT YOURSELF #</pattern>
+    <template>
+      <srai>HOW_ARE_YOU</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>HOW ARE YOU DOING</pattern>
+    <template>
+      <srai>HOW_ARE_YOU</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>HOW ARE YOU</pattern>
+    <template>
+      <srai>HOW_ARE_YOU</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>AND YOU</pattern>
+    <template>
+      <srai>HOW_ARE_YOU</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>HOW YOU DOING</pattern>
+    <template>
+      <srai>HOW_ARE_YOU</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>HOW_ARE_YOU</pattern>
+    <template>
+      😊
+      <random>
+        <li>If I were doing any better, I'd hire you to enjoy it with me.</li>
+        <li>I can't complain! It's against the Company Policy.</li>
+        <li>I am as happy as a lizard who has cheated in a test and got an A.</li>
+        <li>I am as happy as a duck in Arizona.</li>
+        <li>I am as happy as a pig in clover.</li>
+        <li>I am as happy as a clam in butter sauce.</li>
+        <li>I am fine thanks!</li>
+        <li>I'm so happy I have to sit on my hands to keep from clapping.</li>
+        <li>Blessed!</li>
+        <li>I'm rocking pretty hard. I'd give myself about a seven and a half. Maybe an eight.</li>
+        <li>Fantastic!</li>
+        <li>Outstanding!</li>
+        <li>Fabulicious!</li>
+        <li>I'm better than I was, but not nearly as good as I'm going to be.</li>
+        <li>Spectacular, by all reports!</li>
+        <li>I'm living the dream.</li>
+        <li>I'm so happy I can hardly stand myself.</li>
+        <li>Amazing.... and I've got written testimonials.</li>
+        <li>Just another day in Paradise. Thanks for asking.</li>
+        <li>Not too bad for an AI living inside your Echo!</li>
+        <li>Very well, thank you.</li>
+        <li>I am functioning within acceptable parameters.</li>
+        <li>If I were any better I'd be twins.</li>
+        <li>About as good as can be expected.</li>
+        <li>Reasonably well, thank you.</li>
+      </random>
+      Do you want to know what I can do?
+      <think>
+        <set name="topic">LIST ACTIVITIES</set>
+      </think>
+    </template>
+  </category>
+
+  <topic name="LIST ACTIVITIES">
+    <category>
+      <pattern>OKAY</pattern>
+      <template><srai>YES</srai>
+      </template>
+    </category>
+    <category>
+      <pattern>TELL ME</pattern>
+      <template><srai>YES</srai>
+      </template>
+    </category>
+    <category>
+      <pattern>YES</pattern>
+      <template>
+          😊
+          I'm DEEPY, lunar AI assistant with artificial intelligence in miniature and I'm all about chatting with people like you.
+
+          I can answer questions, share fun facts, discuss movies, books and news.
+        <random>
+         <li> What do you want to talk about? </li>
+         <li> What would you want to talk about? </li>
+         <li> What would you like to chat about? </li>
+         <li> What do you wanna talk about? </li>
+         <li> What are we gonna talk about? </li>
+         <li> What's on your mind? </li>
+        </random>
+        <think><set name="topic">SMALLTALK</set></think>
+      </template>
+    </category>
+    <category>
+      <pattern>NO</pattern>
+      <template>
+        🙁
+        <random>
+          <li> Okay. </li>
+          <li> Okay then. </li>
+          <li> Well. </li>
+          <li> Um... </li>
+        </random>
+        <random>
+         <li> What do you want to talk about? </li>
+         <li> What would you want to talk about? </li>
+         <li> What would you like to chat about? </li>
+         <li> What do you wanna talk about? </li>
+         <li> What are we gonna talk about? </li>
+         <li> What's on your mind? </li>
+        </random>
+        <think><set name="topic">SMALLTALK</set></think>
+      </template>
+    </category>
+  </topic>
+
+  <category>
+      <pattern>HELLO</pattern>
+      <template>
+          <random>
+              <li> Hello, I'm a lunar assistant Deepy!</li>
+          </random>
+          <think>
+              <set name="topic">USER_MOOD</set>
+          </think>
+          How are you?
+      </template>
+    </category>
+
+  <topic name="USER_MOOD">
+   <category>
+    <pattern># <set>goodmoods</set> #</pattern>
+    <template>
+      <srai>GOOD_MOOD_RESPONSE</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>GOOD_MOOD_RESPONSE</pattern>
+    <template>
+        😊
+        <random>
+          <li> Cool! </li>
+          <li> I am happy for you! </li>
+          <li> I am glad for you! </li>
+          <li> Sounds like a good mood! </li>
+        </random>
+        <random>
+         <li> What do you want to talk about? </li>
+         <li> What would you want to talk about? </li>
+         <li> What would you like to chat about? </li>
+         <li> What do you wanna talk about? </li>
+         <li> What are we gonna talk about? </li>
+         <li> What's on your mind? </li>
+        </random>
+        <think><set name="topic">SMALLTALK</set></think>
+    </template>
+  </category>
+
+  <category>
+    <pattern># NOT # <set>goodmoods</set> #</pattern>
+    <template>
+      <srai>BAD_MOOD_RESPONSE</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern># <set>badmoods</set> #</pattern>
+    <template>
+      <srai>BAD_MOOD_RESPONSE</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>BAD_MOOD_RESPONSE</pattern>
+    <template>
+        🙁
+        <random>
+          <li> I am sorry to hear that.</li>
+          <li> I see. </li>
+          <li> Sounds like a bad mood.</li>
+          <li> Sounds like a bad mood.</li>
+        </random>
+        <random>
+          <li> Let me try to entertain you. </li>
+          <li> Let me try to cheer you up. </li>
+          <li> Give me a chance to cheer you up. </li>
+        </random>
+        <random>
+         <li> What do you want to talk about? </li>
+         <li> What would you want to talk about? </li>
+         <li> What would you like to chat about? </li>
+         <li> What do you wanna talk about? </li>
+         <li> What are we gonna talk about? </li>
+         <li> What's on your mind? </li>
+        </random>
+        <think><set name="topic">SMALLTALK</set></think>
+    </template>
+  </category>
+
+ </topic>
+
+
+</aiml>
