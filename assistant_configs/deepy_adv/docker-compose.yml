@@ -47,4 +47,30 @@ services:
       context: skills/program-y
     ports:
       - 3005:3005
+  entity_linking:
+    build:
+      args:
+        CONFIG: entity_linking.json
+        PORT: 3006
+        SRC_DIR: annotators/entity_linking
+      context: ./
+      dockerfile: common/Dockerfile
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 3006:3006
+    environment:
+      - CUDA_VISIBLE_DEVICES=''
+  intent_catcher:
+    build:
+      context: ./annotators/intent_catcher/
+    ports:
+      - 3007:3007
+    command: gunicorn --workers=1 --name=catcher --bind 0.0.0.0:3007 --timeout=100 server:app
+  sentseg:
+    build:
+      context: ./annotators/sent_seg/
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:3008 -t 100
+    ports:
+      - 3008:3008
 version: "3.7"
