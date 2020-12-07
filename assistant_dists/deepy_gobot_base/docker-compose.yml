@@ -1,0 +1,49 @@
+services:
+  agent:
+    build:
+      context: agent
+    container_name: agent
+    depends_on:
+      - mongo
+    ports:
+      - 4242:4242
+    tty: true
+    command: python -m deeppavlov_agent.run -ch http_client --cors
+  spelling_preprocessing:
+    build:
+      context: annotators/spelling_preprocessing
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:3001 --timeout=100
+    ports:
+      - 3001:3001
+  harvesters_maintenance_gobot_skill:
+    build:
+      context: skills/harvesters_maintenance_gobot_skill
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:3002 --timeout=1000
+    ports:
+      - 3002:3002
+  mongo:
+    command: mongod
+    image: mongo:4.0.0
+    ports:
+      - 27017:27017
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  rule_based_response_selector:
+    build:
+      context: selectors/rule_based_response_selector
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:3003
+    volumes: []
+    ports:
+      - 3003:3003
+  emotion_classification:
+    build:
+      context: annotators/emotion_classification
+    command: python -m deeppavlov riseapi emo_bert.json -p 3004
+    ports:
+      - 3004:3004
+  program_y:
+    build:
+      context: skills/program-y
+    ports:
+      - 3005:3005
+version: "3.7"

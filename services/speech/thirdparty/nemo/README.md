@@ -1,0 +1,1 @@
+curl -X POST "http://0.0.0.0:4343/asr?user_id=fdgdfgsd" -F "file=@8088-284756-0037.wav"  --output out.wav
