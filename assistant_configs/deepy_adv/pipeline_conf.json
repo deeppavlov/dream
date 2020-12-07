@@ -27,6 +27,24 @@
                 "dialog_formatter": "dp_formatters:last_utt_dialog",
                 "response_formatter": "dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation"
+            },
+            "entity_linking": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://entity_linking:3006/model"
+                },
+                "dialog_formatter": "dp_formatters:last_utt_dialog",
+                "response_formatter": "dp_formatters:entity_linking_formatter",
+                "state_manager_method": "add_annotation"
+            },
+            "sentseg": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://sentseg:3008/sentseg"
+                },
+                "dialog_formatter": "dp_formatters:last_utt_dialog",
+                "response_formatter": "dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation"
             }
         },
         "skills": {
