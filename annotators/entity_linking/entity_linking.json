@@ -1,0 +1,71 @@
+{
+  "chainer": {
+    "in": ["sentences"],
+    "pipe": [
+      {
+        "config_path": "{CONFIGS_PATH}/ner/ner_lcquad_bert_ent_and_type.json",
+        "in": ["sentences"],
+        "out": ["x_tokens", "y_pred"]
+      },
+      {
+        "in": ["x_tokens", "y_pred"],
+        "out": ["entities", "types", "entities_pos"],
+        "entity_tags": ["E-TAG"],
+        "type_tag": "T-TAG",
+        "o_tag": "O-TAG",
+        "tags_file": "{NER_PATH}/tag.dict",
+        "class_name": "entity_detection_parser"
+      },
+      {
+        "class_name": "kbqa_entity_linker",
+        "in": ["entities"],
+        "out": ["entity_ids", "confidences"],
+        "load_path": "{DOWNLOADS_PATH}/wikidata_eng",
+        "inverted_index_filename": "inverted_index_eng.pickle",
+        "entities_list_filename": "entities_list.pickle",
+        "q2name_filename": "wiki_eng_q_to_name.pickle",
+        "who_entities_filename": "who_entities.pickle",
+        "build_inverted_index": false,
+        "use_descriptions": false,
+        "use_prefix_tree": false,
+        "num_entities_to_return": 5
+      },
+      {
+        "class_name": "type_requester",
+        "in": ["entity_ids"],
+        "out": ["id_types"]
+      }
+    ],
+    "out": ["entities", "entity_ids", "id_types"]
+  },
+  "metadata": {
+    "imports": [
+      "type_requester"
+    ],
+    "variables": {
+      "ROOT_PATH": "~/.deeppavlov",
+      "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
+      "MODELS_PATH": "{ROOT_PATH}/models",
+      "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs",
+      "NER_PATH": "{MODELS_PATH}/ner_lcquad_ent_and_type"
+    },
+    "requirements": [
+      "{DEEPPAVLOV_PATH}/requirements/tf.txt",
+      "{DEEPPAVLOV_PATH}/requirements/bert_dp.txt",
+      "{DEEPPAVLOV_PATH}/requirements/rapidfuzz.txt",
+      "{DEEPPAVLOV_PATH}/requirements/hdt.txt",
+      "{DEEPPAVLOV_PATH}/requirements/spelling.txt",
+      "requirements.txt"
+    ],
+    "download": [
+      {
+        "url": "http://files.deeppavlov.ai/kbqa/wikidata/kbqa_entity_linking_eng.tar.gz",
+        "subdir": "{DOWNLOADS_PATH}/wikidata_eng"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/kbqa/models/ner_lcquad.tar.gz",
+        "subdir": "{NER_PATH}"
+      }
+    ]
+  }
+}

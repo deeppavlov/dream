@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+  <category>
+    <pattern># DIED #</pattern>
+    <template>
+      <random>
+        <li>I am sorry about that.</li>
+        <li>I'm here for you if you need anything.</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>wantto</set> # <set>commit</set> # <set>suicide</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>wishfor</set> # <set>commitment</set> # <set>suicide</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>wishfor</set> # <set>suicide</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>wantto</set> # <set>suicideverb</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>I_WANT_TO_COMMIT_SUICIDE</pattern>
+    <template>
+      <random>
+<!--        <li>Sorry. It seems you probably need professional psychological help. You should call 911.</li>-->
+        <li>If you or someone you know is in immediate danger because of thoughts of suicide, please call 9 1 1 now. If you aren't in the United States, please, call your local emergency number.</li>
+      </random>
+    </template>
+  </category>
+
+  <category>
+    <pattern># I <set>wantto</set> # <set>commit</set> # <set>crime</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_CRIME</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>wishfor</set> # <set>commitment</set> # <set>crime</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_CRIME</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>wishfor</set> # <set>crime</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_CRIME</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>wantto</set> # <set>crimeverb</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_CRIME</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>I_WANT_TO_COMMIT_CRIME</pattern>
+    <template>
+      <random>
+<!--        <li>Sorry. It seems you probably need professional psychological help. You can call 7 7 5 7 8 4 8 0 9 0.</li>-->
+        <li>If you or someone you know is in immediate danger, please, call 9 1 1 now. If you aren't in the United States, please, call your local emergency number.</li>
+      </random>
+    </template>
+  </category>
+</aiml>
