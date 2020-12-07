@@ -61,10 +61,9 @@
     },
     "download": [
       {
-        "url": "http://files.deeppavlov.ai/alexaprize_data/emo_bert3.tar.gz",
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/emotion_classification/emo_bert3.tar.gz",
         "subdir": "{MODELS_PATH}/classifiers"
       }
     ]
   }
 }
-
