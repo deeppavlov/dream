@@ -51,13 +51,20 @@ async def perform_test_dialogue(session, url, uuid, payloads, with_debug_info=Fa
                 logger.debug("Time: {}; Request: {}; Response: {}".format(
                     start_time - end_time, request_body, response)
                 )
-                if response['user_id'] != uuid:
-                    logger.info('request returned wrong uuid')
-                active_skill = response['active_skill']
-                result.append([uuid, active_skill, start_time, end_time,
-                               end_time - start_time, len(i), i, response['response']])
-                if with_debug_info:
-                    result[-1].append(response)
+                if request_body["payload"] in ["/start", "/close"]:
+                    active_skill = 'command_performed'
+                    response = {}
+                    response['response'] = 'command_performed'
+                    result.append([uuid, active_skill, start_time, end_time,
+                                   end_time - start_time, len(i), i, response['response']])
+                else:
+                    if response['user_id'] != uuid:
+                        logger.info('request returned wrong uuid')
+                    active_skill = response['active_skill']
+                    result.append([uuid, active_skill, start_time, end_time,
+                                   end_time - start_time, len(i), i, response['response']])
+                    if with_debug_info:
+                        result[-1].append(response)
         except aiohttp.client_exceptions.ClientResponseError as e:
             logger.exception(e)
             end_time = time()
