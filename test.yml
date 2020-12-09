@@ -38,6 +38,6 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=10.11.1.1:9077
+      - PROXY_PASS=10.11.1.1:8077
       - PORT=8077
 version: '3.7'
