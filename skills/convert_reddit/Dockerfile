@@ -9,7 +9,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /root/.cache
 
-ARG DATA_URL=http://files.deeppavlov.ai/alexaprize_data/convert_reddit_v2.4.tar.gz
+ARG DATA_URL=http://files.deeppavlov.ai/alexaprize_data/convert_reddit_v2.5.tar.gz
 
 RUN mkdir -p /root/convert_data && \
     curl $DATA_URL > /root/convert_data/convert_reddit_data.tar.gz && \
