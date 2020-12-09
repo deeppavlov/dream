@@ -29,6 +29,8 @@ ASKED_ABOUT_FACT_PROB = 0.99
 FACTOID_CLASS_THRESHOLD = 0.5
 factoid_classifier = build_model(config="./yahoo_convers_vs_info_light.json", download=False)
 fact_dict = json.load(open('fact_dict.json', 'r'))
+use_random_facts = False
+decrease_coef = 0.8
 
 tell_me = r"(do you know|(can|could) you tell me|tell me)"
 tell_me_template = re.compile(tell_me)
@@ -206,18 +208,13 @@ def respond():
                 # we use one of the statements
                 answer = kbqa_response["response"]
                 if isinstance(answer, list):
-                    str_response = ', '.join(answer)
+                    response = ', '.join(answer)
                 else:
-                    str_response = answer
-                count = len(re.findall(r'\w+', str_response))
-                if (count > 3):
-                    response = random.choice(long_pre_stmts) + str_response
-                else:
-                    response = random.choice(short_pre_statements) + str_response
+                    response = answer
                 # FACTOID_DEFAULT_CONFIDENCE
-                confidence = kbqa_response["confidence"]
+                confidence = kbqa_response["confidence"] * decrease_coef
             # and "?" in dialog["human_utterances"][-1]["text"]: Factoid questions can be without ?
-            elif len(fact_output) > 0:
+            elif len(fact_output) > 0 and use_random_facts:
                 logger.info("Factoid question. Answer with pre-recorded facts.")
                 # response = "Here's something I've found on the web... " + fact_output
                 response = random.choice(pre_old_memory_statements) + fact_output
