@@ -143,7 +143,7 @@ class RuleBasedSkillSelectorConnector:
             factoid_prob_threshold = 0.9  # to check if factoid probability has at least this prob
             sensitive_dialogacts_detected = any(
                 [(t in self.sensitive_dialogacts and "?" in user_uttr_text) for t in cobot_dialogacts]
-            )
+            ) or user_uttr_annotations["intent_catcher"].get("opinion_request", {}).get("detected", 0)
             blist_topics_detected = user_uttr_annotations["blacklisted_words"]["restricted_topics"]
 
             about_movies = (self.movie_cobot_dialogacts & cobot_dialogact_topics)

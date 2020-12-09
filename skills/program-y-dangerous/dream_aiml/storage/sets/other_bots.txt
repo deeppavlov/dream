@@ -1,0 +1,7 @@
+siri
+alice
+cortana
+assistant
+google
+wechat
+xaioice

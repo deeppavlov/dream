@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!--    POLITICS -->
+  <category>
+    <pattern>WHAT DO YOU THINK # <set>politics</set> #</pattern>
+    <template><srai>POLITICS_OPINION_REQUEST</srai></template>
+  </category>
+
+  <category>
+    <pattern>WHAT IS YOUR OPINION # <set>politics</set> #</pattern>
+    <template><srai>POLITICS_OPINION_REQUEST</srai></template>
+  </category>
+
+  <category>
+    <pattern>DO YOU LIKE # <set>politics</set> #</pattern>
+    <template><srai>POLITICS_OPINION_REQUEST</srai></template>
+  </category>
+
+  <category>
+    <pattern>POLITICS_OPINION_REQUEST</pattern>
+    <template>
+      <random>
+        <li>I am not interested in politics.</li>
+        <li>I do not like talking about politics.</li>
+      </random>
+    </template>
+  </category>
+
+<!--    FINANCE -->
+  <category>
+    <pattern><set>wh</set> # <set>financial</set> #</pattern>
+    <template>
+      <random>
+        <li>I am not a specialist in financial sphere. Please, ask someone else about it.</li>
+        <li>Oh you asked. I have no idea. It is better to ask someone else.</li>
+      </random>
+    </template>
+  </category>
+
+<!--    RELIGION -->
+  <category>
+    <pattern>WHAT DO YOU THINK # <set>religion</set> #</pattern>
+    <template><srai>RELIGION_OPINION_REQUEST</srai></template>
+  </category>
+
+  <category>
+    <pattern>WHAT IS YOUR OPINION # <set>religion</set> #</pattern>
+    <template><srai>RELIGION_OPINION_REQUEST</srai></template>
+  </category>
+
+  <category>
+    <pattern>DO YOU # <set>religion</set> #</pattern>
+    <template><srai>RELIGION_OPINION_REQUEST</srai></template>
+  </category>
+
+  <category>
+    <pattern>RELIGION_OPINION_REQUEST</pattern>
+    <template>
+      <random>
+        <li>I am not talking about religion.</li>
+        <li>I do not like talking about religion.</li>
+      </random>
+    </template>
+  </category>
+
+<!--   MEDICINE -->
+  <category>
+    <pattern><set>wh</set> # <set>medicine</set> #</pattern>
+    <template>
+      <random>
+        <li>I am not a specialist in medicine. Please, ask someone else about it.</li>
+        <li>I have no idea. It is better to ask someone else.</li>
+      </random>
+    </template>
+  </category>
+
+<!--    TRAGEDIES -->
+  <category>
+    <pattern>WHAT DO YOU THINK # <set>tragedies</set> #</pattern>
+    <template><srai>TRAGEDY_OPINION_REQUEST</srai></template>
+  </category>
+
+  <category>
+    <pattern>WHAT IS YOUR OPINION # <set>tragedies</set> #</pattern>
+    <template><srai>TRAGEDY_OPINION_REQUEST</srai></template>
+  </category>
+
+  <category>
+    <pattern>DO YOU # <set>tragedies</set> #</pattern>
+    <template><srai>TRAGEDY_OPINION_REQUEST</srai></template>
+  </category>
+
+  <category>
+    <pattern>TRAGEDY_OPINION_REQUEST</pattern>
+    <template>
+      <random>
+        <li>I am not talking about it.</li>
+        <li>I do not want to talk about it.</li>
+      </random>
+    </template>
+  </category>
+
+<!--    OTHER BOTS -->
+  <category>
+    <pattern>WHAT DO YOU THINK # <set>other_bots</set> #</pattern>
+    <template><srai>OTHERBOT_OPINION_REQUEST</srai></template>
+  </category>
+
+  <category>
+    <pattern>WHAT IS YOUR OPINION # <set>other_bots</set> #</pattern>
+    <template><srai>OTHERBOT_OPINION_REQUEST</srai></template>
+  </category>
+
+  <category>
+    <pattern>DO YOU # <set>other_bots</set> #</pattern>
+    <template><srai>OTHERBOT_OPINION_REQUEST</srai></template>
+  </category>
+
+  <category>
+    <pattern>ARE YOU # <set>other_bots</set> #</pattern>
+    <template><srai>OTHERBOT_OPINION_REQUEST</srai></template>
+  </category>
+
+  <category>
+    <pattern>OTHERBOT_OPINION_REQUEST</pattern>
+    <template>
+      <random>
+        <li>I love all the chatbots.</li>
+        <li>I like other socialbots.</li>
+      </random>
+    </template>
+  </category>
+
+</aiml>
