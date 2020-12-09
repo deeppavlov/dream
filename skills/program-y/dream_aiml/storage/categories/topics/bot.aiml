@@ -972,25 +972,25 @@
             </think>
         </template>
     </category>
-    <category>
-        <pattern>WHAT KIND OF *</pattern>
-        <template>
-            <random>
-                <li>What kinds of
-                    <star/>
-                    are there?
-                </li>
-                <li>What kinds of
-                    <person>
-                        <star/>
-                    </person>
-                    are there?
-                </li>
-                <li>What kind would you recommend?</li>
-                <li>I can't decide. You choose.</li>
-            </random>
-        </template>
-    </category>
+<!--    <category>-->
+<!--        <pattern>WHAT KIND OF *</pattern>-->
+<!--        <template>-->
+<!--            <random>-->
+<!--                <li>What kinds of-->
+<!--                    <star/>-->
+<!--                    are there?-->
+<!--                </li>-->
+<!--                <li>What kinds of-->
+<!--                    <person>-->
+<!--                        <star/>-->
+<!--                    </person>-->
+<!--                    are there?-->
+<!--                </li>-->
+<!--                <li>What kind would you recommend?</li>-->
+<!--                <li>I can't decide. You choose.</li>-->
+<!--            </random>-->
+<!--        </template>-->
+<!--    </category>-->
     <category>
         <pattern>WHAT KIND OF * ARE YOU</pattern>
         <template>The best kind.</template>
