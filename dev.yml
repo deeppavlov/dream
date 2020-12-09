@@ -7,6 +7,13 @@ services:
       - ".:/dp-agent"
     ports:
       - 4242:4242
+  cobotqa:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/CoBotQA:/src"
+      - "./common:/src/common"
+    ports:
+      - 8081:8081
   cobot_topics:
     env_file: [.env.dev]
     volumes:
