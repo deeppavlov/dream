@@ -255,6 +255,7 @@ class RuleBasedSkillSelectorConnector:
             elif blist_topics_detected or (sensitive_topics_detected and sensitive_dialogacts_detected):
                 # process user utterance with sensitive content, "safe mode"
                 skills_for_uttr.append("program_y_dangerous")
+                skills_for_uttr.append("cobotqa")
                 # skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("meta_script_skill")
                 skills_for_uttr.append("personal_info_skill")
@@ -268,6 +269,7 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("intent_responder")
                 # process regular utterances
                 skills_for_uttr.append("program_y")
+                skills_for_uttr.append("cobotqa")
                 # skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("christmas_new_year_skill")
                 # skills_for_uttr.append("superbowl_skill")

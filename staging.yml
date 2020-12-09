@@ -5,6 +5,10 @@ services:
       - ${ENV_FILE}
     ports:
       - ${DP_AGENT_PORT}:4242
+  cobotqa:
+    image: ${DOCKER_REGISTRY}/cobotqa:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   sentseg:
     image: ${DOCKER_REGISTRY}/sentseg:${VERSION}
     env_file:

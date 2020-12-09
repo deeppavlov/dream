@@ -304,12 +304,12 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                     "about it" not in dialog['utterances'][0]["text"].lower():
                 logger.info("User wants to talk about particular topic")
                 # if user says `let's chat about blablabla`
-                # if skill_names[i] == 'cobotqa':
-                #     logger.info("Particular topic. CoBotQA + Greeting to very big score.")
-                #     # I don't have an opinion on that but I know some facts.
-                #     resp = candidates[i]['text'].replace("I don't have an opinion on that but I know some facts.", "")
-                #     candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + resp
-                #     curr_score = very_big_score
+                if skill_names[i] == 'cobotqa':
+                    logger.info("Particular topic. CoBotQA + Greeting to very big score.")
+                    # I don't have an opinion on that but I know some facts.
+                    resp = candidates[i]['text'].replace("I don't have an opinion on that but I know some facts.", "")
+                    candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + resp
+                    curr_score = very_big_score
                 if skill_names[i] == 'meta_script_skill' and len(candidates[i]['text']) > 0 and \
                         confidences[i] > 0.98:
                     logger.info("Particular topic. meta_script_skill + Greeting to very big score.")
@@ -352,7 +352,8 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             else:
                 confidences[i] = 0.2  # Low confidence for greeting in the middle of dialogue
         # we don't have 'cobotqa' anymore; instead we have factoid_qa
-        elif skill_names[i] == 'factoid_qa' and "Here's something I found on the web." in candidates[i]['text']:
+        elif skill_names[i] in ['factoid_qa', "cobotqa"] and \
+                "Here's something I found on the web." in candidates[i]['text']:
             confidences[i] = 0.6
         elif skill_names[i] == 'factoid_qa' and dialog['human_utterances'][-1]["annotations"].get(
                 "intent_catcher", {}).get("weather_forecast_intent", {}).get("detected", 0) == 1:

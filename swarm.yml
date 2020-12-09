@@ -8,6 +8,14 @@ services:
           - node.labels.with_gpu != true
           - node.labels.is_agent == true
 
+  cobotqa:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
   cobot_topics:
     deploy:
       mode: replicated
