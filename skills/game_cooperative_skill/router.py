@@ -53,7 +53,9 @@ def run_skills(history: List, state: Dict, agent_intents: Dict = {}):
     if len(state.utterances) <= 1:
         scheduled_skills.append((tutor_attrs.skill_name, [tutor_attrs.modes.intro]))
 
-    elif "topic_switching" in agent_intents:
+    elif "topic_switching" in agent_intents and not (
+        ("next_game_intent" in state.intents) and is_last_skill(game_conversation_attrs.skill_name, state)
+    ):
         # switch the topic
         pass
     elif (
