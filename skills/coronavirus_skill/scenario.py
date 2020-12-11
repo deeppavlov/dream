@@ -15,7 +15,8 @@ from common.coronavirus import corona_switch_skill_reply, is_staying_home_reques
 from common.link import link_to
 from common.utils import is_yes, is_no
 from common.utils import check_about_death, about_virus, quarantine_end
-from common.universal_templates import book_movie_music_found
+from common.universal_templates import book_movie_music_found, if_lets_chat_about_topic, is_switch_topic
+
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.DEBUG)
@@ -164,10 +165,16 @@ def get_state_cases():
     while True:
         current_date = datetime.now().strftime('%m-%d-%Y') + '.csv'
         prev_date = (datetime.now() - timedelta(days=1)).strftime('%m-%d-%Y') + '.csv'
-        try:
-            current_data = pd.read_csv((DATA_URL + current_date), error_bad_lines=False)
-        except BaseException:
-            current_data = pd.read_csv((DATA_URL + prev_date), error_bad_lines=False)
+        prev_prev_date = (datetime.now() - timedelta(days=2)).strftime('%m-%d-%Y') + '.csv'
+        current_data = None
+        for date_ in [prev_prev_date, prev_date, current_date]:
+            try:
+                current_data = pd.read_csv((DATA_URL + date_), error_bad_lines=False)
+                logging.info(f'Data for  {date_} retrieved')
+            except BaseException:
+                pass
+        if current_data is None:
+            raise Exception('Data not retrieved')
         current_data = current_data[current_data['Country_Region'] == 'US']
         state_data = defaultdict(lambda: (0, 0))
         county_data = defaultdict(lambda: (0, 0))  # (state, county)
@@ -229,7 +236,7 @@ def get_statephrase(state_name, state_data, county_data, nation_data):
         phrase = 'In the {0}, the total number of registered coronavirus cases ' \
                  'is {1} including {2} deaths.'.format(*data1)
     else:
-        raise Exception(str(state_name) + ' not in names')
+        raise Exception(f'{state_name} not in names')
     if data1[2] == 1:
         phrase = phrase.replace('deaths', 'death')
     elif data1[2] == 0:
@@ -253,7 +260,7 @@ def get_age_answer(last_utterance, bot_attr):
             age_num = word_to_num(user_phrase)
         reply, bot_attr = get_agephrase(age_num, bot_attr)
     except BaseException:
-        reply = "I didn't get your age. Could you, please, repeat it."
+        reply = ''
     logging.debug(reply)
     return reply, bot_attr
 
@@ -447,9 +454,9 @@ class CoronavirusSkillScenario:
                     else:
                         reply, confidence = FEAR_HATE_REPLY2, 0.95
                     reply = improve_phrase(reply)
-                elif 'would you like to learn more' in last_bot_phrase:
+                elif 'to learn more' in last_bot_phrase:
                     fear_prob = dialog['utterances'][-1]['annotations']['emotion_classification']['text']['fear']
-                    logging.debug('Fear prob ' + str(fear_prob))
+                    logging.debug(f'Fear prob {fear_prob}')
                     if is_no(last_utterance):
                         logging.info('Another fact request detected, answer is NO')
                         reply = corona_switch_skill_reply()
@@ -538,7 +545,7 @@ class CoronavirusSkillScenario:
                                 logging.info('I have just asked about age, returning age phrase')
                                 reply, bot_attr = get_age_answer(last_utterance, bot_attr)
                                 confidence = 1
-                                if 'repeat it' in reply:
+                                if reply == '':
                                     logging.info('Could not detect age. Looking for something else')
                                     repeat_in_reply = True
                                 else:
@@ -585,8 +592,10 @@ class CoronavirusSkillScenario:
                                 logging.info('After asking about age returning age phrase')
                                 reply, bot_attr = get_age_answer(last_utterance, bot_attr)
                                 confidence = 1
-                                if 'repeat it' in reply:
-                                    confidence = 0
+                            # Reply is empty if it wasnt about age.
+                            if is_switch_topic(last_utterance) or is_no(last_utterance):
+                                # We shut up under this condition, otherwise carry on
+                                confidence = 0
                             elif (wants_cv or about_coronavirus(last_utterance)) and wasnot_first:
                                 logging.info('Returning state phrase')
                                 reply, confidence = get_statephrase(detected_state, STATE_DATA,
@@ -609,6 +618,10 @@ class CoronavirusSkillScenario:
                     confidence = 0
                 elif reply == '':
                     logging.info('reply is empty, drop confidence to 0')
+                    confidence = 0
+
+                elif if_lets_chat_about_topic(last_utterance['text']) and not about_virus(last_utterance['text']):
+                    logging.info('Topic chat request found, drop confidence to 0')
                     confidence = 0
                 elif reply.lower() in last_utterances and confidence == 1:
                     logging.info('I have said that before, a bit less confident')
