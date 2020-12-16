@@ -237,6 +237,16 @@
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators.spelling_preprocessing"]
             },
+            "odqa": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://0.0.0.0:8078/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "required_previous_services": ["annotators.spelling_preprocessing"]
+            },
             "kbqa": {
                 "connector": {
                     "protocol": "http",

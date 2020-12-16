@@ -405,4 +405,11 @@ services:
       - "./annotators/spelling_preprocessing:/src"
     ports:
       - 8074:8074
+  odqa:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/odqa:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8078:8078
 version: "3.7"
