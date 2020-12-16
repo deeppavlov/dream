@@ -508,6 +508,20 @@ def ner_formatter_last_bot_dialog(dialog: Dict):
 #         }
 #     ]
 
+def el_formatter_dialog(dialog: Dict):
+    # Used by: entity_linking annotator
+    context = [dialog['human_utterances'][-1]['annotations']['sentseg']['punct_sent']]
+    ner_output = dialog['human_utterances'][-1]['annotations']['ner']
+    entity_substr = [entity["text"] for entities in ner_output for entity in entities]
+    
+    return [
+        {
+            'entity_substr': entity_substr, 
+            'template': [''],
+            'context': context 
+        }
+    ]
+
 
 def short_story_formatter_dialog(dialog: Dict):
     # Used by: short_story_skill

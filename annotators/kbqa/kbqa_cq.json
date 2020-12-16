@@ -93,7 +93,8 @@
         "batch_size": 32,
         "load_path": "{DOWNLOADS_PATH}/wikidata_eng",
         "rel_q2name_filename": "wiki_dict_properties.pickle",
-	"return_confidences": true,
+	    "return_confidences": true,
+	    "return_sentence_answer": true,
         "in": ["x", "candidate_answers"],
         "out": ["answers"]
       }
@@ -129,7 +130,7 @@
       "ROOT_PATH": "~/.deeppavlov",
       "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
       "MODELS_PATH": "{ROOT_PATH}/models",
-      "BERT_PATH": "{DOWNLOADS_PATH}/bert_models/cased_L-12_H-768_A-12",
+      "BERT_PATH": "{DOWNLOADS_PATH}/bert_models_kbqa/cased_L-12_H-768_A-12",
       "NER_PATH": "{MODELS_PATH}/ner_lcquad_ent_and_type",
       "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs"
     },
@@ -144,7 +145,6 @@
       "{DEEPPAVLOV_PATH}/requirements/wikihow.txt",
       "{DEEPPAVLOV_PATH}/requirements/spacy.txt",
       "{DEEPPAVLOV_PATH}/requirements/pyinflect.txt"
-
     ],
     "labels": {
       "telegram_utils": "NERCoNLL2003Model",
@@ -157,7 +157,7 @@
       },
       {
         "url": "http://files.deeppavlov.ai/deeppavlov_data/bert/cased_L-12_H-768_A-12.zip",
-        "subdir": "{DOWNLOADS_PATH}/bert_models"
+        "subdir": "{DOWNLOADS_PATH}/bert_models_kbqa"
       },
       {
         "url": "http://files.deeppavlov.ai/kbqa/models/query_prediction.tar.gz",
@@ -176,7 +176,7 @@
         "subdir": "{MODELS_PATH}/rel_ranking_bert"
       },
       {
-        "url": "http://files.deeppavlov.ai/kbqa/wikidata/wiki_eng_files.tar.gz",
+        "url": "http://files.deeppavlov.ai/kbqa/wikidata/wiki_eng_files_no_el.tar.gz",
         "subdir": "{DOWNLOADS_PATH}/wikidata_eng"
       },
       {

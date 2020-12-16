@@ -36,10 +36,15 @@ for service_name, service_args in data['services'].items():
                     else:
                         raise ValueError
                     for save_dir in paths:
-                        downloads[str(save_dir / f_name)].append(service_name)
+                        downloads[str(save_dir / f_name)].append((service_name, url))
         except Exception as e:
             print(service_name)
             raise e
 
-duplicates = {key: val for key, val in downloads.items() if len(val) != 1}
+duplicates = {}
+for key, val in downloads.items():
+    urls = set([file_url for service_name, file_url in val])
+    if len(urls) != 1:
+        duplicates[key] = val
+
 assert not duplicates, duplicates
