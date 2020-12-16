@@ -9,7 +9,7 @@ services:
       dockerfile: dp/dockerfile_skill_gpu
     environment:
       - CUDA_VISIBLE_DEVICES=0
-    env_file: [.env.dev]
+    env_file: [ .env.dev ]
     volumes:
       - "./annotators/DeepPavlovToxicClassification:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
@@ -25,7 +25,7 @@ services:
       dockerfile: dp/dockerfile_skill_gpu
     environment:
       - CUDA_VISIBLE_DEVICES=0
-    env_file: [.env.dev]
+    env_file: [ .env.dev ]
     volumes:
       - "./annotators/DeepPavlovSentimentClassification:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
@@ -41,7 +41,7 @@ services:
       dockerfile: dp/dockerfile_skill_gpu
     environment:
       - CUDA_VISIBLE_DEVICES=1
-    env_file: [.env.dev]
+    env_file: [ .env.dev ]
     volumes:
       - "./annotators/DeepPavlovEmotionClassification:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
@@ -57,7 +57,7 @@ services:
       dockerfile: dp/dockerfile_skill_gpu
     environment:
       - CUDA_VISIBLE_DEVICES=1
-    env_file: [.env.dev]
+    env_file: [ .env.dev ]
     volumes:
       - "./annotators/stop_detect:/src"
       - "./common:/src/common"
@@ -89,7 +89,7 @@ services:
       dockerfile: dp/dockerfile_skill_gpu
     environment:
       - CUDA_VISIBLE_DEVICES=2
-    env_file: [.env.dev]
+    env_file: [ .env.dev ]
     volumes:
       - "./annotators/DeepPavlovFactoidClassification:/src"
       - "~/.deeppavlov:/root/.deeppavlov"

@@ -431,6 +431,14 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8071
       - PORT=8071
+  odqa:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=10.11.1.1:8078
+      - PORT=8078
   kbqa:
     command: ["nginx", "-g", "daemon off;"]
     build:

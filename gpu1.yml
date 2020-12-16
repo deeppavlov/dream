@@ -59,4 +59,7 @@ services:
   cobot_convers_evaluator_annotator:
     environment:
       - CUDA_VISIBLE_DEVICES=6
+  odqa:
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
 version: '3.7'

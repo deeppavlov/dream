@@ -32,6 +32,9 @@ services:
   factoid_classification:
     environment:
       - CUDA_VISIBLE_DEVICES=9
+  odqa:
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
   wiki_parser:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
