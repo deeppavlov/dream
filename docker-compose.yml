@@ -452,7 +452,7 @@ services:
         CONFIG: kbqa_cq.json
         PORT: 8072
         SRC_DIR: annotators/kbqa/
-        COMMIT: 4b6ff60b01a15dd041b0702589caff73a69e37e8
+        COMMIT: 46e0d9163667116176dbb622c0c48d6b4366fb7a
       context: ./
       dockerfile: annotators/kbqa/Dockerfile
     environment:

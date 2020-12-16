@@ -254,6 +254,15 @@
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
             },
+            "entity_linking": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://0.0.0.0:8075/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:el_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "required_previous_services": ["annotators.ner"]
+            },
             "sentrewrite": {
                 "connector": "connectors.sentrewrite",
                 "dialog_formatter": "state_formatters.dp_formatters:sent_rewrite_formatter_dialog",
