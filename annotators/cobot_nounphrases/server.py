@@ -41,6 +41,8 @@ np_ignore_list = ["'s", 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselv
                   "some more", " a lot", "a bit", "another one", "something else", "something", "anything",
                   "someone", "anyone", "play", "mean", "a lot", "a little", "a little bit", "sure"]
 
+words_ignore_in_np = re.compile(r"(which|what)", re.IGNORECASE)
+
 
 def noun_phrase_extraction(input_text):
     if input_text:
@@ -68,6 +70,8 @@ def noun_phrase_extraction(input_text):
                 noun_chunks.extend([vbg[0].text.lower()])
             return noun_chunks
 
+        for i in range(len(augmented_noun_chunks)):
+            augmented_noun_chunks[i] = re.sub(words_ignore_in_np, "", augmented_noun_chunks[i]).strip()
         return augmented_noun_chunks
     return []
 
