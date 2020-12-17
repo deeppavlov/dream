@@ -218,12 +218,36 @@ OPINION_EXPRESSION_TEMPLATES = {  # обязательно не меньше 3 �
     ]
 }
 
-BANNED_PROPERTIES = {"gay", "dead", "liar", "death", "terror"}
+BANNED_PROPERTIES = {"gay", "dead", "liar", "death", "terror", "hurt", "sick", "ill", "sad", "upset",
+                     "disappointed"}
 
 BANNED_NOUNS_FOR_OPINION_EXPRESSION = {
     "trump", "putin", "coronavirus", "corona virus", "virus", "me", "it", "her", "him", "them", "wanna",
     "no thanks", "thanks", "lol", "alexa", "suck", "fuck", "sex", "one", "thing", "something", "anything", "nothing",
     "topic", "today", "yesterday", "tomorrow", "now", "mine", "talk", "chat", "me", "favorite",
     "everything", "way", "minute", "lot", "lots", "things", "wanna", "times", "subject", "object", "none",
-    "question", "conversation", "problem", "no problem", "please", "human", "people", "humanity"
+    "question", "conversation", "problem", "no problem", "please", "human", "people", "humanity",
+    "opinion", "opinions", "view", "views", "thought", "thoughts", "attitude", "attitudes",
+    "bank", "banks", "stocks", "stock", "cryptocurrency", "sales", "revenue", "sale", "revenues", "tax", "taxes",
+    "money", "free money", "crypto", "exchange", "trading", "day trading", "crypto coins"
 }
+
+BANNED_WORDS_IN_NOUNS_FOR_OPINION_EXPRESSION = [
+    "trump", "putin", "coronavirus", "corona virus", "virus", "me", "it", "her", "him", "them", "wanna",
+    "no thanks", "thanks", "lol", "alexa", "suck", "fuck", "sex", "one", "thing", "something", "anything", "nothing",
+    "topic", "today", "yesterday", "tomorrow", "now", "mine", "talk", "chat", "me", "favorite",
+    "everything", "way", "minute", "lot", "lots", "things", "wanna", "times", "subject", "object", "none",
+    "question", "conversation", "problem", "no problem", "please", "human", "people", "humanity",
+    "opinion", "opinions", "view", "views", "thought", "thoughts", "attitude", "attitudes",
+    "bank", "banks", "stocks", "stock", "cryptocurrency", "sales", "revenue", "sale", "revenues", "tax", "taxes",
+    "money", "free money", "crypto", "exchange", "trading", "day trading", "crypto coins", "time", "loan", "loans",
+    "debt", "debt", "friend", "kiss", "kisses", "kissing", "energy", "electrity", "pollution", "damage", "damages",
+    "damaging", "water", "family", "sibling", "siblings", "sister", "sisters", "brother", "brothers", "parent",
+    "parents", "mother", "mothers", "father", "fathers", "dad", "dads", "mom", "moms", "language", "languages",
+    "strike", "strikes", "side",
+    "cough", "migrain", "influenza", "autism", "hangover", "sick", "sickness",
+    "medicine", "medication", "medications", "drugs", "pills", "poison", "poisoning", "pain", "pains", "painkiller",
+    "painkillers", "sore throat", "throat", "case", "nosebleed", "nose", "ache", "aches", "vertigo", "digestion",
+    "digestions", "headache", "headaches", "insomnia", "cystitis", "treatment", "treat",
+    "temperature", "temperatures", "wound", "wounds", "blood",
+]

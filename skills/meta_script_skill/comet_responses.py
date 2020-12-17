@@ -9,6 +9,7 @@ from spacy.symbols import nsubj, VERB, PROPN, NOUN
 from random import choice, shuffle
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
+from common.universal_templates import join_words_in_or_pattern
 from common.utils import is_opinion_request, get_skill_outputs_from_dialog
 from common.greeting import dont_tell_you_answer
 from utils import get_used_attributes_by_name, get_comet_atomic, TOP_FREQUENT_WORDS, get_all_not_used_templates, \
@@ -18,7 +19,7 @@ from constants import idopattern, DEFAULT_ASK_ATOMIC_QUESTION_CONFIDENCE, DEFAUL
     ATOMIC_COMMENT_TEMPLATES, CONCEPTNET_OPINION_TEMPLATES, OPINION_EXPRESSION_TEMPLATES, \
     REQUESTED_CONCEPTNET_OPINION_CONFIDENCE, NOT_REQUESTED_CONCEPTNET_OPINION_CONFIDENCE, \
     NUMBER_OF_HYPOTHESES_COMET_DIALOG, possessive_pronouns, BANNED_NOUNS_FOR_OPINION_EXPRESSION, BANNED_PROPERTIES, \
-    NUMBER_OF_HYPOTHESES_OPINION_COMET_DIALOG
+    NUMBER_OF_HYPOTHESES_OPINION_COMET_DIALOG, BANNED_WORDS_IN_NOUNS_FOR_OPINION_EXPRESSION
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -188,11 +189,17 @@ def comment_using_atomic(dialog):
     return responses, confidences, attrs
 
 
+BANNED_WORDS_IN_NOUNS_FOR_OPINION_EXPRESSION_COMPILED = join_words_in_or_pattern(
+    BANNED_WORDS_IN_NOUNS_FOR_OPINION_EXPRESSION)
+
+
 def filter_nouns_for_conceptnet(annotated_phrase):
     subjects = annotated_phrase["annotations"].get("cobot_nounphrases", [])
     subjects = [re.sub(possessive_pronouns, "", noun) for noun in subjects]
     subjects = [re.sub(r"(\bthe\b|\ba\b|\ban\b)", "", noun) for noun in subjects]
     subjects = [noun for noun in subjects if noun not in BANNED_NOUNS_FOR_OPINION_EXPRESSION]
+    subjects = [noun for noun in subjects if not re.search(BANNED_WORDS_IN_NOUNS_FOR_OPINION_EXPRESSION_COMPILED,
+                                                           annotated_phrase["text"])]
     for ent in annotated_phrase["annotations"]["ner"]:
         if not ent:
             continue
