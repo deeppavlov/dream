@@ -9,7 +9,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /root/.cache
 
-ARG DATA_URL=http://files.deeppavlov.ai/alexaprize_data/convert_reddit_v2.5.tar.gz
+ARG DATA_URL=http://files.deeppavlov.ai/alexaprize_data/convert_reddit_v2.7.tar.gz
 
 RUN mkdir -p /root/convert_data && \
     curl $DATA_URL > /root/convert_data/convert_reddit_data.tar.gz && \
@@ -27,7 +27,7 @@ RUN python -m spacy download en_core_web_sm
 ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 ENV MODEL_PATH /root/convert_data/convert
-ENV DATABASE_PATH /root/convert_data/replies_v3.pkl
+ENV DATABASE_PATH /root/convert_data/replies_v5.pkl
 ENV CONFIDENCE_PATH /root/convert_data/confidences_v3.npy
 ENV PYTHONPATH /usr/local/bin/python
 ENV DEVICE cpu
