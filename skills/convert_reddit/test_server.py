@@ -10,7 +10,7 @@ dialog = [
     "I response test questions",
 ]
 
-checked_cand_nums = [0, 2, 3, 3, 3]
+checked_cand_nums = [3, 3, 3, 3, 3]
 
 
 def history_gen(dialog):
@@ -26,6 +26,7 @@ def test_skill():
             url, json={"utterances_histories": [utterances], "approximate_confidence_is_enabled": False},
         )
         assert str(res.status_code) == "200"
+        print(res.json())
         assert len([i for i in res.json()[0][0] if i]) == checked_cand_num
     print("SUCCESS!")
 
