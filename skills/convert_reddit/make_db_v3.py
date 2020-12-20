@@ -37,7 +37,7 @@ banned_responses = [utils.clear_text(utter) for utter in banned_responses]
 
 # main in/out-put files
 db_file = work_dir / "convert_reddit" / "replies_v4.pkl"
-output_db_file = work_dir / "convert_reddit" / "replies_v5.pkl"
+output_db_file = work_dir / "convert_reddit" / "replies_v6.pkl"
 
 # tmp data
 chache_file = work_dir / "chache.json"

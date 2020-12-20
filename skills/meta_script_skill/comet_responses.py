@@ -204,11 +204,8 @@ def filter_nouns_for_conceptnet(annotated_phrase):
         if not ent:
             continue
         ent = ent[0]
-        if ent["type"] == "LOC":
-            pass
-        else:
-            if ent["text"] in subjects:
-                subjects.remove(ent["text"])
+        if ent["text"] in subjects:
+            subjects.remove(ent["text"])
 
     bad_subjects = []
     for subject in subjects:
