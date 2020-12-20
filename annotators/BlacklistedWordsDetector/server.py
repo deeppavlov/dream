@@ -28,6 +28,7 @@ class Blacklist:
         """
         self.name = path.name.split('_blacklist')[0]
         self.tokenize_reg = re.compile(r"[\w']+|[^\w ]")
+        self.split_apostrophes = re.compile("'")
         self.blacklist_tokenized = [self.tokenize_reg.findall(line.strip().lower()) for line in path.open('r')]
         self.blacklist = set([' '.join(phrase) for phrase in self.blacklist_tokenized])
         self.max_ngram = max([len(x) for x in self.blacklist_tokenized])
@@ -41,6 +42,7 @@ class Blacklist:
         Returns:
             set of all unique ngrams (ngram len <= self.max_ngram) in utterance
         """
+        utterance = re.sub(self.split_apostrophes, " ", utterance)
         tokens = self.tokenize_reg.findall(utterance)
         all_ngrams = set()
         for n_gram_len in range(1, self.max_ngram):
