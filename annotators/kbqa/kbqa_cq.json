@@ -37,14 +37,14 @@
       {
         "class_name": "api_requester",
         "id": "linker_entities",
-        "url": "http://entity_linking:8075/model",
+        "url": "http://entity-linking:8075/model",
         "out": ["entity_ids"],
         "param_names": ["entity_substr", "template_found"]
       },
       {
         "class_name": "api_requester",
         "id": "wiki_p",
-        "url": "http://wiki_parser:8077/model",
+        "url": "http://wiki-parser:8077/model",
         "out": ["wiki_parser_output"],
         "param_names": ["parser_info", "query"]
       },

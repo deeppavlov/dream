@@ -415,5 +415,10 @@ def respond():
     return jsonify(list(zip(responses, confidences, human_attributes, bot_attributes, attributes)))
 
 
+@app.route("/healthz", methods=['GET'])
+def healthz():
+    return "OK", 200
+
+
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=3000)

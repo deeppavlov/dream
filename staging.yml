@@ -13,19 +13,19 @@ services:
     image: ${DOCKER_REGISTRY}/sentseg:${VERSION}
     env_file:
       - ${ENV_FILE}
-  cobot_topics:
+  cobot-topics:
      image: ${DOCKER_REGISTRY}/cobot_topics:${VERSION}
      env_file:
        - ${ENV_FILE}
-  cobot_dialogact_intents:
+  cobot-dialogact-intents:
      image: ${DOCKER_REGISTRY}/cobot_dialogact_intents:${VERSION}
      env_file:
        - ${ENV_FILE}
-  cobot_dialogact_topics:
+  cobot-dialogact-topics:
      image: ${DOCKER_REGISTRY}/cobot_dialogact_topics:${VERSION}
      env_file:
        - ${ENV_FILE}
-  cobot_convers_evaluator_annotator:
+  cobot-convers-evaluator-annotator:
      image: ${DOCKER_REGISTRY}/cobot_convers_evaluator_annotator:${VERSION}
      env_file:
        - ${ENV_FILE}
@@ -33,15 +33,15 @@ services:
     image: ${DOCKER_REGISTRY}/sentrewrite:${VERSION}
     env_file:
       - ${ENV_FILE}
-  convers_evaluation_selector:
+  convers-evaluation-selector:
     image: ${DOCKER_REGISTRY}/convers_evaluation_selector:${VERSION}
     env_file:
       - ${ENV_FILE}
-  personality_catcher:
+  personality-catcher:
     image: ${DOCKER_REGISTRY}/personality_catcher:${VERSION}
     env_file:
       - ${ENV_FILE}
-  program_y:
+  program-y:
     image: ${DOCKER_REGISTRY}/program_y:${VERSION}
     env_file:
       - ${ENV_FILE}
@@ -51,27 +51,27 @@ services:
       timeout: 2s
       retries: 3
       start_period: 1m
-  toxic_classification:
+  toxic-classification:
     image: ${DOCKER_REGISTRY}/toxic_classification:${VERSION}
     env_file:
       - ${ENV_FILE}
-  sentiment_classification:
+  sentiment-classification:
     image: ${DOCKER_REGISTRY}/sentiment_classification:${VERSION}
     env_file:
       - ${ENV_FILE}
-  intent_catcher:
+  intent-catcher:
     image: ${DOCKER_REGISTRY}/intent_catcher:${VERSION}
     env_file:
       - ${ENV_FILE}
-  intent_responder:
+  intent-responder:
     image: ${DOCKER_REGISTRY}/intent_responder:${VERSION}
     env_file:
       - ${ENV_FILE}
-  blacklisted_words:
+  blacklisted-words:
     image: ${DOCKER_REGISTRY}/blacklisted_words:${VERSION}
     env_file:
       - ${ENV_FILE}
-  program_y_dangerous:
+  program-y-dangerous:
     image: ${DOCKER_REGISTRY}/program_y_dangerous:${VERSION}
     env_file:
       - ${ENV_FILE}
@@ -90,7 +90,7 @@ services:
     image: mongo:4.0.0
     env_file:
       - ${ENV_FILE}
-  movie_skill:
+  movie-skill:
     image: ${DOCKER_REGISTRY}/movie_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
@@ -102,33 +102,29 @@ services:
     image: ${DOCKER_REGISTRY}/eliza:${VERSION}
     env_file:
       - ${ENV_FILE}
-  book_tfidf_retrieval:
+  book-tfidf-retrieval:
     image: ${DOCKER_REGISTRY}/book_tfidf_retrieval:${VERSION}
-  book_skill:
-    image: ${DOCKER_REGISTRY}/book_skill:${VERSION}
-    env_file:
-      - ${ENV_FILE}
-  entertainment_tfidf_retrieval:
+  entertainment-tfidf-retrieval:
     image: ${DOCKER_REGISTRY}/entertainment_tfidf_retrieval:${VERSION}
-  fashion_tfidf_retrieval:
+  fashion-tfidf-retrieval:
     image: ${DOCKER_REGISTRY}/fashion_tfidf_retrieval:${VERSION}
-  movie_tfidf_retrieval:
+  movie-tfidf-retrieval:
     image: ${DOCKER_REGISTRY}/movie_tfidf_retrieval:${VERSION}
-  music_tfidf_retrieval:
+  music-tfidf-retrieval:
     image: ${DOCKER_REGISTRY}/music_tfidf_retrieval:${VERSION}
-  politics_tfidf_retrieval:
+  politics-tfidf-retrieval:
     image: ${DOCKER_REGISTRY}/politics_tfidf_retrieval:${VERSION}
-  science_technology_tfidf_retrieval:
+  science-technology-tfidf-retrieval:
     image: ${DOCKER_REGISTRY}/science_technology_tfidf_retrieval:${VERSION}
-  sport_tfidf_retrieval:
+  sport-tfidf-retrieval:
     image: ${DOCKER_REGISTRY}/sport_tfidf_retrieval:${VERSION}
-  animals_tfidf_retrieval:
+  animals-tfidf-retrieval:
     image: ${DOCKER_REGISTRY}/animals_tfidf_retrieval:${VERSION}
-  convert_reddit:
+  convert-reddit:
     image: ${DOCKER_REGISTRY}/convert_reddit:${VERSION}
     env_file:
       - ${ENV_FILE}
-  personal_info_skill:
+  personal-info-skill:
     image: ${DOCKER_REGISTRY}/personal_info_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
@@ -136,75 +132,75 @@ services:
     image: ${DOCKER_REGISTRY}/asr:${VERSION}
     env_file:
       - ${ENV_FILE}
-  misheard_asr:
+  misheard-asr:
     image: ${DOCKER_REGISTRY}/misheard_asr:${VERSION}
     env_file:
       - ${ENV_FILE}
-  short_story_skill:
+  short-story-skill:
     image: ${DOCKER_REGISTRY}/short_story_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
-  book_skill:
+  book-skill:
     image: ${DOCKER_REGISTRY}/book_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
-  christmas_new_year_skill:
+  christmas-new-year-skill:
     image: ${DOCKER_REGISTRY}/christmas_new_year_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
-  superbowl_skill:
+  superbowl-skill:
     image: ${DOCKER_REGISTRY}/superbowl_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
-  oscar_skill:
+  oscar-skill:
     image: ${DOCKER_REGISTRY}/oscar_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
-  valentines_day_skill:
+  valentines-day-skill:
     image: ${DOCKER_REGISTRY}/valentines_day_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
-  weather_skill:
+  weather-skill:
     image: ${DOCKER_REGISTRY}/weather_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
-  emotion_classification:
+  emotion-classification:
     image: ${DOCKER_REGISTRY}/emotion_classification:${VERSION}
     env_file:
       - ${ENV_FILE}
-  emotion_skill:
+  emotion-skill:
     image: ${DOCKER_REGISTRY}/emotion_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
-  comet_atomic:
+  comet-atomic:
     image: ${DOCKER_REGISTRY}/comet_atomic:${VERSION}
     env_file:
       - ${ENV_FILE}
-  comet_conceptnet:
+  comet-conceptnet:
     image: ${DOCKER_REGISTRY}/comet_conceptnet:${VERSION}
     env_file:
       - ${ENV_FILE}
-  dummy_skill_dialog:
+  dummy-skill-dialog:
     image: ${DOCKER_REGISTRY}/dummy_skill_dialog:${VERSION}
     env_file:
       - ${ENV_FILE}
-  meta_script_skill:
+  meta-script-skill:
     image: ${DOCKER_REGISTRY}/meta_script_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
-  stop_detect:
+  stop-detect:
     image: ${DOCKER_REGISTRY}/stop_detect:${VERSION}
     env_file:
       - ${ENV_FILE}
-  coronavirus_skill:
+  coronavirus-skill:
     image: ${DOCKER_REGISTRY}/coronavirus_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
-  small_talk_skill:
+  small-talk-skill:
     image: ${DOCKER_REGISTRY}/small_talk_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
-  game_cooperative_skill:
+  game-cooperative-skill:
     image: ${DOCKER_REGISTRY}/game_cooperative_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
@@ -212,7 +208,7 @@ services:
     image: ${DOCKER_REGISTRY}/kbqa:${VERSION}
     env_file:
       - ${ENV_FILE}
-  program_y_wide:
+  program-y-wide:
     image: ${DOCKER_REGISTRY}/program_y_wide:${VERSION}
     env_file:
       - ${ENV_FILE}
@@ -222,24 +218,36 @@ services:
       timeout: 2s
       retries: 3
       start_period: 1m
-  news_api_skill:
+  news-api-skill:
     image: ${DOCKER_REGISTRY}/news_api_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
-  greeting_skill:
+  greeting-skill:
     image: ${DOCKER_REGISTRY}/greeting_skill:${VERSION}
     env_file:
       - ${ENV_FILE}
-  spelling_preprocessing:
+  spelling-preprocessing:
     image: ${DOCKER_REGISTRY}/spelling_preprocessing:${VERSION}
     env_file:
       - ${ENV_FILE}
-  wiki_parser:
+  wiki-parser:
     image: ${DOCKER_REGISTRY}/wiki_parser:${VERSION}
     env_file:
       - ${ENV_FILE}
-  kbqa_entity_linker:
-    image: ${DOCKER_REGISTRY}/kbqa_entity_linker:${VERSION}
+  factoid-qa:
+    image: ${DOCKER_REGISTRY}/factoid_qa:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  factoid-classification:
+    image: ${DOCKER_REGISTRY}/factoid_classification:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  cobot-nounphrases:
+    image: ${DOCKER_REGISTRY}/cobot_nounphrases:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  entity-linking:
+    image: ${DOCKER_REGISTRY}/entity_linking:${VERSION}
     env_file:
       - ${ENV_FILE}
 volumes:

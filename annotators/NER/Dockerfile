@@ -23,4 +23,4 @@ RUN python -c "import nltk; nltk.download('punkt')"
 COPY . /src/
 WORKDIR /src
 
-CMD gunicorn --workers=1 server:app
+CMD gunicorn --workers=1 server:app -b 0.0.0.0:8000
