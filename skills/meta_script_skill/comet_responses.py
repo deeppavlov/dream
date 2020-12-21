@@ -193,6 +193,17 @@ BANNED_WORDS_IN_NOUNS_FOR_OPINION_EXPRESSION_COMPILED = join_words_in_or_pattern
     BANNED_WORDS_IN_NOUNS_FOR_OPINION_EXPRESSION)
 
 
+def del_list_inplace(l, id_to_del):
+    for i in sorted(id_to_del, reverse=True):
+        del(l[i])
+
+
+def remove_intersections_of_entities(entity, subjects):
+    ids_to_remove = list(set([i for i, subj in enumerate(subjects) if entity in subj or subj in entity]))
+    del_list_inplace(subjects, ids_to_remove)
+    return subjects
+
+
 def filter_nouns_for_conceptnet(annotated_phrase):
     subjects = annotated_phrase["annotations"].get("cobot_nounphrases", [])
     subjects = [re.sub(possessive_pronouns, "", noun) for noun in subjects]
@@ -204,8 +215,7 @@ def filter_nouns_for_conceptnet(annotated_phrase):
         if not ent:
             continue
         ent = ent[0]
-        if ent["text"] in subjects:
-            subjects.remove(ent["text"])
+        subjects = remove_intersections_of_entities(ent["text"], subjects)
 
     bad_subjects = []
     for subject in subjects:

@@ -5,6 +5,7 @@ medicine
 medicines
 medication
 medications
+medical
 throat
 throats
 throating
@@ -31,6 +32,7 @@ poisoning
 falling asleep
 sunburn
 bleeding
+blood
 blood pressure
 allergies
 allergy
@@ -44,6 +46,21 @@ drug
 temperature
 insomnia
 burn
+burns
 cystitis
 symptoms
 ambulance
+disease
+diseases
+health
+illness
+illnesses
+treat
+treatment
+hurt
+hurts
+digestion
+doctor
+doctors
+headache
+headaches

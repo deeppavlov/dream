@@ -24,7 +24,7 @@ FINISHED_SCRIPT = "finished"
 DEFAULT_ASK_ATOMIC_QUESTION_CONFIDENCE = 0.9
 DEFAULT_ATOMIC_CONTINUE_CONFIDENCE = 0.7
 REQUESTED_CONCEPTNET_OPINION_CONFIDENCE = 0.9
-NOT_REQUESTED_CONCEPTNET_OPINION_CONFIDENCE = 0.7
+NOT_REQUESTED_CONCEPTNET_OPINION_CONFIDENCE = 0.5
 
 COMET_SERVICE_URL = os.getenv('COMET_SERVICE_URL')
 CONCEPTNET_SERVICE_URL = os.getenv('CONCEPTNET_SERVICE_URL')
@@ -153,7 +153,7 @@ BANNED_NOUNS = {"lol", "alexa", "suck", "fuck", "sex", "one", "thing", "somethin
                 "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",
                 "january", "february", "march", "april", "may", "june", "july", "august", "september",
                 "october", "november", "december", "morning", "day", "evening", "night", "afternoon", "hour",
-                "minute", "second", "times"}
+                "minute", "second", "times", "opinion"}
 
 idopattern = re.compile(r"i [a-zA-Z ,0-9]+", re.IGNORECASE)
 possessive_pronouns = re.compile(r"(my |your |yours |mine |their |our |her |his |its )", re.IGNORECASE)
@@ -229,7 +229,8 @@ BANNED_NOUNS_FOR_OPINION_EXPRESSION = {
     "question", "conversation", "problem", "no problem", "please", "human", "people", "humanity",
     "opinion", "opinions", "view", "views", "thought", "thoughts", "attitude", "attitudes",
     "bank", "banks", "stocks", "stock", "cryptocurrency", "sales", "revenue", "sale", "revenues", "tax", "taxes",
-    "money", "free money", "crypto", "exchange", "trading", "day trading", "crypto coins"
+    "money", "free money", "crypto", "exchange", "trading", "day trading", "crypto coins", "city", "bill gates",
+    "lionel messi"
 }
 
 BANNED_WORDS_IN_NOUNS_FOR_OPINION_EXPRESSION = [
@@ -249,5 +250,5 @@ BANNED_WORDS_IN_NOUNS_FOR_OPINION_EXPRESSION = [
     "medicine", "medication", "medications", "drugs", "pills", "poison", "poisoning", "pain", "pains", "painkiller",
     "painkillers", "sore throat", "throat", "case", "nosebleed", "nose", "ache", "aches", "vertigo", "digestion",
     "digestions", "headache", "headaches", "insomnia", "cystitis", "treatment", "treat",
-    "temperature", "temperatures", "wound", "wounds", "blood",
+    "temperature", "temperatures", "wound", "wounds", "blood", "trinity", "bill", "lionel"
 ]
