@@ -41,5 +41,10 @@ def respond():
     return jsonify(responses)
 
 
+@app.route("/healthz", methods=['GET'])
+def healthz():
+    return "OK", 200
+
+
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=3000)

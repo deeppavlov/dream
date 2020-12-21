@@ -14,41 +14,41 @@ services:
       - "./common:/src/common"
     ports:
       - 8081:8081
-  cobot_topics:
+  cobot-topics:
     env_file: [.env.dev]
     volumes:
       - "./annotators/cobot_topics:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8001:8001
-  cobot_dialogact_topics:
+  cobot-dialogact-topics:
     env_file: [.env.dev]
     volumes:
       - "./annotators/cobot_dialogact_topics:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8002:8002
-  cobot_dialogact_intents:
+  cobot-dialogact-intents:
     env_file: [.env.dev]
     volumes:
       - "./annotators/cobot_dialogact_intents:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8003:8003
-  cobot_convers_evaluator_annotator:
+  cobot-convers-evaluator-annotator:
     env_file: [.env.dev]
     volumes:
       - "./annotators/cobot_convers_evaluator_annotator:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8004:8004
-  cobot_nounphrases:
+  cobot-nounphrases:
     env_file: [.env.dev]
     volumes:
       - "./annotators/cobot_nounphrases:/src"
     ports:
       - 8006:8006
-  program_y:
+  program-y:
     env_file: [.env.dev]
     volumes:
       - "./skills/program-y:/src"
@@ -56,7 +56,7 @@ services:
       - "./common:/src/common"
     ports:
       - 8008:8008
-  personality_catcher:
+  personality-catcher:
     env_file: [.env.dev]
     volumes:
       - "./skills/personality_catcher:/app"
@@ -68,21 +68,21 @@ services:
       - "./annotators/SentSeg:/src"
     ports:
       - 8011:8011
-  convers_evaluation_selector:
+  convers-evaluation-selector:
     env_file: [.env.dev]
     volumes:
       - "./response_selectors/convers_evaluation_based_selector:/src"
       - "./common:/src/common"
     ports:
       - 8009:8009
-  toxic_classification:
+  toxic-classification:
     env_file: [.env.dev]
     volumes:
       - "./annotators/DeepPavlovToxicClassification:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8013:8013
-  sentiment_classification:
+  sentiment-classification:
     env_file: [.env.dev]
     volumes:
       - "./annotators/DeepPavlovSentimentClassification:/src"
@@ -95,32 +95,32 @@ services:
       - "./annotators/SentRewrite:/src"
     ports:
       - 8017:8017
-  intent_responder:
+  intent-responder:
     env_file: [.env.dev]
     volumes:
       - "./skills/IntentResponder:/src"
     ports:
       - 8012:8012
-  intent_catcher:
+  intent-catcher:
     env_file: [.env.dev]
     volumes:
       - "./annotators/IntentCatcher/src:/src"
     ports:
       - 8014:8014
-  blacklisted_words:
+  blacklisted-words:
     env_file: [.env.dev]
     volumes:
       - "./annotators/BlacklistedWordsDetector:/src"
     ports:
       - 8018:8018
-  program_y_dangerous:
+  program-y-dangerous:
     env_file: [.env.dev]
     volumes:
       - "./skills/program-y-dangerous:/src"
       - "./skills/program-y-dangerous/logs:/tmp"
     ports:
       - 8022:8022
-  movie_skill:
+  movie-skill:
     env_file: [.env.dev]
     volumes:
       - "./common:/src/common"
@@ -145,67 +145,67 @@ services:
       - "./skills/eliza:/src"
     ports:
       - 8047:8047
-  book_tfidf_retrieval:
+  book-tfidf-retrieval:
     env_file: [.env.dev]
     volumes:
       - "./skills/topicalchat_tfidf_retrieval:/src"
     ports:
       - 8039:8039
-  entertainment_tfidf_retrieval:
+  entertainment-tfidf-retrieval:
     env_file: [.env.dev]
     volumes:
       - "./skills/topicalchat_tfidf_retrieval:/src"
     ports:
       - 8040:8040
-  fashion_tfidf_retrieval:
+  fashion-tfidf-retrieval:
     env_file: [.env.dev]
     volumes:
       - "./skills/topicalchat_tfidf_retrieval:/src"
     ports:
       - 8041:8041
-  movie_tfidf_retrieval:
+  movie-tfidf-retrieval:
     env_file: [.env.dev]
     volumes:
       - "./skills/topicalchat_tfidf_retrieval:/src"
     ports:
       - 8042:8042
-  music_tfidf_retrieval:
+  music-tfidf-retrieval:
     env_file: [.env.dev]
     volumes:
       - "./skills/topicalchat_tfidf_retrieval:/src"
     ports:
       - 8034:8034
-  politics_tfidf_retrieval:
+  politics-tfidf-retrieval:
     env_file: [.env.dev]
     volumes:
       - "./skills/topicalchat_tfidf_retrieval:/src"
     ports:
       - 8043:8043
-  science_technology_tfidf_retrieval:
+  science-technology-tfidf-retrieval:
     env_file: [.env.dev]
     volumes:
       - "./skills/topicalchat_tfidf_retrieval:/src"
     ports:
       - 8044:8044
-  sport_tfidf_retrieval:
+  sport-tfidf-retrieval:
     env_file: [.env.dev]
     volumes:
       - "./skills/topicalchat_tfidf_retrieval:/src"
     ports:
       - 8045:8045
-  animals_tfidf_retrieval:
+  animals-tfidf-retrieval:
     env_file: [.env.dev]
     volumes:
       - "./skills/topicalchat_tfidf_retrieval:/src"
     ports:
       - 8050:8050
-  convert_reddit:
+  convert-reddit:
     env_file: [.env.dev]
     volumes:
       - "./skills/convert_reddit:/app"
     ports:
       - 8029:8029
-  personal_info_skill:
+  personal-info-skill:
     env_file: [.env.dev]
     volumes:
       - "./skills/personal_info_skill:/src"
@@ -219,93 +219,93 @@ services:
       - "./common:/src/common"
     ports:
       - 8031:8031
-  misheard_asr:
+  misheard-asr:
     env_file: [.env.dev]
     volumes:
       - "./skills/misheard_asr:/src"
     ports:
       - 8033:8033
-  book_skill:
+  book-skill:
     env_file: [.env.dev]
     volumes:
       - "./skills/book_skill:/src"
       - "./common:/src/common"
     ports:
       - 8032:8032
-  christmas_new_year_skill:
+  christmas-new-year-skill:
     env_file: [.env.dev]
     volumes:
       - "./skills/christmas_new_year_skill:/src"
     ports:
       - 8036:8036
-  superbowl_skill:
+  superbowl-skill:
     env_file: [.env.dev]
     volumes:
       - "./skills/superbowl_skill:/src"
     ports:
       - 8051:8051
-  oscar_skill:
+  oscar-skill:
     env_file: [.env.dev]
     volumes:
       - "./skills/oscar_skill:/src"
     ports:
       - 8055:8055
-  valentines_day_skill:
+  valentines-day-skill:
     env_file: [.env.dev]
     volumes:
       - "./skills/valentines_day_skill:/src"
     ports:
       - 8058:8058
-  weather_skill:
+  weather-skill:
     env_file: [.env.dev]
     volumes:
       - "./skills/weather_skill:/src"
       - "./common:/src/common"
     ports:
       - 8037:8037
-  emotion_skill:
+  emotion-skill:
     env_file: [.env.dev]
     volumes:
       - "./skills/emotion_skill:/src"
       - "./common:/src/common"
     ports:
       - 8049:8049
-  emotion_classification:
+  emotion-classification:
     env_file: [.env.dev]
     volumes:
       - "./annotators/DeepPavlovEmotionClassification:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8038:8038
-  dummy_skill_dialog:
+  dummy-skill-dialog:
     env_file: [.env.dev]
     volumes:
       - "./skills/dummy_skill_dialog:/app"
     ports:
       - 8052:8052
-  comet_atomic:
+  comet-atomic:
     env_file: [.env.dev]
     ports:
       - 8053:8053
-  comet_conceptnet:
+  comet-conceptnet:
     env_file: [.env.dev]
     ports:
       - 8065:8065
-  meta_script_skill:
+  meta-script-skill:
     env_file: [.env.dev]
     volumes:
       - "./skills/meta_script_skill:/src"
       - "./common:/src/common"
     ports:
       - 8054:8054
-  short_story_skill:
+  short-story-skill:
     env_file: [.env.dev]
     volumes:
       - "./skills/short_story_skill:/src"
       - "./common:/src/common"
     ports:
       - 8057:8057
-  stop_detect:
+  stop-detect:
     env_file: [.env.dev]
     volumes:
       - "./annotators/stop_detect:/src"
@@ -313,49 +313,49 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8056:8056
-  coronavirus_skill:
+  coronavirus-skill:
     env_file: [.env.dev]
     volumes:
       - "./skills/coronavirus_skill:/src"
       - "./common:/src/common"
     ports:
       - 8061:8061
-  small_talk_skill:
+  small-talk-skill:
     env_file: [.env.dev]
     volumes:
       - "./skills/small_talk_skill:/src"
       - "./common:/src/common"
     ports:
       - 8062:8062
-  game_cooperative_skill:
+  game-cooperative-skill:
     env_file: [.env.dev]
     volumes:
       - "./skills/game_cooperative_skill:/src"
       - "./common:/src/common"
     ports:
       - 8068:8068
-  program_y_wide:
+  program-y-wide:
     env_file: [.env.dev]
     volumes:
       - "./skills/program-y-wide:/src"
       - "./skills/program-y-wide/logs:/tmp"
     ports:
       - 8064:8064
-  news_api_skill:
+  news-api-skill:
     env_file: [.env.dev]
     volumes:
       - "./skills/news_api_skill:/src"
       - "./common:/src/common"
     ports:
       - 8066:8066
-  greeting_skill:
+  greeting-skill:
     env_file: [.env.dev]
     volumes:
       - "./common:/src/common"
       - "./skills/greeting_skill:/src"
     ports:
       - 8070:8070
-  factoid_qa:
+  factoid-qa:
     env_file: [.env.dev]
     volumes:
       - "./skills/factoid_qa:/src"
@@ -369,21 +369,21 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8072:8072
-  entity_linking:
+  entity-linking:
     env_file: [.env.dev]
     volumes:
       - "./annotators/entity_linking:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8075:8075
-  wiki_parser:
+  wiki-parser:
     env_file: [.env.dev]
     volumes:
       - "./annotators/wiki_parser:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8077:8077
-  factoid_classification:
+  factoid-classification:
     env_file: [.env.dev]
     volumes:
       - "./annotators/DeepPavlovFactoidClassification:/src"
@@ -399,7 +399,7 @@ services:
     # # you can use persistent local volume if you need
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
-  spelling_preprocessing:
+  spelling-preprocessing:
     env_file: [.env.dev]
     volumes:
       - "./annotators/spelling_preprocessing:/src"

@@ -133,11 +133,12 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
     dockercompose_cmd logs --no-color -f --tail="all" --timestamps &
     echo "Passing test data to each skill selected for testing"
 
-    for container in sentiment_classification movie_skill asr weather_skill program_y \
-                     program_y_dangerous superbowl_skill oscar_skill valentines_day_skill eliza \
-                     dummy_skill_dialog intent_catcher short_story_skill comet_atomic \
-                     comet_conceptnet convers_evaluation_selector emotion_skill game_cooperative_skill \
-                     entity_linking odqa convert_reddit; do
+    for container in sentiment-classification movie-skill asr weather-skill program-y \
+                     program-y-dangerous superbowl-skill oscar-skill valentines-day-skill eliza \
+                     dummy-skill-dialog intent-catcher short-story-skill comet-atomic \
+                     comet-conceptnet convers-evaluation-selector emotion-skill game-cooperative-skill \
+                     entity-linking odqa convert-reddit; do
+
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh
     done

@@ -5,18 +5,19 @@ services:
       context: ./
       dockerfile: dockerfile_agent
     environment:
-      WAIT_HOSTS: "cobotqa:8081, cobot_topics:8001, cobot_dialogact_topics:8002, cobot_dialogact_intents:8003,
-        cobot_nounphrases:8006, program_y:8008, sentseg:8011, convers_evaluation_selector:8009, personality_catcher:8010,
-        intent_responder:8012, intent_catcher:8014, blacklisted_words:8018,
-        toxic_classification:8013, sentrewrite:8017, ner:8021,  program_y_dangerous:8022, movie_skill:8023,
-        sentiment_classification:8024,
-        convert_reddit:8029, personal_info_skill:8030, asr:8031, misheard_asr:8033,
-        christmas_new_year_skill:8036, weather_skill:8037, emotion_classification:8038, alice:8000,
-        eliza:8047, emotion_skill:8049, dummy_skill_dialog:8052, comet_atomic:8053, meta_script_skill:8054,
-        oscar_skill:8055, coronavirus_skill:8061, small_talk_skill:8062, game_cooperative_skill:8068, program_y_wide:8064,
-        comet_conceptnet:8065, news_api_skill:8066, short_story_skill:8057, greeting_skill:8070, factoid_qa:8071, kbqa:8072,
-        factoid_classification:8073, spelling_preprocessing:8074, entity_linking:8075, wiki_parser:8077, odqa:8078"
+      WAIT_HOSTS: "cobot-topics:8001, cobot-dialogact-topics:8002, cobot-dialogact-intents:8003,
+        cobot-nounphrases:8006, program-y:8008, sentseg:8011, convers-evaluation-selector:8009, personality-catcher:8010,
+        intent-responder:8012, intent-catcher:8014, blacklisted-words:8018,
+        toxic-classification:8013, sentrewrite:8017, ner:8021,  program-y-dangerous:8022, movie-skill:8023,
+        sentiment-classification:8024,
+        convert-reddit:8029, personal-info-skill:8030, asr:8031, misheard-asr:8033,
+        christmas-new-year-skill:8036, weather-skill:8037, emotion-classification:8038, alice:8000,
+        eliza:8047, emotion-skill:8049, dummy-skill-dialog:8052, comet-atomic:8053, meta-script-skill:8054,
+        oscar-skill:8055, coronavirus-skill:8061, small-talk-skill:8062, game-cooperative-skill:8068, program-y-wide:8064,
+        comet-conceptnet:8065, news-api-skill:8066, short-story-skill:8057, greeting-skill:8070, factoid-qa:8071, kbqa:8072,
+        factoid-classification:8073, spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, odqa:8078"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+
   cobotqa:
     build:
       context: .
@@ -24,7 +25,8 @@ services:
     environment:
       - ASYNC_SIZE=20
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8081 -t 15
-  cobot_topics:
+
+  cobot-topics:
     build:
       args:
         CONFIG: cobot_bert.json
@@ -35,7 +37,7 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=0
 
-  cobot_dialogact_topics:
+  cobot-dialogact-topics:
     build:
       args:
         CONFIG: cobot_bert.json
@@ -46,7 +48,7 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=0
 
-  cobot_dialogact_intents:
+  cobot-dialogact-intents:
     build:
       args:
         CONFIG: cobot_bert.json
@@ -57,7 +59,7 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=0
 
-  cobot_convers_evaluator_annotator:
+  cobot-convers-evaluator-annotator:
     build:
       args:
         CONFIG: cobot_conveval_bert.json
@@ -68,16 +70,16 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=0
 
-  cobot_nounphrases:
+  cobot-nounphrases:
     build:
       context: ./annotators/cobot_nounphrases/
     command: bash -c "gunicorn --workers=1 server:app -b 0.0.0.0:8006 -t 60"
-  program_y:
+  program-y:
     build:
       context: .
       dockerfile: ./skills/program-y/Dockerfile
 
-  personality_catcher:
+  personality-catcher:
     build:
       context: ./skills/personality_catcher/
     command: uvicorn server:app --host 0.0.0.0 --port 8010
@@ -87,13 +89,13 @@ services:
       context: ./annotators/SentSeg/
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8011 -t 100
 
-  convers_evaluation_selector:
+  convers-evaluation-selector:
     build:
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8009 -t 15
 
-  toxic_classification:
+  toxic-classification:
     build:
       args:
         CONFIG: toxic_classification.json
@@ -104,7 +106,7 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=0
 
-  sentiment_classification:
+  sentiment-classification:
     build:
       args:
         CONFIG: sentiment_sst_conv_bert.json
@@ -120,26 +122,26 @@ services:
       context: ./annotators/SentRewrite/
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8017 -t 60
 
-  intent_responder:
+  intent-responder:
     build:
       context: ./skills/IntentResponder/
     command: gunicorn --workers=1 --name=responder --bind 0.0.0.0:8012 --timeout=100 server:app
 
-  intent_catcher:
+  intent-catcher:
     build:
       context: ./annotators/IntentCatcher/
     command: gunicorn --workers=1 --name=catcher --bind 0.0.0.0:8014 --timeout=100 server:app
 
-  blacklisted_words:
+  blacklisted-words:
     build:
       context: ./annotators/BlacklistedWordsDetector/
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8018
 
-  program_y_dangerous:
+  program-y-dangerous:
     build:
       context: ./skills/program-y-dangerous/
 
-  movie_skill:
+  movie-skill:
     build:
       context: .
       dockerfile: ./skills/movie_skill/Dockerfile
@@ -163,7 +165,7 @@ services:
       context: ./skills/eliza/
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8047
 
-  book_tfidf_retrieval:
+  book-tfidf-retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
       args:
@@ -173,7 +175,7 @@ services:
         CONFIDENCE_THRESHOLD: 0.51
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8039
 
-  entertainment_tfidf_retrieval:
+  entertainment-tfidf-retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
       args:
@@ -183,7 +185,7 @@ services:
         CONFIDENCE_THRESHOLD: 0.59
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8040
 
-  fashion_tfidf_retrieval:
+  fashion-tfidf-retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
       args:
@@ -193,7 +195,7 @@ services:
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8041
 
-  movie_tfidf_retrieval:
+  movie-tfidf-retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
       args:
@@ -203,7 +205,7 @@ services:
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8042
 
-  music_tfidf_retrieval:
+  music-tfidf-retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
       args:
@@ -213,7 +215,7 @@ services:
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8034
 
-  politics_tfidf_retrieval:
+  politics-tfidf-retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
       args:
@@ -223,7 +225,7 @@ services:
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8043
 
-  science_technology_tfidf_retrieval:
+  science-technology-tfidf-retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
       args:
@@ -233,7 +235,7 @@ services:
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8044
 
-  sport_tfidf_retrieval:
+  sport-tfidf-retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
       args:
@@ -243,7 +245,7 @@ services:
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8045
 
-  animals_tfidf_retrieval:
+  animals-tfidf-retrieval:
     build:
       context: ./skills/topicalchat_tfidf_retrieval/
       args:
@@ -253,12 +255,12 @@ services:
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8050
 
-  convert_reddit:
+  convert-reddit:
     build:
       context: ./skills/convert_reddit/
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8029 -t 60
 
-  personal_info_skill:
+  personal-info-skill:
     build:
       context: .
       dockerfile: ./skills/personal_info_skill/Dockerfile
@@ -270,50 +272,50 @@ services:
       dockerfile: ./annotators/asr/Dockerfile
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8031
 
-  misheard_asr:
+  misheard-asr:
     build:
       context: ./skills/misheard_asr/
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8033
 
-  book_skill:
+  book-skill:
     build:
       context: .
       dockerfile: ./skills/book_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8032
 
-  christmas_new_year_skill:
+  christmas-new-year-skill:
     build:
       context: ./skills/christmas_new_year_skill/
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8036
 
-  superbowl_skill:
+  superbowl-skill:
     build:
       context: ./skills/superbowl_skill/
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8051
 
-  oscar_skill:
+  oscar-skill:
     build:
       context: ./skills/oscar_skill/
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8055
 
-  valentines_day_skill:
+  valentines-day-skill:
     build:
       context: ./skills/valentines_day_skill/
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8058
 
-  weather_skill:
+  weather-skill:
     build:
             context: .
             dockerfile: ./skills/weather_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8037
 
-  emotion_skill:
+  emotion-skill:
     build:
       context: .
       dockerfile: ./skills/emotion_skill/Dockerfile
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8049
 
-  emotion_classification:
+  emotion-classification:
     build:
       args:
         CONFIG: emo_bert.json
@@ -324,12 +326,12 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=0
 
-  dummy_skill_dialog:
+  dummy-skill-dialog:
     build:
       context: ./skills/dummy_skill_dialog/
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8052
 
-  comet_atomic:
+  comet-atomic:
     build:
       context: ./annotators/COMeT/
       args:
@@ -342,7 +344,7 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=0
 
-  comet_conceptnet:
+  comet-conceptnet:
     build:
       context: ./annotators/COMeT/
       args:
@@ -355,19 +357,19 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=0
 
-  meta_script_skill:
+  meta-script-skill:
     build:
       context: .
       dockerfile: skills/meta_script_skill/Dockerfile
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8054
 
-  short_story_skill:
+  short-story-skill:
     build:
       context: .
       dockerfile: ./skills/short_story_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8057
 
-  stop_detect:
+  stop-detect:
     build:
       args:
         CONFIG: stop_detect.json
@@ -378,19 +380,19 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=0
 
-  coronavirus_skill:
+  coronavirus-skill:
     build:
       context: .
       dockerfile: ./skills/coronavirus_skill/Dockerfile
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8061
 
-  small_talk_skill:
+  small-talk-skill:
     build:
       context: .
       dockerfile: ./skills/small_talk_skill/Dockerfile
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8062
 
-  game_cooperative_skill:
+  game-cooperative-skill:
     build:
       args:
         SERVICE_PORT: 8068
@@ -398,13 +400,12 @@ services:
       dockerfile: ./skills/game_cooperative_skill/Dockerfile
     command: bash server_run.sh "gunicorn --workers=2 server:app -b 0.0.0.0:8068 --reload"
 
-  program_y_wide:
+  program-y-wide:
     build:
       context: ./skills/program-y-wide/
-    working_dir: /src/dream_aiml/scripts/xnix
     command: ./sanic.sh
 
-  news_api_skill:
+  news-api-skill:
     build:
       context: .
       dockerfile: ./skills/news_api_skill/Dockerfile
@@ -412,19 +413,19 @@ services:
       - ASYNC_SIZE=3
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8066 -t 15
 
-  greeting_skill:
+  greeting-skill:
     build:
       context: .
       dockerfile: ./skills/greeting_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8070 --timeout=60 --preload
 
-  factoid_qa:
+  factoid-qa:
     build:
       context: .
       dockerfile: ./skills/factoid_qa/Dockerfile
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8071
 
-  entity_linking:
+  entity-linking:
     build:
       args:
         CONFIG: kbqa_entity_linking.json
@@ -435,7 +436,7 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=''
 
-  wiki_parser:
+  wiki-parser:
     build:
       args:
         CONFIG: wiki_parser.json
@@ -445,7 +446,7 @@ services:
       dockerfile: dp/dockerfile_skill_gpu
     environment:
       - CUDA_VISIBLE_DEVICES=''
-      
+
   odqa:
     build:
       args:
@@ -470,7 +471,7 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=0
 
-  factoid_classification:
+  factoid-classification:
     build:
       args:
         CONFIG: factoid_classification.json
@@ -481,7 +482,7 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=0
 
-  spelling_preprocessing:
+  spelling-preprocessing:
     build:
       context: ./annotators/spelling_preprocessing/
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8074 --timeout=100

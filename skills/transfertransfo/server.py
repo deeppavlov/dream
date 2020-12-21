@@ -21,7 +21,7 @@ from postprocessor.postprocessing import postprocess_text, DROP_SPEC_TOKEN
 # define environment
 SENTRY_DSN = os.getenv("SENTRY_DSN")
 SENTIMENT_CLASSIFICATION_SERVICE_URL = os.getenv(
-    "SENTIMENT_CLASSIFICATION_SERVICE_URL", "http://sentiment_classification:8024/model"
+    "SENTIMENT_CLASSIFICATION_SERVICE_URL", "http://sentiment-classification:8024/model"
 )
 SEED = 31415
 DEVICE = os.getenv("DEVICE", "cpu")  # cuda or cpu

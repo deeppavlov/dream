@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{KUBER_DP_NAME}}
+  namespace: alexa
+spec:
+  replicas: {{REPLICAS_NUM}}
+  selector:
+    matchLabels:
+      app: {{KUBER_DP_NAME}}
+  template:
+    metadata:
+      labels:
+        app: {{KUBER_DP_NAME}}
+    spec:
+      nodeSelector:
+        {% if CUDA_VISIBLE_DEVICES != "''" %}
+        gpu: 'true'
+        {% endif %}
+        environment: {{ENVIRONMENT}}
+      containers:
+      - name: alexaservice
+        image: {{KUBER_IMAGE_TAG}}
+        {% if COMMAND %}
+        command: [ 'bash' ]
+        args: [ '-c', '{{COMMAND}}' ]
+        {% endif %}
+        ports:
+        - name: dp-service
+          protocol: TCP
+          containerPort: {{PORT}}
+        volumeMounts:
+        - name: volume-podinfo
+          mountPath: /etc/podinfo
+          readOnly: false
+        {% if COMPONENTS_VOLUME %}
+        - name: volume-components
+          mountPath: /root/.deeppavlov
+        {% endif %}
+        env:
+        - name: CUDA_VISIBLE_DEVICES
+          value: {{CUDA_VISIBLE_DEVICES}}
+        {% if WAIT_HOSTS %}
+        - name: WAIT_HOSTS
+          value: "{{ WAIT_HOSTS }}"
+        {% endif %}
+        {% if WAIT_HOSTS_TIMEOUT %}
+        - name: WAIT_HOSTS_TIMEOUT
+          value: "{{ WAIT_HOSTS_TIMEOUT }}"
+        {% endif %}
+        envFrom:
+        - configMapRef:
+            name: env-dev
+        #startupProbe:
+        #  httpGet:
+        #    path: /healthz
+        #    port: dp-service
+        #  failureThreshold: 30
+        #  periodSeconds: 10
+      volumes:
+      #- name: volume-logs
+        #persistentVolumeClaim:
+          #claimName: logs-hostpath-pvc
+      - name: volume-components
+        persistentVolumeClaim:
+          claimName: components-claim
+      - name: volume-podinfo
+        downwardAPI:
+          items:
+          - path: "labels"
+            fieldRef:
+              fieldPath: metadata.labels
+          - path: "annotations"
+            fieldRef:
+              fieldPath: metadata.annotations
