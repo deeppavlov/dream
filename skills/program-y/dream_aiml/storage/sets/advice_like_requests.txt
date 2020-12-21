@@ -1,5 +1,10 @@
-let us
-let me
+who
+what
+which
+when
+where
+why
+how
 do we
 do i
 do you
@@ -18,7 +23,3 @@ would you
 should we
 should i
 should you
-we
-i
-you
-what
