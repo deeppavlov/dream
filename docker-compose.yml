@@ -403,7 +403,7 @@ services:
   program-y-wide:
     build:
       context: ./skills/program-y-wide/
-    command: ./sanic.sh
+    command: sh -c "./sanic.sh"
 
   news-api-skill:
     build:
