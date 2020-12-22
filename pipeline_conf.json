@@ -131,7 +131,7 @@
             "conceptnet": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://comet_conceptnet:8065/comet_annotator"
+                    "url": "http://comet-conceptnet:8065/comet_annotator"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_human_utt_nounphrases",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -240,7 +240,7 @@
             "odqa": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://0.0.0.0:8078/model"
+                    "url": "http://odqa:8078/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -267,7 +267,7 @@
             "entity_linking": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://0.0.0.0:8075/model"
+                    "url": "http://entity-linking:8075/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:el_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
