@@ -48,9 +48,9 @@ async def perform_test_dialogue(session, url, uuid, payloads, with_debug_info=Fa
                 resp.raise_for_status()
                 response = await resp.json()
                 end_time = time()
-                logger.debug("Time: {}; Request: {}; Response: {}".format(
-                    start_time - end_time, request_body, response)
-                )
+                # logger.debug("Time: {}; Request: {}; Response: {}".format(
+                #     start_time - end_time, request_body, response)
+                # )
                 if request_body["payload"] in ["/start", "/close"]:
                     active_skill = 'command_performed'
                     response = {}
