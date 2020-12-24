@@ -137,7 +137,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
                      program-y-dangerous superbowl-skill oscar-skill valentines-day-skill eliza \
                      dummy-skill-dialog intent-catcher short-story-skill comet-atomic \
                      comet-conceptnet convers-evaluation-selector emotion-skill game-cooperative-skill \
-                     entity-linking odqa convert-reddit; do
+                     entity-linking odqa convert-reddit question-generator; do
 
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh

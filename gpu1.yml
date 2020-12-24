@@ -59,4 +59,7 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=5
 
+  question-generator:
+    environment:
+      - CUDA_VISIBLE_DEVICES=4
 version: '3.7'
