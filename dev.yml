@@ -412,4 +412,10 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8078:8078
+  question-generator:
+    env_file: [.env.dev]
+    volumes:
+      - "./services/question_generator:/src"
+    ports:
+      - 8079:8079
 version: "3.7"

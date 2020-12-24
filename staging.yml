@@ -250,6 +250,10 @@ services:
     image: ${DOCKER_REGISTRY}/entity_linking:${VERSION}
     env_file:
       - ${ENV_FILE}
+  question-generator:
+    image: ${DOCKER_REGISTRY}/question_generator:${VERSION}
+    env_file:
+      - ${ENV_FILE}
 volumes:
   external-logs:
   external-deeppavlov:

@@ -42,3 +42,6 @@ entity-linking:
 
 wiki-parser:
   CUDA_VISIBLE_DEVICES: "''"
+
+question-generator:
+  CUDA_VISIBLE_DEVICES: '5'

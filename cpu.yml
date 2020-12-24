@@ -4,41 +4,44 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  toxic_classification:
+  toxic-classification:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  sentiment_classification:
+  sentiment-classification:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  emotion_classification:
+  emotion-classification:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  cobot_topics:
+  cobot-topics:
     environment:
       CUDA_VISIBLE_DEVICES: ""
   kbqa:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  cobot_convers_evaluator_annotator:
+  cobot-convers-evaluator-annotator:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  cobot_dialogact_topics:
+  cobot-dialogact-topics:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  cobot_dialogact_intents:
+  cobot-dialogact-intents:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  cobot_nounphrases:
+  cobot-nounphrases:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  comet_atomic:
-    environment:
-      DEVICE: cpu
-      CUDA_VISIBLE_DEVICES: ""
-  comet_conceptnet:
+  comet-atomic:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  factoid_classification:
+  comet-conceptnet:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  factoid-classification:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  question-generator:
     environment:
       CUDA_VISIBLE_DEVICES: ""

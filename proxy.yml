@@ -1,5 +1,5 @@
 services:
-  cobot_topics:
+  cobot-topics:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -7,7 +7,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8001
       - PORT=8001
-  cobot_dialogact_topics:
+  cobot-dialogact-topics:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -15,7 +15,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8002
       - PORT=8002
-  cobot_dialogact_intents:
+  cobot-dialogact-intents:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -23,7 +23,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8003
       - PORT=8003
-  cobot_convers_evaluator_annotator:
+  cobot-convers-evaluator-annotator:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -31,7 +31,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8004
       - PORT=8004
-  cobot_nounphrases:
+  cobot-nounphrases:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -39,7 +39,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8006
       - PORT=8006
-  program_y:
+  program-y:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -47,7 +47,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8008
       - PORT=8008
-  personality_catcher:
+  personality-catcher:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -63,7 +63,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8011
       - PORT=8011
-  convers_evaluation_selector:
+  convers-evaluation-selector:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -71,7 +71,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8009
       - PORT=8009
-  toxic_classification:
+  toxic-classification:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -79,7 +79,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8013
       - PORT=8013
-  sentiment_classification:
+  sentiment-classification:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -95,7 +95,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8017
       - PORT=8017
-  intent_responder:
+  intent-responder:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -103,7 +103,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8012
       - PORT=8012
-  intent_catcher:
+  intent-catcher:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -111,7 +111,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8014
       - PORT=8014
-  blacklisted_words:
+  blacklisted-words:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -119,7 +119,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8018
       - PORT=8018
-  program_y_dangerous:
+  program-y-dangerous:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -127,7 +127,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8022
       - PORT=8022
-  movie_skill:
+  movie-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -159,7 +159,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8047
       - PORT=8047
-  book_tfidf_retrieval:
+  book-tfidf-retrieval:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -167,7 +167,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8039
       - PORT=8039
-  entertainment_tfidf_retrieval:
+  entertainment-tfidf-retrieval:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -175,7 +175,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8040
       - PORT=8040
-  fashion_tfidf_retrieval:
+  fashion-tfidf-retrieval:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -183,7 +183,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8041
       - PORT=8041
-  movie_tfidf_retrieval:
+  movie-tfidf-retrieval:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -191,7 +191,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8042
       - PORT=8042
-  music_tfidf_retrieval:
+  music-tfidf-retrieval:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -199,7 +199,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8034
       - PORT=8034
-  politics_tfidf_retrieval:
+  politics-tfidf-retrieval:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -207,7 +207,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8043
       - PORT=8043
-  science_technology_tfidf_retrieval:
+  science-technology-tfidf-retrieval:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -215,7 +215,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8044
       - PORT=8044
-  sport_tfidf_retrieval:
+  sport-tfidf-retrieval:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -223,7 +223,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8045
       - PORT=8045
-  animals_tfidf_retrieval:
+  animals-tfidf-retrieval:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -231,7 +231,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8050
       - PORT=8050
-  convert_reddit:
+  convert-reddit:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -239,7 +239,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8029
       - PORT=8029
-  personal_info_skill:
+  personal-info-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -255,7 +255,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8031
       - PORT=8031
-  misheard_asr:
+  misheard-asr:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -263,7 +263,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8033
       - PORT=8033
-  book_skill:
+  book-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -271,7 +271,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8032
       - PORT=8032
-  christmas_new_year_skill:
+  christmas-new-year-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -279,7 +279,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8036
       - PORT=8036
-  superbowl_skill:
+  superbowl-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -287,7 +287,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8051
       - PORT=8051
-  oscar_skill:
+  oscar-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -295,7 +295,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8055
       - PORT=8055
-  valentines_day_skill:
+  valentines-day-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -303,7 +303,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8058
       - PORT=8058
-  weather_skill:
+  weather-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -311,7 +311,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8037
       - PORT=8037
-  emotion_skill:
+  emotion-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -319,7 +319,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8049
       - PORT=8049
-  emotion_classification:
+  emotion-classification:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -327,7 +327,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8038
       - PORT=8038
-  dummy_skill_dialog:
+  dummy-skill-dialog:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -335,7 +335,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8052
       - PORT=8052
-  comet_atomic:
+  comet-atomic:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -343,7 +343,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8053
       - PORT=8053
-  comet_conceptnet:
+  comet-conceptnet:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -351,7 +351,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8065
       - PORT=8065
-  meta_script_skill:
+  meta-script-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -359,7 +359,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8054
       - PORT=8054
-  short_story_skill:
+  short-story-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -367,7 +367,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8057
       - PORT=8057
-  stop_detect:
+  stop-detect:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -375,7 +375,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8056
       - PORT=8056
-  coronavirus_skill:
+  coronavirus-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -383,7 +383,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8061
       - PORT=8061
-  small_talk_skill:
+  small-talk-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -391,7 +391,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8062
       - PORT=8062
-  game_cooperative_skill:
+  game-cooperative-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -399,7 +399,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8068
       - PORT=8068
-  program_y_wide:
+  program-y-wide:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -407,7 +407,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8064
       - PORT=8064
-  news_api_skill:
+  news-api-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -415,7 +415,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8066
       - PORT=8066
-  greeting_skill:
+  greeting-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -423,7 +423,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8070
       - PORT=8070
-  factoid_qa:
+  factoid-qa:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -447,7 +447,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8072
       - PORT=8072
-  factoid_classification:
+  factoid-classification:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -455,7 +455,7 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8073
       - PORT=8073
-  spelling_preprocessing:
+  spelling-preprocessing:
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -463,7 +463,7 @@ services:
       - PROXY_PASS=10.11.1.1:8074
       - PORT=8074
     command: ["nginx", "-g", "daemon off;"]
-  entity_linking:
+  entity-linking:
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -471,12 +471,28 @@ services:
       - PROXY_PASS=10.11.1.1:8075
       - PORT=8075
     command: ["nginx", "-g", "daemon off;"]
-  wiki_parser:
+  wiki-parser:
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
       - PROXY_PASS=10.11.1.1:8077
       - PORT=8077
+    command: ["nginx", "-g", "daemon off;"]
+  cobotqa:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=10.11.1.1:8081
+      - PORT=8081
+    command: ["nginx", "-g", "daemon off;"]
+  question-generator:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=10.11.1.1:8079
+      - PORT=8079
     command: ["nginx", "-g", "daemon off;"]
 version: '3.7'
