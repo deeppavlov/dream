@@ -34,6 +34,7 @@
         "class_name": "document_chunker",
         "in": ["tfidf_doc_text"],
         "out": ["chunks"],
+        "number_of_paragraphs": 30,
         "flatten_result": true,
         "paragraphs": true
       },
@@ -44,7 +45,7 @@
       },
       {
         "class_name": "logit_ranker",
-        "batch_size": 64,
+        "batch_size": 32,
         "squad_model": {"config_path": "{CONFIGS_PATH}/squad/multi_squad_noans_infer.json"},
         "sort_noans": true,
         "in": [
