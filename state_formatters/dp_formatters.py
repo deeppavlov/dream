@@ -134,7 +134,8 @@ def cobot_qa_formatter_service(payload):
     # Used by: cobot_qa_formatter
     hyps = []
     for resp, conf in zip(payload[0], payload[1]):
-        hyps.append({"text": resp, "confidence": conf})
+        if len(resp) > 0 and conf > 0.:
+            hyps.append({"text": resp, "confidence": conf})
     return hyps
 
 
@@ -142,7 +143,8 @@ def misheard_asr_formatter_service(payload):
     # Used by: misheard_asr_formatter
     hyps = []
     for resp, conf, ha, ba in zip(payload[0], payload[1], payload[2], payload[3]):
-        hyps.append({"text": resp, "confidence": conf, "human_attributes": ha, "bot_attributes": ba})
+        if len(resp) > 0 and conf > 0:
+            hyps.append({"text": resp, "confidence": conf, "human_attributes": ha, "bot_attributes": ba})
     return hyps
 
 
@@ -374,7 +376,10 @@ def base_formatter_service(payload: Dict) -> Dict:
     Used by: dummy_skill_formatter, intent_responder_formatter, transfertransfo_formatter,
     aiml_formatter, alice_formatter, tfidf_formatter
     '''
-    return [{"text": payload[0], "confidence": payload[1]}]
+    if len(payload[0]) > 0 and payload[1] > 0.:
+        return [{"text": payload[0], "confidence": payload[1]}]
+    else:
+        return []
 
 
 def simple_formatter_service(payload: List):
@@ -447,30 +452,39 @@ def skill_with_attributes_formatter_service(payload: Dict):
              by ^ marked optional elements
     """
     # Used by: book_skill_formatter, skill_with_attributes_formatter, news_skill, meta_script_skill, dummy_skill
+    # deal with text & confidences
     if isinstance(payload[0], list) and isinstance(payload[1], list):
-        result = [{"text": hyp[0],
-                   "confidence": hyp[1]} for hyp in zip(*payload)]
+        # several hypotheses from this skill
+        result = []
+        for hyp in zip(*payload):
+            if len(hyp[0]) > 0 and hyp[1] > 0.:
+                full_hyp = {"text": hyp[0], "confidence": hyp[1]}
+                if len(payload) >= 4:
+                    # have human and bot attributes in hyps
+                    full_hyp["human_attributes"] = hyp[2]
+                    full_hyp["bot_attributes"] = hyp[3]
+                if len(payload) == 3 or len(payload) == 5:
+                    # have also attributes in hyps
+                    assert isinstance(hyp[-1], dict), "Attribute is a dictionary"
+                    for key in hyp[-1]:
+                        full_hyp[key] = hyp[-1][key]
+                result += [full_hyp]
     else:
-        result = [{"text": payload[0],
-                   "confidence": payload[1]}]
-
-    if len(payload) >= 4:
-        if isinstance(payload[2], dict) and isinstance(payload[3], dict):
-            result[0]["human_attributes"] = payload[2]
-            result[0]["bot_attributes"] = payload[3]
-        elif isinstance(payload[2], list) and isinstance(payload[3], list):
-            for i, hyp in enumerate(zip(*payload)):
-                result[i]["human_attributes"] = hyp[2]
-                result[i]["bot_attributes"] = hyp[3]
-
-    if len(payload) == 3 or len(payload) == 5:
-        if isinstance(payload[-1], dict):
-            for key in payload[-1]:
-                result[0][key] = payload[-1][key]
-        elif isinstance(payload[-1], list):
-            for i, hyp in enumerate(zip(*payload)):
-                for key in hyp[-1]:
-                    result[i][key] = hyp[-1][key]
+        # only one hypotheses from this skill
+        if len(payload[0]) > 0 and payload[1] > 0.:
+            result = [{"text": payload[0],
+                       "confidence": payload[1]}]
+            if len(payload) >= 4:
+                # have human and bot attributes in hyps
+                result[0]["human_attributes"] = payload[2]
+                result[0]["bot_attributes"] = payload[3]
+            if len(payload) == 3 or len(payload) == 5:
+                # have also attributes in hyps
+                assert isinstance(payload[-1], dict), "Attribute is a dictionary"
+                for key in payload[-1]:
+                    result[0][key] = payload[-1][key]
+        else:
+            result = []
 
     return result
 
