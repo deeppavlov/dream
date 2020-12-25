@@ -38,9 +38,7 @@ def notify(status, duration = 0, e = "") {
 
 pipeline {
 
-  agent {
-    label 'gpu9'
-  }
+  agent none
 
   environment {
     AGENT_PORT=4242
@@ -109,15 +107,15 @@ spec:
             notify('start')
             catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
               try {
-                sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 263182626354.dkr.ecr.us-east-1.amazonaws.com'
-                sh  '''for service in $(docker-compose -f docker-compose.yml -f dev.yml ps --services | grep -wv -e mongo)
+                sh label: 'login to ecr', script: 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $DOCKER_REGISTRY'
+                sh label: 'ecr create repo', script: '''for service in $(docker-compose -f docker-compose.yml -f dev.yml ps --services | grep -wv -e mongo)
                     do
                       aws ecr describe-repositories --repository-names $service || aws ecr create-repository --repository-name $service
                     done
                     '''
-                sh 'python3 kubernetes/kuber_generator.py'
-                sh 'docker-compose -f docker-compose.yml -f dev.yml -f staging.yml -f network.yml build'
-                sh 'docker-compose -f docker-compose.yml -f dev.yml -f staging.yml push'
+                sh label: 'generate deployment', script: 'python3 kubernetes/kuber_generator.py'
+                sh label: 'docker build', script: 'docker-compose -f docker-compose.yml -f dev.yml -f staging.yml -f network.yml build'
+                sh label: 'docker push', script: 'docker-compose -f docker-compose.yml -f dev.yml -f staging.yml push'
               }
               catch (Exception e) {
                 int duration = (currentBuild.duration - startTime) / 1000
@@ -194,11 +192,10 @@ spec:
             notify('start')
             catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
               try {
-                sh 'aws eks update-kubeconfig --name alexa'
-                sh 'kubectl delete configmap env-dev -n alexa'
-                sh 'kubectl create configmap env-dev -n alexa --from-env-file $ENV_FILE'
-                sh 'python3 kubernetes/kuber_generator.py'
-                sh 'for dir in kubernetes/models/*; do kubectl apply -f $dir || true; done'
+                sh label: 'update kubeconfig', script: 'aws eks update-kubeconfig --name alexa'
+                sh label: 'update environment', script: 'kubectl delete configmap env-dev -n alexa && kubectl create configmap env-dev -n alexa --from-env-file $ENV_FILE'
+                sh label: 'generate deployment', script: 'python3 kubernetes/kuber_generator.py'
+                sh label: 'deploy', script: 'for dir in kubernetes/models/*; do kubectl apply -f $dir || true; done'
               }
               catch (Exception e) {
                 int duration = (currentBuild.duration - startTime) / 1000
@@ -229,9 +226,9 @@ spec:
 
     stage('Checkout') {
 
-      //agent {
-      //  label 'gpu9'
-      //}
+      agent {
+        label 'gpu9'
+      }
 
       steps {
         script {
@@ -259,9 +256,9 @@ spec:
         beforeAgent true
       }
 
-      //agent {
-      //  label 'gpu9'
-      //}
+      agent {
+        label 'gpu9'
+      }
 
       steps {
         script{
@@ -304,9 +301,9 @@ spec:
         beforeAgent true
       }
 
-      //agent {
-      //  label 'gpu9'
-      //}
+      agent {
+        label 'gpu9'
+      }
 
       steps {
         script {
@@ -339,6 +336,11 @@ spec:
             notify('success', duration)
           }
         }
+        aborted {
+          script {
+            notify('aborted')
+          }
+        }
       }
     }
 
@@ -349,9 +351,9 @@ spec:
         beforeAgent true
       }
 
-      //agent {
-      //  label 'gpu9'
-      //}
+      agent {
+        label 'gpu9'
+      }
 
       stages {
 
@@ -378,6 +380,11 @@ spec:
               script {
                 int duration = (currentBuild.duration - startTime) / 1000
                 notify('success', duration)
+              }
+            }
+            aborted {
+              script {
+                notify('aborted')
               }
             }
           }
@@ -407,6 +414,11 @@ spec:
               script {
                 int duration = (currentBuild.duration - startTime) / 1000
                 notify('success', duration)
+              }
+            }
+            aborted {
+              script {
+                notify('aborted')
               }
             }
           }
@@ -441,20 +453,19 @@ spec:
           }
         }*/
       }
-    }
-  }
-
-  post {
-    aborted {
-      script {
-        notify('aborted')
-      }
-    }
-    cleanup {
-      script {
-        if (started) {
-          notify('cleanup')
-          sh './tests/runtests.sh MODE=clean'
+      post {
+        aborted {
+          script {
+            notify('aborted')
+          }
+        }
+        cleanup {
+          script {
+            if (started) {
+              notify('cleanup')
+              sh './tests/runtests.sh MODE=clean'
+            }
+          }
         }
       }
     }

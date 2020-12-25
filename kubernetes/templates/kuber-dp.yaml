@@ -21,6 +21,7 @@ spec:
       containers:
       - name: alexaservice
         image: {{KUBER_IMAGE_TAG}}
+        imagePullPolicy: Always
         {% if COMMAND %}
         command: [ 'bash' ]
         args: [ '-c', '{{COMMAND}}' ]

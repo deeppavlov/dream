@@ -1,6 +1,7 @@
 import json
 import re
 import shutil
+import os
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 
@@ -12,6 +13,7 @@ REPO_PATH = Path(__file__).resolve().parents[1]
 KUBER_PATH = REPO_PATH / 'kubernetes'
 TEMPLATES_PATH = KUBER_PATH / 'templates'
 MODELS_PATH = KUBER_PATH / 'models'
+DOCKER_REGISTRY = os.getenv('DOCKER_REGISTRY')
 
 env = Environment(loader=FileSystemLoader(TEMPLATES_PATH), trim_blocks=True, lstrip_blocks=True)
 lb_template = env.get_template('kuber-lb.yaml')
@@ -63,7 +65,7 @@ def generate_deployments():
         values_dict = {
             'KUBER_DP_NAME': dp_name,
             'REPLICAS_NUM': deploy.get(service_name, {}).get('REPLICAS_NUM', 1),
-            'KUBER_IMAGE_TAG': f'263182626354.dkr.ecr.us-east-1.amazonaws.com/{service_name.replace("-", "_")}',
+            'KUBER_IMAGE_TAG': f'{DOCKER_REGISTRY}/{service_name}',
             'PORT': get_port(service_params),
             'CUDA_VISIBLE_DEVICES': repr(cuda),
             'KUBER_LB_NAME': service_name,
