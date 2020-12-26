@@ -183,6 +183,7 @@ spec:
       environment {
         VERSION='latest'
         ENV_FILE='.env.dev'
+        DOCKER_REGISTRY='263182626354.dkr.ecr.us-east-1.amazonaws.com'
       }
 
       steps {
@@ -230,11 +231,17 @@ spec:
         label 'gpu9'
       }
 
+      when {
+        changeRequest target: 'dev', comparator: 'GLOB'
+        beforeAgent true
+      }
+
       steps {
         script {
           def branch = "Current branch is ${env.BRANCH_NAME}"
           if (isPullRequest) {
             echo """${branch}
+            Git commiter name: ${env.GIT_AUTHOR_NAME} or ${env.GIT_COMMITTER_NAME}
             Pull request: merge ${env.CHANGE_BRANCH} into ${env.CHANGE_TARGET}
             Pull request id: ${pullRequest.id} or ${env.CHANGE_ID}
             Pull request title: ${pullRequest.title}
