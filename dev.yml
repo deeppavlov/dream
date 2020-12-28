@@ -405,6 +405,13 @@ services:
       - "./annotators/spelling_preprocessing:/src"
     ports:
       - 8074:8074
+  grounding-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/grounding_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8080:8080
   odqa:
     env_file: [.env.dev]
     volumes:
