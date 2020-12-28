@@ -1,0 +1,6 @@
+sentry_sdk==0.14.3
+flask==1.1.1
+requests==2.22.0
+gunicorn==19.9.0
+word2number==1.1
+pandas==1.0.3

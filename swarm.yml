@@ -531,4 +531,12 @@ services:
         constraints:
           - node.labels.with_gpu != true
 
+  grounding_skill:
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.with_gpu != true
+
 version: '3.7'

@@ -1,0 +1,110 @@
+[
+  {
+    "id": "5de8c8c5d696e26f2f754123",
+    "utterances": [
+      {
+        "text": "let's chat.",
+        "user": {
+          "id": "11a15d4b809143f78883438b94c8a7ce",
+          "user_telegram_id": "984576984756409586-0",
+          "persona": {},
+          "profile": {
+            "name": null,
+            "gender": null,
+            "birthdate": null,
+            "location": null,
+            "home_coordinates": null,
+            "work_coordinates": null,
+            "occupation": null,
+            "income_per_year": null
+          },
+          "attributes": {},
+          "user_type": "human"
+        }
+      },
+      {
+        "text": "Hi, this is an Alexa Prize Socialbot. How are you?",
+        "orig_text": null,
+        "active_skill": "program_y",
+        "confidence": 0.98
+      },
+      {
+        "text": "lets talk about books",
+        "orig_text": null,
+        "active_skill": "program_y",
+        "confidence": 0.98
+      },
+      {
+        "text": "OK, let's talk about books. Do you love reading?"
+      },
+      {
+        "text": "Yes I love it very much"
+      },
+      {
+        "text": "Interesting. Have you read that book?"
+      },
+      {
+        "text": "i said you're already. it's the ski crime and punishment.",
+        "user": {
+          "id": "11a15d4b809143f78883438b94c8a7ce",
+          "user_telegram_id": "984576984756409586-0",
+          "persona": {},
+          "profile": {
+            "name": null,
+            "gender": null,
+            "birthdate": null,
+            "location": null,
+            "home_coordinates": null,
+            "work_coordinates": null,
+            "occupation": null,
+            "income_per_year": null
+          },
+          "attributes": {},
+          "user_type": "human"
+        },
+     "annotations":{
+        "asr":{
+           "asr_confidence": "medium"
+        },
+        "attitude_classification":{
+           "confidence":0.7960726618766785,
+           "text":"very_positive"
+        },
+        "blacklisted_words":{
+           "inappropriate": false,
+           "profanity": false,
+           "restricted_topics": true
+        },
+                    "cobot_dialogact_intents": {
+                        "text": [
+                            "Information_DeliveryIntent"
+                        ]},
+                    "cobot_dialogact_topics": {
+                         "text": [
+                            "Entertainment_Books"
+                        ]
+                    },
+        "cobot_nounphrases":[
+           "the ski crime"
+        ],
+        "cobot_topics": {
+           "text":[
+              "Phatic",
+              "Politics"
+           ]
+        },
+        "intent_catcher":{
+           "dont_understand":{
+              "confidence": 0.9,
+              "detected": "1"
+           }
+        },
+        "sentiment_classification":
+        {
+          "text": ["negative", 0.8564978241920471]
+        }
+     }
+    }
+   ]
+  }
+]
