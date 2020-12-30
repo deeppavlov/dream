@@ -13,7 +13,9 @@ def main():
     count = 0        
     for data, gold_result in zip(request_data, gold_results):
         result = requests.post(url, json=data).json()
-        if result == gold_result:
+        res_ans, res_conf = result[0][:2]
+        gold_ans, gold_conf = gold_result[0][:2]
+        if res_ans == gold_ans and round(res_conf, 2) == round(gold_conf, 2):
             count += 1
         else:
             print(f"Got {result}, but expected: {gold_result}")

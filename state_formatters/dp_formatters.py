@@ -76,7 +76,7 @@ def last_n_human_utt_dialog_formatter(dialog: Dict, last_n_utts: int, only_last_
                 text = sentseg_ann['punct_sent']
             human_utts += [text]
             detected_intents += [[intent for intent, value in utt['annotations'].get('intent_catcher', {}).items()
-                                 if value['detected']]]
+                                  if value['detected']]]
     return [{'sentences_batch': [human_utts[-last_n_utts:]], 'intents': [detected_intents[-last_n_utts:]]}]
 
 
@@ -391,6 +391,21 @@ def simple_formatter_service(payload: List):
     return payload
 
 
+def kbqa_response_formatter(payload: List):
+    return {"qa_system": "kbqa",
+            "answer": payload[0][0],
+            "confidence": payload[0][1]}
+
+
+def odqa_response_formatter(payload: List):
+    return {"qa_system": "odqa",
+            "answer": payload[0],
+            "confidence": payload[1],
+            "answer_pos": payload[2],
+            "answer_sentence": payload[3],
+            "paragraph": payload[4]}
+
+
 def utt_sentseg_punct_dialog(dialog: Dict):
     '''
     Used by: skill_with_attributes_formatter; punct_dialogs_formatter,
@@ -524,17 +539,30 @@ def ner_formatter_last_bot_dialog(dialog: Dict):
 
 def el_formatter_dialog(dialog: Dict):
     # Used by: entity_linking annotator
-    context = [dialog['human_utterances'][-1]['annotations']['sentseg']['punct_sent']]
     ner_output = dialog['human_utterances'][-1]['annotations']['ner']
-    entity_substr = [entity["text"] for entities in ner_output for entity in entities]
-    
+    entity_substr = [[entity["text"] for entity in entities] for entities in ner_output]
+    context = [dialog['human_utterances'][-1]['annotations']['sentseg']['punct_sent'] for _ in entity_substr]
+    template = ['' for _ in entity_substr]
+
     return [
         {
-            'entity_substr': entity_substr, 
-            'template': [''],
-            'context': context 
+            'entity_substr': entity_substr,
+            'template': template,
+            'context': context
         }
     ]
+
+
+def kbqa_formatter_dialog(dialog: Dict):
+    # Used by: kbqa annotator
+    sentences = [dialog['human_utterances'][-1]['annotations']['sentseg']['punct_sent']]
+    return [{'x_init': sentences}]
+
+
+def odqa_formatter_dialog(dialog: Dict):
+    # Used by: odqa annotator
+    sentences = [dialog['human_utterances'][-1]['annotations']['sentseg']['punct_sent']]
+    return [{'question_raw': sentences}]
 
 
 def short_story_formatter_dialog(dialog: Dict):

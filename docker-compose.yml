@@ -428,7 +428,7 @@ services:
   entity-linking:
     build:
       args:
-        CONFIG: kbqa_entity_linking.json
+        CONFIG: kbqa_entity_linking_lite.json
         PORT: 8075
         SRC_DIR: annotators/entity_linking
       context: ./
@@ -442,7 +442,7 @@ services:
         CONFIG: wiki_parser.json
         PORT: 8077
         SRC_DIR: annotators/wiki_parser
-        COMMIT: f764a753bb4913363feb6ce5e76509eb1e2b47b0
+        COMMIT: a9085ab5aa6fef30c0bdbf3054cac0455af3ab28
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -454,7 +454,7 @@ services:
         CONFIG: en_odqa_infer_wiki.json
         PORT: 8078
         SRC_DIR: annotators/odqa/
-        COMMIT: f764a753bb4913363feb6ce5e76509eb1e2b47b0
+        COMMIT: a9085ab5aa6fef30c0bdbf3054cac0455af3ab28
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -466,7 +466,7 @@ services:
         CONFIG: kbqa_cq.json
         PORT: 8072
         SRC_DIR: annotators/kbqa/
-        COMMIT: f764a753bb4913363feb6ce5e76509eb1e2b47b0
+        COMMIT: a9085ab5aa6fef30c0bdbf3054cac0455af3ab28
       context: ./
       dockerfile: annotators/kbqa/Dockerfile
     environment:

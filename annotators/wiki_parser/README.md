@@ -13,8 +13,17 @@ requests.post(wiki_parser_url, json = {"parser_info": ["find_triplets"], "query"
 To extract all relations of the entities, the "query" argument should be the list of entities ids and "parser_info" - list of "find\_rels" strings.
 
 ```python
-requests.post(wiki_parser_url, json = {"parser_info": ["find_rels"], "query": ["Q159"]}).json()
+requests.post(wiki_parser_url, json = {"parser_info": ["find_rels"], "query": [("Q159", "forw", "")]}).json()
 ```
+
+(triplets of type (subject, relation, object))
+or
+
+```python
+requests.post(wiki_parser_url, json = {"parser_info": ["find_rels"], "query": [("Q159", "backw", "")]}).json()
+```
+
+(triplets of type (object, relation, subject)).
 
 To execute SPARQL queries, the "query" argument should be the list of tuples with the info about SPARQL queries and "parser_info" - list of "query\_execute" strings.
 
