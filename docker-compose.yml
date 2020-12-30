@@ -343,6 +343,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8053
     environment:
       - CUDA_VISIBLE_DEVICES=0
+      - DEVICE=gpu_0
 
   comet-conceptnet:
     build:
@@ -356,6 +357,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8065
     environment:
       - CUDA_VISIBLE_DEVICES=0
+      - DEVICE=gpu_0
 
   meta-script-skill:
     build:
