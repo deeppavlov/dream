@@ -242,20 +242,20 @@
                     "protocol": "http",
                     "url": "http://odqa:8078/model"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "dialog_formatter": "state_formatters.dp_formatters:odqa_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:odqa_response_formatter",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.spelling_preprocessing"]
+                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
             },
             "kbqa": {
                 "connector": {
                     "protocol": "http",
                     "url": "http://kbqa:8072/model"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "dialog_formatter": "state_formatters.dp_formatters:kbqa_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:kbqa_response_formatter",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.spelling_preprocessing"]
+                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
             },
             "ner": {
                 "connector": "connectors.ner",

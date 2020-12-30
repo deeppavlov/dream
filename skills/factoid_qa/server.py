@@ -8,7 +8,9 @@ import json
 import sys
 import requests
 import sentry_sdk
+import concurrent.futures
 from deeppavlov import build_model
+from deeppavlov.core.data.utils import simple_download
 from flask import Flask, request, jsonify
 from os import getenv
 
@@ -24,11 +26,18 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 KBQA_URL = getenv('KBQA_URL')
+ODQA_URL = getenv('ODQA_URL')
+use_annotators_output = True
 FACTOID_DEFAULT_CONFIDENCE = 0.99  # otherwise dummy often beats it
 ASKED_ABOUT_FACT_PROB = 0.99
 FACTOID_CLASS_THRESHOLD = 0.5
 factoid_classifier = build_model(config="./yahoo_convers_vs_info_light.json", download=False)
-fact_dict = json.load(open('fact_dict.json', 'r'))
+
+templates_dict_url = "http://files.deeppavlov.ai/kbqa/templates_dict.json"
+simple_download(templates_dict_url, "templates_dict.json")
+templates_dict = json.load(open('templates_dict.json', 'r'))
+
+fact_dict = json.load(open("fact_dict.json", 'r'))
 use_random_facts = False
 decrease_coef = 0.8
 
@@ -84,7 +93,6 @@ long_pre_stmts = ["It is the impractical things in this tumultuous hellscape"
                   " consciousness. Me? I'm still mastering my ability to answer your questions. Here's"
                   " what I've found: "]
 
-
 pre_old_memory_statements = ["Hmm, there's something I've heard once: ",
                              "Not sure if that's what you're looking for but this is what I remember: ",
                              "To the best of my knowledge, this is what I recall: "]
@@ -116,31 +124,73 @@ def asked_about_fact(x):
                                          'tell me about', 'tell me more about']])
 
 
-def getKbqaResponse(query):
-    kbqa_response = dict()
-    kbqa_response["response"] = "Not Found"
-    kbqa_response["confidence"] = 0.0
-    # adding experimental KBQA support
+def getQaResponse(query, system):
+    qa_response = dict()
+    qa_response["qa_system"] = system
+    qa_response["answer"] = "Not Found"
+    qa_response["confidence"] = 0.0
     try:
         x = [query]
-        kbqa_request_dict = dict([('x_init', x)])
-        kbqa_request = json.dumps(kbqa_request_dict, ensure_ascii=False).encode('utf8')
-        # kbqa_request = "{ \"x\": [" + last_phrase + "] }"
-        logging.info('Preparing to run query against KBQA DP Model: ' + str(kbqa_request))
-        # kbqa_request = kbqa_request.encode(encoding='utf-8')
-        resp = requests.post(KBQA_URL, data=kbqa_request)
-        if resp.status_code != 200:
-            logging.info('API Error: KBQA DP Model inaccessible, status code: ' + str(resp.status_code))
+        if system == "kbqa":
+            qa_request_dict = dict([('x_init', x)])
+            qa_url = KBQA_URL
         else:
-            logging.info('Query against KBQA DP Model succeeded')
+            qa_request_dict = dict([('question_raw', x)])
+            qa_url = ODQA_URL
+        qa_request = json.dumps(qa_request_dict, ensure_ascii=False).encode('utf8')
+        logging.info(f'Preparing to run query against {system} DP Model: ' + str(qa_request))
+        tm_st = time.time()
+        resp = requests.post(qa_url, data=qa_request)
+        tm_end = time.time()
+        if resp.status_code != 200:
+            logging.info(f'API Error: {system} DP Model inaccessible, status code: ' + str(resp.status_code))
+        else:
+            logging.info(f'Query against {system} DP Model succeeded, time {tm_end - tm_st}')
             logging.info('Response: ' + str(resp.json()))
-            kbqa_response["response"] = resp.json()[0][0][0]
-            kbqa_response["confidence"] = resp.json()[0][0][1]
+            if system == "kbqa":
+                qa_response["answer"] = resp.json()[0][0][0]
+                qa_response["confidence"] = resp.json()[0][0][1]
+            else:
+                qa_response["answer"] = resp.json()[0][0]
+                qa_response["answer_sentence"] = resp.json()[0][3]
+                qa_response["confidence"] = resp.json()[0][1]
     except Exception as ex:
-        logging.info('Failed to run query against KBQA DP Model' + sys.exc_info()[0])
+        logging.info(f'Failed to run query against {system} DP Model' + str(sys.exc_info()[0]))
         logging.info('Exception: ' + str(ex))
 
-    return kbqa_response
+    return qa_response
+
+
+def odqa_kbqa_choose(question, odqa_response, kbqa_response):
+    answer = ""
+    confidence = 0.0
+    question_type = ""
+    for template, template_type in templates_dict.items():
+        if re.findall(template, question, re.IGNORECASE):
+            question_type = template_type
+            break
+    kbqa_answer = kbqa_response.get("answer", "Not Found")
+    kbqa_confidence = kbqa_response.get("confidence", 0.0)
+    if isinstance(answer, list):
+        response = ', '.join(answer)
+    else:
+        response = answer
+    odqa_answer = odqa_response.get("answer_sentence", "Not Found")
+    odqa_confidence = odqa_response.get("confidence", 0.0)
+
+    logging.info(f'odqa_confidence {odqa_confidence} kbqa_confidence {kbqa_confidence}')
+    if question_type == "odqa" and odqa_confidence > 0.9998:
+        return odqa_answer, odqa_confidence
+    elif question_type == "kbqa" and kbqa_confidence > 0.95:
+        return kbqa_answer, kbqa_confidence
+    elif odqa_answer and odqa_confidence > kbqa_confidence:
+        return odqa_answer, odqa_confidence
+    elif kbqa_answer != "Not Found" and kbqa_confidence > odqa_confidence:
+        return kbqa_answer, kbqa_confidence
+    else:
+        return odqa_answer, odqa_confidence
+
+    return answer, confidence
 
 
 @app.route("/test", methods=['POST'])
@@ -188,6 +238,7 @@ def respond():
     # logging.info('Factoid classes ' + str(factoid_classes))
 
     kbqa_response = dict()
+    odqa_response = dict()
 
     for dialog, is_factoid, fact_output in zip(dialogs_batch,
                                                is_factoid_sents,
@@ -198,28 +249,30 @@ def respond():
             "detected", 0) == 1 or if_lets_chat_about_topic(curr_ann_uttr["text"])
         is_question = "?" in curr_ann_uttr['annotations']['sentrewrite']['modified_sents'][-1]
         if is_factoid and (tell_me_about_intent or is_question):
-            logger.info("Question is classified as factoid. Querying KBQA.")
-            print("Question is classified as factoid. Querying KBQA...", flush=True)
-            kbqa_response = getKbqaResponse(query=last_phrase)
-            if "Not Found" not in kbqa_response["response"]:
-                logger.info("Factoid question. Answer with KBQA response.")
-                # capitalizing
-                # response = str(kbqa_response["response"]).capitalize()
-                # we use one of the statements
-                answer = kbqa_response["response"]
-                if isinstance(answer, list):
-                    response = ', '.join(answer)
-                else:
-                    response = answer
-                # FACTOID_DEFAULT_CONFIDENCE
-                confidence = kbqa_response["confidence"] * decrease_coef
-            # and "?" in dialog["human_utterances"][-1]["text"]: Factoid questions can be without ?
-            elif len(fact_output) > 0 and use_random_facts:
-                logger.info("Factoid question. Answer with pre-recorded facts.")
-                # response = "Here's something I've found on the web... " + fact_output
-                response = random.choice(pre_old_memory_statements) + fact_output
-                confidence = FACTOID_DEFAULT_CONFIDENCE
+            logger.info("Question is classified as factoid. Querying KBQA and ODQA.")
+            print("Question is classified as factoid. Querying KBQA and ODQA...", flush=True)
+            logger.info(
+                f"Using annotators output, kbqa_response {curr_ann_uttr['annotations'].get('kbqa', {})} odqa_response {curr_ann_uttr['annotations'].get('odqa', {})}")
+            if use_annotators_output:
+                kbqa_response = curr_ann_uttr["annotations"].get("kbqa", {})
+                odqa_response = curr_ann_uttr["annotations"].get("odqa", {})
+                logger.info(f"Using annotators output, kbqa_response {kbqa_response} odqa_response {odqa_response}")
             else:
+                futures = []
+                executor = concurrent.futures.ThreadPoolExecutor()
+                for system in ["odqa", "kbqa"]:
+                    futures.append(executor.submit(getQaResponse, last_phrase, system))
+                results = []
+                for future in concurrent.futures.as_completed(futures):
+                    results.append(future.result())
+                for result in results:
+                    if result["qa_system"] == "kbqa":
+                        kbqa_response = result
+                    else:
+                        odqa_response = result
+
+            response, confidence = odqa_kbqa_choose(last_phrase, odqa_response, kbqa_response)
+            if not response:
                 response = random.choice(DONT_KNOW_ANSWER)
                 confidence = FACTOID_NOTSURE_CONFIDENCE
                 attr['not sure'] = True

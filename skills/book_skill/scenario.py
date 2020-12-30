@@ -305,8 +305,12 @@ def get_triples(part1, part2, part3):
             known_part1 = part1
     logging.debug('Calling get_triples for  known part' + known_part)
     t = time.time()
-    response = requests.post(WIKIDATA_URL, json={"query": [known_part], "parser_info": ["find_triplets"]}).json()
-    response = response[0][0][mode]
+    response = []
+    resp = requests.post(WIKIDATA_URL, json={"query": [known_part], "parser_info": ["find_triplets"]})
+    if resp.status_code == 200:
+        response = resp.json()[0][0][mode]
+    else:
+        logging.debug("Could not access wiki parser")
     exec_time = round(time.time() - t, 2)
     logging.debug('Response obtained with exec time ' + str(exec_time))
 
