@@ -43,4 +43,10 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8077
       - PORT=8077
+  comet-atomic:
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+  comet-conceptnet:
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
 version: '3.7'
