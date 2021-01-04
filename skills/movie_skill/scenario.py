@@ -1,22 +1,23 @@
 import logging
-import time
-import re
-import string
 import random
+import re
+import sentry_sdk
+import string
+import time
+from os import getenv
 from random import choice
 from collections import defaultdict
 
 from templates import MovieSkillTemplates
 from nltk.tokenize import sent_tokenize, word_tokenize
-from common.utils import get_skill_outputs_from_dialog, is_yes, is_no
+
 from common.constants import CAN_CONTINUE
+from common.link import link_to
+from common.movies import get_movie_template
 from common.universal_templates import if_switch_topic, is_switch_topic, if_lets_chat_about_topic, if_choose_topic, \
     COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
-from common.movies import get_movie_template
-from common.link import link_to
+from common.utils import get_skill_outputs_from_dialog, is_yes, is_no, get_topics, get_intents
 
-from os import getenv
-import sentry_sdk
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -167,8 +168,7 @@ class MovieSkillScenario:
             return response, confidence, human_attr, bot_attr, attr
 
     def is_about_movies(self, uttr, prev_uttr={}):
-        annotations = uttr.get("annotations", {})
-        is_movie_topic = "Entertainment_Movies" in annotations.get('cobot_dialogact_topics', {}).get('text', [])
+        is_movie_topic = "Entertainment_Movies" in get_topics(uttr, which="cobot_dialogact_topics")
 
         curr_uttr_is_about_movies = re.search(self.movie_pattern, uttr["text"].lower())
         prev_uttr_last_sent = prev_uttr.get("annotations", {}).get("sentseg", {}).get("segments", [""])[-1].lower()
@@ -202,7 +202,7 @@ class MovieSkillScenario:
 
     def is_opinion_request(self, uttr):
         annotations = uttr.get("annotations", {})
-        intents = annotations.get("cobot_dialogact_intents", {}).get('text', [])
+        intents = get_intents(uttr, which="cobot_dialogact_intents")
         intent_detected = annotations.get("intent_catcher", {}).get(
             "opinion_request", {}).get("detected") == 1 or "Opinion_RequestIntent" in intents
         opinion_detected = "Opinion_ExpressionIntent" in intents
@@ -212,8 +212,7 @@ class MovieSkillScenario:
             return False
 
     def is_opinion_expression(self, uttr):
-        annotations = uttr.get("annotations", {})
-        intents = annotations.get("cobot_dialogact_intents", {}).get('text', [])
+        intents = get_intents(uttr, which="cobot_dialogact_intents")
         intent_detected = "Opinion_ExpressionIntent" in intents
         info_request_detected = "Information_RequestIntent" in intents
         if intent_detected or (re.search(self.opinion_expression, uttr["text"].lower()) and not info_request_detected):
@@ -227,7 +226,7 @@ class MovieSkillScenario:
     def is_unclear_switch_topic(self, uttr):
         annotations = uttr.get("annotations", {})
         topic_switch_detected = annotations.get("intent_catcher", {}).get("topic_switching", {}).get("detected", 0) == 1
-        intents = annotations.get("cobot_dialogact_intents", {}).get("text", [])
+        intents = get_intents(uttr, which="cobot_dialogact_intents")
         intent_detected = "Topic_SwitchIntent" in intents
         if intent_detected or topic_switch_detected or if_lets_chat_about_topic(uttr["text"].lower()) or \
                 if_switch_topic(uttr["text"].lower()):

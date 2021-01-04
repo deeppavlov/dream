@@ -4,18 +4,20 @@ import asyncio
 import csv
 import json
 import logging
+import random
 import re
 import time
 from collections import defaultdict
-import random
+from copy import deepcopy
+from os import getenv
 from random import choice
 from typing import Callable, Dict
-from copy import deepcopy
+
+import sentry_sdk
 
 from common.universal_templates import opinion_request_question
 from common.link import link_to, high_rated_skills_for_linking
-import sentry_sdk
-from os import getenv
+from common.utils import get_topics
 
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -154,7 +156,7 @@ class DummySkillConnector:
             st_time = time.time()
             dialog = deepcopy(payload['payload']["dialogs"][0])
 
-            curr_topics = dialog["utterances"][-1]["annotations"].get("cobot_topics", {}).get("text", [])
+            curr_topics = get_topics(dialog["utterances"][-1], which="cobot_topics")
             curr_nounphrases = dialog["utterances"][-1]["annotations"].get("cobot_nounphrases", [])
 
             if len(curr_topics) == 0:

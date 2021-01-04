@@ -6,14 +6,14 @@ services:
       context: ./
       dockerfile: dockerfile_agent
     environment:
-      WAIT_HOSTS: "cobotqa:8081, program_y:8008, sentseg:8011, convers_evaluation_selector:8009, personality_catcher:8010,
-        intent_responder:8012, intent_catcher:8014, blacklisted_words:8018,
-        toxic_classification:8013, sentrewrite:8017, ner:8021,  program_y_dangerous:8022, movie_skill:8023,
-        sentiment_classification:8024,
-        convert_reddit:8029, personal_info_skill:8030, asr:8031, book_skill:8032, misheard_asr:8033,
-        christmas_new_year_skill:8036, weather_skill:8037, emotion_classification:8038, alice:8000,
-        eliza:8047, emotion_skill:8049, dummy_skill_dialog:8052, comet_atomic:8053, meta_script_skill:8054, oscar_skill:8055,
-        small_talk_skill:8062, program_y_wide:8064, comet_conceptnet:8065, greeting_skill:8070"
+      WAIT_HOSTS: "cobotqa:8081, cobot-topics:8001, cobot-dialogact:8002, cobot-convers-evaluator-annotator:8004,
+        personality-catcher:8010, intent-responder:8012, intent-catcher:8014, blacklisted-words:8018,
+        toxic-classification:8013, sentrewrite:8017, ner:8021,  program-y-dangerous:8022, movie-skill:8023,
+        sentiment-classification:8024,
+        convert-reddit:8029, personal-info-skill:8030, asr:8031, book-skill:8032, misheard-asr:8033,
+        christmas-new-year-skill:8036, weather-skill:8037, emotion-classification:8038, alice:8000,
+        eliza:8047, emotion-skill:8049, dummy-skill-dialog:8052, comet-atomic:8053, meta-script-skill:8054, oscar-skill:8055,
+        small-talk-skill:8062, program-y-wide:8064, comet-conceptnet:8065, greeting-skill:8070"
       WAIT_HOSTS_TIMEOUT: 480
     env_file:
       - ${ENV_FILE}

@@ -2,18 +2,6 @@ services:
   agent:
     volumes:
       - "/cephfs/home/ignatov/artifacts:/output"
-  cobot-topics:
-    environment:
-      - CUDA_VISIBLE_DEVICES=5
-  cobot-dialogact-topics:
-    environment:
-      - CUDA_VISIBLE_DEVICES=5
-  cobot-dialogact-intents:
-    environment:
-      - CUDA_VISIBLE_DEVICES=6
-  cobot-convers-evaluator-annotator:
-    environment:
-      - CUDA_VISIBLE_DEVICES=6
   toxic-classification:
     environment:
       - CUDA_VISIBLE_DEVICES=7
@@ -23,7 +11,7 @@ services:
   emotion-classification:
     environment:
       - CUDA_VISIBLE_DEVICES=8
-  stop-detect:
+  question-generator:
     environment:
       - CUDA_VISIBLE_DEVICES=8
   kbqa:
@@ -34,7 +22,13 @@ services:
       - CUDA_VISIBLE_DEVICES=9
   odqa:
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=6
+  comet-atomic:
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
+  comet-conceptnet:
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
   wiki-parser:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
@@ -43,10 +37,4 @@ services:
     environment:
       - PROXY_PASS=10.11.1.1:8077
       - PORT=8077
-  comet-atomic:
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-  comet-conceptnet:
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
 version: '3.7'

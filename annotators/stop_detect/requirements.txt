@@ -1,2 +1,0 @@
-sentry-sdk==0.14.1
-gunicorn==19.9.0

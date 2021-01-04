@@ -17,6 +17,7 @@ import sentry_sdk
 from cobotqa_service import send_cobotqa
 
 from common.universal_templates import opinion_request_question, fact_about_replace, FACT_ABOUT_TEMPLATES
+from common.utils import get_topics, get_intents
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -257,7 +258,7 @@ def respond():
         conf_cands = list(confidences[dialog_ids == i])
 
         annotations = dialog["human_utterances"][-1]["annotations"]
-        intents = annotations.get("cobot_dialogact_intents", {}).get("text", [])
+        intents = get_intents(dialog["human_utterances"][-1], which="cobot_dialogact_intents")
         opinion_request_detected = annotations["intent_catcher"].get(
             "opinion_request", {}).get("detected") == 1
         reply = dialog['human_utterances'][-1]['text'].replace("\'", " \'").lower()
@@ -265,7 +266,7 @@ def respond():
         sensitive_topics = {"Politics", "Celebrities", "Religion", "Sex_Profanity", "Sports", "News", "Psychology"}
         # `General_ChatIntent` sensitive in case when `?` in reply
         sensitive_dialogacts = {"Opinion_RequestIntent", "General_ChatIntent"}
-        cobot_topics = set(dialog['human_utterances'][-1]['annotations']['cobot_topics']['text'])
+        cobot_topics = set(get_topics(dialog['human_utterances'][-1], which='all'))
         sensitive_topics_detected = any([t in sensitive_topics for t in cobot_topics])
         sensitive_dialogacts_detected = any([(t in sensitive_dialogacts and "?" in reply) for t in intents])
         blist_topics_detected = dialog['human_utterances'][-1]['annotations']['blacklisted_words']['restricted_topics']

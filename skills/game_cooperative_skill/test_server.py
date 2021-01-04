@@ -53,10 +53,10 @@ def update_utterances(utterances=[], response=None, text_request=""):
 request_utters = [
     "hi",
     "yes",
-    "top of year",
+    "top of last year",
     "go on",
     "move on",
-    "top of year",
+    "top of last year",
     "yes",
     "talk",
     "yes",

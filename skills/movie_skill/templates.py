@@ -7,6 +7,8 @@ import numpy as np
 from imdb_database import IMDb
 from utils import list_unique_values
 
+from common.utils import get_intents
+
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -204,8 +206,7 @@ class MovieSkillTemplates:
         return movies_ids, unique_persons, genres
 
     def give_opinion(self, dialog):
-        annotations = dialog["utterances"][-1]["annotations"]
-        intents = annotations.get("cobot_dialogact_intents", {}).get("text", [])
+        intents = get_intents(dialog['human_utterances'][-1], which='cobot_dialogact_intents')
 
         dialog_subjects = self.extract_previous_dialog_subjects(dialog)
         logger.info("Found in the previous dialog the following: {}".format(dialog_subjects))
@@ -394,9 +395,9 @@ class MovieSkillTemplates:
         confidence = self.zero_confidence
         result = []
 
-        user_uttr = dialog["utterances"][-1]["text"].lower()
-        annotations = dialog["utterances"][-1]["annotations"]
-        intents = annotations.get("cobot_dialogact_intents", {}).get("text", [])
+        user_uttr = dialog["human_utterances"][-1]["text"].lower()
+        annotations = dialog["human_utterances"][-1]["annotations"]
+        intents = get_intents(dialog["human_utterances"][-1], which="cobot_dialogact_intents")
         opinion_request_detected = annotations["intent_catcher"].get(
             "opinion_request", {}).get("detected") == 1
 

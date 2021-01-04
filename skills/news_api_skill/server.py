@@ -15,15 +15,14 @@ from os import getenv
 import sentry_sdk
 from newsapi_service import CachedRequestsAPI
 
+from common.constants import CAN_CONTINUE
+from common.link import link_to
+from common.metrics import setup_metrics
 from common.news import OFFER_BREAKING_NEWS, BREAKING_NEWS, OFFERED_BREAKING_NEWS_STATUS, \
     OFFERED_NEWS_DETAILS_STATUS, OPINION_REQUEST_STATUS, WHAT_TYPE_OF_NEWS, OFFER_TOPIC_SPECIFIC_NEWS, \
     OFFER_TOPIC_SPECIFIC_NEWS_STATUS, OFFERED_NEWS_TOPIC_CATEGORIES_STATUS
 from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, COMPILE_SWITCH_TOPIC, if_lets_chat_about_topic
-from common.utils import get_skill_outputs_from_dialog, is_yes, is_no
-from common.constants import CAN_CONTINUE
-from common.link import link_to
-
-from common.metrics import setup_metrics
+from common.utils import get_skill_outputs_from_dialog, is_yes, is_no, get_topics
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -182,8 +181,8 @@ def collect_topics_and_statuses(dialogs):
                 prev_news_samples.append(prev_news)
         else:
             logger.info(f"News skill was NOT active.")
-            about_news = (({"News"} & set(curr_uttr["annotations"].get("cobot_topics", {}).get(
-                "text", []))) or re.search(NEWS_TEMPLATES, curr_uttr["text"].lower())) and \
+            about_news = (({"News"} & set(get_topics(curr_uttr, which="cobot_topics"))) or re.search(
+                NEWS_TEMPLATES, curr_uttr["text"].lower())) and \
                 not re.search(FALSE_NEWS_TEMPLATES, curr_uttr["text"].lower())
             lets_chat_about_particular_topic = if_lets_chat_about_topic(curr_uttr["text"].lower())
 

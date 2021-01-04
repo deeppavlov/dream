@@ -1,41 +1,26 @@
-cobot-topics:
-  CUDA_VISIBLE_DEVICES: '0'
-
-cobot-dialogact-topics:
-  CUDA_VISIBLE_DEVICES: '0'
-
-cobot-dialogact-intents:
-  CUDA_VISIBLE_DEVICES: '1'
-
-cobot-convers-evaluator-annotator:
-  CUDA_VISIBLE_DEVICES: '1'
-
 toxic-classification:
-  CUDA_VISIBLE_DEVICES: '2'
+  CUDA_VISIBLE_DEVICES: '0'
 
 sentiment-classification:
-  CUDA_VISIBLE_DEVICES: '2'
+  CUDA_VISIBLE_DEVICES: '0'
 
 emotion-classification:
-  CUDA_VISIBLE_DEVICES: '3'
-
-stop-detect:
-  CUDA_VISIBLE_DEVICES: '3'
+  CUDA_VISIBLE_DEVICES: '1'
 
 kbqa:
-  CUDA_VISIBLE_DEVICES: '4'
+  CUDA_VISIBLE_DEVICES: '2'
 
 factoid-classification:
-  CUDA_VISIBLE_DEVICES: '4'
+  CUDA_VISIBLE_DEVICES: '2'
 
 odqa:
-  CUDA_VISIBLE_DEVICES: '5'
+  CUDA_VISIBLE_DEVICES: '3'
 
 comet-atomic:
-  CUDA_VISIBLE_DEVICES: '6'
+  CUDA_VISIBLE_DEVICES: '3'
 
 comet-conceptnet:
-  CUDA_VISIBLE_DEVICES: '6'
+  CUDA_VISIBLE_DEVICES: '3'
 
 entity-linking:
   CUDA_VISIBLE_DEVICES: "''"
@@ -44,4 +29,4 @@ wiki-parser:
   CUDA_VISIBLE_DEVICES: "''"
 
 question-generator:
-  CUDA_VISIBLE_DEVICES: '5'
+  CUDA_VISIBLE_DEVICES: '1'

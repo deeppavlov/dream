@@ -10,7 +10,7 @@ from random import choice, shuffle
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
 from common.universal_templates import join_words_in_or_pattern
-from common.utils import is_opinion_request, get_skill_outputs_from_dialog
+from common.utils import is_opinion_request, get_skill_outputs_from_dialog, get_topics
 from common.greeting import dont_tell_you_answer
 from utils import get_used_attributes_by_name, get_comet_atomic, TOP_FREQUENT_WORDS, get_all_not_used_templates, \
     get_comet_conceptnet, get_nltk_sentiment, get_not_used_template
@@ -276,8 +276,7 @@ def express_opinion_using_conceptnet(dialog):
         if response == "":
             continue
 
-        cobot_dialogact_topics = dialog['human_utterances'][-1]['annotations'].get(
-            'cobot_dialogact_topics', {}).get('text', [])
+        cobot_dialogact_topics = get_topics(dialog['human_utterances'][-1], which="cobot_dialogact_topics")
         is_scripted_topic = any([topic in cobot_dialogact_topics
                                  for topic in ["Entertainment_Movies", "Entertainment_Books"]])
         if is_opinion_request(dialog["human_utterances"][-1]) and not is_scripted_topic:

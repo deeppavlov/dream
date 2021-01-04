@@ -1,19 +1,4 @@
 services:
-  cobot-topics:
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-
-  cobot-dialogact-topics:
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-
-  cobot-dialogact-intents:
-    environment:
-      - CUDA_VISIBLE_DEVICES=1
-
-  cobot-convers-evaluator-annotator:
-    environment:
-      - CUDA_VISIBLE_DEVICES=1
 
   toxic-classification:
     environment:
@@ -34,10 +19,6 @@ services:
   comet-conceptnet:
     environment:
       - CUDA_VISIBLE_DEVICES=''
-
-  stop-detect:
-    environment:
-      - CUDA_VISIBLE_DEVICES=3
 
   entity-linking:
     environment:

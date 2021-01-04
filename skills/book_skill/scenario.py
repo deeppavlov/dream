@@ -1,18 +1,21 @@
-from common.universal_templates import BOOK_CHANGE_PHRASE, is_switch_topic
-from common.tutor import get_tutor_phrase
-from common.books import BOOK_SKILL_CHECK_PHRASES
+import json
 import logging
-import time
-from os import getenv
-from string import punctuation
-import sentry_sdk
+import os
 import random
 import requests
-import json
-import os
+import sentry_sdk
+import time
 import zipfile
-from datetime import datetime
 import _pickle as cPickle
+from datetime import datetime
+from os import getenv
+from string import punctuation
+
+from common.books import BOOK_SKILL_CHECK_PHRASES
+from common.tutor import get_tutor_phrase
+from common.universal_templates import BOOK_CHANGE_PHRASE, is_switch_topic
+from common.utils import get_topics, get_intents
+
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -59,14 +62,12 @@ def was_question_about_book(phrase):
 
 def opinion_request_detected(annotated_utterance):
     y1 = annotated_utterance['annotations']['intent_catcher'].get('opinion_request', {}).get('detected') == 1
-    y2 = 'Opinion_RequestIntent' in annotated_utterance['annotations'].get("cobot_dialogact_intents",
-                                                                           {}).get('text', [])
+    y2 = 'Opinion_RequestIntent' in get_intents(annotated_utterance, which="cobot_dialogact_intents")
     return y1 or y2
 
 
 def information_request_detected(annotated_utterance):
-    return 'Information_RequestIntent' in annotated_utterance['annotations'].get("cobot_dialogact_intents",
-                                                                                 {}).get('text', [])
+    return 'Information_RequestIntent' in get_intents(annotated_utterance, which="cobot_dialogact_intents")
 
 
 def request_detected(annotated_utterance):
@@ -74,10 +75,9 @@ def request_detected(annotated_utterance):
 
 
 def opinion_expression_detected(annotated_utterance):
-    y1 = 'Opinion_ExpressionIntent' in annotated_utterance['annotations'].get("cobot_dialogact_intents",
-                                                                              {}).get('text', [])
-    y2 = 'Information_DeliveryIntent' in annotated_utterance['annotations'].get("cobot_dialogact_intents",
-                                                                                {}).get('text', [])
+    _intents = get_intents(annotated_utterance, which="cobot_dialogact_intents")
+    y1 = 'Opinion_ExpressionIntent' in _intents
+    y2 = 'Information_DeliveryIntent' in _intents
     y3 = was_question_about_book(annotated_utterance['text'])
     return y1 or y2 or y3
 
@@ -85,8 +85,8 @@ def opinion_expression_detected(annotated_utterance):
 def about_book(annotated_utterance):
     # logging.debug('aboutg book')
     # logging.debug(annotated_utterance)
-    y1 = "Entertainment_Books" in annotated_utterance['annotations']['cobot_dialogact_intents']['text']
-    y2 = 'Information_RequestIntent' in annotated_utterance['annotations']['cobot_topics']['text']
+    y1 = "Entertainment_Books" in get_topics(annotated_utterance, which="cobot_dialogact_topics")
+    y2 = 'Information_RequestIntent' in get_topics(annotated_utterance, which='cobot_topics')
     # logging.debug('ok')
     return y1 or y2
 
@@ -104,7 +104,7 @@ def asking_about_book(annotated_user_phrase):
 def is_stop(annotated_phrase):
     y0 = annotated_phrase['annotations']['intent_catcher'].get('exit', {}).get('detected') == 1
     try:
-        y1 = 'Topic_SwitchIntent' in annotated_phrase['annotations'].get("cobot_dialogact_intents", {}).get('text', [])
+        y1 = 'Topic_SwitchIntent' in get_intents(annotated_phrase, which="cobot_dialogact_intents")
     except BaseException:
         y1 = False
     user_phrase = annotated_phrase['text']
@@ -913,6 +913,9 @@ class BookSkillScenario:
                 sentry_sdk.capture_exception(e)
                 reply = ""
                 confidence = 0
+
+            if isinstance(reply, list):
+                reply = " ".join(reply)
             if not is_previous_was_about_book(dialog) and confidence > 0.95 and reply != START_PHRASE:
                 confidence = 0.95
             if reply == prev_reply:

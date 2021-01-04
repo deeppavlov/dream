@@ -14,7 +14,8 @@ from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
 from common.emotion import detect_emotion, is_joke_requested
 from common.news import is_breaking_news_requested
 from common.universal_templates import if_lets_chat_about_topic
-from common.utils import check_about_death, about_virus, quarantine_end, service_intents, low_priority_intents
+from common.utils import check_about_death, about_virus, quarantine_end, service_intents, low_priority_intents, \
+    get_topics, get_intents
 from common.weather import is_weather_requested
 from common.coronavirus import is_staying_home_requested
 from common.grounding import what_we_talk_about
@@ -133,11 +134,11 @@ class RuleBasedSkillSelectorConnector:
 
             tell_me_a_story_detected = user_uttr_annotations["intent_catcher"].get("tell_me_a_story",
                                                                                    {}).get("detected", 0)
-            cobot_topics = set(user_uttr_annotations.get("cobot_topics", {}).get("text", []))
+            cobot_topics = set(get_topics(dialog["human_utterances"][-1], which="cobot_topics"))
             sensitive_topics_detected = any([t in self.sensitive_topics for t in cobot_topics])
 
-            cobot_dialogacts = user_uttr_annotations.get("cobot_dialogact_intents", {}).get("text", [])
-            cobot_dialogact_topics = set(user_uttr_annotations.get("cobot_dialogact_topics", {}).get("text", []))
+            cobot_dialogacts = get_intents(dialog['human_utterances'][-1], which="cobot_dialogact_intents")
+            cobot_dialogact_topics = set(get_topics(dialog['human_utterances'][-1], which="cobot_dialogact_topics"))
             # factoid
             factoid_classification = user_uttr_annotations['factoid_classification']['factoid']
             # using factoid
