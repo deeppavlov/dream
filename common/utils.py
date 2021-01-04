@@ -1,7 +1,13 @@
 import re
 from random import choice
 
-from common.universal_templates import join_sentences_in_or_pattern, DONOTKNOW_LIKE
+
+def join_words_in_or_pattern(words):
+    return "(" + "|".join([r'\b%s\b' % word for word in words]) + ")"
+
+
+def join_sentences_in_or_pattern(sents):
+    return "(" + "|".join(sents) + ")"
 
 
 other_skills = {'intent_responder', 'program_y_dangerous', 'misheard_asr', 'christmas_new_year_skill',
@@ -164,6 +170,7 @@ def is_yes(annotated_phrase):
 
 
 no_templates = re.compile(r"(\bno\b|\bnot\b|no way|don't|no please|i disagree)")
+DONOTKNOW_LIKE = [r"(i )?(do not|don't) know", "you (choose|decide|pick up)"]
 
 
 def is_no(annotated_phrase):
@@ -196,7 +203,7 @@ def get_intent_name(text):
 
 def is_opinion_request(annotated_phrase):
     annotations = annotated_phrase.get("annotations", {})
-    intents = []  # annotations.get("cobot_dialogact_intents", {}).get("text", {})
+    intents = get_intents(annotated_phrase, which="cobot_dialogact_intents")
     intent_detected = annotations.get("intent_catcher", {}).get("opinion_request", {}).get(
         "detected") == 1 or "Opinion_RequestIntent" in intents
     opinion_detected = "Opinion_ExpressionIntent" in intents
@@ -264,3 +271,72 @@ def get_not_used_template(used_templates, all_templates):
         return choice(available)
     else:
         return choice(all_templates)
+
+
+def get_topics(annotated_utterance, which="all"):
+    """Function to get topics from particular annotator or all detected.
+
+    Args:
+        annotated_utterance: dictionary with annotated utterance
+        which: which topics to return.
+            'all' means topics by `cobot_topics` and `cobot_dialogact_topics`,
+            'cobot_topics' means topics by `cobot_topics`,
+            'cobot_dialogact_topics' means topics by `cobot_dialogact_topics`.
+
+    Returns:
+        list of topics
+    """
+    cobot_topics = annotated_utterance.get("annotations", {}).get("cobot_topics", {}).get("text", [])
+
+    cobot_da_topics = []
+    if "cobot_dialogact" in annotated_utterance.get("annotations", {}):
+        if "topics" in annotated_utterance["annotations"]["cobot_dialogact"]:
+            cobot_da_topics = annotated_utterance["annotations"]["cobot_dialogact"]["topics"]
+    elif "cobot_dialogact_topics" in annotated_utterance.get("annotations", {}):
+        if "text" in annotated_utterance["annotations"]["cobot_dialogact_topics"]:
+            cobot_da_topics = annotated_utterance["annotations"]["cobot_dialogact_topics"]["text"]
+
+    result = []
+    if which == "all":
+        result += cobot_topics + cobot_da_topics
+    elif which == "cobot_topics":
+        result += cobot_topics
+    elif which == "cobot_dialogact_topics":
+        result += cobot_da_topics
+
+    return result
+
+
+def get_intents(annotated_utterance, which="all"):
+    """Function to get intents from particular annotator or all detected.
+
+    Args:
+        annotated_utterance: dictionary with annotated utterance
+        which: which intents to return.
+            'all' means intents detected by `intent_catcher` and `cobot_dialogact_intents`,
+            'intent_catcher' means intents detected by `intent_catcher`,
+            'cobot_dialogact_intents' means intents detected by `cobot_dialogact_intents`.
+
+    Returns:
+        list of intents
+    """
+    intents = annotated_utterance.get("annotations", {}).get("intent_catcher", {})
+    detected_intents = [k for k, v in intents.items() if v.get("detected", 0) == 1]
+
+    cobot_da_intents = []
+    if "cobot_dialogact" in annotated_utterance.get("annotations", {}):
+        if "intents" in annotated_utterance["annotations"]["cobot_dialogact"]:
+            cobot_da_intents = annotated_utterance["annotations"]["cobot_dialogact"]["intents"]
+    elif "cobot_dialogact_intents" in annotated_utterance.get("annotations", {}):
+        if "text" in annotated_utterance["annotations"]["cobot_dialogact_intents"]:
+            cobot_da_intents = annotated_utterance["annotations"]["cobot_dialogact_intents"]["text"]
+
+    result = []
+    if which == "all":
+        result += detected_intents + cobot_da_intents
+    elif which == "intent_catcher":
+        result += detected_intents
+    elif which == "cobot_dialogact_intents":
+        result += cobot_da_intents
+
+    return result

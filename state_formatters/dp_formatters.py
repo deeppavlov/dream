@@ -2,7 +2,7 @@ from typing import Dict, List
 import logging
 from copy import deepcopy
 from common.universal_templates import if_lets_chat_about_topic
-from common.utils import service_intents
+from common.utils import service_intents, get_topics
 
 logger = logging.getLogger(__name__)
 
@@ -208,8 +208,8 @@ def convert_formatter_dialog(dialog: Dict) -> Dict:
             [utt['annotations']["sentseg"]["punct_sent"] for utt in dialog['utterances']]
         ],
         'personality': [dialog['bot']['persona']],
-        'topics': [dialog["utterances"][-1]["annotations"]["cobot_topics"]['text']],
-        'dialogact_topics': [dialog["utterances"][-1]["annotations"]["cobot_dialogact_topics"]['text']],
+        'topics': [get_topics(dialog["utterances"][-1], which="cobot_topics")],
+        'dialogact_topics': [get_topics(dialog["utterances"][-1], which="cobot_dialogact_topics")],
     }]
 
 
@@ -247,6 +247,12 @@ def cobot_classifiers_formatter_service(payload: List):
         return {"text": []}
 
 
+def cobot_dialogact_formatter_service(payload: List):
+    # Used by: cobot_dialogact_formatter
+    return {"intents": payload[0],
+            "topics": payload[1]}
+
+
 def cobot_dialogact_intents_formatter_service(payload: List):
     return {"text": [j[0] for j in payload]}
 
@@ -260,12 +266,13 @@ def cobot_topics_formatter_service(payload: List):
 
 
 def cobot_formatter_dialog(dialog: Dict):
+    # Used by: cobot_dialogact_formatter, cobot_classifiers_formatter
     dialog = get_last_n_turns(dialog)
     dialog = remove_clarification_turns_from_dialog(dialog)
     utterances_histories = []
     for utt in dialog['utterances']:
         utterances_histories.append(utt['annotations']['sentseg']['segments'])
-    return [{'sentences': [utterances_histories]}]
+    return [{'utterances_histories': [utterances_histories]}]
 
 
 def base_response_selector_formatter_service(payload: List):
@@ -364,6 +371,19 @@ def cobot_conv_eval_formatter_dialog(dialog: Dict) -> Dict:
     payload = stop_formatter_dialog(dialog)
     # print(f"formatter {payload}", flush=True)
     return payload
+
+
+def cobot_convers_evaluator_annotator_formatter(dialog: Dict) -> Dict:
+    dialog = get_last_n_turns(dialog)
+    dialog = remove_clarification_turns_from_dialog(dialog)
+    conv = dict()
+    hypotheses = dialog["utterances"][-1]["hypotheses"]
+    conv["hypotheses"] = [h["text"] for h in hypotheses]
+    conv["currentUtterance"] = dialog["utterances"][-1]["text"]
+    # cobot recommends to take 2 last utt for conversation evaluation service
+    conv["pastUtterances"] = [uttr["text"] for uttr in dialog["human_utterances"]][-3:-1]
+    conv["pastResponses"] = [uttr["text"] for uttr in dialog["bot_utterances"]][-2:]
+    return [conv]
 
 
 def dp_toxic_formatter_service(payload: List):

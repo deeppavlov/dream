@@ -17,28 +17,21 @@ services:
   cobot-topics:
     env_file: [.env.dev]
     volumes:
-      - "./annotators/cobot_topics:/src"
+      - "./annotators/CoBotTopicClassification:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8001:8001
-  cobot-dialogact-topics:
+  cobot-dialogact:
     env_file: [.env.dev]
     volumes:
-      - "./annotators/cobot_dialogact_topics:/src"
+      - "./annotators/CoBotDialogActClassification:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8002:8002
-  cobot-dialogact-intents:
-    env_file: [.env.dev]
-    volumes:
-      - "./annotators/cobot_dialogact_intents:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8003:8003
   cobot-convers-evaluator-annotator:
     env_file: [.env.dev]
     volumes:
-      - "./annotators/cobot_convers_evaluator_annotator:/src"
+      - "./annotators/CoBotConversationEvaluator:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8004:8004
@@ -305,14 +298,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8057:8057
-  stop-detect:
-    env_file: [.env.dev]
-    volumes:
-      - "./annotators/stop_detect:/src"
-      - "./common:/src/common"
-      - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8056:8056
   coronavirus-skill:
     env_file: [.env.dev]
     volumes:

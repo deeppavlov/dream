@@ -15,7 +15,7 @@ request_utters = [
     "yes",
     "go on",
     "move on",
-    "top of year",
+    "top of last year",
     "yes",
     "talk",
     "yes",

@@ -1,8 +1,10 @@
-import sentry_sdk
 import logging
-from os import getenv
-from common.grounding import what_we_talk_about
+import sentry_sdk
 from collections import defaultdict
+from os import getenv
+
+from common.grounding import what_we_talk_about
+from common.utils import get_topics, get_intents
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -37,11 +39,6 @@ class GroundingSkillScenario:
                     prev_annotations = dialog['human_utterances'][-2].get('annotations', dict())
                     logger.debug('Running grounding skill')
                     reply = 'To my understanding, we are talking about '
-                    if 'cobot_dialogact' in prev_annotations:  # Support different formats
-                        prev_annotations['cobot_dialogact_topics'] = prev_annotations['cobot_dialogact'].get('topics',
-                                                                                                             [])
-                        prev_annotations['cobot_dialogact_intents'] = prev_annotations['cobot_dialogact'].get('intents',
-                                                                                                              [])
 
                     entity_list = []
                     for tmp in prev_annotations.get('ner', []):
@@ -49,10 +46,10 @@ class GroundingSkillScenario:
                             entity_list.append(tmp[0]['text'])
                     my_entities = ', '.join([str(k) for k in sorted(entity_list)])
 
-                    topic_list1 = prev_annotations.get('cobot_topics', [])
+                    topic_list1 = get_topics(dialog['human_utterances'][-2], which='cobot_topics')
                     if 'text' in topic_list1:
                         topic_list1 = topic_list1['text']
-                    topic_list2 = prev_annotations.get('cobot_dialogact_topics', [])
+                    topic_list2 = get_topics(dialog['human_utterances'][-2], which='cobot_dialogact_topics')
                     if 'text' in topic_list2:
                         topic_list2 = topic_list2['text']
 
@@ -62,7 +59,7 @@ class GroundingSkillScenario:
                     topic_list = [j.replace('_', ' ') for j in topic_list if j not in ['Other', 'Phatic']]
                     my_topics = ', '.join([str(k) for k in sorted(topic_list)])
 
-                    intent_list = prev_annotations.get('cobot_dialogact_intents', [])
+                    intent_list = get_intents(dialog['human_utterances'][-2], which='cobot_dialogact_intents')
                     if 'text' in intent_list:
                         intent_list = intent_list['text']
 

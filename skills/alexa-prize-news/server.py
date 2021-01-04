@@ -14,6 +14,7 @@ from src.skill import AlexaPrizeSkill
 
 from common.constants import CAN_CONTINUE
 from common.news import is_breaking_news_requested
+from common.utils import get_topics
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -43,8 +44,8 @@ def respond():
         try:
             curr_uttr = dialog["utterances"][-1]
             logger.info(f"User uttr: {curr_uttr['text']}")
-            cobot_topics = set(dialog['utterances'][-1]['annotations']['cobot_topics']['text'])
-            cobot_dialogact_topics = set(dialog['utterances'][-1]['annotations']['cobot_dialogact_topics']['text'])
+            cobot_topics = set(get_topics(dialog['utterances'][-1], which='cobot_topics'))
+            cobot_dialogact_topics = set(get_topics(dialog['utterances'][-1], which='cobot_dialogact_topics'))
             news_cobot_dialogacts = {"Science_and_Technology", "Sports", "Politics"}
             news_cobot_topics = {"News"}
             about_news = (news_cobot_dialogacts & cobot_dialogact_topics) | (news_cobot_topics & cobot_topics)
