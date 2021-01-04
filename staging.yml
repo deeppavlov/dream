@@ -18,7 +18,7 @@ services:
      env_file:
        - ${ENV_FILE}
   cobot-dialogact:
-     image: ${DOCKER_REGISTRY}/cobot-dialogact-intents:${VERSION}
+     image: ${DOCKER_REGISTRY}/cobot-dialogact:${VERSION}
      env_file:
        - ${ENV_FILE}
   cobot-convers-evaluator-annotator:

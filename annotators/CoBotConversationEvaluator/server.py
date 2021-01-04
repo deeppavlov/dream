@@ -57,9 +57,9 @@ def respond():
                 timeout=1.2
             )
             cache[conv_data] = result
-    except (requests.ConnectTimeout, requests.ReadTimeout) as e:
-        logger.error("cobot convers eval Timeout")
+    except Exception as e:
         sentry_sdk.capture_exception(e)
+        logger.exception(e)
         result = requests.Response()
         result.status_code = 504
 

@@ -150,7 +150,7 @@ You can run to check if logs appear in cloudwatch by command `docker run alpine 
 
 How to run monitoring script
 ==========================
-- `SENTRY_DSN=https://443be99a3dad4acda7ff11d9ba96d262@o298876.ingest.sentry.io/5279613 python3 service_monitoring.py http://Docker-ExternalLoa-LOFSURITNPLE-525614984.us-east-1.elb.amazonaws.com:4242`
+- `SENTRY_DSN=https://512146d297934039b6e98c9388701f4a@o488460.ingest.sentry.io/5548871 python3 service_monitoring.py http://Docker-ExternalLoa-LOFSURITNPLE-525614984.us-east-1.elb.amazonaws.com:4242`
 
 - Для мониторинга CPU/Memory/Disk используется https://github.com/stefanprodan/swarmprom - Docker Swarm monitoring with Prometheus, Grafana, cAdvisor, Node Exporter, Alert Manager and Unsee.
 
