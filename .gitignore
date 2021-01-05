@@ -137,5 +137,6 @@ intent_data_train.json
 
 local.yml
 local-most.yml
+network.yml
 
 kubernetes/models

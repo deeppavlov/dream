@@ -1,13 +1,12 @@
-import json
 import re
 import shutil
 import os
+import yaml
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 
-
 from typing import Dict, Union
-import yaml
+
 
 REPO_PATH = Path(__file__).resolve().parents[1]
 KUBER_PATH = REPO_PATH / 'kubernetes'
@@ -38,6 +37,7 @@ def get_port(service_params: Dict) -> int:
     assert ports[0] == ports[1], f'{ports}'
     return ports[0]
 
+
 def generate_network():
     compose = read_yaml(REPO_PATH / 'docker-compose.yml')
     network = {'services': {}}
@@ -45,6 +45,7 @@ def generate_network():
         network['services'][service_name] = {'build': {'network': 'host'}}
 
     write_file(REPO_PATH / 'network.yml', yaml.dump(network))
+
 
 def generate_deployments():
     if MODELS_PATH.exists():
@@ -60,14 +61,14 @@ def generate_deployments():
             continue
         dp_name = f'{service_name}-dp'
 
-        cuda = deploy.get(service_name, {}).get('CUDA_VISIBLE_DEVICES', '')
+        gpu = deploy.get(service_name, {}).get('gpu', 'false')
 
         values_dict = {
             'KUBER_DP_NAME': dp_name,
             'REPLICAS_NUM': deploy.get(service_name, {}).get('REPLICAS_NUM', 1),
             'KUBER_IMAGE_TAG': f'{DOCKER_REGISTRY}/{service_name}',
             'PORT': get_port(service_params),
-            'CUDA_VISIBLE_DEVICES': repr(cuda),
+            'GPU': gpu,
             'KUBER_LB_NAME': service_name,
             'CLUSTER_IP': '10.100.198.105',  # REPLACE WITH CORRECT!!!!!!!!!
             'CLUSTER_PORT': get_port(service_params),  # REPLACE WITH CORRECT!!!!!!!!!

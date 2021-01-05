@@ -14,8 +14,8 @@ spec:
         app: {{KUBER_DP_NAME}}
     spec:
       nodeSelector:
-        {% if CUDA_VISIBLE_DEVICES != "''" %}
-        gpu: 'true'
+        {% if GPU %}
+        gpu: "{{ GPU | string }}"
         {% endif %}
         environment: {{ENVIRONMENT}}
       containers:

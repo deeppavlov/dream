@@ -1,26 +1,34 @@
 toxic-classification:
   CUDA_VISIBLE_DEVICES: '0'
+  gpu: 0
 
 sentiment-classification:
   CUDA_VISIBLE_DEVICES: '0'
+  gpu: 0
 
 emotion-classification:
   CUDA_VISIBLE_DEVICES: '1'
+  gpu: 1
 
 kbqa:
   CUDA_VISIBLE_DEVICES: '2'
+  gpu: 2
 
 factoid-classification:
   CUDA_VISIBLE_DEVICES: '2'
+  gpu: 2
 
 odqa:
   CUDA_VISIBLE_DEVICES: '3'
+  gpu: 3
 
 comet-atomic:
   CUDA_VISIBLE_DEVICES: '3'
+  gpu: 3
 
 comet-conceptnet:
   CUDA_VISIBLE_DEVICES: '3'
+  gpu: 3
 
 entity-linking:
   CUDA_VISIBLE_DEVICES: "''"
@@ -30,3 +38,4 @@ wiki-parser:
 
 question-generator:
   CUDA_VISIBLE_DEVICES: '1'
+  gpu: 1
