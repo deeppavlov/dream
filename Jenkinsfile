@@ -66,7 +66,7 @@ metadata:
     jenkins: slave
 spec:
   nodeSelector:
-    gpu: "false"
+    jenkins: slave
   containers:
   - name: jenkins-agent
     image: 263182626354.dkr.ecr.us-east-1.amazonaws.com/jenkins-agent
