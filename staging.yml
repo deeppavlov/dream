@@ -246,6 +246,10 @@ services:
     image: ${DOCKER_REGISTRY}/question-generator:${VERSION}
     env_file:
       - ${ENV_FILE}
+  grounding-skill:
+    image: ${DOCKER_REGISTRY}/grounding-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
 volumes:
   external-logs:
   external-deeppavlov:
