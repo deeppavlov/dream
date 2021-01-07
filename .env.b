@@ -1,8 +1,8 @@
 EXTERNAL_FOLDER=~/.deeppavlov/agent/
-COBOT_API_KEY=
+COBOT_API_KEY=QFPxaMUoPi5qcax2FBt9D6Y6vAgLRBbn56TW1iO3
 COBOT_QUERY_SERVICE_URL=
 COBOT_ENTITY_SERVICE_URL=
-COBOT_QA_SERVICE_URL=
+COBOT_QA_SERVICE_URL=https://06421kpunk.execute-api.us-east-1.amazonaws.com/prod/qa/v1/answer
 COBOT_TOPICS_SERVICE_URL=https://gpri4649wf.execute-api.us-east-1.amazonaws.com/prod/topic/v1/batchTopics
 COBOT_OFFENSIVE_SERVICE_URL=https://bnd8xjhonk.execute-api.us-east-1.amazonaws.com/prod/offensiveness/v1/batchOffensivenessClasses
 COBOT_DIALOGACT_SERVICE_URL=https://srglfu2huc.execute-api.us-east-1.amazonaws.com/prod/dialogact/v1/batchDialogActIntents
