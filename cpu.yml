@@ -33,3 +33,6 @@ services:
   question-generator:
     environment:
       CUDA_VISIBLE_DEVICES: ""
+  knowledge-grounding:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
