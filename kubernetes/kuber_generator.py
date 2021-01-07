@@ -13,6 +13,10 @@ KUBER_PATH = REPO_PATH / 'kubernetes'
 TEMPLATES_PATH = KUBER_PATH / 'templates'
 MODELS_PATH = KUBER_PATH / 'models'
 DOCKER_REGISTRY = os.getenv('DOCKER_REGISTRY')
+NAMESPACE = os.getenv('NAMESPACE', 'alexa')
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'A')
+ENV_CM = os.getenv('ENV_CM', 'env-dev')
+VERSION = os.getenv('VERSION', 'latest')
 
 env = Environment(loader=FileSystemLoader(TEMPLATES_PATH), trim_blocks=True, lstrip_blocks=True)
 lb_template = env.get_template('kuber-lb.yaml')
@@ -66,13 +70,15 @@ def generate_deployments():
         values_dict = {
             'KUBER_DP_NAME': dp_name,
             'REPLICAS_NUM': deploy.get(service_name, {}).get('REPLICAS_NUM', 1),
-            'KUBER_IMAGE_TAG': f'{DOCKER_REGISTRY}/{service_name}',
+            'KUBER_IMAGE_TAG': f'{DOCKER_REGISTRY}/{service_name}:{VERSION}',
             'PORT': get_port(service_params),
             'GPU': gpu,
             'KUBER_LB_NAME': service_name,
             'CLUSTER_IP': '10.100.198.105',  # REPLACE WITH CORRECT!!!!!!!!!
             'CLUSTER_PORT': get_port(service_params),  # REPLACE WITH CORRECT!!!!!!!!!
-            'ENVIRONMENT': 'A'
+            'ENVIRONMENT': ENVIRONMENT,
+            'NAMESPACE': NAMESPACE,
+            'ENV_CM': ENV_CM
         }
 
         if 'command' in compose['services'].get(service_name, []):

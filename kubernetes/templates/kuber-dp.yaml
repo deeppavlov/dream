@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{KUBER_DP_NAME}}
-  namespace: alexa
+  namespace: {{ NAMESPACE }}
 spec:
   replicas: {{REPLICAS_NUM}}
   selector:
@@ -17,7 +17,7 @@ spec:
         {% if GPU %}
         gpu: "{{ GPU | string }}"
         {% endif %}
-        environment: {{ENVIRONMENT}}
+        environment: {{ ENVIRONMENT }}
       containers:
       - name: alexaservice
         image: {{KUBER_IMAGE_TAG}}
@@ -51,7 +51,7 @@ spec:
         {% endif %}
         envFrom:
         - configMapRef:
-            name: env-dev
+            name: {{ ENV_CM }}
         #startupProbe:
         #  httpGet:
         #    path: /healthz
@@ -64,7 +64,7 @@ spec:
           #claimName: logs-hostpath-pvc
       - name: volume-components
         persistentVolumeClaim:
-          claimName: components-claim
+          claimName: components-claim-{{ ENVIRONMENT | lower }}
       - name: volume-podinfo
         downwardAPI:
           items:

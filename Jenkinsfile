@@ -54,6 +54,181 @@ pipeline {
 
   stages {
 
+    stage('Build-prod') {
+      agent {
+        kubernetes {
+          label 'slave'
+          yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    jenkins: slave
+spec:
+  nodeSelector:
+    jenkins: slave
+  containers:
+  - name: jenkins-agent
+    image: 263182626354.dkr.ecr.us-east-1.amazonaws.com/jenkins-agent
+    imagePullPolicy: Always
+    command:
+    - cat
+    tty: true
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - name: dockersock
+      mountPath: "/var/run/docker.sock"
+  volumes:
+  - name: dockersock
+    hostPath:
+      path: /var/run/docker.sock
+      type: File
+"""
+        }
+      }
+
+      when {
+        buildingTag()
+        beforeAgent true
+      }
+
+      environment {
+        VERSION="${TAG_NAME}"
+        ENV_FILE='.env.b'
+        DP_AGENT_PORT=4242
+        DOCKER_REGISTRY='263182626354.dkr.ecr.us-east-1.amazonaws.com'
+        DOCKER_BUILDKIT=1
+        COMPOSE_DOCKER_CLI_BUILD=1
+      }
+
+      steps {
+        container('jenkins-agent') {
+          script {
+            int startTime = currentBuild.duration
+            notify('start')
+            catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+              try {
+                sh label: 'login to ecr', script: 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $DOCKER_REGISTRY'
+                sh label: 'ecr create repo', script: '''for service in $(docker-compose -f docker-compose.yml -f dev.yml ps --services | grep -wv -e mongo)
+                    do
+                      aws ecr describe-repositories --repository-names $service || aws ecr create-repository --repository-name $service
+                    done
+                    '''
+                sh label: 'generate deployment', script: 'python3 kubernetes/kuber_generator.py'
+                sh label: 'docker build', script: 'docker-compose -f docker-compose.yml -f dev.yml -f staging.yml -f network.yml build'
+                sh label: 'docker push', script: 'docker-compose -f docker-compose.yml -f dev.yml -f staging.yml push'
+              }
+              catch (Exception e) {
+                int duration = (currentBuild.duration - startTime) / 1000
+                notify('failed', duration, e.getMessage())
+                throw e
+              }
+            }
+          }
+        }
+      }
+
+      post {
+        failure {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+            notify('failed', duration)
+          }
+        }
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+            notify('success', duration)
+          }
+        }
+      }
+    }
+
+    stage('Deploy-prod') {
+      agent {
+        kubernetes {
+          label 'slave'
+          yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    jenkins: slave
+spec:
+  containers:
+  - name: jenkins-agent
+    image: 263182626354.dkr.ecr.us-east-1.amazonaws.com/jenkins-agent
+    imagePullPolicy: Always
+    command:
+    - cat
+    tty: true
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - name: dockersock
+      mountPath: "/var/run/docker.sock"
+  volumes:
+  - name: dockersock
+    hostPath:
+      path: /var/run/docker.sock
+      type: File
+"""
+        }
+      }
+
+      when {
+        buildingTag()
+        beforeAgent true
+      }
+
+      environment {
+        VERSION="${TAG_NAME}"
+        ENV_FILE='.env.b'
+        ENV_CM='env-b'
+        DOCKER_REGISTRY='263182626354.dkr.ecr.us-east-1.amazonaws.com'
+        NAMESPACE='alexa-b'
+        ENVIRONMENT='B'
+      }
+
+      steps {
+        container('jenkins-agent') {
+          script {
+            int startTime = currentBuild.duration
+            notify('start')
+            catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+              try {
+                sh label: 'update kubeconfig', script: 'aws eks update-kubeconfig --name alexa'
+                sh label: 'update environment', script: "kubectl delete configmap ${ENV_CM} -n ${NAMESPACE} && kubectl create configmap ${ENV_CM} -n ${NAMESPACE} --from-env-file ${ENV_FILE}"
+                sh label: 'generate deployment', script: 'python3 kubernetes/kuber_generator.py'
+                sh label: 'deploy', script: 'for dir in kubernetes/models/*; do kubectl apply -f $dir || true; done'
+              }
+              catch (Exception e) {
+                int duration = (currentBuild.duration - startTime) / 1000
+                notify('failed', duration, e.getMessage())
+                throw e
+              }
+            }
+          }
+        }
+      }
+
+      post {
+        failure {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+            notify('failed', duration)
+          }
+        }
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+            notify('success', duration)
+          }
+        }
+      }
+    }
+
     stage('Build-dev') {
       agent {
         kubernetes {
@@ -185,7 +360,10 @@ spec:
       environment {
         VERSION='latest'
         ENV_FILE='.env.dev'
+        ENV_CM='env-dev'
         DOCKER_REGISTRY='263182626354.dkr.ecr.us-east-1.amazonaws.com'
+        NAMESPACE='alexa'
+        ENVIRONMENT='dev'
       }
 
       steps {
@@ -196,7 +374,7 @@ spec:
             catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
               try {
                 sh label: 'update kubeconfig', script: 'aws eks update-kubeconfig --name alexa'
-                sh label: 'update environment', script: 'kubectl delete configmap env-dev -n alexa && kubectl create configmap env-dev -n alexa --from-env-file $ENV_FILE'
+                sh label: 'update environment', script: 'kubectl delete configmap ${ENV_CM} -n ${NAMESPACE} && kubectl create configmap ${ENV_CM} -n ${NAMESPACE} --from-env-file $ENV_FILE'
                 sh label: 'generate deployment', script: 'python3 kubernetes/kuber_generator.py'
                 sh label: 'deploy', script: 'for dir in kubernetes/models/*; do kubectl apply -f $dir || true; done'
               }
