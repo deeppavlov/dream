@@ -140,7 +140,7 @@ def getQaResponse(query, system):
         qa_request = json.dumps(qa_request_dict, ensure_ascii=False).encode('utf8')
         logging.info(f'Preparing to run query against {system} DP Model: ' + str(qa_request))
         tm_st = time.time()
-        resp = requests.post(qa_url, data=qa_request)
+        resp = requests.post(qa_url, data=qa_request, timeout=1.5)
         tm_end = time.time()
         if resp.status_code != 200:
             logging.info(f'API Error: {system} DP Model inaccessible, status code: ' + str(resp.status_code))
@@ -172,9 +172,9 @@ def odqa_kbqa_choose(question, odqa_response, kbqa_response):
     kbqa_answer = kbqa_response.get("answer", "Not Found")
     kbqa_confidence = kbqa_response.get("confidence", 0.0)
     if isinstance(answer, list):
-        response = ', '.join(answer)
+        answer = ', '.join(answer)
     else:
-        response = answer
+        answer = answer
     odqa_answer = odqa_response.get("answer_sentence", "Not Found")
     odqa_confidence = odqa_response.get("confidence", 0.0)
 
@@ -196,7 +196,7 @@ def odqa_kbqa_choose(question, odqa_response, kbqa_response):
 @app.route("/test", methods=['POST'])
 def test():
     last_phrase = request.json["query"]
-    response_dict = getKbqaResponse(last_phrase)
+    response_dict = getQaResponse(last_phrase)
     return response_dict["response"]
 
 
@@ -252,7 +252,8 @@ def respond():
             logger.info("Question is classified as factoid. Querying KBQA and ODQA.")
             print("Question is classified as factoid. Querying KBQA and ODQA...", flush=True)
             logger.info(
-                f"Using annotators output, kbqa_response {curr_ann_uttr['annotations'].get('kbqa', {})} odqa_response {curr_ann_uttr['annotations'].get('odqa', {})}")
+                f"Using annotators output, kbqa_response {curr_ann_uttr['annotations'].get('kbqa', {})} "
+                f"odqa_response {curr_ann_uttr['annotations'].get('odqa', {})}")
             if use_annotators_output:
                 kbqa_response = curr_ann_uttr["annotations"].get("kbqa", {})
                 odqa_response = curr_ann_uttr["annotations"].get("odqa", {})
