@@ -418,12 +418,20 @@ def kbqa_response_formatter(payload: List):
 
 
 def odqa_response_formatter(payload: List):
-    return {"qa_system": "odqa",
-            "answer": payload[0],
-            "confidence": payload[1],
-            "answer_pos": payload[2],
-            "answer_sentence": payload[3],
-            "paragraph": payload[4]}
+    if payload and len(payload) >= 4:
+        return {"qa_system": "odqa",
+                "answer": payload[0],
+                "confidence": payload[1],
+                "answer_pos": payload[2],
+                "answer_sentence": payload[3],
+                "paragraph": payload[4]}
+    else:
+        return {"qa_system": "odqa",
+                "answer": "",
+                "confidence": 0.0,
+                "answer_pos": 0,
+                "answer_sentence": "",
+                "paragraph": ""}
 
 
 def utt_sentseg_punct_dialog(dialog: Dict):
