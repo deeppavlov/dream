@@ -39,3 +39,7 @@ wiki-parser:
 question-generator:
   CUDA_VISIBLE_DEVICES: '1'
   gpu: 1
+
+knowledge-grounding:
+  CUDA_VISIBLE_DEVICES: '1'
+  gpu: 1

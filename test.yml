@@ -29,6 +29,9 @@ services:
   comet-conceptnet:
     environment:
       - CUDA_VISIBLE_DEVICES=6
+  knowledge-grounding:
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
   wiki-parser:
     command: [ "nginx", "-g", "daemon off;" ]
     build:

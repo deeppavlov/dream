@@ -250,6 +250,10 @@ services:
     image: ${DOCKER_REGISTRY}/grounding-skill:${VERSION}
     env_file:
       - ${ENV_FILE}
+  knowledge-grounding:
+    image: ${DOCKER_REGISTRY}/knowledge-grounding:${VERSION}
+    env_file:
+      - ${ENV_FILE}
 volumes:
   external-logs:
   external-deeppavlov:

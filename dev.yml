@@ -410,4 +410,10 @@ services:
       - "./services/question_generator:/src"
     ports:
       - 8079:8079
+  knowledge-grounding:
+    env_file: [.env.dev]
+    volumes:
+      - "./services/knowledge_grounding:/src"
+    ports:
+      - 8083:8083
 version: "3.7"
