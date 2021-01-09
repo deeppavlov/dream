@@ -306,7 +306,9 @@ def get_triples(part1, part2, part3):
     logging.debug('Calling get_triples for  known part' + known_part)
     t = time.time()
     response = []
-    resp = requests.post(WIKIDATA_URL, json={"query": [known_part], "parser_info": ["find_triplets"]})
+    resp = requests.post(WIKIDATA_URL,
+                         json={"query": [known_part], "parser_info": ["find_triplets"]},
+                         timeout=1)
     if resp.status_code == 200:
         response = resp.json()[0][0][mode]
     else:
@@ -336,7 +338,9 @@ def request_entities(entity):
     ENTITY_LINKING_URL = os.getenv("ENTITY_LINKING_URL")
     assert type(entity) == str
     t = time.time()
-    response = requests.post(ENTITY_LINKING_URL, json={"entity_substr": [[entity]], "template_found": [""]}).json()
+    response = requests.post(ENTITY_LINKING_URL,
+                             json={"entity_substr": [[entity]], "template_found": [""]},
+                             timeout=1).json()
     exec_time = round(time.time() - t, 2)
     logging.debug('Response is ' + str(response) + ' with exec time ' + str(exec_time))
 
