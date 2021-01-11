@@ -6,9 +6,9 @@ from os import getenv
 import random
 import pathlib
 import datetime
-import traceback
+import copy
 
-from flask import Flask, request, jsonify, abort
+from flask import Flask, request, jsonify
 from healthcheck import HealthCheck
 import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
@@ -81,24 +81,25 @@ def get_agent_intents(last_utter):
 @app.route("/respond", methods=["POST"])
 def respond():
     dialogs_batch = [None]
-    try:
-        st_time = time.time()
-        dialogs_batch = request.json["dialogs"]
-        rand_seed = request.json.get("rand_seed")
-        responses = []
+    st_time = time.time()
+    dialogs_batch = request.json["dialogs"]
+    rand_seed = request.json.get("rand_seed")
 
-        for dialog in dialogs_batch:
-            prev_news_outputs = get_skill_outputs_from_dialog(
-                dialog["utterances"][-MEMORY_LENGTH:], "game_cooperative_skill", activated=True
-            )
-            is_active_last_answer = bool(prev_news_outputs)
-            prev_news_outputs = (
-                prev_news_outputs
-                if is_active_last_answer
-                else get_skill_outputs_from_dialog(dialog["utterances"], "game_cooperative_skill", activated=True)
-            )
-            prev_news_output = prev_news_outputs[-1] if prev_news_outputs else {}
-            state = prev_news_output.get("state", {})
+    responses = []
+    for dialog in dialogs_batch:
+        prev_skill_outputs = get_skill_outputs_from_dialog(
+            dialog["utterances"][-MEMORY_LENGTH:], "game_cooperative_skill", activated=True
+        )
+        is_active_last_answer = bool(prev_skill_outputs)
+        prev_skill_outputs = (
+            prev_skill_outputs
+            if is_active_last_answer
+            else get_skill_outputs_from_dialog(dialog["utterances"], "game_cooperative_skill", activated=True)
+        )
+        prev_skill_output = prev_skill_outputs[-1] if prev_skill_outputs else {}
+        prev_state = prev_skill_output.get("state", {})
+        try:
+            state = copy.deepcopy(prev_state)
             if state and not is_active_last_answer:
                 state["messages"] = []
             # pre_len = len(state.get("messages", []))
@@ -114,8 +115,8 @@ def respond():
             response, state = skill([last_utter_text], state, agent_intents)
 
             # logger.info(f"state = {state}")
-            logger.info(f"last_utter_text = {last_utter_text}")
-            logger.info(f"response = {response}")
+            # logger.info(f"last_utter_text = {last_utter_text}")
+            # logger.info(f"response = {response}")
             text = response.get("text", "Sorry")
             confidence = 1.0 if response.get("confidence") else 0.0
             confidence *= 0.9 if "I like to talk about games." in response.get("text") else 1.0
@@ -124,14 +125,14 @@ def respond():
             can_continue = CAN_CONTINUE if confidence else CAN_NOT_CONTINUE
             attr = {"can_continue": can_continue, "state": state, "agent_intents": agent_intents}
             responses.append((text, confidence, attr))
+        except Exception as exc:
+            sentry_sdk.capture_exception(exc)
+            logger.exception(exc)
+            responses.append(("Sorry", 0.0, {"state": prev_state}))
 
         total_time = time.time() - st_time
         logger.info(f"game_cooperative_skill exec time = {total_time:.3f}s")
 
-    except Exception as exc:
-        logger.error(traceback.format_exc())
-        sentry_sdk.capture_exception(exc)
-        abort(500, description=str(traceback.format_exc()))
     return jsonify(responses)
 
 
