@@ -310,7 +310,7 @@ def get_triples(part1, part2, part3):
                          json={"query": [known_part], "parser_info": ["find_triplets"]},
                          timeout=1)
     if resp.status_code == 200:
-        response = resp.json()[0][0][mode]
+        response = resp.json()[0][0].get(mode, [])
     else:
         logging.debug("Could not access wiki parser")
     exec_time = round(time.time() - t, 2)
