@@ -5,7 +5,6 @@ import pickle
 import time
 import json
 import difflib
-import traceback
 import re
 import pathlib
 
@@ -191,8 +190,9 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True):
             answers = [cand[0] for cand in selected_candidates]
             confidences = [min(float(cand[1]) * 1.7, 0.95) for cand in selected_candidates]
             return answers, confidences
-        except Exception:
-            logger.error(traceback.format_exc())
+        except Exception as exc:
+            sentry_sdk.capture_exception(exc)
+            logger.exception(exc)
             candidate = candidates[0]
             return [candidate[0]], [candidate[1]]
     else:
