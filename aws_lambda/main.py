@@ -31,6 +31,7 @@ B_VERSION = os.getenv('B_VERSION')
 B_VERSION_RATIO = os.getenv('B_VERSION_RATIO')
 B_AGENT_URL = os.getenv('B_AGENT_URL')
 B_AGENT_PORT = os.getenv('B_AGENT_PORT')
+TIMEOUT = os.getenv('TIMEOUT', 7.5)
 
 ab_tests_mode = False
 if A_AGENT_URL is not None and B_AGENT_URL is not None and A_AGENT_PORT != B_AGENT_PORT:
@@ -126,7 +127,7 @@ def call_dp_agent(user_id, text, request_data):
                          'session_id': session_id, 'request_id': request_id,
                          'conversation_id': conversation_id, 'speech': speech, 'version': version}
         logger.info(f'send to agent: {send_to_agent}')
-        r = requests.post(dp_agent_url, json=send_to_agent, timeout=5.5).json()
+        r = requests.post(dp_agent_url, json=send_to_agent, timeout=TIMEOUT).json()
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         sentry_sdk.capture_exception(e)
         logger.exception("AWS_LAMBDA Timeout")

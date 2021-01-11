@@ -14,7 +14,7 @@ TEMPLATES_PATH = KUBER_PATH / 'templates'
 MODELS_PATH = KUBER_PATH / 'models'
 DOCKER_REGISTRY = os.getenv('DOCKER_REGISTRY')
 NAMESPACE = os.getenv('NAMESPACE', 'alexa')
-ENVIRONMENT = os.getenv('ENVIRONMENT', 'A')
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'dev')
 ENV_CM = os.getenv('ENV_CM', 'env-dev')
 VERSION = os.getenv('VERSION', 'latest')
 

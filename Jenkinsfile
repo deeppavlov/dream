@@ -94,6 +94,7 @@ spec:
       }
 
       environment {
+        //VERSION=sh(returnStdout: true, script: "git tag --contains | head -1").trim()
         VERSION="${TAG_NAME}"
         ENV_FILE='.env.b'
         DP_AGENT_PORT=4242
@@ -499,7 +500,7 @@ spec:
           Exception ex = null
           catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
             try {
-              sh 'tests/runtests.sh MODE=start'
+              sh 'tests/runtests.sh MODE=clean && tests/runtests.sh MODE=start'
             }
             catch (Exception e) {
               int duration = (currentBuild.duration - startTime) / 1000
@@ -526,6 +527,7 @@ spec:
         aborted {
           script {
             notify('aborted')
+            sh 'tests/runtests.sh MODE=clean'
           }
         }
       }
