@@ -43,3 +43,7 @@ question-generator:
 knowledge-grounding:
   CUDA_VISIBLE_DEVICES: '1'
   gpu: 1
+
+dialog-breakdown:
+  CUDA_VISIBLE_DEVICES: '0'
+    gpu: 0
