@@ -415,10 +415,10 @@ services:
   odqa:
     build:
       args:
-        CONFIG: en_odqa_infer_wiki.json
+        CONFIG: en_odqa_infer_wiki_fast.json
         PORT: 8078
         SRC_DIR: annotators/odqa/
-        COMMIT: a9085ab5aa6fef30c0bdbf3054cac0455af3ab28
+        COMMIT: e7de5271823ce1aeafdf8f7e32f351ccb3743083
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
