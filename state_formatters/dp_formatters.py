@@ -630,3 +630,25 @@ def attitude_formatter_service(payload: Dict):
         return {"text": payload[0]}
     elif len(payload) == 0:
         return {"text": []}
+
+
+def dialog_breakdown_formatter(dialog: Dict) -> List[Dict]:
+    # Used by: dialog_breakdown
+    dialog = get_last_n_turns(dialog, bot_last_turns=2)
+    dialog = replace_with_annotated_utterances(dialog, mode="punct_sent")
+    context = " ".join([uttr["text"] for uttr in dialog['utterances'][-4:-1]])
+    return [{'context': [context],
+             "curr_utterance": [dialog['utterances'][-1]["text"]]
+             }]
+
+
+def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
+    # Used by: dialog_breakdown
+    dialog = get_last_n_turns(dialog, bot_last_turns=2)
+    dialog = replace_with_annotated_utterances(dialog, mode="punct_sent")
+    context = " ".join([uttr["text"] for uttr in dialog['utterances'][-3:]])
+    hyps = {"context": [], "curr_utterance": []}
+    for hyp in dialog["utterances"][-1]["hypotheses"]:
+        hyps["context"].append(context)
+        hyps["curr_utterance"].append(hyp["text"])
+    return [hyps]

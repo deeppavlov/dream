@@ -260,6 +260,16 @@
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg",
                     "annotators.ner"]
+            },
+            "dialog_breakdown": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://dialog-breakdown:8082/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dialog_breakdown_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"],
+                "state_manager_method": "add_annotation"
             }
         },
         "skill_selectors": {
@@ -712,7 +722,18 @@
               "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
               "previous_services": ["skills"],
               "state_manager_method": "add_hypothesis_annotation_batch"
-          }
+          },
+            "dialog_breakdown": {
+                "connector": {
+                    "protocol": "python",
+                    "class_name": "annotators.dialog_breakdown.connector:BatchConnector",
+                    "url": "http://dialog-breakdown:8082/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list_for_dialog_breakdown",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": ["skills"],
+                "state_manager_method": "add_hypothesis_annotation_batch"
+            }
         },
         "response_selectors": {
             "convers_evaluation_selector": {
