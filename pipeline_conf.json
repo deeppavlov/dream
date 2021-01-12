@@ -227,6 +227,16 @@
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
             },
+            "odqa": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://odqa:8078/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:odqa_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:odqa_response_formatter",
+                "state_manager_method": "add_annotation",
+                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
+            },
             "ner": {
                 "connector": "connectors.ner",
                 "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_dialog",
