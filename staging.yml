@@ -254,6 +254,10 @@ services:
     image: ${DOCKER_REGISTRY}/knowledge-grounding:${VERSION}
     env_file:
       - ${ENV_FILE}
+  dialog-breakdown:
+    image: ${DOCKER_REGISTRY}/dialog-breakdown:${VERSION}
+    env_file:
+      - ${ENV_FILE}
 volumes:
   external-logs:
   external-deeppavlov:

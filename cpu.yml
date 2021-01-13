@@ -36,3 +36,6 @@ services:
   knowledge-grounding:
     environment:
       CUDA_VISIBLE_DEVICES: ""
+  dialog-breakdown:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
