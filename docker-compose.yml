@@ -406,7 +406,7 @@ services:
         CONFIG: wiki_parser.json
         PORT: 8077
         SRC_DIR: annotators/wiki_parser
-        COMMIT: a9085ab5aa6fef30c0bdbf3054cac0455af3ab28
+        COMMIT: 9b5fa82e6e55802237d02660a4cbefe14fd7daae
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -427,10 +427,10 @@ services:
   kbqa:
     build:
       args:
-        CONFIG: kbqa_cq.json
+        CONFIG: kbqa_cq_mt_bert.json
         PORT: 8072
         SRC_DIR: annotators/kbqa/
-        COMMIT: a9085ab5aa6fef30c0bdbf3054cac0455af3ab28
+        COMMIT: 9b5fa82e6e55802237d02660a4cbefe14fd7daae
       context: ./
       dockerfile: annotators/kbqa/Dockerfile
     environment:

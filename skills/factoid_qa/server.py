@@ -5,7 +5,6 @@ import re
 import time
 import random
 import json
-import sys
 import requests
 import sentry_sdk
 import concurrent.futures
@@ -138,15 +137,15 @@ def getQaResponse(query, system):
             qa_request_dict = dict([('question_raw', x)])
             qa_url = ODQA_URL
         qa_request = json.dumps(qa_request_dict, ensure_ascii=False).encode('utf8')
-        logging.info(f'Preparing to run query against {system} DP Model: ' + str(qa_request))
+        logger.info(f'Preparing to run query against {system} DP Model: ' + str(qa_request))
         tm_st = time.time()
         resp = requests.post(qa_url, data=qa_request, timeout=1.5)
         tm_end = time.time()
         if resp.status_code != 200:
-            logging.info(f'API Error: {system} DP Model inaccessible, status code: ' + str(resp.status_code))
+            logger.info(f'API Error: {system} DP Model inaccessible, status code: ' + str(resp.status_code))
         else:
-            logging.info(f'Query against {system} DP Model succeeded, time {tm_end - tm_st}')
-            logging.info('Response: ' + str(resp.json()))
+            logger.info(f'Query against {system} DP Model succeeded, time {tm_end - tm_st}')
+            logger.info('Response: ' + str(resp.json()))
             if system == "kbqa":
                 qa_response["answer"] = resp.json()[0][0][0]
                 qa_response["confidence"] = resp.json()[0][0][1]
@@ -155,8 +154,8 @@ def getQaResponse(query, system):
                 qa_response["answer_sentence"] = resp.json()[0][3]
                 qa_response["confidence"] = resp.json()[0][1]
     except Exception as ex:
-        logging.info(f'Failed to run query against {system} DP Model' + str(sys.exc_info()[0]))
-        logging.info('Exception: ' + str(ex))
+        sentry_sdk.capture_exception(ex)
+        logger.exception(ex)
 
     return qa_response
 
@@ -178,7 +177,7 @@ def odqa_kbqa_choose(question, odqa_response, kbqa_response):
     odqa_answer = odqa_response.get("answer_sentence", "Not Found")
     odqa_confidence = odqa_response.get("confidence", 0.0)
 
-    logging.info(f'odqa_confidence {odqa_confidence} kbqa_confidence {kbqa_confidence}')
+    logger.info(f'odqa_confidence {odqa_confidence} kbqa_confidence {kbqa_confidence}')
     if question_type == "odqa" and odqa_confidence > 0.9998:
         return odqa_answer, odqa_confidence
     elif question_type == "kbqa" and kbqa_confidence > 0.95:
@@ -227,15 +226,15 @@ def respond():
         names = list(set(names))
         ner_outputs_to_classify.append(names)
 
-    logging.info('Ner outputs ' + str(ner_outputs_to_classify))
+    logger.info('Ner outputs ' + str(ner_outputs_to_classify))
     fact_outputs = get_random_facts(ner_outputs_to_classify)
-    logging.info('Fact outputs ' + str(fact_outputs))
+    logger.info('Fact outputs ' + str(fact_outputs))
     for i in range(len(sentences_to_classify)):
         if asked_about_fact(sentences_to_classify[i]):
             is_factoid_sents[i] = ASKED_ABOUT_FACT_PROB
 
     # factoid_classes = [cl > FACTOID_CLASS_THRESHOLD for cl in factoid_classes]
-    # logging.info('Factoid classes ' + str(factoid_classes))
+    # logger.info('Factoid classes ' + str(factoid_classes))
 
     kbqa_response = dict()
     odqa_response = dict()
@@ -285,7 +284,7 @@ def respond():
         responses.append(response)
         confidences.append(confidence)
         attributes.append(attr)
-    logging.info("Responses " + str(responses))
+    logger.info("Responses " + str(responses))
     total_time = time.time() - st_time
     logger.info(f'factoid_qa exec time: {total_time:.3f}s')
     return jsonify(list(zip(responses, confidences, attributes)))

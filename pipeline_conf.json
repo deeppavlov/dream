@@ -244,6 +244,16 @@
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
             },
+            "kbqa": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://kbqa:8072/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:kbqa_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:kbqa_response_formatter",
+                "state_manager_method": "add_annotation",
+                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
+            },
             "entity_linking": {
                 "connector": {
                     "protocol": "http",
@@ -686,6 +696,16 @@
                     "url": "http://grounding_skill:8080/grounding_skill"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:full_utt_sentseg_punct_dialog",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
+            },
+            "factoid_qa": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://factoid-qa:8071/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"

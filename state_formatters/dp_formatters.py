@@ -412,13 +412,18 @@ def simple_formatter_service(payload: List):
 
 
 def kbqa_response_formatter(payload: List):
-    return {"qa_system": "kbqa",
-            "answer": payload[0][0],
-            "confidence": payload[0][1]}
+    if payload and len(payload[0]) == 2:
+        return {"qa_system": "kbqa",
+                "answer": payload[0][0],
+                "confidence": payload[0][1]}
+    else:
+        return {"qa_system": "kbqa",
+                "answer": "",
+                "confidence": 0.0}
 
 
 def odqa_response_formatter(payload: List):
-    if payload and len(payload) >= 4:
+    if payload and len(payload) == 5:
         return {"qa_system": "odqa",
                 "answer": payload[0],
                 "confidence": payload[1],
