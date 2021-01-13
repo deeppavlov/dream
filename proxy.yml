@@ -479,4 +479,12 @@ services:
       - PROXY_PASS=10.11.1.1:8083
       - PORT=8083
     command: ["nginx", "-g", "daemon off;"]
+  dialog-breakdown:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=10.11.1.1:8082
+      - PORT=8082
+    command: ["nginx", "-g", "daemon off;"]
 version: '3.7'

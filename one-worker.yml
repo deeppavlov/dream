@@ -87,4 +87,6 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8080 --timeout=100
   knowledge_grounding:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8083
+  dialog-breakdown:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8082
 version: '3.7'
