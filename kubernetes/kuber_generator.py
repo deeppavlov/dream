@@ -15,7 +15,6 @@ MODELS_PATH = KUBER_PATH / 'models'
 DOCKER_REGISTRY = os.getenv('DOCKER_REGISTRY')
 NAMESPACE = os.getenv('NAMESPACE', 'alexa')
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'dev')
-ENV_CM = os.getenv('ENV_CM', 'env-dev')
 VERSION = os.getenv('VERSION', 'latest')
 
 env = Environment(loader=FileSystemLoader(TEMPLATES_PATH), trim_blocks=True, lstrip_blocks=True)
@@ -66,6 +65,7 @@ def generate_deployments():
         dp_name = f'{service_name}-dp'
 
         gpu = deploy.get(service_name, {}).get('gpu', 'false')
+        cuda = deploy.get(service_name, {}).get('CUDA_VISIBLE_DEVICES', 0)
 
         values_dict = {
             'KUBER_DP_NAME': dp_name,
@@ -73,12 +73,12 @@ def generate_deployments():
             'KUBER_IMAGE_TAG': f'{DOCKER_REGISTRY}/{service_name}:{VERSION}',
             'PORT': get_port(service_params),
             'GPU': gpu,
+            'CUDA_VISIBLE_DEVICES': cuda,
             'KUBER_LB_NAME': service_name,
             'CLUSTER_IP': '10.100.198.105',  # REPLACE WITH CORRECT!!!!!!!!!
             'CLUSTER_PORT': get_port(service_params),  # REPLACE WITH CORRECT!!!!!!!!!
             'ENVIRONMENT': ENVIRONMENT,
             'NAMESPACE': NAMESPACE,
-            'ENV_CM': ENV_CM
         }
 
         if 'command' in compose['services'].get(service_name, []):

@@ -7,27 +7,27 @@ sentiment-classification:
   gpu: 0
 
 emotion-classification:
-  CUDA_VISIBLE_DEVICES: '1'
+  CUDA_VISIBLE_DEVICES: '0'
   gpu: 1
 
 kbqa:
-  CUDA_VISIBLE_DEVICES: '2'
+  CUDA_VISIBLE_DEVICES: '0'
   gpu: 2
 
 factoid-classification:
-  CUDA_VISIBLE_DEVICES: '2'
+  CUDA_VISIBLE_DEVICES: '0'
   gpu: 2
 
 odqa:
-  CUDA_VISIBLE_DEVICES: '3'
+  CUDA_VISIBLE_DEVICES: '0'
   gpu: 3
 
 comet-atomic:
-  CUDA_VISIBLE_DEVICES: '3'
+  CUDA_VISIBLE_DEVICES: '0'
   gpu: 3
 
 comet-conceptnet:
-  CUDA_VISIBLE_DEVICES: '3'
+  CUDA_VISIBLE_DEVICES: '0'
   gpu: 3
 
 entity-linking:
@@ -37,11 +37,11 @@ wiki-parser:
   CUDA_VISIBLE_DEVICES: "''"
 
 question-generator:
-  CUDA_VISIBLE_DEVICES: '1'
+  CUDA_VISIBLE_DEVICES: '0'
   gpu: 1
 
 knowledge-grounding:
-  CUDA_VISIBLE_DEVICES: '1'
+  CUDA_VISIBLE_DEVICES: '0'
   gpu: 1
 
 dialog-breakdown:

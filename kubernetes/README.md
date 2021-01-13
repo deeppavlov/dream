@@ -74,3 +74,12 @@ for dir in kubernetes/models/*; do k apply -f $dir; done
 ```shell script
 for file in kubernetes/models/*/*-lb.yaml; do k apply -f $file; done
 ```
+
+```
+helm repo add gpu-helm-charts \
+   https://nvidia.github.io/gpu-monitoring-tools/helm-charts
+
+helm install \
+   --generate-name \
+   gpu-helm-charts/dcgm-exporter
+```
