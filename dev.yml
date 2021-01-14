@@ -423,4 +423,11 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8082:8082
+  knowledge-grounding-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./common:/src/common"
+      - "./skills/knowledge_grounding_skill:/src"
+    ports:
+      - 8085:8085
 version: "3.7"
