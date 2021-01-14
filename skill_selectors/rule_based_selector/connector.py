@@ -283,6 +283,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("personal_info_skill")
                 skills_for_uttr.append("meta_script_skill")
                 skills_for_uttr.append("greeting_skill")
+                skills_for_uttr.append("knowledge_grounding_skill")
                 # hiding factoid by default, adding check for factoid classification instead
                 # skills_for_uttr.append("factoid_qa")
                 if (factoid_classification > factoid_prob_threshold):
