@@ -65,7 +65,7 @@ def generate_deployments():
         dp_name = f'{service_name}-dp'
 
         gpu = deploy.get(service_name, {}).get('gpu', 'false')
-        cuda = deploy.get(service_name, {}).get('CUDA_VISIBLE_DEVICES', 0)
+        cuda = deploy.get(service_name, {}).get('CUDA_VISIBLE_DEVICES', '')
 
         values_dict = {
             'KUBER_DP_NAME': dp_name,
@@ -73,7 +73,7 @@ def generate_deployments():
             'KUBER_IMAGE_TAG': f'{DOCKER_REGISTRY}/{service_name}:{VERSION}',
             'PORT': get_port(service_params),
             'GPU': gpu,
-            'CUDA_VISIBLE_DEVICES': cuda,
+            'CUDA_VISIBLE_DEVICES': repr(cuda),
             'KUBER_LB_NAME': service_name,
             'CLUSTER_IP': '10.100.198.105',  # REPLACE WITH CORRECT!!!!!!!!!
             'CLUSTER_PORT': get_port(service_params),  # REPLACE WITH CORRECT!!!!!!!!!
