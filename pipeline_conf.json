@@ -229,7 +229,8 @@
             },
             "odqa": {
                 "connector": {
-                    "protocol": "http",
+                    "protocol": "python",
+                    "class_name": "annotators.odqa.connector:ODQAConnector",
                     "url": "http://odqa:8078/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:odqa_formatter_dialog",
@@ -246,7 +247,8 @@
             },
             "kbqa": {
                 "connector": {
-                    "protocol": "http",
+                    "protocol": "python",
+                    "class_name": "annotators.kbqa.connector:KBQAConnector",
                     "url": "http://kbqa:8072/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:kbqa_formatter_dialog",
