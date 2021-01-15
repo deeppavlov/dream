@@ -47,7 +47,7 @@ def main_test():
         "Let's chat. I love talking! What do you want to talk about?",
         "Hi, this is an Alexa Prize Socialbot! Yeah, let’s have a chat! What shall we talk about?",
         "Hi there, this is an Alexa Prize Socialbot! Lovely to meet you! What do you want to talk about?",
-        "Hello there, this is an Alexa Prize Socialbot! Nice to meet you! What do you want to talk about?",
+        "Hi there, this is an Alexa Prize Socialbot! Nice to meet you! What do you want to talk about?",
     ]
     for sent in sentences:
         data = {"sentences_batch": [[sent]]}

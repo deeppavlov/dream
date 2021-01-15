@@ -308,19 +308,19 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                     logger.info("Particular topic. CoBotQA + Greeting to very big score.")
                     # I don't have an opinion on that but I know some facts.
                     resp = candidates[i]['text'].replace("I don't have an opinion on that but I know some facts.", "")
-                    candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + resp
+                    candidates[i]['text'] = "Hi, " + greeting_spec + '! ' + resp
                     curr_score = very_big_score
                 if skill_names[i] == 'meta_script_skill' and len(candidates[i]['text']) > 0 and \
                         confidences[i] > 0.98:
                     logger.info("Particular topic. meta_script_skill + Greeting to very big score.")
                     # I don't have an opinion on that but I know some facts.
                     resp = candidates[i]['text']
-                    candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + resp
+                    candidates[i]['text'] = "Hi, " + greeting_spec + '! ' + resp
                     curr_score = very_big_score
                 elif skill_names[i] == 'small_talk_skill':
                     logger.info("Particular topic. Small-talk + Greeting NOT to very big score.")
                     # for now do not give small talk a very big score here
-                    candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + candidates[i]['text']
+                    candidates[i]['text'] = "Hi, " + greeting_spec + '! ' + candidates[i]['text']
                     # curr_score = very_big_score
             elif if_choose_topic(dialog['utterances'][0]["text"].lower()) and \
                     "about it" not in dialog['utterances'][0]["text"].lower():
@@ -328,11 +328,11 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                 # if user says `let's chat about something`
                 if skill_names[i] == 'small_talk_skill':
                     logger.info("No topic. Small-talk + Greeting to very big score.")
-                    candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + candidates[i]['text']
+                    candidates[i]['text'] = "Hi, " + greeting_spec + '! ' + candidates[i]['text']
                     curr_score = very_big_score
                 elif skill_names[i] == 'meta_script_skill' and len(candidates[i]['text']) > 0:
                     logger.info("No topic. Meta-script + Greeting to very big score.")
-                    candidates[i]['text'] = "Hello, " + greeting_spec + '! ' + candidates[i]['text']
+                    candidates[i]['text'] = "Hi, " + greeting_spec + '! ' + candidates[i]['text']
                     curr_score = very_big_score
             else:
                 logger.info("User just wants to talk.")
@@ -430,7 +430,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
 
     if len(dialog["bot_utterances"]) == 0 and greeting_spec not in best_text:
         # add greeting to the first bot uttr, if it's not already included
-        best_text = "Hello, " + greeting_spec + '! ' + best_text
+        best_text = "Hi, " + greeting_spec + '! ' + best_text
 
     while candidates[best_id]["text"] == "" or candidates[best_id]["confidence"] == 0.:
         curr_single_scores[int(best_id)] = 0.
