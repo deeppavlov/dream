@@ -13,7 +13,7 @@ Example output:
 
 ```
 human: turn off how do you talk about british
-bot: Hello, this is an Alexa Prize Socialbot!
+bot: Hi, this is an Alexa Prize Socialbot!
 human: hi there
 0 hypot: Could you, please, help and explain to me. Yesterday I was browsing photos on the Internet. And seen a lot of people in very, very strange poses. It was called yoga. Have you ever tried to tie yourself in a knot?; skill: meta_script_skill; conf: 0.99
 1 hypot: Good Evening, this is an Alexa Prize Socialbot! How are you?; skill: program_y; conf: 0.98

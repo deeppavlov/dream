@@ -1,5 +1,5 @@
 "skill_names" "phrase text" response1 response2 response3
-"program_y" "Let's chat" "Hi, this is an Alexa Prize Socialbot." "Good Morning, this is an Alexa Prize Socialbot!" "Hello, this is an Alexa Prize Socialbot!" "Good Evening, this is an Alexa Prize Socialbot!" "Good Night, this is an Alexa Prize Socialbot!"
+"program_y" "Let's chat" "Hi, this is an Alexa Prize Socialbot." "Good Morning, this is an Alexa Prize Socialbot!" "Hi, this is an Alexa Prize Socialbot!" "Good Evening, this is an Alexa Prize Socialbot!" "Good Night, this is an Alexa Prize Socialbot!"
 "program_y;meta_script_skill;greeting_skill" "good"
 "program_y;meta_script_skill" "How are you" "Do you want to know what I can do?"
 "program_y;meta_script_skill;intent_responder" "yes sure" "#+#what_can_you_do"

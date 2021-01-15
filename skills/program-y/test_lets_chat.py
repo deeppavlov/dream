@@ -227,14 +227,14 @@ def main_test():
         "Let's chat. I love talking! What do you want to talk about?",
         "Hi, this is an Alexa Prize Socialbot! Yeah, let’s have a chat! What shall we talk about?",
         "Hi there, this is an Alexa Prize Socialbot! Lovely to meet you! What do you want to talk about?",
-        "Hello there, this is an Alexa Prize Socialbot! Nice to meet you! What do you want to talk about?",
-        # Hello
+        "Hi there, this is an Alexa Prize Socialbot! Nice to meet you! What do you want to talk about?",
+        # Hi
         "Good Evening, this is an Alexa Prize Socialbot!",
         "Good Morning, this is an Alexa Prize Socialbot!",
-        "Hello, this is an Alexa Prize Socialbot!",
+        "Hi, this is an Alexa Prize Socialbot!",
         "Good Evening, this is an Alexa Prize Socialbot!",
         "Hi, this is an Alexa Prize Socialbot!",
-        # Hello is extended by oscar
+        # Hi is extended by oscar
         "Hi, this is an Alexa Prize Socialbot! The Oscars are coming soon, I look forward to it.",
         "Hi, this is an Alexa Prize Socialbot! The Oscars ceremony is set for this coming Sunday!"
         " I think it's very exciting!",
