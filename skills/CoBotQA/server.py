@@ -111,7 +111,7 @@ def respond():
         entities = []
         attit = curr_uttr["annotations"].get("sentiment_classification", {}).get("text", [""])[0]
         for _ in range(N_FACTS_TO_CHOSE):
-            for ent in curr_uttr["annotations"]["ner"]:
+            for ent in curr_uttr["annotations"].get("ner", []):
                 if not ent:
                     continue
                 ent = ent[0]
@@ -126,7 +126,7 @@ def respond():
                         facts_questions.append("Fact about {}".format(ent["text"]))
                         facts_dialog_ids += [i]
             if len(entities) == 0:
-                for ent in curr_uttr["annotations"]["cobot_nounphrases"]:
+                for ent in curr_uttr["annotations"].get("cobot_nounphrases", []):
                     if ent.lower() not in UNIGRAMS:
                         if ent in entities + ["I", 'i']:
                             pass

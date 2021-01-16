@@ -360,7 +360,7 @@ def get_entities(annotated_phrase):
         for tmp in annotated_phrase['annotations']['ner']:
             if len(tmp) > 0 and 'text' in tmp[0] and tmp[0]['text'] not in named_entities:
                 named_entities.append(tmp[0]['text'])
-        for nounphrase in annotated_phrase['annotations']['cobot_nounphrases']:
+        for nounphrase in annotated_phrase['annotations'].get("cobot_nounphrases", []):
             if nounphrase not in named_entities:
                 named_entities.append(nounphrase)
     return named_entities
