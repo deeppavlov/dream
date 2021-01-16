@@ -2,7 +2,7 @@ from typing import Dict, List
 import logging
 from copy import deepcopy
 from common.universal_templates import if_lets_chat_about_topic
-from common.utils import service_intents, get_topics
+from common.utils import service_intents, get_topics, get_intents
 
 logger = logging.getLogger(__name__)
 
@@ -86,8 +86,7 @@ def last_n_human_utt_dialog_formatter(dialog: Dict, last_n_utts: int, only_last_
             else:
                 text = sentseg_ann['punct_sent']
             human_utts += [text]
-            detected_intents += [[intent for intent, value in utt['annotations'].get('intent_catcher', {}).items()
-                                  if value['detected']]]
+            detected_intents += [get_intents(utt, which="all")]
     return [{'sentences_batch': [human_utts], 'intents': [detected_intents]}]
 
 
@@ -339,7 +338,7 @@ def last_bot_utt_dialog(dialog: Dict) -> Dict:
 
 def last_human_utt_nounphrases(dialog: Dict) -> Dict:
     # Used by: comet_conceptnet_annotator
-    return [{'nounphrases': [dialog['human_utterances'][-1]['annotations']['cobot_nounphrases']]}]
+    return [{'nounphrases': [dialog['human_utterances'][-1]['annotations'].get('cobot_nounphrases', [])]}]
 
 
 def hypotheses_list(dialog: Dict) -> Dict:
