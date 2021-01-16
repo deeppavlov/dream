@@ -17,7 +17,7 @@ from common.movies import get_movie_template
 from common.universal_templates import if_switch_topic, is_switch_topic, if_lets_chat_about_topic, if_choose_topic, \
     COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
 from common.utils import get_skill_outputs_from_dialog, is_yes, is_no, get_topics, get_intents
-
+from CoBotQA.cobotqa_service import send_cobotqa
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -477,7 +477,7 @@ class MovieSkillScenario:
             if result is not None:
                 result = f"The leading actors are {', '.join(result)}."
             else:
-                result = ""  # send_cobotqa(f"who stars in {movie_type} {movie_title}?")
+                result = send_cobotqa(f"who stars in {movie_type} {movie_title}?")
             if len(unique_persons) > 0 and all([name in result for name in list(unique_persons.keys())]):
                 if len(unique_persons) > 1:
                     response = "Great! All those people are from main cast."
@@ -506,7 +506,7 @@ class MovieSkillScenario:
                 else:
                     result = f"The genres of the {movie_type} are {', '.join(result)}."
             else:
-                result = ""  # send_cobotqa(f"genre of {movie_type} {movie_title}?")
+                result = send_cobotqa(f"genre of {movie_type} {movie_title}?")
             if len(mentioned_genres) > 0 and any([name in result for name in mentioned_genres]):
                 response = f"Great! {result}"
             elif is_yes(curr_user_uttr):
@@ -532,7 +532,7 @@ class MovieSkillScenario:
 
     def generate_fact_from_cobotqa(self, request_about, movie_id, movie_title, movie_type, prev_status_line,
                                    human_attr, bot_attr, prev_movie_skill_text=""):
-        fact = ""  # send_cobotqa(f"{request_about} {movie_type} {movie_title}?")
+        fact = send_cobotqa(f"{request_about} {movie_type} {movie_title}?")
         logger.info(f"Generated fact about `{movie_title}`: {fact}.")
         if len(fact) > 0 and "Sorry, I don't know" not in fact and "This might answer your question" not in fact and \
                 fact not in prev_movie_skill_text:

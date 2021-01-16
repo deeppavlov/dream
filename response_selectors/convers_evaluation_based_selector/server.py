@@ -183,7 +183,7 @@ def lower_duplicates_score(candidates, bot_utt_counter, scores, confidences):
         if cand['skill_name'] == 'intent_responder' and '#+#repeat' in cand['text']:
             continue
         # TODO: remove the quick fix of gcs petitions, issue is https://github.com/deepmipt/assistant/issues/80
-        if cand['skill_name'] in ['game_cooperative_skill', "news_api_skill"]:
+        if cand['skill_name'] in ['game_cooperative_skill', "news_api_skill", "movie_skill"]:
             continue
 
         cand_sents = sent_tokenize(cand["text"].lower())
@@ -268,7 +268,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     lower_duplicates_score(candidates, bot_utt_counter, scores, confidences)
     lower_retrieve_skills_confidence_if_scenario_exist(candidates, scores, confidences)
 
-    prev_active_skill = dialog["bot_utterances"][-1]['active_skill'] if len(dialog["bot_utterances"]) > 0 else ''
+    # prev_active_skill = dialog["bot_utterances"][-1]['active_skill'] if len(dialog["bot_utterances"]) > 0 else ''
     skill_names = [c['skill_name'] for c in candidates]
     how_are_you_spec = "Do you want to know what I can do?"  # this is always at the end of answers to `how are you`
     what_i_can_do_spec = "socialbot running inside"
@@ -310,7 +310,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                     resp = candidates[i]['text'].replace("I don't have an opinion on that but I know some facts.", "")
                     candidates[i]['text'] = "Hi, " + greeting_spec + '! ' + resp
                     curr_score = very_big_score
-                if skill_names[i] == 'meta_script_skill' and len(candidates[i]['text']) > 0 and \
+                elif skill_names[i] == 'meta_script_skill' and len(candidates[i]['text']) > 0 and \
                         confidences[i] > 0.98:
                     logger.info("Particular topic. meta_script_skill + Greeting to very big score.")
                     # I don't have an opinion on that but I know some facts.
@@ -340,7 +340,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                 if skill_names[i] == 'program_y' and greeting_spec in candidates[i]['text']:
                     logger.info("Just chat. Program-y to very big score.")
                     curr_score = very_big_score
-        elif skill_names[i] == 'program_y' and prev_active_skill == 'program_y' and (
+        elif skill_names[i] == 'program_y' and (
                 how_are_you_spec in candidates[i]['text'] or what_i_can_do_spec in candidates[i]['text']) \
                 and len(dialog['utterances']) < 16:
             curr_score = very_big_score
@@ -457,7 +457,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                 best_text = f"{name}, {best_text}"
 
     # adding capitalization of only the first letter to any final answer
-    best_text = re.sub('([a-zA-Z])', lambda x: x.groups()[0].upper(), best_text, 1)
+    # best_text = re.sub('([a-zA-Z])', lambda x: x.groups()[0].upper(), best_text, 1)
 
     # print("looking for dialog beginning...", flush=True)
     # if it's a dialog beginning, we shall tell user the current dialog's id:

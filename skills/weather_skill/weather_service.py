@@ -161,9 +161,9 @@ def owm_requests_weather_forecast_now(city_str):
             response_template = random_crazy_forecast(city_str)
             # response_template = SORRY_TEMPLATE
 
-    except (requests.ConnectTimeout, requests.ReadTimeout) as e:
+    except Exception as e:
         sentry_sdk.capture_exception(e)
-        logger.exception("WeatherService Timeout")
+        logger.exception(e)
         response_template = SORRY_TEMPLATE
     # print(response_template)
     return response_template

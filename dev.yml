@@ -118,6 +118,7 @@ services:
     volumes:
       - "./common:/src/common"
       - "./skills/movie_skill:/src"
+      - "./skills/CoBotQA:/src/CoBotQA"
     ports:
       - 8023:8023
   ner:

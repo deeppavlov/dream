@@ -29,7 +29,7 @@ class BatchConnector:
                 headers=headers,
                 json=payload['payload'],
                 method='POST',
-                timeout=2.0
+                timeout=1.0
             ).json()
             result = [res[0] for res in result]
             total_time = time.time() - st_time
