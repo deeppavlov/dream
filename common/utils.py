@@ -12,7 +12,7 @@ def join_sentences_in_or_pattern(sents):
 
 other_skills = {'intent_responder', 'program_y_dangerous', 'misheard_asr', 'christmas_new_year_skill',
                 'superbowl_skill', 'oscar_skill', 'valentines_day_skill'}
-scenario_skills = {'movie_skill', 'personal_info_skill', 'short_story_skill',
+scenario_skills = {'movie_skill', 'personal_info_skill',  # 'short_story_skill',
                    'book_skill', 'weather_skill', 'emotion_skill', 'dummy_skill_dialog',
                    'meta_script_skill', 'coronavirus_skill', 'small_talk_skill',
                    'news_api_skill', 'game_cooperative_skill'}
