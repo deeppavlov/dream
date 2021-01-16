@@ -9,6 +9,16 @@ logger = logging.getLogger(__name__)
 LAST_N_TURNS = 5  # number of turns to consider in annotator/skill.
 
 
+def get_last_n_turns(dialog: Dict, bot_last_turns=None, human_last_turns=None, total_last_turns=None):
+    bot_last_turns = bot_last_turns or LAST_N_TURNS
+    human_last_turns = human_last_turns or bot_last_turns + 1
+    total_last_turns = total_last_turns or bot_last_turns * 2 + 1
+    dialog["utterances"] = dialog["utterances"][-total_last_turns:]
+    dialog["human_utterances"] = dialog["human_utterances"][-human_last_turns:]
+    dialog["bot_utterances"] = dialog["bot_utterances"][-bot_last_turns:]
+    return dialog
+
+
 def is_human_uttr_repeat_request_or_misheard(utt):
     is_repeat_request = utt.get('annotations', {}).get("intent_catcher", {}).get("repeat", {}).get("detected", 0) == 1
     is_low_asr_conf = utt.get('annotations', {}).get('asr', {}).get('asr_confidence', "") == 'very_low'
@@ -65,9 +75,10 @@ def last_n_human_utt_dialog_formatter(dialog: Dict, last_n_utts: int, only_last_
             not if_lets_chat_about_topic(dialog["utterances"][0]["text"].lower()):
         # in all cases when not particular topic, convert first phrase in the dialog to `hello!`
         dialog["utterances"][0]['annotations']['sentseg']['punct_sent'] = "hello!"
+
     human_utts = []
     detected_intents = []
-    for utt in dialog['utterances']:
+    for utt in dialog['human_utterances'][-last_n_utts:]:
         if utt['user']['user_type'] == 'human':
             sentseg_ann = utt['annotations']['sentseg']
             if only_last_sentence:
@@ -77,17 +88,19 @@ def last_n_human_utt_dialog_formatter(dialog: Dict, last_n_utts: int, only_last_
             human_utts += [text]
             detected_intents += [[intent for intent, value in utt['annotations'].get('intent_catcher', {}).items()
                                   if value['detected']]]
-    return [{'sentences_batch': [human_utts[-last_n_utts:]], 'intents': [detected_intents[-last_n_utts:]]}]
+    return [{'sentences_batch': [human_utts], 'intents': [detected_intents]}]
 
 
 def alice_formatter_dialog(dialog: Dict) -> List:
     # Used by: alice
+    dialog = get_last_n_turns(dialog)
     dialog = remove_clarification_turns_from_dialog(dialog)
     return last_n_human_utt_dialog_formatter(dialog, last_n_utts=2, only_last_sentence=True)
 
 
 def programy_formatter_dialog(dialog: Dict) -> List:
     # Used by: program_y, program_y_dangerous, program_y_wide
+    dialog = get_last_n_turns(dialog)
     dialog = remove_clarification_turns_from_dialog(dialog)
     dialog = last_n_human_utt_dialog_formatter(dialog, last_n_utts=5)[0]
     sentences = dialog['sentences_batch'][0]
@@ -108,6 +121,7 @@ def programy_formatter_dialog(dialog: Dict) -> List:
 
 def eliza_formatter_dialog(dialog: Dict) -> Dict:
     # Used by: eliza_formatter
+    dialog = get_last_n_turns(dialog)
     dialog = remove_clarification_turns_from_dialog(dialog)
     history = []
     prev_human_utterance = None
@@ -148,16 +162,6 @@ def misheard_asr_formatter_service(payload):
     return hyps
 
 
-def get_last_n_turns(dialog: Dict, bot_last_turns=None, human_last_turns=None, total_last_turns=None):
-    bot_last_turns = bot_last_turns or LAST_N_TURNS
-    human_last_turns = human_last_turns or bot_last_turns + 1
-    total_last_turns = total_last_turns or bot_last_turns * 2 + 1
-    dialog["utterances"] = dialog["utterances"][-total_last_turns:]
-    dialog["human_utterances"] = dialog["human_utterances"][-human_last_turns:]
-    dialog["bot_utterances"] = dialog["bot_utterances"][-bot_last_turns:]
-    return dialog
-
-
 def replace_with_annotated_utterances(dialog, mode="punct_sent"):
     if mode == "punct_sent":
         for utt in dialog['utterances']:
@@ -181,7 +185,7 @@ def replace_with_annotated_utterances(dialog, mode="punct_sent"):
 
 def base_skill_selector_formatter_dialog(dialog: Dict) -> Dict:
     # Used by: base_skill_selector_formatter
-    dialog = get_last_n_turns(dialog, bot_last_turns=10)
+    dialog = get_last_n_turns(dialog, bot_last_turns=5)
     dialog = remove_clarification_turns_from_dialog(dialog)
     dialog = replace_with_annotated_utterances(dialog, mode="punct_sent")
     return [{"states_batch": [dialog]}]
@@ -453,10 +457,17 @@ def utt_sentseg_punct_dialog(dialog: Dict):
 
 def full_utt_sentseg_punct_dialog(dialog: Dict):
     '''
-    Used ONLY by: base_response_selector_formatter
+    Used ONLY by: greeting_skill (turns on only for first 10 turns)
     '''
     dialog = remove_clarification_turns_from_dialog(dialog)
     dialog = replace_with_annotated_utterances(dialog, mode="punct_sent")
+    return [{'dialogs': [dialog]}]
+
+
+def full_history_dialog(dialog: Dict):
+    '''
+    Used ONLY by: response selector and greeting_skill (turns on only for first 10 turns)
+    '''
     return [{'dialogs': [dialog]}]
 
 
@@ -612,6 +623,7 @@ def short_story_formatter_dialog(dialog: Dict):
 
 def intent_responder_formatter_dialog(dialog: Dict):
     # Used by: intent_responder
+    dialog = get_last_n_turns(dialog)
     dialog = remove_clarification_turns_from_dialog(dialog)
     intents = list(dialog['utterances'][-1]['annotations']['intent_catcher'].keys())
     called_intents = {intent: False for intent in intents}

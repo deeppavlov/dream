@@ -62,11 +62,11 @@ def compile_regs(dictionary):
 
 dialog_segment_regs = collections.OrderedDict()
 #  ordered by priority
-dialog_segment_regs["who_wins"] = add_ANY_PATTERN([r"(who|which)", r"(win|make|won)", "super", r"bowls?(\s|$)"])
-dialog_segment_regs["who_goes"] = add_ANY_PATTERN(
-    [r"(who)", r"(going|gonna|play|will be in)", r"^(win|make)", "super", r"bowls?(\s|$)"]
-)
-dialog_segment_regs["what_time"] = add_ANY_PATTERN([r"(what)", r"(time)", "super", r"bowls?(\s|$)"])
+# dialog_segment_regs["who_wins"] = add_ANY_PATTERN([r"(who|which)", r"(win|make|won)", "super", r"bowls?(\s|$)"])
+# dialog_segment_regs["who_goes"] = add_ANY_PATTERN(
+#     [r"(who)", r"(going|gonna|play|will be in)", r"^(win|make)", "super", r"bowls?(\s|$)"]
+# )
+# dialog_segment_regs["what_time"] = add_ANY_PATTERN([r"(what)", r"(time)", "super", r"bowls?(\s|$)"])
 dialog_segment_regs["fun_facts"] = add_ANY_PATTERN([r"(fact|anything|something)", r"about", "super", r"bowls?(\s|$)"])
 dialog_segment_regs["talk_about"] = add_ANY_PATTERN([r"(talk|chat|say|speak|tell)", r"about", "super", r"bowls?(\s|$)"])
 dialog_segment_regs["forty_niner"] = merge_regs(
@@ -82,15 +82,15 @@ dialog_segment_regs["what_about"] = add_ANY_PATTERN([r"what about (the )?super b
 dialog_segment_regs["super_bowl"] = add_ANY_PATTERN([r"(the )?super bowls?(\s|$)"])
 
 faq_candidetes = {
-    "who_wins": ["The wait for the Kansas City Chiefs -- and for their head coach -- is finally over."
-                 "A half century after winning their first Super Bowl, the Chiefs are champions once more,"
-                 "winning Super Bowl LIV in epic fashion at Hard Rock Stadium."],
-    "who_goes": ["The Kansas City Chiefs and San Francisco 49ers are set to face off in Super Bowl 2020."],
-    "what_time": [
-        "The Super Bowl in 2020, the game that will crown an NFL champion for the 2019 season, is scheduled"
-        " to take place Sunday, February 2 at Hard Rock Stadium in Miami Gardens, Florida."
-        " The 49ers will play the Chiefs."
-    ],
+    # "who_wins": ["The wait for the Kansas City Chiefs -- and for their head coach -- is finally over."
+    #              "A half century after winning their first Super Bowl, the Chiefs are champions once more,"
+    #              "winning Super Bowl LIV in epic fashion at Hard Rock Stadium."],
+    # "who_goes": ["The Kansas City Chiefs and San Francisco 49ers are set to face off in Super Bowl 2020."],
+    # "what_time": [
+    #     "The Super Bowl in 2020, the game that will crown an NFL champion for the 2019 season, is scheduled"
+    #     " to take place Sunday, February 2 at Hard Rock Stadium in Miami Gardens, Florida."
+    #     " The 49ers will play the Chiefs."
+    # ],
     "fun_facts": fun_facts,
     "talk_about": fun_facts,
     "forty_niner": forty_niner_fun_facts,

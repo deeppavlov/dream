@@ -52,10 +52,10 @@ class CachedRequestsAPI:
         for ind, api_key in enumerate(self._api_keys):
             try:
                 request_address = self._construct_address(topic, api_key)
-                resp = requests.get(url=request_address)
-            except (requests.ConnectTimeout, requests.ReadTimeout) as e:
+                resp = requests.get(url=request_address, timeout=1.5)
+            except Exception as e:
                 sentry_sdk.capture_exception(e)
-                logger.exception("NewsAPI Timeout")
+                logger.exception(e)
                 resp = requests.Response()
                 resp.status_code = 504
             if resp.status_code == 429:

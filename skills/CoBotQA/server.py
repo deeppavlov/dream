@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-N_FACTS_TO_CHOSE = 3
+N_FACTS_TO_CHOSE = 1
 ASK_QUESTION_PROB = 0.5
 
 ASYNC_SIZE = int(os.environ.get('ASYNC_SIZE', 6))

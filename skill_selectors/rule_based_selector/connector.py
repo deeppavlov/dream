@@ -237,9 +237,6 @@ class RuleBasedSkillSelectorConnector:
             about_books = about_books or book_skill_was_proposed(prev_bot_uttr) or 'book' in user_uttr_text
 
             emotions = user_uttr_annotations['emotion_classification']['text']
-
-            # print(f"Skill Selector: did we select game_cooperative_skill? {about_games}", flush=True)
-
             if "/new_persona" in user_uttr_text:
                 # process /new_persona command
                 skills_for_uttr.append("personality_catcher")  # TODO: rm crutch of personality_catcher
@@ -275,14 +272,15 @@ class RuleBasedSkillSelectorConnector:
                 # process regular utterances
                 skills_for_uttr.append("program_y")
                 skills_for_uttr.append("cobotqa")
-                # skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("christmas_new_year_skill")
-                # skills_for_uttr.append("superbowl_skill")
+                skills_for_uttr.append("superbowl_skill")
                 # skills_for_uttr.append("oscar_skill")
-                # skills_for_uttr.append("valentines_day_skill")
+                skills_for_uttr.append("valentines_day_skill")
                 skills_for_uttr.append("personal_info_skill")
                 skills_for_uttr.append("meta_script_skill")
-                skills_for_uttr.append("greeting_skill")
+                if len(dialog["utterances"]) < 20:
+                    # greeting skill inside itself do not turn on later than 10th turn of the conversation
+                    skills_for_uttr.append("greeting_skill")
                 skills_for_uttr.append("knowledge_grounding_skill")
                 # hiding factoid by default, adding check for factoid classification instead
                 # skills_for_uttr.append("factoid_qa")
@@ -293,7 +291,7 @@ class RuleBasedSkillSelectorConnector:
                 # if ner_detected:
                 #     skills_for_uttr.append("reddit_ner_skill")
 
-                if len(dialog["human_utterances"]) >= 4:
+                if len(dialog["human_utterances"]) >= 3:
                     # can answer on 4-th user response
                     skills_for_uttr.append("convert_reddit")
                 if len(dialog["utterances"]) > 14:
@@ -404,7 +402,6 @@ class RuleBasedSkillSelectorConnector:
             if "/alexa_" in user_uttr_text:
                 skills_for_uttr = ["alexa_handler"]
             logger.info(f"Selected skills: {skills_for_uttr}")
-            # print(f"Selected skills: {skills_for_uttr}", flush=True)
             asyncio.create_task(callback(
                 task_id=payload['task_id'],
                 response=list(set(skills_for_uttr))

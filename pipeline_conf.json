@@ -687,7 +687,7 @@
                     "protocol": "http",
                     "url": "http://greeting-skill:8070/greeting_skill"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:full_utt_sentseg_punct_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
@@ -697,7 +697,7 @@
                     "protocol": "http",
                     "url": "http://grounding_skill:8080/grounding_skill"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:full_utt_sentseg_punct_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
@@ -763,7 +763,7 @@
                     "protocol": "http",
                     "url": "http://convers-evaluation-selector:8009/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:full_utt_sentseg_punct_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
                 "previous_services": ["post_skill_selector_annotators"],
                 "state_manager_method": "add_bot_utterance"
