@@ -236,7 +236,7 @@ def collect_topics_and_statuses(dialogs):
 
 
 def link_to_other_skills(human_attr, bot_attr, curr_uttr):
-    link = link_to(['movie_skill', 'book_skill', "short_story_skill"], bot_attr["used_links"])
+    link = link_to(['movie_skill', 'book_skill'], bot_attr["used_links"])
     response = link['phrase']
     if len(curr_uttr['text'].split()) <= 5 and not re.search(FALSE_NEWS_TEMPLATES, curr_uttr['text']):
         confidence = LINKTO_CONFIDENCE

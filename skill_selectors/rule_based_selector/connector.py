@@ -130,8 +130,6 @@ class RuleBasedSkillSelectorConnector:
             ner_detected = len(list(chain.from_iterable(user_uttr_annotations["ner"]))) > 0
             logger.info(f"Detected Entities: {ner_detected}")
 
-            tell_me_a_story_detected = user_uttr_annotations["intent_catcher"].get("tell_me_a_story",
-                                                                                   {}).get("detected", 0)
             cobot_topics = set(get_topics(dialog["human_utterances"][-1], which="cobot_topics"))
             sensitive_topics_detected = any([t in self.sensitive_topics for t in cobot_topics])
 
@@ -355,9 +353,6 @@ class RuleBasedSkillSelectorConnector:
                     if user_uttr_annotations["asr"]["asr_confidence"] == "very_low":
                         skills_for_uttr = ["misheard_asr"]
 
-                if tell_me_a_story_detected or prev_active_skill == 'short_story_skill':
-                    # if it's detected - only telling story
-                    skills_for_uttr = ["short_story_skill"]
             # always add dummy_skill
             skills_for_uttr.append("dummy_skill")
             #  no convert when about coronavirus
