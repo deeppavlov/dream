@@ -200,6 +200,10 @@ services:
     image: ${DOCKER_REGISTRY}/kbqa:${VERSION}
     env_file:
       - ${ENV_FILE}
+  odqa:
+    image: ${DOCKER_REGISTRY}/odqa:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   program-y-wide:
     image: ${DOCKER_REGISTRY}/program-y-wide:${VERSION}
     env_file:
