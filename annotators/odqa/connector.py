@@ -22,7 +22,10 @@ class ODQAConnector:
     async def send(self, payload: Dict, callback: Callable):
         try:
             st_time = time.time()
-            odqa_result = requests.post(url=self._url, json=payload['payload'], timeout=1.5).json()[0]
+            odqa_result = []
+            resp = requests.post(url=self._url, json=payload['payload'], timeout=1.5)
+            if resp.status_code == 200:
+                odqa_result = resp.json()[0]
             total_time = time.time() - st_time
             logger.info(f'ODQA connector exec time: {total_time:.3f}s, result: {odqa_result}')
 

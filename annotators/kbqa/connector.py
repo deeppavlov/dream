@@ -22,7 +22,10 @@ class KBQAConnector:
     async def send(self, payload: Dict, callback: Callable):
         try:
             st_time = time.time()
-            kbqa_result = requests.post(url=self._url, json=payload['payload'], timeout=1.5).json()[0]
+            kbqa_result = []
+            resp = requests.post(url=self._url, json=payload['payload'], timeout=1.5)
+            if resp.status_code == 200:
+                kbqa_result = resp.json()[0]
             total_time = time.time() - st_time
             logger.info(f'KBQA connector exec time: {total_time:.3f}s, result: {kbqa_result}')
 
