@@ -65,7 +65,7 @@
         "That’s nice! I am glad you are doing fine. What made you happy this week?",
         "Seems like everything is going great, good for you! What was the best thing of the week?"
       ],
-      "next_step":["joy_link_to_joke", "joy_link_to_story"],
+      "next_step":["joy_link_to_joke"],
       "link": ""
     },
     "joy_feeling_towards_smth":{
@@ -79,13 +79,6 @@
       ],
       "next_step":["offered_joke"],
       "link": ""
-    },
-    "joy_link_to_story":{
-      "answers":[
-        "Glad to hear that! Speaking of me, this week I’ve had a great time chatting with different people. I even made some new friends. One told me a cool story, do you want to hear it?"
-      ],
-      "next_step":[""],
-      "link": "short_story_skill"
     },
     "fear":{
       "answers": [
