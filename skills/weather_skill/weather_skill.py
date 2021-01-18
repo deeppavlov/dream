@@ -16,7 +16,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 city_slot_obj = OWMCitySlot()
-blacklist_cities = {'is', 'none'}
+blacklist_cities = {'is', 'none', 'ok', 'okay'}
 
 
 class DialogDataManager():
