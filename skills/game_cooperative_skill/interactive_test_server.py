@@ -25,20 +25,18 @@ false_requests = []
 
 def update_utterances(utterances=[], response=None, text_request=""):
     if response:
-        text, confidence, attr = response
+        text, confidence, _, _, attr = response
         can_continue = attr["can_continue"]
-        state = attr["state"]
         utterances[-1]["hypotheses"] = [
             {
                 "skill_name": "game_cooperative_skill",
                 "text": text,
                 "confidence": confidence,
                 "can_continue": can_continue,
-                "state": state,
             }
         ]
         utterances += [
-            {"text": text, "active_skill": "game_cooperative_skill", "confidence": confidence},
+            {"text": text, "orig_text": text, "active_skill": "game_cooperative_skill", "confidence": confidence},
         ]
     if text_request:
         utterances += [
@@ -50,13 +48,24 @@ def update_utterances(utterances=[], response=None, text_request=""):
 def test_skill():
     url = "http://0.0.0.0:8068/respond"
     utterances = []
+    human_attr = {}
+    bot_attr = {}
     while True:
         utterances = update_utterances(utterances=utterances, text_request=input("your request:"))
         human_utterances = [uttr for uttr in utterances if "hypotheses" in uttr]
-        input_data = {"dialogs": [{"utterances": utterances, "human_utterances": human_utterances}]}
+        input_data = {
+            "dialogs": [
+                {
+                    "utterances": utterances,
+                    "human_utterances": human_utterances,
+                    "human": {"attributes": human_attr},
+                    "bot": {"attributes": bot_attr},
+                }
+            ]
+        }
         response = requests.post(url, json=input_data).json()[0]
         utterances = update_utterances(utterances=utterances, response=response)
-        text, confidence, attr = response
+        text, confidence, human_attr, bot_attr, attr = response
         # print(f"state:{attr['state']}")
         print(f"agent_intents:{attr['agent_intents']}")
         print(f"confidence:{confidence}")

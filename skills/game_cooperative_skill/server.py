@@ -91,13 +91,8 @@ def respond():
             dialog["utterances"][-MEMORY_LENGTH:], "game_cooperative_skill", activated=True
         )
         is_active_last_answer = bool(prev_skill_outputs)
-        prev_skill_outputs = (
-            prev_skill_outputs
-            if is_active_last_answer
-            else get_skill_outputs_from_dialog(dialog["utterances"], "game_cooperative_skill", activated=True)
-        )
-        prev_skill_output = prev_skill_outputs[-1] if prev_skill_outputs else {}
-        prev_state = prev_skill_output.get("state", {})
+        human_attr = dialog["human"]["attributes"]
+        prev_state = human_attr.get("game_cooperative_skill", {}).get("state", {})
         try:
             state = copy.deepcopy(prev_state)
             if state and not is_active_last_answer:
@@ -123,12 +118,21 @@ def respond():
             confidence *= 1.0 if is_active_last_answer else 0.98
 
             can_continue = CAN_CONTINUE if confidence else CAN_NOT_CONTINUE
-            attr = {"can_continue": can_continue, "state": state, "agent_intents": agent_intents}
-            responses.append((text, confidence, attr))
+
+            human_attr["game_cooperative_skill"] = {"state": state}
+            attr = {"can_continue": can_continue}
+            responses
+
         except Exception as exc:
             sentry_sdk.capture_exception(exc)
             logger.exception(exc)
-            responses.append(("Sorry", 0.0, {"state": prev_state}))
+            text = "Sorry"
+            confidence = 0.0
+            human_attr["game_cooperative_skill"] = {"state": prev_state}
+            attr = {}
+
+        bot_attr = {}
+        responses.append((text, confidence, human_attr, bot_attr, attr))
 
         total_time = time.time() - st_time
         logger.info(f"game_cooperative_skill exec time = {total_time:.3f}s")
