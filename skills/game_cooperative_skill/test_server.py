@@ -28,16 +28,14 @@ false_requests = []
 
 def update_utterances(utterances=[], response=None, text_request=""):
     if response:
-        text, confidence, attr = response
+        text, confidence, _, _, attr = response
         can_continue = attr["can_continue"]
-        state = attr["state"]
         utterances[-1]["hypotheses"] = [
             {
                 "skill_name": "game_cooperative_skill",
                 "text": text,
                 "confidence": confidence,
                 "can_continue": can_continue,
-                "state": state,
             }
         ]
         utterances += [
@@ -88,15 +86,26 @@ def test_skill():
     url = "http://0.0.0.0:8068/respond"
     utterances = []
     warnings = 0
+    human_attr = {}
+    bot_attr = {}
 
     for ind, (req_utter, true_resp_utter) in enumerate(zip(request_utters, true_response_utters)):
         utterances = update_utterances(utterances=utterances, text_request=req_utter)
         human_utterances = [uttr for uttr in utterances if "hypotheses" in uttr]
-        input_data = {"dialogs": [{"utterances": utterances, "human_utterances": human_utterances}]}
+        input_data = {
+            "dialogs": [
+                {
+                    "utterances": utterances,
+                    "human_utterances": human_utterances,
+                    "human": {"attributes": human_attr},
+                    "bot": {"attributes": bot_attr},
+                }
+            ]
+        }
         input_data["rand_seed"] = SEED + ind
         response = requests.post(url, json=input_data).json()[0]
         utterances = update_utterances(utterances=utterances, response=response)
-        text, confidence, attr = response
+        text, confidence, human_attr, bot_attr, attr = response
         ratio = difflib.SequenceMatcher(None, true_resp_utter.split(), text.split()).ratio()
 
         print("----------------------------------------")
