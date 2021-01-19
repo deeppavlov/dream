@@ -14,7 +14,7 @@ spec:
         app: {{KUBER_DP_NAME}}
     spec:
       nodeSelector:
-        {% if GPU %}
+        {% if GPU != "false" %}
         gpu: "{{ GPU | string }}"
         {% endif %}
         environment: {{ ENVIRONMENT }}

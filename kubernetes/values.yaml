@@ -1,0 +1,32 @@
+legacyDaemonsetAPI: false
+compatWithCPUManager: false
+migStrategy: none
+failOnInitError: true
+deviceListStrategy: envvar
+
+nameOverride: ""
+fullnameOverride: ""
+selectorLabelsOverride: {}
+
+namespace: kube-system
+
+imagePullSecrets: []
+image:
+  repository: nvidia/k8s-device-plugin
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+updateStrategy:
+  type: RollingUpdate
+
+podSecurityContext: {}
+securityContext: {}
+
+resources: {}
+nodeSelector:
+  matchExpressions:
+  - {key: gpu, operator: NotIn, values: [false]}
+
+affinity: {}
+tolerations: {}

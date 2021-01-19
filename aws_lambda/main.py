@@ -34,7 +34,7 @@ B_AGENT_PORT = os.getenv('B_AGENT_PORT')
 TIMEOUT = float(os.getenv('TIMEOUT', 7.5))
 
 ab_tests_mode = False
-if A_AGENT_URL is not None and B_AGENT_URL is not None and A_AGENT_PORT != B_AGENT_PORT:
+if A_AGENT_URL is not None and B_AGENT_URL is not None:
     ab_tests_mode = True
 
 sentry_sdk.init(

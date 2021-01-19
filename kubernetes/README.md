@@ -75,11 +75,19 @@ for dir in kubernetes/models/*; do k apply -f $dir; done
 for file in kubernetes/models/*/*-lb.yaml; do k apply -f $file; done
 ```
 
+###Сервисы для видеокарт
 ```
+helm repo add nvgfd https://nvidia.github.io/gpu-feature-discovery
+helm install nvgfd nvgfd/gpu-feature-discovery
+
+helm repo add nvdp https://nvidia.github.io/k8s-device-plugin
+helm install nvdp nvdp/nvidia-device-plugin
+
 helm repo add gpu-helm-charts \
    https://nvidia.github.io/gpu-monitoring-tools/helm-charts
 
-helm install \
-   --generate-name \
-   gpu-helm-charts/dcgm-exporter
+kubectl apply -f https://raw.githubusercontent.com/prometheus-community/helm-charts/main/charts/kube-prometheus-stack/crds/crd-servicemonitors.yaml
+
+helm upgrade -i dcgm-exporter gpu-helm-charts/dcgm-exporter -f kubernetes/helm-charts/dcgm-exporter/values.yaml
+
 ```

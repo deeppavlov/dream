@@ -26,8 +26,8 @@ fi
 
 if [[ "$LAMBDA_NAME" == "" ]]; then
     # also in case if LAMBDA_NAME is custom you should put .env file into aws_lambda folder
-	echo "Usage: aws_lambda/deploy.sh TARGET=target or aws_lambda/deploy.sh LAMBDA_NAME=LAMBDA_FUNCTION_NAME"
-	exit 1
+    echo "Usage: aws_lambda/deploy.sh TARGET=target or aws_lambda/deploy.sh LAMBDA_NAME=LAMBDA_FUNCTION_NAME"
+    exit 1
 fi
 
 echo "Deploying lambda_function to $LAMBDA_NAME"

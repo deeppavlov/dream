@@ -72,7 +72,7 @@ def generate_deployments():
             'REPLICAS_NUM': deploy.get(service_name, {}).get('REPLICAS_NUM', 1),
             'KUBER_IMAGE_TAG': f'{DOCKER_REGISTRY}/{service_name}:{VERSION}',
             'PORT': get_port(service_params),
-            'GPU': gpu,
+            'GPU': str(gpu),
             'CUDA_VISIBLE_DEVICES': repr(cuda),
             'KUBER_LB_NAME': service_name,
             'CLUSTER_IP': '10.100.198.105',  # REPLACE WITH CORRECT!!!!!!!!!
