@@ -1,9 +1,8 @@
 FROM tensorflow/tensorflow:1.15.2-gpu-py3
 
-EXPOSE 8014:8014
+EXPOSE 3006:3006
 
 WORKDIR /
-RUN mkdir /model
 
 RUN  apt-get update \
   && apt-get install -y wget \
@@ -13,12 +12,8 @@ COPY ./requirements.txt requirements.txt
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
-ENV TFHUB_CACHE_DIR='/root/tfhub_cache'
-ENV USE_MODEL_URL='https://tfhub.dev/google/universal-sentence-encoder/2'
+COPY ./ /
 
-RUN python -c "import tensorflow_hub as hub; model=hub.Module('$USE_MODEL_URL')"
-
-COPY ./src/ ./
-COPY ./data/ /data
+RUN python -c "import tensorflow_hub as hub; hub.Module(\"https://tfhub.dev/google/universal-sentence-encoder/2\")"
 
 CMD gunicorn --workers=1 --name=catcher --bind 0.0.0.0:8014 --timeout=500 server:app

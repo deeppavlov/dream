@@ -20,12 +20,12 @@ logger.setLevel(gunicorn_logger.level)
 
 app = Flask(__name__)
 
-logger.info('Creating model...')
+logger.info('Loading DeepPavlov model...')
 
 config = json.load(open("config.json"))
 model = build_model(config, mode='infer', download=True)
 
-logger.info('Creating model...DONE')
+logger.info('Loading DeepPavlov model...DONE')
 
 
 @app.route("/catch", methods=['POST'])
@@ -37,5 +37,5 @@ def catch():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=8014)
+    app.run(debug=True, host='0.0.0.0', port=3006)
     sess.close()
