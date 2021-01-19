@@ -16,4 +16,4 @@ COPY ./ /
 
 RUN python -c "import tensorflow_hub as hub; hub.Module(\"https://tfhub.dev/google/universal-sentence-encoder/2\")"
 
-CMD gunicorn --workers=1 --name=catcher --bind 0.0.0.0:8014 --timeout=500 server:app
+CMD gunicorn --workers=1 --name=catcher --bind 0.0.0.0:3006 --timeout=500 server:app

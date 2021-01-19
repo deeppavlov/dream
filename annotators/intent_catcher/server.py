@@ -20,6 +20,18 @@ logger.setLevel(gunicorn_logger.level)
 
 app = Flask(__name__)
 
+def wrap(cl, intents):
+    if cl not in intents:
+        raise Exception("classes.dict contain intents other than than the nn.h5 model")
+    else:
+        res = {i:{"detected": 0} for i in intents}
+        res[cl] = {"detected": 1}
+    return res
+    
+
+with open('/models/intent_catcher/classes.dict') as fp:
+    intents = {l.split('\t')[0] for l in fp.readlines()}
+
 logger.info('Loading DeepPavlov model...')
 
 config = json.load(open("config.json"))
@@ -32,7 +44,7 @@ logger.info('Loading DeepPavlov model...DONE')
 def catch():
     sentences = request.json['sentences']
     logger.info(f"Number of utterances: {len(sentences)}")
-    results = model(sentences)
+    results = [wrap(s, intents) for s in model(sentences)]
     return jsonify(results)
 
 
