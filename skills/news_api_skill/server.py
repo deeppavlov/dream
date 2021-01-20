@@ -2,18 +2,18 @@
 
 import logging
 import os
-import string
-from time import time
 import re
 import random
+import string
 from collections import defaultdict
-
-from nltk.tokenize import word_tokenize
 from concurrent.futures import ThreadPoolExecutor
-from flask import Flask, request, jsonify
+from copy import deepcopy
 from os import getenv
+from time import time
+
 import sentry_sdk
-from newsapi_service import CachedRequestsAPI
+from flask import Flask, request, jsonify
+from nltk.tokenize import word_tokenize
 
 from common.constants import CAN_CONTINUE
 from common.link import link_to
@@ -23,6 +23,7 @@ from common.news import OFFER_BREAKING_NEWS, BREAKING_NEWS, OFFERED_BREAKING_NEW
     OFFER_TOPIC_SPECIFIC_NEWS_STATUS, OFFERED_NEWS_TOPIC_CATEGORIES_STATUS
 from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, COMPILE_SWITCH_TOPIC, if_lets_chat_about_topic
 from common.utils import get_skill_outputs_from_dialog, is_yes, is_no, get_topics
+from newsapi_service import CachedRequestsAPI
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -39,7 +40,7 @@ ASYNC_SIZE = int(os.environ.get('ASYNC_SIZE', 6))
 BANNED_UNIGRAMS = ["I", 'i', "news", "something", "anything", "me"]
 NEWS_TOPICS = ["Sports", "Politics", "Economy", "Science", "Arts", "Health", "Education"]
 
-NEWS_API_REQUESTOR = CachedRequestsAPI(renew_freq_time=10800)  # time in seconds
+NEWS_API_REQUESTOR = CachedRequestsAPI(renew_freq_time=21600)  # time in seconds
 DEFAULT_NEWS_OFFER_CONFIDENCE = 1.
 WHAT_TYPE_OF_NEWS_CONFIDENCE = 0.9
 NOT_SPECIFIC_NEWS_OFFER_CONFIDENCE = 1.
@@ -77,8 +78,8 @@ def extract_topics(curr_uttr):
         if not ent:
             continue
         ent = ent[0]
-        # if not (ent["text"].lower() == "alexa" and curr_uttr["text"].lower()[:5] == "alexa") and \
-        if "news" not in ent["text"].lower():
+        if not (ent["text"].lower() == "alexa" and curr_uttr["text"].lower()[:5] == "alexa") and \
+                "news" not in ent["text"].lower():
             entities.append(ent["text"].lower())
     if len(entities) == 0:
         for ent in curr_uttr["annotations"].get("cobot_nounphrases", []):
@@ -87,6 +88,7 @@ def extract_topics(curr_uttr):
                     pass
                 else:
                     entities.append(ent)
+    entities = [ent for ent in entities if len(ent) > 0]
     return entities
 
 
@@ -105,6 +107,7 @@ def collect_topics_and_statuses(dialogs):
     topics = []
     statuses = []
     prev_news_samples = []
+    curr_news_samples = []
     for i, dialog in enumerate(dialogs):
         curr_uttr = dialog["human_utterances"][-1]
 
@@ -119,34 +122,38 @@ def collect_topics_and_statuses(dialogs):
             logger.info(f"News skill was prev active.")
             prev_news_skill_output = prev_news_skill_output[-1]
             prev_status = prev_news_skill_output.get("news_status", "")
-            prev_topic = prev_news_skill_output.get("news_topic", "")
-            prev_news = prev_news_skill_output.get("curr_news", {})
+            prev_topic = prev_news_skill_output.get("news_topic", "all")
+            last_news = prev_news_skill_output.get("curr_news", {})
             if prev_status == OFFERED_NEWS_DETAILS_STATUS and is_yes(curr_uttr):
                 logger.info(f"Detected topic for news: {prev_topic}")
                 topics.append(prev_topic)
                 statuses.append("details")
-                prev_news_samples.append(prev_news)
+                prev_news_samples.append({})
+                curr_news_samples.append(last_news)
             elif prev_status == OFFERED_NEWS_DETAILS_STATUS and is_no(curr_uttr):
                 logger.info("User refuse to get news details")
                 topics.append(prev_topic)
                 statuses.append("finished")
-                prev_news_samples.append(prev_news)
+                prev_news_samples.append(last_news)
+                curr_news_samples.append({})
             elif (prev_status == OFFERED_BREAKING_NEWS_STATUS or BREAKING_NEWS.lower() in prev_bot_uttr_lower) and \
                     is_yes(curr_uttr):
                 logger.info("Detected topic for news: all.")
                 topics.append("all")
                 statuses.append("headline")
-                prev_news_samples.append(prev_news)
+                prev_news_samples.append({})
+                curr_news_samples.append(last_news)
             elif re.search(TELL_MORE_NEWS_TEMPLATES, curr_uttr["text"].lower()):
                 prev_news_skill_output = get_skill_outputs_from_dialog(
                     dialog["utterances"][-7:], skill_name="news_api_skill", activated=True)
                 for prev_news_out in prev_news_skill_output:
                     if prev_news_out.get("curr_news", {}) != {}:
-                        prev_news = prev_news_out.get("curr_news", {})
-                logger.info(f"User requested more news. Prev news was: {prev_news}")
+                        last_news = prev_news_out.get("curr_news", {})
+                logger.info(f"User requested more news. Prev news was: {last_news}")
                 topics.append(prev_topic)
                 statuses.append("headline")
-                prev_news_samples.append(prev_news)
+                prev_news_samples.append(last_news)
+                curr_news_samples.append({})
             elif prev_status == OFFERED_NEWS_TOPIC_CATEGORIES_STATUS:
                 if not (news_rejection(curr_uttr["text"].lower()) or is_no(curr_uttr)):
                     logger.info("User chose the topic for news")
@@ -163,22 +170,26 @@ def collect_topics_and_statuses(dialogs):
                             topics.append("all")
                     logger.info(f"Chosen topic: {topics}")
                     statuses.append("headline")
-                    prev_news_samples.append(prev_news)
+                    prev_news_samples.append(last_news)
+                    curr_news_samples.append({})
                 else:
                     logger.info("User doesn't want to get any news")
                     topics.append("all")
                     statuses.append("finished")
-                    prev_news_samples.append(prev_news)
+                    prev_news_samples.append(last_news)
+                    curr_news_samples.append({})
             elif prev_status == OFFER_TOPIC_SPECIFIC_NEWS_STATUS and is_yes(curr_uttr):
                 logger.info(f"User wants to listen news about {prev_topic}.")
                 topics.append(prev_topic)
                 statuses.append("headline")
-                prev_news_samples.append(prev_news)
+                prev_news_samples.append({})
+                curr_news_samples.append(last_news)
             else:
                 logger.info("News skill was active and now can offer more news.")
                 topics.append("all")
                 statuses.append("finished")
-                prev_news_samples.append(prev_news)
+                prev_news_samples.append(last_news)
+                curr_news_samples.append({})
         else:
             logger.info(f"News skill was NOT active.")
             about_news = (({"News"} & set(get_topics(curr_uttr, which="cobot_topics"))) or re.search(
@@ -192,6 +203,7 @@ def collect_topics_and_statuses(dialogs):
                 topics.append("all")
                 statuses.append("headline")
                 prev_news_samples.append({})
+                curr_news_samples.append({})
             elif about_news or lets_chat_about_particular_topic:
                 # the request contains something about news
                 entities = extract_topics(curr_uttr)
@@ -205,7 +217,7 @@ def collect_topics_and_statuses(dialogs):
                     if len(prev_news_skill_output) > 0 and len(prev_news_skill_output[-1]) > 0:
                         prev_news_skill_output = prev_news_skill_output[-1]
                         prev_news = prev_news_skill_output.get("curr_news", {})
-                        prev_topic = prev_news_skill_output.get("news_topic", "")
+                        prev_topic = prev_news_skill_output.get("news_topic", "all")
                     else:
                         prev_news = {}
                         prev_topic = "all"
@@ -213,12 +225,14 @@ def collect_topics_and_statuses(dialogs):
                     topics.append(prev_topic)
                     statuses.append("headline")
                     prev_news_samples.append(prev_news)
+                    curr_news_samples.append({})
                 elif len(entities) == 0:
                     # no entities or nounphrases -> no special news request, get all news
                     logger.info("News request, no entities and nounphrases.")
                     topics.append("all")
                     statuses.append("headline")
                     prev_news_samples.append({})
+                    curr_news_samples.append({})
                 else:
                     # found entities or nounphrases -> special news request,
                     # get the last mentioned entity
@@ -227,12 +241,14 @@ def collect_topics_and_statuses(dialogs):
                     topics.append(entities[-1])
                     statuses.append("headline")
                     prev_news_samples.append({})
+                    curr_news_samples.append({})
             else:
                 logger.info("Didn't detected news request.")
                 topics.append("all")
                 statuses.append("finished")
                 prev_news_samples.append({})
-    return topics, statuses, prev_news_samples
+                curr_news_samples.append({})
+    return topics, statuses, prev_news_samples, curr_news_samples
 
 
 def link_to_other_skills(human_attr, bot_attr, curr_uttr):
@@ -262,7 +278,7 @@ def respond():
     bot_attributes = []
     attributes = []
 
-    topics, statuses, prev_news_samples = collect_topics_and_statuses(dialogs)
+    topics, statuses, prev_news_samples, curr_news_samples = collect_topics_and_statuses(dialogs)
 
     # run asynchronous news requests
     executor = ThreadPoolExecutor(max_workers=ASYNC_SIZE)
@@ -270,6 +286,10 @@ def respond():
         # result is a list of articles. the first one is top rated news.
         curr_topic = topics[i]
         curr_status = statuses[i]
+        curr_news = curr_news_samples[i]
+        curr_news = curr_news if (len(curr_news) > 0 and curr_news.get("title") and curr_news.get(
+            "description")) else {}
+        result = result if (result and result.get("title") and result.get("description")) else {}
         logger.info(f"Composing answer for topic: {curr_topic} and status: {curr_status}.")
         logger.info(f"Result: {result}.")
 
@@ -280,13 +300,18 @@ def respond():
 
         lets_chat_about_particular_topic = if_lets_chat_about_topic(dialogs[i]["human_utterances"][-1]["text"].lower())
         if lets_chat_about_particular_topic:
-            if result and result.get("title") and result.get("description"):
+            if result:
                 # it was a lets chat about topic and we found appropriate news
-                response = OFFER_TOPIC_SPECIFIC_NEWS.replace("TOPIC", curr_topic)
-                confidence = LINKTO_CONFIDENCE
-                attr = {"news_status": OFFER_TOPIC_SPECIFIC_NEWS_STATUS, "news_topic": curr_topic,
-                        "curr_news": result, "can_continue": CAN_CONTINUE}
-
+                if curr_topic == "all":
+                    response = OFFER_BREAKING_NEWS
+                    confidence = LINKTO_FOR_LONG_RESPONSE_CONFIDENCE
+                    attr = {"news_status": OFFERED_BREAKING_NEWS_STATUS, "news_topic": "all",
+                            "can_continue": CAN_CONTINUE, "curr_news": prev_news_samples[i]}
+                else:
+                    response = OFFER_TOPIC_SPECIFIC_NEWS.replace("TOPIC", curr_topic)
+                    confidence = LINKTO_CONFIDENCE
+                    attr = {"news_status": OFFER_TOPIC_SPECIFIC_NEWS_STATUS, "news_topic": curr_topic,
+                            "curr_news": result, "can_continue": CAN_CONTINUE}
                 responses.append(response)
                 confidences.append(confidence)
                 human_attributes.append(human_attr)
@@ -301,8 +326,9 @@ def respond():
                 attributes.append({})
                 continue
 
-        if result and result.get("title") and result.get("description"):
+        if result or curr_news:
             logger.info("Topic: {}".format(curr_topic))
+            logger.info("News found In history: {}".format(curr_news))
             logger.info("News found: {}".format(result))
             if curr_status == "headline":
                 if len(dialogs[i]["human_utterances"]) > 0:
@@ -315,6 +341,8 @@ def respond():
                     prev_bot_uttr_lower = ""
 
                 if BREAKING_NEWS.lower() in prev_bot_uttr_lower and is_yes(curr_uttr):
+                    if curr_news:
+                        result = deepcopy(curr_news)
                     response = f"Here it is: {result['title']}.. {OFFER_MORE}"
                     confidence = DEFAULT_NEWS_OFFER_CONFIDENCE
                     attr = {"news_status": OFFERED_NEWS_DETAILS_STATUS, "news_topic": curr_topic,
@@ -329,20 +357,23 @@ def respond():
                         confidence = 0.
                         attr = {}
                     else:
+                        if curr_news:
+                            result = deepcopy(curr_news)
                         response = f"Here is one of the latest news that I found: {result['title']}.. {OFFER_MORE}"
                         confidence = DEFAULT_NEWS_OFFER_CONFIDENCE
                         attr = {"news_status": OFFERED_NEWS_DETAILS_STATUS, "news_topic": curr_topic,
                                 "curr_news": result, "can_continue": CAN_CONTINUE}
                 else:
-                    response = f"Here is one of the latest news on topic {curr_topic}: {result['title']}.. {OFFER_MORE}"
+                    if curr_news:
+                        result = deepcopy(curr_news)
+                    response = f"Here is one of the latest news on topic {curr_topic}: " \
+                               f"{result['title']}.. {OFFER_MORE}"
                     confidence = DEFAULT_NEWS_OFFER_CONFIDENCE
                     attr = {"news_status": OFFERED_NEWS_DETAILS_STATUS, "news_topic": curr_topic,
                             "curr_news": result, "can_continue": CAN_CONTINUE}
             elif curr_status == "details":
-                prev_news_skill_output = get_skill_outputs_from_dialog(
-                    dialogs[i]["utterances"][-3:], skill_name="news_api_skill", activated=True)
-                if len(prev_news_skill_output) > 0 and len(prev_news_skill_output[-1].get("curr_news", {})) > 0:
-                    result = prev_news_skill_output[-1].get("curr_news", {})
+                if curr_news:
+                    result = deepcopy(curr_news)
                 response = f"In details: {result['description']}. {ASK_OPINION}"
                 confidence = DEFAULT_NEWS_DETAILS_CONFIDENCE
                 attr = {"news_status": OPINION_REQUEST_STATUS, "news_topic": curr_topic, "curr_news": result,
