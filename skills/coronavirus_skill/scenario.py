@@ -327,33 +327,10 @@ def asked_have(last_utterance):
     return cond1 and about_virus(last_utterance)
 
 
-def return_fact(facts, last_bot_phrases, asked_about_age=False, met_last=False):
-    last_bot_phrases = [j.lower() for j in last_bot_phrases]
-    phrase_ends = ['anyway, i can tell', 'do you want to know']
-    #  logging.info('Last bot phrases before and after transition')
-    #  logging.info(last_bot_phrases)
-    for i in range(len(last_bot_phrases)):
-        phrase = last_bot_phrases[i].lower()
-        for phrase_end in phrase_ends:
-            phrase = phrase.split(phrase_end)[0]
-        phrase = ' '.join(phrase.strip().split(' '))
-        last_bot_phrases[i] = phrase
-    #  logging.info(last_bot_phrases)
+def return_fact(facts, used_phrases, asked_about_age=False, met_last=False):
     for fact in facts:
-        met_before = any([fact.lower() in phrase.lower()
-                          for phrase in last_bot_phrases])
-        if not met_before:
+        if all([fact not in j for j in used_phrases]):
             if fact != facts[-1] and not met_last:
-                #  logging.info('*****')
-                #  logging.info(fact)
-                #  logging.info(last_bot_phrases[0])
-                #  pr=False
-                #  for i in range(1,min(len(fact), len(last_bot_phrases[0]))):
-                #    if fact[:i] != last_bot_phrases[:i] and not pr:
-                #        logging.info(fact[:i])
-                #        logging.info(last_bot_phrases[:i])
-                #        logging.info(i)
-                #        pr=True
                 fact = improve_phrase(fact, asked_about_age, met_last)
             return fact
     return ''
@@ -401,10 +378,13 @@ class CoronavirusSkillScenario:
         human_attributes, bot_attributes, attributes = [], [], []
 
         for dialog in dialogs:
-            human_attr = {}
+            reply, confidence, attr = '', 0, {}
+            human_attr = dialog['human']['attributes']
+            human_attr["coronavirus_skill"] = human_attr.get("coronavirus_skill", {})
+            human_attr["coronavirus_skill"]["used_phrases"] = human_attr["coronavirus_skill"].get(
+                "used_phrases", [])
             bot_attr = dialog["bot"]["attributes"]
             bot_attr["used_links"] = bot_attr.get("used_links", defaultdict(list))
-            attr = {}
             try:
                 confidence = 0
                 if len(dialog['utterances']) >= 2:
@@ -431,10 +411,12 @@ class CoronavirusSkillScenario:
                 if len(last_bot_phrases) > 0:
                     last_bot_phrase = last_bot_phrases[0]
                 # this is questionable: it is wrong to lowercase responses, but needed to match data.
-                met_last = any([self.facts[-1].lower() in j.lower() for j in last_bot_phrases])
+                met_last = any([self.facts[-1].lower() in j
+                                for j in human_attr['coronavirus_skill']['used_phrases']])
                 logging.info(last_bot_phrases)
                 logging.info(met_last)
-                asked_about_age = any(['what is your age' in j for j in last_bot_phrases])
+                asked_about_age = any(['what is your age' in j
+                                       for j in human_attr['coronavirus_skill']['used_phrases']])
                 #  logging.info(asked_about_age)
                 if quarantine_end(last_utterance):
                     logging.info('Quarantine end detected')
@@ -467,7 +449,8 @@ class CoronavirusSkillScenario:
                         confidence = 0.95
                     elif is_yes(last_utterance):
                         logging.info('Returning a fact')
-                        reply, confidence = return_fact(self.facts, last_bot_phrases,
+                        reply, confidence = return_fact(self.facts,
+                                                        human_attr['coronavirus_skill']['used_phrases'],
                                                         asked_about_age, met_last), 1
                     else:
                         reply, confidence = '', 0
@@ -489,7 +472,8 @@ class CoronavirusSkillScenario:
                     logging.info('Bot offered another fact in previous utterance')
                     if is_yes(last_utterance):
                         logging.info('Answer is YES')
-                        reply, confidence = return_fact(self.facts, last_bot_phrases,
+                        reply, confidence = return_fact(self.facts,
+                                                        human_attr['coronavirus_skill']['used_phrases'],
                                                         asked_about_age, met_last), 1
                         logging.info('No fact returned')
                         if not reply:
@@ -536,7 +520,8 @@ class CoronavirusSkillScenario:
                         else:
                             wants_cv = is_yes(last_utterance) and 'you are asking about coronavirus' in last_bot_phrase
                             #  logging.info(last_bot_phrases)
-                            not_seen_before = all(['confirmed cases of' not in j for j in last_bot_phrases])
+                            not_seen_before = all(['confirmed cases of' not in j
+                                                   for j in human_attr['coronavirus_skill']['used_phrases']])
                             #  logging.info(not_seen_before)
                             was_firstphrase = is_yes(last_utterance) and 'the number of millionaires' in last_bot_phrase
                             about_death = check_about_death(last_utterance)
@@ -555,6 +540,7 @@ class CoronavirusSkillScenario:
                                     logging.info('I was asked about death or I offered second core fact')
                                     reply, confidence = self.phrases[1], 1.0
                                     reply = improve_phrase(reply, asked_about_age, met_last)
+
                                 elif (wants_cv or about_coronavirus(last_utterance)) and not_seen_before:
                                     logging.info('Returning first phrase')
                                     reply, confidence = self.phrases[0], 1
@@ -562,7 +548,8 @@ class CoronavirusSkillScenario:
                                 else:
                                     if is_yes(last_utterance):
                                         logging.info('YES received - returning fact')
-                                        reply, confidence = return_fact(self.facts, last_bot_phrases,
+                                        reply, confidence = return_fact(self.facts,
+                                                                        human_attr['coronavirus_skill']['used_phrases'],
                                                                         asked_about_age, met_last), 1
                                         if not reply:
                                             logging.debug('No reply received')
@@ -576,7 +563,8 @@ class CoronavirusSkillScenario:
                                         reply = improve_phrase(reply, asked_about_age, met_last)
                                     else:
                                         logging.info('Final point detected. Return smth')
-                                        reply, confidence = return_fact(self.facts, last_bot_phrases,
+                                        reply, confidence = return_fact(self.facts,
+                                                                        human_attr['coronavirus_skill']['used_phrases'],
                                                                         asked_about_age, met_last), 0.9
                     else:  # Detected some state
                         if about_virus(last_utterance) and not about_coronavirus(last_utterance):
@@ -604,7 +592,8 @@ class CoronavirusSkillScenario:
                             else:
                                 if is_yes(last_utterance):
                                     logging.info('YES detected - returning fact')
-                                    reply, confidence = return_fact(self.facts, last_bot_phrases,
+                                    reply, confidence = return_fact(self.facts,
+                                                                    human_attr['coronavirus_skill']['used_phrases'],
                                                                     asked_about_age, met_last), 1
                                     if not reply:
                                         logging.info('NO detected - returning zero')
@@ -635,6 +624,8 @@ class CoronavirusSkillScenario:
                 reply = ""
                 confidence = 0
             texts.append(reply)
+            # add reply only once in the end to make code simpler
+            human_attr['coronavirus_skill']['used_phrases'].append(reply)
             confidences.append(confidence)
             human_attributes.append(human_attr)
             bot_attributes.append(bot_attr)
