@@ -170,6 +170,9 @@ class RuleBasedSkillSelectorConnector:
             if len(dialog["human_utterances"]) > 1:
                 prev_user_uttr_hyp = dialog["human_utterances"][-2]["hypotheses"]
 
+            if len(dialog['bot_utterances']) > 0:
+                prev_bot_uttr = dialog["bot_utterances"][-1]
+
             prev_active_skill = prev_bot_uttr.get("active_skill", "")
 
             weather_city_slot_requested = any(
@@ -184,7 +187,7 @@ class RuleBasedSkillSelectorConnector:
                 "weather_forecast_intent", {}
             ).get("detected", False) or (
                 prev_bot_uttr.get("active_skill", "") == "weather_skill" and weather_city_slot_requested
-            )
+            ) or (lets_chat_about_particular_topic and "weather" in user_uttr_text)
             about_weather = about_weather or is_weather_requested(prev_bot_uttr, dialog['human_utterances'][-1])
             news_re_expr = re.compile(r"(news|(what is|what ?'s)( the)? new|something new)")
             about_news = (self.news_cobot_topics & cobot_topics) or re.search(news_re_expr, user_uttr_text)
