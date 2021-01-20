@@ -420,14 +420,14 @@ def kbqa_response_formatter(payload: Dict):
                 "answer": payload["kbqa_res"][0][0],
                 "confidence": payload["kbqa_res"][0][1]}
     else:
-        {"qa_system": "kbqa",
-         "answer": "",
-         "confidence": 0.0}
+        return {"qa_system": "kbqa",
+                "answer": "",
+                "confidence": 0.0}
 
 
 def odqa_response_formatter(payload: Dict):
-    if payload and "odqa_res" in payload and len(payload["odqa_res"]) >= 4:
-        odqa_res = payload["odqa_res"]
+    if payload and "odqa_res" in payload and payload["odqa_res"] and len(payload["odqa_res"][0]) == 5:
+        odqa_res = payload["odqa_res"][0]
         return {"qa_system": "odqa",
                 "answer": odqa_res[0],
                 "confidence": odqa_res[1],
@@ -580,13 +580,35 @@ def ner_formatter_last_bot_dialog(dialog: Dict):
 #                              else int(dialog['utterances'][-2]['active_skill'] == 'reddit_ner_skill')]
 #         }
 #     ]
+def wp_formatter_dialog(dialog: Dict):
+    # Used by: wiki_parser annotator
+    entity_ids_batch, _ = dialog['human_utterances'][-1]['annotations'].get('entity_linking', [[], []])
+    input_entity_ids = []
+    if entity_ids_batch:
+        for entity_ids_list in entity_ids_batch:
+            for entity_ids in entity_ids_list:
+                if entity_ids:
+                    input_entity_ids.append(entity_ids[0])
+    parser_info = ["find_top_triplets" for _ in input_entity_ids]
+    return [
+        {
+            'parser_info': parser_info,
+            'query': input_entity_ids
+        }
+    ]
+
 
 def el_formatter_dialog(dialog: Dict):
     # Used by: entity_linking annotator
     ner_output = dialog['human_utterances'][-1]['annotations']['ner']
+    nounphrases = dialog['human_utterances'][-1]['annotations'].get('cobot_nounphrases', [])
     entity_substr = [[entity["text"] for entity in entities] for entities in ner_output]
     context = [dialog['human_utterances'][-1]['annotations']['sentseg']['punct_sent'] for _ in entity_substr]
     template = ['' for _ in entity_substr]
+    if nounphrases:
+        entity_substr.append(nounphrases)
+        context.append(dialog['human_utterances'][-1]['annotations']['sentseg']['punct_sent'])
+        template.append('')
 
     return [
         {
