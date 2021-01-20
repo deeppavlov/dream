@@ -24,6 +24,7 @@ app = Flask(__name__)
 @app.route("/model", methods=['POST'])
 def respond():
     questions = request.json.get("x_init", [" "])
+    res = [("Not Found", 0.0)] * len(questions)
     try:
         res = kbqa(questions)
     except Exception as e:

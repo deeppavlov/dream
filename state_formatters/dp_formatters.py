@@ -589,7 +589,11 @@ def wp_formatter_dialog(dialog: Dict):
             for entity_ids in entity_ids_list:
                 if entity_ids:
                     input_entity_ids.append(entity_ids[0])
-    parser_info = ["find_top_triplets" for _ in input_entity_ids]
+    if input_entity_ids:
+        parser_info = ["find_top_triplets" for _ in input_entity_ids]
+    else:
+        input_entity_ids = ["0"]
+        parser_info = ["find_top_triplets"]
     return [
         {
             'parser_info': parser_info,
