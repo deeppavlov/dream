@@ -145,7 +145,8 @@
         "ranker": {"config_path": "{CONFIGS_PATH}/ranking/rel_ranking.json"},
         "load_path": "{DOWNLOADS_PATH}/wikidata_eng",
         "rel_q2name_filename": "wiki_dict_properties.pickle",
-        "rels_to_leave": 40
+        "rels_to_leave": 40,
+        "softmax": true
       },
       {
         "class_name": "query_generator",
@@ -166,10 +167,10 @@
         "max_comb_num": 50,
         "use_api_requester": true,
         "in": ["x", "x", "template_type", "entities", "types"],
-        "out": ["candidate_rels_answers"]
+        "out": ["candidate_rels_answers", "entities", "template_answers"]
       },
       {
-        "class_name": "rel_ranking_bert_infer",
+        "class_name": "rel_ranking_infer",
         "bert_preprocessor": {
           "class_name": "bert_preprocessor",
           "vocab_file": "{BERT_PATH}/vocab.txt",
@@ -190,7 +191,7 @@
         "use_mt_bert": true,
         "return_all_possible_answers": true,
 	    "return_sentence_answer": true,
-	    "in": ["x", "candidate_rels_answers"],
+	    "in": ["x", "candidate_rels_answers", "entities", "template_answers"],
         "out": ["answers"]
       }
     ],

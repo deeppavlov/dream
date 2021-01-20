@@ -407,7 +407,7 @@ services:
         CONFIG: wiki_parser.json
         PORT: 8077
         SRC_DIR: annotators/wiki_parser
-        COMMIT: 9b5fa82e6e55802237d02660a4cbefe14fd7daae
+        COMMIT: cf0d9d3ef97b943c1185787e3897dd05a3cdd25e
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -421,7 +421,7 @@ services:
         SRC_DIR: annotators/odqa/
         COMMIT: e7de5271823ce1aeafdf8f7e32f351ccb3743083
       context: ./
-      dockerfile: dp/dockerfile_skill_gpu
+      dockerfile: annotators/odqa/Dockerfile
     environment:
       - CUDA_VISIBLE_DEVICES=0
 
@@ -431,7 +431,7 @@ services:
         CONFIG: kbqa_cq_mt_bert.json
         PORT: 8072
         SRC_DIR: annotators/kbqa/
-        COMMIT: 2f2295b54f4bf57fca81a0b83e797a5a0133ac93
+        COMMIT: f6755a31e72e915f57ee07ab254fbb95b5bb2323
       context: ./
       dockerfile: annotators/kbqa/Dockerfile
     environment:

@@ -8,7 +8,7 @@ ARG SRC_DIR
 ENV CONFIG=$CONFIG
 ENV PORT=$PORT
 
-COPY ./annotators/kbqa/requirements.txt /src/requirements.txt
+COPY ./annotators/odqa/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
 RUN cd DeepPavlov && \
@@ -23,6 +23,5 @@ COPY $SRC_DIR /src
 WORKDIR /src
 
 RUN python -m deeppavlov install $CONFIG
-RUN python -m spacy download en_core_web_sm
 
 CMD ./proxy.sh

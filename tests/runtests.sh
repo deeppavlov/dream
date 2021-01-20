@@ -138,7 +138,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
                      program-y-dangerous superbowl-skill oscar-skill valentines-day-skill eliza \
                      dummy-skill-dialog intent-catcher short-story-skill comet-atomic \
                      comet-conceptnet convers-evaluation-selector emotion-skill game-cooperative-skill \
-                     entity-linking odqa convert-reddit question-generator grounding-skill \
+                     entity-linking kbqa odqa wiki-parser convert-reddit question-generator grounding-skill \
                      cobot-topics cobot-dialogact cobot-convers-evaluator-annotator \
                      knowledge-grounding dialog-breakdown knowledge-grounding-skill book-skill; do
 

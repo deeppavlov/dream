@@ -229,8 +229,7 @@
             },
             "odqa": {
                 "connector": {
-                    "protocol": "python",
-                    "class_name": "annotators.odqa.connector:ODQAConnector",
+                    "protocol": "http",
                     "url": "http://odqa:8078/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:odqa_formatter_dialog",
@@ -247,8 +246,7 @@
             },
             "kbqa": {
                 "connector": {
-                    "protocol": "python",
-                    "class_name": "annotators.kbqa.connector:KBQAConnector",
+                    "protocol": "http",
                     "url": "http://kbqa:8072/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:kbqa_formatter_dialog",
@@ -263,7 +261,16 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:el_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": ["annotators.ner"]
+                "required_previous_services": ["annotators.ner", "annotators.cobot_nounphrases"]
+            },
+            "wiki_parser": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://wiki-parser:8077/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:wp_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "required_previous_services": ["annotators.entity_linking"]
             },
             "sentrewrite": {
                 "connector": "connectors.sentrewrite",
