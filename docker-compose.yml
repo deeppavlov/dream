@@ -395,6 +395,7 @@ services:
         CONFIG: kbqa_entity_linking_lite.json
         PORT: 8075
         SRC_DIR: annotators/entity_linking
+        COMMIT: cf0d9d3ef97b943c1185787e3897dd05a3cdd25e
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:

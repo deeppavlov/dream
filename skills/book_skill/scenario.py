@@ -1,3 +1,4 @@
+import itertools
 import json
 import logging
 import os
@@ -324,8 +325,21 @@ def request_entities(entity):
     ENTITY_LINKING_URL = os.getenv("ENTITY_LINKING_URL")
     assert type(entity) == str
     t = time.time()
+    used_types = ["Q36180",  # writer
+                  "Q49757",  # novelist
+                  "Q214917",  # playwright
+                  "Q1930187",  # journalist
+                  "Q6625963",  # novelist
+                  "Q28389",  # screenwriter
+                  "Q571",  # book
+                  "Q7725634",  # literary work
+                  "Q1667921"  # novel series
+                  ]
     response = requests.post(ENTITY_LINKING_URL,
-                             json={"entity_substr": [[entity]], "template_found": [""]},
+                             json={"entity_substr": [[entity]],
+                                   "template_found": [""],
+                                   "context": [""],
+                                   "entity_types": [[used_types]]},
                              timeout=1).json()
     exec_time = round(time.time() - t, 2)
     logger.debug('Response is ' + str(response) + ' with exec time ' + str(exec_time))
@@ -412,7 +426,10 @@ def who_wrote_book(book, return_plain=False):
     else:
         # It means that we don't have author in cache. No reason for exception!
         logger.info(f'No author found in cache for {book}')
-        author_list = get_triples(["find_object"], [(plain_book_entity.upper(), "P50", "forw")])[0]
+        author_list = get_triples(["find_object", "find_object"], [(plain_book_entity.upper(), "P50", "forw"),
+                                                                   (plain_book_entity.upper(), "P800", "backw")])
+        author_list = list(itertools.chain.from_iterable(author_list))
+        author_list = list(set(author_list))
         logger.debug('Author list received ' + str(author_list))
         author_list = [x[x.find('Q'):] for x in author_list]  # to unify representations
     sorted_author_list = sorted(author_list, key=lambda x: int(x[1:]))  # Sort entities by frequency
@@ -586,7 +603,10 @@ def best_book_by_author(plain_author_name, plain_last_bookname=None,
         book_list = wikidata['books_of_author'][plain_author_name]
     else:
         logger.debug('No books of author found in pickled data')
-        book_list = get_triples(["find_object"], [(plain_author_name, "P800", "forw")])[0]
+        book_list = get_triples(["find_object", "find_object"], [(plain_author_name, "P800", "forw"),
+                                                                 (plain_author_name, "P50", "backw")])
+        book_list = list(itertools.chain.from_iterable(book_list))
+        book_list = list(set(book_list))
     try:
         logger.debug('List of returned books')
         logger.debug(book_list)
@@ -595,12 +615,15 @@ def best_book_by_author(plain_author_name, plain_last_bookname=None,
         book_list = [x[x.find('Q'):] for x in book_list]  # to unify representations
         logger.debug('List of returned books - processed')
         logger.debug(book_list)
-        sorted_book_list = sorted(book_list, key=lambda x: int(x[1:]))  # Sort entities by frequency
-        logger.debug(sorted_book_list)
-        logger.debug('Best entity')
-        best_book_entity = random.choice(sorted_book_list[:top_n_best_books])
-        logger.debug(best_book_entity)
-        best_bookname = entity_to_label(best_book_entity)
+        if book_list:
+            sorted_book_list = sorted(book_list, key=lambda x: int(x[1:]))  # Sort entities by frequency
+            logger.debug(sorted_book_list)
+            logger.debug('Best entity')
+            best_book_entity = random.choice(sorted_book_list[:top_n_best_books])
+            logger.debug(best_book_entity)
+            best_bookname = entity_to_label(best_book_entity)
+        else:
+            best_bookname = default_phrase
         logger.debug('Answer ' + best_bookname)
         return best_bookname
     except Exception as e:
