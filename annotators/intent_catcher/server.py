@@ -32,12 +32,12 @@ def wrap(cl, intents):
 with open('/models/intent_catcher/classes.dict') as fp:
     intents = {l.split('\t')[0] for l in fp.readlines()}
 
-logger.info('Loading DeepPavlov model...')
+logger.info('DeepPavlov Intent Catcher: Loading DeepPavlov model...')
 
 config = json.load(open("config.json"))
 model = build_model(config, mode='infer', download=True)
 
-logger.info('Loading DeepPavlov model...DONE')
+logger.info('DeepPavlov Intent Catcher: Loading DeepPavlov model...DONE')
 
 
 @app.route("/catch", methods=['POST'])
