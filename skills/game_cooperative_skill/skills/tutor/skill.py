@@ -2,6 +2,7 @@
 from typing import List
 import types
 import pathlib
+import random
 
 from utils.state import State
 
@@ -20,7 +21,13 @@ def run_skill(state: State, modes: List = [skill_attrs.modes.intro]):
             # text="I like to talk about games. "
             # "We can talk about games of tops or about you or my favorite games, what do you want to talk about?",
             # "We can talk about top games, just say: tell me about the best games",
-            text="Love games. Got a list of the top released games, wanna discuss it? ",
+            text=random.choice(
+                [
+                    "Love games. Got a list of the top released games, wanna discuss it? ",
+                    "You know, I love games, especially stats like top of the games released. Wanna learn more?",
+                    "So, well, one of my hobbies is keeping fresh stats about the top video games. Wanna dig into it?",
+                ]
+            ),
             # "Say tell me about the best games",
             confidence=1.0,
         )
