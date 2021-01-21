@@ -1,6 +1,16 @@
 server:
   nodeSelector:
     gpu: "false"
+  persistentVolume:
+    enabled: true
+    size: 50Gi
+  readinessProbeInitialDelay: 30
+  readinessProbePeriodSeconds: 10
+  readinessProbeTimeout: 4
+  readinessProbeFailureThreshold: 5
+  readinessProbeSuccessThreshold: 1
+  livenessProbeFailureThreshold: 5
+  livenessProbeInitialDelay: 60
 
 kubeStateMetrics:
   enabled: true

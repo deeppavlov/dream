@@ -376,6 +376,7 @@ spec:
                 sh label: 'update environment', script: 'kubectl create configmap env -n ${NAMESPACE} --from-env-file $ENV_FILE -o yaml --dry-run=client | kubectl apply -f -'
                 sh label: 'generate deployment', script: 'python3 kubernetes/kuber_generator.py'
                 sh label: 'deploy', script: 'for dir in kubernetes/models/*; do kubectl apply -f $dir || true; done'
+                sh label: 'recreate pods', script: 'for dp in kubernetes/models/*/*-dp.yaml; do kubectl rollout restart -n ${NAMESPACE} deploy $(basename ${dp%.*}); done'
               }
               catch (Exception e) {
                 int duration = (currentBuild.duration - startTime) / 1000
@@ -442,12 +443,12 @@ spec:
             catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
               try {
                 sh label: 'is agent running', script: '''
-                  local timeout=${WAIT_TIMEOUT:-1000}
-                  local url=${CHECK_URL}
-                  local reply=${REPLY}
-                  local interval=${WAIT_INTERVAL:-10}
+                  timeout=${WAIT_TIMEOUT:-1000}
+                  url=${CHECK_URL}
+                  reply=${REPLY}
+                  interval=${WAIT_INTERVAL:-10}
                   while [[ $timeout -gt 0 ]]; do
-                    local res=$(curl -XGET "$url" -s -o /dev/null -w "%{http_code}")
+                    res=$(curl -XGET "$url" -s -o /dev/null -w "%{http_code}")
                     if [ "$res" == "200" ]; then
                       return 0
                     fi
