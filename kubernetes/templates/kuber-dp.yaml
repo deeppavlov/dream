@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{KUBER_DP_NAME}}
+  name: {{ KUBER_DP_NAME }}
   namespace: {{ NAMESPACE }}
 spec:
-  replicas: {{REPLICAS_NUM}}
+  replicas: {{ REPLICAS_NUM }}
   selector:
     matchLabels:
-      app: {{KUBER_DP_NAME}}
+      app: {{ KUBER_DP_NAME }}
   template:
     metadata:
       labels:
-        app: {{KUBER_DP_NAME}}
+        app: {{ KUBER_DP_NAME }}
     spec:
       nodeSelector:
         {% if GPU != "false" %}
@@ -20,16 +20,16 @@ spec:
         environment: {{ ENVIRONMENT }}
       containers:
       - name: alexaservice
-        image: {{KUBER_IMAGE_TAG}}
+        image: {{ KUBER_IMAGE_TAG }}
         imagePullPolicy: Always
         {% if COMMAND %}
         command: [ 'bash' ]
-        args: [ '-c', '{{COMMAND}}' ]
+        args: [ '-c', '{{ COMMAND }}' ]
         {% endif %}
         ports:
         - name: dp-service
           protocol: TCP
-          containerPort: {{PORT}}
+          containerPort: {{ PORT }}
         volumeMounts:
         - name: volume-podinfo
           mountPath: /etc/podinfo
@@ -40,7 +40,7 @@ spec:
         {% endif %}
         env:
         - name: CUDA_VISIBLE_DEVICES
-          value: {{CUDA_VISIBLE_DEVICES}}
+          value: {{ CUDA_VISIBLE_DEVICES }}
         {% if WAIT_HOSTS %}
         - name: WAIT_HOSTS
           value: "{{ WAIT_HOSTS }}"
@@ -52,12 +52,14 @@ spec:
         envFrom:
         - configMapRef:
             name: env
-        #startupProbe:
-        #  httpGet:
-        #    path: /healthz
-        #    port: dp-service
-        #  failureThreshold: 30
-        #  periodSeconds: 10
+        {% if KUBER_DP_NAME == "agent-dp" %}
+        startupProbe:
+          httpGet:
+            path: /ping
+            port: dp-service
+          failureThreshold: 60
+          periodSeconds: 10
+        {% endif %}
       volumes:
       #- name: volume-logs
         #persistentVolumeClaim:

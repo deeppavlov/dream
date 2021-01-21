@@ -403,6 +403,86 @@ spec:
       }
     }
 
+    stage('Is-running-dev') {
+      agent {
+        kubernetes {
+          label 'slave'
+          yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    jenkins: slave
+spec:
+  containers:
+  - name: jenkins-busybox
+    image: busybox
+    imagePullPolicy: Always
+    command:
+    - cat
+    tty: true
+"""
+        }
+      }
+
+      when {
+        branch pattern: 'dev', comparator: 'EQUALS'
+        beforeAgent true
+      }
+
+      environment {
+        CHECK_URL="http://ab61c7a0598e44dcbab6b2c216e108de-1052105272.us-east-1.elb.amazonaws.com:4242/ping"
+      }
+
+      steps {
+        container('jenkins-busybox') {
+          script {
+            int startTime = currentBuild.duration
+            notify('start')
+            catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+              try {
+                sh label: 'is agent running', script: '''
+                  local timeout=${WAIT_TIMEOUT:-1000}
+                  local url=${CHECK_URL}
+                  local reply=${REPLY}
+                  local interval=${WAIT_INTERVAL:-10}
+                  while [[ $timeout -gt 0 ]]; do
+                    local res=$(curl -XGET "$url" -s -o /dev/null -w "%{http_code}")
+                    if [ "$res" == "200" ]; then
+                      return 0
+                    fi
+                    sleep $interval
+                    ((timeout-=interval))
+                    echo wait $url timeout in $timeout sec..
+                  done
+                  return 1
+                '''
+              }
+              catch (Exception e) {
+                int duration = (currentBuild.duration - startTime) / 1000
+                notify('failed', duration, e.getMessage())
+                throw e
+              }
+            }
+          }
+        }
+      }
+
+      post {
+        failure {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+            notify('failed', duration)
+          }
+        }
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+            notify('success', duration)
+          }
+        }
+      }
+    }
 
     stage('Checkout') {
 
