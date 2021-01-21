@@ -145,9 +145,9 @@ class WeatherSkill:
         # 2. retrieve a city slot from usermessage (use NER? or Personal Info skill)
         curr_confidence = BASE_CONFIDENCE
         current_reply = ""
-        human_attr = {}
-        bot_attr = dialog["bot"]["attributes"]
-        bot_attr["used_links"] = bot_attr.get("used_links", defaultdict(list))
+        bot_attr = {}
+        human_attr = dialog["human"]["attributes"]
+        human_attr["used_links"] = human_attr.get("used_links", defaultdict(list))
         weather_for_homeland_requested = False
         ######################################################################
         #
@@ -264,8 +264,8 @@ class WeatherSkill:
                     curr_confidence = SMALLTALK_CONFIDENCE
                     weather = context_dict["weather_forecast_interaction_preferred_weather"]
                     context_dict['weather_forecast_interaction_preferred_weather'] = False
-                    link = link_to(['coronavirus_skill'], used_links=bot_attr["used_links"])
-                    bot_attr["used_links"][link["skill"]] = bot_attr["used_links"].get(
+                    link = link_to(['coronavirus_skill'], used_links=human_attr["used_links"])
+                    human_attr["used_links"][link["skill"]] = human_attr["used_links"].get(
                         link["skill"], []) + [link['phrase']]
                     current_reply = self.weather_dict[weather]['answer'] + " " + link["phrase"]
                 else:

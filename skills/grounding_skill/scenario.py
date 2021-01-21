@@ -26,9 +26,9 @@ class GroundingSkillScenario:
         confidences = []
         human_attributes, bot_attributes, attributes = [], [], []
         for dialog in dialogs:
-            human_attr = {}
-            bot_attr = dialog["bot"]["attributes"]
-            bot_attr["used_links"] = bot_attr.get("used_links", defaultdict(list))
+            bot_attr = {}
+            human_attr = dialog["human"]["attributes"]
+            human_attr["used_links"] = human_attr.get("used_links", defaultdict(list))
             attr = {}
             try:
                 if not what_we_talk_about(dialog['utterances'][-1]):

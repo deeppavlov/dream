@@ -181,14 +181,14 @@ class EmotionSkillScenario:
         bot_attrs = []
         for dialog in dialogs:
             try:
-                bot_attributes = dialog["bot"]["attributes"]
-                bot_attributes["used_links"] = bot_attributes.get("used_links", defaultdict(list))
-                bot_attributes["emotion_skill_attributes"] = bot_attributes.get(
+                human_attributes = dialog["human"]["attributes"]
+                human_attributes["used_links"] = human_attributes.get("used_links", defaultdict(list))
+                human_attributes["emotion_skill_attributes"] = human_attributes.get(
                     "emotion_skill_attributes", {})
-                emotion_skill_attributes = bot_attributes["emotion_skill_attributes"]
+                emotion_skill_attributes = human_attributes["emotion_skill_attributes"]
                 state = emotion_skill_attributes.get("state", "")
                 emotion = emotion_skill_attributes.get("emotion", "")
-                human_attributes = dialog["human"]["attributes"]
+                bot_attributes = {}
                 attr = {"can_continue": CAN_CONTINUE}
                 annotated_user_phrase = dialog['utterances'][-1]
                 most_likely_emotion = self._get_user_emotion(annotated_user_phrase)
@@ -214,9 +214,9 @@ class EmotionSkillScenario:
                         emotion,
                         emotion_skill_attributes,
                         intent,
-                        bot_attributes["used_links"]
+                        human_attributes["used_links"]
                     )
-                    bot_attributes['emotion_skill_attributes'] = emotion_skill_attributes
+                    human_attributes['emotion_skill_attributes'] = emotion_skill_attributes
                     if book_movie_music_found(annotated_user_phrase):
                         logging.info('Found named topic in user utterance - dropping confidence')
                         confidence = min(confidence, 0.9)
@@ -230,19 +230,23 @@ class EmotionSkillScenario:
                 reply = ""
                 state = ""
                 confidence = 0.0
+                human_attributes, bot_attributes, attr = {}, {}, {}
+                link = ""
+                annotated_user_phrase = {'text': ""}
 
             if state != "":  # Part of a script - so we must continue
                 attr['can_continue'] = MUST_CONTINUE
 
             if link:
-                if link["skill"] not in bot_attributes["used_links"]:
-                    bot_attributes["used_links"][link["skill"]] = []
-                bot_attributes["used_links"][link["skill"]].append(link['phrase'])
+                if link["skill"] not in human_attributes["used_links"]:
+                    human_attributes["used_links"][link["skill"]] = []
+                human_attributes["used_links"][link["skill"]].append(link['phrase'])
 
             self.logger.info(f"__call__ reply: {reply}; conf: {confidence};"
                              f" user_phrase: {annotated_user_phrase['text']}"
-                             f" attributes: {attr}"
-                             f" bot_attributes: {bot_attributes}")
+                             f" human_attributes: {human_attributes}"
+                             f" bot_attributes: {bot_attributes}"
+                             f" attributes: {attr}")
             texts.append(reply)
             confidences.append(confidence)
             human_attrs.append(human_attributes)

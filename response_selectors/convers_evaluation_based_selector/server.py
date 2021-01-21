@@ -144,18 +144,18 @@ def respond():
                             selected_human_attributes, selected_bot_attributes)))
 
 
-def join_used_links_in_bot_attributes(main_bot_attrs, add_bot_attrs):
-    result = deepcopy(main_bot_attrs)
+def join_used_links_in_attributes(main_attrs, add_attrs):
+    result = deepcopy(main_attrs)
     result["used_links"] = result.get("used_links", defaultdict(list))
 
-    for skill_name in add_bot_attrs.get("used_links", defaultdict(list)):
+    for skill_name in add_attrs.get("used_links", defaultdict(list)):
         result["used_links"][skill_name] = result["used_links"].get(
-            skill_name, []) + add_bot_attrs["used_links"].get(skill_name, [])
+            skill_name, []) + add_attrs["used_links"].get(skill_name, [])
     return result
 
 
-def add_question_to_statement(best_candidate, best_skill_name, dummy_question, dummy_question_bot_attr,
-                              link_to_question, link_to_bot_attrs, not_sure_factoid):
+def add_question_to_statement(best_candidate, best_skill_name, dummy_question, dummy_question_human_attr,
+                              link_to_question, link_to_human_attrs, not_sure_factoid):
 
     if not_sure_factoid and "factoid_qa" in best_skill_name:
         best_candidate["text"] = "I am not sure in my answer but I can try. " + best_candidate["text"]
@@ -165,14 +165,14 @@ def add_question_to_statement(best_candidate, best_skill_name, dummy_question, d
             best_candidate["text"] += np.random.choice([f" Let me ask you something. {dummy_question}",
                                                         f" I would like to ask you a question. {dummy_question}"])
             # if this is not a link-to question, bot attributes will be still empty
-            best_candidate["bot_attributes"] = join_used_links_in_bot_attributes(
-                best_candidate.get("bot_attributes", {}), dummy_question_bot_attr)
+            best_candidate["human_attributes"] = join_used_links_in_attributes(
+                best_candidate.get("human_attributes", {}), dummy_question_human_attr)
     elif best_skill_name in retrieve_skills:
         if not is_question(best_candidate["text"]) and random.random() < ASK_LINK_TO_FOR_RETRIEVE_PROB:
             logger.info(f"adding link_to {link_to_question} to response.")
             best_candidate["text"] += f". {link_to_question}"
-            best_candidate["bot_attributes"] = join_used_links_in_bot_attributes(
-                best_candidate.get("bot_attributes", {}), link_to_bot_attrs)
+            best_candidate["human_attributes"] = join_used_links_in_attributes(
+                best_candidate.get("human_attributes", {}), link_to_human_attrs)
 
     return best_candidate
 
@@ -280,9 +280,9 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     very_big_score = 100
     very_low_score = -100
     dummy_question = ""
-    dummy_question_bot_attr = {}
+    dummy_question_human_attr = {}
     link_to_question = ""
-    link_to_bot_attrs = {}
+    link_to_human_attrs = {}
     not_sure_factoid = False
     if "factoid_qa" in skill_names:
         factoid_index = skill_names.index("factoid_qa")
@@ -383,10 +383,10 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             # this is only about `dummy_skill`
             if "link_to_for_response_selector" in candidates[i].get("type", ""):
                 link_to_question = candidates[i]['text']
-                link_to_bot_attrs = candidates[i].get("bot_attributes", {})
+                link_to_human_attrs = candidates[i].get("human_attributes", {})
         if skill_names[i] == 'dummy_skill' and "question" in candidates[i].get("type", ""):
             dummy_question = candidates[i]['text']
-            dummy_question_bot_attr = candidates[i].get("bot_attributes", {})
+            dummy_question_human_attr = candidates[i].get("human_attributes", {})
 
         if curr_score is None:
             cand_scores = scores[i]
@@ -420,8 +420,8 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     best_skill_name = skill_names[int(best_id)]
 
     best_candidate = add_question_to_statement(
-        best_candidate, best_skill_name, dummy_question, dummy_question_bot_attr,
-        link_to_question, link_to_bot_attrs, not_sure_factoid)
+        best_candidate, best_skill_name, dummy_question, dummy_question_human_attr,
+        link_to_question, link_to_human_attrs, not_sure_factoid)
 
     best_text = best_candidate["text"]
     best_confidence = best_candidate["confidence"]

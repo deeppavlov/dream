@@ -93,7 +93,7 @@ for city_name in CITIES.keys():
     CITIES[city_name] = CITIES[city_name][i_]
 
 
-def get_agephrase(age_num, bot_attr):
+def get_agephrase(age_num, bot_attr, human_attr):
     if age_num < 20:
         phrase = 'According to the statistical data, 999 persons from 1000 in your age ' \
                  'recover after contacting coronavirus.'
@@ -120,15 +120,15 @@ def get_agephrase(age_num, bot_attr):
     r = random()
     if r < 0.5:
         phrase = phrase + ' While staying at home, you may use a lot of different online cinema. '
-        link = link_to(['movie_skill'], used_links=bot_attr["used_links"])
-        bot_attr["used_links"][link["skill"]] = bot_attr["used_links"].get(link["skill"], []) + [link['phrase']]
+        link = link_to(['movie_skill'], used_links=human_attr["used_links"])
+        human_attr["used_links"][link["skill"]] = human_attr["used_links"].get(link["skill"], []) + [link['phrase']]
         phrase = phrase + link['phrase']
     else:
         phrase = phrase + ' While staying at home, you may read a lot of different books. '
-        link = link_to(['book_skill'], used_links=bot_attr["used_links"])
-        bot_attr["used_links"][link["skill"]] = bot_attr["used_links"].get(link["skill"], []) + [link['phrase']]
+        link = link_to(['book_skill'], used_links=human_attr["used_links"])
+        human_attr["used_links"][link["skill"]] = human_attr["used_links"].get(link["skill"], []) + [link['phrase']]
         phrase = phrase + link['phrase']
-    return phrase, bot_attr
+    return phrase, bot_attr, human_attr
 
 
 def about_coronavirus(annotated_phrase):
@@ -244,7 +244,7 @@ def get_statephrase(state_name, state_data, county_data, nation_data):
     return phrase
 
 
-def get_age_answer(last_utterance, bot_attr):
+def get_age_answer(last_utterance, bot_attr, human_attr):
     try:
         age_num = None
         user_phrase = last_utterance['text']
@@ -258,11 +258,11 @@ def get_age_answer(last_utterance, bot_attr):
                 age_num = int(user_word)
         if age_num is None:
             age_num = word_to_num(user_phrase)
-        reply, bot_attr = get_agephrase(age_num, bot_attr)
+        reply, bot_attr, human_attr = get_agephrase(age_num, bot_attr, human_attr)
     except BaseException:
         reply = ''
     logging.debug(reply)
-    return reply, bot_attr
+    return reply, bot_attr, human_attr
 
 
 def make_phrases(n_cases, n_deaths, num_flu_deaths, millionair_number):
@@ -383,8 +383,8 @@ class CoronavirusSkillScenario:
             human_attr["coronavirus_skill"] = human_attr.get("coronavirus_skill", {})
             human_attr["coronavirus_skill"]["used_phrases"] = human_attr["coronavirus_skill"].get(
                 "used_phrases", [])
-            bot_attr = dialog["bot"]["attributes"]
-            bot_attr["used_links"] = bot_attr.get("used_links", defaultdict(list))
+            bot_attr = {}
+            human_attr["used_links"] = human_attr.get("used_links", defaultdict(list))
             try:
                 confidence = 0
                 if len(dialog['utterances']) >= 2:
@@ -528,7 +528,7 @@ class CoronavirusSkillScenario:
                             is_age = False
                             if 'is your age' in last_bot_phrase or "didn't get your age" in last_bot_phrase:
                                 logging.info('I have just asked about age, returning age phrase')
-                                reply, bot_attr = get_age_answer(last_utterance, bot_attr)
+                                reply, bot_attr, human_attr = get_age_answer(last_utterance, bot_attr, human_attr)
                                 confidence = 1
                                 if reply == '':
                                     logging.info('Could not detect age. Looking for something else')
@@ -578,7 +578,7 @@ class CoronavirusSkillScenario:
                             wasnot_first = 'of registered coronavirus' not in last_bot_phrase
                             if 'is your age' in last_bot_phrase or "didn't get your age" in last_bot_phrase:
                                 logging.info('After asking about age returning age phrase')
-                                reply, bot_attr = get_age_answer(last_utterance, bot_attr)
+                                reply, bot_attr, human_attr = get_age_answer(last_utterance, bot_attr, human_attr)
                                 confidence = 1
                             # Reply is empty if it wasnt about age.
                             if is_switch_topic(last_utterance) or is_no(last_utterance):
