@@ -66,9 +66,9 @@ def respond():
     attributes = []
 
     for dialog in dialogs_batch:
-        human_attr = {}
-        bot_attr = dialog["bot"]["attributes"]
-        bot_attr["used_links"] = bot_attr.get("used_links", defaultdict(list))
+        bot_attr = {}
+        human_attr = dialog["human"]["attributes"]
+        human_attr["used_links"] = human_attr.get("used_links", defaultdict(list))
         attr = {}
         response = ""
         confidence = 0.0

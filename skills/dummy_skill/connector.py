@@ -121,8 +121,8 @@ def get_link_to_question(dialog):
         tuple of linked question and updated bot attributes with saved link to `used_links`
     """
     # get previous active skills
-    bot_attr = deepcopy(dialog["bot"]["attributes"])
-    bot_attr["used_links"] = bot_attr.get("used_links", defaultdict(list))
+    human_attr = deepcopy(dialog["human"]["attributes"])
+    human_attr["used_links"] = human_attr.get("used_links", defaultdict(list))
 
     # dummy skill gets only 5 last turns, so we do not repeat skill for 5 turns
     prev_active_skills = set([uttr.get("active_skill", "") for uttr in dialog["bot_utterances"]
@@ -131,23 +131,23 @@ def get_link_to_question(dialog):
     available_links = list(set(high_rated_skills_for_linking).difference(prev_active_skills))
     if len(available_links) > 0:
         # if we still have skill to link to, try to generate linking question
-        link = link_to(available_links, used_links=bot_attr["used_links"])
-        bot_attr["used_links"][link["skill"]] = bot_attr["used_links"].get(link["skill"], []) + [link['phrase']]
+        link = link_to(available_links, used_links=human_attr["used_links"])
+        human_attr["used_links"][link["skill"]] = human_attr["used_links"].get(link["skill"], []) + [link['phrase']]
         linked_question = link["phrase"]
     else:
         linked_question = ""
 
-    return linked_question, bot_attr
+    return linked_question, human_attr
 
 
 def generate_question_not_from_last_responses(dialog):
-    linked_question, bot_attr = get_link_to_question(dialog)
+    linked_question, human_attr = get_link_to_question(dialog)
 
     if len(linked_question) > 0:
         result = linked_question
     else:
         result = ""
-    return result, bot_attr
+    return result, human_attr
 
 
 class DummySkillConnector:
@@ -209,29 +209,29 @@ class DummySkillConnector:
                         bot_attrs += [{}]
                     else:
                         logger.info("No special nounphrases for questions. Return link-to question.")
-                        question, bot_attr = generate_question_not_from_last_responses(dialog)
+                        question, human_attr = generate_question_not_from_last_responses(dialog)
                         if len(question) > 0:
                             cands += [question]
                             confs += [0.55]
                             attrs += [{"type": "normal_question"}]
-                            human_attrs += [{}]
-                            bot_attrs += [bot_attr]
+                            human_attrs += [human_attr]
+                            bot_attrs += [{}]
             else:
                 logger.info("Dialog begins. No special nounphrases for questions. Return link-to question.")
-                question, bot_attr = generate_question_not_from_last_responses(dialog)
+                question, human_attr = generate_question_not_from_last_responses(dialog)
                 cands += [question]
                 confs += [0.55]
                 attrs += [{"type": "normal_question"}]
-                human_attrs += [{}]
-                bot_attrs += [bot_attr]
+                human_attrs += [human_attr]
+                bot_attrs += [{}]
 
-            link_to_question, bot_attr = get_link_to_question(dialog)
+            link_to_question, human_attr = get_link_to_question(dialog)
             if link_to_question:
                 cands += [link_to_question]
                 confs += [0.05]  # Use it only as response selector retrieve skill output modifier
                 attrs += [{"type": "link_to_for_response_selector"}]
-                human_attrs += [{}]
-                bot_attrs += [bot_attr]
+                human_attrs += [human_attr]
+                bot_attrs += [{}]
 
             facts_same_nps = []
             for i, nphrase in enumerate(curr_nounphrases):

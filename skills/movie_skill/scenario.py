@@ -72,12 +72,10 @@ class MovieSkillScenario:
         attributes = []
 
         for dialog in dialogs:
-            # import json
-            # logger.info(json.dumps(dialog))
             curr_user_uttr = dialog["human_utterances"][-1]
-            response, confidence, human_attr, attr = "", 0.0, {}, {}
-            bot_attr = dialog["bot"]["attributes"]
-            bot_attr["used_links"] = bot_attr.get("used_links", defaultdict(list))
+            response, confidence, human_attr, bot_attr, attr = "", 0.0, {}, {}, {}
+            human_attr = dialog["human"]["attributes"]
+            human_attr["used_links"] = human_attr.get("used_links", defaultdict(list))
             # not overlapping mentions of movies titles, persons names and genres
             movies_ids, unique_persons, mentioned_genres = self.templates.extract_mentions(
                 curr_user_uttr["text"].lower(), find_ignored=True)
@@ -151,11 +149,11 @@ class MovieSkillScenario:
 
     @staticmethod
     def link_to_other_skills(human_attr, bot_attr, to_skills=['book_skill']):
-        link = link_to(to_skills, bot_attr["used_links"])
+        link = link_to(to_skills, human_attr["used_links"])
         response = link['phrase']
         if response:
             confidence = LINKTO_CONFIDENCE
-            bot_attr["used_links"][link["skill"]] = bot_attr["used_links"].get(link["skill"], []) + [link['phrase']]
+            human_attr["used_links"][link["skill"]] = human_attr["used_links"].get(link["skill"], []) + [link['phrase']]
             attr = {}
             return response, confidence, human_attr, bot_attr, attr
         else:
@@ -235,9 +233,9 @@ class MovieSkillScenario:
             return False
 
     def movie_scenario(self, dialog, movies_ids=[], unique_persons={}, mentioned_genres=[]):
-        human_attr = {}
-        bot_attr = dialog["bot"]["attributes"]
-        bot_attr["used_links"] = bot_attr.get("used_links", defaultdict(list))
+        bot_attr = {}
+        human_attr = dialog["human"]["attributes"]
+        human_attr["used_links"] = human_attr.get("used_links", defaultdict(list))
         for p in ["discussed_movie_titles", "discussed_movie_ids", "discussed_movie_persons",
                   "discussed_movie_genres"]:
             human_attr[p] = dialog["human"]["attributes"].get(p, [])

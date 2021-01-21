@@ -2,16 +2,16 @@ import requests
 import json
 
 
-def make_input_data(curr_sent, bot_sent, bot_attributes={},
+def make_input_data(curr_sent, bot_sent, human_attributes={},
                     emotion={'neutral': 0}, intents={"yes": {"confidence": 0, "detected": 0}}):
     input_data = {
         "dialogs": [
             {
                 "id": "test",
-                "bot": {"attributes": bot_attributes},
-                "human": {"attributes": {}},
-                "human_attributes": {},
-                "bot_attributes": bot_attributes,
+                "bot": {"attributes": {}},
+                "human": {"attributes": human_attributes},
+                "human_attributes": human_attributes,
+                "bot_attributes": {},
                 "utterances": [
                     {
                         "user_telegram_id": "test",
@@ -85,11 +85,11 @@ if __name__ == '__main__':
     with open("tests.json") as fp:
         tests = json.load(fp)
     for test in tests:
-        results = test.pop('results')
+        expected_results = test.pop('results')
         test = make_input_data(
             test.get('curr_sent', ""),
             test.get('bot_sent', ""),
-            test.get('bot_attributes', {}),
+            test.get('human_attributes', {}),
             test.get("emotion", {'neutral': 0}),
             test.get("intents", {"yes": {"confidence": 0, "detected": 0}})
         )
@@ -97,22 +97,30 @@ if __name__ == '__main__':
             phrase, confidence, human_attributes, \
                 bot_attributes, attributes = requests.post(url, json=test).json()[0]
         except Exception as e:
-            print(f"Exception:\n test: {test}\nresult: {results}")
+            print(f"Exception:\n test: {test}\nresult: {expected_results}")
             raise e
-        state = bot_attributes.get("emotion_skill_attributes", {}).get("state", "")
-        emotion = bot_attributes.get("emotion_skill_attributes", {}).get("emotion", "")
+        state = human_attributes.get("emotion_skill_attributes", {}).get("state", "")
+        emotion = human_attributes.get("emotion_skill_attributes", {}).get("emotion", "")
         try:
-            assert results.get("text", "") in phrase, print(phrase)
-            assert results.get("confidence", confidence) == confidence, print(confidence)
-            assert state in results.get("states", [state]), print(state)
-            assert results.get("emotion", emotion) == emotion, print(emotion)
+            if "text" in expected_results:
+                print("Check text")
+                assert expected_results["text"] in phrase, print(phrase)
+            if "confidence" in expected_results:
+                print("Check confidence")
+                assert expected_results["confidence"] == confidence, print(confidence)
+            if "states" in expected_results:
+                print("Check states")
+                assert state in expected_results["states"], print(state)
+            if "emotion" in expected_results:
+                print("Check emotion")
+                assert expected_results["emotion"] == emotion, print(emotion)
         except AssertionError as e:
             print(f"AssertionError at test: \n{test}\n")
             print("-" * 30)
-            print(f"results: {results}")
+            print(f"expected_results: {expected_results}")
             print(
-                f"phrase: {phrase}; confidence: {confidence};"
-                f"bot_attributes: {bot_attributes}; human_attributes: {human_attributes}"
+                f"phrase: {phrase}; confidence: {confidence}; "
+                f"bot_attributes: {bot_attributes}; human_attributes: {human_attributes}; "
                 f"attributes: {attributes}"
             )
             raise e

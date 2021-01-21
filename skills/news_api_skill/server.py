@@ -252,7 +252,7 @@ def collect_topics_and_statuses(dialogs):
 
 
 def link_to_other_skills(human_attr, bot_attr, curr_uttr):
-    link = link_to(['movie_skill', 'book_skill'], bot_attr["used_links"])
+    link = link_to(['movie_skill', 'book_skill'], human_attr["used_links"])
     response = link['phrase']
     if len(curr_uttr['text'].split()) <= 5 and not re.search(FALSE_NEWS_TEMPLATES, curr_uttr['text']):
         confidence = LINKTO_CONFIDENCE
@@ -261,9 +261,9 @@ def link_to_other_skills(human_attr, bot_attr, curr_uttr):
         confidence = 0.
     else:
         confidence = LINKTO_FOR_LONG_RESPONSE_CONFIDENCE
-    if link["skill"] not in bot_attr["used_links"]:
-        bot_attr["used_links"][link["skill"]] = []
-    bot_attr["used_links"][link["skill"]].append(link['phrase'])
+    if link["skill"] not in human_attr["used_links"]:
+        human_attr["used_links"][link["skill"]] = []
+    human_attr["used_links"][link["skill"]].append(link['phrase'])
     attr = {}
     return response, confidence, human_attr, bot_attr, attr
 
@@ -293,9 +293,9 @@ def respond():
         logger.info(f"Composing answer for topic: {curr_topic} and status: {curr_status}.")
         logger.info(f"Result: {result}.")
 
-        bot_attr = dialogs[i]["bot"]["attributes"]
-        bot_attr["used_links"] = bot_attr.get("used_links", defaultdict(list))
-        human_attr = {}
+        human_attr = dialogs[i]["human"]["attributes"]
+        human_attr["used_links"] = human_attr.get("used_links", defaultdict(list))
+        bot_attr = {}
         # the only difference is that result is already is a dictionary with news.
 
         lets_chat_about_particular_topic = if_lets_chat_about_topic(dialogs[i]["human_utterances"][-1]["text"].lower())

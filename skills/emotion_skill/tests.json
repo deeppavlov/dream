@@ -26,7 +26,7 @@
       "no": {"confidence": 0.0, "detected": 0},
       "yes": {"confidence": 1.0, "detected": 1}
     },
-    "bot_attributes":{"emotion_skill_attributes":{"state":"offered_joke", "emotion":"sadness"}},
+    "human_attributes":{"emotion_skill_attributes":{"state":"offered_joke", "emotion":"sadness"}},
     "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
     "results":{"state":["offer_another_joke"], "emotion":"sadness"}
   },
@@ -37,7 +37,7 @@
       "no": {"confidence": 0.0, "detected": 0},
       "yes": {"confidence": 0.0, "detected": 0}
     },
-    "bot_attributes":{"emotion_skill_attributes":{"state":"offer_another_joke", "emotion":"sadness"}},
+    "human_attributes":{"emotion_skill_attributes":{"state":"offer_another_joke", "emotion":"sadness"}},
     "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
     "results":{"state":["offered_joke"], "emotion":"sadness"}
   },
@@ -48,7 +48,7 @@
       "no": {"confidence": 1.0, "detected": 1},
       "yes": {"confidence": 0.0, "detected": 0}
     },
-    "bot_attributes":{"emotion_skill_attributes":{"state":"offered_joke", "emotion":"sadness"}},
+    "human_attributes":{"emotion_skill_attributes":{"state":"offered_joke", "emotion":"sadness"}},
     "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
     "results":{"text": "Do you think that some advices might help? I know a lot.", "state":["offered_advice"], "emotion":"sadness"}
   },
@@ -59,7 +59,7 @@
       "no": {"confidence": 0.0, "detected": 0},
       "yes": {"confidence": 1.0, "detected": 1}
     },
-    "bot_attributes":{"emotion_skill_attributes":{"state":"offered_advice", "emotion":"sadness"}},
+    "human_attributes":{"emotion_skill_attributes":{"state":"offered_advice", "emotion":"sadness"}},
     "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
     "results":{"state":["offer_another_advice"], "emotion":"sadness"}
   },
@@ -70,7 +70,7 @@
       "no": {"confidence": 0.0, "detected": 0},
       "yes": {"confidence": 0.0, "detected": 0}
     },
-    "bot_attributes":{"emotion_skill_attributes":{"state":"offer_another_advice", "emotion":"sadness"}},
+    "human_attributes":{"emotion_skill_attributes":{"state":"offer_another_advice", "emotion":"sadness"}},
     "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
     "results":{"state":["offered_advice"], "emotion":"sadness"}
   },
@@ -81,7 +81,7 @@
       "no": {"confidence": 1.0, "detected": 1},
       "yes": {"confidence": 0.0, "detected": 0}
     },
-    "bot_attributes":{"emotion_skill_attributes":{"state":"offered_advice", "emotion":"sadness"}},
+    "human_attributes":{"emotion_skill_attributes":{"state":"offered_advice", "emotion":"sadness"}},
     "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
     "results":{"state":[""], "emotion":"sadness"}
   },
@@ -92,7 +92,7 @@
       "no": {"confidence": 0.0, "detected": 0},
       "yes": {"confidence": 0.0, "detected": 0}
     },
-    "bot_attributes":{"emotion_skill_attributes":{}},
+    "human_attributes":{"emotion_skill_attributes":{}},
     "emotion": {"anger": 0, "fear": 0, "joy": 1, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
     "results":{"states":["joy_link_to_joke", "joy_link_to_story"], "emotion":"joy"}
   },
@@ -103,7 +103,7 @@
       "no": {"confidence": 0.0, "detected": 0},
       "yes": {"confidence": 0.0, "detected": 0}
     },
-    "bot_attributes":{"emotion_skill_attributes":{"state": "joy_link_to_joke", "emotion":"joy"}},
+    "human_attributes":{"emotion_skill_attributes":{"state": "joy_link_to_joke", "emotion":"joy"}},
     "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
     "results":{"states":["offered_joke"], "emotion":"joy"}
   }
