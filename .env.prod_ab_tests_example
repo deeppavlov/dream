@@ -10,6 +10,7 @@ COBOT_CONVERSATION_EVALUATION_SERVICE_URL=https://pssen6zq8k.execute-api.us-east
 TELEGRAM_TOKEN=your_telegram_token
 TELEGRAM_PROXY=socks5://ipavlov:ipavlov_telegram@159.65.126.171:1337
 SENTRY_DSN=https://b7421080d49a4b2c959be52dd5609873@o488460.ingest.sentry.io/5548867
+DP_AGENT_SENTRY_DSN=https://b7421080d49a4b2c959be52dd5609873@o488460.ingest.sentry.io/5548867
 DB_NAME=dream-prod
 DB_HOST=mongo.alexa.svc.cluster.local
 DB_PORT=27017
