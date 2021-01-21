@@ -6,6 +6,16 @@ from datetime import datetime
 
 def exit_respond(dialog, response_phrases):
     # goodbye_fix_phrases = ["goodbye", "bye", "bye bye", "alexa bye", "bye alexa", "goodbye alexa", "alexa bye bye"]
+    apology_bye_phrases = [
+        "Sorry, have a great day!",
+        "Sorry to bother you, see you next time!",
+        "My bad. Have a great time!",
+        "Didn't mead to be rude. Talk to you next time.",
+        "Sorry for interrupting you. Talk to you soon.",
+        "Terribly sorry. Have a great day!",
+        "Thought you wanted to chat. My bad. See you soon!",
+        "Oh, sorry. Have a great day!"
+    ]
     utt = dialog["utterances"][-1]
     response = random.choice(response_phrases).strip()  # Neutral response
     annotation = utt["annotations"]
@@ -23,14 +33,13 @@ def exit_respond(dialog, response_phrases):
         is_blacklisted = annotation["cobot_offensiveness"]["is_blacklisted"] == "blacklist"
     except KeyError:
         is_blacklisted = False
-
-    if sentiment == "positive":
+    if len(dialog["utterances"]) < 4:
+        response = random.choice(apology_bye_phrases)
+    elif sentiment == "positive":
         positive = ["I'm glad to help you! ", "Thanks for the chat! ", "Cool! "]
         response = random.choice(positive) + response
-    elif offensiveness == "toxic" or is_blacklisted:
-        response = "I'm sorry if i dissapointed you, but there is no need to be rude. " + response
-    # elif sentiment == "negative" and utt["text"] not in goodbye_fix_phrases:
-    #     response = "I apologize for dissapointing you, I'm still learning. " + response
+    elif offensiveness == "toxic" or is_blacklisted or sentiment == "negative":
+        response = random.choice(apology_bye_phrases)
     return response
 
 
