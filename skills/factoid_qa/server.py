@@ -214,7 +214,6 @@ def respond():
     for dialog in dialogs_batch:
         uttr = dialog["human_utterances"][-1]
         # probabilities of being factoid question
-        is_factoid_sents.append(uttr["annotations"].get("factoid_classification", {}).get("factoid", 0))
         last_phrase = dialog["human_utterances"][-1]["text"]
         if 'about' in last_phrase:
             probable_subjects = last_phrase.split('about')[1:]
@@ -224,6 +223,10 @@ def respond():
         names = [j[0]['text'].lower() for j in names if len(j) > 0]
         names = [j for j in names + probable_subjects if j in fact_dict.keys()]
         names = list(set(names))
+        nounphrases = dialog['human_utterances'][-1]['annotations'].get('cobot_nounphrases', [])
+        is_factoid_class = uttr["annotations"].get("factoid_classification", {}).get("factoid", 0)
+        is_factoid = is_factoid_class and (names or nounphrases)
+        is_factoid_sents.append(is_factoid)
         ner_outputs_to_classify.append(names)
 
     logger.info('Ner outputs ' + str(ner_outputs_to_classify))
@@ -251,8 +254,8 @@ def respond():
             logger.info("Question is classified as factoid. Querying KBQA and ODQA.")
             print("Question is classified as factoid. Querying KBQA and ODQA...", flush=True)
             logger.info(
-                f"Using annotators output, kbqa_response {curr_ann_uttr['annotations'].get('kbqa', {})} "
-                f"odqa_response {curr_ann_uttr['annotations'].get('odqa', {})}")
+                f"Using annotators output, kbqa_response {curr_ann_uttr['annotations'].get('kbqa', [])} "
+                f"odqa_response {curr_ann_uttr['annotations'].get('odqa', [])}")
             if use_annotators_output:
                 kbqa_response = curr_ann_uttr["annotations"].get("kbqa", {})
                 odqa_response = curr_ann_uttr["annotations"].get("odqa", {})

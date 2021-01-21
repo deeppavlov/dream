@@ -27,6 +27,9 @@ def respond():
     res = []
     try:
         res = odqa(questions)
+        res = [[elem[i] for elem in res] for i in range(len(res[0]))]
+        for i in range(len(res)):
+            res[i][1] = float(res[i][1])
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)

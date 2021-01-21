@@ -414,35 +414,6 @@ def simple_formatter_service(payload: List):
     return payload
 
 
-def kbqa_response_formatter(payload: Dict):
-    if payload and "kbqa_res" in payload and payload["kbqa_res"] and len(payload["kbqa_res"][0]) == 2:
-        return {"qa_system": "kbqa",
-                "answer": payload["kbqa_res"][0][0],
-                "confidence": payload["kbqa_res"][0][1]}
-    else:
-        return {"qa_system": "kbqa",
-                "answer": "",
-                "confidence": 0.0}
-
-
-def odqa_response_formatter(payload: Dict):
-    if payload and "odqa_res" in payload and payload["odqa_res"] and len(payload["odqa_res"][0]) == 5:
-        odqa_res = payload["odqa_res"][0]
-        return {"qa_system": "odqa",
-                "answer": odqa_res[0],
-                "confidence": odqa_res[1],
-                "answer_pos": odqa_res[2],
-                "answer_sentence": odqa_res[3],
-                "paragraph": odqa_res[4]}
-    else:
-        return {"qa_system": "odqa",
-                "answer": "",
-                "confidence": 0.0,
-                "answer_pos": 0,
-                "answer_sentence": "",
-                "paragraph": ""}
-
-
 def utt_sentseg_punct_dialog(dialog: Dict):
     '''
     Used by: skill_with_attributes_formatter; punct_dialogs_formatter,
