@@ -65,7 +65,7 @@ request_utters = [
     "top",
 ]
 true_response_utters = [
-    "Love games. Got a list of the top released games, wanna discuss it? ",
+    "So, well, one of my hobbies is keeping fresh stats about the top video games. Wanna dig into it?",
     "I can tell you a few things about popular games. For now, I can talk about the most popular games for this or last year, last month, or even the last week (hotties!). Which of these time periods is of interest for you?",
     "There were 20 newly released games highly rated in the last year. Do you want to learn more? ",
     "The game with the highest rating is Cyberpunk 2077. It was released on December 10 2020. It's a combination of  Action & RPG. 58 percent of people marked Cyberpunk 2077 as exceptional.  If you want to discuss it in details say I want to talk about it.  Chatting about it or the next one? ",
