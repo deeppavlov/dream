@@ -124,10 +124,16 @@
         "repeat(, please){0,1}(, ((Alexa)|(bot))){0,1}",
         "((alexa)|(bot)), repeat(, please){0,1}",
         "((can)|(would)|(could)) you (please ){0,1}((repeat)|(say))( ((that)|(the question)|(what you said))){0,1}( again){0,1}( please){0,1}",
-        "i did not hear you, well please repeat."
+        "i did not hear you well, please repeat.",
+        "(alexa ){0,1}what did you just say",
+        "(alexa ){0,1}what you are (even ){0,1}talking about",
+        "excuse me",
+        "padon me",
+        "(sorry, ){0,1}i didn't catch that"  
       ],
       "min_precision": 0.94,
       "punctuation": [
+        "?",
         ".",
         "!"
       ]
@@ -168,7 +174,6 @@
 	      "(because ){0,1}you are being confusing(, alexa){0,1}",
         "you are not making any sense",
         "(alexa ){0,1}i am confused",
-        "(alexa ){0,1}what did you just say",
         "(alexa ){0,1}what the fuck",
         "(i ((do)|(did)) not ((get)|(understand)) ){0,1}what do you ((mean)|(say))( alexa){0,1}",
         "(i ((do)|(did)) not ((get)|(understand)) ){0,1}what are you saying",
@@ -181,7 +186,8 @@
         "((i don't ((know)|(understand)|(get)) )|(I am not sure )|())what ((do)|(did)) you mean( alexa){0,1}",
         "((i don't ((know)|(understand)|(get)) )|(I am not sure )|())((what you mean)|(what you say)|(what you want)|(what are you talking about))( alexa){0,1}",
         "(what, ){0,1}it doesn't make (any ){0,1}sense( alexa){0,1}",
-        "(alexa ){0,1}it ((don't)|(doesn't)) make any sense"
+        "(alexa ){0,1}it ((don't)|(doesn't)) make any sense",
+        "(alexa ){0,1}we're not on the same page"
       ],
       "min_precision": 0.9,
       "punctuation": [
