@@ -27,6 +27,8 @@ def respond():
     res = [("Not Found", 0.0)] * len(questions)
     try:
         res = kbqa(questions)
+        if res:
+            res = [(answer, float(conf)) for answer, conf in res]
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
