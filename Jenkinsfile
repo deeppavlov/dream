@@ -417,7 +417,7 @@ metadata:
 spec:
   containers:
   - name: jenkins-busybox
-    image: busybox
+    image: curlimages/curl
     imagePullPolicy: Always
     command:
     - cat
