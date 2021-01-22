@@ -8,11 +8,12 @@ interval=${WAIT_INTERVAL:-10}
 while [ $timeout -gt 0 ]; do
   res=$(curl -XGET "$url" -s -o /dev/null -w "%{http_code}")
   if [ "$res" == "200" ]; then
-    return 0
+    echo "ok"
+    exit 0
   fi
   sleep $interval
   ((timeout-=interval))
   echo wait $url timeout in $timeout sec..
 done
 
-return 1
+exit 1
