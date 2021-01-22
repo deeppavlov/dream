@@ -30,10 +30,11 @@ def respond():
         ner_histories.append([])
         for utterance in dialog:
             # noinspection PyInterpreter
-            if "ner" in utterance:
-                ner_histories[-1].append(utterance["ner"])
+            if "sentseg" in utterance:
+                n_segments = len(utterance["sentseg"]["segments"])  # utterance["text"] is a list of sentences
             else:
-                ner_histories[-1].append(utterance["bot_ner"])
+                n_segments = 1
+            ner_histories[-1].append(utterance.get("ner", n_segments * [[]]))
 
     ret = []
 
