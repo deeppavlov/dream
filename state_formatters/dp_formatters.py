@@ -74,32 +74,38 @@ def last_n_human_utt_dialog_formatter(dialog: Dict, last_n_utts: int, only_last_
     if len(dialog["human_utterances"]) <= last_n_utts and \
             not if_lets_chat_about_topic(dialog["utterances"][0]["text"].lower()):
         # in all cases when not particular topic, convert first phrase in the dialog to `hello!`
-        dialog["utterances"][0]['annotations']['sentseg']['punct_sent'] = "hello!"
+        if "sentseg" in dialog["human_utterances"][0]['annotations']:
+            dialog["human_utterances"][0]['annotations']['sentseg']['punct_sent'] = "hello!"
+            dialog["human_utterances"][0]['annotations']['sentseg']['segments'] = ["hello"]
+        else:
+            dialog["human_utterances"][0]['text'] = "hello"
 
     human_utts = []
     detected_intents = []
     for utt in dialog['human_utterances'][-last_n_utts:]:
-        if utt['user']['user_type'] == 'human':
+        if "sentseg" in utt['annotations']:
             sentseg_ann = utt['annotations']['sentseg']
             if only_last_sentence:
                 text = sentseg_ann['segments'][-1] if len(sentseg_ann['segments']) > 0 else ''
             else:
                 text = sentseg_ann['punct_sent']
-            human_utts += [text]
-            detected_intents += [get_intents(utt, which="all")]
+        else:
+            text = utt["text"]
+        human_utts += [text]
+        detected_intents += [get_intents(utt, which="all")]
     return [{'sentences_batch': [human_utts], 'intents': [detected_intents]}]
 
 
 def alice_formatter_dialog(dialog: Dict) -> List:
     # Used by: alice
-    dialog = get_last_n_turns(dialog)
+    dialog = get_last_n_turns(dialog, bot_last_turns=4)
     dialog = remove_clarification_turns_from_dialog(dialog)
     return last_n_human_utt_dialog_formatter(dialog, last_n_utts=2, only_last_sentence=True)
 
 
 def programy_formatter_dialog(dialog: Dict) -> List:
     # Used by: program_y, program_y_dangerous, program_y_wide
-    dialog = get_last_n_turns(dialog)
+    dialog = get_last_n_turns(dialog, bot_last_turns=6)
     dialog = remove_clarification_turns_from_dialog(dialog)
     dialog = last_n_human_utt_dialog_formatter(dialog, last_n_utts=5)[0]
     sentences = dialog['sentences_batch'][0]
@@ -118,7 +124,7 @@ def programy_formatter_dialog(dialog: Dict) -> List:
     return [{'sentences_batch': [sentences]}]
 
 
-def eliza_formatter_dialog(dialog: Dict) -> Dict:
+def eliza_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: eliza_formatter
     dialog = get_last_n_turns(dialog)
     dialog = remove_clarification_turns_from_dialog(dialog)
@@ -126,16 +132,19 @@ def eliza_formatter_dialog(dialog: Dict) -> Dict:
     prev_human_utterance = None
     for utt in dialog['utterances']:
         if utt["user"]["user_type"] == "human":
-            prev_human_utterance = utt['annotations']["spelling_preprocessing"]
+            prev_human_utterance = utt['annotations'].get("spelling_preprocessing",
+                                                          utt["text"])
         elif utt["user"]["user_type"] == "bot" and utt["active_skill"] == "eliza" and prev_human_utterance is not None:
             history.append(prev_human_utterance)
+    last_utterance = dialog['human_utterances'][-1]['annotations'].get("spelling_preprocessing",
+                                                                       dialog['human_utterances'][-1]["text"])
     return [{
-        "last_utterance_batch": [dialog['utterances'][-1]['annotations']["spelling_preprocessing"]],
+        "last_utterance_batch": [last_utterance],
         "human_utterance_history_batch": [history],
     }]
 
 
-def aiml_formatter_dialog(dialog: Dict) -> Dict:
+def aiml_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: aiml_formatter
     return [{
         'states_batch': [{'user_id': dialog['human']['id']}],
@@ -164,25 +173,42 @@ def misheard_asr_formatter_service(payload):
 def replace_with_annotated_utterances(dialog, mode="punct_sent"):
     if mode == "punct_sent":
         for utt in dialog['utterances']:
-            utt['text'] = utt['annotations']['sentseg']['punct_sent']
+            if "sentseg" in utt['annotations']:
+                utt['text'] = utt['annotations']['sentseg']['punct_sent']
         for utt in dialog['human_utterances']:
-            utt['text'] = utt['annotations']['sentseg']['punct_sent']
+            if "sentseg" in utt['annotations']:
+                utt['text'] = utt['annotations']['sentseg']['punct_sent']
     elif mode == "segments":
         for utt in dialog['utterances']:
-            utt['text'] = utt['annotations']['sentseg']['segments']
+            if "sentseg" in utt['annotations']:
+                utt['text'] = utt['annotations']['sentseg']['segments']
+            else:
+                utt['text'] = [utt['text']]
         for utt in dialog['human_utterances']:
-            utt['text'] = utt['annotations']['sentseg']['segments']
+            if "sentseg" in utt['annotations']:
+                utt['text'] = utt['annotations']['sentseg']['segments']
+            else:
+                utt['text'] = [utt['text']]
         for utt in dialog['bot_utterances']:
-            utt['text'] = utt['annotations']['sentseg']['segments']
+            if "sentseg" in utt['annotations']:
+                utt['text'] = utt['annotations']['sentseg']['segments']
+            else:
+                utt['text'] = [utt['text']]
     elif mode == "modified_sents":
         for utt in dialog['utterances']:
-            utt['text'] = utt['annotations']['sentrewrite']['modified_sents'][-1]
+            if "sentrewrite" in utt['annotations']:
+                utt['text'] = utt['annotations']['sentrewrite']['modified_sents'][-1]
+            elif "sentseg" in utt['annotations']:
+                utt['text'] = utt['annotations']['sentseg']['punct_sent']
         for utt in dialog['human_utterances']:
-            utt['text'] = utt['annotations']['sentrewrite']['modified_sents'][-1]
+            if "sentrewrite" in utt['annotations']:
+                utt['text'] = utt['annotations']['sentrewrite']['modified_sents'][-1]
+            elif "sentseg" in utt['annotations']:
+                utt['text'] = utt['annotations']['sentseg']['punct_sent']
     return dialog
 
 
-def base_skill_selector_formatter_dialog(dialog: Dict) -> Dict:
+def base_skill_selector_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: base_skill_selector_formatter
     dialog = get_last_n_turns(dialog, bot_last_turns=5)
     dialog = remove_clarification_turns_from_dialog(dialog)
@@ -190,25 +216,27 @@ def base_skill_selector_formatter_dialog(dialog: Dict) -> Dict:
     return [{"states_batch": [dialog]}]
 
 
-def transfertransfo_formatter_dialog(dialog: Dict) -> Dict:
+def transfertransfo_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: transfertransfo_formatter
     dialog = get_last_n_turns(dialog)
     dialog = remove_clarification_turns_from_dialog(dialog)
+    dialog = replace_with_annotated_utterances(dialog, mode="punct_sent")
     return [{
         'utterances_histories': [
-            [utt['annotations']["sentseg"]["punct_sent"] for utt in dialog['utterances']]
+            [utt['text'] for utt in dialog['utterances']]
         ],
         'personality': [dialog['bot']['persona']]
     }]
 
 
-def convert_formatter_dialog(dialog: Dict) -> Dict:
+def convert_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: topicalchat_convert_retrieval
     dialog = get_last_n_turns(dialog)
     dialog = remove_clarification_turns_from_dialog(dialog)
+    dialog = replace_with_annotated_utterances(dialog, mode="punct_sent")
     return [{
         'utterances_histories': [
-            [utt['annotations']["sentseg"]["punct_sent"] for utt in dialog['utterances']]
+            [utt['text'] for utt in dialog['utterances']]
         ],
         'personality': [dialog['bot']['persona']],
         'topics': [get_topics(dialog["utterances"][-1], which="cobot_topics")],
@@ -216,9 +244,10 @@ def convert_formatter_dialog(dialog: Dict) -> Dict:
     }]
 
 
-def personality_catcher_formatter_dialog(dialog: Dict) -> Dict:
+def personality_catcher_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: personality_catcher_formatter
-    return [{'personality': [dialog['human_utterances'][-1]['annotations']["spelling_preprocessing"]]}]
+    return [{'personality': [dialog['human_utterances'][-1]['annotations'].get(
+        "spelling_preprocessing", dialog['human_utterances'][-1]['text'])]}]
 
 
 def telegram_selector_formatter_in(dialog: Dict):
@@ -272,9 +301,10 @@ def cobot_formatter_dialog(dialog: Dict):
     # Used by: cobot_dialogact_formatter, cobot_classifiers_formatter
     dialog = get_last_n_turns(dialog)
     dialog = remove_clarification_turns_from_dialog(dialog)
+    dialog = replace_with_annotated_utterances(dialog, mode="segments")
     utterances_histories = []
     for utt in dialog['utterances']:
-        utterances_histories.append(utt['annotations']['sentseg']['segments'])
+        utterances_histories.append(utt['text'])
     return [{'utterances_histories': [utterances_histories]}]
 
 
@@ -287,61 +317,64 @@ def base_response_selector_formatter_service(payload: List):
                 "human_attributes": payload[3], "bot_attributes": payload[4]}
 
 
-def sent_rewrite_formatter_dialog(dialog: Dict) -> Dict:
+def sent_rewrite_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: sent_rewrite_formatter
     dialog = get_last_n_turns(dialog)
     dialog = remove_clarification_turns_from_dialog(dialog)
+    dialog = replace_with_annotated_utterances(dialog, mode="segments")
     utterances_histories = []
     annotation_histories = []
     for utt in dialog['utterances']:
         annotation_histories.append(utt['annotations'])
-        utterances_histories.append(utt['annotations']['sentseg']['segments'])
+        utterances_histories.append(utt['text'])
     return [{
         'utterances_histories': [utterances_histories],
         'annotation_histories': [annotation_histories]
     }]
 
 
-def sent_rewrite_formatter_w_o_last_dialog(dialog: Dict) -> Dict:
+def sent_rewrite_formatter_w_o_last_dialog(dialog: Dict) -> List[Dict]:
     dialog = get_last_n_turns(dialog, LAST_N_TURNS + 1)
     dialog = remove_clarification_turns_from_dialog(dialog)
+    dialog = replace_with_annotated_utterances(dialog, mode="segments")
     utterances_histories = []
     annotation_histories = []
     for utt in dialog['utterances'][:-1]:
         annotation_histories.append(utt['annotations'])
-        utterances_histories.append(utt['annotations']['sentseg']['segments'])
+        utterances_histories.append(utt['text'])
     return [{
         'utterances_histories': [utterances_histories],
         'annotation_histories': [annotation_histories]
     }]
 
 
-def asr_formatter_dialog(dialog: Dict) -> Dict:
+def asr_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: asr_formatter
     return [{'speeches': [dialog['utterances'][-1].get('attributes', {}).get('speech', {})],
              'human_utterances': [dialog['human_utterances'][-3:]]}]
 
 
-def last_utt_dialog(dialog: Dict) -> Dict:
+def last_utt_dialog(dialog: Dict) -> List[Dict]:
     # Used by: dp_toxic_formatter, sent_segm_formatter, tfidf_formatter, sentiment_classification
     return [{'sentences': [dialog['utterances'][-1]['text']]}]
 
 
-def preproc_last_human_utt_dialog(dialog: Dict) -> Dict:
+def preproc_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
     # Used by: sentseg over human uttrs
-    return [{'sentences': [dialog['human_utterances'][-1]['annotations']["spelling_preprocessing"]]}]
+    return [{'sentences': [dialog['human_utterances'][-1]['annotations'].get("spelling_preprocessing",
+                                                                             dialog['human_utterances'][-1]['text'])]}]
 
 
-def last_bot_utt_dialog(dialog: Dict) -> Dict:
+def last_bot_utt_dialog(dialog: Dict) -> List[Dict]:
     return [{'sentences': [dialog['bot_utterances'][-1]['text']]}]
 
 
-def last_human_utt_nounphrases(dialog: Dict) -> Dict:
+def last_human_utt_nounphrases(dialog: Dict) -> List[Dict]:
     # Used by: comet_conceptnet_annotator
     return [{'nounphrases': [dialog['human_utterances'][-1]['annotations'].get('cobot_nounphrases', [])]}]
 
 
-def hypotheses_list(dialog: Dict) -> Dict:
+def hypotheses_list(dialog: Dict) -> List[Dict]:
     hypotheses = dialog["utterances"][-1]["hypotheses"]
     hypots = [h["text"] for h in hypotheses]
     return [{'sentences': hypots}]
@@ -351,13 +384,16 @@ def last_utt_and_history_dialog(dialog: Dict) -> List:
     # Used by: topicalchat retrieval skills
     dialog = get_last_n_turns(dialog)
     dialog = remove_clarification_turns_from_dialog(dialog)
+    dialog = replace_with_annotated_utterances(dialog, mode="punct_sent")
+    sent = dialog['human_utterances'][-1]['annotations'].get("spelling_preprocessing",
+                                                             dialog['human_utterances'][-1]['text'])
     return [{
-        'sentences': [dialog['human_utterances'][-1]['annotations']["spelling_preprocessing"]],
-        'utterances_histories': [[utt['annotations']['sentseg']['punct_sent'] for utt in dialog['utterances']]]
+        'sentences': [sent],
+        'utterances_histories': [[utt['text'] for utt in dialog['utterances']]]
     }]
 
 
-def stop_formatter_dialog(dialog: Dict) -> Dict:
+def stop_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: stop annotator, conv eval annotator
     hypotheses = dialog["utterances"][-1]["hypotheses"]
     utts = []
@@ -369,14 +405,14 @@ def stop_formatter_dialog(dialog: Dict) -> Dict:
     return [{'dialogs': utts}]
 
 
-def cobot_conv_eval_formatter_dialog(dialog: Dict) -> Dict:
+def cobot_conv_eval_formatter_dialog(dialog: Dict) -> List[Dict]:
     dialog = get_last_n_turns(dialog, total_last_turns=4)
     payload = stop_formatter_dialog(dialog)
     # print(f"formatter {payload}", flush=True)
     return payload
 
 
-def cobot_convers_evaluator_annotator_formatter(dialog: Dict) -> Dict:
+def cobot_convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
     dialog = get_last_n_turns(dialog)
     dialog = remove_clarification_turns_from_dialog(dialog)
     conv = dict()
@@ -394,7 +430,7 @@ def dp_toxic_formatter_service(payload: List):
     return payload[0]
 
 
-def base_formatter_service(payload: Dict) -> Dict:
+def base_formatter_service(payload: Dict) -> List[Dict]:
     '''
     Used by: dummy_skill_formatter, intent_responder_formatter, transfertransfo_formatter,
     aiml_formatter, alice_formatter, tfidf_formatter
@@ -521,21 +557,36 @@ def skill_with_attributes_formatter_service(payload: Dict):
 
 def last_utt_sentseg_punct_dialog(dialog: Dict):
     # Used by: attitude_formatter, sentiment_formatter
-    return [{'sentences': [dialog['utterances'][-1]['annotations']['sentseg']['punct_sent']]}]
+    if "sentseg" in dialog['utterances'][-1]['annotations']:
+        return [{'sentences': [dialog['utterances'][-1]['annotations']['sentseg']['punct_sent']]}]
+    else:
+        return [{'sentences': [dialog['utterances'][-1]['text']]}]
 
 
 def last_utt_sentseg_segments_dialog(dialog: Dict):
     # Used by: intent_catcher_formatter
-    return [{'sentences': [dialog['utterances'][-1]['annotations']['sentseg']['segments']]}]
+    if "sentseg" in dialog['utterances'][-1]['annotations']:
+        return [{'sentences': [dialog['utterances'][-1]['annotations']['sentseg']['segments']]}]
+    else:
+        segments = [dialog['utterances'][-1]['text']]
+        return [{'sentences': [segments]}]
 
 
 def ner_formatter_dialog(dialog: Dict):
     # Used by: ner_formatter
-    return [{'last_utterances': [dialog['utterances'][-1]['annotations']['sentseg']['segments']]}]
+    if "sentseg" in dialog['utterances'][-1]['annotations']:
+        return [{'last_utterances': [dialog['utterances'][-1]['annotations']['sentseg']['segments']]}]
+    else:
+        segments = [dialog['utterances'][-1]['text']]
+        return [{'last_utterances': [segments]}]
 
 
 def ner_formatter_last_bot_dialog(dialog: Dict):
-    return [{'last_utterances': [dialog['bot_utterances'][-1]['annotations']['sentseg']['segments']]}]
+    if "sentseg" in dialog['bot_utterances'][-1]['annotations']:
+        return [{'last_utterances': [dialog['bot_utterances'][-1]['annotations']['sentseg']['segments']]}]
+    else:
+        segments = [dialog['bot_utterances'][-1]['text']]
+        return [{'last_utterances': [segments]}]
 
 
 # def reddit_ner_formatter_dialog(dialog: Dict):
@@ -578,11 +629,17 @@ def el_formatter_dialog(dialog: Dict):
     ner_output = dialog['human_utterances'][-1]['annotations']['ner']
     nounphrases = dialog['human_utterances'][-1]['annotations'].get('cobot_nounphrases', [])
     entity_substr = [[entity["text"] for entity in entities] for entities in ner_output]
-    context = [dialog['human_utterances'][-1]['annotations']['sentseg']['punct_sent'] for _ in entity_substr]
+
+    if "sentseg" in dialog['human_utterances'][-1]['annotations']:
+        last_human_utterance_text = dialog['human_utterances'][-1]['annotations']['sentseg']['punct_sent']
+    else:
+        last_human_utterance_text = dialog['human_utterances'][-1]['text']
+
+    context = [last_human_utterance_text for _ in entity_substr]
     template = ['' for _ in entity_substr]
     if nounphrases:
         entity_substr.append(nounphrases)
-        context.append(dialog['human_utterances'][-1]['annotations']['sentseg']['punct_sent'])
+        context.append(last_human_utterance_text)
         template.append('')
 
     return [
@@ -596,13 +653,23 @@ def el_formatter_dialog(dialog: Dict):
 
 def kbqa_formatter_dialog(dialog: Dict):
     # Used by: kbqa annotator
-    sentences = [dialog['human_utterances'][-1]['annotations']['sentseg']['punct_sent']]
+    if "sentseg" in dialog['human_utterances'][-1]['annotations']:
+        last_human_utterance_text = dialog['human_utterances'][-1]['annotations']['sentseg']['punct_sent']
+    else:
+        last_human_utterance_text = dialog['human_utterances'][-1]['text']
+
+    sentences = [last_human_utterance_text]
     return [{'x_init': sentences}]
 
 
 def odqa_formatter_dialog(dialog: Dict):
     # Used by: odqa annotator
-    sentences = [dialog['human_utterances'][-1]['annotations']['sentseg']['punct_sent']]
+    if "sentseg" in dialog['human_utterances'][-1]['annotations']:
+        last_human_utterance_text = dialog['human_utterances'][-1]['annotations']['sentseg']['punct_sent']
+    else:
+        last_human_utterance_text = dialog['human_utterances'][-1]['text']
+
+    sentences = [last_human_utterance_text]
     return [{'question_raw': sentences}]
 
 
@@ -610,8 +677,9 @@ def short_story_formatter_dialog(dialog: Dict):
     # Used by: short_story_skill
     return [
         {
-            'intents': dialog['human_utterances'][-1]['annotations']['intent_catcher'],
-            'human_sentence': dialog['human_utterances'][-1]['annotations']["spelling_preprocessing"],
+            'intents': dialog['human_utterances'][-1]['annotations'].get('intent_catcher', {}),
+            'human_sentence': dialog['human_utterances'][-1]['annotations'].get("spelling_preprocessing",
+                                                                                dialog['human_utterances'][-1]['text']),
             'state': dialog["bot"]["attributes"].get("short_story_skill_attributes", {})
         }
     ]
@@ -630,7 +698,8 @@ def intent_responder_formatter_dialog(dialog: Dict):
     dialog['called_intents'] = called_intents
     dialog["utterances"] = dialog["utterances"][-(LAST_N_TURNS * 2 + 1):]
     for utt in dialog['utterances']:
-        utt['text'] = utt['annotations']['sentseg']['punct_sent']
+        if "sentseg" in utt['annotations']:
+            utt['text'] = utt['annotations']['sentseg']['punct_sent']
     return [{'dialogs': [dialog]}]
 
 
