@@ -14,9 +14,7 @@ spec:
         app: {{ KUBER_DP_NAME }}
     spec:
       nodeSelector:
-        {% if GPU != "false" %}
         gpu: "{{ GPU | string }}"
-        {% endif %}
         environment: {{ ENVIRONMENT }}
       containers:
       - name: alexaservice

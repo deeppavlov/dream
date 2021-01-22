@@ -416,8 +416,8 @@ metadata:
     jenkins: slave
 spec:
   containers:
-  - name: jenkins-busybox
-    image: curlimages/curl
+  - name: jenkins-agent
+    image: 263182626354.dkr.ecr.us-east-1.amazonaws.com/jenkins-agent
     imagePullPolicy: Always
     command:
     - cat
@@ -438,7 +438,7 @@ spec:
       }
 
       steps {
-        container('jenkins-busybox') {
+        container('jenkins-agent') {
           script {
             int startTime = currentBuild.duration
             notify('start')
