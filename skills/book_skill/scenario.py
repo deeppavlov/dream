@@ -624,6 +624,8 @@ def best_book_by_author(plain_author_name, plain_last_bookname=None,
             best_bookname = entity_to_label(best_book_entity)
         else:
             best_bookname = default_phrase
+        if best_bookname is None:
+            best_bookname = default_phrase
         logger.debug('Answer ' + best_bookname)
         return best_bookname
     except Exception as e:
