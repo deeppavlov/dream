@@ -343,6 +343,10 @@ class RuleBasedSkillSelectorConnector:
                         found_emotion, found_prob = emotion, prob
                 cond1 = found_emotion != 'neutral' and found_prob > emo_prob_threshold
                 should_run_emotion = cond1 or detect_emotion(prev_bot_uttr, dialog['human_utterances'][-1])
+                good_emotion_prob = max([emotions['joy'], emotions['love']])
+                bad_emotion_prob = max([emotions['anger'], emotions['fear'], emotions['sadness']])
+                not_strange_emotion_prob = not (good_emotion_prob > 0.5 and bad_emotion_prob > 0.5)
+                should_run_emotion = should_run_emotion and not_strange_emotion_prob
                 if should_run_emotion or "how are you?" in prev_bot_uttr.get("text", "").lower():
                     skills_for_uttr.append('emotion_skill')
 
