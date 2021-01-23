@@ -181,18 +181,18 @@ def replace_with_annotated_utterances(dialog, mode="punct_sent"):
     elif mode == "segments":
         for utt in dialog['utterances']:
             if "sentseg" in utt['annotations']:
-                utt['text'] = utt['annotations']['sentseg']['segments']
-            else:
+                utt['text'] = deepcopy(utt['annotations']['sentseg']['segments'])
+            elif isinstance(utt['text'], str):
                 utt['text'] = [utt['text']]
         for utt in dialog['human_utterances']:
             if "sentseg" in utt['annotations']:
-                utt['text'] = utt['annotations']['sentseg']['segments']
-            else:
+                utt['text'] = deepcopy(utt['annotations']['sentseg']['segments'])
+            elif isinstance(utt['text'], str):
                 utt['text'] = [utt['text']]
         for utt in dialog['bot_utterances']:
             if "sentseg" in utt['annotations']:
-                utt['text'] = utt['annotations']['sentseg']['segments']
-            else:
+                utt['text'] = deepcopy(utt['annotations']['sentseg']['segments'])
+            elif isinstance(utt['text'], str):
                 utt['text'] = [utt['text']]
     elif mode == "modified_sents":
         for utt in dialog['utterances']:
