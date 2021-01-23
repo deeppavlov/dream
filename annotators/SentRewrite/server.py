@@ -23,18 +23,15 @@ def respond():
     utterances_histories = request.json["utterances_histories"]
     annotation_histories = request.json["annotation_histories"]
 
-    # [dialog -> utterance -> sentence -> ner (dict)]
+    # [dialog_annotations -> annotated_utterance -> sentence -> ner (dict)]
     # {'confidence': 0.9985795021057129, 'end_pos': 5, 'start_pos': 0, 'text': 'Messi', 'type': 'PERSON'}
     ner_histories = []
-    for dialog in annotation_histories:
+    for dialog, dialog_annotations in zip(utterances_histories, annotation_histories):
         ner_histories.append([])
-        for utterance in dialog:
+        for utterance, annotated_utterance in zip(dialog, dialog_annotations):
             # noinspection PyInterpreter
-            if "sentseg" in utterance:
-                n_segments = len(utterance["sentseg"]["segments"])  # utterance["text"] is a list of sentences
-            else:
-                n_segments = 1
-            ner_histories[-1].append(utterance.get("ner", n_segments * [[]]))
+            n_segments = len(utterance)
+            ner_histories[-1].append(annotated_utterance.get("ner", n_segments * [[]]))
 
     ret = []
 
