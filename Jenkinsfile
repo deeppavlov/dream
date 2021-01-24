@@ -44,8 +44,6 @@ pipeline {
     AGENT_PORT=4242
     WAIT_TIMEOUT=2400
     WAIT_INTERVAL=10
-    COMPOSE_DOCKER_CLI_BUILD=1
-    DOCKER_BUILDKIT=1
     COMPOSE_HTTP_TIMEOUT=120
     AWS_ACCESS_KEY_ID='AKIAT2RXIFYZLDB66LZ3'
     AWS_SECRET_ACCESS_KEY='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'
@@ -99,8 +97,6 @@ spec:
         ENV_FILE='.env.b'
         DP_AGENT_PORT=4242
         DOCKER_REGISTRY='263182626354.dkr.ecr.us-east-1.amazonaws.com'
-        DOCKER_BUILDKIT=1
-        COMPOSE_DOCKER_CLI_BUILD=1
       }
 
       steps {
@@ -273,8 +269,6 @@ spec:
         ENV_FILE='.env.staging'
         DP_AGENT_PORT=4242
         DOCKER_REGISTRY='263182626354.dkr.ecr.us-east-1.amazonaws.com'
-        DOCKER_BUILDKIT=1
-        COMPOSE_DOCKER_CLI_BUILD=1
       }
 
       steps {

@@ -10,6 +10,7 @@ LAST_N_TURNS = 5  # number of turns to consider in annotator/skill.
 
 
 def get_last_n_turns(dialog: Dict, bot_last_turns=None, human_last_turns=None, total_last_turns=None):
+    dialog = deepcopy(dialog)
     bot_last_turns = bot_last_turns or LAST_N_TURNS
     human_last_turns = human_last_turns or bot_last_turns + 1
     total_last_turns = total_last_turns or bot_last_turns * 2 + 1
@@ -71,6 +72,7 @@ def last_n_human_utt_dialog_formatter(dialog: Dict, last_n_utts: int, only_last_
         last_n_utts (int): how many last user utterances to take
         only_last_sentence (bool, optional): take only last sentence in each utterance. Defaults to False.
     """
+    dialog = deepcopy(dialog)
     if len(dialog["human_utterances"]) <= last_n_utts and \
             not if_lets_chat_about_topic(dialog["utterances"][0]["text"].lower()):
         # in all cases when not particular topic, convert first phrase in the dialog to `hello!`
@@ -171,6 +173,7 @@ def misheard_asr_formatter_service(payload):
 
 
 def replace_with_annotated_utterances(dialog, mode="punct_sent"):
+    dialog = deepcopy(dialog)
     if mode == "punct_sent":
         for utt in dialog['utterances']:
             if "sentseg" in utt['annotations']:
