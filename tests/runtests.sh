@@ -140,7 +140,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
                      comet-conceptnet convers-evaluation-selector emotion-skill game-cooperative-skill \
                      entity-linking kbqa odqa wiki-parser convert-reddit question-generator grounding-skill \
                      cobot-topics cobot-dialogact cobot-convers-evaluator-annotator \
-                     knowledge-grounding dialog-breakdown knowledge-grounding-skill book-skill; do
+                     dialog-breakdown book-skill; do
 
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh
