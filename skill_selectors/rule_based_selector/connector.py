@@ -14,10 +14,10 @@ from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
 from common.emotion import detect_emotion, is_joke_requested
 from common.news import is_breaking_news_requested
 from common.universal_templates import if_lets_chat_about_topic
-from common.utils import check_about_death, about_virus, quarantine_end, service_intents, low_priority_intents, \
+from common.utils import service_intents, low_priority_intents, \
     get_topics, get_intents
 from common.weather import is_weather_requested
-from common.coronavirus import is_staying_home_requested
+from common.coronavirus import check_about_death, about_virus, quarantine_end, is_staying_home_requested
 from common.grounding import what_we_talk_about
 
 sentry_sdk.init(getenv('SENTRY_DSN'))

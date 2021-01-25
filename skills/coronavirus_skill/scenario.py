@@ -1,21 +1,25 @@
-import logging
-from os import getenv
-import sentry_sdk
-from string import punctuation
-from word2number.w2n import word_to_num
-from random import random
 import json
-import pandas as pd
-from copy import deepcopy
+import logging
+import re
 import threading
 import time
 from datetime import datetime, timedelta
 from collections import defaultdict
-from common.coronavirus import corona_switch_skill_reply, is_staying_home_requested
+from copy import deepcopy
+from os import getenv
+from random import random
+from string import punctuation
+
+import pandas as pd
+import sentry_sdk
+from word2number.w2n import word_to_num
+
+from common.coronavirus import corona_switch_skill_reply, is_staying_home_requested, check_about_death, about_virus, \
+    quarantine_end
 from common.link import link_to
 from common.utils import is_yes, is_no
-from common.utils import check_about_death, about_virus, quarantine_end
 from common.universal_templates import book_movie_music_found, if_lets_chat_about_topic, is_switch_topic
+
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -131,15 +135,32 @@ def get_agephrase(age_num, bot_attr, human_attr):
     return phrase, bot_attr, human_attr
 
 
+pandemy_request = re.compile(r"(outbreak|pandemy|epidemy|pandemi|epidemi)", re.IGNORECASE)
+corona_request = re.compile(r"(corona|corana|corono|clone a|colonel|chrono|quran|corvette|current|kroner|corolla|"
+                            r"crown|volume|karuna|toronow|chrome|code nineteen)", re.IGNORECASE)
+
+
 def about_coronavirus(annotated_phrase):
-    contain_words = any([j in annotated_phrase['text'] for j in ['corona', 'corana', 'corono', 'clone a',
-                                                                 'colonel', 'chrono', 'quran', 'corvette',
-                                                                 'current', 'kroner', 'corolla', 'crown',
-                                                                 'volume', 'karuna', 'toronow', 'chrome',
-                                                                 'code nineteen']])
-    contain_related = any([j in annotated_phrase['text'] for j in ['outbreak', 'pandemy', 'epidemy',
-                                                                   'pandemi', 'epidemi']])
+    if re.search(corona_request, annotated_phrase['text']):
+        contain_words = True
+    else:
+        contain_words = False
+    if re.search(pandemy_request, annotated_phrase['text']):
+        contain_related = True
+    else:
+        contain_related = False
     return about_virus(annotated_phrase) and (contain_words or contain_related)
+
+
+chances_request = re.compile(r"(what are my chances|will i die)", re.IGNORECASE)
+
+
+def get_chance_request(last_utterance):
+    if isinstance(last_utterance, str):
+        last_utterance = {'text': last_utterance}
+    if re.search(chances_request, last_utterance['text']):
+        return True
+    return False
 
 
 def get_cases_deaths():
@@ -150,14 +171,22 @@ def get_cases_deaths():
     return int(num_cases), int(num_deaths)
 
 
+advice_request = re.compile(r"(what if|to do| should i do)", re.IGNORECASE)
+
+
 def wants_advice(annotated_phrase):
-    request = annotated_phrase['text'].lower()
-    return any([j in request for j in ['what if', 'to do', 'should i do']])
+    if re.search(advice_request, annotated_phrase['text']):
+        return True
+    return False
+
+
+symptoms_request = re.compile(r"(symptoms|do i have|tell from|if i get)", re.IGNORECASE)
 
 
 def know_symptoms(annotated_phrase):
-    request = annotated_phrase['text'].lower()
-    return any([j in request for j in ['symptoms', 'do i have', 'tell from', 'if i get']])
+    if re.search(symptoms_request, annotated_phrase['text']):
+        return True
+    return False
 
 
 def get_state_cases():
@@ -293,38 +322,60 @@ def improve_phrase(phrase, asked_about_age=True, met_last=True):
     if asked_about_age:
         phrase = phrase + ' Would you want to learn more?'
     else:
-        phrase = phrase + ' Anyway, I can tell you how likely you are ' \
+        phrase = phrase + ' Anyway, I can approximately tell you how likely you are ' \
                           'to recover from coronavirus if you get it. ' \
                           'What is your age? '
     return phrase
 
 
+origin_request = re.compile(r"(origin|come from|where did it start)", re.IGNORECASE)
+
+
 def asked_origin(last_utterance):
-    return any([j in last_utterance['text'].lower() for j in ['origin', 'come from']])
+    if re.search(origin_request, last_utterance['text']):
+        return True
+    return False
+
+
+dontlike_request = re.compile(r"(don't like|don't want to talk|don't want to hear|not concerned about|"
+                              r"over the coronavirus|no coronavirus|stop talking about|no more coronavirus|"
+                              r"don't want to listen)", re.IGNORECASE)
 
 
 def dontlike(last_utterance):
     last_uttr_text = last_utterance['text'].lower()
     last_uttr_text = last_uttr_text.replace('wanna', 'want to')
-    return any([j in last_uttr_text for j in ["don't like", "don't want to talk", "don't want to hear",
-                                              "not concerned about", "over the coronavirus",
-                                              "no coronavirus", "stop talking about",
-                                              "no more coronavirus", "don't want to listen"]])
+    if re.search(dontlike_request, last_uttr_text):
+        return True
+    return False
+
+
+vaccine_request = re.compile(r"(cure|treatment|vaccine)", re.IGNORECASE)
 
 
 def asked_cure(last_utterance):
-    return any([j in last_utterance['text'].lower() for j in ['cure', 'treatment', 'vaccine']])
+    if re.search(vaccine_request, last_utterance['text']):
+        return True
+    return False
+
+
+corona_definition_request = re.compile(r"(what is corona|what's corona|what is the pandemic)", re.IGNORECASE)
 
 
 def asked_whatvirus(last_utterance):
-    return any([j in last_utterance['text'].lower() for j in ['what is corona', "what's corona"]])
+    if re.search(corona_definition_request, last_utterance['text']):
+        return True
+    return False
+
+
+doyouhave_request = re.compile(r"(do you have|have you got|are you getting|have you ever got|are you sick with|"
+                               r"have you come down with)", re.IGNORECASE)
 
 
 def asked_have(last_utterance):
-    cond1 = any([j in last_utterance['text'].lower() for j in ["do you have", "have you got",
-                                                               "are you getting", "have you ever got",
-                                                               "are you sick with", "have you come down with"]])
-    return cond1 and about_virus(last_utterance)
+    if re.search(doyouhave_request, last_utterance['text']) and about_virus(last_utterance):
+        return True
+    return False
 
 
 def return_fact(facts, used_phrases, asked_about_age=False, met_last=False):
@@ -436,6 +487,10 @@ class CoronavirusSkillScenario:
                     else:
                         reply, confidence = FEAR_HATE_REPLY2, 0.95
                     reply = improve_phrase(reply)
+                elif get_chance_request(last_utterance):
+                    reply, confidence = "As I am not your family doctor, " \
+                                        "my knowledge about your resilience to coronavirus is limited.", 0.95
+                    reply = f'{reply} Please, check the CDC website for more information.'  # Daniil suggestion
                 elif 'to learn more' in last_bot_phrase:
                     fear_prob = dialog['utterances'][-1]['annotations']['emotion_classification']['text']['fear']
                     logging.debug(f'Fear prob {fear_prob}')

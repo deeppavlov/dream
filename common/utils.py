@@ -138,27 +138,6 @@ def get_user_replies_to_particular_skill(utterances, skill_name):
     return result
 
 
-def check_about_death(last_utterance):
-    if type(last_utterance) == str:
-        last_utterance = {'text': last_utterance}
-    return any([j in last_utterance['text'] for j in ['death', ' die', ' dying', 'mortality']])
-
-
-def quarantine_end(last_utterance):
-    if type(last_utterance) == str:
-        last_utterance = {'text': last_utterance}
-    return 'quarantine' in last_utterance['text'] and any([j in last_utterance['text'] for j in ['end', 'over']])
-
-
-def about_virus(annotated_phrase):
-    if type(annotated_phrase) == str:
-        annotated_phrase = {'text': annotated_phrase}
-    return any([j in annotated_phrase['text'].lower() for j in ['virus', 'covid', ' ill ', 'infect',
-                                                                'code nineteen', 'corona', 'corana', 'corono',
-                                                                'colonel', 'chrono ', 'corvette',
-                                                                'kroner', 'karuna', 'toronow']])
-
-
 yes_templates = re.compile(r"(\byes\b|\byup\b|\byep\b|\bsure\b|go ahead|\byeah\b|\bok\b|okay|"
                            r"^why not\.?$|^tell me\.?$|^i agree\.?$|^i think so\.?$)")
 
