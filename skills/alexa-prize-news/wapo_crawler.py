@@ -40,15 +40,16 @@ def parse_one_period(SITE, stdate, enddate, mode="posts"):
         if len(data) == 0:
             filename = f'{mode}_' + stdate.strftime("%Y:%m:%d") + '-' + enddate.strftime("%Y:%m:%d")
             print(f"{mode}: saved in {filename}.json")
-            if os.path.isfile(DATA_PATH + filename + '.json'):
-                prev_docs = json.load(open(DATA_PATH + filename + '.json', 'r'))
+            name = ''.join([DATA_PATH, filename, '.json'])
+            if os.path.isfile(name):
+                prev_docs = json.load(open(name, 'r'))
                 for k in prev_docs:
                     # it also removes duplicates!
                     docs[k] = prev_docs[k]
-                json.dump(docs, open(DATA_PATH + filename + '.json', 'w'), indent=2)
+                json.dump(docs, open(name, 'w'), indent=2)
                 break
             else:
-                json.dump(docs, open(DATA_PATH + filename + '.json', 'w'), indent=2)
+                json.dump(docs, open(name, 'w'), indent=2)
                 break
         else:
             docs.update({news['contenturl']: news for news in data})

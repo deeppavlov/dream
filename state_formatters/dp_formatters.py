@@ -451,7 +451,7 @@ def simple_formatter_service(payload: List):
     Used by: punct_dialogs_formatter, intent_catcher_formatter, asr_formatter,
     sent_rewrite_formatter, sent_segm_formatter, base_skill_selector_formatter
     '''
-    logging.info('answer ' + str(payload))
+    logging.info(f'answer {payload}')
     return payload
 
 

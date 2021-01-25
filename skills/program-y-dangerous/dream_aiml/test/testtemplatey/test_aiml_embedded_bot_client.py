@@ -4,11 +4,11 @@ import sys
 import os
 SELF_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(os.path.dirname(SELF_DIR))
-SRC_ROOT_DIR = ROOT_DIR + "/src"
+SRC_ROOT_DIR = f"{ROOT_DIR}/src"
 sys.path.append(SRC_ROOT_DIR)
 # #####################################################
 from templatey.clients.aiml_embedded_bot_client import AIMLEmbeddedBotClient  # noqa
-CONFIG_PATH = ROOT_DIR + "/config/xnix/config.yaml"
+CONFIG_PATH = f"{ROOT_DIR}/config/xnix/config.yaml"
 
 
 class TestAIMLEmbeddedBotClient(unittest.TestCase):

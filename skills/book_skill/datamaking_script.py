@@ -49,13 +49,13 @@ def get_name(annotated_phrase, mode='author', return_plain=False):
                                                            'classConstraints': class_constraints}),
                                           method='POST').json()
                 entityname_plain = answer['resolvedEntities'][0]['value']
-                entityname_plain = '<' + entityname_plain + '>'
+                entityname_plain = f'<{entityname_plain}>'
                 if return_plain:
                     entityname = entityname_plain
                 else:
                     answer = requests.request(
                         url=QUERY_SERVICE_URL, headers=headers, data=json.dumps(
-                            {'query': {'text': 'query label|' + entityname_plain + ' <aio:prefLabel> ' + 'label'}}),
+                            {'query': {'text': f'query label|{entityname_plain} <aio:prefLabel> label'}}),
                         method='POST').json()
                     entityname = answer['results'][0]['bindingList'][0]['value']
             except BaseException:
@@ -98,7 +98,7 @@ author_names = dict()
 author_books = defaultdict(list)
 for author in tqdm(authors):
     if author not in author_books:
-        curr_books = get_answer('books of ' + author)
+        curr_books = get_answer(f'books of {author}')
         plain_author = get_name(author, 'author', return_plain=True)
         author_names[plain_author] = author
         author_books[author] = curr_books

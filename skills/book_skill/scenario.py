@@ -298,7 +298,7 @@ def fact_about_book(annotated_user_phrase):
     logger.debug(annotated_user_phrase)
     bookname, _ = get_name(annotated_user_phrase, 'book')
     logger.debug('Getting a fact about bookname')
-    reply = get_answer('fact about ' + bookname)
+    reply = get_answer(f'fact about {bookname}')
     return reply
 
 
@@ -315,13 +315,13 @@ def get_triples(parser_info, queries):
     else:
         logger.debug("Could not access wiki parser")
     exec_time = round(time.time() - t, 2)
-    logger.debug('Response obtained with exec time ' + str(exec_time))
+    logger.debug(f'Response obtained with exec time {exec_time}')
 
     return response
 
 
 def request_entities(entity):
-    logger.debug('Calling request_entities for ' + str(entity))
+    logger.debug(f'Calling request_entities for {entity}')
     ENTITY_LINKING_URL = os.getenv("ENTITY_LINKING_URL")
     assert type(entity) == str
     t = time.time()
@@ -342,7 +342,7 @@ def request_entities(entity):
                                    "entity_types": [[used_types]]},
                              timeout=1).json()
     exec_time = round(time.time() - t, 2)
-    logger.debug('Response is ' + str(response) + ' with exec time ' + str(exec_time))
+    logger.debug(f'Response is {response} with exec time {exec_time}')
 
     entities = response[0][0][0]
     probs = response[0][1][0]
@@ -413,13 +413,13 @@ def get_name(annotated_phrase, mode='author', bookyear=True, return_plain=False)
 
 def who_wrote_book(book, return_plain=False):
     # Input bookname output author name
-    logger.debug('Calling who_wrote_book for ' + str(book))
+    logger.debug(f'Calling who_wrote_book for {book}')
     if book[0].upper() == 'Q' and all([j in '1234567890' for j in book[1:]]):  # it is plain
         plain_book_entity = book
     else:
         plain_book_entity, _ = wikidata_process_entities(book, mode='book',
                                                          bookyear=False, return_plain=True)
-    logger.debug('Search author with entity ' + plain_book_entity.upper())
+    logger.debug(f'Search author with entity {plain_book_entity.upper()}')
     author_list = []
     if book in wikidata['who_wrote_book']:
         author_list = wikidata['who_wrote_book'][book]
@@ -430,21 +430,21 @@ def who_wrote_book(book, return_plain=False):
                                                                    (plain_book_entity.upper(), "P800", "backw")])
         author_list = list(itertools.chain.from_iterable(author_list))
         author_list = list(set(author_list))
-        logger.debug('Author list received ' + str(author_list))
+        logger.debug(f'Author list received {author_list}')
         author_list = [x[x.find('Q'):] for x in author_list]  # to unify representations
     sorted_author_list = sorted(author_list, key=lambda x: int(x[1:]))  # Sort entities by frequency
     author_entity = sorted_author_list[0]
     if return_plain:
-        logger.debug('Answer ' + str(author_entity))
+        logger.debug(f'Answer {author_entity}')
         return author_entity
     else:
         author_name = entity_to_label(author_entity)
-        logger.debug('Answer ' + str(author_name))
+        logger.debug(f'Answer {author_name}')
         return author_name
 
 
 def get_wikidata_entities(entity_list):
-    logger.debug('Calling get_wikidata_entities for ' + str(entity_list))
+    logger.debug(f'Calling get_wikidata_entities for {entity_list}')
     if type(entity_list) == str:
         entity_list = [entity_list]
     answer_entities = []  # All found wikidata entitites
@@ -464,14 +464,14 @@ def get_wikidata_entities(entity_list):
             else:
                 found_wikidata_entities = []
         answer_entities = answer_entities + found_wikidata_entities
-    logger.debug('Answer ' + str(answer_entities))
+    logger.debug(f'Answer {answer_entities}')
     return answer_entities
 
 
 def get_published_year(book_entity):
     global wikidata
     # print('Entity '+book_entity)
-    logger.debug('Calling get_published_year for ' + str(book_entity))
+    logger.debug(f'Calling get_published_year for {book_entity}')
     assert type(book_entity) == str and book_entity[0] == 'Q'
     book_entity = book_entity.strip()
     published_year = ""
@@ -480,9 +480,9 @@ def get_published_year(book_entity):
     else:
         published_year = get_triples(["find_object"], [(book_entity, "P577", "forw")])[0]
         try:
-            logger.debug('Answer list ' + str(published_year))
+            logger.debug(f'Answer list {published_year}')
             published_year = re.findall(r"[\d]{3,4}", published_year[0])[0]
-            logger.debug('Answer ' + str(published_year))
+            logger.debug(f'Answer {published_year}')
         except Exception as e:
             sentry_sdk.capture_exception(e)
             logger.exception(f'Could not obtain published year from {published_year}')
@@ -490,7 +490,7 @@ def get_published_year(book_entity):
 
 
 def entity_to_label(entity):
-    logger.debug('Calling entity_to_label for ' + str(entity))
+    logger.debug(f'Calling entity_to_label for {entity}')
     assert type(entity) == str and entity[0] == 'Q'
     global wikidata
     label = ""
@@ -504,10 +504,10 @@ def entity_to_label(entity):
                 label = labels[0].split('"')[1]
             else:
                 label = labels[0]
-            logger.debug('Answer ' + str(label))
+            logger.debug(f'Answer {label}')
         except Exception as e:
             sentry_sdk.capture_exception(e)
-            logger.exception('Exception in converstion of labels ' + str(labels))
+            logger.exception(f'Exception in converstion of labels {labels}')
     return label
 
 
@@ -524,7 +524,7 @@ def wikidata_process_entities(entity_list, mode='author', bookyear=False,
     Q7725634, Q1667921 - book serie
     '''
     all_found_entities = get_wikidata_entities(entity_list)
-    logger.debug('Calling wikidata_process_entities for ' + str(all_found_entities) + ' mode ' + mode)
+    logger.debug(f'Calling wikidata_process_entities for {all_found_entities} mode {mode}')
     requested_entities = []  # All found wikidata entities OF REQUESTED TYPE
     entities_num = len(all_found_entities)
     bool_numbers = None
@@ -581,7 +581,7 @@ def wikidata_process_entities(entity_list, mode='author', bookyear=False,
     if len(requested_entities) > 0:
         found_entity = requested_entities[0]  # Found entity
         n_years_ago = None
-        logger.info('Found entity ' + str(found_entity))
+        logger.info(f'Found entity {found_entity}')
         if bookyear and mode == 'book':
             logger.debug('Getting published year for ' + str(found_entity))
             publication_year = get_published_year(found_entity)
@@ -649,17 +649,17 @@ def parse_author_best_book(annotated_phrase, default_phrase="Fabulous! And what 
             logger.debug('Answer not obtained(no bookname no author)')
             return default_phrase
     else:
-        logger.info('Processing bookname ' + plain_bookname)
+        logger.info(f'Processing bookname {plain_bookname}')
         plain_author = who_wrote_book(plain_bookname, return_plain=True)
         if plain_author is not None:
             logger.debug('author detected')
             logger.debug(plain_author)
-            logger.debug('bookname ' + plain_bookname)
+            logger.debug(f'bookname {plain_bookname}')
         else:
             logger.debug('No author found')
         answer = best_book_by_author(plain_author_name=plain_author, plain_last_bookname=plain_bookname,
                                      default_phrase=default_phrase)
-        logger.debug('Answer is ' + str(answer))
+        logger.debug(f'Answer is {answer}')
         return answer
 
 
@@ -694,7 +694,7 @@ class BookSkillScenario:
         GENRE_PHRASE_1 = 'What is your favorite book genre?'
 
         def GENRE_PHRASE_2(book):
-            phrase1 = 'Amazing! Have you read ' + book + ' ? And if you have read it, what do you think about it?'
+            phrase1 = f'Amazing! Have you read {book} ? And if you have read it, what do you think about it?'
             return phrase1
 
         GENRE_PHRASE_ADVICE = "You can read it. You won't regret it!"
@@ -799,7 +799,7 @@ class BookSkillScenario:
                     else:
                         logger.debug('Bookname detected')
                         if n_years_ago > 0:
-                            recency_phrase = str(n_years_ago) + " years ago! "
+                            recency_phrase = f"{n_years_ago} years ago! "
                         else:
                             recency_phrase = 'Just recently! '
                         reply, confidence = recency_phrase + YES_PHRASE_4, self.default_conf
@@ -842,10 +842,10 @@ class BookSkillScenario:
                             book = parse_author_best_book(annotated_user_phrase, default_phrase=YES_PHRASE_2)
                             if book != YES_PHRASE_2 and book.lower() not in annotated_user_phrase['text'].lower():
                                 logger.debug('Could not find author best book. Returning default answer')
-                                reply = 'Interesting. Have you read ' + book + '?'
+                                reply = f'Interesting. Have you read {book}?'
                                 confidence = 0.9
                             else:
-                                logger.debug('Best book for ' + str(annotated_user_phrase['text']) + ' not retrieved')
+                                logger.debug(f"Best book for {annotated_user_phrase['text']} not retrieved")
                                 reply, confidence = YES_PHRASE_2, 0.9
                     elif YES_PHRASE_2 == bot_phrases[-1]:
                         logger.debug('We have just said YES_PHRASE_2')
@@ -886,7 +886,7 @@ class BookSkillScenario:
                                 logger.debug('No book found')
                                 reply, confidence = self.default_reply, 0
                             else:
-                                logger.debug('Returning genre phrase for ' + str(book))
+                                logger.debug(f'Returning genre phrase for {book}')
                                 reply, confidence = GENRE_PHRASE_2(book), self.default_conf
                         elif 'Amazing! Have you read ' in bot_phrases[-1]:
                             logger.debug('"Amazing! Have uou read"  in last bot phrase')
@@ -894,14 +894,14 @@ class BookSkillScenario:
                                 logger.debug('Tell me more intent detected')
                                 reply = None
                                 bookname = bot_phrases[-1].split('you read ')[1].split('?')[0].strip()
-                                logger.debug('Detected name ' + str(bookname) + ' in last_bot_phrase')
+                                logger.debug(f'Detected name {bookname} in last_bot_phrase')
                                 for genre in self.bookreads_data:
                                     if self.bookreads_data[genre]['title'] == bookname:
-                                        logger.debug('Returning phrase for book of genre ' + genre)
+                                        logger.debug(f'Returning phrase for book of genre {genre}')
                                         reply, confidence = self.bookreads_data[genre]['description'], self.default_conf
                                 if reply is None:
-                                    part1 = 'From bot phrase ' + bot_phrases[-1]
-                                    part2 = ' bookname *' + bookname + '* didnt match'
+                                    part1 = f'From bot phrase {bot_phrases[-1]}'
+                                    part2 = f' bookname * bookname * didnt match'
                                     sentry_sdk.capture_exception(Exception(part1 + part2))
                                     logger.exception(part1 + part2)
                             elif is_no(annotated_user_phrase):
@@ -947,19 +947,19 @@ class BookSkillScenario:
                     bookname, n_years_ago = get_name(annotated_user_phrase, 'book', bookyear=True)
                     genre_name = get_genre(annotated_user_phrase['text'], return_name=True)
                     if author_name is not None:
-                        logger.debug('Phrase contains name of author ' + str(author_name))
-                        reply1 = ' I enjoy reading books of ' + author_name + ' . '
+                        logger.debug(f'Phrase contains name of author {author_name}')
+                        reply1 = f' I enjoy reading books of {author_name} . '
                         best_book = best_book_by_author(author_name, default_phrase=None)
                         if best_book is not None:
-                            reply2 = ' My favourite book of this author is ' + best_book
+                            reply2 = f' My favourite book of this author is {best_book}'
                         else:
                             reply2 = ''
                         reply, confidence = reply1 + reply2, self.default_conf
                     elif bookname is not None:
-                        logger.debug('Phrase contains name of book ' + str(bookname))
-                        reply = bookname + ' is an amazing book! '
+                        logger.debug(f'Phrase contains name of book {bookname}')
+                        reply = f'{bookname} is an amazing book! '
                         if n_years_ago is not None:
-                            reply = reply + 'Do you know when it was first published?'
+                            reply = f'{reply} Do you know when it was first published?'
                         if any([j.lower() in bot_phrases[-1].lower() for j in BOOK_SKILL_CHECK_PHRASES]):
                             confidence = 0.99
                         else:
@@ -967,7 +967,7 @@ class BookSkillScenario:
                     elif genre_name is not None:
                         prev_genre = get_genre(annotated_prev_phrase['text'], return_name=True)
                         only_one_phrase = len(GENRE_PHRASES[genre_name]) == 1
-                        logger.debug('Phrase contains name of genre ' + str(genre_name))
+                        logger.debug(f'Phrase contains name of genre {genre_name}')
                         if prev_genre != genre_name or only_one_phrase:
                             reply, confidence = GENRE_PHRASES[genre_name][0], self.default_conf
                         else:

@@ -149,7 +149,7 @@ def correct_verb_form(attr, values):
 
             doc = nlp(values[i])
             if values[i][:3] != "to " and doc[0].pos == VERB:
-                values[i] = "to " + values[i]
+                values[i] = f"to {values[i]}"
 
     if attr in ["Causes", "DesireOf"]:
         for i in range(len(values)):
@@ -499,7 +499,7 @@ def get_statement_phrase(dialog, topic, attr, TOPICS):
     attr["meta_script_relation_template"] = meta_script_template
 
     relation = DIVE_DEEPER_TEMPLATE_COMETS[meta_script_template]["attribute"]
-    prediction = get_comet_atomic("person " + topic, relation, TOPICS)
+    prediction = get_comet_atomic(f"person {topic}", relation, TOPICS)
 
     if prediction == "":
         return "", 0.0, {"can_continue": CAN_NOT_CONTINUE}

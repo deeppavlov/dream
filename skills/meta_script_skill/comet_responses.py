@@ -97,7 +97,7 @@ def ask_question_using_atomic(dialog):
             logger.info("Greeting skill asked personal questions and answer was not like `nothing`.")
             idosents = dialog["human_utterances"][-1]["annotations"].get("sentseg", {}).get("segments", [""])
             if len(idosents) == 1 and len(idosents[0].split()) <= 2:
-                idosents = ["I like " + idosents[0]]
+                idosents = [f"I like {idosents[0]}"]
 
     if len(idosents) > 0:
         # all i do sents are without punctuation
@@ -270,7 +270,7 @@ def express_opinion_using_conceptnet(dialog):
             value_by_default=None, activated=True, skill_name="comet_dialog_skill")[-2:]
         opinion_expr_template = get_not_used_template(used_templates, OPINION_EXPRESSION_TEMPLATES[sentiment])
         attr["conceptnet_opinion_expr_template"] = opinion_expr_template
-        response = opinion_expr_template + " " + response
+        response = f'{opinion_expr_template} {response}'
         response = response.replace("OBJECT", nounphrase)
 
         if response == "":
