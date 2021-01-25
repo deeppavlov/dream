@@ -106,6 +106,13 @@ def call_dp_agent(user_id, text, request_data):
         if not speech:
             logger.error("No speech in request_data")
 
+    is_experiment = False
+    # dialogs with isExpiment == true are skipped in ratings leaderboard (~25% of traffic)
+    # take isExperiment from request itself or from sesstion attributes
+    is_experiment |= request_data['request'].get('payload', {}).get('isExperiment', False)
+    is_experiment |= request_data['session'].get('attributes', {}).get('isExperiment', False)
+    logger.info(f"isExperiment: {is_experiment}")
+
     conversation_id = get_conversation_id(request_data)
 
     response, intent = None, None
@@ -195,6 +202,12 @@ class LaunchRequestHandler(AbstractRequestHandler):
         # type: (HandlerInput) -> Response
         # speak_output = "Hi, this is an Alexa Prize Socialbot. How are you?"
         user_id = ask_utils.get_user_id(handler_input)
+
+        session_attr = handler_input.attributes_manager.session_attributes
+        is_experiment = request_data['request'].get('payload', {}).get('isExperiment', False)
+        # save isExperiment flag in session attributes
+        session_attr['isExperiment'] = is_experiment
+
         call_dp_agent(user_id, '/start', request_data)
         # text = "Alexa, let's chat."
         speech = request_data['request'].get('payload', {}).get('speechRecognition', None)
