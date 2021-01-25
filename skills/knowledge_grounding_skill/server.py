@@ -93,7 +93,7 @@ def respond():
             logger.exception(f'service error status code: ' + str(responses.status_code))
         else:
             responses = responses.json()
-            logger.info("Respond exec time: " + str(time.time() - st_time))
+            logger.info(f"Respond exec time: {time.time() - st_time}")
     except Exception as ex:
         sentry_sdk.capture_exception(ex)
         logger.exception(ex)

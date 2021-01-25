@@ -27,8 +27,8 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 CORONAVIRUS_URL = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/' \
                   'csse_covid_19_data/csse_covid_19_time_series'
-DEATH_URL = CORONAVIRUS_URL + '/time_series_covid19_deaths_global.csv'
-CASE_URL = CORONAVIRUS_URL + '/time_series_covid19_confirmed_global.csv'
+DEATH_URL = f'{CORONAVIRUS_URL}/time_series_covid19_deaths_global.csv'
+CASE_URL = f'{CORONAVIRUS_URL}/time_series_covid19_confirmed_global.csv'
 STATES = {j.strip().lower().split(';')[0]: j.strip().lower().split(';')[1]
           for j in open('state_names.txt', 'r').readlines()}
 NATIONS = {j.strip().lower().split(';')[0]: j.strip().lower().split(';')[1]
@@ -119,16 +119,16 @@ def get_agephrase(age_num, bot_attr, human_attr):
     else:  # prob = 13.6
         phrase = 'According to the statistical data, 7 persons from 8 ' \
                  'of your age recover after contacting coronavirus.'
-    phrase = phrase + ' However, it is better to stay at home as much as you can ' \
-                      'to make older people safer.'
+    phrase = f'{phrase} However, it is better to stay at home as much as you can ' \
+             'to make older people safer.'
     r = random()
     if r < 0.5:
-        phrase = phrase + ' While staying at home, you may use a lot of different online cinema. '
+        phrase = f'{phrase} While staying at home, you may use a lot of different online cinema. '
         link = link_to(['movie_skill'], used_links=human_attr["used_links"])
         human_attr["used_links"][link["skill"]] = human_attr["used_links"].get(link["skill"], []) + [link['phrase']]
-        phrase = phrase + link['phrase']
+        phrase = f"{phrase} {link['phrase']}"
     else:
-        phrase = phrase + ' While staying at home, you may read a lot of different books. '
+        phrase = f'{phrase} While staying at home, you may read a lot of different books. '
         link = link_to(['book_skill'], used_links=human_attr["used_links"])
         human_attr["used_links"][link["skill"]] = human_attr["used_links"].get(link["skill"], []) + [link['phrase']]
         phrase = phrase + link['phrase']
