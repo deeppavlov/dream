@@ -252,7 +252,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:kbqa_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
+                "required_previous_services": ["annotators.entity_linking"]
             },
             "entity_linking": {
                 "connector": {

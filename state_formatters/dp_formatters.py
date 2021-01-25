@@ -658,13 +658,31 @@ def el_formatter_dialog(dialog: Dict):
 
 def kbqa_formatter_dialog(dialog: Dict):
     # Used by: kbqa annotator
-    if "sentseg" in dialog['human_utterances'][-1]['annotations']:
-        last_human_utterance_text = dialog['human_utterances'][-1]['annotations']['sentseg']['punct_sent']
+    annotations = dialog['human_utterances'][-1]['annotations']
+    if "sentseg" in annotations:
+        if "segments" in annotations['sentseg']:
+            sentences = deepcopy(annotations['sentseg']['segments'])
+        else:
+            sentences = [deepcopy(annotations['sentseg']['punct_sent'])]
     else:
-        last_human_utterance_text = dialog['human_utterances'][-1]['text']
+        sentences = [deepcopy(dialog['human_utterances'][-1]['text'])]
+    ner_output = annotations['ner']
+    entity_substr = [[entity["text"] for entity in entities] for entities in ner_output]
+    nounphrases = annotations.get('cobot_nounphrases', [])
+    entities = []
+    for n, entities_list in enumerate(entity_substr):
+        if entities_list:
+            entities.append([entities_list[0]])
+        elif nounphrases and len(nounphrases) > n:
+            entities.append(nounphrases[n])
+        else:
+            entities.append([])
+    if not entities:
+        entities = [[] for _ in sentences]
+    entities = entities[:len(sentences)]
 
-    sentences = [last_human_utterance_text]
-    return [{'x_init': sentences}]
+    return [{'x_init': sentences,
+             'entities': entities}]
 
 
 def odqa_formatter_dialog(dialog: Dict):
