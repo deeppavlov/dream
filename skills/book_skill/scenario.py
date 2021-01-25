@@ -13,7 +13,7 @@ from datetime import datetime
 from os import getenv
 from string import punctuation
 
-from common.books import BOOK_SKILL_CHECK_PHRASES
+from common.books import BOOK_SKILL_CHECK_PHRASES, skill_trigger_phrases
 from common.tutor import get_tutor_phrase
 from common.universal_templates import BOOK_CHANGE_PHRASE, is_switch_topic
 from common.utils import get_topics, get_intents
@@ -615,18 +615,18 @@ def best_book_by_author(plain_author_name, plain_last_bookname=None,
         book_list = [x[x.find('Q'):] for x in book_list]  # to unify representations
         logger.debug('List of returned books - processed')
         logger.debug(book_list)
+        best_bookname = default_phrase  # default value
         if book_list:
             sorted_book_list = sorted(book_list, key=lambda x: int(x[1:]))  # Sort entities by frequency
             logger.debug(sorted_book_list)
-            logger.debug('Best entity')
-            best_book_entity = random.choice(sorted_book_list[:top_n_best_books])
-            logger.debug(best_book_entity)
-            best_bookname = entity_to_label(best_book_entity)
-        else:
-            best_bookname = default_phrase
-        if best_bookname is None:
-            best_bookname = default_phrase
-        logger.debug('Answer ' + best_bookname)
+            sorted_bookname_list = [entity_to_label(j)
+                                    for j in sorted_book_list]
+            logger.debug('List of books with known booknames')
+            sorted_bookname_list = [j for j in sorted_bookname_list if j is not None]
+            logger.debug(sorted_bookname_list)
+            if len(sorted_bookname_list) > 0:
+                best_bookname = random.choice(sorted_bookname_list[:top_n_best_books])
+        logger.debug('Answer {best_bookname}')
         return best_bookname
     except Exception as e:
         sentry_sdk.capture_exception(e)
@@ -655,12 +655,27 @@ def parse_author_best_book(annotated_phrase, default_phrase="Fabulous! And what 
             logger.debug('author detected')
             logger.debug(plain_author)
             logger.debug(f'bookname {plain_bookname}')
+            answer = best_book_by_author(plain_author_name=plain_author, plain_last_bookname=plain_bookname,
+                                         default_phrase=default_phrase)
+            logger.debug(f'Answer is {answer}')
+            return answer
         else:
             logger.debug('No author found')
-        answer = best_book_by_author(plain_author_name=plain_author, plain_last_bookname=plain_bookname,
-                                     default_phrase=default_phrase)
-        logger.debug(f'Answer is {answer}')
-        return answer
+            return default_phrase
+
+
+dontlike_request = re.compile(r"(not like|not want to talk|not want to hear|not concerned about|"
+                              r"over the books|no books|stop talking about|no more books|"
+                              r"not want to listen)", re.IGNORECASE)
+
+
+def dontlike(last_utterance):
+    last_uttr_text = last_utterance['text'].lower()
+    last_uttr_text = re.sub('wanna', 'want to', last_uttr_text, re.IGNORECASE)
+    last_uttr_text = re.sub("don't'", "do not", last_uttr_text, re.IGNORECASE)
+    if re.search(dontlike_request, last_uttr_text):
+        return True
+    return False
 
 
 class BookSkillScenario:
@@ -727,7 +742,6 @@ class BookSkillScenario:
                 logger.debug('bot phrases')
                 logger.debug(bot_phrases)
                 user_phrases = []
-                prev_reply = ''
                 annotated_user_phrase = dialog['utterances'][-1]
                 annotated_user_phrase['text'] = annotated_user_phrase['text'].replace('.', '')
                 user_phrases.append(annotated_user_phrase['text'])
@@ -735,7 +749,6 @@ class BookSkillScenario:
                     annotated_prev_phrase = dialog['utterances'][-3]
                     annotated_prev_phrase['text'] = annotated_prev_phrase['text'].replace('.', '')
                     user_phrases.append(annotated_prev_phrase['text'])
-                    prev_reply = annotated_prev_phrase['text']
                 else:
                     annotated_prev_phrase = None
                 # logger.debug(str(annotated_user_phrase))
@@ -745,6 +758,8 @@ class BookSkillScenario:
                 '''
                 Remove punctuation
                 '''
+                used_trigger = any([j in bot_phrases[-1] for j in skill_trigger_phrases()])
+                was_checkphrase = [j.lower() in bot_phrases[-1].lower() for j in BOOK_SKILL_CHECK_PHRASES]
                 # I don't denote annotated_user_phrase['text'].lower() as a single variable
                 # in order not to confuse it with annotated_user_phrase
                 cond1 = any([j in annotated_user_phrase['text'].lower()
@@ -752,9 +767,12 @@ class BookSkillScenario:
                 if cond1 and not is_no(annotated_user_phrase):
                     logger.debug('Detected talk about books. Calling start phrase')
                     reply, confidence = START_PHRASE, 1
+                elif dontlike(annotated_user_phrase):
+                    reply, confidence = '', 0
                 elif is_switch_topic(annotated_user_phrase):
                     reply, confidence = BOOK_CHANGE_PHRASE, 0.9
-                elif fact_request_detected(annotated_user_phrase):
+                elif (fact_request_detected(annotated_user_phrase)
+                      and fact_about_book(annotated_user_phrase) is not None):
                     logger.debug('Detected fact request')
                     reply, confidence = YES_PHRASE_3_FACT, self.default_conf
                 elif genre_request_detected(annotated_user_phrase):
@@ -960,7 +978,7 @@ class BookSkillScenario:
                         reply = f'{bookname} is an amazing book! '
                         if n_years_ago is not None:
                             reply = f'{reply} Do you know when it was first published?'
-                        if any([j.lower() in bot_phrases[-1].lower() for j in BOOK_SKILL_CHECK_PHRASES]):
+                        if was_checkphrase:
                             confidence = 0.99
                         else:
                             confidence = self.default_conf
@@ -972,13 +990,21 @@ class BookSkillScenario:
                             reply, confidence = GENRE_PHRASES[genre_name][0], self.default_conf
                         else:
                             reply, confidence = GENRE_PHRASES[genre_name][1], self.default_conf
-                    elif any([j.lower() in bot_phrases[-1].lower() for j in BOOK_SKILL_CHECK_PHRASES]):
+                    elif was_checkphrase:
                         logger.info('The answer probably was about book, but we cant find this book')
                         reply = random.choice(UNKNOWNBOOK_QUESTIONS)
                         confidence = 0.9
+                    elif used_trigger:
+                        # phrase only about bookname in the same way as trigger
+                        reply, confidence = 'Sorry, I could not find this book. Please, tell me about it', 0.85
+                    elif 'I enjoy reading book of ' in bot_phrases[-1]:
+                        author_name = bot_phrases[-1].split('enjoy reading book of')[1].split('.')[0]
+                        reply, confidence = f'What books of {author_name} do you like?', 0.8
                     else:
                         logger.debug('Final branch. Say starting phrase.')
-                        reply, confidence = START_PHRASE, 0.85
+                        reply, confidence = START_PHRASE, 0.7
+                    if not (used_trigger or was_checkphrase):
+                        confidence = confidence * 0.5
                 if reply in bot_phrases[:-2]:
                     confidence = confidence * 0.5
                 assert reply is not None
@@ -992,7 +1018,7 @@ class BookSkillScenario:
                 reply = " ".join(reply)
             if not is_previous_was_about_book(dialog) and confidence > 0.95 and reply != START_PHRASE:
                 confidence = 0.95
-            if reply == prev_reply:
+            if reply in human_attr['book_skill']['used_phrases']:
                 confidence = 0.5
 
             texts.append(reply)
