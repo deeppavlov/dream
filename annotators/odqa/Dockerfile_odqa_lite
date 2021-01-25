@@ -1,0 +1,39 @@
+FROM deeppavlov/base-gpu:0.12.1
+
+RUN apt-get -y update
+RUN apt-get install -y software-properties-common
+RUN add-apt-repository ppa:openjdk-r/ppa
+RUN apt-get -y update
+RUN apt install -y openjdk-11-jdk
+    
+RUN export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64/bin/"
+
+ARG CONFIG
+ARG COMMIT=0.13.0
+ARG PORT
+ARG SRC_DIR
+
+ENV CONFIG=$CONFIG
+ENV PORT=$PORT
+
+COPY ./annotators/odqa/requirements.txt /src/requirements.txt
+RUN pip install -r /src/requirements.txt
+
+RUN cd DeepPavlov && \
+    git config --global user.email "you@example.com" && \
+    git config --global user.name "Your Name" && \
+    git fetch --all --tags --prune && \
+    git checkout $COMMIT && \
+    pip install -e .
+
+COPY $SRC_DIR /src
+
+WORKDIR /src
+RUN pip install pyserini==0.10.1.0
+RUN pip uninstall -y tensorflow
+RUN pip uninstall -y tensorflow-gpu
+RUN pip install tensorflow==1.15.2
+RUN pip install tensorflow-gpu==1.15.2
+RUN python -m deeppavlov install $CONFIG
+
+CMD ./proxy.sh

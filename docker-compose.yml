@@ -416,12 +416,12 @@ services:
   odqa:
     build:
       args:
-        CONFIG: en_odqa_infer_wiki_fast.json
+        CONFIG: en_odqa_infer_wiki_lite.json
         PORT: 8078
         SRC_DIR: annotators/odqa/
-        COMMIT: e7de5271823ce1aeafdf8f7e32f351ccb3743083
+        COMMIT: 668e7a224aaa9d05d06b9cf5f0261a82cc68d3af
       context: ./
-      dockerfile: annotators/odqa/Dockerfile
+      dockerfile: annotators/odqa/Dockerfile_odqa_lite
     environment:
       - CUDA_VISIBLE_DEVICES=0
 

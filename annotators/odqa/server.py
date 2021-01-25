@@ -10,8 +10,10 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 sentry_sdk.init(dsn=os.getenv('SENTRY_DSN'), integrations=[FlaskIntegration()])
 
+config_name = os.getenv("CONFIG")
+
 try:
-    odqa = build_model("en_odqa_infer_wiki_fast.json", download=True)
+    odqa = build_model(config_name, download=True)
     test_res = odqa(["What is the capital of Russia?"])
     logger.info("model loaded, test query processed")
 except Exception as e:
