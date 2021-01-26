@@ -419,7 +419,7 @@ services:
         CONFIG: en_odqa_infer_wiki_lite.json
         PORT: 8078
         SRC_DIR: annotators/odqa/
-        COMMIT: 668e7a224aaa9d05d06b9cf5f0261a82cc68d3af
+        COMMIT: ecc12a4d959e3a675491cb9e65ac0e448c7854c7
       context: ./
       dockerfile: annotators/odqa/Dockerfile_odqa_lite
     environment:
