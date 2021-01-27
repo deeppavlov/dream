@@ -156,7 +156,7 @@ def conceptnet_annotator(request, category=("SymbolOf", "HasProperty", "Causes",
             cn_result = get_comet_conceptnet_output(np, category=category)
             np_conceptnet_rels = {}
             for rel in cn_result:
-                np_conceptnet_rels[rel] = [b for b in cn_result[rel]['beams'] if b != 'none']
+                np_conceptnet_rels[rel] = [b for b in cn_result[rel].get('beams', []) if b != 'none']
             result[np] = np_conceptnet_rels
         batch += [result]
     return batch

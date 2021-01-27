@@ -32,7 +32,7 @@ def test_conceptnet():
 def test_conceptnet_annotator():
     url = 'http://0.0.0.0:8065/comet_annotator'
 
-    request_data = {'nounphrases': [['basketball', 'unicorn'], ['pancakes']]}
+    request_data = {'nounphrases': [['basketball', 'unicorn'], ['pancakes'], ['ieaundy karianne rania tecca dot']]}
 
     result = requests.post(url, json=request_data).json()
 
@@ -58,6 +58,9 @@ def test_conceptnet_annotator():
                 'HasProperty': ['delicious', 'tasty', 'good'],
                 'SymbolOf': ['breakfast', 'food', 'coffee']
             }
+        },
+        {
+            'ieaundy karianne rania tecca dot': {'Causes': [], 'CausesDesire': [], 'HasProperty': [], 'SymbolOf': []}
         }]
 
     assert result == gold_result, f'Got\n{result}\n, but expected:\n{gold_result}'
