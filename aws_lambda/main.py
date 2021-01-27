@@ -23,6 +23,8 @@ SENTRY_DSN = os.getenv('SENTRY_DSN')
 DP_AGENT_URL = os.getenv('DP_AGENT_URL')
 DP_AGENT_PORT = os.getenv('DP_AGENT_PORT')
 
+# a/b tests params
+# A_VERSION_RATIO (int) : B_VERSION_RATIO (int) - ratios like 1:1, 2:1, 3:7 or even 1:0.
 A_VERSION = os.getenv('A_VERSION')
 A_VERSION_RATIO = os.getenv('A_VERSION_RATIO')
 A_AGENT_URL = os.getenv('A_AGENT_URL')
@@ -31,6 +33,8 @@ B_VERSION = os.getenv('B_VERSION')
 B_VERSION_RATIO = os.getenv('B_VERSION_RATIO')
 B_AGENT_URL = os.getenv('B_AGENT_URL')
 B_AGENT_PORT = os.getenv('B_AGENT_PORT')
+EXPR_RATE = os.getenv('EXPR_RATE', 0.25)
+
 TIMEOUT = float(os.getenv('TIMEOUT', 7.5))
 
 ab_tests_mode = False
@@ -67,6 +71,14 @@ if ab_tests_mode:
         B_VERSION_RATIO = 1
     A_VERSION_RATIO = int(A_VERSION_RATIO)
     B_VERSION_RATIO = int(B_VERSION_RATIO)
+
+    # isExperimental flag is set to True for 25% of all dialogs -> all isExperimental traffic is send to B_VERSION.
+    # B_VERSION will get at least 25% of all traffic for any A_VERSION_RATIO : B_VERSION_RATIO.
+    # We can control A:B ratio only for the remaining 75%.
+
+    # correct ratios to make A:B versions traffic close as much as possible to original A_VERSION_RATIO:B_VERSION_RATIO
+    B_VERSION_RATIO = max(int(round(B_VERSION_RATIO / (A_VERSION_RATIO + B_VERSION_RATIO) - EXPR_RATE, 2) * 100), 0)
+    A_VERSION_RATIO = min(int(round(A_VERSION_RATIO / (A_VERSION_RATIO + B_VERSION_RATIO) + EXPR_RATE, 2) * 100), 100)
 
     random.seed(get_seed(A_VERSION, B_VERSION))
     buckets = list(range(A_VERSION_RATIO + B_VERSION_RATIO))
@@ -119,15 +131,16 @@ def call_dp_agent(user_id, text, request_data):
     dp_agent_url = f'{DP_AGENT_URL}:{DP_AGENT_PORT}'
 
     # A/B tests logic
-    # currently if A/B tests are not runing version is set to None
+    # currently if A/B tests are not running version is set to None
     version = None
     if ab_tests_mode:
-        if buckets[hashlib.md5(user_id.encode()).digest()[-1] % (A_VERSION_RATIO + B_VERSION_RATIO)] < A_VERSION_RATIO:
-            dp_agent_url = f'{A_AGENT_URL}:{A_AGENT_PORT}'
-            version = A_VERSION
-        else:
+        A = buckets[hashlib.md5(user_id.encode()).digest()[-1] % (A_VERSION_RATIO + B_VERSION_RATIO)] < A_VERSION_RATIO
+        if is_experiment or not A:
             dp_agent_url = f'{B_AGENT_URL}:{B_AGENT_PORT}'
             version = B_VERSION
+        else:
+            dp_agent_url = f'{A_AGENT_URL}:{A_AGENT_PORT}'
+            version = A_VERSION
         logger.info(f"User {user_id}\n sent to version {version} on {dp_agent_url}")
     try:
         send_to_agent = {'user_id': user_id, 'payload': text, 'device_id': device_id,

@@ -17,11 +17,11 @@ done
 
 if [[ "$TARGET" == "dev" ]]; then
     cp .env.staging aws_lambda/.env
-    LAMBDA_NAME="dp_agent_lambda_proxy_dev"
+    LAMBDA_NAME="dream_staging"
 fi
 if [[ "$TARGET" == "prod" ]]; then
     cp .env.prod aws_lambda/.env
-    LAMBDA_NAME="dp_agent_lambda_proxy"
+    LAMBDA_NAME="dp_agent_lambda_proxy_dev"
 fi
 
 if [[ "$LAMBDA_NAME" == "" ]]; then
