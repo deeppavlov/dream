@@ -750,7 +750,7 @@ class BookSkillScenario:
                     annotated_prev_phrase['text'] = annotated_prev_phrase['text'].replace('.', '')
                     user_phrases.append(annotated_prev_phrase['text'])
                 else:
-                    annotated_prev_phrase = None
+                    annotated_prev_phrase = {'text': ''}
                 # logger.debug(str(annotated_user_phrase))
                 # logger.debug(bot_phrases[-1])
                 logger.debug('User phrase: last and prev from last')
