@@ -20,7 +20,7 @@ services:
       - "./annotators/CoBotTopicClassification:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
-      - 8001:8001
+      - 8001:8000
   cobot-dialogact:
     env_file: [.env.dev]
     volumes:

@@ -6,7 +6,7 @@ services:
       context: ./
       dockerfile: dockerfile_agent
     environment:
-      WAIT_HOSTS: "cobotqa:8081, cobot-topics:8001, cobot-dialogact:8002, cobot-convers-evaluator-annotator:8004,
+      WAIT_HOSTS: "cobotqa:8081, cobot-topics:8000, cobot-dialogact:8002, cobot-convers-evaluator-annotator:8004,
         personality-catcher:8010, intent-responder:8012, intent-catcher:8014, blacklisted-words:8018,
         toxic-classification:8013, sentrewrite:8017, ner:8021,  program-y-dangerous:8022, movie-skill:8023,
         sentiment-classification:8024,
