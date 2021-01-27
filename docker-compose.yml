@@ -19,6 +19,8 @@ services:
         knowledge-grounding:8083, dialog-breakdown:8082, knowledge-grounding-skill:8085"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
     deploy:
+      mode: replicated
+      replicas: 4
       resources:
         limits:
           memory: 3G
@@ -34,7 +36,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8081 -t 15
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 8
       resources:
         limits:
           memory: 256M
@@ -48,7 +50,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8000 -t 15
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 8
       resources:
         limits:
           memory: 256M
@@ -61,7 +63,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8002 -t 15
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 8
       resources:
         limits:
           memory: 128M
@@ -74,7 +76,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8004 -t 15
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 8
       resources:
         limits:
           memory: 128M
@@ -87,7 +89,7 @@ services:
     command: bash -c "gunicorn --workers=1 server:app -b 0.0.0.0:8006 -t 60"
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 8
       resources:
         limits:
           memory: 256M
@@ -126,7 +128,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8011 -t 100
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 8
       resources:
         limits:
           memory: 1.5G
@@ -140,7 +142,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8009 -t 15
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 8
       resources:
         limits:
           memory: 128M
@@ -256,7 +258,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8023 --timeout=300 --preload
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 4
       resources:
         limits:
           memory: 768M
@@ -473,7 +475,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8029 -t 60
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 4
       resources:
         limits:
           memory: 1536M
@@ -594,7 +596,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8037
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 4
       resources:
         limits:
           memory: 1152M
@@ -608,7 +610,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8049
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 4
       resources:
         limits:
           memory: 128M
@@ -785,7 +787,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8066 -t 15
     deploy:
       mode: replicated
-      replicas: 1
+      replicas: 2
       resources:
         limits:
           memory: 256M
@@ -853,7 +855,7 @@ services:
       - CUDA_VISIBLE_DEVICES=''
     deploy:
       mode: replicated
-      replicas: 1
+      replicas: 8
       resources:
         limits:
           memory: 256M
@@ -876,9 +878,9 @@ services:
       replicas: 1
       resources:
         limits:
-          memory: 13G
+          memory: 15G
         reservations:
-          memory: 13G
+          memory: 15G
 
   kbqa:
     build:
@@ -896,9 +898,9 @@ services:
       replicas: 1
       resources:
         limits:
-          memory: 10G
+          memory: 15G
         reservations:
-          memory: 10G
+          memory: 15G
 
   factoid-classification:
     build:
@@ -994,9 +996,9 @@ services:
       replicas: 1
       resources:
         limits:
-          memory: 3G
+          memory: 3.5G
         reservations:
-          memory: 3G
+          memory: 3.5G
 
   knowledge-grounding-skill:
     build:
