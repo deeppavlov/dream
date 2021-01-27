@@ -3,7 +3,7 @@ server:
     gpu: "false"
   persistentVolume:
     enabled: true
-    size: 50Gi
+    size: 100Gi
   readinessProbeInitialDelay: 30
   readinessProbePeriodSeconds: 10
   readinessProbeTimeout: 4
@@ -11,6 +11,8 @@ server:
   readinessProbeSuccessThreshold: 1
   livenessProbeFailureThreshold: 5
   livenessProbeInitialDelay: 60
+
+  retention: "5d"
 
 kubeStateMetrics:
   enabled: true

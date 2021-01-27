@@ -2,7 +2,7 @@ import requests
 
 
 def main():
-    url = 'http://0.0.0.0:8001/topics'
+    url = 'http://0.0.0.0:8000/topics'
 
     request_data = {"sentences": [['do you like muslims?',
                                    'what are your thoughts about donald trump?']

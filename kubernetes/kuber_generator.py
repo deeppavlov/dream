@@ -37,8 +37,8 @@ def get_port(service_params: Dict) -> int:
     ports = service_params['ports']
     assert len(ports) == 1, f'{ports}'
     ports = list(map(int, ports[0].split(':')))
-    assert ports[0] == ports[1], f'{ports}'
-    return ports[0]
+    # assert ports[0] == ports[1], f'{ports}'
+    return ports[1]
 
 
 def generate_network():
@@ -55,9 +55,9 @@ def generate_deployments():
         shutil.rmtree(MODELS_PATH)
 
     dev = read_yaml(REPO_PATH / 'dev.yml')
-    compose = read_yaml(REPO_PATH / 'docker-compose.yml')
+    compose = read_yaml(REPO_PATH / 'docker-compose.yml').get('services')
     deploy = read_yaml(KUBER_PATH / 'configs/deploy.yaml') or {}
-    print('total services (inc. mongo and agent):', len(dev['services']))
+    print('total services (inc. mongo and agent):', len(compose))
 
     for service_name, service_params in dev['services'].items():
         if service_name == 'mongo':
@@ -66,10 +66,12 @@ def generate_deployments():
 
         gpu = deploy.get(service_name, {}).get('gpu', 'false')
         cuda = deploy.get(service_name, {}).get('CUDA_VISIBLE_DEVICES', '')
+        resources = compose.get(service_name, {}).get('deploy', {}).get('resources')
 
         values_dict = {
             'KUBER_DP_NAME': dp_name,
-            'REPLICAS_NUM': deploy.get(service_name, {}).get('REPLICAS_NUM', 1),
+            'REPLICAS': compose.get(service_name, {}).get('deploy', {}).get('replicas', 1),
+            'resources': resources,
             'KUBER_IMAGE_TAG': f'{DOCKER_REGISTRY}/{service_name}:{VERSION}',
             'PORT': get_port(service_params),
             'GPU': str(gpu),
@@ -81,8 +83,8 @@ def generate_deployments():
             'NAMESPACE': NAMESPACE,
         }
 
-        if 'command' in compose['services'].get(service_name, []):
-            command = compose['services'][service_name]['command']
+        if 'command' in compose.get(service_name, []):
+            command = compose.get(service_name, {}).get('command', '')
             if command.startswith(('gunicorn', 'uvicorn', 'cd /src/dream_aiml/scripts', 'bash server_run.sh')):
                 values_dict.update({'COMMAND': command})
             elif command.startswith('sh -c') or command.startswith('bash -c'):
@@ -93,7 +95,7 @@ def generate_deployments():
 
         if service_name == 'agent':
             values_dict.update({
-                'WAIT_HOSTS': compose['services']['agent']['environment']['WAIT_HOSTS'],
+                'WAIT_HOSTS': compose['agent']['environment']['WAIT_HOSTS'],
                 'WAIT_HOSTS_TIMEOUT': 480
             })
 

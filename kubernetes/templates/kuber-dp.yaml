@@ -4,10 +4,12 @@ metadata:
   name: {{ KUBER_DP_NAME }}
   namespace: {{ NAMESPACE }}
 spec:
-  replicas: {{ REPLICAS_NUM }}
+  replicas: {{ REPLICAS }}
   selector:
     matchLabels:
       app: {{ KUBER_DP_NAME }}
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
@@ -57,6 +59,27 @@ spec:
             port: dp-service
           failureThreshold: 60
           periodSeconds: 10
+        {% endif %}
+        {% if resources %}
+        resources:
+          {% if 'limits' in resources %}
+          limits:
+            {% if 'memory' in resources.limits %}
+            memory: {{ resources.limits.memory }}
+            {% endif %}
+            {% if 'cpu' in resources.limits %}
+            cpu: {{ resources.limits.cpu }}
+            {% endif %}
+          {% endif %}
+          {% if 'reservations' in resources %}
+          requests:
+            {% if 'memory' in resources.reservations %}
+            memory: {{ resources.reservations.memory }}
+            {% endif %}
+            {% if 'cpu' in resources.reservations %}
+            cpu: {{ resources.reservations.cpu }}
+            {% endif %}
+          {% endif %}
         {% endif %}
       volumes:
       #- name: volume-logs
