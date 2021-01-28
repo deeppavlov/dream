@@ -19,6 +19,7 @@ try:
 except Exception as e:
     sentry_sdk.capture_exception(e)
     logger.exception(e)
+    raise e
 
 app = Flask(__name__)
 

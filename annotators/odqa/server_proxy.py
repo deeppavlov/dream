@@ -29,7 +29,7 @@ def respond():
         resp = requests.post("http://0.0.0.0:8080/model", json=questions, timeout=1.5)
         if resp.status_code == 200:
             odqa_resp = resp.json()
-            if resp:
+            if odqa_resp:
                 odqa_res = []
                 for elem in odqa_resp:
                     if elem and len(elem) == 5:
