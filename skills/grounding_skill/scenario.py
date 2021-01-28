@@ -30,8 +30,13 @@ class GroundingSkillScenario:
             human_attr = dialog["human"]["attributes"]
             human_attr["used_links"] = human_attr.get("used_links", defaultdict(list))
             attr = {}
+            what_do_you_mean_intent = dialog["human_utterances"][-1].get(
+                "annotations", {}).get(
+                "intent_catcher", {}).get(
+                "what_are_you_talking_about", {}).get(
+                "detected", False)
             try:
-                if not what_we_talk_about(dialog['utterances'][-1]):
+                if not (what_we_talk_about(dialog['human_utterances'][-1]) or what_do_you_mean_intent):
                     reply, confidence = '', 0
                 elif len(dialog.get('human_utterances', [])) < 2:
                     reply, confidence = DONTKNOW_PHRASE, DONTKNOW_CONF
