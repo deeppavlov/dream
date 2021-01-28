@@ -125,6 +125,7 @@ services:
     env_file: [.env.dev]
     volumes:
       - './annotators/NER:/src'
+      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8021:8021
   alice:
@@ -346,6 +347,7 @@ services:
     volumes:
       - "./skills/factoid_qa:/src"
       - "./common:/src/common"
+      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8071:8071
   kbqa:
