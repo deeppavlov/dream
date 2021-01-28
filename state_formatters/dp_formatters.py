@@ -76,6 +76,7 @@ def last_n_human_utt_dialog_formatter(dialog: Dict, last_n_utts: int, only_last_
         last_n_utts (int): how many last user utterances to take
         only_last_sentence (bool, optional): take only last sentence in each utterance. Defaults to False.
     """
+    dialog = deepcopy(dialog)
     if len(dialog["human_utterances"]) <= last_n_utts and \
             not if_lets_chat_about_topic(dialog["utterances"][0]["text"].lower()):
         # in all cases when not particular topic, convert first phrase in the dialog to `hello!`
