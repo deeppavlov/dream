@@ -3,7 +3,6 @@ import re
 import time
 from os import getenv
 
-from deeppavlov import build_model
 from flask import Flask, request, jsonify
 import sentry_sdk
 
@@ -15,8 +14,6 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-
-SPELL_CHECK_MODEL = build_model(config="brillmoore_wikitypos_en")
 
 templates = []
 templates += [(re.compile(r"\bwon'?t\b", flags=re.IGNORECASE), "will not")]
@@ -97,7 +94,6 @@ def respond():
     sentences = request.json["sentences"]
 
     corrected_sentences = [preprocess(text) for text in sentences]
-    # corrected_sentences = SPELL_CHECK_MODEL(corrected_sentences)
 
     total_time = time.time() - st_time
     logger.info(f'Spelling Preprocessing exec time: {total_time:.3f}s')
