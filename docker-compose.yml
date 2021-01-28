@@ -898,9 +898,9 @@ services:
       replicas: 1
       resources:
         limits:
-          memory: 15G
+          memory: 20G
         reservations:
-          memory: 15G
+          memory: 20G
 
   factoid-classification:
     build:
