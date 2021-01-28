@@ -31,7 +31,7 @@
             "intent_catcher": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://spelling_preprocessing:3007/catch"
+                    "url": "http://intent_catcher:3007/catch"
                 },
                 "dialog_formatter": "dp_formatters:last_utt_dialog",
                 "response_formatter": "dp_formatters:simple_formatter_service",

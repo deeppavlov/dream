@@ -11,3 +11,7 @@ As you **add new phrases to the intents**, please be very careful. Intents shoul
 To add new intent, you should
  1. Fit the model on the intents (look for example Colab notebook). \\
  2. Then add the model to models, modify config and run.
+
+## Tests
+
+The test sentences are contained in `tests.json` file. To run tests, run the intent\_catcher service and run `./test.sh`.
