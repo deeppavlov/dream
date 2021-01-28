@@ -64,10 +64,6 @@
         "intent": "exit"
     },
     {
-        "sentence": "end this conversation",
-        "intent": "exit"
-    },
-    {
         "sentence": "cancel",
         "intent": "exit"
     },
@@ -113,6 +109,18 @@
     },
     {
         "sentence": "I did not get what do you mean",
+        "intent": "what_are_you_talking_about"
+    },
+    {
+        "sentence": "What are you talking about?",
+        "intent": "what_are_you_talking_about"
+    },
+    {
+        "sentence": "What is it about?",
+        "intent": "what_are_you_talking_about"
+    },
+    {
+        "sentence": "We're not on the same page",
         "intent": "dont_understand"
     },
     {

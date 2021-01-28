@@ -1,5 +1,26 @@
 {
   "intent_phrases": {
+    "what_are_you_talking_about": {
+      "phrases": [
+        "(alexa ){0,1}what are ((you)|(we)) ((talking about)|(discussing))",
+        "(alexa ){0,1}what ((you)|(we)) are (even ){0,1}((talking about)|(discussing))",
+        "(alexa ){0,1}what does it mean",
+        "(alexa ){0,1}pass that by me again",
+        "(alexa ){0,1}i ((don't)|(didn't)|(do not)|(did not)) get it",
+        "(alexa ){0,1}what it is about",
+        "(alexa ){0,1}what is it about", 
+        "i lost common ground",
+        "(alexa ){0,1}what (even ){0,1}is that",
+        "(i ((did not get)|(don't understand)|(don't get)) ){0,1}what do you mean( alexa){0,1}",
+        "(sorry, ){0,1}i ((don't)|(do not)|(didn't)|(did not)) ((understand)|(get))( ((what you mean)|(what are you talking about)))( alexa){0,1}",
+        "((what you mean)|(what are you talking about))( alexa){0,1}"
+      ],
+      "min_precision": 0.94,
+      "punctuation": [
+        ".",
+        "?"
+      ]
+    },
     "topic_switching": {
       "phrases": [
 	"(that's ){0,1}enough( talking ){0,1} about ((this)|(it)|(that)|(movies)|(music)|(politics)|(the weather)|(you)|(me)|(this topic)|(this thing)|(that))",
@@ -71,7 +92,7 @@
         "(alexa ){0,1}let’s ((chat)|(talk)) later",
         "alexa ((off)|(stop)|(cancel)|(pause)|(quiet))",
         "(alexa ){0,1}shut ((your face)|(up)|(off))",
-        "((end)|(stop)|(cancel)|(exit)) ((this)|(our)){0,1}((chat)|(conversation)|(dialog))(, ((alexa)|(bot))){0,1}",
+        "((end)|(stop)|(cancel)|(exit)) ((this )|(our )){0,1}((chat)|(conversation)|(dialog))(, ((alexa)|(bot))){0,1}",
         "((end)|(stop)|(cancel)) it(, ((alexa)|(bot))){0,1}",
         "i ((do not)|(don't)) ((want to)|(wanna)) talk( to you){0,1}( anymore){0,1}",
         "(i ((say)|(said)) ){0,1}have a ((good)|(great)|(nice)) ((day)|(night)|(one)|(evening))(, (alexa)|(bot)){0,1}",
@@ -92,7 +113,13 @@
         "can you ((turn off)|(shut down)|(shut up)|(exit)|(stop))",
         "stop listening( now){0,1}",
         "(alexa ){0,1}shut (the fuck ){0,1}up",
-        "switch back to alexa"
+        "switch back to alexa",
+        "(alexa ){0,1}((end)|(finish)) ((a)|(the)|(this)|(our)) ((conversation)|(chat)|(discussion))",
+        "(alexa ){0,1}stop making ((this )|(the )){0,1}((song)|(noise))",
+        "end this conversation"
+      ],
+        "reg_phrases": [
+      	"end this conversation"
       ],
       "min_precision": 0.99,
       "punctuation": [
@@ -126,7 +153,6 @@
         "((can)|(would)|(could)) you (please ){0,1}((repeat)|(say))( ((that)|(the question)|(what you said))){0,1}( again){0,1}( please){0,1}",
         "i did not hear you well, please repeat.",
         "(alexa ){0,1}what did you just say",
-        "(alexa ){0,1}what you are (even ){0,1}talking about",
         "excuse me",
         "padon me",
         "(sorry, ){0,1}i didn't catch that"  
@@ -170,7 +196,6 @@
     },
     "dont_understand": {
       "phrases": [
-        "(alexa ){0,1}what",
 	      "(because ){0,1}you are being confusing(, alexa){0,1}",
         "you are not making any sense",
         "(alexa ){0,1}i am confused",
@@ -179,12 +204,10 @@
         "(i ((do)|(did)) not ((get)|(understand)) ){0,1}what are you saying",
         "(i ((do)|(did)) not ((get)|(understand)) ){0,1}why do you ((say)|(tell me)) that",
         "i don’t know anything that you mean",
-        "what even is that",
         "i don’t ((know)|(understand)|(get)) what that means",
-        "(i ((did not get)|(don't understand)|(don't get)) ){0,1}what do you mean( alexa){0,1}",
-        "(sorry, ){0,1}I ((don't)|(do not)|(didn't)|(did not)) ((understand)|(get)|(know))( ((what you mean)|(what you say)|(what you want)|(what are you talking about)))( alexa){0,1}",
-        "((i don't ((know)|(understand)|(get)) )|(I am not sure )|())what ((do)|(did)) you mean( alexa){0,1}",
-        "((i don't ((know)|(understand)|(get)) )|(I am not sure )|())((what you mean)|(what you say)|(what you want)|(what are you talking about))( alexa){0,1}",
+        "(sorry, ){0,1}I ((don't)|(do not)|(didn't)|(did not)) ((understand)|(get)|(know))( ((what you say)|(what you want)))( alexa){0,1}",
+        "((i don't ((know)|(understand)|(get)) )|(I am not sure ))what ((do)|(did)) you mean( alexa){0,1}",
+        "((i don't ((know)|(understand)|(get)) )|(I am not sure ))((what you mean)|(what you say)|(what you want)|(what are you talking about))( alexa){0,1}",
         "(what, ){0,1}it doesn't make (any ){0,1}sense( alexa){0,1}",
         "(alexa ){0,1}it ((don't)|(doesn't)) make any sense",
         "(alexa ){0,1}we're not on the same page"
@@ -547,7 +570,11 @@
       "phrases": [
         "doing ((fine)|(great)|(cool)|(okay))( ((thanks)|(thank you))){0,1}",
         "i(('m)|( am)) ((doing)|(all)) ((okay)|(right)|(fine)|(great)|(cool))( thanks){0,1}",
-        "i(('m)|( am)) ((fine)|(good)|(well)|(happy)|(very kind as well)|(okay)|(great)|(cool))( thanks){0,1}"
+        "i(('m)|( am)) ((fine)|(good)|(well)|(happy)|(very kind as well)|(okay)|(great)|(cool))( thanks){0,1}",
+        "i am good"
+      ],
+      "reg_phrases":[
+        "i am good"
       ],
       "min_precision": 0.00,
       "punctuation": [
@@ -1422,7 +1449,11 @@
       "your language or knowledge of how people speak now",
       "what which rule was lazarus",
       "when were new year",
-      "what ((rule)|(something)|(anything)) is"
+      "what ((rule)|(something)|(anything)) is",
+      "can you not answer the question",
+      "play with ((friends)|(dog)|(cat))",
+      "play ((basketball)|(baseball)|(geometry dash))",
+      "you got different games you said"
     ],
     "punctuation": [
       ".",
