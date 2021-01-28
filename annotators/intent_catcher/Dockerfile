@@ -21,4 +21,4 @@ RUN python -c "import tensorflow_hub as hub; model=hub.Module('$USE_MODEL_URL')"
 COPY ./src/ ./
 COPY ./data/ /data
 
-CMD gunicorn --workers=1 --name=catcher --bind 0.0.0.0:8014 --timeout=500 server:app
+CMD gunicorn --workers=1 --name=catcher --bind 0.0.0.0:3007 --timeout=500 server:app
