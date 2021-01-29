@@ -2,8 +2,8 @@ services:
   comet-atomic:
     build:
       args:
-        PRETRAINED_MODEL: https://team-dream-storage.s3.amazonaws.com/atomic_pretrained_model.pickle
-        PREPROCESS_DATA: https://team-dream-storage.s3.amazonaws.com/categories_oEffect%23oReact%23oWant%23xAttr%23xEffect%23xIntent%23xNeed%23xReact%23xWant-maxe1_17-maxe2_35-maxr_1.pickle
+        PRETRAINED_MODEL: https://team-dream-storage.s3.amazonaws.com/comet/atomic_pretrained_model.pickle
+        PREPROCESS_DATA: https://team-dream-storage.s3.amazonaws.com/comet/categories_oEffect%23oReact%23oWant%23xAttr%23xEffect%23xIntent%23xNeed%23xReact%23xWant-maxe1_17-maxe2_35-maxr_1.pickle
   #comet_conceptnet:
     #build:
       #args:
