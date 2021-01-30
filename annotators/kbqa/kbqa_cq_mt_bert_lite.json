@@ -59,7 +59,7 @@
         "rels_to_leave": 10,
         "return_all_possible_answers": true,
         "use_alt_templates": false,
-        "max_comb_num": 50,
+        "max_comb_num": 30,
         "use_api_requester": true,
         "in": ["x_init", "x_init", "template_type", "entities", "types"],
         "out": ["candidate_rels_answers", "entities", "template_answers"]

@@ -37,27 +37,41 @@ def respond():
     entities = inp.get("entities", [[]])
     entity_types = [[] for _ in questions]
     sanitized_questions, sanitized_entities = [], []
+    nf_numbers = []
     if len(questions) == len(entities):
-        for question, entities_list in zip(questions, entities):
+        for n, (question, entities_list) in enumerate(zip(questions, entities)):
             if question.startswith("/") or "/alexa" in question or any(["/" in entity for entity in entities_list]):
-                sanitized_questions.append(" ")
-                sanitized_entities.append([])
+                nf_numbers.append(n)
+            elif not entities_list:
+                nf_numbers.append(n)
             else:
                 sanitized_questions.append(question)
                 sanitized_entities.append(entities_list)
-    if NER_INPUT:
-        kbqa_input = [sanitized_questions, sanitized_questions, template_types, sanitized_entities, entity_types]
-    else:
-        kbqa_input = [questions]
-    res = [("Not Found", 0.0)] * len(questions)
+    kbqa_input = []
+    if sanitized_questions:
+        if NER_INPUT:
+            kbqa_input = [sanitized_questions, sanitized_questions, template_types, sanitized_entities, entity_types]
+        else:
+            kbqa_input = [sanitized_questions]
+    out_res = [("Not Found", 0.0)] * len(questions)
     try:
-        res = kbqa(*kbqa_input)
-        if res:
-            res = [(answer, float(conf)) for answer, conf in res]
+        if kbqa_input:
+            res = kbqa(*kbqa_input)
+            if res:
+                out_res = []
+                cnt_fnd = 0
+                for i in range(len(questions)):
+                    if i in nf_numbers:
+                        out_res.append(("Not Found", 0.0))
+                    else:
+                        if cnt_fnd < len(res):
+                            answer, conf = res[cnt_fnd]
+                            out_res.append((answer, float(conf)))
+                            cnt_fnd += 1
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
-    return jsonify(res)
+    return jsonify(out_res)
 
 
 if __name__ == "__main__":
