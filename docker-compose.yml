@@ -20,12 +20,12 @@ services:
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
     deploy:
       mode: replicated
-      replicas: 1
+      replicas: 8
       resources:
         limits:
-          memory: 3G
+          memory: 2G
         reservations:
-          memory: 3G
+          memory: 2G
 
   cobotqa:
     build:
