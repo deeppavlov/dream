@@ -20,7 +20,7 @@ services:
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 1
       resources:
         limits:
           memory: 3G
