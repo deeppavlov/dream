@@ -263,7 +263,7 @@ def respond():
             else:
                 futures = []
                 executor = concurrent.futures.ThreadPoolExecutor()
-                for system in ["odqa", "kbqa"]:
+                for system in ["odqa"]:
                     futures.append(executor.submit(getQaResponse, last_phrase, system))
                 results = []
                 for future in concurrent.futures.as_completed(futures):
