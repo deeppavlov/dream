@@ -692,7 +692,7 @@
             "grounding_skill": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://grounding_skill:8080/grounding_skill"
+                    "url": "http://grounding-skill:8080/grounding_skill"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
