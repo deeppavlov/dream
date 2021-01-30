@@ -23,7 +23,7 @@ class KBQAConnector:
         try:
             st_time = time.time()
             kbqa_result = []
-            resp = requests.post(url=self._url, json=payload['payload'], timeout=1.5)
+            resp = requests.post(url=self._url, json=payload['payload'], timeout=0.5)
             if resp.status_code == 200:
                 kbqa_result = resp.json()[0]
             total_time = time.time() - st_time

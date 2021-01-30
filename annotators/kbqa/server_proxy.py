@@ -23,7 +23,7 @@ def respond():
     kbqa_res = [default_resp] * len(questions.get("x_init", []))
     try:
         st_time = time.time()
-        resp = requests.post("http://0.0.0.0:8080/model", json=questions, timeout=1.5)
+        resp = requests.post("http://0.0.0.0:8080/model", json=questions, timeout=0.5)
         if resp.status_code == 200:
             kbqa_res = []
             kbqa_resp = resp.json()
