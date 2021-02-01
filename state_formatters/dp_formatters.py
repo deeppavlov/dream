@@ -19,8 +19,16 @@ def get_last_n_turns(dialog: Dict, bot_last_turns=None, human_last_turns=None, t
         if key not in ["utterances", "human_utterances", "bot_utterances"]:
             new_dialog[key] = deepcopy(value)
     new_dialog["utterances"] = deepcopy(dialog["utterances"][-total_last_turns:])
-    new_dialog["human_utterances"] = deepcopy(dialog["human_utterances"][-human_last_turns:])
-    new_dialog["bot_utterances"] = deepcopy(dialog["bot_utterances"][-bot_last_turns:])
+
+    new_dialog["human_utterances"] = []
+    new_dialog["bot_utterances"] = []
+
+    for utt in new_dialog["utterances"]:
+        if utt['user']['user_type'] == 'human':
+            new_dialog["human_utterances"].append(deepcopy(utt))
+        elif utt['user']['user_type'] == 'bot':
+            new_dialog["bot_utterances"].append(deepcopy(utt))
+
     return new_dialog
 
 
@@ -62,9 +70,9 @@ def remove_clarification_turns_from_dialog(dialog):
 
     for utt in new_dialog["utterances"]:
         if utt['user']['user_type'] == 'human':
-            new_dialog["human_utterances"].append(utt)
+            new_dialog["human_utterances"].append(deepcopy(utt))
         elif utt['user']['user_type'] == 'bot':
-            new_dialog["bot_utterances"].append(utt)
+            new_dialog["bot_utterances"].append(deepcopy(utt))
 
     return new_dialog
 
@@ -331,7 +339,7 @@ def sent_rewrite_formatter_dialog(dialog: Dict) -> List[Dict]:
     utterances_histories = []
     annotation_histories = []
     for utt in dialog['utterances']:
-        annotation_histories.append(utt['annotations'])
+        annotation_histories.append(deepcopy(utt['annotations']))
         utterances_histories.append(utt['text'])
     return [{
         'utterances_histories': [utterances_histories],
@@ -346,7 +354,7 @@ def sent_rewrite_formatter_w_o_last_dialog(dialog: Dict) -> List[Dict]:
     utterances_histories = []
     annotation_histories = []
     for utt in dialog['utterances'][:-1]:
-        annotation_histories.append(utt['annotations'])
+        annotation_histories.append(deepcopy(utt['annotations']))
         utterances_histories.append(utt['text'])
     return [{
         'utterances_histories': [utterances_histories],
@@ -589,10 +597,10 @@ def last_utt_sentseg_segments_dialog(dialog: Dict):
 
 def ner_formatter_dialog(dialog: Dict):
     # Used by: ner_formatter
-    if "sentseg" in dialog['utterances'][-1]['annotations']:
-        return [{'last_utterances': [dialog['utterances'][-1]['annotations']['sentseg']['segments']]}]
+    if "sentseg" in dialog['human_utterances'][-1]['annotations']:
+        return [{'last_utterances': [dialog['human_utterances'][-1]['annotations']['sentseg']['segments']]}]
     else:
-        segments = [dialog['utterances'][-1]['text']]
+        segments = [dialog['human_utterances'][-1]['text']]
         return [{'last_utterances': [segments]}]
 
 
