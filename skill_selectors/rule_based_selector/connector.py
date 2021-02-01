@@ -7,9 +7,8 @@ from typing import Dict, Callable
 
 import sentry_sdk
 
-from common.universal_templates import BOOK_TEMPLATES
 from common.movies import movie_skill_was_proposed
-from common.books import book_skill_was_proposed
+from common.books import book_skill_was_proposed, about_book, QUESTIONS_ABOUT_BOOKS
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
 from common.emotion import detect_emotion, is_joke_requested
 from common.news import is_breaking_news_requested
@@ -147,8 +146,7 @@ class RuleBasedSkillSelectorConnector:
             about_movies = (self.movie_cobot_dialogacts & cobot_dialogact_topics)
             about_music = ("Entertainment_Music" in cobot_dialogact_topics) | ("Music" in cobot_topics)
             about_games = ("Games" in cobot_topics and "Entertainment_General" in cobot_dialogact_topics)
-            about_books = (self.books_cobot_dialogacts & cobot_dialogact_topics) | (
-                self.books_cobot_topics & cobot_topics)
+            about_books = about_book(dialog["human_utterances"][-1])
 
             #  topicalchat_tfidf_retrieval
             about_entertainments = (self.entertainment_cobot_dialogacts & cobot_dialogact_topics) | (
@@ -206,7 +204,7 @@ class RuleBasedSkillSelectorConnector:
                 prev_bot_uttr, dialog['human_utterances'][-1])
             about_movies = (about_movies or movie_skill_was_proposed(prev_bot_uttr) or re.search(
                 self.about_movie_words, prev_bot_uttr.get("text", "").lower()))
-            about_books = about_books or book_skill_was_proposed(prev_bot_uttr) or 'book' in user_uttr_text
+            about_books = about_books or book_skill_was_proposed(prev_bot_uttr)
 
             emotions = user_uttr_annotations['emotion_classification']['text']
             if "/new_persona" in user_uttr_text:
@@ -285,11 +283,13 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("coronavirus_skill")
                 if about_music and len(dialog["utterances"]) > 2:
                     skills_for_uttr.append("music_tfidf_retrieval")
-                met_book_template = False
-                if len(dialog['utterances']) >= 2:
-                    met_book_template = any([j.lower() in dialog['utterances'][-2]['text'].lower()
-                                             for j in BOOK_TEMPLATES])
-                if about_books or prev_active_skill == 'book_skill' or met_book_template:
+
+                linked_to_book = False
+                if len(dialog["bot_utterances"]) > 0:
+                    linked_to_book = any([phrase in dialog["bot_utterances"][-1]["text"]
+                                          for phrase in QUESTIONS_ABOUT_BOOKS])
+
+                if about_books or prev_active_skill == 'book_skill' or linked_to_book:
                     skills_for_uttr.append("book_skill")
                     skills_for_uttr.append("book_tfidf_retrieval")
 

@@ -32,10 +32,6 @@ NP_OPINION_REQUESTS = [
     "I'd like to hear your opinion on NP."
 ]
 
-BOOK_TEMPLATES = ['talk about books', 'do you love reading']
-
-BOOK_CHANGE_PHRASE = "Okay! What would you prefer to discuss? Movies or an interesting fact from Wikipedia?"
-
 
 def opinion_request_question():
     return choice(UNIVERSAL_OPINION_REQUESTS)
