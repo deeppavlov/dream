@@ -94,7 +94,7 @@ spec:
       environment {
         //VERSION=sh(returnStdout: true, script: "git tag --contains | head -1").trim()
         VERSION="${TAG_NAME}"
-        ENV_FILE='.env.b'
+        ENV_FILE='.env.prod'
         DP_AGENT_PORT=4242
         DOCKER_REGISTRY='263182626354.dkr.ecr.us-east-1.amazonaws.com'
       }
@@ -181,7 +181,7 @@ spec:
 
       environment {
         VERSION="${TAG_NAME}"
-        ENV_FILE='.env.b'
+        ENV_FILE='.env.prod'
         DOCKER_REGISTRY='263182626354.dkr.ecr.us-east-1.amazonaws.com'
         NAMESPACE='alexa-b'
         ENVIRONMENT='B'
