@@ -163,6 +163,7 @@ class WeatherSkill:
             # check if weather intent triggered in last utterance:
             ############################################################
             annotations = dialog["utterances"][-1]["annotations"]
+            weather_without_city_requested = False
             if len(dialog["utterances"]) > 1:
                 prev_bot_utt = dialog["utterances"][-2]
                 user_utt = dialog["utterances"][-1]
