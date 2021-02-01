@@ -268,7 +268,7 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg",
-                    "annotators.ner"]
+                    "annotators.ner", "post_annotators.ner"]
             },
             "dialog_breakdown": {
                 "connector": {
