@@ -27,6 +27,7 @@ app = Flask(__name__)
 @app.route("/model", methods=['POST'])
 def respond():
     questions = request.json.get("question_raw", [" "])
+    questions = [question.lstrip("alexa") for question in questions]
     res = []
     try:
         res = odqa(questions)
