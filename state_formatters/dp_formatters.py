@@ -467,6 +467,15 @@ def utt_sentseg_punct_dialog(dialog: Dict):
     return [{'dialogs': [dialog]}]
 
 
+def utt_non_punct_dialog(dialog: Dict):
+    '''
+    Used by: book_skill
+    '''
+    dialog = get_last_n_turns(dialog)
+    dialog = remove_clarification_turns_from_dialog(dialog)
+    return [{'dialogs': [dialog]}]
+
+
 def full_utt_sentseg_punct_dialog(dialog: Dict):
     '''
     Used ONLY by: greeting_skill (turns on only for first 10 turns)
