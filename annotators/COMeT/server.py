@@ -1,6 +1,7 @@
 import logging
 import time
 import os
+import re
 from functools import lru_cache
 
 import torch
@@ -70,6 +71,17 @@ def get_comet_conceptnet_output(input_event, category):
 
 logger.info(f'comet model for {graph} is ready')
 
+
+other_symbols_compiled = re.compile(r"[^a-zA-Z0-9\- ]")
+none_compiled = re.compile(r"\bnone\b", re.IGNORECASE)
+
+
+def cleanup(text):
+    cleaned = re.sub(other_symbols_compiled, "", text)
+    cleaned = re.sub(none_compiled, "", cleaned)
+    return cleaned.strip()
+
+
 app = Flask(__name__)
 
 
@@ -138,6 +150,9 @@ def respond():
     else:
         raise RuntimeError('Graph {graph} is not in ["atomic", "conceptnet"]')
 
+    for rel in output:
+        output[rel]["beams"] = [cleanup(b) for b in output[rel].get('beams', []) if len(cleanup(b)) > 0]
+
     logger.info(output)
     total_time = time.time() - st_time
     logger.info(f'comet exec time: {total_time:.3f}s')
@@ -156,7 +171,7 @@ def conceptnet_annotator(request, category=("SymbolOf", "HasProperty", "Causes",
             cn_result = get_comet_conceptnet_output(np, category=category)
             np_conceptnet_rels = {}
             for rel in cn_result:
-                np_conceptnet_rels[rel] = [b for b in cn_result[rel].get('beams', []) if b != 'none']
+                np_conceptnet_rels[rel] = [cleanup(b) for b in cn_result[rel].get('beams', []) if len(cleanup(b)) > 0]
             result[np] = np_conceptnet_rels
         batch += [result]
     return batch

@@ -213,7 +213,7 @@ def get_comet_atomic(topic, relation, TOPICS={}):
         # send request to COMeT service on `topic & relation`
         try:
             comet_result = custom_request(COMET_SERVICE_URL, {"input": f"{topic}",
-                                                              "category": relation}, 1.5)
+                                                              "category": relation}, timeout=1)
         except (requests.ConnectTimeout, requests.ReadTimeout) as e:
             logger.error("COMeT Atomic result Timeout")
             sentry_sdk.capture_exception(e)
@@ -266,7 +266,7 @@ def get_comet_conceptnet(topic, relation, return_all=False, return_not_filtered=
     # send request to COMeT ConceptNet service on `topic & relation`
     try:
         comet_result = custom_request(CONCEPTNET_SERVICE_URL, {"input": f"{topic}.",
-                                                               "category": relation}, 1.5)
+                                                               "category": relation}, timeout=1)
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         logger.error("COMeT ConceptNet result Timeout")
         sentry_sdk.capture_exception(e)
