@@ -12,11 +12,11 @@ def main():
 
     gold_result = {
         'oEffect': {
-            'beams': ['none', 'they go to the store', 'they go to the mall'],
+            'beams': ['they go to the store', 'they go to the mall'],
             'effect_type': 'oEffect', 'event': 'PersonX went to a mall'
         },
         'oReact': {
-            'beams': ['none', 'happy', 'interested'],
+            'beams': ['happy', 'interested'],
             'effect_type': 'oReact', 'event': 'PersonX went to a mall'
         },
         'xAttr': {
@@ -28,7 +28,7 @@ def main():
             'effect_type': 'xIntent', 'event': 'PersonX went to a mall'
         },
         'xNeed': {
-            'beams': ['to drive to the mall', 'to get in the car', 'to drive to the mall .'],
+            'beams': ['to drive to the mall', 'to get in the car', 'to drive to the mall'],
             'effect_type': 'xNeed', 'event': 'PersonX went to a mall'
         },
         'xReact': {
