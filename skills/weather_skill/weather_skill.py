@@ -119,7 +119,7 @@ class DialogDataManager():
 BASE_CONFIDENCE = 0.0
 
 # confidence when we ready to provide forecast
-FORECAST_CONFIDENCE = 0.999
+FORECAST_CONFIDENCE = 1.
 
 # confidence when we asking auxillary questions for providing weather forecast
 QUESTION_CONFIDENCE = 0.999
