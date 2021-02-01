@@ -40,11 +40,6 @@ pipeline {
 
   agent none
 
-  when {
-    buildingTag()
-    beforeAgent true
-  }
-
   environment {
     AGENT_PORT=4242
     WAIT_TIMEOUT=2400
@@ -90,6 +85,11 @@ spec:
       type: File
 """
         }
+      }
+
+      when {
+        buildingTag()
+        beforeAgent true
       }
 
       environment {
