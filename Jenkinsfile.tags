@@ -45,10 +45,6 @@ pipeline {
     beforeAgent true
   }
 
-  parameters {
-    choice(name: 'ENVIRONMENT', choices: ['A', 'B'], description: 'Pick environment')
-  }
-
   environment {
     AGENT_PORT=4242
     WAIT_TIMEOUT=2400
@@ -175,6 +171,13 @@ spec:
       path: /var/run/docker.sock
       type: File
 """
+        }
+      }
+
+      input {
+        message 'Pick environment'
+        parameters {
+          choice(name: 'ENVIRONMENT', choices: ['A', 'B'], description: 'Pick environment')
         }
       }
 
