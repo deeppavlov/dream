@@ -624,7 +624,7 @@ def get_not_given_question_about_books(used_phrases):
     not_asked_questions = set(QUESTIONS_ABOUT_BOOKS).difference(set(used_phrases))
     if len(not_asked_questions):
         # choose not used question about books
-        reply = random.choice(not_asked_questions)
+        reply = random.choice(list(not_asked_questions))
     else:
         # choose any question about books
         reply = random.choice(QUESTIONS_ABOUT_BOOKS)
