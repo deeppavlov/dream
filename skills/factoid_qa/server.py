@@ -168,14 +168,20 @@ def odqa_kbqa_choose(question, odqa_response, kbqa_response):
         if re.findall(template, question, re.IGNORECASE):
             question_type = template_type
             break
-    kbqa_answer = kbqa_response.get("answer", "Not Found")
-    kbqa_confidence = kbqa_response.get("confidence", 0.0)
+    kbqa_answer = "Not Found"
+    kbqa_confidence = 0.0
+    if isinstance(kbqa_response, dict) and "answer" in kbqa_response and "confidence" in kbqa_response:
+        kbqa_answer = kbqa_response["answer"]
+        kbqa_confidence = kbqa_response["confidence"]
     if isinstance(answer, list):
         answer = ', '.join(answer)
     else:
         answer = answer
-    odqa_answer = odqa_response.get("answer_sentence", "Not Found")
-    odqa_confidence = odqa_response.get("confidence", 0.0)
+    odqa_answer = "Not Found"
+    odqa_confidence = 0.0
+    if isinstance(odqa_response, dict) and "answer_sentence" in odqa_response and "confidence" in odqa_response:
+        odqa_answer = odqa_response["answer_sentence"]
+        odqa_confidence = odqa_response["confidence"]
 
     logger.info(f'odqa_confidence {odqa_confidence} kbqa_confidence {kbqa_confidence}')
     if question_type == "odqa" and odqa_confidence > 0.9998:
