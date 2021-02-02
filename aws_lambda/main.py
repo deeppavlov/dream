@@ -115,7 +115,7 @@ def call_dp_agent(user_id, text, request_data):
         speech = request_data['request']['speechRecognition']
     except KeyError:
         speech = request_data['request'].get('payload', {}).get('speechRecognition', [])
-        if not speech:
+        if not speech and '/alexa' not in text and text != 'hello':
             logger.error("No speech in request_data")
 
     is_experiment = False
