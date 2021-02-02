@@ -77,8 +77,10 @@ if ab_tests_mode:
     # We can control A:B ratio only for the remaining 75%.
 
     # correct ratios to make A:B versions traffic close as much as possible to original A_VERSION_RATIO:B_VERSION_RATIO
-    B_VERSION_RATIO = max(int(round(B_VERSION_RATIO / (A_VERSION_RATIO + B_VERSION_RATIO) - EXPR_RATE, 2) * 100), 0)
-    A_VERSION_RATIO = min(int(round(A_VERSION_RATIO / (A_VERSION_RATIO + B_VERSION_RATIO) + EXPR_RATE, 2) * 100), 100)
+    B_RATIO_CORRECTED = max(int(round(B_VERSION_RATIO / (A_VERSION_RATIO + B_VERSION_RATIO) - EXPR_RATE, 2) * 100), 0)
+    A_RATIO_CORRECTED = min(int(round(A_VERSION_RATIO / (A_VERSION_RATIO + B_VERSION_RATIO) + EXPR_RATE, 2) * 100), 100)
+    A_VERSION_RATIO = A_RATIO_CORRECTED
+    B_VERSION_RATIO = B_RATIO_CORRECTED
 
     random.seed(get_seed(A_VERSION, B_VERSION))
     buckets = list(range(A_VERSION_RATIO + B_VERSION_RATIO))
