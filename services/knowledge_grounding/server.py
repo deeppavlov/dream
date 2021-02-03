@@ -32,9 +32,10 @@ kg_script = ParlaiPreloadModelScript.main(
     '/data/models/topical_chat_blender90_1_sent_48_epochs/model.checkpoint',
     model_file='/opt/conda/lib/python3.7/site-packages'
     '/data/models/topical_chat_blender90_1_sent_48_epochs/model',
+    fp16=False,
     inference='nucleus',
     topp=0.9,
-    skip_generation=False
+    skip_generation=False,
 )
 
 logger.info('knowledge grounding script has loaded the model and is ready')

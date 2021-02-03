@@ -62,7 +62,10 @@ def get_annotations_from_dialog(utterances, annotator_name, key_name):
     result_values = []
     for i, uttr in enumerate(utterances):
         annotation = uttr.get("annotations", {}).get(annotator_name, {})
-        value = annotation.get(key_name, "")
+        value = ""
+        if isinstance(annotation, dict) and key_name in annotation:
+            value = annotation.get(key_name, "")
+
         # include only non-empty strs
         if value:
             result_values.append(((len(utterances) - i - 1) * 0.01, value))
@@ -75,100 +78,105 @@ def respond():
     st_time = time.time()
     dialogs_batch = request.json["dialogs"]
     input_batch = []
-    responses = []
-    confidences = []
-    attributes = []
+
     nounphrases = []
     entities = []
+    annotations_depths = []
+    lets_chat_about_flags = []
     for dialog in dialogs_batch:
-        user_input_text = dialog["human_utterances"][-1]["text"]
+        try:
+            user_input_text = dialog["human_utterances"][-1]["text"]
 
-        nounphrases.append(
-            re.compile(join_sentences_in_or_pattern(
-                dialog["human_utterances"][-1].get("annotations", {}).get("cobot_nounphrases", [])
-            ), re.IGNORECASE))
-        entities.append(
-            re.compile(join_sentences_in_or_pattern(
-                get_entities(dialog["human_utterances"][-1])), re.IGNORECASE))
+            nounphrases.append(
+                re.compile(join_sentences_in_or_pattern(
+                    dialog["human_utterances"][-1].get("annotations", {}).get("cobot_nounphrases", [])
+                ), re.IGNORECASE))
+            entities.append(
+                re.compile(join_sentences_in_or_pattern(
+                    get_entities(dialog["human_utterances"][-1])), re.IGNORECASE))
+            lets_chat_about_intent = dialog["human_utterances"][-1].get("annotations", {}).get(
+                "intent_catcher", {}).get("lets_chat_about", {}).get("detected", False)
+            lets_chat_about_flags.append(if_lets_chat_about_topic(user_input_text.lower()) or lets_chat_about_intent)
 
-        lets_chat_about_intent = dialog["human_utterances"][-1].get("annotations",
-                                                                    {}).get("intent_catcher",
-                                                                            {}).get("lets_chat_about",
-                                                                                    {}).get("detected", False)
-        user_input_history = [i["text"] for i in dialog["utterances"]]
-        user_input_history = '\n'.join(user_input_history)
+            user_input_history = [i["text"] for i in dialog["utterances"]]
+            user_input_history = '\n'.join(user_input_history)
 
-        user_input_knowledge = ""
-        anntrs_knowledge = ""
-        # look for kbqa/odqa text in ANNTR_HISTORY_LEN previous human utterances
-        annotators = {
-            "odqa": "paragraph",
-            "kbqa": "answer"
-        }
-        annotations_depth = {}
-        for anntr_name, anntr_key in annotators.items():
-            prev_anntr_outputs = get_annotations_from_dialog(
-                dialog["utterances"][-ANNTR_HISTORY_LEN * 2 - 1:],
-                anntr_name,
-                anntr_key
-            )
-            logger.debug(f"Prev {anntr_name} {anntr_key}s: {prev_anntr_outputs}")
-            # add final dot to kbqa answer to make it a sentence
-            if (prev_anntr_outputs) and (anntr_name == "kbqa"):
-                prev_anntr_outputs[-1][1] += "."
-            # concat annotations separated by space to make a paragraph
-            if (prev_anntr_outputs) and (prev_anntr_outputs[-1][1] != "Not Found"):
-                anntrs_knowledge += prev_anntr_outputs[-1][1] + " "
-                annotations_depth[anntr_name] = prev_anntr_outputs[-1][0]
-        if anntrs_knowledge:
-            user_input_knowledge += '\n'.join(tokenize.sent_tokenize(anntrs_knowledge))
-        user_input_checked_sentence = tokenize.sent_tokenize(user_input_knowledge)[0] if user_input_knowledge else ""
+            user_input_knowledge = ""
+            anntrs_knowledge = ""
+            # look for kbqa/odqa text in ANNTR_HISTORY_LEN previous human utterances
+            annotators = {
+                "odqa": "paragraph",
+                "kbqa": "answer"
+            }
+            annotations_depth = {}
+            for anntr_name, anntr_key in annotators.items():
+                prev_anntr_outputs = get_annotations_from_dialog(
+                    dialog["utterances"][-ANNTR_HISTORY_LEN * 2 - 1:],
+                    anntr_name,
+                    anntr_key
+                )
+                logger.debug(f"Prev {anntr_name} {anntr_key}s: {prev_anntr_outputs}")
+                # add final dot to kbqa answer to make it a sentence
+                if prev_anntr_outputs and anntr_name == "kbqa":
+                    prev_anntr_outputs[-1][1] += "."
+                # concat annotations separated by space to make a paragraph
+                if prev_anntr_outputs and prev_anntr_outputs[-1][1] != "Not Found":
+                    anntrs_knowledge += prev_anntr_outputs[-1][1] + " "
+                    annotations_depth[anntr_name] = prev_anntr_outputs[-1][0]
+            if anntrs_knowledge:
+                user_input_knowledge += '\n'.join(tokenize.sent_tokenize(anntrs_knowledge))
+            user_input_checked_sentence = tokenize.sent_tokenize(
+                user_input_knowledge)[0] if user_input_knowledge else ""
 
-        user_input = {
-            'checked_sentence': user_input_checked_sentence,
-            'knowledge': user_input_knowledge,
-            'text': user_input_text,
-            'history': user_input_history
-        }
-        input_batch.append(user_input)
-        attributes.append({
-            "knowledge_paragraph": user_input_knowledge,
-            "knowledge_checked_sentence": user_input_checked_sentence,
-            "can_continue": CAN_CONTINUE
-        })
-        if if_lets_chat_about_topic(user_input_text.lower()) or lets_chat_about_intent:
-            confidences.append(LETS_CHAT_ABOUT_CONFIDENDENCE
-                               - annotations_depth.get("odqa", 0.0)
-                               - 0.01 * int(dialog["bot_utterances"][-1]["active_skill"]
-                                            == "knowledge_grounding_skill"))
-        else:
-            confidences.append(DEFAULT_CONFIDENCE)
+            user_input = {
+                'checked_sentence': user_input_checked_sentence,
+                'knowledge': user_input_knowledge,
+                'text': user_input_text,
+                'history': user_input_history
+            }
+            annotations_depths.append(annotations_depth)
+            input_batch.append(user_input)
+
+        except Exception as ex:
+            sentry_sdk.capture_exception(ex)
+            logger.exception(ex)
+
     try:
         resp = requests.post(KNOWLEDGE_GROUNDING_SERVICE_URL, json={'batch': input_batch}, timeout=1.5)
-        if resp.status_code != 200:
-            logger.exception(f'service error status code: ' + str(resp.status_code))
-        else:
-            responses = resp.json()
-            confidences = [
-                NOUNPHRASE_ENTITY_CONFIDENCE if (nounphrases[i].search(responses[i])
-                                                 or entities[i].search(responses[i]))
-                else confidences[i] for i in range(len(responses))
-            ]
-            confidences = [
-                HIGHEST_CONFIDENCE if (nounphrases[i].search(responses[i])
-                                       or entities[i].search(responses[i]))
-                and (lets_chat_about_intent
-                     or if_lets_chat_about_topic(input_batch[i]["text"].lower()))
-                else confidences[i] for i in range(len(responses))
-            ]
-            confidences = [
-                HAS_SPEC_CHAR_CONFIDENCE if special_char_re.search(responses[i])
-                else confidences[i] for i in range(len(responses))
-            ]
-            logger.info(f"Respond exec time: {time.time() - st_time}")
+        responses = resp.json()
+        confidences = []
+        attributes = []
+
+        for i, dialog in enumerate(dialogs_batch):
+            attr = {
+                "knowledge_paragraph": input_batch[i]["knowledge"],
+                "knowledge_checked_sentence": input_batch[i]["checked_sentence"],
+                "can_continue": CAN_CONTINUE
+            }
+            if lets_chat_about_flags[i]:
+                confidence = LETS_CHAT_ABOUT_CONFIDENDENCE - annotations_depths[i].get("odqa", 0.0) - 0.01 * int(
+                    dialog["bot_utterances"][-1]["active_skill"] == "knowledge_grounding_skill")
+            else:
+                confidence = DEFAULT_CONFIDENCE
+
+            if nounphrases[i].search(responses[i]) or entities[i].search(responses[i]):
+                confidence = NOUNPHRASE_ENTITY_CONFIDENCE
+            if (nounphrases[i].search(responses[i]) or entities[i].search(responses[i])) and lets_chat_about_flags[i]:
+                confidence = HIGHEST_CONFIDENCE
+            if special_char_re.search(responses[i]):
+                confidence = HAS_SPEC_CHAR_CONFIDENCE
+
+            attributes.append(attr)
+            confidences.append(confidence)
+
     except Exception as ex:
         sentry_sdk.capture_exception(ex)
         logger.exception(ex)
+        responses = [""] * len(dialogs_batch)
+        confidences = [0.] * len(dialogs_batch)
+        attributes = [{}] * len(dialogs_batch)
+
+    logger.info(f"Respond exec time: {time.time() - st_time}")
     return jsonify(list(zip(responses, confidences, attributes)))
 
 
