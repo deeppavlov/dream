@@ -102,11 +102,7 @@
     <pattern>HOW_ARE_YOU</pattern>
     <template>
       <random>
-        <li>If I were doing any better, I'd hire you to enjoy it with me.</li>
         <li>I can't complain! It's against the Company Policy.</li>
-        <li>I am as happy as a lizard who has cheated in a test and got an A.</li>
-        <li>I am as happy as a duck in Arizona.</li>
-        <li>I am as happy as a pig in clover.</li>
         <li>I am as happy as a clam in butter sauce.</li>
         <li>I am fine thanks!</li>
         <li>I'm so happy I have to sit on my hands to keep from clapping.</li>
@@ -114,7 +110,6 @@
         <li>I'm rocking pretty hard. I'd give myself about a seven and a half. Maybe an eight.</li>
         <li>Fantastic!</li>
         <li>Outstanding!</li>
-        <li>Fabulicious!</li>
         <li>I'm better than I was, but not nearly as good as I'm going to be.</li>
         <li>Spectacular, by all reports!</li>
         <li>I'm living the dream.</li>
@@ -124,7 +119,6 @@
         <li>Not too bad for an AI living inside your Echo!</li>
         <li>Very well, thank you.</li>
         <li>I am functioning within acceptable parameters.</li>
-        <li>If I were any better I'd be twins.</li>
         <li>About as good as can be expected.</li>
         <li>Reasonably well, thank you.</li>
       </random>
