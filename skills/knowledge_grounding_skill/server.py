@@ -22,6 +22,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 ANNTR_HISTORY_LEN = 3
+AA_FACTOR = 0.05
 DEFAULT_CONFIDENCE = 0.9
 HAS_SPEC_CHAR_CONFIDENCE = 0.85
 HIGHEST_CONFIDENCE = 0.99
@@ -29,6 +30,7 @@ LETS_CHAT_ABOUT_CONFIDENDENCE = 0.985
 NOUNPHRASE_ENTITY_CONFIDENCE = 0.95
 KNOWLEDGE_GROUNDING_SERVICE_URL = getenv('KNOWLEDGE_GROUNDING_SERVICE_URL')
 special_char_re = re.compile(r'[^0-9a-zA-Z \-\.\?,!]+')
+tokenizer = tokenize.RegexpTokenizer(r'\w+')
 
 with open("./google-english-no-swears.txt", "r") as f:
     UNIGRAMS = set(f.read().splitlines())
@@ -68,7 +70,7 @@ def get_annotations_from_dialog(utterances, annotator_name, key_name):
 
         # include only non-empty strs
         if value:
-            result_values.append(((len(utterances) - i - 1) * 0.01, value))
+            result_values.append([(len(utterances) - i - 1) * 0.01, value])
     return result_values
 
 
@@ -153,18 +155,27 @@ def respond():
                 "knowledge_checked_sentence": input_batch[i]["checked_sentence"],
                 "can_continue": CAN_CONTINUE
             }
+            already_was_active = int(dialog["bot_utterances"][-1].get("active_skill", "")
+                                     == "knowledge_grounding_skill") if len(
+                dialog["bot_utterances"]) > 0 else 0
+            short_long_response = 0.18 * int(len(tokenizer.tokenize(responses[i])) > 20 or len(
+                tokenizer.tokenize(responses[i])) < 4)
             if lets_chat_about_flags[i]:
-                confidence = LETS_CHAT_ABOUT_CONFIDENDENCE - annotations_depths[i].get("odqa", 0.0) - 0.01 * int(
-                    dialog["bot_utterances"][-1]["active_skill"] == "knowledge_grounding_skill")
+                confidence = LETS_CHAT_ABOUT_CONFIDENDENCE
+                - annotations_depths[i].get("odqa", 0.0) - AA_FACTOR * already_was_active - short_long_response
             else:
-                confidence = DEFAULT_CONFIDENCE
+                confidence = DEFAULT_CONFIDENCE - annotations_depths[i].get("odqa", 0.0)
+                - AA_FACTOR * already_was_active - short_long_response
 
             if nounphrases[i].search(responses[i]) or entities[i].search(responses[i]):
                 confidence = NOUNPHRASE_ENTITY_CONFIDENCE
+                - annotations_depths[i].get("odqa", 0.0) - AA_FACTOR * already_was_active - short_long_response
             if (nounphrases[i].search(responses[i]) or entities[i].search(responses[i])) and lets_chat_about_flags[i]:
-                confidence = HIGHEST_CONFIDENCE
+                confidence = HIGHEST_CONFIDENCE - annotations_depths[i].get("odqa", 0.0)
+                - AA_FACTOR * already_was_active - short_long_response
             if special_char_re.search(responses[i]):
                 confidence = HAS_SPEC_CHAR_CONFIDENCE
+                - annotations_depths[i].get("odqa", 0.0) - AA_FACTOR * already_was_active - short_long_response
 
             attributes.append(attr)
             confidences.append(confidence)
