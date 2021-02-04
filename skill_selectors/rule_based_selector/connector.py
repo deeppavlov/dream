@@ -251,7 +251,8 @@ class RuleBasedSkillSelectorConnector:
                 if len(dialog["utterances"]) < 20:
                     # greeting skill inside itself do not turn on later than 10th turn of the conversation
                     skills_for_uttr.append("greeting_skill")
-                skills_for_uttr.append("knowledge_grounding_skill")
+                if len(dialog["utterances"]) > 8:
+                    skills_for_uttr.append("knowledge_grounding_skill")
                 # hiding factoid by default, adding check for factoid classification instead
                 # skills_for_uttr.append("factoid_qa")
                 if (factoid_classification > factoid_prob_threshold):
