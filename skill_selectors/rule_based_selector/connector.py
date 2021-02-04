@@ -210,15 +210,8 @@ class RuleBasedSkillSelectorConnector:
             if "/new_persona" in user_uttr_text:
                 # process /new_persona command
                 skills_for_uttr.append("personality_catcher")  # TODO: rm crutch of personality_catcher
-            elif "/get_dialog_id" in user_uttr_text:
-                # process /get_dialog_id command
-                # initializing new dict
-                user_uttr_annotations["intent_catcher"]["get_dialog_id"] = dict()
-                # custom setting values
-                user_uttr_annotations["intent_catcher"]["get_dialog_id"]["confidence"] = 1.0
-                user_uttr_annotations["intent_catcher"]["get_dialog_id"]["detected"] = 1
-                # asking for help from intent_responder
-                skills_for_uttr.append("intent_responder")
+            elif user_uttr_text == "/get_dialog_id":
+                skills_for_uttr.append("dummy_skill")
             elif high_priority_intent_detected:
                 # process intent with corresponding IntentResponder
                 skills_for_uttr.append("intent_responder")
