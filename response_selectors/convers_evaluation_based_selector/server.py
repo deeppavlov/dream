@@ -456,15 +456,8 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             if random.random() <= CALL_BY_NAME_PROBABILITY:
                 best_text = f"{name}, {best_text}"
 
-    # adding capitalization of only the first letter to any final answer
-    # best_text = re.sub('([a-zA-Z])', lambda x: x.groups()[0].upper(), best_text, 1)
-
-    # print("looking for dialog beginning...", flush=True)
-    # if it's a dialog beginning, we shall tell user the current dialog's id:
-    if (len(dialog['human_utterances']) == 1 and SHOW_DIALOG_ID is True):
-        # print("dialog beginning. Adding dialog id", flush=True)
-        # print("dialog id: " + str(dialog["dialog_id"]), flush=True)
-        best_text = best_text + "\n\n" + "Oh, and remember this dialog's id: " + str(dialog["dialog_id"])
+    if dialog['human_utterances'][-1]["text"] == "/get_dialog_id":
+        best_text = "Your dialog's id: " + str(dialog["dialog_id"])
 
     return best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes
 
