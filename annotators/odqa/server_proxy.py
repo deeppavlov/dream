@@ -16,17 +16,17 @@ app = Flask(__name__)
 
 @app.route("/model", methods=['POST'])
 def respond():
-    questions = request.json
+    odqa_input = request.json
     default_resp = {"qa_system": "odqa",
                     "answer": "",
                     "confidence": 0.0,
                     "answer_pos": 0,
                     "answer_sentence": "",
                     "paragraph": ""}
-    odqa_res = [default_resp] * len(questions.get("question_raw", []))
+    odqa_res = [default_resp] * len(odqa_input.get("question_raw", []))
     try:
         st_time = time.time()
-        resp = requests.post("http://0.0.0.0:8080/model", json=questions, timeout=1.5)
+        resp = requests.post("http://0.0.0.0:8080/model", json=odqa_input, timeout=1.5)
         if resp.status_code == 200:
             odqa_resp = resp.json()
             if odqa_resp:

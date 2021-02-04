@@ -1,12 +1,12 @@
 {
   "chainer": {
-    "in": ["question_raw"],
+    "in": ["question_raw", "entity_substr"],
     "out": ["answer", "answer_score", "answer_place", "answer_sentence", "answer_context"],
     "pipe": [
       {
         "class_name": "pyserini_ranker",
         "index_folder": "{DOWNLOADS_PATH}/wiki_index",
-        "in": ["question_raw"],
+        "in": ["entity_substr"],
         "out": ["doc_text"],
         "top_n": 15
       },

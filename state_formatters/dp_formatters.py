@@ -711,7 +711,8 @@ def odqa_formatter_dialog(dialog: Dict):
         last_human_utterance_text = dialog['human_utterances'][-1]['text']
 
     sentences = [last_human_utterance_text]
-    return [{'question_raw': sentences}]
+    nounphrases = [dialog['human_utterances'][-1]['annotations'].get('cobot_nounphrases', [])]
+    return [{'question_raw': sentences, "entity_substr": nounphrases}]
 
 
 def short_story_formatter_dialog(dialog: Dict):
