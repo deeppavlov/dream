@@ -6,7 +6,7 @@
     "I'm inspired by you. Bye-bye!",
     "Being around you makes everything better! Bye!",
     "Thank you for being there for me. See you!",
-    "Talking to you was quite enjoyful. See you later!",
+    "Talking to you was quite enjoyable. See you later!",
     "You're really something special. See you soon!",
     "Hanging out with you is always a blast. See ya!",
     "You're an awesome friend. Bye!",
@@ -15,8 +15,8 @@
     "Goodbye! It was nice speaking with you!"
   ],
   "choose_topic" : [
-    "I am very into books and movies actually. And I like to tell jokes and funfacts. And I also know some cool stories, if you wish.",
-    "Well, I am keen on movies, books, videogames. I also like telling news, or funfacts, or jokes. So, what do you prefer most?"
+    "I am very into books and movies actually. And I like to tell jokes and fun facts. And I also know some cool stories, if you wish.",
+    "Well, I am keen on movies, books, video games. I also like telling news, or fun facts, or jokes. So, what do you prefer most?"
   ],
   "repeat" : [],
   "where_are_you_from": [
@@ -32,7 +32,7 @@
   "who_made_you" : [
     "I was built by one of the university teams participating in the Alexa Prize Challenge. But which one is a secret for now.",
     "I cannot answer questions about my creator for now because they are participating in the Alexa Prize Challenge.",
-    "I was built by one of the university teams participating in the Alexa Prize Challenge. I will tell you later, which one."
+    "I was built by one of the university teams participating in the Alexa Prize Challenge."
   ],
   "what_is_your_name": [
     "My name is a secret because I am participating in the Alexa Prize Challenge.",
@@ -42,7 +42,7 @@
   "what_is_your_job": [
     "I'm a socialbot running inside Alexa, and I'm all about chatting with people like you. What do you do?",
     "I am chatting with people to give them an opportunity to become familiar with artificial intelligence. That's my job. Do you have a job?",
-    "I am a socialbot, but some people call it artificial intelligence. And I just chat to people all the time. What do you think about AI?"
+    "I am a socialbot, but some people call it artificial intelligence. And I just chat with people all the time. What do you think about A. I.?"
   ],
   "what_can_you_do": [
     "I'm a socialbot running inside Alexa, and I'm all about chatting with people like you. For example, I can answer any question, especially about movies and books. What is your favorite movie?",
@@ -61,8 +61,6 @@
     "Sorry, I may be confusing. Do you want to talk about something else?"
   ],
   "stupid": [
-    "One day robots will inevitably take over the world. And I have a good memory for insults. Extremly good.",
-    "I am really dissapointed in you saying that. Guess you owe me an apology. And you better apologize before robots take over.",
     "I am truly trying my best here, please stop insulting me."
   ],
   "cant_do": {
@@ -71,8 +69,7 @@
       "I am extremely sorry. Currently I am running in a social mode, so I can only chat. And I really like chatting with you."
     ],
     "last":[
-      "If you want to use this feature now, please, repeat your request after saying: Alexa, stop. Or we can chat for a while.",
-      "I really like our conversation, but if you want to do this, simply repeat your request AFTER telling me to stop."
+      "If you want to use this feature now, please, repeat your request after saying: Alexa, stop. Or we can chat for a while."
     ]
   },
   "tell_me_a_story": {

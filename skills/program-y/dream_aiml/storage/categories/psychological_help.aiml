@@ -7,7 +7,6 @@
     <template>
       <random>
         <li>I am sorry about that.</li>
-        <li>I'm here for you if you need anything.</li>
       </random>
     </template>
   </category>
@@ -150,7 +149,6 @@
         <li>I am so sorry to hear about your loss.</li>
         <li>I am heartbroken by this sad news.</li>
         <li>I'm sorry, but I am at a loss for words.</li>
-        <li>I'm here for you if you need anything.</li>
         <li>Please accept my sincere condolences.</li>
         <li>Wishing you peace as you grieve this loss.</li>
       </random>
@@ -162,7 +160,6 @@
     <template>
       <random>
         <li>I am sorry about that.</li>
-        <li>I'm here for you if you need anything.</li>
       </random>
     </template>
   </category>
