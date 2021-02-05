@@ -255,7 +255,7 @@ class RuleBasedSkillSelectorConnector:
                 # if ner_detected:
                 #     skills_for_uttr.append("reddit_ner_skill")
 
-                if len(dialog["human_utterances"]) >= 3:
+                if len(dialog["human_utterances"]) >= 5:
                     # can answer on 4-th user response
                     skills_for_uttr.append("convert_reddit")
                 if len(dialog["utterances"]) > 14:
