@@ -187,7 +187,8 @@ spec:
 
       environment {
         VERSION="${TAG_NAME}"
-        ENV_FILE=".env.prod." + ENVIRONMENT.toLowerCase()
+        ENV_LOWER = ENVIRONMENT.toLowerCase()
+        ENV_FILE=".env.prod.${ENV_LOWER}"
       }
 
       steps {
