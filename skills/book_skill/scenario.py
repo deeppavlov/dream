@@ -164,9 +164,11 @@ class BookSkillScenario:
 
                 # I don't denote annotated_user_phrase['text'].lower() as a single variable
                 # in order not to confuse it with annotated_user_phrase
-                lets_chat_about_books = if_lets_chat_about_topic(annotated_user_phrase["text"]) and re.search(
-                    BOOK_PATTERN, annotated_user_phrase["text"])
-                if lets_chat_about_books and not is_no(annotated_user_phrase):
+                lets_chat_about_books = all([if_lets_chat_about_topic(annotated_user_phrase["text"]),
+                                             re.search(BOOK_PATTERN, annotated_user_phrase["text"])])
+                if all([lets_chat_about_books,
+                        not is_no(annotated_user_phrase),
+                        not dontlike(annotated_user_phrase)]):
                     # let's chat about books
                     logger.debug('Detected talk about books. Calling start phrase')
                     if START_PHRASE in human_attr['book_skill']['used_phrases']:
@@ -253,7 +255,7 @@ class BookSkillScenario:
                         logger.debug(annotated_user_phrase['text'])
                         book = parse_author_best_book(annotated_user_phrase,
                                                       default_phrase=f"Fabulous! {WHAT_BOOK_IMPRESSED_MOST}")
-                        if book != f"Fabulous! {WHAT_BOOK_IMPRESSED_MOST}" and \
+                        if book is not None and book != f"Fabulous! {WHAT_BOOK_IMPRESSED_MOST}" and \
                                 book.lower() not in annotated_user_phrase['text'].lower():
                             logger.debug('Could not find author best book. Returning default answer')
                             reply = IF_REMEMBER_LAST_BOOK.replace("BOOK", book)
