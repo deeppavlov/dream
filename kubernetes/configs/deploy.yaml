@@ -46,7 +46,7 @@ knowledge-grounding:
 
 dialog-breakdown:
   CUDA_VISIBLE_DEVICES: '0'
-  gpu: 0
+  gpu: 2
 
 knowledge-grounding-skill:
   CUDA_VISIBLE_DEVICES: "''"

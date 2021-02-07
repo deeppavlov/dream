@@ -439,7 +439,7 @@ def cobot_convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
     return [conv]
 
 
-def dp_toxic_formatter_service(payload: List):
+def dp_classes_formatter_service(payload: List):
     # Used by: dp_toxic_formatter
     return payload[0]
 
