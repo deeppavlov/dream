@@ -187,8 +187,6 @@ spec:
 
       environment {
         VERSION="${TAG_NAME}"
-        ENV_LOWER = ENVIRONMENT.toLowerCase()
-        ENV_FILE=".env.prod.${ENV_LOWER}"
       }
 
       steps {
@@ -196,6 +194,7 @@ spec:
           script {
             int startTime = currentBuild.duration
             env.NAMESPACE = "alexa-" + ENVIRONMENT.toLowerCase()
+            env.ENV_FILE=".env.prod." + ENVIRONMENT.toLowerCase()
             notify('start')
             catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
               try {
