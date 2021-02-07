@@ -24,10 +24,10 @@ logger = logging.getLogger(__name__)
 USE_CACHE = True
 EL_CONF_THRES = 0.6
 
-NOT_LIKE_PATTERN = r"(dislike|not like|not love|not prefer|hate|n't like|" \
+NOT_LIKE_PATTERN = r"(dislike|not like|not want|not love|not prefer|hate|n't like|" \
                    r"not into|not fond|not crazy|not appriciate|n't appriciate|" \
                    r"disintrested|not for you|not for me|not a big fan|loathe|not stand|n't stand|" \
-                   r"not much of fan)"
+                   r"not much of fan|not read)"
 LIKE_PATTERN = r"(like|love|prefer|adore|enjoy|fond of|passionate of|fan of|interested in|" \
                r"into|for you|for me)"
 FAVORITE_PATTERN = r"(favorite|loved|beloved|fondling|best|most interesting)"
@@ -612,7 +612,7 @@ def dontlike(last_utterance):
     last_uttr_text = last_utterance['text'].lower()
     last_uttr_text = re.sub('wanna', 'want to', last_uttr_text, re.IGNORECASE)
     last_uttr_text = re.sub("don't'", "do not", last_uttr_text, re.IGNORECASE)
-    if re.search(dontlike_request, last_uttr_text):
+    if re.search(dontlike_request, last_uttr_text) or re.search(NOT_LIKE_PATTERN, last_uttr_text):
         return True
     return False
 
