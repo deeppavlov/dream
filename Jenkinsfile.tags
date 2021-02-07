@@ -96,6 +96,7 @@ spec:
         //VERSION=sh(returnStdout: true, script: "git tag --contains | head -1").trim()
         VERSION="${TAG_NAME}"
         DP_AGENT_PORT=4242
+        ENV_FILE=".env.prod"
       }
 
       steps {
