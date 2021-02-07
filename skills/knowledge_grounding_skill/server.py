@@ -10,7 +10,7 @@ from nltk import tokenize
 
 from common.constants import CAN_CONTINUE
 from common.universal_templates import if_lets_chat_about_topic
-from common.utils import join_sentences_in_or_pattern
+from common.utils import join_sentences_in_or_pattern, join_words_in_or_pattern
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -26,14 +26,17 @@ AA_FACTOR = 0.05
 DEFAULT_CONFIDENCE = 0.9
 HAS_SPEC_CHAR_CONFIDENCE = 0.85
 HIGHEST_CONFIDENCE = 0.99
+KG_ACTIVE_DEPTH = 4
 LETS_CHAT_ABOUT_CONFIDENDENCE = 0.985
 NOUNPHRASE_ENTITY_CONFIDENCE = 0.95
 KNOWLEDGE_GROUNDING_SERVICE_URL = getenv('KNOWLEDGE_GROUNDING_SERVICE_URL')
-special_char_re = re.compile(r'[^0-9a-zA-Z \-\.\?,!]+')
+special_char_re = re.compile(r'[^0-9a-zA-Z \-\.\'\?,!]+')
 tokenizer = tokenize.RegexpTokenizer(r'\w+')
 
 with open("./google-english-no-swears.txt", "r") as f:
     UNIGRAMS = set(f.read().splitlines())
+with open("./abbreviations_acronyms_list.txt", "r") as f:
+    ABBRS = re.compile(join_words_in_or_pattern(list(f.read().splitlines())), re.IGNORECASE)
 
 
 def get_entities(utt):
@@ -66,7 +69,9 @@ def get_annotations_from_dialog(utterances, annotator_name, key_name):
         annotation = uttr.get("annotations", {}).get(annotator_name, {})
         value = ""
         if isinstance(annotation, dict) and key_name in annotation:
-            value = annotation.get(key_name, "")
+            # check if odqa has nonempty answer along with a paragraph
+            if annotator_name == "odqa" and annotation.get("answer", ""):
+                value = annotation.get(key_name, "")
 
         # include only non-empty strs
         if value:
@@ -89,13 +94,16 @@ def respond():
         try:
             user_input_text = dialog["human_utterances"][-1]["text"]
 
-            nounphrases.append(
-                re.compile(join_sentences_in_or_pattern(
-                    dialog["human_utterances"][-1].get("annotations", {}).get("cobot_nounphrases", [])
-                ), re.IGNORECASE))
-            entities.append(
-                re.compile(join_sentences_in_or_pattern(
-                    get_entities(dialog["human_utterances"][-1])), re.IGNORECASE))
+            cobot_nounphrases = dialog["human_utterances"][-1].get("annotations", {}).get("cobot_nounphrases", [])
+            if cobot_nounphrases:
+                nounphrases.append(re.compile(join_sentences_in_or_pattern(cobot_nounphrases), re.IGNORECASE))
+            else:
+                nounphrases.append("")
+            curr_ents = get_entities(dialog["human_utterances"][-1])
+            if curr_ents:
+                entities.append(re.compile(join_sentences_in_or_pattern(curr_ents), re.IGNORECASE))
+            else:
+                entities.append("")
             lets_chat_about_intent = dialog["human_utterances"][-1].get("annotations", {}).get(
                 "intent_catcher", {}).get("lets_chat_about", {}).get("detected", False)
             lets_chat_about_flags.append(if_lets_chat_about_topic(user_input_text.lower()) or lets_chat_about_intent)
@@ -153,30 +161,37 @@ def respond():
             attr = {
                 "knowledge_paragraph": input_batch[i]["knowledge"],
                 "knowledge_checked_sentence": input_batch[i]["checked_sentence"],
-                "can_continue": CAN_CONTINUE
+                "can_continue": CAN_CONTINUE,
+                "confidence_case": ""
             }
-            already_was_active = int(dialog["bot_utterances"][-1].get("active_skill", "")
-                                     == "knowledge_grounding_skill") if len(
-                dialog["bot_utterances"]) > 0 else 0
+            already_was_active = 0
+            if len(dialog["bot_utterances"]) > 0:
+                for bu in range(1, 1 + min(KG_ACTIVE_DEPTH, len(dialog["bot_utterances"]))):
+                    already_was_active += int(dialog["bot_utterances"][-bu].get(
+                        "active_skill", "") == "knowledge_grounding_skill")
+            already_was_active *= AA_FACTOR
             short_long_response = 0.18 * int(len(tokenizer.tokenize(responses[i])) > 20 or len(
                 tokenizer.tokenize(responses[i])) < 4)
-            if lets_chat_about_flags[i]:
-                confidence = LETS_CHAT_ABOUT_CONFIDENDENCE
-                - annotations_depths[i].get("odqa", 0.0) - AA_FACTOR * already_was_active - short_long_response
-            else:
-                confidence = DEFAULT_CONFIDENCE - annotations_depths[i].get("odqa", 0.0)
-                - AA_FACTOR * already_was_active - short_long_response
 
-            if nounphrases[i].search(responses[i]) or entities[i].search(responses[i]):
+            curr_nounphrase_search = nounphrases[i].search(responses[i]) if nounphrases[i] else False
+            curr_entities_search = entities[i].search(responses[i]) if entities[i] else False
+            if (curr_nounphrase_search or curr_entities_search) and lets_chat_about_flags[i]:
+                confidence = HIGHEST_CONFIDENCE
+                attr["confidence_case"] += "nounphrase_entity_and_lets_chat_about"
+            elif curr_nounphrase_search or curr_entities_search:
                 confidence = NOUNPHRASE_ENTITY_CONFIDENCE
-                - annotations_depths[i].get("odqa", 0.0) - AA_FACTOR * already_was_active - short_long_response
-            if (nounphrases[i].search(responses[i]) or entities[i].search(responses[i])) and lets_chat_about_flags[i]:
-                confidence = HIGHEST_CONFIDENCE - annotations_depths[i].get("odqa", 0.0)
-                - AA_FACTOR * already_was_active - short_long_response
-            if special_char_re.search(responses[i]):
+                attr["confidence_case"] += "nounphrase_entity"
+            elif lets_chat_about_flags[i]:
+                confidence = LETS_CHAT_ABOUT_CONFIDENDENCE
+                attr["confidence_case"] += "lets_chat_about"
+            else:
+                confidence = DEFAULT_CONFIDENCE
+                attr["confidence_case"] += "default"
+            if special_char_re.search(responses[i]) or ABBRS.search(responses[i]):
                 confidence = HAS_SPEC_CHAR_CONFIDENCE
-                - annotations_depths[i].get("odqa", 0.0) - AA_FACTOR * already_was_active - short_long_response
-
+                attr["confidence_case"] += "special_char"
+            penalties = annotations_depths[i].get("odqa", 0.0) + already_was_active + short_long_response
+            confidence -= penalties
             attributes.append(attr)
             confidences.append(confidence)
 

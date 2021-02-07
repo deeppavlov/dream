@@ -26,5 +26,5 @@ class QuickstartUser(HttpUser):
 
     def on_start(self):
         print('start')
-        self.id = uuid.uuid4().hex
+        self.id = f'test_{uuid.uuid4().hex[5:]}'
         self.data = (p for p in phrases)

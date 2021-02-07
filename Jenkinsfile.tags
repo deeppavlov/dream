@@ -95,7 +95,6 @@ spec:
       environment {
         //VERSION=sh(returnStdout: true, script: "git tag --contains | head -1").trim()
         VERSION="${TAG_NAME}"
-        ENV_FILE='.env.prod'
         DP_AGENT_PORT=4242
       }
 
@@ -188,7 +187,6 @@ spec:
 
       environment {
         VERSION="${TAG_NAME}"
-        ENV_FILE='.env.prod'
       }
 
       steps {
@@ -196,6 +194,7 @@ spec:
           script {
             int startTime = currentBuild.duration
             env.NAMESPACE = "alexa-" + ENVIRONMENT.toLowerCase()
+            env.ENV_FILE=".env.prod." + ENVIRONMENT.toLowerCase()
             notify('start')
             catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
               try {
