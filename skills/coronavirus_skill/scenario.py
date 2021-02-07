@@ -71,18 +71,20 @@ WHAT_PHRASE = ("Coronavirus COVID 19 is an infectious disease. "
                "complications from COVID-19 illness.")
 WORK_AND_STAY_HOME_PHRASE = ("Every day that you practice social distancing during the pandemic, "
                              "you are doing someone else (maybe hundreds or even thousands of someone elses) "
-                             "a great kindness. So if you can, stay home. It's the easiest act of "
-                             "heroism you'll ever do. Would you like to learn more about coronavirus?")
+                             "a great kindness. "
+                             "So if you can, stay home, and vaccinate it you have not already done it."
+                             "It's the easiest act of heroism you'll ever do. "
+                             "Would you like to learn more about coronavirus?")
 CDC_STAY_HOME_RECOMMENDATION = ("While some of the communities and businesses are re-opening, CDC recommends Americans"
                                 "to understand potential risks and use different measures to maximize their own safety."
-                                "If you absolutely have to go outside please wear masks, practice social distancing,"
+                                "If you are not vaccinated yet, please wear masks, practice social distancing,"
                                 "and minimize time you have to spend outside of your home.")
 EXPLAIN_PHRASE = 'If you are outside your home, you can get a coronavirus. ' \
                  'Even if you easily overcome it, you can begin a chain of many new infections, ' \
                  'which can be critical or deadly for some.' \
                  'So unless you work in healthcare or other essential industries,' \
                  'social distancing is your best bet.'
-FEAR_HATE_REPLY1 = 'Please, calm down. We are a strong nation, we are flattening the curve ' \
+FEAR_HATE_REPLY1 = 'Please, calm down. We are a strong nation, we are vaccinating people ' \
                    'and we will overcome this disease one day.'
 FEAR_HATE_REPLY2 = 'Please, chin up. We have already defeated a hell lot of diseases, ' \
                    'and I am sure that coronavirus will be the next one.'
