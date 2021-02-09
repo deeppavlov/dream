@@ -63,6 +63,7 @@ class MovieSkillScenario:
                                                re.IGNORECASE)
 
         self.extra_space_template = re.compile(r"\s\s+")
+        self.letters = re.compile(r"[a-zA-Z]+")
 
     def __call__(self, dialogs):
         responses = []
@@ -368,14 +369,17 @@ class MovieSkillScenario:
                     f"`{curr_user_uttr['text']}`.")
         numvotes = self.templates.imdb.get_info_about_movie(movie_title, "numVotes")
         numvotes = 0 if numvotes is None else numvotes
-        if numvotes > 50000:
+        letters_in_title = re.search(self.letters, movie_title)
+        if numvotes > 50000 and letters_in_title and len(letters_in_title[0]) >= 2:
             # full user utterance is a movie title -> consider full match
             logger.info("Found movie title with more than 10k votes. Don't clarify the title.")
             response, confidence, human_attr, bot_attr, attr = self.opinion_expression_and_request(
                 movie_id, [], human_attr, bot_attr)
-        else:
+        elif letters_in_title and len(letters_in_title[0]) >= 2:
             logger.info("Found movie title with less than 10k votes. Clarify title.")
             response, confidence, attr = self.clarify_movie_title(curr_user_uttr, movie_id)
+        else:
+            response, confidence, attr = "", 0., {}
 
         return response, confidence, human_attr, bot_attr, attr
 
