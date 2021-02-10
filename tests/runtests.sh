@@ -125,6 +125,9 @@ if [[ "$MODE" == "test_dialog" || "$MODE" == "all" ]]; then
 
     echo "Testing file conflicts"
     dockercompose_cmd exec -T -u $(id -u) agent python utils/analyze_downloads.py
+
+    echo "Testing docker-compose files"
+    dockercompose_cmd exec -T -u $(id -u) agent python utils/verify_compose.py
 fi
 
 if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
