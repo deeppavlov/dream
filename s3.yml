@@ -2,36 +2,56 @@ services:
   comet-atomic:
     build:
       args:
-        PRETRAINED_MODEL: https://team-dream-storage.s3.amazonaws.com/comet/atomic_pretrained_model.pickle
-        PREPROCESS_DATA: https://team-dream-storage.s3.amazonaws.com/comet/categories_oEffect%23oReact%23oWant%23xAttr%23xEffect%23xIntent%23xNeed%23xReact%23xWant-maxe1_17-maxe2_35-maxr_1.pickle
-  #comet_conceptnet:
-    #build:
-      #args:
-        #PRETRAINED_MODEL: https://team-dream-storage.s3.amazonaws.com/conceptnet_pretrained_model.pickle
-        #PREPROCESS_DATA: https://team-dream-storage.s3.amazonaws.com/rel_language-trainsize_100-devversion_12-maxe1_10-maxe2_15-maxr_5.pickle
-  #convert_reddit:
-    #build:
-      #args:
-        #DATA_URL: https://team-dream-storage.s3.amazonaws.com/convert_reddit_v2.3.tar.gz
-  #emotion_classification:
-    #build:
-      #args:
-        #SED_ARG: http://files.deeppavlov.ai/alexaprize_data/emo_bert3.tar.gz|https://team-dream-storage.s3.amazonaws.com/emo_bert3.tar.gz
-  #ner:
-    #build:
-      #args:
-        #DATA_URL: https://team-dream-storage.s3.amazonaws.com/elmo2.tar.gz
-        #NER_URL: https://team-dream-storage.s3.amazonaws.com/ner.tar.xz
-  #sentiment_classification:
-    #build:
-      #args:
-        #SED_ARG: http://files.deeppavlov.ai/deeppavlov_data/classifiers/sentiment_sst_bert_v2.tar.gz|https://team-dream-storage.s3.amazonaws.com/sentiment_sst_bert_v2.tar.gz
-  #stop_detect:
-    #build:
-      #args:
-        #SED_ARG: http://files.deeppavlov.ai/alexaprize_data/stop_detect_new.tar.gz|https://team-dream-storage.s3.amazonaws.com/stop_detect_new.tar.gz
-  #toxic_classification:
-    #build:
-      #args:
-        #SED_ARG: http://files.deeppavlov.ai/deeppavlov_data/classifiers/toxic_float_conv_bert_v0.tar.gz|https://team-dream-storage.s3.amazonaws.com/toxic_float_conv_bert_v0.tar.gz
+        PRETRAINED_MODEL: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/comet/atomic_pretrained_model.pickle
+        PREPROCESS_DATA: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/comet/categories_oEffect%23oReact%23oWant%23xAttr%23xEffect%23xIntent%23xNeed%23xReact%23xWant-maxe1_17-maxe2_35-maxr_1.pickle
+  comet-conceptnet:
+    build:
+      args:
+        PRETRAINED_MODEL: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/conceptnet/conceptnet_pretrained_model.pickle
+        PREPROCESS_DATA: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/conceptnet/rel_language-trainsize_100-devversion_12-maxe1_10-maxe2_15-maxr_5.pickle
+  convert-reddit:
+    build:
+      args:
+        DATA_URL: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/convert_reddit_v2.8.tar.gz
+  dialog-breakdown:
+    build:
+      args:
+        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
+  emotion-classification:
+    build:
+      args:
+        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
+  entity-linking:
+    build:
+      args:
+        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
+  factoid-classification:
+    build:
+      args:
+        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
+  ner:
+    build:
+      args:
+        DATA_URL: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/elmo2.tar.gz
+        NER_URL: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/ner.tar.xz
+  odqa:
+    build:
+      args:
+        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
+  sentiment-classification:
+    build:
+      args:
+        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
+  toxic-classification:
+    build:
+      args:
+        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
+  question-generator:
+    build:
+      args:
+        MODEL_URL: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/question_generator/model_24_0.94_37.23.pth
+  wiki-parser:
+    build:
+      args:
+        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
 version: "3.7"
