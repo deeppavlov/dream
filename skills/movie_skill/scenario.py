@@ -167,7 +167,8 @@ class MovieSkillScenario:
             return response, confidence, human_attr, bot_attr, attr
 
     def is_about_movies(self, uttr, prev_uttr={}):
-        is_movie_topic = "Entertainment_Movies" in get_topics(uttr, which="cobot_dialogact_topics")
+        is_movie_topic = any([topic in get_topics(uttr, which="all")
+                              for topic in ["Entertainment_Movies", "Movies_TV", "Celebrities"]])
 
         curr_uttr_is_about_movies = re.search(self.movie_pattern, uttr["text"].lower())
         prev_uttr_last_sent = prev_uttr.get("annotations", {}).get("sentseg", {}).get("segments", [""])[-1].lower()
@@ -460,10 +461,15 @@ class MovieSkillScenario:
                 response = f"What do you think about character of {result[0]} in this {movie_type}?"
             else:
                 response = f"Who is your favorite character in this {movie_type}?"
-
-        confidence = SUPER_CONFIDENCE
-        attr = {"movie_id": movie_id, "can_continue": CAN_CONTINUE,
-                "status_line": prev_status_line + ["do_you_know_question"]}
+        else:
+            response = ""
+        if response:
+            confidence = SUPER_CONFIDENCE
+            attr = {"movie_id": movie_id, "can_continue": CAN_CONTINUE,
+                    "status_line": prev_status_line + ["do_you_know_question"]}
+        else:
+            confidence = 0.0
+            attr = {}
         return response, confidence, human_attr, bot_attr, attr
 
     def check_answer_to_do_you_know_question(
