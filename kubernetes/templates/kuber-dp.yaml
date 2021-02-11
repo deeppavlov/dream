@@ -60,6 +60,22 @@ spec:
           failureThreshold: 60
           periodSeconds: 10
         {% endif %}
+        {% if "program-y" in KUBER_DP_NAME %}
+        livenessProbe:
+          exec:
+            command:
+            - curl
+            - -X
+            - POST
+            - -s
+            - -H
+            - 'content-type: application/json'
+            - -d
+            - '{ "sentences_batch": [["hello"]], "user_ids": [[1212121]] }'
+            - 'http://localhost:{{ PORT }}/api/rest/v1.0/ask'
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        {% endif %}
         {% if resources %}
         resources:
           {% if 'limits' in resources %}
