@@ -140,7 +140,7 @@ class IMDb:
         self.with_ignored_movies_names = deepcopy(self.without_ignored_movies_names)
 
         with open("databases/google-10000-english-no-swears.txt", "r") as f:
-            self.frequent_unigrams = f.read().splitlines()[:5000]
+            self.frequent_unigrams = f.read().splitlines()[:2000]
 
         with open("databases/topics_counter_50.json", "r") as f:
             # phrases are like `verb + noun` or `verb + prep + noun` WITHOUT articles
@@ -151,7 +151,8 @@ class IMDb:
         # WITHOUT WORD MOVIE IGNORED MOVIES
         for proc_title in movie_titles_to_ignore + [
                 "angela", "earthquake", "abortion", "tricks", "isolation", "cage", "back", "stronger", "judy",
-                "live", "lunch", "weekend", "gays", "bean", "her", "eat", "she", "he", "thing", "pets"]:
+                "live", "lunch", "weekend", "gays", "bean", "her", "eat", "she", "he", "thing", "pets",
+                "happy days", "foster", "wij"]:
             try:
                 self.without_ignored_movies_names.pop(proc_title)
             except KeyError:
@@ -166,7 +167,8 @@ class IMDb:
                 "games", "see", "really", "my favorite movie", "i do", "what happened",
                 "me", "off", "nothing", "talk to her", "boy a", "play",
                 "i feel", "question", "thank you", "singing", "program", "other", "lets talk about",
-                "conversation", "good", "they", "hello", "make", "pretty good", "talk", "happy days", "ok", "okay"]:
+                "conversation", "good", "they", "hello", "make", "pretty good", "talk", "ok", "okay",
+                "tell me something", "different", "day", "seen", "i like"]:
             try:
                 self.with_ignored_movies_names.pop(proc_title)
             except KeyError:
