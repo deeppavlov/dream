@@ -9,8 +9,9 @@ def main():
                                               ["okay", "i love cats", "my cat is named putin"]]]}
 
     result = requests.post(url, json=request_data).json()
-    gold_result = [[['Information_RequestIntent', 'Information_RequestIntent', 'Information_RequestIntent'],
-                    ['Other', 'Science_and_Technology', 'Politics']]]
+    gold_result = [[['General_ChatIntent', 'Information_RequestIntent', 'Information_RequestIntent'],
+                    ['Other', 'Science_and_Technology', 'Science_and_Technology']]]
+
     assert result == gold_result, f'Got\n{result}\n, but expected:\n{gold_result}'
     print('Success')
 
