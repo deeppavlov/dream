@@ -418,7 +418,7 @@ services:
         CONFIG: wiki_parser.json
         PORT: 8077
         SRC_DIR: annotators/wiki_parser
-        COMMIT: cf0d9d3ef97b943c1185787e3897dd05a3cdd25e
+        COMMIT: b7244defb55d634c3036ac43e4ce2323814723e0
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:

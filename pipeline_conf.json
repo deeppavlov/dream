@@ -261,6 +261,7 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:el_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators.ner", "annotators.cobot_nounphrases"]
             },
             "wiki_parser": {
@@ -270,6 +271,7 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:wp_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators.entity_linking"]
             },
             "sentrewrite": {
