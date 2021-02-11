@@ -23,14 +23,20 @@ app = Flask(__name__)
 
 ANNTR_HISTORY_LEN = 3
 AA_FACTOR = 0.05
-DEFAULT_CONFIDENCE = 0.9
-HAS_SPEC_CHAR_CONFIDENCE = 0.85
+ABBRS_CONFIDENCE = 0.8
+DEFAULT_CONFIDENCE = 0.88
+HAS_SPEC_CHAR_CONFIDENCE = 0.0
 HIGHEST_CONFIDENCE = 0.99
-KG_ACTIVE_DEPTH = 4
+KG_ACTIVE_DEPTH = 2
 LETS_CHAT_ABOUT_CONFIDENDENCE = 0.985
 NOUNPHRASE_ENTITY_CONFIDENCE = 0.95
 KNOWLEDGE_GROUNDING_SERVICE_URL = getenv('KNOWLEDGE_GROUNDING_SERVICE_URL')
 special_char_re = re.compile(r'[^0-9a-zA-Z \-\.\'\?,!]+')
+special_intents = [
+    "cant_do", "repeat", "weather_forecast_intent", "what_are_you_talking_about",
+    "what_can_you_do", "what_is_your_job", "what_is_your_name", "what_time",
+    "where_are_you_from", "who_made_you"
+]
 tokenizer = tokenize.RegexpTokenizer(r'\w+')
 
 with open("./google-english-no-swears.txt", "r") as f:
@@ -108,6 +114,11 @@ def respond():
                 "intent_catcher", {}).get("lets_chat_about", {}).get("detected", False)
             lets_chat_about_flags.append(if_lets_chat_about_topic(user_input_text.lower()) or lets_chat_about_intent)
 
+            special_intents_flag = any([
+                dialog["human_utterances"][-1].get("annotations", {}).get("intent_catcher", {}).get(
+                    si, {}).get("detected", False) for si in special_intents
+            ])
+
             user_input_history = [i["text"] for i in dialog["utterances"]]
             user_input_history = '\n'.join(user_input_history)
 
@@ -115,7 +126,7 @@ def respond():
             anntrs_knowledge = ""
             # look for kbqa/odqa text in ANNTR_HISTORY_LEN previous human utterances
             annotators = {
-                "odqa": "paragraph",
+                "odqa": "answer_sentence",
                 "kbqa": "answer"
             }
             annotations_depth = {}
@@ -170,30 +181,36 @@ def respond():
                     already_was_active += int(dialog["bot_utterances"][-bu].get(
                         "active_skill", "") == "knowledge_grounding_skill")
             already_was_active *= AA_FACTOR
-            short_long_response = 0.18 * int(len(tokenizer.tokenize(responses[i])) > 20 or len(
+            short_long_response = 0.5 * int(len(tokenizer.tokenize(responses[i])) > 20 or len(
                 tokenizer.tokenize(responses[i])) < 4)
 
             curr_nounphrase_search = nounphrases[i].search(responses[i]) if nounphrases[i] else False
             curr_entities_search = entities[i].search(responses[i]) if entities[i] else False
             if (curr_nounphrase_search or curr_entities_search) and lets_chat_about_flags[i]:
                 confidence = HIGHEST_CONFIDENCE
-                attr["confidence_case"] += "nounphrase_entity_and_lets_chat_about"
+                attr["confidence_case"] += "nounphrase_entity_and_lets_chat_about "
             elif curr_nounphrase_search or curr_entities_search:
                 confidence = NOUNPHRASE_ENTITY_CONFIDENCE
-                attr["confidence_case"] += "nounphrase_entity"
+                attr["confidence_case"] += "nounphrase_entity "
             elif lets_chat_about_flags[i]:
                 confidence = LETS_CHAT_ABOUT_CONFIDENDENCE
-                attr["confidence_case"] += "lets_chat_about"
+                attr["confidence_case"] += "lets_chat_about "
             else:
                 confidence = DEFAULT_CONFIDENCE
-                attr["confidence_case"] += "default"
-            if special_char_re.search(responses[i]) or ABBRS.search(responses[i]):
+                attr["confidence_case"] += "default "
+            if ABBRS.search(responses[i]):
+                confidence = ABBRS_CONFIDENCE
+                attr["confidence_case"] += "acronyms "
+            if special_char_re.search(responses[i]):
                 confidence = HAS_SPEC_CHAR_CONFIDENCE
-                attr["confidence_case"] += "special_char"
+                attr["confidence_case"] += "special_char "
+            if special_intents_flag:
+                confidence = 0.0
+                attr["confidence_case"] += "special_intents "
             penalties = annotations_depths[i].get("odqa", 0.0) + already_was_active + short_long_response
             confidence -= penalties
             attributes.append(attr)
-            confidences.append(confidence)
+            confidences.append(max(0.0, confidence))
 
     except Exception as ex:
         sentry_sdk.capture_exception(ex)
