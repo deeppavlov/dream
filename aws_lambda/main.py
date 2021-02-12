@@ -187,7 +187,7 @@ def process_dp_agent_response(agent_data, user_id, handler_input):
     if agent_data['intent'] == 'exit':
         call_dp_agent(user_id, '/close', request_data)
         logger.info("ExitIntent From DpAgent")
-        return handler_input.response_builder.speak(speak_output).response
+        return handler_input.response_builder.speak('').set_should_end_session(True).response
     else:
         logger.info(f"Normal output from DpAgent: {speak_output}")
         # TODO: Think how to validate invalid SSML responses!!!
