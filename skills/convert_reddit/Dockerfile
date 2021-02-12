@@ -12,16 +12,17 @@ RUN apt-get update && \
 ARG DATA_URL=http://files.deeppavlov.ai/alexaprize_data/convert_reddit_v2.8.tar.gz
 
 RUN mkdir -p /root/convert_data && \
-    curl $DATA_URL > /root/convert_data/convert_reddit_data.tar.gz && \
+    curl -L $DATA_URL --output /root/convert_data/convert_reddit_data.tar.gz && \
     cd /root/convert_data/ && \
-    tar -xvzf convert_reddit_data.tar.gz
+    tar -xvf convert_reddit_data.tar.gz && \
+    rm convert_reddit_data.tar.gz
 
 ########## MODELS ###########
 
-RUN mkdir /app
+WORKDIR /app
 
-COPY requirements.txt /app/requirements.txt
-RUN pip install -r /app/requirements.txt
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 RUN python -m spacy download en_core_web_sm
 
 ENV LC_ALL C.UTF-8
@@ -32,7 +33,6 @@ ENV CONFIDENCE_PATH /root/convert_data/confidences_v3.npy
 ENV PYTHONPATH /usr/local/bin/python
 ENV DEVICE cpu
 
-COPY . /app/
-WORKDIR /app
+COPY . .
 
 CMD gunicorn --workers=2 server:app --timeout 120
