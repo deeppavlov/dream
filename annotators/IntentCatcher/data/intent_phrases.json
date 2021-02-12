@@ -13,7 +13,8 @@
         "(alexa ){0,1}what (even ){0,1}is that",
         "(i ((did not get)|(don't understand)|(don't get)) ){0,1}what do you mean( alexa){0,1}",
         "(sorry, ){0,1}i ((don't)|(do not)|(didn't)|(did not)) ((understand)|(get))( ((what you mean)|(what are you talking about)))( alexa){0,1}",
-        "((what you mean)|(what are you talking about))( alexa){0,1}"
+        "((what you mean)|(what are you talking about))( alexa){0,1}",
+        "i don't know what you just said"
       ],
       "min_precision": 0.94,
       "punctuation": [
@@ -117,7 +118,9 @@
         "(alexa ){0,1}((end)|(finish)) ((a)|(the)|(this)|(our)) ((conversation)|(chat)|(discussion))",
         "(alexa ){0,1}stop making ((this )|(the )){0,1}((song)|(noise))",
         "end this conversation",
-        "(alexa ){0,1}talk less"
+        "(alexa ){0,1}talk less",
+        "(alexa ){0,1}can ((you)|(we)) be done",
+        "(thank you ){0,1}(alexa ){0,1}i ((need)|(want)|(have)) to finish( up){0,1}( now){0,1}"  
       ],
         "reg_phrases": [
       	"end this conversation"
@@ -171,7 +174,8 @@
         "((sure)|(fine)|(okay)|(ok)|(yes)|(yup)|(yea)|(yeah)|(cool)|(good)|(go ahead))(( i agree)|( thanks)|( please)|( i will)|( why not)){0,1}",
         "((yeah)|(yes)|(okay)|(sure)|(yup)|(fine)|(definetely)|(absolutely)), ((go ahead)|(do it)|(lets do it)|(continue)|(go on)|(tell me)|(thank you)|(please))",
         "((come on)|(do it)|(tell me)|(ho on)|(continue)|(definetely)|(as you wish)|(as you want)|(that will be cool)|(whatever))",
-        "shoot"
+        "shoot",
+        "sure why not"
       ],
       "reg_phrases": [
       	"you bet(\\!|\\.)"
@@ -1458,7 +1462,9 @@
       "you got different games you said",
       "don't shoot ((people)|(animals)|(birds))",
       "shoot ((me)|(him))",
-      "shoot ((this)|(that)) ((dog)|(bird)|(coyote))"
+      "shoot ((this)|(that)) ((dog)|(bird)|(coyote))",
+      "okay bye i games",
+      "(alexa ){0,1}what things do interact with"
     ],
     "reg_phrases": [
       "shoot .*",
