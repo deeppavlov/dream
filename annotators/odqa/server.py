@@ -14,7 +14,7 @@ config_name = os.getenv("CONFIG")
 
 try:
     odqa = build_model(config_name, download=True)
-    test_res = odqa(["What is the capital of Russia?"], ["the capital, russia"])
+    test_res = odqa(["What is the capital of Russia?"], ["the capital, russia"], [["the capital", "russia"]])
     logger.info("model loaded, test query processed")
 except Exception as e:
     sentry_sdk.capture_exception(e)
@@ -28,11 +28,11 @@ app = Flask(__name__)
 def respond():
     questions = request.json.get("question_raw", [" "])
     questions = [question.lstrip("alexa") for question in questions]
-    entity_substr_list = request.json.get("entity_substr", [[]])
-    entity_substr = [", ".join(elem) for elem in entity_substr_list]
+    nounphr_list = request.json.get("entity_substr", [[]])
+    questions_nounphr = [", ".join(elem) for elem in nounphr_list]
     res = []
     try:
-        res = odqa(questions, entity_substr)
+        res = odqa(questions, questions_nounphr, nounphr_list)
         res = [[elem[i] for elem in res] for i in range(len(res[0]))]
         for i in range(len(res)):
             res[i][1] = float(res[i][1])
