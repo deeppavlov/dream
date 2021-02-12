@@ -52,180 +52,8 @@ pipeline {
 
   stages {
 
-    stage('Build-prod') {
-      agent {
-        kubernetes {
-          label 'slave'
-          yaml """
-apiVersion: v1
-kind: Pod
-metadata:
-  labels:
-    jenkins: slave
-spec:
-  nodeSelector:
-    jenkins: slave
-  containers:
-  - name: jenkins-agent
-    image: 263182626354.dkr.ecr.us-east-1.amazonaws.com/jenkins-agent
-    imagePullPolicy: Always
-    command:
-    - cat
-    tty: true
-    securityContext:
-      privileged: true
-    volumeMounts:
-    - name: dockersock
-      mountPath: "/var/run/docker.sock"
-  volumes:
-  - name: dockersock
-    hostPath:
-      path: /var/run/docker.sock
-      type: File
-"""
-        }
-      }
+    stage('Dev') {
 
-      when {
-        buildingTag()
-        beforeAgent true
-      }
-
-      environment {
-        //VERSION=sh(returnStdout: true, script: "git tag --contains | head -1").trim()
-        VERSION="${TAG_NAME}"
-        ENV_FILE='.env.prod'
-        DP_AGENT_PORT=4242
-        DOCKER_REGISTRY='263182626354.dkr.ecr.us-east-1.amazonaws.com'
-      }
-
-      steps {
-        container('jenkins-agent') {
-          script {
-            int startTime = currentBuild.duration
-            notify('start')
-            catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-              try {
-                sh label: 'login to ecr', script: 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $DOCKER_REGISTRY'
-                sh label: 'ecr create repo', script: '''for service in $(docker-compose -f docker-compose.yml ps --services | grep -wv -e mongo)
-                    do
-                      aws ecr describe-repositories --repository-names $service || aws ecr create-repository --repository-name $service
-                    done
-                    '''
-                sh label: 'generate deployment', script: 'python3 kubernetes/kuber_generator.py'
-                sh label: 'docker build', script: 'docker-compose -f docker-compose.yml -f staging.yml -f network.yml build'
-                sh label: 'docker push', script: 'docker-compose -f docker-compose.yml -f staging.yml push'
-              }
-              catch (Exception e) {
-                int duration = (currentBuild.duration - startTime) / 1000
-                notify('failed', duration, e.getMessage())
-                throw e
-              }
-            }
-          }
-        }
-      }
-
-      post {
-        failure {
-          script {
-            int duration = (currentBuild.duration - startTime) / 1000
-            notify('failed', duration)
-          }
-        }
-        success {
-          script {
-            int duration = (currentBuild.duration - startTime) / 1000
-            notify('success', duration)
-          }
-        }
-      }
-    }
-
-    stage('Deploy-prod') {
-      agent {
-        kubernetes {
-          label 'slave'
-          yaml """
-apiVersion: v1
-kind: Pod
-metadata:
-  labels:
-    jenkins: slave
-spec:
-  containers:
-  - name: jenkins-agent
-    image: 263182626354.dkr.ecr.us-east-1.amazonaws.com/jenkins-agent
-    imagePullPolicy: Always
-    command:
-    - cat
-    tty: true
-    securityContext:
-      privileged: true
-    volumeMounts:
-    - name: dockersock
-      mountPath: "/var/run/docker.sock"
-  volumes:
-  - name: dockersock
-    hostPath:
-      path: /var/run/docker.sock
-      type: File
-"""
-        }
-      }
-
-      when {
-        buildingTag()
-        beforeAgent true
-      }
-
-      environment {
-        VERSION="${TAG_NAME}"
-        ENV_FILE='.env.prod'
-        DOCKER_REGISTRY='263182626354.dkr.ecr.us-east-1.amazonaws.com'
-        NAMESPACE='alexa-b'
-        ENVIRONMENT='B'
-      }
-
-      steps {
-        container('jenkins-agent') {
-          script {
-            int startTime = currentBuild.duration
-            notify('start')
-            catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-              try {
-                sh label: 'update kubeconfig', script: 'aws eks update-kubeconfig --name alexa'
-                sh label: 'update environment', script: 'kubectl create configmap env -n ${NAMESPACE} --from-env-file $ENV_FILE -o yaml --dry-run=client | kubectl apply -f -'
-                sh label: 'generate deployment', script: 'python3 kubernetes/kuber_generator.py'
-                sh label: 'deploy', script: 'for dir in kubernetes/models/*; do kubectl apply -f $dir || true; done'
-              }
-              catch (Exception e) {
-                int duration = (currentBuild.duration - startTime) / 1000
-                notify('failed', duration, e.getMessage())
-                throw e
-              }
-            }
-          }
-        }
-      }
-
-      post {
-        failure {
-          script {
-            int duration = (currentBuild.duration - startTime) / 1000
-            notify('failed', duration)
-          }
-        }
-        success {
-          script {
-            int duration = (currentBuild.duration - startTime) / 1000
-            notify('success', duration)
-          }
-        }
-      }
-    }
-
-    stage('Build-dev') {
       agent {
         kubernetes {
           label 'slave'
@@ -268,345 +96,253 @@ spec:
         VERSION='latest'
         ENV_FILE='.env.staging'
         DP_AGENT_PORT=4242
-        DOCKER_REGISTRY='263182626354.dkr.ecr.us-east-1.amazonaws.com'
-      }
-
-      steps {
-        container('jenkins-agent') {
-          script {
-            int startTime = currentBuild.duration
-            notify('start')
-            catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-              try {
-                sh label: 'login to ecr', script: 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $DOCKER_REGISTRY'
-                sh label: 'ecr create repo', script: '''for service in $(docker-compose -f docker-compose.yml ps --services | grep -wv -e mongo)
-                    do
-                      aws ecr describe-repositories --repository-names $service || aws ecr create-repository --repository-name $service
-                    done
-                    '''
-                sh label: 'generate deployment', script: 'python3 kubernetes/kuber_generator.py'
-                sh label: 'docker build', script: 'docker-compose -f docker-compose.yml -f staging.yml -f network.yml -f s3.yml build'
-                sh label: 'docker push', script: 'docker-compose -f docker-compose.yml -f staging.yml push'
-              }
-              catch (Exception e) {
-                int duration = (currentBuild.duration - startTime) / 1000
-                notify('failed', duration, e.getMessage())
-                throw e
-              }
-            }
-          }
-        }
-      }
-
-      post {
-        failure {
-          script {
-            int duration = (currentBuild.duration - startTime) / 1000
-            notify('failed', duration)
-          }
-        }
-        success {
-          script {
-            int duration = (currentBuild.duration - startTime) / 1000
-            notify('success', duration)
-          }
-        }
-      }
-    }
-
-    stage('Deploy-dev') {
-      agent {
-        kubernetes {
-          label 'slave'
-          yaml """
-apiVersion: v1
-kind: Pod
-metadata:
-  labels:
-    jenkins: slave
-spec:
-  containers:
-  - name: jenkins-agent
-    image: 263182626354.dkr.ecr.us-east-1.amazonaws.com/jenkins-agent
-    imagePullPolicy: Always
-    command:
-    - cat
-    tty: true
-    securityContext:
-      privileged: true
-    volumeMounts:
-    - name: dockersock
-      mountPath: "/var/run/docker.sock"
-  volumes:
-  - name: dockersock
-    hostPath:
-      path: /var/run/docker.sock
-      type: File
-"""
-        }
-      }
-
-      when {
-        branch pattern: 'dev', comparator: 'EQUALS'
-        beforeAgent true
-      }
-
-      environment {
-        VERSION='latest'
-        ENV_FILE='.env.staging'
         DOCKER_REGISTRY='263182626354.dkr.ecr.us-east-1.amazonaws.com'
         NAMESPACE='alexa'
         ENVIRONMENT='dev'
-      }
-
-      steps {
-        container('jenkins-agent') {
-          script {
-            int startTime = currentBuild.duration
-            notify('start')
-            catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-              try {
-                sh label: 'update kubeconfig', script: 'aws eks update-kubeconfig --name alexa'
-                sh label: 'update environment', script: 'kubectl create configmap env -n ${NAMESPACE} --from-env-file $ENV_FILE -o yaml --dry-run=client | kubectl apply -f -'
-                sh label: 'generate deployment', script: 'python3 kubernetes/kuber_generator.py'
-                sh label: 'deploy', script: 'for dir in kubernetes/models/*; do kubectl apply -f $dir || true; done'
-                sh label: 'recreate pods', script: 'for dp in kubernetes/models/*/*-dp.yaml; do kubectl rollout restart -n ${NAMESPACE} deploy $(basename ${dp%.*}); done'
-              }
-              catch (Exception e) {
-                int duration = (currentBuild.duration - startTime) / 1000
-                notify('failed', duration, e.getMessage())
-                throw e
-              }
-            }
-          }
-        }
-      }
-
-      post {
-        failure {
-          script {
-            int duration = (currentBuild.duration - startTime) / 1000
-            notify('failed', duration)
-          }
-        }
-        success {
-          script {
-            int duration = (currentBuild.duration - startTime) / 1000
-            notify('success', duration)
-          }
-        }
-      }
-    }
-
-    stage('Is-running-dev') {
-      agent {
-        kubernetes {
-          label 'slave'
-          yaml """
-apiVersion: v1
-kind: Pod
-metadata:
-  labels:
-    jenkins: slave
-spec:
-  containers:
-  - name: jenkins-agent
-    image: 263182626354.dkr.ecr.us-east-1.amazonaws.com/jenkins-agent
-    imagePullPolicy: Always
-    command:
-    - cat
-    tty: true
-    securityContext:
-      privileged: true
-"""
-        }
-      }
-
-      when {
-        branch pattern: 'dev', comparator: 'EQUALS'
-        beforeAgent true
-      }
-
-      environment {
         CHECK_URL="http://ab61c7a0598e44dcbab6b2c216e108de-1052105272.us-east-1.elb.amazonaws.com:4242/ping"
-      }
-
-      steps {
-        container('jenkins-agent') {
-          script {
-            int startTime = currentBuild.duration
-            notify('start')
-            catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-              try {
-                sh label: 'is agent running', script: 'tests/wait_service.sh'
-              }
-              catch (Exception e) {
-                int duration = (currentBuild.duration - startTime) / 1000
-                notify('failed', duration, e.getMessage())
-                throw e
-              }
-            }
-          }
-        }
-      }
-
-      post {
-        failure {
-          script {
-            int duration = (currentBuild.duration - startTime) / 1000
-            notify('failed', duration)
-          }
-        }
-        success {
-          script {
-            int duration = (currentBuild.duration - startTime) / 1000
-            notify('success', duration)
-          }
-        }
-      }
-    }
-
-    stage('Checkout') {
-
-      agent {
-        label 'gpu9'
-      }
-
-      when {
-        changeRequest target: 'dev', comparator: 'GLOB'
-        beforeAgent true
-      }
-
-      steps {
-        script {
-          def branch = "Current branch is ${env.BRANCH_NAME}"
-          if (isPullRequest) {
-            echo """${branch}
-            Git commiter name: ${env.GIT_AUTHOR_NAME} or ${env.GIT_COMMITTER_NAME}
-            Pull request: merge ${env.CHANGE_BRANCH} into ${env.CHANGE_TARGET}
-            Pull request id: ${pullRequest.id} or ${env.CHANGE_ID}
-            Pull request title: ${pullRequest.title}
-            Pull request headRef: ${pullRequest.headRef}
-            Pull request base: ${pullRequest.base}
-            """
-          }
-          else {
-            echo "${branch}"
-          }
-        }
-      }
-    }
-
-    stage('Build') {
-
-      when {
-        changeRequest target: 'dev', comparator: 'GLOB'
-        beforeAgent true
-      }
-
-      agent {
-        label 'gpu9'
-      }
-
-      steps {
-        script{
-          startTime = currentBuild.duration
-          notify('start')
-          Exception ex = null
-          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-            try {
-              sh 'tests/runtests.sh MODE=build'
-            }
-            catch (Exception e) {
-              int duration = (currentBuild.duration - startTime) / 1000
-              notify('failed', duration, e.getMessage())
-              throw e
-            }
-          }
-        }
-      }
-
-      post {
-        failure {
-          script {
-            sh 'tests/runtests.sh MODE=clean'
-          }
-        }
-        success {
-          script {
-            int duration = (currentBuild.duration - startTime) / 1000
-            notify('success', duration)
-          }
-        }
-      }
-
-    }
-
-    stage('Start') {
-
-      when {
-        changeRequest target: 'dev', comparator: 'GLOB'
-        beforeAgent true
-      }
-
-      agent {
-        label 'gpu9'
-      }
-
-      steps {
-        script {
-          startTime = currentBuild.duration
-          notify('start')
-          Exception ex = null
-          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-            try {
-              sh 'tests/runtests.sh MODE=clean && tests/runtests.sh MODE=start'
-            }
-            catch (Exception e) {
-              int duration = (currentBuild.duration - startTime) / 1000
-              notify('failed', duration, e.getMessage())
-              throw e
-            }
-          }
-        }
-      }
-
-      post {
-        failure {
-          script {
-            sh 'tests/runtests.sh MODE=clean'
-          }
-        }
-        success {
-          script {
-            started = true
-            int duration = (currentBuild.duration - startTime) / 1000
-            notify('success', duration)
-          }
-        }
-        aborted {
-          script {
-            notify('aborted')
-            sh 'tests/runtests.sh MODE=clean'
-          }
-        }
-      }
-    }
-
-    stage('Tests') {
-
-      when {
-        changeRequest target: 'dev', comparator: 'GLOB'
-        beforeAgent true
-      }
-
-      agent {
-        label 'gpu9'
       }
 
       stages {
 
+        stage ('Build-dev') {
+
+          steps {
+            container('jenkins-agent') {
+              script {
+                int startTime = currentBuild.duration
+                notify('start')
+                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                  try {
+                    sh label: 'login to ecr', script: 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $DOCKER_REGISTRY'
+                    sh label: 'ecr create repo', script: '''for service in $(docker-compose -f docker-compose.yml ps --services | grep -wv -e mongo)
+                        do
+                          aws ecr describe-repositories --repository-names $service || aws ecr create-repository --repository-name $service
+                        done
+                        '''
+                    sh label: 'generate deployment', script: 'python3 kubernetes/kuber_generator.py'
+                    sh label: 'docker build', script: 'docker-compose -f docker-compose.yml -f staging.yml -f network.yml -f s3.yml build'
+                    sh label: 'docker push', script: 'docker-compose -f docker-compose.yml -f staging.yml push'
+                  }
+                  catch (Exception e) {
+                    int duration = (currentBuild.duration - startTime) / 1000
+                    notify('failed', duration, e.getMessage())
+                    throw e
+                  }
+                }
+              }
+            }
+          }
+
+          post {
+            failure {
+              script {
+                int duration = (currentBuild.duration - startTime) / 1000
+                notify('failed', duration)
+              }
+            }
+            success {
+              script {
+                int duration = (currentBuild.duration - startTime) / 1000
+                notify('success', duration)
+              }
+            }
+          }
+        }
+
+        stage('Deploy-dev') {
+
+          steps {
+            container('jenkins-agent') {
+              script {
+                int startTime = currentBuild.duration
+                notify('start')
+                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                  try {
+                    sh label: 'update kubeconfig', script: 'aws eks update-kubeconfig --name alexa'
+                    sh label: 'update environment', script: 'kubectl create configmap env -n ${NAMESPACE} --from-env-file $ENV_FILE -o yaml --dry-run=client | kubectl apply -f -'
+                    sh label: 'generate deployment', script: 'python3 kubernetes/kuber_generator.py'
+                    sh label: 'deploy', script: 'for dir in kubernetes/models/*; do kubectl apply -f $dir || true; done'
+                    sh label: 'recreate pods', script: 'for dp in kubernetes/models/*/*-dp.yaml; do kubectl rollout restart -n ${NAMESPACE} deploy $(basename ${dp%.*}); done'
+                  }
+                  catch (Exception e) {
+                    int duration = (currentBuild.duration - startTime) / 1000
+                    notify('failed', duration, e.getMessage())
+                    throw e
+                  }
+                }
+              }
+            }
+          }
+
+          post {
+            failure {
+              script {
+                int duration = (currentBuild.duration - startTime) / 1000
+                notify('failed', duration)
+              }
+            }
+            success {
+              script {
+                int duration = (currentBuild.duration - startTime) / 1000
+                notify('success', duration)
+              }
+            }
+          }
+        }
+
+        stage('Is-running-dev') {
+
+          steps {
+            container('jenkins-agent') {
+              script {
+                int startTime = currentBuild.duration
+                notify('start')
+                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                  try {
+                    sh label: 'is agent running', script: 'tests/wait_service.sh'
+                  }
+                  catch (Exception e) {
+                    int duration = (currentBuild.duration - startTime) / 1000
+                    notify('failed', duration, e.getMessage())
+                    throw e
+                  }
+                }
+              }
+            }
+          }
+
+          post {
+            failure {
+              script {
+                int duration = (currentBuild.duration - startTime) / 1000
+                notify('failed', duration)
+              }
+            }
+            success {
+              script {
+                int duration = (currentBuild.duration - startTime) / 1000
+                notify('success', duration)
+              }
+            }
+          }
+        }
+      } // end of stages
+    } // end of dev
+
+    stage('Tests') {
+
+      agent {
+        label 'gpu9'
+      }
+
+      when {
+        changeRequest target: 'dev', comparator: 'GLOB'
+        beforeAgent true
+      }
+
+      stages {
+
+        stage('Checkout') {
+
+          steps {
+            script {
+              def branch = "Current branch is ${env.BRANCH_NAME}"
+              if (isPullRequest) {
+                echo """${branch}
+                Git commiter name: ${env.GIT_AUTHOR_NAME} or ${env.GIT_COMMITTER_NAME}
+                Pull request: merge ${env.CHANGE_BRANCH} into ${env.CHANGE_TARGET}
+                Pull request id: ${pullRequest.id} or ${env.CHANGE_ID}
+                Pull request title: ${pullRequest.title}
+                Pull request headRef: ${pullRequest.headRef}
+                Pull request base: ${pullRequest.base}
+                """
+              }
+              else {
+                echo "${branch}"
+              }
+            }
+          }
+        }
+
+        stage('Build') {
+
+          steps {
+            script{
+              startTime = currentBuild.duration
+              notify('start')
+              Exception ex = null
+              catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                try {
+                  sh 'tests/runtests.sh MODE=build'
+                }
+                catch (Exception e) {
+                  int duration = (currentBuild.duration - startTime) / 1000
+                  notify('failed', duration, e.getMessage())
+                  throw e
+                }
+              }
+            }
+          }
+
+          post {
+            failure {
+              script {
+                sh 'tests/runtests.sh MODE=clean'
+              }
+            }
+            success {
+              script {
+                int duration = (currentBuild.duration - startTime) / 1000
+                notify('success', duration)
+              }
+            }
+          }
+        }
+
+        stage('Start') {
+
+          steps {
+            script {
+              startTime = currentBuild.duration
+              notify('start')
+              Exception ex = null
+              catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                try {
+                  sh 'tests/runtests.sh MODE=clean && tests/runtests.sh MODE=start'
+                }
+                catch (Exception e) {
+                  int duration = (currentBuild.duration - startTime) / 1000
+                  notify('failed', duration, e.getMessage())
+                  throw e
+                }
+              }
+            }
+          }
+
+          post {
+            failure {
+              script {
+                sh 'tests/runtests.sh MODE=clean'
+              }
+            }
+            success {
+              script {
+                started = true
+                int duration = (currentBuild.duration - startTime) / 1000
+                notify('success', duration)
+              }
+            }
+            aborted {
+              script {
+                notify('aborted')
+                sh 'tests/runtests.sh MODE=clean'
+              }
+            }
+          }
+        }
+
         stage('Test dialog') {
+
           steps {
             script {
               startTime = currentBuild.duration
@@ -701,7 +437,7 @@ spec:
             }
           }
         }*/
-      }
+      } // end of stages
       post {
         aborted {
           script {
@@ -717,6 +453,6 @@ spec:
           }
         }
       }
-    }
-  }
+    } // end of Tests
+  } // end of stages
 }
