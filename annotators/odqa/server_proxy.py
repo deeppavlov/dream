@@ -22,6 +22,7 @@ def respond():
                     "confidence": 0.0,
                     "answer_pos": 0,
                     "answer_sentence": "",
+                    "topical_chat_fact": "",
                     "paragraph": ""}
     odqa_res = [default_resp] * len(odqa_input.get("question_raw", []))
     try:
@@ -32,13 +33,14 @@ def respond():
             if odqa_resp:
                 odqa_res = []
                 for elem in odqa_resp:
-                    if elem and len(elem) == 5:
+                    if elem and len(elem) == 6:
                         odqa_res.append({"qa_system": "odqa",
                                          "answer": elem[0],
                                          "confidence": float(elem[1]),
                                          "answer_pos": elem[2],
                                          "answer_sentence": elem[3],
-                                         "paragraph": elem[4]})
+                                         "topical_chat_fact": elem[4],
+                                         "paragraph": elem[5]})
                     else:
                         odqa_res.append(default_resp)
         logger.info("Respond exec time: " + str(time.time() - st_time))
