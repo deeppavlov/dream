@@ -9,7 +9,6 @@ import requests
 import sentry_sdk
 import concurrent.futures
 from deeppavlov import build_model
-from deeppavlov.core.data.utils import simple_download
 from flask import Flask, request, jsonify
 from os import getenv
 
@@ -32,8 +31,6 @@ ASKED_ABOUT_FACT_PROB = 0.99
 FACTOID_CLASS_THRESHOLD = 0.5
 factoid_classifier = build_model(config="./yahoo_convers_vs_info_light.json", download=False)
 
-templates_dict_url = "http://files.deeppavlov.ai/kbqa/templates_dict.json"
-simple_download(templates_dict_url, "templates_dict.json")
 templates_dict = json.load(open('templates_dict.json', 'r'))
 
 fact_dict = json.load(open("fact_dict.json", 'r'))
