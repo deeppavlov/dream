@@ -5,19 +5,16 @@ import pickle
 import time
 import json
 import difflib
+import traceback
 import re
-import pathlib
 
 import tensorflow_hub as tfhub
 import tensorflow as tf
 import tensorflow_text
 import numpy as np
-import spacy
 from flask import Flask, request, jsonify
 from flasgger import Swagger, swag_from
 import sentry_sdk
-
-import utils
 
 tensorflow_text.__name__
 
@@ -47,21 +44,25 @@ random.seed(SEED)
 sess = tf.InteractiveSession(graph=tf.Graph())
 
 module = tfhub.Module(MODEL_PATH)
-response_encodings, responses = pickle.load(pathlib.Path(DATABASE_PATH).open("rb"))
-response_encodings = np.array(response_encodings)
+response_encodings, responses = pickle.load(open(DATABASE_PATH, "rb"))
 confidences = np.load(CONFIDENCE_PATH)
 
-nlp = spacy.load("en_core_web_sm")
 
-local_data_dir = pathlib.Path("data")
-banned_responses = json.load((local_data_dir / "banned_responses_v2.json").open())
-# banned_responses += json.load((local_data_dir / "banned_responses_v3.json").open())
-banned_responses += json.load((local_data_dir / "banned_responses_v4.json").open())
-banned_phrases = json.load((local_data_dir / "banned_phrases.json").open())
-banned_words = json.load((local_data_dir / "banned_words.json").open())
-banned_words_for_questions = json.load((local_data_dir / "banned_words_for_questions.json").open())
+spaces_pat = re.compile(r"\s+")
+special_symb_pat = re.compile(r"[^A-Za-z0-9 ]")
 
-banned_responses = [utils.clear_text(utter) for utter in banned_responses]
+
+def clear_text(text):
+    text = special_symb_pat.sub("", spaces_pat.sub(" ", text.lower().replace("\n", " "))).strip()
+    text = text.replace("\u2019", "'")
+    return text
+
+
+banned_responses = json.load(open("./banned_responses.json"))
+banned_responses = [clear_text(utter) for utter in banned_responses]
+banned_phrases = json.load(open("./banned_phrases.json"))
+banned_words = json.load(open("./banned_words.json"))
+banned_words_for_questions = json.load(open("./banned_words_for_questions.json"))
 
 text_placeholder = tf.placeholder(dtype=tf.string, shape=[None])
 extra_text_placeholder = tf.placeholder(dtype=tf.string, shape=[None])
@@ -146,17 +147,17 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True):
         if not [
             None
             for f_utter in banned_responses
-            if difflib.SequenceMatcher(None, f_utter.split(), utils.clear_text(cand).split()).ratio() > 0.9
+            if difflib.SequenceMatcher(None, f_utter.split(), clear_text(cand).split()).ratio() > 0.9
         ]:
             filtered_indices.append(ind)
 
     if is_unanswerable_utters(utterances_histories):
-        return [""], [0.0]
+        return "", 0.0
 
-    clear_utterances_histories = [utils.clear_text(utt).split() for utt in utterances_histories[::-1][1::2][::-1]]
+    clear_utterances_histories = [clear_text(utt).split() for utt in utterances_histories[::-1][1::2][::-1]]
 
     for ind in reversed(filtered_indices):
-        cand = utils.clear_text(responses[ind]).split()
+        cand = clear_text(responses[ind]).split()
         raw_cand = responses[ind].lower()
         # hello ban
         hello_flag = any([j in cand[:3] for j in ["hi", "hello"]])
@@ -180,7 +181,7 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True):
 
     if len(filtered_indices) > 0:
         candidates = [
-            (utils.clear_text(responses[ind]), approximate_confidence(scores[ind], approximate_confidence_is_enabled))
+            (clear_text(responses[ind]), approximate_confidence(scores[ind], approximate_confidence_is_enabled))
             for ind in filtered_indices
         ]
         try:
@@ -188,15 +189,14 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True):
                 candidates, choice_num=NUM_SAMPLE, softmax_temperature=SOFTMAX_TEMPERATURE
             )
             answers = [cand[0] for cand in selected_candidates]
-            confidences = [min(float(cand[1]) * 1.7, 0.95) for cand in selected_candidates]
+            confidences = [float(cand[1]) for cand in selected_candidates]
             return answers, confidences
-        except Exception as exc:
-            sentry_sdk.capture_exception(exc)
-            logger.exception(exc)
+        except Exception:
+            logger.error(traceback.format_exc())
             candidate = candidates[0]
-            return [candidate[0]], [candidate[1]]
+            return candidate
     else:
-        return [""], [0.0]
+        return "", 0.0
 
 
 @app.route("/convert_reddit", methods=["POST"])
@@ -207,6 +207,5 @@ def convert_chitchat_model():
     approximate_confidence_is_enabled = request.json.get("approximate_confidence_is_enabled", True)
     response = [inference(hist, approximate_confidence_is_enabled) for hist in utterances_histories]
     total_time = time.time() - st_time
-    logger.warning(f"convert_reddit answ: {response}")
     logger.warning(f"convert_reddit exec time: {total_time:.3f}s")
     return jsonify(response)

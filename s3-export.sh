@@ -24,6 +24,7 @@ aws s3 cp /home/export/alexaprize_data s3://team-dream-storage/alexaprize_data \
   --include="conceptnet/conceptnet_pretrained_model.pickle" \
   --include="conceptnet/rel_language-trainsize_100-devversion_12-maxe1_10-maxe2_15-maxr_5.pickle" \
   --include="convert_reddit_v2.8.tar.gz" \
+  --include="convert_reddit_v2.3.tar.gz" \
   --include="emo_bert3_v1.tar.gz" \
   --include="elmo2.tar.gz" \
   --include="ner.tar.xz" \
