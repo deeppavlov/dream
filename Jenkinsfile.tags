@@ -203,6 +203,13 @@ spec:
                 sh label: 'update environment', script: "kubectl create configmap env -n ${NAMESPACE} --from-env-file $ENV_FILE -o yaml --dry-run=client | kubectl apply -f -"
                 sh label: 'generate deployment', script: 'python3 kubernetes/kuber_generator.py'
                 sh label: 'deploy', script: 'for dir in kubernetes/models/*; do kubectl apply -f $dir || true; done'
+                sh label: 'deploy status', script: '''
+                  status=0
+                  for dir in kubernetes/models/*; do
+                    kubectl rollout status -n ${NAMESPACE} deploy $(basename ${dir}-dp) || status=$?
+                  done
+                  exit $status
+                '''
               }
               catch (Exception e) {
                 int duration = (currentBuild.duration - startTime) / 1000
@@ -228,6 +235,142 @@ spec:
           }
         }
       } // end of post
+    } // end of stage
+
+    stage('Is-running-prod-A') {
+      agent {
+        kubernetes {
+          label 'slave'
+          yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    jenkins: slave
+spec:
+  containers:
+  - name: jenkins-agent
+    image: 263182626354.dkr.ecr.us-east-1.amazonaws.com/jenkins-agent
+    imagePullPolicy: Always
+    command:
+    - cat
+    tty: true
+    securityContext:
+      privileged: true
+"""
+        }
+      }
+
+      when {
+        buildingTag()
+        beforeAgent true
+      }
+
+      environment {
+        CHECK_URL="http://a0c5f8bbe459c4cf7a1e04d8807bf007-344976058.us-east-1.elb.amazonaws.com:4242/ping"
+      }
+
+      steps {
+        container('jenkins-agent') {
+          script {
+            int startTime = currentBuild.duration
+            notify('start')
+            catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+              try {
+                sh label: 'is agent running', script: 'tests/wait_service.sh'
+              }
+              catch (Exception e) {
+                int duration = (currentBuild.duration - startTime) / 1000
+                notify('failed', duration, e.getMessage())
+                throw e
+              }
+            }
+          }
+        }
+      }
+
+      post {
+        failure {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+            notify('failed', duration)
+          }
+        }
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+            notify('success', duration)
+          }
+        }
+      }
+    } // end of stage
+
+    stage('Is-running-prod-B') {
+      agent {
+        kubernetes {
+          label 'slave'
+          yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    jenkins: slave
+spec:
+  containers:
+  - name: jenkins-agent
+    image: 263182626354.dkr.ecr.us-east-1.amazonaws.com/jenkins-agent
+    imagePullPolicy: Always
+    command:
+    - cat
+    tty: true
+    securityContext:
+      privileged: true
+"""
+        }
+      }
+
+      when {
+        buildingTag()
+        beforeAgent true
+      }
+
+      environment {
+        CHECK_URL="http://a1b4e1088651f439d9e82fce0c4533b4-501376769.us-east-1.elb.amazonaws.com:4242/ping"
+      }
+
+      steps {
+        container('jenkins-agent') {
+          script {
+            int startTime = currentBuild.duration
+            notify('start')
+            catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+              try {
+                sh label: 'is agent running', script: 'tests/wait_service.sh'
+              }
+              catch (Exception e) {
+                int duration = (currentBuild.duration - startTime) / 1000
+                notify('failed', duration, e.getMessage())
+                throw e
+              }
+            }
+          }
+        }
+      }
+
+      post {
+        failure {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+            notify('failed', duration)
+          }
+        }
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+            notify('success', duration)
+          }
+        }
+      }
     } // end of stage
   } // end of stages
 }
