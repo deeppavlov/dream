@@ -3,7 +3,6 @@
 tensorflow==1.14.0
 tensorflow_text==0.1.0
 tensorflow-hub==0.7.0
-spacy==2.3.2
 
 # web
 gunicorn==19.9.0
@@ -12,3 +11,4 @@ flasgger==0.9.4.dev0
 
 # external
 sentry-sdk==0.13.4
+requests==2.22.0
