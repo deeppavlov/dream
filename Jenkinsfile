@@ -111,23 +111,21 @@ spec:
               script {
                 int startTime = currentBuild.duration
                 notify('start')
-                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-                  try {
-                    sh label: 'login to ecr', script: 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $DOCKER_REGISTRY'
-                    sh label: 'ecr create repo', script: '''for service in $(docker-compose -f docker-compose.yml ps --services | grep -wv -e mongo)
-                        do
-                          aws ecr describe-repositories --repository-names $service || aws ecr create-repository --repository-name $service
-                        done
-                        '''
-                    sh label: 'generate deployment', script: 'python3 kubernetes/kuber_generator.py'
-                    sh label: 'docker build', script: 'docker-compose -f docker-compose.yml -f staging.yml -f network.yml -f s3.yml build'
-                    sh label: 'docker push', script: 'docker-compose -f docker-compose.yml -f staging.yml push'
-                  }
-                  catch (Exception e) {
-                    int duration = (currentBuild.duration - startTime) / 1000
-                    notify('failed', duration, e.getMessage())
-                    throw e
-                  }
+                try {
+                  sh label: 'login to ecr', script: 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $DOCKER_REGISTRY'
+                  sh label: 'ecr create repo', script: '''for service in $(docker-compose -f docker-compose.yml ps --services | grep -wv -e mongo)
+                      do
+                        aws ecr describe-repositories --repository-names $service || aws ecr create-repository --repository-name $service
+                      done
+                      '''
+                  sh label: 'generate deployment', script: 'python3 kubernetes/kuber_generator.py'
+                  sh label: 'docker build', script: 'docker-compose -f docker-compose.yml -f staging.yml -f network.yml -f s3.yml build'
+                  sh label: 'docker push', script: 'docker-compose -f docker-compose.yml -f staging.yml push'
+                }
+                catch (Exception e) {
+                  int duration = (currentBuild.duration - startTime) / 1000
+                  notify('failed', duration, e.getMessage())
+                  throw e
                 }
               }
             }
