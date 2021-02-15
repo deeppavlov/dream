@@ -1,0 +1,124 @@
+[
+    {
+        "human_attributes": {
+            "entities": {
+                "mind": {
+                    "name": "mind",
+                    "human_encounters": [],
+                    "bot_encounters": [
+                        {
+                            "human_utterance_index": 2,
+                            "full_name": "mind",
+                            "skill_name": "program_y",
+                            "next_user_sentiment": "neutral",
+                            "next_user_emotions": {
+                                "anger": 0.32732871174812317,
+                                "fear": 0.2566507160663605,
+                                "joy": 0.22400087118148804,
+                                "love": 0.33087098598480225,
+                                "neutral": 0.9992567896842957,
+                                "sadness": 0.2501361668109894,
+                                "surprise": 0.2733495533466339
+                            },
+                            "next_user_intents": [],
+                            "next_user_topics": [],
+                            "pos": [
+                                "NOUN"
+                            ]
+                        }
+                    ]
+                },
+                "ocean": {
+                    "name": "ocean",
+                    "human_encounters": [
+                        {
+                            "human_utterance_index": 0,
+                            "full_name": "ocean",
+                            "previous_skill_name": "pre_start",
+                            "next_skill_name": "program_y",
+                            "sentiment": "neutral",
+                            "emotions": {
+                                "anger": 0.24991858005523682,
+                                "fear": 0.24776309728622437,
+                                "joy": 0.25688308477401733,
+                                "love": 0.41372254490852356,
+                                "neutral": 0.9992358684539795,
+                                "sadness": 0.204048290848732,
+                                "surprise": 0.27391141653060913
+                            },
+                            "intents": [],
+                            "topics": [],
+                            "pos": [
+                                "NOUN"
+                            ]
+                        },
+                        {
+                            "human_utterance_index": 2,
+                            "full_name": "ocean",
+                            "previous_skill_name": "program_y",
+                            "next_skill_name": "meta_script_skill",
+                            "sentiment": "neutral",
+                            "emotions": {
+                                "anger": 0.32732871174812317,
+                                "fear": 0.2566507160663605,
+                                "joy": 0.22400087118148804,
+                                "love": 0.33087098598480225,
+                                "neutral": 0.9992567896842957,
+                                "sadness": 0.2501361668109894,
+                                "surprise": 0.2733495533466339
+                            },
+                            "intents": [],
+                            "topics": [],
+                            "pos": [
+                                "NOUN"
+                            ]
+                        },
+                        {
+                            "human_utterance_index": 3,
+                            "full_name": "ocean",
+                            "previous_skill_name": "meta_script_skill",
+                            "next_skill_name": "",
+                            "sentiment": "positive",
+                            "emotions": {
+                                "anger": 0.24564120173454285,
+                                "fear": 0.24954921007156372,
+                                "joy": 0.23422017693519592,
+                                "love": 0.37936845421791077,
+                                "sadness": 0.22301127016544342,
+                                "surprise": 0.3041641116142273,
+                                "neutral": 0.9992741942405701
+                            },
+                            "intents": [],
+                            "topics": [],
+                            "pos": [
+                                "NOUN"
+                            ]
+                        }
+                    ],
+                    "bot_encounters": [
+                        {
+                            "human_utterance_index": 3,
+                            "full_name": "ocean",
+                            "skill_name": "meta_script_skill",
+                            "next_user_sentiment": "positive",
+                            "next_user_emotions": {
+                                "anger": 0.24564120173454285,
+                                "fear": 0.24954921007156372,
+                                "joy": 0.23422017693519592,
+                                "love": 0.37936845421791077,
+                                "sadness": 0.22301127016544342,
+                                "surprise": 0.3041641116142273,
+                                "neutral": 0.9992741942405701
+                            },
+                            "next_user_intents": [],
+                            "next_user_topics": [],
+                            "pos": [
+                                "NOUN"
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    }
+]

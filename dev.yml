@@ -426,6 +426,27 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8082:8082
+  friendship-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/friendship_skill:/src"
+      - "./skills/meta_script_skill:/src/meta_script_skill"
+      - "./common:/src/common"
+    ports:
+      - 8086:8086
+  masked-lm:
+    env_file: [.env.dev]
+    volumes:
+      - "./services/masked_lm:/src"
+    ports:
+      - 8088:8088
+  entity-storer:
+    env_file: [.env.dev]
+    volumes:
+      - "./common:/src/common"
+      - "./annotators/entity_storer:/src"
+    ports:
+      - 8089:8089
   knowledge-grounding-skill:
     env_file: [.env.dev]
     volumes:

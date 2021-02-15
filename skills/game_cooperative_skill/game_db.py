@@ -13,7 +13,7 @@ import sentry_sdk
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 
-logging.basicConfig(format="%(asctime)s - %(pathname)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 DB_FILE = pathlib.Path(os.getenv("DB_FILE", "/tmp/game_db.json"))

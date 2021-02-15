@@ -240,7 +240,7 @@ def respond():
 
         bot_uttr = dialogs[curr_dialog_id]["bot_utterances"]
         bot_uttr = bot_uttr[-1] if len(bot_uttr) > 0 else {}
-        if confidence == 0.7 and bot_uttr.get("active_skill", "") == "greeting_skill" and \
+        if confidence == 0.7 and bot_uttr.get("active_skill", "") in ["greeting_skill", "friendship_skill"] and \
                 "?" not in dialogs[curr_dialog_id]["human_utterances"][-1]["text"]:
             confidence = 0.9
 
