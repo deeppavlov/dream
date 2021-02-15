@@ -1,18 +1,12 @@
 FROM tensorflow/tensorflow:1.14.0-py3
 
+ARG DATA_URL=http://files.deeppavlov.ai/alexaprize_data/dummy_skill_dialog.tar.gz
+
+ADD $DATA_URL /root/model/
+
 WORKDIR /app
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        curl &&\
-    apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
-	rm -rf /var/lib/apt/lists/* && \
-    rm -rf /root/.cache
-
-RUN mkdir -p /root/model && \
-    curl http://files.deeppavlov.ai/alexaprize_data/dummy_skill_dialog.tar.gz > /root/model/dummy_skill_dialog.tar.gz && \
-    cd /root/model/ && \
-    tar -xvzf dummy_skill_dialog.tar.gz
+RUN tar -xvzf /root/model/*.tar.gz -C /root/model
 
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
