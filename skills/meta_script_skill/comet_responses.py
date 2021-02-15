@@ -93,7 +93,7 @@ def ask_question_using_atomic(dialog):
     best_freq_portion = 0.
     if len(idosents) == 0:
         if not dont_tell_you_answer(dialog["human_utterances"][-1]) and len(dialog["bot_utterances"]) > 0 and \
-                dialog["bot_utterances"][-1]["active_skill"] == "greeting_skill":
+                dialog["bot_utterances"][-1]["active_skill"] in ["greeting_skill", "friendship_skill"]:
             logger.info("Greeting skill asked personal questions and answer was not like `nothing`.")
             idosents = dialog["human_utterances"][-1]["annotations"].get("sentseg", {}).get("segments", [""])
             if len(idosents) == 1 and len(idosents[0].split()) <= 2:
@@ -285,7 +285,7 @@ def express_opinion_using_conceptnet(dialog):
             # opinion request on scripted topics
             confidence = NOT_REQUESTED_CONCEPTNET_OPINION_CONFIDENCE
         elif not dont_tell_you_answer(dialog["human_utterances"][-1]) and len(dialog["bot_utterances"]) > 0 and \
-                dialog["bot_utterances"][-1]["active_skill"] == "greeting_skill":
+                dialog["bot_utterances"][-1]["active_skill"] in ["greeting_skill", "friendship_skill"]:
             confidence = NOT_REQUESTED_CONCEPTNET_OPINION_CONFIDENCE
         else:
             response = ""

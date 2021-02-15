@@ -3,6 +3,7 @@
 import logging
 import json
 from random import choice, uniform, random
+import pathlib
 
 from os import getenv
 import sentry_sdk
@@ -26,7 +27,10 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-TOPICS = json.load(open("comet_predefined.json", "r"))
+WORK_DIR = pathlib.Path(__file__).parent
+
+TOPICS = json.load((WORK_DIR / "comet_predefined.json").open())
+
 for _topic in TOPICS:
     for _relation in TOPICS[_topic]:
         TOPICS[_topic][_relation] = [el for el in TOPICS[_topic][_relation] if el != "none"]
@@ -218,7 +222,7 @@ def get_response_for_particular_topic_and_status(topic, curr_meta_script_status,
         prev_what_to_talk_about_outputs = sum([list_of_outputs for list_of_outputs in prev_what_to_talk_about_outputs
                                                if len(list_of_outputs) > 0], [])
         prev_what_to_talk_about_greeting = (len(prev_what_to_talk_about_outputs) > 0 and bot_uttr.get(
-            "active_skill", "") in ["greeting_skill", "program_y"])
+            "active_skill", "") in ["greeting_skill", "friendship_skill", "program_y"])
 
         if (not prev_what_to_talk_about_greeting and can_offer_topic) or talk_about_user_topic:
             # if person wants to talk about something particular and we have extracted some topic - do that!

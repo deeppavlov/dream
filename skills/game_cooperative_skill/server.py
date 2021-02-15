@@ -26,7 +26,7 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 DB_FILE = pathlib.Path(getenv("DB_FILE", "/tmp/game_db.json"))
 MEMORY_LENGTH = 3
 
-logging.basicConfig(format="%(asctime)s - %(pathname)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)

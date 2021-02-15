@@ -35,4 +35,7 @@ services:
   dialog-breakdown:
     environment:
       - CUDA_VISIBLE_DEVICES=5
+  masked-lm:
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
 version: '3.7'

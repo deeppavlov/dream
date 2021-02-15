@@ -243,7 +243,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("meta_script_skill")
                 if len(dialog["utterances"]) < 20:
                     # greeting skill inside itself do not turn on later than 10th turn of the conversation
-                    skills_for_uttr.append("greeting_skill")
+                    skills_for_uttr.append("friendship_skill")
                 if len(dialog["utterances"]) > 8 or prev_bot_uttr.get(
                         "active_skill", "") in ["greeting_skill", "friendship_skill"]:
                     skills_for_uttr.append("knowledge_grounding_skill")

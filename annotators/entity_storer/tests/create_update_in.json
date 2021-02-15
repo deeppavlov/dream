@@ -1,0 +1,592 @@
+{
+    "human_utter_indexes": [
+        3
+    ],
+    "dialogs": [
+        {
+            "human_utterances": [
+                {
+                    "text": "what can you tell about ocean?",
+                    "annotations": {
+                        "spelling_preprocessing": "what can you tell about ocean?",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "sentseg": {
+                            "punct_sent": "what can you tell about ocean?",
+                            "segments": [
+                                "what can you tell about ocean?"
+                            ]
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "emotion_classification": {
+                            "text": {
+                                "anger": 0.32732871174812317,
+                                "fear": 0.2566507160663605,
+                                "joy": 0.22400087118148804,
+                                "love": 0.33087098598480225,
+                                "sadness": 0.2501361668109894,
+                                "surprise": 0.2733495533466339,
+                                "neutral": 0.9992567896842957
+                            }
+                        },
+                        "toxic_classification": {
+                            "identity_hate": 0.001917034387588501,
+                            "insult": 0.0009615123271942139,
+                            "obscene": 0.0012877285480499268,
+                            "severe_toxic": 0.0006519854068756104,
+                            "sexual_explicit": 0.0012310163583606482,
+                            "threat": 0.001566628459841013,
+                            "toxic": 0.0030268491245806217
+                        },
+                        "sentiment_classification": {
+                            "text": [
+                                "neutral",
+                                0.7191838026046753
+                            ]
+                        },
+                        "cobot_nounphrases": [
+                            "ocean"
+                        ],
+                        "factoid_classification": {
+                            "factoid": 0.9984594583511353,
+                            "conversational": 0.0015406067250296474
+                        },
+                        "conceptnet": {
+                            "ocean": {
+                                "Causes": [
+                                    "drown",
+                                    "tidal wave",
+                                    "death"
+                                ],
+                                "CausesDesire": [
+                                    "surf",
+                                    "swim",
+                                    "fish"
+                                ],
+                                "HasProperty": [
+                                    "salty",
+                                    "full of water",
+                                    "very deep"
+                                ],
+                                "SymbolOf": [
+                                    "life",
+                                    "africa",
+                                    "love"
+                                ]
+                            }
+                        },
+                        "dialog_breakdown": [
+                            {
+                                "breakdown": 0.07217830419540405,
+                                "no_breakdown": 0.9278216361999512
+                            }
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 6,
+                                    "start_pos": 5,
+                                    "text": "ocean",
+                                    "type": "LOC"
+                                }
+                            ]
+                        ],
+                        "odqa": {
+                            "answer": "metaphor for life",
+                            "answer_pos": 131,
+                            "answer_sentence": "The ocean is a metaphor for life.",
+                            "confidence": 0.997706949710846,
+                            "paragraph": "I'm talking about I've been staring at her laying still for so long, and I'm talking about the ocean at that point. The ocean is a metaphor for life. Blythe also said when the song was written there were two different endings.",
+                            "qa_system": "odqa"
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Hi, this is an Alexa Prize Socialbot! How are you?",
+                                "i am good, do you like ocean?",
+                                "Cool! What's on your mind?",
+                                "what can you tell about ocean?"
+                            ]
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "Information_RequestIntent"
+                            ],
+                            "topics": [
+                                "Other"
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "SciTech"
+                            ]
+                        },
+                        "kbqa": {
+                            "answer": "Not Found",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        }
+                    }
+                },
+                {
+                    "text": "ocean is cool , do you like fishing?",
+                    "annotations": {
+                        "spelling_preprocessing": "ocean is cool, do you like fishing",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "emotion_classification": {
+                            "text": {
+                                "anger": 0.24564120173454285,
+                                "fear": 0.24954921007156372,
+                                "joy": 0.23422017693519592,
+                                "love": 0.37936845421791077,
+                                "sadness": 0.22301127016544342,
+                                "surprise": 0.3041641116142273,
+                                "neutral": 0.9992741942405701
+                            }
+                        },
+                        "sentiment_classification": {
+                            "text": [
+                                "positive",
+                                0.7512490749359131
+                            ]
+                        },
+                        "cobot_nounphrases": [
+                            "ocean",
+                            "fishing"
+                        ],
+                        "factoid_classification": {
+                            "factoid": 0.0007756109698675573,
+                            "conversational": 0.9992244243621826
+                        },
+                        "toxic_classification": {
+                            "identity_hate": 0.000503242015838623,
+                            "insult": 0.0004819631576538086,
+                            "obscene": 0.00048089027404785156,
+                            "severe_toxic": 0.00021567940711975098,
+                            "sexual_explicit": 0.0005004429840482771,
+                            "threat": 0.0006769403116777539,
+                            "toxic": 0.0016404258785769343
+                        },
+                        "conceptnet": {
+                            "fishing": {
+                                "Causes": [
+                                    "drown",
+                                    "catch fish",
+                                    "fish to be catch"
+                                ],
+                                "CausesDesire": [
+                                    "fish",
+                                    "fish for bait",
+                                    "swim"
+                                ],
+                                "HasProperty": [
+                                    "fun",
+                                    "dangerous",
+                                    "good for your health"
+                                ],
+                                "SymbolOf": [
+                                    "fish",
+                                    "sailor",
+                                    "zodiac"
+                                ]
+                            },
+                            "ocean": {
+                                "Causes": [
+                                    "drown",
+                                    "tidal wave",
+                                    "death"
+                                ],
+                                "CausesDesire": [
+                                    "surf",
+                                    "swim",
+                                    "fish"
+                                ],
+                                "HasProperty": [
+                                    "salty",
+                                    "full of water",
+                                    "very deep"
+                                ],
+                                "SymbolOf": [
+                                    "life",
+                                    "africa",
+                                    "love"
+                                ]
+                            }
+                        },
+                        "sentseg": {
+                            "punct_sent": "ocean is cool , do you like fishing?",
+                            "segments": [
+                                "ocean is cool , do you like fishing?"
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "dialog_breakdown": [
+                            {
+                                "breakdown": 0.0850723385810852,
+                                "no_breakdown": 0.9149277210235596
+                            }
+                        ],
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 1,
+                                    "start_pos": 0,
+                                    "text": "ocean",
+                                    "type": "LOC"
+                                }
+                            ]
+                        ],
+                        "odqa": {
+                            "answer": "affected when trying to remove the fish from the hook",
+                            "answer_pos": 217,
+                            "answer_sentence": "Fishermen are often affected when trying to remove the fish from the hook; when pulled from the water, the fish flares the spines on its fins and gill covers, making it difficult to handle.",
+                            "confidence": 0.9598036408424377,
+                            "paragraph": "Like many other scorpionfish, this species has venom in its spines. Once called one of the most noxious marine animals in California waters, this fish has been responsible for many human injuries. Fishermen are often affected when trying to remove the fish from the hook; when pulled from the water, the fish flares the spines on its fins and gill covers, making it difficult to handle.",
+                            "qa_system": "odqa"
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "Information_RequestIntent"
+                            ],
+                            "topics": [
+                                "Other"
+                            ]
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Cool! What's on your mind?",
+                                "what can you tell about ocean?",
+                                "Can I ask something about swimming in ocean?",
+                                "ocean is cool , do you like fishing?"
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        },
+                        "kbqa": {
+                            "answer": "Not Found",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Can I ask something about swimming in ocean?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Can I ask something about swimming in ocean?",
+                            "segments": [
+                                "Can I ask something about swimming in ocean?"
+                            ]
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 8,
+                                    "start_pos": 7,
+                                    "text": "ocean",
+                                    "type": "LOC"
+                                }
+                            ]
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "i am good, do you like ocean?",
+                                "Cool! What's on your mind?",
+                                "what can you tell about ocean?",
+                                "Can I ask something about swimming in ocean?"
+                            ]
+                        }
+                    },
+                    "active_skill": "meta_script_skill"
+                }
+            ],
+            "human": {
+                "id": "601a95530ef6e1b4e14b6f46",
+                "user_external_id": "sdcasdcdasc",
+                "persona": {},
+                "profile": {
+                    "name": null,
+                    "gender": null,
+                    "birthdate": null,
+                    "location": null,
+                    "home_coordinates": null,
+                    "work_coordinates": null,
+                    "occupation": null,
+                    "income_per_year": null
+                },
+                "attributes": {
+                    "entities": {
+                        "mind": {
+                            "bot_encounters": [
+                                {
+                                    "full_name": "mind",
+                                    "next_user_emotions": {
+                                        "anger": 0.32732871174812317,
+                                        "fear": 0.2566507160663605,
+                                        "joy": 0.22400087118148804,
+                                        "love": 0.33087098598480225,
+                                        "neutral": 0.9992567896842957,
+                                        "sadness": 0.2501361668109894,
+                                        "surprise": 0.2733495533466339
+                                    },
+                                    "next_user_intents": [],
+                                    "next_user_sentiment": "neutral",
+                                    "next_user_topics": [],
+                                    "pos": [
+                                        "NOUN"
+                                    ],
+                                    "skill_name": "program_y",
+                                    "human_utterance_index": 2
+                                }
+                            ],
+                            "human_encounters": [],
+                            "name": "mind"
+                        },
+                        "ocean": {
+                            "bot_encounters": [],
+                            "human_encounters": [
+                                {
+                                    "emotions": {
+                                        "anger": 0.24991858005523682,
+                                        "fear": 0.24776309728622437,
+                                        "joy": 0.25688308477401733,
+                                        "love": 0.41372254490852356,
+                                        "neutral": 0.9992358684539795,
+                                        "sadness": 0.204048290848732,
+                                        "surprise": 0.27391141653060913
+                                    },
+                                    "full_name": "ocean",
+                                    "intents": [],
+                                    "next_skill_name": "program_y",
+                                    "pos": [
+                                        "NOUN"
+                                    ],
+                                    "previous_skill_name": "pre_start",
+                                    "sentiment": "neutral",
+                                    "topics": [],
+                                    "human_utterance_index": 0
+                                },
+                                {
+                                    "emotions": {
+                                        "anger": 0.32732871174812317,
+                                        "fear": 0.2566507160663605,
+                                        "joy": 0.22400087118148804,
+                                        "love": 0.33087098598480225,
+                                        "neutral": 0.9992567896842957,
+                                        "sadness": 0.2501361668109894,
+                                        "surprise": 0.2733495533466339
+                                    },
+                                    "full_name": "ocean",
+                                    "intents": [],
+                                    "next_skill_name": "",
+                                    "pos": [
+                                        "NOUN"
+                                    ],
+                                    "previous_skill_name": "program_y",
+                                    "sentiment": "neutral",
+                                    "topics": [],
+                                    "human_utterance_index": 2
+                                }
+                            ],
+                            "name": "ocean"
+                        }
+                    }
+                },
+                "user_type": "human"
+            }
+        }
+    ]
+}

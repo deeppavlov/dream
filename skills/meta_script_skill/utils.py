@@ -6,6 +6,8 @@ import re
 import string
 import json
 from os import getenv
+import pathlib
+
 import sentry_sdk
 import spacy
 import requests
@@ -15,38 +17,40 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
 from common.utils import transform_vbg, get_skill_outputs_from_dialog, is_yes, is_no
 from common.universal_templates import if_switch_topic
-from constants import COMET_SERVICE_URL, CONCEPTNET_SERVICE_URL, STARTINGS, OTHER_STARTINGS, WIKI_STARTINGS, \
-    LET_ME_ASK_TEMPLATES, COMMENTS, ASK_OPINION, DIVE_DEEPER_TEMPLATE_COMETS, DIVE_DEEPER_COMMENTS, \
-    DEFAULT_CONFIDENCE, DEFAULT_STARTING_CONFIDENCE, CONTINUE_USER_TOPIC_CONFIDENCE, BANNED_VERBS, BANNED_NOUNS, \
-    VNP_SOURCE, NP_SOURCE, possessive_pronouns
+
+try:
+    import constants as meta_script_skill_constants
+except ModuleNotFoundError:
+    import meta_script_skill.constants as meta_script_skill_constants
 
 
-sentry_sdk.init(getenv('SENTRY_DSN'))
+sentry_sdk.init(getenv("SENTRY_DSN"))
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 nlp = spacy.load("en_core_web_sm")
 
-with open("topics_counter_10.json", "r") as f:
-    # phrases appeared more than 500 times
-    # phrases are like `verb + noun` or `verb + prep + noun` WITHOUT articles
-    TOP_FREQUENT_VERB_NOUN_PHRASES = json.load(f)
+WORK_DIR = pathlib.Path(__file__).parent
+
+# phrases appeared more than 500 times
+# phrases are like `verb + noun` or `verb + prep + noun` WITHOUT articles
+TOP_FREQUENT_VERB_NOUN_PHRASES = json.load((WORK_DIR / "topics_counter_10.json").open())
 
 # for 200 -> 933 bigrams, for 300 -> 556 bigrams, for 500 -> 273 bigrams to ignore
-TOP_FREQUENT_BIGRAMS_TO_IGNORE = [bigram for bigram in TOP_FREQUENT_VERB_NOUN_PHRASES
-                                  if TOP_FREQUENT_VERB_NOUN_PHRASES[bigram] >= 200]
+TOP_FREQUENT_BIGRAMS_TO_IGNORE = [
+    bigram for bigram in TOP_FREQUENT_VERB_NOUN_PHRASES if TOP_FREQUENT_VERB_NOUN_PHRASES[bigram] >= 200
+]
 # they are already sorted in decreasing order
-TOP_FREQUENT_BIGRAMS_TO_FIND_VERB = {bigram: TOP_FREQUENT_VERB_NOUN_PHRASES[bigram]
-                                     for bigram in TOP_FREQUENT_VERB_NOUN_PHRASES
-                                     if TOP_FREQUENT_VERB_NOUN_PHRASES[bigram] < 200}
+TOP_FREQUENT_BIGRAMS_TO_FIND_VERB = {
+    bigram: TOP_FREQUENT_VERB_NOUN_PHRASES[bigram]
+    for bigram in TOP_FREQUENT_VERB_NOUN_PHRASES
+    if TOP_FREQUENT_VERB_NOUN_PHRASES[bigram] < 200
+}
+TOP_FREQUENT_WORDS = (WORK_DIR / "google-10000-english-no-swears.txt").open().read().splitlines()[:1000]
 
-with open("google-10000-english-no-swears.txt", "r") as f:
-    TOP_FREQUENT_WORDS = f.read().splitlines()[:1000]
-
-WIKI_DESCRIPTIONS = json.load(open("wiki_topics_descriptions_one_sent.json", "r"))
+WIKI_DESCRIPTIONS = json.load((WORK_DIR / "wiki_topics_descriptions_one_sent.json").open())
 list_of_hobbies = list(WIKI_DESCRIPTIONS.keys())
 
 
@@ -55,7 +59,7 @@ def get_verb_topic(nounphrased_topic):
     if len(doc) == 1:
         for token in doc:
             if token.pos == VERB:
-                return (token.lemma_)
+                return token.lemma_
     return f"do {nounphrased_topic}"
 
 
@@ -63,13 +67,13 @@ for hobby in list_of_hobbies:
     verb_hobby = get_verb_topic(hobby)
     WIKI_DESCRIPTIONS[verb_hobby] = WIKI_DESCRIPTIONS.pop(hobby)
 
-punct_reg = re.compile(f'[{string.punctuation}]')
-articles_reg = re.compile(r'(\ba\b|\bthe\b|\bto\b)\s')
-person_reg = re.compile(r'(\bperson x\b|\bpersonx\b|\bperson\b)')
+punct_reg = re.compile(f"[{string.punctuation}]")
+articles_reg = re.compile(r"(\ba\b|\bthe\b|\bto\b)\s")
+person_reg = re.compile(r"(\bperson x\b|\bpersonx\b|\bperson\b)")
 
 
 def is_custom_topic(topic):
-    return not (topic in STARTINGS or topic in WIKI_DESCRIPTIONS)
+    return not (topic in meta_script_skill_constants.STARTINGS or topic in WIKI_DESCRIPTIONS)
 
 
 def is_wiki_topic(topic):
@@ -77,7 +81,7 @@ def is_wiki_topic(topic):
 
 
 def is_predefined_topic(topic):
-    return topic in STARTINGS
+    return topic in meta_script_skill_constants.STARTINGS
 
 
 def remove_duplicates(values):
@@ -88,9 +92,9 @@ def remove_duplicates(values):
     d = {}
     for v in values:
         v = v.strip()
-        v_clean = re.sub(punct_reg, '', v.lower())
-        v_clean = re.sub(articles_reg, '', v_clean)
-        v_clean = re.sub(person_reg, '', v_clean)
+        v_clean = re.sub(punct_reg, "", v.lower())
+        v_clean = re.sub(articles_reg, "", v_clean)
+        v_clean = re.sub(person_reg, "", v_clean)
         v_clean = v_clean.strip()
         if v_clean not in d:
             d[v_clean] = [v]
@@ -98,7 +102,7 @@ def remove_duplicates(values):
             if v_clean.split()[0] not in ["feel", "need", "want"]:
                 d[v_clean] += [v]
 
-    return [re.sub(person_reg, '', v[0]) for k, v in d.items()]
+    return [re.sub(person_reg, "", v[0]) for k, v in d.items()]
 
 
 def remove_all_phrases_containing_word(topic, phrases):
@@ -108,16 +112,21 @@ def remove_all_phrases_containing_word(topic, phrases):
     for phrase in phrases:
         not_included = True
         for token in doc:
-            if len(token.lemma_) > 2 and token.lemma_ not in set(TOP_FREQUENT_WORDS[:100]) and (
-                    re.search(r"\b%s" % token.lemma_, phrase) or (
-                    token.text[-1] == "y" and re.search(r"\b%s" % token.text[:-1], phrase))):
+            if (
+                len(token.lemma_) > 2
+                and token.lemma_ not in set(TOP_FREQUENT_WORDS[:100])
+                and (
+                    re.search(r"\b%s" % token.lemma_, phrase)
+                    or (token.text[-1] == "y" and re.search(r"\b%s" % token.text[:-1], phrase))
+                )
+            ):
                 not_included = False
         if not_included:
             cleaned_phrases.append(phrase)
     return cleaned_phrases
 
 
-def custom_request(url, data, timeout, method='POST'):
+def custom_request(url, data, timeout, method="POST"):
     return requests.request(url=url, json=data, method=method, timeout=timeout)
 
 
@@ -138,9 +147,26 @@ def correct_verb_form(attr, values):
              "Desires", "HasFirstSubevent", "HasLastSubevent", "HasPainCharacter", "HasPainIntensity",
              "HasPrerequisite", "HasSubevent", "MotivatedByGoal", "NotCapableOf", "NotDesires", "ReceivesAction"]
     """
-    if attr in ["xIntent", "xNeed", "xWant", "oWant", "CapableOf", "CausesDesire", "DesireOf",
-                "Desires", "HasFirstSubevent", "HasLastSubevent", "HasPainCharacter", "HasPainIntensity",
-                "HasPrerequisite", "HasSubevent", "MotivatedByGoal", "NotCapableOf", "NotDesires", "ReceivesAction"]:
+    if attr in [
+        "xIntent",
+        "xNeed",
+        "xWant",
+        "oWant",
+        "CapableOf",
+        "CausesDesire",
+        "DesireOf",
+        "Desires",
+        "HasFirstSubevent",
+        "HasLastSubevent",
+        "HasPainCharacter",
+        "HasPainIntensity",
+        "HasPrerequisite",
+        "HasSubevent",
+        "MotivatedByGoal",
+        "NotCapableOf",
+        "NotDesires",
+        "ReceivesAction",
+    ]:
         for i in range(len(values)):
             if values[i][:4] == "you ":
                 values[i] = values[i][4:]
@@ -182,7 +208,7 @@ def correct_verb_form(attr, values):
                 if len(doc) == 1:
                     values[i] = doc[0].lemma_
                 else:
-                    values[i] = doc[0].lemma_ + values[i][values[i].find(" "):]
+                    values[i] = doc[0].lemma_ + values[i][values[i].find(" ") :]
             if values[i][:3] != "to " and doc[0].pos == VERB:
                 values[i] = "to " + values[i]
     return values
@@ -212,8 +238,9 @@ def get_comet_atomic(topic, relation, TOPICS={}):
     else:
         # send request to COMeT service on `topic & relation`
         try:
-            comet_result = custom_request(COMET_SERVICE_URL, {"input": f"{topic}",
-                                                              "category": relation}, timeout=1)
+            comet_result = custom_request(
+                meta_script_skill_constants.COMET_SERVICE_URL, {"input": f"{topic}", "category": relation}, timeout=1
+            )
         except (requests.ConnectTimeout, requests.ReadTimeout) as e:
             logger.error("COMeT Atomic result Timeout")
             sentry_sdk.capture_exception(e)
@@ -222,7 +249,8 @@ def get_comet_atomic(topic, relation, TOPICS={}):
 
         if comet_result.status_code != 200:
             msg = "COMeT Atomic: result status code is not 200: {}. result text: {}; result status: {}".format(
-                comet_result, comet_result.text, comet_result.status_code)
+                comet_result, comet_result.text, comet_result.status_code
+            )
             logger.warning(msg)
             relation_phrases = []
         else:
@@ -234,8 +262,9 @@ def get_comet_atomic(topic, relation, TOPICS={}):
     relation_phrases = remove_duplicates([topic] + relation_phrases)[1:]  # the first element is topic
     logger.info(f"After removing duplicates relation phrases from COMeT Atomic: {relation_phrases}")
     relation_phrases = remove_all_phrases_containing_word(topic, relation_phrases)
-    logger.info(f"After removing all phrases containing topic words "
-                f"relation phrases from COMeT Atomic: {relation_phrases}")
+    logger.info(
+        f"After removing all phrases containing topic words " f"relation phrases from COMeT Atomic: {relation_phrases}"
+    )
 
     relation_phrases = [ph for ph in relation_phrases if len(ph) > 0]
     relation_phrases = correct_verb_form(relation, relation_phrases)
@@ -265,8 +294,9 @@ def get_comet_conceptnet(topic, relation, return_all=False, return_not_filtered=
 
     # send request to COMeT ConceptNet service on `topic & relation`
     try:
-        comet_result = custom_request(CONCEPTNET_SERVICE_URL, {"input": f"{topic}.",
-                                                               "category": relation}, timeout=1)
+        comet_result = custom_request(
+            meta_script_skill_constants.CONCEPTNET_SERVICE_URL, {"input": f"{topic}.", "category": relation}, timeout=1
+        )
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         logger.error("COMeT ConceptNet result Timeout")
         sentry_sdk.capture_exception(e)
@@ -275,7 +305,8 @@ def get_comet_conceptnet(topic, relation, return_all=False, return_not_filtered=
 
     if comet_result.status_code != 200:
         msg = "COMeT ConceptNet: result status code is not 200: {}. result text: {}; result status: {}".format(
-            comet_result, comet_result.text, comet_result.status_code)
+            comet_result, comet_result.text, comet_result.status_code
+        )
         logger.warning(msg)
         relation_phrases = []
     else:
@@ -328,8 +359,13 @@ def get_gerund_topic(topic):
     return topic.replace(to_replace, gerund)
 
 
-def get_used_attributes_by_name(utterances, attribute_name="meta_script_topic", value_by_default=None, activated=True,
-                                skill_name="meta_script_skill"):
+def get_used_attributes_by_name(
+    utterances,
+    attribute_name="meta_script_topic",
+    value_by_default=None,
+    activated=True,
+    skill_name="meta_script_skill",
+):
     """
     Find among given utterances values of particular attribute of `meta_script_skill` outputs.
     `meta_script_skill` should be active skill if `activated`
@@ -344,8 +380,7 @@ def get_used_attributes_by_name(utterances, attribute_name="meta_script_topic", 
         list of attribute values
     """
     used = []
-    meta_script_outputs = get_skill_outputs_from_dialog(
-        utterances, skill_name=skill_name, activated=activated)
+    meta_script_outputs = get_skill_outputs_from_dialog(utterances, skill_name=skill_name, activated=activated)
 
     for output in meta_script_outputs:
         value = output.get(attribute_name, value_by_default)
@@ -404,24 +439,24 @@ def get_starting_phrase(dialog, topic, attr):
         tuple of text response, confidence and response attributes
     """
     used_templates = get_used_attributes_by_name(
-        dialog["utterances"], attribute_name="meta_script_starting_template",
-        value_by_default=None, activated=True)[-3:]
+        dialog["utterances"], attribute_name="meta_script_starting_template", value_by_default=None, activated=True
+    )[-3:]
 
     if is_custom_topic(topic):
-        template = get_not_used_template(used_templates, OTHER_STARTINGS)
+        template = get_not_used_template(used_templates, meta_script_skill_constants.OTHER_STARTINGS)
         attr["meta_script_starting_template"] = template
-        response = template.replace('DOINGTHAT', get_gerund_topic(topic)).replace('DOTHAT', topic)
+        response = template.replace("DOINGTHAT", get_gerund_topic(topic)).replace("DOTHAT", topic)
     elif is_wiki_topic(topic):
-        template = get_not_used_template(used_templates, WIKI_STARTINGS)
+        template = get_not_used_template(used_templates, meta_script_skill_constants.WIKI_STARTINGS)
         attr["meta_script_starting_template"] = template
-        response = template.replace('DESCRIPTION', WIKI_DESCRIPTIONS[topic])
+        response = template.replace("DESCRIPTION", WIKI_DESCRIPTIONS[topic])
     else:
         # predefined topic
-        template = get_not_used_template(used_templates, LET_ME_ASK_TEMPLATES)
+        template = get_not_used_template(used_templates, meta_script_skill_constants.LET_ME_ASK_TEMPLATES)
         attr["meta_script_starting_template"] = template
-        response = f"{template} {STARTINGS[topic]}"
+        response = f"{template} {meta_script_skill_constants.STARTINGS[topic]}"
 
-    confidence = DEFAULT_STARTING_CONFIDENCE
+    confidence = meta_script_skill_constants.DEFAULT_STARTING_CONFIDENCE
     attr["can_continue"] = CAN_CONTINUE
     return response, confidence, attr
 
@@ -439,15 +474,16 @@ def get_comment_phrase(dialog, attr):
         tuple of text response, confidence and response attributes
     """
     used_templates = get_used_attributes_by_name(
-        dialog["utterances"], attribute_name="meta_script_comment_template",
-        value_by_default=None, activated=True)[-2:]
+        dialog["utterances"], attribute_name="meta_script_comment_template", value_by_default=None, activated=True
+    )[-2:]
 
-    sentiment = dialog["utterances"][-1]["annotations"].get("sentiment_classification",
-                                                            {'text': ['neutral', 1.]})["text"][0]
-    template = get_not_used_template(used_templates, COMMENTS[sentiment])
+    sentiment = dialog["utterances"][-1]["annotations"].get("sentiment_classification", {"text": ["neutral", 1.0]})[
+        "text"
+    ][0]
+    template = get_not_used_template(used_templates, meta_script_skill_constants.COMMENTS[sentiment])
     attr["meta_script_comment_template"] = template
     response = template
-    confidence = DEFAULT_CONFIDENCE
+    confidence = meta_script_skill_constants.DEFAULT_CONFIDENCE
     attr["can_continue"] = CAN_NOT_CONTINUE
     return response, confidence, attr
 
@@ -465,14 +501,14 @@ def get_opinion_phrase(dialog, topic, attr):
         tuple of text response, confidence and response attributes
     """
     used_templates = get_used_attributes_by_name(
-        dialog["utterances"], attribute_name="meta_script_opinion_template",
-        value_by_default=None, activated=True)[-2:]
+        dialog["utterances"], attribute_name="meta_script_opinion_template", value_by_default=None, activated=True
+    )[-2:]
 
-    template = get_not_used_template(used_templates, ASK_OPINION)
+    template = get_not_used_template(used_templates, meta_script_skill_constants.ASK_OPINION)
     attr["meta_script_opinion_template"] = template
 
     response = template.replace("DOINGTHAT", get_gerund_topic(topic)).replace("DOTHAT", topic)
-    confidence = DEFAULT_CONFIDENCE
+    confidence = meta_script_skill_constants.DEFAULT_CONFIDENCE
     attr["can_continue"] = CAN_CONTINUE
     return response, confidence, attr
 
@@ -493,60 +529,73 @@ def get_statement_phrase(dialog, topic, attr, TOPICS):
 
     # choose and fill template with relation from COMeT
     used_templates = get_used_attributes_by_name(
-        dialog["utterances"], attribute_name="meta_script_relation_template",
-        value_by_default=None, activated=True)[-2:]
-    meta_script_template = get_not_used_template(used_templates, DIVE_DEEPER_TEMPLATE_COMETS)
+        dialog["utterances"], attribute_name="meta_script_relation_template", value_by_default=None, activated=True
+    )[-2:]
+    meta_script_template = get_not_used_template(
+        used_templates, meta_script_skill_constants.DIVE_DEEPER_TEMPLATE_COMETS
+    )
     attr["meta_script_relation_template"] = meta_script_template
 
-    relation = DIVE_DEEPER_TEMPLATE_COMETS[meta_script_template]["attribute"]
+    relation = meta_script_skill_constants.DIVE_DEEPER_TEMPLATE_COMETS[meta_script_template]["attribute"]
     prediction = get_comet_atomic(f"person {topic}", relation, TOPICS)
 
     if prediction == "":
         return "", 0.0, {"can_continue": CAN_NOT_CONTINUE}
 
-    if random() < 0.5 and len(dialog["utterances"]) >= 2 and dialog["bot_utterances"][-1].get(
-            "active_skill", "") == "meta_script_skill":
+    if (
+        random() < 0.5
+        and len(dialog["utterances"]) >= 2
+        and dialog["bot_utterances"][-1].get("active_skill", "") == "meta_script_skill"
+    ):
         dothat = "do that"
         doingthat = "doing that"
     else:
         dothat = re.sub(r"^be ", "become ", topic)
         doingthat = get_gerund_topic(topic)
-    statement = meta_script_template.replace(
-        "DOINGTHAT", doingthat).replace(
-        "DOTHAT", dothat).replace(
-        "RELATION", prediction)
+    statement = (
+        meta_script_template.replace("DOINGTHAT", doingthat).replace("DOTHAT", dothat).replace("RELATION", prediction)
+    )
 
     # choose template for short comment
     used_templates = get_used_attributes_by_name(
-        dialog["utterances"], attribute_name="meta_script_deeper_comment_template",
-        value_by_default=None, activated=True)[-2:]
+        dialog["utterances"],
+        attribute_name="meta_script_deeper_comment_template",
+        value_by_default=None,
+        activated=True,
+    )[-2:]
     if is_yes(last_uttr):
         comment = get_not_used_template(
-            used_templates, DIVE_DEEPER_COMMENTS["yes"] + DIVE_DEEPER_COMMENTS["other"])
+            used_templates,
+            meta_script_skill_constants.DIVE_DEEPER_COMMENTS["yes"]
+            + meta_script_skill_constants.DIVE_DEEPER_COMMENTS["other"],
+        )
         attr["meta_script_deeper_comment_template"] = comment
     elif is_no(last_uttr):
         comment = get_not_used_template(
-            used_templates, DIVE_DEEPER_COMMENTS["no"] + DIVE_DEEPER_COMMENTS["other"])
+            used_templates,
+            meta_script_skill_constants.DIVE_DEEPER_COMMENTS["no"]
+            + meta_script_skill_constants.DIVE_DEEPER_COMMENTS["other"],
+        )
         attr["meta_script_deeper_comment_template"] = comment
     else:
-        comment = get_not_used_template(
-            used_templates, DIVE_DEEPER_COMMENTS["other"])
+        comment = get_not_used_template(used_templates, meta_script_skill_constants.DIVE_DEEPER_COMMENTS["other"])
         attr["meta_script_deeper_comment_template"] = comment
 
     # choose and fill template of question upon relation from COMeT
     used_templates = get_used_attributes_by_name(
-        dialog["utterances"], attribute_name="meta_script_question_template",
-        value_by_default=None, activated=True)[-3:]
+        dialog["utterances"], attribute_name="meta_script_question_template", value_by_default=None, activated=True
+    )[-3:]
     meta_script_template_question = get_not_used_template(
-        used_templates, DIVE_DEEPER_TEMPLATE_COMETS[meta_script_template]["templates"])
+        used_templates, meta_script_skill_constants.DIVE_DEEPER_TEMPLATE_COMETS[meta_script_template]["templates"]
+    )
     attr["meta_script_question_template"] = meta_script_template_question
 
     if is_custom_topic(topic):
         response = f"{meta_script_template_question.replace('STATEMENT', statement)}".strip()
-        confidence = CONTINUE_USER_TOPIC_CONFIDENCE
+        confidence = meta_script_skill_constants.CONTINUE_USER_TOPIC_CONFIDENCE
     else:
         response = f"{comment} {meta_script_template_question.replace('STATEMENT', statement)}".strip()
-        confidence = DEFAULT_CONFIDENCE
+        confidence = meta_script_skill_constants.DEFAULT_CONFIDENCE
     attr["can_continue"] = CAN_CONTINUE
     return response, confidence, attr
 
@@ -554,7 +603,7 @@ def get_statement_phrase(dialog, topic, attr, TOPICS):
 def get_most_frequent_bigrams_with_word(word):
     target_bigrams = []
     for bigram in TOP_FREQUENT_BIGRAMS_TO_FIND_VERB:
-        if re.search(r'\b%s\b' % word, bigram):
+        if re.search(r"\b%s\b" % word, bigram):
             target_bigrams += [bigram]
     return target_bigrams[:10]
 
@@ -575,8 +624,11 @@ def clean_up_topic_list(verb_nounphrases):
 
     for vnp in verb_nounphrases:
         tokens = vnp.split()
-        vnp_is_frequent = (vnp in TOP_FREQUENT_BIGRAMS_TO_IGNORE or tokens[0] in BANNED_VERBS or tokens[-1] in
-                           BANNED_NOUNS.union(set(TOP_FREQUENT_WORDS[:100])))
+        vnp_is_frequent = (
+            vnp in TOP_FREQUENT_BIGRAMS_TO_IGNORE
+            or tokens[0] in meta_script_skill_constants.BANNED_VERBS
+            or tokens[-1] in meta_script_skill_constants.BANNED_NOUNS.union(set(TOP_FREQUENT_WORDS[:100]))
+        )
         length_is_enough = len(tokens[0]) >= 2 and len(tokens[-1]) > 2
         one_of_verb_noun_not_frequent = tokens[0] not in TOP_FREQUENT_WORDS or tokens[-1] not in TOP_FREQUENT_WORDS
         verb_exceptions = ["play", "practice", "be"]
@@ -602,7 +654,11 @@ def extract_verb_noun_phrases(utterance, only_i_do_that=True, nounphrases=[]):
     # verbs_without_nouns = []
     doc = nlp(utterance, disable=["ner"])
     for possible_verb in doc:
-        if possible_verb.pos == VERB and possible_verb.lemma_ not in BANNED_VERBS and len(possible_verb.lemma_) > 1:
+        if (
+            possible_verb.pos == VERB
+            and possible_verb.lemma_ not in meta_script_skill_constants.BANNED_VERBS
+            and len(possible_verb.lemma_) > 1
+        ):
             i_do_that = False
             for possible_subject in possible_verb.children:
                 # if this verb is directed by `I`
@@ -628,29 +684,34 @@ def extract_verb_noun_phrases(utterance, only_i_do_that=True, nounphrases=[]):
                 for possible_subject in possible_verb.children:
                     if possible_subject.dep != nsubj:
                         if possible_subject.pos == NOUN and possible_subject.dep == dobj:
-                            if (possible_verb.lemma_ not in TOP_FREQUENT_WORDS or possible_subject.lemma_ not
-                                in TOP_FREQUENT_WORDS) and \
-                                    possible_subject.lemma_ not in BANNED_NOUNS:
+                            if (
+                                possible_verb.lemma_ not in TOP_FREQUENT_WORDS
+                                or possible_subject.lemma_ not in TOP_FREQUENT_WORDS
+                            ) and possible_subject.lemma_ not in meta_script_skill_constants.BANNED_NOUNS:
                                 verb_noun_phrases.append(f"{possible_verb.lemma_} {possible_subject}")
                                 break
                         elif possible_subject.pos == ADP:
                             for poss_subsubj in possible_subject.children:
                                 if poss_subsubj.pos == NOUN and poss_subsubj.dep == dobj:
-                                    if (possible_verb.lemma_ not in TOP_FREQUENT_WORDS or poss_subsubj.lemma_ not
-                                        in TOP_FREQUENT_WORDS) and \
-                                            poss_subsubj.lemma_ not in BANNED_NOUNS:
+                                    if (
+                                        possible_verb.lemma_ not in TOP_FREQUENT_WORDS
+                                        or poss_subsubj.lemma_ not in TOP_FREQUENT_WORDS
+                                    ) and poss_subsubj.lemma_ not in meta_script_skill_constants.BANNED_NOUNS:
                                         verb_noun_phrases.append(
-                                            f"{possible_verb.lemma_} {possible_subject} {poss_subsubj}")
+                                            f"{possible_verb.lemma_} {possible_subject} {poss_subsubj}"
+                                        )
                                         break
 
     logger.info(f"Extracted the following verb-noun-based bigrams: {verb_noun_phrases}")
     good_verb_noun_phrases = clean_up_topic_list(verb_noun_phrases)
-    sources = [VNP_SOURCE] * len(good_verb_noun_phrases)
+    sources = [meta_script_skill_constants.VNP_SOURCE] * len(good_verb_noun_phrases)
     logger.info(f"After cleaning we have the following verb-noun-based bigrams: {good_verb_noun_phrases}")
 
     if len(nounphrases) > 0:
         logger.info("No good verb-nounphrase topic. Try to find nounphrase, and appropriate verb from top-bigrams.")
-        nounphrases = [re.sub(possessive_pronouns, "", noun.lower()).strip() for noun in nounphrases]
+        nounphrases = [
+            re.sub(meta_script_skill_constants.possessive_pronouns, "", noun.lower()).strip() for noun in nounphrases
+        ]
         nounphrases = [noun for noun in nounphrases if len(noun) > 0]
         noun_based_phrases = []
         for noun in nounphrases:
@@ -659,10 +720,10 @@ def extract_verb_noun_phrases(utterance, only_i_do_that=True, nounphrases=[]):
         logger.info(f"Extracted the following noun-based bigrams: {noun_based_phrases}")
         noun_based_phrases = clean_up_topic_list(noun_based_phrases)
         logger.info(f"After cleaning we have the following noun-based bigrams: {noun_based_phrases}")
-        sources += [NP_SOURCE] * len(noun_based_phrases)
+        sources += [meta_script_skill_constants.NP_SOURCE] * len(noun_based_phrases)
         good_verb_noun_phrases += noun_based_phrases
 
-    logger.info(f'extracted verb noun phrases {good_verb_noun_phrases} from {utterance}')
+    logger.info(f"extracted verb noun phrases {good_verb_noun_phrases} from {utterance}")
     return good_verb_noun_phrases, sources
 
 
@@ -685,8 +746,9 @@ def check_topic_lemmas_in_sentence(sentence, topic):
 
 
 def switch_topic_uttr(uttr):
-    topic_switch_detected = uttr.get("annotations", {}).get(
-        "intent_catcher", {}).get("topic_switching", {}).get("detected", 0) == 1
+    topic_switch_detected = (
+        uttr.get("annotations", {}).get("intent_catcher", {}).get("topic_switching", {}).get("detected", 0) == 1
+    )
     if if_switch_topic(uttr["text"].lower()) or topic_switch_detected:
         return True
     return False
@@ -697,9 +759,9 @@ nltk_sentiment_classifier = SentimentIntensityAnalyzer()
 
 def get_nltk_sentiment(text):
     result = nltk_sentiment_classifier.polarity_scores(text)
-    if result.get("pos", 0.) >= 0.5:
+    if result.get("pos", 0.0) >= 0.5:
         return "positive"
-    elif result.get("neg", 0.) >= 0.5:
+    elif result.get("neg", 0.0) >= 0.5:
         return "negative"
     else:
         return "neutral"
