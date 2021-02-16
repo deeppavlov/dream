@@ -20,6 +20,11 @@ services:
     deploy:
       mode: replicated
       replicas: 8
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
 
   cobotqa:
     build:
@@ -27,78 +32,199 @@ services:
       dockerfile: ./skills/CoBotQA/Dockerfile
     environment:
       - ASYNC_SIZE=20
-    command: gunicorn --workers=4 server:app -b 0.0.0.0:8081 -t 15
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8081 -t 15
+    deploy:
+      mode: replicated
+      replicas: 8
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
+
 
   cobot-topics:
     build:
       context: ./annotators/CoBotTopicClassification/
-    command: gunicorn --workers=4 server:app -b 0.0.0.0:8000 -t 15
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8000 -t 15
+    deploy:
+      mode: replicated
+      replicas: 8
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
 
   cobot-dialogact:
     build:
       context: ./annotators/CoBotDialogActClassification/
-    command: gunicorn --workers=4 server:app -b 0.0.0.0:8002 -t 15
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8002 -t 15
+    deploy:
+      mode: replicated
+      replicas: 8
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
 
   cobot-convers-evaluator-annotator:
     build:
       context: ./annotators/CoBotConversationEvaluator/
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8004 -t 15
+    deploy:
+      mode: replicated
+      replicas: 8
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
 
   cobot-nounphrases:
     build:
       context: ./annotators/cobot_nounphrases/
     command: bash -c "gunicorn --workers=1 server:app -b 0.0.0.0:8006 -t 60"
+    deploy:
+      mode: replicated
+      replicas: 8
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
 
   program-y:
     build:
       context: .
       dockerfile: ./skills/program-y/Dockerfile
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 768M
+        reservations:
+          memory: 768M
 
   personality-catcher:
     build:
       context: ./skills/personality_catcher/
     command: uvicorn server:app --host 0.0.0.0 --port 8010
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
 
   sentseg:
     build:
       context: ./annotators/SentSeg/
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8011 -t 100
+    deploy:
+      mode: replicated
+      replicas: 8
+      resources:
+        limits:
+          memory: 1.5G
+        reservations:
+          memory: 1.5G
 
   convers-evaluation-selector:
     build:
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
-    command: gunicorn --workers=4 server:app -b 0.0.0.0:8009 -t 15
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8009 -t 15
+    deploy:
+      mode: replicated
+      replicas: 8
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
 
   sentrewrite:
     build:
       context: ./annotators/SentRewrite/
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8017 -t 60
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 512M
 
   intent-responder:
     build:
       context: ./skills/IntentResponder/
     command: gunicorn --workers=1 --name=responder --bind 0.0.0.0:8012 --timeout=100 server:app
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
 
   intent-catcher:
     build:
       context: ./annotators/IntentCatcher/
     command: gunicorn --workers=1 --name=catcher --bind 0.0.0.0:8014 --timeout=100 server:app
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 3G
+        reservations:
+          memory: 3G
 
   blacklisted-words:
     build:
       context: ./annotators/BlacklistedWordsDetector/
-    command: gunicorn --workers=4 server:app -b 0.0.0.0:8018
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8018
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
 
   program-y-dangerous:
     build:
       context: ./skills/program-y-dangerous/
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
 
   movie-skill:
     build:
       context: .
       dockerfile: ./skills/movie_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8023 --timeout=300 --preload
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 768M
+        reservations:
+          memory: 768M
 
   ner:
     build:
@@ -107,16 +233,40 @@ services:
       DEVICE: cuda
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8021 -t 100
     tty: true
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 1512M
+        reservations:
+          memory: 1512M
 
   alice:
     build:
       context: ./skills/ALICEChatAPI/
-    command: gunicorn --workers=4 server:app -b 0.0.0.0:8000
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8000
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 512M
 
   eliza:
     build:
       context: ./skills/eliza/
-    command: gunicorn --workers=2 server:app -b 0.0.0.0:8047
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8047
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
 
   book-tfidf-retrieval:
     build:
@@ -127,6 +277,14 @@ services:
         TOPIC_NAME: book
         CONFIDENCE_THRESHOLD: 0.51
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8039
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 170M
+        reservations:
+          memory: 170M
 
   entertainment-tfidf-retrieval:
     build:
@@ -137,6 +295,14 @@ services:
         TOPIC_NAME: entertainment
         CONFIDENCE_THRESHOLD: 0.59
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8040
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 170M
+        reservations:
+          memory: 170M
 
   fashion-tfidf-retrieval:
     build:
@@ -147,6 +313,14 @@ services:
         TOPIC_NAME: fashion
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8041
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 170M
+        reservations:
+          memory: 170M
 
   movie-tfidf-retrieval:
     build:
@@ -157,6 +331,14 @@ services:
         TOPIC_NAME: movie
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8042
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 170M
+        reservations:
+          memory: 170M
 
   music-tfidf-retrieval:
     build:
@@ -167,6 +349,14 @@ services:
         TOPIC_NAME: music
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8034
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 170M
+        reservations:
+          memory: 170M
 
   politics-tfidf-retrieval:
     build:
@@ -177,6 +367,14 @@ services:
         TOPIC_NAME: politics
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8043
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 170M
+        reservations:
+          memory: 170M
 
   science-technology-tfidf-retrieval:
     build:
@@ -187,6 +385,14 @@ services:
         TOPIC_NAME: science_technology
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8044
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 170M
+        reservations:
+          memory: 170M
 
   sport-tfidf-retrieval:
     build:
@@ -215,71 +421,175 @@ services:
         TOPIC_NAME: animals
         CONFIDENCE_THRESHOLD: 0.6
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8050
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 170M
+        reservations:
+          memory: 170M
 
   convert-reddit:
     build:
       context: ./skills/convert_reddit/
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8029 -t 60
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 1536M
+        reservations:
+          memory: 1536M
 
   personal-info-skill:
     build:
       context: .
       dockerfile: ./skills/personal_info_skill/Dockerfile
-    command: gunicorn --workers=4 server:app -b 0.0.0.0:8030
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8030
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
 
   asr:
     build:
       context: .
       dockerfile: ./annotators/asr/Dockerfile
-    command: gunicorn --workers=4 server:app -b 0.0.0.0:8031
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8031
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
 
   misheard-asr:
     build:
       context: ./skills/misheard_asr/
-    command: gunicorn --workers=4 server:app -b 0.0.0.0:8033
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8033
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 196M
+        reservations:
+          memory: 196M
 
   book-skill:
     build:
       context: .
       dockerfile: ./skills/book_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8032
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
 
   christmas-new-year-skill:
     build:
       context: ./skills/christmas_new_year_skill/
-    command: gunicorn --workers=4 server:app -b 0.0.0.0:8036
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8036
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
 
   superbowl-skill:
     build:
       context: ./skills/superbowl_skill/
-    command: gunicorn --workers=2 server:app -b 0.0.0.0:8051
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8051
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
 
   oscar-skill:
     build:
       context: ./skills/oscar_skill/
-    command: gunicorn --workers=2 server:app -b 0.0.0.0:8055
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8055
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
 
   valentines-day-skill:
     build:
       context: ./skills/valentines_day_skill/
-    command: gunicorn --workers=2 server:app -b 0.0.0.0:8058
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8058
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
 
   weather-skill:
     build:
             context: .
             dockerfile: ./skills/weather_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8037
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 1152M
+        reservations:
+          memory: 1152M
 
   emotion-skill:
     build:
       context: .
       dockerfile: ./skills/emotion_skill/Dockerfile
-    command: gunicorn --workers=2 server:app -b 0.0.0.0:8049
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8049
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
 
   dummy-skill-dialog:
     build:
       context: ./skills/dummy_skill_dialog/
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8052
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 768M
+        reservations:
+          memory: 768M
 
   comet-atomic:
     build:
@@ -294,6 +604,14 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - DEVICE=gpu_0
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
 
   comet-conceptnet:
     build:
@@ -308,30 +626,70 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - DEVICE=gpu_0
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        reservations:
+          memory: 2G
+        limits:
+          memory: 2G
 
   meta-script-skill:
     build:
       context: .
       dockerfile: skills/meta_script_skill/Dockerfile
-    command: gunicorn --workers=4 server:app -b 0.0.0.0:8054
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8054
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
 
   short-story-skill:
     build:
       context: .
       dockerfile: ./skills/short_story_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8057
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
 
   coronavirus-skill:
     build:
       context: .
       dockerfile: ./skills/coronavirus_skill/Dockerfile
-    command: gunicorn --workers=4 server:app -b 0.0.0.0:8061
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8061
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
 
   small-talk-skill:
     build:
       context: .
       dockerfile: ./skills/small_talk_skill/Dockerfile
-    command: gunicorn --workers=2 server:app -b 0.0.0.0:8062
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8062
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
 
   game-cooperative-skill:
     build:
@@ -339,12 +697,28 @@ services:
         SERVICE_PORT: 8068
       context: .
       dockerfile: ./skills/game_cooperative_skill/Dockerfile
-    command: bash server_run.sh "gunicorn --workers=2 server:app -b 0.0.0.0:8068 --reload"
+    command: bash server_run.sh "gunicorn --workers=1 server:app -b 0.0.0.0:8068 --reload"
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
 
   program-y-wide:
     build:
       context: ./skills/program-y-wide/
     command: sh -c "./sanic.sh"
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
 
   news-api-skill:
     build:
@@ -353,18 +727,42 @@ services:
     environment:
       - ASYNC_SIZE=3
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8066 -t 15
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
 
   greeting-skill:
     build:
       context: .
       dockerfile: ./skills/greeting_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8070 --timeout=60 --preload
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
 
   factoid-qa:
     build:
       context: .
       dockerfile: ./skills/factoid_qa/Dockerfile
-    command: gunicorn --workers=2 server:app -b 0.0.0.0:8071
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8071
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
 
   entity-linking:
     build:
@@ -377,6 +775,14 @@ services:
       dockerfile: dp/dockerfile_skill_gpu
     environment:
       - CUDA_VISIBLE_DEVICES=''
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 20G
+        reservations:
+          memory: 20G
 
   wiki-parser:
     build:
@@ -389,6 +795,14 @@ services:
       dockerfile: dp/dockerfile_skill_gpu
     environment:
       - CUDA_VISIBLE_DEVICES=''
+    deploy:
+      mode: replicated
+      replicas: 8
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
 
   odqa:
     build:
@@ -401,6 +815,14 @@ services:
       dockerfile: annotators/odqa/Dockerfile_odqa_lite
     environment:
       - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 15G
+        reservations:
+          memory: 15G
 
   kbqa:
     build:
@@ -413,6 +835,14 @@ services:
       dockerfile: annotators/kbqa/Dockerfile
     environment:
       - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 20G
+        reservations:
+          memory: 20G
 
   factoid-classification:
     build:
@@ -424,17 +854,41 @@ services:
       dockerfile: dp/dockerfile_skill_gpu
     environment:
       - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
 
   spelling-preprocessing:
     build:
       context: ./annotators/spelling_preprocessing/
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8074 --timeout=100
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 512M
 
   grounding-skill:
     build:
       context: .
       dockerfile: ./skills/grounding_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8080 --timeout=60 --preload
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 512M
 
   question-generator:
     build:
@@ -445,12 +899,29 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - DECODING=greedy
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
+
   knowledge-grounding:
     build:
       context: ./services/knowledge_grounding/
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8083
     environment:
       - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
 
   dialog-breakdown:
     build:
@@ -462,6 +933,14 @@ services:
       dockerfile: dp/dockerfile_skill_gpu
     environment:
       - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 3.5G
+        reservations:
+          memory: 3.5G
 
   friendship-skill:
     build:
@@ -470,6 +949,14 @@ services:
       context: .
       dockerfile: ./skills/friendship_skill/Dockerfile
     command:  gunicorn --workers=1 server:app -b 0.0.0.0:8086 --reload
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 384M
+        reservations:
+          memory: 384M
 
   masked-lm:
     build:
@@ -480,6 +967,14 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8088
     environment:
       - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
 
   entity-storer:
     build:
@@ -489,14 +984,30 @@ services:
         WORK_DIR: annotators/entity_storer
         SERVICE_PORT: 8089
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8089 --reload
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 384M
+        reservations:
+          memory: 384M
 
   knowledge-grounding-skill:
     build:
       context: .
       dockerfile: ./skills/knowledge_grounding_skill/Dockerfile
-    command: gunicorn --workers=4 server:app -b 0.0.0.0:8085
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8085
     environment:
       - CUDA_VISIBLE_DEVICES=''
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
 
   combined-classification:
     build:
@@ -510,5 +1021,10 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
 
 version: '3.7'
