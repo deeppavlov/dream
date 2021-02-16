@@ -13,6 +13,7 @@ files=(
   deeppavlov_data/classifiers/yahoo_convers_vs_info_v4.tar.gz
   deeppavlov_data/classifiers/sentiment_sst_bert_v2.tar.gz
   deeppavlov_data/wiki_index.tar.gz
+  deeppavlov_data/multi_squad_model_noans_1.1.tar.gz
   alexaprize_data/cobot_bert_6task.tar.gz
   alexaprize_data/comet/atomic_pretrained_model.pickle
   alexaprize_data/comet/categories_oEffect#oReact#oWant#xAttr#xEffect#xIntent#xNeed#xReact#xWant-maxe1_17-maxe2_35-maxr_1.pickle
@@ -32,6 +33,12 @@ files=(
   kbqa/wikidata/types_dict.pickle
   kbqa/wikidata/wikidata_lite.hdt
   kbqa/wikidata/wikidata_lite.hdt.index.v1-1
+  kbqa/models/rel_ranking.tar.gz
+  kbqa/wikidata/topical_chat.tar.gz
+  embeddings/reddit_fastText/wordpunct_tok_reddit_comments_2017_11_100.bin
+  kbqa/wikidata/path_ranking_data.tar.gz
+  kbqa/models/opendialkg_path_ranking_lite.tar.gz
+  kbqa/models/dialogpt_wiki.tar.gz
 )
 
 for file in ${files[@]}; do
