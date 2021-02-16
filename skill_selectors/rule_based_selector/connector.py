@@ -17,7 +17,7 @@ from common.utils import service_intents, low_priority_intents, \
     get_topics, get_intents, get_emotions
 from common.weather import is_weather_requested
 from common.coronavirus import check_about_death, about_virus, quarantine_end, is_staying_home_requested
-# from common.grounding import what_we_talk_about
+from common.grounding import what_we_talk_about
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -196,7 +196,7 @@ class RuleBasedSkillSelectorConnector:
                     virus_prev = virus_prev or any([function(dialog['utterances'][-i]['text'])
                                                     for function in [about_virus, quarantine_end]])
             enable_coronavirus_death = check_about_death(user_uttr_text)
-            # enable_grounding_skill = what_we_talk_about(user_uttr_text)
+            enable_grounding_skill = what_we_talk_about(user_uttr_text)
             enable_coronavirus = any([function(user_uttr_text)
                                       for function in [about_virus, quarantine_end]])
             enable_coronavirus = enable_coronavirus or (enable_coronavirus_death and virus_prev)
@@ -233,8 +233,8 @@ class RuleBasedSkillSelectorConnector:
             else:
                 if low_priority_intent_detected:
                     skills_for_uttr.append("intent_responder")
-                # if enable_grounding_skill:
-                #     skills_for_uttr.append("grounding_skill")
+                if enable_grounding_skill:
+                    skills_for_uttr.append("grounding_skill")
                 # process regular utterances
                 skills_for_uttr.append("program_y")
                 skills_for_uttr.append("cobotqa")

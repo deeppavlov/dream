@@ -144,7 +144,8 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
                      entity-linking kbqa odqa wiki-parser convert-reddit question-generator grounding-skill \
                      cobot-topics cobot-dialogact cobot-convers-evaluator-annotator \
                      dialog-breakdown book-skill combined-classification knowledge-grounding-skill \
-                     friendship-skill masked-lm entity-storer; do
+                     friendship-skill masked-lm entity-storer grounding-skill; do
+
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh
     done
