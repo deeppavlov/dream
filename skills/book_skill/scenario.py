@@ -13,7 +13,7 @@ from common.utils import is_yes, is_no
 from utils import get_name, get_genre, suggest_template, get_not_given_question_about_books, dontlike, is_stop, \
     side_intent, fact_about_book, fav_genre_request_detected, \
     fav_book_request_detected, parse_author_best_book, tell_me_more, \
-    is_positive, is_negative, best_book_by_author, GENRE_PHRASES, was_question_about_book
+    is_positive, is_negative, best_book_by_author, GENRE_PHRASES
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -364,7 +364,15 @@ class BookSkillScenario:
                     if confidence == 0:
                         reply, confidence = random.choice(UNKNOWN_BOOK_QUESTIONS), self.low_conf
                 elif about_book(annotated_user_phrase):
-                    if was_question_about_book(annotated_user_phrase):
+                    bookname, n_years_ago = get_name(annotated_user_phrase, mode='book', bookyear=True)
+                    if bookname is None:
+                        logger.debug('No bookname detected')
+                        if WHAT_IS_FAV_GENRE not in human_attr['book_skill']['used_phrases']:
+                            logging.debug('WHAT_IS_FAV_GENRE not in bot phrases: returning it')
+                            reply, confidence = WHAT_IS_FAV_GENRE, self.default_conf
+                        else:
+                            reply, confidence = "", 0
+                    else:
                         if fact_about_book(annotated_user_phrase) is not None:
                             # if user asked ANY question about books, answer with fact.
                             # BUT not with the super confidence,
@@ -374,14 +382,10 @@ class BookSkillScenario:
                             attr = {"can_continue": CAN_CONTINUE}
                         else:
                             reply, confidence = self.default_reply, 0
-                    else:
 
-                        if WHAT_IS_FAV_GENRE not in human_attr['book_skill']['used_phrases']:
-                            logging.debug('WHAT_IS_FAV_GENRE not in bot phrases: returning it')
-                            reply, confidence = WHAT_IS_FAV_GENRE, self.default_conf
-                        else:
-                            reply, confidence = self.get_reply_considering_book_author_genre_info(
-                                annotated_user_phrase, annotated_prev_phrase)
+                    if reply == "":
+                        reply, confidence = self.get_reply_considering_book_author_genre_info(
+                            annotated_user_phrase, annotated_prev_phrase)
                 else:
                     reply, confidence = self.default_reply, 0
 
