@@ -5,6 +5,7 @@ from os import getenv
 from common.constants import MUST_CONTINUE, CAN_CONTINUE
 from common.link import link_to
 from common.universal_templates import book_movie_music_found
+from common.utils import get_emotions
 from collections import defaultdict
 import re
 
@@ -26,12 +27,12 @@ class EmotionSkillScenario:
 
     def _get_user_emotion(self, annotated_user_phrase, discard_emotion=None):
         most_likely_emotion = None
-        emotion_probs = annotated_user_phrase['annotations']['emotion_classification']['text']
-        if discard_emotion:
+        emotion_probs = get_emotions(annotated_user_phrase, probs=True)
+        if discard_emotion in emotion_probs:
             emotion_probs.pop(discard_emotion)
         most_likely_prob = max(emotion_probs.values())
         for emotion in emotion_probs.keys():
-            if emotion_probs[emotion] == most_likely_prob:
+            if emotion_probs.get(emotion, 0) == most_likely_prob:
                 most_likely_emotion = emotion
         return most_likely_emotion
 

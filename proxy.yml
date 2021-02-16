@@ -55,22 +55,6 @@ services:
     environment:
       - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/sentseg
       - PORT=8011
-  toxic-classification:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/toxic-classification
-      - PORT=8013
-  sentiment-classification:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/sentiment-classification
-      - PORT=8024
   sentrewrite:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -303,14 +287,6 @@ services:
     environment:
       - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/emotion-skill
       - PORT=8049
-  emotion-classification:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/emotion-classification
-      - PORT=8038
   dummy-skill-dialog:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -518,6 +494,14 @@ services:
     environment:
       - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/knowledge-grounding-skill
       - PORT=8085
+    command: ["nginx", "-g", "daemon off;"]
+  combined-classification:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/combined-classification
+      - PORT=8087
     command: ["nginx", "-g", "daemon off;"]
   grounding-skill:
     build:

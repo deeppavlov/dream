@@ -1,17 +1,5 @@
 services:
 
-  toxic-classification:
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-
-  sentiment-classification:
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-
-  emotion-classification:
-    environment:
-      - CUDA_VISIBLE_DEVICES=1
-
   comet-atomic:
     environment:
       - CUDA_VISIBLE_DEVICES=5
@@ -52,5 +40,9 @@ services:
   masked-lm:
     environment:
       - CUDA_VISIBLE_DEVICES=4
+
+  combined-classification:
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
 
 version: '3.7'

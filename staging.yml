@@ -47,14 +47,6 @@ services:
       timeout: 2s
       retries: 3
       start_period: 1m
-  toxic-classification:
-    image: ${DOCKER_REGISTRY}/toxic-classification:${VERSION}
-    env_file:
-      - ${ENV_FILE}
-  sentiment-classification:
-    image: ${DOCKER_REGISTRY}/sentiment-classification:${VERSION}
-    env_file:
-      - ${ENV_FILE}
   intent-catcher:
     image: ${DOCKER_REGISTRY}/intent-catcher:${VERSION}
     env_file:
@@ -158,10 +150,6 @@ services:
       - ${ENV_FILE}
   weather-skill:
     image: ${DOCKER_REGISTRY}/weather-skill:${VERSION}
-    env_file:
-      - ${ENV_FILE}
-  emotion-classification:
-    image: ${DOCKER_REGISTRY}/emotion-classification:${VERSION}
     env_file:
       - ${ENV_FILE}
   emotion-skill:
@@ -278,6 +266,10 @@ services:
     image: ${DOCKER_REGISTRY}/knowledge-grounding-skill:${VERSION}
     env_file:
       - ${ENV_FILE}
+  combined-classification:
+     image: ${DOCKER_REGISTRY}/combined-classification:${VERSION}
+     env_file:
+       - ${ENV_FILE}
 volumes:
   external-logs:
   external-deeppavlov:

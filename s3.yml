@@ -17,10 +17,6 @@ services:
     build:
       args:
         SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
-  emotion-classification:
-    build:
-      args:
-        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
   entity-linking:
     build:
       args:
@@ -38,14 +34,6 @@ services:
     build:
       args:
         SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
-  sentiment-classification:
-    build:
-      args:
-        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
-  toxic-classification:
-    build:
-      args:
-        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
   question-generator:
     build:
       args:
@@ -54,4 +42,8 @@ services:
     build:
       args:
         SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
+  combined-classification:
+    build:
+      args:
+        DATA_URL: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/cobot_bert_6task.tar.gz
 version: "3.7"

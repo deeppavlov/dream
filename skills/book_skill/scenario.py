@@ -27,15 +27,13 @@ LAST_BOOK_READ = "What is the last book you have read?"
 IF_NOT_LOVE_READING = "Why don't you love reading?"
 IF_NOT_REMEMBER_LAST_BOOK = "That's OK. I can't name it either."
 IF_REMEMBER_LAST_BOOK = "Interesting. Have you read BOOK?"
-
-BOOK_CHANGE_PHRASE = "Okay! What would you like to talk about? For example, movies, games or news."
-
 WHAT_BOOK_IMPRESSED_MOST = "And what book did impress you the most?"
 AMAZING_READ_BOOK = "I've read it. It's an amazing book!"
 WHEN_IT_WAS_PUBLISHED = "Do you know when it was first published?"
 OFFER_FACT_ABOUT_BOOK = "Would you like to know some facts about it?"
 OFFER_FACT_DID_NOT_FIND_IT = "Sorry, I suggested the fact but can not find it now."
 DID_NOT_EXIST = "I didn't exist in that time."
+BOOK_CHANGE_PHRASE = "Okay! What would you like to talk about? For example, movies, games or news."
 
 FAVOURITE_GENRE_ANSWERS = list(GENRE_PHRASES.values())
 FAVOURITE_BOOK_ANSWERS = ['My favourite book is "The Old Man and the Sea" by Ernest Hemingway.',

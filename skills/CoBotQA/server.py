@@ -17,7 +17,7 @@ import sentry_sdk
 from cobotqa_service import send_cobotqa
 
 from common.universal_templates import opinion_request_question, fact_about_replace, FACT_ABOUT_TEMPLATES
-from common.utils import get_topics, get_intents
+from common.utils import get_topics, get_intents, get_sentiment
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -109,7 +109,7 @@ def respond():
         facts_questions = []
         facts_dialog_ids = []
         entities = []
-        attit = curr_uttr["annotations"].get("sentiment_classification", {}).get("text", [""])[0]
+        attit = get_sentiment(curr_uttr, probs=False)[0]
         for _ in range(N_FACTS_TO_CHOSE):
             for ent in curr_uttr["annotations"].get("ner", []):
                 if not ent:

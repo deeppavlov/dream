@@ -16,7 +16,7 @@ from collections import defaultdict
 from common.duplicates import NOT_LOWER_DUPLICATES_SENTS
 from common.universal_templates import if_lets_chat_about_topic, if_choose_topic
 from common.utils import scenario_skills, retrieve_skills, okay_statements, is_question, \
-    get_intent_name, low_priority_intents, substitute_nonwords
+    get_intent_name, low_priority_intents, substitute_nonwords, get_toxic
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -64,17 +64,9 @@ def respond():
             if skill_data["text"] and skill_data["confidence"]:
                 if not skill_data.get("annotations"):
                     logger.warning(f"Valid skill data without annotations: {skill_data}")
-    default_toxic = {
-        "identity_hate": 0.0,
-        "insult": 0.0,
-        "obscene": 0.0,
-        "severe_toxic": 0.0,
-        "sexual_explicit": 0.0,
-        "threat": 0.0,
-        "toxic": 0.0
-    }
-    toxic_result = [annotation.get('toxic_classification', default_toxic) for annotation in annotations]
-    toxicities = [max(res.values()) for res in toxic_result]
+    # raise Exception(str(annotations))
+    toxic_result = [get_toxic({'annotations': annotation}, probs=True) for annotation in annotations]
+    toxicities = [max(res.values()) if len(res) > 0 else 0 for res in toxic_result]
     stop_result = [annotation.get('stop_detect', {'stop': 0}) for annotation in annotations]
     stop_probs = [j['stop'] for j in stop_result]
     for j in range(len(skill_names)):

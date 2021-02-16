@@ -5,18 +5,17 @@ services:
       context: ./
       dockerfile: dockerfile_agent
     environment:
-      WAIT_HOSTS: "cobotqa:8081, cobot-topics:8000, cobot-dialogact:8002, cobot-convers-evaluator-annotator:8004,
+      WAIT_HOSTS: "cobotqa:8081, cobot-convers-evaluator-annotator:8004,
         cobot-nounphrases:8006, program-y:8008, sentseg:8011, convers-evaluation-selector:8009, personality-catcher:8010,
         intent-responder:8012, intent-catcher:8014, blacklisted-words:8018,
-        toxic-classification:8013, sentrewrite:8017, ner:8021,  program-y-dangerous:8022, movie-skill:8023,
-        sentiment-classification:8024,
+         sentrewrite:8017, ner:8021,  program-y-dangerous:8022, movie-skill:8023,
         convert-reddit:8029, personal-info-skill:8030, asr:8031, misheard-asr:8033,
-        christmas-new-year-skill:8036, weather-skill:8037, emotion-classification:8038, alice:8000,
+        christmas-new-year-skill:8036, weather-skill:8037,  alice:8000,
         eliza:8047, emotion-skill:8049, dummy-skill-dialog:8052, comet-atomic:8053, meta-script-skill:8054,
         oscar-skill:8055, coronavirus-skill:8061, small-talk-skill:8062, game-cooperative-skill:8068, program-y-wide:8064,
         comet-conceptnet:8065, news-api-skill:8066, short-story-skill:8057, greeting-skill:8070, factoid-qa:8071, kbqa:8072,
         factoid-classification:8073, spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, odqa:8078,
-        knowledge-grounding:8083, dialog-breakdown:8082, knowledge-grounding-skill:8085"
+        knowledge-grounding:8083, combined-classification:8087, dialog-breakdown:8082, knowledge-grounding-skill:8085"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
     deploy:
       mode: replicated
@@ -70,28 +69,6 @@ services:
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8009 -t 15
-
-  toxic-classification:
-    build:
-      args:
-        CONFIG: toxic_classification.json
-        PORT: 8013
-        SRC_DIR: annotators/DeepPavlovToxicClassification
-      context: ./
-      dockerfile: dp/dockerfile_skill_gpu
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-
-  sentiment-classification:
-    build:
-      args:
-        CONFIG: sentiment_sst_conv_bert.json
-        PORT: 8024
-        SRC_DIR: annotators/DeepPavlovSentimentClassification
-      context: ./
-      dockerfile: dp/dockerfile_skill_gpu
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
 
   sentrewrite:
     build:
@@ -299,17 +276,6 @@ services:
       dockerfile: ./skills/emotion_skill/Dockerfile
     command: gunicorn --workers=2 server:app -b 0.0.0.0:8049
 
-  emotion-classification:
-    build:
-      args:
-        CONFIG: emo_bert.json
-        PORT: 8038
-        SRC_DIR: annotators/DeepPavlovEmotionClassification
-      context: ./
-      dockerfile: dp/dockerfile_skill_gpu
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-
   dummy-skill-dialog:
     build:
       context: ./skills/dummy_skill_dialog/
@@ -485,6 +451,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8083
     environment:
       - CUDA_VISIBLE_DEVICES=0
+
   dialog-breakdown:
     build:
       args:
@@ -530,4 +497,18 @@ services:
     command: gunicorn --workers=4 server:app -b 0.0.0.0:8085
     environment:
       - CUDA_VISIBLE_DEVICES=''
+
+  combined-classification:
+    build:
+      args:
+        CONFIG: combined_classifier.json
+        PORT: 8087
+      context: .
+      dockerfile: ./annotators/combined_classification/Dockerfile
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      mode: replicated
+      replicas: 1
+
 version: '3.7'

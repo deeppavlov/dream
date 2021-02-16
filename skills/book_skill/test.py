@@ -29,10 +29,10 @@ def main_test():
                     "OK, let's talk about books. Do you love reading?",
                     "That's great. What is the last book you have read?",
                     "Interesting. Have you read",
-                    "I've also read it. It's an amazing book! Do you know when it was first published?",
+                    "I've read it. It's an amazing book! Do you know when it was first published?",
                     # This should be a beginning of the response - response needs to be randomized
                     'What is your favorite book genre?',
-                    'Amazing! Have you read The Testaments ? And if you have read it, what do you think about it?',
+                    'Amazing! Have you read The Testaments? And if you have read it, what do you think about it?',
                     json.load(open('bookreads_data.json', 'r'))[0]['fiction']['description']]
     for i in range(len(sliced_data)):
         response = requests.post(url, json=sliced_data[i]).json()[0][0]

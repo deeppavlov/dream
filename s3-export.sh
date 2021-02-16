@@ -13,6 +13,7 @@ files=(
   deeppavlov_data/classifiers/yahoo_convers_vs_info_v4.tar.gz
   deeppavlov_data/classifiers/sentiment_sst_bert_v2.tar.gz
   deeppavlov_data/wiki_index.tar.gz
+  alexaprize_data/cobot_bert_6task.tar.gz
   alexaprize_data/comet/atomic_pretrained_model.pickle
   alexaprize_data/comet/categories_oEffect#oReact#oWant#xAttr#xEffect#xIntent#xNeed#xReact#xWant-maxe1_17-maxe2_35-maxr_1.pickle
   alexaprize_data/conceptnet/conceptnet_pretrained_model.pickle

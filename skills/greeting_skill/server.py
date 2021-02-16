@@ -12,6 +12,7 @@ import sentry_sdk
 from common.constants import CAN_CONTINUE
 from common.universal_templates import if_lets_chat_about_topic
 from common.utils import get_skill_outputs_from_dialog, get_outputs_with_response_from_dialog, get_not_used_template
+from common.utils import get_sentiment
 from common.greeting import GREETING_QUESTIONS, dont_tell_you_answer
 
 
@@ -38,7 +39,7 @@ COMMENTS = {"neutral": ["Ok. ", "Oh. ", "Huh. ", "Well. ", "Gotcha. ", "Hmm. ", 
 def get_next_step(user_utterance, next_step_id, last_comments=[]):
     response, confidence, attr = "", 0., {}
     if next_step_id < len(GREETING_STEPS):
-        sentiment = user_utterance["annotations"].get("sentiment_classification", {}).get("text", [""])[0]
+        sentiment = get_sentiment(user_utterance, probs=False)[0]
         comment = get_not_used_template(used_templates=last_comments,
                                         all_templates=COMMENTS[sentiment])
         response = comment + choice(GREETING_QUESTIONS[GREETING_STEPS[next_step_id]])

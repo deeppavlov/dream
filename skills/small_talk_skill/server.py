@@ -11,7 +11,7 @@ from os import getenv
 import sentry_sdk
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
-from common.utils import get_skill_outputs_from_dialog
+from common.utils import get_skill_outputs_from_dialog, get_sentiment
 from common.universal_templates import if_choose_topic, if_switch_topic, if_lets_chat_about_topic, \
     COMPILE_WHAT_TO_TALK_ABOUT
 
@@ -77,8 +77,7 @@ def respond():
         _, new_user_topic, new_conf = pickup_topic_and_start_small_talk(dialog)
         logger.info(f"From current user utterance: `{dialog['human_utterances'][-1]['text']}` "
                     f"extracted topic: `{new_user_topic}`.")
-        sentiment = dialog["human_utterances"][-1]["annotations"].get(
-            "sentiment_classification", {}).get("text", [""])[0]
+        sentiment = get_sentiment(dialog["human_utterances"][-1], probs=False)[0]
         if len(topic) > 0 and len(script) > 0 and \
                 (len(new_user_topic) == 0 or new_conf == FOUND_WORD_START_CONFIDENCE):
             # we continue dialog if new topic was not found or was found just as the key word in user sentence.

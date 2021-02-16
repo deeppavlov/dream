@@ -138,36 +138,6 @@
                 "required_previous_services": ["annotators.spelling_preprocessing", "annotators.cobot_nounphrases"],
                 "state_manager_method": "add_annotation"
             },
-            "toxic_classification": {
-                "connector": {
-                    "protocol": "http",
-                    "url": "http://toxic-classification:8013/model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:dp_classes_formatter_service",
-                "required_previous_services": ["annotators.spelling_preprocessing"],
-                "state_manager_method": "add_annotation"
-            },
-            "sentiment_classification": {
-                "connector": {
-                    "protocol": "http",
-                    "url": "http://sentiment-classification:8024/model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:cobot_classifiers_formatter_service",
-                "required_previous_services": ["annotators.spelling_preprocessing"],
-                "state_manager_method": "add_annotation"
-            },
-            "emotion_classification": {
-                "connector": {
-                    "protocol": "http",
-                    "url": "http://emotion-classification:8038/model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:cobot_classifiers_formatter_service",
-                "required_previous_services": ["annotators.spelling_preprocessing"],
-                "state_manager_method": "add_annotation"
-            },
             "blacklisted_words": {
                 "connector": {
                     "protocol": "http",
@@ -291,6 +261,16 @@
                 "response_formatter": "state_formatters.dp_formatters:dp_classes_formatter_service",
                 "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"],
                 "state_manager_method": "add_annotation"
+            },
+            "combined_classification": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://combined-classification:8087/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "required_previous_services": ["annotators.spelling_preprocessing"],
+                "state_manager_method": "add_annotation"
             }
         },
         "skill_selectors": {
@@ -304,8 +284,7 @@
                 "previous_services": ["annotators"],
                 "required_previous_services": ["annotators.intent_catcher",
                    "annotators.blacklisted_words", "annotators.asr",
-                   "annotators.toxic_classification",
-                   "annotators.cobot_topics", "annotators.cobot_dialogact",
+                   "annotators.combined_classification",
                    "annotators.sentrewrite"],
                 "tags": ["selector"]
             }
@@ -733,17 +712,6 @@
             }
         },
         "post_skill_selector_annotators": {
-          "toxic_classification": {
-              "connector": {
-                  "protocol": "python",
-                  "class_name": "annotators.DeepPavlovToxicClassification.connector:BatchConnector",
-                  "url": "http://toxic-classification:8013/model"
-              },
-              "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
-              "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-              "previous_services": ["skills"],
-              "state_manager_method": "add_hypothesis_annotation_batch"
-          },
           "blacklisted_words": {
               "connector": {
                   "protocol": "http",
@@ -774,7 +742,17 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": ["skills"],
                 "state_manager_method": "add_hypothesis_annotation_batch"
-            }
+            },
+            "combined_classification": {
+              "connector": {
+                  "protocol": "http",
+                  "url": "http://combined-classification:8087/batch_model"
+              },
+              "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+              "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+              "previous_services": ["skills"],
+              "state_manager_method": "add_hypothesis_annotation_batch"
+          }
         },
         "response_selectors": {
             "convers_evaluation_selector": {

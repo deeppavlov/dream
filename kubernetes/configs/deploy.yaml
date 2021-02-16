@@ -1,14 +1,6 @@
-toxic-classification:
+combined-classification:
   CUDA_VISIBLE_DEVICES: '0'
   gpu: 0
-
-sentiment-classification:
-  CUDA_VISIBLE_DEVICES: '0'
-  gpu: 0
-
-emotion-classification:
-  CUDA_VISIBLE_DEVICES: '0'
-  gpu: 1
 
 kbqa:
   CUDA_VISIBLE_DEVICES: '0'

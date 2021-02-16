@@ -15,7 +15,7 @@ from spacy.symbols import nsubj, VERB, xcomp, NOUN, ADP, dobj
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
-from common.utils import transform_vbg, get_skill_outputs_from_dialog, is_yes, is_no
+from common.utils import transform_vbg, get_skill_outputs_from_dialog, is_yes, is_no, get_sentiment
 from common.universal_templates import if_switch_topic
 
 try:
@@ -477,9 +477,7 @@ def get_comment_phrase(dialog, attr):
         dialog["utterances"], attribute_name="meta_script_comment_template", value_by_default=None, activated=True
     )[-2:]
 
-    sentiment = dialog["utterances"][-1]["annotations"].get("sentiment_classification", {"text": ["neutral", 1.0]})[
-        "text"
-    ][0]
+    sentiment = get_sentiment(dialog["human_utterances"][-1], probs=False)[0]
     template = get_not_used_template(used_templates, meta_script_skill_constants.COMMENTS[sentiment])
     attr["meta_script_comment_template"] = template
     response = template
