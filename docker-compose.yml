@@ -1042,8 +1042,8 @@ services:
       replicas: 1
       resources:
         limits:
-          memory: 12 Gb
+          memory: 20G
         reservations:
-          memory: 12 Gb
+          memory: 20G
 
 version: '3.7'
