@@ -148,7 +148,6 @@ def join_used_links_in_attributes(main_attrs, add_attrs):
 
 def add_question_to_statement(best_candidate, best_skill_name, dummy_question, dummy_question_human_attr,
                               link_to_question, link_to_human_attrs, not_sure_factoid):
-
     if not_sure_factoid and "factoid_qa" in best_skill_name:
         best_candidate["text"] = "I am not sure in my answer but I can try. " + best_candidate["text"]
     if best_candidate["text"].strip() in okay_statements:
@@ -208,6 +207,20 @@ def lower_retrieve_skills_confidence_if_scenario_exist(candidates, scores, confi
                 scores[i]['isResponseInteresting'] *= lower_coeff
 
 
+def lower_wd_skill_conf_if_movie_or_book(candidates, confidences):
+    topic_skills = ["movie_skill", "book_skill", "game_cooperative_skill"]
+    skills_conf = {}
+    for cand, conf in zip(candidates, confidences):
+        skill_name = cand["skill_name"]
+        if skill_name in topic_skills:
+            skills_conf[skill_name] = conf
+    if any([conf > 0.8 for conf in skills_conf.values()]):
+        for i, (cand, conf) in enumerate(zip(candidates, confidences)):
+            if cand["skill_name"] == "wikidata_dial_skill":
+                confidences[i] = 0.5
+    return candidates, confidences
+
+
 def calculate_single_convers_evaluator_score(cand_scores):
     score_conv_eval = sum([cand_scores["isResponseOnTopic"],
                            cand_scores["isResponseInteresting"],
@@ -257,6 +270,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     bot_utterances = [substitute_nonwords(utt) for utt in bot_utterances]
     bot_utt_counter = Counter(bot_utterances)
 
+    candidates, confidences = lower_wd_skill_conf_if_movie_or_book(candidates, confidences)
     lower_duplicates_score(candidates, bot_utt_counter, scores, confidences)
     lower_retrieve_skills_confidence_if_scenario_exist(candidates, scores, confidences)
 

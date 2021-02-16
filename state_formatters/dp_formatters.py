@@ -430,23 +430,30 @@ def wp_formatter_dialog(dialog: Dict):
 
 def el_formatter_dialog(dialog: Dict):
     # Used by: entity_linking annotator
-    ner_output = dialog["human_utterances"][-1]["annotations"]["ner"]
-    nounphrases = dialog["human_utterances"][-1]["annotations"].get("cobot_nounphrases", [])
-    entity_substr = [[entity["text"] for entity in entities] for entities in ner_output]
+    ner_output = dialog['human_utterances'][-1]['annotations'].get('ner', [])
+    nounphrases = dialog['human_utterances'][-1]['annotations'].get('cobot_nounphrases', [])
+    entity_substr = []
+    if ner_output:
+        for entities in ner_output:
+            for entity in entities:
+                if entity and isinstance(entity, dict) and "text" in entity and entity["text"].lower() != "alexa":
+                    entity_substr.append(entity["text"])
 
-    if "sentseg" in dialog["human_utterances"][-1]["annotations"]:
-        last_human_utterance_text = dialog["human_utterances"][-1]["annotations"]["sentseg"]["punct_sent"]
+    if "sentseg" in dialog['human_utterances'][-1]['annotations']:
+        last_human_utterance_text = dialog['human_utterances'][-1]['annotations']['sentseg']['punct_sent']
     else:
-        last_human_utterance_text = dialog["human_utterances"][-1]["text"]
-
-    context = [last_human_utterance_text for _ in entity_substr]
-    template = ["" for _ in entity_substr]
+        last_human_utterance_text = dialog['human_utterances'][-1]['text']
     if nounphrases:
-        entity_substr.append(nounphrases)
-        context.append(last_human_utterance_text)
-        template.append("")
+        entity_substr += nounphrases
+    entity_substr = list(set(entity_substr))
 
-    return [{"entity_substr": entity_substr, "template": template, "context": context}]
+    return [
+        {
+            'entity_substr': [entity_substr],
+            'template': [''],
+            'context': [last_human_utterance_text]
+        }
+    ]
 
 
 def kbqa_formatter_dialog(dialog: Dict):
@@ -513,7 +520,7 @@ def intent_responder_formatter_dialog(dialog: Dict):
         for intent in called:
             called_intents[intent] = True
     dialog["called_intents"] = called_intents
-    dialog["utterances"] = dialog["utterances"][-(utils.LAST_N_TURNS * 2 + 1) :]
+    dialog["utterances"] = dialog["utterances"][-(utils.LAST_N_TURNS * 2 + 1):]
     for utt in dialog["utterances"]:
         if "sentseg" in utt["annotations"]:
             utt["text"] = utt["annotations"]["sentseg"]["punct_sent"]

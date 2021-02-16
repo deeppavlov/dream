@@ -15,7 +15,8 @@ services:
         oscar-skill:8055, coronavirus-skill:8061, small-talk-skill:8062, game-cooperative-skill:8068, program-y-wide:8064,
         comet-conceptnet:8065, news-api-skill:8066, short-story-skill:8057, greeting-skill:8070, factoid-qa:8071, kbqa:8072,
         factoid-classification:8073, spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, odqa:8078,
-        knowledge-grounding:8083, combined-classification:8087, dialog-breakdown:8082, knowledge-grounding-skill:8085"
+        knowledge-grounding:8083, combined-classification:8087, dialog-breakdown:8082, knowledge-grounding-skill:8085,
+        wikidata-dial-skill:8091"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
     deploy:
       mode: replicated
@@ -1026,5 +1027,23 @@ services:
           memory: 2G
         reservations:
           memory: 2G
+
+  wikidata-dial-skill:
+    build:
+      args:
+        CONFIG: kg_dial_generator.json
+        PORT: 8091
+        COMMIT: 5dac85a06fde0e2983c7569ae058e3bf2d45ce2c
+      context: skills/wikidata_dial_skill
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 12 Gb
+        reservations:
+          memory: 12 Gb
 
 version: '3.7'

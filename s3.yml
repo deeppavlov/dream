@@ -46,4 +46,8 @@ services:
     build:
       args:
         DATA_URL: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/cobot_bert_6task.tar.gz
+  wikidata-dial-skill:
+    build:
+      args:
+        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
 version: "3.7"
