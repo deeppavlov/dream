@@ -107,15 +107,14 @@ class Entity:
     def add_human_encounters(self, human_utters, bot_utters, human_utter_index):
         human_utter = human_utters[-1]
         bot_utter = bot_utters[0] if bot_utters else {}
-        human_annotations = human_utter.get("annotations", {})
         entities = parse_entities(human_utter["text"])
         entities = [ent for ent in entities if self.name in wnl.lemmatize(ent["text"], "n")]
 
         active_skill = bot_utter.get("active_skill", "pre_start")
-        sentiment = human_annotations.get("sentiment_classification", {}).get("text", ["neutral", 0])[0]
-        emotions = human_annotations.get("emotion_classification", {}).get("text", {"neutral": 0})
-        intents = utils.get_intents(human_annotations)
-        topics = utils.get_topics(human_annotations)
+        sentiment = utils.get_sentiment(human_utter, probs=False, default_labels=['neutral'])[0]
+        emotions = utils.get_emotions(human_utter, probs=True, default_probs={'neutral': 0})
+        intents = utils.get_intents(human_utter)
+        topics = utils.get_topics(human_utter)
         for entity in entities:
             hee = HumanEntityEncounter(
                 human_utterance_index=human_utter_index,
@@ -133,15 +132,14 @@ class Entity:
     def add_bot_encounters(self, human_utters, bot_utters, human_utter_index):
         human_utter = human_utters[-1]
         bot_utter = bot_utters[0] if bot_utters else {}
-        human_annotations = human_utter.get("annotations", {})
         entities = parse_entities(bot_utter["text"])
         entities = [ent for ent in entities if self.name in wnl.lemmatize(ent["text"], "n")]
 
         active_skill = bot_utter.get("active_skill", "pre_start")
-        next_user_sentiment = human_annotations.get("sentiment_classification", {}).get("text", ["neutral", 0])[0]
-        next_user_emotions = human_annotations.get("emotion_classification", {}).get("text", {"neutral": 0})
-        next_user_intents = utils.get_intents(human_annotations)
-        next_user_topics = utils.get_topics(human_annotations)
+        next_user_sentiment = utils.get_sentiment(human_utter, probs=False, default_labels=['neutral'])[0]
+        next_user_emotions = utils.get_emotions(human_utter, probs=True, default_probs={'neutral': 0})
+        next_user_intents = utils.get_intents(human_utter)
+        next_user_topics = utils.get_topics(human_utter)
         for entity in entities:
             bee = BotEntityEncounter(
                 human_utterance_index=human_utter_index,
