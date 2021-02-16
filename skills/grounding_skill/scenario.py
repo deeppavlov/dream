@@ -43,7 +43,7 @@ class GroundingSkillScenario:
                 else:
                     prev_annotations = dialog['human_utterances'][-2].get('annotations', dict())
                     logger.debug('Running grounding skill')
-                    reply = 'To my understanding, we are talking about '
+                    reply = 'To my understanding, we are talking'
 
                     entity_list = []
                     for tmp in prev_annotations.get('ner', []):
@@ -52,11 +52,7 @@ class GroundingSkillScenario:
                     my_entities = ', '.join([str(k) for k in sorted(entity_list)])
 
                     topic_list1 = get_topics(dialog['human_utterances'][-2], which='cobot_topics')
-                    if 'text' in topic_list1:
-                        topic_list1 = topic_list1['text']
                     topic_list2 = get_topics(dialog['human_utterances'][-2], which='cobot_dialogact_topics')
-                    if 'text' in topic_list2:
-                        topic_list2 = topic_list2['text']
 
                     topic_list = topic_list1 + topic_list2
 

@@ -68,20 +68,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8009:8009
-  toxic-classification:
-    env_file: [.env.dev]
-    volumes:
-      - "./annotators/DeepPavlovToxicClassification:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8013:8013
-  sentiment-classification:
-    env_file: [.env.dev]
-    volumes:
-      - "./annotators/DeepPavlovSentimentClassification:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8024:8024
   sentrewrite:
     env_file: [.env.dev]
     volumes:
@@ -92,18 +78,21 @@ services:
     env_file: [.env.dev]
     volumes:
       - "./skills/IntentResponder:/src"
+      - "./common:/src/common"
     ports:
       - 8012:8012
   intent-catcher:
     env_file: [.env.dev]
     volumes:
       - "./annotators/IntentCatcher/src:/src"
+      - "./common:/src/common"
     ports:
       - 8014:8014
   blacklisted-words:
     env_file: [.env.dev]
     volumes:
       - "./annotators/BlacklistedWordsDetector:/src"
+      - "./common:/src/common"
     ports:
       - 8018:8018
   program-y-dangerous:
@@ -111,6 +100,7 @@ services:
     volumes:
       - "./skills/program-y-dangerous:/src"
       - "./skills/program-y-dangerous/logs:/tmp"
+      - "./common:/src/common"
     ports:
       - 8022:8022
   movie-skill:
@@ -198,6 +188,7 @@ services:
     env_file: [.env.dev]
     volumes:
       - "./skills/convert_reddit:/app"
+      - "./common:/src/common"
     ports:
       - 8029:8029
   personal-info-skill:
@@ -265,13 +256,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8049:8049
-  emotion-classification:
-    env_file: [.env.dev]
-    volumes:
-      - "./annotators/DeepPavlovEmotionClassification:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8038:8038
   dummy-skill-dialog:
     env_file: [.env.dev]
     volumes:
@@ -454,4 +438,11 @@ services:
       - "./skills/knowledge_grounding_skill:/src"
     ports:
       - 8085:8085
+  combined-classification:
+    env_file: [.env.dev]
+    volumes:
+      - "./common:/src/common"
+      - "./annotators/combined_classification:/src"
+    ports:
+      - 8087:8087
 version: "3.7"

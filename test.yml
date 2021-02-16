@@ -2,15 +2,6 @@ services:
   agent:
     volumes:
       - "/cephfs/home/ignatov/artifacts:/output"
-  toxic-classification:
-    environment:
-      - CUDA_VISIBLE_DEVICES=7
-  sentiment-classification:
-    environment:
-      - CUDA_VISIBLE_DEVICES=7
-  emotion-classification:
-    environment:
-      - CUDA_VISIBLE_DEVICES=8
   question-generator:
     environment:
       - CUDA_VISIBLE_DEVICES=8
@@ -35,6 +26,9 @@ services:
   dialog-breakdown:
     environment:
       - CUDA_VISIBLE_DEVICES=5
+  combined-classification:
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
   masked-lm:
     environment:
       - CUDA_VISIBLE_DEVICES=9

@@ -16,7 +16,7 @@ from common.link import link_to
 from common.movies import get_movie_template
 from common.universal_templates import if_switch_topic, is_switch_topic, if_lets_chat_about_topic, if_choose_topic, \
     COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
-from common.utils import get_skill_outputs_from_dialog, is_yes, is_no, get_topics, get_intents
+from common.utils import get_skill_outputs_from_dialog, is_yes, is_no, get_topics, get_intents, get_sentiment
 from CoBotQA.cobotqa_service import send_cobotqa
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -98,8 +98,7 @@ class MovieSkillScenario:
                 response = re.sub(self.extra_space_template, " ", response)
             if response == "" or confidence <= OFFER_TALK_ABOUT_MOVIES_CONFIDENCE:
                 # no answers in scenraio
-                annotations = dialog["utterances"][-1]["annotations"]
-                attitude = annotations.get("sentiment_classification", {}).get("text", [""])[0]
+                attitude = get_sentiment(dialog['utterances'][-1], probs=False)[0]
 
                 if len(dialog["bot_utterances"]) > 0:
                     prev_bot_uttr = dialog["bot_utterances"][-1]
@@ -600,8 +599,8 @@ class MovieSkillScenario:
                 response, confidence, human_attr, bot_attr, attr = self.ask_do_you_know_question(
                     movie_id, movie_title, movie_type, prev_status_line, human_attr, bot_attr)
         elif prev_status == "opinion_request":  # -> user_opinion_comment
-            sentiment = curr_user_uttr["annotations"].get("sentiment_classification",
-                                                          {'text': ['neutral', 1.]})["text"][0]
+            sentiment = get_sentiment(curr_user_uttr, default_labels=['neutral'], probs=False)[0]
+
             response, confidence, human_attr, bot_attr, attr = self.ask_do_you_know_question(
                 movie_id, movie_title, movie_type, prev_status_line, human_attr, bot_attr)
             response = f"{get_movie_template('user_opinion_comment', subcategory=sentiment, movie_type=movie_type)} " \

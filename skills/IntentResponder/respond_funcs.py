@@ -3,6 +3,8 @@
 import random
 from datetime import datetime
 
+from common.utils import get_sentiment
+
 
 def exit_respond(dialog, response_phrases):
     # goodbye_fix_phrases = ["goodbye", "bye", "bye bye", "alexa bye", "bye alexa", "goodbye alexa", "alexa bye bye"]
@@ -20,7 +22,7 @@ def exit_respond(dialog, response_phrases):
     response = random.choice(response_phrases).strip()  # Neutral response
     annotation = utt["annotations"]
     try:
-        sentiment = annotation.get("sentiment_classification", {}).get("text", [""])[0]
+        sentiment = get_sentiment(utt, probs=False)[0]
     except KeyError:
         sentiment = "neutral"
     # sentiment_confidence = annotation['cobot_sentiment']['confidence']

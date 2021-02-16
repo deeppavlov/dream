@@ -14,7 +14,7 @@ from common.emotion import detect_emotion, is_joke_requested
 from common.news import is_breaking_news_requested
 from common.universal_templates import if_lets_chat_about_topic
 from common.utils import service_intents, low_priority_intents, \
-    get_topics, get_intents
+    get_topics, get_intents, get_emotions
 from common.weather import is_weather_requested
 from common.coronavirus import check_about_death, about_virus, quarantine_end, is_staying_home_requested
 # from common.grounding import what_we_talk_about
@@ -205,8 +205,11 @@ class RuleBasedSkillSelectorConnector:
             about_movies = (about_movies or movie_skill_was_proposed(prev_bot_uttr) or re.search(
                 self.about_movie_words, prev_bot_uttr.get("text", "").lower()))
             about_books = about_books or book_skill_was_proposed(prev_bot_uttr)
+            emotions = get_emotions({'annotations': user_uttr_annotations}, probs=True)
+            # check that logging of if empty is in get_emotion and delete string than
 
-            emotions = user_uttr_annotations['emotion_classification']['text']
+            # print(f"Skill Selector: did we select game_cooperative_skill? {about_games}", flush=True)
+
             if "/new_persona" in user_uttr_text:
                 # process /new_persona command
                 skills_for_uttr.append("personality_catcher")  # TODO: rm crutch of personality_catcher
@@ -267,8 +270,7 @@ class RuleBasedSkillSelectorConnector:
                 # Disable topicalchat_convert_retrieval v8.7.0
                 # skills_for_uttr.append("topicalchat_convert_retrieval")
 
-                if prev_bot_uttr.get("active_skill", "") in ["dummy_skill", "dummy_skill_dialog"] and \
-                        len(dialog["utterances"]) > 4:
+                if ('dummy_skill' in prev_bot_uttr.get("active_skill", "") and len(dialog["utterances"]) > 4):
                     skills_for_uttr.append("dummy_skill_dialog")
 
                 # thematic skills
@@ -334,13 +336,14 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("joke")
 
                 emo_prob_threshold = 0.9  # to check if any emotion has at least this prob
+                found_emotion, found_prob = 'neutral', 1
                 for emotion, prob in emotions.items():
                     if prob == max(emotions.values()):
                         found_emotion, found_prob = emotion, prob
                 cond1 = found_emotion != 'neutral' and found_prob > emo_prob_threshold
                 should_run_emotion = cond1 or detect_emotion(prev_bot_uttr, dialog['human_utterances'][-1])
-                good_emotion_prob = max([emotions['joy'], emotions['love']])
-                bad_emotion_prob = max([emotions['anger'], emotions['fear'], emotions['sadness']])
+                good_emotion_prob = max([emotions.get('joy', 0), emotions.get('love', 0)])
+                bad_emotion_prob = max([emotions.get('anger', 0), emotions.get('fear', 0), emotions.get('sadness', 0)])
                 not_strange_emotion_prob = not (good_emotion_prob > 0.5 and bad_emotion_prob > 0.5)
                 should_run_emotion = should_run_emotion and not_strange_emotion_prob
                 if should_run_emotion or "how are you?" in prev_bot_uttr.get("text", "").lower():

@@ -137,14 +137,14 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
     echo "Passing test data to each skill selected for testing"
 
 
-    for container in sentiment-classification movie-skill asr weather-skill program-y \
+    for container in movie-skill asr weather-skill program-y \
                      program-y-dangerous superbowl-skill oscar-skill valentines-day-skill eliza \
                      dummy-skill-dialog intent-catcher short-story-skill comet-atomic \
                      comet-conceptnet convers-evaluation-selector emotion-skill game-cooperative-skill \
                      entity-linking kbqa odqa wiki-parser convert-reddit question-generator grounding-skill \
                      cobot-topics cobot-dialogact cobot-convers-evaluator-annotator \
-                     dialog-breakdown book-skill knowledge-grounding-skill friendship-skill masked-lm entity-storer; do
-
+                     dialog-breakdown book-skill combined-classification knowledge-grounding-skill \
+                     friendship-skill masked-lm entity-storer; do
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh
     done

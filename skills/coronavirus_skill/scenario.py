@@ -17,7 +17,7 @@ from word2number.w2n import word_to_num
 from common.coronavirus import corona_switch_skill_reply, is_staying_home_requested, check_about_death, about_virus, \
     quarantine_end
 from common.link import link_to
-from common.utils import is_yes, is_no
+from common.utils import is_yes, is_no, get_emotions
 from common.universal_templates import book_movie_music_found, if_lets_chat_about_topic, is_switch_topic
 
 
@@ -312,10 +312,8 @@ def make_phrases(n_cases, n_deaths, num_flu_deaths, millionair_number):
 
 def emotion_detected(annotated_phrase, name='fear'):
     threshold = 0.8
-    emotion_probs = annotated_phrase['annotations']['emotion_classification']['text']
-    logging.debug(emotion_probs)
-    assert name in emotion_probs.keys()
-    return emotion_probs[name] > threshold
+    emotion_probs = get_emotions(annotated_phrase, probs=True)
+    return emotion_probs.get(name, 0) > threshold
 
 
 def improve_phrase(phrase, asked_about_age=True, met_last=True):
@@ -494,7 +492,7 @@ class CoronavirusSkillScenario:
                                         "my knowledge about your resilience to coronavirus is limited.", 0.95
                     reply = f'{reply} Please, check the CDC website for more information.'  # Daniil suggestion
                 elif 'to learn more' in last_bot_phrase:
-                    fear_prob = dialog['utterances'][-1]['annotations']['emotion_classification']['text']['fear']
+                    fear_prob = get_emotions(dialog['utterances'][-1], probs=True).get('fear', 0)
                     logging.debug(f'Fear prob {fear_prob}')
                     if is_no(last_utterance):
                         logging.info('Another fact request detected, answer is NO')

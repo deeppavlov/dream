@@ -14,7 +14,7 @@ from os import getenv
 
 from common.books import QUESTIONS_ABOUT_BOOKS, about_book
 from common.universal_templates import is_switch_topic, if_lets_chat
-from common.utils import is_opinion_request, is_no
+from common.utils import is_opinion_request, is_no, get_sentiment
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -92,12 +92,12 @@ def side_intent(annotated_phrase):
 
 
 def is_negative(annotated_phrase):
-    sentiment = annotated_phrase['annotations']['sentiment_classification']['text'][0]
+    sentiment = get_sentiment(annotated_phrase, probs=False)[0]
     return sentiment in ["negative", "very_negative"]
 
 
 def is_positive(annotated_phrase):
-    sentiment = annotated_phrase['annotations']['sentiment_classification']['text'][0]
+    sentiment = get_sentiment(annotated_phrase, probs=False)[0]
     return sentiment in ["positive", "very_positive"]
 
 

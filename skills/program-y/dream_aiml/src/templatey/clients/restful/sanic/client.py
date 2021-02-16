@@ -30,7 +30,7 @@ import re
 from sanic import Sanic
 from sanic.response import json
 from sanic.exceptions import ServerError
-
+from os import getenv
 from programy.clients.restful.client import RestBotClient
 from programy.clients.restful.sanic.config import SanicRestConfiguration
 import sentry_sdk
@@ -39,7 +39,7 @@ from sentry_sdk.integrations.logging import ignore_logger
 import string
 from templatey.processors.pre.normalizer import PreProcessor
 
-
+sentry_sdk.init(getenv('SENTRY_DSN'))
 ignore_logger("root")
 # TODO: Get if from config.sanic.yml
 NULL_RESPONSE = "Sorry, I don't have an answer for that!"

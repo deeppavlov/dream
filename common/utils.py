@@ -1,5 +1,11 @@
 import re
+import logging
+from os import getenv
+from copy import deepcopy
+import sentry_sdk
 from random import choice
+
+sentry_sdk.init(getenv('SENTRY_DSN'))
 
 
 def join_words_in_or_pattern(words):
@@ -33,6 +39,28 @@ service_intents = {'lets_chat_about', 'tell_me_more', 'topic_switching', 'yes', 
                    'what_are_you_talking_about'}
 low_priority_intents = {'dont_understand'}
 
+combined_classes = {
+    'emotion_classification': ['anger', 'fear', 'joy', 'love', 'sadness', 'surprise', 'neutral'],
+    'toxic_classification': ['identity_hate', 'insult',
+                             'obscene', 'severe_toxic',
+                             'sexual_explicit', 'threat',
+                             'toxic'],
+    'sentiment_classification': ['positive', 'negative', 'neutral'],
+    'cobot_topics': ['Phatic', 'Other', 'Movies_TV', 'Music', 'SciTech', 'Literature',
+                     'Travel_Geo', 'Celebrities', 'Games', 'Pets_Animals', 'Sports',
+                     'Psychology', 'Religion', 'Weather_Time', 'Food_Drink', 'Politics',
+                     'Sex_Profanity', 'Art_Event', 'Math', 'News', 'Entertainment', 'Fashion'],
+    'cobot_dialogact_topics': ['Other', 'Phatic', 'Entertainment_Movies', 'Entertainment_Books',
+                               'Entertainment_General', 'Interactive', 'Entertainment_Music',
+                               'Science_and_Technology', 'Sports', 'Politics'],
+    'cobot_dialogact_intents': ['Information_DeliveryIntent', 'General_ChatIntent',
+                                'Information_RequestIntent', 'User_InstructionIntent',
+                                'InteractiveIntent',
+                                'Opinion_ExpressionIntent', 'OtherIntent', 'ClarificationIntent',
+                                'Topic_SwitchIntent', 'Opinion_RequestIntent',
+                                'Multiple_GoalsIntent']
+}
+
 
 def get_skill_outputs_from_dialog(utterances, skill_name, activated=False):
     """
@@ -57,8 +85,8 @@ def get_skill_outputs_from_dialog(utterances, skill_name, activated=False):
             for skop in skills_outputs:
                 # need to check text-response for skills with several hypotheses
                 if skop["skill_name"] == skill_name:
-                    if activated and skop["text"] in final_response and uttr["active_skill"] == skill_name and \
-                            len(skop) > 0:
+                    if activated and skop["text"] in final_response and uttr["active_skill"] == skill_name:
+                        # removed one condition as if scop contains skill_name and text, its len is > 0
                         result.append(skop)
                     else:
                         if not activated and len(skop) > 0:
@@ -154,9 +182,9 @@ DONOTKNOW_LIKE = [r"(i )?(do not|don't) know", "you (choose|decide|pick up)"]
 
 
 def is_no(annotated_phrase):
-    no_detected = annotated_phrase['annotations'].get('intent_catcher', {}).get('no', {}).get('detected') == 1
+    no_detected = annotated_phrase.get("annotations", {}).get('intent_catcher', {}).get('no', {}).get('detected') == 1
     # TODO: intent catcher thinks that horrible is no intent'
-    user_phrase = annotated_phrase['text'].lower().strip().replace('.', '')
+    user_phrase = annotated_phrase.get('text', '').lower().strip().replace('.', '')
     is_not_horrible = 'horrible' != user_phrase
     no_regexp_detected = re.search(no_templates, annotated_phrase["text"].lower())
     is_not_idontknow = not re.search(join_sentences_in_or_pattern(DONOTKNOW_LIKE), annotated_phrase["text"].lower())
@@ -193,8 +221,8 @@ def is_opinion_request(annotated_phrase):
                                          r"recognize|sure|understand|feel|fond of|care for|fansy|appeal|suppose|"
                                          r"imagine|guess)")
     if intent_detected or \
-            (re.search(opinion_request_pattern,
-                       annotated_phrase["text"].lower()) and not opinion_detected and "?" in annotated_phrase["text"]):
+        (re.search(opinion_request_pattern,
+                   annotated_phrase["text"].lower()) and not opinion_detected and "?" in annotated_phrase["text"]):
         return True
     else:
         return False
@@ -253,7 +281,175 @@ def get_not_used_template(used_templates, all_templates):
         return choice(all_templates)
 
 
-def get_topics(annotated_utterance, which="all"):
+def _probs_to_labels(answer_probs, threshold=0.5):
+    answer_labels = [label for label in answer_probs if answer_probs[label] > threshold]
+    if len(answer_labels) == 0:
+        answer_labels = [key for key in answer_probs
+                         if answer_probs[key] == max(answer_probs.values())]
+    return answer_labels
+
+
+def _labels_to_probs(answer_labels, all_labels):
+    answer_probs = dict()
+    for label in all_labels:
+        if label in answer_labels:
+            answer_probs[label] = 1
+        else:
+            answer_probs[label] = 0
+    return answer_probs
+
+
+def _get_combined_annotations(annotated_utterance, model_name):
+    answer_probs, answer_labels = {}, []
+    try:
+        annotations = annotated_utterance['annotations']
+        combined_annotations = annotations['combined_classification']
+        if len(combined_annotations) > 0 and type(combined_annotations) == list:
+            combined_annotations = combined_annotations[0]
+        if model_name in combined_annotations:
+            answer_probs = combined_annotations[model_name]
+        else:
+            raise Exception(f'Not found Model name {model_name} in combined annotations {combined_annotations}')
+        answer_labels = _probs_to_labels(answer_probs)
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        logging.exception(e)
+    logging.debug(f'From combined {answer_probs} {model_name} {answer_labels}')
+    return answer_probs, answer_labels
+
+
+def _process_text(answer):
+    if isinstance(answer, dict) and 'text' in answer:
+        return answer['text']
+    else:
+        return answer
+
+
+def _process_old_sentiment(answer):
+    # Input: all sentiment annotations. Output: probs
+    if isinstance(answer[0], str) and isinstance(answer[1], float):
+        # support old sentiment output
+        curr_answer = {}
+        for key in combined_classes['sentiment_classification']:
+            if key == answer[0]:
+                curr_answer[key] = answer[1]
+            else:
+                curr_answer[key] = 0.5 * (1 - answer[1])
+        answer_probs = curr_answer
+        return answer_probs
+    else:
+        logging.warning('_process_old_sentiment got file with an output that is not old-style')
+        return answer
+
+
+def _get_plain_annotations(annotated_utterance, model_name):
+    answer_probs, answer_labels = {}, []
+    try:
+        annotations = annotated_utterance['annotations']
+        answer = annotations[model_name]
+        logging.info(f'Being processed plain annotation {answer}')
+        answer = _process_text(answer)
+        if type(answer) == list:
+            if model_name == 'sentiment_classification':
+                answer_probs = _process_old_sentiment(answer)
+                answer_labels = _probs_to_labels(answer_probs)
+            else:
+                answer_labels = answer
+                answer_probs = _labels_to_probs(answer_labels, combined_classes[model_name])
+        else:
+            answer_probs = answer
+            answer_labels = _probs_to_labels(answer_probs)
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        logging.exception(e)
+    logging.info(f'Answer {answer_probs} {answer_labels}')
+    return answer_probs, answer_labels
+
+
+def print_combined(combined_output):
+    combined_output = deepcopy(combined_output)
+    for i in range(len(combined_output)):
+        for key in combined_output[i]:
+            for class_ in combined_output[i][key]:
+                combined_output[i][key][class_] = round(combined_output[i][key][class_], 2)
+    logging.info(f'Combined classifier output is {combined_output}')
+
+
+def _get_etc_model(annotated_utterance, model_name, probs=True, default_probs={}, default_labels=[]):
+    """Function to get emotion classifier annotations from annotated utterance.
+
+    Args:
+        annotated_utterance: dictionary with annotated utterance, or annotations
+        probs: return probabilities or not
+        default: default value to return. If it is None, returns empty dict/list depending on probs argument
+    Returns:
+        dictionary with emotion probablilties, if probs == True, or emotion labels if probs != True
+    """
+    try:
+        if model_name in annotated_utterance['annotations']:
+            answer_probs, answer_labels = _get_plain_annotations(annotated_utterance,
+                                                                 model_name=model_name)
+        else:
+            answer_probs, answer_labels = _get_combined_annotations(annotated_utterance,
+                                                                    model_name=model_name)
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        logging.exception(e)
+        answer_probs, answer_labels = default_probs, default_labels
+    if probs:  # return probs
+        return answer_probs
+    else:
+        return answer_labels
+
+
+def get_toxic(annotated_utterance, probs=True, default_probs={}, default_labels=[]):
+    """Function to get toxic classifier annotations from annotated utterance.
+
+    Args:
+        annotated_utterance: dictionary with annotated utterance, or annotations
+        probs: return probabilities or not
+        default: default value to return. If it is None, returns empty dict/list depending on probs argument
+    Returns:
+        dictionary with toxic probablilties, if probs == True, or toxic labels if probs != True
+    """
+    return _get_etc_model(annotated_utterance, 'toxic_classification', probs=probs,
+                          default_probs=default_probs, default_labels=default_labels)
+
+
+def get_sentiment(annotated_utterance, probs=True,
+                  default_probs={'positive': 0, 'negative': 0, 'neutral': 1},
+                  default_labels=['neutral']):
+    """Function to get sentiment classifier annotations from annotated utterance.
+
+    Args:
+        annotated_utterance: dictionary with annotated utterance, or annotations
+        probs: return probabilities or not
+        default: default value to return. If it is None, returns empty dict/list depending on probs argument
+    Returns:
+        dictionary with sentiment probablilties, if probs == True, or sentiment labels if probs != True
+    """
+    return _get_etc_model(annotated_utterance, 'sentiment_classification', probs=probs,
+                          default_probs=default_probs, default_labels=default_labels)
+
+
+def get_emotions(annotated_utterance, probs=True,
+                 default_probs={'anger': 0, 'fear': 0, 'joy': 0, 'love': 0,
+                                'sadness': 0, 'surprise': 0, 'neutral': 1},
+                 default_labels=['neutral']):
+    """Function to get toxic classifier annotations from annotated utterance.
+
+    Args:
+        annotated_utterance: dictionary with annotated utterance, or annotations
+        probs: return probabilities or not
+        default: default value to return. If it is None, returns empty dict/list depending on probs argument
+    Returns:
+        dictionary with emotion probablilties, if probs == True, or toxic labels if probs != True
+    """
+    return _get_etc_model(annotated_utterance, 'emotion_classification', probs=probs,
+                          default_probs=default_probs, default_labels=default_labels)
+
+
+def get_topics(annotated_utterance, probs=False, default_probs={}, default_labels=[], which="all"):
     """Function to get topics from particular annotator or all detected.
 
     Args:
@@ -266,28 +462,56 @@ def get_topics(annotated_utterance, which="all"):
     Returns:
         list of topics
     """
-    cobot_topics = annotated_utterance.get("annotations", {}).get("cobot_topics", {}).get("text", [])
+    annotations = annotated_utterance.get("annotations", {})
+    cobot_topics_probs, cobot_topics_labels = {}, []
+    if 'cobot_topics' in annotations:
+        cobot_topics_labels = _process_text(annotations['cobot_topics'])
+        cobot_topics_probs = _labels_to_probs(cobot_topics_labels, combined_classes['cobot_topics'])
+    if 'combined_classification' in annotations and len(cobot_topics_labels) == 0:
+        cobot_topics_probs, cobot_topics_labels = _get_combined_annotations(
+            annotated_utterance, model_name='cobot_topics')
+    cobot_topics_labels = _process_text(cobot_topics_labels)
+    if len(cobot_topics_probs) == 0:
+        cobot_topics_probs = _labels_to_probs(cobot_topics_labels,
+                                              combined_classes['cobot_topics'])
 
-    cobot_da_topics = []
-    if "cobot_dialogact" in annotated_utterance.get("annotations", {}):
-        if "topics" in annotated_utterance["annotations"]["cobot_dialogact"]:
-            cobot_da_topics = annotated_utterance["annotations"]["cobot_dialogact"]["topics"]
-    elif "cobot_dialogact_topics" in annotated_utterance.get("annotations", {}):
-        if "text" in annotated_utterance["annotations"]["cobot_dialogact_topics"]:
-            cobot_da_topics = annotated_utterance["annotations"]["cobot_dialogact_topics"]["text"]
+    cobot_da_topics_probs, cobot_da_topics_labels = {}, []
+    if "cobot_dialogact" in annotations and "topics" in annotations["cobot_dialogact"]:
+        cobot_da_topics_labels = annotated_utterance["annotations"]["cobot_dialogact"]["topics"]
+    elif "cobot_dialogact_topics" in annotations:
+        cobot_da_topics_labels = annotated_utterance['annotations']['cobot_dialogact_topics']
 
-    result = []
+    if 'combined_classification' in annotations and len(cobot_da_topics_labels) == 0:
+        cobot_da_topics_probs, cobot_da_topics_labels = _get_combined_annotations(
+            annotated_utterance, model_name='cobot_dialogact_topics')
+    cobot_da_topics_labels = _process_text(cobot_da_topics_labels)
+    if len(cobot_da_topics_probs) == 0:
+        cobot_da_topics_probs = _labels_to_probs(cobot_da_topics_labels,
+                                                 combined_classes['cobot_dialogact_topics'])
+
     if which == "all":
-        result += cobot_topics + cobot_da_topics
+        answer_labels = cobot_topics_labels + cobot_da_topics_labels
+        answer_probs = {**cobot_topics_probs, **cobot_da_topics_probs}
     elif which == "cobot_topics":
-        result += cobot_topics
+        answer_probs, answer_labels = cobot_topics_probs, cobot_topics_labels
     elif which == "cobot_dialogact_topics":
-        result += cobot_da_topics
+        answer_probs, answer_labels = cobot_da_topics_probs, cobot_da_topics_labels
+    else:
+        logging.exception(f'Unknown input type in get_topics: {which}')
+        answer_probs, answer_labels = default_probs, default_labels
+    try:
+        assert len(answer_probs) > 0 and len(answer_labels) > 0, annotations
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        logging.exception(f'No topic annotations received - returning default')
+        answer_probs, answer_labels = default_probs, default_labels
+    if probs:
+        return answer_probs
+    else:
+        return answer_labels
 
-    return result
 
-
-def get_intents(annotated_utterance, which="all"):
+def get_intents(annotated_utterance, probs=False, default_probs={}, default_labels=[], which="all"):
     """Function to get intents from particular annotator or all detected.
 
     Args:
@@ -300,23 +524,39 @@ def get_intents(annotated_utterance, which="all"):
     Returns:
         list of intents
     """
-    intents = annotated_utterance.get("annotations", {}).get("intent_catcher", {})
+    annotations = annotated_utterance.get("annotations", {})
+    intents = annotations.get("intent_catcher", {})
     detected_intents = [k for k, v in intents.items() if v.get("detected", 0) == 1]
-
-    cobot_da_intents = []
-    if "cobot_dialogact" in annotated_utterance.get("annotations", {}):
-        if "intents" in annotated_utterance["annotations"]["cobot_dialogact"]:
-            cobot_da_intents = annotated_utterance["annotations"]["cobot_dialogact"]["intents"]
-    elif "cobot_dialogact_intents" in annotated_utterance.get("annotations", {}):
-        if "text" in annotated_utterance["annotations"]["cobot_dialogact_intents"]:
-            cobot_da_intents = annotated_utterance["annotations"]["cobot_dialogact_intents"]["text"]
-
-    result = []
+    detected_intent_probs = {key: 1 for key in detected_intents}
+    cobot_da_intent_probs, cobot_da_intent_labels = {}, []
+    if "cobot_dialogact" in annotations and "intents" in annotations["cobot_dialogact"]:
+        cobot_da_intent_labels = annotated_utterance["annotations"]["cobot_dialogact"]["intents"]
+    elif 'cobot_dialogact_intents' in annotations:
+        cobot_da_intent_labels = annotated_utterance['annotations']['cobot_dialogact_intents']
+    if "combined_classification" in annotations and len(cobot_da_intent_labels) == 0:
+        cobot_da_intent_probs, cobot_da_intent_labels = _get_combined_annotations(annotated_utterance,
+                                                                                  model_name='cobot_dialogact_intents')
+    cobot_da_intent_labels = _process_text(cobot_da_intent_labels)
+    if len(cobot_da_intent_probs) == 0:
+        cobot_da_intent_probs = _labels_to_probs(cobot_da_intent_labels,
+                                                 combined_classes['cobot_dialogact_topics'])
     if which == "all":
-        result += detected_intents + cobot_da_intents
+        answer_probs = {**detected_intent_probs, **cobot_da_intent_probs}
+        answer_labels = detected_intents + cobot_da_intent_labels
     elif which == "intent_catcher":
-        result += detected_intents
+        answer_probs, answer_labels = detected_intent_probs, detected_intents
     elif which == "cobot_dialogact_intents":
-        result += cobot_da_intents
-
-    return result
+        answer_probs, answer_labels = cobot_da_intent_probs, cobot_da_intent_labels
+    else:
+        logging.exception(f'Unknown type {which}')
+        answer_probs, answer_labels = default_probs, default_labels
+    try:
+        assert len(answer_probs) > 0 and len(answer_labels) > 0, annotations
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        logging.exception(f'No intent annotations received - returning default')
+        answer_probs, answer_labels = default_probs, default_labels
+    if probs:
+        return answer_probs
+    else:
+        return answer_labels
