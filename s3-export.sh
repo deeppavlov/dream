@@ -35,6 +35,7 @@ files=(
   kbqa/wikidata/wikidata_lite.hdt.index.v1-1
   kbqa/models/rel_ranking.tar.gz
   kbqa/wikidata/topical_chat.tar.gz
+  kbqa/wikidata/wiki_dict_properties.pickle
   embeddings/reddit_fastText/wordpunct_tok_reddit_comments_2017_11_100.bin
   kbqa/wikidata/path_ranking_data.tar.gz
   kbqa/models/opendialkg_path_ranking_lite.tar.gz

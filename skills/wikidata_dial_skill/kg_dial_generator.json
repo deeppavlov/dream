@@ -73,6 +73,10 @@
       {
         "url": "http://files.deeppavlov.ai/kbqa/wikidata/wikidata_lite.hdt.index.v1-1",
         "subdir": "{DOWNLOADS_PATH}/wikidata"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/kbqa/wikidata/wiki_dict_properties.pickle",
+        "subdir": "{DOWNLOADS_PATH}/wikidata_eng"
       }
     ]
   }
