@@ -1043,8 +1043,8 @@ services:
       replicas: 1
       resources:
         limits:
-          memory: 20G
+          memory: 10G
         reservations:
-          memory: 20G
+          memory: 10G
 
 version: '3.7'
