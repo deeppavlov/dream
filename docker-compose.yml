@@ -801,9 +801,9 @@ services:
       replicas: 8
       resources:
         limits:
-          memory: 256M
+          memory: 768M
         reservations:
-          memory: 256M
+          memory: 768M
 
   odqa:
     build:
@@ -920,9 +920,9 @@ services:
       replicas: 1
       resources:
         limits:
-          memory: 256M
+          memory: 3G
         reservations:
-          memory: 256M
+          memory: 3G
 
   dialog-breakdown:
     build:
