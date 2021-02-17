@@ -801,9 +801,9 @@ services:
       replicas: 8
       resources:
         limits:
-          memory: 768M
+          memory: 2G
         reservations:
-          memory: 768M
+          memory: 2G
 
   odqa:
     build:
