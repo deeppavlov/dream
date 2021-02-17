@@ -278,7 +278,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     skill_names = [c['skill_name'] for c in candidates]
     how_are_you_spec = "Do you want to know what I can do?"  # this is always at the end of answers to `how are you`
     what_i_can_do_spec = "socialbot running inside"
-    psycho_help_spec = "If you or someone you know is in immediate danger"
+    psycho_help_spec = "might not always feel like it"
     greeting_spec = "this is an Alexa Prize Socialbot"
     misheard_with_spec1 = "I misheard you"
     misheard_with_spec2 = "like to chat about"
