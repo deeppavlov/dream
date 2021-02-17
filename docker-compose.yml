@@ -164,7 +164,8 @@ services:
 
   intent-responder:
     build:
-      context: ./skills/IntentResponder/
+      context: .
+      dockerfile: ./skills/IntentResponder/Dockerfile
     command: gunicorn --workers=1 --name=responder --bind 0.0.0.0:8012 --timeout=100 server:app
     deploy:
       mode: replicated
