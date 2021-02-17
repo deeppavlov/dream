@@ -7,6 +7,7 @@ RUN pip install -r requirements.txt
 
 RUN python -m spacy download en
 RUN python -m spacy download en_core_web_sm
+RUN python -m spacy download en_core_web_md
 RUN python -m nltk.downloader vader_lexicon
 
 COPY ./skills/friendship_skill/programy_logger_off.sh ./programy_logger_off.sh
