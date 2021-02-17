@@ -395,7 +395,6 @@ services:
     env_file: [.env.dev]
     volumes:
       - "./skills/wikidata_dial_skill:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8091:8091
   question-generator:

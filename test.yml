@@ -56,8 +56,6 @@ services:
       - CUDA_VISIBLE_DEVICES=9
   wikidata-dial-skill:
     env_file: [ .env.dev ]
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=5
   mongo:
