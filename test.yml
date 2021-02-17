@@ -50,14 +50,6 @@ services:
     env_file: [ .env.dev ]
     environment:
       - CUDA_VISIBLE_DEVICES=7
-  masked-lm:
-    env_file: [ .env.dev ]
-    environment:
-      - CUDA_VISIBLE_DEVICES=9
-  wikidata-dial-skill:
-    env_file: [ .env.dev ]
-    environment:
-      - CUDA_VISIBLE_DEVICES=5
   mongo:
     env_file: [ .env.dev ]
     command: mongod
@@ -184,10 +176,6 @@ services:
   spelling-preprocessing:
     env_file: [ .env.dev ]
   grounding-skill:
-    env_file: [ .env.dev ]
-  friendship-skill:
-    env_file: [ .env.dev ]
-  entity-storer:
     env_file: [ .env.dev ]
   knowledge-grounding-skill:
     env_file: [ .env.dev ]
