@@ -24,7 +24,6 @@ def handler(requested_data):
     st_time = time.time()
 
     dialogs = requested_data.get("dialogs", [])
-    logger.info(dialogs)
 
     human_utter_indexes = requested_data.get("human_utter_indexes", [0] * len(dialogs))
     responses = []
