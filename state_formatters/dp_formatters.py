@@ -430,8 +430,8 @@ def wp_formatter_dialog(dialog: Dict):
 
 def el_formatter_dialog(dialog: Dict):
     # Used by: entity_linking annotator
-    ner_output = dialog['human_utterances'][-1]['annotations'].get('ner', [])
-    nounphrases = dialog['human_utterances'][-1]['annotations'].get('cobot_nounphrases', [])
+    ner_output = dialog["human_utterances"][-1]["annotations"].get("ner", [])
+    nounphrases = dialog["human_utterances"][-1]["annotations"].get("cobot_nounphrases", [])
     entity_substr = []
     if ner_output:
         for entities in ner_output:
@@ -439,21 +439,15 @@ def el_formatter_dialog(dialog: Dict):
                 if entity and isinstance(entity, dict) and "text" in entity and entity["text"].lower() != "alexa":
                     entity_substr.append(entity["text"])
 
-    if "sentseg" in dialog['human_utterances'][-1]['annotations']:
-        last_human_utterance_text = dialog['human_utterances'][-1]['annotations']['sentseg']['punct_sent']
+    if "sentseg" in dialog["human_utterances"][-1]["annotations"]:
+        last_human_utterance_text = dialog["human_utterances"][-1]["annotations"]["sentseg"]["punct_sent"]
     else:
-        last_human_utterance_text = dialog['human_utterances'][-1]['text']
+        last_human_utterance_text = dialog["human_utterances"][-1]["text"]
     if nounphrases:
         entity_substr += nounphrases
     entity_substr = list(set(entity_substr))
 
-    return [
-        {
-            'entity_substr': [entity_substr],
-            'template': [''],
-            'context': [last_human_utterance_text]
-        }
-    ]
+    return [{"entity_substr": [entity_substr], "template": [""], "context": [last_human_utterance_text]}]
 
 
 def kbqa_formatter_dialog(dialog: Dict):
@@ -520,7 +514,7 @@ def intent_responder_formatter_dialog(dialog: Dict):
         for intent in called:
             called_intents[intent] = True
     dialog["called_intents"] = called_intents
-    dialog["utterances"] = dialog["utterances"][-(utils.LAST_N_TURNS * 2 + 1):]
+    dialog["utterances"] = dialog["utterances"][-(utils.LAST_N_TURNS * 2 + 1) :]
     for utt in dialog["utterances"]:
         if "sentseg" in utt["annotations"]:
             utt["text"] = utt["annotations"]["sentseg"]["punct_sent"]
@@ -548,8 +542,9 @@ def dialog_breakdown_formatter(dialog: Dict) -> List[Dict]:
 
 def entity_storer_formatter(dialog: Dict) -> List[Dict]:
     human_utter_index = len(dialog["human_utterances"]) - 1
+    attributes = {"entities": dialog.get("human", {}).get("attributes", {}).get("entities", {})}
 
-    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1, human_last_turns=2, exclude_attributes=[])
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1, human_last_turns=2)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="modified_sents")
 
     # rm all execpt human_utterances, bot_utterances
@@ -558,7 +553,7 @@ def entity_storer_formatter(dialog: Dict) -> List[Dict]:
         dialog, types_utterances=["human_utterances", "bot_utterances"]
     )
 
-    new_dialog["human"] = {"entities": dialog.get("human", {}).get("entities", {})}
+    new_dialog["human"] = {"attributes": attributes}
 
     return [{"human_utter_indexes": [human_utter_index], "dialogs": [new_dialog]}]
 
@@ -566,7 +561,11 @@ def entity_storer_formatter(dialog: Dict) -> List[Dict]:
 def friendship_skill_formatter(dialog: Dict) -> List[Dict]:
     human_utter_index = len(dialog["human_utterances"]) - 1
 
-    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1, human_last_turns=1, exclude_attributes=[])
+    human_attributes = dialog.get("human", {}).get("attributes", {})
+    friendship_skill_state = human_attributes.get("friendship_skill_state", {})
+    entities = human_attributes.get("entities", {})
+
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1, human_last_turns=1)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
 
     # rm all execpt human_utterances, bot_utterances
@@ -574,10 +573,6 @@ def friendship_skill_formatter(dialog: Dict) -> List[Dict]:
     new_dialog = utils.clean_up_utterances_to_avoid_unwanted_keys(
         dialog, types_utterances=["human_utterances", "bot_utterances"]
     )
-
-    human_attributes = dialog.get("human", {}).get("attributes", {})
-    friendship_skill_state = human_attributes.get("friendship_skill_state", {})
-    entities = human_attributes.get("entities", {})
 
     return [
         {

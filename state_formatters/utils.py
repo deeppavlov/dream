@@ -16,7 +16,7 @@ def get_last_n_turns(
     bot_last_turns=None,
     human_last_turns=None,
     total_last_turns=None,
-    exclude_attributes=["entities"],
+    excluded_attributes=["entities"],
 ):
     bot_last_turns = bot_last_turns or LAST_N_TURNS
     human_last_turns = human_last_turns or bot_last_turns + 1
@@ -25,10 +25,13 @@ def get_last_n_turns(
     new_dialog = {}
     for key, value in dialog.items():
         if key not in ["utterances", "human_utterances", "bot_utterances"]:
-            new_dialog[key] = deepcopy(value)
-            if key in ["human", "bot"]:
-                new_dialog[key] = deepcopy({k: v for k, v in value.items() if k not in exclude_attributes})
-
+            if isinstance(value, dict) and "attributes" in value:
+                new_dialog[key] = {k: deepcopy(v) for k, v in value.items() if k != "attributes"}
+                new_dialog[key]["attributes"] = {
+                    k: deepcopy(v) for k, v in value["attributes"].items() if k not in excluded_attributes
+                }
+            else:
+                new_dialog[key] = deepcopy(value)
     new_dialog["utterances"] = deepcopy(dialog["utterances"][-total_last_turns:])
 
     new_dialog["human_utterances"] = []

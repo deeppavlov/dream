@@ -111,8 +111,8 @@ class Entity:
         entities = [ent for ent in entities if self.name in wnl.lemmatize(ent["text"], "n")]
 
         active_skill = bot_utter.get("active_skill", "pre_start")
-        sentiment = utils.get_sentiment(human_utter, probs=False, default_labels=['neutral'])[0]
-        emotions = utils.get_emotions(human_utter, probs=True, default_probs={'neutral': 0})
+        sentiment = utils.get_sentiment(human_utter, probs=False)[0]
+        emotions = utils.get_emotions(human_utter)
         intents = utils.get_intents(human_utter)
         topics = utils.get_topics(human_utter)
         for entity in entities:
@@ -136,8 +136,8 @@ class Entity:
         entities = [ent for ent in entities if self.name in wnl.lemmatize(ent["text"], "n")]
 
         active_skill = bot_utter.get("active_skill", "pre_start")
-        next_user_sentiment = utils.get_sentiment(human_utter, probs=False, default_labels=['neutral'])[0]
-        next_user_emotions = utils.get_emotions(human_utter, probs=True, default_probs={'neutral': 0})
+        next_user_sentiment = utils.get_sentiment(human_utter, probs=False)[0]
+        next_user_emotions = utils.get_emotions(human_utter)
         next_user_intents = utils.get_intents(human_utter)
         next_user_topics = utils.get_topics(human_utter)
         for entity in entities:
