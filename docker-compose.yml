@@ -920,9 +920,9 @@ services:
       replicas: 1
       resources:
         limits:
-          memory: 3G
+          memory: 5G
         reservations:
-          memory: 3G
+          memory: 5G
 
   dialog-breakdown:
     build:
