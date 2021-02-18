@@ -278,6 +278,16 @@ def respond():
                         odqa_response = result
 
             response, confidence = odqa_kbqa_choose(last_phrase, odqa_response, kbqa_response)
+            if len(response) > 300:
+                response_cut = ""
+                cur_len = 0
+                response_split = response.split(', ')
+                for piece in response_split:
+                    if cur_len + len(piece) < 300:
+                        response_cut += f"{piece}, "
+                        cur_len += len(piece)
+                response = response_cut.rstrip(", ")
+
             if not response:
                 response = random.choice(DONT_KNOW_ANSWER)
                 confidence = FACTOID_NOTSURE_CONFIDENCE
