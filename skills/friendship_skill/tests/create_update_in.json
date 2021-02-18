@@ -1,6 +1,7 @@
 {
+    "rand_seed": 31425,
     "human_utter_index_batch": [
-        1
+        0
     ],
     "dialog_batch": [
         {
@@ -12,15 +13,34 @@
                             "asr_confidence": "undefined"
                         },
                         "spelling_preprocessing": "hi",
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9982210397720337
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9222673773765564
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9989814758300781
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9996328353881836
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.737922191619873
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0014452040195465088
+                            }
+                        },
+                        "cobot_nounphrases": [],
                         "blacklisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "cobot_nounphrases": [],
-                        "conceptnet": {},
                         "factoid_classification": {
-                            "factoid": 0.009537393227219582,
+                            "factoid": 0.009537387639284134,
                             "conversational": 0.990462601184845
                         },
                         "sentseg": {
@@ -29,31 +49,19 @@
                                 "hi."
                             ]
                         },
-                        "sentiment_classification": {
-                            "text": [
-                                "positive",
-                                0.7813644409179688
-                            ]
+                        "conceptnet": {},
+                        "dialog_breakdown": {
+                            "breakdown": 0.14266762137413025,
+                            "no_breakdown": 0.8573323488235474
                         },
-                        "toxic_classification": {
-                            "identity_hate": 0.00018966197967529297,
-                            "insult": 0.0003548860549926758,
-                            "obscene": 0.00013205409049987793,
-                            "severe_toxic": 7.709860801696777e-05,
-                            "sexual_explicit": 0.00024537532590329647,
-                            "threat": 0.00019372269161976874,
-                            "toxic": 0.0008196837152354419
-                        },
-                        "emotion_classification": {
-                            "text": {
-                                "anger": 0.2747260332107544,
-                                "fear": 0.2630036473274231,
-                                "joy": 0.27582401037216187,
-                                "love": 0.3456863760948181,
-                                "sadness": 0.2310934215784073,
-                                "surprise": 0.2347712516784668,
-                                "neutral": 0.9991804957389832
-                            }
+                        "odqa": {
+                            "answer": "",
+                            "answer_pos": 0,
+                            "answer_sentence": "",
+                            "confidence": 0.0,
+                            "paragraph": "",
+                            "qa_system": "odqa",
+                            "topical_chat_fact": ""
                         },
                         "intent_catcher": {
                             "cant_do": {
@@ -112,6 +120,10 @@
                                 "confidence": 0.0,
                                 "detected": 0
                             },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
                             "what_can_you_do": {
                                 "confidence": 0.0,
                                 "detected": 0
@@ -140,18 +152,6 @@
                                 "confidence": 0.0,
                                 "detected": 0
                             }
-                        },
-                        "odqa": {
-                            "answer": "",
-                            "answer_pos": 0,
-                            "answer_sentence": "",
-                            "confidence": 0.0,
-                            "paragraph": "",
-                            "qa_system": "odqa"
-                        },
-                        "dialog_breakdown": {
-                            "breakdown": 0.1426677107810974,
-                            "no_breakdown": 0.8573322892189026
                         },
                         "ner": [
                             [
@@ -164,427 +164,83 @@
                                 }
                             ]
                         ],
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Other"
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        },
+                        "entity_linking": [
+                            [
+                                [
+                                    "Q782",
+                                    "Q1568",
+                                    "Q18031792",
+                                    "Q15815525",
+                                    "Q4290475"
+                                ]
+                            ],
+                            [
+                                [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            ]
+                        ],
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
                                 "hi."
                             ]
                         },
-                        "kbqa": {
-                            "answer": "Not Found",
-                            "confidence": 0.0,
-                            "qa_system": "kbqa"
-                        },
-                        "cobot_dialogact": {
-                            "intents": [
-                                "General_ChatIntent"
-                            ],
-                            "topics": [
-                                "Phatic"
-                            ]
-                        },
-                        "cobot_topics": {
-                            "text": [
-                                "Phatic"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "text": "i like my car.",
-                    "annotations": {
-                        "asr": {
-                            "asr_confidence": "undefined"
-                        },
-                        "spelling_preprocessing": "i like my car",
-                        "blacklisted_words": {
-                            "inappropriate": false,
-                            "profanity": false,
-                            "restricted_topics": false
-                        },
-                        "factoid_classification": {
-                            "factoid": 0.0017397922929376364,
-                            "conversational": 0.9982602000236511
-                        },
-                        "emotion_classification": {
-                            "text": {
-                                "anger": 0.36839693784713745,
-                                "fear": 0.24130603671073914,
-                                "joy": 0.2826783061027527,
-                                "love": 0.32026124000549316,
-                                "sadness": 0.3140684962272644,
-                                "surprise": 0.16143561899662018,
-                                "neutral": 0.9991900324821472
+                        "wiki_parser": [
+                            {
+                                "Hawaii": {
+                                    "instance of": [
+                                        [
+                                            "Q35657",
+                                            "state of the United States"
+                                        ]
+                                    ],
+                                    "located in": [
+                                        [
+                                            "Q30",
+                                            "United States of America"
+                                        ]
+                                    ],
+                                    "country": [
+                                        [
+                                            "Q30",
+                                            "United States of America"
+                                        ]
+                                    ]
+                                }
                             }
-                        },
-                        "cobot_nounphrases": [
-                            "my car"
                         ],
-                        "toxic_classification": {
-                            "identity_hate": 0.0016292333602905273,
-                            "insult": 0.001177966594696045,
-                            "obscene": 0.002318471670150757,
-                            "severe_toxic": 0.0008936524391174316,
-                            "sexual_explicit": 0.0018019822891801596,
-                            "threat": 0.0021067867055535316,
-                            "toxic": 0.004069975111633539
-                        },
-                        "sentiment_classification": {
-                            "text": [
-                                "positive",
-                                0.7644631862640381
-                            ]
-                        },
-                        "conceptnet": {
-                            "my car": {
-                                "Causes": [
-                                    "accident",
-                                    "crash",
-                                    "get in accident"
-                                ],
-                                "CausesDesire": [
-                                    "drive",
-                                    "drive car",
-                                    "drive it"
-                                ],
-                                "HasProperty": [
-                                    "red",
-                                    "blue",
-                                    "yellow"
-                                ],
-                                "SymbolOf": [
-                                    "love",
-                                    "my childhood",
-                                    "life"
-                                ]
-                            }
-                        },
-                        "sentseg": {
-                            "punct_sent": "i like my car.",
-                            "segments": [
-                                "i like my car."
-                            ]
-                        },
-                        "intent_catcher": {
-                            "cant_do": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "choose_topic": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "doing_well": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "dont_understand": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "exit": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "lets_chat_about": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "no": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "opinion_request": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "repeat": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "stupid": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "tell_me_a_story": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "tell_me_more": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "topic_switching": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "weather_forecast_intent": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_can_you_do": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_is_your_job": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_is_your_name": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_time": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "where_are_you_from": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "who_made_you": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "yes": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            }
-                        },
-                        "dialog_breakdown": {
-                            "breakdown": 0.29068106412887573,
-                            "no_breakdown": 0.7093189358711243
-                        },
-                        "ner": [
-                            []
-                        ],
-                        "sentrewrite": {
-                            "clusters": [],
-                            "modified_sents": [
-                                "hi.",
-                                "Hi, this is an Alexa Prize Socialbot! Great! What would you want to talk about? Movies, books and games are my favorite topics.",
-                                "i like my car."
-                            ]
-                        },
-                        "odqa": {
-                            "answer": "a custom pimp",
-                            "answer_pos": 12,
-                            "answer_sentence": "Each car is a custom pimp, tailored to the personalities and interests of the owners.",
-                            "confidence": 0.9974843263626099,
-                            "paragraph": "Each car is a custom pimp, tailored to the personalities and interests of the owners. For example, a  fan had his car painted to look like one specially customized in the  game, while a bowler had a ball spinner installed in his trunk, a badminton player had a badminton net installed in the back of his Dodge Caravan, and a surfer got a clothes dryer in the back of his Volkswagen Type 2. Work usually includes new paint, accessories, chrome, tires, and rims, and internal electronics (DVD players, video games, large TFT screens, and other cutting-edge accessories).",
-                            "qa_system": "odqa"
-                        },
-                        "kbqa": {
-                            "answer": "Not Found",
-                            "confidence": 0.0,
-                            "qa_system": "kbqa"
-                        },
-                        "cobot_topics": {
-                            "text": [
-                                "SciTech"
-                            ]
-                        },
-                        "cobot_dialogact": {
-                            "intents": [
-                                "Information_DeliveryIntent"
-                            ],
-                            "topics": [
-                                "Other"
-                            ]
-                        }
+                        "kbqa": [
+                            "United States of America",
+                            0.10643990337848663
+                        ]
                     }
                 }
             ],
-            "bot_utterances": [
-                {
-                    "text": "Hi, this is an Alexa Prize Socialbot! Great! What would you want to talk about? Movies, books and games are my favorite topics.",
-                    "annotations": {
-                        "sentseg": {
-                            "punct_sent": "Hi, this is an Alexa Prize Socialbot! Great! What would you want to talk about? Movies, books and games are my favorite topics.",
-                            "segments": [
-                                "Hi, this is an Alexa Prize Socialbot!",
-                                "Great!",
-                                "What would you want to talk about?",
-                                "Movies, books and games are my favorite topics."
-                            ]
-                        },
-                        "ner": [
-                            [
-                                {
-                                    "confidence": 1,
-                                    "end_pos": 7,
-                                    "start_pos": 5,
-                                    "text": "alexa prize",
-                                    "type": "MISC"
-                                }
-                            ],
-                            [],
-                            [],
-                            []
-                        ],
-                        "sentrewrite": {
-                            "clusters": [],
-                            "modified_sents": [
-                                "hi.",
-                                "Hi, this is an Alexa Prize Socialbot! Great! What would you want to talk about? Movies, books and games are my favorite topics."
-                            ]
-                        }
-                    },
-                    "active_skill": "friendship_skill"
-                }
-            ]
+            "bot_utterances": []
         }
     ],
     "friendship_skill_state_batch": [
-        {
-            "dialog_flow_state": "{\"vars\": {\"__state__\": \"State.USR_STD_GREETING\", \"__stack__\": [], \"__user_utterance__\": \"hi.\", \"__system_state__\": \"State.SYS_STD_GREETING\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"Great! What would you want to talk about? Movies, books and games are my favorite topics.\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"GREETING\\\"<__tuple__>\\\"State.USR_STD_GREETING\\\"\"}",
-            "history": {
-                "0": "State.SYS_STD_GREETING"
-            },
-            "last_human_utter_index": 0,
-            "shared_memory": {
-                "greeting_step_id": 1,
-                "last_acknowledgements": [
-                    "Great! "
-                ]
-            },
-            "used_links": {}
-        }
+        {}
     ],
     "entities_batch": [
-        {
-            "Movies": {
-                "bot_encounters": [
-                    {
-                        "full_name": "Movies",
-                        "human_utterance_index": 1,
-                        "next_user_emotions": {
-                            "anger": 0.36839693784713745,
-                            "fear": 0.24130603671073914,
-                            "joy": 0.2826783061027527,
-                            "love": 0.32026124000549316,
-                            "neutral": 0.9991900324821472,
-                            "sadness": 0.3140684962272644,
-                            "surprise": 0.16143561899662018
-                        },
-                        "next_user_intents": [],
-                        "next_user_sentiment": "positive",
-                        "next_user_topics": [],
-                        "pos": [
-                            "NOUN"
-                        ],
-                        "skill_name": "friendship_skill"
-                    }
-                ],
-                "human_encounters": [],
-                "name": "Movies"
-            },
-            "book": {
-                "bot_encounters": [
-                    {
-                        "full_name": "books",
-                        "human_utterance_index": 1,
-                        "next_user_emotions": {
-                            "anger": 0.36839693784713745,
-                            "fear": 0.24130603671073914,
-                            "joy": 0.2826783061027527,
-                            "love": 0.32026124000549316,
-                            "neutral": 0.9991900324821472,
-                            "sadness": 0.3140684962272644,
-                            "surprise": 0.16143561899662018
-                        },
-                        "next_user_intents": [],
-                        "next_user_sentiment": "positive",
-                        "next_user_topics": [],
-                        "pos": [
-                            "NOUN"
-                        ],
-                        "skill_name": "friendship_skill"
-                    }
-                ],
-                "human_encounters": [],
-                "name": "book"
-            },
-            "car": {
-                "bot_encounters": [],
-                "human_encounters": [
-                    {
-                        "emotions": {
-                            "anger": 0.36839693784713745,
-                            "fear": 0.24130603671073914,
-                            "joy": 0.2826783061027527,
-                            "love": 0.32026124000549316,
-                            "neutral": 0.9991900324821472,
-                            "sadness": 0.3140684962272644,
-                            "surprise": 0.16143561899662018
-                        },
-                        "full_name": "car",
-                        "human_utterance_index": 1,
-                        "intents": [],
-                        "next_skill_name": "",
-                        "pos": [
-                            "NOUN"
-                        ],
-                        "previous_skill_name": "friendship_skill",
-                        "sentiment": "positive",
-                        "topics": []
-                    }
-                ],
-                "name": "car"
-            },
-            "game": {
-                "bot_encounters": [
-                    {
-                        "full_name": "games",
-                        "human_utterance_index": 1,
-                        "next_user_emotions": {
-                            "anger": 0.36839693784713745,
-                            "fear": 0.24130603671073914,
-                            "joy": 0.2826783061027527,
-                            "love": 0.32026124000549316,
-                            "neutral": 0.9991900324821472,
-                            "sadness": 0.3140684962272644,
-                            "surprise": 0.16143561899662018
-                        },
-                        "next_user_intents": [],
-                        "next_user_sentiment": "positive",
-                        "next_user_topics": [],
-                        "pos": [
-                            "NOUN"
-                        ],
-                        "skill_name": "friendship_skill"
-                    }
-                ],
-                "human_encounters": [],
-                "name": "game"
-            },
-            "topic": {
-                "bot_encounters": [
-                    {
-                        "full_name": "favorite topics",
-                        "human_utterance_index": 1,
-                        "next_user_emotions": {
-                            "anger": 0.36839693784713745,
-                            "fear": 0.24130603671073914,
-                            "joy": 0.2826783061027527,
-                            "love": 0.32026124000549316,
-                            "neutral": 0.9991900324821472,
-                            "sadness": 0.3140684962272644,
-                            "surprise": 0.16143561899662018
-                        },
-                        "next_user_intents": [],
-                        "next_user_sentiment": "positive",
-                        "next_user_topics": [],
-                        "pos": [
-                            "ADJ",
-                            "NOUN"
-                        ],
-                        "skill_name": "friendship_skill"
-                    }
-                ],
-                "human_encounters": [],
-                "name": "topic"
-            }
-        }
+        {}
     ]
 }

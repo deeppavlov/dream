@@ -1,6 +1,7 @@
 from typing import List
 import logging
 import os
+import collections
 
 
 import en_core_web_sm
@@ -10,6 +11,9 @@ from nltk.stem import WordNetLemmatizer
 import common.utils as utils
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
+
+ENCOUNTERS_MAX_LEN = 3
+ENTITY_MAX_NO = 10
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -97,6 +101,9 @@ class Entity:
                 self.human_encounters = []
                 self.bot_encounters = []
 
+        self.human_encounters = collections.deque(self.human_encounters, maxlen=ENCOUNTERS_MAX_LEN)
+        self.bot_encounters = collections.deque(self.bot_encounters, maxlen=ENCOUNTERS_MAX_LEN)
+
     def __iter__(self):
         for x, y in self.__dict__.items():
             if x in ["human_encounters", "bot_encounters"]:
@@ -161,6 +168,14 @@ class Entity:
         ]
         for encounter in encounters:
             encounter.next_skill_name = active_skill
+
+    def get_last_utterance_index(self):
+        utterance_indexes = [
+            encounter.human_utterance_index
+            for encounter in list(self.human_encounters)[-1:] + list(self.bot_encounters)[-1:]
+        ]
+        max_utterance_index = max(utterance_indexes) if utterance_indexes else -1
+        return max_utterance_index
 
 
 prohibited_nouns = ["kind", "sort"]
@@ -245,6 +260,12 @@ def update_entities(dialog, human_utter_index, entities={}):
             entities[entity_name].update_human_encounters(human_utterances, bot_utterances, human_utter_index)
             for entity_name in short_human_entities
         ]
+    index2entity = {
+        entity.get_last_utterance_index(): {entity_name: entity} for entity_name, entity in entities.items()
+    }
+    recent_indexes = sorted(index2entity)[-ENTITY_MAX_NO:]
+    entities = {}
+    [entities.update(index2entity[i]) for i in recent_indexes]
     return entities
 
 

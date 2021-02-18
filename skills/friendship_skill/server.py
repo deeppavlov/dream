@@ -122,7 +122,7 @@ def respond():
         except Exception as exc:
             sentry_sdk.capture_exception(exc)
             logger.exception(exc)
-            responses.append(("Sorry", 0.0, {}))
+            responses.append(("Sorry", 0., {}, {}, {}))
 
         total_time = time.time() - st_time
         logger.info(f"friendship_skill exec time = {total_time:.3f}s")

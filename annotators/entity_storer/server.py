@@ -39,7 +39,6 @@ def handler(requested_data):
             sentry_sdk.capture_exception(exc)
             human_attr = {}
         responses += [{"human_attributes": human_attr}]
-
     total_time = time.time() - st_time
     logger.info(f"entity_storer exec time: {total_time:.3f}s")
     return responses

@@ -177,6 +177,14 @@ services:
     env_file: [ .env.dev ]
   grounding-skill:
     env_file: [ .env.dev ]
+  masked-lm:
+    env_file: [ .env.dev ]
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
+  friendship-skill:
+    env_file: [ .env.dev ]
+  entity-storer:
+    env_file: [ .env.dev ]
   knowledge-grounding-skill:
     env_file: [ .env.dev ]
 version: '3.7'

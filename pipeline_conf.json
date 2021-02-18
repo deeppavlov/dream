@@ -271,6 +271,19 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "required_previous_services": ["annotators.spelling_preprocessing"],
                 "state_manager_method": "add_annotation"
+            },
+            "entity_storer": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://entity-storer:8089/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:entity_storer_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "update_attributes",
+                "required_previous_services": [
+                    "annotators.combined_classification",
+                    "annotators.intent_catcher"
+                ]
             }
         },
         "skill_selectors": {
@@ -696,6 +709,16 @@
                     "url": "http://factoid-qa:8071/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
+            },
+            "friendship_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://friendship-skill:8086/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:friendship_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
