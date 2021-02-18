@@ -82,7 +82,6 @@ def masked_lm(templates=["Hello, it's [MASK] dog."], prob_threshold=0.0, probs_f
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
-        logger.error(f"request_data = {request_data}")
         predictions_batch = {}
     logger.debug(f"predictions_batch = {predictions_batch}")
     tokens_batch = []

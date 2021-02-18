@@ -42,3 +42,7 @@ dialog-breakdown:
 
 knowledge-grounding-skill:
   CUDA_VISIBLE_DEVICES: "''"
+
+masked-lm:
+  CUDA_VISIBLE_DEVICES: '0'
+  gpu: 2
