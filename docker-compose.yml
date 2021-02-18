@@ -956,9 +956,9 @@ services:
       replicas: 4
       resources:
         limits:
-          memory: 384M
+          memory: 768M
         reservations:
-          memory: 384M
+          memory: 768M
 
   masked-lm:
     build:
