@@ -974,9 +974,9 @@ services:
       replicas: 1
       resources:
         limits:
-          memory: 2G
+          memory: 4G
         reservations:
-          memory: 2G
+          memory: 4G
 
   entity-storer:
     build:
