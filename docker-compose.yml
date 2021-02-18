@@ -831,7 +831,7 @@ services:
         CONFIG: kbqa_cq_mt_bert_lite.json
         PORT: 8072
         SRC_DIR: annotators/kbqa/
-        COMMIT: c3676867684ca42e71e7af935c8ec721104cd291
+        COMMIT: 5dac85a06fde0e2983c7569ae058e3bf2d45ce2c
       context: ./
       dockerfile: annotators/kbqa/Dockerfile
     environment:
