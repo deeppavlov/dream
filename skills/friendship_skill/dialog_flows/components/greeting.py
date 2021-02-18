@@ -289,7 +289,8 @@ def link_to_by_enity_response(vars):
                 }
                 link_to_skill_scores = masked_lm(list(link_to_skills.values()), probs_flag=True)
                 link_to_skill_scores = {
-                    topic: max(*list(score.values()), 0) for topic, score in zip(link_to_skills, link_to_skill_scores)
+                    topic: max(*list(score.values()), 0) if score else 0
+                    for topic, score in zip(link_to_skills, link_to_skill_scores)
                 }
                 skill_names = sorted(link_to_skill_scores, key=lambda x: link_to_skill_scores[x])[-2:]
         else:

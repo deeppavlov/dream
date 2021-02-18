@@ -33,6 +33,7 @@ ODQA_URL=http://odqa:8078/model
 BLACKLIST_ANNOTATOR_URL=http://blacklisted-words:8018/blacklisted_words_batch
 COMET_SERVICE_URL=http://comet-atomic:8053/comet
 CONCEPTNET_SERVICE_URL=http://comet-conceptnet:8065/comet
+MASKED_LM_SERVICE_URL=http://masked-lm:8088/respond
 SENTIMENT_CLASSIFICATION_SERVICE_URL=http://sentiment-classification:8024/model
 WIKIDATA_URL=http://wiki-parser:8077/model
 ENTITY_LINKING_URL=http://entity-linking:8075/model
