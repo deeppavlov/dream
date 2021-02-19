@@ -23,24 +23,27 @@ def respond():
                     "answer_pos": 0,
                     "answer_sentence": "",
                     "topical_chat_fact": "",
-                    "paragraph": ""}
-    odqa_res = [default_resp] * len(odqa_input.get("question_raw", []))
+                    "paragraph": "",
+                    "first_par": ""}
+    odqa_res = [default_resp] * len(odqa_input.get("human_sentences", []))
     try:
         st_time = time.time()
+        logger.info(f"odqa input {odqa_input}")
         resp = requests.post("http://0.0.0.0:8080/model", json=odqa_input, timeout=1.5)
         if resp.status_code == 200:
             odqa_resp = resp.json()
             if odqa_resp:
                 odqa_res = []
                 for elem in odqa_resp:
-                    if elem and len(elem) == 6:
+                    if elem and len(elem) == 7:
                         odqa_res.append({"qa_system": "odqa",
                                          "answer": elem[0],
                                          "confidence": float(elem[1]),
                                          "answer_pos": elem[2],
                                          "answer_sentence": elem[3],
                                          "topical_chat_fact": elem[4],
-                                         "paragraph": elem[5]})
+                                         "paragraph": elem[5],
+                                         "first_par": elem[6]})
                     else:
                         odqa_res.append(default_resp)
         logger.info("Respond exec time: " + str(time.time() - st_time))
