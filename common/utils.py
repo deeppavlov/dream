@@ -178,7 +178,7 @@ def is_yes(annotated_phrase):
 
 
 no_templates = re.compile(r"(\bno\b|\bnot\b|no way|don't|no please|i disagree)")
-DONOTKNOW_LIKE = [r"(i )?(do not|don't) know", "you (choose|decide|pick up)"]
+DONOTKNOW_LIKE = [r"(i )?(do not|don't) know", "you (choose|decide|pick up)", "no idea"]
 
 
 def is_no(annotated_phrase):
