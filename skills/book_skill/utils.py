@@ -33,12 +33,17 @@ LIKE_PATTERN = r"(like|love|prefer|adore|enjoy|fond of|passionate of|fan of|inte
 FAVORITE_PATTERN = r"(favorite|loved|beloved|fondling|best|most interesting)"
 
 GENRE_PHRASES = json.load(open('genre_phrases.json', 'r'))[0]
-ENTITY_SERVICE_URL = getenv('COBOT_ENTITY_SERVICE_URL')
-QUERY_SERVICE_URL = getenv('COBOT_QUERY_SERVICE_URL')
-QA_SERVICE_URL = getenv('COBOT_QA_SERVICE_URL')
-WIKIDATA_URL = getenv("WIKIDATA_URL")
-ENTITY_LINKING_URL = getenv("ENTITY_LINKING_URL")
-API_KEY = getenv('COBOT_API_KEY')
+DEBUG_MODE = False
+if DEBUG_MODE:
+    API_KEY = 'QFPxaMUoPi5qcax2FBt9D6Y6vAgLRBbn56TW1iO3'
+    QA_SERVICE_URL = 'https://06421kpunk.execute-api.us-east-1.amazonaws.com/prod/qa/v1/answer'
+    WIKIDATA_URL = 'http://0.0.0.0:8077/model'
+    ENTITY_LINKING_URL = 'http://0.0.0.0:8075/model'
+else:
+    QA_SERVICE_URL = getenv('COBOT_QA_SERVICE_URL')
+    WIKIDATA_URL = getenv("WIKIDATA_URL")
+    ENTITY_LINKING_URL = getenv("ENTITY_LINKING_URL")
+    API_KEY = getenv('COBOT_API_KEY')
 
 kbqa_files = ['inverted_index_eng.pickle',
               'entities_list.pickle',
@@ -220,7 +225,7 @@ def fact_about_book(annotated_user_phrase):
     logger.debug(annotated_user_phrase)
     bookname, _ = get_name(annotated_user_phrase, 'book')
     logger.debug('Getting a fact about bookname')
-    reply = get_answer(f'fact about book "{bookname}"')
+    reply = get_answer(f'fact about "{bookname}"')
     return reply
 
 
@@ -428,13 +433,17 @@ def get_published_year(book_entity):
 
 def entity_to_label(entity):
     logger.debug(f'Calling entity_to_label for {entity}')
-    # assert type(entity) == str and entity[0] == 'Q'
+    if type(entity) != str or entity[0] != 'Q':
+        warning_text = 'Wrong entity format. We assume it to be label but check the code'
+        sentry_sdk.capture_exception(Exception(warning_text))
+        logger.exception(warning_text)
+        return entity
     global wikidata
     label = ""
     if entity in wikidata['labels']:
         label = wikidata['labels'][entity]
     else:
-        labels = get_triples(["find_label"], [(entity, "")])[0]
+        labels = get_triples(["find_label"], [(entity, "")])
         try:
             sep = '"'
             if sep in labels[0]:
@@ -516,30 +525,33 @@ def wikidata_process_entities(entity_list, mode='author', bookyear=False,
             logger.exception(f'Wrong mode: {mode}')
             return None, None
         requested_entities = sorted(requested_entities, key=lambda x: int(x[1:]))  # Sort entities by frequency
-        found_entity, n_years_ago = None, None
+        found_entity, plain_entity, n_years_ago = None, None, None
         if len(requested_entities) > 0:
-            found_entity = requested_entities[0]  # Found entity
+            plain_entity = requested_entities[0]  # Found entity
+            found_entity = entity_to_label(plain_entity)
             n_years_ago = None
-            logger.info(f'Found entity {found_entity}')
+            logger.info(f'Found entity {plain_entity}')
             if bookyear and mode == 'book':
-                logger.debug('Getting published year for ' + str(found_entity))
-                publication_year = get_published_year(found_entity)
+                logger.debug(f'Getting published year for {plain_entity}')
+                publication_year = get_published_year(plain_entity)
                 n_years_ago = datetime.now().year - int(publication_year)
-                logger.debug('Years ago ' + str(n_years_ago))
-            if not return_plain:
-                found_entity = entity_to_label(found_entity)
+                logger.debug(f'Years ago {n_years_ago}')
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
+        plain_entity = None
         found_entity = None
         n_years_ago = None
-
-    logger.debug('Answer ' + str(found_entity) + ' ' + str(n_years_ago))
-    return found_entity, n_years_ago
+    if return_plain:
+        entity = plain_entity
+    else:
+        entity = found_entity
+    logger.debug(f'Answer {entity} {n_years_ago}')
+    return entity, n_years_ago
 
 
 def best_book_by_author(plain_author_name, default_phrase, plain_last_bookname=None, top_n_best_books=1):
-    logger.debug('Calling best_book_by_author for ' + str(plain_author_name) + ' ' + str(plain_last_bookname))
+    logger.debug(f'Calling best_book_by_author for {plain_author_name} {plain_last_bookname}')
     # best books
     book_list = None
     if plain_author_name in wikidata['books_of_author']:
@@ -604,7 +616,7 @@ def parse_author_best_book(annotated_phrase, default_phrase):
 
 
 dontlike_request = re.compile(r"(not like|not want to talk|not want to hear|not concerned about|"
-                              r"over the books|no books|stop talking about|no more books|"
+                              r"over the books|no books|stop talking about|no more books|do not read|"
                               r"not want to listen)", re.IGNORECASE)
 
 

@@ -13,7 +13,7 @@ from common.utils import is_yes, is_no
 from utils import get_name, get_genre, suggest_template, get_not_given_question_about_books, dontlike, is_stop, \
     side_intent, fact_about_book, fav_genre_request_detected, \
     fav_book_request_detected, parse_author_best_book, tell_me_more, \
-    is_positive, is_negative, best_book_by_author, GENRE_PHRASES
+    is_positive, is_negative, best_book_by_author, GENRE_PHRASES, was_question_about_book
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -143,6 +143,7 @@ class BookSkillScenario:
             human_attr = dialog["human"]["attributes"]
             human_attr["book_skill"] = human_attr.get("book_skill", {})
             human_attr['book_skill']['used_phrases'] = human_attr['book_skill'].get('used_phrases', [])
+            human_attr['book_skill']['last_fact'] = human_attr['book_skill'].get('last_fact', '')
             try:
                 # TODO check correct order of concatenation of replies
                 bot_phrases = [j['text'] for j in dialog['bot_utterances']]
@@ -162,11 +163,9 @@ class BookSkillScenario:
 
                 # I don't denote annotated_user_phrase['text'].lower() as a single variable
                 # in order not to confuse it with annotated_user_phrase
-                lets_chat_about_books = all([if_lets_chat_about_topic(annotated_user_phrase["text"]),
-                                             re.search(BOOK_PATTERN, annotated_user_phrase["text"])])
-                if all([lets_chat_about_books,
-                        not is_no(annotated_user_phrase),
-                        not dontlike(annotated_user_phrase)]):
+                lets_chat_about_books = if_lets_chat_about_topic(annotated_user_phrase["text"]) and re.search(
+                    BOOK_PATTERN, annotated_user_phrase["text"])
+                if lets_chat_about_books and not is_no(annotated_user_phrase):
                     # let's chat about books
                     logger.debug('Detected talk about books. Calling start phrase')
                     if START_PHRASE in human_attr['book_skill']['used_phrases']:
@@ -177,16 +176,19 @@ class BookSkillScenario:
                     attr = {"can_continue": CAN_CONTINUE}
                 elif dontlike(annotated_user_phrase):
                     # no more books OR user doesn't like books
+                    logger.debug('DONTLIKE detected')
                     reply, confidence = '', 0
                 elif len(dialog["bot_utterances"]) > 0 and \
                         dialog["bot_utterances"][-1]["active_skill"] == "book_skill" and \
                         is_switch_topic(annotated_user_phrase):
                     # if book skill was active and switch topic intent, offer movies
+                    logger.debug('Switching topic')
                     reply, confidence = BOOK_CHANGE_PHRASE, self.default_conf
                 elif len(dialog["bot_utterances"]) > 0 and \
                         dialog["bot_utterances"][-1]["active_skill"] == "book_skill" and \
                         (is_stop(annotated_user_phrase) or side_intent(annotated_user_phrase)):
                     # if book skill was active, stop/not/other intents, do not reply
+                    logger.debug('Detected stop/no/other intent')
                     reply, confidence = self.default_reply, 0
                 elif fav_genre_request_detected(annotated_user_phrase):
                     # if user asked us about favorite genre
@@ -194,7 +196,7 @@ class BookSkillScenario:
                     reply, confidence = random.choice(FAVOURITE_GENRE_ANSWERS), self.super_conf
                 elif fav_book_request_detected(annotated_user_phrase):
                     # if user asked us about favorite book
-                    logging.debug('Detected favorite book request')
+                    logger.debug('Detected favorite book request')
                     if FAVOURITE_BOOK_ANSWERS[0] not in human_attr['book_skill']['used_phrases']:
                         reply = FAVOURITE_BOOK_ANSWERS[0]
                     elif FAVOURITE_BOOK_ANSWERS[1] not in human_attr['book_skill']['used_phrases']:
@@ -204,25 +206,27 @@ class BookSkillScenario:
                     confidence = self.super_conf
                 elif OFFER_FACT_ABOUT_BOOK in bot_phrases[-1]:
                     # if we offered fact about book on the previous step
-                    logging.debug('Previous bot phrase was AMAZING_READ_BOOK & OFFER_FACT_ABOUT_BOOK')
+                    logger.debug('Previous bot phrase was AMAZING_READ_BOOK & OFFER_FACT_ABOUT_BOOK')
                     if is_yes(annotated_user_phrase):
-                        logging.debug('Detected is_yes answer')
+                        logger.debug('Detected is_yes answer')
                         for phrase in [annotated_user_phrase, annotated_prev_phrase]:
-                            # logging.debug(str(phrase))
-                            logging.debug('Finding fact about book')
-                            reply, confidence = fact_about_book(phrase), self.super_conf
+                            # logger.debug(str(phrase))
+                            logger.debug('Finding fact about book')
+                            reply, confidence = human_attr['book_skill']['last_fact'], self.super_conf
                             if reply is not None:
-                                logging.debug('Found a bookfact')
+                                logger.debug('Found a bookfact')
                                 break
                         if reply is None:
                             # if we offered fact but didn't find it, say sorry about that
-                            logging.debug('Fact about book returned None')
+                            logger.debug('Fact about book returned None')
                             reply, confidence = OFFER_FACT_DID_NOT_FIND_IT, self.default_conf
                     elif is_no(annotated_user_phrase):
                         # if user say no, we offer change to movies
+                        logger.debug('Offering change to movies')
                         reply, confidence = BOOK_CHANGE_PHRASE, self.default_conf
                     else:
                         # if user said something else on the fact offering, do not answer at all
+                        logger.debug('User said sth else on the offered fact')
                         reply, confidence = self.default_reply, 0
                 elif START_PHRASE in bot_phrases[-1]:
                     # if we asked do you love reading previously
@@ -298,6 +302,7 @@ class BookSkillScenario:
                         else:
                             recency_phrase = 'Just recently!'
                         # answering with default conf as we do not even check the user utterance at all
+                        logger.debug('Giving recency phrase')
                         reply, confidence = f"{recency_phrase} {DID_NOT_EXIST} {get_tutor_phrase()}", self.default_conf
                 elif bot_phrases[-1] in OPINION_REQUEST_ON_BOOK_PHRASES:
                     # if we previously asked about user's opinion on book
@@ -359,9 +364,11 @@ class BookSkillScenario:
                         logger.debug('No intent detected. Returning nothing')
                         reply, confidence = self.default_reply, 0
                 elif any([phrase in bot_phrases[-1] for phrase in BOOK_SKILL_CHECK_PHRASES]):
+                    logger.debug('Reply considering book genre')
                     reply, confidence = self.get_reply_considering_book_author_genre_info(
                         annotated_user_phrase, annotated_prev_phrase)
                     if confidence == 0:
+                        logger.debug('An unknown book met')
                         reply, confidence = random.choice(UNKNOWN_BOOK_QUESTIONS), self.low_conf
                 elif about_book(annotated_user_phrase):
                     bookname, n_years_ago = get_name(annotated_user_phrase, mode='book', bookyear=True)
@@ -373,20 +380,23 @@ class BookSkillScenario:
                         else:
                             reply, confidence = "", 0
                     else:
-                        if fact_about_book(annotated_user_phrase) is not None:
+                        retrieved_fact = fact_about_book(annotated_user_phrase)
+                        if retrieved_fact is not None and was_question_about_book(annotated_user_phrase):
                             # if user asked ANY question about books, answer with fact.
                             # BUT not with the super confidence,
                             # because actually factoid/cobotqa can give exact answer to the user's question
                             logger.debug('Detected fact request')
                             reply, confidence = f"{AMAZING_READ_BOOK} {OFFER_FACT_ABOUT_BOOK}", self.default_conf
+                            human_attr['book_skill']['last_fact'] = retrieved_fact
                             attr = {"can_continue": CAN_CONTINUE}
                         else:
+                            logger.debug('Was question about book but fact not retrieved')
                             reply, confidence = self.default_reply, 0
-
                     if reply == "":
                         reply, confidence = self.get_reply_considering_book_author_genre_info(
                             annotated_user_phrase, annotated_prev_phrase)
                 else:
+                    logger.debug('Final branch')
                     reply, confidence = self.default_reply, 0
 
             except Exception as e:
