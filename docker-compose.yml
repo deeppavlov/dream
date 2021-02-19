@@ -809,10 +809,10 @@ services:
   odqa:
     build:
       args:
-        CONFIG: en_odqa_infer_wiki_tch.json
+        CONFIG: en_odqa_infer_wiki_tch_el.json
         PORT: 8078
         SRC_DIR: annotators/odqa/
-        COMMIT: 1ad1d7b3831b0276368a43fc59a1dab1f898104f
+        COMMIT: bd94831bc1d259cb73605f4e559b398e61f17f55
       context: ./
       dockerfile: annotators/odqa/Dockerfile_odqa_lite
     environment:
@@ -822,9 +822,9 @@ services:
       replicas: 1
       resources:
         limits:
-          memory: 15G
+          memory: 20G
         reservations:
-          memory: 15G
+          memory: 20G
 
   kbqa:
     build:

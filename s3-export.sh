@@ -31,6 +31,7 @@ files=(
   kbqa/templates_eng_compr.json
   kbqa/wikidata/kbqa_entity_linking_eng.tar.gz
   kbqa/wikidata/types_dict.pickle
+  kbqa/wikidata/q_to_par_en.pickle
   kbqa/wikidata/wikidata_lite.hdt
   kbqa/wikidata/wikidata_lite.hdt.index.v1-1
   kbqa/models/rel_ranking.tar.gz

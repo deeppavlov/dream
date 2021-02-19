@@ -4,12 +4,17 @@ import requests
 def main():
     url = 'http://0.0.0.0:8078/model'
 
-    request_data = [{"question_raw": ["Who played Sheldon Cooper in The Big Bang Theory?"],
-                     "entity_substr": [["Sheldon Cooper", "The Big Bang Theory"]]},
-                    {"question_raw": ["What is the capital of Germany?"],
-                     "entity_substr": [["the capital", "Germany"]]},
-                    {"question_raw": ["/alexa_stop_handler."], "entity_substr": [[]]},
-                    {"question_raw": [" "], "entity_substr": [[]]}]
+    request_data = [{"human_sentences": ["Who played Sheldon Cooper in The Big Bang Theory?"],
+                     "bot_sentences": [""],
+                     "entity_substr": [["Sheldon Cooper", "The Big Bang Theory"]],
+                     "entities": [[]]},
+                    {"human_sentences": ["What is the capital of Germany?"],
+                     "bot_sentences": [""],
+                     "entity_substr": [["the capital", "Germany"]],
+                     "entities": [[]]},
+                    {"human_sentences": ["/alexa_stop_handler."], "bot_sentences": [""],
+                     "entity_substr": [[]], "entities": [[]]},
+                    {"human_sentences": [" "], "bot_sentences": [""], "entity_substr": [[]], "entities": [[]]}]
 
     gold_answers = ["Jim Parsons", "Everest", "", ""]
     count = 0

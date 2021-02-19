@@ -480,14 +480,34 @@ def kbqa_formatter_dialog(dialog: Dict):
 
 def odqa_formatter_dialog(dialog: Dict):
     # Used by: odqa annotator
+    last_human_utterance_text = ""
+    last_bot_utterance_text = ""
     if "sentseg" in dialog["human_utterances"][-1]["annotations"]:
         last_human_utterance_text = dialog["human_utterances"][-1]["annotations"]["sentseg"]["punct_sent"]
     else:
         last_human_utterance_text = dialog["human_utterances"][-1]["text"]
+    human_sentences = [last_human_utterance_text]
 
-    sentences = [last_human_utterance_text]
+    if dialog["bot_utterances"]:
+        if "sentseg" in dialog["bot_utterances"][-1]["annotations"]:
+            last_bot_utterance_text = dialog["bot_utterances"][-1]["annotations"]["sentseg"]["punct_sent"]
+        else:
+            last_bot_utterance_text = dialog["bot_utterances"][-1]["text"]
+    bot_sentences = [last_bot_utterance_text]
     nounphrases = [dialog["human_utterances"][-1]["annotations"].get("cobot_nounphrases", [])]
-    return [{"question_raw": sentences, "entity_substr": nounphrases}]
+
+    entity_ids_batch, _ = dialog["human_utterances"][-1]["annotations"].get("entity_linking", [[], []])
+    input_entity_ids = []
+    if entity_ids_batch:
+        for entity_ids_list in entity_ids_batch:
+            if entity_ids_list:
+                input_entity_ids.append(entity_ids_list[0])
+    input_entity_ids = list(set(input_entity_ids))
+
+    return [{"human_sentences": human_sentences,
+             "bot_sentences": bot_sentences,
+             "entity_substr": nounphrases,
+             "entities": [input_entity_ids]}]
 
 
 def short_story_formatter_dialog(dialog: Dict):
@@ -514,7 +534,7 @@ def intent_responder_formatter_dialog(dialog: Dict):
         for intent in called:
             called_intents[intent] = True
     dialog["called_intents"] = called_intents
-    dialog["utterances"] = dialog["utterances"][-(utils.LAST_N_TURNS * 2 + 1) :]
+    dialog["utterances"] = dialog["utterances"][-(utils.LAST_N_TURNS * 2 + 1):]
     for utt in dialog["utterances"]:
         if "sentseg" in utt["annotations"]:
             utt["text"] = utt["annotations"]["sentseg"]["punct_sent"]
