@@ -802,9 +802,9 @@ services:
       replicas: 8
       resources:
         limits:
-          memory: 2G
+          memory: 3G
         reservations:
-          memory: 2G
+          memory: 3G
 
   odqa:
     build:
