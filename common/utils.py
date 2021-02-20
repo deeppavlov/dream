@@ -550,12 +550,13 @@ def get_intents(annotated_utterance, probs=False, default_probs={}, default_labe
     else:
         logging.exception(f'Unknown type {which}')
         answer_probs, answer_labels = default_probs, default_labels
-    try:
-        assert len(answer_probs) > 0 and len(answer_labels) > 0, annotations
-    except Exception as e:
-        sentry_sdk.capture_exception(e)
-        logging.exception(f'No intent annotations received - returning default')
-        answer_probs, answer_labels = default_probs, default_labels
+    if which != 'intent_catcher':
+        try:
+            assert len(answer_probs) == len(answer_labels) and len(answer_labels) > 0, annotations
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            logging.exception(f'No intent annotations received - returning default')
+            answer_probs, answer_labels = default_probs, default_labels
     if probs:
         return answer_probs
     else:
