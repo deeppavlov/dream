@@ -39,3 +39,9 @@ services:
   masked-lm:
     environment:
       CUDA_VISIBLE_DEVICES: ""
+  wikidata-dial-service:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  wikidata-dial-skill:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
