@@ -468,7 +468,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=10.11.1.1:8086
+      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/friendship-skill
       - PORT=8086
     command: ["nginx", "-g", "daemon off;"]
   masked-lm:
@@ -476,7 +476,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=10.11.1.1:8088
+      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/masked-lm
       - PORT=8088
     command: ["nginx", "-g", "daemon off;"]
   entity-storer:
@@ -484,7 +484,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=10.11.1.1:8089
+      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/entity-storer
       - PORT=8089
     command: ["nginx", "-g", "daemon off;"]
   knowledge-grounding-skill:
