@@ -1,6 +1,8 @@
-from typing import Dict, List
 import logging
 from copy import deepcopy
+from typing import Dict, List
+
+from common.universal_templates import if_lets_chat_about_topic
 from common.utils import service_intents
 import state_formatters.utils as utils
 
@@ -17,6 +19,10 @@ def alice_formatter_dialog(dialog: Dict) -> List:
 def programy_formatter_dialog(dialog: Dict) -> List:
     # Used by: program_y, program_y_dangerous, program_y_wide
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=6)
+    first_uttr_hi = False
+    if len(dialog["utterances"]) == 1 and not if_lets_chat_about_topic(dialog["human_utterances"][-1]["text"]):
+        first_uttr_hi = True
+
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
     dialog = utils.last_n_human_utt_dialog_formatter(dialog, last_n_utts=5)[0]
     sentences = dialog["sentences_batch"][0]
@@ -32,6 +38,8 @@ def programy_formatter_dialog(dialog: Dict) -> List:
                 sentences[i] = "yes."
             elif "no" in ints:
                 sentences[i] = "no."
+    if first_uttr_hi:
+        sentences = ["hi."]
     return [{"sentences_batch": [sentences]}]
 
 
