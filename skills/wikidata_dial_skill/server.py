@@ -1,10 +1,10 @@
 import logging
 import os
+import requests
 import time
 from flask import Flask, request, jsonify
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
-from deeppavlov import build_model
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -15,16 +15,10 @@ intent_responder_intents = set(["exit", "repeat", "where_are_you_from", "who_mad
                                 "what_is_your_job", "what_can_you_do", "what_time", "dont_understand", "choose_topic",
                                 "cant_do", "tell_me_a_story", "get_dialog_id"])
 
-try:
-    kgdg = build_model("kg_dial_generator.json", download=False)
-    test_res = kgdg(["What is the capital of Russia?"], [["Q159"]])
-    logger.info("model loaded, test query processed")
-except Exception as e:
-    sentry_sdk.capture_exception(e)
-    logger.exception(e)
-    raise e
-
 app = Flask(__name__)
+
+WIKIDATA_DIALOGUE_SERVICE_URL = os.getenv("WIKIDATA_DIALOGUE_SERVICE_URL")
+LOWER_LIMIT = 0.6
 
 
 @app.route("/model", methods=['POST'])
@@ -54,7 +48,13 @@ def respond():
         generated_utterances = [""]
         confidences = [0.0]
     try:
-        generated_utterances, confidences = kgdg(sentences, entities)
+        res = requests.post(WIKIDATA_DIALOGUE_SERVICE_URL,
+                            json={"sentences": sentences, "entities": entities}, timeout=0.7)
+        if res.status_code == 200:
+            generated_utterances, confidences = res.json()
+            for i in range(len(confidences)):
+                if confidences[i] < LOWER_LIMIT:
+                    confidences[i] = LOWER_LIMIT
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)

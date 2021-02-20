@@ -38,3 +38,4 @@ SENTIMENT_CLASSIFICATION_SERVICE_URL=http://sentiment-classification:8024/model
 WIKIDATA_URL=http://wiki-parser:8077/model
 ENTITY_LINKING_URL=http://entity-linking:8075/model
 KNOWLEDGE_GROUNDING_SERVICE_URL=http://knowledge-grounding:8083/respond
+WIKIDATA_DIALOGUE_SERVICE_URL=http://wikidata-dial-service:8092/model

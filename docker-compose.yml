@@ -16,7 +16,7 @@ services:
         comet-conceptnet:8065, news-api-skill:8066, short-story-skill:8057, greeting-skill:8070, factoid-qa:8071, kbqa:8072,
         factoid-classification:8073, spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, odqa:8078,
         knowledge-grounding:8083, combined-classification:8087, dialog-breakdown:8082, knowledge-grounding-skill:8085,
-        friendship-skill:8086, masked-lm:8088, entity-storer:8089"
+        friendship-skill:8086, masked-lm:8088, entity-storer:8089, wikidata-dial-skill:8091, wikidata-dial-service:8092"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
     deploy:
       mode: replicated
@@ -1028,5 +1028,37 @@ services:
           memory: 2G
         reservations:
           memory: 2G
+
+  wikidata-dial-skill:
+    build:
+      args:
+        PORT: 8091
+      context: skills/wikidata_dial_skill
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
+
+  wikidata-dial-service:
+    build:
+      args:
+        CONFIG: kg_dial_generator.json
+        PORT: 8092
+        COMMIT: 5dac85a06fde0e2983c7569ae058e3bf2d45ce2c
+      context: services/wikidata_dial_service
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 10G
+        reservations:
+          memory: 10G
 
 version: '3.7'

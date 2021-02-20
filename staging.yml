@@ -270,6 +270,14 @@ services:
      image: ${DOCKER_REGISTRY}/combined-classification:${VERSION}
      env_file:
        - ${ENV_FILE}
+  wikidata-dial-service:
+    image: ${DOCKER_REGISTRY}/wikidata-dial-service:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  wikidata-dial-skill:
+    image: ${DOCKER_REGISTRY}/wikidata-dial-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
 volumes:
   external-logs:
   external-deeppavlov:

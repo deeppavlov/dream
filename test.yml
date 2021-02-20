@@ -187,4 +187,12 @@ services:
     env_file: [ .env.dev ]
   knowledge-grounding-skill:
     env_file: [ .env.dev ]
+  wikidata-dial-skill:
+    env_file: [ .env.dev ]
+  wikidata-dial-service:
+    env_file: [ .env.dev ]
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
 version: '3.7'

@@ -46,3 +46,7 @@ knowledge-grounding-skill:
 masked-lm:
   CUDA_VISIBLE_DEVICES: '0'
   gpu: 2
+
+wikidata-dial-service:
+  CUDA_VISIBLE_DEVICES: '0'
+  gpu: 3
