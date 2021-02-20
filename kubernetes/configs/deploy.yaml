@@ -49,4 +49,4 @@ masked-lm:
 
 wikidata-dial-service:
   CUDA_VISIBLE_DEVICES: '0'
-  gpu: 3
+  gpu: 0
