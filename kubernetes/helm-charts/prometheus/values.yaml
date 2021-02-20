@@ -7,23 +7,83 @@ server:
   persistentVolume:
     enabled: true
     size: 100Gi
+  ## Server Deployment Strategy type
+  strategy:
+    type: Recreate
+  resource:
+    limits:
+      cpu: 1000m
+      memory: 1024Mi
+    requests:
+      cpu: 1000m
+      memory: 1024Mi
   readinessProbeInitialDelay: 30
   readinessProbePeriodSeconds: 10
   readinessProbeTimeout: 4
-  readinessProbeFailureThreshold: 5
+  readinessProbeFailureThreshold: 1000
   readinessProbeSuccessThreshold: 1
-  livenessProbeFailureThreshold: 5
   livenessProbeInitialDelay: 60
+  livenessProbePeriodSeconds: 60
+  livenessProbeTimeout: 10
+  livenessProbeFailureThreshold: 1000
+  livenessProbeSuccessThreshold: 1
   retention: "5d"
+  extraFlags:
+    - web.enable-lifecycle
+    ## web.enable-admin-api flag controls access to the administrative HTTP API which includes functionality such as
+    ## deleting time series. This is disabled by default.
+    # - web.enable-admin-api
+    ##
+    ## storage.tsdb.no-lockfile flag controls BD locking
+    # - storage.tsdb.no-lockfile
+    ##
+    ## storage.tsdb.wal-compression flag enables compression of the write-ahead log (WAL)
+    - storage.tsdb.wal-compression
+
+alertmanager:
+  ## Alertmanager Deployment Strategy type
+  strategy:
+    type: Recreate
+
+## alertmanager ConfigMap entries
+##
+alertmanagerFiles:
+  alertmanager.yml:
+    global:
+      slack_api_url: 'https://hooks.slack.com/services/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'
+
+    receivers:
+      - name: default-receiver
+        slack_configs:
+         - channel: 'alexaprize_alerts'
+           send_resolved: true
+
+    route:
+      group_wait: 10s
+      group_interval: 5m
+      receiver: default-receiver
+      repeat_interval: 3h
 
 serverFiles:
+  ## Alerts configuration
+  ## Ref: https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
+  alerting_rules.yml:
+    groups:
+      - name: Instances
+        rules:
+          - alert: InstanceDown
+            expr: probe_success == 0
+            for: 15s
+            labels:
+              severity: page
+            annotations:
+              description: '{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 15 seconds.'
+              summary: 'Instance {{ $labels.instance }} down'
+
   prometheus.yml:
     rule_files:
       - /etc/config/recording_rules.yml
       - /etc/config/alerting_rules.yml
-    ## Below two files are DEPRECATED will be removed from this default values file
-      - /etc/config/rules
-      - /etc/config/alerts
 
     scrape_configs:
       - job_name: prometheus
@@ -392,7 +452,23 @@ serverFiles:
             regex: Pending|Succeeded|Failed
             action: drop
 
-#extraScrapeConfigs: |
+extraScrapeConfigs: |
+  - job_name: 'blackbox'
+    scrape_interval: 15s
+    metrics_path: /probe
+    params:
+      module: [http_2xx]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - http://agent.alexa.svc:4242/ping
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: prometheus-blackbox-exporter:9115
+
   #- job_name: gpu-metrics
     #scrape_interval: 2s
     #metrics_path: /metrics
