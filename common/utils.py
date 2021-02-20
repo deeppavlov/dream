@@ -499,8 +499,9 @@ def get_topics(annotated_utterance, probs=False, default_probs={}, default_label
     else:
         logging.exception(f'Unknown input type in get_topics: {which}')
         answer_probs, answer_labels = default_probs, default_labels
+
     try:
-        assert len(answer_probs) > 0 and len(answer_labels) > 0, annotations
+        assert len(answer_labels) > 0, annotations
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logging.exception(f'No topic annotations received - returning default')
@@ -529,6 +530,7 @@ def get_intents(annotated_utterance, probs=False, default_probs={}, default_labe
     detected_intents = [k for k, v in intents.items() if v.get("detected", 0) == 1]
     detected_intent_probs = {key: 1 for key in detected_intents}
     cobot_da_intent_probs, cobot_da_intent_labels = {}, []
+
     if "cobot_dialogact" in annotations and "intents" in annotations["cobot_dialogact"]:
         cobot_da_intent_labels = annotated_utterance["annotations"]["cobot_dialogact"]["intents"]
     elif 'cobot_dialogact_intents' in annotations:
@@ -536,10 +538,12 @@ def get_intents(annotated_utterance, probs=False, default_probs={}, default_labe
     if "combined_classification" in annotations and len(cobot_da_intent_labels) == 0:
         cobot_da_intent_probs, cobot_da_intent_labels = _get_combined_annotations(annotated_utterance,
                                                                                   model_name='cobot_dialogact_intents')
+
     cobot_da_intent_labels = _process_text(cobot_da_intent_labels)
     if len(cobot_da_intent_probs) == 0:
         cobot_da_intent_probs = _labels_to_probs(cobot_da_intent_labels,
-                                                 combined_classes['cobot_dialogact_topics'])
+                                                 combined_classes['cobot_dialogact_intents'])
+
     if which == "all":
         answer_probs = {**detected_intent_probs, **cobot_da_intent_probs}
         answer_labels = detected_intents + cobot_da_intent_labels
@@ -550,9 +554,10 @@ def get_intents(annotated_utterance, probs=False, default_probs={}, default_labe
     else:
         logging.exception(f'Unknown type {which}')
         answer_probs, answer_labels = default_probs, default_labels
+
     if which != 'intent_catcher':
         try:
-            assert len(answer_probs) == len(answer_labels) and len(answer_labels) > 0, annotations
+            assert len(answer_labels) > 0, annotations
         except Exception as e:
             sentry_sdk.capture_exception(e)
             logging.exception(f'No intent annotations received - returning default')
