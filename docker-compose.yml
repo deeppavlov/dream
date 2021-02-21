@@ -43,33 +43,6 @@ services:
         reservations:
           memory: 256M
 
-
-  cobot-topics:
-    build:
-      context: ./annotators/CoBotTopicClassification/
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8000 -t 15
-    deploy:
-      mode: replicated
-      replicas: 8
-      resources:
-        limits:
-          memory: 256M
-        reservations:
-          memory: 256M
-
-  cobot-dialogact:
-    build:
-      context: ./annotators/CoBotDialogActClassification/
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8002 -t 15
-    deploy:
-      mode: replicated
-      replicas: 8
-      resources:
-        limits:
-          memory: 128M
-        reservations:
-          memory: 128M
-
   cobot-convers-evaluator-annotator:
     build:
       context: ./annotators/CoBotConversationEvaluator/
