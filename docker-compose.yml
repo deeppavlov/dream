@@ -16,7 +16,13 @@ services:
         comet-conceptnet:8065, news-api-skill:8066, short-story-skill:8057, greeting-skill:8070, factoid-qa:8071, kbqa:8072,
         factoid-classification:8073, spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, odqa:8078,
         knowledge-grounding:8083, combined-classification:8087, dialog-breakdown:8082, knowledge-grounding-skill:8085,
-        friendship-skill:8086, masked-lm:8088, entity-storer:8089, wikidata-dial-skill:8091, wikidata-dial-service:8092"
+        friendship-skill:8086, masked-lm:8088, entity-storer:8089, wikidata-dial-skill:8091, wikidata-dial-service:8092,
+        book-tfidf-retrieval:8039, entertainment-tfidf-retrieval:8040, fashion-tfidf-retrieval:8041,
+        movie-tfidf-retrieval:8042, music-tfidf-retrieval:8034, politics-tfidf-retrieval:8043,
+        science-technology-tfidf-retrieval:8044, sport-tfidf-retrieval:8045, animals-tfidf-retrieval:8050,
+        book-skill:8032, superbowl-skill:8051, valentines-day-skill:8058, grounding-skill:8080,
+        question-generator:8079
+        "
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
     deploy:
       mode: replicated
