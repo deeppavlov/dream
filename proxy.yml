@@ -1,20 +1,4 @@
 services:
-  cobot-topics:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/cobot-topics
-      - PORT=8000
-  cobot-dialogact:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/cobot-dialogact
-      - PORT=8002
   cobot-convers-evaluator-annotator:
     command: ["nginx", "-g", "daemon off;"]
     build:

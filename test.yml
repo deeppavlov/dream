@@ -61,14 +61,6 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   cobotqa:
     env_file: [ .env.dev ]
-  cobot-topics:
-    env_file: [ .env.dev ]
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
-  cobot-dialogact:
-    env_file: [ .env.dev ]
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
   cobot-convers-evaluator-annotator:
     env_file: [ .env.dev ]
     volumes:
