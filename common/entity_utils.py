@@ -208,7 +208,9 @@ def parse_entities(text):
 
     full_names = [[str(token) for token in ent] for ent in entities]
     poses = [[token.pos_ for token in ent] for ent in entities]
-    return [{"text": " ".join(entity), "pos": pos} for entity, pos in zip(full_names, poses)]
+    entities = [{"text": " ".join(entity).replace(".", ""), "pos": pos} for entity, pos in zip(full_names, poses)]
+    entities = [entity for entity in entities if len(entity["text"]) > 2]
+    return entities
 
 
 def parse_short_entities(text):
@@ -223,6 +225,8 @@ def is_entity(text):
 def load_raw_entities(raw_entities):
     entities = {entity_name: Entity(raw_data=entity_raw_data) for entity_name, entity_raw_data in raw_entities.items()}
     entities = {entity_name: ent for entity_name, ent in entities.items() if "_ERROR" not in ent.name}
+    entities = {entity_name: ent for entity_name, ent in entities.items() if "." not in entity_name}
+    entities = {entity_name: ent for entity_name, ent in entities.items() if len(entity_name) > 2}
     return entities
 
 
