@@ -1,6 +1,7 @@
 from typing import Dict, List
 import logging
 from copy import deepcopy
+import re
 
 from common.universal_templates import if_lets_chat_about_topic
 from common.utils import get_intents
@@ -9,6 +10,14 @@ from common.utils import get_intents
 logger = logging.getLogger(__name__)
 
 LAST_N_TURNS = 5  # number of turns to consider in annotator/skill.
+
+
+spaces_pat = re.compile(r"\s+")
+special_symb_pat = re.compile(r"[^a-zа-я0-9' ]", flags=re.IGNORECASE)
+
+
+def clean_text(text):
+    return special_symb_pat.sub(" ", spaces_pat.sub(" ", text.lower().replace("\n", " "))).strip()
 
 
 def get_last_n_turns(
@@ -96,39 +105,24 @@ def remove_clarification_turns_from_dialog(dialog):
 
 def replace_with_annotated_utterances(dialog, mode="punct_sent"):
     if mode == "punct_sent":
-        for utt in dialog["utterances"]:
-            if "sentseg" in utt["annotations"]:
-                utt["text"] = utt["annotations"]["sentseg"]["punct_sent"]
-        for utt in dialog["human_utterances"]:
+        for utt in dialog["utterances"] + dialog["human_utterances"]:
             if "sentseg" in utt["annotations"]:
                 utt["text"] = utt["annotations"]["sentseg"]["punct_sent"]
     elif mode == "segments":
-        for utt in dialog["utterances"]:
-            if "sentseg" in utt["annotations"]:
-                utt["text"] = deepcopy(utt["annotations"]["sentseg"]["segments"])
-            elif isinstance(utt["text"], str):
-                utt["text"] = [utt["text"]]
-        for utt in dialog["human_utterances"]:
-            if "sentseg" in utt["annotations"]:
-                utt["text"] = deepcopy(utt["annotations"]["sentseg"]["segments"])
-            elif isinstance(utt["text"], str):
-                utt["text"] = [utt["text"]]
-        for utt in dialog["bot_utterances"]:
+        for utt in dialog["utterances"] + dialog["human_utterances"] + dialog["bot_utterances"]:
             if "sentseg" in utt["annotations"]:
                 utt["text"] = deepcopy(utt["annotations"]["sentseg"]["segments"])
             elif isinstance(utt["text"], str):
                 utt["text"] = [utt["text"]]
     elif mode == "modified_sents":
-        for utt in dialog["utterances"]:
+        for utt in dialog["utterances"] + dialog["human_utterances"]:
             if "sentrewrite" in utt["annotations"]:
                 utt["text"] = utt["annotations"]["sentrewrite"]["modified_sents"][-1]
             elif "sentseg" in utt["annotations"]:
                 utt["text"] = utt["annotations"]["sentseg"]["punct_sent"]
-        for utt in dialog["human_utterances"]:
-            if "sentrewrite" in utt["annotations"]:
-                utt["text"] = utt["annotations"]["sentrewrite"]["modified_sents"][-1]
-            elif "sentseg" in utt["annotations"]:
-                utt["text"] = utt["annotations"]["sentseg"]["punct_sent"]
+    elif mode == "clean_sent":
+        for utt in dialog["utterances"] + dialog["human_utterances"] + dialog["bot_utterances"]:
+            utt["text"] = clean_text(utt["text"])
     return dialog
 
 
