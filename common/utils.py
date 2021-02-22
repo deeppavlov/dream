@@ -174,7 +174,9 @@ yes_templates = re.compile(r"(\byes\b|\byup\b|\byep\b|\bsure\b|go ahead|\byeah\b
 def is_yes(annotated_phrase):
     yes_detected = annotated_phrase['annotations'].get('intent_catcher', {}).get('yes', {}).get('detected') == 1
     # TODO: intent catcher not catches 'yes thanks!'
-    return yes_detected or re.search(yes_templates, annotated_phrase["text"].lower())
+    if yes_detected or re.search(yes_templates, annotated_phrase["text"].lower()):
+        return True
+    return False
 
 
 no_templates = re.compile(r"(\bno\b|\bnot\b|no way|don't|no please|i disagree)")
@@ -188,8 +190,10 @@ def is_no(annotated_phrase):
     is_not_horrible = 'horrible' != user_phrase
     no_regexp_detected = re.search(no_templates, annotated_phrase["text"].lower())
     is_not_idontknow = not re.search(join_sentences_in_or_pattern(DONOTKNOW_LIKE), annotated_phrase["text"].lower())
+    if is_not_horrible and (no_detected or no_regexp_detected) and is_not_idontknow:
+        return True
 
-    return is_not_horrible and (no_detected or no_regexp_detected) and is_not_idontknow
+    return False
 
 
 def is_question(text):
