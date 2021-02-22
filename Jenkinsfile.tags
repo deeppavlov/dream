@@ -224,42 +224,6 @@ spec:
             }
           }
 
-          steps {
-            container('jenkins-agent') {
-              script {
-                int startTime = currentBuild.duration
-                env.NAMESPACE = "alexa-" + ENVIRONMENT.toLowerCase()
-                env.ENV_FILE=".env.prod." + ENVIRONMENT.toLowerCase()
-                notify('start')
-                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-                  try {
-                    sh label: 'update kubeconfig', script: 'aws eks update-kubeconfig --name alexa'
-                    sh label: 'update environment', script: "kubectl create configmap env -n ${NAMESPACE} --from-env-file $ENV_FILE -o yaml --dry-run=client | kubectl apply -f -"
-                    sh label: 'generate deployment', script: 'python3 kubernetes/kuber_generator.py'
-                    sh label: 'deploy', script: 'for dir in kubernetes/models/*; do kubectl apply -f $dir || true; done'
-                    sh label: 'deploy status', script: '''
-                      status=0
-                      for dir in kubernetes/models/*; do
-                        kubectl rollout status -n ${NAMESPACE} deploy $(basename ${dir}-dp) || status=$?
-                      done
-                      exit $status
-                    '''
-              post {
-                failure {
-                  script {
-                    int duration = (currentBuild.duration - startTime) / 1000
-                    notify('failed', duration)
-                  }
-                }
-                success {
-                  script {
-                    int duration = (currentBuild.duration - startTime) / 1000
-                    notify('success', duration)
-                  }
-                }
-              }
-            } // end of stage
-
         stage('Is-running-prod-B') {
 
           environment {
@@ -302,5 +266,5 @@ spec:
         } // end of stage
       } // end of stages
     } // end of stage
-  } end of stages
-}
+  } // end of stages
+} // end of pipeline
