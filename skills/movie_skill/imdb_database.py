@@ -152,7 +152,7 @@ class IMDb:
         for proc_title in movie_titles_to_ignore + [
                 "angela", "earthquake", "abortion", "tricks", "isolation", "cage", "back", "stronger", "judy",
                 "live", "lunch", "weekend", "gays", "bean", "her", "eat", "she", "he", "thing", "pets",
-                "happy days", "foster"]:
+                "happy days", "foster", "travelling"]:
             try:
                 self.without_ignored_movies_names.pop(proc_title)
             except KeyError:
