@@ -13,8 +13,8 @@ banned_nouns_file = pathlib.Path("/src/programy_storage/sets/banned_noun.txt")
 BANNED_NOUNS = [noun.strip() for noun in banned_nouns_file.open().readlines() if "#" not in noun]
 
 DIALOG_BEGINNING_START_CONFIDENCE = 0.98
-DIALOG_BEGINNING_CONTINUE_CONFIDENCE = 0.85
-DIALOG_BEGINNING_SHORT_ANSWER_CONFIDENCE = 0.9
+DIALOG_BEGINNING_CONTINUE_CONFIDENCE = 0.9
+DIALOG_BEGINNING_SHORT_ANSWER_CONFIDENCE = 0.98
 MIDDLE_DIALOG_START_CONFIDENCE = 0.7
 
 
