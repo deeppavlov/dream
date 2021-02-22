@@ -113,7 +113,7 @@ class RuleBasedSkillSelectorConnector:
             high_priority_intent_detected = any(
                 [
                     v["detected"] == 1
-                    for k, v in user_uttr_annotations["intent_catcher"].items()
+                    for k, v in user_uttr_annotations.get("intent_catcher", {}).items()
                     if k
                     not in service_intents
                 ]
@@ -121,12 +121,12 @@ class RuleBasedSkillSelectorConnector:
             low_priority_intent_detected = any(
                 [
                     v["detected"] == 1
-                    for k, v in user_uttr_annotations["intent_catcher"].items()
+                    for k, v in user_uttr_annotations.get("intent_catcher", {}).items()
                     if k in low_priority_intents
                 ]
             )
 
-            ner_detected = len(list(chain.from_iterable(user_uttr_annotations["ner"]))) > 0
+            ner_detected = len(list(chain.from_iterable(user_uttr_annotations.get("ner", [])))) > 0
             logger.info(f"Detected Entities: {ner_detected}")
 
             cobot_topics = set(get_topics(dialog["human_utterances"][-1], which="cobot_topics"))
@@ -135,13 +135,13 @@ class RuleBasedSkillSelectorConnector:
             cobot_dialogacts = get_intents(dialog['human_utterances'][-1], which="cobot_dialogact_intents")
             cobot_dialogact_topics = set(get_topics(dialog['human_utterances'][-1], which="cobot_dialogact_topics"))
             # factoid
-            factoid_classification = user_uttr_annotations['factoid_classification']['factoid']
+            factoid_classification = user_uttr_annotations.get('factoid_classification', {}).get('factoid', 0.)
             # using factoid
             factoid_prob_threshold = 0.9  # to check if factoid probability has at least this prob
             sensitive_dialogacts_detected = any(
                 [(t in self.sensitive_dialogacts and "?" in user_uttr_text) for t in cobot_dialogacts]
             ) or user_uttr_annotations["intent_catcher"].get("opinion_request", {}).get("detected", 0)
-            blist_topics_detected = user_uttr_annotations["blacklisted_words"]["restricted_topics"]
+            blist_topics_detected = user_uttr_annotations.get("blacklisted_words", {}).get("restricted_topics", 0)
 
             about_movies = (self.movie_cobot_dialogacts & cobot_dialogact_topics)
             about_music = ("Entertainment_Music" in cobot_dialogact_topics) | ("Music" in cobot_topics)
@@ -181,7 +181,7 @@ class RuleBasedSkillSelectorConnector:
                 ]
             )
 
-            about_weather = user_uttr_annotations["intent_catcher"].get(
+            about_weather = user_uttr_annotations.get("intent_catcher", {}).get(
                 "weather_forecast_intent", {}
             ).get("detected", False) or (
                 prev_bot_uttr.get("active_skill", "") == "weather_skill" and weather_city_slot_requested
@@ -357,7 +357,7 @@ class RuleBasedSkillSelectorConnector:
 
                 if len(dialog["utterances"]) > 1:
                     # Use only misheard asr skill if asr is not confident and skip it for greeting
-                    if user_uttr_annotations["asr"]["asr_confidence"] == "very_low":
+                    if user_uttr_annotations.get("asr", {}).get("asr_confidence", "high") == "very_low":
                         skills_for_uttr = ["misheard_asr"]
 
             # always add dummy_skill
@@ -384,5 +384,5 @@ class RuleBasedSkillSelectorConnector:
             sentry_sdk.capture_exception(e)
             asyncio.create_task(callback(
                 task_id=payload['task_id'],
-                response=e
+                response=["program_y", "dummy_skill", "cobotqa"]
             ))
