@@ -177,26 +177,6 @@
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
             },
-            "cobot_topics": {
-                "connector": {
-                    "protocol": "http",
-                    "url": "http://cobot-topics:8000/topics"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
-                "response_formatter": "state_formatters.dp_formatters:cobot_classifiers_formatter_service",
-                "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
-            },
-            "cobot_dialogact": {
-                "connector": {
-                    "protocol": "http",
-                    "url": "http://cobot-dialogact:8002/dialogact"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:cobot_formatter_dialog",
-                "response_formatter": "state_formatters.dp_formatters:cobot_dialogact_formatter_service",
-                "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
-            },
             "odqa": {
                 "connector": {
                     "protocol": "http",
