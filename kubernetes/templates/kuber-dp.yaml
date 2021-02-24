@@ -75,6 +75,7 @@ spec:
             - 'http://localhost:{{ PORT }}/api/rest/v1.0/ask'
           initialDelaySeconds: 60
           periodSeconds: 10
+          failureThreshold: 1
         {% endif %}
         {% if resources %}
         resources:
