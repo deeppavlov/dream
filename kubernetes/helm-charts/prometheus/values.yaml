@@ -79,6 +79,74 @@ serverFiles:
             annotations:
               description: '{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 15 seconds.'
               summary: 'Instance {{ $labels.instance }} down'
+      - name: Kubernetes
+        rules:
+        - alert: KubernetesPodCrashLooping
+          expr: increase(kube_pod_container_status_restarts_total[1m]) > 3
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: 'Kubernetes pod crash looping ({{ $labels.namespace }}/{{ $labels.pod }})'
+            description: 'Pod {{ $labels.pod }} is crash looping\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}'
+        - alert: KubernetesNodeReady
+          expr: kube_node_status_condition{condition="Ready",status="true"} == 0
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: 'Kubernetes Node ready (node {{ $labels.kubernetes_node }})'
+            description: 'Node {{ $labels.node }} has been unready for a long time\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}'
+        - alert: KubernetesMemoryPressure
+          expr: kube_node_status_condition{condition="MemoryPressure",status="true"} == 1
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: 'Kubernetes memory pressure (node {{ $labels.kubernetes_node }})'
+            description: '{{ $labels.node }} has MemoryPressure condition\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}'
+        - alert: KubernetesDiskPressure
+          expr: kube_node_status_condition{condition="DiskPressure",status="true"} == 1
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: 'Kubernetes disk pressure (node {{ $labels.kubernetes_node }})'
+            description: '{{ $labels.node }} has DiskPressure condition\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}'
+      - name: Nodes
+        rules:
+        - alert: HostOutOfMemory
+          expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 10
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: 'Host out of memory (node {{ $labels.kubernetes_node }})'
+            description: 'Node memory is filling up (< 10% left)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}'
+        - alert: HostMemoryUnderMemoryPressure
+          expr: rate(node_vmstat_pgmajfault[1m]) > 1000
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: 'Host memory under memory pressure (node {{ $labels.kubernetes_node }})'
+            description: 'The node is under heavy memory pressure. High rate of major page faults\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}'
+        - alert: HostOutOfDiskSpace
+          expr: (node_filesystem_avail_bytes * 100) / node_filesystem_size_bytes < 10 and ON (instance, device, mountpoint) node_filesystem_readonly == 0
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: 'Host out of disk space (node {{ $labels.kubernetes_node }})'
+            description: 'Disk is almost full (< 10% left)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}'
+        - alert: HostHighCpuLoad
+          expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[2m])) * 100) > 80
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: 'Host high CPU load (node {{ $labels.kubernetes_node }})'
+            description: 'CPU load is > 80%\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}'
 
   prometheus.yml:
     rule_files:
@@ -461,6 +529,8 @@ extraScrapeConfigs: |
     static_configs:
       - targets:
         - http://agent.alexa.svc:4242/ping
+        - http://agent.alexa-a.svc:4242/ping
+        - http://agent.alexa-b.svc:4242/ping
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
