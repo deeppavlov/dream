@@ -36,11 +36,17 @@ def respond():
         else:
             sentence = uttr.get("text", "")
         sentences.append(sentence)
-        if "entity_linking" in annotations:
-            entity_ids_batch, _ = annotations["entity_linking"]
-            entities.append([entity_ids_list[0] for entity_ids_list in entity_ids_batch])
-        else:
-            entities.append([])
+        entities_inp = []
+        try:
+            if "entity_linking" in annotations:
+                entity_ids_batch, _ = annotations["entity_linking"]
+                for entity_ids_list in entity_ids_batch:
+                    if entity_ids_list:
+                        entities_inp.append(entity_ids_list[0])
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            logger.exception(e)
+        entities.append(entities_inp)
     if sentences:
         generated_utterances = ["" for _ in sentences]
         confidences = [0.0 for _ in sentences]
