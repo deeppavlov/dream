@@ -45,9 +45,9 @@ services:
       replicas: 8
       resources:
         limits:
-          memory: 128M
+          memory: 256M
         reservations:
-          memory: 128M
+          memory: 256M
 
   cobot-convers-evaluator-annotator:
     build:
