@@ -587,29 +587,13 @@ def entity_storer_formatter(dialog: Dict) -> List[Dict]:
 
 
 def friendship_skill_formatter(dialog: Dict) -> List[Dict]:
-    human_utter_index = len(dialog["human_utterances"]) - 1
+    service_name = f"friendship_skill"
+    return utils.dff_formatter(dialog, service_name)
 
-    human_attributes = dialog.get("human", {}).get("attributes", {})
-    friendship_skill_state = human_attributes.get("friendship_skill_state", {})
-    entities = human_attributes.get("entities", {})
 
-    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1, human_last_turns=1)
-    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
-
-    # rm all execpt human_utterances, bot_utterances
-    # we need only: text, annotations, active_skill
-    new_dialog = utils.clean_up_utterances_to_avoid_unwanted_keys(
-        dialog, types_utterances=["human_utterances", "bot_utterances"]
-    )
-
-    return [
-        {
-            "human_utter_index_batch": [human_utter_index],
-            "dialog_batch": [new_dialog],
-            "friendship_skill_state_batch": [friendship_skill_state],
-            "entities_batch": [entities],
-        }
-    ]
+def dff_template_formatter(dialog: Dict) -> List[Dict]:
+    service_name = f"dff_template"
+    return utils.dff_formatter(dialog, service_name)
 
 
 def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:

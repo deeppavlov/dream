@@ -1,12 +1,13 @@
 import logging
+import re
 
 
 from nltk.stem import WordNetLemmatizer
 
 import common.utils as common_utils
 import common.universal_templates as universal_templates
+import common.dialogflow_framework.utils.state as state_utils
 
-import dialog_flows.utils as dialog_flows_utils
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -30,16 +31,21 @@ def is_switch_topic(vars):
 
 
 def is_question(vars):
-    text = dialog_flows_utils.get_last_user_utterance(vars)["text"]
+    text = state_utils.get_last_human_utterance(vars)["text"]
     flag = common_utils.is_question(text)
     logging.debug(f"is_question = {flag}")
     return flag
 
 
 def is_lets_chat_about_topic(vars):
-    text = dialog_flows_utils.get_last_user_utterance(vars)["text"]
-    flag = universal_templates.if_lets_chat_about_topic(text.lower())
-    logging.debug(f"is_lets_chat_about_topic = {flag}")
+    last_human_uttr = state_utils.get_last_human_utterance(vars)
+    last_human_uttr_text = last_human_uttr["text"]
+    last_bot_uttr_text = state_utils.get_last_bot_utterance(vars)["text"]
+    intents = common_utils.get_intents(last_human_uttr, which="intent_responder")
+
+    flag = "lets_chat_about" in intents
+    flag = flag or universal_templates.if_lets_chat_about_topic(last_human_uttr_text)
+    flag = flag or re.search(common_utils.COMPILE_WHAT_TO_TALK_ABOUT, last_bot_uttr_text)
     return flag
 
 
@@ -62,14 +68,14 @@ def is_long_interrupted(vars, how_long=3):
 
 
 def is_new_human_entity(vars):
-    new_entities = dialog_flows_utils.get_new_human_labeled_noun_phrase(vars)
+    new_entities = state_utils.get_new_human_labeled_noun_phrase(vars)
     flag = bool(new_entities)
     logging.debug(f"is_new_human_entity = {flag}")
     return flag
 
 
 def is_entities(vars):
-    entities = dialog_flows_utils.get_labeled_noun_phrase(vars)
+    entities = state_utils.get_labeled_noun_phrase(vars)
     flag = bool(entities)
     logging.debug(f"is_entities = {flag}")
     return flag

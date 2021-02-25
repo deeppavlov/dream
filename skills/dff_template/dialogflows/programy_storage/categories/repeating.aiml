@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+    <category>
+        <pattern> HI </pattern>
+        <template>
+        </template>
+    </category>
+
+    <category>
+        <pattern> * </pattern>
+        <template>
+            <srai> ALL <star/> </srai>
+        </template>
+    </category>
+    <category>
+        <pattern> ALL * </pattern>
+        <template>
+            programy
+            <random>
+                <li>Blessed!</li>
+                <li>Fantastic!</li>
+            </random>
+            <star/>
+        </template>
+    </category>
+</aiml>
