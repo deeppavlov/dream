@@ -42,7 +42,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8081 -t 15
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 6
       resources:
         limits:
           memory: 128M
@@ -164,9 +164,9 @@ services:
       replicas: 4
       resources:
         limits:
-          memory: 3.2G
+          memory: 3.5G
         reservations:
-          memory: 3.2G
+          memory: 3.5G
 
   blacklisted-words:
     build:
@@ -200,7 +200,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8023 --timeout=300 --preload
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 4
       resources:
         limits:
           memory: 768M
@@ -229,7 +229,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8000
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 4
       resources:
         limits:
           memory: 512M
@@ -242,7 +242,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8047
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 4
       resources:
         limits:
           memory: 80M
@@ -651,7 +651,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8061
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 4
       resources:
         limits:
           memory: 128M
@@ -665,7 +665,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8062
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 4
       resources:
         limits:
           memory: 80M
