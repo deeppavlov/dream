@@ -188,3 +188,31 @@ def stop_formatter_dialog(dialog: Dict) -> List[Dict]:
         tmp_utts = " [SEP] ".join([j for j in tmp_utts])
         utts.append(tmp_utts)
     return [{"dialogs": utts}]
+
+
+def dff_formatter(dialog: Dict, service_name: str, bot_last_turns=1, human_last_turns=1) -> List[Dict]:
+    # DialoFlow Framework formatter
+    state_name = f"{service_name}_state"
+    human_utter_index = len(dialog["human_utterances"]) - 1
+
+    human_attributes = dialog.get("human", {}).get("attributes", {})
+    state = human_attributes.get(state_name, {})
+    entities = human_attributes.get("entities", {})
+
+    dialog = get_last_n_turns(dialog, bot_last_turns=bot_last_turns, human_last_turns=human_last_turns)
+    dialog = replace_with_annotated_utterances(dialog, mode="punct_sent")
+
+    # rm all execpt human_utterances, bot_utterances
+    # we need only: text, annotations, active_skill
+    new_dialog = clean_up_utterances_to_avoid_unwanted_keys(
+        dialog, types_utterances=["human_utterances", "bot_utterances"]
+    )
+
+    return [
+        {
+            "human_utter_index_batch": [human_utter_index],
+            "dialog_batch": [new_dialog],
+            f"{state_name}_batch": [state],
+            "entities_batch": [entities],
+        }
+    ]

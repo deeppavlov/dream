@@ -70,7 +70,7 @@ std_acknowledgements = {
 
 def get_sentiment_acknowledgement(vars, acknowledgements=None):
     acknowledgements = std_acknowledgements.update(acknowledgements) if acknowledgements else std_acknowledgements
-    return acknowledgements.get(dialog_flows_utils.get_sentiment(vars), [""])
+    return acknowledgements.get(dialog_flows_utils.get_human_sentiment(vars), [""])
 
 
 # curl -H "Content-Type: application/json" -XPOST http://0.0.0.0:8088/respond \
@@ -130,7 +130,7 @@ def std_greeting_response(vars):
 
         greeting_step_id = shared_memory.get("greeting_step_id", 0)
         last_acknowledgements = shared_memory.get("last_acknowledgements", [])
-        sentiment = dialog_flows_utils.get_sentiment(vars)
+        sentiment = dialog_flows_utils.get_human_sentiment(vars)
 
         # get ack, body
         ack = common_utils.get_not_used_template(
@@ -181,7 +181,7 @@ def new_entities_is_needed_for_request(ngrams, vars):
 def new_entities_is_needed_for_response(vars):
     try:
         ack = random.choice(get_sentiment_acknowledgement(vars))
-        new_entities = dialog_flows_utils.get_new_human_entities(vars)
+        new_entities = dialog_flows_utils.get_new_human_labeled_noun_phrase(vars)
         new_entity = list(new_entities)[0]
 
         new_entity = new_entity if condition_utils.is_plural(new_entity) else f"a {new_entity}"
@@ -274,7 +274,7 @@ link_to_skill2i_like_to_talk = {
 def link_to_by_enity_response(vars):
     ack = random.choice(get_sentiment_acknowledgement(vars))
     try:
-        entities = dialog_flows_utils.get_entities(vars)
+        entities = dialog_flows_utils.get_labeled_noun_phrase(vars)
         time_sorted_human_entities = entity_utils.get_time_sorted_human_entities(entities)
         if time_sorted_human_entities:
             logger.info(f"time_sorted_human_entities= {time_sorted_human_entities}")
