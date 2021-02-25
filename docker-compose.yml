@@ -42,12 +42,12 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8081 -t 15
     deploy:
       mode: replicated
-      replicas: 8
+      replicas: 4
       resources:
         limits:
-          memory: 256M
+          memory: 128M
         reservations:
-          memory: 256M
+          memory: 128M
 
   cobot-convers-evaluator-annotator:
     build:
@@ -68,7 +68,7 @@ services:
     command: bash -c "gunicorn --workers=1 server:app -b 0.0.0.0:8006 -t 60"
     deploy:
       mode: replicated
-      replicas: 8
+      replicas: 4
       resources:
         limits:
           memory: 256M
@@ -97,9 +97,9 @@ services:
       replicas: 2
       resources:
         limits:
-          memory: 128M
+          memory: 50M
         reservations:
-          memory: 128M
+          memory: 50M
 
   sentseg:
     build:
@@ -107,12 +107,12 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8011 -t 100
     deploy:
       mode: replicated
-      replicas: 8
+      replicas: 4
       resources:
         limits:
-          memory: 1.5G
+          memory: 1G
         reservations:
-          memory: 1.5G
+          memory: 1G
 
   convers-evaluation-selector:
     build:
@@ -161,7 +161,7 @@ services:
     command: gunicorn --workers=1 --name=catcher --bind 0.0.0.0:8014 --timeout=100 server:app
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 4
       resources:
         limits:
           memory: 3G
@@ -200,7 +200,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8023 --timeout=300 --preload
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
       resources:
         limits:
           memory: 768M
@@ -229,7 +229,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8000
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
       resources:
         limits:
           memory: 512M
@@ -242,12 +242,12 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8047
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
       resources:
         limits:
-          memory: 128M
+          memory: 80M
         reservations:
-          memory: 128M
+          memory: 80M
 
   book-tfidf-retrieval:
     build:
@@ -417,7 +417,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8029 -t 60
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
       resources:
         limits:
           memory: 1536M
@@ -448,9 +448,9 @@ services:
       replicas: 4
       resources:
         limits:
-          memory: 100M
+          memory: 80M
         reservations:
-          memory: 100M
+          memory: 80M
 
   misheard-asr:
     build:
@@ -458,12 +458,12 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8033
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
       resources:
         limits:
-          memory: 196M
+          memory: 128M
         reservations:
-          memory: 196M
+          memory: 128M
 
   book-skill:
     build:
@@ -485,12 +485,12 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8036
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 1
       resources:
         limits:
-          memory: 128M
+          memory: 80M
         reservations:
-          memory: 128M
+          memory: 80M
 
   superbowl-skill:
     build:
@@ -498,12 +498,12 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8051
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 1
       resources:
         limits:
-          memory: 128M
+          memory: 80M
         reservations:
-          memory: 128M
+          memory: 80M
 
   oscar-skill:
     build:
@@ -511,12 +511,12 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8055
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 1
       resources:
         limits:
-          memory: 128M
+          memory: 80M
         reservations:
-          memory: 128M
+          memory: 80M
 
   valentines-day-skill:
     build:
@@ -524,12 +524,12 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8058
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 1
       resources:
         limits:
-          memory: 128M
+          memory: 80M
         reservations:
-          memory: 128M
+          memory: 80M
 
   weather-skill:
     build:
@@ -538,7 +538,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8037
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
       resources:
         limits:
           memory: 1152M
@@ -552,12 +552,12 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8049
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
       resources:
         limits:
-          memory: 128M
+          memory: 80M
         reservations:
-          memory: 128M
+          memory: 80M
 
   dummy-skill-dialog:
     build:
@@ -565,7 +565,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8052
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 1
       resources:
         limits:
           memory: 768M
@@ -637,12 +637,12 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8057
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 1
       resources:
         limits:
-          memory: 128M
+          memory: 80M
         reservations:
-          memory: 128M
+          memory: 80M
 
   coronavirus-skill:
     build:
@@ -651,7 +651,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8061
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
       resources:
         limits:
           memory: 128M
@@ -665,12 +665,12 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8062
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
       resources:
         limits:
-          memory: 128M
+          memory: 80M
         reservations:
-          memory: 128M
+          memory: 80M
 
   game-cooperative-skill:
     build:
@@ -694,7 +694,7 @@ services:
     command: sh -c "./sanic.sh"
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 4
       resources:
         limits:
           memory: 256M
@@ -713,9 +713,9 @@ services:
       replicas: 2
       resources:
         limits:
-          memory: 256M
+          memory: 128M
         reservations:
-          memory: 256M
+          memory: 128M
 
   greeting-skill:
     build:
@@ -727,9 +727,9 @@ services:
       replicas: 2
       resources:
         limits:
-          memory: 128M
+          memory: 50M
         reservations:
-          memory: 128M
+          memory: 50M
 
   factoid-qa:
     build:
@@ -778,7 +778,7 @@ services:
       - CUDA_VISIBLE_DEVICES=''
     deploy:
       mode: replicated
-      replicas: 8
+      replicas: 4
       resources:
         limits:
           memory: 3G
@@ -821,9 +821,9 @@ services:
       replicas: 1
       resources:
         limits:
-          memory: 20G
+          memory: 15G
         reservations:
-          memory: 20G
+          memory: 15G
 
   factoid-classification:
     build:
@@ -840,9 +840,9 @@ services:
       replicas: 1
       resources:
         limits:
-          memory: 2G
+          memory: 3G
         reservations:
-          memory: 2G
+          memory: 3G
 
   spelling-preprocessing:
     build:
@@ -853,9 +853,9 @@ services:
       replicas: 4
       resources:
         limits:
-          memory: 512M
+          memory: 50M
         reservations:
-          memory: 512M
+          memory: 50M
 
   grounding-skill:
     build:
@@ -864,12 +864,12 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8080 --timeout=60 --preload
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
       resources:
         limits:
-          memory: 512M
+          memory: 80M
         reservations:
-          memory: 512M
+          memory: 80M
 
   question-generator:
     build:
@@ -953,9 +953,9 @@ services:
       replicas: 1
       resources:
         limits:
-          memory: 4G
+          memory: 3G
         reservations:
-          memory: 4G
+          memory: 3G
 
   entity-storer:
     build:
