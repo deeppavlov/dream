@@ -68,7 +68,7 @@ services:
     command: bash -c "gunicorn --workers=1 server:app -b 0.0.0.0:8006 -t 60"
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 8
       resources:
         limits:
           memory: 256M
@@ -107,7 +107,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8011 -t 100
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 8
       resources:
         limits:
           memory: 1G
@@ -164,9 +164,9 @@ services:
       replicas: 4
       resources:
         limits:
-          memory: 3G
+          memory: 3.2G
         reservations:
-          memory: 3G
+          memory: 3.2G
 
   blacklisted-words:
     build:
@@ -417,7 +417,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8029 -t 60
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 4
       resources:
         limits:
           memory: 1536M
@@ -552,7 +552,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8049
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 4
       resources:
         limits:
           memory: 80M
@@ -565,7 +565,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8052
     deploy:
       mode: replicated
-      replicas: 1
+      replicas: 4
       resources:
         limits:
           memory: 768M
@@ -778,7 +778,7 @@ services:
       - CUDA_VISIBLE_DEVICES=''
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 6
       resources:
         limits:
           memory: 3G
