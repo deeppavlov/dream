@@ -73,71 +73,76 @@ class MovieSkillScenario:
         attributes = []
 
         for dialog in dialogs:
-            curr_user_uttr = dialog["human_utterances"][-1]
-            response, confidence, human_attr, bot_attr, attr = "", 0.0, {}, {}, {}
-            human_attr = dialog["human"]["attributes"]
-            human_attr["used_links"] = human_attr.get("used_links", defaultdict(list))
-            # not overlapping mentions of movies titles, persons names and genres
-            movies_ids, unique_persons, mentioned_genres = self.templates.extract_mentions(
-                curr_user_uttr["text"].lower(), find_ignored=True)
-            logger.info(
-                f"Current user utterance is about movies: `{curr_user_uttr['text']}`. "
-                f"Detected Movies Titles: "
-                f"{[self.templates.imdb(movie)['title'] for movie in movies_ids]}, "
-                f"Persons: {unique_persons.keys()}, "
-                f"Genres: {mentioned_genres}")
+            try:
+                curr_user_uttr = dialog["human_utterances"][-1]
+                response, confidence, human_attr, bot_attr, attr = "", 0.0, {}, {}, {}
+                human_attr = dialog["human"]["attributes"]
+                human_attr["used_links"] = human_attr.get("used_links", defaultdict(list))
+                # not overlapping mentions of movies titles, persons names and genres
+                movies_ids, unique_persons, mentioned_genres = self.templates.extract_mentions(
+                    curr_user_uttr["text"].lower(), find_ignored=True)
+                logger.info(
+                    f"Current user utterance is about movies: `{curr_user_uttr['text']}`. "
+                    f"Detected Movies Titles: "
+                    f"{[self.templates.imdb(movie)['title'] for movie in movies_ids]}, "
+                    f"Persons: {unique_persons.keys()}, "
+                    f"Genres: {mentioned_genres}")
 
-            if self.donot_chat_about_movies(curr_user_uttr) or re.search(
-                    self.no_movies_template, curr_user_uttr["text"]):
-                response, confidence, human_attr, bot_attr, attr = self.link_to_other_skills(human_attr, bot_attr)
-            if response == "":
-                response, _, confidence = self.templates.faq(dialog)
-            if response == "":
-                response, confidence, human_attr, bot_attr, attr = self.movie_scenario(
-                    dialog, movies_ids, unique_persons, mentioned_genres)
-                response = re.sub(self.extra_space_template, " ", response)
-            if response == "" or confidence <= OFFER_TALK_ABOUT_MOVIES_CONFIDENCE:
-                # no answers in scenraio
-                attitude = get_sentiment(dialog['utterances'][-1], probs=False)[0]
+                if self.donot_chat_about_movies(curr_user_uttr) or re.search(
+                        self.no_movies_template, curr_user_uttr["text"]):
+                    response, confidence, human_attr, bot_attr, attr = self.link_to_other_skills(human_attr, bot_attr)
+                if response == "":
+                    response, _, confidence = self.templates.faq(dialog)
+                if response == "":
+                    response, confidence, human_attr, bot_attr, attr = self.movie_scenario(
+                        dialog, movies_ids, unique_persons, mentioned_genres)
+                    response = re.sub(self.extra_space_template, " ", response)
+                if response == "" or confidence <= OFFER_TALK_ABOUT_MOVIES_CONFIDENCE:
+                    # no answers in scenraio
+                    attitude = get_sentiment(dialog['utterances'][-1], probs=False)[0]
 
-                if len(dialog["bot_utterances"]) > 0:
-                    prev_bot_uttr = dialog["bot_utterances"][-1]
-                else:
-                    prev_bot_uttr = {"text": ""}
+                    if len(dialog["bot_utterances"]) > 0:
+                        prev_bot_uttr = dialog["bot_utterances"][-1]
+                    else:
+                        prev_bot_uttr = {"text": ""}
 
-                if self.is_opinion_expression(curr_user_uttr):
-                    response, result, confidence = self.templates.get_user_opinion(dialog, attitude)
-                    if len(result) > 0 and result[0][1] == "movie" and \
-                            self.is_about_movies(curr_user_uttr, prev_bot_uttr):
-                        confidence = SUPER_CONFIDENCE
-                        movie_id = result[0][0]
-                        attr = {"movie_id": movie_id, "can_continue": CAN_CONTINUE,
-                                "status_line": ["opinion_request"]}
-                        human_attr = {}
-                        bot_attr = {}
-                        for p in ["discussed_movie_titles", "discussed_movie_ids", "discussed_movie_persons",
-                                  "discussed_movie_genres"]:
-                            human_attr[p] = dialog["human"]["attributes"].get(p, [])
-
-                        human_attr["discussed_movie_titles"] += [self.templates.imdb(movie_id).get("title", "")]
-                        human_attr["discussed_movie_ids"] += [movie_id]
-
-                if self.is_opinion_request(curr_user_uttr):
-                    response, result, confidence = self.templates.give_opinion(dialog)
-                    if response != "":
+                    if self.is_opinion_expression(curr_user_uttr):
+                        response, result, confidence = self.templates.get_user_opinion(dialog, attitude)
                         if len(result) > 0 and result[0][1] == "movie" and \
                                 self.is_about_movies(curr_user_uttr, prev_bot_uttr):
                             confidence = SUPER_CONFIDENCE
                             movie_id = result[0][0]
                             attr = {"movie_id": movie_id, "can_continue": CAN_CONTINUE,
-                                    "status_line": ["opinion_expression", "opinion_request"]}
+                                    "status_line": ["opinion_request"]}
                             human_attr = {}
                             bot_attr = {}
                             for p in ["discussed_movie_titles", "discussed_movie_ids", "discussed_movie_persons",
                                       "discussed_movie_genres"]:
                                 human_attr[p] = dialog["human"]["attributes"].get(p, [])
+
                             human_attr["discussed_movie_titles"] += [self.templates.imdb(movie_id).get("title", "")]
                             human_attr["discussed_movie_ids"] += [movie_id]
+
+                    if self.is_opinion_request(curr_user_uttr):
+                        response, result, confidence = self.templates.give_opinion(dialog)
+                        if response != "":
+                            if len(result) > 0 and result[0][1] == "movie" and \
+                                    self.is_about_movies(curr_user_uttr, prev_bot_uttr):
+                                confidence = SUPER_CONFIDENCE
+                                movie_id = result[0][0]
+                                attr = {"movie_id": movie_id, "can_continue": CAN_CONTINUE,
+                                        "status_line": ["opinion_expression", "opinion_request"]}
+                                human_attr = {}
+                                bot_attr = {}
+                                for p in ["discussed_movie_titles", "discussed_movie_ids", "discussed_movie_persons",
+                                          "discussed_movie_genres"]:
+                                    human_attr[p] = dialog["human"]["attributes"].get(p, [])
+                                human_attr["discussed_movie_titles"] += [self.templates.imdb(movie_id).get("title", "")]
+                                human_attr["discussed_movie_ids"] += [movie_id]
+            except Exception as e:
+                sentry_sdk.capture_exception(e)
+                logger.exception(e)
+                response, confidence, human_attr, bot_attr, attr = "", 0., {}, {}, {}
 
             responses.append(response.strip())
             confidences.append(confidence)
