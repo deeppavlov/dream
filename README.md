@@ -18,7 +18,7 @@ You can find distributions in the /assistant_dists subdirectory of the repositor
 2. Switch to its directory: `cd assistant-base`
 3. Build and run it: `docker-compose up --build`
 
-API will run on `http://localhost:4242'.
+DeepPavlov's Agent API will run on `http://localhost:4242'. You can learn about its API from the [DeepPavlov Agent Docs](https://deeppavlov-agent.readthedocs.io/en/latest/)
 
 All dialogs will be saved in **dp-agent** database running in **mongo** container.
 
