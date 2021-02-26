@@ -35,8 +35,15 @@ okay_statements = {"Okay.", "That's cool!", "Interesting.", "Sounds interesting.
                    "Really?", "Okay. I got it.", "Well, okay.", "Well, as you wish."}
 
 service_intents = {'lets_chat_about', 'tell_me_more', 'topic_switching', 'yes', 'opinion_request', 'dont_understand',
-                   'no', 'stupid', 'weather_forecast_intent', 'doing_well', 'tell_me_a_story',
-                   'what_are_you_talking_about'}
+                   'no', 'stupid', 'weather_forecast_intent', 'doing_well', 'tell_me_a_story', "choose_topic"}
+
+high_priority_intents = {"intent_responder": {"cant_do", "exit", "repeat",
+                                              "what_can_you_do", "what_is_your_job", "what_is_your_name",
+                                              "where_are_you_from", "who_made_you", "what_time"
+                                              },
+                         "grounding_skill": {"what_are_you_talking_about"},
+                         }
+
 low_priority_intents = {'dont_understand'}
 
 combined_classes = {
