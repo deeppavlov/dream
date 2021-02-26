@@ -22,6 +22,13 @@ DeepPavlov's Agent API will run on `http://localhost:4242'. You can learn about 
 
 All dialogs will be saved in **dp-agent** database running in **mongo** container.
 
+You can talk to the system through CLI by using these commands:
+
+`$: docker-compose exec agent bash`
+`$(inside docker): python -m deeppavlov_agent.run`
+
+Then you'll have to supply user's name, and you'll be able to talk to the machine
+
 ## ASR & TTS
 You can add custom docker-compose file called `asr_tts.yml` located in `/assistant_dists` subdirectory to your `docker-compose` command like this:
 
