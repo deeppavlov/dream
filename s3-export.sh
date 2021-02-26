@@ -47,4 +47,6 @@ for file in ${files[@]}; do
   aws s3api head-object --bucket $bucket --key $file || \
   aws s3 cp $base/$file s3://team-dream-storage/$file \
   --acl=public-read
+  aws s3 cp $base/$file.md5 s3://team-dream-storage/$file.md5 \
+  --acl=public-read
 done
