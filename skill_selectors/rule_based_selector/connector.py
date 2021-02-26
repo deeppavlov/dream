@@ -13,11 +13,10 @@ from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
 from common.emotion import detect_emotion, is_joke_requested
 from common.news import is_breaking_news_requested
 from common.universal_templates import if_lets_chat_about_topic
-from common.utils import service_intents, low_priority_intents, \
+from common.utils import high_priority_intents, low_priority_intents, \
     get_topics, get_intents, get_emotions
 from common.weather import is_weather_requested
 from common.coronavirus import check_about_death, about_virus, quarantine_end, is_staying_home_requested
-from common.grounding import what_we_talk_about
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -110,21 +109,11 @@ class RuleBasedSkillSelectorConnector:
             user_uttr_annotations = dialog["human_utterances"][-1]["annotations"]
             lets_chat_about_particular_topic = if_lets_chat_about_topic(user_uttr_text)
 
-            high_priority_intent_detected = any(
-                [
-                    v["detected"] == 1
-                    for k, v in user_uttr_annotations.get("intent_catcher", {}).items()
-                    if k
-                    not in service_intents
-                ]
-            )
-            low_priority_intent_detected = any(
-                [
-                    v["detected"] == 1
-                    for k, v in user_uttr_annotations.get("intent_catcher", {}).items()
-                    if k in low_priority_intents
-                ]
-            )
+            intent_catcher_intents = get_intents(dialog['human_utterances'][-1], probs=False, which="intent_catcher")
+            high_priority_intent_detected = any([k for k in intent_catcher_intents
+                                                 if k in high_priority_intents["intent_responder"]])
+            low_priority_intent_detected = any([k for k in intent_catcher_intents
+                                                if k in low_priority_intents])
 
             ner_detected = len(list(chain.from_iterable(user_uttr_annotations.get("ner", [])))) > 0
             logger.info(f"Detected Entities: {ner_detected}")
@@ -140,7 +129,7 @@ class RuleBasedSkillSelectorConnector:
             factoid_prob_threshold = 0.9  # to check if factoid probability has at least this prob
             sensitive_dialogacts_detected = any(
                 [(t in self.sensitive_dialogacts and "?" in user_uttr_text) for t in cobot_dialogacts]
-            ) or user_uttr_annotations["intent_catcher"].get("opinion_request", {}).get("detected", 0)
+            ) or "opinion_request" in intent_catcher_intents
             blist_topics_detected = user_uttr_annotations.get("blacklisted_words", {}).get("restricted_topics", 0)
 
             about_movies = (self.movie_cobot_dialogacts & cobot_dialogact_topics)
@@ -181,9 +170,7 @@ class RuleBasedSkillSelectorConnector:
                 ]
             )
 
-            about_weather = user_uttr_annotations.get("intent_catcher", {}).get(
-                "weather_forecast_intent", {}
-            ).get("detected", False) or (
+            about_weather = "weather_forecast_intent" in intent_catcher_intents or (
                 prev_bot_uttr.get("active_skill", "") == "weather_skill" and weather_city_slot_requested
             ) or (lets_chat_about_particular_topic and "weather" in user_uttr_text)
             about_weather = about_weather or is_weather_requested(prev_bot_uttr, dialog['human_utterances'][-1])
@@ -196,7 +183,7 @@ class RuleBasedSkillSelectorConnector:
                     virus_prev = virus_prev or any([function(dialog['utterances'][-i]['text'])
                                                     for function in [about_virus, quarantine_end]])
             enable_coronavirus_death = check_about_death(user_uttr_text)
-            enable_grounding_skill = what_we_talk_about(user_uttr_text)
+            enable_grounding_skill = "what_are_you_talking_about" in intent_catcher_intents
             enable_coronavirus = any([function(user_uttr_text)
                                       for function in [about_virus, quarantine_end]])
             enable_coronavirus = enable_coronavirus or (enable_coronavirus_death and virus_prev)
