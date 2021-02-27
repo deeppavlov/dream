@@ -443,4 +443,13 @@ services:
       - "./annotators/combined_classification:/src"
     ports:
       - 8087:8087
+  dff-travel-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_travel_skill:/src"
+      - "./common:/src/common"
+      - "./skills/CoBotQA:/src/CoBotQA"
+    ports:
+      - 8096:8096
+
 version: "3.7"

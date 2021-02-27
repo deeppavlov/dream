@@ -606,3 +606,8 @@ def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
         hyps["context"].append(context)
         hyps["curr_utterance"].append(hyp["text"])
     return [hyps]
+
+
+def dff_travel_formatter(dialog: Dict) -> List[Dict]:
+    service_name = f"dff_travel_skill"
+    return utils.dff_formatter(dialog, service_name)
