@@ -21,7 +21,7 @@ services:
         movie-tfidf-retrieval:8042, music-tfidf-retrieval:8034, politics-tfidf-retrieval:8043,
         science-technology-tfidf-retrieval:8044, sport-tfidf-retrieval:8045, animals-tfidf-retrieval:8050,
         book-skill:8032, superbowl-skill:8051, valentines-day-skill:8058, grounding-skill:8080,
-        question-generator:8079
+        question-generator:8079, dff-travel-skill:8096
         "
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
     deploy:
@@ -1040,4 +1040,20 @@ services:
         reservations:
           memory: 10G
 
+  dff-travel-skill:
+      build:
+        args:
+          SERVICE_PORT: 8096
+          SERVICE_NAME: dff_travel_skill # has to be the same with skill dir name
+        context: .
+        dockerfile: skills/dff_travel_skill/Dockerfile
+      command:  gunicorn --workers=1 server:app -b 0.0.0.0:8096 --reload
+      deploy:
+        mode: replicated
+        replicas: 2
+        resources:
+          limits:
+            memory: 768M
+          reservations:
+            memory: 768M
 version: '3.7'

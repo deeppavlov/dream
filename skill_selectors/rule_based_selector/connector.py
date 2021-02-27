@@ -17,6 +17,7 @@ from common.utils import high_priority_intents, low_priority_intents, \
     get_topics, get_intents, get_emotions
 from common.weather import is_weather_requested
 from common.coronavirus import check_about_death, about_virus, quarantine_end, is_staying_home_requested
+import common.travel as common_travel
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -346,6 +347,23 @@ class RuleBasedSkillSelectorConnector:
                     # Use only misheard asr skill if asr is not confident and skip it for greeting
                     if user_uttr_annotations.get("asr", {}).get("asr_confidence", "high") == "very_low":
                         skills_for_uttr = ["misheard_asr"]
+
+                named_entities = []
+                for ent in user_uttr_annotations.get("ner", []):
+                    if not ent:
+                        continue
+                    ent = ent[0]
+                    named_entities.append(ent)
+
+                about_travel = "Travel_Geo" in cobot_topics or any([ent["type"] == "LOC" for ent in named_entities])
+                user_about_travel = re.search(common_travel.TRAVELLING_TEMPLATE, dialog["human_utterances"][-1]["text"])
+                linked_to_travel = False
+                if len(dialog["bot_utterances"]) > 0:
+                    linked_to_travel = any([phrase.lower() in dialog["bot_utterances"][-1]["text"].lower()
+                                            for phrase in list(common_travel.skill_trigger_phrases())])
+
+                if about_travel or user_about_travel or linked_to_travel or prev_active_skill == "dff_travel_skill":
+                    skills_for_uttr.append("dff_travel_skill")
 
             # always add dummy_skill
             skills_for_uttr.append("dummy_skill")
