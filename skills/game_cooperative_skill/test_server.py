@@ -60,9 +60,6 @@ request_utters = [
     "yes",
     "ten",
     "next",
-    "top of month",
-    "no",
-    "top",
 ]
 true_response_utters = [
     "So, well, one of my hobbies is keeping fresh stats about the top video games. Wanna dig into it?",
@@ -76,9 +73,6 @@ true_response_utters = [
     "So I suppose you liked Cyberpunk 2077 right? How would you rate the desire to play it again, from 1 to 10?",
     "You gave it a really high rating. Your rating is higher than one given by the rest of the players. Most of them rated it at 8.4 points. Well. I'd love to talk about other things but my developer forgot to add them to my memory banks. Please forgive him, he's young and very clever. For now can we please discuss the next game?",
     "The next game is Fall Guys: Ultimate Knockout. It was released on August 04 2020. It's a combination of Action, Sports, Casual Massively Multiplayer & Indie. 60 percent of people marked Fall Guys: Ultimate Knockout as recommended.  Discussing it or moving on? ",
-    "There were 9 newly released games highly rated in the last month. Do you want to learn more? ",
-    "You can always chat with me about other popular games. What do you want to talk about?",
-    "Last time we had a conversation about the best games of the last month. For now, I can talk about the most popular games for this or last year, last month, or even the last week (hotties!). Which of these time periods is of interest for you?",
 ]
 
 
