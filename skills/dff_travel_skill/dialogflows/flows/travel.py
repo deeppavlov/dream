@@ -115,7 +115,7 @@ def get_mentioned_locations(vars):
     user_mentioned_locations = []
     for named_entity in user_mentioned_named_entities:
         if named_entity["type"] == "LOC":
-            user_mentioned_locations.append(named_entity)
+            user_mentioned_locations.append(named_entity["text"])
     if len(user_mentioned_locations) == 0:
         nounphrases = state_utils.get_nounphrases_from_human_utterance(vars)
         travel_topic = any([
@@ -310,7 +310,7 @@ def have_bot_been_in_response(vars):
     user_mentioned_locations = get_mentioned_locations(vars)
 
     if len(user_mentioned_locations):
-        location = f"in {user_mentioned_locations[-1]['text']}"
+        location = f"in {user_mentioned_locations[-1]}"
     else:
         location = "there"
     responses = [f"I've been {location} just virtually because physically I live in the cloud. Have you been there?",
@@ -325,7 +325,7 @@ def have_bot_been_in_response(vars):
 
         state_utils.set_can_continue(vars)
         if len(user_mentioned_locations) > 0:
-            state_utils.save_to_shared_memory(vars, discussed_location=user_mentioned_locations[-1]["text"])
+            state_utils.save_to_shared_memory(vars, discussed_location=user_mentioned_locations[-1])
         return random.choice(responses)
     except Exception as exc:
         logger.exception(exc)
@@ -358,7 +358,7 @@ def user_have_been_in_response(vars):
     # USR_OPINION_MENTIONED_BY_USER_LOC
     user_mentioned_locations = get_mentioned_locations(vars)
     if len(user_mentioned_locations) > 0:
-        location = user_mentioned_locations[-1]["text"]
+        location = user_mentioned_locations[-1]
     else:
         location = "there"
     shared_memory = state_utils.get_shared_memory(vars)
