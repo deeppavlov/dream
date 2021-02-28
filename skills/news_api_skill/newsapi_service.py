@@ -52,7 +52,7 @@ class CachedRequestsAPI:
         for ind, api_key in enumerate(self._api_keys):
             try:
                 request_address = self._construct_address(topic, api_key)
-                resp = requests.get(url=request_address, timeout=1.5)
+                resp = requests.get(url=request_address, timeout=0.7)
             except Exception as e:
                 sentry_sdk.capture_exception(e)
                 logger.exception(e)
