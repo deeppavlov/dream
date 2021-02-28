@@ -67,11 +67,11 @@ def set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE):
 def get_named_entities_from_human_utterance(vars):
     # ent is a dict! ent = {"text": "London":, "type": "LOC"}
     entities = []
-    for ent in vars["agent"]["dialog"]["human_utterances"][-1].get("annotations", {}).get("ner", []):
-        if not ent:
+    for ents in vars["agent"]["dialog"]["human_utterances"][-1].get("annotations", {}).get("ner", []):
+        if not ents:
             continue
-        ent = ent[0]
-        entities.append(ent)
+        for ent in ents:
+            entities.append(ent)
     return entities
 
 
@@ -94,12 +94,11 @@ def is_no_human_dialog_breakdown(vars):
     return False
 
 
-def no_dialog_breakdown_or_no_requests(vars):
+def no_requests(vars):
     """Function to determine if user didn't asked to switch topic, user didn't ask to talk about something particular,
         user didn't requested some special intents (like what_is_your_name, what_are_you_talking_about),
-        user didn't asked or requested something, OR no dialog breakdown in conversation.
+        user didn't asked or requested something,
     """
-    no_db = is_no_human_dialog_breakdown(vars)
     intents = common_utils.get_intents(get_last_human_utterance(vars), which="all")
     intents_by_catcher = common_utils.get_intents(get_last_human_utterance(vars), probs=False, which="intent_catcher")
     is_high_priority_intent = any([intent not in common_utils.service_intents for intent in intents_by_catcher])
@@ -109,6 +108,6 @@ def no_dialog_breakdown_or_no_requests(vars):
     is_not_request_intent = all([intent not in request_intents for intent in intents])
     is_no_question = "?" not in get_last_human_utterance(vars)["text"]
 
-    if not is_high_priority_intent and (no_db or (is_not_request_intent and is_no_question)):
+    if not is_high_priority_intent and is_not_request_intent and is_no_question:
         return True
     return False
