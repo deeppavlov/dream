@@ -778,12 +778,12 @@ services:
       - CUDA_VISIBLE_DEVICES=''
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
       resources:
         limits:
-          memory: 3G
+          memory: 4G
         reservations:
-          memory: 3G
+          memory: 4G
 
   odqa:
     build:
