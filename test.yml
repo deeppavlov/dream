@@ -67,6 +67,10 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
   cobot-nounphrases:
     env_file: [ .env.dev ]
+  cobot-topics:
+    env_file: [ .env.dev ]
+  cobot-dialogact:
+    env_file: [ .env.dev ]
   program-y:
     env_file: [ .env.dev ]
   personality-catcher:
