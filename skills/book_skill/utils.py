@@ -236,7 +236,7 @@ def get_triples(parser_info, queries):
         response = [[]]
         resp = requests.post(WIKIDATA_URL,
                              json={"query": queries, "parser_info": parser_info},
-                             timeout=1)
+                             timeout=0.5)
         if resp.status_code == 200:
             response = [elem[0] for elem in resp.json()]
         else:

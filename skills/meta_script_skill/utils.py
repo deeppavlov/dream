@@ -239,7 +239,8 @@ def get_comet_atomic(topic, relation, TOPICS={}):
         # send request to COMeT service on `topic & relation`
         try:
             comet_result = custom_request(
-                meta_script_skill_constants.COMET_SERVICE_URL, {"input": f"{topic}", "category": relation}, timeout=1
+                meta_script_skill_constants.COMET_SERVICE_URL, {"input": f"{topic}", "category": relation},
+                timeout=1.
             )
         except (requests.ConnectTimeout, requests.ReadTimeout) as e:
             logger.error("COMeT Atomic result Timeout")
@@ -295,7 +296,8 @@ def get_comet_conceptnet(topic, relation, return_all=False, return_not_filtered=
     # send request to COMeT ConceptNet service on `topic & relation`
     try:
         comet_result = custom_request(
-            meta_script_skill_constants.CONCEPTNET_SERVICE_URL, {"input": f"{topic}.", "category": relation}, timeout=1
+            meta_script_skill_constants.CONCEPTNET_SERVICE_URL, {"input": f"{topic}.", "category": relation},
+            timeout=0.5
         )
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         logger.error("COMeT ConceptNet result Timeout")
