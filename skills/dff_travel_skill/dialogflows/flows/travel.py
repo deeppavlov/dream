@@ -15,9 +15,10 @@ from CoBotQA.cobotqa_service import send_cobotqa
 from common.travel import OPINION_REQUESTS_ABOUT_TRAVELLING, TRAVELLING_TEMPLATE, I_HAVE_BEEN_TEMPLATE, \
     WHY_DONT_USER_LIKES_TRAVELLING_RESPONSES, OPINION_REQUEST_ABOUT_MENTIONED_BY_USER_LOC, USER_IMPRESSIONS_REQUEST, \
     WOULD_USER_LIKE_TO_VISIT_LOC_REQUESTS, ACKNOWLEDGE_USER_WILL_VISIT_LOC, QUESTIONS_ABOUT_LOCATION, \
-    ACKNOWLEDGE_USER_DO_NOT_WANT_TO_VISIT_LOC, OFFER_FACT_RESPONSES, OPINION_REQUESTS, HAVE_YOU_BEEN_TEMPLATE
+    ACKNOWLEDGE_USER_DO_NOT_WANT_TO_VISIT_LOC, OFFER_FACT_RESPONSES, OPINION_REQUESTS, HAVE_YOU_BEEN_TEMPLATE, \
+    ACKNOWLEDGE_USER_DISLIKE_LOC
 from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
-from common.utils import get_intents, get_topics, get_sentiment, is_yes, is_no, get_not_used_template
+from common.utils import get_intents, get_sentiment, is_yes, is_no, get_not_used_template
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 
@@ -52,6 +53,8 @@ class State(Enum):
 
     SYS_USR_LIKE_MENTIONED_BY_USER_LOC = auto()
     USR_WHAT_BEST_MENTIONED_BY_USER_LOC = auto()
+
+    USR_DISLIKE_AND_WHAT_LOC_NOT_CONF = auto()
 
     SYS_NO_DIALOG_BREAKDOWN_REQUEST = auto()
 
@@ -116,14 +119,14 @@ def get_mentioned_locations(vars):
     for named_entity in user_mentioned_named_entities:
         if named_entity["type"] == "LOC":
             user_mentioned_locations.append(named_entity["text"])
-    if len(user_mentioned_locations) == 0:
-        nounphrases = state_utils.get_nounphrases_from_human_utterance(vars)
-        travel_topic = any([
-            spec_topic in get_topics(state_utils.get_last_human_utterance(vars), probs=False, which="all")
-            for spec_topic in ["Travel_Geo", "Politics"]])
-
-        if len(nounphrases) == 1 and travel_topic:
-            user_mentioned_locations.append(nounphrases[0])
+    # if len(user_mentioned_locations) == 0:
+    #     nounphrases = state_utils.get_nounphrases_from_human_utterance(vars)
+    #     travel_topic = any([
+    #         spec_topic in get_topics(state_utils.get_last_human_utterance(vars), probs=False, which="all")
+    #         for spec_topic in ["Travel_Geo", "Politics"]])
+    #
+    #     if len(nounphrases) == 1 and travel_topic:
+    #         user_mentioned_locations.append(nounphrases[0])
 
     return user_mentioned_locations
 
@@ -142,9 +145,9 @@ def no_request(ngrams, vars):
     return flag
 
 
-def no_dialog_breakdown_or_no_requests_request(ngrams, vars):
+def no_requests_request(ngrams, vars):
     # SYS_NO_DIALOG_BREAKDOWN_AND_NO_QUESTIONS_REQUEST
-    flag = state_utils.no_dialog_breakdown_or_no_requests(vars)
+    flag = state_utils.no_requests(vars)
 
     if flag:
         logger.info(f"No dialog breakdown or request intents in user utterances")
@@ -242,7 +245,7 @@ def not_like_travelling_response(vars):
     # USR_NOT_TRAVELLING_PREF
     logger.info(f"Bot asks why user does not like travelling.")
     try:
-        no_db = state_utils.no_dialog_breakdown_or_no_requests(vars)
+        no_db = state_utils.no_requests(vars)
         if no_db:
             state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
         else:
@@ -293,13 +296,19 @@ def user_mention_named_entity_loc_request(ngrams, vars):
 # user asks if bot have been in LOC
 ##################################################################################################################
 
-def have_bot_been_in_request(ngrams, vars):
-    # SYS_HAVE_BOT_BEEN
+def have_bot_been_in(vars):
     user_asks_have_you_been = re.search(HAVE_YOU_BEEN_TEMPLATE,
                                         state_utils.get_last_human_utterance(vars)["text"])
     user_mentioned_locations = get_mentioned_locations(vars)
 
     if user_asks_have_you_been and len(user_mentioned_locations) > 0:
+        return True
+    return False
+
+
+def have_bot_been_in_request(ngrams, vars):
+    # SYS_HAVE_BOT_BEEN
+    if have_bot_been_in(vars):
         logger.info(f"User asks if bot have been in LOC in user utterances")
         return True
     return False
@@ -318,7 +327,7 @@ def have_bot_been_in_response(vars):
                  ]
     logger.info(f"Bot responses that bot has not been in LOC: {location}.")
     try:
-        if have_bot_been_in_request(None, vars):
+        if have_bot_been_in(vars):
             state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
         else:
             state_utils.set_confidence(vars, confidence=DEFAULT_CONFIDENCE)
@@ -397,11 +406,10 @@ def user_liked_mentioned_by_user_loc_response(vars):
     logger.info(f"Bot acknowledges that user liked LOC and asks about best about LOC: {location}.")
 
     try:
-        no_db = state_utils.no_dialog_breakdown_or_no_requests(vars)
-        if no_db:
-            state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
+        if is_yes(state_utils.get_last_human_utterance(vars)):
+            state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
         else:
-            state_utils.set_confidence(vars, confidence=DEFAULT_CONFIDENCE)
+            state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
         state_utils.set_can_continue(vars)
         if len(location) > 0:
             state_utils.save_to_shared_memory(vars, discussed_location=location)
@@ -414,7 +422,7 @@ def user_liked_mentioned_by_user_loc_response(vars):
 
 
 def user_no_or_disliked_request(ngrams, vars):
-    # SYS_USR_DISLIKED_MENTIONED_BY_USER_LOC
+    # SYS_USR_DISLIKE_MENTIONED_BY_USER_LOC
     # on this request we will answer with new question about other locations
     flag = no_request(ngrams, vars) or negative_sentiment_request(ngrams, vars)
     if flag:
@@ -423,9 +431,34 @@ def user_no_or_disliked_request(ngrams, vars):
     return False
 
 
+def user_disliked_mentioned_by_user_loc_response(vars):
+    # USR_DISLIKE_AND_WHAT_LOC_NOT_CONF
+    shared_memory = state_utils.get_shared_memory(vars)
+    used_questions_about_location = shared_memory.get("used_questions_about_location", [])
+    logger.info(f"Bot acknowledges user dislike loc and asks a question about some other LOC.")
+
+    try:
+        if is_no(state_utils.get_last_human_utterance(vars)):
+            state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+        else:
+            state_utils.set_confidence(vars, confidence=DEFAULT_CONFIDENCE)
+
+        state_utils.set_can_continue(vars)
+        question_about_location = get_not_used_template(used_questions_about_location, QUESTIONS_ABOUT_LOCATION)
+        state_utils.save_to_shared_memory(
+            vars, used_questions_about_location=used_questions_about_location + [question_about_location])
+        return f"{random.choice(ACKNOWLEDGE_USER_DISLIKE_LOC)} {question_about_location}"
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        state_utils.set_confidence(vars, ZERO_CONFIDENCE)
+        return error_response(vars)
+
+
 ##################################################################################################################
 # user have NOT been in LOC
 ##################################################################################################################
+
 I_HAVE_NOT_BEEN_TEMPLATE = re.compile(r"(i|we|me) (have|did|was|had|were) (not|never) (been (in|on|there)|visit)",
                                       re.IGNORECASE)
 
@@ -471,7 +504,7 @@ def user_would_like_to_visit_response(vars):
     logger.info(f"Bot acknowledges that user would liked to visit LOC: {location}. Wish he/she will do.")
 
     try:
-        no_db = state_utils.no_dialog_breakdown_or_no_requests(vars)
+        no_db = state_utils.no_requests(vars)
         if no_db:
             state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
         else:
@@ -601,7 +634,7 @@ def share_fact_about_loc_response(vars):
     try:
         if len(location) and len(fact_about_location) > 0:
             opinion_req = random.choice(OPINION_REQUESTS)
-            no_db = state_utils.no_dialog_breakdown_or_no_requests(vars)
+            no_db = state_utils.no_requests(vars)
             if no_db:
                 state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
             else:
@@ -683,15 +716,26 @@ simplified_dialogflow.add_system_transition(State.SYS_USR_LIKE_MENTIONED_BY_USER
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_WHAT_BEST_MENTIONED_BY_USER_LOC,
     {
-        State.SYS_BEST_MENTIONED_BY_USER_LOC: no_dialog_breakdown_or_no_requests_request,
+        State.SYS_BEST_MENTIONED_BY_USER_LOC: no_requests_request,
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_WHAT_BEST_MENTIONED_BY_USER_LOC, State.SYS_ERR)
 
 ##################################################################################################################
 #  SYS_USR_DISLIKE_MENTIONED_BY_USER_LOC
-simplified_dialogflow.add_system_transition(State.SYS_USR_DISLIKE_MENTIONED_BY_USER_LOC, State.USR_WHAT_LOC_NOT_CONF,
-                                            not_confident_ask_question_about_travelling_response)
+simplified_dialogflow.add_system_transition(State.SYS_USR_DISLIKE_MENTIONED_BY_USER_LOC,
+                                            State.USR_DISLIKE_AND_WHAT_LOC_NOT_CONF,
+                                            user_disliked_mentioned_by_user_loc_response)
+
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_DISLIKE_AND_WHAT_LOC_NOT_CONF,
+    {
+        State.SYS_USR_HAVE_BEEN: user_have_been_in_request,
+        State.SYS_LOC_DETECTED: user_mention_named_entity_loc_request
+    },
+)
+simplified_dialogflow.set_error_successor(State.USR_DISLIKE_AND_WHAT_LOC_NOT_CONF, State.SYS_ERR)
+
 
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_WHAT_LOC_NOT_CONF,
@@ -724,7 +768,7 @@ simplified_dialogflow.add_system_transition(State.SYS_WOULD_VISIT_LOC, State.USR
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_WISH_WOULD_VISIT_LOC,
     {
-        State.SYS_USR_RESP_ABOUT_WISHES: no_dialog_breakdown_or_no_requests_request,
+        State.SYS_USR_RESP_ABOUT_WISHES: no_requests_request,
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_WISH_WOULD_VISIT_LOC, State.SYS_ERR)
@@ -763,7 +807,7 @@ simplified_dialogflow.add_system_transition(State.SYS_WANT_FACT_ABOUT_LOC, State
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_SHARE_FACT_ABOUT_LOC,
     {
-        State.SYS_GET_FACT_ABOUT_LOC: no_dialog_breakdown_or_no_requests_request,
+        State.SYS_GET_FACT_ABOUT_LOC: no_requests_request,
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_SHARE_FACT_ABOUT_LOC, State.SYS_ERR)
@@ -822,7 +866,7 @@ simplified_dialogflow.add_system_transition(State.SYS_DISLIKE_TRAVELLING, State.
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_NOT_TRAVELLING_PREF,
     {
-        State.SYS_WHY_NOT_LIKE_TRAVELLING: no_dialog_breakdown_or_no_requests_request,
+        State.SYS_WHY_NOT_LIKE_TRAVELLING: no_requests_request,
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_NOT_TRAVELLING_PREF, State.SYS_ERR)

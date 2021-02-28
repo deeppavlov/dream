@@ -78,3 +78,8 @@ OFFER_FACT_RESPONSES = ["Great! Would you like to me to share a fact about LOCAT
                         "Cool! Do you want to hear a fact about LOCATION?",
                         "I know something interesting about it. Do you want me to share a fact about LOCATION?",
                         ]
+
+ACKNOWLEDGE_USER_DISLIKE_LOC = ["I see you don't like it. As you wish.",
+                                "I see. Suit yourself.",
+                                "I got you don't like this location.",
+                                ]
