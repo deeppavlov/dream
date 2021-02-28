@@ -14,6 +14,20 @@ services:
       - "./common:/src/common"
     ports:
       - 8081:8081
+  cobot-topics:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/CoBotTopicClassification:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8001:8000
+  cobot-dialogact:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/CoBotDialogActClassification:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8002:8002
   cobot-convers-evaluator-annotator:
     env_file: [.env.dev]
     volumes:

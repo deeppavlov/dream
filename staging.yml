@@ -13,6 +13,14 @@ services:
     image: ${DOCKER_REGISTRY}/sentseg:${VERSION}
     env_file:
       - ${ENV_FILE}
+  cobot-topics:
+     image: ${DOCKER_REGISTRY}/cobot-topics:${VERSION}
+     env_file:
+       - ${ENV_FILE}
+  cobot-dialogact:
+     image: ${DOCKER_REGISTRY}/cobot-dialogact:${VERSION}
+     env_file:
+       - ${ENV_FILE}
   cobot-convers-evaluator-annotator:
      image: ${DOCKER_REGISTRY}/cobot-convers-evaluator-annotator:${VERSION}
      env_file:

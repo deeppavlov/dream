@@ -492,9 +492,9 @@ def get_topics(annotated_utterance, probs=False, default_probs={}, default_label
     elif "cobot_dialogact_topics" in annotations:
         cobot_da_topics_labels = annotated_utterance['annotations']['cobot_dialogact_topics']
 
-    if 'combined_classification' in annotations and len(cobot_da_topics_labels) == 0:
-        cobot_da_topics_probs, cobot_da_topics_labels = _get_combined_annotations(
-            annotated_utterance, model_name='cobot_dialogact_topics')
+    # if 'combined_classification' in annotations and len(cobot_da_topics_labels) == 0:
+    #     cobot_da_topics_probs, cobot_da_topics_labels = _get_combined_annotations(
+    #         annotated_utterance, model_name='cobot_dialogact_topics')
     cobot_da_topics_labels = _process_text(cobot_da_topics_labels)
     if len(cobot_da_topics_probs) == 0:
         cobot_da_topics_probs = _labels_to_probs(cobot_da_topics_labels,
@@ -546,9 +546,9 @@ def get_intents(annotated_utterance, probs=False, default_probs={}, default_labe
         cobot_da_intent_labels = annotated_utterance["annotations"]["cobot_dialogact"]["intents"]
     elif 'cobot_dialogact_intents' in annotations:
         cobot_da_intent_labels = annotated_utterance['annotations']['cobot_dialogact_intents']
-    if "combined_classification" in annotations and len(cobot_da_intent_labels) == 0:
-        cobot_da_intent_probs, cobot_da_intent_labels = _get_combined_annotations(annotated_utterance,
-                                                                                  model_name='cobot_dialogact_intents')
+    # if "combined_classification" in annotations and len(cobot_da_intent_labels) == 0:
+    #     cobot_da_intent_probs, cobot_da_intent_labels = _get_combined_annotations(
+    #         annotated_utterance, model_name='cobot_dialogact_intents')
 
     cobot_da_intent_labels = _process_text(cobot_da_intent_labels)
     if len(cobot_da_intent_probs) == 0:
