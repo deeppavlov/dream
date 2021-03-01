@@ -297,7 +297,7 @@ def get_comet_conceptnet(topic, relation, return_all=False, return_not_filtered=
     try:
         comet_result = custom_request(
             meta_script_skill_constants.CONCEPTNET_SERVICE_URL, {"input": f"{topic}.", "category": relation},
-            timeout=0.5
+            timeout=1.
         )
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         logger.error("COMeT ConceptNet result Timeout")
