@@ -5,8 +5,9 @@ import sentry_sdk
 
 from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov import build_model
+
 logger = logging.getLogger(__name__)
-sentry_sdk.init(dsn=os.getenv('SENTRY_DSN'), integrations=[FlaskIntegration()])
+sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 try:
     model = build_model("combined_classifier.json", download=False)
@@ -23,14 +24,17 @@ app = Flask(__name__)
 def get_result(sentences):
     res = [{} for _ in sentences]
     try:
-        res = model(sentences)
+        if sentences:
+            res = model(sentences)
+        else:
+            raise Exception("Empty list of sentences received")
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
     return res
 
 
-@app.route("/model", methods=['POST'])
+@app.route("/model", methods=["POST"])
 def respond():
     logger.info(request.json)
     sentences = request.json.get("sentences", [" "])
@@ -38,7 +42,7 @@ def respond():
     return jsonify(answer)
 
 
-@app.route("/batch_model", methods=['POST'])
+@app.route("/batch_model", methods=["POST"])
 def batch_respond():
     logger.info(request.json)
     sentences = request.json.get("sentences", [" "])
