@@ -168,7 +168,7 @@ spec:
                     sh label: 'deploy status', script: '''
                       status=0
                       for dir in kubernetes/models/*; do
-                        kubectl rollout status -n ${NAMESPACE} deploy $(basename ${dir}-dp) || status=$?
+                        kubectl rollout status --timeout=${WAIT_TIMEOUT}s -n ${NAMESPACE} deploy $(basename ${dir}-dp) || status=$?
                       done
                       exit $status
                     '''
