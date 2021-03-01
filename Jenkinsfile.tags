@@ -106,12 +106,12 @@ spec:
 
           environment {
             DP_AGENT_PORT=4242
-            ENV_FILE=".env.prod"
           }
 
           steps {
             container('jenkins-agent') {
               script {
+                env.ENV_FILE=".env.prod." + ENVIRONMENT.toLowerCase()
                 int startTime = currentBuild.duration
                 notify('start')
                 try {
@@ -199,15 +199,18 @@ spec:
           } // end of post
         } // end of stage
 
-        stage('Is-running-prod-A') {
-
-          environment {
-            CHECK_URL="http://a0c5f8bbe459c4cf7a1e04d8807bf007-344976058.us-east-1.elb.amazonaws.com:4242/ping"
-          }
+        stage('Is-running-prod') {
 
           steps {
             container('jenkins-agent') {
               script {
+                if ( ENVIRONMENT == 'A' ) {
+                  env.CHECK_URL="http://a0c5f8bbe459c4cf7a1e04d8807bf007-344976058.us-east-1.elb.amazonaws.com:4242/ping"
+                }
+                if ( ENVIRONMENT == 'B' ) {
+                  env.CHECK_URL="http://a1b4e1088651f439d9e82fce0c4533b4-501376769.us-east-1.elb.amazonaws.com:4242/ping"
+                }
+                env.STAGE_NAME = "${env.STAGE_NAME}-${ENVIRONMENT}"
                 int startTime = currentBuild.duration
                 notify('start')
                 catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
@@ -224,7 +227,7 @@ spec:
             }
           }
         }
-        stage('Is-running-prod-B') {
+/*        stage('Is-running-prod-B') {
 
           environment {
             CHECK_URL="http://a1b4e1088651f439d9e82fce0c4533b4-501376769.us-east-1.elb.amazonaws.com:4242/ping"
@@ -263,7 +266,7 @@ spec:
               }
             }
           }
-        } // end of stage
+        } // end of stage */
       } // end of stages
     } // end of stage
   } // end of stages
