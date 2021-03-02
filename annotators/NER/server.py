@@ -18,7 +18,10 @@ app = Flask(__name__)
 ner = ner_model.load_model()
 logger.info("ner model is loaded.")
 
-BANNED_ENTITIES = ["okay", "oh", "name", "ocean", "hey"]
+BANNED_ENTITIES = ["okay", "oh", "name", "ocean", "hey", "cool"]
+
+with open("./google-english-no-swears.txt", "r") as f:
+    UNIGRAMS = set(f.read().splitlines()[:500])
 
 
 @app.route('/ner', methods=['POST'])
@@ -46,7 +49,7 @@ def respond():
 
             for ent in entities_for_sent:
                 ent_text = ent["text"].lower()
-                if ent_text not in BANNED_ENTITIES and len(ent_text) > 2:
+                if ent_text not in BANNED_ENTITIES and ent_text not in UNIGRAMS and len(ent_text) > 2:
                     good_entities_for_sent.append(deepcopy(ent))
 
             good_preds.append(good_entities_for_sent)
