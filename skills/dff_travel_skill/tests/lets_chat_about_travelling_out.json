@@ -9,7 +9,7 @@
                         "What is your opinion of travelling?"
                     ]
                 },
-                "last_human_utter_index": 1,
+                "previous_human_utter_index": 1,
                 "history": {
                     "1": "State.SYS_LETS_CHAT_ABOUT_TRAVELLING"
                 },

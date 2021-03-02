@@ -5,17 +5,17 @@ import logging
 from enum import Enum, auto
 
 
-from emora_stdm import DialogueFlow
 import requests
 import sentry_sdk
 
-import utils.stdm.dialog_flow_extention as dialog_flow_extention
-import dialog_flows.utils as dialog_flows_utils
-import dialog_flows.condition_utils as condition_utils
+import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
+import common.dialogflow_framework.utils.state as state_utils
+import common.dialogflow_framework.utils.condition as condition_utils
 import common.entity_utils as entity_utils
 import common.utils as common_utils
 import common.greeting as common_greeting
 import common.link as common_link
+import dialogflows.scopes as scopes
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -42,6 +42,11 @@ class State(Enum):
     USR_ERR = auto()
 
 
+DIALOG_BEGINNING_START_CONFIDENCE = 0.98
+DIALOG_BEGINNING_CONTINUE_CONFIDENCE = 0.9
+DIALOG_BEGINNING_SHORT_ANSWER_CONFIDENCE = 0.98
+MIDDLE_DIALOG_START_CONFIDENCE = 0.7
+
 # %%
 
 ##################################################################################################################
@@ -49,9 +54,7 @@ class State(Enum):
 ##################################################################################################################
 
 
-dialog_flow = DialogueFlow(State.USR_START, initial_speaker=DialogueFlow.Speaker.USER)
-simplified_dialog_flow = dialog_flow_extention.DFEasyFilling(dialog_flow)
-
+simplified_dialogflow = dialogflow_extention.DFEasyFilling(State.USR_START)
 
 ##################################################################################################################
 ##################################################################################################################
@@ -70,7 +73,7 @@ std_acknowledgements = {
 
 def get_sentiment_acknowledgement(vars, acknowledgements=None):
     acknowledgements = std_acknowledgements.update(acknowledgements) if acknowledgements else std_acknowledgements
-    return acknowledgements.get(dialog_flows_utils.get_human_sentiment(vars), [""])
+    return acknowledgements.get(state_utils.get_human_sentiment(vars), [""])
 
 
 # curl -H "Content-Type: application/json" -XPOST http://0.0.0.0:8088/respond \
@@ -78,7 +81,7 @@ def get_sentiment_acknowledgement(vars, acknowledgements=None):
 def masked_lm(templates=["Hello, it's [MASK] dog."], prob_threshold=0.0, probs_flag=False):
     request_data = {"text": templates}
     try:
-        predictions_batch = requests.post(MASKED_LM_SERVICE_URL, json=request_data, timeout=0.5).json()
+        predictions_batch = requests.post(MASKED_LM_SERVICE_URL, json=request_data, timeout=1.5).json()
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
@@ -94,6 +97,25 @@ def masked_lm(templates=["Hello, it's [MASK] dog."], prob_threshold=0.0, probs_f
                     tokens[token] = prob
         tokens_batch += [tokens if probs_flag else list(tokens)]
     return tokens_batch
+
+
+def set_confidence_by_universal_policy(vars):
+    if not condition_utils.is_begin_of_dialog(vars, begin_dialog_n=10):
+        state_utils.set_confidence(vars, 0)
+    elif condition_utils.is_first_our_response(vars):
+        state_utils.set_confidence(vars, DIALOG_BEGINNING_START_CONFIDENCE)
+        state_utils.set_can_continue(vars)
+    elif not condition_utils.is_interrupted(vars) and common_greeting.dont_tell_you_answer(
+        state_utils.get_last_human_utterance(vars)
+    ):
+        state_utils.set_confidence(vars, DIALOG_BEGINNING_SHORT_ANSWER_CONFIDENCE)
+        state_utils.set_can_continue(vars)
+    elif not condition_utils.is_interrupted(vars):
+        state_utils.set_confidence(vars, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
+        state_utils.set_can_continue(vars)
+    else:
+        state_utils.set_confidence(vars, MIDDLE_DIALOG_START_CONFIDENCE)
+        state_utils.set_can_continue(vars)
 
 
 ##################################################################################################################
@@ -115,22 +137,23 @@ def std_greeting_request(ngrams, vars):
     flag = flag and not condition_utils.is_new_human_entity(vars)
     flag = flag and not condition_utils.is_switch_topic(vars)
     flag = flag and not condition_utils.is_opinion_request(vars)
-    flag = flag and not condition_utils.is_lets_chat_about_topic(vars)
+    flag = flag and not condition_utils.is_lets_chat_about_topic_human_initiative(vars)
     flag = flag and not condition_utils.is_question(vars)
     flag = flag and condition_utils.is_begin_of_dialog(vars)
     if flag:
-        shared_memory = dialog_flows_utils.get_shared_memory(vars)
+        shared_memory = state_utils.get_shared_memory(vars)
         flag = flag and shared_memory.get("greeting_step_id", 0) < len(GREETING_STEPS)
+    logger.info(f"std_greeting_request={flag}")
     return flag
 
 
 def std_greeting_response(vars):
     try:
-        shared_memory = dialog_flows_utils.get_shared_memory(vars)
+        shared_memory = state_utils.get_shared_memory(vars)
 
         greeting_step_id = shared_memory.get("greeting_step_id", 0)
         last_acknowledgements = shared_memory.get("last_acknowledgements", [])
-        sentiment = dialog_flows_utils.get_human_sentiment(vars)
+        sentiment = state_utils.get_human_sentiment(vars)
 
         # get ack, body
         ack = common_utils.get_not_used_template(
@@ -139,26 +162,14 @@ def std_greeting_response(vars):
         body = random.choice(common_greeting.GREETING_QUESTIONS[GREETING_STEPS[greeting_step_id]])
 
         # set_confidence
-        if greeting_step_id == 0:
-            dialog_flows_utils.set_confidence(vars, dialog_flows_utils.DIALOG_BEGINNING_START_CONFIDENCE)
-        elif common_greeting.dont_tell_you_answer(dialog_flows_utils.get_last_user_utterance(vars)):
-            # More confident as user's answer is too simple
-            dialog_flows_utils.set_confidence(vars, dialog_flows_utils.DIALOG_BEGINNING_SHORT_ANSWER_CONFIDENCE)
-        else:
-            dialog_flows_utils.set_confidence(vars, dialog_flows_utils.DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
-
-        dialog_flows_utils.set_can_continue(vars)
-        dialog_flows_utils.save_to_shared_memory(
-            vars, greeting_step_id=greeting_step_id + 1, last_acknowledgements=[ack]
-        )
-        # if condition_utils.is_first_user_request(vars):
-        #     dialog_flows_utils.set_confidence(vars, dialog_flows_utils.DIALOG_BEGINNING_START_CONFIDENCE)
+        set_confidence_by_universal_policy(vars)
+        state_utils.save_to_shared_memory(vars, greeting_step_id=greeting_step_id + 1, last_acknowledgements=[ack])
 
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        dialog_flows_utils.set_confidence(vars, 0)
+        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -171,8 +182,9 @@ def new_entities_is_needed_for_request(ngrams, vars):
     flag = True
     flag = flag and condition_utils.is_first_time_of_state(vars, State.SYS_NEW_ENTITIES_IS_NEEDED_FOR)
     flag = flag and not condition_utils.is_switch_topic(vars)
-    flag = flag and not condition_utils.is_lets_chat_about_topic(vars)
+    flag = flag and not condition_utils.is_lets_chat_about_topic_human_initiative(vars)
     flag = flag and condition_utils.is_new_human_entity(vars)
+    logger.info(f"new_entities_is_needed_for_request={flag}")
     return flag
 
 
@@ -181,27 +193,27 @@ def new_entities_is_needed_for_request(ngrams, vars):
 def new_entities_is_needed_for_response(vars):
     try:
         ack = random.choice(get_sentiment_acknowledgement(vars))
-        new_entities = dialog_flows_utils.get_new_human_labeled_noun_phrase(vars)
+        new_entities = state_utils.get_new_human_labeled_noun_phrase(vars)
         new_entity = list(new_entities)[0]
 
         new_entity = new_entity if condition_utils.is_plural(new_entity) else f"a {new_entity}"
         template = f"So you mentioned {new_entity}. Does it [MASK] for you? Tell me why?"
         tokens = masked_lm([template], prob_threshold=0.05)[0]
-        logger.info(f"tokens = {tokens}")
+        logger.debug(f"tokens = {tokens}")
 
         if tokens:
             body = f"So you mentioned {new_entity}. Does it {random.choice(tokens)} for you? Tell me why?"
+            set_confidence_by_universal_policy(vars)
         else:
-            ack = "Sorry"
+            ack = ""
             body = ""
+            state_utils.set_confidence(vars, 0)
 
-        dialog_flows_utils.set_confidence(vars)
-        dialog_flows_utils.set_can_continue(vars)
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        dialog_flows_utils.set_confidence(vars, 0)
+        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -213,13 +225,15 @@ def new_entities_is_needed_for_response(vars):
 def closed_answer_request(ngrams, vars):
     flag = True
     flag = flag and not condition_utils.is_switch_topic(vars)
-    flag = flag and not condition_utils.is_lets_chat_about_topic(vars)
+    flag = flag and not condition_utils.is_lets_chat_about_topic_human_initiative(vars)
+    logger.info(f"closed_answer_request={flag}")
     return flag
 
 
 def closed_answer_response(vars):
     ack = random.choice(get_sentiment_acknowledgement(vars))
     body = ""
+    set_confidence_by_universal_policy(vars)
     return " ".join([ack, body])
 
 
@@ -231,7 +245,8 @@ def closed_answer_response(vars):
 def link_to_by_enity_request(ngrams, vars):
     flag = True
     flag = flag and not condition_utils.is_switch_topic(vars)
-    flag = flag and not condition_utils.is_lets_chat_about_topic(vars)
+    flag = flag and not condition_utils.is_lets_chat_about_topic_human_initiative(vars)
+    logger.info(f"link_to_by_enity_request={flag}")
     return flag
 
 
@@ -274,12 +289,12 @@ link_to_skill2i_like_to_talk = {
 def link_to_by_enity_response(vars):
     ack = random.choice(get_sentiment_acknowledgement(vars))
     try:
-        entities = dialog_flows_utils.get_labeled_noun_phrase(vars)
+        entities = state_utils.get_labeled_noun_phrase(vars)
         time_sorted_human_entities = entity_utils.get_time_sorted_human_entities(entities)
         if time_sorted_human_entities:
-            logger.info(f"time_sorted_human_entities= {time_sorted_human_entities}")
+            logger.debug(f"time_sorted_human_entities= {time_sorted_human_entities}")
             tgt_entity = list(time_sorted_human_entities)[-1]
-            logger.info(f"tgt_entity= {tgt_entity}")
+            logger.debug(f"tgt_entity= {tgt_entity}")
             if tgt_entity in sum(link_to_skill2key_words.values(), []):
                 skill_names = [skill for skill, key_words in link_to_skill2key_words.items() if tgt_entity in key_words]
             else:
@@ -297,23 +312,22 @@ def link_to_by_enity_response(vars):
             skill_names = [random.choice(list(link_to_skill2key_words))]
 
         # used_links
-        used_links = dialog_flows_utils.get_used_links(vars)
+        used_links = state_utils.get_used_links(vars)
 
         link = common_link.link_to(skill_names, used_links)
         used_links[link["skill"]] = used_links.get(link["skill"], []) + [link["phrase"]]
 
-        dialog_flows_utils.save_used_links(vars, used_links)
+        state_utils.save_used_links(vars, used_links)
 
         body = random.choice(link_to_skill2i_like_to_talk.get(link["skill"], [""]))
 
         body += f" {link['phrase']}"
-        dialog_flows_utils.set_confidence(vars)
-        dialog_flows_utils.set_can_continue(vars)
+        set_confidence_by_universal_policy(vars)
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        dialog_flows_utils.set_confidence(vars, 0)
+        state_utils.set_confidence(vars, 0)
         return " ".join([ack, "I like to talk about movies. Do you have favorite movies?"])
 
 
@@ -323,8 +337,8 @@ def link_to_by_enity_response(vars):
 
 
 def error_response(vars):
-    dialog_flows_utils.set_confidence(vars, 0)
-    return "Sorry"
+    state_utils.set_confidence(vars, 0)
+    return ""
 
 
 ##################################################################################################################
@@ -337,7 +351,7 @@ def error_response(vars):
 ##################################################################################################################
 #  START
 
-simplified_dialog_flow.add_user_serial_transitions(
+simplified_dialogflow.add_user_serial_transitions(
     State.USR_START,
     {
         State.SYS_STD_GREETING: std_greeting_request,
@@ -345,14 +359,14 @@ simplified_dialog_flow.add_user_serial_transitions(
         State.SYS_LINK_TO_BY_ENITY: link_to_by_enity_request,
     },
 )
-simplified_dialog_flow.set_error_successor(State.USR_START, State.SYS_ERR)
+simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
 
 ##################################################################################################################
 #  SYS_STD_GREETING
 
-simplified_dialog_flow.add_system_transition(State.SYS_STD_GREETING, State.USR_STD_GREETING, std_greeting_response)
+simplified_dialogflow.add_system_transition(State.SYS_STD_GREETING, State.USR_STD_GREETING, std_greeting_response)
 
-simplified_dialog_flow.add_user_serial_transitions(
+simplified_dialogflow.add_user_serial_transitions(
     State.USR_STD_GREETING,
     {
         State.SYS_NEW_ENTITIES_IS_NEEDED_FOR: new_entities_is_needed_for_request,
@@ -361,64 +375,67 @@ simplified_dialog_flow.add_user_serial_transitions(
 )
 
 
-simplified_dialog_flow.set_error_successor(State.USR_STD_GREETING, State.SYS_ERR)
+simplified_dialogflow.set_error_successor(State.USR_STD_GREETING, State.SYS_ERR)
 
 
 ##################################################################################################################
 #  SYS_NEW_ENTITIES_IS_NEEDED_FOR
-simplified_dialog_flow.add_system_transition(
+simplified_dialogflow.add_system_transition(
     State.SYS_NEW_ENTITIES_IS_NEEDED_FOR,
     State.USR_NEW_ENTITIES_IS_NEEDED_FOR,
     new_entities_is_needed_for_response,
 )
-simplified_dialog_flow.set_error_successor(State.SYS_NEW_ENTITIES_IS_NEEDED_FOR, State.SYS_ERR)
+simplified_dialogflow.set_error_successor(State.SYS_NEW_ENTITIES_IS_NEEDED_FOR, State.SYS_ERR)
 
 
-simplified_dialog_flow.add_user_transition(
+simplified_dialogflow.add_user_transition(
     State.USR_NEW_ENTITIES_IS_NEEDED_FOR,
     State.SYS_CLOSED_ANSWER,
     closed_answer_request,
 )
 
 
-simplified_dialog_flow.set_error_successor(State.USR_NEW_ENTITIES_IS_NEEDED_FOR, State.SYS_ERR)
+simplified_dialogflow.set_error_successor(State.USR_NEW_ENTITIES_IS_NEEDED_FOR, State.SYS_ERR)
 ##################################################################################################################
 #  SYS_CLOSED_ANSWER
 
-simplified_dialog_flow.add_system_transition(
+simplified_dialogflow.add_system_transition(
     State.SYS_CLOSED_ANSWER,
     State.USR_CLOSED_ANSWER,
     closed_answer_response,
 )
 
-simplified_dialog_flow.add_user_transition(
+simplified_dialogflow.add_user_transition(
     State.USR_CLOSED_ANSWER,
     State.SYS_LINK_TO_BY_ENITY,
     link_to_by_enity_request,
 )
-simplified_dialog_flow.set_error_successor(State.USR_CLOSED_ANSWER, State.SYS_ERR)
+simplified_dialogflow.set_error_successor(State.USR_CLOSED_ANSWER, State.SYS_ERR)
 
 ##################################################################################################################
 #  SYS_LINK_TO_BY_ENITY
 
-simplified_dialog_flow.add_system_transition(
+simplified_dialogflow.add_system_transition(
     State.SYS_LINK_TO_BY_ENITY,
     State.USR_LINK_TO_BY_ENITY,
     link_to_by_enity_response,
 )
 
-simplified_dialog_flow.add_user_transition(
+simplified_dialogflow.add_user_transition(
     State.USR_LINK_TO_BY_ENITY,
     State.SYS_STD_GREETING,
     std_greeting_request,
 )
-simplified_dialog_flow.set_error_successor(State.USR_LINK_TO_BY_ENITY, State.SYS_ERR)
+simplified_dialogflow.set_error_successor(State.USR_LINK_TO_BY_ENITY, State.SYS_ERR)
 
 
 ##################################################################################################################
 #  SYS_ERR
-simplified_dialog_flow.add_system_transition(
+simplified_dialogflow.add_system_transition(
     State.SYS_ERR,
-    State.USR_START,
+    (scopes.MAIN, scopes.State.USR_ROOT),
     error_response,
 )
+
+
+dialogflow = simplified_dialogflow.get_dialogflow()

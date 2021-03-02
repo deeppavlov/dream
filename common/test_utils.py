@@ -2,6 +2,9 @@ import difflib
 import json
 import pathlib
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def compare_structs(ground_truth, hypothesis, stack_track="hypothesis"):
@@ -63,5 +66,5 @@ def save_to_test(data, file_path, indent=4):
     assert "tests" == file_path.parent.name, "Test has to be at `tests` dir"
     assert file_path.name[-8:] in ["_in.json", "out.json"], "file name has to contain _in.json/_out.json"
     json.dump(data, file_path.open("wt"), indent=indent)
-    stat = file_path.stat()
+    stat = file_path.parent.stat()
     os.chown(file_path, stat.st_uid, stat.st_gid)

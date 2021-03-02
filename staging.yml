@@ -254,8 +254,8 @@ services:
     image: ${DOCKER_REGISTRY}/knowledge-grounding-skill:${VERSION}
     env_file:
       - ${ENV_FILE}
-  friendship-skill:
-    image: ${DOCKER_REGISTRY}/friendship-skill:${VERSION}
+  dff-friendship-skill:
+    image: ${DOCKER_REGISTRY}/dff-friendship-skill:${VERSION}
     env_file:
       - ${ENV_FILE}
   masked-lm:

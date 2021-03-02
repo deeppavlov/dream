@@ -586,13 +586,13 @@ def entity_storer_formatter(dialog: Dict) -> List[Dict]:
     return [{"human_utter_indexes": [human_utter_index], "dialogs": [new_dialog]}]
 
 
-def friendship_skill_formatter(dialog: Dict) -> List[Dict]:
-    service_name = f"friendship_skill"
+def dff_friendship_skill_formatter(dialog: Dict) -> List[Dict]:
+    service_name = "dff_friendship_skill"
     return utils.dff_formatter(dialog, service_name)
 
 
 def dff_template_formatter(dialog: Dict) -> List[Dict]:
-    service_name = f"dff_template"
+    service_name = "dff_template"
     return utils.dff_formatter(dialog, service_name)
 
 
