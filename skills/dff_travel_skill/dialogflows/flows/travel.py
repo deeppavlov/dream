@@ -378,11 +378,15 @@ def user_have_been_in_response(vars):
     logger.info(f"Bot asks if user liked visited LOC: {location}.")
 
     try:
-        assign_conf_decreasing_if_requests_in_human_uttr(vars, SUPER_CONFIDENCE, DEFAULT_CONFIDENCE)
         state_utils.set_can_continue(vars)
         response = get_not_used_template(used_opinion_requests, OPINION_REQUEST_ABOUT_MENTIONED_BY_USER_LOC)
         if len(user_mentioned_locations) > 0:
+            # if we found named location, super conf if no request in user uttrs, otherwise default conf
             state_utils.save_to_shared_memory(vars, discussed_location=location)
+            assign_conf_decreasing_if_requests_in_human_uttr(vars, SUPER_CONFIDENCE, DEFAULT_CONFIDENCE)
+        else:
+            # if we did NOT find named location, default conf if no request in user uttrs, otherwise zero conf
+            assign_conf_decreasing_if_requests_in_human_uttr(vars, DEFAULT_CONFIDENCE, ZERO_CONFIDENCE)
         state_utils.save_to_shared_memory(
             vars, used_opinion_requests_mentioned_loc=used_opinion_requests + [response])
         return response
