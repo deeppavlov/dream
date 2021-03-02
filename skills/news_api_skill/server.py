@@ -413,8 +413,7 @@ def respond():
                 else:
                     # news was offered previously but the user refuse to get it
                     # or false news request was detected
-                    response, confidence, human_attr, bot_attr, attr = link_to_other_skills(
-                        human_attr, bot_attr, curr_uttr)
+                    response, confidence, human_attr, bot_attr, attr = "", 0., {}, {}, {}
 
         else:
             # no found news
