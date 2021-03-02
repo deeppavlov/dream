@@ -112,6 +112,13 @@ simplified_dialogflow = dialogflow_extention.DFEasyFilling(State.USR_START)
 # general requests
 ##################################################################################################################
 
+def assign_conf_decreasing_if_requests_in_human_uttr(vars, CONF_1, CONF_2):
+    no_db = state_utils.no_requests(vars)
+    if no_db:
+        state_utils.set_confidence(vars, confidence=CONF_1)
+    else:
+        state_utils.set_confidence(vars, confidence=CONF_2)
+
 
 def get_mentioned_locations(vars):
     user_mentioned_named_entities = state_utils.get_named_entities_from_human_utterance(vars)
@@ -245,11 +252,7 @@ def not_like_travelling_response(vars):
     # USR_NOT_TRAVELLING_PREF
     logger.info(f"Bot asks why user does not like travelling.")
     try:
-        no_db = state_utils.no_requests(vars)
-        if no_db:
-            state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
-        else:
-            state_utils.set_confidence(vars, confidence=DEFAULT_CONFIDENCE)
+        assign_conf_decreasing_if_requests_in_human_uttr(vars, HIGH_CONFIDENCE, DEFAULT_CONFIDENCE)
 
         state_utils.set_can_continue(vars)
         return random.choice(WHY_DONT_USER_LIKES_TRAVELLING_RESPONSES)
@@ -267,7 +270,7 @@ def linkto_personal_info_response(vars):
                  ]
     logger.info(f"Bot asks user about his/her origin/home town.")
     try:
-        state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
+        assign_conf_decreasing_if_requests_in_human_uttr(vars, HIGH_CONFIDENCE, DEFAULT_CONFIDENCE)
         state_utils.set_can_continue(vars)
         return random.choice(responses)
     except Exception as exc:
@@ -328,7 +331,7 @@ def have_bot_been_in_response(vars):
     logger.info(f"Bot responses that bot has not been in LOC: {location}.")
     try:
         if have_bot_been_in(vars):
-            state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+            assign_conf_decreasing_if_requests_in_human_uttr(vars, SUPER_CONFIDENCE, DEFAULT_CONFIDENCE)
         else:
             state_utils.set_confidence(vars, confidence=DEFAULT_CONFIDENCE)
 
@@ -375,7 +378,7 @@ def user_have_been_in_response(vars):
     logger.info(f"Bot asks if user liked visited LOC: {location}.")
 
     try:
-        state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+        assign_conf_decreasing_if_requests_in_human_uttr(vars, SUPER_CONFIDENCE, DEFAULT_CONFIDENCE)
         state_utils.set_can_continue(vars)
         response = get_not_used_template(used_opinion_requests, OPINION_REQUEST_ABOUT_MENTIONED_BY_USER_LOC)
         if len(user_mentioned_locations) > 0:
@@ -409,7 +412,8 @@ def user_liked_mentioned_by_user_loc_response(vars):
         if is_yes(state_utils.get_last_human_utterance(vars)):
             state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
         else:
-            state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
+            assign_conf_decreasing_if_requests_in_human_uttr(vars, HIGH_CONFIDENCE, DEFAULT_CONFIDENCE)
+
         state_utils.set_can_continue(vars)
         if len(location) > 0:
             state_utils.save_to_shared_memory(vars, discussed_location=location)
@@ -441,7 +445,7 @@ def user_disliked_mentioned_by_user_loc_response(vars):
         if is_no(state_utils.get_last_human_utterance(vars)):
             state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
         else:
-            state_utils.set_confidence(vars, confidence=DEFAULT_CONFIDENCE)
+            assign_conf_decreasing_if_requests_in_human_uttr(vars, HIGH_CONFIDENCE, DEFAULT_CONFIDENCE)
 
         state_utils.set_can_continue(vars)
         question_about_location = get_not_used_template(used_questions_about_location, QUESTIONS_ABOUT_LOCATION)
@@ -484,7 +488,7 @@ def user_have_not_been_in_response(vars):
     logger.info(f"Bot asks if user wants to visit non-visited LOC: {location}.")
 
     try:
-        state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+        assign_conf_decreasing_if_requests_in_human_uttr(vars, SUPER_CONFIDENCE, DEFAULT_CONFIDENCE)
         state_utils.set_can_continue(vars)
         if len(location) > 0:
             state_utils.save_to_shared_memory(vars, discussed_location=location)
@@ -504,12 +508,7 @@ def user_would_like_to_visit_response(vars):
     logger.info(f"Bot acknowledges that user would liked to visit LOC: {location}. Wish he/she will do.")
 
     try:
-        no_db = state_utils.no_requests(vars)
-        if no_db:
-            state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
-        else:
-            state_utils.set_confidence(vars, confidence=DEFAULT_CONFIDENCE)
-
+        assign_conf_decreasing_if_requests_in_human_uttr(vars, SUPER_CONFIDENCE, DEFAULT_CONFIDENCE)
         state_utils.set_can_continue(vars)
         if len(location) > 0:
             state_utils.save_to_shared_memory(vars, discussed_location=location)
@@ -530,7 +529,7 @@ def user_would_not_like_to_visit_response(vars):
     logger.info(f"Bot acknowledges that user would not like to visit LOC: {location}, asks question about other LOC.")
 
     try:
-        state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+        assign_conf_decreasing_if_requests_in_human_uttr(vars, SUPER_CONFIDENCE, DEFAULT_CONFIDENCE)
         state_utils.set_can_continue(vars)
         question_about_location = get_not_used_template(used_questions_about_location, QUESTIONS_ABOUT_LOCATION)
         if len(location) > 0:
@@ -557,7 +556,7 @@ def confident_ask_question_about_travelling_response(vars):
     logger.info(f"Bot confidently asks a question about some LOC.")
 
     try:
-        state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+        assign_conf_decreasing_if_requests_in_human_uttr(vars, SUPER_CONFIDENCE, DEFAULT_CONFIDENCE)
         state_utils.set_can_continue(vars)
         question_about_location = get_not_used_template(used_questions_about_location, QUESTIONS_ABOUT_LOCATION)
         state_utils.save_to_shared_memory(
@@ -577,7 +576,7 @@ def not_confident_ask_question_about_travelling_response(vars):
     logger.info(f"Bot not confidently asks a question about some LOC.")
 
     try:
-        state_utils.set_confidence(vars, confidence=DEFAULT_CONFIDENCE)
+        assign_conf_decreasing_if_requests_in_human_uttr(vars, DEFAULT_CONFIDENCE, ZERO_CONFIDENCE)
         state_utils.set_can_continue(vars)
         question_about_location = get_not_used_template(used_questions_about_location, QUESTIONS_ABOUT_LOCATION)
         state_utils.save_to_shared_memory(
@@ -608,7 +607,7 @@ def offer_fact_about_loc_response(vars):
 
     try:
         if len(location) and len(fact_about_location) > 0:
-            state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+            assign_conf_decreasing_if_requests_in_human_uttr(vars, SUPER_CONFIDENCE, DEFAULT_CONFIDENCE)
             state_utils.set_can_continue(vars)
             state_utils.save_to_shared_memory(vars, discussed_location=location)
             state_utils.save_to_shared_memory(vars, fact_about_discussed_location=fact_about_location)
@@ -634,11 +633,7 @@ def share_fact_about_loc_response(vars):
     try:
         if len(location) and len(fact_about_location) > 0:
             opinion_req = random.choice(OPINION_REQUESTS)
-            no_db = state_utils.no_requests(vars)
-            if no_db:
-                state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
-            else:
-                state_utils.set_confidence(vars, confidence=DEFAULT_CONFIDENCE)
+            assign_conf_decreasing_if_requests_in_human_uttr(vars, SUPER_CONFIDENCE, DEFAULT_CONFIDENCE)
             state_utils.set_can_continue(vars)
             state_utils.save_to_shared_memory(vars, discussed_location=location)
             state_utils.save_to_shared_memory(vars, used_opinion_requests=used_opinion_requests + [opinion_req])
