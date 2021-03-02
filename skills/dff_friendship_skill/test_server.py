@@ -1,30 +1,23 @@
 import requests
 import os
-import pathlib
-import json
 
 import common.test_utils as test_utils
 
 
-SERVICE_PORT = os.getenv("SERVICE_PORT")
+SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
+RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
 URL = f"http://0.0.0.0:{SERVICE_PORT}/respond"
 
 
-def get_tests(postfix):
-    return {
-        file.name.replace(postfix, ""): json.load(file.open("rt"))
-        for file in pathlib.Path("tests/").glob(f"*{postfix}")
-    }
+def handler(requested_data, random_seed):
+    hypothesis = requests.post(URL, json={**requested_data, "random_seed": random_seed}).json()
+    return hypothesis
 
 
-in_data = get_tests("_in.json")
-out_data = get_tests("_out.json")
-assert set(in_data) == set(out_data), "All files must be in pairs."
-
-
-def main():
+def run_test(handler):
+    in_data, out_data = test_utils.get_dataset()
     for test_name in in_data:
-        hypothesis = requests.post(URL, json=in_data[test_name]).json()
+        hypothesis = handler(in_data[test_name], RANDOM_SEED)
         print(f"test name: {test_name}")
         is_equal_flag, msg = test_utils.compare_structs(out_data[test_name], hypothesis)
         if msg and len(msg.split("`")) == 5:
@@ -37,4 +30,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    run_test(handler)

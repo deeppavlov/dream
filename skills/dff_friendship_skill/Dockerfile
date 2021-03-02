@@ -1,8 +1,9 @@
 FROM python:3.9.1
-
+# ###################### IMMUTABLE SECTION ######################################
+# Do not change anything in this section 
 WORKDIR /src
 
-COPY ./skills/friendship_skill/requirements.txt .
+COPY common/dialogflow_framework/requirements.txt .
 RUN pip install -r requirements.txt
 
 RUN python -m spacy download en
@@ -10,11 +11,20 @@ RUN python -m spacy download en_core_web_sm
 RUN python -m spacy download en_core_web_md
 RUN python -m nltk.downloader vader_lexicon
 
-COPY ./skills/friendship_skill/programy_logger_off.sh ./programy_logger_off.sh
+COPY common/dialogflow_framework/scripts /scripts
 
-RUN bash programy_logger_off.sh
+RUN bash /scripts/programy_logger_off.sh
 
-COPY ./skills/friendship_skill/ ./
+# ###################### CUSTOM SECTION ######################################
+# Here you can make changes 
+
+ARG SERVICE_NAME
+ENV SERVICE_NAME ${SERVICE_NAME}
+
+COPY skills/${SERVICE_NAME}/requirements.txt .
+RUN pip install -r requirements.txt
+
+COPY skills/${SERVICE_NAME}/ ./
 COPY ./common/ ./common/
 
 ARG SERVICE_PORT

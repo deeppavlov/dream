@@ -15,7 +15,6 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 ENCOUNTERS_MAX_LEN = 3
 ENTITY_MAX_NO = 10
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 spacy_nlp = en_core_web_sm.load()

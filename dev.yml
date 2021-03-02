@@ -429,11 +429,10 @@ services:
       - "./skills/knowledge_grounding_skill:/src"
     ports:
       - 8085:8085
-  friendship-skill:
+  dff-friendship-skill:
     env_file: [.env.dev]
     volumes:
-      - "./skills/friendship_skill:/src"
-      - "./skills/meta_script_skill:/src/meta_script_skill"
+      - "./skills/dff_friendship_skill:/src"
       - "./common:/src/common"
     ports:
       - 8086:8086

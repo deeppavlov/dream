@@ -144,7 +144,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
                      entity-linking kbqa odqa wiki-parser convert-reddit question-generator grounding-skill \
                      cobot-convers-evaluator-annotator \
                      dialog-breakdown book-skill combined-classification knowledge-grounding-skill \
-                     grounding-skill friendship-skill masked-lm entity-storer wikidata-dial-skill \
+                     grounding-skill dff-friendship-skill masked-lm entity-storer wikidata-dial-skill \
                      dff-travel-skill; do
 
         echo "Run tests for $container"

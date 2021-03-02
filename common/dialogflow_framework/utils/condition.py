@@ -37,32 +37,41 @@ def is_question(vars):
     return flag
 
 
-def is_lets_chat_about_topic(vars):
+def is_lets_chat_about_topic_human_initiative(vars):
     last_human_uttr = state_utils.get_last_human_utterance(vars)
     last_human_uttr_text = last_human_uttr["text"]
-    last_bot_uttr_text = state_utils.get_last_bot_utterance(vars)["text"]
-    intents = common_utils.get_intents(last_human_uttr, which="intent_responder")
-
+    intents = common_utils.get_intents(last_human_uttr, which="intent_catcher")
     flag = "lets_chat_about" in intents
     flag = flag or universal_templates.if_lets_chat_about_topic(last_human_uttr_text)
-    flag = flag or re.search(common_utils.COMPILE_WHAT_TO_TALK_ABOUT, last_bot_uttr_text)
+    logging.debug(f"is_lets_chat_about_topic_human_initiative = {flag}")
+    return flag
+
+
+def is_lets_chat_about_topic(vars):
+    flag = is_lets_chat_about_topic_human_initiative(vars)
+
+    last_human_uttr = state_utils.get_last_human_utterance(vars)
+    last_bot_uttr_text = state_utils.get_last_bot_utterance(vars)["text"]
+    is_bot_initiative = bool(re.search(universal_templates.COMPILE_WHAT_TO_TALK_ABOUT, last_bot_uttr_text))
+    flag = flag or (is_bot_initiative and not common_utils.is_no(last_human_uttr))
+    logging.debug(f"is_lets_chat_about_topic = {flag}")
     return flag
 
 
 def is_begin_of_dialog(vars, begin_dialog_n=10):
-    flag = vars["agent"]["human_utter_index"] < begin_dialog_n
+    flag = state_utils.get_human_utter_index(vars) < begin_dialog_n
     logging.debug(f"is_begin_of_dialog = {flag}")
     return flag
 
 
 def is_interrupted(vars):
-    flag = (vars["agent"]["human_utter_index"] - vars["agent"]["last_human_utter_index"]) != 1
+    flag = (state_utils.get_human_utter_index(vars) - state_utils.get_previous_human_utter_index(vars)) != 1
     logging.debug(f"is_interrupted = {flag}")
     return flag
 
 
 def is_long_interrupted(vars, how_long=3):
-    flag = (vars["agent"]["human_utter_index"] - vars["agent"]["last_human_utter_index"]) > how_long
+    flag = (state_utils.get_human_utter_index(vars) - state_utils.get_previous_human_utter_index(vars)) > how_long
     logging.debug(f"is_long_interrupted = {flag}")
     return flag
 

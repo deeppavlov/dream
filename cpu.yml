@@ -33,7 +33,7 @@ services:
   combined-classification:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  friendship-skill:
+  dff-friendship-skill:
     environment:
       CUDA_VISIBLE_DEVICES: ""
   masked-lm:

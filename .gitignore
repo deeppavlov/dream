@@ -140,3 +140,4 @@ local-most.yml
 network.yml
 
 kubernetes/models
+docker-compose-one-replica.yml

@@ -20,12 +20,12 @@ def load_into_dialogflow(dialogflow, human_utter_index, dialog, state, entities)
     cached_functions.clear_cache()
     dialogflow.reset()
     dialogflow_state = state.get("dialogflow_state")
-    last_human_utter_index = state.get("last_human_utter_index", -1)
-    interrupted_flag = (human_utter_index - last_human_utter_index) != 1
+    previous_human_utter_index = state.get("previous_human_utter_index", -1)
+    interrupted_flag = (human_utter_index - previous_human_utter_index) != 1
     if dialogflow_state and not interrupted_flag:
         dialogflow.deserialize(dialogflow_state)
     agent = {
-        "last_human_utter_index": last_human_utter_index,
+        "previous_human_utter_index": previous_human_utter_index,
         "human_utter_index": human_utter_index,
         "dialog": dialog,
         "entities": entities,
@@ -46,7 +46,7 @@ def get_dialog_state(dialogflow):
     history[str(human_utter_index)] = dialogflow.controller().vars()["__system_state__"]
     state = {
         "shared_memory": agent["shared_memory"],
-        "last_human_utter_index": human_utter_index,
+        "previous_human_utter_index": human_utter_index,
         "history": history,
         "used_links": used_links,
     }

@@ -1,6 +1,5 @@
 import logging
 
-
 import common.entity_utils as entity_utils
 import common.constants as common_constants
 import common.utils as common_utils
@@ -35,6 +34,14 @@ def get_shared_memory(vars):
 
 def get_used_links(vars):
     return vars["agent"]["used_links"]
+
+
+def get_human_utter_index(vars):
+    return vars["agent"]["human_utter_index"]
+
+
+def get_previous_human_utter_index(vars):
+    return vars["agent"]["previous_human_utter_index"]
 
 
 def get_last_human_utterance(vars):
@@ -87,8 +94,9 @@ def is_no_human_dialog_breakdown(vars):
     bot: what did you like most in Vietnam?
     human: very tasty fruits -> dialog breakdown!
     """
-    no_db_proba = get_last_human_utterance(vars).get("annotations", {}).get(
-        "dialog_breakdown", {}).get("no_breakdown", 0.)
+    no_db_proba = (
+        get_last_human_utterance(vars).get("annotations", {}).get("dialog_breakdown", {}).get("no_breakdown", 0.0)
+    )
     if no_db_proba > 0.5:
         return True
     return False
@@ -96,15 +104,22 @@ def is_no_human_dialog_breakdown(vars):
 
 def no_requests(vars):
     """Function to determine if user didn't asked to switch topic, user didn't ask to talk about something particular,
-        user didn't requested some special intents (like what_is_your_name, what_are_you_talking_about),
-        user didn't asked or requested something,
+    user didn't requested some special intents (like what_is_your_name, what_are_you_talking_about),
+    user didn't asked or requested something,
     """
     intents = common_utils.get_intents(get_last_human_utterance(vars), which="all")
     intents_by_catcher = common_utils.get_intents(get_last_human_utterance(vars), probs=False, which="intent_catcher")
     is_high_priority_intent = any([intent not in common_utils.service_intents for intent in intents_by_catcher])
 
-    request_intents = ["opinion_request", "topic_switching", "lets_chat_about", "what_are_you_talking_about",
-                       "Information_RequestIntent", "Topic_SwitchIntent", "Opinion_RequestIntent"]
+    request_intents = [
+        "opinion_request",
+        "topic_switching",
+        "lets_chat_about",
+        "what_are_you_talking_about",
+        "Information_RequestIntent",
+        "Topic_SwitchIntent",
+        "Opinion_RequestIntent",
+    ]
     is_not_request_intent = all([intent not in request_intents for intent in intents])
     is_no_question = "?" not in get_last_human_utterance(vars)["text"]
 
