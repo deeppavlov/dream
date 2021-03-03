@@ -63,6 +63,22 @@ def respond():
     return jsonify(list(zip(responses, confidences, human_attributes, bot_attributes, attributes)))
 
 
+what_is_your_name_pattern = re.compile(
+    r"((what is|what's|whats|tell me|may i know|ask you for) your? name|what name would you like)", re.IGNORECASE)
+my_name_is_pattern = re.compile(r"my (name is|name's)|call me", re.IGNORECASE)
+where_are_you_from_pattern = re.compile(r"(where are you from|where you (were|was) born|"
+                                        r"(what is|what's|whats|tell me) your "
+                                        r"(home\s?land|mother\s?land|native\s?land|birth\s?place))", re.IGNORECASE)
+my_origin_is_pattern = re.compile(r"(my ((home\s?land|mother\s?land|native\s?land|birth\s?place) "
+                                  r"is|(home\s?land|mother\s?land|native\s?land|birth\s?place)'s)|"
+                                  r"(i was|i were) born in|i am from|i'm from)", re.IGNORECASE)
+what_is_your_location_pattern = re.compile(r"((what is|what's|whats|tell me) your? location|"
+                                           r"where do you live|where are you now|"
+                                           r"is that where you live now)", re.IGNORECASE)
+my_location_is_pattern = re.compile(r"(my (location is|location's)|(i am|i'm|i)( live| living)? in([a-zA-z ]+)?now)",
+                                    re.IGNORECASE)
+
+
 def process_info(dialog, which_info="name"):
     human_attr = {}
     bot_attr = {}
@@ -79,24 +95,9 @@ def process_info(dialog, which_info="name"):
 
     logger.info(f"Previous bot uuterance: {prev_bot_uttr}")
     is_about_templates = {
-        "name": (re.search(r"(what is|what's|whats|tell me) your? name",
-                           prev_bot_uttr) or re.search(r"(my (name is|name's)|call me)",
-                                                       curr_user_uttr)),
-        "homeland": re.search(r"(where are you from|where you (were|was) born|"
-                              r"(what is|what's|whats|tell me) your "
-                              r"(home\s?land|mother\s?land|native\s?land|birth\s?place))",
-                              prev_bot_uttr) or re.search(
-            r"(my ((home\s?land|mother\s?land|native\s?land|birth\s?place) "
-            r"is|(home\s?land|mother\s?land|native\s?land|birth\s?place)'s)|"
-            r"(i was|i were) born in|i am from|i'm from)",
-            curr_user_uttr),
-        "location": re.search(
-            r"((what is|what's|whats|tell me) your? location|"
-            r"where do you live|where are you now|"
-            r"is that where you live now)",
-            prev_bot_uttr) or re.search(
-            r"(my (location is|location's)|(i am|i'm|i)( live| living)? in([a-zA-z ]+)?now)",
-            curr_user_uttr)
+        "name": what_is_your_name_pattern.search(prev_bot_uttr) or my_name_is_pattern.search(curr_user_uttr),
+        "homeland": where_are_you_from_pattern.search(prev_bot_uttr) or my_origin_is_pattern.search(curr_user_uttr),
+        "location": what_is_your_location_pattern.search(prev_bot_uttr) or my_location_is_pattern.search(curr_user_uttr)
     }
     repeat_info_phrases = {"name": "I didn't get your name. Could you, please, repeat it.",
                            "location": "I didn't get your location. Could you, please, repeat it.",

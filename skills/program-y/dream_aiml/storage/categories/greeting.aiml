@@ -190,7 +190,12 @@
           <think>
               <set name="topic">USER_MOOD</set>
           </think>
-          How are you?
+          <random>
+              <li>How are you?</li>
+              <li>How are things?</li>
+              <li>How are you doing today?</li>
+              <li>How is the day going so far for you?</li>
+          </random>
       </template>
     </category>
 

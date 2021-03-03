@@ -1,5 +1,6 @@
 # %%
 import random
+import re
 import os
 import logging
 from enum import Enum, auto
@@ -28,6 +29,14 @@ logger = logging.getLogger(__name__)
 
 class State(Enum):
     USR_START = auto()
+
+    SYS_HELLO = auto()
+    USR_HELLO_AND_CONTNIUE = auto()
+    SYS_USR_ASKS_BOT_HOW_ARE_YOU = auto()
+    SYS_USR_ANSWERS_HOW_IS_HE_DOING = auto()
+    USR_HOW_BOT_IS_DOING_AND_OFFER_LIST_ACTIVITIES = auto()
+    SYS_SHARE_LIST_ACTIVITIES = auto()
+
     SYS_STD_GREETING = auto()
     USR_STD_GREETING = auto()
 
@@ -46,6 +55,8 @@ DIALOG_BEGINNING_START_CONFIDENCE = 0.98
 DIALOG_BEGINNING_CONTINUE_CONFIDENCE = 0.9
 DIALOG_BEGINNING_SHORT_ANSWER_CONFIDENCE = 0.98
 MIDDLE_DIALOG_START_CONFIDENCE = 0.7
+SUPER_CONFIDENCE = 1.0
+HIGH_CONFIDENCE = 0.98
 
 # %%
 
@@ -116,6 +127,171 @@ def set_confidence_by_universal_policy(vars):
     else:
         state_utils.set_confidence(vars, MIDDLE_DIALOG_START_CONFIDENCE)
         state_utils.set_can_continue(vars)
+
+
+##################################################################################################################
+# std hello
+##################################################################################################################
+
+def hello_request(ngrams, vars):
+    # SYS_HELLO
+    flag = True
+    flag = flag and len(vars["agent"]["dialog"]["human_utterances"]) == 1
+    flag = flag and not condition_utils.is_lets_chat_about_topic(vars)
+    return flag
+
+
+def hello_response(vars):
+    # USR_HELLO_AND_CONTNIUE
+    try:
+        state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+        state_utils.set_can_continue(vars)
+        which_start = random.choice(["how_are_you",
+                                     "what_is_your_name",
+                                     "what_to_talk_about"])
+        if which_start == "how_are_you":
+            after_hello_resp = random.choice(common_greeting.HOW_ARE_YOU_RESPONSES)
+        elif which_start == "what_is_your_name":
+            after_hello_resp = random.choice(common_greeting.WHAT_IS_YOUR_NAME_RESPONSES)
+        else:
+            # what_to_talk_about
+            greeting_step_id = 0
+            after_hello_resp = random.choice(common_greeting.GREETING_QUESTIONS[GREETING_STEPS[greeting_step_id]])
+            # set_confidence
+            set_confidence_by_universal_policy(vars)
+            state_utils.save_to_shared_memory(vars, greeting_step_id=greeting_step_id + 1)
+
+        return f"{common_greeting.HI_THIS_IS_ALEXA} {after_hello_resp}"
+
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        state_utils.set_confidence(vars, 0.)
+        return error_response(vars)
+
+
+##################################################################################################################
+# bot asks: how are you
+##################################################################################################################
+HOW_ARE_YOU_TEMPLATE = re.compile(
+    r"(how are you|what about you|how about you|and you|how you doing)",
+    re.IGNORECASE)
+
+
+def how_are_you_request(ngrams, vars):
+    # SYS_USR_ASKS_BOT_HOW_ARE_YOU
+    if HOW_ARE_YOU_TEMPLATE.search(state_utils.get_last_human_utterance(vars)):
+        return True
+    return False
+
+
+def how_are_you_response(vars):
+    # USR_HOW_BOT_IS_DOING_AND_OFFER_LIST_ACTIVITIES
+    try:
+        state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+        state_utils.set_can_continue(vars)
+        how_bot_is_doing_resp = random.choice(common_greeting.HOW_BOT_IS_DOING_RESPONSES)
+        return f"{how_bot_is_doing_resp} {common_greeting.LIST_ACTIVITIES_OFFER}"
+
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        state_utils.set_confidence(vars, 0.)
+        return error_response(vars)
+
+
+##################################################################################################################
+# user answers how is he/she doing
+##################################################################################################################
+POSITIVE_RESPONSE = re.compile(
+    r"(happy|good|okay|great|yeah|cool|awesome|perfect|nice|well|ok|fine|neat|swell|peachy|excellent|splendid"
+    r"|super|classy|tops|famous|superb|incredible|tremendous|class|crackajack|crackerjack)",
+    re.IGNORECASE)
+NEGATIVE_RESPONSE = re.compile(
+    r"(sad|pity|bad|tired|poor|ill|low|inferior|miserable|naughty|nasty|foul|ugly|grisly|harmful|sick|sore"
+    r"|diseased|ailing|spoiled|depraved|tained|damaged|awry|badly|sadly|wretched|awful|terrible|depressed)",
+    re.IGNORECASE)
+
+
+def positive_or_negative_request(ngrams, vars):
+    # SYS_USR_ANSWERS_HOW_IS_HE_DOING
+    usr_sentiment = state_utils.get_human_sentiment(vars)
+    pos_temp = POSITIVE_RESPONSE.search(state_utils.get_last_human_utterance(vars))
+    neg_temp = NEGATIVE_RESPONSE.search(state_utils.get_last_human_utterance(vars))
+    if usr_sentiment in ["positive", "negative"] or pos_temp or neg_temp:
+        return True
+    return False
+
+
+def how_human_is_doing_response(vars):
+    # USR_STD_GREETING
+    try:
+        usr_sentiment = state_utils.get_human_sentiment(vars)
+        state_utils.set_can_continue(vars)
+
+        if POSITIVE_RESPONSE.search(state_utils.get_last_human_utterance(vars)):
+            state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+            user_mood_acknowledgement = random.choice(common_greeting.GOOD_MOOD_REACTIONS)
+        elif NEGATIVE_RESPONSE.search(state_utils.get_last_human_utterance(vars)):
+            state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+            user_mood_acknowledgement = f"{random.choice(common_greeting.BAD_MOOD_REACTIONS)} " \
+                                        f"{random.choice(common_greeting.GIVE_ME_CHANCE_TO_CHEER_UP)}"
+        elif usr_sentiment == "positive":
+            state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
+            user_mood_acknowledgement = random.choice(common_greeting.GOOD_MOOD_REACTIONS)
+        elif usr_sentiment == "negative":
+            state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
+            user_mood_acknowledgement = f"{random.choice(common_greeting.BAD_MOOD_REACTIONS)} " \
+                                        f"{random.choice(common_greeting.GIVE_ME_CHANCE_TO_CHEER_UP)}"
+        else:
+            state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
+            user_mood_acknowledgement = "Okay."
+
+        greeting_step_id = 0
+        offer_topic_choose = random.choice(common_greeting.GREETING_QUESTIONS[GREETING_STEPS[greeting_step_id]])
+        state_utils.save_to_shared_memory(vars, greeting_step_id=greeting_step_id + 1)
+
+        return f"{user_mood_acknowledgement} {offer_topic_choose}"
+
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        state_utils.set_confidence(vars, 0.)
+        return error_response(vars)
+
+
+##################################################################################################################
+# bot shares list activities
+##################################################################################################################
+
+def is_yes_request(ngrams, vars):
+    if condition_utils.is_yes_vars(vars):
+        return True
+    return False
+
+
+def is_no_request(ngrams, vars):
+    if condition_utils.is_no_vars(vars):
+        return True
+    return False
+
+
+def share_list_activities_response(vars):
+    # USR_STD_GREETING
+    try:
+        state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+        state_utils.set_can_continue(vars)
+        greeting_step_id = 0
+        offer_topic_choose = random.choice(common_greeting.GREETING_QUESTIONS[GREETING_STEPS[greeting_step_id]])
+        state_utils.save_to_shared_memory(vars, greeting_step_id=greeting_step_id + 1)
+
+        return f"{common_greeting.LIST_ACTIVITIES_RESPONSE} {offer_topic_choose}"
+
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        state_utils.set_confidence(vars, 0.)
+        return error_response(vars)
 
 
 ##################################################################################################################
@@ -354,12 +530,59 @@ def error_response(vars):
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_START,
     {
+        State.SYS_HELLO: hello_request,
+        State.SYS_USR_ASKS_BOT_HOW_ARE_YOU: how_are_you_request,
         State.SYS_STD_GREETING: std_greeting_request,
         State.SYS_NEW_ENTITIES_IS_NEEDED_FOR: new_entities_is_needed_for_request,
         State.SYS_LINK_TO_BY_ENITY: link_to_by_enity_request,
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
+
+##################################################################################################################
+#  SYS_HELLO
+
+simplified_dialogflow.add_system_transition(State.SYS_HELLO, State.USR_HELLO_AND_CONTNIUE, hello_response)
+
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_HELLO_AND_CONTNIUE,
+    {
+        State.SYS_STD_GREETING: std_greeting_request,
+        State.SYS_USR_ASKS_BOT_HOW_ARE_YOU: how_are_you_request,
+        State.SYS_USR_ANSWERS_HOW_IS_HE_DOING: positive_or_negative_request,
+    },
+)
+simplified_dialogflow.set_error_successor(State.USR_HELLO_AND_CONTNIUE, State.SYS_ERR)
+
+
+##################################################################################################################
+#  SYS_USR_ASKS_BOT_HOW_ARE_YOU
+
+simplified_dialogflow.add_system_transition(State.SYS_USR_ASKS_BOT_HOW_ARE_YOU,
+                                            State.USR_HOW_BOT_IS_DOING_AND_OFFER_LIST_ACTIVITIES,
+                                            how_are_you_response)
+
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_HOW_BOT_IS_DOING_AND_OFFER_LIST_ACTIVITIES,
+    {
+        State.SYS_SHARE_LIST_ACTIVITIES: is_yes_request,
+    },
+)
+simplified_dialogflow.set_error_successor(State.USR_HOW_BOT_IS_DOING_AND_OFFER_LIST_ACTIVITIES, State.SYS_ERR)
+
+##################################################################################################################
+#  SYS_SHARE_LIST_ACTIVITIES
+
+simplified_dialogflow.add_system_transition(State.SYS_SHARE_LIST_ACTIVITIES,
+                                            State.USR_STD_GREETING,
+                                            share_list_activities_response)
+
+##################################################################################################################
+#  SYS_USR_ANSWERS_HOW_IS_HE_DOING
+
+simplified_dialogflow.add_system_transition(State.SYS_USR_ANSWERS_HOW_IS_HE_DOING,
+                                            State.USR_STD_GREETING,
+                                            how_human_is_doing_response)
 
 ##################################################################################################################
 #  SYS_STD_GREETING

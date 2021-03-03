@@ -346,13 +346,13 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
                 if skill_names[i] == 'program_y' and greeting_spec in candidates[i]['text']:
                     logger.info("Just chat. Program-y to very big score.")
                     curr_score = very_big_score
-        elif skill_names[i] == 'program_y' and (
+        elif skill_names[i] == 'dff_friendship_skill' and (
                 how_are_you_spec in candidates[i]['text'] or what_i_can_do_spec in candidates[i]['text']) \
                 and len(dialog['utterances']) < 16:
             curr_score = very_big_score
         elif skill_names[i] == 'program_y_dangerous' and psycho_help_spec in candidates[i]['text']:
             curr_score = very_big_score
-        elif skill_names[i] == 'program_y' and greeting_spec in candidates[i]['text']:
+        elif skill_names[i] == 'dff_friendship_skill' and greeting_spec in candidates[i]['text']:
             if len(dialog["utterances"]) < 2:
                 curr_score = very_big_score
             else:
