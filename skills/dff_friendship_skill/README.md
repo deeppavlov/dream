@@ -74,7 +74,7 @@ The file `server.py` contains this code
 @app.route("/respond", methods=["POST"])
 def respond():
     # next commented line for test creating
-    # import common.test_utils as t_utils; t_utils.save_to_test(responses,"tests/TEST_NAME_in.json",indent=4)
+    # import common.test_utils as t_utils; t_utils.save_to_test(request.json,"tests/TEST_NAME_in.json",indent=4)
     responses = handler(request.json)
     # next commented line for test creating
     # import common.test_utils as t_utils; t_utils.save_to_test(responses,"tests/TEST_NAME_out.json",indent=4)
