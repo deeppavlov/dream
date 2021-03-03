@@ -180,7 +180,7 @@ HOW_ARE_YOU_TEMPLATE = re.compile(
 
 def how_are_you_request(ngrams, vars):
     # SYS_USR_ASKS_BOT_HOW_ARE_YOU
-    if HOW_ARE_YOU_TEMPLATE.search(state_utils.get_last_human_utterance(vars)):
+    if HOW_ARE_YOU_TEMPLATE.search(state_utils.get_last_human_utterance(vars)["text"]):
         return True
     return False
 
@@ -216,8 +216,8 @@ NEGATIVE_RESPONSE = re.compile(
 def positive_or_negative_request(ngrams, vars):
     # SYS_USR_ANSWERS_HOW_IS_HE_DOING
     usr_sentiment = state_utils.get_human_sentiment(vars)
-    pos_temp = POSITIVE_RESPONSE.search(state_utils.get_last_human_utterance(vars))
-    neg_temp = NEGATIVE_RESPONSE.search(state_utils.get_last_human_utterance(vars))
+    pos_temp = POSITIVE_RESPONSE.search(state_utils.get_last_human_utterance(vars)["text"])
+    neg_temp = NEGATIVE_RESPONSE.search(state_utils.get_last_human_utterance(vars)["text"])
     if usr_sentiment in ["positive", "negative"] or pos_temp or neg_temp:
         return True
     return False
@@ -229,10 +229,10 @@ def how_human_is_doing_response(vars):
         usr_sentiment = state_utils.get_human_sentiment(vars)
         state_utils.set_can_continue(vars)
 
-        if POSITIVE_RESPONSE.search(state_utils.get_last_human_utterance(vars)):
+        if POSITIVE_RESPONSE.search(state_utils.get_last_human_utterance(vars)["text"]):
             state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
             user_mood_acknowledgement = random.choice(common_greeting.GOOD_MOOD_REACTIONS)
-        elif NEGATIVE_RESPONSE.search(state_utils.get_last_human_utterance(vars)):
+        elif NEGATIVE_RESPONSE.search(state_utils.get_last_human_utterance(vars)["text"]):
             state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
             user_mood_acknowledgement = f"{random.choice(common_greeting.BAD_MOOD_REACTIONS)} " \
                                         f"{random.choice(common_greeting.GIVE_ME_CHANCE_TO_CHEER_UP)}"
