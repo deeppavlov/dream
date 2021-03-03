@@ -38,10 +38,11 @@ special_char_re = re.compile(r'[^0-9a-zA-Z \-\.\'\?,!]+')
 greetings_farewells_re = re.compile(join_words_in_or_pattern(["have .* day", ".* bye",
                                                               "\bbye", "goodbye", "hello",
                                                               "it .* chatting .*",
-                                                              "that was .* chatting .*",
+                                                              ".* chatting with you .*",
                                                               "hi", "good morning",
                                                               "good afternoon",
-                                                              "good luck", "great chat"]))
+                                                              "good luck", "great chat",
+                                                              "get off .*"]))
 special_intents = [
     "cant_do", "repeat", "weather_forecast_intent", "what_are_you_talking_about",
     "what_can_you_do", "what_is_your_job", "what_is_your_name", "what_time",
@@ -223,7 +224,8 @@ def respond():
                     'checked_sentence': fact,
                     'knowledge': fact,
                     'text': user_input_text,
-                    'history': user_input_history
+                    'history': user_input_history,
+                    'chosen_topic_fact': True
                 }
                 annotations_depths.append({})
                 dial_ids.append(d_id)
@@ -270,9 +272,12 @@ def respond():
 
                 curr_nounphrase_search = nounphrases[i].search(raw_responses[curr_i]) if nounphrases[i] else False
                 curr_entities_search = entities[i].search(raw_responses[curr_i]) if entities[i] else False
+
                 topic = chosen_topics.get(i, "")
-                if topic:
-                    raw_responses[curr_i] = f"Okay, Let's chat about {topic}. {raw_responses[curr_i]}"
+                chosen_topic_fact_flag = input_batch[curr_i].get("chosen_topic_fact", False)
+                add_intro = ""
+                if topic and chosen_topic_fact_flag:
+                    add_intro = f"Okay, Let's chat about {topic}. "
                     confidence = HIGHEST_CONFIDENCE
                     attr["confidence_case"] += "topic_fact "
                 if (curr_nounphrase_search or curr_entities_search) and lets_chat_about_flags[i]:
@@ -305,7 +310,7 @@ def respond():
                 confidence -= penalties
                 curr_attributes.append(attr)
                 curr_confidences.append(max(0.0, confidence))
-                curr_responses.append(raw_responses[curr_i])
+                curr_responses.append(add_intro + raw_responses[curr_i])
             attributes.append(curr_attributes)
             confidences.append(curr_confidences)
             responses.append(curr_responses)
