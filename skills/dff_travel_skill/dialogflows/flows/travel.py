@@ -9,6 +9,7 @@ import sentry_sdk
 
 import dialogflows.scopes as scopes
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
+import common.dialogflow_framework.utils.condition as condition_utils
 import common.dialogflow_framework.utils.state as state_utils
 
 from CoBotQA.cobotqa_service import send_cobotqa
@@ -18,7 +19,7 @@ from common.travel import OPINION_REQUESTS_ABOUT_TRAVELLING, TRAVELLING_TEMPLATE
     ACKNOWLEDGE_USER_DO_NOT_WANT_TO_VISIT_LOC, OFFER_FACT_RESPONSES, OPINION_REQUESTS, HAVE_YOU_BEEN_TEMPLATE, \
     ACKNOWLEDGE_USER_DISLIKE_LOC
 from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
-from common.utils import get_intents, get_sentiment, is_yes, is_no, get_not_used_template
+from common.utils import get_intents, get_sentiment, get_not_used_template
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 
@@ -113,7 +114,7 @@ simplified_dialogflow = dialogflow_extention.DFEasyFilling(State.USR_START)
 ##################################################################################################################
 
 def assign_conf_decreasing_if_requests_in_human_uttr(vars, CONF_1, CONF_2):
-    no_db = state_utils.no_requests(vars)
+    no_db = condition_utils.no_requests(vars)
     if no_db:
         state_utils.set_confidence(vars, confidence=CONF_1)
     else:
@@ -141,20 +142,20 @@ def get_mentioned_locations(vars):
 def yes_request(ngrams, vars):
     # SYS_YES_REQUEST
     flag = True
-    flag = flag and is_yes(state_utils.get_last_human_utterance(vars))
+    flag = flag and condition_utils.is_yes_vars(vars)
     return flag
 
 
 def no_request(ngrams, vars):
     # SYS_NO_REQUEST
     flag = True
-    flag = flag and is_no(state_utils.get_last_human_utterance(vars))
+    flag = flag and condition_utils.is_no_vars(vars)
     return flag
 
 
 def no_requests_request(ngrams, vars):
     # SYS_NO_DIALOG_BREAKDOWN_AND_NO_QUESTIONS_REQUEST
-    flag = state_utils.no_requests(vars)
+    flag = condition_utils.no_requests(vars)
 
     if flag:
         logger.info(f"No dialog breakdown or request intents in user utterances")
@@ -353,8 +354,7 @@ def have_bot_been_in_response(vars):
 def user_have_been_in_request(ngrams, vars):
     # SYS_USR_HAVE_BEEN
     bot_asks_have_you_been_and_user_agrees = re.search(
-        HAVE_YOU_BEEN_TEMPLATE, state_utils.get_last_bot_utterance(vars)["text"]) and is_yes(
-        state_utils.get_last_human_utterance(vars))
+        HAVE_YOU_BEEN_TEMPLATE, state_utils.get_last_bot_utterance(vars)["text"]) and condition_utils.is_yes_vars(vars)
     user_says_been_in = re.search(
         I_HAVE_BEEN_TEMPLATE, state_utils.get_last_human_utterance(vars)["text"])
     bot_asked_about_location = any([req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower()
@@ -413,7 +413,7 @@ def user_liked_mentioned_by_user_loc_response(vars):
     logger.info(f"Bot acknowledges that user liked LOC and asks about best about LOC: {location}.")
 
     try:
-        if is_yes(state_utils.get_last_human_utterance(vars)):
+        if condition_utils.is_yes_vars(vars):
             state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
         else:
             assign_conf_decreasing_if_requests_in_human_uttr(vars, HIGH_CONFIDENCE, DEFAULT_CONFIDENCE)
@@ -446,7 +446,7 @@ def user_disliked_mentioned_by_user_loc_response(vars):
     logger.info(f"Bot acknowledges user dislike loc and asks a question about some other LOC.")
 
     try:
-        if is_no(state_utils.get_last_human_utterance(vars)):
+        if condition_utils.is_no_vars(vars):
             state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
         else:
             assign_conf_decreasing_if_requests_in_human_uttr(vars, HIGH_CONFIDENCE, DEFAULT_CONFIDENCE)
@@ -474,8 +474,7 @@ I_HAVE_NOT_BEEN_TEMPLATE = re.compile(r"(i|we|me) (have|did|was|had|were) (not|n
 def user_have_not_been_in_request(ngrams, vars):
     # SYS_USR_HAVE_NOT_BEEN
     bot_asks_have_you_been_and_user_disagrees = re.search(
-        HAVE_YOU_BEEN_TEMPLATE, state_utils.get_last_bot_utterance(vars)["text"]) and is_no(
-        state_utils.get_last_human_utterance(vars))
+        HAVE_YOU_BEEN_TEMPLATE, state_utils.get_last_bot_utterance(vars)["text"]) and condition_utils.is_no_vars(vars)
     user_says_not_been_in = re.search(
         I_HAVE_NOT_BEEN_TEMPLATE, state_utils.get_last_human_utterance(vars)["text"])
 

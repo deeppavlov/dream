@@ -106,3 +106,61 @@ def is_first_our_response(vars):
     flag = len(list(vars["agent"]["history"].values())) == 0
     logging.debug(f"is_first_our_response = {flag}")
     return flag
+
+
+def is_no_human_dialog_breakdown(vars):
+    """Is dialog breakdown in human utterance or no.
+    Pay attention that dialog breakdown does not mean that user changed topic completely.
+    For example,
+    bot: what did you like most in Vietnam?
+    human: very tasty fruits -> dialog breakdown!
+    """
+    no_db_proba = (
+        state_utils.get_last_human_utterance(vars)
+        .get("annotations", {})
+        .get("dialog_breakdown", {})
+        .get("no_breakdown", 0.0)
+    )
+    if no_db_proba > 0.5:
+        return True
+    return False
+
+
+def no_requests(vars):
+    """Function to determine if user didn't asked to switch topic, user didn't ask to talk about something particular,
+    user didn't requested some special intents (like what_is_your_name, what_are_you_talking_about),
+    user didn't asked or requested something,
+    """
+    intents = common_utils.get_intents(state_utils.get_last_human_utterance(vars), which="all")
+    intents_by_catcher = common_utils.get_intents(
+        state_utils.get_last_human_utterance(vars), probs=False, which="intent_catcher"
+    )
+    is_high_priority_intent = any([intent not in common_utils.service_intents for intent in intents_by_catcher])
+
+    request_intents = [
+        "opinion_request",
+        "topic_switching",
+        "lets_chat_about",
+        "what_are_you_talking_about",
+        "Information_RequestIntent",
+        "Topic_SwitchIntent",
+        "Opinion_RequestIntent",
+    ]
+    is_not_request_intent = all([intent not in request_intents for intent in intents])
+    is_no_question = "?" not in state_utils.get_last_human_utterance(vars)["text"]
+
+    if not is_high_priority_intent and is_not_request_intent and is_no_question:
+        return True
+    return False
+
+
+def is_yes_vars(vars):
+    flag = True
+    flag = flag and common_utils.is_yes(state_utils.get_last_human_utterance(vars))
+    return flag
+
+
+def is_no_vars(vars):
+    flag = True
+    flag = flag and common_utils.is_no(state_utils.get_last_human_utterance(vars))
+    return flag
