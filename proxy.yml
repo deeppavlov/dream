@@ -535,6 +535,13 @@ services:
       - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/wikidata-dial-service
       - PORT=8092
     command: [ "nginx", "-g", "daemon off;" ]
+  dff-animals-skill:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/dff-animals-skill
+      - PORT=8094
   dff-travel-skill:
     build:
       context: dp/proxy/

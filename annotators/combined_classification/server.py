@@ -23,6 +23,8 @@ app = Flask(__name__)
 
 def get_result(sentences):
     res = [{} for _ in sentences]
+    if not sentences:
+        sentences = [" "]
     try:
         if sentences:
             res = model(sentences)

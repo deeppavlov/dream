@@ -596,6 +596,11 @@ def dff_template_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, service_name)
 
 
+def dff_animals_skill_formatter(dialog: Dict) -> List[Dict]:
+    service_name = "dff_animals_skill"
+    return utils.dff_formatter(dialog, service_name)
+
+
 def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
     # Used by: dialog_breakdown
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=2)

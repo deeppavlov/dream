@@ -14,7 +14,7 @@ import common.personal_info as personal_info
 import common.meta_script as meta_script
 import common.game_cooperative_skill as game_cooperative_skill
 import common.travel as dff_travel_skill
-
+import common.animals as dff_animals_skill
 
 # Each common skill module should define +skill_trigger_phrases()+ function
 # that contains all phrases to trigger specific skill
@@ -34,13 +34,14 @@ skills_phrases_map = {
     # 'short_story_skill': set(short_story.skill_trigger_phrases()),
     'game_cooperative_skill': set(game_cooperative_skill.skill_trigger_phrases()),
     # TODO: Add smalltalk skill phrases that is not identical to meta_script_skill
-    'dff_travel_skill': set(dff_travel_skill.skill_trigger_phrases())
+    'dff_travel_skill': set(dff_travel_skill.skill_trigger_phrases()),
+    'dff_animals_skill': set(dff_animals_skill.skill_trigger_phrases())
 }
 
 high_rated_skills_for_linking = {
     "news_skill", "movie_skill", "book_skill", "coronavirus_skill",  # "short_story_skill",
     "game_cooperative_skill", "personal_info_skill", "meta_script_skill", "emotion_skill",
-    "weather_skill", "dff_travel_skill"
+    "weather_skill", "dff_travel_skill", "dff_animals_skill"
 }
 
 # assuming that all skills weights are equal to 1 by default

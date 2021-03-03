@@ -145,7 +145,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
                      cobot-convers-evaluator-annotator \
                      dialog-breakdown book-skill combined-classification knowledge-grounding-skill \
                      grounding-skill dff-friendship-skill masked-lm entity-storer wikidata-dial-skill \
-                     dff-travel-skill; do
+                     dff-travel-skill dff-animals-skill; do
 
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh
