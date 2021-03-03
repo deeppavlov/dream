@@ -531,7 +531,6 @@ simplified_dialogflow.add_user_serial_transitions(
     State.USR_START,
     {
         State.SYS_HELLO: hello_request,
-        State.SYS_USR_ASKS_BOT_HOW_ARE_YOU: how_are_you_request,
         State.SYS_STD_GREETING: std_greeting_request,
         State.SYS_NEW_ENTITIES_IS_NEEDED_FOR: new_entities_is_needed_for_request,
         State.SYS_LINK_TO_BY_ENITY: link_to_by_enity_request,
