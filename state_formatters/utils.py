@@ -6,7 +6,6 @@ import re
 from common.universal_templates import if_lets_chat_about_topic
 from common.utils import get_intents
 
-
 logger = logging.getLogger(__name__)
 
 LAST_N_TURNS = 5  # number of turns to consider in annotator/skill.
@@ -21,11 +20,11 @@ def clean_text(text):
 
 
 def get_last_n_turns(
-    dialog: Dict,
-    bot_last_turns=None,
-    human_last_turns=None,
-    total_last_turns=None,
-    excluded_attributes=["entities"],
+        dialog: Dict,
+        bot_last_turns=None,
+        human_last_turns=None,
+        total_last_turns=None,
+        excluded_attributes=["entities"],
 ):
     bot_last_turns = bot_last_turns or LAST_N_TURNS
     human_last_turns = human_last_turns or bot_last_turns + 1
@@ -83,9 +82,9 @@ def remove_clarification_turns_from_dialog(dialog):
             new_dialog["utterances"].append(utt)
         elif utt["user"]["user_type"] == "bot":
             if (
-                0 < i < dialog_length - 1
-                and is_bot_uttr_repeated_or_misheard(utt)
-                and is_human_uttr_repeat_request_or_misheard(dialog["utterances"][i - 1])
+                    0 < i < dialog_length - 1
+                    and is_bot_uttr_repeated_or_misheard(utt)
+                    and is_human_uttr_repeat_request_or_misheard(dialog["utterances"][i - 1])
             ):
                 new_dialog["utterances"] = new_dialog["utterances"][:-1]
             else:
@@ -127,9 +126,9 @@ def replace_with_annotated_utterances(dialog, mode="punct_sent"):
 
 
 def clean_up_utterances_to_avoid_unwanted_keys(
-    dialog,
-    wanted_keys=["text", "annotations", "active_skill"],
-    types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        dialog,
+        wanted_keys=["text", "annotations", "active_skill"],
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
 ):
     # Attention! It removes all other keys from the dialog
     new_dialog = {}
@@ -153,7 +152,7 @@ def last_n_human_utt_dialog_formatter(dialog: Dict, last_n_utts: int, only_last_
     """
     dialog = deepcopy(dialog)
     if len(dialog["human_utterances"]) <= last_n_utts and not if_lets_chat_about_topic(
-        dialog["utterances"][0]["text"].lower()
+            dialog["utterances"][0]["text"].lower()
     ):
         # in all cases when not particular topic, convert first phrase in the dialog to `hello!`
         if "sentseg" in dialog["human_utterances"][0]["annotations"]:

@@ -449,6 +449,14 @@ services:
       - "./annotators/entity_storer:/src"
     ports:
       - 8089:8089
+  dff-animals-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_animals_skill:/src"
+      - "./common:/src/common"
+      - "./skills/CoBotQA:/src/CoBotQA"
+    ports:
+      - 8094:8094
   combined-classification:
     env_file: [.env.dev]
     volumes:

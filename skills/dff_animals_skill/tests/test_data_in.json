@@ -1,0 +1,58 @@
+{
+    "rand_seed": 31425,
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "do you like animals?",
+                    "annotations": {
+                        "cobot_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "do you like animals?",
+                            "segments": [
+                                "do you like animals?"
+                            ]
+                        },
+                        "intent_catcher": {
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Other"
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "animals_skill_state_batch": [
+        {}
+    ],
+    "entities_batch": [
+        {}
+    ]
+}

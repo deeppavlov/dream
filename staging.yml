@@ -278,6 +278,10 @@ services:
     image: ${DOCKER_REGISTRY}/wikidata-dial-skill:${VERSION}
     env_file:
       - ${ENV_FILE}
+  dff-animals-skill:
+    image: ${DOCKER_REGISTRY}/dff-animals-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   dff-travel-skill:
     image: ${DOCKER_REGISTRY}/dff-travel-skill:${VERSION}
     env_file:

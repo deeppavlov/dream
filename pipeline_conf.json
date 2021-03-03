@@ -752,6 +752,17 @@
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
             },
+            "dff_animals_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://dff-animals-skill:8094/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_animals_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
+            },
             "dff_friendship_skill": {
                 "connector": {
                     "protocol": "http",

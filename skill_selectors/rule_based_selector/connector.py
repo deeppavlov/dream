@@ -139,17 +139,15 @@ class RuleBasedSkillSelectorConnector:
             about_books = about_book(dialog["human_utterances"][-1])
 
             #  topicalchat_tfidf_retrieval
-            about_entertainments = (self.entertainment_cobot_dialogacts & cobot_dialogact_topics) | (
-                self.entertainment_cobot_topics & cobot_topics
-            )
+            about_entertainments = (self.entertainment_cobot_dialogacts & cobot_dialogact_topics) | \
+                                   (self.entertainment_cobot_topics & cobot_topics)
             about_fashions = (self.fashion_cobot_dialogacts & cobot_dialogact_topics) | \
                              (self.fashion_cobot_topics & cobot_topics)
             # about_politics = (politic_cobot_dialogacts & cobot_dialogact_topics) | (sport_cobot_topics & cobot_topics)
-            about_science_technology = (self.science_cobot_dialogacts & cobot_dialogact_topics) | (
-                self.science_cobot_topics & cobot_topics
-            )
-            about_sports = (self.sport_cobot_dialogacts & cobot_dialogact_topics) | (
-                self.sport_cobot_topics & cobot_topics)
+            about_science_technology = (self.science_cobot_dialogacts & cobot_dialogact_topics) | \
+                                       (self.science_cobot_topics & cobot_topics)
+            about_sports = (self.sport_cobot_dialogacts & cobot_dialogact_topics) | \
+                           (self.sport_cobot_topics & cobot_topics)
             about_animals = self.animals_cobot_topics & cobot_topics
 
             prev_user_uttr_hyp = []
@@ -270,6 +268,8 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("coronavirus_skill")
                 if about_music and len(dialog["utterances"]) > 2:
                     skills_for_uttr.append("music_tfidf_retrieval")
+                if about_animals or prev_active_skill == 'dff_animals_skill':
+                    skills_for_uttr.append("dff_animals_skill")
 
                 linked_to_book = False
                 if len(dialog["bot_utterances"]) > 0:

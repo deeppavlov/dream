@@ -21,8 +21,7 @@ services:
         movie-tfidf-retrieval:8042, music-tfidf-retrieval:8034, politics-tfidf-retrieval:8043,
         science-technology-tfidf-retrieval:8044, sport-tfidf-retrieval:8045, animals-tfidf-retrieval:8050,
         book-skill:8032, superbowl-skill:8051, valentines-day-skill:8058, grounding-skill:8080,
-        dff-travel-skill:8096
-        "
+        dff-animals-skill:8094, dff-travel-skill:8096"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
     deploy:
       mode: replicated
@@ -902,7 +901,7 @@ services:
       context: ./services/question_generator/
       args:
         MODEL_URL: http://lnsigo.mipt.ru/export/alexaprize_data/question_generator/model_24_0.94_37.23.pth
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8079
+    command: gunicorn --workers=1 --timeout 300 server:app -b 0.0.0.0:8079
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - DECODING=greedy
@@ -1066,6 +1065,23 @@ services:
           memory: 10G
         reservations:
           memory: 10G
+
+  dff-animals-skill:
+    build:
+      args:
+        SERVICE_PORT: 8094
+        SERVICE_NAME: dff_animals_skill # has to be the same with skill dir name
+      context: .
+      dockerfile: ./skills/dff_animals_skill/Dockerfile
+    command: gunicorn --workers=1 --timeout 100 server:app -b 0.0.0.0:8094 --reload
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 768M
+        reservations:
+          memory: 768M
 
   dff-travel-skill:
       build:

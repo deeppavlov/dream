@@ -191,6 +191,8 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=7
+  dff-animals-skill:
+    env_file: [ .env.dev ]
   dff-travel-skill:
     env_file: [ .env.dev ]
 version: '3.7'
