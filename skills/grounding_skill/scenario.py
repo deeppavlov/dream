@@ -114,7 +114,7 @@ class GroundingSkillScenario:
                     if len(entity_name) > 0 and reply is None:
                         reply = f"We are discussing {entity_name}, aren't we?"
                     for topic in topics_by_popularity:  # start from least popular
-                        if topic in topic_dict and reply is None:
+                        if topic in topic_list and reply is None:
                             reply = topic_dict[topic]
                     if reply is None:
                         reply, confidence = DONTKNOW_PHRASE, DONTKNOW_CONF
