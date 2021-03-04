@@ -1,0 +1,23 @@
+[
+    [
+        "How about cooking chicken noodle soup?",
+        1.0,
+        {
+            "dff_food_skill_state": {
+                "shared_memory": {
+                    "used_meals": "chicken noodle soup"
+                },
+                "previous_human_utter_index": 0,
+                "history": {
+                    "0": "State.SYS_WHAT_COOK"
+                },
+                "used_links": {},
+                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_HOW_ABOUT_MEAL1\", \"__stack__\": [], \"__user_utterance__\": \"what do you suggest me to cook tonight\", \"__system_state__\": \"State.SYS_WHAT_COOK\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"How about cooking chicken noodle soup?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"FOOD\\\"<__tuple__>\\\"State.USR_HOW_ABOUT_MEAL1\\\"\"}"
+            }
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

@@ -195,4 +195,6 @@ services:
     env_file: [ .env.dev ]
   dff-travel-skill:
     env_file: [ .env.dev ]
+  dff-food-skill:
+    env_file: [ .env.dev ]
 version: '3.7'

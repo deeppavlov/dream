@@ -94,6 +94,9 @@ class RuleBasedSkillSelectorConnector:
     animals_cobot_topics = {
         "Pets_Animals",
     }
+    food_cobot_topics = {
+        "Food_Drink",
+    }
     books_cobot_dialogacts = {"Entertainment_General", "Entertainment_Books"}
     books_cobot_topics = {"Entertainment", "Literature"}
     news_cobot_topics = {"News"}
@@ -149,6 +152,7 @@ class RuleBasedSkillSelectorConnector:
             about_sports = (self.sport_cobot_dialogacts & cobot_dialogact_topics) | \
                            (self.sport_cobot_topics & cobot_topics)
             about_animals = self.animals_cobot_topics & cobot_topics
+            about_food = self.food_cobot_topics & cobot_topics
 
             prev_user_uttr_hyp = []
             prev_bot_uttr = {}
@@ -270,6 +274,8 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("music_tfidf_retrieval")
                 if about_animals or prev_active_skill == 'dff_animals_skill':
                     skills_for_uttr.append("dff_animals_skill")
+                if about_food or prev_active_skill == 'dff_food_skill':
+                    skills_for_uttr.append("dff_food_skill")
 
                 linked_to_book = False
                 if len(dialog["bot_utterances"]) > 0:
@@ -383,6 +389,7 @@ class RuleBasedSkillSelectorConnector:
             asyncio.create_task(callback(
                 task_id=payload['task_id'],
                 response=list(set(skills_for_uttr))
+
             ))
         except Exception as e:
             logger.exception(e)

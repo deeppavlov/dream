@@ -620,3 +620,8 @@ def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
 def dff_travel_formatter(dialog: Dict) -> List[Dict]:
     service_name = f"dff_travel_skill"
     return utils.dff_formatter(dialog, service_name)
+
+
+def dff_food_skill_formatter(dialog: Dict) -> List[Dict]:
+    service_name = f"dff_food_skill"
+    return utils.dff_formatter(dialog, service_name)

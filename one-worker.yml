@@ -99,5 +99,6 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8091
   dff-travel-skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8096
-
+  dff-food-skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8097
 version: '3.7'

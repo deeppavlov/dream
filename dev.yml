@@ -472,5 +472,11 @@ services:
       - "./skills/CoBotQA:/src/CoBotQA"
     ports:
       - 8096:8096
-
+  dff-food-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_food_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8097:8097
 version: "3.7"
