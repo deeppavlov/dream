@@ -24,6 +24,7 @@ MODEL_PATH = os.getenv("MODEL_PATH")
 DATABASE_PATH = os.getenv("DATABASE_PATH")
 CONFIDENCE_PATH = os.getenv("CONFIDENCE_PATH")
 SOFTMAX_TEMPERATURE = float(os.getenv("SOFTMAX_TEMPERATURE", 0.08))
+CONFIDENCE_DECAY = float(os.getenv("CONVERT_CONFIDENCE_DECAY", 0.9))
 NUM_SAMPLE = int(os.getenv("NUM_SAMPLE", 3))
 
 
@@ -35,7 +36,6 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
-
 app = Flask(__name__)
 swagger = Swagger(app)
 
@@ -126,6 +126,10 @@ def softmax(x, t):
     return e_x / e_x.sum(axis=0)
 
 
+def exponential_decay(init_value, factor, num_steps):
+    return init_value * factor**num_steps
+
+
 def sample_candidates(candidates, choice_num=1, replace=False, softmax_temperature=1):
     choice_num = min(choice_num, len(candidates))
     confidences = [cand[1] for cand in candidates]
@@ -137,7 +141,7 @@ def sample_candidates(candidates, choice_num=1, replace=False, softmax_temperatu
     return sampled_candidates.tolist()
 
 
-def inference(utterances_histories, approximate_confidence_is_enabled=True):
+def inference(utterances_histories, num_ongoing_utt, approximate_confidence_is_enabled=True):
     context_encoding = encode_context(utterances_histories)
     scores = context_encoding.dot(response_encodings.T)
     indices = np.argsort(scores)[::-1][:10]
@@ -189,11 +193,17 @@ def inference(utterances_histories, approximate_confidence_is_enabled=True):
                 candidates, choice_num=NUM_SAMPLE, softmax_temperature=SOFTMAX_TEMPERATURE
             )
             answers = [cand[0] for cand in selected_candidates]
-            confidences = [float(cand[1]) for cand in selected_candidates]
+            confidences = [
+                exponential_decay(float(cand[1]), CONFIDENCE_DECAY, num_ongoing_utt)
+                for cand in selected_candidates
+            ]
             return answers, confidences
         except Exception:
             logger.error(traceback.format_exc())
-            candidate = candidates[0]
+            candidate = (
+                candidates[0][0],
+                exponential_decay(float(candidates[0][1]), CONFIDENCE_DECAY, num_ongoing_utt),
+            )
             return candidate
     else:
         return "", 0.0
@@ -205,7 +215,11 @@ def convert_chitchat_model():
     st_time = time.time()
     utterances_histories = request.json["utterances_histories"]
     approximate_confidence_is_enabled = request.json.get("approximate_confidence_is_enabled", True)
-    response = [inference(hist, approximate_confidence_is_enabled) for hist in utterances_histories]
+    num_ongoing_utt = request.json.get("num_ongoing_utt", [0])
+    response = [
+        inference(hist, num_ongoing_utt[0], approximate_confidence_is_enabled)
+        for hist in utterances_histories
+    ]
     total_time = time.time() - st_time
     logger.warning(f"convert_reddit exec time: {total_time:.3f}s")
     return jsonify(response)
