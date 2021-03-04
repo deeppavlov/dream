@@ -7,7 +7,6 @@ from common.universal_templates import if_lets_chat_about_topic
 from common.utils import get_intents
 
 logger = logging.getLogger(__name__)
-
 LAST_N_TURNS = 5  # number of turns to consider in annotator/skill.
 
 
@@ -187,6 +186,16 @@ def stop_formatter_dialog(dialog: Dict) -> List[Dict]:
         tmp_utts = " [SEP] ".join([j for j in tmp_utts])
         utts.append(tmp_utts)
     return [{"dialogs": utts}]
+
+
+def count_ongoing_skill_utterances(bot_utterances: List[Dict], skill: str) -> int:
+    i = 0
+    for utt in bot_utterances[::-1]:
+        if utt['active_skill'] == skill:
+            i += 1
+        else:
+            break
+    return i
 
 
 def dff_formatter(dialog: Dict, service_name: str, bot_last_turns=1, human_last_turns=1) -> List[Dict]:

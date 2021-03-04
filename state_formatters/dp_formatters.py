@@ -100,6 +100,10 @@ def convert_formatter_dialog(dialog: Dict) -> List[Dict]:
         {
             "utterances_histories": [[utt["text"] for utt in dialog["utterances"]]],
             "personality": [dialog["bot"]["persona"]],
+            "num_ongoing_utt": [utils.count_ongoing_skill_utterances(
+                dialog["bot_utterances"],
+                'convert_reddit'
+            )]
         }
     ]
 
