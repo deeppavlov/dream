@@ -12,7 +12,7 @@ def exit_respond(dialog, response_phrases):
         "Sorry, have a great day!",
         "Sorry to bother you, see you next time!",
         "My bad. Have a great time!",
-        "Didn't mead to be rude. Talk to you next time.",
+        "Didn't mean to be rude. Talk to you next time.",
         "Sorry for interrupting you. Talk to you soon.",
         "Terribly sorry. Have a great day!",
         "Thought you wanted to chat. My bad. See you soon!",
