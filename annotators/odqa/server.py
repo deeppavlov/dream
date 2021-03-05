@@ -12,6 +12,11 @@ sentry_sdk.init(dsn=os.getenv('SENTRY_DSN'), integrations=[FlaskIntegration()])
 
 config_name = os.getenv("CONFIG")
 
+with open("google-10000-english-no-swears.txt", 'r') as fl:
+    lines = fl.readlines()
+    freq_words = [line.strip() for line in lines]
+    freq_words = set(freq_words[:800])
+
 try:
     odqa = build_model(config_name, download=True)
     test_res = odqa(["What is the capital of Russia?"], ["the capital, russia"], [["the capital", "russia"]], [""])
@@ -51,6 +56,8 @@ def respond():
     bot_sentences = request.json.get("bot_sentences", [" "])
     questions = [question.lstrip("alexa") for question in questions]
     nounphr_list = request.json.get("entity_substr", [])
+    nounphr_list = [[nounphrase for nounphrase in nounphrases if nounphrase not in freq_words]
+                    for nounphrases in nounphr_list]
     questions_nounphr = [", ".join(elem) for elem in nounphr_list]
     if not nounphr_list:
         nounphr_list = [[] for _ in questions]
@@ -64,16 +71,37 @@ def respond():
         else:
             input_entities.append([])
 
-    res = []
+    nf_numbers, f_questions, f_questions_nounphr, f_nounphr_list, f_input_entities = [], [], [], [], []
+    for n, (question, question_nounphr, nounphrases, input_entity) in \
+            enumerate(zip(questions, questions_nounphr, nounphr_list, input_entities)):
+        if question not in freq_words and nounphrases:
+            f_questions.append(question)
+            f_questions_nounphr.append(question_nounphr)
+            f_nounphr_list.append(nounphrases)
+            f_input_entities.append(input_entity)
+        else:
+            nf_numbers.append(n)
+
+    out_res = []
     try:
-        res = odqa(questions, questions_nounphr, nounphr_list, input_entities)
-        res = [[elem[i] for elem in res] for i in range(len(res[0]))]
-        for i in range(len(res)):
-            res[i][1] = float(res[i][1])
+        if f_questions:
+            odqa_res = odqa(f_questions, f_questions_nounphr, f_nounphr_list, f_input_entities)
+            odqa_res = [[elem[i] for elem in odqa_res] for i in range(len(odqa_res[0]))]
+            for i in range(len(odqa_res)):
+                odqa_res[i][1] = float(odqa_res[i][1])
+            out_res = []
+            cnt_fnd = 0
+            for i in range(len(questions)):
+                if i in nf_numbers:
+                    out_res.append(["", 0.0, 0, "", "", "", ""])
+                else:
+                    if cnt_fnd < len(odqa_res):
+                        out_res.append(odqa_res[cnt_fnd])
+                        cnt_fnd += 1
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
-    return jsonify(res)
+    return jsonify(out_res)
 
 
 if __name__ == "__main__":
