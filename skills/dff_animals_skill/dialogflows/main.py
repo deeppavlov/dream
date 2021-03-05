@@ -51,6 +51,7 @@ for node in [scopes.State.USR_ROOT, scopes.State.USR_ERR]:
         },
     )
 simplified_dialogflow.set_error_successor(scopes.State.USR_ROOT, scopes.State.SYS_ERR)
+simplified_dialogflow.set_error_successor(scopes.State.USR_ERR, scopes.State.SYS_ERR)
 simplified_dialogflow.add_system_transition(
     scopes.State.SYS_ERR,
     scopes.State.USR_ROOT,

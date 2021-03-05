@@ -58,5 +58,12 @@ for node in [scopes.State.USR_ROOT, scopes.State.USR_ERR]:
             (scopes.TRAVEL, travel_flow.State.USR_START): travel_request,
         },
     )
+simplified_dialogflow.set_error_successor(scopes.State.USR_ROOT, scopes.State.SYS_ERR)
+simplified_dialogflow.set_error_successor(scopes.State.USR_ERR, scopes.State.SYS_ERR)
+simplified_dialogflow.add_system_transition(
+    scopes.State.SYS_ERR,
+    scopes.State.USR_ROOT,
+    travel_flow.error_response,
+)
 composite_dialogflow.set_controller("SYSTEM")
 composite_dialogflow._controller = simplified_dialogflow.get_dialogflow()
