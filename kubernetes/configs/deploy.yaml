@@ -1,26 +1,26 @@
 combined-classification:
   CUDA_VISIBLE_DEVICES: '0'
-  gpu: 0
+  gpu: 2
 
 kbqa:
   CUDA_VISIBLE_DEVICES: '0'
-  gpu: 2
+  gpu: 0
 
 factoid-classification:
   CUDA_VISIBLE_DEVICES: '0'
-  gpu: 2
+  gpu: 0
 
 odqa:
   CUDA_VISIBLE_DEVICES: '0'
-  gpu: 3
+  gpu: 2
 
 comet-atomic:
   CUDA_VISIBLE_DEVICES: '0'
-  gpu: 3
+  gpu: 1
 
 comet-conceptnet:
   CUDA_VISIBLE_DEVICES: '0'
-  gpu: 3
+  gpu: 1
 
 entity-linking:
   CUDA_VISIBLE_DEVICES: "''"
@@ -30,7 +30,7 @@ wiki-parser:
 
 question-generator:
   CUDA_VISIBLE_DEVICES: '0'
-  gpu: 1
+  gpu: 2
 
 knowledge-grounding:
   CUDA_VISIBLE_DEVICES: '0'
@@ -38,15 +38,12 @@ knowledge-grounding:
 
 dialog-breakdown:
   CUDA_VISIBLE_DEVICES: '0'
-  gpu: 2
-
-knowledge-grounding-skill:
-  CUDA_VISIBLE_DEVICES: "''"
+  gpu: 1
 
 masked-lm:
   CUDA_VISIBLE_DEVICES: '0'
-  gpu: 2
+  gpu: 1
 
 wikidata-dial-service:
   CUDA_VISIBLE_DEVICES: '0'
-  gpu: 0
+  gpu: 1
