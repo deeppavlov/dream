@@ -138,6 +138,9 @@ def ask_question_using_atomic(dialog):
             relation = ATOMIC_FUTURE_QUESTION_TEMPLATES[template]["attribute"]
         else:
             relation = ""
+        # check of sentiment for relation and drop it, if negative
+        if get_nltk_sentiment(relation) == "negative":
+            relation = ""
         logger.info(f"Choose template: {template}")
         response = fill_comet_atomic_template(best_sent, template, relation)
         if response == "":
