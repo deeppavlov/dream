@@ -12,7 +12,7 @@ from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
 from common.universal_templates import join_words_in_or_pattern
 from common.utils import is_opinion_request, get_skill_outputs_from_dialog, get_topics
 from common.greeting import dont_tell_you_answer
-from utils import get_used_attributes_by_name, get_comet_atomic, TOP_FREQUENT_WORDS, get_all_not_used_templates, \
+from utils import get_used_attributes_by_name, get_comet_atomic, TOP_100_FREQUENT_WORDS, get_all_not_used_templates, \
     get_comet_conceptnet, get_nltk_sentiment, get_not_used_template
 from constants import idopattern, DEFAULT_ASK_ATOMIC_QUESTION_CONFIDENCE, DEFAULT_ATOMIC_CONTINUE_CONFIDENCE, \
     ATOMIC_PAST_QUESTION_TEMPLATES, ATOMIC_FUTURE_QUESTION_TEMPLATES, \
@@ -104,7 +104,7 @@ def ask_question_using_atomic(dialog):
         best_freq_portion = 0.75
         for sent in idosents:
             words = sent.split()
-            freq_words_portion = sum([1 if word in TOP_FREQUENT_WORDS[:100] + ["did", "know", "knew"]
+            freq_words_portion = sum([1 if word in TOP_100_FREQUENT_WORDS or word in ["did", "know", "knew"]
                                       else 0 for word in words]) * 1. / len(words)
             if freq_words_portion <= best_freq_portion:
                 best_freq_portion = freq_words_portion
