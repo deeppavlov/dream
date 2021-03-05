@@ -123,7 +123,10 @@
         "(thank you ){0,1}(alexa ){0,1}i ((need)|(want)|(have)) to finish( up){0,1}( now){0,1}"  
       ],
         "reg_phrases": [
-      	"end this conversation"
+      	"end this conversation",
+        "alexa done",
+        "alexa we are done",
+        "alexa i am done"
       ],
       "min_precision": 0.99,
       "punctuation": [
