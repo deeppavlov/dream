@@ -16,11 +16,11 @@ odqa:
 
 comet-atomic:
   CUDA_VISIBLE_DEVICES: '0'
-  gpu: 1
+  gpu: 2
 
 comet-conceptnet:
   CUDA_VISIBLE_DEVICES: '0'
-  gpu: 1
+  gpu: 2
 
 entity-linking:
   CUDA_VISIBLE_DEVICES: "''"
@@ -30,7 +30,7 @@ wiki-parser:
 
 question-generator:
   CUDA_VISIBLE_DEVICES: '0'
-  gpu: 2
+  gpu: 1
 
 knowledge-grounding:
   CUDA_VISIBLE_DEVICES: '0'
