@@ -174,7 +174,7 @@ def respond():
                        "That's really nice, thanks.",
                        "That's nice of you to say.",
                        "Kazuo Ishiguro, Gretchen Mol, Benjamin Wadsworth, Johann Mühlegg, Ramkumar Ramanathan"
-                       " and others.",
+                       " and others.", "I didn't catch that. Please say that again."
                        ]
         bad_subanswers = ["let's talk about", "i have lots of", "world of warcraft",
                           " wow ", " ok is", "coolness is ", "about nice",
@@ -185,7 +185,9 @@ def respond():
                           "faktas", "fact about amazing", "also called movie or motion picture",
                           "known as eugen warming", "select a chat program that fits your needs",
                           "is usually defined as a humorous anecdote or remark intended to provoke laughter",
-                          "joke is a display of humour in which words are used within a specific"]
+                          "joke is a display of humour in which words are used within a specific",
+                          "didn't catch that", "say that again", "try again"
+                          ]
 
         curr_nounphrases = dialogs[curr_dialog_id]["human_utterances"][-1]["annotations"].get("cobot_nounphrases", [])
         if len(response) > 0 and 'skill://amzn1' not in response:
