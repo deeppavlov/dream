@@ -48,7 +48,9 @@ TOP_FREQUENT_BIGRAMS_TO_FIND_VERB = {
     for bigram in TOP_FREQUENT_VERB_NOUN_PHRASES
     if TOP_FREQUENT_VERB_NOUN_PHRASES[bigram] < 200
 }
-TOP_FREQUENT_WORDS = (WORK_DIR / "google-10000-english-no-swears.txt").open().read().splitlines()[:1000]
+TOP_1k_FREQUENT_WORDS = (WORK_DIR / "google-10000-english-no-swears.txt").open().read().splitlines()[:1000]
+TOP_100_FREQUENT_WORDS = set(TOP_1k_FREQUENT_WORDS[:100])
+TOP_1k_FREQUENT_WORDS = set(TOP_1k_FREQUENT_WORDS)
 
 WIKI_DESCRIPTIONS = json.load((WORK_DIR / "wiki_topics_descriptions_one_sent.json").open())
 list_of_hobbies = list(WIKI_DESCRIPTIONS.keys())
@@ -114,7 +116,7 @@ def remove_all_phrases_containing_word(topic, phrases):
         for token in doc:
             if (
                 len(token.lemma_) > 2
-                and token.lemma_ not in set(TOP_FREQUENT_WORDS[:100])
+                and token.lemma_ not in TOP_100_FREQUENT_WORDS
                 and (
                     re.search(r"\b%s" % token.lemma_, phrase)
                     or (token.text[-1] == "y" and re.search(r"\b%s" % token.text[:-1], phrase))
@@ -611,8 +613,8 @@ def get_most_frequent_bigrams_with_word(word):
 def clean_up_topic_list(verb_nounphrases):
     """check whether - bigram not in `TOP_FREQUENT_BIGRAMS_TO_IGNORE`,
                      - verb not in `BANNED_VERBS`,
-                     - noun not in `BANNED_NOUNS` + 100 `TOP_FREQUENT_WORDS`
-                     - at least one of the words not in `TOP_FREQUENT_WORDS`
+                     - noun not in `BANNED_NOUNS` + `TOP_100_FREQUENT_WORDS`
+                     - at least one of the words not in `TOP_1k_FREQUENT_WORDS`
 
     Args:
         verb_nounphrases: list of verb+noun phrases
@@ -627,10 +629,11 @@ def clean_up_topic_list(verb_nounphrases):
         vnp_is_frequent = (
             vnp in TOP_FREQUENT_BIGRAMS_TO_IGNORE
             or tokens[0] in meta_script_skill_constants.BANNED_VERBS
-            or tokens[-1] in meta_script_skill_constants.BANNED_NOUNS.union(set(TOP_FREQUENT_WORDS[:100]))
+            or tokens[-1] in meta_script_skill_constants.BANNED_NOUNS.union(TOP_100_FREQUENT_WORDS)
         )
         length_is_enough = len(tokens[0]) >= 2 and len(tokens[-1]) > 2
-        one_of_verb_noun_not_frequent = tokens[0] not in TOP_FREQUENT_WORDS or tokens[-1] not in TOP_FREQUENT_WORDS
+        one_of_verb_noun_not_frequent = (tokens[0] not in TOP_1k_FREQUENT_WORDS or tokens[-1] not in
+                                         TOP_1k_FREQUENT_WORDS)
         verb_exceptions = ["play", "practice", "be"]
 
         if vnp in verb_exceptions or (not vnp_is_frequent and length_is_enough and one_of_verb_noun_not_frequent):
@@ -679,14 +682,14 @@ def extract_verb_noun_phrases(utterance, only_i_do_that=True, nounphrases=[]):
                             i_do_that = True
                 i_do_that *= complex_verb
             if (only_i_do_that and i_do_that) or not only_i_do_that:
-                # if possible_verb.lemma_ not in TOP_FREQUENT_WORDS:
+                # if possible_verb.lemma_ not in TOP_1k_FREQUENT_WORDS:
                 #     verbs_without_nouns.append(f"{possible_verb.lemma_}")
                 for possible_subject in possible_verb.children:
                     if possible_subject.dep != nsubj:
                         if possible_subject.pos == NOUN and possible_subject.dep == dobj:
                             if (
-                                possible_verb.lemma_ not in TOP_FREQUENT_WORDS
-                                or possible_subject.lemma_ not in TOP_FREQUENT_WORDS
+                                possible_verb.lemma_ not in TOP_1k_FREQUENT_WORDS
+                                or possible_subject.lemma_ not in TOP_1k_FREQUENT_WORDS
                             ) and possible_subject.lemma_ not in meta_script_skill_constants.BANNED_NOUNS:
                                 verb_noun_phrases.append(f"{possible_verb.lemma_} {possible_subject}")
                                 break
@@ -694,8 +697,8 @@ def extract_verb_noun_phrases(utterance, only_i_do_that=True, nounphrases=[]):
                             for poss_subsubj in possible_subject.children:
                                 if poss_subsubj.pos == NOUN and poss_subsubj.dep == dobj:
                                     if (
-                                        possible_verb.lemma_ not in TOP_FREQUENT_WORDS
-                                        or poss_subsubj.lemma_ not in TOP_FREQUENT_WORDS
+                                        possible_verb.lemma_ not in TOP_1k_FREQUENT_WORDS
+                                        or poss_subsubj.lemma_ not in TOP_1k_FREQUENT_WORDS
                                     ) and poss_subsubj.lemma_ not in meta_script_skill_constants.BANNED_NOUNS:
                                         verb_noun_phrases.append(
                                             f"{possible_verb.lemma_} {possible_subject} {poss_subsubj}"
@@ -736,7 +739,7 @@ def check_topic_lemmas_in_sentence(sentence, topic):
     vn_lemmas = get_verb_noun_lemmas(topic.lower())
     sent_lemmas = [word.lemma_ for word in nlp(sentence.lower(), disable=["ner"])]
     vn_lemmas = set(vn_lemmas)
-    for top_word in TOP_FREQUENT_WORDS[:100]:
+    for top_word in TOP_100_FREQUENT_WORDS:
         vn_lemmas.discard(top_word)
 
     for word in vn_lemmas:
