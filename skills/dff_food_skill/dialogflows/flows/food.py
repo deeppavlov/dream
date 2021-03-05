@@ -295,7 +295,7 @@ def gourmet_response(vars):
 
 
 def smth_request(ngrams, vars):
-    flag = state_utils.no_requests(vars)
+    flag = condition_utils.no_requests(vars)
     logger.info(f"smth_request {flag}")
     return flag
 
