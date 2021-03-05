@@ -152,7 +152,7 @@ BANNED_NOUNS = {"lol", "alexa", "suck", "fuck", "sex", "one", "thing", "somethin
                 "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",
                 "january", "february", "march", "april", "may", "june", "july", "august", "september",
                 "october", "november", "december", "morning", "day", "evening", "night", "afternoon", "hour",
-                "minute", "second", "times", "opinion"}
+                "minute", "second", "times", "opinion", "everyone", "anyone", "somebody", "anybody"}
 
 idopattern = re.compile(r"i [a-zA-Z ,0-9]+", re.IGNORECASE)
 possessive_pronouns = re.compile(r"(my |your |yours |mine |their |our |her |his |its )", re.IGNORECASE)
