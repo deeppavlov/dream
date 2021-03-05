@@ -816,7 +816,7 @@ services:
         CONFIG: en_odqa_infer_wiki_tch_el.json
         PORT: 8078
         SRC_DIR: annotators/odqa/
-        COMMIT: 6398bd2b905a585f1ab3330acfa1994d8bb52449
+        COMMIT: ae8964a60347ca741370fe653b70ac154517a72d
       context: ./
       dockerfile: annotators/odqa/Dockerfile_odqa_lite
     environment:
