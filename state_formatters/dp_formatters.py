@@ -569,7 +569,7 @@ def dialog_breakdown_formatter(dialog: Dict) -> List[Dict]:
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=2)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
     context = " ".join([uttr["text"] for uttr in dialog["utterances"][-4:-1]])
-    return [{"context": [context], "curr_utterance": [dialog["utterances"][-1]["text"]]}]
+    return [{"context": [context], "curr_utterance": [dialog["human_utterances"][-1]["text"]]}]
 
 
 def entity_storer_formatter(dialog: Dict) -> List[Dict]:

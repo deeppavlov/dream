@@ -258,7 +258,7 @@
                     "url": "http://dialog-breakdown:8082/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dialog_breakdown_formatter",
-                "response_formatter": "state_formatters.dp_formatters:dp_classes_formatter_service",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"],
                 "state_manager_method": "add_annotation"
             },
@@ -831,9 +831,8 @@
           },
             "dialog_breakdown": {
                 "connector": {
-                    "protocol": "python",
-                    "class_name": "annotators.dialog_breakdown.connector:BatchConnector",
-                    "url": "http://dialog-breakdown:8082/model"
+                    "protocol": "http",
+                    "url": "http://dialog-breakdown:8082/batch_model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list_for_dialog_breakdown",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",

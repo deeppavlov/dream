@@ -935,8 +935,8 @@ services:
         CONFIG: breakdown_config.json
         SRC_DIR: annotators/dialog_breakdown
         PORT: 8082
-      context: ./
-      dockerfile: dp/dockerfile_skill_gpu
+      context: .
+      dockerfile: ./annotators/dialog_breakdown/Dockerfile
     environment:
       - CUDA_VISIBLE_DEVICES=0
     deploy:

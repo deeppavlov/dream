@@ -16,7 +16,7 @@ services:
   dialog-breakdown:
     build:
       args:
-        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
+        DATA_URL: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
   entity-linking:
     build:
       args:

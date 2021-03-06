@@ -15,8 +15,9 @@ RUN wget ${MODELS_URL} -O ./new_vectorizer_2.zip
 ARG TOPICAL_DATA_URL
 ENV TOPICAL_DATA_URL ${TOPICAL_DATA_URL:-http://lnsigo.mipt.ru/export/alexaprize_data/topicalchat_tfidf_retrieval/topicalchat_music_data.tar.gz}
 
-RUN wget ${TOPICAL_DATA_URL} -O ./topical_data.tar.gz
-RUN tar zxfv ./topical_data.tar.gz
+RUN wget ${TOPICAL_DATA_URL} -O ./topical_data.tar.gz && \
+    tar zxfv ./topical_data.tar.gz && \
+    rm -f ./topical_data.tar.gz
 
 ARG TOPIC_NAME
 ENV TOPIC_NAME ${TOPIC_NAME}
