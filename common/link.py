@@ -72,9 +72,10 @@ def link_to(skills, used_links={}):
     filtered_phrases_map = dict(skills_phrases_map)
     filtered_skills = set(skills)
     for skill_name, phrases in used_links.items():
-        filtered_phrases_map[skill_name] = skills_phrases_map[skill_name].difference(set(phrases))
-        if len(phrases) > 0:
-            filtered_skills.discard(skill_name)
+        if skill_name in skills_phrases_map:
+            filtered_phrases_map[skill_name] = skills_phrases_map[skill_name].difference(set(phrases))
+            if len(phrases) > 0:
+                filtered_skills.discard(skill_name)
 
     # all skills were linked before, use original list of skills
     if len(filtered_skills) == 0:
