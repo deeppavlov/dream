@@ -31,6 +31,6 @@ class CustomClassifierModel(TorchBertClassifierModel):
 
         batch_predictions = []
         for i in range(len(pred)):
-            batch_predictions.append({self.columns[j]: pred[i, j] for j in range(len(self.columns))})
+            batch_predictions.append({self.columns[j]: float(pred[i, j]) for j in range(len(self.columns))})
 
         return batch_predictions
