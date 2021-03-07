@@ -16,12 +16,12 @@ WHAT_IS_YOUR_NAME_RESPONSES = [
 ]
 
 GREETING_QUESTIONS = {
-    "what_to_talk_about": ["What do you want to talk about? Movies, books and games are my favorite topics.",
-                           "What would you want to talk about? Movies, books and games are my favorite topics.",
-                           "What would you like to chat about? Movies, books and games are my favorite topics.",
-                           "What do you wanna talk about? Movies, books and games are my favorite topics.",
-                           "What are we gonna talk about? Movies, books and games are my favorite topics.",
-                           "What's on your mind? We can chat about movies, books or games."
+    "what_to_talk_about": ["What do you want to talk about?",
+                           "What would you want to talk about?",
+                           "What would you like to chat about?",
+                           "What do you wanna talk about?",
+                           "What are we gonna talk about?",
+                           "What's on your mind?"
                            ],
     "what_are_your_interests": ["What are your interests?",
                                 "What do you like?",
