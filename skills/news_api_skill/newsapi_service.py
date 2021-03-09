@@ -1,11 +1,13 @@
 import logging
 import os
 import requests
-from os import getenv
-from datetime import datetime
-import sentry_sdk
-from langdetect import detect
 from collections import deque
+from copy import deepcopy
+from datetime import datetime
+from langdetect import detect
+from os import getenv
+
+import sentry_sdk
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -90,13 +92,13 @@ class CachedRequestsAPI:
                 result = response
         return result
 
-    def send(self, topic="all", status="", prev_news={}):
+    def send(self, topic="all", status="", prev_news=[]):
         """Get news using cache and NewsAPI requests
 
         Args:
             topic: string topic (i.g. sport news, putin, politics
             status: string news skill status
-            prev_news: prev news sent to user (dictionary)
+            prev_news: list of all discussed previous news sent to user (list of dictionaries)
 
         Returns:
             dictionary with one top rated over latest news
@@ -109,24 +111,13 @@ class CachedRequestsAPI:
             self.cached[topic] = self.get_new_topic_news(topic) + self.cached.get(topic, [])
             self.prev_renew_times[topic] = curr_time
 
-        top_news = self.cached.get(topic, [])
+        top_news = deepcopy(self.cached.get(topic, []))
+        if len(prev_news) > 0 and status == "headline":
+            # some prev discussed news detected
+            top_news = [news for news in top_news if news not in prev_news]
 
         if len(top_news) > 0:
-            if prev_news != {} and status == "headline":
-                # some prev discussed news detected
-                try:
-                    prev_index = self.cached[topic].index(prev_news)
-                except ValueError:
-                    # prev news is not stored anymore or from other topic
-                    prev_index = -1
-                if prev_index == len(self.cached[topic]) - 1:
-                    # out of available news
-                    result = {}
-                else:
-                    # return the next one news in top rating
-                    result = self.get_not_blacklisted_english_news(self.cached[topic][prev_index + 1:])
-            else:
-                result = self.get_not_blacklisted_english_news(top_news)
+            result = self.get_not_blacklisted_english_news(top_news)
         else:
             result = {}
         return result
