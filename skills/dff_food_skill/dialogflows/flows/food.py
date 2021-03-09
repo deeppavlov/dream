@@ -44,6 +44,7 @@ MEALS = [
     "fries with beef and tomatoes",
     "quinoa with turkey and broccoli",
 ]
+CONF = 1.0
 
 
 class State(Enum):
@@ -141,7 +142,7 @@ def lets_talk_about_request(ngrams, vars):
 
 def what_cuisine_response(vars):
     try:
-        state_utils.set_confidence(vars)
+        state_utils.set_confidence(vars, confidence=CONF)
         state_utils.set_can_continue(vars)
         return "Okay. What cuisine do you prefer?"
     except Exception as exc:
@@ -162,7 +163,7 @@ def cuisine_request(ngrams, vars):
 def cuisine_fact_response(vars):
     cuisine_fact = ""
     try:
-        state_utils.set_confidence(vars)
+        state_utils.set_confidence(vars, confidence=CONF)
         state_utils.set_can_continue(vars)
         last_utt_lower = state_utils.get_last_human_utterance(vars)["text"].lower()
         for cuisine in list(CUISINES_FACTS.keys()):
@@ -183,7 +184,7 @@ def what_fav_food_response(vars):
     try:
         food_type = random.choice(food_types)
 
-        state_utils.set_confidence(vars)
+        state_utils.set_confidence(vars, confidence=CONF)
         state_utils.set_can_continue(vars)
         return f"What is your favorite {food_type}?"
     except Exception as exc:
@@ -215,7 +216,7 @@ def food_fact_response(vars):
     #     if "here" in fact.lower():
     fact = annotations.get("odqa", {}).get("answer_sentence", "")
     try:
-        state_utils.set_confidence(vars)
+        state_utils.set_confidence(vars, confidence=CONF)
         state_utils.set_can_continue(vars)
         if not fact:
             return "Sounds tasty. I haven't heard about it. Do you recommend?"
@@ -256,7 +257,7 @@ def how_about_meal_response(vars):
     used_meals = shared_memory.get("used_meals", "")
     meal = random.choice([i for i in MEALS if i != used_meals])
     try:
-        state_utils.set_confidence(vars)
+        state_utils.set_confidence(vars, confidence=CONF)
         state_utils.set_can_continue(vars)
         # first attempt to suggest a meal
         if not used_meals:
@@ -273,7 +274,7 @@ def how_about_meal_response(vars):
 
 def recipe_response(vars):
     try:
-        state_utils.set_confidence(vars)
+        state_utils.set_confidence(vars, confidence=CONF)
         return "Great! If you need the recipe ask me after our conversation"
     except Exception as exc:
         logger.exception(exc)
@@ -284,7 +285,7 @@ def recipe_response(vars):
 
 def gourmet_response(vars):
     try:
-        state_utils.set_confidence(vars)
+        state_utils.set_confidence(vars, confidence=CONF)
         state_utils.set_can_continue(vars)
         return "It seems you're a gourmet! What is your favorite meal?"
     except Exception as exc:
