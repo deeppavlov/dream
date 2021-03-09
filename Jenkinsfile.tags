@@ -210,7 +210,7 @@ spec:
                 if ( ENVIRONMENT == 'B' ) {
                   env.CHECK_URL="http://a1b4e1088651f439d9e82fce0c4533b4-501376769.us-east-1.elb.amazonaws.com:4242/ping"
                 }
-                env.STAGE_NAME = "${env.STAGE_NAME}-${ENVIRONMENT}"
+                //env.STAGE_NAME = "${env.STAGE_NAME}-${ENVIRONMENT}"
                 int startTime = currentBuild.duration
                 notify('start')
                 catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
@@ -226,6 +226,22 @@ spec:
               }
             }
           }
+
+          post {
+            failure {
+              script {
+                int duration = (currentBuild.duration - startTime) / 1000
+                notify('failed', duration)
+              }
+            }
+            success {
+              script {
+                int duration = (currentBuild.duration - startTime) / 1000
+                notify('success', duration)
+              }
+            }
+          }
+
         }
 /*        stage('Is-running-prod-B') {
 
