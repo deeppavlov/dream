@@ -18,7 +18,7 @@ app = Flask(__name__)
 ner = ner_model.load_model()
 logger.info("ner model is loaded.")
 
-BANNED_ENTITIES = ["okay", "oh", "name", "ocean", "hey", "cool"]
+BANNED_ENTITIES = ["okay", "oh", "name", "ocean", "hey", "cool", "corona"]
 
 with open("./google-english-no-swears.txt", "r") as f:
     UNIGRAMS = set(f.read().splitlines()[:500])
