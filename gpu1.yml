@@ -28,9 +28,6 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=3
 
-  question-generator:
-    environment:
-      - CUDA_VISIBLE_DEVICES=3
   knowledge-grounding:
     environment:
       - CUDA_VISIBLE_DEVICES=4

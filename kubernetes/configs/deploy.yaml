@@ -28,10 +28,6 @@ entity-linking:
 wiki-parser:
   CUDA_VISIBLE_DEVICES: "''"
 
-question-generator:
-  CUDA_VISIBLE_DEVICES: '0'
-  gpu: 1
-
 knowledge-grounding:
   CUDA_VISIBLE_DEVICES: '0'
   gpu: 1
