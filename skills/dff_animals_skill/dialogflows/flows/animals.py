@@ -18,6 +18,11 @@ logger = logging.getLogger(__name__)
 
 breeds = json.load(open("breeds.json", 'r'))
 
+CONF_1 = 1.0
+CONF_2 = 0.98
+CONF_3 = 0.95
+CONF_4 = 0.9
+
 
 class State(Enum):
     USR_START = auto()
@@ -137,22 +142,26 @@ def sys_ask_some_questions_request(ngrams, vars):
 
 def what_animals_response(vars):
     response = "What animals do you like?"
+    state_utils.set_confidence(vars, confidence=CONF_1)
     return response
 
 
 def have_pets_response(vars):
     response = "Do you have any pets?"
+    state_utils.set_confidence(vars, confidence=CONF_1)
     return response
 
 
 def ask_about_zoo_response(vars):
     response = "Have you ever been to the zoo?"
+    state_utils.set_confidence(vars, confidence=CONF_2)
     return response
 
 
 def ask_some_questions_response(vars):
     questions = ["Do you think that animals dream?", "Have you ever been in the farm?"]
     response = random.choice(questions)
+    state_utils.set_confidence(vars, confidence=CONF_2)
     return response
 
 
@@ -160,6 +169,7 @@ def tell_about_pets_response(vars):
     responses = ["I have a dog named Jack. He is a German Shepherd. He is very cute.",
                  "I have a cat named Thomas. He is active and playful, enjoying games like fetch and learning tricks."]
     response = random.choice(responses)
+    state_utils.set_confidence(vars, confidence=CONF_3)
     return response
 
 
@@ -217,12 +227,14 @@ def ask_about_feeding_request(ngrams, vars):
 
 def ask_more_details_response(vars):
     response = "What is your impression?"
+    state_utils.set_confidence(vars, confidence=CONF_3)
     return response
 
 
 def suggest_visiting_response(vars):
     response = "A day at the zoo also encourages a healthy lifestyle while bringing family and friends together." + \
                "It is the perfect day trip destination for any season!"
+    state_utils.set_confidence(vars, confidence=CONF_3)
     return response
 
 
@@ -234,21 +246,25 @@ def tell_fact_ask_about_pets_response(vars):
         fact = send_cobotqa(f"fact about {nounphr[0]}")
     ask_about_pets = "Do you have pets?"
     response = " ".join([fact, ask_about_pets])
+    state_utils.set_confidence(vars, confidence=CONF_3)
     return response
 
 
 def ask_about_breed_response(vars):
     response = "What breed is it?"
+    state_utils.set_confidence(vars, confidence=CONF_3)
     return response
 
 
 def ask_about_color_response(vars):
     response = "What color is it?"
+    state_utils.set_confidence(vars, confidence=CONF_4)
     return response
 
 
 def ask_about_feeding_response(vars):
     response = "How do you feed him?"
+    state_utils.set_confidence(vars, confidence=CONF_4)
     return response
 
 
@@ -274,13 +290,15 @@ def tell_fact_about_breed_response(vars):
     if fact:
         response = fact
     else:
-        response = "They are sensitive and intelligent dogs, known for undying loyalty and the amazing ability to" + \
+        response = "They are sensitive and intelligent, known for undying loyalty and the amazing ability to" + \
                    "foresee their owners’ needs."
+    state_utils.set_confidence(vars, confidence=CONF_4)
     return response
 
 
 def ask_about_training_response(vars):
     response = "Did you train him to execute commands?"
+    state_utils.set_confidence(vars, confidence=CONF_4)
     return response
 
 
