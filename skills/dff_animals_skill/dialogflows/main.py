@@ -29,10 +29,7 @@ simplified_dialogflow = dialogflow_extention.DFEasyFilling(dialogflow=dialogflow
 
 
 def animals_request(ngrams, vars):
-    flag = False
-    for keyword in ["animal", "pet", "cat", "dog"]:
-        if keyword in vars["agent"]["dialog"]["human_utterances"][-1]["text"]:
-            flag = True
+    flag = True
     logger.info(f"animals_request={flag}")
     return flag
 
