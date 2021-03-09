@@ -8,6 +8,7 @@ from typing import Dict, Callable
 import sentry_sdk
 
 from common.movies import movie_skill_was_proposed
+from common.food import food_skill_was_proposed
 from common.books import book_skill_was_proposed, about_book, QUESTIONS_ABOUT_BOOKS
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
 from common.emotion import detect_emotion, is_joke_requested
@@ -152,7 +153,6 @@ class RuleBasedSkillSelectorConnector:
             about_sports = (self.sport_cobot_dialogacts & cobot_dialogact_topics) | \
                            (self.sport_cobot_topics & cobot_topics)
             about_animals = self.animals_cobot_topics & cobot_topics
-            about_food = self.food_cobot_topics & cobot_topics
 
             prev_user_uttr_hyp = []
             prev_bot_uttr = {}
@@ -195,6 +195,7 @@ class RuleBasedSkillSelectorConnector:
             about_movies = (about_movies or movie_skill_was_proposed(prev_bot_uttr) or re.search(
                 self.about_movie_words, prev_bot_uttr.get("text", "").lower()))
             about_books = about_books or book_skill_was_proposed(prev_bot_uttr)
+            about_food = (self.food_cobot_topics & cobot_topics) or food_skill_was_proposed(prev_bot_uttr)
             emotions = get_emotions({'annotations': user_uttr_annotations}, probs=True)
             # check that logging of if empty is in get_emotion and delete string than
 
