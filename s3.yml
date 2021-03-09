@@ -34,10 +34,6 @@ services:
     build:
       args:
         SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
-  question-generator:
-    build:
-      args:
-        MODEL_URL: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/question_generator/model_24_0.94_37.23.pth
   wiki-parser:
     build:
       args:

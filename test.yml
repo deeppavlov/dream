@@ -6,10 +6,6 @@ services:
       - ".:/dp-agent"
     ports:
       - 4242:4242
-  question-generator:
-    env_file: [ .env.dev ]
-    environment:
-      - CUDA_VISIBLE_DEVICES=8
   kbqa:
     env_file: [ .env.dev ]
     volumes:

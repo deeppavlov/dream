@@ -403,12 +403,6 @@ services:
       - "./services/wikidata_dial_service:/src"
     ports:
       - 8092:8092
-  question-generator:
-    env_file: [.env.dev]
-    volumes:
-      - "./services/question_generator:/src"
-    ports:
-      - 8079:8079
   knowledge-grounding:
     env_file: [.env.dev]
     volumes:

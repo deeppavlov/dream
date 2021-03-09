@@ -141,7 +141,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
                      program-y-dangerous superbowl-skill oscar-skill valentines-day-skill eliza \
                      dummy-skill-dialog intent-catcher short-story-skill comet-atomic \
                      comet-conceptnet convers-evaluation-selector emotion-skill game-cooperative-skill \
-                     entity-linking kbqa odqa wiki-parser convert-reddit question-generator grounding-skill \
+                     entity-linking kbqa odqa wiki-parser convert-reddit \
                      cobot-convers-evaluator-annotator \
                      dialog-breakdown book-skill combined-classification knowledge-grounding-skill \
                      grounding-skill dff-friendship-skill masked-lm entity-storer wikidata-dial-skill \

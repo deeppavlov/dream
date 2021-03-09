@@ -439,14 +439,6 @@ services:
       - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/cobotqa
       - PORT=8081
     command: ["nginx", "-g", "daemon off;"]
-  question-generator:
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/question-generator
-      - PORT=8079
-    command: ["nginx", "-g", "daemon off;"]
   knowledge-grounding:
     build:
       context: dp/proxy/

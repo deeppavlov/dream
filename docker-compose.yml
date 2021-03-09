@@ -896,24 +896,6 @@ services:
         reservations:
           memory: 80M
 
-  question-generator:
-    build:
-      context: ./services/question_generator/
-      args:
-        MODEL_URL: http://lnsigo.mipt.ru/export/alexaprize_data/question_generator/model_24_0.94_37.23.pth
-    command: gunicorn --workers=1 --timeout 300 server:app -b 0.0.0.0:8079
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - DECODING=greedy
-    deploy:
-      mode: replicated
-      replicas: 1
-      resources:
-        limits:
-          memory: 3G
-        reservations:
-          memory: 3G
-
   knowledge-grounding:
     build:
       context: ./services/knowledge_grounding/

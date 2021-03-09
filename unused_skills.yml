@@ -93,39 +93,21 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
+  question-generator:
+    build:
+      context: ./services/question_generator/
+      args:
+        MODEL_URL: http://lnsigo.mipt.ru/export/alexaprize_data/question_generator/model_24_0.94_37.23.pth
+    command: gunicorn --workers=1 --timeout 300 server:app -b 0.0.0.0:8079
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - DECODING=greedy
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 3G
+        reservations:
+          memory: 3G
 version: '3.7'
-
-
-## from dev.yml
-book_skill:
-  env_file: [.env.dev]
-  volumes:
-    - "./skills/book_skill:/src"
-    - "./common:/src/common"
-  ports:
-    - 8032:8032
-
-## from proxy.yml
-book_skill:
-  build:
-    context: ./
-    dockerfile: dp/proxy/Dockerfile
-  environment:
-    - HOST=10.11.1.1
-    - PORT=8032
-
-## from local.yml
-book_skill:
-  build:
-    context: .
-    dockerfile: ./skills/book_skill/Dockerfile
-  command: gunicorn --workers=1 server:app -b 0.0.0.0:8032
-  deploy:
-    mode: replicated
-    placement:
-      constraints:
-      - node.labels.with_gpu != true
-    replicas: 2
-  volumes:
-  - ./skills/book_skill:/src
-  - ./common:/src/common
