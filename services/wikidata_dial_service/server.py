@@ -27,18 +27,40 @@ def respond():
     sentences = request.json["sentences"]
     entities = request.json["entities"]
     if sentences:
-        generated_utterances = ["" for _ in sentences]
-        confidences = [0.0 for _ in sentences]
+        out_uttr = ["" for _ in sentences]
+        out_conf = [0.0 for _ in sentences]
     else:
-        generated_utterances = [""]
-        confidences = [0.0]
+        out_uttr = [""]
+        out_conf = [0.0]
+    f_sentences = []
+    f_entities = []
+    nf_numbers = []
+    for n, (sentence, entities_list) in enumerate(zip(sentences, entities)):
+        if len(sentence.split()) == 1 and not entities_list:
+            nf_numbers.append(n)
+        else:
+            f_sentences.append(sentence)
+            f_entities.append(entities_list)
+
     try:
-        generated_utterances, confidences = kgdg(sentences, entities)
+        generated_utterances, confidences = kgdg(f_sentences, f_entities)
+        out_uttr = []
+        out_conf = []
+        cnt_fnd = 0
+        for i in range(len(sentences)):
+            if i in nf_numbers:
+                out_uttr.append("")
+                out_conf.append(0.0)
+            else:
+                out_uttr.append(generated_utterances[cnt_fnd])
+                out_conf.append(confidences[cnt_fnd])
+                cnt_fnd += 1
+
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
 
-    return jsonify([generated_utterances, confidences])
+    return jsonify([out_uttr, out_conf])
 
 
 if __name__ == "__main__":
