@@ -241,9 +241,9 @@ class RuleBasedSkillSelectorConnector:
                     # greeting skill inside itself do not turn on later than 10th turn of the conversation
                     # skills_for_uttr.append("greeting_skill")
                     skills_for_uttr.append("dff_friendship_skill")
-                if len(dialog["utterances"]) > 8 or prev_bot_uttr.get(
-                        "active_skill", "") in ["greeting_skill", "dff_friendship_skill"]:
-                    skills_for_uttr.append("knowledge_grounding_skill")
+                # if len(dialog["utterances"]) > 8 or prev_bot_uttr.get(
+                #         "active_skill", "") in ["greeting_skill", "dff_friendship_skill"]:
+                #     skills_for_uttr.append("knowledge_grounding_skill")
                     # skills_for_uttr.append("wikidata_dial_skill")
                 # hiding factoid by default, adding check for factoid classification instead
                 # skills_for_uttr.append("factoid_qa")
