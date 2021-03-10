@@ -106,6 +106,7 @@ def news_rejection(uttr):
 def collect_topics_and_statuses(dialogs):
     topics = []
     statuses = []
+    # list of already discussed news' urls!! so, list of strings! not list of dicts!
     prev_news_samples = []
     curr_news_samples = []
     for i, dialog in enumerate(dialogs):
@@ -144,8 +145,8 @@ def collect_topics_and_statuses(dialogs):
                 logger.info("Detected topic for news: all.")
                 topics.append("all")
                 statuses.append("headline")
-                prev_news_samples.append({})
-                curr_news_samples.append(human_attr["news_skill"]["discussed_news"])
+                prev_news_samples.append(human_attr["news_skill"]["discussed_news"])
+                curr_news_samples.append(last_news)
             elif re.search(TELL_MORE_NEWS_TEMPLATES, curr_uttr["text"].lower()):
                 prev_news_skill_output = get_skill_outputs_from_dialog(
                     dialog["utterances"][-7:], skill_name="news_api_skill", activated=True)
@@ -312,14 +313,14 @@ def respond():
                     attr = {"news_status": OFFERED_BREAKING_NEWS_STATUS, "news_topic": "all",
                             "can_continue": CAN_CONTINUE, "curr_news": prev_news_samples[i]}
                     if attr["curr_news"] not in human_attr["news_skill"]["discussed_news"]:
-                        human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]]
+                        human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
                 else:
                     response = OFFER_TOPIC_SPECIFIC_NEWS.replace("TOPIC", curr_topic)
                     confidence = LINKTO_CONFIDENCE
                     attr = {"news_status": OFFER_TOPIC_SPECIFIC_NEWS_STATUS, "news_topic": curr_topic,
                             "curr_news": result, "can_continue": CAN_CONTINUE}
                     if attr["curr_news"] not in human_attr["news_skill"]["discussed_news"]:
-                        human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]]
+                        human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
                 responses.append(response)
                 confidences.append(confidence)
                 human_attributes.append(human_attr)
@@ -356,7 +357,7 @@ def respond():
                     attr = {"news_status": OFFERED_NEWS_DETAILS_STATUS, "news_topic": curr_topic,
                             "curr_news": result, "can_continue": CAN_CONTINUE}
                     if attr["curr_news"] not in human_attr["news_skill"]["discussed_news"]:
-                        human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]]
+                        human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
                 elif curr_topic == "all":
                     prev_news_skill_output = get_skill_outputs_from_dialog(
                         dialogs[i]["utterances"][-3:], skill_name="news_api_skill", activated=True)
@@ -374,7 +375,7 @@ def respond():
                         attr = {"news_status": OFFERED_NEWS_DETAILS_STATUS, "news_topic": curr_topic,
                                 "curr_news": result, "can_continue": CAN_CONTINUE}
                         if attr["curr_news"] not in human_attr["news_skill"]["discussed_news"]:
-                            human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]]
+                            human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
                 else:
                     if curr_news:
                         result = deepcopy(curr_news)
@@ -384,7 +385,7 @@ def respond():
                     attr = {"news_status": OFFERED_NEWS_DETAILS_STATUS, "news_topic": curr_topic,
                             "curr_news": result, "can_continue": CAN_CONTINUE}
                     if attr["curr_news"] not in human_attr["news_skill"]["discussed_news"]:
-                        human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]]
+                        human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
             elif curr_status == "details":
                 if curr_news:
                     result = deepcopy(curr_news)
@@ -393,7 +394,7 @@ def respond():
                 attr = {"news_status": OPINION_REQUEST_STATUS, "news_topic": curr_topic, "curr_news": result,
                         "can_continue": CAN_CONTINUE}
                 if attr["curr_news"] not in human_attr["news_skill"]["discussed_news"]:
-                    human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]]
+                    human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
             else:
                 prev_news_skill_output = get_skill_outputs_from_dialog(
                     dialogs[i]["utterances"][-3:], skill_name="news_api_skill", activated=True)
@@ -423,7 +424,7 @@ def respond():
                         attr = {"news_status": OFFERED_NEWS_TOPIC_CATEGORIES_STATUS, "can_continue": CAN_CONTINUE,
                                 "news_topic": " ".join(offered_topics), "curr_news": result}
                         if attr["curr_news"] not in human_attr["news_skill"]["discussed_news"]:
-                            human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]]
+                            human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
                     else:
                         # can't find enough topics for the user to offer
                         response, confidence, human_attr, bot_attr, attr = link_to_other_skills(
@@ -445,15 +446,13 @@ def respond():
                 attr = {"news_status": OFFERED_BREAKING_NEWS_STATUS, "news_topic": "all",
                         "can_continue": CAN_CONTINUE, "curr_news": prev_news_samples[i]}
                 if attr["curr_news"] not in human_attr["news_skill"]["discussed_news"]:
-                    human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]]
+                    human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
             else:
                 logger.info("No latest news found.")
                 response = "Sorry, seems like all the news slipped my mind. Let's chat about something else. " \
                            "What do you want to talk about?"
                 confidence = NOT_SPECIFIC_NEWS_OFFER_CONFIDENCE
                 attr = {"news_status": OFFERED_BREAKING_NEWS_STATUS, "can_continue": CAN_CONTINUE}
-                if attr["curr_news"] not in human_attr["news_skill"]["discussed_news"]:
-                    human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]]
 
         responses.append(response)
         confidences.append(confidence)

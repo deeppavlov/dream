@@ -92,13 +92,13 @@ class CachedRequestsAPI:
                 result = response
         return result
 
-    def send(self, topic="all", status="", prev_news=[]):
+    def send(self, topic="all", status="", prev_news_urls=[]):
         """Get news using cache and NewsAPI requests
 
         Args:
             topic: string topic (i.g. sport news, putin, politics
             status: string news skill status
-            prev_news: list of all discussed previous news sent to user (list of dictionaries)
+            prev_news_urls: list of all discussed previous news' URLs sent to user (list of strings)
 
         Returns:
             dictionary with one top rated over latest news
@@ -112,9 +112,9 @@ class CachedRequestsAPI:
             self.prev_renew_times[topic] = curr_time
 
         top_news = deepcopy(self.cached.get(topic, []))
-        if len(prev_news) > 0 and status == "headline":
+        if len(prev_news_urls) > 0 and status == "headline":
             # some prev discussed news detected
-            top_news = [news for news in top_news if news not in prev_news]
+            top_news = [news for news in top_news if "url" in news and news["url"] not in prev_news_urls]
 
         if len(top_news) > 0:
             result = self.get_not_blacklisted_english_news(top_news)
