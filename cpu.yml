@@ -30,9 +30,6 @@ services:
   combined-classification:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  dff-friendship-skill:
-    environment:
-      CUDA_VISIBLE_DEVICES: ""
   masked-lm:
     environment:
       CUDA_VISIBLE_DEVICES: ""

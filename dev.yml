@@ -473,4 +473,11 @@ services:
       - "./common:/src/common"
     ports:
       - 8097:8097
+  dff-sport-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_sport_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8098:8098
 version: "3.7"

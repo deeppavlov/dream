@@ -1,0 +1,21 @@
+[
+    [
+        "I live on a cloud, so i can't do sport , but I'm really curious about what sport are you fond of?",
+        0.99,
+        {
+            "dff_sport_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 1,
+                "history": {
+                    "1": "State.SYS_LETS_TALK_SPORT"
+                },
+                "used_links": {},
+                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_ASK_ABOUT_SPORT\", \"__stack__\": [], \"__user_utterance__\": \"lets talk abou sport\", \"__system_state__\": \"State.SYS_LETS_TALK_SPORT\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"I live on a cloud, so i can't do sport , but I'm really curious about what sport are you fond of?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"SPORT\\\"<__tuple__>\\\"State.USR_ASK_ABOUT_SPORT\\\"\"}"
+            }
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

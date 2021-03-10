@@ -100,10 +100,7 @@ def convert_formatter_dialog(dialog: Dict) -> List[Dict]:
         {
             "utterances_histories": [[utt["text"] for utt in dialog["utterances"]]],
             "personality": [dialog["bot"]["persona"]],
-            "num_ongoing_utt": [utils.count_ongoing_skill_utterances(
-                dialog["bot_utterances"],
-                'convert_reddit'
-            )]
+            "num_ongoing_utt": [utils.count_ongoing_skill_utterances(dialog["bot_utterances"], "convert_reddit")],
         }
     ]
 
@@ -516,10 +513,14 @@ def odqa_formatter_dialog(dialog: Dict):
                 input_entity_ids.append(entity_ids_list[0])
     input_entity_ids = list(set(input_entity_ids))
 
-    return [{"human_sentences": human_sentences,
-             "bot_sentences": bot_sentences,
-             "entity_substr": nounphrases,
-             "entities": [input_entity_ids]}]
+    return [
+        {
+            "human_sentences": human_sentences,
+            "bot_sentences": bot_sentences,
+            "entity_substr": nounphrases,
+            "entities": [input_entity_ids],
+        }
+    ]
 
 
 def short_story_formatter_dialog(dialog: Dict):
@@ -546,7 +547,7 @@ def intent_responder_formatter_dialog(dialog: Dict):
         for intent in called:
             called_intents[intent] = True
     dialog["called_intents"] = called_intents
-    dialog["utterances"] = dialog["utterances"][-(utils.LAST_N_TURNS * 2 + 1):]
+    dialog["utterances"] = dialog["utterances"][-(utils.LAST_N_TURNS * 2 + 1) :]
     for utt in dialog["utterances"]:
         if "sentseg" in utt["annotations"]:
             utt["text"] = utt["annotations"]["sentseg"]["punct_sent"]
@@ -605,6 +606,16 @@ def dff_animals_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, service_name)
 
 
+def dff_sport_skill_formatter(dialog: Dict) -> List[Dict]:
+    service_name = "dff_sport_skill"
+    return utils.dff_formatter(dialog, service_name)
+
+
+def dff_travel_skill_formatter(dialog: Dict) -> List[Dict]:
+    service_name = f"dff_travel_skill"
+    return utils.dff_formatter(dialog, service_name)
+
+
 def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
     # Used by: dialog_breakdown
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=2)
@@ -615,11 +626,6 @@ def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
         hyps["context"].append(context)
         hyps["curr_utterance"].append(hyp["text"])
     return [hyps]
-
-
-def dff_travel_formatter(dialog: Dict) -> List[Dict]:
-    service_name = f"dff_travel_skill"
-    return utils.dff_formatter(dialog, service_name)
 
 
 def dff_food_skill_formatter(dialog: Dict) -> List[Dict]:

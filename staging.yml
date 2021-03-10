@@ -282,6 +282,10 @@ services:
     image: ${DOCKER_REGISTRY}/dff-travel-skill:${VERSION}
     env_file:
       - ${ENV_FILE}
+  dff-sport-skill:
+    image: ${DOCKER_REGISTRY}/dff-sport-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   dff-food-skill:
     image: ${DOCKER_REGISTRY}/dff-food-skill:${VERSION}
     env_file:

@@ -1,0 +1,546 @@
+{
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "hi.",
+                    "annotations": {
+                        "spelling_preprocessing": "hi",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.002753159496933222,
+                            "conversational": 0.9972468614578247
+                        },
+                        "cobot_nounphrases": [],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9966639280319214
+                            },
+                            "cobot_dialogact_topics": {
+                                "Phatic": 0.9813531637191772
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.997812032699585
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9993772506713867
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.6476767063140869
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.003938913345336914
+                            }
+                        },
+                        "sentseg": {
+                            "punct_sent": "hi.",
+                            "segments": [
+                                "hi."
+                            ]
+                        },
+                        "conceptnet": {},
+                        "dialog_breakdown": {
+                            "breakdown": 0.5057077407836914,
+                            "no_breakdown": 0.4942922592163086
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            }
+                        },
+                        "odqa": {
+                            "answer": "",
+                            "answer_pos": 0,
+                            "answer_sentence": "",
+                            "confidence": 0.0,
+                            "first_par": "",
+                            "paragraph": "",
+                            "qa_system": "odqa",
+                            "topical_chat_fact": ""
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Phatic"
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        },
+                        "entity_linking": [
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi."
+                            ]
+                        },
+                        "wiki_parser": [
+                            {}
+                        ],
+                        "kbqa": [
+                            "Not Found",
+                            0.0
+                        ]
+                    }
+                },
+                {
+                    "text": "lets talk abou sport.",
+                    "annotations": {
+                        "spelling_preprocessing": "lets talk abou sport",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.9996713399887085
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9636922478675842,
+                                "Sports": 0.7028750777244568
+                            },
+                            "cobot_topics": {
+                                "Sports": 0.999480664730072
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9976041913032532
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6816843748092651
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.003092855215072632
+                            }
+                        },
+                        "cobot_nounphrases": [
+                            "lets",
+                            "abou sport"
+                        ],
+                        "factoid_classification": {
+                            "factoid": 0.0011221086606383324,
+                            "conversational": 0.9988778233528137
+                        },
+                        "sentseg": {
+                            "punct_sent": "lets talk abou sport.",
+                            "segments": [
+                                "lets talk abou sport."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.9359326362609863,
+                                "detected": 1
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "dialog_breakdown": {
+                            "breakdown": 0.2834956645965576,
+                            "no_breakdown": 0.7165043354034424
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_dialogact": {
+                            "intents": [
+                                "Information_RequestIntent"
+                            ],
+                            "topics": [
+                                "Sports"
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Sports"
+                            ]
+                        },
+                        "odqa": {
+                            "answer": "Arabic",
+                            "answer_pos": 209,
+                            "answer_sentence": "Salah Tizani (in Arabic \u0635\u0644\u0627\u062d \u062a\u064a\u0632\u0627\u0646\u064a), full name Salaheddine Mohammad Ameen al Tizani (born in Tripoli, Lebanon in 1929) is a well-known Lebanese actor and comedian, best known for his character Abou Salim (in Arabic \u0627\u0654\u0628\u0648 \u0633\u0644\u064a\u0645), also the title of the long-running Lebanese comedy television series of the same title, where he portrayed the character of a funny, simple and reconciliatory man trying to solve the rifts between the various characters in the series.",
+                            "confidence": 0.9978675246238708,
+                            "first_par": "",
+                            "paragraph": "Salah Tizani (in Arabic \u0635\u0644\u0627\u062d \u062a\u064a\u0632\u0627\u0646\u064a), full name Salaheddine Mohammad Ameen al Tizani (born in Tripoli, Lebanon in 1929) is a well-known Lebanese actor and comedian, best known for his character Abou Salim (in Arabic \u0627\u0654\u0628\u0648 \u0633\u0644\u064a\u0645), also the title of the long-running Lebanese comedy television series of the same title, where he portrayed the character of a funny, simple and reconciliatory man trying to solve the rifts between the various characters in the series. The programme was credited to Abou Salim and his troupe (\u0627\u0654\u0628\u0648 \u0633\u0644\u064a\u0645 \u0648\u0641\u0631\u0642\u062a\u0647) and included othjer memorable characters like Fehmen played by Mahmoud Mabsout and Asaad played by Abdallah Homsi and Shukri Shukrallah played by Salah Sobh and Zaghloul played by Fouad Hassan amongst others.",
+                            "qa_system": "odqa",
+                            "topical_chat_fact": ""
+                        },
+                        "entity_linking": [
+                            [
+                                [
+                                    "Q21427672",
+                                    "Q20017099",
+                                    "Q20536758",
+                                    "Q6533503",
+                                    "Q1129445"
+                                ],
+                                [
+                                    "Q947356",
+                                    "Q657729",
+                                    "Q3117422",
+                                    "Q13577460",
+                                    "Q1032195"
+                                ]
+                            ],
+                            [
+                                [
+                                    0.7272727272727274,
+                                    0.6153846153846154,
+                                    0.47058823529411764,
+                                    0.4444444444444444,
+                                    0.42105263157894735
+                                ],
+                                [
+                                    0.8,
+                                    0.8,
+                                    0.7777777777777779,
+                                    0.7777777777777779,
+                                    0.7777777777777779
+                                ]
+                            ]
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "ok.",
+                                "Hi, this is an Alexa Prize Socialbot! What would you want to talk about?",
+                                "lets talk abou sport."
+                            ]
+                        },
+                        "wiki_parser": [
+                            {
+                                "Lets Go": {
+                                    "instance of": [
+                                        [
+                                            "Q209939",
+                                            "live album"
+                                        ]
+                                    ]
+                                },
+                                "Saab Sport": {
+                                    "instance of": [
+                                        [
+                                            "Q3231690",
+                                            "automobile model"
+                                        ]
+                                    ]
+                                }
+                            }
+                        ],
+                        "kbqa": [
+                            "Not Found",
+                            0.0
+                        ],
+                        "conceptnet": {
+                            "abou sport": {
+                                "Causes": [
+                                    "competitiveness",
+                                    "competitiveness and competitiveness",
+                                    "injury"
+                                ],
+                                "CausesDesire": [
+                                    "play tennis",
+                                    "compete against someone",
+                                    "compete"
+                                ],
+                                "HasProperty": [
+                                    "very popular in asia",
+                                    "fun",
+                                    "very popular"
+                                ],
+                                "SymbolOf": [
+                                    "hockey",
+                                    "victory",
+                                    "pride"
+                                ]
+                            },
+                            "lets": {
+                                "Causes": [
+                                    "feel good",
+                                    "light bulb",
+                                    "light"
+                                ],
+                                "CausesDesire": [
+                                    "create art",
+                                    "paint",
+                                    "create"
+                                ],
+                                "HasProperty": [
+                                    "white",
+                                    "blue",
+                                    "black"
+                                ],
+                                "SymbolOf": [
+                                    "love",
+                                    "passion",
+                                    "freedom"
+                                ]
+                            }
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Hi, this is an Alexa Prize Socialbot! What would you want to talk about?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Hi, this is an Alexa Prize Socialbot! What would you want to talk about?",
+                            "segments": [
+                                "Hi, this is an Alexa Prize Socialbot!",
+                                "What would you want to talk about?"
+                            ]
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 7,
+                                    "start_pos": 5,
+                                    "text": "alexa prize",
+                                    "type": "MISC"
+                                }
+                            ],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "ok.",
+                                "Hi, this is an Alexa Prize Socialbot! What would you want to talk about?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_friendship_skill"
+                }
+            ]
+        }
+    ],
+    "dff_sport_skill_state_batch": [
+        {}
+    ],
+    "entities_batch": [
+        {
+            "sport": {
+                "bot_encounters": [],
+                "human_encounters": [
+                    {
+                        "emotions": {
+                            "neutral": 0.9976041913032532
+                        },
+                        "full_name": "talk abou sport",
+                        "human_utterance_index": 1,
+                        "intents": [
+                            "lets_chat_about",
+                            "Information_RequestIntent"
+                        ],
+                        "next_skill_name": "",
+                        "pos": [
+                            "NOUN",
+                            "NOUN",
+                            "NOUN"
+                        ],
+                        "previous_skill_name": "dff_friendship_skill",
+                        "sentiment": "neutral",
+                        "topics": [
+                            "Sports",
+                            "Other",
+                            "Sports"
+                        ]
+                    }
+                ],
+                "name": "sport"
+            }
+        }
+    ]
+}
