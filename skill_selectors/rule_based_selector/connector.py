@@ -20,6 +20,7 @@ from common.utils import high_priority_intents, low_priority_intents, \
 from common.weather import is_weather_requested
 from common.coronavirus import check_about_death, about_virus, quarantine_end, is_staying_home_requested
 import common.travel as common_travel
+import common.sport as common_sport
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -373,6 +374,39 @@ class RuleBasedSkillSelectorConnector:
                 if about_travel or user_about_travel or linked_to_travel or prev_active_skill == "dff_travel_skill":
                     skills_for_uttr.append("dff_travel_skill")
 
+                if about_travel or user_about_travel or linked_to_travel or prev_active_skill == "dff_travel_skill":
+                    skills_for_uttr.append("dff_travel_skill")
+
+                # add sport skill
+                about_sport = "Sports" in cobot_topics
+                user_about_kind_of_sport = re.search(
+                    common_sport.KIND_OF_SPORTS_TEMPLATE, dialog["human_utterances"][-1]["text"]
+                )
+                user_about_kind_of_comp = re.search(
+                    common_sport.KIND_OF_COMPETITION_TEMPLATE, dialog["human_utterances"][-1]["text"]
+                )
+                user_about_athlete = re.search(common_sport.ATHLETE_TEMPLETE, dialog["human_utterances"][-1]["text"])
+                user_about_comp = re.search(common_sport.COMPETITION_TEMPLATE, dialog["human_utterances"][-1]["text"])
+                linked_to_sport = False
+                if len(dialog["bot_utterances"]) > 0:
+                    linked_to_sport = any(
+                        [
+                            phrase.lower() in dialog["bot_utterances"][-1]["text"].lower()
+                            for phrase in list(common_sport.skill_trigger_phrases())
+                        ]
+                    )
+                flag = (
+                    bool(about_sport)
+                    or bool(user_about_kind_of_sport)
+                    or bool(user_about_kind_of_comp)
+                    or bool(user_about_athlete)
+                    or bool(user_about_comp)
+                    or bool(linked_to_sport)
+                    or prev_active_skill == "dff_sport_skill"
+                )
+                if flag:
+                    skills_for_uttr.append("dff_sport_skill")
+
             # always add dummy_skill
             skills_for_uttr.append("dummy_skill")
             #  no convert when about coronavirus
@@ -391,7 +425,6 @@ class RuleBasedSkillSelectorConnector:
             asyncio.create_task(callback(
                 task_id=payload['task_id'],
                 response=list(set(skills_for_uttr))
-
             ))
         except Exception as e:
             logger.exception(e)
