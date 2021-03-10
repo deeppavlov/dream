@@ -1,0 +1,328 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "lets talk abou music.",
+                    "annotations": {
+                        "spelling_preprocessing": "lets talk abou music",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "cobot_nounphrases": [
+                            "lets",
+                            "abou music"
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.9979021549224854
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Music": 0.8781317472457886,
+                                "Other": 0.8728662729263306
+                            },
+                            "cobot_topics": {
+                                "Music": 0.9996509552001953
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.999118447303772
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6862514019012451
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0010637938976287842
+                            }
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.0017441308591514826,
+                            "conversational": 0.9982559084892273
+                        },
+                        "sentseg": {
+                            "punct_sent": "lets talk abou music.",
+                            "segments": [
+                                "lets talk abou music."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.9989231824874878,
+                                "detected": 1
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "dialog_breakdown": {
+                            "breakdown": 0.3218398094177246,
+                            "no_breakdown": 0.6781602501869202
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "OtherIntent"
+                            ],
+                            "topics": [
+                                "Other"
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_topics": {
+                            "text": [
+                                "Music"
+                            ]
+                        },
+                        "odqa": {
+                            "answer": "Abou Salim",
+                            "answer_pos": 194,
+                            "answer_sentence": "Salah Tizani (in Arabic \u0635\u0644\u0627\u062d \u062a\u064a\u0632\u0627\u0646\u064a), full name Salaheddine Mohammad Ameen al Tizani (born in Tripoli, Lebanon in 1929) is a well-known Lebanese actor and comedian, best known for his character Abou Salim (in Arabic \u0627\u0654\u0628\u0648 \u0633\u0644\u064a\u0645), also the title of the long-running Lebanese comedy television series of the same title, where he portrayed the character of a funny, simple and reconciliatory man trying to solve the rifts between the various characters in the series.",
+                            "confidence": 0.9978191256523132,
+                            "first_par": "",
+                            "paragraph": "Salah Tizani (in Arabic \u0635\u0644\u0627\u062d \u062a\u064a\u0632\u0627\u0646\u064a), full name Salaheddine Mohammad Ameen al Tizani (born in Tripoli, Lebanon in 1929) is a well-known Lebanese actor and comedian, best known for his character Abou Salim (in Arabic \u0627\u0654\u0628\u0648 \u0633\u0644\u064a\u0645), also the title of the long-running Lebanese comedy television series of the same title, where he portrayed the character of a funny, simple and reconciliatory man trying to solve the rifts between the various characters in the series. The programme was credited to Abou Salim and his troupe (\u0627\u0654\u0628\u0648 \u0633\u0644\u064a\u0645 \u0648\u0641\u0631\u0642\u062a\u0647) and included othjer memorable characters like Fehmen played by Mahmoud Mabsout and Asaad played by Abdallah Homsi and Shukri Shukrallah played by Salah Sobh and Zaghloul played by Fouad Hassan amongst others.",
+                            "qa_system": "odqa",
+                            "topical_chat_fact": ""
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "lets talk abou music."
+                            ]
+                        },
+                        "entity_linking": [
+                            [
+                                [
+                                    "Q7111107",
+                                    "Q1144787",
+                                    "Q303526",
+                                    "Q7564267",
+                                    "Q368535"
+                                ],
+                                [
+                                    "Q21427672",
+                                    "Q20017099",
+                                    "Q20536758",
+                                    "Q6533503",
+                                    "Q1129445"
+                                ]
+                            ],
+                            [
+                                [
+                                    0.8421052631578947,
+                                    0.8,
+                                    0.8,
+                                    0.8,
+                                    0.8
+                                ],
+                                [
+                                    0.7272727272727274,
+                                    0.6153846153846154,
+                                    0.47058823529411764,
+                                    0.4444444444444444,
+                                    0.42105263157894735
+                                ]
+                            ]
+                        ],
+                        "wiki_parser": [
+                            {
+                                "Lets Go": {
+                                    "instance of": [
+                                        [
+                                            "Q209939",
+                                            "live album"
+                                        ]
+                                    ]
+                                },
+                                "Our Music": {
+                                    "instance of": [
+                                        [
+                                            "Q482994",
+                                            "album"
+                                        ]
+                                    ]
+                                }
+                            }
+                        ],
+                        "kbqa": [
+                            "Not Found",
+                            0.0
+                        ],
+                        "conceptnet": {
+                            "abou music": {
+                                "Causes": [
+                                    "deafness",
+                                    "relaxation",
+                                    "headache"
+                                ],
+                                "CausesDesire": [
+                                    "dance",
+                                    "attend rock concert",
+                                    "play guitar"
+                                ],
+                                "HasProperty": [
+                                    "popular in asia",
+                                    "fun",
+                                    "loud"
+                                ],
+                                "SymbolOf": [
+                                    "freedom",
+                                    "love",
+                                    "passion"
+                                ]
+                            },
+                            "lets": {
+                                "Causes": [
+                                    "feel good",
+                                    "light bulb",
+                                    "light"
+                                ],
+                                "CausesDesire": [
+                                    "create art",
+                                    "paint",
+                                    "create"
+                                ],
+                                "HasProperty": [
+                                    "white",
+                                    "blue",
+                                    "black"
+                                ],
+                                "SymbolOf": [
+                                    "love",
+                                    "passion",
+                                    "freedom"
+                                ]
+                            }
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_music_skill_state_batch": [
+        {}
+    ],
+    "entities_batch": [
+        {
+            "music": {
+                "bot_encounters": [],
+                "human_encounters": [
+                    {
+                        "emotions": {
+                            "neutral": 0.999118447303772
+                        },
+                        "full_name": "talk abou music",
+                        "human_utterance_index": 0,
+                        "intents": [
+                            "lets_chat_about",
+                            "Information_RequestIntent"
+                        ],
+                        "next_skill_name": "",
+                        "pos": [
+                            "NOUN",
+                            "NOUN",
+                            "NOUN"
+                        ],
+                        "previous_skill_name": "pre_start",
+                        "sentiment": "neutral",
+                        "topics": [
+                            "Music",
+                            "Entertainment_Music",
+                            "Other"
+                        ]
+                    }
+                ],
+                "name": "music"
+            }
+        }
+    ]
+}

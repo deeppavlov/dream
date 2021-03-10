@@ -601,6 +601,11 @@ def dff_template_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, service_name)
 
 
+def dff_music_skill_formatter(dialog: Dict) -> List[Dict]:
+    service_name = "dff_music_skill"
+    return utils.dff_formatter(dialog, service_name)
+
+
 def dff_animals_skill_formatter(dialog: Dict) -> List[Dict]:
     service_name = "dff_animals_skill"
     return utils.dff_formatter(dialog, service_name)

@@ -20,6 +20,7 @@ from common.utils import high_priority_intents, low_priority_intents, \
 from common.weather import is_weather_requested
 from common.coronavirus import check_about_death, about_virus, quarantine_end, is_staying_home_requested
 import common.travel as common_travel
+import common.music as common_music
 import common.sport as common_sport
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -279,6 +280,14 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("dff_animals_skill")
                 if about_food or prev_active_skill == 'dff_food_skill':
                     skills_for_uttr.append("dff_food_skill")
+
+                linked_to_music = False
+                if len(dialog["bot_utterances"]) > 0:
+                    linked_to_music = any([phrase.lower() in dialog["bot_utterances"][-1]["text"].lower()
+                                           for phrase in list(common_music.skill_trigger_phrases())])
+
+                if about_music or prev_active_skill == 'dff_music_skill' or linked_to_music:
+                    skills_for_uttr.append("dff_music_skill")
 
                 linked_to_book = False
                 if len(dialog["bot_utterances"]) > 0:

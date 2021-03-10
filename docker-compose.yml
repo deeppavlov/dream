@@ -1117,4 +1117,21 @@ services:
         reservations:
           memory: 768M
 
+  dff-music-skill:
+    build:
+      args:
+        SERVICE_PORT: 8099
+        SERVICE_NAME: dff_music_skill # has to be the same with skill dir name
+      context: .
+      dockerfile: ./skills/dff_music_skill/Dockerfile
+    command:  gunicorn --workers=1 server:app -b 0.0.0.0:8099 --reload
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 768M
+        reservations:
+          memory: 768M
+
 version: '3.7'
