@@ -473,6 +473,13 @@ services:
       - "./common:/src/common"
     ports:
       - 8097:8097
+  dff-music-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_music_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8099:8099
   dff-sport-skill:
     env_file: [.env.dev]
     volumes:
