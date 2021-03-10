@@ -369,21 +369,22 @@ def new_entities_is_needed_for_request(ngrams, vars):
 def new_entities_is_needed_for_response(vars):
     try:
         ack = random.choice(get_sentiment_acknowledgement(vars))
-        new_entities = state_utils.get_new_human_labeled_noun_phrase(vars)
-        new_entity = list(new_entities)[0]
+        body = "tell me more about that"
+        # new_entities = state_utils.get_new_human_labeled_noun_phrase(vars)
+        # new_entity = list(new_entities)[0]
 
-        new_entity = new_entity if condition_utils.is_plural(new_entity) else f"a {new_entity}"
-        template = f"So you mentioned {new_entity}. Does it [MASK] for you? Tell me why?"
-        tokens = masked_lm([template], prob_threshold=0.05)[0]
-        logger.debug(f"tokens = {tokens}")
+        # new_entity = new_entity if condition_utils.is_plural(new_entity) else f"a {new_entity}"
+        # template = f"So you mentioned {new_entity}. Does it [MASK] for you? Tell me why?"
+        # tokens = masked_lm([template], prob_threshold=0.05)[0]
+        # logger.debug(f"tokens = {tokens}")
 
-        if tokens:
-            body = f"So you mentioned {new_entity}. Does it {random.choice(tokens)} for you? Tell me why?"
-            set_confidence_by_universal_policy(vars)
-        else:
-            ack = ""
-            body = ""
-            state_utils.set_confidence(vars, 0)
+        # if tokens:
+        #     body = f"So you mentioned {new_entity}. Does it {random.choice(tokens)} for you? Tell me why?"
+        #     set_confidence_by_universal_policy(vars)
+        # else:
+        #     ack = ""
+        #     body = ""
+        #     state_utils.set_confidence(vars, 0)
 
         return " ".join([ack, body])
     except Exception as exc:
