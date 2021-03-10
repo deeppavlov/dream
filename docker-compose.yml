@@ -1083,10 +1083,6 @@ services:
             memory: 768M
 
   dff-sport-skill:
-    volumes:
-      - "./skills/dff_sport_skill:/src"
-      - "./common:/src/common"
-      - "./skills/CoBotQA:/src/CoBotQA"
     build:
       args:
         SERVICE_PORT: 8098
@@ -1094,6 +1090,15 @@ services:
       context: .
       dockerfile: skills/dff_sport_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8098 --reload
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 768M
+        reservations:
+          memory: 768M
+
 
   dff-food-skill:
     build:
