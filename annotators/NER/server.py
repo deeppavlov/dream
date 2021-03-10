@@ -18,7 +18,10 @@ app = Flask(__name__)
 ner = ner_model.load_model()
 logger.info("ner model is loaded.")
 
+nltk_stopwords_file = "nltk_stopwords.txt"
+nltk_stopwords = ([line.strip() for line in open(nltk_stopwords_file, 'r').readlines()])
 BANNED_ENTITIES = ["okay", "oh", "name", "ocean", "hey", "cool", "corona"]
+BANNED_ENTITIES = set(BANNED_ENTITIES + nltk_stopwords)
 
 with open("./google-english-no-swears.txt", "r") as f:
     UNIGRAMS = set(f.read().splitlines()[:500])
