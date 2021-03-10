@@ -5,7 +5,6 @@ import json
 def get_input_json(fname):
     with open(fname, "r") as f:
         res = json.load(f)
-    res['dialogs'][0]
     return res
 
 
@@ -14,7 +13,7 @@ def main_test():
     input_data = get_input_json("test_configs/test_dialog.json")
     response = requests.post(url, json=input_data).text
     response = response.replace('  ', ' ')
-    reply = "You wanted to hear my thoughts about star wars, am I correct?"
+    reply = "You just told me about star wars, right?"
     assert reply in response, response
 
 

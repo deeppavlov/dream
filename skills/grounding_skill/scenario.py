@@ -28,7 +28,18 @@ def get_intent_dict(entity_name):
     return intent_dict
 
 
-def get_topic_dict():
+def get_da_topic_dict():
+    #  order DOES matter
+    topic_dict = {"Entertainment_Movies": "We were discussing movies, am I right?",
+                  "Entertainment_Books": "We were discussing books, am I right?",
+                  'Entertainment_General': "We are just trying to be polite to each other, aren't we?",
+                  "Science_and_Technology": "I was under impression we were chatting about technology stuff",
+                  "Sports": "So I thought we were talking about sports",
+                  "Politics": "Correct me if I'm wrong but I thought we were discussing politics"}
+    return topic_dict
+
+
+def get_cobot_topic_dict():
     #  order DOES matter
     topic_dict = {'Phatic': "We are just trying to be polite to each other, aren't we?",
                   "Other": "I can't figure out what we are talking about exactly. Can you spare a hand?",
@@ -99,23 +110,32 @@ class GroundingSkillScenario:
                     if 'text' in intent_list:
                         intent_list = intent_list['text']
                     intent_list = list(set(intent_list))
+                    logger.info(f'Intents received {intent_list}')
+                    da_topic_list = get_topics(dialog['human_utterances'][-2], which='cobot_dialogact_topics')
+                    if 'text' in da_topic_list:
+                        da_topic_list = da_topic_list['text']
+                    da_topic_list = list(set(da_topic_list))
+                    da_topic_dict = get_da_topic_dict()
+                    da_topics_by_popularity = list(da_topic_dict.keys())[::-1]
 
-                    topic_list = get_topics(dialog['human_utterances'][-2], which='cobot_topics')
-                    if 'text' in topic_list:
-                        topic_list = topic_list['text']
-                    topic_list = list(set(topic_list))
-                    topic_dict = get_topic_dict()
-                    topics_by_popularity = list(topic_dict.keys())[::-1]
-
+                    cobot_topic_list = get_topics(dialog['human_utterances'][-2], which='cobot_topics')
+                    if 'text' in cobot_topic_list:
+                        cobot_topic_list = cobot_topic_list['text']
+                    cobot_topic_list = list(set(cobot_topic_list))
+                    cobot_topic_dict = get_cobot_topic_dict()
+                    cobot_topics_by_popularity = list(cobot_topic_dict.keys())[::-1]
                     reply = None
                     for intent in intents_by_popularity:  # start from least popular
-                        if intent in intent_dict and reply is None and len(entity_name) > 0:
+                        if intent in intent_list and reply is None and len(entity_name) > 0:
                             reply = intent_dict[intent]
                     if len(entity_name) > 0 and reply is None:
                         reply = f"We are discussing {entity_name}, aren't we?"
-                    for topic in topics_by_popularity:  # start from least popular
-                        if topic in topic_list and reply is None:
-                            reply = topic_dict[topic]
+                    for topic in da_topics_by_popularity:  # start from least popular
+                        if topic in da_topic_list and reply is None:
+                            reply = da_topic_dict[topic]
+                    for topic in cobot_topics_by_popularity:  # start from least popular
+                        if topic in cobot_topic_list and reply is None:
+                            reply = cobot_topic_dict[topic]
                     if reply is None:
                         reply, confidence = DONTKNOW_PHRASE, DONTKNOW_CONF
                     else:
