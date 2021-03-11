@@ -42,11 +42,10 @@ skills_phrases_map = {
     'dff_food_skill': set(dff_food_skill.skill_trigger_phrases()),
 }
 
-high_rated_skills_for_linking = {
-    "news_skill", "movie_skill", "book_skill", "coronavirus_skill",  # "short_story_skill",
-    "game_cooperative_skill", "personal_info_skill", "meta_script_skill", "emotion_skill",
-    "weather_skill", "dff_travel_skill", "dff_animals_skill", "dff_food_skill", "dff_sport_skill"
-}
+SKILLS_FOR_LINKING = set(skills_phrases_map.keys())
+
+LOW_RATED_SKILLS = {"emotion_skill", "coronavirus_skill", "weather_skill", "personal_info_skill", "meta_script_skill"}
+SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED = set(skills_phrases_map.keys()).difference(LOW_RATED_SKILLS)
 
 # assuming that all skills weights are equal to 1 by default
 # it is used to control amount of link_to phrases to specific skills
@@ -55,7 +54,7 @@ skills_link_to_weights = {
 }
 
 
-def link_to(skills, used_links={}):
+def link_to(skills, used_links={}, recent_active_skills=[]):
     """
     Returns random skill and phrase from skills_phrases_map.
     Use it to add link to specific skill in your phrase.
@@ -68,6 +67,7 @@ def link_to(skills, used_links={}):
         Key is skill_name, value is used links phrases.
         Pass it to prevent selecting identical phrases.
         It will try to link_to skills that were not linked before.
+    recent_active_skills: list or set of recently used skills not to link to them
     """
     random_skill = ''
     random_phrase = ''
@@ -80,6 +80,10 @@ def link_to(skills, used_links={}):
                 filtered_skills.discard(skill_name)
 
     # all skills were linked before, use original list of skills
+    if len(filtered_skills) == 0:
+        filtered_skills = skills
+    filtered_skills = set(filtered_skills).difference(set(recent_active_skills))
+    # all skills among available were active recently, use original list of skills
     if len(filtered_skills) == 0:
         filtered_skills = skills
 

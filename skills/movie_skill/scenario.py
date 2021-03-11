@@ -12,7 +12,7 @@ from templates import MovieSkillTemplates
 from nltk.tokenize import sent_tokenize, word_tokenize
 
 from common.constants import CAN_CONTINUE
-from common.link import link_to
+from common.link import link_to, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED
 from common.movies import get_movie_template
 from common.universal_templates import if_switch_topic, is_switch_topic, if_lets_chat_about_topic, if_choose_topic, \
     COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
@@ -153,7 +153,7 @@ class MovieSkillScenario:
         return responses, confidences, human_attributes, bot_attributes, attributes
 
     @staticmethod
-    def link_to_other_skills(human_attr, bot_attr, to_skills=['book_skill']):
+    def link_to_other_skills(human_attr, bot_attr, to_skills=SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED):
         link = link_to(to_skills, human_attr["used_links"])
         response = link['phrase']
         if response:
@@ -279,7 +279,7 @@ class MovieSkillScenario:
                     else:
                         # current movie was already discussed
                         offer, confidence, human_attr, bot_attr, attr = self.link_to_other_skills(
-                            human_attr, bot_attr, to_skills=['movie_skill', 'book_skill'])
+                            human_attr, bot_attr)
                         response = f"We have talked about this movie previously. " \
                                    f"{get_movie_template('lets_move_on')} {offer}"
                         confidence = END_SCENARIO_OFFER_CONFIDENCE
@@ -303,7 +303,7 @@ class MovieSkillScenario:
                     attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
                 else:
                     offer, confidence, human_attr, bot_attr, attr = self.link_to_other_skills(
-                        human_attr, bot_attr, to_skills=['movie_skill', 'book_skill'])
+                        human_attr, bot_attr)
                     response = f"{offer}"
                     confidence = END_SCENARIO_OFFER_CONFIDENCE
                     attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
@@ -325,7 +325,7 @@ class MovieSkillScenario:
                         curr_user_uttr, curr_movie_id, human_attr, bot_attr)
                 else:
                     offer, confidence, human_attr, bot_attr, attr = self.link_to_other_skills(
-                        human_attr, bot_attr, to_skills=['movie_skill', "book_skill"])
+                        human_attr, bot_attr)
                     response = f"We have talked about this movie previously. " \
                                f"{get_movie_template('lets_move_on')} {offer}"
                     confidence = DEFAULT_CONFIDENCE
@@ -568,7 +568,7 @@ class MovieSkillScenario:
     def lets_talk_about_offer(self, prev_status_line, human_attr, bot_attr):
         # facts are done. offer to talk about other movie.
         offer, confidence, human_attr, bot_attr, attr = self.link_to_other_skills(
-            human_attr, bot_attr, to_skills=['movie_skill', 'book_skill'])
+            human_attr, bot_attr)
         logger.info(f"Offer question about something: `{offer}`.")
         response = f"{offer}"
         confidence = END_SCENARIO_OFFER_CONFIDENCE
