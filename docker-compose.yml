@@ -8,7 +8,7 @@ services:
       WAIT_HOSTS: "cobotqa:8081, cobot-topics:8000, cobot-dialogact:8002, cobot-convers-evaluator-annotator:8004,
         cobot-nounphrases:8006, program-y:8008, sentseg:8011, convers-evaluation-selector:8009, personality-catcher:8010,
         intent-responder:8012, intent-catcher:8014, blacklisted-words:8018,
-         sentrewrite:8017, ner:8021,  program-y-dangerous:8022, movie-skill:8023,
+        sentrewrite:8017, ner:8021, program-y-dangerous:8022, movie-skill:8023,
         convert-reddit:8029, personal-info-skill:8030, asr:8031, misheard-asr:8033,
         christmas-new-year-skill:8036, weather-skill:8037,  alice:8000,
         eliza:8047, emotion-skill:8049, dummy-skill-dialog:8052, comet-atomic:8053, meta-script-skill:8054,
@@ -21,7 +21,8 @@ services:
         movie-tfidf-retrieval:8042, music-tfidf-retrieval:8034, politics-tfidf-retrieval:8043,
         science-technology-tfidf-retrieval:8044, sport-tfidf-retrieval:8045, animals-tfidf-retrieval:8050,
         book-skill:8032, superbowl-skill:8051, valentines-day-skill:8058, grounding-skill:8080,
-        dff-animals-skill:8094, dff-travel-skill:8096, dff-food-skill:8097, dff-sport-skill:8098"
+        dff-animals-skill:8094, dff-travel-skill:8096, dff-food-skill:8097, dff-sport-skill:8098,
+        midas-classification:8090"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
     deploy:
       mode: replicated
@@ -1133,5 +1134,21 @@ services:
           memory: 768M
         reservations:
           memory: 768M
+
+  midas-classification:
+    build:
+      context: .
+      dockerfile: ./annotators/midas_classification/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8090
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 11G
+        reservations:
+          memory: 11G
 
 version: '3.7'

@@ -540,6 +540,12 @@ def get_intents(annotated_utterance, probs=False, default_probs={}, default_labe
     intents = annotations.get("intent_catcher", {})
     detected_intents = [k for k, v in intents.items() if v.get("detected", 0) == 1]
     detected_intent_probs = {key: 1 for key in detected_intents}
+    midas_intent_probs = annotations.get("midas_classification", {})
+    if midas_intent_probs:
+        max_midas_prob = max(midas_intent_probs.values())
+        midas_intent_labels = [k for k, v in midas_intent_probs.items() if v == max_midas_prob]
+    else:
+        midas_intent_labels = []
     cobot_da_intent_probs, cobot_da_intent_labels = {}, []
 
     if "cobot_dialogact" in annotations and "intents" in annotations["cobot_dialogact"]:
@@ -557,12 +563,14 @@ def get_intents(annotated_utterance, probs=False, default_probs={}, default_labe
                                                  combined_classes['cobot_dialogact_intents'])
 
     if which == "all":
-        answer_probs = {**detected_intent_probs, **cobot_da_intent_probs}
-        answer_labels = detected_intents + cobot_da_intent_labels
+        answer_probs = {**detected_intent_probs, **cobot_da_intent_probs, **midas_intent_probs}
+        answer_labels = detected_intents + cobot_da_intent_labels + midas_intent_labels
     elif which == "intent_catcher":
         answer_probs, answer_labels = detected_intent_probs, detected_intents
     elif which == "cobot_dialogact_intents":
         answer_probs, answer_labels = cobot_da_intent_probs, cobot_da_intent_labels
+    elif which == 'midas':
+        answer_probs, answer_labels = midas_intent_probs, midas_intent_labels
     else:
         logging.exception(f'Unknown type {which}')
         answer_probs, answer_labels = default_probs, default_labels

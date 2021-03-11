@@ -42,4 +42,8 @@ services:
     build:
       args:
         DATA_URL: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/cobot_bert_6task.tar.gz
+  midas-classification:
+    build:
+      args:
+        DATA_URL: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/midas.tar.gz
 version: "3.7"

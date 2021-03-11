@@ -36,6 +36,10 @@ dialog-breakdown:
   CUDA_VISIBLE_DEVICES: '0'
   gpu: 1
 
+midas-classification:
+  CUDA_VISIBLE_DEVICES: '0'
+  gpu: 0
+
 masked-lm:
   CUDA_VISIBLE_DEVICES: '0'
   gpu: 1

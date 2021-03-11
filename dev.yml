@@ -458,6 +458,12 @@ services:
       - "./annotators/combined_classification:/src"
     ports:
       - 8087:8087
+  midas-classification:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/midas_classification:/src"
+    ports:
+      - 8090:8090
   dff-travel-skill:
     env_file: [.env.dev]
     volumes:

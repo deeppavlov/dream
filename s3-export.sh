@@ -23,6 +23,7 @@ files=(
   alexaprize_data/convert_reddit_v2.3.tar.gz
   alexaprize_data/emo_bert3_v1.tar.gz
   alexaprize_data/elmo2.tar.gz
+  alexaprize_data/midas.tar.gz
   alexaprize_data/ner.tar.xz
   alexaprize_data/ood_dbdc_torch_bert_v2.tar.gz
   alexaprize_data/question_generator/model_24_0.94_37.23.pth
