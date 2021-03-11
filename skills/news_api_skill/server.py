@@ -16,7 +16,7 @@ from flask import Flask, request, jsonify
 from nltk.tokenize import word_tokenize
 
 from common.constants import CAN_CONTINUE
-from common.link import link_to
+from common.link import link_to, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED
 from common.metrics import setup_metrics
 from common.news import OFFER_BREAKING_NEWS, BREAKING_NEWS, OFFERED_BREAKING_NEWS_STATUS, \
     OFFERED_NEWS_DETAILS_STATUS, OPINION_REQUEST_STATUS, WHAT_TYPE_OF_NEWS, OFFER_TOPIC_SPECIFIC_NEWS, \
@@ -254,7 +254,8 @@ def collect_topics_and_statuses(dialogs):
 
 
 def link_to_other_skills(human_attr, bot_attr, curr_uttr):
-    link = link_to(['movie_skill', 'book_skill'], human_attr["used_links"])
+    link = link_to(SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED, human_attr["used_links"],
+                   recent_active_skills=["news_api_skill"])
     response = link['phrase']
     if len(curr_uttr['text'].split()) <= 5 and not re.search(FALSE_NEWS_TEMPLATES, curr_uttr['text']):
         confidence = LINKTO_CONFIDENCE

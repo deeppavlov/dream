@@ -6,7 +6,7 @@ import pprint
 from collections import defaultdict
 from city_slot import OWMCitySlot
 from common.constants import CAN_CONTINUE, MUST_CONTINUE
-from common.link import link_to
+from common.link import link_to, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED
 from common.weather import is_weather_for_homeland_requested, is_weather_without_city_requested
 
 
@@ -265,7 +265,8 @@ class WeatherSkill:
                     curr_confidence = SMALLTALK_CONFIDENCE
                     weather = context_dict["weather_forecast_interaction_preferred_weather"]
                     context_dict['weather_forecast_interaction_preferred_weather'] = False
-                    link = link_to(['coronavirus_skill'], used_links=human_attr["used_links"])
+                    link = link_to(SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED, used_links=human_attr["used_links"],
+                                   recent_active_skills=["weather_skill"])
                     human_attr["used_links"][link["skill"]] = human_attr["used_links"].get(
                         link["skill"], []) + [link['phrase']]
                     current_reply = self.weather_dict[weather]['answer'] + " " + link["phrase"]

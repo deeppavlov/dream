@@ -16,7 +16,7 @@ from typing import Callable, Dict
 import sentry_sdk
 
 from common.universal_templates import opinion_request_question
-from common.link import link_to, high_rated_skills_for_linking
+from common.link import link_to, SKILLS_FOR_LINKING
 from common.utils import get_topics
 
 
@@ -128,10 +128,11 @@ def get_link_to_question(dialog):
     prev_active_skills = set([uttr.get("active_skill", "") for uttr in dialog["bot_utterances"]
                               if uttr.get("active_skill", "") != ""])
     # remove prev active skills from those we can link to
-    available_links = list(set(high_rated_skills_for_linking).difference(prev_active_skills))
+    available_links = list(set(SKILLS_FOR_LINKING).difference(prev_active_skills))
     if len(available_links) > 0:
         # if we still have skill to link to, try to generate linking question
-        link = link_to(available_links, used_links=human_attr["used_links"])
+        link = link_to(SKILLS_FOR_LINKING, used_links=human_attr["used_links"],
+                       recent_active_skills=prev_active_skills)
         human_attr["used_links"][link["skill"]] = human_attr["used_links"].get(link["skill"], []) + [link['phrase']]
         linked_question = link["phrase"]
     else:
