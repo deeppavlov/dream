@@ -280,11 +280,11 @@ def respond():
     bot_attributes = []
     attributes = []
 
-    topics, statuses, prev_news_samples, curr_news_samples = collect_topics_and_statuses(dialogs)
+    topics, statuses, prev_news_samples_urls, curr_news_samples = collect_topics_and_statuses(dialogs)
 
     # run asynchronous news requests
     executor = ThreadPoolExecutor(max_workers=ASYNC_SIZE)
-    for i, result in enumerate(executor.map(NEWS_API_REQUESTOR.send, topics, statuses, prev_news_samples)):
+    for i, result in enumerate(executor.map(NEWS_API_REQUESTOR.send, topics, statuses, prev_news_samples_urls)):
         # result is a list of articles. the first one is top rated news.
         curr_topic = topics[i]
         curr_status = statuses[i]
@@ -311,7 +311,7 @@ def respond():
                     response = OFFER_BREAKING_NEWS
                     confidence = LINKTO_FOR_LONG_RESPONSE_CONFIDENCE
                     attr = {"news_status": OFFERED_BREAKING_NEWS_STATUS, "news_topic": "all",
-                            "can_continue": CAN_CONTINUE, "curr_news": prev_news_samples[i]}
+                            "can_continue": CAN_CONTINUE, "curr_news": prev_news_samples_urls[i]}
                     if attr["curr_news"] not in human_attr["news_skill"]["discussed_news"]:
                         human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
                 else:
@@ -409,7 +409,7 @@ def respond():
                     offered_topics = []
                     for topic in topics_list:
                         curr_topic_result = NEWS_API_REQUESTOR.send(topic=topic, status="finished",
-                                                                    prev_news=prev_news_samples[i])
+                                                                    prev_news_urls=prev_news_samples_urls[i])
                         if len(curr_topic_result) > 0:
                             offered_topics.append(topic)
                             logger.info("Topic: {}".format(topic))
@@ -444,7 +444,7 @@ def respond():
                 response = f"Sorry, I could not find some specific news. {OFFER_BREAKING_NEWS}"
                 confidence = NOT_SPECIFIC_NEWS_OFFER_CONFIDENCE
                 attr = {"news_status": OFFERED_BREAKING_NEWS_STATUS, "news_topic": "all",
-                        "can_continue": CAN_CONTINUE, "curr_news": prev_news_samples[i]}
+                        "can_continue": CAN_CONTINUE, "curr_news": prev_news_samples_urls[i]}
                 if attr["curr_news"] not in human_attr["news_skill"]["discussed_news"]:
                     human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
             else:
