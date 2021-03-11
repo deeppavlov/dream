@@ -1,4 +1,4 @@
-OPINION_REQUESTS_ABOUT_FOOD = ["What is your opinion of cooking?",
+OPINION_REQUESTS_ABOUT_FOOD = ["What is your opinion on cooking?",
                                "Do you think cooking is cool?",
                                "Many people say they adore cooking. Do you agree?",
                                "Do you think cooking is a great thing?"]
