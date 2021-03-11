@@ -239,9 +239,16 @@ def last_human_utt_nounphrases(dialog: Dict) -> List[Dict]:
 
 
 def hypotheses_list(dialog: Dict) -> List[Dict]:
-    hypotheses = dialog["utterances"][-1]["hypotheses"]
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
     hypots = [h["text"] for h in hypotheses]
     return [{"sentences": hypots}]
+
+
+def hypotheses_list_last_uttr(dialog: Dict) -> List[Dict]:
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
+    hypots = [h["text"] for h in hypotheses]
+    last_human_utterances = [dialog['human_utterances'][-1]['text'] for h in hypotheses]
+    return [{"sentences": hypots, "last_human_utterances": last_human_utterances}]
 
 
 def last_utt_and_history_dialog(dialog: Dict) -> List:
@@ -266,7 +273,7 @@ def cobot_convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
     dialog = utils.get_last_n_turns(dialog)
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
     conv = dict()
-    hypotheses = dialog["utterances"][-1]["hypotheses"]
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
     conv["hypotheses"] = [h["text"] for h in hypotheses]
     conv["currentUtterance"] = dialog["utterances"][-1]["text"]
     # cobot recommends to take 2 last utt for conversation evaluation service
@@ -627,7 +634,7 @@ def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
     context = " ".join([uttr["text"] for uttr in dialog["utterances"][-3:]])
     hyps = {"context": [], "curr_utterance": []}
-    for hyp in dialog["utterances"][-1]["hypotheses"]:
+    for hyp in dialog["human_utterances"][-1]["hypotheses"]:
         hyps["context"].append(context)
         hyps["curr_utterance"].append(hyp["text"])
     return [hyps]

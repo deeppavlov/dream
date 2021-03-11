@@ -91,6 +91,8 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8082
   knowledge-grounding-skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8085
+  midas-classification:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8090
   combined-classification:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8087
   wikidata-dial-service:

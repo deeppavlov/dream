@@ -250,6 +250,10 @@ services:
     image: ${DOCKER_REGISTRY}/knowledge-grounding-skill:${VERSION}
     env_file:
       - ${ENV_FILE}
+  midas-classification:
+    image: ${DOCKER_REGISTRY}/midas-classification:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   dff-friendship-skill:
     image: ${DOCKER_REGISTRY}/dff-friendship-skill:${VERSION}
     env_file:
