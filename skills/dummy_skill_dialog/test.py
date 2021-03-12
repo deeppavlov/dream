@@ -12,6 +12,15 @@ def get_input_json(fname):
 def slice_(input_data, i):
     tmp_data = deepcopy(input_data)
     tmp_data['dialogs'][0]['utterances'] = input_data['dialogs'][0]['utterances'][:i]
+    tmp_data['dialogs'][0]['human_utterances'] = []
+    tmp_data['dialogs'][0]['bot_utterances'] = []
+
+    for uttr in tmp_data['dialogs'][0]['utterances']:
+        if uttr["user"]["user_type"] == "human":
+            tmp_data['dialogs'][0]['human_utterances'].append(deepcopy(uttr))
+        else:
+            tmp_data['dialogs'][0]['bot_utterances'].append(deepcopy(uttr))
+
     return tmp_data
 
 
@@ -42,7 +51,7 @@ def main_test():
                     "to you, i've gotta run now, bye!"]
 
     for response, gold_phrase in zip(responses, gold_phrases):
-        assert response == gold_phrase
+        assert response == gold_phrase, print(f"Expect: {gold_phrase}. Got: {response}.")
 
 
 if __name__ == '__main__':

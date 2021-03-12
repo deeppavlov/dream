@@ -61,52 +61,56 @@ def respond():
         bot_response = "I really do not know what to answer."
         confidence = 0.0
         dialog_position, dialog_id, dialog_type = -1, "", ""
+        attr = {}
 
         st_time = time.time()
-        last_active_skill = dialog["utterances"][-2]["active_skill"]
-
-        assert(last_active_skill in ["dummy_skill", "dummy_skill_dialog"])
-
-        if last_active_skill == "dummy_skill":
-            text = dialog["utterances"][-2]["text"]
-            for key, value in TOPIC_DIALOGS.items():
-                if text == value[0]:
-                    dialog_id = key
-                    dialog_type = "topic"
-                    break
-            for key, value in NP_DIALOGS.items():
-                if text == value[0]:
-                    dialog_id = key
-                    dialog_type = "noun_phrase"
-                    break
-            dialog_position = 1
+        if len(dialog["bot_utterances"]) > 0:
+            last_active_skill = dialog["bot_utterances"][-1]["active_skill"]
         else:
-            for hypothesis in dialog["utterances"][-3]["hypotheses"]:
-                if hypothesis["skill_name"] == "dummy_skill_dialog":
-                    dialog_position = hypothesis["dialog_position"]
-                    dialog_id = hypothesis["dialog_id"]
-                    dialog_type = hypothesis["dialog_type"]
+            last_active_skill = ""
 
-        if dialog_type in ["topic", "noun_phrase"]:
+        if last_active_skill in ["dummy_skill", "dummy_skill_dialog"]:
 
-            if dialog_type == "topic":
-                anticipated_dialog = TOPIC_DIALOGS[dialog_id]
+            if last_active_skill == "dummy_skill":
+                text = dialog["bot_utterances"][-1]["text"]
+                for key, value in TOPIC_DIALOGS.items():
+                    if text == value[0]:
+                        dialog_id = key
+                        dialog_type = "topic"
+                        break
+                for key, value in NP_DIALOGS.items():
+                    if text == value[0]:
+                        dialog_id = key
+                        dialog_type = "noun_phrase"
+                        break
+                dialog_position = 1
             else:
-                anticipated_dialog = NP_DIALOGS[dialog_id]
+                for hypothesis in dialog["human_utterances"][-2]["hypotheses"]:
+                    if hypothesis["skill_name"] == "dummy_skill_dialog":
+                        dialog_position = hypothesis["dialog_position"]
+                        dialog_id = hypothesis["dialog_id"]
+                        dialog_type = hypothesis["dialog_type"]
 
-            human_response = dialog['utterances'][-1]['text']
-            anticipated_response = anticipated_dialog[dialog_position]
-            human_response_encoded = normalize(encode([human_response]))[0]
-            anticipated_response_encoded = normalize(encode([anticipated_response]))[0]
+            if dialog_type in ["topic", "noun_phrase"]:
 
-            score = human_response_encoded.dot(anticipated_response_encoded.T)
+                if dialog_type == "topic":
+                    anticipated_dialog = TOPIC_DIALOGS[dialog_id]
+                else:
+                    anticipated_dialog = NP_DIALOGS[dialog_id]
 
-            if score > 0.5 and len(anticipated_dialog) - 2 > dialog_position:
-                bot_response = anticipated_dialog[dialog_position + 1]
-                confidence = float(score)
-                dialog_position += 2
+                human_response = dialog['human_utterances'][-1]['text']
+                anticipated_response = anticipated_dialog[dialog_position]
+                human_response_encoded = normalize(encode([human_response]))[0]
+                anticipated_response_encoded = normalize(encode([anticipated_response]))[0]
 
-        attr = {"dialog_position": dialog_position, "dialog_id": dialog_id, "dialog_type": dialog_type}
+                score = human_response_encoded.dot(anticipated_response_encoded.T)
+
+                if score > 0.5 and len(anticipated_dialog) - 2 > dialog_position:
+                    bot_response = anticipated_dialog[dialog_position + 1]
+                    confidence = float(score)
+                    dialog_position += 2
+
+            attr = {"dialog_position": dialog_position, "dialog_id": dialog_id, "dialog_type": dialog_type}
 
         final_confidences.append(confidence)
         final_responses.append(bot_response)
