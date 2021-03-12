@@ -5,6 +5,7 @@ from copy import deepcopy
 import sentry_sdk
 from random import choice
 
+
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
 
