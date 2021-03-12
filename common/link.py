@@ -41,6 +41,17 @@ skills_phrases_map = {
     'dff_sport_skill': set(dff_sport_skill.skill_trigger_phrases()),
     'dff_food_skill': set(dff_food_skill.skill_trigger_phrases()),
 }
+# TODO: adding new skill above, add here a conversational topic to the list, it will be used to offer topic in greeting
+LIST_OF_SCRIPTED_TOPICS = {
+    "news_api_skill": "news",
+    "movie_skill": "movies",
+    "book_skill": "books",
+    "game_cooperative_skill": "games",
+    "dff_travel_skill": "travel",
+    "dff_animals_skill": "pets",
+    "dff_sport_skill": "sport",
+    "dff_food_skill": "food",
+}
 
 SKILLS_FOR_LINKING = set(skills_phrases_map.keys())
 

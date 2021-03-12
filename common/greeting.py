@@ -15,13 +15,19 @@ WHAT_IS_YOUR_NAME_RESPONSES = [
     "I'd love to get to know you a bit better before we chat! Is it all right if I ask you for your name?",
 ]
 
+TOPIC_OFFERING_TEMPLATES = ["TOPIC1 and TOPIC2 are my favorite topics.",
+                            "Maybe, TOPIC1 or TOPIC2?",
+                            "Say, TOPIC1 or TOPIC2?",
+                            "How about TOPIC1 or TOPIC2?"
+                            ]
+
 GREETING_QUESTIONS = {
-    "what_to_talk_about": ["What do you want to talk about? Movies, books and games are my favorite topics.",
-                           "What would you want to talk about? Movies, books and games are my favorite topics.",
-                           "What would you like to chat about? Movies, books and games are my favorite topics.",
-                           "What do you wanna talk about? Movies, books and games are my favorite topics.",
-                           "What are we gonna talk about? Movies, books and games are my favorite topics.",
-                           "What's on your mind? We can chat about movies, books or games."
+    "what_to_talk_about": ["What do you want to talk about?",
+                           "What would you want to talk about?",
+                           "What would you like to chat about?",
+                           "What do you wanna talk about?",
+                           "What are we gonna talk about?",
+                           "What's on your mind?"
                            ],
     "what_are_your_interests": ["What are your interests?",
                                 "What do you like?",
