@@ -312,15 +312,15 @@ def respond():
                     response = OFFER_BREAKING_NEWS
                     confidence = LINKTO_FOR_LONG_RESPONSE_CONFIDENCE
                     attr = {"news_status": OFFERED_BREAKING_NEWS_STATUS, "news_topic": "all",
-                            "can_continue": CAN_CONTINUE, "curr_news": prev_news_samples_urls[i][-1]}
-                    if attr["curr_news"] not in human_attr["news_skill"]["discussed_news"]:
+                            "can_continue": CAN_CONTINUE, "curr_news": result}
+                    if attr["curr_news"]["url"] not in human_attr["news_skill"]["discussed_news"]:
                         human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
                 else:
                     response = OFFER_TOPIC_SPECIFIC_NEWS.replace("TOPIC", curr_topic)
                     confidence = LINKTO_CONFIDENCE
                     attr = {"news_status": OFFER_TOPIC_SPECIFIC_NEWS_STATUS, "news_topic": curr_topic,
                             "curr_news": result, "can_continue": CAN_CONTINUE}
-                    if attr["curr_news"] not in human_attr["news_skill"]["discussed_news"]:
+                    if attr["curr_news"]["url"] not in human_attr["news_skill"]["discussed_news"]:
                         human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
                 responses.append(response)
                 confidences.append(confidence)
@@ -357,7 +357,7 @@ def respond():
                     confidence = DEFAULT_NEWS_OFFER_CONFIDENCE
                     attr = {"news_status": OFFERED_NEWS_DETAILS_STATUS, "news_topic": curr_topic,
                             "curr_news": result, "can_continue": CAN_CONTINUE}
-                    if attr["curr_news"] not in human_attr["news_skill"]["discussed_news"]:
+                    if attr["curr_news"]["url"] not in human_attr["news_skill"]["discussed_news"]:
                         human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
                 elif curr_topic == "all":
                     prev_news_skill_output = get_skill_outputs_from_dialog(
@@ -375,7 +375,7 @@ def respond():
                         confidence = DEFAULT_NEWS_OFFER_CONFIDENCE
                         attr = {"news_status": OFFERED_NEWS_DETAILS_STATUS, "news_topic": curr_topic,
                                 "curr_news": result, "can_continue": CAN_CONTINUE}
-                        if attr["curr_news"] not in human_attr["news_skill"]["discussed_news"]:
+                        if attr["curr_news"]["url"] not in human_attr["news_skill"]["discussed_news"]:
                             human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
                 else:
                     if curr_news:
@@ -385,7 +385,7 @@ def respond():
                     confidence = DEFAULT_NEWS_OFFER_CONFIDENCE
                     attr = {"news_status": OFFERED_NEWS_DETAILS_STATUS, "news_topic": curr_topic,
                             "curr_news": result, "can_continue": CAN_CONTINUE}
-                    if attr["curr_news"] not in human_attr["news_skill"]["discussed_news"]:
+                    if attr["curr_news"]["url"] not in human_attr["news_skill"]["discussed_news"]:
                         human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
             elif curr_status == "details":
                 if curr_news:
@@ -394,7 +394,7 @@ def respond():
                 confidence = DEFAULT_NEWS_DETAILS_CONFIDENCE
                 attr = {"news_status": OPINION_REQUEST_STATUS, "news_topic": curr_topic, "curr_news": result,
                         "can_continue": CAN_CONTINUE}
-                if attr["curr_news"] not in human_attr["news_skill"]["discussed_news"]:
+                if attr["curr_news"]["url"] not in human_attr["news_skill"]["discussed_news"]:
                     human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
             else:
                 prev_news_skill_output = get_skill_outputs_from_dialog(
@@ -424,7 +424,7 @@ def respond():
                         confidence = WHAT_TYPE_OF_NEWS_CONFIDENCE
                         attr = {"news_status": OFFERED_NEWS_TOPIC_CATEGORIES_STATUS, "can_continue": CAN_CONTINUE,
                                 "news_topic": " ".join(offered_topics), "curr_news": result}
-                        if attr["curr_news"] not in human_attr["news_skill"]["discussed_news"]:
+                        if attr["curr_news"]["url"] not in human_attr["news_skill"]["discussed_news"]:
                             human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
                     else:
                         # can't find enough topics for the user to offer
@@ -445,8 +445,8 @@ def respond():
                 response = f"Sorry, I could not find some specific news. {OFFER_BREAKING_NEWS}"
                 confidence = NOT_SPECIFIC_NEWS_OFFER_CONFIDENCE
                 attr = {"news_status": OFFERED_BREAKING_NEWS_STATUS, "news_topic": "all",
-                        "can_continue": CAN_CONTINUE, "curr_news": prev_news_samples_urls[i][-1]}
-                if attr["curr_news"] not in human_attr["news_skill"]["discussed_news"]:
+                        "can_continue": CAN_CONTINUE, "curr_news": NEWS_API_REQUESTOR.cached["all"][0]}
+                if attr["curr_news"]["url"] not in human_attr["news_skill"]["discussed_news"]:
                     human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
             else:
                 logger.info("No latest news found.")
