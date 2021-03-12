@@ -60,6 +60,21 @@ HIGH_CONFIDENCE = 0.98
 
 # %%
 
+
+def compose_topic_offering(excluded_skills=[]):
+    ask_about_topic = random.choice(common_greeting.GREETING_QUESTIONS["what_to_talk_about"])
+    offer_topics_template = random.choice(common_greeting.TOPIC_OFFERING_TEMPLATES)
+
+    available_topics = [topic for skill_name, topic in common_link.LIST_OF_SCRIPTED_TOPICS.items()
+                        if skill_name not in excluded_skills]
+
+    topics = random.choice(available_topics, size=2, replace=False)
+    offer_topics = offer_topics_template.replace("TOPIC1", topics[0]).replace("TOPIC2", topics[1])
+
+    response = f"{ask_about_topic} {offer_topics}"
+    return response
+
+
 ##################################################################################################################
 # Init DialogFlow
 ##################################################################################################################
@@ -156,7 +171,7 @@ def hello_response(vars):
         else:
             # what_to_talk_about
             greeting_step_id = 0
-            after_hello_resp = random.choice(common_greeting.GREETING_QUESTIONS[GREETING_STEPS[greeting_step_id]])
+            after_hello_resp = compose_topic_offering(excluded_skills=[])
             # set_confidence
             set_confidence_by_universal_policy(vars)
             state_utils.save_to_shared_memory(vars, greeting_step_id=greeting_step_id + 1)
@@ -248,7 +263,7 @@ def how_human_is_doing_response(vars):
             user_mood_acknowledgement = "Okay."
 
         greeting_step_id = 0
-        offer_topic_choose = random.choice(common_greeting.GREETING_QUESTIONS[GREETING_STEPS[greeting_step_id]])
+        offer_topic_choose = compose_topic_offering(excluded_skills=[])
         state_utils.save_to_shared_memory(vars, greeting_step_id=greeting_step_id + 1)
 
         return f"{user_mood_acknowledgement} {offer_topic_choose}"
@@ -282,7 +297,7 @@ def share_list_activities_response(vars):
         state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
         state_utils.set_can_continue(vars)
         greeting_step_id = 0
-        offer_topic_choose = random.choice(common_greeting.GREETING_QUESTIONS[GREETING_STEPS[greeting_step_id]])
+        offer_topic_choose = compose_topic_offering(excluded_skills=[])
         state_utils.save_to_shared_memory(vars, greeting_step_id=greeting_step_id + 1)
 
         return f"{common_greeting.LIST_ACTIVITIES_RESPONSE} {offer_topic_choose}"
@@ -335,7 +350,12 @@ def std_greeting_response(vars):
         ack = common_utils.get_not_used_template(
             used_templates=last_acknowledgements, all_templates=COMMENTS[sentiment]
         )
-        body = random.choice(common_greeting.GREETING_QUESTIONS[GREETING_STEPS[greeting_step_id]])
+        if greeting_step_id == 0:
+            prev_active_skills = [uttr.get("active_skill", "")
+                                  for uttr in vars["agent"]["dialog"]["bot_utterances"]][-5:]
+            body = compose_topic_offering(excluded_skills=prev_active_skills)
+        else:
+            body = random.choice(common_greeting.GREETING_QUESTIONS[GREETING_STEPS[greeting_step_id]])
 
         # set_confidence
         set_confidence_by_universal_policy(vars)

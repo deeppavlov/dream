@@ -1,17 +1,17 @@
 import re
 
 
-OPINION_REQUESTS_ABOUT_TRAVELLING = ["Do you like travelling?",
-                                     "What is your view on travelling?",
-                                     "What is your opinion of travelling?",
-                                     "Do you think travelling is cool?",
-                                     "Many people say they adore travelling. Do you agree?",
-                                     "Do you think travelling is a great thing?"
+OPINION_REQUESTS_ABOUT_TRAVELLING = ["Do you like travel?",
+                                     "What is your view on travel?",
+                                     "What is your opinion of travel?",
+                                     "Do you think travel is cool?",
+                                     "Many people say they adore travel. Do you agree?",
+                                     "Do you think travel is a great thing?"
                                      ]
 
-OFFER_TALK_ABOUT_TRAVELLING = ["Would you like to talk about travelling?",
-                               "Let's chat about travelling adventures! Do you agree?",
-                               "I'd like to talk about travelling, would you?"
+OFFER_TALK_ABOUT_TRAVELLING = ["Would you like to talk about travel?",
+                               "Let's chat about travel adventures! Do you agree?",
+                               "I'd like to talk about travel, would you?"
                                ]
 
 
