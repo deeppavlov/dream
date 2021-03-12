@@ -10,12 +10,12 @@ import sentry_sdk
 
 from common.utils import get_skill_outputs_from_dialog, get_user_replies_to_particular_skill, is_no, is_yes, \
     get_outputs_with_response_from_dialog
-from common.universal_templates import if_choose_topic, if_lets_chat_about_topic
+from common.universal_templates import if_choose_topic, if_lets_chat_about_topic, switch_topic_uttr
 from common.news import OPINION_REQUEST_STATUS, OFFERED_NEWS_DETAILS_STATUS
 from common.greeting import GREETING_QUESTIONS
 from utils import get_starting_phrase, get_statement_phrase, get_opinion_phrase, get_comment_phrase, \
     extract_verb_noun_phrases, is_custom_topic, WIKI_DESCRIPTIONS, \
-    get_used_attributes_by_name, check_topic_lemmas_in_sentence, switch_topic_uttr
+    get_used_attributes_by_name, check_topic_lemmas_in_sentence
 from constants import DEFAULT_DIALOG_BEGIN_CONFIDENCE, MATCHED_DIALOG_BEGIN_CONFIDENCE, FINISHED_SCRIPT, \
     FINISHED_SCRIPT_RESPONSE, DEFAULT_STARTING_CONFIDENCE, NOUN_TOPIC_STARTING_CONFIDENCE, NP_SOURCE, \
     PREDEFINED_SOURCE, BROKEN_DIALOG_CONTINUE_CONFIDENCE, NUMBER_OF_STARTING_HYPOTHESES_META_SCRIPT

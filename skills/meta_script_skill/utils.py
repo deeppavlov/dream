@@ -16,7 +16,6 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
 from common.utils import transform_vbg, get_skill_outputs_from_dialog, is_yes, is_no, get_sentiment
-from common.universal_templates import if_switch_topic
 
 try:
     import constants as meta_script_skill_constants
@@ -745,15 +744,6 @@ def check_topic_lemmas_in_sentence(sentence, topic):
     for word in vn_lemmas:
         if word in sent_lemmas:
             return True
-    return False
-
-
-def switch_topic_uttr(uttr):
-    topic_switch_detected = (
-        uttr.get("annotations", {}).get("intent_catcher", {}).get("topic_switching", {}).get("detected", 0) == 1
-    )
-    if if_switch_topic(uttr["text"].lower()) or topic_switch_detected:
-        return True
     return False
 
 

@@ -2,7 +2,6 @@ afk
 bbiab
 bbl
 bbs
-beg
 brb
 btw
 eg
@@ -33,7 +32,6 @@ dafb
 dmv
 dnc
 dod
-don
 dz
 fbi
 fubar
@@ -83,7 +81,6 @@ aka
 captcha
 cc
 cst
-daemon
 dba
 dnd
 eds
@@ -123,7 +120,6 @@ motss
 paws
 pga
 spca
-so
 swf
 swm
 ts
@@ -142,7 +138,6 @@ min
 misc
 mr
 mrs
-no
 rsvp
 tel
 temp
@@ -166,7 +161,6 @@ e
 n
 ne
 nw
-s
 se
 sw
 w
@@ -193,6 +187,8 @@ brb
 cul
 cwyl
 iirc
+ii
+njpw
 iq
 np
 ty

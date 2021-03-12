@@ -12,8 +12,9 @@ from flask import Flask, request, jsonify
 from nltk import pos_tag, tokenize
 
 from common.constants import CAN_CONTINUE
-from common.universal_templates import if_lets_chat_about_topic, if_choose_topic, if_switch_topic
-from common.utils import get_intents, join_sentences_in_or_pattern, join_words_in_or_pattern
+from common.universal_templates import if_lets_chat_about_topic, if_choose_topic, switch_topic_uttr
+from common.utils import get_intents, join_sentences_in_or_pattern, join_words_in_or_pattern, \
+    get_topics
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -24,25 +25,32 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-ANNTR_HISTORY_LEN = 2
+DEFAULT_ANNTR_HISTORY_LEN = 2
 AA_FACTOR = 0.05
 ABBRS_CONFIDENCE = 0.8
 DEFAULT_CONFIDENCE = 0.88
 HAS_SPEC_CHAR_CONFIDENCE = 0.0
 HIGHEST_CONFIDENCE = 0.99
 KG_ACTIVE_DEPTH = 2
-LETS_CHAT_ABOUT_CONFIDENDENCE = 0.985
+LETS_CHAT_ABOUT_CONFIDENDENCE = 0.6
 NOUNPHRASE_ENTITY_CONFIDENCE = 0.95
 KNOWLEDGE_GROUNDING_SERVICE_URL = getenv('KNOWLEDGE_GROUNDING_SERVICE_URL')
+COBOT_DA_FILE_TOPICS_MATCH = {
+    'Entertainment_Movies': 'movies',
+    'Entertainment_Music': 'music',
+    'Science_and_Technology': 'science',
+    'Sports': 'sports'
+}
 special_char_re = re.compile(r'[^0-9a-zA-Z \-\.\'\?,!]+')
-greetings_farewells_re = re.compile(join_words_in_or_pattern(["have .* day", ".* bye",
+greetings_farewells_re = re.compile(join_words_in_or_pattern(["have .* day", "have .* night", ".* bye",
                                                               "\bbye", "goodbye", "hello",
-                                                              "it .* chatting .*",
+                                                              "it .* chatting .*", "it .* talking .*",
                                                               ".* chatting with you .*",
                                                               "hi", "good morning",
                                                               "good afternoon",
                                                               "good luck", "great chat",
-                                                              "get off .*"]))
+                                                              "get off .*", "thanks for the chat",
+                                                              "thank.* for .* chat"]))
 special_intents = [
     "cant_do", "repeat", "weather_forecast_intent", "what_are_you_talking_about",
     "what_can_you_do", "what_is_your_job", "what_is_your_name", "what_time",
@@ -92,21 +100,13 @@ def get_annotations_from_dialog(utterances, annotator_name, key_name):
             # check if odqa has nonempty answer along with a paragraph
             if annotator_name == "odqa" and annotation.get("answer", ""):
                 value = annotation.get(key_name, "")
+            elif annotator_name == "kbqa":
+                value = annotation.get(key_name, "")
 
         # include only non-empty strs
         if value:
             result_values.append([(len(utterances) - i - 1) * 0.01, value])
     return result_values
-
-
-def switch_topic_uttr(uttr):
-    # from meta_script_skill utils
-    topic_switch_detected = (
-        uttr.get("annotations", {}).get("intent_catcher", {}).get("topic_switching", {}).get("detected", 0) == 1
-    )
-    if if_switch_topic(uttr["text"].lower()) or topic_switch_detected:
-        return True
-    return False
 
 
 @app.route("/respond", methods=['POST'])
@@ -127,37 +127,75 @@ def respond():
     for d_id, dialog in enumerate(dialogs_batch):
         try:
             user_input_text = dialog["human_utterances"][-1]["text"]
+            bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) > 0 else {}
             last_user_sent_text = dialog["human_utterances"][-1].get(
                 "annotations", {}).get("sentseg", {}).get("segments", [""])[-1].lower()
             switch_choose_topic = switch_topic_uttr(
                 dialog["human_utterances"][-1]) or if_choose_topic(
-                last_user_sent_text, prev_uttr=dialog["bot_utterances"][-1]["text"].lower())
+                last_user_sent_text, prev_uttr=bot_uttr.get("text", "").lower())
 
+            # get cobot_nounphrases
             cob_nounphs = dialog["human_utterances"][-1].get("annotations", {}).get("cobot_nounphrases", [])
             cobot_nounphrases = []
             for ph in cob_nounphs:
-                if pos_tag([ph])[0][1].startswith("VB"):
+                if not pos_tag([ph])[0][1].startswith("VB"):
                     cobot_nounphrases.append(ph)
+            nounphrases.append(re.compile(join_sentences_in_or_pattern(cobot_nounphrases),
+                                          re.IGNORECASE) if cobot_nounphrases else "")
+
+            # get entities
             curr_ents = get_entities(dialog["human_utterances"][-1])
+            entities.append(re.compile(join_sentences_in_or_pattern(curr_ents),
+                                       re.IGNORECASE) if curr_ents else "")
 
+            # intents
             detected_intents = get_intents(dialog["human_utterances"][-1], which="intent_catcher")
-            lets_chat_about_intent = "lets_chat_about" in detected_intents
+            lets_chat_about_flags.append(
+                if_lets_chat_about_topic(user_input_text.lower()) or (
+                    "lets_chat_about" in detected_intents
+                )
+            )
             special_intents_flag = any([si in detected_intents for si in special_intents])
+            special_intents_flags.append(special_intents_flag)
 
+            # if detected lets_chat is about topic from the file
+            lets_chat_topic = ""
+            anntr_history_len = DEFAULT_ANNTR_HISTORY_LEN
+            if lets_chat_about_flags[-1]:
+                anntr_history_len = 0
+                _get_topics = get_topics(dialog["human_utterances"][-1], which="cobot_dialogact_topics")
+                for topic in _get_topics:
+                    if topic in COBOT_DA_FILE_TOPICS_MATCH.keys():
+                        lets_chat_topic = COBOT_DA_FILE_TOPICS_MATCH[topic]
+
+            # if prev skill == news_api_skill get news description and create knowledge fact
+            news_api_fact = ""
+            if (bot_uttr.get("active_skill", "") == "news_api_skill") and (
+                not (switch_choose_topic or lets_chat_about_flags[-1])
+            ):
+                prev_human_utt_hypotheses = dialog["human_utterances"][-2].get("hypotheses", [])
+                news_api_hypothesis = [
+                    h for h in prev_human_utt_hypotheses if (h.get("skill_name", "") == "news_api_skill")
+                ]
+                if news_api_hypothesis:
+                    if news_api_hypothesis[0].get("news_status", "") == "opinion_request":
+                        news_api_fact = news_api_hypothesis[0].get("curr_news", {}).get("description", "")
+
+            # start creating data for kg service
             user_input_history = [i["text"] for i in dialog["utterances"]]
             user_input_history = '\n'.join(user_input_history)
 
             user_input_knowledge = ""
             anntrs_knowledge = ""
-            # look for kbqa/odqa text in ANNTR_HISTORY_LEN previous human utterances
+            # look for kbqa/odqa text in anntr_history_len previous human utterances
             annotators = {
-                "odqa": "answer_sentence",
-                "kbqa": "answer"
+                # "odqa": "answer_sentence",
+                # "kbqa": "answer"
             }
             annotations_depth = {}
             for anntr_name, anntr_key in annotators.items():
                 prev_anntr_outputs = get_annotations_from_dialog(
-                    dialog["utterances"][-ANNTR_HISTORY_LEN * 2 - 1:],
+                    dialog["utterances"][-anntr_history_len * 2 - 1:],
                     anntr_name,
                     anntr_key
                 )
@@ -171,7 +209,11 @@ def respond():
                     annotations_depth[anntr_name] = prev_anntr_outputs[-1][0]
             if anntrs_knowledge:
                 user_input_knowledge += '\n'.join(tokenize.sent_tokenize(anntrs_knowledge))
-            user_input_checked_sentence = tokenize.sent_tokenize(
+
+            # add nounphrases and entities to the knowledge
+            joined_nounphrases = " ".join(cobot_nounphrases) + " " if cobot_nounphrases else ""
+            joined_entities = " ".join(curr_ents) + " " if curr_ents else ""
+            user_input_checked_sentence = joined_nounphrases + joined_entities + tokenize.sent_tokenize(
                 user_input_knowledge)[0] if user_input_knowledge else ""
 
             user_input = {
@@ -185,7 +227,7 @@ def respond():
             input_batch.append(user_input)
 
             topical_chat_annots = get_annotations_from_dialog(
-                dialog["utterances"][-ANNTR_HISTORY_LEN * 2 - 1:],
+                dialog["utterances"][-anntr_history_len * 2 - 1:],
                 "odqa",
                 "topical_chat_fact"
             )
@@ -201,7 +243,7 @@ def respond():
                 input_batch.append(user_input)
 
             odqa_1st_par_annots = get_annotations_from_dialog(
-                dialog["utterances"][-ANNTR_HISTORY_LEN * 2 - 1:],
+                dialog["utterances"][-anntr_history_len * 2 - 1:],
                 "odqa",
                 "first_par"
             )
@@ -216,28 +258,43 @@ def respond():
                 dial_ids.append(d_id)
                 input_batch.append(user_input)
 
-            if switch_choose_topic:
-                topic = random.sample(TOPICS_FACTS.keys(), 1)[0]
-                fact = random.sample(TOPICS_FACTS[topic], 1)[0]
-                chosen_topics[d_id] = topic
+            if switch_choose_topic or lets_chat_topic:
+                if lets_chat_topic:
+                    fact = random.sample(TOPICS_FACTS[lets_chat_topic], 1)[0]
+                    chosen_topics[d_id] = topic
+                    user_input = {
+                        'checked_sentence': fact,
+                        'knowledge': fact,
+                        'text': user_input_text,
+                        'history': user_input_history,
+                        'chosen_topic_fact': 'lets_chat_cobot_da'
+                    }
+                else:
+                    topic = random.sample(TOPICS_FACTS.keys(), 1)[0]
+                    fact = random.sample(TOPICS_FACTS[topic], 1)[0]
+                    chosen_topics[d_id] = topic
+                    user_input = {
+                        'checked_sentence': fact,
+                        'knowledge': fact,
+                        'text': user_input_text,
+                        'history': user_input_history,
+                        'chosen_topic_fact': 'switch_random'
+                    }
+                annotations_depths.append({})
+                dial_ids.append(d_id)
+                input_batch.append(user_input)
+            if news_api_fact:
                 user_input = {
-                    'checked_sentence': fact,
-                    'knowledge': fact,
+                    'checked_sentence': news_api_fact,
+                    'knowledge': news_api_fact,
                     'text': user_input_text,
                     'history': user_input_history,
-                    'chosen_topic_fact': True
+                    'news_api_fact': True
                 }
                 annotations_depths.append({})
                 dial_ids.append(d_id)
                 input_batch.append(user_input)
 
-            entities.append(re.compile(join_sentences_in_or_pattern(curr_ents),
-                                       re.IGNORECASE) if curr_ents else "")
-            lets_chat_about_flags.append(
-                if_lets_chat_about_topic(user_input_text.lower()) or lets_chat_about_intent)
-            nounphrases.append(re.compile(join_sentences_in_or_pattern(cobot_nounphrases),
-                                          re.IGNORECASE) if cobot_nounphrases else "")
-            special_intents_flags.append(special_intents_flag)
         except Exception as ex:
             sentry_sdk.capture_exception(ex)
             logger.exception(ex)
@@ -273,13 +330,26 @@ def respond():
                 curr_nounphrase_search = nounphrases[i].search(raw_responses[curr_i]) if nounphrases[i] else False
                 curr_entities_search = entities[i].search(raw_responses[curr_i]) if entities[i] else False
 
+                no_penalties = False
                 topic = chosen_topics.get(i, "")
-                chosen_topic_fact_flag = input_batch[curr_i].get("chosen_topic_fact", False)
+                chosen_topic_fact_flag = input_batch[curr_i].get("chosen_topic_fact", "")
                 add_intro = ""
                 if topic and chosen_topic_fact_flag:
                     add_intro = f"Okay, Let's chat about {topic}. "
                     confidence = HIGHEST_CONFIDENCE
-                    attr["confidence_case"] += "topic_fact "
+                    no_penalties = True
+                    attr["confidence_case"] += f"topic_fact: {chosen_topic_fact_flag} "
+                if input_batch[curr_i].get("news_api_fact", ""):
+                    add_intro = random.choice(
+                        [
+                            "Sounds like ", "Seems like ", "Makes sense. ",
+                            "Here's what I've heard ", "Here's something else I've heard",
+                            "It reminds me that", "This comes to my mind "
+                        ]
+                    )
+                    no_penalties = True
+                    confidence = HIGHEST_CONFIDENCE
+                    attr["confidence_case"] += "news_api_fact "
                 if (curr_nounphrase_search or curr_entities_search) and lets_chat_about_flags[i]:
                     confidence = HIGHEST_CONFIDENCE
                     attr["confidence_case"] += "nounphrase_entity_and_lets_chat_about "
@@ -306,7 +376,8 @@ def respond():
                     attr["confidence_case"] += "greetings_farewells "
 
                 penalties = annotations_depths[curr_i].get("odqa", 0.0) + annotations_depths[curr_i].get(
-                    "odqa_topical_chat", 0.0) + already_was_active + short_long_response
+                    "odqa_topical_chat", 0.0) + already_was_active \
+                    + short_long_response if not no_penalties else 0.
                 confidence -= penalties
                 curr_attributes.append(attr)
                 curr_confidences.append(max(0.0, confidence))

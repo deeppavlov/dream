@@ -220,3 +220,12 @@ def if_choose_topic(uttr, prev_uttr="---"):
         return True
     else:
         return False
+
+
+def switch_topic_uttr(uttr):
+    topic_switch_detected = (
+        uttr.get("annotations", {}).get("intent_catcher", {}).get("topic_switching", {}).get("detected", 0) == 1
+    )
+    if if_switch_topic(uttr["text"].lower()) or topic_switch_detected:
+        return True
+    return False

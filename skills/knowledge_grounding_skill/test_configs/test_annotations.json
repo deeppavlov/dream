@@ -9,7 +9,9 @@
                     "confidence": 0.9990292191505432,
                     "answer_pos": 371,
                     "answer_sentence": "Iron Man, with his team Force Works and ally War Machine defeat him, but not before the Mandarin discovers that Tony Stark is the man inside the Iron Man armor.",
-                    "paragraph": "The Mandarin discovers the Heart of Darkness, an orb of apparently mystic energy; the alien Century believes it is an ancient artifact which acts as a \"lens\" to attract and focus all manner of dark power. The Mandarin uses its power to turn back time in China, and literally transforms it into a feudal nation again, one in which electronic equipment cannot not operate. Iron Man, with his team Force Works and ally War Machine defeat him, but not before the Mandarin discovers that Tony Stark is the man inside the Iron Man armor."
+                    "paragraph": "The Mandarin discovers the Heart of Darkness, an orb of apparently mystic energy; the alien Century believes it is an ancient artifact which acts as a \"lens\" to attract and focus all manner of dark power. The Mandarin uses its power to turn back time in China, and literally transforms it into a feudal nation again, one in which electronic equipment cannot not operate. Iron Man, with his team Force Works and ally War Machine defeat him, but not before the Mandarin discovers that Tony Stark is the man inside the Iron Man armor.",
+                    "topical_chat_fact": "Iron Man, with his team Force Works and ally War Machine defeat him, but not before the Mandarin discovers that Tony Stark is the man inside the Iron Man armor.",
+                    "first_par": "The Mandarin discovers the Heart of Darkness, an orb of apparently mystic energy; the alien Century believes it is an ancient artifact which acts as a \"lens\" to attract and focus all manner of dark power."
                 },
                 "kbqa": {
                     "qa_system": "kbqa",
@@ -27,7 +29,9 @@
                     "confidence": 0.999485969543457,
                     "answer_pos": 71,
                     "answer_sentence": "Robert Downey, Jr. was cast in the title role in September 2006, after growing out a goatee and working out to convince the filmmakers he was right for the part.",
-                    "paragraph": "Robert Downey, Jr. was cast in the title role in September 2006, after growing out a goatee and working out to convince the filmmakers he was right for the part. Principal photography began on March 12, 2007, with the first few weeks spent on Stark's captivity in Afghanistan, which was filmed in Inyo County, California. Production also occurred on the former Hughes Company soundstages in Playa Vista, Los Angeles, California, with additional filming at Edwards Air Force Base and Caesars Palace in Las Vegas, Nevada."
+                    "paragraph": "Robert Downey, Jr. was cast in the title role in September 2006, after growing out a goatee and working out to convince the filmmakers he was right for the part. Principal photography began on March 12, 2007, with the first few weeks spent on Stark's captivity in Afghanistan, which was filmed in Inyo County, California. Production also occurred on the former Hughes Company soundstages in Playa Vista, Los Angeles, California, with additional filming at Edwards Air Force Base and Caesars Palace in Las Vegas, Nevada.",
+                    "topical_chat_fact": "Production also occurred on the former Hughes Company soundstages in Playa Vista, Los Angeles, California, with additional filming at Edwards Air Force Base and Caesars Palace in Las Vegas, Nevada.",
+                    "first_par": "Robert Downey, Jr. was cast in the title role in September 2006, after growing out a goatee and working out to convince the filmmakers he was right for the part."
                 },
                 "kbqa": {
                     "qa_system": "kbqa",
@@ -45,7 +49,9 @@
                     "confidence": 0.9981006979942322,
                     "answer_pos": 92,
                     "answer_sentence": "Generally, it does include a murder mystery.",
-                    "paragraph": "Hard-boiled crime fiction just uses a different set of cliche\u0301s and stereotypes. Generally, it does include a murder mystery. However, the atmosphere created by hard-boiled writers and the settings they chose for their novels are different from English country-house murders or mysteries surrounding rich old ladies elegantly bumped off on a cruise ship, with a detective happening to be on board."
+                    "paragraph": "Hard-boiled crime fiction just uses a different set of cliche\u0301s and stereotypes. Generally, it does include a murder mystery. However, the atmosphere created by hard-boiled writers and the settings they chose for their novels are different from English country-house murders or mysteries surrounding rich old ladies elegantly bumped off on a cruise ship, with a detective happening to be on board.",
+                    "topical_chat_fact": "However, the atmosphere created by hard-boiled writers and the settings they chose for their novels are different from English country-house murders or mysteries surrounding rich old ladies elegantly bumped off on a cruise ship, with a detective happening to be on board.",
+                    "first_par": "Hard-boiled crime fiction just uses a different set of cliche\u0301s and stereotypes. Generally, it does include a murder mystery."
                 },
                 "kbqa": {
                     "qa_system": "kbqa",
@@ -63,7 +69,9 @@
                     "confidence": 0.9997559785842896,
                     "answer_pos": 307,
                     "answer_sentence": "It stars Jake Gyllenhaal as a U.S. Army captain who is sent into a computed reality to find a bomber; additionally starring Michelle Monaghan, Vera Farmiga, and Jeffrey Wright.",
-                    "paragraph": "Source Code is a 2011 American-French science fiction thriller film directed by Duncan Jones, produced by Mark Gordon, Jordan Wynn, and Philippe Rousselet, and written by Ben Ripley. It stars Jake Gyllenhaal as a U.S. Army captain who is sent into a computed reality to find a bomber; additionally starring Michelle Monaghan, Vera Farmiga, and Jeffrey Wright. The film had its world premiere on March 11, 2011 at South by Southwest, and was released by Summit Entertainment on April 1, 2011 in North America and Europe."
+                    "paragraph": "Source Code is a 2011 American-French science fiction thriller film directed by Duncan Jones, produced by Mark Gordon, Jordan Wynn, and Philippe Rousselet, and written by Ben Ripley. It stars Jake Gyllenhaal as a U.S. Army captain who is sent into a computed reality to find a bomber; additionally starring Michelle Monaghan, Vera Farmiga, and Jeffrey Wright. The film had its world premiere on March 11, 2011 at South by Southwest, and was released by Summit Entertainment on April 1, 2011 in North America and Europe.",
+                    "topical_chat_fact": "The film had its world premiere on March 11, 2011 at South by Southwest, and was released by Summit Entertainment on April 1, 2011 in North America and Europe.",
+                    "first_par": "Source Code is a 2011 American-French science fiction thriller film directed by Duncan Jones, produced by Mark Gordon, Jordan Wynn, and Philippe Rousselet, and written by Ben Ripley."
                 },
                 "kbqa": {
                     "qa_system": "kbqa",
@@ -80,7 +88,9 @@
                     "confidence": 0.9964657425880432,
                     "answer_pos": 6,
                     "answer_sentence": "Movie 43 is a 2013 American anthology comedy film co-directed and produced by Peter Farrelly, and written by Rocky Russo and Jeremy Sosenko among others.",
-                    "paragraph": "Movie 43 is a 2013 American anthology comedy film co-directed and produced by Peter Farrelly, and written by Rocky Russo and Jeremy Sosenko among others. The film features fourteen different storylines, each one by a different director, including Elizabeth Banks, Steven Brill, Steve Carr, Rusty Cundieff, James Duffy, Griffin Dunne, Patrik Forsberg, James Gunn, Bob Odenkirk, Brett Ratner, Will Graham, and Jonathan van Tulleken. It stars an ensemble cast that is led by Elizabeth Banks, Kristen Bell, Halle Berry, Gerard Butler, Leslie Bibb, Kate Bosworth, Josh Duhamel, Anna Faris, Richard Gere, Terrence Howard, Hugh Jackman, Johnny Knoxville, Justin Long, Christopher Mintz-Plasse, Chloe\u0308 Grace Moretz, Liev Schreiber, Seann William Scott, Emma Stone, Jason Sudeikis, Uma Thurman, Naomi Watts and Kate Winslet."
+                    "paragraph": "Movie 43 is a 2013 American anthology comedy film co-directed and produced by Peter Farrelly, and written by Rocky Russo and Jeremy Sosenko among others. The film features fourteen different storylines, each one by a different director, including Elizabeth Banks, Steven Brill, Steve Carr, Rusty Cundieff, James Duffy, Griffin Dunne, Patrik Forsberg, James Gunn, Bob Odenkirk, Brett Ratner, Will Graham, and Jonathan van Tulleken. It stars an ensemble cast that is led by Elizabeth Banks, Kristen Bell, Halle Berry, Gerard Butler, Leslie Bibb, Kate Bosworth, Josh Duhamel, Anna Faris, Richard Gere, Terrence Howard, Hugh Jackman, Johnny Knoxville, Justin Long, Christopher Mintz-Plasse, Chloe\u0308 Grace Moretz, Liev Schreiber, Seann William Scott, Emma Stone, Jason Sudeikis, Uma Thurman, Naomi Watts and Kate Winslet.",
+                    "topical_chat_fact": "It stars an ensemble cast that is led by Elizabeth Banks, Kristen Bell, Halle Berry, Gerard Butler, Leslie Bibb, Kate Bosworth, Josh Duhamel, Anna Faris, Richard Gere, Terrence Howard, Hugh Jackman, Johnny Knoxville, Justin Long, Christopher Mintz-Plasse, Chloe\u0308 Grace Moretz, Liev Schreiber, Seann William Scott, Emma Stone, Jason Sudeikis, Uma Thurman, Naomi Watts and Kate Winslet.",
+                    "first_par": "Movie 43 is a 2013 American anthology comedy film co-directed and produced by Peter Farrelly, and written by Rocky Russo and Jeremy Sosenko among others."
                 },
                 "kbqa": {
                     "qa_system": "kbqa",
@@ -97,7 +107,9 @@
                     "confidence": 0.9995138645172119,
                     "answer_pos": 35,
                     "answer_sentence": "David Ayer, who wrote and directed \"End of Watch\", grew up in South Central Los Angeles and has had numerous friends in the LAPD.",
-                    "paragraph": "David Ayer, who wrote and directed \"End of Watch\", grew up in South Central Los Angeles and has had numerous friends in the LAPD. He had written several films previously about police officers in Los Angeles, but while these depicted rogue and corrupt officers, he wanted to feature honest, ethical police work in \"End of Watch\". In contrast to his previous works, Ayer wanted to focus on the friendship between Taylor and Zavala and \"have all the cop stuff drop away and become secondary to the chemistry of these guys\"."
+                    "paragraph": "David Ayer, who wrote and directed \"End of Watch\", grew up in South Central Los Angeles and has had numerous friends in the LAPD. He had written several films previously about police officers in Los Angeles, but while these depicted rogue and corrupt officers, he wanted to feature honest, ethical police work in \"End of Watch\". In contrast to his previous works, Ayer wanted to focus on the friendship between Taylor and Zavala and \"have all the cop stuff drop away and become secondary to the chemistry of these guys\".",
+                    "topical_chat_fact": "In contrast to his previous works, Ayer wanted to focus on the friendship between Taylor and Zavala and \"have all the cop stuff drop away and become secondary to the chemistry of these guys\".",
+                    "first_par": "David Ayer, who wrote and directed \"End of Watch\", grew up in South Central Los Angeles and has had numerous friends in the LAPD."
                 },
                 "kbqa": {
                     "qa_system": "kbqa",
@@ -114,7 +126,9 @@
                     "confidence": 0.990627646446228,
                     "answer_pos": 81,
                     "answer_sentence": "Excluding the criteria of medium, Aristotle's system distinguished four types of classical genres: tragedy (superior-dramatic dialogue), epic (superior-mixed narrative), comedy (inferior-dramatic dialogue), and parody (inferior-mixed narrative).",
-                    "paragraph": "Excluding the criteria of medium, Aristotle's system distinguished four types of classical genres: tragedy (superior-dramatic dialogue), epic (superior-mixed narrative), comedy (inferior-dramatic dialogue), and parody (inferior-mixed narrative). Genette continues by explaining the later integration of lyric poetry into the classical system during the romantic period, replacing the now removed pure narrative mode. Lyric poetry, once considered non-mimetic, was deemed to imitate feelings, becoming the third leg of a new tripartite system: lyrical, epical, and dramatic dialogue."
+                    "paragraph": "Excluding the criteria of medium, Aristotle's system distinguished four types of classical genres: tragedy (superior-dramatic dialogue), epic (superior-mixed narrative), comedy (inferior-dramatic dialogue), and parody (inferior-mixed narrative). Genette continues by explaining the later integration of lyric poetry into the classical system during the romantic period, replacing the now removed pure narrative mode. Lyric poetry, once considered non-mimetic, was deemed to imitate feelings, becoming the third leg of a new tripartite system: lyrical, epical, and dramatic dialogue.",
+                    "topical_chat_fact": "Lyric poetry, once considered non-mimetic, was deemed to imitate feelings, becoming the third leg of a new tripartite system: lyrical, epical, and dramatic dialogue.",
+                    "first_par": "Excluding the criteria of medium, Aristotle's system distinguished four types of classical genres: tragedy (superior-dramatic dialogue), epic (superior-mixed narrative), comedy (inferior-dramatic dialogue), and parody (inferior-mixed narrative)."
                 },
                 "kbqa": {
                     "qa_system": "kbqa",
@@ -131,7 +145,9 @@
                     "confidence": 0.9974576234817505,
                     "answer_pos": 106,
                     "answer_sentence": "Numerous private eyes\u2014professionals as well as amateurs\u2014are now women, some of them lesbians.",
-                    "paragraph": "LGBT has also left its mark on the genre of crime fiction. Numerous private eyes\u2014professionals as well as amateurs\u2014are now women, some of them lesbians. Tally McGinnis, for example, is the young gay heroine of a series of novels by U.S. author Nancy Sanra (born 1944)."
+                    "paragraph": "LGBT has also left its mark on the genre of crime fiction. Numerous private eyes\u2014professionals as well as amateurs\u2014are now women, some of them lesbians. Tally McGinnis, for example, is the young gay heroine of a series of novels by U.S. author Nancy Sanra (born 1944).",
+                    "topical_chat_fact": "Tally McGinnis, for example, is the young gay heroine of a series of novels by U.S. author Nancy Sanra (born 1944).",
+                    "first_par": "LGBT has also left its mark on the genre of crime fiction."
                 }, "kbqa": {
                     "qa_system": "kbqa",
                     "answer": "",
@@ -147,7 +163,9 @@
                     "confidence": 0.9988332390785217,
                     "answer_pos": 29,
                     "answer_sentence": "The Secret Life of Pets is a 2016 American computer-animated comedy film produced by Illumination Entertainment.",
-                    "paragraph": "The Secret Life of Pets is a 2016 American computer-animated comedy film produced by Illumination Entertainment. It is directed by Chris Renaud, co-directed by Yarrow Cheney and written by Brian Lynch, Cinco Paul and Ken Daurio. The film stars Louis C.K., Eric Stonestreet, Kevin Hart, Steve Coogan, Ellie Kemper, Bobby Moynihan, Lake Bell, Dana Carvey, Hannibal Buress, Jenny Slate and Albert Brooks."
+                    "paragraph": "The Secret Life of Pets is a 2016 American computer-animated comedy film produced by Illumination Entertainment. It is directed by Chris Renaud, co-directed by Yarrow Cheney and written by Brian Lynch, Cinco Paul and Ken Daurio. The film stars Louis C.K., Eric Stonestreet, Kevin Hart, Steve Coogan, Ellie Kemper, Bobby Moynihan, Lake Bell, Dana Carvey, Hannibal Buress, Jenny Slate and Albert Brooks.",
+                    "topical_chat_fact": "The film stars Louis C.K., Eric Stonestreet, Kevin Hart, Steve Coogan, Ellie Kemper, Bobby Moynihan, Lake Bell, Dana Carvey, Hannibal Buress, Jenny Slate and Albert Brooks.",
+                    "first_par": "The Secret Life of Pets is a 2016 American computer-animated comedy film produced by Illumination Entertainment."
                 },
                 "kbqa": {
                     "qa_system": "kbqa",
@@ -167,7 +185,9 @@
                     "confidence": 0.9990292191505432,
                     "answer_pos": 371,
                     "answer_sentence": "Iron Man, with his team Force Works and ally War Machine defeat him, but not before the Mandarin discovers that Tony Stark is the man inside the Iron Man armor.",
-                    "paragraph": "The Mandarin discovers the Heart of Darkness, an orb of apparently mystic energy; the alien Century believes it is an ancient artifact which acts as a \"lens\" to attract and focus all manner of dark power. The Mandarin uses its power to turn back time in China, and literally transforms it into a feudal nation again, one in which electronic equipment cannot not operate. Iron Man, with his team Force Works and ally War Machine defeat him, but not before the Mandarin discovers that Tony Stark is the man inside the Iron Man armor."
+                    "paragraph": "The Mandarin discovers the Heart of Darkness, an orb of apparently mystic energy; the alien Century believes it is an ancient artifact which acts as a \"lens\" to attract and focus all manner of dark power. The Mandarin uses its power to turn back time in China, and literally transforms it into a feudal nation again, one in which electronic equipment cannot not operate. Iron Man, with his team Force Works and ally War Machine defeat him, but not before the Mandarin discovers that Tony Stark is the man inside the Iron Man armor.",
+                    "topical_chat_fact": "Iron Man, with his team Force Works and ally War Machine defeat him, but not before the Mandarin discovers that Tony Stark is the man inside the Iron Man armor.",
+                    "first_par": "The Mandarin discovers the Heart of Darkness, an orb of apparently mystic energy; the alien Century believes it is an ancient artifact which acts as a \"lens\" to attract and focus all manner of dark power."
                 },
                 "kbqa": {
                     "qa_system": "kbqa",
@@ -185,7 +205,9 @@
                     "confidence": 0.9981006979942322,
                     "answer_pos": 92,
                     "answer_sentence": "Generally, it does include a murder mystery.",
-                    "paragraph": "Hard-boiled crime fiction just uses a different set of cliche\u0301s and stereotypes. Generally, it does include a murder mystery. However, the atmosphere created by hard-boiled writers and the settings they chose for their novels are different from English country-house murders or mysteries surrounding rich old ladies elegantly bumped off on a cruise ship, with a detective happening to be on board."
+                    "paragraph": "Hard-boiled crime fiction just uses a different set of cliche\u0301s and stereotypes. Generally, it does include a murder mystery. However, the atmosphere created by hard-boiled writers and the settings they chose for their novels are different from English country-house murders or mysteries surrounding rich old ladies elegantly bumped off on a cruise ship, with a detective happening to be on board.",
+                    "topical_chat_fact": "However, the atmosphere created by hard-boiled writers and the settings they chose for their novels are different from English country-house murders or mysteries surrounding rich old ladies elegantly bumped off on a cruise ship, with a detective happening to be on board.",
+                    "first_par": "Hard-boiled crime fiction just uses a different set of cliche\u0301s and stereotypes."
                 },
                 "kbqa": {
                     "qa_system": "kbqa",
@@ -201,7 +223,10 @@
                     "answer": "43",
                     "confidence": 0.9964657425880432,
                     "answer_pos": 6,
-                    "answer_sentence": "Movie 43 is a 2013 American anthology comedy film co-directed and produced by Peter Farrelly, and written by Rocky Russo and Jeremy Sosenko among others.", "paragraph": "Movie 43 is a 2013 American anthology comedy film co-directed and produced by Peter Farrelly, and written by Rocky Russo and Jeremy Sosenko among others. The film features fourteen different storylines, each one by a different director, including Elizabeth Banks, Steven Brill, Steve Carr, Rusty Cundieff, James Duffy, Griffin Dunne, Patrik Forsberg, James Gunn, Bob Odenkirk, Brett Ratner, Will Graham, and Jonathan van Tulleken. It stars an ensemble cast that is led by Elizabeth Banks, Kristen Bell, Halle Berry, Gerard Butler, Leslie Bibb, Kate Bosworth, Josh Duhamel, Anna Faris, Richard Gere, Terrence Howard, Hugh Jackman, Johnny Knoxville, Justin Long, Christopher Mintz-Plasse, Chloe\u0308 Grace Moretz, Liev Schreiber, Seann William Scott, Emma Stone, Jason Sudeikis, Uma Thurman, Naomi Watts and Kate Winslet."
+                    "answer_sentence": "Movie 43 is a 2013 American anthology comedy film co-directed and produced by Peter Farrelly, and written by Rocky Russo and Jeremy Sosenko among others.",
+                    "paragraph": "Movie 43 is a 2013 American anthology comedy film co-directed and produced by Peter Farrelly, and written by Rocky Russo and Jeremy Sosenko among others. The film features fourteen different storylines, each one by a different director, including Elizabeth Banks, Steven Brill, Steve Carr, Rusty Cundieff, James Duffy, Griffin Dunne, Patrik Forsberg, James Gunn, Bob Odenkirk, Brett Ratner, Will Graham, and Jonathan van Tulleken. It stars an ensemble cast that is led by Elizabeth Banks, Kristen Bell, Halle Berry, Gerard Butler, Leslie Bibb, Kate Bosworth, Josh Duhamel, Anna Faris, Richard Gere, Terrence Howard, Hugh Jackman, Johnny Knoxville, Justin Long, Christopher Mintz-Plasse, Chloe\u0308 Grace Moretz, Liev Schreiber, Seann William Scott, Emma Stone, Jason Sudeikis, Uma Thurman, Naomi Watts and Kate Winslet.",
+                    "topical_chat_fact": "It stars an ensemble cast that is led by Elizabeth Banks, Kristen Bell, Halle Berry, Gerard Butler, Leslie Bibb, Kate Bosworth, Josh Duhamel, Anna Faris, Richard Gere, Terrence Howard, Hugh Jackman, Johnny Knoxville, Justin Long, Christopher Mintz-Plasse, Chloe\u0308 Grace Moretz, Liev Schreiber, Seann William Scott, Emma Stone, Jason Sudeikis, Uma Thurman, Naomi Watts and Kate Winslet.",
+                    "first_par": "Movie 43 is a 2013 American anthology comedy film co-directed and produced by Peter Farrelly, and written by Rocky Russo and Jeremy Sosenko among others."
                 },
                 "kbqa": {
                     "qa_system": "kbqa",
@@ -217,7 +242,10 @@
                     "answer": "classical genres: tragedy (superior-dramatic dialogue), epic (superior-mixed narrative), comedy",
                     "confidence": 0.990627646446228,
                     "answer_pos": 81,
-                    "answer_sentence": "Excluding the criteria of medium, Aristotle's system distinguished four types of classical genres: tragedy (superior-dramatic dialogue), epic (superior-mixed narrative), comedy (inferior-dramatic dialogue), and parody (inferior-mixed narrative).", "paragraph": "Excluding the criteria of medium, Aristotle's system distinguished four types of classical genres: tragedy (superior-dramatic dialogue), epic (superior-mixed narrative), comedy (inferior-dramatic dialogue), and parody (inferior-mixed narrative). Genette continues by explaining the later integration of lyric poetry into the classical system during the romantic period, replacing the now removed pure narrative mode. Lyric poetry, once considered non-mimetic, was deemed to imitate feelings, becoming the third leg of a new tripartite system: lyrical, epical, and dramatic dialogue."
+                    "answer_sentence": "Excluding the criteria of medium, Aristotle's system distinguished four types of classical genres: tragedy (superior-dramatic dialogue), epic (superior-mixed narrative), comedy (inferior-dramatic dialogue), and parody (inferior-mixed narrative).",
+                    "paragraph": "Excluding the criteria of medium, Aristotle's system distinguished four types of classical genres: tragedy (superior-dramatic dialogue), epic (superior-mixed narrative), comedy (inferior-dramatic dialogue), and parody (inferior-mixed narrative). Genette continues by explaining the later integration of lyric poetry into the classical system during the romantic period, replacing the now removed pure narrative mode. Lyric poetry, once considered non-mimetic, was deemed to imitate feelings, becoming the third leg of a new tripartite system: lyrical, epical, and dramatic dialogue.",
+                    "topical_chat_fact": "Lyric poetry, once considered non-mimetic, was deemed to imitate feelings, becoming the third leg of a new tripartite system: lyrical, epical, and dramatic dialogue.",
+                    "first_par": "Excluding the criteria of medium, Aristotle's system distinguished four types of classical genres: tragedy (superior-dramatic dialogue), epic (superior-mixed narrative), comedy (inferior-dramatic dialogue), and parody (inferior-mixed narrative)."
                 },
                 "kbqa": {
                     "qa_system": "kbqa",
@@ -234,7 +262,9 @@
                     "confidence": 0.9988332390785217,
                     "answer_pos": 29,
                     "answer_sentence": "The Secret Life of Pets is a 2016 American computer-animated comedy film produced by Illumination Entertainment.",
-                    "paragraph": "The Secret Life of Pets is a 2016 American computer-animated comedy film produced by Illumination Entertainment. It is directed by Chris Renaud, co-directed by Yarrow Cheney and written by Brian Lynch, Cinco Paul and Ken Daurio. The film stars Louis C.K., Eric Stonestreet, Kevin Hart, Steve Coogan, Ellie Kemper, Bobby Moynihan, Lake Bell, Dana Carvey, Hannibal Buress, Jenny Slate and Albert Brooks."
+                    "paragraph": "The Secret Life of Pets is a 2016 American computer-animated comedy film produced by Illumination Entertainment. It is directed by Chris Renaud, co-directed by Yarrow Cheney and written by Brian Lynch, Cinco Paul and Ken Daurio. The film stars Louis C.K., Eric Stonestreet, Kevin Hart, Steve Coogan, Ellie Kemper, Bobby Moynihan, Lake Bell, Dana Carvey, Hannibal Buress, Jenny Slate and Albert Brooks.",
+                    "topical_chat_fact": "The film stars Louis C.K., Eric Stonestreet, Kevin Hart, Steve Coogan, Ellie Kemper, Bobby Moynihan, Lake Bell, Dana Carvey, Hannibal Buress, Jenny Slate and Albert Brooks.",
+                    "first_par": "The Secret Life of Pets is a 2016 American computer-animated comedy film produced by Illumination Entertainment."
                 },
                 "kbqa": {
                     "qa_system": "kbqa",
@@ -254,7 +284,9 @@
                     "confidence": 0.999485969543457,
                     "answer_pos": 71,
                     "answer_sentence": "Robert Downey, Jr. was cast in the title role in September 2006, after growing out a goatee and working out to convince the filmmakers he was right for the part.",
-                    "paragraph": "Robert Downey, Jr. was cast in the title role in September 2006, after growing out a goatee and working out to convince the filmmakers he was right for the part. Principal photography began on March 12, 2007, with the first few weeks spent on Stark's captivity in Afghanistan, which was filmed in Inyo County, California. Production also occurred on the former Hughes Company soundstages in Playa Vista, Los Angeles, California, with additional filming at Edwards Air Force Base and Caesars Palace in Las Vegas, Nevada."
+                    "paragraph": "Robert Downey, Jr. was cast in the title role in September 2006, after growing out a goatee and working out to convince the filmmakers he was right for the part. Principal photography began on March 12, 2007, with the first few weeks spent on Stark's captivity in Afghanistan, which was filmed in Inyo County, California. Production also occurred on the former Hughes Company soundstages in Playa Vista, Los Angeles, California, with additional filming at Edwards Air Force Base and Caesars Palace in Las Vegas, Nevada.",
+                    "topical_chat_fact": "Production also occurred on the former Hughes Company soundstages in Playa Vista, Los Angeles, California, with additional filming at Edwards Air Force Base and Caesars Palace in Las Vegas, Nevada.",
+                    "first_par": "Robert Downey, Jr. was cast in the title role in September 2006, after growing out a goatee and working out to convince the filmmakers he was right for the part."
                 },
                 "kbqa": {
                     "qa_system": "kbqa",
@@ -272,7 +304,9 @@
                     "confidence": 0.9997559785842896,
                     "answer_pos": 307,
                     "answer_sentence": "It stars Jake Gyllenhaal as a U.S. Army captain who is sent into a computed reality to find a bomber; additionally starring Michelle Monaghan, Vera Farmiga, and Jeffrey Wright.",
-                    "paragraph": "Source Code is a 2011 American-French science fiction thriller film directed by Duncan Jones, produced by Mark Gordon, Jordan Wynn, and Philippe Rousselet, and written by Ben Ripley. It stars Jake Gyllenhaal as a U.S. Army captain who is sent into a computed reality to find a bomber; additionally starring Michelle Monaghan, Vera Farmiga, and Jeffrey Wright. The film had its world premiere on March 11, 2011 at South by Southwest, and was released by Summit Entertainment on April 1, 2011 in North America and Europe."
+                    "paragraph": "Source Code is a 2011 American-French science fiction thriller film directed by Duncan Jones, produced by Mark Gordon, Jordan Wynn, and Philippe Rousselet, and written by Ben Ripley. It stars Jake Gyllenhaal as a U.S. Army captain who is sent into a computed reality to find a bomber; additionally starring Michelle Monaghan, Vera Farmiga, and Jeffrey Wright. The film had its world premiere on March 11, 2011 at South by Southwest, and was released by Summit Entertainment on April 1, 2011 in North America and Europe.",
+                    "topical_chat_fact": "The film had its world premiere on March 11, 2011 at South by Southwest, and was released by Summit Entertainment on April 1, 2011 in North America and Europe.",
+                    "first_par": "Source Code is a 2011 American-French science fiction thriller film directed by Duncan Jones, produced by Mark Gordon, Jordan Wynn, and Philippe Rousselet, and written by Ben Ripley."
                 },
                 "kbqa": {
                     "qa_system": "kbqa",
@@ -290,7 +324,9 @@
                     "confidence": 0.9995138645172119,
                     "answer_pos": 35,
                     "answer_sentence": "David Ayer, who wrote and directed \"End of Watch\", grew up in South Central Los Angeles and has had numerous friends in the LAPD.",
-                    "paragraph": "David Ayer, who wrote and directed \"End of Watch\", grew up in South Central Los Angeles and has had numerous friends in the LAPD. He had written several films previously about police officers in Los Angeles, but while these depicted rogue and corrupt officers, he wanted to feature honest, ethical police work in \"End of Watch\". In contrast to his previous works, Ayer wanted to focus on the friendship between Taylor and Zavala and \"have all the cop stuff drop away and become secondary to the chemistry of these guys\"."
+                    "paragraph": "David Ayer, who wrote and directed \"End of Watch\", grew up in South Central Los Angeles and has had numerous friends in the LAPD. He had written several films previously about police officers in Los Angeles, but while these depicted rogue and corrupt officers, he wanted to feature honest, ethical police work in \"End of Watch\". In contrast to his previous works, Ayer wanted to focus on the friendship between Taylor and Zavala and \"have all the cop stuff drop away and become secondary to the chemistry of these guys\".",
+                    "topical_chat_fact": "In contrast to his previous works, Ayer wanted to focus on the friendship between Taylor and Zavala and \"have all the cop stuff drop away and become secondary to the chemistry of these guys\".",
+                    "first_par": "David Ayer, who wrote and directed \"End of Watch\", grew up in South Central Los Angeles and has had numerous friends in the LAPD."
                 },
                 "kbqa": {
                     "qa_system": "kbqa",
@@ -308,7 +344,9 @@
                     "confidence": 0.9974576234817505,
                     "answer_pos": 106,
                     "answer_sentence": "Numerous private eyes\u2014professionals as well as amateurs\u2014are now women, some of them lesbians.",
-                    "paragraph": "LGBT has also left its mark on the genre of crime fiction. Numerous private eyes\u2014professionals as well as amateurs\u2014are now women, some of them lesbians. Tally McGinnis, for example, is the young gay heroine of a series of novels by U.S. author Nancy Sanra (born 1944)."
+                    "paragraph": "LGBT has also left its mark on the genre of crime fiction. Numerous private eyes\u2014professionals as well as amateurs\u2014are now women, some of them lesbians. Tally McGinnis, for example, is the young gay heroine of a series of novels by U.S. author Nancy Sanra (born 1944).",
+                    "topical_chat_fact": "ally McGinnis, for example, is the young gay heroine of a series of novels by U.S. author Nancy Sanra (born 1944).",
+                    "first_par": "LGBT has also left its mark on the genre of crime fiction."
                 }, "kbqa": {
                     "qa_system": "kbqa",
                     "answer": "",

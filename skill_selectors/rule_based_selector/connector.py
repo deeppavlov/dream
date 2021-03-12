@@ -14,7 +14,7 @@ from common.books import book_skill_was_proposed, about_book, QUESTIONS_ABOUT_BO
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
 from common.emotion import detect_emotion, is_joke_requested
 from common.news import is_breaking_news_requested
-from common.universal_templates import if_lets_chat_about_topic
+from common.universal_templates import if_lets_chat_about_topic, if_choose_topic, switch_topic_uttr
 from common.utils import high_priority_intents, low_priority_intents, \
     get_topics, get_intents, get_emotions
 from common.weather import is_weather_requested
@@ -175,6 +175,12 @@ class RuleBasedSkillSelectorConnector:
                 ]
             )
 
+            last_user_sent_text = dialog["human_utterances"][-1].get(
+                "annotations", {}).get("sentseg", {}).get("segments", [""])[-1].lower()
+            switch_choose_topic = switch_topic_uttr(
+                dialog["human_utterances"][-1]) or if_choose_topic(
+                last_user_sent_text, prev_uttr=prev_bot_uttr.get("text", "").lower())
+
             about_weather = "weather_forecast_intent" in intent_catcher_intents or (
                 prev_bot_uttr.get("active_skill", "") == "weather_skill" and weather_city_slot_requested
             ) or (lets_chat_about_particular_topic and "weather" in user_uttr_text)
@@ -242,6 +248,9 @@ class RuleBasedSkillSelectorConnector:
                     # greeting skill inside itself do not turn on later than 10th turn of the conversation
                     # skills_for_uttr.append("greeting_skill")
                     skills_for_uttr.append("dff_friendship_skill")
+                if switch_choose_topic:
+                    # skills_for_uttr.append("knowledge_grounding_skill")
+                    pass
                 # if len(dialog["utterances"]) > 8 or prev_bot_uttr.get(
                 #         "active_skill", "") in ["greeting_skill", "dff_friendship_skill"]:
                 #     skills_for_uttr.append("knowledge_grounding_skill")
