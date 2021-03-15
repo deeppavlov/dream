@@ -599,33 +599,27 @@ def entity_storer_formatter(dialog: Dict) -> List[Dict]:
 
 
 def dff_friendship_skill_formatter(dialog: Dict) -> List[Dict]:
-    service_name = "dff_friendship_skill"
-    return utils.dff_formatter(dialog, service_name)
+    return utils.dff_formatter(dialog, "dff_friendship_skill")
 
 
 def dff_template_formatter(dialog: Dict) -> List[Dict]:
-    service_name = "dff_template"
-    return utils.dff_formatter(dialog, service_name)
+    return utils.dff_formatter(dialog, "dff_template")
 
 
 def dff_music_skill_formatter(dialog: Dict) -> List[Dict]:
-    service_name = "dff_music_skill"
-    return utils.dff_formatter(dialog, service_name)
+    return utils.dff_formatter(dialog, "dff_music_skill")
 
 
 def dff_animals_skill_formatter(dialog: Dict) -> List[Dict]:
-    service_name = "dff_animals_skill"
-    return utils.dff_formatter(dialog, service_name)
+    return utils.dff_formatter(dialog, "dff_animals_skill")
 
 
 def dff_sport_skill_formatter(dialog: Dict) -> List[Dict]:
-    service_name = "dff_sport_skill"
-    return utils.dff_formatter(dialog, service_name)
+    return utils.dff_formatter(dialog, "dff_sport_skill")
 
 
 def dff_travel_skill_formatter(dialog: Dict) -> List[Dict]:
-    service_name = f"dff_travel_skill"
-    return utils.dff_formatter(dialog, service_name)
+    return utils.dff_formatter(dialog, "dff_travel_skill")
 
 
 def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
