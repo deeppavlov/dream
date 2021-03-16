@@ -169,7 +169,7 @@ class IMDb:
                 "i feel", "question", "thank you", "singing", "program", "other", "lets talk about",
                 "conversation", "good", "they", "hello", "make", "pretty good", "talk", "ok", "okay",
                 "tell me something", "different", "day", "seen", "i like", "wij", "because", "me too",
-                "horror", "will", "character", "more", "show", "coming out", "remember"]:
+                "horror", "will", "character", "more", "show", "coming out", "remember", "again", "time"]:
             try:
                 self.with_ignored_movies_names.pop(proc_title)
             except KeyError:
