@@ -8,6 +8,7 @@ from enum import Enum, auto
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
 from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
+from common.greeting import GREETING_QUESTIONS
 from common.utils import get_intents, is_yes, is_no
 from common.animals import PETS_TEMPLATE, COLORS_TEMPLATE, LIKE_ANIMALS_REQUESTS, HAVE_PETS_REQUESTS, \
     OFFER_TALK_ABOUT_ANIMALS
@@ -20,8 +21,11 @@ breeds = json.load(open("breeds.json", 'r'))
 
 CONF_1 = 1.0
 CONF_2 = 0.98
-CONF_3 = 0.95
+CONF_3 = 0.96
 CONF_4 = 0.9
+
+ANIMALS_TEMPLATE = re.compile(r"(animals|pets)", re.IGNORECASE)
+COMPILE_GREETING_QUESTIONS = re.compile("|".join(GREETING_QUESTIONS["what_to_talk_about"]), re.IGNORECASE)
 
 
 class State(Enum):
@@ -66,14 +70,17 @@ class State(Enum):
 
 
 def lets_talk_about_request(vars):
-    ANIMALS_TEMPLATE = re.compile(r"(animals|pets)", re.IGNORECASE)
-    uttr = state_utils.get_last_human_utterance(vars)
-    user_lets_chat_about = "lets_chat_about" in get_intents(uttr, which="intent_catcher") or if_lets_chat_about_topic(
-        uttr["text"]) or re.search(COMPILE_WHAT_TO_TALK_ABOUT, uttr["text"])
-    user_lets_chat_about_animals = re.search(ANIMALS_TEMPLATE, uttr["text"]) and not \
-        re.search("like|love|have", uttr["text"])
-    linkto_talk_about_animals = any([req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower()
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
+    user_lets_chat_about = "lets_chat_about" in get_intents(user_uttr, which="intent_catcher") or \
+                           if_lets_chat_about_topic(user_uttr["text"]) or re.search(COMPILE_WHAT_TO_TALK_ABOUT,
+                                                                                    bot_uttr["text"]) or re.search(
+        COMPILE_GREETING_QUESTIONS, bot_uttr["text"])
+    user_lets_chat_about_animals = re.search(ANIMALS_TEMPLATE, user_uttr["text"]) and not \
+        re.search("like|love|have", user_uttr["text"])
+    linkto_talk_about_animals = any([req.lower() in bot_uttr["text"].lower()
                                      for req in OFFER_TALK_ABOUT_ANIMALS])
+
     user_agrees = is_yes(state_utils.get_last_human_utterance(vars))
 
     if (user_lets_chat_about and user_lets_chat_about_animals) or (linkto_talk_about_animals and user_agrees):
