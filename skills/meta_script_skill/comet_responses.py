@@ -8,7 +8,7 @@ import spacy
 from spacy.symbols import nsubj, VERB, PROPN, NOUN
 from random import choice, shuffle
 
-from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
+from common.constants import CAN_NOT_CONTINUE
 from common.universal_templates import join_words_in_or_pattern
 from common.utils import is_opinion_request, get_skill_outputs_from_dialog, get_topics
 from common.greeting import dont_tell_you_answer
@@ -148,7 +148,7 @@ def ask_question_using_atomic(dialog):
 
         response = grammar_fixes(response)
         confidence = DEFAULT_ASK_ATOMIC_QUESTION_CONFIDENCE
-        attr["can_continue"] = CAN_CONTINUE
+        attr["can_continue"] = CAN_NOT_CONTINUE
         attr["atomic_dialog"] = "ask_question"
         attr["tense"] = tense
         attr["atomic_best_sent"] = best_sent
@@ -182,7 +182,7 @@ def comment_using_atomic(dialog):
             continue
 
         confidence = DEFAULT_ATOMIC_CONTINUE_CONFIDENCE
-        attr["can_continue"] = CAN_CONTINUE
+        attr["can_continue"] = CAN_NOT_CONTINUE
         attr["atomic_dialog"] = "comment"
         attr["atomic_best_sent"] = prev_best_sent
         responses.append(response)
