@@ -13,8 +13,8 @@ from common.utils import is_yes, is_no
 from utils import get_name, get_genre, suggest_template, get_not_given_question_about_books, dontlike, is_stop, \
     side_intent, fact_about_book, fav_genre_request_detected, \
     fav_book_request_detected, parse_author_best_book, tell_me_more, \
-    is_positive, is_negative, best_book_by_author, GENRE_PHRASES, was_question_about_book
-
+    is_positive, is_negative, best_book_by_author, GENRE_PHRASES, was_question_about_book, \
+    asked_about_genre, GENRE_DICT, is_previous_was_book_skill, just_mentioned
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -54,6 +54,7 @@ UNKNOWN_BOOK_QUESTIONS = ["Sorry I've never heard about this book. What is it ab
                           "I suppose I've never heard about this book before. What did you like about it?",
                           "Oops. I guess I've never heard about this book before. "
                           "What caught your attention in this book?"]
+DONT_KNOW_EITHER = "I don't know either. Let's talk about something else."
 
 
 class BookSkillScenario:
@@ -63,8 +64,8 @@ class BookSkillScenario:
         self.default_conf = 0.9
         self.low_conf = 0.7
         self.default_reply = ""
-        self.bookread_dir = 'bookreads_data.json'
-        self.bookreads_data = json.load(open(self.bookread_dir, 'r'))[0]
+        self.bookreads_dir = 'bookreads_data.json'
+        self.bookreads_data = json.load(open(self.bookreads_dir, 'r'))[0]
 
     def get_genre_book(self, annotated_user_phrase):
         '''
@@ -146,6 +147,7 @@ class BookSkillScenario:
             human_attr['book_skill']['last_fact'] = human_attr['book_skill'].get('last_fact', '')
             try:
                 # TODO check correct order of concatenation of replies
+                book_just_active = is_previous_was_book_skill(dialog)
                 bot_phrases = [j['text'] for j in dialog['bot_utterances']]
                 if len(bot_phrases) == 0:
                     bot_phrases.append('')
@@ -160,7 +162,6 @@ class BookSkillScenario:
                     annotated_prev_phrase = {'text': ''}
 
                 logger.debug(f'User phrase: last and prev from last: {user_phrases}')
-
                 # I don't denote annotated_user_phrase['text'].lower() as a single variable
                 # in order not to confuse it with annotated_user_phrase
                 lets_chat_about_books = if_lets_chat_about_topic(annotated_user_phrase["text"]) and re.search(
@@ -178,15 +179,11 @@ class BookSkillScenario:
                     # no more books OR user doesn't like books
                     logger.debug('DONTLIKE detected')
                     reply, confidence = '', 0
-                elif len(dialog["bot_utterances"]) > 0 and \
-                        dialog["bot_utterances"][-1]["active_skill"] == "book_skill" and \
-                        is_switch_topic(annotated_user_phrase):
+                elif book_just_active and is_switch_topic(annotated_user_phrase):
                     # if book skill was active and switch topic intent, offer movies
                     logger.debug('Switching topic')
                     reply, confidence = BOOK_CHANGE_PHRASE, self.default_conf
-                elif len(dialog["bot_utterances"]) > 0 and \
-                        dialog["bot_utterances"][-1]["active_skill"] == "book_skill" and \
-                        (is_stop(annotated_user_phrase) or side_intent(annotated_user_phrase)):
+                elif book_just_active and (is_stop(annotated_user_phrase) or side_intent(annotated_user_phrase)):
                     # if book skill was active, stop/not/other intents, do not reply
                     logger.debug('Detected stop/no/other intent')
                     reply, confidence = self.default_reply, 0
@@ -194,6 +191,9 @@ class BookSkillScenario:
                     # if user asked us about favorite genre
                     logger.debug('Detected favorite genre request')
                     reply, confidence = random.choice(FAVOURITE_GENRE_ANSWERS), self.super_conf
+                elif asked_about_genre(annotated_user_phrase):
+                    genre_asked = get_genre(annotated_user_phrase)
+                    reply, confidence = GENRE_DICT[genre_asked], self.default_conf
                 elif fav_book_request_detected(annotated_user_phrase):
                     # if user asked us about favorite book
                     logger.debug('Detected favorite book request')
@@ -204,6 +204,8 @@ class BookSkillScenario:
                     else:
                         reply = random.choice(FAVOURITE_BOOK_ANSWERS)
                     confidence = self.super_conf
+                elif fav_book_request_detected(annotated_prev_phrase) and tell_me_more(annotated_user_phrase):
+                    reply, confidence = FAVOURITE_BOOK_ANSWERS[1], self.super_conf
                 elif OFFER_FACT_ABOUT_BOOK in bot_phrases[-1]:
                     # if we offered fact about book on the previous step
                     logger.debug('Previous bot phrase was AMAZING_READ_BOOK & OFFER_FACT_ABOUT_BOOK')
@@ -255,11 +257,9 @@ class BookSkillScenario:
                     else:
                         logger.debug('Does not detect NO. Parsing author best book for')
                         logger.debug(annotated_user_phrase['text'])
-                        book = parse_author_best_book(annotated_user_phrase,
-                                                      default_phrase=f"Fabulous! {WHAT_BOOK_IMPRESSED_MOST}")
-                        if book is not None and book != f"Fabulous! {WHAT_BOOK_IMPRESSED_MOST}" and \
-                                book.lower() not in annotated_user_phrase['text'].lower():
-                            logger.debug('Could not find author best book. Returning default answer')
+                        book = parse_author_best_book(annotated_user_phrase)
+                        if book and not just_mentioned(annotated_user_phrase, book):
+                            logger.debug('Found_BEST_BOOK')
                             reply = IF_REMEMBER_LAST_BOOK.replace("BOOK", book)
                             confidence = self.default_conf
                         else:
@@ -294,7 +294,7 @@ class BookSkillScenario:
                     bookname, n_years_ago = get_name(annotated_prev_phrase, mode='book', bookyear=True)
                     if bookname is None:
                         logger.debug('No bookname detected')
-                        reply, confidence = '', 0
+                        reply, confidence = DONT_KNOW_EITHER, self.default_conf
                     else:
                         logger.debug('Bookname detected')
                         if n_years_ago > 0:
@@ -317,6 +317,7 @@ class BookSkillScenario:
                         logger.debug('Detected neither YES nor NO intent. Returning nothing')
                         reply, confidence = self.default_reply, 0
                 elif WHAT_IS_FAV_GENRE == bot_phrases[-1] or self.genrebook_request_detected(annotated_user_phrase):
+                    # push it to the end to move forward variants where we the topic is known
                     logger.debug(f"Last phrase is WHAT_IS_FAV_GENRE for {annotated_user_phrase['text']}")
                     book = self.get_genre_book(annotated_user_phrase)
                     if book is None or is_no(annotated_user_phrase):
