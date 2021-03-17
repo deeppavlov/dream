@@ -69,6 +69,32 @@ combined_classes = {
                                 'Multiple_GoalsIntent']
 }
 
+midas_classes = {
+    "semantic_request": {
+        "question":
+            ["open_question_factual", "open_question_opinion", "open_question_personal",
+             "yes_no_question", "clarifying_question"],
+        "command":
+            ["command", "dev_command"],
+        "opinion":
+            ["appreciation", "opinion", "complaint", "comment"],
+        "statement":
+            ["statement"],
+        "answer":
+            ["other_answers", "pos_answer", "neg_answer"],
+    },
+    "functional_request": {
+        "incomplete":
+            ["abandon", "nonsense"],
+        "social_convention":
+            ["opening", "closing", "hold", "back-channeling"],
+        "apology":
+            [],
+        "other":
+            ["uncertain", "non_compliant", "correction"],
+    }
+}
+
 
 def get_skill_outputs_from_dialog(utterances, skill_name, activated=False):
     """
