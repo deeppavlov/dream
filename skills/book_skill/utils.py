@@ -32,6 +32,25 @@ LIKE_PATTERN = r"(like|love|prefer|adore|enjoy|fond of|passionate of|fan of|inte
                r"into|for you|for me)"
 FAVORITE_PATTERN = r"(favorite|loved|beloved|fondling|best|most interesting)"
 
+GENRE_DICT = {'memoir autobiography': 'memoir books',
+              'history biography': 'biography books',
+              'science technology': 'technology books',
+              'debut novel': 'debut novel books',
+              'graphic novels comics': 'comics',
+              'picture': 'picture books',
+              'romance': 'romance books',
+              'non-fiction': 'non-fiction books',
+              'food cook': 'culinary books',
+              'poetry': 'poetry books',
+              'childrens': "children's literature",
+              'mystery thriller': 'thriller books',
+              'horror': 'horror stories',
+              'humour': 'funny stories',
+              'fantasy': 'fantasy books',
+              'science fiction': 'science fiction books',
+              'historical fiction': 'historical fiction books',
+              'fiction': 'fiction'
+              }
 GENRE_PHRASES = json.load(open('genre_phrases.json', 'r'))[0]
 DEBUG_MODE = False
 if DEBUG_MODE:
@@ -44,7 +63,7 @@ else:
     WIKIDATA_URL = getenv("WIKIDATA_URL")
     ENTITY_LINKING_URL = getenv("ENTITY_LINKING_URL")
     API_KEY = getenv('COBOT_API_KEY')
-
+assert ENTITY_LINKING_URL and WIKIDATA_URL
 kbqa_files = ['inverted_index_eng.pickle',
               'entities_list.pickle',
               'wiki_eng_q_to_name.pickle',
@@ -165,32 +184,18 @@ def get_genre(user_phrase, return_name=False):
     else:
         return None
     if return_name:
-        genre_dict = {'memoir autobiography': 'memoir books',
-                      'history biography': 'biography books',
-                      'science technology': 'technology books',
-                      'debut novel': 'debut novel books',
-                      'graphic novels comics': 'comics',
-                      'picture': 'picture books',
-                      'romance': 'romance books',
-                      'non-fiction': 'non-fiction books',
-                      'food cook': 'culinary books',
-                      'poetry': 'poetry books',
-                      'childrens': "children's literature",
-                      'mystery thriller': 'thriller books',
-                      'horror': 'horror stories',
-                      'humour': 'funny stories',
-                      'fantasy': 'fantasy books',
-                      'science fiction': 'science fiction books',
-                      'historical fiction': 'historical fiction books',
-                      'fiction': 'fiction'
-                      }
-        return genre_dict[genre]
+        return GENRE_DICT[genre]
     else:
         return genre
 
 
+genres_regexp = f"({'|'.join(GENRE_DICT.keys())})"
+do_you_love_regexp = '(do you (love|like|enjoy)|what do you think)'
+
+
 favorite_genre_template = re.compile(r"(favourite|favorite|best|suggest|recommend) book genre", re.IGNORECASE)
 favorite_book_template = re.compile(r"(favourite|favorite|best|suggest|recommend) book", re.IGNORECASE)
+asked_genre_template = re.compile(rf"{do_you_love_regexp} {genres_regexp}", re.IGNORECASE)
 
 
 def fav_genre_request_detected(annotated_user_phrase):
@@ -199,6 +204,10 @@ def fav_genre_request_detected(annotated_user_phrase):
 
 def fav_book_request_detected(annotated_user_phrase):
     return re.search(favorite_book_template, annotated_user_phrase["text"])
+
+
+def asked_about_genre(annotated_user_phrase):
+    return re.search(asked_genre_template, annotated_user_phrase["text"])
 
 
 def get_answer(phrase):
@@ -297,8 +306,14 @@ def is_previous_was_book_skill(dialog):
     return len(dialog['bot_utterances']) >= 1 and dialog["bot_utterances"][-1]["active_skill"] == 'book_skill'
 
 
+def just_mentioned(annotated_phrase, book):
+    return book and book.lower() in annotated_phrase['text'].lower()
+
+
 def get_entities(annotated_phrase):
-    named_entities = [annotated_phrase['text']]
+    named_entities = []
+    if annotated_phrase['text'] in wikidata['entities']:
+        named_entities = [annotated_phrase['text']]
     if 'annotations' in annotated_phrase:
         for tmp in annotated_phrase['annotations']['ner']:
             if len(tmp) > 0 and 'text' in tmp[0] and tmp[0]['text'] not in named_entities:
@@ -589,7 +604,7 @@ def best_book_by_author(plain_author_name, default_phrase, plain_last_bookname=N
         return default_phrase
 
 
-def parse_author_best_book(annotated_phrase, default_phrase):
+def parse_author_best_book(annotated_phrase, default_phrase=None):
     global author_names
     logger.debug(f'Calling parse_author_best_book for {annotated_phrase["text"]}')
     annotated_phrase['text'] = annotated_phrase['text'].lower()
