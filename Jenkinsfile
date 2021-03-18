@@ -236,7 +236,7 @@ spec:
     stage('Tests') {
 
       agent {
-        label 'gpu9'
+        label 'test'
       }
 
       when {
