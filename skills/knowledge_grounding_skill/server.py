@@ -249,18 +249,22 @@ def respond():
                 annotators, dialog["utterances"], anntr_history_len
             )
             # add nounphrases and entities to the knowledge
-            user_input_checked_sentence = space_join(cobot_nounphrases)
-            + space_join(curr_ents) + tokenize.sent_tokenize(
-                user_input_knowledge)[0] if user_input_knowledge else ""
-            user_input = {
-                'checked_sentence': user_input_checked_sentence,
-                'knowledge': user_input_knowledge,
-                'text': user_input_text,
-                'history': user_input_history
-            }
-            input_batch.append(user_input)
-            annotations_depths.append(annotations_depth)
-            dial_ids.append(d_id)
+            if user_input_knowledge:
+                user_input_checked_sentence = space_join(cobot_nounphrases) + space_join(
+                    curr_ents) + tokenize.sent_tokenize(user_input_knowledge)[0]
+            else:
+                user_input_checked_sentence = ""
+
+            if user_input_knowledge:
+                user_input = {
+                    'checked_sentence': user_input_checked_sentence,
+                    'knowledge': user_input_knowledge,
+                    'text': user_input_text,
+                    'history': user_input_history
+                }
+                annotations_depths.append(annotations_depth)
+                dial_ids.append(d_id)
+                input_batch.append(user_input)
 
             topical_chat_annots = get_annotations_from_dialog(
                 dialog["utterances"][-anntr_history_len * 2 - 1:],
@@ -332,8 +336,18 @@ def respond():
             logger.exception(ex)
 
     try:
-        resp = requests.post(KNOWLEDGE_GROUNDING_SERVICE_URL, json={'batch': input_batch}, timeout=1.5)
-        raw_responses = resp.json()
+        raw_responses = []
+        if input_batch:
+            logger.info(f"skill sends to service: {input_batch}")
+            resp = requests.post(KNOWLEDGE_GROUNDING_SERVICE_URL, json={'batch': input_batch}, timeout=1.5)
+            raw_responses = resp.json()
+        else:
+            responses = [[""]]
+            confidences = [[0.]]
+            attributes = [[{}]]
+            logger.info(f"Collected no hypotheses, exiting")
+            return jsonify(list(zip(responses, confidences, attributes)))
+
         dial_ids = np.array(dial_ids)
         attributes = []
         confidences = []
