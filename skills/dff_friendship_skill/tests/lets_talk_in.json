@@ -6,63 +6,49 @@
         {
             "human_utterances": [
                 {
-                    "text": "what do you suggest me to cook tonight?",
+                    "text": "hi.",
                     "annotations": {
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "spelling_preprocessing": "what do you suggest me to cook tonight?",
+                        "spelling_preprocessing": "hi",
                         "blacklisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "sentseg": {
-                            "punct_sent": "what do you suggest me to cook tonight?",
-                            "segments": [
-                                "what do you suggest me to cook tonight?"
-                            ]
-                        },
                         "combined_classification": {
                             "cobot_dialogact_intents": {
-                                "Information_RequestIntent": 0.9990172386169434
+                                "General_ChatIntent": 0.9982210397720337
                             },
                             "cobot_dialogact_topics": {
-                                "Other": 0.9994735717773438
+                                "Other": 0.9222673177719116
                             },
                             "cobot_topics": {
-                                "Phatic": 0.9977806806564331
+                                "Phatic": 0.9989813566207886
                             },
                             "emotion_classification": {
-                                "neutral": 0.9994137287139893
+                                "neutral": 0.9996328353881836
                             },
                             "sentiment_classification": {
-                                "neutral": 0.6787934303283691
+                                "positive": 0.737921953201294
                             },
                             "toxic_classification": {
-                                "toxic": 0.0007550716400146484
+                                "toxic": 0.0014452040195465088
                             }
                         },
                         "cobot_nounphrases": [],
                         "factoid_classification": {
-                            "factoid": 0.0007027726387605071,
-                            "conversational": 0.9992972612380981
+                            "factoid": 0.009537387639284134,
+                            "conversational": 0.990462601184845
+                        },
+                        "sentseg": {
+                            "punct_sent": "hi.",
+                            "segments": [
+                                "hi."
+                            ]
                         },
                         "conceptnet": {},
-                        "odqa": {
-                            "answer": "",
-                            "answer_pos": 0,
-                            "answer_sentence": "",
-                            "confidence": 0.0,
-                            "first_par": "",
-                            "paragraph": "",
-                            "qa_system": "odqa",
-                            "topical_chat_fact": ""
-                        },
-                        "dialog_breakdown": {
-                            "breakdown": 0.3344433307647705,
-                            "no_breakdown": 0.6655566692352295
-                        },
                         "intent_catcher": {
                             "cant_do": {
                                 "confidence": 0.0,
@@ -153,17 +139,57 @@
                                 "detected": 0
                             }
                         },
+                        "odqa": {
+                            "answer": "",
+                            "answer_pos": 0,
+                            "answer_sentence": "",
+                            "confidence": 0.0,
+                            "first_par": "",
+                            "paragraph": "",
+                            "qa_system": "odqa",
+                            "topical_chat_fact": ""
+                        },
+                        "dialog_breakdown": {
+                            "breakdown": 0.08041238784790039,
+                            "no_breakdown": 0.9195876121520996
+                        },
+                        "midas_classification": {
+                            "abandon": 0.5342747032071542,
+                            "appreciation": 0.0006722624054165342,
+                            "back-channeling": 0.014399203702821935,
+                            "clarifying_question": 0.007946359343674367,
+                            "closing": 0.00782014866588869,
+                            "command": 0.003282071579066977,
+                            "comment": 0.0006353263328817575,
+                            "complaint": 0.011597274086387117,
+                            "correction": 0.0014901288581254044,
+                            "dev_command": 0.0030434619962045797,
+                            "hold": 0.36610297311614237,
+                            "neg_answer": 0.00145841583927615,
+                            "non_compliant": 0.0019705670803976533,
+                            "nonsense": 0.010156367691108214,
+                            "open_question_factual": 0.0037207017765771584,
+                            "open_question_opinion": 0.0005413756600455029,
+                            "open_question_personal": 0.0028641740149075497,
+                            "opening": 0.0026353266292805408,
+                            "opinion": 0.00535037534742673,
+                            "other_answers": 0.001275376345471768,
+                            "pos_answer": 0.005607225370278708,
+                            "statement": 0.006165157392194176,
+                            "uncertain": 0.00211900853633888,
+                            "yes_no_question": 0.004872015022933265
+                        },
+                        "ner": [
+                            []
+                        ],
                         "cobot_dialogact": {
                             "intents": [
-                                "Information_RequestIntent"
+                                "General_ChatIntent"
                             ],
                             "topics": [
                                 "Other"
                             ]
                         },
-                        "ner": [
-                            []
-                        ],
                         "cobot_topics": {
                             "text": [
                                 "Phatic"
@@ -176,15 +202,15 @@
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
-                                "what do you suggest me to cook tonight?"
+                                "hi."
                             ]
                         },
+                        "wiki_parser": [
+                            {}
+                        ],
                         "kbqa": [
                             "Not Found",
                             0.0
-                        ],
-                        "wiki_parser": [
-                            {}
                         ]
                     }
                 }
@@ -192,37 +218,13 @@
             "bot_utterances": []
         }
     ],
-    "dff_food_skill_state_batch": [
+    "dff_friendship_skill_state_batch": [
         {}
     ],
     "entities_batch": [
-        {
-            "tonight": {
-                "bot_encounters": [],
-                "human_encounters": [
-                    {
-                        "emotions": {
-                            "neutral": 0.9994137287139893
-                        },
-                        "full_name": "tonight",
-                        "human_utterance_index": 0,
-                        "intents": [
-                            "Information_RequestIntent"
-                        ],
-                        "next_skill_name": "",
-                        "pos": [
-                            "NOUN"
-                        ],
-                        "previous_skill_name": "pre_start",
-                        "sentiment": "neutral",
-                        "topics": [
-                            "Phatic",
-                            "Other"
-                        ]
-                    }
-                ],
-                "name": "tonight"
-            }
-        }
+        {}
+    ],
+    "used_links_batch": [
+        {}
     ]
 }

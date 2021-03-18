@@ -9,9 +9,9 @@
                 "history": {
                     "0": "State.SYS_HELLO"
                 },
-                "used_links": {},
                 "dialogflow_state": "{\"vars\": {\"__stack__\": [], \"__user_utterance__\": \"hi\", \"__system_state__\": \"State.SYS_HELLO\", \"__state__\": \"State.USR_HELLO_AND_CONTNIUE\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"Hi, this is an Alexa Prize Socialbot! I do not think we have met before. What name would you like me to call you?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"GREETING\\\"<__tuple__>\\\"State.USR_HELLO_AND_CONTNIUE\\\"\"}"
-            }
+            },
+            "used_links": {}
         },
         {},
         {

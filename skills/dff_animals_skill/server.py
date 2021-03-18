@@ -39,11 +39,12 @@ def handler(requested_data, random_seed=None):
     human_utter_index_batch = requested_data.get("human_utter_index_batch", [0] * len(dialog_batch))
     state_batch = requested_data.get(f"{SERVICE_NAME}_state_batch", [{}] * len(dialog_batch))
     entities_batch = requested_data.get("entities_batch", [{}] * len(dialog_batch))
+    used_links_batch = requested_data.get("used_links_batch", [{}] * len(dialog_batch))
     random_seed = requested_data.get("random_seed", random_seed)  # for tests
 
     responses = []
-    for human_utter_index, dialog, state, entities in zip(
-        human_utter_index_batch, dialog_batch, state_batch, entities_batch
+    for human_utter_index, dialog, state, entities, used_links in zip(
+        human_utter_index_batch, dialog_batch, state_batch, entities_batch, used_links_batch
     ):
         try:
             # for tests
@@ -53,11 +54,11 @@ def handler(requested_data, random_seed=None):
             text = dialog["human_utterances"][-1]["text"]
             text = text_utils.clean_text(text)
 
-            dialogflow_utils.load_into_dialogflow(DF, human_utter_index, dialog, state, entities)
+            dialogflow_utils.load_into_dialogflow(DF, human_utter_index, dialog, state, entities, used_links)
             text, confidence, can_continue = dialogflow_utils.run_turn(DF, text)
-            state = dialogflow_utils.get_dialog_state(DF)
+            state, used_links = dialogflow_utils.get_dialog_state(DF)
 
-            human_attr = {f"{SERVICE_NAME}_state": state}
+            human_attr = {f"{SERVICE_NAME}_state": state, "used_links": used_links}
             hype_attr = {"can_continue": can_continue}
 
             responses.append((text, confidence, human_attr, {}, hype_attr))
@@ -84,11 +85,10 @@ logger.info(f"{SERVICE_NAME} is loaded and ready")
 
 @app.route("/respond", methods=["POST"])
 def respond():
-    # next commented line for test creating
-    # import common.test_utils as t_utils; t_utils.save_to_test(responses,"tests/test_1_in.json",indent=4)
+    # import common.test_utils as t_utils; t_utils.save_to_test(request.json,"tests/lets_talk_in.json",indent=4)  # TEST
+    # responses = handler(request.json, RANDOM_SEED)  # TEST
+    # import common.test_utils as t_utils; t_utils.save_to_test(responses,"tests/lets_talk_out.json",indent=4)  # TEST
     responses = handler(request.json)
-    # next commented line for test creating
-    # import common.test_utils as t_utils; t_utils.save_to_test(responses,"tests/test_1_out.json",indent=4)
     return jsonify(responses)
 
 

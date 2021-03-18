@@ -114,7 +114,7 @@ def sys_what_animals_request(ngrams, vars):
     user_agrees = is_yes(state_utils.get_last_human_utterance(vars))
     if ("what_animals" not in state_utils.get_used_links(vars) and lets_talk_about_request(vars)) or \
             (linkto_like_animals and user_agrees):
-        state_utils.save_used_links(vars, "what_animals")
+        state_utils.save_to_shared_memory(vars, what_animals=True)
         flag = True
     logger.info(f"sys_what_animals_request {flag}")
     return flag
@@ -123,7 +123,7 @@ def sys_what_animals_request(ngrams, vars):
 def sys_have_pets_request(ngrams, vars):
     flag = False
     if "have_pets" not in state_utils.get_used_links(vars) and lets_talk_about_request(vars):
-        state_utils.save_used_links(vars, "have_pets")
+        state_utils.save_to_shared_memory(vars, have_pets=True)
         flag = True
     logger.info(f"sys_have_pets_request {flag}")
     return flag
@@ -132,7 +132,7 @@ def sys_have_pets_request(ngrams, vars):
 def sys_ask_about_zoo_request(ngrams, vars):
     flag = False
     if "ask_about_zoo" not in state_utils.get_used_links(vars) and lets_talk_about_request(vars):
-        state_utils.save_used_links(vars, "ask_about_zoo")
+        state_utils.save_to_shared_memory(vars, ask_about_zoo=True)
         flag = True
     logger.info(f"sys_ask_about_zoo_request {flag}")
     return flag
@@ -141,7 +141,7 @@ def sys_ask_about_zoo_request(ngrams, vars):
 def sys_ask_some_questions_request(ngrams, vars):
     flag = False
     if "some_questions" not in state_utils.get_used_links(vars) and lets_talk_about_request(vars):
-        state_utils.save_used_links(vars, "some_questions")
+        state_utils.save_to_shared_memory(vars, some_questions=True)
         flag = True
     logger.info(f"sys_ask_some_questions_request {flag}")
     return flag

@@ -6,59 +6,49 @@
         {
             "human_utterances": [
                 {
-                    "text": "let's talk about music.",
+                    "text": "let's talk about food.",
                     "annotations": {
+                        "spelling_preprocessing": "let's talk about food",
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "spelling_preprocessing": "let's talk about music",
                         "blacklisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "factoid_classification": {
-                            "factoid": 0.0019981167279183865,
-                            "conversational": 0.9980018734931946
-                        },
                         "combined_classification": {
                             "cobot_dialogact_intents": {
-                                "Information_RequestIntent": 0.9770923852920532
+                                "Information_RequestIntent": 0.9840970635414124
                             },
                             "cobot_dialogact_topics": {
-                                "Entertainment_Music": 0.9764801263809204
+                                "Other": 0.9965211749076843
                             },
                             "cobot_topics": {
-                                "Music": 0.9994005560874939
+                                "Food_Drink": 0.998781681060791
                             },
                             "emotion_classification": {
-                                "neutral": 0.9995986819267273
+                                "neutral": 0.9997024536132812
                             },
                             "sentiment_classification": {
-                                "positive": 0.8295563459396362
+                                "neutral": 0.6380325555801392
                             },
                             "toxic_classification": {
-                                "toxic": 0.0009880363941192627
+                                "threat": 0.0011580884456634521
                             }
                         },
+                        "factoid_classification": {
+                            "factoid": 0.0031548745464533567,
+                            "conversational": 0.9968451261520386
+                        },
                         "cobot_nounphrases": [
-                            "music"
+                            "food"
                         ],
                         "sentseg": {
-                            "punct_sent": "let's talk about music.",
+                            "punct_sent": "let's talk about food.",
                             "segments": [
-                                "let's talk about music."
+                                "let's talk about food."
                             ]
-                        },
-                        "odqa": {
-                            "answer": "",
-                            "answer_pos": 0,
-                            "answer_sentence": "",
-                            "confidence": 0.0,
-                            "first_par": "",
-                            "paragraph": "",
-                            "qa_system": "odqa",
-                            "topical_chat_fact": ""
                         },
                         "intent_catcher": {
                             "cant_do": {
@@ -151,59 +141,75 @@
                             }
                         },
                         "dialog_breakdown": {
-                            "breakdown": 0.1560441106557846,
-                            "no_breakdown": 0.843955934047699
+                            "breakdown": 0.1860419511795044,
+                            "no_breakdown": 0.8139580488204956
                         },
                         "midas_classification": {
-                            "abandon": 0.0008655383835483608,
-                            "appreciation": 0.00015076823281341998,
-                            "back-channeling": 7.324510968301681e-05,
-                            "clarifying_question": 0.00022864357605393792,
-                            "closing": 0.00041303811964919687,
-                            "command": 0.9901298627740982,
-                            "comment": 4.260730201724879e-05,
-                            "complaint": 0.00044422055746043534,
-                            "correction": 0.00010592773139095043,
-                            "dev_command": 0.0015002625785961936,
-                            "hold": 0.00034098813978414424,
-                            "neg_answer": 9.207633666222608e-05,
-                            "non_compliant": 0.00022528884993894524,
-                            "nonsense": 0.0009571197176357182,
-                            "open_question_factual": 0.0003515119090143443,
-                            "open_question_opinion": 0.0009687092409759738,
-                            "open_question_personal": 0.00013265022018576234,
-                            "opening": 0.00015486339331180008,
-                            "opinion": 0.0006005592028285865,
-                            "other_answers": 8.50189858095102e-05,
-                            "pos_answer": 0.0008163763912503226,
-                            "statement": 0.00017963279397019687,
-                            "uncertain": 0.00011209809567990836,
-                            "yes_no_question": 0.0010289923576417366
+                            "abandon": 0.0008221524299552723,
+                            "appreciation": 0.0001468902611203616,
+                            "back-channeling": 6.77091641856399e-05,
+                            "clarifying_question": 0.00023660683974782894,
+                            "closing": 0.00043591806383746763,
+                            "command": 0.9904207062733625,
+                            "comment": 4.4114813245158733e-05,
+                            "complaint": 0.0004979890086197998,
+                            "correction": 9.988260763512097e-05,
+                            "dev_command": 0.0013494101684073552,
+                            "hold": 0.000302665316995235,
+                            "neg_answer": 9.383900198213277e-05,
+                            "non_compliant": 0.00021612740963309878,
+                            "nonsense": 0.0009428623454572829,
+                            "open_question_factual": 0.00037196247726929075,
+                            "open_question_opinion": 0.0010212129370960764,
+                            "open_question_personal": 0.00013572473221263123,
+                            "opening": 0.0001462805821381212,
+                            "opinion": 0.0005922466132035827,
+                            "other_answers": 8.860241575774446e-05,
+                            "pos_answer": 0.0007391321651367773,
+                            "statement": 0.00019109939413864083,
+                            "uncertain": 0.0001103527657000807,
+                            "yes_no_question": 0.0009265122131626374
                         },
-                        "cobot_dialogact": {
-                            "intents": [
-                                "Information_RequestIntent"
-                            ],
-                            "topics": [
-                                "Entertainment_Music"
-                            ]
+                        "odqa": {
+                            "answer": "",
+                            "answer_pos": 0,
+                            "answer_sentence": "",
+                            "confidence": 0.0,
+                            "first_par": "",
+                            "paragraph": "",
+                            "qa_system": "odqa",
+                            "topical_chat_fact": ""
                         },
                         "ner": [
                             []
                         ],
+                        "cobot_dialogact": {
+                            "intents": [
+                                "OtherIntent"
+                            ],
+                            "topics": [
+                                "Other"
+                            ]
+                        },
                         "cobot_topics": {
                             "text": [
-                                "Music"
+                                "Food_Drink"
+                            ]
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "let's talk about food."
                             ]
                         },
                         "entity_linking": [
                             [
                                 [
-                                    "Q1921383",
-                                    "Q155358",
-                                    "Q11342639",
-                                    "Q638",
-                                    "Q1437440"
+                                    "Q2095",
+                                    "Q626981",
+                                    "Q51885874",
+                                    "Q15713092",
+                                    "Q20380750"
                                 ]
                             ],
                             [
@@ -216,23 +222,49 @@
                                 ]
                             ]
                         ],
-                        "sentrewrite": {
-                            "clusters": [],
-                            "modified_sents": [
-                                "let's talk about music."
-                            ]
-                        },
                         "wiki_parser": [
                             {
-                                "Music": {
-                                    "instance of": [
+                                "food": {
+                                    "subclass of": [
                                         [
-                                            "Q134556",
-                                            "single"
+                                            "Q1194058",
+                                            "disposable product"
                                         ],
                                         [
-                                            "Q7366",
-                                            "song"
+                                            "Q1422299",
+                                            "nutriment"
+                                        ],
+                                        [
+                                            "Q2424752",
+                                            "product"
+                                        ]
+                                    ],
+                                    "has effect": [
+                                        [
+                                            "Q1562684",
+                                            "satiety"
+                                        ],
+                                        [
+                                            "Q769815",
+                                            "food allergy"
+                                        ]
+                                    ],
+                                    "has quality": [
+                                        [
+                                            "Q1689021",
+                                            "shelf life"
+                                        ],
+                                        [
+                                            "Q186205",
+                                            "food energy"
+                                        ],
+                                        [
+                                            "Q19861951",
+                                            "type of food or dish"
+                                        ],
+                                        [
+                                            "Q2514470",
+                                            "digestibility"
                                         ]
                                     ]
                                 }
@@ -243,26 +275,26 @@
                             0.0
                         ],
                         "conceptnet": {
-                            "music": {
+                            "food": {
                                 "Causes": [
-                                    "you feel good",
-                                    "relaxation",
-                                    "enjoyment"
+                                    "you feel full",
+                                    "you get fat",
+                                    "you get full"
                                 ],
                                 "CausesDesire": [
-                                    "listen to music",
-                                    "play piano",
-                                    "sing"
+                                    "eat",
+                                    "have food",
+                                    "eat quickly"
                                 ],
                                 "HasProperty": [
-                                    "fun to listen to",
-                                    "fun",
+                                    "necessary to live",
+                                    "necessary for survival",
                                     "good"
                                 ],
                                 "SymbolOf": [
-                                    "love",
+                                    "hunger",
                                     "life",
-                                    "creativity"
+                                    "food"
                                 ]
                             }
                         }
@@ -272,19 +304,19 @@
             "bot_utterances": []
         }
     ],
-    "dff_music_skill_state_batch": [
+    "dff_food_skill_state_batch": [
         {}
     ],
     "entities_batch": [
         {
-            "music": {
+            "food": {
                 "bot_encounters": [],
                 "human_encounters": [
                     {
                         "emotions": {
-                            "neutral": 0.9995986819267273
+                            "neutral": 0.9997024536132812
                         },
-                        "full_name": "music",
+                        "full_name": "food",
                         "human_utterance_index": 0,
                         "intents": [
                             "lets_chat_about",
@@ -295,14 +327,14 @@
                             "NOUN"
                         ],
                         "previous_skill_name": "pre_start",
-                        "sentiment": "positive",
+                        "sentiment": "neutral",
                         "topics": [
-                            "Music",
-                            "Entertainment_Music"
+                            "Food_Drink",
+                            "Other"
                         ]
                     }
                 ],
-                "name": "music"
+                "name": "food"
             }
         }
     ],

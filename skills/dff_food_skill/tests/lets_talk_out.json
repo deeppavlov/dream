@@ -1,0 +1,21 @@
+[
+    [
+        "What is your favorite fruit?",
+        0.95,
+        {
+            "dff_food_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 0,
+                "history": {
+                    "0": "State.SYS_WHAT_FAV_FOOD"
+                },
+                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_WHAT_FAV_FOOD\", \"__stack__\": [], \"__user_utterance__\": \"lets talk about food\", \"__system_state__\": \"State.SYS_WHAT_FAV_FOOD\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"What is your favorite fruit?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"FOOD\\\"<__tuple__>\\\"State.USR_WHAT_FAV_FOOD\\\"\"}"
+            },
+            "used_links": {}
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]
