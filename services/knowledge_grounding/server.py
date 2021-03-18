@@ -46,27 +46,31 @@ app = Flask(__name__)
 @app.route("/respond", methods=['POST'])
 def respond():
     batch = request.json['batch']
-    responses = []
+    responses = [""]
     random.seed(42)
-    for sample in batch:
-        response = ""
-        st_time = time.time()
-        if sample['knowledge']:
-            try:
-                user_input = {
+    st_time = time.time()
+    if batch:
+        user_inputs = {
+            'history': batch[0]['history'].split('\n') if batch[0]['history'] else [''],
+            'inputs': []
+        }
+        for sample in batch:
+            user_inputs['inputs'].append(
+                {
                     'checked_sentence': sample['checked_sentence'],
                     'knowledge': sample['knowledge'],
-                    'text': sample['text'],
-                    'history': sample['history'].split('\n') if sample['history'] else ['']
+                    'text': sample['text']
                 }
-                response = kg_script.run(user_input)['text']
-            except Exception as e:
-                sentry_sdk.capture_exception(e)
-                logger.exception(e)
-            logger.info(f'Current sample response: {response}')
-        else:
-            logger.info(f'Sample knowledge is empty, returning empty response')
-        total_time = time.time() - st_time
-        logger.info(f'knowledge grounding: one sample from batch exec time: {total_time:.3f}s')
-        responses.append(response)
+            )
+        try:
+            raw_responses = kg_script.run(user_inputs)
+            responses = [r['text'] for r in raw_responses]
+            logger.info(f'Current sample responses: {responses}')
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            logger.exception(e)
+    else:
+        logger.info('Received empty batch, exiting with empty responses')
+    total_time = time.time() - st_time
+    logger.info(f'knowledge grounding: one batch exec time: {total_time:.3f}s')
     return jsonify(responses)

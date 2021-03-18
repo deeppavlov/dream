@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y --allow-unauthenticated git wget && rm 
 WORKDIR /src
 
 # install parlai
-RUN pip install git+https://github.com/Saraharas/ParlAI@v0.9.4-kg#egg=ParlAI
+RUN pip install git+https://github.com/Saraharas/ParlAI@v0.9.4-kg-batch#egg=ParlAI
 
 # create dirs for data and models
 RUN mkdir -p /opt/conda/lib/python3.7/site-packages/data/models
