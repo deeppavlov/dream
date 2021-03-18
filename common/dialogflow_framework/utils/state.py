@@ -3,6 +3,7 @@ import logging
 import common.entity_utils as entity_utils
 import common.constants as common_constants
 import common.utils as common_utils
+import common.link as common_link
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -59,8 +60,16 @@ def save_to_shared_memory(vars, **kwargs):
     vars["agent"]["shared_memory"].update(kwargs)
 
 
-def save_used_links(vars, used_links):
-    vars["agent"]["used_links"] = used_links
+def update_used_links(vars, linked_skill_name, linking_phrase):
+    agent = vars["agent"]
+    agent["used_links"][linked_skill_name] = agent["used_links"].get(linked_skill_name, []) + [linking_phrase]
+
+
+def get_new_link_to(vars, skill_names):
+    used_links = get_used_links(vars)
+    link = common_link.link_to(skill_names, used_links)
+    update_used_links(vars, link["skill"], link["phrase"])
+    return link
 
 
 def set_confidence(vars, confidence=1.0):
