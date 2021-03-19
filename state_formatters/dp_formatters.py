@@ -433,15 +433,19 @@ def wp_formatter_dialog(dialog: Dict):
     # Used by: wiki_parser annotator
     entity_ids_batch, _ = dialog["human_utterances"][-1]["annotations"].get("entity_linking", [[], []])
     input_entity_ids = []
+    input_entity_ids_list = []
     if entity_ids_batch:
         for entity_ids_list in entity_ids_batch:
             if entity_ids_list:
                 input_entity_ids.append(entity_ids_list[0])
+                input_entity_ids_list.append(entity_ids_list[:5])
     input_entity_ids = list(set(input_entity_ids))
-    parser_info = ["find_top_triplets"]
+    parser_info = ["find_top_triplets", "find_top_triplets_for_topic_skills"]
     if not input_entity_ids:
         input_entity_ids = [""]
-    return [{"parser_info": parser_info, "query": [input_entity_ids]}]
+    if not input_entity_ids_list:
+        input_entity_ids_list = [[]]
+    return [{"parser_info": parser_info, "query": [input_entity_ids, input_entity_ids_list]}]
 
 
 def el_formatter_dialog(dialog: Dict):
