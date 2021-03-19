@@ -22,7 +22,6 @@ COPY . /src
 WORKDIR /src
 
 RUN python -m deeppavlov install $CONFIG
-RUN python -m deeppavlov download $CONFIG
 RUN python -m spacy download en_core_web_sm
 
 CMD gunicorn --workers=1 --timeout 500 --graceful-timeout 500 server:app -b 0.0.0.0:8092

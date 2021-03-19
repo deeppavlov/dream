@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 sentry_sdk.init(dsn=os.getenv('SENTRY_DSN'), integrations=[FlaskIntegration()])
 
 try:
-    kgdg = build_model("kg_dial_generator.json", download=False)
+    kgdg = build_model("kg_dial_generator.json", download=True)
     test_res = kgdg(["What is the capital of Russia?"], [["Q159"]])
     logger.info("model loaded, test query processed")
 except Exception as e:
