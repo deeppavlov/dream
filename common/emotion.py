@@ -19,18 +19,24 @@ NEGATIVE_EMOTION = 'negative_emotion'
 
 HOW_DO_YOU_FEEL = 'How do you feel?'
 
+SAD_TEMPLATE = r"^(sad|horrible|depressed|awful|dire|died)\.?$"
 
-def is_joke_requested(prev_user_uttr):
-    return bool(re.match("tell me .*joke(s){0,1}", prev_user_uttr.get('text', '').lower()))
+
+def is_sad(uttr):
+    return re.search(SAD_TEMPLATE, uttr)
+
+
+def is_joke_requested(uttr):
+    return bool(re.match("tell me .*joke(s){0,1}", uttr))
 
 
 def skill_trigger_phrases():
     return [HOW_DO_YOU_FEEL]
 
 
-def detect_emotion(prev_bot_utt, user_utt):
-    if HOW_DO_YOU_FEEL.lower() in prev_bot_utt.get('text', '').lower():
-        for w in user_utt['text'].split(" "):
+def emotion_from_feel_answer(prev_bot_uttr, user_uttr):
+    if HOW_DO_YOU_FEEL.lower() in prev_bot_uttr.lower():
+        for w in user_uttr.split(" "):
             w = re.sub(r"\W", " ", w.lower()).strip()
             if w in POSITIVE_EMOTIONS:
                 return POSITIVE_EMOTION

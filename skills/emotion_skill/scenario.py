@@ -4,6 +4,7 @@ import logging
 from os import getenv
 from common.constants import MUST_CONTINUE, CAN_CONTINUE
 from common.link import link_to
+from common.emotion import is_joke_requested, is_sad
 from common.universal_templates import book_movie_music_found
 from common.utils import get_emotions
 from collections import defaultdict
@@ -26,6 +27,8 @@ class EmotionSkillScenario:
         self.logger = logger
 
     def _get_user_emotion(self, annotated_user_phrase, discard_emotion=None):
+        if is_sad(annotated_user_phrase['text']):
+            return 'sadness'
         most_likely_emotion = None
         emotion_probs = get_emotions(annotated_user_phrase, probs=True)
         if discard_emotion in emotion_probs:
@@ -75,6 +78,8 @@ class EmotionSkillScenario:
         }
 
         state = emotion_skill_attributes.get("state", "")
+        if is_joke_requested(user_phrase):
+            state = "joke_requested"
         prev_jokes_advices = emotion_skill_attributes.get("prev_jokes_advices", [])
         is_yes = intent.get("yes", {}).get("detected", 0)
         is_no = intent.get("no", {}).get("detected", 0)

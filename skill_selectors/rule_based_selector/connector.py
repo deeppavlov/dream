@@ -12,7 +12,8 @@ from common.animals import animals_skill_was_proposed
 from common.food import food_skill_was_proposed
 from common.books import book_skill_was_proposed, about_book, QUESTIONS_ABOUT_BOOKS
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
-from common.emotion import detect_emotion, is_joke_requested
+from common.emotion import emotion_from_feel_answer, is_joke_requested, is_sad
+from common.greeting import HOW_ARE_YOU_RESPONSES
 from common.news import is_breaking_news_requested
 from common.universal_templates import if_lets_chat_about_topic, if_choose_topic, switch_topic_uttr
 from common.utils import high_priority_intents, low_priority_intents, \
@@ -251,10 +252,12 @@ class RuleBasedSkillSelectorConnector:
                 if switch_choose_topic:
                     skills_for_uttr.append("knowledge_grounding_skill")
                     pass
+
                 if len(dialog["utterances"]) > 8 or prev_bot_uttr.get(
                         "active_skill", "") in ["greeting_skill", "dff_friendship_skill"]:
                     skills_for_uttr.append("knowledge_grounding_skill")
                     # skills_for_uttr.append("wikidata_dial_skill")
+
                 # hiding factoid by default, adding check for factoid classification instead
                 # skills_for_uttr.append("factoid_qa")
                 if (factoid_classification > factoid_prob_threshold):
@@ -335,7 +338,7 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("news_api_skill")
 
                 # joke requested
-                if is_joke_requested(dialog["human_utterances"][-1]):
+                if is_joke_requested(dialog["human_utterances"][-1]['text']):
                     # if there is no "bot" key in our dictionary, we manually create it
                     if "bot" not in dialog:
                         dialog['bot'] = {}
@@ -356,13 +359,22 @@ class RuleBasedSkillSelectorConnector:
                 for emotion, prob in emotions.items():
                     if prob == max(emotions.values()):
                         found_emotion, found_prob = emotion, prob
-                cond1 = found_emotion != 'neutral' and found_prob > emo_prob_threshold
-                should_run_emotion = cond1 or detect_emotion(prev_bot_uttr, dialog['human_utterances'][-1])
+                emo_found_emotion = found_emotion != 'neutral' and found_prob > emo_prob_threshold
                 good_emotion_prob = max([emotions.get('joy', 0), emotions.get('love', 0)])
                 bad_emotion_prob = max([emotions.get('anger', 0), emotions.get('fear', 0), emotions.get('sadness', 0)])
                 not_strange_emotion_prob = not (good_emotion_prob > 0.5 and bad_emotion_prob > 0.5)
-                should_run_emotion = should_run_emotion and not_strange_emotion_prob
-                if should_run_emotion or "how are you?" in prev_bot_uttr.get("text", "").lower():
+                how_are_you = any([how_are_you_response.lower() in prev_bot_uttr.get("text", "").lower()
+                                   for how_are_you_response in HOW_ARE_YOU_RESPONSES])
+                joke_request_detected = is_joke_requested(dialog['human_utterances'][-1].get("text", ""))
+                sadness_detected_by_regexp = is_sad(dialog['human_utterances'][-1].get("text", ""))
+                detected_from_feel_answer = emotion_from_feel_answer(prev_bot_uttr.get("text", ""),
+                                                                     dialog['human_utterances'][-1].get("text", ""))
+                should_run_emotion = any([emo_found_emotion,
+                                          joke_request_detected,
+                                          sadness_detected_by_regexp,
+                                          detected_from_feel_answer,
+                                          how_are_you]) and not_strange_emotion_prob
+                if should_run_emotion:
                     skills_for_uttr.append('emotion_skill')
 
                 for hyp in prev_user_uttr_hyp:
