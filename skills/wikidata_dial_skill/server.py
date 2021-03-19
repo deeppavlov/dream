@@ -55,7 +55,7 @@ def respond():
         confidences = [0.0]
     try:
         res = requests.post(WIKIDATA_DIALOGUE_SERVICE_URL,
-                            json={"sentences": sentences, "entities": entities}, timeout=0.7)
+                            json={"sentences": sentences, "entities": entities}, timeout=1.5)
         if res.status_code == 200:
             generated_utterances, confidences = res.json()
             for i in range(len(confidences)):

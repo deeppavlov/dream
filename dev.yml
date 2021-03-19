@@ -401,6 +401,7 @@ services:
     env_file: [ .env.dev ]
     volumes:
       - "./services/wikidata_dial_service:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8092:8092
   knowledge-grounding:
