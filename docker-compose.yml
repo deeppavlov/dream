@@ -899,6 +899,8 @@ services:
 
   knowledge-grounding:
     build:
+      args:
+        MODEL_CKPT: 3_sent_62_epochs
       context: ./services/knowledge_grounding/
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8083
     environment:

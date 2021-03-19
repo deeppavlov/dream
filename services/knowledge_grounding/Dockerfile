@@ -1,11 +1,14 @@
 FROM pytorch/pytorch:1.5-cuda10.1-cudnn7-runtime
 
+ARG MODEL_CKPT
+ENV MODEL_CKPT ${MODEL_CKPT}
+
 RUN apt-get update && apt-get install -y --allow-unauthenticated git wget && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /src
 
 # install parlai
-RUN pip install git+https://github.com/Saraharas/ParlAI@v0.9.4-kg-batch#egg=ParlAI
+RUN pip install git+https://github.com/Saraharas/ParlAI@v0.9.4-kg-batch-2models#egg=ParlAI
 
 # create dirs for data and models
 RUN mkdir -p /opt/conda/lib/python3.7/site-packages/data/models
@@ -15,10 +18,15 @@ RUN wget http://lnsigo.mipt.ru/export/alexaprize_data/parlai_grounding_knowledge
 tar -xvzf /opt/conda/lib/python3.7/site-packages/data/parlai_topical_chat_data.tar.gz -C /opt/conda/lib/python3.7/site-packages/data &&\
 rm /opt/conda/lib/python3.7/site-packages/data/parlai_topical_chat_data.tar.gz
 
-# load model tar.gz
+# load models tar.gz
 RUN wget http://lnsigo.mipt.ru/export/alexaprize_data/parlai_grounding_knowledge/topical_chat_blender90_1_sent_48_epochs.tar.gz -q -P /opt/conda/lib/python3.7/site-packages/data/models &&\
 tar -xvzf /opt/conda/lib/python3.7/site-packages/data/models/topical_chat_blender90_1_sent_48_epochs.tar.gz -C /opt/conda/lib/python3.7/site-packages/data/models &&\
 rm /opt/conda/lib/python3.7/site-packages/data/models/topical_chat_blender90_1_sent_48_epochs.tar.gz
+
+RUN wget http://lnsigo.mipt.ru/export/alexaprize_data/parlai_grounding_knowledge/topical_chat_blender90_3_sent_62_epochs.tar.gz -q -P /opt/conda/lib/python3.7/site-packages/data/models &&\
+tar -xvzf /opt/conda/lib/python3.7/site-packages/data/models/topical_chat_blender90_3_sent_62_epochs.tar.gz -C /opt/conda/lib/python3.7/site-packages/data/models &&\
+rm /opt/conda/lib/python3.7/site-packages/data/models/topical_chat_blender90_3_sent_62_epochs.tar.gz
+
 
 WORKDIR /src
 
