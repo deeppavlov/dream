@@ -5,6 +5,8 @@ from os import getenv
 
 from common.grounding import what_we_talk_about
 from common.utils import get_topics, get_intents
+from utils import get_intent_dict, get_da_topic_dict, get_cobot_topic_dict, \
+    MIDAS_INTENT_ACKNOWLEDGMENETS, get_midas_intent_acknowledgement, reformulate_question_to_statement
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -14,56 +16,6 @@ logger = logging.getLogger(__name__)
 DEFAULT_CONF = 0.99
 DONTKNOW_CONF = 0.5
 DONTKNOW_PHRASE = "Seems like I have no idea what we are talking about."
-
-
-def get_intent_dict(entity_name):
-    #  order DOES matter
-    intent_dict = {'Information_DeliveryIntent': f'You just told me about {entity_name}, right?',
-                   'Information_RequestIntent': f"You've asked me about {entity_name} haven't you?",
-                   'User_InstructionIntent': "You just gave me a command. Am I right?",
-                   "Opinion_ExpressionIntent": f"You just shared your opinion about {entity_name} with me, right?",
-                   "ClarificationIntent": f"You clarified me what you've just said about {entity_name}, right?",
-                   "Topic_SwitchIntent": "You wanted to change topic, right?",
-                   "Opinion_RequestIntent": f"You wanted to hear my thoughts about {entity_name}, am I correct?"}
-    return intent_dict
-
-
-def get_da_topic_dict():
-    #  order DOES matter
-    topic_dict = {"Entertainment_Movies": "We were discussing movies, am I right?",
-                  "Entertainment_Books": "We were discussing books, am I right?",
-                  'Entertainment_General': "We are just trying to be polite to each other, aren't we?",
-                  "Science_and_Technology": "I was under impression we were chatting about technology stuff",
-                  "Sports": "So I thought we were talking about sports",
-                  "Politics": "Correct me if I'm wrong but I thought we were discussing politics"}
-    return topic_dict
-
-
-def get_cobot_topic_dict():
-    #  order DOES matter
-    topic_dict = {'Phatic': "We are just trying to be polite to each other, aren't we?",
-                  "Other": "I can't figure out what we are talking about exactly. Can you spare a hand?",
-                  "Movies_TV": "We were discussing movies, am I right?",
-                  "Music": "Thought we were talking about music",
-                  "SciTech": "I was under impression we were chatting about technology stuff",
-                  "Literature": "We were discussing literature, am I right?",
-                  "Travel_Geo": "Thought we were talking about some travel stuff",
-                  "Celebrities": "We're discussing celebrities, right?",
-                  "Games": "We're talking about games, correct?",
-                  "Pets_Animals": "Thought we were talking about animals",
-                  "Sports": "So I thought we were talking about sports",
-                  "Psychology": "Correct me if I'm wrong but I thought we were talking about psychology",
-                  "Religion": "Aren't we talking about religion, my dear?",
-                  "Weather_Time": "Aren't we discussing the best topic of all times, weather?",
-                  "Food_Drink": "Thought we were discussing food stuff",
-                  "Politics": "Correct me if I'm wrong but I thought we were discussing politics",
-                  "Sex_Profanity": "This is a something I'd rather avoid talking about",
-                  "Art_Event": "My understanding is we are discussing arts, aren't we?",
-                  "Math": "My guess is we were talking about math stuff",
-                  "News": "Aren't we discussing news my dear friend?",
-                  "Entertainment": "Thought we were discussing something about entertainment",
-                  "Fashion": "We are talking about fashion am I right?"}
-    return topic_dict
 
 
 class GroundingSkillScenario:
@@ -76,6 +28,8 @@ class GroundingSkillScenario:
         confidences = []
         human_attributes, bot_attributes, attributes = [], [], []
         for dialog in dialogs:
+            curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs = [], [], [], [], []
+
             bot_attr = {}
             human_attr = dialog["human"]["attributes"]
             human_attr["used_links"] = human_attr.get("used_links", defaultdict(list))
@@ -147,10 +101,40 @@ class GroundingSkillScenario:
                 sentry_sdk.capture_exception(e)
                 reply = ""
                 confidence = 0
-            texts.append(reply)
-            confidences.append(confidence)
-            human_attributes.append(human_attr)
-            bot_attributes.append(bot_attr)
-            attributes.append(attr)
+
+            curr_responses += [reply]
+            curr_confidences += [confidence]
+            curr_human_attrs += [human_attr]
+            curr_bot_attrs += [bot_attr]
+            curr_attrs += [attr]
+
+            # ACKNOWLEDGEMENT HYPOTHESES for current utterance
+            curr_intents = get_intents(dialog['human_utterances'][-1], probs=False, which='midas',
+                                       midas_threshold=0.3)
+            curr_considered_intents = [intent for intent in curr_intents if intent in MIDAS_INTENT_ACKNOWLEDGMENETS]
+
+            if curr_considered_intents:
+                # can generate acknowledgement
+                is_need_nounphrase_intent = any([intent in curr_intents for intent in ["open_question_opinion"]])
+                if is_need_nounphrase_intent:
+                    curr_nounphrase = dialog['human_utterances'][-1]["annotations"].get("cobot_nounphrases", [])
+                    curr_nounphrase = curr_nounphrase[-1] if len(curr_nounphrase) > 0 and curr_nounphrase[-1] else ""
+                    ackn_response = get_midas_intent_acknowledgement(curr_considered_intents[-1], curr_nounphrase)
+                else:
+                    curr_reformulated_question = reformulate_question_to_statement(
+                        dialog['human_utterances'][-1]["text"])
+                    ackn_response = get_midas_intent_acknowledgement(curr_considered_intents[-1],
+                                                                     curr_reformulated_question)
+                curr_responses += [ackn_response]
+                curr_confidences += [0.5]
+                curr_human_attrs += [{}]
+                curr_bot_attrs += [{}]
+                curr_attrs += [{"response_parts": ["acknowledgement"]}]
+
+            texts.append(curr_responses)
+            confidences.append(curr_confidences)
+            human_attributes.append(curr_human_attrs)
+            bot_attributes.append(curr_bot_attrs)
+            attributes.append(curr_attrs)
 
         return texts, confidences, human_attributes, bot_attributes, attributes

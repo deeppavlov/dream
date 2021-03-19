@@ -550,7 +550,8 @@ def get_topics(annotated_utterance, probs=False, default_probs={}, default_label
         return answer_labels
 
 
-def get_intents(annotated_utterance, probs=False, default_probs={}, default_labels=[], which="all"):
+def get_intents(annotated_utterance, probs=False, default_probs={}, default_labels=[], which="all",
+                midas_threshold=None):
     """Function to get intents from particular annotator or all detected.
 
     Args:
@@ -570,7 +571,10 @@ def get_intents(annotated_utterance, probs=False, default_probs={}, default_labe
     midas_intent_probs = annotations.get("midas_classification", {})
     if midas_intent_probs:
         max_midas_prob = max(midas_intent_probs.values())
-        midas_intent_labels = [k for k, v in midas_intent_probs.items() if v == max_midas_prob]
+        if midas_threshold:
+            midas_intent_labels = [k for k, v in midas_intent_probs.items() if v >= midas_threshold]
+        else:
+            midas_intent_labels = [k for k, v in midas_intent_probs.items() if v == max_midas_prob]
     else:
         midas_intent_labels = []
     cobot_da_intent_probs, cobot_da_intent_labels = {}, []
