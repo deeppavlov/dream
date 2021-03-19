@@ -2,9 +2,11 @@ import requests
 import logging
 
 test_config = {'dialogs': [{'human_utterances': [{'text': 'i love you'}],
-                            'bot_utterances': [{'text': 'i hate you'}]}]}
+                            'bot_utterances': [{'text': 'i hate you'}]}],
+               'threshold': 0}
 test_config_reverted = {'sentences': ['i love you'],
-                        'last_human_utterances': ['i hate you']}
+                        'last_human_utterances': ['i hate you'],
+                        'threshold': 0}
 test_config_order = ['open_question_opinion', 'open_question_personal',
                      'clarifying_question', 'correction', 'opening',
                      'uncertain', 'open_question_factual', 'non_compliant',
