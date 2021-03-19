@@ -797,19 +797,19 @@ services:
         CONFIG: wiki_parser.json
         PORT: 8077
         SRC_DIR: annotators/wiki_parser
-        COMMIT: 2680ef300a1941c183f4cd91eb24ceba0706fce3
+        COMMIT: ff5b156d16a949c3ec99da7fb60ae907dec37a41
       context: ./
-      dockerfile: dp/dockerfile_skill_gpu
+      dockerfile: annotators/wiki_parser/Dockerfile
     environment:
       - CUDA_VISIBLE_DEVICES=''
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 10
       resources:
         limits:
-          memory: 4G
+          memory: 256M
         reservations:
-          memory: 4G
+          memory: 256M
 
   odqa:
     build:
