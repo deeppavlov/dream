@@ -24,14 +24,16 @@ if cuda:
 else:
     device = torch.device('cpu')
 
-logger.info(f'knowledge grounding is set to run on {device}')
+kg_checkpoint_name = os.environ.get("MODEL_CKPT", "1_sent_48_epochs")
+
+logger.info(f'knowledge grounding model {kg_checkpoint_name} is set to run on {device}')
 
 kg_script = ParlaiPreloadModelScript.main(
     task='topical_chat:generator',
-    init_model='/opt/conda/lib/python3.7/site-packages'
-    '/data/models/topical_chat_blender90_1_sent_48_epochs/model.checkpoint',
-    model_file='/opt/conda/lib/python3.7/site-packages'
-    '/data/models/topical_chat_blender90_1_sent_48_epochs/model',
+    init_model=f"/opt/conda/lib/python3.7/site-packages"
+    f"/data/models/topical_chat_blender90_{kg_checkpoint_name}/model.checkpoint",
+    model_file=f"/opt/conda/lib/python3.7/site-packages"
+    f"/data/models/topical_chat_blender90_{kg_checkpoint_name}/model",
     fp16=False,
     inference='nucleus',
     topp=0.9,
