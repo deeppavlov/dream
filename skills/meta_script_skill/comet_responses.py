@@ -58,6 +58,7 @@ def get_main_verb_tense_for_user_doings(utterance):
 def fill_comet_atomic_template(curr_user_uttr, template, relation):
     prediction = get_comet_atomic(curr_user_uttr, relation)
     logger.info(f"Get prediction: {prediction}")
+
     if prediction == "":
         return ""
     if relation in ["xIntent", "xNeed", "xWant", "oWant", "xEffect", "oEffect"] and prediction[:3] == "to ":
@@ -138,9 +139,7 @@ def ask_question_using_atomic(dialog):
             relation = ATOMIC_FUTURE_QUESTION_TEMPLATES[template]["attribute"]
         else:
             relation = ""
-        # check of sentiment for relation and drop it, if negative
-        if get_nltk_sentiment(relation) == "negative":
-            relation = ""
+
         logger.info(f"Choose template: {template}")
         response = fill_comet_atomic_template(best_sent, template, relation)
         if response == "":
