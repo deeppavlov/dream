@@ -25,7 +25,8 @@ files=(
   alexaprize_data/elmo2.tar.gz
   alexaprize_data/midas.tar.gz
   alexaprize_data/ner.tar.xz
-  alexaprize_data/ood_dbdc_bert_v1.tar.gz
+  deeppavlov_data/classifiers/ood_dbdc_bert_v1.tar.gz
+  deeppavlov_data/bert/uncased_L-12_H-768_A-12.zip
   alexaprize_data/question_generator/model_24_0.94_37.23.pth
   kbqa/wikidata/wiki_eng_files_no_el.tar.gz
   kbqa/wikidata/sparql_queries.json
