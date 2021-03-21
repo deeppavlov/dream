@@ -54,6 +54,18 @@ TOP_1k_FREQUENT_WORDS = set(TOP_1k_FREQUENT_WORDS)
 WIKI_DESCRIPTIONS = json.load((WORK_DIR / "wiki_topics_descriptions_one_sent.json").open())
 list_of_hobbies = list(WIKI_DESCRIPTIONS.keys())
 
+nltk_sentiment_classifier = SentimentIntensityAnalyzer()
+
+
+def get_nltk_sentiment(text):
+    result = nltk_sentiment_classifier.polarity_scores(text)
+    if result.get("pos", 0.0) >= 0.5:
+        return "positive"
+    elif result.get("neg", 0.0) >= 0.5:
+        return "negative"
+    else:
+        return "neutral"
+
 
 def get_verb_topic(nounphrased_topic):
     doc = nlp(nounphrased_topic)
@@ -228,7 +240,7 @@ def get_comet_atomic(topic, relation, TOPICS={}):
     """
 
     logger.info(f"Comet Atomic request on topic: {topic}.")
-    if topic is None or topic == "" or relation == "" or relation is None:
+    if topic is None or topic == "" or relation == "" or relation is None or get_nltk_sentiment(topic) == "negative":
         return ""
 
     predefined_relation = TOPICS.get(topic, {}).get(relation, [])
@@ -267,8 +279,9 @@ def get_comet_atomic(topic, relation, TOPICS={}):
     logger.info(
         f"After removing all phrases containing topic words " f"relation phrases from COMeT Atomic: {relation_phrases}"
     )
+    # check of sentiment for relation and drop it, if negative
+    relation_phrases = [ph for ph in relation_phrases if len(ph) > 0 and get_nltk_sentiment(ph) != "negative"]
 
-    relation_phrases = [ph for ph in relation_phrases if len(ph) > 0]
     relation_phrases = correct_verb_form(relation, relation_phrases)
     logger.info(f"After correcting verb form relation phrases from COMeT Atomic: {relation_phrases}")
 
@@ -745,16 +758,3 @@ def check_topic_lemmas_in_sentence(sentence, topic):
         if word in sent_lemmas:
             return True
     return False
-
-
-nltk_sentiment_classifier = SentimentIntensityAnalyzer()
-
-
-def get_nltk_sentiment(text):
-    result = nltk_sentiment_classifier.polarity_scores(text)
-    if result.get("pos", 0.0) >= 0.5:
-        return "positive"
-    elif result.get("neg", 0.0) >= 0.5:
-        return "negative"
-    else:
-        return "neutral"
