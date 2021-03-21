@@ -16,7 +16,7 @@ services:
   dialog-breakdown:
     build:
       args:
-        DATA_URL: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/ood_dbdc_torch_bert_v2.tar.gz
+        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
   entity-linking:
     build:
       args:
