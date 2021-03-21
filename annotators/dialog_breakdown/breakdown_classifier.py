@@ -4,7 +4,7 @@ from os import getenv
 import sentry_sdk
 
 from deeppavlov.core.common.registry import register
-from deeppavlov.models.torch_bert.torch_bert_classifier import TorchBertClassifierModel
+from deeppavlov.models.bert.bert_classifier import BertClassifierModel
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 
@@ -12,8 +12,8 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 
-@register("torch_breakdown_classifier")
-class CustomClassifierModel(TorchBertClassifierModel):
+@register("tf_breakdown_classifier")
+class CustomClassifierModel(BertClassifierModel):
     columns = ["breakdown", "no_breakdown"]
 
     def __call__(self, features):

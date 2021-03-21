@@ -24,8 +24,8 @@
         ],
         "pipe": [
             {
-                "class_name": "torch_bert_preprocessor",
-                "vocab_file": "bert-base-uncased",
+                "class_name": "bert_preprocessor",
+                "vocab_file": "{DOWNLOADS_PATH}/bert_models/uncased_L-12_H-768_A-12/vocab.txt",
                 "do_lower_case": true,
                 "max_seq_length": 64,
                 "in": [
@@ -63,16 +63,16 @@
                 "single_vector": true
             },
             {
-                "class_name": "torch_breakdown_classifier",
+                "class_name": "tf_breakdown_classifier",
                 "n_classes": "#classes_vocab.len",
                 "return_probas": true,
-                "pretrained_bert": "bert-base-uncased",
+                "one_hot_labels": false,
+                "bert_config_file": "{DOWNLOADS_PATH}/bert_models/uncased_L-12_H-768_A-12/bert_config.json",
+                "pretrained_bert": "{DOWNLOADS_PATH}/bert_models/uncased_L-12_H-768_A-12/bert_model.ckpt",
                 "save_path": "{MODEL_PATH}/model",
                 "load_path": "{MODEL_PATH}/model",
-                "optimizer": "AdamW",
-                "optimizer_parameters": {
-                    "lr": 2e-05
-                },
+                "keep_prob": 0.5,
+                "learning_rate": 2e-05,
                 "learning_rate_drop_patience": 2,
                 "learning_rate_drop_div": 2.0,
                 "in": [
@@ -82,12 +82,12 @@
                     "y_ids"
                 ],
                 "out": [
-                    "bd_probas"
+                    "y_pred_probas"
                 ]
             }
         ],
         "out": [
-            "bd_probas"
+            "y_pred_probas"
         ]
     },
     "train": {
@@ -105,7 +105,8 @@
             "train",
             "valid"
         ],
-        "class_name": "torch_trainer"
+        "class_name": "nn_trainer",
+        "tensorboard_log_dir": "{MODEL_PATH}/"
     },
     "metadata": {
         "imports": [
@@ -115,11 +116,21 @@
             "ROOT_PATH": "~/.deeppavlov",
             "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
             "MODELS_PATH": "{ROOT_PATH}/models",
-            "MODEL_PATH": "/models/ood_dbdc_torch_bert_v2"
+            "MODEL_PATH": "{MODELS_PATH}/classifiers/ood_dbdc_bert_v1"
         },
         "requirements": [
-            "{DEEPPAVLOV_PATH}/requirements/pytorch.txt",
-            "{DEEPPAVLOV_PATH}/requirements/transformers.txt"
+            "{DEEPPAVLOV_PATH}/requirements/tf.txt",
+            "{DEEPPAVLOV_PATH}/requirements/bert_dp.txt"
+        ],
+        "download": [
+            {
+                "url": "http://files.deeppavlov.ai/deeppavlov_data/bert/uncased_L-12_H-768_A-12.zip",
+                "subdir": "{DOWNLOADS_PATH}/bert_models"
+            },
+            {
+                "url": "http://files.deeppavlov.ai/deeppavlov_data/classifiers/ood_dbdc_bert_v1.tar.gz",
+                "subdir": "{MODELS_PATH}/classifiers"
+            }
         ]
     }
 }

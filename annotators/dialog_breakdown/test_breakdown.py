@@ -15,8 +15,8 @@ def main():
 
     print(requests.post(url, json=request_data).json())
     bd_proba = requests.post(url, json=request_data).json()[0]["breakdown"]
-    bd_proba = round(bd_proba, 2)
-    assert bd_proba == 0.61, f'Got\n{bd_proba}\n, but expected:\n{0.8321649}'
+    bd_proba = round(bd_proba, 3)
+    assert bd_proba == 0.995, f'Got\n{bd_proba}\n, but expected:\n{0.995}'
     print('Success')
 
 
