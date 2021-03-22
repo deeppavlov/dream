@@ -811,6 +811,8 @@ class MovieSkillTemplates:
                 pass
             reply = ""
             add_info = []
+            if genres:
+                genres = list(set(genres))
             for genre in genres:
                 add_info += [[genre, "genre", self.imdb.genereate_opinion_about_genre(genre)]]
                 reply += " " + self.opinion_about_genres(genre)
