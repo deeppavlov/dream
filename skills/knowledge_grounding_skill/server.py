@@ -121,33 +121,44 @@ def get_intents_flags(utt):
     return lets_chat_about_flag, special_intents_flag
 
 
-def get_lets_chat_topic(lets_chat_about_flag, utt, anntr_history_len):
+def get_lets_chat_topic(lets_chat_about_flag, utt):
     lets_chat_topic = ""
     COBOT_DA_FILE_TOPICS_MATCH = {
         'Entertainment_Movies': 'movies',
         'Entertainment_Music': 'music',
         'Science_and_Technology': 'science',
-        'Sports': 'sports'
+        'Sports': 'sports',
+        'Games': 'games',
+        'Movies_TV': 'movies',
+        'SciTech': 'science',
+        'Psychology': 'emotions',
+        'Music': 'music',
+        'Food_Drink': 'food',
+        'Weather_Time': 'weather',
+        'Entertainment': 'activities',
+        'Celebrities': 'celebrities',
+        'Travel_Geo': 'travel',
+        'Art_Event': 'art'
     }
     if lets_chat_about_flag:
-        anntr_history_len = 0
-        _get_topics = get_topics(utt, which="cobot_dialogact_topics")
+        _get_topics = get_topics(utt, which="all")
         for topic in _get_topics:
             if topic in COBOT_DA_FILE_TOPICS_MATCH:
                 lets_chat_topic = COBOT_DA_FILE_TOPICS_MATCH[topic]
-    return lets_chat_topic, anntr_history_len
+    return lets_chat_topic
 
 
-def get_news_api_fact(bot_uttr, prev_human_uttr, not_switch_or_lets_chat_flag):
+def get_news_api_fact(bot_uttr, human_uttrs, not_switch_or_lets_chat_flag):
     news_api_fact = ""
-    if (bot_uttr.get("active_skill", "") == "news_api_skill") and not_switch_or_lets_chat_flag:
-        prev_human_utt_hypotheses = prev_human_uttr.get("hypotheses", [])
-        news_api_hypothesis = [
-            h for h in prev_human_utt_hypotheses if (h.get("skill_name", "") == "news_api_skill")
-        ]
-        if news_api_hypothesis:
-            if news_api_hypothesis[0].get("news_status", "") == "opinion_request":
-                news_api_fact = news_api_hypothesis[0].get("curr_news", {}).get("description", "")
+    if len(human_uttrs) > 1:
+        if (bot_uttr.get("active_skill", "") == "news_api_skill") and not_switch_or_lets_chat_flag:
+            prev_human_utt_hypotheses = human_uttrs[-2].get("hypotheses", [])
+            news_api_hypothesis = [
+                h for h in prev_human_utt_hypotheses if (h.get("skill_name", "") == "news_api_skill")
+            ]
+            if news_api_hypothesis:
+                if news_api_hypothesis[0].get("news_status", "") == "opinion_request":
+                    news_api_fact = news_api_hypothesis[0].get("curr_news", {}).get("description", "")
     return news_api_fact
 
 
@@ -230,13 +241,15 @@ def respond():
             special_intents_flags.append(special_intents_flag)
 
             anntr_history_len = DEFAULT_ANNTR_HISTORY_LEN
+            if lets_chat_about_flag or switch_choose_topic:
+                anntr_history_len = 0
             # if detected lets_chat is about topic from the file
-            lets_chat_topic, anntr_history_len = get_lets_chat_topic(
-                lets_chat_about_flag, dialog["human_utterances"][-1], anntr_history_len
+            lets_chat_topic = get_lets_chat_topic(
+                lets_chat_about_flag, dialog["human_utterances"][-1]
             )
             # if prev skill == news_api_skill get news description and create knowledge fact
             news_api_fact = get_news_api_fact(
-                bot_uttr, dialog["human_utterances"][-2], not (switch_choose_topic or lets_chat_about_flag)
+                bot_uttr, dialog["human_utterances"], not (switch_choose_topic or lets_chat_about_flag)
             )
             # start creating data for kg service
             user_input_history = '\n'.join([i["text"] for i in dialog["utterances"]])
@@ -298,7 +311,7 @@ def respond():
                 annotations_depths.append({"odqa_1st_par": odqa_1st_par_annots[-1][0]})
                 dial_ids.append(d_id)
 
-            if switch_choose_topic or lets_chat_topic:
+            if any([switch_choose_topic, lets_chat_topic, lets_chat_about_flag]):
                 if lets_chat_topic:
                     fact = random.sample(TOPICS_FACTS[lets_chat_topic], 1)[0]
                     chosen_topics[d_id] = lets_chat_topic
@@ -386,8 +399,8 @@ def respond():
                     add_intro = random.choice(
                         [
                             "Sounds like ", "Seems like ", "Makes sense. ",
-                            "Here's what I've heard ", "Here's something else I've heard",
-                            "It reminds me that", "This comes to my mind "
+                            "Here's what I've heard: ", "Here's something else I've heard: ",
+                            "It reminds me that", "This comes to my mind: ", ""
                         ]
                     )
                     no_penalties = True
