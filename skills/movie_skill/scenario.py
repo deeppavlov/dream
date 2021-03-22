@@ -139,6 +139,12 @@ class MovieSkillScenario:
                                     human_attr[p] = dialog["human"]["attributes"].get(p, [])
                                 human_attr["discussed_movie_titles"] += [self.templates.imdb(movie_id).get("title", "")]
                                 human_attr["discussed_movie_ids"] += [movie_id]
+
+                    if len(dialog["bot_utterances"]) and "?" in dialog["bot_utterances"][-1]["text"] and any(
+                            [word in dialog["bot_utterances"][-1]["text"] for word in ["book", "reading"]]):
+                        # significantly decrease confidence if was question about books in prev bot utterance
+                        confidence = 0.8 * confidence
+
             except Exception as e:
                 sentry_sdk.capture_exception(e)
                 logger.exception(e)
@@ -172,7 +178,7 @@ class MovieSkillScenario:
 
     def is_about_movies(self, uttr, prev_uttr={}):
         is_movie_topic = any([topic in get_topics(uttr, which="all")
-                              for topic in ["Entertainment_Movies", "Movies_TV", "Celebrities"]])
+                              for topic in ["Entertainment_Movies"]])
 
         curr_uttr_is_about_movies = re.search(self.movie_pattern, uttr["text"].lower())
         prev_uttr_last_sent = prev_uttr.get("annotations", {}).get("sentseg", {}).get("segments", [""])[-1].lower()
@@ -205,21 +211,20 @@ class MovieSkillScenario:
             return False
 
     def is_opinion_request(self, uttr):
-        annotations = uttr.get("annotations", {})
-        intents = get_intents(uttr, which="cobot_dialogact_intents")
-        intent_detected = annotations.get("intent_catcher", {}).get(
-            "opinion_request", {}).get("detected") == 1 or "Opinion_RequestIntent" in intents
-        opinion_detected = "Opinion_ExpressionIntent" in intents
-        if intent_detected or (re.search(self.opinion_request, uttr["text"].lower()) and not opinion_detected):
+        all_intents = get_intents(uttr, which="all", midas_threshold=0.1)
+
+        intent_detected = any([intent in all_intents for intent in ["opinion_request", "Opinion_RequestIntent",
+                                                                    "open_question_opinion", "yes_no_question"]])
+        if intent_detected:
             return True
         else:
             return False
 
     def is_opinion_expression(self, uttr):
-        intents = get_intents(uttr, which="cobot_dialogact_intents")
-        intent_detected = "Opinion_ExpressionIntent" in intents
-        info_request_detected = "Information_RequestIntent" in intents
-        if intent_detected or (re.search(self.opinion_expression, uttr["text"].lower()) and not info_request_detected):
+        all_intents = get_intents(uttr, which="midas", midas_threshold=0.1)
+        intent_detected = any([intent in all_intents for intent in ["opinion"]])
+
+        if intent_detected:
             return True
         else:
             return False
