@@ -165,6 +165,11 @@ spec:
                     sh label: 'update environment', script: "kubectl create configmap env -n ${NAMESPACE} --from-env-file $ENV_FILE -o yaml --dry-run=client | kubectl apply -f -"
                     sh label: 'generate deployment', script: 'python3 kubernetes/kuber_generator.py'
                     sh label: 'deploy', script: 'for dir in kubernetes/models/*; do kubectl apply -f $dir || true; done'
+                    sh label: 'remove redundant pods', script: '''
+                      for dp in $(kubectl get deploy -n {NAMESPACE} -l app.kubernetes.io/managed-by!=Helm --no-headers -o custom-columns=":metadata.name")
+                      do
+                        [ -d kubernetes/models/${dp%-*} ] || kubectl delete deploy $dp -n {NAMESPACE}
+                      done
                     sh label: 'deploy status', script: '''
                       status=0
                       for dir in kubernetes/models/*; do
