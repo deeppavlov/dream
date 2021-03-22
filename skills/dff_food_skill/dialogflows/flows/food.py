@@ -144,7 +144,7 @@ def lets_talk_about_request(ngrams, vars):
 
 def what_cuisine_response(vars):
     try:
-        state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
+        state_utils.set_confidence(vars, confidence=CONF_HIGH)
         state_utils.set_can_continue(vars)
         return "Okay. What cuisine do you prefer?"
     except Exception as exc:
@@ -186,7 +186,7 @@ def what_fav_food_response(vars):
     try:
         food_type = random.choice(food_types)
 
-        state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
+        state_utils.set_confidence(vars, confidence=CONF_HIGH)
         state_utils.set_can_continue(vars)
         return f"What is your favorite {food_type}?"
     except Exception as exc:
@@ -197,6 +197,7 @@ def what_fav_food_response(vars):
 
 
 def fav_food_request(ngrams, vars):
+    flag = False
     user_fav_food = []
     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
     nounphr = annotations.get("cobot_nounphrases", [])
@@ -205,8 +206,7 @@ def fav_food_request(ngrams, vars):
     for ne in nounphr:
         user_fav_food.append(ne)
     if user_fav_food and any([cobot_topic, conceptnet]):
-        return True
-    flag = bool(user_fav_food)
+        flag = True
     logger.info(f"fav_food_request {flag}")
     return flag
 
