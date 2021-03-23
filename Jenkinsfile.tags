@@ -170,6 +170,7 @@ spec:
                       do
                         [ -d kubernetes/models/${dp%-*} ] || kubectl delete deploy $dp -n {NAMESPACE}
                       done
+                    '''
                     sh label: 'deploy status', script: '''
                       status=0
                       for dir in kubernetes/models/*; do
