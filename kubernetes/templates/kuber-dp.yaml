@@ -65,12 +65,12 @@ spec:
           exec:
             command:
             - curl
-            - -X
-            - POST
+            - -X POST
             - -s
-            - -H
-            - 'content-type: application/json'
+            - -H 'content-type: application/json'
             - -d
+            - --connect-timeout 2
+            - -m 2
             - '{ "sentences_batch": [["hello"]], "user_ids": [[1212121]] }'
             - 'http://localhost:{{ PORT }}/api/rest/v1.0/ask'
           initialDelaySeconds: 60
