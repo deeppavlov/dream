@@ -7,6 +7,7 @@ import random
 import json
 import requests
 import sentry_sdk
+import spacy
 import concurrent.futures
 from deeppavlov import build_model
 from flask import Flask, request, jsonify
@@ -35,7 +36,9 @@ templates_dict = json.load(open('templates_dict.json', 'r'))
 
 fact_dict = json.load(open("fact_dict.json", 'r'))
 use_random_facts = False
-decrease_coef = 0.8
+decrease_coef = 0.95
+
+nlp = spacy.load("en_core_web_sm")
 
 tell_me = r"(do you know|(can|could) you tell me|tell me)"
 tell_me_template = re.compile(tell_me)
@@ -92,6 +95,20 @@ long_pre_stmts = ["It is the impractical things in this tumultuous hellscape"
 pre_old_memory_statements = ["Hmm, there's something I've heard once: ",
                              "Not sure if that's what you're looking for but this is what I remember: ",
                              "To the best of my knowledge, this is what I recall: "]
+
+
+def filter_factoid(sentence):
+    is_factoid = True
+    parsed_sentence = nlp(sentence)
+    tokens = [elem.text for elem in parsed_sentence]
+    tags = [elem.tag_ for elem in parsed_sentence]
+    if "i" in tokens or "you" in tokens:
+        is_factoid = False
+    found_nouns = any([tag in tags for tag in ["NN", "NNP"]])
+    found_verbs = any([tag in tags for tag in ["VB", "VBZ", "VBP"]])
+    if not found_nouns and not found_verbs:
+        is_factoid = False
+    return is_factoid
 
 
 def get_random_facts(ner_outputs_to_classify):
@@ -228,7 +245,7 @@ def respond():
         names = list(set(names))
         nounphrases = dialog['human_utterances'][-1]['annotations'].get('cobot_nounphrases', [])
         is_factoid_class = uttr["annotations"].get("factoid_classification", {}).get("factoid", 0)
-        is_factoid = is_factoid_class and (names or nounphrases)
+        is_factoid = is_factoid_class and (names or nounphrases) and filter_factoid(last_phrase)
         is_factoid_sents.append(is_factoid)
         ner_outputs_to_classify.append(names)
 
@@ -297,6 +314,7 @@ def respond():
             response = ""
             confidence = 0.
 
+        confidence = confidence * decrease_coef
         responses.append(response)
         confidences.append(confidence)
         attributes.append(attr)
