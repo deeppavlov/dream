@@ -45,12 +45,15 @@ class State(Enum):
     USR_HAVE_PETS = auto()
     USR_ASK_SOME_QUESTIONS = auto()
     #
+    SYS_IS_DOG_CAT = auto()
     SYS_IS_WILD = auto()
     SYS_ASK_ABOUT_BREED = auto()
     SYS_ASK_ABOUT_COLOR = auto()
     SYS_ASK_ABOUT_FEEDING = auto()
     SYS_USER_HAS_BEEN = auto()
     SYS_USER_HAS_NOT_BEEN = auto()
+    #
+    USR_ASK_ABOUT_DOG_CAT = auto()
     #
     USR_TELL_FACT_ASK_ABOUT_PETS = auto()
     USR_ASK_ABOUT_BREED = auto()
@@ -201,6 +204,14 @@ def is_wild_request(ngrams, vars):
     return flag
 
 
+def is_dog_cat_request(ngrams, vars):
+    flag = False
+    text = state_utils.get_last_human_utterance(vars)["text"]
+    if text in {"dogs", "cats", "dogs, cats", "cats, dogs"}:
+        flag = True
+    return flag
+
+
 def ask_about_breed_request(ngrams, vars):
     flag = False
     text = state_utils.get_last_human_utterance(vars)["text"]
@@ -257,15 +268,29 @@ def tell_fact_ask_about_pets_response(vars):
     return response
 
 
+def ask_about_dog_cat_response(vars):
+    text = state_utils.get_last_human_utterance(vars)["text"]
+    animal = re.findall("dog|cat", text)
+    response = f"Do you have a {animal}?"
+    state_utils.set_confidence(vars, confidence=CONF_1)
+    return response
+
+
+def has_pet_request(ngrams, vars):
+    if is_no(state_utils.get_last_human_utterance(vars)):
+        return True
+    return False
+
+
 def ask_about_breed_response(vars):
     response = "What breed is it?"
-    state_utils.set_confidence(vars, confidence=CONF_3)
+    state_utils.set_confidence(vars, confidence=CONF_2)
     return response
 
 
 def ask_about_color_response(vars):
     response = "What color is it?"
-    state_utils.set_confidence(vars, confidence=CONF_4)
+    state_utils.set_confidence(vars, confidence=CONF_2)
     return response
 
 
@@ -373,6 +398,7 @@ simplified_dialog_flow.set_error_successor(State.SYS_LIKE_ANIMALS, State.SYS_ERR
 simplified_dialog_flow.add_user_serial_transitions(
     State.USR_WHAT_ANIMALS,
     {
+        State.SYS_IS_DOG_CAT: is_dog_cat_request,
         State.SYS_IS_WILD: is_wild_request,
         State.SYS_ASK_ABOUT_BREED: ask_about_breed_request,
         State.SYS_ASK_ABOUT_COLOR: ask_about_color_request,
@@ -433,6 +459,22 @@ simplified_dialog_flow.add_system_transition(
 )
 simplified_dialog_flow.set_error_successor(State.SYS_USER_HAS_NOT_BEEN, State.SYS_ERR)
 simplified_dialog_flow.set_error_successor(State.USR_SUGGEST_VISITING, State.SYS_ERR)
+
+simplified_dialog_flow.add_system_transition(
+    State.SYS_IS_DOG_CAT,
+    State.USR_ASK_ABOUT_DOG_CAT,
+    ask_about_dog_cat_response,
+)
+simplified_dialog_flow.set_error_successor(State.SYS_IS_DOG_CAT, State.SYS_ERR)
+
+simplified_dialog_flow.add_user_serial_transitions(
+    State.USR_ASK_ABOUT_DOG_CAT,
+    {
+        State.USR_ASK_ABOUT_BREED: has_pet_request,
+        State.USR_ASK_ABOUT_COLOR: has_pet_request,
+    },
+)
+simplified_dialog_flow.set_error_successor(State.USR_ASK_ABOUT_DOG_CAT, State.SYS_ERR)
 
 simplified_dialog_flow.add_system_transition(
     State.SYS_IS_WILD,
