@@ -14,6 +14,8 @@ files=(
   deeppavlov_data/classifiers/sentiment_sst_bert_v2.tar.gz
   deeppavlov_data/wiki_index.tar.gz
   deeppavlov_data/multi_squad_model_noans_1.1.tar.gz
+  alexaprize_data/book_author_names.txt
+  alexaprize_data/book_query_dict.pkl
   alexaprize_data/cobot_bert_6task.tar.gz
   alexaprize_data/comet/atomic_pretrained_model.pickle
   alexaprize_data/comet/categories_oEffect#oReact#oWant#xAttr#xEffect#xIntent#xNeed#xReact#xWant-maxe1_17-maxe2_35-maxr_1.pickle

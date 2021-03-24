@@ -1,8 +1,8 @@
 from random import choice
 import re
 
-from common.utils import join_words_in_or_pattern, join_sentences_in_or_pattern, get_topics, get_intents
-
+from common.utils import join_words_in_or_pattern, join_sentences_in_or_pattern, get_topics, \
+    get_intents, get_sentiment
 
 # https://www.englishclub.com/vocabulary/fl-asking-for-opinions.htm
 UNIVERSAL_OPINION_REQUESTS = [
@@ -76,7 +76,6 @@ TO_ME_LIKE = [r"to me( now)?", r"with me( now)?", r"me( now)?", "now"]
 SOMETHING_LIKE = ["anything", "something", "nothing", "none", "that", "everything"]
 DONOTKNOW_LIKE = [r"(i )?(do not|don't) know", "you (choose|decide|pick up)"]
 KNOW_LIKE = ["know", "learn", "find out"]
-
 
 # talk to me, talk with me, talk, talk with me now, talk now.
 TALK_TO_ME = join_words_in_or_pattern(TALK_LIKE) + r"(\s" + join_words_in_or_pattern(TO_ME_LIKE) + r")?"
@@ -215,11 +214,35 @@ def if_choose_topic(uttr, prev_uttr="---"):
         return True
     elif re.search(COMPILE_WHAT_TO_TALK_ABOUT, uttr_):
         return True
-    elif re.search(COMPILE_WHAT_TO_TALK_ABOUT, prev_uttr_) and \
-            re.search(COMPILE_SOMETHING, uttr_):
+    elif re.search(COMPILE_WHAT_TO_TALK_ABOUT, prev_uttr_) and re.search(COMPILE_SOMETHING, uttr_):
         return True
     else:
         return False
+
+
+def is_negative(annotated_uttr):
+    sentiment = get_sentiment(annotated_uttr, probs=False)[0]
+    return sentiment in ["negative", "very_negative"]
+
+
+def is_positive(annotated_uttr):
+    sentiment = get_sentiment(annotated_uttr, probs=False)[0]
+    return sentiment in ["positive", "very_positive"]
+
+
+def is_neutral(annotated_uttr):
+    sentiment = get_sentiment(annotated_uttr, probs=False)[0]
+    return sentiment in ["neutral"]
+
+
+more_details_pattern = re.compile(r"(\bmore\b|detail)", re.IGNORECASE)
+
+
+def tell_me_more(annotated_uttr):
+    intents = get_intents(annotated_uttr, which="intent_catcher", probs=False)
+    cond1 = 'tell_me_more' in intents
+    cond2 = re.search(more_details_pattern, annotated_uttr['text'])
+    return cond1 or cond2
 
 
 def switch_topic_uttr(uttr):
