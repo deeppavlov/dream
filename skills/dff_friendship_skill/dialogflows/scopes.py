@@ -2,6 +2,7 @@ from enum import Enum, auto
 
 MAIN = "SYSTEM"
 GREETING = "GREETING"
+WEEKEND = "WEEKEND"
 
 
 class State(Enum):
