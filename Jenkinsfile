@@ -241,6 +241,12 @@ spec:
 
       when {
         changeRequest target: 'dev', comparator: 'GLOB'
+        not {
+          changeRequest title: '(?i)\b*wip\b*', comparator: 'REGEXP'
+        }
+        not {
+          changeRequest title: '(?i)\\[skip-ci\\]', comparator: 'REGEXP'
+        }
         beforeAgent true
       }
 
