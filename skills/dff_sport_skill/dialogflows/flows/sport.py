@@ -10,7 +10,10 @@ import requests
 import dialogflows.scopes as scopes
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
-from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
+from common.universal_templates import if_lets_chat_about_topic
+from common.universal_templates import COMPILE_WHAT_TO_TALK_ABOUT, COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
+import common.greeting as common_greeting
+import common.link as common_link
 from common.sport import (
     BINARY_QUESTION_ABOUT_SPORT,
     BINARY_QUESTION_ABOUT_ATHLETE,
@@ -96,6 +99,27 @@ simplified_dialogflow = dialogflow_extention.DFEasyFilling(State.USR_START)
 ##################################################################################################################
 # HELP FUNCTION
 ##################################################################################################################
+
+
+def donot_chat_about(uttr):
+    if re.search(COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, uttr["text"].lower()):
+        return True
+    else:
+        return False
+
+
+def compose_topic_offering(excluded_skills=[]):
+    ask_about_topic = random.choice(common_greeting.GREETING_QUESTIONS["what_to_talk_about"])
+    offer_topics_template = random.choice(common_greeting.TOPIC_OFFERING_TEMPLATES)
+
+    available_topics = [topic for skill_name, topic in common_link.LIST_OF_SCRIPTED_TOPICS.items()
+                        if skill_name not in excluded_skills]
+
+    topics = random.choice(available_topics, size=2, replace=False)
+    offer_topics = offer_topics_template.replace("TOPIC1", topics[0]).replace("TOPIC2", topics[1])
+
+    response = f"{ask_about_topic} {offer_topics}"
+    return response
 
 
 def get_news_for_person_or_org(vars):
@@ -193,13 +217,14 @@ def link_to_like_comp_request(ngrams, vars):
 
 def lets_talk_about_sport_request(ngrams, vars):
     # SYS_LETS_TALK_SPORT
+    dont_chat = donot_chat_about(state_utils.get_last_human_utterance(vars))
     user_lets_chat_about = (
         "lets_chat_about" in get_intents(state_utils.get_last_human_utterance(vars), which="intent_catcher")
         or if_lets_chat_about_topic(state_utils.get_last_human_utterance(vars)["text"])
     )
-
+    user_want = user_lets_chat_about and not dont_chat
     user_lets_chat_about_sport = re.search(SPORT_TEMPLATE, state_utils.get_last_human_utterance(vars)["text"])
-    flag = bool(user_lets_chat_about) and bool(user_lets_chat_about_sport)
+    flag = user_want and bool(user_lets_chat_about_sport)
     logger.info(f"lets_talk_about_sport_request={flag}")
     return flag
 
@@ -236,13 +261,14 @@ def lets_chat_about_sport_response(vars):
 
 def lets_talk_about_athlete_request(ngrams, vars):
     # SYS_LETS_TALK_ATHLETE
+    dont_chat = donot_chat_about(state_utils.get_last_human_utterance(vars))
     user_lets_chat_about = (
         "lets_chat_about" in get_intents(state_utils.get_last_human_utterance(vars), which="intent_catcher")
         or if_lets_chat_about_topic(state_utils.get_last_human_utterance(vars)["text"])
     )
-
+    user_want = user_lets_chat_about and not dont_chat
     user_lets_chat_about_athlete = re.search(ATHLETE_TEMPLETE, state_utils.get_last_human_utterance(vars)["text"])
-    flag = bool(user_lets_chat_about) and bool(user_lets_chat_about_athlete)
+    flag = user_want and bool(user_lets_chat_about_athlete)
     logger.info(f"lets_talk_about_athlete_request={flag}")
     return flag
 
@@ -302,6 +328,7 @@ def user_ask_who_do_u_support_response(vars):
 
 def user_like_or_ask_about_player_or_org_request(ngrams, vars):
     # SYS_TELL_ATHLETE
+    dont_chat = donot_chat_about(state_utils.get_last_human_utterance(vars))
     user_like_or_ask = re.search(LIKE_TEMPLATE, state_utils.get_last_human_utterance(vars)["text"]) or re.search(
         QUESTION_TEMPLATE, state_utils.get_last_human_utterance(vars)["text"]
     )
@@ -311,9 +338,10 @@ def user_like_or_ask_about_player_or_org_request(ngrams, vars):
     it_is_not_negative = "negative" not in get_sentiment(
         state_utils.get_last_human_utterance(vars), probs=False, default_labels=["neutral"]
     )
-    user_want = (bool(user_like_or_ask) or user_lets_chat_about) and it_is_not_negative
+    user_want = (bool(user_like_or_ask) or user_lets_chat_about) and not dont_chat
+    user_like_and_want = user_want and it_is_not_negative
     flag_have_per_or_org, _ = get_news_for_person_or_org(vars)
-    flag = user_want and flag_have_per_or_org
+    flag = user_like_and_want and flag_have_per_or_org
     logger.info(f"user_like_or_ask_about_player_or_org_request = {flag}")
     return flag
 
@@ -341,13 +369,15 @@ def user_like_or_ask_about_player_or_org_response(vars):
 
 def user_like_sport_request(ngrams, vars):
     # SYS_TELL_SPORT
+    dont_chat = donot_chat_about(state_utils.get_last_human_utterance(vars))
     it_is_not_negative = "negative" not in get_sentiment(state_utils.get_last_human_utterance(vars), probs=False,
                                                          default_labels=["neutral"])
+    user_want = it_is_not_negative and not dont_chat
     user_says_about_kind_of_sport = re.search(KIND_OF_SPORTS_TEMPLATE,
                                               state_utils.get_last_human_utterance(vars)["text"])
-    flag_1 = bool(user_says_about_kind_of_sport) and it_is_not_negative
     if bool(user_says_about_kind_of_sport) is True:
-        flag_2 = len(state_utils.get_last_human_utterance(vars)["text"]) == user_says_about_kind_of_sport.group()
+        flag_1 = bool(user_says_about_kind_of_sport) and user_want
+        flag_2 = len(state_utils.get_last_human_utterance(vars)["text"]) == len(user_says_about_kind_of_sport.group())
         flag = flag_1 or flag_2
     else:
         flag = False
@@ -382,13 +412,15 @@ def user_like_sport_response(vars):
 
 def user_lets_talk_about_comp_request(ngrams, vars):
     # SYS_LETS_TALK_ABOUT_COMP
+    dont_chat = donot_chat_about(state_utils.get_last_human_utterance(vars))
     user_lets_chat_about = (
         "lets_chat_about" in get_intents(state_utils.get_last_human_utterance(vars), which="intent_catcher")
         or if_lets_chat_about_topic(state_utils.get_last_human_utterance(vars)["text"])
         or re.search(COMPILE_WHAT_TO_TALK_ABOUT, state_utils.get_last_bot_utterance(vars)["text"])
     )
+    user_want = user_lets_chat_about and not dont_chat
     user_said_about_comp = re.search(COMPETITION_TEMPLATE, state_utils.get_last_human_utterance(vars)["text"])
-    flag = bool(user_lets_chat_about) and bool(user_said_about_comp)
+    flag = user_want and bool(user_said_about_comp)
     logger.info(f"user_lets_talk_about_comp_request={flag}")
     return flag
 
@@ -425,13 +457,15 @@ def user_ask_about_comp_response(vars):
 
 def user_like_comp_request(ngrams, vars):
     # SYS_TELL_COMP
+    dont_chat = donot_chat_about(state_utils.get_last_human_utterance(vars))
     it_is_not_negative = "negative" not in get_sentiment(state_utils.get_last_human_utterance(vars), probs=False,
                                                          default_labels=["neutral"])
+    user_want = it_is_not_negative and not dont_chat
     user_says_about_kind_of_comp = re.search(KIND_OF_COMPETITION_TEMPLATE,
                                              state_utils.get_last_human_utterance(vars)["text"])
-    flag_1 = bool(user_says_about_kind_of_comp) and it_is_not_negative
     if bool(user_says_about_kind_of_comp) is True:
-        flag_2 = len(state_utils.get_last_human_utterance(vars)["text"]) == user_says_about_kind_of_comp.group()
+        flag_1 = bool(user_says_about_kind_of_comp) and user_want
+        flag_2 = len(state_utils.get_last_human_utterance(vars)["text"]) == len(user_says_about_kind_of_comp.group())
         flag = flag_1 or flag_2
     else:
         flag = False
@@ -475,15 +509,15 @@ def user_negative_request(ngrams, vars):
     return flag
 
 
-def user_negative_response(vers):
+def user_negative_response(vars):
     # USR_GO_ANOTHER
-    responses = ["pets", "science", "travel", "food", "games", "movies", "books"]
-    topics = random.sample(responses, 2)
     try:
         state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
-        return (
-            f"Well, What do you want to discuss? I would like to talk about {topics[0]} or {topics[1]}."
-        )
+        prev_active_skills = [uttr.get("active_skill", "")
+                              for uttr in vars["agent"]["dialog"]["bot_utterances"]][-5:]
+        prev_active_skills.append('dff_sport_skill')
+        body = compose_topic_offering(excluded_skills=prev_active_skills)
+        return body
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
