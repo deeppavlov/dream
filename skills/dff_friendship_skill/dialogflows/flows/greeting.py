@@ -12,11 +12,14 @@ import sentry_sdk
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
-import common.entity_utils as entity_utils
 import common.utils as common_utils
 import common.greeting as common_greeting
 import common.link as common_link
 import dialogflows.scopes as scopes
+import dialogflows.flows.weekend as weekend_flow
+
+from dialogflows.flows.shared import link_to_by_enity_request
+from dialogflows.flows.shared import link_to_by_enity_response
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -435,95 +438,6 @@ def closed_answer_response(vars):
 
 
 ##################################################################################################################
-# link_to by enity
-##################################################################################################################
-
-
-def link_to_by_enity_request(ngrams, vars):
-    flag = True
-    flag = flag and not condition_utils.is_switch_topic(vars)
-    flag = flag and not condition_utils.is_lets_chat_about_topic_human_initiative(vars)
-    logger.info(f"link_to_by_enity_request={flag}")
-    return flag
-
-
-link_to_skill2key_words = {
-    "news_skill": ["news"],
-    "movie_skill": ["movie"],
-    "book_skill": ["book"],
-    # "coronavirus_skill": ["coronavirus"],
-    "game_cooperative_skill": ["game"],
-    "personal_info_skill": ["private live"],
-    "meta_script_skill": ["nothing"],
-    "emotion_skill": ["emotion"],
-    "weather_skill": ["weather"],
-}
-link_to_skill2i_like_to_talk = {
-    "news_skill": [
-        "Anxious to stay current on the news.",
-        "I don't know about you but I feel nervous when I don't know what's going on.",
-    ],
-    "movie_skill": ["Movies are my passion.", "Love stories about the world told in motion."],
-    "book_skill": [
-        "With a good book I can lose myself anywhere on Earth.",
-        "One of my creators has a huge home library. Wish I could read some of those books.",
-    ],
-    "coronavirus_skill": [" "],
-    "game_cooperative_skill": [
-        "Computer games are fantastic. Their virtual worlds help me to escape my prosaic ordinary life in the cloud.",
-        "With this lockdown games are my way to escape and thrive.",
-    ],
-    "personal_info_skill": [" "],
-    "meta_script_skill": [" "],
-    "emotion_skill": [
-        "Emotions are important.",
-        "Life isn't about just doing things. What you, me, everyone feels about their lives is as important.",
-    ],
-    "weather_skill": ["Everybody likes to talk about weather right?" "It feels rather cold here in the sky."],
-}
-
-
-def link_to_by_enity_response(vars):
-    ack = random.choice(get_sentiment_acknowledgement(vars))
-    try:
-        entities = state_utils.get_labeled_noun_phrase(vars)
-        time_sorted_human_entities = entity_utils.get_time_sorted_human_entities(entities)
-        if time_sorted_human_entities:
-            logger.debug(f"time_sorted_human_entities= {time_sorted_human_entities}")
-            tgt_entity = list(time_sorted_human_entities)[-1]
-            logger.debug(f"tgt_entity= {tgt_entity}")
-            if tgt_entity in sum(link_to_skill2key_words.values(), []):
-                skill_names = [skill for skill, key_words in link_to_skill2key_words.items() if tgt_entity in key_words]
-            else:
-                link_to_skills = {
-                    link_to_skill: f"I [MASK] interested in both {key_words[0]} and {tgt_entity}."
-                    for link_to_skill, key_words in link_to_skill2key_words.items()
-                }
-                link_to_skill_scores = masked_lm(list(link_to_skills.values()), probs_flag=True)
-                link_to_skill_scores = {
-                    topic: max(*list(score.values()), 0) if score else 0
-                    for topic, score in zip(link_to_skills, link_to_skill_scores)
-                }
-                skill_names = sorted(link_to_skill_scores, key=lambda x: link_to_skill_scores[x])[-2:]
-        else:
-            skill_names = [random.choice(list(link_to_skill2key_words))]
-
-        # used_links
-        link = state_utils.get_new_link_to(vars, skill_names)
-
-        body = random.choice(link_to_skill2i_like_to_talk.get(link["skill"], [""]))
-
-        body += f" {link['phrase']}"
-        set_confidence_by_universal_policy(vars)
-        return " ".join([ack, body])
-    except Exception as exc:
-        logger.exception(exc)
-        sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
-        return " ".join([ack, "I like to talk about movies. Do you have favorite movies?"])
-
-
-##################################################################################################################
 # error
 ##################################################################################################################
 
@@ -548,6 +462,7 @@ simplified_dialogflow.add_user_serial_transitions(
     {
         State.SYS_HELLO: hello_request,
         State.SYS_STD_GREETING: std_greeting_request,
+        (scopes.WEEKEND, weekend_flow.State.USR_START): weekend_flow.std_weekend_request,
         State.SYS_NEW_ENTITIES_IS_NEEDED_FOR: new_entities_is_needed_for_request,
         State.SYS_LINK_TO_BY_ENITY: link_to_by_enity_request,
     },
@@ -563,6 +478,7 @@ simplified_dialogflow.add_user_serial_transitions(
     State.USR_HELLO_AND_CONTNIUE,
     {
         State.SYS_STD_GREETING: std_greeting_request,
+        (scopes.WEEKEND, weekend_flow.State.USR_START): weekend_flow.std_weekend_request,
         State.SYS_USR_ASKS_BOT_HOW_ARE_YOU: how_are_you_request,
         State.SYS_USR_ANSWERS_HOW_IS_HE_DOING: positive_or_negative_request,
     },
@@ -581,6 +497,7 @@ simplified_dialogflow.add_user_serial_transitions(
     State.USR_HOW_BOT_IS_DOING_AND_OFFER_LIST_ACTIVITIES,
     {
         State.SYS_SHARE_LIST_ACTIVITIES: is_yes_request,
+        (scopes.WEEKEND, weekend_flow.State.USR_START): weekend_flow.std_weekend_request,
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_HOW_BOT_IS_DOING_AND_OFFER_LIST_ACTIVITIES, State.SYS_ERR)
@@ -607,6 +524,7 @@ simplified_dialogflow.add_system_transition(State.SYS_STD_GREETING, State.USR_ST
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_STD_GREETING,
     {
+        (scopes.WEEKEND, weekend_flow.State.USR_START): weekend_flow.std_weekend_request,
         State.SYS_NEW_ENTITIES_IS_NEEDED_FOR: new_entities_is_needed_for_request,
         State.SYS_LINK_TO_BY_ENITY: link_to_by_enity_request,
     },
