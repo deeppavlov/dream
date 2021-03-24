@@ -9,7 +9,6 @@ import requests
 import sentry_sdk
 import spacy
 import concurrent.futures
-from deeppavlov import build_model
 from flask import Flask, request, jsonify
 from os import getenv
 
@@ -30,7 +29,6 @@ use_annotators_output = True
 FACTOID_DEFAULT_CONFIDENCE = 0.99  # otherwise dummy often beats it
 ASKED_ABOUT_FACT_PROB = 0.99
 FACTOID_CLASS_THRESHOLD = 0.5
-factoid_classifier = build_model(config="./yahoo_convers_vs_info_light.json", download=False)
 
 templates_dict = json.load(open('templates_dict.json', 'r'))
 
@@ -97,17 +95,22 @@ pre_old_memory_statements = ["Hmm, there's something I've heard once: ",
                              "To the best of my knowledge, this is what I recall: "]
 
 
-def filter_factoid(sentence):
+def check_factoid(sentence):
     is_factoid = True
-    parsed_sentence = nlp(sentence)
-    tokens = [elem.text for elem in parsed_sentence]
-    tags = [elem.tag_ for elem in parsed_sentence]
-    if "i" in tokens or "you" in tokens:
-        is_factoid = False
-    found_nouns = any([tag in tags for tag in ["NN", "NNP"]])
-    found_verbs = any([tag in tags for tag in ["VB", "VBZ", "VBP"]])
-    if not found_nouns and not found_verbs:
-        is_factoid = False
+    try:
+        parsed_sentence = nlp(sentence)
+        if parsed_sentence:
+            tokens = [elem.text for elem in parsed_sentence]
+            tags = [elem.tag_ for elem in parsed_sentence]
+            if "i" in tokens or "you" in tokens:
+                is_factoid = False
+            found_nouns = any([tag in tags for tag in ["NN", "NNP"]])
+            found_verbs = any([tag in tags for tag in ["VB", "VBZ", "VBP"]])
+            if not found_nouns and not found_verbs:
+                is_factoid = False
+    except Exception as ex:
+        sentry_sdk.capture_exception(ex)
+        logger.exception(ex)
     return is_factoid
 
 
@@ -245,7 +248,7 @@ def respond():
         names = list(set(names))
         nounphrases = dialog['human_utterances'][-1]['annotations'].get('cobot_nounphrases', [])
         is_factoid_class = uttr["annotations"].get("factoid_classification", {}).get("factoid", 0)
-        is_factoid = is_factoid_class and (names or nounphrases) and filter_factoid(last_phrase)
+        is_factoid = is_factoid_class and (names or nounphrases) and check_factoid(last_phrase)
         is_factoid_sents.append(is_factoid)
         ner_outputs_to_classify.append(names)
 
