@@ -5,7 +5,7 @@ printenv | sed 's/^\(.*\)\=\(.*\)$/export \1\="\2"/g' > /root/.env
 
 cd "$(dirname "$0")"
 
-bash game_db_update.sh
+bash update_game_db.sh
 
 cron
 tail -f /var/log/cron.log &

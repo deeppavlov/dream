@@ -247,7 +247,7 @@ def hypotheses_list(dialog: Dict) -> List[Dict]:
 def hypotheses_list_last_uttr(dialog: Dict) -> List[Dict]:
     hypotheses = dialog["human_utterances"][-1]["hypotheses"]
     hypots = [h["text"] for h in hypotheses]
-    last_human_utterances = [dialog['human_utterances'][-1]['text'] for h in hypotheses]
+    last_human_utterances = [dialog["human_utterances"][-1]["text"] for h in hypotheses]
     return [{"sentences": hypots, "last_human_utterances": last_human_utterances}]
 
 
@@ -641,3 +641,14 @@ def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
 def dff_food_skill_formatter(dialog: Dict) -> List[Dict]:
     service_name = f"dff_food_skill"
     return utils.dff_formatter(dialog, service_name)
+
+
+def game_cooperative_skill_formatter(dialog: Dict):
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    dialog["human"]["attributes"] = {
+        "game_cooperative_skill": dialog["human"]["attributes"].get("game_cooperative_skill", {}),
+        "used_links": dialog["human"]["attributes"].get("used_links", {}),
+    }
+    return [{"dialogs": [dialog]}]
