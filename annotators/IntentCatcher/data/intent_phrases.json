@@ -551,8 +551,8 @@
     },
     "opinion_request": {
       "phrases": [
-        "what (do){0,1} you ((think)|(rekon)|(believe)|(suppose)|(feel)) about ((it)|(this)|(this movie)|(him)|(her)|(them)|(Morgan Freeman)|(Brad Pitt)|(Angeline Jolie-Pitt)|(Home Alone)|(The Avengers)|(my outfit))",
-        "what ((do){0,1} you ((think)|(rekon)|(believe)|(suppose)|(feel))){0,1} about ((drama)|(comedy)|(horrors)|(this actors)|(this plot)|(this synopsis)|(the cast)|(this book)|(Harry Potter book)|(psychology)|(religion)|(cars))",
+        "what (do){0,1} you ((think)|(reckon)|(believe)|(suppose)|(feel)) about ((it)|(this)|(this movie)|(him)|(her)|(them)|(Morgan Freeman)|(Brad Pitt)|(Angeline Jolie-Pitt)|(Home Alone)|(The Avengers)|(my outfit))",
+        "what ((do){0,1} you ((think)|(reckon)|(believe)|(suppose)|(feel))){0,1} about ((drama)|(comedy)|(horrors)|(this actors)|(this plot)|(this synopsis)|(the cast)|(this book)|(Harry Potter book)|(psychology)|(religion)|(cars))",
         "what('s){0,1} ((is)|(are)){0,1} your ((take)|(reaction)|(position)|(opinion)|(experience)|(view)|(thought)|(feeling))(s){0,1} ((about)|(on)) ((it)|(this)|(this movie)|(him)|(her)|(them)|(Chris Evans)|(Matthew Perry)|(TV show)|(book)|(song)|(movie)|(The Shawshank Redemption))",
         "how ((do){0,1} you ((feel)|(think))){0,1} about ((it)|(this)|(this movie)|(him)|(her)|(them)|(Meggy Smith)|(John Doe)|(book)|(song)|(series)|(creation)|(The Godfather)|(The Dark Knight))",
         "(do){0,1} you ((think)|(believe)|(suppose)|(feel)) (that){0,1} ((it)|(this)|(this movie)|(him)|(her)|(them)|(Christian Bale)|(Heath Ledger)|(12 Angry Men)|(Schindler's List)|(movie)|(picture)|(tragedy)|(biography)|(shoes)|(t-shirt)) ((is)|(are)|(was)|(were)|(will be)) ((cool)|(nice)|(great)|(interesting|correct|substantial))",
