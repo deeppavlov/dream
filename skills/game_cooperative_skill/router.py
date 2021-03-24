@@ -4,6 +4,7 @@ from typing import Dict, List
 
 from utils.candidates import sample_candidates
 from utils.state import State
+from utils.game_db import get_db_index
 
 from skills.skill_scorer.skill import run_skill as skill_scorer, skill_attrs as skill_scorer_attrs
 from skills.rule_based_intent.skill import run_skill as rule_based_intent, skill_attrs as rule_based_intent_attrs
@@ -35,11 +36,11 @@ def is_last_skill(skill_name, state):
 
 
 def run_skills(history: List, state: Dict, agent_intents: Dict = {}):
-    state = State(state)
+    state = State(get_db_index(), state)
     state.add_human_message(history[-1])
     # step 0
     # get skill scores
-    state = skill_scorer(state)
+    # state = skill_scorer(state)
 
     # step 1
     # try to find an intention

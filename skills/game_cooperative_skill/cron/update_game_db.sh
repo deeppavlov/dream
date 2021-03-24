@@ -4,4 +4,4 @@ cd "$(dirname "$0")"
 
 source /root/.env
 
-python ../game_db.py
+python update_game_db.py

@@ -1,7 +1,6 @@
 # %%
 from typing import List
 import types
-import json
 import pathlib
 import os
 import random
@@ -9,6 +8,7 @@ import random
 from utils.programy_extention import MindfulDataFileBot
 from utils.programy_model import run_models, cmd_postprocessing
 from utils.state import State
+from utils.game_db import get_game_db
 
 # configuration
 STORAGE_PATH = os.getenv("STORAGE_PATH")
@@ -25,14 +25,6 @@ category_pathes = list((storage_path).glob("./categories/*")) + list(
 aiml_files = {
     category_path.name: {"aiml": [category_path], "sets": [share_set_path]} for category_path in category_pathes
 }
-
-
-# load content
-# latest_json_file = list(sorted(content_dir.glob("./*.json")))[-1]
-# latest_json_file = list(sorted(content_dir.glob("./tops_2020-04-13.json")))[-1]
-# tops = json.load(DB_FILE.open())
-def get_game_db():
-    return json.load(DB_FILE.open())
 
 
 # init models
@@ -288,7 +280,10 @@ def run_skill(state: State, modes: List = [skill_attrs.modes.intro]):
             )
 
     state.add_hypothesis(
-        skill_name=skill_attrs.skill_name, text=text, confidence=confidence, scenario=scenario,
+        skill_name=skill_attrs.skill_name,
+        text=text,
+        confidence=confidence,
+        scenario=scenario,
     )
     state.update_skill_state(skill_attrs.skill_name, skill_state_update)
 
