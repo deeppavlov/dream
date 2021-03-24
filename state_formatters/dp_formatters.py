@@ -65,7 +65,7 @@ def eliza_formatter_dialog(dialog: Dict) -> List[Dict]:
     ]
 
 
-def cobot_qa_formatter_service(payload):
+def cobot_qa_formatter_service(payload: List):
     # Used by: cobot_qa_formatter
     hyps = []
     for resp, conf in zip(payload[0], payload[1]):
@@ -74,7 +74,7 @@ def cobot_qa_formatter_service(payload):
     return hyps
 
 
-def misheard_asr_formatter_service(payload):
+def misheard_asr_formatter_service(payload: List):
     # Used by: misheard_asr_formatter
     hyps = []
     for resp, conf, ha, ba in zip(payload[0], payload[1], payload[2], payload[3]):
@@ -287,7 +287,7 @@ def dp_classes_formatter_service(payload: List):
     return payload[0]
 
 
-def base_formatter_service(payload: Dict) -> List[Dict]:
+def base_formatter_service(payload: List) -> List[Dict]:
     """
     Used by: dummy_skill_formatter, intent_responder_formatter, transfertransfo_formatter,
     aiml_formatter, alice_formatter, tfidf_formatter
@@ -349,7 +349,7 @@ def utt_sentrewrite_modified_last_dialog_emotion_skill(dialog: Dict):
     return [{"dialogs": [dialog]}]
 
 
-def skill_with_attributes_formatter_service(payload: Dict):
+def skill_with_attributes_formatter_service(payload: List):
     """
     Formatter should use `"state_manager_method": "add_hypothesis"` in config!!!
     Because it returns list of hypothesis even if the payload is returned for one sample!
@@ -565,7 +565,7 @@ def intent_responder_formatter_dialog(dialog: Dict):
     return [{"dialogs": [dialog]}]
 
 
-def attitude_formatter_service(payload: Dict):
+def attitude_formatter_service(payload: List):
     # Used by: attitude_formatter
     payload = payload[0]
     if len(payload) == 2:
