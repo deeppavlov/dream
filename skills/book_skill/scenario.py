@@ -8,17 +8,18 @@ from os import getenv
 from common.books import BOOK_SKILL_CHECK_PHRASES, about_book, BOOK_PATTERN
 from common.constants import CAN_CONTINUE
 from common.tutor import get_tutor_phrase
-from common.universal_templates import is_switch_topic, if_lets_chat_about_topic
+from common.universal_templates import is_switch_topic, if_lets_chat_about_topic, tell_me_more, \
+    is_positive, is_negative
 from common.utils import is_yes, is_no
-from utils import get_name, get_genre, suggest_template, get_not_given_question_about_books, dontlike, is_stop, \
-    side_intent, fact_about_book, fav_genre_request_detected, \
-    fav_book_request_detected, parse_author_best_book, tell_me_more, \
-    is_positive, is_negative, best_book_by_author, GENRE_PHRASES, was_question_about_book, \
+from utils import get_name, get_genre, suggest_template, get_not_given_question_about_books, dontlike, \
+    fact_about_book, fav_genre_request_detected, is_side_intent, is_stop, \
+    fav_book_request_detected, parse_author_best_book, best_book_by_author, GENRE_PHRASES, was_question_about_book, \
     asked_about_genre, GENRE_DICT, is_previous_was_book_skill, just_mentioned
+
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.DEBUG)
+                    level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 START_PHRASE = "OK, let's talk about books. Do you love reading?"
@@ -183,7 +184,7 @@ class BookSkillScenario:
                     # if book skill was active and switch topic intent, offer movies
                     logger.debug('Switching topic')
                     reply, confidence = BOOK_CHANGE_PHRASE, self.default_conf
-                elif book_just_active and (is_stop(annotated_user_phrase) or side_intent(annotated_user_phrase)):
+                elif book_just_active and (is_stop(annotated_user_phrase) or is_side_intent(annotated_user_phrase)):
                     # if book skill was active, stop/not/other intents, do not reply
                     logger.debug('Detected stop/no/other intent')
                     reply, confidence = self.default_reply, 0
@@ -376,7 +377,7 @@ class BookSkillScenario:
                     if bookname is None:
                         logger.debug('No bookname detected')
                         if WHAT_IS_FAV_GENRE not in human_attr['book_skill']['used_phrases']:
-                            logging.debug('WHAT_IS_FAV_GENRE not in bot phrases: returning it')
+                            logger.debug('WHAT_IS_FAV_GENRE not in bot phrases: returning it')
                             reply, confidence = WHAT_IS_FAV_GENRE, self.default_conf
                         else:
                             reply, confidence = "", 0

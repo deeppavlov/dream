@@ -3,14 +3,6 @@ import json
 from copy import deepcopy
 
 
-def get_input_json(fname):
-    with open(fname, "r") as f:
-        res = json.load(f)
-    # if len(res[0]['utterances'])%2==0:
-    #    res[0]['utterances']=res[0]['utterances'][:-1]
-    return {"dialogs": res}
-
-
 def slice_(input_data, i):
     tmp_data = deepcopy(input_data)
     tmp_data['dialogs'][0]['human_utterances'] = input_data['dialogs'][0]['human_utterances'][:i]
@@ -22,7 +14,7 @@ def slice_(input_data, i):
 
 def main_test():
     url = 'http://0.0.0.0:8032/book_skill'
-    input_data = get_input_json("test_configs/test_dialog.json")
+    input_data = json.load(open("test_configs/test_dialog.json", "r"))
     sliced_data = [slice_(input_data, i) for i in range(1, 10)]
     gold_phrases = ["I've read it. It's an amazing book! Would you like to know some facts about it?",
                     "",  # As CobotQA doesn't always work
@@ -40,6 +32,7 @@ def main_test():
         if i != 1:  # As CobotQA doesn't always work
             assert len(response) > 0
         assert response in gold_phrases[i] or gold_phrases[i] in response, '*'.join([response, gold_phrases[i]])
+    print('TESTS FOR BOOK SKILL PASSED')
     return 0
 
 

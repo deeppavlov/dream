@@ -2,20 +2,14 @@ import re
 import logging
 from os import getenv
 from copy import deepcopy
-import sentry_sdk
 from random import choice
 
+from common.custom_requests import request_triples_wikidata
+import sentry_sdk
+
 logger = logging.getLogger(__name__)
+
 sentry_sdk.init(getenv('SENTRY_DSN'))
-
-
-def join_words_in_or_pattern(words):
-    return "(" + "|".join([r'\b%s\b' % word for word in words]) + ")"
-
-
-def join_sentences_in_or_pattern(sents):
-    return "(" + "|".join(sents) + ")"
-
 
 other_skills = {'intent_responder', 'program_y_dangerous', 'misheard_asr', 'christmas_new_year_skill',
                 'superbowl_skill', 'oscar_skill', 'valentines_day_skill'}
@@ -96,6 +90,14 @@ midas_classes = {
 }
 
 
+def join_words_in_or_pattern(words):
+    return "(" + "|".join([r'\b%s\b' % word for word in words]) + ")"
+
+
+def join_sentences_in_or_pattern(sents):
+    return "(" + "|".join(sents) + ")"
+
+
 def get_skill_outputs_from_dialog(utterances, skill_name, activated=False):
     """
     Extract list of dictionaries with already formatted outputs of `skill_name` from full dialog.
@@ -123,7 +125,7 @@ def get_skill_outputs_from_dialog(utterances, skill_name, activated=False):
                         # removed one condition as if scop contains skill_name and text, its len is > 0
                         result.append(skop)
                     else:
-                        if not activated and len(skop) > 0:
+                        if not activated and skop:
                             result.append(skop)
         elif "hypotheses" in uttr:
             skills_outputs = uttr["hypotheses"]
@@ -247,11 +249,9 @@ def get_intent_name(text):
     return intent_name
 
 
-def is_opinion_request(annotated_phrase):
-    annotations = annotated_phrase.get("annotations", {})
-    intents = get_intents(annotated_phrase, which="cobot_dialogact_intents")
-    intent_detected = annotations.get("intent_catcher", {}).get("opinion_request", {}).get(
-        "detected") == 1 or "Opinion_RequestIntent" in intents
+def is_opinion_request(annotated_utterance):
+    intents = get_intents(annotated_utterance, which="all", probs=False)
+    intent_detected = 'opinion_request' in intents or "Opinion_RequestIntent" in intents
     opinion_detected = "Opinion_ExpressionIntent" in intents
 
     opinion_request_pattern = re.compile(r"(don't|do not|not|are not|are|do)?\s?you\s"
@@ -260,7 +260,8 @@ def is_opinion_request(annotated_phrase):
                                          r"imagine|guess)")
     if intent_detected or \
         (re.search(opinion_request_pattern,
-                   annotated_phrase["text"].lower()) and not opinion_detected and "?" in annotated_phrase["text"]):
+                   annotated_utterance["text"].lower())
+         and not opinion_detected and "?" in annotated_utterance["text"]):
         return True
     else:
         return False
@@ -290,10 +291,10 @@ def get_outputs_with_response_from_dialog(utterances, response, activated=False)
             for skop in skills_outputs:
                 # need to check text-response for skills with several hypotheses
                 if response in skop["text"]:
-                    if activated and skop["text"] in final_response and len(skop) > 0:
+                    if activated and skop["text"] in final_response and skop:
                         result.append(skop)
                     else:
-                        if not activated and len(skop) > 0:
+                        if not activated and skop:
                             result.append(skop)
         elif "hypotheses" in uttr:
             skills_outputs = uttr["hypotheses"]
@@ -313,7 +314,7 @@ def get_not_used_template(used_templates, all_templates):
         string template
     """
     available = list(set(all_templates).difference(set(used_templates)))
-    if len(available) > 0:
+    if available:
         return choice(available)
     else:
         return choice(all_templates)
@@ -321,7 +322,7 @@ def get_not_used_template(used_templates, all_templates):
 
 def _probs_to_labels(answer_probs, threshold=0.5):
     answer_labels = [label for label in answer_probs if answer_probs[label] > threshold]
-    if len(answer_labels) == 0:
+    if not answer_labels:
         answer_labels = [key for key in answer_probs
                          if answer_probs[key] == max(answer_probs.values())]
     return answer_labels
@@ -342,7 +343,7 @@ def _get_combined_annotations(annotated_utterance, model_name):
     try:
         annotations = annotated_utterance['annotations']
         combined_annotations = annotations['combined_classification']
-        if len(combined_annotations) > 0 and type(combined_annotations) == list:
+        if combined_annotations and isinstance(combined_annotations, list):
             combined_annotations = combined_annotations[0]
         if model_name in combined_annotations:
             answer_probs = combined_annotations[model_name]
@@ -387,7 +388,7 @@ def _get_plain_annotations(annotated_utterance, model_name):
         answer = annotations[model_name]
         logger.info(f'Being processed plain annotation {answer}')
         answer = _process_text(answer)
-        if type(answer) == list:
+        if isinstance(answer, list):
             if model_name == 'sentiment_classification':
                 answer_probs = _process_old_sentiment(answer)
                 answer_labels = _probs_to_labels(answer_probs)
@@ -507,11 +508,11 @@ def get_topics(annotated_utterance, probs=False, default_probs={}, default_label
     if 'cobot_topics' in annotations:
         cobot_topics_labels = _process_text(annotations['cobot_topics'])
         cobot_topics_probs = _labels_to_probs(cobot_topics_labels, combined_classes['cobot_topics'])
-    if 'combined_classification' in annotations and len(cobot_topics_labels) == 0:
+    if 'combined_classification' in annotations and not cobot_topics_labels:
         cobot_topics_probs, cobot_topics_labels = _get_combined_annotations(
             annotated_utterance, model_name='cobot_topics')
     cobot_topics_labels = _process_text(cobot_topics_labels)
-    if len(cobot_topics_probs) == 0:
+    if not cobot_topics_probs:
         cobot_topics_probs = _labels_to_probs(cobot_topics_labels,
                                               combined_classes['cobot_topics'])
 
@@ -521,11 +522,11 @@ def get_topics(annotated_utterance, probs=False, default_probs={}, default_label
     elif "cobot_dialogact_topics" in annotations:
         cobot_da_topics_labels = annotated_utterance['annotations']['cobot_dialogact_topics']
 
-    if 'combined_classification' in annotations and len(cobot_da_topics_labels) == 0:
+    if 'combined_classification' in annotations and not cobot_da_topics_labels:
         cobot_da_topics_probs, cobot_da_topics_labels = _get_combined_annotations(
             annotated_utterance, model_name='cobot_dialogact_topics')
     cobot_da_topics_labels = _process_text(cobot_da_topics_labels)
-    if len(cobot_da_topics_probs) == 0:
+    if not cobot_da_topics_probs:
         cobot_da_topics_probs = _labels_to_probs(cobot_da_topics_labels,
                                                  combined_classes['cobot_dialogact_topics'])
 
@@ -540,7 +541,7 @@ def get_topics(annotated_utterance, probs=False, default_probs={}, default_label
         logger.exception(f'Unknown input type in get_topics: {which}')
         answer_probs, answer_labels = default_probs, default_labels
     try:
-        assert len(answer_labels) > 0, annotations
+        assert answer_labels, annotations
     except Exception as e:
         with sentry_sdk.push_scope() as scope:
             annotations_to_log = {key: value for key, value in annotations.items()
@@ -594,12 +595,12 @@ def get_intents(annotated_utterance, probs=False, default_probs={}, default_labe
     elif 'cobot_dialogact_intents' in annotations:
         cobot_da_intent_labels = annotated_utterance['annotations']['cobot_dialogact_intents']
 
-    if "combined_classification" in annotations and len(cobot_da_intent_labels) == 0:
+    if "combined_classification" in annotations and not cobot_da_intent_labels:
         cobot_da_intent_probs, cobot_da_intent_labels = _get_combined_annotations(
             annotated_utterance, model_name='cobot_dialogact_intents')
 
     cobot_da_intent_labels = _process_text(cobot_da_intent_labels)
-    if len(cobot_da_intent_probs) == 0:
+    if not cobot_da_intent_probs:
         cobot_da_intent_probs = _labels_to_probs(cobot_da_intent_labels,
                                                  combined_classes['cobot_dialogact_intents'])
 
@@ -617,7 +618,7 @@ def get_intents(annotated_utterance, probs=False, default_probs={}, default_labe
         answer_probs, answer_labels = default_probs, default_labels
     if which not in ['intent_catcher', 'midas']:
         try:
-            assert len(answer_labels) > 0, annotations
+            assert answer_labels, annotations
         except Exception as e:
             with sentry_sdk.push_scope() as scope:
                 annotations_to_log = {key: value for key, value in annotations.items()
@@ -632,3 +633,94 @@ def get_intents(annotated_utterance, probs=False, default_probs={}, default_labe
         return answer_probs
     else:
         return answer_labels
+
+
+def get_raw_entity_names_from_annotations(annotations):
+    """
+
+    Args:
+        annotated_utterance: annotated utterance
+
+    Returns:
+        Wikidata entities we received from annotations
+    """
+    raw_el_output = annotations.get('entity_linking', [[], []])
+    entities = []
+    try:
+        if raw_el_output[0]:
+            if isinstance(raw_el_output[0][0], list):
+                entities = raw_el_output[0][0]
+            elif isinstance(raw_el_output[0][0], str):
+                entities = raw_el_output[0]
+    except Exception as e:
+        error_message = f'Wrong entity linking output format {raw_el_output} : {e}'
+        sentry_sdk.capture_exception(error_message)
+        logging.exception(error_message)
+    return entities
+
+
+def get_entity_names_from_annotations(annotated_utterance, stopwords=None, default_entities=[]):
+    """
+
+    Args:
+        annotated_utterance: annotated utterance
+        stopwords_file: name of file with stopwords
+
+    Returns:
+        Names of named entities we received from annotations
+    """
+    stopwords = stopwords if stopwords else []
+    full_text = annotated_utterance['text'].lower()
+    named_entities = [full_text] if full_text in default_entities else []
+    annotations = annotated_utterance.get('annotations', {})
+    for tmp in annotations['ner']:
+        if tmp and 'text' in tmp[0]:
+            named_entities.append(tmp[0]['text'])
+    for nounphrase in annotations.get("cobot_nounphrases", []):
+        named_entities.append(nounphrase)
+    for wikiparser_dict in annotations.get('wiki_parser', [{}]):
+        for wiki_entity_name in wikiparser_dict:
+            named_entities.append(wiki_entity_name)
+    named_entities = [entity
+                      for entity in named_entities
+                      if any([len(ent_word) >= 5 or ent_word not in stopwords for ent_word in entity.split(' ')])]
+    named_entities = list(set(named_entities))
+    # remove entities which are is either too short or stopword
+    return named_entities
+
+
+def entity_to_label(entity):
+    """
+
+    Args:
+        entity: Wikidata entity for which we need to receive the label
+        If should be string, with first letter Q and other from 0 to 9, like Q5321
+
+    Returns:
+
+        label: label from this entity.
+        If entity is in wrong format we assume that it is already label but give exception
+
+    """
+    logging.debug(f'Calling entity_to_label for {entity}')
+    no_entity = not entity
+    wrong_entity_type = not isinstance(entity, str)
+    wrong_entity_format = entity and (entity[0] != 'Q' or any([j not in '0123456789' for j in entity[1:]]))
+    if no_entity or wrong_entity_type or wrong_entity_format:
+        warning_text = f'Wrong entity format. We assume {entity} to be label but check the code'
+        sentry_sdk.capture_exception(Exception(warning_text))
+        logging.exception(warning_text)
+        return entity
+    label = ""
+    labels = request_triples_wikidata("find_label", [(entity, "")])
+    try:
+        sep = '"'
+        if sep in labels[0]:
+            label = labels[0].split('"')[1]
+        else:
+            label = labels[0]
+        logging.debug(f'Answer {label}')
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        logging.exception(Exception(e, 'Exception in conversion of labels {labels}'))
+    return label

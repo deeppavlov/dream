@@ -495,6 +495,9 @@ services:
     build:
       context: .
       dockerfile: ./skills/book_skill/Dockerfile
+      args:
+        AUTHOR_NAMES: http://files.deeppavlov.ai/alexaprize_data/book_author_names.txt
+        QUERY_DICT: http://files.deeppavlov.ai/alexaprize_data/book_query_dict.pkl
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8032
     deploy:
       mode: replicated
@@ -559,8 +562,8 @@ services:
 
   weather-skill:
     build:
-            context: .
-            dockerfile: ./skills/weather_skill/Dockerfile
+      context: .
+      dockerfile: ./skills/weather_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8037
     deploy:
       mode: replicated
@@ -1100,7 +1103,6 @@ services:
           memory: 768M
         reservations:
           memory: 768M
-
 
   dff-food-skill:
     build:

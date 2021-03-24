@@ -216,6 +216,7 @@ services:
     volumes:
       - "./skills/book_skill:/src"
       - "./common:/src/common"
+      - "./skills/CoBotQA:/src/CoBotQA"
     ports:
       - 8032:8032
   christmas-new-year-skill:

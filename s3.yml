@@ -46,4 +46,9 @@ services:
     build:
       args:
         DATA_URL: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/midas.tar.gz
+  book-skill:
+    build:
+      args:
+        AUTHOR_NAMES: http://team-dream-storage.s3.amazonaws.com/alexaprize_data/book_author_names.txt
+        QUERY_DICT: http://team-dream-storage.s3.amazonaws.com/alexaprize_data/book_query_dict.pkl
 version: "3.7"
