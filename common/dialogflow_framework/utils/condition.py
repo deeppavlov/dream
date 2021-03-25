@@ -108,20 +108,11 @@ def is_first_our_response(vars):
     return flag
 
 
-def is_no_human_dialog_breakdown(vars):
-    """Is dialog breakdown in human utterance or no.
-    Pay attention that dialog breakdown does not mean that user changed topic completely.
-    For example,
-    bot: what did you like most in Vietnam?
-    human: very tasty fruits -> dialog breakdown!
+def is_no_human_abandon(vars):
+    """Is dialog breakdown in human utterance or no. Uses MIDAS hold/abandon classes.
     """
-    no_db_proba = (
-        state_utils.get_last_human_utterance(vars)
-        .get("annotations", {})
-        .get("dialog_breakdown", {})
-        .get("no_breakdown", 0.0)
-    )
-    if no_db_proba > 0.5:
+    midas_classes = common_utils.get_intents(state_utils.get_last_human_utterance(vars), which="midas")
+    if "abandon" not in midas_classes:
         return True
     return False
 

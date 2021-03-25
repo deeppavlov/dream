@@ -32,10 +32,6 @@ knowledge-grounding:
   CUDA_VISIBLE_DEVICES: '0'
   gpu: 1
 
-dialog-breakdown:
-  CUDA_VISIBLE_DEVICES: '0'
-  gpu: 1
-
 midas-classification:
   CUDA_VISIBLE_DEVICES: '0'
   gpu: 0

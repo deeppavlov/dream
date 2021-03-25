@@ -36,12 +36,6 @@ services:
     env_file: [ .env.dev ]
     environment:
       - CUDA_VISIBLE_DEVICES=8
-  dialog-breakdown:
-    env_file: [ .env.dev ]
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
-    environment:
-      - CUDA_VISIBLE_DEVICES=5
   midas-classification:
     environment:
       - CUDA_VISIBLE_DEVICES=6
