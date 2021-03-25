@@ -504,9 +504,9 @@ services:
       replicas: 2
       resources:
         limits:
-          memory: 256M
+          memory: 540M
         reservations:
-          memory: 256M
+          memory: 540M
 
   christmas-new-year-skill:
     build:
