@@ -9,6 +9,6 @@ RUN pip install -r /src/requirements.txt
 COPY ./skills/factoid_qa/ /src/
 COPY ./common/ /src/common/
 WORKDIR /src
-RUN python -c 'import deeppavlov.models'
+
 ENV DP_SKIP_NLTK_DOWNLOAD='True'
 CMD gunicorn --workers=2 server:app

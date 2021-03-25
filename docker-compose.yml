@@ -770,9 +770,9 @@ services:
       replicas: 4
       resources:
         limits:
-          memory: 128M
+          memory: 256M
         reservations:
-          memory: 128M
+          memory: 256M
 
   entity-linking:
     build:

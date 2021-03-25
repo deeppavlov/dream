@@ -332,7 +332,6 @@ services:
     volumes:
       - "./skills/factoid_qa:/src"
       - "./common:/src/common"
-      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8071:8071
   kbqa:
