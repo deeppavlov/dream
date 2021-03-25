@@ -411,13 +411,6 @@ services:
       - "./services/knowledge_grounding:/src"
     ports:
       - 8083:8083
-  dialog-breakdown:
-    env_file: [.env.dev]
-    volumes:
-      - "./annotators/dialog_breakdown:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8082:8082
   knowledge-grounding-skill:
     env_file: [.env.dev]
     volumes:
