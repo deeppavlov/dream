@@ -39,13 +39,14 @@ KNOWLEDGE_GROUNDING_SERVICE_URL = getenv('KNOWLEDGE_GROUNDING_SERVICE_URL')
 special_char_re = re.compile(r'[^0-9a-zA-Z \-\.\'\?,!]+')
 greetings_farewells_re = re.compile(join_words_in_or_pattern(["have .* day", "have .* night", ".* bye",
                                                               "\bbye", "goodbye", "hello",
-                                                              "it .* chatting .*", "it .* talking .*",
-                                                              ".* chatting with you .*",
+                                                              "(it|its|it's) .* chatting.*",
+                                                              "(it|its|it's) .* talking.*",
+                                                              ".* chatting with you.*",
                                                               "hi", "good morning",
                                                               "good afternoon",
                                                               "good luck", "great chat",
-                                                              "get off .*", "thanks for the chat",
-                                                              "thank.* for .* chat"]))
+                                                              "get off.*", "thanks for the chat",
+                                                              "thank.* for .* chat"]), re.IGNORECASE)
 tokenizer = tokenize.RegexpTokenizer(r'\w+')
 
 with open("./google-english-no-swears.txt", "r") as f:
