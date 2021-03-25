@@ -462,9 +462,9 @@ simplified_dialogflow.add_user_serial_transitions(
     {
         State.SYS_HELLO: hello_request,
         State.SYS_STD_GREETING: std_greeting_request,
-        (scopes.WEEKEND, weekend_flow.State.USR_START): weekend_flow.std_weekend_request,
         State.SYS_NEW_ENTITIES_IS_NEEDED_FOR: new_entities_is_needed_for_request,
         State.SYS_LINK_TO_BY_ENITY: link_to_by_enity_request,
+        (scopes.WEEKEND, weekend_flow.State.USR_START): weekend_flow.std_weekend_request,
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
@@ -478,9 +478,9 @@ simplified_dialogflow.add_user_serial_transitions(
     State.USR_HELLO_AND_CONTNIUE,
     {
         State.SYS_STD_GREETING: std_greeting_request,
-        (scopes.WEEKEND, weekend_flow.State.USR_START): weekend_flow.std_weekend_request,
         State.SYS_USR_ASKS_BOT_HOW_ARE_YOU: how_are_you_request,
         State.SYS_USR_ANSWERS_HOW_IS_HE_DOING: positive_or_negative_request,
+        (scopes.WEEKEND, weekend_flow.State.USR_START): weekend_flow.std_weekend_request,
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_HELLO_AND_CONTNIUE, State.SYS_ERR)
@@ -524,9 +524,9 @@ simplified_dialogflow.add_system_transition(State.SYS_STD_GREETING, State.USR_ST
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_STD_GREETING,
     {
-        (scopes.WEEKEND, weekend_flow.State.USR_START): weekend_flow.std_weekend_request,
         State.SYS_NEW_ENTITIES_IS_NEEDED_FOR: new_entities_is_needed_for_request,
         State.SYS_LINK_TO_BY_ENITY: link_to_by_enity_request,
+        (scopes.WEEKEND, weekend_flow.State.USR_START): weekend_flow.std_weekend_request,
     },
 )
 

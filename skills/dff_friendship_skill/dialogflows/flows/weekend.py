@@ -119,11 +119,22 @@ def get_human_sentiment_acknowledgement(vars, acknowledgements=None):
 # std weekend
 ##################################################################################################################
 
+patterns_bot = ["chat about", "talk about", "on your mind"]
+re_patterns_bot = re.compile("(" + "|".join(patterns_bot) + ")", re.IGNORECASE)
+
+patterns_human = ["no idea", "don't know", "nothing", "anything", "your favorite topic"]
+re_patterns_human = re.compile("(" + "|".join(patterns_human) + ")", re.IGNORECASE)
+
 
 def std_weekend_request(ngrams, vars):
-    flag = True
+    flag = False
 
-    logger.info(f"std_weekend_request={flag}")
+    last_bot_text = state_utils.get_last_bot_utterance(vars)["text"]
+    human_text = state_utils.get_last_human_utterance(vars)["text"]
+
+    flag = bool(re.search(re_patterns_bot, last_bot_text) and re.search(re_patterns_human, human_text))
+
+    logger.info(f"weekend_request={flag}")
     return flag
 
 
@@ -630,11 +641,7 @@ def error_response(vars):
 
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_START,
-    {
-        State.SYS_WEEKEND: std_weekend_request  # ,
-        #        State.SYS_NEW_ENTITIES_IS_NEEDED_FOR: new_entities_is_needed_for_request,
-        #        State.SYS_LINK_TO_BY_ENITY: link_to_by_enity_request,
-    },
+    {State.SYS_WEEKEND: std_weekend_request},
 )
 simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
 
