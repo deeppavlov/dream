@@ -279,11 +279,12 @@ def respond():
                 dial_ids.append(d_id)
                 input_batch.append(user_input)
 
-            topical_chat_annots = get_annotations_from_dialog(
-                dialog["utterances"][-anntr_history_len * 2 - 1:],
-                "odqa",
-                "topical_chat_fact"
-            )
+            # topical_chat_annots = get_annotations_from_dialog(
+            #     dialog["utterances"][-anntr_history_len * 2 - 1:],
+            #     "odqa",
+            #     "topical_chat_fact"
+            # )
+            topical_chat_annots = ""
             if topical_chat_annots:
                 user_input = {
                     'checked_sentence': topical_chat_annots[-1][1],
