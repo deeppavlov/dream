@@ -23,6 +23,7 @@ CONF_1 = 1.0
 CONF_2 = 0.98
 CONF_3 = 0.96
 CONF_4 = 0.9
+CONF_5 = 0.85
 
 ANIMALS_TEMPLATE = re.compile(r"(animals|pets)", re.IGNORECASE)
 COMPILE_GREETING_QUESTIONS = re.compile("|".join(GREETING_QUESTIONS["what_to_talk_about"]), re.IGNORECASE)
@@ -38,12 +39,14 @@ class State(Enum):
     SYS_Q_HAVE_PETS = auto()
     SYS_ASK_ABOUT_ZOO = auto()
     SYS_ASK_SOME_QUESTIONS = auto()
+    SYS_MENTION_ANIMALS = auto()
     #
     USR_WHAT_ANIMALS = auto()
     USR_TELL_ABOUT_PETS = auto()
     USR_ASK_ABOUT_ZOO = auto()
     USR_HAVE_PETS = auto()
     USR_ASK_SOME_QUESTIONS = auto()
+    USR_MENTION_ANIMALS = auto()
     #
     SYS_IS_DOG_CAT = auto()
     SYS_IS_WILD = auto()
@@ -73,6 +76,7 @@ class State(Enum):
 
 
 def lets_talk_about_request(vars):
+    flag = False
     user_uttr = state_utils.get_last_human_utterance(vars)
     bot_uttr = state_utils.get_last_bot_utterance(vars)
     user_lets_chat_about = "lets_chat_about" in get_intents(user_uttr, which="intent_catcher") or \
@@ -87,9 +91,9 @@ def lets_talk_about_request(vars):
     user_agrees = is_yes(state_utils.get_last_human_utterance(vars))
 
     if (user_lets_chat_about and user_lets_chat_about_animals) or (linkto_talk_about_animals and user_agrees):
-        logger.info("lets talk about animals request")
-        return True
-    return False
+        flag = True
+    logger.info(f"lets_talk_about_request={flag}")
+    return flag
 
 
 def have_pets_request(ngrams, vars):
@@ -97,7 +101,7 @@ def have_pets_request(ngrams, vars):
     text = state_utils.get_last_human_utterance(vars)["text"]
     if re.findall("(do|did) you have (any )?(pets|animals)", text):
         flag = True
-    logger.info(f"have_pets_request {flag}")
+    logger.info(f"have_pets_request={flag}")
     return flag
 
 
@@ -106,7 +110,20 @@ def like_animals_request(ngrams, vars):
     text = state_utils.get_last_human_utterance(vars)["text"]
     if re.findall("(do|did) you (like|love) (pets|animals)", text):
         flag = True
-    logger.info(f"like_animals_request {flag}")
+    logger.info(f"like_animals_request={flag}")
+    return flag
+
+
+def mention_animals_request(ngrams, vars):
+    flag = False
+    annotations = state_utils.get_last_human_utterance(vars)["annotations"]
+    conceptnet = annotations.get("conceptnet", {})
+    for elem, triplets in conceptnet.items():
+        if "SymbolOf" in triplets:
+            objects = triplets["SymbolOf"]
+            if "animal" in objects:
+                flag = True
+    logger.info(f"mention_animals_request={flag}")
     return flag
 
 
@@ -115,55 +132,58 @@ def sys_what_animals_request(ngrams, vars):
     linkto_like_animals = any([req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower()
                                for req in LIKE_ANIMALS_REQUESTS])
     user_agrees = is_yes(state_utils.get_last_human_utterance(vars))
-    if ("what_animals" not in state_utils.get_used_links(vars) and lets_talk_about_request(vars)) or \
+    shared_memory = state_utils.get_shared_memory(vars)
+    if (not shared_memory.get("what_animals", False) and lets_talk_about_request(vars)) or \
             (linkto_like_animals and user_agrees):
-        state_utils.save_to_shared_memory(vars, what_animals=True)
         flag = True
-    logger.info(f"sys_what_animals_request {flag}")
+    logger.info(f"sys_what_animals_request={flag}")
     return flag
 
 
 def sys_have_pets_request(ngrams, vars):
     flag = False
-    if "have_pets" not in state_utils.get_used_links(vars) and lets_talk_about_request(vars):
-        state_utils.save_to_shared_memory(vars, have_pets=True)
+    shared_memory = state_utils.get_shared_memory(vars)
+    if not shared_memory.get("have_pets", False) and lets_talk_about_request(vars):
         flag = True
-    logger.info(f"sys_have_pets_request {flag}")
+    logger.info(f"sys_have_pets_request={flag}")
     return flag
 
 
 def sys_ask_about_zoo_request(ngrams, vars):
     flag = False
-    if "ask_about_zoo" not in state_utils.get_used_links(vars) and lets_talk_about_request(vars):
-        state_utils.save_to_shared_memory(vars, ask_about_zoo=True)
+    shared_memory = state_utils.get_shared_memory(vars)
+    if not shared_memory.get("ask_about_zoo", False) and lets_talk_about_request(vars):
         flag = True
-    logger.info(f"sys_ask_about_zoo_request {flag}")
+    logger.info(f"sys_ask_about_zoo_request={flag}")
     return flag
 
 
 def sys_ask_some_questions_request(ngrams, vars):
     flag = False
-    if "some_questions" not in state_utils.get_used_links(vars) and lets_talk_about_request(vars):
-        state_utils.save_to_shared_memory(vars, some_questions=True)
+    shared_memory = state_utils.get_shared_memory(vars)
+    if not shared_memory.get("some_questions", False) and lets_talk_about_request(vars):
         flag = True
-    logger.info(f"sys_ask_some_questions_request {flag}")
+    logger.info(f"sys_ask_some_questions_request={flag}")
     return flag
 
 
 def what_animals_response(vars):
     response = "What animals do you like?"
+    state_utils.save_to_shared_memory(vars, what_animals=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
     return response
 
 
 def have_pets_response(vars):
     response = "Do you have any pets?"
+    state_utils.save_to_shared_memory(vars, have_pets=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
     return response
 
 
 def ask_about_zoo_response(vars):
     response = "Have you ever been to the zoo?"
+    state_utils.save_to_shared_memory(vars, ask_about_zoo=True)
     state_utils.set_confidence(vars, confidence=CONF_2)
     return response
 
@@ -171,6 +191,7 @@ def ask_about_zoo_response(vars):
 def ask_some_questions_response(vars):
     questions = ["Do you think that animals dream?", "Have you ever been in the farm?"]
     response = random.choice(questions)
+    state_utils.save_to_shared_memory(vars, some_questions=True)
     state_utils.set_confidence(vars, confidence=CONF_2)
     return response
 
@@ -183,16 +204,31 @@ def tell_about_pets_response(vars):
     return response
 
 
+def mention_animals_response(vars):
+    text = state_utils.get_last_human_utterance(vars)["text"]
+    pet = re.findall(PETS_TEMPLATE, text)
+    if pet:
+        response = f"Do you have a {pet}?"
+    else:
+        response = "Do you have pets?"
+    state_utils.set_confidence(vars, confidence=CONF_5)
+    return response
+
+
 def user_has_been_request(ngrams, vars):
+    flag = False
     if is_yes(state_utils.get_last_human_utterance(vars)):
-        return True
-    return False
+        flag = True
+    logger.info(f"user_has_been_request={flag}")
+    return flag
 
 
 def user_has_not_been_request(ngrams, vars):
+    flag = False
     if is_no(state_utils.get_last_human_utterance(vars)):
-        return True
-    return False
+        flag = True
+    logger.info(f"user_has_not_been_request={flag}")
+    return flag
 
 
 def is_wild_request(ngrams, vars):
@@ -200,7 +236,7 @@ def is_wild_request(ngrams, vars):
     text = state_utils.get_last_human_utterance(vars)["text"]
     if not re.findall(PETS_TEMPLATE, text):
         flag = True
-    logger.info(f"is_wild_request {flag}")
+    logger.info(f"is_wild_request={flag}")
     return flag
 
 
@@ -209,6 +245,7 @@ def is_dog_cat_request(ngrams, vars):
     text = state_utils.get_last_human_utterance(vars)["text"]
     if text in {"dogs", "cats", "dogs, cats", "cats, dogs"}:
         flag = True
+    logger.info(f"is_dog_cat_request={flag}")
     return flag
 
 
@@ -219,7 +256,7 @@ def ask_about_breed_request(ngrams, vars):
                             for req in HAVE_PETS_REQUESTS])
     if re.findall(PETS_TEMPLATE, text) and not re.findall("|".join(breeds.keys()), text) and linkto_have_pets:
         flag = True
-    logger.info(f"ask_about_breed {flag}")
+    logger.info(f"ask_about_breed_request={flag}")
     return flag
 
 
@@ -230,7 +267,7 @@ def ask_about_color_request(ngrams, vars):
                             for req in HAVE_PETS_REQUESTS])
     if re.findall(PETS_TEMPLATE, text) and not re.findall(COLORS_TEMPLATE, text) and linkto_have_pets:
         flag = True
-    logger.info(f"ask_about_color {flag}")
+    logger.info(f"ask_about_color_request={flag}")
     return flag
 
 
@@ -239,7 +276,7 @@ def ask_about_feeding_request(ngrams, vars):
     text = state_utils.get_last_human_utterance(vars)["text"]
     if re.findall(PETS_TEMPLATE, text) and "feed" not in text:
         flag = True
-    logger.info(f"ask_about_feeding {flag}")
+    logger.info(f"ask_about_feeding_request={flag}")
     return flag
 
 
@@ -277,9 +314,11 @@ def ask_about_dog_cat_response(vars):
 
 
 def has_pet_request(ngrams, vars):
+    flag = False
     if is_no(state_utils.get_last_human_utterance(vars)):
-        return True
-    return False
+        flag = True
+    logger.info(f"has_pet_request={flag}")
+    return flag
 
 
 def ask_about_breed_response(vars):
@@ -301,10 +340,12 @@ def ask_about_feeding_response(vars):
 
 
 def tell_fact_about_breed_request(ngrams, vars):
+    flag = False
     text = state_utils.get_last_human_utterance(vars)["text"]
     if re.findall("|".join(breeds.keys()), text):
-        return True
-    return False
+        flag = True
+    logger.info(f"tell_fact_about_breed_request={flag}")
+    return flag
 
 
 def ask_about_training_request(ngrams, vars):
@@ -352,6 +393,7 @@ simplified_dialog_flow.add_user_serial_transitions(
         State.SYS_LIKE_ANIMALS: like_animals_request,
         State.SYS_ASK_ABOUT_BREED: ask_about_breed_request,
         State.SYS_ASK_ABOUT_COLOR: ask_about_color_request,
+        State.SYS_MENTION_ANIMALS: mention_animals_request,
     },
 )
 simplified_dialog_flow.set_error_successor(State.USR_START, State.SYS_ERR)
@@ -359,6 +401,7 @@ simplified_dialog_flow.set_error_successor(State.SYS_WHAT_ANIMALS, State.SYS_ERR
 simplified_dialog_flow.set_error_successor(State.SYS_Q_HAVE_PETS, State.SYS_ERR)
 simplified_dialog_flow.set_error_successor(State.SYS_ASK_ABOUT_ZOO, State.SYS_ERR)
 simplified_dialog_flow.set_error_successor(State.SYS_ASK_SOME_QUESTIONS, State.SYS_ERR)
+simplified_dialog_flow.set_error_successor(State.SYS_MENTION_ANIMALS, State.SYS_ERR)
 
 simplified_dialog_flow.add_system_transition(
     State.SYS_WHAT_ANIMALS,
@@ -387,6 +430,13 @@ simplified_dialog_flow.add_system_transition(
     tell_about_pets_response,
 )
 simplified_dialog_flow.set_error_successor(State.SYS_HAVE_PETS, State.SYS_ERR)
+
+simplified_dialog_flow.add_system_transition(
+    State.SYS_MENTION_ANIMALS,
+    State.USR_MENTION_ANIMALS,
+    mention_animals_response,
+)
+simplified_dialog_flow.set_error_successor(State.USR_MENTION_ANIMALS, State.SYS_ERR)
 
 simplified_dialog_flow.add_system_transition(
     State.SYS_LIKE_ANIMALS,
