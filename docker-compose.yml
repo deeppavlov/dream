@@ -15,7 +15,7 @@ services:
         oscar-skill:8055, coronavirus-skill:8061, small-talk-skill:8062, game-cooperative-skill:8068, program-y-wide:8064,
         comet-conceptnet:8065, news-api-skill:8066, short-story-skill:8057, greeting-skill:8070, factoid-qa:8071, kbqa:8072,
         factoid-classification:8073, spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, odqa:8078,
-        knowledge-grounding:8083, combined-classification:8087, dialog-breakdown:8082, knowledge-grounding-skill:8085,
+        knowledge-grounding:8083, combined-classification:8087, knowledge-grounding-skill:8085,
         dff-friendship-skill:8086, masked-lm:8088, entity-storer:8089, wikidata-dial-skill:8091, wikidata-dial-service:8092,
         book-tfidf-retrieval:8039, entertainment-tfidf-retrieval:8040, fashion-tfidf-retrieval:8041,
         movie-tfidf-retrieval:8042, music-tfidf-retrieval:8034, politics-tfidf-retrieval:8043,
@@ -916,24 +916,6 @@ services:
           memory: 4G
         reservations:
           memory: 4G
-
-  dialog-breakdown:
-    build:
-      args:
-        CONFIG: breakdown_config.json
-        PORT: 8082
-      context: .
-      dockerfile: annotators/dialog_breakdown/Dockerfile
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-    deploy:
-      mode: replicated
-      replicas: 1
-      resources:
-        limits:
-          memory: 3.5G
-        reservations:
-          memory: 3.5G
 
   dff-friendship-skill:
     build:
