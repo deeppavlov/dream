@@ -12,7 +12,6 @@ import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 import common.entity_utils as entity_utils
 import common.greeting as common_greeting
-import common.link as common_link
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -162,12 +161,7 @@ def link_to_by_enity_response(vars):
             skill_names = [random.choice(list(link_to_skill2key_words))]
 
         # used_links
-        used_links = state_utils.get_used_links(vars)
-
-        link = common_link.link_to(skill_names, used_links)
-        used_links[link["skill"]] = used_links.get(link["skill"], []) + [link["phrase"]]
-
-        state_utils.save_used_links(vars, used_links)
+        link = state_utils.get_new_link_to(vars, skill_names)
 
         body = random.choice(link_to_skill2i_like_to_talk.get(link["skill"], [""]))
 

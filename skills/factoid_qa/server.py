@@ -321,7 +321,7 @@ def respond():
         responses.append(response)
         confidences.append(confidence)
         attributes.append(attr)
-    logger.info("Responses " + str(responses))
+    logger.info(f"Responses {responses}")
     total_time = time.time() - st_time
     logger.info(f'factoid_qa exec time: {total_time:.3f}s')
     return jsonify(list(zip(responses, confidences, attributes)))

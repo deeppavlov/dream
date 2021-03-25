@@ -6,18 +6,15 @@ from os import getenv
 import sentry_sdk
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
+logger = logging.getLogger(__name__)
 
 DEBUG_MODE = False
 if DEBUG_MODE:
-    API_KEY = 'QFPxaMUoPi5qcax2FBt9D6Y6vAgLRBbn56TW1iO3'
-    QA_SERVICE_URL = 'https://06421kpunk.execute-api.us-east-1.amazonaws.com/prod/qa/v1/answer'
     WIKIDATA_URL = 'http://0.0.0.0:8077/model'
     ENTITY_LINKING_URL = 'http://0.0.0.0:8075/model'
 else:
-    COBOT_QA_SERVICE_URL = getenv('COBOT_QA_SERVICE_URL')
     WIKIDATA_URL = getenv("WIKIDATA_URL")
     ENTITY_LINKING_URL = getenv("ENTITY_LINKING_URL")
-    COBOT_API_KEY = getenv('COBOT_API_KEY')
     assert WIKIDATA_URL and ENTITY_LINKING_URL
 
 
@@ -34,7 +31,7 @@ def request_entities_entitylinking(entity, types, return_raw=False,
     Returns:
 
     """
-    logging.debug(f'Calling request_entities for {entity} {types}')
+    logger.debug(f'Calling request_entities for {entity} {types}')
     try:
         assert isinstance(entity, str)
         t = time.time()
@@ -45,7 +42,7 @@ def request_entities_entitylinking(entity, types, return_raw=False,
                                        "entity_types": [[types]]},
                                  timeout=1).json()
         exec_time = time.time() - t
-        logging.debug(f'Response from entity_linking {response} obtained with exec time  {exec_time:.2f}')
+        logger.debug(f'Response from entity_linking {response} obtained with exec time {exec_time:.2f}')
         if return_raw:
             return response
         entities = response[0][0][0]
@@ -61,7 +58,7 @@ def request_entities_entitylinking(entity, types, return_raw=False,
         assert len(entities) == len(probs)
     except Exception as e:
         sentry_sdk.capture_exception(e)
-        logging.exception(e)
+        logger.exception(e)
         entities = []
         probs = []
     return entities, probs
@@ -77,12 +74,11 @@ def request_triples_wikidata(parser_info, queries, query_dict={}):
     Returns:
         response - response from wikidata REST API if we received it, empty list otherwise
     """
-    # logging.info(f"Calling get_triples, parser_info {parser_info}, queries {queries}")
     responses = []
-    resp = None
     try:
         t = time.time()
         for query in queries:
+            curr_response = ""
             if (parser_info, query) in query_dict:
                 curr_response = (query_dict[(parser_info, query)])
             else:
@@ -96,9 +92,9 @@ def request_triples_wikidata(parser_info, queries, query_dict={}):
             else:
                 responses.append(curr_response)
         exec_time = time.time() - t
-        logging.info(f'Response from wiki_parser {responses} obtained with exec time  {exec_time:.2f}')
+        logger.info(f'Response from wiki_parser {responses} obtained with exec time {exec_time:.2f}')
     except Exception as e:
         sentry_sdk.capture_exception(e)
-        logging.exception(f'Exception in request_triples_wikidata for {parser_info} {query} answer {resp}')
+        logger.exception(e)
 
     return responses
