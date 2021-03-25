@@ -332,7 +332,6 @@ services:
     volumes:
       - "./skills/factoid_qa:/src"
       - "./common:/src/common"
-      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8071:8071
   kbqa:
@@ -472,6 +471,7 @@ services:
     volumes:
       - "./skills/dff_food_skill:/src"
       - "./common:/src/common"
+      - "./skills/CoBotQA:/src/CoBotQA"
     ports:
       - 8097:8097
   dff-music-skill:

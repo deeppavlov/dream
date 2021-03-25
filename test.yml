@@ -152,8 +152,6 @@ services:
     env_file: [ .env.dev ]
   factoid-qa:
     env_file: [ .env.dev ]
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
   entity-linking:
     env_file: [ .env.dev ]
     volumes:

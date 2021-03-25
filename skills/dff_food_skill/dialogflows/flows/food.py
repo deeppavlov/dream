@@ -5,7 +5,7 @@ import os
 import random
 import re
 
-# from CoBotQA.cobotqa_service import send_cobotqa
+from CoBotQA.cobotqa_service import send_cobotqa
 from enum import Enum, auto
 
 import sentry_sdk
@@ -47,6 +47,7 @@ MEALS = [
 CONF_HIGH = 1.0
 CONF_MIDDLE = 0.95
 CONF_LOW = 0.9
+CONF_LOWEST = 0.8
 
 
 class State(Enum):
@@ -183,11 +184,23 @@ def cuisine_fact_response(vars):
 
 def what_fav_food_response(vars):
     food_types = ["food", "meal", "fruit", "dessert"]
-    try:
-        food_type = random.choice(food_types)
+    shared_memory = state_utils.get_shared_memory(vars)
+    used_food = shared_memory.get("used_food", [])
 
-        state_utils.set_confidence(vars, confidence=CONF_HIGH)
+    try:
+        if used_food:
+            unused_food = [i for i in food_types if i not in used_food]
+            if unused_food:
+                food_type = random.choice(unused_food)
+                state_utils.set_confidence(vars, confidence=CONF_LOW)
+            else:
+                food_type = "snack"
+                state_utils.set_confidence(vars, confidence=CONF_LOWEST)
+        else:
+            food_type = "food"
+            state_utils.set_confidence(vars, confidence=CONF_HIGH)
         state_utils.set_can_continue(vars)
+        state_utils.save_to_shared_memory(vars, used_food=used_food + [food_type])
         return f"What is your favorite {food_type}?"
     except Exception as exc:
         logger.exception(exc)
@@ -218,7 +231,10 @@ def food_fact_response(vars):
     # if nounphr:
     #     fact = send_cobotqa(f"fact about {nounphr[0]}")
     #     if "here" in fact.lower():
-    fact = annotations.get("odqa", {}).get("answer_sentence", "")
+    facts = annotations.get("fact_retrieval", [])
+    fact = ""
+    if facts:
+        fact = facts[0]
     try:
         state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
         state_utils.set_can_continue(vars)
@@ -265,8 +281,8 @@ def how_about_meal_response(vars):
         state_utils.set_confidence(vars, confidence=CONF_HIGH)
         state_utils.set_can_continue(vars)
         # first attempt to suggest a meal
+        state_utils.save_to_shared_memory(vars, used_meals=meal)
         if not used_meals:
-            state_utils.save_to_shared_memory(vars, used_meals=meal)
             return f"How about cooking {meal}?"
         else:
             return f"Okay. Give me one more chance. I recommend {meal}."
@@ -280,10 +296,16 @@ def how_about_meal_response(vars):
 def recipe_response(vars):
     try:
         state_utils.set_confidence(vars, confidence=CONF_LOW)
-        return "Great! If you need the recipe ask me after our conversation"
+        shared_memory = state_utils.get_shared_memory(vars)
+        used_meal = shared_memory.get("used_meals", "")
+        recipe = send_cobotqa(f"how to cook {used_meal}")
+        if not(used_meal and recipe):
+            recipe = "Great! Enjoy your meal!"
+        return recipe
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
+        state_utils.set_can_continue(vars)
         state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
@@ -451,10 +473,10 @@ simplified_dialogflow.add_user_transition(State.USR_FOOD_FACT, State.SYS_SOMETHI
 simplified_dialogflow.set_error_successor(State.USR_FOOD_FACT, State.SYS_ERR)
 
 
-simplified_dialogflow.add_system_transition(State.SYS_SOMETHING, State.USR_WHERE_R_U_FROM, where_are_you_from_response)
+simplified_dialogflow.add_system_transition(State.SYS_SOMETHING, State.USR_WHAT_FAV_FOOD, what_fav_food_response)
 simplified_dialogflow.set_error_successor(State.SYS_SOMETHING, State.SYS_ERR)
 
-##################################################################################################################
+#################################################################################################################
 #  SYS_ERR
 simplified_dialogflow.add_system_transition(
     State.SYS_ERR,
