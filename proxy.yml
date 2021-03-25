@@ -447,14 +447,6 @@ services:
       - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/knowledge-grounding
       - PORT=8083
     command: ["nginx", "-g", "daemon off;"]
-  dialog-breakdown:
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/dialog-breakdown
-      - PORT=8082
-    command: ["nginx", "-g", "daemon off;"]
   dff-friendship-skill:
     build:
       context: dp/proxy/

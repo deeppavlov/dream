@@ -31,9 +31,6 @@ services:
   knowledge-grounding:
     environment:
       - CUDA_VISIBLE_DEVICES=4
-  dialog-breakdown:
-    environment:
-      - CUDA_VISIBLE_DEVICES=4
   midas-classification:
     environment:
       - CUDA_VISIBLE_DEVICES=6
