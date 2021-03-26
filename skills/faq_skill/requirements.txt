@@ -1,0 +1,8 @@
+flask==1.1.1
+gunicorn==19.9.0
+requests==2.22.0
+numpy==1.17.2
+sentry-sdk==0.12.3
+spacy==2.2.3
+deeppavlov==0.14.0
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.5/en_core_web_sm-2.2.5.tar.gz#egg=en_core_web_sm==2.2.5
