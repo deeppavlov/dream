@@ -26,8 +26,6 @@ services:
     image: mongo:4.0.0
     ports:
       - 27017:27017
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
   rule_based_response_selector:
     build:
       context: selectors/rule_based_response_selector
