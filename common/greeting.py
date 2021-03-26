@@ -10,9 +10,9 @@ HOW_ARE_YOU_RESPONSES = [
 ]
 
 WHAT_IS_YOUR_NAME_RESPONSES = [
-    "I think we have not met yet. May I know your name?",
+    "I think we have not met yet. What name would you like me to call you?",
     "I do not think we have met before. What name would you like me to call you?",
-    "I'd love to get to know you a bit better before we chat! Is it all right if I ask you for your name?",
+    "I'd love to get to know you a bit better before we chat! What is your name?",
 ]
 
 TOPIC_OFFERING_TEMPLATES = ["TOPIC1 and TOPIC2 are my favorite topics.",
