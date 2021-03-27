@@ -4,7 +4,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 patterns = [
-    "what are we talking about",
+    "are we talking about",
+    "are you talking about",
     "what it is about",
     "what is it about",
     "what we are discussing",
