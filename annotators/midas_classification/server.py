@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-MIDAS_DEFAULT_THRESHOLD = 0.05
+MIDAS_DEFAULT_THRESHOLD = 0.01
 
 try:
     model_dir = '/midas'
