@@ -88,6 +88,8 @@ midas_classes = {
             ["uncertain", "non_compliant", "correction"],
     }
 }
+MIDAS_SEMANTIC_LABELS = sum([intent_list for intent_list in midas_classes["semantic_request"].values()], [])
+MIDAS_FUNCTIONAL_LABELS = sum([intent_list for intent_list in midas_classes["functional_request"].values()], [])
 
 
 def join_words_in_or_pattern(words):
@@ -557,8 +559,7 @@ def get_topics(annotated_utterance, probs=False, default_probs={}, default_label
         return answer_labels
 
 
-def get_intents(annotated_utterance, probs=False, default_probs={}, default_labels=[], which="all",
-                midas_threshold=None):
+def get_intents(annotated_utterance, probs=False, default_probs={}, default_labels=[], which="all"):
     """Function to get intents from particular annotator or all detected.
 
     Args:
@@ -571,7 +572,6 @@ def get_intents(annotated_utterance, probs=False, default_probs={}, default_labe
             'intent_catcher' means intents detected by `intent_catcher`.
             'cobot_dialogact_intents' means intents detected by `cobot_dialogact_intents`.
             'midas' means intents detected by `midas_classification`.
-        midas_threshold: probability threshold we set for midas intents
     Returns:
         list of intents
     """
@@ -581,11 +581,22 @@ def get_intents(annotated_utterance, probs=False, default_probs={}, default_labe
     detected_intent_probs = {key: 1 for key in detected_intents}
     midas_intent_probs = annotations.get("midas_classification", {})
     if midas_intent_probs:
-        max_midas_prob = max(midas_intent_probs.values())
-        if midas_threshold:
-            midas_intent_labels = [k for k, v in midas_intent_probs.items() if v >= midas_threshold]
+        semantic_midas_probs = {k: v for k, v in midas_intent_probs.items() if k in MIDAS_SEMANTIC_LABELS}
+        functional_midas_probs = {k: v for k, v in midas_intent_probs.items() if k in MIDAS_FUNCTIONAL_LABELS}
+        if semantic_midas_probs:
+            max_midas_semantic_prob = max(semantic_midas_probs.values())
         else:
-            midas_intent_labels = [k for k, v in midas_intent_probs.items() if v == max_midas_prob]
+            max_midas_semantic_prob = 0.
+        if functional_midas_probs:
+            max_midas_functional_prob = max(functional_midas_probs.values())
+        else:
+            max_midas_functional_prob = 0.
+
+        midas_semantic_intent_labels = [k for k, v in semantic_midas_probs.items()
+                                        if v == max_midas_semantic_prob]
+        midas_functional_intent_labels = [k for k, v in functional_midas_probs.items()
+                                          if v == max_midas_functional_prob]
+        midas_intent_labels = midas_semantic_intent_labels + midas_functional_intent_labels
     else:
         midas_intent_labels = []
     cobot_da_intent_probs, cobot_da_intent_labels = {}, []

@@ -211,7 +211,7 @@ class MovieSkillScenario:
             return False
 
     def is_opinion_request(self, uttr):
-        all_intents = get_intents(uttr, which="all", midas_threshold=0.1)
+        all_intents = get_intents(uttr, which="all")
 
         intent_detected = any([intent in all_intents for intent in ["opinion_request", "Opinion_RequestIntent",
                                                                     "open_question_opinion", "yes_no_question"]])
@@ -221,7 +221,7 @@ class MovieSkillScenario:
             return False
 
     def is_opinion_expression(self, uttr):
-        all_intents = get_intents(uttr, which="midas", midas_threshold=0.1)
+        all_intents = get_intents(uttr, which="midas")
         intent_detected = any([intent in all_intents for intent in ["opinion"]])
 
         if intent_detected:

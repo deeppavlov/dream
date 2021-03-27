@@ -109,8 +109,7 @@ class GroundingSkillScenario:
             curr_attrs += [attr]
 
             # ACKNOWLEDGEMENT HYPOTHESES for current utterance
-            curr_intents = get_intents(dialog['human_utterances'][-1], probs=False, which='midas',
-                                       midas_threshold=0.3)
+            curr_intents = get_intents(dialog['human_utterances'][-1], probs=False, which='midas')
             curr_considered_intents = [intent for intent in curr_intents if intent in MIDAS_INTENT_ACKNOWLEDGMENETS]
 
             if curr_considered_intents:
