@@ -52,6 +52,7 @@ templates += [(re.compile(r"\bwhys\b", flags=re.IGNORECASE), "why is")]
 
 templates += [(re.compile(r"\bbtw\b", flags=re.IGNORECASE), "by the way")]
 templates += [(re.compile(r"\bcu\b", flags=re.IGNORECASE), "see you")]
+templates += [(re.compile(r"\bid k\b", flags=re.IGNORECASE), "i don't know")]
 templates += [(re.compile(r"\bidk\b", flags=re.IGNORECASE), "i don't know")]
 templates += [(re.compile(r"\bimo\b", flags=re.IGNORECASE), "in my opinion")]
 templates += [(re.compile(r"\bomg\b", flags=re.IGNORECASE), "oh my god")]
