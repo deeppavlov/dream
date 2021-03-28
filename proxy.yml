@@ -383,14 +383,14 @@ services:
     environment:
       - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/factoid-qa
       - PORT=8071
-  odqa:
-    command: [ "nginx", "-g", "daemon off;" ]
+  text-qa:
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/odqa
+      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/text-qa
       - PORT=8078
+    command: [ "nginx", "-g", "daemon off;" ]
   kbqa:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -566,5 +566,13 @@ services:
     environment:
       - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/dff-music-skill
       - PORT=8099
+    command: [ "nginx", "-g", "daemon off;" ]
+  fact-retrieval:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/fact-retrieval
+      - PORT=8100
     command: [ "nginx", "-g", "daemon off;" ]
 version: '3.7'

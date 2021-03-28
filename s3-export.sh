@@ -12,6 +12,7 @@ files=(
   deeppavlov_data/bert/conversational_cased_L-12_H-768_A-12.tar.gz
   deeppavlov_data/classifiers/yahoo_convers_vs_info_v4.tar.gz
   deeppavlov_data/classifiers/sentiment_sst_bert_v2.tar.gz
+  deeppavlov_data/bert/uncased_L-4_H-128_A-2.zip
   deeppavlov_data/wiki_index.tar.gz
   deeppavlov_data/multi_squad_model_noans_1.1.tar.gz
   alexaprize_data/book_author_names.txt
@@ -45,6 +46,8 @@ files=(
   kbqa/wikidata/path_ranking_data.tar.gz
   kbqa/models/opendialkg_path_ranking_lite.tar.gz
   kbqa/models/dialogpt_wiki.tar.gz
+  kbqa/models/fact_ranking_bert_lite.tar.gz
+  kbqa/models/rel_ranking_bert_lite.tar.gz
 )
 
 for file in ${files[@]}; do

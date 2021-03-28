@@ -9,6 +9,7 @@ import requests
 import yaml
 from deeppavlov.core.data.utils import path_set_md5
 from deeppavlov.download import get_configs_downloads
+from git import Repo
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--compose_file', help='path to compose file to analyze', default='docker-compose.yml')
@@ -20,8 +21,14 @@ with open(args.compose_file) as f:
 
 downloads = defaultdict(list)
 
+repo = Repo('/pavlov/DeepPavlov')
+origin = repo.remotes.origin
+origin.pull()
+
 for service_name, service_args in data['services'].items():
     if service_args.get('build', {}).get('args', {}).get('SRC_DIR') is not None:
+        commit = service_args['build']['args'].get('COMMIT', 'master')
+        repo.git.checkout(commit)
         config_path = Path(service_args['build']['args']['SRC_DIR']) / service_args['build']['args']['CONFIG']
         try:
             config_downloads = dict(get_configs_downloads(config_path))

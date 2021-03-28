@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 KBQA_URL = getenv('KBQA_URL')
-ODQA_URL = getenv('ODQA_URL')
+TEXT_QA_URL = getenv('TEXT_QA_URL')
 use_annotators_output = True
 FACTOID_DEFAULT_CONFIDENCE = 0.99  # otherwise dummy often beats it
 ASKED_ABOUT_FACT_PROB = 0.99
@@ -152,9 +152,9 @@ def getQaResponse(query, system):
             qa_url = KBQA_URL
         else:
             qa_request_dict = dict([('question_raw', x)])
-            qa_url = ODQA_URL
+            qa_url = TEXT_QA_URL
         qa_request = json.dumps(qa_request_dict, ensure_ascii=False).encode('utf8')
-        logger.info(f'Preparing to run query against {system} DP Model: ' + str(qa_request))
+        logger.info(f'Preparing to run query against {system} DP Model: {qa_request}')
         tm_st = time.time()
         resp = requests.post(qa_url, data=qa_request, timeout=1.5)
         tm_end = time.time()
@@ -177,7 +177,7 @@ def getQaResponse(query, system):
     return qa_response
 
 
-def odqa_kbqa_choose(question, odqa_response, kbqa_response):
+def qa_choose(question, odqa_response, kbqa_response):
     answer = ""
     confidence = 0.0
     question_type = ""
@@ -252,9 +252,9 @@ def respond():
         is_factoid_sents.append(is_factoid)
         ner_outputs_to_classify.append(names)
 
-    logger.info('Ner outputs ' + str(ner_outputs_to_classify))
+    logger.info(f'Ner outputs {ner_outputs_to_classify}')
     fact_outputs = get_random_facts(ner_outputs_to_classify)
-    logger.info('Fact outputs ' + str(fact_outputs))
+    logger.info(f'Fact outputs {fact_outputs}')
     for i in range(len(sentences_to_classify)):
         if asked_about_fact(sentences_to_classify[i]):
             is_factoid_sents[i] = ASKED_ABOUT_FACT_PROB
@@ -262,12 +262,43 @@ def respond():
     # factoid_classes = [cl > FACTOID_CLASS_THRESHOLD for cl in factoid_classes]
     # logger.info('Factoid classes ' + str(factoid_classes))
 
-    kbqa_response = dict()
-    odqa_response = dict()
+    questions_batch = []
+    facts_batch = []
+    question_nums = []
+    for n, (dialog, is_factoid, fact_output) in enumerate(zip(dialogs_batch, is_factoid_sents, fact_outputs)):
+        curr_ann_uttr = dialog["human_utterances"][-1]
+        annotations = curr_ann_uttr["annotations"]
+        tell_me_about_intent = annotations.get("intent_catcher", {}).get("lets_chat_about", {}).get(
+            "detected", 0) == 1 or if_lets_chat_about_topic(curr_ann_uttr["text"])
+        is_question = "?" in annotations['sentrewrite']['modified_sents'][-1]
+        if is_factoid and (tell_me_about_intent or is_question):
+            questions_batch.append(curr_ann_uttr["text"])
+            facts_batch.append(annotations.get("fact_retrieval", []))
+            question_nums.append(n)
 
-    for dialog, is_factoid, fact_output in zip(dialogs_batch,
-                                               is_factoid_sents,
-                                               fact_outputs):
+    text_qa_response_batch = [{"answer": "", "answer_sentence": "", "confidence": 0.0} for _ in dialogs_batch]
+    resp = requests.post(TEXT_QA_URL, json={"question_raw": questions_batch, "top_facts": facts_batch}, timeout=0.5)
+    if resp.status_code != 200:
+        logger.info(f'API Error: Text QA inaccessible')
+    else:
+        logger.info(f'Query against Text QA succeeded')
+        text_qa_resp = resp.json()
+        text_qa_response_batch = []
+        cnt_fnd = 0
+        for i in range(len(dialogs_batch)):
+            if i in question_nums and cnt_fnd < len(text_qa_resp):
+                text_qa_response_batch.append({"answer": text_qa_resp[cnt_fnd][0],
+                                               "answer_sentence": text_qa_resp[cnt_fnd][3],
+                                               "confidence": text_qa_resp[cnt_fnd][1]})
+            else:
+                text_qa_response_batch.append({"answer": "", "answer_sentence": "", "confidence": 0.0})
+    logger.info(f'Response: {resp.json()}')
+
+    kbqa_response = dict()
+
+    for dialog, text_qa_response, is_factoid, fact_output in zip(dialogs_batch, text_qa_response_batch,
+                                                                 is_factoid_sents,
+                                                                 fact_outputs):
         attr = {}
         curr_ann_uttr = dialog["human_utterances"][-1]
         tell_me_about_intent = curr_ann_uttr["annotations"].get("intent_catcher", {}).get("lets_chat_about", {}).get(
@@ -276,28 +307,22 @@ def respond():
         if is_factoid and (tell_me_about_intent or is_question):
             logger.info("Question is classified as factoid. Querying KBQA and ODQA.")
             print("Question is classified as factoid. Querying KBQA and ODQA...", flush=True)
-            logger.info(
-                f"Using annotators output, kbqa_response {curr_ann_uttr['annotations'].get('kbqa', [])} "
-                f"odqa_response {curr_ann_uttr['annotations'].get('odqa', [])}")
+            logger.info(f"Using annotators output, kbqa_response {curr_ann_uttr['annotations'].get('kbqa', [])}")
             if use_annotators_output:
                 kbqa_response = curr_ann_uttr["annotations"].get("kbqa", {})
-                odqa_response = curr_ann_uttr["annotations"].get("odqa", {})
-                logger.info(f"Using annotators output, kbqa_response {kbqa_response} odqa_response {odqa_response}")
+                logger.info(f"Using annotators output, kbqa_response {kbqa_response}")
             else:
                 futures = []
                 executor = concurrent.futures.ThreadPoolExecutor()
-                for system in ["odqa", "kbqa"]:
+                for system in ["kbqa"]:
                     futures.append(executor.submit(getQaResponse, last_phrase, system))
                 results = []
                 for future in concurrent.futures.as_completed(futures):
                     results.append(future.result())
                 for result in results:
-                    if result["qa_system"] == "kbqa":
-                        kbqa_response = result
-                    else:
-                        odqa_response = result
+                    kbqa_response = result
 
-            response, confidence = odqa_kbqa_choose(last_phrase, odqa_response, kbqa_response)
+            response, confidence = qa_choose(last_phrase, text_qa_response, kbqa_response)
             if len(response) > 300:
                 response_cut = ""
                 cur_len = 0

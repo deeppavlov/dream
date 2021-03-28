@@ -1,5 +1,6 @@
 import logging
 import os
+import time
 from flask import Flask, request, jsonify
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
@@ -53,8 +54,12 @@ def respond():
             kbqa_input = [sanitized_questions, sanitized_questions, template_types, sanitized_entities, entity_types]
         else:
             kbqa_input = [sanitized_questions]
-    out_res = [("Not Found", 0.0)] * len(questions)
+    default_resp = {"qa_system": "kbqa",
+                    "answer": "",
+                    "confidence": 0.0}
+    out_res = [default_resp for _ in questions]
     try:
+        st_time = time.time()
         if kbqa_input:
             res = kbqa(*kbqa_input)
             if res:
@@ -62,12 +67,15 @@ def respond():
                 cnt_fnd = 0
                 for i in range(len(questions)):
                     if i in nf_numbers:
-                        out_res.append(("Not Found", 0.0))
+                        out_res.append(default_resp)
                     else:
                         if cnt_fnd < len(res):
                             answer, conf = res[cnt_fnd]
-                            out_res.append((answer, float(conf)))
+                            out_res.append({"qa_system": "kbqa",
+                                            "answer": answer,
+                                            "confidence": float(conf)})
                             cnt_fnd += 1
+        logger.info(f"Respond exec time: {time.time() - st_time}")
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)

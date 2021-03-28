@@ -10,7 +10,7 @@ factoid-classification:
   CUDA_VISIBLE_DEVICES: '0'
   gpu: 0
 
-odqa:
+text-qa:
   CUDA_VISIBLE_DEVICES: '0'
   gpu: 2
 
@@ -43,3 +43,7 @@ masked-lm:
 wikidata-dial-service:
   CUDA_VISIBLE_DEVICES: '0'
   gpu: 1
+
+fact-retrieval:
+  CUDA_VISIBLE_DEVICES: '0'
+  gpu: 2
