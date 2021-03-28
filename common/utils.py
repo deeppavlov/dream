@@ -219,6 +219,13 @@ def is_yes(annotated_phrase):
 
 no_templates = re.compile(r"(\bno\b|\bnot\b|no way|don't|no please|i disagree)")
 DONOTKNOW_LIKE = [r"(i )?(do not|don't) know", "you (choose|decide|pick up)", "no idea"]
+DONOTKNOW_LIKE_PATTERN = re.compile(join_sentences_in_or_pattern(DONOTKNOW_LIKE), re.IGNORECASE)
+
+
+def is_donot_know(annotated_phrase):
+    if DONOTKNOW_LIKE_PATTERN.search(annotated_phrase["text"]):
+        return True
+    return False
 
 
 def is_no(annotated_phrase):
@@ -227,7 +234,7 @@ def is_no(annotated_phrase):
     user_phrase = annotated_phrase.get('text', '').lower().strip().replace('.', '')
     is_not_horrible = 'horrible' != user_phrase
     no_regexp_detected = re.search(no_templates, annotated_phrase["text"].lower())
-    is_not_idontknow = not re.search(join_sentences_in_or_pattern(DONOTKNOW_LIKE), annotated_phrase["text"].lower())
+    is_not_idontknow = not is_donot_know(annotated_phrase)
     if is_not_horrible and (no_detected or no_regexp_detected) and is_not_idontknow:
         return True
 

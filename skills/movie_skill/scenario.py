@@ -16,7 +16,8 @@ from common.link import link_to, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED
 from common.movies import get_movie_template
 from common.universal_templates import if_switch_topic, is_switch_topic, if_lets_chat_about_topic, if_choose_topic, \
     COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
-from common.utils import get_skill_outputs_from_dialog, is_yes, is_no, get_topics, get_intents, get_sentiment
+from common.utils import get_skill_outputs_from_dialog, is_yes, is_no, get_topics, get_intents, get_sentiment, \
+    is_donot_know
 from CoBotQA.cobotqa_service import send_cobotqa
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -505,7 +506,7 @@ class MovieSkillScenario:
                     response = f"Great! {result}"
                 else:
                     response = f"Great!"
-            elif is_no(curr_user_uttr):
+            elif is_no(curr_user_uttr) or is_donot_know(curr_user_uttr):
                 if "Sorry, I don't know" in result or len(result.strip()) == 0:
                     response = f"Seems like I also can't find this information."
                 else:
@@ -531,7 +532,7 @@ class MovieSkillScenario:
                     response = f"Great!"
                 else:
                     response = f"Great! {result}"
-            elif is_no(curr_user_uttr):
+            elif is_no(curr_user_uttr) or is_donot_know(curr_user_uttr):
                 if "Sorry, I don't know" in result or len(result.strip()) == 0:
                     response = f"Seems like I also can't find this information."
                 else:
