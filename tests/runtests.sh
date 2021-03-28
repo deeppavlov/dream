@@ -124,7 +124,7 @@ if [[ "$MODE" == "test_dialog" || "$MODE" == "all" ]]; then
     fi
 
     echo "Testing file conflicts"
-    dockercompose_cmd exec -T -u $(id -u) agent python utils/analyze_downloads.py
+    dockercompose_cmd exec -T agent python utils/analyze_downloads.py
 
     echo "Testing docker-compose files"
     dockercompose_cmd exec -T -u $(id -u) agent python utils/verify_compose.py
@@ -141,11 +141,12 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
                      program-y-dangerous superbowl-skill oscar-skill valentines-day-skill eliza \
                      dummy-skill-dialog intent-catcher short-story-skill comet-atomic \
                      comet-conceptnet convers-evaluation-selector emotion-skill game-cooperative-skill \
-                     entity-linking kbqa odqa wiki-parser convert-reddit \
+                     entity-linking kbqa text-qa wiki-parser convert-reddit \
                      cobot-convers-evaluator-annotator \
                      book-skill combined-classification knowledge-grounding-skill \
                      grounding-skill dff-friendship-skill masked-lm entity-storer wikidata-dial-skill \
-                     dff-travel-skill dff-animals-skill dff-food-skill dff-sport-skill midas-classification; do
+                     dff-travel-skill dff-animals-skill dff-food-skill dff-sport-skill midas-classification \
+                     fact-retrieval; do
 
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh

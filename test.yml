@@ -18,7 +18,7 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=9
-  odqa:
+  text-qa:
     env_file: [ .env.dev ]
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
@@ -192,4 +192,10 @@ services:
     env_file: [ .env.dev ]
   dff-music-skill:
     env_file: [ .env.dev ]
+  fact-retrieval:
+    env_file: [ .env.dev ]
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
 version: '3.7'

@@ -1,14 +1,13 @@
 {
   "chainer": {
-    "in": ["question_raw", "question_nounphr", "nounphr", "entities"],
-    "out": ["answer", "answer_score", "answer_place", "answer_sentence", "answer_sentence_tch", "answer_context", "first_par"],
+    "in": ["current_utterance", "dialog_history", "nounphr", "first_par"],
     "pipe": [
       {
-        "class_name": "pyserini_ranker",
+        "class_name": "pyserini_ranker:PyseriniRanker",
         "index_folder": "{DOWNLOADS_PATH}/wiki_index",
-        "in": ["question_nounphr"],
+        "in": ["current_utterance"],
         "out": ["doc_text"],
-        "top_n": 15
+        "top_n": 7
       },
       {
         "class_name": "document_chunker",
@@ -20,9 +19,9 @@
         "log": true
       },
       {
-        "class_name": "par_tfidf_ranker",
-        "in": ["question_raw", "paragraphs", "nounphr", "entities"],
-        "out": ["top_paragraphs", "top_facts", "first_par"],
+        "class_name": "tfidf_ranker:ParTfidfRanker",
+        "in": ["current_utterance", "paragraphs", "nounphr"],
+        "out": ["top_sentences", "topical_chat_facts"],
         "tokenizer": {
           "class_name": "stream_spacy_tokenizer",
           "lemmas": true,
@@ -33,26 +32,19 @@
         "np_facts_filename": "{DOWNLOADS_PATH}/topical_chat/nounphrases_facts_map.json",
         "facts_map_filename": "{DOWNLOADS_PATH}/topical_chat/facts_map.json",
         "unigrams_filename": "{DOWNLOADS_PATH}/topical_chat/google-english-no-swears.txt",
-        "wiki_first_par_filename": "{DOWNLOADS_PATH}/wikidata_eng/q_to_par_en.pickle",
-        "top_n": 32,
+        "top_n": 60,
         "log": true
       },
       {
-        "class_name": "string_multiplier",
-        "id": "str_mult"
-      },
-      {
-        "class_name": "logit_ranker",
-        "string_multiplier": "#str_mult",
-        "batch_size": 32,
-        "squad_model": {"config_path": "{CONFIGS_PATH}/squad/multi_squad_noans_infer.json"},
-        "sort_noans": false,
-        "return_answer_sentence": true,
-        "use_topical_chat": true,
-        "in": ["question_raw", "top_paragraphs", "top_facts"],
-        "out": ["answer", "answer_score", "answer_place", "answer_sentence", "answer_sentence_tch", "answer_context"]
+        "class_name": "fact_ranking:FactRankerInfer",
+        "in": ["dialog_history", "top_sentences", "topical_chat_facts", "first_par"],
+        "out": ["top_facts"],
+        "facts_to_leave": 20,
+        "thres": 0.93,
+        "ranker": {"config_path": "{CONFIGS_PATH}/classifiers/fact_ranking_bert_lite.json"}
       }
-    ]
+    ],
+    "out": ["top_facts"]
   },
   "metadata": {
     "variables": {
@@ -75,10 +67,6 @@
       {
         "url": "http://files.deeppavlov.ai/kbqa/wikidata/topical_chat.tar.gz",
         "subdir": "{DOWNLOADS_PATH}/topical_chat"
-      },
-      {
-        "url": "http://files.deeppavlov.ai/kbqa/wikidata/q_to_par_en.pickle",
-        "subdir": "{DOWNLOADS_PATH}/wikidata_eng"
       }
     ]
   }

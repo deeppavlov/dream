@@ -431,7 +431,7 @@ def ner_formatter_last_bot_dialog(dialog: Dict):
 
 def wp_formatter_dialog(dialog: Dict):
     # Used by: wiki_parser annotator
-    entity_ids_batch, _ = dialog["human_utterances"][-1]["annotations"].get("entity_linking", [[], []])
+    entity_ids_batch, _, _ = dialog["human_utterances"][-1]["annotations"].get("entity_linking", [[], [], []])
     input_entity_ids = []
     input_entity_ids_list = []
     if entity_ids_batch:
@@ -498,38 +498,25 @@ def kbqa_formatter_dialog(dialog: Dict):
     return [{"x_init": sentences, "entities": entities}]
 
 
-def odqa_formatter_dialog(dialog: Dict):
+def fact_retrieval_formatter_dialog(dialog: Dict):
     # Used by: odqa annotator
-    last_human_utterance_text = ""
-    last_bot_utterance_text = ""
-    if "sentseg" in dialog["human_utterances"][-1]["annotations"]:
-        last_human_utterance_text = dialog["human_utterances"][-1]["annotations"]["sentseg"]["punct_sent"]
-    else:
-        last_human_utterance_text = dialog["human_utterances"][-1]["text"]
-    human_sentences = [last_human_utterance_text]
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    dialog_history = [" ".join([uttr["text"] for uttr in dialog["utterances"][-3:]])]
 
-    if dialog["bot_utterances"]:
-        if "sentseg" in dialog["bot_utterances"][-1]["annotations"]:
-            last_bot_utterance_text = dialog["bot_utterances"][-1]["annotations"]["sentseg"]["punct_sent"]
-        else:
-            last_bot_utterance_text = dialog["bot_utterances"][-1]["text"]
-    bot_sentences = [last_bot_utterance_text]
-    nounphrases = [dialog["human_utterances"][-1]["annotations"].get("cobot_nounphrases", [])]
+    last_human_utt = dialog["human_utterances"][-1]
 
-    entity_ids_batch, _ = dialog["human_utterances"][-1]["annotations"].get("entity_linking", [[], []])
-    input_entity_ids = []
-    if entity_ids_batch:
-        for entity_ids_list in entity_ids_batch:
-            if entity_ids_list:
-                input_entity_ids.append(entity_ids_list[0])
-    input_entity_ids = list(set(input_entity_ids))
+    nounphrases = [last_human_utt["annotations"].get("cobot_nounphrases", [])]
+
+    _, _, first_par_batch = \
+        last_human_utt["annotations"].get("entity_linking", [[], [], []])
 
     return [
         {
-            "human_sentences": human_sentences,
-            "bot_sentences": bot_sentences,
+            "human_sentences": [last_human_utt["text"]],
+            "dialog_history": dialog_history,
             "entity_substr": nounphrases,
-            "entities": [input_entity_ids],
+            "first_par": [first_par_batch],
         }
     ]
 
@@ -558,7 +545,7 @@ def intent_responder_formatter_dialog(dialog: Dict):
         for intent in called:
             called_intents[intent] = True
     dialog["called_intents"] = called_intents
-    dialog["utterances"] = dialog["utterances"][-(utils.LAST_N_TURNS * 2 + 1) :]
+    dialog["utterances"] = dialog["utterances"][-(utils.LAST_N_TURNS * 2 + 1):]
     for utt in dialog["utterances"]:
         if "sentseg" in utt["annotations"]:
             utt["text"] = utt["annotations"]["sentseg"]["punct_sent"]

@@ -197,15 +197,16 @@
                 "state_manager_method": "add_annotation",
                 "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
             },
-            "odqa": {
+            "fact_retrieval": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://odqa:8078/model"
+                    "url": "http://fact-retrieval:8100/model"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:odqa_formatter_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:fact_retrieval_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
+                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg",
+                                               "annotators.entity_linking"]
             },
             "ner": {
                 "connector": "connectors.ner",

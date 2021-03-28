@@ -16,7 +16,6 @@ from common.universal_templates import if_lets_chat_about_topic, if_choose_topic
 from common.utils import get_intents, join_sentences_in_or_pattern, join_words_in_or_pattern, \
     get_topics
 
-
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -26,6 +25,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 DEFAULT_ANNTR_HISTORY_LEN = 2
+TOP_N_FACTS = 2
 AA_FACTOR = 0.05
 ABBRS_CONFIDENCE = 0.8
 DEFAULT_CONFIDENCE = 0.88
@@ -69,7 +69,7 @@ def get_entities(utt):
     return entities
 
 
-def get_annotations_from_dialog(utterances, annotator_name, key_name):
+def get_annotations_from_dialog(utterances, annotator_name, key_name=None):
     """
     Extract list of strings with values of specific key <key_name>
     from annotator <annotator_name> dict from given dialog utterances.
@@ -88,14 +88,16 @@ def get_annotations_from_dialog(utterances, annotator_name, key_name):
         value = ""
         if isinstance(annotation, dict) and key_name in annotation:
             # check if odqa has nonempty answer along with a paragraph
-            if annotator_name == "odqa" and annotation.get("answer", ""):
+            if annotator_name == "kbqa":
                 value = annotation.get(key_name, "")
-            elif annotator_name == "kbqa":
-                value = annotation.get(key_name, "")
+            # include only non-empty strs
+            if value:
+                result_values.append([(len(utterances) - i - 1) * 0.01, value])
+        if isinstance(annotation, list):
+            values = annotation
+            for value in values[:2]:
+                result_values.append([(len(utterances) - i - 1) * 0.01, value])
 
-        # include only non-empty strs
-        if value:
-            result_values.append([(len(utterances) - i - 1) * 0.01, value])
     return result_values
 
 
@@ -115,9 +117,7 @@ def get_intents_flags(utt):
         "where_are_you_from", "who_made_you"
     ]
     detected_intents = get_intents(utt, which="intent_catcher")
-    lets_chat_about_flag = if_lets_chat_about_topic(utt["text"].lower()) or (
-        "lets_chat_about" in detected_intents
-    )
+    lets_chat_about_flag = if_lets_chat_about_topic(utt["text"].lower()) or ("lets_chat_about" in detected_intents)
     special_intents_flag = any([si in detected_intents for si in special_intents])
     return lets_chat_about_flag, special_intents_flag
 
@@ -280,38 +280,21 @@ def respond():
                 dial_ids.append(d_id)
                 input_batch.append(user_input)
 
-            # topical_chat_annots = get_annotations_from_dialog(
-            #     dialog["utterances"][-anntr_history_len * 2 - 1:],
-            #     "odqa",
-            #     "topical_chat_fact"
-            # )
-            topical_chat_annots = ""
-            if topical_chat_annots:
-                user_input = {
-                    'checked_sentence': topical_chat_annots[-1][1],
-                    'knowledge': topical_chat_annots[-1][1],
-                    'text': user_input_text,
-                    'history': user_input_history
-                }
-                input_batch.append(user_input)
-                annotations_depths.append({"odqa_topical_chat": topical_chat_annots[-1][0]})
-                dial_ids.append(d_id)
-
-            odqa_1st_par_annots = get_annotations_from_dialog(
+            retrieved_facts = get_annotations_from_dialog(
                 dialog["utterances"][-anntr_history_len * 2 - 1:],
-                "odqa",
-                "first_par"
+                "fact_retrieval"
             )
-            if odqa_1st_par_annots:
-                user_input = {
-                    'checked_sentence': tokenize.sent_tokenize(odqa_1st_par_annots[-1][1])[0],
-                    'knowledge': odqa_1st_par_annots[-1][1],
-                    'text': user_input_text,
-                    'history': user_input_history
-                }
-                input_batch.append(user_input)
-                annotations_depths.append({"odqa_1st_par": odqa_1st_par_annots[-1][0]})
-                dial_ids.append(d_id)
+            if retrieved_facts:
+                for depth, fact in retrieved_facts[:TOP_N_FACTS]:
+                    user_input = {
+                        'checked_sentence': fact,
+                        'knowledge': fact,
+                        'text': user_input_text,
+                        'history': user_input_history
+                    }
+                    input_batch.append(user_input)
+                    annotations_depths.append({"retrieved_fact": depth})
+                    dial_ids.append(d_id)
 
             if any([switch_choose_topic, lets_chat_topic, lets_chat_about_flag]):
                 if lets_chat_topic:
@@ -433,9 +416,8 @@ def respond():
                     confidence = 0.0
                     attr["confidence_case"] += "greetings_farewells "
 
-                penalties = annotations_depths[curr_i].get("odqa", 0.0) + annotations_depths[curr_i].get(
-                    "odqa_topical_chat", 0.0) + already_was_active \
-                    + short_long_response if not no_penalties else 0.
+                penalties = annotations_depths[curr_i].get("retrieved_fact", 0.0) + already_was_active + \
+                    short_long_response if not no_penalties else 0.
                 confidence -= penalties
                 curr_attributes.append(attr)
                 curr_confidences.append(max(0.0, confidence))

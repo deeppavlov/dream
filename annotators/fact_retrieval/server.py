@@ -1,5 +1,7 @@
 import logging
 import os
+import pickle
+import random
 from flask import Flask, request, jsonify
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
@@ -17,9 +19,14 @@ with open("google-10000-english-no-swears.txt", 'r') as fl:
     freq_words = [line.strip() for line in lines]
     freq_words = set(freq_words[:800])
 
+with open("sentences.pickle", 'rb') as fl:
+    test_sentences = pickle.load(fl)
+
 try:
-    odqa = build_model(config_name, download=True)
-    test_res = odqa(["What is the capital of Russia?"], ["the capital, russia"], [["the capital", "russia"]], [""])
+    fact_retrieval = build_model(config_name, download=True)
+    for i in range(50):
+        utt = random.choice(test_sentences)
+        test_res = fact_retrieval([utt], [utt], [["moscow"]], [[]])
     logger.info("model loaded, test query processed")
 except Exception as e:
     sentry_sdk.capture_exception(e)
@@ -52,52 +59,44 @@ def check_utterance(question, bot_sentence):
 
 @app.route("/model", methods=['POST'])
 def respond():
-    questions = request.json.get("human_sentences", [" "])
-    bot_sentences = request.json.get("bot_sentences", [" "])
-    questions = [question.lstrip("alexa") for question in questions]
+    cur_utt = request.json.get("human_sentences", [" "])
+    dialog_history = request.json.get("dialog_history", [" "])
+    cur_utt = [utt.lstrip("alexa") for utt in cur_utt]
     nounphr_list = request.json.get("entity_substr", [])
     nounphr_list = [[nounphrase for nounphrase in nounphrases if nounphrase not in freq_words]
                     for nounphrases in nounphr_list]
-    questions_nounphr = [", ".join(elem) for elem in nounphr_list]
     if not nounphr_list:
-        nounphr_list = [[] for _ in questions]
-    entities_batch = request.json.get("entities", [])
-    if not entities_batch:
-        entities_batch = [[] for _ in questions]
-    input_entities = []
-    for question, bot_sentence, entities_list in zip(questions, bot_sentences, entities_batch):
-        if len(entities_list) == 1:
-            input_entities.append(entities_list)
-        else:
-            input_entities.append([])
+        nounphr_list = [[] for _ in cur_utt]
+    first_par_batch = request.json.get("first_par", [])
+    if not first_par_batch:
+        first_par_batch = [[] for _ in cur_utt]
 
-    nf_numbers, f_questions, f_questions_nounphr, f_nounphr_list, f_input_entities = [], [], [], [], []
-    for n, (question, question_nounphr, nounphrases, input_entity) in \
-            enumerate(zip(questions, questions_nounphr, nounphr_list, input_entities)):
-        if question not in freq_words and nounphrases:
-            f_questions.append(question)
-            f_questions_nounphr.append(question_nounphr)
+    nf_numbers, f_utt, f_dh, f_nounphr_list, f_first_par = [], [], [], [], []
+    for n, (utt, dh, nounphrases, input_par) in \
+            enumerate(zip(cur_utt, dialog_history, nounphr_list, first_par_batch)):
+        if utt not in freq_words and nounphrases:
+            f_utt.append(utt)
+            f_dh.append(dh)
             f_nounphr_list.append(nounphrases)
-            f_input_entities.append(input_entity)
+            f_first_par.append(input_par)
         else:
             nf_numbers.append(n)
 
-    out_res = []
+    out_res = [[] for _ in cur_utt]
     try:
-        if f_questions:
-            odqa_res = odqa(f_questions, f_questions_nounphr, f_nounphr_list, f_input_entities)
-            odqa_res = [[elem[i] for elem in odqa_res] for i in range(len(odqa_res[0]))]
-            for i in range(len(odqa_res)):
-                odqa_res[i][1] = float(odqa_res[i][1])
+        if f_utt:
+            fact_res = fact_retrieval(f_utt, f_dh, f_nounphr_list, f_first_par)
             out_res = []
             cnt_fnd = 0
-            for i in range(len(questions)):
+            for i in range(len(cur_utt)):
                 if i in nf_numbers:
-                    out_res.append(["", 0.0, 0, "", "", "", ""])
+                    out_res.append([])
                 else:
-                    if cnt_fnd < len(odqa_res):
-                        out_res.append(odqa_res[cnt_fnd])
+                    if cnt_fnd < len(fact_res):
+                        out_res.append(fact_res[cnt_fnd])
                         cnt_fnd += 1
+                    else:
+                        out_res.append([])
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)

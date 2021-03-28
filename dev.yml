@@ -384,10 +384,10 @@ services:
       - "./common:/src/common"
     ports:
       - 8080:8080
-  odqa:
+  text-qa:
     env_file: [.env.dev]
     volumes:
-      - "./annotators/odqa:/src"
+      - "./services/text_qa:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8078:8078
@@ -488,4 +488,11 @@ services:
       - "./common:/src/common"
     ports:
       - 8098:8098
+  fact-retrieval:
+    env_file: [ .env.dev ]
+    volumes:
+      - "./annotators/fact_retrieval:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8100:8100
 version: "3.7"

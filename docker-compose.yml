@@ -14,7 +14,7 @@ services:
         eliza:8047, emotion-skill:8049, dummy-skill-dialog:8052, comet-atomic:8053, meta-script-skill:8054,
         oscar-skill:8055, coronavirus-skill:8061, small-talk-skill:8062, game-cooperative-skill:8068, program-y-wide:8064,
         comet-conceptnet:8065, news-api-skill:8066, short-story-skill:8057, greeting-skill:8070, factoid-qa:8071, kbqa:8072,
-        factoid-classification:8073, spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, odqa:8078,
+        factoid-classification:8073, spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, text-qa:8078,
         knowledge-grounding:8083, combined-classification:8087, knowledge-grounding-skill:8085,
         dff-friendship-skill:8086, masked-lm:8088, entity-storer:8089, wikidata-dial-skill:8091, wikidata-dial-service:8092,
         book-tfidf-retrieval:8039, entertainment-tfidf-retrieval:8040, fashion-tfidf-retrieval:8041,
@@ -22,7 +22,7 @@ services:
         science-technology-tfidf-retrieval:8044, sport-tfidf-retrieval:8045, animals-tfidf-retrieval:8050,
         book-skill:8032, superbowl-skill:8051, valentines-day-skill:8058, grounding-skill:8080,
         dff-animals-skill:8094, dff-travel-skill:8096, dff-food-skill:8097, dff-sport-skill:8098,
-        midas-classification:8090"
+        midas-classification:8090, fact-retrieval:8100"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
     deploy:
       mode: replicated
@@ -780,7 +780,7 @@ services:
         CONFIG: kbqa_entity_linking_lite.json
         PORT: 8075
         SRC_DIR: annotators/entity_linking
-        COMMIT: ff3ac8ca31006196388d934cfcbd7a82b2483333
+        COMMIT: 35c8416731a89430191a97a0cd9661cef55f438c
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -814,15 +814,14 @@ services:
         reservations:
           memory: 256M
 
-  odqa:
+  text-qa:
     build:
       args:
-        CONFIG: en_odqa_infer_wiki_tch_el.json
+        CONFIG: qa.json
         PORT: 8078
-        SRC_DIR: annotators/odqa/
-        COMMIT: ae8964a60347ca741370fe653b70ac154517a72d
-      context: ./
-      dockerfile: annotators/odqa/Dockerfile_odqa_lite
+        COMMIT: 4b3e60c407644b750c9dc292ac6bf206081fb9d0
+      context: services/text_qa
+      dockerfile: Dockerfile
     environment:
       - CUDA_VISIBLE_DEVICES=0
     deploy:
@@ -830,9 +829,9 @@ services:
       replicas: 1
       resources:
         limits:
-          memory: 20G
+          memory: 3G
         reservations:
-          memory: 20G
+          memory: 3G
 
   kbqa:
     build:
@@ -840,7 +839,7 @@ services:
         CONFIG: kbqa_cq_mt_bert_lite.json
         PORT: 8072
         SRC_DIR: annotators/kbqa/
-        COMMIT: 5dac85a06fde0e2983c7569ae058e3bf2d45ce2c
+        COMMIT: ebe8ef154cd14a1aad8204843df09ef4940b56c7
       context: ./
       dockerfile: annotators/kbqa/Dockerfile
     environment:
@@ -850,9 +849,9 @@ services:
       replicas: 1
       resources:
         limits:
-          memory: 12G
+          memory: 5G
         reservations:
-          memory: 12G
+          memory: 5G
 
   factoid-classification:
     build:
@@ -1135,5 +1134,25 @@ services:
           memory: 11G
         reservations:
           memory: 11G
+
+  fact-retrieval:
+    build:
+      args:
+        CONFIG: fact_retrieval.json
+        PORT: 8100
+        SRC_DIR: annotators/fact_retrieval/
+        COMMIT: 4b3e60c407644b750c9dc292ac6bf206081fb9d0
+      context: ./
+      dockerfile: annotators/fact_retrieval/Dockerfile
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      mode: replicated
+      replicas: 3
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 4G
 
 version: '3.7'

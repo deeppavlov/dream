@@ -17,9 +17,15 @@
         "use_descriptions": false,
         "use_prefix_tree": false,
         "num_entities_to_return": 5
+      },
+      {
+        "class_name": "first_par_extractor",
+        "in": ["entity_ids"],
+        "out": ["first_par"],
+        "wiki_first_par_filename": "{DOWNLOADS_PATH}/wikidata_eng/q_to_par_en.pickle"
       }
     ],
-    "out": ["entity_ids", "confidences"]
+    "out": ["entity_ids", "confidences", "first_par"]
   },
   "metadata": {
     "variables": {
@@ -45,6 +51,10 @@
       },
       {
         "url": "http://files.deeppavlov.ai/kbqa/wikidata/types_dict.pickle",
+        "subdir": "{DOWNLOADS_PATH}/wikidata_eng"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/kbqa/wikidata/q_to_par_en.pickle",
         "subdir": "{DOWNLOADS_PATH}/wikidata_eng"
       }
     ]
