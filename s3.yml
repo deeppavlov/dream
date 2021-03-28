@@ -26,7 +26,11 @@ services:
       args:
         DATA_URL: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/elmo2.tar.gz
         NER_URL: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/ner.tar.xz
-  odqa:
+  text-qa:
+    build:
+      args:
+        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
+  fact-retrieval:
     build:
       args:
         SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com

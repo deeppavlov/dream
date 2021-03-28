@@ -13,6 +13,7 @@ ARG CONFIG
 ARG COMMIT=0.13.0
 ARG PORT
 ARG SRC_DIR
+ARG SED_ARG=" | "
 
 ENV CONFIG=$CONFIG
 ENV PORT=$PORT
@@ -31,5 +32,7 @@ RUN pip uninstall -y tensorflow-gpu
 RUN pip install tensorflow==1.15.2
 RUN pip install tensorflow-gpu==1.15.2
 RUN python -m deeppavlov install $CONFIG
+
+RUN sed -i "s|$SED_ARG|g" "$CONFIG"
 
 CMD gunicorn  --workers=1 --timeout 500 server:app -b 0.0.0.0:8100
