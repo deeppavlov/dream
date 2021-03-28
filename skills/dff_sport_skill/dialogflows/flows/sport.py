@@ -1,3 +1,4 @@
+import numpy as np
 import logging
 import os
 import re
@@ -115,7 +116,7 @@ def compose_topic_offering(excluded_skills=[]):
     available_topics = [topic for skill_name, topic in common_link.LIST_OF_SCRIPTED_TOPICS.items()
                         if skill_name not in excluded_skills]
 
-    topics = random.choice(available_topics, size=2, replace=False)
+    topics = np.random.choice(available_topics, size=2, replace=False)
     offer_topics = offer_topics_template.replace("TOPIC1", topics[0]).replace("TOPIC2", topics[1])
 
     response = f"{ask_about_topic} {offer_topics}"
