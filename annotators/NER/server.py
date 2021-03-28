@@ -20,7 +20,7 @@ logger.info("ner model is loaded.")
 
 nltk_stopwords_file = "nltk_stopwords.txt"
 nltk_stopwords = ([line.strip() for line in open(nltk_stopwords_file, 'r').readlines()])
-BANNED_ENTITIES = ["okay", "oh", "name", "ocean", "hey", "cool", "corona"]
+BANNED_ENTITIES = ["okay", "oh", "name", "ocean", "hey", "cool", "corona", "pop", "rap"]
 BANNED_ENTITIES = set(BANNED_ENTITIES + nltk_stopwords)
 
 with open("./google-english-no-swears.txt", "r") as f:
