@@ -1,5 +1,5 @@
 WEEKEND_QUESTIONS = [
-    "What did you get up to this weekend?",
+    "What did you get up to last weekend?",
     "So how did you spend your weekend?",
     "How was your weekend?",
 ]
