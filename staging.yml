@@ -188,8 +188,12 @@ services:
     image: ${DOCKER_REGISTRY}/kbqa:${VERSION}
     env_file:
       - ${ENV_FILE}
-  odqa:
-    image: ${DOCKER_REGISTRY}/odqa:${VERSION}
+  text-qa:
+    image: ${DOCKER_REGISTRY}/text-qa:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  fact-retrieval:
+    image: ${DOCKER_REGISTRY}/fact-retrieval:${VERSION}
     env_file:
       - ${ENV_FILE}
   program-y-wide:
