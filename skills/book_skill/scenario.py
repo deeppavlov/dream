@@ -175,7 +175,6 @@ class BookSkillScenario:
                         confidence = self.super_conf
                     else:
                         reply, confidence = START_PHRASE, self.super_conf
-                    attr = {"can_continue": CAN_CONTINUE}
                 elif dontlike(annotated_user_phrase):
                     # no more books OR user doesn't like books
                     logger.debug('DONTLIKE detected')
@@ -237,11 +236,9 @@ class BookSkillScenario:
                     if is_no(annotated_user_phrase):
                         logger.debug('Detected answer NO')
                         reply, confidence = IF_NOT_LOVE_READING, self.super_conf
-                        attr = {"can_continue": CAN_CONTINUE}
                     elif is_yes(annotated_user_phrase):
                         logger.debug('Detected asnswer YES')
                         reply, confidence = f"{IF_LOVE_READING} {LAST_BOOK_READ}", self.super_conf
-                        attr = {"can_continue": CAN_CONTINUE}
                     else:
                         logger.debug('No answer detected. Return nothing.')
                         reply, confidence = self.default_reply, 0
@@ -266,7 +263,6 @@ class BookSkillScenario:
                         else:
                             logger.debug(f"Best book for {annotated_user_phrase['text']} not retrieved")
                             reply, confidence = f"Fabulous! {WHAT_BOOK_IMPRESSED_MOST}", self.default_conf
-                            attr = {"can_continue": CAN_CONTINUE}
                 elif WHAT_BOOK_IMPRESSED_MOST in bot_phrases[-1]:
                     logger.debug('We have just said YES_PHRASE_2')
                     if is_no(annotated_user_phrase):
@@ -287,7 +283,6 @@ class BookSkillScenario:
                                 confidence = self.super_conf
                             else:
                                 confidence = self.default_conf
-                            attr = {"can_continue": CAN_CONTINUE}
                 elif WHEN_IT_WAS_PUBLISHED in bot_phrases[-1]:
                     # if we asked when it was published
                     logger.debug(f"We have just asked when the book was published: "
@@ -328,7 +323,6 @@ class BookSkillScenario:
                         # default conf as no check for user uttr (not super conf)
                         logger.debug(f'Returning genre phrase for {book}')
                         reply, confidence = HAVE_YOU_READ_BOOK.replace("BOOK", book), self.default_conf
-                        attr = {"can_continue": CAN_CONTINUE}
                 elif HAVE_YOU_READ_BOOK in bot_phrases[-1]:
                     logger.debug('"Amazing! Have HAVE_YOU_READ_BOOK in last bot phrase')
                     if tell_me_more(annotated_user_phrase):
@@ -361,7 +355,6 @@ class BookSkillScenario:
                         else:
                             logger.debug('Without detected intent returning OPINION_REQUEST_ON_BOOK_PHRASES')
                             reply, confidence = random.choice(OPINION_REQUEST_ON_BOOK_PHRASES), self.default_conf
-                            attr = {"can_continue": CAN_CONTINUE}
                     else:
                         logger.debug('No intent detected. Returning nothing')
                         reply, confidence = self.default_reply, 0
@@ -390,7 +383,6 @@ class BookSkillScenario:
                             logger.debug('Detected fact request')
                             reply, confidence = f"{AMAZING_READ_BOOK} {OFFER_FACT_ABOUT_BOOK}", self.default_conf
                             human_attr['book_skill']['last_fact'] = retrieved_fact
-                            attr = {"can_continue": CAN_CONTINUE}
                         else:
                             logger.debug('Was question about book but fact not retrieved')
                             reply, confidence = self.default_reply, 0
@@ -400,7 +392,8 @@ class BookSkillScenario:
                 else:
                     logger.debug('Final branch')
                     reply, confidence = self.default_reply, 0
-
+                if confidence in [self.super_conf, self.default_conf]:
+                    attr = {"can_continue": CAN_CONTINUE}
             except Exception as e:
                 logger.exception("exception in book skill")
                 sentry_sdk.capture_exception(e)
@@ -409,10 +402,8 @@ class BookSkillScenario:
 
             if isinstance(reply, list):
                 reply = " ".join(reply)
-
             if reply in human_attr['book_skill']['used_phrases']:
                 confidence *= 0.9
-
             texts.append(reply)
             if len(reply) > 0:
                 human_attr['book_skill']['used_phrases'].append(reply)

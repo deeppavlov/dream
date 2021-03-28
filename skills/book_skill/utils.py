@@ -252,6 +252,7 @@ def get_name(annotated_phrase, mode='author', bookyear=False,
     Returns a single name of book or author if it exists.
     P106 - instance of
     Q36180 - author
+    Q18814623 - autobiographer
     P31 - instance of
     Q571 - book
     Q7725634, Q1667921, Q277759 - book serie
@@ -263,7 +264,9 @@ def get_name(annotated_phrase, mode='author', bookyear=False,
         entities_num = len(all_found_entities)
         if mode == 'author':
             parser_info = "check_triplet"
-            queries = [(entity, "P106", "Q36180") for entity in all_found_entities]
+            author_types = ['Q36180', 'Q18814623']
+            queries = [(entity, "P106", author_type)
+                       for entity in all_found_entities for author_type in author_types]
             bool_numbers = request_triples_wikidata(parser_info, queries, query_dict=book_query_dict)
             if len(bool_numbers) == len(all_found_entities):
                 for entity, bool_number in zip(all_found_entities, bool_numbers):
