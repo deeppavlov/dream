@@ -12,7 +12,7 @@ OFFERED_NEWS_TOPIC_CATEGORIES_STATUS = "offered_news_topic_categories"
 
 NEWS_GIVEN = "offered_news_details"
 WHAT_TYPE_OF_NEWS = ["What other kinds of news would you want to discuss?",
-                     "What are the other kinds of news you'd love to hear about?",
+                     "What are the other kinds of news would you like to hear about?",
                      "What else would you want to hear news about?",
                      "What type of news do you prefer?"]
 

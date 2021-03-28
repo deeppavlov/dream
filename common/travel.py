@@ -64,7 +64,7 @@ WOULD_USER_LIKE_TO_VISIT_LOC_REQUESTS = ["Would you like to visit it some day?",
                                          "If possible, Would you like to visit it some day?",
                                          ]
 
-ACKNOWLEDGE_USER_WILL_VISIT_LOC = ["Wish you will be able to visit it someday! And you will really like it!",
+ACKNOWLEDGE_USER_WILL_VISIT_LOC = ["I hope you will be able to visit it someday! And you will really like it!",
                                    "Hope you will visit it!",
                                    "I keep my fingers crossed for you to visit this place one day!",
                                    ]

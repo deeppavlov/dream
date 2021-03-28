@@ -8,9 +8,9 @@ BOOK_SKILL_CHECK_PHRASE3 = 'book did impress you the most'
 SWITCH_BOOK_SKILL_PHRASE = f"What is {BOOK_SKILL_CHECK_PHRASE} you've read?"
 
 QUESTIONS_ABOUT_BOOKS = ["What is your favorite book?",
-                         "Which book did impress you the most?",
+                         "Which book impressed you the most?",
                          "What is the longest book you have ever read?",
-                         "Which book have you recommended for other people?",
+                         "What's a book you like to recommend to other people?",
                          "What is a book that was recommended to you?"]
 
 BOOK_SKILL_CHECK_PHRASES = [BOOK_SKILL_CHECK_PHRASE, BOOK_SKILL_CHECK_PHRASE2,

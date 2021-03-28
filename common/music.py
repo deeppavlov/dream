@@ -1,10 +1,10 @@
 OPINION_REQUESTS_ABOUT_MUSIC = ["What music do you like?",
                                 "Do you like listening to music?",
                                 "What do you listen to?",
-                                "Who is your favourite artist?",
-                                "What is your favourite song?",
-                                "What is your favourite album?",
-                                "Do you have favourite artist?"
+                                "Who is your favorite artist?",
+                                "What is your favorite song?",
+                                "What is your favorite album?",
+                                "Do you have a favorite artist?"
                                 ]
 
 

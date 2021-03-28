@@ -1,11 +1,11 @@
-OPINION_REQUESTS_ABOUT_FOOD = ["What is your opinion on cooking?",
+OPINION_REQUESTS_ABOUT_FOOD = ["Do you like cooking?",
                                "Do you think cooking is cool?",
                                "Many people say they adore cooking. Do you agree?",
                                "Do you think cooking is a great thing?"]
 
-OFFER_TALK_ABOUT_FOOD = ["Would you like to talk about daily bread?",
-                         "Let's chat about foodstuffs! Do you agree?",
-                         "I'd like to talk about edibles, would you?"]
+OFFER_TALK_ABOUT_FOOD = ["Would you like to chat about food?",
+                         "Would you like to talk about food?",
+                         "I'd like to talk about food, would you?"]
 
 TRIGGER_PHRASES = OPINION_REQUESTS_ABOUT_FOOD + OFFER_TALK_ABOUT_FOOD
 
