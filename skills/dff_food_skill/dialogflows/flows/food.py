@@ -14,8 +14,8 @@ import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_exten
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 import dialogflows.scopes as scopes
-from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
-from common.utils import get_intents, is_yes, get_topics
+# from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
+from common.utils import is_no, get_topics
 from common.food import TRIGGER_PHRASES
 
 
@@ -27,7 +27,10 @@ logger = logging.getLogger(__name__)
 
 with open("cuisines_facts.json", "r") as f:
     CUISINES_FACTS = json.load(f)
-FOOD_WORDS_RE = re.compile(r"(food|cooking|cuisine|daily bread|meals|foodstuffs|edibles|drinks)", re.IGNORECASE)
+FOOD_WORDS_RE = re.compile(
+    r"(food|cooking|cuisine|daily bread|meals|foodstuffs|edibles|drinks|pepperoni)",
+    re.IGNORECASE
+)
 WHAT_COOK_RE = re.compile(
     r"(what should i|what do you suggest me to) (cook|make for dinner)( tonight| today| tomorrow){0,1}",
     re.IGNORECASE,
@@ -130,15 +133,21 @@ def error_response(vars):
 
 
 def lets_talk_about_request(ngrams, vars):
-    user_lets_chat_about = (
-        "lets_chat_about" in get_intents(state_utils.get_last_human_utterance(vars), which="intent_catcher")
-        or if_lets_chat_about_topic(state_utils.get_last_human_utterance(vars)["text"])
-        or re.search(COMPILE_WHAT_TO_TALK_ABOUT, state_utils.get_last_bot_utterance(vars)["text"])
-    )
-    user_lets_chat_about_food = bool(
-        re.search(FOOD_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"].lower())
-    )
-    flag = user_lets_chat_about and user_lets_chat_about_food
+    # user_lets_chat_about = (
+    #     "lets_chat_about" in get_intents(state_utils.get_last_human_utterance(vars), which="intent_catcher")
+    #     or if_lets_chat_about_topic(state_utils.get_last_human_utterance(vars)["text"])
+    #     or re.search(COMPILE_WHAT_TO_TALK_ABOUT, state_utils.get_last_bot_utterance(vars)["text"])
+    # )
+    annotations = state_utils.get_last_human_utterance(vars)["annotations"]
+    cobot_topic = "Food_Drink" in get_topics(state_utils.get_last_human_utterance(vars), which="cobot_topics")
+    conceptnet = "food" in annotations.get("conceptnet", {}).get("SymbolOf", [])
+
+    user_lets_chat_about_food = any([
+        re.search(FOOD_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"].lower()),
+        cobot_topic,
+        conceptnet
+    ])
+    flag = user_lets_chat_about_food
     logger.info(f"lets_talk_about_request {flag}")
     return flag
 
@@ -345,7 +354,7 @@ def what_fav_food_request(ngrams, vars):
             req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower()
             for req in TRIGGER_PHRASES
         ]
-    ) and is_yes(state_utils.get_last_human_utterance(vars))
+    ) and (not is_no(state_utils.get_last_human_utterance(vars)))
     food_1st_time = condition_utils.is_first_time_of_state(vars, State.SYS_WHAT_FAV_FOOD)
     cuisine_1st_time = condition_utils.is_first_time_of_state(vars, State.SYS_WHAT_CUISINE)
 
@@ -367,7 +376,7 @@ def what_cuisine_request(ngrams, vars):
             req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower()
             for req in TRIGGER_PHRASES
         ]
-    ) and is_yes(state_utils.get_last_human_utterance(vars))
+    ) and (not is_no(state_utils.get_last_human_utterance(vars)))
     flag = lets_talk_about_request(ngrams, vars) or linkto_food_skill_agreed
     logger.info(f"what_cuisine_request {flag}")
     return flag
