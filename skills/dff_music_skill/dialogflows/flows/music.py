@@ -207,7 +207,7 @@ def i_like_response(vars):
         state_utils.set_can_continue(vars)
         genre = random.choice(list(MUSIC_DATA))
         artist = random.choice(list(MUSIC_DATA[genre]))
-        return f"Well, I like {artist}, but I don't listen to it very often. Do you like {artist}?"
+        return f"Well, I like {artist}, but I don't listen to them very often. Do you like {artist}?"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)

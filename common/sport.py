@@ -5,10 +5,10 @@ import re
 ##################################################################################################################
 
 
-BINARY_QUESTION_ABOUT_SPORT = ["Do you like sport?",
-                               "Do you think active lifestyle is cool?",
+BINARY_QUESTION_ABOUT_SPORT = ["Do you like sports?",
+                               # "Do you think active lifestyle is cool?",
                                "Do you like fitness?",
-                               "Let's chat about sport! Do you agree?"
+                               "Would you like to chat about sport?"
                                ]
 BINARY_QUESTION_ABOUT_ATHLETE = ["Would you like to talk about your favorite athletes?",
                                  "Do you have a sports idol?"
