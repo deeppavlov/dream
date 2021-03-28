@@ -55,8 +55,8 @@ def quarantine_end(last_utterance):
     return False
 
 
-virus_compiled = re.compile(r"(virus|\bcovid\b|\bill\b|infect|code nineteen|corona|corana|corono|colonel|"
-                            r"chrono|corvette|kroner|karuna|toronow)", re.IGNORECASE)
+virus_compiled = re.compile(r"(virus|\bcovid\b|\bill\b|infect|code nineteen|corona|corana|corono|"
+                            r"kroner)", re.IGNORECASE)
 
 
 def about_virus(annotated_phrase):
