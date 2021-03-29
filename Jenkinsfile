@@ -162,7 +162,7 @@ spec:
                     sh label: 'deploy', script: 'for dir in kubernetes/models/*; do kubectl apply -f $dir || true; done'
                     sh label: 'recreate pods', script: 'for dp in kubernetes/models/*/*-dp.yaml; do kubectl rollout restart -n ${NAMESPACE} deploy $(basename ${dp%.*}); done'
                     sh label: 'remove redundant pods', script: '''
-                      for dp in $(kubectl get deploy -n {NAMESPACE} -l app.kubernetes.io/managed-by!=Helm --no-headers -o custom-columns=":metadata.name")
+                      for dp in $(kubectl get deploy -n {NAMESPACE} -l app.kubernetes.io/managed-by!=Helm --no-headers -o custom-columns=":metadata.name");
                       do
                         [ -d kubernetes/models/${dp%-*} ] || kubectl delete deploy $dp -n {NAMESPACE}
                       done
