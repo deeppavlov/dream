@@ -259,9 +259,13 @@ def respond():
                 # "odqa": "answer_sentence",
                 # "kbqa": "answer"
             }
-            user_input_knowledge, annotations_depth = get_knowledge_from_annotators(
-                annotators, dialog["utterances"], anntr_history_len
-            )
+            if not switch_choose_topic:
+                user_input_knowledge, annotations_depth = get_knowledge_from_annotators(
+                    annotators, dialog["utterances"], anntr_history_len
+                )
+            else:
+                user_input_knowledge = ""
+                annotations_depth = {}
             # add nounphrases and entities to the knowledge
             if user_input_knowledge:
                 user_input_checked_sentence = space_join(cobot_nounphrases) + space_join(
