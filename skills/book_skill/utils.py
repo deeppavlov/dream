@@ -204,9 +204,14 @@ def who_wrote_book(plain_book_entity, return_plain=False):
         logger.info(f'Answer {author_entity}')
         return author_entity
     else:
-        author_name = entity_to_label(author_entity)
-        logger.info(f'Answer for who_wrote_book {author_name}')
-        return author_name
+        try:
+            author_name = entity_to_label(author_entity)
+            logger.info(f'Answer for who_wrote_book {author_name}')
+            return author_name
+        except Exception as e:
+            logging.exception(e)
+            sentry_sdk.raise_exception(e)
+            return None
 
 
 def get_published_year(book_entity):
@@ -374,11 +379,11 @@ def parse_author_best_book(annotated_phrase, default_phrase=None):
     else:
         logger.debug(f'Processing bookname {plain_bookname}')
         plain_author = who_wrote_book(plain_bookname, return_plain=True)
-        if plain_author is not None:
+        if plain_author:
             logger.debug(f'author detected: {plain_author} bookname {plain_bookname}')
             answer = best_book_by_author(plain_author_name=plain_author, plain_last_bookname=plain_bookname,
                                          default_phrase=default_phrase)
-            logger.debug(f'Answer for parse_authro_best_book is {answer}')
+            logger.debug(f'Answer for parse_author_best_book is {answer}')
             return answer
         else:
             logger.debug('No author found')
