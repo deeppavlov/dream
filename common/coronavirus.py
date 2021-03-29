@@ -8,6 +8,7 @@ from common.utils import is_yes, is_no
 
 REMOTE_WORK_CORONAVIRUS_PHRASE = "Are you staying at home and working remotely to avoid coronavirus?"
 STAY_HOME_CORONAVIRUS_PHRASE = "Are you staying at home to avoid coronavirus?"
+CORONA_SWITCH_BEGIN = "Okay! I believe that this coronavirus will disappear! Now it is better to stay home. "
 
 
 def skill_trigger_phrases():
@@ -19,7 +20,7 @@ def corona_skill_was_proposed(prev_bot_utt):
 
 
 def corona_switch_skill_reply():
-    reply = "Okay! I believe that this coronavirus will disappear! Now it is better to stay home. "
+    reply = CORONA_SWITCH_BEGIN
     chosen = choice([SWITCH_BOOK_SKILL_PHRASE, SWITCH_MOVIE_SKILL_PHRASE])
     return reply + chosen
 
