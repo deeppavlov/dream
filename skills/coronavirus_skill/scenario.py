@@ -14,8 +14,8 @@ import pandas as pd
 import sentry_sdk
 from word2number.w2n import word_to_num
 
-from common.coronavirus import corona_switch_skill_reply, is_staying_home_requested, check_about_death, about_virus, \
-    quarantine_end
+from common.coronavirus import CORONA_SWITCH_BEGIN, corona_switch_skill_reply, is_staying_home_requested, \
+    check_about_death, about_virus, quarantine_end
 from common.link import link_to
 from common.utils import is_yes, is_no, get_emotions
 from common.universal_templates import book_movie_music_found, if_lets_chat_about_topic, is_switch_topic
@@ -498,6 +498,7 @@ class CoronavirusSkillScenario:
                         logging.info('Another fact request detected, answer is NO')
                         reply = corona_switch_skill_reply()
                         confidence = 0.98
+                        human_attr["coronavirus_skill"]['stop'] = True
                     elif fear_prob > 0.9:
                         logging.info('Corona fear detected')
                         reply = 'Just stay home, wash your hands and you will be fine. We will get over it.'
@@ -663,7 +664,9 @@ class CoronavirusSkillScenario:
                 elif reply == '':
                     logging.info('reply is empty, drop confidence to 0')
                     confidence = 0
-
+                elif human_attr['coronavirus_skill'].get('stop', False) and CORONA_SWITCH_BEGIN not in reply:
+                    logging.info('User not wants to talk about covid')
+                    confidence = 0
                 elif if_lets_chat_about_topic(last_utterance['text']) and not about_virus(last_utterance['text']):
                     logging.info('Topic chat request found, drop confidence to 0')
                     confidence = 0
