@@ -9,6 +9,7 @@ from CoBotQA.cobotqa_service import send_cobotqa
 from enum import Enum, auto
 
 import sentry_sdk
+from spacy import load
 
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
@@ -23,6 +24,9 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 
 
 logger = logging.getLogger(__name__)
+
+
+spacy_nlp = load("en_core_web_sm")
 
 
 with open("cuisines_facts.json", "r") as f:
@@ -165,9 +169,11 @@ def what_cuisine_response(vars):
 
 
 def cuisine_request(ngrams, vars):
-    annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-    nounphr = annotations.get("cobot_nounphrases", [])
-    flag = bool(nounphr)
+    # annotations = state_utils.get_last_human_utterance(vars)["annotations"]
+    # nounphr = annotations.get("cobot_nounphrases", [])
+    # flag = bool(nounphr)
+    utt = spacy_nlp(state_utils.get_last_human_utterance(vars)["text"].lower())
+    flag = any([w.pos_ == 'ADJ' for w in utt])
     logger.info(f"cuisine_request {flag}")
     return flag
 
@@ -224,7 +230,11 @@ def fav_food_request(ngrams, vars):
     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
     nounphr = annotations.get("cobot_nounphrases", [])
     cobot_topic = "Food_Drink" in get_topics(state_utils.get_last_human_utterance(vars), which="cobot_topics")
-    conceptnet = "food" in annotations.get("conceptnet", {}).get("SymbolOf", [])
+    conceptnet = any([
+        "food" in annotations.get("conceptnet", {}).get("SymbolOf", []),
+        "delicious" in annotations.get("conceptnet", {}).get("HasProperty", []),
+        "tasty" in annotations.get("conceptnet", {}).get("HasProperty", [])
+    ])
     for ne in nounphr:
         user_fav_food.append(ne)
     if user_fav_food and any([cobot_topic, conceptnet]):
