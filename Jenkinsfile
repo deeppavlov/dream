@@ -375,6 +375,7 @@ spec:
               script {
                 int duration = (currentBuild.duration - startTime) / 1000
                 notify('success', duration)
+                archiveArtifacts artifacts: 'tests/dream/output/*', fingerprint: true
               }
             }
             aborted {
