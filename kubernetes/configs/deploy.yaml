@@ -46,4 +46,4 @@ wikidata-dial-service:
 
 fact-retrieval:
   CUDA_VISIBLE_DEVICES: '0'
-  gpu: 2
+  gpu: 1
