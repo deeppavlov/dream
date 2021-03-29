@@ -39,3 +39,7 @@ After that you'll be able to interact with Deepy through the ASR service to prov
 
 You can use either NeMo or Clone TTS service by sending batches of text phrases to its `http://_tts_service_name:_tts_service_port_/tts?text=_your_text_here_` endpoint.
 
+## Bonus: Check Out GERTY 3000 Replica made by Markus Wobisch
+**IMPORTANT** This project isn't related to ours, though we'd be thrilled for it to run our Deepy! )
+![image](https://user-images.githubusercontent.com/5264043/112886628-d6720900-90da-11eb-9c97-addd8b63f97e.png)
+Read more in Markus Wobisch's [Blog](http://markus-wobisch.blogspot.com/2020/05/building-gerty-3000-replica-part-1.html)
