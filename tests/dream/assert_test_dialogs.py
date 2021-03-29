@@ -13,6 +13,24 @@ parser.add_argument("-time_limit", "--time_limit", type=float, default=3)
 spaces_pat = re.compile(r"\s+")
 special_symb_pat = re.compile(r"[^a-z0-9 ]")
 
+SPECIAL_SKILLS = {
+    "RANDOM_SKILLS": [
+        "program_y",
+        "dummy_skill",
+        "movie_tfidf_retrieval",
+        "entertainment_tfidf_retrieval",
+        "music_tfidf_retrieval",
+        "personal_info_skill",
+        "knowledge_grounding_skill",
+        "dff_friendship_skill",
+        "meta_script_skill",
+        "comet_dialog_skill",
+        "dummy_skill",
+        "news_api_skill",
+        "book_skill",
+    ],
+}
+
 
 def clean_text(text):
     return special_symb_pat.sub("", spaces_pat.sub(" ", text.lower().replace("\n", " "))).strip()
@@ -54,7 +72,12 @@ def main():
                     print(f"FOUND POSSIBLE ERROR: pred skill: {skill} is PROHIBITED: {skill_name}")
             else:
                 acceptable_skill_names = acceptable_skill_names.split(";")
-                if skill not in acceptable_skill_names:
+                acceptable_skill_names = sum(
+                    [SPECIAL_SKILLS.get(skill_name, [skill_name]) for skill_name in acceptable_skill_names], []
+                )
+                if skill in acceptable_skill_names:
+                    pass
+                else:
                     passed_acceptable_skills = False
                     print(
                         f"FOUND POSSIBLE ERROR: pred skill: {skill} "
