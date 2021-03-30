@@ -28,7 +28,7 @@
  "no"
  "no"
  "no"
-"book_skill" "let's talk about books" "OK, let's talk about books. Do you love reading?"
+"book_skill;RANDOM_SKILLS" "let's talk about books" "OK, let's talk about books. Do you love reading?"
  "yes"
  "harry potter"
  "I think its very interesting"
