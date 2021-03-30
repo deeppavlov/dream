@@ -4,11 +4,11 @@ import requests
 from collections import deque
 from copy import deepcopy
 from datetime import datetime
-from langdetect import detect
 from os import getenv
 
 import sentry_sdk
-
+from langdetect import detect
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -17,6 +17,19 @@ logger = logging.getLogger(__name__)
 
 
 BLACKLIST_ANNOTATOR_URL = getenv('BLACKLIST_ANNOTATOR_URL')
+
+
+nltk_sentiment_classifier = SentimentIntensityAnalyzer()
+
+
+def get_nltk_sentiment(text):
+    result = nltk_sentiment_classifier.polarity_scores(text)
+    if result.get("pos", 0.0) >= 0.5:
+        return "positive"
+    elif result.get("neg", 0.0) >= 0.5:
+        return "negative"
+    else:
+        return "neutral"
 
 
 class CachedRequestsAPI:
@@ -133,6 +146,8 @@ class CachedRequestsAPI:
                 continue
             lang = detect(article.get("title", ""))
             if lang != "en":
+                continue
+            if get_nltk_sentiment(article.get("title", "")) == "negative":
                 continue
 
             to_check = [f"{title} {description}"]
