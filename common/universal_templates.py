@@ -56,7 +56,7 @@ def nounphrases_questions(nounphrase=None):
 ARTICLES = r"\s?(\ba\b|\ban\b|\bthe\b|\bsome\b|\bany\b)?\s?"
 ANY_WORDS = r"[a-zA-Z0-9 ]*"
 ANY_SENTENCES = r"[A-Za-z0-9-!,\?\.’'\"’ ]*"
-END = r"([!,\?\.’'\"’]+.*)?$"
+END = r"([!,\?\.’'\"’]+.*|$)"
 BEGIN_OF_SENT = r"^(.*[!,\?\.’'\"’]+ )?"
 
 ABOUT_LIKE = ["about", "of", "on" + ARTICLES + "topic of"]
@@ -143,10 +143,11 @@ WHAT_TO_TALK_ABOUT = r"what (do|can|could|will|would|are) (you|we|i) " + join_wo
                      r"\s" + join_words_in_or_pattern(TALK_LIKE) + r"\s" + join_words_in_or_pattern(ABOUT_LIKE) + END
 PICK_UP_THE_TOPIC = r"(pick up|choose|select|give)( me)?" + ARTICLES + r"topic" + END
 ASK_ME_SOMETHING = r"(ask|tell|say)( me)?" + join_words_in_or_pattern(SOMETHING_LIKE) + END
+WHATS_ON_YOUR_MIND = r"what('s| is) on your mind"
 
 # ----- What do you want to talk about? / Pick up the topic. / Ask me something. ----
 COMPILE_WHAT_TO_TALK_ABOUT = re.compile(join_sentences_in_or_pattern(
-    [WHAT_TO_TALK_ABOUT, PICK_UP_THE_TOPIC, ASK_ME_SOMETHING]),
+    [WHAT_TO_TALK_ABOUT, PICK_UP_THE_TOPIC, ASK_ME_SOMETHING, WHATS_ON_YOUR_MIND]),
     re.IGNORECASE)
 
 # ----- Something. / Anything. / Nothing. ----
