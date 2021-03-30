@@ -16,6 +16,9 @@
         "((what you mean)|(what are you talking about))( alexa){0,1}",
         "i don't know what you just said"
       ],
+      "reg_phrases": [
+        ".* did not get what do you mean"
+      ], 
       "min_precision": 0.94,
       "punctuation": [
         ".",
@@ -196,6 +199,9 @@
         "((no)|(please)), ((never)|(no way)|(don't)|(do not)|(never again)|(definetely no))(  alexa){0,1}",
         "((i said)|(Uhh)) ((no)|(never)|(don't))( alexa){0,1}",
         "((definetely not)|(never)|(never ask me that again)|(that's boring)|(that will be boring)|(i don't know)|(i am not sure))"
+      ],
+      "reg_phrases": [
+        ".* no no"
       ],
       "min_precision": 0.0,
       "punctuation": [
