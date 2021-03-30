@@ -944,5 +944,13 @@
   </category>
   </topic>
 
+  <category>
+    <pattern>WHAT # ALEXA PRIZE</pattern>
+    <template>
+      <random>
+        <li>The Alexa Prize Socialbot Grand Challenge is a university challenge to advance human-computer interaction, competing teams will create socialbots that can converse coherently and engagingly. What would you like to chat about?</li>
+      </random>
+    </template>
+  </category>
 
 </aiml>
