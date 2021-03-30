@@ -184,6 +184,12 @@ def comment_using_atomic(dialog):
         attr["can_continue"] = CAN_NOT_CONTINUE
         attr["atomic_dialog"] = "comment"
         attr["atomic_best_sent"] = prev_best_sent
+
+        if get_nltk_sentiment(response) == "negative":
+            response = ""
+            confidence = 0.
+            attr = {}
+
         responses.append(response)
         confidences.append(confidence)
         attrs.append(attr)
@@ -266,7 +272,7 @@ def express_opinion_using_conceptnet(dialog):
 
         # get sentiment for prediction phrase (not all response, as response is mostly neutral)
         sentiment = get_nltk_sentiment(prediction)
-        logger.info(f"Composed phrase `{response}` has sentiment `{sentiment}`")
+        logger.info(f"Prediction `{prediction}` has sentiment `{sentiment}`")
         used_templates = get_used_attributes_by_name(
             dialog["utterances"], attribute_name="conceptnet_opinion_expr_template",
             value_by_default=None, activated=True, skill_name="comet_dialog_skill")[-2:]

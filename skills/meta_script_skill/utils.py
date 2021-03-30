@@ -304,7 +304,7 @@ def get_comet_conceptnet(topic, relation, return_all=False, return_not_filtered=
     """
 
     logger.info(f"Comet ConceptNet request on topic: {topic}.")
-    if topic is None or topic == "" or relation == "" or relation is None:
+    if topic is None or topic == "" or relation == "" or relation is None or get_nltk_sentiment(topic) == "negative":
         return ""
 
     # send request to COMeT ConceptNet service on `topic & relation`
@@ -336,7 +336,8 @@ def get_comet_conceptnet(topic, relation, return_all=False, return_not_filtered=
     relation_phrases = remove_duplicates([topic] + relation_phrases)[1:]  # the first element is topic
     relation_phrases = remove_all_phrases_containing_word(topic, relation_phrases)
 
-    relation_phrases = [ph for ph in relation_phrases if len(ph) > 0]
+    # check of sentiment for relation and drop it, if negative
+    relation_phrases = [ph for ph in relation_phrases if len(ph) > 0 and get_nltk_sentiment(ph) != "negative"]
     relation_phrases = correct_verb_form(relation, relation_phrases)
 
     if return_all:
