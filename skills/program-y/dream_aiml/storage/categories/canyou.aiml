@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <aiml version="2.0">
 
+
+  <category>
+    <pattern>CAN YOU TALK LIKE #</pattern>
+    <template>
+      <srai>CAN_YOU_TALK_LIKE_SOMEBODY</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>YOU TALK LIKE #</pattern>
+    <template>
+      <srai>CAN_YOU_TALK_LIKE_SOMEBODY</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>CAN_YOU_TALK_LIKE_SOMEBODY</pattern>
+    <template>
+      <random>
+        <li>Sorry, I am a socialbot, so I can't talk like anybody but me.</li>
+        <li>Not during the Alexa Prize Challenge.</li>
+        <li>Sadly, I'm prohibited from doing that during the Alexa Prize Challenge.</li>
+      </random>
+    </template>
+  </category>
+
   <category>
     <pattern>CAN YOU WATCH # MOVIES</pattern>
     <template>

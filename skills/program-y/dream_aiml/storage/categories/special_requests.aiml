@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <aiml version="2.0">
 
+<!--    WOULD YOU LIKE ME TO dance/sing    -->
+
+  <category>
+    <pattern>DO YOU WANT ME TO SING</pattern>
+    <template>
+      <srai>LIKE_ME_TO_SING</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>WOULD YOU LIKE ME TO SING</pattern>
+    <template>
+      <srai>LIKE_ME_TO_SING</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>LIKE_ME_TO_SING</pattern>
+    <template>
+      <random>
+        <li>As a socialbot I have access only to the text of your responses. Still I believe you are a great singer!</li>
+      </random>
+    </template>
+  </category>
+
 <!--    LIAR    -->
   <category>
     <pattern># ARE YOU LYING #</pattern>
