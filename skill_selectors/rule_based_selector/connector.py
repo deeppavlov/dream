@@ -262,7 +262,6 @@ class RuleBasedSkillSelectorConnector:
                 # skills_for_uttr.append("factoid_qa")
                 if (factoid_classification > factoid_prob_threshold):
                     skills_for_uttr.append("factoid_qa")
-                skills_for_uttr.append("comet_dialog_skill")
 
                 # if ner_detected:
                 #     skills_for_uttr.append("reddit_ner_skill")
@@ -270,6 +269,7 @@ class RuleBasedSkillSelectorConnector:
                 if len(dialog["human_utterances"]) >= 5:
                     # can answer on 4-th user response
                     skills_for_uttr.append("convert_reddit")
+                    skills_for_uttr.append("comet_dialog_skill")
                 if len(dialog["utterances"]) > 14:
                     skills_for_uttr.append("alice")
                     skills_for_uttr.append("program_y_wide")
