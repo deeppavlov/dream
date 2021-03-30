@@ -79,9 +79,15 @@ class GroundingSkillScenario:
                     cobot_topic_dict = get_cobot_topic_dict()
                     cobot_topics_by_popularity = list(cobot_topic_dict.keys())[::-1]
                     reply = None
-                    for intent in intents_by_popularity:  # start from least popular
-                        if intent in intent_list and reply is None and len(entity_name) > 0:
-                            reply = intent_dict[intent]
+                    if len(dialog.get("bot_utterances", [])) > 0:
+                        if dialog["bot_utterances"][-1]["active_skill"] == "meta_script_skill":
+                            reply = "I was asking you about some unknown for me human stuff."
+                        if dialog["bot_utterances"][-1]["active_skill"] == "comet_dialog_skill":
+                            reply = "I was trying to give a comment based on some commonsense knowledge."
+                    if reply is None:
+                        for intent in intents_by_popularity:  # start from least popular
+                            if intent in intent_list and reply is None and len(entity_name) > 0:
+                                reply = intent_dict[intent]
                     if len(entity_name) > 0 and reply is None:
                         reply = f"We are discussing {entity_name}, aren't we?"
                     for topic in da_topics_by_popularity:  # start from least popular

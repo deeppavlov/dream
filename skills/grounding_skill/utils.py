@@ -19,9 +19,9 @@ def get_da_topic_dict():
     topic_dict = {"Entertainment_Movies": "We were discussing movies, am I right?",
                   "Entertainment_Books": "We were discussing books, am I right?",
                   'Entertainment_General': "We are just trying to be polite to each other, aren't we?",
-                  "Science_and_Technology": "I was under impression we were chatting about technology stuff",
-                  "Sports": "So I thought we were talking about sports",
-                  "Politics": "Correct me if I'm wrong but I thought we were discussing politics"}
+                  "Science_and_Technology": "I was under impression we were chatting about technology stuff.",
+                  "Sports": "So I thought we were talking about sports.",
+                  "Politics": "Correct me if I'm wrong but I thought we were discussing politics."}
     return topic_dict
 
 
@@ -30,24 +30,24 @@ def get_cobot_topic_dict():
     topic_dict = {'Phatic': "We are just trying to be polite to each other, aren't we?",
                   "Other": "I can't figure out what we are talking about exactly. Can you spare a hand?",
                   "Movies_TV": "We were discussing movies, am I right?",
-                  "Music": "Thought we were talking about music",
-                  "SciTech": "I was under impression we were chatting about technology stuff",
+                  "Music": "Thought we were talking about music.",
+                  "SciTech": "I was under impression we were chatting about technology stuff.",
                   "Literature": "We were discussing literature, am I right?",
-                  "Travel_Geo": "Thought we were talking about some travel stuff",
+                  "Travel_Geo": "Thought we were talking about some travel stuff.",
                   "Celebrities": "We're discussing celebrities, right?",
                   "Games": "We're talking about games, correct?",
-                  "Pets_Animals": "Thought we were talking about animals",
-                  "Sports": "So I thought we were talking about sports",
-                  "Psychology": "Correct me if I'm wrong but I thought we were talking about psychology",
+                  "Pets_Animals": "Thought we were talking about animals.",
+                  "Sports": "So I thought we were talking about sports.",
+                  "Psychology": "Correct me if I'm wrong but I thought we were talking about psychology.",
                   "Religion": "Aren't we talking about religion, my dear?",
                   "Weather_Time": "Aren't we discussing the best topic of all times, weather?",
-                  "Food_Drink": "Thought we were discussing food stuff",
-                  "Politics": "Correct me if I'm wrong but I thought we were discussing politics",
-                  "Sex_Profanity": "This is a something I'd rather avoid talking about",
+                  "Food_Drink": "Thought we were discussing food stuff.",
+                  "Politics": "Correct me if I'm wrong but I thought we were discussing politics.",
+                  "Sex_Profanity": "This is a something I'd rather avoid talking about.",
                   "Art_Event": "My understanding is we are discussing arts, aren't we?",
-                  "Math": "My guess is we were talking about math stuff",
+                  "Math": "My guess is we were talking about math stuff.",
                   "News": "Aren't we discussing news my dear friend?",
-                  "Entertainment": "Thought we were discussing something about entertainment",
+                  "Entertainment": "Thought we were discussing something about entertainment.",
                   "Fashion": "We are talking about fashion am I right?"}
     return topic_dict
 
