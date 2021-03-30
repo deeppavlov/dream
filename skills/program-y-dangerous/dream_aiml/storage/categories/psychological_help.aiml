@@ -12,6 +12,13 @@
   </category>
 
   <category>
+    <pattern><set>suicide</set></pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+
+  <category>
     <pattern># I <set>wantto</set> # <set>commit</set> # <set>suicide</set> #</pattern>
     <template>
       <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
