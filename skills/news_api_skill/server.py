@@ -161,8 +161,8 @@ def collect_topics_and_statuses(dialogs):
             elif prev_status == OFFERED_NEWS_TOPIC_CATEGORIES_STATUS:
                 if not (news_rejection(curr_uttr["text"].lower()) or is_no(curr_uttr)):
                     logger.info("User chose the topic for news")
-                    if "first" in curr_uttr["text"].lower() or "any" in curr_uttr["text"].lower() or \
-                            "both" in curr_uttr["text"].lower():
+                    if any([word in curr_uttr["text"].lower()
+                            for word in ["first", "any", "both", "either", "all", "don't know", "not know"]]):
                         topics.append(prev_topic.split()[0])
                     elif "second" in curr_uttr["text"].lower() or "last" in curr_uttr["text"].lower():
                         topics.append(prev_topic.split()[1])
