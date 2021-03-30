@@ -289,7 +289,7 @@ def respond():
                 "fact_retrieval"
             )
             if retrieved_facts:
-                for depth, fact in retrieved_facts[:TOP_N_FACTS]:
+                for depth, fact in retrieved_facts[-TOP_N_FACTS:]:
                     user_input = {
                         'checked_sentence': fact,
                         'knowledge': fact,
