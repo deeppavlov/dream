@@ -9,11 +9,11 @@ from collections import OrderedDict
 from utils import *
 
 MODEL_NAME = 'linear_classifier'
-INTENT_DATA_PATH = './intent_data.json'
 MULTILABEL = True
 TRAIN_SIZE = 0.5
-DENSE_LAYERS = 1
+DENSE_LAYERS = 2
 MODEL_NAME += '_h' + str(DENSE_LAYERS)
+INTENT_DATA_PATH = './intent_data_h' + str(DENSE_LAYERS) + '.json'
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
