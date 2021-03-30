@@ -18,7 +18,7 @@ from nltk.tokenize import word_tokenize
 from common.constants import CAN_CONTINUE
 from common.link import link_to, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED
 from common.metrics import setup_metrics
-from common.news import OFFER_BREAKING_NEWS, BREAKING_NEWS, OFFERED_BREAKING_NEWS_STATUS, \
+from common.news import OFFER_BREAKING_NEWS, OFFERED_BREAKING_NEWS_STATUS, \
     OFFERED_NEWS_DETAILS_STATUS, OPINION_REQUEST_STATUS, WHAT_TYPE_OF_NEWS, OFFER_TOPIC_SPECIFIC_NEWS, \
     OFFER_TOPIC_SPECIFIC_NEWS_STATUS, OFFERED_NEWS_TOPIC_CATEGORIES_STATUS
 from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, COMPILE_SWITCH_TOPIC, if_lets_chat_about_topic
@@ -140,8 +140,8 @@ def collect_topics_and_statuses(dialogs):
                 statuses.append("finished")
                 prev_news_samples.append(human_attr["news_skill"]["discussed_news"])
                 curr_news_samples.append({})
-            elif (prev_status == OFFERED_BREAKING_NEWS_STATUS or BREAKING_NEWS.lower() in prev_bot_uttr_lower) and \
-                    is_yes(curr_uttr):
+            elif (prev_status == OFFERED_BREAKING_NEWS_STATUS or OFFER_BREAKING_NEWS.lower() in
+                  prev_bot_uttr_lower) and is_yes(curr_uttr):
                 logger.info("Detected topic for news: all.")
                 topics.append("all")
                 statuses.append("headline")
@@ -201,7 +201,7 @@ def collect_topics_and_statuses(dialogs):
                 not re.search(FALSE_NEWS_TEMPLATES, curr_uttr["text"].lower())
             lets_chat_about_particular_topic = if_lets_chat_about_topic(curr_uttr["text"].lower())
 
-            if BREAKING_NEWS.lower() in prev_bot_uttr_lower and is_yes:
+            if OFFER_BREAKING_NEWS.lower() in prev_bot_uttr_lower and is_yes:
                 # news skill was not previously active
                 logger.info("Detected topic for news: all.")
                 topics.append("all")
@@ -350,7 +350,7 @@ def respond():
                 else:
                     prev_bot_uttr_lower = ""
 
-                if BREAKING_NEWS.lower() in prev_bot_uttr_lower and is_yes(curr_uttr):
+                if OFFER_BREAKING_NEWS.lower() in prev_bot_uttr_lower and is_yes(curr_uttr):
                     if curr_news:
                         result = deepcopy(curr_news)
                     response = f"Here it is: {result['title']}.. {OFFER_MORE}"
