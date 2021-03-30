@@ -16,7 +16,7 @@ import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 import dialogflows.scopes as scopes
 # from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
-from common.utils import is_no, get_topics
+from common.utils import is_yes, get_topics
 from common.food import TRIGGER_PHRASES
 
 
@@ -364,7 +364,7 @@ def what_fav_food_request(ngrams, vars):
             req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower()
             for req in TRIGGER_PHRASES
         ]
-    ) and (not is_no(state_utils.get_last_human_utterance(vars)))
+    ) and is_yes(state_utils.get_last_human_utterance(vars))
     food_1st_time = condition_utils.is_first_time_of_state(vars, State.SYS_WHAT_FAV_FOOD)
     cuisine_1st_time = condition_utils.is_first_time_of_state(vars, State.SYS_WHAT_CUISINE)
 
@@ -386,7 +386,7 @@ def what_cuisine_request(ngrams, vars):
             req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower()
             for req in TRIGGER_PHRASES
         ]
-    ) and (not is_no(state_utils.get_last_human_utterance(vars)))
+    ) and is_yes(state_utils.get_last_human_utterance(vars))
     flag = lets_talk_about_request(ngrams, vars) or linkto_food_skill_agreed
     logger.info(f"what_cuisine_request {flag}")
     return flag
