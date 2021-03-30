@@ -392,7 +392,7 @@ def new_entities_is_needed_for_request(ngrams, vars):
 def new_entities_is_needed_for_response(vars):
     try:
         ack = random.choice(get_sentiment_acknowledgement(vars))
-        body = "tell me more about that"
+        body = "Tell me more about that."
         # new_entities = state_utils.get_new_human_labeled_noun_phrase(vars)
         # new_entity = list(new_entities)[0]
 
