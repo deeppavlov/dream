@@ -65,7 +65,9 @@ def respond():
 
 what_is_your_name_pattern = re.compile(
     r"((what is|what's|whats|tell me|may i know|ask you for) your? name|what name would you like)", re.IGNORECASE)
-my_name_is_pattern = re.compile(r"my (name is|name's)|call me", re.IGNORECASE)
+my_name_is_pattern = re.compile(r"(my (name is|name's)|call me)", re.IGNORECASE)
+my_name_is_not_pattern = re.compile(r"(my (name is not|name isn't|name's not)|not call me|why do you call me)",
+                                    re.IGNORECASE)
 where_are_you_from_pattern = re.compile(r"(where are you from|where you (were|was) born|"
                                         r"(what is|what's|whats|tell me) your "
                                         r"(home\s?land|mother\s?land|native\s?land|birth\s?place))", re.IGNORECASE)
@@ -141,6 +143,14 @@ def process_info(dialog, which_info="name"):
         confidence = 1.0
         got_info = False
         attr["can_continue"] = MUST_CONTINUE
+
+    if my_name_is_not_pattern.search(curr_user_uttr):
+        logger.info(f"User says My name is not Blabla")
+        response = f"My bad. What is your name again?"
+        confidence = 1.0
+        got_info = True
+        attr["can_continue"] = CAN_CONTINUE
+
     if (is_about_templates[which_info] or prev_bot_uttr == repeat_info_phrases[which_info].lower()) and not got_info:
         logger.info(f"Asked for {which_info} in {prev_bot_uttr}")
         found_info = check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr)
