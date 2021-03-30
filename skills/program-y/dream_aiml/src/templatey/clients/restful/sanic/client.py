@@ -120,6 +120,8 @@ class SanicRestBotClient(RestBotClient):
                     untagged_text = ""
                 elif len(untagged_text.split()) <= 3:
                     confidence = 0.6
+                elif "this is an Alexa Prize Socialbot" in untagged_text and len(user_sentences) > 2:
+                    confidence = 0.6
                 elif untagged_text:
                     confidence = 0.98
                 else:
