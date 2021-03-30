@@ -777,10 +777,10 @@ services:
   entity-linking:
     build:
       args:
-        CONFIG: kbqa_entity_linking_lite.json
+        CONFIG: kbqa_entity_linking.json
         PORT: 8075
         SRC_DIR: annotators/entity_linking
-        COMMIT: 35c8416731a89430191a97a0cd9661cef55f438c
+        COMMIT: c8aee9360b457131dfc042d31b53ad80b8c0ac29
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -790,9 +790,9 @@ services:
       replicas: 1
       resources:
         limits:
-          memory: 20G
+          memory: 23G
         reservations:
-          memory: 20G
+          memory: 23G
 
   wiki-parser:
     build:
