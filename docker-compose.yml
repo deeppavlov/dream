@@ -22,7 +22,7 @@ services:
         science-technology-tfidf-retrieval:8044, sport-tfidf-retrieval:8045, animals-tfidf-retrieval:8050,
         book-skill:8032, superbowl-skill:8051, valentines-day-skill:8058, grounding-skill:8080,
         dff-animals-skill:8094, dff-travel-skill:8096, dff-food-skill:8097, dff-sport-skill:8098,
-        midas-classification:8090, fact-retrieval:8100"
+        midas-classification:8090, dff-celebrity-skill:8093, fact-retrieval:8100"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
     deploy:
       mode: replicated
@@ -983,6 +983,23 @@ services:
           memory: 128M
         reservations:
           memory: 128M
+
+  dff-celebrity-skill:
+    build:
+      args:
+        SERVICE_PORT: 8093
+        SERVICE_NAME: dff_celebrity_skill
+      context: .
+      dockerfile: ./skills/dff_celebrity_skill/Dockerfile
+    command:  gunicorn --workers=1 server:app -b 0.0.0.0:8093 --reload
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 768M
+        reservations:
+          memory: 768M
 
   combined-classification:
     build:

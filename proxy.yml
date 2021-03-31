@@ -559,6 +559,14 @@ services:
       - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/dff-food-skill
       - PORT=8097
     command: [ "nginx", "-g", "daemon off;" ]
+  dff-celebrity-skill:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:      
+      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/dff-celebrity-skill
+      - PORT=8093
+    command: [ "nginx", "-g", "daemon off;" ]
   dff-music-skill:
     build:
       context: dp/proxy/

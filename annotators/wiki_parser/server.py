@@ -1,5 +1,6 @@
 import logging
 import os
+import time
 from flask import Flask, request, jsonify
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
@@ -15,16 +16,19 @@ app = Flask(__name__)
 
 @app.route("/model", methods=['POST'])
 def respond():
+    st_time = time.time()
     inp = request.json
-    parser_info = inp.get("parser_info", [" "])
-    query = inp.get("query", [" "])
+    parser_info = inp.get("parser_info", ["find_triplets"])
+    query = inp.get("query", [("Q0", "P0", "forw")])
     res = [[] for _ in query]
+    logger.debug('Calling wp')
     try:
         res = wp_call(parser_info, query)
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
-
+    total_time = time.time() - st_time
+    logger.info(f"Wiki parser exec time = {total_time:.3f}s")
     return jsonify(res)
 
 

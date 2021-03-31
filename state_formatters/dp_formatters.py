@@ -439,13 +439,10 @@ def wp_formatter_dialog(dialog: Dict):
             if entity_ids_list:
                 input_entity_ids.append(entity_ids_list[0])
                 input_entity_ids_list.append(entity_ids_list[:5])
-    input_entity_ids = list(set(input_entity_ids))
-    parser_info = ["find_top_triplets", "find_top_triplets_for_topic_skills"]
-    if not input_entity_ids:
-        input_entity_ids = [""]
+    parser_info = ["find_top_triplets"]
     if not input_entity_ids_list:
         input_entity_ids_list = [[]]
-    return [{"parser_info": parser_info, "query": [input_entity_ids, input_entity_ids_list]}]
+    return [{"parser_info": parser_info, "query": [input_entity_ids_list]}]
 
 
 def el_formatter_dialog(dialog: Dict):
@@ -595,6 +592,10 @@ def dff_friendship_skill_formatter(dialog: Dict) -> List[Dict]:
 
 def dff_template_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_template")
+
+
+def dff_celebrity_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_celebrity_skill")
 
 
 def dff_music_skill_formatter(dialog: Dict) -> List[Dict]:

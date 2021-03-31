@@ -1,0 +1,440 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "johny depp.",
+                    "annotations": {
+                        "spelling_preprocessing": "johny depp",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9993849992752075
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Movies": 0.9508625268936157
+                            },
+                            "cobot_topics": {
+                                "Celebrities": 0.3791043758392334
+                            },
+                            "emotion_classification": {
+                                "anger": 0.5762877464294434,
+                                "joy": 0.6146530508995056,
+                                "neutral": 0.995531439781189
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.5224923491477966
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0029053688049316406
+                            }
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.008647806942462921,
+                            "conversational": 0.9913522005081177
+                        },
+                        "cobot_nounphrases": [
+                            "johny depp"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "johny depp.",
+                            "segments": [
+                                "johny depp."
+                            ]
+                        },
+                        "midas_classification": {
+                            "abandon": 0.4831610939172175,
+                            "nonsense": 0.1622201350046202,
+                            "statement": 0.06509193287056919
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Entertainment_Movies"
+                            ]
+                        },
+                        "odqa": {
+                            "answer": "the character was paralleled to a mood ring",
+                            "answer_pos": 171,
+                            "answer_sentence": "In an interview with Depp, the character was paralleled to a mood ring, [as] his emotions are very close to the surface.",
+                            "confidence": 0.9991373419761658,
+                            "first_par": "",
+                            "paragraph": "Depp and Burton decided that the Hatter's clothes, skin, hair, personality and accent would change throughout the film to reflect his emotions. In an interview with Depp, the character was paralleled to a mood ring, [as] his emotions are very close to the surface. The Hatter is made up of different people and their extreme sides, with a gentle voice much like the character's creator Lewis Carroll reflecting the lighter personality and with a Scottish Glaswegian accent (which Depp modeled after Gregor Fisher's Rab C. Nesbitt character) reflecting a darker, more dangerous personality.",
+                            "qa_system": "odqa",
+                            "topical_chat_fact": ""
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Celebrities"
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 2,
+                                    "start_pos": 0,
+                                    "text": "johny depp",
+                                    "type": "PER"
+                                }
+                            ]
+                        ],
+                        "entity_linking": [
+                            [
+                                [
+                                    "Q37175",
+                                    "Q12488007",
+                                    "Q2749342",
+                                    "Q3182923",
+                                    "Q50824387"
+                                ]
+                            ],
+                            [
+                                [
+                                    0.9523809523809523,
+                                    0.7619047619047619,
+                                    0.7272727272727274,
+                                    0.7272727272727274,
+                                    0.7272727272727274
+                                ]
+                            ]
+                        ],
+                        "conceptnet": {
+                            "johny depp": {
+                                "Causes": [
+                                    "you feel good",
+                                    "death",
+                                    "pregnancy"
+                                ],
+                                "CausesDesire": [
+                                    "fly kite",
+                                    "play baseball",
+                                    "fly airplane"
+                                ],
+                                "HasProperty": [
+                                    "dead",
+                                    "lame",
+                                    "old"
+                                ],
+                                "SymbolOf": [
+                                    "korea university",
+                                    "korea",
+                                    "love"
+                                ]
+                            }
+                        },
+                        "kbqa": [
+                            "film director, voice actor, film producer, guitarist and film actor",
+                            0.8173134326934814
+                        ],
+                        "wiki_parser": {
+                            "entities_info": {
+                                "Johnny Depp": {
+                                    "country of sitizenship": [
+                                        [
+                                            "Q30",
+                                            "United States of America"
+                                        ]
+                                    ],
+                                    "date of birth": [
+                                        [
+                                            "\"+1963-06-09^^T\"",
+                                            "09 June 1963"
+                                        ]
+                                    ],
+                                    "genre": [
+                                        [
+                                            "Q11399",
+                                            "rock music"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q5",
+                                            "human"
+                                        ]
+                                    ],
+                                    "occupation": [
+                                        [
+                                            "Q10798782",
+                                            "television actor"
+                                        ],
+                                        [
+                                            "Q10800557",
+                                            "film actor"
+                                        ],
+                                        [
+                                            "Q22810659",
+                                            "nightclub owner"
+                                        ],
+                                        [
+                                            "Q2405480",
+                                            "voice actor"
+                                        ],
+                                        [
+                                            "Q2526255",
+                                            "film director"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "topic_skill_entities_info": {
+                                "Johnny Depp": {
+                                    "country of sitizenship": [
+                                        [
+                                            "Q30",
+                                            "United States of America"
+                                        ]
+                                    ],
+                                    "date of birth": [
+                                        [
+                                            "\"+1963-06-09^^T\"",
+                                            "09 June 1963"
+                                        ]
+                                    ],
+                                    "genre": [
+                                        [
+                                            "Q11399",
+                                            "rock music"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q5",
+                                            "human"
+                                        ]
+                                    ],
+                                    "occupation": [
+                                        [
+                                            "Q10798782",
+                                            "television actor"
+                                        ],
+                                        [
+                                            "Q10800557",
+                                            "film actor"
+                                        ],
+                                        [
+                                            "Q22810659",
+                                            "nightclub owner"
+                                        ],
+                                        [
+                                            "Q2405480",
+                                            "voice actor"
+                                        ],
+                                        [
+                                            "Q2526255",
+                                            "film director"
+                                        ]
+                                    ]
+                                },
+                                "Johny Gudel": {
+                                    "country of sitizenship": [
+                                        [
+                                            "Q252",
+                                            "Indonesia"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q5",
+                                            "human"
+                                        ]
+                                    ],
+                                    "occupation": [
+                                        [
+                                            "Q33999",
+                                            "actor"
+                                        ]
+                                    ]
+                                },
+                                "Johny Joseph": {
+                                    "country of sitizenship": [
+                                        [
+                                            "Q790",
+                                            "Haiti"
+                                        ]
+                                    ],
+                                    "date of birth": [
+                                        [
+                                            "\"+1964-09-27^^T\"",
+                                            "27 September 1964"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q5",
+                                            "human"
+                                        ]
+                                    ],
+                                    "occupation": [
+                                        [
+                                            "Q1930187",
+                                            "journalist"
+                                        ],
+                                        [
+                                            "Q270389",
+                                            "news presenter"
+                                        ],
+                                        [
+                                            "Q3400985",
+                                            "academic"
+                                        ]
+                                    ]
+                                }
+                            }
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "johny depp."
+                            ]
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_celebrity_skill_state_batch": [
+        {}
+    ],
+    "entities_batch": [
+        {
+            "depp": {
+                "bot_encounters": [],
+                "human_encounters": [
+                    {
+                        "emotions": {
+                            "anger": 0.5762877464294434,
+                            "joy": 0.6146530508995056,
+                            "neutral": 0.995531439781189
+                        },
+                        "full_name": "johny depp",
+                        "human_utterance_index": 0,
+                        "intents": [
+                            "General_ChatIntent",
+                            "abandon"
+                        ],
+                        "next_skill_name": "",
+                        "pos": [
+                            "ADJ",
+                            "NOUN"
+                        ],
+                        "previous_skill_name": "pre_start",
+                        "sentiment": "neutral",
+                        "topics": [
+                            "Celebrities",
+                            "Entertainment_Movies"
+                        ]
+                    }
+                ],
+                "name": "depp"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ]
+}
