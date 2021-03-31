@@ -327,6 +327,7 @@ class KBEntityLinker(Component, Serializable):
                             entity: str,
                             context: str = None) -> Tuple[List[str], List[float], List[Tuple[str, str, int, int]]]:
         entities_ratios = []
+        entity = entity.lower()
         for candidate, entity_names in zip(candidate_entities, candidate_names):
             entity_num, entity_id, num_rels, tokens_matched = candidate
             fuzz_ratio = max([fuzz.ratio(name.lower(), entity) for name in entity_names])
