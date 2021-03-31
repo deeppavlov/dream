@@ -780,7 +780,7 @@ services:
         CONFIG: kbqa_entity_linking.json
         PORT: 8075
         SRC_DIR: annotators/entity_linking
-        COMMIT: 04128b187a84668938035b045436933232c5e32e
+        COMMIT: 5b99ac3392e8e178e2bb4f9b218d4ddb2ec2e242
       context: ./
       dockerfile: dp/dockerfile_skill_gpu
     environment:
@@ -839,7 +839,7 @@ services:
         CONFIG: kbqa_cq_mt_bert_lite.json
         PORT: 8072
         SRC_DIR: annotators/kbqa/
-        COMMIT: 04128b187a84668938035b045436933232c5e32e
+        COMMIT: 5b99ac3392e8e178e2bb4f9b218d4ddb2ec2e242
       context: ./
       dockerfile: annotators/kbqa/Dockerfile
     environment:
