@@ -13,7 +13,7 @@ from common.food import food_skill_was_proposed
 from common.books import book_skill_was_proposed, about_book, QUESTIONS_ABOUT_BOOKS
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
 from common.emotion import emotion_from_feel_answer, is_joke_requested, is_sad
-from common.greeting import HOW_ARE_YOU_RESPONSES
+from common.greeting import HOW_ARE_YOU_RESPONSES, GREETING_QUESTIONS
 from common.news import is_breaking_news_requested
 from common.universal_templates import if_lets_chat_about_topic, if_choose_topic, switch_topic_uttr
 from common.utils import high_priority_intents, low_priority_intents, \
@@ -167,6 +167,8 @@ class RuleBasedSkillSelectorConnector:
                 prev_bot_uttr = dialog["bot_utterances"][-1]
 
             prev_active_skill = prev_bot_uttr.get("active_skill", "")
+            greeting_what_to_talk_question = any([question.lower() in prev_bot_uttr.get("text", "").lower()
+                                                  for question in GREETING_QUESTIONS["what_to_talk_about"]])
 
             weather_city_slot_requested = any(
                 [
@@ -253,8 +255,11 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("knowledge_grounding_skill")
                     pass
 
-                if len(dialog["utterances"]) > 8 or prev_bot_uttr.get(
-                        "active_skill", "") in ["greeting_skill", "dff_friendship_skill"]:
+                if len(dialog["utterances"]) > 8 or (
+                    (
+                        prev_bot_uttr.get("active_skill", "") in ["greeting_skill", "dff_friendship_skill"]
+                    ) and greeting_what_to_talk_question
+                ):
                     skills_for_uttr.append("knowledge_grounding_skill")
                     # skills_for_uttr.append("wikidata_dial_skill")
 
