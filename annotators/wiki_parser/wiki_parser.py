@@ -205,37 +205,36 @@ def find_types(entity: str):
     return types
 
 
-def find_top_triplets(query):
+def find_top_triplets(entity):
     triplets_info = {}
-    for entity in query:
-        if entity.startswith("Q"):
-            triplets = {}
-            entity_label = find_label(entity, "")
-            for rel_id, rel_label in [("P31", "instance of"),
-                                      ("P279", "subclass of"),
-                                      ("P131", "located in"),
-                                      ("P106", "occupation"),
-                                      ("P361", "part of"),
-                                      ("P17", "country"),
-                                      ("P27", "country of sitizenship"),
-                                      ("P569", "date of birth"),
-                                      ("P1542", "has effect"),
-                                      ("P580", "start time"),
-                                      ("P1552", "has quality"),
-                                      ("P50", "author"),
-                                      ("P136", "genre"),
-                                      ("P577", "publication date"),
-                                      ("P800", "notable work")
-                                      ]:
-                objects = find_object(entity, rel_id, "")
-                objects_info = []
-                for obj in objects[:5]:
-                    obj_label = find_label(obj, "")
-                    if obj_label:
-                        objects_info.append((obj, obj_label))
-                if objects_info:
-                    triplets[rel_label] = objects_info
-            triplets_info[entity_label] = triplets
+    if entity.startswith("Q"):
+        triplets = {}
+        entity_label = find_label(entity, "")
+        for rel_id, rel_label in [("P31", "instance of"),
+                                  ("P279", "subclass of"),
+                                  ("P131", "located in"),
+                                  ("P106", "occupation"),
+                                  ("P361", "part of"),
+                                  ("P17", "country"),
+                                  ("P27", "country of sitizenship"),
+                                  ("P569", "date of birth"),
+                                  ("P1542", "has effect"),
+                                  ("P580", "start time"),
+                                  ("P1552", "has quality"),
+                                  ("P50", "author"),
+                                  ("P136", "genre"),
+                                  ("P577", "publication date"),
+                                  ("P800", "notable work")
+                                  ]:
+            objects = find_object(entity, rel_id, "")
+            objects_info = []
+            for obj in objects[:5]:
+                obj_label = find_label(obj, "")
+                if obj_label:
+                    objects_info.append((obj, obj_label))
+            if objects_info:
+                triplets[rel_label] = objects_info
+        triplets_info[entity_label] = triplets
     return triplets_info
 
 
@@ -255,13 +254,23 @@ def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], w
             wiki_parser_output += rels
         elif parser_info == "find_top_triplets":
             triplets_info = {}
+            topic_skills_triplets_info = {}
             try:
-                triplets_info = find_top_triplets(query)
+                for entities in query:
+                    if entities:
+                        entity_triplets_info = find_top_triplets(entities[0])
+                        triplets_info = {**triplets_info, **entity_triplets_info}
+                    for entity in entities:
+                        types = find_types(entity)
+                        if set(types).intersection(topic_skill_types):
+                            entity_triplets_info = find_top_triplets(entity)
+                            topic_skills_triplets_info = {**topic_skills_triplets_info, **entity_triplets_info}
             except Exception as e:
                 log.info("Wrong arguments are passed to wiki_parser")
                 sentry_sdk.capture_exception(e)
                 log.exception(e)
-            wiki_parser_output.append(triplets_info)
+            wiki_parser_output.append({"entities_info": triplets_info,
+                                       "topic_skill_entities_info": topic_skills_triplets_info})
         elif parser_info == "find_top_triplets_for_topic_skills":
             triplets_info = {}
             for entities_list in query:
@@ -272,7 +281,6 @@ def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], w
                             entity_triplets_info = find_top_triplets(entity)
                             triplets_info = {**triplets_info, **entity_triplets_info}
             wiki_parser_output.append(triplets_info)
-
         elif parser_info == "find_object":
             objects = []
             try:
@@ -316,7 +324,7 @@ def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], w
                 triplets.extend([triplet for triplet in triplets_forw
                                  if not triplet[2].startswith(prefixes["statement"])])
                 triplets_backw, c = document.search_triples("", "", f"{prefixes['entity']}/{query}")
-                triplets.extend([triplet for triplet in triplets_forw
+                triplets.extend([triplet for triplet in triplets_backw
                                  if not triplet[0].startswith(prefixes["statement"])])
             except Exception as e:
                 log.info("Wrong arguments are passed to wiki_parser")
@@ -324,7 +332,7 @@ def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], w
                 log.exception(e)
             wiki_parser_output.append(list(triplets))
         else:
-            raise ValueError("Unsupported query type")
+            raise ValueError(f"Unsupported query type {parser_info}")
 
 
 def wp_call(parser_info_list: List[str], queries_list: List[Any]) -> List[Any]:

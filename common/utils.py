@@ -742,3 +742,42 @@ def entity_to_label(entity):
         sentry_sdk.capture_exception(e)
         logging.exception(Exception(e, 'Exception in conversion of labels {labels}'))
     return label
+
+
+def get_types_from_annotations(annotations, types, tocheck_relation='occupation', exclude_types=False):
+    '''
+
+    Args:
+        annotations: annotations of utterance
+        types: types from which we need to find one
+        or ( if exclude_types is True) to find type not included in the list, if it is the entity of given type
+        tocheck_relation: relation we want to check
+        exclude_types: if False we look for matching types, otherwise we look for excluding types
+
+    Returns:
+        name of entity, name of type found, raw name of type found
+    '''
+    wp_annotations = annotations.get("wiki_parser", {})
+    try:
+        topic_entities = wp_annotations.get('topic_skill_entities_info', {})
+        for entity in topic_entities:
+            for relation in topic_entities[entity]:
+                if relation == tocheck_relation:
+                    type_to_typename = {j[0]: j[1]
+                                        for j in topic_entities[entity][relation]}
+                    found_types = type_to_typename.keys()
+                    matching_types = set(found_types) & set(types)
+                    some_types_match = len(matching_types) > 0
+                    for type_ in types:
+                        return_matching_type = all([type_ in matching_types,
+                                                    not exclude_types])
+                        return_mismatching_type = all([type_ not in matching_types,
+                                                       exclude_types,
+                                                       some_types_match])
+                        if return_matching_type or return_mismatching_type:
+                            return entity, type_to_typename[type_], type_
+            logging.warning('Relation to check not found')
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        logging.exception(Exception(e, f'Exception in processing wp annotations {wp_annotations}'))
+    return None, None, None
