@@ -196,7 +196,10 @@ class WeatherSkill:
                     # ask question:
                     current_reply = "Hmm. Which particular city would you like a weather forecast for?"
                     context_dict[city_slot_requested] = True
-                    curr_confidence = QUESTION_CONFIDENCE
+                    if weather_without_city_requested:
+                        curr_confidence = FORECAST_CONFIDENCE
+                    else:
+                        curr_confidence = QUESTION_CONFIDENCE
                 return current_reply, curr_confidence, human_attr, bot_attr, context_dict
             elif context_dict.get(city_slot_requested, False) or weather_for_homeland_requested:
                 logger.warning("WEATHER FORECAST city_slot_requested already! Handling!")
