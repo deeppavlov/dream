@@ -200,4 +200,6 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=6
+  cobot-entities:
+    env_file: [ .env.dev ]
 version: '3.7'
