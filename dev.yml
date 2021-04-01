@@ -503,4 +503,10 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8100:8100
+  cobot-entities:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/CoBotNER:/src"
+    ports:
+      - 8102:8102
 version: "3.7"
