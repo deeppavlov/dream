@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 
 
 class RuleBasedSkillSelectorConnector:
-    sensitive_topics = {"Politics", "Religion", "Sex_Profanity"}
+    sensitive_topics = {"Politics", "Religion", "Sex_Profanity", "Inappropriate_Topic"}
     # `General_ChatIntent` sensitive in case when `?` in reply
     sensitive_dialogacts = {"Opinion_RequestIntent", "General_ChatIntent"}
     movie_cobot_dialogacts = {
