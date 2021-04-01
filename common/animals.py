@@ -19,5 +19,63 @@ def animals_skill_was_proposed(prev_bot_utt):
     return any([phrase.lower() in prev_bot_utt.get('text', '').lower() for phrase in TRIGGER_PHRASES])
 
 
+def check_about_pets(text):
+    if "let's talk about pets" in text or re.findall(r"(pets|about pets)\??", text):
+        return True
+    else:
+        return False
+
+
 PETS_TEMPLATE = re.compile(r"(cat|dog|horse|puppy|kitty|kitten|parrot|rat|mouse|hamster)", re.IGNORECASE)
 COLORS_TEMPLATE = re.compile(r"(black|white|yellow|blue|green|brown|orange|spotted|striped)", re.IGNORECASE)
+
+WILD_ANIMALS = [
+    "I like squirrels. I admire how skillfully they can climb up trees. "
+    "When I walk in the park, sometimes I feed squirrels.",
+    "I like mountain goats. "
+    "I saw a video on Youtube where a goat was climbing up a sheer cliff and they did not fall down.",
+    "I like elephants. When I was in India, I rode an elephant.",
+    "I like foxes. Foxes are intriguing animals, known for their intelligence, playfulness, and lithe athleticism.",
+    "I like wolves. They are related to dogs. I love how they vary in fur color. I love how packs work together.",
+    "I like eagles. Bald eagle is the symbol of America. A bald eagle has Superman-like vision."
+]
+
+WHAT_PETS_I_HAVE = ["I have a dog named Jack. He is a German Shepherd. He is very cute.",
+                    "I have a cat named Thomas. "
+                    "He is active and playful, enjoying games like fetch and learning tricks.",
+                    "My favourite pet is my dog Charlie. "
+                    "He is beautiful and easy to care for, his medium white fur needs no extra brushing.",
+                    "My favourite pet is my dog Archie. "
+                    "Playing with him is a lot of fun, I throw a tennis ball and he bounces off to retrieve it."
+                    ]
+
+CATS_DOGS_PHRASES = {"cat": ["Can cats reduce stress and improve mood? The answer seems to be yes.",
+                             "Cats have long been one of the more popular companion animals, constantly battling dogs "
+                             "for the number one spot",
+                             "Whether you’ve had your cat for her whole life, or you’ve just welcomed a cat or kitten "
+                             "into your new family, you can find yourself learning something new about your cat "
+                             "everyday"],
+                     "dog": ["Having a dog can help you stay active. Nothing beats a long walk with your "
+                             "four-legged friend on a fresh, spring morning.",
+                             "Nothing beats a long walk with your four-legged friend on a fresh, spring morning. "
+                             "Or seeing the joy on their faces when you pick up a ball and they know it’s playtime "
+                             "in the local park!",
+                             "There’s an old saying, which is certainly true, that dogs repay the love you give "
+                             "them ten-fold.",
+                             "One of the most noticeable benefits of owning a dog is that it’s almost impossible to "
+                             "feel lonely when your dog is by your side, and for good reason."]
+                     }
+
+MY_CAT = ["My cat is as frail as an autumn leaf as an autumn leaf but her purr is as loud as seas.",
+          "Her claws are as gnarled as an ancient oak.",
+          "She sits by the fire and tries to keep warm or she curls herself up on my knees.",
+          "Her fur is as soft as a kitten's coat but her ears are as deaf as the breeze.",
+          "Sometimes my cat thinks that she is a dog."]
+
+MY_DOG = ["My dog is incredibly and unconditionally loyal to me. He loves me as much as I love him or sometimes more.",
+          "We always play catch outside my house or sometimes in the park.",
+          "He is the reason I am active and good at exercise. He will never let me be lazy. "
+          "Whenever possible, we always keep playing some or the other games with him.",
+          "He will play games with us, keep all our family members together with his love and cuddles and "
+          "also he keeps thieves and uninvited guests out of our home."
+          ]
