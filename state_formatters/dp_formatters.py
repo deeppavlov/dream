@@ -448,7 +448,7 @@ def wp_formatter_dialog(dialog: Dict):
 def el_formatter_dialog(dialog: Dict):
     # Used by: entity_linking annotator
     ner_output = dialog["human_utterances"][-1]["annotations"].get("ner", [])
-    nounphrases = dialog["human_utterances"][-1]["annotations"].get("cobot_nounphrases", [])
+    nounphrases = dialog["human_utterances"][-1]["annotations"].get("cobot_entities", {}).get("entities", [])
     entity_substr = []
     if ner_output:
         for entities in ner_output:
@@ -503,7 +503,7 @@ def fact_retrieval_formatter_dialog(dialog: Dict):
 
     last_human_utt = dialog["human_utterances"][-1]
 
-    nounphrases = [last_human_utt["annotations"].get("cobot_nounphrases", [])]
+    nounphrases = [last_human_utt["annotations"].get("cobot_entities", {}).get("entities", [])]
 
     _, _, first_par_batch = \
         last_human_utt["annotations"].get("entity_linking", [[], [], []])
