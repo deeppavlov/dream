@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-DEFAULT_ANNTR_HISTORY_LEN = 2
+DEFAULT_ANNTR_HISTORY_LEN = 1
 TOP_N_FACTS = 2
 AA_FACTOR = 0.05
 ABBRS_CONFIDENCE = 0.8
@@ -102,7 +102,7 @@ def get_annotations_from_dialog(utterances, annotator_name, key_name=None):
 
 
 def get_cobot_nounphrases(utt):
-    cob_nounphs = utt.get("annotations", {}).get("cobot_nounphrases", [])
+    cob_nounphs = utt.get("annotations", {}).get("cobot_entities", {}).get("entities", [])
     cobot_nounphrases = []
     for ph in cob_nounphs:
         if not pos_tag([ph])[0][1].startswith("VB"):
