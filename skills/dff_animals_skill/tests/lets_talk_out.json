@@ -1,6 +1,6 @@
 [
     [
-        "What animals do you like?",
+        "I like elephants. When I was in India, I rode an elephant. What animals do you like?",
         1.0,
         {
             "dff_animals_skill_state": {
@@ -9,7 +9,7 @@
                 "history": {
                     "0": "State.SYS_WHAT_ANIMALS"
                 },
-                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_WHAT_ANIMALS\", \"__stack__\": [], \"__user_utterance__\": \"lets talk about animals\", \"__system_state__\": \"State.SYS_WHAT_ANIMALS\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"What animals do you like?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"ANIMALS\\\"<__tuple__>\\\"State.USR_WHAT_ANIMALS\\\"\"}"
+                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_WHAT_ANIMALS\", \"__stack__\": [], \"__user_utterance__\": \"lets talk about animals\", \"__system_state__\": \"State.SYS_WHAT_ANIMALS\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"I like elephants. When I was in India, I rode an elephant. What animals do you like?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"ANIMALS\\\"<__tuple__>\\\"State.USR_WHAT_ANIMALS\\\"\"}"
             },
             "used_links": {}
         },
