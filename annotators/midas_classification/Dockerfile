@@ -8,9 +8,9 @@ RUN mkdir /src
 RUN mkdir /midas
 
 RUN wget -q $DATA_URL -O /tmp/midas.tar.gz && tar -zvxf /tmp/midas.tar.gz -C /midas && rm -f /tmp/midas.tar.gz
-COPY ./requirements.txt /src/requirements.txt
+COPY ./annotators/midas_classification/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
-COPY . /src/
+COPY ./annotators/midas_classification /src/
 
 WORKDIR /src
 

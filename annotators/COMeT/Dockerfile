@@ -47,7 +47,4 @@ RUN git apply /comet/functions.diff
 ARG DECODING_ALGO
 ENV DECODING_ALGO ${DECODING_ALGO}
 
-ENV LC_ALL C.UTF-8
-ENV LANG C.UTF-8
-
 CMD gunicorn --workers=1 server:app -b 0.0.0.0:8053

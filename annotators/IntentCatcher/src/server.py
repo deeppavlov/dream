@@ -1,25 +1,28 @@
+#!/usr/bin/env python
+
+from os import getenv
+
+import tensorflow as tf
 import logging
-import os
-
 import sentry_sdk
-from flask import Flask, jsonify, request
-from sentry_sdk.integrations.flask import FlaskIntegration
+from flask import Flask, request, jsonify
 
-# logging here because it conflicts with tf
+from detector import *
+
+sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
-
-import tensorflow as tf  # noqa: E402 cause of logger configuration
-from detector import RegMD  # noqa: E402
-
-sentry_sdk.init(dsn=os.getenv('SENTRY_DSN'), integrations=[FlaskIntegration()])
-
-
 logger = logging.getLogger(__name__)
+
+gunicorn_logger = logging.getLogger('gunicorn.error')
+logger.handlers = gunicorn_logger.handlers
+logger.setLevel(gunicorn_logger.level)
+
+app = Flask(__name__)
+
 sess = tf.compat.v1.Session()
 
 logger.info('Creating detector...')
-
 detector = RegMD(logger)
 logger.info('Creating detector... finished')
 
@@ -33,8 +36,6 @@ logger.info("Global variables initialized")
 detector.detect([["Wake up phrase"]], sess)
 logger.info("DONE")
 
-app = Flask(__name__)
-
 
 @app.route("/detect", methods=['POST'])
 def detect():
@@ -45,5 +46,5 @@ def detect():
 
 
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port=8014)
+    app.run(debug=True, host='0.0.0.0', port=8014)
     sess.close()
