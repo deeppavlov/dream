@@ -6,7 +6,7 @@ import sentry_sdk
 from os import getenv
 
 from common.books import BOOK_SKILL_CHECK_PHRASES, about_book, BOOK_PATTERN
-from common.constants import CAN_CONTINUE
+from common.constants import CAN_CONTINUE_SCENARIO
 from common.tutor import get_tutor_phrase
 from common.universal_templates import is_switch_topic, if_lets_chat_about_topic, tell_me_more, \
     is_positive, is_negative
@@ -393,7 +393,7 @@ class BookSkillScenario:
                     logger.debug('Final branch')
                     reply, confidence = self.default_reply, 0
                 if confidence in [self.super_conf, self.default_conf]:
-                    attr = {"can_continue": CAN_CONTINUE}
+                    attr = {"can_continue": CAN_CONTINUE_SCENARIO}
             except Exception as e:
                 logger.exception("exception in book skill")
                 sentry_sdk.capture_exception(e)

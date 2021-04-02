@@ -9,7 +9,7 @@ from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
 
-from common.constants import CAN_CONTINUE
+from common.constants import CAN_CONTINUE_SCENARIO
 from common.universal_templates import if_lets_chat_about_topic
 from common.utils import get_skill_outputs_from_dialog, get_outputs_with_response_from_dialog, get_not_used_template
 from common.utils import get_sentiment
@@ -51,7 +51,7 @@ def get_next_step(user_utterance, next_step_id, last_comments=[]):
         else:
             confidence = DIALOG_BEGINNING_CONTINUE_CONFIDENCE
 
-        attr = {"can_continue": CAN_CONTINUE, "greeting_step": GREETING_STEPS[next_step_id],
+        attr = {"can_continue": CAN_CONTINUE_SCENARIO, "greeting_step": GREETING_STEPS[next_step_id],
                 "greeting_comment": comment}
     return response, confidence, attr
 

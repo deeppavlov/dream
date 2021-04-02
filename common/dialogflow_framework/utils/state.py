@@ -76,7 +76,7 @@ def set_confidence(vars, confidence=1.0):
     vars["agent"]["response"].update({"confidence": confidence})
 
 
-def set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE):
+def set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO):
     vars["agent"]["response"].update({"can_continue": continue_flag})
 
 

@@ -11,7 +11,7 @@ import sentry_sdk
 from flask import Flask, request, jsonify
 from nltk import pos_tag, tokenize
 
-from common.constants import CAN_CONTINUE
+from common.constants import CAN_CONTINUE_SCENARIO
 from common.universal_templates import if_lets_chat_about_topic, if_choose_topic, switch_topic_uttr
 from common.utils import get_intents, join_sentences_in_or_pattern, join_words_in_or_pattern, \
     get_topics
@@ -363,7 +363,7 @@ def respond():
                 attr = {
                     "knowledge_paragraph": input_batch[curr_i]["knowledge"],
                     "knowledge_checked_sentence": input_batch[curr_i]["checked_sentence"],
-                    "can_continue": CAN_CONTINUE,
+                    "can_continue": CAN_CONTINUE_SCENARIO,
                     "confidence_case": ""
                 }
 

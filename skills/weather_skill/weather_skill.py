@@ -5,7 +5,7 @@ import sentry_sdk
 import pprint
 from collections import defaultdict
 from city_slot import OWMCitySlot
-from common.constants import CAN_CONTINUE, MUST_CONTINUE
+from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE
 from common.link import link_to, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED
 from common.weather import is_weather_for_homeland_requested, is_weather_without_city_requested
 
@@ -218,7 +218,7 @@ class WeatherSkill:
                     # provide FORECAST
                     ############################################################
                     context_dict['weather_forecast_interaction_city_slot_raw'] = city
-                    context_dict['can_continue'] = MUST_CONTINUE
+                    context_dict['can_continue'] = CAN_CONTINUE_SCENARIO
                     context_dict['weather_forecast_interaction_question_asked'] = True
                     weather_forecast_str = self.request_weather_service(city)
                     current_reply = weather_forecast_str + ". " + question_phrase
@@ -231,7 +231,7 @@ class WeatherSkill:
                     # FORGET because it is a complex case. tell a joke about weather?
                     ############################################################
                     current_reply = "Sorry, I have no weather for the place. I didn't recognize the city..."
-                    context_dict['can_continue'] = CAN_CONTINUE
+                    context_dict['can_continue'] = CAN_CONTINUE_SCENARIO
                     curr_confidence = MISSED_CITY_CONFIDENCE
             elif context_dict.get("weather_forecast_interaction_question_asked", False):
                 logger.warning("WEATHER INTERACTION QUESTION ASKED")
@@ -254,14 +254,14 @@ class WeatherSkill:
                     # INGORE
                     ############################################################
                     context_dict['weather_forecast_interaction_preferred_weather'] = False
-                    context_dict['can_continue'] = CAN_CONTINUE
+                    context_dict['can_continue'] = CAN_CONTINUE_SCENARIO
             elif context_dict.get("weather_forecast_interaction_preferred_weather", False):
                 logger.warning("WEATHER PREFFERED WEATHER GOT")
                 # got preferred weather from user and asked him a "let me guess" question
                 ############################################################
                 # provide templated answer
                 ############################################################
-                context_dict['can_continue'] = CAN_CONTINUE
+                context_dict['can_continue'] = CAN_CONTINUE_SCENARIO
                 user_utterance = d_man.get_last_utterance_dict()['text']
                 if not re.match(".*(i|I) (don't|do not) like.*", user_utterance):
                     # talk more about hiking/swimming/skiing/etc.

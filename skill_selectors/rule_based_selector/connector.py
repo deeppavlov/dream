@@ -11,7 +11,7 @@ from common.movies import movie_skill_was_proposed
 from common.animals import animals_skill_was_proposed
 from common.food import food_skill_was_proposed
 from common.books import book_skill_was_proposed, about_book, QUESTIONS_ABOUT_BOOKS
-from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
+from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_CONTINUE_SCENARIO_DONE
 from common.emotion import emotion_from_feel_answer, is_joke_requested, is_sad
 from common.greeting import HOW_ARE_YOU_RESPONSES, GREETING_QUESTIONS
 from common.news import is_breaking_news_requested
@@ -386,7 +386,8 @@ class RuleBasedSkillSelectorConnector:
 
                 for hyp in prev_user_uttr_hyp:
                     # here we just forcibly add skills which return `can_continue` and it's not `no`
-                    if hyp.get("can_continue", CAN_NOT_CONTINUE) in {CAN_CONTINUE, MUST_CONTINUE}:
+                    if hyp.get("can_continue", CAN_NOT_CONTINUE) in {CAN_CONTINUE_SCENARIO, MUST_CONTINUE,
+                                                                     CAN_CONTINUE_SCENARIO_DONE}:
                         skills_for_uttr.append(hyp["skill_name"])
 
                 if len(dialog["utterances"]) > 1:

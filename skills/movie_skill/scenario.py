@@ -11,7 +11,7 @@ from collections import defaultdict
 from templates import MovieSkillTemplates
 from nltk.tokenize import sent_tokenize, word_tokenize
 
-from common.constants import CAN_CONTINUE
+from common.constants import CAN_CONTINUE_SCENARIO
 from common.link import link_to, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED
 from common.movies import get_movie_template
 from common.universal_templates import if_switch_topic, is_switch_topic, if_lets_chat_about_topic, if_choose_topic, \
@@ -113,7 +113,7 @@ class MovieSkillScenario:
                                 self.is_about_movies(curr_user_uttr, prev_bot_uttr):
                             confidence = SUPER_CONFIDENCE
                             movie_id = result[0][0]
-                            attr = {"movie_id": movie_id, "can_continue": CAN_CONTINUE,
+                            attr = {"movie_id": movie_id, "can_continue": CAN_CONTINUE_SCENARIO,
                                     "status_line": ["opinion_request"]}
                             human_attr = {}
                             bot_attr = {}
@@ -131,7 +131,7 @@ class MovieSkillScenario:
                                     self.is_about_movies(curr_user_uttr, prev_bot_uttr):
                                 confidence = SUPER_CONFIDENCE
                                 movie_id = result[0][0]
-                                attr = {"movie_id": movie_id, "can_continue": CAN_CONTINUE,
+                                attr = {"movie_id": movie_id, "can_continue": CAN_CONTINUE_SCENARIO,
                                         "status_line": ["opinion_expression", "opinion_request"]}
                                 human_attr = {}
                                 bot_attr = {}
@@ -270,11 +270,11 @@ class MovieSkillScenario:
                     re.search(COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, curr_user_uttr["text"].lower()):
                 # user wants to switch the topic while we are in the script
                 response, confidence = "What do you want to talk about?", NOT_SURE_CONFIDENCE
-                attr = {"status_line": prev_status_line + ["finished"], "can_continue": CAN_CONTINUE}
+                attr = {"status_line": prev_status_line + ["finished"], "can_continue": CAN_CONTINUE_SCENARIO}
             elif re.search(self.not_watched_template, curr_user_uttr["text"]):
                 response = f"{get_movie_template('lets_talk_about_other_movie')}"
                 confidence = END_SCENARIO_OFFER_CONFIDENCE
-                attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
+                attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE_SCENARIO}
             elif prev_status == "finished" or prev_status == "":
                 if len(movies_ids) > 0:
                     curr_movie_id = movies_ids[-1]
@@ -289,30 +289,30 @@ class MovieSkillScenario:
                         response = f"We have talked about this movie previously. " \
                                    f"{get_movie_template('lets_move_on')} {offer}"
                         confidence = END_SCENARIO_OFFER_CONFIDENCE
-                        attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
+                        attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE_SCENARIO}
                 elif is_no(curr_user_uttr) or if_switch_topic(curr_user_uttr["text"].lower()):
                     response = "What do you want to talk about?"
                     confidence = NOT_SURE_CONFIDENCE
-                    attr = {"status_line": prev_status_line + ["finished"], "can_continue": CAN_CONTINUE}
+                    attr = {"status_line": prev_status_line + ["finished"], "can_continue": CAN_CONTINUE_SCENARIO}
                 elif len(prev_movie_skill_outputs) > 2 and \
                         prev_movie_skill_outputs[-3].get("status_line", [""]) == ["finished"] and \
                         prev_movie_skill_outputs[-2].get("status_line", [""]) == ["finished"]:
                     response = f"{get_movie_template('dont_know_movie_title_at_all')} " \
                                f"{get_movie_template('lets_talk_about_other_movie')}"
                     confidence = END_SCENARIO_OFFER_CONFIDENCE
-                    attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
+                    attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE_SCENARIO}
                 elif len(prev_movie_skill_outputs) > 1 and \
                         prev_movie_skill_outputs[-2].get("status_line", [""]) == ["finished"]:
                     response = f"{get_movie_template('dont_know_movie_title_at_all')} " \
                                f"{get_movie_template('lets_talk_about_other_movie')}"
                     confidence = DEFAULT_CONFIDENCE
-                    attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
+                    attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE_SCENARIO}
                 else:
                     offer, confidence, human_attr, bot_attr, attr = self.link_to_other_skills(
                         human_attr, bot_attr)
                     response = f"{offer}"
                     confidence = END_SCENARIO_OFFER_CONFIDENCE
-                    attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
+                    attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE_SCENARIO}
             else:
                 # some movie scenario started and not finished
                 response, confidence, human_attr, bot_attr, attr = self.get_next_response_movie_scenario(
@@ -335,14 +335,14 @@ class MovieSkillScenario:
                     response = f"We have talked about this movie previously. " \
                                f"{get_movie_template('lets_move_on')} {offer}"
                     confidence = DEFAULT_CONFIDENCE
-                    attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
+                    attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE_SCENARIO}
         elif self.lets_chat_about_movies(curr_user_uttr, prev_bot_uttr):
             # user wants to talk about movies. offer quesiton about movies
             offer, confidence, human_attr, bot_attr, attr = self.link_to_other_skills(
                 human_attr, bot_attr, to_skills=['movie_skill'])
             response = offer
             confidence = SUPER_CONFIDENCE
-            attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE}
+            attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE_SCENARIO}
         else:
             response, confidence, human_attr, bot_attr, attr = "", 0.0, {}, {}, {}
 
@@ -362,7 +362,7 @@ class MovieSkillScenario:
             confidence = SUPER_CONFIDENCE
         else:
             confidence = CLARIFICATION_CONFIDENCE
-        attr = {"movie_id": movie_id, "status_line": ["clarification"], "can_continue": CAN_CONTINUE}
+        attr = {"movie_id": movie_id, "status_line": ["clarification"], "can_continue": CAN_CONTINUE_SCENARIO}
         return response, confidence, attr
 
     def remove_punct_and_articles(self, s, lowecase=True):
@@ -403,7 +403,7 @@ class MovieSkillScenario:
         if confidence >= 0.9 and len(reply) > 0 and len(movie_title) > 0:
             response = f"{reply} {get_movie_template('opinion_request_about_movie', movie_type=movie_type)}"
             confidence = SUPER_CONFIDENCE
-            attr = {"movie_id": movie_id, "can_continue": CAN_CONTINUE,
+            attr = {"movie_id": movie_id, "can_continue": CAN_CONTINUE_SCENARIO,
                     "status_line": prev_status_line + ["confirmation", "opinion_expression", "opinion_request"]}
             human_attr["discussed_movie_titles"] += [self.templates.imdb(movie_id).get("title", "")]
             human_attr["discussed_movie_ids"] += [movie_id]
@@ -413,7 +413,7 @@ class MovieSkillScenario:
             response = f"{get_movie_template('dont_know_movie_title_at_all', movie_type=movie_type)} " \
                        f"{get_movie_template('lets_talk_about_other_movie', movie_type=movie_type)} {offer}"
             confidence = END_SCENARIO_OFFER_CONFIDENCE
-            attr = {"status_line": prev_status_line + ["finished"], "can_continue": CAN_CONTINUE}
+            attr = {"status_line": prev_status_line + ["finished"], "can_continue": CAN_CONTINUE_SCENARIO}
         return response, confidence, human_attr, bot_attr, attr
 
     def after_clarification(self, curr_user_uttr, prev_movie_skill_outputs,
@@ -432,12 +432,12 @@ class MovieSkillScenario:
                 response = f"{get_movie_template('dont_know_movie_title_at_all')} " \
                            f"{get_movie_template('lets_talk_about_other_movie')} {offer}"
                 confidence = DEFAULT_CONFIDENCE
-                attr = {"status_line": prev_status_line + ["finished"], "can_continue": CAN_CONTINUE}
+                attr = {"status_line": prev_status_line + ["finished"], "can_continue": CAN_CONTINUE_SCENARIO}
             else:
                 logger.info(f"Extracted another movie title after clarification. Clarify for the second time.")
                 curr_movie_id = movies_ids[-1]
                 response, confidence, attr = self.clarify_movie_title(curr_user_uttr, curr_movie_id)
-                attr["can_continue"] = CAN_CONTINUE
+                attr["can_continue"] = CAN_CONTINUE_SCENARIO
         else:
             logger.info(f"Didn't extracted movie title after the first clarification. Offer talk about movies.")
             offer, confidence, human_attr, bot_attr, attr = self.link_to_other_skills(
@@ -445,7 +445,7 @@ class MovieSkillScenario:
             response = f"{get_movie_template('dont_know_movie_title_at_all')} " \
                        f"{get_movie_template('lets_talk_about_other_movie')} {offer}"
             confidence = END_SCENARIO_OFFER_CONFIDENCE
-            attr = {"status_line": prev_status_line + ["finished"], "can_continue": CAN_CONTINUE}
+            attr = {"status_line": prev_status_line + ["finished"], "can_continue": CAN_CONTINUE_SCENARIO}
         return response, confidence, human_attr, bot_attr, attr
 
     def ask_do_you_know_question(self, movie_id, movie_title, movie_type, prev_status_line, human_attr, bot_attr):
@@ -475,7 +475,7 @@ class MovieSkillScenario:
             response = ""
         if response:
             confidence = SUPER_CONFIDENCE
-            attr = {"movie_id": movie_id, "can_continue": CAN_CONTINUE,
+            attr = {"movie_id": movie_id, "can_continue": CAN_CONTINUE_SCENARIO,
                     "status_line": prev_status_line + ["do_you_know_question"]}
         else:
             confidence = 0.0
@@ -488,7 +488,7 @@ class MovieSkillScenario:
         question_text = prev_movie_skill_outputs[-1].get("text", "")
         logger.info(f"Check user's answer to do-you-know question about `{movie_title}`: `{question_text}`.")
         confidence = SUPER_CONFIDENCE
-        attr = {"movie_id": movie_id, "can_continue": CAN_CONTINUE,
+        attr = {"movie_id": movie_id, "can_continue": CAN_CONTINUE_SCENARIO,
                 "status_line": prev_status_line + ["comment_to_question"]}
         if "who are the leading actors" in question_text:
             result = self.templates.imdb.get_info_about_movie(movie_title, "actors")
@@ -562,7 +562,7 @@ class MovieSkillScenario:
 
             response = "Did you know that " + fact
             confidence = SUPER_CONFIDENCE
-            attr = {"movie_id": movie_id, "can_continue": CAN_CONTINUE,
+            attr = {"movie_id": movie_id, "can_continue": CAN_CONTINUE_SCENARIO,
                     "status_line": prev_status_line + ["fact"]}
         else:
             response, confidence, human_attr, bot_attr, attr = self.lets_talk_about_offer(
@@ -578,7 +578,7 @@ class MovieSkillScenario:
         logger.info(f"Offer question about something: `{offer}`.")
         response = f"{offer}"
         confidence = END_SCENARIO_OFFER_CONFIDENCE
-        attr = {"status_line": prev_status_line + ["finished"], "can_continue": CAN_CONTINUE}
+        attr = {"status_line": prev_status_line + ["finished"], "can_continue": CAN_CONTINUE_SCENARIO}
 
         return response, confidence, human_attr, bot_attr, attr
 
@@ -605,7 +605,7 @@ class MovieSkillScenario:
                 confidence = SUPER_CONFIDENCE
                 response = get_movie_template('opinion_request_about_movie', movie_type=movie_type)
                 attr = {"movie_id": movie_id, "status_line": prev_status_line + ["opinion_request"],
-                        "can_continue": CAN_CONTINUE}
+                        "can_continue": CAN_CONTINUE_SCENARIO}
             else:
                 response, confidence, human_attr, bot_attr, attr = self.ask_do_you_know_question(
                     movie_id, movie_title, movie_type, prev_status_line, human_attr, bot_attr)
