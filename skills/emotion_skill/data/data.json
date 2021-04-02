@@ -96,7 +96,7 @@
     },
     "anger":{
       "answers": [
-        "I feel that you are angry. Well, that is a natural feeling, and it's not always negative, but frequent feelings of anger have been linked to higher risk of heart disease, high blood pressure, depression and difficulty sleeping. When I feel angry, I usually recall some funny jokes. Do you want to hear one?"
+        "Please calm down. Frequent feelings of displeasure have been linked to higher risk of heart disease, high blood pressure, depression and difficulty sleeping. When I feel like you, I usually recall some funny jokes. Do you want to hear one?"
       ],
       "next_step":["offered_joke"],
       "link": ""
