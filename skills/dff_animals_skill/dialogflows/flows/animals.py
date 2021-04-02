@@ -9,6 +9,7 @@ import sentry_sdk
 from CoBotQA.cobotqa_service import send_cobotqa
 from enum import Enum, auto
 
+import common.constants as common_constants
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
 from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
@@ -249,7 +250,7 @@ def what_animals_response(vars):
     response = f"{what_i_like} What animals do you like?"
     state_utils.save_to_shared_memory(vars, what_animals=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
 
@@ -258,7 +259,7 @@ def have_pets_response(vars):
     response = f"{what_pets_i_have} Do you have any pets?"
     state_utils.save_to_shared_memory(vars, have_pets=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
 
@@ -268,7 +269,7 @@ def ask_about_zoo_response(vars):
     response = " ".join([i_went_zoo, question_zoo])
     state_utils.save_to_shared_memory(vars, ask_about_zoo=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
 
@@ -277,12 +278,14 @@ def ask_some_questions_response(vars):
     response = random.choice(questions)
     state_utils.save_to_shared_memory(vars, some_questions=True)
     state_utils.set_confidence(vars, confidence=CONF_2)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
     return response
 
 
 def tell_about_pets_response(vars):
     response = random.choice(WHAT_PETS_I_HAVE)
     state_utils.set_confidence(vars, confidence=CONF_1)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
 
@@ -294,7 +297,7 @@ def mention_animals_response(vars):
     else:
         response = "Do you have pets?"
     state_utils.set_confidence(vars, confidence=CONF_5)
-    state_utils.set_can_continue(vars)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
 
@@ -416,13 +419,15 @@ def ask_about_feeding_request(ngrams, vars):
 def ask_more_details_response(vars):
     response = "What is your impression? What did you like most?"
     state_utils.set_confidence(vars, confidence=CONF_1)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
     return response
 
 
 def suggest_visiting_response(vars):
     response = "A day at the zoo also encourages a healthy lifestyle while bringing family and friends together." + \
                "It is the perfect day trip destination for any season!"
-    state_utils.set_confidence(vars, confidence=CONF_3)
+    state_utils.set_confidence(vars, confidence=CONF_1)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
     return response
 
 
@@ -436,7 +441,7 @@ def tell_fact_ask_about_pets_response(vars):
     response = " ".join([fact, ask_about_pets])
     state_utils.save_to_shared_memory(vars, tell_fact_ask_about_pets=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
 
@@ -456,17 +461,18 @@ def why_do_you_like_response(vars):
         response = f"Cool! Why do you like them?"
     state_utils.save_to_shared_memory(vars, why_do_you_like=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
 
 def ask_about_dog_cat_response(vars):
+    response = ""
     found_users_pet = retrieve_and_save(vars)
     if found_users_pet:
         pet_phrase = random.choice(CATS_DOGS_PHRASES[found_users_pet])
         response = f"{pet_phrase} Do you have a {found_users_pet}?"
     state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
 
@@ -496,7 +502,7 @@ def ask_about_name_response(vars):
         response = "What is his name?"
     state_utils.save_to_shared_memory(vars, asked_name=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
 
@@ -505,7 +511,7 @@ def suggest_pet_response(vars):
     pet_phrase = random.choice(phrases)
     response = f"{pet_phrase} Have you been to the zoo?"
     state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
 
@@ -521,7 +527,7 @@ def ask_about_breed_response(vars):
     else:
         response = "What breed is it?"
     state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
 
@@ -537,6 +543,7 @@ def ask_about_color_response(vars):
     else:
         response = "What color is it?"
     state_utils.set_confidence(vars, confidence=CONF_1)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
 
@@ -545,13 +552,14 @@ def what_wild_response(vars):
     response = f"{what_i_like} What wild animals do you like?"
     state_utils.save_to_shared_memory(vars, what_animals=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
 
 def ask_about_feeding_response(vars):
     response = "How do you feed him?"
     state_utils.set_confidence(vars, confidence=CONF_4)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
     return response
 
 
@@ -589,13 +597,14 @@ def tell_fact_about_breed_response(vars):
     shared_memory = state_utils.get_shared_memory(vars)
     if not shared_memory.get("ask_about_zoo", False):
         response = f"{response} Have you been to the zoo?"
-    state_utils.set_confidence(vars, confidence=CONF_1)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
 
 def ask_about_training_response(vars):
     response = "Did you train him to execute commands?"
     state_utils.set_confidence(vars, confidence=CONF_4)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
     return response
 
 
