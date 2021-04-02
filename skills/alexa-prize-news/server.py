@@ -12,7 +12,7 @@ import sentry_sdk
 from zdialog import Request
 from src.skill import AlexaPrizeSkill
 
-from common.constants import CAN_CONTINUE
+from common.constants import CAN_CONTINUE_SCENARIO
 from common.news import is_breaking_news_requested
 from common.utils import get_topics
 
@@ -105,7 +105,7 @@ def respond():
                     attr["mode"] = "body"
                 elif mode == "entity" or mode == "headline":
                     confidence = 0.98
-                    attr["can_continue"] = CAN_CONTINUE
+                    attr["can_continue"] = CAN_CONTINUE_SCENARIO
                     attr["mode"] = mode
                     offer_news = [f"I've heard the following news from Washington Post: '{response}'. "
                                   f"Do you want to hear more?",
@@ -120,7 +120,7 @@ def respond():
                     response = ""
                 else:
                     # mode is "none"
-                    attr["can_continue"] = CAN_CONTINUE
+                    attr["can_continue"] = CAN_CONTINUE_SCENARIO
                     attr["mode"] = None
                     confidence = 0.95
                     offer_news = [f"I could not find some specific news. So, here is one of the latest news "

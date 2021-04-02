@@ -6,7 +6,7 @@ from os import getenv
 import sentry_sdk
 from flask import Flask, request, jsonify
 
-from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
+from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE
 
 from teller import Teller
 
@@ -15,7 +15,7 @@ PHRASES_FILE = '/data/phrases.json'
 
 status_constants = {
     "cannot": CAN_NOT_CONTINUE,
-    "can": CAN_CONTINUE,
+    "can": CAN_CONTINUE_SCENARIO,
     "must": MUST_CONTINUE
 }
 

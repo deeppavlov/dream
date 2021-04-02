@@ -2,7 +2,7 @@ import sentry_sdk
 import random
 import logging
 from os import getenv
-from common.constants import MUST_CONTINUE, CAN_CONTINUE
+from common.constants import MUST_CONTINUE, CAN_CONTINUE_SCENARIO
 from common.link import link_to
 from common.emotion import is_joke_requested, is_sad
 from common.universal_templates import book_movie_music_found
@@ -195,7 +195,7 @@ class EmotionSkillScenario:
                 state = emotion_skill_attributes.get("state", "")
                 emotion = emotion_skill_attributes.get("emotion", "")
                 bot_attributes = {}
-                attr = {"can_continue": CAN_CONTINUE}
+                attr = {"can_continue": CAN_CONTINUE_SCENARIO}
                 annotated_user_phrase = dialog['utterances'][-1]
                 most_likely_emotion = self._get_user_emotion(annotated_user_phrase)
                 intent = annotated_user_phrase['annotations'].get("intent_catcher", {})

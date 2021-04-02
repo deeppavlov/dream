@@ -7,7 +7,7 @@ import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
 
 import common.dialogflow_framework.stdm.cached_functions as cached_functions
-from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
+from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO
 
 ignore_logger("root")
 
@@ -59,6 +59,6 @@ def run_turn(dialogflow, text):
     dialogflow.user_turn(text)
     text = dialogflow.system_turn()
     confidence = dialogflow.controller().vars()["agent"]["response"].get("confidence", 0.85)
-    can_continue = CAN_CONTINUE if confidence else CAN_NOT_CONTINUE
+    can_continue = CAN_CONTINUE_SCENARIO if confidence else CAN_NOT_CONTINUE
     can_continue = dialogflow.controller().vars()["agent"]["response"].get("can_continue", can_continue)
     return text, confidence, can_continue

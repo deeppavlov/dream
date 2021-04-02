@@ -14,7 +14,7 @@ import requests
 from spacy.symbols import nsubj, VERB, xcomp, NOUN, ADP, dobj
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
-from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE
+from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO
 from common.utils import transform_vbg, get_skill_outputs_from_dialog, is_yes, is_no, get_sentiment
 
 try:
@@ -474,7 +474,7 @@ def get_starting_phrase(dialog, topic, attr):
         response = f"{template} {meta_script_skill_constants.STARTINGS[topic]}"
 
     confidence = meta_script_skill_constants.DEFAULT_STARTING_CONFIDENCE
-    attr["can_continue"] = CAN_CONTINUE
+    attr["can_continue"] = CAN_CONTINUE_SCENARIO
     return response, confidence, attr
 
 
@@ -524,7 +524,7 @@ def get_opinion_phrase(dialog, topic, attr):
 
     response = template.replace("DOINGTHAT", get_gerund_topic(topic)).replace("DOTHAT", topic)
     confidence = meta_script_skill_constants.DEFAULT_CONFIDENCE
-    attr["can_continue"] = CAN_CONTINUE
+    attr["can_continue"] = CAN_CONTINUE_SCENARIO
     return response, confidence, attr
 
 
@@ -611,7 +611,7 @@ def get_statement_phrase(dialog, topic, attr, TOPICS):
     else:
         response = f"{comment} {meta_script_template_question.replace('STATEMENT', statement)}".strip()
         confidence = meta_script_skill_constants.DEFAULT_CONFIDENCE
-    attr["can_continue"] = CAN_CONTINUE
+    attr["can_continue"] = CAN_CONTINUE_SCENARIO
     return response, confidence, attr
 
 

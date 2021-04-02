@@ -8,7 +8,7 @@ import uuid
 from flask import Flask, request, jsonify
 from database import EntityDatabase
 
-from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
+from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE
 
 from linker import *
 
@@ -18,7 +18,7 @@ ENTITY_DATASET_PATH = '/data/entity_database.json'
 
 status_constants = {
     "cannot": CAN_NOT_CONTINUE,
-    "can": CAN_CONTINUE,
+    "can": CAN_CONTINUE_SCENARIO,
     "must": MUST_CONTINUE
 }
 

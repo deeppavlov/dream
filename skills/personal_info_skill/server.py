@@ -8,7 +8,7 @@ from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
 
-from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE, MUST_CONTINUE
+from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE
 from common.weather import ASK_WEATHER_SKILL_FOR_HOMELAND_PHRASE
 
 
@@ -149,7 +149,7 @@ def process_info(dialog, which_info="name"):
         response = f"My bad. What is your name again?"
         confidence = 1.0
         got_info = True
-        attr["can_continue"] = CAN_CONTINUE
+        attr["can_continue"] = CAN_CONTINUE_SCENARIO
 
     if (is_about_templates[which_info] or prev_bot_uttr == repeat_info_phrases[which_info].lower()) and not got_info:
         logger.info(f"Asked for {which_info} in {prev_bot_uttr}")
@@ -167,7 +167,7 @@ def process_info(dialog, which_info="name"):
             else:
                 response = repeat_info_phrases[which_info]
                 confidence = 1.0
-                attr["can_continue"] = CAN_CONTINUE
+                attr["can_continue"] = CAN_CONTINUE_SCENARIO
         else:
             human_attr[which_info] = found_info
             if which_info == "name":
