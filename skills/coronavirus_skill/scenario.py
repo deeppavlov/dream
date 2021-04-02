@@ -405,6 +405,9 @@ class CoronavirusSkillScenario:
             self.phrases = make_phrases(num_cases, num_cv_deaths, num_flu_deaths, millionaire_number)
             self._updating_thread = threading.Thread(target=get_state_cases)
             self._updating_thread.start()
+            logger.info('waiting for intital data 30s')
+            time.sleep(30)
+            logger.info('waiting for intital data 30s: DONE')
             # self.facts = [j.lower() for j in FACT_LIST]
             self.facts = [j for j in FACT_LIST]
             self.symptom_phrase = 'According to the CDC website, ' \
