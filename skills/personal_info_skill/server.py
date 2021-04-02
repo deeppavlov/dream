@@ -8,7 +8,7 @@ from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
 
-from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE
+from common.constants import CAN_NOT_CONTINUE, MUST_CONTINUE
 from common.weather import ASK_WEATHER_SKILL_FOR_HOMELAND_PHRASE
 
 
@@ -44,13 +44,13 @@ def respond():
                 dialog, which_info="location")
 
         if confidence == 0.0:
-            response, confidence = tell_my_info(dialog, which_info="name")
+            response, confidence, attr = tell_my_info(dialog, which_info="name")
 
         if confidence == 0.0:
-            response, confidence = tell_my_info(dialog, which_info="location")
+            response, confidence, attr = tell_my_info(dialog, which_info="location")
 
         if confidence == 0.0:
-            response, confidence = tell_my_info(dialog, which_info="homeland")
+            response, confidence, attr = tell_my_info(dialog, which_info="homeland")
 
         responses.append(response)
         confidences.append(confidence)
@@ -149,7 +149,7 @@ def process_info(dialog, which_info="name"):
         response = f"My bad. What is your name again?"
         confidence = 1.0
         got_info = True
-        attr["can_continue"] = CAN_CONTINUE_SCENARIO
+        attr["can_continue"] = MUST_CONTINUE
 
     if (is_about_templates[which_info] or prev_bot_uttr == repeat_info_phrases[which_info].lower()) and not got_info:
         logger.info(f"Asked for {which_info} in {prev_bot_uttr}")
@@ -163,21 +163,21 @@ def process_info(dialog, which_info="name"):
                     len(curr_user_annot.get("cobot_nounphrases", [])) > 0:
                 response = "I've never heard about this name."
                 confidence = 1.0
-                attr["can_continue"] = CAN_NOT_CONTINUE
+                attr["can_continue"] = MUST_CONTINUE
             else:
                 response = repeat_info_phrases[which_info]
                 confidence = 1.0
-                attr["can_continue"] = CAN_CONTINUE_SCENARIO
+                attr["can_continue"] = MUST_CONTINUE
         else:
             human_attr[which_info] = found_info
             if which_info == "name":
                 response = response_phrases[which_info] + human_attr[which_info] + "."
                 confidence = 1.0
-                attr["can_continue"] = CAN_NOT_CONTINUE
+                attr["can_continue"] = MUST_CONTINUE
             elif which_info == "location":
                 response = response_phrases[which_info]
                 confidence = 1.0
-                attr["can_continue"] = CAN_NOT_CONTINUE
+                attr["can_continue"] = MUST_CONTINUE
             elif which_info == "homeland":
                 if dialog["human"]["profile"].get("location", None) is None:
                     response = response_phrases[which_info]
@@ -186,7 +186,7 @@ def process_info(dialog, which_info="name"):
                 else:
                     response = response_phrases["location"]
                     confidence = 1.0
-                    attr["can_continue"] = CAN_NOT_CONTINUE
+                    attr["can_continue"] = MUST_CONTINUE
 
     return response, confidence, human_attr, bot_attr, attr
 
@@ -194,6 +194,7 @@ def process_info(dialog, which_info="name"):
 def tell_my_info(dialog, which_info="name"):
     response = ""
     confidence = 0.0
+    attr = {}
 
     curr_user_uttr = dialog["utterances"][-1]["text"].lower()
 
@@ -220,11 +221,13 @@ def tell_my_info(dialog, which_info="name"):
         logger.info(f"Asked to memorize user's {which_info} in {curr_user_uttr}")
         if dialog["human"]["profile"].get(which_info, None) is None:
             response = responses[which_info]
-            confidence = 10.0
+            confidence = 1.0
+            attr["can_continue"] = MUST_CONTINUE
         else:
             name = dialog["human"]["profile"][which_info]
             response = f"Your {which_info} is {name}."
-            confidence = 10.
+            confidence = 1.
+            attr["can_continue"] = MUST_CONTINUE
     return response, confidence
 
 
