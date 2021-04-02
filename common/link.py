@@ -9,7 +9,6 @@ import common.books as books
 import common.movies as movies
 import common.emotion as emotion
 import common.weather as weather
-import common.coronavirus as coronavirus
 import common.personal_info as personal_info
 import common.meta_script as meta_script
 import common.game_cooperative_skill as game_cooperative_skill
@@ -31,7 +30,6 @@ skills_phrases_map = {
     'movie_skill': set(movies.skill_trigger_phrases()),
     'book_skill': set(books.skill_trigger_phrases()),
     'emotion_skill': set(emotion.skill_trigger_phrases()),
-    'coronavirus_skill': set(coronavirus.skill_trigger_phrases()),
     'weather_skill': set(weather.skill_trigger_phrases()),
     'personal_info_skill': set(personal_info.skill_trigger_phrases()),
     'meta_script_skill': set(meta_script.skill_trigger_phrases()),
@@ -61,7 +59,7 @@ LIST_OF_SCRIPTED_TOPICS = {
 
 SKILLS_FOR_LINKING = set(skills_phrases_map.keys())
 
-LOW_RATED_SKILLS = {"emotion_skill", "coronavirus_skill", "weather_skill", "personal_info_skill", "meta_script_skill"}
+LOW_RATED_SKILLS = {"emotion_skill", "weather_skill", "personal_info_skill", "meta_script_skill"}
 SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED = set(skills_phrases_map.keys()).difference(LOW_RATED_SKILLS)
 
 # assuming that all skills weights are equal to 1 by default
