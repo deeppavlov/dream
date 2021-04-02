@@ -15,7 +15,7 @@ import sentry_sdk
 from flask import Flask, request, jsonify
 from nltk.tokenize import word_tokenize
 
-from common.constants import CAN_CONTINUE_SCENARIO
+from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE, MUST_CONTINUE
 from common.link import link_to, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED
 from common.metrics import setup_metrics
 from common.news import OFFER_BREAKING_NEWS, OFFERED_BREAKING_NEWS_STATUS, \
@@ -356,7 +356,7 @@ def respond():
                     response = f"Here it is: {result['title']}.. {OFFER_MORE}"
                     confidence = DEFAULT_NEWS_OFFER_CONFIDENCE
                     attr = {"news_status": OFFERED_NEWS_DETAILS_STATUS, "news_topic": curr_topic,
-                            "curr_news": result, "can_continue": CAN_CONTINUE_SCENARIO}
+                            "curr_news": result, "can_continue": MUST_CONTINUE}
                     if attr["curr_news"]["url"] not in human_attr["news_skill"]["discussed_news"]:
                         human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
                 elif curr_topic == "all":
@@ -374,7 +374,7 @@ def respond():
                         response = f"Here is one of the latest news that I found: {result['title']}.. {OFFER_MORE}"
                         confidence = DEFAULT_NEWS_OFFER_CONFIDENCE
                         attr = {"news_status": OFFERED_NEWS_DETAILS_STATUS, "news_topic": curr_topic,
-                                "curr_news": result, "can_continue": CAN_CONTINUE_SCENARIO}
+                                "curr_news": result, "can_continue": MUST_CONTINUE}
                         if attr["curr_news"]["url"] not in human_attr["news_skill"]["discussed_news"]:
                             human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
                 else:
@@ -384,7 +384,7 @@ def respond():
                                f"{result['title']}.. {OFFER_MORE}"
                     confidence = DEFAULT_NEWS_OFFER_CONFIDENCE
                     attr = {"news_status": OFFERED_NEWS_DETAILS_STATUS, "news_topic": curr_topic,
-                            "curr_news": result, "can_continue": CAN_CONTINUE_SCENARIO}
+                            "curr_news": result, "can_continue": MUST_CONTINUE}
                     if attr["curr_news"]["url"] not in human_attr["news_skill"]["discussed_news"]:
                         human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
             elif curr_status == "details":
@@ -393,7 +393,7 @@ def respond():
                 response = f"In details: {result['description']}. {ASK_OPINION}"
                 confidence = DEFAULT_NEWS_DETAILS_CONFIDENCE
                 attr = {"news_status": OPINION_REQUEST_STATUS, "news_topic": curr_topic, "curr_news": result,
-                        "can_continue": CAN_CONTINUE_SCENARIO}
+                        "can_continue": MUST_CONTINUE}
                 if attr["curr_news"]["url"] not in human_attr["news_skill"]["discussed_news"]:
                     human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
             else:
@@ -423,7 +423,7 @@ def respond():
                                    f"{offered_topics[0]} or {offered_topics[1].lower()}?"
                         confidence = WHAT_TYPE_OF_NEWS_CONFIDENCE
                         attr = {"news_status": OFFERED_NEWS_TOPIC_CATEGORIES_STATUS,
-                                "can_continue": CAN_CONTINUE_SCENARIO,
+                                "can_continue": CAN_CONTINUE_SCENARIO_DONE,
                                 "news_topic": " ".join(offered_topics), "curr_news": result}
                         if attr["curr_news"]["url"] not in human_attr["news_skill"]["discussed_news"]:
                             human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
@@ -446,7 +446,7 @@ def respond():
                 response = f"Sorry, I could not find some specific news. {OFFER_BREAKING_NEWS}"
                 confidence = NOT_SPECIFIC_NEWS_OFFER_CONFIDENCE
                 attr = {"news_status": OFFERED_BREAKING_NEWS_STATUS, "news_topic": "all",
-                        "can_continue": CAN_CONTINUE_SCENARIO, "curr_news": NEWS_API_REQUESTOR.cached["all"][0]}
+                        "can_continue": MUST_CONTINUE, "curr_news": NEWS_API_REQUESTOR.cached["all"][0]}
                 if attr["curr_news"]["url"] not in human_attr["news_skill"]["discussed_news"]:
                     human_attr["news_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
             else:
@@ -454,7 +454,7 @@ def respond():
                 response = "Sorry, seems like all the news slipped my mind. Let's chat about something else. " \
                            "What do you want to talk about?"
                 confidence = NOT_SPECIFIC_NEWS_OFFER_CONFIDENCE
-                attr = {"news_status": OFFERED_BREAKING_NEWS_STATUS, "can_continue": CAN_CONTINUE_SCENARIO}
+                attr = {"news_status": OFFERED_BREAKING_NEWS_STATUS, "can_continue": MUST_CONTINUE}
 
         responses.append(response)
         confidences.append(confidence)
