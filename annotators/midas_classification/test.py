@@ -1,10 +1,6 @@
 import requests
 import logging
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
-logger = logging.getLogger(__name__)
-
 test_config = {'dialogs': [{'human_utterances': [{'text': 'i love you'}],
                             'bot_utterances': [{'text': 'i hate you'}]}],
                'threshold': 0}
@@ -29,8 +25,7 @@ def main_test():
                                                      f'to responses {responses}'
     predicted_order = sorted(responses[0], key=responses[0].get)
     assert predicted_order == test_config_order, predicted_order
-    logger.info('MIDAS test passed')
+    logging.info('MIDAS test passed')
 
 
-if __name__ == '__main__':
-    main_test()
+main_test()
