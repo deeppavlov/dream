@@ -138,7 +138,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
 
 
     for container in movie-skill asr weather-skill program-y \
-                     program-y-dangerous superbowl-skill oscar-skill valentines-day-skill eliza \
+                     program-y-dangerous eliza \
                      dummy-skill-dialog intent-catcher short-story-skill comet-atomic \
                      comet-conceptnet convers-evaluation-selector emotion-skill game-cooperative-skill \
                      entity-linking kbqa text-qa wiki-parser convert-reddit \
