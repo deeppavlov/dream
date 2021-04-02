@@ -1,4 +1,3 @@
-
 # %%
 import random
 import os
@@ -8,6 +7,7 @@ import logging
 import requests
 import sentry_sdk
 
+from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 import common.entity_utils as entity_utils
@@ -70,20 +70,21 @@ def masked_lm(templates=["Hello, it's [MASK] dog."], prob_threshold=0.0, probs_f
 def set_confidence_by_universal_policy(vars):
     if not condition_utils.is_begin_of_dialog(vars, begin_dialog_n=10):
         state_utils.set_confidence(vars, 0)
+        state_utils.reset_can_continue(vars)
     elif condition_utils.is_first_our_response(vars):
         state_utils.set_confidence(vars, DIALOG_BEGINNING_START_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
     elif not condition_utils.is_interrupted(vars) and common_greeting.dont_tell_you_answer(
         state_utils.get_last_human_utterance(vars)
     ):
         state_utils.set_confidence(vars, DIALOG_BEGINNING_SHORT_ANSWER_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
     elif not condition_utils.is_interrupted(vars):
         state_utils.set_confidence(vars, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
     else:
         state_utils.set_confidence(vars, MIDDLE_DIALOG_START_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
 
 ##################################################################################################################
@@ -167,9 +168,17 @@ def link_to_by_enity_response(vars):
 
         body += f" {link['phrase']}"
         set_confidence_by_universal_policy(vars)
+        state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO_DONE)
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
         state_utils.set_confidence(vars, 0)
+        state_utils.reset_can_continue(vars)
         return " ".join([ack, "I like to talk about movies. Do you have favorite movies?"])
+
+
+def error_response(vars):
+    state_utils.set_confidence(vars, 0)
+    state_utils.reset_can_continue(vars)
+    return ""

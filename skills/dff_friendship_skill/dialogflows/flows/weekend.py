@@ -8,6 +8,7 @@ import re
 
 import sentry_sdk
 
+from common.constants import CAN_CONTINUE_SCENARIO
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
 import common.utils as common_utils
@@ -15,6 +16,7 @@ import common.scenarios.weekend as common_weekend
 import dialogflows.scopes as scopes
 from dialogflows.flows.shared import link_to_by_enity_request
 from dialogflows.flows.shared import link_to_by_enity_response
+from dialogflows.flows.shared import error_response
 
 # import dialog_flows.components.greeting as flows_greeting
 
@@ -155,15 +157,13 @@ def std_weekend_response(vars):
 
         # set confidence
         state_utils.set_confidence(vars, DIALOG_BEGINNING_START_CONFIDENCE)
-        # can continue = true
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
         state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -201,15 +201,13 @@ def sys_cleaned_up_response(vars):
 
         # set confidence
         state_utils.set_confidence(vars, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
-        # can continue = true
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
         state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -243,15 +241,13 @@ def sys_slept_in_response(vars):
 
         # set confidence
         state_utils.set_confidence(vars, DIALOG_BEGINNING_START_CONFIDENCE)
-        # can continue = true
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
         state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -285,13 +281,13 @@ def sys_feel_great_response(vars):
 
         # set confidence
         state_utils.set_confidence(vars, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
+        state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
         state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -325,13 +321,13 @@ def sys_need_more_time_response(vars):
 
         # set confidence
         state_utils.set_confidence(vars, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
+        state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
         state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -373,15 +369,13 @@ def sys_watched_film_response(vars):
 
         # set confidence
         state_utils.set_confidence(vars, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
-        # can continue = true
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
         state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -428,15 +422,13 @@ def sys_read_book_response(vars):
 
         # set confidence
         state_utils.set_confidence(vars, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
-        # can continue = true
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
         state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -485,15 +477,13 @@ def sys_played_computer_game_response(vars):
 
         # set confidence
         state_utils.set_confidence(vars, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
-        # can continue = true
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
         state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -527,15 +517,13 @@ def sys_play_on_weekends_response(vars):
 
         # set confidence
         state_utils.set_confidence(vars, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
-        # can continue = true
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
         state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -569,13 +557,13 @@ def sys_play_regularly_response(vars):
 
         # set confidence
         state_utils.set_confidence(vars, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
+        state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
         state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -609,24 +597,14 @@ def sys_play_once_response(vars):
 
         # set confidence
         state_utils.set_confidence(vars, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
+        state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
         state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
-
-
-##################################################################################################################
-# error
-##################################################################################################################
-
-
-def error_response(vars):
-    state_utils.set_confidence(vars, 0)
-    return ""
 
 
 ##################################################################################################################
