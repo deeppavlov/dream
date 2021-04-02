@@ -21,7 +21,7 @@ retrieve_skills = {'cobotqa', 'program_y', 'alice', 'eliza', 'book_tfidf_retriev
                    'entertainment_tfidf_retrieval', 'fashion_tfidf_retrieval', 'movie_tfidf_retrieval',
                    'music_tfidf_retrieval', 'politics_tfidf_retrieval', 'science_technology_tfidf_retrieval',
                    'sport_tfidf_retrieval', 'animals_tfidf_retrieval', 'convert_reddit',
-                   'topicalchat_convert_retrieval', 'program_y_wide'}
+                   'topicalchat_convert_retrieval', 'program_y_wide', "knowledge_grounding_skill"}
 
 okay_statements = {"Okay.", "That's cool!", "Interesting.", "Sounds interesting.", "Sounds interesting!",
                    "OK.", "Cool!", "Thanks!", "Okay, thanks.", "I'm glad you think so!",
