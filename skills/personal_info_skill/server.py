@@ -228,7 +228,7 @@ def tell_my_info(dialog, which_info="name"):
             response = f"Your {which_info} is {name}."
             confidence = 1.
             attr["can_continue"] = MUST_CONTINUE
-    return response, confidence
+    return response, confidence, attr
 
 
 def check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr):
