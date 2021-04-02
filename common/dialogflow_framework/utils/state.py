@@ -80,6 +80,11 @@ def set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     vars["agent"]["response"].update({"can_continue": continue_flag})
 
 
+def reset_can_continue(vars):
+    if "can_continue" in vars["agent"]["response"]:
+        del vars["agent"]["response"]["can_continue"]
+
+
 def get_named_entities_from_human_utterance(vars):
     # ent is a dict! ent = {"text": "London":, "type": "LOC"}
     entities = []

@@ -9,6 +9,7 @@ import numpy as np
 import requests
 import sentry_sdk
 
+from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
@@ -20,6 +21,8 @@ import dialogflows.flows.weekend as weekend_flow
 
 from dialogflows.flows.shared import link_to_by_enity_request
 from dialogflows.flows.shared import link_to_by_enity_response
+from dialogflows.flows.shared import set_confidence_by_universal_policy
+from dialogflows.flows.shared import error_response
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -128,25 +131,6 @@ def masked_lm(templates=["Hello, it's [MASK] dog."], prob_threshold=0.0, probs_f
     return tokens_batch
 
 
-def set_confidence_by_universal_policy(vars):
-    if not condition_utils.is_begin_of_dialog(vars, begin_dialog_n=10):
-        state_utils.set_confidence(vars, 0)
-    elif condition_utils.is_first_our_response(vars):
-        state_utils.set_confidence(vars, DIALOG_BEGINNING_START_CONFIDENCE)
-        state_utils.set_can_continue(vars)
-    elif not condition_utils.is_interrupted(vars) and common_greeting.dont_tell_you_answer(
-        state_utils.get_last_human_utterance(vars)
-    ):
-        state_utils.set_confidence(vars, DIALOG_BEGINNING_SHORT_ANSWER_CONFIDENCE)
-        state_utils.set_can_continue(vars)
-    elif not condition_utils.is_interrupted(vars):
-        state_utils.set_confidence(vars, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
-    else:
-        state_utils.set_confidence(vars, MIDDLE_DIALOG_START_CONFIDENCE)
-        state_utils.set_can_continue(vars)
-
-
 ##################################################################################################################
 # std hello
 ##################################################################################################################
@@ -163,7 +147,7 @@ def hello_response(vars):
     # USR_HELLO_AND_CONTNIUE
     try:
         state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, MUST_CONTINUE)
         which_start = random.choice(["how_are_you",
                                      "what_is_your_name",
                                      "what_to_talk_about"])
@@ -184,7 +168,6 @@ def hello_response(vars):
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0.)
         return error_response(vars)
 
 
@@ -207,14 +190,13 @@ def how_are_you_response(vars):
     # USR_HOW_BOT_IS_DOING_AND_OFFER_LIST_ACTIVITIES
     try:
         state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, MUST_CONTINUE)
         how_bot_is_doing_resp = random.choice(common_greeting.HOW_BOT_IS_DOING_RESPONSES)
         return f"{how_bot_is_doing_resp} {common_greeting.LIST_ACTIVITIES_OFFER}"
 
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0.)
         return error_response(vars)
 
 
@@ -245,24 +227,28 @@ def how_human_is_doing_response(vars):
     # USR_STD_GREETING
     try:
         usr_sentiment = state_utils.get_human_sentiment(vars)
-        state_utils.set_can_continue(vars)
 
         if POSITIVE_RESPONSE.search(state_utils.get_last_human_utterance(vars)["text"]):
             state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+            state_utils.set_can_continue(vars, MUST_CONTINUE)
             user_mood_acknowledgement = random.choice(common_greeting.GOOD_MOOD_REACTIONS)
         elif NEGATIVE_RESPONSE.search(state_utils.get_last_human_utterance(vars)["text"]):
             state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+            state_utils.set_can_continue(vars, MUST_CONTINUE)
             user_mood_acknowledgement = f"{random.choice(common_greeting.BAD_MOOD_REACTIONS)} " \
                                         f"{random.choice(common_greeting.GIVE_ME_CHANCE_TO_CHEER_UP)}"
         elif usr_sentiment == "positive":
             state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
+            state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
             user_mood_acknowledgement = random.choice(common_greeting.GOOD_MOOD_REACTIONS)
         elif usr_sentiment == "negative":
             state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
+            state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
             user_mood_acknowledgement = f"{random.choice(common_greeting.BAD_MOOD_REACTIONS)} " \
                                         f"{random.choice(common_greeting.GIVE_ME_CHANCE_TO_CHEER_UP)}"
         else:
             state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
+            state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
             user_mood_acknowledgement = "Okay."
 
         greeting_step_id = 0
@@ -274,7 +260,6 @@ def how_human_is_doing_response(vars):
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0.)
         return error_response(vars)
 
 
@@ -308,7 +293,6 @@ def share_list_activities_response(vars):
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0.)
         return error_response(vars)
 
 
@@ -368,7 +352,6 @@ def std_greeting_response(vars):
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -413,7 +396,6 @@ def new_entities_is_needed_for_response(vars):
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -435,16 +417,6 @@ def closed_answer_response(vars):
     body = ""
     set_confidence_by_universal_policy(vars)
     return " ".join([ack, body])
-
-
-##################################################################################################################
-# error
-##################################################################################################################
-
-
-def error_response(vars):
-    state_utils.set_confidence(vars, 0)
-    return ""
 
 
 ##################################################################################################################
