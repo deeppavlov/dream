@@ -25,42 +25,14 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8023 --timeout=300 --preload
   ner:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8021 -t 100
-  alice:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8000
   eliza:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8047
-  book-tfidf-retrieval:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8039
-  entertainment-tfidf-retrieval:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8040
-  fashion-tfidf-retrieval:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8041
-  movie-tfidf-retrieval:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8042
-  music-tfidf-retrieval:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8034
-  politics-tfidf-retrieval:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8043
-  science-technology-tfidf-retrieval:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8044
-  sport-tfidf-retrieval:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8045
-  animals-tfidf-retrieval:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8050
   book-skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8032 -t 60
   convert-reddit:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8029 -t 60
   personal-info-skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8030
-  christmas-new-year-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8036
-  superbowl-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8051
-  oscar-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8055
-  valentines-day-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8058
   weather-skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8037
   emotion-skill:

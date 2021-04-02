@@ -82,32 +82,10 @@ services:
     image: ${DOCKER_REGISTRY}/movie-skill:${VERSION}
     env_file:
       - ${ENV_FILE}
-  alice:
-    image: ${DOCKER_REGISTRY}/alice:${VERSION}
-    env_file:
-      - ${ENV_FILE}
   eliza:
     image: ${DOCKER_REGISTRY}/eliza:${VERSION}
     env_file:
       - ${ENV_FILE}
-  book-tfidf-retrieval:
-    image: ${DOCKER_REGISTRY}/book-tfidf-retrieval:${VERSION}
-  entertainment-tfidf-retrieval:
-    image: ${DOCKER_REGISTRY}/entertainment-tfidf-retrieval:${VERSION}
-  fashion-tfidf-retrieval:
-    image: ${DOCKER_REGISTRY}/fashion-tfidf-retrieval:${VERSION}
-  movie-tfidf-retrieval:
-    image: ${DOCKER_REGISTRY}/movie-tfidf-retrieval:${VERSION}
-  music-tfidf-retrieval:
-    image: ${DOCKER_REGISTRY}/music-tfidf-retrieval:${VERSION}
-  politics-tfidf-retrieval:
-    image: ${DOCKER_REGISTRY}/politics-tfidf-retrieval:${VERSION}
-  science-technology-tfidf-retrieval:
-    image: ${DOCKER_REGISTRY}/science-technology-tfidf-retrieval:${VERSION}
-  sport-tfidf-retrieval:
-    image: ${DOCKER_REGISTRY}/sport-tfidf-retrieval:${VERSION}
-  animals-tfidf-retrieval:
-    image: ${DOCKER_REGISTRY}/animals-tfidf-retrieval:${VERSION}
   convert-reddit:
     image: ${DOCKER_REGISTRY}/convert-reddit:${VERSION}
     env_file:
@@ -130,22 +108,6 @@ services:
       - ${ENV_FILE}
   book-skill:
     image: ${DOCKER_REGISTRY}/book-skill:${VERSION}
-    env_file:
-      - ${ENV_FILE}
-  christmas-new-year-skill:
-    image: ${DOCKER_REGISTRY}/christmas-new-year-skill:${VERSION}
-    env_file:
-      - ${ENV_FILE}
-  superbowl-skill:
-    image: ${DOCKER_REGISTRY}/superbowl-skill:${VERSION}
-    env_file:
-      - ${ENV_FILE}
-  oscar-skill:
-    image: ${DOCKER_REGISTRY}/oscar-skill:${VERSION}
-    env_file:
-      - ${ENV_FILE}
-  valentines-day-skill:
-    image: ${DOCKER_REGISTRY}/valentines-day-skill:${VERSION}
     env_file:
       - ${ENV_FILE}
   weather-skill:

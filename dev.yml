@@ -118,72 +118,12 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8021:8021
-  alice:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/ALICEChatAPI:/src"
-    ports:
-      - 8000:8000
   eliza:
     env_file: [.env.dev]
     volumes:
       - "./skills/eliza:/src"
     ports:
       - 8047:8047
-  book-tfidf-retrieval:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/topicalchat_tfidf_retrieval:/src"
-    ports:
-      - 8039:8039
-  entertainment-tfidf-retrieval:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/topicalchat_tfidf_retrieval:/src"
-    ports:
-      - 8040:8040
-  fashion-tfidf-retrieval:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/topicalchat_tfidf_retrieval:/src"
-    ports:
-      - 8041:8041
-  movie-tfidf-retrieval:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/topicalchat_tfidf_retrieval:/src"
-    ports:
-      - 8042:8042
-  music-tfidf-retrieval:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/topicalchat_tfidf_retrieval:/src"
-    ports:
-      - 8034:8034
-  politics-tfidf-retrieval:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/topicalchat_tfidf_retrieval:/src"
-    ports:
-      - 8043:8043
-  science-technology-tfidf-retrieval:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/topicalchat_tfidf_retrieval:/src"
-    ports:
-      - 8044:8044
-  sport-tfidf-retrieval:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/topicalchat_tfidf_retrieval:/src"
-    ports:
-      - 8045:8045
-  animals-tfidf-retrieval:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/topicalchat_tfidf_retrieval:/src"
-    ports:
-      - 8050:8050
   convert-reddit:
     env_file: [.env.dev]
     volumes:
@@ -219,30 +159,6 @@ services:
       - "./skills/CoBotQA:/src/CoBotQA"
     ports:
       - 8032:8032
-  christmas-new-year-skill:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/christmas_new_year_skill:/src"
-    ports:
-      - 8036:8036
-  superbowl-skill:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/superbowl_skill:/src"
-    ports:
-      - 8051:8051
-  oscar-skill:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/oscar_skill:/src"
-    ports:
-      - 8055:8055
-  valentines-day-skill:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/valentines_day_skill:/src"
-    ports:
-      - 8058:8058
   weather-skill:
     env_file: [.env.dev]
     volumes:

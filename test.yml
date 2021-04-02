@@ -88,27 +88,7 @@ services:
     env_file: [ .env.dev ]
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
-  alice:
-    env_file: [ .env.dev ]
   eliza:
-    env_file: [ .env.dev ]
-  book-tfidf-retrieval:
-    env_file: [ .env.dev ]
-  entertainment-tfidf-retrieval:
-    env_file: [ .env.dev ]
-  fashion-tfidf-retrieval:
-    env_file: [ .env.dev ]
-  movie-tfidf-retrieval:
-    env_file: [ .env.dev ]
-  music-tfidf-retrieval:
-    env_file: [ .env.dev ]
-  politics-tfidf-retrieval:
-    env_file: [ .env.dev ]
-  science-technology-tfidf-retrieval:
-    env_file: [ .env.dev ]
-  sport-tfidf-retrieval:
-    env_file: [ .env.dev ]
-  animals-tfidf-retrieval:
     env_file: [ .env.dev ]
   convert-reddit:
     env_file: [ .env.dev ]
@@ -119,14 +99,6 @@ services:
   misheard-asr:
     env_file: [ .env.dev ]
   book-skill:
-    env_file: [ .env.dev ]
-  christmas-new-year-skill:
-    env_file: [ .env.dev ]
-  superbowl-skill:
-    env_file: [ .env.dev ]
-  oscar-skill:
-    env_file: [ .env.dev ]
-  valentines-day-skill:
     env_file: [ .env.dev ]
   weather-skill:
     env_file: [ .env.dev ]

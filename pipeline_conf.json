@@ -325,17 +325,6 @@
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
             },
-            "alice": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://alice:8000/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:alice_formatter_dialog",
-                "response_formatter": "state_formatters.dp_formatters:base_formatter_service",
-                "previous_services": ["skill_selectors"],
-                "state_manager_method": "add_hypothesis"
-            },
             "eliza": {
                 "connector": {
                     "protocol": "http",
@@ -488,105 +477,6 @@
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
             },
-            "book_tfidf_retrieval": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://book-tfidf-retrieval:8039/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
-                "response_formatter": "state_formatters.dp_formatters:base_formatter_service",
-                "previous_services": ["skill_selectors"],
-                "state_manager_method": "add_hypothesis"
-            },
-            "entertainment_tfidf_retrieval": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://entertainment-tfidf-retrieval:8040/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
-                "response_formatter": "state_formatters.dp_formatters:base_formatter_service",
-                "previous_services": ["skill_selectors"],
-                "state_manager_method": "add_hypothesis"
-            },
-            "fashion_tfidf_retrieval": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://fashion-tfidf-retrieval:8041/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
-                "response_formatter": "state_formatters.dp_formatters:base_formatter_service",
-                "previous_services": ["skill_selectors"],
-                "state_manager_method": "add_hypothesis"
-            },
-            "movie_tfidf_retrieval": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://movie-tfidf-retrieval:8042/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
-                "response_formatter": "state_formatters.dp_formatters:base_formatter_service",
-                "previous_services": ["skill_selectors"],
-                "state_manager_method": "add_hypothesis"
-            },
-            "music_tfidf_retrieval": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://music-tfidf-retrieval:8034/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
-                "response_formatter": "state_formatters.dp_formatters:base_formatter_service",
-                "previous_services": ["skill_selectors"],
-                "state_manager_method": "add_hypothesis"
-            },
-             "politics_tfidf_retrieval": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://politics-tfidf-retrieval:8043/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
-                "response_formatter": "state_formatters.dp_formatters:base_formatter_service",
-                "previous_services": ["skill_selectors"],
-                "state_manager_method": "add_hypothesis"
-            },
-            "science_technology_tfidf_retrieval": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://science-technology-tfidf-retrieval:8044/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
-                "response_formatter": "state_formatters.dp_formatters:base_formatter_service",
-                "previous_services": ["skill_selectors"],
-                "state_manager_method": "add_hypothesis"
-            },
-            "sport_tfidf_retrieval": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://sport-tfidf-retrieval:8045/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
-                "response_formatter": "state_formatters.dp_formatters:base_formatter_service",
-                "previous_services": ["skill_selectors"],
-                "state_manager_method": "add_hypothesis"
-            },
-            "animals_tfidf_retrieval": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://animals-tfidf-retrieval:8050/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
-                "response_formatter": "state_formatters.dp_formatters:base_formatter_service",
-                "previous_services": ["skill_selectors"],
-                "state_manager_method": "add_hypothesis"
-            },
             "book_skill": {
                 "connector": {
                     "protocol": "http",
@@ -606,50 +496,6 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
-                "state_manager_method": "add_hypothesis"
-            },
-            "christmas_new_year_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://christmas-new-year-skill:8036/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
-                "state_manager_method": "add_hypothesis"
-            },
-            "superbowl_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://superbowl-skill:8051/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:base_formatter_service",
-                "previous_services": ["skill_selectors"],
-                "state_manager_method": "add_hypothesis"
-            },
-            "oscar_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://oscar-skill:8055/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:base_formatter_service",
-                "previous_services": ["skill_selectors"],
-                "state_manager_method": "add_hypothesis"
-            },
-            "valentines_day_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://valentines-day-skill:8058/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:base_formatter_service",
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
             },
