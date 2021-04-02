@@ -973,7 +973,7 @@ simplified_dialogflow.set_error_successor(State.SYS_CONCERT_NO, State.SYS_ERR)
 #  USR_CONCERT_WHO
 
 simplified_dialogflow.add_user_transition(
-    State.USR_CHECK_LATER ,
+    State.USR_CONCERT_WHO ,
     State.SYS_CONCERT_KNOWN,
     any_request
 )
