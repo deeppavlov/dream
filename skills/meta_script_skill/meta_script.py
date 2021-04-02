@@ -141,9 +141,7 @@ def get_statuses_and_topics(dialog):
                 "segments", [""])[-1].lower()
             if curr_source_topics != [PREDEFINED_SOURCE]:
                 # if topic is extracted from utterances
-                curr_meta_script_statuses += [dialog_flow_user_topic[0]] * len(topics)
-                curr_meta_script_topics += topics
-                source_topics += curr_source_topics
+                pass
             elif switch_topic_uttr(dialog["human_utterances"][-1]) or \
                     if_choose_topic(last_user_sent_text, prev_uttr=dialog["bot_utterances"][-1]["text"].lower()):
                 # one of the predefined topics (wiki or hand-written)
