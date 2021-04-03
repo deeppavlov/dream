@@ -392,7 +392,8 @@
                                 ]
                             }
                         }
-                    }
+                    },
+                    "actor": true
                 },
                 "previous_human_utter_index": 0,
                 "history": {
