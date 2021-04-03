@@ -291,6 +291,12 @@ def linkto_personal_info_response(vars):
 def user_mention_named_entity_loc_request(ngrams, vars):
     # SYS_LOC_DETECTED
     user_mentioned_locations = get_mentioned_locations(vars)
+    weather_forecast = "weather_forecast_intent" in get_intents(state_utils.get_last_human_utterance(vars),
+                                                                which="intent_catcher")
+    prev_active_skill = state_utils.get_last_bot_utterance(vars).get("active_skill", "")
+    if weather_forecast or prev_active_skill == "weather_skill":
+        logger.info(f"Found mentioned named locations in user utterances BUT it's about weather. Don't respond.")
+        return False
 
     if len(user_mentioned_locations) > 0:
         logger.info(f"Found mentioned named locations in user utterances")
