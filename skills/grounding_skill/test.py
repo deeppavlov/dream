@@ -13,6 +13,9 @@ def get_input_json(fname):
 def main_test():
     url = 'http://0.0.0.0:8080/grounding_skill'
     input_data = get_input_json("test_configs/test_dialog.json")
+    with open("universal_intent_responses.json", "r") as f:
+        UNIVERSAL_INTENT_RESPONSES = json.load(f)
+
     response = requests.post(url, json=input_data)
     response = response.text.replace('  ', ' ')
     reply = "You just told me about star wars, right?"
@@ -59,6 +62,12 @@ def main_test():
     new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["midas_classification"] = {"neg_answer": 1.0}
     response = requests.post(url, json=new_input_data)
     assert any([resp in response.text for resp in MIDAS_INTENT_ACKNOWLEDGMENETS["neg_answer"]]), response.json()
+
+    # check universal intent responses
+    new_input_data = deepcopy(input_data)
+    new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["midas_classification"] = {"opinion": 1.0}
+    response = requests.post(url, json=new_input_data)
+    assert any([resp in response.text for resp in UNIVERSAL_INTENT_RESPONSES["opinion"]]), response.json()
 
     print("Success!")
 

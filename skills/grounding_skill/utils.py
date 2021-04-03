@@ -2,54 +2,64 @@ import random
 import re
 
 
-def get_intent_dict(entity_name):
-    #  order DOES matter
-    intent_dict = {'Information_DeliveryIntent': f'You just told me about {entity_name}, right?',
-                   'Information_RequestIntent': f"You've asked me about {entity_name} haven't you?",
-                   'User_InstructionIntent': "You just gave me a command. Am I right?",
-                   "Opinion_ExpressionIntent": f"You just shared your opinion about {entity_name} with me, right?",
-                   "ClarificationIntent": f"You clarified me what you've just said about {entity_name}, right?",
-                   "Topic_SwitchIntent": "You wanted to change topic, right?",
-                   "Opinion_RequestIntent": f"You wanted to hear my thoughts about {entity_name}, am I correct?"}
-    return intent_dict
+INTENT_DICT = {
+    'Information_DeliveryIntent': 'You just told me about ENTITY_NAME, right?',
+    'Information_RequestIntent': "You've asked me about ENTITY_NAME haven't you?",
+    'User_InstructionIntent': "You just gave me a command. Am I right?",
+    "Opinion_ExpressionIntent": "You just shared your opinion about ENTITY_NAME with me, right?",
+    "ClarificationIntent": "You clarified me what you've just said about ENTITY_NAME, right?",
+    "Topic_SwitchIntent": "You wanted to change topic, right?",
+    "Opinion_RequestIntent": "You wanted to hear my thoughts about ENTITY_NAME, am I correct?"}
 
 
-def get_da_topic_dict():
-    #  order DOES matter
-    topic_dict = {"Entertainment_Movies": "We were discussing movies, am I right?",
-                  "Entertainment_Books": "We were discussing books, am I right?",
-                  'Entertainment_General': "We are just trying to be polite to each other, aren't we?",
-                  "Science_and_Technology": "I was under impression we were chatting about technology stuff.",
-                  "Sports": "So I thought we were talking about sports.",
-                  "Politics": "Correct me if I'm wrong but I thought we were discussing politics."}
-    return topic_dict
+DA_TOPIC_DICT = {
+    "Entertainment_Movies": "We were discussing movies, am I right?",
+    "Entertainment_Books": "We were discussing books, am I right?",
+    'Entertainment_General': "We are just trying to be polite to each other, aren't we?",
+    "Science_and_Technology": "I was under impression we were chatting about technology stuff.",
+    "Sports": "So I thought we were talking about sports.",
+    "Politics": "Correct me if I'm wrong but I thought we were discussing politics."
+}
 
 
-def get_cobot_topic_dict():
-    #  order DOES matter
-    topic_dict = {'Phatic': "We are just trying to be polite to each other, aren't we?",
-                  "Other": "I can't figure out what we are talking about exactly. Can you spare a hand?",
-                  "Movies_TV": "We were discussing movies, am I right?",
-                  "Music": "Thought we were talking about music.",
-                  "SciTech": "I was under impression we were chatting about technology stuff.",
-                  "Literature": "We were discussing literature, am I right?",
-                  "Travel_Geo": "Thought we were talking about some travel stuff.",
-                  "Celebrities": "We're discussing celebrities, right?",
-                  "Games": "We're talking about games, correct?",
-                  "Pets_Animals": "Thought we were talking about animals.",
-                  "Sports": "So I thought we were talking about sports.",
-                  "Psychology": "Correct me if I'm wrong but I thought we were talking about psychology.",
-                  "Religion": "Aren't we talking about religion, my dear?",
-                  "Weather_Time": "Aren't we discussing the best topic of all times, weather?",
-                  "Food_Drink": "Thought we were discussing food stuff.",
-                  "Politics": "Correct me if I'm wrong but I thought we were discussing politics.",
-                  "Sex_Profanity": "This is a something I'd rather avoid talking about.",
-                  "Art_Event": "My understanding is we are discussing arts, aren't we?",
-                  "Math": "My guess is we were talking about math stuff.",
-                  "News": "Aren't we discussing news my dear friend?",
-                  "Entertainment": "Thought we were discussing something about entertainment.",
-                  "Fashion": "We are talking about fashion am I right?"}
-    return topic_dict
+COBOT_TOPIC_DICT = {
+    'Phatic': "We are just trying to be polite to each other, aren't we?",
+    "Other": "I can't figure out what we are talking about exactly. Can you spare a hand?",
+    "Movies_TV": "We were discussing movies, am I right?",
+    "Music": "Thought we were talking about music.",
+    "SciTech": "I was under impression we were chatting about technology stuff.",
+    "Literature": "We were discussing literature, am I right?",
+    "Travel_Geo": "Thought we were talking about some travel stuff.",
+    "Celebrities": "We're discussing celebrities, right?",
+    "Games": "We're talking about games, correct?",
+    "Pets_Animals": "Thought we were talking about animals.",
+    "Sports": "So I thought we were talking about sports.",
+    "Psychology": "Correct me if I'm wrong but I thought we were talking about psychology.",
+    "Religion": "Aren't we talking about religion, my dear?",
+    "Weather_Time": "Aren't we discussing the best topic of all times, weather?",
+    "Food_Drink": "Thought we were discussing food stuff.",
+    "Politics": "Correct me if I'm wrong but I thought we were discussing politics.",
+    "Sex_Profanity": "This is a something I'd rather avoid talking about.",
+    "Art_Event": "My understanding is we are discussing arts, aren't we?",
+    "Math": "My guess is we were talking about math stuff.",
+    "News": "Aren't we discussing news my dear friend?",
+    "Entertainment": "Thought we were discussing something about entertainment.",
+    "Fashion": "We are talking about fashion am I right?"
+}
+
+
+def get_entity_name(annotations):
+    entity_list = []
+    for tmp in annotations.get('ner', []):
+        if len(tmp) > 0 and 'text' in tmp[0]:
+            entity_list.append(tmp[0]['text'])
+    if len(entity_list) == 1:
+        entity_name = entity_list[0]
+    elif len(entity_list) > 1:
+        entity_name = ','.join(entity_list[:-1]) + ' and ' + entity_list[-1]
+    else:
+        entity_name = ''
+    return entity_name
 
 
 MIDAS_INTENT_ACKNOWLEDGMENETS = {
