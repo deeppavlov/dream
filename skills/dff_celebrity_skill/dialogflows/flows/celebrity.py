@@ -15,6 +15,7 @@ import dialogflows.scopes as scopes
 
 from common.utils import get_types_from_annotations, get_intents
 from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
+from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_CONTINUE_SCENARIO_DONE
 from CoBotQA.cobotqa_service import send_cobotqa
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -35,12 +36,14 @@ class State(Enum):
     USR_ASK_ANOTHER_FACT = auto()
     USR_ANSWERS_QUESTION = auto()
     USR_TELLS_SOMETHING = auto()
+    USR_TELLS_A_FILM = auto()
     USR_YESNO_1 = auto()
     USR_YESNO_2 = auto()
 
     SYS_GIVE_A_FACT = auto()
     SYS_EXIT = auto()
     SYS_ASKS_A_FACT = auto()
+    SYS_ASKS_A_FILM = auto()
     SYS_GOTO_CELEBRITY = auto()
     SYS_CELEBRITY_FIRST_MENTIONED = auto()
     SYS_CELEBRITY_TELL_OTHERJOBS = auto()
@@ -85,6 +88,14 @@ def default_condition_request(ngram, vars):
 def yes_request(ngrams, vars):
     flag = condition_utils.is_yes_vars(vars)
     logger.info(f'yes_request: {flag}')
+    return flag
+
+
+def yes_actor_request(ngrams, vars):
+    flag = condition_utils.is_yes_vars(vars)
+    shared_memory = state_utils.get_shared_memory(vars)
+    is_actor = shared_memory.get("actor", False)
+    flag = flag and is_actor
     return flag
 
 
@@ -163,9 +174,18 @@ def get_celebrity(vars, exclude_types=False, use_only_last_utt=False):
         utterances_to_iterate = dialog["human_utterances"][::-1] + [last_utterance_with_celebrity]
     texts_to_iterate = [j['text'] for j in utterances_to_iterate]
     logger.debug(f'Calling get_celebrity on {texts_to_iterate} exclude_types {exclude_types} {use_only_last_utt}')
-    raw_profession_list = ['Q33999', 'Q177220', 'Q17125263', 'Q245068', 'Q2066131', 'Q947873',
-                           'Q10800557', 'Q10798782', 'Q2405480',
-                           'Q211236']
+    raw_profession_list = ['Q33999',  # actor
+                           "Q10800557",  # film actor
+                           "Q10798782",  # television actor
+                           "Q2405480",  # voice actor
+                           'Q17125263',  # youtuber
+                           'Q245068',  # comedian
+                           'Q2066131',  # sportsman
+                           'Q947873',  # television presenter
+                           'Q2405480',  # comedian
+                           'Q211236',  # celebrity
+                           'Q177220']  # singer
+    actor_profession_list = raw_profession_list[:4]
     mentioned_otherjobs = shared_memory.get('mentioned_otherjobs', [])
     if exclude_types:
         raw_profession_list = raw_profession_list + mentioned_otherjobs
@@ -178,16 +198,21 @@ def get_celebrity(vars, exclude_types=False, use_only_last_utt=False):
         if celebrity_name is not None:
             logger.debug(f'Answer for get_celebrity exclude_types {exclude_types} : {celebrity_name} {celebrity_type}')
             state_utils.save_to_shared_memory(vars, last_utterance_with_celebrity=human_utterance)
+            met_actor = celebrity_raw_type in actor_profession_list
+            state_utils.save_to_shared_memory(vars, actor=met_actor)
             return celebrity_name, celebrity_type
     logger.debug(f'For get_celebrity no answer obtained')
     return None, None
 
 
-def wrap(function, vars, confidence):
-    state_utils.set_confidence(vars, confidence=confidence)
-    state_utils.set_can_continue(vars)
+def propose_celebrity_response(vars):
+    state_utils.set_confidence(vars, confidence=CONF_HIGH)
+    state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
     try:
-        return function(vars)
+        celebrity, celebrity_name = get_celebrity(vars)
+        assert celebrity and celebrity_name
+        answer = f'{celebrity} is an amazing {celebrity_name} ! May I tell you something about this person?'
+        return answer
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -195,61 +220,58 @@ def wrap(function, vars, confidence):
         return error_response(vars)
 
 
-def propose_celebrity(vars):
-    celebrity, celebrity_name = get_celebrity(vars)
-    assert celebrity and celebrity_name
-    answer = f'{celebrity} is an amazing {celebrity_name} ! May I tell you something about this person?'
-    return answer
-
-
-def propose_celebrity_response(vars):
-    return wrap(propose_celebrity, vars, CONF_HIGH)
-
-
-def celebrity_fact(vars):
-    logger.debug('Getting celebrity facts')
-    celebrity_name, celebrity_type = get_celebrity(vars)
-    shared_memory = state_utils.get_shared_memory(vars)
-    given_facts = shared_memory.get('given_facts', [])
-    logger.debug(f'Given facts in memory {given_facts}')
-    num_attempts = 2
-    curr_fact = ''
-    next_fact = shared_memory.get('next_fact', '')
-    for _ in range(num_attempts):
-        if next_fact:
-            curr_fact = next_fact
-            next_fact = ''
-        if not curr_fact:
-            curr_fact = get_cobot_fact(celebrity_name, given_facts)
-        if not next_fact:
-            next_fact = get_cobot_fact(celebrity_name, given_facts + [curr_fact])
-    if not next_fact:
-        celebrity_name, celebrity_otherjob = get_celebrity(vars, exclude_types=True)
-        next_fact = f'{celebrity_name} is also a {celebrity_otherjob}.'
-    assert curr_fact
-    reply = f'{curr_fact}'
-    if next_fact:
-        reply = f'{reply} May I tell you another fact about this {celebrity_type}?'
-    state_utils.save_to_shared_memory(vars, given_facts=given_facts + [curr_fact], next_fact=next_fact)
-    logger.debug(f'In function celebrity_fact_response answer {reply}')
-    return reply
-
-
 def celebrity_fact_response(vars):
-    return wrap(celebrity_fact, vars, CONF_HIGH)
-
-
-def celebrity_otherjob(vars):
-    celebrity_name, celebrity_otherjob = get_celebrity(vars, exclude_types=True)
-    assert celebrity_otherjob and celebrity_name
-    reply = f'{celebrity_name} is also a {celebrity_otherjob}. May I tell you something else about this person?'
     state_utils.set_confidence(vars, confidence=CONF_HIGH)
-    state_utils.set_can_continue(vars)
-    return reply
+    state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+    try:
+        logger.debug('Getting celebrity facts')
+        celebrity_name, celebrity_type = get_celebrity(vars)
+        shared_memory = state_utils.get_shared_memory(vars)
+        given_facts = shared_memory.get('given_facts', [])
+        logger.debug(f'Given facts in memory {given_facts}')
+        num_attempts = 2
+        curr_fact = ''
+        next_fact = shared_memory.get('next_fact', '')
+        for _ in range(num_attempts):
+            if next_fact:
+                curr_fact = next_fact
+                next_fact = ''
+            if not curr_fact:
+                curr_fact = get_cobot_fact(celebrity_name, given_facts)
+            if not next_fact:
+                next_fact = get_cobot_fact(celebrity_name, given_facts + [curr_fact])
+        if not next_fact:
+            celebrity_name, celebrity_otherjob = get_celebrity(vars, exclude_types=True)
+            next_fact = f'{celebrity_name} is also a {celebrity_otherjob}.'
+        assert curr_fact
+        reply = f'{curr_fact}'
+        if next_fact:
+            reply = f'{reply} May I tell you another fact about this {celebrity_type}?'
+        state_utils.save_to_shared_memory(vars, given_facts=given_facts + [curr_fact], next_fact=next_fact)
+        logger.debug(f'In function celebrity_fact_response answer {reply}')
+        return reply
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        state_utils.set_confidence(vars, 0)
+        return error_response(vars)
 
 
 def celebrity_otherjob_response(vars):
-    return wrap(celebrity_otherjob, vars, CONF_HIGH)
+    state_utils.set_confidence(vars, confidence=CONF_HIGH)
+    state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+    try:
+        celebrity_name, celebrity_otherjob = get_celebrity(vars, exclude_types=True)
+        assert celebrity_otherjob and celebrity_name
+        reply = f'{celebrity_name} is also a {celebrity_otherjob}. May I tell you something else about this person?'
+        state_utils.set_confidence(vars, confidence=CONF_HIGH)
+        state_utils.set_can_continue(vars)
+        return reply
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        state_utils.set_confidence(vars, 0)
+        return error_response(vars)
 
 
 def info_response(vars):
@@ -259,11 +281,19 @@ def info_response(vars):
 
 
 def acknowledge_and_link_to_celebrity_response(vars):
+    state_utils.set_confidence(vars, confidence=CONF_MEDIUM)
+    state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
     return f"Sounds interesting. But let's talk about something else. {favourite_celebrity_response(vars)}"
 
 
 def link_to_celebrity_response(vars):
     return f"OK. {favourite_celebrity_response(vars)}"
+
+
+def ask_film_response(vars):
+    state_utils.set_confidence(vars, confidence=CONF_MEDIUM)
+    state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO_DONE)
+    return "What is your favourite film with this actor?"
 
 
 def favourite_celebrity_response(vars):
@@ -279,7 +309,10 @@ def favourite_celebrity_response(vars):
                 state_utils.save_to_shared_memory(vars, asked_questions=asked_questions + [celebrity_question])
                 confidence = confidences[i]
                 state_utils.set_confidence(vars, confidence=confidence)
-                state_utils.set_can_continue(vars)
+                if i == 0:
+                    state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+                else:
+                    state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
                 return celebrity_question
     except Exception as exc:
         logger.exception(exc)
@@ -360,12 +393,15 @@ simplified_dialogflow.add_system_transition(State.SYS_GOTO_CELEBRITY, State.USR_
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_YESNO_2,
     {
+        State.SYS_ASKS_A_FILM: yes_actor_request,
         State.SYS_GIVE_A_FACT: yes_request,
         State.SYS_EXIT: dont_want_request,
         State.SYS_GOTO_CELEBRITY: no_request
     },
 )
 simplified_dialogflow.add_system_transition(State.SYS_GIVE_A_FACT, State.USR_ASK_ANOTHER_FACT, celebrity_fact_response)
+simplified_dialogflow.add_system_transition(State.SYS_ASKS_A_FILM, State.USR_TELLS_A_FILM, ask_film_response)
+
 
 for state_ in State:
     simplified_dialogflow.set_error_successor(state_, State.SYS_ERR)
