@@ -24,9 +24,15 @@ def get_new_human_labeled_noun_phrase(vars):
     return entity_utils.get_new_human_entities(entities, human_utter_index)
 
 
-def get_human_sentiment(vars):
-    sentiment = common_utils.get_sentiment(vars["agent"]["dialog"]["human_utterances"][-1], probs=False)[0]
-    return sentiment
+def get_human_sentiment(vars, negative_threshold=0.5, positive_threshold=0.333):
+    sentiment_probs = common_utils.get_sentiment(vars["agent"]["dialog"]["human_utterances"][-1], probs=True)
+    max_sentiment_prob = max(sentiment_probs)
+    max_sentiment = [sentiment for sentiment in sentiment_probs if sentiment_probs[sentiment] == max_sentiment_prob][0]
+    return_negative = max_sentiment == 'negative' and max_sentiment_prob >= negative_threshold
+    return_positive = max_sentiment == 'positive' and max_sentiment_prob >= positive_threshold
+    if return_negative or return_positive:
+        return max_sentiment
+    return 'neutral'
 
 
 def get_shared_memory(vars):
