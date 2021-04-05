@@ -31,8 +31,7 @@ if COBOT_DIALOGACT_SERVICE_URL is None:
 headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COBOT_API_KEY}'}
 
 
-@app.route("/dialogact", methods=['POST'])
-def respond():
+def get_result(request):
     st_time = time.time()
     utterances_histories = request.json['utterances_histories']
     intents = []
@@ -87,7 +86,19 @@ def respond():
 
     total_time = time.time() - st_time
     logger.info(f'cobot_dialogact exec time: {total_time:.3f}s')
-    return jsonify(list(zip(intents, topics)))
+    return list(zip(intents, topics))
+
+
+@app.route("/dialogact", methods=['POST'])
+def respond():
+    result = get_result(request)
+    return jsonify(result)
+
+
+@app.route("/dialogact_batch", methods=['POST'])
+def respond_batch():
+    result = get_result(request)
+    return jsonify([{"batch": result}])
 
 
 if __name__ == '__main__':

@@ -395,7 +395,7 @@ def _get_plain_annotations(annotated_utterance, model_name):
     try:
         annotations = annotated_utterance['annotations']
         answer = annotations[model_name]
-        logger.info(f'Being processed plain annotation {answer}')
+        # logger.info(f'Being processed plain annotation {answer}')
         answer = _process_text(answer)
         if isinstance(answer, list):
             if model_name == 'sentiment_classification':
@@ -410,7 +410,7 @@ def _get_plain_annotations(annotated_utterance, model_name):
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
-    logger.info(f'Answer for get_plain_annotations {answer_probs} {answer_labels}')
+    # logger.info(f'Answer for get_plain_annotations {answer_probs} {answer_labels}')
     return answer_probs, answer_labels
 
 
@@ -781,3 +781,34 @@ def get_types_from_annotations(annotations, types, tocheck_relation='occupation'
         sentry_sdk.capture_exception(e)
         logging.exception(Exception(e, f'Exception in processing wp annotations {wp_annotations}'))
     return None, None, None
+
+
+ANYTHING_EXCEPT_OF_LETTERS_AND_SPACE_COMPILED = re.compile(r"[^a-zA-Z ]")
+MULTI_SPACE_COMPILED = re.compile(r"\s+")
+
+
+def clean_entities(entities):
+    entities = [entity.lower() for entity in entities]
+    entities = [re.sub(ANYTHING_EXCEPT_OF_LETTERS_AND_SPACE_COMPILED, " ", entity)
+                for entity in entities]
+    entities = [re.sub(MULTI_SPACE_COMPILED, " ", entity).strip()
+                for entity in entities]
+    entities = [entity.split() for entity in entities]  # now it's a list of lists of strings
+    entities = sum(entities, [])  # flatten list
+    return entities
+
+
+def get_common_tokens_in_lists_of_strings(list_of_strings_0, list_of_strings_1):
+    """
+    Clean strings removing anything except of letters and spaces, split every string to tokens by spaces,
+    find common tokens for two lists of strings.
+    """
+    list_of_strings_0 = deepcopy(list_of_strings_0)
+    list_of_strings_1 = deepcopy(list_of_strings_1)
+
+    list_of_strings_0 = clean_entities(list_of_strings_0)
+    list_of_strings_1 = clean_entities(list_of_strings_1)
+
+    common_substrings = list(set(list_of_strings_0).intersection(set(list_of_strings_1)))
+
+    return common_substrings

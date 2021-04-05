@@ -1,0 +1,30 @@
+{
+    "open_question_factual": [
+        "statement",
+        "other_answers",
+        "pos_answer",
+        "neg_answer"
+    ],
+    "open_question_opinion": [
+        "opinion"
+    ],
+    "open_question_personal": [
+        "opinion",
+        "statement",
+        "other_answers",
+        "pos_answer",
+        "neg_answer"
+    ],
+    "yes_no_question": [
+        "pos_answer",
+        "neg_answer",
+        "yes",
+        "no"
+    ],
+    "clarifying_question": [
+        "opinion",
+        "statement",
+        "other_answers",
+        "pos_answer",
+        "neg_answer"]
+}

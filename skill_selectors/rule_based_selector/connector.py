@@ -198,7 +198,6 @@ class RuleBasedSkillSelectorConnector:
                     virus_prev = virus_prev or any([function(dialog['utterances'][-i]['text'])
                                                     for function in [about_virus, quarantine_end]])
             enable_coronavirus_death = check_about_death(user_uttr_text)
-            enable_grounding_skill = "what_are_you_talking_about" in intent_catcher_intents
             enable_coronavirus = any([function(user_uttr_text)
                                       for function in [about_virus, quarantine_end]])
             enable_coronavirus = enable_coronavirus or (enable_coronavirus_death and virus_prev)
@@ -238,8 +237,7 @@ class RuleBasedSkillSelectorConnector:
             else:
                 if low_priority_intent_detected:
                     skills_for_uttr.append("intent_responder")
-                if enable_grounding_skill:
-                    skills_for_uttr.append("grounding_skill")
+                skills_for_uttr.append("grounding_skill")
                 # process regular utterances
                 skills_for_uttr.append("program_y")
                 skills_for_uttr.append("cobotqa")

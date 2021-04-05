@@ -90,7 +90,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8006 -t 60 --preload
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 8
       resources:
         limits:
           memory: 256M

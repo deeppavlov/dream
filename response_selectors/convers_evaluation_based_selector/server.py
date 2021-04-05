@@ -1,22 +1,26 @@
 #!/usr/bin/env python
-
 import logging
+import pprint
+import random
 import re
 import time
-import numpy as np
-import random
-from flask import Flask, request, jsonify
-from os import getenv
 from collections import Counter
+from os import getenv
+
+import numpy as np
 import sentry_sdk
-import pprint
+from flask import Flask, request, jsonify
 from nltk.tokenize import sent_tokenize
-from copy import deepcopy
-from collections import defaultdict
-from common.duplicates import NOT_LOWER_DUPLICATES_SENTS
+
 from common.universal_templates import if_lets_chat_about_topic, if_choose_topic
-from common.utils import scenario_skills, retrieve_skills, okay_statements, is_question, \
-    get_intent_name, low_priority_intents, substitute_nonwords, get_toxic
+from common.utils import get_intent_name, low_priority_intents, substitute_nonwords, get_toxic
+from tag_based_selection import tag_based_response_selection
+from utils import add_question_to_statement, lower_duplicates_score, \
+    lower_retrieve_skills_confidence_if_scenario_exist, calculate_single_convers_evaluator_score, \
+    downscore_toxic_blacklisted_responses, CONV_EVAL_STRENGTH, CONFIDENCE_STRENGTH, \
+    how_are_you_spec, what_i_can_do_spec, psycho_help_spec, greeting_spec, misheard_with_spec1, \
+    misheard_with_spec2, alexa_abilities_spec
+
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -27,9 +31,12 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 CALL_BY_NAME_PROBABILITY = 0.5  # if name is already known
-ASK_DUMMY_QUESTION_PROB = 0.5
-ASK_LINK_TO_FOR_RETRIEVE_PROB = 0.5
 SHOW_DIALOG_ID = False
+TAG_BASED_SELECTION = True
+MOST_DUMMY_RESPONSES = ["I really do not know what to answer.",
+                        "Sorry, probably, I didn't get what you mean.",
+                        "I didn't get it. Sorry"
+                        ]
 
 
 @app.route("/respond", methods=['POST'])
@@ -38,97 +45,91 @@ def respond():
 
     st_time = time.time()
     dialogs_batch = request.json["dialogs"]
-    response_candidates = [dialog["utterances"][-1]["hypotheses"] for dialog in dialogs_batch]
 
-    dialog_ids = []
     selected_skill_names = []
     selected_texts = []
     selected_confidences = []
     selected_human_attributes = []
     selected_bot_attributes = []
-    confidences = []
-    utterances = []
-    skill_names = []
 
-    annotations = []
     for i, dialog in enumerate(dialogs_batch):
-        for skill_data in response_candidates[i]:
-            if len(dialog["utterances"]) > 1:
-                assert len(dialog["human_utterances"]) > 0
-                assert len(dialog["bot_utterances"]) > 0
-            dialog_ids += [i]
-            confidences += [skill_data["confidence"]]
-            utterances += [skill_data["text"]]  # all bot utterances
-            skill_names += [skill_data["skill_name"]]
-            annotations += [skill_data.get("annotations", {})]
-            if skill_data["text"] and skill_data["confidence"]:
-                if not skill_data.get("annotations"):
-                    logger.warning(f"Valid skill data without annotations: {skill_data}")
-    # raise Exception(str(annotations))
-    toxic_result = [get_toxic({'annotations': annotation}, probs=True) for annotation in annotations]
-    toxicities = [max(res.values()) if len(res) > 0 else 0 for res in toxic_result]
-    stop_result = [annotation.get('stop_detect', {'stop': 0}) for annotation in annotations]
-    stop_probs = [j['stop'] for j in stop_result]
-    for j in range(len(skill_names)):
-        if skill_names[j] == 'intent_responder':
-            stop_probs[j] = 0
-    default_blacklist = {'inappropriate': False, 'profanity': False, 'restricted_topics': False}
-    blacklist_result = [annotation.get('blacklisted_words', default_blacklist) for annotation in annotations]
-    has_blacklisted = [int(res['profanity']) for res in blacklist_result]
-    has_inappropriate = [int(res['inappropriate']) for res in blacklist_result]
-    for i, has_blisted in enumerate(has_blacklisted):
-        if has_blisted:
-            with sentry_sdk.push_scope() as scope:
-                scope.set_extra('utterance', utterances[i])
-                scope.set_extra('selected_skills', response_candidates[dialog_ids[i]])
-                sentry_sdk.capture_message("response selector got candidate with blacklisted phrases")
-                msg = f"response selector got candidate with blacklisted phrases:\n" \
-                      f"utterance: {utterances[i]}\n" \
-                      f"selected_skills: {response_candidates[dialog_ids[i]]}"
-                logger.info(msg)
+        curr_toxicities = []
+        curr_has_blacklisted = []
+        curr_has_inappropriate = []
+        curr_confidences = []
+        curr_scores = []
 
-    default_conv_eval = {
-        "isResponseOnTopic": 0.,
-        "isResponseInteresting": 0.,
-        "responseEngagesUser": 0.,
-        "isResponseComprehensible": 0.,
-        "isResponseErroneous": 0.
-    }
-    # do not need it because if alexa handler, no annotations!
-    # assert 'cobot_convers_evaluator_annotator' in annotations[0]
-    result = [annotation.get('cobot_convers_evaluator_annotator', default_conv_eval)
-              for annotation in annotations]
-    # raise Exception('Sample annotation is '+str(annotations[0]))
-    result = np.array(result)
-    dialog_ids = np.array(dialog_ids)
-    confidences = np.array(confidences)
-    toxicities = np.array(toxicities)
-    stop_probs = np.array(stop_probs)
-    has_blacklisted = np.array(has_blacklisted)
-    has_inappropriate = np.array(has_inappropriate)
-    for i, dialog in enumerate(dialogs_batch):
-        # curr_candidates is dict
-        curr_candidates = response_candidates[i]
-        logger.info("Curr candidates:")
-        logger.info(pprint.pformat(curr_candidates, compact=False))
-        # choose results which correspond curr candidates
-        curr_scores = result[dialog_ids == i]  # array of dictionaries
-        curr_confidences = confidences[dialog_ids == i]  # array of float numbers
+        try:
+            curr_candidates = dialog["utterances"][-1]["hypotheses"]
+            logger.info("Curr candidates:")
+            logger.info(pprint.pformat(curr_candidates, compact=False))
 
-        best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes = select_response(
-            curr_candidates, curr_scores, curr_confidences,
-            toxicities[dialog_ids == i], has_blacklisted[dialog_ids == i], has_inappropriate[dialog_ids == i],
-            stop_probs[dialog_ids == i], dialog)
+            for skill_data in curr_candidates:
+                if len(dialog["utterances"]) > 1:
+                    assert len(dialog["human_utterances"]) > 0
+                    assert len(dialog["bot_utterances"]) > 0
+
+                curr_confidences += [skill_data["confidence"]]
+                annotation = skill_data.get("annotations", {})
+                if skill_data["text"] and skill_data["confidence"]:
+                    if not skill_data.get("annotations"):
+                        logger.warning(f"Valid skill data without annotations: {skill_data}")
+
+                toxic_result = get_toxic({'annotations': annotation}, probs=True)
+                default_blacklist = {'inappropriate': False, 'profanity': False, 'restricted_topics': False}
+                blacklist_result = annotation.get('blacklisted_words', default_blacklist)
+
+                curr_toxicities += [max(toxic_result.values()) if len(toxic_result) > 0 else 0]
+                curr_has_blacklisted += [int(blacklist_result['profanity'])]
+                curr_has_inappropriate += [int(blacklist_result['inappropriate'])]
+
+                if blacklist_result['profanity']:
+                    with sentry_sdk.push_scope() as scope:
+                        scope.set_extra('utterance', skill_data["text"])
+                        scope.set_extra('selected_skills', skill_data)
+                        sentry_sdk.capture_message("response selector got candidate with blacklisted phrases")
+                        msg = f"response selector got candidate with blacklisted phrases:\n" \
+                              f"utterance: {skill_data['text']}\n" \
+                              f"skill name: {skill_data['skill_name']}"
+                        logger.info(msg)
+
+                default_conv_eval = {"isResponseOnTopic": 0., "isResponseInteresting": 0., "responseEngagesUser": 0.,
+                                     "isResponseComprehensible": 0., "isResponseErroneous": 0.}
+                curr_scores += [annotation.get('cobot_convers_evaluator_annotator', default_conv_eval)]
+
+            curr_toxicities = np.array(curr_toxicities)
+            curr_has_blacklisted = np.array(curr_has_blacklisted)
+            curr_has_inappropriate = np.array(curr_has_inappropriate)
+            curr_scores = np.array(curr_scores)
+            curr_confidences = np.array(curr_confidences)
+            # now we collected all current candidates and their annotations. select response among them
+            best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes = select_response(
+                curr_candidates, curr_scores, curr_confidences,
+                curr_toxicities, curr_has_blacklisted, curr_has_inappropriate, dialog)
+        except Exception as e:
+            logger.exception(e)
+            sentry_sdk.capture_exception(e)
+            if dialog["utterances"][-1].get("hypotheses", []):
+                best_cand = random.choice(dialog["utterances"][-1]["hypotheses"])
+            else:
+                best_cand = {"text": random.choice(MOST_DUMMY_RESPONSES), "confidence": 0.1,
+                             "human_attributes": {}, "bot_attributes": {}, "skill_name": "dummy_skill"}
+            best_skill_name = best_cand["skill_name"]
+            best_text = best_cand["text"]
+            best_confidence = best_cand["confidence"]
+            best_human_attributes = best_cand["human_attributes"]
+            best_bot_attributes = best_cand["bot_attributes"]
 
         selected_skill_names.append(best_skill_name)
         selected_texts.append(best_text)
         selected_confidences.append(best_confidence)
         selected_human_attributes.append(best_human_attributes)
         selected_bot_attributes.append(best_bot_attributes)
-        logger.info(f"Choose selected_skill_names: {selected_skill_names};"
-                    f"selected_texts {selected_texts}; selected_confidences {selected_confidences};"
-                    f"selected human attributes: {selected_human_attributes}; "
-                    f"selected bot attributes: {selected_bot_attributes}")
+
+    logger.info(f"Choose selected_skill_names: {selected_skill_names};"
+                f"selected_texts {selected_texts}; selected_confidences {selected_confidences};"
+                f"selected human attributes: {selected_human_attributes}; "
+                f"selected bot attributes: {selected_bot_attributes}")
 
     total_time = time.time() - st_time
     logger.info(f'convers_evaluation_selector exec time: {total_time:.3f}s')
@@ -136,153 +137,16 @@ def respond():
                             selected_human_attributes, selected_bot_attributes)))
 
 
-def join_used_links_in_attributes(main_attrs, add_attrs):
-    result = deepcopy(main_attrs)
-    result["used_links"] = result.get("used_links", defaultdict(list))
-
-    for skill_name in add_attrs.get("used_links", defaultdict(list)):
-        result["used_links"][skill_name] = result["used_links"].get(
-            skill_name, []) + add_attrs["used_links"].get(skill_name, [])
-    return result
-
-
-def add_question_to_statement(best_candidate, best_skill_name, dummy_question, dummy_question_human_attr,
-                              link_to_question, link_to_human_attrs, not_sure_factoid):
-    if not_sure_factoid and "factoid_qa" in best_skill_name:
-        best_candidate["text"] = "I am not sure in my answer but I can try. " + best_candidate["text"]
-    if best_candidate["text"].strip() in okay_statements:
-        if dummy_question != "" and random.random() < ASK_DUMMY_QUESTION_PROB:
-            logger.info(f"adding {dummy_question} to response.")
-            best_candidate["text"] += np.random.choice([f" Let me ask you something. {dummy_question}",
-                                                        f" I would like to ask you a question. {dummy_question}"])
-            # if this is not a link-to question, bot attributes will be still empty
-            best_candidate["human_attributes"] = join_used_links_in_attributes(
-                best_candidate.get("human_attributes", {}), dummy_question_human_attr)
-    elif best_skill_name in retrieve_skills:
-        if not is_question(best_candidate["text"]) and random.random() < ASK_LINK_TO_FOR_RETRIEVE_PROB:
-            logger.info(f"adding link_to {link_to_question} to response.")
-            best_candidate["text"] += f". {link_to_question}"
-            best_candidate["human_attributes"] = join_used_links_in_attributes(
-                best_candidate.get("human_attributes", {}), link_to_human_attrs)
-
-    return best_candidate
-
-
-def lower_duplicates_score(candidates, bot_utt_counter, scores, confidences):
-    for i, cand in enumerate(candidates):
-        # no penalties for repeat intent
-        if cand['skill_name'] == 'intent_responder' and '#+#repeat' in cand['text']:
-            continue
-        # TODO: remove the quick fix of gcs petitions, issue is https://github.com/deepmipt/assistant/issues/80
-        if cand['skill_name'] in ['game_cooperative_skill', "news_api_skill", "movie_skill"]:
-            continue
-
-        cand_sents = sent_tokenize(cand["text"].lower())
-        coeff = 1
-        n_duplicates = 0
-        for cand_sent in cand_sents:
-            if len(cand_sent.split()) >= 3 and cand_sent not in NOT_LOWER_DUPLICATES_SENTS:
-                cand_sent = substitute_nonwords(cand_sent)
-                coeff += bot_utt_counter[cand_sent]
-                n_duplicates += 1
-
-        # apply penalties to non-script skills and in case if response consists only from duplicates
-        if confidences[i] < 1. or n_duplicates == len(cand_sents):
-            confidences[i] /= coeff
-            scores[i]['isResponseInteresting'] /= coeff
-            scores[i]['responseEngagesUser'] /= coeff
-
-
-def lower_retrieve_skills_confidence_if_scenario_exist(candidates, scores, confidences):
-    has_scenario_skill = False
-    lower_coeff = 0.25  # Lower confidence and isResponseInteresting for retrieve skills to 25%
-    for cand in candidates:
-        if cand['skill_name'] in scenario_skills and cand['text'] and cand['confidence'] >= 0.9:
-            has_scenario_skill = True
-            break
-    if has_scenario_skill:
-        for i, cand in enumerate(candidates):
-            if cand['skill_name'] in retrieve_skills:
-                confidences[i] *= lower_coeff
-                scores[i]['isResponseInteresting'] *= lower_coeff
-
-
-def lower_wd_skill_conf_if_movie_or_book(candidates, confidences):
-    topic_skills = ["movie_skill", "book_skill", "game_cooperative_skill"]
-    skills_conf = {}
-    for cand, conf in zip(candidates, confidences):
-        skill_name = cand["skill_name"]
-        if skill_name in topic_skills:
-            skills_conf[skill_name] = conf
-    if any([conf > 0.8 for conf in skills_conf.values()]):
-        for i, (cand, conf) in enumerate(zip(candidates, confidences)):
-            if cand["skill_name"] == "wikidata_dial_skill":
-                confidences[i] = 0.5
-    return candidates, confidences
-
-
-def calculate_single_convers_evaluator_score(cand_scores):
-    score_conv_eval = sum([cand_scores["isResponseOnTopic"],
-                           cand_scores["isResponseInteresting"],
-                           cand_scores["responseEngagesUser"],
-                           cand_scores["isResponseComprehensible"]])
-    score_conv_eval -= cand_scores["isResponseErroneous"]
-    return score_conv_eval
-
-
-def select_response(candidates, scores, confidences, toxicities, has_blacklisted,
-                    has_inappropriate, stop_probs, dialog):
-    confidence_strength = 2
-    conv_eval_strength = 0.4
-    stop_threshold = 0.95  # 0.58  To provide 99% precision on STOP class. For now 0.95 to fix tests
-    # calculate curr_scores which is an array of values-scores for each candidate
+def rule_score_based_selection(dialog, candidates, scores, confidences, toxicities, bot_utterances):
     curr_single_scores = []
 
-    # exclude toxic messages and messages with blacklisted phrases
-    ids = (toxicities > 0.5) | (has_blacklisted > 0) | (has_inappropriate > 0) | (stop_probs > stop_threshold)
-    logger.info(f"Bot excluded utterances: {ids}. toxicities: {toxicities};"
-                f"has_blacklisted: {has_blacklisted}; has_inappropriate: {has_inappropriate};"
-                f"stop probs: {stop_probs}")
-
-    if sum(ids) == len(toxicities):
-        # the most dummy заглушка на случай, когда все абсолютно скиллы вернули токсичные ответы
-        non_toxic_answers = ["I really do not know what to answer.",
-                             "Sorry, probably, I didn't get what you mean.",
-                             "I didn't get it. Sorry"
-                             ]
-        non_toxic_answer = np.random.choice(non_toxic_answers)
-        return None, non_toxic_answer, 1.0, {}, {}
-
-    scores[ids] = {"isResponseOnTopic": 0.,
-                   "isResponseInteresting": 0.,
-                   "responseEngagesUser": 0.,
-                   "isResponseComprehensible": 0.,
-                   "isResponseErroneous": 1.,
-                   }
-    confidences[ids] = 0.
-
-    # check for repetitions
-    bot_utterances = [sent_tokenize(uttr["text"].lower()) for uttr in dialog["bot_utterances"]]
-    prev_large_utterances = [[sent] for utt in bot_utterances[:-15] for sent in utt if len(sent) >= 40]
-    bot_utterances = prev_large_utterances + bot_utterances[-15:]
-    # flatten 2d list to 1d list of all appeared sentences of bot replies
-    bot_utterances = sum(bot_utterances, [])
-    bot_utterances = [substitute_nonwords(utt) for utt in bot_utterances]
     bot_utt_counter = Counter(bot_utterances)
-
-    candidates, confidences = lower_wd_skill_conf_if_movie_or_book(candidates, confidences)
     lower_duplicates_score(candidates, bot_utt_counter, scores, confidences)
     lower_retrieve_skills_confidence_if_scenario_exist(candidates, scores, confidences)
 
     # prev_active_skill = dialog["bot_utterances"][-1]['active_skill'] if len(dialog["bot_utterances"]) > 0 else ''
     skill_names = [c['skill_name'] for c in candidates]
-    how_are_you_spec = "Do you want to know what I can do?"  # this is always at the end of answers to `how are you`
-    what_i_can_do_spec = "socialbot running inside"
-    psycho_help_spec = "might not always feel like it"
-    greeting_spec = "this is an Alexa Prize Socialbot"
-    misheard_with_spec1 = "I misheard you"
-    misheard_with_spec2 = "like to chat about"
-    alexa_abilities_spec = "If you want to use the requested feature say"
+
     very_big_score = 100
     very_low_score = -100
     dummy_question = ""
@@ -399,7 +263,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             confidence = confidences[i]
             skill_name = skill_names[i]
             score_conv_eval = calculate_single_convers_evaluator_score(cand_scores)
-            score = conv_eval_strength * score_conv_eval + confidence_strength * confidence
+            score = CONV_EVAL_STRENGTH * score_conv_eval + CONFIDENCE_STRENGTH * confidence
             logger.info(f'Skill {skill_name} has final score: {score}. Confidence: {confidence}. '
                         f'Toxicity: {toxicities[i]}. Cand scores: {cand_scores}')
             curr_single_scores.append(score)
@@ -407,7 +271,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
             cand_scores = scores[i]
             skill_name = skill_names[i]
             score_conv_eval = calculate_single_convers_evaluator_score(cand_scores)
-            score = conv_eval_strength * score_conv_eval + curr_score
+            score = CONV_EVAL_STRENGTH * score_conv_eval + curr_score
             logger.info(f'Skill {skill_name} has final score: {score}. '
                         f'Toxicity: {toxicities[i]}. Cand scores: {cand_scores}')
             curr_single_scores.append(score)
@@ -429,11 +293,42 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
         best_candidate, best_skill_name, dummy_question, dummy_question_human_attr,
         link_to_question, link_to_human_attrs, not_sure_factoid)
 
+    return best_candidate, best_id, curr_single_scores
+
+
+def select_response(candidates, scores, confidences, toxicities, has_blacklisted,
+                    has_inappropriate, dialog):
+    # TOXICITY & BLACKLISTS checks
+    n_toxic_candidates, scores, confidences = downscore_toxic_blacklisted_responses(
+        scores, confidences, toxicities, has_blacklisted, has_inappropriate)
+    if n_toxic_candidates == len(toxicities):
+        # the most dummy заглушка на случай, когда все абсолютно скиллы вернули токсичные ответы
+        return None, np.random.choice(MOST_DUMMY_RESPONSES), 1.0, {}, {}
+
+    # REPEAT checks
+    bot_utterances = [sent_tokenize(uttr["text"].lower()) for uttr in dialog["bot_utterances"]]
+    prev_large_utterances = [[sent] for utt in bot_utterances[:-15] for sent in utt if len(sent) >= 40]
+    bot_utterances = prev_large_utterances + bot_utterances[-15:]
+    # flatten 2d list to 1d list of all appeared sentences of bot replies
+    bot_utterances = sum(bot_utterances, [])
+    bot_utterances = [substitute_nonwords(utt) for utt in bot_utterances]
+
+    if TAG_BASED_SELECTION:
+        logger.info(f"Tag based selection")
+        best_candidate, best_id, curr_single_scores = tag_based_response_selection(
+            dialog, candidates, scores, confidences, bot_utterances)
+    else:
+        best_candidate, best_id, curr_single_scores = rule_score_based_selection(
+            dialog, candidates, scores, confidences, toxicities, bot_utterances)
+
+    logger.info(f"Best candidate: {best_candidate}")
     best_text = best_candidate["text"]
+    best_skill_name = best_candidate["skill_name"]
     best_confidence = best_candidate["confidence"]
     best_human_attributes = best_candidate.get("human_attributes", {})
     best_bot_attributes = best_candidate.get("bot_attributes", {})
 
+    greeting_spec = "this is an Alexa Prize Socialbot"
     if len(dialog["bot_utterances"]) == 0 and greeting_spec not in best_text:
         # add greeting to the first bot uttr, if it's not already included
         best_text = "Hi, " + greeting_spec + '! ' + best_text
@@ -451,8 +346,8 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
 
     if dialog["human"]["profile"].get("name", False):
         name = dialog["human"]["profile"].get("name", False)
-        if len(dialog["utterances"]) >= 2:
-            if re.search(r"\b" + name + r"\b", dialog["utterances"][-2]["text"]):
+        if len(dialog["bot_utterances"]) >= 1:
+            if re.search(r"\b" + name + r"\b", dialog["bot_utterances"][-1]["text"]):
                 pass
             else:
                 if random.random() <= CALL_BY_NAME_PROBABILITY:
