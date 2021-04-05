@@ -279,7 +279,7 @@ def get_name(annotated_phrase, mode='author', bookyear=False,
                         logger.debug('It is author')
                         requested_entities.append(entity)
         elif mode == 'book':
-            entity_types_to_find = ['Q571', "Q7725634", "Q1667921", "Q277759"]
+            entity_types_to_find = ['Q571', "Q7725634", "Q1667921", "Q277759", "Q8261", "Q47461344"]
             queries = []
             for entity_type in entity_types_to_find:
                 for entity in all_found_entities:
