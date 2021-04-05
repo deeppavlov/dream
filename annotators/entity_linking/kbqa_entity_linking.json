@@ -62,6 +62,10 @@
       {
         "url": "http://files.deeppavlov.ai/kbqa/wikidata/q_to_descr_en.pickle",
         "subdir": "{DOWNLOADS_PATH}/wikidata_eng"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/kbqa/wikidata/q_to_par_en.pickle",
+        "subdir": "{DOWNLOADS_PATH}/wikidata_eng"
       }
     ]
   }
