@@ -403,9 +403,9 @@ services:
       replicas: 1
       resources:
         limits:
-          memory: 2.5G
+          memory: 3.5G
         reservations:
-          memory: 2.5G
+          memory: 3.5G
 
   comet-conceptnet:
     build:
@@ -425,10 +425,10 @@ services:
       mode: replicated
       replicas: 1
       resources:
-        reservations:
-          memory: 2G
         limits:
-          memory: 2G
+          memory: 3.5G
+        reservations:
+          memory: 3.5G
 
   meta-script-skill:
     build:
