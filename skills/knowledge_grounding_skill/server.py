@@ -69,6 +69,16 @@ def get_entities(utt):
     return entities
 
 
+def get_cobotqa(utterances):
+    result_values = []
+    for i, uttr in enumerate(utterances):
+        annotation = uttr.get("annotations", {}).get("cobotqa", {})
+        value = annotation.get("text", "")
+        if value:
+            result_values.append([(len(utterances) - i - 1) * 0.01, value])
+    return result_values
+
+
 def get_annotations_from_dialog(utterances, annotator_name, key_name=None):
     """
     Extract list of strings with values of specific key <key_name>
@@ -146,6 +156,8 @@ def get_lets_chat_topic(lets_chat_about_flag, utt):
         for topic in _get_topics:
             if topic in COBOT_DA_FILE_TOPICS_MATCH:
                 lets_chat_topic = COBOT_DA_FILE_TOPICS_MATCH[topic]
+                if lets_chat_topic not in utt["text"]:
+                    lets_chat_topic = ""
     return lets_chat_topic
 
 
@@ -333,6 +345,19 @@ def respond():
                 annotations_depths.append({})
                 dial_ids.append(d_id)
 
+            cobotqa_facts = get_cobotqa(dialog["utterances"][-anntr_history_len * 2 - 1:])
+            if cobotqa_facts:
+                user_input = {
+                    'checked_sentence': cobotqa_facts[-1][1],
+                    'knowledge': cobotqa_facts[-1][1],
+                    'text': user_input_text,
+                    'history': user_input_history,
+                    'cobotqa_fact': True
+                }
+                input_batch.append(user_input)
+                annotations_depths.append({"cobotqa": cobotqa_facts[-1][0]})
+                dial_ids.append(d_id)
+
         except Exception as ex:
             sentry_sdk.capture_exception(ex)
             logger.exception(ex)
@@ -374,6 +399,7 @@ def respond():
                 curr_nounphrase_search = nounphrases[i].search(raw_responses[curr_i]) if nounphrases[i] else False
                 curr_entities_search = entities[i].search(raw_responses[curr_i]) if entities[i] else False
                 no_penalties = False
+                cobotqa_penalty = 0.0
 
                 topic = chosen_topics.get(i, "")
                 chosen_topic_fact_flag = input_batch[curr_i].get("chosen_topic_fact", "")
@@ -388,13 +414,17 @@ def respond():
                     add_intro = random.choice(
                         [
                             "Sounds like ", "Seems like ", "Makes sense. ",
-                            "Here's what I've heard: ", "Here's something else I've heard: ",
+                            # "Here's what I've heard: ", "Here's something else I've heard: ",
                             "It reminds me that", "This comes to my mind: ", ""
                         ]
                     )
                     no_penalties = True
                     confidence = HIGHEST_CONFIDENCE
                     attr["confidence_case"] += "news_api_fact "
+                if input_batch[curr_i].get("cobotqa_fact", ""):
+                    cobotqa_penalty = annotations_depths[curr_i].get("cobotqa", 0.0)
+                    confidence = DEFAULT_CONFIDENCE
+                    attr["confidence_case"] += "cobotqa_fact "
                 if (curr_nounphrase_search or curr_entities_search) and lets_chat_about_flags[i]:
                     confidence = HIGHEST_CONFIDENCE
                     attr["confidence_case"] += "nounphrase_entity_and_lets_chat_about "
@@ -420,8 +450,8 @@ def respond():
                     confidence = 0.0
                     attr["confidence_case"] += "greetings_farewells "
 
-                penalties = annotations_depths[curr_i].get("retrieved_fact", 0.0) + already_was_active + \
-                    short_long_response if not no_penalties else 0.
+                penalties = annotations_depths[curr_i].get("retrieved_fact", 0.0) + cobotqa_penalty + \
+                    already_was_active + short_long_response if not no_penalties else 0.
                 confidence -= penalties
                 curr_attributes.append(attr)
                 curr_confidences.append(max(0.0, confidence))
