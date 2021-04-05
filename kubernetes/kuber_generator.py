@@ -85,7 +85,8 @@ def generate_deployments():
 
         if 'command' in compose.get(service_name, []):
             command = compose.get(service_name, {}).get('command', '')
-            if command.startswith(('gunicorn', 'uvicorn', 'cd /src/dream_aiml/scripts', 'bash server_run.sh')):
+            if command.startswith(('gunicorn', 'uvicorn', 'cd /src/dream_aiml/scripts', 'bash server_run.sh', 'flask',
+                                   'python')):
                 values_dict.update({'COMMAND': command})
             elif command.startswith('sh -c') or command.startswith('bash -c'):
                 command = re.findall(r'(bash -c|sh -c) [\'\"](.+)[\'\"]$', command)[0][1]
