@@ -35,7 +35,7 @@ services:
       dockerfile: ./skills/CoBotQA/Dockerfile
     environment:
       - ASYNC_SIZE=20
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8081 -t 15
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8081 -t 15 --preload
     deploy:
       mode: replicated
       replicas: 8
@@ -48,7 +48,7 @@ services:
   cobot-topics:
     build:
       context: ./annotators/CoBotTopicClassification/
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8000 -t 15
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8000 -t 15 --preload
     deploy:
       mode: replicated
       replicas: 4
@@ -61,7 +61,7 @@ services:
   cobot-dialogact:
     build:
       context: ./annotators/CoBotDialogActClassification/
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8002 -t 15
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8002 -t 15 --preload
     deploy:
       mode: replicated
       replicas: 4
@@ -74,7 +74,7 @@ services:
   cobot-convers-evaluator-annotator:
     build:
       context: ./annotators/CoBotConversationEvaluator/
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8004 -t 15
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8004 -t 15 --preload
     deploy:
       mode: replicated
       replicas: 8
@@ -87,7 +87,7 @@ services:
   cobot-nounphrases:
     build:
       context: ./annotators/cobot_nounphrases/
-    command: bash -c "gunicorn --workers=1 server:app -b 0.0.0.0:8006 -t 60"
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8006 -t 60 --preload
     deploy:
       mode: replicated
       replicas: 4
@@ -126,7 +126,9 @@ services:
   sentseg:
     build:
       context: ./annotators/SentSeg/
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8011 -t 100
+    command: flask run -h 0.0.0.0 -p 8011
+    environment:
+      - FLASK_APP=server
     deploy:
       mode: replicated
       replicas: 4
@@ -140,7 +142,9 @@ services:
     build:
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8009 -t 15
+    command: flask run -h 0.0.0.0 -p 8009
+    environment:
+      - FLASK_APP=server
     deploy:
       mode: replicated
       replicas: 8
@@ -153,7 +157,9 @@ services:
   sentrewrite:
     build:
       context: ./annotators/SentRewrite/
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8017 -t 60
+    command: flask run -h 0.0.0.0 -p 8017
+    environment:
+      - FLASK_APP=server
     deploy:
       mode: replicated
       replicas: 4
@@ -167,7 +173,7 @@ services:
     build:
       context: .
       dockerfile: ./skills/IntentResponder/Dockerfile
-    command: gunicorn --workers=1 --name=responder --bind 0.0.0.0:8012 --timeout=100 server:app
+    command: gunicorn --workers=1 --name=responder --bind 0.0.0.0:8012 --timeout=100 server:app --preload
     deploy:
       mode: replicated
       replicas: 2
@@ -180,7 +186,9 @@ services:
   intent-catcher:
     build:
       context: ./annotators/IntentCatcher/
-    command: gunicorn --workers=1 --name=catcher --bind 0.0.0.0:8014 --timeout=100 server:app
+    command:  python -m flask run -h 0.0.0.0 -p 8014 --without-threads
+    environment:
+      - FLASK_APP=server
     deploy:
       mode: replicated
       replicas: 4
@@ -193,7 +201,7 @@ services:
   blacklisted-words:
     build:
       context: ./annotators/BlacklistedWordsDetector/
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8018
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8018 --preload
     deploy:
       mode: replicated
       replicas: 4
@@ -234,7 +242,9 @@ services:
       context: ./annotators/NER/
     environment:
       DEVICE: cuda
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8021 -t 100
+    command: flask run -h 0.0.0.0 -p 8021
+    environment:
+      - FLASK_APP=server
     tty: true
     deploy:
       mode: replicated
@@ -248,7 +258,7 @@ services:
   eliza:
     build:
       context: ./skills/eliza/
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8047
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8047 --preload
     deploy:
       mode: replicated
       replicas: 2
@@ -261,7 +271,9 @@ services:
   convert-reddit:
     build:
       context: ./skills/convert_reddit/
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8029 -t 60
+    command: flask run -h 0.0.0.0 -p 8029
+    environment:
+      - FLASK_APP=server
     deploy:
       mode: replicated
       replicas: 4
@@ -275,7 +287,7 @@ services:
     build:
       context: .
       dockerfile: ./skills/personal_info_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8030
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8030 --preload
     deploy:
       mode: replicated
       replicas: 4
@@ -289,7 +301,7 @@ services:
     build:
       context: .
       dockerfile: ./annotators/asr/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8031
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8031 --preload
     deploy:
       mode: replicated
       replicas: 2
@@ -302,7 +314,7 @@ services:
   misheard-asr:
     build:
       context: ./skills/misheard_asr/
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8033
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8033 --preload
     deploy:
       mode: replicated
       replicas: 2
@@ -319,7 +331,7 @@ services:
       args:
         AUTHOR_NAMES: http://files.deeppavlov.ai/alexaprize_data/book_author_names.txt
         QUERY_DICT: http://files.deeppavlov.ai/alexaprize_data/book_query_dict.pkl
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8032
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8032 --preload
     deploy:
       mode: replicated
       replicas: 2
@@ -333,7 +345,7 @@ services:
     build:
       context: .
       dockerfile: ./skills/weather_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8037
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8037 --preload
     deploy:
       mode: replicated
       replicas: 2
@@ -347,7 +359,7 @@ services:
     build:
       context: .
       dockerfile: ./skills/emotion_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8049
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8049 --preload
     deploy:
       mode: replicated
       replicas: 4
@@ -360,7 +372,9 @@ services:
   dummy-skill-dialog:
     build:
       context: ./skills/dummy_skill_dialog/
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8052
+    command: flask run -h 0.0.0.0 -p 8052 --without-threads
+    environment:
+      - FLASK_APP=server
     deploy:
       mode: replicated
       replicas: 1
@@ -379,10 +393,11 @@ services:
         PREPROCESS_DATA: "http://lnsigo.mipt.ru/export/alexaprize_data/comet/categories_oEffect%23oReact%23oWant%23xAttr%23xEffect%23xIntent%23xNeed%23xReact%23xWant-maxe1_17-maxe2_35-maxr_1.pickle"
         TEST_SCRIPT: test_atomic.py
         DECODING_ALGO: beam-3
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8053
+    command: flask run -h 0.0.0.0 -p 8053
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - DEVICE=gpu_0
+      - FLASK_APP=server
     deploy:
       mode: replicated
       replicas: 1
@@ -401,10 +416,11 @@ services:
         PREPROCESS_DATA: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/rel_language-trainsize_100-devversion_12-maxe1_10-maxe2_15-maxr_5.pickle
         DECODING_ALGO: beam-3
         TEST_SCRIPT: test_conceptnet.py
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8065
+    command: flask run -h 0.0.0.0 -p 8065
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - DEVICE=gpu_0
+      - FLASK_APP=server
     deploy:
       mode: replicated
       replicas: 1
@@ -418,7 +434,7 @@ services:
     build:
       context: .
       dockerfile: skills/meta_script_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8054
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8054 --preload
     deploy:
       mode: replicated
       replicas: 4
@@ -432,7 +448,7 @@ services:
     build:
       context: .
       dockerfile: ./skills/short_story_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8057
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8057 --preload
     deploy:
       mode: replicated
       replicas: 1
@@ -446,7 +462,9 @@ services:
     build:
       context: .
       dockerfile: ./skills/coronavirus_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8061
+    command: flask run -h 0.0.0.0 -p 8061
+    environment:
+      - FLASK_APP=server
     deploy:
       mode: replicated
       replicas: 2
@@ -460,7 +478,7 @@ services:
     build:
       context: .
       dockerfile: ./skills/small_talk_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8062
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8062 --preload
     deploy:
       mode: replicated
       replicas: 4
@@ -476,7 +494,7 @@ services:
         SERVICE_PORT: 8068
       context: .
       dockerfile: ./skills/game_cooperative_skill/Dockerfile
-    command: bash server_run.sh "gunicorn --workers=1 server:app -b 0.0.0.0:8068 --reload"
+    command: bash server_run.sh "gunicorn --workers=1 server:app -b 0.0.0.0:8068 --reload --preload"
     deploy:
       mode: replicated
       replicas: 4
@@ -505,7 +523,7 @@ services:
       dockerfile: ./skills/news_api_skill/Dockerfile
     environment:
       - ASYNC_SIZE=3
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8066 -t 15
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8066 -t 15 --preload
     deploy:
       mode: replicated
       replicas: 4
@@ -533,7 +551,7 @@ services:
     build:
       context: .
       dockerfile: ./skills/factoid_qa/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8071
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8071 --preload
     deploy:
       mode: replicated
       replicas: 4
@@ -572,8 +590,10 @@ services:
         COMMIT: ff5b156d16a949c3ec99da7fb60ae907dec37a41
       context: ./
       dockerfile: annotators/wiki_parser/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8077
     environment:
       - CUDA_VISIBLE_DEVICES=''
+      - FLASK_APP=server
     deploy:
       mode: replicated
       replicas: 10
@@ -591,8 +611,10 @@ services:
         COMMIT: 4b3e60c407644b750c9dc292ac6bf206081fb9d0
       context: services/text_qa
       dockerfile: Dockerfile
+    command: flask run -h 0.0.0.0 -p 8078
     environment:
       - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
     deploy:
       mode: replicated
       replicas: 1
@@ -611,8 +633,10 @@ services:
         COMMIT: 5b99ac3392e8e178e2bb4f9b218d4ddb2ec2e242
       context: ./
       dockerfile: annotators/kbqa/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8072
     environment:
       - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
     deploy:
       mode: replicated
       replicas: 1
@@ -644,7 +668,7 @@ services:
   spelling-preprocessing:
     build:
       context: ./annotators/spelling_preprocessing/
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8074 --timeout=100
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8074 --timeout=100 --preload
     deploy:
       mode: replicated
       replicas: 4
@@ -673,9 +697,10 @@ services:
       args:
         MODEL_CKPT: 3_sent_62_epochs
       context: ./services/knowledge_grounding/
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8083
+    command: flask run -h 0.0.0.0 -p 8083
     environment:
       - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
     deploy:
       mode: replicated
       replicas: 1
@@ -692,7 +717,7 @@ services:
         SERVICE_NAME: dff_friendship_skill # has to be the same with skill dir name
       context: .
       dockerfile: ./skills/dff_friendship_skill/Dockerfile
-    command:  gunicorn --workers=1 server:app -b 0.0.0.0:8086 --reload
+    command:  gunicorn --workers=1 server:app -b 0.0.0.0:8086 --reload --preload
     deploy:
       mode: replicated
       replicas: 4
@@ -708,9 +733,10 @@ services:
       args:
         SERVICE_PORT: 8088
         PRETRAINED_MODEL_NAME_OR_PATH: "bert-base-uncased"
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8088 --timeout=500 # was 300
+    command: flask run -h 0.0.0.0 -p 8088
     environment:
       - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
     deploy:
       mode: replicated
       replicas: 1
@@ -727,7 +753,7 @@ services:
       args:
         WORK_DIR: annotators/entity_storer
         SERVICE_PORT: 8089
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8089 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8089 --reload --preload
     deploy:
       mode: replicated
       replicas: 4
@@ -741,7 +767,7 @@ services:
     build:
       context: .
       dockerfile: ./skills/knowledge_grounding_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8085
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8085 --preload
     environment:
       - CUDA_VISIBLE_DEVICES=''
     deploy:
@@ -793,6 +819,9 @@ services:
       args:
         PORT: 8091
       context: skills/wikidata_dial_skill
+    command: flask run -h 0.0.0.0 -p 8091
+    environment:
+      - FLASK_APP=server
     deploy:
       mode: replicated
       replicas: 1
@@ -809,8 +838,10 @@ services:
         PORT: 8092
         COMMIT: 5dac85a06fde0e2983c7569ae058e3bf2d45ce2c
       context: services/wikidata_dial_service
+    command: flask run -h 0.0.0.0 -p 8092
     environment:
       - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
     deploy:
       mode: replicated
       replicas: 1
@@ -827,7 +858,7 @@ services:
         SERVICE_NAME: dff_animals_skill # has to be the same with skill dir name
       context: .
       dockerfile: ./skills/dff_animals_skill/Dockerfile
-    command: gunicorn --workers=1 --timeout 100 server:app -b 0.0.0.0:8094 --reload
+    command: gunicorn --workers=1 --timeout 100 server:app -b 0.0.0.0:8094 --reload --preload
     deploy:
       mode: replicated
       replicas: 2
@@ -844,7 +875,7 @@ services:
           SERVICE_NAME: dff_travel_skill # has to be the same with skill dir name
         context: .
         dockerfile: skills/dff_travel_skill/Dockerfile
-      command:  gunicorn --workers=1 server:app -b 0.0.0.0:8096 --reload
+      command:  gunicorn --workers=1 server:app -b 0.0.0.0:8096 --reload --preload
       deploy:
         mode: replicated
         replicas: 2
@@ -861,7 +892,7 @@ services:
         SERVICE_NAME: dff_sport_skill
       context: .
       dockerfile: skills/dff_sport_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8098 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8098 --reload --preload
     deploy:
       mode: replicated
       replicas: 2
@@ -878,7 +909,7 @@ services:
         SERVICE_NAME: dff_food_skill
       context: .
       dockerfile: ./skills/dff_food_skill/Dockerfile
-    command: gunicorn --workers=1 --timeout 500 --graceful-timeout 500 server:app -b 0.0.0.0:8097 --reload
+    command: gunicorn --workers=1 --timeout 500 --graceful-timeout 500 server:app -b 0.0.0.0:8097 --reload --preload
     deploy:
       mode: replicated
       replicas: 2
@@ -895,7 +926,7 @@ services:
         SERVICE_NAME: dff_music_skill # has to be the same with skill dir name
       context: .
       dockerfile: ./skills/dff_music_skill/Dockerfile
-    command:  gunicorn --workers=1 server:app -b 0.0.0.0:8099 --reload
+    command:  gunicorn --workers=1 server:app -b 0.0.0.0:8099 --reload --preload
     deploy:
       mode: replicated
       replicas: 2
@@ -907,11 +938,11 @@ services:
 
   midas-classification:
     build:
-      context: .
-      dockerfile: ./annotators/midas_classification/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8090
+      context: ./annotators/midas_classification
+    command: flask run -h 0.0.0.0 -p 8090
     environment:
       - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
     deploy:
       mode: replicated
       replicas: 1
@@ -930,8 +961,10 @@ services:
         COMMIT: 4b3e60c407644b750c9dc292ac6bf206081fb9d0
       context: ./
       dockerfile: annotators/fact_retrieval/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8100
     environment:
       - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
     deploy:
       mode: replicated
       replicas: 2
@@ -940,10 +973,11 @@ services:
           memory: 4G
         reservations:
           memory: 4G
+
   cobot-entities:
     build:
       context: ./annotators/CoBotNER/
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8102 -t 15
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8102 -t 15 --preload
     deploy:
       mode: replicated
       replicas: 4

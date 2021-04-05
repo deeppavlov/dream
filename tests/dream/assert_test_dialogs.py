@@ -28,6 +28,8 @@ SPECIAL_SKILLS = {
         "dummy_skill",
         "news_api_skill",
         "book_skill",
+        "movie_skill",
+        "dff_music_skill",
     ],
 }
 
