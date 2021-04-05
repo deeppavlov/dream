@@ -40,7 +40,7 @@ KIND_OF_SPORTS_TEMPLATE = re.compile(
     r"|long jump|martial arts|motorbike sports|mountaineering|orienteering"
     r"|parachuting|pole-vaulting|polo|riding|rowing|rugby|sailing|skis|snooker"
     r"|track-and-field|triathlon|tug of war|volleyball|water polo|waterski"
-    r"|weight lifting|working out|wrestling|sport|run|swim|fitness|lacrosse|riding horses|ballet|marching|soccer)",
+    r"|weight lifting|working out|wrestling|run|swim|fitness|lacrosse|riding horses|ballet|marching|soccer)",
     re.IGNORECASE,
 )
 

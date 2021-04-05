@@ -13,6 +13,7 @@ import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_exten
 import common.dialogflow_framework.utils.state as state_utils
 from common.universal_templates import if_lets_chat_about_topic
 from common.universal_templates import COMPILE_WHAT_TO_TALK_ABOUT, COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
+from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
 import common.greeting as common_greeting
 import common.link as common_link
 from common.sport import (
@@ -247,6 +248,7 @@ def lets_chat_about_sport_response(vars):
     ]
     try:
         state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         return random.choice(responses)
     except Exception as exc:
         logger.exception(exc)
@@ -286,7 +288,8 @@ def user_ask_about_athletes_request(ngrams, vars):
 def user_ask_about_athletes_response(vars):
     # USR_ASK_ABOUT_ATHLETE
     try:
-        state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+        state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
+        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
         return f"I know all the athletes on this planet. Which athlete do you like the most?"
     except Exception as exc:
         logger.exception(exc)
@@ -314,6 +317,7 @@ def user_ask_who_do_u_support_response(vars):
     responses = ["sports teams", "athletes"]
     try:
         state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
+        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
         return f"I was born quite recently. But I know a lot of {random.choice(responses)}. Tell me who do you support?"
     except Exception as exc:
         logger.exception(exc)
@@ -351,8 +355,9 @@ def user_like_or_ask_about_player_or_org_response(vars):
     # USR_LIKE_ATHLETE
     try:
         state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
-        have_news, news_string = get_news_for_person_or_org(vars)
-        if have_news:
+        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)  # change in MUST_CONTINUE with
+        have_news, news_string = get_news_for_person_or_org(vars)                # check person for sport area &
+        if have_news:                                                            # connect to Start
             return news_string
         else:
             return error_response(vars)
@@ -392,6 +397,7 @@ def user_like_sport_response(vars):
         number = random.randint(1, 10)
         kind_of_sport = re.search(KIND_OF_SPORTS_TEMPLATE,
                                   state_utils.get_last_human_utterance(vars)["text"]).group()
+        state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)  # change question and add cycle here
         if number > 3:
             state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
             return f"why do you like {kind_of_sport}?"
@@ -440,6 +446,7 @@ def user_ask_about_comp_response(vars):
     responses = ["FIFA World Cup", "Olympic Games", "Super Bowl", "Grand National"]
     try:
         state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         return (
             f"Well. if I had a physical embodiment, I would like to go to the {random.choice(responses)}."
             f"Do you have a favorite competition?"
@@ -481,6 +488,7 @@ def user_like_comp_response(vars):
         kind_of_comp = re.search(
             KIND_OF_COMPETITION_TEMPLATE, state_utils.get_last_human_utterance(vars)["text"]
         ).group()
+        state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)  # change question and add cycle here
         if number > 3:
             state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
             return f"why do you like {kind_of_comp}?"
@@ -542,15 +550,15 @@ def error_response(vars):
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_START,
     {
-        State.SYS_LETS_TALK_SPORT: lets_talk_about_sport_request,
         State.SYS_WHAT_SPORT: user_ask_about_sport_request,
-        State.SYS_LETS_TALK_ATHLETE: lets_talk_about_athlete_request,
         State.SYS_WHO_FAVORITE_ATHLETE: user_ask_about_athletes_request,
         State.SYS_WHO_SUPPORT: user_ask_who_do_u_support_request,
-        State.SYS_LETS_TALK_ABOUT_COMP: user_lets_talk_about_comp_request,
         State.SYS_ASK_ABOUT_COMP: user_ask_about_comp_request,
         State.SYS_TELL_SPORT: user_like_sport_request,
         State.SYS_TELL_COMP: user_like_comp_request,
+        State.SYS_LETS_TALK_ABOUT_COMP: user_lets_talk_about_comp_request,
+        State.SYS_LETS_TALK_ATHLETE: lets_talk_about_athlete_request,
+        State.SYS_LETS_TALK_SPORT: lets_talk_about_sport_request,
         State.SYS_LINK_TO_LIKE_SPORT: link_to_like_sport_request,
         State.SYS_LINK_TO_LIKE_COMP: link_to_like_comp_request,
         State.SYS_LINK_TO_LIKE_ATHLETE: link_to_like_athlete_request
