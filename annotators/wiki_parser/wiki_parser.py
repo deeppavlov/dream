@@ -51,6 +51,8 @@ topic_skill_types = set(["Q36180",  # writer
                          "Q6625963",  # novelist
                          "Q28389",  # screenwriter
                          "Q571",  # book
+                         "Q8261",  # novel
+                         "Q47461344",  # written work
                          "Q7725634",  # literary work
                          "Q1667921",  # novel series
                          "Q33999",  # actor
