@@ -32,8 +32,7 @@ if COBOT_TOPICS_SERVICE_URL is None:
 headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COBOT_API_KEY}'}
 
 
-@app.route("/topics", methods=['POST'])
-def respond():
+def get_result(request):
     st_time = time.time()
     user_list_sentences = request.json['sentences']
 
@@ -79,7 +78,19 @@ def respond():
 
     total_time = time.time() - st_time
     logger.info(f'cobot_topics exec time: {total_time:.3f}s')
-    return jsonify(topics)
+    return topics
+
+
+@app.route("/topics", methods=['POST'])
+def respond():
+    result = get_result(request)
+    return jsonify(result)
+
+
+@app.route("/topics_batch", methods=['POST'])
+def respond_batch():
+    result = get_result(request)
+    return jsonify([{"batch": result}])
 
 
 if __name__ == '__main__':

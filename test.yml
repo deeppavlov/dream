@@ -88,6 +88,8 @@ services:
     env_file: [ .env.dev ]
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
   eliza:
     env_file: [ .env.dev ]
   convert-reddit:

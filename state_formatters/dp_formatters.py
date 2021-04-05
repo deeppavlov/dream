@@ -251,6 +251,35 @@ def hypotheses_list_last_uttr(dialog: Dict) -> List[Dict]:
     return [{"sentences": hypots, "last_human_utterances": last_human_utterances}]
 
 
+def hypotheses_segmented_list(dialog: Dict) -> List[Dict]:
+    hypotheses = dialog["utterances"][-1]["hypotheses"]
+    hypots = [[h["text"]] for h in hypotheses]
+    return [{'sentences': hypots}]
+
+
+def ner_hypotheses_segmented_list(dialog: Dict):
+    hypotheses = dialog["utterances"][-1]["hypotheses"]
+    hypots = [[h["text"]] for h in hypotheses]
+    return [{'last_utterances': hypots}]
+
+
+def hypothesis_histories_list(dialog: Dict):
+    hypotheses = dialog["utterances"][-1]["hypotheses"]
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="segments")
+    utterances_histories_batch = []
+    for hyp in hypotheses:
+        utterances_histories = []
+        for utt in dialog['utterances']:
+            utterances_histories.append(utt['text'])
+        # hyp["text"] is a string. We need to pass here list of strings.
+        utterances_histories.append([hyp["text"]])
+        utterances_histories_batch.append(utterances_histories)
+
+    return [{'utterances_histories': utterances_histories_batch}]
+
+
 def last_utt_and_history_dialog(dialog: Dict) -> List:
     # Used by: topicalchat retrieval skills
     dialog = utils.get_last_n_turns(dialog)
@@ -304,6 +333,29 @@ def simple_formatter_service(payload: List):
     sent_rewrite_formatter, sent_segm_formatter, base_skill_selector_formatter
     """
     logging.info(f"answer {payload}")
+    return payload
+
+
+def simple_batch_formatter_service(payload: List):
+    for i in range(len(payload["batch"])):
+        if len(payload["batch"][i]) == 3:
+            payload["batch"][i] = {"text": payload["batch"][i][0],
+                                   "confidence": payload["batch"][i][1],
+                                   "is_blacklisted": payload["batch"][i][2]}
+        elif len(payload["batch"][i]) == 2:
+            payload["batch"][i] = {"text": payload["batch"][i][0],
+                                   "confidence": payload["batch"][i][1]}
+        elif len(payload["batch"][i]) == 1:
+            payload["batch"][i] = {"text": payload["batch"][i][0]}
+        elif len(payload["batch"][i]) == 0:
+            payload["batch"][i] = {"text": []}
+    return payload
+
+
+def cobot_dialogact_batch_formatter_service(payload: List):
+    for i in range(len(payload["batch"])):
+        payload["batch"][i] = {"intents": payload["batch"][i][0], "topics": payload["batch"][i][1]}
+
     return payload
 
 

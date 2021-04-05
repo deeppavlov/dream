@@ -139,15 +139,19 @@ def hello_request(ngrams, vars):
     # SYS_HELLO
     flag = True
     flag = flag and len(vars["agent"]["dialog"]["human_utterances"]) == 1
-    flag = flag and not condition_utils.is_lets_chat_about_topic(vars)
+    flag = flag
     return flag
 
 
 def hello_response(vars):
     # USR_HELLO_AND_CONTNIUE
     try:
-        state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
-        state_utils.set_can_continue(vars, MUST_CONTINUE)
+        if condition_utils.is_lets_chat_about_topic(vars):
+            state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
+            state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
+        else:
+            state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+            state_utils.set_can_continue(vars, MUST_CONTINUE)
         which_start = random.choice(["how_are_you",
                                      "what_is_your_name",
                                      "what_to_talk_about"])

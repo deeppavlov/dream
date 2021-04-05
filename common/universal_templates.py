@@ -253,3 +253,23 @@ def switch_topic_uttr(uttr):
     if if_switch_topic(uttr["text"].lower()) or topic_switch_detected:
         return True
     return False
+
+
+QUESTION_BEGINNINGS = QUESTION_LIKE + [
+    r"what'?s?", "when", "where", "which", r"who'?s?", "whom", "whose", r"how'?s?", "why", "whether",
+    "do (i|we|you)", "does (it|he|she)", "have (i|we|you)", "has (it|he|she)",
+    "can (i|it|we|you)", "could (i|it|we|you)", "shall (i|we|you)", "should (i|it|we|you)",
+    "will (i|it|we|you)", "would (i|it|we|you)", "might (i|it|we|you)", "must (i|it|we|you)",
+    "tell me"
+]
+
+QUESTION_BEGINNINGS_PATTERN = re.compile(r"^" + join_words_in_or_pattern(QUESTION_BEGINNINGS), re.IGNORECASE)
+
+
+def is_any_question_sentence_in_utterance(annotated_uttr):
+    is_question_symbol = "?" in annotated_uttr["text"]
+    sentences = re.split(r'[\.\?!]', annotated_uttr["text"])
+    is_question_any_sent = any([QUESTION_BEGINNINGS_PATTERN.search(sent.strip()) for sent in sentences])
+    if is_question_any_sent or is_question_symbol:
+        return True
+    return False

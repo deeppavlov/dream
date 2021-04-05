@@ -80,8 +80,7 @@ symbols_for_nounphrases = re.compile(r"[^0-9a-zA-Z \-]+")
 spaces = re.compile(r"\s\s+")
 
 
-@app.route("/respond", methods=['POST'])
-def respond():
+def get_result(request):
     st_time = time.time()
     sentences = request.json['sentences']
     result = []
@@ -98,7 +97,19 @@ def respond():
     logger.debug(f"Output: {result}")
     total_time = time.time() - st_time
     logger.info(f'nounphrase annotator exec time: {total_time:.3f}s')
+    return result
+
+
+@app.route("/respond", methods=['POST'])
+def nounphrases_respond():
+    result = get_result(request)
     return jsonify(result)
+
+
+@app.route("/respond_batch", methods=['POST'])
+def nounphrases_respond_batch():
+    result = get_result(request)
+    return jsonify([{"batch": result}])
 
 
 if __name__ == '__main__':
