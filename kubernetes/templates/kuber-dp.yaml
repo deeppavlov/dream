@@ -41,6 +41,10 @@ spec:
         env:
         - name: CUDA_VISIBLE_DEVICES
           value: {{ CUDA_VISIBLE_DEVICES }}
+        {% for env in ENVS %}
+        - name: {{env.name}}
+          value: {{ env.value }}
+        {% endfor %}
         {% if WAIT_HOSTS %}
         - name: WAIT_HOSTS
           value: "{{ WAIT_HOSTS }}"
