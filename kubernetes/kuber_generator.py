@@ -108,7 +108,7 @@ def generate_deployments():
         envs = [
             {"name": env[0], "value": env[1]}
             for env in envs
-            if env[0] not in ["DEVICE", "CUDA_VISIBLE_DEVICES", "WAIT_HOSTS", "WAIT_HOSTS_TIMEOUT"]
+            if env[0] not in ["CUDA_VISIBLE_DEVICES", "WAIT_HOSTS", "WAIT_HOSTS_TIMEOUT"]
         ]
         values_dict["ENVS"] = envs
         if "~/.deeppavlov:/root/.deeppavlov" in service_params.get("volumes", []):
