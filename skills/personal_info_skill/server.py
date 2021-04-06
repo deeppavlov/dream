@@ -10,6 +10,7 @@ import sentry_sdk
 
 from common.constants import CAN_NOT_CONTINUE, MUST_CONTINUE
 from common.weather import ASK_WEATHER_SKILL_FOR_HOMELAND_PHRASE
+from common.utils import get_entities
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -88,10 +89,11 @@ def process_info(dialog, which_info="name"):
     response = ""
     confidence = 0.0
 
-    curr_user_uttr = dialog["utterances"][-1]["text"].lower()
-    curr_user_annot = dialog["utterances"][-1]["annotations"]
+    curr_uttr_dict = dialog["human_utterances"][-1]
+    curr_user_uttr = curr_uttr_dict["text"].lower()
+    curr_user_annot = curr_uttr_dict["annotations"]
     try:
-        prev_bot_uttr = dialog["utterances"][-2]["text"].lower()
+        prev_bot_uttr = dialog["bot_utterances"][-1]["text"].lower()
     except IndexError:
         prev_bot_uttr = ""
 
@@ -160,7 +162,7 @@ def process_info(dialog, which_info="name"):
                 confidence = 0.0
                 attr["can_continue"] = CAN_NOT_CONTINUE
             elif which_info == "name" and len(curr_user_uttr.split()) == 1 and \
-                    len(curr_user_annot.get("cobot_nounphrases", [])) > 0:
+                    len(get_entities(curr_uttr_dict, only_named=False, with_labels=False)) > 0:
                 response = "I've never heard about this name."
                 confidence = 1.0
                 attr["can_continue"] = MUST_CONTINUE
@@ -233,10 +235,8 @@ def tell_my_info(dialog, which_info="name"):
 
 def check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr):
     found_info = None
-    for ent in curr_user_annot.get("ner", []):
-        if not ent:
-            continue
-        ent = ent[0]
+    for ent in get_entities({"text": curr_user_uttr, "annotations": curr_user_annot},
+                            only_named=True, with_labels=True):
         if (which_info == "name" and ent["type"] in ["PER", "LOC"]) or (
                 (which_info == "homeland" or which_info == "location") and ent["type"] in ["PER", "LOC"]):
             if ent["text"].lower() == "alexa":

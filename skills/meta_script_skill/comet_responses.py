@@ -10,7 +10,7 @@ from random import choice, shuffle
 
 from common.constants import CAN_NOT_CONTINUE
 from common.universal_templates import join_words_in_or_pattern
-from common.utils import is_opinion_request, get_skill_outputs_from_dialog, get_topics
+from common.utils import is_opinion_request, get_skill_outputs_from_dialog, get_topics, get_entities
 from common.greeting import dont_tell_you_answer
 from utils import get_used_attributes_by_name, get_comet_atomic, TOP_100_FREQUENT_WORDS, get_all_not_used_templates, \
     get_comet_conceptnet, get_nltk_sentiment, get_not_used_template
@@ -213,16 +213,13 @@ def remove_intersections_of_entities(entity, subjects):
 
 
 def filter_nouns_for_conceptnet(annotated_phrase):
-    subjects = annotated_phrase["annotations"].get("cobot_nounphrases", [])
+    subjects = get_entities(annotated_phrase, only_named=False, with_labels=False)
     subjects = [re.sub(possessive_pronouns, "", noun) for noun in subjects]
     subjects = [re.sub(r"(\bthe\b|\ba\b|\ban\b)", "", noun) for noun in subjects]
     subjects = [noun for noun in subjects if noun not in BANNED_NOUNS_FOR_OPINION_EXPRESSION]
     subjects = [noun for noun in subjects if not re.search(BANNED_WORDS_IN_NOUNS_FOR_OPINION_EXPRESSION_COMPILED,
                                                            annotated_phrase["text"])]
-    for ent in annotated_phrase["annotations"]["ner"]:
-        if not ent:
-            continue
-        ent = ent[0]
+    for ent in get_entities(annotated_phrase, only_named=True, with_labels=True):
         subjects = remove_intersections_of_entities(ent["text"], subjects)
 
     bad_subjects = []

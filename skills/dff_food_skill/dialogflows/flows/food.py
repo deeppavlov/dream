@@ -17,7 +17,7 @@ import common.dialogflow_framework.utils.condition as condition_utils
 import dialogflows.scopes as scopes
 # from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE, MUST_CONTINUE
-from common.utils import is_yes, get_topics
+from common.utils import is_yes, get_topics, get_entities
 from common.food import TRIGGER_PHRASES
 
 
@@ -170,8 +170,7 @@ def what_cuisine_response(vars):
 
 
 def cuisine_request(ngrams, vars):
-    # annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-    # nounphr = annotations.get("cobot_nounphrases", [])
+    # nounphr = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
     # flag = bool(nounphr)
     utt = spacy_nlp(state_utils.get_last_human_utterance(vars)["text"].lower())
     flag = any([w.pos_ == 'ADJ' for w in utt])
@@ -229,7 +228,7 @@ def fav_food_request(ngrams, vars):
     flag = False
     user_fav_food = []
     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-    nounphr = annotations.get("cobot_nounphrases", [])
+    nounphr = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
     cobot_topic = "Food_Drink" in get_topics(state_utils.get_last_human_utterance(vars), which="cobot_topics")
     conceptnet = any([
         "food" in annotations.get("conceptnet", {}).get("SymbolOf", []),
@@ -246,7 +245,7 @@ def fav_food_request(ngrams, vars):
 
 def food_fact_response(vars):
     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-    # nounphr = annotations.get("cobot_nounphrases", [])
+    # nounphr = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
     # fact = ""
     # if nounphr:
     #     fact = send_cobotqa(f"fact about {nounphr[0]}")

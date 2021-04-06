@@ -13,6 +13,8 @@ import json
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 
+from common.utils import get_entities
+
 QUERY_SERVICE_URL = getenv('COBOT_QUERY_SERVICE_URL')
 ENTITY_SERVICE_URL = getenv('COBOT_ENTITY_SERVICE_URL')
 QA_SERVICE_URL = getenv('COBOT_QA_SERVICE_URL')
@@ -34,10 +36,10 @@ def get_name(annotated_phrase, mode='author', return_plain=False):
     headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': API_KEY}
     named_entities = [annotated_phrase['text']]
     if 'annotations' in annotated_phrase:
-        for tmp in annotated_phrase['annotations']['ner']:
-            if len(tmp) > 0 and 'text' in tmp[0] and tmp[0]['text'] not in named_entities:
-                named_entities.append(tmp[0]['text'])
-        for nounphrase in annotated_phrase['annotations'].get("cobot_nounphrases", []):
+        for tmp in get_entities(annotated_phrase, only_named=True, with_labels=False):
+            if tmp not in named_entities:
+                named_entities.append(tmp)
+        for nounphrase in get_entities(annotated_phrase, only_named=False, with_labels=False):
             if nounphrase not in named_entities:
                 named_entities.append(nounphrase)
     entityname = None

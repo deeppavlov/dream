@@ -8,6 +8,7 @@ from city_slot import OWMCitySlot
 from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE
 from common.link import link_to, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED
 from common.weather import is_weather_for_homeland_requested, is_weather_without_city_requested
+from common.utils import get_entities
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -92,14 +93,10 @@ class DialogDataManager():
         city = city_slot_obj(utterance_dict['text'])
         if not city:
             # if not extracted lets try to grab from NER?
-            annotations = utterance_dict["annotations"]
             city = None
             # logger.info("entities in lastest annotation:")
             # logger.info(annotations["ner"])
-            for ent in annotations["ner"]:
-                if not ent:
-                    continue
-                ent = ent[0]
+            for ent in get_entities(utterance_dict, only_named=True, with_labels=True):
                 if ent['type'] == "LOC":
                     city = ent['text']
                     # TODO normalize city...?

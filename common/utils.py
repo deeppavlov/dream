@@ -653,6 +653,34 @@ def get_intents(annotated_utterance, probs=False, default_probs={}, default_labe
         return answer_labels
 
 
+COBOT_ENTITIES_SKIP_LABELS = ["anaphor"]
+
+
+def get_entities(annotated_utterance, only_named=False, with_labels=False):
+    entities = None
+    if not only_named:
+        if "cobot_entities" in annotated_utterance["annotations"]:
+            labelled_entities = annotated_utterance["annotations"]["cobot_entities"].get("labelled_entities", [])
+            # skip some labels
+            entities = [ent for ent in labelled_entities if ent["label"] not in COBOT_ENTITIES_SKIP_LABELS]
+            if not with_labels:
+                entities = [ent["text"] for ent in entities]
+        else:
+            entities = annotated_utterance["annotations"].get("cobot_nounphrases", [])
+            if with_labels:
+                # actually there are no labels for cobot nounphrases
+                # so, let's make it as for cobot_entities format
+                entities = [{"text": ent, "label": "misc"} for ent in entities]
+    else:
+        # `ner` contains list of lists of dicts. the length of the list is n-sentences
+        # each entity is {"confidence": 1, "end_pos": 1, "start_pos": 0, "text": "unicorns", "type": "ORG"}
+        entities = annotated_utterance["annotations"].get("ner", [])
+        entities = sum(entities, [])  # flatten list, now it's a list of dicts-entities
+        if not with_labels:
+            entities = [ent["text"] for ent in entities]
+    return entities if entities is not None else []
+
+
 def get_raw_entity_names_from_annotations(annotations):
     """
 

@@ -22,7 +22,7 @@ from common.news import OFFER_BREAKING_NEWS, OFFERED_BREAKING_NEWS_STATUS, \
     OFFERED_NEWS_DETAILS_STATUS, OPINION_REQUEST_STATUS, WHAT_TYPE_OF_NEWS, OFFER_TOPIC_SPECIFIC_NEWS, \
     OFFER_TOPIC_SPECIFIC_NEWS_STATUS, OFFERED_NEWS_TOPIC_CATEGORIES_STATUS
 from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, COMPILE_SWITCH_TOPIC, if_lets_chat_about_topic
-from common.utils import get_skill_outputs_from_dialog, is_yes, is_no, get_topics
+from common.utils import get_skill_outputs_from_dialog, is_yes, is_no, get_topics, get_entities
 from newsapi_service import CachedRequestsAPI
 
 
@@ -73,16 +73,12 @@ def extract_topics(curr_uttr):
     Returns:
         list of mentioned entities/nounphrases
     """
-    entities = []
-    for ent in curr_uttr["annotations"].get("ner", []):
-        if not ent:
-            continue
-        ent = ent[0]
-        if not (ent["text"].lower() == "alexa" and curr_uttr["text"].lower()[:5] == "alexa") and \
-                "news" not in ent["text"].lower():
-            entities.append(ent["text"].lower())
+    entities = get_entities(curr_uttr, only_named=True, with_labels=False)
+    entities = [ent.lower() for ent in entities]
+    entities = [ent for ent in entities
+                if not (ent == "alexa" and curr_uttr["text"].lower()[:5] == "alexa") and "news" not in ent]
     if len(entities) == 0:
-        for ent in curr_uttr["annotations"].get("cobot_nounphrases", []):
+        for ent in get_entities(curr_uttr, only_named=False, with_labels=False):
             if ent.lower() not in BANNED_UNIGRAMS and "news" not in ent.lower():
                 if ent in entities:
                     pass

@@ -9,7 +9,7 @@ from os import getenv
 import sentry_sdk
 
 from common.utils import get_skill_outputs_from_dialog, get_user_replies_to_particular_skill, is_no, is_yes, \
-    get_outputs_with_response_from_dialog
+    get_outputs_with_response_from_dialog, get_entities
 from common.universal_templates import if_choose_topic, if_lets_chat_about_topic, switch_topic_uttr
 from common.news import OPINION_REQUEST_STATUS, OFFERED_NEWS_DETAILS_STATUS
 from common.greeting import GREETING_QUESTIONS
@@ -43,7 +43,7 @@ def extract_from_dialog(dialog):
     else:
         prev_news_output = {}
     no_detected = is_no(dialog["human_utterances"][-1])
-    nounphrases = dialog["human_utterances"][-1]["annotations"].get("cobot_nounphrases", [])
+    nounphrases = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
 
     if prev_news_output.get("news_status", "finished") == OPINION_REQUEST_STATUS or \
             (prev_news_output.get("news_status", "finished") == OFFERED_NEWS_DETAILS_STATUS and no_detected):

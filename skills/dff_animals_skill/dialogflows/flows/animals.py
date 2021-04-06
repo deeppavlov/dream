@@ -14,7 +14,7 @@ import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_exten
 import common.dialogflow_framework.utils.state as state_utils
 from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
 from common.greeting import GREETING_QUESTIONS
-from common.utils import get_intents, is_yes, is_no
+from common.utils import get_intents, is_yes, is_no, get_entities
 from common.animals import PETS_TEMPLATE, COLORS_TEMPLATE, LIKE_ANIMALS_REQUESTS, OFFER_TALK_ABOUT_ANIMALS, \
     WILD_ANIMALS, WHAT_PETS_I_HAVE, CATS_DOGS_PHRASES
 
@@ -157,14 +157,11 @@ def retrieve_and_save(vars):
 
 def retrieve_and_save_name(vars):
     name = ""
-    annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-    ner = annotations.get("ner", [])
-    for entities in ner:
-        if entities:
-            for entity in entities:
-                if entity.get("type", "") == "PER":
-                    name = entity["text"]
-                    state_utils.save_to_shared_memory(vars, users_pet_name=name)
+    ner = get_entities(state_utils.get_last_human_utterance(vars), only_named=True, with_labels=True)
+    for entity in ner:
+        if entity.get("type", "") == "PER":
+            name = entity["text"]
+            state_utils.save_to_shared_memory(vars, users_pet_name=name)
     return name
 
 
@@ -432,8 +429,7 @@ def suggest_visiting_response(vars):
 
 
 def tell_fact_ask_about_pets_response(vars):
-    annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-    nounphr = annotations.get("cobot_nounphrases", [])
+    nounphr = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
     fact = ""
     if nounphr:
         fact = send_cobotqa(f"fact about {nounphr[0]}")
@@ -581,8 +577,7 @@ def ask_about_training_request(ngrams, vars):
 
 
 def tell_fact_about_breed_response(vars):
-    annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-    nounphrases = annotations.get("cobot_nounphrases")
+    nounphrases = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
     fact = ""
     for nounphrase in nounphrases:
         if nounphrase in breeds:
