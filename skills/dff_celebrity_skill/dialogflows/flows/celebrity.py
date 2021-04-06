@@ -13,8 +13,8 @@ import common.dialogflow_framework.utils.state as state_utils
 
 import dialogflows.scopes as scopes
 
-from common.utils import get_types_from_annotations, get_intents
-from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
+from common.utils import get_types_from_annotations
+from common.celebrities import talk_about_celebrity
 from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_CONTINUE_SCENARIO_DONE
 from CoBotQA.cobotqa_service import send_cobotqa
 
@@ -115,12 +115,7 @@ def dont_want_request(ngrams, vars):
 def talk_about_celebrity_request(ngrams, vars):
     human_utterance = state_utils.get_last_human_utterance(vars)
     bot_utterance = state_utils.get_last_bot_utterance(vars)
-    user_lets_chat_about = (
-        "lets_chat_about" in get_intents(human_utterance, which="intent_catcher")
-        or if_lets_chat_about_topic(human_utterance["text"])
-        or re.search(COMPILE_WHAT_TO_TALK_ABOUT, bot_utterance["text"]))
-    flag = user_lets_chat_about and any([j in human_utterance['text'].lower()
-                                         for j in ['celebrit', 'actor']])
+    flag = talk_about_celebrity(human_utterance, bot_utterance)
     logger.info(f'talk_about_celebrity_request: {flag}')
     return flag
 
