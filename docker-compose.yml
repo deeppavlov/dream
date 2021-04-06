@@ -134,9 +134,9 @@ services:
       replicas: 4
       resources:
         limits:
-          memory: 1G
+          memory: 1.5G
         reservations:
-          memory: 1G
+          memory: 1.5G
 
   convers-evaluation-selector:
     build:
