@@ -17,7 +17,7 @@ import sentry_sdk
 
 from common.universal_templates import opinion_request_question
 from common.link import link_to, SKILLS_FOR_LINKING
-from common.utils import get_topics
+from common.utils import get_topics, get_entities
 
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -157,8 +157,8 @@ class DummySkillConnector:
             st_time = time.time()
             dialog = deepcopy(payload['payload']["dialogs"][0])
 
-            curr_topics = get_topics(dialog["utterances"][-1], which="cobot_topics")
-            curr_nounphrases = dialog["utterances"][-1]["annotations"].get("cobot_nounphrases", [])
+            curr_topics = get_topics(dialog["human_utterances"][-1], which="cobot_topics")
+            curr_nounphrases = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
 
             if len(curr_topics) == 0:
                 curr_topics = ["Phatic"]

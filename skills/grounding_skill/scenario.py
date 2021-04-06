@@ -6,7 +6,7 @@ from collections import defaultdict
 from os import getenv
 
 from common.grounding import what_we_talk_about
-from common.utils import get_topics, get_intents
+from common.utils import get_topics, get_intents, get_entities
 from utils import MIDAS_INTENT_ACKNOWLEDGMENETS, get_midas_intent_acknowledgement, reformulate_question_to_statement, \
     INTENT_DICT, DA_TOPIC_DICT, COBOT_TOPIC_DICT, get_entity_name
 
@@ -102,7 +102,7 @@ def generate_acknowledgement(dialog):
         # can generate acknowledgement
         is_need_nounphrase_intent = any([intent in curr_intents for intent in ["open_question_opinion"]])
         if is_need_nounphrase_intent:
-            curr_nounphrase = dialog['human_utterances'][-1]["annotations"].get("cobot_nounphrases", [])
+            curr_nounphrase = get_entities(dialog['human_utterances'][-1], only_named=False, with_labels=False)
             curr_nounphrase = curr_nounphrase[-1] if len(curr_nounphrase) > 0 and curr_nounphrase[-1] else ""
             ackn_response = get_midas_intent_acknowledgement(curr_considered_intents[-1], curr_nounphrase)
         else:

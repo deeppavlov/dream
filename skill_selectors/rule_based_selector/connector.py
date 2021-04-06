@@ -1,7 +1,6 @@
 import asyncio
 import logging
 import re
-from itertools import chain
 from os import getenv
 from typing import Dict, Callable
 
@@ -18,7 +17,7 @@ from common.greeting import HOW_ARE_YOU_RESPONSES, GREETING_QUESTIONS
 from common.news import is_breaking_news_requested
 from common.universal_templates import if_lets_chat_about_topic, if_choose_topic, switch_topic_uttr
 from common.utils import high_priority_intents, low_priority_intents, \
-    get_topics, get_intents, get_emotions
+    get_topics, get_intents, get_emotions, get_entities
 from common.weather import is_weather_requested
 from common.coronavirus import check_about_death, about_virus, quarantine_end, is_staying_home_requested
 import common.travel as common_travel
@@ -127,7 +126,7 @@ class RuleBasedSkillSelectorConnector:
             low_priority_intent_detected = any([k for k in intent_catcher_intents
                                                 if k in low_priority_intents])
 
-            ner_detected = len(list(chain.from_iterable(user_uttr_annotations.get("ner", [])))) > 0
+            ner_detected = len(get_entities(dialog["human_utterances"][-1], only_named=True, with_labels=False)) > 0
             logger.info(f"Detected Entities: {ner_detected}")
 
             cobot_topics = set(get_topics(dialog["human_utterances"][-1], which="cobot_topics"))
@@ -398,12 +397,7 @@ class RuleBasedSkillSelectorConnector:
                     if user_uttr_annotations.get("asr", {}).get("asr_confidence", "high") == "very_low":
                         skills_for_uttr = ["misheard_asr"]
 
-                named_entities = []
-                for ent in user_uttr_annotations.get("ner", []):
-                    if not ent:
-                        continue
-                    ent = ent[0]
-                    named_entities.append(ent)
+                named_entities = get_entities(dialog["human_utterances"][-1], only_named=True, with_labels=True)
 
                 about_travel = "Travel_Geo" in cobot_topics or any([ent["type"] == "LOC" for ent in named_entities])
                 user_about_travel = re.search(common_travel.TRAVELLING_TEMPLATE, dialog["human_utterances"][-1]["text"])

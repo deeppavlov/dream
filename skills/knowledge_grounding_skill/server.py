@@ -14,7 +14,7 @@ from nltk import pos_tag, tokenize
 from common.constants import CAN_CONTINUE_SCENARIO
 from common.universal_templates import if_lets_chat_about_topic, if_choose_topic, switch_topic_uttr
 from common.utils import get_intents, join_sentences_in_or_pattern, join_words_in_or_pattern, \
-    get_topics
+    get_topics, get_entities
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -57,13 +57,10 @@ with open("./topics_facts.json") as f:
     TOPICS_FACTS = json.load(f)
 
 
-def get_entities(utt):
+def get_named_entities(utt):
     entities = []
 
-    for ent in utt["annotations"].get("ner", []):
-        if not ent:
-            continue
-        ent = ent[0]["text"].lower()
+    for ent in get_entities(utt, only_named=True, with_labels=False):
         if ent not in UNIGRAMS and not (ent == "alexa" and utt["text"].lower()[:5] == "alexa"):
             entities.append(ent)
     return entities
@@ -112,7 +109,7 @@ def get_annotations_from_dialog(utterances, annotator_name, key_name=None):
 
 
 def get_cobot_nounphrases(utt):
-    cob_nounphs = utt.get("annotations", {}).get("cobot_entities", {}).get("entities", [])
+    cob_nounphs = get_entities(utt, only_named=False, with_labels=False)
     cobot_nounphrases = []
     for ph in cob_nounphs:
         if not pos_tag([ph])[0][1].startswith("VB"):
@@ -245,7 +242,7 @@ def respond():
             nounphrases.append(re.compile(join_sentences_in_or_pattern(cobot_nounphrases),
                                           re.IGNORECASE) if cobot_nounphrases else "")
             # entities
-            curr_ents = get_entities(dialog["human_utterances"][-1])
+            curr_ents = get_named_entities(dialog["human_utterances"][-1])
             entities.append(re.compile(join_sentences_in_or_pattern(curr_ents),
                                        re.IGNORECASE) if curr_ents else "")
             # intents

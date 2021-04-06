@@ -14,7 +14,7 @@ import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_exten
 import common.dialogflow_framework.utils.state as state_utils
 import dialogflows.scopes as scopes
 from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
-from common.utils import get_intents, is_yes, is_no
+from common.utils import get_intents, is_yes, is_no, get_entities
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -177,8 +177,7 @@ def lets_talk_about_request(ngrams, vars):
 
 def music_mention_request(ngrams, vars):
     # has any nounphrases in phrase -> music mention
-    annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-    nounphr = annotations.get("cobot_nounphrases", [])
+    nounphr = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
     flag = (len(nounphr) > 0)
     logger.info(f"music_mention_request {flag}")
     return flag
@@ -689,7 +688,7 @@ def end_response(vars):
 #     logger.info("FAV_MUSIC_REQUEST IN")
 #     user_fav_music = []
 #     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-#     nounphr = annotations.get("cobot_nounphrases", [])
+#     nounphr = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
 #     for ne in nounphr:
 #         user_fav_music.append(ne)
 #     if user_fav_music:
@@ -699,7 +698,7 @@ def end_response(vars):
 
 # def music_fact_response(vars):
 #     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-#     # nounphr = annotations.get("cobot_nounphrases", [])
+#     # nounphr = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
 #     # fact = ""
 #     # if nounphr:
 #     #     fact = send_cobotqa(f"fact about {nounphr[0]}")

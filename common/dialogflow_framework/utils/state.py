@@ -100,15 +100,12 @@ def reset_can_continue(vars):
 
 def get_named_entities_from_human_utterance(vars):
     # ent is a dict! ent = {"text": "London":, "type": "LOC"}
-    entities = []
-    for ents in vars["agent"]["dialog"]["human_utterances"][-1].get("annotations", {}).get("ner", []):
-        if not ents:
-            continue
-        for ent in ents:
-            entities.append(ent)
+    entities = common_utils.get_entities(vars["agent"]["dialog"]["human_utterances"][-1],
+                                         only_named=True, with_labels=True)
     return entities
 
 
 def get_nounphrases_from_human_utterance(vars):
-    nps = vars["agent"]["dialog"]["human_utterances"][-1].get("annotations", {}).get("cobot_nounphrases", [])
+    nps = common_utils.get_entities(vars["agent"]["dialog"]["human_utterances"][-1],
+                                    only_named=False, with_labels=False)
     return nps

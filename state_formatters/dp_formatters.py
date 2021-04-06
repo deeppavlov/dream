@@ -3,7 +3,7 @@ from copy import deepcopy
 from typing import Dict, List
 
 from common.universal_templates import if_lets_chat_about_topic
-from common.utils import service_intents
+from common.utils import service_intents, get_entities
 import state_formatters.utils as utils
 
 logger = logging.getLogger(__name__)
@@ -235,7 +235,8 @@ def last_bot_utt_dialog(dialog: Dict) -> List[Dict]:
 
 def last_human_utt_nounphrases(dialog: Dict) -> List[Dict]:
     # Used by: comet_conceptnet_annotator
-    return [{"nounphrases": [dialog["human_utterances"][-1]["annotations"].get("cobot_nounphrases", [])]}]
+    entities = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
+    return [{"nounphrases": [entities]}]
 
 
 def hypotheses_list(dialog: Dict) -> List[Dict]:
@@ -499,14 +500,13 @@ def wp_formatter_dialog(dialog: Dict):
 
 def el_formatter_dialog(dialog: Dict):
     # Used by: entity_linking annotator
-    ner_output = dialog["human_utterances"][-1]["annotations"].get("ner", [])
+    ner_output = get_entities(dialog["human_utterances"][-1], only_named=True, with_labels=True)
     nounphrases = dialog["human_utterances"][-1]["annotations"].get("cobot_entities", {}).get("entities", [])
     entity_substr = []
     if ner_output:
-        for entities in ner_output:
-            for entity in entities:
-                if entity and isinstance(entity, dict) and "text" in entity and entity["text"].lower() != "alexa":
-                    entity_substr.append(entity["text"])
+        for entity in ner_output:
+            if entity and isinstance(entity, dict) and "text" in entity and entity["text"].lower() != "alexa":
+                entity_substr.append(entity["text"])
 
     if "sentseg" in dialog["human_utterances"][-1]["annotations"]:
         last_human_utterance_text = dialog["human_utterances"][-1]["annotations"]["sentseg"]["punct_sent"]
@@ -529,9 +529,8 @@ def kbqa_formatter_dialog(dialog: Dict):
             sentences = [deepcopy(annotations["sentseg"]["punct_sent"])]
     else:
         sentences = [deepcopy(dialog["human_utterances"][-1]["text"])]
-    ner_output = annotations["ner"]
-    entity_substr = [[entity["text"] for entity in entities] for entities in ner_output]
-    nounphrases = annotations.get("cobot_nounphrases", [])
+    entity_substr = get_entities(dialog["human_utterances"][-1], only_named=True, with_labels=False)
+    nounphrases = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
     entities = []
     for n, entities_list in enumerate(entity_substr):
         if entities_list:

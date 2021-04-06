@@ -14,6 +14,7 @@ from os import getenv
 
 from common.factoid import DONT_KNOW_ANSWER, FACTOID_NOTSURE_CONFIDENCE
 from common.universal_templates import if_lets_chat_about_topic
+from common.utils import get_entities
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -242,11 +243,11 @@ def respond():
             probable_subjects = last_phrase.split('about')[1:]
         else:
             probable_subjects = []
-        names = dialog["human_utterances"][-1]["annotations"]["ner"]
-        names = [j[0]['text'].lower() for j in names if len(j) > 0]
+        names = get_entities(dialog["human_utterances"][-1], only_named=True, with_labels=True)
+        names = [j['text'].lower() for j in names]
         names = [j for j in names + probable_subjects if j in fact_dict.keys()]
         names = list(set(names))
-        nounphrases = dialog['human_utterances'][-1]['annotations'].get('cobot_nounphrases', [])
+        nounphrases = get_entities(dialog['human_utterances'][-1], only_named=False, with_labels=False)
         is_factoid_class = uttr["annotations"].get("factoid_classification", {}).get("factoid", 0)
         is_factoid = is_factoid_class and (names or nounphrases) and check_factoid(last_phrase)
         is_factoid_sents.append(is_factoid)

@@ -17,7 +17,7 @@ import sentry_sdk
 from cobotqa_service import send_cobotqa
 
 from common.universal_templates import opinion_request_question, fact_about_replace, FACT_ABOUT_TEMPLATES
-from common.utils import get_topics, get_intents, get_sentiment
+from common.utils import get_topics, get_intents, get_sentiment, get_entities
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -111,10 +111,7 @@ def respond():
         entities = []
         attit = get_sentiment(curr_uttr, probs=False)[0]
         for _ in range(N_FACTS_TO_CHOSE):
-            for ent in curr_uttr["annotations"].get("ner", []):
-                if not ent:
-                    continue
-                ent = ent[0]
+            for ent in get_entities(curr_uttr, only_named=True, with_labels=True):
                 if ent["text"].lower() not in UNIGRAMS and not (
                         ent["text"].lower() == "alexa" and curr_uttr["text"].lower()[:5] == "alexa"):
                     if attit in ["neutral", "positive"]:
@@ -126,7 +123,7 @@ def respond():
                         facts_questions.append("Fact about {}".format(ent["text"]))
                         facts_dialog_ids += [i]
             if len(entities) == 0:
-                for ent in curr_uttr["annotations"].get("cobot_nounphrases", []):
+                for ent in get_entities(curr_uttr, only_named=False, with_labels=False):
                     if ent.lower() not in UNIGRAMS:
                         if ent in entities + ["I", 'i']:
                             pass
@@ -192,7 +189,8 @@ def respond():
                           "try asking", "missed part", "try saying"
                           ]
 
-        curr_nounphrases = dialogs[curr_dialog_id]["human_utterances"][-1]["annotations"].get("cobot_nounphrases", [])
+        curr_nounphrases = get_entities(dialogs[curr_dialog_id]["human_utterances"][-1],
+                                        only_named=False, with_labels=False)
         if len(response) > 0 and 'skill://amzn1' not in response:
             sentences = sent_tokenize(response.replace(".,", "."))
             full_resp = response
