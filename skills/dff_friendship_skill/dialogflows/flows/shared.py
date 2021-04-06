@@ -70,7 +70,6 @@ def masked_lm(templates=["Hello, it's [MASK] dog."], prob_threshold=0.0, probs_f
 def set_confidence_by_universal_policy(vars):
     if not condition_utils.is_begin_of_dialog(vars, begin_dialog_n=10):
         state_utils.set_confidence(vars, 0)
-        state_utils.reset_can_continue(vars)
     elif condition_utils.is_first_our_response(vars):
         state_utils.set_confidence(vars, DIALOG_BEGINNING_START_CONFIDENCE)
         state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
@@ -174,11 +173,9 @@ def link_to_by_enity_response(vars):
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
         state_utils.set_confidence(vars, 0)
-        state_utils.reset_can_continue(vars)
         return " ".join([ack, "I like to talk about movies. Do you have favorite movies?"])
 
 
 def error_response(vars):
     state_utils.set_confidence(vars, 0)
-    state_utils.reset_can_continue(vars)
     return ""

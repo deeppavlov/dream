@@ -85,6 +85,8 @@ def get_new_link_to(vars, skill_names):
 
 def set_confidence(vars, confidence=1.0):
     vars["agent"]["response"].update({"confidence": confidence})
+    if confidence == 0.0:
+        reset_can_continue(vars)
 
 
 def set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO):
