@@ -136,7 +136,7 @@ def process_info(dialog, which_info="name"):
         response = response_phrases["location"]
         confidence = 1.0
         got_info = True
-        attr["can_continue"] = CAN_NOT_CONTINUE
+        attr["can_continue"] = MUST_CONTINUE
     elif re.search(r"is that where you live now",
                    prev_bot_uttr) and curr_user_annot.get("intent_catcher",
                                                           {}).get("no", {}).get("detected", 0) == 1:
