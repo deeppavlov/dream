@@ -68,18 +68,11 @@ spec:
         livenessProbe:
           exec:
             command:
-            - curl
-            - -X POST
-            - -s
-            - -H
-            - 'content-type: application/json'
-            - -d
-            - --connect-timeout
-            - '2'
-            - -m
-            - '2'
-            - '{ "sentences_batch": [["hello"]], "user_ids": [[1212121]] }'
-            - 'http://localhost:{{ PORT }}/api/rest/v1.0/ask'
+            - sh
+            - -c
+            - |-
+              curl -X POST -s -H 'content-type: application/json' -d '{ "sentences_batch": [["hello"]], "user_ids": [[1212121]] }' http://localhost:{{ PORT }}/api/rest/v1.0/ask -o /dev/null -w '%{http_code}
+              ' | grep -c 200
           initialDelaySeconds: 60
           periodSeconds: 10
           failureThreshold: 1
