@@ -265,7 +265,7 @@ class WeatherSkill:
                     curr_confidence = SMALLTALK_CONFIDENCE
                     weather = context_dict["weather_forecast_interaction_preferred_weather"]
                     context_dict['weather_forecast_interaction_preferred_weather'] = False
-                    link = link_to(SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED, used_links=human_attr["used_links"],
+                    link = link_to(SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED, human_attributes=human_attr,
                                    recent_active_skills=["weather_skill"])
                     human_attr["used_links"][link["skill"]] = human_attr["used_links"].get(
                         link["skill"], []) + [link['phrase']]

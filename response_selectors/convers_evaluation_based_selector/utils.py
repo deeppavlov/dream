@@ -8,7 +8,9 @@ import sentry_sdk
 from nltk.tokenize import sent_tokenize
 
 from common.duplicates import NOT_LOWER_DUPLICATES_SENTS
-from common.utils import scenario_skills, retrieve_skills, okay_statements, is_question, substitute_nonwords
+from common.link import skills_phrases_map
+from common.utils import scenario_skills, retrieve_skills, okay_statements, is_question, substitute_nonwords, \
+    get_sentiment, get_toxic, is_no
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -124,3 +126,25 @@ def downscore_toxic_blacklisted_responses(scores, confidences, toxicities, has_b
     confidences[ids] = 0.
 
     return sum(ids), scores, confidences
+
+
+def get_updated_disliked_skills(dialog, can_not_be_disliked_skills=[]):
+    disliked_skills = dialog["human"]["attributes"].get("disliked_skills", [])
+    prev_bot_uttr = dialog["bot_utterances"][-1]["text"].lower() if len(dialog["bot_utterances"]) > 0 else ""
+
+    linked_to_skill = ""
+    for skill_name, link_phrases in skills_phrases_map.items():
+        for phrase in link_phrases:
+            if phrase.lower() in prev_bot_uttr:
+                linked_to_skill = skill_name
+                break
+
+    if linked_to_skill:
+        sentiment = get_sentiment(dialog["human_utterances"][-1], probs=False)
+        toxicity = get_toxic(dialog["human_utterances"][-1], probs=False)
+        _is_no = is_no(dialog["human_utterances"][-1])
+        if (sentiment and sentiment[0] == "negative") or toxicity or _is_no:
+            if linked_to_skill not in can_not_be_disliked_skills:
+                disliked_skills.append(linked_to_skill)
+
+    return disliked_skills

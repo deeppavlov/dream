@@ -13,7 +13,7 @@ from common.universal_templates import if_lets_chat_about_topic, is_switch_topic
 from common.utils import get_intent_name, get_intents, get_topics, get_common_tokens_in_lists_of_strings
 from utils import calculate_single_convers_evaluator_score, CONV_EVAL_STRENGTH, CONFIDENCE_STRENGTH, \
     how_are_you_spec, what_i_can_do_spec, greeting_spec, misheard_with_spec1, \
-    misheard_with_spec2, alexa_abilities_spec, join_used_links_in_attributes
+    misheard_with_spec2, alexa_abilities_spec, join_used_links_in_attributes, get_updated_disliked_skills
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -44,7 +44,9 @@ ACTIVE_SKILLS = [
     "valentines_dat_skill", "weather_skill", "wikidata_dial_skill",  # "friendship_skill", "dff_friendship_skill",
     "comet_dialog_skill",
     "dff_animals_skill", "dff_food_skill", "dff_music_skill", "dff_sport_skill", "dff_travel_skill",
+    "dff_celebrity_skill",
 ]
+CAN_NOT_BE_DISLIKED_SKILLS = ["meta_script_skill", "personal_info_skill"]
 NOT_ADD_PROMPT_SKILLS = ["alexa_handler", "intent_responder", "misheard_asr", "program_y_dangerous"]
 GENERAL_TOPICS = ["Phatic", "Other"]
 
@@ -246,6 +248,8 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
     else:
         _prev_active_skill = ""
 
+    disliked_skills = get_updated_disliked_skills(dialog, can_not_be_disliked_skills=CAN_NOT_BE_DISLIKED_SKILLS)
+
     categorized_hyps = {}
     categorized_prompts = {}
     for dasuffix in ["reqda", ""]:
@@ -263,7 +267,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         all_cand_intents, all_cand_topics, all_cand_named_entities, all_cand_nounphrases = get_main_info_annotations(
             cand_uttr)
         skill_name = cand_uttr["skill_name"]
-        _is_dialog_abandon = "abandon" in all_user_intents
+        _is_dialog_abandon = "abandon" in all_cand_intents
         _is_just_prompt = (cand_uttr["skill_name"] == "dummy_skill" and "link_to_for_response_selector" in
                            cand_uttr.get("type", "")) or cand_uttr.get("response_parts", []) == ["prompt"]
         _is_active_skill = (_prev_active_skill == cand_uttr["skill_name"] or cand_uttr.get(
@@ -383,8 +387,25 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
     # now compute current scores as one float value
     curr_single_scores = compute_curr_single_scores(candidates, scores, confidences)
 
+    # remove disliked skills from hypotheses
+    for category in categorized_hyps:
+        new_ids = []
+        for cand_id in categorized_hyps[category]:
+            if candidates[cand_id]["skill_name"] not in disliked_skills:
+                new_ids.append(cand_id)
+        categorized_hyps[category] = deepcopy(new_ids)
+    for category in categorized_prompts:
+        new_ids = []
+        for cand_id in categorized_prompts[category]:
+            if candidates[cand_id]["skill_name"] not in disliked_skills:
+                new_ids.append(cand_id)
+        categorized_prompts[category] = deepcopy(new_ids)
+
     best_cand_id = pickup_best_id(categorized_hyps, candidates, curr_single_scores, bot_utterances)
     best_candidate = candidates[best_cand_id]
+    best_candidate["human_attributes"] = best_candidate.get("human_attributes", {})
+    # save updated disliked skills to human attributes of the best candidate
+    best_candidate["human_attributes"]["disliked_skills"] = disliked_skills
     logger.info(f"Best candidate: {best_candidate}")
 
     if does_not_require_prompt(candidates, best_cand_id):

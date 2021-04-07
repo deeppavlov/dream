@@ -131,7 +131,7 @@ def get_link_to_question(dialog):
     available_links = list(set(SKILLS_FOR_LINKING).difference(prev_active_skills))
     if len(available_links) > 0:
         # if we still have skill to link to, try to generate linking question
-        link = link_to(SKILLS_FOR_LINKING, used_links=human_attr["used_links"],
+        link = link_to(SKILLS_FOR_LINKING, human_attributes=human_attr,
                        recent_active_skills=prev_active_skills)
         human_attr["used_links"][link["skill"]] = human_attr["used_links"].get(link["skill"], []) + [link['phrase']]
         linked_question = link["phrase"]

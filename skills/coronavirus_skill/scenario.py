@@ -126,12 +126,12 @@ def get_agephrase(age_num, bot_attr, human_attr):
     r = random()
     if r < 0.5:
         phrase = f'{phrase} While staying at home, you may use a lot of different online cinema. '
-        link = link_to(['movie_skill'], used_links=human_attr["used_links"])
+        link = link_to(['movie_skill'], human_attributes=human_attr)
         human_attr["used_links"][link["skill"]] = human_attr["used_links"].get(link["skill"], []) + [link['phrase']]
         phrase = f"{phrase} {link['phrase']}"
     else:
         phrase = f'{phrase} While staying at home, you may read a lot of different books. '
-        link = link_to(['book_skill'], used_links=human_attr["used_links"])
+        link = link_to(['book_skill'], human_attributes=human_attr)
         human_attr["used_links"][link["skill"]] = human_attr["used_links"].get(link["skill"], []) + [link['phrase']]
         phrase = phrase + link['phrase']
     return phrase, bot_attr, human_attr

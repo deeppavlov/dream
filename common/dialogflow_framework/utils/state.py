@@ -48,6 +48,10 @@ def get_used_links(vars):
     return vars["agent"]["used_links"]
 
 
+def get_human_attributes(vars):
+    return vars["agent"]["dialog"]["human"]["attributes"]
+
+
 def get_human_utter_index(vars):
     return vars["agent"]["human_utter_index"]
 
@@ -77,8 +81,8 @@ def update_used_links(vars, linked_skill_name, linking_phrase):
 
 
 def get_new_link_to(vars, skill_names):
-    used_links = get_used_links(vars)
-    link = common_link.link_to(skill_names, used_links)
+    human_attributes = get_human_attributes(vars)
+    link = common_link.link_to(skill_names, human_attributes=human_attributes)
     update_used_links(vars, link["skill"], link["phrase"])
     return link
 

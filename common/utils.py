@@ -362,7 +362,7 @@ def _get_combined_annotations(annotated_utterance, model_name):
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
-    logger.debug(f'From combined {answer_probs} {model_name} {answer_labels}')
+    # logger.debug(f'From combined {answer_probs} {model_name} {answer_labels}')
     return answer_probs, answer_labels
 
 

@@ -250,7 +250,7 @@ def collect_topics_and_statuses(dialogs):
 
 
 def link_to_other_skills(human_attr, bot_attr, curr_uttr):
-    link = link_to(SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED, human_attr["used_links"],
+    link = link_to(SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED, human_attributes=human_attr,
                    recent_active_skills=["news_api_skill"])
     response = link['phrase']
     if len(curr_uttr['text'].split()) <= 5 and not re.search(FALSE_NEWS_TEMPLATES, curr_uttr['text']):
