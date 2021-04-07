@@ -69,7 +69,7 @@ skills_link_to_weights = {
 }
 
 
-def link_to(skills, used_links={}, recent_active_skills=[]):
+def link_to(skills, human_attributes, recent_active_skills=[]):
     """
     Returns random skill and phrase from skills_phrases_map.
     Use it to add link to specific skill in your phrase.
@@ -78,12 +78,16 @@ def link_to(skills, used_links={}, recent_active_skills=[]):
     ----------
     skills : array
         Array of skills, used in +skills_phrases_map+
-    used_links : dict
-        Key is skill_name, value is used links phrases.
-        Pass it to prevent selecting identical phrases.
-        It will try to link_to skills that were not linked before.
+    human_attributes : dict
+        where used_links is a dict where:
+            Key is skill_name, value is used links phrases.
+            Pass it to prevent selecting identical phrases.
+            It will try to link_to skills that were not linked before.
     recent_active_skills: list or set of recently used skills not to link to them
     """
+    used_links = human_attributes.get("used_links", {})
+    disliked_skills = human_attributes.get("disliked_skills", [])
+
     random_skill = ''
     random_phrase = ''
     filtered_phrases_map = dict(skills_phrases_map)
@@ -99,6 +103,10 @@ def link_to(skills, used_links={}, recent_active_skills=[]):
         filtered_skills = skills
     filtered_skills = set(filtered_skills).difference(set(recent_active_skills))
     # all skills among available were active recently, use original list of skills
+    if len(filtered_skills) == 0:
+        filtered_skills = skills
+    filtered_skills = set(filtered_skills).difference(set(disliked_skills))
+    # all skills among available are disliked, use original list of skills
     if len(filtered_skills) == 0:
         filtered_skills = skills
 

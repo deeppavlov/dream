@@ -64,7 +64,7 @@ class EmotionSkillScenario:
     # def _is_stop()
 
     def _get_reply_and_conf(self, user_phrase, bot_phrase, emotion,
-                            emotion_skill_attributes, intent, used_links):
+                            emotion_skill_attributes, intent, human_attr):
 
         start_states = {
             "joy": 'joy_i_feel' if self._check_i_feel(user_phrase, bot_phrase)
@@ -87,7 +87,7 @@ class EmotionSkillScenario:
         link = ''
         self.logger.info(
             f"_get_reply_and_conf {user_phrase}; {bot_phrase}; {emotion};"
-            f" {emotion_skill_attributes}; {intent}; {used_links}"
+            f" {emotion_skill_attributes}; {intent}; {human_attr}"
         )
 
         if state == "":
@@ -132,7 +132,7 @@ class EmotionSkillScenario:
                 reply = random.choice(step['answers'])
                 link = step['link']
                 if link:
-                    link = link_to([link], used_links)
+                    link = link_to([link], human_attributes=human_attr)
                     reply += link['phrase']
                 if len(step['next_step']):
                     state = random.choice(step['next_step'])
@@ -166,7 +166,7 @@ class EmotionSkillScenario:
                 state = random.choice(step['next_step'])
             link = step['link']
             if link:
-                link = link_to([link], used_links)
+                link = link_to([link], human_attributes=human_attr)
                 link['phrase'] = reply
                 # reply += link['phrase']
             confidence = 1.0
@@ -220,7 +220,7 @@ class EmotionSkillScenario:
                         emotion,
                         emotion_skill_attributes,
                         intent,
-                        human_attributes["used_links"]
+                        human_attributes
                     )
                     human_attributes['emotion_skill_attributes'] = emotion_skill_attributes
                     if book_movie_music_found(annotated_user_phrase):

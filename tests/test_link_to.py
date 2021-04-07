@@ -2,11 +2,11 @@ import common.link as link
 
 
 def test_link_to():
-    link_result = link.link_to(['news_skill'], [])
+    link_result = link.link_to(['news_skill'], {})
     assert link_result['phrase']
     assert link_result['skill']
 
-    link_result = link.link_to(['news_skill', 'movie_skill', 'book_skill'], [])
+    link_result = link.link_to(['news_skill', 'movie_skill', 'book_skill'], {})
     print(link_result)
 
 

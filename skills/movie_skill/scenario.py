@@ -163,7 +163,7 @@ class MovieSkillScenario:
 
     @staticmethod
     def link_to_other_skills(human_attr, bot_attr, to_skills=SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED):
-        link = link_to(to_skills, human_attr["used_links"])
+        link = link_to(to_skills, human_attributes=human_attr)
         response = link['phrase']
         if response:
             confidence = LINKTO_CONFIDENCE
