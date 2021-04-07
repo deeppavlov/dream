@@ -178,10 +178,6 @@ if __name__ == '__main__':
         response, status = REST_CLIENT.process_request(request)
         return REST_CLIENT.create_response(response, status=status)
 
-    @APP.route('/metrics', methods=['GET'])
-    async def metrics(request):
-        return json({}, status=200)
-
     print("Loading CUSTOM VERSION, please wait...")
     REST_CLIENT = SanicRestBotClient("sanic")
     REST_CLIENT.run(APP)
