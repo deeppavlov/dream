@@ -42,8 +42,8 @@ spec:
         - name: CUDA_VISIBLE_DEVICES
           value: {{ CUDA_VISIBLE_DEVICES }}
         {% for env in ENVS %}
-        - name: {{env.name}}
-          value: {{ env.value }}
+        - name: {{ env.name }}
+          value: "{{ env.value }}"
         {% endfor %}
         {% if WAIT_HOSTS %}
         - name: WAIT_HOSTS
@@ -75,9 +75,9 @@ spec:
             - 'content-type: application/json'
             - -d
             - --connect-timeout
-            - 2
+            - '2'
             - -m
-            - 2
+            - '2'
             - '{ "sentences_batch": [["hello"]], "user_ids": [[1212121]] }'
             - 'http://localhost:{{ PORT }}/api/rest/v1.0/ask'
           initialDelaySeconds: 60
