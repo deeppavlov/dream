@@ -631,7 +631,7 @@ services:
       - FLASK_APP=server
     deploy:
       mode: replicated
-      replicas: 10
+      replicas: 20
       resources:
         limits:
           memory: 256M
@@ -1004,9 +1004,9 @@ services:
       replicas: 1
       resources:
         limits:
-          memory: 11G
+          memory: 3G
         reservations:
-          memory: 11G
+          memory: 3G
 
   fact-retrieval:
     build:
