@@ -151,7 +151,7 @@ def lets_talk_about_request(ngrams, vars):
         re.search(FOOD_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"].lower()),
         cobot_topic,
         conceptnet
-    ])
+    ]) and (not state_utils.get_last_human_utterance(vars)["text"].startswith("what"))
     flag = user_lets_chat_about_food
     logger.info(f"lets_talk_about_request {flag}")
     return flag
@@ -198,7 +198,7 @@ def cuisine_fact_response(vars):
 
 
 def what_fav_food_response(vars):
-    food_types = ["food", "meal", "fruit", "dessert"]
+    food_types = ["food", "drink", "fruit", "dessert", "vegetable", "berry"]
     shared_memory = state_utils.get_shared_memory(vars)
     used_food = shared_memory.get("used_food", [])
 
