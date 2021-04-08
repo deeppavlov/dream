@@ -221,9 +221,9 @@ def does_not_require_prompt(candidates, best_cand_id):
     _is_not_add_prompt_skill = candidates[best_cand_id]["skill_name"] in NOT_ADD_PROMPT_SKILLS
 
     _is_any_question = is_any_question_sentence_in_utterance(candidates[best_cand_id])
-
+    _can_continue = candidates[best_cand_id].get("can_continue", CAN_NOT_CONTINUE) != CAN_NOT_CONTINUE
     if _is_already_prompt or _is_question or _is_very_long or _is_request or _is_not_add_prompt_skill or \
-            _is_any_question:
+            _is_any_question or _can_continue:
         return True
     return False
 
