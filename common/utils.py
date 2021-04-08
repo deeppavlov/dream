@@ -210,9 +210,9 @@ yes_templates = re.compile(r"(\byes\b|\byup\b|\byep\b|\bsure\b|go ahead|\byeah\b
 
 
 def is_yes(annotated_phrase):
-    yes_detected = annotated_phrase['annotations'].get('intent_catcher', {}).get('yes', {}).get('detected') == 1
+    yes_detected = "yes" in get_intents(annotated_phrase, which='intent_catcher', probs=False)
     # TODO: intent catcher not catches 'yes thanks!'
-    if yes_detected or re.search(yes_templates, annotated_phrase["text"].lower()):
+    if yes_detected or re.search(yes_templates, annotated_phrase.get("text", "").lower()):
         return True
     return False
 
@@ -223,17 +223,17 @@ DONOTKNOW_LIKE_PATTERN = re.compile(join_sentences_in_or_pattern(DONOTKNOW_LIKE)
 
 
 def is_donot_know(annotated_phrase):
-    if DONOTKNOW_LIKE_PATTERN.search(annotated_phrase["text"]):
+    if DONOTKNOW_LIKE_PATTERN.search(annotated_phrase.get("text", "")):
         return True
     return False
 
 
 def is_no(annotated_phrase):
-    no_detected = annotated_phrase.get("annotations", {}).get('intent_catcher', {}).get('no', {}).get('detected') == 1
+    no_detected = "no" in get_intents(annotated_phrase, which='intent_catcher', probs=False)
     # TODO: intent catcher thinks that horrible is no intent'
     user_phrase = annotated_phrase.get('text', '').lower().strip().replace('.', '')
     is_not_horrible = 'horrible' != user_phrase
-    no_regexp_detected = re.search(no_templates, annotated_phrase["text"].lower())
+    no_regexp_detected = re.search(no_templates, annotated_phrase.get("text", "").lower())
     is_not_idontknow = not is_donot_know(annotated_phrase)
     if is_not_horrible and (no_detected or no_regexp_detected) and is_not_idontknow:
         return True
@@ -269,8 +269,8 @@ def is_opinion_request(annotated_utterance):
                                          r"imagine|guess)")
     if intent_detected or \
         (re.search(opinion_request_pattern,
-                   annotated_utterance["text"].lower())
-         and not opinion_detected and "?" in annotated_utterance["text"]):
+                   annotated_utterance.get("text", "").lower())
+         and not opinion_detected and "?" in annotated_utterance.get("text", "")):
         return True
     else:
         return False
@@ -441,7 +441,7 @@ def _get_etc_model(annotated_utterance, model_name, probs=True, default_probs={}
         dictionary with emotion probablilties, if probs == True, or emotion labels if probs != True
     """
     try:
-        if model_name in annotated_utterance['annotations']:
+        if model_name in annotated_utterance.get('annotations', {}):
             answer_probs, answer_labels = _get_plain_annotations(annotated_utterance,
                                                                  model_name=model_name)
         else:
@@ -723,7 +723,7 @@ def get_entity_names_from_annotations(annotated_utterance, stopwords=None, defau
         Names of named entities we received from annotations
     """
     stopwords = stopwords if stopwords else []
-    full_text = annotated_utterance['text'].lower()
+    full_text = annotated_utterance.get('text', '').lower()
     named_entities = [full_text] if full_text in default_entities else []
     annotations = annotated_utterance.get('annotations', {})
     for tmp in annotations['ner']:
