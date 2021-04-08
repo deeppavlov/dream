@@ -253,19 +253,19 @@ def hypotheses_list_last_uttr(dialog: Dict) -> List[Dict]:
 
 
 def hypotheses_segmented_list(dialog: Dict) -> List[Dict]:
-    hypotheses = dialog["utterances"][-1]["hypotheses"]
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
     hypots = [[h["text"]] for h in hypotheses]
     return [{'sentences': hypots}]
 
 
 def ner_hypotheses_segmented_list(dialog: Dict):
-    hypotheses = dialog["utterances"][-1]["hypotheses"]
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
     hypots = [[h["text"]] for h in hypotheses]
     return [{'last_utterances': hypots}]
 
 
 def hypothesis_histories_list(dialog: Dict):
-    hypotheses = dialog["utterances"][-1]["hypotheses"]
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
     dialog = utils.get_last_n_turns(dialog)
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="segments")
