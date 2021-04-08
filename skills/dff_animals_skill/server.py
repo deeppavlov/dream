@@ -40,11 +40,12 @@ def handler(requested_data, random_seed=None):
     state_batch = requested_data.get(f"{SERVICE_NAME}_state_batch", [{}] * len(dialog_batch))
     entities_batch = requested_data.get("entities_batch", [{}] * len(dialog_batch))
     used_links_batch = requested_data.get("used_links_batch", [{}] * len(dialog_batch))
+    disliked_skills_batch = requested_data.get("disliked_skills_batch", [{}] * len(dialog_batch))
     random_seed = requested_data.get("random_seed", random_seed)  # for tests
 
     responses = []
-    for human_utter_index, dialog, state, entities, used_links in zip(
-        human_utter_index_batch, dialog_batch, state_batch, entities_batch, used_links_batch
+    for human_utter_index, dialog, state, entities, used_links, disliked_skills in zip(
+        human_utter_index_batch, dialog_batch, state_batch, entities_batch, used_links_batch, disliked_skills_batch
     ):
         try:
             # for tests
@@ -54,11 +55,13 @@ def handler(requested_data, random_seed=None):
             text = dialog["human_utterances"][-1]["text"]
             text = text_utils.clean_text(text)
 
-            dialogflow_utils.load_into_dialogflow(DF, human_utter_index, dialog, state, entities, used_links)
+            dialogflow_utils.load_into_dialogflow(
+                DF, human_utter_index, dialog, state, entities, used_links, disliked_skills
+            )
             text, confidence, can_continue = dialogflow_utils.run_turn(DF, text)
-            state, used_links = dialogflow_utils.get_dialog_state(DF)
+            state, used_links, disliked_skills = dialogflow_utils.get_dialog_state(DF)
 
-            human_attr = {f"{SERVICE_NAME}_state": state, "used_links": used_links}
+            human_attr = {f"{SERVICE_NAME}_state": state, "used_links": used_links, "disliked_skills": disliked_skills}
             hype_attr = {"can_continue": can_continue}
 
             responses.append((text, confidence, human_attr, {}, hype_attr))

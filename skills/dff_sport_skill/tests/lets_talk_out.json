@@ -9,9 +9,10 @@
                 "history": {
                     "0": "State.SYS_LETS_TALK_SPORT"
                 },
-                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_ASK_ABOUT_SPORT\", \"__stack__\": [], \"__user_utterance__\": \"lets talk about sports\", \"__system_state__\": \"State.SYS_LETS_TALK_SPORT\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"I live on a cloud, so i can't do sport , but I'm really curious about what sport are you fond of?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"SPORT\\\"<__tuple__>\\\"State.USR_ASK_ABOUT_SPORT\\\"\"}"
+                "dialogflow_state": "{\"vars\": {\"__stack__\": [], \"__user_utterance__\": \"lets talk about sports\", \"__system_state__\": \"State.SYS_LETS_TALK_SPORT\", \"__state__\": \"State.USR_ASK_ABOUT_SPORT\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"I live on a cloud, so i can't do sport , but I'm really curious about what sport are you fond of?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"SPORT\\\"<__tuple__>\\\"State.USR_ASK_ABOUT_SPORT\\\"\"}"
             },
-            "used_links": {}
+            "used_links": {},
+            "disliked_skills": {}
         },
         {},
         {

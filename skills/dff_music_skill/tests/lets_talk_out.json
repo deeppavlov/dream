@@ -9,9 +9,10 @@
                 "history": {
                     "0": "State.SYS_LETS_TALK_ABOUT"
                 },
-                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_WHAT_MUSIC_LIKE\", \"__stack__\": [], \"__user_utterance__\": \"lets talk about music\", \"__system_state__\": \"State.SYS_LETS_TALK_ABOUT\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"Sure. Which music do you like?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"MUSIC\\\"<__tuple__>\\\"State.USR_WHAT_MUSIC_LIKE\\\"\"}"
+                "dialogflow_state": "{\"vars\": {\"__stack__\": [], \"__user_utterance__\": \"lets talk about music\", \"__system_state__\": \"State.SYS_LETS_TALK_ABOUT\", \"__state__\": \"State.USR_WHAT_MUSIC\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"Sure. Which music do you like?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"MUSIC\\\"<__tuple__>\\\"State.USR_WHAT_MUSIC\\\"\"}"
             },
-            "used_links": {}
+            "used_links": {},
+            "disliked_skills": {}
         },
         {},
         {

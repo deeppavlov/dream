@@ -16,7 +16,7 @@ sentry_sdk.init(os.getenv("SENTRY_DSN"))
 logger = logging.getLogger(__name__)
 
 
-def load_into_dialogflow(dialogflow, human_utter_index, dialog, state, entities, used_links):
+def load_into_dialogflow(dialogflow, human_utter_index, dialog, state, entities, used_links, disliked_skills):
     cached_functions.clear_cache()
     dialogflow.reset()
     dialogflow_state = state.get("dialogflow_state")
@@ -34,6 +34,7 @@ def load_into_dialogflow(dialogflow, human_utter_index, dialog, state, entities,
         "cache": {},
         "history": state.get("history", {}),
         "used_links": used_links,
+        "disliked_skills": disliked_skills,
     }
     dialogflow.controller().vars()["agent"] = agent
 
@@ -43,6 +44,7 @@ def get_dialog_state(dialogflow):
     human_utter_index = agent["human_utter_index"]
     history = agent["history"]
     used_links = agent["used_links"]
+    disliked_skills = agent["disliked_skills"]
     history[str(human_utter_index)] = dialogflow.controller().vars()["__system_state__"]
     state = {
         "shared_memory": agent["shared_memory"],
@@ -52,7 +54,7 @@ def get_dialog_state(dialogflow):
     del dialogflow.controller().vars()["agent"]
     state["dialogflow_state"] = dialogflow.serialize()
     logger.debug(f"state={state}")
-    return state, used_links
+    return state, used_links, disliked_skills
 
 
 def run_turn(dialogflow, text):
