@@ -3,20 +3,20 @@ kubeStateMetrics:
 
 server:
   nodeSelector:
-    gpu: "false"
+    service: "true"
   persistentVolume:
     enabled: true
     size: 100Gi
   ## Server Deployment Strategy type
   strategy:
     type: Recreate
-  resource:
+  resources:
     limits:
       cpu: 1000m
-      memory: 2048Mi
+      memory: 20Gi
     requests:
       cpu: 1000m
-      memory: 1024Mi
+      memory: 12Gi
   readinessProbeInitialDelay: 30
   readinessProbePeriodSeconds: 10
   readinessProbeTimeout: 4

@@ -1,0 +1,336 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: alexa
+  region: us-east-1
+  version: "1.18"
+
+managedNodeGroups:
+
+- name: ng0-cpu
+  instanceType: t2.xlarge #16Gb
+  desiredCapacity: 1
+  minSize: 1
+  maxSize: 1
+  volumeSize: 200
+  privateNetworking: false
+  availabilityZones:
+  - us-east-1a
+  labels:
+    gpu: 'false'
+    jenkins: 'slave'
+  tags:
+    gpu: 'false'
+  ssh:
+    publicKeyPath: id_rsa_alexa.pub
+
+- name: ng1-cpu
+  instanceType: t2.xlarge #16Gb
+  desiredCapacity: 1
+  minSize: 1
+  maxSize: 3
+  volumeSize: 200
+  privateNetworking: false
+  availabilityZones:
+  - us-east-1a
+  labels:
+    gpu: 'false'
+    agent: 'true'
+    jenkins: 'slave'
+  tags:
+    gpu: 'false'
+  ssh:
+    publicKeyPath: id_rsa_alexa.pub
+
+
+- name: ng2-gpu4
+  instanceType: g4dn.2xlarge
+  instancePrefix: gpu
+  desiredCapacity: 1
+  minSize: 1
+  maxSize: 1
+  volumeSize: 200
+  privateNetworking: false
+  availabilityZones:
+  - us-east-1a
+  labels:
+    gpu: '0'
+    environment: 'dev'
+    nvidia.com/gpu: 'true'
+  tags:
+    gpu: 'true'
+  ssh:
+    publicKeyPath: id_rsa_alexa.pub
+
+- name: ng2-gpu5
+  instanceType: g4dn.2xlarge
+  instancePrefix: gpu
+  desiredCapacity: 1
+  minSize: 1
+  maxSize: 1
+  volumeSize: 200
+  privateNetworking: false
+  availabilityZones:
+  - us-east-1a
+  labels:
+    nvidia.com/gpu: 'true'
+    gpu: '1'
+    environment: 'dev'
+  tags:
+    gpu: 'true'
+  ssh:
+    publicKeyPath: id_rsa_alexa.pub
+
+- name: ng2-gpu2
+  instanceType: g4dn.2xlarge
+  instancePrefix: gpu
+  desiredCapacity: 1
+  minSize: 1
+  maxSize: 1
+  volumeSize: 200
+  privateNetworking: false
+  availabilityZones:
+  - us-east-1a
+  labels:
+    nvidia.com/gpu: 'true'
+    gpu: '2'
+    environment: 'dev'
+  tags:
+    gpu: 'true'
+  ssh:
+    publicKeyPath: id_rsa_alexa.pub
+
+#- name: ng2-gpu3
+  #instanceType: g4dn.2xlarge
+  #instancePrefix: gpu
+  #desiredCapacity: 1
+  #minSize: 1
+  #maxSize: 1
+  #volumeSize: 200
+  #privateNetworking: false
+  #availabilityZones:
+  #- us-east-1a
+  #labels:
+    #nvidia.com/gpu: 'true'
+    #gpu: '3'
+    #environment: 'dev'
+  #tags:
+    #gpu: 'true'
+  #ssh:
+    #publicKeyPath: id_rsa_alexa.pub
+
+- name: ng3-gpu2
+  instanceType: g4dn.2xlarge
+  instancePrefix: gpu
+  desiredCapacity: 1
+  minSize: 1
+  maxSize: 1
+  volumeSize: 200
+  privateNetworking: false
+  availabilityZones:
+  - us-east-1b
+  labels:
+    nvidia.com/gpu: 'true'
+    gpu: '2'
+    environment: B
+  tags:
+    gpu: 'true'
+  ssh:
+    publicKeyPath: id_rsa_alexa.pub
+
+#- name: ng3-gpu3
+  #instanceType: g4dn.2xlarge
+  #instancePrefix: gpu
+  #desiredCapacity: 1
+  #minSize: 1
+  #maxSize: 1
+  #volumeSize: 200
+  #privateNetworking: false
+  #availabilityZones:
+  #- us-east-1b
+  #labels:
+    #nvidia.com/gpu: 'true'
+    #gpu: '3'
+    #environment: B
+  #tags:
+    #gpu: 'true'
+  #ssh:
+    #publicKeyPath: id_rsa_alexa.pub
+
+- name: ng3-gpu4
+  instanceType: g4dn.2xlarge
+  instancePrefix: gpu
+  desiredCapacity: 1
+  minSize: 1
+  maxSize: 1
+  volumeSize: 200
+  privateNetworking: false
+  availabilityZones:
+  - us-east-1b
+  labels:
+    nvidia.com/gpu: 'true'
+    gpu: '0'
+    environment: B
+  tags:
+    gpu: 'true'
+  ssh:
+    publicKeyPath: id_rsa_alexa.pub
+
+- name: ng3-gpu5
+  instanceType: g4dn.2xlarge
+  instancePrefix: gpu
+  desiredCapacity: 1
+  minSize: 1
+  maxSize: 1
+  volumeSize: 200
+  privateNetworking: false
+  availabilityZones:
+  - us-east-1b
+  labels:
+    nvidia.com/gpu: 'true'
+    gpu: '1'
+    environment: B
+  tags:
+    gpu: 'true'
+  ssh:
+    publicKeyPath: id_rsa_alexa.pub
+
+- name: ng4-gpu2
+  instanceType: g4dn.2xlarge
+  instancePrefix: gpu
+  desiredCapacity: 1
+  minSize: 1
+  maxSize: 1
+  volumeSize: 200
+  privateNetworking: false
+  availabilityZones:
+  - us-east-1b
+  labels:
+    nvidia.com/gpu: 'true'
+    gpu: '2'
+    environment: A
+  tags:
+    gpu: 'true'
+  ssh:
+    publicKeyPath: id_rsa_alexa.pub
+
+#- name: ng4-gpu3
+  #instanceType: g4dn.2xlarge
+  #instancePrefix: gpu
+  #desiredCapacity: 1
+  #minSize: 1
+  #maxSize: 1
+  #volumeSize: 200
+  #privateNetworking: false
+  #availabilityZones:
+  #- us-east-1b
+  #labels:
+    #nvidia.com/gpu: 'true'
+    #gpu: '3'
+    #environment: A
+  #tags:
+    #gpu: 'true'
+  #ssh:
+    #publicKeyPath: id_rsa_alexa.pub
+
+- name: ng4-gpu0
+  instanceType: g4dn.2xlarge
+  instancePrefix: gpu
+  desiredCapacity: 1
+  minSize: 1
+  maxSize: 1
+  volumeSize: 200
+  privateNetworking: false
+  availabilityZones:
+  - us-east-1b
+  labels:
+    nvidia.com/gpu: 'true'
+    gpu: '0'
+    environment: A
+  tags:
+    gpu: 'true'
+  ssh:
+    publicKeyPath: id_rsa_alexa.pub
+
+- name: ng4-gpu1
+  instanceType: g4dn.2xlarge
+  instancePrefix: gpu
+  desiredCapacity: 1
+  minSize: 1
+  maxSize: 1
+  volumeSize: 200
+  privateNetworking: false
+  availabilityZones:
+  - us-east-1b
+  labels:
+    nvidia.com/gpu: 'true'
+    gpu: '1'
+    environment: A
+  tags:
+    gpu: 'true'
+  ssh:
+    publicKeyPath: id_rsa_alexa.pub
+
+- name: ng5-cpu
+  instanceType: m5a.4xlarge #64Gb 16vcpu
+  desiredCapacity: 2
+  minSize: 1
+  maxSize: 3
+  volumeSize: 200
+  privateNetworking: false
+  availabilityZones:
+  - us-east-1a
+  labels:
+    gpu: 'false'
+    environment: 'dev'
+  tags:
+    gpu: 'false'
+  ssh:
+    publicKeyPath: id_rsa_alexa.pub
+
+- name: ng6-cpu
+  instanceType: m5a.4xlarge #64Gb 16vcpu
+  desiredCapacity: 3
+  minSize: 1
+  maxSize: 3
+  volumeSize: 200
+  privateNetworking: false
+  availabilityZones:
+  - us-east-1a
+  labels:
+    gpu: 'false'
+    environment: 'B'
+  tags:
+    gpu: 'false'
+  ssh:
+    publicKeyPath: id_rsa_alexa.pub
+
+- name: ng7-cpu
+  instanceType: m5a.4xlarge #64Gb 16vcpu
+  desiredCapacity: 3
+  minSize: 1
+  maxSize: 3
+  volumeSize: 200
+  privateNetworking: false
+  availabilityZones:
+  - us-east-1b
+  labels:
+    gpu: 'false'
+    environment: 'A'
+  tags:
+    gpu: 'false'
+  ssh:
+    publicKeyPath: id_rsa_alexa.pub
+
+availabilityZones:
+- us-east-1a
+- us-east-1b
+
+
+#aws configure
+#aws eks update-kubeconfig --region us-west-1 --name my-eks-cluster
+#k get cm -n kube-system aws-auth -o yaml > aws-auth.yaml
+#k apply -f csi-driver.yaml
+
+# eksctl scale nodegroup --name=ng-2 --nodes=1 --cluster=alexa

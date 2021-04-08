@@ -1,0 +1,118 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: staging
+  region: us-west-2
+  version: "1.18"
+
+managedNodeGroups:
+
+- name: service
+  instanceType: t2.2xlarge #32Gb 8vcpu
+  desiredCapacity: 1
+  minSize: 1
+  maxSize: 3
+  volumeSize: 200
+  privateNetworking: false
+  availabilityZones:
+  - us-west-2a
+  labels:
+    jenkins: 'slave'
+    mongo: 'true'
+    service: 'true'
+  tags:
+    service: 'true'
+  ssh:
+    publicKeyPath: id_rsa_alexa.pub
+
+- name: cpu0
+  instanceType: m5a.4xlarge #64Gb 16vcpu
+  desiredCapacity: 2
+  minSize: 1
+  maxSize: 3
+  volumeSize: 200
+  privateNetworking: false
+  availabilityZones:
+  - us-west-2a
+  labels:
+    gpu: 'false'
+    environment: 'dev'
+  tags:
+    gpu: 'false'
+  ssh:
+    publicKeyPath: id_rsa_alexa.pub
+
+- name: gpu0
+  instanceType: g4dn.2xlarge
+  instancePrefix: gpu
+  desiredCapacity: 1
+  minSize: 1
+  maxSize: 1
+  volumeSize: 200
+  privateNetworking: false
+  availabilityZones:
+  - us-west-2a
+  labels:
+    gpu: '0'
+    environment: 'dev'
+    nvidia.com/gpu: 'true'
+  tags:
+    gpu: 'true'
+  ssh:
+    publicKeyPath: id_rsa_alexa.pub
+
+- name: gpu1
+  instanceType: g4dn.2xlarge
+  instancePrefix: gpu
+  desiredCapacity: 1
+  minSize: 1
+  maxSize: 1
+  volumeSize: 200
+  privateNetworking: false
+  availabilityZones:
+  - us-west-2a
+  labels:
+    nvidia.com/gpu: 'true'
+    gpu: '1'
+    environment: 'dev'
+  tags:
+    gpu: 'true'
+  ssh:
+    publicKeyPath: id_rsa_alexa.pub
+
+- name: gpu2
+  instanceType: g4dn.2xlarge
+  instancePrefix: gpu
+  desiredCapacity: 1
+  minSize: 1
+  maxSize: 1
+  volumeSize: 200
+  privateNetworking: false
+  availabilityZones:
+  - us-west-2a
+  labels:
+    nvidia.com/gpu: 'true'
+    gpu: '2'
+    environment: 'dev'
+  tags:
+    gpu: 'true'
+  ssh:
+    publicKeyPath: id_rsa_alexa.pub
+
+
+availabilityZones:
+- us-west-2a
+- us-west-2b
+
+
+#aws configure
+#aws eks update-kubeconfig --region us-west-1 --name my-eks-cluster
+#k get cm -n kube-system aws-auth -o yaml > aws-auth.yaml
+#k apply -f csi-driver.yaml
+
+# eksctl scale nodegroup --name=ng-2 --nodes=1 --cluster=alexa
+
+#shuu01 token
+#AKIA5U27I4UTIJ7QJJ5L
+#vRaTfImk82DF3eX5TYU9ajUzB0AcYLZM5qmLjCk2
