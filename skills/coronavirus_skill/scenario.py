@@ -18,7 +18,7 @@ from common.coronavirus import CORONA_SWITCH_BEGIN, corona_switch_skill_reply, i
     check_about_death, about_virus, quarantine_end
 from common.link import link_to
 from common.utils import is_yes, is_no, get_emotions
-from common.universal_templates import book_movie_music_found, if_lets_chat_about_topic, is_switch_topic
+from common.universal_templates import book_movie_music_found, if_chat_about_particular_topic, is_switch_topic
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -447,6 +447,8 @@ class CoronavirusSkillScenario:
                 else:
                     last_bot_phrase = ''
                     stay_home_request = False
+
+                prev_bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}
                 last_utterance = dialog['utterances'][-1]
                 last_utterance_text = last_utterance['text'].lower()
                 last_utterances = []
@@ -670,7 +672,8 @@ class CoronavirusSkillScenario:
                 elif human_attr['coronavirus_skill'].get('stop', False) and CORONA_SWITCH_BEGIN not in reply:
                     logging.info('User not wants to talk about covid')
                     confidence = 0
-                elif if_lets_chat_about_topic(last_utterance['text']) and not about_virus(last_utterance['text']):
+                elif if_chat_about_particular_topic(last_utterance,
+                                                    prev_bot_uttr) and not about_virus(last_utterance['text']):
                     logging.info('Topic chat request found, drop confidence to 0')
                     confidence = 0
                 elif reply.lower() in last_utterances and confidence == 1:

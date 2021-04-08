@@ -13,7 +13,7 @@ from flask import Flask, request, jsonify
 from os import getenv
 
 from common.factoid import DONT_KNOW_ANSWER, FACTOID_NOTSURE_CONFIDENCE
-from common.universal_templates import if_lets_chat_about_topic
+from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_entities
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -268,9 +268,10 @@ def respond():
     question_nums = []
     for n, (dialog, is_factoid, fact_output) in enumerate(zip(dialogs_batch, is_factoid_sents, fact_outputs)):
         curr_ann_uttr = dialog["human_utterances"][-1]
+        prev_ann_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}
         annotations = curr_ann_uttr["annotations"]
         tell_me_about_intent = annotations.get("intent_catcher", {}).get("lets_chat_about", {}).get(
-            "detected", 0) == 1 or if_lets_chat_about_topic(curr_ann_uttr["text"])
+            "detected", 0) == 1 or if_chat_about_particular_topic(curr_ann_uttr, prev_ann_uttr)
         is_question = "?" in annotations['sentrewrite']['modified_sents'][-1]
         if is_factoid and (tell_me_about_intent or is_question):
             questions_batch.append(curr_ann_uttr["text"])
@@ -302,8 +303,9 @@ def respond():
                                                                  fact_outputs):
         attr = {}
         curr_ann_uttr = dialog["human_utterances"][-1]
+        prev_ann_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}
         tell_me_about_intent = curr_ann_uttr["annotations"].get("intent_catcher", {}).get("lets_chat_about", {}).get(
-            "detected", 0) == 1 or if_lets_chat_about_topic(curr_ann_uttr["text"])
+            "detected", 0) == 1 or if_chat_about_particular_topic(curr_ann_uttr, prev_ann_uttr)
         is_question = "?" in curr_ann_uttr['annotations']['sentrewrite']['modified_sents'][-1]
         if is_factoid and (tell_me_about_intent or is_question):
             logger.info("Question is classified as factoid. Querying KBQA and ODQA.")

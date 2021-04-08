@@ -13,8 +13,8 @@ import sentry_sdk
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
 import dialogflows.scopes as scopes
-from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
-from common.utils import get_intents, is_yes, is_no, get_entities
+from common.universal_templates import if_chat_about_particular_topic
+from common.utils import is_yes, is_no, get_entities
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -164,13 +164,10 @@ def error_response(vars):
 
 
 def lets_talk_about_request(ngrams, vars):
-    user_lets_chat_about = (
-        "lets_chat_about" in get_intents(state_utils.get_last_human_utterance(vars), which="intent_catcher")
-        or if_lets_chat_about_topic(state_utils.get_last_human_utterance(vars)["text"])
-        or re.search(COMPILE_WHAT_TO_TALK_ABOUT, state_utils.get_last_bot_utterance(vars)["text"])
-    )
-    user_lets_chat_about_music = bool(music_words_re.search(state_utils.get_last_human_utterance(vars)["text"].lower()))
-    flag = bool(user_lets_chat_about) and user_lets_chat_about_music
+    user_lets_chat_about_music = if_chat_about_particular_topic(
+        state_utils.get_last_human_utterance(vars), state_utils.get_last_bot_utterance(vars),
+        compiled_pattern=music_words_re)
+    flag = bool(user_lets_chat_about_music)
     logger.info(f"lets_talk_about_request {flag}")
     return flag
 

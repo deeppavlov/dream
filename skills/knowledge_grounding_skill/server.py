@@ -12,7 +12,7 @@ from flask import Flask, request, jsonify
 from nltk import pos_tag, tokenize
 
 from common.constants import CAN_CONTINUE_SCENARIO
-from common.universal_templates import if_lets_chat_about_topic, if_choose_topic, switch_topic_uttr
+from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
 from common.utils import get_intents, join_sentences_in_or_pattern, join_words_in_or_pattern, \
     get_topics, get_entities
 
@@ -124,7 +124,7 @@ def get_intents_flags(utt):
         "where_are_you_from", "who_made_you"
     ]
     detected_intents = get_intents(utt, which="intent_catcher")
-    lets_chat_about_flag = if_lets_chat_about_topic(utt["text"].lower()) or ("lets_chat_about" in detected_intents)
+    lets_chat_about_flag = if_chat_about_particular_topic(utt)
     special_intents_flag = any([si in detected_intents for si in special_intents])
     return lets_chat_about_flag, special_intents_flag
 
@@ -231,12 +231,7 @@ def respond():
         try:
             user_input_text = dialog["human_utterances"][-1]["text"]
             bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) > 0 else {}
-
-            last_user_sent_text = dialog["human_utterances"][-1].get(
-                "annotations", {}).get("sentseg", {}).get("segments", [""])[-1].lower()
-            switch_choose_topic = switch_topic_uttr(
-                dialog["human_utterances"][-1]) or if_choose_topic(
-                last_user_sent_text, prev_uttr=bot_uttr.get("text", "").lower())
+            switch_choose_topic = if_choose_topic(dialog["human_utterances"][-1], bot_uttr)
             # cobot_nounphrases
             cobot_nounphrases = get_cobot_nounphrases(dialog["human_utterances"][-1])
             nounphrases.append(re.compile(join_sentences_in_or_pattern(cobot_nounphrases),

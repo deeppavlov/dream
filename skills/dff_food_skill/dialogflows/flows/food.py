@@ -15,7 +15,7 @@ import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_exten
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 import dialogflows.scopes as scopes
-# from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
+# from common.universal_templates import if_chat_about_particular_topic
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE, MUST_CONTINUE
 from common.utils import is_yes, is_no, get_topics, get_entities
 from common.food import TRIGGER_PHRASES
@@ -140,8 +140,7 @@ def error_response(vars):
 def lets_talk_about_request(ngrams, vars):
     # user_lets_chat_about = (
     #     "lets_chat_about" in get_intents(state_utils.get_last_human_utterance(vars), which="intent_catcher")
-    #     or if_lets_chat_about_topic(state_utils.get_last_human_utterance(vars)["text"])
-    #     or re.search(COMPILE_WHAT_TO_TALK_ABOUT, state_utils.get_last_bot_utterance(vars)["text"])
+    #     or if_chat_about_particular_topic(state_utils.get_last_human_utterance(vars), prev_uttr)
     # )
     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
     cobot_topic = "Food_Drink" in get_topics(state_utils.get_last_human_utterance(vars), which="cobot_topics")

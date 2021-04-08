@@ -3,6 +3,7 @@ import re
 
 from common.utils import join_words_in_or_pattern, join_sentences_in_or_pattern, get_topics, \
     get_intents, get_sentiment
+from common.greeting import GREETING_QUESTIONS
 
 # https://www.englishclub.com/vocabulary/fl-asking-for-opinions.htm
 UNIVERSAL_OPINION_REQUESTS = [
@@ -196,29 +197,77 @@ def book_movie_music_found(annotated_uttr):
 
 
 def is_switch_topic(annotated_uttr):
-    annotations = annotated_uttr.get("annotations", {})
-    topic_switch_detected = annotations.get("intent_catcher", {}).get("topic_switching", {}).get("detected", 0) == 1
-    intents = get_intents(annotated_uttr, which="cobot_dialogact_intents")
-    intent_detected = "Topic_SwitchIntent" in intents
-    if intent_detected or topic_switch_detected or if_switch_topic(annotated_uttr["text"].lower()):
+    topic_switch_detected = "topic_switching" in get_intents(annotated_uttr, which="intent_catcher")
+
+    if topic_switch_detected or if_switch_topic(annotated_uttr["text"].lower()):
         return True
     else:
         return False
 
 
-def if_choose_topic(uttr, prev_uttr="---"):
-    uttr_ = uttr.lower()
-    prev_uttr_ = prev_uttr.lower()
-    if re.search(COMPILE_SWITCH_TOPIC, uttr_):
+def if_choose_topic(annotated_uttr, prev_annotated_uttr={}):
+    """Dialog context implies that the next utterances can pick up a topic:
+        - annotated_uttr asks to switch topic
+        - annotated_uttr asks "what do you want to talk about?"
+        - annotated_uttr asks "let's talk about something (else)"
+        - prev_annotated_uttr asks "what do you want to talk about?", and annotated_uttr says something/anything.
+    """
+    uttr_ = annotated_uttr.get('text', "").lower()
+    prev_uttr_ = prev_annotated_uttr.get('text', '--').lower()
+    chat_about_intent = 'lets_chat_about' in get_intents(annotated_uttr, probs=False, which='intent_catcher')
+    user_asks_what_to_talk_about = re.search(COMPILE_WHAT_TO_TALK_ABOUT, uttr_)
+    # user ask to "talk about something"
+    smth1 = re.search(COMPILE_LETS_TALK_ABOUT_SOMETHING, uttr_) or (chat_about_intent and re.search(
+        COMPILE_SOMETHING, uttr_))
+    # bot asks "what user wants to talk about", and user answers "something"
+    prev_chat_about_intent = 'lets_chat_about' in get_intents(prev_annotated_uttr, probs=False, which='intent_catcher')
+    prev_uttr_asks_what_topic = prev_chat_about_intent or re.search(COMPILE_WHAT_TO_TALK_ABOUT, prev_uttr_)
+    smth2 = prev_uttr_asks_what_topic and re.search(COMPILE_SOMETHING, uttr_)
+
+    switch_topic = is_switch_topic(annotated_uttr)
+    if switch_topic or user_asks_what_to_talk_about or (smth1 or smth2):
         return True
-    elif re.search(COMPILE_LETS_TALK_ABOUT_SOMETHING, uttr_):
-        return True
-    elif re.search(COMPILE_WHAT_TO_TALK_ABOUT, uttr_):
-        return True
-    elif re.search(COMPILE_WHAT_TO_TALK_ABOUT, prev_uttr_) and re.search(COMPILE_SOMETHING, uttr_):
-        return True
-    else:
+    return False
+
+
+def if_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr={}, key_words=[], compiled_pattern=r""):
+    """Dialog context implies that the last utterances chooses particular conversational topic:
+        - annotated_uttr asks "let's talk about PARTICULAR-TOPIC"
+        - prev_annotated_uttr asks "what do you want to talk about?", and annotated_uttr says PARTICULAR-TOPIC.
+        - prev_annotated_uttr asks "what are your interests?", and annotated_uttr says PARTICULAR-TOPIC.
+    """
+    uttr_ = annotated_uttr.get('text', "").lower()
+    prev_uttr_ = prev_annotated_uttr.get('text', '--').lower()
+
+    # current uttr is lets talk about blabla
+    chat_about_intent = 'lets_chat_about' in get_intents(annotated_uttr, probs=False, which='intent_catcher')
+    chat_about = chat_about_intent or if_lets_chat_about_topic(uttr_)
+
+    # prev uttr is what do you want to talk about?
+    greeting_question_texts = [question.lower() for t in GREETING_QUESTIONS for question in GREETING_QUESTIONS[t]]
+    prev_was_greeting = any([greeting_question in prev_uttr_ for greeting_question in greeting_question_texts])
+    prev_chat_about_intent = 'lets_chat_about' in get_intents(prev_annotated_uttr, probs=False, which='intent_catcher')
+    prev_what_to_talk_about_regexp = re.search(COMPILE_WHAT_TO_TALK_ABOUT, prev_uttr_)
+    prev_what_to_chat_about = prev_was_greeting or prev_chat_about_intent or prev_what_to_talk_about_regexp
+
+    switch_topic = if_choose_topic(annotated_uttr, prev_annotated_uttr)
+    not_want = re.search(COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, uttr_)
+    if not_want or switch_topic:
         return False
+    elif prev_what_to_chat_about or chat_about:
+        if key_words:
+            if any([word in uttr_ for word in key_words]):
+                return True
+            else:
+                return False
+        elif compiled_pattern:
+            if re.search(compiled_pattern, uttr_):
+                return True
+            else:
+                return False
+        else:
+            return True
+    return False
 
 
 def is_negative(annotated_uttr):
@@ -244,15 +293,6 @@ def tell_me_more(annotated_uttr):
     cond1 = 'tell_me_more' in intents
     cond2 = re.search(more_details_pattern, annotated_uttr['text'])
     return cond1 or cond2
-
-
-def switch_topic_uttr(uttr):
-    topic_switch_detected = (
-        uttr.get("annotations", {}).get("intent_catcher", {}).get("topic_switching", {}).get("detected", 0) == 1
-    )
-    if if_switch_topic(uttr["text"].lower()) or topic_switch_detected:
-        return True
-    return False
 
 
 QUESTION_BEGINNINGS = QUESTION_LIKE + [

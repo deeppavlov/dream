@@ -21,7 +21,8 @@ from common.metrics import setup_metrics
 from common.news import OFFER_BREAKING_NEWS, OFFERED_BREAKING_NEWS_STATUS, \
     OFFERED_NEWS_DETAILS_STATUS, OPINION_REQUEST_STATUS, WHAT_TYPE_OF_NEWS, OFFER_TOPIC_SPECIFIC_NEWS, \
     OFFER_TOPIC_SPECIFIC_NEWS_STATUS, OFFERED_NEWS_TOPIC_CATEGORIES_STATUS
-from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, COMPILE_SWITCH_TOPIC, if_lets_chat_about_topic
+from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, COMPILE_SWITCH_TOPIC, \
+    if_chat_about_particular_topic
 from common.utils import get_skill_outputs_from_dialog, is_yes, is_no, get_topics, get_entities
 from newsapi_service import CachedRequestsAPI
 
@@ -107,6 +108,7 @@ def collect_topics_and_statuses(dialogs):
     curr_news_samples = []
     for i, dialog in enumerate(dialogs):
         curr_uttr = dialog["human_utterances"][-1]
+        prev_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}
         human_attr = dialogs[i]["human"]["attributes"]
         human_attr["news_skill"] = human_attr.get("news_skill", {})
         human_attr["news_skill"]["discussed_news"] = human_attr["news_skill"].get("discussed_news", [])
@@ -195,7 +197,7 @@ def collect_topics_and_statuses(dialogs):
             about_news = (({"News"} & set(get_topics(curr_uttr, which="cobot_topics"))) or re.search(
                 NEWS_TEMPLATES, curr_uttr["text"].lower())) and \
                 not re.search(FALSE_NEWS_TEMPLATES, curr_uttr["text"].lower())
-            lets_chat_about_particular_topic = if_lets_chat_about_topic(curr_uttr["text"].lower())
+            lets_chat_about_particular_topic = if_chat_about_particular_topic(curr_uttr, prev_uttr)
 
             if OFFER_BREAKING_NEWS.lower() in prev_bot_uttr_lower and is_yes:
                 # news skill was not previously active
@@ -300,7 +302,9 @@ def respond():
         bot_attr = {}
         # the only difference is that result is already is a dictionary with news.
 
-        lets_chat_about_particular_topic = if_lets_chat_about_topic(dialogs[i]["human_utterances"][-1]["text"].lower())
+        lets_chat_about_particular_topic = if_chat_about_particular_topic(
+            dialogs[i]["human_utterances"][-1], dialogs[i]["bot_utterances"][-1]
+            if len(dialogs[i]["bot_utterances"]) else {})
         if lets_chat_about_particular_topic:
             if result:
                 # it was a lets chat about topic and we found appropriate news

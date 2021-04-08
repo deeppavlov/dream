@@ -12,8 +12,7 @@ import sentry_sdk
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO
 from common.utils import get_skill_outputs_from_dialog, get_sentiment
-from common.universal_templates import if_choose_topic, if_switch_topic, if_lets_chat_about_topic, \
-    COMPILE_WHAT_TO_TALK_ABOUT
+from common.universal_templates import if_choose_topic, if_switch_topic, if_chat_about_particular_topic
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -261,12 +260,11 @@ def pickup_topic_and_start_small_talk(dialog):
     """
     last_user_uttr = dialog["human_utterances"][-1]
     if len(dialog["bot_utterances"]) > 0:
-        last_bot_uttr_text = dialog["bot_utterances"][-1]["text"].lower()
+        last_bot_uttr = dialog['bot_utterances'][-1]
     else:
-        last_bot_uttr_text = "---"
+        last_bot_uttr = {"text": "---", "annotations": {}}
 
-    if if_choose_topic(last_user_uttr["text"].lower(), prev_uttr=last_bot_uttr_text.lower()) or \
-            if_switch_topic(last_user_uttr["text"].lower()):
+    if if_choose_topic(last_user_uttr, last_bot_uttr) or if_switch_topic(last_user_uttr["text"].lower()):
         # user asks bot to chose topic: `pick up topic/what do you want to talk about/would you like to switch topic`
         # or bot asks user to chose topic and user says `nothing/anything/don't know`
         # if user asks to switch the topic
@@ -283,8 +281,7 @@ def pickup_topic_and_start_small_talk(dialog):
             response = ""
             confidence = 0.
         logger.info(f"Bot initiates script on topic: `{topic}`.")
-    elif if_lets_chat_about_topic(last_user_uttr["text"].lower()) or \
-            re.search(COMPILE_WHAT_TO_TALK_ABOUT, last_bot_uttr_text.lower()):
+    elif if_chat_about_particular_topic(last_user_uttr, last_bot_uttr):
         # user said `let's talk about [topic]` or
         # bot said `what do you want to talk about/would you like to switch the topic`,
         #   and user answered [topic] (not something, nothing, i don't know - in this case,

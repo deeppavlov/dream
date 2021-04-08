@@ -16,7 +16,7 @@ from common.celebrities import talk_about_celebrity
 from common.emotion import emotion_from_feel_answer, is_joke_requested, is_sad
 from common.greeting import HOW_ARE_YOU_RESPONSES, GREETING_QUESTIONS
 from common.news import is_breaking_news_requested
-from common.universal_templates import if_lets_chat_about_topic, if_choose_topic, switch_topic_uttr
+from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
 from common.utils import high_priority_intents, low_priority_intents, \
     get_topics, get_intents, get_emotions, get_entities
 from common.weather import is_weather_requested
@@ -119,7 +119,8 @@ class RuleBasedSkillSelectorConnector:
             skills_for_uttr = []
             user_uttr_text = dialog["human_utterances"][-1]["text"].lower()
             user_uttr_annotations = dialog["human_utterances"][-1]["annotations"]
-            lets_chat_about_particular_topic = if_lets_chat_about_topic(user_uttr_text)
+            bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}
+            lets_chat_about_particular_topic = if_chat_about_particular_topic(dialog["human_utterances"][-1], bot_uttr)
 
             intent_catcher_intents = get_intents(dialog['human_utterances'][-1], probs=False, which="intent_catcher")
             high_priority_intent_detected = any([k for k in intent_catcher_intents
@@ -180,11 +181,7 @@ class RuleBasedSkillSelectorConnector:
                     if hyp["skill_name"] == "weather_skill"
                 ]
             )
-            last_user_sent_text = dialog["human_utterances"][-1].get(
-                "annotations", {}).get("sentseg", {}).get("segments", [""])[-1].lower()
-            switch_choose_topic = switch_topic_uttr(
-                dialog["human_utterances"][-1]) or if_choose_topic(
-                last_user_sent_text, prev_uttr=prev_bot_uttr.get("text", "").lower())
+            switch_choose_topic = if_choose_topic(dialog["human_utterances"][-1], prev_bot_uttr)
             about_weather = "weather_forecast_intent" in intent_catcher_intents or (
                 prev_bot_uttr.get("active_skill", "") == "weather_skill" and weather_city_slot_requested
             ) or (lets_chat_about_particular_topic and "weather" in user_uttr_text)

@@ -14,8 +14,8 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.link import link_to, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED
 from common.movies import get_movie_template
-from common.universal_templates import if_switch_topic, is_switch_topic, if_lets_chat_about_topic, if_choose_topic, \
-    COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
+from common.universal_templates import if_switch_topic, is_switch_topic, if_chat_about_particular_topic, \
+    if_choose_topic, COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
 from common.utils import get_skill_outputs_from_dialog, is_yes, is_no, get_topics, get_intents, get_sentiment, \
     is_donot_know
 from CoBotQA.cobotqa_service import send_cobotqa
@@ -186,8 +186,8 @@ class MovieSkillScenario:
         curr_uttr_is_about_movies = re.search(self.movie_pattern, uttr["text"].lower())
         prev_uttr_last_sent = prev_uttr.get("annotations", {}).get("sentseg", {}).get("segments", [""])[-1].lower()
         prev_uttr_is_about_movies = re.search(self.movie_pattern, prev_uttr_last_sent)
-        lets_talk_about_movies = if_lets_chat_about_topic(uttr=uttr["text"].lower()) and curr_uttr_is_about_movies
-        chosed_topic = if_choose_topic(prev_uttr["text"].lower()) and curr_uttr_is_about_movies
+        lets_talk_about_movies = if_chat_about_particular_topic(uttr, prev_uttr, compiled_pattern=self.movie_pattern)
+        chosed_topic = if_choose_topic(uttr, prev_uttr) and curr_uttr_is_about_movies
 
         if is_movie_topic or lets_talk_about_movies or chosed_topic or curr_uttr_is_about_movies or \
                 ("?" in prev_uttr_last_sent and prev_uttr_is_about_movies):
@@ -204,8 +204,8 @@ class MovieSkillScenario:
 
     def lets_chat_about_movies(self, uttr, prev_uttr={}):
         curr_uttr_is_about_movies = re.search(self.movie_pattern, uttr["text"].lower())
-        lets_talk_about_movies = if_lets_chat_about_topic(uttr=uttr["text"].lower()) and curr_uttr_is_about_movies
-        chosed_topic = if_choose_topic(prev_uttr["text"].lower()) and curr_uttr_is_about_movies
+        lets_talk_about_movies = if_chat_about_particular_topic(uttr, prev_uttr, compiled_pattern=self.movie_pattern)
+        chosed_topic = if_choose_topic(uttr, prev_uttr) and curr_uttr_is_about_movies
 
         if lets_talk_about_movies or chosed_topic or \
                 ("?" not in uttr["text"] and "?" in prev_uttr["text"] and curr_uttr_is_about_movies):
@@ -240,7 +240,7 @@ class MovieSkillScenario:
         topic_switch_detected = annotations.get("intent_catcher", {}).get("topic_switching", {}).get("detected", 0) == 1
         intents = get_intents(uttr, which="cobot_dialogact_intents")
         intent_detected = "Topic_SwitchIntent" in intents
-        if intent_detected or topic_switch_detected or if_lets_chat_about_topic(uttr["text"].lower()) or \
+        if intent_detected or topic_switch_detected or if_chat_about_particular_topic(uttr) or \
                 if_switch_topic(uttr["text"].lower()):
             return True
         else:

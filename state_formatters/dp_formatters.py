@@ -2,7 +2,7 @@ import logging
 from copy import deepcopy
 from typing import Dict, List
 
-from common.universal_templates import if_lets_chat_about_topic
+from common.universal_templates import if_chat_about_particular_topic
 from common.utils import service_intents, get_entities
 import state_formatters.utils as utils
 
@@ -20,7 +20,7 @@ def programy_formatter_dialog(dialog: Dict) -> List:
     # Used by: program_y, program_y_dangerous, program_y_wide
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=6)
     first_uttr_hi = False
-    if len(dialog["utterances"]) == 1 and not if_lets_chat_about_topic(dialog["human_utterances"][-1]["text"]):
+    if len(dialog["utterances"]) == 1 and not if_chat_about_particular_topic(dialog["human_utterances"][-1]):
         first_uttr_hi = True
 
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
