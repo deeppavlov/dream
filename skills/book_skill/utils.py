@@ -245,8 +245,8 @@ def get_published_year(book_entity):
     return published_year
 
 
-def neither_book_nor_author(bookname, stopwords):
-    return bookname and all([len(word) < 5 or word in stopwords for word in bookname.split(' ')])
+def book_or_author(bookname, stopwords):
+    return bookname and not all([len(word) < 5 or word in stopwords for word in bookname.split(' ')])
 
 
 def get_name(annotated_phrase, mode='author', bookyear=False,
@@ -262,69 +262,38 @@ def get_name(annotated_phrase, mode='author', bookyear=False,
     Q571 - book
     Q7725634, Q1667921, Q277759 - book serie
     '''
+    plain_entity, found_entity, n_years_ago = None, None, None
     try:
         all_found_entities = get_raw_entity_names_from_annotations(annotated_phrase['annotations'])
         logger.info(f'Found entities in annotations {all_found_entities}')
-        requested_entities = []  # All found wikidata entities OF REQUESTED TYPE
-        entities_num = len(all_found_entities)
         if mode == 'author':
-            parser_info = "check_triplet"
-            author_types = ['Q36180', 'Q18814623']
-            queries = [(entity, "P106", author_type)
-                       for entity in all_found_entities for author_type in author_types]
-            bool_numbers = request_triples_wikidata(parser_info, queries, query_dict=book_query_dict)
-            if len(bool_numbers) == len(all_found_entities):
-                for entity, bool_number in zip(all_found_entities, bool_numbers):
-                    if bool_number:
-                        logger.debug('It is author')
-                        requested_entities.append(entity)
+            types = ['Q36180', 'Q18814623']
         elif mode == 'book':
-            entity_types_to_find = ['Q571', "Q7725634", "Q1667921", "Q277759", "Q8261", "Q47461344"]
-            queries = []
-            for entity_type in entity_types_to_find:
-                for entity in all_found_entities:
-                    queries.append((entity, "P31", entity_type))
-            parser_info = "check_triplet"
-            bool_numbers = request_triples_wikidata(parser_info, queries, query_dict=book_query_dict)
-            for i in range(len(bool_numbers)):
-                entity = queries[i][0]
-                bool_number = bool_numbers[i]
-                if bool_number:
-                    if i < entities_num:
-                        logger.debug('It is a book')
-                    else:
-                        logger.debug('It is a book serie')
-                    requested_entities.append(entity)
-            if len(requested_entities) == 0:
-                logger.debug('Neither book, nor book serie')
+            types = ['Q571', "Q7725634", "Q1667921", "Q277759", "Q8261", "Q47461344"]
         else:
-            logger.exception(f'Wrong mode: {mode}')
-            return None, None
-        requested_entities = sorted(requested_entities, key=lambda x: int(x[1:]))  # Sort entities by frequency
-        found_entity, plain_entity, n_years_ago = None, None, None
-        if len(requested_entities) > 0:
-            plain_entity = requested_entities[0]  # Found entity
-            found_entity = entity_to_label(plain_entity)
-            n_years_ago = None
-            logger.info(f'Found entity {plain_entity}')
-            if bookyear and mode == 'book':
-                logger.debug(f'Getting published year for {plain_entity}')
-                publication_year = get_published_year(plain_entity)
-                n_years_ago = datetime.now().year - int(publication_year)
-                logger.debug(f'Years ago {n_years_ago}')
+            raise Exception(f'Wrong mode: {mode}')
+        n_years_ago = None
+        toiterate_dict = annotated_phrase['annotations']['wiki_parser'][0]['topic_skill_entities_info']
+        for key in annotated_phrase['annotations']['wiki_parser'][0]['entities_info']:
+            if key not in toiterate_dict:
+                toiterate_dict[key] = annotated_phrase['annotations']['wiki_parser'][0]['entities_info'][key]
+        for entity in toiterate_dict:
+            found_types = [j[0] for j in toiterate_dict[entity]['instance of']]
+            if any([j in types for j in found_types]) and book_or_author(entity, stopwords):
+                logging.debug(f'{mode} found')
+                found_entity, plain_entity = entity, toiterate_dict[entity]['plain_entity']
+                if mode == 'book':
+                    publication_year = toiterate_dict[entity]['publication date'][0][0]
+                    start_ind = None
+                    for i in range(len(publication_year)):
+                        if publication_year[i] in '0123456789' and not start_ind:
+                            start_ind = i
+                    publication_year = publication_year[start_ind:start_ind + 4]
+                    n_years_ago = datetime.now().year - int(publication_year)
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
-        plain_entity = None
-        found_entity = None
-        n_years_ago = None
-    if neither_book_nor_author(found_entity, stopwords):
-        logger.info('Found bookname is in stopwords')
-        entity, n_years_ago = None, None
-    elif return_plain:
-        entity = plain_entity
-    else:
-        entity = found_entity
+    entity = plain_entity if return_plain else found_entity
     logger.info(f'Answer for get_name {entity} {n_years_ago}')
     return entity, n_years_ago
 
@@ -436,3 +405,10 @@ def is_stop(annotated_uttr):
     switch_intent = is_switch_topic(annotated_uttr)
     stop_or_no_intent = 'stop' in annotated_uttr['text'].lower() or is_no(annotated_uttr)
     return exit_intent or switch_intent or stop_or_no_intent
+
+
+dontknow_template = re.compile(r"(not know|cannot remember|don't know|can't remember)", re.IGNORECASE)
+
+
+def dontknow(annotated_uttr):
+    return re.search(dontknow_template, annotated_uttr['text'])

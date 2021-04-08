@@ -14,7 +14,7 @@ from common.utils import is_yes, is_no
 from utils import get_name, get_genre, suggest_template, get_not_given_question_about_books, dontlike, \
     fact_about_book, fav_genre_request_detected, is_side_intent, is_stop, \
     fav_book_request_detected, parse_author_best_book, best_book_by_author, GENRE_PHRASES, was_question_about_book, \
-    asked_about_genre, GENRE_DICT, is_previous_was_book_skill, just_mentioned
+    asked_about_genre, GENRE_DICT, is_previous_was_book_skill, just_mentioned, dontknow
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -35,7 +35,7 @@ OFFER_FACT_ABOUT_BOOK = "Would you like to know some facts about it?"
 OFFER_FACT_DID_NOT_FIND_IT = "Sorry, I suggested the fact but can not find it now."
 DID_NOT_EXIST = "I didn't exist in that time."
 BOOK_CHANGE_PHRASE = "Okay! What would you like to talk about? For example, movies, games or news."
-
+BOOK_ANY_PHRASE = "I see you can't name it. Could you please name any book you have read?"
 FAVOURITE_GENRE_ANSWERS = list(GENRE_PHRASES.values())
 FAVOURITE_BOOK_ANSWERS = ['My favourite book is "The Old Man and the Sea" by Ernest Hemingway.',
                           'The Old Man and the Sea tells the story of a battle between a fisherman '
@@ -179,6 +179,8 @@ class BookSkillScenario:
                     # no more books OR user doesn't like books
                     logger.debug('DONTLIKE detected')
                     reply, confidence = '', 0
+                elif dontknow(annotated_user_phrase):
+                    reply, confidence = BOOK_ANY_PHRASE, self.default_conf
                 elif book_just_active and is_switch_topic(annotated_user_phrase):
                     # if book skill was active and switch topic intent, offer movies
                     logger.debug('Switching topic')

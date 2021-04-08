@@ -51,6 +51,7 @@ topic_skill_types = set(["Q36180",  # writer
                          "Q6625963",  # novelist
                          "Q28389",  # screenwriter
                          "Q571",  # book
+                         "Q277759",  # book series
                          "Q8261",  # novel
                          "Q47461344",  # written work
                          "Q7725634",  # literary work
@@ -212,6 +213,7 @@ def find_top_triplets(entity):
     if entity.startswith("Q"):
         triplets = {}
         entity_label = find_label(entity, "")
+        triplets['plain_entity'] = entity
         for rel_id, rel_label in [("P31", "instance of"),
                                   ("P279", "subclass of"),
                                   ("P131", "located in"),
