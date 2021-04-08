@@ -1,0 +1,681 @@
+{
+    "human_utter_index_batch": [
+        8
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "fun fact.",
+                    "annotations": {
+                        "spelling_preprocessing": "fun fact",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.9988415241241455
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9907732009887695
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9964619278907776
+                            },
+                            "emotion_classification": {
+                                "joy": 0.6858540177345276,
+                                "neutral": 0.9814146161079407
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.8827279806137085
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0021194517612457275
+                            }
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.016507098451256752,
+                            "conversational": 0.9834928512573242
+                        },
+                        "cobot_nounphrases": [
+                            "fun fact"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "fun fact.",
+                            "segments": [
+                                "fun fact."
+                            ]
+                        },
+                        "cobot_entities": {
+                            "entities": [
+                                "fact"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "text": "fact"
+                                }
+                            ]
+                        },
+                        "conceptnet": {
+                            "fun fact": {
+                                "Causes": [
+                                    "fun",
+                                    "happiness",
+                                    "you will laugh"
+                                ],
+                                "CausesDesire": [
+                                    "play game",
+                                    "watch tv",
+                                    "laugh"
+                                ],
+                                "HasProperty": [
+                                    "fun",
+                                    "fun to play with",
+                                    "fun to have"
+                                ],
+                                "SymbolOf": [
+                                    "life",
+                                    "disneyland",
+                                    "cartoon"
+                                ]
+                            }
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Other"
+                            ]
+                        },
+                        "midas_classification": {
+                            "abandon": 0.5313541767088609,
+                            "back-channeling": 0.016914030825041726,
+                            "clarifying_question": 0.01927499436840271,
+                            "closing": 0.018489845541824524,
+                            "command": 0.013536371913687449,
+                            "complaint": 0.020157044577356547,
+                            "dev_command": 0.01200078427792438,
+                            "hold": 0.23490800544429072,
+                            "nonsense": 0.030205156502789838,
+                            "opinion": 0.012912498928434563,
+                            "statement": 0.02210877373500553,
+                            "yes_no_question": 0.01347768738660345
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        },
+                        "entity_linking": [
+                            [
+                                [
+                                    "Q188572",
+                                    "Q5428672",
+                                    "Q7474729",
+                                    "Q55829492",
+                                    "Q11331951"
+                                ]
+                            ],
+                            [
+                                [
+                                    0.8757121562957764,
+                                    0.44393643736839294,
+                                    0.3781319856643677,
+                                    0.2953064739704132,
+                                    0.2941112518310547
+                                ]
+                            ],
+                            [
+                                "A fact is an occurrence in the real world. The usual test for a statement of fact is verifiability\u2014that is whether it can be demonstrated to correspond to experience. Standard reference works are often used to check facts. Scientific facts are verified by repeatable careful observation or measurement by experiments or other means. "
+                            ]
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Sorry, something went wrong inside. Please tell me, what did you say.",
+                                "b\u001b [ A\u001b [ A.",
+                                "Sorry, something went wrong inside. Please tell me, what did you say.",
+                                "fun fact."
+                            ]
+                        },
+                        "kbqa": {
+                            "answer": "Not Found",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": [
+                            "Deary said that the twist at the end of the fun and fast moving play shows that history is in the end about both the facts and figures, yet also the interpretations and enjoyment."
+                        ],
+                        "wiki_parser": {
+                            "entities_info": {
+                                "fact": {
+                                    "part of": [
+                                        [
+                                            "Q59157121",
+                                            "factual information"
+                                        ],
+                                        [
+                                            "Q7949",
+                                            "truth"
+                                        ]
+                                    ],
+                                    "subclass of": [
+                                        [
+                                            "Q2684591",
+                                            "statement"
+                                        ],
+                                        [
+                                            "Q42848",
+                                            "data"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "topic_skill_entities_info": {}
+                        }
+                    }
+                },
+                {
+                    "text": "fun fact.",
+                    "annotations": {
+                        "spelling_preprocessing": "fun fact",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.9988415241241455
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9907732009887695
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9964619278907776
+                            },
+                            "emotion_classification": {
+                                "joy": 0.6858540177345276,
+                                "neutral": 0.9814146161079407
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.8827279806137085
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0021194517612457275
+                            }
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.016507098451256752,
+                            "conversational": 0.9834928512573242
+                        },
+                        "cobot_nounphrases": [
+                            "fun fact"
+                        ],
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "sentseg": {
+                            "punct_sent": "fun fact.",
+                            "segments": [
+                                "fun fact."
+                            ]
+                        },
+                        "cobot_entities": {
+                            "entities": [
+                                "fact"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "text": "fact"
+                                }
+                            ]
+                        },
+                        "conceptnet": {
+                            "fun fact": {
+                                "Causes": [
+                                    "fun",
+                                    "happiness",
+                                    "you will laugh"
+                                ],
+                                "CausesDesire": [
+                                    "play game",
+                                    "watch tv",
+                                    "laugh"
+                                ],
+                                "HasProperty": [
+                                    "fun",
+                                    "fun to play with",
+                                    "fun to have"
+                                ],
+                                "SymbolOf": [
+                                    "life",
+                                    "disneyland",
+                                    "cartoon"
+                                ]
+                            }
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Other"
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        },
+                        "midas_classification": {
+                            "abandon": 0.2997041555673134,
+                            "clarifying_question": 0.041005222509027245,
+                            "closing": 0.020879721004980676,
+                            "command": 0.3231349600842744,
+                            "complaint": 0.05085515023261347,
+                            "dev_command": 0.01531239614776308,
+                            "hold": 0.08150846371159776,
+                            "nonsense": 0.03821637739271466,
+                            "open_question_factual": 0.015010765955848345,
+                            "open_question_personal": 0.01163376873315921,
+                            "opinion": 0.01649319178814107,
+                            "pos_answer": 0.010752637994534799,
+                            "yes_no_question": 0.024368128858085474
+                        },
+                        "entity_linking": [
+                            [
+                                [
+                                    "Q188572",
+                                    "Q5428672",
+                                    "Q7474729",
+                                    "Q55829492",
+                                    "Q11331951"
+                                ]
+                            ],
+                            [
+                                [
+                                    0.8757121562957764,
+                                    0.44393643736839294,
+                                    0.3781319856643677,
+                                    0.2953064739704132,
+                                    0.2941112518310547
+                                ]
+                            ],
+                            [
+                                "A fact is an occurrence in the real world. The usual test for a statement of fact is verifiability\u2014that is whether it can be demonstrated to correspond to experience. Standard reference works are often used to check facts. Scientific facts are verified by repeatable careful observation or measurement by experiments or other means. "
+                            ]
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Sorry, something went wrong inside. Please tell me, what did you say.",
+                                "fun fact.",
+                                "Sorry, probably, I didn't get what you mean.",
+                                "fun fact."
+                            ]
+                        },
+                        "wiki_parser": {
+                            "entities_info": {
+                                "fact": {
+                                    "part of": [
+                                        [
+                                            "Q59157121",
+                                            "factual information"
+                                        ],
+                                        [
+                                            "Q7949",
+                                            "truth"
+                                        ]
+                                    ],
+                                    "subclass of": [
+                                        [
+                                            "Q2684591",
+                                            "statement"
+                                        ],
+                                        [
+                                            "Q42848",
+                                            "data"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "topic_skill_entities_info": {}
+                        },
+                        "kbqa": {
+                            "answer": "Not Found",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": []
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Sorry, probably, I didn't get what you mean.",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Sorry, probably, I didn't get what you mean.",
+                            "segments": [
+                                "Sorry, probably, I didn't get what you mean."
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "b\u001b [ A\u001b [ A.",
+                                "Sorry, something went wrong inside. Please tell me, what did you say.",
+                                "fun fact.",
+                                "Sorry, probably, I didn't get what you mean."
+                            ]
+                        }
+                    },
+                    "active_skill": "dummy_skill"
+                }
+            ]
+        }
+    ],
+    "dff_funfact_skill_state_batch": [
+        {}
+    ],
+    "entities_batch": [
+        {
+            "fact": {
+                "bot_encounters": [
+                    {
+                        "full_name": "fun fact",
+                        "human_utterance_index": 3,
+                        "next_user_emotions": {
+                            "joy": 0.6858540177345276,
+                            "neutral": 0.9814146161079407
+                        },
+                        "next_user_intents": [
+                            "Information_RequestIntent"
+                        ],
+                        "next_user_sentiment": "positive",
+                        "next_user_topics": [
+                            "Phatic",
+                            "Other"
+                        ],
+                        "pos": [
+                            "ADJ",
+                            "NOUN"
+                        ],
+                        "skill_name": "cobotqa"
+                    }
+                ],
+                "human_encounters": [
+                    {
+                        "emotions": {
+                            "joy": 0.6858540177345276,
+                            "neutral": 0.9814146161079407
+                        },
+                        "full_name": "fun fact",
+                        "human_utterance_index": 5,
+                        "intents": [
+                            "General_ChatIntent"
+                        ],
+                        "next_skill_name": "last_chance_service",
+                        "pos": [
+                            "ADJ",
+                            "NOUN"
+                        ],
+                        "previous_skill_name": "last_chance_service",
+                        "sentiment": "positive",
+                        "topics": [
+                            "Phatic",
+                            "Other"
+                        ]
+                    },
+                    {
+                        "emotions": {
+                            "joy": 0.6858540177345276,
+                            "neutral": 0.9814146161079407
+                        },
+                        "full_name": "fun fact",
+                        "human_utterance_index": 7,
+                        "intents": [
+                            "Information_RequestIntent"
+                        ],
+                        "next_skill_name": "dummy_skill",
+                        "pos": [
+                            "ADJ",
+                            "NOUN"
+                        ],
+                        "previous_skill_name": "last_chance_service",
+                        "sentiment": "positive",
+                        "topics": [
+                            "Phatic",
+                            "Other"
+                        ]
+                    },
+                    {
+                        "emotions": {
+                            "joy": 0.6858540177345276,
+                            "neutral": 0.9814146161079407
+                        },
+                        "full_name": "fun fact",
+                        "human_utterance_index": 8,
+                        "intents": [
+                            "Information_RequestIntent"
+                        ],
+                        "next_skill_name": "",
+                        "pos": [
+                            "ADJ",
+                            "NOUN"
+                        ],
+                        "previous_skill_name": "dummy_skill",
+                        "sentiment": "positive",
+                        "topics": [
+                            "Phatic",
+                            "Other"
+                        ]
+                    }
+                ],
+                "name": "fact"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "random_seed": 2718
+}
