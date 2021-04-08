@@ -10,6 +10,7 @@ from common.movies import movie_skill_was_proposed
 from common.animals import animals_skill_was_proposed
 from common.food import food_skill_was_proposed
 from common.books import book_skill_was_proposed, about_book, QUESTIONS_ABOUT_BOOKS
+from common.funfact import funfact_requested
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_CONTINUE_SCENARIO_DONE
 from common.celebrities import talk_about_celebrity
 from common.emotion import emotion_from_feel_answer, is_joke_requested, is_sad
@@ -179,13 +180,11 @@ class RuleBasedSkillSelectorConnector:
                     if hyp["skill_name"] == "weather_skill"
                 ]
             )
-
             last_user_sent_text = dialog["human_utterances"][-1].get(
                 "annotations", {}).get("sentseg", {}).get("segments", [""])[-1].lower()
             switch_choose_topic = switch_topic_uttr(
                 dialog["human_utterances"][-1]) or if_choose_topic(
                 last_user_sent_text, prev_uttr=prev_bot_uttr.get("text", "").lower())
-
             about_weather = "weather_forecast_intent" in intent_catcher_intents or (
                 prev_bot_uttr.get("active_skill", "") == "weather_skill" and weather_city_slot_requested
             ) or (lets_chat_about_particular_topic and "weather" in user_uttr_text)
@@ -235,6 +234,8 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("news_api_skill")
                 if enable_coronavirus or prev_active_skill == 'coronavirus_skill':
                     skills_for_uttr.append("coronavirus_skill")
+                if funfact_requested(dialog["human_utterances"][-1], prev_bot_uttr):
+                    skills_for_uttr.append("dff_funfact_skill")
                 if enable_celebrities:
                     skills_for_uttr.append("dff_celebrity_skill")
                 skills_for_uttr.append("factoid_qa")

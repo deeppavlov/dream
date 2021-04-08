@@ -77,4 +77,6 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8097
   cobot-entities:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8102
+  dff-funfact-skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8104
 version: '3.7'

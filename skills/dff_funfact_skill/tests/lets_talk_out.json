@@ -1,0 +1,26 @@
+[
+    [
+        "Banging your head against a wall for one hour burns 150 calories. Would you like to know another fun fact?",
+        0.95,
+        {
+            "dff_funfact_skill_state": {
+                "shared_memory": {
+                    "given_funfacts": [
+                        "Banging your head against a wall for one hour burns 150 calories."
+                    ]
+                },
+                "previous_human_utter_index": 8,
+                "history": {
+                    "8": "State.SYS_OFFERS_FACT"
+                },
+                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_START\", \"__stack__\": [], \"__user_utterance__\": \"fun fact\", \"__system_state__\": \"State.SYS_OFFERS_FACT\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"Banging your head against a wall for one hour burns 150 calories. Would you like to know another fun fact?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"FUNFACT\\\"<__tuple__>\\\"State.USR_START\\\"\"}"
+            },
+            "used_links": {},
+            "disliked_skills": {}
+        },
+        {},
+        {
+            "can_continue": "must"
+        }
+    ]
+]

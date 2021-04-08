@@ -479,4 +479,12 @@ services:
       - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/cobot-entities
       - PORT=8102
     command: ["nginx", "-g", "daemon off;"]
+  dff-funfact-skill:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/dff-funfact-skill
+      - PORT=8104
+    command: ["nginx", "-g", "daemon off;"]
 version: '3.7'

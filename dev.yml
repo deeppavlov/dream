@@ -425,4 +425,11 @@ services:
       - "./annotators/CoBotNER:/src"
     ports:
       - 8102:8102
+  dff-funfact-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_funfact_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8104:8104
 version: "3.7"
