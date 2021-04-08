@@ -265,6 +265,9 @@ def get_name(annotated_phrase, mode='author', bookyear=False,
     plain_entity, found_entity, n_years_ago = None, None, None
     try:
         all_found_entities = get_raw_entity_names_from_annotations(annotated_phrase['annotations'])
+        if not all_found_entities:
+            logger.warning(f'Entities not found in {annotated_phrase["annotations"].get("entity_linking", {})}')
+            return None, None
         logger.info(f'Found entities in annotations {all_found_entities}')
         if mode == 'author':
             types = ['Q36180', 'Q18814623']
@@ -273,10 +276,13 @@ def get_name(annotated_phrase, mode='author', bookyear=False,
         else:
             raise Exception(f'Wrong mode: {mode}')
         n_years_ago = None
-        toiterate_dict = annotated_phrase['annotations']['wiki_parser'][0]['topic_skill_entities_info']
-        for key in annotated_phrase['annotations']['wiki_parser'][0]['entities_info']:
+        wp_annotations = annotated_phrase['annotations']['wiki_parser']
+        if isinstance(wp_annotations, list):
+            wp_annotations = wp_annotations[0]
+        toiterate_dict = wp_annotations['topic_skill_entities_info']
+        for key in wp_annotations['entities_info']:
             if key not in toiterate_dict:
-                toiterate_dict[key] = annotated_phrase['annotations']['wiki_parser'][0]['entities_info'][key]
+                toiterate_dict[key] = wp_annotations['entities_info'][key]
         for entity in toiterate_dict:
             found_types = [j[0] for j in toiterate_dict[entity]['instance of']]
             if any([j in types for j in found_types]) and book_or_author(entity, stopwords):
