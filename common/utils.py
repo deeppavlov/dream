@@ -329,9 +329,9 @@ def get_not_used_template(used_templates, all_templates):
         return choice(all_templates)
 
 
-def _probs_to_labels(answer_probs, threshold=0.5):
+def _probs_to_labels(answer_probs, max_proba=True, threshold=0.5):
     answer_labels = [label for label in answer_probs if answer_probs[label] > threshold]
-    if not answer_labels:
+    if not answer_labels and max_proba:
         answer_labels = [key for key in answer_probs
                          if answer_probs[key] == max(answer_probs.values())]
     return answer_labels
@@ -358,7 +358,11 @@ def _get_combined_annotations(annotated_utterance, model_name):
             answer_probs = combined_annotations[model_name]
         else:
             raise Exception(f'Not found Model name {model_name} in combined annotations {combined_annotations}')
-        answer_labels = _probs_to_labels(answer_probs)
+        if model_name == "toxic_classification":
+            answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=0.5)
+        else:
+            answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
+
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
@@ -400,13 +404,16 @@ def _get_plain_annotations(annotated_utterance, model_name):
         if isinstance(answer, list):
             if model_name == 'sentiment_classification':
                 answer_probs = _process_old_sentiment(answer)
-                answer_labels = _probs_to_labels(answer_probs)
+                answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
             else:
                 answer_labels = answer
                 answer_probs = _labels_to_probs(answer_labels, combined_classes[model_name])
         else:
             answer_probs = answer
-            answer_labels = _probs_to_labels(answer_probs)
+            if model_name == "toxic_classification":
+                answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=0.5)
+            else:
+                answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
