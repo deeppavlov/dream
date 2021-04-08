@@ -45,9 +45,12 @@ pipeline {
     WAIT_TIMEOUT=2400
     WAIT_INTERVAL=10
     COMPOSE_HTTP_TIMEOUT=120
-    AWS_ACCESS_KEY_ID='AKIAT2RXIFYZLDB66LZ3'
-    AWS_SECRET_ACCESS_KEY='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'
-    AWS_DEFAULT_REGION='us-east-1'
+    //AWS_ACCESS_KEY_ID='AKIAT2RXIFYZLDB66LZ3'
+    //AWS_SECRET_ACCESS_KEY='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'
+    //AWS_DEFAULT_REGION='us-east-1'
+    AWS_ACCESS_KEY_ID='AKIA5U27I4UTIJ7QJJ5L'
+    AWS_SECRET_ACCESS_KEY='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'
+    AWS_DEFAULT_REGION='us-west-2'
   }
 
   stages {
@@ -96,10 +99,12 @@ spec:
         VERSION='latest'
         ENV_FILE='.env.staging'
         DP_AGENT_PORT=4242
-        DOCKER_REGISTRY='263182626354.dkr.ecr.us-east-1.amazonaws.com'
+        //DOCKER_REGISTRY='263182626354.dkr.ecr.us-east-1.amazonaws.com'
+        DOCKER_REGISTRY='938113295654.dkr.ecr.us-west-2.amazonaws.com'
         NAMESPACE='alexa'
         ENVIRONMENT='dev'
-        CHECK_URL="http://ab61c7a0598e44dcbab6b2c216e108de-1052105272.us-east-1.elb.amazonaws.com:4242/ping"
+        //CHECK_URL="http://ab61c7a0598e44dcbab6b2c216e108de-1052105272.us-east-1.elb.amazonaws.com:4242/ping"
+        CHECK_URL="http://agent.alexa.svc:4242/ping"
       }
 
       stages {
@@ -112,7 +117,7 @@ spec:
                 int startTime = currentBuild.duration
                 notify('start')
                 try {
-                  sh label: 'login to ecr', script: 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $DOCKER_REGISTRY'
+                  sh label: 'login to ecr', script: 'aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin $DOCKER_REGISTRY'
                   sh label: 'ecr create repo', script: '''for service in $(docker-compose -f docker-compose.yml ps --services | grep -wv -e mongo)
                       do
                         aws ecr describe-repositories --repository-names $service || aws ecr create-repository --repository-name $service
@@ -156,7 +161,7 @@ spec:
                 notify('start')
                 catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                   try {
-                    sh label: 'update kubeconfig', script: 'aws eks update-kubeconfig --name alexa'
+                    sh label: 'update kubeconfig', script: 'aws eks update-kubeconfig --name staging'
                     sh label: 'update environment', script: 'kubectl create configmap env -n ${NAMESPACE} --from-env-file $ENV_FILE -o yaml --dry-run=client | kubectl apply -f -'
                     sh label: 'generate deployment', script: 'python3 kubernetes/kuber_generator.py'
                     sh label: 'deploy', script: 'for dir in kubernetes/models/*; do kubectl apply -f $dir || true; done'
