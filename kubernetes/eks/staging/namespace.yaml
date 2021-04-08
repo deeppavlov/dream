@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: alexa
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring

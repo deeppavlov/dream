@@ -63,7 +63,7 @@ dashboardProviders:
       disableDeletion: true
       editable: true
       options:
-        path: /var/lib/grafana/dashboards
+        path: /var/lib/grafana/dashboards/default
         foldersFromFilesStructure: true
 
 ## Configure grafana dashboard to import

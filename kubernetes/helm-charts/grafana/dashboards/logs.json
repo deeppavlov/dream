@@ -18,9 +18,57 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 3,
-  "iteration": 1610365375860,
+  "iteration": 1617441480198,
   "links": [],
   "panels": [
+    {
+      "datasource": "Loki",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "showLabels": true,
+        "showTime": true,
+        "sortOrder": "Ascending",
+        "wrapLogMessage": true
+      },
+      "pluginVersion": "7.1.5",
+      "targets": [
+        {
+          "expr": "{app=\"$app\", namespace=\"$env\"} |= \"ERROR\"",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Errors",
+      "type": "logs"
+    },
     {
       "datasource": "Loki",
       "fieldConfig": {
@@ -30,14 +78,14 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 11,
+        "h": 18,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 8
       },
       "id": 2,
       "options": {
-        "showLabels": false,
+        "showLabels": true,
         "showTime": true,
         "sortOrder": "Ascending",
         "wrapLogMessage": true
@@ -65,9 +113,9 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
-          "text": "alexa",
-          "value": "alexa"
+          "selected": false,
+          "text": "alexa-b",
+          "value": "alexa-b"
         },
         "datasource": "Loki",
         "definition": "label_values(namespace)",
@@ -78,7 +126,7 @@
         "name": "env",
         "options": [],
         "query": "label_values(namespace)",
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
@@ -91,21 +139,21 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
-          "text": "coronavirus-skill-dp",
-          "value": "coronavirus-skill-dp"
+          "selected": false,
+          "text": "agent-dp",
+          "value": "agent-dp"
         },
         "datasource": "Loki",
-        "definition": "label_values(up{namespace=\"$env\"}, app)",
+        "definition": "label_values(job)",
         "hide": 0,
         "includeAll": false,
         "label": "",
         "multi": false,
         "name": "app",
         "options": [],
-        "query": "label_values(up{namespace=\"$env\"}, app)",
+        "query": "label_values(job)",
         "refresh": 2,
-        "regex": "",
+        "regex": "$env/(.*)",
         "skipUrlSync": false,
         "sort": 1,
         "tagValuesQuery": "",
@@ -137,5 +185,5 @@
   "timezone": "",
   "title": "Logs",
   "uid": "wC7YpIvMk",
-  "version": 4
+  "version": 8
 }
