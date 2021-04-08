@@ -13,9 +13,10 @@
                 "history": {
                     "0": "State.SYS_LETS_CHAT_ABOUT_TRAVELLING"
                 },
-                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_OPINION_TRAVELLING\", \"__stack__\": [], \"__user_utterance__\": \"lets talk about traveling\", \"__system_state__\": \"State.SYS_LETS_CHAT_ABOUT_TRAVELLING\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"What is your opinion of travel?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"TRAVEL\\\"<__tuple__>\\\"State.USR_OPINION_TRAVELLING\\\"\"}"
+                "dialogflow_state": "{\"vars\": {\"__stack__\": [], \"__user_utterance__\": \"lets talk about traveling\", \"__system_state__\": \"State.SYS_LETS_CHAT_ABOUT_TRAVELLING\", \"__state__\": \"State.USR_OPINION_TRAVELLING\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"What is your opinion of travel?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"TRAVEL\\\"<__tuple__>\\\"State.USR_OPINION_TRAVELLING\\\"\"}"
             },
-            "used_links": {}
+            "used_links": {},
+            "disliked_skills": {}
         },
         {},
         {

@@ -206,6 +206,7 @@ def dff_formatter(dialog: Dict, service_name: str, bot_last_turns=1, human_last_
     human_attributes = dialog.get("human", {}).get("attributes", {})
     state = human_attributes.get(state_name, {})
     used_links = human_attributes.get("used_links", {})
+    disliked_skills = human_attributes.get("disliked_skills", {})
     entities = human_attributes.get("entities", {})
 
     dialog = get_last_n_turns(dialog, bot_last_turns=bot_last_turns, human_last_turns=human_last_turns)
@@ -224,5 +225,6 @@ def dff_formatter(dialog: Dict, service_name: str, bot_last_turns=1, human_last_
             f"{state_name}_batch": [state],
             "entities_batch": [entities],
             "used_links_batch": [used_links],
+            "disliked_skills_batch": [disliked_skills],
         }
     ]

@@ -399,9 +399,10 @@
                 "history": {
                     "0": "State.SYS_CELEBRITY_FIRST_MENTIONED"
                 },
-                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_YESNO_1\", \"__stack__\": [], \"__user_utterance__\": \"johny depp\", \"__system_state__\": \"State.SYS_CELEBRITY_FIRST_MENTIONED\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"Johnny Depp is an amazing film actor ! May I tell you something about this person?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"CELEBRITY\\\"<__tuple__>\\\"State.USR_YESNO_1\\\"\"}"
+                "dialogflow_state": "{\"vars\": {\"__stack__\": [], \"__user_utterance__\": \"johny depp\", \"__system_state__\": \"State.SYS_CELEBRITY_FIRST_MENTIONED\", \"__state__\": \"State.USR_YESNO_1\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"Johnny Depp is an amazing film actor ! May I tell you something about this person?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"CELEBRITY\\\"<__tuple__>\\\"State.USR_YESNO_1\\\"\"}"
             },
-            "used_links": {}
+            "used_links": {},
+            "disliked_skills": {}
         },
         {},
         {
