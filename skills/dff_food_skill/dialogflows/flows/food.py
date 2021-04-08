@@ -17,7 +17,7 @@ import common.dialogflow_framework.utils.condition as condition_utils
 import dialogflows.scopes as scopes
 # from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE, MUST_CONTINUE
-from common.utils import is_yes, get_topics, get_entities
+from common.utils import is_yes, is_no, get_topics, get_entities
 from common.food import TRIGGER_PHRASES
 
 
@@ -159,8 +159,12 @@ def lets_talk_about_request(ngrams, vars):
 
 def what_cuisine_response(vars):
     try:
-        state_utils.set_confidence(vars, confidence=CONF_HIGH)
-        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+        if is_yes(state_utils.get_last_human_utterance(vars)):
+            state_utils.set_confidence(vars, confidence=CONF_HIGH)
+            state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+        elif not is_no(state_utils.get_last_human_utterance(vars)):
+            state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
         return "Okay. What cuisine do you prefer?"
     except Exception as exc:
         logger.exception(exc)
@@ -214,7 +218,12 @@ def what_fav_food_response(vars):
         else:
             food_type = "food"
             state_utils.set_confidence(vars, confidence=CONF_HIGH)
-        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+
+        if is_yes(state_utils.get_last_human_utterance(vars)):
+            state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+        elif not is_no(state_utils.get_last_human_utterance(vars)):
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+
         state_utils.save_to_shared_memory(vars, used_food=used_food + [food_type])
         return f"What is your favorite {food_type}?"
     except Exception as exc:
@@ -364,7 +373,12 @@ def what_fav_food_request(ngrams, vars):
             req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower()
             for req in TRIGGER_PHRASES
         ]
-    ) and is_yes(state_utils.get_last_human_utterance(vars))
+    ) and any(
+        [
+            is_yes(state_utils.get_last_human_utterance(vars)),
+            not is_no(state_utils.get_last_human_utterance(vars))
+        ]
+    )
     food_1st_time = condition_utils.is_first_time_of_state(vars, State.SYS_WHAT_FAV_FOOD)
     cuisine_1st_time = condition_utils.is_first_time_of_state(vars, State.SYS_WHAT_CUISINE)
 
@@ -386,7 +400,12 @@ def what_cuisine_request(ngrams, vars):
             req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower()
             for req in TRIGGER_PHRASES
         ]
-    ) and is_yes(state_utils.get_last_human_utterance(vars))
+    ) and any(
+        [
+            is_yes(state_utils.get_last_human_utterance(vars)),
+            not is_no(state_utils.get_last_human_utterance(vars))
+        ]
+    )
     flag = lets_talk_about_request(ngrams, vars) or linkto_food_skill_agreed
     logger.info(f"what_cuisine_request {flag}")
     return flag
