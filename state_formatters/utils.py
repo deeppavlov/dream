@@ -3,7 +3,7 @@ import logging
 from copy import deepcopy
 import re
 
-from common.universal_templates import if_lets_chat_about_topic
+from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_intents
 
 logger = logging.getLogger(__name__)
@@ -150,9 +150,7 @@ def last_n_human_utt_dialog_formatter(dialog: Dict, last_n_utts: int, only_last_
         only_last_sentence (bool, optional): take only last sentence in each utterance. Defaults to False.
     """
     dialog = deepcopy(dialog)
-    if len(dialog["human_utterances"]) <= last_n_utts and not if_lets_chat_about_topic(
-            dialog["utterances"][0]["text"].lower()
-    ):
+    if len(dialog["human_utterances"]) <= last_n_utts and not if_chat_about_particular_topic(dialog["utterances"][0]):
         # in all cases when not particular topic, convert first phrase in the dialog to `hello!`
         if "sentseg" in dialog["human_utterances"][0]["annotations"]:
             dialog["human_utterances"][0]["annotations"]["sentseg"]["punct_sent"] = "hello!"

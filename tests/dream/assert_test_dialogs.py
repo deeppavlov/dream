@@ -27,6 +27,7 @@ SPECIAL_SKILLS = {
         "comet_dialog_skill",
         "dummy_skill",
         "news_api_skill",
+        "convert_reddit",
         "grounding_skill",
         "book_skill",
         "movie_skill",

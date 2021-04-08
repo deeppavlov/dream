@@ -12,7 +12,7 @@ import sentry_sdk
 from flask import Flask, request, jsonify
 from nltk.tokenize import sent_tokenize
 
-from common.universal_templates import if_lets_chat_about_topic, if_choose_topic
+from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
 from common.utils import get_intent_name, low_priority_intents, substitute_nonwords, get_toxic
 from tag_based_selection import tag_based_response_selection
 from utils import add_question_to_statement, lower_duplicates_score, \
@@ -170,7 +170,7 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, toxiciti
 
         if len(dialog['human_utterances']) == 1 and greeting_spec not in candidates[i]['text']:
             logger.info("Dialog Beginning detected.")
-            if if_lets_chat_about_topic(dialog['utterances'][0]["text"].lower()) and \
+            if if_chat_about_particular_topic(dialog['utterances'][0]) and \
                     "about it" not in dialog['utterances'][0]["text"].lower():
                 logger.info("User wants to talk about particular topic")
                 # if user says `let's chat about blablabla`
@@ -192,7 +192,7 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, toxiciti
                     # for now do not give small talk a very big score here
                     candidates[i]['text'] = "Hi, " + greeting_spec + '! ' + candidates[i]['text']
                     # curr_score = very_big_score
-            elif if_choose_topic(dialog['utterances'][0]["text"].lower()) and \
+            elif if_choose_topic(dialog['utterances'][0]) and \
                     "about it" not in dialog['utterances'][0]["text"].lower():
                 logger.info("User wants bot to choose the topic")
                 # if user says `let's chat about something`

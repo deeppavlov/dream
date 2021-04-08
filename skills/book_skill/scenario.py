@@ -8,7 +8,7 @@ from os import getenv
 from common.books import BOOK_SKILL_CHECK_PHRASES, about_book, BOOK_PATTERN
 from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.tutor import get_tutor_phrase
-from common.universal_templates import is_switch_topic, if_lets_chat_about_topic, tell_me_more, \
+from common.universal_templates import is_switch_topic, if_chat_about_particular_topic, tell_me_more, \
     is_positive, is_negative
 from common.utils import is_yes, is_no
 from utils import get_name, get_genre, suggest_template, get_not_given_question_about_books, dontlike, \
@@ -165,8 +165,8 @@ class BookSkillScenario:
                 logger.debug(f'User phrase: last and prev from last: {user_phrases}')
                 # I don't denote annotated_user_phrase['text'].lower() as a single variable
                 # in order not to confuse it with annotated_user_phrase
-                lets_chat_about_books = if_lets_chat_about_topic(annotated_user_phrase["text"]) and re.search(
-                    BOOK_PATTERN, annotated_user_phrase["text"])
+                lets_chat_about_books = if_chat_about_particular_topic(
+                    annotated_user_phrase, annotated_prev_phrase, compiled_pattern=BOOK_PATTERN)
                 if lets_chat_about_books and not is_no(annotated_user_phrase):
                     # let's chat about books
                     logger.debug('Detected talk about books. Calling start phrase')

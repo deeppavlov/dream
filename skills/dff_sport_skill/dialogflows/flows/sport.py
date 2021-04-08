@@ -11,8 +11,8 @@ import requests
 import dialogflows.scopes as scopes
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
-from common.universal_templates import if_lets_chat_about_topic
-from common.universal_templates import COMPILE_WHAT_TO_TALK_ABOUT, COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
+from common.universal_templates import if_chat_about_particular_topic
+from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
 from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
 import common.greeting as common_greeting
 import common.link as common_link
@@ -35,7 +35,7 @@ from common.sport import (
     ZERO_CONFIDENCE,
 )
 import common.dialogflow_framework.utils.condition as condition_utils
-from common.utils import get_intents, get_sentiment
+from common.utils import get_sentiment
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -219,14 +219,12 @@ def link_to_like_comp_request(ngrams, vars):
 
 def lets_talk_about_sport_request(ngrams, vars):
     # SYS_LETS_TALK_SPORT
-    dont_chat = donot_chat_about(state_utils.get_last_human_utterance(vars))
-    user_lets_chat_about = (
-        "lets_chat_about" in get_intents(state_utils.get_last_human_utterance(vars), which="intent_catcher")
-        or if_lets_chat_about_topic(state_utils.get_last_human_utterance(vars)["text"])
-    )
-    user_want = user_lets_chat_about and not dont_chat
-    user_lets_chat_about_sport = re.search(SPORT_TEMPLATE, state_utils.get_last_human_utterance(vars)["text"])
-    flag = user_want and bool(user_lets_chat_about_sport)
+    user_lets_chat_about_sport = if_chat_about_particular_topic(
+        state_utils.get_last_human_utterance(vars),
+        state_utils.get_last_bot_utterance(vars),
+        compiled_pattern=SPORT_TEMPLATE)
+
+    flag = bool(user_lets_chat_about_sport)
     logger.info(f"lets_talk_about_sport_request={flag}")
     return flag
 
@@ -264,14 +262,12 @@ def lets_chat_about_sport_response(vars):
 
 def lets_talk_about_athlete_request(ngrams, vars):
     # SYS_LETS_TALK_ATHLETE
-    dont_chat = donot_chat_about(state_utils.get_last_human_utterance(vars))
-    user_lets_chat_about = (
-        "lets_chat_about" in get_intents(state_utils.get_last_human_utterance(vars), which="intent_catcher")
-        or if_lets_chat_about_topic(state_utils.get_last_human_utterance(vars)["text"])
-    )
-    user_want = user_lets_chat_about and not dont_chat
-    user_lets_chat_about_athlete = re.search(ATHLETE_TEMPLETE, state_utils.get_last_human_utterance(vars)["text"])
-    flag = user_want and bool(user_lets_chat_about_athlete)
+    user_lets_chat_about_athlete = if_chat_about_particular_topic(
+        state_utils.get_last_human_utterance(vars),
+        state_utils.get_last_bot_utterance(vars),
+        compiled_pattern=ATHLETE_TEMPLETE)
+
+    flag = bool(user_lets_chat_about_athlete)
     logger.info(f"lets_talk_about_athlete_request={flag}")
     return flag
 
@@ -337,9 +333,8 @@ def user_like_or_ask_about_player_or_org_request(ngrams, vars):
     user_like_or_ask = re.search(LIKE_TEMPLATE, state_utils.get_last_human_utterance(vars)["text"]) or re.search(
         QUESTION_TEMPLATE, state_utils.get_last_human_utterance(vars)["text"]
     )
-    user_lets_chat_about = ("lets_chat_about" in get_intents(state_utils.get_last_human_utterance(vars),
-                                                             which="intent_catcher") or if_lets_chat_about_topic(
-        state_utils.get_last_human_utterance(vars)["text"]))
+    user_lets_chat_about = if_chat_about_particular_topic(
+        state_utils.get_last_human_utterance(vars), state_utils.get_last_bot_utterance(vars))
     it_is_not_negative = "negative" not in get_sentiment(
         state_utils.get_last_human_utterance(vars), probs=False, default_labels=["neutral"]
     )
@@ -419,15 +414,12 @@ def user_like_sport_response(vars):
 
 def user_lets_talk_about_comp_request(ngrams, vars):
     # SYS_LETS_TALK_ABOUT_COMP
-    dont_chat = donot_chat_about(state_utils.get_last_human_utterance(vars))
-    user_lets_chat_about = (
-        "lets_chat_about" in get_intents(state_utils.get_last_human_utterance(vars), which="intent_catcher")
-        or if_lets_chat_about_topic(state_utils.get_last_human_utterance(vars)["text"])
-        or re.search(COMPILE_WHAT_TO_TALK_ABOUT, state_utils.get_last_bot_utterance(vars)["text"])
-    )
-    user_want = user_lets_chat_about and not dont_chat
-    user_said_about_comp = re.search(COMPETITION_TEMPLATE, state_utils.get_last_human_utterance(vars)["text"])
-    flag = user_want and bool(user_said_about_comp)
+    user_lets_chat_about_comp = if_chat_about_particular_topic(
+        state_utils.get_last_human_utterance(vars),
+        state_utils.get_last_bot_utterance(vars),
+        compiled_pattern=COMPETITION_TEMPLATE)
+
+    flag = bool(user_lets_chat_about_comp)
     logger.info(f"user_lets_talk_about_comp_request={flag}")
     return flag
 

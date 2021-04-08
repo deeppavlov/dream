@@ -19,7 +19,7 @@ from common.travel import OPINION_REQUESTS_ABOUT_TRAVELLING, TRAVELLING_TEMPLATE
     WOULD_USER_LIKE_TO_VISIT_LOC_REQUESTS, ACKNOWLEDGE_USER_WILL_VISIT_LOC, QUESTIONS_ABOUT_LOCATION, \
     ACKNOWLEDGE_USER_DO_NOT_WANT_TO_VISIT_LOC, OFFER_FACT_RESPONSES, OPINION_REQUESTS, HAVE_YOU_BEEN_TEMPLATE, \
     ACKNOWLEDGE_USER_DISLIKE_LOC
-from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
+from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_intents, get_sentiment, get_not_used_template
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -186,15 +186,12 @@ def negative_sentiment_request(ngrams, vars):
 def lets_chat_about_travelling_request(ngrams, vars):
     # SYS_LETS_CHAT_ABOUT_TRAVELLING
     # this check will also catch linkto questions about travelling
-    user_lets_chat_about = "lets_chat_about" in get_intents(
-        state_utils.get_last_human_utterance(vars), which="intent_catcher") or if_lets_chat_about_topic(
-        state_utils.get_last_human_utterance(vars)["text"]) or re.search(
-        COMPILE_WHAT_TO_TALK_ABOUT, state_utils.get_last_bot_utterance(vars)["text"])
+    user_lets_chat_about_travelling = if_chat_about_particular_topic(
+        state_utils.get_last_human_utterance(vars),
+        state_utils.get_last_bot_utterance(vars),
+        compiled_pattern=TRAVELLING_TEMPLATE)
 
-    user_lets_chat_about_travelling = re.search(TRAVELLING_TEMPLATE,
-                                                state_utils.get_last_human_utterance(vars)["text"])
-
-    if user_lets_chat_about and user_lets_chat_about_travelling:
+    if user_lets_chat_about_travelling:
         logger.info(f"Let's chat about travelling in user utterances")
         return True
     return False

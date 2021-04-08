@@ -9,7 +9,8 @@ from nltk.tokenize import sent_tokenize
 
 from common.link import skills_phrases_map
 from common.constants import CAN_CONTINUE_SCENARIO_DONE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
-from common.universal_templates import if_lets_chat_about_topic, is_switch_topic, is_any_question_sentence_in_utterance
+from common.universal_templates import if_chat_about_particular_topic, is_switch_topic, \
+    is_any_question_sentence_in_utterance
 from common.utils import get_intent_name, get_intents, get_topics, get_common_tokens_in_lists_of_strings
 from utils import calculate_single_convers_evaluator_score, CONV_EVAL_STRENGTH, CONFIDENCE_STRENGTH, \
     how_are_you_spec, what_i_can_do_spec, greeting_spec, misheard_with_spec1, \
@@ -272,8 +273,8 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
                            cand_uttr.get("type", "")) or cand_uttr.get("response_parts", []) == ["prompt"]
         _is_active_skill = (_prev_active_skill == cand_uttr["skill_name"] or cand_uttr.get(
             "can_continue", "") == MUST_CONTINUE)
-        _user_wants_to_chat_about_topic = ("lets_chat_about" in all_user_intents or if_lets_chat_about_topic(
-            dialog['utterances'][0]["text"].lower())) and "about it" not in dialog['utterances'][0]["text"].lower()
+        _user_wants_to_chat_about_topic = if_chat_about_particular_topic(
+            dialog['utterances'][0]) and "about it" not in dialog['utterances'][0]["text"].lower()
         if any([phrase.lower() in cand_uttr["text"].lower() for phrase in LINK_TO_PHRASES]):
             # add `prompt` to response_parts if any linkto phrase in hypothesis
             cand_uttr["response_parts"] = cand_uttr.get("response_parts", []) + ["prompt"]

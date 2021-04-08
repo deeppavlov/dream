@@ -38,11 +38,8 @@ def is_question(vars):
 
 
 def is_lets_chat_about_topic_human_initiative(vars):
-    last_human_uttr = state_utils.get_last_human_utterance(vars)
-    last_human_uttr_text = last_human_uttr["text"]
-    intents = common_utils.get_intents(last_human_uttr, which="intent_catcher")
-    flag = "lets_chat_about" in intents
-    flag = flag or universal_templates.if_lets_chat_about_topic(last_human_uttr_text)
+    flag = universal_templates.if_chat_about_particular_topic(
+        state_utils.get_last_human_utterance(vars), state_utils.get_last_bot_utterance(vars))
     logging.debug(f"is_lets_chat_about_topic_human_initiative = {flag}")
     return flag
 

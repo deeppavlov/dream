@@ -10,7 +10,7 @@ import sentry_sdk
 
 from common.utils import get_skill_outputs_from_dialog, get_user_replies_to_particular_skill, is_no, is_yes, \
     get_outputs_with_response_from_dialog, get_entities
-from common.universal_templates import if_choose_topic, if_lets_chat_about_topic, switch_topic_uttr
+from common.universal_templates import if_choose_topic, if_chat_about_particular_topic, is_switch_topic
 from common.news import OPINION_REQUEST_STATUS, OFFERED_NEWS_DETAILS_STATUS
 from common.greeting import GREETING_QUESTIONS
 from utils import get_starting_phrase, get_statement_phrase, get_opinion_phrase, get_comment_phrase, \
@@ -137,13 +137,11 @@ def get_statuses_and_topics(dialog):
             # if previous meta script is finished (comment given) in previous bot reply
             # or if no meta script in previous reply or script was forcibly
             topics, curr_source_topics = get_not_used_topics(used_topics, dialog)
-            last_user_sent_text = dialog["human_utterances"][-1].get("annotations", {}).get("sentseg", {}).get(
-                "segments", [""])[-1].lower()
             if curr_source_topics != [PREDEFINED_SOURCE]:
                 # if topic is extracted from utterances
                 pass
-            elif switch_topic_uttr(dialog["human_utterances"][-1]) or \
-                    if_choose_topic(last_user_sent_text, prev_uttr=dialog["bot_utterances"][-1]["text"].lower()):
+            elif if_choose_topic(dialog["human_utterances"][-1], dialog['bot_utterances'][-1]):
+                # len(utterances) >3 so at least 1 bot utterance exists
                 # one of the predefined topics (wiki or hand-written)
                 curr_meta_script_statuses += [dialog_flow[0]] * len(topics)
                 curr_meta_script_topics += topics
@@ -204,15 +202,12 @@ def get_response_for_particular_topic_and_status(topic, curr_meta_script_status,
         last_user_sent_text = ""
     if len(dialog["bot_utterances"]) > 0:
         bot_uttr = dialog["bot_utterances"][-1]
-        text_bot_uttr = dialog["bot_utterances"][-1]["text"].lower()
     else:
         bot_uttr = {}
-        text_bot_uttr = ""
-
     if curr_meta_script_status == "starting":
         response, confidence, attr = get_starting_phrase(dialog, topic, attr)
-        can_offer_topic = if_choose_topic(last_user_sent_text, prev_uttr=text_bot_uttr) or switch_topic_uttr(user_uttr)
-        talk_about_user_topic = is_custom_topic(topic) and if_lets_chat_about_topic(text_user_uttr)
+        can_offer_topic = if_choose_topic(dialog["human_utterances"][-1], bot_uttr)
+        talk_about_user_topic = is_custom_topic(topic) and if_chat_about_particular_topic(user_uttr, bot_uttr)
 
         prev_what_to_talk_about_outputs = [get_outputs_with_response_from_dialog(
             dialog["utterances"][-3:], response=response, activated=True)
@@ -241,7 +236,7 @@ def get_response_for_particular_topic_and_status(topic, curr_meta_script_status,
             logger.info("Question by user was detected. Without any word from topic in it. "
                         "Don't continue the script on this turn.")
             response, confidence, attr = "", 0., {}
-        elif switch_topic_uttr(user_uttr) or if_lets_chat_about_topic(text_user_uttr):
+        elif is_switch_topic(user_uttr) or if_chat_about_particular_topic(user_uttr):
             logger.info("Topic switching was detected. Finish script.")
             response, confidence = FINISHED_SCRIPT_RESPONSE, 0.5
             attr["meta_script_status"] = FINISHED_SCRIPT

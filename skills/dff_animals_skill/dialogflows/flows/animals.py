@@ -12,9 +12,9 @@ from enum import Enum, auto
 import common.constants as common_constants
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
-from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
+from common.universal_templates import if_chat_about_particular_topic
 from common.greeting import GREETING_QUESTIONS
-from common.utils import get_intents, is_yes, is_no, get_entities
+from common.utils import is_yes, is_no, get_entities
 from common.animals import PETS_TEMPLATE, COLORS_TEMPLATE, LIKE_ANIMALS_REQUESTS, OFFER_TALK_ABOUT_ANIMALS, \
     WILD_ANIMALS, WHAT_PETS_I_HAVE, CATS_DOGS_PHRASES
 
@@ -114,10 +114,7 @@ def lets_talk_about_request(vars):
     flag = False
     user_uttr = state_utils.get_last_human_utterance(vars)
     bot_uttr = state_utils.get_last_bot_utterance(vars)
-    user_lets_chat_about = "lets_chat_about" in get_intents(user_uttr, which="intent_catcher") or \
-                           if_lets_chat_about_topic(user_uttr["text"]) or re.search(COMPILE_WHAT_TO_TALK_ABOUT,
-                                                                                    bot_uttr["text"]) or re.search(
-        COMPILE_GREETING_QUESTIONS, bot_uttr["text"])
+    user_lets_chat_about = if_chat_about_particular_topic(user_uttr, bot_uttr)
     user_lets_chat_about_animals = re.search(ANIMALS_TEMPLATE, user_uttr["text"]) and not \
         re.search("like|love|have", user_uttr["text"])
     linkto_talk_about_animals = any([req.lower() in bot_uttr["text"].lower()
