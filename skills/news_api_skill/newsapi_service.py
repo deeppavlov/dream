@@ -33,8 +33,8 @@ def get_nltk_sentiment(text):
 
 
 class CachedRequestsAPI:
-    NEWS_SERVICE_URL = f"https://gnews.io/api/v4/search?q=TOPIC&token="
-    ALL_NEWS_SERVICE_URL = f"https://gnews.io/api/v4/top-headlines?token="
+    NEWS_SERVICE_URL = f"http://newsapi.org/v2/top-headlines?q=TOPIC&sortBy=popularity&apiKey="
+    ALL_NEWS_SERVICE_URL = f"http://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey="
 
     def __init__(self, renew_freq_time=3600):
         self.renew_freq_time = renew_freq_time
@@ -46,7 +46,12 @@ class CachedRequestsAPI:
                     f"api keys: {self._api_keys}")
 
     def _collect_api_keys(self):
-        api_keys = [os.environ["GNEWS_API_KEY"]]
+        api_keys_count = 5
+        api_keys = []
+        for i in range(1, api_keys_count + 1):
+            key = f"NEWS_API_KEY_{i}"
+            if key in os.environ:
+                api_keys.append(os.environ[key])
         assert len(api_keys) > 0, print(f"news skill api keys is empty! api_keys {api_keys}")
         return deque(api_keys)
 
@@ -55,7 +60,7 @@ class CachedRequestsAPI:
             request_address = self.ALL_NEWS_SERVICE_URL + api_key
         else:
             request_address = self.NEWS_SERVICE_URL + api_key
-            request_address = request_address.replace("TOPIC", f'"{topic}"')
+            request_address = request_address.replace("TOPIC", topic)
         return request_address
 
     def _make_request(self, topic):
@@ -90,8 +95,14 @@ class CachedRequestsAPI:
                 f"result status: {resp.status_code}")
         else:
             response = resp.json()
-            response = response.get("articles", [])
-            result = response
+            if response["status"] != "ok":
+                logger.warning(
+                    f"News API! result status code is not `ok`")
+                sentry_sdk.capture_message(
+                    f"News API! result status code is not `ok`")
+            else:
+                response = response.get("articles", [])
+                result = response
         return result
 
     def send(self, topic="all", status="", prev_news_urls=[]):
