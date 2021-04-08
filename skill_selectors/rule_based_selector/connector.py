@@ -238,6 +238,7 @@ class RuleBasedSkillSelectorConnector:
                 if enable_celebrities:
                     skills_for_uttr.append("dff_celebrity_skill")
                 skills_for_uttr.append("factoid_qa")
+                skills_for_uttr.append("grounding_skill")
             else:
                 if low_priority_intent_detected:
                     skills_for_uttr.append("intent_responder")

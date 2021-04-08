@@ -2,11 +2,14 @@ import json
 import logging
 import random
 import sentry_sdk
-from collections import defaultdict
 from os import getenv
 
+from common.constants import MUST_CONTINUE
+from common.greeting import GREETING_QUESTIONS
+from common.link import skills_phrases_map
 from common.grounding import what_we_talk_about
-from common.utils import get_topics, get_intents, get_entities
+from common.universal_templates import is_any_question_sentence_in_utterance
+from common.utils import get_topics, get_intents, get_entities, get_toxic, is_no
 from utils import MIDAS_INTENT_ACKNOWLEDGMENETS, get_midas_intent_acknowledgement, reformulate_question_to_statement, \
     INTENT_DICT, DA_TOPIC_DICT, COBOT_TOPIC_DICT, get_entity_name
 
@@ -15,8 +18,9 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-DEFAULT_CONF = 0.99
+SUPER_CONF = 1.
 UNIVERSAL_RESPONSE_CONFIDENCE = 0.8
+UNIVERSAL_RESPONSE_LOW_CONFIDENCE = 0.7
 DONTKNOW_CONF = 0.5
 ACKNOWLEDGEMENT_CONF = 0.5
 DONTKNOW_PHRASE = "Seems like I have no idea what we are talking about."
@@ -24,15 +28,18 @@ DONTKNOW_PHRASE = "Seems like I have no idea what we are talking about."
 INTENTS_BY_POPULARITY = list(INTENT_DICT.keys())[::-1]
 DA_TOPICS_BY_POPULARITY = list(DA_TOPIC_DICT.keys())[::-1]
 COBOT_TOPICS_BY_POPULARITY = list(COBOT_TOPIC_DICT.keys())[::-1]
+LINKTO_QUESTIONS_LOWERCASED = [question.lower() for set_of_quests in skills_phrases_map.values()
+                               for question in set_of_quests]
 
 with open("universal_intent_responses.json", "r") as f:
     UNIVERSAL_INTENT_RESPONSES = json.load(f)
 
 
 def collect_topics_entities_intents(dialog):
-    intent_list = get_intents(dialog['human_utterances'][-2], which='cobot_dialogact_intents')
-    da_topic_list = get_topics(dialog['human_utterances'][-2], which='cobot_dialogact_topics')
-    cobot_topic_list = get_topics(dialog['human_utterances'][-2], which='cobot_topics')
+    prev_human_uttr = dialog['human_utterances'][-2] if len(dialog['human_utterances']) > 1 else {}
+    intent_list = get_intents(prev_human_uttr, which='cobot_dialogact_intents')
+    da_topic_list = get_topics(prev_human_uttr, which='cobot_dialogact_topics')
+    cobot_topic_list = get_topics(prev_human_uttr, which='cobot_topics')
 
     intent_list = list(set(intent_list))
     da_topic_list = list(set(da_topic_list))
@@ -42,6 +49,9 @@ def collect_topics_entities_intents(dialog):
 
 
 def what_do_you_mean_response(dialog):
+    attr = {}
+    human_attr = {}
+    bot_attr = {}
     try:
         what_do_you_mean_intent = dialog["human_utterances"][-1].get(
             "annotations", {}).get(
@@ -53,11 +63,11 @@ def what_do_you_mean_response(dialog):
         elif len(dialog.get('human_utterances', [])) < 2:
             reply, confidence = DONTKNOW_PHRASE, DONTKNOW_CONF
         else:
-            logger.debug('Running grounding skill')
             # collect prev current intents, topics
             intent_list, da_topic_list, cobot_topic_list = collect_topics_entities_intents(dialog)
             # get prev entity_name
-            prev_annotations = dialog['human_utterances'][-2].get('annotations', {})
+            prev_annotations = dialog['human_utterances'][-2].get(
+                'annotations', {}) if len(dialog['human_utterances']) > 1 else {}
             entity_name = get_entity_name(prev_annotations)
 
             reply = None
@@ -81,8 +91,8 @@ def what_do_you_mean_response(dialog):
             if reply is None:
                 reply, confidence = DONTKNOW_PHRASE, DONTKNOW_CONF
             else:
-                confidence = DEFAULT_CONF
-            logger.info(f'Grounding skill output: {reply} {confidence}')
+                confidence = SUPER_CONF
+                attr = {"can_continue": MUST_CONTINUE}
     except Exception as e:
         logger.exception("exception in grounding skill")
         logger.info(str(e))
@@ -90,13 +100,16 @@ def what_do_you_mean_response(dialog):
         reply = ""
         confidence = 0
 
-    return reply, confidence
+    return reply, confidence, human_attr, bot_attr, attr
 
 
 def generate_acknowledgement(dialog):
     curr_intents = get_intents(dialog['human_utterances'][-1], probs=False, which='midas')
     curr_considered_intents = [intent for intent in curr_intents if intent in MIDAS_INTENT_ACKNOWLEDGMENETS]
     ackn_response = ""
+    attr = {}
+    human_attr = {}
+    bot_attr = {}
 
     if curr_considered_intents:
         # can generate acknowledgement
@@ -110,14 +123,24 @@ def generate_acknowledgement(dialog):
                 dialog['human_utterances'][-1]["text"])
             ackn_response = get_midas_intent_acknowledgement(curr_considered_intents[-1],
                                                              curr_reformulated_question)
-    return ackn_response, ACKNOWLEDGEMENT_CONF
+        attr = {"response_parts": ["acknowledgement"]}
+    return ackn_response, ACKNOWLEDGEMENT_CONF, human_attr, bot_attr, attr
+
+
+def get_unused_response(intent, used_universal_intent_responses):
+    available_resps = list(set(UNIVERSAL_INTENT_RESPONSES[intent]).difference(set(used_universal_intent_responses)))
+    if available_resps:
+        reply = random.choice(available_resps)
+    else:
+        reply = random.choice(UNIVERSAL_INTENT_RESPONSES[intent])
+    return reply
 
 
 def generate_universal_response(dialog):
     curr_intents = get_intents(dialog['human_utterances'][-1], probs=False, which='midas')
     human_attr = dialog["human"]["attributes"]
-    human_attr["grouding_skill"] = human_attr.get("grouding_skill", {})
-    human_attr["grouding_skill"]["used_universal_intent_responses"] = human_attr["grouding_skill"].get(
+    human_attr["grounding_skill"] = human_attr.get("grounding_skill", {})
+    human_attr["grounding_skill"]["used_universal_intent_responses"] = human_attr["grounding_skill"].get(
         "used_universal_intent_responses", [])
     bot_attr = {}
     attr = {}
@@ -126,18 +149,41 @@ def generate_universal_response(dialog):
 
     for intent in curr_intents:
         if intent in UNIVERSAL_INTENT_RESPONSES:
-            available_resps = list(set(UNIVERSAL_INTENT_RESPONSES[intent]).difference(
-                set(human_attr["grouding_skill"]["used_universal_intent_responses"])))
-            if available_resps:
-                reply = random.choice(available_resps)
-                human_attr["grouding_skill"]["used_universal_intent_responses"] += [reply]
-            else:
-                reply = random.choice(UNIVERSAL_INTENT_RESPONSES[intent])
+            reply = get_unused_response(intent, human_attr["grounding_skill"]["used_universal_intent_responses"])
+            human_attr["grounding_skill"]["used_universal_intent_responses"] += [reply]
             confidence = UNIVERSAL_RESPONSE_CONFIDENCE
             attr = {"response_parts": ["body"]}
             # we prefer the first found intent, as it should be semantic request
             break
+    if reply == "":
+        if is_any_question_sentence_in_utterance(dialog['human_utterances'][-1]):
+            reply = get_unused_response("open_question_opinion",
+                                        human_attr["grounding_skill"]["used_universal_intent_responses"])
+            human_attr["grounding_skill"]["used_universal_intent_responses"] += [reply]
+            confidence = UNIVERSAL_RESPONSE_LOW_CONFIDENCE
+            attr = {"response_parts": ["body"]}
 
+    return reply, confidence, human_attr, bot_attr, attr
+
+
+def ask_for_topic_after_two_no_in_a_row_to_linkto(dialog):
+    prev_bot_uttr = dialog["bot_utterances"][-1]["text"].lower() if len(dialog["bot_utterances"]) else ""
+    prev_prev_bot_uttr = dialog["bot_utterances"][-2]["text"].lower() if len(dialog["bot_utterances"]) > 1 else ""
+    prev_was_linkto = any([question in prev_bot_uttr for question in LINKTO_QUESTIONS_LOWERCASED])
+    prev_prev_was_linkto = any([question in prev_prev_bot_uttr for question in LINKTO_QUESTIONS_LOWERCASED])
+    human_is_no = is_no(dialog["human_utterances"][-1])
+    prev_human_is_no = is_no(dialog["human_utterances"][-2] if len(dialog["human_utterances"]) > 1 else {})
+
+    reply = ""
+    confidence = 0.
+    attr = {}
+    human_attr = {}
+    bot_attr = {}
+    if prev_was_linkto and prev_prev_was_linkto and human_is_no and prev_human_is_no:
+        offer = random.choice(GREETING_QUESTIONS["what_to_talk_about"])
+        reply = f"Okay then. {offer}"
+        confidence = SUPER_CONF
+        attr = {"can_continue": MUST_CONTINUE}
     return reply, confidence, human_attr, bot_attr, attr
 
 
@@ -153,28 +199,31 @@ class GroundingSkillScenario:
         for dialog in dialogs:
             curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs = [], [], [], [], []
 
-            bot_attr = {}
-            human_attr = dialog["human"]["attributes"]
-            human_attr["used_links"] = human_attr.get("used_links", defaultdict(list))
-            attr = {}
-
             # what do you mean response
-            reply, confidence = what_do_you_mean_response(dialog)
+            prev_human_uttr = dialog['human_utterances'][-2] if len(dialog['human_utterances']) > 1 else {}
+            toxic_result = get_toxic(prev_human_uttr, probs=False)
+            default_blacklist = {'inappropriate': False, 'profanity': False, 'restricted_topics': False}
+            blacklist_result = prev_human_uttr.get("annotations", {}).get('blacklisted_words', default_blacklist)
+            is_toxic_or_blacklisted = toxic_result or blacklist_result['profanity'] or blacklist_result['inappropriate']
+
+            reply, confidence, human_attr, bot_attr, attr = what_do_you_mean_response(dialog)
+            if reply and confidence and not is_toxic_or_blacklisted:
+                curr_responses += [reply]
+                curr_confidences += [confidence]
+                curr_human_attrs += [human_attr]
+                curr_bot_attrs += [bot_attr]
+                curr_attrs += [attr]
+                logger.info(f'Grounding skill what_do_you_mean: {reply}')
+
+            # ACKNOWLEDGEMENT HYPOTHESES for current utterance
+            reply, confidence, human_attr, bot_attr, attr = generate_acknowledgement(dialog)
             if reply and confidence:
                 curr_responses += [reply]
                 curr_confidences += [confidence]
                 curr_human_attrs += [human_attr]
                 curr_bot_attrs += [bot_attr]
                 curr_attrs += [attr]
-
-            # ACKNOWLEDGEMENT HYPOTHESES for current utterance
-            reply, confidence = generate_acknowledgement(dialog)
-            if reply and confidence:
-                curr_responses += [reply]
-                curr_confidences += [confidence]
-                curr_human_attrs += [{}]
-                curr_bot_attrs += [{}]
-                curr_attrs += [{"response_parts": ["acknowledgement"]}]
+                logger.info(f'Grounding skill acknowledgement: {reply}')
 
             # UNIVERSAL INTENT RESPONSES
             reply, confidence, human_attr, bot_attr, attr = generate_universal_response(dialog)
@@ -184,6 +233,17 @@ class GroundingSkillScenario:
                 curr_human_attrs += [human_attr]
                 curr_bot_attrs += [bot_attr]
                 curr_attrs += [attr]
+                logger.info(f'Grounding skill universal_response: {reply}')
+
+            # two 'no' in a row to linkto questions
+            reply, confidence, human_attr, bot_attr, attr = ask_for_topic_after_two_no_in_a_row_to_linkto(dialog)
+            if reply and confidence:
+                curr_responses += [reply]
+                curr_confidences += [confidence]
+                curr_human_attrs += [human_attr]
+                curr_bot_attrs += [bot_attr]
+                curr_attrs += [attr]
+                logger.info(f'Grounding skill 2 "no" detected: {reply}')
 
             texts.append(curr_responses)
             confidences.append(curr_confidences)
