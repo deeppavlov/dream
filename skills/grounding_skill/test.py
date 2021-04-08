@@ -17,9 +17,8 @@ def main_test():
         UNIVERSAL_INTENT_RESPONSES = json.load(f)
 
     response = requests.post(url, json=input_data)
-    response = response.text.replace('  ', ' ')
     reply = "You just told me about star wars, right?"
-    assert reply in response, response.json()
+    assert reply in response.text.replace('  ', ' '), response.json()
 
     # check acknowledgement
     new_input_data = deepcopy(input_data)
