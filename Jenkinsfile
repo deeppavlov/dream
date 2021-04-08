@@ -45,12 +45,9 @@ pipeline {
     WAIT_TIMEOUT=2400
     WAIT_INTERVAL=10
     COMPOSE_HTTP_TIMEOUT=120
-    //AWS_ACCESS_KEY_ID='AKIAT2RXIFYZLDB66LZ3'
-    //AWS_SECRET_ACCESS_KEY='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'
-    //AWS_DEFAULT_REGION='us-east-1'
-    AWS_ACCESS_KEY_ID='AKIA5U27I4UTIJ7QJJ5L'
-    AWS_SECRET_ACCESS_KEY='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'
-    AWS_DEFAULT_REGION='us-west-2'
+    AWS_ACCESS_KEY_ID='AKIAT2RXIFYZLDB66LZ3'
+    AWS_SECRET_ACCESS_KEY='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'
+    AWS_DEFAULT_REGION='us-east-1'
   }
 
   stages {
@@ -99,12 +96,10 @@ spec:
         VERSION='latest'
         ENV_FILE='.env.staging'
         DP_AGENT_PORT=4242
-        //DOCKER_REGISTRY='263182626354.dkr.ecr.us-east-1.amazonaws.com'
-        DOCKER_REGISTRY='938113295654.dkr.ecr.us-west-2.amazonaws.com'
+        DOCKER_REGISTRY='263182626354.dkr.ecr.us-east-1.amazonaws.com'
         NAMESPACE='alexa'
         ENVIRONMENT='dev'
-        //CHECK_URL="http://ab61c7a0598e44dcbab6b2c216e108de-1052105272.us-east-1.elb.amazonaws.com:4242/ping"
-        CHECK_URL="http://agent.alexa.svc:4242/ping"
+        CHECK_URL="http://ab61c7a0598e44dcbab6b2c216e108de-1052105272.us-east-1.elb.amazonaws.com:4242/ping"
       }
 
       stages {
