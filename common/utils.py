@@ -803,7 +803,7 @@ def get_types_from_annotations(annotations, types, tocheck_relation='occupation'
                     found_types = type_to_typename.keys()
                     matching_types = set(found_types) & set(types)
                     some_types_match = len(matching_types) > 0
-                    for type_ in types:
+                    for type_ in type_to_typename.keys():
                         return_matching_type = all([type_ in matching_types,
                                                     not exclude_types])
                         return_mismatching_type = all([type_ not in matching_types,
