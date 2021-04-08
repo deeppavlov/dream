@@ -17,7 +17,7 @@ import common.dialogflow_framework.utils.condition as condition_utils
 import dialogflows.scopes as scopes
 # from common.universal_templates import if_chat_about_particular_topic
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE, MUST_CONTINUE
-from common.utils import is_yes, is_no, get_topics, get_entities
+from common.utils import is_yes, is_no, get_entities
 from common.food import TRIGGER_PHRASES
 
 
@@ -143,12 +143,10 @@ def lets_talk_about_request(ngrams, vars):
     #     or if_chat_about_particular_topic(state_utils.get_last_human_utterance(vars), prev_uttr)
     # )
     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-    cobot_topic = "Food_Drink" in get_topics(state_utils.get_last_human_utterance(vars), which="cobot_topics")
     conceptnet = "food" in annotations.get("conceptnet", {}).get("SymbolOf", [])
 
     user_lets_chat_about_food = any([
         re.search(FOOD_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"].lower()),
-        cobot_topic,
         conceptnet
     ]) and (not state_utils.get_last_human_utterance(vars)["text"].startswith("what"))
     flag = user_lets_chat_about_food
@@ -204,24 +202,30 @@ def what_fav_food_response(vars):
     food_types = ["food", "drink", "fruit", "dessert", "vegetable", "berry"]
     shared_memory = state_utils.get_shared_memory(vars)
     used_food = shared_memory.get("used_food", [])
+    unused_food = []
 
     try:
         if used_food:
             unused_food = [i for i in food_types if i not in used_food]
             if unused_food:
                 food_type = random.choice(unused_food)
-                state_utils.set_confidence(vars, confidence=CONF_LOW)
             else:
                 food_type = "snack"
-                state_utils.set_confidence(vars, confidence=CONF_LOWEST)
         else:
             food_type = "food"
-            state_utils.set_confidence(vars, confidence=CONF_HIGH)
 
         if is_yes(state_utils.get_last_human_utterance(vars)):
             state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+            if food_type == "food":
+                state_utils.set_confidence(vars, confidence=CONF_HIGH)
+            if food_type == "snack":
+                state_utils.set_confidence(vars, confidence=CONF_LOWEST)
+            if unused_food:
+                state_utils.set_confidence(vars, confidence=CONF_LOW)
+
         elif not is_no(state_utils.get_last_human_utterance(vars)):
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+            state_utils.set_confidence(vars, confidence=CONF_LOW)
 
         state_utils.save_to_shared_memory(vars, used_food=used_food + [food_type])
         return f"What is your favorite {food_type}?"
@@ -237,7 +241,7 @@ def fav_food_request(ngrams, vars):
     user_fav_food = []
     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
     nounphr = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
-    cobot_topic = "Food_Drink" in get_topics(state_utils.get_last_human_utterance(vars), which="cobot_topics")
+    # cobot_topic = "Food_Drink" in get_topics(state_utils.get_last_human_utterance(vars), which="cobot_topics")
     conceptnet = any([
         "food" in annotations.get("conceptnet", {}).get("SymbolOf", []),
         "delicious" in annotations.get("conceptnet", {}).get("HasProperty", []),
@@ -245,7 +249,7 @@ def fav_food_request(ngrams, vars):
     ])
     for ne in nounphr:
         user_fav_food.append(ne)
-    if user_fav_food and any([cobot_topic, conceptnet]):
+    if user_fav_food and conceptnet:
         flag = True
     logger.info(f"fav_food_request {flag}")
     return flag
