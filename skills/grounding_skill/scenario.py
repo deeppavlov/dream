@@ -36,14 +36,17 @@ with open("universal_intent_responses.json", "r") as f:
 
 
 def collect_topics_entities_intents(dialog):
-    prev_human_uttr = dialog['human_utterances'][-2] if len(dialog['human_utterances']) > 1 else {}
-    intent_list = get_intents(prev_human_uttr, which='cobot_dialogact_intents')
-    da_topic_list = get_topics(prev_human_uttr, which='cobot_dialogact_topics')
-    cobot_topic_list = get_topics(prev_human_uttr, which='cobot_topics')
+    if len(dialog['human_utterances']) > 1:
+        prev_human_uttr = dialog['human_utterances'][-2]
+        intent_list = get_intents(prev_human_uttr, which='cobot_dialogact_intents')
+        da_topic_list = get_topics(prev_human_uttr, which='cobot_dialogact_topics')
+        cobot_topic_list = get_topics(prev_human_uttr, which='cobot_topics')
 
-    intent_list = list(set(intent_list))
-    da_topic_list = list(set(da_topic_list))
-    cobot_topic_list = list(set(cobot_topic_list))
+        intent_list = list(set(intent_list))
+        da_topic_list = list(set(da_topic_list))
+        cobot_topic_list = list(set(cobot_topic_list))
+    else:
+        intent_list, da_topic_list, cobot_topic_list = [], [], []
 
     return intent_list, da_topic_list, cobot_topic_list
 
@@ -200,14 +203,17 @@ class GroundingSkillScenario:
             curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs = [], [], [], [], []
 
             # what do you mean response
-            prev_human_uttr = dialog['human_utterances'][-2] if len(dialog['human_utterances']) > 1 else {}
-            toxic_result = get_toxic(prev_human_uttr, probs=False)
-            default_blacklist = {'inappropriate': False, 'profanity': False, 'restricted_topics': False}
-            blacklist_result = prev_human_uttr.get("annotations", {}).get('blacklisted_words', default_blacklist)
-            is_toxic_or_blacklisted = toxic_result or blacklist_result['profanity'] or blacklist_result['inappropriate']
+            if len(dialog['human_utterances']) > 1:
+                prev_human_uttr = dialog['human_utterances'][-2]
+                toxic_result = get_toxic(prev_human_uttr, probs=False)
+                default_blacklist = {'inappropriate': False, 'profanity': False, 'restricted_topics': False}
+                blacklist_result = prev_human_uttr.get("annotations", {}).get('blacklisted_words', default_blacklist)
+                is_toxic = toxic_result or blacklist_result['profanity'] or blacklist_result['inappropriate']
+            else:
+                is_toxic = False
 
             reply, confidence, human_attr, bot_attr, attr = what_do_you_mean_response(dialog)
-            if reply and confidence and not is_toxic_or_blacklisted:
+            if reply and confidence and not is_toxic:
                 curr_responses += [reply]
                 curr_confidences += [confidence]
                 curr_human_attrs += [human_attr]
