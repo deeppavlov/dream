@@ -309,21 +309,25 @@ def respond():
                     fact = random.sample(TOPICS_FACTS[lets_chat_topic], 1)[0]
                     chosen_topics[d_id] = lets_chat_topic
                     _chosen_topic_fact = 'lets_chat_cobot_da'
-                else:
+                elif not get_entities(dialog["human_utterances"][-1],
+                                      only_named=False, with_labels=False):
                     topic = random.sample(TOPICS_FACTS.keys(), 1)[0]
                     fact = random.sample(TOPICS_FACTS[topic], 1)[0]
                     chosen_topics[d_id] = topic
                     _chosen_topic_fact = 'switch_random'
-                user_input = {
-                    'checked_sentence': fact,
-                    'knowledge': fact,
-                    'text': user_input_text,
-                    'history': user_input_history,
-                    'chosen_topic_fact': _chosen_topic_fact
-                }
-                input_batch.append(user_input)
-                annotations_depths.append({})
-                dial_ids.append(d_id)
+                else:
+                    fact = ""
+                if fact:
+                    user_input = {
+                        'checked_sentence': fact,
+                        'knowledge': fact,
+                        'text': user_input_text,
+                        'history': user_input_history,
+                        'chosen_topic_fact': _chosen_topic_fact
+                    }
+                    input_batch.append(user_input)
+                    annotations_depths.append({})
+                    dial_ids.append(d_id)
 
             if news_api_fact:
                 user_input = {
@@ -432,25 +436,36 @@ def respond():
                 else:
                     confidence = DEFAULT_CONFIDENCE
                     attr["confidence_case"] += "default "
-                if ABBRS.search(raw_responses[curr_i]):
+                acronym_flag = ABBRS.search(raw_responses[curr_i])
+                if acronym_flag:
                     confidence = ABBRS_CONFIDENCE
-                    attr["confidence_case"] += "acronyms "
-                if special_char_re.search(raw_responses[curr_i]):
+                    attr["confidence_case"] += f"acronyms: {acronym_flag.group(1)} "
+                special_char_flag = bool(special_char_re.search(raw_responses[curr_i]))
+                if special_char_flag:
                     confidence = HAS_SPEC_CHAR_CONFIDENCE
                     attr["confidence_case"] += "special_char "
                 if special_intents_flags[i]:
                     confidence = 0.0
                     attr["confidence_case"] += "special_intents "
-                if greetings_farewells_re.search(raw_responses[curr_i]):
+                greetings_farewells_flag = bool(greetings_farewells_re.search(raw_responses[curr_i]))
+                if greetings_farewells_flag:
                     confidence = 0.0
                     attr["confidence_case"] += "greetings_farewells "
 
                 penalties = annotations_depths[curr_i].get("retrieved_fact", 0.0) + cobotqa_penalty + \
                     already_was_active + short_long_response if not no_penalties else 0.
                 confidence -= penalties
-                curr_attributes.append(attr)
-                curr_confidences.append(max(0.0, confidence))
-                curr_responses.append(add_intro + raw_responses[curr_i])
+                if any(
+                    [
+                        acronym_flag, special_char_flag, special_intents_flags[i],
+                        greetings_farewells_flag, short_long_response
+                    ]
+                ):
+                    continue
+                else:
+                    curr_attributes.append(attr)
+                    curr_confidences.append(max(0.0, confidence))
+                    curr_responses.append(re.sub(r'\s([?.!",;:](?:\s|$))', r'\1', add_intro + raw_responses[curr_i]))
             attributes.append(curr_attributes)
             confidences.append(curr_confidences)
             responses.append(curr_responses)
