@@ -77,11 +77,13 @@ simplified_dialogflow = dialogflow_extention.DFEasyFilling(State.USR_START)
 # std greeting
 ##################################################################################################################
 
-def default_condition_request(ngram, vars):
+def default_condition_request(ngrams, vars):
     flag = True
     flag = flag and not condition_utils.is_switch_topic(vars)
     flag = flag and not condition_utils.is_lets_chat_about_topic_human_initiative(vars)
     flag = flag and not condition_utils.is_question(vars)
+    flag = flag or talk_about_celebrity_request(ngrams, vars)
+    logger.info(f'default_condition_request {flag}')
     return flag
 
 
@@ -175,6 +177,7 @@ def get_celebrity(vars, exclude_types=False, use_only_last_utt=False):
                            "Q2405480",  # voice actor
                            'Q17125263',  # youtuber
                            'Q245068',  # comedian
+                           'Q19204627',  # American football player
                            'Q2066131',  # sportsman
                            'Q947873',  # television presenter
                            'Q2405480',  # comedian

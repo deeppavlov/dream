@@ -793,6 +793,8 @@ def get_types_from_annotations(annotations, types, tocheck_relation='occupation'
         name of entity, name of type found, raw name of type found
     '''
     wp_annotations = annotations.get("wiki_parser", {})
+    if isinstance(wp_annotations, list) and wp_annotations:  # support 2 different formats
+        wp_annotations = wp_annotations[0]
     try:
         topic_entities = wp_annotations.get('topic_skill_entities_info', {})
         for entity in topic_entities:
