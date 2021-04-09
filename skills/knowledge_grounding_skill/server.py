@@ -402,6 +402,7 @@ def respond():
                     confidence = HIGHEST_CONFIDENCE
                     no_penalties = True
                     attr["confidence_case"] += f"topic_fact: {chosen_topic_fact_flag} "
+                    attr["response_parts"] = ["prompt"]
                 if input_batch[curr_i].get("news_api_fact", ""):
                     add_intro = random.choice(
                         [
@@ -420,12 +421,14 @@ def respond():
                 if (curr_nounphrase_search or curr_entities_search) and lets_chat_about_flags[i]:
                     confidence = HIGHEST_CONFIDENCE
                     attr["confidence_case"] += "nounphrase_entity_and_lets_chat_about "
+                    attr["response_parts"] = ["prompt"]
                 elif curr_nounphrase_search or curr_entities_search:
                     confidence = NOUNPHRASE_ENTITY_CONFIDENCE
                     attr["confidence_case"] += "nounphrase_entity "
                 elif lets_chat_about_flags[i]:
                     confidence = LETS_CHAT_ABOUT_CONFIDENDENCE
                     attr["confidence_case"] += "lets_chat_about "
+                    attr["response_parts"] = ["prompt"]
                 else:
                     confidence = DEFAULT_CONFIDENCE
                     attr["confidence_case"] += "default "
