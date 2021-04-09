@@ -33,7 +33,7 @@ spacy_nlp = load("en_core_web_sm")
 with open("cuisines_facts.json", "r") as f:
     CUISINES_FACTS = json.load(f)
 FOOD_WORDS_RE = re.compile(
-    r"(food|cooking|cuisine|daily bread|meals|foodstuffs|edibles|drinks|pepperoni)",
+    r"(food|cook|cooking|cuisine|daily bread|meals|foodstuffs|edibles|drinks|pepperoni|pizza|strawberries)",
     re.IGNORECASE
 )
 WHAT_COOK_RE = re.compile(
