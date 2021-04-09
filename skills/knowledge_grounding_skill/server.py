@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-DEFAULT_ANNTR_HISTORY_LEN = 1
+DEFAULT_ANNTR_HISTORY_LEN = 0
 TOP_N_FACTS = 2
 AA_FACTOR = 0.05
 ABBRS_CONFIDENCE = 0.8
