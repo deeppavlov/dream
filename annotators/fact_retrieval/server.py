@@ -2,6 +2,8 @@ import logging
 import os
 import pickle
 import random
+import time
+
 from flask import Flask, request, jsonify
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
@@ -59,6 +61,7 @@ def check_utterance(question, bot_sentence):
 
 @app.route("/model", methods=['POST'])
 def respond():
+    st_time = time.time()
     cur_utt = request.json.get("human_sentences", [" "])
     dialog_history = request.json.get("dialog_history", [" "])
     cur_utt = [utt.lstrip("alexa") for utt in cur_utt]
@@ -100,6 +103,8 @@ def respond():
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
+    total_time = time.time() - st_time
+    logger.info(f'fact_retrieval exec time: {total_time:.3f}s')
     return jsonify(out_res)
 
 

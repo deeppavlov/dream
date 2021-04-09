@@ -477,7 +477,7 @@ def respond():
         confidences = [[0.]]
         attributes = [[{}]]
 
-    logger.info(f"Respond exec time: {time.time() - st_time}")
+    logger.info(f"knowledge_grounding_skill exec time: {time.time() - st_time}")
     return jsonify(list(zip(responses, confidences, attributes)))
 
 

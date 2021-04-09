@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import re
+import time
 from os import getenv
 from typing import Dict, Callable
 
@@ -113,6 +114,7 @@ class RuleBasedSkillSelectorConnector:
                                    r"fantasy)")
 
     async def send(self, payload: Dict, callback: Callable):
+        st_time = time.time()
         try:
             dialog = payload['payload']['states_batch'][0]
 
@@ -458,11 +460,16 @@ class RuleBasedSkillSelectorConnector:
             if "/alexa_" in user_uttr_text:
                 skills_for_uttr = ["alexa_handler"]
             logger.info(f"Selected skills: {skills_for_uttr}")
+
+            total_time = time.time() - st_time
+            logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
             asyncio.create_task(callback(
                 task_id=payload['task_id'],
                 response=list(set(skills_for_uttr))
             ))
         except Exception as e:
+            total_time = time.time() - st_time
+            logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
             logger.exception(e)
             sentry_sdk.capture_exception(e)
             asyncio.create_task(callback(
