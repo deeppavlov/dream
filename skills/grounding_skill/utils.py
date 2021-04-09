@@ -80,7 +80,7 @@ MIDAS_INTENT_ACKNOWLEDGMENETS = {
                         "You wanna hear SUBJECT."
                         ],
     "pos_answer": ["I see you agree.",
-                   "It's a yes."
+                   "It's a yes.",
                    "You accepted."
                    ],
     "neg_answer": [f"I see you disagree.",

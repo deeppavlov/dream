@@ -94,8 +94,13 @@ def what_do_you_mean_response(dialog):
             if reply is None:
                 reply, confidence = DONTKNOW_PHRASE, DONTKNOW_CONF
             else:
-                confidence = SUPER_CONF
-                attr = {"can_continue": MUST_CONTINUE}
+                if what_we_talk_about(dialog['human_utterances'][-1]):
+                    confidence = SUPER_CONF
+                    attr = {"can_continue": MUST_CONTINUE}
+                else:
+                    # what_do_you_mean_intent but not regexp
+                    confidence = UNIVERSAL_RESPONSE_CONFIDENCE
+                    attr = {}
     except Exception as e:
         logger.exception("exception in grounding skill")
         logger.info(str(e))
