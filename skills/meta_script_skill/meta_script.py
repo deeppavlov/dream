@@ -8,6 +8,7 @@ import pathlib
 from os import getenv
 import sentry_sdk
 
+from common.constants import CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE
 from common.utils import get_skill_outputs_from_dialog, get_user_replies_to_particular_skill, is_no, is_yes, \
     get_outputs_with_response_from_dialog, get_entities
 from common.universal_templates import if_choose_topic, if_chat_about_particular_topic, is_switch_topic
@@ -206,6 +207,7 @@ def get_response_for_particular_topic_and_status(topic, curr_meta_script_status,
         bot_uttr = {}
     if curr_meta_script_status == "starting":
         response, confidence, attr = get_starting_phrase(dialog, topic, attr)
+        attr["response_parts"] = ["prompt"]
         can_offer_topic = if_choose_topic(dialog["human_utterances"][-1], bot_uttr)
         talk_about_user_topic = is_custom_topic(topic) and if_chat_about_particular_topic(user_uttr, bot_uttr)
 
@@ -246,6 +248,7 @@ def get_response_for_particular_topic_and_status(topic, curr_meta_script_status,
             attr["meta_script_status"] = FINISHED_SCRIPT
         elif curr_meta_script_status == "comment":
             response, confidence, attr = get_comment_phrase(dialog, attr)
+            attr["can_continue"] = CAN_NOT_CONTINUE
         elif curr_meta_script_status == "opinion":
             response, confidence, attr = get_opinion_phrase(dialog, topic, attr)
         elif curr_meta_script_status == "deeper1" and (is_no(user_uttr) or "never" in text_user_uttr):
@@ -253,6 +256,7 @@ def get_response_for_particular_topic_and_status(topic, curr_meta_script_status,
             attr["meta_script_status"] = FINISHED_SCRIPT
         else:
             response, confidence, attr = get_statement_phrase(dialog, topic, attr, TOPICS)
+            attr["can_continue"] = CAN_CONTINUE_SCENARIO
 
         if confidence > 0.7 and (is_yes(user_uttr) or len(text_user_uttr.split()) > 7):
             # if yes detected, confidence 1.0 - we like agreements!
