@@ -24,7 +24,7 @@ from common.coronavirus import check_about_death, about_virus, quarantine_end, i
 import common.travel as common_travel
 import common.music as common_music
 import common.sport as common_sport
-from common.animals import check_about_pets
+from common.animals import check_about_animals, mentioned_animal
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -204,8 +204,8 @@ class RuleBasedSkillSelectorConnector:
                 self.about_movie_words, prev_bot_uttr.get("text", "").lower()))
             about_books = about_books or book_skill_was_proposed(prev_bot_uttr)
             about_food = (self.food_cobot_topics & cobot_topics) or food_skill_was_proposed(prev_bot_uttr)
-            about_animals = self.animals_cobot_topics & cobot_topics or animals_skill_was_proposed(prev_bot_uttr)
-            about_pets = check_about_pets(dialog["human_utterances"][-1]["text"])
+            about_animals = check_about_animals(dialog["human_utterances"][-1]["text"]) or \
+                animals_skill_was_proposed(prev_bot_uttr) or mentioned_animal(user_uttr_annotations)
             emotions = get_emotions({'annotations': user_uttr_annotations}, probs=True)
             # check that logging of if empty is in get_emotion and delete string than
             about_celebrities = self.celebrity_cobot_topics or enable_celebrity(dialog["human_utterances"][-1],
@@ -298,7 +298,7 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("coronavirus_skill")
                 if about_music and len(dialog["utterances"]) > 2:
                     skills_for_uttr.append("music_tfidf_retrieval")
-                if about_animals or about_pets or prev_active_skill == 'dff_animals_skill':
+                if about_animals or prev_active_skill == 'dff_animals_skill':
                     skills_for_uttr.append("dff_animals_skill")
                 if about_food or prev_active_skill == 'dff_food_skill':
                     skills_for_uttr.append("dff_food_skill")
