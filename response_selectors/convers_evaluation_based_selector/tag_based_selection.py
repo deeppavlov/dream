@@ -288,7 +288,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         _is_active_skill = (_prev_active_skill == cand_uttr["skill_name"] or cand_uttr.get(
             "can_continue", "") == MUST_CONTINUE)
         _user_wants_to_chat_about_topic = if_chat_about_particular_topic(
-            dialog['utterances'][0]) and "about it" not in dialog['utterances'][0]["text"].lower()
+            annotated_uttr) and "about it" not in annotated_uttr["text"].lower()
         if any([phrase.lower() in cand_uttr["text"].lower() for phrase in LINK_TO_PHRASES]):
             # add `prompt` to response_parts if any linkto phrase in hypothesis
             cand_uttr["response_parts"] = cand_uttr.get("response_parts", []) + ["prompt"]
