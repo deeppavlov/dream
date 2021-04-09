@@ -29,13 +29,13 @@
         "num_entities_to_return": 5
       },
       {
-        "class_name": "first_par_extractor",
+        "class_name": "q_to_page:QToPage",
         "in": ["entity_ids"],
-        "out": ["first_par"],
-        "wiki_first_par_filename": "{DOWNLOADS_PATH}/wikidata_eng/q_to_par_en.pickle"
+        "out": ["entity_pages"],
+        "q_to_page_filename": "{DOWNLOADS_PATH}/wikidata_eng/q_to_page_en.pickle"
       }
     ],
-    "out": ["entity_ids", "confidences", "first_par"]
+    "out": ["entity_ids", "confidences", "entity_pages"]
   },
   "metadata": {
     "variables": {
@@ -64,7 +64,7 @@
         "subdir": "{DOWNLOADS_PATH}/wikidata_eng"
       },
       {
-        "url": "http://files.deeppavlov.ai/kbqa/wikidata/q_to_par_en.pickle",
+        "url": "http://files.deeppavlov.ai/kbqa/wikidata/q_to_page_en.pickle",
         "subdir": "{DOWNLOADS_PATH}/wikidata_eng"
       }
     ]
