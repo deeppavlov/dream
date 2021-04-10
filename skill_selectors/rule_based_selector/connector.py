@@ -236,7 +236,8 @@ class RuleBasedSkillSelectorConnector:
                 if funfact_requested(dialog["human_utterances"][-1], prev_bot_uttr):
                     skills_for_uttr.append("dff_funfact_skill")
                 if about_celebrities:
-                    skills_for_uttr.append("dff_celebrity_skill")
+                    pass
+                    # skills_for_uttr.append("dff_celebrity_skill")
                 skills_for_uttr.append("factoid_qa")
                 skills_for_uttr.append("grounding_skill")
             else:
@@ -252,8 +253,6 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("valentines_day_skill")
                 skills_for_uttr.append("personal_info_skill")
                 skills_for_uttr.append("meta_script_skill")
-                if about_celebrities:
-                    skills_for_uttr.append("dff_celebrity_skill")
                 if len(dialog["utterances"]) < 20:
                     # greeting skill inside itself do not turn on later than 10th turn of the conversation
                     # skills_for_uttr.append("greeting_skill")
@@ -300,8 +299,8 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("coronavirus_skill")
                 if about_music and len(dialog["utterances"]) > 2:
                     skills_for_uttr.append("music_tfidf_retrieval")
-                if about_animals or prev_active_skill == 'dff_animals_skill':
-                    skills_for_uttr.append("dff_animals_skill")
+                # if about_animals or prev_active_skill == 'dff_animals_skill':
+                #     skills_for_uttr.append("dff_animals_skill")
                 if about_food or prev_active_skill == 'dff_food_skill':
                     skills_for_uttr.append("dff_food_skill")
 
