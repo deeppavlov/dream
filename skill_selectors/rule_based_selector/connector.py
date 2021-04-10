@@ -12,7 +12,7 @@ from common.food import food_skill_was_proposed
 from common.books import book_skill_was_proposed, about_book, QUESTIONS_ABOUT_BOOKS
 from common.funfact import funfact_requested
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_CONTINUE_SCENARIO_DONE
-from common.celebrities import talk_about_celebrity
+# from common.celebrities import talk_about_celebrity
 from common.emotion import emotion_from_feel_answer, is_joke_requested, is_sad
 from common.greeting import HOW_ARE_YOU_RESPONSES, GREETING_QUESTIONS
 from common.news import is_breaking_news_requested
@@ -208,8 +208,8 @@ class RuleBasedSkillSelectorConnector:
             about_pets = check_about_pets(dialog["human_utterances"][-1]["text"])
             emotions = get_emotions({'annotations': user_uttr_annotations}, probs=True)
             # check that logging of if empty is in get_emotion and delete string than
-            enable_celebrities = self.celebrity_cobot_topics or talk_about_celebrity(dialog["human_utterances"][-1],
-                                                                                     prev_bot_uttr)
+            # enable_celebrities = self.celebrity_cobot_topics or talk_about_celebrity(dialog["human_utterances"][-1],
+            #                                                                          prev_bot_uttr)
             # print(f"Skill Selector: did we select game_cooperative_skill? {about_games}", flush=True)
 
             if "/new_persona" in user_uttr_text:
@@ -233,8 +233,8 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("coronavirus_skill")
                 if funfact_requested(dialog["human_utterances"][-1], prev_bot_uttr):
                     skills_for_uttr.append("dff_funfact_skill")
-                if enable_celebrities:
-                    skills_for_uttr.append("dff_celebrity_skill")
+                # if enable_celebrities:
+                #     skills_for_uttr.append("dff_celebrity_skill")
                 skills_for_uttr.append("factoid_qa")
                 skills_for_uttr.append("grounding_skill")
             else:
