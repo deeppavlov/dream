@@ -2,9 +2,6 @@ from enum import Enum, auto
 
 MAIN = "SYSTEM"
 ANIMALS = "ANIMALS"
-USER_PETS = "USER_PETS"
-MY_PETS = "MY_PETS"
-WILD_ANIMALS = "WILD_ANIMALS"
 
 
 class State(Enum):

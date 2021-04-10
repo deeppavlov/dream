@@ -556,7 +556,7 @@ def fact_retrieval_formatter_dialog(dialog: Dict):
 
     nounphrases = [last_human_utt["annotations"].get("cobot_entities", {}).get("entities", [])]
 
-    _, _, entity_pages = \
+    _, _, first_par_batch = \
         last_human_utt["annotations"].get("entity_linking", [[], [], []])
 
     return [
@@ -564,7 +564,7 @@ def fact_retrieval_formatter_dialog(dialog: Dict):
             "human_sentences": [last_human_utt["text"]],
             "dialog_history": dialog_history,
             "entity_substr": nounphrases,
-            "entity_pages": [entity_pages],
+            "first_par": [first_par_batch],
         }
     ]
 

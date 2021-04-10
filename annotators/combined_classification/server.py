@@ -1,7 +1,5 @@
 import logging
 import os
-import time
-
 from flask import Flask, request, jsonify
 import sentry_sdk
 
@@ -24,7 +22,6 @@ app = Flask(__name__)
 
 
 def get_result(sentences):
-    st_time = time.time()
     res = [{} for _ in sentences]
     if not sentences:
         sentences = [" "]
@@ -36,9 +33,6 @@ def get_result(sentences):
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
-
-    total_time = time.time() - st_time
-    logger.info(f'cobot_topics exec time: {total_time:.3f}s')
     return res
 
 

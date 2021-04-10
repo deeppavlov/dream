@@ -229,7 +229,7 @@
                             "film director, voice actor, film producer, guitarist and film actor",
                             0.8173134326934814
                         ],
-                        "wiki_parser": [{
+                        "wiki_parser": {
                             "entities_info": {
                                 "Johnny Depp": {
                                     "country of sitizenship": [
@@ -384,7 +384,7 @@
                                     ]
                                 }
                             }
-                        }],
+                        },
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [

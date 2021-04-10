@@ -6,12 +6,10 @@ def main():
 
     request_data = [{"human_sentences": ["Who played Sheldon Cooper in The Big Bang Theory?"],
                      "dialog_history": ["Who played Sheldon Cooper in The Big Bang Theory?"],
-                     "entity_substr": [["Sheldon Cooper", "The Big Bang Theory"]],
-                     "entity_pages": [[["Sheldon Cooper"], ["The Big Bang Theory"]]]},
+                     "entity_substr": [["Sheldon Cooper", "The Big Bang Theory"]]},
                     {"human_sentences": ["What is the capital of Germany?"],
                      "dialog_history": ["What is the capital of Germany?"],
-                     "entity_substr": [["the capital", "Germany"]],
-                     "entity_pages": [[["Capital"], ["Germany"]]]},
+                     "entity_substr": [["the capital", "Germany"]]},
                     {"human_sentences": ["/alexa_stop_handler."], "dialog_history": [""], "entity_substr": [[]]},
                     {"human_sentences": [" "], "dialog_history": [""], "entity_substr": [[]]}]
 

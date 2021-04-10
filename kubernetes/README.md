@@ -231,8 +231,3 @@ helm upgrade -i grafana grafana/grafana -n monitoring -f kubernetes/helm-charts/
 helm repo add grafana https://grafana.github.io/helm-charts
 helm upgrade -i loki grafana/loki -n monitoring -f kubernetes/helm-charts/loki/values.yaml
 ```
-
-###Metric API
-```bash
-kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
-```

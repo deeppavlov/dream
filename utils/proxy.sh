@@ -24,14 +24,10 @@ if [ -n "$d" ] && [ -n "$c" ]; then
   exit 1
 fi
 
-#export AWS_ACCESS_KEY_ID='AKIAT2RXIFYZLDB66LZ3'
-#export AWS_SECRET_ACCESS_KEY='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'
-#export AWS_DEFAULT_REGION='us-east-1'
-#export LB_NAME="a72bd67cd6eb54e188e4513c1f70ab0b"
-export AWS_ACCESS_KEY_ID='AKIA5U27I4UTIJ7QJJ5L'
-export AWS_SECRET_ACCESS_KEY='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'
-export AWS_DEFAULT_REGION='us-west-2'
-export LB_NAME="a737ad642c7cc4356a543c2c58779eb6"
+export AWS_ACCESS_KEY_ID='AKIAT2RXIFYZLDB66LZ3'
+export AWS_SECRET_ACCESS_KEY='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'
+export AWS_DEFAULT_REGION='us-east-1'
+export LB_NAME="a72bd67cd6eb54e188e4513c1f70ab0b"
 
 
 SG=$(aws elb describe-load-balancers --load-balancer-name $LB_NAME --query LoadBalancerDescriptions[*].SecurityGroups[] --output text)

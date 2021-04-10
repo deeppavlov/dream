@@ -11,9 +11,8 @@ patterns = [
     "what we are discussing",
     "what do you mean",
     "i lost common ground",
-    "what"
 ]
-re_patterns = re.compile(r"^(" + "|".join(patterns) + r")[\?\.]?$", re.IGNORECASE)
+re_patterns = re.compile("(" + "|".join(patterns) + ")", re.IGNORECASE)
 
 
 def what_we_talk_about(utterance):

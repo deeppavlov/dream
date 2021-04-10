@@ -32,7 +32,6 @@ SPECIAL_SKILLS = {
         "book_skill",
         "movie_skill",
         "dff_music_skill",
-        "dff_animals_skill",
         "weather_skill",
     ],
 }

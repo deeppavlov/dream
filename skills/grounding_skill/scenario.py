@@ -36,17 +36,14 @@ with open("universal_intent_responses.json", "r") as f:
 
 
 def collect_topics_entities_intents(dialog):
-    if len(dialog['human_utterances']) > 1:
-        prev_human_uttr = dialog['human_utterances'][-2]
-        intent_list = get_intents(prev_human_uttr, which='cobot_dialogact_intents')
-        da_topic_list = get_topics(prev_human_uttr, which='cobot_dialogact_topics')
-        cobot_topic_list = get_topics(prev_human_uttr, which='cobot_topics')
+    prev_human_uttr = dialog['human_utterances'][-2] if len(dialog['human_utterances']) > 1 else {}
+    intent_list = get_intents(prev_human_uttr, which='cobot_dialogact_intents')
+    da_topic_list = get_topics(prev_human_uttr, which='cobot_dialogact_topics')
+    cobot_topic_list = get_topics(prev_human_uttr, which='cobot_topics')
 
-        intent_list = list(set(intent_list))
-        da_topic_list = list(set(da_topic_list))
-        cobot_topic_list = list(set(cobot_topic_list))
-    else:
-        intent_list, da_topic_list, cobot_topic_list = [], [], []
+    intent_list = list(set(intent_list))
+    da_topic_list = list(set(da_topic_list))
+    cobot_topic_list = list(set(cobot_topic_list))
 
     return intent_list, da_topic_list, cobot_topic_list
 
@@ -94,13 +91,8 @@ def what_do_you_mean_response(dialog):
             if reply is None:
                 reply, confidence = DONTKNOW_PHRASE, DONTKNOW_CONF
             else:
-                if what_we_talk_about(dialog['human_utterances'][-1]):
-                    confidence = SUPER_CONF
-                    attr = {"can_continue": MUST_CONTINUE}
-                else:
-                    # what_do_you_mean_intent but not regexp
-                    confidence = UNIVERSAL_RESPONSE_CONFIDENCE
-                    attr = {}
+                confidence = SUPER_CONF
+                attr = {"can_continue": MUST_CONTINUE}
     except Exception as e:
         logger.exception("exception in grounding skill")
         logger.info(str(e))
@@ -208,17 +200,14 @@ class GroundingSkillScenario:
             curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs = [], [], [], [], []
 
             # what do you mean response
-            if len(dialog['human_utterances']) > 1:
-                prev_human_uttr = dialog['human_utterances'][-2]
-                toxic_result = get_toxic(prev_human_uttr, probs=False)
-                default_blacklist = {'inappropriate': False, 'profanity': False, 'restricted_topics': False}
-                blacklist_result = prev_human_uttr.get("annotations", {}).get('blacklisted_words', default_blacklist)
-                is_toxic = toxic_result or blacklist_result['profanity'] or blacklist_result['inappropriate']
-            else:
-                is_toxic = False
+            prev_human_uttr = dialog['human_utterances'][-2] if len(dialog['human_utterances']) > 1 else {}
+            toxic_result = get_toxic(prev_human_uttr, probs=False)
+            default_blacklist = {'inappropriate': False, 'profanity': False, 'restricted_topics': False}
+            blacklist_result = prev_human_uttr.get("annotations", {}).get('blacklisted_words', default_blacklist)
+            is_toxic_or_blacklisted = toxic_result or blacklist_result['profanity'] or blacklist_result['inappropriate']
 
             reply, confidence, human_attr, bot_attr, attr = what_do_you_mean_response(dialog)
-            if reply and confidence and not is_toxic:
+            if reply and confidence and not is_toxic_or_blacklisted:
                 curr_responses += [reply]
                 curr_confidences += [confidence]
                 curr_human_attrs += [human_attr]

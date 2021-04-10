@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-DEFAULT_ANNTR_HISTORY_LEN = 0
+DEFAULT_ANNTR_HISTORY_LEN = 1
 TOP_N_FACTS = 2
 AA_FACTOR = 0.05
 ABBRS_CONFIDENCE = 0.8
@@ -309,25 +309,21 @@ def respond():
                     fact = random.sample(TOPICS_FACTS[lets_chat_topic], 1)[0]
                     chosen_topics[d_id] = lets_chat_topic
                     _chosen_topic_fact = 'lets_chat_cobot_da'
-                elif not get_entities(dialog["human_utterances"][-1],
-                                      only_named=False, with_labels=False):
+                else:
                     topic = random.sample(TOPICS_FACTS.keys(), 1)[0]
                     fact = random.sample(TOPICS_FACTS[topic], 1)[0]
                     chosen_topics[d_id] = topic
                     _chosen_topic_fact = 'switch_random'
-                else:
-                    fact = ""
-                if fact:
-                    user_input = {
-                        'checked_sentence': fact,
-                        'knowledge': fact,
-                        'text': user_input_text,
-                        'history': user_input_history,
-                        'chosen_topic_fact': _chosen_topic_fact
-                    }
-                    input_batch.append(user_input)
-                    annotations_depths.append({})
-                    dial_ids.append(d_id)
+                user_input = {
+                    'checked_sentence': fact,
+                    'knowledge': fact,
+                    'text': user_input_text,
+                    'history': user_input_history,
+                    'chosen_topic_fact': _chosen_topic_fact
+                }
+                input_batch.append(user_input)
+                annotations_depths.append({})
+                dial_ids.append(d_id)
 
             if news_api_fact:
                 user_input = {
@@ -406,7 +402,6 @@ def respond():
                     confidence = HIGHEST_CONFIDENCE
                     no_penalties = True
                     attr["confidence_case"] += f"topic_fact: {chosen_topic_fact_flag} "
-                    attr["response_parts"] = ["prompt"]
                 if input_batch[curr_i].get("news_api_fact", ""):
                     add_intro = random.choice(
                         [
@@ -425,47 +420,34 @@ def respond():
                 if (curr_nounphrase_search or curr_entities_search) and lets_chat_about_flags[i]:
                     confidence = HIGHEST_CONFIDENCE
                     attr["confidence_case"] += "nounphrase_entity_and_lets_chat_about "
-                    attr["response_parts"] = ["prompt"]
                 elif curr_nounphrase_search or curr_entities_search:
                     confidence = NOUNPHRASE_ENTITY_CONFIDENCE
                     attr["confidence_case"] += "nounphrase_entity "
                 elif lets_chat_about_flags[i]:
                     confidence = LETS_CHAT_ABOUT_CONFIDENDENCE
                     attr["confidence_case"] += "lets_chat_about "
-                    attr["response_parts"] = ["prompt"]
                 else:
                     confidence = DEFAULT_CONFIDENCE
                     attr["confidence_case"] += "default "
-                acronym_flag = ABBRS.search(raw_responses[curr_i])
-                if acronym_flag:
+                if ABBRS.search(raw_responses[curr_i]):
                     confidence = ABBRS_CONFIDENCE
-                    attr["confidence_case"] += f"acronyms: {acronym_flag.group(1)} "
-                special_char_flag = bool(special_char_re.search(raw_responses[curr_i]))
-                if special_char_flag:
+                    attr["confidence_case"] += "acronyms "
+                if special_char_re.search(raw_responses[curr_i]):
                     confidence = HAS_SPEC_CHAR_CONFIDENCE
                     attr["confidence_case"] += "special_char "
                 if special_intents_flags[i]:
                     confidence = 0.0
                     attr["confidence_case"] += "special_intents "
-                greetings_farewells_flag = bool(greetings_farewells_re.search(raw_responses[curr_i]))
-                if greetings_farewells_flag:
+                if greetings_farewells_re.search(raw_responses[curr_i]):
                     confidence = 0.0
                     attr["confidence_case"] += "greetings_farewells "
 
                 penalties = annotations_depths[curr_i].get("retrieved_fact", 0.0) + cobotqa_penalty + \
                     already_was_active + short_long_response if not no_penalties else 0.
                 confidence -= penalties
-                if any(
-                    [
-                        acronym_flag, special_char_flag, special_intents_flags[i],
-                        greetings_farewells_flag, short_long_response
-                    ]
-                ):
-                    continue
-                else:
-                    curr_attributes.append(attr)
-                    curr_confidences.append(max(0.0, confidence))
-                    curr_responses.append(re.sub(r'\s([?.!",;:](?:\s|$))', r'\1', add_intro + raw_responses[curr_i]))
+                curr_attributes.append(attr)
+                curr_confidences.append(max(0.0, confidence))
+                curr_responses.append(add_intro + raw_responses[curr_i])
             attributes.append(curr_attributes)
             confidences.append(curr_confidences)
             responses.append(curr_responses)
@@ -477,7 +459,7 @@ def respond():
         confidences = [[0.]]
         attributes = [[{}]]
 
-    logger.info(f"knowledge_grounding_skill exec time: {time.time() - st_time}")
+    logger.info(f"Respond exec time: {time.time() - st_time}")
     return jsonify(list(zip(responses, confidences, attributes)))
 
 
