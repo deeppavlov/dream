@@ -384,6 +384,7 @@ def full_history_dialog(dialog: Dict):
     """
     Used ONLY by: response selector and greeting_skill (turns on only for first 10 turns)
     """
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=10)
     return [{"dialogs": [dialog]}]
 
 

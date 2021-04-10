@@ -187,9 +187,10 @@ class EmotionSkillScenario:
         bot_attrs = []
         for dialog in dialogs:
             try:
-                human_attributes = dialog["human"]["attributes"]
-                human_attributes["used_links"] = human_attributes.get("used_links", defaultdict(list))
-                human_attributes["emotion_skill_attributes"] = human_attributes.get(
+                human_attributes = {}
+                human_attributes["used_links"] = dialog["human"]["attributes"].get("used_links", defaultdict(list))
+                human_attributes["disliked_skills"] = dialog["human"]["attributes"].get("disliked_skills", [])
+                human_attributes["emotion_skill_attributes"] = dialog["human"]["attributes"].get(
                     "emotion_skill_attributes", {})
                 emotion_skill_attributes = human_attributes["emotion_skill_attributes"]
                 state = emotion_skill_attributes.get("state", "")

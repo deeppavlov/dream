@@ -109,8 +109,8 @@ def collect_topics_and_statuses(dialogs):
     for i, dialog in enumerate(dialogs):
         curr_uttr = dialog["human_utterances"][-1]
         prev_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}
-        human_attr = dialogs[i]["human"]["attributes"]
-        human_attr["news_skill"] = human_attr.get("news_skill", {})
+        human_attr = {}
+        human_attr["news_skill"] = dialogs[i]["human"]["attributes"].get("news_skill", {})
         human_attr["news_skill"]["discussed_news"] = human_attr["news_skill"].get("discussed_news", [])
 
         if len(dialog["bot_utterances"]) > 0:
@@ -294,9 +294,10 @@ def respond():
         logger.info(f"Composing answer for topic: {curr_topic} and status: {curr_status}.")
         logger.info(f"Result: {result}.")
 
-        human_attr = dialogs[i]["human"]["attributes"]
-        human_attr["used_links"] = human_attr.get("used_links", defaultdict(list))
-        human_attr["news_skill"] = human_attr.get("news_skill", {})
+        human_attr = {}
+        human_attr["used_links"] = dialogs[i]["human"]["attributes"].get("used_links", defaultdict(list))
+        human_attr["disliked_skills"] = dialogs[i]["human"]["attributes"].get("disliked_skills", [])
+        human_attr["news_skill"] = dialogs[i]["human"]["attributes"].get("news_skill", {})
         human_attr["news_skill"]["discussed_news"] = human_attr["news_skill"].get("discussed_news", [])
 
         bot_attr = {}

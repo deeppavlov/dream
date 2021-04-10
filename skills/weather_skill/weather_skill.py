@@ -143,8 +143,9 @@ class WeatherSkill:
         curr_confidence = BASE_CONFIDENCE
         current_reply = ""
         bot_attr = {}
-        human_attr = dialog["human"]["attributes"]
-        human_attr["used_links"] = human_attr.get("used_links", defaultdict(list))
+        human_attr = {}
+        human_attr["used_links"] = dialog["human"]["attributes"].get("used_links", defaultdict(list))
+        human_attr["disliked_skills"] = dialog["human"]["attributes"].get("disliked_skills", [])
         weather_for_homeland_requested = False
         ######################################################################
         #

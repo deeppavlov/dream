@@ -146,8 +146,8 @@ def get_unused_response(intent, used_universal_intent_responses):
 
 def generate_universal_response(dialog):
     curr_intents = get_intents(dialog['human_utterances'][-1], probs=False, which='midas')
-    human_attr = dialog["human"]["attributes"]
-    human_attr["grounding_skill"] = human_attr.get("grounding_skill", {})
+    human_attr = {}
+    human_attr["grounding_skill"] = dialog["human"]["attributes"].get("grounding_skill", {})
     human_attr["grounding_skill"]["used_universal_intent_responses"] = human_attr["grounding_skill"].get(
         "used_universal_intent_responses", [])
     bot_attr = {}

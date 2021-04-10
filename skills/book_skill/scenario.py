@@ -142,8 +142,8 @@ class BookSkillScenario:
             confidence = 0
             attr = {}
             bot_attr = {}
-            human_attr = dialog["human"]["attributes"]
-            human_attr["book_skill"] = human_attr.get("book_skill", {})
+            human_attr = {}
+            human_attr["book_skill"] = dialog["human"]["attributes"].get("book_skill", {})
             human_attr['book_skill']['used_phrases'] = human_attr['book_skill'].get('used_phrases', [])
             human_attr['book_skill']['last_fact'] = human_attr['book_skill'].get('last_fact', '')
             try:
