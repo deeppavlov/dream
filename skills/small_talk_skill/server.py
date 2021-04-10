@@ -102,7 +102,6 @@ def respond():
                             f"Bot response: `{response}`.")
                 # topic script start, response is already formulated
                 human_attr["small_talk_topics"] = used_topics + [topic]
-                attr["response_parts"] = ["prompt"]
                 attr["can_continue"] = CAN_CONTINUE_SCENARIO
                 attr["small_talk_topic"] = topic
                 attr["small_talk_step"] = 0

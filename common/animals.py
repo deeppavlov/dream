@@ -19,28 +19,14 @@ def animals_skill_was_proposed(prev_bot_utt):
     return any([phrase.lower() in prev_bot_utt.get('text', '').lower() for phrase in TRIGGER_PHRASES])
 
 
-ANIMALS_TEMPLATE = re.compile(r"(animal|\bpet\b|\bpets\b)", re.IGNORECASE)
-PETS_TEMPLATE = re.compile(r"(\bcat\b|\bdog\b|horse|puppy|kitty|kitten|parrot|\brat\b|mouse|hamster)", re.IGNORECASE)
-
-
-def check_about_animals(text):
-    if re.findall(ANIMALS_TEMPLATE, text) or re.findall(PETS_TEMPLATE, text):
+def check_about_pets(text):
+    if "let's talk about pets" in text or re.findall(r"(pets|about pets)\??", text):
         return True
     else:
         return False
 
 
-def mentioned_animal(annotations):
-    flag = False
-    conceptnet = annotations.get("conceptnet", {})
-    for elem, triplets in conceptnet.items():
-        if "SymbolOf" in triplets:
-            objects = triplets["SymbolOf"]
-            if "animal" in objects:
-                flag = True
-    return flag
-
-
+PETS_TEMPLATE = re.compile(r"(cat|dog|horse|puppy|kitty|kitten|parrot|rat|mouse|hamster)", re.IGNORECASE)
 COLORS_TEMPLATE = re.compile(r"(black|white|yellow|blue|green|brown|orange|spotted|striped)", re.IGNORECASE)
 
 WILD_ANIMALS = [
@@ -54,26 +40,21 @@ WILD_ANIMALS = [
     "I like eagles. Bald eagle is the symbol of America. A bald eagle has Superman-like vision."
 ]
 
-WHAT_PETS_I_HAVE = [{"pet": "dog", "name": "Jack", "breed": "German Shepherd",
-                     "sentence": "I have a dog named Jack. He is a German Shepherd. He is very cute."},
-                    {"pet": "dog", "name": "Charlie", "breed": "Husky",
-                     "sentence": "I have a dog named Charlie. He is a Husky. He is very cute."},
-                    {"pet": "dog", "name": "Archie", "breed": "Labrador",
-                     "sentence": "I have a dog named Archie. He is a Labrador. He is very cute."},
-                    {"pet": "cat", "name": "Thomas", "breed": "Maine Coon",
-                     "sentence": "I have a cat named Thomas. He is a big fluffy Maine Coon."},
-                    {"pet": "cat", "name": "Jackie", "breed": "Persian",
-                     "sentence": "I have a cat named Jackie. He is a Persian."},
-                    {"pet": "cat", "name": "Prince", "breed": "Siamese",
-                     "sentence": "I have a cat named Prince. He is a Siamese."}
+WHAT_PETS_I_HAVE = ["I have a dog named Jack. He is a German Shepherd. He is very cute.",
+                    "I have a cat named Thomas. "
+                    "He is active and playful, enjoying games like fetch and learning tricks.",
+                    "My favourite pet is my dog Charlie. "
+                    "He is beautiful and easy to care for, his medium white fur needs no extra brushing.",
+                    "My favourite pet is my dog Archie. "
+                    "Playing with him is a lot of fun, I throw a tennis ball and he bounces off to retrieve it."
                     ]
 
 CATS_DOGS_PHRASES = {"cat": ["Can cats reduce stress and improve mood? The answer seems to be yes.",
                              "Cats have long been one of the more popular companion animals, constantly battling dogs "
-                             "for the number one spot.",
+                             "for the number one spot",
                              "Whether you’ve had your cat for her whole life, or you’ve just welcomed a cat or kitten "
                              "into your new family, you can find yourself learning something new about your cat "
-                             "everyday."],
+                             "everyday"],
                      "dog": ["Having a dog can help you stay active. Nothing beats a long walk with your "
                              "four-legged friend on a fresh, spring morning.",
                              "Nothing beats a long walk with your four-legged friend on a fresh, spring morning. "
@@ -89,7 +70,6 @@ MY_CAT = ["My cat is as frail as an autumn leaf as an autumn leaf but her purr i
           "Her claws are as gnarled as an ancient oak.",
           "She sits by the fire and tries to keep warm or she curls herself up on my knees.",
           "Her fur is as soft as a kitten's coat but her ears are as deaf as the breeze.",
-          "He is beautiful and easy to care for, his medium white fur needs no extra brushing.",
           "Sometimes my cat thinks that she is a dog."]
 
 MY_DOG = ["My dog is incredibly and unconditionally loyal to me. He loves me as much as I love him or sometimes more.",
@@ -97,6 +77,5 @@ MY_DOG = ["My dog is incredibly and unconditionally loyal to me. He loves me as 
           "He is the reason I am active and good at exercise. He will never let me be lazy. "
           "Whenever possible, we always keep playing some or the other games with him.",
           "He will play games with us, keep all our family members together with his love and cuddles and "
-          "also he keeps thieves and uninvited guests out of our home.",
-          "He is active and playful, enjoying games like fetch and learning tricks.",
-          "Playing with him is a lot of fun, I throw a tennis ball and he bounces off to retrieve it."]
+          "also he keeps thieves and uninvited guests out of our home."
+          ]

@@ -62,7 +62,7 @@ class BookSkillScenario:
 
     def __init__(self):
         self.super_conf = 1.0
-        self.default_conf = 0.95
+        self.default_conf = 0.9
         self.low_conf = 0.7
         self.default_reply = ""
         self.bookreads_dir = 'bookreads_data.json'
@@ -152,9 +152,6 @@ class BookSkillScenario:
                 bot_phrases = [j['text'] for j in dialog['bot_utterances']]
                 if len(bot_phrases) == 0:
                     bot_phrases.append('')
-                    annotated_bot_phrase = {'text': '', 'annotations': {}}
-                else:
-                    annotated_bot_phrase = dialog['bot_utterances'][-1]
                 logger.debug(f'bot phrases: {bot_phrases}')
 
                 user_phrases = [utt["text"] for utt in dialog['human_utterances'][-2:]]
@@ -169,7 +166,7 @@ class BookSkillScenario:
                 # I don't denote annotated_user_phrase['text'].lower() as a single variable
                 # in order not to confuse it with annotated_user_phrase
                 lets_chat_about_books = if_chat_about_particular_topic(
-                    annotated_user_phrase, annotated_bot_phrase, compiled_pattern=BOOK_PATTERN)
+                    annotated_user_phrase, annotated_prev_phrase, compiled_pattern=BOOK_PATTERN)
                 if lets_chat_about_books and not is_no(annotated_user_phrase):
                     # let's chat about books
                     logger.debug('Detected talk about books. Calling start phrase')

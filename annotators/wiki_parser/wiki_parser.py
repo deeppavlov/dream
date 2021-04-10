@@ -65,7 +65,6 @@ topic_skill_types = set(["Q36180",  # writer
                          "Q10800557",  # film actor
                          "Q10798782",  # television actor
                          "Q2405480",  # voice actor
-                         "Q19204627",  # American football player
                          "Q211236"  # celebrity
                          ])
 
