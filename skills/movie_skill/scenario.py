@@ -77,8 +77,9 @@ class MovieSkillScenario:
             try:
                 curr_user_uttr = dialog["human_utterances"][-1]
                 response, confidence, human_attr, bot_attr, attr = "", 0.0, {}, {}, {}
-                human_attr = dialog["human"]["attributes"]
-                human_attr["used_links"] = human_attr.get("used_links", defaultdict(list))
+                human_attr = {}
+                human_attr["used_links"] = dialog["human"]["attributes"].get("used_links", defaultdict(list))
+                human_attr["disliked_skills"] = dialog["human"]["attributes"].get("disliked_skills", [])
                 # not overlapping mentions of movies titles, persons names and genres
                 movies_ids, unique_persons, mentioned_genres = self.templates.extract_mentions(
                     curr_user_uttr["text"].lower(), find_ignored=True)
@@ -248,8 +249,9 @@ class MovieSkillScenario:
 
     def movie_scenario(self, dialog, movies_ids=[], unique_persons={}, mentioned_genres=[]):
         bot_attr = {}
-        human_attr = dialog["human"]["attributes"]
-        human_attr["used_links"] = human_attr.get("used_links", defaultdict(list))
+        human_attr = {}
+        human_attr["used_links"] = dialog["human"]["attributes"].get("used_links", defaultdict(list))
+        human_attr["disliked_skills"] = dialog["human"]["attributes"].get("disliked_skills", [])
         for p in ["discussed_movie_titles", "discussed_movie_ids", "discussed_movie_persons",
                   "discussed_movie_genres"]:
             human_attr[p] = dialog["human"]["attributes"].get(p, [])
