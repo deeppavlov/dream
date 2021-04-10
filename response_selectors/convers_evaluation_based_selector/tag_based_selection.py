@@ -228,6 +228,20 @@ def does_not_require_prompt(candidates, best_cand_id):
     return False
 
 
+def if_acknowledgement_in_previous_bot_utterance(dialog):
+    if len(dialog["bot_utterances"]) > 0 and len(dialog["human_utterances"]) > 1:
+        prev_bot_uttr_text = dialog["bot_utterances"][-1]["text"].lower()
+        prev_human_uttr = dialog["human_utterances"][-2]
+        acknowledgments = []
+        for hyp in prev_human_uttr["hypotheses"]:
+            if hyp.get("response_parts", []) == ["acknowledgment"]:
+                acknowledgments += [hyp["text"].lower()]
+        for ackn in acknowledgments:
+            if ackn in prev_bot_uttr_text:
+                return True
+    return False
+
+
 def tag_based_response_selection(dialog, candidates, scores, confidences, bot_utterances):
     annotated_uttr = dialog["human_utterances"][-1]
     all_user_intents, all_user_topics, all_user_named_entities, all_user_nounphrases = get_main_info_annotations(
@@ -274,7 +288,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         _is_active_skill = (_prev_active_skill == cand_uttr["skill_name"] or cand_uttr.get(
             "can_continue", "") == MUST_CONTINUE)
         _user_wants_to_chat_about_topic = if_chat_about_particular_topic(
-            dialog['utterances'][0]) and "about it" not in dialog['utterances'][0]["text"].lower()
+            annotated_uttr) and "about it" not in annotated_uttr["text"].lower()
         if any([phrase.lower() in cand_uttr["text"].lower() for phrase in LINK_TO_PHRASES]):
             # add `prompt` to response_parts if any linkto phrase in hypothesis
             cand_uttr["response_parts"] = cand_uttr.get("response_parts", []) + ["prompt"]
@@ -408,6 +422,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
     # save updated disliked skills to human attributes of the best candidate
     best_candidate["human_attributes"]["disliked_skills"] = disliked_skills
     logger.info(f"Best candidate: {best_candidate}")
+    n_sents_without_prompt = len(sent_tokenize(best_candidate["text"]))
 
     if does_not_require_prompt(candidates, best_cand_id):
         # the candidate already contains a prompt or a question or of a length more than 200 symbols
@@ -434,8 +449,9 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             if len(best_candidate["human_attributes"]["used_links"]) == 0:
                 best_candidate["human_attributes"].pop("used_links")
 
-    if acknowledgement_hypothesis and acknowledgement_decision() and len(sent_tokenize(best_candidate["text"])) == 1:
-        logger.info(f"Acknowledgement is given, Final hypothesis contains only 1 sentence, "
+    was_ackn = if_acknowledgement_in_previous_bot_utterance(dialog)
+    if acknowledgement_hypothesis and acknowledgement_decision() and n_sents_without_prompt == 1 and not was_ackn:
+        logger.info(f"Acknowledgement is given, Final hypothesis contains only 1 sentence, no ackn in prev bot uttr,"
                     f"and we decided to add an acknowledgement to the best candidate.")
         best_candidate["text"] = f'{acknowledgement_hypothesis["text"]} {best_candidate["text"]}'
         best_candidate["response_parts"] = ["acknowledgement"] + best_candidate.get("response_parts", [])

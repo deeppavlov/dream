@@ -688,6 +688,38 @@ def get_entities(annotated_utterance, only_named=False, with_labels=False):
     return entities if entities is not None else []
 
 
+def get_named_persons(annotated_utterance):
+    named_entities = get_entities(annotated_utterance, only_named=True, with_labels=True)
+    all_entities = get_entities(annotated_utterance, only_named=False, with_labels=True)
+
+    named_persons = []
+    for ent in named_entities:
+        if ent["type"] == "PER":
+            named_persons.append(ent["text"])
+    for ent in all_entities:
+        if ent["label"] == "person":
+            named_persons.append(ent["text"])
+    named_persons = list(set(named_persons))
+
+    return named_persons
+
+
+def get_named_locations(annotated_utterance):
+    named_entities = get_entities(annotated_utterance, only_named=True, with_labels=True)
+    all_entities = get_entities(annotated_utterance, only_named=False, with_labels=True)
+
+    named_locations = []
+    for ent in named_entities:
+        if ent["type"] == "LOC":
+            named_locations.append(ent["text"])
+    for ent in all_entities:
+        if ent["label"] == "location":
+            named_locations.append(ent["text"])
+    named_locations = list(set(named_locations))
+
+    return named_locations
+
+
 def get_raw_entity_names_from_annotations(annotations):
     """
 
@@ -793,6 +825,8 @@ def get_types_from_annotations(annotations, types, tocheck_relation='occupation'
         name of entity, name of type found, raw name of type found
     '''
     wp_annotations = annotations.get("wiki_parser", {})
+    if isinstance(wp_annotations, list) and wp_annotations:  # support 2 different formats
+        wp_annotations = wp_annotations[0]
     try:
         topic_entities = wp_annotations.get('topic_skill_entities_info', {})
         for entity in topic_entities:

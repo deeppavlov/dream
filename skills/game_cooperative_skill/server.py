@@ -13,8 +13,8 @@ from healthcheck import HealthCheck
 import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
 
-from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO
-from common.universal_templates import is_switch_topic
+from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE
+from common.universal_templates import is_switch_topic, if_chat_about_particular_topic
 
 from common.utils import get_skill_outputs_from_dialog
 from router import run_skills as skill
@@ -114,10 +114,17 @@ def respond():
             # logger.info(f"response = {response}")
             text = response.get("text", "Sorry")
             confidence = 1.0 if response.get("confidence") else 0.0
-            confidence *= 0.9 if "I like to talk about games." in response.get("text") else 1.0
             confidence *= 1.0 if is_active_last_answer else 0.98
-
-            can_continue = CAN_CONTINUE_SCENARIO if confidence else CAN_NOT_CONTINUE
+            if "I like to talk about games." in response.get("text") and if_chat_about_particular_topic(
+                dialog["human_utterances"][-1], dialog["bot_utterances"][-1] if dialog["bot_utterances"] else {}
+            ):
+                confidence = 1
+            if confidence == 1:
+                can_continue = MUST_CONTINUE
+            elif confidence > 0.9:
+                can_continue = CAN_CONTINUE_SCENARIO
+            else:
+                can_continue = CAN_NOT_CONTINUE
 
             human_attr["game_cooperative_skill"] = {"state": state}
             attr = {"can_continue": can_continue}
