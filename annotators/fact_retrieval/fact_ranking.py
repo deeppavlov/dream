@@ -36,7 +36,8 @@ class FactRankerInfer(Component):
     def __init__(self, ranker=None,
                  batch_size: int = 64,
                  facts_to_leave: int = 3,
-                 thres=0.94, **kwargs):
+                 thres=0.94,
+                 use_topical_chat_facts=True, **kwargs):
         """
 
         Args:
@@ -51,6 +52,7 @@ class FactRankerInfer(Component):
         self.batch_size = batch_size
         self.facts_to_leave = facts_to_leave
         self.thres = thres
+        self.use_topical_chat_facts = use_topical_chat_facts
 
     def __call__(self, dialog_history_list: List[str], sentences_batch: List[List[str]],
                  topical_chat_facts_batch: List[List[str]], first_paragraphs_batch: List[List[str]]) -> List[List[str]]:
@@ -58,10 +60,15 @@ class FactRankerInfer(Component):
         tm1 = time.time()
         for dialog_history, sentences_list, topical_chat_facts, first_paragraphs in \
                 zip(dialog_history_list, sentences_batch, topical_chat_facts_batch, first_paragraphs_batch):
+            first_par_list = []
             cand_facts = sentences_list
-            for paragraph in topical_chat_facts + first_paragraphs:
+            for paragraph in first_paragraphs:
                 sentences = sent_tokenize(paragraph)
-                cand_facts.extend([sentence for sentence in sentences if len(sentence.split()) < 150])
+                first_par_list += sentences[:2]
+            if self.use_topical_chat_facts:
+                for paragraph in topical_chat_facts:
+                    sentences = sent_tokenize(paragraph)
+                    cand_facts.extend([sentence for sentence in sentences if len(sentence.split()) < 150])
 
             facts_with_scores = []
             n_batches = len(cand_facts) // self.batch_size + int(len(cand_facts) % self.batch_size > 0)
@@ -81,6 +88,7 @@ class FactRankerInfer(Component):
 
             facts_with_scores = sorted(facts_with_scores, key=lambda x: x[1], reverse=True)
             top_facts = [fact for fact, score in facts_with_scores if score > self.thres]
+            top_facts = first_par_list + top_facts
             top_facts_batch.append(top_facts[:self.facts_to_leave])
         tm2 = time.time()
         logger.info(f"time of ranking {tm2 - tm1}")
