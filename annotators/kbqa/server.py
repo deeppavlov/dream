@@ -75,7 +75,7 @@ def respond():
                                             "answer": answer,
                                             "confidence": float(conf)})
                             cnt_fnd += 1
-        logger.info(f"Respond exec time: {time.time() - st_time}")
+        logger.info(f"kbqa exec time: {time.time() - st_time}")
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)

@@ -28,7 +28,7 @@ def respond():
         sentry_sdk.capture_exception(e)
         logger.exception(e)
     total_time = time.time() - st_time
-    logger.info(f"Wiki parser exec time = {total_time:.3f}s")
+    logger.info(f"wiki parser exec time = {total_time:.3f}s")
     return jsonify(res)
 
 

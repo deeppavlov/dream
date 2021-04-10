@@ -15,7 +15,7 @@ import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_exten
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 import dialogflows.scopes as scopes
-# from common.universal_templates import if_chat_about_particular_topic
+from common.universal_templates import if_chat_about_particular_topic
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE, MUST_CONTINUE
 from common.utils import is_yes, is_no, get_entities
 from common.food import TRIGGER_PHRASES
@@ -33,7 +33,7 @@ spacy_nlp = load("en_core_web_sm")
 with open("cuisines_facts.json", "r") as f:
     CUISINES_FACTS = json.load(f)
 FOOD_WORDS_RE = re.compile(
-    r"(food|cooking|cuisine|daily bread|meals|foodstuffs|edibles|drinks|pepperoni)",
+    r"(food|cook|cooking|cuisine|daily bread|meals|foodstuffs|edibles|drinks|pepperoni|pizza|strawberries)",
     re.IGNORECASE
 )
 WHAT_COOK_RE = re.compile(
@@ -146,7 +146,10 @@ def lets_talk_about_request(ngrams, vars):
     conceptnet = "food" in annotations.get("conceptnet", {}).get("SymbolOf", [])
 
     user_lets_chat_about_food = any([
-        re.search(FOOD_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"].lower()),
+        re.search(FOOD_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"].lower())
+        and if_chat_about_particular_topic(state_utils.get_last_human_utterance(vars),
+                                           state_utils.get_last_bot_utterance(vars),
+                                           compiled_pattern=FOOD_WORDS_RE),
         conceptnet
     ]) and (not state_utils.get_last_human_utterance(vars)["text"].startswith("what"))
     flag = user_lets_chat_about_food

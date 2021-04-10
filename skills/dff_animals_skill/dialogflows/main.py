@@ -5,10 +5,13 @@ from emora_stdm import CompositeDialogueFlow, DialogueFlow
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 
 import dialogflows.flows.animals as animals_flow
+import dialogflows.flows.my_pets as my_pets_flow
+import dialogflows.flows.user_pets as user_pets_flow
+import dialogflows.flows.wild_animals as wild_animals_flow
+from dialogflows.flows.animals_states import State as AS
 import dialogflows.scopes as scopes
 
 logger = logging.getLogger(__name__)
-
 
 composite_dialogflow = CompositeDialogueFlow(
     scopes.State.USR_ROOT,
@@ -18,6 +21,9 @@ composite_dialogflow = CompositeDialogueFlow(
 )
 
 composite_dialogflow.add_component(animals_flow.dialogflow, scopes.ANIMALS)
+composite_dialogflow.add_component(my_pets_flow.dialogflow, scopes.MY_PETS)
+composite_dialogflow.add_component(user_pets_flow.dialogflow, scopes.USER_PETS)
+composite_dialogflow.add_component(wild_animals_flow.dialogflow, scopes.WILD_ANIMALS)
 
 dialogflow = composite_dialogflow.component(scopes.MAIN)
 simplified_dialogflow = dialogflow_extention.DFEasyFilling(dialogflow=dialogflow)
@@ -44,7 +50,7 @@ for node in [scopes.State.USR_ROOT, scopes.State.USR_ERR]:
     simplified_dialogflow.add_user_serial_transitions(
         node,
         {
-            (scopes.ANIMALS, animals_flow.State.USR_START): animals_request,
+            (scopes.ANIMALS, AS.USR_START): animals_request,
         },
     )
 simplified_dialogflow.set_error_successor(scopes.State.USR_ROOT, scopes.State.SYS_ERR)

@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import re
+import time
 from os import getenv
 from typing import Dict, Callable
 
@@ -12,7 +13,7 @@ from common.food import food_skill_was_proposed
 from common.books import book_skill_was_proposed, about_book, QUESTIONS_ABOUT_BOOKS
 from common.funfact import funfact_requested
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_CONTINUE_SCENARIO_DONE
-# from common.celebrities import talk_about_celebrity
+from common.celebrities import enable_celebrity
 from common.emotion import emotion_from_feel_answer, is_joke_requested, is_sad
 from common.greeting import HOW_ARE_YOU_RESPONSES, GREETING_QUESTIONS
 from common.news import is_breaking_news_requested
@@ -24,7 +25,7 @@ from common.coronavirus import check_about_death, about_virus, quarantine_end, i
 import common.travel as common_travel
 import common.music as common_music
 import common.sport as common_sport
-from common.animals import check_about_pets
+from common.animals import check_about_animals, mentioned_animal
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -113,6 +114,7 @@ class RuleBasedSkillSelectorConnector:
                                    r"fantasy)")
 
     async def send(self, payload: Dict, callback: Callable):
+        st_time = time.time()
         try:
             dialog = payload['payload']['states_batch'][0]
 
@@ -204,12 +206,12 @@ class RuleBasedSkillSelectorConnector:
                 self.about_movie_words, prev_bot_uttr.get("text", "").lower()))
             about_books = about_books or book_skill_was_proposed(prev_bot_uttr)
             about_food = (self.food_cobot_topics & cobot_topics) or food_skill_was_proposed(prev_bot_uttr)
-            about_animals = self.animals_cobot_topics & cobot_topics or animals_skill_was_proposed(prev_bot_uttr)
-            about_pets = check_about_pets(dialog["human_utterances"][-1]["text"])
+            about_animals = check_about_animals(dialog["human_utterances"][-1]["text"]) or \
+                animals_skill_was_proposed(prev_bot_uttr) or mentioned_animal(user_uttr_annotations)
             emotions = get_emotions({'annotations': user_uttr_annotations}, probs=True)
             # check that logging of if empty is in get_emotion and delete string than
-            # enable_celebrities = self.celebrity_cobot_topics or talk_about_celebrity(dialog["human_utterances"][-1],
-            #                                                                          prev_bot_uttr)
+            about_celebrities = self.celebrity_cobot_topics or enable_celebrity(dialog["human_utterances"][-1],
+                                                                                prev_bot_uttr)
             # print(f"Skill Selector: did we select game_cooperative_skill? {about_games}", flush=True)
 
             if "/new_persona" in user_uttr_text:
@@ -233,8 +235,8 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("coronavirus_skill")
                 if funfact_requested(dialog["human_utterances"][-1], prev_bot_uttr):
                     skills_for_uttr.append("dff_funfact_skill")
-                # if enable_celebrities:
-                #     skills_for_uttr.append("dff_celebrity_skill")
+                if about_celebrities:
+                    skills_for_uttr.append("dff_celebrity_skill")
                 skills_for_uttr.append("factoid_qa")
                 skills_for_uttr.append("grounding_skill")
             else:
@@ -250,6 +252,8 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("valentines_day_skill")
                 skills_for_uttr.append("personal_info_skill")
                 skills_for_uttr.append("meta_script_skill")
+                if about_celebrities:
+                    skills_for_uttr.append("dff_celebrity_skill")
                 if len(dialog["utterances"]) < 20:
                     # greeting skill inside itself do not turn on later than 10th turn of the conversation
                     # skills_for_uttr.append("greeting_skill")
@@ -296,7 +300,7 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("coronavirus_skill")
                 if about_music and len(dialog["utterances"]) > 2:
                     skills_for_uttr.append("music_tfidf_retrieval")
-                if about_animals or about_pets or prev_active_skill == 'dff_animals_skill':
+                if about_animals or prev_active_skill == 'dff_animals_skill':
                     skills_for_uttr.append("dff_animals_skill")
                 if about_food or prev_active_skill == 'dff_food_skill':
                     skills_for_uttr.append("dff_food_skill")
@@ -456,11 +460,16 @@ class RuleBasedSkillSelectorConnector:
             if "/alexa_" in user_uttr_text:
                 skills_for_uttr = ["alexa_handler"]
             logger.info(f"Selected skills: {skills_for_uttr}")
+
+            total_time = time.time() - st_time
+            logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
             asyncio.create_task(callback(
                 task_id=payload['task_id'],
                 response=list(set(skills_for_uttr))
             ))
         except Exception as e:
+            total_time = time.time() - st_time
+            logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
             logger.exception(e)
             sentry_sdk.capture_exception(e)
             asyncio.create_task(callback(

@@ -1,5 +1,7 @@
 import logging
 import os
+import time
+
 from flask import Flask, request, jsonify
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
@@ -24,6 +26,7 @@ app = Flask(__name__)
 
 @app.route("/model", methods=['POST'])
 def respond():
+    tm_st = time.time()
     sentences = request.json["sentences"]
     entities = request.json["entities"]
     if sentences:
@@ -59,6 +62,7 @@ def respond():
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
+    logger.info(f"wikidata_dial_service exec time: {time.time() - tm_st}")
 
     return jsonify([out_uttr, out_conf])
 

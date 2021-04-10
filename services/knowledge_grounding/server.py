@@ -74,5 +74,5 @@ def respond():
     else:
         logger.info('Received empty batch, exiting with empty responses')
     total_time = time.time() - st_time
-    logger.info(f'knowledge grounding: one batch exec time: {total_time:.3f}s')
+    logger.info(f'knowledge grounding one batch exec time: {total_time:.3f}s')
     return jsonify(responses)

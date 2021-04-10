@@ -2,6 +2,8 @@ import logging
 import os
 import pickle
 import random
+import time
+
 from flask import Flask, request, jsonify
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
@@ -26,7 +28,7 @@ try:
     fact_retrieval = build_model(config_name, download=True)
     for i in range(50):
         utt = random.choice(test_sentences)
-        test_res = fact_retrieval([utt], [utt], [["moscow"]], [[]])
+        test_res = fact_retrieval([utt], [utt], [["moscow"]], [[["Moscow"]]])
     logger.info("model loaded, test query processed")
 except Exception as e:
     sentry_sdk.capture_exception(e)
@@ -59,6 +61,7 @@ def check_utterance(question, bot_sentence):
 
 @app.route("/model", methods=['POST'])
 def respond():
+    st_time = time.time()
     cur_utt = request.json.get("human_sentences", [" "])
     dialog_history = request.json.get("dialog_history", [" "])
     cur_utt = [utt.lstrip("alexa") for utt in cur_utt]
@@ -67,25 +70,25 @@ def respond():
                     for nounphrases in nounphr_list]
     if not nounphr_list:
         nounphr_list = [[] for _ in cur_utt]
-    first_par_batch = request.json.get("first_par", [])
-    if not first_par_batch:
-        first_par_batch = [[] for _ in cur_utt]
+    entity_pages = request.json.get("entity_pages", [])
+    if not entity_pages:
+        entity_pages = [[] for _ in cur_utt]
 
-    nf_numbers, f_utt, f_dh, f_nounphr_list, f_first_par = [], [], [], [], []
-    for n, (utt, dh, nounphrases, input_par) in \
-            enumerate(zip(cur_utt, dialog_history, nounphr_list, first_par_batch)):
+    nf_numbers, f_utt, f_dh, f_nounphr_list, f_entity_pages = [], [], [], [], []
+    for n, (utt, dh, nounphrases, input_pages) in \
+            enumerate(zip(cur_utt, dialog_history, nounphr_list, entity_pages)):
         if utt not in freq_words and nounphrases:
             f_utt.append(utt)
             f_dh.append(dh)
             f_nounphr_list.append(nounphrases)
-            f_first_par.append(input_par)
+            f_entity_pages.append(input_pages)
         else:
             nf_numbers.append(n)
 
     out_res = [[] for _ in cur_utt]
     try:
         if f_utt:
-            fact_res = fact_retrieval(f_utt, f_dh, f_nounphr_list, f_first_par)
+            fact_res = fact_retrieval(f_utt, f_dh, f_nounphr_list, f_entity_pages)
             out_res = []
             cnt_fnd = 0
             for i in range(len(cur_utt)):
@@ -100,6 +103,8 @@ def respond():
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
+    total_time = time.time() - st_time
+    logger.info(f'fact_retrieval exec time: {total_time:.3f}s')
     return jsonify(out_res)
 
 
