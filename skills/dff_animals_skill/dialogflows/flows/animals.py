@@ -62,8 +62,9 @@ def like_animals_request(ngrams, vars):
     flag = False
     text = state_utils.get_last_human_utterance(vars)["text"]
     shared_memory = state_utils.get_shared_memory(vars)
+    started = shared_memory.get("start", False)
     my_pet = shared_memory.get("my_pet", "")
-    if re.search(LIKE_PETS_TEMPLATE, text) or not my_pet:
+    if re.search(LIKE_PETS_TEMPLATE, text) or (not my_pet and started):
         flag = True
     logger.info(f"like_animals_request={flag}")
     return flag
@@ -100,7 +101,8 @@ def sys_what_animals_request(ngrams, vars):
 def sys_have_pets_request(ngrams, vars):
     flag = False
     shared_memory = state_utils.get_shared_memory(vars)
-    if not shared_memory.get("have_pets", False) and lets_talk_about_request(vars):
+    started = shared_memory.get("start", False)
+    if not shared_memory.get("have_pets", False) and (lets_talk_about_request(vars) or started):
         flag = True
     logger.info(f"sys_have_pets_request={flag}")
     return flag
@@ -181,7 +183,8 @@ def what_wild_request(ngrams, vars):
     is_wild = shared_memory.get("is_wild", False)
     what_wild = shared_memory.get("what_wild", False)
     logger.info(f"what_wild_request, is wild {is_wild}, what wild {what_wild}")
-    if is_wild or what_wild or user_asks_about_pets:
+    started = shared_memory.get("start", False)
+    if is_wild or what_wild or user_asks_about_pets or (not lets_talk_about_request(vars) and not started):
         flag = False
     logger.info(f"what_wild_request={flag}")
     return flag
@@ -208,6 +211,7 @@ def not_wants_more_request(ngrams, vars):
 def what_animals_response(vars):
     what_i_like = random.choice(WILD_ANIMALS)
     response = f"{what_i_like} What animals do you like?"
+    state_utils.save_to_shared_memory(vars, start=True)
     state_utils.save_to_shared_memory(vars, what_animals=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
@@ -217,6 +221,7 @@ def what_animals_response(vars):
 def have_pets_response(vars):
     what_pets_i_have = random.choice(WHAT_PETS_I_HAVE)
     response = f"{what_pets_i_have} Do you have pets?"
+    state_utils.save_to_shared_memory(vars, start=True)
     state_utils.save_to_shared_memory(vars, have_pets=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
     state_utils.set_can_continue(vars)
@@ -230,6 +235,7 @@ def tell_about_pets_response(vars):
     my_pet_name = my_pet_info["name"]
     my_pet_breed = my_pet_info["breed"]
     sentence = my_pet_info["sentence"]
+    state_utils.save_to_shared_memory(vars, start=True)
     state_utils.save_to_shared_memory(vars, my_pet=my_pet)
     state_utils.save_to_shared_memory(vars, my_pet_name=my_pet_name)
     state_utils.save_to_shared_memory(vars, my_pet_breed=my_pet_breed)
@@ -246,6 +252,7 @@ def mention_animals_response(vars):
         response = f"Do you have a {pet}?"
     else:
         response = "Do you have pets?"
+    state_utils.save_to_shared_memory(vars, start=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
@@ -254,6 +261,7 @@ def mention_animals_response(vars):
 def what_wild_response(vars):
     what_i_like = random.choice(WILD_ANIMALS)
     response = f"{what_i_like} What wild animals do you like?"
+    state_utils.save_to_shared_memory(vars, start=True)
     state_utils.save_to_shared_memory(vars, what_wild=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
@@ -261,6 +269,7 @@ def what_wild_response(vars):
 
 
 def error_response(vars):
+    state_utils.save_to_shared_memory(vars, start=False)
     state_utils.set_confidence(vars, 0)
     return ""
 
