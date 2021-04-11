@@ -56,7 +56,7 @@ def respond():
                 about_news = about_news or is_breaking_news_requested(prev_bot_uttr, dialog["utterances"][-1])
 
             entities = []
-            for ent in curr_uttr["annotations"]["ner"]:
+            for ent in curr_uttr["annotations"].get("ner", []):
                 if not ent:
                     continue
                 ent = ent[0]
@@ -68,7 +68,7 @@ def respond():
                     else:
                         entities.append(ent["text"].lower())
 
-            for ent in curr_uttr["annotations"]["cobot_nounphrases"]:
+            for ent in curr_uttr["annotations"].get("cobot_nounphrases", []):
                 if ent.lower() not in UNIGRAMS:
                     if ent in entities + ["I", 'i']:
                         pass

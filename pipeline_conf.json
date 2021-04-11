@@ -2,14 +2,17 @@
     "connectors": {
         "sentseg": {
             "protocol": "http",
+            "timeout": 1,
             "url": "http://sentseg:8011/sentseg"
         },
         "ner": {
             "protocol": "http",
+            "timeout": 1,
             "url": "http://ner:8021/ner"
         },
         "sentrewrite": {
             "protocol": "http",
+            "timeout": 1,
             "url": "http://sentrewrite:8017/sentrewrite"
         }
     },
@@ -20,26 +23,28 @@
                 "class_name": "PredefinedTextConnector",
                 "response_text": "Sorry, something went wrong inside. Please tell me, what did you say.",
                 "annotations": {
-                  "sentseg": {
-                    "punct_sent": "Sorry, something went wrong inside. Please tell me, what did you say.",
-                    "segments": [
-                      "Sorry, something went wrong inside.",
-                      "Please tell me, what did you say."
+                    "sentseg": {
+                        "punct_sent": "Sorry, something went wrong inside. Please tell me, what did you say.",
+                        "segments": [
+                            "Sorry, something went wrong inside.",
+                            "Please tell me, what did you say."
+                        ]
+                    },
+                    "sentrewrite": {
+                        "clusters": [],
+                        "modified_sents": [
+                            "Sorry, something went wrong inside. Please tell me, what did you say."
+                        ]
+                    },
+                    "ner": [
+                        []
                     ]
-                  },
-                  "sentrewrite": {
-                    "clusters": [],
-                    "modified_sents": [
-                      "Sorry, something went wrong inside. Please tell me, what did you say."
-                    ]
-                  },
-                  "ner": [
-                    []
-                  ]
                 }
             },
             "state_manager_method": "add_bot_utterance_last_chance",
-            "tags": ["last_chance"]
+            "tags": [
+                "last_chance"
+            ]
         },
         "timeout_service": {
             "connector": {
@@ -47,57 +52,73 @@
                 "class_name": "PredefinedTextConnector",
                 "response_text": "Sorry, I need to think more on that. Let's talk about something else.",
                 "annotations": {
-                  "sentseg": {
-                    "punct_sent": "Sorry, I need to think more on that. Let's talk about something else.",
-                    "segments": [
-                      "Sorry, I need to think more on that.",
-                      "Let's talk about something else."
+                    "sentseg": {
+                        "punct_sent": "Sorry, I need to think more on that. Let's talk about something else.",
+                        "segments": [
+                            "Sorry, I need to think more on that.",
+                            "Let's talk about something else."
+                        ]
+                    },
+                    "sentrewrite": {
+                        "clusters": [],
+                        "modified_sents": [
+                            "Sorry, I need to think more on that. Let's talk about something else."
+                        ]
+                    },
+                    "ner": [
+                        []
                     ]
-                  },
-                  "sentrewrite": {
-                    "clusters": [],
-                    "modified_sents": [
-                      "Sorry, I need to think more on that. Let's talk about something else."
-                    ]
-                  },
-                  "ner": [
-                    []
-                  ]
                 }
             },
             "state_manager_method": "add_bot_utterance_last_chance",
-            "tags": ["timeout"]
+            "tags": [
+                "timeout"
+            ]
         },
         "bot_annotator_selector": {
             "connector": {
                 "protocol": "python",
                 "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
-                "annotator_names": ["sentseg", "ner", "sentrewrite"]
+                "annotator_names": [
+                    "sentseg",
+                    "ner",
+                    "sentrewrite"
+                ]
             },
             "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-            "tags": ["selector"]
+            "tags": [
+                "selector"
+            ]
         },
         "post_annotators": {
             "sentseg": {
                 "connector": "connectors.sentseg",
                 "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": ["bot_annotator_selector"],
+                "previous_services": [
+                    "bot_annotator_selector"
+                ],
                 "state_manager_method": "add_annotation_prev_bot_utt"
             },
             "ner": {
                 "connector": "connectors.ner",
                 "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_last_bot_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": ["bot_annotator_selector", "post_annotators.sentseg"],
+                "required_previous_services": [
+                    "bot_annotator_selector",
+                    "post_annotators.sentseg"
+                ],
                 "state_manager_method": "add_annotation_prev_bot_utt"
             },
             "sentrewrite": {
                 "connector": "connectors.sentrewrite",
                 "dialog_formatter": "state_formatters.dp_formatters:sent_rewrite_formatter_w_o_last_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": ["bot_annotator_selector", "post_annotators.sentseg",
-                    "post_annotators.ner"],
+                "required_previous_services": [
+                    "bot_annotator_selector",
+                    "post_annotators.sentseg",
+                    "post_annotators.ner"
+                ],
                 "state_manager_method": "add_annotation_prev_bot_utt"
             }
         },
@@ -105,6 +126,7 @@
             "spelling_preprocessing": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://spelling-preprocessing:8074/response"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
@@ -115,42 +137,55 @@
                 "connector": "connectors.sentseg",
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": ["annotators.spelling_preprocessing"],
+                "required_previous_services": [
+                    "annotators.spelling_preprocessing"
+                ],
                 "state_manager_method": "add_annotation"
             },
             "cobot_nounphrases": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://cobot-nounphrases:8006/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": ["annotators.spelling_preprocessing"],
+                "required_previous_services": [
+                    "annotators.spelling_preprocessing"
+                ],
                 "state_manager_method": "add_annotation"
             },
             "conceptnet": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://comet-conceptnet:8065/comet_annotator"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_human_utt_nounphrases",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.cobot_nounphrases"],
+                "required_previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.cobot_nounphrases"
+                ],
                 "state_manager_method": "add_annotation"
             },
             "blacklisted_words": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://blacklisted-words:8018/blacklisted_words"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": ["annotators.spelling_preprocessing"],
+                "required_previous_services": [
+                    "annotators.spelling_preprocessing"
+                ],
                 "state_manager_method": "add_annotation"
             },
             "asr": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://asr:8031/asr_check"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:asr_formatter_dialog",
@@ -160,122 +195,166 @@
             "factoid_classification": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://factoid-classification:8073/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:dp_classes_formatter_service",
-                "required_previous_services": ["annotators.spelling_preprocessing"],
+                "required_previous_services": [
+                    "annotators.spelling_preprocessing"
+                ],
                 "state_manager_method": "add_annotation"
             },
             "intent_catcher": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://intent-catcher:8014/detect"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
+                "required_previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg"
+                ]
             },
             "cobot_topics": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://cobot-topics:8000/topics"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
                 "response_formatter": "state_formatters.dp_formatters:cobot_classifiers_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
+                "required_previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg"
+                ]
             },
             "cobot_dialogact": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://cobot-dialogact:8002/dialogact"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:cobot_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:cobot_dialogact_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
+                "required_previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg"
+                ]
             },
             "fact_retrieval": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://fact-retrieval:8100/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:fact_retrieval_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg",
-                                               "annotators.entity_linking"]
+                "required_previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg",
+                    "annotators.entity_linking"
+                ]
             },
             "ner": {
                 "connector": "connectors.ner",
                 "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"]
+                "required_previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg"
+                ]
             },
             "kbqa": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://kbqa:8072/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:kbqa_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.entity_linking"]
+                "required_previous_services": [
+                    "annotators.entity_linking"
+                ]
             },
             "entity_linking": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://entity-linking:8075/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:el_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.ner", "annotators.cobot_nounphrases"]
+                "required_previous_services": [
+                    "annotators.ner",
+                    "annotators.cobot_nounphrases"
+                ]
             },
             "wiki_parser": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://wiki-parser:8077/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:wp_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.entity_linking"]
+                "required_previous_services": [
+                    "annotators.entity_linking"
+                ]
             },
             "sentrewrite": {
                 "connector": "connectors.sentrewrite",
                 "dialog_formatter": "state_formatters.dp_formatters:sent_rewrite_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg",
-                    "annotators.ner", "post_annotators.ner"]
+                "required_previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg",
+                    "annotators.ner",
+                    "post_annotators.ner"
+                ]
             },
             "midas_classification": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://midas-classification:8090/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"],
+                "required_previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg"
+                ],
                 "state_manager_method": "add_annotation"
             },
             "combined_classification": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 3,
                     "url": "http://combined-classification:8087/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": ["annotators.spelling_preprocessing"],
+                "required_previous_services": [
+                    "annotators.spelling_preprocessing"
+                ],
                 "state_manager_method": "add_annotation"
             },
             "entity_storer": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://entity-storer:8089/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:entity_storer_formatter",
@@ -289,12 +368,15 @@
             "cobot_entities": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://cobot-entities:8102/entities"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": ["annotators.spelling_preprocessing"]
+                "required_previous_services": [
+                    "annotators.spelling_preprocessing"
+                ]
             }
         },
         "skill_selectors": {
@@ -305,12 +387,19 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": ["annotators"],
-                "required_previous_services": ["annotators.intent_catcher",
-                   "annotators.blacklisted_words", "annotators.asr",
-                   "annotators.combined_classification",
-                   "annotators.sentrewrite"],
-                "tags": ["selector"]
+                "previous_services": [
+                    "annotators"
+                ],
+                "required_previous_services": [
+                    "annotators.intent_catcher",
+                    "annotators.blacklisted_words",
+                    "annotators.asr",
+                    "annotators.combined_classification",
+                    "annotators.sentrewrite"
+                ],
+                "tags": [
+                    "selector"
+                ]
             }
         },
         "skills": {
@@ -322,7 +411,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_sport_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "eliza": {
@@ -333,7 +424,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:eliza_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "cobotqa": {
@@ -344,7 +437,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
                 "response_formatter": "state_formatters.dp_formatters:cobot_qa_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "program_y": {
@@ -355,7 +450,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:programy_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "personality_catcher": {
@@ -366,7 +463,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:personality_catcher_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:personality_catcher_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "intent_responder": {
@@ -377,7 +476,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:intent_responder_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "dummy_skill": {
@@ -387,7 +488,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "alexa_handler": {
@@ -397,7 +500,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:cobot_qa_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "dummy_skill_dialog": {
@@ -408,7 +513,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "misheard_asr": {
@@ -419,7 +526,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
                 "response_formatter": "state_formatters.dp_formatters:misheard_asr_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "program_y_dangerous": {
@@ -430,7 +539,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:programy_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "movie_skill": {
@@ -441,7 +552,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "emotion_skill": {
@@ -452,7 +565,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog_emotion_skill",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "convert_reddit": {
@@ -463,7 +578,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:convert_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "personal_info_skill": {
@@ -474,7 +591,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "book_skill": {
@@ -485,7 +604,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "coronavirus_skill": {
@@ -496,7 +617,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "weather_skill": {
@@ -507,7 +630,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "meta_script_skill": {
@@ -518,7 +643,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "short_story_skill": {
@@ -529,7 +656,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:short_story_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "small_talk_skill": {
@@ -540,7 +669,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "game_cooperative_skill": {
@@ -551,7 +682,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:game_cooperative_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "program_y_wide": {
@@ -562,7 +695,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:programy_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "news_api_skill": {
@@ -573,7 +708,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "comet_dialog_skill": {
@@ -584,7 +721,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "grounding_skill": {
@@ -595,7 +734,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "factoid_qa": {
@@ -606,7 +747,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "dff_celebrity_skill": {
@@ -617,7 +760,11 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_celebrity_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors", "annotators.entity_linking", "annotators.wiki_parser"],
+                "previous_services": [
+                    "skill_selectors",
+                    "annotators.entity_linking",
+                    "annotators.wiki_parser"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "dff_animals_skill": {
@@ -628,7 +775,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_animals_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "dff_friendship_skill": {
@@ -639,7 +788,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_friendship_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "knowledge_grounding_skill": {
@@ -650,7 +801,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "dff_travel_skill": {
@@ -661,7 +814,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_travel_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "dff_food_skill": {
@@ -672,7 +827,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_food_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "dff_music_skill": {
@@ -683,7 +840,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_music_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             },
             "dff_funfact_skill": {
@@ -694,34 +853,43 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_funfact_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["skill_selectors"],
+                "previous_services": [
+                    "skill_selectors"
+                ],
                 "state_manager_method": "add_hypothesis"
             }
         },
         "post_skill_selector_annotators": {
-          "blacklisted_words": {
-              "connector": {
-                  "protocol": "http",
-                  "url": "http://blacklisted-words:8018/blacklisted_words_batch"
-              },
-              "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
-              "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-              "previous_services": ["skills"],
-              "state_manager_method": "add_hypothesis_annotation_batch"
-          },
-          "cobot_convers_evaluator_annotator": {
-              "connector": {
-                  "protocol": "http",
-                  "url": "http://cobot-convers-evaluator-annotator:8004/evaluate"
-              },
-              "dialog_formatter": "state_formatters.dp_formatters:cobot_convers_evaluator_annotator_formatter",
-              "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-              "previous_services": ["skills"],
-              "state_manager_method": "add_hypothesis_annotation_batch"
-          },
+            "blacklisted_words": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://blacklisted-words:8018/blacklisted_words_batch"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch"
+            },
+            "cobot_convers_evaluator_annotator": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://cobot-convers-evaluator-annotator:8004/evaluate"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:cobot_convers_evaluator_annotator_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch"
+            },
             "cobot_nounphrases": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://cobot-nounphrases:8006/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
@@ -734,35 +902,42 @@
             "midas_classification": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://midas-classification:8090/batch_model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list_last_uttr",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": ["skills"],
+                "previous_services": [
+                    "skills"
+                ],
                 "state_manager_method": "add_hypothesis_annotation_batch"
             },
             "combined_classification": {
-              "connector": {
-                  "protocol": "http",
-                  "url": "http://combined-classification:8087/batch_model"
-              },
-              "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
-              "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-              "previous_services": [
-                  "skills"
-              ],
-              "state_manager_method": "add_hypothesis_annotation_batch"
-          }
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://combined-classification:8087/batch_model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch"
+            }
         },
         "response_selectors": {
             "convers_evaluation_selector": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://convers-evaluation-selector:8009/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
-                "previous_services": ["post_skill_selector_annotators"],
+                "previous_services": [
+                    "post_skill_selector_annotators"
+                ],
                 "state_manager_method": "add_bot_utterance"
             }
         }

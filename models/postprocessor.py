@@ -302,7 +302,7 @@ class DefaultPostprocessor:
             # get tokens & tags
             response = d['utterances'][-1]
             try:
-                ner_annotations = response['annotations']['ner']
+                ner_annotations = response['annotations'].get('ner', {})
                 user_name = d['user']['profile']['name']
                 # replace names with user name
                 if ner_annotations and (response['active_skill'] == 'chitchat'):

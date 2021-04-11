@@ -95,7 +95,7 @@ class DialogDataManager():
             # if not extracted lets try to grab from NER?
             city = None
             # logger.info("entities in lastest annotation:")
-            # logger.info(annotations["ner"])
+            # logger.info(annotations.get("ner",[]))
             for ent in get_entities(utterance_dict, only_named=True, with_labels=True):
                 if ent['type'] == "LOC":
                     city = ent['text']

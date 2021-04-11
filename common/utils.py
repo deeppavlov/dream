@@ -351,7 +351,7 @@ def _get_combined_annotations(annotated_utterance, model_name):
     answer_probs, answer_labels = {}, []
     try:
         annotations = annotated_utterance['annotations']
-        combined_annotations = annotations['combined_classification']
+        combined_annotations = annotations.get('combined_classification', {})
         if combined_annotations and isinstance(combined_annotations, list):
             combined_annotations = combined_annotations[0]
         if model_name in combined_annotations:
@@ -522,15 +522,15 @@ def get_topics(annotated_utterance, probs=False, default_probs={}, default_label
     annotations = annotated_utterance.get("annotations", {})
     cobot_topics_probs, cobot_topics_labels = {}, []
     if 'cobot_topics' in annotations:
-        cobot_topics_labels = _process_text(annotations['cobot_topics'])
-        cobot_topics_probs = _labels_to_probs(cobot_topics_labels, combined_classes['cobot_topics'])
+        cobot_topics_labels = _process_text(annotations.get('cobot_topics', {}))
+        cobot_topics_probs = _labels_to_probs(cobot_topics_labels, combined_classes.get('cobot_topics', {}))
     if 'combined_classification' in annotations and not cobot_topics_labels:
         cobot_topics_probs, cobot_topics_labels = _get_combined_annotations(
             annotated_utterance, model_name='cobot_topics')
     cobot_topics_labels = _process_text(cobot_topics_labels)
     if not cobot_topics_probs:
         cobot_topics_probs = _labels_to_probs(cobot_topics_labels,
-                                              combined_classes['cobot_topics'])
+                                              combined_classes.get('cobot_topics', {}))
 
     cobot_da_topics_probs, cobot_da_topics_labels = {}, []
     if "cobot_dialogact" in annotations and "topics" in annotations["cobot_dialogact"]:
@@ -764,7 +764,7 @@ def get_entity_names_from_annotations(annotated_utterance, stopwords=None, defau
     full_text = annotated_utterance.get('text', '').lower()
     named_entities = [full_text] if full_text in default_entities else []
     annotations = annotated_utterance.get('annotations', {})
-    for tmp in annotations['ner']:
+    for tmp in annotations.get('ner', []):
         if tmp and 'text' in tmp[0]:
             named_entities.append(tmp[0]['text'])
     for nounphrase in annotations.get("cobot_nounphrases", []):
