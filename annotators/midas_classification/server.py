@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 MIDAS_DEFAULT_THRESHOLD = 0.01
+EMPTY_SIGN = ': EMPTY >'
 
 try:
     model_dir = '/midas'
@@ -41,6 +42,9 @@ label_to_act = {0: "statement", 1: "back-channeling", 2: "opinion", 3: "pos_answ
 
 def predict(inputs, threshold):
     logger.info(f'Inputs {inputs}')
+    if len(inputs) == 1 and inputs[0].strip() == EMPTY_SIGN:
+        logger.warning('Calling MIDAS with empty inputs. Check out why')
+        return {}
     try:
         predictions, raw_outputs = model.predict(inputs)
         raw_outputs = [raw_output.astype(np.float64) for raw_output in raw_outputs]
@@ -66,7 +70,7 @@ def respond():
     st_time = time.time()
     inputs = []
     threshold = request.json.get('threshold', MIDAS_DEFAULT_THRESHOLD)
-    for dialog in request.json.get('dialogs', []):
+    for dialog in request.json.get('dialogs', [{}]):
         if dialog.get('bot_utterances', []):
             prev_bot_uttr_text = dialog["bot_utterances"][-1].get("text", "").lower()
         else:
@@ -76,7 +80,7 @@ def respond():
         else:
             curr_human_uttr_text = ""
 
-        input_ = f"{prev_bot_uttr_text} : EMPTY > {curr_human_uttr_text}"
+        input_ = f"{prev_bot_uttr_text} {EMPTY_SIGN} {curr_human_uttr_text}"
         inputs.append(input_)
     responses = predict(inputs, threshold)
     logging.info(f'midas_classification exec time {time.time() - st_time}')
@@ -86,10 +90,10 @@ def respond():
 @app.route("/batch_model", methods=['POST'])
 def batch_respond():
     st_time = time.time()
-    bot_utterances = request.json.get('sentences', [])
-    human_utterances = request.json.get('last_human_utterances', [])
+    bot_utterances = request.json.get('sentences', [""])
+    human_utterances = request.json.get('last_human_utterances', [""])
     threshold = request.json.get('threshold', MIDAS_DEFAULT_THRESHOLD)
-    inputs = [f"{context.lower()} : EMPTY > {utterance.lower()}"
+    inputs = [f"{context.lower()} {EMPTY_SIGN} {utterance.lower()}"
               for context, utterance in zip(human_utterances, bot_utterances)]
     responses = predict(inputs, threshold)
     logging.info(f'midas_classification exec time {time.time() - st_time}')
