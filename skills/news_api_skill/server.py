@@ -145,6 +145,13 @@ def collect_topics_and_statuses(dialogs):
                 statuses.append("headline")
                 prev_news_samples.append(human_attr["news_skill"]["discussed_news"])
                 curr_news_samples.append(last_news)
+            elif (prev_status == OFFERED_BREAKING_NEWS_STATUS or OFFER_BREAKING_NEWS.lower() in
+                  prev_bot_uttr_lower) and is_no(curr_uttr):
+                logger.info("User refuse to get latest news")
+                topics.append("all")
+                statuses.append("finished")
+                prev_news_samples.append(human_attr["news_skill"]["discussed_news"])
+                curr_news_samples.append({})
             elif re.search(TELL_MORE_NEWS_TEMPLATES, curr_uttr["text"].lower()):
                 prev_news_skill_output = get_skill_outputs_from_dialog(
                     dialog["utterances"][-7:], skill_name="news_api_skill", activated=True)
