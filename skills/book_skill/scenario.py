@@ -11,15 +11,13 @@ from common.tutor import get_tutor_phrase
 from common.universal_templates import is_switch_topic, if_chat_about_particular_topic, tell_me_more, \
     is_positive, is_negative
 from common.utils import is_yes, is_no
-from utils import get_name, get_genre, suggest_template, get_not_given_question_about_books, dontlike, \
+from book_utils import get_name, get_genre, suggest_template, get_not_given_question_about_books, dontlike, \
     fact_about_book, fav_genre_request_detected, is_side_intent, is_stop, \
     fav_book_request_detected, parse_author_best_book, best_book_by_author, GENRE_PHRASES, was_question_about_book, \
     asked_about_genre, GENRE_DICT, is_previous_was_book_skill, just_mentioned, dontknow
 
-
 sentry_sdk.init(getenv('SENTRY_DSN'))
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+
 logger = logging.getLogger(__name__)
 
 START_PHRASE = "OK, let's talk about books. Do you love reading?"
