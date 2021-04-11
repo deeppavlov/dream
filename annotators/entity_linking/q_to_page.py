@@ -28,3 +28,24 @@ class QToPage(Component):
                 pages_batch.append([])
 
         return pages_batch
+
+
+@register("first_par_extractor")
+class FirstParExtractor(Component):
+    def __init__(self, wiki_first_par_filename, **kwargs):
+        self.wiki_first_par = load_pickle(str(expand_path(wiki_first_par_filename)))
+
+    def __call__(self, entities_batch):
+        batch_first_par = []
+        for entities_list in entities_batch:
+            if entities_list:
+                first_par_list = []
+                for entities in entities_list:
+                    for entity in entities:
+                        if entity in self.wiki_first_par:
+                            first_par_list.append(self.wiki_first_par[entity])
+                batch_first_par.append(first_par_list)
+            else:
+                batch_first_par.append([])
+
+        return batch_first_par
