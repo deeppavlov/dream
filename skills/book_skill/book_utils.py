@@ -11,9 +11,9 @@ import _pickle as cPickle
 
 from common.books import QUESTIONS_ABOUT_BOOKS, about_book
 from common.utils import is_opinion_request, get_intents
-from common.utils import entity_to_label, get_raw_entity_names_from_annotations, is_no
+from common.utils import entity_to_label, get_raw_entity_names_from_annotations
 from common.universal_templates import is_switch_topic
-from common.custom_requests import request_triples_wikidata
+from common.custom_requests import request_triples_wikidata, request_entities_entitylinking
 from CoBotQA.cobotqa_service import send_cobotqa
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -283,11 +283,18 @@ def get_name(annotated_phrase, mode='author', bookyear=False,
         for key in wp_annotations['entities_info']:
             if key not in toiterate_dict:
                 toiterate_dict[key] = wp_annotations['entities_info'][key]
+        logger.debug(toiterate_dict)
         for entity in toiterate_dict:
             found_types = [j[0] for j in toiterate_dict[entity]['instance of']]
             if any([j in types for j in found_types]) and book_or_author(entity, stopwords):
                 logging.debug(f'{mode} found')
-                found_entity, plain_entity = entity, toiterate_dict[entity]['plain_entity']
+                found_entity = entity
+                if 'plain_entity' not in toiterate_dict[entity]:
+                    logger.warning(f'No plain_entity found in annotation for {entity}')
+                    plain_entities, _ = request_entities_entitylinking(entity, types=types, confidence_threshold=0.05)
+                    plain_entity = plain_entities[0]
+                else:
+                    plain_entity = toiterate_dict[entity]['plain_entity']
                 if mode == 'book':
                     publication_year = toiterate_dict[entity]['publication date'][0][0]
                     start_ind = None
@@ -409,7 +416,7 @@ def is_stop(annotated_uttr):
     intents = get_intents(annotated_uttr, which="intent_catcher", probs=False)
     exit_intent = 'exit' in intents
     switch_intent = is_switch_topic(annotated_uttr)
-    stop_or_no_intent = 'stop' in annotated_uttr['text'].lower() or is_no(annotated_uttr)
+    stop_or_no_intent = 'stop' in annotated_uttr['text'].lower()
     return exit_intent or switch_intent or stop_or_no_intent
 
 
