@@ -54,7 +54,7 @@ combined_classes = {
                      'Sex_Profanity', 'Art_Event', 'Math', 'News', 'Entertainment', 'Fashion'],
     'cobot_dialogact_topics': ['Other', 'Phatic', 'Entertainment_Movies', 'Entertainment_Books',
                                'Entertainment_General', 'Interactive', 'Entertainment_Music',
-                               'Science_and_Technology', 'Sports', 'Politics'],
+                               'Science_and_Technology', 'Sports', 'Politics'],  # Inappropriate_Content
     'cobot_dialogact_intents': ['Information_DeliveryIntent', 'General_ChatIntent',
                                 'Information_RequestIntent', 'User_InstructionIntent',
                                 'InteractiveIntent',

@@ -1,3 +1,5 @@
+import re
+
 from common.utils import is_yes
 
 # this way news skill offers latest news when nothing specific found
@@ -17,6 +19,7 @@ WHAT_TYPE_OF_NEWS = ["What other kinds of news would you want to discuss?",
                      "What type of news do you prefer?"]
 
 NEWS_DUPLICATES = WHAT_TYPE_OF_NEWS
+NEWS_COMPILED_PATTERN = re.compile(r"(news|(what is|what ?'s)( the)? new|something new)", re.IGNORECASE)
 
 
 def skill_trigger_phrases():

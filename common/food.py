@@ -1,3 +1,5 @@
+import re
+
 OPINION_REQUESTS_ABOUT_FOOD = ["Do you like cooking?",
                                "Do you think cooking is cool?",
                                "Many people say they adore cooking. Do you agree?",
@@ -8,6 +10,7 @@ OFFER_TALK_ABOUT_FOOD = ["Would you like to chat about food?",
                          "I'd like to talk about food, would you?"]
 
 TRIGGER_PHRASES = OPINION_REQUESTS_ABOUT_FOOD + OFFER_TALK_ABOUT_FOOD
+FOOD_COMPILED_PATTERN = re.compile(r"\bfood", re.IGNORECASE)
 
 
 def skill_trigger_phrases():

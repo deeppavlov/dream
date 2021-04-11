@@ -53,6 +53,7 @@ def funfact_request(ngrams, vars):
     human_utterance = state_utils.get_last_human_utterance(vars)
     bot_utterance = state_utils.get_last_bot_utterance(vars)
     flag = funfact_requested(human_utterance, bot_utterance)
+    logging.info(f'funfact_request {flag}')
     return flag
 
 
