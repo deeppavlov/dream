@@ -5,6 +5,7 @@
         {
             "dff_animals_skill_state": {
                 "shared_memory": {
+                    "start": true,
                     "what_animals": true
                 },
                 "previous_human_utter_index": 0,
