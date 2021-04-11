@@ -273,10 +273,10 @@ def respond():
         tell_me_about_intent = annotations.get("intent_catcher", {}).get("lets_chat_about", {}).get(
             "detected", 0) == 1 or if_chat_about_particular_topic(curr_ann_uttr, prev_ann_uttr)
 
-        if "sentrewrite" in annotations["annotations"]:
-            text_rewritten = annotations["annotations"]["sentrewrite"]["modified_sents"][-1]
+        if "sentrewrite" in annotations:
+            text_rewritten = annotations["sentrewrite"]["modified_sents"][-1]
         else:
-            text_rewritten = annotations["text"]
+            text_rewritten = curr_ann_uttr["text"]
         is_question = "?" in text_rewritten
         if is_factoid and (tell_me_about_intent or is_question):
             questions_batch.append(curr_ann_uttr["text"])
