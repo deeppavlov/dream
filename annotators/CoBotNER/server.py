@@ -3,6 +3,7 @@
 import json
 import logging
 import os
+import re
 import time
 
 import requests
@@ -29,6 +30,8 @@ if COBOT_NER_SERVICE_URL is None:
     raise RuntimeError('COBOT_NER_SERVICE_URL environment variable is not set')
 
 headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COBOT_API_KEY}'}
+EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE = re.compile(r"[^a-zA-Z0-9 ]")
+DOUBLE_SPACES = re.compile(r"\s+")
 
 
 @app.route("/entities", methods=['POST'])
@@ -65,8 +68,13 @@ def respond():
             #               {'text': 'michail jordan', 'label': 'person'},
             #               {'text': 'basketballist', 'label': 'sport'}],
             #  'model_version': 'v1.1'}
-            curr_entities = [lab_ent["text"] for lab_ent in result["response"]]
-            curr_labelled_entities = result["response"]
+            curr_entities = []
+            curr_labelled_entities = []
+            for lab_ent in result["response"]:
+                lab_ent["text"] = EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE.sub(" ", lab_ent["text"])
+                lab_ent["text"] = DOUBLE_SPACES.sub(" ", lab_ent["text"]).strip()
+                curr_entities += [lab_ent["text"]]
+                curr_labelled_entities += [lab_ent]
 
         outputs.append({"entities": curr_entities, "labelled_entities": curr_labelled_entities})
 
