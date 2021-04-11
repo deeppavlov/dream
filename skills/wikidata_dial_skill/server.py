@@ -39,7 +39,7 @@ def respond():
         entities_inp = []
         try:
             if "entity_linking" in annotations:
-                entity_ids_batch, _ = annotations["entity_linking"]
+                entity_ids_batch, _ = annotations.get("entity_linking", [[], []])
                 for entity_ids_list in entity_ids_batch:
                     if entity_ids_list:
                         entities_inp.append(entity_ids_list[0])

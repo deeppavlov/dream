@@ -90,7 +90,10 @@ def respond():
     dialog_ids = []
     for i, dialog in enumerate(dialogs):
         curr_uttr = dialog["human_utterances"][-1]
-        curr_uttr_rewritten = curr_uttr["annotations"]["sentrewrite"]["modified_sents"][-1]
+        if "sentrewrite" in curr_uttr["annotations"]:
+            curr_uttr_rewritten = curr_uttr["annotations"]["sentrewrite"]["modified_sents"][-1]
+        else:
+            curr_uttr_rewritten = curr_uttr["text"]
         curr_uttr_clean = remove_punct_and_articles(curr_uttr_rewritten)
         if curr_uttr_clean in COMMON_USER_PHRASES:
             # do not add any fact about ... and
@@ -262,7 +265,7 @@ def respond():
 
         annotations = dialog["human_utterances"][-1]["annotations"]
         intents = get_intents(dialog["human_utterances"][-1], which="cobot_dialogact_intents")
-        opinion_request_detected = annotations["intent_catcher"].get(
+        opinion_request_detected = annotations.get("intent_catcher", {}).get(
             "opinion_request", {}).get("detected") == 1
         reply = dialog['human_utterances'][-1]['text'].replace("\'", " \'").lower()
 
@@ -272,7 +275,12 @@ def respond():
         cobot_topics = set(get_topics(dialog['human_utterances'][-1], which='all'))
         sensitive_topics_detected = any([t in sensitive_topics for t in cobot_topics])
         sensitive_dialogacts_detected = any([(t in sensitive_dialogacts and "?" in reply) for t in intents])
-        blist_topics_detected = dialog['human_utterances'][-1]['annotations']['blacklisted_words']['restricted_topics']
+        if 'blacklisted_words' in dialog['human_utterances'][-1]['annotations']:
+            blist_topics_detected = dialog['human_utterances'][-1]['annotations']['blacklisted_words'][
+                "restricted_topics"
+            ]
+        else:
+            blist_topics_detected = []
 
         for j in range(len(resp_cands)):
             if j != 0:

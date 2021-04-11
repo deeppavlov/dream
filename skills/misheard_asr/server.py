@@ -49,7 +49,7 @@ def misheard_response():
                      f"PREV BOT UTT: {prev_bot_utt}")
         if bot_attributes.get('asr_misheard') is True and prev_bot_utt['active_skill'] == 'misheard_asr':
             bot_attributes['asr_misheard'] = False
-            if current_user_utt['annotations']['intent_catcher'].get('yes', {}).get('detected') == 1:
+            if current_user_utt['annotations'].get("intent_catcher", {}).get('yes', {}).get('detected') == 1:
                 hypots = prev_user_utt["hypotheses"]
                 logger.debug(f"PREV HYPOTS: {hypots}")
                 candidates = []
@@ -62,7 +62,7 @@ def misheard_response():
                 final_confidences.append(confs)
                 final_human_attributes.append([human_attributes] * len(candidates))
                 final_bot_attributes.append([bot_attributes] * len(candidates))
-            elif current_user_utt['annotations']['intent_catcher'].get('no', {}).get('detected') == 1:
+            elif current_user_utt['annotations'].get("intent_catcher", {}).get('no', {}).get('detected') == 1:
                 response = "What is it that you'd like to chat about?"
                 final_responses.append([response])
                 final_confidences.append([1.0])

@@ -410,7 +410,7 @@ class MovieSkillTemplates:
         user_uttr = dialog["human_utterances"][-1]["text"].lower()
         annotations = dialog["human_utterances"][-1]["annotations"]
         intents = get_intents(dialog["human_utterances"][-1], which="cobot_dialogact_intents")
-        opinion_request_detected = annotations["intent_catcher"].get(
+        opinion_request_detected = annotations.get("intent_catcher", {}).get(
             "opinion_request", {}).get("detected") == 1
 
         # favorite movies
