@@ -693,12 +693,15 @@ def get_named_persons(annotated_utterance):
     all_entities = get_entities(annotated_utterance, only_named=False, with_labels=True)
 
     named_persons = []
-    for ent in named_entities:
-        if ent["type"] == "PER":
-            named_persons.append(ent["text"])
-    for ent in all_entities:
-        if ent["label"] == "person":
-            named_persons.append(ent["text"])
+    if "cobot_entities" in annotated_utterance["annotations"]:
+        for ent in all_entities:
+            if ent["label"] == "person":
+                named_persons.append(ent["text"])
+    elif "ner" in annotated_utterance["annotations"]:
+        for ent in named_entities:
+            if ent["type"] == "PER":
+                named_persons.append(ent["text"])
+
     named_persons = list(set(named_persons))
 
     return named_persons
@@ -709,12 +712,15 @@ def get_named_locations(annotated_utterance):
     all_entities = get_entities(annotated_utterance, only_named=False, with_labels=True)
 
     named_locations = []
-    for ent in named_entities:
-        if ent["type"] == "LOC":
-            named_locations.append(ent["text"])
-    for ent in all_entities:
-        if ent["label"] == "location":
-            named_locations.append(ent["text"])
+    if "cobot_entities" in annotated_utterance["annotations"]:
+        for ent in all_entities:
+            if ent["label"] == "location":
+                named_locations.append(ent["text"])
+    elif "ner" in annotated_utterance["annotations"]:
+        for ent in named_entities:
+            if ent["type"] == "LOC":
+                named_locations.append(ent["text"])
+
     named_locations = list(set(named_locations))
 
     return named_locations

@@ -1,5 +1,7 @@
 from random import choice
 
+from common.utils import get_entities
+
 MOVIE_SKILL_CHECK_PHRASE = "the recent movie"
 SWITCH_MOVIE_SKILL_PHRASE = f"What is {MOVIE_SKILL_CHECK_PHRASE} you've watched?"
 
@@ -89,3 +91,15 @@ def get_movie_template(category, subcategory=None, movie_type="movie"):
     else:
         return choice(templates[category]).replace(
             "TYPE", movie_type).replace("SUBJECT", choice(["it", f"this {movie_type}"]))
+
+
+def extract_movies_names_from_annotations(annotated_uttr):
+    if "cobot_entities" in annotated_uttr["annotations"]:
+        movies_titles = []
+        entities = get_entities(annotated_uttr, only_named=False, with_labels=True)
+        for ent in entities:
+            if ent.get("label", "") == "videoname":
+                movies_titles += [ent["text"]]
+    else:
+        movies_titles = None
+    return movies_titles

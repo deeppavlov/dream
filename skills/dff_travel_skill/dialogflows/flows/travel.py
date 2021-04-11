@@ -20,7 +20,7 @@ from common.travel import OPINION_REQUESTS_ABOUT_TRAVELLING, TRAVELLING_TEMPLATE
     ACKNOWLEDGE_USER_DO_NOT_WANT_TO_VISIT_LOC, OFFER_FACT_RESPONSES, OPINION_REQUESTS, HAVE_YOU_BEEN_TEMPLATE, \
     ACKNOWLEDGE_USER_DISLIKE_LOC
 from common.universal_templates import if_chat_about_particular_topic
-from common.utils import get_intents, get_sentiment, get_not_used_template
+from common.utils import get_intents, get_sentiment, get_not_used_template, get_named_locations
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 
@@ -123,19 +123,7 @@ def choose_conf_decreasing_if_requests_in_human_uttr(vars, CONF_1, CONF_2):
 
 
 def get_mentioned_locations(vars):
-    user_mentioned_named_entities = state_utils.get_named_entities_from_human_utterance(vars)
-    user_mentioned_locations = []
-    for named_entity in user_mentioned_named_entities:
-        if named_entity["type"] == "LOC":
-            user_mentioned_locations.append(named_entity["text"])
-    # if len(user_mentioned_locations) == 0:
-    #     nounphrases = state_utils.get_nounphrases_from_human_utterance(vars)
-    #     travel_topic = any([
-    #         spec_topic in get_topics(state_utils.get_last_human_utterance(vars), probs=False, which="all")
-    #         for spec_topic in ["Travel_Geo", "Politics"]])
-    #
-    #     if len(nounphrases) == 1 and travel_topic:
-    #         user_mentioned_locations.append(nounphrases[0])
+    user_mentioned_locations = get_named_locations(vars["agent"]["dialog"]["human_utterances"][-1])
 
     return user_mentioned_locations
 

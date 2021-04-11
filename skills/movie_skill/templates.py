@@ -7,6 +7,7 @@ import numpy as np
 from imdb_database import IMDb
 from utils import list_unique_values
 
+from common.movies import extract_movies_names_from_annotations
 from common.utils import get_intents
 
 
@@ -84,11 +85,11 @@ class MovieSkillTemplates:
                     pass
         return dialog_subjects
 
-    def extract_mentions(self, uttr, dialog=None, find_ignored=False):
+    def extract_mentions(self, annotated_uttr, dialog=None, find_ignored=False):
         """Extract movies titles, movie persons names and genres from the given utterance
 
         Args:
-            uttr: string utterance
+            annotated_uttr: dict utterance
 
         Returns:
             tuple of three elements.
@@ -97,8 +98,19 @@ class MovieSkillTemplates:
             and values - their possible (appeared in the database) professions.
             The third one is a list of mentioned genres or word `genre`.
         """
+        uttr = annotated_uttr["text"]
         # extracting movies titles, movie-persons names
-        movies_ids = self.imdb.find_name(uttr, "movie", find_ignored=find_ignored)
+        movies_titles = extract_movies_names_from_annotations(annotated_uttr)
+        if movies_titles is None:
+            # no cobot_entities annotations
+            movies_ids = self.imdb.find_name(uttr, "movie", find_ignored=find_ignored)
+        else:
+            # movies_titles is a list of string titles (or empty list)
+            movies_ids = []
+            for movie_title in movies_titles:
+                movies_ids.append(self.imdb.get_imdb_id(self.imdb.process_movie_name(movie_title)))
+            # drop movies that are not in our database
+            movies_ids = [imdb_id for imdb_id in movies_ids if imdb_id is not None]
 
         if not(dialog is None) and len(movies_ids) == 0:
             if len(dialog["utterances"]) > 1:
@@ -213,7 +225,7 @@ class MovieSkillTemplates:
 
         uttr = dialog["utterances"][-1]["text"]
         # not overlapping mentions of movies titles, persons names and genres
-        movies_ids, unique_persons, genres = self.extract_mentions(uttr)
+        movies_ids, unique_persons, genres = self.extract_mentions(dialog['human_utterances'][-1])
         logger.info("Detected Movies Titles: {}, Persons: {}, Genres: {}".format(
             [self.imdb(movie)["title"] for movie in movies_ids], unique_persons.keys(), genres))
 
@@ -328,7 +340,7 @@ class MovieSkillTemplates:
         logger.info("Found in the previous dialog the following: {}".format(dialog_subjects))
 
         uttr = dialog["utterances"][-1]["text"]
-        movies_ids, unique_persons, genres = self.extract_mentions(uttr, dialog)
+        movies_ids, unique_persons, genres = self.extract_mentions(dialog['human_utterances'][-1], dialog)
         logger.info("Detected Movies Titles: {}, Persons: {}, Genres: {}".format(
             [self.imdb(movie)["title"] for movie in movies_ids], unique_persons.keys(), genres))
 
