@@ -48,6 +48,10 @@ files=(
   kbqa/models/dialogpt_wiki.tar.gz
   kbqa/models/fact_ranking_bert_lite.tar.gz
   kbqa/models/rel_ranking_bert_lite.tar.gz
+  datasets/wikipedia/enwiki_lite.tar.gz
+  kbqa/wikidata/topical_chat.tar.gz
+  kbqa/wikidata/q_to_descr_en.pickle
+  kbqa/wikidata/q_to_page_en.pickle
 )
 
 for file in ${files[@]}; do

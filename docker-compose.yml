@@ -249,8 +249,6 @@ services:
   ner:
     build:
       context: ./annotators/NER/
-    environment:
-      DEVICE: cuda
     command: flask run -h 0.0.0.0 -p 8021
     environment:
       - FLASK_APP=server
@@ -921,24 +919,24 @@ services:
           memory: 768M
 
   dff-travel-skill:
-      build:
-        args:
-          SERVICE_PORT: 8096
-          SERVICE_NAME: dff_travel_skill # has to be the same with skill dir name
-        context: .
-        dockerfile: skills/dff_travel_skill/Dockerfile
-      command: gunicorn --workers=1 server:app -b 0.0.0.0:8096 --reload
-      # command:  flask run -h 0.0.0.0 -p 8096
-      # environment:
-      #   - FLASK_APP=server
-      deploy:
-        mode: replicated
-        replicas: 2
-        resources:
-          limits:
-            memory: 768M
-          reservations:
-            memory: 768M
+    build:
+      args:
+        SERVICE_PORT: 8096
+        SERVICE_NAME: dff_travel_skill # has to be the same with skill dir name
+      context: .
+      dockerfile: skills/dff_travel_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8096 --reload
+    # command:  flask run -h 0.0.0.0 -p 8096
+    # environment:
+    #   - FLASK_APP=server
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 768M
+        reservations:
+          memory: 768M
 
   dff-sport-skill:
     build:
