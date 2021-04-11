@@ -1,12 +1,20 @@
-from common.utils import is_yes
+import re
+from common.utils import is_yes, get_intents
 
 
 ASK_WEATHER_SKILL_FOR_HOMELAND_PHRASE = "Would you like to know the weather there?"
 ASK_WEATHER_SKILL_PHRASE = "Would you like to know the weather?"
 
+WEATHER_COMPILED_PATTERN = re.compile(r"(weather|forecast)", re.IGNORECASE)
+
 
 def skill_trigger_phrases():
     return [ASK_WEATHER_SKILL_PHRASE]
+
+
+def skill_all_trigger_phrases():
+    # these phrases include linkto from skill_trigger_phrases, and some SPECIFIC linking phrases
+    return skill_trigger_phrases() + [ASK_WEATHER_SKILL_FOR_HOMELAND_PHRASE, ASK_WEATHER_SKILL_PHRASE]
 
 
 def is_weather_for_homeland_requested(prev_bot_utt, user_utt):
@@ -23,7 +31,9 @@ def is_weather_without_city_requested(prev_bot_utt, user_utt):
     return False
 
 
-def is_weather_requested(prev_bot_utt, user_utt):
-    w1 = is_weather_for_homeland_requested(prev_bot_utt, user_utt)
-    w2 = is_weather_without_city_requested(prev_bot_utt, user_utt)
-    return w1 or w2
+def if_special_weather_turn_on(user_utt, prev_bot_utt):
+    if "weather_forecast_intent" in get_intents(user_utt, probs=False, which="all") or \
+            is_weather_for_homeland_requested(prev_bot_utt, user_utt) or \
+            is_weather_without_city_requested(prev_bot_utt, user_utt):
+        return True
+    return False

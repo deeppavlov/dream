@@ -1,9 +1,15 @@
+import re
 from random import choice
 
 from common.utils import get_entities
 
 MOVIE_SKILL_CHECK_PHRASE = "the recent movie"
 SWITCH_MOVIE_SKILL_PHRASE = f"What is {MOVIE_SKILL_CHECK_PHRASE} you've watched?"
+
+MOVIE_COMPILED_PATTERN = re.compile(
+    r"(movie|film|picture|series|tv[ -]?show|reality[ -]?show|netflix|\btv\b|"
+    r"comedy|comedies|thriller|animation|anime|talk[ -]?show|cartoon|drama|"
+    r"fantasy)", re.IGNORECASE)
 
 
 def skill_trigger_phrases():

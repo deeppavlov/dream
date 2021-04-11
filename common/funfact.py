@@ -1,14 +1,16 @@
+import re
+
 from common.utils import is_yes
-import logging
+
+
+FUNFACT_COMPILED_PATTERN = re.compile(r"(funfact|fun fact|tell me something)", re.IGNORECASE)
 
 
 def funfact_requested(annotated_user_utt, annotated_bot_utt):
-    turn_on_funfact = any([j in annotated_user_utt['text']
-                           for j in ['funfact', 'fun fact', 'tell me something']])
+    turn_on_funfact = FUNFACT_COMPILED_PATTERN.search(annotated_user_utt['text'])
     previous_was_funfact = annotated_bot_utt.get('active_skill', '') == 'dff_funfact_skill'
     agree_next = is_yes(annotated_user_utt)
     flag = turn_on_funfact or (previous_was_funfact and agree_next)
-    logging.info(f'funfact_requested {flag}')
     return flag
 
 

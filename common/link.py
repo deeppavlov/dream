@@ -118,3 +118,19 @@ def link_to(skills, human_attributes, recent_active_skills=[]):
     if filtered_phrases:
         random_phrase = choice(filtered_phrases)
     return {'phrase': random_phrase, 'skill': random_skill}
+
+
+def skill_was_linked(skill_name, prev_bot_utt):
+    for phrase in skills_phrases_map.get(skill_name, []):
+        if phrase.lower() in prev_bot_utt.get('text', '').lower():
+            return True
+    return False
+
+
+def get_all_linked_to_skills(prev_bot_utt):
+    skills = []
+    for skill_name in skills_phrases_map:
+        if skill_was_linked(skill_name, prev_bot_utt):
+            skills.append(skill_name)
+
+    return skills
