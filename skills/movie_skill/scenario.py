@@ -82,7 +82,7 @@ class MovieSkillScenario:
                 human_attr["disliked_skills"] = dialog["human"]["attributes"].get("disliked_skills", [])
                 # not overlapping mentions of movies titles, persons names and genres
                 movies_ids, unique_persons, mentioned_genres = self.templates.extract_mentions(
-                    curr_user_uttr["text"].lower(), find_ignored=True)
+                    curr_user_uttr, find_ignored=True)
                 logger.info(
                     f"Current user utterance is about movies: `{curr_user_uttr['text']}`. "
                     f"Detected Movies Titles: "

@@ -10,7 +10,7 @@ import sentry_sdk
 
 from common.constants import CAN_NOT_CONTINUE, MUST_CONTINUE
 from common.weather import ASK_WEATHER_SKILL_FOR_HOMELAND_PHRASE
-from common.utils import get_entities
+from common.utils import get_entities, get_named_locations, get_named_persons
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -235,22 +235,35 @@ def tell_my_info(dialog, which_info="name"):
 
 def check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr):
     found_info = None
-    for ent in get_entities({"text": curr_user_uttr, "annotations": curr_user_annot},
-                            only_named=True, with_labels=True):
-        if (which_info == "name" and ent["type"] in ["PER", "LOC"]) or (
-                (which_info == "homeland" or which_info == "location") and ent["type"] in ["PER", "LOC"]):
+    if "cobot_entities" in curr_user_annot:
+        if which_info == "name":
+            named_entities = get_named_persons({"text": curr_user_uttr, "annotations": curr_user_annot})
+        else:
+            named_entities = get_named_locations({"text": curr_user_uttr, "annotations": curr_user_annot})
+    else:
+        named_entities = []
+        for ent in get_entities({"text": curr_user_uttr, "annotations": curr_user_annot},
+                                only_named=True, with_labels=True):
             if ent["text"].lower() == "alexa":
                 if (re.search(r"(my (name is|name's)|call me) alexa", curr_user_uttr) or (re.search(
                         r"(what is|what's|whats|tell me) your? name",
-                        prev_bot_uttr) and re.match(r"^alexa[\.,!\?]*$", curr_user_uttr))):
+                        prev_bot_uttr) and re.match(r"^alexa[.,!?]*$", curr_user_uttr))):
                     # - my name is alexa
                     # - what's your name? - alexa.
                     pass
                 else:
                     # in all other cases skip alexa
                     continue
-            logger.info(f"Found {which_info} `{ent['text']}`")
-            found_info = " ".join([n.capitalize() for n in ent["text"].split()])
+            if re.match(r"^" + ent["text"] + r"[.,!?]*$", curr_user_uttr, re.IGNORECASE):
+                named_entities.append(ent["text"])
+            elif (which_info == "name" and ent["type"] == "PER") or (
+                    which_info in ["homeland", "location"] and ent["type"] == "LOC"):
+                named_entities.append(ent["text"])
+
+    if named_entities:
+        ent = named_entities[-1]
+        found_info = " ".join([n.capitalize() for n in ent.split()])
+    logger.info(f"Found {which_info} `{found_info}`")
     return found_info
 
 
