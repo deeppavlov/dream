@@ -19,8 +19,8 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 SUPER_CONF = 1.
-UNIVERSAL_RESPONSE_CONFIDENCE = 0.8
-UNIVERSAL_RESPONSE_LOW_CONFIDENCE = 0.7
+UNIVERSAL_RESPONSE_CONFIDENCE = 0.7
+UNIVERSAL_RESPONSE_LOW_CONFIDENCE = 0.6
 DONTKNOW_CONF = 0.5
 ACKNOWLEDGEMENT_CONF = 0.5
 DONTKNOW_PHRASE = "Seems like I have no idea what we are talking about."
