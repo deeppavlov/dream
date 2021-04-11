@@ -54,40 +54,51 @@ class FactRankerInfer(Component):
         self.thres = thres
         self.use_topical_chat_facts = use_topical_chat_facts
 
-    def __call__(self, dialog_history_list: List[str], sentences_batch: List[List[str]],
-                 topical_chat_facts_batch: List[List[str]], first_paragraphs_batch: List[List[str]]) -> List[List[str]]:
+    def __call__(self, dialog_history_list: List[str],
+                 first_paragraphs_batch: List[List[str]],
+                 topical_chat_facts_batch: List[List[str]] = None,
+                 sentences_batch: List[List[str]] = None) -> List[List[str]]:
         top_facts_batch = []
+        if sentences_batch is None:
+            sentences_batch = [[] for _ in dialog_history_list]
+        if topical_chat_facts_batch is None:
+            topical_chat_facts_batch = [[] for _ in dialog_history_list]
         tm1 = time.time()
-        for dialog_history, sentences_list, topical_chat_facts, first_paragraphs in \
+        for dialog_history, sentences_list, topical_chat_facts, first_paragraphs_list in \
                 zip(dialog_history_list, sentences_batch, topical_chat_facts_batch, first_paragraphs_batch):
             first_par_list = []
-            cand_facts = sentences_list
-            for paragraph in first_paragraphs:
-                sentences = sent_tokenize(paragraph)
-                first_par_list += sentences[:2]
-            if self.use_topical_chat_facts:
+            cand_facts = []
+            if sentences_list:
+                cand_facts = sentences_list
+            for first_paragraphs in first_paragraphs_list:
+                for paragraph in first_paragraphs:
+                    sentences = sent_tokenize(paragraph)
+                    first_par_list += sentences[:2]
+            if self.use_topical_chat_facts and topical_chat_facts:
                 for paragraph in topical_chat_facts:
                     sentences = sent_tokenize(paragraph)
                     cand_facts.extend([sentence for sentence in sentences if len(sentence.split()) < 150])
 
             facts_with_scores = []
-            n_batches = len(cand_facts) // self.batch_size + int(len(cand_facts) % self.batch_size > 0)
-            logger.info(f"num batches {n_batches}")
-            for i in range(n_batches):
-                dh_batch = []
-                facts_batch = []
-                for candidate_fact in cand_facts[i * self.batch_size: (i + 1) * self.batch_size]:
-                    dh_batch.append(dialog_history)
-                    facts_batch.append(candidate_fact)
+            top_facts = []
+            if cand_facts:
+                n_batches = len(cand_facts) // self.batch_size + int(len(cand_facts) % self.batch_size > 0)
+                logger.info(f"num batches {n_batches}")
+                for i in range(n_batches):
+                    dh_batch = []
+                    facts_batch = []
+                    for candidate_fact in cand_facts[i * self.batch_size: (i + 1) * self.batch_size]:
+                        dh_batch.append(dialog_history)
+                        facts_batch.append(candidate_fact)
 
-                if dh_batch:
-                    probas = self.ranker(dh_batch, facts_batch)
-                    probas = [proba[1] for proba in probas]
-                    for j, fact in enumerate(facts_batch):
-                        facts_with_scores.append((fact, probas[j]))
+                    if dh_batch:
+                        probas = self.ranker(dh_batch, facts_batch)
+                        probas = [proba[1] for proba in probas]
+                        for j, fact in enumerate(facts_batch):
+                            facts_with_scores.append((fact, probas[j]))
 
-            facts_with_scores = sorted(facts_with_scores, key=lambda x: x[1], reverse=True)
-            top_facts = [fact for fact, score in facts_with_scores if score > self.thres]
+                facts_with_scores = sorted(facts_with_scores, key=lambda x: x[1], reverse=True)
+                top_facts = [fact for fact, score in facts_with_scores if score > self.thres]
             top_facts = first_par_list + top_facts
             top_facts_batch.append(top_facts[:self.facts_to_leave])
         tm2 = time.time()

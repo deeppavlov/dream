@@ -38,7 +38,7 @@
       },
       {
         "class_name": "fact_ranking:FactRankerInfer",
-        "in": ["dialog_history", "top_sentences", "topical_chat_facts", "first_par"],
+        "in": ["dialog_history", "first_par", "topical_chat_facts", "top_sentences"],
         "out": ["top_facts"],
         "facts_to_leave": 20,
         "thres": 0.93,

@@ -598,7 +598,7 @@ services:
   entity-linking:
     build:
       args:
-        CONFIG: kbqa_entity_linking.json
+        CONFIG: kbqa_entity_linking_page.json
         PORT: 8075
         SRC_DIR: annotators/entity_linking
         COMMIT: 5b99ac3392e8e178e2bb4f9b218d4ddb2ec2e242
@@ -1016,7 +1016,7 @@ services:
   fact-retrieval:
     build:
       args:
-        CONFIG: fact_retrieval_ent.json
+        CONFIG: fact_retrieval_page.json
         PORT: 8100
         SRC_DIR: annotators/fact_retrieval/
         COMMIT: 4b3e60c407644b750c9dc292ac6bf206081fb9d0
