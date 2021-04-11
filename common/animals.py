@@ -20,11 +20,18 @@ def animals_skill_was_proposed(prev_bot_utt):
 
 
 ANIMALS_TEMPLATE = re.compile(r"(animal|\bpet\b|\bpets\b)", re.IGNORECASE)
-PETS_TEMPLATE = re.compile(r"(\bcat\b|\bdog\b|horse|puppy|kitty|kitten|parrot|\brat\b|mouse|hamster)", re.IGNORECASE)
+PETS_TEMPLATE = re.compile(r"(\bcat\b|\bcats\b|\bdog\b|\bdogs\b|horse|puppy|kitty|kitten|parrot|\brat\b|\brats\b|"
+                           r"mouse|hamster)", re.IGNORECASE)
+ANIMALS_FIND_TEMPLATE = re.compile(r"(animal|\bpet\b|\bpets\b|\bcat\b|\bcats\b|\bdog\b|\bdogs\b|horse|puppy|kitty|"
+                                   r"kitten|parrot|\brat\b|\brats\b|mouse|hamster)", re.IGNORECASE)
+HAVE_LIKE_PETS_TEMPLATE = re.compile(r"(do|did|have) you (have |had |like )?(any |a )?(pets|pet|animals|animal)",
+                                     re.IGNORECASE)
+HAVE_PETS_TEMPLATE = re.compile(r"(do|did|have) you (have |had )?(any |a )?(pets|pet|animals|animal)", re.IGNORECASE)
+LIKE_PETS_TEMPLATE = re.compile(r"(do|did|have) you (like |love )?(any |a )?(pets|pet|animals|animal)", re.IGNORECASE)
 
 
 def check_about_animals(text):
-    if re.findall(ANIMALS_TEMPLATE, text) or re.findall(PETS_TEMPLATE, text):
+    if re.findall(ANIMALS_FIND_TEMPLATE, text):
         return True
     else:
         return False

@@ -10,11 +10,10 @@ import sentry_sdk
 import common.constants as common_constants
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
-from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
-from common.greeting import GREETING_QUESTIONS
-from common.utils import get_intents, is_yes, is_no
-from common.animals import PETS_TEMPLATE, LIKE_ANIMALS_REQUESTS, OFFER_TALK_ABOUT_ANIMALS, \
-    WILD_ANIMALS, WHAT_PETS_I_HAVE
+from common.universal_templates import if_chat_about_particular_topic
+from common.utils import is_yes, is_no
+from common.animals import PETS_TEMPLATE, ANIMALS_FIND_TEMPLATE, LIKE_ANIMALS_REQUESTS, WILD_ANIMALS, \
+    WHAT_PETS_I_HAVE, HAVE_LIKE_PETS_TEMPLATE, HAVE_PETS_TEMPLATE, LIKE_PETS_TEMPLATE
 
 import dialogflows.scopes as scopes
 from dialogflows.flows.my_pets_states import State as MyPetsState
@@ -37,27 +36,14 @@ CONF_2 = 0.98
 CONF_3 = 0.96
 CONF_4 = 0.9
 
-ANIMALS_TEMPLATE = re.compile(r"(animals|pets)", re.IGNORECASE)
-COMPILE_GREETING_QUESTIONS = re.compile("|".join(GREETING_QUESTIONS["what_to_talk_about"]), re.IGNORECASE)
-
 
 def lets_talk_about_request(vars):
     flag = False
     user_uttr = state_utils.get_last_human_utterance(vars)
     bot_uttr = state_utils.get_last_bot_utterance(vars)
-    user_lets_chat_about = "lets_chat_about" in get_intents(user_uttr, which="intent_catcher") or \
-                           if_lets_chat_about_topic(user_uttr["text"]) or re.search(COMPILE_WHAT_TO_TALK_ABOUT,
-                                                                                    bot_uttr["text"]) or re.search(
-        COMPILE_GREETING_QUESTIONS, bot_uttr["text"])
-    user_lets_chat_about_animals = re.search(ANIMALS_TEMPLATE, user_uttr["text"]) and not \
-        re.search("like|love|have", user_uttr["text"])
-    linkto_talk_about_animals = any([req.lower() in bot_uttr["text"].lower()
-                                     for req in OFFER_TALK_ABOUT_ANIMALS])
-
-    user_agrees = is_yes(state_utils.get_last_human_utterance(vars))
-
-    if (user_lets_chat_about and user_lets_chat_about_animals) or (linkto_talk_about_animals and user_agrees) or \
-            re.findall(r"^(pets|animals)\??$", user_uttr["text"]):
+    have_pets = re.search(HAVE_LIKE_PETS_TEMPLATE, user_uttr["text"])
+    chat_about = if_chat_about_particular_topic(user_uttr, bot_uttr, compiled_pattern=ANIMALS_FIND_TEMPLATE)
+    if have_pets or chat_about:
         flag = True
     logger.info(f"lets_talk_about_request={flag}")
     return flag
@@ -66,7 +52,7 @@ def lets_talk_about_request(vars):
 def have_pets_request(ngrams, vars):
     flag = False
     text = state_utils.get_last_human_utterance(vars)["text"]
-    if re.findall("(do|did) you have (any )?(pets|animals)", text):
+    if re.search(HAVE_PETS_TEMPLATE, text):
         flag = True
     logger.info(f"have_pets_request={flag}")
     return flag
@@ -77,7 +63,7 @@ def like_animals_request(ngrams, vars):
     text = state_utils.get_last_human_utterance(vars)["text"]
     shared_memory = state_utils.get_shared_memory(vars)
     my_pet = shared_memory.get("my_pet", "")
-    if re.findall("(do|did) you (like|love) (pets|animals)", text) or not my_pet:
+    if re.search(LIKE_PETS_TEMPLATE, text) or not my_pet:
         flag = True
     logger.info(f"like_animals_request={flag}")
     return flag
@@ -103,7 +89,7 @@ def sys_what_animals_request(ngrams, vars):
     text = state_utils.get_last_human_utterance(vars)["text"]
     user_agrees = is_yes(state_utils.get_last_human_utterance(vars))
     shared_memory = state_utils.get_shared_memory(vars)
-    user_asks_about_pets = re.findall(r"(do|did )?you have (a )?pet(s)?", text)
+    user_asks_about_pets = re.search(HAVE_PETS_TEMPLATE, text)
     check_linkto = lets_talk_about_request(vars) or (linkto_like_animals and user_agrees) or text in {"animals", "pets"}
     if not user_asks_about_pets and not shared_memory.get("what_animals", False) and check_linkto:
         flag = True
@@ -125,7 +111,7 @@ def is_wild_request(ngrams, vars):
     text = state_utils.get_last_human_utterance(vars)["text"]
     shared_memory = state_utils.get_shared_memory(vars)
     used_is_wild = shared_memory.get("is_wild", False)
-    if not re.findall(PETS_TEMPLATE, text) and not used_is_wild:
+    if not re.search(PETS_TEMPLATE, text) and not used_is_wild:
         flag = True
     logger.info(f"is_wild_request={flag}")
     return flag
@@ -134,7 +120,7 @@ def is_wild_request(ngrams, vars):
 def is_not_wild_request(ngrams, vars):
     flag = False
     text = state_utils.get_last_human_utterance(vars)["text"]
-    if re.findall(PETS_TEMPLATE, text):
+    if re.search(PETS_TEMPLATE, text):
         flag = True
     logger.info(f"is_not_wild_request={flag}")
     return flag
@@ -157,7 +143,7 @@ def user_has_pets_request(ngrams, vars):
     flag = False
     isno = is_no(state_utils.get_last_human_utterance(vars))
     text = state_utils.get_last_human_utterance(vars)["text"]
-    if re.findall(PETS_TEMPLATE, text) and not isno:
+    if re.search(PETS_TEMPLATE, text) and not isno:
         flag = True
     logger.info(f"user_has_pets_request={flag}")
     return flag
@@ -167,7 +153,7 @@ def user_has_not_pets_request(ngrams, vars):
     flag = False
     isno = is_no(state_utils.get_last_human_utterance(vars))
     text = state_utils.get_last_human_utterance(vars)["text"]
-    if not re.findall(PETS_TEMPLATE, text) or isno:
+    if not re.search(PETS_TEMPLATE, text) or isno:
         flag = True
     logger.info(f"user_has_not_pets_request={flag}")
     return flag
@@ -191,7 +177,7 @@ def what_wild_request(ngrams, vars):
     flag = True
     text = state_utils.get_last_human_utterance(vars)["text"]
     shared_memory = state_utils.get_shared_memory(vars)
-    user_asks_about_pets = re.findall(r"(do|did )?you have (a )?pet(s)?", text)
+    user_asks_about_pets = re.search(HAVE_PETS_TEMPLATE, text)
     is_wild = shared_memory.get("is_wild", False)
     what_wild = shared_memory.get("what_wild", False)
     logger.info(f"what_wild_request, is wild {is_wild}, what wild {what_wild}")
@@ -255,7 +241,7 @@ def tell_about_pets_response(vars):
 
 def mention_animals_response(vars):
     text = state_utils.get_last_human_utterance(vars)["text"]
-    pet = re.findall(PETS_TEMPLATE, text)
+    pet = re.search(PETS_TEMPLATE, text)
     if pet:
         response = f"Do you have a {pet}?"
     else:
