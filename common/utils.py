@@ -229,6 +229,16 @@ def is_donot_know(annotated_phrase):
     return False
 
 
+def is_no_intent(annotated_phrase):
+    no_detected = "no" in get_intents(annotated_phrase, which='intent_catcher', probs=False)
+    midas_no_detected = "neg_answer" in get_intents(annotated_phrase, which='midas', probs=False)
+    is_not_idontknow = not is_donot_know(annotated_phrase)
+    if (no_detected or midas_no_detected) and is_not_idontknow:
+        return True
+
+    return False
+
+
 def is_no(annotated_phrase):
     no_detected = "no" in get_intents(annotated_phrase, which='intent_catcher', probs=False)
     midas_no_detected = "neg_answer" in get_intents(annotated_phrase, which='midas', probs=False)

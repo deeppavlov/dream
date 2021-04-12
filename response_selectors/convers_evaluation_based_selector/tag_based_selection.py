@@ -417,12 +417,18 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
     for category in categorized_hyps:
         new_ids = []
         for cand_id in categorized_hyps[category]:
+            if candidates[cand_id]["skill_name"] in disliked_skills and candidates[cand_id].get(
+                    "can_continue", CAN_NOT_CONTINUE) == MUST_CONTINUE:
+                disliked_skills.remove(candidates[cand_id]["skill_name"])
             if candidates[cand_id]["skill_name"] not in disliked_skills:
                 new_ids.append(cand_id)
         categorized_hyps[category] = deepcopy(new_ids)
     for category in categorized_prompts:
         new_ids = []
         for cand_id in categorized_prompts[category]:
+            if candidates[cand_id]["skill_name"] in disliked_skills and candidates[cand_id].get(
+                    "can_continue", CAN_NOT_CONTINUE) == MUST_CONTINUE:
+                disliked_skills.remove(candidates[cand_id]["skill_name"])
             if candidates[cand_id]["skill_name"] not in disliked_skills:
                 new_ids.append(cand_id)
         categorized_prompts[category] = deepcopy(new_ids)
