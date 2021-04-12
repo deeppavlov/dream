@@ -18,7 +18,10 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-questions_pets = ["Would you like to learn more about {}?", "More about {}?"]
+questions_pets = ["Would you like to learn more about {}?", "More about {}?", "Do you want to hear more about {}?",
+                  "Something else about {}?", "Should I continue?"]
+random.shuffle(MY_CAT)
+random.shuffle(MY_DOG)
 
 CONF_1 = 1.0
 
@@ -154,7 +157,6 @@ def tell_about_dog_response(vars):
 
 
 def my_cat_1_response(vars):
-    random.shuffle(MY_CAT)
     fact = MY_CAT[0]
     shared_memory = state_utils.get_shared_memory(vars)
     my_pet_name = shared_memory.get("my_pet_name", "my cat")
@@ -200,7 +202,6 @@ def my_cat_3_response(vars):
 
 
 def my_dog_1_response(vars):
-    random.shuffle(MY_DOG)
     fact = MY_DOG[0]
     shared_memory = state_utils.get_shared_memory(vars)
     my_pet_name = shared_memory.get("my_pet_name", "my dog")

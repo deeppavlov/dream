@@ -49,6 +49,7 @@ def retrieve_and_save(vars):
 
 def retrieve_and_save_name(vars):
     name = ""
+    shared_memory = state_utils.get_shared_memory(vars)
     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
     ner = annotations.get("ner", [])
     for entities in ner:
@@ -56,7 +57,8 @@ def retrieve_and_save_name(vars):
             for entity in entities:
                 if entity.get("type", "") == "PER":
                     name = entity["text"]
-                    state_utils.save_to_shared_memory(vars, users_pet_name=name)
+                    if not shared_memory.get("users_pet_name", ""):
+                        state_utils.save_to_shared_memory(vars, users_pet_name=name)
     return name
 
 
