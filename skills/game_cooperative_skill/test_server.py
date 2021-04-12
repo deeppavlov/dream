@@ -29,7 +29,7 @@ false_requests = []
 def update_utterances(utterances=[], response=None, text_request=""):
     if response:
         text, confidence, _, _, attr = response
-        can_continue = attr["can_continue"]
+        can_continue = attr.get("can_continue", "")
         utterances[-1]["hypotheses"] = [
             {
                 "skill_name": "game_cooperative_skill",
@@ -86,11 +86,13 @@ def test_skill():
     for ind, (req_utter, true_resp_utter) in enumerate(zip(request_utters, true_response_utters)):
         utterances = update_utterances(utterances=utterances, text_request=req_utter)
         human_utterances = [uttr for uttr in utterances if "hypotheses" in uttr]
+        bot_utterances = [uttr for uttr in utterances if "hypotheses" not in uttr]
         input_data = {
             "dialogs": [
                 {
                     "utterances": utterances,
                     "human_utterances": human_utterances,
+                    "bot_utterances": bot_utterances,
                     "human": {"attributes": human_attr},
                     "bot": {"attributes": bot_attr},
                 }

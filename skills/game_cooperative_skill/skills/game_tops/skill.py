@@ -161,7 +161,7 @@ def describe_top_handler(state, skill_state, true_model_names, true_cmds):
         text = "I didn't get what you've just said. "
         text += f"I was talking about {current_game.get('name_original', 'games')}, do you want to continue? "
         text += "For example, you can say:  go on "
-        text += "Or do you want to stop for now? "
+        text += "do you want to continue? "
         skill_state_update = {"next_step": "describe_top"}
 
     return state, text, confidence, skill_state_update, scenario
@@ -199,13 +199,13 @@ def select_top_handler(state, skill_state, true_model_names, true_cmds):
         text = "I didn't get what you've just said. "
         text += "Do you want to chat about the best games of the past year, this year, last month or week? "
         text += "For example, you can say: show me the best games of this year. "
-        text += "Or do you want to stop for now? "
+        text += "do you want to continue? "
         skill_state_update = {"next_step": "select_top"}
     elif not current_top:
         text = f"I haven't heard of any hot new games in {period_plh}. "
         text += "Do you want to chat about the best games of the past year, this year? "
         text += "For example, you can say: show me the best games of this year. "
-        text += "Or do you want to stop for now? "
+        text += "do you want to continue? "
         skill_state_update = {"next_step": "select_top"}
     else:
         is_plh = "was" if len(current_top) == 1 else "were"

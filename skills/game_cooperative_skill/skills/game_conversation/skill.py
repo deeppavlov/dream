@@ -189,8 +189,8 @@ def have_you_played_handler(previous_handler_state, skill_state, state, true_mod
             ]
             if current_game:
                 text += [f"I wonder if you played {current_game.get('name_original')}."]
-                text += ["For example, you can say: yes or no ."]
-            text += ["Or do you want to stop for now?"]
+                # text += ["For example, you can say: yes or no ."]
+            text += ["do you want to continue? "]
             skill_state_update.update({"next_step": "have_you_played"})
         skill_state_update[game_id] = game_state
 
@@ -282,7 +282,7 @@ def do_you_like_handler(previous_handler_state, skill_state, state, true_model_n
                 text += [f"I asked what rating would you give {current_game.get('name_original')}."]
                 text += ["For example, you can say: one or ten  or any number from 1 to 10."]
 
-            text += [f"Or do you want to stop for now?"]
+            text += [f"do you want to continue? "]
             skill_state_update = {"next_step": "do_you_like"}
 
     handler_state = {}

@@ -112,13 +112,16 @@ def respond():
             # logger.info(f"state = {state}")
             # logger.info(f"last_utter_text = {last_utter_text}")
             # logger.info(f"response = {response}")
+            bot_utterance = dialog["bot_utterances"][-1] if dialog["bot_utterances"] else {}
             text = response.get("text", "Sorry")
             confidence = 1.0 if response.get("confidence") else 0.0
             confidence *= 1.0 if is_active_last_answer else 0.98
             if "I like to talk about games." in response.get("text") and if_chat_about_particular_topic(
-                dialog["human_utterances"][-1], dialog["bot_utterances"][-1] if dialog["bot_utterances"] else {}
+                dialog["human_utterances"][-1], bot_utterance
             ):
                 confidence = 1
+            if text.lower() in bot_utterance.get("text", "").lower():
+                confidence = 0
             if confidence == 1:
                 can_continue = MUST_CONTINUE
             elif confidence > 0.9:
