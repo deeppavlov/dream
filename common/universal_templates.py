@@ -72,7 +72,7 @@ TALK_LIKE = ["talk", "chat", "converse", "discuss", "speak", "tell", "say", "gos
                                       r"speaking|chatter|chitchat|chit chat)",
              f"tell {ANY_WORDS}"]
 WANT_LIKE = ["want to", "wanna", "wish to", "need to", "desire to", r"(would |'d )?(like|love|dream) to", "going to",
-             "gonna", "will", "can", "could", "plan to", "in need to", "demand"]
+             "gonna", "will", "can", "could", "plan to", "in need to", "demand", "want to"]
 TO_ME_LIKE = [r"to me( now)?", r"with me( now)?", r"me( now)?", "now"]
 SOMETHING_LIKE = ["anything", "something", "nothing", "none", "that", "everything"]
 DONOTKNOW_LIKE = [r"(i )?(do not|don't) know", "you (choose|decide|pick up)"]
@@ -88,7 +88,7 @@ KNOW = join_words_in_or_pattern(KNOW_LIKE)
 # --------------- Let's talk. / Can we talk? / Talk to me. ------------
 COMPILE_LETS_TALK = re.compile(join_sentences_in_or_pattern(
     [
-        BEGIN_OF_SENT + TALK_TO_ME + END,
+        TALK_TO_ME + END,
         join_words_in_or_pattern(QUESTION_LIKE) + r"\s?" + TALK_TO_ME + END,
         join_words_in_or_pattern(WANT_LIKE) + r"\s?" + TALK_TO_ME + END,
         join_words_in_or_pattern(START_LIKE) + r"\s?" + TALK_TO_ME + END
@@ -96,14 +96,17 @@ COMPILE_LETS_TALK = re.compile(join_sentences_in_or_pattern(
     re.IGNORECASE)
 
 # --------------- I don't want to talk. / I don't want to talk about that. ------------
-COMPILE_NOT_WANT_TO_TALK_ABOUT_IT = re.compile(
-    r"(not|n't|\bno\b) " + join_words_in_or_pattern(WANT_LIKE) + r"\s" + join_words_in_or_pattern(TALK_LIKE),
+COMPILE_NOT_WANT_TO_TALK_ABOUT_IT = re.compile(join_sentences_in_or_pattern(
+    [
+        r"(not|n't|\bno\b) " + join_words_in_or_pattern(WANT_LIKE),
+        r"(not|n't|\bno\b) " + join_words_in_or_pattern(TALK_LIKE),
+    ]),
     re.IGNORECASE)
 
 # ----- Let's talk about something. / Can we talk about something? / Talk to me about something. ----
 COMPILE_LETS_TALK_ABOUT_SOMETHING = re.compile(join_sentences_in_or_pattern(
     [
-        BEGIN_OF_SENT + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END,
+        TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END,
         join_words_in_or_pattern(QUESTION_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END,
         join_words_in_or_pattern(WANT_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END,
         join_words_in_or_pattern(START_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END,
@@ -128,7 +131,7 @@ COMPILE_SWITCH_TOPIC = re.compile(join_sentences_in_or_pattern(
 # ----- Let's talk about TOPIC. / Can we talk about TOPIC? / Talk to me about TOPIC. ----
 COMPILE_LETS_TALK_ABOUT_TOPIC = re.compile(join_sentences_in_or_pattern(
     [
-        BEGIN_OF_SENT + TALK_TO_ME + SOMETHING_WITH_SPACES + ABOUT_TOPIC + END,
+        TALK_TO_ME + SOMETHING_WITH_SPACES + ABOUT_TOPIC + END,
         join_words_in_or_pattern(QUESTION_LIKE) + r"\s?" + TALK_TO_ME + SOMETHING_WITH_SPACES + ABOUT_TOPIC + END,
         join_words_in_or_pattern(WANT_LIKE) + r"\s?" + TALK_TO_ME + SOMETHING_WITH_SPACES + ABOUT_TOPIC + END,
         join_words_in_or_pattern(START_LIKE) + r"\s?" + TALK_TO_ME + SOMETHING_WITH_SPACES + ABOUT_TOPIC + END,
