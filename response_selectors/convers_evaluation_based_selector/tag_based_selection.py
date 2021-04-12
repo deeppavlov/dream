@@ -305,7 +305,8 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
                                                                       all_user_nounphrases)) > 0
         _same_topic_entity = _same_topics or _same_named_entities or _same_nounphrases
 
-        if cand_uttr["skill_name"] == 'program_y' and cand_uttr['confidence'] == 0.98:
+        if cand_uttr["skill_name"] == 'program_y' and cand_uttr['confidence'] == 0.98 and \
+                len(cand_uttr["text"].split()) > 6:
             cand_uttr["can_continue"] = CAN_CONTINUE_SCENARIO_DONE
         _can_continue = cand_uttr.get("can_continue", CAN_NOT_CONTINUE)
         if _is_active_skill:
@@ -345,6 +346,9 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             # user wants to chat about particular topic
 
             CASE = "User wants to talk about topic."
+            # in this case we do not give priority to previously active skill
+            # because now user wants to talk about something particular
+            _is_active_skill = False
             categorized_hyps, categorized_prompts = categorize_candidate(
                 cand_id, skill_name, categorized_hyps, categorized_prompts, _is_just_prompt,
                 _is_active_skill, _can_continue, _same_topic_entity, _is_dialog_abandon,
