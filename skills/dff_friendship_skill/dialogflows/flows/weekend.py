@@ -172,7 +172,7 @@ def std_weekend_response(vars):
 ##################################################################################################################
 
 
-patterns_human = ["cleane", "tide", "reorganize"]
+patterns_human = ["clean", "tide", "reorganize", "tidi", "laundry"]
 cleaned_up_patterns_re = re.compile("(" + "|".join(patterns_human) + ")", re.IGNORECASE)
 
 
