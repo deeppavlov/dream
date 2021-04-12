@@ -11,7 +11,7 @@ from os import getenv
 import sentry_sdk
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO
-from common.utils import get_skill_outputs_from_dialog, get_sentiment
+from common.utils import get_skill_outputs_from_dialog, get_sentiment, get_entities
 from common.universal_templates import if_choose_topic, if_switch_topic, if_chat_about_particular_topic
 
 
@@ -222,6 +222,21 @@ def find_topics_in_substring(substring):
     return topics
 
 
+def extract_topics(curr_uttr):
+    entities = get_entities(curr_uttr, only_named=True, with_labels=False)
+    entities = [ent.lower() for ent in entities]
+    entities = [ent for ent in entities
+                if not (ent == "alexa" and curr_uttr["text"].lower()[:5] == "alexa") and "news" not in ent]
+    if len(entities) == 0:
+        for ent in get_entities(curr_uttr, only_named=False, with_labels=False):
+            if ent in entities:
+                pass
+            else:
+                entities.append(ent)
+    entities = [ent for ent in entities if len(ent) > 0]
+    return entities
+
+
 def extract_topic_from_user_uttr(dialog):
     """
     Extract one of the considered topics out of `TOPIC_WORDS.keys()`.
@@ -233,18 +248,13 @@ def extract_topic_from_user_uttr(dialog):
     Returns:
         string topic
     """
-    talk_about = re.compile(r"about ([a-zA-Z\s0-9]+)")
-    curr_user_uttr = dialog["human_utterances"][-1]["text"].lower()
-    about_what = re.search(talk_about, curr_user_uttr)
-    if about_what:
-        # if user said "blabla about topic"
-        topics = find_topics_in_substring(about_what.group(0))
-    else:
-        # if user said "sports" to questions "what do you wanna talk about"
-        topics = find_topics_in_substring(curr_user_uttr)
+    entities = extract_topics(dialog["human_utterances"][-1])
+    topics = []
+    for entity in entities:
+        topics += find_topics_in_substring(entity)
     if len(topics) > 0:
-        logger.info(f"Extracted topic `{topics[0]}` from user utterance.")
-        return topics[0]
+        logger.info(f"Extracted topic `{topics[-1]}` from user utterance.")
+        return topics[-1]
     else:
         return ""
 
