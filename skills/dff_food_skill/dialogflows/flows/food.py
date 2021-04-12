@@ -33,7 +33,8 @@ spacy_nlp = load("en_core_web_sm")
 with open("cuisines_facts.json", "r") as f:
     CUISINES_FACTS = json.load(f)
 FOOD_WORDS_RE = re.compile(
-    r"(food|cook|cooking|cuisine|daily bread|meals|foodstuffs|edibles|drinks|pepperoni|pizza|strawberries)",
+    r"(food|cook|cooking|cuisine|daily bread|meals|foodstuffs"
+    "|edibles|drinks|pepperoni|pizza|strawberries|chocolate|coffee)",
     re.IGNORECASE
 )
 WHAT_COOK_RE = re.compile(
@@ -137,13 +138,14 @@ def error_response(vars):
 ##################################################################################################################
 
 
-def lets_talk_about_request(ngrams, vars):
+def lets_talk_about_check(vars):
     # user_lets_chat_about = (
     #     "lets_chat_about" in get_intents(state_utils.get_last_human_utterance(vars), which="intent_catcher")
     #     or if_chat_about_particular_topic(state_utils.get_last_human_utterance(vars), prev_uttr)
     # )
-    annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-    conceptnet = "food" in annotations.get("conceptnet", {}).get("SymbolOf", [])
+    conceptnet_symbolof = state_utils.get_last_human_utterance(vars)["annotations"].get(
+        "conceptnet", {}).get("SymbolOf", [])
+    conceptnet = any([i in conceptnet_symbolof for i in ["food", "coffee", "sweetness"]])
 
     user_lets_chat_about_food = any([
         re.search(FOOD_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"].lower())
@@ -153,18 +155,30 @@ def lets_talk_about_request(ngrams, vars):
         conceptnet
     ]) and (not state_utils.get_last_human_utterance(vars)["text"].startswith("what"))
     flag = user_lets_chat_about_food
-    logger.info(f"lets_talk_about_request {flag}")
+    logger.info(f"lets_talk_about_check {flag}")
     return flag
 
 
 def what_cuisine_response(vars):
+    user_utt = state_utils.get_last_human_utterance(vars)
+    bot_utt = state_utils.get_last_bot_utterance(vars)["text"].lower()
+    linkto_food_skill_agreed = any(
+        [
+            req.lower() in bot_utt for req in TRIGGER_PHRASES
+        ]
+    )
+    lets_talk_about_asked = lets_talk_about_check(vars)
     try:
-        if is_yes(state_utils.get_last_human_utterance(vars)):
+        if linkto_food_skill_agreed:
+            if is_yes(user_utt):
+                state_utils.set_confidence(vars, confidence=CONF_HIGH)
+                state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+            elif not is_no(user_utt):
+                state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
+                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+        elif lets_talk_about_asked:
             state_utils.set_confidence(vars, confidence=CONF_HIGH)
             state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-        elif not is_no(state_utils.get_last_human_utterance(vars)):
-            state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
-            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
         return "Okay. What cuisine do you prefer?"
     except Exception as exc:
         logger.exception(exc)
@@ -203,10 +217,17 @@ def cuisine_fact_response(vars):
 
 def what_fav_food_response(vars):
     food_types = ["food", "drink", "fruit", "dessert", "vegetable", "berry"]
+    user_utt = state_utils.get_last_human_utterance(vars)
     shared_memory = state_utils.get_shared_memory(vars)
     used_food = shared_memory.get("used_food", [])
     unused_food = []
-
+    linkto_food_skill_agreed = any(
+        [
+            req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower()
+            for req in TRIGGER_PHRASES
+        ]
+    )
+    lets_talk_about_asked = lets_talk_about_check(vars)
     try:
         if used_food:
             unused_food = [i for i in food_types if i not in used_food]
@@ -217,18 +238,32 @@ def what_fav_food_response(vars):
         else:
             food_type = "food"
 
-        if is_yes(state_utils.get_last_human_utterance(vars)):
-            state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-            if food_type == "food":
-                state_utils.set_confidence(vars, confidence=CONF_HIGH)
-            if food_type == "snack":
-                state_utils.set_confidence(vars, confidence=CONF_LOWEST)
-            if unused_food:
+        if linkto_food_skill_agreed:
+            if is_yes(user_utt):
+                if food_type == "food":
+                    state_utils.set_confidence(vars, confidence=CONF_HIGH)
+                    state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+                if food_type == "snack":
+                    state_utils.set_confidence(vars, confidence=CONF_LOWEST)
+                    state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
+                if unused_food:
+                    state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
+                    state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+
+            elif not is_no(user_utt):
+                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
                 state_utils.set_confidence(vars, confidence=CONF_LOW)
 
-        elif not is_no(state_utils.get_last_human_utterance(vars)):
-            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
-            state_utils.set_confidence(vars, confidence=CONF_LOW)
+        elif lets_talk_about_asked:
+            if food_type == "food":
+                state_utils.set_confidence(vars, confidence=CONF_HIGH)
+                state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+            if food_type == "snack":
+                state_utils.set_confidence(vars, confidence=CONF_LOWEST)
+                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
+            if unused_food:
+                state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
+                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
 
         state_utils.save_to_shared_memory(vars, used_food=used_food + [food_type])
         return f"What is your favorite {food_type}?"
@@ -388,7 +423,7 @@ def what_fav_food_request(ngrams, vars):
     food_1st_time = condition_utils.is_first_time_of_state(vars, State.SYS_WHAT_FAV_FOOD)
     cuisine_1st_time = condition_utils.is_first_time_of_state(vars, State.SYS_WHAT_CUISINE)
 
-    if not (lets_talk_about_request(ngrams, vars) or linkto_food_skill_agreed):
+    if not (lets_talk_about_check(vars) or linkto_food_skill_agreed):
         flag = False
     elif (food_1st_time and cuisine_1st_time):
         flag = random.choice([True, False])
@@ -412,7 +447,7 @@ def what_cuisine_request(ngrams, vars):
             not is_no(state_utils.get_last_human_utterance(vars))
         ]
     )
-    flag = lets_talk_about_request(ngrams, vars) or linkto_food_skill_agreed
+    flag = lets_talk_about_check(vars) or linkto_food_skill_agreed
     logger.info(f"what_cuisine_request {flag}")
     return flag
 
