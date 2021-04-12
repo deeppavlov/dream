@@ -105,7 +105,10 @@ std_acknowledgements = {
 
 def get_sentiment_acknowledgement(vars, acknowledgements=None):
     acknowledgements = std_acknowledgements.update(acknowledgements) if acknowledgements else std_acknowledgements
-    return acknowledgements.get(state_utils.get_human_sentiment(vars), [""])
+    sentiment = state_utils.get_human_sentiment(vars)
+    if condition_utils.is_yes_vars(vars) or condition_utils.is_no_vars(vars):
+        sentiment = "neutral"
+    return acknowledgements.get(sentiment, [""])
 
 
 # curl -H "Content-Type: application/json" -XPOST http://0.0.0.0:8088/respond \
