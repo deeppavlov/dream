@@ -1,7 +1,6 @@
 import requests
 import json
 from copy import deepcopy
-from utils import MIDAS_INTENT_ACKNOWLEDGMENETS
 
 
 def get_input_json(fname):
@@ -52,18 +51,6 @@ def main_test():
         "yes_no_question": 1.0}
     response = requests.post(url, json=new_input_data)
     assert "whether I know about horses".lower() in response.text.lower(), response.json()
-
-    new_input_data = deepcopy(input_data)
-    new_input_data["dialogs"][0]["human_utterances"][-1]["text"] = "yes"
-    new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["midas_classification"] = {"pos_answer": 1.0}
-    response = requests.post(url, json=new_input_data)
-    assert any([resp in response.text for resp in MIDAS_INTENT_ACKNOWLEDGMENETS["pos_answer"]]), response.json()
-
-    new_input_data = deepcopy(input_data)
-    new_input_data["dialogs"][0]["human_utterances"][-1]["text"] = "no"
-    new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["midas_classification"] = {"neg_answer": 1.0}
-    response = requests.post(url, json=new_input_data)
-    assert any([resp in response.text for resp in MIDAS_INTENT_ACKNOWLEDGMENETS["neg_answer"]]), response.json()
 
     # check universal intent responses
     new_input_data = deepcopy(input_data)

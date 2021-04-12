@@ -154,6 +154,7 @@ def generate_universal_response(dialog):
     attr = {}
     reply = ""
     confidence = 0.
+    ackn, _, _, _, _ = generate_acknowledgement(dialog)
 
     for intent in curr_intents:
         if intent in UNIVERSAL_INTENT_RESPONSES:
@@ -170,7 +171,8 @@ def generate_universal_response(dialog):
             human_attr["grounding_skill"]["used_universal_intent_responses"] += [reply]
             confidence = UNIVERSAL_RESPONSE_LOW_CONFIDENCE
             attr = {"response_parts": ["body"]}
-
+    if ackn:
+        reply = f"{ackn} {reply}"
     return reply, confidence, human_attr, bot_attr, attr
 
 
@@ -227,14 +229,14 @@ class GroundingSkillScenario:
                 logger.info(f'Grounding skill what_do_you_mean: {reply}')
 
             # ACKNOWLEDGEMENT HYPOTHESES for current utterance
-            reply, confidence, human_attr, bot_attr, attr = generate_acknowledgement(dialog)
-            if reply and confidence:
-                curr_responses += [reply]
-                curr_confidences += [confidence]
-                curr_human_attrs += [human_attr]
-                curr_bot_attrs += [bot_attr]
-                curr_attrs += [attr]
-                logger.info(f'Grounding skill acknowledgement: {reply}')
+            # reply, confidence, human_attr, bot_attr, attr = generate_acknowledgement(dialog)
+            # if reply and confidence:
+            #     curr_responses += [reply]
+            #     curr_confidences += [confidence]
+            #     curr_human_attrs += [human_attr]
+            #     curr_bot_attrs += [bot_attr]
+            #     curr_attrs += [attr]
+            #     logger.info(f'Grounding skill acknowledgement: {reply}')
 
             # UNIVERSAL INTENT RESPONSES
             reply, confidence, human_attr, bot_attr, attr = generate_universal_response(dialog)
