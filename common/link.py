@@ -26,7 +26,7 @@ import common.music as dff_music_skill
 # 'book_skill': set(books.skill_trigger_phrases()),
 
 skills_phrases_map = {
-    'news_skill': set(news.skill_trigger_phrases()),
+    'news_api_skill': set(news.skill_trigger_phrases()),
     'movie_skill': set(movies.skill_trigger_phrases()),
     'book_skill': set(books.skill_trigger_phrases()),
     'emotion_skill': set(emotion.skill_trigger_phrases()),

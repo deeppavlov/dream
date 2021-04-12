@@ -100,7 +100,7 @@ def link_to_by_enity_request(ngrams, vars):
 
 
 link_to_skill2key_words = {
-    "news_skill": ["news"],
+    "news_api_skill": ["news"],
     "movie_skill": ["movie"],
     "book_skill": ["book"],
     # "coronavirus_skill": ["coronavirus"],
@@ -111,7 +111,7 @@ link_to_skill2key_words = {
     "weather_skill": ["weather"],
 }
 link_to_skill2i_like_to_talk = {
-    "news_skill": [
+    "news_api_skill": [
         "Anxious to stay current on the news.",
         "I don't know about you but I feel nervous when I don't know what's going on.",
     ],
