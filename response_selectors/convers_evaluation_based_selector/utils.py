@@ -10,7 +10,7 @@ from nltk.tokenize import sent_tokenize
 from common.duplicates import NOT_LOWER_DUPLICATES_SENTS
 from common.link import skills_phrases_map
 from common.utils import scenario_skills, retrieve_skills, okay_statements, is_question, substitute_nonwords, \
-    get_sentiment, get_toxic, is_no
+    get_sentiment, get_toxic, is_no_intent
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -142,7 +142,7 @@ def get_updated_disliked_skills(dialog, can_not_be_disliked_skills=[]):
     if linked_to_skill:
         sentiment = get_sentiment(dialog["human_utterances"][-1], probs=False)
         toxicity = get_toxic(dialog["human_utterances"][-1], probs=False)
-        _is_no = is_no(dialog["human_utterances"][-1])
+        _is_no = is_no_intent(dialog["human_utterances"][-1])
         if (sentiment and sentiment[0] == "negative") or toxicity or _is_no:
             if linked_to_skill not in can_not_be_disliked_skills:
                 disliked_skills.append(linked_to_skill)
