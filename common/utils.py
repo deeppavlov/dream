@@ -211,8 +211,9 @@ yes_templates = re.compile(r"(\byes\b|\byup\b|\byep\b|\bsure\b|go ahead|\byeah\b
 
 def is_yes(annotated_phrase):
     yes_detected = "yes" in get_intents(annotated_phrase, which='intent_catcher', probs=False)
+    midas_yes_detected = "pos_answer" in get_intents(annotated_phrase, which='midas', probs=False)
     # TODO: intent catcher not catches 'yes thanks!'
-    if yes_detected or re.search(yes_templates, annotated_phrase.get("text", "").lower()):
+    if yes_detected or midas_yes_detected or re.search(yes_templates, annotated_phrase.get("text", "").lower()):
         return True
     return False
 
@@ -230,12 +231,13 @@ def is_donot_know(annotated_phrase):
 
 def is_no(annotated_phrase):
     no_detected = "no" in get_intents(annotated_phrase, which='intent_catcher', probs=False)
+    midas_no_detected = "neg_answer" in get_intents(annotated_phrase, which='midas', probs=False)
     # TODO: intent catcher thinks that horrible is no intent'
     user_phrase = annotated_phrase.get('text', '').lower().strip().replace('.', '')
     is_not_horrible = 'horrible' != user_phrase
     no_regexp_detected = re.search(no_templates, annotated_phrase.get("text", "").lower())
     is_not_idontknow = not is_donot_know(annotated_phrase)
-    if is_not_horrible and (no_detected or no_regexp_detected) and is_not_idontknow:
+    if is_not_horrible and (no_detected or midas_no_detected or no_regexp_detected) and is_not_idontknow:
         return True
 
     return False
