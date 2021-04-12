@@ -285,7 +285,15 @@ def get_name(annotated_phrase, mode='author', bookyear=False,
                 toiterate_dict[key] = wp_annotations['entities_info'][key]
         logger.debug(toiterate_dict)
         for entity in toiterate_dict:
-            found_types = [j[0] for j in toiterate_dict[entity]['instance of']]
+            if 'instance of' in toiterate_dict[entity]:
+                found_types = [j[0] for j in toiterate_dict[entity]['instance of']]
+            else:
+                logger.warning(f'No instance of found in annotation for {entity}')
+                found_types = []
+                for type_ in types:
+                    if request_triples_wikidata("check_triplet", [(entity, "P31", "forw")],
+                                                query_dict=book_query_dict):
+                        found_types.append(type)
             if any([j in types for j in found_types]) and book_or_author(entity, stopwords):
                 logging.debug(f'{mode} found')
                 found_entity = entity
@@ -296,7 +304,11 @@ def get_name(annotated_phrase, mode='author', bookyear=False,
                 else:
                     plain_entity = toiterate_dict[entity]['plain_entity']
                 if mode == 'book':
-                    publication_year = toiterate_dict[entity]['publication date'][0][0]
+                    if 'publication date' in toiterate_dict[entity]:
+                        publication_year = toiterate_dict[entity]['publication date'][0][0]
+                    else:
+                        logger.warning('No publication date found in annotation for {entity}')
+                        publication_year = get_published_year(plain_entity)
                     start_ind = None
                     for i in range(len(publication_year)):
                         if publication_year[i] in '0123456789' and not start_ind:
