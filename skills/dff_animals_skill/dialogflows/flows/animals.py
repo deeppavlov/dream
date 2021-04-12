@@ -101,8 +101,9 @@ def sys_what_animals_request(ngrams, vars):
 def sys_have_pets_request(ngrams, vars):
     flag = False
     shared_memory = state_utils.get_shared_memory(vars)
+    found_users_pet = shared_memory.get("users_pet", "")
     started = shared_memory.get("start", False)
-    if not shared_memory.get("have_pets", False) and (lets_talk_about_request(vars) or started):
+    if not shared_memory.get("have_pets", False) and not found_users_pet and (lets_talk_about_request(vars) or started):
         flag = True
     logger.info(f"sys_have_pets_request={flag}")
     return flag
@@ -219,8 +220,16 @@ def what_animals_response(vars):
 
 
 def have_pets_response(vars):
-    what_pets_i_have = random.choice(WHAT_PETS_I_HAVE)
-    response = f"{what_pets_i_have} Do you have pets?"
+    my_pet_info = random.choice(WHAT_PETS_I_HAVE)
+    my_pet = my_pet_info["pet"]
+    my_pet_name = my_pet_info["name"]
+    my_pet_breed = my_pet_info["breed"]
+    sentence = my_pet_info["sentence"]
+    state_utils.save_to_shared_memory(vars, start=True)
+    state_utils.save_to_shared_memory(vars, my_pet=my_pet)
+    state_utils.save_to_shared_memory(vars, my_pet_name=my_pet_name)
+    state_utils.save_to_shared_memory(vars, my_pet_breed=my_pet_breed)
+    response = f"{sentence} Do you have pets?"
     state_utils.save_to_shared_memory(vars, start=True)
     state_utils.save_to_shared_memory(vars, have_pets=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
@@ -246,10 +255,15 @@ def tell_about_pets_response(vars):
 
 
 def mention_animals_response(vars):
+    replace_plural = {"cats": "cat", "dogs": "dog", "rats": "rat"}
     text = state_utils.get_last_human_utterance(vars)["text"]
-    pet = re.search(PETS_TEMPLATE, text)
+    pet = re.findall(PETS_TEMPLATE, text)
     if pet:
-        response = f"Do you have a {pet}?"
+        if pet[0] in replace_plural:
+            found_pet = replace_plural[pet[0]]
+        else:
+            found_pet = pet[0]
+        response = f"Do you have a {found_pet}?"
     else:
         response = "Do you have pets?"
     state_utils.save_to_shared_memory(vars, start=True)
