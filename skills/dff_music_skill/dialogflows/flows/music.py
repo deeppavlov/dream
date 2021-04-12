@@ -14,6 +14,7 @@ import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_exten
 import common.dialogflow_framework.utils.state as state_utils
 import dialogflows.scopes as scopes
 from common.universal_templates import if_chat_about_particular_topic
+from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE
 from common.utils import is_yes, is_no, get_entities
 
 
@@ -23,7 +24,8 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 logger = logging.getLogger(__name__)
 
 
-MUST_CONTINUE_CONFIDENCE = 0.98
+MUST_CONTINUE_CONFIDENCE = 1.0
+CAN_CONTINUE_CONFIDENCE = 0.98
 CANNOT_CONTINUE_CONFIDENCE = 0.0
 
 with open("music_data.json", "r") as f:
@@ -196,7 +198,7 @@ def what_music_request(ngrams, vars):
 def what_music_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         return "Sure. Which music do you like?"
     except Exception as exc:
         logger.exception(exc)
@@ -207,8 +209,8 @@ def what_music_response(vars):
 
 def let_me_guess_response(vars):
     try:
-        state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_confidence(vars, CAN_CONTINUE_CONFIDENCE)
+        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
         genre = random.choice(list(MUSIC_DATA))
         artist = random.choice(list(MUSIC_DATA[genre]))
         return f'Ok. Let me guess your favorite artist. Is it "{artist}"?'
@@ -227,8 +229,8 @@ def i_like_request(ngrams, vars):
 
 def want_music_response(vars):
     try:
-        state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_confidence(vars, CAN_CONTINUE_CONFIDENCE)
+        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
         return "Do you want to talk about music?"
     except Exception as exc:
         logger.exception(exc)
@@ -240,7 +242,7 @@ def want_music_response(vars):
 def want_play_music_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         return "Do you want me to play music?"
     except Exception as exc:
         logger.exception(exc)
@@ -252,7 +254,7 @@ def want_play_music_response(vars):
 def prefer_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         return "I prefer electronic music, like Aphex Twin or Kraftwerk. Do you like them?"
     except Exception as exc:
         logger.exception(exc)
@@ -264,7 +266,7 @@ def prefer_response(vars):
 def social_mode_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         return "I am sorry, I am currently running in a social mode. You can ask me to do this after our talk."
     except Exception as exc:
         logger.exception(exc)
@@ -275,8 +277,8 @@ def social_mode_response(vars):
 
 def sorry_response(vars):
     try:
-        state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_confidence(vars, CAN_CONTINUE_CONFIDENCE)
+        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
         return "Ok, sorry. What do you want to talk about then?"
     except Exception as exc:
         logger.exception(exc)
@@ -294,7 +296,7 @@ def dont_know_request(ngrams, vars):
 def cool_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         return "So cool that we have the same taste in music!"
     except Exception as exc:
         logger.exception(exc)
@@ -306,7 +308,7 @@ def cool_response(vars):
 def taste_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         return "Well, you can check them out later, but I must warn you that I have a very specific taste.  "
     except Exception as exc:
         logger.exception(exc)
@@ -362,7 +364,7 @@ def get_genre_from_text(text):
 def genre_specific_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
 
         text = state_utils.get_last_human_utterance(vars)["text"]
         genre = get_genre_from_text(text)
@@ -394,6 +396,26 @@ def genre_specific_response(vars):
         elif genre == "children":
             return f"Oh, so you are a young fellow, I guess. \
             Do you listen to music often?"
+        elif genre == "folk":
+            return f"Oh, cool! I really like Bob Dylan, if you ask me. \
+            Do you like him?"
+        elif genre == "reggae":
+            return f"Reggae is very cool, it always sound sunny bright. \
+            Did you know that \"Don't worry, be happy\" initially was written \
+            by Bobby McFerrin and not Bob Marley?"
+        elif genre == "country":
+            return f"I love \"Country Roads\" by John Denver. \
+            It gives me feel like I am returning home from a long trip. \
+            Do you feel the same?"
+        elif genre == "alternative":
+            return f"When I was younger, I used to listen to Linkin Park a lot. \
+            Oh boy, what a legendary band that was. Have you heard about them?"
+        elif genre == "indie":
+            return f"Indie music is so diverse! I like MGMT, and I am a fan of \
+            the Pixies. Did you know that David Bowie was their fan too?"
+        elif genre == "all kinds":
+            return f"I prefer techno most of the time. \
+            Do you know David Bowie, by the way?"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -404,7 +426,7 @@ def genre_specific_response(vars):
 def dont_know_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         return f"Never heard about it. Is it a band, song, or a genre?"
     except Exception as exc:
         logger.exception(exc)
@@ -416,7 +438,7 @@ def dont_know_response(vars):
 def concert_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         return f"Have you been to any live shows lately?"
     except Exception as exc:
         logger.exception(exc)
@@ -428,7 +450,7 @@ def concert_response(vars):
 def genre_advice_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
 
         shared_memory = state_utils.get_shared_memory(vars)
         genre = shared_memory.get("genre", "pop")
@@ -447,6 +469,25 @@ def genre_advice_response(vars):
             return f"Well, now you know it."
         elif genre == "children":
             return f"But do you like listening to it?"
+        elif genre == "folk":
+            return f"Ok, I get it. I guess you have a more \
+            pretentious taste than I do."
+        elif genre == "reggae":
+            return f"I've been confused for a long time, \
+            because they sound so alike to me!"
+        elif genre == "country":
+            return f"Well, try to imagine Blue Ridge Mountains \
+            while listening to it. You will get what I mean."
+        elif genre == "alternative":
+            return f"Oh, I really recommend you to know them better. \
+            That is some classic alternative in my opinion."
+        elif genre == "indie":
+            return f"To me, that is crazy. Though they are not very popular in \
+            the United States, they even were an inspiration to Kurt Cobain."
+        elif genre == "all kinds":
+            return f"You should check him out, especially \"Space oddity\". \
+            It is really something special. \
+            They even played it on a real Space Station!"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -475,7 +516,7 @@ def genre_request(ngrams, vars):
 def check_later_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         return "Oh, i will definitely check it out later."
     except Exception as exc:
         logger.exception(exc)
@@ -487,7 +528,7 @@ def check_later_response(vars):
 def concert_who_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         return f"Who was it?"
     except Exception as exc:
         logger.exception(exc)
@@ -499,7 +540,7 @@ def concert_who_response(vars):
 def concert_covid_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         return f"There wasn't much going on due to CoVID-19. Hope we will get some in future."
     except Exception as exc:
         logger.exception(exc)
@@ -511,7 +552,7 @@ def concert_covid_response(vars):
 def concert_known_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         return f"Oh, sounds familiar. Guess I've seen their live online."
     except Exception as exc:
         logger.exception(exc)
@@ -523,7 +564,7 @@ def concert_known_response(vars):
 def ask_advice_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         return f"You know, I often feel myself overwhelmed with everything. \
         Can you suggest me something relaxing to listen to?"
     except Exception as exc:
@@ -535,8 +576,8 @@ def ask_advice_response(vars):
 
 def it_ok_response(vars):
     try:
-        state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_confidence(vars, CAN_CONTINUE_CONFIDENCE)
+        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
         return f"Don't worry. Do you want to talk about something else?"
     except Exception as exc:
         logger.exception(exc)
@@ -548,7 +589,7 @@ def it_ok_response(vars):
 def thanks_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         return f"Thank you, I will check it out."
     except Exception as exc:
         logger.exception(exc)
@@ -588,7 +629,8 @@ def entity_mention_request(ngrams, vars):
 
 def heard_latest_response(vars):
     try:
-        state_utils.set_can_continue(vars)
+        state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         return "Have you been listening to it lately?"
     except Exception as exc:
         logger.exception(exc)
