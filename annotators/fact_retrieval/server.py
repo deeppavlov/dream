@@ -14,6 +14,8 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 sentry_sdk.init(dsn=os.getenv('SENTRY_DSN'), integrations=[FlaskIntegration()])
 
+FILTER_FREQ = False
+
 config_name = os.getenv("CONFIG")
 
 with open("google-10000-english-no-swears.txt", 'r') as fl:
@@ -66,8 +68,9 @@ def respond():
     dialog_history = request.json.get("dialog_history", [" "])
     cur_utt = [utt.lstrip("alexa") for utt in cur_utt]
     nounphr_list = request.json.get("entity_substr", [])
-    nounphr_list = [[nounphrase for nounphrase in nounphrases if nounphrase not in freq_words]
-                    for nounphrases in nounphr_list]
+    if FILTER_FREQ:
+        nounphr_list = [[nounphrase for nounphrase in nounphrases if nounphrase not in freq_words]
+                        for nounphrases in nounphr_list]
     if not nounphr_list:
         nounphr_list = [[] for _ in cur_utt]
     entity_pages = request.json.get("entity_pages", [])

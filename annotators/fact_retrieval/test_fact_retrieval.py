@@ -31,11 +31,16 @@ def main():
                         {"human_sentences": ["/alexa_stop_handler."], "dialog_history": [""], "entity_substr": [[]]},
                         {"human_sentences": [" "], "dialog_history": [""], "entity_substr": [[]]}]
 
-    gold_results = [True, True, False, False]
+    gold_results = [
+        ['Sheldon Lee Cooper is a fictional character in the CBS television series The Big Bang Theory.',
+         'The Big Bang Theory is an American television sitcom created by Chuck Lorre and Bill Prady'],
+        ['Germany is a country in Central Europe.'],
+        [], []
+    ]
     count = 0
     for data, gold_result in zip(request_data, gold_results):
         result = requests.post(url, json=data).json()
-        if (len(result[0]) > 0) == gold_result:
+        if result[0] == gold_result:
             count += 1
         else:
             print(f"Got {result}, but expected: {gold_result}")
