@@ -5,7 +5,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/cobot-topics
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/cobot-topics
       - PORT=8000
   cobot-dialogact:
     command: ["nginx", "-g", "daemon off;"]
@@ -13,7 +13,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/cobot-dialogact
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/cobot-dialogact
       - PORT=8002
   cobot-convers-evaluator-annotator:
     command: ["nginx", "-g", "daemon off;"]
@@ -21,7 +21,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/cobot-convers-evaluator-annotator
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/cobot-convers-evaluator-annotator
       - PORT=8004
   cobot-nounphrases:
     command: ["nginx", "-g", "daemon off;"]
@@ -29,7 +29,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/cobot-nounphrases
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/cobot-nounphrases
       - PORT=8006
   program-y:
     command: ["nginx", "-g", "daemon off;"]
@@ -37,7 +37,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/program-y
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/program-y
       - PORT=8008
   personality-catcher:
     command: ["nginx", "-g", "daemon off;"]
@@ -45,7 +45,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/personality-catcher
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/personality-catcher
       - PORT=8010
   sentseg:
     command: ["nginx", "-g", "daemon off;"]
@@ -53,7 +53,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/sentseg
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/sentseg
       - PORT=8011
   sentrewrite:
     command: ["nginx", "-g", "daemon off;"]
@@ -61,7 +61,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/sentrewrite
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/sentrewrite
       - PORT=8017
   intent-responder:
     command: ["nginx", "-g", "daemon off;"]
@@ -69,7 +69,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/intent-responder
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/intent-responder
       - PORT=8012
   intent-catcher:
     command: ["nginx", "-g", "daemon off;"]
@@ -77,7 +77,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/intent-catcher
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/intent-catcher
       - PORT=8014
   blacklisted-words:
     command: ["nginx", "-g", "daemon off;"]
@@ -85,7 +85,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/blacklisted-words
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/blacklisted-words
       - PORT=8018
   program-y-dangerous:
     command: ["nginx", "-g", "daemon off;"]
@@ -93,7 +93,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/program-y-dangerous
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/program-y-dangerous
       - PORT=8022
   movie-skill:
     command: ["nginx", "-g", "daemon off;"]
@@ -101,7 +101,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/movie-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/movie-skill
       - PORT=8023
   ner:
     command: ["nginx", "-g", "daemon off;"]
@@ -109,7 +109,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/ner
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/ner
       - PORT=8021
   eliza:
     command: ["nginx", "-g", "daemon off;"]
@@ -117,7 +117,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/eliza
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/eliza
       - PORT=8047
   convert-reddit:
     command: ["nginx", "-g", "daemon off;"]
@@ -125,7 +125,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/convert-reddit
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/convert-reddit
       - PORT=8029
   personal-info-skill:
     command: ["nginx", "-g", "daemon off;"]
@@ -133,7 +133,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/personal-info-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/personal-info-skill
       - PORT=8030
   asr:
     command: ["nginx", "-g", "daemon off;"]
@@ -141,7 +141,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/asr
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/asr
       - PORT=8031
   misheard-asr:
     command: ["nginx", "-g", "daemon off;"]
@@ -149,7 +149,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/misheard-asr
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/misheard-asr
       - PORT=8033
   book-skill:
     command: ["nginx", "-g", "daemon off;"]
@@ -157,7 +157,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/book-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/book-skill
       - PORT=8032
   weather-skill:
     command: ["nginx", "-g", "daemon off;"]
@@ -165,7 +165,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/weather-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/weather-skill
       - PORT=8037
   emotion-skill:
     command: ["nginx", "-g", "daemon off;"]
@@ -173,7 +173,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/emotion-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/emotion-skill
       - PORT=8049
   dummy-skill-dialog:
     command: ["nginx", "-g", "daemon off;"]
@@ -181,7 +181,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/dummy-skill-dialog
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/dummy-skill-dialog
       - PORT=8052
   comet-atomic:
     command: ["nginx", "-g", "daemon off;"]
@@ -189,7 +189,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/comet-atomic
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/comet-atomic
       - PORT=8053
   comet-conceptnet:
     command: ["nginx", "-g", "daemon off;"]
@@ -197,7 +197,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/comet-conceptnet
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/comet-conceptnet
       - PORT=8065
   meta-script-skill:
     command: ["nginx", "-g", "daemon off;"]
@@ -205,7 +205,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/meta-script-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/meta-script-skill
       - PORT=8054
   short-story-skill:
     command: ["nginx", "-g", "daemon off;"]
@@ -213,7 +213,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/short-story-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/short-story-skill
       - PORT=8057
   coronavirus-skill:
     command: ["nginx", "-g", "daemon off;"]
@@ -221,7 +221,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/coronavirus-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/coronavirus-skill
       - PORT=8061
   small-talk-skill:
     command: ["nginx", "-g", "daemon off;"]
@@ -229,7 +229,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/small-talk-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/small-talk-skill
       - PORT=8062
   game-cooperative-skill:
     command: ["nginx", "-g", "daemon off;"]
@@ -237,7 +237,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/game-cooperative-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/game-cooperative-skill
       - PORT=8068
   program-y-wide:
     command: ["nginx", "-g", "daemon off;"]
@@ -245,7 +245,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/program-y-wide
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/program-y-wide
       - PORT=8064
   news-api-skill:
     command: ["nginx", "-g", "daemon off;"]
@@ -253,7 +253,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/news-api-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/news-api-skill
       - PORT=8066
   greeting-skill:
     command: ["nginx", "-g", "daemon off;"]
@@ -261,7 +261,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/greeting-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/greeting-skill
       - PORT=8070
   factoid-qa:
     command: ["nginx", "-g", "daemon off;"]
@@ -269,14 +269,14 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/factoid-qa
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/factoid-qa
       - PORT=8071
   text-qa:
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/text-qa
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/text-qa
       - PORT=8078
     command: [ "nginx", "-g", "daemon off;" ]
   kbqa:
@@ -285,7 +285,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/kbqa
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/kbqa
       - PORT=8072
   factoid-classification:
     command: ["nginx", "-g", "daemon off;"]
@@ -293,14 +293,14 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/factoid-classification
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/factoid-classification
       - PORT=8073
   spelling-preprocessing:
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/spelling-preprocessing
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/spelling-preprocessing
       - PORT=8074
     command: ["nginx", "-g", "daemon off;"]
   entity-linking:
@@ -308,7 +308,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/entity-linking
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/entity-linking
       - PORT=8075
     command: ["nginx", "-g", "daemon off;"]
   wiki-parser:
@@ -316,7 +316,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/wiki-parser
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/wiki-parser
       - PORT=8077
     command: ["nginx", "-g", "daemon off;"]
   cobotqa:
@@ -324,7 +324,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/cobotqa
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/cobotqa
       - PORT=8081
     command: ["nginx", "-g", "daemon off;"]
   knowledge-grounding:
@@ -332,7 +332,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/knowledge-grounding
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/knowledge-grounding
       - PORT=8083
     command: ["nginx", "-g", "daemon off;"]
   dff-friendship-skill:
@@ -340,7 +340,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/dff-friendship-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/dff-friendship-skill
       - PORT=8086
     command: ["nginx", "-g", "daemon off;"]
   masked-lm:
@@ -348,7 +348,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/masked-lm
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/masked-lm
       - PORT=8088
     command: ["nginx", "-g", "daemon off;"]
   entity-storer:
@@ -356,7 +356,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/entity-storer
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/entity-storer
       - PORT=8089
     command: ["nginx", "-g", "daemon off;"]
   knowledge-grounding-skill:
@@ -364,7 +364,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/knowledge-grounding-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/knowledge-grounding-skill
       - PORT=8085
     command: ["nginx", "-g", "daemon off;"]
   midas-classification:
@@ -372,7 +372,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/midas-classification
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/midas-classification
       - PORT=8090
     command: ["nginx", "-g", "daemon off;"]
   combined-classification:
@@ -380,7 +380,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/combined-classification
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/combined-classification
       - PORT=8087
     command: ["nginx", "-g", "daemon off;"]
   grounding-skill:
@@ -388,7 +388,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/grounding-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/grounding-skill
       - PORT=8080
     command: [ "nginx", "-g", "daemon off;"]
   convers-evaluation-selector:
@@ -396,7 +396,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/convers-evaluation-selector
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/convers-evaluation-selector
       - PORT=8009
     command: [ "nginx", "-g", "daemon off;" ]
   wikidata-dial-skill:
@@ -404,7 +404,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/wikidata-dial-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/wikidata-dial-skill
       - PORT=8091
     command: [ "nginx", "-g", "daemon off;" ]
   wikidata-dial-service:
@@ -412,7 +412,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/wikidata-dial-service
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/wikidata-dial-service
       - PORT=8092
     command: [ "nginx", "-g", "daemon off;" ]
   dff-animals-skill:
@@ -420,7 +420,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/dff-animals-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/dff-animals-skill
       - PORT=8094
     command: [ "nginx", "-g", "daemon off;" ]
   dff-travel-skill:
@@ -428,7 +428,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/dff-travel-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/dff-travel-skill
       - PORT=8096
     command: [ "nginx", "-g", "daemon off;" ]
   dff-sport-skill:
@@ -436,7 +436,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/dff-sport-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/dff-sport-skill
       - PORT=8098
     command: [ "nginx", "-g", "daemon off;" ]
   dff-food-skill:
@@ -444,7 +444,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/dff-food-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/dff-food-skill
       - PORT=8097
     command: [ "nginx", "-g", "daemon off;" ]
   dff-celebrity-skill:
@@ -452,7 +452,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:      
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/dff-celebrity-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/dff-celebrity-skill
       - PORT=8093
     command: [ "nginx", "-g", "daemon off;" ]
   dff-music-skill:
@@ -460,7 +460,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/dff-music-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/dff-music-skill
       - PORT=8099
     command: [ "nginx", "-g", "daemon off;" ]
   fact-retrieval:
@@ -468,7 +468,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/fact-retrieval
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/fact-retrieval
       - PORT=8100
     command: [ "nginx", "-g", "daemon off;" ]
   cobot-entities:
@@ -476,7 +476,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/cobot-entities
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/cobot-entities
       - PORT=8102
     command: ["nginx", "-g", "daemon off;"]
   dff-funfact-skill:
@@ -484,7 +484,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/dff-funfact-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/dff-funfact-skill
       - PORT=8104
     command: ["nginx", "-g", "daemon off;"]
 version: '3.7'
