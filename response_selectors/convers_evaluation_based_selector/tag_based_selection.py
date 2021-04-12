@@ -11,7 +11,7 @@ from common.link import skills_phrases_map
 from common.constants import CAN_CONTINUE_SCENARIO_DONE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.universal_templates import if_chat_about_particular_topic, is_switch_topic, \
     is_any_question_sentence_in_utterance
-from common.utils import get_intent_name, get_intents, get_topics, get_common_tokens_in_lists_of_strings
+from common.utils import get_intent_name, get_intents, get_topics, get_common_tokens_in_lists_of_strings, get_entities
 from utils import calculate_single_convers_evaluator_score, CONV_EVAL_STRENGTH, CONFIDENCE_STRENGTH, \
     how_are_you_spec, what_i_can_do_spec, greeting_spec, misheard_with_spec1, \
     misheard_with_spec2, alexa_abilities_spec, join_used_links_in_attributes, get_updated_disliked_skills
@@ -257,6 +257,8 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
                                  for _intent in _force_intents_detected], [])
     _required_actions = sum([REQUIRE_ACTION_INTENTS.get(_intent, [])
                              for _intent in _require_action_intents_detected], [])
+    _contains_entities = len(get_entities(annotated_uttr, only_named=False, with_labels=False)) > 0
+    _is_active_skill_finishes_script = False
 
     if len(dialog["bot_utterances"]) > 0:
         _prev_active_skill = dialog["bot_utterances"][-1]["active_skill"]
@@ -283,8 +285,10 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             cand_uttr)
         skill_name = cand_uttr["skill_name"]
         _is_dialog_abandon = "abandon" in all_cand_intents
-        _is_just_prompt = (cand_uttr["skill_name"] == "dummy_skill" and "link_to_for_response_selector" in
-                           cand_uttr.get("type", "")) or cand_uttr.get("response_parts", []) == ["prompt"]
+        _is_just_prompt = (cand_uttr["skill_name"] == "dummy_skill" and any(
+            [question_type in cand_uttr.get("type", "")
+             for question_type in ["normal_question", "link_to_for_response_selector"]])) or cand_uttr.get(
+            "response_parts", []) == ["prompt"]
         _is_active_skill = (_prev_active_skill == cand_uttr["skill_name"] or cand_uttr.get(
             "can_continue", "") == MUST_CONTINUE)
         _user_wants_to_chat_about_topic = if_chat_about_particular_topic(
@@ -304,6 +308,9 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         if cand_uttr["skill_name"] == 'program_y' and cand_uttr['confidence'] == 0.98:
             cand_uttr["can_continue"] = CAN_CONTINUE_SCENARIO_DONE
         _can_continue = cand_uttr.get("can_continue", CAN_NOT_CONTINUE)
+        if _is_active_skill:
+            _is_active_skill_finishes_script = _is_active_skill and _can_continue in [CAN_NOT_CONTINUE,
+                                                                                      CAN_CONTINUE_SCENARIO_DONE]
 
         if _is_force_intent:
             # =====force intents, choose as best_on_topic hypotheses from skills responding this request=====
@@ -431,7 +438,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         pass
     elif sum(categorized_prompts.values(), []):
         # need to add some prompt, and have a prompt
-        if prompt_decision():
+        if (_is_active_skill_finishes_script and not _contains_entities) or prompt_decision():
             logger.info(f"Decided to add a prompt to the best candidate.")
             best_prompt_id = pickup_best_id(categorized_prompts, candidates, curr_single_scores, bot_utterances)
             # as we have only one active skill, let's consider active skill as that one providing prompt
