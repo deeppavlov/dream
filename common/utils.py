@@ -699,7 +699,7 @@ def get_named_persons(annotated_utterance):
         for ent in all_entities:
             if ent["label"] == "person":
                 named_persons.append(ent["text"])
-    elif "ner" in annotated_utterance["annotations"]:
+    if "ner" in annotated_utterance["annotations"]:
         for ent in named_entities:
             if ent["type"] == "PER":
                 named_persons.append(ent["text"])
@@ -718,7 +718,7 @@ def get_named_locations(annotated_utterance):
         for ent in all_entities:
             if ent["label"] == "location":
                 named_locations.append(ent["text"])
-    elif "ner" in annotated_utterance["annotations"]:
+    if "ner" in annotated_utterance["annotations"]:
         for ent in named_entities:
             if ent["type"] == "LOC":
                 named_locations.append(ent["text"])
