@@ -444,7 +444,7 @@ simplified_dialogflow.add_user_serial_transitions(
     {
         State.SYS_HELLO: hello_request,
         State.SYS_STD_GREETING: std_greeting_request,
-        State.SYS_NEW_ENTITIES_IS_NEEDED_FOR: new_entities_is_needed_for_request,
+        State.SYS_CLOSED_ANSWER: new_entities_is_needed_for_request,
         State.SYS_LINK_TO_BY_ENITY: link_to_by_enity_request,
         (scopes.WEEKEND, weekend_flow.State.USR_START): weekend_flow.std_weekend_request,
     },
