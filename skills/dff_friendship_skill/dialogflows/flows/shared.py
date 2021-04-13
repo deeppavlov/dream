@@ -132,6 +132,32 @@ link_to_skill2i_like_to_talk = {
         "Life isn't about just doing things. What you, me, everyone feels about their lives is as important.",
     ],
     "weather_skill": ["Everybody likes to talk about weather right?" "It feels rather cold here in the sky."],
+    "dff_travel_skill": [
+        "Travel used to be a priveledge. Then it was available to everyone. "
+        "It's a privilege again. What is the place you miss the most?",
+        "Travel helps us to refresh and widen our perspective on the world. What's the destination that changed yours?",
+    ],
+    "dff_animals_skill": [
+        "Who are we without love? This is the question I ask myself when I look at my lovely cat. "
+        "Wonder if you have a pet, too?",
+        "To love and to be loved is a part of what it means to be a human being. "
+        "But a special treasure is to be loved by your own pet. Do you have one?",
+    ],
+    "dff_food_skill": [
+        "Sadly I can't taste food or drinks, but I'm all about learning more about it. Do you have a favorite dish?",
+        "Being in a beautiful restaurant and eating filet mignon, that's what I call a great end of day. "
+        "What about you?",
+    ],
+    "dff_sport_skill": [
+        "For us bots it's easy to stay fit, we can just program us to be like that. How do you keep us?",
+        "While I can't tell you about my home soccer team, I'm very proud of it. What about yours?",
+    ],
+    "dff_music_skill": [
+        "It is impractical things in this world that matter most. A book, a name, a music album. "
+        "What is the one that matters the most for you?",
+        "It is not our enemies that defeat us. It is our fear. "
+        "And speaking of fear good jazz helps me to find energy to keep up. What about you?",
+    ],
 }
 
 
