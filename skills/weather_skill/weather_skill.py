@@ -5,7 +5,7 @@ import sentry_sdk
 import pprint
 from collections import defaultdict
 from city_slot import OWMCitySlot
-from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE
+from common.constants import CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE, MUST_CONTINUE
 from common.link import link_to, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED
 from common.weather import is_weather_for_homeland_requested, is_weather_without_city_requested
 from common.utils import get_entities
@@ -195,8 +195,10 @@ class WeatherSkill:
                     current_reply = "Hmm. Which particular city would you like a weather forecast for?"
                     context_dict[city_slot_requested] = True
                     if weather_without_city_requested:
+                        context_dict['can_continue'] = MUST_CONTINUE
                         curr_confidence = FORECAST_CONFIDENCE
                     else:
+                        context_dict['can_continue'] = CAN_CONTINUE_SCENARIO
                         curr_confidence = QUESTION_CONFIDENCE
                 return current_reply, curr_confidence, human_attr, bot_attr, context_dict
             elif context_dict.get(city_slot_requested, False) or weather_for_homeland_requested:
@@ -216,7 +218,7 @@ class WeatherSkill:
                     # provide FORECAST
                     ############################################################
                     context_dict['weather_forecast_interaction_city_slot_raw'] = city
-                    context_dict['can_continue'] = CAN_CONTINUE_SCENARIO
+                    context_dict['can_continue'] = MUST_CONTINUE
                     context_dict['weather_forecast_interaction_question_asked'] = True
                     weather_forecast_str = self.request_weather_service(city)
                     current_reply = weather_forecast_str + ". " + question_phrase
@@ -242,7 +244,7 @@ class WeatherSkill:
                     ############################################################
                     curr_confidence = SMALLTALK_CONFIDENCE
                     context_dict['weather_forecast_interaction_preferred_weather'] = weather
-                    context_dict['can_continue'] = MUST_CONTINUE
+                    context_dict['can_continue'] = CAN_CONTINUE_SCENARIO
                     current_reply = self.weather_dict[weather]['question']
                 else:
                     # we have been ignored?
@@ -259,10 +261,10 @@ class WeatherSkill:
                 ############################################################
                 # provide templated answer
                 ############################################################
-                context_dict['can_continue'] = CAN_CONTINUE_SCENARIO
                 user_utterance = d_man.get_last_utterance_dict()['text']
                 if not re.match(".*(i|I) (don't|do not) like.*", user_utterance):
                     # talk more about hiking/swimming/skiing/etc.
+                    context_dict['can_continue'] = CAN_CONTINUE_SCENARIO
                     curr_confidence = SMALLTALK_CONFIDENCE
                     weather = context_dict["weather_forecast_interaction_preferred_weather"]
                     context_dict['weather_forecast_interaction_preferred_weather'] = False
@@ -272,10 +274,10 @@ class WeatherSkill:
                         link["skill"], []) + [link['phrase']]
                     current_reply = self.weather_dict[weather]['answer'] + " " + link["phrase"]
                 else:
+                    context_dict['can_continue'] = CAN_NOT_CONTINUE
                     # don't talk about hiking/swimming/skiing/etc.
-                    pass
             else:
-                pass
+                context_dict['can_continue'] = CAN_NOT_CONTINUE
                 # just ignore
             return current_reply, curr_confidence, human_attr, bot_attr, context_dict
 
