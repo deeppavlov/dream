@@ -22,7 +22,12 @@ NEGATIVE_EMOTION = 'negative_emotion'
 HOW_DO_YOU_FEEL = 'How do you feel?'
 
 SAD_TEMPLATE = r"^(sad|horrible|depressed|awful|dire|died)\.?$"
-JOKE_REQUEST_COMPILED_PATTERN = re.compile(r"tell me .*joke(s){0,1}", re.IGNORECASE)
+JOKE_REQUEST_COMPILED_PATTERN = re.compile(r"(tell me .*joke{0,1}|tell a joke|tell joke)", re.IGNORECASE)
+TALK_ABOUT_EMO_TEMPLATE = re.compile(r'talk about emotion', re.IGNORECASE)
+
+
+def talk_about_emotion(uttr):
+    return re.search(TALK_ABOUT_EMO_TEMPLATE, uttr)
 
 
 def is_sad(uttr):
@@ -30,11 +35,11 @@ def is_sad(uttr):
 
 
 def is_joke_requested(uttr):
-    return bool(re.match(JOKE_REQUEST_COMPILED_PATTERN, uttr))
+    return bool(re.search(JOKE_REQUEST_COMPILED_PATTERN, uttr))
 
 
 def skill_trigger_phrases():
-    return [HOW_DO_YOU_FEEL]
+    return [HOW_DO_YOU_FEEL] + HOW_ARE_YOU_RESPONSES
 
 
 def emotion_from_feel_answer(prev_bot_uttr, user_uttr):
@@ -62,12 +67,14 @@ def if_turn_on_emotion(user_utt, bot_uttr):
     how_are_you = any([how_are_you_response.lower() in bot_uttr.get("text", "").lower()
                        for how_are_you_response in HOW_ARE_YOU_RESPONSES])
     joke_request_detected = is_joke_requested(user_utt.get("text", ""))
+    talk_about_regexp = talk_about_emotion(user_utt.get("text", ""))
     sadness_detected_by_regexp = is_sad(user_utt.get("text", ""))
     detected_from_feel_answer = emotion_from_feel_answer(bot_uttr.get("text", ""),
                                                          user_utt.get("text", ""))
     should_run_emotion = any([emo_found_emotion,
                               joke_request_detected,
                               sadness_detected_by_regexp,
+                              talk_about_regexp,
                               detected_from_feel_answer,
                               how_are_you]) and not_strange_emotion_prob
     return should_run_emotion

@@ -4,7 +4,7 @@ import logging
 from os import getenv
 from common.constants import MUST_CONTINUE, CAN_CONTINUE_SCENARIO
 from common.link import link_to
-from common.emotion import is_joke_requested, is_sad
+from common.emotion import is_joke_requested, is_sad, skill_trigger_phrases, talk_about_emotion
 from common.universal_templates import book_movie_music_found
 from common.utils import get_emotions
 from collections import defaultdict
@@ -25,9 +25,11 @@ class EmotionSkillScenario:
         self.jokes = jokes
         self.advices = advices
         self.logger = logger
+        self.regexp_sad = False
 
     def _get_user_emotion(self, annotated_user_phrase, discard_emotion=None):
         if is_sad(annotated_user_phrase['text']):
+            self.regexp_sad = True
             return 'sadness'
         most_likely_emotion = None
         emotion_probs = get_emotions(annotated_user_phrase, probs=True)
@@ -214,7 +216,11 @@ class EmotionSkillScenario:
                 logger.info(f"user sent: {annotated_user_phrase['text']}")
                 if emotion == "" or state == "":
                     emotion = most_likely_emotion
-                if emotion != "neutral" or state != "":
+                if talk_about_emotion(annotated_user_phrase['text']):
+                    reply = f'OK. {random.choice(skill_trigger_phrases())}'
+                    attr['can_continue'] = MUST_CONTINUE
+                    confidence = 1
+                elif emotion != "neutral" or state != "":
                     reply, confidence, link, emotion_skill_attributes = self._get_reply_and_conf(
                         annotated_user_phrase['text'],
                         prev_bot_phrase,
@@ -241,8 +247,10 @@ class EmotionSkillScenario:
                 link = ""
                 annotated_user_phrase = {'text': ""}
 
-            if state != "":  # Part of a script - so we must continue
+            if state != "" or any([trigger_question in prev_bot_phrase
+                                   for trigger_question in skill_trigger_phrases()]) or self.regexp_sad:
                 attr['can_continue'] = MUST_CONTINUE
+                confidence = 1
 
             if link:
                 if link["skill"] not in human_attributes["used_links"]:

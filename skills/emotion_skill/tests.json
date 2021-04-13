@@ -7,7 +7,7 @@
       "yes": {"confidence": 0.0, "detected": 0}
     },
     "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
-    "results":{"text":"", "confidence":0.0}
+    "results":{"text":""}
   },
   {
     "curr_sent": "i am feeling depressed",
