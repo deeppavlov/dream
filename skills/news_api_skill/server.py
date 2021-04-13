@@ -20,7 +20,7 @@ from common.link import link_to, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED
 from common.metrics import setup_metrics
 from common.news import OFFER_BREAKING_NEWS, OFFERED_BREAKING_NEWS_STATUS, \
     OFFERED_NEWS_DETAILS_STATUS, OPINION_REQUEST_STATUS, WHAT_TYPE_OF_NEWS, OFFER_TOPIC_SPECIFIC_NEWS, \
-    OFFER_TOPIC_SPECIFIC_NEWS_STATUS, OFFERED_NEWS_TOPIC_CATEGORIES_STATUS
+    OFFER_TOPIC_SPECIFIC_NEWS_STATUS, OFFERED_NEWS_TOPIC_CATEGORIES_STATUS, was_offer_news_about_topic
 from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, COMPILE_SWITCH_TOPIC, \
     if_chat_about_particular_topic
 from common.utils import get_skill_outputs_from_dialog, is_yes, is_no, get_topics, get_entities
@@ -87,6 +87,11 @@ def extract_topics(curr_uttr):
                     entities.append(ent)
     entities = [ent for ent in entities if len(ent) > 0]
     return entities
+
+
+def extract_topics_from_string(uttr_text):
+    topics = re.findall(r"about ([a-zA-Z ]+)\?", uttr_text)
+    return topics
 
 
 def news_rejection(uttr):
@@ -205,11 +210,19 @@ def collect_topics_and_statuses(dialogs):
                 NEWS_TEMPLATES, curr_uttr["text"].lower())) and \
                 not re.search(FALSE_NEWS_TEMPLATES, curr_uttr["text"].lower())
             lets_chat_about_particular_topic = if_chat_about_particular_topic(curr_uttr, prev_uttr)
+            _was_offer_news = was_offer_news_about_topic(prev_bot_uttr_lower)
 
-            if OFFER_BREAKING_NEWS.lower() in prev_bot_uttr_lower and is_yes:
+            if OFFER_BREAKING_NEWS.lower() in prev_bot_uttr_lower and is_yes(curr_uttr):
                 # news skill was not previously active
                 logger.info("Detected topic for news: all.")
                 topics.append("all")
+                statuses.append("headline")
+                prev_news_samples.append(human_attr["news_api_skill"]["discussed_news"])
+                curr_news_samples.append({})
+            elif _was_offer_news and is_yes(curr_uttr):
+                entities = extract_topics_from_string(prev_bot_uttr_lower)
+                logger.info(f"Bot offered news on entities: `{entities}`")
+                topics.append(entities[-1])
                 statuses.append("headline")
                 prev_news_samples.append(human_attr["news_api_skill"]["discussed_news"])
                 curr_news_samples.append({})
