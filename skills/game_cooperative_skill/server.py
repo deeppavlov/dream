@@ -7,6 +7,7 @@ import random
 import pathlib
 import datetime
 import copy
+import difflib
 
 from flask import Flask, request, jsonify
 from healthcheck import HealthCheck
@@ -16,7 +17,10 @@ from sentry_sdk.integrations.logging import ignore_logger
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE
 from common.universal_templates import is_switch_topic, if_chat_about_particular_topic
 
-from common.utils import get_skill_outputs_from_dialog
+from common.utils import get_skill_outputs_from_dialog, is_yes
+from common.game_cooperative_skill import game_skill_was_proposed
+from common.dialogflow_framework.programy.text_preprocessing import clean_text
+
 from router import run_skills as skill
 
 
@@ -120,8 +124,15 @@ def respond():
                 dialog["human_utterances"][-1], bot_utterance
             ):
                 confidence = 1
-            if text.lower() in bot_utterance.get("text", "").lower():
+            if is_yes(dialog["human_utterances"][-1]) and game_skill_was_proposed(bot_utterance):
+                confidence = 1
+            curr_text = clean_text(text.lower())
+            last_text = clean_text(bot_utterance.get("text", "").lower())
+            ratio = difflib.SequenceMatcher(None, curr_text.split(), last_text.split()).ratio()
+
+            if ratio > 0.95:
                 confidence = 0
+
             if confidence == 1:
                 can_continue = MUST_CONTINUE
             elif confidence > 0.9:
