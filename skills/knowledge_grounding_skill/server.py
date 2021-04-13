@@ -364,11 +364,12 @@ def respond():
             logger.info(f"skill sends to service: {input_batch}")
             resp = requests.post(KNOWLEDGE_GROUNDING_SERVICE_URL, json={'batch': input_batch}, timeout=1.5)
             raw_responses = resp.json()
+            logger.info(f"skill receives from service: {raw_responses}")
         else:
             responses = [[""]]
             confidences = [[0.]]
             attributes = [[{}]]
-            logger.info(f"Collected no hypotheses, exiting")
+            logger.info(f"Collected no hypotheses, exiting with {list(zip(responses, confidences, attributes))}")
             return jsonify(list(zip(responses, confidences, attributes)))
 
         dial_ids = np.array(dial_ids)
@@ -439,18 +440,22 @@ def respond():
                 acronym_flag = ABBRS.search(raw_responses[curr_i])
                 if acronym_flag:
                     confidence = ABBRS_CONFIDENCE
-                    attr["confidence_case"] += f"acronyms: {acronym_flag.group(1)} "
-                special_char_flag = bool(special_char_re.search(raw_responses[curr_i]))
+                    attr["confidence_case"] += f"acronyms: {acronym_flag} "
+                    logger.debug(f"KG skill: found acronyms: {acronym_flag}")
+                special_char_flag = special_char_re.search(raw_responses[curr_i])
                 if special_char_flag:
                     confidence = HAS_SPEC_CHAR_CONFIDENCE
                     attr["confidence_case"] += "special_char "
+                    logger.debug(f"KG skill: found special_char: {special_char_flag}")
                 if special_intents_flags[i]:
                     confidence = 0.0
                     attr["confidence_case"] += "special_intents "
-                greetings_farewells_flag = bool(greetings_farewells_re.search(raw_responses[curr_i]))
+                    logger.debug(f"KG skill: found special_intents")
+                greetings_farewells_flag = greetings_farewells_re.search(raw_responses[curr_i])
                 if greetings_farewells_flag:
                     confidence = 0.0
                     attr["confidence_case"] += "greetings_farewells "
+                    logger.debug(f"KG skill: found greetings_farewells: {greetings_farewells_flag}")
 
                 penalties = annotations_depths[curr_i].get("retrieved_fact", 0.0) + cobotqa_penalty + \
                     already_was_active + short_long_response if not no_penalties else 0.
@@ -461,6 +466,7 @@ def respond():
                         greetings_farewells_flag, short_long_response
                     ]
                 ):
+                    logger.debug(f"KG skill: found penalties in response: {raw_responses[curr_i]}")
                     continue
                 else:
                     curr_attributes.append(attr)
