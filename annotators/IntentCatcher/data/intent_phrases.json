@@ -278,6 +278,8 @@
       	"(alexa ){0,1}play ((country)|(rap)) music",
 	      "(alexa ){0,1}(i ((need)|(want)) you to ){0,1}play ((me )|(us )){0,1}(some ){0,1}((country)|(reggae)|(modern)|(pop)|(soul)|(jazz)|(rap)|(rock)|(my)|(popular)|(my playlist) ){0,1}music",
         "(alexa ){0,1}volume ((up)|(down)|(nine)|(ten)|(eight)|(eleven)|(twenty)|(one)|(five))",
+        "(alexa )?(increase|decrease|lower) (the )?(volume|sound)",
+        "(alexa )?make it (louder|quiter)",
         "(alexa ){0,1}((brighten)|(dim)) the light",
         "(alexa ){0,1}((can you )|(i want you to )){0,1}stop ((the timer)|(playing music)|(the music)|(the country music))",
         "(alexa ){0,1}((can you )|(i want you to )){0,1}(set ){0,1}timer ((off)|(on)|(((five)|(fifteen)|(ten)|(one)|(two)|(eight)|(twenty)) minutes))",
