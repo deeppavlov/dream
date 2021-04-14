@@ -80,6 +80,7 @@ templates += [(re.compile(r"\bwazzup\b", flags=re.IGNORECASE), "what's up")]
 templates += [(re.compile(r"\bwhatsup\b", flags=re.IGNORECASE), "what's up")]
 templates += [(re.compile(r"\bwanna\b", flags=re.IGNORECASE), "want to")]
 templates += [(re.compile(r"\bgonna\b", flags=re.IGNORECASE), "going to")]
+templates += [(re.compile(r"\bna\b", flags=re.IGNORECASE), "no")]
 
 templates += [(re.compile(r"\s+"), " ")]
 

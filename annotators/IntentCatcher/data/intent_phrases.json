@@ -208,7 +208,7 @@
     "no": {
       "phrases": [
         "(alexa ){0,1}((no)|(nope)|(no way)|(don't)|(do not do this)|(please, no)|(never do this)|(surely not)|(don't do this)|(absolutely not)|(not at all)|(definetely not))",
-        "((no)|(nope)|(no way)|(don't)|(do not do this)|(please, no)|(never do this)|(surely not)|(don't do this))( alexa){0,1}",
+        "((no)|(nope)|(no way)|(don't)|(do not do this)|(please, no)|(never do this)|(surely not)|(don't do this)|(na))( alexa){0,1}",
         "((no)|(please)), ((never)|(no way)|(don't)|(do not)|(never again)|(definetely no))(  alexa){0,1}",
         "((i said)|(Uhh)) ((no)|(never)|(don't))( alexa){0,1}",
         "((definetely not)|(never)|(never ask me that again)|(that's boring)|(that will be boring)|(i don't know)|(i am not sure))"
