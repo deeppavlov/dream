@@ -293,7 +293,9 @@ def respond():
                 "fact_retrieval"
             )
             if retrieved_facts:
-                for depth, fact in retrieved_facts[-TOP_N_FACTS:]:
+                # get here first two facts because they have the highest fact retrieval score
+                # and annotations history is set to 0
+                for depth, fact in retrieved_facts[:TOP_N_FACTS]:
                     user_input = {
                         'checked_sentence': fact,
                         'knowledge': fact,
@@ -408,7 +410,7 @@ def respond():
                     no_penalties = True
                     attr["confidence_case"] += f"topic_fact: {chosen_topic_fact_flag} "
                     attr["response_parts"] = ["prompt"]
-                if input_batch[curr_i].get("news_api_fact", ""):
+                elif input_batch[curr_i].get("news_api_fact", ""):
                     add_intro = random.choice(
                         [
                             "Sounds like ", "Seems like ", "Makes sense. ",
@@ -419,11 +421,11 @@ def respond():
                     no_penalties = True
                     confidence = HIGHEST_CONFIDENCE
                     attr["confidence_case"] += "news_api_fact "
-                if input_batch[curr_i].get("cobotqa_fact", ""):
+                elif input_batch[curr_i].get("cobotqa_fact", ""):
                     cobotqa_penalty = annotations_depths[curr_i].get("cobotqa", 0.0)
                     confidence = DEFAULT_CONFIDENCE
                     attr["confidence_case"] += "cobotqa_fact "
-                if (curr_nounphrase_search or curr_entities_search) and lets_chat_about_flags[i]:
+                elif (curr_nounphrase_search or curr_entities_search) and lets_chat_about_flags[i]:
                     confidence = HIGHEST_CONFIDENCE
                     attr["confidence_case"] += "nounphrase_entity_and_lets_chat_about "
                     attr["response_parts"] = ["prompt"]
@@ -437,6 +439,7 @@ def respond():
                 else:
                     confidence = DEFAULT_CONFIDENCE
                     attr["confidence_case"] += "default "
+
                 acronym_flag = ABBRS.search(raw_responses[curr_i])
                 if acronym_flag:
                     confidence = ABBRS_CONFIDENCE
@@ -466,7 +469,7 @@ def respond():
                         greetings_farewells_flag, short_long_response
                     ]
                 ):
-                    logger.debug(f"KG skill: found penalties in response: {raw_responses[curr_i]}")
+                    logger.debug(f"KG skill: found penalties in response: {raw_responses[curr_i]}, skipping it")
                     continue
                 else:
                     curr_attributes.append(attr)
