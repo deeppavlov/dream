@@ -30,6 +30,21 @@ misheard_with_spec1 = "I misheard you"
 misheard_with_spec2 = "like to chat about"
 alexa_abilities_spec = "If you want to use the requested feature say"
 
+LET_ME_ASK_YOU_PHRASES = [
+    "Let me ask you something.",
+    "I would like to ask you a question.",
+    "Hey, I have a quesiton to you.",
+    "May I ask you one interesting thing."
+]
+COMPLETELY_CHANGING_THE_SUBJECT_PHRASES = [
+    "Completely changing the subject,",
+    "This has nothing to do with what we were talking about, but",
+    "Not to change the subject, but",
+    "Changing gears a little bit,",
+    "Changing the topic slightly,",
+    "Totally unrelated,"
+]
+
 
 def join_used_links_in_attributes(main_attrs, add_attrs):
     result = deepcopy(main_attrs)
@@ -49,8 +64,7 @@ def add_question_to_statement(best_candidate, best_skill_name, dummy_question, d
     if best_candidate["text"].strip() in okay_statements:
         if dummy_question != "" and random.random() < ASK_DUMMY_QUESTION_PROB:
             logger.info(f"adding {dummy_question} to response.")
-            best_candidate["text"] += np.random.choice([f" Let me ask you something. {dummy_question}",
-                                                        f" I would like to ask you a question. {dummy_question}"])
+            best_candidate["text"] += f"{np.random.choice(LET_ME_ASK_YOU_PHRASES)} {dummy_question}"
             # if this is not a link-to question, bot attributes will be still empty
             best_candidate["human_attributes"] = join_used_links_in_attributes(
                 best_candidate.get("human_attributes", {}), dummy_question_human_attr)

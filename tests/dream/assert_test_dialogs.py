@@ -33,6 +33,7 @@ SPECIAL_SKILLS = {
         "movie_skill",
         "dff_music_skill",
         "dff_animals_skill",
+        "dff_sport_skill",
         "weather_skill",
     ],
 }

@@ -13,7 +13,7 @@ from common.universal_templates import if_chat_about_particular_topic, is_switch
     is_any_question_sentence_in_utterance
 from common.utils import get_intent_name, get_intents, get_topics, get_common_tokens_in_lists_of_strings, get_entities
 from utils import calculate_single_convers_evaluator_score, CONV_EVAL_STRENGTH, CONFIDENCE_STRENGTH, \
-    how_are_you_spec, what_i_can_do_spec, greeting_spec, misheard_with_spec1, \
+    how_are_you_spec, what_i_can_do_spec, greeting_spec, misheard_with_spec1, COMPLETELY_CHANGING_THE_SUBJECT_PHRASES, \
     misheard_with_spec2, alexa_abilities_spec, join_used_links_in_attributes, get_updated_disliked_skills
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -258,13 +258,14 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
     _required_actions = sum([REQUIRE_ACTION_INTENTS.get(_intent, [])
                              for _intent in _require_action_intents_detected], [])
     _contains_entities = len(get_entities(annotated_uttr, only_named=False, with_labels=False)) > 0
-    _is_active_skill_finishes_script = False
+    _is_active_skill_can_not_continue = False
 
-    if len(dialog["bot_utterances"]) > 0:
-        _prev_active_skill = dialog["bot_utterances"][-1]["active_skill"]
-    else:
-        _prev_active_skill = ""
-
+    _prev_active_skill = dialog["bot_utterances"][-1]["active_skill"] if len(dialog["bot_utterances"]) > 0 else ""
+    _prev_prev_active_skill = dialog["bot_utterances"][-2]["active_skill"] if len(dialog["bot_utterances"]) > 1 else ""
+    _no_script_two_times_in_a_row = False
+    if _prev_active_skill and _prev_prev_active_skill:
+        if _prev_active_skill not in ACTIVE_SKILLS and _prev_prev_active_skill not in ACTIVE_SKILLS:
+            _no_script_two_times_in_a_row = True
     disliked_skills = get_updated_disliked_skills(dialog, can_not_be_disliked_skills=CAN_NOT_BE_DISLIKED_SKILLS)
 
     categorized_hyps = {}
@@ -310,8 +311,9 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             cand_uttr["can_continue"] = CAN_CONTINUE_SCENARIO_DONE
         _can_continue = cand_uttr.get("can_continue", CAN_NOT_CONTINUE)
         if _is_active_skill:
-            _is_active_skill_finishes_script = _is_active_skill and _can_continue in [CAN_NOT_CONTINUE,
-                                                                                      CAN_CONTINUE_SCENARIO_DONE]
+            # we will focibly add prompt if current scripted skill finishes scenario,
+            # and has no opportunity to continue at all.
+            _is_active_skill_can_not_continue = _is_active_skill and _can_continue in [CAN_NOT_CONTINUE]
 
         if _is_force_intent:
             # =====force intents, choose as best_on_topic hypotheses from skills responding this request=====
@@ -405,6 +407,8 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         elif cand_uttr["confidence"] >= 1.:
             # -------------------- SUPER CONFIDENCE CASE HERE! --------------------
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
+        if _is_just_prompt and _no_script_two_times_in_a_row:
+            categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
 
         if cand_uttr["skill_name"] == "grounding_skill" and "acknowledgement" in cand_uttr.get("response_parts", []):
             acknowledgement_hypothesis = deepcopy(cand_uttr)
@@ -448,13 +452,18 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         pass
     elif sum(categorized_prompts.values(), []):
         # need to add some prompt, and have a prompt
-        if (_is_active_skill_finishes_script and not _contains_entities) or prompt_decision():
+        _add_prompt_forcibly = best_candidate["skill_name"] == _prev_active_skill and _is_active_skill_can_not_continue
+        _add_prompt_forcibly = _add_prompt_forcibly and not _contains_entities
+
+        if _add_prompt_forcibly or prompt_decision():
             logger.info(f"Decided to add a prompt to the best candidate.")
             best_prompt_id = pickup_best_id(categorized_prompts, candidates, curr_single_scores, bot_utterances)
             # as we have only one active skill, let's consider active skill as that one providing prompt
             # but we also need to reassign all the attributes
             best_prompt = candidates[best_prompt_id]
-            best_candidate["text"] = f'{best_candidate["text"]} {best_prompt["text"]}'
+            best_candidate["text"] = f'{best_candidate["text"]} ' \
+                                     f'{np.random.choice(COMPLETELY_CHANGING_THE_SUBJECT_PHRASES)} ' \
+                                     f'{best_prompt["text"]}'
             # TODO: how to correctly reassign human-/bot-/hyp- attributes??? how to deal with skill name?
             best_candidate["attributes"] = best_candidate.get("attributes", {})
             best_candidate["attributes"]["prompt_skill"] = best_prompt
