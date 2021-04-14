@@ -218,7 +218,7 @@ def is_yes(annotated_phrase):
     return False
 
 
-no_templates = re.compile(r"(\bno\b|\bnot\b|no way|don't|no please|i disagree)")
+no_templates = re.compile(r"(\bno\b|\bnot\b|no way|don't|no please|i disagree|^neither$)")
 DONOTKNOW_LIKE = [r"(i )?(do not|don't) know", "you (choose|decide|pick up)", "no idea"]
 DONOTKNOW_LIKE_PATTERN = re.compile(join_sentences_in_or_pattern(DONOTKNOW_LIKE), re.IGNORECASE)
 

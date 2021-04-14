@@ -131,32 +131,27 @@ def collect_topics_and_statuses(dialogs):
             prev_status = prev_news_skill_output.get("news_status", "")
             prev_topic = prev_news_skill_output.get("news_topic", "all")
             last_news = prev_news_skill_output.get("curr_news", {})
-            if prev_status == OFFERED_NEWS_DETAILS_STATUS and is_yes(curr_uttr):
-                logger.info(f"Detected topic for news: {prev_topic}")
+            if prev_status == OFFERED_NEWS_DETAILS_STATUS:
                 topics.append(prev_topic)
-                statuses.append("details")
-                prev_news_samples.append(human_attr["news_api_skill"]["discussed_news"])
-                curr_news_samples.append(last_news)
-            elif prev_status == OFFERED_NEWS_DETAILS_STATUS and is_no(curr_uttr):
-                logger.info("User refuse to get news details")
-                topics.append(prev_topic)
-                statuses.append("finished")
-                prev_news_samples.append(human_attr["news_api_skill"]["discussed_news"])
-                curr_news_samples.append({})
-            elif (prev_status == OFFERED_BREAKING_NEWS_STATUS or OFFER_BREAKING_NEWS.lower() in
-                  prev_bot_uttr_lower) and is_yes(curr_uttr):
-                logger.info("Detected topic for news: all.")
-                topics.append("all")
-                statuses.append("headline")
+                if is_yes(curr_uttr):
+                    logger.info(f"Detected topic for news: {prev_topic}")
+                    statuses.append("details")
+                else:
+                    logger.info("User refused to get news details")
+                    statuses.append("finished")
                 prev_news_samples.append(human_attr["news_api_skill"]["discussed_news"])
                 curr_news_samples.append(last_news)
             elif (prev_status == OFFERED_BREAKING_NEWS_STATUS or OFFER_BREAKING_NEWS.lower() in
-                  prev_bot_uttr_lower) and is_no(curr_uttr):
-                logger.info("User refuse to get latest news")
+                  prev_bot_uttr_lower):
                 topics.append("all")
-                statuses.append("declined")
+                if is_yes(curr_uttr):
+                    logger.info("Detected topic for news: all.")
+                    statuses.append("headline")
+                else:
+                    logger.info("User refuse to get latest news")
+                    statuses.append("declined")
                 prev_news_samples.append(human_attr["news_api_skill"]["discussed_news"])
-                curr_news_samples.append({})
+                curr_news_samples.append(last_news)
             elif re.search(TELL_MORE_NEWS_TEMPLATES, curr_uttr["text"].lower()):
                 prev_news_skill_output = get_skill_outputs_from_dialog(
                     dialog["utterances"][-7:], skill_name="news_api_skill", activated=True)
@@ -192,10 +187,14 @@ def collect_topics_and_statuses(dialogs):
                     statuses.append("declined")
                     prev_news_samples.append(human_attr["news_api_skill"]["discussed_news"])
                     curr_news_samples.append({})
-            elif prev_status == OFFER_TOPIC_SPECIFIC_NEWS_STATUS and is_yes(curr_uttr):
-                logger.info(f"User wants to listen news about {prev_topic}.")
+            elif prev_status == OFFER_TOPIC_SPECIFIC_NEWS_STATUS:
                 topics.append(prev_topic)
-                statuses.append("headline")
+                if is_yes(curr_uttr):
+                    logger.info(f"User wants to listen news about {prev_topic}.")
+                    statuses.append("headline")
+                else:
+                    logger.info(f"User doesn't want to listen news about {prev_topic}.")
+                    statuses.append("declined")
                 prev_news_samples.append(human_attr["news_api_skill"]["discussed_news"])
                 curr_news_samples.append(last_news)
             else:
@@ -212,18 +211,26 @@ def collect_topics_and_statuses(dialogs):
             lets_chat_about_particular_topic = if_chat_about_particular_topic(curr_uttr, prev_uttr)
             _was_offer_news = was_offer_news_about_topic(prev_bot_uttr_lower)
 
-            if OFFER_BREAKING_NEWS.lower() in prev_bot_uttr_lower and is_yes(curr_uttr):
+            if OFFER_BREAKING_NEWS.lower() in prev_bot_uttr_lower:
                 # news skill was not previously active
-                logger.info("Detected topic for news: all.")
                 topics.append("all")
-                statuses.append("headline")
+                if is_yes(curr_uttr):
+                    logger.info("Detected topic for news: all.")
+                    statuses.append("headline")
+                else:
+                    logger.info("Detected topic for news: all. Refused to get latest news")
+                    statuses.append("declined")
                 prev_news_samples.append(human_attr["news_api_skill"]["discussed_news"])
                 curr_news_samples.append({})
-            elif _was_offer_news and is_yes(curr_uttr):
+            elif _was_offer_news:
                 entities = extract_topics_from_string(prev_bot_uttr_lower)
-                logger.info(f"Bot offered news on entities: `{entities}`")
                 topics.append(entities[-1])
-                statuses.append("headline")
+                if is_yes(curr_uttr):
+                    logger.info(f"Bot offered news on entities: `{entities}`")
+                    statuses.append("headline")
+                else:
+                    logger.info(f"Bot offered news on entities: `{entities}`. User refused.")
+                    statuses.append("declined")
                 prev_news_samples.append(human_attr["news_api_skill"]["discussed_news"])
                 curr_news_samples.append({})
             elif about_news or lets_chat_about_particular_topic:
