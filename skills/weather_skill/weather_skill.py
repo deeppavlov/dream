@@ -5,10 +5,13 @@ import sentry_sdk
 import pprint
 from collections import defaultdict
 from city_slot import OWMCitySlot
+
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE, MUST_CONTINUE
 from common.link import link_to, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED
-from common.weather import is_weather_for_homeland_requested, is_weather_without_city_requested
-from common.utils import get_entities
+from common.weather import is_weather_for_homeland_requested, is_weather_without_city_requested, \
+    WEATHER_COMPILED_PATTERN, ASK_WEATHER_SKILL_PHRASE
+from common.universal_templates import if_chat_about_particular_topic
+from common.utils import get_entities, get_intents
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -160,15 +163,13 @@ class WeatherSkill:
             ############################################################
             # check if weather intent triggered in last utterance:
             ############################################################
-            annotations = dialog["utterances"][-1]["annotations"]
-            weather_without_city_requested = False
-            if len(dialog["utterances"]) > 1:
-                prev_bot_utt = dialog["utterances"][-2]
-                user_utt = dialog["utterances"][-1]
-                weather_for_homeland_requested = is_weather_for_homeland_requested(prev_bot_utt, user_utt)
-                weather_without_city_requested = is_weather_without_city_requested(prev_bot_utt, user_utt)
-            if annotations.get("intent_catcher", {}).get("weather_forecast_intent", {}).get(
-                    "detected", 0) == 1 or weather_without_city_requested:
+            prev_bot_utt = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}
+            user_utt = dialog["human_utterances"][-1]
+            weather_for_homeland_requested = is_weather_for_homeland_requested(prev_bot_utt, user_utt)
+            weather_without_city_requested = is_weather_without_city_requested(prev_bot_utt, user_utt)
+
+            if "weather_forecast_intent" in get_intents(user_utt, probs=False, which="intent_catcher") or \
+                    weather_without_city_requested:
                 logger.warning("WEATHER FORECAST INTENT DETECTED")
                 ############################################################
                 # retrieve city slot or enqueue question into agenda
@@ -276,6 +277,9 @@ class WeatherSkill:
                 else:
                     context_dict['can_continue'] = CAN_NOT_CONTINUE
                     # don't talk about hiking/swimming/skiing/etc.
+            elif if_chat_about_particular_topic(user_utt, prev_bot_utt, compiled_pattern=WEATHER_COMPILED_PATTERN):
+                current_reply = ASK_WEATHER_SKILL_PHRASE
+                curr_confidence = FORECAST_CONFIDENCE
             else:
                 context_dict['can_continue'] = CAN_NOT_CONTINUE
                 # just ignore
