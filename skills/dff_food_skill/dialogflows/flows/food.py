@@ -53,6 +53,18 @@ MEALS = [
     "fries with beef and tomatoes",
     "quinoa with turkey and broccoli",
 ]
+CUISINES_COUNTRIES = {
+    "french": "France",
+    "chinese": "China",
+    "japanese": "Japan",
+    "italian": "Italy",
+    "greek": "Greece",
+    "spanish": "Spain",
+    "mediterranean": "Italy",
+    "thai": "Thailand",
+    "indian": "India",
+    "mexican": "Mexico"
+}
 CONF_HIGH = 1.0
 CONF_MIDDLE = 0.95
 CONF_LOW = 0.9
@@ -82,6 +94,8 @@ class State(Enum):
     SYS_NO_FOOD_FACT = auto()
     SYS_SOMETHING = auto()
     USR_WHERE_R_U_FROM = auto()
+    SYS_TO_TRAVEL_SKILL = auto()
+    USR_COUNTRY = auto()
     #
     SYS_ERR = auto()
     USR_ERR = auto()
@@ -205,9 +219,26 @@ def cuisine_fact_response(vars):
         for cuisine in list(CUISINES_FACTS.keys()):
             if cuisine in last_utt_lower:
                 cuisine_fact = CUISINES_FACTS.get(cuisine, "")
+                state_utils.save_to_shared_memory(vars, cuisine=cuisine)
         if not cuisine_fact:
             cuisine_fact = "Haven't tried it yet. What do you recommend to start with?"
         return cuisine_fact
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        state_utils.set_confidence(vars, 0)
+        return error_response(vars)
+
+
+def country_response(vars):
+    shared_memory = state_utils.get_shared_memory(vars)
+    cuisine_discussed = shared_memory.get("cuisine", "")
+    try:
+        if cuisine_discussed:
+            if cuisine_discussed in CUISINES_COUNTRIES:
+                state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
+                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
+                return f"Have you been in {CUISINES_COUNTRIES[cuisine_discussed]}?"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -494,8 +525,16 @@ simplified_dialogflow.add_system_transition(State.SYS_CUISINE, State.USR_CUISINE
 simplified_dialogflow.set_error_successor(State.SYS_CUISINE, State.SYS_ERR)
 
 
-simplified_dialogflow.add_user_transition(State.USR_CUISINE_FACT, State.SYS_SOMETHING, smth_request)
+simplified_dialogflow.add_user_transition(State.USR_CUISINE_FACT, State.SYS_TO_TRAVEL_SKILL, smth_request)
 simplified_dialogflow.set_error_successor(State.USR_CUISINE_FACT, State.SYS_ERR)
+
+
+simplified_dialogflow.add_system_transition(State.SYS_TO_TRAVEL_SKILL, State.USR_COUNTRY, country_response)
+simplified_dialogflow.set_error_successor(State.SYS_TO_TRAVEL_SKILL, State.SYS_ERR)
+
+
+simplified_dialogflow.add_user_transition(State.USR_COUNTRY, State.SYS_SOMETHING, smth_request)
+simplified_dialogflow.set_error_successor(State.USR_COUNTRY, State.SYS_ERR)
 
 ##################################################################################################################
 #  SYS_WHAT_COOK
