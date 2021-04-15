@@ -37,9 +37,12 @@ def respond():
         if len(last_utt) > 1 and any([entity_substr.lower() == last_utt.lower()
                                       for entity_substr in entity_substr_list]) or \
                 any([entity_substr.lower() == last_utt[:-1] for entity_substr in entity_substr_list]):
-            new_context_batch.append(" ".join(context_list))
+            context = " ".join(context_list)
         else:
-            new_context_batch.append(last_utt)
+            context = last_utt
+        if isinstance(context, list):
+            context = " ".join(context)
+        new_context_batch.append(context)
 
     entity_info_batch = [[{}] for _ in entity_substr_batch]
     try:
