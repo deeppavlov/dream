@@ -32,9 +32,25 @@ spacy_nlp = load("en_core_web_sm")
 
 with open("cuisines_facts.json", "r") as f:
     CUISINES_FACTS = json.load(f)
+CONCEPTNET_SYMBOLOF_FOOD = [
+    "food", "coffee", "sweetness", "hunger",
+    "breakfast", "dinner", "pizza"
+]
+CONCEPTNET_HASPROPERTY_FOOD = ["delicious", "tasty", "sweet"]
+CONCEPTNET_CAUSESDESIRE_FOOD = [
+    "eat chocolate", "have breakfast", "eat", "eat breakfast", "eat food",
+    "have food", "eat quickly"
+]
 FOOD_WORDS_RE = re.compile(
-    r"(food|cook|cooking|cuisine|daily bread|meals|foodstuffs"
-    "|edibles|drinks|pepperoni|pizza|strawberries|chocolate|coffee)",
+    r"(food|cook|cooking|bake|baking|cuisine|daily bread|meals|foodstuffs"
+    "|edibles|drink|pepperoni|pizza|strawberries|chocolate|coffee|eat|dinner"
+    "|breakfast|pasta|burger|cheese|tasty|waffles)",
+    re.IGNORECASE
+)
+FOOD_SKILL_TRANSFER_PHRASES_RE = re.compile(
+    r"(do you know .* most (favorite|favourite) food?|.*what is your (favorite|favourite) food?"
+    "|.*by the way, what food do you like?|do you like .* cuisine?"
+    "|.*what kind of cuisine do you like?)",
     re.IGNORECASE
 )
 WHAT_COOK_RE = re.compile(
@@ -150,6 +166,26 @@ def error_response(vars):
 ##################################################################################################################
 # let's talk about food
 ##################################################################################################################
+def check_conceptnet(vars):
+    annotations_conceptnet = state_utils.get_last_human_utterance(vars)["annotations"].get(
+        "conceptnet", {})
+    conceptnet_symbolof = any(
+        [
+            i in annotations_conceptnet.get("SymbolOf", []) for i in CONCEPTNET_SYMBOLOF_FOOD
+        ]
+    )
+    conceptnet_hasproperty = any(
+        [
+            i in annotations_conceptnet.get("HasProperty", []) for i in CONCEPTNET_HASPROPERTY_FOOD
+        ]
+    )
+    conceptnet_causesdesire = any(
+        [
+            i in annotations_conceptnet.get("CausesDesire", []) for i in CONCEPTNET_CAUSESDESIRE_FOOD
+        ]
+    )
+    conceptnet = any([conceptnet_symbolof, conceptnet_hasproperty, conceptnet_causesdesire])
+    return conceptnet
 
 
 def lets_talk_about_check(vars):
@@ -157,17 +193,18 @@ def lets_talk_about_check(vars):
     #     "lets_chat_about" in get_intents(state_utils.get_last_human_utterance(vars), which="intent_catcher")
     #     or if_chat_about_particular_topic(state_utils.get_last_human_utterance(vars), prev_uttr)
     # )
-    conceptnet_symbolof = state_utils.get_last_human_utterance(vars)["annotations"].get(
-        "conceptnet", {}).get("SymbolOf", [])
-    conceptnet = any([i in conceptnet_symbolof for i in ["food", "coffee", "sweetness"]])
-
-    user_lets_chat_about_food = any([
-        re.search(FOOD_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"].lower())
-        and if_chat_about_particular_topic(state_utils.get_last_human_utterance(vars),
+    user_lets_chat_about_food = any(
+        [
+            re.search(FOOD_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"].lower()),
+            if_chat_about_particular_topic(state_utils.get_last_human_utterance(vars),
                                            state_utils.get_last_bot_utterance(vars),
                                            compiled_pattern=FOOD_WORDS_RE),
-        conceptnet
-    ]) and (not state_utils.get_last_human_utterance(vars)["text"].startswith("what"))
+            check_conceptnet(vars),
+            re.search(FOOD_SKILL_TRANSFER_PHRASES_RE,
+                      state_utils.get_last_human_utterance(vars)["text"].lower())
+        ]
+    )
+    # and (not state_utils.get_last_human_utterance(vars)["text"].startswith("what"))
     flag = user_lets_chat_about_food
     logger.info(f"lets_talk_about_check {flag}")
     return flag
@@ -193,7 +230,10 @@ def what_cuisine_response(vars):
         elif lets_talk_about_asked:
             state_utils.set_confidence(vars, confidence=CONF_HIGH)
             state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-        return "Okay. What cuisine do you prefer?"
+        else:
+            state_utils.set_confidence(vars, confidence=CONF_LOW)
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+        return "What cuisine do you prefer?"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -295,6 +335,9 @@ def what_fav_food_response(vars):
             if unused_food:
                 state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+        else:
+            state_utils.set_confidence(vars, confidence=CONF_LOW)
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
 
         state_utils.save_to_shared_memory(vars, used_food=used_food + [food_type])
         return f"What is your favorite {food_type}?"
@@ -307,18 +350,10 @@ def what_fav_food_response(vars):
 
 def fav_food_request(ngrams, vars):
     flag = False
-    user_fav_food = []
-    annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-    nounphr = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
+    user_fav_food = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
     # cobot_topic = "Food_Drink" in get_topics(state_utils.get_last_human_utterance(vars), which="cobot_topics")
-    conceptnet = any([
-        "food" in annotations.get("conceptnet", {}).get("SymbolOf", []),
-        "delicious" in annotations.get("conceptnet", {}).get("HasProperty", []),
-        "tasty" in annotations.get("conceptnet", {}).get("HasProperty", [])
-    ])
-    for ne in nounphr:
-        user_fav_food.append(ne)
-    if user_fav_food and conceptnet:
+    food_words_search = re.search(FOOD_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"].lower())
+    if any([user_fav_food, check_conceptnet(vars), food_words_search]):
         flag = True
     logger.info(f"fav_food_request {flag}")
     return flag
@@ -351,7 +386,7 @@ def food_fact_response(vars):
 
 def are_you_gourmet_response(vars):
     try:
-        state_utils.set_confidence(vars, confidence=CONF_LOW)
+        state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
         return "Are you a gourmet?"
     except Exception as exc:
@@ -395,11 +430,12 @@ def how_about_meal_response(vars):
 
 def recipe_response(vars):
     try:
-        state_utils.set_confidence(vars, confidence=CONF_LOW)
         shared_memory = state_utils.get_shared_memory(vars)
         used_meal = shared_memory.get("used_meals", "")
         recipe = send_cobotqa(f"how to cook {used_meal}")
-        if not(used_meal and recipe):
+        state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
+        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
+        if not (used_meal and recipe):
             recipe = "Great! Enjoy your meal!"
         return recipe
     except Exception as exc:
@@ -412,7 +448,7 @@ def recipe_response(vars):
 
 def gourmet_response(vars):
     try:
-        state_utils.set_confidence(vars, confidence=CONF_LOW)
+        state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
         return "It seems you're a gourmet! What is your favorite meal?"
     except Exception as exc:
@@ -430,7 +466,8 @@ def smth_request(ngrams, vars):
 
 def where_are_you_from_response(vars):
     try:
-        state_utils.set_confidence(vars)
+        state_utils.set_confidence(vars, confidence=CONF_LOW)
+        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
         return "Where are you from?"
     except Exception as exc:
         logger.exception(exc)
