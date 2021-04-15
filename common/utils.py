@@ -747,14 +747,13 @@ def get_raw_entity_names_from_annotations(annotations):
     Returns:
         Wikidata entities we received from annotations
     """
-    raw_el_output = annotations.get('entity_linking', [[], []])
+    raw_el_output = annotations.get('entity_linking', [{}])
     entities = []
     try:
-        if raw_el_output[0]:
-            if isinstance(raw_el_output[0][0], list):
-                entities = raw_el_output[0][0]
-            elif isinstance(raw_el_output[0][0], str):
-                entities = raw_el_output[0]
+        if isinstance(raw_el_output[0], dict):
+            entities = raw_el_output[0].get("entity_ids", [])
+        if isinstance(raw_el_output[0], list):
+            entities = raw_el_output[0][0]
     except Exception as e:
         error_message = f'Wrong entity linking output format {raw_el_output} : {e}'
         sentry_sdk.capture_exception(error_message)

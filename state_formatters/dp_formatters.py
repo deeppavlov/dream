@@ -485,39 +485,38 @@ def ner_formatter_last_bot_dialog(dialog: Dict):
 
 def wp_formatter_dialog(dialog: Dict):
     # Used by: wiki_parser annotator
-    entity_ids_batch, _, _ = dialog["human_utterances"][-1]["annotations"].get("entity_linking", [[], [], []])
-    input_entity_ids = []
-    input_entity_ids_list = []
-    if entity_ids_batch:
-        for entity_ids_list in entity_ids_batch:
-            if entity_ids_list:
-                input_entity_ids.append(entity_ids_list[0])
-                input_entity_ids_list.append(entity_ids_list[:5])
+    entity_info_list = dialog["human_utterances"][-1]["annotations"].get("entity_linking", [{}])
+    input_entity_info_list = []
+    if entity_info_list:
+        for entity_info in entity_info_list:
+            if entity_info and "entity_substr" in entity_info and "entity_ids" in entity_info:
+                input_entity_info_list.append({"entity_substr": entity_info["entity_substr"],
+                                               "entity_ids": entity_info["entity_ids"][:5]})
     parser_info = ["find_top_triplets"]
-    if not input_entity_ids_list:
-        input_entity_ids_list = [[]]
-    return [{"parser_info": parser_info, "query": [input_entity_ids_list]}]
+    if not input_entity_info_list:
+        input_entity_info_list = [{}]
+    return [{"parser_info": parser_info, "query": [input_entity_info_list]}]
 
 
 def el_formatter_dialog(dialog: Dict):
     # Used by: entity_linking annotator
+    num_last_utterances = 2
     ner_output = get_entities(dialog["human_utterances"][-1], only_named=True, with_labels=True)
     nounphrases = dialog["human_utterances"][-1]["annotations"].get("cobot_entities", {}).get("entities", [])
     entity_substr = []
     if ner_output:
         for entity in ner_output:
             if entity and isinstance(entity, dict) and "text" in entity and entity["text"].lower() != "alexa":
-                entity_substr.append(entity["text"])
+                entity_substr.append(entity["text"].lower())
 
-    if "sentseg" in dialog["human_utterances"][-1]["annotations"]:
-        last_human_utterance_text = dialog["human_utterances"][-1]["annotations"]["sentseg"]["punct_sent"]
-    else:
-        last_human_utterance_text = dialog["human_utterances"][-1]["text"]
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    context = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
     if nounphrases:
-        entity_substr += nounphrases
+        entity_substr += [nounphrase.lower() for nounphrase in nounphrases]
     entity_substr = list(set(entity_substr))
 
-    return [{"entity_substr": [entity_substr], "template": [""], "context": [last_human_utterance_text]}]
+    return [{"entity_substr": [entity_substr], "template": [""], "context": context}]
 
 
 def kbqa_formatter_dialog(dialog: Dict):
@@ -557,15 +556,18 @@ def fact_retrieval_formatter_dialog(dialog: Dict):
 
     nounphrases = [last_human_utt["annotations"].get("cobot_entities", {}).get("entities", [])]
 
-    _, _, entity_pages = \
-        last_human_utt["annotations"].get("entity_linking", [[], [], []])
+    entity_info_list = last_human_utt["annotations"].get("entity_linking", [{}])
+    entity_pages_list = []
+    for entity_info in entity_info_list:
+        if "entity_pages" in entity_info and entity_info["entity_pages"]:
+            entity_pages_list.append(entity_info["entity_pages"])
 
     return [
         {
             "human_sentences": [last_human_utt["text"]],
             "dialog_history": dialog_history,
             "entity_substr": nounphrases,
-            "entity_pages": [entity_pages],
+            "entity_pages": [entity_pages_list]
         }
     ]
 
