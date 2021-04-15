@@ -24,6 +24,7 @@ files=(
   alexaprize_data/conceptnet/rel_language-trainsize_100-devversion_12-maxe1_10-maxe2_15-maxr_5.pickle
   alexaprize_data/convert_reddit_v2.8.tar.gz
   alexaprize_data/convert_reddit_v2.3.tar.gz
+  alexaprize_data/convert_reddit_v2.3.punct.tar.gz
   alexaprize_data/emo_bert3_v1.tar.gz
   alexaprize_data/elmo2.tar.gz
   alexaprize_data/midas.tar.gz
