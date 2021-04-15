@@ -2,14 +2,12 @@ import logging
 
 from emora_stdm import CompositeDialogueFlow, DialogueFlow
 
-
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 
 import dialogflows.flows.funfact as funfact_flow
 import dialogflows.scopes as scopes
 
 logger = logging.getLogger(__name__)
-
 
 composite_dialogflow = CompositeDialogueFlow(
     scopes.State.USR_ROOT,
@@ -18,12 +16,10 @@ composite_dialogflow = CompositeDialogueFlow(
     initial_speaker=DialogueFlow.Speaker.USER,
 )
 
-
 composite_dialogflow.add_component(funfact_flow.dialogflow, scopes.FUNFACT)
 
 dialogflow = composite_dialogflow.component(scopes.MAIN)
 simplified_dialogflow = dialogflow_extention.DFEasyFilling(dialogflow=dialogflow)
-
 
 ##################################################################################################################
 ##################################################################################################################
@@ -38,7 +34,6 @@ for node in [scopes.State.USR_ROOT, scopes.State.USR_ERR]:
             (scopes.FUNFACT, funfact_flow.State.USR_START): funfact_flow.funfact_request
         },
     )
-
 
 composite_dialogflow.set_controller("SYSTEM")
 composite_dialogflow._controller = simplified_dialogflow.get_dialogflow()
