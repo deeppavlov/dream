@@ -60,13 +60,34 @@ topic_skill_types = set(["Q36180",  # writer
                          "Q177220",  # singer
                          "Q17125263",  # youtuber
                          "Q245068",  # comedian
-                         "Q2066131",  # sportsman
                          "Q947873",  # television presenter
                          "Q10800557",  # film actor
                          "Q10798782",  # television actor
                          "Q2405480",  # voice actor
+                         "Q211236",  # celebrity
+                         "Q82955",  # politician
+                         "Q372436",  # statesperson
+                         "Q488205",  # singer-songwriter
+                         "Q36834",  # composer
+                         "Q177220",  # singer
+                         "Q753110",  # songwriter
+                         "Q134556",  # single
+                         "Q7366",  # song
+                         "Q482994",  # album
+                         "Q2066131",  # athlete
+                         "Q937857",  # football player
+                         "Q4009406",  # sprinter
+                         "Q10843402",  # swimmer
+                         "Q10873124",  # chess player
+                         "Q3665646",  # basketball player
+                         "Q10833314",  # tennis player
                          "Q19204627",  # American football player
-                         "Q211236"  # celebrity
+                         "Q10871364",  # baseball player
+                         "Q20639856",  # team
+                         "Q847017",  # sports club
+                         "Q476028",  # football club
+                         "Q4498974",  # ice hockey team
+                         "Q570116"  # tourist attraction
                          ])
 
 
@@ -209,7 +230,35 @@ def find_types(entity: str):
     return types
 
 
-def find_top_triplets(entity):
+def find_subclasses(entity: str):
+    if not entity.startswith("http"):
+        entity = f"{prefixes['entity']}/{entity}"
+    tr, c = document.search_triples(entity, f"{prefixes['rels']['direct']}/P279", "")
+    subclasses = [triplet[2].split('/')[-1] for triplet in tr]
+    subclasses = list(set(subclasses))
+    return subclasses
+
+
+def find_types_2hop(entity: str):
+    types_1hop = find_types(entity)
+    types_2hop_list = []
+    for tp in types_1hop:
+        types_2hop = find_types(tp) + find_subclasses(tp)
+        types_2hop_list += types_2hop
+    types_2hop_list = list(set(types_2hop_list))
+    return types_2hop_list
+
+
+def find_objects_info(objects):
+    objects_info = []
+    for obj in objects[:15]:
+        obj_label = find_label(obj, "")
+        if obj_label:
+            objects_info.append((obj, obj_label))
+    return objects_info
+
+
+def find_top_triplets(entity, entity_substr):
     triplets_info = {}
     if entity.startswith("Q"):
         triplets = {}
@@ -229,7 +278,26 @@ def find_top_triplets(entity):
                                   ("P50", "author"),
                                   ("P136", "genre"),
                                   ("P577", "publication date"),
-                                  ("P800", "notable work")
+                                  ("P800", "notable work"),
+                                  ("P463", "musical group"),
+                                  ("P1303", "instrument"),
+                                  ("P166", "awards received"),
+                                  ("P571", "inception"),
+                                  ("P175", "performer"),
+                                  ("P658", "tracklist"),
+                                  ("P641", "sport"),
+                                  ("P54", "member of sport team"),
+                                  ("P1532", "country for sport"),
+                                  ("P413", "position played on team"),
+                                  ("P1344", "participant in"),
+                                  ("P1449", "nickname"),
+                                  ("P286", "head coach"),
+                                  ("P118", "league"),
+                                  ("P115", "home venue"),
+                                  ("P2522", "victory"),
+                                  ("P6364", "official color or colors"),
+                                  ("P206", "located next to body of water"),
+                                  ("P840", "narrative location")
                                   ]:
             objects = find_object(entity, rel_id, "")
             objects_info = []
@@ -239,7 +307,16 @@ def find_top_triplets(entity):
                     objects_info.append((obj, obj_label))
             if objects_info:
                 triplets[rel_label] = objects_info
-        triplets_info[entity_label] = triplets
+        songs = find_object(entity, "P175", "backw")
+        songs_with_labels = find_objects_info(songs)
+        if songs_with_labels:
+            triplets["songs of singer"] = songs_with_labels
+        players = find_object(entity, "P54", "backw")
+        players_with_labels = find_objects_info(players)
+        if players_with_labels:
+            triplets["players list"] = players_with_labels
+        triplets["entity_label"] = entity_label
+        triplets_info[entity_substr] = triplets
     return triplets_info
 
 
@@ -261,15 +338,21 @@ def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], w
             triplets_info = {}
             topic_skills_triplets_info = {}
             try:
-                for entities in query:
-                    if entities:
-                        entity_triplets_info = find_top_triplets(entities[0])
-                        triplets_info = {**triplets_info, **entity_triplets_info}
-                    for entity in entities:
-                        types = find_types(entity)
-                        if set(types).intersection(topic_skill_types):
-                            entity_triplets_info = find_top_triplets(entity)
-                            topic_skills_triplets_info = {**topic_skills_triplets_info, **entity_triplets_info}
+                for entity_info in query:
+                    if entity_info:
+                        entity_substr = entity_info.get("entity_substr", "")
+                        entity_ids = entity_info.get("entity_ids")
+                        if entity_ids:
+                            entity_triplets_info = find_top_triplets(entity_ids[0], entity_substr)
+                            triplets_info = {**triplets_info, **entity_triplets_info}
+                        for entity in entity_ids:
+                            types = find_types(entity)
+                            types_2hop = find_types_2hop(entity)
+                            if set(types).intersection(topic_skill_types) or \
+                                    set(types_2hop).intersection(topic_skill_types):
+                                entity_triplets_info = find_top_triplets(entity, entity_substr)
+                                topic_skills_triplets_info = {**topic_skills_triplets_info, **entity_triplets_info}
+                                break
             except Exception as e:
                 log.info("Wrong arguments are passed to wiki_parser")
                 sentry_sdk.capture_exception(e)

@@ -38,15 +38,15 @@ def request_entities_entitylinking(entity, types, return_raw=False,
         response = requests.post(ENTITY_LINKING_URL,
                                  json={"entity_substr": [[entity]],
                                        "template_found": [""],
-                                       "context": [""],
+                                       "context": [[""]],
                                        "entity_types": [[types]]},
                                  timeout=1).json()
         exec_time = time.time() - t
         logger.debug(f'Response from entity_linking {response} obtained with exec time {exec_time:.2f}')
         if return_raw:
             return response
-        entities = response[0][0][0]
-        probs = response[0][1][0]
+        entities = response[0][0]["entity_ids"]
+        probs = response[0][0]["confidences"]
         assert len(entities) == len(probs) and entities, response
         entities_with_conf = [(entity, conf)
                               for entity, conf in zip(entities, probs)

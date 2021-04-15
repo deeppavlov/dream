@@ -49,3 +49,7 @@ requests.post(wiki_parser_url, json = {"parser_info": ["find_label"], "query": [
 ```
 
 In the example in the list ["Q159", ""] the second element which is an empty string can be the string with the sentence.
+
+Example of wiki parser annotations:
+
+{'entities_info': {'Forrest Gump': {'genre': [['Q130232', 'drama'], ['Q157443', 'comedy film'], ['Q192881', 'tragicomedy'], ['Q21401869', 'flashback film'], ['Q2975633', 'coming-of-age story']], 'has quality': [['Q45172088', 'fails the Bechdel Test'], ['Q58483045', 'passes the reverse Bechdel Test'], ['Q93639564', 'passes the Mako Mori Test'], ['Q93985027', 'fails the Vito Russo Test']], 'instance of': [['Q11424', 'film']], 'publication date': [['"+1994-06-23^^T"', '23 June 1994'], ['"+1994-07-06^^T"', '06 July 1994'], ['"+1994-10-05^^T"', '05 October 1994'], ['"+1994-10-13^^T"', '13 October 1994'], ['"+1994-10-14^^T"', '14 October 1994']]}, 'entity_substr': 'Forrest Gump'}, 'topic_skill_entities_info': {}}

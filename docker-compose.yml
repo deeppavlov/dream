@@ -603,7 +603,7 @@ services:
         SRC_DIR: annotators/entity_linking
         COMMIT: 5b99ac3392e8e178e2bb4f9b218d4ddb2ec2e242
       context: ./
-      dockerfile: dp/dockerfile_skill_gpu
+      dockerfile: annotators/entity_linking/Dockerfile
     environment:
       - CUDA_VISIBLE_DEVICES=''
     deploy:
@@ -664,7 +664,7 @@ services:
         CONFIG: kbqa_cq_mt_bert_lite.json
         PORT: 8072
         SRC_DIR: annotators/kbqa/
-        COMMIT: 5b99ac3392e8e178e2bb4f9b218d4ddb2ec2e242
+        COMMIT: 83fa40d7f600137910c663bda9a4d81fa425fe12
       context: ./
       dockerfile: annotators/kbqa/Dockerfile
     command: flask run -h 0.0.0.0 -p 8072

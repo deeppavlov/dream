@@ -39,10 +39,17 @@ def respond():
         entities_inp = []
         try:
             if "entity_linking" in annotations:
-                entity_ids_batch, _ = annotations.get("entity_linking", [[], []])
-                for entity_ids_list in entity_ids_batch:
-                    if entity_ids_list:
-                        entities_inp.append(entity_ids_list[0])
+                entity_info_list = annotations["entity_linking"]
+                if entity_info_list:
+                    if isinstance(entity_info_list[0], dict):
+                        for entity_info in entity_info_list:
+                            if "entity_ids" in entity_info and entity_info["entity_ids"]:
+                                entities_inp.append(entity_info["entity_ids"][0])
+                    if isinstance(entity_info_list[0], list):
+                        entity_ids_batch, conf = entity_info_list
+                        for entity_ids_list in entity_ids_batch:
+                            if entity_ids_list:
+                                entities_inp.append(entity_ids_list[0])
         except Exception as e:
             sentry_sdk.capture_exception(e)
             logger.exception(e)
