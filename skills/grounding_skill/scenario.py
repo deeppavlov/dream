@@ -161,7 +161,7 @@ def generate_universal_response(dialog):
             reply = get_unused_response(intent, human_attr["grounding_skill"]["used_universal_intent_responses"])
             human_attr["grounding_skill"]["used_universal_intent_responses"] += [reply]
             confidence = UNIVERSAL_RESPONSE_CONFIDENCE
-            attr = {"response_parts": ["body"]}
+            attr = {"response_parts": ["body"], "type": "universal_response"}
             # we prefer the first found intent, as it should be semantic request
             break
     if reply == "":
@@ -170,9 +170,10 @@ def generate_universal_response(dialog):
                                         human_attr["grounding_skill"]["used_universal_intent_responses"])
             human_attr["grounding_skill"]["used_universal_intent_responses"] += [reply]
             confidence = UNIVERSAL_RESPONSE_LOW_CONFIDENCE
-            attr = {"response_parts": ["body"]}
-    if ackn:
+            attr = {"response_parts": ["body"], "type": "universal_response"}
+    if ackn and reply:
         reply = f"{ackn} {reply}"
+        attr["response_parts"] = ["acknowlegdement", "body"]
     return reply, confidence, human_attr, bot_attr, attr
 
 

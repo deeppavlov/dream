@@ -360,7 +360,9 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             # =====user intent requires particular action=====
 
             CASE = "User intent requires action."
-            if set(all_cand_intents).intersection(set(_required_actions)):
+            _is_grounding_reqda = skill_name == "grounding_skill" and cand_uttr.get("type", "") == "universal_response"
+
+            if set(all_cand_intents).intersection(set(_required_actions)) or _is_grounding_reqda:
                 # -----one of the can intent is in intents required by user-----
                 categorized_hyps, categorized_prompts = categorize_candidate(
                     cand_id, skill_name, categorized_hyps, categorized_prompts, _is_just_prompt,
