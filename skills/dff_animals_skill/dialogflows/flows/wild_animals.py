@@ -23,6 +23,8 @@ nlp = en_core_web_sm.load()
 p = inflect.engine()
 
 CONF_1 = 1.0
+CONF_2 = 0.99
+CONF_3 = 0.95
 
 
 def plural_nouns(text):
@@ -85,7 +87,7 @@ def ask_about_zoo_response(vars):
     question_zoo = "When have you been to the zoo last time?"
     response = " ".join([i_went_zoo, question_zoo])
     state_utils.save_to_shared_memory(vars, ask_about_zoo=True)
-    state_utils.set_confidence(vars, confidence=CONF_1)
+    state_utils.set_confidence(vars, confidence=CONF_3)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     logger.info(f"ask_about_zoo_response: {response}")
     return response
@@ -93,7 +95,7 @@ def ask_about_zoo_response(vars):
 
 def ask_more_details_response(vars):
     response = "What is your impression? What did you like most?"
-    state_utils.set_confidence(vars, confidence=CONF_1)
+    state_utils.set_confidence(vars, confidence=CONF_2)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     logger.info(f"ask_more_details_response: {response}")
     return response
@@ -102,7 +104,7 @@ def ask_more_details_response(vars):
 def suggest_visiting_response(vars):
     response = "A day at the zoo also encourages a healthy lifestyle while bringing family and friends together. " + \
                "It is the perfect day trip destination for any season!"
-    state_utils.set_confidence(vars, confidence=CONF_1)
+    state_utils.set_confidence(vars, confidence=CONF_2)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     logger.info(f"suggest_visiting_response: {response}")
     return response

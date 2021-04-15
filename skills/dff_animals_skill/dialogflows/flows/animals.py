@@ -33,7 +33,7 @@ breeds = json.load(open("breeds.json", 'r'))
 
 CONF_1 = 1.0
 CONF_2 = 0.98
-CONF_3 = 0.96
+CONF_3 = 0.95
 CONF_4 = 0.9
 
 
@@ -267,7 +267,7 @@ def mention_animals_response(vars):
     else:
         response = "Do you have pets?"
     state_utils.save_to_shared_memory(vars, start=True)
-    state_utils.set_confidence(vars, confidence=CONF_1)
+    state_utils.set_confidence(vars, confidence=CONF_4)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 

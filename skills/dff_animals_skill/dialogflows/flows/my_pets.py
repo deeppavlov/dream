@@ -24,6 +24,8 @@ random.shuffle(MY_CAT)
 random.shuffle(MY_DOG)
 
 CONF_1 = 1.0
+CONF_2 = 0.99
+CONF_3 = 0.95
 
 
 def about_cat_request(ngrams, vars):
@@ -165,7 +167,7 @@ def my_cat_1_response(vars):
     response = " ".join([fact, question_cat])
     state_utils.save_to_shared_memory(vars, told_about_cat=True)
     state_utils.save_to_shared_memory(vars, cat=True)
-    state_utils.set_confidence(vars, confidence=CONF_1)
+    state_utils.set_confidence(vars, confidence=CONF_2)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     logger.info(f"my_cat_1_response: {response}")
     return response
@@ -179,7 +181,7 @@ def my_cat_2_response(vars):
     question_cat = question_cat.format(random.choice(["my cat", my_pet_name]))
     response = " ".join([fact, question_cat])
     state_utils.save_to_shared_memory(vars, cat=True)
-    state_utils.set_confidence(vars, confidence=CONF_1)
+    state_utils.set_confidence(vars, confidence=CONF_2)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     logger.info(f"my_cat_2_response: {response}")
     return response
@@ -195,7 +197,7 @@ def my_cat_3_response(vars):
     else:
         response = " ".join([fact, about_dog])
     state_utils.save_to_shared_memory(vars, cat=True)
-    state_utils.set_confidence(vars, confidence=CONF_1)
+    state_utils.set_confidence(vars, confidence=CONF_3)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     logger.info(f"my_cat_3_response: {response}")
     return response
@@ -210,7 +212,7 @@ def my_dog_1_response(vars):
     response = " ".join([fact, question_dog])
     state_utils.save_to_shared_memory(vars, told_about_dog=True)
     state_utils.save_to_shared_memory(vars, dog=True)
-    state_utils.set_confidence(vars, confidence=CONF_1)
+    state_utils.set_confidence(vars, confidence=CONF_2)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     logger.info(f"my_dog_1_response: {response}")
     return response
@@ -224,7 +226,7 @@ def my_dog_2_response(vars):
     question_dog = question_dog.format(random.choice(["my dog", my_pet_name]))
     response = " ".join([fact, question_dog])
     state_utils.save_to_shared_memory(vars, dog=True)
-    state_utils.set_confidence(vars, confidence=CONF_1)
+    state_utils.set_confidence(vars, confidence=CONF_2)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     logger.info(f"my_dog_2_response: {response}")
     return response
@@ -240,7 +242,7 @@ def my_dog_3_response(vars):
     else:
         response = " ".join([fact, about_cat])
     state_utils.save_to_shared_memory(vars, dog=True)
-    state_utils.set_confidence(vars, confidence=CONF_1)
+    state_utils.set_confidence(vars, confidence=CONF_3)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     logger.info(f"my_dog_3_response: {response}")
     return response
