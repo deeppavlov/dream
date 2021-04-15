@@ -35,6 +35,11 @@ KG_ACTIVE_DEPTH = 2
 LETS_CHAT_ABOUT_CONFIDENDENCE = 0.6
 NOUNPHRASE_ENTITY_CONFIDENCE = 0.95
 KNOWLEDGE_GROUNDING_SERVICE_URL = getenv('KNOWLEDGE_GROUNDING_SERVICE_URL')
+DFF_SKILLS = [
+    "dff_travel_skill", "dff_animals_skill", "dff_food_skill", "dff_friendship_skill",
+    "dff_music_skill", "dff_sport_skill"
+]
+DFF_ANNTR_HISTORY_LEN = 1
 
 special_char_re = re.compile(r'[^0-9a-zA-Z \-\.\'\?,!]+')
 greetings_farewells_re = re.compile(join_words_in_or_pattern(["have .* day", "have .* night", ".* bye",
@@ -55,6 +60,17 @@ with open("./abbreviations_acronyms_list.txt", "r") as f:
     ABBRS = re.compile(join_words_in_or_pattern(list(f.read().splitlines())), re.IGNORECASE)
 with open("./topics_facts.json") as f:
     TOPICS_FACTS = json.load(f)
+
+
+def check_dffs(bot_uttrs):
+    flag = False
+    if len(bot_uttrs) > 1:
+        last_utt_skill = bot_uttrs[-1].get("active_skill", "")
+        last_but_one_utt_skill = bot_uttrs[-2].get("active_skill", "")
+        if last_utt_skill in DFF_SKILLS:
+            if last_but_one_utt_skill == last_utt_skill:
+                flag = True
+    return flag
 
 
 def get_named_entities(utt):
@@ -246,7 +262,11 @@ def respond():
             special_intents_flags.append(special_intents_flag)
 
             anntr_history_len = DEFAULT_ANNTR_HISTORY_LEN
-            if lets_chat_about_flag or switch_choose_topic:
+            bot_uttrs_for_dff_check = dialog["bot_utterances"][-2:] if len(dialog["bot_utterances"]) > 1 else []
+            dffs_flag = check_dffs(bot_uttrs_for_dff_check)
+            if dffs_flag:
+                anntr_history_len = DFF_ANNTR_HISTORY_LEN
+            elif lets_chat_about_flag or switch_choose_topic:
                 anntr_history_len = 0
             # if detected lets_chat is about topic from the file
             lets_chat_topic = get_lets_chat_topic(
@@ -293,9 +313,7 @@ def respond():
                 "fact_retrieval"
             )
             if retrieved_facts:
-                # get here first two facts because they have the highest fact retrieval score
-                # and annotations history is set to 0
-                for depth, fact in retrieved_facts[:TOP_N_FACTS]:
+                for depth, fact in retrieved_facts[-TOP_N_FACTS:]:
                     user_input = {
                         'checked_sentence': fact,
                         'knowledge': fact,
