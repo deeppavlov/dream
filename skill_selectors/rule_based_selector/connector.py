@@ -92,7 +92,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("grounding_skill")
 
                 skills_for_uttr += turn_on_skills(
-                    cobot_topics, cobot_dialogact_topics, user_uttr_text,
+                    cobot_topics, cobot_dialogact_topics, user_uttr_text, bot_uttr.get("text", ""),
                     available_skills=["news_api_skill", "coronavirus_skill", "dff_funfact_skill",
                                       "dff_celebrity_skill", "weather_skill"])
 
@@ -155,7 +155,14 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("dummy_skill_dialog")
 
                 # turn on topical skills based on current cobot-topics, cobot-dialogact-topics & pattern matching
-                skills_for_uttr += turn_on_skills(cobot_topics, cobot_dialogact_topics, user_uttr_text)
+                skills_for_uttr += turn_on_skills(
+                    cobot_topics, cobot_dialogact_topics, user_uttr_text, bot_uttr.get("text", ""),
+                    available_skills=['movie_skill', 'book_skill', 'news_api_skill', 'dff_food_skill',
+                                      'dff_animals_skill', 'dff_sport_skill', 'dff_music_skill',
+                                      'dff_science_skill',  # 'dff_celebrity_skill',
+                                      'game_cooperative_skill', 'weather_skill', 'dff_funfact_skill',
+                                      'dff_travel_skill', 'coronavirus_skill'
+                                      ])
 
                 # some special cases
                 if if_special_weather_turn_on(user_uttr, bot_uttr):
