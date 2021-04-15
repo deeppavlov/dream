@@ -2,22 +2,23 @@ import re
 
 from common.animals import ANIMALS_TEMPLATE, PETS_TEMPLATE
 from common.books import BOOK_PATTERN
-# from common.celebrities import CELEBRITY_COMPILED_PATTERN
+from common.celebrities import CELEBRITY_COMPILED_PATTERN
 from common.coronavirus import virus_compiled
 from common.food import FOOD_COMPILED_PATTERN
 from common.funfact import FUNFACT_COMPILED_PATTERN
 from common.game_cooperative_skill import GAMES_COMPILED_PATTERN
 from common.movies import MOVIE_COMPILED_PATTERN
 from common.music import MUSIC_COMPILED_PATTERN
-from common.news import NEWS_COMPILED_PATTERN
+from common.news import NEWS_COMPILED_PATTERN, TOPIC_NEWS_OFFER
 from common.sport import KIND_OF_SPORTS_TEMPLATE, SPORT_TEMPLATE, KIND_OF_COMPETITION_TEMPLATE, COMPETITION_TEMPLATE, \
     ATHLETE_TEMPLETE
-from common.travel import TRAVELLING_TEMPLATE
+from common.travel import TRAVELLING_TEMPLATE, HAVE_YOU_BEEN_TEMPLATE, I_HAVE_BEEN_TEMPLATE
 from common.weather import WEATHER_COMPILED_PATTERN
 
 SKILL_TOPICS = {
     "movie_skill": {
         "compiled_patterns": [MOVIE_COMPILED_PATTERN],
+        "previous_bot_patterns": [],
         "cobot_dialogact_topics": [
             "Entertainment_Movies",
             "Entertainment_General"
@@ -32,6 +33,7 @@ SKILL_TOPICS = {
     },
     "book_skill": {
         "compiled_patterns": [BOOK_PATTERN],
+        "previous_bot_patterns": [],
         "cobot_dialogact_topics": [
             "Entertainment_General",
             "Entertainment_Books"
@@ -43,6 +45,7 @@ SKILL_TOPICS = {
     },
     "news_api_skill": {
         "compiled_patterns": [NEWS_COMPILED_PATTERN],
+        "previous_bot_patterns": TOPIC_NEWS_OFFER,
         "cobot_dialogact_topics": [
         ],
         "cobot_topics": [
@@ -51,6 +54,7 @@ SKILL_TOPICS = {
     },
     "dff_food_skill": {
         "compiled_patterns": [FOOD_COMPILED_PATTERN],
+        "previous_bot_patterns": [],
         "cobot_dialogact_topics": [
         ],
         "cobot_topics": [
@@ -59,6 +63,7 @@ SKILL_TOPICS = {
     },
     "dff_animals_skill": {
         "compiled_patterns": [ANIMALS_TEMPLATE, PETS_TEMPLATE],
+        "previous_bot_patterns": [],
         "cobot_dialogact_topics": [
         ],
         "cobot_topics": [
@@ -68,6 +73,7 @@ SKILL_TOPICS = {
     "dff_sport_skill": {
         "compiled_patterns": [SPORT_TEMPLATE, KIND_OF_SPORTS_TEMPLATE, KIND_OF_COMPETITION_TEMPLATE,
                               COMPETITION_TEMPLATE, ATHLETE_TEMPLETE],
+        "previous_bot_patterns": [],
         "cobot_dialogact_topics": [
             "Sports"
         ],
@@ -77,6 +83,7 @@ SKILL_TOPICS = {
     },
     "dff_music_skill": {
         "compiled_patterns": [MUSIC_COMPILED_PATTERN],
+        "previous_bot_patterns": [],
         "cobot_dialogact_topics": [
             "Entertainment_Music"
         ],
@@ -86,6 +93,7 @@ SKILL_TOPICS = {
     },
     "dff_science_skill": {
         "compiled_patterns": [],
+        "previous_bot_patterns": [],
         "cobot_dialogact_topics": [
             "Science_and_Technology",
             "Entertainment_Books",
@@ -96,16 +104,18 @@ SKILL_TOPICS = {
             "SciTech",
         ]
     },
-    # "dff_celebrity_skill": {
-    #     "compiled_patterns": [CELEBRITY_COMPILED_PATTERN],
-    #     "cobot_dialogact_topics": [
-    #     ],
-    #     "cobot_topics": [
-    #         "Celebrities"
-    #     ]
-    # },
+    "dff_celebrity_skill": {
+        "compiled_patterns": [CELEBRITY_COMPILED_PATTERN],
+        "previous_bot_patterns": [],
+        "cobot_dialogact_topics": [
+        ],
+        "cobot_topics": [
+            "Celebrities"
+        ]
+    },
     "game_cooperative_skill": {
         "compiled_patterns": [GAMES_COMPILED_PATTERN],
+        "previous_bot_patterns": [],
         "cobot_dialogact_topics": [
             "Entertainment_General"
         ],
@@ -115,6 +125,7 @@ SKILL_TOPICS = {
     },
     "weather_skill": {
         "compiled_patterns": [WEATHER_COMPILED_PATTERN],
+        "previous_bot_patterns": [],
         "cobot_dialogact_topics": [
         ],
         "cobot_topics": [
@@ -123,6 +134,7 @@ SKILL_TOPICS = {
     },
     "dff_funfact_skill": {
         "compiled_patterns": [FUNFACT_COMPILED_PATTERN],
+        "previous_bot_patterns": [],
         "cobot_dialogact_topics": [
         ],
         "cobot_topics": [
@@ -130,6 +142,7 @@ SKILL_TOPICS = {
     },
     "dff_travel_skill": {
         "compiled_patterns": [TRAVELLING_TEMPLATE],
+        "previous_bot_patterns": [HAVE_YOU_BEEN_TEMPLATE, TRAVELLING_TEMPLATE, I_HAVE_BEEN_TEMPLATE],
         "cobot_dialogact_topics": [
         ],
         "cobot_topics": [
@@ -138,6 +151,7 @@ SKILL_TOPICS = {
     },
     "coronavirus_skill": {
         "compiled_patterns": [virus_compiled],
+        "previous_bot_patterns": [],
         "cobot_dialogact_topics": [
         ],
         "cobot_topics": [
@@ -146,7 +160,16 @@ SKILL_TOPICS = {
 }
 
 
-def turn_on_skills(cobot_topics, cobot_dialogact_topics, user_uttr_text, available_skills=None):
+def turn_on_skills(cobot_topics, cobot_dialogact_topics, user_uttr_text, prev_bot_uttr_text, available_skills=None):
+    """
+    Function to turn on skills from SKILL_TOPICS based on
+        - Cobot-topics, list of corresponding topics is in SKILL_TOPICS[skill_name][cobot_topics],
+        - Cobot-Dialogact-Topics, SKILL_TOPICS[skill_name][cobot_dialogact_topics],
+        - list of patterns (compiled or not) or strings (then ase sensitive) to search in USER utterances,
+                see SKILL_TOPICS[skill_name][compiled_patterns]
+        - list of patterns (compiled or not) or strings (then ase sensitive) to search in PREV BOT utterances,
+                see SKILL_TOPICS[skill_name][previous_bot_patterns]
+    """
     cobot_dialogact_topics = set(cobot_dialogact_topics)
     cobot_topics = set(cobot_topics)
 
@@ -155,6 +178,9 @@ def turn_on_skills(cobot_topics, cobot_dialogact_topics, user_uttr_text, availab
         if available_skills is None or (available_skills is not None and skill_name in available_skills):
             for pattern in SKILL_TOPICS[skill_name]["compiled_patterns"]:
                 if re.search(pattern, user_uttr_text):
+                    skills.append(skill_name)
+            for pattern in SKILL_TOPICS[skill_name]["previous_bot_patterns"]:
+                if re.search(pattern, prev_bot_uttr_text):
                     skills.append(skill_name)
             if set(SKILL_TOPICS[skill_name]["cobot_dialogact_topics"]) & cobot_dialogact_topics:
                 skills.append(skill_name)
