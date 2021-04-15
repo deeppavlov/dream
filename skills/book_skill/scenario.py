@@ -291,7 +291,7 @@ class BookSkillScenario:
                     logger.debug(f"We have just asked when the book was published: "
                                  f"getting name for {annotated_prev_phrase['text']}")
                     bookname, n_years_ago = get_name(annotated_prev_phrase, mode='book', bookyear=True)
-                    if bookname is None:
+                    if not bookname or not n_years_ago:
                         logger.debug('No bookname detected')
                         reply, confidence = DONT_KNOW_EITHER, self.default_conf
                     else:
