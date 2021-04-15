@@ -1,6 +1,6 @@
 FROM tensorflow/tensorflow:1.14.0-py3
 
-ARG DATA_URL=http://files.deeppavlov.ai/alexaprize_data/convert_reddit_v2.3.tar.gz
+ARG DATA_URL=http://files.deeppavlov.ai/alexaprize_data/convert_reddit_v2.3.punct.tar.gz
 
 ADD $DATA_URL /root/convert_data/
 
