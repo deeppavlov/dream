@@ -98,7 +98,8 @@ class FactRankerInfer(Component):
                             facts_with_scores.append((fact, probas[j]))
 
                 facts_with_scores = sorted(facts_with_scores, key=lambda x: x[1], reverse=True)
-                top_facts = [fact for fact, score in facts_with_scores if score > self.thres]
+                top_facts = [fact for fact, score in facts_with_scores if score > self.thres
+                             and "File" not in fact and "Image" not in fact]
             top_facts = first_par_list + top_facts
             top_facts_batch.append(top_facts[:self.facts_to_leave])
         tm2 = time.time()
