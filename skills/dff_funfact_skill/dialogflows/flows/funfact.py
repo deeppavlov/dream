@@ -1,11 +1,12 @@
 # %%
 import os
 import logging
+import random
 from enum import Enum, auto
 
 import sentry_sdk
 
-from common.funfact import funfact_requested, FUNFACT_LIST
+from common.funfact import funfact_requested, FUNFACT_LIST, make_question
 from common.constants import MUST_CONTINUE
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
@@ -46,7 +47,7 @@ simplified_dialogflow = dialogflow_extention.DFEasyFilling(State.USR_START)
 ##################################################################################################################
 # std greeting
 ##################################################################################################################
-CONF_HIGH = 0.95
+CONF_HIGH = 1.0
 
 
 def funfact_request(ngrams, vars):
@@ -57,16 +58,19 @@ def funfact_request(ngrams, vars):
     return flag
 
 
-def funfact_response(vars):
+def funfact_response(vars, shuffle=True):
     logger.info("exec funfact_response")
     state_utils.set_confidence(vars, confidence=CONF_HIGH)
     state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
     shared_memory = state_utils.get_shared_memory(vars)
     given_funfacts = shared_memory.get('given_funfacts', [])
-    for funfact in FUNFACT_LIST:
+    if shuffle:
+        random.shuffle(FUNFACT_LIST)
+    for funfact, topic in FUNFACT_LIST:
+        link_question = make_question(topic)
         if funfact not in given_funfacts:
             state_utils.save_to_shared_memory(vars, given_funfacts=given_funfacts + [funfact])
-            answer = f'{funfact} Would you like to know another fun fact?'
+            answer = f'{funfact} {link_question}'
             return answer
     state_utils.set_confidence(vars, confidence=0)
     answer = ''
