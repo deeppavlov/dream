@@ -27,11 +27,11 @@
         "sentence": "off",
         "intent": "exit"
     },
-    {   
+    {
         "sentence": "stop this bot.",
         "intent": "exit"
     },
-     {   
+     {
          "sentence": "end the chat.",
 	 "intent": "exit"
     },
@@ -475,8 +475,24 @@
       "sentence": "and in the darkness bind them",
       "intent": null
     },
-    {   
+    {
       "sentence": "it is a thought-provoking story to me",
+      "intent": null
+    },
+    {
+      "sentence": "next one",
+      "intent": null
+    },
+    {
+      "sentence": "next",
+      "intent": null
+    },
+    {
+      "sentence": "what's your cat name",
+      "intent": null
+    },
+    {
+      "sentence": "what's your dog name",
       "intent": null
     },
     {
@@ -507,11 +523,11 @@
         "sentence": "let's play sudoku",
         "intent": "cant_do"
     },
-    {   
+    {
 	"sentence": "can you stop music while we chat?",
 	"intent": "cant_do"
     },
-    {   
+    {
         "sentence": "turn off light.",
         "intent": "cant_do"
     },

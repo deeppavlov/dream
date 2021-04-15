@@ -20,11 +20,11 @@ if USE_MODEL_PATH is None:
 
 INTENT_MODEL_PATH = os.environ.get('INTENT_MODEL_PATH', None)
 if INTENT_MODEL_PATH is None:
-    INTENT_MODEL_PATH = '/data/models/linear_classifier_h2.h5'
+    INTENT_MODEL_PATH = '/data/models/linear_classifier_h3.h5'
 
 INTENT_DATA_PATH = os.environ.get('INTENT_DATA_PATH', None)
 if INTENT_DATA_PATH is None:
-    INTENT_DATA_PATH = '/data/intent_data_h2.json'
+    INTENT_DATA_PATH = '/data/intent_data_h3.json'
 
 INTENT_PHRASES_PATH = os.environ.get('INTENT_PHRASES_PATH', None)
 if INTENT_PHRASES_PATH is None:
