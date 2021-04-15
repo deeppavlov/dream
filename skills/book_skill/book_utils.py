@@ -313,8 +313,11 @@ def get_name(annotated_phrase, mode='author', bookyear=False,
                     for i in range(len(publication_year)):
                         if publication_year[i] in '0123456789' and not start_ind:
                             start_ind = i
-                    publication_year = publication_year[start_ind:start_ind + 4]
-                    n_years_ago = datetime.now().year - int(publication_year)
+                    if start_ind:
+                        publication_year = publication_year[start_ind:start_ind + 4]
+                        n_years_ago = datetime.now().year - int(publication_year)
+                    else:
+                        logger.warning(f'Wrong output {publication_year} no n_years_ago')
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
