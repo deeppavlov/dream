@@ -22,6 +22,8 @@ logger = logging.getLogger(__name__)
 breeds = json.load(open("breeds.json", 'r'))
 
 CONF_1 = 1.0
+CONF_2 = 0.99
+CONF_3 = 0.95
 
 
 def extract_pet(utt):
@@ -260,7 +262,7 @@ def ask_about_breed_response(vars):
     else:
         response = "What breed is it?"
     state_utils.save_to_shared_memory(vars, asked_breed=True)
-    state_utils.set_confidence(vars, confidence=CONF_1)
+    state_utils.set_confidence(vars, confidence=CONF_2)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
@@ -277,7 +279,7 @@ def ask_about_color_response(vars):
     else:
         response = "What color is it?"
     state_utils.save_to_shared_memory(vars, asked_color=True)
-    state_utils.set_confidence(vars, confidence=CONF_1)
+    state_utils.set_confidence(vars, confidence=CONF_2)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
@@ -294,7 +296,7 @@ def ask_about_feeding_response(vars):
     else:
         response = "How do you feed him?"
     state_utils.save_to_shared_memory(vars, asked_feeding=True)
-    state_utils.set_confidence(vars, confidence=CONF_1)
+    state_utils.set_confidence(vars, confidence=CONF_3)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
@@ -313,7 +315,7 @@ def tell_fact_about_breed_response(vars):
         response = "They are sensitive and intelligent, known for undying loyalty and the amazing ability to" + \
                    "foresee their owners’ needs."
     state_utils.save_to_shared_memory(vars, fact_about_breed=True)
-    state_utils.set_confidence(vars, confidence=CONF_1)
+    state_utils.set_confidence(vars, confidence=CONF_3)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
