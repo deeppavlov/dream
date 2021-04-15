@@ -13,7 +13,7 @@ import common.dialogflow_framework.utils.state as state_utils
 from common.universal_templates import if_chat_about_particular_topic
 from common.utils import is_yes, is_no
 from common.animals import PETS_TEMPLATE, ANIMALS_FIND_TEMPLATE, LIKE_ANIMALS_REQUESTS, WILD_ANIMALS, \
-    WHAT_PETS_I_HAVE, HAVE_LIKE_PETS_TEMPLATE, HAVE_PETS_TEMPLATE, LIKE_PETS_TEMPLATE
+    WHAT_PETS_I_HAVE, HAVE_LIKE_PETS_TEMPLATE, HAVE_PETS_TEMPLATE, LIKE_PETS_TEMPLATE, TRIGGER_PHRASES
 
 import dialogflows.scopes as scopes
 from dialogflows.flows.my_pets_states import State as MyPetsState
@@ -42,8 +42,10 @@ def lets_talk_about_request(vars):
     user_uttr = state_utils.get_last_human_utterance(vars)
     bot_uttr = state_utils.get_last_bot_utterance(vars)
     have_pets = re.search(HAVE_LIKE_PETS_TEMPLATE, user_uttr["text"])
+    found_prompt = any([phrase in bot_uttr for phrase in TRIGGER_PHRASES])
+    isyes = is_yes(user_uttr)
     chat_about = if_chat_about_particular_topic(user_uttr, bot_uttr, compiled_pattern=ANIMALS_FIND_TEMPLATE)
-    if have_pets or chat_about:
+    if have_pets or chat_about or (found_prompt and isyes):
         flag = True
     logger.info(f"lets_talk_about_request={flag}")
     return flag
@@ -72,6 +74,7 @@ def like_animals_request(ngrams, vars):
 
 def mention_animals_request(ngrams, vars):
     flag = False
+    text = state_utils.get_last_human_utterance(vars)["text"]
     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
     conceptnet = annotations.get("conceptnet", {})
     for elem, triplets in conceptnet.items():
@@ -79,6 +82,8 @@ def mention_animals_request(ngrams, vars):
             objects = triplets["SymbolOf"]
             if "animal" in objects:
                 flag = True
+    if re.search(PETS_TEMPLATE, text):
+        flag = True
     logger.info(f"mention_animals_request={flag}")
     return flag
 
@@ -144,9 +149,11 @@ def my_pets_request(ngrams, vars):
 
 def user_has_pets_request(ngrams, vars):
     flag = False
+    user_uttr = state_utils.get_last_human_utterance(vars)["text"]
+    bot_uttr = state_utils.get_last_bot_utterance(vars)["text"]
     isno = is_no(state_utils.get_last_human_utterance(vars))
-    text = state_utils.get_last_human_utterance(vars)["text"]
-    if re.search(PETS_TEMPLATE, text) and not isno:
+    isyes = is_yes(state_utils.get_last_human_utterance(vars))
+    if (re.search(PETS_TEMPLATE, user_uttr) and not isno) or (re.search(PETS_TEMPLATE, bot_uttr) and isyes):
         flag = True
     logger.info(f"user_has_pets_request={flag}")
     return flag
