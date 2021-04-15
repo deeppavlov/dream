@@ -8,7 +8,7 @@
         "(alexa ){0,1}pass that by me again",
         "(alexa ){0,1}i ((don't)|(didn't)|(do not)|(did not)) get it",
         "(alexa ){0,1}what it is about",
-        "(alexa ){0,1}what is it about", 
+        "(alexa ){0,1}what is it about",
         "i lost common ground",
         "(alexa ){0,1}what (even ){0,1}is that",
         "(i ((did not get)|(don't understand)|(don't get)) ){0,1}what do you mean( alexa){0,1}",
@@ -126,7 +126,7 @@
         "end this conversation",
         "(alexa ){0,1}talk less",
         "(alexa ){0,1}can ((you)|(we)) be done",
-        "(thank you ){0,1}(alexa ){0,1}i ((need)|(want)|(have)) to finish( up){0,1}( now){0,1}"  
+        "(thank you ){0,1}(alexa ){0,1}i ((need)|(want)|(have)) to finish( up){0,1}( now){0,1}"
       ],
         "reg_phrases": [
       	"end this conversation",
@@ -178,7 +178,7 @@
         "(alexa ){0,1}what did you just say",
         "excuse me",
         "padon me",
-        "(sorry, ){0,1}i didn't catch that"  
+        "(sorry, ){0,1}i didn't catch that"
       ],
       "min_precision": 0.94,
       "punctuation": [
@@ -632,6 +632,13 @@
   },
   "random_phrases": {
     "phrases": [
+      "next one",
+      "next",
+      "next thing",
+      "can we get it in here that",
+      "what's your cat's name",
+      "what is your dog's name",
+      "what's your pet name",
       "corona virus",
       "it's a thought-provoking story",
       "he told me a funny story",
