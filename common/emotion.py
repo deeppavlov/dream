@@ -63,7 +63,7 @@ def if_turn_on_emotion(user_utt, bot_uttr):
     emo_found_emotion = found_emotion != 'neutral' and found_prob > emo_prob_threshold
     good_emotion_prob = max([emotions.get('joy', 0), emotions.get('love', 0)])
     bad_emotion_prob = max([emotions.get('anger', 0), emotions.get('fear', 0), emotions.get('sadness', 0)])
-    not_strange_emotion_prob = not (good_emotion_prob > 0.5 and bad_emotion_prob > 0.5)
+    not_strange_emotion_prob = not (good_emotion_prob > 0.6 and bad_emotion_prob > 0.5)
     how_are_you = any([how_are_you_response.lower() in bot_uttr.get("text", "").lower()
                        for how_are_you_response in HOW_ARE_YOU_RESPONSES])
     joke_request_detected = is_joke_requested(user_utt.get("text", ""))
