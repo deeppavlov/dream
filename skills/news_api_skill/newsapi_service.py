@@ -7,7 +7,6 @@ from datetime import datetime
 from os import getenv
 
 import sentry_sdk
-from langdetect import detect
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -133,9 +132,6 @@ class CachedRequestsAPI:
             description = article.get("description", "") or ""
             if len(description) == 0:
                 continue
-            lang = detect(article.get("title", ""))
-            if lang != "en":
-                continue
             if get_nltk_sentiment(article.get("title", "")) == "negative":
                 continue
 
@@ -161,8 +157,7 @@ class CachedRequestsAPI:
                     f"result status: {resp.status_code}")
             else:
                 # each element is like `{'inappropriate': False, 'profanity': False, 'restricted_topics': False}`
-                result = [d.get("inappropriate", False) or d.get("profanity", False)
-                          for d in resp.json()[0]["batch"]][0]
+                result = [sum(d.values()) for d in resp.json()[0]["batch"]][0]
 
             if not result:
                 return article
