@@ -487,4 +487,12 @@ services:
       - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/dff-funfact-skill
       - PORT=8104
     command: ["nginx", "-g", "daemon off;"]
+  dff-bot-persona-skill:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=a72bd67cd6eb54e188e4513c1f70ab0b-771974208.us-east-1.elb.amazonaws.com/dff-bot-persona-skill
+      - PORT=8105
+    command: [ "nginx", "-g", "daemon off;" ]
 version: '3.7'

@@ -14,6 +14,7 @@ from common.sport import KIND_OF_SPORTS_TEMPLATE, SPORT_TEMPLATE, KIND_OF_COMPET
     ATHLETE_TEMPLETE
 from common.travel import TRAVELLING_TEMPLATE, HAVE_YOU_BEEN_TEMPLATE, I_HAVE_BEEN_TEMPLATE
 from common.weather import WEATHER_COMPILED_PATTERN
+from common.bot_persona import YOUR_FAVORITE_COMPILED_PATTERN
 
 SKILL_TOPICS = {
     "movie_skill": {
@@ -157,6 +158,14 @@ SKILL_TOPICS = {
         "cobot_topics": [
         ]
     },
+    "dff_bot_persona_skill": {
+        "compiled_patterns": [YOUR_FAVORITE_COMPILED_PATTERN],
+        "previous_bot_patterns": [],
+        "cobot_dialogact_topics": [
+        ],
+        "cobot_topics": [
+        ]
+    }
 }
 
 

@@ -432,4 +432,11 @@ services:
       - "./common:/src/common"
     ports:
       - 8104:8104
+  dff-bot-persona-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_bot_persona_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8105:8105
 version: "3.7"

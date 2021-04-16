@@ -689,6 +689,11 @@ def dff_food_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, service_name)
 
 
+def dff_bot_persona_skill_formatter(dialog: Dict) -> List[Dict]:
+    service_name = f"dff_bot_persona_skill"
+    return utils.dff_formatter(dialog, service_name)
+
+
 def game_cooperative_skill_formatter(dialog: Dict):
     dialog = utils.get_last_n_turns(dialog)
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
