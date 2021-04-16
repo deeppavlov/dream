@@ -170,6 +170,8 @@ services:
     env_file: [ .env.dev ]
   fact-retrieval:
     env_file: [ .env.dev ]
+  dff-bot-persona-skill:
+    env_file: [ .env.dev ]
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:

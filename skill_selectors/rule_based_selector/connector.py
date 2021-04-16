@@ -161,7 +161,7 @@ class RuleBasedSkillSelectorConnector:
                                       'dff_animals_skill', 'dff_sport_skill', 'dff_music_skill',
                                       'dff_science_skill',  # 'dff_celebrity_skill',
                                       'game_cooperative_skill', 'weather_skill', 'dff_funfact_skill',
-                                      'dff_travel_skill', 'coronavirus_skill'
+                                      'dff_travel_skill', 'coronavirus_skill', "dff_bot_persona_skill",
                                       ])
 
                 # some special cases

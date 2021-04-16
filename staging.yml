@@ -272,6 +272,10 @@ services:
     image: ${DOCKER_REGISTRY}/dff-funfact-skill:${VERSION}
     env_file:
       - ${ENV_FILE}
+  dff-bot-persona-skill:
+    image: ${DOCKER_REGISTRY}/dff-bot-persona-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
 volumes:
   external-logs:
   external-deeppavlov:
