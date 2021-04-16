@@ -39,13 +39,18 @@ def extract_pet(utt):
 
 
 def retrieve_and_save(vars):
-    text = state_utils.get_last_human_utterance(vars)["text"]
+    user_uttr = state_utils.get_last_human_utterance(vars)["text"]
+    bot_uttr = state_utils.get_last_bot_utterance(vars)["text"]
+    isyes = is_yes(state_utils.get_last_human_utterance(vars))
     shared_memory = state_utils.get_shared_memory(vars)
     found_users_pet = shared_memory.get("users_pet", "")
     if not found_users_pet:
-        found_users_pet = extract_pet(text)
+        found_users_pet = extract_pet(user_uttr)
+        found_pet_bot_uttr = extract_pet(bot_uttr)
         if found_users_pet:
             state_utils.save_to_shared_memory(vars, users_pet=found_users_pet)
+        if found_pet_bot_uttr and isyes:
+            state_utils.save_to_shared_memory(vars, users_pet=found_pet_bot_uttr)
     return found_users_pet
 
 
@@ -96,6 +101,7 @@ def what_pets_request(ngrams, vars):
     user_has = re.findall("i (have|had)", user_uttr)
     mention_pet = re.findall(PETS_TEMPLATE, user_uttr)
     asked_about_pets = "do you have pets" in bot_uttr.lower()
+    logger.info(f"what_pets_request, {asked_about_pets}, {isyes}, {user_has}, {mention_pet}")
     if asked_about_pets and (isyes or user_has) and not mention_pet:
         flag = True
     logger.info(f"what_pets_request={flag}")
@@ -179,18 +185,18 @@ def ask_about_color_request(ngrams, vars):
     return flag
 
 
-def ask_about_feeding_request(ngrams, vars):
+def ask_more_info_request(ngrams, vars):
     flag = False
     bot_uttr = state_utils.get_last_bot_utterance(vars)["text"]
     user_uttr = state_utils.get_last_human_utterance(vars)["text"]
     shared_memory = state_utils.get_shared_memory(vars)
     found_pet = re.findall(PETS_TEMPLATE, user_uttr)
     users_pet = shared_memory.get("users_pet", "")
-    asked_feeding = shared_memory.get("asked_feeding", False)
+    asked_more_info = shared_memory.get("asked_more_info", False)
     isno = is_no(state_utils.get_last_human_utterance(vars))
     user_has_not = (re.findall("do you have a (cat|dog)", bot_uttr, re.IGNORECASE) and isno) and not \
         re.findall(PETS_TEMPLATE, user_uttr)
-    if not user_has_not and not asked_feeding and (found_pet or users_pet) and "feed" not in user_uttr:
+    if not user_has_not and not asked_more_info and (found_pet or users_pet) and "feed" not in user_uttr:
         flag = True
     logger.info(f"ask_about_feeding_request={flag}")
     return flag
@@ -284,18 +290,18 @@ def ask_about_color_response(vars):
     return response
 
 
-def ask_about_feeding_response(vars):
+def ask_more_info_response(vars):
     found_users_pet = retrieve_and_save(vars)
     found_users_pet_name = retrieve_and_save_name(vars)
+    sentence = "It is very interesting."
     if found_users_pet:
-        pet_phrase = choose_pet_phrase(vars, found_users_pet)
         if found_users_pet_name:
-            response = f"{pet_phrase} How do you feed {found_users_pet_name}?"
+            response = f"{sentence} Could you tell more about {found_users_pet_name}?"
         else:
-            response = f"{pet_phrase} How do you feed your {found_users_pet}?"
+            response = f"{sentence} Could you tell more about {found_users_pet}?"
     else:
-        response = "How do you feed him?"
-    state_utils.save_to_shared_memory(vars, asked_feeding=True)
+        response = "{sentence} Could you tell more about your pet?"
+    state_utils.save_to_shared_memory(vars, asked_more_info=True)
     state_utils.set_confidence(vars, confidence=CONF_3)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
@@ -356,7 +362,7 @@ simplified_dialog_flow.add_user_serial_transitions(
         UserPetsState.SYS_ASK_ABOUT_NAME: ask_about_name_request,
         UserPetsState.SYS_WHAT_BREED: ask_about_breed_request,
         UserPetsState.SYS_WHAT_COLOR: ask_about_color_request,
-        UserPetsState.SYS_ASK_ABOUT_FEEDING: ask_about_feeding_request,
+        UserPetsState.SYS_ASK_MORE_INFO: ask_more_info_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
 )
@@ -366,7 +372,7 @@ simplified_dialog_flow.add_user_serial_transitions(
     {
         UserPetsState.SYS_WHAT_BREED: ask_about_breed_request,
         UserPetsState.SYS_WHAT_COLOR: ask_about_color_request,
-        UserPetsState.SYS_ASK_ABOUT_FEEDING: ask_about_feeding_request,
+        UserPetsState.SYS_ASK_MORE_INFO: ask_more_info_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
 )
@@ -383,7 +389,7 @@ simplified_dialog_flow.add_user_serial_transitions(
     {
         UserPetsState.SYS_ASK_ABOUT_NAME: ask_about_name_request,
         UserPetsState.SYS_WHAT_COLOR: ask_about_color_request,
-        UserPetsState.SYS_ASK_ABOUT_FEEDING: ask_about_feeding_request,
+        UserPetsState.SYS_ASK_MORE_INFO: ask_more_info_request,
         UserPetsState.SYS_TELL_FACT_ABOUT_BREED: tell_fact_about_breed_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
@@ -394,13 +400,13 @@ simplified_dialog_flow.add_user_serial_transitions(
     {
         UserPetsState.SYS_ASK_ABOUT_NAME: ask_about_name_request,
         UserPetsState.SYS_WHAT_BREED: ask_about_breed_request,
-        UserPetsState.SYS_ASK_ABOUT_FEEDING: ask_about_feeding_request,
+        UserPetsState.SYS_ASK_MORE_INFO: ask_more_info_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
 )
 
 simplified_dialog_flow.add_user_serial_transitions(
-    UserPetsState.USR_ASK_ABOUT_FEEDING,
+    UserPetsState.USR_ASK_MORE_INFO,
     {
         UserPetsState.SYS_WHAT_BREED: ask_about_breed_request,
         UserPetsState.SYS_WHAT_COLOR: ask_about_color_request,
@@ -420,8 +426,8 @@ simplified_dialog_flow.add_system_transition(UserPetsState.SYS_WHAT_BREED, UserP
                                              ask_about_breed_response, )
 simplified_dialog_flow.add_system_transition(UserPetsState.SYS_WHAT_COLOR, UserPetsState.USR_WHAT_COLOR,
                                              ask_about_color_response, )
-simplified_dialog_flow.add_system_transition(UserPetsState.SYS_ASK_ABOUT_FEEDING, UserPetsState.USR_ASK_ABOUT_FEEDING,
-                                             ask_about_feeding_response, )
+simplified_dialog_flow.add_system_transition(UserPetsState.SYS_ASK_MORE_INFO, UserPetsState.USR_ASK_MORE_INFO,
+                                             ask_more_info_response, )
 simplified_dialog_flow.add_system_transition(UserPetsState.SYS_TELL_FACT_ABOUT_BREED,
                                              UserPetsState.USR_TELL_FACT_ABOUT_BREED, tell_fact_about_breed_response, )
 
@@ -437,8 +443,8 @@ simplified_dialog_flow.set_error_successor(UserPetsState.SYS_WHAT_BREED, UserPet
 simplified_dialog_flow.set_error_successor(UserPetsState.SYS_WHAT_COLOR, UserPetsState.SYS_ERR)
 simplified_dialog_flow.set_error_successor(UserPetsState.USR_WHAT_BREED, UserPetsState.SYS_ERR)
 simplified_dialog_flow.set_error_successor(UserPetsState.USR_WHAT_COLOR, UserPetsState.SYS_ERR)
-simplified_dialog_flow.set_error_successor(UserPetsState.SYS_ASK_ABOUT_FEEDING, UserPetsState.SYS_ERR)
-simplified_dialog_flow.set_error_successor(UserPetsState.USR_ASK_ABOUT_FEEDING, UserPetsState.SYS_ERR)
+simplified_dialog_flow.set_error_successor(UserPetsState.SYS_ASK_MORE_INFO, UserPetsState.SYS_ERR)
+simplified_dialog_flow.set_error_successor(UserPetsState.USR_ASK_MORE_INFO, UserPetsState.SYS_ERR)
 simplified_dialog_flow.set_error_successor(UserPetsState.SYS_TELL_FACT_ABOUT_BREED, UserPetsState.SYS_ERR)
 simplified_dialog_flow.set_error_successor(UserPetsState.USR_TELL_FACT_ABOUT_BREED, UserPetsState.SYS_ERR)
 

@@ -111,6 +111,7 @@ def suggest_visiting_response(vars):
 
 
 def why_do_you_like_response(vars):
+    text = state_utils.get_last_human_utterance(vars)["text"]
     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
     conceptnet = annotations.get("conceptnet", {})
     found_animal = ""
@@ -120,6 +121,10 @@ def why_do_you_like_response(vars):
             if "animal" in objects:
                 found_animal = elem
                 found_animal = plural_nouns(found_animal)
+    if not found_animal:
+        animal = re.findall("i like (.*?)", text)
+        if animal and len(animal[0].split()) <= 3:
+            found_animal = animal[0]
     if found_animal:
         response = f"Cool! Why do you like {found_animal}?"
     else:
