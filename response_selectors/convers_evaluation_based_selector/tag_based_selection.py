@@ -38,14 +38,17 @@ LINK_TO_PHRASES = sum([list(list_el) for list_el in skills_phrases_map.values()]
 
 # this is a list of skills which are not one-lines
 ACTIVE_SKILLS = [
-    "book_skill", "christmas_new_year_skill", "coronaviruse_skill", "dummy_skill_dialog",
+    "book_skill", "christmas_new_year_skill", "coronavirus_skill", "dummy_skill_dialog",
     "emotion_skill", "game_cooperative_skill",  # "knowledge_grounding_skill",
     "meta_script_skill", "movie_skill", "news_api_skill", "oscar_skill", "personal_info_skill",
-    "reddit_ner_skill", "short_story_skill", "superbowl_skill",  # "small_talk_skill",
-    "valentines_dat_skill", "weather_skill", "wikidata_dial_skill",  # "friendship_skill", "dff_friendship_skill",
+    "reddit_ner_skill", "short_story_skill", "superbowl_skill",  #
+    "valentines_dat_skill", "weather_skill", "wikidata_dial_skill",  #
     "comet_dialog_skill",
     "dff_animals_skill", "dff_food_skill", "dff_music_skill", "dff_sport_skill", "dff_travel_skill",
     "dff_celebrity_skill",
+]
+ALMOST_ACTIVE_SKILLS = [
+    "small_talk_skill", "friendship_skill", "dff_friendship_skill",
 ]
 CAN_NOT_BE_DISLIKED_SKILLS = ["meta_script_skill", "personal_info_skill"]
 NOT_ADD_PROMPT_SKILLS = ["alexa_handler", "intent_responder", "misheard_asr", "program_y_dangerous"]
@@ -264,7 +267,8 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
     _prev_prev_active_skill = dialog["bot_utterances"][-2]["active_skill"] if len(dialog["bot_utterances"]) > 1 else ""
     _no_script_two_times_in_a_row = False
     if _prev_active_skill and _prev_prev_active_skill:
-        if _prev_active_skill not in ACTIVE_SKILLS and _prev_prev_active_skill not in ACTIVE_SKILLS:
+        if all([skill not in ACTIVE_SKILLS + ALMOST_ACTIVE_SKILLS
+                for skill in [_prev_active_skill, _prev_prev_active_skill]]):
             _no_script_two_times_in_a_row = True
     disliked_skills = get_updated_disliked_skills(dialog, can_not_be_disliked_skills=CAN_NOT_BE_DISLIKED_SKILLS)
 
@@ -410,8 +414,6 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         elif cand_uttr["confidence"] >= 1.:
             # -------------------- SUPER CONFIDENCE CASE HERE! --------------------
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
-        if _is_just_prompt and _no_script_two_times_in_a_row:
-            categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
 
         if cand_uttr["skill_name"] == "grounding_skill" and "acknowledgement" in cand_uttr.get("response_parts", []):
             acknowledgement_hypothesis = deepcopy(cand_uttr)
@@ -454,11 +456,14 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
                     f"Do NOT add prompt.")
         pass
     elif sum(categorized_prompts.values(), []):
+        # best cand is 3d times in a row not scripted skill, let's append linkto
+        _is_best_not_script = best_candidate["skill_name"] not in ACTIVE_SKILLS + ALMOST_ACTIVE_SKILLS
+
         # need to add some prompt, and have a prompt
         _add_prompt_forcibly = best_candidate["skill_name"] == _prev_active_skill and _is_active_skill_can_not_continue
         _add_prompt_forcibly = _add_prompt_forcibly and not _contains_entities
 
-        if _add_prompt_forcibly or prompt_decision():
+        if _add_prompt_forcibly or prompt_decision() or (_no_script_two_times_in_a_row and _is_best_not_script):
             logger.info(f"Decided to add a prompt to the best candidate.")
             best_prompt_id = pickup_best_id(categorized_prompts, candidates, curr_single_scores, bot_utterances)
             # as we have only one active skill, let's consider active skill as that one providing prompt
