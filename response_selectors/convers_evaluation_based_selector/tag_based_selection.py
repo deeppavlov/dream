@@ -348,9 +348,9 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             # user wants to chat about particular topic
 
             CASE = "User wants to talk about topic."
-            # in this case we do not give priority to previously active skill
+            # in this case we do not give priority to previously active skill (but give to must continue skill!)
             # because now user wants to talk about something particular
-            _is_active_skill = False
+            _is_active_skill = cand_uttr.get("can_continue", "") == MUST_CONTINUE
             categorized_hyps, categorized_prompts = categorize_candidate(
                 cand_id, skill_name, categorized_hyps, categorized_prompts, _is_just_prompt,
                 _is_active_skill, _can_continue, _same_topic_entity, _is_dialog_abandon,
