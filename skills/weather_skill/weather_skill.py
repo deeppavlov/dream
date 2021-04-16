@@ -11,7 +11,7 @@ from common.link import link_to, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED
 from common.weather import is_weather_for_homeland_requested, is_weather_without_city_requested, \
     WEATHER_COMPILED_PATTERN, ASK_WEATHER_SKILL_PHRASE
 from common.universal_templates import if_chat_about_particular_topic
-from common.utils import get_entities, get_intents
+from common.utils import get_intents, get_named_locations
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -92,23 +92,13 @@ class DialogDataManager():
             # by default provide location extraction from last reply
             utterance_dict = self.get_last_utterance_dict()
 
-        # ### Alternative GEO extractor:
-        city = city_slot_obj(utterance_dict['text'])
-        if not city:
-            # if not extracted lets try to grab from NER?
-            city = None
-            # logger.info("entities in lastest annotation:")
-            # logger.info(annotations.get("ner",[]))
-            for ent in get_entities(utterance_dict, only_named=True, with_labels=True):
-                if ent['type'] == "LOC":
-                    city = ent['text']
-                    # TODO normalize city...?
-                    # TODO validate city?
+        locations = get_named_locations(utterance_dict)
+        if locations:
+            city = locations[-1]
+        else:
+            city = ""
 
-        # TODO No NER detected location case?
-        # TODO detect from keywords search
         logger.info(f"Extracted city `{city}` from user utterance.")
-        city = city or ''
         if city.lower().strip() not in blacklist_cities:
             return city
         else:
