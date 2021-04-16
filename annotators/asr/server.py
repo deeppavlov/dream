@@ -37,7 +37,7 @@ def is_asr_trustable(human_utterances, cur_asr_confidence):
     is_cur_low = cur_asr_confidence == "very_low"
     cur_text = substitute_nonwords(human_utterances[-1]['text'].lower())
     prev_human_utt = substitute_nonwords(human_utterances[-2]['text'].lower())
-    is_prev_low = human_utterances[-2]["annotations"]["asr"]["asr_confidence"] == "very_low"
+    is_prev_low = human_utterances[-2]["annotations"].get("asr", {}).get("asr_confidence", "undefined") == "very_low"
     identical_utts = cur_text == prev_human_utt
     both_has_very_low_asr = is_cur_low and is_prev_low
     not_trustable = both_has_very_low_asr or identical_utts
