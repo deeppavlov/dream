@@ -258,6 +258,52 @@ def find_objects_info(objects):
     return objects_info
 
 
+def extract_info():
+    art_genres = [["film", "Q201658", ["Q11424"], "actor", "P161"],
+                  ["tv series", "Q15961987", ["Q5398426"], "tv actor", "P161"],
+                  ["song", "Q188451", ["Q134556", "Q7366"], "singer", "P175"],
+                  ["album", "Q188451", ["Q482994", "Q208569"], "", "P175"],
+                  ["book", "Q192239", ["Q7725634"], "writer", "P50"],
+                  ["athlete", "Q31629", ["Q5"], "", ""],
+                  ["team", "Q31629", ["Q20639856", "Q12973014"], "", ""]
+                  ]
+    art_genres_dict = {}
+    people_genres_dict = {}
+    for art_type, genre_type, types, occupation, rel in art_genres:
+        genres_list = find_object(genre_type, "P31", "backw")
+        genre_labels_list = find_objects_info(genres_list)
+        genre_dict = {}
+        people_dict = {}
+        for genre, genre_label in genre_labels_list:
+            art_objects = find_object(genre, "P136", "backw")
+            art_objects = [obj for obj in art_objects if set(types).intersection(find_types_2hop(obj))]
+            art_objects_with_scores = []
+            if occupation:
+                people_list = []
+                for obj in art_objects:
+                    tr, cnt = document.search_triples(f"http://we/{obj}", "", "")
+                    art_objects_with_scores.append((obj, cnt))
+                    people = find_object(obj, rel, "forw")
+                    people_list += people
+
+                people_with_scores = []
+                for man in people_list:
+                    tr, cnt = document.search_triples(f"http://we/{man}", "", "")
+                    people_with_scores.append((man, cnt))
+                people_with_scores = sorted(people_with_scores, key=lambda x: x[1], reverse=True)
+                people_labels = find_objects_info(people_with_scores[:10])
+                people_dict[genre] = people_labels
+
+            art_objects_with_scores = sorted(art_objects_with_scores, key=lambda x: x[1], reverse=True)
+            art_objects_labels = find_objects_info(art_objects_with_scores[:10])
+
+            genre_dict[genre] = art_objects_labels
+        art_genres_dict[art_type] = genre_dict
+        if occupation:
+            people_genres_dict[occupation] = people_dict
+    return art_genres_dict, people_genres_dict
+
+
 def find_top_triplets(entity, entity_substr):
     triplets_info = {}
     if entity.startswith("Q"):
@@ -320,6 +366,22 @@ def find_top_triplets(entity, entity_substr):
     return triplets_info
 
 
+def find_objects_by_category(what_to_find, category, subject):
+    objects = []
+    if category == "film" and what_to_find == "actors":
+        objects = find_object(subject, "P161", "forw")
+    elif category == "tv series" and what_to_find == "actors":
+        objects = find_object(subject, "P161", "forw")
+    elif category == "tv series" and what_to_find == "episode":
+        objects = find_object(subject, "P179", "backw")
+    else:
+        pass
+    objects_with_labels = find_objects_info(objects[:10])
+    return objects_with_labels
+
+
+genres_dict, people_genres_dict = extract_info()
+
 manager = mp.Manager()
 
 
@@ -369,6 +431,30 @@ def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], w
                             entity_triplets_info = find_top_triplets(entity)
                             triplets_info = {**triplets_info, **entity_triplets_info}
             wiki_parser_output.append(triplets_info)
+        elif parser_info == "find_topic_info":
+            objects = []
+            try:
+                if "genre" in query and "category" in query:
+                    genre = query["genre"]
+                    category = query["category"]
+                    if category in {"actor", "singer", "tv actor", "writer"}:
+                        if category in people_genres_dict and genre in people_genres_dict[category]:
+                            objects = people_genres_dict[category][genre]
+                    else:
+                        if category in genres_dict and genre in genres_dict[category]:
+                            objects = genres_dict[category][genre]
+                elif "what_to_find" in query and "category" in query and "subject" in query:
+                    what_to_find = query["what_to_find"]
+                    category = query["category"]
+                    subject = query["subject"]
+                    objects = find_objects_by_category(what_to_find, category, subject)
+                else:
+                    log.debug("unsupported query type")
+            except Exception as e:
+                log.info("Wrong arguments are passed to wiki_parser")
+                sentry_sdk.capture_exception(e)
+                log.exception(e)
+            wiki_parser_output.append(objects)
         elif parser_info == "find_object":
             objects = []
             try:
