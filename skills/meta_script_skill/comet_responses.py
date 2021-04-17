@@ -10,10 +10,10 @@ from random import choice, shuffle
 
 from common.constants import CAN_NOT_CONTINUE
 from common.universal_templates import join_words_in_or_pattern
-from common.utils import is_opinion_request, get_skill_outputs_from_dialog, get_topics, get_entities
+from common.utils import is_opinion_request, get_skill_outputs_from_dialog, get_entities
 from common.greeting import dont_tell_you_answer
 from utils import get_used_attributes_by_name, get_comet_atomic, TOP_100_FREQUENT_WORDS, get_all_not_used_templates, \
-    get_comet_conceptnet, get_nltk_sentiment, get_not_used_template
+    get_comet_conceptnet, get_nltk_sentiment, get_not_used_template, TOP_1k_FREQUENT_WORDS
 from constants import idopattern, DEFAULT_ASK_ATOMIC_QUESTION_CONFIDENCE, DEFAULT_ATOMIC_CONTINUE_CONFIDENCE, \
     ATOMIC_PAST_QUESTION_TEMPLATES, ATOMIC_FUTURE_QUESTION_TEMPLATES, \
     ATOMIC_COMMENT_TEMPLATES, CONCEPTNET_OPINION_TEMPLATES, OPINION_EXPRESSION_TEMPLATES, \
@@ -97,7 +97,7 @@ def ask_question_using_atomic(dialog):
                 dialog["bot_utterances"][-1]["active_skill"] in ["greeting_skill", "dff_friendship_skill"]:
             logger.info("Greeting skill asked personal questions and answer was not like `nothing`.")
             idosents = dialog["human_utterances"][-1]["annotations"].get("sentseg", {}).get("segments", [""])
-            if len(idosents) == 1 and len(idosents[0].split()) <= 2:
+            if len(idosents) == 1 and len(idosents[0].split()) == 1 and idosents[0] not in TOP_1k_FREQUENT_WORDS:
                 idosents = [f"I like {idosents[0]}"]
 
     if len(idosents) > 0:
@@ -281,25 +281,13 @@ def express_opinion_using_conceptnet(dialog):
         if response == "":
             continue
 
-        cobot_dialogact_topics = get_topics(dialog['human_utterances'][-1], which="cobot_dialogact_topics")
-        is_scripted_topic = any([topic in cobot_dialogact_topics
-                                 for topic in ["Entertainment_Movies", "Entertainment_Books"]])
-        if is_opinion_request(dialog["human_utterances"][-1]) and not is_scripted_topic:
+        if is_opinion_request(dialog["human_utterances"][-1]):
             confidence = REQUESTED_CONCEPTNET_OPINION_CONFIDENCE
-        elif is_opinion_request(dialog["human_utterances"][-1]):
-            # opinion request on scripted topics
-            confidence = NOT_REQUESTED_CONCEPTNET_OPINION_CONFIDENCE
-        elif not dont_tell_you_answer(dialog["human_utterances"][-1]) and len(dialog["bot_utterances"]) > 0 and \
-                dialog["bot_utterances"][-1]["active_skill"] in ["greeting_skill", "dff_friendship_skill"]:
+        elif not dont_tell_you_answer(dialog["human_utterances"][-1]):
             confidence = NOT_REQUESTED_CONCEPTNET_OPINION_CONFIDENCE
         else:
             response = ""
             confidence = 0.
-            # if "time" in get_comet_conceptnet(nounphrase, "IsA", return_all=True, return_not_filtered=True):
-            #     logger.info("Noun is defined as `time`. Skip it.")
-            #     continue
-            # else:
-            #     confidence = NOT_REQUESTED_CONCEPTNET_OPINION_CONFIDENCE
 
         attr["conceptnet_dialog"] = "express_opinion"
         attr["conceptnet_opinion_object"] = nounphrase
