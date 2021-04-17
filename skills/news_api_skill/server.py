@@ -19,7 +19,7 @@ from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE, 
 from common.link import link_to, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED
 from common.metrics import setup_metrics
 from common.news import OFFER_BREAKING_NEWS, OFFERED_BREAKING_NEWS_STATUS, \
-    OFFERED_NEWS_DETAILS_STATUS, OPINION_REQUEST_STATUS, WHAT_TYPE_OF_NEWS, OFFER_TOPIC_SPECIFIC_NEWS, \
+    OFFERED_NEWS_DETAILS_STATUS, OPINION_REQUEST_STATUS, WHAT_TYPE_OF_NEWS, SAY_TOPIC_SPECIFIC_NEWS, \
     OFFER_TOPIC_SPECIFIC_NEWS_STATUS, OFFERED_NEWS_TOPIC_CATEGORIES_STATUS, was_offer_news_about_topic
 from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, COMPILE_SWITCH_TOPIC, \
     if_chat_about_particular_topic
@@ -361,9 +361,10 @@ def respond():
                         confidence = 0.
                         attr = {}
                 else:
-                    response = OFFER_TOPIC_SPECIFIC_NEWS.replace("TOPIC", curr_topic)
+                    response = SAY_TOPIC_SPECIFIC_NEWS.replace("TOPIC", curr_topic)
+                    response = f"{response} {result['title']}.. {OFFER_MORE}"
                     confidence = LINKTO_CONFIDENCE
-                    attr = {"news_status": OFFER_TOPIC_SPECIFIC_NEWS_STATUS, "news_topic": curr_topic,
+                    attr = {"news_status": OFFERED_NEWS_DETAILS_STATUS, "news_topic": curr_topic,
                             "curr_news": result, "can_continue": CAN_CONTINUE_SCENARIO}
                     if attr["curr_news"]["url"] not in human_attr["news_api_skill"]["discussed_news"]:
                         human_attr["news_api_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
