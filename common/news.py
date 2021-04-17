@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 # this way news skill offers latest news when nothing specific found
 OFFER_BREAKING_NEWS = "Would you like to hear the latest news?"
 OFFER_TOPIC_SPECIFIC_NEWS = "Would you like to hear news about TOPIC?"
+SAY_TOPIC_SPECIFIC_NEWS = "Talking about TOPIC. I've recently heard that"
 # statuses in attributes for news skill
 OFFER_TOPIC_SPECIFIC_NEWS_STATUS = "offered_specific_news"
 OFFERED_BREAKING_NEWS_STATUS = "offered_breaking_news"
