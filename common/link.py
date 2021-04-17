@@ -10,7 +10,6 @@ import common.movies as movies
 import common.emotion as emotion
 import common.weather as weather
 import common.personal_info as personal_info
-import common.meta_script as meta_script
 import common.game_cooperative_skill as game_cooperative_skill
 import common.travel as dff_travel_skill
 # import common.celebrities as dff_celebrity_skill
@@ -32,8 +31,6 @@ skills_phrases_map = {
     'emotion_skill': set(emotion.skill_trigger_phrases()),
     'weather_skill': set(weather.skill_trigger_phrases()),
     'personal_info_skill': set(personal_info.skill_trigger_phrases()),
-    'meta_script_skill': set(meta_script.skill_trigger_phrases()),
-    # 'short_story_skill': set(short_story.skill_trigger_phrases()),
     'game_cooperative_skill': set(game_cooperative_skill.skill_trigger_phrases()),
     # TODO: Add smalltalk skill phrases that is not identical to meta_script_skill
     'dff_travel_skill': set(dff_travel_skill.skill_trigger_phrases()),
@@ -59,7 +56,11 @@ LIST_OF_SCRIPTED_TOPICS = {
 
 SKILLS_FOR_LINKING = set(skills_phrases_map.keys())
 
-LOW_RATED_SKILLS = {"emotion_skill", "weather_skill", "personal_info_skill", "meta_script_skill"}
+LOW_RATED_SKILLS = {
+    "emotion_skill",
+    "weather_skill",
+    "personal_info_skill",
+}
 SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED = set(skills_phrases_map.keys()).difference(LOW_RATED_SKILLS)
 
 # assuming that all skills weights are equal to 1 by default
