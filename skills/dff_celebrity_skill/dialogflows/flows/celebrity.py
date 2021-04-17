@@ -25,15 +25,14 @@ logger = logging.getLogger(__name__)
 ENTITY_LINKING_URL = getenv("ENTITY_LINKING_URL")
 assert ENTITY_LINKING_URL is not None
 
-CONF_HIGH = 0.95
-CONF_MEDIUM = 0.85
+CONF_HIGH = 1
+CONF_MEDIUM = 0.95
 CONF_LOW = 0.75
 
 
 class State(Enum):
     USR_START = auto()
     USR_FAVOURITE_CELEBRITY = auto()
-    USR_ASK_ANOTHER_FACT = auto()
     USR_ANSWERS_QUESTION = auto()
     USR_TELLS_SOMETHING = auto()
     USR_TELLS_A_FILM = auto()
@@ -147,7 +146,9 @@ def get_cobot_fact(celebrity_name, given_facts):
     logger.debug(f'Calling cobot_fact for {celebrity_name} {given_facts}')
     answer = send_cobotqa(f'fact about {celebrity_name}')
     if answer is None:
-        logger.debug('Answer from cobotqa not obtained')
+        error_message = f'Answer from cobotqa or fact about {celebrity_name} not obtained'
+        logger.error(error_message)
+        sentry_sdk.capture_exception(Exception(error_message))
         return None
     for phrase_ in ['This might answer your question', 'According to Wikipedia']:
         if phrase_ in answer:
@@ -163,14 +164,10 @@ def get_celebrity(vars, exclude_types=False, use_only_last_utt=False):
     # if 'agent' not in vars:
     #     vars = {'agent': vars}
     shared_memory = state_utils.get_shared_memory(vars)
-    last_utterance_with_celebrity = shared_memory.get("last_utterance_with_celebrity", {"annotations": {}, "text": ""})
-    dialog = vars["agent"]['dialog']
-    if use_only_last_utt:
-        utterances_to_iterate = [state_utils.get_last_human_utterance(vars)]
-    else:
-        utterances_to_iterate = dialog["human_utterances"][::-1] + [last_utterance_with_celebrity]
-    texts_to_iterate = [j['text'] for j in utterances_to_iterate]
-    logger.debug(f'Calling get_celebrity on {texts_to_iterate} exclude_types {exclude_types} {use_only_last_utt}')
+    last_wp = shared_memory.get("last_wp", {"wiki_parser": {}})
+    # dialog = vars["agent"]['dialog']
+    human_utterance = state_utils.get_last_human_utterance(vars)
+    logger.debug(f'Calling get_celebrity on {human_utterance["text"]} {exclude_types} {use_only_last_utt}')
     raw_profession_list = ['Q33999',  # actor
                            "Q10800557",  # film actor
                            "Q10798782",  # television actor
@@ -187,20 +184,25 @@ def get_celebrity(vars, exclude_types=False, use_only_last_utt=False):
     mentioned_otherjobs = shared_memory.get('mentioned_otherjobs', [])
     if exclude_types:
         raw_profession_list = raw_profession_list + mentioned_otherjobs
-    for human_utterance in utterances_to_iterate:
+    celebrity_name, celebrity_type, celebrity_raw_type = get_types_from_annotations(
+        human_utterance['annotations'], tocheck_relation='occupation',
+        types=raw_profession_list, exclude_types=exclude_types)
+    met_actor = celebrity_raw_type in actor_profession_list
+    if not celebrity_name:
         celebrity_name, celebrity_type, celebrity_raw_type = get_types_from_annotations(
-            human_utterance['annotations'], tocheck_relation='occupation',
+            last_wp, tocheck_relation='occupation',
             types=raw_profession_list, exclude_types=exclude_types)
-        if exclude_types:
-            state_utils.save_to_shared_memory(vars, mentioned_otherjobs=[celebrity_raw_type])
-        if celebrity_name is not None:
-            logger.debug(f'Answer for get_celebrity exclude_types {exclude_types} : {celebrity_name} {celebrity_type}')
-            state_utils.save_to_shared_memory(vars, last_utterance_with_celebrity=human_utterance)
-            met_actor = celebrity_raw_type in actor_profession_list
-            state_utils.save_to_shared_memory(vars, actor=met_actor)
-            return celebrity_name, celebrity_type
-    logger.debug(f'For get_celebrity no answer obtained')
-    return None, None
+    else:
+        # we found in last utterance celeb name
+        last_wp = {'wiki_parser': human_utterance['annotations'].get('wiki_parser', {})}
+    if exclude_types:
+        mentioned_otherjobs = mentioned_otherjobs + [celebrity_raw_type]
+    logger.debug(f'Answer for get_celebrity exclude_types {exclude_types} : {celebrity_name} {celebrity_type}')
+    state_utils.save_to_shared_memory(vars,
+                                      last_wp=last_wp,
+                                      mentioned_otherjobs=mentioned_otherjobs,
+                                      actor=met_actor)
+    return celebrity_name, celebrity_type
 
 
 def propose_celebrity_response(vars):
@@ -241,6 +243,7 @@ def celebrity_fact_response(vars):
         if not next_fact:
             celebrity_name, celebrity_otherjob = get_celebrity(vars, exclude_types=True)
             next_fact = f'{celebrity_name} is also a {celebrity_otherjob}.'
+        logger.debug(f'Curr {curr_fact} next {next_fact}')
         assert curr_fact
         reply = f'{curr_fact}'
         if next_fact:
@@ -261,7 +264,15 @@ def celebrity_otherjob_response(vars):
     try:
         celebrity_name, celebrity_otherjob = get_celebrity(vars, exclude_types=True)
         assert celebrity_otherjob and celebrity_name
-        reply = f'{celebrity_name} is also a {celebrity_otherjob}. May I tell you something else about this person?'
+        shared_memory = state_utils.get_shared_memory(vars)
+        given_facts = shared_memory.get('given_facts', [])
+        next_fact = shared_memory.get('next_fact', '')
+        if not next_fact:
+            next_fact = get_cobot_fact(celebrity_name, given_facts)
+            state_utils.save_to_shared_memory(vars, next_fact=next_fact)
+        reply = f'{celebrity_name} is also a {celebrity_otherjob}. '
+        if next_fact:
+            reply = f'{reply} May I tell you something else about this person?'
         state_utils.set_confidence(vars, confidence=CONF_HIGH)
         state_utils.set_can_continue(vars)
         return reply
@@ -397,9 +408,8 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_GOTO_CELEBRITY: no_request
     },
 )
-simplified_dialogflow.add_system_transition(State.SYS_GIVE_A_FACT, State.USR_ASK_ANOTHER_FACT, celebrity_fact_response)
+simplified_dialogflow.add_system_transition(State.SYS_GIVE_A_FACT, State.USR_YESNO_2, celebrity_fact_response)
 simplified_dialogflow.add_system_transition(State.SYS_ASKS_A_FILM, State.USR_TELLS_A_FILM, ask_film_response)
-
 
 for state_ in State:
     simplified_dialogflow.set_error_successor(state_, State.SYS_ERR)
