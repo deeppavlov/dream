@@ -160,7 +160,7 @@ def describe_top_handler(state, skill_state, true_model_names, true_cmds):
             current_game = {}
         text = "I didn't get what you've just said. "
         text += f"I was talking about {current_game.get('name_original', 'games')}, do you want to continue? "
-        text += "For example, you can say:  go on "
+        text += "For example, you can say:  go on. "
         text += "do you want to continue? "
         skill_state_update = {"next_step": "describe_top"}
 
