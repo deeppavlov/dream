@@ -235,12 +235,14 @@ def tell_my_info(dialog, which_info="name"):
 
 def check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr):
     found_info = None
-    if "cobot_entities" in curr_user_annot:
-        if which_info == "name":
-            named_entities = get_named_persons({"text": curr_user_uttr, "annotations": curr_user_annot})
-        else:
-            named_entities = get_named_locations({"text": curr_user_uttr, "annotations": curr_user_annot})
+
+    if which_info == "name":
+        named_entities = get_named_persons({"text": curr_user_uttr, "annotations": curr_user_annot})
     else:
+        named_entities = get_named_locations({"text": curr_user_uttr, "annotations": curr_user_annot})
+
+    if len(named_entities) == 0:
+        # try to search in all types of NAMED entities
         named_entities = []
         for ent in get_entities({"text": curr_user_uttr, "annotations": curr_user_annot},
                                 only_named=True, with_labels=True):
