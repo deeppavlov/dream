@@ -173,11 +173,11 @@ ATOMIC_FUTURE_QUESTION_TEMPLATES = {
     "Sounds RELATION to me!": {"attribute": "xAttr"},  # adjective relation
     "Feels RELATION.": {"attribute": "xAttr"},  # adjective relation
     "Guess you're gonna RELATION?": {"attribute": "xIntent"},  # relation `do that`
-    "Will you RELATION after that?": {"attribute": "xWant"}  # relation `do that`
+    "Will you RELATION?": {"attribute": "xWant"}  # relation `do that`
 }
 
 ATOMIC_COMMENT_TEMPLATES = {
-    "Others will feel RELATION after that, won't they?": {"attribute": "oReact"},  # adjective relation
+    "Others will feel RELATION, won't they?": {"attribute": "oReact"},  # adjective relation
     "I suppose some people may feel RELATION, what do you think?": {"attribute": "oReact"},  # adjective relation
     "I am RELATION to hear that.": {"attribute": "oReact"},  # adjective relation
     "It seems others want to RELATION.": {"attribute": "oEffect"},  # relation `do that`
