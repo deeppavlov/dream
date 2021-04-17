@@ -8,7 +8,7 @@ from imdb_database import IMDb
 from utils import list_unique_values
 
 from common.movies import extract_movies_names_from_annotations
-from common.utils import get_intents
+from common.utils import get_intents, is_opinion_request
 
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -408,14 +408,11 @@ class MovieSkillTemplates:
         result = []
 
         user_uttr = dialog["human_utterances"][-1]["text"].lower()
-        annotations = dialog["human_utterances"][-1]["annotations"]
         intents = get_intents(dialog["human_utterances"][-1], which="cobot_dialogact_intents")
-        opinion_request_detected = annotations.get("intent_catcher", {}).get(
-            "opinion_request", {}).get("detected") == 1
+        opinion_request_detected = is_opinion_request(dialog["human_utterances"][-1])
 
         # favorite movies
-        if (("Information_RequestIntent"
-             in intents) or ("Opinion_RequestIntent" in intents) or opinion_request_detected):
+        if "Information_RequestIntent" in intents or opinion_request_detected:
             if re.search(self.LESSFAVORITE_PATTERN, user_uttr) or re.search(self.NOT_LIKE_PATTERN, user_uttr):
                 # less favorite movie
                 if (re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.LESSFAVORITE_PATTERN} {self.MOVIE_PATTERN}",
