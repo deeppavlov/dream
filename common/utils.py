@@ -272,7 +272,7 @@ def get_intent_name(text):
 
 def is_opinion_request(annotated_utterance):
     intents = get_intents(annotated_utterance, which="all", probs=False)
-    intent_detected = any([intent in intents for intent in ['opinion_request', "Opinion_RequestIntent",
+    intent_detected = any([intent in intents for intent in ["Opinion_RequestIntent",
                                                             "open_question_opinion"]])
     opinion_detected = any([intent in intents for intent in ["Opinion_ExpressionIntent", "opinion"]])
 

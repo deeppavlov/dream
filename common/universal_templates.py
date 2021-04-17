@@ -200,7 +200,7 @@ def book_movie_music_found(annotated_uttr):
 
 
 def is_switch_topic(annotated_uttr):
-    topic_switch_detected = "topic_switching" in get_intents(annotated_uttr, which="intent_catcher")
+    topic_switch_detected = "Topic_SwitchIntent" in get_intents(annotated_uttr, which="all")
 
     if topic_switch_detected or if_switch_topic(annotated_uttr["text"].lower()):
         return True
