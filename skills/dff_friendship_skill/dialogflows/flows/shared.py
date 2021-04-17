@@ -152,6 +152,10 @@ link_to_skill2i_like_to_talk = {
         "For us bots it's easy to stay fit, we can just program us to be like that. How do you keep us?",
         "While I can't tell you about my home soccer team, I'm very proud of it. What about yours?",
     ],
+    "dff_celebrity_skill": ["I wonder how humans get obsessed over celebrities, so I want to understand it better. "
+                            "Who is your favourite celebrity?",
+                            "I love watching movies. Which actor was the first one you really loved?"
+                            ],
     "dff_music_skill": [
         "It is impractical things in this world that matter most. A book, a name, a music album. "
         "What is the one that matters the most for you?",
