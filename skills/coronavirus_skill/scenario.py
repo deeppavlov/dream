@@ -139,7 +139,7 @@ def get_agephrase(age_num, bot_attr, human_attr):
 
 pandemy_request = re.compile(r"(outbreak|pandemy|epidemy|pandemi|epidemi)", re.IGNORECASE)
 corona_request = re.compile(r"(corona|corana|corono|clone a|colonel|chrono|quran|corvette|current|kroner|corolla|"
-                            r"crown|volume|karuna|toronow|chrome|code nineteen)", re.IGNORECASE)
+                            r"crown|volume|karuna|toronow|chrome|code nineteen|covid)", re.IGNORECASE)
 
 
 def about_coronavirus(annotated_phrase):
