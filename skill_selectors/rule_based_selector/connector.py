@@ -74,6 +74,12 @@ class RuleBasedSkillSelectorConnector:
             if_lets_chat_about_particular_topic_detected = if_chat_about_particular_topic(user_uttr, bot_uttr)
             linked_to_skill_names = get_all_linked_to_skills(bot_uttr)
 
+            if "exit" in intent_catcher_intents and len(dialog["human_utterances"]) == 1:
+                high_priority_intent_detected = False
+                not_detected = {"detected": 0, "confidence": 0.0}
+                dialog["human_utterances"][-1]["annotations"]["intent_catcher"]["exit"] = not_detected
+                dialog["utterances"][-1]["annotations"]["intent_catcher"]["exit"] = not_detected
+
             if "/new_persona" in user_uttr_text:
                 # process /new_persona command
                 skills_for_uttr.append("personality_catcher")  # TODO: rm crutch of personality_catcher
