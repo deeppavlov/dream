@@ -61,6 +61,8 @@ np_ignore_expr = re.compile("(" + "|".join([r'\b%s\b' % word for word in np_igno
                             re.IGNORECASE)
 np_remove_expr = re.compile("(" + "|".join([r'\b%s\b' % word for word in np_remove_list]) + ")", re.IGNORECASE)
 rm_spaces_expr = re.compile(r'\s\s+')
+ASK_ME_QUESTION_PATTERN = re.compile(
+    r"^(do you have (a )?question|(can you|could you)?ask me (something|anything|question))", re.IGNORECASE)
 
 donotknow_answers = [
     "What do you want to talk about?",
@@ -229,7 +231,10 @@ class DummySkillConnector:
             link_to_question, human_attr = get_link_to_question(dialog)
             if link_to_question:
                 cands += [link_to_question]
-                confs += [0.05]  # Use it only as response selector retrieve skill output modifier
+                if ASK_ME_QUESTION_PATTERN.search(dialog["human_utterances"][-1]["text"]):
+                    confs += [1.0]  # Use it only as response selector retrieve skill output modifier
+                else:
+                    confs += [0.05]  # Use it only as response selector retrieve skill output modifier
                 attrs += [{"type": "link_to_for_response_selector"}]
                 human_attrs += [human_attr]
                 bot_attrs += [{}]
