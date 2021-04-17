@@ -7,14 +7,16 @@ def main():
     request_data = [{"parser_info": ["find_top_triplets"],
                      "query": [[{"entity_substr": "Jürgen Schmidhuber", "entity_ids": ["Q92735"]}]]}]
 
-    gold_results = [[{'entities_info':
-                     {'Jürgen Schmidhuber': {'country of sitizenship': [['Q183', 'Germany']],
-                                             'date of birth': [['"+1963-01-17^^T"', '17 January 1963']],
-                                             'instance of': [['Q5', 'human']],
-                                             'occupation': [['Q15976092', 'artificial intelligence researcher'],
-                                                            ['Q1622272', 'university teacher'],
-                                                            ['Q82594', 'computer scientist']]},
-                      'entity_substr': 'Jürgen Schmidhuber'},
+    gold_results = [[{'entities_info': {'Jürgen Schmidhuber': {'country of sitizenship': [['Q183', 'Germany']],
+                                                               'date of birth': [
+                                                                   ['"+1963-01-17^^T"', '17 January 1963']],
+                                                               'entity_label': 'Jürgen Schmidhuber',
+                                                               'instance of': [['Q5', 'human']],
+                                                               'occupation': [
+                                                                   ['Q15976092', 'artificial intelligence researcher'],
+                                                                   ['Q1622272', 'university teacher'],
+                                                                   ['Q82594', 'computer scientist']],
+                                                               'plain_entity': 'Q92735'}},
                       'topic_skill_entities_info': {}}]]
 
     count = 0
