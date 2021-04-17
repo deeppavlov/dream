@@ -185,7 +185,7 @@ def inference(utterances_histories, num_ongoing_utt, approximate_confidence_is_e
 
     if len(filtered_indices) > 0:
         candidates = [
-            (clear_text(responses[ind]), approximate_confidence(scores[ind], approximate_confidence_is_enabled))
+            (responses[ind], approximate_confidence(scores[ind], approximate_confidence_is_enabled))
             for ind in filtered_indices
         ]
         try:
