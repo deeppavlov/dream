@@ -35,6 +35,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 health = HealthCheck(app, "/healthcheck")
+logging.getLogger("werkzeug").setLevel("WARNING")
 
 
 # add your own check function to the healthcheck
