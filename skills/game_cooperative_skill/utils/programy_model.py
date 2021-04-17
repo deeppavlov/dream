@@ -29,6 +29,8 @@ def run_models(models, human_utterances):
 
 def cmd_postprocessing(model_results, cmd_only=False, model_name_only=False):
     cmds = {model_name: str(cmd).replace(".", "").upper() for model_name, cmd in model_results.items()}
+    cmds = {model_name: cmd for model_name, cmd in cmds.items() if cmd}
+    cmds = {model_name: cmd.split()[0] for model_name, cmd in cmds.items()}
     if cmd_only:
         cmds = [cmd for cmd in cmds.values()]
     elif model_name_only:
