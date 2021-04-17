@@ -1,6 +1,6 @@
 import re
 
-FUNFACT_COMPILED_PATTERN = re.compile(r"(funfact|fun fact|tell me something)", re.IGNORECASE)
+FUNFACT_COMPILED_PATTERN = re.compile(r"(funfact|fun fact|tell me something fun)", re.IGNORECASE)
 
 
 def funfact_requested(annotated_user_utt, annotated_bot_utt):
