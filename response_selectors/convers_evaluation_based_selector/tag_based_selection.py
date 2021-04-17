@@ -313,6 +313,12 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         if cand_uttr["skill_name"] == 'program_y' and cand_uttr['confidence'] == 0.98 and \
                 len(cand_uttr["text"].split()) > 6:
             cand_uttr["can_continue"] = CAN_CONTINUE_SCENARIO_DONE
+        elif cand_uttr["skill_name"] not in ACTIVE_SKILLS or (
+                _prev_active_skill != cand_uttr["skill_name"] and cand_uttr["confidence"] < 0.95):
+            # to more fair compare not-scipted skills and not-active scripted skills (so, prompts from scripted skills),
+            # assign them all to not-continue category
+            cand_uttr["can_continue"] = CAN_NOT_CONTINUE
+
         _can_continue = cand_uttr.get("can_continue", CAN_NOT_CONTINUE)
         if _is_active_skill:
             # we will focibly add prompt if current scripted skill finishes scenario,
