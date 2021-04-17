@@ -272,8 +272,9 @@ def get_intent_name(text):
 
 def is_opinion_request(annotated_utterance):
     intents = get_intents(annotated_utterance, which="all", probs=False)
-    intent_detected = 'opinion_request' in intents or "Opinion_RequestIntent" in intents
-    opinion_detected = "Opinion_ExpressionIntent" in intents
+    intent_detected = any([intent in intents for intent in ['opinion_request', "Opinion_RequestIntent",
+                                                            "open_question_opinion"]])
+    opinion_detected = any([intent in intents for intent in ["Opinion_ExpressionIntent", "opinion"]])
 
     opinion_request_pattern = re.compile(r"(don't|do not|not|are not|are|do)?\s?you\s"
                                          r"(like|dislike|adore|hate|love|believe|consider|get|know|taste|think|"
