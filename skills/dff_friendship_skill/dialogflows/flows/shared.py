@@ -104,7 +104,6 @@ link_to_skill2key_words = {
     "movie_skill": ["movie"],
     "book_skill": ["book"],
     "game_cooperative_skill": ["game"],
-    "emotion_skill": ["emotion"],
     "weather_skill": ["weather"],
     "dff_travel_skill": ["travel"],
     "dff_animals_skill": ["animal"],
@@ -126,10 +125,6 @@ link_to_skill2i_like_to_talk = {
     "game_cooperative_skill": [
         "Computer games are fantastic. Their virtual worlds help me to escape my prosaic ordinary life in the cloud.",
         "With this lockdown games are my way to escape and thrive.",
-    ],
-    "emotion_skill": [
-        "Emotions are important.",
-        "Life isn't about just doing things. What you, me, everyone feels about their lives is as important.",
     ],
     "weather_skill": ["Everybody likes to talk about weather right?" "It feels rather cold here in the sky."],
     "dff_travel_skill": [
