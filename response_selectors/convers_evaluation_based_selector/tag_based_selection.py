@@ -89,10 +89,10 @@ def categorize_candidate(cand_id, skill_name, categorized_hyps, categorized_prom
     """
     _is_active_skill = _is_active_skill and skill_name in ACTIVE_SKILLS
     if (_can_continue == MUST_CONTINUE) or (_is_active_skill and _can_continue == CAN_CONTINUE_SCENARIO):
-        # so, scripted skills with CAN_CONTINUE_SCENARIO_DONE status are not considered as active!
+        # so, scripted skills with CAN_CONTINUE_SCENARIO_DONE or CAN_NOT_CONTINUE status are not considered as active!
         # this is a chance for other skills to be turned on
         actsuffix = "active"
-    elif _can_continue in [CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE]:
+    elif _can_continue in [CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE] and skill_name in ACTIVE_SKILLS:
         actsuffix = "continued"
     else:
         actsuffix = "finished"
@@ -164,9 +164,26 @@ def pickup_best_id(categorized, candidates, curr_single_scores, bot_utterances):
     """
     best_cand_id = 0
     for dasuffix in ["reqda", ""]:
-        for actsuffix in ["active", "continued", "finished"]:
+        # firstly, consider ACTIVE SKILL
+        for actsuffix in ["active"]:
             for suffix in ["same_topic_entity_no_db", "same_topic_entity_db",
                            "othr_topic_entity_no_db", "othr_topic_entity_db"]:
+                if len(categorized[f"{actsuffix}_{suffix}_{dasuffix}"]) > 0:
+                    best_cand_id = choose_best_with_scores(categorized[f"{actsuffix}_{suffix}_{dasuffix}"],
+                                                           curr_single_scores, candidates, bot_utterances)
+                    logger.info(f"==========Found {actsuffix}_{suffix}_{dasuffix} hyp: {candidates[best_cand_id]}")
+                    return best_cand_id
+        # secondly, consider all skills with the same topic/entities, priority those who can continue
+        for actsuffix in ["continued", "finished"]:
+            for suffix in ["same_topic_entity_no_db", "same_topic_entity_db"]:
+                if len(categorized[f"{actsuffix}_{suffix}_{dasuffix}"]) > 0:
+                    best_cand_id = choose_best_with_scores(categorized[f"{actsuffix}_{suffix}_{dasuffix}"],
+                                                           curr_single_scores, candidates, bot_utterances)
+                    logger.info(f"==========Found {actsuffix}_{suffix}_{dasuffix} hyp: {candidates[best_cand_id]}")
+                    return best_cand_id
+        # thirdly, consider all skills with other topic/entities, priority those who can continue
+        for actsuffix in ["continued", "finished"]:
+            for suffix in ["othr_topic_entity_no_db", "othr_topic_entity_db"]:
                 if len(categorized[f"{actsuffix}_{suffix}_{dasuffix}"]) > 0:
                     best_cand_id = choose_best_with_scores(categorized[f"{actsuffix}_{suffix}_{dasuffix}"],
                                                            curr_single_scores, candidates, bot_utterances)
@@ -289,7 +306,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         all_cand_intents, all_cand_topics, all_cand_named_entities, all_cand_nounphrases = get_main_info_annotations(
             cand_uttr)
         skill_name = cand_uttr["skill_name"]
-        _is_dialog_abandon = "abandon" in all_cand_intents
+        _is_dialog_abandon = False  # "abandon" in all_cand_intents
         _is_just_prompt = (cand_uttr["skill_name"] == "dummy_skill" and any(
             [question_type in cand_uttr.get("type", "")
              for question_type in ["normal_question", "link_to_for_response_selector"]])) or cand_uttr.get(
