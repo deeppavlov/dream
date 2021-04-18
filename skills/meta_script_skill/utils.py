@@ -59,10 +59,10 @@ nltk_sentiment_classifier = SentimentIntensityAnalyzer()
 
 def get_nltk_sentiment(text):
     result = nltk_sentiment_classifier.polarity_scores(text)
-    if result.get("pos", 0.0) >= 0.5:
-        return "positive"
-    elif result.get("neg", 0.0) >= 0.5:
+    if result.get("neg", 0.0) >= 0.05:
         return "negative"
+    elif result.get("pos", 0.0) >= 0.5:
+        return "positive"
     else:
         return "neutral"
 
