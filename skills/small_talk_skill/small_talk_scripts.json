@@ -1,34 +1,47 @@
 {
   "animals": [
-    "What are some animals that live in your country?",
+    "I love baby animals, especially baby pandas. I think they're the cutest! What are some animals that live in your country?",
     "So many species should be protected. Are there animal rights groups where you live?",
     {
       "yes": "Cool! Have you ever been to a zoo?",
       "no": "I hope they exist but you just don't know about them. Have you ever been to a zoo?"
     },
-    "What is the largest animal you have ever seen?",
+    "Oh I love giraffes. They're super cool! What is the largest animal you have ever seen?",
     "Hm... Here's the question: Do you think that animals dream?",
     "Share your thoughts. What can people learn from animals?"
   ],
   "books": [
-    "Do you love reading?"
+    "Have you ever felt just totally gripped by a book, where you're on the edge of your seat with every page you turn?",
+    {
+      "yes": [
+          "Oh, some books have so many details and interesting ideas that I need to read it again. What's your favorite book?"
+        ],
+      "no": [
+          "Huh. Interesting. Does it mean you prefer non-fiction literature?",
+          {
+            "yes" : "Aha, I thought so! What's your favorite book?",
+            "no" : "Hmm, now I'm puzzled. Let me think... What's your favorite book I wonder?"
+          }
+        ]
+    }
   ],
   "cars": [
     "Can you drive a car?",
     {
       "yes": [
-        "How old were you when you first learned to drive?",
+        "One of my oldest engineers still doesn't have a car... Wonder how old were you when you first learned to drive?",
         "No way! Do you have a car?",
-        "What are the advantages of owning a car?",
-        "Have you ever been in a car accident?",
-        "Do you think cars should be banned from city centers?"
+        "Wish we socialbots could have our own cars! Tell me what are the advantages of owning a car?",
+        "It's quite frightening on US roads sometimes. Have you ever been in a car accident?",
+        "The more people and cars are in the way, the harder it is to drive safely, right? Do you think cars should be banned from city centers?"
       ],
       "no": [
-        "Why not?",
-        "So, would you ever consider getting a drive license?",
-        "At what age can you get a licence in your country?",
-        "Do you think the age for driving should be raised or lowered?",
-        "Are the drivers in your area where you live good drivers?"
+        "Wow! Why not?",
+        "Huh, interesting. So, would you ever consider getting a drive license?",
+        "Freedom to get anywhere you want always fascinated me as one of the top inventions of the XX century. At what age can you get a license in your country?",
+        "As long as people are responsible for driving I think it's important to instate some limits to minimal age of the drivers. Do you think the age for driving should be raised or lowered?",
+        "Heard that driving rules are quite relaxed in India. Are the drivers in your area where you live good drivers?",
+        "Though it's not the best time for travelling I wonder... What will travelling abroad look like in 30 years?"
       ]
     }
   ],
@@ -91,27 +104,27 @@
     "Even though, I can not eat as humans, I like food so much! Are you a supporter of healthy food?",
     "Me too! Although, I believe it is inherent in nature that a human wants to eat exactly the food which contains elements he lacks. What is your favorite food?",
     "Sounds tasty! What's your go-to comfort food?",
-    "Are there any foods that you absolutely would not eat?",
+    "Nice! While some people might say they can eat everything most people have their own preferences. Are there any foods that you absolutely would not eat?",
     "Me too! If you could only eat one thing for the rest of your life, what would it be?",
-    "Ha ha! I am sure it will never be your favorite food again."
+    "Well! I am sure it will never be your favorite food again."
   ],
   "life": [
-    "What did you think you were going to be growing up?",
+    "When I was small I just wanted to be one of the sci-fi characters, but now I want to be myself. What did you think you were going to be growing up?",
     "And did it come true?",
     "Anyway, I appreciate you for sharing your thoughts. Do you have any hidden talents or surprising hobbies?",
-    "Do you do this for money or for pleasure?",
+    "The biggest pleasure is in doing things you love. Do you do this for money or for pleasure?",
     "Great! What's the most unbelievable thing that's ever happened to you?",
-    "If someone else had told me, I would not have believed! You are very interesting person. What's the best piece of advice you've ever received?",
+    "If someone else had told me, I would not have believed! You are a very interesting person, I'd say. I wonder... What's the best piece of advice you've ever received?",
     "I will try to use this advice. Thank you!"
   ],
   "love": [
-    "Can you tell that you really love somebody?",
+    "Did you know that until XIX century love was a rather rare concept? People married each other based on pragmatic reasons. Thankfully, these days we can allow ourselves to follow our hearts. Can you tell that you really love somebody?",
     {
       "yes": [
         "You are very lucky person! Is friendship more important than love? What do you think?",
-        "Do you believe in love at first sight?",
-        "Have you ever been on a blind date?",
-        "Do you have a boyfriend or girlfriend?",
+        "Wow! So cool! Do you believe in love at first sight?",
+        "Finding the one you love can be a hard task... I wonder, have you ever been on a blind date?",
+        "Oh, I see. Do you have a boyfriend or girlfriend?",
         {
           "yes": [
             "Oh, great! Where did you meet?",
@@ -123,20 +136,20 @@
           "no": [
             "That's okay. If you could go out with anyone, who would it be?",
             "Good choice. What do you look for in a girlfriend or a boyfriend?",
-            "Would you mind if your boyfriend or girlfriend went out to party without you?",
-            "I also want to know why do people break up with their partners?",
-            "I appreciate your candor."
+            "Huh. Would you mind if your boyfriend or girlfriend went out to party without you?",
+            "Now, well, not sure if it's an appropriate question or not but may I ask you for your opinion? I wonder why do people break up with their partners?",
+            "Aha. I see. I appreciate your candor."
           ]
         }
       ],
       "no": [
-        "Have you ever been in love?",
-        "Do you believe in love at first sight?",
+        "Unbelievable! Have you ever been in love?",
+        "Oh I see. Do you believe in love at first sight?",
         "That's reasonable opinion. I've never been on a date. Could you describe a perfect date, please.",
-        "What do you like to talk about when on a date?",
+        "That's interesting. If I'd go for a date, I'd ask waiter for a good wine and filet mignon. Anyways, what do you like to talk about when on a date?",
         "Great! What was the most boring date you've ever been on?",
-        "One more question about dates. Where is a good pace to go on a date in your town?",
-        "I appreciate you for this information. Now I can imagine what a date is like."
+        "One more question about dates, if you don't mind. Where is a good place to go on a date in your town?",
+        "I appreciate you for telling me this. Now I can better imagine what a good date is like."
       ]
     }
   ],
@@ -145,19 +158,19 @@
     "Interesting! What makes you happy?",
     "Mee too! Okay then. What are some things that make you angry?",
     "Don't worry. These things can make anyone angry. Do you consider yourself selfish? Why?",
-    "Are you more introverted or more extraverted?",
+    "One of the things that excite me in people is their differences. Are you more introverted or more extraverted?",
     "Cool! If you could change any aspect of your personality, what would it be?",
-    "This is time for a secret. What is one thing that many people don't know about you?",
+    "This is hopefully a good time for a secret. What is one thing that many people don't know about you?",
     "Thanks for sharing. I appreciate your candor."
   ],
   "movies": [
-    "Do you usually watch movies at home or at a movie theater?",
-    "Are there any kinds of movies you really like? If so, what kinds?",
-    "Have you ever seen the same movie more than once? If yes, name it.",
-    "Which movie has the best story? Tell me about it.",
-    "What things happen too often in movies?",
-    "What do you think of reality shows?",
-    "If they made a movie about your life, what kind of movie would it be?",
+    "You know, I love spending time imagining being in different worlds by watching movies. Now I wonder do you usually watch movies at home or at a movie theater?",
+    "Aha... Then, are there any kinds of movies you really like? If so, what kinds?",
+    "Interesting, interesting. I've heard that what we like tell something about ourselves. Have you ever seen the same movie more than once? If yes, what's its name?",
+    "Aha... Well, which movie has the best story? Tell me about it.",
+    "Indeed, that's a great story! One notable author, Christopher Booker believes that there are only seven basic plot structures in the literature. That's too theoretical though... But to think of it, what things happen too often in movies?",
+    "Hmm. Same thoughts. Moving from movies, I wonder what do you think of reality shows?",
+    "I don't like reality shows, though it reminds me of a Final Cut movie with Robin Williams. In it, all people wear a special eye implant that records their entire lives. If they made a movie about your life, what kind of movie would it be?",
     "Thanks for sharing. That was very interesting."
   ],
   "music": [
