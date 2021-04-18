@@ -1,13 +1,13 @@
 import re
+from common.utils import join_sentences_in_or_pattern
 
 
-YOUR_FAVORITE_COMPILED_PATTERN = re.compile("(you|your|yours|you have( a | ))favorite", re.IGNORECASE)
-
-
-def check_bot_favorites(user_utt):
-    return any(
+YOUR_FAVORITE_COMPILED_PATTERN = re.compile(
+    join_sentences_in_or_pattern(
         [
-            ("my" not in user_utt) and ("favorite" in user_utt),
-            re.search(YOUR_FAVORITE_COMPILED_PATTERN, user_utt)
+            "(you|your|yours|you have a).*(favou?rite|like)",
+            r"what( kinds? of | )[a-z ]+ do you (like|love|prefer|adore|fond of)"
         ]
-    )
+    ),
+    re.IGNORECASE
+)
