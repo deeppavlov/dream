@@ -31,7 +31,7 @@ def send_cobotqa(question):
                                 headers=headers,
                                 data=json.dumps(request_body),
                                 method='POST',
-                                timeout=1)
+                                timeout=0.9)
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)

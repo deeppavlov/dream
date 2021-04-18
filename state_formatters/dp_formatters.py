@@ -66,7 +66,7 @@ def eliza_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 
 def cobot_qa_formatter_service(payload: List):
-    # Used by: cobot_qa_formatter
+    # Used by: cobot_qa
     hyps = []
     for resp, conf in zip(payload[0], payload[1]):
         if len(resp) > 0 and conf > 0.0:

@@ -9,6 +9,10 @@ services:
     image: ${DOCKER_REGISTRY}/cobotqa:${VERSION}
     env_file:
       - ${ENV_FILE}
+  cobotqa-annotator:
+    image: ${DOCKER_REGISTRY}/cobotqa-annotator:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   sentseg:
     image: ${DOCKER_REGISTRY}/sentseg:${VERSION}
     env_file:

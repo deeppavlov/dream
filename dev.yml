@@ -7,13 +7,13 @@ services:
       - ".:/dp-agent"
     ports:
       - 4242:4242
-  cobotqa:
+  cobotqa-annotator:
     env_file: [.env.dev]
     volumes:
-      - "./skills/CoBotQA:/src"
+      - "./annotators/CoBotQA:/src"
       - "./common:/src/common"
     ports:
-      - 8081:8081
+      - 8106:8106
   cobot-topics:
     env_file: [.env.dev]
     volumes:
@@ -108,7 +108,7 @@ services:
     volumes:
       - "./common:/src/common"
       - "./skills/movie_skill:/src"
-      - "./skills/CoBotQA:/src/CoBotQA"
+      - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8023:8023
   ner:
@@ -156,7 +156,7 @@ services:
     volumes:
       - "./skills/book_skill:/src"
       - "./common:/src/common"
-      - "./skills/CoBotQA:/src/CoBotQA"
+      - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8032:8032
   weather-skill:
@@ -299,6 +299,13 @@ services:
       - "./common:/src/common"
     ports:
       - 8080:8080
+  cobotqa:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/CoBotQA:/src"
+      - "./common:/src/common"
+    ports:
+      - 8081:8081
   text-qa:
     env_file: [.env.dev]
     volumes:
@@ -357,7 +364,7 @@ services:
     volumes:
       - "./skills/dff_celebrity_skill:/src"
       - "./common:/src/common"
-      - "./skills/CoBotQA:/src/CoBotQA"
+      - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8093:8093
   dff-animals-skill:
@@ -365,7 +372,7 @@ services:
     volumes:
       - "./skills/dff_animals_skill:/src"
       - "./common:/src/common"
-      - "./skills/CoBotQA:/src/CoBotQA"
+      - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8094:8094
   combined-classification:
@@ -386,7 +393,7 @@ services:
     volumes:
       - "./skills/dff_travel_skill:/src"
       - "./common:/src/common"
-      - "./skills/CoBotQA:/src/CoBotQA"
+      - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8096:8096
   dff-food-skill:
@@ -394,7 +401,7 @@ services:
     volumes:
       - "./skills/dff_food_skill:/src"
       - "./common:/src/common"
-      - "./skills/CoBotQA:/src/CoBotQA"
+      - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8097:8097
   dff-music-skill:

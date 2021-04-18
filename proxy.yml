@@ -327,6 +327,14 @@ services:
       - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/cobotqa
       - PORT=8081
     command: ["nginx", "-g", "daemon off;"]
+  cobotqa-annotator:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/cobotqa-annotator
+      - PORT=8106
+    command: ["nginx", "-g", "daemon off;"]
   knowledge-grounding:
     build:
       context: dp/proxy/
@@ -451,7 +459,7 @@ services:
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
-    environment:      
+    environment:
       - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/dff-celebrity-skill
       - PORT=8093
     command: [ "nginx", "-g", "daemon off;" ]

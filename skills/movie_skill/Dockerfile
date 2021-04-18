@@ -10,7 +10,7 @@ RUN python -c "import nltk; nltk.download('punkt')"
 # RUN tar -zxvf /data/imdb_database_and_models.tar.gz -C /data/
 
 COPY ./skills/movie_skill ./
-COPY ./skills/CoBotQA/ CoBotQA/
+COPY ./annotators/CoBotQA/ CoBotQA/
 COPY ./common/ common/
 
 CMD gunicorn --workers=1 --bind 0.0.0.0:8023 --timeout=60 server:app --preload

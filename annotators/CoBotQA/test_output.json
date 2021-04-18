@@ -1,0 +1,15 @@
+[
+    {
+        "facts": [
+            {
+                "entity": "michael jordan",
+                "fact": "Here\"s a fact about Michael Jordan. His 1992 playoff game against the Portland Trail Blazers, where he had 35 first-half points and nailed six three-pointers in a row, has been claimed by many as “the closest anyone has ever come to playing a perfect game of basketball.” Ironically, Jordan was bypassed in the 1984 draft by the Trail Blazers, who picked Sam Bowie instead, a move that has gone down in history as one of the biggest draft-day blunders."
+            },
+            {
+                "entity": "michael jordan",
+                "fact": "Here\"s a fact about Michael Jordan. Fired by the Washington Wizards due to player dissension, the team finishing 37-45 two years in a row, and dissonance in the organization involving Jordan\"s people. Jordan was hired on 19 January 2000 as chief executive and president of basketball operations. Owner Abe Pollin gave him free rein to run the Wizards, and Jordan eventually bought a percentage of the team. He got $10 million in severance. (7 May 2003)."
+            }
+        ],
+        "response": ""
+    }
+]
