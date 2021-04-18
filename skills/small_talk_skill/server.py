@@ -29,8 +29,8 @@ with open("topic_words.json", "r") as f:
 
 for topic in TOPIC_PATTERNS:
     words = TOPIC_PATTERNS[topic]
-    pattern = "(" + "|".join([r'\b%s\b' % word for word in words]) + ")"
-    TOPIC_PATTERNS[topic] = re.compile(pattern)
+    pattern = "(" + "|".join([r'\b%s' % word for word in words]) + ")"
+    TOPIC_PATTERNS[topic] = re.compile(pattern, re.IGNORECASE)
 
 with open("small_talk_scripts.json", "r") as f:
     TOPIC_SCRIPTS = json.load(f)
