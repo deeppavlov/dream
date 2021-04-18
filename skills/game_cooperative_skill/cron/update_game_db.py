@@ -12,6 +12,7 @@ import requests
 import sentry_sdk
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
+API_KEY = "f7d903aa967743b9adcfd2cdbb5345e8"
 
 logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -44,7 +45,7 @@ game_fields = [
 
 def get_game(game_id="99999999999"):
     try:
-        game = requests.get(f"https://api.rawg.io/api/games/{game_id}").json()
+        game = requests.get(f"https://api.rawg.io/api/games/{game_id}?key={API_KEY}").json()
     except Exception as exc:
         logger.error(traceback.format_exc())
         sentry_sdk.capture_exception(exc)
@@ -56,7 +57,7 @@ def get_game(game_id="99999999999"):
 def get_game_top(from_data="2019-01-01", to_data="2019-12-31"):
     try:
         games = (
-            requests.get(f"https://api.rawg.io/api/games?dates={from_data},{to_data}&ordering=-added")
+            requests.get(f"https://api.rawg.io/api/games?dates={from_data},{to_data}&ordering=-added&key={API_KEY}")
             .json()
             .get("results", [])
         )
