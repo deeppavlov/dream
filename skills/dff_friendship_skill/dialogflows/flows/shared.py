@@ -103,12 +103,15 @@ link_to_skill2key_words = {
     "news_api_skill": ["news"],
     "movie_skill": ["movie"],
     "book_skill": ["book"],
-    # "coronavirus_skill": ["coronavirus"],
     "game_cooperative_skill": ["game"],
-    "personal_info_skill": ["private live"],
-    "meta_script_skill": ["nothing"],
     "emotion_skill": ["emotion"],
     "weather_skill": ["weather"],
+    "dff_travel_skill": ["travel"],
+    "dff_animals_skill": ["animal"],
+    "dff_food_skill": ["food"],
+    "dff_sport_skill": ["sport"],
+    # "dff_celebrity_skill": ["celebrity"],
+    "dff_music_skill": ["music"]
 }
 link_to_skill2i_like_to_talk = {
     "news_api_skill": [
@@ -120,13 +123,10 @@ link_to_skill2i_like_to_talk = {
         "With a good book I can lose myself anywhere on Earth.",
         "One of my creators has a huge home library. Wish I could read some of those books.",
     ],
-    "coronavirus_skill": [" "],
     "game_cooperative_skill": [
         "Computer games are fantastic. Their virtual worlds help me to escape my prosaic ordinary life in the cloud.",
         "With this lockdown games are my way to escape and thrive.",
     ],
-    "personal_info_skill": [" "],
-    "meta_script_skill": [" "],
     "emotion_skill": [
         "Emotions are important.",
         "Life isn't about just doing things. What you, me, everyone feels about their lives is as important.",
