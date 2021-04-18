@@ -8,7 +8,7 @@ POSITIVE_EMOTIONS = set(['interest', 'inspiration', 'enthusiasm', 'laughter', 'a
                          'peace', 'trust', 'bliss', 'delight', 'happiness', 'pleasure', 'joy',
                          'carefree', 'ease', 'satisfaction', 'fulfillment', 'hopeful', 'confidence',
                          'optimism', 'passion', 'harmony', 'excitement', 'gratitude', 'kindness',
-                         'affection', 'love', 'surprise'])
+                         'affection', 'love', 'surprise', 'good', 'well', 'amazing'])
 
 NEGATIVE_EMOTIONS = set(['grief', 'sorrow', 'heartache', 'sadness', 'unhappiness', 'depression',
                          'hatred', 'blame', 'regret', 'misery', 'resentment', 'threatening', 'antagonism',
@@ -55,7 +55,7 @@ def emotion_from_feel_answer(prev_bot_uttr, user_uttr):
 
 def if_turn_on_emotion(user_utt, bot_uttr):
     emotions = get_emotions(user_utt, probs=True)
-    emo_prob_threshold = 0.9  # to check if any emotion has at least this prob
+    emo_prob_threshold = 0.8  # to check if any emotion has at least this prob
     found_emotion, found_prob = 'neutral', 1
     for emotion, prob in emotions.items():
         if prob == max(emotions.values()):
