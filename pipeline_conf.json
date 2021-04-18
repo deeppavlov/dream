@@ -247,6 +247,22 @@
                     "annotators.sentseg"
                 ]
             },
+            "cobotqa_annotator": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://cobotqa-annotator:8106/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "required_previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.cobot_entities",
+                    "annotators.cobot_nounphrases",
+                    "annotators.sentrewrite"
+                ]
+            },
             "fact_retrieval": {
                 "connector": {
                     "protocol": "http",

@@ -11,7 +11,7 @@ RUN pip install -r /src/requirements.txt
 
 COPY ./skills/book_skill/ /src/
 COPY ./common/ /src/common/
-COPY ./skills/CoBotQA/ ./src/CoBotQA/
+COPY ./annotators/CoBotQA/ ./src/CoBotQA/
 RUN wget -q $AUTHOR_NAMES -O /global_data/book_author_names.txt
 RUN wget -q $QUERY_DICT -O /global_data/book_query_dict.pkl
 WORKDIR /src

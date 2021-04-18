@@ -1,23 +1,19 @@
 #!/usr/bin/env python
 
 import logging
-import os
 import string
 from time import time
 import random
 import re
 
-import numpy as np
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.stem import WordNetLemmatizer
-from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
-from cobotqa_service import send_cobotqa
 
 from common.universal_templates import opinion_request_question, fact_about_replace, FACT_ABOUT_TEMPLATES
-from common.utils import get_topics, get_intents, get_sentiment, get_entities
+from common.utils import get_topics, get_intents, get_entities
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -29,23 +25,6 @@ app = Flask(__name__)
 
 N_FACTS_TO_CHOSE = 1
 ASK_QUESTION_PROB = 0.5
-
-ASYNC_SIZE = int(os.environ.get('ASYNC_SIZE', 6))
-COBOT_API_KEY = os.environ.get('COBOT_API_KEY')
-COBOT_QA_SERVICE_URL = os.environ.get('COBOT_QA_SERVICE_URL')
-
-if COBOT_API_KEY is None:
-    raise RuntimeError('COBOT_API_KEY environment variable is not set')
-if COBOT_QA_SERVICE_URL is None:
-    raise RuntimeError('COBOT_QA_SERVICE_URL environment variable is not set')
-
-headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COBOT_API_KEY}'}
-
-with open("./google-english-no-swears.txt", "r") as f:
-    UNIGRAMS = set(f.read().splitlines())
-
-with open("./common_user_phrases.txt", "r") as f:
-    COMMON_USER_PHRASES = set(f.read().splitlines())
 
 
 def remove_punct_and_articles(s, lowecase=True):
@@ -62,12 +41,10 @@ lemmatizer = WordNetLemmatizer()
 
 def get_common_words(a: str, b: str, lemmatize: bool = True) -> set:
     """Returns set of common words (lemmatized) in strings a and b
-
     Args:
         a (str): string a
         b (str): string b
         lemmatize (bool, optional): Lemmatize each word. Defaults to True.
-
     Returns:
         set: common words in strings a and b
     """
@@ -83,217 +60,104 @@ def get_common_words(a: str, b: str, lemmatize: bool = True) -> set:
 def respond():
     st_time = time()
     dialogs = request.json['dialogs']
-    responses = []
-    confidences = []
-
-    questions = []
-    dialog_ids = []
-    for i, dialog in enumerate(dialogs):
-        curr_uttr = dialog["human_utterances"][-1]
-        if "sentrewrite" in curr_uttr["annotations"]:
-            curr_uttr_rewritten = curr_uttr["annotations"]["sentrewrite"]["modified_sents"][-1]
-        else:
-            curr_uttr_rewritten = curr_uttr["text"]
-        curr_uttr_clean = remove_punct_and_articles(curr_uttr_rewritten)
-        if curr_uttr_clean in COMMON_USER_PHRASES:
-            # do not add any fact about ... and
-            # replace human utterance by special string
-            # cobotqa will respond with ''
-            questions.append(f'[common_phrase_replaced: {curr_uttr_clean}]')
-            dialog_ids += [i]
-            continue
-        # fix to question what is fact, cobotqa gives random fact on such question
-        what_is_fact = 'what is fact'
-        if remove_punct_and_articles(curr_uttr_rewritten)[-len(what_is_fact):] == what_is_fact:
-            curr_uttr_rewritten = 'definition of fact'
-        questions.append(curr_uttr_rewritten)
-        dialog_ids += [i]
-
-        facts_questions = []
-        facts_dialog_ids = []
-        entities = []
-        attit = get_sentiment(curr_uttr, probs=False)[0]
-        for _ in range(N_FACTS_TO_CHOSE):
-            for ent in get_entities(curr_uttr, only_named=True, with_labels=True):
-                if ent["text"].lower() not in UNIGRAMS and not (
-                        ent["text"].lower() == "alexa" and curr_uttr["text"].lower()[:5] == "alexa"):
-                    if attit in ["neutral", "positive"]:
-                        entities.append(ent["text"].lower())
-                        facts_questions.append("Fun fact about {}".format(ent["text"]))
-                        facts_dialog_ids += [i]
-                    else:
-                        entities.append(ent["text"].lower())
-                        facts_questions.append("Fact about {}".format(ent["text"]))
-                        facts_dialog_ids += [i]
-            if len(entities) == 0:
-                for ent in get_entities(curr_uttr, only_named=False, with_labels=False):
-                    if ent.lower() not in UNIGRAMS:
-                        if ent in entities + ["I", 'i']:
-                            pass
-                        else:
-                            facts_questions.append("Fact about {}".format(ent))
-                            facts_dialog_ids += [i]
-
-        if len(facts_questions) > 6:
-            ids = np.random.choice(np.arange(len(facts_questions)), size=6)
-            facts_questions = np.array(facts_questions)[ids].tolist()
-            facts_dialog_ids = np.array(facts_dialog_ids)[ids].tolist()
-
-        questions.extend(facts_questions)
-        dialog_ids.extend(facts_dialog_ids)
-
-    executor = ThreadPoolExecutor(max_workers=ASYNC_SIZE)
-    responses_for_this_dialog = []
-    curr_dialog_id = dialog_ids[0]
-    for i, response in enumerate(executor.map(send_cobotqa, questions)):
-        if curr_dialog_id != dialog_ids[i]:
-            curr_dialog_id = dialog_ids[i]
-            responses_for_this_dialog = []
-
-        if response in responses_for_this_dialog:
-            response = ""
-        else:
-            responses_for_this_dialog.append(response)
-
-        logger.info("Question: {}".format(questions[i]))
-        logger.info("Response: {}".format(response))
-
-        # fix for cases when fact is about fun, but fun is not in entities
-        fun_fact_q = 'Fun fact about'
-        if fun_fact_q in questions[i] and ' fun' not in questions[i][len(fun_fact_q):].lower() \
-                and 'Fun is defined by the Oxford English Dictionary as' in response:
-            response = ''
-
-        bad_answers = ['You can now put your wizarding world knowledge to the test with the official Harry Potter '
-                       'quiz. Just say: "Play the Harry Potter Quiz."',
-                       "I can provide information, music, news, weather, and more.",
-                       'For the latest in politics and other news, try asking "Alexa, play my Flash Briefing."',
-                       "I don't have an opinion on that.", "[GetMusicDetailsIntent:Music]",
-                       "Thank you!",
-                       "Thanks!",
-                       "That's really nice, thanks.",
-                       "That's nice of you to say.",
-                       "Kazuo Ishiguro, Gretchen Mol, Benjamin Wadsworth, Johann Mühlegg, Ramkumar Ramanathan"
-                       " and others.", "I didn't catch that. Please say that again.", "Okay."
-                       ]
-        bad_subanswers = ["let's talk about", "i have lots of", "world of warcraft",
-                          " wow ", " ok is", "coolness is ", "about nice",
-                          "\"let's talk\" is a 2002 drama", "visit amazon.com/",
-                          'alexa, play my flash briefing.', "amazon alexa",
-                          "past tense", "plural form", "singular form", "present tense", "future tense", "bob cut",
-                          "movie theater", "alexa app", "more news", "be here when you need me", "the weeknd",
-                          "faktas", "fact about amazing", "also called movie or motion picture",
-                          "known as eugen warming", "select a chat program that fits your needs",
-                          "is usually defined as a humorous anecdote or remark intended to provoke laughter",
-                          "joke is a display of humour in which words are used within a specific",
-                          "didn't catch that", "say that again", "try again", "really nice to meet you too",
-                          "like to learn about how I can help", "sorry", "i don't under", "ask me whatever you like",
-                          "i don’t know that", "initialism for laughing out loud", "gamelistintent", "listintent",
-                          "try asking", "missed part", "try saying"
-                          ]
-
-        curr_nounphrases = get_entities(dialogs[curr_dialog_id]["human_utterances"][-1],
-                                        only_named=False, with_labels=False)
-        if len(response) > 0 and 'skill://amzn1' not in response:
-            sentences = sent_tokenize(response.replace(".,", "."))
-            full_resp = response
-            response = " ".join(sentences[:2])
-            if full_resp in bad_answers or any([bad_substr in full_resp.lower() for bad_substr in bad_subanswers]):
-                confidence = 0.
-                response = ""
-            elif len(sentences[0]) < 100 and "fact about" in sentences[0]:
-                # this is a fact from cobotqa itself
-                # cobotqa answer `Here's a fact about Hollywood. Hollywood blablabla.`
-                subjects = re.findall(r"fact about (.+)\.", sentences[0].lower())
-                response = fact_about_replace() + " " + " ".join(sentences[1:2])
-
-                if len(subjects) > 0 and random.random() < ASK_QUESTION_PROB:
-                    # randomly append question about found NP
-                    response += " " + opinion_request_question()
-
-                if len(subjects) > 0 and len(get_common_words(subjects[0], questions[i])) > 0:
-                    # in case if subject in response is same as in user question
-                    confidence = 0.7
-                else:
-                    confidence = 0.3
-            elif "fact about" in questions[i].lower():
-                response = " ".join(sentences[:1])
-                # check this is requested `fact about NP/NE`
-                subjects = re.findall(r"fact about (.+)", questions[i].lower())
-
-                if len(subjects) > 0 and random.random() < ASK_QUESTION_PROB:
-                    # randomly append question about requested fact
-                    response += " " + opinion_request_question()
-
-                if len(subjects) > 0 and len(get_common_words(subjects[0], response)) > 0:
-                    # in case if requested subject is in response
-                    confidence = 0.7
-                else:
-                    confidence = 0.3
-            elif any(substr in full_resp for substr in
-                     ["Here's something I found", "Here's what I found", "According to ",
-                      "This might answer your question"]):
-                confidence = 0.7
-            elif "is usually defined as" in full_resp:
-                confidence = 0.3
-            elif len(full_resp.split()) > 10 and any([noun.lower() in full_resp.lower() for noun in curr_nounphrases]):
-                confidence = 0.7
-            else:
-                confidence = 0.95
-        else:
-            confidence = 0.00
-            response = ""
-
-        bot_uttr = dialogs[curr_dialog_id]["bot_utterances"]
-        bot_uttr = bot_uttr[-1] if len(bot_uttr) > 0 else {}
-        if confidence == 0.7 and bot_uttr.get("active_skill", "") in ["greeting_skill", "dff_friendship_skill"] and \
-                "?" not in dialogs[curr_dialog_id]["human_utterances"][-1]["text"]:
-            confidence = 0.9
-
-        confidences += [confidence]
-        responses += [response]
-
-    dialog_ids = np.array(dialog_ids)
-    responses = np.array(responses)
-    confidences = np.array(confidences)
     final_responses = []
     final_confidences = []
 
     for i, dialog in enumerate(dialogs):
-        resp_cands = list(responses[dialog_ids == i])
-        conf_cands = list(confidences[dialog_ids == i])
-
-        annotations = dialog["human_utterances"][-1]["annotations"]
-        intents = get_intents(dialog["human_utterances"][-1], which="cobot_dialogact_intents")
-        opinion_request_detected = annotations.get("intent_catcher", {}).get(
-            "opinion_request", {}).get("detected") == 1
-        reply = dialog['human_utterances'][-1]['text'].replace("\'", " \'").lower()
-
-        sensitive_topics = {"Politics", "Celebrities", "Religion", "Sex_Profanity", "Sports", "News", "Psychology"}
+        curr_uttr = dialog["human_utterances"][-1]
+        curr_nounphrases = get_entities(curr_uttr, only_named=False, with_labels=False)
+        cobotqa_annotations = curr_uttr.get("annotations", {}).get("cobotqa_annotator", {})
+        direct_response = cobotqa_annotations.get("response", "")
+        facts = cobotqa_annotations.get("facts", [])
+        # each fact is a dict: `{"entity": "politics", "fact": "Politics is a ..."}`
+        all_intents = set(get_intents(curr_uttr, which="cobot_dialogact_intents"))
+        opinion_request_detected = "opinion_request" in get_intents(curr_uttr, which="intent_catcher", probs=False)
+        sensitive_topics = {"Politics", "Religion", "Sex_Profanity", "Inappropriate_Content"}
         # `General_ChatIntent` sensitive in case when `?` in reply
         sensitive_dialogacts = {"Opinion_RequestIntent", "General_ChatIntent"}
-        cobot_topics = set(get_topics(dialog['human_utterances'][-1], which='all'))
-        sensitive_topics_detected = any([t in sensitive_topics for t in cobot_topics])
-        sensitive_dialogacts_detected = any([(t in sensitive_dialogacts and "?" in reply) for t in intents])
-        if 'blacklisted_words' in dialog['human_utterances'][-1]['annotations']:
-            blist_topics_detected = dialog['human_utterances'][-1]['annotations']['blacklisted_words'][
-                "restricted_topics"
-            ]
-        else:
-            blist_topics_detected = []
+        all_topics = set(get_topics(curr_uttr, which='all'))
+        sensitive_topics_detected = sensitive_topics & all_topics
+        sensitive_dialogacts_detected = "?" in curr_uttr['text'] and (sensitive_dialogacts & all_intents)
+        blist_topics_detected = curr_uttr.get('annotations', {}).get('blacklisted_words', {}).get(
+            "restricted_topics", False)
+        opinion_request_detected = ("Opinion_RequestIntent" in all_intents) or opinion_request_detected
+        sensitive_case_request = sensitive_topics_detected and sensitive_dialogacts_detected
+        sensitive_case_request = sensitive_case_request or opinion_request_detected or blist_topics_detected
 
-        for j in range(len(resp_cands)):
-            if j != 0:
-                # facts
-                if (("Opinion_RequestIntent" in intents) or opinion_request_detected or blist_topics_detected or (
-                        sensitive_topics_detected and sensitive_dialogacts_detected)) and len(resp_cands[j]) > 0:
-                    if any([templ in resp_cands[j] for templ in FACT_ABOUT_TEMPLATES]):
-                        resp_cands[j] = f"I don't have an opinion on that but... {resp_cands[j]}"
+        hypotheses_subjects = []
+        hypotheses = []
+        if direct_response:
+            hypotheses.append(direct_response)
+            hypotheses_subjects.append(None)
+        for fact in facts:
+            hypotheses.append(fact["fact"])
+            hypotheses_subjects.append(fact["entity"])
+
+        curr_responses = []
+        curr_confidences = []
+        for response, subject in zip(hypotheses, hypotheses_subjects):
+            if len(response) > 0:
+                sentences = sent_tokenize(response.replace(".,", "."))
+                full_resp = response
+                response = " ".join(sentences[:2])
+                if len(sentences[0]) < 100 and "fact about" in sentences[0]:
+                    # this is a fact from cobotqa itself
+                    # cobotqa answer `Here's a fact about Hollywood. Hollywood blablabla.`
+                    subjects = re.findall(r"fact about (.+)\.", sentences[0].lower())
+                    response = fact_about_replace() + " " + " ".join(sentences[1:2])
+
+                    if len(subjects) > 0 and random.random() < ASK_QUESTION_PROB:
+                        # randomly append question about found NP
+                        response += " " + opinion_request_question()
+
+                    if len(subjects) > 0 and len(get_common_words(subjects[0], subject)) > 0:
+                        # in case if subject in response is same as in user question
+                        confidence = 0.7
                     else:
-                        resp_cands[j] = f"I don't have an opinion on that but I've heard that {resp_cands[j]}"
+                        confidence = 0.3
+                elif subject is not None and subject:
+                    response = " ".join(sentences[:1])
 
-        final_responses.append(resp_cands)
-        final_confidences.append(conf_cands)
+                    if random.random() < ASK_QUESTION_PROB:
+                        # randomly append question about requested fact
+                        response += " " + opinion_request_question()
+
+                    if len(get_common_words(subject, response)) > 0:
+                        # in case if requested subject is in response
+                        confidence = 0.7
+                    else:
+                        confidence = 0.3
+                elif any(substr in full_resp for substr in
+                         ["Here's something I found", "Here's what I found", "According to ",
+                          "This might answer your question"]):
+                    confidence = 0.7
+                elif "is usually defined as" in full_resp:
+                    confidence = 0.3
+                elif len(full_resp.split()) > 10 and any([noun.lower() in full_resp.lower()
+                                                          for noun in curr_nounphrases]):
+                    confidence = 0.7
+                else:
+                    confidence = 0.95
+
+                bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) > 0 else {}
+                act_skill = bot_uttr.get("active_skill", "")
+                if confidence == 0.7 and act_skill in ["greeting_skill", "dff_friendship_skill"] and \
+                        "?" not in curr_uttr["text"]:
+                    confidence = 0.9
+
+                if sensitive_case_request and subject is not None:
+                    if any([templ in response for templ in FACT_ABOUT_TEMPLATES]):
+                        response = f"I don't have an opinion on that but... {response}"
+                    else:
+                        response = f"I don't have an opinion on that but I've heard that {response}"
+            else:
+                confidence = 0.00
+                response = ""
+
+            curr_responses.append(response)
+            curr_confidences.append(confidence)
+        final_responses.append(curr_responses)
+        final_confidences.append(curr_confidences)
 
     total_time = time() - st_time
     logger.info(f'cobotqa exec time: {total_time:.3f}s')

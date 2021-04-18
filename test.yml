@@ -54,6 +54,8 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   cobotqa:
     env_file: [ .env.dev ]
+  cobotqa-annotator:
+    env_file: [ .env.dev ]
   cobot-convers-evaluator-annotator:
     env_file: [ .env.dev ]
     volumes:
