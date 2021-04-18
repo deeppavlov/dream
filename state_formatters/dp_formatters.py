@@ -255,13 +255,13 @@ def hypotheses_list_last_uttr(dialog: Dict) -> List[Dict]:
 def hypotheses_segmented_list(dialog: Dict) -> List[Dict]:
     hypotheses = dialog["human_utterances"][-1]["hypotheses"]
     hypots = [[h["text"]] for h in hypotheses]
-    return [{'sentences': hypots}]
+    return [{"sentences": hypots}]
 
 
 def ner_hypotheses_segmented_list(dialog: Dict):
     hypotheses = dialog["human_utterances"][-1]["hypotheses"]
     hypots = [[h["text"]] for h in hypotheses]
-    return [{'last_utterances': hypots}]
+    return [{"last_utterances": hypots}]
 
 
 def hypothesis_histories_list(dialog: Dict):
@@ -272,13 +272,13 @@ def hypothesis_histories_list(dialog: Dict):
     utterances_histories_batch = []
     for hyp in hypotheses:
         utterances_histories = []
-        for utt in dialog['utterances']:
-            utterances_histories.append(utt['text'])
+        for utt in dialog["utterances"]:
+            utterances_histories.append(utt["text"])
         # hyp["text"] is a string. We need to pass here list of strings.
         utterances_histories.append([hyp["text"]])
         utterances_histories_batch.append(utterances_histories)
 
-    return [{'utterances_histories': utterances_histories_batch}]
+    return [{"utterances_histories": utterances_histories_batch}]
 
 
 def last_utt_and_history_dialog(dialog: Dict) -> List:
@@ -340,12 +340,13 @@ def simple_formatter_service(payload: List):
 def simple_batch_formatter_service(payload: List):
     for i in range(len(payload["batch"])):
         if len(payload["batch"][i]) == 3:
-            payload["batch"][i] = {"text": payload["batch"][i][0],
-                                   "confidence": payload["batch"][i][1],
-                                   "is_blacklisted": payload["batch"][i][2]}
+            payload["batch"][i] = {
+                "text": payload["batch"][i][0],
+                "confidence": payload["batch"][i][1],
+                "is_blacklisted": payload["batch"][i][2],
+            }
         elif len(payload["batch"][i]) == 2:
-            payload["batch"][i] = {"text": payload["batch"][i][0],
-                                   "confidence": payload["batch"][i][1]}
+            payload["batch"][i] = {"text": payload["batch"][i][0], "confidence": payload["batch"][i][1]}
         elif len(payload["batch"][i]) == 1:
             payload["batch"][i] = {"text": payload["batch"][i][0]}
         elif len(payload["batch"][i]) == 0:
@@ -490,8 +491,9 @@ def wp_formatter_dialog(dialog: Dict):
     if entity_info_list:
         for entity_info in entity_info_list:
             if entity_info and "entity_substr" in entity_info and "entity_ids" in entity_info:
-                input_entity_info_list.append({"entity_substr": entity_info["entity_substr"],
-                                               "entity_ids": entity_info["entity_ids"][:5]})
+                input_entity_info_list.append(
+                    {"entity_substr": entity_info["entity_substr"], "entity_ids": entity_info["entity_ids"][:5]}
+                )
     parser_info = ["find_top_triplets"]
     if not input_entity_info_list:
         input_entity_info_list = [{}]
@@ -567,7 +569,7 @@ def fact_retrieval_formatter_dialog(dialog: Dict):
             "human_sentences": [last_human_utt["text"]],
             "dialog_history": dialog_history,
             "entity_substr": nounphrases,
-            "entity_pages": [entity_pages_list]
+            "entity_pages": [entity_pages_list],
         }
     ]
 
@@ -596,7 +598,7 @@ def intent_responder_formatter_dialog(dialog: Dict):
         for intent in called:
             called_intents[intent] = True
     dialog["called_intents"] = called_intents
-    dialog["utterances"] = dialog["utterances"][-(utils.LAST_N_TURNS * 2 + 1):]
+    dialog["utterances"] = dialog["utterances"][-(utils.LAST_N_TURNS * 2 + 1) :]
     for utt in dialog["utterances"]:
         if "sentseg" in utt["annotations"]:
             utt["text"] = utt["annotations"]["sentseg"]["punct_sent"]
@@ -703,3 +705,32 @@ def game_cooperative_skill_formatter(dialog: Dict):
         "used_links": dialog["human"]["attributes"].get("used_links", {}),
     }
     return [{"dialogs": [dialog]}]
+
+
+def hypothesis_scorer_formatter(dialog: Dict):
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    return [
+        {
+            "dialogues": [
+                {
+                    "context": [uttr["text"] for uttr in dialog["utterances"]],
+                    "hyp": [
+                        {
+                            "text": hyp["text"],
+                            "confidence": hyp.get("confidence", 0),
+                            "cobot_convers_evaluator_annotator": hyp.get("annotations", {}).get(
+                                "cobot_convers_evaluator_annotator", {}
+                            ),
+                        }
+                        for hyp in dialog["human_utterances"][-1]["hypotheses"]
+                    ],
+                }
+            ]
+        }
+    ]
+
+
+def hyp_scorer_resp_formatter(payload: Dict):
+    return {"batch": [i for i in payload.get("batch", [])]}

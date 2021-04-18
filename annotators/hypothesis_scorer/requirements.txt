@@ -1,0 +1,7 @@
+Flask==1.1.1
+simpletransformers==0.60.6
+sentry_sdk==0.13.3
+tensorflow_text==0.1.0
+tensorflow-hub==0.7.0
+catboost==0.25.1
+torch==1.5

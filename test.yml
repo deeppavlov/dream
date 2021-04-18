@@ -182,4 +182,8 @@ services:
     env_file: [ .env.dev ]
   dff-funfact-skill:
     env_file: [ .env.dev ]
+  hypothesis-scorer:
+    env_file: [ .env.dev ]
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
 version: '3.7'

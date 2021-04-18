@@ -431,6 +431,12 @@ services:
       - "./annotators/CoBotNER:/src"
     ports:
       - 8102:8102
+  hypothesis-scorer:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/hypothesis_scorer:/src"
+    ports:
+      - 8110:8110
   dff-funfact-skill:
     env_file: [.env.dev]
     volumes:
