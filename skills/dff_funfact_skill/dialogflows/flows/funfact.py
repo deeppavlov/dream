@@ -67,11 +67,14 @@ def funfact_response(vars, shuffle=True):
     if shuffle:
         random.shuffle(FUNFACT_LIST)
     for funfact, topic in FUNFACT_LIST:
-        link_question = make_question(topic)
+        if given_funfacts:
+            link_question = make_question()
+        else:
+            link_question = make_question(topic)
         if funfact not in given_funfacts:
             state_utils.save_to_shared_memory(vars, given_funfacts=given_funfacts + [funfact])
-            answer = f'{funfact} {link_question}'
-            return answer
+        answer = f'{funfact} {link_question}'
+        return answer
     state_utils.set_confidence(vars, confidence=0)
     answer = ''
     return answer
