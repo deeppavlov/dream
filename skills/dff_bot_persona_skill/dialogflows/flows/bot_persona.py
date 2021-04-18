@@ -17,6 +17,7 @@ import dialogflows.scopes as scopes
 from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE, MUST_CONTINUE
 from common.utils import get_intents, get_sentiment
+from common.bot_persona import YOUR_FAVORITE_COMPILED_PATTERN
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -30,7 +31,6 @@ spacy_nlp = load("en_core_web_sm")
 
 with open("topic_favorites.json", "r") as f:
     FAV_STORIES_TOPICS = json.load(f)
-your_favorite_request_re = re.compile("(you|your|yours|you have a).*(favorite|favourite|like)", re.IGNORECASE)
 
 CONF_HIGH = 1.0
 CONF_MIDDLE = 0.95
@@ -114,7 +114,7 @@ def fav_or_lets_chat_request(ngrams, vars):
     flag = any(
         [
             any(["favorite" in utt, "favourite" in utt]),
-            re.search(your_favorite_request_re, utt),
+            re.search(YOUR_FAVORITE_COMPILED_PATTERN, utt),
             user_lets_chat_about
         ]
     )
@@ -144,12 +144,16 @@ def my_fav_story_response(vars):
         if not name and any(
             [
                 ("my" not in utt) and ("favorite" in utt),
-                re.search(your_favorite_request_re, utt)
+                re.search(YOUR_FAVORITE_COMPILED_PATTERN, utt)
             ]
         ):
             response = "Oh, I don't have one. What about you?"
             state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+        else:
+            response = "I've never heard about it. Could you plaese tell me more about it?"
+            state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
         return response
     except Exception as exc:
         logger.exception(exc)
