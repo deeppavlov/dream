@@ -59,5 +59,8 @@ FUNFACT_LIST = [
 ]
 
 
-def make_question(topic):
-    return f"Would you like to talk about {topic}? " "Or would you like to hear another fun fact?"
+def make_question(topic=""):
+    if topic:
+        return f"Would you like to talk about {topic}? Or would you like to hear another fun fact?"
+    else:
+        return "Would you like to hear another fun fact?"
