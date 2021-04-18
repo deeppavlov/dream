@@ -1,0 +1,1027 @@
+[
+    {
+        "context": [
+            "i'm good how are you",
+            "Spectacular, by all reports! Do you want to know what I can do?",
+            "absolutely",
+            "I'm a socialbot running inside Alexa, and I'm all about chatting with people like you. I can answer questions, share fun facts, discuss movies, books and news. What do you want to talk about?",
+            "let's talk about movies"
+        ],
+        "hyp": [
+            {
+                "is_best": false,
+                "text": "Sorry, probably, I didn't get what you meant. What do you want to talk about?",
+                "confidence": 0.5,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.329,
+                    "isResponseErroneous": 0.939,
+                    "responseEngagesUser": 0.455,
+                    "isResponseInteresting": 0.047,
+                    "isResponseComprehensible": 0.91
+                }
+            },
+            {
+                "is_best": true,
+                "text": "What is the most romantic movie you have ever seen?",
+                "confidence": 0.55,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.891,
+                    "isResponseErroneous": 0.197,
+                    "responseEngagesUser": 0.794,
+                    "isResponseInteresting": 0.594,
+                    "isResponseComprehensible": 1.0
+                }
+            },
+            {
+                "is_best": false,
+                "text": "What is your favorite book?",
+                "confidence": 0.05,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.712,
+                    "isResponseErroneous": 0.426,
+                    "responseEngagesUser": 0.823,
+                    "isResponseInteresting": 0.235,
+                    "isResponseComprehensible": 0.999
+                }
+            },
+            {
+                "is_best": false,
+                "text": "i do, one of my favorites is the lion king, have you seen it?",
+                "confidence": 0.45762672140014454,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.856,
+                    "isResponseErroneous": 0.087,
+                    "responseEngagesUser": 0.776,
+                    "isResponseInteresting": 0.814,
+                    "isResponseComprehensible": 0.998
+                }
+            },
+            {
+                "is_best": false,
+                "text": "my sonis watching bill nye right now. he got his break in entertainment by winning a steve martin lookalike contest, lol.",
+                "confidence": 0.7137343034375733,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.769,
+                    "isResponseErroneous": 0.069,
+                    "responseEngagesUser": 0.481,
+                    "isResponseInteresting": 0.747,
+                    "isResponseComprehensible": 1.0
+                }
+            },
+            {
+                "is_best": false,
+                "text": "Would you like to hear news about movies?",
+                "confidence": 0.9,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.623,
+                    "isResponseErroneous": 0.363,
+                    "responseEngagesUser": 0.619,
+                    "isResponseInteresting": 0.153,
+                    "isResponseComprehensible": 0.998
+                }
+            },
+            {
+                "is_best": false,
+                "text": "Sorry, I don't have an answer for that!",
+                "confidence": 0.2,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.325,
+                    "isResponseErroneous": 0.911,
+                    "responseEngagesUser": 0.326,
+                    "isResponseInteresting": 0.181,
+                    "isResponseComprehensible": 0.991
+                }
+            },
+            {
+                "is_best": true,
+                "text": "What is the recent movie you've watched?",
+                "confidence": 1.0,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.871,
+                    "isResponseErroneous": 0.151,
+                    "responseEngagesUser": 0.667,
+                    "isResponseInteresting": 0.604,
+                    "isResponseComprehensible": 1.0
+                }
+            }
+        ]
+    },
+    {
+        "context": [
+            "absolutely",
+            "I'm a socialbot running inside Alexa, and I'm all about chatting with people like you. I can answer questions, share fun facts, discuss movies, books and news. What do you want to talk about?",
+            "let's talk about movies",
+            "What is the recent movie you've watched?",
+            "kong skull island"
+        ],
+        "hyp": [
+            {
+                "is_best": false,
+                "text": "Sorry, probably, I didn't get what you meant. What do you want to talk about?",
+                "confidence": 0.5,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.106,
+                    "isResponseErroneous": 0.999,
+                    "responseEngagesUser": 0.362,
+                    "isResponseInteresting": 0.0,
+                    "isResponseComprehensible": 0.131
+                }
+            },
+            {
+                "is_best": false,
+                "text": "Are you staying at home and working remotely to avoid coronavirus?",
+                "confidence": 0.55,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.351,
+                    "isResponseErroneous": 0.918,
+                    "responseEngagesUser": 0.395,
+                    "isResponseInteresting": 0.054,
+                    "isResponseComprehensible": 0.778
+                }
+            },
+            {
+                "is_best": false,
+                "text": "Where are you from?",
+                "confidence": 0.05,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.412,
+                    "isResponseErroneous": 0.978,
+                    "responseEngagesUser": 0.397,
+                    "isResponseInteresting": 0.037,
+                    "isResponseComprehensible": 0.731
+                }
+            },
+            {
+                "is_best": false,
+                "text": "do you think they actually used it as the skull of yorick?",
+                "confidence": 0.3421724620920168,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.459,
+                    "isResponseErroneous": 0.978,
+                    "responseEngagesUser": 0.388,
+                    "isResponseInteresting": 0.019,
+                    "isResponseComprehensible": 0.773
+                }
+            },
+            {
+                "is_best": false,
+                "text": "yeah he won that championship back in 1958",
+                "confidence": 0.38645535446752666,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.557,
+                    "isResponseErroneous": 0.99,
+                    "responseEngagesUser": 0.344,
+                    "isResponseInteresting": 0.042,
+                    "isResponseComprehensible": 0.045
+                }
+            },
+            {
+                "is_best": false,
+                "text": "Huh. So you mentioned a island. Does it matter for you? Tell me why?",
+                "confidence": 0.98,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.274,
+                    "isResponseErroneous": 0.984,
+                    "responseEngagesUser": 0.332,
+                    "isResponseInteresting": 0.024,
+                    "isResponseComprehensible": 0.8
+                }
+            },
+            {
+                "is_best": false,
+                "text": "What is your favorite book?",
+                "confidence": 0.9,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.255,
+                    "isResponseErroneous": 0.979,
+                    "responseEngagesUser": 0.517,
+                    "isResponseInteresting": 0.014,
+                    "isResponseComprehensible": 0.845
+                }
+            },
+            {
+                "is_best": true,
+                "text": "Kong: Skull Island is a good action movie. What do you think about it?",
+                "confidence": 1.0,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.505,
+                    "isResponseErroneous": 0.938,
+                    "responseEngagesUser": 0.344,
+                    "isResponseInteresting": 0.084,
+                    "isResponseComprehensible": 0.454
+                }
+            },
+            {
+                "is_best": false,
+                "text": "Sorry, I don't have an answer for that!",
+                "confidence": 0.2,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.091,
+                    "isResponseErroneous": 0.999,
+                    "responseEngagesUser": 0.206,
+                    "isResponseInteresting": 0.003,
+                    "isResponseComprehensible": 0.366
+                }
+            },
+            {
+                "is_best": false,
+                "text": "oh on that note kong skull island was also pretty good the universes are going to be combining",
+                "confidence": 0.7856438143568015,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.663,
+                    "isResponseErroneous": 0.908,
+                    "responseEngagesUser": 0.518,
+                    "isResponseInteresting": 0.576,
+                    "isResponseComprehensible": 0.961
+                }
+            },
+            {
+                "is_best": true,
+                "text": "that looks interesting you liked it",
+                "confidence": 0.6234289550179829,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.315,
+                    "isResponseErroneous": 0.995,
+                    "responseEngagesUser": 0.519,
+                    "isResponseInteresting": 0.012,
+                    "isResponseComprehensible": 0.802
+                }
+            },
+            {
+                "is_best": false,
+                "text": "i always defend ai to people it is a kubrick movie in spielberg packaging i honestly love the world and the music in it",
+                "confidence": 0.540824382913731,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.377,
+                    "isResponseErroneous": 0.739,
+                    "responseEngagesUser": 0.514,
+                    "isResponseInteresting": 0.459,
+                    "isResponseComprehensible": 0.169
+                }
+            },
+            {
+                "is_best": false,
+                "text": "yes , kong the kong movie . one being the exhibition actress ann darrow .",
+                "confidence": 0.88,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.51,
+                    "isResponseErroneous": 0.977,
+                    "responseEngagesUser": 0.53,
+                    "isResponseInteresting": 0.149,
+                    "isResponseComprehensible": 0.904
+                }
+            },
+            {
+                "is_best": false,
+                "text": "I recall this. The scene where Kong approaches James Conrad (Hiddleston) and Mason Weaver (Larson) at night in the fog and has glowing eyes lead to some behind the scenes disagreements.",
+                "confidence": 0.7,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.773,
+                    "isResponseErroneous": 0.944,
+                    "responseEngagesUser": 0.572,
+                    "isResponseInteresting": 0.347,
+                    "isResponseComprehensible": 0.994
+                }
+            }
+        ]
+    },
+    {
+        "context": [
+            "let's talk about movies",
+            "What is the recent movie you've watched?",
+            "kong skull island",
+            "Kong: Skull Island is a good action movie. What do you think about it?",
+            "it's one of my favorite movies of all time"
+        ],
+        "hyp": [
+            {
+                "is_best": false,
+                "text": "What do you want to talk about?",
+                "confidence": 0.5,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.349,
+                    "isResponseErroneous": 0.601,
+                    "responseEngagesUser": 0.621,
+                    "isResponseInteresting": 0.001,
+                    "isResponseComprehensible": 0.896
+                }
+            },
+            {
+                "is_best": false,
+                "text": "Do you have any hidden talents?",
+                "confidence": 0.55,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.382,
+                    "isResponseErroneous": 0.783,
+                    "responseEngagesUser": 0.681,
+                    "isResponseInteresting": 0.002,
+                    "isResponseComprehensible": 0.921
+                }
+            },
+            {
+                "is_best": false,
+                "text": "What do you like to do?",
+                "confidence": 0.05,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.415,
+                    "isResponseErroneous": 0.33,
+                    "responseEngagesUser": 0.682,
+                    "isResponseInteresting": 0.002,
+                    "isResponseComprehensible": 0.874
+                }
+            },
+            {
+                "is_best": false,
+                "text": "yes, i do too.  my favorite actor was jim carrey since i was a child.  i admire that he now chooses not to be in a movie that doesn't project positivity.",
+                "confidence": 0.5386670735533553,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.688,
+                    "isResponseErroneous": 0.369,
+                    "responseEngagesUser": 0.769,
+                    "isResponseInteresting": 0.254,
+                    "isResponseComprehensible": 1.0
+                }
+            },
+            {
+                "is_best": false,
+                "text": "yes, i do too.  my favorite actor was jim carrey since i was a child.  i admire that he now chooses not to be in a movie that doesn't project positivity.",
+                "confidence": 0.5386670735533553,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.688,
+                    "isResponseErroneous": 0.369,
+                    "responseEngagesUser": 0.769,
+                    "isResponseInteresting": 0.254,
+                    "isResponseComprehensible": 1.0
+                }
+            },
+            {
+                "is_best": false,
+                "text": "Sounds cool! So you mentioned a time. Does it work for you? Tell me why?",
+                "confidence": 0.98,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.516,
+                    "isResponseErroneous": 0.847,
+                    "responseEngagesUser": 0.699,
+                    "isResponseInteresting": 0.08,
+                    "isResponseComprehensible": 0.947
+                }
+            },
+            {
+                "is_best": false,
+                "text": "Sorry, I don't have an answer for that!",
+                "confidence": 0.2,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.246,
+                    "isResponseErroneous": 0.778,
+                    "responseEngagesUser": 0.437,
+                    "isResponseInteresting": 0.002,
+                    "isResponseComprehensible": 0.81
+                }
+            },
+            {
+                "is_best": true,
+                "text": "what are your other favorites",
+                "confidence": 0.7509478001675124,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.47,
+                    "isResponseErroneous": 0.42,
+                    "responseEngagesUser": 0.798,
+                    "isResponseInteresting": 0.006,
+                    "isResponseComprehensible": 0.985
+                }
+            },
+            {
+                "is_best": false,
+                "text": "ok interesting who is your favorite",
+                "confidence": 0.7880622752130857,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.468,
+                    "isResponseErroneous": 0.303,
+                    "responseEngagesUser": 0.775,
+                    "isResponseInteresting": 0.014,
+                    "isResponseComprehensible": 0.979
+                }
+            },
+            {
+                "is_best": false,
+                "text": "do you have a favorite i could use a little entertainment",
+                "confidence": 0.7143568014977583,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.684,
+                    "isResponseErroneous": 0.333,
+                    "responseEngagesUser": 0.698,
+                    "isResponseInteresting": 0.03,
+                    "isResponseComprehensible": 0.974
+                }
+            },
+            {
+                "is_best": true,
+                "text": "Cool! What do you think about character of John C. Reilly in this movie?",
+                "confidence": 1.0,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.863,
+                    "isResponseErroneous": 0.148,
+                    "responseEngagesUser": 0.835,
+                    "isResponseInteresting": 0.122,
+                    "isResponseComprehensible": 0.999
+                }
+            },
+            {
+                "is_best": false,
+                "text": "mine too . her hobbies are to eat her aunt ' s tuna and cheese pasta or listening to her favorite song jet lag by simple plan .",
+                "confidence": 0.30000000000000004,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.55,
+                    "isResponseErroneous": 0.816,
+                    "responseEngagesUser": 0.828,
+                    "isResponseInteresting": 0.107,
+                    "isResponseComprehensible": 0.981
+                }
+            },
+            {
+                "is_best": false,
+                "text": "I don't have an opinion on that but I've heard that According to Wikipedia: The career is an individual's metaphorical \"journey\" through learning, work and other aspects of life.",
+                "confidence": 0.3,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.51,
+                    "isResponseErroneous": 0.459,
+                    "responseEngagesUser": 0.526,
+                    "isResponseInteresting": 0.259,
+                    "isResponseComprehensible": 0.964
+                }
+            }
+        ]
+    },
+    {
+        "context": [
+            "kong skull island",
+            "Kong: Skull Island is a good action movie. What do you think about it?",
+            "it's one of my favorite movies of all time",
+            "Cool! What do you think about character of John C. Reilly in this movie?",
+            "i don't remember that character"
+        ],
+        "hyp": [
+            {
+                "is_best": false,
+                "text": "What do you want to talk about?",
+                "confidence": 0.5,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.472,
+                    "isResponseErroneous": 0.233,
+                    "responseEngagesUser": 0.669,
+                    "isResponseInteresting": 0.027,
+                    "isResponseComprehensible": 0.99
+                }
+            },
+            {
+                "is_best": false,
+                "text": "What is the last book you've read?",
+                "confidence": 0.55,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.455,
+                    "isResponseErroneous": 0.332,
+                    "responseEngagesUser": 0.739,
+                    "isResponseInteresting": 0.08,
+                    "isResponseComprehensible": 0.991
+                }
+            },
+            {
+                "is_best": false,
+                "text": "Oh! Breaking news! Would you like to hear it?",
+                "confidence": 0.05,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.269,
+                    "isResponseErroneous": 0.318,
+                    "responseEngagesUser": 0.523,
+                    "isResponseInteresting": 0.019,
+                    "isResponseComprehensible": 0.957
+                }
+            },
+            {
+                "is_best": false,
+                "text": "Well, now that you've mentioned character, I've remembered this. Today I learned that the next king of Swaziland is determined by first deciding which of the king's wives will be the \"Great Wife\". She must be of good character and not a ritual wife. Her character affects her child's chances of ascending to the status of king. Her son will automatically become the next king.. This is interesting, isn't it?",
+                "confidence": 0.5,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.832,
+                    "isResponseErroneous": 0.039,
+                    "responseEngagesUser": 0.744,
+                    "isResponseInteresting": 0.973,
+                    "isResponseComprehensible": 1.0
+                }
+            },
+            {
+                "is_best": false,
+                "text": "the infinity gauntlet was what thanos wore on his hand in the movie. like a golden glove. do you like marvel or dc better?",
+                "confidence": 0.46350561888182207,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.788,
+                    "isResponseErroneous": 0.009,
+                    "responseEngagesUser": 0.755,
+                    "isResponseInteresting": 0.857,
+                    "isResponseComprehensible": 0.946
+                }
+            },
+            {
+                "is_best": false,
+                "text": "it had daniel radcliffe voicing edward cullen.",
+                "confidence": 0.49557983244037906,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.685,
+                    "isResponseErroneous": 0.135,
+                    "responseEngagesUser": 0.635,
+                    "isResponseInteresting": 0.254,
+                    "isResponseComprehensible": 0.997
+                }
+            },
+            {
+                "is_best": false,
+                "text": "Gotcha. So you mentioned a character. Does it work for you? Tell me why?",
+                "confidence": 0.98,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.426,
+                    "isResponseErroneous": 0.421,
+                    "responseEngagesUser": 0.727,
+                    "isResponseInteresting": 0.45,
+                    "isResponseComprehensible": 0.867
+                }
+            },
+            {
+                "is_best": false,
+                "text": "Hey, it's something unclear to me  what does remembering character mean?",
+                "confidence": 0.8,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.418,
+                    "isResponseErroneous": 0.29,
+                    "responseEngagesUser": 0.538,
+                    "isResponseInteresting": 0.234,
+                    "isResponseComprehensible": 0.846
+                }
+            },
+            {
+                "is_best": false,
+                "text": "Sorry, I don't have an answer for that!",
+                "confidence": 0.2,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.352,
+                    "isResponseErroneous": 0.617,
+                    "responseEngagesUser": 0.49,
+                    "isResponseInteresting": 0.086,
+                    "isResponseComprehensible": 0.991
+                }
+            },
+            {
+                "is_best": true,
+                "text": "he was the main character",
+                "confidence": 0.7047248361826871,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.561,
+                    "isResponseErroneous": 0.502,
+                    "responseEngagesUser": 0.527,
+                    "isResponseInteresting": 0.497,
+                    "isResponseComprehensible": 0.989
+                }
+            },
+            {
+                "is_best": false,
+                "text": "fun movie cool world great characters",
+                "confidence": 0.4794206040301522,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.686,
+                    "isResponseErroneous": 0.391,
+                    "responseEngagesUser": 0.73,
+                    "isResponseInteresting": 0.109,
+                    "isResponseComprehensible": 0.998
+                }
+            },
+            {
+                "is_best": false,
+                "text": "im pretty sure hes the main character",
+                "confidence": 0.37758350987830713,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.589,
+                    "isResponseErroneous": 0.138,
+                    "responseEngagesUser": 0.603,
+                    "isResponseInteresting": 0.68,
+                    "isResponseComprehensible": 0.971
+                }
+            },
+            {
+                "is_best": false,
+                "text": "i have never seen the movie .",
+                "confidence": 0.88,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.605,
+                    "isResponseErroneous": 0.41,
+                    "responseEngagesUser": 0.684,
+                    "isResponseInteresting": 0.191,
+                    "isResponseComprehensible": 0.997
+                }
+            },
+            {
+                "is_best": false,
+                "text": "Huh. Which book did impress you the most?",
+                "confidence": 0.85,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.492,
+                    "isResponseErroneous": 0.287,
+                    "responseEngagesUser": 0.709,
+                    "isResponseInteresting": 0.266,
+                    "isResponseComprehensible": 0.993
+                }
+            }
+        ]
+    },
+    {
+        "context": [
+            "i don't remember that character",
+            "Gotcha. So you mentioned a character. Does it work for you? Tell me why?",
+            "yeah",
+            "interesting stuff if youve seen it what was your opinion on the sign language used in shape of water. What is your name?",
+            "you are a bad social bot"
+        ],
+        "hyp": [
+            {
+                "is_best": false,
+                "text": "Sorry, probably, I didn't get what you meant. What do you want to talk about?",
+                "confidence": 0.5,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.208,
+                    "isResponseErroneous": 0.694,
+                    "responseEngagesUser": 0.393,
+                    "isResponseInteresting": 0.048,
+                    "isResponseComprehensible": 0.799
+                }
+            },
+            {
+                "is_best": false,
+                "text": "If you want to talk about games just say, \"let's talk about games\"",
+                "confidence": 0.55,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.198,
+                    "isResponseErroneous": 0.457,
+                    "responseEngagesUser": 0.374,
+                    "isResponseInteresting": 0.052,
+                    "isResponseComprehensible": 0.964
+                }
+            },
+            {
+                "is_best": false,
+                "text": "If you would like to talk about something else just say, 'lets talk about something else'.",
+                "confidence": 0.05,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.148,
+                    "isResponseErroneous": 0.632,
+                    "responseEngagesUser": 0.45,
+                    "isResponseInteresting": 0.032,
+                    "isResponseComprehensible": 0.975
+                }
+            },
+            {
+                "is_best": false,
+                "text": "i think thats the situation with everyone. but even better if you are a shareholder with facebook. being valued at 104 billion in 2012",
+                "confidence": 0.4043969013666404,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.371,
+                    "isResponseErroneous": 0.778,
+                    "responseEngagesUser": 0.578,
+                    "isResponseInteresting": 0.205,
+                    "isResponseComprehensible": 0.985
+                }
+            },
+            {
+                "is_best": false,
+                "text": "I didn't get your name. Could you, please, repeat it.",
+                "confidence": 1.0,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.218,
+                    "isResponseErroneous": 0.868,
+                    "responseEngagesUser": 0.303,
+                    "isResponseInteresting": 0.024,
+                    "isResponseComprehensible": 0.602
+                }
+            },
+            {
+                "is_best": true,
+                "text": "There's no doubt I could improve.",
+                "confidence": 0.98,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.289,
+                    "isResponseErroneous": 0.341,
+                    "responseEngagesUser": 0.353,
+                    "isResponseInteresting": 0.158,
+                    "isResponseComprehensible": 0.972
+                }
+            },
+            {
+                "is_best": false,
+                "text": "hey man you are useful you ever watch titanic",
+                "confidence": 0.7134878307138987,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.184,
+                    "isResponseErroneous": 0.77,
+                    "responseEngagesUser": 0.431,
+                    "isResponseInteresting": 0.069,
+                    "isResponseComprehensible": 0.94
+                }
+            },
+            {
+                "is_best": false,
+                "text": "have it your way then i liked the movie",
+                "confidence": 0.07012489530472484,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.214,
+                    "isResponseErroneous": 0.901,
+                    "responseEngagesUser": 0.409,
+                    "isResponseInteresting": 0.2,
+                    "isResponseComprehensible": 0.775
+                }
+            },
+            {
+                "is_best": false,
+                "text": "well for sure if its a good movie better thanks let me know if you know a good one lol",
+                "confidence": 0.03749137803616298,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.306,
+                    "isResponseErroneous": 0.835,
+                    "responseEngagesUser": 0.451,
+                    "isResponseInteresting": 0.077,
+                    "isResponseComprehensible": 0.828
+                }
+            },
+            {
+                "is_best": false,
+                "text": "this is too funny , do you like youtube ?",
+                "confidence": 0.88,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.253,
+                    "isResponseErroneous": 0.743,
+                    "responseEngagesUser": 0.301,
+                    "isResponseInteresting": 0.075,
+                    "isResponseComprehensible": 0.977
+                }
+            },
+            {
+                "is_best": false,
+                "text": "yeah",
+                "confidence": 0.33999999999999997,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.202,
+                    "isResponseErroneous": 0.714,
+                    "responseEngagesUser": 0.227,
+                    "isResponseInteresting": 0.287,
+                    "isResponseComprehensible": 0.884
+                }
+            },
+            {
+                "is_best": false,
+                "text": "A socialbot is an Alexa skill that converses about popular topics, such as Entertainment, Politics, and Sports. What do you reckon?",
+                "confidence": 0.3,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.164,
+                    "isResponseErroneous": 0.928,
+                    "responseEngagesUser": 0.331,
+                    "isResponseInteresting": 0.038,
+                    "isResponseComprehensible": 0.588
+                }
+            }
+        ]
+    },
+    {
+        "context": [
+            "yes",
+            "The game with the highest rating is Breathedge. It was released on February 25 2021. It's a combination of  Adventure & Indie. 50 percent of people marked Breathedge as recommended.  If you want to discuss it in details say I want to talk about it.  Wanna hear more about it or the next one? ",
+            "next one",
+            "The next game is Curse of the Dead Gods. It was released on February 23 2021. It's a combination of Action Adventure & RPG. 38 percent of people marked Curse of the Dead Gods as recommended.  Chatting about it or the next one? ",
+            "let's talk about this one"
+        ],
+        "hyp": [
+            {
+                "is_best": false,
+                "text": "Sorry, I didn't catch that. What would you like to chat about?",
+                "confidence": 0.5,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.222,
+                    "isResponseErroneous": 0.912,
+                    "responseEngagesUser": 0.395,
+                    "isResponseInteresting": 0.0,
+                    "isResponseComprehensible": 0.998
+                }
+            },
+            {
+                "is_best": false,
+                "text": "How do you feel?",
+                "confidence": 0.55,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.332,
+                    "isResponseErroneous": 0.753,
+                    "responseEngagesUser": 0.363,
+                    "isResponseInteresting": 0.0,
+                    "isResponseComprehensible": 0.993
+                }
+            },
+            {
+                "is_best": false,
+                "text": "Would you like to know the weather?",
+                "confidence": 0.05,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.398,
+                    "isResponseErroneous": 0.79,
+                    "responseEngagesUser": 0.425,
+                    "isResponseInteresting": 0.0,
+                    "isResponseComprehensible": 0.994
+                }
+            },
+            {
+                "is_best": true,
+                "text": "Would you like to hear the latest news?",
+                "confidence": 0.7,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.355,
+                    "isResponseErroneous": 0.383,
+                    "responseEngagesUser": 0.401,
+                    "isResponseInteresting": 0.0,
+                    "isResponseComprehensible": 0.959
+                }
+            },
+            {
+                "is_best": false,
+                "text": "Sorry, I don't have an answer for that!",
+                "confidence": 0.2,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.14,
+                    "isResponseErroneous": 0.875,
+                    "responseEngagesUser": 0.194,
+                    "isResponseInteresting": 0.0,
+                    "isResponseComprehensible": 0.985
+                }
+            },
+            {
+                "is_best": false,
+                "text": "Have you played it before? ",
+                "confidence": 1.0,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.452,
+                    "isResponseErroneous": 0.588,
+                    "responseEngagesUser": 0.331,
+                    "isResponseInteresting": 0.0,
+                    "isResponseComprehensible": 0.989
+                }
+            },
+            {
+                "is_best": false,
+                "text": "were not talking about it okay were stressed",
+                "confidence": 0.4623029265408681,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.404,
+                    "isResponseErroneous": 0.555,
+                    "responseEngagesUser": 0.392,
+                    "isResponseInteresting": 0.0,
+                    "isResponseComprehensible": 0.999
+                }
+            },
+            {
+                "is_best": false,
+                "text": "and if we dont it wont be mentioned",
+                "confidence": 0.006920357688328324,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.329,
+                    "isResponseErroneous": 0.207,
+                    "responseEngagesUser": 0.43,
+                    "isResponseInteresting": 0.0,
+                    "isResponseComprehensible": 0.994
+                }
+            },
+            {
+                "is_best": false,
+                "text": "yes but can we talk about rampart",
+                "confidence": 0.005035842735379613,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.287,
+                    "isResponseErroneous": 0.923,
+                    "responseEngagesUser": 0.242,
+                    "isResponseInteresting": 0.001,
+                    "isResponseComprehensible": 0.996
+                }
+            }
+        ]
+    },
+    {
+        "context": [
+            "next one",
+            "The next game is Curse of the Dead Gods. It was released on February 23 2021. It's a combination of Action Adventure & RPG. 38 percent of people marked Curse of the Dead Gods as recommended.  Chatting about it or the next one? ",
+            "let's talk about this one",
+            "Have you played it before? ",
+            "no i haven't"
+        ],
+        "hyp": [
+            {
+                "is_best": false,
+                "text": "What do you want to talk about?",
+                "confidence": 0.5,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.32,
+                    "isResponseErroneous": 0.112,
+                    "responseEngagesUser": 0.629,
+                    "isResponseInteresting": 0.0,
+                    "isResponseComprehensible": 1.0
+                }
+            },
+            {
+                "is_best": false,
+                "text": "Would you like to know the weather?",
+                "confidence": 0.55,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.377,
+                    "isResponseErroneous": 0.232,
+                    "responseEngagesUser": 0.654,
+                    "isResponseInteresting": 0.0,
+                    "isResponseComprehensible": 0.999
+                }
+            },
+            {
+                "is_best": false,
+                "text": "What do you usually do on the weekends?",
+                "confidence": 0.05,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.422,
+                    "isResponseErroneous": 0.064,
+                    "responseEngagesUser": 0.595,
+                    "isResponseInteresting": 0.017,
+                    "isResponseComprehensible": 0.996
+                }
+            },
+            {
+                "is_best": false,
+                "text": "What is the last book you've read?",
+                "confidence": 0.7,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.505,
+                    "isResponseErroneous": 0.054,
+                    "responseEngagesUser": 0.663,
+                    "isResponseInteresting": 0.005,
+                    "isResponseComprehensible": 1.0
+                }
+            },
+            {
+                "is_best": false,
+                "text": "I didn't get what you've just said. I wonder if you played Curse of the Dead Gods. For example, you can say: yes or no . Or do you want to stop for now?",
+                "confidence": 1.0,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.459,
+                    "isResponseErroneous": 0.379,
+                    "responseEngagesUser": 0.585,
+                    "isResponseInteresting": 0.294,
+                    "isResponseComprehensible": 0.887
+                }
+            },
+            {
+                "is_best": false,
+                "text": "Anyway.",
+                "confidence": 0.6,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.355,
+                    "isResponseErroneous": 0.099,
+                    "responseEngagesUser": 0.438,
+                    "isResponseInteresting": 0.002,
+                    "isResponseComprehensible": 1.0
+                }
+            },
+            {
+                "is_best": true,
+                "text": "in that case hope you enjoy it",
+                "confidence": 0.4646166921219884,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.453,
+                    "isResponseErroneous": 0.033,
+                    "responseEngagesUser": 0.495,
+                    "isResponseInteresting": 0.001,
+                    "isResponseComprehensible": 0.999
+                }
+            },
+            {
+                "is_best": false,
+                "text": "its like an awesome campaign of call of cthulhu or some similar pulpy tabletop rpg the characters environments and all",
+                "confidence": 0.5226178745627432,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.675,
+                    "isResponseErroneous": 0.181,
+                    "responseEngagesUser": 0.438,
+                    "isResponseInteresting": 0.646,
+                    "isResponseComprehensible": 1.0
+                }
+            },
+            {
+                "is_best": false,
+                "text": "oh ok maybe the neverending story is a good pick if you didnt already try it out",
+                "confidence": 0.20638579593043305,
+                "cobot_convers_evaluator_annotator": {
+                    "isResponseOnTopic": 0.463,
+                    "isResponseErroneous": 0.04,
+                    "responseEngagesUser": 0.644,
+                    "isResponseInteresting": 0.058,
+                    "isResponseComprehensible": 1.0
+                }
+            }
+        ]
+    }
+]

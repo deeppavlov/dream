@@ -42,8 +42,12 @@ masked-lm:
 
 wikidata-dial-service:
   CUDA_VISIBLE_DEVICES: '0'
-  gpu: 1
+  gpu: 2
 
 fact-retrieval:
   CUDA_VISIBLE_DEVICES: '0'
+  gpu: 1
+
+hypothesis-scorer:
+  CUDA_VISIBLE_DEVICES: '1'
   gpu: 1
