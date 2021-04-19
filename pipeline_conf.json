@@ -952,18 +952,6 @@
               ],
               "state_manager_method": "add_hypothesis_annotation_batch"
           },
-            "hypothesis-scorer": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://hypothesis-scorer:8110/batch_model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:hypothesis_scorer_formatter",
-                "response_formatter": "state_formatters.dp_formatters:hyp_scorer_resp_formatter",
-                "previous_services": ["post_skill_selector_annotators.cobot_convers_evaluator_annotator"],
-                "state_manager_method": "add_hypothesis_annotation_batch"
-            }
-        },
         "response_selectors": {
             "convers_evaluation_selector": {
                 "connector": {
