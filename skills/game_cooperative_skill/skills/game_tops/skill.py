@@ -12,7 +12,7 @@ from utils.game_db import get_game_db
 
 # configuration
 STORAGE_PATH = os.getenv("STORAGE_PATH")
-DB_FILE = pathlib.Path(os.getenv("DB_FILE", "/tmp/game_db.json"))
+DB_FILE = pathlib.Path(os.getenv("DB_FILE", "/data/game-cooperative-skill/game_db.json"))
 
 
 # load programy models

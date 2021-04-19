@@ -39,3 +39,4 @@ ENTITY_LINKING_URL=http://entity-linking:8075/model
 KNOWLEDGE_GROUNDING_SERVICE_URL=http://knowledge-grounding:8083/respond
 WIKIDATA_DIALOGUE_SERVICE_URL=http://wikidata-dial-service:8092/model
 NEWS_API_SKILL_URL=http://news-api-skill:8066/respond
+RAWG_API_KEY=64a06a047abf433f8ec497004a594394

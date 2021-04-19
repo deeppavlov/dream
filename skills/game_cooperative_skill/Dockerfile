@@ -11,6 +11,11 @@ RUN apt-get update && \
 COPY ./skills/game_cooperative_skill/requirements.txt .
 RUN pip install -r requirements.txt
 
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    ./aws/install && \
+    rm -rf ./aws awscliv2.zip
+
 COPY ./skills/game_cooperative_skill/ ./
 COPY ./common/ ./common/
 
@@ -19,6 +24,7 @@ COPY ./skills/game_cooperative_skill/cron/crontab /etc/cron.d/crontab
 RUN chmod 0644 /etc/cron.d/crontab && \
     crontab /etc/cron.d/crontab && \
     touch /var/log/cron.log
+
 
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}

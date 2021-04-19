@@ -27,7 +27,7 @@ from router import run_skills as skill
 ignore_logger("root")
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
-DB_FILE = pathlib.Path(getenv("DB_FILE", "/tmp/game_db.json"))
+DB_FILE = pathlib.Path(getenv("DB_FILE", "/data/game-cooperative-skill/game_db.json"))
 MEMORY_LENGTH = 3
 
 logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.INFO)
