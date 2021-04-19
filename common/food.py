@@ -11,6 +11,12 @@ OFFER_TALK_ABOUT_FOOD = ["Would you like to chat about food?",
 
 TRIGGER_PHRASES = OPINION_REQUESTS_ABOUT_FOOD + OFFER_TALK_ABOUT_FOOD
 FOOD_COMPILED_PATTERN = re.compile(r"\bfood", re.IGNORECASE)
+FOOD_SKILL_TRANSFER_PHRASES_RE = re.compile(
+    r"(do you know .* most (favorite|favourite) food?|.*what is your (favorite|favourite) food?"
+    "|.*by the way, what food do you like?|do you like .* cuisine?"
+    "|.*what kind of cuisine do you like?)",
+    re.IGNORECASE
+)
 
 
 def skill_trigger_phrases():

@@ -18,7 +18,7 @@ import dialogflows.scopes as scopes
 from common.universal_templates import if_chat_about_particular_topic, DONOTKNOW_LIKE
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE, MUST_CONTINUE
 from common.utils import is_yes, is_no, get_entities, join_words_in_or_pattern
-from common.food import TRIGGER_PHRASES
+from common.food import TRIGGER_PHRASES, FOOD_SKILL_TRANSFER_PHRASES_RE
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -51,12 +51,6 @@ FOOD_WORDS_RE = re.compile(
     r"(food|cook|cooking|bake|baking|cuisine|daily bread|meals|foodstuffs"
     "|edibles|drink|pepperoni|pizza|strawberries|chocolate|coffee|eat|dinner"
     "|breakfast|pasta|burger|cheese|tasty|waffles)",
-    re.IGNORECASE
-)
-FOOD_SKILL_TRANSFER_PHRASES_RE = re.compile(
-    r"(do you know .* most (favorite|favourite) food?|.*what is your (favorite|favourite) food?"
-    "|.*by the way, what food do you like?|do you like .* cuisine?"
-    "|.*what kind of cuisine do you like?)",
     re.IGNORECASE
 )
 WHAT_COOK_RE = re.compile(

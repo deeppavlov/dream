@@ -4,7 +4,7 @@ from common.animals import ANIMALS_TEMPLATE, PETS_TEMPLATE
 from common.books import BOOK_PATTERN
 from common.celebrities import CELEBRITY_COMPILED_PATTERN
 from common.coronavirus import virus_compiled
-from common.food import FOOD_COMPILED_PATTERN
+from common.food import FOOD_COMPILED_PATTERN, FOOD_SKILL_TRANSFER_PHRASES_RE
 from common.funfact import FUNFACT_COMPILED_PATTERN
 from common.game_cooperative_skill import GAMES_COMPILED_PATTERN
 from common.movies import MOVIE_COMPILED_PATTERN
@@ -55,7 +55,7 @@ SKILL_TOPICS = {
     },
     "dff_food_skill": {
         "compiled_patterns": [FOOD_COMPILED_PATTERN],
-        "previous_bot_patterns": [],
+        "previous_bot_patterns": [FOOD_SKILL_TRANSFER_PHRASES_RE],
         "cobot_dialogact_topics": [
         ],
         "cobot_topics": [
