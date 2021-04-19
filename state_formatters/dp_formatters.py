@@ -391,10 +391,12 @@ def full_history_dialog(dialog: Dict):
 
 def utt_sentrewrite_modified_last_dialog(dialog: Dict):
     # Used by: book_skill_formatter; misheard_asr_formatter, cobot_qa_formatter
+    all_prev_active_skills = [uttr.get("active_skill", "") for uttr in dialog["bot_utterances"]]
+    all_prev_active_skills = [skill_name for skill_name in all_prev_active_skills if skill_name]
     dialog = utils.get_last_n_turns(dialog)
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="modified_sents")
-    return [{"dialogs": [dialog]}]
+    return [{"dialogs": [dialog], "all_prev_active_skills": [all_prev_active_skills]}]
 
 
 def utt_sentrewrite_modified_last_dialog_emotion_skill(dialog: Dict):

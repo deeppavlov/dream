@@ -112,7 +112,7 @@ questions_generator = RandomTopicResponder("skills/dummy_skill/questions_with_to
 facts_generator = RandomTopicResponder("skills/dummy_skill/facts_with_topics.csv", 'topic', 'fact')
 
 
-def get_link_to_question(dialog):
+def get_link_to_question(dialog, all_prev_active_skills):
     """Generate `link_to` question updating bot attributes to one of the skills
         which were not active for the last [5] turns.
 
@@ -126,15 +126,12 @@ def get_link_to_question(dialog):
     human_attr = deepcopy(dialog["human"]["attributes"])
     human_attr["used_links"] = human_attr.get("used_links", defaultdict(list))
 
-    # dummy skill gets only 5 last turns, so we do not repeat skill for 5 turns
-    prev_active_skills = set([uttr.get("active_skill", "") for uttr in dialog["bot_utterances"]
-                              if uttr.get("active_skill", "") != ""])
     # remove prev active skills from those we can link to
-    available_links = list(set(SKILLS_FOR_LINKING).difference(prev_active_skills))
+    available_links = list(set(SKILLS_FOR_LINKING).difference(all_prev_active_skills))
     if len(available_links) > 0:
         # if we still have skill to link to, try to generate linking question
         link = link_to(SKILLS_FOR_LINKING, human_attributes=human_attr,
-                       recent_active_skills=prev_active_skills)
+                       recent_active_skills=all_prev_active_skills)
         human_attr["used_links"][link["skill"]] = human_attr["used_links"].get(link["skill"], []) + [link['phrase']]
         linked_question = link["phrase"]
     else:
@@ -143,8 +140,8 @@ def get_link_to_question(dialog):
     return linked_question, human_attr
 
 
-def generate_question_not_from_last_responses(dialog):
-    linked_question, human_attr = get_link_to_question(dialog)
+def generate_question_not_from_last_responses(dialog, all_prev_active_skills):
+    linked_question, human_attr = get_link_to_question(dialog, all_prev_active_skills)
 
     if len(linked_question) > 0:
         result = linked_question
@@ -158,6 +155,7 @@ class DummySkillConnector:
         try:
             st_time = time.time()
             dialog = deepcopy(payload['payload']["dialogs"][0])
+            all_prev_active_skills = list(set((payload['payload']["all_prev_active_skills"][0])))
 
             curr_topics = get_topics(dialog["human_utterances"][-1], which="cobot_topics")
             curr_nounphrases = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
@@ -212,7 +210,7 @@ class DummySkillConnector:
                         bot_attrs += [{}]
                     else:
                         logger.info("No special nounphrases for questions. Return link-to question.")
-                        question, human_attr = generate_question_not_from_last_responses(dialog)
+                        question, human_attr = generate_question_not_from_last_responses(dialog, all_prev_active_skills)
                         if len(question) > 0:
                             cands += [question]
                             confs += [0.55]
@@ -221,14 +219,14 @@ class DummySkillConnector:
                             bot_attrs += [{}]
             else:
                 logger.info("Dialog begins. No special nounphrases for questions. Return link-to question.")
-                question, human_attr = generate_question_not_from_last_responses(dialog)
+                question, human_attr = generate_question_not_from_last_responses(dialog, all_prev_active_skills)
                 cands += [question]
                 confs += [0.55]
                 attrs += [{"type": "normal_question"}]
                 human_attrs += [human_attr]
                 bot_attrs += [{}]
 
-            link_to_question, human_attr = get_link_to_question(dialog)
+            link_to_question, human_attr = get_link_to_question(dialog, all_prev_active_skills)
             if link_to_question:
                 cands += [link_to_question]
                 if ASK_ME_QUESTION_PATTERN.search(dialog["human_utterances"][-1]["text"]):
