@@ -34,7 +34,7 @@ def plural_nouns(text):
         processed_tokens = []
         for token in processed_text:
             if token.tag_ == "NNP":
-                processed_tokens.append(p.plural_noun(token))
+                processed_tokens.append(p.plural_noun(token.text))
             else:
                 processed_tokens.append(token)
         plural_text = " ".join(processed_tokens)
