@@ -39,6 +39,8 @@ services:
   midas-classification:
     environment:
       - CUDA_VISIBLE_DEVICES=6
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
   combined-classification:
     env_file: [ .env.dev ]
     environment:

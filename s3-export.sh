@@ -27,7 +27,7 @@ files=(
   alexaprize_data/convert_reddit_v2.3.punct.tar.gz
   alexaprize_data/emo_bert3_v1.tar.gz
   alexaprize_data/elmo2.tar.gz
-  alexaprize_data/midas.tar.gz
+  alexaprize_data/midas_conv_bert_v1.tar.gz
   alexaprize_data/ner.tar.xz
   deeppavlov_data/classifiers/ood_dbdc_bert_v1.tar.gz
   deeppavlov_data/bert/uncased_L-12_H-768_A-12.zip

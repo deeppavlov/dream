@@ -5,19 +5,17 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-test_config = {'dialogs': [{'human_utterances': [{'text': 'i love you'}],
-                            'bot_utterances': [{'text': 'i hate you'}]}],
+test_config = {'dialogs': [{'human_utterances': [{'text': 'this is the best dog'}],
+                            'bot_utterances': [{'text': 'so what you think ha'}]}],
                'threshold': 0}
-test_config_reverted = {'sentences': ['i love you'],
-                        'last_human_utterances': ['i hate you'],
+test_config_reverted = {'sentences': ['this is the best dog'],
+                        'last_human_utterances': ['so what you think ha'],
                         'threshold': 0}
-test_config_order = ['open_question_opinion', 'open_question_personal',
-                     'clarifying_question', 'correction', 'opening',
-                     'uncertain', 'open_question_factual', 'non_compliant',
-                     'neg_answer', 'command', 'dev_command', 'yes_no_question',
-                     'appreciation', 'closing', 'other_answers', 'nonsense',
-                     'pos_answer', 'complaint', 'comment', 'hold',
-                     'back-channeling', 'abandon', 'opinion', 'statement']
+gold_result = {
+    'opinion': 0.6699745, 'pos_answer': 0.00049586035, 'statement': 0.20634566,
+    'neg_answer': 0.001343765, 'yes_no_question': 0.006176666, 'other_answers': 0.003905255,
+    'open_question_factual': 0.034658864, 'open_question_opinion': 0.07709945
+}
 
 
 def main_test():
@@ -27,9 +25,10 @@ def main_test():
     batch_responses = requests.post(batch_url, json=test_config_reverted).json()
     assert batch_responses[0]['batch'] == responses, f'Batch responses {batch_responses} not match' \
                                                      f'to responses {responses}'
-    predicted_order = sorted(responses[0], key=responses[0].get)
-    assert predicted_order == test_config_order, predicted_order
-    logger.info('MIDAS test passed')
+
+    assert round(responses[0]["opinion"], 5) == 0.66997, print(responses)
+
+    logger.info('Success')
 
 
 if __name__ == '__main__':
