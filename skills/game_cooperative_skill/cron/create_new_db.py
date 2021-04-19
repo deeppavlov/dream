@@ -2,25 +2,28 @@
 
 import json
 import pathlib
-import os
 import datetime
 import traceback
-from os import getenv
 import logging
+import os
+import argparse
 
 import requests
 import sentry_sdk
 
-sentry_sdk.init(getenv("SENTRY_DSN"))
-API_KEY = "f7d903aa967743b9adcfd2cdbb5345e8"
+sentry_sdk.init(os.getenv("SENTRY_DSN"))
+RAWG_API_KEY = os.getenv("RAWG_API_KEY")
 
 logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-DB_FILE = pathlib.Path(os.getenv("DB_FILE", "/tmp/game_db.json"))
+parser = argparse.ArgumentParser()
+parser.add_argument("-d", "--db", type=pathlib.Path)
+args = parser.parse_args()
+
 REQ_TIME_FORMAT = "%Y-%m-%d"
-if not DB_FILE.parent.is_dir():
-    DB_FILE.parent.mkdir(parents=True, exist_ok=True)
+if not args.db.parent.is_dir():
+    args.db.parent.mkdir(parents=True, exist_ok=True)
 # %%
 
 game_fields = [
@@ -45,7 +48,9 @@ game_fields = [
 
 def get_game(game_id="99999999999"):
     try:
-        game = requests.get(f"https://api.rawg.io/api/games/{game_id}?key={API_KEY}").json()
+        game = requests.get(f"https://api.rawg.io/api/games/{game_id}?key={RAWG_API_KEY}").json()
+        err_msg = f"empty response for game_id = {game_id}"
+        assert game, err_msg
     except Exception as exc:
         logger.error(traceback.format_exc())
         sentry_sdk.capture_exception(exc)
@@ -56,11 +61,13 @@ def get_game(game_id="99999999999"):
 
 def get_game_top(from_data="2019-01-01", to_data="2019-12-31"):
     try:
-        games = (
-            requests.get(f"https://api.rawg.io/api/games?dates={from_data},{to_data}&ordering=-added&key={API_KEY}")
-            .json()
-            .get("results", [])
+        games = requests.get(
+            f"https://api.rawg.io/api/games?dates={from_data},{to_data}&ordering=-added&key={RAWG_API_KEY}"
         )
+        games = games.json()
+        games = games.get("results", [])
+        err_msg = f"empty response for game of ({from_data} {to_data})"
+        assert games, err_msg
     except Exception as exc:
         logger.error(traceback.format_exc())
         sentry_sdk.capture_exception(exc)
@@ -101,17 +108,22 @@ def download_data():
 def update_db_file(db_file_path):
     curr_date = datetime.datetime.now()
     min_update_time = datetime.timedelta(hours=12)
-    file_modification_time = datetime.datetime.fromtimestamp(DB_FILE.lstat().st_mtime if DB_FILE.exists() else 0)
+    file_modification_time = datetime.datetime.fromtimestamp(args.db.lstat().st_mtime if args.db.exists() else 0)
     if curr_date - min_update_time > file_modification_time:
-        print("Start game db updating", flush=True)
+        logger.info("Start game db updating")
         data = download_data()
         db_file_path = pathlib.Path(db_file_path)
         json.dump(data, db_file_path.open("wt"), indent=4, ensure_ascii=False)
-        print("Game db updating is finished", flush=True)
+        logger.info("Game db updating is finished")
     else:
-        print("Stop game db updating, db has already been updated", flush=True)
+        logger.info("Stop game db updating, db has already been updated")
 
 
 if __name__ == "__main__":
-    # execute only if run as a script
-    update_db_file(DB_FILE)
+    logger.info("Start game db creating")
+    data = download_data()
+    logger.info("Game db creating is finished")
+    if sum(data.values(), []):
+        json.dump(data, args.db.open("wt"), indent=4, ensure_ascii=False)
+    else:
+        exit(1)

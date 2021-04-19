@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 # configuration
-DB_FILE = pathlib.Path(os.getenv("DB_FILE", "/tmp/game_db.json"))
+DB_FILE = pathlib.Path(os.getenv("DB_FILE", "/data/game-cooperative-skill/game_db.json"))
 GAME_DB = {}
 
 
