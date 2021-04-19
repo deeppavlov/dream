@@ -37,6 +37,8 @@ music_words_re = re.compile(
     re.IGNORECASE,
 )
 like_re = re.compile(r"what ((songs)|(music)|(song)|(artist)|(singer)) do you ((like)|(listen)|(love)|(prefer))")
+what_fav_re = re.compile(r"(((what)|(who)) (is ){,1})|(tell me about )your favorite\
+ ((artist)|(songwriter)|(perfomer)|(band)|(music band)|(music group)|(song)|(album)|(music)|(kind of music))")
 dont_know_re = re.compile(r"((dont)|(doesnt)|(do not)|(does not)|(don't)|(doesn't)) know")
 i_like_re = re.compile(r"((like)|(love)|(adore)|(listen to)|(prefer))", re.IGNORECASE)
 music_request_re = re.compile(r"(alexa\, music)|(music)", re.IGNORECASE)
@@ -50,6 +52,9 @@ what_listen_re = re.compile("what ((((should)|(can)|(may)) I listen)|(you sugges
 
 class State(Enum):
     USR_START = auto()
+    #
+    SYS_WHAT_FAV = auto()
+    USR_MY_FAV = auto()
     #
     SYS_LETS_TALK_ABOUT = auto()
     SYS_MUSIC = auto()
@@ -190,7 +195,8 @@ def music_request(ngrams, vars):
 
 
 def what_music_request(ngrams, vars):
-    flag = bool(like_re.search(state_utils.get_last_human_utterance(vars)["text"]))
+    text = state_utils.get_last_human_utterance(vars)["text"]
+    flag = bool(like_re.match(text) or what_fav_re.match(text))
     logger.info(f"what_music_request {flag}")
     return flag
 
@@ -381,7 +387,7 @@ def genre_specific_response(vars):
             return f"My favourite genre is techno, but I still like jazz, \
             especially Dave Brubeck Quartet, Paul Desmond and Duke Ellington. \
             You heard about them, right?"
-        elif genre == "classic":
+        elif genre == "classic" or genre == "contemporary":
             return f"Well, I am actually a techno fan. \
             But let me guess, are you a fan of Beethoven?"
         elif genre == "electronic" or genre == "trance" or genre == "techno" or genre == "dance" or genre == "house":
@@ -413,7 +419,7 @@ def genre_specific_response(vars):
         elif genre == "indie":
             return f"Indie music is so diverse! I like MGMT, and I am a fan of \
             the Pixies. Did you know that David Bowie was their fan too?"
-        elif genre == "all kinds":
+        elif genre == "all" or genre == "everything":
             return f"I prefer techno most of the time. \
             Do you know David Bowie, by the way?"
     except Exception as exc:
@@ -459,7 +465,7 @@ def genre_advice_response(vars):
             return f"Well, now you know it."
         elif genre == "jazz":
             return f"Oh, you should definitely check them out, like, one hundred percent."
-        elif genre == "classic":
+        elif genre == "classic" or genre == "contemporary":
             return f"Well, I was worth trying. I guess it right most of the time."
         elif genre == "electronic" or genre == "trance" or genre == "techno" or genre == "dance" or genre == "house":
             return f"What do you like then?"
@@ -484,7 +490,7 @@ def genre_advice_response(vars):
         elif genre == "indie":
             return f"To me, that is crazy. Though they are not very popular in \
             the United States, they even were an inspiration to Kurt Cobain."
-        elif genre == "all kinds":
+        elif genre == "all" or genre == "everything":
             return f"You should check him out, especially \"Space oddity\". \
             It is really something special. \
             They even played it on a real Space Station!"
