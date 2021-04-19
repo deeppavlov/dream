@@ -566,7 +566,7 @@ def confident_ask_question_about_travelling_response(vars):
     logger.info(f"Bot confidently asks a question about some LOC.")
 
     try:
-        confidence = choose_conf_decreasing_if_requests_in_human_uttr(vars, SUPER_CONFIDENCE, DEFAULT_CONFIDENCE)
+        confidence = SUPER_CONFIDENCE
         state_utils.set_confidence(vars, confidence)
         if confidence == SUPER_CONFIDENCE:
             state_utils.set_can_continue(vars, MUST_CONTINUE)
@@ -590,7 +590,7 @@ def not_confident_ask_question_about_travelling_response(vars):
     logger.info(f"Bot not confidently asks a question about some LOC.")
 
     try:
-        confidence = choose_conf_decreasing_if_requests_in_human_uttr(vars, DEFAULT_CONFIDENCE, ZERO_CONFIDENCE)
+        confidence = choose_conf_decreasing_if_requests_in_human_uttr(vars, HIGH_CONFIDENCE, DEFAULT_CONFIDENCE)
         state_utils.set_confidence(vars, confidence)
         state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO_DONE)
         question_about_location = get_not_used_template(used_questions_about_location, QUESTIONS_ABOUT_LOCATION)
