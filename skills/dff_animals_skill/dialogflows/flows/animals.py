@@ -121,13 +121,8 @@ def sys_what_animals_request(ngrams, vars):
                                for req in LIKE_ANIMALS_REQUESTS])
     text = state_utils.get_last_human_utterance(vars)["text"]
     user_agrees = is_yes(state_utils.get_last_human_utterance(vars))
-    shared_memory = state_utils.get_shared_memory(vars)
-    user_asks_about_pets = re.search(HAVE_PETS_TEMPLATE, text)
-    found_pet_word = re.findall(r"(pet|pets)", text)
-    found_pet = re.findall(PETS_TEMPLATE, text)
     check_linkto = lets_talk_about_request(vars) or (linkto_like_animals and user_agrees) or text == "animals"
-    if not user_asks_about_pets and not found_pet_word and not found_pet and \
-            not shared_memory.get("what_animals", False) and check_linkto:
+    if check_linkto:
         flag = True
     logger.info(f"sys_what_animals_request={flag}")
     return flag
