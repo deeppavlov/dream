@@ -393,23 +393,32 @@ def fav_food_request(ngrams, vars):
 
 
 def food_fact_response(vars):
-    annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-    # nounphr = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
-    # fact = ""
-    # if nounphr:
-    #     fact = send_cobotqa(f"fact about {nounphr[0]}")
-    #     if "here" in fact.lower():
-    facts = annotations.get("fact_retrieval", [])
+    cool_words = ["cool", "tasty", "delicious"]
+    opinions = ["like", "love", "adore"]
+    human_utt = state_utils.get_last_human_utterance(vars)
+    annotations = human_utt["annotations"]
+    human_utt_text = human_utt["text"].lower()
+    bot_utt_text = state_utils.get_last_bot_utterance(vars)["text"].lower()
     fact = ""
-    if facts:
-        fact = facts[0]
+    intro = "Did you know that "
+    if "berry" in bot_utt_text:
+        intro = ""
+        if ("berry" not in human_utt_text) and (len(human_utt_text.split()) == 1):
+            berry_name = human_utt_text + "berry"
+            fact = send_cobotqa(f"fact about {berry_name}")
+        else:
+            fact = send_cobotqa(f"fact about {human_utt_text}")
+    else:
+        facts = annotations.get("fact_retrieval", [])
+        if facts:
+            fact = facts[0]
     try:
         state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
         if not fact:
             endings = ["Do you recommend", "Why do you like it"]
-            return f"Sounds tasty. I haven't heard about it. {random.choice(endings)}?"
-        return f"I like it too. Do you know that {fact}"
+            return f"Sounds {random.choice(cool_words)}. I haven't heard about it. {random.choice(endings)}?"
+        return f"I {random.choice(opinions)} it too. {intro}{fact}"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
