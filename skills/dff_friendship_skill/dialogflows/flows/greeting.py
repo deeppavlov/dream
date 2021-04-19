@@ -225,7 +225,10 @@ def positive_or_negative_request(ngrams, vars):
     usr_sentiment = state_utils.get_human_sentiment(vars)
     pos_temp = POSITIVE_RESPONSE.search(state_utils.get_last_human_utterance(vars)["text"])
     neg_temp = NEGATIVE_RESPONSE.search(state_utils.get_last_human_utterance(vars)["text"])
-    if usr_sentiment in ["positive", "negative"] or pos_temp or neg_temp:
+
+    bot_asked_how_are_you = any([resp in state_utils.get_last_bot_utterance(vars)["text"]
+                                 for resp in common_greeting.HOW_ARE_YOU_RESPONSES])
+    if bot_asked_how_are_you and (usr_sentiment in ["positive", "negative"] or pos_temp or neg_temp):
         return True
     return False
 
