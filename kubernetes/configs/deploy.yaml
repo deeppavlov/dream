@@ -49,5 +49,5 @@ fact-retrieval:
   gpu: 1
 
 hypothesis-scorer:
-  CUDA_VISIBLE_DEVICES: '1'
+  CUDA_VISIBLE_DEVICES: '0'
   gpu: 1
