@@ -16,7 +16,7 @@ export s3_file=$base_dir/$RAWG_API_KEY/game_db.json
 export md_file=/tmp/meta_data.json
 
 
-mkdir -p local_dir
+mkdir -p $local_dir
 
 function db_update() {
     aws s3 cp $local_file s3://$bucket/$s3_file --acl=public-read
