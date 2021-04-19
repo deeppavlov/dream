@@ -36,7 +36,7 @@ LETS_CHAT_ABOUT_CONFIDENDENCE = 0.6
 NOUNPHRASE_ENTITY_CONFIDENCE = 0.95
 KNOWLEDGE_GROUNDING_SERVICE_URL = getenv('KNOWLEDGE_GROUNDING_SERVICE_URL')
 DFF_SKILLS = [
-    "dff_travel_skill", "dff_animals_skill", "dff_food_skill", "dff_friendship_skill",
+    "dff_travel_skill", "dff_animals_skill", "dff_food_skill",
     "dff_music_skill", "dff_sport_skill"
 ]
 DFF_ANNTR_HISTORY_LEN = 1
@@ -264,10 +264,10 @@ def respond():
             anntr_history_len = DEFAULT_ANNTR_HISTORY_LEN
             bot_uttrs_for_dff_check = dialog["bot_utterances"][-2:] if len(dialog["bot_utterances"]) > 1 else []
             dffs_flag = check_dffs(bot_uttrs_for_dff_check)
-            if dffs_flag:
-                anntr_history_len = DFF_ANNTR_HISTORY_LEN
-            elif lets_chat_about_flag or switch_choose_topic:
+            if lets_chat_about_flag or switch_choose_topic:
                 anntr_history_len = 0
+            elif dffs_flag:
+                anntr_history_len = DFF_ANNTR_HISTORY_LEN
             # if detected lets_chat is about topic from the file
             lets_chat_topic = get_lets_chat_topic(
                 lets_chat_about_flag, dialog["human_utterances"][-1]
