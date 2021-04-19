@@ -250,15 +250,17 @@ class KBEntityLinker(Component, Serializable):
         return entity_ids_batch, confidences_batch
 
     def lemmatize_substr(self, text):
-        pr_text = self.nlp(text)
-        processed_tokens = []
-        for token in pr_text:
-            if token.tag_ == "NNS":
-                processed_tokens.append(self.inflect_engine.singular_noun(token.text))
-            else:
-                processed_tokens.append(token)
-        text = " ".join(processed_tokens)
-        return text
+        lemm_text = ""
+        if text:
+            pr_text = self.nlp(text)
+            processed_tokens = []
+            for token in pr_text:
+                if token.tag_ == "NNS":
+                    processed_tokens.append(self.inflect_engine.singular_noun(token.text))
+                else:
+                    processed_tokens.append(token.text)
+            lemm_text = " ".join(processed_tokens)
+        return lemm_text
 
     def link_entity(self, entity: str, long_context: Optional[str] = None, short_context: Optional[str] = None,
                     template_found: Optional[str] = None, entity_types: List[str] = None,
