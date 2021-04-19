@@ -117,7 +117,8 @@ def ask_about_name_request(ngrams, vars):
         re.findall(PETS_TEMPLATE, user_uttr)
     shared_memory = state_utils.get_shared_memory(vars)
     asked_name = shared_memory.get("asked_name", False)
-    if not user_has_not and not asked_name and not re.findall(r"(name|call)", user_uttr):
+    users_pet = shared_memory.get("users_pet", "")
+    if not user_has_not and not asked_name and not re.findall(r"(name|call)", user_uttr) and users_pet:
         flag = True
     logger.info(f"ask_about_name_request={flag}")
     return flag
@@ -152,14 +153,14 @@ def ask_about_breed_request(ngrams, vars):
     shared_memory = state_utils.get_shared_memory(vars)
     found_pet = re.findall(PETS_TEMPLATE, user_uttr)
     users_pet = shared_memory.get("users_pet", "")
-    asked_name = shared_memory.get("asked_name", False)
+    users_pet_name = shared_memory.get("users_pet_name", "")
     asked_breed = shared_memory.get("asked_breed", False)
     found_breed = re.findall("|".join(breeds.keys()), user_uttr)
     isno = is_no(state_utils.get_last_human_utterance(vars))
     user_has_not = (re.findall("do you have a (cat|dog)", bot_uttr, re.IGNORECASE) and isno) and not \
         re.findall(PETS_TEMPLATE, user_uttr)
     logger.info(f"ask_about_breed_request_isno {isno}")
-    if not user_has_not and not asked_breed and (found_pet or asked_name or users_pet) and not found_breed:
+    if not user_has_not and not asked_breed and (found_pet or users_pet_name or users_pet) and not found_breed:
         flag = True
     logger.info(f"ask_about_breed_request={flag}")
     return flag
@@ -172,14 +173,14 @@ def ask_about_color_request(ngrams, vars):
     shared_memory = state_utils.get_shared_memory(vars)
     found_pet = re.findall(PETS_TEMPLATE, user_uttr)
     users_pet = shared_memory.get("users_pet", "")
-    asked_name = shared_memory.get("asked_name", False)
+    users_pet_name = shared_memory.get("users_pet_name", "")
     asked_color = shared_memory.get("asked_color", False)
     found_color = re.findall(COLORS_TEMPLATE, user_uttr)
     isno = is_no(state_utils.get_last_human_utterance(vars))
     user_has_not = (re.findall("do you have a (cat|dog)", bot_uttr, re.IGNORECASE) and isno) and not \
         re.findall(PETS_TEMPLATE, user_uttr)
     logger.info(f"ask_about_color_request_isno {isno}")
-    if not user_has_not and not asked_color and (found_pet or asked_name or users_pet) and not found_color:
+    if not user_has_not and not asked_color and (found_pet or users_pet_name or users_pet) and not found_color:
         flag = True
     logger.info(f"ask_about_color_request={flag}")
     return flag
