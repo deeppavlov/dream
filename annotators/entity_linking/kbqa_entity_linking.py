@@ -19,6 +19,8 @@ import logging
 from typing import List, Dict, Tuple, Optional, Any
 from collections import defaultdict, Counter
 
+import en_core_web_sm
+import inflect
 import nltk
 import pymorphy2
 import sentry_sdk
@@ -141,6 +143,8 @@ class KBEntityLinker(Component, Serializable):
             self.stopwords = set(stopwords.words("russian"))
         self.re_tokenizer = re.compile(r"[\w']+|[^\w ]")
         self.entity_ranker = entity_ranker
+        self.nlp = en_core_web_sm.load()
+        self.inflect_engine = inflect.engine()
         self.use_descriptions = use_descriptions
         self.include_mention = include_mention
         self.num_entities_to_return = num_entities_to_return
@@ -210,23 +214,26 @@ class KBEntityLinker(Component, Serializable):
 
     def __call__(self, entity_substr_batch: List[List[str]],
                  templates_batch: List[str] = None,
-                 context_batch: List[str] = None,
-                 entity_types_batch: List[List[List[str]]] = None) -> Tuple[
-            List[List[List[str]]], List[List[List[float]]]]:
+                 long_context_batch: List[str] = None,
+                 entity_types_batch: List[List[List[str]]] = None,
+                 short_context_batch: List[str] = None) -> Tuple[List[List[List[str]]], List[List[List[float]]]]:
         entity_ids_batch = []
         confidences_batch = []
         if templates_batch is None:
             templates_batch = ["" for _ in entity_substr_batch]
-        if context_batch is None:
-            context_batch = ["" for _ in entity_substr_batch]
+        if long_context_batch is None:
+            long_context_batch = ["" for _ in entity_substr_batch]
+        if short_context_batch is None:
+            short_context_batch = ["" for _ in entity_substr_batch]
         if entity_types_batch is None:
             entity_types_batch = [[[] for _ in entity_substr_list] for entity_substr_list in entity_substr_batch]
-        for entity_substr_list, template_found, context, entity_types_list in \
-                zip(entity_substr_batch, templates_batch, context_batch, entity_types_batch):
+        for entity_substr_list, template_found, long_context, entity_types_list, short_context in \
+                zip(entity_substr_batch, templates_batch, long_context_batch, entity_types_batch, short_context_batch):
             entity_ids_list = []
             confidences_list = []
             for entity_substr, entity_types in zip(entity_substr_list, entity_types_list):
-                entity_ids, confidences = self.link_entity(entity_substr, context, template_found, entity_types)
+                entity_ids, confidences = self.link_entity(entity_substr, long_context, short_context,
+                                                           template_found, entity_types)
                 if self.num_entities_to_return == 1:
                     if entity_ids:
                         entity_ids_list.append(entity_ids[0])
@@ -242,19 +249,39 @@ class KBEntityLinker(Component, Serializable):
 
         return entity_ids_batch, confidences_batch
 
-    def link_entity(self, entity: str, context: Optional[str] = None, template_found: Optional[str] = None,
-                    entity_types: List[str] = None, cut_entity: bool = False) -> Tuple[List[str], List[float]]:
+    def lemmatize_substr(self, text):
+        pr_text = self.nlp(text)
+        processed_tokens = []
+        for token in pr_text:
+            if token.tag_ == "NNS":
+                processed_tokens.append(self.inflect_engine.singular_noun(token.text))
+            else:
+                processed_tokens.append(token)
+        text = " ".join(processed_tokens)
+        return text
+
+    def link_entity(self, entity: str, long_context: Optional[str] = None, short_context: Optional[str] = None,
+                    template_found: Optional[str] = None, entity_types: List[str] = None,
+                    cut_entity: bool = False) -> Tuple[List[str], List[float]]:
         confidences = []
         if not entity:
             entities_ids = ['None']
         else:
+            entity_is_uttr = False
+            lets_talk_phrases = ["let's talk", "let's chat", "what about", "do you know", "tell me about"]
+            found_lets_talk_phrase = any([phrase in short_context for phrase in lets_talk_phrases])
+            if short_context and (entity == short_context or entity == short_context[:-1] or found_lets_talk_phrase) \
+                    and len(entity.split()) == 1:
+                entity = self.lemmatize_substr(entity)
+                entity_is_uttr = True
+
             candidate_entities = self.candidate_entities_inverted_index(entity)
             if self.types_dict:
                 if entity_types:
                     entity_types = set(entity_types)
                     candidate_entities = [entity for entity in candidate_entities if
                                           self.types_dict.get(entity[1], set()).intersection(entity_types)]
-                if template_found in ["what is xxx?", "what was xxx?"]:
+                if template_found in ["what is xxx?", "what was xxx?"] or entity_is_uttr:
                     candidate_entities_filtered = [entity for entity in candidate_entities if
                                                    not self.types_dict.get(entity[1], set()).intersection(
                                                        self.black_list_what_is)]
@@ -265,7 +292,7 @@ class KBEntityLinker(Component, Serializable):
                 candidate_entities = self.candidate_entities_inverted_index(entity)
             candidate_entities, candidate_names = self.candidate_entities_names(entity, candidate_entities)
             entities_ids, confidences, srtd_cand_ent = self.sort_found_entities(candidate_entities,
-                                                                                candidate_names, entity, context)
+                                                                                candidate_names, entity, long_context)
             if template_found:
                 entities_ids = self.filter_entities(entities_ids, template_found)
 

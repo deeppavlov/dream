@@ -1,6 +1,6 @@
 {
   "chainer": {
-    "in": ["entity_substr", "template", "context"],
+    "in": ["entity_substr", "template", "long_context", "entity_types", "short_context"],
     "pipe": [
       {
         "class_name": "rel_ranking_infer",
@@ -13,7 +13,7 @@
       },
       {
         "class_name": "kbqa_entity_linking:KBEntityLinker",
-        "in": ["entity_substr", "template", "context"],
+        "in": ["entity_substr", "template", "long_context", "entity_types", "short_context"],
         "out": ["entity_ids", "confidences"],
         "load_path": "{DOWNLOADS_PATH}/wikidata_eng",
         "inverted_index_filename": "inverted_index_eng.pickle",

@@ -31,7 +31,8 @@ def respond():
     entity_substr_batch = inp.get("entity_substr", [[""]])
     template_batch = inp.get("template", [""])
     context_batch = inp.get("context", [[""]])
-    new_context_batch = []
+    long_context_batch = []
+    short_context_batch = []
     for entity_substr_list, context_list in zip(entity_substr_batch, context_batch):
         last_utt = context_list[-1]
         if len(last_utt) > 1 and any([entity_substr.lower() == last_utt.lower()
@@ -42,11 +43,18 @@ def respond():
             context = last_utt
         if isinstance(context, list):
             context = " ".join(context)
-        new_context_batch.append(context)
+        if isinstance(last_utt, list):
+            short_context = ' '.join(last_utt)
+        else:
+            short_context = last_utt
+        long_context_batch.append(context)
+        short_context_batch.append(short_context)
 
+    entity_types_batch = [[[] for _ in entity_substr_list] for entity_substr_list in entity_substr_batch]
     entity_info_batch = [[{}] for _ in entity_substr_batch]
     try:
-        entity_ids_batch, conf_batch, entity_pages_batch = el(entity_substr_batch, template_batch, new_context_batch)
+        entity_ids_batch, conf_batch, entity_pages_batch = el(entity_substr_batch, template_batch, long_context_batch,
+                                                              entity_types_batch, short_context_batch)
         entity_info_batch = []
         for entity_substr_list, entity_ids_list, conf_list, entity_pages_list in \
                 zip(entity_substr_batch, entity_ids_batch, conf_batch, entity_pages_batch):
