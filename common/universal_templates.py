@@ -2,7 +2,7 @@ from random import choice
 import re
 
 from common.utils import join_words_in_or_pattern, join_sentences_in_or_pattern, get_topics, \
-    get_intents, get_sentiment
+    get_intents, get_sentiment, is_yes
 from common.greeting import GREETING_QUESTIONS
 
 # https://www.englishclub.com/vocabulary/fl-asking-for-opinions.htm
@@ -74,7 +74,8 @@ TALK_LIKE = ["talk", "chat", "converse", "discuss", "speak", "tell", "say", "gos
 WANT_LIKE = ["want to", "wanna", "wish to", "need to", "desire to", r"(would |'d )?(like|love|dream) to", "going to",
              "gonna", "will", "can", "could", "plan to", "in need to", "demand", "want to"]
 TO_ME_LIKE = [r"to me( now)?", r"with me( now)?", r"me( now)?", "now"]
-SOMETHING_LIKE = ["anything", "something", "nothing", "none", "that", "everything"]
+SOMETHING_LIKE = ["anything", "something", "that", "everything"]
+NOTHING_LIKE = ["nothing", "none", "neither"]
 DONOTKNOW_LIKE = [r"(i )?(do not|don't) know", "you (choose|decide|pick up)"]
 KNOW_LIKE = ["know", "learn", "find out"]
 
@@ -156,7 +157,9 @@ COMPILE_WHAT_TO_TALK_ABOUT = re.compile(join_sentences_in_or_pattern(
 
 # ----- Something. / Anything. / Nothing. ----
 COMPILE_SOMETHING = re.compile(join_sentences_in_or_pattern(
-    [join_words_in_or_pattern(SOMETHING_LIKE), join_words_in_or_pattern(DONOTKNOW_LIKE)]) + END,
+    [join_words_in_or_pattern(SOMETHING_LIKE),
+     join_words_in_or_pattern(NOTHING_LIKE),
+     join_words_in_or_pattern(DONOTKNOW_LIKE)]) + END,
     re.IGNORECASE)
 
 
@@ -233,6 +236,11 @@ def if_choose_topic(annotated_uttr, prev_annotated_uttr={}):
     return False
 
 
+ANY_TOPIC_AMONG_OFFERED = re.compile(
+    r"(\bany\b|\ball\b|\beither\b|\bboth\b|don't know|not know"
+    r"|you (choose|pick up|tell me|want|wish|like)\.?$)")
+
+
 def if_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr={}, key_words=[], compiled_pattern=r""):
     """Dialog context implies that the last utterances chooses particular conversational topic:
         - annotated_uttr asks "let's talk about PARTICULAR-TOPIC"
@@ -259,12 +267,16 @@ def if_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr={}, key_w
         return False
     elif prev_what_to_chat_about or chat_about:
         if key_words:
-            if any([word in uttr_ for word in key_words]):
+            offered_this_topic = any([word in prev_uttr_ for word in key_words])
+            user_agrees_or_any = ANY_TOPIC_AMONG_OFFERED.search(uttr_) or is_yes(annotated_uttr)
+            if any([word in uttr_ for word in key_words]) or (offered_this_topic and user_agrees_or_any):
                 return True
             else:
                 return False
-        elif compiled_pattern:
-            if re.search(compiled_pattern, uttr_):
+        elif compiled_pattern or ANY_TOPIC_AMONG_OFFERED.search(uttr_):
+            offered_this_topic = re.search(compiled_pattern, prev_uttr_)
+            user_agrees_or_any = ANY_TOPIC_AMONG_OFFERED.search(uttr_) or is_yes(annotated_uttr)
+            if re.search(compiled_pattern, uttr_) or (offered_this_topic and user_agrees_or_any):
                 return True
             else:
                 return False
