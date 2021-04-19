@@ -6,11 +6,9 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 test_config = {'dialogs': [{'human_utterances': [{'text': 'this is the best dog'}],
-                            'bot_utterances': [{'text': 'so what you think ha'}]}],
-               'threshold': 0}
+                            'bot_utterances': [{'text': 'so what you think ha'}]}]}
 test_config_reverted = {'sentences': ['this is the best dog'],
-                        'last_human_utterances': ['so what you think ha'],
-                        'threshold': 0}
+                        'last_human_utterances': ['so what you think ha']}
 gold_result = {
     'opinion': 0.6699745, 'pos_answer': 0.00049586035, 'statement': 0.20634566,
     'neg_answer': 0.001343765, 'yes_no_question': 0.006176666, 'other_answers': 0.003905255,
