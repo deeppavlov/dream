@@ -19,8 +19,7 @@ services:
         book-skill:8032, grounding-skill:8080,
         dff-animals-skill:8094, dff-travel-skill:8096, dff-food-skill:8097, dff-sport-skill:8098,
         midas-classification:8090, dff-celebrity-skill:8093, fact-retrieval:8100, cobot-entities:8102,
-        dff-funfact-skill:8104, dff-bot-persona-skill:8105, cobotqa-annotator:8106,
-        hypothesis-scorer:8110"
+        dff-funfact-skill:8104, dff-bot-persona-skill:8105, cobotqa-annotator:8106"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
     deploy:
       mode: replicated
