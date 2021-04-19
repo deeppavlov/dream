@@ -33,9 +33,11 @@ logger.info(f"Considered classes dictionary: {label_to_act}")
 
 def predict(inputs):
     logger.info(f'Inputs {inputs}')
-    if len(inputs) == 1 and inputs[0].strip() == EMPTY_SIGN:
+    if len(inputs) == 0:
+        return []
+    elif len(inputs) == 1 and inputs[0].strip() == EMPTY_SIGN:
         logger.warning('Calling MIDAS with empty inputs. Check out why')
-        return {}
+        return [{}]
     try:
         predictions = model(inputs)
         responses = [
