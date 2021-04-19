@@ -1,17 +1,21 @@
-FROM pytorch/pytorch:1.5-cuda10.1-cudnn7-runtime
+FROM deeppavlov/base-gpu:0.14.1
 
-ARG DATA_URL=http://files.deeppavlov.ai/alexaprize_data/midas.tar.gz
+ARG CONFIG
+ARG SED_ARG=" | "
 
-RUN apt-get update && apt-get install -y --allow-unauthenticated wget && rm -rf /var/lib/apt/lists/*
+ENV CONFIG=$CONFIG
 
 RUN mkdir /src
 RUN mkdir /midas
 
-RUN wget -q $DATA_URL -O /tmp/midas.tar.gz && tar -zvxf /tmp/midas.tar.gz -C /midas && rm -f /tmp/midas.tar.gz
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 COPY . /src/
 
 WORKDIR /src
+
+RUN python -m deeppavlov install $CONFIG
+
+RUN sed -i "s|$SED_ARG|g" "$CONFIG"
 
 CMD gunicorn --workers=1 server:app -b 0.0.0.0:8090

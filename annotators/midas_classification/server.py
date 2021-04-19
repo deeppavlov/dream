@@ -1,10 +1,10 @@
 import logging
 import time
 import os
+
 import numpy as np
-from scipy.special import softmax
-from simpletransformers.classification import ClassificationModel
 import sentry_sdk
+from deeppavlov import build_model
 from flask import Flask, request, jsonify
 
 sentry_sdk.init(os.getenv('SENTRY_DSN'))
@@ -15,51 +15,36 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-MIDAS_DEFAULT_THRESHOLD = 0.01
 EMPTY_SIGN = ': EMPTY >'
 
 try:
-    model_dir = '/midas'
-    model = ClassificationModel(model_type='bert', model_name=model_dir, tokenizer_type='bert',
-                                use_cuda=True, num_labels=24, cuda_device=0,
-                                args={'sliding_window': True, 'fp16': False, 'reprocess_input_data': True,
-                                      'use_multiprocessing': False,
-                                      'cache_dir': 'midas',
-                                      'best_model_dir': 'midas', 'no_cache': True})
-    m = model.predict(['hi'])
+    model = build_model("midas_conv_bert.json", download=True)
+    m = model(['hi'])
 except Exception as e:
     logger.exception('Midas not loaded')
     sentry_sdk.capture_exception(e)
     raise e
 
-label_to_act = {0: "statement", 1: "back-channeling", 2: "opinion", 3: "pos_answer", 4: "abandon",
-                5: "appreciation", 6: "yes_no_question", 7: "closing", 8: "neg_answer",
-                9: "other_answers", 10: "command", 11: "hold", 12: "complaint",
-                13: "open_question_factual", 14: "open_question_opinion", 15: "comment",
-                16: "nonsense", 17: "dev_command", 18: "correction", 19: "opening", 20: "clarifying_question",
-                21: "uncertain", 22: "non_compliant", 23: "open_question_personal"}
+
+label_to_act = {0: "opinion", 1: "pos_answer", 2: "statement", 3: "neg_answer", 4: "yes_no_question",
+                5: "other_answers", 6: "open_question_factual", 7: "open_question_opinion"}
+logger.info(f"Considered classes dictionary: {label_to_act}")
 
 
-def predict(inputs, threshold):
+def predict(inputs):
     logger.info(f'Inputs {inputs}')
     if len(inputs) == 1 and inputs[0].strip() == EMPTY_SIGN:
         logger.warning('Calling MIDAS with empty inputs. Check out why')
         return {}
     try:
-        predictions, raw_outputs = model.predict(inputs)
-        raw_outputs = [raw_output.astype(np.float64) for raw_output in raw_outputs]
-        # convert to float64 because float32 is not json serializable
-        logger.info(f'predicted raw label is {[label_to_act[k] for k in predictions]}')
-        pred_probas = list(map(softmax, raw_outputs))
-        responses = [dict(zip(label_to_act.values(), pred[0])) for pred in pred_probas]
-        for i in range(len(responses)):
-            max_prob = max(responses[i].values())
-            for label in label_to_act.values():
-                if responses[i][label] < min(threshold, max_prob):
-                    del responses[i][label]
-        assert len(responses) == len(inputs)
+        predictions = model(inputs)
+        responses = [
+            {class_name: pred_value.astype(np.float64)
+             for class_name, pred_value in zip(label_to_act.values(), preds)}
+            for preds in predictions]
     except Exception as e:
-        responses = [{'': 0} for _ in inputs]
+        responses = [{class_name: 0 for class_name in label_to_act.values()}
+                     for _ in inputs]
         sentry_sdk.capture_exception(e)
         logger.exception(e)
     return responses
@@ -69,7 +54,6 @@ def predict(inputs, threshold):
 def respond():
     st_time = time.time()
     inputs = []
-    threshold = request.json.get('threshold', MIDAS_DEFAULT_THRESHOLD)
     for dialog in request.json.get('dialogs', [{}]):
         if dialog.get('bot_utterances', []):
             prev_bot_uttr_text = dialog["bot_utterances"][-1].get("text", "").lower()
@@ -82,7 +66,7 @@ def respond():
 
         input_ = f"{prev_bot_uttr_text} {EMPTY_SIGN} {curr_human_uttr_text}"
         inputs.append(input_)
-    responses = predict(inputs, threshold)
+    responses = predict(inputs)
     logging.info(f'midas_classification exec time {time.time() - st_time}')
     return jsonify(responses)
 
@@ -92,10 +76,9 @@ def batch_respond():
     st_time = time.time()
     bot_utterances = request.json.get('sentences', [""])
     human_utterances = request.json.get('last_human_utterances', [""])
-    threshold = request.json.get('threshold', MIDAS_DEFAULT_THRESHOLD)
     inputs = [f"{context.lower()} {EMPTY_SIGN} {utterance.lower()}"
               for context, utterance in zip(human_utterances, bot_utterances)]
-    responses = predict(inputs, threshold)
+    responses = predict(inputs)
     logging.info(f'midas_classification exec time {time.time() - st_time}')
     return jsonify([{"batch": responses}])
 
