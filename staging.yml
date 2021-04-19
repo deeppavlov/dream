@@ -280,6 +280,10 @@ services:
     image: ${DOCKER_REGISTRY}/dff-bot-persona-skill:${VERSION}
     env_file:
       - ${ENV_FILE}
+  hypothesis-scorer:
+    image: ${DOCKER_REGISTRY}/hypothesis-scorer:${VERSION}
+    env_file:
+      - ${ENV_FILE}
 volumes:
   external-logs:
   external-deeppavlov:
