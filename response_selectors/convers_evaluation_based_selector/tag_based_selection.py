@@ -485,6 +485,11 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         # need to add some prompt, and have a prompt
         _add_prompt_forcibly = best_candidate["skill_name"] == _prev_active_skill and _is_active_skill_can_not_continue
         _add_prompt_forcibly = _add_prompt_forcibly and not _contains_entities
+        _no_need_for_changing_topic = False
+        if best_candidate["skill_name"] == "personal_info_skill" and "Nice to meet you" in best_candidate["text"] and \
+                len(dialog["utterances"]) < 6:
+            _add_prompt_forcibly = True
+            _no_need_for_changing_topic = True
 
         if _add_prompt_forcibly or prompt_decision() or (_no_script_two_times_in_a_row and _is_best_not_script):
             logger.info(f"Decided to add a prompt to the best candidate.")
@@ -492,9 +497,13 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             # as we have only one active skill, let's consider active skill as that one providing prompt
             # but we also need to reassign all the attributes
             best_prompt = candidates[best_prompt_id]
-            best_candidate["text"] = f'{best_candidate["text"]} ' \
-                                     f'{np.random.choice(COMPLETELY_CHANGING_THE_SUBJECT_PHRASES)} ' \
-                                     f'{best_prompt["text"]}'
+            if _no_need_for_changing_topic:
+                best_candidate["text"] = f'{best_candidate["text"]} ' \
+                                         f'{best_prompt["text"]}'
+            else:
+                best_candidate["text"] = f'{best_candidate["text"]} ' \
+                                         f'{np.random.choice(COMPLETELY_CHANGING_THE_SUBJECT_PHRASES)} ' \
+                                         f'{best_prompt["text"]}'
             # TODO: how to correctly reassign human-/bot-/hyp- attributes??? how to deal with skill name?
             best_candidate["attributes"] = best_candidate.get("attributes", {})
             best_candidate["attributes"]["prompt_skill"] = best_prompt
