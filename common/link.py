@@ -12,7 +12,7 @@ import common.weather as weather
 import common.personal_info as personal_info
 import common.game_cooperative_skill as game_cooperative_skill
 import common.travel as dff_travel_skill
-import common.celebrities as dff_celebrity_skill
+# import common.celebrities as dff_celebrity_skill
 import common.sport as dff_sport_skill
 import common.animals as dff_animals_skill
 import common.food as dff_food_skill
@@ -35,7 +35,7 @@ skills_phrases_map = {
     # TODO: Add smalltalk skill phrases that is not identical to meta_script_skill
     'dff_travel_skill': set(dff_travel_skill.skill_trigger_phrases()),
     'dff_animals_skill': set(dff_animals_skill.skill_trigger_phrases()),
-    'dff_celebrity_skill': set(dff_celebrity_skill.skill_trigger_phrases()),
+    # 'dff_celebrity_skill': set(dff_celebrity_skill.skill_trigger_phrases()),
     'dff_food_skill': set(dff_food_skill.skill_trigger_phrases()),
     'dff_sport_skill': set(dff_sport_skill.skill_trigger_phrases()),
     'dff_music_skill': set(dff_music_skill.skill_trigger_phrases())
@@ -51,7 +51,7 @@ LIST_OF_SCRIPTED_TOPICS = {
     "dff_sport_skill": "sport",
     "dff_food_skill": "food",
     "dff_music_skill": "music",
-    "dff_celebrity_skill": "celebrities"
+    # "dff_celebrity_skill": "celebrities"
 }
 
 SKILLS_FOR_LINKING = set(skills_phrases_map.keys())
