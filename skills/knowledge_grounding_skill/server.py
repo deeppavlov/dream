@@ -4,6 +4,7 @@ import numpy as np
 import random
 import re
 import time
+from copy import deepcopy
 from os import getenv
 
 import requests
@@ -15,6 +16,7 @@ from common.constants import CAN_NOT_CONTINUE
 from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
 from common.utils import get_intents, join_sentences_in_or_pattern, join_words_in_or_pattern, \
     get_topics, get_entities
+from common.response_selection import ACTIVE_SKILLS
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -35,10 +37,8 @@ KG_ACTIVE_DEPTH = 2
 LETS_CHAT_ABOUT_CONFIDENDENCE = 0.6
 NOUNPHRASE_ENTITY_CONFIDENCE = 0.95
 KNOWLEDGE_GROUNDING_SERVICE_URL = getenv('KNOWLEDGE_GROUNDING_SERVICE_URL')
-DFF_SKILLS = [
-    "dff_travel_skill", "dff_animals_skill", "dff_food_skill",
-    "dff_music_skill", "dff_sport_skill"
-]
+ACTIVE_SKILLS.remove("personal_info_skill")
+DFF_SKILLS = deepcopy(ACTIVE_SKILLS)
 DFF_ANNTR_HISTORY_LEN = 1
 
 special_char_re = re.compile(r'[^0-9a-zA-Z \-\.\'\?,!]+')
@@ -85,10 +85,12 @@ def get_named_entities(utt):
 def get_cobotqa(utterances):
     result_values = []
     for i, uttr in enumerate(utterances):
-        annotation = uttr.get("annotations", {}).get("cobotqa", {})
-        value = annotation.get("text", "")
-        if value:
-            result_values.append([(len(utterances) - i - 1) * 0.01, value])
+        annotation = uttr.get("annotations", {}).get("cobotqa_annotator", {})
+        values = annotation.get("facts", [])
+        for v in values:
+            value = v.get("fact", "")
+            if value:
+                result_values.append([(len(utterances) - i - 1) * 0.01, value])
     return result_values
 
 
@@ -117,7 +119,7 @@ def get_annotations_from_dialog(utterances, annotator_name, key_name=None):
             if value:
                 result_values.append([(len(utterances) - i - 1) * 0.01, value])
         if isinstance(annotation, list):
-            values = annotation
+            values = deepcopy(annotation)
             for value in values[:2]:
                 result_values.append([(len(utterances) - i - 1) * 0.01, value])
 
