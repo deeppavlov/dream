@@ -110,12 +110,12 @@ def respond():
                         # randomly append question about found NP
                         response += " " + opinion_request_question()
 
-                    if len(subjects) > 0 and len(get_common_words(subjects[0], subject)) > 0:
+                    if len(subjects) > 0 and subject and len(get_common_words(subjects[0], subject)) > 0:
                         # in case if subject in response is same as in user question
                         confidence = 0.7
                     else:
                         confidence = 0.3
-                elif subject is not None and subject:
+                elif subject is not None and len(subject) > 0:
                     response = " ".join(sentences[:1])
 
                     if random.random() < ASK_QUESTION_PROB:
