@@ -79,7 +79,7 @@ def categorize_candidate(cand_id, skill_name, categorized_hyps, categorized_prom
         # so, scripted skills with CAN_CONTINUE_SCENARIO_DONE or CAN_NOT_CONTINUE status are not considered as active!
         # this is a chance for other skills to be turned on
         actsuffix = "active"
-    elif _can_continue in [CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE] and skill_name in ACTIVE_SKILLS:
+    elif _can_continue in [CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE]:
         actsuffix = "continued"
     else:
         actsuffix = "finished"
@@ -319,12 +319,6 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         if cand_uttr["skill_name"] == 'program_y' and cand_uttr['confidence'] == 0.98 and \
                 len(cand_uttr["text"].split()) > 6:
             cand_uttr["can_continue"] = CAN_CONTINUE_SCENARIO_DONE
-        elif cand_uttr["skill_name"] not in ACTIVE_SKILLS or (
-                _prev_active_skill != cand_uttr["skill_name"] and cand_uttr["confidence"] < 0.95):
-            # to more fair compare not-scipted skills and not-active scripted skills (so, prompts from scripted skills),
-            # assign them all to not-continue category
-            cand_uttr["can_continue"] = CAN_NOT_CONTINUE
-
         _can_continue = cand_uttr.get("can_continue", CAN_NOT_CONTINUE)
         if _is_active_skill:
             # we will focibly add prompt if current scripted skill finishes scenario,
