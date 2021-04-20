@@ -35,7 +35,11 @@ function is_updated() {
 function random_wait() {
     sleep $(( $( shuf -i 0-59 -n 1 ) * $1 ))
 }
-
-db_load || { random_wait 2 ; db_load || { python create_new_db.py -d $local_file && db_update; }; };
-is_updated || { random_wait 60 ; is_updated || { python create_new_db.py -d $local_file && db_update; }; };
-db_load
+if [ -z "$1" ]
+then
+    is_updated || { random_wait 60 ; is_updated || { python create_new_db.py -d $local_file && db_update; }; };
+    db_load
+else
+    db_load || { random_wait 2 ; db_load || { python create_new_db.py -d $local_file && db_update; }; };
+    db_load
+fi
