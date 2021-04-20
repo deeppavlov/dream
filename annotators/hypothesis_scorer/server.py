@@ -30,7 +30,7 @@ def batch_respond():
         sentry_sdk.capture_exception(e)
         logger.exception(e)
 
-    logging.info(f"response_selection exec time {time.time() - st_time}")
+    logging.info(f"hypothesis_scorer exec time {time.time() - st_time}")
     return jsonify([{"batch": responses}])
 
 
