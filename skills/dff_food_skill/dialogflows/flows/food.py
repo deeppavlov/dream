@@ -18,7 +18,7 @@ import dialogflows.scopes as scopes
 from common.universal_templates import if_chat_about_particular_topic, DONOTKNOW_LIKE
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE, MUST_CONTINUE
 from common.utils import is_yes, is_no, get_entities, join_words_in_or_pattern
-from common.food import TRIGGER_PHRASES, FOOD_SKILL_TRANSFER_PHRASES_RE
+from common.food import TRIGGER_PHRASES, FOOD_WORDS, FOOD_SKILL_TRANSFER_PHRASES_RE, WHAT_COOK
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -47,16 +47,8 @@ CONCEPTNET_CAUSESDESIRE_FOOD = [
     "have meal", "have breakfast", "have food", "have steak",
     "cook dinner", "cook potato", "cook meal", "cook food", "cook pasta"
 ]
-FOOD_WORDS_RE = re.compile(
-    r"(food|cook|cooking|bake|baking|cuisine|daily bread|meals|foodstuffs"
-    "|edibles|drink|pepperoni|pizza|strawberries|chocolate|coffee|eat|dinner"
-    "|breakfast|pasta|burger|cheese|tasty|waffles)",
-    re.IGNORECASE
-)
-WHAT_COOK_RE = re.compile(
-    r"(what should i|what do you suggest me to) (cook|make for dinner)( tonight| today| tomorrow){0,1}",
-    re.IGNORECASE,
-)
+FOOD_WORDS_RE = re.compile(FOOD_WORDS, re.IGNORECASE)
+WHAT_COOK_RE = re.compile(WHAT_COOK, re.IGNORECASE)
 DONOTKNOW_LIKE_RE = re.compile(join_words_in_or_pattern(DONOTKNOW_LIKE), re.IGNORECASE)
 MEALS = [
     "lazagna",
@@ -204,6 +196,10 @@ def lets_talk_about_check(vars):
     # )
     human_utt = state_utils.get_last_human_utterance(vars)
     bot_utt = state_utils.get_last_bot_utterance(vars)
+    if "what is the weather" in human_utt["text"].lower():
+        flag = False
+        logger.info(f"lets_talk_about_check {flag}, weather detected")
+        return flag
     user_lets_chat_about_food = any(
         [
             re.search(FOOD_WORDS_RE, human_utt["text"].lower()),
@@ -391,12 +387,16 @@ def fav_food_request(ngrams, vars):
 
 
 def food_fact_response(vars):
+    acknowledgements = [
+        "I like it too.", "I'm not fond of it.", "It's awesome.",
+        "Fantastic.", "Loving it.", "Yummy!"
+    ]
     cool_words = ["cool", "tasty", "delicious"]
-    opinions = ["like", "love", "adore"]
     human_utt = state_utils.get_last_human_utterance(vars)
     annotations = human_utt["annotations"]
     human_utt_text = human_utt["text"].lower()
     bot_utt_text = state_utils.get_last_bot_utterance(vars)["text"].lower()
+
     fact = ""
     berry_name = ""
     intro = "Did you know that "
@@ -421,7 +421,7 @@ def food_fact_response(vars):
         if not fact:
             endings = ["Do you recommend", "Why do you like it"]
             return f"Sounds {random.choice(cool_words)}. I haven't heard about it. {random.choice(endings)}?"
-        return f"I {random.choice(opinions)} it too. {intro}{fact}"
+        return f"{random.choice(acknowledgements)} {intro}{fact}"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
