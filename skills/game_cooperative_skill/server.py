@@ -18,7 +18,7 @@ from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTI
 from common.universal_templates import is_switch_topic, if_chat_about_particular_topic
 
 from common.utils import get_skill_outputs_from_dialog, is_yes
-from common.game_cooperative_skill import game_skill_was_proposed
+from common.game_cooperative_skill import game_skill_was_proposed, GAMES_COMPILED_PATTERN
 from common.dialogflow_framework.programy.text_preprocessing import clean_text
 
 from router import run_skills as skill
@@ -119,14 +119,21 @@ def respond():
             # logger.info(f"response = {response}")
             bot_utterance = dialog["bot_utterances"][-1] if dialog["bot_utterances"] else {}
             text = response.get("text", "Sorry")
-            confidence = 1.0 if response.get("confidence") else 0.0
-            confidence *= 1.0 if is_active_last_answer else 0.98
-            if "I like to talk about games." in response.get("text") and if_chat_about_particular_topic(
+            if not response.get("confidence"):
+                confidence = 0
+            elif GAMES_COMPILED_PATTERN.search(last_utter_text) and not is_active_last_answer:
+                confidence = 0.98
+            elif is_active_last_answer:
+                confidence = 1
+            elif "I like to talk about games." in response.get("text") and if_chat_about_particular_topic(
                 dialog["human_utterances"][-1], bot_utterance
             ):
                 confidence = 1
-            if is_yes(dialog["human_utterances"][-1]) and game_skill_was_proposed(bot_utterance):
+            elif is_yes(dialog["human_utterances"][-1]) and game_skill_was_proposed(bot_utterance):
                 confidence = 1
+            else:
+                confidence = 0
+
             curr_text = clean_text(text.lower())
             last_text = clean_text(bot_utterance.get("text", "").lower())
             ratio = difflib.SequenceMatcher(None, curr_text.split(), last_text.split()).ratio()
