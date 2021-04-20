@@ -229,6 +229,20 @@ def preproc_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
     ]
 
 
+def preproc_last_human_utt_and_nounphrases_dialog(dialog: Dict) -> List[Dict]:
+    # Used by: cobot entities
+    return [
+        {
+            "sentences": [
+                dialog["human_utterances"][-1]["annotations"].get(
+                    "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
+                )
+            ],
+            "nounphrases": [dialog["human_utterances"][-1]["annotations"].get("cobot_nounphrases", [])]
+        }
+    ]
+
+
 def last_bot_utt_dialog(dialog: Dict) -> List[Dict]:
     return [{"sentences": [dialog["bot_utterances"][-1]["text"]]}]
 

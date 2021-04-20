@@ -387,11 +387,12 @@
                     "timeout": 1,
                     "url": "http://cobot-entities:8102/entities"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_and_nounphrases_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "required_previous_services": [
-                    "annotators.spelling_preprocessing"
+                    "annotators.spelling_preprocessing",
+                    "annotators.cobot_nounphrases"
                 ]
             }
         },
