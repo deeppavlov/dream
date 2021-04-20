@@ -14,7 +14,7 @@ from os import getenv
 import sentry_sdk
 from cobotqa_service import send_cobotqa
 
-from common.utils import get_sentiment, get_entities
+from common.utils import get_entities
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -110,21 +110,14 @@ def respond():
         fact_entities = []
 
         entities = []
-        attit = get_sentiment(curr_uttr, probs=False)[0]
         for _ in range(N_FACTS_TO_CHOSE):
             for ent in get_entities(curr_uttr, only_named=True, with_labels=True):
                 if ent["text"].lower() not in UNIGRAMS and not (
                         ent["text"].lower() == "alexa" and curr_uttr["text"].lower()[:5] == "alexa"):
-                    if attit in ["neutral", "positive"]:
-                        entities.append(ent["text"].lower())
-                        facts_questions.append("Fun fact about {}".format(ent["text"]))
-                        facts_dialog_ids += [i]
-                        fact_entities.append(ent["text"])
-                    else:
-                        entities.append(ent["text"].lower())
-                        facts_questions.append("Fact about {}".format(ent["text"]))
-                        facts_dialog_ids += [i]
-                        fact_entities.append(ent["text"])
+                    entities.append(ent["text"].lower())
+                    facts_questions.append("Fact about {}".format(ent["text"]))
+                    facts_dialog_ids += [i]
+                    fact_entities.append(ent["text"])
             if len(entities) == 0:
                 for ent in get_entities(curr_uttr, only_named=False, with_labels=False):
                     if ent.lower() not in UNIGRAMS:
