@@ -15,6 +15,8 @@ from common.utils import get_intent_name, get_intents, get_topics, get_common_to
 from utils import calculate_single_convers_evaluator_score, CONV_EVAL_STRENGTH, CONFIDENCE_STRENGTH, \
     how_are_you_spec, what_i_can_do_spec, greeting_spec, misheard_with_spec1, COMPLETELY_CHANGING_THE_SUBJECT_PHRASES, \
     misheard_with_spec2, alexa_abilities_spec, join_used_links_in_attributes, get_updated_disliked_skills
+from common.response_selection import ACTIVE_SKILLS, ALMOST_ACTIVE_SKILLS, CAN_NOT_BE_DISLIKED_SKILLS, \
+    NOT_ADD_PROMPT_SKILLS
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -37,21 +39,6 @@ ACKNOWLEDGEMENT_PROBA = 1.0
 LINK_TO_PHRASES = sum([list(list_el) for list_el in skills_phrases_map.values()], [])
 
 # this is a list of skills which are not one-lines
-ACTIVE_SKILLS = [
-    "book_skill", "christmas_new_year_skill", "coronavirus_skill", "dummy_skill_dialog",
-    "emotion_skill", "game_cooperative_skill",  # "knowledge_grounding_skill",
-    "meta_script_skill", "movie_skill", "news_api_skill", "oscar_skill", "personal_info_skill",
-    "reddit_ner_skill", "short_story_skill", "superbowl_skill",  #
-    "valentines_dat_skill", "weather_skill", "wikidata_dial_skill",  #
-    "comet_dialog_skill",
-    "dff_animals_skill", "dff_food_skill", "dff_music_skill", "dff_sport_skill", "dff_travel_skill",
-    "dff_celebrity_skill",
-]
-ALMOST_ACTIVE_SKILLS = [
-    "small_talk_skill", "friendship_skill", "dff_friendship_skill",
-]
-CAN_NOT_BE_DISLIKED_SKILLS = ["meta_script_skill", "personal_info_skill"]
-NOT_ADD_PROMPT_SKILLS = ["alexa_handler", "intent_responder", "misheard_asr", "program_y_dangerous"]
 GENERAL_TOPICS = ["Phatic", "Other"]
 
 
