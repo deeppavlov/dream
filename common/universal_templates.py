@@ -273,7 +273,7 @@ def if_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr={}, key_w
                 return True
             else:
                 return False
-        elif compiled_pattern or ANY_TOPIC_AMONG_OFFERED.search(uttr_):
+        elif compiled_pattern:
             offered_this_topic = re.search(compiled_pattern, prev_uttr_)
             user_agrees_or_any = ANY_TOPIC_AMONG_OFFERED.search(uttr_) or is_yes(annotated_uttr)
             if re.search(compiled_pattern, uttr_) or (offered_this_topic and user_agrees_or_any):

@@ -211,7 +211,7 @@ yes_templates = re.compile(r"(\byes\b|\byup\b|\byep\b|\bsure\b|go ahead|\byeah\b
 
 def is_yes(annotated_phrase):
     yes_detected = "yes" in get_intents(annotated_phrase, which='intent_catcher', probs=False)
-    midas_yes_detected = "pos_answer" in get_intents(annotated_phrase, which='midas', probs=False)
+    midas_yes_detected = False  # "pos_answer" in get_intents(annotated_phrase, which='midas', probs=False)
     # TODO: intent catcher not catches 'yes thanks!'
     if yes_detected or midas_yes_detected or re.search(yes_templates, annotated_phrase.get("text", "").lower()):
         return True
@@ -231,7 +231,7 @@ def is_donot_know(annotated_phrase):
 
 def is_no_intent(annotated_phrase):
     no_detected = "no" in get_intents(annotated_phrase, which='intent_catcher', probs=False)
-    midas_no_detected = "neg_answer" in get_intents(annotated_phrase, which='midas', probs=False)
+    midas_no_detected = False  # "neg_answer" in get_intents(annotated_phrase, which='midas', probs=False)
     is_not_idontknow = not is_donot_know(annotated_phrase)
     if (no_detected or midas_no_detected) and is_not_idontknow:
         return True
