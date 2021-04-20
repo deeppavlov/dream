@@ -20,10 +20,10 @@ sentry_sdk.init(getenv('SENTRY_DSN'))
 
 logger = logging.getLogger(__name__)
 
-START_PHRASE = "OK, let's talk about books. Do you love reading?"
-IF_LOVE_READING = "That's great."
+START_PHRASE = "OK, let's talk about books. Books are my diamonds. Do you love reading?"
+IF_LOVE_READING = "That's great. Outside of a dog, a book is a man's best friend."
 LAST_BOOK_READ = "What is the last book you have read?"
-IF_NOT_LOVE_READING = "Why don't you love reading?"
+IF_NOT_LOVE_READING = "Why don't you love reading? Maybe you haven't found the right book?"
 IF_NOT_REMEMBER_LAST_BOOK = "That's OK. I can't name it either."
 IF_REMEMBER_LAST_BOOK = "Interesting. Have you read BOOK?"
 WHAT_BOOK_IMPRESSED_MOST = "And what book did impress you the most?"
@@ -38,8 +38,7 @@ FAVOURITE_GENRE_ANSWERS = list(GENRE_PHRASES.values())
 FAVOURITE_BOOK_ANSWERS = ['My favourite book is "The Old Man and the Sea" by Ernest Hemingway.',
                           'The Old Man and the Sea tells the story of a battle between a fisherman '
                           'and a large marlin. This is my favourite story, it is truly fascinating.']
-WHAT_IS_FAV_GENRE = 'What is your favorite book genre?'
-
+WHAT_IS_FAV_GENRE = 'I have read a plenty of books from different genres. What is your favorite book genre?'
 HAVE_YOU_READ_BOOK = 'Amazing! Have you read BOOK? And if you have read it, what do you think about it?'
 READ_BOOK_ADVICE = "You can read it. You won't regret it!"
 USER_LIKED_BOOK_PHRASE = "I see you love it. It is so wonderful that you read the books you love."
