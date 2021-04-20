@@ -306,6 +306,10 @@ def country_response(vars):
                 state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
                 return f"Have you been in {CUISINES_COUNTRIES[cuisine_discussed]}?"
+        else:
+            state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
+            return "Where are you from?"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -380,7 +384,7 @@ def fav_food_request(ngrams, vars):
     user_fav_food = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
     # cobot_topic = "Food_Drink" in get_topics(state_utils.get_last_human_utterance(vars), which="cobot_topics")
     food_words_search = re.search(FOOD_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"].lower())
-    if any([user_fav_food, check_conceptnet(vars), food_words_search]):
+    if any([user_fav_food, check_conceptnet(vars), food_words_search]) and condition_utils.no_requests(vars):
         flag = True
     logger.info(f"fav_food_request {flag}")
     return flag
@@ -394,14 +398,19 @@ def food_fact_response(vars):
     human_utt_text = human_utt["text"].lower()
     bot_utt_text = state_utils.get_last_bot_utterance(vars)["text"].lower()
     fact = ""
+    berry_name = ""
     intro = "Did you know that "
     if "berry" in bot_utt_text:
         intro = ""
-        if ("berry" not in human_utt_text) and (len(human_utt_text.split()) == 1):
-            berry_name = human_utt_text + "berry"
+        berry_names = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
+        if berry_names:
+            berry_name = berry_names[0]
+
+        if all(["berry" not in human_utt_text, len(human_utt_text.split()) == 1, berry_name]):
+            berry_name += "berry"
             fact = send_cobotqa(f"fact about {berry_name}")
-        else:
-            fact = send_cobotqa(f"fact about {human_utt_text}")
+        elif berry_name:
+            fact = send_cobotqa(f"fact about {berry_name}")
     else:
         facts = annotations.get("fact_retrieval", [])
         if facts:

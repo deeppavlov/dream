@@ -99,5 +99,5 @@
  "no"
 "dff_music_skill" "tell me about music"
  "no"
-"game_cooperative_skill" "tell me about games"
+"game_cooperative_skill;knowledge_grounding_skill" "tell me about games"
  "no"
