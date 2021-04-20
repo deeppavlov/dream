@@ -2,8 +2,9 @@
 This module consolidates possible phrases that links to specific skill.
 Also it contains +link_to+ function that returns phrase to link to specific skill
 """
-
+from copy import deepcopy
 from random import choice, choices
+
 import common.news as news
 import common.books as books
 import common.movies as movies
@@ -89,10 +90,9 @@ def link_to(skills, human_attributes, recent_active_skills=[]):
     used_links = human_attributes.get("used_links", {})
     disliked_skills = human_attributes.get("disliked_skills", [])
 
-    random_skill = ''
-    random_phrase = ''
-    filtered_phrases_map = dict(skills_phrases_map)
-    filtered_skills = set(skills)
+    filtered_phrases_map = deepcopy(skills_phrases_map)
+    filtered_skills = set(deepcopy(skills))
+
     for skill_name, phrases in used_links.items():
         if skill_name in skills_phrases_map:
             filtered_phrases_map[skill_name] = skills_phrases_map[skill_name].difference(set(phrases))
@@ -101,23 +101,30 @@ def link_to(skills, human_attributes, recent_active_skills=[]):
 
     # all skills were linked before, use original list of skills
     if len(filtered_skills) == 0:
-        filtered_skills = skills
+        filtered_skills = set(deepcopy(skills))
     filtered_skills = set(filtered_skills).difference(set(recent_active_skills))
     # all skills among available were active recently, use original list of skills
     if len(filtered_skills) == 0:
-        filtered_skills = skills
+        filtered_skills = set(deepcopy(skills))
     filtered_skills = set(filtered_skills).difference(set(disliked_skills))
     # all skills among available are disliked, use original list of skills
     if len(filtered_skills) == 0:
-        filtered_skills = skills
+        filtered_skills = set(deepcopy(skills))
 
     if filtered_skills:
         skills_weights = [skills_link_to_weights.get(s, 1.0) for s in filtered_skills]
         random_skill = choices(list(filtered_skills), weights=skills_weights, k=1)[0]
+    else:
+        # unreal situation if `skills` is not empty list, but let's make it
+        skills = list(skills)
+        skills_weights = [skills_link_to_weights.get(s, 1.0) for s in skills]
+        random_skill = choices(skills, weights=skills_weights, k=1)[0]
 
     filtered_phrases = list(filtered_phrases_map[random_skill])
     if filtered_phrases:
         random_phrase = choice(filtered_phrases)
+    else:
+        random_phrase = choice(list(skills_phrases_map[random_skill]))
     return {'phrase': random_phrase, 'skill': random_skill}
 
 
