@@ -5,6 +5,7 @@ import logging
 import os
 import re
 import time
+from copy import deepcopy
 
 import requests
 from flask import Flask, request, jsonify
@@ -38,6 +39,7 @@ DOUBLE_SPACES = re.compile(r"\s+")
 def respond():
     st_time = time.time()
     user_utterances = request.json['sentences']
+    user_nounphrases = request.json['nounphrases']
 
     outputs = []
 
@@ -68,6 +70,28 @@ def respond():
             #               {'text': 'michail jordan', 'label': 'person'},
             #               {'text': 'basketballist', 'label': 'sport'}],
             #  'model_version': 'v1.1'}
+            if len(result["response"]) >= 2:
+                new_result = {"response": []}
+                used_ent = False
+                for ent_first, ent_next in zip(result["response"][:-1], result["response"][1:]):
+                    if f"{ent_first['text']} {ent_next['text']}" in user_nounphrases[i]:
+                        if ent_first['label'] == ent_next['label']:
+                            new_result["response"] += [{"text": f"{ent_first['text']} {ent_next['text']}",
+                                                        "label": ent_next['label']}]
+                        else:
+                            new_result["response"] += [{"text": f"{ent_first['text']} {ent_next['text']}",
+                                                        "label": "misc"}]
+                        used_ent = True
+                    elif not used_ent:
+                        new_result["response"] += [ent_first]
+                    else:
+                        # this ent was already added
+                        used_ent = False
+                if result["response"][-1] not in new_result["response"] and \
+                        result["response"][-1]["text"] not in new_result["response"][-1]["text"]:
+                    new_result["response"] += [result["response"][-1]]
+                result["response"] = deepcopy(new_result["response"])
+
             curr_entities = []
             curr_labelled_entities = []
             for lab_ent in result["response"]:
