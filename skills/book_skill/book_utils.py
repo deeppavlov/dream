@@ -58,17 +58,10 @@ book_banned_words = set([line.strip() for line in book_banned_words_file.read_te
 book_default_entities = set([j.strip() for j in open('/global_data/book_author_names.txt', 'r').readlines()])
 book_query_dict = cPickle.load(open('/global_data/book_query_dict.pkl', 'rb'))
 
-DEBUG_MODE = False
-if DEBUG_MODE:
-    API_KEY = 'QFPxaMUoPi5qcax2FBt9D6Y6vAgLRBbn56TW1iO3'
-    QA_SERVICE_URL = 'https://06421kpunk.execute-api.us-east-1.amazonaws.com/prod/qa/v1/answer'
-    WIKIDATA_URL = 'http://0.0.0.0:8077/model'
-    ENTITY_LINKING_URL = 'http://0.0.0.0:8075/model'
-else:
-    QA_SERVICE_URL = getenv('COBOT_QA_SERVICE_URL')
-    WIKIDATA_URL = getenv("WIKIDATA_URL")
-    ENTITY_LINKING_URL = getenv("ENTITY_LINKING_URL")
-    API_KEY = getenv('COBOT_API_KEY')
+QA_SERVICE_URL = getenv('COBOT_QA_SERVICE_URL')
+WIKIDATA_URL = getenv("WIKIDATA_URL")
+ENTITY_LINKING_URL = getenv("ENTITY_LINKING_URL")
+API_KEY = getenv('COBOT_API_KEY')
 assert ENTITY_LINKING_URL and WIKIDATA_URL
 kbqa_files = ['inverted_index_eng.pickle',
               'entities_list.pickle',
@@ -238,8 +231,8 @@ def get_published_year(book_entity):
         year_candidates = re.findall(r"[\d]{3,4}", published_year)
         published_year = int(year_candidates[0])
         assert published_year
-    except Exception as e:
-        sentry_sdk.capture_exception(e)
+    except Exception:
+        # sentry_sdk.capture_exception(e)
         logger.exception(f'Could not obtain published year from {published_year_list}')
     logger.info(f'Answer for get_published_year {published_year}')
     return published_year

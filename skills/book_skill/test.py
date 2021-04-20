@@ -19,12 +19,14 @@ def main_test():
     gold_phrases = ["I've read it. It's an amazing book! Would you like to know some facts about it?",
                     "",  # As CobotQA doesn't always work
                     'My favourite book is "The Old Man and the Sea" by Ernest Hemingway.',
-                    "OK, let's talk about books. Do you love reading?",
-                    "That's great. What is the last book you have read?",
+                    "OK, let's talk about books. "
+                    "Books are my diamonds. Do you love reading?",
+                    "That's great. Outside of a dog, a book is a man's best friend. "
+                    "What is the last book you have read?",
                     "Interesting. Have you read",
                     "It's an amazing book! Do you know when it was first published?",
                     # This should be a beginning of the response - response needs to be randomized
-                    'What is your favorite book genre?',
+                    'I have read a plenty of books from different genres. What is your favorite book genre?',
                     'Amazing! Have you read The Testaments? And if you have read it, what do you think about it?',
                     json.load(open('bookreads_data.json', 'r'))[0]['fiction']['description']]
     for i in range(len(sliced_data)):
