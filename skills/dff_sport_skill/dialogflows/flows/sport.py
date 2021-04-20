@@ -9,33 +9,41 @@ import sentry_sdk
 import requests
 
 import dialogflows.scopes as scopes
+from CoBotQA.cobotqa_service import send_cobotqa
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
 from common.universal_templates import if_chat_about_particular_topic
 from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
-from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
+from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO_DONE
 import common.greeting as common_greeting
 import common.link as common_link
 from common.sport import (
     BINARY_QUESTION_ABOUT_SPORT,
     BINARY_QUESTION_ABOUT_ATHLETE,
     BINARY_QUESTION_ABOUT_COMP,
-
+    OFFER_FACT_COMPETITION,
+    OPINION_REQUESTS,
+    OPINION_ABOUT_ATHLETE_WITH_TEAM,
+    OPINION_ABOUT_ATHLETE_WITH_TEAM_AND_POS,
+    OPINION_ABOUT_ATHLETE_WITHOUT_TEAM,
+    OPINION_ABOUT_TEAM,
     SPORT_TEMPLATE,
     KIND_OF_SPORTS_TEMPLATE,
     KIND_OF_COMPETITION_TEMPLATE,
     ATHLETE_TEMPLETE,
     SUPPORT_TEMPLATE,
     QUESTION_TEMPLATE,
-    LIKE_TEMPLATE,
+    LAST_CHANCE_TEMPLATE,
     COMPETITION_TEMPLATE,
-
+    ASK_ABOUT_ATH_IN_KIND_OF_SPORT,
     SUPER_CONFIDENCE,
     HIGH_CONFIDENCE,
     ZERO_CONFIDENCE,
+    NUMBER_PROBABILITY
 )
+
 import common.dialogflow_framework.utils.condition as condition_utils
-from common.utils import get_sentiment
+from common.utils import get_sentiment, get_named_persons
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -50,7 +58,6 @@ class State(Enum):
     SYS_LINK_TO_LIKE_SPORT = auto()
     SYS_LINK_TO_LIKE_ATHLETE = auto()
     SYS_LINK_TO_LIKE_COMP = auto()
-
     USR_START = auto()
 
     SYS_WHO_FAVORITE_ATHLETE = auto()
@@ -78,8 +85,25 @@ class State(Enum):
     USR_WHY_LIKE_COMP = auto()
 
     SYS_TELL_NEGATIVE = auto()
-    USR_GO_ANOTHER = auto()
+    USR_TELL_NEGATIVE = auto()
 
+    SYS_NOT_NEGATIVE_AFTER_Y_COMP = auto()
+    USR_OFFER_FACT_ABOUT_COMP = auto()
+    USR_GET_FACT_ABOUT_COMP = auto()
+    SYS_WANT_FACT_ABOUT_COMP = auto
+
+    SYS_NOT_NEGATIVE_AFTER_Y_KIND_OF_SPORT = auto()
+    USR_HAVE_ATH_FROM_THIS_SPORT = auto()
+    SYS_TELL_TEAM = auto()
+    SYS_TELL_ATHLETE_WITHOUT_TEAM = auto()
+
+    SYS_NOT_NEG_AFTER_ATHLETE_WITH_TEAM = auto()
+    USR_LINK_TO_TRAVEL = auto()
+    USR_GET_OPIN_ABOUT_TEAM = auto()
+    SYS_NOT_NEG_AFT_COMMENT_TEAM = auto()
+
+    SYS_LAST_CHANCE = auto()
+    USR_LAST_CHANCE = auto()
     SYS_ERR = auto()
 
 
@@ -104,10 +128,17 @@ simplified_dialogflow = dialogflow_extention.DFEasyFilling(State.USR_START)
 
 
 def donot_chat_about(uttr):
-    if re.search(COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, uttr["text"].lower()):
-        return True
-    else:
-        return False
+    flag = bool(re.search(COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, uttr["text"].lower()))
+    return flag
+
+
+def not_negative_emotion(vars):
+    dont_chat = donot_chat_about(state_utils.get_last_human_utterance(vars))
+    it_is_not_negative = "negative" not in get_sentiment(state_utils.get_last_human_utterance(vars), probs=False,
+                                                         default_labels=["neutral"])
+    user_positive_or_neutral = it_is_not_negative and not dont_chat
+    user_agrees = condition_utils.is_yes_vars(vars)
+    return user_agrees or user_positive_or_neutral
 
 
 def compose_topic_offering(excluded_skills=[]):
@@ -125,8 +156,10 @@ def compose_topic_offering(excluded_skills=[]):
 
 
 def get_news_for_person_or_org(vars):
-    person_or_org_array = get_name_person_or_org(vars)
-    if len(person_or_org_array) > 0:
+    array_person = get_named_persons(state_utils.get_last_human_utterance(vars))
+    array_org = get_org_in_last_human_utterance(vars)
+    person_or_org_array = array_person + array_org
+    if person_or_org_array:
         news_string = get_news(person_or_org_array[-1])
         flag = True
     else:
@@ -156,13 +189,87 @@ def get_news(string):
         return f""
 
 
-def get_name_person_or_org(vars):
+def get_org_in_last_human_utterance(vars):
     user_mentioned_named_entities = state_utils.get_named_entities_from_human_utterance(vars)
     user_mentioned_name = []
     for named_entity in user_mentioned_named_entities:
-        if named_entity["type"] == "PER" or "ORG":
+        if named_entity["type"] == "ORG":
             user_mentioned_name.append(named_entity["text"])
     return user_mentioned_name
+
+
+def entity_in_last_uttr_from_sport_area(vars):
+    array_person = get_named_persons(state_utils.get_last_human_utterance(vars))
+    array_org = get_org_in_last_human_utterance(vars)
+    array_entities = array_person + array_org
+    annotated_utterance = state_utils.get_last_human_utterance(vars)
+    array_sport_entities = []
+    for entity in array_entities:
+        wiki_parser_for_entity = annotated_utterance["annotations"].get("wiki_parser", {}).get(
+            "topic_skill_entities_info", {}).get(entity.lower(), {})
+        if bool(wiki_parser_for_entity) is False:
+            wiki_parser_for_entity = annotated_utterance["annotations"].get("wiki_parser", {}).get(
+                "entities_info", {}).get(entity.lower(), {})
+        kind_of_sport = wiki_parser_for_entity.get("sport", [["", ""]])[-1][1]
+        occupation = wiki_parser_for_entity.get("occupation", [["", ""]])[-1][1]
+        instance_of = wiki_parser_for_entity.get("instance of", [["", ""]])[-1][1]
+        wiki_annotated_for_entity = kind_of_sport + " " + occupation + " " + instance_of
+        sport_flag = bool(re.search(KIND_OF_SPORTS_TEMPLATE, wiki_annotated_for_entity)) or bool(
+            re.search(ATHLETE_TEMPLETE, wiki_annotated_for_entity)) or bool(
+            re.search(SPORT_TEMPLATE, wiki_annotated_for_entity))
+        if sport_flag:
+            it_is_athlete = bool(re.search(r"human", instance_of)) or bool(re.search(ATHLETE_TEMPLETE, occupation))
+            dict_entity = {"name": entity}
+            if it_is_athlete:
+                dict_entity["type"] = "athlete"
+
+                dict_entity["country for sport"] = wiki_parser_for_entity.get("country for sport",
+                                                                              [["", ""]])[-1][1]
+                dict_entity["position played on team"] = wiki_parser_for_entity.get("position played on team",
+                                                                                    [["", ""]])[-1][1]
+                dict_entity["member of sport team"] = wiki_parser_for_entity.get("member of sport team",
+                                                                                 [["", ""]])[0][1]
+                dict_entity["id sport team"] = wiki_parser_for_entity.get("member of sport team",
+                                                                          [["", ""]])[0][0]
+            else:
+                dict_entity["type"] = "team"
+
+                dict_entity["victory"] = wiki_parser_for_entity.get("victory",
+                                                                    [["", ""]])[-1][1]
+                dict_entity["country"] = wiki_parser_for_entity.get("country",
+                                                                    [["", ""]])[-1][1]
+            array_sport_entities.append(dict_entity)
+        else:
+            pass
+    if array_sport_entities:
+        return array_sport_entities[-1]
+    else:
+        return {"type": "None"}
+
+
+def get_dict_entity(entity_substr, entity_ids, type):
+    try:
+        WIKIDATA_URL = "http://wiki-parser:8077/model"
+        dict_result = requests.post(WIKIDATA_URL,
+                                    json={"parser_info": ["find_top_triplets"],
+                                          "query": [[{"entity_substr": entity_substr,
+                                                     "entity_ids": [entity_ids]}]]},
+                                    timeout=1).json()
+        if dict_result[0].get("topic_skill_entities_info", {}):
+            big_dict_team = dict_result[0]["topic_skill_entities_info"].get(entity_substr, {})
+        elif dict_result[0].get("entities_info", {}):
+            big_dict_team = dict_result[0]["entities_info"].get(entity_substr, {})
+        else:
+            big_dict_team = {}
+        small_dict_team = {"type": type,
+                           "name": entity_substr,
+                           "victory": big_dict_team.get("victory", [["", ""]])[-1][1],
+                           "country": big_dict_team.get("country", [["", ""]])[-1][1]}
+        return small_dict_team
+    except Exception as exc:
+        sentry_sdk.capture_exception(exc)
+        logger.exception(exc)
+        return {"type": "None"}
 
 
 ##################################################################################################################
@@ -212,6 +319,7 @@ def link_to_like_comp_request(ngrams, vars):
     logger.info(f"link_to_like_comp_request={flag}")
     return flag
 
+
 ##################################################################################################################
 # let's talk about sport || what kind of sport do you like
 ##################################################################################################################
@@ -223,9 +331,8 @@ def lets_talk_about_sport_request(ngrams, vars):
         state_utils.get_last_human_utterance(vars),
         state_utils.get_last_bot_utterance(vars),
         compiled_pattern=SPORT_TEMPLATE)
-
     flag = bool(user_lets_chat_about_sport)
-    logger.info(f"lets_talk_about_sport_request={flag}")
+    logger.info(f"lets_talk_about_sport_request = {flag}")
     return flag
 
 
@@ -284,8 +391,8 @@ def user_ask_about_athletes_request(ngrams, vars):
 def user_ask_about_athletes_response(vars):
     # USR_ASK_ABOUT_ATHLETE
     try:
-        state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
-        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+        state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         return f"I know all the athletes on this planet. Which athlete do you like the most?"
     except Exception as exc:
         logger.exception(exc)
@@ -312,54 +419,13 @@ def user_ask_who_do_u_support_response(vars):
     # USR_ASK_WHO_SUPPORT
     responses = ["sports teams", "athletes"]
     try:
-        state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
-        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+        state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         return f"I was born quite recently. But I know a lot of {random.choice(responses)}. Tell me who do you support?"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
         state_utils.set_confidence(vars, ZERO_CONFIDENCE)
-        return error_response(vars)
-
-
-##################################################################################################################
-# i like Ronaldo/Barcelona || What do u think about Messi/Real Madrid? (without checking for the sports area)
-##################################################################################################################
-
-
-def user_like_or_ask_about_player_or_org_request(ngrams, vars):
-    # SYS_TELL_ATHLETE
-    dont_chat = donot_chat_about(state_utils.get_last_human_utterance(vars))
-    user_like_or_ask = re.search(LIKE_TEMPLATE, state_utils.get_last_human_utterance(vars)["text"]) or re.search(
-        QUESTION_TEMPLATE, state_utils.get_last_human_utterance(vars)["text"]
-    )
-    user_lets_chat_about = if_chat_about_particular_topic(
-        state_utils.get_last_human_utterance(vars), state_utils.get_last_bot_utterance(vars))
-    it_is_not_negative = "negative" not in get_sentiment(
-        state_utils.get_last_human_utterance(vars), probs=False, default_labels=["neutral"]
-    )
-    user_want = (bool(user_like_or_ask) or user_lets_chat_about) and not dont_chat
-    user_like_and_want = user_want and it_is_not_negative
-    flag_have_per_or_org, _ = get_news_for_person_or_org(vars)
-    flag = user_like_and_want and flag_have_per_or_org
-    logger.info(f"user_like_or_ask_about_player_or_org_request = {flag}")
-    return flag
-
-
-def user_like_or_ask_about_player_or_org_response(vars):
-    # USR_LIKE_ATHLETE
-    try:
-        state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
-        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)  # change in MUST_CONTINUE with
-        have_news, news_string = get_news_for_person_or_org(vars)                # check person for sport area &
-        if have_news:                                                            # connect to Start
-            return news_string
-        else:
-            return error_response(vars)
-    except Exception as exc:
-        logger.exception(exc)
-        sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, confidence=ZERO_CONFIDENCE)
         return error_response(vars)
 
 
@@ -370,13 +436,10 @@ def user_like_or_ask_about_player_or_org_response(vars):
 
 def user_like_sport_request(ngrams, vars):
     # SYS_TELL_SPORT
-    dont_chat = donot_chat_about(state_utils.get_last_human_utterance(vars))
-    it_is_not_negative = "negative" not in get_sentiment(state_utils.get_last_human_utterance(vars), probs=False,
-                                                         default_labels=["neutral"])
-    user_want = it_is_not_negative and not dont_chat
+    user_want = not_negative_emotion(vars)
     user_says_about_kind_of_sport = re.search(KIND_OF_SPORTS_TEMPLATE,
                                               state_utils.get_last_human_utterance(vars)["text"])
-    if bool(user_says_about_kind_of_sport) is True:
+    if bool(user_says_about_kind_of_sport):
         flag_1 = bool(user_says_about_kind_of_sport) and user_want
         flag_2 = len(state_utils.get_last_human_utterance(vars)["text"]) == len(user_says_about_kind_of_sport.group())
         flag = flag_1 or flag_2
@@ -392,8 +455,9 @@ def user_like_sport_response(vars):
         number = random.randint(1, 10)
         kind_of_sport = re.search(KIND_OF_SPORTS_TEMPLATE,
                                   state_utils.get_last_human_utterance(vars)["text"]).group()
-        state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)  # change question and add cycle here
-        if number > 3:
+        state_utils.save_to_shared_memory(vars, kind_of_sport=kind_of_sport)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+        if number > NUMBER_PROBABILITY:
             state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
             return f"why do you like {kind_of_sport}?"
         else:
@@ -408,6 +472,182 @@ def user_like_sport_response(vars):
 
 
 ##################################################################################################################
+# if human have no_negative emotion after why like kind_of_sport -> i ask famous athlete
+##################################################################################################################
+
+
+def user_positive_or_neutral_about_kind_of_sport_request(ngrams, vars):
+    # SYS_NOT_NEGATIVE_AFTER_Y_KIND_OF_SPORT
+    flag = not_negative_emotion(vars)
+    logger.info(f"user_positive_or_neutral_about_kind_of_sport_request={flag}")
+    return flag
+
+
+def user_positive_or_neutral_about_kind_of_sport_response(vars):
+    # USR_HAVE_ATH_FROM_THIS_SPORT
+    try:
+        shared_memory = state_utils.get_shared_memory(vars)
+        kind_of_sport = shared_memory.get("kind_of_sport", "")
+        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+        state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
+        return random.choice(ASK_ABOUT_ATH_IN_KIND_OF_SPORT).replace("KIND_OF_SPORT", kind_of_sport)
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        state_utils.set_confidence(vars, ZERO_CONFIDENCE)
+        return error_response(vars)
+
+
+##################################################################################################################
+# i like Ronaldo || some athlete who have team!
+##################################################################################################################
+
+
+def user_like_or_ask_about_player_request(ngrams, vars):
+    # SYS_TELL_ATHLETE
+    not_negative = not_negative_emotion(vars)
+    dict_entity = entity_in_last_uttr_from_sport_area(vars)
+    user_tell_athlete_with_team = dict_entity["type"] == "athlete" and len(
+        dict_entity.get("member of sport team", "")) > 0
+    flag = not_negative and user_tell_athlete_with_team
+    logger.info(f"user_like_or_ask_about_player_request = {flag}")
+    return flag
+
+
+def user_like_or_ask_about_player_response(vars):
+    # USR_LIKE_ATHLETE
+    try:
+        dict_athlete_with_team = entity_in_last_uttr_from_sport_area(vars)
+        state_utils.save_to_shared_memory(vars, dict_athlete=dict_athlete_with_team)
+        team = dict_athlete_with_team.get("member of sport team", "")
+        position = dict_athlete_with_team.get("position played on team", "")
+        if team:
+            state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+            state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+            if position:
+                response = random.choice(OPINION_ABOUT_ATHLETE_WITH_TEAM_AND_POS)
+                response_replace = response.replace("TEAM", team).replace("POSITION", position)
+            else:
+                response = random.choice(OPINION_ABOUT_ATHLETE_WITH_TEAM)
+                response_replace = response.replace("TEAM", team)
+            return response_replace
+        else:
+            return last_chance_response(vars)
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        state_utils.set_confidence(vars, confidence=ZERO_CONFIDENCE)
+        return error_response(vars)
+
+
+#####################################################################################################################
+# some athlete who does not have team! or neg emotion
+#####################################################################################################################
+
+
+def user_like_or_ask_about_player_without_team_request(ngrams, vars):
+    # SYS_TELL_ATHLETE_WITHOUT_TEAM
+    not_negative = not_negative_emotion(vars)
+    dict_entity = entity_in_last_uttr_from_sport_area(vars)
+    user_tell_athlete_without_team = dict_entity["type"] == "athlete" and len(
+        dict_entity.get("member of sport team", "")) == 0
+    flag = not_negative and user_tell_athlete_without_team
+    logger.info(f"user_like_or_ask_about_player_request = {flag}")
+    return flag
+
+
+def link_to_travel_response(vars):
+    # USR_LINK_TO_TRAVEL
+    try:
+        state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+        state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+        shared_memory = state_utils.get_shared_memory(vars)
+        dict_athlete = shared_memory.get("dict_athlete", {})
+        dict_team = shared_memory.get("dict_team", {})
+        information_flag = False
+        if dict_athlete:
+            country = dict_athlete.get("country for sport", "")
+            name = dict_athlete.get("name", "")
+            if country and name:
+                information_flag = True
+        if not information_flag and dict_team:
+            country = dict_team.get("country", "")
+            name = dict_team.get("name", "")
+            if country and name:
+                information_flag = True
+        if information_flag:
+            response = random.choice(OPINION_ABOUT_ATHLETE_WITHOUT_TEAM)
+            response_replace = response.replace("COUNTRY", country).replace("NAME", name)
+            return response_replace
+        else:
+            return last_chance_response(vars)
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        state_utils.set_confidence(vars, confidence=ZERO_CONFIDENCE)
+        return error_response(vars)
+
+
+#####################################################################################################################
+# user tell team or user not negative after comment athlete with team
+#####################################################################################################################
+
+
+def user_tell_team_request(ngrams, vars):
+    # SYS_TELL_TEAM
+    user_not_negative = not_negative_emotion(vars)
+    dict_entity = entity_in_last_uttr_from_sport_area(vars)
+    user_tell_team = dict_entity["type"] == "team"
+    flag = user_not_negative and user_tell_team
+    logger.info(f"user_tell_team_request = {flag}")
+    return flag
+
+
+def user_not_neg_after_comment_ath_with_team_request(ngrams, vars):
+    # SYS_NOT_NEG_AFTER_ATHLETE_WITH_TEAM
+    flag = not_negative_emotion(vars)
+    logger.info(f"user_not_neg_after_comment_ath_with_team_request = {flag}")
+    return flag
+
+
+def user_get_talk_about_team_response(vars):
+    # USR_GET_OPIN_ABOUT_TEAM
+    try:
+        dict_entity = entity_in_last_uttr_from_sport_area(vars)
+        if dict_entity["type"] == "team":
+            state_utils.save_to_shared_memory(vars, dict_team=dict_entity)
+            competition = dict_entity["victory"]
+            country = dict_entity["country"]
+            name_team = dict_entity["name"]
+        else :
+            shared_memory = state_utils.get_shared_memory(vars)
+            dict_athlete = shared_memory.get("dict_athlete", {})
+            name_team = dict_athlete["member of sport team"]
+            id_team = dict_athlete["id sport team"]
+            dict_team = get_dict_entity(name_team, id_team, "team")
+            state_utils.save_to_shared_memory(vars, dict_team=dict_team)
+            competition = dict_team.get("victory", "")
+            country = dict_team.get("country", "")
+        if competition:
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+            state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
+            response = random.choice(OPINION_ABOUT_TEAM)
+            response_replace = response.replace("TEAM", name_team).replace("COMPETITION", competition)
+            return response_replace
+        elif country:
+            state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+            state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
+            return f"Oh, that's a cool team. I know they are from {country}. Have you ever been there?"
+        else:
+            return last_chance_response(vars)
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        state_utils.set_confidence(vars, confidence=ZERO_CONFIDENCE)
+        return error_response(vars)
+
+
+##################################################################################################################
 # do you like competition? || let's talk about tournament
 ##################################################################################################################
 
@@ -418,9 +658,15 @@ def user_lets_talk_about_comp_request(ngrams, vars):
         state_utils.get_last_human_utterance(vars),
         state_utils.get_last_bot_utterance(vars),
         compiled_pattern=COMPETITION_TEMPLATE)
-
     flag = bool(user_lets_chat_about_comp)
     logger.info(f"user_lets_talk_about_comp_request={flag}")
+    return flag
+
+
+def user_not_neg_after_comment_team_request(ngrams, vars):
+    # SYS_NOT_NEG_AFT_COMMENT_TEAM
+    flag = not_negative_emotion(vars)
+    logger.info(f"user_not_neg_after_comment_team_request = {flag}")
     return flag
 
 
@@ -435,13 +681,19 @@ def user_ask_about_comp_request(ngrams, vars):
 
 def user_ask_about_comp_response(vars):
     # USR_ASK_ABOUT_COMP
-    responses = ["FIFA World Cup", "Olympic Games", "Super Bowl", "Grand National"]
     try:
+        shared_memory = state_utils.get_shared_memory(vars)
+        dict_team = shared_memory.get("dict_team", {})
+        if dict_team:
+            competition = dict_team.get("victory", "")
+        else:
+            response_competition = ["UFC", "FIFA World Cup", "Super Bowl", "NBA", "Rugby World Cup", "Stanley Cup"]
+            competition = random.choice(response_competition)
         state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
         state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         return (
-            f"Well. if I had a physical embodiment, I would like to go to the {random.choice(responses)}."
-            f"Do you have a favorite competition?"
+            f"Well. if I had a physical embodiment, I would like to go to the {competition} "
+            f"and see this wonderful tournament.Do you have a favorite competition?"
         )
     except Exception as exc:
         logger.exception(exc)
@@ -451,24 +703,16 @@ def user_ask_about_comp_response(vars):
 
 
 ##################################################################################################################
-# i like Super Bowl
+# i like Super Bowl   # в другом пр проверять регэксп
 ##################################################################################################################
 
 
 def user_like_comp_request(ngrams, vars):
     # SYS_TELL_COMP
-    dont_chat = donot_chat_about(state_utils.get_last_human_utterance(vars))
-    it_is_not_negative = "negative" not in get_sentiment(state_utils.get_last_human_utterance(vars), probs=False,
-                                                         default_labels=["neutral"])
-    user_want = it_is_not_negative and not dont_chat
+    not_negative = not_negative_emotion(vars)
     user_says_about_kind_of_comp = re.search(KIND_OF_COMPETITION_TEMPLATE,
                                              state_utils.get_last_human_utterance(vars)["text"])
-    if bool(user_says_about_kind_of_comp) is True:
-        flag_1 = bool(user_says_about_kind_of_comp) and user_want
-        flag_2 = len(state_utils.get_last_human_utterance(vars)["text"]) == len(user_says_about_kind_of_comp.group())
-        flag = flag_1 or flag_2
-    else:
-        flag = False
+    flag = not_negative and bool(user_says_about_kind_of_comp)
     logger.info(f"user_like_comp_request={flag}")
     return flag
 
@@ -480,12 +724,12 @@ def user_like_comp_response(vars):
         kind_of_comp = re.search(
             KIND_OF_COMPETITION_TEMPLATE, state_utils.get_last_human_utterance(vars)["text"]
         ).group()
-        state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)  # change question and add cycle here
-        if number > 3:
-            state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+        state_utils.save_to_shared_memory(vars, kind_of_comp=kind_of_comp)
+        state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+        if number > NUMBER_PROBABILITY:
             return f"why do you like {kind_of_comp}?"
         else:
-            state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
             news = get_news(kind_of_comp)
             return news
     except Exception as exc:
@@ -496,7 +740,77 @@ def user_like_comp_response(vars):
 
 
 ##################################################################################################################
-# No, i would not || I doesn't like this
+# user not negative and we propose to discuss the fact about COMP
+##################################################################################################################
+
+
+def user_positive_or_neutral_about_comp_request(ngrams, vars):
+    # SYS_NOT_NEGATIVE_AFTER_Y_COMP
+    flag = not_negative_emotion(vars)
+    logger.info(f"user_positive_or_neutral_about_comp_request={flag}")
+    return flag
+
+
+def user_positive_or_neutral_about_comp_response(vars):
+    # USR_OFFER_FACT_ABOUT_COMP
+    try:
+        shared_memory = state_utils.get_shared_memory(vars)
+        competition = shared_memory.get("kind_of_comp", "")
+        if competition:
+            fact_about_discussed_competition = send_cobotqa(f"fact about {competition}")
+        else:
+            fact_about_discussed_competition = ""
+        if fact_about_discussed_competition and competition:
+            state_utils.save_to_shared_memory(
+                vars,
+                fact_about_discussed_competition=fact_about_discussed_competition
+            )
+            state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+            offer_fact = random.choice(OFFER_FACT_COMPETITION).replace("COMPETITION", competition)
+            return offer_fact
+        else:
+            return last_chance_response(vars)
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        state_utils.set_confidence(vars, ZERO_CONFIDENCE)
+        return error_response(vars)
+
+
+##################################################################################################################
+# user want fact about COMP
+##################################################################################################################
+
+
+def user_want_fact_about_comp_request(ngrams, vars):
+    # SYS_WANT_FACT_ABOUT_COMP
+    flag = not_negative_emotion(vars)
+    logger.info(f"user_want_fact_about_comp_request={flag}")
+    return flag
+
+
+def user_want_fact_about_comp_response(vars):
+    # USR_GET_FACT_ABOUT_COMP
+    try:
+        shared_memory = state_utils.get_shared_memory(vars)
+        fact_about_discussed_competition = shared_memory.get("fact_about_discussed_competition", "")
+        if fact_about_discussed_competition:
+            opinion_req = random.choice(OPINION_REQUESTS)
+            state_utils.set_confidence(vars, HIGH_CONFIDENCE)
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
+            return f"{fact_about_discussed_competition} {opinion_req}"
+        else:
+            return last_chance_response(vars)
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        state_utils.set_confidence(vars, ZERO_CONFIDENCE)
+        return error_response(vars)
+
+
+##################################################################################################################
+# negative -> exit from the skill
 ##################################################################################################################
 
 
@@ -510,15 +824,44 @@ def user_negative_request(ngrams, vars):
     return flag
 
 
-def user_negative_response(vars):
-    # USR_GO_ANOTHER
+def user_negative_response(ngrams, vars):
+    # USR_TELL_NEGATIVE
     try:
-        state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
+        state_utils.set_confidence(vars, SUPER_CONFIDENCE)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         prev_active_skills = [uttr.get("active_skill", "")
                               for uttr in vars["agent"]["dialog"]["bot_utterances"]][-5:]
-        prev_active_skills.append('dff_sport_skill')
-        body = compose_topic_offering(excluded_skills=prev_active_skills)
-        return body
+        if "dff_travel_skill" in prev_active_skills:
+            body = compose_topic_offering(excluded_skills=prev_active_skills)
+            return body
+        else:
+            countries = ["Russia", "China", "Germany"]
+            return f"I know that sports are very popular in {random.choice(countries)}. Have you ever been there?"
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        state_utils.set_confidence(vars, ZERO_CONFIDENCE)
+        return error_response(vars)
+
+
+##################################################################################################################
+# last chance == fullback
+##################################################################################################################
+
+
+def last_chance_request(ngrams, vars):
+    # SYS_LAST_CHANCE
+    flag = True
+    logger.info(f"last_chance_request = {flag}")
+    return flag
+
+
+def last_chance_response(vars):
+    # USR_LAST_CHANCE
+    try:
+        state_utils.set_confidence(vars, HIGH_CONFIDENCE)
+        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+        return random.choice(LAST_CHANCE_TEMPLATE)
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -547,6 +890,9 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_WHO_SUPPORT: user_ask_who_do_u_support_request,
         State.SYS_ASK_ABOUT_COMP: user_ask_about_comp_request,
         State.SYS_TELL_SPORT: user_like_sport_request,
+        State.SYS_TELL_ATHLETE: user_like_or_ask_about_player_request,
+        State.SYS_TELL_ATHLETE_WITHOUT_TEAM: user_like_or_ask_about_player_without_team_request,
+        State.SYS_TELL_TEAM: user_tell_team_request,
         State.SYS_TELL_COMP: user_like_comp_request,
         State.SYS_LETS_TALK_ABOUT_COMP: user_lets_talk_about_comp_request,
         State.SYS_LETS_TALK_ATHLETE: lets_talk_about_athlete_request,
@@ -574,15 +920,17 @@ simplified_dialogflow.add_system_transition(
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_ASK_ABOUT_ATHLETE,
     {
-        State.SYS_TELL_ATHLETE: user_like_or_ask_about_player_or_org_request,
+        State.SYS_TELL_ATHLETE: user_like_or_ask_about_player_request,
         State.SYS_TELL_SPORT: user_like_sport_request,
         State.SYS_TELL_NEGATIVE: user_negative_request,
+        State.SYS_LAST_CHANCE: last_chance_request
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_ASK_ABOUT_ATHLETE, State.SYS_ERR)
 
 ##################################################################################################################
-# SYS_ASK_ABOUT_COMP || SYS_LETS_TALK_ABOUT_COMP || SYS_LINK_TO_LIKE_COMP --> USR_ASK_ABOUT_COMP
+# SYS_NOT_NEG_AFT_COMMENT_TEAM || SYS_ASK_ABOUT_COMP || SYS_LETS_TALK_ABOUT_COMP || SYS_LINK_TO_LIKE_COMP
+# --> USR_ASK_ABOUT_COMP
 
 simplified_dialogflow.add_system_transition(
     State.SYS_ASK_ABOUT_COMP, State.USR_ASK_ABOUT_COMP, user_ask_about_comp_response
@@ -591,8 +939,13 @@ simplified_dialogflow.add_system_transition(
 simplified_dialogflow.add_system_transition(
     State.SYS_LETS_TALK_ABOUT_COMP, State.USR_ASK_ABOUT_COMP, user_ask_about_comp_response
 )
+
 simplified_dialogflow.add_system_transition(
     State.SYS_LINK_TO_LIKE_COMP, State.USR_ASK_ABOUT_COMP, user_ask_about_comp_response
+)
+
+simplified_dialogflow.add_system_transition(
+    State.SYS_NOT_NEG_AFT_COMMENT_TEAM, State.USR_ASK_ABOUT_COMP, user_ask_about_comp_response
 )
 
 simplified_dialogflow.add_user_serial_transitions(
@@ -600,6 +953,7 @@ simplified_dialogflow.add_user_serial_transitions(
     {
         State.SYS_TELL_COMP: user_like_comp_request,
         State.SYS_TELL_NEGATIVE: user_negative_request,
+        State.SYS_LAST_CHANCE: last_chance_request
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_ASK_ABOUT_COMP, State.SYS_ERR)
@@ -612,7 +966,9 @@ simplified_dialogflow.add_system_transition(State.SYS_TELL_COMP, State.USR_WHY_L
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_WHY_LIKE_COMP,
     {
+        State.SYS_NOT_NEGATIVE_AFTER_Y_COMP: user_positive_or_neutral_about_comp_request,
         State.SYS_TELL_NEGATIVE: user_negative_request,
+        State.SYS_LAST_CHANCE: last_chance_request
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_WHY_LIKE_COMP, State.SYS_ERR)
@@ -627,9 +983,10 @@ simplified_dialogflow.add_system_transition(
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_ASK_WHO_SUPPORT,
     {
-        State.SYS_TELL_ATHLETE: user_like_or_ask_about_player_or_org_request,
+        State.SYS_TELL_ATHLETE: user_like_or_ask_about_player_request,
         State.SYS_TELL_SPORT: user_like_sport_request,
         State.SYS_TELL_NEGATIVE: user_negative_request,
+        State.SYS_LAST_CHANCE: last_chance_request
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_ASK_WHO_SUPPORT, State.SYS_ERR)
@@ -651,25 +1008,12 @@ simplified_dialogflow.add_user_serial_transitions(
     State.USR_ASK_ABOUT_SPORT,
     {
         State.SYS_TELL_SPORT: user_like_sport_request,
-        State.SYS_TELL_ATHLETE: user_like_or_ask_about_player_or_org_request,
+        State.SYS_TELL_ATHLETE: user_like_or_ask_about_player_request,
         State.SYS_TELL_NEGATIVE: user_negative_request,
+        State.SYS_LAST_CHANCE: last_chance_request
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_ASK_ABOUT_SPORT, State.SYS_ERR)
-
-##################################################################################################################
-# SYS_TELL_ATHLETE --> USR_LIKE_ATHLETE
-
-simplified_dialogflow.add_system_transition(
-    State.SYS_TELL_ATHLETE, State.USR_LIKE_ATHLETE, user_like_or_ask_about_player_or_org_response
-)
-simplified_dialogflow.add_user_serial_transitions(
-    State.USR_LIKE_ATHLETE,
-    {
-        State.SYS_TELL_NEGATIVE: user_negative_request,
-    },
-)
-simplified_dialogflow.set_error_successor(State.USR_LIKE_ATHLETE, State.SYS_ERR)
 
 ##################################################################################################################
 # SYS_TELL_SPORT --> USR_WHY_LIKE_SPORT
@@ -679,19 +1023,148 @@ simplified_dialogflow.add_system_transition(State.SYS_TELL_SPORT, State.USR_WHY_
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_WHY_LIKE_SPORT,
     {
+        State.SYS_TELL_ATHLETE: user_like_or_ask_about_player_request,
+        State.SYS_TELL_TEAM: user_tell_team_request,
+        State.SYS_TELL_ATHLETE_WITHOUT_TEAM: user_like_or_ask_about_player_without_team_request,
+        State.SYS_NOT_NEGATIVE_AFTER_Y_KIND_OF_SPORT: user_positive_or_neutral_about_kind_of_sport_request,
         State.SYS_TELL_NEGATIVE: user_negative_request,
+        State.SYS_LAST_CHANCE: last_chance_request
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_WHY_LIKE_SPORT, State.SYS_ERR)
 
 ##################################################################################################################
-# SYS_TELL_NEGATIVE -> USR_GO_ANOTHER
+# SYS_NOT_NEGATIVE_AFTER_Y_KIND_OF_SPORT --> USR_HAVE_ATH_FROM_THIS_SPORT
+
+simplified_dialogflow.add_system_transition(State.SYS_NOT_NEGATIVE_AFTER_Y_KIND_OF_SPORT,
+                                            State.USR_HAVE_ATH_FROM_THIS_SPORT,
+                                            user_positive_or_neutral_about_kind_of_sport_response)
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_HAVE_ATH_FROM_THIS_SPORT,
+    {
+        State.SYS_TELL_ATHLETE: user_like_or_ask_about_player_request,
+        State.SYS_TELL_TEAM: user_tell_team_request,
+        State.SYS_TELL_ATHLETE_WITHOUT_TEAM: user_like_or_ask_about_player_without_team_request,
+        State.SYS_TELL_NEGATIVE: user_negative_request,
+        State.SYS_LAST_CHANCE: last_chance_request
+    },
+)
+simplified_dialogflow.set_error_successor(State.USR_WHY_LIKE_SPORT, State.SYS_ERR)
+
+##################################################################################################################
+# SYS_TELL_ATHLETE --> USR_LIKE_ATHLETE
 
 simplified_dialogflow.add_system_transition(
-    State.SYS_TELL_NEGATIVE, State.USR_GO_ANOTHER, user_negative_response
+    State.SYS_TELL_ATHLETE, State.USR_LIKE_ATHLETE, user_like_or_ask_about_player_response
+)
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_LIKE_ATHLETE,
+    {
+        State.SYS_NOT_NEG_AFTER_ATHLETE_WITH_TEAM: user_not_neg_after_comment_ath_with_team_request,
+        State.SYS_TELL_NEGATIVE: user_negative_request,
+        State.SYS_LAST_CHANCE: last_chance_request
+    },
+)
+simplified_dialogflow.set_error_successor(State.USR_LIKE_ATHLETE, State.SYS_ERR)
+
+##################################################################################################################
+# SYS_TELL_ATHLETE_WITHOUT_TEAM || --> USR_LINK_TO_TRAVEL
+
+simplified_dialogflow.add_system_transition(
+    State.SYS_TELL_ATHLETE_WITHOUT_TEAM, State.USR_LINK_TO_TRAVEL, link_to_travel_response
 )
 
-# there are no user serial
+##################################################################################################################
+# SYS_NOT_NEG_AFTER_ATHLETE_WITH_TEAM || SYS_TELL_TEAM --> USR_GET_OPIN_ABOUT_TEAM
+
+simplified_dialogflow.add_system_transition(
+    State.SYS_TELL_TEAM, State.USR_GET_OPIN_ABOUT_TEAM, user_get_talk_about_team_response
+)
+
+simplified_dialogflow.add_system_transition(
+    State.SYS_NOT_NEG_AFTER_ATHLETE_WITH_TEAM, State.USR_GET_OPIN_ABOUT_TEAM, user_get_talk_about_team_response
+)
+
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_GET_OPIN_ABOUT_TEAM,
+    {
+        State.SYS_NOT_NEG_AFT_COMMENT_TEAM: user_not_neg_after_comment_team_request,
+        State.SYS_TELL_NEGATIVE: user_negative_request,
+        State.SYS_LAST_CHANCE: last_chance_request
+    },
+)
+
+simplified_dialogflow.set_error_successor(State.USR_GET_OPIN_ABOUT_TEAM, State.SYS_ERR)
+
+##################################################################################################################
+# SYS_NOT_NEGATIVE_AFTER_Y_COMP --> USR_OFFER_FACT_ABOUT_COMP
+
+simplified_dialogflow.add_system_transition(
+    State.SYS_NOT_NEGATIVE_AFTER_Y_COMP,
+    State.USR_OFFER_FACT_ABOUT_COMP,
+    user_positive_or_neutral_about_comp_response
+)
+
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_OFFER_FACT_ABOUT_COMP,
+    {
+        State.SYS_WANT_FACT_ABOUT_COMP: user_want_fact_about_comp_request,
+        State.SYS_TELL_NEGATIVE: user_negative_request,
+        State.SYS_LAST_CHANCE: last_chance_request
+    },
+)
+
+simplified_dialogflow.set_error_successor(State.USR_OFFER_FACT_ABOUT_COMP, State.SYS_ERR)
+
+##################################################################################################################
+# SYS_WANT_FACT_ABOUT_COMP -> USR_GET_FACT_ABOUT_COMP
+
+simplified_dialogflow.add_system_transition(
+    State.SYS_WANT_FACT_ABOUT_COMP, State.USR_GET_FACT_ABOUT_COMP, user_want_fact_about_comp_response
+)
+
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_GET_FACT_ABOUT_COMP,
+    {
+        State.SYS_TELL_NEGATIVE: user_negative_request,
+        State.SYS_LAST_CHANCE: last_chance_request
+    },
+)
+
+simplified_dialogflow.set_error_successor(State.USR_GET_FACT_ABOUT_COMP, State.SYS_ERR)
+##################################################################################################################
+# SYS_LAST_CHANCE -> USR_LAST_CHANCE
+
+simplified_dialogflow.add_system_transition(
+    State.SYS_LAST_CHANCE, State.USR_LAST_CHANCE, last_chance_response
+)
+
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_LAST_CHANCE,
+    {
+        State.SYS_WHAT_SPORT: user_ask_about_sport_request,
+        State.SYS_WHO_FAVORITE_ATHLETE: user_ask_about_athletes_request,
+        State.SYS_WHO_SUPPORT: user_ask_who_do_u_support_request,
+        State.SYS_ASK_ABOUT_COMP: user_ask_about_comp_request,
+        State.SYS_TELL_SPORT: user_like_sport_request,
+        State.SYS_TELL_ATHLETE: user_like_or_ask_about_player_request,
+        State.SYS_TELL_ATHLETE_WITHOUT_TEAM: user_like_or_ask_about_player_without_team_request,
+        State.SYS_TELL_TEAM: user_tell_team_request,
+        State.SYS_TELL_COMP: user_like_comp_request,
+        State.SYS_LETS_TALK_ABOUT_COMP: user_lets_talk_about_comp_request,
+        State.SYS_LETS_TALK_ATHLETE: lets_talk_about_athlete_request,
+        State.SYS_LETS_TALK_SPORT: lets_talk_about_sport_request,
+        State.SYS_TELL_NEGATIVE: user_negative_request
+    },
+)
+
+##################################################################################################################
+# SYS_TELL_NEGATIVE -> USR_TELL_NEGATIVE
+
+simplified_dialogflow.add_system_transition(
+    State.SYS_TELL_NEGATIVE, State.USR_TELL_NEGATIVE, user_negative_response
+)
+
 ##################################################################################################################
 # SYS_ERR
 

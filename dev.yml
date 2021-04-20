@@ -417,6 +417,7 @@ services:
     volumes:
       - "./skills/dff_sport_skill:/src"
       - "./common:/src/common"
+      - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8098:8098
   fact-retrieval:
