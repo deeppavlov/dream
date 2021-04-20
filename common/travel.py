@@ -52,6 +52,10 @@ OPINION_REQUEST_ABOUT_MENTIONED_BY_USER_LOC = ["Cool. Do you like it?",
                                                "That's great! Do you like it?",
                                                "Wow! What is your view about it?",
                                                ]
+OPINION_REQUEST_ABOUT_VISITED_LOC = ["Cool. Do you like it?",
+                                     "That's great! Do you like it?",
+                                     "Wow! What is your view about it?",
+                                     ]
 
 USER_IMPRESSIONS_REQUEST = [
     "I'm even a bit jealous! What do you like most about this place?",
@@ -83,3 +87,5 @@ ACKNOWLEDGE_USER_DISLIKE_LOC = ["I see you don't like it. As you wish.",
                                 "I see. Suit yourself.",
                                 "I got you don't like this location.",
                                 ]
+
+DID_NOT_GET_LOCATION = "Sorry, probably I don't know this place. Let's talk about other location."

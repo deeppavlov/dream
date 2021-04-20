@@ -116,3 +116,18 @@ def get_nounphrases_from_human_utterance(vars):
     nps = common_utils.get_entities(vars["agent"]["dialog"]["human_utterances"][-1],
                                     only_named=False, with_labels=False)
     return nps
+
+
+def get_cobotqa_annotations_from_human_utterance(vars):
+    return vars["agent"]["dialog"]["human_utterances"][-1].get("annotations", {}).get(
+        "cobotqa_annotator", {"facts": [], "response": ""})
+
+
+def get_fact_for_particular_entity_from_human_utterance(vars, entity):
+    cobotqa_annotations = get_cobotqa_annotations_from_human_utterance(vars)
+    facts_for_entity = []
+    for fact in cobotqa_annotations["facts"]:
+        if fact.get("entity", "") == entity:
+            facts_for_entity += [fact["fact"]]
+
+    return facts_for_entity
