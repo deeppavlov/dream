@@ -311,6 +311,8 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             [question_type in cand_uttr.get("type", "")
              for question_type in ["normal_question", "link_to_for_response_selector"]])) or cand_uttr.get(
             "response_parts", []) == ["prompt"]
+        if cand_uttr["confidence"] == 1.0:
+            cand_uttr["can_continue"] = MUST_CONTINUE
         _is_active_skill = (_prev_active_skill == cand_uttr["skill_name"] or cand_uttr.get(
             "can_continue", "") == MUST_CONTINUE)
         _user_wants_to_chat_about_topic = if_chat_about_particular_topic(
