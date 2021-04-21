@@ -420,7 +420,9 @@ class MovieSkillTemplates:
                                                       f"{self.ANY_LETTERS}{self.NOT_LIKE_PATTERN}",
                                                       user_uttr)):
                     response = "I can't name one particular movie but I don't like musicals and " \
-                               "I'm a bit scared by mystery movies. What movies you don't like?"
+                               "I'm a bit scared by mystery movies. " \
+                               "I watched Ring by Hideo Nakata and it was really scary! "\
+                               "What movies you don't like?"
                     confidence = self.person_highest_confidence
                     result = [["Musical", "genre", "negative"], ["Mystery", "genre", "negative"]]
                 # less favorite tv show
@@ -465,7 +467,8 @@ class MovieSkillTemplates:
                                                       f"{self.ANY_LETTERS}{self.LIKE_PATTERN}",
                                                       user_uttr)):
                     response = "I adore all Star Wars movies. The best episode is the fifth one, " \
-                               "The Empire Strikes Back. What is your favorite movie?"
+                               "The Empire Strikes Back. Yoda teachings are so cool! " \
+                               "What is your favorite movie?"
                     confidence = self.person_highest_confidence
                     result = [["0080684", "movie", "very_positive"]]
                 # favorite tv show

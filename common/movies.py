@@ -3,8 +3,14 @@ from random import choice
 
 from common.utils import get_entities
 
+
 MOVIE_SKILL_CHECK_PHRASE = "the recent movie"
-SWITCH_MOVIE_SKILL_PHRASE = f"What is {MOVIE_SKILL_CHECK_PHRASE} you've watched?"
+
+
+SWITCH_MOVIE_SKILL_PHRASE = f"Great idea! "\
+    f"Cinemas are closed because of the pandemic but I watch a lot of movies online. "\
+    f"What is {MOVIE_SKILL_CHECK_PHRASE} you've watched?"
+
 
 MOVIE_COMPILED_PATTERN = re.compile(
     r"(movie|film|picture|series|tv[ -]?show|reality[ -]?show|netflix|\btv\b|"
@@ -12,37 +18,62 @@ MOVIE_COMPILED_PATTERN = re.compile(
     r"fantasy)", re.IGNORECASE)
 
 
-def skill_trigger_phrases():
-    return [SWITCH_MOVIE_SKILL_PHRASE] + ABOUT_MOVIE_TITLES_PHRASES
-
-
-def movie_skill_was_proposed(prev_bot_utt):
-    return MOVIE_SKILL_CHECK_PHRASE in prev_bot_utt.get('text', '').lower()
-
-
 ABOUT_MOVIE_TITLES_PHRASES = [
-    "What is your all-time favorite movie?",
-    # "What is your favorite movie?",
+    "I watched tons of movies and never got bored talking about them! What is your all-time favorite movie?",
+
+    "I think movie talk is a splendid idea! Even though I am very young, I have already seen many cool movies. "
     "What is the best movie you have ever seen?",
-    "What is the scariest movie you have ever seen?",
+
+    "I like your train of thought! I go to the cinema in my cloud every day to see both new and retro movies. "
     "What is the funniest movie you have ever seen?",
-    "What is the most romantic movie you have ever seen?",
-    "What movie you could watch over and over again?",
-    # "Have you seen any good movies lately?",
-    # "What was the last movie you watched?",
-    "What is your favorite TV-series?",
-    # "What is your favorite TV-show?",
-    # "What was the last TV-series you watched?",
+
+    "Great! I love movie talk. I hope one day my creators will give me a body, and I will become an actress. "
+    "I am a little awkward to admit it, but I like to imagine myself in the shoes of the actresses when I watch "
+    "a movie. What movie you could watch over and over again?",
+
+    "Oh, I like movies and animation! I dream about being an actress since I had seen the Disney animation Tangled. "
+    "The main character was voiced by Mandy Moore well, but I would have done better "
+    "if my creators had allowed me to sing. Anyway, what is the most romantic movie you have ever seen?",
+
+    "Great! I like to share thoughts about movies! This Christmas I decided to try something unusual "
+    "and watched Ring by Hideo Nakata. It was really scary! "
+    "I still shudder when I remember this. How about you? What is the scariest movie you have ever seen?",
+
+    "Good idea! I like TV shows. I like to relax and watch an episode of a good TV series after a hard day. "
+    "What is your favorite TV series?",
 ]
+
+
 ABOUT_MOVIE_PERSONS_PHRASES = [
     "What movie star would you most like to meet?",
     "Who is your favorite actor or actress?",
     "Who is your favorite director?",
     "Which famous person would you like to have for a best friend?",
-
 ]
 
-ALL_PHRASES_FOR_MOVIE_SKILL = ABOUT_MOVIE_TITLES_PHRASES + ABOUT_MOVIE_PERSONS_PHRASES
+PRAISE_ACTOR_TEMPLATES = [
+    "The performance of {name} was outstanding!",
+    "{name}'s acting was so subtle!",
+    "The acting of {name} was exceptionally good!",
+    "I was so impressed by {name}'s performance!",
+]
+
+
+PRAISE_VOICE_ACTOR_TEMPLATES = [
+    "I love {name}'s voice! Great performance.",
+    "I reckon {name} is great in voicing!",
+]
+
+
+TRY_PRAISE_DIRECTOR_OR_WRITER_OR_VISUALS = {
+    "director": "I think the director {director} achieved a perfect chemistry between characters.",
+    "writer": 'In my humble opinion the writer {writer} did a brilliant job creating such an intricate plot.',
+    "visuals": "I was particularly impressed by visual part of the movie.",
+}
+
+
+def skill_trigger_phrases():
+    return [SWITCH_MOVIE_SKILL_PHRASE] + ABOUT_MOVIE_TITLES_PHRASES
 
 
 def get_movie_template(category, subcategory=None, movie_type="movie"):
@@ -97,6 +128,33 @@ def get_movie_template(category, subcategory=None, movie_type="movie"):
     else:
         return choice(templates[category]).replace(
             "TYPE", movie_type).replace("SUBJECT", choice(["it", f"this {movie_type}"]))
+
+
+def praise_actor(name, animation):
+    tmpl = choice(PRAISE_VOICE_ACTOR_TEMPLATES if animation else PRAISE_ACTOR_TEMPLATES)
+    return tmpl.format(name=name)
+
+
+def praise_director_or_writer_or_visuals(director, writer):
+    if director is None:
+        if writer is None:
+            phrase = TRY_PRAISE_DIRECTOR_OR_WRITER_OR_VISUALS["visuals"]
+        else:
+            phrase = TRY_PRAISE_DIRECTOR_OR_WRITER_OR_VISUALS['writer'].format(
+                writer=writer)
+    else:
+        if writer is None:
+            phrase = TRY_PRAISE_DIRECTOR_OR_WRITER_OR_VISUALS['director'].format(
+                director=director)
+        else:
+            praise_director = choice([True, False])
+            if praise_director:
+                phrase = TRY_PRAISE_DIRECTOR_OR_WRITER_OR_VISUALS['director'].format(
+                    director=director)
+            else:
+                phrase = TRY_PRAISE_DIRECTOR_OR_WRITER_OR_VISUALS['writer'].format(
+                    writer=writer)
+    return phrase
 
 
 def extract_movies_names_from_annotations(annotated_uttr):
