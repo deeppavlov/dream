@@ -31,6 +31,7 @@ from common.sport import (
     KIND_OF_SPORTS_TEMPLATE,
     KIND_OF_COMPETITION_TEMPLATE,
     ATHLETE_TEMPLETE,
+    LIKE_TEMPLATE,
     SUPPORT_TEMPLATE,
     QUESTION_TEMPLATE,
     LAST_CHANCE_TEMPLATE,
@@ -437,9 +438,12 @@ def user_ask_who_do_u_support_response(vars):
 
 def user_like_sport_request(ngrams, vars):
     # SYS_TELL_SPORT
-    user_want = not_negative_emotion(vars)
     user_says_about_kind_of_sport = re.search(KIND_OF_SPORTS_TEMPLATE,
                                               state_utils.get_last_human_utterance(vars)["text"])
+    user_like = re.search(LIKE_TEMPLATE,
+                          state_utils.get_last_human_utterance(vars)["text"])
+    dont_chat = donot_chat_about(state_utils.get_last_human_utterance(vars))
+    user_want = bool(user_like) and not dont_chat
     if bool(user_says_about_kind_of_sport):
         flag_1 = bool(user_says_about_kind_of_sport) and user_want
         flag_2 = len(state_utils.get_last_human_utterance(vars)["text"]) == len(user_says_about_kind_of_sport.group())
@@ -825,7 +829,7 @@ def user_negative_request(ngrams, vars):
     return flag
 
 
-def user_negative_response(ngrams, vars):
+def user_negative_response(vars):
     # USR_TELL_NEGATIVE
     try:
         state_utils.set_confidence(vars, SUPER_CONFIDENCE)

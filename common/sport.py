@@ -53,7 +53,7 @@ KIND_OF_COMPETITION_TEMPLATE = re.compile(
     r"|Cricket World Cup|World Series|Tour De France|March Madness"
     r"|UEFA|Ryder Cup|Daytona 500|Rugby World Cup"
     r"|Boston Marathon|Open Championship|Indianapolis 500|Stanley Cup"
-    r"|Monaco Grand Prix|Rose Bowl|MMA|UFC)",
+    r"|Monaco Grand Prix|Rose Bowl|UFC)",
     re.IGNORECASE,
 )
 
