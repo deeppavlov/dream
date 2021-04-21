@@ -31,7 +31,8 @@ def build_input_from_segments(persona, history, reply, tokenizer, lm_labels=Fals
 
 
 def create_generator(tokenizer, model, device="cpu", with_eos=False):
-    def generator(personality, history, current_output=[]):
+    def generator(personality, history, current_output=None):
+        current_output = [] if current_output is None else current_output
         instance, sequence = build_input_from_segments(personality, history, current_output, tokenizer, with_eos=False)
 
         input_ids = torch.tensor(instance["input_ids"], device=device).unsqueeze(0)

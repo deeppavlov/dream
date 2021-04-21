@@ -57,7 +57,8 @@ class EmotionSkillScenario:
         result = result or 'how are you' in bot_phrase
         return result
 
-    def _random_choice(self, data, discard_data=[]):
+    def _random_choice(self, data, discard_data=None):
+        discard_data = [] if discard_data is None else discard_data
         chosen_data = list(set(data).difference(set(discard_data)))
         if len(chosen_data):
             return random.choice(chosen_data)

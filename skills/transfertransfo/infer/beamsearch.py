@@ -24,7 +24,9 @@ class BeamSearchNode(object):
         self.prob = prob
         self.length = len(infered_token_ids)
 
-    def eval(self, personality=[], history=[], alpha=1.0):
+    def eval(self, personality=None, history=None, alpha=1.0):
+        personality = [] if personality is None else personality
+        history = [] if history is None else history
         reward = 0
         # Add here a function for shaping a reward
 

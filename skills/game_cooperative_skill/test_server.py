@@ -26,7 +26,8 @@ false_requests = []
 # ]
 
 
-def update_utterances(utterances=[], response=None, text_request=""):
+def update_utterances(utterances=None, response=None, text_request=""):
+    utterances = [] if utterances is None else utterances
     if response:
         text, confidence, _, _, attr = response
         can_continue = attr.get("can_continue", "")

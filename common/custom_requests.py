@@ -64,7 +64,7 @@ def request_entities_entitylinking(entity, types, return_raw=False,
     return entities, probs
 
 
-def request_triples_wikidata(parser_info, queries, query_dict={}):
+def request_triples_wikidata(parser_info, queries, query_dict=None):
     """
 
     Args:
@@ -74,6 +74,7 @@ def request_triples_wikidata(parser_info, queries, query_dict={}):
     Returns:
         response - response from wikidata REST API if we received it, empty list otherwise
     """
+    query_dict = {} if query_dict is None else query_dict
     responses = []
     try:
         t = time.time()

@@ -184,7 +184,8 @@ class MovieSkillScenario:
             confidence = LINKTO_CONFIDENCE
             return response, confidence, human_attr, bot_attr, attr
 
-    def is_about_movies(self, uttr, prev_uttr={}):
+    def is_about_movies(self, uttr, prev_uttr=None):
+        prev_uttr = {} if prev_uttr is None else prev_uttr
         is_movie_topic = any([topic in get_topics(uttr, which="all")
                               for topic in ["Entertainment_Movies", "Movies_TV"]])
 
@@ -207,7 +208,8 @@ class MovieSkillScenario:
         else:
             return False
 
-    def lets_chat_about_movies(self, uttr, prev_uttr={}):
+    def lets_chat_about_movies(self, uttr, prev_uttr=None):
+        prev_uttr = {} if prev_uttr is None else prev_uttr
         curr_uttr_is_about_movies = re.search(self.movie_pattern, uttr["text"].lower())
         lets_talk_about_movies = if_chat_about_particular_topic(uttr, prev_uttr, compiled_pattern=self.movie_pattern)
         chosed_topic = if_choose_topic(uttr, prev_uttr) and curr_uttr_is_about_movies
@@ -251,7 +253,10 @@ class MovieSkillScenario:
         else:
             return False
 
-    def movie_scenario(self, dialog, movies_ids=[], unique_persons={}, mentioned_genres=[]):
+    def movie_scenario(self, dialog, movies_ids=None, unique_persons=None, mentioned_genres=None):
+        movies_ids = [] if movies_ids is None else movies_ids
+        unique_persons = {} if unique_persons is None else unique_persons
+        mentioned_genres = [] if mentioned_genres is None else mentioned_genres
         bot_attr = {}
         human_attr = {}
         human_attr["used_links"] = dialog["human"]["attributes"].get("used_links", defaultdict(list))

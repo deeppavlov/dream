@@ -2,8 +2,10 @@ import requests
 import json
 
 
-def make_input_data(curr_sent, bot_sent, human_attributes={},
-                    emotion={'neutral': 0}, intents={"yes": {"confidence": 0, "detected": 0}}):
+def make_input_data(curr_sent, bot_sent, human_attributes=None, emotion=None, intents=None):
+    human_attributes = {} if human_attributes is None else human_attributes
+    emotion = {'neutral': 0} if emotion is None else emotion
+    intents = {"yes": {"confidence": 0, "detected": 0}} if intents is None else intents
     input_data = {
         "dialogs": [
             {

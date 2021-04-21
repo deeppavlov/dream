@@ -211,13 +211,14 @@ def is_switch_topic(annotated_uttr):
         return False
 
 
-def if_choose_topic(annotated_uttr, prev_annotated_uttr={}):
+def if_choose_topic(annotated_uttr, prev_annotated_uttr=None):
     """Dialog context implies that the next utterances can pick up a topic:
         - annotated_uttr asks to switch topic
         - annotated_uttr asks "what do you want to talk about?"
         - annotated_uttr asks "let's talk about something (else)"
         - prev_annotated_uttr asks "what do you want to talk about?", and annotated_uttr says something/anything.
     """
+    prev_annotated_uttr = {} if prev_annotated_uttr is None else prev_annotated_uttr
     uttr_ = annotated_uttr.get('text', "").lower()
     prev_uttr_ = prev_annotated_uttr.get('text', '--').lower()
     chat_about_intent = 'lets_chat_about' in get_intents(annotated_uttr, probs=False, which='intent_catcher')
@@ -241,12 +242,14 @@ ANY_TOPIC_AMONG_OFFERED = re.compile(
     r"|you (choose|pick up|tell me|want|wish|like)\.?$)")
 
 
-def if_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr={}, key_words=[], compiled_pattern=r""):
+def if_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr=None, key_words=None, compiled_pattern=r""):
     """Dialog context implies that the last utterances chooses particular conversational topic:
         - annotated_uttr asks "let's talk about PARTICULAR-TOPIC"
         - prev_annotated_uttr asks "what do you want to talk about?", and annotated_uttr says PARTICULAR-TOPIC.
         - prev_annotated_uttr asks "what are your interests?", and annotated_uttr says PARTICULAR-TOPIC.
     """
+    prev_annotated_uttr = {} if prev_annotated_uttr is None else prev_annotated_uttr
+    key_words = [] if key_words is None else key_words
     uttr_ = annotated_uttr.get('text', "").lower()
     prev_uttr_ = prev_annotated_uttr.get('text', '--').lower()
 

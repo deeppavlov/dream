@@ -443,7 +443,7 @@ def print_combined(combined_output):
     logger.info(f'Combined classifier output is {combined_output}')
 
 
-def _get_etc_model(annotated_utterance, model_name, probs=True, default_probs={}, default_labels=[]):
+def _get_etc_model(annotated_utterance, model_name, probs=True, default_probs=None, default_labels=None):
     """Function to get emotion classifier annotations from annotated utterance.
 
     Args:
@@ -453,6 +453,8 @@ def _get_etc_model(annotated_utterance, model_name, probs=True, default_probs={}
     Returns:
         dictionary with emotion probablilties, if probs == True, or emotion labels if probs != True
     """
+    default_probs = {} if default_probs is None else default_probs
+    default_labels = [] if default_labels is None else default_labels
     try:
         if model_name in annotated_utterance.get('annotations', {}):
             answer_probs, answer_labels = _get_plain_annotations(annotated_utterance,
@@ -470,7 +472,7 @@ def _get_etc_model(annotated_utterance, model_name, probs=True, default_probs={}
         return answer_labels
 
 
-def get_toxic(annotated_utterance, probs=True, default_probs={}, default_labels=[]):
+def get_toxic(annotated_utterance, probs=True, default_probs=None, default_labels=None):
     """Function to get toxic classifier annotations from annotated utterance.
 
     Args:
@@ -480,6 +482,8 @@ def get_toxic(annotated_utterance, probs=True, default_probs={}, default_labels=
     Returns:
         dictionary with toxic probablilties, if probs == True, or toxic labels if probs != True
     """
+    default_probs = {} if default_probs is None else default_probs
+    default_labels = [] if default_labels is None else default_labels
     return _get_etc_model(annotated_utterance, 'toxic_classification', probs=probs,
                           default_probs=default_probs, default_labels=default_labels)
 
@@ -517,7 +521,7 @@ def get_emotions(annotated_utterance, probs=True,
                           default_probs=default_probs, default_labels=default_labels)
 
 
-def get_topics(annotated_utterance, probs=False, default_probs={}, default_labels=[], which="all"):
+def get_topics(annotated_utterance, probs=False, default_probs=None, default_labels=None, which="all"):
     """Function to get topics from particular annotator or all detected.
 
     Args:
@@ -532,6 +536,8 @@ def get_topics(annotated_utterance, probs=False, default_probs={}, default_label
     Returns:
         list of topics
     """
+    default_probs = {} if default_probs is None else default_probs
+    default_labels = [] if default_labels is None else default_labels
     annotations = annotated_utterance.get("annotations", {})
     cobot_topics_probs, cobot_topics_labels = {}, []
     if 'cobot_topics' in annotations:
@@ -586,7 +592,7 @@ def get_topics(annotated_utterance, probs=False, default_probs={}, default_label
         return answer_labels
 
 
-def get_intents(annotated_utterance, probs=False, default_probs={}, default_labels=[], which="all"):
+def get_intents(annotated_utterance, probs=False, default_probs=None, default_labels=None, which="all"):
     """Function to get intents from particular annotator or all detected.
 
     Args:
@@ -602,6 +608,8 @@ def get_intents(annotated_utterance, probs=False, default_probs={}, default_labe
     Returns:
         list of intents
     """
+    default_probs = {} if default_probs is None else default_probs
+    default_labels = [] if default_labels is None else default_labels
     annotations = annotated_utterance.get("annotations", {})
     intents = annotations.get("intent_catcher", {})
     detected_intents = [k for k, v in intents.items() if v.get("detected", 0) == 1]
@@ -763,7 +771,7 @@ def get_raw_entity_names_from_annotations(annotations):
     return entities
 
 
-def get_entity_names_from_annotations(annotated_utterance, stopwords=None, default_entities=[]):
+def get_entity_names_from_annotations(annotated_utterance, stopwords=None, default_entities=None):
     """
 
     Args:
@@ -773,6 +781,7 @@ def get_entity_names_from_annotations(annotated_utterance, stopwords=None, defau
     Returns:
         Names of named entities we received from annotations
     """
+    default_entities = [] if default_entities is None else default_entities
     stopwords = stopwords if stopwords else []
     full_text = annotated_utterance.get('text', '').lower()
     named_entities = [full_text] if full_text in default_entities else []

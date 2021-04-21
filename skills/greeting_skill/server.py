@@ -36,7 +36,8 @@ COMMENTS = {"neutral": ["Ok. ", "Oh. ", "Huh. ", "Well. ", "Gotcha. ", "Hmm. ", 
             }
 
 
-def get_next_step(user_utterance, next_step_id, last_comments=[]):
+def get_next_step(user_utterance, next_step_id, last_comments=None):
+    last_comments = [] if last_comments is None else last_comments
     response, confidence, attr = "", 0., {}
     if next_step_id < len(GREETING_STEPS):
         sentiment = get_sentiment(user_utterance, probs=False)[0]

@@ -122,8 +122,8 @@ MISSED_CITY_CONFIDENCE = 0.98
 
 
 class WeatherSkill:
-    def __init__(self, weather_dict={}):
-        self.weather_dict = weather_dict
+    def __init__(self, weather_dict=None):
+        self.weather_dict = {} if weather_dict is None else weather_dict
 
     def process_dialog(self, dialog):
         """Method of a dialog analysis"""

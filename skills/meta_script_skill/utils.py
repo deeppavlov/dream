@@ -227,7 +227,7 @@ def correct_verb_form(attr, values):
     return values
 
 
-def get_comet_atomic(topic, relation, TOPICS={}):
+def get_comet_atomic(topic, relation, TOPICS=None):
     """
     Get COMeT prediction for considered topic like `verb subj/adj/adv` of particular relation.
 
@@ -239,6 +239,7 @@ def get_comet_atomic(topic, relation, TOPICS={}):
         string, one of predicted by Comet relations
     """
 
+    TOPICS = {} if TOPICS is None else TOPICS
     logger.info(f"Comet Atomic request on topic: {topic}.")
     if topic is None or topic == "" or relation == "" or relation is None or get_nltk_sentiment(topic) == "negative":
         return ""
@@ -665,7 +666,8 @@ def clean_up_topic_list(verb_nounphrases):
     return cleaned
 
 
-def extract_verb_noun_phrases(utterance, only_i_do_that=True, nounphrases=[]):
+def extract_verb_noun_phrases(utterance, only_i_do_that=True, nounphrases=None):
+    nounphrases = [] if nounphrases is None else nounphrases
     verb_noun_phrases = []
     # verbs_without_nouns = []
     doc = nlp(utterance, disable=["ner"])
