@@ -12,6 +12,7 @@ from common.constants import CAN_CONTINUE_SCENARIO
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
 import common.utils as common_utils
+import common.universal_templates as common_universal_templates
 import common.scenarios.weekend as common_weekend
 import dialogflows.scopes as scopes
 from dialogflows.flows.shared import link_to_by_enity_request
@@ -129,12 +130,13 @@ re_patterns_human = re.compile("(" + "|".join(patterns_human) + ")", re.IGNORECA
 
 
 def std_weekend_request(ngrams, vars):
-    flag = False
-
-    last_bot_text = state_utils.get_last_bot_utterance(vars)["text"]
     human_text = state_utils.get_last_human_utterance(vars)["text"]
 
-    flag = bool(re.search(re_patterns_bot, last_bot_text) and re.search(re_patterns_human, human_text))
+    prev_was_about_topic = common_universal_templates.if_utterance_requests_topic(
+        state_utils.get_last_bot_utterance(vars))
+    anything = re.search(re_patterns_human, human_text)
+
+    flag = bool(prev_was_about_topic and anything)
 
     logger.info(f"weekend_request={flag}")
     return flag

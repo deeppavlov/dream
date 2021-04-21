@@ -242,6 +242,17 @@ ANY_TOPIC_AMONG_OFFERED = re.compile(
     r"|you (choose|pick up|tell me|want|wish|like)\.?$)")
 
 
+def if_utterance_requests_topic(annotated_uttr):
+    greeting_question_texts = [question.lower() for t in GREETING_QUESTIONS for question in GREETING_QUESTIONS[t]]
+    prev_was_greeting = any([greeting_question in annotated_uttr.get("text", "")
+                             for greeting_question in greeting_question_texts])
+
+    prev_what_to_talk_about_regexp = re.search(COMPILE_WHAT_TO_TALK_ABOUT, annotated_uttr.get("text", ""))
+    if prev_was_greeting or prev_what_to_talk_about_regexp:
+        return True
+    return False
+
+
 def if_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr=None, key_words=None, compiled_pattern=r""):
     """Dialog context implies that the last utterances chooses particular conversational topic:
         - annotated_uttr asks "let's talk about PARTICULAR-TOPIC"
@@ -251,18 +262,15 @@ def if_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr=None, key
     prev_annotated_uttr = {} if prev_annotated_uttr is None else prev_annotated_uttr
     key_words = [] if key_words is None else key_words
     uttr_ = annotated_uttr.get('text', "").lower()
-    prev_uttr_ = prev_annotated_uttr.get('text', '--').lower()
+    prev_uttr_ = prev_annotated_uttr.get('text', "").lower()
 
     # current uttr is lets talk about blabla
     chat_about_intent = 'lets_chat_about' in get_intents(annotated_uttr, probs=False, which='intent_catcher')
     chat_about = chat_about_intent or if_lets_chat_about_topic(uttr_)
 
     # prev uttr is what do you want to talk about?
-    greeting_question_texts = [question.lower() for t in GREETING_QUESTIONS for question in GREETING_QUESTIONS[t]]
-    prev_was_greeting = any([greeting_question in prev_uttr_ for greeting_question in greeting_question_texts])
     prev_chat_about_intent = 'lets_chat_about' in get_intents(prev_annotated_uttr, probs=False, which='intent_catcher')
-    prev_what_to_talk_about_regexp = re.search(COMPILE_WHAT_TO_TALK_ABOUT, prev_uttr_)
-    prev_what_to_chat_about = prev_was_greeting or prev_chat_about_intent or prev_what_to_talk_about_regexp
+    prev_what_to_chat_about = prev_chat_about_intent or if_utterance_requests_topic(prev_annotated_uttr)
 
     switch_topic = if_choose_topic(annotated_uttr, prev_annotated_uttr)
     not_want = re.search(COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, uttr_)
