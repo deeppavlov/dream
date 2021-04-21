@@ -121,16 +121,18 @@ def respond():
             text = response.get("text", "Sorry")
             if not response.get("confidence"):
                 confidence = 0
-            elif GAMES_COMPILED_PATTERN.search(last_utter_text) and not is_active_last_answer:
-                confidence = 0.98
-            elif is_active_last_answer:
-                confidence = 1
-            elif "I like to talk about games." in response.get("text") and if_chat_about_particular_topic(
-                dialog["human_utterances"][-1], bot_utterance
+            elif not is_active_last_answer and if_chat_about_particular_topic(
+                dialog["human_utterances"][-1],
+                bot_utterance,
+                compiled_pattern=GAMES_COMPILED_PATTERN,
             ):
+                confidence = 1
+            elif is_active_last_answer:
                 confidence = 1
             elif is_yes(dialog["human_utterances"][-1]) and game_skill_was_proposed(bot_utterance):
                 confidence = 1
+            elif GAMES_COMPILED_PATTERN.search(last_utter_text) and not is_active_last_answer:
+                confidence = 0.98
             else:
                 confidence = 0
 
@@ -155,7 +157,7 @@ def respond():
         except Exception as exc:
             sentry_sdk.capture_exception(exc)
             logger.exception(exc)
-            text = "Sorry"
+            text = ""
             confidence = 0.0
             human_attr["game_cooperative_skill"] = {"state": prev_state}
             attr = {}
