@@ -689,7 +689,7 @@ def share_fact_about_loc_response(vars):
     # USR_SHARE_FACT_ABOUT_LOC
     shared_memory = state_utils.get_shared_memory(vars)
     location = shared_memory.get("discussed_location", "")
-    fact_about_location = shared_memory.get("fact_about_discussed_location", {}).get("fact", "")
+    fact_about_location = shared_memory.get("fact_about_discussed_location", {})
     if fact_about_location.get("location", "") == location and fact_about_location.get("fact", ""):
         fact_about_location = fact_about_location.get("fact", "")
     else:
