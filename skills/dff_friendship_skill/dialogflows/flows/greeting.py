@@ -67,7 +67,8 @@ HIGH_CONFIDENCE = 0.98
 # %%
 
 
-def compose_topic_offering(excluded_skills=[]):
+def compose_topic_offering(excluded_skills=None):
+    excluded_skills = [] if excluded_skills is None else excluded_skills
     ask_about_topic = random.choice(common_greeting.GREETING_QUESTIONS["what_to_talk_about"])
     offer_topics_template = random.choice(common_greeting.TOPIC_OFFERING_TEMPLATES)
 
@@ -114,7 +115,8 @@ def get_sentiment_acknowledgement(vars, acknowledgements=None):
 
 # curl -H "Content-Type: application/json" -XPOST http://0.0.0.0:8088/respond \
 #   -d '{"text":["Hello, my dog [MASK] cute"]}'
-def masked_lm(templates=["Hello, it's [MASK] dog."], prob_threshold=0.0, probs_flag=False):
+def masked_lm(templates=None, prob_threshold=0.0, probs_flag=False):
+    templates = ["Hello, it's [MASK] dog."] if templates is None else templates
     request_data = {"text": templates}
     try:
         predictions_batch = requests.post(MASKED_LM_SERVICE_URL, json=request_data, timeout=1.5).json()

@@ -71,7 +71,7 @@ skills_link_to_weights = {
 }
 
 
-def link_to(skills, human_attributes, recent_active_skills=[]):
+def link_to(skills, human_attributes, recent_active_skills=None):
     """
     Returns random skill and phrase from skills_phrases_map.
     Use it to add link to specific skill in your phrase.
@@ -87,6 +87,7 @@ def link_to(skills, human_attributes, recent_active_skills=[]):
             It will try to link_to skills that were not linked before.
     recent_active_skills: list or set of recently used skills not to link to them
     """
+    recent_active_skills = [] if recent_active_skills is None else recent_active_skills
     used_links = human_attributes.get("used_links", {})
     disliked_skills = human_attributes.get("disliked_skills", [])
 

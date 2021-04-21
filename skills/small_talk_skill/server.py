@@ -124,7 +124,8 @@ def respond():
     return jsonify(list(zip(responses, confidences, human_attributes, bot_attributes, attributes)))
 
 
-def get_next_response_on_topic(topic, curr_user_uttr, curr_step=0, topic_script=[]):
+def get_next_response_on_topic(topic, curr_user_uttr, curr_step=0, topic_script=None):
+    topic_script = [] if topic_script is None else topic_script
     attr = {}
 
     if curr_step == len(topic_script):

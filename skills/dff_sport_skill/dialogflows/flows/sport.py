@@ -141,7 +141,8 @@ def not_negative_emotion(vars):
     return user_agrees or user_positive_or_neutral
 
 
-def compose_topic_offering(excluded_skills=[]):
+def compose_topic_offering(excluded_skills=None):
+    excluded_skills = [] if excluded_skills is None else excluded_skills
     ask_about_topic = random.choice(common_greeting.GREETING_QUESTIONS["what_to_talk_about"])
     offer_topics_template = random.choice(common_greeting.TOPIC_OFFERING_TEMPLATES)
 

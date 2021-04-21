@@ -914,10 +914,11 @@ class MovieSkillTemplates:
         return ""
 
     @staticmethod
-    def opinion_about_movie(name, attitude, genres=[]):
+    def opinion_about_movie(name, attitude, genres=None):
         """
         Generate templated reply about movie `name` with the given `attitude`
         """
+        genres = [] if genres is None else genres
         if "Series" not in genres:
             subject = np.random.choice(["movie", "film", "pic", "picture"] + [genre.lower() + " movie"
                                                                               for genre in genres])

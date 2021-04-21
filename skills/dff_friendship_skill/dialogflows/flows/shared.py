@@ -46,7 +46,8 @@ def get_sentiment_acknowledgement(vars, acknowledgements=None):
 
 # curl -H "Content-Type: application/json" -XPOST http://0.0.0.0:8088/respond \
 #   -d '{"text":["Hello, my dog [MASK] cute"]}'
-def masked_lm(templates=["Hello, it's [MASK] dog."], prob_threshold=0.0, probs_flag=False):
+def masked_lm(templates=None, prob_threshold=0.0, probs_flag=False):
+    templates = ["Hello, it's [MASK] dog."] if templates is None else templates
     request_data = {"text": templates}
     try:
         predictions_batch = requests.post(MASKED_LM_SERVICE_URL, json=request_data, timeout=1.5).json()

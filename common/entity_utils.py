@@ -229,7 +229,8 @@ def load_raw_entities(raw_entities):
     return entities
 
 
-def update_entities(dialog, human_utter_index, entities={}):
+def update_entities(dialog, human_utter_index, entities=None):
+    entities = {} if entities is None else entities
     old_entities = list(entities)
     human_utterances = dialog["human_utterances"]
     bot_utterances = dialog["bot_utterances"]

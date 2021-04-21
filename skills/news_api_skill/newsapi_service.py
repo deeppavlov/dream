@@ -93,7 +93,7 @@ class CachedRequestsAPI:
             result = response
         return result
 
-    def send(self, topic="all", status="", prev_news_urls=[]):
+    def send(self, topic="all", status="", prev_news_urls=None):
         """Get news using cache and NewsAPI requests
 
         Args:
@@ -104,6 +104,7 @@ class CachedRequestsAPI:
         Returns:
             dictionary with one top rated over latest news
         """
+        prev_news_urls = [] if prev_news_urls is None else prev_news_urls
         topic = topic.lower() if len(topic) > 0 else "all"
         curr_time = datetime.now()
 

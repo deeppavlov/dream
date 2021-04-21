@@ -142,7 +142,8 @@ def downscore_toxic_blacklisted_responses(scores, confidences, toxicities, has_b
     return sum(ids), scores, confidences
 
 
-def get_updated_disliked_skills(dialog, can_not_be_disliked_skills=[]):
+def get_updated_disliked_skills(dialog, can_not_be_disliked_skills=None):
+    can_not_be_disliked_skills = [] if can_not_be_disliked_skills is None else can_not_be_disliked_skills
     disliked_skills = dialog["human"]["attributes"].get("disliked_skills", [])
     prev_bot_uttr = dialog["bot_utterances"][-1]["text"].lower() if len(dialog["bot_utterances"]) > 0 else ""
 
