@@ -13,7 +13,7 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.link import link_to, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED
-from common.movies import get_movie_template
+from common.movies import get_movie_template, praise_actor, praise_director_or_writer_or_visuals
 from common.universal_templates import if_switch_topic, is_switch_topic, if_chat_about_particular_topic, \
     if_choose_topic, COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
 from common.utils import get_skill_outputs_from_dialog, is_yes, is_no, get_topics, get_intents, get_sentiment, \
@@ -408,6 +408,16 @@ class MovieSkillScenario:
 
         return response, confidence, human_attr, bot_attr, attr
 
+    def praise_random_actor_from_cast(self, movie_id, top_n_actors=2):
+        genres = self.templates.imdb.get_info_about_movie(movie_id, field="genre")
+        actors = self.templates.imdb.get_info_about_movie(movie_id, field="actors")
+        if actors:
+            actor = random.choice(actors[:top_n_actors])
+            phrase = praise_actor(actor, animation="Animation" in genres)
+        else:
+            phrase = "This movie is definitely worth watching."
+        return phrase
+
     def opinion_expression_and_request(self, movie_id, prev_status_line, human_attr, bot_attr):
         movie_title = self.templates.imdb(movie_id).get("title", "")
         movie_type = self.templates.imdb.get_movie_type(movie_id)
@@ -415,7 +425,9 @@ class MovieSkillScenario:
 
         reply, _, confidence = self.templates.give_opinion_about_movie([movie_id])
         if confidence >= 0.9 and len(reply) > 0 and len(movie_title) > 0:
-            response = f"{reply} {get_movie_template('opinion_request_about_movie', movie_type=movie_type)}"
+            actor_compliment = self.praise_random_actor_from_cast(movie_id)
+            response = f"{reply} {actor_compliment} "\
+                       f"{get_movie_template('opinion_request_about_movie', movie_type=movie_type)}"
             confidence = SUPER_CONFIDENCE
             attr = {"movie_id": movie_id, "can_continue": MUST_CONTINUE,
                     "status_line": prev_status_line + ["confirmation", "opinion_expression", "opinion_request"]}
@@ -625,11 +637,16 @@ class MovieSkillScenario:
                     movie_id, movie_title, movie_type, prev_status_line, human_attr, bot_attr)
         elif prev_status == "opinion_request":  # -> user_opinion_comment
             sentiment = get_sentiment(curr_user_uttr, default_labels=['neutral'], probs=False)[0]
-
+            if sentiment == "positive":
+                director = self.templates.imdb.get_info_about_movie(movie_id, "directors")[0]
+                writer = self.templates.imdb.get_info_about_movie(movie_id, "writers")[0]
+                praise_to_director_or_writer_or_visuals = praise_director_or_writer_or_visuals(director, writer)
+            else:
+                praise_to_director_or_writer_or_visuals = ""
             response, confidence, human_attr, bot_attr, attr = self.ask_do_you_know_question(
                 movie_id, movie_title, movie_type, prev_status_line, human_attr, bot_attr)
             response = f"{get_movie_template('user_opinion_comment', subcategory=sentiment, movie_type=movie_type)} " \
-                       f"{response}"
+                       f"{praise_to_director_or_writer_or_visuals} {response}"
             attr["status_line"] = prev_status_line + ["user_opinion_comment", "do_you_know_question"]
         elif prev_status == "user_opinion_comment":  # -> do_you_know_question
             response, confidence, human_attr, bot_attr, attr = self.ask_do_you_know_question(
