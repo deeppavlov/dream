@@ -21,7 +21,6 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
 USE_CACHE = True
 
 NOT_LIKE_PATTERN = r"(dislike|not like|not want|not love|not prefer|hate|n't like|" \
@@ -145,7 +144,6 @@ def get_genre(user_phrase, return_name=False):
 genres_regexp = f"({'|'.join(GENRE_DICT.keys())})"
 do_you_love_regexp = '(do you (love|like|enjoy)|what do you think)'
 
-
 favorite_genre_template = re.compile(r"(favourite|favorite|best|suggest|recommend) book genre", re.IGNORECASE)
 favorite_book_template = re.compile(r"(favourite|favorite|best|suggest|recommend) book", re.IGNORECASE)
 asked_genre_template = re.compile(rf"{do_you_love_regexp} {genres_regexp}", re.IGNORECASE)
@@ -166,9 +164,13 @@ def asked_about_genre(annotated_user_phrase):
 def fact_about_book(annotated_user_phrase):
     logger.debug('fact about')
     logger.debug(annotated_user_phrase)
-    bookname, _ = get_name(annotated_user_phrase, 'book')
-    logger.debug('Getting a fact about bookname')
-    reply = send_cobotqa(f'fact about "{bookname}"')
+    book_name, _ = get_name(annotated_user_phrase, 'book')
+    movie_name, movie_author = get_name(annotated_user_phrase, 'movie')
+    if not movie_name:
+        logger.debug('Getting a fact about bookname')
+        reply = send_cobotqa(f'fact about "{book_name}"')
+    else:
+        reply = f'I enjoyed watching the film {movie_name} based on this book, which was directed by {movie_author}. '
     return reply
 
 
@@ -180,13 +182,17 @@ def just_mentioned(annotated_phrase, book):
     return book and book.lower() in annotated_phrase['text'].lower()
 
 
-def who_wrote_book(plain_book_entity, return_plain=False):
+def get_author(plain_entity, return_plain=False, mode='book'):
     # Input bookname output author name
-    logger.info(f'Calling who_wrote_book for {plain_book_entity}')
-    logger.debug(f'Search author with entity {plain_book_entity.upper()}')
-    author_list = request_triples_wikidata("find_object", [(plain_book_entity.upper(), "P50", "forw"),
-                                                           (plain_book_entity.upper(), "P800",
-                                                            "backw")], query_dict=book_query_dict)
+    logger.info(f'Calling get_author for {plain_entity}')
+    logger.debug(f'Search author with entity {plain_entity.upper()}')
+    if mode == 'book':
+        author_list = request_triples_wikidata("find_object", [(plain_entity.upper(), "P50", "forw"),
+                                                               (plain_entity.upper(), "P800",
+                                                                "backw")], query_dict=book_query_dict)
+    else:
+        author_list = request_triples_wikidata("find_object", [(plain_entity.upper(), "P57", "forw")],
+                                               query_dict={})
     logger.info(f'Author list received {author_list}')
     author_list = list(itertools.chain.from_iterable(author_list))
     author_list = list(set(author_list))
@@ -199,7 +205,7 @@ def who_wrote_book(plain_book_entity, return_plain=False):
     else:
         try:
             author_name = entity_to_label(author_entity)
-            logger.info(f'Answer for who_wrote_book {author_name}')
+            logger.info(f'Answer for get_author {author_name}')
             return author_name
         except Exception as e:
             logging.exception(e)
@@ -242,6 +248,22 @@ def book_or_author(bookname, stopwords):
     return bookname and not all([len(word) < 5 or word in stopwords for word in bookname.split(' ')])
 
 
+def process_year(publication_year):
+    is_timeout = publication_year in [[], [[]]]
+    if is_timeout:
+        return None
+    start_ind, n_years_ago = None, None
+    for i in range(len(publication_year)):
+        if publication_year[i] in '0123456789' and not start_ind:
+            start_ind = i
+    if start_ind:
+        publication_year = publication_year[start_ind:start_ind + 4]
+        n_years_ago = datetime.now().year - int(publication_year)
+    else:
+        logger.warning(f'Wrong output {publication_year} no n_years_ago')
+    return n_years_ago
+
+
 def get_name(annotated_phrase, mode='author', bookyear=False,
              return_plain=False, stopwords=book_banned_words):  # it was wikidata_process_entities
     '''
@@ -255,7 +277,7 @@ def get_name(annotated_phrase, mode='author', bookyear=False,
     Q571 - book
     Q7725634, Q1667921, Q277759 - book serie
     '''
-    plain_entity, found_entity, n_years_ago = None, None, None
+    plain_entity, found_entity, n_years_ago, attribute, film_director = None, None, None, None, None
     try:
         all_found_entities = get_raw_entity_names_from_annotations(annotated_phrase['annotations'])
         if not all_found_entities:
@@ -266,6 +288,8 @@ def get_name(annotated_phrase, mode='author', bookyear=False,
             types = ['Q36180', 'Q18814623']
         elif mode == 'book':
             types = ['Q571', "Q7725634", "Q1667921", "Q277759", "Q8261", "Q47461344"]
+        elif mode == 'movie':
+            types = ["Q11424", "Q24856"]
         else:
             raise Exception(f'Wrong mode: {mode}')
         n_years_ago = None
@@ -302,21 +326,19 @@ def get_name(annotated_phrase, mode='author', bookyear=False,
                     else:
                         logger.warning('No publication date found in annotation for {entity}')
                         publication_year = get_published_year(plain_entity)
-                    start_ind = None
-                    for i in range(len(publication_year)):
-                        if publication_year[i] in '0123456789' and not start_ind:
-                            start_ind = i
-                    if start_ind:
-                        publication_year = publication_year[start_ind:start_ind + 4]
-                        n_years_ago = datetime.now().year - int(publication_year)
+                    n_years_ago = process_year(publication_year)
+                elif mode == 'movie':
+                    if "film director" in toiterate_dict[entity]:
+                        film_director = toiterate_dict[entity]['film producer'][0][0]
                     else:
-                        logger.warning(f'Wrong output {publication_year} no n_years_ago')
+                        film_director = get_author(plain_entity, mode='movie')
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
     entity = plain_entity if return_plain else found_entity
-    logger.info(f'Answer for get_name {entity} {n_years_ago}')
-    return entity, n_years_ago
+    attribute = film_director if mode == 'movie' else n_years_ago
+    logger.info(f'Answer for get_name {entity} {attribute}')
+    return entity, attribute
 
 
 def best_book_by_author(plain_author_name, default_phrase, plain_last_bookname=None, top_n_best_books=1):
@@ -368,7 +390,7 @@ def parse_author_best_book(annotated_phrase, default_phrase=None):
             return default_phrase
     else:
         logger.debug(f'Processing bookname {plain_bookname}')
-        plain_author = who_wrote_book(plain_bookname, return_plain=True)
+        plain_author = get_author(plain_bookname, return_plain=True, mode='book')
         if plain_author:
             logger.debug(f'author detected: {plain_author} bookname {plain_bookname}')
             answer = best_book_by_author(plain_author_name=plain_author, plain_last_bookname=plain_bookname,

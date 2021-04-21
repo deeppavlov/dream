@@ -87,7 +87,9 @@ topic_skill_types = set(["Q36180",  # writer
                          "Q847017",  # sports club
                          "Q476028",  # football club
                          "Q4498974",  # ice hockey team
-                         "Q570116"  # tourist attraction
+                         "Q570116",  # tourist attraction
+                         "Q11424",  # film
+                         "Q24856"  # film series
                          ])
 
 

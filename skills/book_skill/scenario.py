@@ -11,6 +11,7 @@ from common.tutor import get_tutor_phrase
 from common.universal_templates import is_switch_topic, if_chat_about_particular_topic, tell_me_more, \
     is_positive, is_negative
 from common.utils import is_yes, is_no
+from common.link import link_to
 from book_utils import get_name, get_genre, suggest_template, get_not_given_question_about_books, dontlike, \
     fact_about_book, fav_genre_request_detected, is_side_intent, is_stop, \
     fav_book_request_detected, parse_author_best_book, best_book_by_author, GENRE_PHRASES, was_question_about_book, \
@@ -219,6 +220,8 @@ class BookSkillScenario:
                             reply, confidence = human_attr['book_skill']['last_fact'], self.super_conf
                             if reply is not None:
                                 logger.debug('Found a bookfact')
+                                if 'enjoyed watching ' in reply:
+                                    reply += link_to(['movie_skill'], dialog["human"]["attributes"])['phrase']
                                 break
                         if reply is None:
                             # if we offered fact but didn't find it, say sorry about that
