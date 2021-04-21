@@ -26,8 +26,10 @@ except Exception as e:
     raise e
 
 
-label_to_act = {0: "opinion", 1: "pos_answer", 2: "statement", 3: "neg_answer", 4: "yes_no_question",
-                5: "other_answers", 6: "open_question_factual", 7: "open_question_opinion"}
+label_to_act = {0: "opinion", 1: "statement", 2: "pos_answer", 3: "neg_answer", 4: "command",
+                5: "comment", 6: "other_answers", 7: "open_question_factual", 8: "yes_no_question",
+                9: "complaint", 10: "open_question_opinion", 11: "appreciation", 12: "dev_command"}
+
 logger.info(f"Considered classes dictionary: {label_to_act}")
 
 
