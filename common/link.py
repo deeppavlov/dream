@@ -112,6 +112,12 @@ def link_to(skills, human_attributes, recent_active_skills=None):
     if len(filtered_skills) == 0:
         filtered_skills = set(deepcopy(skills))
 
+    # remove from filtered skills all skills which links all were used before.
+    for skill_name, phrases in used_links.items():
+        if skill_name in skills_phrases_map:
+            if len(filtered_phrases_map[skill_name]) == 0:
+                filtered_skills.discard(skill_name)
+
     if filtered_skills:
         skills_weights = [skills_link_to_weights.get(s, 1.0) for s in filtered_skills]
         random_skill = choices(list(filtered_skills), weights=skills_weights, k=1)[0]
