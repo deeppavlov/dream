@@ -10,9 +10,11 @@ test_config = {'dialogs': [{'human_utterances': [{'text': 'this is the best dog'
 test_config_reverted = {'sentences': ['this is the best dog'],
                         'last_human_utterances': ['so what you think ha']}
 gold_result = {
-    'opinion': 0.6699745, 'pos_answer': 0.00049586035, 'statement': 0.20634566,
-    'neg_answer': 0.001343765, 'yes_no_question': 0.006176666, 'other_answers': 0.003905255,
-    'open_question_factual': 0.034658864, 'open_question_opinion': 0.07709945
+    'appreciation': 0.0716494619846344, 'command': 0.0030570626258850098, 'comment': 0.7691837549209595,
+    'complaint': 0.02454354055225849, 'dev_command': 0.006282569374889135, 'neg_answer': 0.0028412530664354563,
+    'open_question_factual': 0.004046098794788122, 'open_question_opinion': 0.002423756755888462,
+    'opinion': 0.048794493079185486, 'other_answers': 0.005758579820394516, 'pos_answer': 0.004446228966116905,
+    'statement': 0.05326918140053749, 'yes_no_question': 0.003704074304550886
 }
 
 
@@ -24,7 +26,7 @@ def main_test():
     assert batch_responses[0]['batch'] == responses, f'Batch responses {batch_responses} not match' \
                                                      f'to responses {responses}'
 
-    assert round(responses[0]["opinion"], 5) == 0.66997, print(responses)
+    assert round(responses[0]["comment"], 5) == 0.76918, print(responses)
 
     logger.info('Success')
 
