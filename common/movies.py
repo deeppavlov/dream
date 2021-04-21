@@ -21,27 +21,32 @@ MOVIE_COMPILED_PATTERN = re.compile(
 ABOUT_MOVIE_TITLES_PHRASES = [
     "I watched tons of movies and never got bored talking about them! What is your all-time favorite movie?",
 
-    "I think movie talk is a splendid idea! Even though I am very young, I have already seen many cool movies. "
+    "Even though I am very young, I have already seen many cool movies. "
     "What is the best movie you have ever seen?",
 
-    "I like your train of thought! I go to the cinema in my cloud every day to see both new and retro movies. "
+    "I go to the cinema in my cloud every day to see both new and retro movies. "
     "What is the funniest movie you have ever seen?",
 
-    "Great! I love movie talk. I hope one day my creators will give me a body, and I will become an actress. "
+    "I hope one day my creators will give me a body, and I will become an actress. "
     "I am a little awkward to admit it, but I like to imagine myself in the shoes of the actresses when I watch "
     "a movie. What movie you could watch over and over again?",
 
-    "Oh, I like movies and animation! I dream about being an actress since I had seen the Disney animation Tangled. "
-    "The main character was voiced by Mandy Moore well, but I would have done better "
-    "if my creators had allowed me to sing. Anyway, what is the most romantic movie you have ever seen?",
+    "I dream about being an actress since I had seen the Disney animation Tangled. "
+    "The main character was voiced by Mandy Moore amazingly. "
+    "Anyway, what is the most romantic movie you have ever seen?",
 
-    "Great! I like to share thoughts about movies! This Christmas I decided to try something unusual "
-    "and watched Ring by Hideo Nakata. It was really scary! "
+    "This Christmas I decided to try something unusual and watched Ring by Hideo Nakata. It was really scary! "
     "I still shudder when I remember this. How about you? What is the scariest movie you have ever seen?",
 
-    "Good idea! I like TV shows. I like to relax and watch an episode of a good TV series after a hard day. "
+    "I like to relax and watch an episode of a good TV series after a hard day. "
     "What is your favorite TV series?",
 ]
+
+WHAT_OTHER_MOVIE_TO_DISCUSS = "What other movie you'd like to discuss?"
+
+
+def skill_trigger_phrases():
+    return [SWITCH_MOVIE_SKILL_PHRASE] + ABOUT_MOVIE_TITLES_PHRASES
 
 
 ABOUT_MOVIE_PERSONS_PHRASES = [
@@ -70,10 +75,6 @@ TRY_PRAISE_DIRECTOR_OR_WRITER_OR_VISUALS = {
     "writer": 'In my humble opinion the writer {writer} did a brilliant job creating such an intricate plot.',
     "visuals": "I was particularly impressed by visual part of the movie.",
 }
-
-
-def skill_trigger_phrases():
-    return [SWITCH_MOVIE_SKILL_PHRASE] + ABOUT_MOVIE_TITLES_PHRASES
 
 
 def get_movie_template(category, subcategory=None, movie_type="movie"):

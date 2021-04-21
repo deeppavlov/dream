@@ -23,9 +23,10 @@ for url in [u'https://datasets.imdbws.com/name.basics.tsv.gz',
 # # Choose imdb-ids of most popular movies
 
 fpath = "./title.ratings.tsv.gz"
-df_ratings = pd.read_table(fpath)
+df_ratings = pd.read_table(fpath, low_memory=False)
 
-df = pd.read_table("./title.basics.tsv.gz", na_values={"startYear": ["\\N"], "endYear": ["\\N"], "isAdult": ["\\N"]})
+df = pd.read_table("./title.basics.tsv.gz", low_memory=False,
+                   na_values={"startYear": ["\\N"], "endYear": ["\\N"], "isAdult": ["\\N"]})
 
 df = df.merge(df_ratings, on="tconst")
 
@@ -49,9 +50,9 @@ if collect_movies_based_on_rating:
     movies_ids.extend(df.loc[(df["startYear"] <= 1990) & (df["averageRating"] > 8), "tconst"].values)
     movies_ids.extend(df.loc[(df["startYear"] > 1990) & (df["startYear"] <= 2005) & (df["averageRating"] > 7),
                              "tconst"].values)
-    movies_ids.extend(df.loc[(df["startYear"] > 2005) & (df["startYear"] <= 2015) & (df["averageRating"] > 7),
+    movies_ids.extend(df.loc[(df["startYear"] > 2005) & (df["startYear"] <= 2015) & (df["averageRating"] > 6),
                              "tconst"].values)
-    movies_ids.extend(df.loc[(df["startYear"] > 2015) & (df["startYear"] <= 2020) & (df["averageRating"] > 6),
+    movies_ids.extend(df.loc[(df["startYear"] > 2015) & (df["startYear"] <= 2021) & (df["averageRating"] > 5),
                              "tconst"].values)
 
     with open("imdb_ids.txt", "w") as f:
@@ -78,7 +79,7 @@ print(f"Total number of considered movies: {len(all_movies_ids)}")
 
 t0 = time()
 fpath = "./title.ratings.tsv.gz"
-df_ratings = pd.read_table(fpath)
+df_ratings = pd.read_table(fpath, low_memory=False)
 
 ind_drop = df_ratings[~df_ratings['tconst'].isin(all_movies_ids)].index
 df_ratings = df_ratings.drop(ind_drop)
@@ -86,7 +87,7 @@ assert df_ratings.shape[0] == len(all_movies_ids), print("Number of samples less
 
 fpath = "./title.basics.tsv.gz"
 
-df = pd.read_table(fpath, na_values={"startYear": ["\\N"], "endYear": ["\\N"], "isAdult": ["\\N"]})
+df = pd.read_table(fpath, low_memory=False, na_values={"startYear": ["\\N"], "endYear": ["\\N"], "isAdult": ["\\N"]})
 
 ind_drop = df[~df['tconst'].isin(all_movies_ids)].index
 df = df.drop(ind_drop)
@@ -120,7 +121,7 @@ print(f"Total time: {time() - t0}")
 t0 = time()
 fpath = "./title.principals.tsv.gz"
 
-df_principals = pd.read_table(fpath)
+df_principals = pd.read_table(fpath, low_memory=False)
 df_principals = df_principals.loc[:, ["tconst", "nconst", "ordering", "category"]]
 df_principals.rename(columns={"tconst": "imdb_id"}, inplace=True)
 
@@ -137,7 +138,7 @@ df_principals = df_principals.drop(ind_drop)
 
 fpath = "./name.basics.tsv.gz"
 
-df_names = pd.read_table(fpath)
+df_names = pd.read_table(fpath, low_memory=False)
 df_names = df_names.loc[:, ["primaryName", "nconst"]]
 df_principals = df_principals.merge(df_names, on="nconst")
 
@@ -171,7 +172,7 @@ t0 = time()
 
 fpath = "./title.akas.tsv.gz"
 
-df_akas = pd.read_table(fpath)
+df_akas = pd.read_table(fpath, low_memory=False)
 df_akas = df_akas.loc[df_akas["region"] == "US", :]
 df_akas.rename(columns={"titleId": "imdb_id"}, inplace=True)
 
