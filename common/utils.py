@@ -428,8 +428,7 @@ def _get_plain_annotations(annotated_utterance, model_name):
             else:
                 answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
     except Exception as e:
-        sentry_sdk.capture_exception(e)
-        logger.exception(e)
+        logger.warning(e)
     # logger.info(f'Answer for get_plain_annotations {answer_probs} {answer_labels}')
     return answer_probs, answer_labels
 
@@ -463,8 +462,7 @@ def _get_etc_model(annotated_utterance, model_name, probs=True, default_probs=No
             answer_probs, answer_labels = _get_combined_annotations(annotated_utterance,
                                                                     model_name=model_name)
     except Exception as e:
-        sentry_sdk.capture_exception(e)
-        logger.exception(e)
+        logger.warning(e)
         answer_probs, answer_labels = default_probs, default_labels
     if probs:  # return probs
         return answer_probs
@@ -577,14 +575,10 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
         answer_probs, answer_labels = default_probs, default_labels
     try:
         assert answer_labels, annotations
-    except Exception as e:
-        with sentry_sdk.push_scope() as scope:
-            annotations_to_log = {key: value for key, value in annotations.items()
-                                  if key in ['cobot_dialogact', 'combined_classification', 'cobot_topics']}
-            scope.set_extra("payload", annotations_to_log)
-            scope.set_extra("which", which)
-            sentry_sdk.capture_exception(e)
-            logger.exception(Exception(e, {"payload": annotations_to_log, 'which': which}))
+    except Exception:
+        annotations_to_log = {key: value for key, value in annotations.items()
+                              if key in ['cobot_dialogact', 'combined_classification', 'cobot_topics']}
+        logger.warning(f'Not answer_labels with payload {annotations_to_log} which {which}')
         answer_probs, answer_labels = default_probs, default_labels
     if probs:
         return answer_probs
@@ -660,20 +654,16 @@ def get_intents(annotated_utterance, probs=False, default_probs=None, default_la
     elif which == 'midas':
         answer_probs, answer_labels = midas_intent_probs, midas_intent_labels
     else:
-        logger.exception(f'Unknown type in get_intents {which}')
+        logger.warning(f'Unknown type in get_intents {which}')
         answer_probs, answer_labels = default_probs, default_labels
     if which not in ['intent_catcher', 'midas']:
         try:
             assert answer_labels, annotations
-        except Exception as e:
-            with sentry_sdk.push_scope() as scope:
-                annotations_to_log = {key: value for key, value in annotations.items()
-                                      if key in ['intent_catcher', 'cobot_dialogact', 'cobot_dialogact_intents',
-                                                 'combined_classification', 'midas_classification']}
-                scope.set_extra("payload", annotations_to_log)
-                scope.set_extra("which", which)
-                sentry_sdk.capture_exception(e)
-                logger.exception(Exception(e, {"payload": annotations_to_log, 'which': which}))
+        except Exception:
+            annotations_to_log = {key: value for key, value in annotations.items()
+                                  if key in ['intent_catcher', 'cobot_dialogact', 'cobot_dialogact_intents',
+                                             'combined_classification', 'midas_classification']}
+            logger.warning(f'Not answer_labels with payload {annotations_to_log} which {which}')
             answer_probs, answer_labels = default_probs, default_labels
     if probs:
         return answer_probs
