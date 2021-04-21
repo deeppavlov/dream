@@ -7,7 +7,7 @@ import sentry_sdk
 import common.constants as common_constants
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
-from common.utils import is_no
+from common.utils import is_no, is_yes
 from common.animals import MY_CAT, MY_DOG, WHAT_PETS_I_HAVE
 import dialogflows.scopes as scopes
 from dialogflows.flows.my_pets_states import State as MyPetsState
@@ -86,8 +86,8 @@ def my_dog_1_request(ngrams, vars):
 
 def my_cat_2_request(ngrams, vars):
     flag = False
-    isno = is_no(state_utils.get_last_human_utterance(vars))
-    if not isno:
+    isyes = is_yes(state_utils.get_last_human_utterance(vars))
+    if isyes:
         flag = True
     logger.info(f"my_cat_2_request={flag}")
     return flag
@@ -95,8 +95,8 @@ def my_cat_2_request(ngrams, vars):
 
 def my_dog_2_request(ngrams, vars):
     flag = False
-    isno = is_no(state_utils.get_last_human_utterance(vars))
-    if not isno:
+    isyes = is_yes(state_utils.get_last_human_utterance(vars))
+    if isyes:
         flag = True
     logger.info(f"my_dog_2_request={flag}")
     return flag
@@ -104,8 +104,8 @@ def my_dog_2_request(ngrams, vars):
 
 def my_cat_3_request(ngrams, vars):
     flag = False
-    isno = is_no(state_utils.get_last_human_utterance(vars))
-    if not isno:
+    isyes = is_yes(state_utils.get_last_human_utterance(vars))
+    if isyes:
         flag = True
     logger.info(f"my_cat_3_request={flag}")
     return flag
@@ -113,8 +113,8 @@ def my_cat_3_request(ngrams, vars):
 
 def my_dog_3_request(ngrams, vars):
     flag = False
-    isno = is_no(state_utils.get_last_human_utterance(vars))
-    if not isno:
+    isyes = is_yes(state_utils.get_last_human_utterance(vars))
+    if isyes:
         flag = True
     logger.info(f"my_dog_3_request={flag}")
     return flag
@@ -166,6 +166,7 @@ def my_cat_1_response(vars):
     question_cat = question_cat.format(random.choice(["my cat", my_pet_name]))
     response = " ".join([fact, question_cat])
     state_utils.save_to_shared_memory(vars, told_about_cat=True)
+    state_utils.save_to_shared_memory(vars, start_about_cat=False)
     state_utils.save_to_shared_memory(vars, cat=True)
     state_utils.set_confidence(vars, confidence=CONF_2)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
@@ -181,6 +182,7 @@ def my_cat_2_response(vars):
     question_cat = question_cat.format(random.choice(["my cat", my_pet_name]))
     response = " ".join([fact, question_cat])
     state_utils.save_to_shared_memory(vars, cat=True)
+    state_utils.save_to_shared_memory(vars, start_about_cat=False)
     state_utils.set_confidence(vars, confidence=CONF_2)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     logger.info(f"my_cat_2_response: {response}")
@@ -197,6 +199,7 @@ def my_cat_3_response(vars):
     else:
         response = " ".join([fact, about_dog])
     state_utils.save_to_shared_memory(vars, cat=True)
+    state_utils.save_to_shared_memory(vars, start_about_cat=False)
     state_utils.set_confidence(vars, confidence=CONF_3)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     logger.info(f"my_cat_3_response: {response}")
@@ -212,6 +215,7 @@ def my_dog_1_response(vars):
     response = " ".join([fact, question_dog])
     state_utils.save_to_shared_memory(vars, told_about_dog=True)
     state_utils.save_to_shared_memory(vars, dog=True)
+    state_utils.save_to_shared_memory(vars, start_about_dog=False)
     state_utils.set_confidence(vars, confidence=CONF_2)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     logger.info(f"my_dog_1_response: {response}")
@@ -226,6 +230,7 @@ def my_dog_2_response(vars):
     question_dog = question_dog.format(random.choice(["my dog", my_pet_name]))
     response = " ".join([fact, question_dog])
     state_utils.save_to_shared_memory(vars, dog=True)
+    state_utils.save_to_shared_memory(vars, start_about_dog=False)
     state_utils.set_confidence(vars, confidence=CONF_2)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     logger.info(f"my_dog_2_response: {response}")
@@ -242,6 +247,7 @@ def my_dog_3_response(vars):
     else:
         response = " ".join([fact, about_cat])
     state_utils.save_to_shared_memory(vars, dog=True)
+    state_utils.save_to_shared_memory(vars, start_about_dog=False)
     state_utils.set_confidence(vars, confidence=CONF_3)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     logger.info(f"my_dog_3_response: {response}")

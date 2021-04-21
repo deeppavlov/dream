@@ -98,11 +98,12 @@ def what_pets_request(ngrams, vars):
     bot_uttr = state_utils.get_last_bot_utterance(vars)["text"]
     user_uttr = state_utils.get_last_human_utterance(vars)["text"]
     isyes = is_yes(state_utils.get_last_human_utterance(vars))
-    user_has = re.findall("i (have|had)", user_uttr)
+    user_has = re.findall(r"i (have|had)", user_uttr)
     mention_pet = re.findall(PETS_TEMPLATE, user_uttr)
     asked_about_pets = "do you have pets" in bot_uttr.lower()
+    bot_asked_pet = re.findall(r"do you have a (cat|dog)", bot_uttr, re.IGNORECASE)
     logger.info(f"what_pets_request, {asked_about_pets}, {isyes}, {user_has}, {mention_pet}")
-    if asked_about_pets and (isyes or user_has) and not mention_pet:
+    if asked_about_pets and (isyes or user_has) and not mention_pet and not (bot_asked_pet and is_yes):
         flag = True
     logger.info(f"what_pets_request={flag}")
     return flag
@@ -113,12 +114,14 @@ def ask_about_name_request(ngrams, vars):
     user_uttr = state_utils.get_last_human_utterance(vars)["text"]
     bot_uttr = state_utils.get_last_bot_utterance(vars)["text"]
     isno = is_no(state_utils.get_last_human_utterance(vars))
-    user_has_not = (re.findall("do you have a (cat|dog)", bot_uttr, re.IGNORECASE) and isno) and not \
-        re.findall(PETS_TEMPLATE, user_uttr)
+    isyes = is_yes(state_utils.get_last_human_utterance(vars))
+    bot_asked_pet = re.findall(r"do you have a (cat|dog)", bot_uttr, re.IGNORECASE)
+    user_has_not = (bot_asked_pet and isno) and not re.findall(PETS_TEMPLATE, user_uttr)
     shared_memory = state_utils.get_shared_memory(vars)
     asked_name = shared_memory.get("asked_name", False)
     users_pet = shared_memory.get("users_pet", "")
-    if not user_has_not and not asked_name and not re.findall(r"(name|call)", user_uttr) and users_pet:
+    if not user_has_not and not asked_name and not re.findall(r"(name|call)", user_uttr) \
+            and (users_pet or (bot_asked_pet and isyes)):
         flag = True
     logger.info(f"ask_about_name_request={flag}")
     return flag

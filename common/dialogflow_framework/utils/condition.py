@@ -1,13 +1,11 @@
 import logging
 import re
 
-
 from nltk.stem import WordNetLemmatizer
 
 import common.utils as common_utils
 import common.universal_templates as universal_templates
 import common.dialogflow_framework.utils.state as state_utils
-
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -84,6 +82,17 @@ def is_entities(vars):
     entities = state_utils.get_labeled_noun_phrase(vars)
     flag = bool(entities)
     logging.debug(f"is_entities = {flag}")
+    return flag
+
+
+def is_last_state(vars, state):
+    flag = False
+    history = list(vars["agent"]["history"].items())
+    if history:
+        history_sorted = sorted(history, key=lambda x: x[0])
+        last_state = history_sorted[-1][1]
+        if last_state == state:
+            flag = True
     return flag
 
 
