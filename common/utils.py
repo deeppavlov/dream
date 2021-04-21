@@ -740,7 +740,12 @@ def get_named_locations(annotated_utterance):
     if "ner" in annotated_utterance["annotations"]:
         for ent in named_entities:
             if ent["type"] == "LOC":
-                named_locations.append(ent["text"])
+                _is_part_of_other_entity = False
+                for cobot_ent in all_entities:
+                    if ent["text"] in cobot_ent["text"] and cobot_ent["label"] != "location":
+                        _is_part_of_other_entity = True
+                if not _is_part_of_other_entity:
+                    named_locations.append(ent["text"])
 
     named_locations = list(set(named_locations))
 
