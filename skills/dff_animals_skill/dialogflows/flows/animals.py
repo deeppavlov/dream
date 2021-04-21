@@ -10,7 +10,8 @@ import sentry_sdk
 import common.constants as common_constants
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
-from common.universal_templates import if_chat_about_particular_topic
+from common.dialogflow_framework.utils.condition import is_last_state
+from common.universal_templates import if_chat_about_particular_topic, if_lets_chat
 from common.utils import is_yes, is_no
 from common.animals import PETS_TEMPLATE, ANIMALS_FIND_TEMPLATE, LIKE_ANIMALS_REQUESTS, WILD_ANIMALS, \
     WHAT_PETS_I_HAVE, HAVE_LIKE_PETS_TEMPLATE, HAVE_PETS_TEMPLATE, LIKE_PETS_TEMPLATE, TRIGGER_PHRASES
@@ -45,7 +46,7 @@ def lets_talk_about_request(vars):
     found_prompt = any([phrase in bot_uttr for phrase in TRIGGER_PHRASES])
     isyes = is_yes(user_uttr)
     chat_about = if_chat_about_particular_topic(user_uttr, bot_uttr, compiled_pattern=ANIMALS_FIND_TEMPLATE)
-    if have_pets or chat_about or (found_prompt and isyes):
+    if have_pets or chat_about or (found_prompt and isyes) and not is_last_state(vars, AS.SYS_WHAT_ANIMALS):
         flag = True
     logger.info(f"lets_talk_about_request={flag}")
     return flag
@@ -73,8 +74,11 @@ def like_animals_request(ngrams, vars):
         told_about = told_about_cat
     if my_pet == "dog":
         told_about = told_about_dog
-    if re.search(LIKE_PETS_TEMPLATE, text) or (not told_about and started):
+    if re.search(LIKE_PETS_TEMPLATE, text) or (not told_about and started) \
+            and not is_last_state(vars, AS.SYS_WHAT_ANIMALS):
         flag = True
+    if if_lets_chat(text) and not lets_talk_about_request(vars):
+        flag = False
     logger.info(f"like_animals_request={flag}")
     return flag
 
@@ -83,7 +87,7 @@ def user_likes_animal_request(ngrams, vars):
     flag = False
     text = state_utils.get_last_human_utterance(vars)["text"]
     animal = re.findall("i like (.*?)", text)
-    if animal and len(animal[0].split()) <= 3:
+    if animal and len(animal[0].split()) <= 3 and not is_last_state(vars, AS.SYS_WHAT_ANIMALS):
         flag = True
     logger.info(f"user_likes_request={flag}")
     return flag
@@ -122,7 +126,8 @@ def sys_what_animals_request(ngrams, vars):
     text = state_utils.get_last_human_utterance(vars)["text"]
     user_agrees = is_yes(state_utils.get_last_human_utterance(vars))
     check_linkto = lets_talk_about_request(vars) or (linkto_like_animals and user_agrees) or text == "animals"
-    if check_linkto:
+    find_pets = re.findall(r"(\bpet\b|\bpets\b)", text) or re.search(PETS_TEMPLATE, text)
+    if check_linkto and not find_pets:
         flag = True
     logger.info(f"sys_what_animals_request={flag}")
     return flag
@@ -136,7 +141,8 @@ def sys_have_pets_request(ngrams, vars):
     started = shared_memory.get("start", False)
     pet = re.search(PETS_TEMPLATE, text)
     if not shared_memory.get("have_pets", False) and not found_users_pet and \
-            ((lets_talk_about_request(vars) and not pet) or started):
+            ((lets_talk_about_request(vars) and not pet) or started) \
+            and not is_last_state(vars, AS.SYS_WHAT_ANIMALS):
         flag = True
     logger.info(f"sys_have_pets_request={flag}")
     return flag
@@ -241,7 +247,10 @@ def what_wild_request(ngrams, vars):
     what_wild = shared_memory.get("what_wild", False)
     logger.info(f"what_wild_request, is wild {is_wild}, what wild {what_wild}")
     started = shared_memory.get("start", False)
-    if is_wild or what_wild or user_asks_about_pets or (not lets_talk_about_request(vars) and not started):
+    if is_wild or what_wild or user_asks_about_pets or (not lets_talk_about_request(vars) and not started) \
+            and not is_last_state(vars, AS.SYS_WHAT_ANIMALS):
+        flag = False
+    if if_lets_chat(text) and not lets_talk_about_request(vars):
         flag = False
     logger.info(f"what_wild_request={flag}")
     return flag
