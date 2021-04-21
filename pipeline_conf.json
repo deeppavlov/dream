@@ -164,7 +164,10 @@
                 "dialog_formatter": "state_formatters.dp_formatters:last_human_utt_nounphrases",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "required_previous_services": [
-                    "annotators.spelling_preprocessing",
+                    "annotators.spelling_preprocessing"
+                ],
+                "previous_services": [
+                    "annotators.cobot_entities",
                     "annotators.cobot_nounphrases"
                 ],
                 "state_manager_method": "add_annotation"
@@ -258,9 +261,11 @@
                 "state_manager_method": "add_annotation",
                 "required_previous_services": [
                     "annotators.spelling_preprocessing",
-                    "annotators.cobot_entities",
-                    "annotators.cobot_nounphrases",
                     "annotators.sentrewrite"
+                ],
+                "previous_services": [
+                    "annotators.cobot_entities",
+                    "annotators.cobot_nounphrases"
                 ]
             },
             "fact_retrieval": {
@@ -311,7 +316,9 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "required_previous_services": [
-                    "annotators.ner",
+                    "annotators.ner"
+                ],
+                "previous_services": [
                     "annotators.cobot_nounphrases"
                 ]
             },
@@ -376,7 +383,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:entity_storer_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "update_attributes",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.combined_classification",
                     "annotators.intent_catcher"
                 ]
@@ -408,11 +415,8 @@
                     "annotators"
                 ],
                 "required_previous_services": [
-                    "annotators.intent_catcher",
                     "annotators.blacklisted_words",
-                    "annotators.asr",
-                    "annotators.combined_classification",
-                    "annotators.sentrewrite"
+                    "annotators.asr"
                 ],
                 "tags": [
                     "selector"
