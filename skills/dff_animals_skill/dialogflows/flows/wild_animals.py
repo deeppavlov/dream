@@ -46,7 +46,12 @@ def plural_nouns(text):
 
 def ask_about_zoo_request(ngrams, vars):
     flag = False
+    user_uttr = state_utils.get_last_human_utterance(vars)["text"]
+    bot_uttr = state_utils.get_last_bot_utterance(vars)["text"]
     shared_memory = state_utils.get_shared_memory(vars)
+    user_why_phrases = ["cause", "they", "i like"]
+    if "why do you like" in bot_uttr.lower() and all([phrase not in user_uttr for phrase in user_why_phrases]):
+        flag = False
     if not shared_memory.get("ask_about_zoo", False) and shared_memory.get("why_do_you_like", False):
         flag = True
     logger.info(f"sys_ask_about_zoo_request={flag}")
@@ -74,9 +79,10 @@ def why_do_you_like_request(ngrams, vars):
     text = state_utils.get_last_human_utterance(vars)["text"]
     if re.findall(PETS_TEMPLATE, text):
         flag = False
+    isno = is_no(state_utils.get_last_human_utterance(vars))
     shared_memory = state_utils.get_shared_memory(vars)
     used_why = shared_memory.get("why_do_you_like", False)
-    if used_why:
+    if used_why or isno:
         flag = False
     logger.info(f"why_do_you_like_request={flag}")
     return flag
