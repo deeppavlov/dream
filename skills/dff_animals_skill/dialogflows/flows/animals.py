@@ -63,7 +63,9 @@ def have_pets_request(ngrams, vars):
 
 def like_animals_request(ngrams, vars):
     flag = False
-    text = state_utils.get_last_human_utterance(vars)["text"]
+    user_uttr = state_utils.get_last_human_utterance(vars)["text"]
+    bot_uttr = state_utils.get_last_bot_utterance(vars)["text"]
+    isno = is_no(state_utils.get_last_human_utterance(vars))
     shared_memory = state_utils.get_shared_memory(vars)
     started = shared_memory.get("start", False)
     my_pet = shared_memory.get("my_pet", "")
@@ -74,10 +76,14 @@ def like_animals_request(ngrams, vars):
         told_about = told_about_cat
     if my_pet == "dog":
         told_about = told_about_dog
-    if re.search(LIKE_PETS_TEMPLATE, text) or (not told_about and started) \
+    if re.search(LIKE_PETS_TEMPLATE, user_uttr) or (not told_about and started) \
             and not is_last_state(vars, AS.SYS_WHAT_ANIMALS):
         flag = True
-    if if_lets_chat(text) and not lets_talk_about_request(vars):
+    user_has = re.findall("i (have|had)", user_uttr)
+    ask_more = "more about" in bot_uttr
+    if (if_lets_chat(user_uttr) and not lets_talk_about_request(vars)) or user_has:
+        flag = False
+    if ask_more and isno:
         flag = False
     logger.info(f"like_animals_request={flag}")
     return flag
