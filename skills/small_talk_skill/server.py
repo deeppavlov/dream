@@ -35,12 +35,18 @@ for topic in TOPIC_PATTERNS:
 with open("small_talk_scripts.json", "r") as f:
     TOPIC_SCRIPTS = json.load(f)
 
-USER_TOPIC_START_CONFIDENCE = 0.9
+USER_TOPIC_START_CONFIDENCE = 0.98
 FOUND_WORD_START_CONFIDENCE = 0.5
 BOT_TOPIC_START_CONFIDENCE = 0.7
 CONTINUE_CONFIDENCE = 0.99
 LONG_ANSWER_CONTINUE_CONFIDENCE = 1.0
 YES_CONTINUE_CONFIDENCE = 1.0
+# if let's chat about TOPIC [key-words]
+NOT_SCRIPTED_TOPICS = [
+    'cars', "depression", "family", "life", "love", "me", "politics", "science",
+    # TODO: remove science when dff-science-skill will be merged
+    "school", "sex", "star wars", "donald trump", "work", "you"
+]
 
 
 @app.route("/respond", methods=['POST'])
@@ -301,7 +307,10 @@ def pickup_topic_and_start_small_talk(dialog):
         topic = extract_topic_from_user_uttr(dialog)
         if len(topic) > 0:
             response = TOPIC_SCRIPTS.get(topic, [""])[0]
-            confidence = USER_TOPIC_START_CONFIDENCE
+            if topic in NOT_SCRIPTED_TOPICS:
+                confidence = YES_CONTINUE_CONFIDENCE
+            else:
+                confidence = USER_TOPIC_START_CONFIDENCE
             logger.info(f"User initiates script on topic: `{topic}`.")
         else:
             response = ""
