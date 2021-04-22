@@ -209,12 +209,13 @@ def collect_topics_and_statuses(dialogs):
                 NEWS_TEMPLATES, curr_uttr["text"].lower())) and \
                 not re.search(FALSE_NEWS_TEMPLATES, curr_uttr["text"].lower())
             lets_chat_about_particular_topic = if_chat_about_particular_topic(curr_uttr, prev_uttr)
+            lets_chat_about_news = if_chat_about_particular_topic(curr_uttr, prev_uttr, compiled_pattern=NEWS_TEMPLATES)
             _was_offer_news = was_offer_news_about_topic(prev_bot_uttr_lower)
 
             if OFFER_BREAKING_NEWS.lower() in prev_bot_uttr_lower:
                 # news skill was not previously active
                 topics.append("all")
-                if is_yes(curr_uttr):
+                if is_yes(curr_uttr) or lets_chat_about_news:
                     logger.info("Detected topic for news: all.")
                     statuses.append("headline")
                 else:
