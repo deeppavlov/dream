@@ -6,7 +6,6 @@ import re
 
 
 BINARY_QUESTION_ABOUT_SPORT = ["Do you like sports?",
-                               # "Do you think active lifestyle is cool?",
                                "Do you like fitness?",
                                "Would you like to chat about sport?"
                                ]
@@ -47,13 +46,19 @@ KIND_OF_SPORTS_TEMPLATE = re.compile(
     re.IGNORECASE,
 )
 
+PASSIVE_SPORT = ["chess", "checkers"]
+
+OPINION_ABOUT_PASSIVE_SPORT = ["KIND_OF_SPORT is cool. But since I live in the cloud, I can only play PASSIVE_SPORT!",
+                               "I would love to play KIND_OF_SPORT. "
+                               "But I have no physical incarnation, so I can only play PASSIVE_SPORT!"]
+
 KIND_OF_COMPETITION_TEMPLATE = re.compile(
     r"(FIFA World Cup|Olympic Games|Super Bowl|Grand National"
     r"|Masters Tournament|Wimbledon|Kentucky Derby|NBA"
     r"|Cricket World Cup|World Series|Tour De France|March Madness"
     r"|UEFA|Ryder Cup|Daytona 500|Rugby World Cup"
     r"|Boston Marathon|Open Championship|Indianapolis 500|Stanley Cup"
-    r"|Monaco Grand Prix|Rose Bowl|UFC)",
+    r"|Monaco Grand Prix|Rose Bowl|UFC|NFL)",
     re.IGNORECASE,
 )
 
@@ -97,5 +102,5 @@ LAST_CHANCE_TEMPLATE = ["I'm still too young and I don't know much, but somethin
                         "Tell me more about that",
                         "Oh, this is the first time I hear about this. "
                         "Tell me more about that",
-                        "This is probably very interesting. Tell me more about."
+                        "This is probably very interesting. Tell me more about that."
                         ]
