@@ -28,6 +28,8 @@ from common.sport import (
     OPINION_ABOUT_ATHLETE_WITHOUT_TEAM,
     OPINION_ABOUT_TEAM,
     SPORT_TEMPLATE,
+    PASSIVE_SPORT,
+    OPINION_ABOUT_PASSIVE_SPORT,
     KIND_OF_SPORTS_TEMPLATE,
     KIND_OF_COMPETITION_TEMPLATE,
     ATHLETE_TEMPLETE,
@@ -464,7 +466,12 @@ def user_like_sport_response(vars):
         state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         if number > NUMBER_PROBABILITY:
             state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
-            return f"why do you like {kind_of_sport}?"
+            passive_sport = random.choice(PASSIVE_SPORT)
+            opinion = random.choice(
+                OPINION_ABOUT_PASSIVE_SPORT
+            ).replace("KIND_OF_SPORT", kind_of_sport).replace("PASSIVE_SPORT", passive_sport)
+            response = opinion + f" Why do you like {kind_of_sport}?"
+            return response
         else:
             state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
             news = get_news(kind_of_sport)
@@ -621,6 +628,7 @@ def user_get_talk_about_team_response(vars):
         dict_entity = entity_in_last_uttr_from_sport_area(vars)
         if dict_entity["type"] == "team":
             state_utils.save_to_shared_memory(vars, dict_team=dict_entity)
+            name_team = dict_entity["name"]
             competition = dict_entity["victory"]
             country = dict_entity["country"]
             name_team = dict_entity["name"]
@@ -642,7 +650,7 @@ def user_get_talk_about_team_response(vars):
         elif country:
             state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
             state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
-            return f"Oh, that's a cool team. I know they are from {country}. Have you ever been there?"
+            return f"{name_team} is a cool team. I know they are from {country}. Have you ever been there?"
         else:
             return last_chance_response(vars)
     except Exception as exc:
@@ -897,11 +905,11 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_TELL_SPORT: user_like_sport_request,
         State.SYS_TELL_ATHLETE: user_like_or_ask_about_player_request,
         State.SYS_TELL_ATHLETE_WITHOUT_TEAM: user_like_or_ask_about_player_without_team_request,
-        State.SYS_TELL_TEAM: user_tell_team_request,
         State.SYS_TELL_COMP: user_like_comp_request,
+        State.SYS_LETS_TALK_SPORT: lets_talk_about_sport_request,
         State.SYS_LETS_TALK_ABOUT_COMP: user_lets_talk_about_comp_request,
         State.SYS_LETS_TALK_ATHLETE: lets_talk_about_athlete_request,
-        State.SYS_LETS_TALK_SPORT: lets_talk_about_sport_request,
+        State.SYS_TELL_TEAM: user_tell_team_request,
         State.SYS_LINK_TO_LIKE_SPORT: link_to_like_sport_request,
         State.SYS_LINK_TO_LIKE_COMP: link_to_like_comp_request,
         State.SYS_LINK_TO_LIKE_ATHLETE: link_to_like_athlete_request
