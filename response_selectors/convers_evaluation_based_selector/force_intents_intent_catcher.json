@@ -36,13 +36,7 @@
     "weather_forecast_intent": [
         "weather_skill"
     ],
-    "tell_me_a_story": [
-        "short_story_skill"
-    ],
     "dont_understand": [
         "intent_catcher"
-    ],
-    "what_are_you_talking_about": [
-        "grounding_skill"
     ]
 }
