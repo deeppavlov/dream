@@ -44,53 +44,53 @@ lang = "@en"
 wiki_filename = "/root/.deeppavlov/downloads/wikidata/wikidata_lite.hdt"
 document = HDTDocument(wiki_filename)
 
-topic_skill_types = set(["Q36180",  # writer
-                         "Q49757",  # poet
-                         "Q214917",  # playwright
-                         "Q1930187",  # journalist
-                         "Q6625963",  # novelist
-                         "Q28389",  # screenwriter
-                         "Q571",  # book
-                         "Q277759",  # book series
-                         "Q8261",  # novel
-                         "Q47461344",  # written work
-                         "Q7725634",  # literary work
-                         "Q1667921",  # novel series
-                         "Q33999",  # actor
-                         "Q177220",  # singer
-                         "Q17125263",  # youtuber
-                         "Q245068",  # comedian
-                         "Q947873",  # television presenter
-                         "Q10800557",  # film actor
-                         "Q10798782",  # television actor
-                         "Q2405480",  # voice actor
-                         "Q211236",  # celebrity
-                         "Q82955",  # politician
-                         "Q372436",  # statesperson
-                         "Q488205",  # singer-songwriter
-                         "Q36834",  # composer
-                         "Q177220",  # singer
-                         "Q753110",  # songwriter
-                         "Q134556",  # single
-                         "Q7366",  # song
-                         "Q482994",  # album
-                         "Q2066131",  # athlete
-                         "Q937857",  # football player
-                         "Q4009406",  # sprinter
-                         "Q10843402",  # swimmer
-                         "Q10873124",  # chess player
-                         "Q3665646",  # basketball player
-                         "Q10833314",  # tennis player
-                         "Q19204627",  # American football player
-                         "Q10871364",  # baseball player
-                         "Q20639856",  # team
-                         "Q847017",  # sports club
-                         "Q476028",  # football club
-                         "Q4498974",  # ice hockey team
-                         "Q570116",  # tourist attraction
-                         "Q11424",  # film
-                         "Q24856"  # film series
-                         ])
+topic_skill_types = {"Q36180",  # writer
+                     "Q49757",  # poet
+                     "Q214917",  # playwright
+                     "Q1930187",  # journalist
+                     "Q6625963",  # novelist
+                     "Q28389",  # screenwriter
+                     "Q571",  # book
+                     "Q277759",  # book series
+                     "Q8261",  # novel
+                     "Q47461344",  # written work
+                     "Q7725634",  # literary work
+                     "Q1667921",  # novel series
+                     "Q33999",  # actor
+                     "Q177220",  # singer
+                     "Q17125263",  # youtuber
+                     "Q245068",  # comedian
+                     "Q947873",  # television presenter
+                     "Q10800557",  # film actor
+                     "Q10798782",  # television actor
+                     "Q2405480",  # voice actor
+                     "Q211236",  # celebrity
+                     "Q82955",  # politician
+                     "Q372436",  # statesperson
+                     "Q488205",  # singer-songwriter
+                     "Q36834",  # composer
+                     "Q177220",  # singer
+                     "Q753110",  # songwriter
+                     "Q134556",  # single
+                     "Q7366",  # song
+                     "Q482994",  # album
+                     "Q2066131",  # athlete
+                     "Q937857",  # football player
+                     "Q4009406",  # sprinter
+                     "Q10843402",  # swimmer
+                     "Q10873124",  # chess player
+                     "Q3665646",  # basketball player
+                     "Q10833314",  # tennis player
+                     "Q19204627",  # American football player
+                     "Q10871364",  # baseball player
+                     "Q20639856",  # team
+                     "Q847017",  # sports club
+                     "Q476028",  # football club
+                     "Q4498974",  # ice hockey team
+                     "Q570116",  # tourist attraction
+                     "Q11424",  # film
+                     "Q24856"  # film series
+                     }
 
 
 def search(self, query: List[str], unknown_elem_positions: List[Tuple[int, str]]) -> List[Dict[str, str]]:
@@ -384,6 +384,35 @@ def find_top_triplets(entity, entity_substr):
         players_with_labels = find_objects_info(players)
         if players_with_labels:
             triplets["players list"] = players_with_labels
+        entity_types = set(find_types(entity) + find_subclasses(entity))
+        if entity_types.intersection({"Q188451"}):  # music genre
+            if entity_substr in genres_dict["singer"]:
+                triplets["top singers"] = genres_dict["singer"][entity_substr]
+            else:
+                for genre in genres_dict["singer"]:
+                    if genre in entity_substr or entity_substr in genre:
+                        triplets["top singers"] = genres_dict["singer"][genre]
+            if entity_substr in genres_dict["song"]:
+                triplets["top songs"] = genres_dict["song"][entity_substr]
+            else:
+                for genre in genres_dict["song"]:
+                    if genre in entity_substr or entity_substr in genre:
+                        triplets["top songs"] = genres_dict["song"][genre]
+
+        if entity_types.intersection({"Q31629", "Q4356073", "Q212434"}):  # type of sport
+            if entity_substr in genres_dict["athlete"]:
+                triplets["top athletes"] = genres_dict["athlete"][entity_substr]
+            else:
+                for sport in genres_dict["athlete"]:
+                    if sport in entity_substr or entity_substr in sport:
+                        triplets["top athletes"] = genres_dict["athlete"][sport]
+            if entity_substr in genres_dict["team"]:
+                triplets["top teams"] = genres_dict["team"][entity_substr]
+            else:
+                for sport in genres_dict["team"]:
+                    if sport in entity_substr or entity_substr in sport:
+                        triplets["top teams"] = genres_dict["team"][sport]
+
         triplets["entity_label"] = entity_label
         triplets_info[entity_substr] = triplets
     return triplets_info
