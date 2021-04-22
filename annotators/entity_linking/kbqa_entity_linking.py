@@ -149,17 +149,17 @@ class KBEntityLinker(Component, Serializable):
         self.include_mention = include_mention
         self.num_entities_to_return = num_entities_to_return
         self.num_entities_for_bert_ranking = num_entities_for_bert_ranking
-        self.black_list_what_is = set(["Q277759",  # book series
-                                       "Q11424",  # film
-                                       "Q7889",  # video game
-                                       "Q2743",  # musical theatre
-                                       "Q5398426",  # tv series
-                                       "Q506240",  # television film
-                                       "Q21191270",  # television series episode
-                                       "Q7725634",  # literary work
-                                       "Q131436",  # board game
-                                       "Q1783817"  # cooperative board game
-                                       ])
+        self.black_list_what_is = {"Q277759",  # book series
+                                   "Q11424",  # film
+                                   "Q7889",  # video game
+                                   "Q2743",  # musical theatre
+                                   "Q5398426",  # tv series
+                                   "Q506240",  # television film
+                                   "Q21191270",  # television series episode
+                                   "Q7725634",  # literary work
+                                   "Q131436",  # board game
+                                   "Q1783817"  # cooperative board game
+                                   }
         if self.use_descriptions and self.entity_ranker is None:
             raise ValueError("No entity ranker is provided!")
 
