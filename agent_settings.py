@@ -1,10 +1,12 @@
 import logging
 from importlib import import_module
+from typing import Dict
 
 from .core.db import DataBase
-from .core.state_manager import StateManager
+from .core.state_manager import StateManager, Dialog
 from .core.workflow_manager import WorkflowManager
 from .state_formatters.output_formatters import http_api_output_formatter, http_debug_output_formatter
+
 
 # Default parameters
 BASE_PARAMETERS = {
@@ -55,6 +57,13 @@ class ExtendedStateManager(StateManager):
             await self.update_human(dialog.human, payload)
         if isinstance(payload.get("bot_attributes"), dict):
             await self.update_bot(dialog.bot, payload)
+
+    async def add_annotation_and_reset_human_attributes_for_first_turn(
+        self, dialog: Dialog, payload: Dict, label: str, **kwargs
+    ):
+        dialog.utterances[-1].annotations[label] = payload
+        if len(dialog.utterances) == 1:
+            dialog.human.attributes = {"disliked_skills": dialog.human.attributes.get("disliked_skills", [])}
 
 
 # Basic agent configuration parameters (some are currently unavailable)
