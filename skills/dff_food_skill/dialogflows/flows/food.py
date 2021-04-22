@@ -18,7 +18,7 @@ import dialogflows.scopes as scopes
 from common.universal_templates import if_chat_about_particular_topic, DONOTKNOW_LIKE
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE, MUST_CONTINUE
 from common.utils import is_yes, is_no, get_entities, join_words_in_or_pattern
-from common.food import TRIGGER_PHRASES, FOOD_WORDS, FOOD_SKILL_TRANSFER_PHRASES_RE, WHAT_COOK
+from common.food import TRIGGER_PHRASES, FOOD_WORDS, WHAT_COOK, FOOD_UTTERANCES_RE, CUISINE_UTTERANCES_RE
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -50,6 +50,8 @@ CONCEPTNET_CAUSESDESIRE_FOOD = [
 FOOD_WORDS_RE = re.compile(FOOD_WORDS, re.IGNORECASE)
 WHAT_COOK_RE = re.compile(WHAT_COOK, re.IGNORECASE)
 DONOTKNOW_LIKE_RE = re.compile(join_words_in_or_pattern(DONOTKNOW_LIKE), re.IGNORECASE)
+NO_WORDS_RE = re.compile(r"(\bnot\b|n't|\bno\b) ", re.IGNORECASE)
+
 MEALS = [
     "lazagna",
     "mac and cheese",
@@ -105,6 +107,7 @@ class State(Enum):
     USR_WHERE_R_U_FROM = auto()
     SYS_TO_TRAVEL_SKILL = auto()
     USR_COUNTRY = auto()
+    SYS_BOT_PERSONA_FAV_FOOD = auto()
     #
     SYS_ERR = auto()
     USR_ERR = auto()
@@ -196,21 +199,35 @@ def lets_talk_about_check(vars):
     # )
     human_utt = state_utils.get_last_human_utterance(vars)
     bot_utt = state_utils.get_last_bot_utterance(vars)
-    if "what is the weather" in human_utt["text"].lower():
-        flag = False
-        logger.info(f"lets_talk_about_check {flag}, weather detected")
-        return flag
-    user_lets_chat_about_food = any(
-        [
-            re.search(FOOD_WORDS_RE, human_utt["text"].lower()),
-            if_chat_about_particular_topic(human_utt, bot_utt, compiled_pattern=FOOD_WORDS_RE),
-            check_conceptnet(vars)[0],
-            re.search(FOOD_SKILL_TRANSFER_PHRASES_RE, human_utt["text"].lower()),
-            re.search(DONOTKNOW_LIKE_RE, human_utt["text"].lower())
-        ]
-    )
+    # if "weather" in human_utt["text"].lower():
+    #     flag = ""
+    #     logger.info(f"lets_talk_about_check {flag}, weather detected")
+    #     return flag
+    if if_chat_about_particular_topic(human_utt, bot_utt, compiled_pattern=FOOD_WORDS_RE):
+        flag = "if_chat_about_particular_topic"
+    elif re.search(FOOD_WORDS_RE, human_utt["text"]):
+        flag = "FOOD_WORDS_RE"
+    elif re.search(FOOD_UTTERANCES_RE, human_utt["text"]):
+        flag = "FOOD_UTTERANCES_RE"
+    elif re.search(CUISINE_UTTERANCES_RE, human_utt["text"]):
+        flag = "CUISINE_UTTERANCES_RE"
+    elif check_conceptnet(vars)[0]:
+        flag = "check_conceptnet"
+    elif re.search(DONOTKNOW_LIKE_RE, human_utt["text"]):
+        flag = "DONOTKNOW_LIKE_RE"
+    else:
+        flag = ""
+    # user_lets_chat_about_food = any(
+    #     [
+    #         re.search(FOOD_WORDS_RE, human_utt["text"].lower()),
+    #         if_chat_about_particular_topic(human_utt, bot_utt, compiled_pattern=FOOD_WORDS_RE),
+    #         check_conceptnet(vars)[0],
+    #         re.search(FOOD_SKILL_TRANSFER_PHRASES_RE, human_utt["text"].lower()),
+    #         re.search(DONOTKNOW_LIKE_RE, human_utt["text"].lower())
+    #     ]
+    # )
     # and (not state_utils.get_last_human_utterance(vars)["text"].startswith("what"))
-    flag = user_lets_chat_about_food
+    # flag = user_lets_chat_about_food
     logger.info(f"lets_talk_about_check {flag}")
     return flag
 
@@ -223,7 +240,7 @@ def what_cuisine_response(vars):
             req.lower() in bot_utt for req in TRIGGER_PHRASES
         ]
     )
-    lets_talk_about_asked = lets_talk_about_check(vars)
+    lets_talk_about_asked = bool(lets_talk_about_check(vars))
     try:
         if linkto_food_skill_agreed:
             if is_yes(user_utt):
@@ -253,7 +270,7 @@ def cuisine_request(ngrams, vars):
     spacy_utt = spacy_nlp(utt)
     utt_adj = any([w.pos_ == 'ADJ' for w in spacy_utt])
     all_words = any([i in utt for i in ["all", "many", "multiple"]])
-    flag = any([utt_adj, check_conceptnet(vars)[0], all_words])
+    flag = any([utt_adj, check_conceptnet(vars)[0], all_words]) and (not re.search(NO_WORDS_RE, utt))
     logger.info(f"cuisine_request {flag}")
     return flag
 
@@ -341,27 +358,33 @@ def what_fav_food_response(vars):
                 if food_type == "food":
                     state_utils.set_confidence(vars, confidence=CONF_HIGH)
                     state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-                if food_type == "snack":
+                elif food_type == "snack":
                     state_utils.set_confidence(vars, confidence=CONF_LOWEST)
                     state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
-                if unused_food:
+                elif unused_food:
                     state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
                     state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+                else:
+                    state_utils.set_confidence(vars, confidence=CONF_LOWEST)
+                    state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
 
             elif not is_no(user_utt):
-                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
                 state_utils.set_confidence(vars, confidence=CONF_LOW)
+                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
 
-        elif lets_talk_about_asked:
-            if food_type == "food":
+        elif bool(lets_talk_about_asked):
+            if (food_type == "food") or (lets_talk_about_asked == "if_chat_about_particular_topic"):
                 state_utils.set_confidence(vars, confidence=CONF_HIGH)
                 state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-            if food_type == "snack":
+            elif food_type == "snack":
                 state_utils.set_confidence(vars, confidence=CONF_LOWEST)
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
-            if unused_food:
+            elif unused_food:
                 state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+            else:
+                state_utils.set_confidence(vars, confidence=CONF_LOWEST)
+                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
         else:
             state_utils.set_confidence(vars, confidence=CONF_LOW)
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
@@ -379,7 +402,7 @@ def fav_food_request(ngrams, vars):
     flag = False
     user_fav_food = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
     # cobot_topic = "Food_Drink" in get_topics(state_utils.get_last_human_utterance(vars), which="cobot_topics")
-    food_words_search = re.search(FOOD_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"].lower())
+    food_words_search = re.search(FOOD_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"])
     if any([user_fav_food, check_conceptnet(vars), food_words_search]) and condition_utils.no_requests(vars):
         flag = True
     logger.info(f"fav_food_request {flag}")
@@ -418,7 +441,9 @@ def food_fact_response(vars):
     try:
         state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
-        if not fact:
+        if re.search(DONOTKNOW_LIKE_RE, human_utt_text):
+            return "I have never heard about it. Could you tell me more about that please."
+        elif not fact:
             endings = ["Do you recommend", "Why do you like it"]
             return f"Sounds {random.choice(cool_words)}. I haven't heard about it. {random.choice(endings)}?"
         return f"{random.choice(acknowledgements)} {intro}{fact}"
@@ -522,6 +547,7 @@ def where_are_you_from_response(vars):
 
 
 def what_fav_food_request(ngrams, vars):
+    food_topic_checked = lets_talk_about_check(vars)
     linkto_food_skill_agreed = any(
         [
             req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower()
@@ -536,8 +562,15 @@ def what_fav_food_request(ngrams, vars):
     food_1st_time = condition_utils.is_first_time_of_state(vars, State.SYS_WHAT_FAV_FOOD)
     cuisine_1st_time = condition_utils.is_first_time_of_state(vars, State.SYS_WHAT_CUISINE)
 
-    if not (lets_talk_about_check(vars) or linkto_food_skill_agreed):
+    if any(
+        [
+            not (bool(food_topic_checked) or linkto_food_skill_agreed),
+            food_topic_checked == "CUISINE_UTTERANCES_RE"
+        ]
+    ):
         flag = False
+    elif food_topic_checked == "FOOD_UTTERANCES_RE":
+        flag = True
     elif (food_1st_time and cuisine_1st_time):
         flag = random.choice([True, False])
     elif (food_1st_time or (not cuisine_1st_time)):
@@ -545,6 +578,19 @@ def what_fav_food_request(ngrams, vars):
     else:
         flag = False
     logger.info(f"what_fav_food_request {flag}")
+    return flag
+
+
+def bot_persona_fav_food_request(ngrams, vars):
+    flag = False
+    if all(
+        [
+            "my favorite food is lava cake" in state_utils.get_last_bot_utterance(vars)["text"].lower(),
+            fav_food_request(ngrams, vars)
+        ]
+    ):
+        flag = True
+    logger.info(f"bot_persona_fav_food_request {flag}")
     return flag
 
 
@@ -560,7 +606,7 @@ def what_cuisine_request(ngrams, vars):
             not is_no(state_utils.get_last_human_utterance(vars))
         ]
     )
-    flag = lets_talk_about_check(vars) or linkto_food_skill_agreed
+    flag = bool(lets_talk_about_check(vars)) or linkto_food_skill_agreed
     logger.info(f"what_cuisine_request {flag}")
     return flag
 
@@ -575,10 +621,12 @@ def what_cuisine_request(ngrams, vars):
 ##################################################################################################################
 #  START
 
+
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_START,
     {
         State.SYS_WHAT_COOK: what_cook_request,
+        State.SYS_BOT_PERSONA_FAV_FOOD: bot_persona_fav_food_request,
         State.SYS_WHAT_FAV_FOOD: what_fav_food_request,
         State.SYS_WHAT_CUISINE: what_cuisine_request,
     },
@@ -589,6 +637,10 @@ simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
 
 simplified_dialogflow.add_system_transition(State.SYS_WHAT_FAV_FOOD, State.USR_WHAT_FAV_FOOD, what_fav_food_response)
 simplified_dialogflow.set_error_successor(State.SYS_WHAT_FAV_FOOD, State.SYS_ERR)
+
+
+simplified_dialogflow.add_system_transition(State.SYS_BOT_PERSONA_FAV_FOOD, State.USR_FOOD_FACT, food_fact_response)
+simplified_dialogflow.set_error_successor(State.SYS_BOT_PERSONA_FAV_FOOD, State.SYS_ERR)
 
 
 simplified_dialogflow.add_system_transition(State.SYS_WHAT_CUISINE, State.USR_WHAT_CUISINE, what_cuisine_response)
