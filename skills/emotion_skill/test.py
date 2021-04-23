@@ -121,7 +121,7 @@ if __name__ == '__main__':
             print("-" * 30)
             print(f"expected_results: {expected_results}")
             print(
-                f"phrase: {phrase}; confidence: {confidence}; "
+                f"state: {state} phrase: {phrase}; confidence: {confidence}; "
                 f"bot_attributes: {bot_attributes}; human_attributes: {human_attributes}; "
                 f"attributes: {attributes}"
             )
