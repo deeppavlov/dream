@@ -4,6 +4,7 @@ RUN mkdir /src
 
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
+RUN spacy download en_core_web_sm
 
 COPY . /src/
 WORKDIR /src
