@@ -8,7 +8,7 @@ from common.utils import is_yes, is_no
 
 REMOTE_WORK_CORONAVIRUS_PHRASE = "Are you staying at home and working remotely to avoid coronavirus?"
 STAY_HOME_CORONAVIRUS_PHRASE = "Are you staying at home to avoid coronavirus?"
-CORONA_SWITCH_BEGIN = "Okay! I believe that this coronavirus will disappear! Now it is better to stay home. "
+CORONA_SWITCH_BEGIN = "Okay! I hope that this coronavirus will disappear! Now it is better to stay home. "
 
 
 def skill_trigger_phrases():
