@@ -55,6 +55,9 @@ def main_test():
     # check universal intent responses
     new_input_data = deepcopy(input_data)
     new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["midas_classification"] = {"opinion": 1.0}
+    new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["cobot_dialogact"] = {
+        "intents": ["General_ChatIntent"], "topics": ["Other"]
+    }
     response = requests.post(url, json=new_input_data)
     assert any([resp in response.text for resp in UNIVERSAL_INTENT_RESPONSES["opinion"]]), response.json()
 
