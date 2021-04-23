@@ -53,6 +53,7 @@ files=(
   kbqa/wikidata/topical_chat.tar.gz
   kbqa/wikidata/q_to_descr_en.pickle
   kbqa/wikidata/q_to_page_en.pickle
+  alexaprize_data/database_most_popular_main_info.json
 )
 
 for file in ${files[@]}; do

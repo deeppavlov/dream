@@ -46,7 +46,7 @@ class MovieSkillTemplates:
     notsure_confidence = 0.5
     zero_confidence = 0.0
 
-    def __init__(self, db_path="./databases/database_most_popular_main_info.json"):
+    def __init__(self, db_path="/data/database_most_popular_main_info.json"):
         np.random.seed(42)
         self.imdb = IMDb(db_path)
 
@@ -103,7 +103,7 @@ class MovieSkillTemplates:
         movies_titles = extract_movies_names_from_annotations(annotated_uttr)
         if movies_titles is None:
             # no cobot_entities annotations
-            movies_ids = self.imdb.find_name(uttr, "movie", find_ignored=find_ignored)
+            movies_ids = []
         else:
             # movies_titles is a list of string titles (or empty list)
             movies_ids = []
@@ -111,21 +111,6 @@ class MovieSkillTemplates:
                 movies_ids.append(self.imdb.get_imdb_id(self.imdb.process_movie_name(movie_title)))
             # drop movies that are not in our database
             movies_ids = [imdb_id for imdb_id in movies_ids if imdb_id is not None]
-
-        if not(dialog is None) and len(movies_ids) == 0:
-            if len(dialog["utterances"]) > 1:
-                prev_uttr = dialog["utterances"][-2]["text"].lower()
-                was_question = ("?" in prev_uttr and re.search(
-                    self.FAVORITE_PATTERN, prev_uttr) and re.search(self.MOVIE_PATTERN, prev_uttr))
-            else:
-                prev_uttr = ""
-                was_question = False
-            if was_question:
-                # search for the answer to `What is your favorite movie?` question
-                logger.info(f"Question about movie is {prev_uttr}. Trying to find movie title in {uttr}.")
-                movies_ids = self.imdb.find_name(uttr, "movie", find_ignored=True)
-        if len(movies_ids) > 0:
-            movies_ids = list(movies_ids)
 
         persons = {}
         for profession in self.imdb.professions:

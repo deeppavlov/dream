@@ -93,26 +93,29 @@ class MovieSkillScenario:
 
                 if self.donot_chat_about_movies(curr_user_uttr) or re.search(
                         self.no_movies_template, curr_user_uttr["text"]):
+                    logger.info("User doesn't want to chat about movies. Link to other skills.")
                     response, confidence, human_attr, bot_attr, attr = self.link_to_other_skills(human_attr, bot_attr)
                 if response == "":
+                    logger.info("Checking for FAQ response.")
                     response, _, confidence = self.templates.faq(dialog)
                 if response == "":
+                    logger.info("Not FAQ request. Checking scenario.")
                     response, confidence, human_attr, bot_attr, attr = self.movie_scenario(
                         dialog, movies_ids, unique_persons, mentioned_genres)
                     response = re.sub(self.extra_space_template, " ", response)
+                    logger.info(f"Scenario response: {response} with confidence: {confidence}.")
                 if response == "" or confidence <= OFFER_TALK_ABOUT_MOVIES_CONFIDENCE:
                     # no answers in scenraio
+                    logger.info(f"Not answered by scenario or confidence < {OFFER_TALK_ABOUT_MOVIES_CONFIDENCE}.")
                     attitude = get_sentiment(dialog['human_utterances'][-1], probs=False)[0]
-
-                    if len(dialog["bot_utterances"]) > 0:
-                        prev_bot_uttr = dialog["bot_utterances"][-1]
-                    else:
-                        prev_bot_uttr = {"text": ""}
+                    prev_bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {"text": ""}
 
                     if self.is_opinion_expression(curr_user_uttr):
+                        logger.info(f"Current user utterance is opinion expression.")
                         response, result, confidence = self.templates.get_user_opinion(dialog, attitude)
                         if len(result) > 0 and result[0][1] == "movie" and \
                                 self.is_about_movies(curr_user_uttr, prev_bot_uttr):
+                            logger.info(f"Current user utterance is opinion expression about movie.")
                             confidence = SUPER_CONFIDENCE
                             movie_id = result[0][0]
                             attr = {"movie_id": movie_id, "can_continue": MUST_CONTINUE,
@@ -127,10 +130,12 @@ class MovieSkillScenario:
                             human_attr["discussed_movie_ids"] += [movie_id]
 
                     if self.is_opinion_request(curr_user_uttr):
+                        logger.info(f"Current user utterance is opinion request.")
                         response, result, confidence = self.templates.give_opinion(dialog)
                         if response != "":
                             if len(result) > 0 and result[0][1] == "movie" and \
                                     self.is_about_movies(curr_user_uttr, prev_bot_uttr):
+                                logger.info(f"Current user utterance is opinion request about movie.")
                                 confidence = SUPER_CONFIDENCE
                                 movie_id = result[0][0]
                                 attr = {"movie_id": movie_id, "can_continue": MUST_CONTINUE,
@@ -146,6 +151,7 @@ class MovieSkillScenario:
                     if len(dialog["bot_utterances"]) and "?" in dialog["bot_utterances"][-1]["text"] and any(
                             [word in dialog["bot_utterances"][-1]["text"] for word in ["book", "reading"]]):
                         # significantly decrease confidence if was question about books in prev bot utterance
+                        logger.info(f"Previous bot utterance is a question about books. Decrease confidence by 0.8.")
                         confidence = 0.8 * confidence
                         if attr.get("can_continue", "") == MUST_CONTINUE:
                             attr["can_continue"] = CAN_CONTINUE_SCENARIO
@@ -232,8 +238,8 @@ class MovieSkillScenario:
             return False
 
     def is_opinion_expression(self, uttr):
-        all_intents = get_intents(uttr, which="midas")
-        intent_detected = any([intent in all_intents for intent in ["opinion"]])
+        all_intents = get_intents(uttr, which="all")
+        intent_detected = any([intent in all_intents for intent in ["opinion", "Opinion_ExpressionIntent"]])
 
         if intent_detected:
             return True
@@ -298,6 +304,13 @@ class MovieSkillScenario:
                         response = f"We have talked about this movie previously. {WHAT_OTHER_MOVIE_TO_DISCUSS}"
                         confidence = END_SCENARIO_OFFER_CONFIDENCE
                         attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE_SCENARIO_DONE}
+                elif "?" in prev_bot_uttr.get("text", "") and re.search(self.movie_pattern,
+                                                                        prev_bot_uttr.get("text", "")):
+                    # bot asked about some movie, but no movie title found
+                    response = f"{get_movie_template('sorry_didnt_get_title')} " \
+                               f"{WHAT_OTHER_MOVIE_TO_DISCUSS}"
+                    confidence = DEFAULT_CONFIDENCE
+                    attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE_SCENARIO_DONE}
                 elif is_no(curr_user_uttr) or if_switch_topic(curr_user_uttr["text"].lower()):
                     response = "What do you want to talk about?"
                     confidence = NOT_SURE_CONFIDENCE
@@ -316,9 +329,9 @@ class MovieSkillScenario:
                     confidence = DEFAULT_CONFIDENCE
                     attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE_SCENARIO_DONE}
                 else:
-                    response = f"{WHAT_OTHER_MOVIE_TO_DISCUSS}"
-                    confidence = END_SCENARIO_OFFER_CONFIDENCE
-                    attr = {"status_line": ["finished"], "can_continue": CAN_CONTINUE_SCENARIO_DONE}
+                    response = ""
+                    confidence = 0.
+                    attr = {}
             else:
                 # some movie scenario started and not finished
                 response, confidence, human_attr, bot_attr, attr = self.get_next_response_movie_scenario(
@@ -627,9 +640,11 @@ class MovieSkillScenario:
                     movie_id, movie_title, movie_type, prev_status_line, human_attr, bot_attr)
         elif prev_status == "opinion_request":  # -> user_opinion_comment
             sentiment = get_sentiment(curr_user_uttr, default_labels=['neutral'], probs=False)[0]
-            if sentiment == "positive":
-                director = self.templates.imdb.get_info_about_movie(movie_id, "directors")[0]
-                writer = self.templates.imdb.get_info_about_movie(movie_id, "writers")[0]
+            directors = self.templates.imdb.get_info_about_movie(movie_id, "directors")
+            writers = self.templates.imdb.get_info_about_movie(movie_id, "writers")
+            if sentiment == "positive" and directors and writers:
+                director = directors[0]
+                writer = writers[0]
                 praise_to_director_or_writer_or_visuals = praise_director_or_writer_or_visuals(director, writer)
             else:
                 praise_to_director_or_writer_or_visuals = ""

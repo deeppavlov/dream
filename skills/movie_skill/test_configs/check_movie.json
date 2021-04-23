@@ -424,6 +424,10 @@
         "user_type": "human"
       },
       "annotations": {
+        "cobot_entities": {
+          "entities": ["the avengers"],
+          "labelled_entities": [{"text":  "the avengers", "label": "videoname"}]
+        },
         "blacklisted_words": {
           "inappropriate": false,
           "profanity": false,
@@ -975,6 +979,10 @@
         "user_type": "human"
       },
       "annotations": {
+        "cobot_entities": {
+          "entities": ["the avengers"],
+          "labelled_entities": [{"text":  "the avengers", "label": "videoname"}]
+        },
         "blacklisted_words": {
           "inappropriate": false,
           "profanity": false,
