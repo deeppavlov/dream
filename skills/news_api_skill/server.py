@@ -347,7 +347,9 @@ def respond():
             NEWS_TEMPLATES, curr_uttr["text"].lower())
         about_news = about_news and not re.search(FALSE_NEWS_TEMPLATES, curr_uttr["text"].lower())
         if lets_chat_about_particular_topic:
-            if result:
+            prev_news_skill_output = get_skill_outputs_from_dialog(
+                dialogs[i]["utterances"][-3:], skill_name="news_api_skill", activated=True)
+            if result and len(prev_news_skill_output) == 0:
                 # it was a lets chat about topic and we found appropriate news
                 if curr_topic == "all":
                     if about_news:
