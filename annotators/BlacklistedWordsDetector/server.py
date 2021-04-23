@@ -1,16 +1,18 @@
 #!/usr/bin/env python
 
 import logging
-from pathlib import Path
-import re
 import time
 from os import getenv
+from pathlib import Path
+from typing import List
 
 import sentry_sdk
+import spacy
 from flask import Flask, request, jsonify
+from spacy.tokens import Doc
+
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
-
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -27,11 +29,24 @@ class Blacklist:
             path: Path object to blacklist file, one blacklisted phrase per line
         """
         self.name = path.name.split('_blacklist')[0]
-        self.tokenize_reg = re.compile(r"[\w']+|[^\w ]")
-        self.split_apostrophes = re.compile("'")
-        self.blacklist_tokenized = [self.tokenize_reg.findall(line.strip().lower()) for line in path.open('r')]
-        self.blacklist = set([' '.join(phrase) for phrase in self.blacklist_tokenized])
-        self.max_ngram = max([len(x) for x in self.blacklist_tokenized])
+        self.blacklist = set()
+        with path.open() as f:
+            for phrase in f:
+                tokenized = en_nlp(phrase.strip())
+                self.blacklist.add(' '.join([str(token) for token in tokenized]))
+                self.blacklist.add(' '.join(self._lemmatize(tokenized)))
+        self.max_ngram = max([len(x) for x in self.blacklist])
+
+    @staticmethod
+    def _lemmatize(utterance: Doc) -> List[str]:
+        """
+        Lemmatize nouns which are not subjects of the sentence
+        Args:
+            utterance: a sentence tokenized using Spacy model ''en_core_web_sm'
+        Returns:
+            List of maybe lemmatized words
+        """
+        return [token.lemma_ if token.pos_ == "NOUN" and token.dep_ != "nsubj" else str(token) for token in utterance]
 
     def _collect_ngrams(self, utterance):
         """
@@ -42,12 +57,17 @@ class Blacklist:
         Returns:
             set of all unique ngrams (ngram len <= self.max_ngram) in utterance
         """
-        utterance = re.sub(self.split_apostrophes, " ", utterance)
-        tokens = self.tokenize_reg.findall(utterance)
+        tokenized = en_nlp(utterance)
+        orig_words = [str(token) for token in en_nlp(utterance)]
+        lemmatized_words = self._lemmatize(tokenized)
         all_ngrams = set()
         for n_gram_len in range(1, self.max_ngram):
-            ngrams = set([' '.join(tokens[i: i + n_gram_len]) for i in range(len(tokens) - n_gram_len + 1)])
-            all_ngrams = all_ngrams | ngrams
+            orig_ngrams = set(
+                [' '.join(orig_words[i: i + n_gram_len]) for i in range(len(orig_words) - n_gram_len + 1)])
+            lemmatized_ngrams = set(
+                [' '.join(lemmatized_words[i: i + n_gram_len]) for i in range(len(lemmatized_words) - n_gram_len + 1)]
+            )
+            all_ngrams = all_ngrams | orig_ngrams | lemmatized_ngrams
         return all_ngrams
 
     def check_utterance(self, utterance):
@@ -70,6 +90,8 @@ class Blacklist:
     def __str__(self):
         return self.name
 
+
+en_nlp = spacy.load('en_core_web_sm')
 
 blacklists_dir = Path('./blacklists')
 blacklist_files = [f for f in blacklists_dir.iterdir() if f.is_file() and f.suffix == '.txt' and '_blacklist' in f.name]
