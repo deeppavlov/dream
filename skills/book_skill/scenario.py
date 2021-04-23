@@ -6,7 +6,7 @@ import sentry_sdk
 from os import getenv
 
 from common.books import BOOK_SKILL_CHECK_PHRASES, about_book, BOOK_PATTERN
-from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
+from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO_DONE
 from common.tutor import get_tutor_phrase
 from common.universal_templates import is_switch_topic, if_chat_about_particular_topic, tell_me_more, \
     is_positive, is_negative
@@ -401,6 +401,8 @@ class BookSkillScenario:
                     attr = {"can_continue": MUST_CONTINUE}
                 elif confidence == self.default_conf:
                     attr = {"can_continue": CAN_CONTINUE_SCENARIO}
+                elif confidence == self.low_conf:
+                    attr = {"can_continue": CAN_CONTINUE_SCENARIO_DONE}
                 else:
                     attr = {'can_continue': CAN_NOT_CONTINUE}
             except Exception as e:
