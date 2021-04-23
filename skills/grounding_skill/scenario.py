@@ -10,7 +10,7 @@ from common.link import skills_phrases_map
 from common.grounding import what_we_talk_about
 from common.universal_templates import is_any_question_sentence_in_utterance
 from common.utils import get_topics, get_intents, get_entities, get_toxic, is_no
-from utils import MIDAS_INTENT_ACKNOWLEDGMENETS, get_midas_intent_acknowledgement, reformulate_question_to_statement, \
+from utils import MIDAS_INTENT_ACKNOWLEDGMENTS, get_midas_intent_acknowledgement, reformulate_question_to_statement, \
     INTENT_DICT, DA_TOPIC_DICT, COBOT_TOPIC_DICT, get_entity_name
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -113,7 +113,7 @@ def what_do_you_mean_response(dialog):
 
 def generate_acknowledgement(dialog):
     curr_intents = get_intents(dialog['human_utterances'][-1], probs=False, which='midas')
-    curr_considered_intents = [intent for intent in curr_intents if intent in MIDAS_INTENT_ACKNOWLEDGMENETS]
+    curr_considered_intents = [intent for intent in curr_intents if intent in MIDAS_INTENT_ACKNOWLEDGMENTS]
     ackn_response = ""
     attr = {}
     human_attr = {}
