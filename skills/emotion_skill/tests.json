@@ -20,28 +20,6 @@
     "results":{"state":["offered_joke"]}
   },
   {
-    "curr_sent": "sure",
-    "bot_sent":"Can I tell you a joke?",
-    "intents":{
-      "no": {"confidence": 0.0, "detected": 0},
-      "yes": {"confidence": 1.0, "detected": 1}
-    },
-    "human_attributes":{"emotion_skill_attributes":{"state":"offered_joke", "emotion":"sadness"}},
-    "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
-    "results":{"state":["offer_another_joke"], "emotion":"sadness"}
-  },
-  {
-    "curr_sent": "ahaha very funny",
-    "bot_sent":"A man in a bar la-la-la",
-    "intents":{
-      "no": {"confidence": 0.0, "detected": 0},
-      "yes": {"confidence": 0.0, "detected": 0}
-    },
-    "human_attributes":{"emotion_skill_attributes":{"state":"offer_another_joke", "emotion":"sadness"}},
-    "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
-    "results":{"state":["offered_joke"], "emotion":"sadness"}
-  },
-  {
     "curr_sent": "no",
     "bot_sent":"Wanna hear another one?",
     "intents":{
@@ -105,6 +83,6 @@
     },
     "human_attributes":{"emotion_skill_attributes":{"state": "joy_link_to_joke", "emotion":"joy"}},
     "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
-    "results":{"states":["offered_joke"], "emotion":"joy"}
+    "results":{"states":["offered_joke", ""], "emotion":"joy"}
   }
 ]

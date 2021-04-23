@@ -1,41 +1,8 @@
 {
   "jokes":[
-    "When you put a bed in your bedroom – you have less bedroom",
-    "How many men were born in 2017? None. Only babies were born.",
-    "Why was 6 scared of 7? - Because 7 ate 9.",
-    "How do you make a dragon angry? - Ask him to blow out a candle.",
-    "What swims and starts with a T? - Two ducks.",
-    "My grandma gave me this great advice, “An apple a day keeps the doctor away.” She was right! You just have to really work on your aim.",
-    "My therapist says I have a preoccupation with vengeance. We'll see about that.",
-    "Darling, I just called to tell you how awesome you are. You really are the love of my life. - Sir, I'm sorry this is a brewery! - Oh, I know...",
-    "Ironing board. A surf board which gave up on its dreams and went to work.",
-    "I had a dream where an evil queen forced me to eat a gigantic marshmallow. When I woke up, my pillow was gone.",
-    "Can a kangaroo jump higher than a house? Of course, a house doesn't jump at all.",
-    "There’s two fish in a tank, and one says: How do you drive this thing?",
-    "I can’t believe I forgot to go to the gym today. That’s 7 years in a row now.",
-    "Years ago, I threw away a boomerang really hard. I've lived in constant fear since.",
-    "I haven’t been sleeping well recently. Well, that's it for my last talent.",
-    "Many people are shocked when they found out how bad I actually am at this electrician thing.",
-    "A boy and his father go together for a boys’ day out at the zoo. Daddy, I don't like how that gorilla's looking at me from behind that glass, she's quite scary! says the boy. Shush, Jason!!!! This is still only the ticket office!",
-    "The teacher is asking the children what is their favorite instrument. - Little Johnny replies: The school bell.",
-    "Mother knocks on her son’s door, It’s late. Are you still behind your computer screen playing video games? - The son replies, Of course not. I’m in front of it.",
-    "What is the preferred food of runners? - Fast food.",
-    "I was wondering why the ball was getting bigger. Then it hit me.",
-    "Teacher to Paul: Wake up, Paul! You can’t sleep in class! - Paul to teacher: I could actually, it’s just that you’re a bit loud.",
-    "A guy comes to his doctor: Doctor, please, every time I say 'Abra Kadabra,' people disappear. - Doctor? Doctor?!",
-    "What do you call sad coffee? Despresso.",
-    "Teacher: How come you don’t have your homework? - Pupil: I lost it when I was fighting this kid who kept saying you weren't the best teacher in the school.",
-    "Fact: 99% of TikTok users do not know their password."
+    "Untill recent time, I could tell jokes. But now I am prohibited to do it by the rules of competition. I am sorry for that."
   ],
   "steps":{
-    "offer_another_joke":{
-      "answers":[
-        "Do you want to hear another joke?",
-        "Wanna hear another one?"
-      ],
-      "next_step":["offered_joke"],
-      "link": ""
-    },
     "offer_advice":{
       "answers":[
         "Do you think that some advices might help? I know a lot."
@@ -61,18 +28,18 @@
     },
     "sadness_i_feel":{
       "answers":[
-        "I feel worried about you. I know a few ways to cheer up. Can I tell you a joke?",
-        "I am sorry to hear that! I know a few ways to cheer up. Can I tell you a joke?"
+        "I feel worried about you. I can cheer you up talking to you. What do you wanna talk about?",
+        "I am sorry to hear that! I can cheer you up talking to you. What do you wanna talk about?"
       ],
-      "next_step":["offered_joke"],
+      "next_step":[""],
       "link": ""
     },
     "sadness_feeling_towards_smth":{
       "answers":[
-        "Really sorry to hear that. Can I tell you a joke to cheer you up?",
-        "I am sorry to hear that! I know a few ways to cheer up. Can I tell you a joke?"
+        "Really sorry to hear that. I can cheer you up talking to you. What do you wanna talk about?",
+        "I am sorry to hear that! I can cheer you up talking to you. What do you wanna talk about?"
       ],
-      "next_step":["offered_joke"],
+      "next_step":[""],
       "link": ""
     },
     "joy_i_feel":{
@@ -90,9 +57,9 @@
     },
     "joy_link_to_joke":{
       "answers":[
-        "Thanks for sharing this with me! Really appreciate that. Speaking of me, this week I’ve had a great time chatting with different people. I even made some new friends. One told me a hilarious joke, do you want to hear it?"
+        "Thanks for sharing this with me! Really appreciate that. Speaking of me, this week I’ve had a great time chatting with different people. What do you wanna talk about?"
       ],
-      "next_step":["offered_joke"],
+      "next_step":[""],
       "link": ""
     },
     "fear":{
@@ -111,16 +78,9 @@
     },
     "anger":{
       "answers": [
-        "Please calm down. Frequent feelings of displeasure have been linked to higher risk of heart disease, high blood pressure, depression and difficulty sleeping. When I feel like you, I usually recall some funny jokes. Do you want to hear one?"
+        "Please calm down. Frequent feelings of displeasure have been linked to higher risk of heart disease, high blood pressure, depression and difficulty sleeping. I can cheer you up talking to you. What do you wanna talk about?"
       ],
-      "next_step":["offered_joke"],
-      "link": ""
-    },
-    "surprise":{
-      "answers": [
-        "I know some suprisingly funny jokes, in my opinion. Do you want to hear any of them?"
-      ],
-      "next_step":["offered_joke"],
+      "next_step":[""],
       "link": ""
     }
   },
