@@ -11,7 +11,7 @@ from common.grounding import what_we_talk_about
 from common.universal_templates import is_any_question_sentence_in_utterance
 from common.utils import get_topics, get_intents, get_entities, get_toxic, is_no
 from utils import MIDAS_INTENT_ACKNOWLEDGMENTS, get_midas_intent_acknowledgement, reformulate_question_to_statement, \
-    INTENT_DICT, DA_TOPIC_DICT, COBOT_TOPIC_DICT, get_entity_name
+    INTENT_DICT, DA_TOPIC_DICT, COBOT_TOPIC_DICT, get_entity_name, get_midas_analogue_intent_for_any_intent
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -112,7 +112,9 @@ def what_do_you_mean_response(dialog):
 
 
 def generate_acknowledgement(dialog):
-    curr_intents = get_intents(dialog['human_utterances'][-1], probs=False, which='midas')
+    curr_intents = get_intents(dialog['human_utterances'][-1], probs=False, which='all')
+    curr_intents = list(set([get_midas_analogue_intent_for_any_intent(intent) for intent in curr_intents
+                             if get_midas_analogue_intent_for_any_intent(intent) is not None]))
     curr_considered_intents = [intent for intent in curr_intents if intent in MIDAS_INTENT_ACKNOWLEDGMENTS]
     ackn_response = ""
     attr = {}
@@ -125,7 +127,8 @@ def generate_acknowledgement(dialog):
         if is_need_nounphrase_intent:
             curr_nounphrase = get_entities(dialog['human_utterances'][-1], only_named=False, with_labels=False)
             curr_nounphrase = curr_nounphrase[-1] if len(curr_nounphrase) > 0 and curr_nounphrase[-1] else ""
-            ackn_response = get_midas_intent_acknowledgement(curr_considered_intents[-1], curr_nounphrase)
+            if curr_nounphrase:
+                ackn_response = get_midas_intent_acknowledgement(curr_considered_intents[-1], curr_nounphrase)
         else:
             curr_reformulated_question = reformulate_question_to_statement(
                 dialog['human_utterances'][-1]["text"])
@@ -145,7 +148,9 @@ def get_unused_response(intent, used_universal_intent_responses):
 
 
 def generate_universal_response(dialog):
-    curr_intents = get_intents(dialog['human_utterances'][-1], probs=False, which='midas')
+    curr_intents = get_intents(dialog['human_utterances'][-1], probs=False, which='all')
+    curr_intents = list(set([get_midas_analogue_intent_for_any_intent(intent) for intent in curr_intents
+                             if get_midas_analogue_intent_for_any_intent(intent) is not None]))
     human_attr = {}
     human_attr["grounding_skill"] = dialog["human"]["attributes"].get("grounding_skill", {})
     human_attr["grounding_skill"]["used_universal_intent_responses"] = human_attr["grounding_skill"].get(

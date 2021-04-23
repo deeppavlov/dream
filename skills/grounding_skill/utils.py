@@ -1,6 +1,8 @@
 import random
 import re
 
+from common.utils import MIDAS_SEMANTIC_LABELS
+
 
 INTENT_DICT = {
     'Information_DeliveryIntent': 'You just told me about ENTITY_NAME, right?',
@@ -80,15 +82,23 @@ MIDAS_INTENT_ACKNOWLEDGMENTS = {
                         "So, you wanna know SUBJECT.",
                         "You wanna hear SUBJECT."
                         ],
-    # "pos_answer": ["I see you agree.",
-    #                "It's a yes.",
-    #                "You accepted."
-    #                ],
-    # "neg_answer": [f"I see you disagree.",
-    #                "It's a no.",
-    #                "You don't agree."
-    #                ],
 }
+
+MIDAS_INTENT_ANALOGUES = {
+    "open_question_opinion": ["open_question_opinion", "Opinion_RequestIntent", "opinion_request"],
+    "open_question_factual": ["open_question_factual", "Information_RequestIntent"],
+    "open_question_personal": ["open_question_personal"],
+    "yes_no_question": ["yes_no_question"]
+}
+
+
+def get_midas_analogue_intent_for_any_intent(intent):
+    for midas_intent_name in MIDAS_INTENT_ANALOGUES:
+        if intent in MIDAS_INTENT_ANALOGUES[midas_intent_name]:
+            return midas_intent_name
+    if intent in MIDAS_SEMANTIC_LABELS:
+        return intent
+    return None
 
 
 def get_midas_intent_acknowledgement(intent, entity_name):
