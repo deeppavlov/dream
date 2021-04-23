@@ -6,6 +6,8 @@ ASK_WEATHER_SKILL_FOR_HOMELAND_PHRASE = "Would you like to know the weather ther
 ASK_WEATHER_SKILL_PHRASE = "Would you like to know the weather?"
 
 WEATHER_COMPILED_PATTERN = re.compile(r"(weather|forecast)", re.IGNORECASE)
+WEATHER_REQUEST_COMPILED_PATTERN = re.compile(
+    r"((tell me|what is|what's|what about|to know|you know) (the )?weather)", re.IGNORECASE)
 
 
 def skill_trigger_phrases():

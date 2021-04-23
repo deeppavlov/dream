@@ -9,9 +9,9 @@ from city_slot import OWMCitySlot
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE, MUST_CONTINUE
 from common.link import link_to, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED
 from common.weather import is_weather_for_homeland_requested, is_weather_without_city_requested, \
-    WEATHER_COMPILED_PATTERN, ASK_WEATHER_SKILL_PHRASE
+    WEATHER_COMPILED_PATTERN, ASK_WEATHER_SKILL_PHRASE, WEATHER_REQUEST_COMPILED_PATTERN
 from common.universal_templates import if_chat_about_particular_topic
-from common.utils import get_intents, get_named_locations
+from common.utils import get_intents, get_named_locations, is_yes
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -157,9 +157,10 @@ class WeatherSkill:
             user_utt = dialog["human_utterances"][-1]
             weather_for_homeland_requested = is_weather_for_homeland_requested(prev_bot_utt, user_utt)
             weather_without_city_requested = is_weather_without_city_requested(prev_bot_utt, user_utt)
+            is_weather_requested_by_user = WEATHER_REQUEST_COMPILED_PATTERN.search(user_utt["text"])
 
             if "weather_forecast_intent" in get_intents(user_utt, probs=False, which="intent_catcher") or \
-                    weather_without_city_requested:
+                    weather_without_city_requested or is_weather_requested_by_user:
                 logger.warning("WEATHER FORECAST INTENT DETECTED")
                 ############################################################
                 # retrieve city slot or enqueue question into agenda
@@ -185,7 +186,7 @@ class WeatherSkill:
                     # ask question:
                     current_reply = "Hmm. Which particular city would you like a weather forecast for?"
                     context_dict[city_slot_requested] = True
-                    if weather_without_city_requested:
+                    if weather_without_city_requested or is_weather_requested_by_user:
                         context_dict['can_continue'] = MUST_CONTINUE
                         curr_confidence = FORECAST_CONFIDENCE
                     else:
@@ -252,18 +253,20 @@ class WeatherSkill:
                 ############################################################
                 # provide templated answer
                 ############################################################
-                user_utterance = d_man.get_last_utterance_dict()['text']
-                if not re.match(".*(i|I) (don't|do not) like.*", user_utterance):
+                if is_yes(annotated_phrase=d_man.get_last_utterance_dict()):
                     # talk more about hiking/swimming/skiing/etc.
                     context_dict['can_continue'] = CAN_CONTINUE_SCENARIO
                     curr_confidence = SMALLTALK_CONFIDENCE
                     weather = context_dict["weather_forecast_interaction_preferred_weather"]
                     context_dict['weather_forecast_interaction_preferred_weather'] = False
-                    link = link_to(SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED, human_attributes=human_attr,
-                                   recent_active_skills=["weather_skill"])
-                    human_attr["used_links"][link["skill"]] = human_attr["used_links"].get(
-                        link["skill"], []) + [link['phrase']]
-                    current_reply = self.weather_dict[weather]['answer'] + " " + link["phrase"]
+                    if "?" not in self.weather_dict[weather]['answer']:
+                        link = link_to(SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED, human_attributes=human_attr,
+                                       recent_active_skills=["weather_skill"])
+                        human_attr["used_links"][link["skill"]] = human_attr["used_links"].get(
+                            link["skill"], []) + [link['phrase']]
+                        current_reply = self.weather_dict[weather]['answer'] + " " + link["phrase"]
+                    else:
+                        current_reply = self.weather_dict[weather]['answer']
                 else:
                     context_dict['can_continue'] = CAN_NOT_CONTINUE
                     # don't talk about hiking/swimming/skiing/etc.
