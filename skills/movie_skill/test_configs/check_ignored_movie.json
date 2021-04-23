@@ -424,6 +424,10 @@
         "user_type": "human"
       },
       "annotations": {
+        "cobot_entities": {
+          "entities": ["her"],
+          "labelled_entities": [{"text":  "her", "label": "videoname"}]
+        },
         "sentseg": {
           "punct_sent": "what do you think about movie her?",
           "segments": [
@@ -975,6 +979,10 @@
         "user_type": "human"
       },
       "annotations": {
+        "cobot_entities": {
+          "entities": ["her"],
+          "labelled_entities": [{"text":  "her", "label": "videoname"}]
+        },
         "sentseg": {
           "punct_sent": "what do you think about movie her?",
           "segments": [

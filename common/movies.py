@@ -96,8 +96,8 @@ def get_movie_template(category, subcategory=None, movie_type="movie"):
             "Did I get correctly that you meant",
             "Am I right in thinking that you meant"],
         "sorry_didnt_get_title": [
-            "Sorry, I could not get what TYPE you are talking about,",
-            "Sorry, I didn't get what TYPE you meant"],
+            "Sorry, I could not get what TYPE you are talking about.",
+            "Sorry, I didn't get what TYPE you meant."],
         "lets_talk_about_other_movie": [
             "Let's talk about some other movie.",
             "Maybe you want to talk about some other movie.",
@@ -112,9 +112,9 @@ def get_movie_template(category, subcategory=None, movie_type="movie"):
             "Sorry, I didn't catch the title, could you, please, repeat it.",
             "Sorry, I didn't get the title, can you, please, repeat it."],
         "dont_know_movie_title_at_all": [
-            "Sorry, probably I've never heard about this TYPE,",
-            "Sorry, maybe I just have never heard about this TYPE,",
-            "Well, probably I've never heard about this TYPE,"],
+            "Sorry, probably I've never heard about this TYPE.",
+            "Sorry, maybe I just have never heard about this TYPE.",
+            "Well, probably I've never heard about this TYPE."],
         "lets_move_on": [
             "Let's move on.",
             "Okay.",

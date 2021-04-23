@@ -5,7 +5,6 @@ import logging
 from copy import deepcopy
 
 import numpy as np
-from nltk.tokenize import wordpunct_tokenize
 
 from utils import GENRES, ALL_GENRES
 
@@ -67,8 +66,6 @@ class IMDb:
         self.without_ignored_movies_names = {}
         self.database = {}
         self.professionals = {}
-        self.without_ignored_movies_names_pattern = None
-        self.with_ignored_movies_names_pattern = None
         self.genres_pattern = None
         self.names_pattern = {}
 
@@ -208,12 +205,6 @@ class IMDb:
             self.collect_persons_and_movies(profession=prof)
 
         logger.info(f"Everything's except patterns were done in {time.time() - t0} sec")
-
-        # compose patterns for re.findall // make insensitive!
-        self.without_ignored_movies_names_pattern = re.compile(
-            "(" + "|".join([r'\b%s\b' % movie for movie in self.without_ignored_movies_names]) + ")", re.IGNORECASE)
-        self.with_ignored_movies_names_pattern = re.compile(
-            "(" + "|".join([r'\b%s\b' % movie for movie in self.with_ignored_movies_names]) + ")", re.IGNORECASE)
 
         for prof in self.professions:
             self.names_pattern[prof] = re.compile(
@@ -382,7 +373,7 @@ class IMDb:
         if name_or_id is None:
             return {}
 
-        if name_or_id.isdigit() and 6 <= len(name_or_id) <= 8:
+        if name_or_id.isdigit() and 6 <= len(name_or_id):
             # this is imdb_id
             pass
         else:
@@ -408,27 +399,8 @@ class IMDb:
             imdb-ids if `movie`, full cased name if `actor` or any profession
         """
         lower_cased_reply = f" {self.process_movie_name(reply.lower())} "
-        if subject == "movie":
-            if find_ignored:
-                results = re.findall(self.with_ignored_movies_names_pattern, lower_cased_reply)
-            else:
-                results = re.findall(self.without_ignored_movies_names_pattern, lower_cased_reply)
-            results = list(results)
-            if len(results) == 0:
-                for target_name in ["film", "series", "movie"]:
-                    start_movie_name = reply.lower().find(target_name)
-                    if start_movie_name != -1:
-                        if lower_cased_reply[-(len(target_name) + 1):] == f"{target_name} ":
-                            tokens = wordpunct_tokenize(lower_cased_reply)
-                            new_lower_cased_reply = f" {self.process_movie_name(' '.join(tokens[-3:]))} "
-                            logger.info(f"1. Trying to find movie title in `{new_lower_cased_reply}`")
-                            results = re.findall(self.with_ignored_movies_names_pattern, new_lower_cased_reply)
-                        else:
-                            tokens = wordpunct_tokenize(reply[start_movie_name:])
-                            new_lower_cased_reply = f" {self.process_movie_name(' '.join(tokens[:3]))} "
-                            logger.info(f"2. Trying to find movie title in `{new_lower_cased_reply}`")
-                            results = re.findall(self.with_ignored_movies_names_pattern, new_lower_cased_reply)
-        elif subject in self.professions:
+
+        if subject in self.professions:
             results = re.findall(self.names_pattern[subject], lower_cased_reply)
         elif subject == "genre":
             results = re.findall(self.genres_pattern, lower_cased_reply)
@@ -438,28 +410,16 @@ class IMDb:
         logger.info(f"Curr found results: {results}")
         results = list(results)
         identifiers = []
-        highest_length = 0
         for result in results:
-            if subject == "movie":
-                found = self.get_imdb_id(result)
-            elif subject in self.professions:
+            found = ""
+            if subject in self.professions:
                 found = self.professionals[f"lowercased_{subject}s"][result]
             elif subject == "genre":
                 for genre in GENRES:
                     if result in GENRES[genre]:
                         found = genre
-            else:
-                found = ""
 
-            if subject == "movie":
-                if return_longest:
-                    if len(result) >= highest_length:
-                        identifiers = [found]
-                        highest_length = len(result)
-                else:
-                    identifiers.append(found)
-            elif subject != "movie":
-                identifiers.append(found)
+            identifiers.append(found)
 
         if len(identifiers) == 0:
             return []

@@ -62,7 +62,7 @@ if collect_movies_based_on_rating:
 if collect_movies_based_on_numvotes:
     movies_ids = []
     movies_ids.extend(df.loc[df.loc[:, "numVotes"] > 1000, "tconst"].values)
-    movies_ids.extend(df.loc[df.loc[:, "averageRating"] > 8., "tconst"].values)
+    movies_ids.extend(df.loc[df.loc[:, "averageRating"] > 7., "tconst"].values)
     movies_ids = list(set(movies_ids))
 
     with open("imdb_ids.txt", "w") as f:

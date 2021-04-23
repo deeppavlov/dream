@@ -251,6 +251,8 @@ services:
     build:
       context: .
       dockerfile: ./skills/movie_skill/Dockerfile
+      args:
+        DATABASE_URL: http://files.deeppavlov.ai/alexaprize_data/database_most_popular_main_info.json
     command: python -m flask run -h 0.0.0.0 -p 8023
     environment:
       - FLASK_APP=server
