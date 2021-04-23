@@ -2,7 +2,7 @@ from random import choice
 import re
 
 from common.utils import join_words_in_or_pattern, join_sentences_in_or_pattern, get_topics, \
-    get_intents, get_sentiment, is_yes
+    get_intents, get_sentiment, is_yes, is_no
 from common.greeting import GREETING_QUESTIONS
 
 # https://www.englishclub.com/vocabulary/fl-asking-for-opinions.htm
@@ -85,6 +85,7 @@ ABOUT_SOMETHING = join_words_in_or_pattern(ABOUT_LIKE) + r"?\s" + join_words_in_
 SOMETHING_WITH_SPACES = r"\s?" + join_words_in_or_pattern(SOMETHING_LIKE) + r"?\s?"
 ABOUT_TOPIC = join_words_in_or_pattern(ABOUT_LIKE) + r"\s" + ANY_WORDS
 KNOW = join_words_in_or_pattern(KNOW_LIKE)
+SOMETHING_ELSE = re.compile(r"((something|anything|everything) (else|other))", re.IGNORECASE)
 
 # --------------- Let's talk. / Can we talk? / Talk to me. ------------
 COMPILE_LETS_TALK = re.compile(join_sentences_in_or_pattern(
@@ -237,6 +238,32 @@ def if_choose_topic(annotated_uttr, prev_annotated_uttr=None):
     return False
 
 
+def if_not_want_to_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr={}):
+    uttr_ = annotated_uttr.get("text", "")
+    if re.search(COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, uttr_):
+        return True
+
+    # prev uttr is what do you want to talk about?
+    prev_chat_about_intent = 'lets_chat_about' in get_intents(prev_annotated_uttr, probs=False, which='intent_catcher')
+    prev_what_to_chat_about = prev_chat_about_intent or if_utterance_requests_topic(prev_annotated_uttr)
+    if prev_what_to_chat_about and is_no(annotated_uttr):
+        # previously offered to chat about topic, user declines
+        return True
+    elif prev_what_to_chat_about and is_switch_topic(annotated_uttr):
+        # previously offered to chat about topic, user asks to switch topic
+        return True
+    elif prev_what_to_chat_about and SOMETHING_ELSE.search(uttr_):
+        # previously offered to chat about topic, user asks to something else
+        return True
+
+    # current uttr is lets talk about something else / other than
+    chat_about_intent = 'lets_chat_about' in get_intents(annotated_uttr, probs=False, which='intent_catcher')
+    chat_about = chat_about_intent or if_lets_chat_about_topic(uttr_)
+    if chat_about and SOMETHING_ELSE.search(uttr_):
+        return True
+    return False
+
+
 ANY_TOPIC_AMONG_OFFERED = re.compile(
     r"(\bany\b|\ball\b|\beither\b|\bboth\b|don't know|not know"
     r"|you (choose|pick up|tell me|want|wish|like)\.?$)")
@@ -272,9 +299,8 @@ def if_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr=None, key
     prev_chat_about_intent = 'lets_chat_about' in get_intents(prev_annotated_uttr, probs=False, which='intent_catcher')
     prev_what_to_chat_about = prev_chat_about_intent or if_utterance_requests_topic(prev_annotated_uttr)
 
-    switch_topic = if_choose_topic(annotated_uttr, prev_annotated_uttr)
-    not_want = re.search(COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, uttr_)
-    if not_want or switch_topic:
+    not_want = if_not_want_to_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr)
+    if not_want:
         return False
     elif prev_what_to_chat_about or chat_about:
         if key_words:
