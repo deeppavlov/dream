@@ -59,10 +59,11 @@ def get_entity_name(annotations):
         entity_name = ','.join(entity_list[:-1]) + ' and ' + entity_list[-1]
     else:
         entity_name = ''
+    entity_name = entity_name.replace('?', '')
     return entity_name
 
 
-MIDAS_INTENT_ACKNOWLEDGMENETS = {
+MIDAS_INTENT_ACKNOWLEDGMENTS = {
     "open_question_opinion": ["You wanna  know my opinion on SUBJECT.",
                               "So, you asked for my opinion on SUBJECT.",
                               "You wanna hear my view on SUBJECT.",
@@ -91,11 +92,12 @@ MIDAS_INTENT_ACKNOWLEDGMENETS = {
 
 
 def get_midas_intent_acknowledgement(intent, entity_name):
-    pos_responses = MIDAS_INTENT_ACKNOWLEDGMENETS.get(intent, [])
+    pos_responses = MIDAS_INTENT_ACKNOWLEDGMENTS.get(intent, [])
     if pos_responses:
         response = random.choice(pos_responses).replace("SUBJECT", entity_name)
     else:
         response = ""
+    response = response.replace('?', '')
     return response
 
 
