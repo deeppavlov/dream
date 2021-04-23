@@ -129,28 +129,31 @@ def owm_requests_weather_forecast_now(city_str):
         resp = requests.get(url=url, timeout=2)
         json_data = resp.json()
         try:
-            description = json_data['weather'][0]['description']
-
-            temperature = kelvin_to_fahrenheit(json_data['main']['temp'])
-            # min_temperature = kelvin_to_fahrenheit(json_data['main']['temp_min'])
-            # max_temperature = kelvin_to_fahrenheit(json_data['main']['temp_max'])
-
-            city_name = json_data['name']
-
-            # meter/sec
-            wind_speed = json_data['wind']['speed']
-
-            # hPa
-            # pressure = json_data['main']['pressure']
-            # humidity = json_data['main']['humidity']
-            # plural or singular form in fahrenheits?
-            if int(temperature) % 10 in [0, 1]:
-                scale_str = "Fahrenheit"
+            if 'weather' not in json_data:
+                response_template = random_crazy_forecast(city_str)
             else:
-                scale_str = "Fahrenheits"
-            response_template = "It is %s, temperature is around %0.1f %s in %s. " \
-                                "Wind speed is about %0.1f meters per second" % (
-                                    description, temperature, scale_str, city_name, wind_speed)
+                description = json_data['weather'][0]['description']
+
+                temperature = kelvin_to_fahrenheit(json_data['main']['temp'])
+                # min_temperature = kelvin_to_fahrenheit(json_data['main']['temp_min'])
+                # max_temperature = kelvin_to_fahrenheit(json_data['main']['temp_max'])
+
+                city_name = json_data['name']
+
+                # meter/sec
+                wind_speed = json_data['wind']['speed']
+
+                # hPa
+                # pressure = json_data['main']['pressure']
+                # humidity = json_data['main']['humidity']
+                # plural or singular form in fahrenheits?
+                if int(temperature) % 10 in [0, 1]:
+                    scale_str = "Fahrenheit"
+                else:
+                    scale_str = "Fahrenheits"
+                response_template = "It is %s, temperature is around %0.1f %s in %s. " \
+                                    "Wind speed is about %0.1f meters per second" % (
+                                        description, temperature, scale_str, city_name, wind_speed)
         except Exception as e:
             # we have problems with weather service:
             # soltions:
