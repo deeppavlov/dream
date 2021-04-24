@@ -10,7 +10,7 @@ from random import choice, shuffle
 
 from common.constants import CAN_NOT_CONTINUE
 from common.universal_templates import join_words_in_or_pattern
-from common.utils import is_opinion_request, get_skill_outputs_from_dialog, get_entities
+from common.utils import is_opinion_request, get_skill_outputs_from_dialog, get_entities, get_toxic
 from common.greeting import dont_tell_you_answer
 from utils import get_used_attributes_by_name, get_comet_atomic, TOP_100_FREQUENT_WORDS, get_all_not_used_templates, \
     get_comet_conceptnet, get_nltk_sentiment, get_not_used_template, TOP_1k_FREQUENT_WORDS
@@ -87,6 +87,8 @@ def grammar_fixes(uttr):
 def ask_question_using_atomic(dialog):
     responses, confidences, attrs = [], [], []
     default_return = [""], [0.0], [{"can_continue": CAN_NOT_CONTINUE}]
+    if get_toxic(dialog["human_utterances"][-1], probs=False):
+        return default_return
 
     idosents = re.findall(idopattern, dialog["human_utterances"][-1]["text"].lower())
     logger.info(f"Found `I do` - like sentences: {idosents}")
@@ -160,6 +162,8 @@ def ask_question_using_atomic(dialog):
 
 def comment_using_atomic(dialog):
     responses, confidences, attrs = [], [], []
+    if get_toxic(dialog["human_utterances"][-1], probs=False):
+        return [""], [0.], [{}]
 
     used_templates = get_used_attributes_by_name(
         dialog["utterances"], attribute_name="atomic_comment_template",
@@ -213,6 +217,8 @@ def remove_intersections_of_entities(entity, subjects):
 
 
 def filter_nouns_for_conceptnet(annotated_phrase):
+    if get_toxic(annotated_phrase, probs=False):
+        return []
     subjects = get_entities(annotated_phrase, only_named=False, with_labels=False)
     subjects = [re.sub(possessive_pronouns, "", noun) for noun in subjects]
     subjects = [re.sub(r"(\bthe\b|\ba\b|\ban\b)", "", noun) for noun in subjects]
