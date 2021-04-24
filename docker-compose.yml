@@ -261,9 +261,9 @@ services:
       replicas: 4
       resources:
         limits:
-          memory: 768M
+          memory: 1280M
         reservations:
-          memory: 768M
+          memory: 1280M
 
   ner:
     build:
