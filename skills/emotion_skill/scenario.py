@@ -239,6 +239,15 @@ class EmotionSkillScenario:
                 else:
                     reply = ""
                     confidence = 0.0
+                was_trigger = any([trigger_question in prev_bot_phrase
+                                   for trigger_question in skill_trigger_phrases()])
+                if dialog['bot_utterances']:
+                    was_active = dialog['bot_utterances'][-1].get('active_skill', {}) == 'emotion_skill'
+                else:
+                    was_active = False
+                if was_trigger or was_active or self.regexp_sad:
+                    attr['can_continue'] = MUST_CONTINUE
+                    confidence = 1
 
             except Exception as e:
                 self.logger.exception("exception in emotion skill")
@@ -249,11 +258,6 @@ class EmotionSkillScenario:
                 human_attributes, bot_attributes, attr = {}, {}, {}
                 link = ""
                 annotated_user_phrase = {'text': ""}
-
-            if state != "" or any([trigger_question in prev_bot_phrase
-                                   for trigger_question in skill_trigger_phrases()]) or self.regexp_sad:
-                attr['can_continue'] = MUST_CONTINUE
-                confidence = 1
 
             if link:
                 if link["skill"] not in human_attributes["used_links"]:
