@@ -231,9 +231,9 @@ services:
       replicas: 4
       resources:
         limits:
-          memory: 100M
+          memory: 256M
         reservations:
-          memory: 100M
+          memory: 256M
 
   program-y-dangerous:
     build:
