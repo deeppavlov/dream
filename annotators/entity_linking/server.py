@@ -102,11 +102,12 @@ def respond():
                 entity_info["entity_pages"] = entity_pages
                 entity_info_list.append(entity_info)
             topic_substr, topic_id = extract_topic_skill_entities(context, entity_substr_list, entity_ids_list)
-            entity_info = {}
-            entity_info["entity_substr"] = topic_substr
-            entity_info["entity_ids"] = [topic_id]
-            entity_info["confidences"] = [float(1.0)]
-            entity_info_list.append(entity_info)
+            if topic_substr:
+                entity_info = {}
+                entity_info["entity_substr"] = topic_substr
+                entity_info["entity_ids"] = [topic_id]
+                entity_info["confidences"] = [float(1.0)]
+                entity_info_list.append(entity_info)
             entity_info_batch.append(entity_info_list)
     except Exception as e:
         sentry_sdk.capture_exception(e)

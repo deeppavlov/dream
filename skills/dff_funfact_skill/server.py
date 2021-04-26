@@ -10,6 +10,7 @@ from healthcheck import HealthCheck
 import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
 
+
 import common.dialogflow_framework.utils.dialogflow as dialogflow_utils
 import common.dialogflow_framework.programy.text_preprocessing as text_utils
 import dialogflows.main as main_dialogflow
@@ -24,6 +25,7 @@ RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
 
 logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 app = Flask(__name__)
 health = HealthCheck(app, "/healthcheck")
@@ -69,8 +71,8 @@ def handler(requested_data, random_seed=None):
             logger.exception(exc)
             responses.append(("", 0.0, {}, {}, {}))
 
-        total_time = time.time() - st_time
-        logger.info(f"{SERVICE_NAME} exec time = {total_time:.3f}s")
+    total_time = time.time() - st_time
+    logger.info(f"{SERVICE_NAME} exec time = {total_time:.3f}s")
     return responses
 
 

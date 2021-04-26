@@ -30,6 +30,10 @@
       {
         "url": "http://files.deeppavlov.ai/kbqa/wikidata/wikidata_lite.hdt.index.v1-1",
         "subdir": "{DOWNLOADS_PATH}/wikidata"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/kbqa/wikidata/wikidata_cache.json",
+        "subdir": "{DOWNLOADS_PATH}/wikidata"
       }
     ]
   }

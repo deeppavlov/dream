@@ -1,0 +1,574 @@
+{
+    "human_utter_index_batch": [
+        2
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "yes.",
+                    "annotations": {
+                        "spelling_preprocessing": "yes",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.5455584526062012,
+                                "Information_DeliveryIntent": 0.6853394508361816
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.879266619682312
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9971470832824707
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9989004135131836
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.794316828250885
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.007270336151123047
+                            }
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.004948323592543602,
+                            "conversational": 0.9950516819953918
+                        },
+                        "cobot_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "yes.",
+                            "segments": [
+                                "yes."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_entities": {
+                            "entities": [],
+                            "labelled_entities": []
+                        },
+                        "midas_classification": {
+                            "appreciation": 0.003418116830289364,
+                            "command": 0.04040932655334473,
+                            "comment": 0.0066802483052015305,
+                            "complaint": 0.007774661760777235,
+                            "dev_command": 0.019213810563087463,
+                            "neg_answer": 0.0034485231153666973,
+                            "open_question_factual": 0.006481857504695654,
+                            "open_question_opinion": 0.0026458892971277237,
+                            "opinion": 0.006915778387337923,
+                            "other_answers": 0.0035008322447538376,
+                            "pos_answer": 0.007017554249614477,
+                            "statement": 0.83311927318573,
+                            "yes_no_question": 0.05937417969107628
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "Information_RequestIntent"
+                            ],
+                            "topics": [
+                                "Politics"
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        },
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    1.0
+                                ],
+                                "entity_ids": [
+                                    ""
+                                ],
+                                "entity_substr": ""
+                            }
+                        ],
+                        "conceptnet": {},
+                        "wiki_parser": {
+                            "entities_info": {},
+                            "topic_skill_entities_info": {}
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "let's talk about politics gossips.",
+                                "Hi, this is an Alexa Prize Socialbot! Aha. So speaking of politics, this happened lately CapStar Names Christopher G. Tietz Chief Credit Policy Officer and Executive Vice President of Specialty Banking Kevin L. Lambert Chief Credit Officer. Have you heard about it?",
+                                "yes, i have heard about it. "
+                            ]
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": [],
+                        "cobotqa_annotator": {
+                            "facts": [],
+                            "response": ""
+                        }
+                    }
+                },
+                {
+                    "text": "no.",
+                    "annotations": {
+                        "spelling_preprocessing": "no",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.7071337103843689
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.8173006176948547
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9986573457717896
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9984775185585022
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6736717224121094
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0038194358348846436
+                            }
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.004733121953904629,
+                            "conversational": 0.9952669143676758
+                        },
+                        "cobot_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "no.",
+                            "segments": [
+                                "no."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_entities": {
+                            "entities": [],
+                            "labelled_entities": []
+                        },
+                        "midas_classification": {
+                            "appreciation": 0.0008405536063946784,
+                            "command": 0.0006905453628860414,
+                            "comment": 0.0014353040605783463,
+                            "complaint": 0.009969971142709255,
+                            "dev_command": 0.0012505430495366454,
+                            "neg_answer": 0.9685925245285034,
+                            "open_question_factual": 0.0011231225216761231,
+                            "open_question_opinion": 0.0008508636383339763,
+                            "opinion": 0.001576687442138791,
+                            "other_answers": 0.004963079933077097,
+                            "pos_answer": 0.006163436453789473,
+                            "statement": 0.00069023622199893,
+                            "yes_no_question": 0.0018531265668570995
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Other"
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        },
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    1.0
+                                ],
+                                "entity_ids": [
+                                    ""
+                                ],
+                                "entity_substr": ""
+                            }
+                        ],
+                        "wiki_parser": {
+                            "entities_info": {},
+                            "topic_skill_entities_info": {}
+                        },
+                        "conceptnet": {},
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": [],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Hi, this is an Alexa Prize Socialbot! Aha. So speaking of politics, this happened lately CapStar Names Christopher G. Tietz Chief Credit Policy Officer and Executive Vice President of Specialty Banking Kevin L. Lambert Chief Credit Officer. Have you heard about it?",
+                                "yes, i have heard about it. ",
+                                "Now, well, it is not in my habit to talk about people but... this l, yeah, is a rather Great actor. Isn't it so?",
+                                "no, it isn't so. "
+                            ]
+                        },
+                        "cobotqa_annotator": {
+                            "facts": [],
+                            "response": ""
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Now, well, it's not in my habit to talk about people but... this l, yeah, is a rather Great actor. Isn't it so?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Now, well, it is not in my habit to talk about people but... this l, yeah, is a rather Great actor. Isn't it so?",
+                            "segments": [
+                                "Now, well, it is not in my habit to talk about people but...",
+                                "this l, yeah, is a rather Great actor.",
+                                "Isn't it so?"
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "let's talk about politics gossips.",
+                                "Hi, this is an Alexa Prize Socialbot! Aha. So speaking of politics, this happened lately CapStar Names Christopher G. Tietz Chief Credit Policy Officer and Executive Vice President of Specialty Banking Kevin L. Lambert Chief Credit Officer. Have you heard about it?",
+                                "yes, i have heard about it. ",
+                                "Now, well, it is not in my habit to talk about people but... this l, yeah, is a rather Great actor. Isn't it so?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_gossip_skill"
+                }
+            ]
+        }
+    ],
+    "dff_gossip_skill_state_batch": [
+        {
+            "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_EVENT_TO_PERSON\", \"__stack__\": [], \"__user_utterance__\": \"yes\", \"__system_state__\": \"State.SYS_NO_OR_YES\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"Now, well, it's not in my habit to talk about people but... this l, yeah, is a rather Great actor. Isn't it so?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"GOSSIP\\\"<__tuple__>\\\"State.USR_EVENT_TO_PERSON\\\"\"}",
+            "history": {
+                "0": "State.SYS_TOPIC_TO_EVENT",
+                "1": "State.SYS_NO_OR_YES"
+            },
+            "previous_human_utter_index": 1,
+            "shared_memory": {
+                "all_mentioned_news": [
+                    "CapStar Names Christopher G. Tietz Chief Credit Policy Officer and Executive Vice President of Specialty Banking; Kevin L. Lambert Chief Credit Officer"
+                ],
+                "bot_emotion_towards_current_person": "Liked",
+                "current_cobot_topic": "Politics",
+                "current_person": "l",
+                "current_person_occupation": "actor",
+                "last_acknowledgements": [
+                    "Great! "
+                ],
+                "people_mentioned_by_bot": [
+                    {
+                        "Judgement": "Other",
+                        "People": [
+                            "l"
+                        ]
+                    }
+                ]
+            }
+        }
+    ],
+    "entities_batch": [
+        {
+            "gossip": {
+                "bot_encounters": [],
+                "human_encounters": [
+                    {
+                        "emotions": {
+                            "neutral": 0.9994316101074219
+                        },
+                        "full_name": "politics gossips",
+                        "human_utterance_index": 0,
+                        "intents": [
+                            "lets_chat_about",
+                            "Information_RequestIntent"
+                        ],
+                        "next_skill_name": "dff_gossip_skill",
+                        "pos": [
+                            "NOUN",
+                            "NOUN"
+                        ],
+                        "previous_skill_name": "pre_start",
+                        "sentiment": "neutral",
+                        "topics": [
+                            "Politics",
+                            "Politics"
+                        ]
+                    }
+                ],
+                "name": "gossip"
+            },
+            "habit": {
+                "bot_encounters": [
+                    {
+                        "full_name": "habit",
+                        "human_utterance_index": 2,
+                        "next_user_emotions": {
+                            "neutral": 0.9984775185585022
+                        },
+                        "next_user_intents": [
+                            "no",
+                            "Information_DeliveryIntent"
+                        ],
+                        "next_user_sentiment": "neutral",
+                        "next_user_topics": [
+                            "Phatic",
+                            "Other"
+                        ],
+                        "pos": [
+                            "NOUN"
+                        ],
+                        "skill_name": "dff_gossip_skill"
+                    }
+                ],
+                "human_encounters": [],
+                "name": "habit"
+            },
+            "socialbot": {
+                "bot_encounters": [
+                    {
+                        "full_name": "alexa prize socialbot",
+                        "human_utterance_index": 1,
+                        "next_user_emotions": {
+                            "neutral": 0.9989004135131836
+                        },
+                        "next_user_intents": [
+                            "yes",
+                            "General_ChatIntent",
+                            "Information_DeliveryIntent"
+                        ],
+                        "next_user_sentiment": "positive",
+                        "next_user_topics": [
+                            "Phatic",
+                            "Other"
+                        ],
+                        "pos": [
+                            "NOUN",
+                            "NOUN",
+                            "NOUN"
+                        ],
+                        "skill_name": "dff_gossip_skill"
+                    }
+                ],
+                "human_encounters": [],
+                "name": "socialbot"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "disliked_skills_batch": [
+        []
+    ]
+}

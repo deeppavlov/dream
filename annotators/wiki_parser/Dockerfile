@@ -17,6 +17,7 @@ RUN pip install hdt==2.3
 RUN mkdir -p /root/.deeppavlov/downloads/wikidata
 RUN wget -q -P /root/.deeppavlov/downloads/wikidata http://files.deeppavlov.ai/kbqa/wikidata/wikidata_lite.hdt
 RUN wget -q -P /root/.deeppavlov/downloads/wikidata http://files.deeppavlov.ai/kbqa/wikidata/wikidata_lite.hdt.index.v1-1
+RUN wget -q -P /root/.deeppavlov/downloads/wikidata http://files.deeppavlov.ai/kbqa/wikidata/wikidata_cache.json
 
 COPY $SRC_DIR /src
 WORKDIR /src
