@@ -100,7 +100,6 @@ class CachedRequestsAPI:
             topic: string topic (i.g. sport news, putin, politics
             status: string news skill status
             prev_news_urls: list of all discussed previous news' URLs sent to user (list of strings)
-
         Returns:
             dictionary with one top rated over latest news
         """

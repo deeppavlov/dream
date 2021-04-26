@@ -238,7 +238,7 @@ def preproc_last_human_utt_and_nounphrases_dialog(dialog: Dict) -> List[Dict]:
                     "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
                 )
             ],
-            "nounphrases": [dialog["human_utterances"][-1]["annotations"].get("cobot_nounphrases", [])]
+            "nounphrases": [dialog["human_utterances"][-1]["annotations"].get("cobot_nounphrases", [])],
         }
     ]
 
@@ -690,6 +690,10 @@ def dff_travel_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_travel_skill")
 
 
+def dff_gossip_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_gossip_skill")
+
+
 def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
     # Used by: dialog_breakdown
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=2)
@@ -721,6 +725,32 @@ def game_cooperative_skill_formatter(dialog: Dict):
         "used_links": dialog["human"]["attributes"].get("used_links", {}),
     }
     return [{"dialogs": [dialog]}]
+
+
+# def speech_function_formatter(dialog: Dict):
+#     resp = {"human_utterance": dialog["human_utterances"][-1]["text"]}
+#     try:
+#         resp["bot_utterance"] = dialog["bot_utterances"][-1]["text"]
+#     except IndexError:
+#         pass
+#     return [resp]
+
+
+# def speech_function_annotation(dialog: Dict):
+#     hypotheses = dialog["utterances"][-1]["hypotheses"]
+#     hypots = [h["text"] for h in hypotheses]
+#     human_utterance = dialog["human_utterances"][-1]["text"]
+#     return [[{"human_utterance": human_utterance, "bot_utterance": h} for h in hypots]]
+
+
+# def speech_function_predictor_formatter(dialog: Dict):
+#     return [[dialog["human_utterances"][-1]["annotations"].get("speech_function_classifier", {}).get("type", "")]]
+
+
+# def speech_function_hypotheses_predictor_formatter(dialog: Dict):
+#     hypotheses = dialog["utterances"][-1]["hypotheses"]
+#     ans = [[h["annotations"].get("speech_function_classifier").get("type", "") for h in hypotheses]]
+#     return ans
 
 
 def hypothesis_scorer_formatter(dialog: Dict):

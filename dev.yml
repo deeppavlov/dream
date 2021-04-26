@@ -427,6 +427,13 @@ services:
       - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8098:8098
+  dff-gossip-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_gossip_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8109:8109
   fact-retrieval:
     env_file: [ .env.dev ]
     volumes:

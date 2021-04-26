@@ -110,4 +110,36 @@ services:
           memory: 3G
         reservations:
           memory: 3G
+
+  speech-function-classifier:
+    build:
+      args:
+        SERVICE_PORT: 8108
+        SERVICE_NAME: speech_function_classifier # has to be the same with skill dir name
+      context: ./annotators/speech_function_classifier/
+    command: uvicorn server:app --reload --host 0.0.0.0 --port 8108
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 768M
+        reservations:
+          memory: 768M
+
+  speech-function-predictor:
+    build:
+      args:
+        SERVICE_PORT: 8107
+        SERVICE_NAME: speech_function_predictor # has to be the same with skill dir name
+      context: ./annotators/speech_function_predictor/
+    command: uvicorn server:app --reload --host 0.0.0.0 --port 8107
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 768M
+        reservations:
+          memory: 768M
 version: '3.7'

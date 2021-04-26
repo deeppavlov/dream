@@ -13,6 +13,8 @@
 # limitations under the License.
 
 import datetime
+import itertools
+import json
 import os
 import re
 import multiprocessing as mp
@@ -43,6 +45,88 @@ max_comb_num = 1e6
 lang = "@en"
 wiki_filename = "/root/.deeppavlov/downloads/wikidata/wikidata_lite.hdt"
 document = HDTDocument(wiki_filename)
+USE_CACHE = True
+
+occ = {"business": [["Q131524", "enterpreneur"]],
+       "sport": [["Q937857", "football player"],
+                 ["Q2066131", "athlete"],
+                 ["Q3665646", "basketball player"],
+                 ["Q10833314", "tennis player"],
+                 ["Q19204627", "american football player"]],
+       "films": [["Q10800557", "film actor"],
+                 ["Q33999", "actor"],
+                 ["Q10798782", "television actor"],
+                 ["Q2526255", "film director"]],
+       "music": [["Q488205", "singer-songwriter"],
+                 ["Q36834", "composer"],
+                 ["Q177220", "singer"],
+                 ["Q753110", "songwriter"]],
+       "literature": [["Q49757", "poet"],
+                      ["Q6625963", "novelist"],
+                      ["Q214917", "playwright"],
+                      ["Q36180", "writer"]],
+       "politics": [["Q82955", "politician"],
+                    ["Q372436", "statesperson"]]
+       }
+
+top_n = 10
+
+
+def find_top_people():
+    top_people = {}
+
+    for domain in occ:
+        occupations = occ[domain]
+        occ_people = []
+        for elem, elem_label in occupations:
+            tr, cnt = document.search_triples("", "http://wpd/P106", f"http://we/{elem}")
+            for triplet in tr:
+                occ_people.append(triplet[0])
+        people_with_cnt = []
+        for man in occ_people:
+            tr, cnt = document.search_triples(f"{man}", "", "")
+            people_with_cnt.append((man, cnt))
+        people_with_cnt = sorted(people_with_cnt, key=lambda x: x[1], reverse=True)
+        people_with_labels = []
+        for man, counts in people_with_cnt[:top_n]:
+            label = ""
+            tr, cnt = document.search_triples(f"{man}", "http://wl", "")
+            for triplet in tr:
+                if triplet[2].endswith("@en"):
+                    label = triplet[2].replace("@en", "").replace('"', '')
+                    break
+            if label:
+                people_with_labels.append([man, label])
+
+        top_people[domain] = people_with_labels
+
+    for domain in occ:
+        occupations = occ[domain]
+        for elem, elem_label in occupations:
+            occ_people = []
+            tr, cnt = document.search_triples("", "http://wpd/P106", f"http://we/{elem}")
+            for triplet in tr:
+                occ_people.append(triplet[0])
+            people_with_cnt = []
+            for man in occ_people:
+                tr, cnt = document.search_triples(f"{man}", "", "")
+                people_with_cnt.append((man, cnt))
+            people_with_cnt = sorted(people_with_cnt, key=lambda x: x[1], reverse=True)
+            people_with_labels = []
+            for man, counts in people_with_cnt[:top_n]:
+                label = ""
+                tr, cnt = document.search_triples(f"{man}", "http://wl", "")
+                for triplet in tr:
+                    if triplet[2].endswith("@en"):
+                        label = triplet[2].replace("@en", "").replace('"', '')
+                        break
+                if label:
+                    people_with_labels.append([man, label])
+
+            top_people[elem_label] = people_with_labels
+
+    return top_people
+
 
 topic_skill_types = {"Q36180",  # writer
                      "Q49757",  # poet
@@ -262,6 +346,60 @@ def find_objects_info(objects, num_objects=25):
     return objects_info
 
 
+def find_intersection(entity1, entity2, rel, direction):
+    if direction == "backw":
+        tr1, cnt1 = document.search_triples("", f"http://wpd/{rel}", f"http://we/{entity1}")
+        tr2, cnt2 = document.search_triples("", f"http://wpd/{rel}", f"http://we/{entity2}")
+        ind = 0
+    else:
+        tr1, cnt1 = document.search_triples(f"http://we/{entity1}", f"http://wpd/{rel}", "")
+        tr2, cnt2 = document.search_triples(f"http://we/{entity2}", f"http://wpd/{rel}", "")
+        ind = 2
+    elem1 = set([triplet[ind] for triplet in tr1])
+    elem2 = set([triplet[ind] for triplet in tr2])
+    elements = elem1.intersection(elem2)
+    info = []
+    if elements:
+        for elem in elements:
+            label = find_label(elem, "")
+            if label:
+                info.append(label)
+                break
+    return info
+
+
+def find_connection(person1, person2):
+    rel_info = [("P161", "films", "backw"), ("P175", "songs", "backw"), ("P50", "books", "backw"),
+                ("P102", "party", "forw"), ("P54", "team", "forw")]
+    entities1 = [(entity_id, n) for n, entity_id in enumerate(person1)]
+    entities2 = [(entity_id, n) for n, entity_id in enumerate(person2)]
+    entity_pairs = list(itertools.product(entities1, entities2))
+    entity_pairs = sorted(entity_pairs, key=lambda x: sum([elem[1] for elem in x]))
+    entity_pairs = [[elem[0] for elem in entity_pair] for entity_pair in entity_pairs]
+    connection = ""
+    info = []
+    for entity1, entity2 in entity_pairs[:4]:
+        info = []
+        tr, cnt1 = document.search_triples(f"http://we/{entity1}", "http://wpd/P26", f"http://we/{entity2}")
+        tr, cnt2 = document.search_triples(f"http://we/{entity2}", "http://wpd/P26", f"http://we/{entity1}")
+        if cnt1 or cnt2:
+            connection = "spouse"
+            break
+        tr, cnt1 = document.search_triples(f"http://we/{entity1}", "http://wpd/P451", f"http://we/{entity2}")
+        tr, cnt2 = document.search_triples(f"http://we/{entity2}", "http://wpd/P451", f"http://we/{entity1}")
+        if cnt1 or cnt2:
+            connection = "partner"
+            break
+        for rel, conn, direction in rel_info:
+            info = find_intersection(entity1, entity2, rel, direction)
+            if info:
+                connection = conn
+                break
+        if info:
+            break
+    return connection, info
+
+
 def extract_info():
     art_genres = [["film", "Q201658", "P136", ["Q11424"], "actor", "P161"],
                   ["tv series", "Q15961987", "P136", ["Q5398426"], "tv actor", "P161"],
@@ -367,14 +505,19 @@ def find_top_triplets(entity, entity_substr):
                                   ("P2522", "victory"),
                                   ("P6364", "official color or colors"),
                                   ("P206", "located next to body of water"),
-                                  ("P840", "narrative location")
+                                  ("P840", "narrative location"),
+                                  ("P1830", "owner of"),
+                                  ("P102", "member of political party"),
+                                  ("P26", "spouse"),
+                                  ("P451", "partner")
                                   ]:
             objects = find_object(entity, rel_id, "")
-            objects_info = []
-            for obj in objects[:5]:
-                obj_label = find_label(obj, "")
-                if obj_label:
-                    objects_info.append((obj, obj_label))
+            objects_info = find_objects_info(objects)
+            if rel_label == "occupation":
+                is_sportsman = any(
+                    [{"Q2066131", "Q18536342"}.intersection(set(find_subclasses(occ))) for occ in objects])
+                if is_sportsman:
+                    objects_info.append(["Q2066131", "athlete"])
             if objects_info:
                 triplets[rel_label] = objects_info
         songs = find_object(entity, "P175", "backw")
@@ -415,8 +558,42 @@ def find_top_triplets(entity, entity_substr):
                         triplets["top teams"] = genres_dict["team"][sport]
 
         triplets["entity_label"] = entity_label
+        occupations = triplets.get("occupation", [])
+        if occupations:
+            occupation_titles = set([occ_title for occ_id, occ_title in occupations])
+            if {"actor", "film actor", "television actor"}.intersection(occupation_titles):
+                objects = find_object(entity, "P161", "backw")
+                objects_info = find_objects_info(objects)
+                if objects_info:
+                    triplets["films of actor"] = objects_info
+            if {"singer", "songwriter", "composer"}.intersection(occupation_titles):
+                objects = find_object(entity, "P175", "backw")
+                albums = [entity for entity in objects if "Q482994" in find_types(entity)]
+                songs = [entity for entity in objects if "Q134556" in find_types(entity)]
+                albums_info = find_objects_info(albums)
+                if albums_info:
+                    triplets["albums"] = albums_info
+                songs_info = find_objects_info(songs)
+                if songs_info:
+                    triplets["songs"] = songs_info
+        birth_date = find_object(entity, "P569", "")
+        if birth_date:
+            date_info = re.findall(r"([\d]{3,4})-([\d]{1,2})-([\d]{1,2})", birth_date[0])
+            if date_info:
+                year, month, day = date_info[0]
+                age = datetime.datetime.now().year - int(year)
+                triplets["age"] = age
         triplets_info[entity_substr] = triplets
     return triplets_info
+
+
+def filter_by_types(objects, types):
+    filtered_objects = []
+    for obj in objects:
+        found_types = find_types(obj)
+        if set(found_types).intersection(types):
+            filtered_objects.append(obj)
+    return filtered_objects
 
 
 def find_objects_by_category(what_to_find, category, subject):
@@ -427,13 +604,27 @@ def find_objects_by_category(what_to_find, category, subject):
         objects = find_object(subject, "P161", "forw")
     elif category == "tv series" and what_to_find == "episodes":
         objects = find_object(subject, "P179", "backw")
+    elif category == "singer" and what_to_find == "songs":
+        objects = find_object(subject, "P175", "backw")
+        objects = filter_by_types(objects, {"Q134556", "Q7366"})
+    elif category == "singer" and what_to_find == "albums":
+        objects = find_object(subject, "P175", "backw")
+        objects = filter_by_types(objects, {"Q482994", "Q208569"})
     else:
         pass
     objects_with_labels = find_objects_info(objects[:20])
     return objects_with_labels
 
 
-genres_dict, people_genres_dict = extract_info()
+if USE_CACHE:
+    with open("/root/.deeppavlov/downloads/wikidata/wikidata_cache.json", 'r') as fl:
+        wikidata_cache = json.load(fl)
+    top_people = wikidata_cache["top_people"]
+    genres_dict = wikidata_cache["genres_dict"]
+    people_genres_dict = wikidata_cache["people_genres_dict"]
+else:
+    top_people = find_top_people()
+    genres_dict, people_genres_dict = extract_info()
 
 manager = mp.Manager()
 
@@ -484,6 +675,27 @@ def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], w
                             entity_triplets_info = find_top_triplets(entity)
                             triplets_info = {**triplets_info, **entity_triplets_info}
             wiki_parser_output.append(triplets_info)
+        elif parser_info == "find_top_people":
+            top_people_list = []
+            try:
+                for occ in query:
+                    if occ in top_people:
+                        top_people_list.append(top_people[occ])
+            except Exception as e:
+                log.info("Wrong arguments are passed to wiki_parser")
+                sentry_sdk.capture_exception(e)
+                log.exception(e)
+            wiki_parser_output.append(top_people_list)
+        elif parser_info == "find_connection":
+            conn_info = []
+            try:
+                entities1, entities2 = query
+                conn_info = list(find_connection(entities1, entities2))
+            except Exception as e:
+                log.info("Wrong arguments are passed to wiki_parser")
+                sentry_sdk.capture_exception(e)
+                log.exception(e)
+            wiki_parser_output.append(conn_info)
         elif parser_info == "find_topic_info":
             objects = []
             try:

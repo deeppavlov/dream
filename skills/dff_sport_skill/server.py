@@ -71,8 +71,8 @@ def handler(requested_data, random_seed=None):
             logger.exception(exc)
             responses.append(("", 0.0, {}, {}, {}))
 
-        total_time = time.time() - st_time
-        logger.info(f"{SERVICE_NAME} exec time = {total_time:.3f}s")
+    total_time = time.time() - st_time
+    logger.info(f"{SERVICE_NAME} exec time = {total_time:.3f}s")
     return responses
 
 
