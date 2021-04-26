@@ -15,8 +15,7 @@ WHAT_IS_YOUR_NAME_RESPONSES = [
     "I'd love to get to know you a bit better before we chat! What is your name?",
 ]
 
-TOPIC_OFFERING_TEMPLATES = ["TOPIC1 and TOPIC2 are my favorite topics.",
-                            "Maybe, TOPIC1 or TOPIC2?",
+TOPIC_OFFERING_TEMPLATES = ["Maybe, TOPIC1 or TOPIC2?",
                             "Say, TOPIC1 or TOPIC2?",
                             "How about TOPIC1 or TOPIC2?"
                             ]
@@ -27,7 +26,7 @@ GREETING_QUESTIONS = {
                            "What would you like to chat about?",
                            "What do you wanna talk about?",
                            "What are we gonna talk about?",
-                           "What's on your mind?"
+                           # "What's on your mind?"
                            ],
     "what_are_your_interests": ["What are your interests?",
                                 "What do you like?",
