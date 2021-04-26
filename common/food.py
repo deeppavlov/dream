@@ -12,7 +12,7 @@ OFFER_TALK_ABOUT_FOOD = ["Would you like to chat about food?",
 
 FOOD_WORDS = r"(food|cook|cooking|\bbake\b|baking|cuisine|daily bread|meals|foodstuffs" \
     "|edibles|drink|pepperoni|pizza|strawberries|chocolate|coffee|\beat\b|\bate\b|\beating\b" \
-    "|\beats\b|dinner|breakfast|\bpasta\b|burger|cheese|tasty|waffles)"
+    "|\beats\b|dinner|breakfast|\bpasta\b|burger|cheese|tasty|waffles|banana|\bfries\b)"
 
 FOOD_UTTERANCES = r"(do you know .* most (favorite|favourite) food" \
     "|.*what is your (favorite|favourite) food" \
