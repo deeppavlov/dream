@@ -89,7 +89,8 @@ topic_skill_types = {"Q36180",  # writer
                      "Q4498974",  # ice hockey team
                      "Q570116",  # tourist attraction
                      "Q11424",  # film
-                     "Q24856"  # film series
+                     "Q24856",  # film series
+                     "Q82955"  # politician
                      }
 
 
