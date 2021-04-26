@@ -256,7 +256,9 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
 
     _is_switch_topic_request = is_switch_topic(annotated_uttr)
     _is_force_intent = any([_intent in all_user_intents for _intent in FORCE_INTENTS_IC.keys()])
-    _is_require_action_intent = any([_intent in all_user_intents for _intent in REQUIRE_ACTION_INTENTS.keys()])
+    _is_require_action_intent = is_any_question_sentence_in_utterance(
+        {"text": annotated_uttr.get("annotations", {}).get("sentseg", {}).get("punct_sent", annotated_uttr["text"])})
+    # _is_require_action_intent = any([_intent in all_user_intents for _intent in REQUIRE_ACTION_INTENTS.keys()])
     _force_intents_detected = [_intent for _intent in FORCE_INTENTS_IC.keys() if _intent in all_user_intents]
     # _require_action_intents_detected = [_intent for _intent in REQUIRE_ACTION_INTENTS.keys()
     #                                     if _intent in all_user_intents]
@@ -366,25 +368,28 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
                 _is_active_skill, _can_continue, _same_topic_entity, _is_dialog_abandon,
                 _is_required_da=False)
 
-        # elif _is_require_action_intent:
-        #     # =====user intent requires particular action=====
-        #
-        #     CASE = "User intent requires action."
-        #     _is_grounding_reqda = skill_name == "grounding_skill" and cand_uttr.get(
-        #         "type", "") == "universal_response"
-        #
-        #     if set(all_cand_intents).intersection(set(_required_actions)) or _is_grounding_reqda:
-        #         # -----one of the can intent is in intents required by user-----
-        #         categorized_hyps, categorized_prompts = categorize_candidate(
-        #             cand_id, skill_name, categorized_hyps, categorized_prompts, _is_just_prompt,
-        #             _is_active_skill, _can_continue, _same_topic_entity, _is_dialog_abandon,
-        #             _is_required_da=True)
-        #     else:
-        #         # -----NO required dialog acts-----
-        #         categorized_hyps, categorized_prompts = categorize_candidate(
-        #             cand_id, skill_name, categorized_hyps, categorized_prompts, _is_just_prompt,
-        #             _is_active_skill, _can_continue, _same_topic_entity, _is_dialog_abandon,
-        #             _is_required_da=False)
+        elif _is_require_action_intent:
+            # =====user intent requires particular action=====
+
+            CASE = "User intent requires action. USER UTTERANCE CONTAINS QUESTION."
+            # _is_grounding_reqda = skill_name == "grounding_skill" and cand_uttr.get(
+            #     "type", "") == "universal_response"
+            _is_active_skill = False  # no priority to active skill
+            _can_continue = CAN_NOT_CONTINUE  # no priority to scripted skills
+
+            # if set(all_cand_intents).intersection(set(_required_actions)) or _is_grounding_reqda:
+            if False:
+                # -----one of the can intent is in intents required by user-----
+                categorized_hyps, categorized_prompts = categorize_candidate(
+                    cand_id, skill_name, categorized_hyps, categorized_prompts, _is_just_prompt,
+                    _is_active_skill, _can_continue, _same_topic_entity, _is_dialog_abandon,
+                    _is_required_da=True)
+            else:
+                # -----NO required dialog acts-----
+                categorized_hyps, categorized_prompts = categorize_candidate(
+                    cand_id, skill_name, categorized_hyps, categorized_prompts, _is_just_prompt,
+                    _is_active_skill, _can_continue, _same_topic_entity, _is_dialog_abandon,
+                    _is_required_da=False)
 
         else:
             # =====user intent does NOT require particular action=====
