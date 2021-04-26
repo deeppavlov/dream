@@ -236,6 +236,13 @@ services:
       - "./common:/src/common"
     ports:
       - 8066:8066
+  news-api-annotator:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/news_api:/src"
+      - "./common:/src/common"
+    ports:
+      - 8112:8112
   greeting-skill:
     env_file: [.env.dev]
     volumes:

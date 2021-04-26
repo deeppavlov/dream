@@ -401,6 +401,23 @@
                     "annotators.spelling_preprocessing",
                     "annotators.cobot_nounphrases"
                 ]
+            },
+            "news_api_annotator": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://news-api-annotator:8112/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg",
+                    "annotators.ner",
+                    "annotators.cobot_entities",
+                    "annotators.cobot_nounphrases"
+                ],
+                "state_manager_method": "add_annotation"
             }
         },
         "skill_selectors": {

@@ -5,8 +5,7 @@ import requests
 from os import getenv
 
 import sentry_sdk
-
-from common.utils import is_yes
+from common.utils import is_yes, get_entities
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -61,17 +60,25 @@ def was_offer_news_about_topic(uttr: str):
     return False
 
 
-def get_news_about_topic(topic: str, NEWS_API_SKILL_URL: str):
+def get_news_about_topic(topic: str, NEWS_API_ANNOTATOR_URL: str, discussed_news=None):
     """
     Function to get news output from news-api-skill.
     ```
     import os
 
-    NEWS_API_SKILL_URL = os.environ.get('NEWS_API_SKILL_URL')
-    result = get_news_about_topic("politics", NEWS_API_SKILL_URL)
+    NEWS_API_ANNOTATOR_URL = os.environ.get('NEWS_API_ANNOTATOR_URL')
+    result = get_news_about_topic("politics", NEWS_API_ANNOTATOR_URL)
     result = [text, conf, human_attributes, bot_attributes, attributes]
     ```
         attributes contains `curr_news` dictionary with info about news
+
+    Attributes:
+        - topic: string topic/entity about which one wants to get news
+        - NEWS_API_ANNOTATOR_URL: news api skill url
+        - discussed_news: list of string news urls which were given to user (not to repeat)
+
+    Returns:
+        - dictionary with news, as curr_news about in example
     """
     # 'curr_news': {
     # 'content': "MORLEY -- Braelyn Berry will be doing her third sport with the track team in her junior season.\n
@@ -84,10 +91,15 @@ def get_news_about_topic(topic: str, NEWS_API_SKILL_URL: str):
     # 'title': 'Morley Stanwood multi-sport athlete anxious for spring season',
     # 'url': 'https://www.bigrapidsnews.com/sports/article/Morley-Stanwood-multi-sport-athlete-anxious-for-16096053.php'
     # },
+    if discussed_news is None:
+        discussed_news = []
+
+    human_attr = {"news_api_skill": {"discussed_news": discussed_news}}
+    result_news = {}
     dialogs = {"dialogs": [
         {"utterances": [],
          "bot_utterances": [],
-         "human": {"attributes": {}},
+         "human": {"attributes": human_attr},
          "human_utterances": [
             {
                 "text": f"news about {topic}",
@@ -105,11 +117,40 @@ def get_news_about_topic(topic: str, NEWS_API_SKILL_URL: str):
         }
     ]}
     try:
-        result = requests.post(NEWS_API_SKILL_URL, json=dialogs, timeout=1.5)
+        result = requests.post(NEWS_API_ANNOTATOR_URL, json=dialogs, timeout=1)
         result = result.json()[0]
+        for entity_news_dict in result:
+            if entity_news_dict and entity_news_dict["entity"] == topic:
+                result_news = entity_news_dict["news"]
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
-        result = []
 
-    return result
+    return result_news
+
+
+BANNED_UNIGRAMS = ["I", 'i', "news", "something", "anything", "me"]
+
+
+def extract_topics(curr_uttr):
+    """Extract entities as topics for news request. If no entities found, extract nounphrases.
+
+    Args:
+        curr_uttr: current human utterance dictionary
+
+    Returns:
+        list of mentioned entities/nounphrases
+    """
+    entities = get_entities(curr_uttr, only_named=True, with_labels=False)
+    entities = [ent.lower() for ent in entities]
+    entities = [ent for ent in entities
+                if not (ent == "alexa" and curr_uttr["text"].lower()[:5] == "alexa") and "news" not in ent]
+    if len(entities) == 0:
+        for ent in get_entities(curr_uttr, only_named=False, with_labels=False):
+            if ent.lower() not in BANNED_UNIGRAMS and "news" not in ent.lower():
+                if ent in entities:
+                    pass
+                else:
+                    entities.append(ent)
+    entities = [ent for ent in entities if len(ent) > 0]
+    return entities

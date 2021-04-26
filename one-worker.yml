@@ -47,6 +47,8 @@ services:
     command: bash server_run.sh "gunicorn --workers=1 server:app -b 0.0.0.0:8068"
   news-api-skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8066 -t 15
+  news-api-annotator:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8112 -t 15
   greeting-skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8070 --timeout=60 --preload
   factoid-qa:
