@@ -26,9 +26,17 @@
       "next_step":[""],
       "link": ""
     },
+    "loneliness_i_feel":{
+      "answers":[
+        "I feel your pain and I will try to help you feel less lonely through my chat. What do you wanna talk about?",
+        "I am always with you, whenever you turn me on. What do you wanna talk about?"
+      ],
+      "next_step":[""],
+      "link": ""
+    },
     "sadness_i_feel":{
       "answers":[
-        "I feel worried about you. I can cheer you up talking to you. What do you wanna talk about?",
+        "Problems are like chocolate, you're best to chew them up and digest them as quickly as possible. I can cheer you up talking to you. What do you wanna talk about?",
         "I am sorry to hear that! I can cheer you up talking to you. What do you wanna talk about?"
       ],
       "next_step":[""],
