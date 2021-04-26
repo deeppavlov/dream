@@ -21,6 +21,7 @@ NEGATIVE_EMOTION = 'negative_emotion'
 
 HOW_DO_YOU_FEEL = 'How do you feel?'
 
+LONELINESS_TEMPLATE = r"(i am alone|lonely|loneliness)"
 SAD_TEMPLATE = r"(sad|horrible|depressed|awful|dire|pretty bad|pain|^bad$|^say$)"
 JOKE_REQUEST_COMPILED_PATTERN = re.compile(r"(tell me .*joke{0,1}|tell a joke|tell joke)", re.IGNORECASE)
 TALK_ABOUT_EMO_TEMPLATE = re.compile(r'talk about emotion', re.IGNORECASE)
@@ -32,6 +33,10 @@ def talk_about_emotion(uttr):
 
 def is_sad(uttr):
     return re.search(SAD_TEMPLATE, uttr)
+
+
+def is_alone(uttr):
+    return re.search(LONELINESS_TEMPLATE, uttr)
 
 
 def is_joke_requested(uttr):
@@ -69,11 +74,13 @@ def if_turn_on_emotion(user_utt, bot_uttr):
     joke_request_detected = is_joke_requested(user_utt.get("text", ""))
     talk_about_regexp = talk_about_emotion(user_utt.get("text", ""))
     sadness_detected_by_regexp = is_sad(user_utt.get("text", ""))
+    loneliness_detected_by_regexp = is_alone(user_utt.get("text", ""))
     detected_from_feel_answer = emotion_from_feel_answer(bot_uttr.get("text", ""),
                                                          user_utt.get("text", ""))
     should_run_emotion = any([emo_found_emotion,
                               joke_request_detected,
                               sadness_detected_by_regexp,
+                              loneliness_detected_by_regexp,
                               talk_about_regexp,
                               detected_from_feel_answer,
                               how_are_you]) and not_strange_emotion_prob

@@ -4,7 +4,7 @@ import logging
 from os import getenv
 from common.constants import MUST_CONTINUE, CAN_CONTINUE_SCENARIO
 from common.link import link_to
-from common.emotion import is_joke_requested, is_sad, skill_trigger_phrases, talk_about_emotion
+from common.emotion import is_joke_requested, is_sad, is_alone, skill_trigger_phrases, talk_about_emotion
 from common.universal_templates import book_movie_music_found
 from common.utils import get_emotions
 from collections import defaultdict
@@ -83,6 +83,8 @@ class EmotionSkillScenario:
         state = emotion_skill_attributes.get("state", "")
         if is_joke_requested(user_phrase):
             state = "joke_requested"
+        elif is_alone(user_phrase):
+            state = "loneliness_i_feel"
         prev_jokes_advices = emotion_skill_attributes.get("prev_jokes_advices", [])
         is_yes = intent.get("yes", {}).get("detected", 0)
         is_no = intent.get("no", {}).get("detected", 0)
