@@ -210,8 +210,9 @@ def get_celebrity(vars, exclude_types=False, use_only_last_utt=False):
         "Q947873",  # television presenter
         "Q2405480",  # comedian
         "Q211236",  # celebrity
-        "Q177220",
-    ]  # singer
+        "Q177220",  # singer
+        "Q82955"  # politician
+    ]
     actor_profession_list = raw_profession_list[:4]
     mentioned_otherjobs = shared_memory.get("mentioned_otherjobs", [])
     if exclude_types:
@@ -253,6 +254,8 @@ def propose_celebrity_response(vars):
         state_utils.save_to_shared_memory(vars, asked_celebrities=asked_celebrities)
         if celebrity and celebrity_name:
             answer = f"{celebrity} is an amazing {celebrity_name} ! May I tell you something about this person?"
+            if celebrity_name == 'politician':
+                answer = answer.replace('an amazing', 'a')  # We are politically neutral
             return answer
         else:
             msg = "No return value in get_celebrity when it should"
