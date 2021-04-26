@@ -52,6 +52,7 @@ class State(Enum):
     USR_CLOSED_ANSWER = auto()
     SYS_LINK_TO_BY_ENITY = auto()
     USR_LINK_TO_BY_ENITY = auto()
+    SYS_OFFERED_TOPICS_DECLINED = auto()
     #
     SYS_ERR = auto()
     USR_ERR = auto()
@@ -67,7 +68,14 @@ HIGH_CONFIDENCE = 0.98
 # %%
 
 
-def compose_topic_offering(excluded_skills=None):
+def is_passive_user(user_utterances):
+    uttrs_lens = [len(uttr.split()) <= 2 for uttr in user_utterances]
+    if all(uttrs_lens):
+        return True
+    return False
+
+
+def compose_topic_offering(vars, excluded_skills=None):
     excluded_skills = [] if excluded_skills is None else excluded_skills
     ask_about_topic = random.choice(common_greeting.GREETING_QUESTIONS["what_to_talk_about"])
     offer_topics_template = random.choice(common_greeting.TOPIC_OFFERING_TEMPLATES)
@@ -80,7 +88,25 @@ def compose_topic_offering(excluded_skills=None):
     offer_topics = offer_topics_template.replace("TOPIC1", topics[0]).replace("TOPIC2", topics[1])
 
     response = f"{ask_about_topic} {offer_topics}"
+    state_utils.save_to_shared_memory(vars, offered_topics=list(topics))
     return response
+
+
+def offered_topic_choice_declined_request(ngrams, vars):
+    # SYS_OFFERED_TOPICS_DECLINED
+    flag = True
+    prev_bot_uttr = state_utils.get_last_bot_utterance(vars)["text"]
+    # asked what to talk about
+    what_to_talk_about_offered = any([resp.lower() in prev_bot_uttr.lower()
+                                      for resp in common_greeting.GREETING_QUESTIONS["what_to_talk_about"]])
+    # offered choice between two topics
+    shared_memory = state_utils.get_shared_memory(vars)
+    offered_topics = shared_memory.get("offered_topics", [])
+    # and user declined
+    declined = condition_utils.is_no_vars(vars)
+    if offered_topics and what_to_talk_about_offered and declined:
+        return True
+    return flag
 
 
 ##################################################################################################################
@@ -159,7 +185,10 @@ def hello_response(vars):
         else:
             state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
             state_utils.set_can_continue(vars, MUST_CONTINUE)
-        which_start = random.choice(["how_are_you", "what_is_your_name", "what_to_talk_about"])
+        which_start = random.choice(["how_are_you",
+                                     # "what_is_your_name",
+                                     # "what_to_talk_about"
+                                     ])
         if which_start == "how_are_you":
             after_hello_resp = random.choice(common_greeting.HOW_ARE_YOU_RESPONSES)
         elif which_start == "what_is_your_name":
@@ -167,7 +196,8 @@ def hello_response(vars):
         else:
             # what_to_talk_about
             greeting_step_id = 0
-            after_hello_resp = compose_topic_offering(excluded_skills=[])
+            disliked_skills = state_utils.get_disliked_skills(vars)
+            after_hello_resp = compose_topic_offering(vars, excluded_skills=disliked_skills)
             # set_confidence
             set_confidence_by_universal_policy(vars)
             state_utils.save_to_shared_memory(vars, greeting_step_id=greeting_step_id + 1)
@@ -268,7 +298,14 @@ def how_human_is_doing_response(vars):
             user_mood_acknowledgement = "Okay."
 
         greeting_step_id = 0
-        offer_topic_choose = compose_topic_offering(excluded_skills=[])
+        disliked_skills = state_utils.get_disliked_skills(vars)
+        if is_passive_user([state_utils.get_last_human_utterance(vars)["text"]]):
+            # what do you want to talk about? movies or books?
+            offer_topic_choose = compose_topic_offering(vars, excluded_skills=disliked_skills)
+        else:
+            # what do you want to talk about?
+            offer_topic_choose = random.choice(common_greeting.GREETING_QUESTIONS["what_to_talk_about"])
+
         state_utils.save_to_shared_memory(vars, greeting_step_id=greeting_step_id + 1)
 
         return f"{user_mood_acknowledgement} {offer_topic_choose}"
@@ -278,6 +315,22 @@ def how_human_is_doing_response(vars):
         sentry_sdk.capture_exception(exc)
         return error_response(vars)
 
+
+def offered_topic_choice_declined_response(vars):
+    # USR_STD_GREETING
+    try:
+        state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+        greeting_step_id = 0
+        # what do you want to talk about?
+        offer_topic_choose = random.choice(common_greeting.GREETING_QUESTIONS["what_to_talk_about"])
+        state_utils.save_to_shared_memory(vars, greeting_step_id=greeting_step_id + 1)
+
+        return f"Okay. {offer_topic_choose}"
+
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        return error_response(vars)
 
 ##################################################################################################################
 # bot shares list activities
@@ -302,7 +355,8 @@ def share_list_activities_response(vars):
         state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
         state_utils.set_can_continue(vars)
         greeting_step_id = 0
-        offer_topic_choose = compose_topic_offering(excluded_skills=[])
+        disliked_skills = state_utils.get_disliked_skills(vars)
+        offer_topic_choose = compose_topic_offering(vars, excluded_skills=disliked_skills)
         state_utils.save_to_shared_memory(vars, greeting_step_id=greeting_step_id + 1)
 
         return f"{common_greeting.LIST_ACTIVITIES_RESPONSE} {offer_topic_choose}"
@@ -358,7 +412,8 @@ def std_greeting_response(vars):
             prev_active_skills = [uttr.get("active_skill", "") for uttr in vars["agent"]["dialog"]["bot_utterances"]][
                 -5:
             ]
-            body = compose_topic_offering(excluded_skills=prev_active_skills)
+            disliked_skills = state_utils.get_disliked_skills(vars)
+            body = compose_topic_offering(vars, excluded_skills=prev_active_skills + disliked_skills)
         else:
             body = random.choice(common_greeting.GREETING_QUESTIONS[GREETING_STEPS[greeting_step_id]])
 
@@ -514,6 +569,7 @@ simplified_dialogflow.add_system_transition(State.SYS_STD_GREETING, State.USR_ST
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_STD_GREETING,
     {
+        State.SYS_OFFERED_TOPICS_DECLINED: offered_topic_choice_declined_request,
         State.SYS_CLOSED_ANSWER: new_entities_is_needed_for_request,
         State.SYS_LINK_TO_BY_ENITY: link_to_by_enity_request,
         (scopes.WEEKEND, weekend_flow.State.USR_START): weekend_flow.std_weekend_request,
@@ -523,6 +579,13 @@ simplified_dialogflow.add_user_serial_transitions(
 
 simplified_dialogflow.set_error_successor(State.USR_STD_GREETING, State.SYS_ERR)
 
+
+##################################################################################################################
+#  SYS_OFFERED_TOPICS_DECLINED
+
+simplified_dialogflow.add_system_transition(
+    State.SYS_OFFERED_TOPICS_DECLINED, State.USR_STD_GREETING, offered_topic_choice_declined_response
+)
 
 ##################################################################################################################
 # #  SYS_NEW_ENTITIES_IS_NEEDED_FOR
