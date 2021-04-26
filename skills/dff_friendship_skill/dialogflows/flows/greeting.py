@@ -68,13 +68,6 @@ HIGH_CONFIDENCE = 0.98
 # %%
 
 
-def is_passive_user(user_utterances):
-    uttrs_lens = [len(uttr.split()) <= 2 for uttr in user_utterances]
-    if all(uttrs_lens):
-        return True
-    return False
-
-
 def compose_topic_offering(vars, excluded_skills=None):
     excluded_skills = [] if excluded_skills is None else excluded_skills
     ask_about_topic = random.choice(common_greeting.GREETING_QUESTIONS["what_to_talk_about"])
@@ -299,7 +292,7 @@ def how_human_is_doing_response(vars):
 
         greeting_step_id = 0
         disliked_skills = state_utils.get_disliked_skills(vars)
-        if is_passive_user([state_utils.get_last_human_utterance(vars)["text"]]):
+        if condition_utils.is_passive_user(vars, history_len=2):
             # what do you want to talk about? movies or books?
             offer_topic_choose = compose_topic_offering(vars, excluded_skills=disliked_skills)
         else:
