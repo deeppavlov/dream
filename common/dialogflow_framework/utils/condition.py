@@ -37,7 +37,8 @@ def is_question(vars):
 
 def is_lets_chat_about_topic_human_initiative(vars):
     flag = universal_templates.if_chat_about_particular_topic(
-        state_utils.get_last_human_utterance(vars), state_utils.get_last_bot_utterance(vars))
+        state_utils.get_last_human_utterance(vars), state_utils.get_last_bot_utterance(vars)
+    )
     logging.debug(f"is_lets_chat_about_topic_human_initiative = {flag}")
     return flag
 
@@ -115,8 +116,7 @@ def is_first_our_response(vars):
 
 
 def is_no_human_abandon(vars):
-    """Is dialog breakdown in human utterance or no. Uses MIDAS hold/abandon classes.
-    """
+    """Is dialog breakdown in human utterance or no. Uses MIDAS hold/abandon classes."""
     midas_classes = common_utils.get_intents(state_utils.get_last_human_utterance(vars), which="midas")
     if "abandon" not in midas_classes:
         return True
@@ -161,3 +161,16 @@ def is_no_vars(vars):
     flag = True
     flag = flag and common_utils.is_no(state_utils.get_last_human_utterance(vars))
     return flag
+
+
+def is_passive_user(vars, history_len=2):
+    """Check history_len last human utterances on the number of tokens.
+    If number of tokens in ALL history_len uterances is <= 3 tokens, then consider user passive - return True.
+    """
+    user_utterances = vars["agent"]["dialog"]["human_utterances"][-history_len:]
+    user_utterances = [utt["text"] for utt in user_utterances]
+
+    uttrs_lens = [len(uttr.split()) <= 3 for uttr in user_utterances]
+    if all(uttrs_lens):
+        return True
+    return False
