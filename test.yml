@@ -126,6 +126,8 @@ services:
     env_file: [ .env.dev ]
   news-api-skill:
     env_file: [ .env.dev ]
+  news-api-annotator:
+    env_file: [ .env.dev ]
   greeting-skill:
     env_file: [ .env.dev ]
   factoid-qa:
