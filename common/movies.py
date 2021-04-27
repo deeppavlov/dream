@@ -43,6 +43,7 @@ ABOUT_MOVIE_TITLES_PHRASES = [
 ]
 
 WHAT_OTHER_MOVIE_TO_DISCUSS = "What other movie you'd like to discuss?"
+CLARIFY_WHAT_MOVIE_TO_DISCUSS = "Can you say again what movie you'd like to discuss?"
 
 
 def skill_trigger_phrases():
