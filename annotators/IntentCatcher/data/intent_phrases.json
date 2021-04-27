@@ -252,7 +252,7 @@
         "(alexa ){0,1}why are you being ((an idiot)|(a dumbass)|(a moron))",
         "how about you quit being ((a moron)|(an idiot)|(a dumbass))",
         "(alexa ){0,1}you ((fucking)|(stupid)) ((dumbass)|(idiot))",
-        "(alexa ){0,1}you're ((an idiot)|(a dumbass)|(a moron))",
+        "(alexa ){0,1}((you are)|(you're)) ((an idiot)|(a dumbass)|(a moron)|(so dumb)|(dumb)|(stupid)|(the most dumb))",
         "(alexa ){0,1}that's a ((stupid)|(dumb)|(boring)) question",
         "(alexa ){0,1}it's not much fun to talk to you",
         "(alexa ){0,1}stop being ((dumb)|(stupid)|(boring)|(an idiot)|(dumbass))",

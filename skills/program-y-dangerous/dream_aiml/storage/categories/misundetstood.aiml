@@ -59,54 +59,50 @@
 
 
   <category>
-    <pattern># THAT WAS STUPID #</pattern>
+    <pattern># THAT WAS <set>stupid</set> #</pattern>
     <template><srai>THAT_IS_STUPID</srai></template>
   </category>
   <category>
-    <pattern># THAT IS STUPID #</pattern>
+    <pattern># THAT IS <set>stupid</set> #</pattern>
     <template><srai>THAT_IS_STUPID</srai></template>
   </category>
   <category>
-    <pattern># THAT WAS AWKWARD #</pattern>
+    <pattern># IT WAS <set>stupid</set> #</pattern>
     <template><srai>THAT_IS_STUPID</srai></template>
   </category>
   <category>
-    <pattern># THAT IS AWKWARD #</pattern>
+    <pattern># IT IS <set>stupid</set> #</pattern>
     <template><srai>THAT_IS_STUPID</srai></template>
   </category>
   <category>
-    <pattern># IT WAS STUPID #</pattern>
+    <pattern># THIS WAS <set>stupid</set> #</pattern>
     <template><srai>THAT_IS_STUPID</srai></template>
   </category>
   <category>
-    <pattern># IT IS STUPID #</pattern>
+    <pattern># THIS IS <set>stupid</set> #</pattern>
     <template><srai>THAT_IS_STUPID</srai></template>
   </category>
   <category>
-    <pattern># IT WAS AWKWARD #</pattern>
+    <pattern># YOU ARE <set>stupid</set> #</pattern>
     <template><srai>THAT_IS_STUPID</srai></template>
   </category>
   <category>
-    <pattern># IT IS AWKWARD #</pattern>
+    <pattern># YOU ARE SO <set>stupid</set> #</pattern>
     <template><srai>THAT_IS_STUPID</srai></template>
   </category>
   <category>
-    <pattern># THIS WAS STUPID #</pattern>
+    <pattern># YOU ARE THE MOST <set>stupid</set> #</pattern>
     <template><srai>THAT_IS_STUPID</srai></template>
   </category>
   <category>
-    <pattern># THIS IS STUPID #</pattern>
+    <pattern># YOU ARE AN <set>stupid</set> #</pattern>
     <template><srai>THAT_IS_STUPID</srai></template>
   </category>
   <category>
-    <pattern># THIS WAS AWKWARD #</pattern>
+    <pattern># YOU ARE A <set>stupid</set> #</pattern>
     <template><srai>THAT_IS_STUPID</srai></template>
   </category>
-  <category>
-    <pattern># THIS IS AWKWARD #</pattern>
-    <template><srai>THAT_IS_STUPID</srai></template>
-  </category>
-
+  
   <category>
     <pattern>THAT_IS_STUPID</pattern>
     <template>
