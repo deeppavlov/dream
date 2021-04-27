@@ -7,7 +7,7 @@ from os import getenv
 from common.constants import MUST_CONTINUE
 from common.greeting import GREETING_QUESTIONS
 from common.link import skills_phrases_map
-from common.grounding import what_we_talk_about
+from common.grounding import what_we_talk_about, are_we_recorded
 from common.universal_templates import is_any_question_sentence_in_utterance
 from common.utils import get_topics, get_intents, get_entities, get_toxic, is_no
 from utils import MIDAS_INTENT_ACKNOWLEDGMENTS, get_midas_intent_acknowledgement, reformulate_question_to_statement, \
@@ -24,6 +24,11 @@ UNIVERSAL_RESPONSE_LOW_CONFIDENCE = 0.6
 DONTKNOW_CONF = 0.5
 ACKNOWLEDGEMENT_CONF = 0.5
 DONTKNOW_PHRASE = "Seems like I have no idea what we are talking about."
+PRIVACY_REPLY = "I am designed to protect your privacy, so I only listen after your device " \
+                "detects the wake word or if the action button is pushed. On Echo " \
+                "devices, you will always know when your request is being processed because " \
+                "a blue light indicator will appear or an audio tone will sound. You can " \
+                "learn more by visiting amazon.com/alexaprivacy."
 
 INTENTS_BY_POPULARITY = list(INTENT_DICT.keys())[::-1]
 DA_TOPICS_BY_POPULARITY = list(DA_TOPIC_DICT.keys())[::-1]
@@ -33,6 +38,18 @@ LINKTO_QUESTIONS_LOWERCASED = [question.lower() for set_of_quests in skills_phra
 
 with open("universal_intent_responses.json", "r") as f:
     UNIVERSAL_INTENT_RESPONSES = json.load(f)
+
+
+def are_we_recorded_response(dialog):
+    attr = {}
+    human_attr = {}
+    bot_attr = {}
+    if are_we_recorded(dialog['human_utterances'][-1]):
+        reply, confidence = PRIVACY_REPLY, 1
+        attr = {"can_continue": MUST_CONTINUE}
+    else:
+        reply, confidence = '', 0
+    return reply, confidence, human_attr, bot_attr, attr
 
 
 def collect_topics_entities_intents(dialog):
@@ -224,6 +241,14 @@ class GroundingSkillScenario:
                 is_toxic = toxic_result or blacklist_result['profanity'] or blacklist_result['inappropriate']
             else:
                 is_toxic = False
+            reply, confidence, human_attr, bot_attr, attr = are_we_recorded_response(dialog)
+            if reply and confidence:
+                curr_responses += [reply]
+                curr_confidences += [confidence]
+                curr_human_attrs += [human_attr]
+                curr_bot_attrs += [bot_attr]
+                curr_attrs += [attr]
+                logger.info(f'Grounding skill are_we_recorded: {reply}')
 
             reply, confidence, human_attr, bot_attr, attr = what_do_you_mean_response(dialog)
             if reply and confidence and not is_toxic:
