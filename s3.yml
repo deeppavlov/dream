@@ -55,4 +55,8 @@ services:
     build:
       args:
         DATABASE_URL: http://team-dream-storage.s3.amazonaws.com/alexaprize_data/database_most_popular_main_info.json
+  dff-wiki-skill:
+    build:
+      args:
+        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
 version: "3.7"

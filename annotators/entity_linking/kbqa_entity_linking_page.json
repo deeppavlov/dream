@@ -33,9 +33,15 @@
         "in": ["entity_ids"],
         "out": ["first_par"],
         "wiki_first_par_filename": "{DOWNLOADS_PATH}/wikidata_eng/q_to_par_en.pickle"
+      },
+      {
+        "class_name": "q_to_page:QToPage",
+        "in": ["entity_ids"],
+        "out": ["entity_pages_titles"],
+        "q_to_page_filename": "{DOWNLOADS_PATH}/wikidata_eng/q_to_page_en.pickle"
       }
     ],
-    "out": ["entity_ids", "confidences", "first_par"]
+    "out": ["entity_ids", "confidences", "first_par", "entity_pages_titles"]
   },
   "metadata": {
     "variables": {
@@ -65,6 +71,10 @@
       },
       {
         "url": "http://files.deeppavlov.ai/kbqa/wikidata/q_to_par_en.pickle",
+        "subdir": "{DOWNLOADS_PATH}/wikidata_eng"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/kbqa/wikidata/q_to_page_en.pickle",
         "subdir": "{DOWNLOADS_PATH}/wikidata_eng"
       }
     ]
