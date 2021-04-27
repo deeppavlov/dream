@@ -454,7 +454,7 @@ class MovieSkillTemplates:
                     response = "I adore all Star Wars movies. The best episode is the fifth one, " \
                                "The Empire Strikes Back. Yoda teachings are so cool! " \
                                "What is your favorite movie?"
-                    confidence = self.person_highest_confidence
+                    confidence = self.person_highest_confidence - 0.01
                     result = [["0080684", "movie", "very_positive"]]
                 # favorite tv show
                 if (re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.FAVORITE_PATTERN} {self.TVSHOW_PATTERN}",
