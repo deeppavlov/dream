@@ -71,7 +71,7 @@ HOW_BOT_IS_DOING_RESPONSES = [
     "Spectacular, by all reports!",
     "I'm living the dream.",
     "I'm so happy I can hardly stand myself.",
-    "Amazing.... and I've got written testimonials.",
+    # "Amazing.... and I've got written testimonials.",
     "Just another day in Paradise. Thanks for asking.",
     "Not too bad for an AI living inside your Echo!",
     "Very well, thank you.",
