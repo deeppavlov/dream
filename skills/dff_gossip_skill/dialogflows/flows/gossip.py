@@ -25,7 +25,8 @@ from dialogflows.flows import utils
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
-NEWS_API_SKILL_URL = os.environ.get("NEWS_API_SKILL_URL")
+NEWS_API_ANNOTATOR_URL = os.environ.get("NEWS_API_ANNOTATOR_URL")
+assert NEWS_API_ANNOTATOR_URL
 
 logger = logging.getLogger(__name__)
 
@@ -255,10 +256,9 @@ def get_news_for_topic(vars, cobot_topic):
 
     if people:
         person = random.choice(people)
-        news = general_common_news.get_news_about_topic(person, NEWS_API_SKILL_URL)
-        logger.debug(f"news = {news}")
+        curr_news = general_common_news.get_news_about_topic(person, NEWS_API_ANNOTATOR_URL)
+        logger.debug(f"news = {curr_news}")
 
-        curr_news = len(news) > 4 and isinstance(news[4], dict) and news[4] and news[4].get("curr_news", {})
         if curr_news and "content" in curr_news and "title" in curr_news:
             content = curr_news["content"].split("[")[0]
             title = curr_news["title"]
