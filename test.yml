@@ -192,4 +192,6 @@ services:
     env_file: [ .env.dev ]
     environment:
       - CUDA_VISIBLE_DEVICES=5
+  dff-wiki-skill:
+    env_file: [ .env.dev ]
 version: '3.7'

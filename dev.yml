@@ -467,4 +467,13 @@ services:
       - "./common:/src/common"
     ports:
       - 8105:8105
+  dff-wiki-skill:
+    env_file: [ .env.dev ]
+    volumes:
+      - "./skills/dff_wiki_skill:/src"
+      - "./common:/src/common"
+      - "./annotators/CoBotQA:/src/CoBotQA"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8111:8111
 version: "3.7"

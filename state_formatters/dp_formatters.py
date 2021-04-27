@@ -614,7 +614,7 @@ def intent_responder_formatter_dialog(dialog: Dict):
         for intent in called:
             called_intents[intent] = True
     dialog["called_intents"] = called_intents
-    dialog["utterances"] = dialog["utterances"][-(utils.LAST_N_TURNS * 2 + 1) :]
+    dialog["utterances"] = dialog["utterances"][-(utils.LAST_N_TURNS * 2 + 1):]
     for utt in dialog["utterances"]:
         if "sentseg" in utt["annotations"]:
             utt["text"] = utt["annotations"]["sentseg"]["punct_sent"]
@@ -713,6 +713,11 @@ def dff_food_skill_formatter(dialog: Dict) -> List[Dict]:
 
 def dff_bot_persona_skill_formatter(dialog: Dict) -> List[Dict]:
     service_name = f"dff_bot_persona_skill"
+    return utils.dff_formatter(dialog, service_name)
+
+
+def dff_wiki_skill_formatter(dialog: Dict) -> List[Dict]:
+    service_name = f"dff_wiki_skill"
     return utils.dff_formatter(dialog, service_name)
 
 

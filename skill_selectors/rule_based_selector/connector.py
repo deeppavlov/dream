@@ -13,6 +13,7 @@ from common.skills_turn_on_topics_and_patterns import turn_on_skills
 from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
 from common.utils import high_priority_intents, low_priority_intents, get_topics, get_intents, get_named_locations
 from common.weather import if_special_weather_turn_on
+from common.wiki_skill import if_switch_wiki_skill
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -73,6 +74,7 @@ class RuleBasedSkillSelectorConnector:
             if_choose_topic_detected = if_choose_topic(user_uttr, bot_uttr)
             if_lets_chat_about_particular_topic_detected = if_chat_about_particular_topic(user_uttr, bot_uttr)
             linked_to_skill_names = get_all_linked_to_skills(bot_uttr)
+
             dialog_len = len(dialog["human_utterances"])
             if "exit" in intent_catcher_intents and (
                     dialog_len == 1 or (dialog_len == 2 and len(user_uttr_text.split()) > 3)):
@@ -137,6 +139,8 @@ class RuleBasedSkillSelectorConnector:
 
                 if low_priority_intent_detected:
                     skills_for_uttr.append("intent_responder")
+                if if_switch_wiki_skill(user_uttr_annotations):
+                    skills_for_uttr.append("dff_wiki_skill")
                 skills_for_uttr.append("grounding_skill")
                 skills_for_uttr.append("program_y")
                 skills_for_uttr.append("cobotqa")

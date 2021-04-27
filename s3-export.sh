@@ -55,6 +55,7 @@ files=(
   kbqa/wikidata/q_to_page_en.pickle
   kbqa/wikidata/wikidata_cache.json
   alexaprize_data/database_most_popular_main_info.json
+  datasets/wikipedia/enwiki_latest.db
 )
 
 for file in ${files[@]}; do
