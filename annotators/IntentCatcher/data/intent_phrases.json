@@ -279,6 +279,8 @@
 	      "(alexa ){0,1}(i ((need)|(want)) you to ){0,1}play ((me )|(us )){0,1}(some ){0,1}((country)|(reggae)|(modern)|(pop)|(soul)|(jazz)|(rap)|(rock)|(my)|(popular)|(my playlist) ){0,1}music",
         "(alexa ){0,1}volume ((up)|(down)|(nine)|(ten)|(eight)|(eleven)|(twenty)|(one)|(five))",
         "(alexa )?(increase|decrease|lower) (the )?(volume|sound)",
+        "(alexa )?turn (the |a )?(it|volume|sound) (up|down)",
+        "(alexa )?turn (up|down) (the |a )?(volume|sound)",
         "(alexa )?make it (louder|quiter)",
         "(alexa ){0,1}((brighten)|(dim)) the light",
         "(alexa ){0,1}((can you )|(i want you to )){0,1}stop ((the timer)|(playing music)|(the music)|(the country music))",
@@ -291,7 +293,8 @@
         "(alexa ){0,1}(can you ){0,1}(please ){0,1}((put on)|(play)) ((a song)|(bowyo)|(moana)|(the song roxanne)|(the song)|(a song ballin)|(that movie)|(the film)|(a talk show)|(kayley kayley)|(carey chewy)|(ariana grande)|(the song i'm more to pandora)|(monster binder)|(black and yellow)|(strange)|(talk about the ninja kids)|(old town road)|(your mama on the phone)|(let me talk about)|(some stilettos with nothing else that's hot)|(march third i will be here)|(something)|(a barbie song)|(my favorite song)|(chat about chris youtube channel)|(top tunes)|(the song alita franklin)|(lights)|(echo)|(a song with n. b. a. youngboy)|(spice and discuss)|(youtube italy talk about music video)|(kevin hart)|(katy songs)|(spain trinidad and tobago)|(chad wild clay songs)|(the video)|(taylor talk)|(a funny movie)|(some porno)|(feel invincible)|(kidz bop kids)|(adult porn hub)|(the spark)|(music on spotify)|(lil uzi vert turn on talking)|(bad banny))( thank you){0,1}",
         "(alexa ){0,1}((can you )|(would you )){0,1}(please ){0,1}play (me ){0,1}(some ){0,1}((hindi)|(christmas)|(the andy griffith)){0,1}((music)|(song))",
         "(alexa ){0,1}set timer( for ((ten)|(nine)|(seven)|(fifteen)|(twenty)|(twenty five)|(thirty))){0,1}((minutes)|(hours)){0,1}",
-        "(alexa ){0,1}set alarm( for ((ten)|(nine)|(seven)|(eight)|(six)|(five)|(four)|(three)|(two)|(one))){0,1}((a.m.)|(p.m.)){0,1}"
+        "(alexa ){0,1}set alarm( for ((ten)|(nine)|(seven)|(eight)|(six)|(five)|(four)|(three)|(two)|(one))){0,1}((a.m.)|(p.m.)){0,1}",
+        "(alexa )?((can|could|would) you|i (want|need) you to )?read (me )?(this |that |the |a )?(it|book|poem|novel|verse)( to me)?"
       ],
       "reg_phrases":[
         "let's play .*",
