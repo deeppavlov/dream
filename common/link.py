@@ -38,7 +38,7 @@ skills_phrases_map = {
     'dff_travel_skill': set(dff_travel_skill.skill_trigger_phrases()),
     'dff_animals_skill': set(dff_animals_skill.skill_trigger_phrases()),
     # 'dff_celebrity_skill': set(dff_celebrity_skill.skill_trigger_phrases()),
-    'dff_dff_gossip_skill_skill': set(dff_gossip_skill.skill_trigger_phrases()),
+    'dff_gossip_skill': set(dff_gossip_skill.skill_trigger_phrases()),
     'dff_food_skill': set(dff_food_skill.skill_trigger_phrases()),
     'dff_sport_skill': set(dff_sport_skill.skill_trigger_phrases()),
     'dff_music_skill': set(dff_music_skill.skill_trigger_phrases())
