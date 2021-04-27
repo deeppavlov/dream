@@ -34,12 +34,12 @@ service_intents = {'lets_chat_about', 'tell_me_more', 'topic_switching', 'yes', 
 
 high_priority_intents = {"intent_responder": {"cant_do", "exit", "repeat",
                                               "what_can_you_do", "what_is_your_job", "what_is_your_name",
-                                              "where_are_you_from", "who_made_you", "what_time"
+                                              "where_are_you_from", "who_made_you"
                                               },
                          "grounding_skill": {"what_are_you_talking_about"},
                          }
 
-low_priority_intents = {'dont_understand'}
+low_priority_intents = {'dont_understand', "what_time"}
 
 combined_classes = {
     'emotion_classification': ['anger', 'fear', 'joy', 'love', 'sadness', 'surprise', 'neutral'],
