@@ -598,11 +598,11 @@ def filter_by_types(objects, types):
 
 def find_objects_by_category(what_to_find, category, subject):
     objects = []
-    if category == "film" and what_to_find == "actors":
+    if category == "movie" and what_to_find == "actors":
         objects = find_object(subject, "P161", "forw")
-    elif category == "tv series" and what_to_find == "actors":
+    elif category == "show" and what_to_find == "actors":
         objects = find_object(subject, "P161", "forw")
-    elif category == "tv series" and what_to_find == "episodes":
+    elif category == "show" and what_to_find == "episodes":
         objects = find_object(subject, "P179", "backw")
     elif category == "singer" and what_to_find == "songs":
         objects = find_object(subject, "P175", "backw")
@@ -610,6 +610,15 @@ def find_objects_by_category(what_to_find, category, subject):
     elif category == "singer" and what_to_find == "albums":
         objects = find_object(subject, "P175", "backw")
         objects = filter_by_types(objects, {"Q482994", "Q208569"})
+    elif category == "music" and what_to_find == "songs":
+        objects = find_object(subject, "P175", "backw")
+        objects = filter_by_types(objects, {"Q134556", "Q7366"})
+    elif category == "music" and what_to_find == "albums":
+        objects = find_object(subject, "P175", "backw")
+        objects = filter_by_types(objects, {"Q482994", "Q208569"})
+    elif category == "music" and what_to_find == "singers":
+        objects = find_object(subject, "P175", "backw")
+        objects = filter_by_types(objects, {"Q488205", "Q36834", "Q177220", "Q753110"})
     else:
         pass
     objects_with_labels = find_objects_info(objects[:20])

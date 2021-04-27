@@ -19,6 +19,7 @@ from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE, 
 from common.utils import get_intents, get_sentiment
 from common.bot_persona import YOUR_FAVORITE_COMPILED_PATTERN
 
+from dialogflows.flows import shared
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 
@@ -31,6 +32,18 @@ spacy_nlp = load("en_core_web_sm")
 
 with open("topic_favorites.json", "r") as f:
     FAV_STORIES_TOPICS = json.load(f)
+
+CATEGORIES_OBJECTS = {
+    "movie": ["actors"],
+    "show": ["actors", "episodes"],
+    "sport": ["athletes", "teams"],
+    "team": ["athletes"],
+    "music": ["singers", "songs", "albums"],
+    "song": ["singers", "albums"],
+    "singer": ["songs", "albums"],
+    # "albums": ["songs", "singers"],
+    # "athletes": ["teams"],
+}
 
 CONF_HIGH = 1.0
 CONF_MIDDLE = 0.95
@@ -48,6 +61,8 @@ class State(Enum):
     SYS_NOT_LIKE_TOPIC = auto()
     USR_WHATS_YOUR_FAV = auto()
     USR_TOP_FAVS = auto()
+    SYS_WHY_FAV = auto()
+    USR_EXPLAIN_FAV = auto()
     #
     SYS_ERR = auto()
     USR_ERR = auto()
@@ -151,7 +166,7 @@ def my_fav_story_response(vars):
             state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
         else:
-            response = "I've never heard about it. Could you plaese tell me more about it?"
+            response = "I've never heard about it. Could you please tell me more about it?"
             state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
         return response
@@ -166,12 +181,64 @@ def check_fav_request(ngrams, vars):
     flag = False
     annot_utt = state_utils.get_last_human_utterance(vars)
     utt = annot_utt["text"].lower()
-    if any(["favorite" in utt, "like" in utt, "love" in utt, "prefer" in utt]) and (
+    if any(
+        ["favorite" in utt, "like" in utt, "love" in utt, "prefer" in utt]) and (
         'negative' not in get_sentiment(annot_utt, probs=False)
     ):
         flag = True
     logger.info(f"check_fav_request {flag}")
     return flag
+
+
+def why_fav_request(ngrams, vars):
+    flag = False
+    utt = state_utils.get_last_human_utterance(vars)["text"].lower()
+    if "why" in utt:
+        flag = True
+    logger.info(f"why_fav_request {flag}")
+    return flag
+
+
+def explain_fav_response(vars):
+    curr_topic = ""
+    curr_item = ""
+    objects = ""
+    wp_top = []
+    shared_memory = state_utils.get_shared_memory(vars)
+    used_topics = list(set(shared_memory.get("used_topics", [])))
+    if used_topics:
+        curr_topic = used_topics[-1]
+        curr_item = FAV_STORIES_TOPICS.get(curr_topic, "").get("name", "")
+        if curr_topic in CATEGORIES_OBJECTS:
+            objects = random.choice(CATEGORIES_OBJECTS[curr_topic])
+    try:
+        if curr_topic in ["movie", "show"]:
+            fake_utterance = f"I like to learn more about {curr_item} {objects} {curr_topic}"
+            wp_top = shared.get_object_top_wiki_parser(curr_item, objects, curr_topic, fake_utterance)
+        elif curr_topic == "sport":
+            wp_top = shared.get_genre_top_wiki_parser(objects[:-1], curr_item)
+        elif curr_topic == "team":
+            fake_utterance = f"I like to learn more about {curr_item}"
+            wp_top = shared.get_team_players_top_wiki_parser(curr_item, fake_utterance)
+        elif curr_topic in ["music", "song", "singer"]:
+            fake_utterance = f"I like to learn more about {curr_item} {objects} {curr_topic}"
+            wp_top = shared.get_object_top_wiki_parser(curr_item, objects, curr_topic, fake_utterance)
+        else:
+            wp_top = []
+        if wp_top:
+            res = " ".join(wp_top)
+            state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+            return f"I like its {objects}. {res} are my favorites. What do you think about them?"
+        else:
+            state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+            return "Hmm, I am just a fan of it!"
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        state_utils.set_confidence(vars, 0)
+        return error_response(vars)
 
 
 def do_you_like_topic_response(vars):
@@ -233,6 +300,12 @@ def top_favs_response(vars):
         return error_response(vars)
 
 
+def smth_request(ngrams, vars):
+    flag = condition_utils.no_requests(vars)
+    logger.info(f"smth_request {flag}")
+    return flag
+
+
 ##################################################################################################################
 ##################################################################################################################
 # linking
@@ -252,8 +325,22 @@ simplified_dialogflow.add_system_transition(State.SYS_FAV_OR_LETS_CHAT, State.US
 simplified_dialogflow.set_error_successor(State.SYS_FAV_OR_LETS_CHAT, State.SYS_ERR)
 
 
-simplified_dialogflow.add_user_transition(State.USR_MY_FAV_STORY, State.SYS_CHECK_FAV, check_fav_request)
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_MY_FAV_STORY,
+    {
+        State.SYS_WHY_FAV: why_fav_request,
+        State.SYS_CHECK_FAV: check_fav_request
+    },
+)
 simplified_dialogflow.set_error_successor(State.USR_MY_FAV_STORY, State.SYS_ERR)
+
+
+simplified_dialogflow.add_system_transition(State.SYS_WHY_FAV, State.USR_EXPLAIN_FAV, explain_fav_response)
+simplified_dialogflow.set_error_successor(State.SYS_WHY_FAV, State.SYS_ERR)
+
+
+simplified_dialogflow.add_user_transition(State.USR_EXPLAIN_FAV, State.SYS_CHECK_FAV, smth_request)
+simplified_dialogflow.set_error_successor(State.USR_EXPLAIN_FAV, State.SYS_ERR)
 
 
 simplified_dialogflow.add_system_transition(State.SYS_CHECK_FAV, State.USR_DO_YOU_LIKE_TOPIC,
