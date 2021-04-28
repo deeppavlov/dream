@@ -28,7 +28,12 @@ def get_last_n_turns(
     bot_last_turns = bot_last_turns or LAST_N_TURNS
     human_last_turns = human_last_turns or bot_last_turns + 1
     total_last_turns = total_last_turns or bot_last_turns * 2 + 1
-
+    utterance_texts = [utterance['text'] for utterance in dialog['utterances'][-total_last_turns:]]
+    for utterance_text in utterance_texts:
+        if '#repeat' in utterance_text:  # Not to lose history on each repeat
+            human_last_turns += 1
+            bot_last_turns += 1
+            total_last_turns += 2
     new_dialog = {}
     for key, value in dialog.items():
         if key not in ["utterances", "human_utterances", "bot_utterances"]:
