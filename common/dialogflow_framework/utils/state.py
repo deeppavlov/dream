@@ -1,7 +1,9 @@
 import logging
+import os
 
 import common.entity_utils as entity_utils
 import common.constants as common_constants
+import common.news as common_news
 import common.utils as common_utils
 import common.link as common_link
 
@@ -10,6 +12,7 @@ logger.setLevel(logging.DEBUG)
 
 
 #  vars is described in README.md
+NEWS_API_ANNOTATOR_URL = os.getenv("NEWS_API_ANNOTATOR_URL")
 
 
 def get_labeled_noun_phrase(vars):
@@ -131,3 +134,17 @@ def get_fact_for_particular_entity_from_human_utterance(vars, entity):
             facts_for_entity += [fact["fact"]]
 
     return facts_for_entity
+
+
+def get_news_about_particular_entity_from_human_utterance(vars, entity):
+    last_uttr = get_last_human_utterance(vars)
+    last_uttr_entities_news = last_uttr.get("annotations", {}).get("news_api_annotator", [])
+    curr_news = {}
+    for news_entity in last_uttr_entities_news:
+        if news_entity["entity"] == entity:
+            curr_news = news_entity["news"]
+            break
+    if not curr_news:
+        curr_news = common_news.get_news_about_topic(entity, NEWS_API_ANNOTATOR_URL)
+
+    return curr_news
