@@ -3,12 +3,19 @@ import re
 FUNFACT_COMPILED_PATTERN = re.compile(r"(funfact|fun fact|tell me something fun|tell something interesting|"
                                       "tell me something interesting|^interesting fact.*)", re.IGNORECASE)
 
+STORY_COMPILED_PATTERN = re.compile(r"(tell a story|tell me a story|interesting story|funny story)\.?$")
+
+
+def story_requested(annotated_user_utt):
+    return bool(STORY_COMPILED_PATTERN.search(annotated_user_utt['text']))
+
 
 def funfact_requested(annotated_user_utt, annotated_bot_utt):
+    story_request = story_requested(annotated_user_utt)
     turn_on_funfact = FUNFACT_COMPILED_PATTERN.search(annotated_user_utt["text"])
     previous_was_funfact = annotated_bot_utt.get("active_skill", "") == "dff_funfact_skill"
     agree_next = "other" in annotated_user_utt["text"] or "fact" in annotated_user_utt["text"]
-    flag = turn_on_funfact or (previous_was_funfact and agree_next)
+    flag = turn_on_funfact or (previous_was_funfact and agree_next) or story_request
     return bool(flag)
 
 

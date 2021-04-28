@@ -6,7 +6,7 @@ from enum import Enum, auto
 
 import sentry_sdk
 
-from common.funfact import funfact_requested, FUNFACT_LIST, make_question
+from common.funfact import funfact_requested, story_requested, FUNFACT_LIST, make_question
 from common.constants import MUST_CONTINUE
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
@@ -66,6 +66,11 @@ def funfact_response(vars, shuffle=True):
     given_funfacts = shared_memory.get('given_funfacts', [])
     if shuffle:
         random.shuffle(FUNFACT_LIST)
+    answer = ""
+    human_utterance = state_utils.get_last_human_utterance(vars)
+    if story_requested(human_utterance):
+        answer = "Unfortunately, rules of the competition forbid me to tell you a story, " \
+                 "but I can tell you a joke."
     for funfact, topic in FUNFACT_LIST:
         if given_funfacts:
             link_question = make_question()
@@ -73,7 +78,7 @@ def funfact_response(vars, shuffle=True):
             link_question = make_question(topic)
         if funfact not in given_funfacts:
             state_utils.save_to_shared_memory(vars, given_funfacts=given_funfacts + [funfact])
-        answer = f'{funfact} {link_question}'
+        answer = f'{answer} {funfact} {link_question}'
         return answer
     state_utils.set_confidence(vars, confidence=0)
     answer = ''
