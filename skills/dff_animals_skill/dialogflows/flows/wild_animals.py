@@ -36,7 +36,7 @@ def plural_nouns(text):
             if token.tag_ == "NNP":
                 processed_tokens.append(p.plural_noun(token.text))
             else:
-                processed_tokens.append(token)
+                processed_tokens.append(token.text)
         plural_text = " ".join(processed_tokens)
     except Exception as e:
         sentry_sdk.capture_exception(e)
