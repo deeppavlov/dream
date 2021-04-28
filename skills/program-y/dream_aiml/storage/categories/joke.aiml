@@ -53,7 +53,7 @@
         </template>
     </category>
     <category>
-        <pattern>TELL ME A JOKE TELL ME A JOKE</pattern>
+        <pattern>TELL ME A JOKE</pattern>
         <template>
             <srai>JOKE</srai>
         </template>

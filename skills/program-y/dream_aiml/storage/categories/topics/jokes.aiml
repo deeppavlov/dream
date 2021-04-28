@@ -35,9 +35,7 @@
     <category>
         <pattern>JOKE</pattern>
         <template>
-            <random>
-                Seems like I don't have a sense of humor, so I prefer not to joke.
-            </random>
+            Seems like I don't have a sense of humor, so I prefer not to joke.
         </template>
     </category>
 
