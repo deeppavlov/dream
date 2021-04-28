@@ -22,7 +22,7 @@ NEGATIVE_EMOTION = 'negative_emotion'
 HOW_DO_YOU_FEEL = 'How do you feel?'
 
 LONELINESS_TEMPLATE = r"(i am alone|lonely|loneliness)"
-SAD_TEMPLATE = r"(sad|horrible|depressed|awful|dire|pretty bad|pain|^bad$|^say$)"
+SAD_TEMPLATE = r"(sad\b|horrible\b|depressed\b|awful\b|dire\b|pretty bad|pain\b|^bad$|^say$)"
 JOKE_REQUEST_COMPILED_PATTERN = re.compile(r"(tell me|tell|hear)( [a-z]+){0,3} jokes?", re.IGNORECASE)
 TALK_ABOUT_EMO_TEMPLATE = re.compile(r'talk about emotion', re.IGNORECASE)
 
