@@ -151,8 +151,10 @@ def respond():
                         response = f"I don't have an opinion on that but... {response}"
                     else:
                         response = f"I don't have an opinion on that but I've heard that {response}"
-                if any([re.match(curr_uttr['text'], FACT_REGEXP),
-                        re.match(curr_uttr['text'], WHAT_REGEXP)]) and confidence >= 0.7:
+                if (
+                    any([FACT_REGEXP.search(curr_uttr["text"]), WHAT_REGEXP.search(curr_uttr["text"])])
+                    and confidence >= 0.7
+                ):
                     # Factual question - must increase confidence
                     confidence = 1
             else:
