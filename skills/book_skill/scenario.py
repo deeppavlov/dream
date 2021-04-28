@@ -306,8 +306,17 @@ class BookSkillScenario:
                         logger.debug(f"Did not detect NO answer. Getting name for: {annotated_user_phrase['text']}")
                         bookname, bookyear = get_name(annotated_user_phrase, mode='book', bookyear=True)
                         if bookname is None:
-                            logger.debug('No bookname detected: returning default reply')
-                            reply, confidence = self.default_reply, 0
+                            movie_name, movie_author = get_name(annotated_user_phrase, 'movie')
+                            if movie_name and movie_author:
+                                # We got movie instead of book
+                                reply = f'I enjoyed watching the film {movie_name} based on this book,' \
+                                        'which was directed by {movie_author}. '
+                                reply += link_to(['movie_skill'],
+                                                 dialog["human"]["attributes"])['phrase']
+                                confidence = self.default_conf
+                            else:
+                                logger.debug('No bookname detected: returning default reply')
+                                reply, confidence = self.default_reply, 0
                         else:
                             # if we found book name in user reply
                             logger.debug('Bookname detected: returning AMAZING_READ_BOOK & WHEN_IT_WAS_PUBLISHED')
@@ -410,7 +419,15 @@ class BookSkillScenario:
                             logger.debug('WHAT_IS_FAV_GENRE not in bot phrases: returning it')
                             reply, confidence = WHAT_IS_FAV_GENRE, self.default_conf
                         else:
-                            reply, confidence = "", 0
+                            movie_name, movie_author = get_name(annotated_user_phrase, 'movie')
+                            if movie_name and movie_author:
+                                reply = f'I enjoyed watching the film {movie_name} based on this book,' \
+                                        'which was directed by {movie_author}. '
+                                reply += link_to(['movie_skill'],
+                                                 dialog["human"]["attributes"])['phrase']
+                                confidence = self.default_conf
+                            else:
+                                reply, confidence = "", 0
                     else:
                         retrieved_fact = fact_about_book(annotated_user_phrase)
                         if retrieved_fact is not None and was_question_about_book(annotated_user_phrase):
