@@ -8,14 +8,9 @@ import sentry_sdk
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logger = logging.getLogger(__name__)
 
-DEBUG_MODE = False
-if DEBUG_MODE:
-    WIKIDATA_URL = 'http://0.0.0.0:8077/model'
-    ENTITY_LINKING_URL = 'http://0.0.0.0:8075/model'
-else:
-    WIKIDATA_URL = getenv("WIKIDATA_URL")
-    ENTITY_LINKING_URL = getenv("ENTITY_LINKING_URL")
-    assert WIKIDATA_URL and ENTITY_LINKING_URL
+WIKIDATA_URL = getenv("WIKIDATA_URL")
+ENTITY_LINKING_URL = getenv("ENTITY_LINKING_URL")
+assert WIKIDATA_URL and ENTITY_LINKING_URL
 
 
 def request_entities_entitylinking(entity, types, return_raw=False,
