@@ -22,7 +22,7 @@ app = Flask(__name__)
 
 logger.info('I am ready to respond')
 
-np_ignore_list = ["'s", 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're",
+np_ignore_list = {"'s", 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're",
                   "you've", "you'll", "you'd", 'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself',
                   'she', "she's", 'her', 'hers', 'herself', 'it', "it's", 'its', 'itself', 'they', 'them', 'their',
                   'theirs', 'themselves', 'what', 'which', 'who', 'whom', 'this', 'that', "that'll", 'these', 'those',
@@ -39,39 +39,36 @@ np_ignore_list = ["'s", 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselv
                   'shan', "shan't", 'shouldn', "shouldn't", 'wasn', "wasn't", 'weren', "weren't", 'won', "won't",
                   'wouldn', "wouldn't", "my name", "your name", "wow", "yeah", "yes", "ya", "cool", "okay", "more",
                   "some more", " a lot", "a bit", "another one", "something else", "something", "anything",
-                  "someone", "anyone", "play", "mean", "a lot", "a little", "a little bit", "sure"]
+                  "someone", "anyone", "play", "mean", "a lot", "a little", "a little bit", "sure"}
 
 words_ignore_in_np = re.compile(r"(which|what)", re.IGNORECASE)
 
 
 def noun_phrase_extraction(input_text):
     if input_text:
+        input_text = input_text.lower()
         doc = nlp(input_text)
-        noun_chunks = []
-        for np in doc.noun_chunks:
-            if str(np).lower() not in np_ignore_list:
-                noun_chunks.append(str(np))
+        noun_chunks = [str(nounph) for nounph in doc.noun_chunks if str(nounph) not in np_ignore_list]
 
         # based on dependency parsing these should be the most likely topics
         augmented_noun_chunks = []
 
         subjects = [token for token in doc
-                    if (("obj" in token.dep_ or "subj" in token.dep_ or "comp" in token.dep_) and not token.is_stop)]
-        for subject in subjects:
-            subject = str(subject)
-            for np in noun_chunks:
-                if subject in np.split() and np.lower() not in augmented_noun_chunks:
-                    augmented_noun_chunks.append(np.lower())
+                    if any([t in token.dep_ for t in ["obj", "subj", "comp"]]) and not token.is_stop]
+        subjects = [str(subject) for subject in subjects]
+
+        augmented_noun_chunks = [nounph for subject in subjects for nounph in noun_chunks if subject in nounph.split()]
+        augmented_noun_chunks = list(set(augmented_noun_chunks))
 
         if not augmented_noun_chunks:
             # if only one word is VBG, add it to the list
             vbg = [token for token in doc if ("VBG" == token.tag_)]
             if len(vbg) == 1:
-                noun_chunks.extend([vbg[0].text.lower()])
+                noun_chunks.extend([vbg[0].text])
             return noun_chunks
 
-        for i in range(len(augmented_noun_chunks)):
-            augmented_noun_chunks[i] = re.sub(words_ignore_in_np, "", augmented_noun_chunks[i]).strip()
+        augmented_noun_chunks = [re.sub(words_ignore_in_np, "", nounph).strip() for nounph in augmented_noun_chunks]
+
         return augmented_noun_chunks
     return []
 
@@ -83,20 +80,19 @@ spaces = re.compile(r"\s\s+")
 def get_result(request):
     st_time = time.time()
     sentences = request.json['sentences']
-    result = []
     logger.debug(f"Input sentences: {sentences}")
-    for sentence in sentences:
-        nounphrases = noun_phrase_extraction(sentence)
-        for j in range(len(nounphrases)):
-            nounphrases[j] = re.sub(symbols_for_nounphrases, "", nounphrases[j]).strip()
-            nounphrases[j] = re.sub(spaces, " ", nounphrases[j])
-        nounphrases = [el for el in nounphrases if len(el) > 0]
 
-        result.append(nounphrases)
+    nounphrases_batch = [noun_phrase_extraction(sentence) for sentence in sentences]
+    nounphrases_batch = [[re.sub(symbols_for_nounphrases, "", nounph).strip() for nounph in nounphrases]
+                         for nounphrases in nounphrases_batch]
+    nounphrases_batch = [[re.sub(spaces, " ", nounph) for nounph in nounphrases]
+                         for nounphrases in nounphrases_batch]
+    result = [[nounph for nounph in nounphrases if len(nounph)]
+              for nounphrases in nounphrases_batch]
 
-    logger.debug(f"Output: {result}")
+    logger.debug(f"cobot_nounphrases output: {result}")
     total_time = time.time() - st_time
-    logger.info(f'nounphrase annotator exec time: {total_time:.3f}s')
+    logger.info(f'cobot_nounphrases exec time: {total_time:.3f}s')
     return result
 
 
