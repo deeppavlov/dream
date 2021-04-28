@@ -1489,7 +1489,7 @@ simplified_dialogflow.add_user_serial_transitions(
     State.USR_SAYS_OPINION_ABT_PERSON,
     {
         State.SYS_DISAGREES_ABT_PERSON: sys_disagrees_abt_person_request,
-        State.SYS_SAYS_OPINION_ABT_PERSON: sys_says_opinion_abt_person_request,
+        # State.SYS_SAYS_OPINION_ABT_PERSON: sys_says_opinion_abt_person_request,
         State.SYS_NOT_INTERESTED_IN_PERSON: sys_not_interested_in_person_request,
         State.SYS_AGREES_ABT_PERSON: sys_agrees_abt_person_request,
         State.SYS_MENTIONS_ANOTHER_PERSON: sys_mentions_another_person_request,
