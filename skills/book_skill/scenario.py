@@ -15,7 +15,8 @@ from common.link import link_to
 from book_utils import get_name, get_genre, suggest_template, get_not_given_question_about_books, dontlike, \
     fact_about_book, fav_genre_request_detected, is_side_intent, is_stop, \
     fav_book_request_detected, parse_author_best_book, best_book_by_author, GENRE_PHRASES, was_question_about_book, \
-    asked_about_genre, GENRE_DICT, is_previous_was_book_skill, just_mentioned, dontknow
+    asked_about_genre, GENRE_DICT, is_previous_was_book_skill, just_mentioned, dontknow, \
+    book_was_offered, tell_about_book
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -41,7 +42,7 @@ FAVOURITE_BOOK_ANSWERS = ['My favourite book is "The Old Man and the Sea" by Ern
                           'and a large marlin. This is my favourite story, it is truly fascinating.']
 WHAT_IS_FAV_GENRE = 'I have read a plenty of books from different genres. What is your favorite book genre?'
 HAVE_YOU_READ_BOOK = 'Amazing! Have you read BOOK? And if you have read it, what do you think about it?'
-READ_BOOK_ADVICE = "You can read it. You won't regret it!"
+READ_BOOK_ADVICE = "You can read it. You won't regret it! May I tell you something about this book?"
 USER_LIKED_BOOK_PHRASE = "I see you love it. It is so wonderful that you read the books you love."
 USER_DISLIKED_BOOK_PHRASE = "I see that this book didn't excite you. " \
                             "It's OK. Maybe some other books will fit you better."
@@ -328,24 +329,12 @@ class BookSkillScenario:
                         # default conf as no check for user uttr (not super conf)
                         logger.debug(f'Returning genre phrase for {book}')
                         reply, confidence = HAVE_YOU_READ_BOOK.replace("BOOK", book), self.default_conf
-                elif HAVE_YOU_READ_BOOK in bot_phrases[-1]:
-                    logger.debug('"Amazing! Have HAVE_YOU_READ_BOOK in last bot phrase')
+                elif book_was_offered(bot_phrases[-1]):  # book_just_offered
+                    logger.debug('Amazing! Have HAVE_YOU_READ_BOOK in last bot phrase')
+                    bookname = book_was_offered(bot_phrases[-1])
                     if tell_me_more(annotated_user_phrase):
-                        logger.debug('Tell me more intent detected')
-                        reply = None
-                        bookname = bot_phrases[-1].split('you read ')[1].split('?')[0].strip()
-                        logger.debug(f'Detected name {bookname} in last_bot_phrase')
-                        for genre in self.bookreads_data:
-                            if self.bookreads_data[genre]['title'] == bookname:
-                                logger.debug(f'Returning phrase for book of genre {genre}')
-                                # as we checked user utter as tell me more, we assign super conf
-                                reply, confidence = self.bookreads_data[genre]['description'], self.super_conf
-                        if reply is None:
-                            part1 = f'From bot phrase {bot_phrases[-1]}'
-                            part2 = f' bookname * bookname * didnt match'
-                            sentry_sdk.capture_exception(Exception(part1 + part2))
-                            logger.exception(part1 + part2)
-                            reply, confidence = self.default_reply, 0
+                        reply = tell_about_book(bookname, self.bookreads_data)
+                        confidence = self.super_conf if reply else 0
                     elif is_no(annotated_user_phrase):
                         logger.debug('intent NO detected')
                         reply, confidence = READ_BOOK_ADVICE, self.super_conf
@@ -363,6 +352,21 @@ class BookSkillScenario:
                     else:
                         logger.debug('No intent detected. Returning nothing')
                         reply, confidence = self.default_reply, 0
+                elif bot_phrases[-1] == READ_BOOK_ADVICE:
+                    # We have offered information about book
+                    bookname = book_was_offered(bot_phrases[-2])
+                    if (tell_me_more(annotated_user_phrase) or is_yes(annotated_user_phrase)) and bookname:
+                        reply = tell_about_book(bookname, self.bookreads_data)
+                        confidence = self.super_conf if reply else 0
+                    elif is_no(annotated_user_phrase):
+                        reply = 'OK, as you wish.'
+                        reply += link_to(['movie_skill', 'dff_music_skill', 'dff_food_skill',
+                                          'news_api_skill', 'weather_skill', 'dff_music_skill',
+                                          'game_cooperative_skill', 'dff_animals_skill', 'dff_sport_skill'],
+                                         dialog["human"]["attributes"])['phrase']
+                        confidence = self.low_conf
+                    else:
+                        reply, confidence = '', 0
                 elif any([phrase in bot_phrases[-1] for phrase in BOOK_SKILL_CHECK_PHRASES]):
                     logger.debug('Reply considering book genre')
                     reply, confidence = self.get_reply_considering_book_author_genre_info(
