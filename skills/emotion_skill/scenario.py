@@ -10,7 +10,6 @@ from common.utils import get_emotions
 from collections import defaultdict
 import re
 
-
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -64,6 +63,7 @@ class EmotionSkillScenario:
             return random.choice(chosen_data)
         else:
             return ""
+
     # def _is_stop()
 
     def _get_reply_and_conf(self, user_phrase, bot_phrase, emotion,
@@ -81,10 +81,6 @@ class EmotionSkillScenario:
         }
 
         state = emotion_skill_attributes.get("state", "")
-        if is_joke_requested(user_phrase):
-            state = "joke_requested"
-        elif is_alone(user_phrase):
-            state = "loneliness_i_feel"
         prev_jokes_advices = emotion_skill_attributes.get("prev_jokes_advices", [])
         is_yes = intent.get("yes", {}).get("detected", 0)
         is_no = intent.get("no", {}).get("detected", 0)
@@ -203,6 +199,7 @@ class EmotionSkillScenario:
                 bot_attributes = {}
                 attr = {"can_continue": CAN_CONTINUE_SCENARIO}
                 annotated_user_phrase = dialog['utterances'][-1]
+                user_phrase = annotated_user_phrase['text']
                 most_likely_emotion = self._get_user_emotion(annotated_user_phrase)
                 intent = annotated_user_phrase['annotations'].get("intent_catcher", {})
                 prev_replies_for_user = [u['text'].lower() for u in dialog['bot_utterances']]
@@ -216,9 +213,15 @@ class EmotionSkillScenario:
                     if not active_skill and state != "":
                         state = ""
                         emotion_skill_attributes['state'] = ""
-                logger.info(f"user sent: {annotated_user_phrase['text']}")
                 if emotion == "" or state == "":
                     emotion = most_likely_emotion
+                if is_joke_requested(user_phrase):
+                    state = "joke_requested"
+                    emotion_skill_attributes['state'] = "joke_requested"
+                elif is_alone(user_phrase):
+                    state = "loneliness_i_feel"
+                    emotion_skill_attributes['state'] = "loneliness_i_feel"
+                logger.info(f"user sent: {annotated_user_phrase['text']} state: {state} emotion: {emotion}")
                 if talk_about_emotion(annotated_user_phrase['text']):
                     reply = f'OK. {random.choice(skill_trigger_phrases())}'
                     attr['can_continue'] = MUST_CONTINUE
