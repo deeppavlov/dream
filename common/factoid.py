@@ -1,4 +1,9 @@
+import re
+
 FACTOID_NOTSURE_CONFIDENCE = 0.1
+
+FACT_REGEXP = re.compile(r"fact about", re.IGNORECASE)
+WHAT_REGEXP = re.compile(r"what (is|are) (a |an |the )?{subject}\?", re.IGNORECASE)
 
 DONT_KNOW_ANSWER = [
     "Sorry I can't answer these kinds of questions yet. "
