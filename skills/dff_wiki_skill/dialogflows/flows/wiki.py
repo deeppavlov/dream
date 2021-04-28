@@ -2,7 +2,6 @@ import logging
 import os
 import re
 import en_core_web_sm
-import inflect
 import nltk
 import sentry_sdk
 
@@ -25,8 +24,6 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 nlp = en_core_web_sm.load()
-nltk.download('punkt')
-p = inflect.engine()
 
 config_name = os.getenv("CONFIG")
 
