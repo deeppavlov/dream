@@ -28,7 +28,7 @@ MUST_CONTINUE_CONFIDENCE = 1.0
 CAN_CONTINUE_CONFIDENCE = 0.98
 CANNOT_CONTINUE_CONFIDENCE = 0.0
 
-with open("music_data.json", "r") as f:
+with open("./music_data.json", "r") as f:
     MUSIC_DATA = json.load(f)
 
 music_words_re = re.compile(
@@ -323,28 +323,43 @@ def taste_response(vars):
         return error_response(vars)
 
 
+def get_genre(vars):
+    genres = MUSIC_DATA.get("genres", [])
+    wiki_parser = state_utils.get_last_human_utterance(vars)["annotations"].get("wiki_parser", {'entities_info': {}})
+    for entity in wiki_parser['entities_info']:
+        logger.info(f"Entity: {wiki_parser['entities_info'][entity]}")
+        if "genre" in wiki_parser['entities_info'][entity]:
+            for genre in genres:
+                for entity_genre in wiki_parser['entities_info'][entity]['genre']:
+                    if genre in entity_genre[1]:
+                        logger.info(f"Genre: {genre}")
+                        return True, genre
+        for i in wiki_parser['entities_info'][entity].get('instance of', []):
+            label = i[1]
+            if label == 'music genre' or label == 'genre':
+                for genre in genres:
+                    if genre in entity:
+                        logger.info(f"Genre: {genre}")
+                        return True, genre
+            elif label in {'music band', 'musical band', 'ensemble', 'musical group', 'artist', 'rock band'}:
+                for genre in genres:
+                    for entity_genre in wiki_parser['entities_info'][entity].get('genre', []):
+                        if genre in entity_genre[1]:
+                            logger.info(f"Genre: {genre}")
+                            return True, genre
+    return False, None
+
+
 def known_request(ngrams, vars):
-    text = state_utils.get_last_human_utterance(vars)["text"]
-    genres = MUSIC_DATA.get('genre', [])
-    songs = MUSIC_DATA.get('songs', [])
-    artists = MUSIC_DATA.get('artist', [])
-    flag = any([genre in text for genre in genres])
-    flag = flag or any([song in text for song in songs])
-    flag = flag or any([artist in text for artist in artists])
+    flag, _ = get_genre(vars)
     logger.info(f"known_request {flag}")
     return flag
 
 
 def unknown_request(ngrams, vars):
-    text = state_utils.get_last_human_utterance(vars)["text"]
-    genres = MUSIC_DATA.get('genre', [])
-    songs = MUSIC_DATA.get('songs', [])
-    artists = MUSIC_DATA.get('artist', [])
-    flag = any([genre in text for genre in genres])
-    flag = flag or any([song in text for song in songs])
-    flag = flag or any([artist in text for artist in artists])
+    flag = not known_request(ngrams, vars)
     logger.info(f"unknown_request {flag}")
-    return not flag
+    return flag
 
 
 def any_request(ngrams, vars):
@@ -354,31 +369,18 @@ def any_request(ngrams, vars):
     return flag
 
 
-def get_genre_from_text(text):
-    for genre in MUSIC_DATA['structured_data']:
-        if genre in text:
-            return genre
-        for artist in MUSIC_DATA['structured_data'][genre]:
-            if artist in text:
-                return genre
-            for song in MUSIC_DATA['structured_data'][genre][artist]:
-                if song in text:
-                    return genre
-    return None
-
-
 def genre_specific_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
 
-        text = state_utils.get_last_human_utterance(vars)["text"]
-        genre = get_genre_from_text(text)
-
+        _, genre = get_genre(vars)
         state_utils.save_to_shared_memory(vars, genre=genre)
 
         if genre is None:
             raise Exception("Genre was found in text, but not in response.")
+        elif genre == "":
+            return f"I didn't actually head about it. What is the genre??"
         elif genre == "pop":
             return f"I really prefer techno over pop music, but I still listen \
             to Taylor Swift sometimes in the night. Did you know that Kanye We\
@@ -387,7 +389,7 @@ def genre_specific_response(vars):
             return f"My favourite genre is techno, but I still like jazz, \
             especially Dave Brubeck Quartet, Paul Desmond and Duke Ellington. \
             You heard about them, right?"
-        elif genre == "classic" or genre == "contemporary":
+        elif genre == "classic" or genre == "contemporary" or genre == "classical":
             return f"Well, I am actually a techno fan. \
             But let me guess, are you a fan of Beethoven?"
         elif genre == "electronic" or genre == "trance" or genre == "techno" or genre == "dance" or genre == "house":
@@ -422,6 +424,8 @@ def genre_specific_response(vars):
         elif genre == "all" or genre == "everything":
             return f"I prefer techno most of the time. \
             Do you know David Bowie, by the way?"
+        else:
+            return f"To me, the rhythm and tempo are most important. What do you like about it?"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -458,8 +462,7 @@ def genre_advice_response(vars):
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
 
-        shared_memory = state_utils.get_shared_memory(vars)
-        genre = shared_memory.get("genre", "pop")
+        genre = state_utils.get_shared_memory(vars).get("genre", "pop")
 
         if genre == "pop":
             return f"Well, now you know it."
@@ -494,6 +497,8 @@ def genre_advice_response(vars):
             return f"You should check him out, especially \"Space oddity\". \
             It is really something special. \
             They even played it on a real Space Station!"
+        else:
+            return f"Cool, I think I understand what you mean."
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
