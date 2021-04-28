@@ -9,7 +9,7 @@ import numpy as np
 import requests
 import sentry_sdk
 
-from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE
+from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
@@ -319,6 +319,7 @@ def offered_topic_choice_declined_response(vars):
     # USR_STD_GREETING
     try:
         state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+        state_utils.set_can_continue(vars, MUST_CONTINUE)
         greeting_step_id = 0
         # what do you want to talk about?
         offer_topic_choose = random.choice(common_greeting.GREETING_QUESTIONS["what_to_talk_about"])
@@ -445,7 +446,7 @@ def new_entities_is_needed_for_response(vars):
         #     ack = ""
         #     body = ""
         #     state_utils.set_confidence(vars, 0)
-
+        state_utils.set_can_continue(vars, CAN_NOT_CONTINUE)
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
@@ -469,7 +470,9 @@ def closed_answer_request(ngrams, vars):
 def closed_answer_response(vars):
     ack = random.choice(get_sentiment_acknowledgement(vars))
     body = ""
+
     set_confidence_by_universal_policy(vars)
+    state_utils.set_can_continue(vars, CAN_NOT_CONTINUE)
     return " ".join([ack, body])
 
 
