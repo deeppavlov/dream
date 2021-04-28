@@ -267,14 +267,14 @@ def if_not_want_to_chat_about_particular_topic(annotated_uttr, prev_annotated_ut
 ANY_TOPIC_AMONG_OFFERED = re.compile(
     r"(\bany\b|\ball\b|\beither\b|\bboth\b|don't know|not know"
     r"|you (choose|pick up|tell me|want|wish|like)\.?$)")
+GREETING_QUESTIONS_TEXTS = [question.lower() for t in GREETING_QUESTIONS for question in GREETING_QUESTIONS[t]]
 
 
 def if_utterance_requests_topic(annotated_uttr):
-    greeting_question_texts = [question.lower() for t in GREETING_QUESTIONS for question in GREETING_QUESTIONS[t]]
-    prev_was_greeting = any([greeting_question in annotated_uttr.get("text", "")
-                             for greeting_question in greeting_question_texts])
+    uttr_text_lower = annotated_uttr.get("text", "").lower()
+    prev_was_greeting = any([greeting_question in uttr_text_lower for greeting_question in GREETING_QUESTIONS_TEXTS])
 
-    prev_what_to_talk_about_regexp = re.search(COMPILE_WHAT_TO_TALK_ABOUT, annotated_uttr.get("text", ""))
+    prev_what_to_talk_about_regexp = re.search(COMPILE_WHAT_TO_TALK_ABOUT, uttr_text_lower)
     if prev_was_greeting or prev_what_to_talk_about_regexp:
         return True
     return False
