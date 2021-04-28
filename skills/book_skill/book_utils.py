@@ -455,3 +455,21 @@ dontknow_template = re.compile(r"(not know|cannot remember|don't know|can't reme
 
 def dontknow(annotated_uttr):
     return re.search(dontknow_template, annotated_uttr['text'])
+
+
+def book_was_offered(phrase):
+    part1 = 'Have you read'
+    part2 = '? And if you have read it, what do you think about it?'
+    if phrase.find(part2) > phrase.find(part1):
+        return phrase.split(part1)[1].split(part2)[0].strip()
+    return False
+
+
+def tell_about_book(bookname, bookreads_data):
+    reply = None
+    logger.debug(f'Detected name {bookname} in last_bot_phrase')
+    for genre in bookreads_data:
+        if bookreads_data[genre].get('title') == bookname:
+            logger.debug(f'Returning phrase for book of genre {genre}')
+            return reply
+    return reply
