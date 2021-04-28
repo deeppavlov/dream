@@ -82,6 +82,17 @@ def get_named_entities(utt):
     return entities
 
 
+def get_news(uttr, which):
+    result_values = []
+    annotation = uttr.get("annotations", {}).get("news_api_annotator", [])
+    for news_item in annotation:
+        if news_item.get("which", "") == which:
+            text = news_item.get("news", {}).get("description", "")
+            if text:
+                result_values.append(text)
+    return result_values
+
+
 def get_cobotqa(utterances):
     result_values = []
     for i, uttr in enumerate(utterances):
@@ -376,6 +387,43 @@ def respond():
                 annotations_depths.append({"cobotqa": cobotqa_facts[-1][0]})
                 dial_ids.append(d_id)
 
+            user_news = get_news(dialog["human_utterances"][-1], "human")
+            bot_news = get_news(dialog["human_utterances"][-1], "bot")
+            all_news = get_news(dialog["human_utterances"][-1], "all")
+            if user_news:
+                user_input = {
+                    'checked_sentence': user_news[-1],
+                    'knowledge': user_news[-1],
+                    'text': user_input_text,
+                    'history': user_input_history,
+                    'news_fact': "human "
+                }
+                input_batch.append(user_input)
+                annotations_depths.append({})
+                dial_ids.append(d_id)
+            elif bot_news:
+                user_input = {
+                    'checked_sentence': bot_news[-1],
+                    'knowledge': bot_news[-1],
+                    'text': user_input_text,
+                    'history': user_input_history,
+                    'news_fact': "bot "
+                }
+                input_batch.append(user_input)
+                annotations_depths.append({})
+                dial_ids.append(d_id)
+            elif all_news:
+                user_input = {
+                    'checked_sentence': all_news[-1],
+                    'knowledge': all_news[-1],
+                    'text': user_input_text,
+                    'history': user_input_history,
+                    'news_fact': "all "
+                }
+                input_batch.append(user_input)
+                annotations_depths.append({})
+                dial_ids.append(d_id)
+
         except Exception as ex:
             sentry_sdk.capture_exception(ex)
             logger.exception(ex)
@@ -422,6 +470,7 @@ def respond():
 
                 topic = chosen_topics.get(i, "")
                 chosen_topic_fact_flag = input_batch[curr_i].get("chosen_topic_fact", "")
+                curr_news_fact = input_batch[curr_i].get("news_fact", "")
 
                 add_intro = ""
                 if topic and chosen_topic_fact_flag:
@@ -445,6 +494,12 @@ def respond():
                     cobotqa_penalty = annotations_depths[curr_i].get("cobotqa", 0.0)
                     confidence = DEFAULT_CONFIDENCE
                     attr["confidence_case"] += "cobotqa_fact "
+                elif curr_news_fact:
+                    if curr_news_fact != "all":
+                        confidence = NOUNPHRASE_ENTITY_CONFIDENCE
+                    else:
+                        confidence = DEFAULT_CONFIDENCE
+                    attr["confidence_case"] += "news_fact: " + curr_news_fact
                 elif (curr_nounphrase_search or curr_entities_search) and lets_chat_about_flags[i]:
                     confidence = HIGHEST_CONFIDENCE
                     attr["confidence_case"] += "nounphrase_entity_and_lets_chat_about "
