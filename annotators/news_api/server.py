@@ -2,7 +2,7 @@
 
 import logging
 import os
-import string
+import re
 from concurrent.futures import ThreadPoolExecutor
 from os import getenv
 from time import time
@@ -10,12 +10,10 @@ from time import time
 import numpy as np
 import sentry_sdk
 from flask import Flask, request, jsonify
-from nltk.tokenize import word_tokenize
 
 from common.metrics import setup_metrics
 from common.news import extract_topics
 from newsapi_service import CachedRequestsAPI
-
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -28,17 +26,18 @@ setup_metrics(app)
 N_FACTS_TO_CHOSE = 3
 ASYNC_SIZE = int(os.environ.get('ASYNC_SIZE', 5))
 
-
 NEWS_API_REQUESTOR = CachedRequestsAPI(renew_freq_time=3600)  # time in seconds
 
+ARTICLES_PATTERN = re.compile(r"\b(a|an|the)\b", re.IGNORECASE)
+EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE = re.compile(r"[^a-zA-Z0-9 ]")
+DOUBLE_SPACES = re.compile(r"\s+")
 
-def remove_punct_and_articles(s, lowecase=True):
-    articles = ['a', 'the']
-    if lowecase:
-        s = s.lower()
-    no_punct = ''.join([c for c in s if c not in string.punctuation])
-    no_articles = ' '.join([w for w in word_tokenize(no_punct) if w.lower() not in articles])
-    return no_articles
+
+def remove_punct_and_articles(s):
+    s = re.sub(ARTICLES_PATTERN, "", s)
+    s = re.sub(EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE, "", s)
+    s = re.sub(DOUBLE_SPACES, " ", s)
+    return s
 
 
 def collect_topics_and_statuses(dialogs):
@@ -127,7 +126,7 @@ def respond():
             responses.append([{}])
 
     total_time = time() - st_time
-    logger.info(f'news_api_skill exec time: {total_time:.3f}s')
+    logger.info(f'news_api_annotator exec time: {total_time:.3f}s')
     return jsonify(responses)
 
 
