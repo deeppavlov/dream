@@ -13,7 +13,8 @@ import common.dialogflow_framework.utils.condition as condition_utils
 import common.dialogflow_framework.utils.state as state_utils
 
 from CoBotQA.cobotqa_service import send_cobotqa
-from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE, MUST_CONTINUE
+from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE, MUST_CONTINUE, CAN_NOT_CONTINUE
+from common.news import TOPIC_NEWS_OFFER
 from common.travel import OPINION_REQUESTS_ABOUT_TRAVELLING, TRAVELLING_TEMPLATE, I_HAVE_BEEN_TEMPLATE, \
     WHY_DONT_USER_LIKES_TRAVELLING_RESPONSES, OPINION_REQUEST_ABOUT_MENTIONED_BY_USER_LOC, USER_IMPRESSIONS_REQUEST, \
     WOULD_USER_LIKE_TO_VISIT_LOC_REQUESTS, ACKNOWLEDGE_USER_WILL_VISIT_LOC, QUESTIONS_ABOUT_LOCATION, \
@@ -340,6 +341,7 @@ def have_bot_been_in_response(vars):
         location = "there"
 
     facts = state_utils.get_fact_for_particular_entity_from_human_utterance(vars, location)
+    facts = [fact for fact in facts if "is a city" not in fact.lower()]
     responses = [f"I've been {location} just virtually because physically I live in the cloud. Have you been there?",
                  f"I've been {location} via pictures and videos. Have you been there?",
                  ]
@@ -414,6 +416,7 @@ def user_have_been_in_response(vars):
             # if we found named location, super conf if no request in user uttrs, otherwise default conf
             state_utils.save_to_shared_memory(vars, discussed_location=location)
             facts = state_utils.get_fact_for_particular_entity_from_human_utterance(vars, location)
+            facts = [fact for fact in facts if "is a city" not in fact.lower()]
             if facts:
                 state_utils.save_to_shared_memory(
                     vars, fact_about_discussed_location={"location": location,
@@ -676,6 +679,19 @@ def offer_fact_about_loc_response(vars):
                                                      "fact": fact_about_location})
             return random.choice(OFFER_FACT_RESPONSES).replace("LOCATION", location)
         else:
+            if location and location != "there":
+                # we are doing that only to check that we have such news, continuation is up to news-api-skill
+                news_about_loc = state_utils.get_news_about_particular_entity_from_human_utterance(vars, location)
+                if news_about_loc:
+                    confidence = choose_conf_decreasing_if_requests_in_human_uttr(
+                        vars, SUPER_CONFIDENCE, DEFAULT_CONFIDENCE)
+                    state_utils.set_confidence(vars, confidence)
+                    if confidence == SUPER_CONFIDENCE:
+                        state_utils.set_can_continue(vars, MUST_CONTINUE)
+                    else:
+                        state_utils.set_can_continue(vars, CAN_NOT_CONTINUE)
+                    return f"{random.choice(TOPIC_NEWS_OFFER)} {location}?"
+
             state_utils.set_confidence(vars, ZERO_CONFIDENCE)
             return error_response(vars)
     except Exception as exc:
