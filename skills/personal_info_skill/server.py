@@ -233,6 +233,20 @@ def tell_my_info(dialog, which_info="name"):
     return response, confidence, attr
 
 
+def extract_possible_names(annotated_utterance, only_named, with_labels):
+    entities = get_entities(
+        annotated_utterance,
+        only_named=only_named,
+        with_labels=with_labels,
+    )
+    if not only_named:
+        nounphrases = annotated_utterance["annotations"].get("cobot_nounphrases", [])
+        if with_labels:
+            nounphrases = [{"text": np, "label": "misc"} for np in nounphrases]
+        entities += nounphrases
+    return entities
+
+
 def check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr):
     found_info = None
 
@@ -240,12 +254,14 @@ def check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr):
         named_entities = get_named_persons({"text": curr_user_uttr, "annotations": curr_user_annot})
     else:
         named_entities = get_named_locations({"text": curr_user_uttr, "annotations": curr_user_annot})
-
     if len(named_entities) == 0:
         # try to search in all types of NAMED entities
         named_entities = []
-        for ent in get_entities({"text": curr_user_uttr, "annotations": curr_user_annot},
-                                only_named=True, with_labels=True):
+        for ent in extract_possible_names(
+                {"text": curr_user_uttr, "annotations": curr_user_annot},
+                only_named=False,
+                with_labels=True,
+        ):
             if ent["text"].lower() == "alexa":
                 if (re.search(r"(my (name is|name's)|call me) alexa", curr_user_uttr) or (re.search(
                         r"(what is|what's|whats|tell me) your? name",
@@ -256,7 +272,11 @@ def check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr):
                 else:
                     # in all other cases skip alexa
                     continue
-            if re.match(r"^" + ent["text"] + r"[.,!?]*$", curr_user_uttr, re.IGNORECASE):
+            if re.search(
+                    r"^" + ent["text"] + r"[.,!?]*$|" + my_name_is_pattern.pattern + ' +' + ent["text"],
+                    curr_user_uttr,
+                    re.IGNORECASE
+            ):
                 named_entities.append(ent["text"])
             elif (which_info == "name" and ent["type"] == "PER") or (
                     which_info in ["homeland", "location"] and ent["type"] == "LOC"):
