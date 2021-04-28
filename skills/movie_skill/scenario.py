@@ -152,8 +152,11 @@ class MovieSkillScenario:
                                 human_attr["discussed_movie_titles"] += [self.templates.imdb(movie_id).get("title", "")]
                                 human_attr["discussed_movie_ids"] += [movie_id]
 
-                _was_book_linkto = any([phrase in dialog["bot_utterances"][-1]["text"]
-                                        for phrase in common_books.skill_trigger_phrases()])
+                if len(dialog["bot_utterances"]):
+                    _was_book_linkto = any([phrase in dialog["bot_utterances"][-1]["text"]
+                                            for phrase in common_books.skill_trigger_phrases()])
+                else:
+                    _was_book_linkto = False
                 if _was_book_linkto:
                     # significantly decrease confidence if was question about books in prev bot utterance
                     logger.info(f"Previous bot utterance is a question about books. Decrease confidence by 0.9.")
