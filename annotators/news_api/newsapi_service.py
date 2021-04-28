@@ -91,6 +91,7 @@ class CachedRequestsAPI:
             response = resp.json()
             response = response.get("articles", [])
             result = response
+        result = self.get_not_blacklisted_english_news(result)
         return result
 
     def send(self, topic="all", status="", prev_news_urls=None):
@@ -118,13 +119,13 @@ class CachedRequestsAPI:
             top_news = [news for news in top_news if "url" in news and news["url"] not in prev_news_urls]
 
         if len(top_news) > 0:
-            result = self.get_not_blacklisted_english_news(top_news)
+            return top_news[0]
         else:
-            result = {}
-        return result
+            return {}
 
     @staticmethod
     def get_not_blacklisted_english_news(articles):
+        articles_to_check = []
         for article in articles:
             title = article.get("title", "") or ""
             if len(title) == 0:
@@ -135,33 +136,30 @@ class CachedRequestsAPI:
             if get_nltk_sentiment(article.get("title", "")) == "negative":
                 continue
 
-            to_check = [f"{title} {description}"]
+            articles_to_check += [f"{title} {description}"]
 
-            try:
-                resp = requests.request(url=BLACKLIST_ANNOTATOR_URL, json={"sentences": to_check},
-                                        method="POST", timeout=1.5)
-            except (requests.ConnectTimeout, requests.ReadTimeout) as e:
-                sentry_sdk.capture_exception(e)
-                logger.exception("Blacklisted Annotator requests from News API skill Timeout")
-                resp = requests.Response()
-                resp.status_code = 504
+        try:
+            resp = requests.request(url=BLACKLIST_ANNOTATOR_URL, json={"sentences": articles_to_check},
+                                    method="POST", timeout=0.3)
+        except (requests.ConnectTimeout, requests.ReadTimeout) as e:
+            sentry_sdk.capture_exception(e)
+            logger.exception("Blacklisted Annotator requests from News API Annotator Timeout")
+            resp = requests.Response()
+            resp.status_code = 504
 
-            if resp.status_code != 200:
-                logger.warning(
-                    f"result status code is not 200: {resp}. result text: {resp.text}; "
-                    f"result status: {resp.status_code}")
-                result = False
-                sentry_sdk.capture_message(
-                    f"Blacklisted Annotator requests from News API skill "
-                    f" result status code is not 200: {resp}. result text: {resp.text}; "
-                    f"result status: {resp.status_code}")
-            else:
-                # each element is like `{'inappropriate': False, 'profanity': False, 'restricted_topics': False}`
-                result = [sum(d.values()) for d in resp.json()[0]["batch"]][0]
+        if resp.status_code != 200:
+            logger.warning(
+                f"result status code is not 200: {resp}. result text: {resp.text}; "
+                f"result status: {resp.status_code}")
+            result = [False] * len(articles_to_check)
+            sentry_sdk.capture_message(
+                f"Blacklisted Annotator requests from News API Annotator "
+                f" result status code is not 200: {resp}. result text: {resp.text}; "
+                f"result status: {resp.status_code}")
+        else:
+            # each element is like `{'inappropriate': False, 'profanity': False, 'restricted_topics': False}`
+            result = [sum(d.values()) for d in resp.json()[0]["batch"]]
 
-            if not result:
-                return article
-            else:
-                continue
+        articles = [article for article, is_black in zip(articles, result) if not is_black]
 
-        return {}
+        return articles
