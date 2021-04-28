@@ -14,6 +14,7 @@ import sentry_sdk
 
 from common.universal_templates import opinion_request_question, fact_about_replace, FACT_ABOUT_TEMPLATES
 from common.utils import get_topics, get_intents, get_entities
+from common.factoid import FACT_REGEXP, WHAT_REGEXP
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -150,6 +151,10 @@ def respond():
                         response = f"I don't have an opinion on that but... {response}"
                     else:
                         response = f"I don't have an opinion on that but I've heard that {response}"
+                if any([re.match(curr_uttr['text'], FACT_REGEXP),
+                        re.match(curr_uttr['text'], WHAT_REGEXP)]) and confidence >= 0.7:
+                    # Factual question - must increase confidence
+                    confidence = 1
             else:
                 confidence = 0.00
                 response = ""
