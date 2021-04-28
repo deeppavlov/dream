@@ -159,6 +159,7 @@ class BookSkillScenario:
                     annotated_bot_phrase = {'text': '', 'annotations': {}}
                 else:
                     annotated_bot_phrase = dialog['bot_utterances'][-1]
+                bot_phrases = [phrase for phrase in bot_phrases if '#repeat' not in phrase]
                 logger.debug(f'bot phrases: {bot_phrases}')
 
                 user_phrases = [utt["text"] for utt in dialog['human_utterances'][-2:]]
