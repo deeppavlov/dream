@@ -49,7 +49,7 @@ LINKTO_FOR_LONG_RESPONSE_CONFIDENCE = 0.7
 OFFER_MORE = "Do you want to hear more?"
 ASK_OPINION = "What do you think about it?"
 
-NEWS_TEMPLATES = re.compile(r"(news|(what is|what's)( the)? new|something new)")
+NEWS_TEMPLATES = re.compile(r"(tell (me )?(some )?news|(what is|what's)( the)? new|something new)")
 FALSE_NEWS_TEMPLATES = re.compile(r"(s good news|s bad news|s sad news|s awful news|s terrible news)")
 TELL_MORE_NEWS_TEMPLATES = re.compile(r"(tell me more|tell me next|more news|next news|other news|learn more)")
 
@@ -190,27 +190,7 @@ def collect_topics_and_statuses(dialogs):
             lets_chat_about_news = if_chat_about_particular_topic(curr_uttr, prev_uttr, compiled_pattern=NEWS_TEMPLATES)
             _was_offer_news = was_offer_news_about_topic(prev_bot_uttr_lower)
 
-            if OFFER_BREAKING_NEWS.lower() in prev_bot_uttr_lower:
-                # news skill was not previously active
-                topics.append("all")
-                if is_yes(curr_uttr) or lets_chat_about_news:
-                    logger.info("Detected topic for news: all.")
-                    statuses.append("headline")
-                else:
-                    logger.info("Detected topic for news: all. Refused to get latest news")
-                    statuses.append("declined")
-                curr_news_samples.append(get_news_for_current_entity("all", curr_uttr, discussed_news))
-            elif _was_offer_news:
-                entities = extract_topics(prev_bot_uttr)
-                topics.append(entities[-1])
-                if is_yes(curr_uttr):
-                    logger.info(f"Bot offered news on entities: `{entities}`")
-                    statuses.append("headline")
-                else:
-                    logger.info(f"Bot offered news on entities: `{entities}`. User refused.")
-                    statuses.append("declined")
-                curr_news_samples.append(get_news_for_current_entity(entities[-1], curr_uttr, discussed_news))
-            elif about_news or lets_chat_about_particular_topic:
+            if about_news:
                 # the request contains something about news
                 entities = extract_topics(curr_uttr)
                 logger.info(f"News request on entities: `{entities}`")
@@ -230,18 +210,49 @@ def collect_topics_and_statuses(dialogs):
                     statuses.append("headline")
                     curr_news_samples.append(get_news_for_current_entity(prev_topic, curr_uttr, discussed_news))
                 elif len(entities) == 0:
-                    if about_news:
-                        # no entities or nounphrases -> no special news request, get all news
-                        logger.info("News request, no entities and nounphrases.")
-                        topics.append("all")
-                        statuses.append("headline")
-                        curr_news_samples.append(get_news_for_current_entity("all", curr_uttr, discussed_news))
-                    else:
-                        # no entities or nounphrases & lets_chat_about_particular_topic
-                        logger.info("No news request, no entities and nounphrases, but lets chat.")
-                        topics.append("all")
-                        statuses.append("declined")
-                        curr_news_samples.append({})
+                    # no entities or nounphrases -> no special news request, get all news
+                    logger.info("News request, no entities and nounphrases.")
+                    topics.append("all")
+                    statuses.append("headline")
+                    curr_news_samples.append(get_news_for_current_entity("all", curr_uttr, discussed_news))
+                else:
+                    # found entities or nounphrases -> special news request,
+                    # get the last mentioned entity
+                    # if no named entities, get the last mentioned nounphrase
+                    logger.info(f"Detected topic for news: {entities[-1]}")
+                    topics.append(entities[-1])
+                    statuses.append("headline")
+                    curr_news_samples.append(get_news_for_current_entity(entities[-1], curr_uttr, discussed_news))
+            elif OFFER_BREAKING_NEWS.lower() in prev_bot_uttr_lower:
+                # news skill was not previously active
+                topics.append("all")
+                if is_yes(curr_uttr) or lets_chat_about_news:
+                    logger.info("Detected topic for news: all.")
+                    statuses.append("headline")
+                else:
+                    logger.info("Detected topic for news: all. Refused to get latest news")
+                    statuses.append("declined")
+                curr_news_samples.append(get_news_for_current_entity("all", curr_uttr, discussed_news))
+            elif _was_offer_news:
+                entities = extract_topics(prev_bot_uttr)
+                topics.append(entities[-1])
+                if is_yes(curr_uttr):
+                    logger.info(f"Bot offered news on entities: `{entities}`")
+                    statuses.append("headline")
+                else:
+                    logger.info(f"Bot offered news on entities: `{entities}`. User refused.")
+                    statuses.append("declined")
+                curr_news_samples.append(get_news_for_current_entity(entities[-1], curr_uttr, discussed_news))
+            elif lets_chat_about_particular_topic:
+                # the request contains something about news
+                entities = extract_topics(curr_uttr)
+                logger.info(f"News request on entities: `{entities}`")
+                if len(entities) == 0:
+                    # no entities or nounphrases & lets_chat_about_particular_topic
+                    logger.info("No news request, no entities and nounphrases, but lets chat.")
+                    topics.append("all")
+                    statuses.append("declined")
+                    curr_news_samples.append({})
                 else:
                     # found entities or nounphrases -> special news request,
                     # get the last mentioned entity
