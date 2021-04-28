@@ -278,8 +278,8 @@ def check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr):
                     re.IGNORECASE
             ):
                 named_entities.append(ent["text"])
-            elif (which_info == "name" and ent["type"] == "PER") or (
-                    which_info in ["homeland", "location"] and ent["type"] == "LOC"):
+            elif (which_info == "name" and ent.get("type", "") == "PER") or (
+                    which_info in ["homeland", "location"] and ent.get("type", "") == "LOC"):
                 named_entities.append(ent["text"])
 
     if named_entities:
