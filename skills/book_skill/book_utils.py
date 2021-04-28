@@ -30,6 +30,7 @@ NOT_LIKE_PATTERN = r"(dislike|not like|not want|not love|not prefer|hate|n't lik
 LIKE_PATTERN = r"(like|love|prefer|adore|enjoy|fond of|passionate of|fan of|interested in|" \
                r"into|for you|for me)"
 FAVORITE_PATTERN = r"(favorite|loved|beloved|fondling|best|most interesting)"
+CHRISTIANITY_PATTERN = r"(bibla\b|bible\b|bibel\b)"
 
 GENRE_DICT = {'memoir autobiography': 'memoir books',
               'history biography': 'biography books',
@@ -176,6 +177,13 @@ def fact_about_book(annotated_user_phrase):
 
 def is_previous_was_book_skill(dialog):
     return len(dialog['bot_utterances']) >= 1 and dialog["bot_utterances"][-1]["active_skill"] == 'book_skill'
+
+
+christianity_template = re.compile(CHRISTIANITY_PATTERN, re.IGNORECASE)
+
+
+def bible_request(annotated_uttr):
+    return re.search(christianity_template, annotated_uttr['text'])
 
 
 def just_mentioned(annotated_phrase, book):

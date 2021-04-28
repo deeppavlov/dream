@@ -41,6 +41,7 @@ SKILL_TOPICS = {
             "Entertainment_Books"
         ],
         "cobot_topics": [
+            "Religion",
             "Entertainment",
             "Literature"
         ]

@@ -16,7 +16,7 @@ from book_utils import get_name, get_genre, suggest_template, get_not_given_ques
     fact_about_book, fav_genre_request_detected, is_side_intent, is_stop, \
     fav_book_request_detected, parse_author_best_book, best_book_by_author, GENRE_PHRASES, was_question_about_book, \
     asked_about_genre, GENRE_DICT, is_previous_was_book_skill, just_mentioned, dontknow, \
-    book_was_offered, tell_about_book
+    book_was_offered, tell_about_book, bible_request
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -42,6 +42,11 @@ FAVOURITE_BOOK_ANSWERS = ['My favourite book is "The Old Man and the Sea" by Ern
                           'and a large marlin. This is my favourite story, it is truly fascinating.']
 WHAT_IS_FAV_GENRE = 'I have read a plenty of books from different genres. What is your favorite book genre?'
 HAVE_YOU_READ_BOOK = 'Amazing! Have you read BOOK? And if you have read it, what do you think about it?'
+BIBLE_RESPONSES = ["I know that Bible is one of the most widespread books on the Earth. "
+                   "It forms the basic of the Christianity. Have you really read the whole Bible?",
+                   "Unfortunately, as a socialbot, I don't have an immortal soul,"
+                   "so I don't think I will ever get into Heaven. That's why I don't know much about religion."
+                   "Let's talk about something else."]
 READ_BOOK_ADVICE = "You can read it. You won't regret it! May I tell you something about this book?"
 USER_LIKED_BOOK_PHRASE = "I see you love it. It is so wonderful that you read the books you love."
 USER_DISLIKED_BOOK_PHRASE = "I see that this book didn't excite you. " \
@@ -191,6 +196,28 @@ class BookSkillScenario:
                     # if book skill was active, stop/not/other intents, do not reply
                     logger.debug('Detected stop/no/other intent')
                     reply, confidence = self.default_reply, 0
+                elif bible_request(annotated_user_phrase):
+                    # if user asked us about Bible or christianity
+                    logger.debug('Detected favorite book request')
+                    if BIBLE_RESPONSES[0] not in human_attr['book_skill']['used_phrases']:
+                        reply = BIBLE_RESPONSES[0]
+                    elif FAVOURITE_BOOK_ANSWERS[1] not in human_attr['book_skill']['used_phrases']:
+                        reply = FAVOURITE_BOOK_ANSWERS[1]
+                        if BIBLE_RESPONSES[0] == annotated_bot_phrase['text']:
+                            reply = f"I am pleased to know it. Let's talk about something else. {reply}"
+                        skills_to_link = ["news_api_skill",
+                                          "movie_skill",
+                                          "book_skill",
+                                          "game_cooperative_skill",
+                                          "dff_travel_skill",
+                                          "dff_animals_skill",
+                                          "dff_sport_skill",
+                                          "dff_food_skill",
+                                          "dff_music_skill"]
+                        reply = f'{reply} {link_to(skills_to_link, dialog["human"]["attributes"])}'
+                    else:
+                        reply = random.choice(FAVOURITE_BOOK_ANSWERS)
+                    confidence = self.super_conf
                 elif fav_genre_request_detected(annotated_user_phrase):
                     # if user asked us about favorite genre
                     logger.debug('Detected favorite genre request')
