@@ -5,8 +5,10 @@ logger = logging.getLogger(__name__)
 
 grounding_patterns = [
     "what are we talking about",
+    "what we are talking about",
     "what do we talk about",
     "what are you talking about",
+    "what you are talking about",
     "what do you talk about",
     "what it is about",
     "what is it about",
