@@ -18,7 +18,7 @@ app = Flask(__name__)
 templates = []
 
 templates += [(re.compile(r"^alexa ", flags=re.IGNORECASE), "")]
-templates += [(re.compile(r"(?<= [a-z])\. (?=[a-z]\.)|(?<= [a-z]\. [a-z])\.(?! [a-z]\.)", flags=re.IGNORECASE), "")]
+templates += [(re.compile(r"(?<=\b[a-z])\. (?=[a-z]\.)|(?<=\b[a-z]\. [a-z])\.(?! [a-z]\.)", flags=re.IGNORECASE), "")]
 templates += [(re.compile(r"\bwon'?t\b", flags=re.IGNORECASE), "will not")]
 templates += [(re.compile(r"\bhaven'?t\b", flags=re.IGNORECASE), "have not")]
 templates += [(re.compile(r"\bhadn'?t\b", flags=re.IGNORECASE), "had not")]
