@@ -131,13 +131,6 @@ MUST_CONTINUE_CONFIDENCE = 0.98
 CANNOT_CONTINUE_CONFIDENCE = 0.0
 # endregion
 
-
-# region COMMENTS
-COMMENTS = {
-    "neutral": ["Ok. ", "Oh. ", "Huh. ", "Well. ", "Gotcha. ", "Hmm. ", "Aha. "],
-    "positive": ["Sounds cool! ", "Great! ", "Wonderful! "],
-    "negative": ["Huh... ", "Sounds sad... ", "Sorry... "],
-}
 # endregion
 
 ################################################################################
@@ -369,9 +362,6 @@ def usr_topic_to_event_response(vars):
     # %ack%. So, speaking of %target_topic%, this happened recently: %event%. Have you heard about it?
     logger.debug("exec usr_topic_to_event_response")
     try:
-        shared_memory = state_utils.get_shared_memory(vars)
-
-        last_acknowledgements = shared_memory.get("last_acknowledgements", [])
         selected_topics = get_supported_cobot_topics(vars)
         if selected_topics:
             cobot_topic = random.choice(list(selected_topics))  # "Entertainment_Movies" # for the time being
@@ -396,10 +386,7 @@ def usr_topic_to_event_response(vars):
             news_title = "Disney will release Scarlett Johansson in Black Widow in theaters and streaming in July"
 
         # get ack, body
-        sentiment = state_utils.get_human_sentiment(vars)
-        ack = common_utils.get_not_used_template(
-            used_templates=last_acknowledgements, all_templates=COMMENTS[sentiment]
-        )
+        ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
 
         # saving person to the list of people mentioned by bot, for now with "Other" judgement
         save_mentioned_person(vars, person, "Other", "people_mentioned_by_bot")
@@ -431,7 +418,6 @@ def usr_topic_to_event_response(vars):
         # can continue = true
         state_utils.set_can_continue(vars, common_constants.MUST_CONTINUE)
 
-        state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
@@ -480,9 +466,6 @@ def usr_event_to_person_response(vars):
         # TEMPORARY OVERRIDE
         current_cobot_topic = "Entertainment_Movies"
 
-        last_acknowledgements = shared_memory.get("last_acknowledgements", [])
-        sentiment = state_utils.get_human_sentiment(vars)
-
         # Positive or Negative
         emotion_reaction_options = ["Liked", "Disliked"]
         # trusting holy RNG
@@ -493,9 +476,7 @@ def usr_event_to_person_response(vars):
         state_utils.save_to_shared_memory(vars, bot_emotion_towards_current_person=target_emotion_type)
 
         # get ack, body
-        ack = common_utils.get_not_used_template(
-            used_templates=last_acknowledgements, all_templates=COMMENTS[sentiment]
-        )
+        ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
 
         # generating response
         body = random.choice(common_gossip.EVENT_TO_PERSON_QUESTIONS)
@@ -522,8 +503,7 @@ def usr_event_to_person_response(vars):
         # can continue = true
         state_utils.set_can_continue(vars, common_constants.CAN_CONTINUE_SCENARIO)
 
-        state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
-        return " ".join([body, prompt])
+        return " ".join([ack, body, prompt])
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -1121,9 +1101,6 @@ def usr_change_to_person_response(vars):
     try:
         shared_memory = state_utils.get_shared_memory(vars)
 
-        last_acknowledgements = shared_memory.get("last_acknowledgements", [])
-        sentiment = state_utils.get_human_sentiment(vars)
-
         shared_memory = state_utils.get_shared_memory(vars)
         # obtaining current context
         current_cobot_topic = shared_memory.get("current_cobot_topic", "")
@@ -1146,9 +1123,8 @@ def usr_change_to_person_response(vars):
         state_utils.save_to_shared_memory(vars, current_person=person)
 
         # generating response
-        ack = common_utils.get_not_used_template(
-            used_templates=last_acknowledgements, all_templates=COMMENTS[sentiment]
-        )
+        ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
+
         prompt = random.choice(common_gossip.CHANGE_TO_OTHER_PERSON_QUESTIONS)
 
         prompt = prompt.replace("target_person", person)

@@ -13,7 +13,6 @@ from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTI
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
-import common.utils as common_utils
 import common.greeting as common_greeting
 import common.link as common_link
 import dialogflows.scopes as scopes
@@ -128,19 +127,6 @@ simplified_dialogflow = dialogflow_extention.DFEasyFilling(State.USR_START)
 ##################################################################################################################
 # utils
 ##################################################################################################################
-std_acknowledgements = {
-    "neutral": ["Ok. ", "Oh. ", "Huh. ", "Well. ", "Gotcha. ", "Hmm. ", "Aha. "],
-    "positive": ["Sounds cool! ", "Great! ", "Wonderful! "],
-    "negative": ["Huh... ", "Sounds sad... ", "Sorry... "],
-}
-
-
-def get_sentiment_acknowledgement(vars, acknowledgements=None):
-    acknowledgements = std_acknowledgements.update(acknowledgements) if acknowledgements else std_acknowledgements
-    sentiment = state_utils.get_human_sentiment(vars)
-    if condition_utils.is_yes_vars(vars) or condition_utils.is_no_vars(vars):
-        sentiment = "neutral"
-    return acknowledgements.get(sentiment, [""])
 
 
 # curl -H "Content-Type: application/json" -XPOST http://0.0.0.0:8088/respond \
@@ -356,11 +342,6 @@ def is_no_request(ngrams, vars):
 
 
 GREETING_STEPS = list(common_greeting.GREETING_QUESTIONS)
-COMMENTS = {
-    "neutral": ["Ok. ", "Oh. ", "Huh. ", "Well. ", "Gotcha. ", "Hmm. ", "Aha. "],
-    "positive": ["Sounds cool! ", "Great! ", "Wonderful! "],
-    "negative": ["Huh... ", "Sounds sad... ", "Sorry... "],
-}
 
 
 def std_greeting_request(ngrams, vars):
@@ -383,13 +364,8 @@ def std_greeting_response(vars):
         shared_memory = state_utils.get_shared_memory(vars)
 
         greeting_step_id = shared_memory.get("greeting_step_id", 0)
-        last_acknowledgements = shared_memory.get("last_acknowledgements", [])
-        sentiment = state_utils.get_human_sentiment(vars)
-
         # get ack, body
-        ack = common_utils.get_not_used_template(
-            used_templates=last_acknowledgements, all_templates=COMMENTS[sentiment]
-        )
+        ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
         if greeting_step_id == 0:
             prev_active_skills = [uttr.get("active_skill", "") for uttr in vars["agent"]["dialog"]["bot_utterances"]][
                 -5:
@@ -401,7 +377,7 @@ def std_greeting_response(vars):
 
         # set_confidence
         set_confidence_by_universal_policy(vars)
-        state_utils.save_to_shared_memory(vars, greeting_step_id=greeting_step_id + 1, last_acknowledgements=[ack])
+        state_utils.save_to_shared_memory(vars, greeting_step_id=greeting_step_id + 1)
 
         return " ".join([ack, body])
     except Exception as exc:
@@ -429,7 +405,7 @@ def new_entities_is_needed_for_request(ngrams, vars):
 #       -d '{"input": "cars", "category": "DesireOf"}'
 def new_entities_is_needed_for_response(vars):
     try:
-        ack = random.choice(get_sentiment_acknowledgement(vars))
+        ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
         body = "Tell me more about that."
         # new_entities = state_utils.get_new_human_labeled_noun_phrase(vars)
         # new_entity = list(new_entities)[0]
@@ -468,7 +444,7 @@ def closed_answer_request(ngrams, vars):
 
 
 def closed_answer_response(vars):
-    ack = random.choice(get_sentiment_acknowledgement(vars))
+    ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
     body = ""
 
     set_confidence_by_universal_policy(vars)
