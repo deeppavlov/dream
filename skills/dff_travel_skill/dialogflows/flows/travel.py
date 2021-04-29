@@ -380,10 +380,13 @@ def _user_have_been_in_request(vars):
         HAVE_YOU_BEEN_TEMPLATE, state_utils.get_last_bot_utterance(vars)["text"]) and condition_utils.is_yes_vars(vars)
     user_says_been_in = re.search(
         I_HAVE_BEEN_TEMPLATE, state_utils.get_last_human_utterance(vars)["text"])
+
+    user_mentioned_locations = get_mentioned_locations(vars)
     bot_asked_about_location = any([req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower()
                                     for req in QUESTIONS_ABOUT_LOCATION])
 
-    if bot_asks_have_you_been_and_user_agrees or user_says_been_in or bot_asked_about_location:
+    if bot_asks_have_you_been_and_user_agrees or user_says_been_in or (
+            bot_asked_about_location and len(user_mentioned_locations) > 0):
         return True
     return False
 
