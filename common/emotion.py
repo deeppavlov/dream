@@ -23,6 +23,7 @@ HOW_DO_YOU_FEEL = 'How do you feel?'
 
 LONELINESS_TEMPLATE = r"(i am alone|lonely|loneliness)"
 SAD_TEMPLATE = r"(sad\b|horrible\b|depressed\b|awful\b|dire\b|pretty bad|pain\b|^bad$|^say$)"
+BORING_TEMPLATE = r"(boring|bored)"  # The template is used to EXCLUDE answers on this intent
 JOKE_REQUEST_COMPILED_PATTERN = re.compile(r"(tell me|tell|hear)( [a-z]+){0,3} jokes?", re.IGNORECASE)
 TALK_ABOUT_EMO_TEMPLATE = re.compile(r'talk about emotion', re.IGNORECASE)
 
@@ -33,6 +34,10 @@ def talk_about_emotion(uttr):
 
 def is_sad(uttr):
     return re.search(SAD_TEMPLATE, uttr)
+
+
+def is_boring(uttr):
+    return re.search(BORING_TEMPLATE, uttr)
 
 
 def is_alone(uttr):

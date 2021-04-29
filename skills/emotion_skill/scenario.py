@@ -4,7 +4,8 @@ import logging
 from os import getenv
 from common.constants import MUST_CONTINUE, CAN_CONTINUE_SCENARIO
 from common.link import link_to
-from common.emotion import is_joke_requested, is_sad, is_alone, skill_trigger_phrases, talk_about_emotion
+from common.emotion import is_joke_requested, is_sad, is_alone, is_boring, \
+    skill_trigger_phrases, talk_about_emotion
 from common.universal_templates import book_movie_music_found
 from common.utils import get_emotions
 from collections import defaultdict
@@ -30,6 +31,8 @@ class EmotionSkillScenario:
         if is_sad(annotated_user_phrase['text']):
             self.regexp_sad = True
             return 'sadness'
+        elif is_boring(annotated_user_phrase['text']):
+            return 'neutral'
         most_likely_emotion = None
         emotion_probs = get_emotions(annotated_user_phrase, probs=True)
         if discard_emotion in emotion_probs:
