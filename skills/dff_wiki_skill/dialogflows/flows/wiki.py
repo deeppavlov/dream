@@ -227,11 +227,14 @@ def tell_fact_response(vars):
     started = shared_memory.get("start", False)
     if not started:
         state_utils.save_to_shared_memory(vars, start=True)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_PROMPT)
     if response:
         state_utils.set_confidence(vars, confidence=CONF_1)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     else:
         state_utils.set_confidence(vars, confidence=CONF_4)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+        if started:
+            state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
 

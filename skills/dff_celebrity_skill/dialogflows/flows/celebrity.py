@@ -15,7 +15,7 @@ import dialogflows.scopes as scopes
 
 from common.utils import get_types_from_annotations
 from common.celebrities import talk_about_celebrity, skill_trigger_phrases
-from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_CONTINUE_SCENARIO_DONE
+from common.constants import MUST_CONTINUE, CAN_CONTINUE_PROMPT, CAN_NOT_CONTINUE
 from CoBotQA.cobotqa_service import send_cobotqa
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -248,7 +248,7 @@ def propose_celebrity_response(vars):
         if any([trigger_phrase in bot_utterance["text"] for trigger_phrase in TRIGGER_PHRASES]):
             confidence = CONF_HIGH
         state_utils.set_confidence(vars, confidence=confidence)
-        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
         celebrity, celebrity_name = get_celebrity(vars)
         asked_celebrities = asked_celebrities + [celebrity]
         state_utils.save_to_shared_memory(vars, asked_celebrities=asked_celebrities)
@@ -308,8 +308,6 @@ def celebrity_fact_response(vars):
 
 def celebrity_otherjob_response(vars):
     try:
-        state_utils.set_confidence(vars, confidence=CONF_HIGH)
-        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         celebrity_name, celebrity_otherjob = get_celebrity(vars, exclude_types=True)
         if celebrity_otherjob and celebrity_name:
             shared_memory = state_utils.get_shared_memory(vars)
@@ -322,27 +320,27 @@ def celebrity_otherjob_response(vars):
             if next_fact:
                 reply = f"{reply} May I tell you something else about this person?"
             state_utils.set_confidence(vars, confidence=CONF_HIGH)
-            state_utils.set_can_continue(vars)
+            state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
             return reply
         else:
+            state_utils.set_confidence(vars, confidence=0)
             msg = "We should have found other job here"
             logger.warn(msg)
             sentry_sdk.capture_message(msg)
             return error_response(vars)
     except Exception as exc:
         return error_response(vars, exc)
-    return error_response(vars)
 
 
 def info_response(vars):
     state_utils.set_confidence(vars, confidence=CONF_MEDIUM)
-    state_utils.set_can_continue(vars)
+    state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
     return "Could you please tell me more about this person?"
 
 
 def acknowledge_and_link_to_celebrity_response(vars):
     state_utils.set_confidence(vars, confidence=CONF_MEDIUM)
-    state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
+    state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
     return f"Sounds interesting. But let's talk about something else. {favourite_celebrity_response(vars)}"
 
 
@@ -352,7 +350,7 @@ def link_to_celebrity_response(vars):
 
 def ask_film_response(vars):
     state_utils.set_confidence(vars, confidence=CONF_MEDIUM)
-    state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO_DONE)
+    state_utils.set_can_continue(vars, CAN_NOT_CONTINUE)
     return "What is your favourite film with this actor?"
 
 
@@ -372,10 +370,7 @@ def favourite_celebrity_response(vars):
                 )
                 confidence = confidences[i]
                 state_utils.set_confidence(vars, confidence=confidence)
-                if i == 0:
-                    state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
-                else:
-                    state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
+                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
                 return celebrity_question
     except Exception as exc:
         return error_response(vars, exc)

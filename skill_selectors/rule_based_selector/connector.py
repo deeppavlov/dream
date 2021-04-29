@@ -6,7 +6,7 @@ from typing import Dict, Callable
 
 import sentry_sdk
 
-from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_CONTINUE_SCENARIO_DONE
+from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_CONTINUE_PROMPT
 from common.emotion import is_joke_requested, if_turn_on_emotion
 from common.link import get_all_linked_to_skills
 from common.skills_turn_on_topics_and_patterns import turn_on_skills
@@ -123,7 +123,7 @@ class RuleBasedSkillSelectorConnector:
                 # turn on prev active skill if it returned not `CAN_NOT_CONTINUE`
                 for hyp in prev_user_uttr_hyp:
                     if hyp.get("can_continue", CAN_NOT_CONTINUE) in {CAN_CONTINUE_SCENARIO, MUST_CONTINUE,
-                                                                     CAN_CONTINUE_SCENARIO_DONE}:
+                                                                     CAN_CONTINUE_PROMPT}:
                         if hyp["skill_name"] == prev_active_skill:
                             skills_for_uttr.append(hyp["skill_name"])
             else:
@@ -133,7 +133,7 @@ class RuleBasedSkillSelectorConnector:
                 # turn on prev active skill if it returned not `CAN_NOT_CONTINUE`
                 for hyp in prev_user_uttr_hyp:
                     if hyp.get("can_continue", CAN_NOT_CONTINUE) in {CAN_CONTINUE_SCENARIO, MUST_CONTINUE,
-                                                                     CAN_CONTINUE_SCENARIO_DONE}:
+                                                                     CAN_CONTINUE_PROMPT}:
                         if hyp["skill_name"] == prev_active_skill:
                             skills_for_uttr.append(hyp["skill_name"])
 

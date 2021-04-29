@@ -225,7 +225,7 @@ def to_animals_flow_request(ngrams, vars):
 def what_pets_response(vars):
     response = "What pets do you have?"
     state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
 
 
@@ -235,7 +235,7 @@ def ask_about_dog_cat_response(vars):
         pet_phrase = choose_pet_phrase(vars, found_users_pet)
         response = f"{pet_phrase} Do you have a {found_users_pet}?"
     state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
 
 
@@ -248,7 +248,7 @@ def ask_about_name_response(vars):
         response = "What is his name?"
     state_utils.save_to_shared_memory(vars, asked_name=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
 
 
@@ -256,7 +256,7 @@ def suggest_pet_response(vars):
     phrases = [phrase for pet_phrases in CATS_DOGS_PHRASES.values() for phrase in pet_phrases]
     response = random.choice(phrases)
     state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
 
 

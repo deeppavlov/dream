@@ -138,7 +138,7 @@ def why_do_you_like_response(vars):
     state_utils.save_to_shared_memory(vars, is_wild=True)
     state_utils.save_to_shared_memory(vars, why_do_you_like=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     logger.info(f"why_do_you_like_response: {response}")
     return response
 

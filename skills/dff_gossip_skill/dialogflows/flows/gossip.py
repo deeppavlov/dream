@@ -607,7 +607,7 @@ def usr_not_interested_in_person_response(vars):
         prompt = prompt.replace("target_occupation", occupation)
 
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, common_constants.CAN_CONTINUE_PROMPT)
 
         return " ".join([ack, prompt])
     except Exception as exc:
@@ -846,7 +846,7 @@ def usr_agrees_abt_person_response(vars):
 
         if prompt:
             state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-            state_utils.set_can_continue(vars)
+            state_utils.set_can_continue(vars, common_constants.CAN_CONTINUE_PROMPT)
         else:
             state_utils.set_confidence(vars, CANNOT_CONTINUE_CONFIDENCE)
             state_utils.set_can_continue(vars, common_constants.CAN_NOT_CONTINUE)
@@ -935,7 +935,7 @@ def usr_disagrees_abt_person_response(vars):
     logger.debug("exec usr_disagrees_abt_person_response")
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, common_constants.CAN_CONTINUE_SCENARIO)
         response_text = "Wait but why?"  # YOUR CODE HERE
 
         return response_text
@@ -1044,7 +1044,7 @@ def usr_says_opinion_abt_person_response(vars):
         prompt = random.choice(common_gossip.REACTION_TO_USER_OPINION_ABOUT_PERSON[judgement])
 
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, common_constants.CAN_CONTINUE_SCENARIO)
 
         return prompt
     except Exception as exc:
@@ -1161,7 +1161,7 @@ def usr_change_to_person_response(vars):
         prompt = prompt.replace("target_occupation", occupation)
 
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, common_constants.CAN_CONTINUE_PROMPT)
         return " ".join([ack, prompt])
     except Exception as exc:
         logger.exception(exc)
@@ -1216,11 +1216,11 @@ def usr_mentions_another_person_response(vars):
 
         body = random.choice(common_gossip.CONFUSED_WHY_USER_MENTIONED_PEOPLE)
         state_utils.set_confidence(vars, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars)
+        state_utils.set_can_continue(vars, common_constants.CAN_CONTINUE_PROMPT)
         # checking if user mentioned at least one person
         if len(user_mentioned_people) == 1:  # it should be but we better check that
             state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
-            state_utils.set_can_continue(vars)
+            state_utils.set_can_continue(vars, common_constants.CAN_CONTINUE_PROMPT)
             user_mentioned_person = user_mentioned_people[0]
             # path #1: mentioned person is the current one (w/o coref)
             if current_person in user_mentioned_people:

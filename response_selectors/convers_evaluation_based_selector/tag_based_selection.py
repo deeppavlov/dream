@@ -8,7 +8,7 @@ import sentry_sdk
 from nltk.tokenize import sent_tokenize
 
 from common.link import skills_phrases_map
-from common.constants import CAN_CONTINUE_SCENARIO_DONE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
+from common.constants import CAN_CONTINUE_PROMPT, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.universal_templates import if_chat_about_particular_topic, is_switch_topic, \
     is_any_question_sentence_in_utterance
 from common.utils import get_intent_name, get_intents, get_topics, get_common_tokens_in_lists_of_strings, get_entities
@@ -47,7 +47,7 @@ def categorize_candidate(cand_id, skill_name, categorized_hyps, categorized_prom
                          _is_required_da=False):
     """Hypotheses could be:
         - active or not
-        - can continue tag (not bool) out of CAN_CONTINUE_SCENARIO_DONE, CAN_CONTINUE_SCENARIO,
+        - can continue tag (not bool) out of CAN_CONTINUE_PROMPT, CAN_CONTINUE_SCENARIO,
                                              MUST_CONTINUE, CAN_NOT_CONTINUE
         - if has at least one of the same topic/named entity/noun phrase
         - is dialog breakdown or not
@@ -75,11 +75,12 @@ def categorize_candidate(cand_id, skill_name, categorized_hyps, categorized_prom
             - othr_topic_entity_db
     """
     _is_active_skill = _is_active_skill and skill_name in ACTIVE_SKILLS
-    if (_can_continue == MUST_CONTINUE) or (_is_active_skill and _can_continue == CAN_CONTINUE_SCENARIO):
-        # so, scripted skills with CAN_CONTINUE_SCENARIO_DONE or CAN_NOT_CONTINUE status are not considered as active!
+    if (_can_continue == MUST_CONTINUE) or (_is_active_skill and _can_continue in [CAN_CONTINUE_SCENARIO,
+                                                                                   CAN_NOT_CONTINUE]):
+        # so, scripted skills with CAN_CONTINUE_PROMPT status are not considered as active!
         # this is a chance for other skills to be turned on
         actsuffix = "active"
-    elif _can_continue in [CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE]:
+    elif _can_continue in [CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT]:
         actsuffix = "continued"
     else:
         actsuffix = "finished"
@@ -320,7 +321,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
 
         if cand_uttr["skill_name"] == 'program_y' and cand_uttr['confidence'] == 0.98 and \
                 len(cand_uttr["text"].split()) > 6:
-            cand_uttr["can_continue"] = CAN_CONTINUE_SCENARIO_DONE
+            cand_uttr["can_continue"] = CAN_CONTINUE_SCENARIO
         _can_continue = cand_uttr.get("can_continue", CAN_NOT_CONTINUE)
         if _is_active_skill:
             # we will focibly add prompt if current scripted skill finishes scenario,
