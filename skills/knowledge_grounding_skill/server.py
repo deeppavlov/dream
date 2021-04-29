@@ -44,8 +44,8 @@ DFF_ANNTR_HISTORY_LEN = 1
 special_char_re = re.compile(r'[^0-9a-zA-Z \-\.\'\?,!]+')
 greetings_farewells_re = re.compile(join_words_in_or_pattern(["have .* day", "have .* night", ".* bye",
                                                               "\bbye", "goodbye", "hello",
-                                                              "(it|its|it's) .* chatting.*",
-                                                              "(it|its|it's) .* talking.*",
+                                                              "(it|its|it's|nice|thank you|thanks).* chatting.*",
+                                                              "(it|its|it's|nice|thank you|thanks).* talking.*",
                                                               ".* chatting with you.*",
                                                               "hi", "good morning",
                                                               "good afternoon",
@@ -87,9 +87,13 @@ def get_news(uttr, which):
     annotation = uttr.get("annotations", {}).get("news_api_annotator", [])
     for news_item in annotation:
         if news_item.get("which", "") == which:
+            title = news_item.get("news", {}).get("title", "")
             text = news_item.get("news", {}).get("description", "")
             if text:
-                result_values.append(text)
+                result_values.append({
+                    "title": title,
+                    "description": text
+                })
     return result_values
 
 
@@ -389,11 +393,11 @@ def respond():
 
             user_news = get_news(dialog["human_utterances"][-1], "human")
             bot_news = get_news(dialog["human_utterances"][-1], "bot")
-            all_news = get_news(dialog["human_utterances"][-1], "all")
+            # all_news = get_news(dialog["human_utterances"][-1], "all")
             if user_news:
                 user_input = {
-                    'checked_sentence': user_news[-1],
-                    'knowledge': user_news[-1],
+                    'checked_sentence': user_news[-1].get("decsription", ""),
+                    'knowledge': user_news[-1].get("decsription", ""),
                     'text': user_input_text,
                     'history': user_input_history,
                     'news_fact': "human "
@@ -403,8 +407,8 @@ def respond():
                 dial_ids.append(d_id)
             elif bot_news:
                 user_input = {
-                    'checked_sentence': bot_news[-1],
-                    'knowledge': bot_news[-1],
+                    'checked_sentence': bot_news[-1].get("decsription", ""),
+                    'knowledge': bot_news[-1].get("decsription", ""),
                     'text': user_input_text,
                     'history': user_input_history,
                     'news_fact': "bot "
@@ -412,17 +416,18 @@ def respond():
                 input_batch.append(user_input)
                 annotations_depths.append({})
                 dial_ids.append(d_id)
-            elif all_news:
-                user_input = {
-                    'checked_sentence': all_news[-1],
-                    'knowledge': all_news[-1],
-                    'text': user_input_text,
-                    'history': user_input_history,
-                    'news_fact': "all "
-                }
-                input_batch.append(user_input)
-                annotations_depths.append({})
-                dial_ids.append(d_id)
+            # elif all_news:
+            #     user_input = {
+            #         'checked_sentence': all_news[-1].get("decsription", ""),
+            #         'knowledge': all_news[-1].get("decsription", ""),
+            #         'text': user_input_text,
+            #         'history': user_input_history,
+            #         'news_fact': "all ",
+            #         'news_title': all_news[-1].get("title", "")
+            #     }
+            #     input_batch.append(user_input)
+            #     annotations_depths.append({})
+            #     dial_ids.append(d_id)
 
         except Exception as ex:
             sentry_sdk.capture_exception(ex)
@@ -499,6 +504,9 @@ def respond():
                         confidence = NOUNPHRASE_ENTITY_CONFIDENCE
                     else:
                         confidence = DEFAULT_CONFIDENCE
+                        curr_news_title = input_batch[curr_i].get("news_title", "")
+                        if curr_news_title:
+                            add_intro = f"I have just read that {curr_news_title}. "
                     attr["confidence_case"] += "news_fact: " + curr_news_fact
                 elif (curr_nounphrase_search or curr_entities_search) and lets_chat_about_flags[i]:
                     confidence = HIGHEST_CONFIDENCE
