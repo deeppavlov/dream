@@ -124,8 +124,8 @@ def collect_ngrams(utterance: Doc, max_ngram: int):
     """
     orig_words = [str(token) for token in utterance]
     lemmatized_variants = lemmatize(utterance)
-    all_ngrams = set()
-    for n_gram_len in range(1, max_ngram):
+    all_ngrams = set(orig_words) | set([t.lemma_ for t in utterance])
+    for n_gram_len in range(2, max_ngram):
         orig_ngrams = set(
             [' '.join(orig_words[i: i + n_gram_len]) for i in range(len(orig_words) - n_gram_len + 1)])
         all_ngrams |= orig_ngrams
