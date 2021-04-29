@@ -26,7 +26,7 @@ USE_CACHE = True
 NOT_LIKE_PATTERN = r"(dislike|not like|not want|not love|not prefer|hate|n't like|" \
                    r"not into|not fond|not crazy|not appriciate|n't appriciate|" \
                    r"disintrested|not for you|not for me|not a big fan|loathe|not stand|n't stand|" \
-                   r"not much of fan|not read)"
+                   r"not much of fan|i (do)? not read)"
 LIKE_PATTERN = r"(like|love|prefer|adore|enjoy|fond of|passionate of|fan of|interested in|" \
                r"into|for you|for me)"
 FAVORITE_PATTERN = r"(favorite|loved|beloved|fondling|best|most interesting)"
@@ -411,7 +411,7 @@ def parse_author_best_book(annotated_phrase, default_phrase=None):
 
 
 dontlike_request = re.compile(r"(not like|not want to talk|not want to hear|not concerned about|"
-                              r"over the books|no books|stop talking about|no more books|do not read|"
+                              r"over the books|no books|stop talking about|no more books|i do not read|"
                               r"not want to listen)", re.IGNORECASE)
 
 
