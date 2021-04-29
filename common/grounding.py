@@ -20,10 +20,9 @@ grounding_patterns = [
 ]
 re_grounding_patterns = re.compile(r"(" + "|".join(grounding_patterns) + r")", re.IGNORECASE)
 
-recording_pattern = "((are|do|can|could|will|would|have|had|whether) " \
-                    "(you|amazon|echo)|conversation( is| (can|could) be)?)" \
-                    "(record|snoop|spy|wiretap|(see|watching|tracking) me)"
-re_recording_patterns = re.compile(rf"({recording_pattern})", re.IGNORECASE)
+re_recording_patterns = re.compile(
+    r"(((are|do|can|could|will|would|have|had|whether) (you|amazon|echo)|conversation( is| (can|could) be)?) "
+    r"(record|snoop|spy|wiretap|(see(ing)?|watch(ing)?|track(ing)?) me|listen(ing)? (to )?(me|my)))", re.IGNORECASE)
 
 
 def are_we_recorded(utterance):
