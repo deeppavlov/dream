@@ -52,9 +52,9 @@ OPINION_REQUEST_ABOUT_MENTIONED_BY_USER_LOC = ["Cool. Do you like it?",
                                                "That's great! Do you like it?",
                                                "Wow! What is your view about it?",
                                                ]
-OPINION_REQUEST_ABOUT_VISITED_LOC = ["Cool. Do you like it?",
-                                     "That's great! Do you like it?",
-                                     "Wow! What is your view about it?",
+OPINION_REQUEST_ABOUT_VISITED_LOC = ["Cool. Did you like it?",
+                                     "That's great! Did you like it?",
+                                     "Wow! So, what is your view about it?",
                                      ]
 
 USER_IMPRESSIONS_REQUEST = [
