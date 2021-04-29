@@ -16,12 +16,21 @@ sentry_sdk.init(os.getenv("SENTRY_DSN"))
 logger = logging.getLogger(__name__)
 
 
-def load_into_dialogflow(dialogflow, human_utter_index, dialog, state, entities, used_links, disliked_skills):
+def load_into_dialogflow(
+    dialogflow,
+    human_utter_index,
+    dialog,
+    state,
+    entities,
+    used_links,
+    disliked_skills,
+    clarification_request_flag,
+):
     cached_functions.clear_cache()
     dialogflow.reset()
     dialogflow_state = state.get("dialogflow_state")
     previous_human_utter_index = state.get("previous_human_utter_index", -1)
-    interrupted_flag = (human_utter_index - previous_human_utter_index) != 1
+    interrupted_flag = (human_utter_index - previous_human_utter_index) != 1 and not clarification_request_flag
     if dialogflow_state and not interrupted_flag:
         dialogflow.deserialize(dialogflow_state)
     agent = {
@@ -35,6 +44,7 @@ def load_into_dialogflow(dialogflow, human_utter_index, dialog, state, entities,
         "history": state.get("history", {}),
         "used_links": used_links,
         "disliked_skills": disliked_skills,
+        "clarification_request_flag": clarification_request_flag,
     }
     dialogflow.controller().vars()["agent"] = agent
 

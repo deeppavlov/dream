@@ -19,11 +19,11 @@ def clean_text(text):
 
 
 def get_last_n_turns(
-        dialog: Dict,
-        bot_last_turns=None,
-        human_last_turns=None,
-        total_last_turns=None,
-        excluded_attributes=["entities"],
+    dialog: Dict,
+    bot_last_turns=None,
+    human_last_turns=None,
+    total_last_turns=None,
+    excluded_attributes=["entities"],
 ):
     bot_last_turns = bot_last_turns or LAST_N_TURNS
     human_last_turns = human_last_turns or bot_last_turns + 1
@@ -86,9 +86,9 @@ def remove_clarification_turns_from_dialog(dialog):
             new_dialog["utterances"].append(utt)
         elif utt["user"]["user_type"] == "bot":
             if (
-                    0 < i < dialog_length - 1
-                    and is_bot_uttr_repeated_or_misheard(utt)
-                    and is_human_uttr_repeat_request_or_misheard(dialog["utterances"][i - 1])
+                0 < i < dialog_length - 1
+                and is_bot_uttr_repeated_or_misheard(utt)
+                and is_human_uttr_repeat_request_or_misheard(dialog["utterances"][i - 1])
             ):
                 new_dialog["utterances"] = new_dialog["utterances"][:-1]
             else:
@@ -130,9 +130,9 @@ def replace_with_annotated_utterances(dialog, mode="punct_sent"):
 
 
 def clean_up_utterances_to_avoid_unwanted_keys(
-        dialog,
-        wanted_keys=["text", "annotations", "active_skill"],
-        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+    dialog,
+    wanted_keys=["text", "annotations", "active_skill"],
+    types_utterances=["human_utterances", "bot_utterances", "utterances"],
 ):
     # Attention! It removes all other keys from the dialog
     new_dialog = {}
@@ -194,7 +194,7 @@ def stop_formatter_dialog(dialog: Dict) -> List[Dict]:
 def count_ongoing_skill_utterances(bot_utterances: List[Dict], skill: str) -> int:
     i = 0
     for utt in bot_utterances[::-1]:
-        if utt['active_skill'] == skill:
+        if utt["active_skill"] == skill:
             i += 1
         else:
             break
@@ -212,6 +212,26 @@ def dff_formatter(dialog: Dict, service_name: str, bot_last_turns=1, human_last_
     disliked_skills = human_attributes.get("disliked_skills", {})
     entities = human_attributes.get("entities", {})
 
+    previous_human_utter_index = state.get("previous_human_utter_index", -1)
+    checking_unclarified_n_turns = human_utter_index - previous_human_utter_index
+    if 1 < checking_unclarified_n_turns <= LAST_N_TURNS and previous_human_utter_index != -1:
+        turns = list(
+            zip(
+                dialog["human_utterances"][-checking_unclarified_n_turns:],
+                dialog["bot_utterances"][-checking_unclarified_n_turns:],
+            )
+        )
+        unclarified_turns = [
+            None
+            for hu, bu in turns
+            if is_human_uttr_repeat_request_or_misheard(hu) and is_bot_uttr_repeated_or_misheard(bu)
+        ]
+        clarification_request_flag = len(unclarified_turns) == 1
+    else:
+        clarification_request_flag = False
+
+    dialog = get_last_n_turns(dialog)
+    dialog = remove_clarification_turns_from_dialog(dialog)
     dialog = get_last_n_turns(dialog, bot_last_turns=bot_last_turns, human_last_turns=human_last_turns)
     dialog = replace_with_annotated_utterances(dialog, mode="punct_sent")
 
@@ -229,5 +249,6 @@ def dff_formatter(dialog: Dict, service_name: str, bot_last_turns=1, human_last_
             "entities_batch": [entities],
             "used_links_batch": [used_links],
             "disliked_skills_batch": [disliked_skills],
+            "clarification_request_flag_batch": [clarification_request_flag],
         }
     ]
