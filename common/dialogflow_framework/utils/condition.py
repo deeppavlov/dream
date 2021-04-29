@@ -18,7 +18,7 @@ wnl = WordNetLemmatizer()
 
 
 def was_clarification_request(vars):
-    flag = common_utils.is_opinion_request(vars["clarification_request_flag"])
+    flag = vars["agent"]["clarification_request_flag"]
     logging.debug(f"was_clarification_request = {flag}")
     return flag
 
