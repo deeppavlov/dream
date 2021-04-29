@@ -11,6 +11,7 @@ import sentry_sdk
 from common.constants import CAN_CONTINUE_SCENARIO
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
+import common.dialogflow_framework.utils.condition as condition_utils
 import common.utils as common_utils
 import common.universal_templates as common_universal_templates
 import common.scenarios.weekend as common_weekend
@@ -81,13 +82,6 @@ SUPER_CONFIDENCE = 1.0
 HIGH_CONFIDENCE = 0.98
 
 
-COMMENTS = {
-    "neutral": ["Ok. ", "Oh. ", "Huh. ", "Well. ", "Gotcha. ", "Hmm. ", "Aha. "],
-    "positive": ["Sounds cool! ", "Great! ", "Wonderful! "],
-    "negative": ["Huh... ", "Sounds sad... ", "Sorry... "],
-}
-
-
 # %%
 
 ##################################################################################################################
@@ -106,16 +100,6 @@ simplified_dialogflow = dialogflow_extention.DFEasyFilling(State.USR_START)
 ##################################################################################################################
 # utils
 ##################################################################################################################
-std_acknowledgements = {
-    "neutral": ["Ok. ", "Oh. ", "Huh. ", "Well. ", "Gotcha. ", "Hmm. ", "Aha. "],
-    "positive": ["Sounds cool! ", "Great! ", "Wonderful! "],
-    "negative": ["Huh... ", "Sounds sad... ", "Sorry... "],
-}
-
-
-def get_human_sentiment_acknowledgement(vars, acknowledgements=None):
-    acknowledgements = std_acknowledgements.update(acknowledgements) if acknowledgements else std_acknowledgements
-    return acknowledgements.get(state_utils.get_human_sentiment(vars), [""])
 
 
 ##################################################################################################################
@@ -144,15 +128,8 @@ def std_weekend_request(ngrams, vars):
 
 def std_weekend_response(vars):
     try:
-        shared_memory = state_utils.get_shared_memory(vars)
-
-        last_acknowledgements = shared_memory.get("last_acknowledgements", [])
-        sentiment = state_utils.get_human_sentiment(vars)
-
         # get ack, body
-        ack = common_utils.get_not_used_template(
-            used_templates=last_acknowledgements, all_templates=COMMENTS[sentiment]
-        )
+        ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
 
         # obtaining random response from weekend questions
         body = random.choice(common_weekend.WEEKEND_QUESTIONS)
@@ -161,7 +138,6 @@ def std_weekend_response(vars):
         state_utils.set_confidence(vars, DIALOG_BEGINNING_START_CONFIDENCE)
         state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
-        state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
@@ -188,15 +164,8 @@ def sys_cleaned_up_request(ngrams, vars):
 
 def sys_cleaned_up_response(vars):
     try:
-        shared_memory = state_utils.get_shared_memory(vars)
-
-        last_acknowledgements = shared_memory.get("last_acknowledgements", [])
-        sentiment = state_utils.get_human_sentiment(vars)
-
         # get ack, body
-        ack = common_utils.get_not_used_template(
-            used_templates=last_acknowledgements, all_templates=COMMENTS[sentiment]
-        )
+        ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
 
         # obtaining random response from weekend questions
         body = random.choice(common_weekend.CLEANED_UP_STATEMENTS)
@@ -205,7 +174,6 @@ def sys_cleaned_up_response(vars):
         state_utils.set_confidence(vars, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
-        state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
@@ -228,15 +196,8 @@ def sys_slept_in_request(ngrams, vars):
 
 def sys_slept_in_response(vars):
     try:
-        shared_memory = state_utils.get_shared_memory(vars)
-
-        last_acknowledgements = shared_memory.get("last_acknowledgements", [])
-        sentiment = state_utils.get_human_sentiment(vars)
-
         # get ack, body
-        ack = common_utils.get_not_used_template(
-            used_templates=last_acknowledgements, all_templates=COMMENTS[sentiment]
-        )
+        ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
 
         # obtaining random response from weekend questions
         body = random.choice(common_weekend.SLEPT_IN_QUESTIONS)
@@ -245,7 +206,6 @@ def sys_slept_in_response(vars):
         state_utils.set_confidence(vars, DIALOG_BEGINNING_START_CONFIDENCE)
         state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
-        state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
@@ -268,15 +228,8 @@ def sys_feel_great_request(ngrams, vars):
 
 def sys_feel_great_response(vars):
     try:
-        shared_memory = state_utils.get_shared_memory(vars)
-
-        last_acknowledgements = shared_memory.get("last_acknowledgements", [])
-        sentiment = state_utils.get_human_sentiment(vars)
-
         # get ack, body
-        ack = common_utils.get_not_used_template(
-            used_templates=last_acknowledgements, all_templates=COMMENTS[sentiment]
-        )
+        ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
 
         # obtaining random response from weekend questions
         body = random.choice(common_weekend.WHAT_PLANS_FOR_TODAY)
@@ -285,7 +238,6 @@ def sys_feel_great_response(vars):
         state_utils.set_confidence(vars, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
-        state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
@@ -308,15 +260,8 @@ def sys_need_more_time_request(ngrams, vars):
 
 def sys_need_more_time_response(vars):
     try:
-        shared_memory = state_utils.get_shared_memory(vars)
-
-        last_acknowledgements = shared_memory.get("last_acknowledgements", [])
-        sentiment = state_utils.get_human_sentiment(vars)
-
         # get ack, body
-        ack = common_utils.get_not_used_template(
-            used_templates=last_acknowledgements, all_templates=COMMENTS[sentiment]
-        )
+        ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
 
         # obtaining random response from weekend questions
         body = random.choice(common_weekend.WISH_MORE_TIME)
@@ -325,7 +270,6 @@ def sys_need_more_time_response(vars):
         state_utils.set_confidence(vars, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
-        state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
@@ -356,15 +300,8 @@ def sys_watched_film_request(ngrams, vars):
 
 def sys_watched_film_response(vars):
     try:
-        shared_memory = state_utils.get_shared_memory(vars)
-
-        last_acknowledgements = shared_memory.get("last_acknowledgements", [])
-        sentiment = state_utils.get_human_sentiment(vars)
-
         # get ack, body
-        ack = common_utils.get_not_used_template(
-            used_templates=last_acknowledgements, all_templates=COMMENTS[sentiment]
-        )
+        ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
 
         # obtaining random response from weekend questions
         body = random.choice(common_weekend.MOVIE_NAME_QUESTION)
@@ -373,7 +310,6 @@ def sys_watched_film_response(vars):
         state_utils.set_confidence(vars, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
-        state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
@@ -406,18 +342,8 @@ def sys_read_book_request(ngrams, vars):
 
 def sys_read_book_response(vars):
     try:
-        shared_memory = state_utils.get_shared_memory(vars)
-
-        last_acknowledgements = shared_memory.get("last_acknowledgements", [])
-        # sentiment = state_utils.get_human_sentiment(vars)
-
-        # override cause somehow "read a book" is classified as "negative" :( WTF?
-        sentiment = "positive"
-
         # get ack, body
-        ack = common_utils.get_not_used_template(
-            used_templates=last_acknowledgements, all_templates=COMMENTS[sentiment]
-        )
+        ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
 
         # obtaining random response from weekend questions
         body = random.choice(common_weekend.BOOK_NAME_QUESTION)
@@ -426,7 +352,6 @@ def sys_read_book_response(vars):
         state_utils.set_confidence(vars, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
-        state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
@@ -461,18 +386,8 @@ def sys_played_computer_game_request(ngrams, vars):
 
 def sys_played_computer_game_response(vars):
     try:
-        shared_memory = state_utils.get_shared_memory(vars)
-
-        last_acknowledgements = shared_memory.get("last_acknowledgements", [])
-        # sentiment = state_utils.get_human_sentiment(vars)
-
-        # override cause somehow "read a book" is classified as "negative" :( WTF?
-        sentiment = "positive"
-
         # get ack, body
-        ack = common_utils.get_not_used_template(
-            used_templates=last_acknowledgements, all_templates=COMMENTS[sentiment]
-        )
+        ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
 
         # obtaining random response from weekend questions
         body = random.choice(common_weekend.COMPUTER_GAME_NAME_QUESTION)
@@ -481,7 +396,6 @@ def sys_played_computer_game_response(vars):
         state_utils.set_confidence(vars, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
-        state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
@@ -504,15 +418,8 @@ def sys_play_on_weekends_request(ngrams, vars):
 
 def sys_play_on_weekends_response(vars):
     try:
-        shared_memory = state_utils.get_shared_memory(vars)
-
-        last_acknowledgements = shared_memory.get("last_acknowledgements", [])
-        sentiment = state_utils.get_human_sentiment(vars)
-
         # get ack, body
-        ack = common_utils.get_not_used_template(
-            used_templates=last_acknowledgements, all_templates=COMMENTS[sentiment]
-        )
+        ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
 
         # obtaining random response from weekend questions
         body = random.choice(common_weekend.GAME_EMOTIONS_QUESTION)
@@ -521,7 +428,6 @@ def sys_play_on_weekends_response(vars):
         state_utils.set_confidence(vars, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
-        state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
@@ -544,15 +450,8 @@ def sys_play_regularly_request(ngrams, vars):
 
 def sys_play_regularly_response(vars):
     try:
-        shared_memory = state_utils.get_shared_memory(vars)
-
-        last_acknowledgements = shared_memory.get("last_acknowledgements", [])
-        sentiment = state_utils.get_human_sentiment(vars)
-
         # get ack, body
-        ack = common_utils.get_not_used_template(
-            used_templates=last_acknowledgements, all_templates=COMMENTS[sentiment]
-        )
+        ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
 
         # obtaining random response from weekend questions
         body = random.choice(common_weekend.REGULAR_PLAYER_QUESTION)
@@ -561,7 +460,6 @@ def sys_play_regularly_response(vars):
         state_utils.set_confidence(vars, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
-        state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)
@@ -584,15 +482,8 @@ def sys_play_once_request(ngrams, vars):
 
 def sys_play_once_response(vars):
     try:
-        shared_memory = state_utils.get_shared_memory(vars)
-
-        last_acknowledgements = shared_memory.get("last_acknowledgements", [])
-        sentiment = state_utils.get_human_sentiment(vars)
-
         # get ack, body
-        ack = common_utils.get_not_used_template(
-            used_templates=last_acknowledgements, all_templates=COMMENTS[sentiment]
-        )
+        ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
 
         # obtaining random response from weekend questions
         body = random.choice(common_weekend.OCCASIONAL_PLAYER_QUESTION)
@@ -601,7 +492,6 @@ def sys_play_once_response(vars):
         state_utils.set_confidence(vars, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
-        state_utils.save_to_shared_memory(vars, last_acknowledgements=[ack])
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)

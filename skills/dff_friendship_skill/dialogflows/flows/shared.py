@@ -32,16 +32,10 @@ HIGH_CONFIDENCE = 0.98
 ##################################################################################################################
 # utils
 ##################################################################################################################
-std_acknowledgements = {
-    "neutral": ["Ok. ", "Oh. ", "Huh. ", "Well. ", "Gotcha. ", "Hmm. ", "Aha. "],
-    "positive": ["Sounds cool! ", "Great! ", "Wonderful! "],
-    "negative": ["Huh... ", "Sounds sad... ", "Sorry... "],
-}
 
 
-def get_sentiment_acknowledgement(vars, acknowledgements=None):
-    acknowledgements = std_acknowledgements.update(acknowledgements) if acknowledgements else std_acknowledgements
-    return acknowledgements.get(state_utils.get_human_sentiment(vars), [""])
+def get_sentiment_acknowledgement(vars):
+    return condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
 
 
 # curl -H "Content-Type: application/json" -XPOST http://0.0.0.0:8088/respond \

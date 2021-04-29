@@ -6,6 +6,7 @@ from nltk.stem import WordNetLemmatizer
 import common.utils as common_utils
 import common.universal_templates as universal_templates
 import common.dialogflow_framework.utils.state as state_utils
+from common.acknowledgements import GENERAL_ACKNOWLEDGEMENTS
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -184,3 +185,20 @@ def is_passive_user(vars, history_len=2):
     if all(uttrs_lens):
         return True
     return False
+
+
+def get_not_used_and_save_sentiment_acknowledgement(vars):
+    sentiment = state_utils.get_human_sentiment(vars)
+    if is_yes_vars(vars) or is_no_vars(vars):
+        sentiment = "neutral"
+
+    shared_memory = state_utils.get_shared_memory(vars)
+    last_acknowledgements = shared_memory.get("last_acknowledgements", [])
+
+    ack = common_utils.get_not_used_template(
+        used_templates=last_acknowledgements, all_templates=GENERAL_ACKNOWLEDGEMENTS[sentiment]
+    )
+
+    used_acks = last_acknowledgements + [ack]
+    state_utils.save_to_shared_memory(vars, last_acknowledgements=used_acks[-2:])
+    return ack
