@@ -1,6 +1,7 @@
 import logging
 import os
 import requests
+import re
 from collections import deque
 from copy import deepcopy
 from datetime import datetime
@@ -17,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 BLACKLIST_ANNOTATOR_URL = getenv('BLACKLIST_ANNOTATOR_URL')
 
-
+BLACKLISTED_WORDS = re.compile(r"(\b|^)(gun|shoot|die.?\b|murder|kill|victim)", re.IGNORECASE)
 nltk_sentiment_classifier = SentimentIntensityAnalyzer()
 
 
@@ -140,7 +141,7 @@ class CachedRequestsAPI:
 
         try:
             resp = requests.request(url=BLACKLIST_ANNOTATOR_URL, json={"sentences": articles_to_check},
-                                    method="POST", timeout=0.3)
+                                    method="POST", timeout=0.5)
         except (requests.ConnectTimeout, requests.ReadTimeout) as e:
             sentry_sdk.capture_exception(e)
             logger.exception("Blacklisted Annotator requests from News API Annotator Timeout")
@@ -160,6 +161,7 @@ class CachedRequestsAPI:
             # each element is like `{'inappropriate': False, 'profanity': False, 'restricted_topics': False}`
             result = [sum(d.values()) for d in resp.json()[0]["batch"]]
 
-        articles = [article for article, is_black in zip(articles, result) if not is_black]
+        articles = [article for article, is_black in zip(articles, result)
+                    if not is_black and not BLACKLISTED_WORDS.search(article.get("title", ""))]
 
         return articles
