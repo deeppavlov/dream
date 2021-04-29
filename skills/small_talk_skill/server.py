@@ -10,7 +10,7 @@ from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
 
-from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO
+from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT, MUST_CONTINUE
 from common.utils import get_skill_outputs_from_dialog, get_sentiment, get_entities
 from common.universal_templates import if_choose_topic, if_switch_topic, if_chat_about_particular_topic
 
@@ -109,7 +109,7 @@ def respond():
                 # topic script start, response is already formulated
                 human_attr["small_talk_topics"] = used_topics + [topic]
                 attr["response_parts"] = ["prompt"]
-                attr["can_continue"] = CAN_CONTINUE_SCENARIO
+                attr["can_continue"] = CAN_CONTINUE_PROMPT
                 attr["small_talk_topic"] = topic
                 attr["small_talk_step"] = 0
                 attr["small_talk_script"] = TOPIC_SCRIPTS.get(topic, [])
@@ -157,7 +157,7 @@ def get_next_response_on_topic(topic, curr_user_uttr, curr_step=0, topic_script=
         yes_detected = curr_user_uttr["annotations"].get("intent_catcher", {}).get("yes", {}).get("detected", 0) == 1
         if yes_detected:
             next_bot_uttr = topic_script[curr_step]["yes"]
-            attr["can_continue"] = CAN_CONTINUE_SCENARIO
+            attr["can_continue"] = MUST_CONTINUE
             attr["small_talk_topic"] = topic
             attr["small_talk_step"] = curr_step
             confidence = YES_CONTINUE_CONFIDENCE

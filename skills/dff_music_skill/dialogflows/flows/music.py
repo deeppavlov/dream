@@ -14,8 +14,8 @@ import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_exten
 import common.dialogflow_framework.utils.state as state_utils
 import dialogflows.scopes as scopes
 from common.universal_templates import if_chat_about_particular_topic
-from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE
-from common.utils import is_yes, is_no, get_entities
+from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_CONTINUE_PROMPT, CAN_NOT_CONTINUE
+from common.utils import is_yes, is_no
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -32,20 +32,26 @@ with open("./music_data.json", "r") as f:
     MUSIC_DATA = json.load(f)
 
 music_words_re = re.compile(
-    r"(music)|(musics)|(song)|(rap)|(rock)|(melody)|(symphony)|(pop)|\
-    (jazz)|(funk)|(blues)|(hip hop)|(folk)|(trance)|(reggae)|(artist)|(heavy metal)",
+    r"(music|musics|musician|song|\brap\b|\brock\b|melody|symphony|\bpop\b|"
+    r"jazz|\bfunk\b|blues|hip hop|\bfolk\b|trance|reggae|artist|heavy metal)",
     re.IGNORECASE,
 )
-like_re = re.compile(r"what ((songs)|(music)|(song)|(artist)|(singer)) do you ((like)|(listen)|(love)|(prefer))")
-what_fav_re = re.compile(r"(((what)|(who)) (is ){,1})|(tell me about )your favorite\
- ((artist)|(songwriter)|(perfomer)|(band)|(music band)|(music group)|(song)|(album)|(music)|(kind of music))")
-dont_know_re = re.compile(r"((dont)|(doesnt)|(do not)|(does not)|(don't)|(doesn't)) know")
-i_like_re = re.compile(r"((like)|(love)|(adore)|(listen to)|(prefer))", re.IGNORECASE)
-music_request_re = re.compile(r"(alexa\, music)|(music)", re.IGNORECASE)
-genre_re = re.compile(r"(genre)")
-song_re = re.compile(r"(song)|(album)")
-band_re = re.compile(r"(singer)|(artist)|(perfomer)|(band)|(orchestra)")
-what_listen_re = re.compile("what ((((should)|(can)|(may)) I listen)|(you suggest listening))")
+like_re = re.compile(r"(what|which|what kind of) (songs?|music|artists?|singers?|musicians?|bands?) "
+                     r"do you (like|listen|love|prefer)", re.IGNORECASE)
+what_fav_re = re.compile(
+    r"((what|who)( is|'s)?|tell me( about)?)( your)? favou?rite "
+    r"(artist|singer|musician|song ?writer|perfomer|band|song|album|music|kind of music)",
+    re.IGNORECASE)
+dont_know_re = re.compile(r"(not|n't) know", re.IGNORECASE)
+i_like_re = re.compile(r"(like|love|adore|listen to|prefer)", re.IGNORECASE)
+music_request_re = re.compile(r"(alexa\, )?(play )?music(\.|$)", re.IGNORECASE)
+genre_re = re.compile(r"genre", re.IGNORECASE)
+song_re = re.compile(r"(song|album)", re.IGNORECASE)
+band_re = re.compile(r"(singer|artist|perfomer|band|orchestra)", re.IGNORECASE)
+what_listen_re = re.compile(
+    r"what( music| kind of music| songs?| artists?)? "
+    r"((should|can|may) I listen|(would |do |are )?you (suggest|recommend|offer) (listening|to listen))",
+    re.IGNORECASE)
 # what_music = re.compile(r"(what should i|what do you suggest me to) (cook|make for dinner)"
 #                        "( tonight| today| tomorrow){0,1}", re.IGNORECASE)
 
@@ -181,8 +187,9 @@ def lets_talk_about_request(ngrams, vars):
 
 def music_mention_request(ngrams, vars):
     # has any nounphrases in phrase -> music mention
-    nounphr = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
-    flag = (len(nounphr) > 0)
+    flag = False
+    if re.search(music_words_re, state_utils.get_last_human_utterance(vars)["text"]):
+        flag = True
     logger.info(f"music_mention_request {flag}")
     return flag
 
@@ -236,7 +243,7 @@ def i_like_request(ngrams, vars):
 def want_music_response(vars):
     try:
         state_utils.set_confidence(vars, CAN_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
         return "Do you want to talk about music?"
     except Exception as exc:
         logger.exception(exc)
@@ -284,7 +291,7 @@ def social_mode_response(vars):
 def sorry_response(vars):
     try:
         state_utils.set_confidence(vars, CAN_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+        state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
         return "Ok, sorry. What do you want to talk about then?"
     except Exception as exc:
         logger.exception(exc)
@@ -315,7 +322,7 @@ def taste_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-        return "Well, you can check them out later, but I must warn you that I have a very specific taste.  "
+        return "Well, you can check them out later, but I must warn you that I have a very specific taste."
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -588,8 +595,8 @@ def ask_advice_response(vars):
 def it_ok_response(vars):
     try:
         state_utils.set_confidence(vars, CAN_CONTINUE_CONFIDENCE)
-        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
-        return f"Don't worry. Do you want to talk about something else?"
+        state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+        return f"Don't worry. What do you want to talk about then?"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -694,6 +701,7 @@ def end_request(ngrams, vars):
 def end_response(vars):
     try:
         state_utils.set_confidence(vars, CANNOT_CONTINUE_CONFIDENCE)
+        state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
         return ""
     except Exception as exc:
         logger.exception(exc)

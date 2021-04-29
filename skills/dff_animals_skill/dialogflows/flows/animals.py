@@ -286,7 +286,7 @@ def what_animals_response(vars):
     state_utils.save_to_shared_memory(vars, start=True)
     state_utils.save_to_shared_memory(vars, what_animals=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
 
 
@@ -304,8 +304,7 @@ def have_pets_response(vars):
     state_utils.save_to_shared_memory(vars, start=True)
     state_utils.save_to_shared_memory(vars, have_pets=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
 
 
@@ -321,7 +320,7 @@ def tell_about_pets_response(vars):
     state_utils.save_to_shared_memory(vars, my_pet_breed=my_pet_breed)
     response = f"{sentence} Would you like to learn more about my {my_pet}?"
     state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
 
 
@@ -336,7 +335,7 @@ def mention_pets_response(vars):
     response = f"Do you have a {found_pet}?"
     state_utils.save_to_shared_memory(vars, start=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
 
 
@@ -352,7 +351,7 @@ def mention_animals_response(vars):
     response = f"Awesome! Do you like {animal}?"
     state_utils.save_to_shared_memory(vars, start=True)
     state_utils.set_confidence(vars, confidence=CONF_4)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_PROMPT)
     return response
 
 
@@ -362,7 +361,7 @@ def what_wild_response(vars):
     state_utils.save_to_shared_memory(vars, start=True)
     state_utils.save_to_shared_memory(vars, what_wild=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
 
 

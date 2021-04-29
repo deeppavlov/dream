@@ -15,7 +15,7 @@ import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 import dialogflows.scopes as scopes
 from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
-from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE, MUST_CONTINUE
+from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.utils import get_intents, get_sentiment
 from common.bot_persona import YOUR_FAVORITE_COMPILED_PATTERN
 
@@ -168,7 +168,7 @@ def my_fav_story_response(vars):
         else:
             response = "I've never heard about it. Could you please tell me more about it?"
             state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
-            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
+            state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
         return response
     except Exception as exc:
         logger.exception(exc)
@@ -274,7 +274,7 @@ def whats_your_fav_response(vars):
             curr_topic = used_topics[-1]
         if curr_topic:
             state_utils.set_confidence(vars, confidence=CONF_LOW)
-            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
             return f"What is your favorite {curr_topic}?"
         else:
             state_utils.set_confidence(vars, 0)
@@ -290,7 +290,7 @@ def whats_your_fav_response(vars):
 def top_favs_response(vars):
     try:
         state_utils.set_confidence(vars, confidence=CONF_LOW)
-        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
+        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
         return f"What are your top three favorites?"
 
     except Exception as exc:

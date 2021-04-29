@@ -7,7 +7,7 @@ import logging
 import requests
 import sentry_sdk
 
-from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE
+from common.constants import CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 import common.entity_utils as entity_utils
@@ -192,7 +192,7 @@ def link_to_by_enity_response(vars):
 
         body += f" {link['phrase']}"
         set_confidence_by_universal_policy(vars)
-        state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO_DONE)
+        state_utils.set_can_continue(vars, CAN_NOT_CONTINUE)
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)

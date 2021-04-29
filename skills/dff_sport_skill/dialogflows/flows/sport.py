@@ -14,7 +14,7 @@ import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_exten
 import common.dialogflow_framework.utils.state as state_utils
 from common.universal_templates import if_chat_about_particular_topic
 from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
-from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO_DONE
+from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
 import common.greeting as common_greeting
 import common.link as common_link
 from common.sport import (
@@ -463,8 +463,8 @@ def user_like_sport_response(vars):
         kind_of_sport = re.search(KIND_OF_SPORTS_TEMPLATE,
                                   state_utils.get_last_human_utterance(vars)["text"]).group()
         state_utils.save_to_shared_memory(vars, kind_of_sport=kind_of_sport)
-        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         if number > NUMBER_PROBABILITY:
+            state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
             state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
             passive_sport = random.choice(PASSIVE_SPORT)
             opinion = random.choice(
@@ -473,6 +473,7 @@ def user_like_sport_response(vars):
             response = opinion + f" Why do you like {kind_of_sport}?"
             return response
         else:
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
             state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
             news = get_news(kind_of_sport)
             return news
@@ -571,12 +572,12 @@ def user_like_or_ask_about_player_without_team_request(ngrams, vars):
 def link_to_travel_response(vars):
     # USR_LINK_TO_TRAVEL
     try:
-        state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
-        state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
         shared_memory = state_utils.get_shared_memory(vars)
         dict_athlete = shared_memory.get("dict_athlete", {})
         dict_team = shared_memory.get("dict_team", {})
         information_flag = False
+        country = ""
+        name = ""
         if dict_athlete:
             country = dict_athlete.get("country for sport", "")
             name = dict_athlete.get("name", "")
@@ -587,7 +588,9 @@ def link_to_travel_response(vars):
             name = dict_team.get("name", "")
             if country and name:
                 information_flag = True
-        if information_flag:
+        if information_flag and country and name:
+            state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+            state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
             response = random.choice(OPINION_ABOUT_ATHLETE_WITHOUT_TEAM)
             response_replace = response.replace("COUNTRY", country).replace("NAME", name)
             return response_replace
@@ -811,7 +814,7 @@ def user_want_fact_about_comp_response(vars):
         if fact_about_discussed_competition:
             opinion_req = random.choice(OPINION_REQUESTS)
             state_utils.set_confidence(vars, HIGH_CONFIDENCE)
-            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
             return f"{fact_about_discussed_competition} {opinion_req}"
         else:
             return last_chance_response(vars)
@@ -873,7 +876,7 @@ def last_chance_response(vars):
     # USR_LAST_CHANCE
     try:
         state_utils.set_confidence(vars, HIGH_CONFIDENCE)
-        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+        state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
         return random.choice(LAST_CHANCE_TEMPLATE)
     except Exception as exc:
         logger.exception(exc)

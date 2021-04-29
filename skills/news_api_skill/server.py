@@ -14,7 +14,7 @@ import sentry_sdk
 from flask import Flask, request, jsonify
 from nltk.tokenize import word_tokenize
 
-from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE, MUST_CONTINUE
+from common.constants import CAN_CONTINUE_PROMPT, MUST_CONTINUE
 from common.link import link_to, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED
 from common.metrics import setup_metrics
 from common.news import OFFER_BREAKING_NEWS, OFFERED_BREAKING_NEWS_STATUS, \
@@ -334,7 +334,7 @@ def respond():
                         response = OFFER_BREAKING_NEWS
                         confidence = DEFAULT_NEWS_OFFER_CONFIDENCE  # 1.0
                         attr = {"news_status": OFFERED_BREAKING_NEWS_STATUS, "news_topic": "all",
-                                "can_continue": CAN_CONTINUE_SCENARIO, "curr_news": result}
+                                "can_continue": CAN_CONTINUE_PROMPT, "curr_news": result}
                         if attr["curr_news"]["url"] not in human_attr["news_api_skill"]["discussed_news"]:
                             human_attr["news_api_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
                     else:
@@ -346,7 +346,7 @@ def respond():
                     response = f"{response} {result['title']}.. {OFFER_MORE}"
                     confidence = LINKTO_CONFIDENCE
                     attr = {"news_status": OFFERED_NEWS_DETAILS_STATUS, "news_topic": curr_topic,
-                            "curr_news": result, "can_continue": CAN_CONTINUE_SCENARIO}
+                            "curr_news": result, "can_continue": CAN_CONTINUE_PROMPT}
                     if attr["curr_news"]["url"] not in human_attr["news_api_skill"]["discussed_news"]:
                         human_attr["news_api_skill"]["discussed_news"] += [attr["curr_news"]["url"]]
                 responses.append(response)
@@ -440,7 +440,7 @@ def respond():
                                    f"{offered_topics[0]} or {offered_topics[1].lower()}?"
                         confidence = WHAT_TYPE_OF_NEWS_CONFIDENCE
                         attr = {"news_status": OFFERED_NEWS_TOPIC_CATEGORIES_STATUS,
-                                "can_continue": CAN_CONTINUE_SCENARIO_DONE,
+                                "can_continue": CAN_CONTINUE_PROMPT,
                                 "news_topic": " ".join(offered_topics), "curr_news": result}
                         if attr["curr_news"]["url"] not in human_attr["news_api_skill"]["discussed_news"]:
                             human_attr["news_api_skill"]["discussed_news"] += [attr["curr_news"]["url"]]

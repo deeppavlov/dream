@@ -16,7 +16,7 @@ import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 import dialogflows.scopes as scopes
 from common.universal_templates import if_chat_about_particular_topic, DONOTKNOW_LIKE
-from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE, MUST_CONTINUE
+from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.utils import is_yes, is_no, get_entities, join_words_in_or_pattern
 from common.food import TRIGGER_PHRASES, FOOD_WORDS, WHAT_COOK, FOOD_UTTERANCES_RE, CUISINE_UTTERANCES_RE
 
@@ -248,13 +248,13 @@ def what_cuisine_response(vars):
                 state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
             elif not is_no(user_utt):
                 state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
-                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
         elif lets_talk_about_asked:
             state_utils.set_confidence(vars, confidence=CONF_HIGH)
             state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         else:
             state_utils.set_confidence(vars, confidence=CONF_LOW)
-            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
         return "What cuisine do you prefer?"
     except Exception as exc:
         logger.exception(exc)
@@ -279,7 +279,6 @@ def cuisine_fact_response(vars):
     cuisine_fact = ""
     try:
         state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
-        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
         last_utt = state_utils.get_last_human_utterance(vars)
         last_utt_lower = last_utt["text"].lower()
         conceptnet_flag, food_item = check_conceptnet(vars)
@@ -288,21 +287,28 @@ def cuisine_fact_response(vars):
                 if cuisine in last_utt_lower:
                     cuisine_fact = CUISINES_FACTS.get(cuisine, "")
                     state_utils.save_to_shared_memory(vars, cuisine=cuisine)
+                    state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
                     return cuisine_fact
             if not cuisine_fact:
+                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
                 return "Haven't tried it yet. What do you recommend to start with?"
         elif conceptnet_flag:
             entity_linking = last_utt["annotations"].get("entity_linking", [])
             if entity_linking:
                 _facts = entity_linking[0].get("entity_pages", [])
                 if _facts:
+                    state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
                     return f"Jummy! I know about {food_item} that {_facts[0]}"
+                else:
+                    return ""
             else:
-                return "My favorite cuisine is French. I'm just in love"
-            "with pastry, especially with profiteroles! How about you?"
+                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+                return "My favorite cuisine is French. I'm just in love " \
+                       "with pastry, especially with profiteroles! How about you?"
         else:
-            return "My favorite cuisine is French. I'm just in love"
-        "with pastry, especially with profiteroles! How about you?"
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+            return "My favorite cuisine is French. I'm just in love " \
+                   "with pastry, especially with profiteroles! How about you?"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -317,11 +323,11 @@ def country_response(vars):
         if cuisine_discussed:
             if cuisine_discussed in CUISINES_COUNTRIES:
                 state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
-                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
+                state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
                 return f"Have you been in {CUISINES_COUNTRIES[cuisine_discussed]}?"
         else:
             state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
-            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
+            state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
             return "Where are you from?"
     except Exception as exc:
         logger.exception(exc)
@@ -360,13 +366,13 @@ def what_fav_food_response(vars):
                     state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
                 elif food_type == "snack":
                     state_utils.set_confidence(vars, confidence=CONF_LOWEST)
-                    state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
+                    state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
                 elif unused_food:
                     state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
                     state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
                 else:
                     state_utils.set_confidence(vars, confidence=CONF_LOWEST)
-                    state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
+                    state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
 
             elif not is_no(user_utt):
                 state_utils.set_confidence(vars, confidence=CONF_LOW)
@@ -378,13 +384,13 @@ def what_fav_food_response(vars):
                 state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
             elif food_type == "snack":
                 state_utils.set_confidence(vars, confidence=CONF_LOWEST)
-                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
+                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
             elif unused_food:
                 state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
             else:
                 state_utils.set_confidence(vars, confidence=CONF_LOWEST)
-                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
+                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
         else:
             state_utils.set_confidence(vars, confidence=CONF_LOW)
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
@@ -440,13 +446,16 @@ def food_fact_response(vars):
             fact = facts[0]
     try:
         state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
-        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
         if re.search(DONOTKNOW_LIKE_RE, human_utt_text):
+            state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
             return "I have never heard about it. Could you tell me more about that please."
         elif not fact:
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
             endings = ["Do you recommend", "Why do you like it"]
             return f"Sounds {random.choice(cool_words)}. I haven't heard about it. {random.choice(endings)}?"
-        return f"{random.choice(acknowledgements)} {intro}{fact}"
+        else:
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+            return f"{random.choice(acknowledgements)} {intro}{fact}"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -504,14 +513,15 @@ def recipe_response(vars):
         used_meal = shared_memory.get("used_meals", "")
         recipe = send_cobotqa(f"how to cook {used_meal}")
         state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
-        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
         if not (used_meal and recipe):
+            state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
             recipe = "Great! Enjoy your meal!"
+        else:
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
         return recipe
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
         state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
@@ -519,7 +529,7 @@ def recipe_response(vars):
 def gourmet_response(vars):
     try:
         state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
-        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
         return "It seems you're a gourmet! What is your favorite meal?"
     except Exception as exc:
         logger.exception(exc)
@@ -537,7 +547,7 @@ def smth_request(ngrams, vars):
 def where_are_you_from_response(vars):
     try:
         state_utils.set_confidence(vars, confidence=CONF_LOW)
-        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
+        state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
         return "Where are you from?"
     except Exception as exc:
         logger.exception(exc)
