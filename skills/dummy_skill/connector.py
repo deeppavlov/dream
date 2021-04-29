@@ -16,8 +16,8 @@ from typing import Callable, Dict
 import sentry_sdk
 
 from common.universal_templates import opinion_request_question
-from common.link import link_to, SKILLS_FOR_LINKING
-from common.utils import get_topics, get_entities
+from common.link import link_to, SKILLS_FOR_LINKING, skills_phrases_map
+from common.utils import get_topics, get_entities, is_no
 
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -29,6 +29,7 @@ sentry_sdk.init(getenv('SENTRY_DSN'))
 ASK_QUESTION_PROB = 0.7
 ASK_NORMAL_QUESTION_PROB = 0.5
 LINK_TO_PROB = 0.5
+LINK_TO_PHRASES = sum([list(list_el) for list_el in skills_phrases_map.values()], [])
 
 np_remove_list = ["'s", 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're",
                   "you've", "you'll", "you'd", 'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself',
@@ -228,8 +229,16 @@ class DummySkillConnector:
 
             link_to_question, human_attr = get_link_to_question(dialog, all_prev_active_skills)
             if link_to_question:
+                _prev_bot_uttr = dialog["bot_utterances"][-2]["text"] if len(dialog["bot_utterances"]) > 1 else ""
+                _bot_uttr = dialog["bot_utterances"][-1]["text"] if len(dialog["bot_utterances"]) > 0 else ""
+
+                _no_to_first_linkto = any([phrase in _bot_uttr for phrase in LINK_TO_PHRASES])
+                _no_to_first_linkto = _no_to_first_linkto and all([phrase not in _prev_bot_uttr
+                                                                   for phrase in LINK_TO_PHRASES])
+                _no_to_first_linkto = _no_to_first_linkto and is_no(dialog["human_utterances"][-1])
+
                 cands += [link_to_question]
-                if ASK_ME_QUESTION_PATTERN.search(dialog["human_utterances"][-1]["text"]):
+                if ASK_ME_QUESTION_PATTERN.search(dialog["human_utterances"][-1]["text"]) or _no_to_first_linkto:
                     confs += [1.0]  # Use it only as response selector retrieve skill output modifier
                 else:
                     confs += [0.05]  # Use it only as response selector retrieve skill output modifier
