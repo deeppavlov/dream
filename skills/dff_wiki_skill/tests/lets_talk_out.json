@@ -1,6 +1,6 @@
 [
     [
-        "Do you want to learn about hardware of smartphone?",
+        "Would you like to know about hardware of smartphone?",
         1.0,
         {
             "dff_wiki_skill_state": {
@@ -17,7 +17,7 @@
                 "history": {
                     "0": "State.SYS_TELL_FACT"
                 },
-                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_TELL_FACT\", \"__stack__\": [], \"__user_utterance__\": \"lets talk about smartphones\", \"__system_state__\": \"State.SYS_TELL_FACT\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"Do you want to learn about hardware of smartphone?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"WIKI\\\"<__tuple__>\\\"State.USR_TELL_FACT\\\"\"}"
+                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_TELL_FACT\", \"__stack__\": [], \"__user_utterance__\": \"lets talk about smartphones\", \"__system_state__\": \"State.SYS_TELL_FACT\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"Would you like to know about hardware of smartphone?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"WIKI\\\"<__tuple__>\\\"State.USR_TELL_FACT\\\"\"}"
             },
             "used_links": {},
             "disliked_skills": {}
