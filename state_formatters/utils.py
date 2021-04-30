@@ -130,9 +130,10 @@ def replace_with_annotated_utterances(dialog, mode="punct_sent"):
 
 
 def clean_up_utterances_to_avoid_unwanted_keys(
-    dialog,
-    wanted_keys=["text", "annotations", "active_skill"],
-    types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        dialog,
+        wanted_keys=["text", "annotations", "active_skill"],
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        used_annotations=None
 ):
     # Attention! It removes all other keys from the dialog
     new_dialog = {}
@@ -142,7 +143,14 @@ def clean_up_utterances_to_avoid_unwanted_keys(
             new_utter = {}
             for wanted_key in wanted_keys:
                 if wanted_key in utter:
-                    new_utter[wanted_key] = utter[wanted_key]
+                    if used_annotations and isinstance(used_annotations, list) and wanted_key == "annotations":
+                        new_annotations = {}
+                        for annotation_key in used_annotations:
+                            if annotation_key in utter[wanted_key]:
+                                new_annotations[annotation_key] = utter[wanted_key][annotation_key]
+                        new_utter[wanted_key] = new_annotations
+                    else:
+                        new_utter[wanted_key] = utter[wanted_key]
             new_dialog[key] += [new_utter]
     return new_dialog
 
@@ -201,7 +209,8 @@ def count_ongoing_skill_utterances(bot_utterances: List[Dict], skill: str) -> in
     return i
 
 
-def dff_formatter(dialog: Dict, service_name: str, bot_last_turns=1, human_last_turns=1) -> List[Dict]:
+def dff_formatter(dialog: Dict, service_name: str, bot_last_turns=1, human_last_turns=1,
+                  used_annotations=None) -> List[Dict]:
     # DialoFlow Framework formatter
     state_name = f"{service_name}_state"
     human_utter_index = len(dialog["human_utterances"]) - 1
@@ -238,7 +247,7 @@ def dff_formatter(dialog: Dict, service_name: str, bot_last_turns=1, human_last_
     # rm all execpt human_utterances, bot_utterances
     # we need only: text, annotations, active_skill
     new_dialog = clean_up_utterances_to_avoid_unwanted_keys(
-        dialog, types_utterances=["human_utterances", "bot_utterances"]
+        dialog, types_utterances=["human_utterances", "bot_utterances"], used_annotations=used_annotations
     )
 
     return [
