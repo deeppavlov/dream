@@ -4,8 +4,8 @@ import re
 import sentry_sdk
 import pprint
 from collections import defaultdict
-from city_slot import OWMCitySlot
 
+from city_slot import OWMCitySlot
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE, MUST_CONTINUE
 from common.link import link_to, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED
 from common.weather import is_weather_for_homeland_requested, is_weather_without_city_requested, \
@@ -28,11 +28,11 @@ class DialogDataManager():
         self.d = dialog_data
 
     def get_last_utterance_dict(self):
-        return self.d["utterances"][-1]
+        return self.d["human_utterances"][-1]
 
     def get_last_bot_utterance_dict(self):
-        if len(self.d["utterances"]) >= 2:
-            return self.d["utterances"][-2]
+        if len(self.d["bot_utterances"]) >= 1:
+            return self.d["bot_utterances"][-1]
         else:
             return None
 
@@ -92,12 +92,15 @@ class DialogDataManager():
             # by default provide location extraction from last reply
             utterance_dict = self.get_last_utterance_dict()
 
-        locations = get_named_locations(utterance_dict)
-        if locations:
-            city = locations[-1]
-        else:
-            city = ""
+        # ### Alternative GEO extractor:
+        city = city_slot_obj(utterance_dict['text'])
+        if not city:
+            # if not extracted lets try to grab from NER?
+            locations = get_named_locations(utterance_dict)
+            if locations:
+                city = locations[-1]
 
+        city = city or ''
         logger.info(f"Extracted city `{city}` from user utterance.")
         if city.lower().strip() not in blacklist_cities:
             return city
