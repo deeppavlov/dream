@@ -477,7 +477,8 @@ def tell_about_book(bookname, bookreads_data):
     reply = None
     logger.debug(f'Detected name {bookname} in last_bot_phrase')
     for genre in bookreads_data:
-        if bookreads_data[genre].get('title') == bookname:
+        if bookreads_data[genre].get('title', '') == bookname:
             logger.debug(f'Returning phrase for book of genre {genre}')
+            reply = bookreads_data[genre].get('description', '')
             return reply
     return reply
