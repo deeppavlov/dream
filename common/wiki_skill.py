@@ -1,10 +1,13 @@
 import itertools
 import random
+import re
+from common.universal_templates import COMPILE_WHAT_TO_TALK_ABOUT
 
 used_types_dict = [{"types": ["Q11253473"  # smart device
                               ],
                     "titles": {"history": "", "hardware": "", "software": ""}},
                    {"entity_substr": ["hiking"],
+                    "page_title": "Hiking",
                     "titles": {"equipment": "", "destinations": ""}},
                    {"types": ["Q15707583",  # fictional animal (for example, unicorn)
                               "Q2239243"  # mythical creature
@@ -12,6 +15,7 @@ used_types_dict = [{"types": ["Q11253473"  # smart device
                     "titles": {"mythology": "", "heraldry": "", "history": "", "modern depictions": "", "origin": "",
                                "popular culture": "Would you like to know about {} in popular culture?"}},
                    {"entity_substr": ["medicine"],
+                    "page_title": "Medicine",
                     "titles": {"clinical practice": "", "branches": "", "quality": "",
                                "traditinal medicine": "Would you like to know about traditional medicine?"}},
                    {"types": ["Q12140"  # medication
@@ -52,7 +56,73 @@ used_types_dict = [{"types": ["Q11253473"  # smart device
                                "relationship with humans": "", "behavior": "", "behaviour": "",
                                "social structure": "",
                                "cultural": "Would you like to know about {} in popular culture?",
-                               "culture": "Would you like to know about {} in popular culture?"}}
+                               "culture": "Would you like to know about {} in popular culture?"}},
+                   {"entity_substr": ["minecraft"],
+                    "types": ["Q7889"],  # video game
+                    "titles": {"game modes": "", "multiplayer": "", "customization": "", "awards": "",
+                               "films": "Would you like to know about films based on {}?",
+                               "virtual reality": "Would you like to know how {} can be played using virtual reality?",
+                               }},
+                   {"entity_substr": ["tiktok"],
+                    "page_title": "TikTok",
+                    "titles": {"viral trends": "", "users": "", "features": ""}},
+                   {"entity_substr": ["artificial intelligence"],
+                    "page_title": "Artificial intelligence",
+                    "titles": {"natural language processing":
+                               "Would you like to know about natural language processing?",
+                               "knowledge representation":
+                                   "Would you like to hear about knowledge representation in {}?",
+                               "symbolic": "Are you interested in symbolic {}?",
+                               "brain simulation": "Would you like to know about brain simulation?",
+                               "applications": "", "risks": ""}},
+                   {"types": ["Q1114461", "Q95074"],  # comics character, fictional character
+                    "titles": {"personality": "", "skills": "", "early years": "", "conception": "", "voice": "",
+                               "creation": "Would you like to learn how {} was created?", "character biography": ""
+                               }},
+                   {"entity_substr": ["politic", "politics"],
+                    "page_title": "Politics",
+                    "titles": {"forms of government": "Would you like to know about forms of government?",
+                               "political culture": "Are you interested in political culture?",
+                               "political corruption": "Do you want to hear about political corruption?",
+                               "democracy": "Would you like to learn about democracy?", "ancient history": "",
+                               "political conflict": "Do you want to hear about political conflicts?"}},
+                   {"types": ["Q82955", "Q372436"],  # politician
+                    "titles": {"political career": "", "early life": "", "family": "", "religious views": "",
+                               "early years": "", "business career": "", "media career": "", "domestic policy": "",
+                               "foreign policy": "", "election": "", "presidential campaign": "",
+                               "political positions": "", "reputation": ""}},
+                   {"entity_substr": ["robots", "robot"],
+                    "page_title": "Robot",
+                    "titles": {"mobile robot": "Would you like to learn about mobile robots?",
+                               "service robot": "Would you like to hear about service robots?",
+                               "military robot": "Do you want to learn about military robots?",
+                               "factory robot": "Are you interested in factory robots?",
+                               "literature": "Would you like to know about books about robots?",
+                               "films": "Are you interested in films about robots?"}},
+                   {"entity_substr": ["religion"],
+                    "page_title": "Religion",
+                    "titles": {"judaism": "Would you like to know about judaism?",
+                               "christianity": "Do you want to learn about christianity?",
+                               "islam": "Would you like to know about islam?",
+                               "buddhism": "Would you like to know about buddhism?"}},
+                   {"entity_substr": ["art", "arts"],
+                    "page_title": "The arts",
+                    "titles": {"architecture": "Would you like to know about architecture?",
+                               "drawing": "Would you like to know about drawing?",
+                               "painting": "Would you like to know about painting?",
+                               "photography": "Would you like to know about photography?",
+                               "sculpture": "Would you like to know about sculpture?",
+                               "dance": "Would you like to know about dance?",
+                               "theatre": "Would you like to know about theatre?"}},
+                   {"entity_substr": ["dinosaur", "dinosaurs"],
+                    "page_title": "Dinosaur",
+                    "titles": {"behavior": "", "pre-scientific history": "",
+                               "early dinosaur research": "Would you like to learn about early research of dinosaurs?",
+                               "discoveries": "", "origins and early evolution": ""}},
+                   {"entity_substr": ["teleportation"],
+                    "page_title": "Teleportation",
+                    "titles": {"fiction": "Would you like to know about teleportation in fiction?",
+                               "science": ""}}
                    ]
 
 used_types = set(itertools.chain.from_iterable([elem.get("types", []) for elem in used_types_dict]))
@@ -76,17 +146,87 @@ prohibited_types = {"Q571",  # book
                     "Q2095"  # food
                     }
 
+QUESTION_TEMPLATES = ["Would you like to know about {} of {}?",
+                      "Do you want to learn about {} of {}?",
+                      "Are you interested in {} of {}?",
+                      "Do you want to hear about {} of {}?"
+                      ]
 
-def if_switch_wiki_skill(user_uttr_annotations):
-    flag = False
-    wp_output = user_uttr_annotations.get("wiki_parser", {})
+
+def find_entity_wp(annotations):
+    found_entity_substr = ""
+    found_entity_id = ""
+    found_entity_types = []
+    wp_output = annotations.get("wiki_parser", {})
     if isinstance(wp_output, dict):
         entities_info = wp_output.get("entities_info", {})
         for entity, triplets in entities_info.items():
-            types = triplets.get("types", []) + triplets.get("instance of", []) + triplets.get("subclass of", [])
+            entity_id = triplets.get("plain_entity", "")
+            types = triplets.get("types", []) + triplets.get("instance of", []) + triplets.get("subclass of", []) + \
+                triplets.get("occupation", [])
             type_ids = [elem for elem, label in types]
             inters = set(type_ids).intersection(used_types)
-            if inters:
+            in_not_used_types = set(type_ids).intersection(prohibited_types)
+            if inters and not in_not_used_types:
+                found_entity_substr = entity
+                found_entity_id = entity_id
+                found_entity_types = inters
+                break
+    return found_entity_substr, found_entity_id, found_entity_types
+
+
+def find_entity_nounphr(annotations):
+    found_entity_substr = ""
+    nounphrases = annotations.get("cobot_nounphrases", [])
+    found = False
+    for nounphr in nounphrases:
+        in_not_used_substr = nounphr in prohibited_topics
+        if nounphr in used_substr and not in_not_used_substr:
+            found_entity_substr = nounphr
+            break
+        for used_entity_substr in used_substr:
+            if (nounphr in used_entity_substr.lower() or used_entity_substr.lower() in nounphr) \
+                    and not in_not_used_substr:
+                found_entity_substr = used_entity_substr
+                found = True
+                break
+        if found:
+            break
+
+    return found_entity_substr
+
+
+def if_user_dont_know_topic(user_uttr, bot_uttr):
+    flag = False
+    what_to_talk_about = re.findall(COMPILE_WHAT_TO_TALK_ABOUT, bot_uttr.get("text", ""))
+    user_dont_know = re.findall("(do not|dont|don't) know", user_uttr["text"]) \
+        or re.findall("(anything|everything)", user_uttr["text"])
+    if what_to_talk_about and user_dont_know:
+        flag = True
+    return flag
+
+
+def if_switch_wiki_skill(user_uttr, bot_uttr):
+    flag = False
+    user_uttr_annotations = user_uttr["annotations"]
+    found_entity_substr, found_entity_id, found_entity_types = find_entity_wp(user_uttr_annotations)
+    found_entity_substr = find_entity_nounphr(user_uttr_annotations)
+    user_dont_know = if_user_dont_know_topic(user_uttr, bot_uttr)
+    if found_entity_id or found_entity_substr or user_dont_know:
+        flag = True
+    return flag
+
+
+def if_find_entity_in_history(dialog):
+    flag = False
+    all_user_uttr = dialog["human_utterances"]
+    utt_num = len(all_user_uttr)
+    if utt_num > 1:
+        for i in range(utt_num - 2, 0, -1):
+            annotations = all_user_uttr[i]["annotations"]
+            found_entity_substr, found_entity_id, found_entity_types = find_entity_wp(annotations)
+            found_entity_substr = find_entity_nounphr(annotations)
+            if found_entity_id or found_entity_substr:
                 flag = True
                 break
     return flag
@@ -144,7 +284,7 @@ def find_paragraph(topic_facts, chosen_title):
     if topic_facts:
         if isinstance(topic_facts, dict):
             for title in topic_facts:
-                if title.lower() == chosen_title:
+                if title == chosen_title:
                     paragraphs = find_par(topic_facts[title])
                     return paragraphs
                 else:
