@@ -16,7 +16,7 @@ from book_utils import get_name, get_genre, suggest_template, get_not_given_ques
     fact_about_book, fav_genre_request_detected, is_side_intent, is_stop, \
     fav_book_request_detected, parse_author_best_book, best_book_by_author, GENRE_PHRASES, was_question_about_book, \
     asked_about_genre, GENRE_DICT, is_previous_was_book_skill, just_mentioned, dontknow, \
-    book_was_offered, tell_about_book, bible_request
+    book_was_offered, tell_about_book, bible_request, get_movie_answer
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -146,7 +146,7 @@ class BookSkillScenario:
             confidence = 0
             attr = {}
             bot_attr = {}
-            human_attr = {}
+            human_attr = dialog["human"]["attributes"]
             human_attr["book_skill"] = dialog["human"]["attributes"].get("book_skill", {})
             human_attr['book_skill']['used_phrases'] = human_attr['book_skill'].get('used_phrases', [])
             human_attr['book_skill']['last_fact'] = human_attr['book_skill'].get('last_fact', '')
@@ -215,7 +215,7 @@ class BookSkillScenario:
                                           "dff_sport_skill",
                                           "dff_food_skill",
                                           "dff_music_skill"]
-                        reply = f'{reply} {link_to(skills_to_link, dialog["human"]["attributes"])}'
+                        reply = f'{reply} {link_to(skills_to_link, human_attr)}'
                     else:
                         reply = random.choice(FAVOURITE_BOOK_ANSWERS)
                     confidence = self.super_conf
@@ -250,7 +250,7 @@ class BookSkillScenario:
                             if reply is not None:
                                 logger.debug('Found a bookfact')
                                 if 'enjoyed watching ' in reply:
-                                    reply += link_to(['movie_skill'], dialog["human"]["attributes"])['phrase']
+                                    reply += link_to(['movie_skill'], human_attr)['phrase']
                                 break
                         if reply is None:
                             # if we offered fact but didn't find it, say sorry about that
@@ -306,17 +306,8 @@ class BookSkillScenario:
                         logger.debug(f"Did not detect NO answer. Getting name for: {annotated_user_phrase['text']}")
                         bookname, bookyear = get_name(annotated_user_phrase, mode='book', bookyear=True)
                         if bookname is None:
-                            movie_name, movie_author = get_name(annotated_user_phrase, 'movie')
-                            if movie_name and movie_author:
-                                # We got movie instead of book
-                                reply = f'I enjoyed watching the film {movie_name} based on this book,' \
-                                        'which was directed by {movie_author}. '
-                                reply += link_to(['movie_skill'],
-                                                 dialog["human"]["attributes"])['phrase']
-                                confidence = self.default_conf
-                            else:
-                                logger.debug('No bookname detected: returning default reply')
-                                reply, confidence = self.default_reply, 0
+                            logger.debug('No bookname detected: returning movie reply 1')
+                            reply, confidence = get_movie_answer(annotated_user_phrase, human_attr), self.default_conf
                         else:
                             # if we found book name in user reply
                             logger.debug('Bookname detected: returning AMAZING_READ_BOOK & WHEN_IT_WAS_PUBLISHED')
@@ -360,8 +351,19 @@ class BookSkillScenario:
                     logger.debug(f"Last phrase is WHAT_IS_FAV_GENRE for {annotated_user_phrase['text']}")
                     book = self.get_genre_book(annotated_user_phrase)
                     if book is None or is_no(annotated_user_phrase):
-                        logger.debug('No book found')
-                        reply, confidence = self.default_reply, 0
+                        bookname, bookyear = get_name(annotated_user_phrase, mode='book', bookyear=True)
+                        if bookname is None:
+                            logger.debug('No bookname detected: returning movie reply 2')
+                            reply, confidence = get_movie_answer(annotated_user_phrase, human_attr), self.default_conf
+                        else:
+                            logger.debug('Bookname in genre request detected: '
+                                         'returning AMAZING_READ_BOOK & WHEN_IT_WAS_PUBLISHED')
+                            reply = f"{AMAZING_READ_BOOK} {WHEN_IT_WAS_PUBLISHED}"
+                            if len(bookname.split()) > 2 and bookname.lower() in annotated_user_phrase["text"].lower():
+                                # if book title is long enough and is in user reply, set super conf
+                                confidence = self.super_conf
+                            else:
+                                confidence = self.default_conf
                     else:
                         # default conf as no check for user uttr (not super conf)
                         logger.debug(f'Returning genre phrase for {book}')
@@ -419,15 +421,8 @@ class BookSkillScenario:
                             logger.debug('WHAT_IS_FAV_GENRE not in bot phrases: returning it')
                             reply, confidence = WHAT_IS_FAV_GENRE, self.default_conf
                         else:
-                            movie_name, movie_author = get_name(annotated_user_phrase, 'movie')
-                            if movie_name and movie_author:
-                                reply = f'I enjoyed watching the film {movie_name} based on this book,' \
-                                        'which was directed by {movie_author}. '
-                                reply += link_to(['movie_skill'],
-                                                 dialog["human"]["attributes"])['phrase']
-                                confidence = self.default_conf
-                            else:
-                                reply, confidence = "", 0
+                            logger.debug('No bookname detected - return movie reply 3')
+                            reply, confidence = get_movie_answer(annotated_user_phrase, human_attr), self.default_conf
                     else:
                         retrieved_fact = fact_about_book(annotated_user_phrase)
                         if retrieved_fact is not None and was_question_about_book(annotated_user_phrase):
@@ -450,10 +445,8 @@ class BookSkillScenario:
                     attr = {"can_continue": MUST_CONTINUE}
                 elif confidence == self.default_conf:
                     attr = {"can_continue": CAN_CONTINUE_SCENARIO}
-                elif confidence == self.low_conf:
-                    attr = {"can_continue": CAN_NOT_CONTINUE}
                 else:
-                    attr = {'can_continue': CAN_NOT_CONTINUE}
+                    attr = {"can_continue": CAN_NOT_CONTINUE}
             except Exception as e:
                 logger.exception("exception in book skill")
                 sentry_sdk.capture_exception(e)

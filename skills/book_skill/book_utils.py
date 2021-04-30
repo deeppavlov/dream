@@ -11,6 +11,7 @@ import _pickle as cPickle
 
 from common.books import QUESTIONS_ABOUT_BOOKS, about_book
 from common.utils import is_opinion_request, get_intents
+from common.link import link_to
 from common.utils import entity_to_label, get_raw_entity_names_from_annotations
 from common.universal_templates import is_switch_topic
 from common.custom_requests import request_triples_wikidata, request_entities_entitylinking
@@ -481,4 +482,14 @@ def tell_about_book(bookname, bookreads_data):
             logger.debug(f'Returning phrase for book of genre {genre}')
             reply = bookreads_data[genre].get('description', '')
             return reply
+    return reply
+
+
+def get_movie_answer(annotated_user_phrase, human_attributes):
+    reply = ''
+    movie_name, movie_author = get_name(annotated_user_phrase, 'movie')
+    if movie_name and movie_author:
+        reply = f'I enjoyed watching the film {movie_name} based on this book,' \
+                f'which was directed by {movie_author}. '
+        reply += link_to(['movie_skill'], human_attributes)['phrase']
     return reply
