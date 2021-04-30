@@ -4,10 +4,20 @@
 # wget http://files.deeppavlov.ai/alexaprize_data/convert_reddit_v2.8.tar.gz
 # tar xzfv .....
 # MODEL_PATH=........../convert_data/convert
+import logging
+import os
+
+import numpy as np
+import sentry_sdk
 import tensorflow_hub as tfhub
 import tensorflow as tf
 import tensorflow_text
 
+
+sentry_sdk.init(os.getenv("SENTRY_DSN"))
+
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 tensorflow_text.__name__
 
@@ -35,18 +45,18 @@ sess.run(tf.tables_initializer())
 sess.run(tf.global_variables_initializer())
 
 
-def encode_context(dialogue_history):
-    """Encode the dialogue context to the response ranking vector space.
+def encode_context(dialog_history):
+    """Encode the dialog context to the response ranking vector space.
 
     Args:
-        dialogue_history: a list of strings, the dialogue history, in
+        dialog_history: a list of strings, the dialog history, in
             chronological order.
     """
 
     # The context is the most recent message in the history.
-    context = dialogue_history[-1]
+    context = dialog_history[-1]
 
-    extra_context = list(dialogue_history[:-1])
+    extra_context = list(dialog_history[:-1])
     extra_context.reverse()
     extra_context_feature = " ".join(extra_context)
 
@@ -60,8 +70,11 @@ def encode_responses(texts):
     return sess.run(response_encoding_tensor, feed_dict={responce_text_placeholder: texts})
 
 
-def get_convert_score(utterances_histories, responses):
-    context_encoding = encode_context(utterances_histories)
-    response_encodings = encode_responses(responses)
-    res = context_encoding.dot(response_encodings.T)
-    return res
+def get_convert_score(contexts, responses):
+    context_encodings = []
+    for context in contexts:
+        context_encodings += [encode_context(context)]
+    context_encodings = np.array(context_encodings)
+    response_encodings = encode_responses(responses)  # 79, 512
+    res = np.multiply(context_encodings, response_encodings)
+    return np.sum(res, axis=1).reshape(-1, 1)
