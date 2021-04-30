@@ -1,8 +1,11 @@
 import logging
 import time
 import os
+
 import sentry_sdk
+from catboost import CatBoostClassifier
 from flask import Flask, request, jsonify
+from score import get_features
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
@@ -11,8 +14,16 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
+
+def get_probas(contexts, hypotheses):
+    features = get_features(contexts, hypotheses)
+    pred = cb.predict_proba(features)[:, 1]
+    return pred
+
+
 try:
-    import score
+    cb = CatBoostClassifier()
+    cb.load_model("model.cbm")
 except Exception as e:
     logger.exception("Scorer not loaded")
     sentry_sdk.capture_exception(e)
@@ -22,11 +33,13 @@ except Exception as e:
 @app.route("/batch_model", methods=["POST"])
 def batch_respond():
     st_time = time.time()
-    dialogues = request.json.get("dialogues", [])
+    contexts = request.json["contexts"]
+    hypotheses = request.json["hypotheses"]
+
     try:
-        responses = score.predict(dialogues)
+        responses = get_probas(contexts, hypotheses).tolist()
     except Exception as e:
-        responses = [[0] * len(x.get("hyp", [])) for x in dialogues]
+        responses = [0] * len(hypotheses)
         sentry_sdk.capture_exception(e)
         logger.exception(e)
 

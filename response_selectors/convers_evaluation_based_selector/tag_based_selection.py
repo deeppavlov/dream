@@ -195,18 +195,21 @@ def acknowledgement_decision():
 
 def compute_curr_single_scores(candidates, scores, confidences):
     curr_single_scores = []
+    if all(["hypothesis_scorer" in cand["annotations"] for cand in candidates]):
+        for i in range(len(candidates)):
+            curr_single_scores.append(candidates[i]["annotations"]["hypothesis_scorer"])
+    else:
+        for i in range(len(scores)):
+            cand_scores = scores[i]
+            confidence = confidences[i]
+            skill_name = candidates[i]["skill_name"]
+            score_conv_eval = calculate_single_convers_evaluator_score(cand_scores)
+            score = CONV_EVAL_STRENGTH * score_conv_eval + CONFIDENCE_STRENGTH * confidence
+            toxicity = max(candidates[i].get("annotations", {}).get('toxic_classification', {"toxic": 0.}).values())
 
-    for i in range(len(scores)):
-        cand_scores = scores[i]
-        confidence = confidences[i]
-        skill_name = candidates[i]["skill_name"]
-        score_conv_eval = calculate_single_convers_evaluator_score(cand_scores)
-        score = CONV_EVAL_STRENGTH * score_conv_eval + CONFIDENCE_STRENGTH * confidence
-        toxicity = max(candidates[i].get("annotations", {}).get('toxic_classification', {"toxic": 0.}).values())
-
-        logger.info(f'Skill {skill_name} has final score: {score}. Confidence: {confidence}. '
-                    f'Toxicity: {toxicity}. Cand scores: {cand_scores}')
-        curr_single_scores.append(score)
+            logger.info(f'Skill {skill_name} has final score: {score}. Confidence: {confidence}. '
+                        f'Toxicity: {toxicity}. Cand scores: {cand_scores}')
+            curr_single_scores.append(score)
 
     return curr_single_scores
 

@@ -760,30 +760,16 @@ def game_cooperative_skill_formatter(dialog: Dict):
 #     return ans
 
 
-def hypothesis_scorer_formatter(dialog: Dict):
-    dialog = utils.get_last_n_turns(dialog)
-    dialog = utils.remove_clarification_turns_from_dialog(dialog)
-    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
-    return [
-        {
-            "dialogues": [
-                {
-                    "context": [uttr["text"] for uttr in dialog["utterances"]],
-                    "hyp": [
-                        {
-                            "text": hyp["text"],
-                            "confidence": hyp.get("confidence", 0),
-                            "cobot_convers_evaluator_annotator": hyp.get("annotations", {}).get(
-                                "cobot_convers_evaluator_annotator", {}
-                            ),
-                        }
-                        for hyp in dialog["human_utterances"][-1]["hypotheses"]
-                    ],
-                }
-            ]
-        }
-    ]
+def hypothesis_scorer_formatter(dialog: Dict) -> List[Dict]:
+    hypotheses = []
+    for hyp in dialog["human_utterances"][-1]["hypotheses"]:
+        hypotheses.append({
+            "text": hyp["text"],
+            "confidence": hyp.get("confidence", 0),
+            "cobot_convers_evaluator_annotator": hyp.get("annotations", {}).get(
+                "cobot_convers_evaluator_annotator", {}),
+        })
 
+    contexts = len(hypotheses) * [[uttr["text"] for uttr in dialog["utterances"]]]
 
-def hyp_scorer_resp_formatter(payload: Dict):
-    return {"batch": [i for i in payload.get("batch", [])]}
+    return [{"contexts": contexts, "hypotheses": hypotheses}]
