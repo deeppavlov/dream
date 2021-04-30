@@ -8,6 +8,7 @@ from common.constants import MUST_CONTINUE
 from common.greeting import GREETING_QUESTIONS
 from common.link import skills_phrases_map
 from common.grounding import what_we_talk_about, are_we_recorded
+from common.sensitive import is_sensitive_situation
 from common.universal_templates import is_any_question_sentence_in_utterance
 from common.utils import get_topics, get_intents, get_entities, get_toxic, is_no
 from utils import MIDAS_INTENT_ACKNOWLEDGMENTS, get_midas_intent_acknowledgement, reformulate_question_to_statement, \
@@ -19,6 +20,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 SUPER_CONF = 1.
+ALMOST_SUPER_CONF = 0.99
 UNIVERSAL_RESPONSE_CONFIDENCE = 0.7
 UNIVERSAL_RESPONSE_LOW_CONFIDENCE = 0.6
 DONTKNOW_CONF = 0.5
@@ -177,6 +179,7 @@ def generate_universal_response(dialog):
     reply = ""
     confidence = 0.
     ackn, _, _, _, _ = generate_acknowledgement(dialog)
+    is_question = is_any_question_sentence_in_utterance(dialog['human_utterances'][-1])
 
     for intent in curr_intents:
         if intent in UNIVERSAL_INTENT_RESPONSES:
@@ -187,12 +190,15 @@ def generate_universal_response(dialog):
             # we prefer the first found intent, as it should be semantic request
             break
     if reply == "":
-        if is_any_question_sentence_in_utterance(dialog['human_utterances'][-1]):
+        if is_question:
             reply = get_unused_response("open_question_opinion",
                                         human_attr["grounding_skill"]["used_universal_intent_responses"])
             human_attr["grounding_skill"]["used_universal_intent_responses"] += [reply]
             confidence = UNIVERSAL_RESPONSE_LOW_CONFIDENCE
             attr = {"response_parts": ["body"], "type": "universal_response"}
+    if is_question and is_sensitive_situation(dialog):
+        # if question in sensitive situation - answer with confidence 0.99
+        confidence = ALMOST_SUPER_CONF
     if ackn and reply:
         reply = f"{ackn} {reply}"
         attr["response_parts"] = ["acknowlegdement", "body"]

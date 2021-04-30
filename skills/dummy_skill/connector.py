@@ -15,8 +15,9 @@ from typing import Callable, Dict
 
 import sentry_sdk
 
-from common.universal_templates import opinion_request_question
 from common.link import link_to, SKILLS_FOR_LINKING, skills_phrases_map
+from common.sensitive import is_sensitive_situation
+from common.universal_templates import opinion_request_question
 from common.utils import get_topics, get_entities, is_no
 
 
@@ -156,6 +157,7 @@ class DummySkillConnector:
         try:
             st_time = time.time()
             dialog = deepcopy(payload['payload']["dialogs"][0])
+            is_sensitive_case = is_sensitive_situation(dialog)
             all_prev_active_skills = list(set((payload['payload']["all_prev_active_skills"][0])))
 
             curr_topics = get_topics(dialog["human_utterances"][-1], which="cobot_topics")
@@ -188,7 +190,7 @@ class DummySkillConnector:
             human_attrs += [{}]
             bot_attrs += [{}]
 
-            if len(dialog["utterances"]) > 14:
+            if len(dialog["utterances"]) > 14 and not is_sensitive_case:
                 questions_same_nps = []
                 for i, nphrase in enumerate(curr_nounphrases):
                     for q_id in NP_QUESTIONS.get(nphrase, []):
@@ -253,7 +255,7 @@ class DummySkillConnector:
                         f"Well, now that you've mentioned {nphrase}, I've remembered this. {FACTS_MAP[str(fact_id)]}. "
                         f"{(opinion_request_question() if random.random() < ASK_QUESTION_PROB else '')}"]
 
-            if len(facts_same_nps) > 0:
+            if len(facts_same_nps) > 0 and not is_sensitive_case:
                 logger.info("Found special nounphrases for facts. Return fact with the same nounphrase.")
                 cands += [choice(facts_same_nps)]
                 confs += [0.5]
