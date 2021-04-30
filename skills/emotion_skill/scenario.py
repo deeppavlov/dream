@@ -248,11 +248,15 @@ class EmotionSkillScenario:
                                    for trigger_question in skill_trigger_phrases()])
                 if dialog['bot_utterances']:
                     was_active = dialog['bot_utterances'][-1].get('active_skill', {}) == 'emotion_skill'
+                    was_book_or_movie = dialog['bot_utterances'][-1].get('active_skill', {}) in ['book_skill',
+                                                                                                 'movie_skill']
                 else:
                     was_active = False
-                if was_trigger or was_active or self.regexp_sad:
+                if (was_trigger or was_active or self.regexp_sad) and not was_book_or_movie:
                     attr['can_continue'] = MUST_CONTINUE
                     confidence = 1
+                elif was_book_or_movie:
+                    confidence = 0.5 * confidence
 
             except Exception as e:
                 self.logger.exception("exception in emotion skill")
