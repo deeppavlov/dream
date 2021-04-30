@@ -9,6 +9,7 @@ import sentry_sdk
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_CONTINUE_PROMPT
 from common.emotion import is_joke_requested, if_turn_on_emotion
 from common.link import get_all_linked_to_skills
+from common.sensitive import is_sensitive_situation
 from common.skills_turn_on_topics_and_patterns import turn_on_skills
 from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
 from common.utils import high_priority_intents, low_priority_intents, get_topics, get_intents, get_named_locations
@@ -22,20 +23,6 @@ logger = logging.getLogger(__name__)
 
 
 class RuleBasedSkillSelectorConnector:
-    sensitive_topics = {
-        "Politics",
-        "Religion",
-        "Sex_Profanity"
-    }
-    sensitive_dialogact_topics = {
-        "Politics",
-        "Inappropriate_Content"
-    }
-    sensitive_all_intents = {
-        "Opinion_RequestIntent",  # cobot_dialogact
-        "opinion_request",  # intent_catcher
-        "open_question_opinion", "open_question_personal", "yes_no_question"  # midas
-    }
 
     async def send(self, payload: Dict, callback: Callable):
         st_time = time.time()
@@ -56,15 +43,8 @@ class RuleBasedSkillSelectorConnector:
 
             cobot_dialogact_topics = set(get_topics(user_uttr, which="cobot_dialogact_topics"))
             cobot_topics = set(get_topics(user_uttr, which="cobot_topics"))
-            sensitive_topics_detected = any(
-                [t in self.sensitive_topics for t in cobot_topics]) or any(
-                [t in self.sensitive_dialogact_topics for t in cobot_dialogact_topics])
-
-            all_intents = get_intents(user_uttr, probs=False, which="all")
-            sensitive_dialogacts_detected = any([t in self.sensitive_all_intents for t in all_intents])
 
             is_factoid = user_uttr_annotations.get('factoid_classification', {}).get('factoid', 0.) > 0.9
-            blist_topics_detected = sum(user_uttr_annotations.get("blacklisted_words", {}).values())
 
             prev_user_uttr_hyp = dialog["human_utterances"][-2]["hypotheses"] if len(
                 dialog["human_utterances"]) > 1 else []
@@ -91,7 +71,7 @@ class RuleBasedSkillSelectorConnector:
             elif high_priority_intent_detected:
                 # process intent with corresponding IntentResponder
                 skills_for_uttr.append("intent_responder")
-            elif blist_topics_detected or (sensitive_topics_detected and sensitive_dialogacts_detected):
+            elif is_sensitive_situation(dialog):
                 # process user utterance with sensitive content, "safe mode"
                 skills_for_uttr.append("program_y_dangerous")
                 skills_for_uttr.append("cobotqa")
@@ -99,6 +79,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("personal_info_skill")
                 skills_for_uttr.append("factoid_qa")
                 skills_for_uttr.append("grounding_skill")
+                skills_for_uttr.append("dummy_skill")
 
                 skills_for_uttr += turn_on_skills(
                     cobot_topics, cobot_dialogact_topics, user_uttr_text, bot_uttr.get("text", ""),
