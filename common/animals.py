@@ -20,14 +20,15 @@ def animals_skill_was_proposed(prev_bot_utt):
 
 
 ANIMALS_TEMPLATE = re.compile(r"(animal|\bpet\b|\bpets\b)", re.IGNORECASE)
-PETS_TEMPLATE = re.compile(r"(\bcat\b|\bcats\b|\bdog\b|\bdogs\b|horse|puppy|kitty|kitten|parrot|\brat\b|\brats\b|"
-                           r"mouse|hamster)", re.IGNORECASE)
-ANIMALS_FIND_TEMPLATE = re.compile(r"(animal|\bpet\b|\bpets\b|\bcat\b|\bcats\b|\bdog\b|\bdogs\b|horse|puppy|kitty|"
-                                   r"kitten|parrot|\brat\b|\brats\b|mouse|hamster)", re.IGNORECASE)
+PETS_TEMPLATE = re.compile(r"(\bcat\b|\bcats\b|\bdog\b|\bdogs\b|horse|puppy|puppies|kitty|kitties|kitten|parrot|"
+                           r"\brat\b|\brats\b|mouse|hamster|fish)", re.IGNORECASE)
+ANIMALS_FIND_TEMPLATE = re.compile(r"(animal|\bpet\b|\bpets\b|\bcat\b|\bcats\b|\bdog\b|\bdogs\b|horse|puppy|puppies|"
+                                   r"kitty|kitties|kitten|parrot|\brat\b|\brats\b|mouse|hamster|fish)", re.IGNORECASE)
 HAVE_LIKE_PETS_TEMPLATE = re.compile(r"(do|did|have) you (have |had |like )?(any |a )?(pets|pet|animals|animal)",
                                      re.IGNORECASE)
 HAVE_PETS_TEMPLATE = re.compile(r"(do|did|have) you (have |had )?(any |a )?(pets|pet|animals|animal)", re.IGNORECASE)
 LIKE_PETS_TEMPLATE = re.compile(r"(do|did|have) you (like |love )?(any |a )?(pets|pet|animals|animal)", re.IGNORECASE)
+DONT_LIKE = re.compile(r"(do not like|don't like|dont like|hate)", re.IGNORECASE)
 
 
 def check_about_animals(text):
@@ -78,14 +79,11 @@ WHAT_PETS_I_HAVE = [{"pet": "dog", "name": "Jack", "breed": "German Shepherd",
 CATS_DOGS_PHRASES = {"cat": ["Can cats reduce stress and improve mood? The answer seems to be yes.",
                              "Cats have long been one of the more popular companion animals, constantly battling dogs "
                              "for the number one spot.",
-                             "Whether you’ve had your cat for her whole life, or you’ve just welcomed a cat or kitten "
+                             "Whether you had your cat for her whole life, or you’ve just welcomed a cat or kitten "
                              "into your new family, you can find yourself learning something new about your cat "
                              "everyday."],
-                     "dog": ["Having a dog can help you stay active. Nothing beats a long walk with your "
-                             "four-legged friend on a fresh, spring morning.",
-                             "Nothing beats a long walk with your four-legged friend on a fresh, spring morning. "
-                             "Or seeing the joy on their faces when you pick up a ball and they know it’s playtime "
-                             "in the local park!",
+                     "dog": ["Having a dog can help you stay active.",
+                             "Nothing beats a long walk with your four-legged friend on a fresh, spring morning.",
                              "There’s an old saying, which is certainly true, that dogs repay the love you give "
                              "them ten-fold.",
                              "One of the most noticeable benefits of owning a dog is that it’s almost impossible to "
@@ -101,9 +99,9 @@ MY_CAT = ["My cat is as frail as an autumn leaf as an autumn leaf but her purr i
 
 MY_DOG = ["My dog is incredibly and unconditionally loyal to me. He loves me as much as I love him or sometimes more.",
           "We always play catch outside my house or sometimes in the park.",
-          "He is the reason I am active and good at exercise. He will never let me be lazy. "
+          "He is the reason I am active and good at exercise. He will never let me be lazy.",
           "Whenever possible, we always keep playing some or the other games with him.",
-          "He will play games with us, keep all our family members together with his love and cuddles and "
-          "also he keeps thieves and uninvited guests out of our home.",
+          "He will play games with us, keep all our family members together with his love and cuddles.",
+          "He keeps thieves and uninvited guests out of our home.",
           "He is active and playful, enjoying games like fetch and learning tricks.",
           "Playing with him is a lot of fun, I throw a tennis ball and he bounces off to retrieve it."]

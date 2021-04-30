@@ -75,15 +75,32 @@ def user_has_not_been_request(ngrams, vars):
 
 
 def why_do_you_like_request(ngrams, vars):
-    flag = True
+    flag = False
     text = state_utils.get_last_human_utterance(vars)["text"]
-    if re.findall(PETS_TEMPLATE, text):
-        flag = False
+    annotations = state_utils.get_last_human_utterance(vars)["annotations"]
+    conceptnet = annotations.get("conceptnet", {})
+    found_animal = ""
+    for elem, triplets in conceptnet.items():
+        if "SymbolOf" in triplets:
+            objects = triplets["SymbolOf"]
+            if "animal" in objects:
+                found_animal = elem
+    wp_output = annotations.get("wiki_parser", {})
+    if isinstance(wp_output, dict):
+        entities_info = wp_output.get("entities_info", {})
+        for entity, triplets in entities_info.items():
+            types = triplets.get("types", []) + triplets.get("instance of", []) + triplets.get("subclass of", [])
+            type_ids = [elem for elem, label in types]
+            inters = set(type_ids).intersection({"Q55983715", "Q16521"})
+            if inters:
+                found_animal = entity
+                break
     isno = is_no(state_utils.get_last_human_utterance(vars))
     shared_memory = state_utils.get_shared_memory(vars)
     used_why = shared_memory.get("why_do_you_like", False)
-    if used_why or isno:
-        flag = False
+    found_pet = re.findall(PETS_TEMPLATE, text)
+    if found_animal and not found_pet and not used_why and not isno:
+        flag = True
     logger.info(f"why_do_you_like_request={flag}")
     return flag
 
@@ -117,7 +134,6 @@ def suggest_visiting_response(vars):
 
 
 def why_do_you_like_response(vars):
-    text = state_utils.get_last_human_utterance(vars)["text"]
     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
     conceptnet = annotations.get("conceptnet", {})
     found_animal = ""
@@ -127,10 +143,17 @@ def why_do_you_like_response(vars):
             if "animal" in objects:
                 found_animal = elem
                 found_animal = plural_nouns(found_animal)
-    if not found_animal:
-        animal = re.findall("i like (.*?)", text)
-        if animal and len(animal[0].split()) <= 3:
-            found_animal = animal[0]
+    wp_output = annotations.get("wiki_parser", {})
+    if isinstance(wp_output, dict):
+        entities_info = wp_output.get("entities_info", {})
+        for entity, triplets in entities_info.items():
+            types = triplets.get("types", []) + triplets.get("instance of", []) + triplets.get("subclass of", [])
+            type_ids = [elem for elem, label in types]
+            inters = set(type_ids).intersection({"Q55983715", "Q16521"})
+            if inters:
+                found_animal = entity
+                found_animal = plural_nouns(found_animal)
+                break
     if found_animal:
         response = f"Cool! Why do you like {found_animal}?"
     else:

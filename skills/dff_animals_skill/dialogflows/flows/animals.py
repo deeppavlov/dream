@@ -14,7 +14,7 @@ from common.dialogflow_framework.utils.condition import is_last_state
 from common.universal_templates import if_chat_about_particular_topic, if_lets_chat
 from common.utils import is_yes, is_no
 from common.animals import PETS_TEMPLATE, ANIMALS_FIND_TEMPLATE, LIKE_ANIMALS_REQUESTS, WILD_ANIMALS, \
-    WHAT_PETS_I_HAVE, HAVE_LIKE_PETS_TEMPLATE, HAVE_PETS_TEMPLATE, LIKE_PETS_TEMPLATE, TRIGGER_PHRASES
+    WHAT_PETS_I_HAVE, HAVE_LIKE_PETS_TEMPLATE, HAVE_PETS_TEMPLATE, LIKE_PETS_TEMPLATE, TRIGGER_PHRASES, DONT_LIKE
 
 import dialogflows.scopes as scopes
 from dialogflows.flows.my_pets_states import State as MyPetsState
@@ -46,7 +46,9 @@ def lets_talk_about_request(vars):
     found_prompt = any([phrase in bot_uttr for phrase in TRIGGER_PHRASES])
     isyes = is_yes(user_uttr)
     chat_about = if_chat_about_particular_topic(user_uttr, bot_uttr, compiled_pattern=ANIMALS_FIND_TEMPLATE)
-    if have_pets or chat_about or (found_prompt and isyes) and not is_last_state(vars, AS.SYS_WHAT_ANIMALS):
+    dont_like = re.findall(DONT_LIKE, user_uttr["text"])
+    if not dont_like and have_pets or chat_about or (found_prompt and isyes) \
+            and not is_last_state(vars, AS.SYS_WHAT_ANIMALS):
         flag = True
     logger.info(f"lets_talk_about_request={flag}")
     return flag
@@ -104,7 +106,8 @@ def mention_pets_request(ngrams, vars):
     text = state_utils.get_last_human_utterance(vars)["text"]
     shared_memory = state_utils.get_shared_memory(vars)
     started = shared_memory.get("start", False)
-    if re.search(PETS_TEMPLATE, text) and not started:
+    dont_like = re.findall(DONT_LIKE, text)
+    if re.search(PETS_TEMPLATE, text) and not started and not dont_like:
         flag = True
     logger.info(f"mention_pets_request={flag}")
     return flag
@@ -112,6 +115,7 @@ def mention_pets_request(ngrams, vars):
 
 def mention_animals_request(ngrams, vars):
     flag = False
+    text = state_utils.get_last_human_utterance(vars)["text"]
     shared_memory = state_utils.get_shared_memory(vars)
     started = shared_memory.get("start", False)
     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
@@ -121,6 +125,9 @@ def mention_animals_request(ngrams, vars):
             objects = triplets["SymbolOf"]
             if "animal" in objects and not started:
                 flag = True
+    dont_like = re.findall(DONT_LIKE, text)
+    if dont_like:
+        flag = False
     logger.info(f"mention_animals_request={flag}")
     return flag
 
@@ -249,12 +256,13 @@ def what_wild_request(ngrams, vars):
     text = state_utils.get_last_human_utterance(vars)["text"]
     shared_memory = state_utils.get_shared_memory(vars)
     user_asks_about_pets = re.search(PETS_TEMPLATE, text)
+    dont_like = re.findall(DONT_LIKE, text)
     is_wild = shared_memory.get("is_wild", False)
     what_wild = shared_memory.get("what_wild", False)
     logger.info(f"what_wild_request, is wild {is_wild}, what wild {what_wild}")
     started = shared_memory.get("start", False)
-    if is_wild or what_wild or user_asks_about_pets or (not lets_talk_about_request(vars) and not started) \
-            and not is_last_state(vars, AS.SYS_WHAT_ANIMALS):
+    if dont_like or is_wild or what_wild or user_asks_about_pets \
+            or (not lets_talk_about_request(vars) and not started) and not is_last_state(vars, AS.SYS_WHAT_ANIMALS):
         flag = False
     if if_lets_chat(text) and not lets_talk_about_request(vars):
         flag = False
@@ -325,7 +333,8 @@ def tell_about_pets_response(vars):
 
 
 def mention_pets_response(vars):
-    replace_plural = {"cats": "cat", "dogs": "dog", "rats": "rat"}
+    replace_plural = {"cats": "cat", "dogs": "dog", "rats": "rat", "puppy": "dog", "puppies": "dog", "kitty": "cat",
+                      "kitties": "cat"}
     text = state_utils.get_last_human_utterance(vars)["text"]
     pet = re.findall(PETS_TEMPLATE, text)
     if pet[0] in replace_plural:
