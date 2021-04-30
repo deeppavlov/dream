@@ -105,7 +105,6 @@ class EmotionSkillScenario:
         elif state == "joke_requested":
             # got joke request
             reply = self._random_choice(self.jokes, prev_jokes_advices)
-            state = 'offer_another_joke'
             if reply == "":
                 state = ""  # We are run out of jokes
                 reply = "I guess I am out of jokes, sorry. Do you know any good jokes?"
