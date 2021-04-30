@@ -11,12 +11,13 @@ OFFER_TALK_ABOUT_FOOD = ["Would you like to chat about food?",
                          "I'd like to talk about food, would you?"]
 
 FOOD_WORDS = r"(food|cook|cooking|\bbake\b|baking|cuisine|daily bread|meals|foodstuffs" \
-    "|edibles|drink|pepperoni|pizza|strawberries|chocolate|coffee|\beat\b|\bate\b|\beating\b" \
-    "|\beats\b|dinner|breakfast|\bpasta\b|burger|cheese|tasty|waffles|banana|\bfries\b)"
+    r"|edibles|drink|pepperoni|pizza|strawberries|chocolate|coffee|\beat\b|\bate\b" \
+    r"|\beating\b|\beats\b|dinner|breakfast|\bpasta\b|burger|cheese|tasty|" \
+    r"waffles|banana|\bfries\b)"
 
 FOOD_UTTERANCES = r"(do you know .* most (favorite|favourite) food" \
-    "|.*what is your (favorite|favourite) food" \
-    "|.*by the way, what food do you like|my favou?rite food is lava cake)"
+    r"|.*what is your (favorite|favourite) food" \
+    r"|.*by the way, what food do you like|my favou?rite food is lava cake)"
 CUISINE_UTTERANCES = r"do you like .* cuisine|.*what kind of cuisine do you like"
 FOOD_UTTERANCES_RE = re.compile(FOOD_UTTERANCES, re.IGNORECASE)
 CUISINE_UTTERANCES_RE = re.compile(CUISINE_UTTERANCES, re.IGNORECASE)
@@ -24,7 +25,7 @@ FOOD_SKILL_TRANSFER_PHRASES = join_sentences_in_or_pattern([FOOD_UTTERANCES, CUI
 FOOD_SKILL_TRANSFER_PHRASES_RE = re.compile(FOOD_SKILL_TRANSFER_PHRASES, re.IGNORECASE)
 
 WHAT_COOK = r"(what should i|what do you suggest me to)" \
-    " (cook|make for dinner)( tonight| today| tomorrow){0,1}"
+    r" (cook|make for dinner)( tonight| today| tomorrow){0,1}"
 
 TRIGGER_PHRASES = OPINION_REQUESTS_ABOUT_FOOD + OFFER_TALK_ABOUT_FOOD
 FOOD_COMPILED_PATTERN = re.compile(join_sentences_in_or_pattern(
