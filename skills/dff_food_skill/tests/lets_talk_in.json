@@ -6,7 +6,7 @@
         {
             "human_utterances": [
                 {
-                    "text": "let's talk about food.",
+                    "text": "let's talk about food",
                     "annotations": {
                         "spelling_preprocessing": "let's talk about food",
                         "asr": {
@@ -37,243 +37,20 @@
                                 "threat": 0.0011580884456634521
                             }
                         },
-                        "factoid_classification": {
-                            "factoid": 0.0031548745464533567,
-                            "conversational": 0.9968451261520386
-                        },
                         "cobot_nounphrases": [
                             "food"
                         ],
-                        "sentseg": {
-                            "punct_sent": "let's talk about food.",
-                            "segments": [
-                                "let's talk about food."
-                            ]
-                        },
-                        "intent_catcher": {
-                            "cant_do": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "choose_topic": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "doing_well": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "dont_understand": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "exit": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "lets_chat_about": {
-                                "confidence": 1.0,
-                                "detected": 1
-                            },
-                            "no": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "opinion_request": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "repeat": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "stupid": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "tell_me_a_story": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "tell_me_more": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "topic_switching": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "weather_forecast_intent": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_are_you_talking_about": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_can_you_do": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_is_your_job": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_is_your_name": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_time": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "where_are_you_from": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "who_made_you": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "yes": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            }
-                        },
-                        "dialog_breakdown": {
-                            "breakdown": 0.1860419511795044,
-                            "no_breakdown": 0.8139580488204956
-                        },
-                        "midas_classification": {
-                            "abandon": 0.0008221524299552723,
-                            "appreciation": 0.0001468902611203616,
-                            "back-channeling": 6.77091641856399e-05,
-                            "clarifying_question": 0.00023660683974782894,
-                            "closing": 0.00043591806383746763,
-                            "command": 0.9904207062733625,
-                            "comment": 4.4114813245158733e-05,
-                            "complaint": 0.0004979890086197998,
-                            "correction": 9.988260763512097e-05,
-                            "dev_command": 0.0013494101684073552,
-                            "hold": 0.000302665316995235,
-                            "neg_answer": 9.383900198213277e-05,
-                            "non_compliant": 0.00021612740963309878,
-                            "nonsense": 0.0009428623454572829,
-                            "open_question_factual": 0.00037196247726929075,
-                            "open_question_opinion": 0.0010212129370960764,
-                            "open_question_personal": 0.00013572473221263123,
-                            "opening": 0.0001462805821381212,
-                            "opinion": 0.0005922466132035827,
-                            "other_answers": 8.860241575774446e-05,
-                            "pos_answer": 0.0007391321651367773,
-                            "statement": 0.00019109939413864083,
-                            "uncertain": 0.0001103527657000807,
-                            "yes_no_question": 0.0009265122131626374
-                        },
-                        "odqa": {
-                            "answer": "",
-                            "answer_pos": 0,
-                            "answer_sentence": "",
-                            "confidence": 0.0,
-                            "first_par": "",
-                            "paragraph": "",
-                            "qa_system": "odqa",
-                            "topical_chat_fact": ""
-                        },
-                        "ner": [
-                            []
-                        ],
-                        "cobot_dialogact": {
-                            "intents": [
-                                "OtherIntent"
+                        "cobot_entities": {
+                            "entities": [
+                                "food"
                             ],
-                            "topics": [
-                                "Other"
-                            ]
-                        },
-                        "cobot_topics": {
-                            "text": [
-                                "Food_Drink"
-                            ]
-                        },
-                        "sentrewrite": {
-                            "clusters": [],
-                            "modified_sents": [
-                                "let's talk about food."
-                            ]
-                        },
-                        "entity_linking": [
-                            [
-                                [
-                                    "Q2095",
-                                    "Q626981",
-                                    "Q51885874",
-                                    "Q15713092",
-                                    "Q20380750"
-                                ]
-                            ],
-                            [
-                                [
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0
-                                ]
-                            ]
-                        ],
-                        "wiki_parser": [
-                            {
-                                "food": {
-                                    "subclass of": [
-                                        [
-                                            "Q1194058",
-                                            "disposable product"
-                                        ],
-                                        [
-                                            "Q1422299",
-                                            "nutriment"
-                                        ],
-                                        [
-                                            "Q2424752",
-                                            "product"
-                                        ]
-                                    ],
-                                    "has effect": [
-                                        [
-                                            "Q1562684",
-                                            "satiety"
-                                        ],
-                                        [
-                                            "Q769815",
-                                            "food allergy"
-                                        ]
-                                    ],
-                                    "has quality": [
-                                        [
-                                            "Q1689021",
-                                            "shelf life"
-                                        ],
-                                        [
-                                            "Q186205",
-                                            "food energy"
-                                        ],
-                                        [
-                                            "Q19861951",
-                                            "type of food or dish"
-                                        ],
-                                        [
-                                            "Q2514470",
-                                            "digestibility"
-                                        ]
-                                    ]
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "text": "food"
                                 }
-                            }
-                        ],
-                        "kbqa": [
-                            "Not Found",
-                            0.0
-                        ],
+                            ]
+                        },
                         "conceptnet": {
                             "food": {
                                 "Causes": [
@@ -297,7 +74,41 @@
                                     "food"
                                 ]
                             }
-                        }
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "The Food and Drug Administration announced Thursday it will begin the process of banning menthol tobacco cigarettes, as well as all flavored cigars \u2014 a move heralded as one expected to improve the health of groups most likely to smoke menthol product... [2718 chars]",
+                                    "description": "The Food and Drug Administration has started the process of banning menthol cigarettes. The ban will take several years to go into effect.",
+                                    "image": "https://media4.s-nbcnews.com/j/newscms/2021_17/3467889/210426-menthol-cigarettes-se-1033a_cd5aab25ecde309e444e21f4578f15d4.nbcnews-fp-1200-630.jpg",
+                                    "publishedAt": "2021-04-29T14:01:00Z",
+                                    "source": {
+                                        "name": "NBC News",
+                                        "url": "https://www.nbcnews.com"
+                                    },
+                                    "title": "A 'historic, lifesaving step': FDA moves to ban menthol cigarettes and flavored cigars",
+                                    "url": "https://www.nbcnews.com/health/health-news/historic-life-saving-step-fda-moves-ban-menthol-cigarettes-flavored-n1265823"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "food",
+                                "news": {
+                                    "content": "The Food and Drug Administration plans to ban menthol in cigarettes and all flavors in cigars, a step the agency says will reduce tobacco use and curb preventable illnesses and deaths.The FDA says flavored products, including menthol, are more appeal... [1181 chars]",
+                                    "description": "The Food and Drug Administration plans to ban menthol in cigarettes and all flavors in cigars.",
+                                    "image": "https://s.abcnews.com/images/US/flavored-cigars-01-ap-iwb-210429_1619707786229_hpMain_16x9_608.jpg?w=1600",
+                                    "publishedAt": "2021-04-29T15:30:28Z",
+                                    "source": {
+                                        "name": "KABC-TV",
+                                        "url": "https://abc7.com"
+                                    },
+                                    "title": "FDA announces plans to pursue ban on menthol in cigarettes",
+                                    "url": "https://abc7.com/fda-announces-plans-to-pursue-ban-on-menthol-in-cigarettes/10559832/"
+                                },
+                                "which": "human"
+                            }
+                        ]
                     }
                 }
             ],
@@ -319,7 +130,6 @@
                         "full_name": "food",
                         "human_utterance_index": 0,
                         "intents": [
-                            "lets_chat_about",
                             "Information_RequestIntent"
                         ],
                         "next_skill_name": "",
@@ -340,5 +150,11 @@
     ],
     "used_links_batch": [
         {}
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
     ]
 }
