@@ -1,3 +1,4 @@
+import json
 import logging
 import re
 import time
@@ -14,6 +15,9 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+
+with open("numbers.json", "r") as f:
+    NUMBERS = json.load(f)
 
 templates = []
 
@@ -83,6 +87,10 @@ templates += [(re.compile(r"\bwanna\b", flags=re.IGNORECASE), "want to")]
 templates += [(re.compile(r"\bgonna\b", flags=re.IGNORECASE), "going to")]
 templates += [(re.compile(r"\bna\b", flags=re.IGNORECASE), "no")]
 
+for written_number, int_number in NUMBERS.items():
+    templates += [(re.compile(r"\b" + written_number + "\b", flags=re.IGNORECASE), str(int_number))]
+
+templates += [(re.compile(r"\b([0-9]+) ([0-9]+)\b", flags=re.IGNORECASE), r"\1\2")]
 templates += [(re.compile(r"\s+"), " ")]
 
 
