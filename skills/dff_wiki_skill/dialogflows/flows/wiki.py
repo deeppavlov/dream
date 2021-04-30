@@ -226,7 +226,10 @@ def tell_fact_response(vars):
         if chosen_title in titles_q and titles_q[chosen_title]:
             question = titles_q[chosen_title].format(found_entity_substr)
         else:
-            question_template = random.choice(QUESTION_TEMPLATES)
+            if len(used_titles) == 0:
+                question_template = QUESTION_TEMPLATES[0]
+            else:
+                question_template = random.choice(QUESTION_TEMPLATES)
             question = question_template.format(chosen_title, found_entity_substr)
         used_titles.append(chosen_title)
         state_utils.save_to_shared_memory(vars, found_entity_substr=found_entity_substr)
