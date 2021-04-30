@@ -29,10 +29,13 @@ CONF_3 = 0.95
 def extract_pet(utt):
     fnd1 = re.findall(r"(used to )?(have|had|like) (a )?(cat|dog)s?", utt)
     fnd2 = re.findall(r"^(a )?(cat|dog)", utt)
+    fnd3 = re.findall(r"and a (cat|dog)", utt)
     if fnd1:
         pet = fnd1[0][3]
     elif fnd2:
         pet = fnd2[0][1]
+    elif fnd3:
+        pet = fnd3[0]
     else:
         pet = ""
     return pet
@@ -46,11 +49,12 @@ def retrieve_and_save(vars):
     found_users_pet = shared_memory.get("users_pet", "")
     if not found_users_pet:
         found_users_pet = extract_pet(user_uttr)
-        found_pet_bot_uttr = extract_pet(bot_uttr)
+        found_pet_bot_uttr = re.findall(r"(cat|dog|rat|fish|parrot|hamster)", bot_uttr)
         if found_users_pet:
             state_utils.save_to_shared_memory(vars, users_pet=found_users_pet)
         if found_pet_bot_uttr and isyes:
-            state_utils.save_to_shared_memory(vars, users_pet=found_pet_bot_uttr)
+            state_utils.save_to_shared_memory(vars, users_pet=found_pet_bot_uttr[0])
+            found_users_pet = found_pet_bot_uttr[0]
     return found_users_pet
 
 
@@ -115,13 +119,14 @@ def ask_about_name_request(ngrams, vars):
     bot_uttr = state_utils.get_last_bot_utterance(vars)["text"]
     isno = is_no(state_utils.get_last_human_utterance(vars))
     isyes = is_yes(state_utils.get_last_human_utterance(vars))
+    user_has = re.findall(r"i (have|had)", user_uttr)
     bot_asked_pet = re.findall(r"do you have a (cat|dog)", bot_uttr, re.IGNORECASE)
     user_has_not = (bot_asked_pet and isno) and not re.findall(PETS_TEMPLATE, user_uttr)
     shared_memory = state_utils.get_shared_memory(vars)
     asked_name = shared_memory.get("asked_name", False)
     users_pet = shared_memory.get("users_pet", "")
     if not user_has_not and not asked_name and not re.findall(r"(name|call)", user_uttr) \
-            and (users_pet or (bot_asked_pet and isyes)):
+            and (users_pet or (bot_asked_pet and (isyes or user_has))):
         flag = True
     logger.info(f"ask_about_name_request={flag}")
     return flag
@@ -241,6 +246,7 @@ def ask_about_dog_cat_response(vars):
 
 def ask_about_name_response(vars):
     found_users_pet = retrieve_and_save(vars)
+    logger.info(f"ask_about_name_response, found_users_pet {found_users_pet}")
     if found_users_pet:
         pet_phrase = choose_pet_phrase(vars, found_users_pet)
         response = f"{pet_phrase} What is your {found_users_pet}'s name?"
@@ -304,7 +310,7 @@ def ask_more_info_response(vars):
         else:
             response = f"{sentence} Could you tell more about {found_users_pet}?"
     else:
-        response = "{sentence} Could you tell more about your pet?"
+        response = f"{sentence} Could you tell more about your pet?"
     state_utils.save_to_shared_memory(vars, asked_more_info=True)
     state_utils.set_confidence(vars, confidence=CONF_3)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
