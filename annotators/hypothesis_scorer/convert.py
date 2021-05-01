@@ -45,7 +45,7 @@ sess.run(tf.tables_initializer())
 sess.run(tf.global_variables_initializer())
 
 
-def encode_context(dialog_history):
+def encode_contexts(dialog_history_batch):
     """Encode the dialog context to the response ranking vector space.
 
     Args:
@@ -54,16 +54,20 @@ def encode_context(dialog_history):
     """
 
     # The context is the most recent message in the history.
-    context = dialog_history[-1]
+    contexts = []
+    extra_context_features = []
 
-    extra_context = list(dialog_history[:-1])
-    extra_context.reverse()
-    extra_context_feature = " ".join(extra_context)
+    for dialog_history in dialog_history_batch:
+        contexts += [dialog_history[-1]]
+
+        extra_context = list(dialog_history[:-1])
+        extra_context.reverse()
+        extra_context_features += [" ".join(extra_context)]
 
     return sess.run(
         context_encoding_tensor,
-        feed_dict={text_placeholder: [context], extra_text_placeholder: [extra_context_feature]},
-    )[0]
+        feed_dict={text_placeholder: contexts, extra_text_placeholder: extra_context_features},
+    )
 
 
 def encode_responses(texts):
@@ -71,10 +75,7 @@ def encode_responses(texts):
 
 
 def get_convert_score(contexts, responses):
-    context_encodings = []
-    for context in contexts:
-        context_encodings += [encode_context(context)]
-    context_encodings = np.array(context_encodings)
+    context_encodings = encode_contexts(contexts)
     response_encodings = encode_responses(responses)  # 79, 512
     res = np.multiply(context_encodings, response_encodings)
     return np.sum(res, axis=1).reshape(-1, 1)
