@@ -8,10 +8,13 @@
                     "used_titles": ["hardware"],
                     "prev_title": "hardware",
                     "prev_page_title": "Hardware",
-                    "found_entity_types": ["Q11253473"],
-                    "curr_page": "Smartphone",
-                    "found_entity_substr": "smartphone",
-                    "start": true
+                    "found_entity_types": [["Q11253473"]],
+                    "curr_pages": ["Smartphone", "Mobile phone features"],
+                    "found_entity_substr": ["smartphone"],
+                    "mentions": [],
+                    "mention_pages": [],
+                    "start": true,
+                    "new_page": true
                 },
                 "previous_human_utter_index": 0,
                 "history": {
