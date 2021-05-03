@@ -33,10 +33,15 @@ def split_page(page):
     else:
         page_split = page
     titles = []
+    main_page_dict = {}
     text_list = []
     dict_level = {2: {}, 3: {}, 4: {}}
     for elem in page_split:
         find_title = re.findall(r"^([=]{1,4})", elem)
+        if elem.startswith("{{"):
+            main_pages = elem.strip()[2:-2].split('|')[1:]
+            if titles:
+                main_page_dict[titles[-1][0]] = main_pages
         if find_title:
             cur_level = len(find_title[0])
             eq_str = "=" * cur_level
@@ -70,7 +75,8 @@ def split_page(page):
 
             titles.append([title, cur_level])
         else:
-            text_list.append(elem)
+            if not elem.startswith("{{"):
+                text_list.append(elem)
 
     if text_list:
         if titles:
@@ -92,7 +98,7 @@ def split_page(page):
                 dict_level[last_level]["first_par"] = text_list
                 text_list = []
 
-    return dict_level[2]
+    return dict_level[2], main_page_dict
 
 
 @register("page_preprocessor")
@@ -102,11 +108,15 @@ class PagePreprocessor(Component):
 
     def __call__(self, pages_batch):
         processed_pages_batch = []
+        main_pages_batch = []
         for pages_list in pages_batch:
             processed_pages_list = []
+            main_pages_list = []
             for page in pages_list:
-                processed_page = split_page(page)
+                processed_page, main_page_dict = split_page(page)
                 processed_pages_list.append(processed_page)
+                main_pages_list.append(main_page_dict)
             processed_pages_batch.append(processed_pages_list)
+            main_pages_batch.append(main_pages_list)
 
-        return processed_pages_batch
+        return processed_pages_batch, main_pages_batch

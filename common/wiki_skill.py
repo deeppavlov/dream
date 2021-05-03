@@ -241,14 +241,14 @@ def choose_title(vars, all_titles, titles_we_use, prev_title, used_titles):
             rand_title = random.choice(titles_we_use)
             if rand_title not in used_titles:
                 for title in all_titles:
-                    if rand_title == title.lower() and rand_title != prev_title:
+                    if rand_title.lower() == title.lower() and rand_title != prev_title:
                         found_title = rand_title
                         found_page_title = title
                         found = True
                         break
                 if not found:
                     for title in all_titles:
-                        if rand_title in title.lower() and rand_title != prev_title:
+                        if rand_title.lower() in title.lower() and rand_title != prev_title:
                             found_title = rand_title
                             found_page_title = title
                             found = True
@@ -292,3 +292,32 @@ def find_paragraph(topic_facts, chosen_title):
                     if paragraphs:
                         return paragraphs
     return paragraphs
+
+
+def find_all_paragraphs(topic_facts, paragraphs):
+    if topic_facts:
+        if isinstance(topic_facts, dict):
+            for title in topic_facts:
+                paragraphs = find_all_paragraphs(topic_facts[title], paragraphs)
+        else:
+            paragraphs += topic_facts
+    return paragraphs
+
+
+def delete_hyperlinks(par):
+    entities = re.findall(r"\[\[(.*?)]]", par)
+    mentions = []
+    pages = []
+    for entity in entities:
+        entity_split = entity.split('|')
+        if len(entity_split) == 1:
+            replace_str = "[[" + entity_split[0] + "]]"
+            mentions.append(entity_split[0])
+            pages.append(entity_split[0].capitalize())
+            par = par.replace(replace_str, entity_split[0])
+        if len(entity_split) == 2:
+            replace_str = "[[" + entity + "]]"
+            mentions.append(entity_split[1])
+            pages.append(entity_split[0].capitalize())
+            par = par.replace(replace_str, entity_split[1])
+    return par, mentions, pages

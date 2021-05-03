@@ -8,15 +8,15 @@
         "out": ["doc_text"],
         "join_docs": false,
         "shuffle": false,
-        "load_path": "{DOWNLOADS_PATH}/odqa/enwiki_latest.db"
+        "load_path": "{DOWNLOADS_PATH}/odqa/enwiki_latest_hyperlinks.db"
       },
       {
         "class_name": "page_preprocessor:PagePreprocessor",
         "in": ["doc_text"],
-        "out": ["processed_pages"]
+        "out": ["processed_pages", "main_pages"]
       }
     ],
-    "out": ["processed_pages"]
+    "out": ["processed_pages", "main_pages"]
   },
   "metadata": {
     "variables": {
@@ -29,7 +29,7 @@
     ],
     "download": [
       {
-        "url": "http://files.deeppavlov.ai/datasets/wikipedia/enwiki_latest.db",
+        "url": "http://files.deeppavlov.ai/datasets/wikipedia/enwiki_latest_hyperlinks.db",
         "subdir": "{DOWNLOADS_PATH}/odqa"
       }
     ]
