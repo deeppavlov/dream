@@ -1,5 +1,6 @@
 import logging
 import numpy as np
+import re
 import time
 from copy import deepcopy
 from os import getenv
@@ -24,6 +25,10 @@ nltk_stopwords = ([line.strip() for line in open(nltk_stopwords_file, 'r').readl
 BANNED_ENTITIES = ["okay", "oh", "name", "ocean", "hey", "cool", "corona", "pop", "rap"]
 BANNED_ENTITIES = set(BANNED_ENTITIES + nltk_stopwords)
 
+EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE = re.compile(r"[^a-zA-Z0-9 \-]")
+DOUBLE_SPACES = re.compile(r"\s+")
+
+
 with open("./google-english-no-swears.txt", "r") as f:
     UNIGRAMS = set(f.read().splitlines()[:500])
 
@@ -35,6 +40,9 @@ def extract_good_entities(preds):
 
         for ent in entities_for_sent:
             ent_text = ent["text"].lower()
+            # remove everything except of letters, digitals, spaces and -
+            ent_text = EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE.sub(" ", ent_text)
+            ent_text = DOUBLE_SPACES.sub(" ", ent_text).strip()
             if ent_text not in BANNED_ENTITIES and ent_text not in UNIGRAMS and len(ent_text) > 2:
                 good_entities_for_sent.append(deepcopy(ent))
 
