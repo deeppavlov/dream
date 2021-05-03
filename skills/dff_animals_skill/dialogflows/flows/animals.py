@@ -47,8 +47,8 @@ def lets_talk_about_request(vars):
     isyes = is_yes(user_uttr)
     chat_about = if_chat_about_particular_topic(user_uttr, bot_uttr, compiled_pattern=ANIMALS_FIND_TEMPLATE)
     dont_like = re.findall(DONT_LIKE, user_uttr["text"])
-    if not dont_like and have_pets or chat_about or (found_prompt and isyes) \
-            and not is_last_state(vars, AS.SYS_WHAT_ANIMALS):
+    if not dont_like and (have_pets or (chat_about and not is_last_state(vars, AS.SYS_WHAT_ANIMALS))
+                          or (found_prompt and isyes)):
         flag = True
     logger.info(f"lets_talk_about_request={flag}")
     return flag
