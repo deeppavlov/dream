@@ -206,6 +206,8 @@ class EmotionSkillScenario:
                 intent = annotated_user_phrase['annotations'].get("intent_catcher", {})
                 prev_replies_for_user = [u['text'].lower() for u in dialog['bot_utterances']]
                 prev_bot_phrase = ''
+                very_confident = any([function(user_phrase)
+                                      for function in [is_sad, is_boring, is_alone, is_joke_requested]])
                 link = ''
                 if prev_replies_for_user:
                     prev_bot_phrase = prev_replies_for_user[-1]
@@ -257,7 +259,9 @@ class EmotionSkillScenario:
                     confidence = 1
                 elif was_book_or_movie:
                     confidence = 0.5 * confidence
-
+                if not very_confident and not was_active:
+                    confidence = min(confidence, 0.99)
+                    attr['can_continue'] = CAN_CONTINUE_SCENARIO
             except Exception as e:
                 self.logger.exception("exception in emotion skill")
                 sentry_sdk.capture_exception(e)
