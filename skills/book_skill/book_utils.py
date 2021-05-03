@@ -393,22 +393,19 @@ def parse_author_best_book(annotated_phrase, default_phrase=None):
         annotated_phrase['text'] = annotated_phrase['text'].split(' is ')[1]
     plain_bookname, _ = get_name(annotated_phrase, 'book', return_plain=True)
     if plain_bookname is None:
-        author, _ = get_name(annotated_phrase, 'author')
-        if author is None:
-            logger.debug('Answer not obtained(no bookname no author)')
-            return default_phrase
+        plain_author, _ = get_name(annotated_phrase, 'author', return_plain=True)
     else:
         logger.debug(f'Processing bookname {plain_bookname}')
         plain_author = get_author(plain_bookname, return_plain=True, mode='book')
-        if plain_author:
-            logger.debug(f'author detected: {plain_author} bookname {plain_bookname}')
-            answer = best_book_by_author(plain_author_name=plain_author, plain_last_bookname=plain_bookname,
-                                         default_phrase=default_phrase)
-            logger.debug(f'Answer for parse_author_best_book is {answer}')
-            return answer
-        else:
-            logger.debug('No author found')
-            return default_phrase
+    if plain_author:
+        logger.debug(f'author detected: {plain_author} bookname {plain_bookname}')
+        answer = best_book_by_author(plain_author_name=plain_author, plain_last_bookname=plain_bookname,
+                                     default_phrase=default_phrase)
+        logger.debug(f'Answer for parse_author_best_book is {answer}')
+        return answer
+    else:
+        logger.debug('No author found')
+        return default_phrase
 
 
 dontlike_request = re.compile(r"(not like|not want to talk|not want to hear|not concerned about|"
