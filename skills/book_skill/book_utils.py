@@ -413,7 +413,7 @@ def parse_author_best_book(annotated_phrase, default_phrase=None):
 
 dontlike_request = re.compile(r"(not like|not want to talk|not want to hear|not concerned about|"
                               r"over the books|no books|stop talking about|no more books|i do not read|"
-                              r"not want to listen)", re.IGNORECASE)
+                              r"not want to listen|not know how to read)", re.IGNORECASE)
 
 
 def dontlike(last_utterance):
