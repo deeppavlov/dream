@@ -6,6 +6,7 @@ import numpy as np
 import sentry_sdk
 from deeppavlov import build_model
 from flask import Flask, request, jsonify
+from nltk.tokenize import sent_tokenize
 
 sentry_sdk.init(os.getenv('SENTRY_DSN'))
 
@@ -54,37 +55,71 @@ def predict(inputs):
     return responses
 
 
+def recombine_responses(responses, dialog_ids, n_dialogs):
+    dialog_ids = np.array(dialog_ids)
+    responses = np.array(responses)
+
+    final_responses = []
+    for i in range(n_dialogs):
+        curr_responses = responses[dialog_ids == i]
+        final_responses.append(list(curr_responses))
+    return final_responses
+
+
 @app.route("/model", methods=['POST'])
 def respond():
     st_time = time.time()
+    dialogs = request.json['dialogs']
+    dialog_ids = []
     inputs = []
-    for dialog in request.json.get('dialogs', [{}]):
-        if dialog.get('bot_utterances', []):
+    for i, dialog in enumerate(dialogs):
+        if len(dialog['bot_utterances']):
             prev_bot_uttr_text = dialog["bot_utterances"][-1].get("text", "").lower()
+            context = sent_tokenize(prev_bot_uttr_text)[-1].lower()
         else:
-            prev_bot_uttr_text = ""
-        if dialog.get('human_utterances', []):
+            context = ""
+        if len(dialog['human_utterances']):
             curr_human_uttr_text = dialog["human_utterances"][-1].get("text", "").lower()
         else:
             curr_human_uttr_text = ""
 
-        input_ = f"{prev_bot_uttr_text} {EMPTY_SIGN} {curr_human_uttr_text}"
-        inputs.append(input_)
+        sentences = sent_tokenize(curr_human_uttr_text)
+        for sent in sentences:
+            input_ = f"{context} {EMPTY_SIGN} {sent}"
+            inputs.append(input_)
+            dialog_ids.append(i)
+
     responses = predict(inputs)
+
+    final_responses = recombine_responses(responses, dialog_ids, len(dialogs))
+
     logging.info(f'midas_classification exec time {time.time() - st_time}')
-    return jsonify(responses)
+    return jsonify(final_responses)
 
 
 @app.route("/batch_model", methods=['POST'])
 def batch_respond():
     st_time = time.time()
-    bot_utterances = request.json.get('sentences', [""])
-    human_utterances = request.json.get('last_human_utterances', [""])
-    inputs = [f"{context.lower()} {EMPTY_SIGN} {utterance.lower()}"
-              for context, utterance in zip(human_utterances, bot_utterances)]
-    responses = predict(inputs)
+    bot_utterances = request.json['sentences']
+    human_utterances = request.json['last_human_utterances']
+    bot_utterances_sentences = [sent_tokenize(utterance) for utterance in bot_utterances]
+    dialog_ids = []
+    inputs = []
+    for i, bot_utterance_sents in enumerate(bot_utterances_sentences):
+        if human_utterances[i]:
+            context = sent_tokenize(human_utterances[i])[-1].lower()
+        else:
+            context = ""
+        for utterance in bot_utterance_sents:
+            inputs += [f"{context} {EMPTY_SIGN} {utterance.lower()}"]
+            dialog_ids += [i]
+
+    responses = predict(inputs)  # list of dicts, dict keys - classes, dict values - probas
+
+    final_responses = recombine_responses(responses, dialog_ids, len(bot_utterances))
+
     logging.info(f'midas_classification exec time {time.time() - st_time}')
-    return jsonify([{"batch": responses}])
+    return jsonify([{"batch": final_responses}])
 
 
 if __name__ == '__main__':

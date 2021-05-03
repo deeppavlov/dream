@@ -10,6 +10,7 @@ RUN mkdir /midas
 
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
+RUN python -c "import nltk; nltk.download('punkt'); nltk.download('wordnet')"
 COPY . /src/
 
 WORKDIR /src
