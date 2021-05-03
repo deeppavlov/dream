@@ -608,8 +608,9 @@ def get_intents(annotated_utterance, probs=False, default_probs=None, default_la
     intents = annotations.get("intent_catcher", {})
     detected_intents = [k for k, v in intents.items() if v.get("detected", 0) == 1]
     detected_intent_probs = {key: 1 for key in detected_intents}
+
     midas_intent_probs = annotations.get("midas_classification", {})
-    if midas_intent_probs:
+    if isinstance(midas_intent_probs, dict) and midas_intent_probs:
         semantic_midas_probs = {k: v for k, v in midas_intent_probs.items() if k in MIDAS_SEMANTIC_LABELS}
         functional_midas_probs = {k: v for k, v in midas_intent_probs.items() if k in MIDAS_FUNCTIONAL_LABELS}
         if semantic_midas_probs:
@@ -626,6 +627,22 @@ def get_intents(annotated_utterance, probs=False, default_probs=None, default_la
         midas_functional_intent_labels = [k for k, v in functional_midas_probs.items()
                                           if v == max_midas_functional_prob]
         midas_intent_labels = midas_semantic_intent_labels + midas_functional_intent_labels
+    elif isinstance(midas_intent_probs, list):
+        if midas_intent_probs:
+            # now it's a list of dictionaries. length of list is n sentences
+            midas_intent_labels = []
+            for midas_sent_probs in midas_intent_probs:
+                max_midas_sent_prob = max(midas_sent_probs.values())
+                midas_intent_labels += [k for k, v in midas_sent_probs.items() if v == max_midas_sent_prob]
+            _midas_intent_probs = deepcopy(midas_intent_probs)
+            midas_intent_probs = {}
+            class_names = list(set(sum([list(resp.keys()) for resp in _midas_intent_probs], [])))
+            for class_name in class_names:
+                max_proba = max([resp.get(class_name, 0.) for resp in _midas_intent_probs])
+                midas_intent_probs[class_name] = max_proba
+        else:
+            midas_intent_probs = {}
+            midas_intent_labels = []
     else:
         midas_intent_labels = []
     cobot_da_intent_probs, cobot_da_intent_labels = {}, []

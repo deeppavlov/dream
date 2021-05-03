@@ -26,7 +26,7 @@ def main_test():
     assert batch_responses[0]['batch'] == responses, f'Batch responses {batch_responses} not match' \
                                                      f'to responses {responses}'
 
-    assert round(responses[0]["comment"], 5) == 0.76918, print(responses)
+    assert round(responses[0][0]["comment"], 5) == 0.76918, print(responses)
 
     logger.info('Success')
 
