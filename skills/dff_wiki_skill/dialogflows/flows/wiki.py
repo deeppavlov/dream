@@ -137,11 +137,11 @@ def get_page_info(vars, where_to_find="current"):
             main_pages_list.append(main_pages)
     else:
         found_entity_substr, _, found_entity_types = find_entity(vars, where_to_find)
-        found_entity_substr_list.append(found_entity_substr)
-        found_entity_types_list.append(list(found_entity_types))
         curr_page = get_page_title(vars, found_entity_substr)
         if curr_page:
             curr_pages.append(curr_page)
+            found_entity_substr_list.append(found_entity_substr)
+            found_entity_types_list.append(list(found_entity_types))
         for page in curr_pages[-2:]:
             page_content, main_pages = get_page_content(page)
             page_content_list.append(page_content)
@@ -263,8 +263,10 @@ def start_talk_request(ngrams, vars):
     flag = False
     found_entity_substr_list, prev_title, prev_page_title, found_entity_types_list, used_titles, _, page_content_list, \
         main_pages_list, page = get_page_info(vars, "history")
-    chosen_title, chosen_page_title = get_title_info(found_entity_substr_list[-1], found_entity_types_list[-1],
-                                                     prev_title, used_titles, page_content_list[-1])
+    chosen_title, chosen_page_title = "", ""
+    if found_entity_substr_list and found_entity_types_list and page_content_list:
+        chosen_title, chosen_page_title = get_title_info(found_entity_substr_list[-1], found_entity_types_list[-1],
+                                                         prev_title, used_titles, page_content_list[-1])
     user_uttr = state_utils.get_last_human_utterance(vars)
     bot_uttr = state_utils.get_last_bot_utterance(vars)
     user_dont_know = if_user_dont_know_topic(user_uttr, bot_uttr)
