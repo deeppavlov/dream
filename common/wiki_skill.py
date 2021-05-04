@@ -185,8 +185,8 @@ def find_entity_nounphr(annotations):
             found_entity_substr = nounphr
             break
         for used_entity_substr in used_substr:
-            if (nounphr in used_entity_substr.lower() or used_entity_substr.lower() in nounphr) \
-                    and not in_not_used_substr:
+            if re.findall(rf"\b{nounphr}\b", used_entity_substr, re.IGNORECASE) \
+                    or re.findall(rf"\b{used_entity_substr}\b", nounphr, re.IGNORECASE) and not in_not_used_substr:
                 found_entity_substr = used_entity_substr
                 found = True
                 break
