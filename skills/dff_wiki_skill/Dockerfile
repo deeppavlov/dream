@@ -29,8 +29,6 @@ ARG SRC_DIR
 ENV CONFIG=$CONFIG
 ENV PORT=$PORT
 
-ARG SED_ARG=" | "
-
 RUN pip install deeppavlov
 
 RUN python -m spacy download en_core_web_sm
@@ -43,7 +41,8 @@ COPY ./annotators/CoBotQA/ ./CoBotQA/
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 
-RUN sed -i "s|$SED_ARG|g" "$CONFIG"
+ARG DATA_URL=http://files.deeppavlov.ai/datasets/wikipedia/enwiki_latest_hyperlinks.db
+ENV DATA_URL ${DATA_URL}
 
 # wait for a server answer ( INTERVAL + TIMEOUT ) * RETRIES seconds after that change stutus to unhealthy
 HEALTHCHECK --interval=5s --timeout=5s --retries=3 CMD curl --fail 127.0.0.1:${SERVICE_PORT}/healthcheck || exit 1
