@@ -1170,7 +1170,7 @@ services:
         COMMIT: 5b99ac3392e8e178e2bb4f9b218d4ddb2ec2e242
       context: ./
       dockerfile: ./skills/dff_wiki_skill/Dockerfile
-    command: ./server.sh
+    command: bash server_run.sh
     # command:  flask run -h 0.0.0.0 -p 8111 
     # environment:
     #   - FLASK_APP=server
