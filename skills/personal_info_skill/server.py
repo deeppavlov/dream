@@ -33,16 +33,21 @@ def respond():
     attributes = []
 
     for dialog in dialogs_batch:
-        response, confidence, human_attr, bot_attr, attr = process_info(
-            dialog, which_info="name")
+        human_attr, bot_attr = {}, {}
+        response, confidence, attr = how_do_you_know_my_info(dialog, which_info="name")
+        if confidence == 0.0:
+            response, confidence, attr = how_do_you_know_my_info(dialog, which_info="location")
+        if confidence == 0.0:
+            response, confidence, attr = how_do_you_know_my_info(dialog, which_info="homeland")
 
         if confidence == 0.0:
-            response, confidence, human_attr, bot_attr, attr = process_info(
-                dialog, which_info="homeland")
+            response, confidence, human_attr, bot_attr, attr = process_info(dialog, which_info="name")
 
         if confidence == 0.0:
-            response, confidence, human_attr, bot_attr, attr = process_info(
-                dialog, which_info="location")
+            response, confidence, human_attr, bot_attr, attr = process_info(dialog, which_info="homeland")
+
+        if confidence == 0.0:
+            response, confidence, human_attr, bot_attr, attr = process_info(dialog, which_info="location")
 
         if confidence == 0.0:
             response, confidence, attr = tell_my_info(dialog, which_info="name")
@@ -80,6 +85,40 @@ what_is_your_location_pattern = re.compile(r"((what is|what's|whats|tell me) you
                                            r"is that where you live now)", re.IGNORECASE)
 my_location_is_pattern = re.compile(r"(my (location is|location's)|(i am|i'm|i)( live| living)? in([a-zA-z ]+)?now)",
                                     re.IGNORECASE)
+
+_name_re = r"(first |last |middle |second )?name"
+_tell_re = r"((told|said|gave)|(tells|says|gives)|((have|had) (told|said|given)))"
+_you_know_question_re = \
+    r"((do|did|can|could) you (know|find out|learn)|(have|had) you (known|found out|learned|learnt))"
+_how_re = r"(how|where|when|from whom)"
+_i_live_re = r"(i lived?|my (house|home) (is|was|have been)|my family live[sd]?)"
+_how_do_you_know_question = rf"({_how_re} {_you_know_question_re}|who {_tell_re} you)"
+how_do_you_know_my_info_patterns = {
+    "name": re.compile(rf"{_how_do_you_know_question} (my {_name_re}|what is my {_name_re}|what my {_name_re} is)"),
+    "location": re.compile(rf"{_how_do_you_know_question} where {_i_live_re}"),
+    "homeland": re.compile(rf"{_how_do_you_know_question} where i am from")
+}
+BOT_DOESNT_KNOW_INFO_KEY = "bot_doesnt_know_info"
+BOT_KNOWS_INFO_KEY = "bot_knows_info"
+how_do_you_know_my_info_responses = {
+    "name": {
+        BOT_DOESNT_KNOW_INFO_KEY: "Sorry, but I really do not know your name. "
+        "Would you be so kind to tell me you name?",
+        BOT_KNOWS_INFO_KEY: "Ah, you have probably forgotten that you told me your name before. "
+        "Maybe you told me your name the last time we talked.",
+    },
+    "location": {
+        BOT_DOESNT_KNOW_INFO_KEY: "Sorry, but I really do not know where you live. Would tell me?",
+        BOT_KNOWS_INFO_KEY: "Ah, you have probably forgotten that"
+        "you told me where you live before. Maybe you told me this the last time we talked.",
+    },
+    "homeland": {
+        BOT_DOESNT_KNOW_INFO_KEY: "Sorry, but I really do not know where you are from. "
+        "So, where are you from? I hope i am not tactless.",
+        BOT_KNOWS_INFO_KEY: "Ah, you have probably forgotten that you told me where you are from before. "
+        "Maybe you told me this the last time we talked",
+    }
+}
 
 
 def process_info(dialog, which_info="name"):
@@ -191,6 +230,23 @@ def process_info(dialog, which_info="name"):
                     attr["can_continue"] = MUST_CONTINUE
 
     return response, confidence, human_attr, bot_attr, attr
+
+
+def how_do_you_know_my_info(dialog, which_info="name"):
+    curr_user_uttr = dialog["utterances"][-1]["text"].lower()
+    how_do_you_know_search_result = how_do_you_know_my_info_patterns[which_info].search(curr_user_uttr)
+    if how_do_you_know_search_result is None:
+        response = ""
+        confidence = 0.0
+        attr = {}
+    else:
+        if dialog.get("human", {}).get("profile", {}).get(which_info, ""):
+            response = how_do_you_know_my_info_responses[which_info][BOT_KNOWS_INFO_KEY]
+        else:
+            response = how_do_you_know_my_info_responses[which_info][BOT_DOESNT_KNOW_INFO_KEY]
+        confidence = 1.0
+        attr = {"can_continue": MUST_CONTINUE}
+    return response, confidence, attr
 
 
 def tell_my_info(dialog, which_info="name"):
