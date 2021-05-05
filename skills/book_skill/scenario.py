@@ -16,7 +16,7 @@ from book_utils import get_name, get_genre, suggest_template, get_not_given_ques
     fact_about_book, fav_genre_request_detected, is_side_intent, is_stop, \
     fav_book_request_detected, parse_author_best_book, best_book_by_author, GENRE_PHRASES, was_question_about_book, \
     asked_about_genre, GENRE_DICT, is_previous_was_book_skill, just_mentioned, dontknow, \
-    book_was_offered, tell_about_book, bible_request, get_movie_answer
+    book_was_offered, tell_about_book, bible_request, get_movie_answer, my_favorite
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -28,7 +28,7 @@ LAST_BOOK_READ = "What is the last book you have read?"
 IF_NOT_LOVE_READING = "Why don't you love reading? Maybe you haven't found the right book?"
 IF_NOT_REMEMBER_LAST_BOOK = "That's OK. I can't name it either."
 IF_REMEMBER_LAST_BOOK = "Interesting. Have you read BOOK?"
-WHAT_BOOK_IMPRESSED_MOST = "And what book did impress you the most?"
+WHAT_BOOK_IMPRESSED_MOST = "what book did impress you the most?"
 AMAZING_READ_BOOK = "I've read it. It's an amazing book!"
 WHEN_IT_WAS_PUBLISHED = "Do you know when it was first published?"
 OFFER_FACT_ABOUT_BOOK = "Would you like to know some facts about it?"
@@ -197,6 +197,10 @@ class BookSkillScenario:
                     # if book skill was active, stop/not/other intents, do not reply
                     logger.debug('Detected stop/no/other intent')
                     reply, confidence = self.default_reply, 0
+                elif my_favorite(annotated_user_phrase) == 'genre':
+                    reply, confidence = WHAT_IS_FAV_GENRE, self.default_conf
+                elif my_favorite(annotated_user_phrase) == 'book':
+                    reply, confidence = f'So {WHAT_BOOK_IMPRESSED_MOST}', self.default_conf
                 elif bible_request(annotated_user_phrase):
                     # if user asked us about Bible or christianity
                     logger.debug('Detected favorite book request')
@@ -296,7 +300,7 @@ class BookSkillScenario:
                             confidence = self.default_conf
                         else:
                             logger.debug(f"Best book for {annotated_user_phrase['text']} not retrieved")
-                            reply, confidence = f"Fabulous! {WHAT_BOOK_IMPRESSED_MOST}", self.default_conf
+                            reply, confidence = f"Fabulous! And {WHAT_BOOK_IMPRESSED_MOST}", self.default_conf
                 elif WHAT_BOOK_IMPRESSED_MOST in bot_phrases[-1]:
                     logger.debug('We have just said YES_PHRASE_2')
                     if is_no(annotated_user_phrase):
