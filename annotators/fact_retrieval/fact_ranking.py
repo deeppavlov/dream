@@ -14,6 +14,7 @@
 
 import logging
 import os
+import re
 import time
 from typing import List
 
@@ -27,6 +28,8 @@ sentry_sdk.init(os.getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.DEBUG)
 logger = logging.getLogger(__name__)
+
+PROHIBITED_WORDS = re.compile(r"(Image|File)", re.IGNORECASE)
 
 
 @register('fact_ranking_infer')
@@ -98,9 +101,9 @@ class FactRankerInfer(Component):
                             facts_with_scores.append((fact, probas[j]))
 
                 facts_with_scores = sorted(facts_with_scores, key=lambda x: x[1], reverse=True)
-                top_facts = [fact for fact, score in facts_with_scores if score > self.thres
-                             and "File" not in fact and "Image" not in fact]
+                top_facts = [fact for fact, score in facts_with_scores if score > self.thres]
             top_facts = first_par_list + top_facts
+            top_facts = [fact for fact in top_facts if not re.findall(PROHIBITED_WORDS, fact)]
             top_facts_batch.append(top_facts[:self.facts_to_leave])
         tm2 = time.time()
         logger.info(f"time of ranking {tm2 - tm1}")
