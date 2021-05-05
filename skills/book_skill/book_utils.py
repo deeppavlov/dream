@@ -147,8 +147,20 @@ genres_regexp = f"({'|'.join(GENRE_DICT.keys())})"
 do_you_love_regexp = '(do you (love|like|enjoy)|what do you think)'
 
 favorite_genre_template = re.compile(r"(favourite|favorite|best|suggest|recommend) book genre", re.IGNORECASE)
+user_favorite_genre_template = re.compile(r"my (favourite|favorite) book genre", re.IGNORECASE)
 favorite_book_template = re.compile(r"(favourite|favorite|best|suggest|recommend) book", re.IGNORECASE)
+user_favorite_book_template = re.compile(r"my (favourite|favorite) book", re.IGNORECASE)
+
 asked_genre_template = re.compile(rf"{do_you_love_regexp} {genres_regexp}", re.IGNORECASE)
+
+
+def my_favorite(annotated_user_phrase):
+    if re.search(user_favorite_genre_template, annotated_user_phrase["text"]):
+        return 'genre'
+    elif re.search(user_favorite_book_template, annotated_user_phrase["text"]):
+        return 'book'
+    else:
+        return None
 
 
 def fav_genre_request_detected(annotated_user_phrase):
