@@ -165,6 +165,7 @@ class BookSkillScenario:
 
                 user_phrases = [utt["text"] for utt in dialog['human_utterances'][-2:]]
                 annotated_user_phrase = dialog['human_utterances'][-1]
+                genre_detected = get_genre(annotated_user_phrase)
 
                 if len(dialog['human_utterances']) > 1:
                     annotated_prev_phrase = dialog['human_utterances'][-2]
@@ -228,9 +229,8 @@ class BookSkillScenario:
                     # if user asked us about favorite genre
                     logger.debug('Detected favorite genre request')
                     reply, confidence = random.choice(FAVOURITE_GENRE_ANSWERS), self.super_conf
-                elif asked_about_genre(annotated_user_phrase):
-                    genre_asked = get_genre(annotated_user_phrase)
-                    reply, confidence = GENRE_DICT[genre_asked], self.default_conf
+                elif asked_about_genre(annotated_user_phrase) and genre_detected:
+                    reply, confidence = GENRE_DICT[genre_detected], self.default_conf
                 elif fav_book_request_detected(annotated_user_phrase):
                     # if user asked us about favorite book
                     logger.debug('Detected favorite book request')
