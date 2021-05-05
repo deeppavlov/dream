@@ -2,6 +2,7 @@ from enum import Enum, auto
 
 MAIN = "SYSTEM"
 GREETING = "GREETING"
+STARTER = "STARTER"
 WEEKEND = "WEEKEND"
 
 
