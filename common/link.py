@@ -164,7 +164,7 @@ PRELINKTO_CONNECTION_PHRASES = json.load(prelinkto_connection_phrases_file.open(
 def get_prelinkto_connection(from_skill, to_skill, used_templates):
     skill_pair = sorted([from_skill, to_skill])
     for el in PRELINKTO_CONNECTION_PHRASES:
-        if el["skill_pair"] == skill_pair:
+        if el.get("skill_pair") == skill_pair and el.get("phrases"):
             return get_not_used_template(used_templates, el["phrases"])
     return ""
 
