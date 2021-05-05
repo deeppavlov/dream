@@ -35,6 +35,7 @@ SPECIAL_SKILLS = {
         "dff_animals_skill",
         "dff_sport_skill",
         "weather_skill",
+        "dff_bot_persona_skill",
     ],
 }
 
