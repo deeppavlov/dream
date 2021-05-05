@@ -326,15 +326,16 @@ def tell_fact_request(ngrams, vars):
         main_pages_list, page = get_page_info(vars)
     logger.info(f"request, found_entity_substr {found_entity_substr_list} prev_title {prev_title} "
                 f"found_entity_types {found_entity_types_list} used_titles {used_titles}")
-    chosen_title, chosen_page_title = get_title_info(found_entity_substr_list[-1], found_entity_types_list[-1],
-                                                     prev_title,
-                                                     used_titles, page_content_list[-1])
-    logger.info(f"request, chosen_title {chosen_title} chosen_page_title {chosen_page_title}")
-    isno = is_no(state_utils.get_last_human_utterance(vars))
-    not_want = re.findall(COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, user_uttr["text"])
+    if found_entity_substr_list and found_entity_types_list and page_content_list:
+        chosen_title, chosen_page_title = get_title_info(
+            found_entity_substr_list[-1], found_entity_types_list[-1], prev_title, used_titles, page_content_list[-1]
+        )
+        logger.info(f"request, chosen_title {chosen_title} chosen_page_title {chosen_page_title}")
+        isno = is_no(state_utils.get_last_human_utterance(vars))
+        not_want = re.findall(COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, user_uttr["text"])
 
-    if chosen_title or (prev_title and not isno and not not_want):
-        flag = True
+        if chosen_title or (prev_title and not isno and not not_want):
+            flag = True
     logger.info(f"tell_fact_request={flag}")
     return flag
 
