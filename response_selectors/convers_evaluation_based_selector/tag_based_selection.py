@@ -13,7 +13,7 @@ from common.universal_templates import if_chat_about_particular_topic, is_switch
     is_any_question_sentence_in_utterance
 from common.utils import get_intent_name, get_intents, get_topics, get_common_tokens_in_lists_of_strings, get_entities
 from utils import calculate_single_convers_evaluator_score, CONV_EVAL_STRENGTH, CONFIDENCE_STRENGTH, \
-    how_are_you_spec, what_i_can_do_spec, greeting_spec, misheard_with_spec1, COMPLETELY_CHANGING_THE_SUBJECT_PHRASES, \
+    how_are_you_spec, what_i_can_do_spec, greeting_spec, misheard_with_spec1, \
     misheard_with_spec2, alexa_abilities_spec, join_used_links_in_attributes, get_updated_disliked_skills
 from common.response_selection import ACTIVE_SKILLS, ALMOST_ACTIVE_SKILLS, CAN_NOT_BE_DISLIKED_SKILLS, \
     NOT_ADD_PROMPT_SKILLS
@@ -498,7 +498,6 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
                                          f'{best_prompt["text"]}'
             else:
                 best_candidate["text"] = f'{best_candidate["text"]} ' \
-                                         f'{np.random.choice(COMPLETELY_CHANGING_THE_SUBJECT_PHRASES)} ' \
                                          f'{best_prompt["text"]}'
             # TODO: how to correctly reassign human-/bot-/hyp- attributes??? how to deal with skill name?
             best_candidate["attributes"] = best_candidate.get("attributes", {})

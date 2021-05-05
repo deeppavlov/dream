@@ -15,7 +15,8 @@ from typing import Callable, Dict
 
 import sentry_sdk
 
-from common.link import link_to, SKILLS_FOR_LINKING, skills_phrases_map
+from common.link import LIST_OF_SCRIPTED_TOPICS, SKILLS_FOR_LINKING, skills_phrases_map, \
+    compose_linkto_with_connection_phrase
 from common.sensitive import is_sensitive_situation
 from common.universal_templates import opinion_request_question
 from common.utils import get_topics, get_entities, is_no
@@ -125,16 +126,24 @@ def get_link_to_question(dialog, all_prev_active_skills):
         tuple of linked question and updated bot attributes with saved link to `used_links`
     """
     # get previous active skills
-    human_attr = deepcopy(dialog["human"]["attributes"])
-    human_attr["used_links"] = human_attr.get("used_links", defaultdict(list))
-
+    human_attr = {}
+    human_attr["used_links"] = dialog["human"]["attributes"].get("used_links", {})
+    human_attr["disliked_skills"] = dialog["human"]["attributes"].get("disliked_skills", [])
+    human_attr["prelinkto_connections"] = dialog["human"]["attributes"].get("prelinkto_connections", [])
+    from_skill = None
+    for from_skill in all_prev_active_skills[::-1][:5]:
+        if from_skill in LIST_OF_SCRIPTED_TOPICS.keys():
+            break
     # remove prev active skills from those we can link to
     available_links = list(set(SKILLS_FOR_LINKING).difference(all_prev_active_skills))
     if len(available_links) > 0:
         # if we still have skill to link to, try to generate linking question
-        link = link_to(SKILLS_FOR_LINKING, human_attributes=human_attr,
-                       recent_active_skills=all_prev_active_skills)
+        # {'phrase': result, 'skill': linkto_dict["skill"], "connection_phrase": connection}
+        link = compose_linkto_with_connection_phrase(
+            SKILLS_FOR_LINKING, human_attributes=human_attr, recent_active_skills=all_prev_active_skills,
+            from_skill=from_skill)
         human_attr["used_links"][link["skill"]] = human_attr["used_links"].get(link["skill"], []) + [link['phrase']]
+        human_attr["prelinkto_connections"] = human_attr["prelinkto_connections"] + [link.get("connection_phrase", "")]
         linked_question = link["phrase"]
     else:
         linked_question = ""
