@@ -197,7 +197,8 @@
         "sure why not"
       ],
       "reg_phrases": [
-      	"you bet(\\!|\\.)"
+      	"you bet(\\!|\\.)",
+		"^kind of(\\!|\\.)?$"
       ],
       "min_precision": 0.0,
       "punctuation": [
