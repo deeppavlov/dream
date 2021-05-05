@@ -2,6 +2,8 @@
 This module consolidates possible phrases that links to specific skill.
 Also it contains +link_to+ function that returns phrase to link to specific skill
 """
+import json
+import pathlib
 from copy import deepcopy
 from random import choice, choices
 
@@ -19,7 +21,8 @@ import common.sport as dff_sport_skill
 import common.animals as dff_animals_skill
 import common.food as dff_food_skill
 import common.music as dff_music_skill
-
+from common.utils import get_not_used_template
+from common.response_selection import COMPLETELY_CHANGING_THE_SUBJECT_PHRASES, CHANGE_TOPIC_SUBJECT, BY_THE_WAY
 # Each common skill module should define +skill_trigger_phrases()+ function
 # that contains all phrases to trigger specific skill
 
@@ -152,3 +155,31 @@ def get_all_linked_to_skills(prev_bot_utt):
             skills.append(skill_name)
 
     return skills
+
+
+prelinkto_connection_phrases_file = pathlib.Path(__file__).resolve().parent / "prelinkto_connection_phrases.json"
+PRELINKTO_CONNECTION_PHRASES = json.load(prelinkto_connection_phrases_file.open())
+
+
+def get_prelinkto_connection(from_skill, to_skill, used_templates):
+    skill_pair = sorted([from_skill, to_skill])
+    for el in PRELINKTO_CONNECTION_PHRASES:
+        if el["skill_pair"] == skill_pair:
+            return get_not_used_template(used_templates, el["phrases"])
+    return ""
+
+
+def compose_linkto_with_connection_phrase(skills, human_attributes, recent_active_skills=None, from_skill=None):
+    from_skill = "" if from_skill is None else from_skill
+    linkto_dict = link_to(skills, human_attributes, recent_active_skills)
+    connection = get_prelinkto_connection(from_skill, linkto_dict["skill"],
+                                          human_attributes.get("prelinkto_connections", []))
+    if not connection:
+        connection = get_not_used_template(human_attributes.get("prelinkto_connections", []),
+                                           COMPLETELY_CHANGING_THE_SUBJECT_PHRASES)
+        result = f"{connection} {linkto_dict['phrase']}"
+    else:
+        change_topic = choice(CHANGE_TOPIC_SUBJECT).replace(
+            "SUBJECT", LIST_OF_SCRIPTED_TOPICS.get(linkto_dict["skill"], "it"))
+        result = f"{choice(BY_THE_WAY)} {connection} {change_topic} {linkto_dict['phrase']}"
+    return {'phrase': result, 'skill': linkto_dict["skill"], "connection_phrase": connection}

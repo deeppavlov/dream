@@ -36,14 +36,6 @@ LET_ME_ASK_YOU_PHRASES = [
     "Hey, I have a quesiton to you.",
     "May I ask you one interesting thing."
 ]
-COMPLETELY_CHANGING_THE_SUBJECT_PHRASES = [
-    "Completely changing the subject,",
-    "This has nothing to do with what we were talking about, but",
-    "Not to change the subject, but",
-    "Changing gears a little bit,",
-    "Changing the topic slightly,",
-    "Totally unrelated,"
-]
 
 
 def join_used_links_in_attributes(main_attrs, add_attrs):

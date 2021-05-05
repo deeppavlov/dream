@@ -15,3 +15,28 @@ ALMOST_ACTIVE_SKILLS = [
 ]
 CAN_NOT_BE_DISLIKED_SKILLS = ["meta_script_skill", "personal_info_skill"]
 NOT_ADD_PROMPT_SKILLS = ["alexa_handler", "intent_responder", "misheard_asr", "program_y_dangerous"]
+
+COMPLETELY_CHANGING_THE_SUBJECT_PHRASES = [
+    "Completely changing the subject,",
+    "This has nothing to do with what we were talking about, but",
+    "Not to change the subject, but",
+    "Changing gears a little bit,",
+    "Changing the topic slightly,",
+    "Totally unrelated,"
+]
+
+CHANGE_TOPIC_SUBJECT = [
+    "Speaking of SUBJECT,",
+    "Talking about SUBJECT,",
+    "Let's talk about SUBJECT,",
+    "We need to discuss SUBJECT,",
+    "Oh, I wanted to talk with you about SUBJECT,",
+]
+
+BY_THE_WAY = [
+    "By the way,",
+    "Anyway,",
+    "That reminds me,",
+    "Oh, before I forget,",
+    "I wanted to mention that",
+]
