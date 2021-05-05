@@ -14,7 +14,7 @@
                 ],
                 "join_docs": false,
                 "shuffle": false,
-                "load_path": "/data/enwiki_latest_hyperlinks.db"
+                "load_path": "/root/.deeppavlov/enwiki_latest_hyperlinks.db"
             },
             {
                 "class_name": "page_preprocessor:PagePreprocessor",
