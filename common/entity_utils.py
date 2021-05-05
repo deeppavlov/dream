@@ -8,7 +8,8 @@ import en_core_web_sm
 import sentry_sdk
 from nltk.stem import WordNetLemmatizer
 
-import common.utils as utils
+from common.utils import get_entities
+from common.universal_templates import get_entities_with_attitudes
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 
@@ -27,23 +28,12 @@ class HumanEntityEncounter:
         self,
         human_utterance_index: int,
         full_name: List[str],
-        previous_skill_name: str,
-        next_skill_name: str,
-        sentiment: str,
-        emotions: List,
-        intents: List,
-        topics: List,
-        pos: List[str],
+        previous_skill_name: str = "",
+        **kwargs
     ):
         self.human_utterance_index = human_utterance_index
         self.full_name = full_name
         self.previous_skill_name = previous_skill_name
-        self.next_skill_name = next_skill_name
-        self.sentiment = sentiment
-        self.emotions = emotions
-        self.intents = intents
-        self.topics = topics
-        self.pos = pos
 
     def __iter__(self):
         for x, y in self.__dict__.items():
@@ -56,20 +46,11 @@ class BotEntityEncounter:
         human_utterance_index: int,
         full_name: str,
         skill_name: str,
-        next_user_sentiment: str,
-        next_user_emotions: List,
-        next_user_intents: List,
-        next_user_topics: List,
-        pos: List[str],
+        **kwargs
     ):
         self.human_utterance_index = human_utterance_index
         self.full_name = full_name
         self.skill_name = skill_name
-        self.next_user_sentiment = next_user_sentiment
-        self.next_user_emotions = next_user_emotions
-        self.next_user_intents = next_user_intents
-        self.next_user_topics = next_user_topics
-        self.pos = pos
 
     def __iter__(self):
         for x, y in self.__dict__.items():
@@ -82,6 +63,8 @@ class Entity:
             self.name = name
             self.human_encounters = []
             self.bot_encounters = []
+            self.human_attitude = None
+            self.bot_attitude = None
         else:
             try:
                 assert isinstance(raw_data, dict)
@@ -93,6 +76,8 @@ class Entity:
                     HumanEntityEncounter(**encounter) for encounter in raw_data["human_encounters"]
                 ]
                 self.bot_encounters = [BotEntityEncounter(**encounter) for encounter in raw_data["bot_encounters"]]
+                self.human_attitude = raw_data.get("human_attitude", None)
+                self.bot_attitude = raw_data.get("bot_attitude", None)
             except Exception as exc:
                 logger.exception(exc)
                 sentry_sdk.capture_exception(exc)
@@ -110,52 +95,38 @@ class Entity:
             else:
                 yield x, y
 
+    def add_human_attitude(self, attitude):
+        self.human_attitude = attitude
+
+    def add_bot_attitude(self, attitude):
+        self.bot_attitude = attitude
+
     def add_human_encounters(self, human_utters, bot_utters, human_utter_index):
         human_utter = human_utters[-1]
         bot_utter = bot_utters[0] if bot_utters else {}
-        entities = parse_entities(human_utter["text"])
-        entities = [ent for ent in entities if self.name in wnl.lemmatize(ent["text"], "n")]
+        entities = get_entities(human_utter, only_named=False, with_labels=False)
+        entities = [ent for ent in entities if self.name in wnl.lemmatize(ent, "n")]
 
         active_skill = bot_utter.get("active_skill", "pre_start")
-        sentiment = utils.get_sentiment(human_utter, probs=False)[0]
-        emotions = utils.get_emotions(human_utter)
-        intents = utils.get_intents(human_utter)
-        topics = utils.get_topics(human_utter)
         for entity in entities:
             hee = HumanEntityEncounter(
                 human_utterance_index=human_utter_index,
-                full_name=entity["text"],
+                full_name=entity,
                 previous_skill_name=active_skill,
-                next_skill_name="",
-                sentiment=sentiment,
-                emotions=emotions,
-                intents=intents,
-                topics=topics,
-                pos=entity["pos"],
             )
             self.human_encounters.append(hee)
 
     def add_bot_encounters(self, human_utters, bot_utters, human_utter_index):
-        human_utter = human_utters[-1]
         bot_utter = bot_utters[0] if bot_utters else {}
-        entities = parse_entities(bot_utter["text"])
-        entities = [ent for ent in entities if self.name in wnl.lemmatize(ent["text"], "n")]
+        entities = get_entities(bot_utter, only_named=False, with_labels=False)
+        entities = [ent for ent in entities if self.name in wnl.lemmatize(ent, "n")]
 
         active_skill = bot_utter.get("active_skill", "pre_start")
-        next_user_sentiment = utils.get_sentiment(human_utter, probs=False)[0]
-        next_user_emotions = utils.get_emotions(human_utter)
-        next_user_intents = utils.get_intents(human_utter)
-        next_user_topics = utils.get_topics(human_utter)
         for entity in entities:
             bee = BotEntityEncounter(
                 human_utterance_index=human_utter_index,
-                full_name=entity["text"],
+                full_name=entity,
                 skill_name=active_skill,
-                next_user_sentiment=next_user_sentiment,
-                next_user_emotions=next_user_emotions,
-                next_user_intents=next_user_intents,
-                next_user_topics=next_user_topics,
-                pos=entity["pos"],
             )
             self.bot_encounters.append(bee)
 
@@ -177,48 +148,13 @@ class Entity:
         return max_utterance_index
 
 
-prohibited_nouns = ["kind", "sort"]
-
-
-def parse_entities(text):
-    doc = spacy_nlp(text)
-    entities = [[]]
-    for token in reversed(doc):
-        if token.pos_ == "NOUN" or (entities[-1] and (token.pos_ == "ADJ" or str(token) == "of")):
-            entities[-1] += [token]
-        else:
-            entities += [[]]
-    entities = [list(reversed(ent)) for ent in entities if ent]
-    # "of" problem decision
-    for ent in entities:
-        of_indexes = [-1] + [index for index, token in enumerate(ent) if str(token) == "of"] + [len(ent)]
-        segments = []
-        for start_index, end_index in zip(of_indexes, of_indexes[1:]):
-            start_index += 1
-            segments += [ent[start_index:end_index]]
-        for _ in range(len(segments) - 1):
-            segments[-2] = segments[-1] + segments[-2]
-            segments.pop()
-        assert len(segments) == 1
-        ent.clear()
-        ent += segments[0]
-    # drop prohibited nouns
-    entities = [[token for token in ent if str(token) not in prohibited_nouns] for ent in entities]
-
-    full_names = [[str(token) for token in ent] for ent in entities]
-    poses = [[token.pos_ for token in ent] for ent in entities]
-    entities = [{"text": " ".join(entity).replace(".", ""), "pos": pos} for entity, pos in zip(full_names, poses)]
-    entities = [entity for entity in entities if len(entity["text"]) > 2]
-    return entities
-
-
-def parse_short_entities(text):
-    entities = [ent["text"].split() for ent in parse_entities(text)]
-    return [wnl.lemmatize(ent[-1], "n") for ent in entities if ent]
-
-
-def is_entity(text):
-    return bool(parse_short_entities(text))
+def parse_entities_with_attitude(annotated_uttr: dict, prev_annotated_uttr: dict):
+    entities_with_attitude = get_entities_with_attitudes(annotated_uttr, prev_annotated_uttr)
+    entities_with_attitude = {
+        "like": [wnl.lemmatize(ent, "n") for ent in entities_with_attitude["like"]],
+        "dislike": [wnl.lemmatize(ent, "n") for ent in entities_with_attitude["dislike"]],
+    }
+    return entities_with_attitude
 
 
 def load_raw_entities(raw_entities):
@@ -237,33 +173,49 @@ def update_entities(dialog, human_utter_index, entities=None):
 
     # add/update bot entities
     if bot_utterances:
-        bot_short_entities = parse_short_entities(bot_utterances[-1]["text"])
-        bot_entities = {
-            entity_name: entities.get(entity_name, Entity(entity_name)) for entity_name in bot_short_entities
-        }
-        entities.update(bot_entities)
-        [ent.add_bot_encounters(human_utterances, bot_utterances, human_utter_index) for ent in bot_entities.values()]
+        bot_entities_with_attitude = parse_entities_with_attitude(
+            bot_utterances[-1], human_utterances[-2] if len(human_utterances) > 1 else {})
+        for attitude in ["like", "dislike"]:
+            bot_short_entities = bot_entities_with_attitude[attitude]
+            bot_entities = {
+                entity_name: entities.get(entity_name, Entity(entity_name)) for entity_name in bot_short_entities
+            }
+            entities.update(bot_entities)
+            [ent.add_bot_encounters(human_utterances, bot_utterances, human_utter_index)
+             for ent in bot_entities.values()]
+            [ent.add_bot_attitude(attitude) for ent in bot_entities.values()]
 
     # add/update human entities
-    human_short_entities = parse_short_entities(human_utterances[-1]["text"])
-    human_entities = {
-        entity_name: entities.get(entity_name, Entity(entity_name)) for entity_name in human_short_entities
-    }
-    entities.update(human_entities)
-    [ent.add_human_encounters(human_utterances, bot_utterances, human_utter_index) for ent in human_entities.values()]
+    human_entities_with_attitude = parse_entities_with_attitude(
+        human_utterances[-1], bot_utterances[-1] if len(bot_utterances) else {})
+    for attitude in ["like", "dislike"]:
+        human_short_entities = human_entities_with_attitude[attitude]
+        human_entities = {
+            entity_name: entities.get(entity_name, Entity(entity_name)) for entity_name in human_short_entities
+        }
+        entities.update(human_entities)
+        [ent.add_human_encounters(human_utterances, bot_utterances, human_utter_index)
+         for ent in human_entities.values()]
+        [ent.add_human_attitude(attitude) for ent in human_entities.values()]
 
     # update previus human entities
     if len(human_utterances) == 2:
-        short_human_entities = parse_short_entities(human_utterances[-2]["text"])
-        new_human_entities = {
-            entity_name: Entity(entity_name) for entity_name in short_human_entities if entity_name not in old_entities
-        }
-        entities.update(new_human_entities)
-        [ent.add_human_encounters(human_utterances, [], human_utter_index - 1) for ent in new_human_entities.values()]
-        [
-            entities[entity_name].update_human_encounters(human_utterances, bot_utterances, human_utter_index)
-            for entity_name in short_human_entities
-        ]
+        human_entities_with_attitude = parse_entities_with_attitude(
+            human_utterances[-2], bot_utterances[-2] if len(bot_utterances) > 1 else {})
+        for attitude in ["like", "dislike"]:
+            short_human_entities = human_entities_with_attitude[attitude]
+            new_human_entities = {
+                entity_name: Entity(entity_name)
+                for entity_name in short_human_entities if entity_name not in old_entities
+            }
+            entities.update(new_human_entities)
+            [ent.add_human_encounters(human_utterances, [], human_utter_index - 1)
+             for ent in new_human_entities.values()]
+            [ent.add_human_attitude(attitude) for ent in new_human_entities.values()]
+            [
+                entities[entity_name].update_human_encounters(human_utterances, bot_utterances, human_utter_index)
+                for entity_name in short_human_entities
+            ]
     index2entity = {
         entity.get_last_utterance_index(): {entity_name: entity} for entity_name, entity in entities.items()
     }

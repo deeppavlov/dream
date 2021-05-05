@@ -442,7 +442,7 @@ def print_combined(combined_output):
     logger.info(f'Combined classifier output is {combined_output}')
 
 
-def _get_etc_model(annotated_utterance, model_name, probs=True, default_probs=None, default_labels=None):
+def _get_etc_model(annotated_utterance, model_name, probs, default_probs, default_labels):
     """Function to get emotion classifier annotations from annotated utterance.
 
     Args:
@@ -452,15 +452,16 @@ def _get_etc_model(annotated_utterance, model_name, probs=True, default_probs=No
     Returns:
         dictionary with emotion probablilties, if probs == True, or emotion labels if probs != True
     """
-    default_probs = {} if default_probs is None else default_probs
-    default_labels = [] if default_labels is None else default_labels
+
     try:
         if model_name in annotated_utterance.get('annotations', {}):
             answer_probs, answer_labels = _get_plain_annotations(annotated_utterance,
                                                                  model_name=model_name)
-        else:
+        elif "combined_classification" in annotated_utterance.get('annotations', {}):
             answer_probs, answer_labels = _get_combined_annotations(annotated_utterance,
                                                                     model_name=model_name)
+        else:
+            answer_probs, answer_labels = default_probs, default_labels
     except Exception as e:
         logger.warning(e)
         answer_probs, answer_labels = default_probs, default_labels
@@ -486,9 +487,7 @@ def get_toxic(annotated_utterance, probs=True, default_probs=None, default_label
                           default_probs=default_probs, default_labels=default_labels)
 
 
-def get_sentiment(annotated_utterance, probs=True,
-                  default_probs={'positive': 0, 'negative': 0, 'neutral': 1},
-                  default_labels=['neutral']):
+def get_sentiment(annotated_utterance, probs=True, default_probs=None, default_labels=None):
     """Function to get sentiment classifier annotations from annotated utterance.
 
     Args:
@@ -498,14 +497,14 @@ def get_sentiment(annotated_utterance, probs=True,
     Returns:
         dictionary with sentiment probablilties, if probs == True, or sentiment labels if probs != True
     """
+    default_probs = {'positive': 0, 'negative': 0, 'neutral': 1} if default_probs is None else default_probs
+    default_labels = ['neutral'] if default_labels is None else default_labels
+
     return _get_etc_model(annotated_utterance, 'sentiment_classification', probs=probs,
                           default_probs=default_probs, default_labels=default_labels)
 
 
-def get_emotions(annotated_utterance, probs=True,
-                 default_probs={'anger': 0, 'fear': 0, 'joy': 0, 'love': 0,
-                                'sadness': 0, 'surprise': 0, 'neutral': 1},
-                 default_labels=['neutral']):
+def get_emotions(annotated_utterance, probs=True, default_probs=None, default_labels=None):
     """Function to get toxic classifier annotations from annotated utterance.
 
     Args:
@@ -515,6 +514,10 @@ def get_emotions(annotated_utterance, probs=True,
     Returns:
         dictionary with emotion probablilties, if probs == True, or toxic labels if probs != True
     """
+    default_probs = {'anger': 0, 'fear': 0, 'joy': 0, 'love': 0, 'sadness': 0, 'surprise': 0,
+                     'neutral': 1} if default_probs is None else default_probs
+    default_labels = ['neutral'] if default_labels is None else default_labels
+
     return _get_etc_model(annotated_utterance, 'emotion_classification', probs=probs,
                           default_probs=default_probs, default_labels=default_labels)
 

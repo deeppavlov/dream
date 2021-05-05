@@ -1,9 +1,16 @@
-from random import choice
+import logging
 import re
+from os import getenv
+from random import choice
 
 from common.utils import join_words_in_or_pattern, join_sentences_in_or_pattern, get_topics, \
-    get_intents, get_sentiment, is_yes, is_no
+    get_intents, get_sentiment, is_yes, is_no, get_entities
 from common.greeting import GREETING_QUESTIONS
+import sentry_sdk
+
+logger = logging.getLogger(__name__)
+
+sentry_sdk.init(getenv('SENTRY_DSN'))
 
 # https://www.englishclub.com/vocabulary/fl-asking-for-opinions.htm
 UNIVERSAL_OPINION_REQUESTS = [
@@ -365,3 +372,85 @@ def is_any_question_sentence_in_utterance(annotated_uttr):
     if is_question_any_sent or is_question_symbol:
         return True
     return False
+
+
+WORD_LOVE = r"(like|love|adore|fancy|fond of|fetch|care for|affect|desire|wish|want)"
+WORD_HATE = r"(dislike|hate|distaste|loathe|object|bar\b|abominate|disrelish)"
+DO_YOU_LOVE_PATTERN = re.compile(r"(do|whether|did|are) you " + WORD_LOVE, re.IGNORECASE)
+DO_YOU_HATE_PATTERN = re.compile(r"(do|whether|did|are) you " + WORD_HATE, re.IGNORECASE)
+MY_FAVORITE_PATTERN = re.compile(
+    r"((is|are|was|were) my (favou?rite|(the )?best|beloved|(a )?loved|well-loved|truelove)|"
+    r"my (favou?rite|(the )?best|beloved|(a )?loved|well-loved|truelove)[a-z0-9A-Z \-]* (is|are|was|were))",
+    re.IGNORECASE)
+I_LOVE_PATTERN = re.compile(r"(^|\b)(i|i'm|i am|we|we're|we are) " + WORD_LOVE, re.IGNORECASE)
+I_HATE_PATTERN = re.compile(r"(^|\b)(i|i'm|i am|we|we're|we are) " + WORD_HATE, re.IGNORECASE)
+WHAT_FAVORITE_PATTERN = re.compile(
+    r"(what|which)[a-z0-9A-Z \-]* your (favou?rite|(the )?best|beloved|(a )?loved|well-loved|truelove)", re.IGNORECASE)
+WHAT_LESS_FAVORITE_PATTERN = re.compile(
+    r"(what|which)[a-z0-9A-Z \-]* your ((less|least)[- ]favou?rite|(the )?worst|unloved|unlovable)", re.IGNORECASE)
+WHAT_DO_YOU_THINK_PATTERN = re.compile(
+    r"(what (do|did|are|were) you (think|believe|recognize|sure|understand|feel|appeal|suppose|imagine|guess|"
+    r"fond of|care for|know|thought|mean|reckon|suggest|wonder|expect|say)|"
+    r"what (is|are|was|were) your (view|thought|opinion|mind|belief|voice|point|position|feeling|sentiment|"
+    r"assessment|judgement|thinking|holding|opining|a say|take))", re.IGNORECASE)
+
+
+def get_entities_with_attitudes(annotated_uttr: dict, prev_annotated_uttr: dict):
+    entities_with_attitudes = {"like": [], "dislike": []}
+    all_entities = get_entities(annotated_uttr, only_named=False, with_labels=False)
+    all_prev_entities = get_entities(prev_annotated_uttr, only_named=False, with_labels=False)
+    logger.info(f"Consider all curr entities: {all_entities}, and all previous entities: {all_prev_entities}")
+    curr_entity = all_entities[0] if all_entities else ""
+    prev_entity = all_prev_entities[-1] if all_prev_entities else ""
+    curr_uttr_text = annotated_uttr.get("text", "")
+    prev_uttr_text = prev_annotated_uttr.get("text", "")
+    curr_sentiment = get_sentiment(annotated_uttr, probs=False, default_labels=["neutral"])[0]
+    current_first_sentence = annotated_uttr.get("annotations", {}).get(
+        "sentseg", {}).get("segments", [curr_uttr_text])[0]
+
+    if "?" in current_first_sentence:
+        pass
+    elif WHAT_FAVORITE_PATTERN.search(prev_uttr_text):
+        # what is your favorite ..? - animals -> `like animals`
+        entities_with_attitudes["like"] += [curr_entity]
+    elif WHAT_LESS_FAVORITE_PATTERN.search(prev_uttr_text):
+        # what is your less favorite ..? - animals -> `dislike animals`
+        entities_with_attitudes["dislike"] += [curr_entity]
+    elif DO_YOU_LOVE_PATTERN.search(prev_uttr_text):
+        if is_no(annotated_uttr):
+            # do you love .. animals? - no -> `dislike animals`
+            entities_with_attitudes["dislike"] += [prev_entity]
+        elif is_yes(annotated_uttr):
+            # do you love .. animals? - yes -> `like animals`
+            entities_with_attitudes["like"] += [prev_entity]
+    elif DO_YOU_HATE_PATTERN.search(prev_uttr_text):
+        if is_no(annotated_uttr):
+            # do you hate .. animals? - no -> `like animals`
+            entities_with_attitudes["like"] += [prev_entity]
+        elif is_yes(annotated_uttr):
+            # do you hate .. animals? - yes -> `dislike animals`
+            entities_with_attitudes["dislike"] += [prev_entity]
+    elif I_HATE_PATTERN.search(curr_uttr_text):
+        # i hate .. animals -> `dislike animals`
+        entities_with_attitudes["dislike"] += [curr_entity]
+    elif I_LOVE_PATTERN.search(curr_uttr_text) or MY_FAVORITE_PATTERN.search(curr_uttr_text):
+        # i love .. animals -> `like animals`
+        entities_with_attitudes["like"] += [curr_entity]
+    elif if_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr=prev_annotated_uttr,
+                                        key_words=[curr_entity]):
+        # what do you want to chat about? - ANIMALS -> `like animals`
+        entities_with_attitudes["like"] += [curr_entity]
+    elif if_not_want_to_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr=prev_annotated_uttr):
+        # i don't wanna talk about animals -> `dislike animals`
+        entities_with_attitudes["dislike"] += [curr_entity]
+    elif WHAT_DO_YOU_THINK_PATTERN.search(prev_uttr_text):
+        if curr_sentiment == "negative":
+            # what do you thank .. animals? - negative -> `dislike animals`
+            entities_with_attitudes["dislike"] += [prev_entity]
+        elif curr_sentiment == "positive":
+            # what do you thank .. animals? - positive -> `like animals`
+            entities_with_attitudes["like"] += [prev_entity]
+
+    entities_with_attitudes["like"] = [el for el in entities_with_attitudes["like"] if el]
+    entities_with_attitudes["dislike"] = [el for el in entities_with_attitudes["dislike"] if el]
+    return entities_with_attitudes
