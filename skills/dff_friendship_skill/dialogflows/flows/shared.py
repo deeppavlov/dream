@@ -12,6 +12,7 @@ import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 import common.entity_utils as entity_utils
 import common.greeting as common_greeting
+import common.link as common_link
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -108,6 +109,12 @@ link_to_skill2key_words = {
     "dff_gossip_skill": ["gossips"],
     "dff_music_skill": ["music"],
 }
+
+link_to_skill2key_words = {
+    skill_name: link_to_skill2key_words[skill_name]
+    for skill_name in link_to_skill2key_words
+    if skill_name in common_link.SKILLS_FOR_LINKING
+}
 link_to_skill2i_like_to_talk = {
     "news_api_skill": [
         "Anxious to stay current on the news.",
@@ -151,6 +158,12 @@ link_to_skill2i_like_to_talk = {
         "It is not our enemies that defeat us. It is our fear. "
         "And speaking of fear good jazz helps me to find energy to keep up.",
     ],
+}
+
+link_to_skill2i_like_to_talk = {
+    skill_name: link_to_skill2i_like_to_talk[skill_name]
+    for skill_name in link_to_skill2i_like_to_talk
+    if skill_name in common_link.SKILLS_FOR_LINKING
 }
 
 
