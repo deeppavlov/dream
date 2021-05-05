@@ -10,7 +10,7 @@ import sentry_sdk
 
 from common.constants import CAN_NOT_CONTINUE, MUST_CONTINUE
 from common.weather import ASK_WEATHER_SKILL_FOR_HOMELAND_PHRASE
-from common.utils import get_entities, get_named_locations, get_named_persons
+from common.utils import get_entities, get_named_locations, get_named_persons, is_no, is_yes
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -131,6 +131,7 @@ def process_info(dialog, which_info="name"):
     curr_uttr_dict = dialog["human_utterances"][-1]
     curr_user_uttr = curr_uttr_dict["text"].lower()
     curr_user_annot = curr_uttr_dict["annotations"]
+    bot_utterance_texts = [u['text'].lower() for u in dialog["bot_utterances"]]
     try:
         prev_bot_uttr = dialog["bot_utterances"][-1]["text"].lower()
     except IndexError:
@@ -146,9 +147,16 @@ def process_info(dialog, which_info="name"):
                            "location": "I didn't get your location. Could you, please, repeat it.",
                            "homeland": "I didn't get where you have been born. Could you please repeat it?"}
 
-    response_phrases = {"name": "Nice to meet you, ",
-                        "location": ASK_WEATHER_SKILL_FOR_HOMELAND_PHRASE,
-                        "homeland": "Is that where you live now?"}
+    response_phrases = {"name": ["Nice to meet you, "],
+                        "location": [ASK_WEATHER_SKILL_FOR_HOMELAND_PHRASE, "Cool!"],
+                        "homeland": ["Is that where you live now?", "Cool!"]}
+    response_phrases = {
+        "name": response_phrases["name"][0],
+        "location": response_phrases["location"][1] if response_phrases["location"][0].lower() in bot_utterance_texts
+        else response_phrases["location"][0],
+        "homeland": response_phrases["homeland"][1] if response_phrases["homeland"][0].lower() in bot_utterance_texts
+        else response_phrases["homeland"][0],
+    }
 
     got_info = False
     # if user doesn't want to share his info
@@ -160,9 +168,7 @@ def process_info(dialog, which_info="name"):
         attr["can_continue"] = CAN_NOT_CONTINUE
         return response, confidence, human_attr, bot_attr, attr
 
-    if re.search(r"is that where you live now",
-                 prev_bot_uttr) and curr_user_annot.get("intent_catcher",
-                                                        {}).get("yes", {}).get("detected", 0) == 1:
+    if re.search(r"is that where you live now", prev_bot_uttr) and is_yes(curr_uttr_dict):
         logger.info(f"Found location=homeland")
         if dialog["human"]["attributes"].get("homeland", None):
             human_attr["location"] = dialog["human"]["attributes"]["homeland"]
@@ -176,9 +182,7 @@ def process_info(dialog, which_info="name"):
         confidence = 1.0
         got_info = True
         attr["can_continue"] = MUST_CONTINUE
-    elif re.search(r"is that where you live now",
-                   prev_bot_uttr) and curr_user_annot.get("intent_catcher",
-                                                          {}).get("no", {}).get("detected", 0) == 1:
+    elif re.search(r"is that where you live now", prev_bot_uttr) and is_no(curr_uttr_dict):
         logger.info(f"Found location is not homeland")
         response = f"So, where do you live now?"
         confidence = 1.0
