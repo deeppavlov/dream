@@ -6,6 +6,7 @@ from emora_stdm import CompositeDialogueFlow, DialogueFlow
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 
 import dialogflows.flows.greeting as greeting_flow
+import dialogflows.flows.starter as starter_flow
 import dialogflows.flows.weekend as weekend_flow
 
 import dialogflows.scopes as scopes
@@ -22,6 +23,7 @@ composite_dialogflow = CompositeDialogueFlow(
 
 
 composite_dialogflow.add_component(greeting_flow.dialogflow, scopes.GREETING)
+composite_dialogflow.add_component(starter_flow.dialogflow, scopes.STARTER)
 composite_dialogflow.add_component(weekend_flow.dialogflow, scopes.WEEKEND)
 
 

@@ -6,6 +6,8 @@ from emora_stdm import CompositeDialogueFlow, DialogueFlow
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 
 import dialogflows.flows.bot_persona as bot_persona_flow
+# import dialogflows.flows.starter as starter_flow
+from dialogflows.flows.bot_persona_states import State as BS
 import dialogflows.scopes as scopes
 
 logger = logging.getLogger(__name__)
@@ -20,6 +22,7 @@ composite_dialogflow = CompositeDialogueFlow(
 
 
 composite_dialogflow.add_component(bot_persona_flow.dialogflow, scopes.BOT_PERSONA)
+# composite_dialogflow.add_component(starter_flow.dialogflow, scopes.STARTER)
 
 dialogflow = composite_dialogflow.component(scopes.MAIN)
 simplified_dialogflow = dialogflow_extention.DFEasyFilling(dialogflow=dialogflow)
@@ -45,7 +48,7 @@ def bot_persona_request(ngrams, vars):
 for node in [scopes.State.USR_ROOT, scopes.State.USR_ERR]:
     simplified_dialogflow.add_user_serial_transitions(
         node,
-        {(scopes.BOT_PERSONA, bot_persona_flow.State.USR_START): bot_persona_request},
+        {(scopes.BOT_PERSONA, BS.USR_START): bot_persona_request},
     )
 simplified_dialogflow.set_error_successor(scopes.State.USR_ROOT, scopes.State.SYS_ERR)
 simplified_dialogflow.set_error_successor(scopes.State.USR_ERR, scopes.State.SYS_ERR)

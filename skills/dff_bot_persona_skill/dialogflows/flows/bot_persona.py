@@ -5,32 +5,34 @@ import os
 import random
 import re
 
-from enum import Enum, auto
-
 import sentry_sdk
 from spacy import load
 
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
-import dialogflows.scopes as scopes
-from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
+# from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT, MUST_CONTINUE, CAN_NOT_CONTINUE
-from common.utils import get_intents, get_sentiment
+from common.utils import get_sentiment
+# , get_intents
 from common.bot_persona import YOUR_FAVORITE_COMPILED_PATTERN
 
+import dialogflows.scopes as scopes
 from dialogflows.flows import shared
+# from dialogflows.flows.starter_states import State as StarterState
+from dialogflows.flows.bot_persona_states import State as BS
+
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
-
-
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
 spacy_nlp = load("en_core_web_sm")
 
 
-with open("topic_favorites.json", "r") as f:
+with open("common/topic_favorites.json", "r") as f:
     FAV_STORIES_TOPICS = json.load(f)
 
 CATEGORIES_OBJECTS = {
@@ -50,24 +52,6 @@ CONF_MIDDLE = 0.95
 CONF_LOW = 0.9
 
 
-class State(Enum):
-    USR_START = auto()
-    #
-    SYS_FAV_OR_LETS_CHAT = auto()
-    USR_MY_FAV_STORY = auto()
-    SYS_CHECK_FAV = auto()
-    USR_DO_YOU_LIKE_TOPIC = auto()
-    SYS_LIKE_TOPIC = auto()
-    SYS_NOT_LIKE_TOPIC = auto()
-    USR_WHATS_YOUR_FAV = auto()
-    USR_TOP_FAVS = auto()
-    SYS_WHY_FAV = auto()
-    USR_EXPLAIN_FAV = auto()
-    #
-    SYS_ERR = auto()
-    USR_ERR = auto()
-
-
 # %%
 
 ##################################################################################################################
@@ -75,7 +59,7 @@ class State(Enum):
 ##################################################################################################################
 
 
-simplified_dialogflow = dialogflow_extention.DFEasyFilling(State.USR_START)
+simplified_dialogflow = dialogflow_extention.DFEasyFilling(BS.USR_START)
 
 ##################################################################################################################
 ##################################################################################################################
@@ -121,18 +105,18 @@ def error_response(vars):
 
 def fav_or_lets_chat_request(ngrams, vars):
     utt = state_utils.get_last_human_utterance(vars)["text"].lower()
-    user_lets_chat_about = (
-        "lets_chat_about" in get_intents(state_utils.get_last_human_utterance(vars), which="intent_catcher")
-        or if_lets_chat_about_topic(state_utils.get_last_human_utterance(vars)["text"])
-        or re.search(COMPILE_WHAT_TO_TALK_ABOUT, state_utils.get_last_bot_utterance(vars)["text"])
-    )
+    # user_lets_chat_about = (
+    #     "lets_chat_about" in get_intents(state_utils.get_last_human_utterance(vars), which="intent_catcher")
+    #     or if_lets_chat_about_topic(state_utils.get_last_human_utterance(vars)["text"])
+    #     or re.search(COMPILE_WHAT_TO_TALK_ABOUT, state_utils.get_last_bot_utterance(vars)["text"])
+    # )
     flag = any(
         [
             any(["favorite" in utt, "favourite" in utt]),
-            re.search(YOUR_FAVORITE_COMPILED_PATTERN, utt),
-            user_lets_chat_about
+            re.search(YOUR_FAVORITE_COMPILED_PATTERN, utt)
         ]
     )
+    # and user_lets_chat_about
     logger.info(f"fav_or_lets_chat_request {flag}")
     return flag
 
@@ -151,7 +135,7 @@ def my_fav_story_response(vars):
                 name = FAV_STORIES_TOPICS.get(topic, "").get("name", "")
                 story = FAV_STORIES_TOPICS.get(topic, "").get("story", "")
                 if name:
-                    response = f"My favorite {topic} is {name}. {story}  What about you?"
+                    response = f"My favorite {topic} is {name}. {story} What about you?"
                     state_utils.set_confidence(vars, confidence=CONF_HIGH)
                     state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
                     state_utils.save_to_shared_memory(vars, used_topics=used_topics + [topic])
@@ -200,9 +184,10 @@ def why_fav_request(ngrams, vars):
 
 
 def explain_fav_response(vars):
+    utt = state_utils.get_last_human_utterance(vars)["text"].lower()
     curr_topic = ""
     curr_item = ""
-    objects = ""
+    _object = ""
     wp_top = []
     shared_memory = state_utils.get_shared_memory(vars)
     used_topics = list(set(shared_memory.get("used_topics", [])))
@@ -210,29 +195,35 @@ def explain_fav_response(vars):
         curr_topic = used_topics[-1]
         curr_item = FAV_STORIES_TOPICS.get(curr_topic, "").get("name", "")
         if curr_topic in CATEGORIES_OBJECTS:
-            objects = random.choice(CATEGORIES_OBJECTS[curr_topic])
+            _object = random.choice(CATEGORIES_OBJECTS[curr_topic])
     try:
+        if utt == "why?":
+            state_utils.set_confidence(vars, confidence=CONF_HIGH)
+            state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+        elif ("why" in utt) and ("?" in utt):
+            state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+        else:
+            state_utils.set_confidence(vars, confidence=CONF_LOW)
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+
         if curr_topic in ["movie", "show"]:
-            fake_utterance = f"I like to learn more about {curr_item} {objects} {curr_topic}"
-            wp_top = shared.get_object_top_wiki_parser(curr_item, objects, curr_topic, fake_utterance)
+            fake_utterance = f"I like to learn more about {curr_item} {_object} {curr_topic}"
+            wp_top = shared.get_object_top_wiki_parser(curr_item, _object, curr_topic, fake_utterance)
         elif curr_topic == "sport":
-            wp_top = shared.get_genre_top_wiki_parser(objects[:-1], curr_item)
+            wp_top = shared.get_genre_top_wiki_parser(_object, curr_item)
         elif curr_topic == "team":
             fake_utterance = f"I like to learn more about {curr_item}"
             wp_top = shared.get_team_players_top_wiki_parser(curr_item, fake_utterance)
         elif curr_topic in ["music", "song", "singer"]:
-            fake_utterance = f"I like to learn more about {curr_item} {objects} {curr_topic}"
-            wp_top = shared.get_object_top_wiki_parser(curr_item, objects, curr_topic, fake_utterance)
+            fake_utterance = f"I like to learn more about {curr_item} {_object} {curr_topic}"
+            wp_top = shared.get_object_top_wiki_parser(curr_item, _object, curr_topic, fake_utterance)
         else:
             wp_top = []
         if wp_top:
             res = " ".join(wp_top)
-            state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
-            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
-            return f"I like its {objects}. {res} are my favorites. What do you think about them?"
+            return f"I like its {_object}. {res} are my favorites. What do you think about them?"
         else:
-            state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
-            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
             return "Hmm, I am just a fan of it!"
     except Exception as exc:
         logger.exception(exc)
@@ -306,6 +297,12 @@ def smth_request(ngrams, vars):
     return flag
 
 
+# def starter_request(ngrams, vars):
+#     flag = len(vars["agent"]["dialog"]["human_utterances"]) == 1
+#     logger.info(f"starter_request {flag}")
+#     return flag
+
+
 ##################################################################################################################
 ##################################################################################################################
 # linking
@@ -316,67 +313,73 @@ def smth_request(ngrams, vars):
 ##################################################################################################################
 #  START
 
-simplified_dialogflow.add_user_transition(State.USR_START, State.SYS_FAV_OR_LETS_CHAT, fav_or_lets_chat_request)
-simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
+# simplified_dialogflow.add_user_serial_transitions(
+#     BS.USR_START,
+#     {
+#         (scopes.STARTER, StarterState.USR_START): starter_request,
+#         BS.SYS_FAV_OR_LETS_CHAT: fav_or_lets_chat_request
+#     })
+simplified_dialogflow.add_user_transition(BS.USR_START, BS.SYS_FAV_OR_LETS_CHAT, fav_or_lets_chat_request)
+simplified_dialogflow.set_error_successor(BS.USR_START, BS.SYS_ERR)
 
 ##################################################################################################################
 
-simplified_dialogflow.add_system_transition(State.SYS_FAV_OR_LETS_CHAT, State.USR_MY_FAV_STORY, my_fav_story_response)
-simplified_dialogflow.set_error_successor(State.SYS_FAV_OR_LETS_CHAT, State.SYS_ERR)
+simplified_dialogflow.add_system_transition(BS.SYS_FAV_OR_LETS_CHAT, BS.USR_MY_FAV_STORY, my_fav_story_response)
+simplified_dialogflow.set_error_successor(BS.SYS_FAV_OR_LETS_CHAT, BS.SYS_ERR)
 
 
 simplified_dialogflow.add_user_serial_transitions(
-    State.USR_MY_FAV_STORY,
+    BS.USR_MY_FAV_STORY,
     {
-        State.SYS_WHY_FAV: why_fav_request,
-        State.SYS_CHECK_FAV: check_fav_request
+        BS.SYS_WHY_FAV: why_fav_request,
+        BS.SYS_CHECK_FAV: check_fav_request
     },
 )
-simplified_dialogflow.set_error_successor(State.USR_MY_FAV_STORY, State.SYS_ERR)
+simplified_dialogflow.set_error_successor(BS.USR_MY_FAV_STORY, BS.SYS_ERR)
 
 
-simplified_dialogflow.add_system_transition(State.SYS_WHY_FAV, State.USR_EXPLAIN_FAV, explain_fav_response)
-simplified_dialogflow.set_error_successor(State.SYS_WHY_FAV, State.SYS_ERR)
+simplified_dialogflow.add_system_transition(BS.SYS_WHY_FAV, BS.USR_EXPLAIN_FAV, explain_fav_response)
+simplified_dialogflow.set_error_successor(BS.SYS_WHY_FAV, BS.SYS_ERR)
 
 
-simplified_dialogflow.add_user_transition(State.USR_EXPLAIN_FAV, State.SYS_CHECK_FAV, smth_request)
-simplified_dialogflow.set_error_successor(State.USR_EXPLAIN_FAV, State.SYS_ERR)
+simplified_dialogflow.add_user_transition(BS.USR_EXPLAIN_FAV, BS.SYS_CHECK_FAV, smth_request)
+simplified_dialogflow.set_error_successor(BS.USR_EXPLAIN_FAV, BS.SYS_ERR)
 
 
-simplified_dialogflow.add_system_transition(State.SYS_CHECK_FAV, State.USR_DO_YOU_LIKE_TOPIC,
+simplified_dialogflow.add_system_transition(BS.SYS_CHECK_FAV, BS.USR_DO_YOU_LIKE_TOPIC,
                                             do_you_like_topic_response)
-simplified_dialogflow.set_error_successor(State.SYS_CHECK_FAV, State.SYS_ERR)
+simplified_dialogflow.set_error_successor(BS.SYS_CHECK_FAV, BS.SYS_ERR)
 
 
 simplified_dialogflow.add_user_serial_transitions(
-    State.USR_DO_YOU_LIKE_TOPIC,
+    BS.USR_DO_YOU_LIKE_TOPIC,
     {
-        State.SYS_LIKE_TOPIC: yes_request,
-        State.SYS_NOT_LIKE_TOPIC: no_request,
+        BS.SYS_LIKE_TOPIC: yes_request,
+        BS.SYS_NOT_LIKE_TOPIC: no_request,
     },
 )
-simplified_dialogflow.set_error_successor(State.USR_DO_YOU_LIKE_TOPIC, State.SYS_ERR)
+simplified_dialogflow.set_error_successor(BS.USR_DO_YOU_LIKE_TOPIC, BS.SYS_ERR)
 
 
-simplified_dialogflow.add_system_transition(State.SYS_LIKE_TOPIC, State.USR_WHATS_YOUR_FAV, whats_your_fav_response)
-simplified_dialogflow.set_error_successor(State.SYS_LIKE_TOPIC, State.SYS_ERR)
+simplified_dialogflow.add_system_transition(BS.SYS_LIKE_TOPIC, BS.USR_WHATS_YOUR_FAV, whats_your_fav_response)
+simplified_dialogflow.set_error_successor(BS.SYS_LIKE_TOPIC, BS.SYS_ERR)
 
 
-simplified_dialogflow.add_user_transition(State.USR_WHATS_YOUR_FAV, State.SYS_FAV_OR_LETS_CHAT, check_fav_request)
-simplified_dialogflow.set_error_successor(State.USR_WHATS_YOUR_FAV, State.SYS_ERR)
+simplified_dialogflow.add_user_transition(BS.USR_WHATS_YOUR_FAV, BS.SYS_FAV_OR_LETS_CHAT, check_fav_request)
+simplified_dialogflow.set_error_successor(BS.USR_WHATS_YOUR_FAV, BS.SYS_ERR)
 
 
-simplified_dialogflow.add_system_transition(State.SYS_NOT_LIKE_TOPIC, State.USR_TOP_FAVS, top_favs_response)
-simplified_dialogflow.set_error_successor(State.SYS_NOT_LIKE_TOPIC, State.SYS_ERR)
+simplified_dialogflow.add_system_transition(BS.SYS_NOT_LIKE_TOPIC, BS.USR_TOP_FAVS, top_favs_response)
+simplified_dialogflow.set_error_successor(BS.SYS_NOT_LIKE_TOPIC, BS.SYS_ERR)
 
 
-simplified_dialogflow.add_user_transition(State.USR_TOP_FAVS, State.SYS_FAV_OR_LETS_CHAT, check_fav_request)
-simplified_dialogflow.set_error_successor(State.USR_TOP_FAVS, State.SYS_ERR)
+simplified_dialogflow.add_user_transition(BS.USR_TOP_FAVS, BS.SYS_FAV_OR_LETS_CHAT, check_fav_request)
+simplified_dialogflow.set_error_successor(BS.USR_TOP_FAVS, BS.SYS_ERR)
 
 #################################################################################################################
 #  SYS_ERR
 simplified_dialogflow.add_system_transition(
-    State.SYS_ERR,
+    BS.SYS_ERR,
     (scopes.MAIN, scopes.State.USR_ROOT),
     error_response,
 )

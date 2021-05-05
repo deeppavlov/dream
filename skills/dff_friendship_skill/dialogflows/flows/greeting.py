@@ -16,7 +16,9 @@ import common.dialogflow_framework.utils.condition as condition_utils
 import common.greeting as common_greeting
 import common.link as common_link
 import dialogflows.scopes as scopes
+from dialogflows.flows.starter_states import State as StarterState
 import dialogflows.flows.weekend as weekend_flow
+import dialogflows.flows.starter as starter_flow
 
 from dialogflows.flows.shared import link_to_by_enity_request
 from dialogflows.flows.shared import link_to_by_enity_response
@@ -174,14 +176,21 @@ def hello_response(vars):
         else:
             state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
             state_utils.set_can_continue(vars, MUST_CONTINUE)
-        which_start = random.choice(["how_are_you",
+        which_start = random.choice(["starter_weekday",
+                                     "starter_genre",
+                                     # "how_are_you",
                                      # "what_is_your_name",
                                      # "what_to_talk_about"
                                      ])
+        state_utils.save_to_shared_memory(vars, greeting_type=which_start)
         if which_start == "how_are_you":
             after_hello_resp = random.choice(common_greeting.HOW_ARE_YOU_RESPONSES)
         elif which_start == "what_is_your_name":
             after_hello_resp = random.choice(common_greeting.WHAT_IS_YOUR_NAME_RESPONSES)
+        elif which_start == "starter_genre":
+            after_hello_resp = starter_flow.genre_response(vars)
+        elif which_start == "starter_weekday":
+            after_hello_resp = starter_flow.weekday_response(vars)
         else:
             # what_to_talk_about
             after_hello_resp = offer_topic_response_part(vars)
@@ -483,6 +492,7 @@ simplified_dialogflow.add_system_transition(State.SYS_HELLO, State.USR_HELLO_AND
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_HELLO_AND_CONTNIUE,
     {
+        (scopes.STARTER, StarterState.USR_START): starter_flow.starter_request,
         State.SYS_STD_GREETING: std_greeting_request,
         State.SYS_USR_ASKS_BOT_HOW_ARE_YOU: how_are_you_request,
         State.SYS_USR_ANSWERS_HOW_IS_HE_DOING: positive_or_negative_request,
