@@ -653,7 +653,7 @@ def user_get_talk_about_team_response(vars):
         elif country:
             state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
             state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
-            return f"{name_team} is a cool team. I know they are from {country}. Have you ever been there?"
+            return f"{name_team} is a cool team. I know they are from {country}. Have you ever been in {country}?"
         else:
             return last_chance_response(vars)
     except Exception as exc:
@@ -852,7 +852,9 @@ def user_negative_response(vars):
             return body
         else:
             countries = ["Russia", "China", "Germany"]
-            return f"I know that sports are very popular in {random.choice(countries)}. Have you ever been there?"
+            country = random.choice(countries)
+            return f"I know that sports are very popular in {country}. " \
+                   f"Have you ever been in {country}?"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
