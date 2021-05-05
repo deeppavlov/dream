@@ -37,9 +37,10 @@ DID_NOT_EXIST = "I didn't exist in that time."
 BOOK_CHANGE_PHRASE = "Okay! What would you like to talk about? For example, movies, games or news."
 BOOK_ANY_PHRASE = "I see you can't name it. Could you please name any book you have read?"
 FAVOURITE_GENRE_ANSWERS = list(GENRE_PHRASES.values())
-FAVOURITE_BOOK_ANSWERS = ['My favourite book is "The Old Man and the Sea" by Ernest Hemingway.',
-                          'The Old Man and the Sea tells the story of a battle between a fisherman '
-                          'and a large marlin. This is my favourite story, it is truly fascinating.']
+FAVOURITE_BOOK_ANSWERS = ['My favourite book is "The catcher in the rye" by J. D. Salinger.',
+                          'The novel "The catcher in the rye" tells the story of a teenager'
+                          'who has been kicked out of a boarding school.'
+                          'This is my favourite story, it is truly fascinating.']
 WHAT_IS_FAV_GENRE = 'I have read a plenty of books from different genres. What is your favorite book genre?'
 HAVE_YOU_READ_BOOK = 'Amazing! Have you read BOOK? And if you have read it, what do you think about it?'
 BIBLE_RESPONSES = ["I know that Bible is one of the most widespread books on the Earth. "

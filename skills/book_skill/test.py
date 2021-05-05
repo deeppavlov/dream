@@ -18,7 +18,7 @@ def main_test():
     sliced_data = [slice_(input_data, i) for i in range(1, 10)]
     gold_phrases = ["I've read it. It's an amazing book! Would you like to know some facts about it?",
                     "",  # As CobotQA doesn't always work
-                    'My favourite book is "The Old Man and the Sea" by Ernest Hemingway.',
+                    'My favourite book is "The catcher in the rye" by J. D. Salinger.',
                     "OK, let's talk about books. "
                     "Books are my diamonds. Do you love reading?",
                     "That's great. Outside of a dog, a book is a man's best friend. "
