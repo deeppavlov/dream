@@ -254,6 +254,7 @@ class EmotionSkillScenario:
                                                                                                  'movie_skill']
                 else:
                     was_active = False
+                    was_book_or_movie = False
                 if (was_trigger or was_active or self.regexp_sad) and not was_book_or_movie:
                     attr['can_continue'] = MUST_CONTINUE
                     confidence = 1
