@@ -2,93 +2,25 @@
     {
         "human_attributes": {
             "entities": {
-                "ocean": {
-                    "name": "ocean",
-                    "human_encounters": [
-                        {
-                            "human_utterance_index": 1,
-                            "full_name": "ocean",
-                            "previous_skill_name": "program_y",
-                            "next_skill_name": "program_y",
-                            "sentiment": "neutral",
-                            "emotions": {
-                                "neutral": 0.9991800785064697
-                            },
-                            "intents": [
-                                "General_ChatIntent"
-                            ],
-                            "topics": [
-                                "Phatic",
-                                "Other"
-                            ],
-                            "pos": [
-                                "NOUN"
-                            ]
-                        },
-                        {
-                            "human_utterance_index": 2,
-                            "full_name": "ocean",
-                            "previous_skill_name": "program_y",
-                            "next_skill_name": "meta_script_skill",
-                            "sentiment": "neutral",
-                            "emotions": {
-                                "neutral": 0.9995207786560059
-                            },
-                            "intents": [
-                                "Information_RequestIntent"
-                            ],
-                            "topics": [
-                                "SciTech",
-                                "Other"
-                            ],
-                            "pos": [
-                                "NOUN"
-                            ]
-                        },
-                        {
-                            "human_utterance_index": 3,
-                            "full_name": "ocean",
-                            "previous_skill_name": "meta_script_skill",
-                            "next_skill_name": "",
-                            "sentiment": "neutral",
-                            "emotions": {
-                                "neutral": 0.998582124710083
-                            },
-                            "intents": [
-                                "opinion_request",
-                                "Information_DeliveryIntent"
-                            ],
-                            "topics": [
-                                "Phatic",
-                                "Other"
-                            ],
-                            "pos": [
-                                "NOUN"
-                            ]
-                        }
-                    ],
+                "apple": {
+                    "name": "apple",
+                    "human_encounters": [],
+                    "bot_encounters": [],
+                    "human_attitude": "like",
+                    "bot_attitude": null
+                },
+                "jewelry": {
+                    "name": "jewelry",
+                    "human_encounters": [],
                     "bot_encounters": [
                         {
-                            "human_utterance_index": 3,
-                            "full_name": "ocean",
-                            "skill_name": "meta_script_skill",
-                            "next_user_sentiment": "neutral",
-                            "next_user_emotions": {
-                                "neutral": 0.998582124710083
-                            },
-                            "next_user_intents": [
-                                "opinion_request",
-                                "Information_DeliveryIntent"
-                            ],
-                            "next_user_topics": [
-                                "Phatic",
-                                "Other"
-                            ],
-                            "pos": [
-                                "NOUN"
-                            ]
+                            "human_utterance_index": 6,
+                            "full_name": "jewelry",
+                            "skill_name": "grounding_skill"
                         }
-                    ]
+                    ],
+                    "human_attitude": null,
+                    "bot_attitude": "like"
                 }
             }
         }

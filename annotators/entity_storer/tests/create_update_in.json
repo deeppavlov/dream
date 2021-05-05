@@ -1,58 +1,65 @@
 {
     "human_utter_indexes": [
-        3
+        6
     ],
     "dialogs": [
         {
             "human_utterances": [
                 {
-                    "text": "what can you tell about ocean?",
+                    "text": "i like apples",
                     "annotations": {
-                        "spelling_preprocessing": "what can you tell about ocean?",
+                        "spelling_preprocessing": "i like apples",
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "sentseg": {
-                            "punct_sent": "what can you tell about ocean?",
-                            "segments": [
-                                "what can you tell about ocean?"
-                            ]
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Opinion_ExpressionIntent": 0.9987988471984863
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9977256059646606
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9921098947525024
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9997066259384155
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.7210806608200073
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.002440035343170166
+                            }
                         },
+                        "cobot_nounphrases": [
+                            "apples"
+                        ],
                         "blacklisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
                         },
                         "factoid_classification": {
-                            "factoid": 0.9984594583511353,
-                            "conversational": 0.0015406067250296474
+                            "factoid": 0.006471502594649792,
+                            "conversational": 0.9935285449028015
                         },
-                        "combined_classification": {
-                            "cobot_dialogact_intents": {
-                                "Information_RequestIntent": 0.7885875701904297
-                            },
-                            "cobot_dialogact_topics": {
-                                "Other": 0.9969688653945923
-                            },
-                            "cobot_topics": {
-                                "SciTech": 0.9996381998062134
-                            },
-                            "emotion_classification": {
-                                "neutral": 0.9995207786560059
-                            },
-                            "sentiment_classification": {
-                                "neutral": 0.7277668118476868
-                            },
-                            "toxic_classification": {
-                                "toxic": 0.0007533431053161621
-                            }
+                        "sentseg": {
+                            "punct_sent": "i like apples.",
+                            "segments": [
+                                "i like apples."
+                            ]
                         },
-                        "cobot_nounphrases": [
-                            "ocean"
-                        ],
-                        "dialog_breakdown": {
-                            "breakdown": 0.14737048745155334,
-                            "no_breakdown": 0.8526294827461243
+                        "cobot_entities": {
+                            "entities": [
+                                "apples"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "text": "apples"
+                                }
+                            ]
                         },
                         "intent_catcher": {
                             "cant_do": {
@@ -144,341 +151,33 @@
                                 "detected": 0
                             }
                         },
+                        "ner": [
+                            []
+                        ],
                         "conceptnet": {
-                            "ocean": {
+                            "apples": {
                                 "Causes": [
-                                    "drown",
-                                    "tidal wave",
-                                    "death"
+                                    "food poison",
+                                    "bread",
+                                    "rot"
                                 ],
                                 "CausesDesire": [
-                                    "surf",
-                                    "swim",
-                                    "fish"
+                                    "eat apple",
+                                    "buy milk",
+                                    "buy apple"
                                 ],
                                 "HasProperty": [
-                                    "salty",
-                                    "full of water",
-                                    "very deep"
+                                    "green",
+                                    "green or red",
+                                    "red"
                                 ],
                                 "SymbolOf": [
-                                    "life",
-                                    "africa",
-                                    "love"
+                                    "spring",
+                                    "summer",
+                                    "winter"
                                 ]
                             }
                         },
-                        "ner": [
-                            [
-                                {
-                                    "confidence": 1,
-                                    "end_pos": 6,
-                                    "start_pos": 5,
-                                    "text": "ocean",
-                                    "type": "LOC"
-                                }
-                            ]
-                        ],
-                        "odqa": {
-                            "answer": "",
-                            "answer_pos": 0,
-                            "answer_sentence": "",
-                            "confidence": 0.0,
-                            "paragraph": "",
-                            "qa_system": "odqa",
-                            "topical_chat_fact": ""
-                        },
-                        "entity_linking": [
-                            [
-                                [
-                                    "Q1201247",
-                                    "Q28868096",
-                                    "Q9430",
-                                    "Q1408498",
-                                    "Q15663120"
-                                ]
-                            ],
-                            [
-                                [
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0
-                                ]
-                            ]
-                        ],
-                        "wiki_parser": [
-                            {
-                                "HMS Ocean": {
-                                    "instance of": [
-                                        [
-                                            "Q1136948",
-                                            "Landing platform helicopter"
-                                        ],
-                                        [
-                                            "Q474748",
-                                            "amphibious assault ship"
-                                        ]
-                                    ]
-                                }
-                            }
-                        ],
-                        "sentrewrite": {
-                            "clusters": [],
-                            "modified_sents": [
-                                "Hi, this is an Alexa Prize Socialbot! How are you?",
-                                "i am good, do you like ocean?",
-                                "I'M happy for you! What would you like to chat about?",
-                                "what can you tell about ocean?"
-                            ]
-                        },
-                        "cobot_dialogact": {
-                            "intents": [
-                                "Information_RequestIntent"
-                            ],
-                            "topics": [
-                                "Other"
-                            ]
-                        },
-                        "cobot_topics": {
-                            "text": [
-                                "SciTech"
-                            ]
-                        },
-                        "kbqa": {
-                            "answer": "Flight deck you tell about ocean.",
-                            "confidence": 0.004716597963124514,
-                            "qa_system": "kbqa"
-                        }
-                    }
-                },
-                {
-                    "text": "ocean is cool , do you like fishing?",
-                    "annotations": {
-                        "spelling_preprocessing": "ocean is cool, do you like fishing",
-                        "asr": {
-                            "asr_confidence": "undefined"
-                        },
-                        "blacklisted_words": {
-                            "inappropriate": false,
-                            "profanity": false,
-                            "restricted_topics": false
-                        },
-                        "factoid_classification": {
-                            "factoid": 0.0007756109698675573,
-                            "conversational": 0.9992244243621826
-                        },
-                        "cobot_nounphrases": [
-                            "ocean",
-                            "fishing"
-                        ],
-                        "combined_classification": {
-                            "cobot_dialogact_intents": {
-                                "General_ChatIntent": 0.9362161755561829,
-                                "Information_RequestIntent": 0.9912881851196289
-                            },
-                            "cobot_dialogact_topics": {
-                                "Other": 0.9993252754211426
-                            },
-                            "cobot_topics": {
-                                "Pets_Animals": 0.9996771812438965,
-                                "SciTech": 0.9937852621078491
-                            },
-                            "emotion_classification": {
-                                "neutral": 0.998582124710083
-                            },
-                            "sentiment_classification": {
-                                "neutral": 0.5368131399154663
-                            },
-                            "toxic_classification": {
-                                "toxic": 0.0034223198890686035
-                            }
-                        },
-                        "sentseg": {
-                            "punct_sent": "ocean is cool , do you like fishing?",
-                            "segments": [
-                                "ocean is cool , do you like fishing?"
-                            ]
-                        },
-                        "intent_catcher": {
-                            "cant_do": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "choose_topic": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "doing_well": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "dont_understand": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "exit": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "lets_chat_about": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "no": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "opinion_request": {
-                                "confidence": 0.5746893882751465,
-                                "detected": 1
-                            },
-                            "repeat": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "stupid": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "tell_me_a_story": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "tell_me_more": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "topic_switching": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "weather_forecast_intent": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_are_you_talking_about": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_can_you_do": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_is_your_job": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_is_your_name": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_time": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "where_are_you_from": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "who_made_you": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "yes": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            }
-                        },
-                        "dialog_breakdown": {
-                            "breakdown": 0.07862720638513565,
-                            "no_breakdown": 0.9213727712631226
-                        },
-                        "ner": [
-                            [
-                                {
-                                    "confidence": 1,
-                                    "end_pos": 1,
-                                    "start_pos": 0,
-                                    "text": "ocean",
-                                    "type": "LOC"
-                                }
-                            ]
-                        ],
-                        "sentrewrite": {
-                            "clusters": [],
-                            "modified_sents": [
-                                "I'M happy for you! What would you like to chat about?",
-                                "what can you tell about ocean?",
-                                "Can I ask something about swimming in ocean?",
-                                "ocean is cool , do you like fishing?"
-                            ]
-                        },
-                        "entity_linking": [
-                            [
-                                [
-                                    "Q1201247",
-                                    "Q28868096",
-                                    "Q9430",
-                                    "Q1408498",
-                                    "Q15663120"
-                                ],
-                                [
-                                    "Q23011437",
-                                    "Q5454994",
-                                    "Q14373",
-                                    "Q5454996",
-                                    "Q51133428"
-                                ]
-                            ],
-                            [
-                                [
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0
-                                ],
-                                [
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0,
-                                    1.0
-                                ]
-                            ]
-                        ],
-                        "wiki_parser": [
-                            {
-                                "Fishing": {
-                                    "instance of": [
-                                        [
-                                            "Q3305213",
-                                            "painting"
-                                        ]
-                                    ],
-                                    "country": [
-                                        [
-                                            "Q142",
-                                            "France"
-                                        ]
-                                    ]
-                                },
-                                "HMS Ocean": {
-                                    "instance of": [
-                                        [
-                                            "Q1136948",
-                                            "Landing platform helicopter"
-                                        ],
-                                        [
-                                            "Q474748",
-                                            "amphibious assault ship"
-                                        ]
-                                    ]
-                                }
-                            }
-                        ],
                         "cobot_dialogact": {
                             "intents": [
                                 "Information_DeliveryIntent"
@@ -487,101 +186,304 @@
                                 "Other"
                             ]
                         },
-                        "kbqa": {
-                            "answer": "flight deck",
-                            "confidence": 0.01250077411532402,
-                            "qa_system": "kbqa"
-                        },
                         "cobot_topics": {
                             "text": [
                                 "Phatic"
                             ]
+                        },
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    0.9747191071510315,
+                                    0.410582035779953,
+                                    0.114540234208107,
+                                    0.07060373574495316,
+                                    0.008907977491617203
+                                ],
+                                "entity_ids": [
+                                    "Q89",
+                                    "Q43202",
+                                    "Q18159636",
+                                    "Q3620918",
+                                    "Q19913384"
+                                ],
+                                "entity_pages": [
+                                    "An apple is an edible fruit produced by an apple tree (Malus domestica). Apple trees are cultivated worldwide and are the most widely grown species in the genus Malus. The tree originated in Central Asia, where its wild ancestor, Malus sieversii, is still found today. Apples have been grown for thousands of years in Asia and Europe and were brought to North America by European colonists. Apples have religious and mythological significance in many cultures, including Norse, Greek, and European Christian tradition.",
+                                    "Apples is a municipality in the district of Morges in the canton of Vaud in Switzerland."
+                                ],
+                                "entity_pages_titles": [
+                                    "Apple",
+                                    "Apples, Vaud",
+                                    "Apples (novel)"
+                                ],
+                                "entity_substr": "apples"
+                            }
+                        ],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": [
+                            "An apple is an edible fruit produced by an apple tree (Malus domestica).",
+                            "Apple trees are cultivated worldwide and are the most widely grown species in the genus Malus.",
+                            "Apples is a municipality in the district of Morges in the canton of Vaud in Switzerland."
+                        ],
+                        "wiki_parser": {
+                            "entities_info": {
+                                "apples": {
+                                    "entity_label": "apple",
+                                    "has quality": [
+                                        [
+                                            "Q1075",
+                                            "color"
+                                        ],
+                                        [
+                                            "Q124794",
+                                            "taste"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q89",
+                                    "subclass of": [
+                                        [
+                                            "Q145150",
+                                            "fruit of Maloideae"
+                                        ],
+                                        [
+                                            "Q3314483",
+                                            "fruit"
+                                        ],
+                                        [
+                                            "Q41274",
+                                            "pome"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "topic_skill_entities_info": {
+                                "apples": {
+                                    "author": [
+                                        [
+                                            "Q7327828",
+                                            "Richard Milward"
+                                        ]
+                                    ],
+                                    "entity_label": "Apples",
+                                    "genre": [
+                                        [
+                                            "Q8261",
+                                            "novel"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q7725634",
+                                            "literary work"
+                                        ]
+                                    ],
+                                    "narrative location": [
+                                        [
+                                            "Q21",
+                                            "England"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q18159636",
+                                    "publication date": [
+                                        [
+                                            "\"+2007-00-00^^T\"",
+                                            "2007"
+                                        ]
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "text": "cool",
+                    "annotations": {
+                        "spelling_preprocessing": "cool",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.0043312013149261475,
+                            "conversational": 0.9956687688827515
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9887658357620239
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9856915473937988
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9991065859794617
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9986233115196228
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.8989133238792419
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.002875983715057373
+                            }
+                        },
+                        "cobot_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "cool.",
+                            "segments": [
+                                "cool."
+                            ]
+                        },
+                        "cobot_entities": {
+                            "entities": [],
+                            "labelled_entities": []
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            }
                         }
                     }
                 }
             ],
             "bot_utterances": [
                 {
-                    "text": "Can I ask something about swimming in ocean?",
+                    "text": "you wanna hear my view on jewelry  i have no idea  totally unrelated  well  do you want to talk about sports competitions",
                     "annotations": {
                         "sentseg": {
-                            "punct_sent": "Can I ask something about swimming in ocean?",
+                            "punct_sent": "You wanna hear my view on jewelry. I have no idea. Totally unrelated, Well, Do you want to talk about sports competitions?",
                             "segments": [
-                                "Can I ask something about swimming in ocean?"
+                                "You wanna hear my view on jewelry.",
+                                "I have no idea.",
+                                "Totally unrelated, Well, Do you want to talk about sports competitions?"
                             ]
                         },
                         "ner": [
-                            [
-                                {
-                                    "confidence": 1,
-                                    "end_pos": 8,
-                                    "start_pos": 7,
-                                    "text": "ocean",
-                                    "type": "LOC"
-                                }
-                            ]
+                            [],
+                            [],
+                            []
                         ],
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
-                                "i am good, do you like ocean?",
-                                "I'M happy for you! What would you like to chat about?",
-                                "what can you tell about ocean?",
-                                "Can I ask something about swimming in ocean?"
+                                "i adore carrots.",
+                                "Would you like to talk about food?",
+                                "do you like jewelry?",
+                                "You wanna hear my view on jewelry. I have no idea. Totally unrelated, Well, Do you want to talk about sports competitions?"
                             ]
-                        }
+                        },
+                        "cobot_nounphrases": [
+                            "jewelry",
+                            "my view",
+                            "no idea",
+                            "sports competitions"
+                        ]
                     },
-                    "active_skill": "meta_script_skill"
+                    "active_skill": "grounding_skill"
                 }
             ],
             "human": {
                 "attributes": {
                     "entities": {
-                        "ocean": {
+                        "carrot": {
+                            "bot_attitude": null,
                             "bot_encounters": [],
-                            "human_encounters": [
-                                {
-                                    "emotions": {
-                                        "neutral": 0.9991800785064697
-                                    },
-                                    "full_name": "ocean",
-                                    "human_utterance_index": 1,
-                                    "intents": [
-                                        "General_ChatIntent"
-                                    ],
-                                    "next_skill_name": "program_y",
-                                    "pos": [
-                                        "NOUN"
-                                    ],
-                                    "previous_skill_name": "program_y",
-                                    "sentiment": "neutral",
-                                    "topics": [
-                                        "Phatic",
-                                        "Other"
-                                    ]
-                                },
-                                {
-                                    "emotions": {
-                                        "neutral": 0.9995207786560059
-                                    },
-                                    "full_name": "ocean",
-                                    "human_utterance_index": 2,
-                                    "intents": [
-                                        "Information_RequestIntent"
-                                    ],
-                                    "next_skill_name": "",
-                                    "pos": [
-                                        "NOUN"
-                                    ],
-                                    "previous_skill_name": "program_y",
-                                    "sentiment": "neutral",
-                                    "topics": [
-                                        "SciTech",
-                                        "Other"
-                                    ]
-                                }
-                            ],
-                            "name": "ocean"
+                            "human_attitude": "like",
+                            "human_encounters": [],
+                            "name": "carrot"
                         }
                     }
                 }

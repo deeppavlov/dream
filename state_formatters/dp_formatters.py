@@ -244,7 +244,10 @@ def preproc_last_human_utt_and_nounphrases_dialog(dialog: Dict) -> List[Dict]:
 
 
 def last_bot_utt_dialog(dialog: Dict) -> List[Dict]:
-    return [{"sentences": [dialog["bot_utterances"][-1]["text"]]}]
+    if len(dialog["bot_utterances"]):
+        return [{"sentences": [dialog["bot_utterances"][-1]["text"]]}]
+    else:
+        return [{"sentences": [""]}]
 
 
 def last_human_utt_nounphrases(dialog: Dict) -> List[Dict]:
