@@ -181,7 +181,7 @@ def is_passive_user(vars, history_len=2):
     user_utterances = vars["agent"]["dialog"]["human_utterances"][-history_len:]
     user_utterances = [utt["text"] for utt in user_utterances]
 
-    uttrs_lens = [len(uttr.split()) <= 3 for uttr in user_utterances]
+    uttrs_lens = [len(uttr.split()) <= 5 for uttr in user_utterances]
     if all(uttrs_lens):
         return True
     return False
