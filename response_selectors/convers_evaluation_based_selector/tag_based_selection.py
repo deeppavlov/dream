@@ -348,6 +348,8 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
 
         elif _is_switch_topic_request:
             # =====direct request by user to switch the topic of current conversation=====
+            # priority to MUST CONTINUE and prompts (dummy linkto, kg-skill, small talk, meta-script)
+            _is_active_skill = cand_uttr.get("can_continue", "") == MUST_CONTINUE or _is_just_prompt
 
             CASE = "Switch topic intent."
             if len(all_user_named_entities) > 0 or len(all_user_nounphrases) > 0:
