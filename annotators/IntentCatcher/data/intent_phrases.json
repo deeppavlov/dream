@@ -299,13 +299,14 @@
       ],
       "reg_phrases":[
         "let's play .*",
-	"can you whisper.*",
+	    "can you whisper.*",
         "(can you ){0,1}turn off .*(music|volume|song|light|lights|timer).*",
-	"(can you ){0,1}((pause)|(stop)) (the ){0,1}music.*",
-      "(alexa ){0,1}turn on.*",
-      "can i have some music on",
-      "(alexa ){0,1}can you play .*",
-      "(alexa ){0,1}start a personality test"
+	    "(can you ){0,1}((pause)|(stop)) (the ){0,1}music.*",
+        "(alexa ){0,1}turn on.*",
+        "can i have some music on",
+        "(alexa ){0,1}can you play .*",
+        "(alexa ){0,1}start a personality test",
+        ".*(alexa )?turn (on |off )?(the |a |my )?alarm( on| off)?.*"
       ],
       "min_precision": 0.70,
       "punctuation": [
