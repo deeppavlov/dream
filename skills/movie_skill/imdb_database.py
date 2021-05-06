@@ -46,6 +46,7 @@ class IMDb:
              (re.compile(r"\ban\b"), ""),
              (re.compile(r'\W'), " "),
              (re.compile(r"\bvs\b"), "versus"),
+             (re.compile(r"\bv\b"), "versus"),
              (re.compile(r"\s\s+"), " "),
              ]
 
