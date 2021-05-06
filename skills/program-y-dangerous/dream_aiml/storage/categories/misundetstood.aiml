@@ -107,6 +107,10 @@
     <template><srai>THAT_IS_STUPID</srai></template>
   </category>
   <category>
+    <pattern># ARE YOU SO <set>stupid</set> #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+  <category>
     <pattern># <set>stupid</set> ARE YOU #</pattern>
     <template><srai>THAT_IS_STUPID</srai></template>
   </category>
