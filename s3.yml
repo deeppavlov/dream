@@ -58,5 +58,5 @@ services:
   dff-wiki-skill:
     build:
       args:
-        DATA_URL: https://team-dream-storage.s3.amazonaws.com/datasets/wikipedia/enwiki_latest_hyperlinks.db
+        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
 version: "3.7"
