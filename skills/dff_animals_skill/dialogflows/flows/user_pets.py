@@ -306,9 +306,9 @@ def ask_more_info_response(vars):
     sentence = "It is very interesting."
     if found_users_pet:
         if found_users_pet_name:
-            response = f"{sentence} Could you tell more about {found_users_pet_name}?"
+            response = f"{sentence} Could you tell more about your {found_users_pet_name}?"
         else:
-            response = f"{sentence} Could you tell more about {found_users_pet}?"
+            response = f"{sentence} Could you tell more about your {found_users_pet}?"
     else:
         response = f"{sentence} Could you tell more about your pet?"
     state_utils.save_to_shared_memory(vars, asked_more_info=True)
