@@ -206,7 +206,7 @@ def get_user_replies_to_particular_skill(utterances, skill_name):
 
 
 yes_templates = re.compile(r"(\byes\b|\byup\b|\byep\b|\bsure\b|go ahead|\byeah\b|\bok\b|okay|"
-                           r"^why not\.?$|^tell me\.?$|^i agree\.?$|^i think so\.?$)")
+                           r"^why not\.?$|^tell me\.?$|^i (agree|do|did|like|have|had|think so)\.?$)")
 
 
 def is_yes(annotated_phrase):
