@@ -41,8 +41,10 @@ COPY ./annotators/CoBotQA/ ./CoBotQA/
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 
-ARG DATA_URL=http://files.deeppavlov.ai/datasets/wikipedia/enwiki_latest_hyperlinks.db
-ENV DATA_URL ${DATA_URL}
+ARG SED_ARG=" | "
+ENV SED_ARG ${SED_ARG}
+
+RUN sed -i "s|$SED_ARG|g" "$CONFIG"
 
 # wait for a server answer ( INTERVAL + TIMEOUT ) * RETRIES seconds after that change stutus to unhealthy
 HEALTHCHECK --interval=5s --timeout=5s --retries=3 CMD curl --fail 127.0.0.1:${SERVICE_PORT}/healthcheck || exit 1
