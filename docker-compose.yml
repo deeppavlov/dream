@@ -981,9 +981,10 @@ services:
         SERVICE_NAME: dff_sport_skill
       context: .
       dockerfile: skills/dff_sport_skill/Dockerfile
-    command:  flask run -h 0.0.0.0 -p 8098
-    environment:
-      - FLASK_APP=server
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8098 --reload
+    # command:  flask run -h 0.0.0.0 -p 8098
+    # environment:
+    #   - FLASK_APP=server
     deploy:
       mode: replicated
       replicas: 2
