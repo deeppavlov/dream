@@ -162,6 +162,7 @@ class CachedRequestsAPI:
             result = [sum(d.values()) for d in resp.json()[0]["batch"]]
 
         articles = [article for article, is_black in zip(articles, result)
-                    if not is_black and not BLACKLISTED_WORDS.search(article.get("title", ""))]
+                    if not is_black and not BLACKLISTED_WORDS.search(
+                    f'{article.get("title", "")} {article.get("description", "")}')]
 
         return articles
