@@ -176,12 +176,13 @@ def hello_response(vars):
         else:
             state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
             state_utils.set_can_continue(vars, MUST_CONTINUE)
-        which_start = random.choice(["starter_weekday",
-                                     "starter_genre",
-                                     # "how_are_you",
-                                     # "what_is_your_name",
-                                     # "what_to_talk_about"
-                                     ])
+        which_start = random.choice([
+            # "starter_weekday",
+            # "starter_genre",
+            "how_are_you",
+            # "what_is_your_name",
+            # "what_to_talk_about"
+        ])
         state_utils.save_to_shared_memory(vars, greeting_type=which_start)
         if which_start == "how_are_you":
             after_hello_resp = random.choice(common_greeting.HOW_ARE_YOU_RESPONSES)
