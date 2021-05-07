@@ -29,6 +29,18 @@ def is_opinion_request(vars):
     return flag
 
 
+def is_previous_turn_dff_suspended(vars):
+    flag = vars["agent"].get("previous_turn_dff_suspended", False)
+    logging.debug(f"is_previous_turn_dff_suspended = {flag}")
+    return flag
+
+
+def is_current_turn_dff_suspended(vars):
+    flag = vars["agent"].get("current_turn_dff_suspended", False)
+    logging.debug(f"is_current_turn_dff_suspended = {flag}")
+    return flag
+
+
 def is_switch_topic(vars):
     flag = universal_templates.is_switch_topic(vars["agent"]["dialog"]["human_utterances"][-1])
     logging.debug(f"is_switch_topic = {flag}")

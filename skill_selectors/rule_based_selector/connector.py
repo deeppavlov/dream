@@ -8,7 +8,7 @@ import sentry_sdk
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_CONTINUE_PROMPT
 from common.emotion import is_joke_requested, if_turn_on_emotion
-from common.link import get_all_linked_to_skills
+from common.link import get_all_linked_to_skills, get_linked_to_dff_skills
 from common.sensitive import is_sensitive_situation
 from common.skills_turn_on_topics_and_patterns import turn_on_skills
 from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
@@ -101,6 +101,10 @@ class RuleBasedSkillSelectorConnector:
                 # turn on skills linked to in the previous bot utterance (of course, it's the only one skill)
                 for skill_name in linked_to_skill_names:
                     skills_for_uttr.append(skill_name)
+                skills_for_uttr.extend(get_linked_to_dff_skills(
+                    dialog["human"]["attributes"].get("dff_shared_state", {}),
+                    len(dialog["human_utterances"]),
+                    dialog["bot_utterances"][-1]["active_skill"]))
                 # turn on prev active skill if it returned not `CAN_NOT_CONTINUE`
                 for hyp in prev_user_uttr_hyp:
                     if hyp.get("can_continue", CAN_NOT_CONTINUE) in {CAN_CONTINUE_SCENARIO, MUST_CONTINUE,
@@ -111,6 +115,10 @@ class RuleBasedSkillSelectorConnector:
                 # turn on skills linked to in the previous bot utterance (of course, it's the only one skill)
                 for skill_name in linked_to_skill_names:
                     skills_for_uttr.append(skill_name)
+                skills_for_uttr.extend(get_linked_to_dff_skills(
+                    dialog["human"]["attributes"].get("dff_shared_state", {}),
+                    len(dialog["human_utterances"]),
+                    dialog["bot_utterances"][-1]["active_skill"]))
                 # turn on prev active skill if it returned not `CAN_NOT_CONTINUE`
                 for hyp in prev_user_uttr_hyp:
                     if hyp.get("can_continue", CAN_NOT_CONTINUE) in {CAN_CONTINUE_SCENARIO, MUST_CONTINUE,

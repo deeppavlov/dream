@@ -30,8 +30,10 @@
                     "1": "State.SYS_NO_OR_YES",
                     "2": "State.SYS_DISAGREES_ABT_PERSON"
                 },
+                "current_turn_dff_suspended": false,
                 "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_DISAGREES_ABT_PERSON\", \"__stack__\": [], \"__user_utterance__\": \"no\", \"__system_state__\": \"State.SYS_DISAGREES_ABT_PERSON\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"Wait but why?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"GOSSIP\\\"<__tuple__>\\\"State.USR_DISAGREES_ABT_PERSON\\\"\"}"
             },
+            "dff_shared_state": {},
             "used_links": {},
             "disliked_skills": []
         },

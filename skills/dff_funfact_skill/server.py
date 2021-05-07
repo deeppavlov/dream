@@ -39,6 +39,7 @@ def handler(requested_data, random_seed=None):
     dialog_batch = requested_data.get("dialog_batch", [])
     human_utter_index_batch = requested_data.get("human_utter_index_batch", [0] * len(dialog_batch))
     state_batch = requested_data.get(f"{SERVICE_NAME}_state_batch", [{}] * len(dialog_batch))
+    dff_shared_state_batch = requested_data.get(f"dff_shared_state_batch", [{}] * len(dialog_batch))
     entities_batch = requested_data.get("entities_batch", [{}] * len(dialog_batch))
     used_links_batch = requested_data.get("used_links_batch", [{}] * len(dialog_batch))
     disliked_skills_batch = requested_data.get("disliked_skills_batch", [{}] * len(dialog_batch))
@@ -48,10 +49,20 @@ def handler(requested_data, random_seed=None):
     random_seed = requested_data.get("random_seed", random_seed)  # for tests
 
     responses = []
-    for human_utter_index, dialog, state, entities, used_links, disliked_skills, clarification_request_flag in zip(
+    for (
+        human_utter_index,
+        dialog,
+        state,
+        dff_shared_state,
+        entities,
+        used_links,
+        disliked_skills,
+        clarification_request_flag,
+    ) in zip(
         human_utter_index_batch,
         dialog_batch,
         state_batch,
+        dff_shared_state_batch,
         entities_batch,
         used_links_batch,
         disliked_skills_batch,
@@ -70,15 +81,21 @@ def handler(requested_data, random_seed=None):
                 human_utter_index,
                 dialog,
                 state,
+                dff_shared_state,
                 entities,
                 used_links,
                 disliked_skills,
                 clarification_request_flag,
             )
             text, confidence, can_continue = dialogflow_utils.run_turn(DF, text)
-            state, used_links, disliked_skills = dialogflow_utils.get_dialog_state(DF)
+            state, dff_shared_state, used_links, disliked_skills = dialogflow_utils.get_dialog_state(DF)
 
-            human_attr = {f"{SERVICE_NAME}_state": state, "used_links": used_links, "disliked_skills": disliked_skills}
+            human_attr = {
+                f"{SERVICE_NAME}_state": state,
+                "dff_shared_state": dff_shared_state,
+                "used_links": used_links,
+                "disliked_skills": disliked_skills,
+            }
             hype_attr = {"can_continue": can_continue}
 
             responses.append((text, confidence, human_attr, {}, hype_attr))

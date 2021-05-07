@@ -9,6 +9,7 @@ import common.link as common_link
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+SERVICE_NAME = os.getenv("SERVICE_NAME")
 
 
 #  vars is described in README.md
@@ -41,6 +42,37 @@ def get_human_sentiment(vars, negative_threshold=0.5, positive_threshold=0.333):
             if return_negative or return_positive:
                 return max_sentiment
     return "neutral"
+
+
+def get_cross_state(vars, service_name=SERVICE_NAME.replace("-", "_")):
+    return vars["agent"]["dff_shared_state"]["cross_states"].get(service_name, {})
+
+
+def save_cross_state(vars, service_name=SERVICE_NAME.replace("-", "_"), new_state={}):
+    vars["agent"]["dff_shared_state"]["cross_states"][service_name] = new_state
+
+
+def get_cross_link(vars, service_name=SERVICE_NAME.replace("-", "_")):
+    links = vars["agent"]["dff_shared_state"]["cross_links"].get(service_name, {})
+    cur_human_index = get_human_utter_index(vars)
+    cross_link = [cross_link for human_index, cross_link in links.items() if (cur_human_index - int(human_index)) == 1]
+    cross_link = cross_link[0] if cross_link else {}
+    return cross_link
+
+
+def set_cross_link(
+    vars,
+    to_service_name,
+    cross_link_additional_data={},
+    from_service_name=SERVICE_NAME.replace("-", "_"),
+):
+    cur_human_index = get_human_utter_index(vars)
+    vars["agent"]["dff_shared_state"]["cross_links"][to_service_name] = {
+        cur_human_index: {
+            "from_service": from_service_name,
+            **cross_link_additional_data,
+        }
+    }
 
 
 def get_shared_memory(vars):
@@ -87,10 +119,19 @@ def get_new_link_to(vars, skill_names):
     used_links = get_used_links(vars)
     disliked_skills = get_disliked_skills(vars)
 
-    link = common_link.link_to(skill_names,
-                               human_attributes={"used_links": used_links, "disliked_skills": disliked_skills})
+    link = common_link.link_to(
+        skill_names, human_attributes={"used_links": used_links, "disliked_skills": disliked_skills}
+    )
     update_used_links(vars, link["skill"], link["phrase"])
     return link
+
+
+def set_dff_suspension(vars):
+    vars["agent"]["current_turn_dff_suspended"] = True
+
+
+def reset_dff_suspension(vars):
+    vars["agent"]["current_turn_dff_suspended"] = False
 
 
 def set_confidence(vars, confidence=1.0):
@@ -110,20 +151,25 @@ def reset_can_continue(vars):
 
 def get_named_entities_from_human_utterance(vars):
     # ent is a dict! ent = {"text": "London":, "type": "LOC"}
-    entities = common_utils.get_entities(vars["agent"]["dialog"]["human_utterances"][-1],
-                                         only_named=True, with_labels=True)
+    entities = common_utils.get_entities(
+        vars["agent"]["dialog"]["human_utterances"][-1], only_named=True, with_labels=True
+    )
     return entities
 
 
 def get_nounphrases_from_human_utterance(vars):
-    nps = common_utils.get_entities(vars["agent"]["dialog"]["human_utterances"][-1],
-                                    only_named=False, with_labels=False)
+    nps = common_utils.get_entities(
+        vars["agent"]["dialog"]["human_utterances"][-1], only_named=False, with_labels=False
+    )
     return nps
 
 
 def get_cobotqa_annotations_from_human_utterance(vars):
-    return vars["agent"]["dialog"]["human_utterances"][-1].get("annotations", {}).get(
-        "cobotqa_annotator", {"facts": [], "response": ""})
+    return (
+        vars["agent"]["dialog"]["human_utterances"][-1]
+        .get("annotations", {})
+        .get("cobotqa_annotator", {"facts": [], "response": ""})
+    )
 
 
 def get_fact_for_particular_entity_from_human_utterance(vars, entity):
