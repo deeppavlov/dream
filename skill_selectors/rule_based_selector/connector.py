@@ -104,7 +104,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.extend(get_linked_to_dff_skills(
                     dialog["human"]["attributes"].get("dff_shared_state", {}),
                     len(dialog["human_utterances"]),
-                    dialog["bot_utterances"][-1]["active_skill"]))
+                    dialog["bot_utterances"][-1]["active_skill"] if dialog["bot_utterances"] else ""))
                 # turn on prev active skill if it returned not `CAN_NOT_CONTINUE`
                 for hyp in prev_user_uttr_hyp:
                     if hyp.get("can_continue", CAN_NOT_CONTINUE) in {CAN_CONTINUE_SCENARIO, MUST_CONTINUE,
@@ -118,7 +118,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.extend(get_linked_to_dff_skills(
                     dialog["human"]["attributes"].get("dff_shared_state", {}),
                     len(dialog["human_utterances"]),
-                    dialog["bot_utterances"][-1]["active_skill"]))
+                    dialog["bot_utterances"][-1]["active_skill"] if dialog["bot_utterances"] else ""))
                 # turn on prev active skill if it returned not `CAN_NOT_CONTINUE`
                 for hyp in prev_user_uttr_hyp:
                     if hyp.get("can_continue", CAN_NOT_CONTINUE) in {CAN_CONTINUE_SCENARIO, MUST_CONTINUE,
