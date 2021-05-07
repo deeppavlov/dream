@@ -476,4 +476,10 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8111:8111
+  topic-recommendation:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/topic_recommendation:/src"
+    ports:
+      - 8113:8113
 version: "3.7"

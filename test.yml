@@ -196,4 +196,6 @@ services:
     env_file: [ .env.dev ]
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
+  topic-recommendation:
+    env_file: [ .env.dev ]
 version: '3.7'

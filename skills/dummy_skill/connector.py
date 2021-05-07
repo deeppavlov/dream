@@ -136,6 +136,11 @@ def get_link_to_question(dialog, all_prev_active_skills):
             break
     # remove prev active skills from those we can link to
     available_links = list(set(SKILLS_FOR_LINKING).difference(all_prev_active_skills))
+    # use recommended skills
+    recommended_skills = dialog["human_utterances"][-1].get("annotations", []).get("topic_recommendation", [])
+    if len(set(available_links).intersection(recommended_skills)) > 0:
+        available_links = list(set(recommended_skills).intersection(available_links))
+
     if len(available_links) > 0:
         # if we still have skill to link to, try to generate linking question
         # {'phrase': result, 'skill': linkto_dict["skill"], "connection_phrase": connection}
