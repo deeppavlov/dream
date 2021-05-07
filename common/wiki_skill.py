@@ -122,13 +122,45 @@ used_types_dict = [{"types": ["Q11253473"  # smart device
                    {"entity_substr": ["teleportation"],
                     "page_title": "Teleportation",
                     "titles": {"fiction": "Would you like to know about teleportation in fiction?",
-                               "science": ""}}
+                               "science": ""}},
+                   {"types": ["Q198"],  # war
+                    "titles": {"causes": "", "tactics": "", "general features": "", "diplomacy": "", "outbreak": "",
+                               "battles": ""}},
+                   {"types": ["Q105756498", "Q215380"],  # type of musical group, musical group
+                    "titles": {"early years": "", "breakthrough success": "", "band split-up": "", "new line-up": "",
+                               "successes and struggles": "", "musical style": "", "development": "", "influences": "",
+                               "awards and achievements": "", "touring years": ""}},
+                   {"entity_substr": ["space", "outer space"],
+                    "page_title": "Space exploration",
+                    "titles": {"first outer space flights": "", "first human outer space flight": "",
+                               "first astronomical body space explorations": "", "first space station": "",
+                               "first interstellar space flight": "", "deep space exploration": "",
+                               "future of space exploration": ""}},
+                   {"entity_substr": ["cryptocurrency"],
+                    "page_title": "Cryptocurrency",
+                    "titles": {"blockchain": "Would you like to know about blockchain?", "mining": "",
+                               "darknet markets": "", "exchanges": ""}},
+                   {"entity_substr": ["bitcoin"],
+                    "page_title": "Bitcoin",
+                    "titles": {"blockchain": "Would you like to know about blockchain?", "mining": "",
+                               "darknet markets": "", "exchanges": "", "software implementation": "",
+                               "transactions": ""}},
+                   {"entity_substr": ["drawing"],
+                    "page_title": "Drawing",
+                    "titles": {"technique": "", "materials": "", "process": ""}},
+                   {"entity_substr": ["fishing"],
+                    "page_title": "Fishing",
+                    "titles": {"traditional fishing": "", "recreational fishing": "", "techniques": ""}},
+                   {"types": ["Q2066131"],  # athlete
+                    "titles": {"club career": "", "international career": "", "player profile": "",
+                               "personal life": ""}}
                    ]
 
 used_types = set(itertools.chain.from_iterable([elem.get("types", []) for elem in used_types_dict]))
 used_substr = set(itertools.chain.from_iterable([elem.get("entity_substr", []) for elem in used_types_dict]))
 
-prohibited_topics = {"music", "films", "movies", "sport", "travel", "food", "animals", "pets"}
+prohibited_topics = {"music", "films", "movies", "sport", "travel", "food", "animals", "pets", "coronavirus",
+                     "corona virus"}
 prohibited_types = {"Q571",  # book
                     "Q277759",  # book series
                     "Q8261",  # novel
@@ -163,15 +195,28 @@ def find_entity_wp(annotations):
         for entity, triplets in entities_info.items():
             entity_id = triplets.get("plain_entity", "")
             types = triplets.get("types", []) + triplets.get("instance of", []) + triplets.get("subclass of", []) + \
-                triplets.get("occupation", [])
+                triplets.get("occupation", []) + triplets.get("types_2hop", [])
             type_ids = [elem for elem, label in types]
             inters = set(type_ids).intersection(used_types)
             in_not_used_types = set(type_ids).intersection(prohibited_types)
-            if inters and not in_not_used_types:
+            in_not_used_topics = entity in prohibited_topics
+            if inters and not in_not_used_types and not in_not_used_topics:
                 found_entity_substr = entity
                 found_entity_id = entity_id
                 found_entity_types = inters
                 break
+        wiki_skill_entities_info = wp_output.get("wiki_skill_entities_info", {})
+        if wiki_skill_entities_info:
+            for entity, triplets in wiki_skill_entities_info.items():
+                if entity not in prohibited_topics:
+                    entity_id = triplets.get("plain_entity", "")
+                    types = triplets.get("types", []) + triplets.get("instance of", []) + \
+                        triplets.get("subclass of", []) + triplets.get("occupation", []) + \
+                        triplets.get("types_2hop", [])
+                    type_ids = [elem for elem, label in types]
+                    found_entity_substr = entity
+                    found_entity_id = entity_id
+                    found_entity_types = type_ids
     return found_entity_substr, found_entity_id, found_entity_types
 
 
@@ -212,7 +257,9 @@ def if_switch_wiki_skill(user_uttr, bot_uttr):
     found_entity_substr, found_entity_id, found_entity_types = find_entity_wp(user_uttr_annotations)
     found_entity_substr = find_entity_nounphr(user_uttr_annotations)
     user_dont_know = if_user_dont_know_topic(user_uttr, bot_uttr)
-    if found_entity_id or found_entity_substr or user_dont_know:
+    asked_name = "what is your name" in bot_uttr.get("text", "").lower()
+    asked_news = "news" in user_uttr["text"]
+    if (found_entity_id or found_entity_substr or user_dont_know) and not asked_name and not asked_news:
         flag = True
     return flag
 
@@ -255,6 +302,13 @@ def choose_title(vars, all_titles, titles_we_use, prev_title, used_titles):
                             break
             if found:
                 break
+    if not found_title:
+        titles_we_use = set(all_titles).difference({"first_par"})
+        if len(titles_we_use) > len(used_titles):
+            for title in titles_we_use:
+                if title not in used_titles:
+                    found_title = title.lower()
+                    found_page_title = title
     return found_title, found_page_title
 
 
@@ -320,4 +374,6 @@ def delete_hyperlinks(par):
             mentions.append(entity_split[1])
             pages.append(entity_split[0].capitalize())
             par = par.replace(replace_str, entity_split[1])
+    par = re.sub("(<ref>|</ref>)", "", par)
+    par = par.replace("  ", " ")
     return par, mentions, pages

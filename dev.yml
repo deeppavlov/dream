@@ -275,6 +275,7 @@ services:
     env_file: [.env.dev]
     volumes:
       - "./annotators/wiki_parser:/src"
+      - "./common:/src/common"
     ports:
       - 8077:8077
   factoid-classification:

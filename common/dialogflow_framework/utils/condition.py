@@ -120,6 +120,15 @@ def is_last_state(vars, state):
     return flag
 
 
+def was_active_in_prev_state(vars):
+    prev_ind = str(vars["agent"]["previous_human_utter_index"])
+    skill_uttr_indices = set(vars["agent"]["history"].keys())
+    if prev_ind in skill_uttr_indices:
+        return True
+    else:
+        return False
+
+
 def is_first_time_of_state(vars, state):
     flag = state not in list(vars["agent"]["history"].values())
     logging.debug(f"is_first_time_of_state {state} = {flag}")
