@@ -395,27 +395,31 @@ def respond():
             bot_news = get_news(dialog["human_utterances"][-1], "bot")
             # all_news = get_news(dialog["human_utterances"][-1], "all")
             if user_news:
-                user_input = {
-                    'checked_sentence': user_news[-1].get("decsription", ""),
-                    'knowledge': user_news[-1].get("decsription", ""),
-                    'text': user_input_text,
-                    'history': user_input_history,
-                    'news_fact': "human "
-                }
-                input_batch.append(user_input)
-                annotations_depths.append({})
-                dial_ids.append(d_id)
+                news_desc = user_news[-1].get("decsription", "")
+                if news_desc:
+                    user_input = {
+                        'checked_sentence': news_desc,
+                        'knowledge': news_desc,
+                        'text': user_input_text,
+                        'history': user_input_history,
+                        'news_fact': "human "
+                    }
+                    input_batch.append(user_input)
+                    annotations_depths.append({})
+                    dial_ids.append(d_id)
             elif bot_news:
-                user_input = {
-                    'checked_sentence': bot_news[-1].get("decsription", ""),
-                    'knowledge': bot_news[-1].get("decsription", ""),
-                    'text': user_input_text,
-                    'history': user_input_history,
-                    'news_fact': "bot "
-                }
-                input_batch.append(user_input)
-                annotations_depths.append({})
-                dial_ids.append(d_id)
+                news_desc = bot_news[-1].get("decsription", "")
+                if news_desc:
+                    user_input = {
+                        'checked_sentence': news_desc,
+                        'knowledge': news_desc,
+                        'text': user_input_text,
+                        'history': user_input_history,
+                        'news_fact': "bot "
+                    }
+                    input_batch.append(user_input)
+                    annotations_depths.append({})
+                    dial_ids.append(d_id)
             # elif all_news:
             #     user_input = {
             #         'checked_sentence': all_news[-1].get("decsription", ""),
