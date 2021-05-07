@@ -331,7 +331,7 @@ class MovieSkillScenario:
                     attr = {"status_line": ["movie_prompt"], "can_continue": CAN_CONTINUE_PROMPT}
                 else:
                     response, confidence, human_attr, bot_attr, attr = "", 0., {}, {}, {}
-            else:
+            elif "movie_id" in prev_movie_skill_outputs[-1]:
                 # some movie scenario started and not finished
                 response, confidence, human_attr, bot_attr, attr = self.get_next_response_movie_scenario(
                     curr_user_uttr, prev_bot_uttr, prev_movie_skill_outputs,
@@ -339,6 +339,8 @@ class MovieSkillScenario:
                 # decrease confidence if movie_skill was not active on prev step
                 if prev_bot_uttr.get("active_skill", "") != "movie_skill":
                     confidence *= 0.8
+            else:
+                response, confidence, human_attr, bot_attr, attr = "", 0., {}, {}, {}
         elif is_prev_bot_uttr_what_movie_question and len(movies_ids) > 0:
             logger.info("Was question about movies. Found movie titles in user response.")
             if is_no(curr_user_uttr):
