@@ -8,18 +8,18 @@
                 {
                     "text": "hello?",
                     "annotations": {
-                        "spelling_preprocessing": "hello",
                         "asr": {
                             "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "hello",
+                        "factoid_classification": {
+                            "factoid": 0.010960372164845467,
+                            "conversational": 0.9890396595001221
                         },
                         "blacklisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
-                        },
-                        "factoid_classification": {
-                            "factoid": 0.010960372164845467,
-                            "conversational": 0.9890396595001221
                         },
                         "combined_classification": {
                             "cobot_dialogact_intents": {
@@ -43,32 +43,29 @@
                             }
                         },
                         "cobot_nounphrases": [],
-                        "cobot_entities": {
-                            "entities": [],
-                            "labelled_entities": []
-                        },
                         "sentseg": {
                             "punct_sent": "hello?",
                             "segments": [
                                 "hello?"
                             ]
                         },
-                        "conceptnet": {},
-                        "midas_classification": {
-                            "appreciation": 0.010693230666220188,
-                            "command": 0.36356985569000244,
-                            "comment": 0.01394089125096798,
-                            "complaint": 0.31689751148223877,
-                            "dev_command": 0.07088878005743027,
-                            "neg_answer": 0.007631364744156599,
-                            "open_question_factual": 0.06049879267811775,
-                            "open_question_opinion": 0.012528421357274055,
-                            "opinion": 0.011402624659240246,
-                            "other_answers": 0.007560706231743097,
-                            "pos_answer": 0.012580689042806625,
-                            "statement": 0.04247451201081276,
-                            "yes_no_question": 0.06933265179395676
-                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.010693230666220188,
+                                "command": 0.36356985569000244,
+                                "comment": 0.01394089125096798,
+                                "complaint": 0.31689751148223877,
+                                "dev_command": 0.07088878005743027,
+                                "neg_answer": 0.007631364744156599,
+                                "open_question_factual": 0.06049879267811775,
+                                "open_question_opinion": 0.012528421357274055,
+                                "opinion": 0.011402624659240246,
+                                "other_answers": 0.007560706231743097,
+                                "pos_answer": 0.012580689042806625,
+                                "statement": 0.04247451201081276,
+                                "yes_no_question": 0.06933265179395676
+                            }
+                        ],
                         "intent_catcher": {
                             "cant_do": {
                                 "confidence": 0.0,
@@ -159,6 +156,18 @@
                                 "detected": 0
                             }
                         },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_entities": {
+                            "entities": [],
+                            "labelled_entities": []
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        },
                         "cobot_dialogact": {
                             "intents": [
                                 "General_ChatIntent"
@@ -167,27 +176,37 @@
                                 "Phatic"
                             ]
                         },
-                        "ner": [
-                            []
-                        ],
-                        "entity_linking": [
-                            {
-                                "confidences": [
-                                    1.0
-                                ],
-                                "entity_ids": [
-                                    ""
-                                ],
-                                "entity_substr": ""
-                            }
-                        ],
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
                                 "hello?"
                             ]
                         },
-                        "fact_retrieval": [],
+                        "entity_linking": [],
+                        "topic_recommendation": [
+                            "dff_sport_skill",
+                            "news_api_skill",
+                            "dff_gossip_skill"
+                        ],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Brian Kolfage, a conservative activist who lost three limbs in Iraq and was the founder and public face of the \u201cWe Build the Wall\u201d fundraising campaign, was charged in federal court in Florida with filing a false tax return. In an indictment, prosecu... [252 chars]",
+                                    "description": "Biden, who is scheduled to speak from the East Room, is expected argue that more steps are needed in the wake of the $1.9 trillion coronavirus relief plan that he signed into law in March.",
+                                    "image": "https://www.washingtonpost.com/wp-apps/imrs.php?src=https://arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/U5AJWIFO2QI6XAWBRFVMVFK3XE.jpg&w=1440",
+                                    "publishedAt": "2021-05-07T14:55:00Z",
+                                    "source": {
+                                        "name": "The Washington Post",
+                                        "url": "https://www.washingtonpost.com"
+                                    },
+                                    "title": "Biden to deliver remarks on the economy after the Labor Department releases its latest jobs report",
+                                    "url": "https://www.washingtonpost.com/politics/2021/05/07/joe-biden-live-updates/"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "conceptnet": {},
                         "kbqa": {
                             "answer": "",
                             "confidence": 0.0,
@@ -197,24 +216,7 @@
                             "entities_info": {},
                             "topic_skill_entities_info": {}
                         },
-                        "news_api_annotator": [
-                            {
-                                "entity": "all",
-                                "news": {
-                                    "content": "A health worker wearing personal protective equipment (PPE) carries a patient suffering from the coronavirus disease (COVID-19) outside the casualty ward at Guru Teg Bahadur hospital, in New Delhi, India, April 24, 2021.\nIndia has reported a record n... [806 chars]",
-                                    "description": "India has reported a record number of coronavirus cases for the fifth day in a row, with a second wave pushing its health-care system to the brink.",
-                                    "image": "https://image.cnbcfm.com/api/v1/image/106873719-16194436602021-04-26t131908z_1656574882_rc2p3n9ssdiw_rtrmadp_0_health-coronavirus-india.jpeg?v=1619443711",
-                                    "publishedAt": "2021-04-26T14:08:41Z",
-                                    "source": {
-                                        "name": "CNBC",
-                                        "url": "https://www.cnbc.com"
-                                    },
-                                    "title": "Photos show the deadly toll as infections top 17 million",
-                                    "url": "https://www.cnbc.com/2021/04/26/photos-show-the-deadly-toll-of-covid-in-india-as-coronavirus-cases-top-17-million.html"
-                                },
-                                "which": "all"
-                            }
-                        ],
+                        "fact_retrieval": [],
                         "cobotqa_annotator": {
                             "facts": [],
                             "response": ""
@@ -228,6 +230,12 @@
     "dff_friendship_skill_state_batch": [
         {}
     ],
+    "dff_shared_state_batch": [
+        {
+            "cross_states": {},
+            "cross_links": {}
+        }
+    ],
     "entities_batch": [
         {}
     ],
@@ -236,5 +244,8 @@
     ],
     "disliked_skills_batch": [
         []
+    ],
+    "clarification_request_flag_batch": [
+        false
     ]
 }

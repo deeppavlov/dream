@@ -37,6 +37,12 @@ logger = logging.getLogger(__name__)
 class State(Enum):
     USR_START = auto()
 
+    SYS_FP = auto()
+    USR_FP = auto()
+    SYS_USER_WANTS_TALK = auto()
+    SYS_USER_DOESNT_WANT_TALK = auto()
+    USR_TURN_OFF = auto()
+
     SYS_HELLO = auto()
     USR_HELLO_AND_CONTNIUE = auto()
     SYS_USR_ASKS_BOT_HOW_ARE_YOU = auto()
@@ -155,6 +161,33 @@ def masked_lm(templates=None, prob_threshold=0.0, probs_flag=False):
     return tokens_batch
 
 ##################################################################################################################
+# std false positive turn on handling
+##################################################################################################################
+
+
+def false_positive_request(ngrams, vars):
+    # SYS_FP
+    flag = (
+        bool(re.search(common_greeting.FALSE_POSITIVE_TURN_ON_RE, state_utils.get_last_human_utterance(vars)["text"]))
+        and state_utils.get_human_utter_index(vars) == 0
+    )
+    return flag
+
+
+def false_positive_response(vars):
+    # USR_FP
+    state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+    state_utils.set_can_continue(vars, MUST_CONTINUE)
+    return "Hi! Seems like Alexa decided to turn me on. Do you want to chat with me?"
+
+
+def bye_response(vars):
+    state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+    state_utils.set_can_continue(vars, CAN_NOT_CONTINUE)
+    intent = "exit"
+    return f"Okay, bye.#+#{intent}"
+
+##################################################################################################################
 # std hello
 ##################################################################################################################
 
@@ -169,6 +202,7 @@ def hello_request(ngrams, vars):
 
 def hello_response(vars):
     # USR_HELLO_AND_CONTNIUE
+    bot_utt = state_utils.get_last_bot_utterance(vars)["text"].lower()
     try:
         if condition_utils.is_lets_chat_about_topic(vars):
             state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
@@ -179,12 +213,15 @@ def hello_response(vars):
         which_start = random.choice([
             # "starter_weekday",
             # "starter_genre",
-            "how_are_you",
+            "what_do_you_do",
+            # "how_are_you",
             # "what_is_your_name",
             # "what_to_talk_about"
         ])
         state_utils.save_to_shared_memory(vars, greeting_type=which_start)
-        if which_start == "how_are_you":
+        if which_start == "what_do_you_do":
+            after_hello_resp = random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES)
+        elif which_start == "how_are_you":
             after_hello_resp = random.choice(common_greeting.HOW_ARE_YOU_RESPONSES)
         elif which_start == "what_is_your_name":
             after_hello_resp = random.choice(common_greeting.WHAT_IS_YOUR_NAME_RESPONSES)
@@ -197,7 +234,10 @@ def hello_response(vars):
             after_hello_resp = offer_topic_response_part(vars)
             # set_confidence
             set_confidence_by_universal_policy(vars)
-        return f"{common_greeting.HI_THIS_IS_ALEXA} {after_hello_resp}"
+        if "seems like alexa decided to turn me on" in bot_utt:
+            return after_hello_resp
+        else:
+            return f"{common_greeting.HI_THIS_IS_ALEXA} {after_hello_resp}"
 
     except Exception as exc:
         logger.exception(exc)
@@ -344,6 +384,12 @@ def is_no_request(ngrams, vars):
         return True
     return False
 
+
+def not_is_no_request(ngrams, vars):
+    if not condition_utils.is_no_vars(vars):
+        return True
+    return False
+
 ##################################################################################################################
 # std greeting
 ##################################################################################################################
@@ -475,6 +521,7 @@ def closed_answer_response(vars):
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_START,
     {
+        State.SYS_FP: false_positive_request,
         State.SYS_HELLO: hello_request,
         State.SYS_USR_ASKS_BOT_HOW_ARE_YOU: how_are_you_request,
         State.SYS_STD_GREETING: std_greeting_request,
@@ -484,6 +531,31 @@ simplified_dialogflow.add_user_serial_transitions(
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
+
+##################################################################################################################
+#  SYS_FP
+
+simplified_dialogflow.add_system_transition(State.SYS_FP, State.USR_FP, false_positive_response)
+simplified_dialogflow.set_error_successor(State.SYS_FP, State.SYS_ERR)
+
+
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_FP,
+    {
+        State.SYS_USER_WANTS_TALK: not_is_no_request,
+        State.SYS_USER_DOESNT_WANT_TALK: is_no_request
+    },
+)
+simplified_dialogflow.set_error_successor(State.USR_FP, State.SYS_ERR)
+
+
+simplified_dialogflow.add_system_transition(State.SYS_USER_WANTS_TALK, State.USR_HELLO_AND_CONTNIUE, hello_response)
+simplified_dialogflow.set_error_successor(State.SYS_USER_WANTS_TALK, State.SYS_ERR)
+
+
+simplified_dialogflow.add_system_transition(State.SYS_USER_DOESNT_WANT_TALK, State.USR_TURN_OFF, bye_response)
+simplified_dialogflow.set_error_successor(State.SYS_USER_DOESNT_WANT_TALK, State.SYS_ERR)
+
 
 ##################################################################################################################
 #  SYS_HELLO
