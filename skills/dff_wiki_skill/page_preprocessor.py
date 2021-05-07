@@ -36,67 +36,68 @@ def split_page(page):
     main_page_dict = {}
     text_list = []
     dict_level = {2: {}, 3: {}, 4: {}}
-    for elem in page_split:
-        find_title = re.findall(r"^([=]{1,4})", elem)
-        if elem.startswith("{{"):
-            main_pages = elem.strip()[2:-2].split('|')[1:]
-            if titles:
-                main_page_dict[titles[-1][0]] = main_pages
-        if find_title:
-            cur_level = len(find_title[0])
-            eq_str = "=" * cur_level
-            title = re.findall(f"{eq_str}(.*?){eq_str}", elem)
-            title = title[0].strip()
-            if text_list:
+    if page_split:
+        for elem in page_split:
+            find_title = re.findall(r"^([=]{1,4})", elem)
+            if elem.startswith("{{"):
+                main_pages = elem.strip()[2:-2].split('|')[1:]
                 if titles:
-                    last_title, last_level = titles[-1]
-                    if cur_level <= last_level:
-                        while titles and last_level >= cur_level:
-                            if titles[-1][1] < cur_level:
-                                last_title, last_level = titles[-1]
-                            else:
-                                last_title, last_level = titles.pop()
-                            if dict_level.get(last_level + 1, {}):
-                                if last_title in dict_level[last_level]:
-                                    dict_level[last_level][last_title] = {**dict_level[last_level + 1],
-                                                                          **dict_level[last_level][last_title]}
+                    main_page_dict[titles[-1][0]] = main_pages
+            if find_title:
+                cur_level = len(find_title[0])
+                eq_str = "=" * cur_level
+                title = re.findall(f"{eq_str}(.*?){eq_str}", elem)
+                title = title[0].strip()
+                if text_list:
+                    if titles:
+                        last_title, last_level = titles[-1]
+                        if cur_level <= last_level:
+                            while titles and last_level >= cur_level:
+                                if titles[-1][1] < cur_level:
+                                    last_title, last_level = titles[-1]
                                 else:
-                                    dict_level[last_level][last_title] = dict_level[last_level + 1]
-                                dict_level[last_level + 1] = {}
-                            else:
-                                dict_level[last_level][last_title] = text_list
-                                text_list = []
-                    else:
-                        dict_level[last_level][last_title] = {"first_par": text_list}
-                        text_list = []
-                else:
-                    dict_level[2]["first_par"] = text_list
-                    text_list = []
-
-            titles.append([title, cur_level])
-        else:
-            if not elem.startswith("{{"):
-                text_list.append(elem)
-
-    if text_list:
-        if titles:
-            last_title, last_level = titles[-1]
-            if cur_level <= last_level:
-                while titles:
-                    last_title, last_level = titles.pop()
-                    if last_level + 1 in dict_level and dict_level[last_level + 1]:
-                        if last_title in dict_level[last_level]:
-                            dict_level[last_level][last_title] = {**dict_level[last_level + 1],
-                                                                  **dict_level[last_level][last_title]}
+                                    last_title, last_level = titles.pop()
+                                if dict_level.get(last_level + 1, {}):
+                                    if last_title in dict_level[last_level]:
+                                        dict_level[last_level][last_title] = {**dict_level[last_level + 1],
+                                                                              **dict_level[last_level][last_title]}
+                                    else:
+                                        dict_level[last_level][last_title] = dict_level[last_level + 1]
+                                    dict_level[last_level + 1] = {}
+                                else:
+                                    dict_level[last_level][last_title] = text_list
+                                    text_list = []
                         else:
-                            dict_level[last_level][last_title] = dict_level[last_level + 1]
-                        dict_level[last_level + 1] = {}
+                            dict_level[last_level][last_title] = {"first_par": text_list}
+                            text_list = []
                     else:
-                        dict_level[last_level][last_title] = text_list
+                        dict_level[2]["first_par"] = text_list
                         text_list = []
+
+                titles.append([title, cur_level])
             else:
-                dict_level[last_level]["first_par"] = text_list
-                text_list = []
+                if not elem.startswith("{{"):
+                    text_list.append(elem)
+
+        if text_list:
+            if titles:
+                last_title, last_level = titles[-1]
+                if cur_level <= last_level:
+                    while titles:
+                        last_title, last_level = titles.pop()
+                        if last_level + 1 in dict_level and dict_level[last_level + 1]:
+                            if last_title in dict_level[last_level]:
+                                dict_level[last_level][last_title] = {**dict_level[last_level + 1],
+                                                                      **dict_level[last_level][last_title]}
+                            else:
+                                dict_level[last_level][last_title] = dict_level[last_level + 1]
+                            dict_level[last_level + 1] = {}
+                        else:
+                            dict_level[last_level][last_title] = text_list
+                            text_list = []
+                else:
+                    dict_level[last_level]["first_par"] = text_list
+                    text_list = []
 
     return dict_level[2], main_page_dict
 

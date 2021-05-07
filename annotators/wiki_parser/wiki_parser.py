@@ -24,6 +24,8 @@ import sentry_sdk
 
 from hdt import HDTDocument
 
+from common.wiki_skill import used_types as wiki_skill_used_types
+
 sentry_sdk.init(os.getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.DEBUG)
@@ -583,6 +585,9 @@ def find_top_triplets(entity, entity_substr):
                 year, month, day = date_info[0]
                 age = datetime.datetime.now().year - int(year)
                 triplets["age"] = age
+        types_2hop = find_types_2hop(entity)
+        types_2hop_with_labels = find_objects_info(types_2hop)
+        triplets["types_2hop"] = types_2hop_with_labels
         triplets_info[entity_substr] = triplets
     return triplets_info
 
@@ -652,6 +657,7 @@ def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], w
         elif parser_info == "find_top_triplets":
             triplets_info = {}
             topic_skills_triplets_info = {}
+            wiki_skill_triplets_info = {}
             try:
                 for entity_info in query:
                     if entity_info:
@@ -660,20 +666,30 @@ def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], w
                         if entity_ids:
                             entity_triplets_info = find_top_triplets(entity_ids[0], entity_substr)
                             triplets_info = {**triplets_info, **entity_triplets_info}
+                        found_topic_skills_info = False
+                        found_wiki_skill_info = False
                         for entity in entity_ids:
                             types = find_types(entity)
                             types_2hop = find_types_2hop(entity)
-                            if set(types).intersection(topic_skill_types) or \
-                                    set(types_2hop).intersection(topic_skill_types):
+                            if not found_topic_skills_info and (set(types).intersection(topic_skill_types)
+                                                                or set(types_2hop).intersection(topic_skill_types)):
                                 entity_triplets_info = find_top_triplets(entity, entity_substr)
                                 topic_skills_triplets_info = {**topic_skills_triplets_info, **entity_triplets_info}
+                                found_topic_skills_info = True
+                            if not found_wiki_skill_info and (set(types).intersection(wiki_skill_used_types)
+                                                              or set(types_2hop).intersection(wiki_skill_used_types)):
+                                entity_triplets_info = find_top_triplets(entity, entity_substr)
+                                wiki_skill_triplets_info = {**wiki_skill_triplets_info, **entity_triplets_info}
+                                found_wiki_skill_info = True
+                            if found_topic_skills_info and found_wiki_skill_info:
                                 break
             except Exception as e:
                 log.info("Wrong arguments are passed to wiki_parser")
                 sentry_sdk.capture_exception(e)
                 log.exception(e)
             wiki_parser_output.append({"entities_info": triplets_info,
-                                       "topic_skill_entities_info": topic_skills_triplets_info})
+                                       "topic_skill_entities_info": topic_skills_triplets_info,
+                                       "wiki_skill_entities_info": wiki_skill_triplets_info})
         elif parser_info == "find_top_triplets_for_topic_skills":
             triplets_info = {}
             for entities_list in query:

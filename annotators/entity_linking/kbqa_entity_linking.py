@@ -255,7 +255,7 @@ class KBEntityLinker(Component, Serializable):
             pr_text = self.nlp(text)
             processed_tokens = []
             for token in pr_text:
-                if token.tag_ == "NNS":
+                if token.tag_ in ["NNS", "NNP"] and self.inflect_engine.singular_noun(token.text):
                     processed_tokens.append(self.inflect_engine.singular_noun(token.text))
                 else:
                     processed_tokens.append(token.text)
