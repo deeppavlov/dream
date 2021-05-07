@@ -38,6 +38,7 @@ import uuid
 from sentry_sdk.integrations.logging import ignore_logger
 import string
 from templatey.processors.pre.normalizer import PreProcessor
+from state_formatters.utils import programy_post_formatter_dialog
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 ignore_logger("root")
@@ -93,7 +94,11 @@ class SanicRestBotClient(RestBotClient):
             if response is not None:
                 return response, status
             responses = []
-            for user_sentences in request.json["sentences_batch"]:
+            for dialog in request.json["dialogs"]:
+
+                user_sentences = programy_post_formatter_dialog(dialog).get("sentences_batch")
+                user_sentences = user_sentences[0] if user_sentences else [""]
+
                 replace_phrases = ['thanks.', 'thank you.', 'please.']
                 for phrase in replace_phrases:
                     if user_sentences[-1] != phrase:
@@ -136,7 +141,8 @@ class SanicRestBotClient(RestBotClient):
             return responses, 200
         except Exception as excep:
             sentry_sdk.capture_exception(excep)
-            return self.format_error_response(userid, question, str(excep)), 500
+            print(excep)
+            return self.format_error_response(uuid.uuid4().hex, question, str(excep)), 500
 
     def run(self, sanic):
 

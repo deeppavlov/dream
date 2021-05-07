@@ -38,6 +38,7 @@ import uuid
 from sentry_sdk.integrations.logging import ignore_logger
 import string
 from templatey.processors.pre.normalizer import PreProcessor
+from state_formatters.utils import programy_post_formatter_dialog
 
 ignore_logger("root")
 # TODO: Get if from config.sanic.yml
@@ -92,7 +93,10 @@ class SanicRestBotClient(RestBotClient):
             if response is not None:
                 return response, status
             responses = []
-            for user_sentences in request.json["sentences_batch"]:
+            for dialog in request.json["dialogs"]:
+
+                user_sentences = programy_post_formatter_dialog(dialog).get("sentences_batch")
+                user_sentences = user_sentences[0] if user_sentences else [""]
                 userid = uuid.uuid4().hex
                 # if user said let's chat at beginning of a dialogue, that we should response with greeting
                 if remove_punct(user_sentences[0]).lower() == remove_punct("let's chat"):
@@ -130,7 +134,8 @@ class SanicRestBotClient(RestBotClient):
             return responses, 200
         except Exception as excep:
             sentry_sdk.capture_exception(excep)
-            return self.format_error_response(userid, question, str(excep)), 500
+            print(excep)
+            return self.format_error_response(uuid.uuid4().hex, question, str(excep)), 500
 
     def run(self, sanic):
 

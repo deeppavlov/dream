@@ -4,7 +4,7 @@ from copy import deepcopy
 import re
 
 from common.universal_templates import if_chat_about_particular_topic
-from common.utils import get_intents
+from common.utils import get_intents, service_intents
 
 logger = logging.getLogger(__name__)
 LAST_N_TURNS = 5  # number of turns to consider in annotator/skill.
@@ -163,9 +163,11 @@ def last_n_human_utt_dialog_formatter(dialog: Dict, last_n_utts: int, only_last_
         only_last_sentence (bool, optional): take only last sentence in each utterance. Defaults to False.
     """
     dialog = deepcopy(dialog)
-    if len(dialog["human_utterances"]) <= last_n_utts and not if_chat_about_particular_topic(dialog["utterances"][0]):
+    if len(dialog["human_utterances"]) <= last_n_utts and not if_chat_about_particular_topic(
+        dialog["human_utterances"][0]
+    ):
         # in all cases when not particular topic, convert first phrase in the dialog to `hello!`
-        if "sentseg" in dialog["human_utterances"][0]["annotations"]:
+        if "sentseg" in dialog["human_utterances"][0].get("annotations", {}):
             dialog["human_utterances"][0]["annotations"]["sentseg"]["punct_sent"] = "hello!"
             dialog["human_utterances"][0]["annotations"]["sentseg"]["segments"] = ["hello"]
         else:
@@ -174,7 +176,7 @@ def last_n_human_utt_dialog_formatter(dialog: Dict, last_n_utts: int, only_last_
     human_utts = []
     detected_intents = []
     for utt in dialog["human_utterances"][-last_n_utts:]:
-        if "sentseg" in utt["annotations"]:
+        if "sentseg" in utt.get("annotations", {}):
             sentseg_ann = utt["annotations"]["sentseg"]
             if only_last_sentence:
                 text = sentseg_ann["segments"][-1] if len(sentseg_ann["segments"]) > 0 else ""
@@ -264,3 +266,31 @@ def dff_formatter(
             "clarification_request_flag_batch": [clarification_request_flag],
         }
     ]
+
+
+def programy_post_formatter_dialog(dialog: Dict) -> Dict:
+    # Used by: program_y, program_y_dangerous, program_y_wide
+    # Look at skills/program_y*
+    dialog = get_last_n_turns(dialog, bot_last_turns=6)
+    first_uttr_hi = False
+    if len(dialog["human_utterances"]) == 1 and not if_chat_about_particular_topic(dialog["human_utterances"][-1]):
+        first_uttr_hi = True
+
+    dialog = remove_clarification_turns_from_dialog(dialog)
+    dialog = last_n_human_utt_dialog_formatter(dialog, last_n_utts=5)[0]
+    sentences = dialog["sentences_batch"][0]
+    intents = dialog["intents"][0]
+
+    # modify sentences with yes/no intents to yes/no phrase
+    # todo: sent may contain multiple sentence, logic here could be improved
+    prioritized_intents = service_intents - {"yes", "no"}
+    for i, (sent, ints) in enumerate(zip(sentences, intents)):
+        ints = set(ints)
+        if "?" not in sent and len(ints & prioritized_intents) == 0:
+            if "yes" in ints:
+                sentences[i] = "yes."
+            elif "no" in ints:
+                sentences[i] = "no."
+    if first_uttr_hi:
+        sentences = ["hi."]
+    return {"sentences_batch": [sentences]}

@@ -45,12 +45,6 @@ services:
     image: ${DOCKER_REGISTRY}/program-y:${VERSION}
     env_file:
       - ${ENV_FILE}
-    healthcheck:
-      test: ["CMD-SHELL", "curl -s --header \"Content-Type: application/json\" --request POST --data '{\"sentences_batch\":[[\"lets chat\"]],\"user_ids\":[123131]}' http://localhost:8008/api/rest/v1.0/ask || exit 1"]
-      interval: 10s
-      timeout: 2s
-      retries: 3
-      start_period: 1m
   intent-catcher:
     image: ${DOCKER_REGISTRY}/intent-catcher:${VERSION}
     env_file:
@@ -67,12 +61,6 @@ services:
     image: ${DOCKER_REGISTRY}/program-y-dangerous:${VERSION}
     env_file:
       - ${ENV_FILE}
-    healthcheck:
-      test: ["CMD-SHELL", "curl -s --header \"Content-Type: application/json\" --request POST --data '{\"sentences_batch\":[[\"i want to commit a suicide\"]],\"user_ids\":[123131]}' http://localhost:8022/api/rest/v1.0/ask || exit 1"]
-      interval: 10s
-      timeout: 2s
-      retries: 3
-      start_period: 1m
   ner:
     image: ${DOCKER_REGISTRY}/ner:${VERSION}
     env_file:
@@ -166,12 +154,6 @@ services:
     image: ${DOCKER_REGISTRY}/program-y-wide:${VERSION}
     env_file:
       - ${ENV_FILE}
-    healthcheck:
-      test: ["CMD-SHELL", "curl -s --header \"Content-Type: application/json\" --request POST --data '{\"sentences_batch\":[[\"lets chat\"]],\"user_ids\":[123131]}' http://localhost:8064/api/rest/v1.0/ask || exit 1"]
-      interval: 10s
-      timeout: 2s
-      retries: 3
-      start_period: 1m
   news-api-skill:
     image: ${DOCKER_REGISTRY}/news-api-skill:${VERSION}
     env_file:

@@ -2,8 +2,7 @@ import logging
 from copy import deepcopy
 from typing import Dict, List
 
-from common.universal_templates import if_chat_about_particular_topic
-from common.utils import service_intents, get_entities
+from common.utils import get_entities
 import state_formatters.utils as utils
 
 logger = logging.getLogger(__name__)
@@ -14,33 +13,6 @@ def alice_formatter_dialog(dialog: Dict) -> List:
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=4)
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
     return utils.last_n_human_utt_dialog_formatter(dialog, last_n_utts=2, only_last_sentence=True)
-
-
-def programy_formatter_dialog(dialog: Dict) -> List:
-    # Used by: program_y, program_y_dangerous, program_y_wide
-    dialog = utils.get_last_n_turns(dialog, bot_last_turns=6)
-    first_uttr_hi = False
-    if len(dialog["utterances"]) == 1 and not if_chat_about_particular_topic(dialog["human_utterances"][-1]):
-        first_uttr_hi = True
-
-    dialog = utils.remove_clarification_turns_from_dialog(dialog)
-    dialog = utils.last_n_human_utt_dialog_formatter(dialog, last_n_utts=5)[0]
-    sentences = dialog["sentences_batch"][0]
-    intents = dialog["intents"][0]
-
-    # modify sentences with yes/no intents to yes/no phrase
-    # todo: sent may contain multiple sentence, logic here could be improved
-    prioritized_intents = service_intents - {"yes", "no"}
-    for i, (sent, ints) in enumerate(zip(sentences, intents)):
-        ints = set(ints)
-        if "?" not in sent and len(ints & prioritized_intents) == 0:
-            if "yes" in ints:
-                sentences[i] = "yes."
-            elif "no" in ints:
-                sentences[i] = "no."
-    if first_uttr_hi:
-        sentences = ["hi."]
-    return [{"sentences_batch": [sentences]}]
 
 
 def eliza_formatter_dialog(dialog: Dict) -> List[Dict]:

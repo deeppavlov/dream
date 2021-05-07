@@ -238,7 +238,8 @@ services:
 
   program-y-dangerous:
     build:
-      context: ./skills/program-y-dangerous/
+      context: .
+      dockerfile: ./skills/program-y-dangerous/Dockerfile
     deploy:
       mode: replicated
       replicas: 2
@@ -555,8 +556,8 @@ services:
 
   program-y-wide:
     build:
-      context: ./skills/program-y-wide/
-    command: sh -c "./sanic.sh"
+      context: .
+      dockerfile: ./skills/program-y-wide/Dockerfile
     deploy:
       mode: replicated
       replicas: 4

@@ -515,7 +515,7 @@
                     "timeout": 2,
                     "url": "http://program-y:8008/api/rest/v1.0/ask"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:programy_formatter_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -604,7 +604,7 @@
                     "timeout": 2,
                     "url": "http://program-y-dangerous:8022/api/rest/v1.0/ask"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:programy_formatter_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -760,7 +760,7 @@
                     "timeout": 2,
                     "url": "http://program-y-wide:8064/api/rest/v1.0/ask"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:programy_formatter_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
