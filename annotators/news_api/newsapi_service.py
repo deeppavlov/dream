@@ -9,6 +9,7 @@ from os import getenv
 
 import sentry_sdk
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from nltk.tokenize import sent_tokenize
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -131,10 +132,17 @@ class CachedRequestsAPI:
             title = article.get("title", "") or ""
             if len(title) == 0:
                 continue
-            description = article.get("description", "") or ""
+            description = article.get("content", "") or ""
+            sentences_content = sent_tokenize(description)
+            if description and len(sentences_content) > 1:
+                description = " ".join(sentences_content[:-1])
+                article["description"] = description
+            else:
+                description = article.get("description", "") or ""
+
             if len(description) == 0:
                 continue
-            if get_nltk_sentiment(article.get("title", "")) == "negative":
+            if get_nltk_sentiment(f"{title} {description}") == "negative":
                 continue
 
             articles_to_check += [f"{title} {description}"]

@@ -458,7 +458,7 @@ def respond():
             logger.info("No particular news found.")
             new_result = get_news_for_current_entity(
                 "all", curr_uttr, human_attr["news_api_skill"]["discussed_news"])
-            if curr_topic != "all" and new_result.get("title", "") > 0:
+            if curr_topic != "all" and len(new_result.get("title", "")) > 0:
                 logger.info("Offer latest news.")
                 response = f"Sorry, I could not find some specific news. {OFFER_BREAKING_NEWS}"
                 confidence = NOT_SPECIFIC_NEWS_OFFER_CONFIDENCE
