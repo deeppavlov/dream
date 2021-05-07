@@ -1,0 +1,22 @@
+{
+    "open_question_opinion": [
+        "You wanna  know my opinion on SUBJECT.",
+        "So, you asked for my opinion on SUBJECT.",
+        "You wanna hear my view on SUBJECT."
+    ],
+    "open_question_factual": [
+        "You've asked me SUBJECT.",
+        "So, you wanna know SUBJECT.",
+        "You wanna hear SUBJECT."
+    ],
+    "open_question_personal": [
+        "You've asked me SUBJECT.",
+        "So, you wanna know SUBJECT.",
+        "You wanna hear SUBJECT."
+    ],
+    "yes_no_question": [
+        "You've asked me SUBJECT.",
+        "So, you wanna know SUBJECT.",
+        "You wanna hear SUBJECT."
+    ]
+}

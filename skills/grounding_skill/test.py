@@ -22,6 +22,9 @@ def main_test():
     # check acknowledgement
     new_input_data = deepcopy(input_data)
     new_input_data["dialogs"][0]["human_utterances"][-1]["text"] = "what do you think about horses"
+    new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["sentseg"] = {
+        "segments": [new_input_data["dialogs"][0]["human_utterances"][-1]["text"]]
+    }
     new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["cobot_entities"] = {
         "entities": ["horses"],
         "labelled_entities": [{"text": "horses", "label": "misc"}]
@@ -33,6 +36,13 @@ def main_test():
 
     new_input_data = deepcopy(input_data)
     new_input_data["dialogs"][0]["human_utterances"][-1]["text"] = "what are the horses"
+    new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["sentseg"] = {
+        "segments": [new_input_data["dialogs"][0]["human_utterances"][-1]["text"]]
+    }
+    new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["cobot_entities"] = {
+        "entities": ["horses"],
+        "labelled_entities": [{"text": "horses", "label": "misc"}]
+    }
     new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["midas_classification"] = [{
         "open_question_factual": 1.0}]
     response = requests.post(url, json=new_input_data)
@@ -40,6 +50,13 @@ def main_test():
 
     new_input_data = deepcopy(input_data)
     new_input_data["dialogs"][0]["human_utterances"][-1]["text"] = "what is your horses name"
+    new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["sentseg"] = {
+        "segments": [new_input_data["dialogs"][0]["human_utterances"][-1]["text"]]
+    }
+    new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["cobot_entities"] = {
+        "entities": ["horses name"],
+        "labelled_entities": [{"text": "horses", "label": "misc"}]
+    }
     new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["midas_classification"] = [{
         "open_question_personal": 1.0}]
     response = requests.post(url, json=new_input_data)
@@ -47,6 +64,13 @@ def main_test():
 
     new_input_data = deepcopy(input_data)
     new_input_data["dialogs"][0]["human_utterances"][-1]["text"] = "do you know about horses"
+    new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["sentseg"] = {
+        "segments": [new_input_data["dialogs"][0]["human_utterances"][-1]["text"]]
+    }
+    new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["cobot_entities"] = {
+        "entities": ["horses"],
+        "labelled_entities": [{"text": "horses", "label": "misc"}]
+    }
     new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["midas_classification"] = [{
         "yes_no_question": 1.0}]
     response = requests.post(url, json=new_input_data)
