@@ -229,17 +229,10 @@ def main_test():
         "Hi there, this is an Alexa Prize Socialbot! Lovely to meet you! What do you want to talk about?",
         "Hi there, this is an Alexa Prize Socialbot! Nice to meet you! What do you want to talk about?",
         # Hi
-        "Good Evening, this is an Alexa Prize Socialbot!",
-        "Good Morning, this is an Alexa Prize Socialbot!",
-        "Hi, this is an Alexa Prize Socialbot!",
-        "Good Evening, this is an Alexa Prize Socialbot!",
-        "Hi, this is an Alexa Prize Socialbot!",
-        # Hi is extended by oscar
-        "Hi, this is an Alexa Prize Socialbot! The Oscars are coming soon, I look forward to it.",
-        "Hi, this is an Alexa Prize Socialbot! The Oscars ceremony is set for this coming Sunday!"
-        " I think it's very exciting!",
-        "Hi, this is an Alexa Prize Socialbot!"" Oscars are coming:"
-        " '1917', Joaquin Phoenix, Renee Zellweger and other names expected to win big at the night!",
+        "Hi there! How are you?",
+        "Hi there! How are things?",
+        "Hi there! How are you doing today?",
+        "Hi there! How is the day going so far for you?",
         # lets about youself
         "I have heard that humans are different to socialbots, so I want to find out more about them. "
         "To help me to do that, please tell me about yourself.",
