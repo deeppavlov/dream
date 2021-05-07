@@ -56,6 +56,7 @@ files=(
   kbqa/wikidata/wikidata_cache.json
   alexaprize_data/database_most_popular_main_info.json
   datasets/wikipedia/enwiki_latest.db
+  alexaprize_data/logreg_recommendation_model.pkl
   datasets/wikipedia/enwiki_latest_hyperlinks.db
 )
 

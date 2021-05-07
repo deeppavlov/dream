@@ -296,6 +296,10 @@ services:
     image: ${DOCKER_REGISTRY}/dff-wiki-skill:${VERSION}
     env_file:
       - ${ENV_FILE}
+  topic-recommendation:
+    image: ${DOCKER_REGISTRY}/topic-recommendation:${VERSION}
+    env_file:
+      - ${ENV_FILE}
 volumes:
   external-logs:
   external-deeppavlov:

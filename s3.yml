@@ -59,4 +59,8 @@ services:
     build:
       args:
         SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
+  topic-recommendation:
+    build:
+      args:
+        DATA_URL: http://team-dream-storage.s3.amazonaws.com/alexaprize_data/logreg_recommendation_model.pkl
 version: "3.7"

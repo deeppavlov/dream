@@ -433,6 +433,20 @@
                     "annotators.cobot_nounphrases"
                 ],
                 "state_manager_method": "add_annotation"
+            },
+            "topic_recommendation": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://topic-recommendation:8113/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:topic_recommendation_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.cobot_entities"
+                ],
+                "state_manager_method": "add_annotation"
             }
         },
         "skill_selectors": {
