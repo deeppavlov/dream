@@ -417,7 +417,7 @@ def utt_sentrewrite_modified_last_dialog(dialog: Dict):
 
 
 def utt_sentrewrite_modified_last_dialog_emotion_skill(dialog: Dict):
-    dialog = utils.get_last_n_turns(dialog, bot_last_turns=25)
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=2)
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="modified_sents")
     return [{"dialogs": [dialog]}]
