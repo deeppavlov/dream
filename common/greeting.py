@@ -2,6 +2,13 @@ import re
 
 HI_THIS_IS_ALEXA = "Hi, this is an Alexa Prize Socialbot!"
 
+WHAT_DO_YOU_DO_RESPONSES = [
+    "What do you do on weekdays?",
+    "What do you do on weekends?"
+]
+
+FALSE_POSITIVE_TURN_ON_RE = re.compile(r"talk like .*|how .* can you talk|can (we|i) talk to yoda", re.IGNORECASE)
+
 HOW_ARE_YOU_RESPONSES = [
     "How are you?",
     "How are things?",
