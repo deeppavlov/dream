@@ -28,9 +28,9 @@ def get_last_n_turns(
     bot_last_turns = bot_last_turns or LAST_N_TURNS
     human_last_turns = human_last_turns or bot_last_turns + 1
     total_last_turns = total_last_turns or bot_last_turns * 2 + 1
-    utterance_texts = [utterance['text'] for utterance in dialog['utterances'][-total_last_turns:]]
+    utterance_texts = [utterance["text"] for utterance in dialog["utterances"][-total_last_turns:]]
     for utterance_text in utterance_texts:
-        if '#repeat' in utterance_text:  # Not to lose history on each repeat
+        if "#repeat" in utterance_text:  # Not to lose history on each repeat
             human_last_turns += 1
             bot_last_turns += 1
             total_last_turns += 2
@@ -130,10 +130,10 @@ def replace_with_annotated_utterances(dialog, mode="punct_sent"):
 
 
 def clean_up_utterances_to_avoid_unwanted_keys(
-        dialog,
-        wanted_keys=["text", "annotations", "active_skill"],
-        types_utterances=["human_utterances", "bot_utterances", "utterances"],
-        used_annotations=None
+    dialog,
+    wanted_keys=["text", "annotations", "active_skill"],
+    types_utterances=["human_utterances", "bot_utterances", "utterances"],
+    used_annotations=None,
 ):
     # Attention! It removes all other keys from the dialog
     new_dialog = {}
@@ -209,14 +209,16 @@ def count_ongoing_skill_utterances(bot_utterances: List[Dict], skill: str) -> in
     return i
 
 
-def dff_formatter(dialog: Dict, service_name: str, bot_last_turns=1, human_last_turns=1,
-                  used_annotations=None) -> List[Dict]:
+def dff_formatter(
+    dialog: Dict, service_name: str, bot_last_turns=1, human_last_turns=1, used_annotations=None
+) -> List[Dict]:
     # DialoFlow Framework formatter
     state_name = f"{service_name}_state"
     human_utter_index = len(dialog["human_utterances"]) - 1
 
     human_attributes = dialog.get("human", {}).get("attributes", {})
     state = human_attributes.get(state_name, {})
+    dff_shared_state = human_attributes.get("dff_shared_state", {"cross_states": {}, "cross_links": {}})
     used_links = human_attributes.get("used_links", {})
     disliked_skills = human_attributes.get("disliked_skills", {})
     entities = human_attributes.get("entities", {})
@@ -255,6 +257,7 @@ def dff_formatter(dialog: Dict, service_name: str, bot_last_turns=1, human_last_
             "human_utter_index_batch": [human_utter_index],
             "dialog_batch": [new_dialog],
             f"{state_name}_batch": [state],
+            f"dff_shared_state_batch": [dff_shared_state],
             "entities_batch": [entities],
             "used_links_batch": [used_links],
             "disliked_skills_batch": [disliked_skills],

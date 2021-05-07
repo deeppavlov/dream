@@ -13,8 +13,10 @@
                 "history": {
                     "0": "State.SYS_WHAT_FAV_FOOD"
                 },
+                "current_turn_dff_suspended": false,
                 "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_WHAT_FAV_FOOD\", \"__stack__\": [], \"__user_utterance__\": \"lets talk about food\", \"__system_state__\": \"State.SYS_WHAT_FAV_FOOD\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"I like to eat lava cake. What is your favorite food?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"FOOD\\\"<__tuple__>\\\"State.USR_WHAT_FAV_FOOD\\\"\"}"
             },
+            "dff_shared_state": {},
             "used_links": {},
             "disliked_skills": []
         },

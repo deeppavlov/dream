@@ -21,6 +21,7 @@ def load_into_dialogflow(
     human_utter_index,
     dialog,
     state,
+    dff_shared_state,
     entities,
     used_links,
     disliked_skills,
@@ -30,8 +31,9 @@ def load_into_dialogflow(
     dialogflow.reset()
     dialogflow_state = state.get("dialogflow_state")
     previous_human_utter_index = state.get("previous_human_utter_index", -1)
+    current_turn_dff_suspended = state.get("current_turn_dff_suspended", False)
     interrupted_flag = (human_utter_index - previous_human_utter_index) != 1 and not clarification_request_flag
-    if dialogflow_state and not interrupted_flag:
+    if dialogflow_state and (not interrupted_flag or current_turn_dff_suspended):
         dialogflow.deserialize(dialogflow_state)
     agent = {
         "previous_human_utter_index": previous_human_utter_index,
@@ -39,7 +41,10 @@ def load_into_dialogflow(
         "dialog": dialog,
         "entities": entities,
         "shared_memory": state.get("shared_memory", {}),
+        "previous_turn_dff_suspended": current_turn_dff_suspended,
+        "current_turn_dff_suspended": False,
         "response": {},
+        "dff_shared_state": dff_shared_state,
         "cache": {},
         "history": state.get("history", {}),
         "used_links": used_links,
@@ -52,19 +57,22 @@ def load_into_dialogflow(
 def get_dialog_state(dialogflow):
     agent = dialogflow.controller().vars()["agent"]
     human_utter_index = agent["human_utter_index"]
+    dff_shared_state = agent["dff_shared_state"]
     history = agent["history"]
     used_links = agent["used_links"]
     disliked_skills = agent["disliked_skills"]
+    current_turn_dff_suspended = agent["current_turn_dff_suspended"]
     history[str(human_utter_index)] = dialogflow.controller().vars()["__system_state__"]
     state = {
         "shared_memory": agent["shared_memory"],
         "previous_human_utter_index": human_utter_index,
         "history": history,
+        "current_turn_dff_suspended": current_turn_dff_suspended,
     }
     del dialogflow.controller().vars()["agent"]
     state["dialogflow_state"] = dialogflow.serialize()
     logger.debug(f"state={state}")
-    return state, used_links, disliked_skills
+    return state, dff_shared_state, used_links, disliked_skills
 
 
 def run_turn(dialogflow, text):

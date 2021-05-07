@@ -183,3 +183,19 @@ def compose_linkto_with_connection_phrase(skills, human_attributes, recent_activ
             "SUBJECT", LIST_OF_SCRIPTED_TOPICS.get(linkto_dict["skill"], "it"))
         result = f"{choice(BY_THE_WAY)} {connection} {change_topic} {linkto_dict['phrase']}"
     return {'phrase': result, 'skill': linkto_dict["skill"], "connection_phrase": connection}
+
+
+def get_linked_to_dff_skills(dff_shared_state, current_turn, prev_active_skill):
+    """Collect the skill names to turn on (actually this should be the only skill because active skill is the only)
+        which were linked to from one dff-skill to another one.
+
+    Returns:
+        list of skill names to turn on
+    """
+    to_skills = []
+    for to_skill in dff_shared_state.get("cross_links", {}).keys():
+        if dff_shared_state.get("cross_links", {})[to_skill].get(current_turn - 1, {}).get(
+                "from_service", "") == prev_active_skill:
+            to_skills.append(to_skill)
+
+    return to_skills
