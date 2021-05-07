@@ -356,19 +356,32 @@ class BookSkillScenario:
                     logger.debug(f"Last phrase is WHAT_IS_FAV_GENRE for {annotated_user_phrase['text']}")
                     book = self.get_genre_book(annotated_user_phrase)
                     if book is None or is_no(annotated_user_phrase):
-                        bookname, bookyear = get_name(annotated_user_phrase, mode='book', bookyear=True)
-                        if bookname is None:
-                            logger.debug('No bookname detected: returning movie reply 2')
-                            reply, confidence = get_movie_answer(annotated_user_phrase, human_attr), self.default_conf
-                        else:
+                        book_name, _ = get_name(annotated_user_phrase, mode='book', bookyear=True)
+                        movie_name, _ = get_name(annotated_user_phrase, mode='movie')
+                        author_name, _ = get_name(annotated_user_phrase, mode='author')
+                        if book_name:
                             logger.debug('Bookname in genre request detected: '
                                          'returning AMAZING_READ_BOOK & WHEN_IT_WAS_PUBLISHED')
                             reply = f"{AMAZING_READ_BOOK} {WHEN_IT_WAS_PUBLISHED}"
-                            if len(bookname.split()) > 2 and bookname.lower() in annotated_user_phrase["text"].lower():
+                            name_in_reply = book_name.lower() in annotated_user_phrase["text"].lower()
+                            if len(book_name.split()) > 2 and name_in_reply:
                                 # if book title is long enough and is in user reply, set super conf
                                 confidence = self.super_conf
                             else:
                                 confidence = self.default_conf
+                        elif movie_name:
+                            logger.debug('No bookname detected: returning movie reply 2')
+                            reply, confidence = get_movie_answer(annotated_user_phrase, human_attr), self.default_conf
+                        elif author_name:
+                            logger.debug('Authorname in genre request found')
+                            book = parse_author_best_book(annotated_user_phrase)
+                            if book and not just_mentioned(annotated_user_phrase, book):
+                                logger.debug('Found_BEST_BOOK')
+                                reply = IF_REMEMBER_LAST_BOOK.replace("BOOK", book)
+                                confidence = self.default_conf
+                        else:
+                            logger.debug(f'Returning genre phrase for {book}')
+                            reply, confidence = HAVE_YOU_READ_BOOK.replace("BOOK", book), self.default_conf
                     else:
                         # default conf as no check for user uttr (not super conf)
                         logger.debug(f'Returning genre phrase for {book}')
