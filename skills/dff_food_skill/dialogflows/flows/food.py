@@ -51,7 +51,8 @@ FOOD_WORDS_RE = re.compile(FOOD_WORDS, re.IGNORECASE)
 WHAT_COOK_RE = re.compile(WHAT_COOK, re.IGNORECASE)
 DONOTKNOW_LIKE_RE = re.compile(join_words_in_or_pattern(DONOTKNOW_LIKE), re.IGNORECASE)
 NO_WORDS_RE = re.compile(r"(\bnot\b|n't|\bno\b) ", re.IGNORECASE)
-FAV_RE = re.compile("favou?rite|like", re.IGNORECASE)
+FAV_RE = re.compile(r"favou?rite|like", re.IGNORECASE)
+LIKE_RE = re.compile(r"i (like|love|adore)", re.IGNORECASE)
 
 MEALS = [
     "lazagna",
@@ -413,7 +414,10 @@ def what_fav_food_response(vars):
 
         state_utils.save_to_shared_memory(vars, used_food=used_food + [food_type])
         fav_item = food_types.get(food_type, "peanut butter")
-        return f"I like to eat {fav_item}. What is your favorite {food_type}?"
+        if food_type != "drink":
+            return f"I like to eat {fav_item}. What is your favorite {food_type}?"
+        else:
+            return f"I like to drink {fav_item}. What is your favorite {food_type}?"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -443,7 +447,6 @@ def food_fact_response(vars):
         "I like it too.", "I'm not fond of it.", "It's awesome.",
         "Fantastic.", "Loving it.", "Yummy!"
     ]
-    cool_words = ["cool", "tasty", "delicious"]
     human_utt = state_utils.get_last_human_utterance(vars)
     annotations = human_utt["annotations"]
     human_utt_text = human_utt["text"].lower()
@@ -471,11 +474,17 @@ def food_fact_response(vars):
         state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
         if re.search(DONOTKNOW_LIKE_RE, human_utt_text):
             state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
-            return "I have never heard about it. Could you tell me more about that please."
-        elif not fact:
+            state_utils.set_confidence(vars, confidence=0.)
+            return error_response(vars)
+        # "I have never heard about it. Could you tell me more about that please."
+        elif (not fact) and check_conceptnet(vars):
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
             endings = ["Do you recommend", "Why do you like it"]
-            return f"Sounds {random.choice(cool_words)}. I haven't heard about it. {random.choice(endings)}?"
+            return f"I haven't heard about it. {random.choice(endings)}?"
+        elif not fact:
+            state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+            state_utils.set_confidence(vars, confidence=0.)
+            return error_response(vars)
         else:
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
             return f"{random.choice(acknowledgements)} {intro}{fact}"
@@ -589,7 +598,8 @@ def what_fav_food_request(ngrams, vars):
     ) and any(
         [
             is_yes(state_utils.get_last_human_utterance(vars)),
-            not is_no(state_utils.get_last_human_utterance(vars))
+            not is_no(state_utils.get_last_human_utterance(vars)),
+            re.search(LIKE_RE, state_utils.get_last_human_utterance(vars)["text"].lower())
         ]
     )
     food_1st_time = condition_utils.is_first_time_of_state(vars, State.SYS_WHAT_FAV_FOOD)

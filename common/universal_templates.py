@@ -83,7 +83,7 @@ WANT_LIKE = ["want to", "wanna", "wish to", "need to", "desire to", r"(would |'d
 TO_ME_LIKE = [r"to me( now)?", r"with me( now)?", r"me( now)?", "now"]
 SOMETHING_LIKE = ["anything", "something", "that", "everything"]
 NOTHING_LIKE = ["nothing", "none", "neither"]
-DONOTKNOW_LIKE = [r"(i )?(do not|don't) know", "you (choose|decide|pick up)", "hard (to say|one)"]
+DONOTKNOW_LIKE = [r"(i )?(do not|don't) know", "you (choose|decide|pick up)", "hard (to say|one)", "none"]
 KNOW_LIKE = ["know", "learn", "find out"]
 
 # talk to me, talk with me, talk, talk with me now, talk now.
