@@ -71,7 +71,7 @@ spec:
             - sh
             - -c
             - |-
-              curl -X POST -s -H 'content-type: application/json' -d '{ "sentences_batch": [["hello"]], "user_ids": [[1212121]] }' http://localhost:{{ PORT }}/api/rest/v1.0/ask -o /dev/null -w '%{http_code}
+              curl -X POST -s -H 'content-type: application/json' -d ' {"dialogs": [{"utterances": [{"text": "hi", "user": {"user_type": "human"}}, {"text": "do you have a boyfriend", "user": {"user_type": "human"}}], "bot_utterances": [{"text": "hi", "user": {"user_type": "human"}}, {"text": "do you have a boyfriend", "user": {"user_type": "human"}}], "human_utterances": [{"text": "hi", "user": {"user_type": "human"}}, {"text": "do you have a boyfriend", "user": {"user_type": "human"}}]}]}' http://localhost:{{ PORT }}/api/rest/v1.0/ask -o /dev/null -w '%{http_code}
               ' | grep -c 200
           initialDelaySeconds: 60
           periodSeconds: 10

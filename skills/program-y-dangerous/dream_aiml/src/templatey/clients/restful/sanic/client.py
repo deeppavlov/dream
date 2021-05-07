@@ -36,6 +36,7 @@ from os import getenv
 import sentry_sdk
 import uuid
 from sentry_sdk.integrations.logging import ignore_logger
+from state_formatters.utils import programy_post_formatter_dialog
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -71,7 +72,10 @@ class SanicRestBotClient(RestBotClient):
             if response is not None:
                 return response, status
             responses = []
-            for user_sentences in request.json['sentences_batch']:
+            for dialog in request.json["dialogs"]:
+
+                user_sentences = programy_post_formatter_dialog(dialog).get("sentences_batch")
+                user_sentences = user_sentences[0] if user_sentences else [""]
                 userid = uuid.uuid4().hex
                 for s in user_sentences:
                     answer = self.ask_question(userid, s)
@@ -86,7 +90,8 @@ class SanicRestBotClient(RestBotClient):
             return responses, 200
         except Exception as excep:
             sentry_sdk.capture_exception(excep)
-            return self.format_error_response(userid, question, str(excep)), 500
+            print(excep)
+            return self.format_error_response(uuid.uuid4().hex, question, str(excep)), 500
 
     def run(self, sanic):
 

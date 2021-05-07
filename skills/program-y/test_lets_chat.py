@@ -4,6 +4,8 @@ import difflib
 
 import requests
 
+import test
+
 
 def main_test():
     url = "http://0.0.0.0:8008/api/rest/v1.0/ask"
@@ -269,7 +271,7 @@ def main_test():
     errors = []
     for key, sents in sentences.items():
         for sent in sents:
-            data = {"sentences_batch": [[sent]]}
+            data = test.to_dialogs([sent])
             response = requests.post(url, json=data).json()[0][0]
             if not [
                 None
@@ -279,6 +281,7 @@ def main_test():
                 print(f"---\nT: {key}\nQ: {sent}\nA: {response}")
                 errors.append(key)
     assert not errors, f"Catched errors\n{pprint.pformat(collections.Counter(errors).most_common())}"
+    print("Success")
 
 
 if __name__ == "__main__":

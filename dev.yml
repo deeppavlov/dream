@@ -46,7 +46,8 @@ services:
     volumes:
       - "./skills/program-y:/src"
       - "./skills/program-y/logs:/tmp"
-      - "./common:/src/common"
+      - "./common:/src/dream_aiml/src/common"
+      - "./state_formatters:/src/dream_aiml/src/state_formatters"
     ports:
       - 8008:8008
   personality-catcher:
@@ -100,7 +101,8 @@ services:
     volumes:
       - "./skills/program-y-dangerous:/src"
       - "./skills/program-y-dangerous/logs:/tmp"
-      - "./common:/src/common"
+      - "./common:/src/dream_aiml/src/common"
+      - "./state_formatters:/src/dream_aiml/src/state_formatters"
     ports:
       - 8022:8022
   movie-skill:
@@ -227,6 +229,8 @@ services:
     volumes:
       - "./skills/program-y-wide:/src"
       - "./skills/program-y-wide/logs:/tmp"
+      - "./common:/src/dream_aiml/src/common"
+      - "./state_formatters:/src/dream_aiml/src/state_formatters"
     ports:
       - 8064:8064
   news-api-skill:

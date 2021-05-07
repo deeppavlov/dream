@@ -2,11 +2,16 @@ import difflib
 import requests
 
 
+def to_dialogs(sentences):
+    utters = [{"text": sent, "user": {"user_type": "human"}} for sent in ["hi"] + sentences]
+    return {"dialogs": [{"utterances": utters, "bot_utterances": utters, "human_utterances": utters}]}
+
+
 def main_test():
     url = "http://0.0.0.0:8008/api/rest/v1.0/ask"
 
     sent = "do you have a boyfriend"
-    data = {"sentences_batch": [[sent]]}
+    data = to_dialogs([sent])
     response = requests.post(url, json=data).json()[0][0]
     assert "I'm happily single. But if you know any nice guys, let me know!" in response, print(sent, ".", response)
 
@@ -14,7 +19,7 @@ def main_test():
     sentences = ["let's chat about"]
     possible_responses = ["I misheard you. WHAT'S it that you'd like to chat about?"]
     for sent in sentences:
-        data = {"sentences_batch": [[sent]]}
+        data = to_dialogs([sent])
         response = requests.post(url, json=data).json()[0][0]
         possible_responses = [res.lower().strip() for res in possible_responses]
         response = response.lower().strip()
@@ -50,7 +55,7 @@ def main_test():
         "Hi there, this is an Alexa Prize Socialbot! Nice to meet you! What do you want to talk about?",
     ]
     for sent in sentences:
-        data = {"sentences_batch": [[sent]]}
+        data = to_dialogs([sent])
         response = requests.post(url, json=data).json()[0][0]
         possible_responses = [res.lower().strip() for res in possible_responses]
         response = response.lower().strip()
@@ -96,7 +101,7 @@ def main_test():
         "Let's chat about something you want. What do you want to talk about?",
     ]
     for sent in sentences:
-        data = {"sentences_batch": [[sent]]}
+        data = to_dialogs([sent])
         response = requests.post(url, json=data).json()[0][0]
         possible_responses = [res.lower().strip() for res in possible_responses]
         response = response.lower().strip()
@@ -154,7 +159,7 @@ def main_test():
 
     sentences = ["can you sing", "can you sing me a song"]
     for sent in sentences:
-        data = {"sentences_batch": [[sent]]}
+        data = to_dialogs([sent])
         response = requests.post(url, json=data).json()[0][0]
         assert "Daisy, Daisy" in response, print(f"User: {sent}. Response: {response}")
 
@@ -167,7 +172,7 @@ def main_test():
         "tell me about yourself",
     ]
     for sent in sentences:
-        data = {"sentences_batch": [[sent]]}
+        data = to_dialogs([sent])
         response = requests.post(url, json=data).json()[0][0].lower().strip()
         assert any(
             [
@@ -187,7 +192,7 @@ def main_test():
 
     sentences = ["can i ask you a question", "i have a question for you", "i have a question"]
     for sent in sentences:
-        data = {"sentences_batch": [[sent]]}
+        data = to_dialogs([sent])
         response = requests.post(url, json=data).json()[0][0].lower().strip()
         assert "You can ask me anything".lower().strip() in response, print(f"User: {sent}. Response: {response}")
 
@@ -205,17 +210,19 @@ def main_test():
         "do you use netflix?",
     ]
     for sent in sentences:
-        data = {"sentences_batch": [[sent]]}
+        data = to_dialogs([sent])
         response = requests.post(url, json=data).json()[0][0].lower().strip()
         assert response in possible_responses, print(f"User: {sent}. Response: {response}")
 
     sentences = ["play sade geronemo", "alexa play set your nemo", "alexa set a timer to morning"]
 
     for sent in sentences:
-        data = {"sentences_batch": [[sent]]}
+        data = to_dialogs([sent])
         response = requests.post(url, json=data).json()[0][0]
         assert "stop" in response.lower().strip() or "social mode" in response.lower().strip(), print(
-            f"User: {sent}. Response: {response}")
+            f"User: {sent}. Response: {response}"
+        )
+    print("Success")
 
 
 if __name__ == "__main__":
