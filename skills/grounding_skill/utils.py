@@ -1,3 +1,4 @@
+import json
 import random
 import re
 
@@ -65,27 +66,11 @@ def get_entity_name(annotations):
     return entity_name
 
 
-MIDAS_INTENT_ACKNOWLEDGMENTS = {
-    "open_question_opinion": ["You wanna  know my opinion on SUBJECT.",
-                              "So, you asked for my opinion on SUBJECT.",
-                              "You wanna hear my view on SUBJECT.",
-                              ],
-    "open_question_factual": ["You've asked me SUBJECT.",
-                              "So, you wanna know SUBJECT.",
-                              "You wanna hear SUBJECT."
-                              ],
-    "open_question_personal": ["You've asked me SUBJECT.",
-                               "So, you wanna know SUBJECT.",
-                               "You wanna hear SUBJECT."
-                               ],
-    "yes_no_question": ["You've asked me SUBJECT.",
-                        "So, you wanna know SUBJECT.",
-                        "You wanna hear SUBJECT."
-                        ],
-}
+with open("midas_acknowledgements.json", "r") as f:
+    MIDAS_INTENT_ACKNOWLEDGMENTS = json.load(f)
 
 MIDAS_INTENT_ANALOGUES = {
-    "open_question_opinion": ["open_question_opinion", "Opinion_RequestIntent", "opinion_request"],
+    "open_question_opinion": ["open_question_opinion", "Opinion_RequestIntent"],
     "open_question_factual": ["open_question_factual", "Information_RequestIntent"],
     "open_question_personal": ["open_question_personal"],
     "yes_no_question": ["yes_no_question"]

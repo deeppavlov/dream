@@ -139,8 +139,10 @@ def generate_acknowledgement(dialog):
     attr = {}
     human_attr = {}
     bot_attr = {}
+    curr_human_entities = get_entities(dialog['human_utterances'][-1], only_named=False, with_labels=False)
 
-    if curr_considered_intents:
+    # we generate acknowledgement ONLY if we have some entities!
+    if curr_considered_intents and len(curr_human_entities):
         # can generate acknowledgement
         is_need_nounphrase_intent = any([intent in curr_intents for intent in ["open_question_opinion"]])
         if is_need_nounphrase_intent:
@@ -149,8 +151,10 @@ def generate_acknowledgement(dialog):
             if curr_nounphrase:
                 ackn_response = get_midas_intent_acknowledgement(curr_considered_intents[-1], curr_nounphrase)
         else:
-            curr_reformulated_question = reformulate_question_to_statement(
-                dialog['human_utterances'][-1]["text"])
+            # to reformulate question, we take only the last human sentence
+            last_human_sent = dialog['human_utterances'][-1].get("annotations", {}).get("sentseg", {}).get(
+                "segments", [dialog['human_utterances'][-1]["text"]])[-1]
+            curr_reformulated_question = reformulate_question_to_statement(last_human_sent)
             ackn_response = get_midas_intent_acknowledgement(curr_considered_intents[-1],
                                                              curr_reformulated_question)
         attr = {"response_parts": ["acknowledgement"]}
@@ -199,7 +203,7 @@ def generate_universal_response(dialog):
     if is_question and is_sensitive_situation(dialog):
         # if question in sensitive situation - answer with confidence 0.99
         confidence = ALMOST_SUPER_CONF
-    if ackn and reply:
+    if ackn:
         reply = f"{ackn} {reply}"
         attr["response_parts"] = ["acknowlegdement", "body"]
     return reply, confidence, human_attr, bot_attr, attr
