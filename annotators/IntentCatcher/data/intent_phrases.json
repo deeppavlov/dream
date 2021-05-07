@@ -180,6 +180,9 @@
         "padon me",
         "(sorry, ){0,1}i didn't catch that"
       ],
+      "reg_phrases": [
+       "^one second*[?.!]?$"
+      ],
       "min_precision": 0.94,
       "punctuation": [
         "?",
