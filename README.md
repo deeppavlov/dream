@@ -15,7 +15,7 @@ You can find distributions in the /assistant_dists subdirectory of the repositor
 
 # Quick Demo
 1. Clone repository
-2. Switch to its directory: `cd assistant-base`
+2. Switch to its directory: `cd deepy`
 3. Build and run it: `docker-compose up --build`
 
 DeepPavlov's Agent API will run on `http://localhost:4242'. You can learn about its API from the [DeepPavlov Agent Docs](https://deeppavlov-agent.readthedocs.io/en/latest/)
