@@ -12,12 +12,11 @@ from deeppavlov import build_model
 import common.constants as common_constants
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
-from common.dialogflow_framework.utils.condition import was_active_in_prev_state
 from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, COMPILE_LETS_TALK
 from common.utils import is_no, is_yes
 from common.wiki_skill import used_types_dict
 from common.wiki_skill import choose_title, find_all_titles, find_paragraph, find_all_paragraphs, delete_hyperlinks
-from common.wiki_skill import find_entity_wp, find_entity_nounphr, if_user_dont_know_topic
+from common.wiki_skill import find_entity_wp, find_entity_nounphr, if_user_dont_know_topic, if_switch_wiki_skill
 from common.wiki_skill import QUESTION_TEMPLATES
 
 import dialogflows.scopes as scopes
@@ -64,6 +63,20 @@ CONF_5 = 0.0
 found_pages_dict = {}
 
 
+def if_was_prev_active(vars):
+    flag = True
+    annotations = state_utils.get_last_human_utterance(vars)["annotations"]
+    wp_output = annotations.get("wiki_parser", {})
+    skill_uttr_indices = set(vars["agent"]["history"].keys())
+    if wp_output and "utt_num" in wp_output:
+        utt_num = str(wp_output["utt_num"] - 2)
+        logger.info(f"if_was_prev_active, utt_num {utt_num} history {skill_uttr_indices}")
+        if utt_num not in skill_uttr_indices:
+            flag = False
+    logger.info(f"was_prev_active {flag}")
+    return flag
+
+
 def another_topic_question(vars, all_titles):
     flag = True
     shared_memory = state_utils.get_shared_memory(vars)
@@ -85,9 +98,9 @@ def another_topic_question(vars, all_titles):
 def find_entity(vars, where_to_find="current"):
     if where_to_find == "current":
         annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-        found_entity_substr, found_entity_id, found_entity_types = find_entity_wp(annotations)
+        found_entity_substr, found_entity_id, found_entity_types, _ = find_entity_wp(annotations)
         if not found_entity_substr:
-            found_entity_substr = find_entity_nounphr(annotations)
+            found_entity_substr, _ = find_entity_nounphr(annotations)
     else:
         all_user_uttr = vars["agent"]["dialog"]["human_utterances"]
         utt_num = len(all_user_uttr)
@@ -97,9 +110,9 @@ def find_entity(vars, where_to_find="current"):
         if utt_num > 1:
             for i in range(utt_num - 2, 0, -1):
                 annotations = all_user_uttr[i]["annotations"]
-                found_entity_substr, found_entity_id, found_entity_types = find_entity_wp(annotations)
+                found_entity_substr, found_entity_id, found_entity_types, _ = find_entity_wp(annotations)
                 if not found_entity_substr:
-                    found_entity_substr = find_entity_nounphr(annotations)
+                    found_entity_substr, _ = find_entity_nounphr(annotations)
                 if found_entity_substr:
                     break
     logger.info(f"find_entity, substr {found_entity_substr} types {found_entity_types}")
@@ -147,13 +160,15 @@ def get_page_info(vars, function_type, where_to_find="current"):
     used_titles = shared_memory.get("used_titles", [])
     found_entity_types_list = shared_memory.get("found_entity_types", [])
     isno = is_no(state_utils.get_last_human_utterance(vars))
-    was_prev_active = was_active_in_prev_state(vars)
+    started = shared_memory.get("start", False)
+    was_prev_active = if_was_prev_active(vars)
+    logger.info(f"started {started}")
     if function_type == "response" and isno and curr_pages and found_entity_substr_list and found_entity_types_list:
-        logger.info(f"deleting, function_type {function_type} isno {isno} was_prev_active {was_prev_active}")
+        logger.info(f"deleting, function_type {function_type} isno {isno}")
         curr_pages.pop()
         found_entity_substr_list.pop()
         found_entity_types_list.pop()
-    if not was_prev_active:
+    if not started or not was_prev_active:
         curr_pages = []
         found_entity_substr_list = []
         found_entity_types_list = []
@@ -318,8 +333,8 @@ def more_details_request(ngrams, vars):
     isyes = is_yes(state_utils.get_last_human_utterance(vars))
     nounphrases = annotations.get("cobot_nounphrases", [])
     inters = set(nounphrases).intersection(set(mentions_list))
-    was_prev_active = was_active_in_prev_state(vars)
-    if ((user_more_details and inters) or (bot_more_details and isyes)) and was_prev_active:
+    started = shared_memory.get("start", False)
+    if ((user_more_details and inters) or (bot_more_details and isyes)) and started:
         flag = True
     logger.info(f"more_details_request={flag}")
     return flag
@@ -327,6 +342,7 @@ def more_details_request(ngrams, vars):
 
 def factoid_q_request(ngrams, vars):
     flag = False
+    shared_memory = state_utils.get_shared_memory(vars)
     user_uttr = state_utils.get_last_human_utterance(vars)
     bot_uttr = state_utils.get_last_bot_utterance(vars)
     user_more_details = re.findall(COMPILE_LETS_TALK, user_uttr["text"])
@@ -344,8 +360,8 @@ def factoid_q_request(ngrams, vars):
     found_nounphr = any([nounphrase in bot_text for nounphrase in nounphrases])
     logger.info(f"factoid_q_request, is_factoid {is_factoid} user_more_details {user_more_details} "
                 f"nounphrases {nounphrases} bot_text {bot_text}")
-    was_prev_active = was_active_in_prev_state(vars)
-    if is_factoid and not user_more_details and found_nounphr and was_prev_active:
+    started = shared_memory.get("start", False)
+    if is_factoid and not user_more_details and found_nounphr and started:
         flag = True
     logger.info(f"factoid_q_request={flag}")
     return flag
@@ -397,6 +413,7 @@ def start_talk_response(vars):
             found_entity_types_list.append([])
     save_wiki_vars(vars, found_entity_substr_list, curr_pages, "", "", [], found_entity_types_list, new_page)
     if response:
+        state_utils.save_to_shared_memory(vars, start=True)
         state_utils.set_confidence(vars, confidence=CONF_4)
         state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_PROMPT)
     else:
@@ -444,7 +461,7 @@ def more_details_response(vars):
     save_wiki_vars(vars, found_entity_substr_list, curr_pages, chosen_title, chosen_page_title, used_titles, [[]],
                    new_page)
     if response:
-        state_utils.set_confidence(vars, confidence=CONF_1)
+        state_utils.set_confidence(vars, confidence=CONF_2)
         state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     else:
         state_utils.set_confidence(vars, confidence=CONF_5)
@@ -520,6 +537,8 @@ def factoid_q_response(vars):
 
 def tell_fact_response(vars):
     shared_memory = state_utils.get_shared_memory(vars)
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
     found_entity_substr_list, prev_title, prev_page_title, found_entity_types_list, used_titles, curr_pages, \
         page_content_list, main_pages_list, new_page = get_page_info(vars, "response")
     logger.info(f"tell_fact_response, found_entity_substr {found_entity_substr_list} prev_title {prev_title} "
@@ -561,9 +580,13 @@ def tell_fact_response(vars):
     if not started:
         state_utils.save_to_shared_memory(vars, start=True)
         state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_PROMPT)
+    _, decrease_conf = if_switch_wiki_skill(user_uttr, bot_uttr)
     if response:
-        state_utils.set_confidence(vars, confidence=CONF_1)
-        state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+        if not started and decrease_conf:
+            state_utils.set_confidence(vars, confidence=CONF_4)
+        else:
+            state_utils.set_confidence(vars, confidence=CONF_2)
+            state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
         state_utils.save_to_shared_memory(vars, start=True)
     else:
         state_utils.set_confidence(vars, confidence=CONF_5)

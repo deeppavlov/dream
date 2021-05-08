@@ -20,10 +20,11 @@ def respond():
     inp = request.json
     parser_info = inp.get("parser_info", ["find_triplets"])
     query = inp.get("query", [("Q0", "P0", "forw")])
+    utt_num = inp.get("utt_num", 0)
     res = [[] for _ in query]
     logger.debug('Calling wp')
     try:
-        res = wp_call(parser_info, query)
+        res = wp_call(parser_info, query, utt_num)
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)

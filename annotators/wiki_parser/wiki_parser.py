@@ -468,7 +468,7 @@ def extract_info():
     return art_genres_dict, people_genres_dict
 
 
-def find_top_triplets(entity, entity_substr):
+def find_top_triplets(entity, entity_substr, pos=None):
     triplets_info = {}
     if entity.startswith("Q"):
         triplets = {}
@@ -588,6 +588,8 @@ def find_top_triplets(entity, entity_substr):
         types_2hop = find_types_2hop(entity)
         types_2hop_with_labels = find_objects_info(types_2hop)
         triplets["types_2hop"] = types_2hop_with_labels
+        if pos is not None:
+            triplets["pos"] = pos
         triplets_info[entity_substr] = triplets
     return triplets_info
 
@@ -643,7 +645,7 @@ else:
 manager = mp.Manager()
 
 
-def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], wiki_parser_output):
+def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], utt_num: int, wiki_parser_output):
     for parser_info, query in zip(parser_info_list, queries_list):
         if parser_info == "find_rels":
             rels = []
@@ -668,7 +670,7 @@ def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], w
                             triplets_info = {**triplets_info, **entity_triplets_info}
                         found_topic_skills_info = False
                         found_wiki_skill_info = False
-                        for entity in entity_ids:
+                        for n, entity in enumerate(entity_ids):
                             types = find_types(entity)
                             types_2hop = find_types_2hop(entity)
                             if not found_topic_skills_info and (set(types).intersection(topic_skill_types)
@@ -678,7 +680,7 @@ def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], w
                                 found_topic_skills_info = True
                             if not found_wiki_skill_info and (set(types).intersection(wiki_skill_used_types)
                                                               or set(types_2hop).intersection(wiki_skill_used_types)):
-                                entity_triplets_info = find_top_triplets(entity, entity_substr)
+                                entity_triplets_info = find_top_triplets(entity, entity_substr, n)
                                 wiki_skill_triplets_info = {**wiki_skill_triplets_info, **entity_triplets_info}
                                 found_wiki_skill_info = True
                             if found_topic_skills_info and found_wiki_skill_info:
@@ -689,7 +691,8 @@ def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], w
                 log.exception(e)
             wiki_parser_output.append({"entities_info": triplets_info,
                                        "topic_skill_entities_info": topic_skills_triplets_info,
-                                       "wiki_skill_entities_info": wiki_skill_triplets_info})
+                                       "wiki_skill_entities_info": wiki_skill_triplets_info,
+                                       "utt_num": utt_num})
         elif parser_info == "find_top_triplets_for_topic_skills":
             triplets_info = {}
             for entities_list in query:
@@ -799,9 +802,9 @@ def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], w
             raise ValueError(f"Unsupported query type {parser_info}")
 
 
-def wp_call(parser_info_list: List[str], queries_list: List[Any]) -> List[Any]:
+def wp_call(parser_info_list: List[str], queries_list: List[Any], utt_num: int) -> List[Any]:
     wiki_parser_output = manager.list()
-    p = mp.Process(target=execute_queries_list, args=(parser_info_list, queries_list, wiki_parser_output))
+    p = mp.Process(target=execute_queries_list, args=(parser_info_list, queries_list, utt_num, wiki_parser_output))
     p.start()
     p.join()
     return list(wiki_parser_output)

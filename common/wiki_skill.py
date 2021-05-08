@@ -2,6 +2,7 @@ import itertools
 import random
 import re
 from common.universal_templates import COMPILE_WHAT_TO_TALK_ABOUT
+from common.animals import ANIMALS_FIND_TEMPLATE
 
 used_types_dict = [{"types": ["Q11253473"  # smart device
                               ],
@@ -189,6 +190,7 @@ def find_entity_wp(annotations):
     found_entity_substr = ""
     found_entity_id = ""
     found_entity_types = []
+    decrease_conf = False
     wp_output = annotations.get("wiki_parser", {})
     if isinstance(wp_output, dict):
         entities_info = wp_output.get("entities_info", {})
@@ -200,10 +202,13 @@ def find_entity_wp(annotations):
             inters = set(type_ids).intersection(used_types)
             in_not_used_types = set(type_ids).intersection(prohibited_types)
             in_not_used_topics = entity in prohibited_topics
-            if inters and not in_not_used_types and not in_not_used_topics:
+            if inters and not in_not_used_topics:
                 found_entity_substr = entity
                 found_entity_id = entity_id
                 found_entity_types = inters
+                found_animal = re.findall(ANIMALS_FIND_TEMPLATE, entity)
+                if in_not_used_types or found_animal:
+                    decrease_conf = True
                 break
         wiki_skill_entities_info = wp_output.get("wiki_skill_entities_info", {})
         if wiki_skill_entities_info:
@@ -214,20 +219,28 @@ def find_entity_wp(annotations):
                         triplets.get("subclass of", []) + triplets.get("occupation", []) + \
                         triplets.get("types_2hop", [])
                     type_ids = [elem for elem, label in types]
+                    pos = triplets["pos"]
+                    if pos > 0:
+                        decrease_conf = True
                     found_entity_substr = entity
                     found_entity_id = entity_id
                     found_entity_types = type_ids
-    return found_entity_substr, found_entity_id, found_entity_types
+                    break
+    return found_entity_substr, found_entity_id, found_entity_types, decrease_conf
 
 
 def find_entity_nounphr(annotations):
     found_entity_substr = ""
+    decrease_conf = False
     nounphrases = annotations.get("cobot_nounphrases", [])
     found = False
     for nounphr in nounphrases:
         in_not_used_substr = nounphr in prohibited_topics
         if nounphr in used_substr and not in_not_used_substr:
             found_entity_substr = nounphr
+            found_animal = re.findall(ANIMALS_FIND_TEMPLATE, found_entity_substr)
+            if found_animal:
+                decrease_conf = True
             break
         for used_entity_substr in used_substr:
             if re.findall(rf"\b{nounphr}\b", used_entity_substr, re.IGNORECASE) \
@@ -238,7 +251,7 @@ def find_entity_nounphr(annotations):
         if found:
             break
 
-    return found_entity_substr
+    return found_entity_substr, decrease_conf
 
 
 def if_user_dont_know_topic(user_uttr, bot_uttr):
@@ -254,14 +267,15 @@ def if_user_dont_know_topic(user_uttr, bot_uttr):
 def if_switch_wiki_skill(user_uttr, bot_uttr):
     flag = False
     user_uttr_annotations = user_uttr["annotations"]
-    found_entity_substr, found_entity_id, found_entity_types = find_entity_wp(user_uttr_annotations)
-    found_entity_substr = find_entity_nounphr(user_uttr_annotations)
+    found_entity_substr, found_entity_id, found_entity_types, decrease_conf_wp = find_entity_wp(user_uttr_annotations)
+    found_entity_substr, decrease_conf_nounphr = find_entity_nounphr(user_uttr_annotations)
     user_dont_know = if_user_dont_know_topic(user_uttr, bot_uttr)
     asked_name = "what is your name" in bot_uttr.get("text", "").lower()
     asked_news = "news" in user_uttr["text"]
     if (found_entity_id or found_entity_substr or user_dont_know) and not asked_name and not asked_news:
         flag = True
-    return flag
+    decrease_conf = decrease_conf_wp or decrease_conf_nounphr
+    return flag, decrease_conf
 
 
 def if_find_entity_in_history(dialog):
@@ -271,8 +285,8 @@ def if_find_entity_in_history(dialog):
     if utt_num > 1:
         for i in range(utt_num - 2, 0, -1):
             annotations = all_user_uttr[i]["annotations"]
-            found_entity_substr, found_entity_id, found_entity_types = find_entity_wp(annotations)
-            found_entity_substr = find_entity_nounphr(annotations)
+            found_entity_substr, found_entity_id, found_entity_types, _ = find_entity_wp(annotations)
+            found_entity_substr, _ = find_entity_nounphr(annotations)
             if found_entity_id or found_entity_substr:
                 flag = True
                 break
@@ -286,7 +300,7 @@ def choose_title(vars, all_titles, titles_we_use, prev_title, used_titles):
         for _ in range(len(all_titles)):
             found = False
             rand_title = random.choice(titles_we_use)
-            if rand_title not in used_titles:
+            if rand_title.lower() not in used_titles:
                 for title in all_titles:
                     if rand_title.lower() == title.lower() and rand_title != prev_title:
                         found_title = rand_title
@@ -306,7 +320,7 @@ def choose_title(vars, all_titles, titles_we_use, prev_title, used_titles):
         titles_we_use = set(all_titles).difference({"first_par"})
         if len(titles_we_use) > len(used_titles):
             for title in titles_we_use:
-                if title not in used_titles:
+                if title.lower() not in used_titles:
                     found_title = title.lower()
                     found_page_title = title
     return found_title, found_page_title

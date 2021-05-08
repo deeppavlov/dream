@@ -18,7 +18,7 @@ def main():
                                                                               ['Q1622272', 'university teacher'],
                                                                               ['Q82594', 'computer scientist']],
                                                                'plain_entity': 'Q92735'}},
-                      'topic_skill_entities_info': {}}]]
+                      'topic_skill_entities_info': {}, "utt_num": 0}]]
 
     count = 0
     for data, gold_result in zip(request_data, gold_results):
