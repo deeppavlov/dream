@@ -128,7 +128,8 @@ class RuleBasedSkillSelectorConnector:
 
                 if low_priority_intent_detected:
                     skills_for_uttr.append("intent_responder")
-                if if_switch_wiki_skill(user_uttr, bot_uttr):
+                switch_wiki_skill, _ = if_switch_wiki_skill(user_uttr, bot_uttr)
+                if switch_wiki_skill:
                     skills_for_uttr.append("dff_wiki_skill")
                 skills_for_uttr.append("grounding_skill")
                 skills_for_uttr.append("program_y")

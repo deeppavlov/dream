@@ -83,7 +83,8 @@ def like_animals_request(ngrams, vars):
         flag = True
     user_has = re.findall("i (have|had)", user_uttr)
     ask_more = "more about" in bot_uttr
-    if (if_lets_chat(user_uttr) and not lets_talk_about_request(vars)) or user_has:
+    find_animal = re.findall(ANIMALS_FIND_TEMPLATE, user_uttr)
+    if (if_lets_chat(user_uttr) and not find_animal) or user_has:
         flag = False
     if ask_more and isno:
         flag = False

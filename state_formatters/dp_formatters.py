@@ -478,6 +478,7 @@ def ner_formatter_last_bot_dialog(dialog: Dict):
 def wp_formatter_dialog(dialog: Dict):
     # Used by: wiki_parser annotator
     entity_info_list = dialog["human_utterances"][-1]["annotations"].get("entity_linking", [{}])
+    utt_index = len(dialog["human_utterances"])
     input_entity_info_list = []
     if entity_info_list:
         for entity_info in entity_info_list:
@@ -488,7 +489,7 @@ def wp_formatter_dialog(dialog: Dict):
     parser_info = ["find_top_triplets"]
     if not input_entity_info_list:
         input_entity_info_list = [{}]
-    return [{"parser_info": parser_info, "query": [input_entity_info_list]}]
+    return [{"parser_info": parser_info, "query": [input_entity_info_list], "utt_num": utt_index}]
 
 
 def el_formatter_dialog(dialog: Dict):
