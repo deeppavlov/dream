@@ -213,8 +213,8 @@ def hello_response(vars):
         which_start = random.choice([
             # "starter_weekday",
             # "starter_genre",
-            "what_do_you_do",
-            # "how_are_you",
+            # "what_do_you_do",
+            "how_are_you",
             # "what_is_your_name",
             # "what_to_talk_about"
         ])
