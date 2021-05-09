@@ -60,6 +60,7 @@ used_types_dict = [{"types": ["Q11253473"  # smart device
                                "culture": "Would you like to know about {} in popular culture?"}},
                    {"entity_substr": ["minecraft"],
                     "types": ["Q7889"],  # video game
+                    "wikihow_info": {"Build-a-Wooden-House-in-Minecraft": ""},
                     "titles": {"game modes": "", "multiplayer": "", "customization": "", "awards": "",
                                "films": "Would you like to know about films based on {}?",
                                "virtual reality": "Would you like to know how {} can be played using virtual reality?",
@@ -159,9 +160,10 @@ used_types_dict = [{"types": ["Q11253473"  # smart device
 
 used_types = set(itertools.chain.from_iterable([elem.get("types", []) for elem in used_types_dict]))
 used_substr = set(itertools.chain.from_iterable([elem.get("entity_substr", []) for elem in used_types_dict]))
+blacklist_words = {"yup", "true", "false"}
 
-prohibited_topics = {"music", "films", "movies", "sport", "travel", "food", "animals", "pets", "coronavirus",
-                     "corona virus"}
+prohibited_topics = {"music", "films", "movies", "sport", "travel", "food", "animals", "pet", "pets", "coronavirus",
+                     "corona virus", "gossip", "gossips"}
 prohibited_types = {"Q571",  # book
                     "Q277759",  # book series
                     "Q8261",  # novel
@@ -185,12 +187,23 @@ QUESTION_TEMPLATES = ["Would you like to know about {} of {}?",
                       "Do you want to hear about {} of {}?"
                       ]
 
+CONF_DICT = {"UNDEFINED": 0.0, "USER_QUESTION_IN_BEGIN": 0.8, "ENTITY_IN_HISTORY": 0.9, "WIKI_TYPE_DOUBT": 0.9,
+             "OTHER_DFF_SKILLS": 0.9, "WIKI_TYPE": 0.94, "IN_SCENARIO": 0.95, "WIKI_TOPIC": 0.99}
+WIKI_BLACKLIST = re.compile(r"(margin|\bfont\b|wikimedia|wikitable)", re.IGNORECASE)
+
 
 def find_entity_wp(annotations):
+    conf_type = "UNDEFINED"
     found_entity_substr = ""
     found_entity_id = ""
     found_entity_types = []
-    decrease_conf = False
+    nounphr_label_dict = {}
+    nounphrases = annotations.get("cobot_entities", {}).get("labelled_entities", [])
+    for nounphr in nounphrases:
+        nounphr_text = nounphr.get("text", "")
+        nounphr_label = nounphr.get("label", "")
+        if nounphr_text and nounphr_label:
+            nounphr_label_dict[nounphr_text] = nounphr_label
     wp_output = annotations.get("wiki_parser", {})
     if isinstance(wp_output, dict):
         entities_info = wp_output.get("entities_info", {})
@@ -201,57 +214,66 @@ def find_entity_wp(annotations):
             type_ids = [elem for elem, label in types]
             inters = set(type_ids).intersection(used_types)
             in_not_used_types = set(type_ids).intersection(prohibited_types)
-            in_not_used_topics = entity in prohibited_topics
-            if inters and not in_not_used_topics:
+            in_not_used_topics = entity in prohibited_topics or entity in blacklist_words
+            if inters and not in_not_used_topics and nounphr_label_dict.get(entity, "") != "number":
                 found_entity_substr = entity
                 found_entity_id = entity_id
                 found_entity_types = inters
                 found_animal = re.findall(ANIMALS_FIND_TEMPLATE, entity)
+                conf_type = "WIKI_TYPE"
                 if in_not_used_types or found_animal:
-                    decrease_conf = True
+                    conf_type = "OTHER_DFF_SKILLS"
                 break
         wiki_skill_entities_info = wp_output.get("wiki_skill_entities_info", {})
         if wiki_skill_entities_info:
             for entity, triplets in wiki_skill_entities_info.items():
-                if entity not in prohibited_topics:
+                if entity not in prohibited_topics and nounphr_label_dict.get(entity, "") != "number":
                     entity_id = triplets.get("plain_entity", "")
                     types = triplets.get("types", []) + triplets.get("instance of", []) + \
                         triplets.get("subclass of", []) + triplets.get("occupation", []) + \
                         triplets.get("types_2hop", [])
                     type_ids = [elem for elem, label in types]
+                    conf_type = "WIKI_TYPE"
                     pos = triplets["pos"]
                     if pos > 0:
-                        decrease_conf = True
+                        conf_type = "WIKI_TYPE_DOUBT"
                     found_entity_substr = entity
                     found_entity_id = entity_id
                     found_entity_types = type_ids
                     break
-    return found_entity_substr, found_entity_id, found_entity_types, decrease_conf
+    return found_entity_substr, found_entity_id, found_entity_types, conf_type
 
 
 def find_entity_nounphr(annotations):
     found_entity_substr = ""
-    decrease_conf = False
-    nounphrases = annotations.get("cobot_nounphrases", [])
+    conf_type = "UNDEFINED"
+    nounphrases = annotations.get("cobot_entities", {}).get("labelled_entities", [])
     found = False
     for nounphr in nounphrases:
-        in_not_used_substr = nounphr in prohibited_topics
-        if nounphr in used_substr and not in_not_used_substr:
-            found_entity_substr = nounphr
+        nounphr_text = nounphr.get("text", "")
+        nounphr_label = nounphr.get("label", "")
+        in_not_used_substr = nounphr_text in prohibited_topics or nounphr_text in blacklist_words
+        if nounphr_text in used_substr and not in_not_used_substr and nounphr_label != "number":
+            found_entity_substr = nounphr_text
+            conf_type = "WIKI_TOPIC"
             found_animal = re.findall(ANIMALS_FIND_TEMPLATE, found_entity_substr)
+            found = True
             if found_animal:
-                decrease_conf = True
+                conf_type = "OTHER_DFF_SKILLS"
             break
-        for used_entity_substr in used_substr:
-            if re.findall(rf"\b{nounphr}\b", used_entity_substr, re.IGNORECASE) \
-                    or re.findall(rf"\b{used_entity_substr}\b", nounphr, re.IGNORECASE) and not in_not_used_substr:
-                found_entity_substr = used_entity_substr
-                found = True
-                break
+        if not found_entity_substr:
+            for used_entity_substr in used_substr:
+                if re.findall(rf"\b{nounphr_text}\b", used_entity_substr, re.IGNORECASE) \
+                        or re.findall(rf"\b{used_entity_substr}\b", nounphr_text, re.IGNORECASE) \
+                        and not in_not_used_substr:
+                    found_entity_substr = used_entity_substr
+                    conf_type = "WIKI_TOPIC"
+                    found = True
+                    break
         if found:
             break
 
-    return found_entity_substr, decrease_conf
+    return found_entity_substr, conf_type
 
 
 def if_user_dont_know_topic(user_uttr, bot_uttr):
@@ -267,15 +289,22 @@ def if_user_dont_know_topic(user_uttr, bot_uttr):
 def if_switch_wiki_skill(user_uttr, bot_uttr):
     flag = False
     user_uttr_annotations = user_uttr["annotations"]
-    found_entity_substr, found_entity_id, found_entity_types, decrease_conf_wp = find_entity_wp(user_uttr_annotations)
-    found_entity_substr, decrease_conf_nounphr = find_entity_nounphr(user_uttr_annotations)
+    found_entity_substr, found_entity_id, found_entity_types, conf_type_wp = find_entity_wp(user_uttr_annotations)
+    found_entity_substr, conf_type_nounphr = find_entity_nounphr(user_uttr_annotations)
     user_dont_know = if_user_dont_know_topic(user_uttr, bot_uttr)
     asked_name = "what is your name" in bot_uttr.get("text", "").lower()
     asked_news = "news" in user_uttr["text"]
     if (found_entity_id or found_entity_substr or user_dont_know) and not asked_name and not asked_news:
         flag = True
-    decrease_conf = decrease_conf_wp or decrease_conf_nounphr
-    return flag, decrease_conf
+    cobot_topics = user_uttr_annotations.get("cobot_topics", {}).get("text", [])
+    decrease_conf_topic = "UNDEFINED"
+    if "Food_Drink" in cobot_topics:
+        decrease_conf_topic = "OTHER_DFF_SKILLS"
+    all_confs = [(conf_type, CONF_DICT[conf_type]) for conf_type in [conf_type_wp, conf_type_nounphr,
+                                                                     decrease_conf_topic]]
+    all_confs = sorted(all_confs, key=lambda x: x[1], reverse=True)
+    wiki_skill_conf_type = all_confs[0][0]
+    return flag, wiki_skill_conf_type
 
 
 def if_find_entity_in_history(dialog):
@@ -388,6 +417,6 @@ def delete_hyperlinks(par):
             mentions.append(entity_split[1])
             pages.append(entity_split[0].capitalize())
             par = par.replace(replace_str, entity_split[1])
-    par = re.sub("(<ref>|</ref>)", "", par)
+    par = re.sub("(<ref>|</ref>|ref name|ref)", "", par)
     par = par.replace("  ", " ")
     return par, mentions, pages

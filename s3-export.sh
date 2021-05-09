@@ -58,6 +58,7 @@ files=(
   datasets/wikipedia/enwiki_latest.db
   alexaprize_data/logreg_recommendation_model.pkl
   datasets/wikipedia/enwiki_latest_hyperlinks.db
+  kbqa/wikidata/wikihow.pickle
 )
 
 for file in ${files[@]}; do

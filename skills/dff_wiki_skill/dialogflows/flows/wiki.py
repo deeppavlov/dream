@@ -1,5 +1,6 @@
 import logging
 import os
+import pickle
 import random
 import re
 import requests
@@ -12,12 +13,14 @@ from deeppavlov import build_model
 import common.constants as common_constants
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
-from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, COMPILE_LETS_TALK
+from common.dialogflow_framework.utils.condition import if_was_prev_active
+from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, COMPILE_LETS_TALK, \
+    is_any_question_sentence_in_utterance
 from common.utils import is_no, is_yes
 from common.wiki_skill import used_types_dict
 from common.wiki_skill import choose_title, find_all_titles, find_paragraph, find_all_paragraphs, delete_hyperlinks
 from common.wiki_skill import find_entity_wp, find_entity_nounphr, if_user_dont_know_topic, if_switch_wiki_skill
-from common.wiki_skill import QUESTION_TEMPLATES
+from common.wiki_skill import QUESTION_TEMPLATES, WIKI_BLACKLIST, CONF_DICT
 
 import dialogflows.scopes as scopes
 from dialogflows.flows.wiki_states import State as WikiState
@@ -35,6 +38,15 @@ text_qa_url = os.getenv("TEXT_QA_URL")
 ANSWER_CONF_THRES = 0.95
 
 page_extractor = build_model(config_name, download=True)
+
+wikihow = {}
+
+try:
+    fl = open("/root/.deeppavlov/downloads/wikidata/wikihow.pickle", 'rb')
+    wikihow = pickle.load(fl)
+except Exception as e:
+    sentry_sdk.capture_exception(e)
+    logger.exception(e)
 
 titles_by_type = {}
 for elem in used_types_dict:
@@ -54,27 +66,24 @@ for elem in used_types_dict:
         if page_title:
             page_titles_by_entity_substr[substr] = page_title
 
-CONF_1 = 1.0
-CONF_2 = 0.98
-CONF_3 = 0.95
-CONF_4 = 0.9
-CONF_5 = 0.0
+questions_by_entity_substr = {}
+for elem in used_types_dict:
+    entity_substrings = elem.get("entity_substr", [])
+    question = elem.get("intro_question", "")
+    if question:
+        for substr in entity_substrings:
+            questions_by_entity_substr[substr] = question
+
+wikihowq_by_substr = {}
+for elem in used_types_dict:
+    entity_substrings = elem.get("entity_substr", [])
+    wikihow_info = elem.get("wikihow_info", {})
+    if wikihow_info:
+        for substr in entity_substrings:
+            wikihowq_by_substr[substr] = wikihow_info
+
 
 found_pages_dict = {}
-
-
-def if_was_prev_active(vars):
-    flag = True
-    annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-    wp_output = annotations.get("wiki_parser", {})
-    skill_uttr_indices = set(vars["agent"]["history"].keys())
-    if wp_output and "utt_num" in wp_output:
-        utt_num = str(wp_output["utt_num"] - 2)
-        logger.info(f"if_was_prev_active, utt_num {utt_num} history {skill_uttr_indices}")
-        if utt_num not in skill_uttr_indices:
-            flag = False
-    logger.info(f"was_prev_active {flag}")
-    return flag
 
 
 def another_topic_question(vars, all_titles):
@@ -92,6 +101,23 @@ def another_topic_question(vars, all_titles):
                 or any([nounphr in title.lower() for title in all_titles]):
             flag = False
     logger.info(f"another topic question {another_topic_question}")
+    return flag
+
+
+def if_wants_more(vars, all_titles):
+    flag = False
+    isyes = is_yes(state_utils.get_last_human_utterance(vars))
+    isno = is_no(state_utils.get_last_human_utterance(vars))
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    further = re.findall(r"(more|further|continue|follow)", user_uttr["text"], re.IGNORECASE)
+    another_topic = another_topic_question(vars, all_titles)
+    if isyes or (further and not isno):
+        flag = True
+    if another_topic and not isyes:
+        flag = False
+    if isno:
+        flag = False
+    logger.info(f"wants_more={flag}")
     return flag
 
 
@@ -159,19 +185,23 @@ def get_page_info(vars, function_type, where_to_find="current"):
     prev_page_title = shared_memory.get("prev_page_title", "")
     used_titles = shared_memory.get("used_titles", [])
     found_entity_types_list = shared_memory.get("found_entity_types", [])
-    isno = is_no(state_utils.get_last_human_utterance(vars))
     started = shared_memory.get("start", False)
     was_prev_active = if_was_prev_active(vars)
     logger.info(f"started {started}")
-    if function_type == "response" and isno and curr_pages and found_entity_substr_list and found_entity_types_list:
-        logger.info(f"deleting, function_type {function_type} isno {isno}")
-        curr_pages.pop()
-        found_entity_substr_list.pop()
-        found_entity_types_list.pop()
+    if function_type == "response" and curr_pages and found_entity_substr_list and found_entity_types_list:
+        page_content, _ = get_page_content(curr_pages[-1])
+        all_titles = find_all_titles([], page_content)
+        wants_more = if_wants_more(vars, all_titles)
+        logger.info(f"deleting, function_type {function_type} wants_more {wants_more}")
+        if not wants_more:
+            curr_pages.pop()
+            found_entity_substr_list.pop()
+            found_entity_types_list.pop()
     if not started or not was_prev_active:
         curr_pages = []
         found_entity_substr_list = []
         found_entity_types_list = []
+        state_utils.save_to_shared_memory(vars, start=False)
     new_page = shared_memory.get("new_page", False)
     page_content_list = []
     main_pages_list = []
@@ -236,7 +266,7 @@ def make_facts_str(paragraphs):
     for sentence in sentences:
         sanitized_sentence, mentions, mention_pages = delete_hyperlinks(sentence)
         words = nltk.word_tokenize(sanitized_sentence)
-        if cur_len + len(words) < max_len:
+        if cur_len + len(words) < max_len and not re.findall(WIKI_BLACKLIST, sanitized_sentence):
             sentences_list.append(sanitized_sentence)
             cur_len += len(words)
             mentions_list += mentions
@@ -252,7 +282,7 @@ def make_facts_str(paragraphs):
         mention_pages_list += mention_pages
         for part in sentence_parts:
             words = nltk.word_tokenize(part)
-            if cur_len + len(words) < max_len:
+            if cur_len + len(words) < max_len and not re.findall(WIKI_BLACKLIST, part):
                 sentences_list.append(part)
                 cur_len += len(words)
             facts_str = ", ".join(sentences_list)
@@ -270,11 +300,13 @@ def make_question(chosen_title, titles_q, found_entity_substr, used_titles):
             question_template = QUESTION_TEMPLATES[0]
         else:
             question_template = random.choice(QUESTION_TEMPLATES)
-        if found_entity_substr in chosen_title.lower() and question_template.endswith("of {}?"):
+        if (found_entity_substr in chosen_title.lower() and question_template.endswith("of {}?")) \
+                or " of " in chosen_title.lower():
             question_template = question_template.split(" of {}?")[0] + "?"
             question = question_template.format(chosen_title)
         else:
             question = question_template.format(chosen_title, found_entity_substr)
+    question = question.replace(" of of ", " of ")
     return question
 
 
@@ -302,6 +334,58 @@ def save_wiki_vars(vars, found_entity_substr_list, curr_pages, prev_title, prev_
     state_utils.save_to_shared_memory(vars, used_titles=used_titles)
     state_utils.save_to_shared_memory(vars, found_entity_types=list(found_entity_types_list))
     state_utils.save_to_shared_memory(vars, new_page=new_page)
+
+
+def intro_question_request(ngrams, vars):
+    flag = False
+    shared_memory = state_utils.get_shared_memory(vars)
+    curr_pages = shared_memory.get("curr_pages", [])
+    if not curr_pages:
+        found_entity_substr, _, found_entity_types = find_entity(vars, "current")
+        if found_entity_substr and found_entity_substr in questions_by_entity_substr:
+            flag = True
+    logger.info(f"intro_question_request={flag}")
+    return flag
+
+
+def wikihow_question_request(ngrams, vars):
+    flag = False
+    shared_memory = state_utils.get_shared_memory(vars)
+    curr_pages = shared_memory.get("curr_pages", [])
+    if not curr_pages:
+        found_entity_substr, _, found_entity_types = find_entity(vars, "current")
+        if found_entity_substr and found_entity_substr in wikihowq_by_substr:
+            flag = True
+    logger.info(f"wikihow_question_request={flag}")
+    return flag
+
+
+def wikihow_step_request(ngrams, vars):
+    flag = False
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    isyes = is_yes(state_utils.get_last_human_utterance(vars))
+    shared_memory = state_utils.get_shared_memory(vars)
+    wikihow_article = shared_memory.get("wikihow_article", "")
+    prev_wikihow_title = shared_memory.get("prev_wikihow_title", "")
+    used_wikihow_titles = set(shared_memory.get("used_wikihow_titles", []))
+    logger.info(f"wikihow_step_request, prev_wikihow_title {prev_wikihow_title} used_wikihow_titles "
+                f"{used_wikihow_titles} article in base {wikihow_article in wikihow}")
+    found_title = ""
+    if wikihow_article:
+        article_content = wikihow.get(wikihow_article, {})
+        if article_content:
+            all_page_titles = article_content.keys()
+            for title in all_page_titles:
+                if title not in used_wikihow_titles:
+                    found_title = title
+                    break
+    further = re.findall(r"(more|further|continue|follow)", user_uttr["text"], re.IGNORECASE)
+    if found_title or prev_wikihow_title:
+        flag = True
+    if prev_wikihow_title and not (isyes or further):
+        flag = False
+    logger.info(f"wikihow_step_request={flag}")
+    return flag
 
 
 def start_talk_request(ngrams, vars):
@@ -374,21 +458,118 @@ def tell_fact_request(ngrams, vars):
         main_pages_list, page = get_page_info(vars, "request")
     logger.info(f"request, found_entity_substr {found_entity_substr_list} prev_title {prev_title} "
                 f"found_entity_types {found_entity_types_list} used_titles {used_titles}")
+    shared_memory = state_utils.get_shared_memory(vars)
+    isno = is_no(state_utils.get_last_human_utterance(vars))
+    started = shared_memory.get("start", False)
     if found_entity_substr_list and found_entity_types_list and page_content_list:
         chosen_title, chosen_page_title = get_title_info(
             found_entity_substr_list[-1], found_entity_types_list[-1], prev_title, used_titles, page_content_list[-1]
         )
         _, _, all_titles = get_titles(found_entity_substr_list[-1], found_entity_types_list[-1], page_content_list[-1])
         logger.info(f"request, chosen_title {chosen_title} chosen_page_title {chosen_page_title}")
-        isno = is_no(state_utils.get_last_human_utterance(vars))
+        wants_more = if_wants_more(vars, all_titles)
         not_want = re.findall(COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, user_uttr["text"])
 
-        if (chosen_title or prev_title) and ((not isno and not not_want) or len(found_entity_substr_list) > 1):
+        if (chosen_title or prev_title) and ((wants_more and not not_want) or not started
+                                             or len(found_entity_substr_list) > 1):
             flag = True
-        if user_uttr["text"].endswith("?") and another_topic_question(vars, all_titles):
+        if (user_uttr["text"].endswith("?") and another_topic_question(vars, all_titles)) or isno:
             flag = False
     logger.info(f"tell_fact_request={flag}")
     return flag
+
+
+def intro_question_response(vars):
+    response = ""
+    shared_memory = state_utils.get_shared_memory(vars)
+    curr_pages = shared_memory.get("curr_pages", [])
+    if not curr_pages:
+        found_entity_substr, _, found_entity_types = find_entity(vars, "current")
+        if found_entity_substr and found_entity_substr in questions_by_entity_substr:
+            response = questions_by_entity_substr[found_entity_substr]
+    if response:
+        state_utils.save_to_shared_memory(vars, start=True)
+        state_utils.set_confidence(vars, confidence=CONF_DICT["WIKI_TOPIC"])
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_PROMPT)
+    else:
+        state_utils.set_confidence(vars, confidence=CONF_DICT["UNDEFINED"])
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
+    return response
+
+
+def wikihow_question_response(vars):
+    response = ""
+    shared_memory = state_utils.get_shared_memory(vars)
+    curr_pages = shared_memory.get("curr_pages", [])
+    if not curr_pages:
+        found_entity_substr, _, found_entity_types = find_entity(vars, "current")
+        if found_entity_substr and found_entity_substr in wikihowq_by_substr:
+            wikihow_questions = wikihowq_by_substr[found_entity_substr]
+            wikihow_articles = list(wikihow_questions.keys())
+            chosen_article = random.choice(wikihow_articles)
+            response = wikihow_questions[chosen_article]
+            if not response:
+                response = f"Would you like to know how to {chosen_article.replace('-', ' ').lower()}?"
+            state_utils.save_to_shared_memory(vars, wikihow_article=chosen_article)
+    if response:
+        state_utils.save_to_shared_memory(vars, start=True)
+        state_utils.set_confidence(vars, confidence=CONF_DICT["WIKI_TOPIC"])
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_PROMPT)
+    else:
+        state_utils.set_confidence(vars, confidence=CONF_DICT["UNDEFINED"])
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
+    return response
+
+
+def wikihow_step_response(vars):
+    shared_memory = state_utils.get_shared_memory(vars)
+    wikihow_article = shared_memory.get("wikihow_article", "")
+    prev_wikihow_title = shared_memory.get("prev_wikihow_title", "")
+    used_wikihow_titles = shared_memory.get("used_wikihow_titles", [])
+    found_title = ""
+    facts_str = ""
+    question = ""
+    if wikihow_article:
+        article_content = wikihow.get(wikihow_article, {})
+        if article_content:
+            all_page_titles = article_content.keys()
+            for title in all_page_titles:
+                if title not in used_wikihow_titles:
+                    found_title = title
+                    break
+            if prev_wikihow_title:
+                paragraphs = article_content[prev_wikihow_title]
+                if paragraphs:
+                    paragraph = paragraphs[0]
+                    sentences = nltk.sent_tokenize(paragraph)
+                    sentences_list = []
+                    cur_len = 0
+                    max_len = 50
+                    for sentence in sentences:
+                        words = nltk.word_tokenize(sentence)
+                        if cur_len + len(words) < max_len:
+                            sentences_list.append(sentence)
+                            cur_len += len(words)
+                    if sentences_list:
+                        facts_str = " ".join(sentences_list)
+                    logger.info(f"wikihow_step_response, sentences_list {sentences_list} facts_str {facts_str}")
+            if found_title:
+                question = f"Would you like to know about {found_title.lower()}?"
+    logger.info(f"wikihow_step_response found_title {found_title} prev_wikihow_title {prev_wikihow_title}")
+    response = f"{facts_str} {question}"
+    response = response.strip()
+    if found_title:
+        state_utils.save_to_shared_memory(vars, prev_wikihow_title=found_title)
+        used_wikihow_titles.append(found_title)
+        state_utils.save_to_shared_memory(vars, used_wikihow_titles=used_wikihow_titles)
+    if response:
+        state_utils.set_confidence(vars, confidence=CONF_DICT["IN_SCENARIO"])
+        state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+    else:
+        state_utils.set_confidence(vars, confidence=CONF_DICT["UNDEFINED"])
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
+
+    return response
 
 
 def start_talk_response(vars):
@@ -414,10 +595,10 @@ def start_talk_response(vars):
     save_wiki_vars(vars, found_entity_substr_list, curr_pages, "", "", [], found_entity_types_list, new_page)
     if response:
         state_utils.save_to_shared_memory(vars, start=True)
-        state_utils.set_confidence(vars, confidence=CONF_4)
+        state_utils.set_confidence(vars, confidence=CONF_DICT["ENTITY_IN_HISTORY"])
         state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_PROMPT)
     else:
-        state_utils.set_confidence(vars, confidence=CONF_5)
+        state_utils.set_confidence(vars, confidence=CONF_DICT["UNDEFINED"])
         state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
     return response
 
@@ -461,10 +642,10 @@ def more_details_response(vars):
     save_wiki_vars(vars, found_entity_substr_list, curr_pages, chosen_title, chosen_page_title, used_titles, [[]],
                    new_page)
     if response:
-        state_utils.set_confidence(vars, confidence=CONF_2)
+        state_utils.set_confidence(vars, confidence=CONF_DICT["IN_SCENARIO"])
         state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     else:
-        state_utils.set_confidence(vars, confidence=CONF_5)
+        state_utils.set_confidence(vars, confidence=CONF_DICT["UNDEFINED"])
         state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
     return response
 
@@ -567,7 +748,7 @@ def tell_fact_response(vars):
         save_wiki_vars(vars, [], [], "", "", [], [], False)
 
     question = ""
-    if found_entity_substr_list:
+    if found_entity_substr_list and chosen_title:
         question = make_question(chosen_title, titles_q, found_entity_substr_list[-1], used_titles)
     if new_page:
         if len(page_content_list) == 1:
@@ -577,27 +758,31 @@ def tell_fact_response(vars):
     else:
         response = make_response(vars, prev_page_title, page_content_list[-1], question)
     started = shared_memory.get("start", False)
-    if not started:
-        state_utils.save_to_shared_memory(vars, start=True)
-        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_PROMPT)
-    _, decrease_conf = if_switch_wiki_skill(user_uttr, bot_uttr)
+    has_q = is_any_question_sentence_in_utterance(user_uttr) and not re.findall(r"(let's|let us)", user_uttr["text"])
+    _, conf_type = if_switch_wiki_skill(user_uttr, bot_uttr)
     if response:
-        if not started and decrease_conf:
-            state_utils.set_confidence(vars, confidence=CONF_4)
+        if not started and has_q:
+            state_utils.set_confidence(vars, confidence=CONF_DICT["USER_QUESTION_IN_BEGIN"])
+            state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_PROMPT)
         else:
-            state_utils.set_confidence(vars, confidence=CONF_2)
+            if not started:
+                state_utils.set_confidence(vars, confidence=CONF_DICT[conf_type])
+            else:
+                state_utils.set_confidence(vars, confidence=CONF_DICT["IN_SCENARIO"])
             state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
         state_utils.save_to_shared_memory(vars, start=True)
     else:
-        state_utils.set_confidence(vars, confidence=CONF_5)
-        if started:
-            state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
+        state_utils.set_confidence(vars, confidence=CONF_DICT["UNDEFINED"])
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
     return response
 
 
 def error_response(vars):
     state_utils.save_to_shared_memory(vars, start=False)
     save_wiki_vars(vars, [], [], "", "", [], [], False)
+    state_utils.save_to_shared_memory(vars, wikihow_article="")
+    state_utils.save_to_shared_memory(vars, prev_wikihow_title="")
+    state_utils.save_to_shared_memory(vars, used_wikihow_titles=[])
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
     state_utils.set_confidence(vars, 0)
     return ""
@@ -608,9 +793,32 @@ simplified_dialog_flow = dialogflow_extention.DFEasyFilling(WikiState.USR_START)
 simplified_dialog_flow.add_user_serial_transitions(
     WikiState.USR_START,
     {
+        WikiState.SYS_WIKIHOW_Q: wikihow_question_request,
+        WikiState.SYS_INTRO_Q: intro_question_request,
         WikiState.SYS_FACTOID_Q: factoid_q_request,
         WikiState.SYS_TELL_FACT: tell_fact_request,
         WikiState.SYS_START_TALK: start_talk_request,
+    },
+)
+
+simplified_dialog_flow.add_user_serial_transitions(
+    WikiState.USR_INTRO_Q,
+    {
+        WikiState.SYS_TELL_FACT: tell_fact_request,
+    },
+)
+
+simplified_dialog_flow.add_user_serial_transitions(
+    WikiState.USR_WIKIHOW_Q,
+    {
+        WikiState.SYS_WIKIHOW_STEP: wikihow_step_request,
+    },
+)
+
+simplified_dialog_flow.add_user_serial_transitions(
+    WikiState.USR_WIKIHOW_STEP,
+    {
+        WikiState.SYS_WIKIHOW_STEP: wikihow_step_request,
     },
 )
 
@@ -638,6 +846,11 @@ simplified_dialog_flow.add_user_serial_transitions(
     },
 )
 
+simplified_dialog_flow.add_system_transition(WikiState.SYS_WIKIHOW_Q, WikiState.USR_WIKIHOW_Q,
+                                             wikihow_question_response, )
+simplified_dialog_flow.add_system_transition(WikiState.SYS_WIKIHOW_STEP, WikiState.USR_WIKIHOW_STEP,
+                                             wikihow_step_response, )
+simplified_dialog_flow.add_system_transition(WikiState.SYS_INTRO_Q, WikiState.USR_INTRO_Q, intro_question_response, )
 simplified_dialog_flow.add_system_transition(WikiState.SYS_TELL_FACT, WikiState.USR_TELL_FACT, tell_fact_response, )
 simplified_dialog_flow.add_system_transition(WikiState.SYS_FACTOID_Q, WikiState.USR_FACTOID_Q, factoid_q_response, )
 simplified_dialog_flow.add_system_transition(WikiState.SYS_MORE_DETAILED, WikiState.USR_MORE_DETAILED,
@@ -648,6 +861,12 @@ simplified_dialog_flow.add_system_transition(WikiState.SYS_ERR, (scopes.MAIN, sc
 simplified_dialog_flow.set_error_successor(WikiState.USR_START, WikiState.SYS_ERR)
 simplified_dialog_flow.set_error_successor(WikiState.SYS_TELL_FACT, WikiState.SYS_ERR)
 simplified_dialog_flow.set_error_successor(WikiState.USR_TELL_FACT, WikiState.SYS_ERR)
+simplified_dialog_flow.set_error_successor(WikiState.SYS_INTRO_Q, WikiState.SYS_ERR)
+simplified_dialog_flow.set_error_successor(WikiState.USR_INTRO_Q, WikiState.SYS_ERR)
+simplified_dialog_flow.set_error_successor(WikiState.SYS_WIKIHOW_Q, WikiState.SYS_ERR)
+simplified_dialog_flow.set_error_successor(WikiState.USR_WIKIHOW_Q, WikiState.SYS_ERR)
+simplified_dialog_flow.set_error_successor(WikiState.SYS_WIKIHOW_STEP, WikiState.SYS_ERR)
+simplified_dialog_flow.set_error_successor(WikiState.USR_WIKIHOW_STEP, WikiState.SYS_ERR)
 simplified_dialog_flow.set_error_successor(WikiState.SYS_START_TALK, WikiState.SYS_ERR)
 simplified_dialog_flow.set_error_successor(WikiState.USR_START_TALK, WikiState.SYS_ERR)
 simplified_dialog_flow.set_error_successor(WikiState.SYS_MORE_DETAILED, WikiState.SYS_ERR)
