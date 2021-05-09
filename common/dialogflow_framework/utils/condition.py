@@ -80,17 +80,15 @@ def is_begin_of_dialog(vars, begin_dialog_n=10):
 
 
 def is_interrupted(vars):
-    flag = (
-        state_utils.get_human_utter_index(vars) - state_utils.get_previous_human_utter_index(vars)
-    ) != 1 and not was_clarification_request(vars)
+    flag = (state_utils.get_human_utter_index(vars) - state_utils.get_previous_human_utter_index(vars)
+            ) != 1 and not was_clarification_request(vars)
     logging.debug(f"is_interrupted = {flag}")
     return flag
 
 
 def is_long_interrupted(vars, how_long=3):
-    flag = (
-        state_utils.get_human_utter_index(vars) - state_utils.get_previous_human_utter_index(vars)
-    ) > how_long and not was_clarification_request(vars)
+    flag = (state_utils.get_human_utter_index(vars) - state_utils.get_previous_human_utter_index(vars)
+            ) > how_long and not was_clarification_request(vars)
     logging.debug(f"is_long_interrupted = {flag}")
     return flag
 
@@ -123,6 +121,15 @@ def is_last_state(vars, state):
 def is_first_time_of_state(vars, state):
     flag = state not in list(vars["agent"]["history"].values())
     logging.debug(f"is_first_time_of_state {state} = {flag}")
+    return flag
+
+
+def if_was_prev_active(vars):
+    flag = False
+    skill_uttr_indices = set(vars["agent"]["history"].keys())
+    human_uttr_index = str(vars["agent"]["human_utter_index"] - 1)
+    if human_uttr_index in skill_uttr_indices:
+        flag = True
     return flag
 
 
