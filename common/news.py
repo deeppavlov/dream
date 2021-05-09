@@ -120,7 +120,7 @@ def get_news_about_topic(topic: str, NEWS_API_ANNOTATOR_URL: str, discussed_news
         result = requests.post(NEWS_API_ANNOTATOR_URL, json=dialogs, timeout=1)
         result = result.json()[0]
         for entity_news_dict in result:
-            if entity_news_dict and entity_news_dict["entity"] == topic:
+            if entity_news_dict and str(entity_news_dict["entity"]).lower() == topic.lower():
                 result_news = entity_news_dict["news"]
     except Exception as e:
         sentry_sdk.capture_exception(e)
