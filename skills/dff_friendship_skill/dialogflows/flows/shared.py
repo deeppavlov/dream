@@ -168,7 +168,7 @@ link_to_skill2i_like_to_talk = {
 
 
 def link_to_by_enity_response(vars):
-    ack = random.choice(get_sentiment_acknowledgement(vars))
+    ack = get_sentiment_acknowledgement(vars)
     try:
         entities = state_utils.get_labeled_noun_phrase(vars)
         time_sorted_human_entities = entity_utils.get_time_sorted_human_entities(entities)
