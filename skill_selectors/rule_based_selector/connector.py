@@ -144,7 +144,7 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("knowledge_grounding_skill")
                     skills_for_uttr.append("news_api_skill")
 
-                if len(dialog["utterances"]) > 8:
+                if len(dialog["utterances"]) > 5:
                     skills_for_uttr.append("knowledge_grounding_skill")
                     skills_for_uttr.append("convert_reddit")
                     skills_for_uttr.append("comet_dialog_skill")
