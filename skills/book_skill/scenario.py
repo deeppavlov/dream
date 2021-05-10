@@ -92,7 +92,8 @@ class BookSkillScenario:
         is_genre_in_phrase = any([j in phrase for j in self.bookreads_data.keys()])
         return re.search(suggest_template, annotated_user_phrase['text']) and is_genre_in_phrase
 
-    def get_reply_considering_book_author_genre_info(self, annotated_user_phrase, annotated_prev_phrase):
+    def get_reply_considering_book_author_genre_info(self, annotated_user_phrase,
+                                                     annotated_prev_phrase, used_phrases=[]):
         logger.debug('Getting whether phrase contains name of author, book or genre')
         author_name, _ = get_name(annotated_user_phrase, 'author')
         bookname, n_years_ago = get_name(annotated_user_phrase, 'book', bookyear=True)
@@ -129,7 +130,7 @@ class BookSkillScenario:
                 reply = GENRE_PHRASES[genre_name][0]
             else:
                 reply = GENRE_PHRASES[genre_name][1]
-            if len(genre_name) > 5:
+            if len(genre_name) > 5 and reply not in used_phrases:
                 confidence = self.super_conf
             else:
                 confidence = self.default_conf
@@ -182,7 +183,7 @@ class BookSkillScenario:
                     logger.debug('Detected talk about books. Calling start phrase')
                     if START_PHRASE in human_attr['book_skill']['used_phrases']:
                         reply = get_not_given_question_about_books(human_attr['book_skill']['used_phrases'])
-                        confidence = self.super_conf
+                        confidence = self.default_conf
                     else:
                         reply, confidence = START_PHRASE, self.super_conf
                 elif dontlike(annotated_user_phrase):
@@ -200,7 +201,8 @@ class BookSkillScenario:
                     logger.debug('Detected stop/no/other intent')
                     reply, confidence = self.default_reply, 0
                 elif my_favorite(annotated_user_phrase) == 'genre':
-                    reply, confidence = WHAT_IS_FAV_GENRE, self.default_conf
+                    reply, confidence = self.get_reply_considering_book_author_genre_info(annotated_user_phrase,
+                                                                                          annotated_prev_phrase)
                 elif my_favorite(annotated_user_phrase) == 'book':
                     reply, confidence = f'So {WHAT_BOOK_IMPRESSED_MOST}', self.default_conf
                 elif bible_request(annotated_user_phrase):
@@ -338,7 +340,7 @@ class BookSkillScenario:
                             recency_phrase = 'Just recently!'
                         # answering with default conf as we do not even check the user utterance at all
                         logger.debug('Giving recency phrase')
-                        reply, confidence = f"{recency_phrase} {DID_NOT_EXIST} {get_tutor_phrase()}", self.default_conf
+                        reply, confidence = f"{recency_phrase} {DID_NOT_EXIST} {get_tutor_phrase()}", self.super_conf
                 elif bot_phrases[-1] in OPINION_REQUEST_ON_BOOK_PHRASES:
                     # if we previously asked about user's opinion on book
                     logger.debug('Last phrase was OPINION_REQUEST_ON_BOOK_PHRASES')
@@ -385,7 +387,7 @@ class BookSkillScenario:
                     else:
                         # default conf as no check for user uttr (not super conf)
                         logger.debug(f'Returning genre phrase for {book}')
-                        reply, confidence = HAVE_YOU_READ_BOOK.replace("BOOK", book), self.default_conf
+                        reply, confidence = HAVE_YOU_READ_BOOK.replace("BOOK", book), self.low_conf
                 elif book_was_offered(bot_phrases[-1]):  # book_just_offered
                     logger.debug('Amazing! Have HAVE_YOU_READ_BOOK in last bot phrase')
                     bookname = book_was_offered(bot_phrases[-1])
@@ -455,7 +457,8 @@ class BookSkillScenario:
                             reply, confidence = self.default_reply, 0
                     if reply == "":
                         reply, confidence = self.get_reply_considering_book_author_genre_info(
-                            annotated_user_phrase, annotated_prev_phrase)
+                            annotated_user_phrase, annotated_prev_phrase,
+                            used_phrases=human_attr['book_skill']['used_phrases'])
                 else:
                     logger.debug('Final branch')
                     reply, confidence = self.default_reply, 0
