@@ -27,7 +27,8 @@ def main_test():
                     "It's an amazing book! Do you know when it was first published?",
                     # This should be a beginning of the response - response needs to be randomized
                     'I have read a plenty of books from different genres. What is your favorite book genre?',
-                    'Amazing! Have you read The Testaments? And if you have read it, what do you think about it?',
+                    'Amazing! Have you read The Catcher in the Rye? ' \
+                    'And if you have read it, what do you think about it?',
                     json.load(open('bookreads_data.json', 'r'))[0]['fiction']['description']]
     for i in range(len(sliced_data)):
         response = requests.post(url, json=sliced_data[i]).json()[0][0]
