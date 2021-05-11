@@ -29,7 +29,6 @@ logger = logging.getLogger(__name__)
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
 ASK_QUESTION_PROB = 0.7
-ASK_NORMAL_QUESTION_PROB = 0.5
 LINK_TO_PROB = 0.5
 LINK_TO_PHRASES = sum([list(list_el) for list_el in skills_phrases_map.values()], [])
 
@@ -217,31 +216,6 @@ class DummySkillConnector:
                     attrs += [{"type": "nounphrase_question"}]
                     human_attrs += [{}]
                     bot_attrs += [{}]
-                else:
-                    if random.random() < ASK_NORMAL_QUESTION_PROB:
-                        logger.info("No special nounphrases for questions. Return question of the same topic.")
-                        cands += [questions_generator.get_random_text(curr_topics)]
-                        confs += [0.5]
-                        attrs += [{"type": "topic_question"}]
-                        human_attrs += [{}]
-                        bot_attrs += [{}]
-                    else:
-                        logger.info("No special nounphrases for questions. Return link-to question.")
-                        question, human_attr = generate_question_not_from_last_responses(dialog, all_prev_active_skills)
-                        if len(question) > 0:
-                            cands += [question]
-                            confs += [0.55]
-                            attrs += [{"type": "normal_question"}]
-                            human_attrs += [human_attr]
-                            bot_attrs += [{}]
-            else:
-                logger.info("Dialog begins. No special nounphrases for questions. Return link-to question.")
-                question, human_attr = generate_question_not_from_last_responses(dialog, all_prev_active_skills)
-                cands += [question]
-                confs += [0.55]
-                attrs += [{"type": "normal_question"}]
-                human_attrs += [human_attr]
-                bot_attrs += [{}]
 
             link_to_question, human_attr = get_link_to_question(dialog, all_prev_active_skills)
             if link_to_question:
