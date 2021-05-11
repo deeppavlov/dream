@@ -88,7 +88,7 @@ templates += [(re.compile(r"\bgonna\b", flags=re.IGNORECASE), "going to")]
 templates += [(re.compile(r"\bna\b", flags=re.IGNORECASE), "no")]
 
 for written_number, int_number in NUMBERS.items():
-    templates += [(re.compile(r"\b" + written_number + "\b", flags=re.IGNORECASE), str(int_number))]
+    templates += [(re.compile(r"\b" + written_number + r"\b", flags=re.IGNORECASE), str(int_number))]
 
 templates += [(re.compile(r"\b([0-9]+) ([0-9]+)\b", flags=re.IGNORECASE), r"\1\2")]
 templates += [(re.compile(r"\s+"), " ")]

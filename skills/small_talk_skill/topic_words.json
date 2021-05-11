@@ -56,7 +56,7 @@
     "boyfriend"
   ],
   "me": [
-    "\bme\b",
+    "(\b|^)me(\b|$)",
     "myself"
   ],
   "movies": [
@@ -165,7 +165,7 @@
     "profession"
   ],
   "you": [
-    "\byou\b",
+    "(\b|^)you(\b|$)",
     "yourself",
     "socialbot",
     "alexa"
