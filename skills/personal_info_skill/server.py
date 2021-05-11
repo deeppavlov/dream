@@ -199,7 +199,9 @@ def process_info(dialog, which_info="name"):
     if (is_about_templates[which_info] or prev_bot_uttr == repeat_info_phrases[which_info].lower()) and not got_info:
         logger.info(f"Asked for {which_info} in {prev_bot_uttr}")
         found_info = check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr)
+        logger.info(f"found_info: {found_info}")
         if found_info is None:
+            logger.info(f"found_info is None")
             if prev_bot_uttr == repeat_info_phrases[which_info].lower():
                 response = ""
                 confidence = 0.0
@@ -314,6 +316,7 @@ def check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr):
         named_entities = get_named_persons({"text": curr_user_uttr, "annotations": curr_user_annot})
     else:
         named_entities = get_named_locations({"text": curr_user_uttr, "annotations": curr_user_annot})
+    logger.info(f"(check_entities)named_entities: {named_entities}")
     if len(named_entities) == 0:
         # try to search in all types of NAMED entities
         named_entities = []
@@ -322,6 +325,9 @@ def check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr):
                 only_named=False,
                 with_labels=True,
         ):
+            logger.info(f"(check_entities)ent: {ent}")
+            if "my name is" == ent["text"].lower() or "call me" == ent["text"].lower():
+                continue
             if ent["text"].lower() == "alexa":
                 if (re.search(r"(my (name is|name's)|call me) alexa", curr_user_uttr) or (re.search(
                         r"(what is|what's|whats|tell me) your? name",
