@@ -696,8 +696,8 @@ def offer_fact_about_loc_response(vars):
                         state_utils.set_can_continue(vars, CAN_NOT_CONTINUE)
                     return f"{random.choice(TOPIC_NEWS_OFFER)} {location}?"
 
-            state_utils.set_confidence(vars, ZERO_CONFIDENCE)
-            return error_response(vars)
+            another_location_question = not_confident_ask_question_about_travelling_response(vars)
+            return f"Okay. Cool. Let's move on. {another_location_question}"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -731,8 +731,8 @@ def share_fact_about_loc_response(vars):
             state_utils.save_to_shared_memory(vars, used_opinion_requests=used_opinion_requests + [opinion_req])
             return f"{fact_about_location} {opinion_req}"
         else:
-            state_utils.set_confidence(vars, ZERO_CONFIDENCE)
-            return error_response(vars)
+            another_location_question = not_confident_ask_question_about_travelling_response(vars)
+            return f"Okay. Cool. Let's move on. {another_location_question}"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
