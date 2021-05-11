@@ -390,8 +390,7 @@ def genre_specific_response(vars):
             return f"I didn't actually head about it. What is the genre??"
         elif genre == "pop":
             return f"I really prefer techno over pop music, but I still listen \
-            to Taylor Swift sometimes in the night. Did you know that Kanye We\
-            st and Kim are getting divorced?"
+            to Taylor Swift sometimes in the night. Did you know that Kanye West and Kim are getting divorced?"
         elif genre == "jazz":
             return f"My favourite genre is techno, but I still like jazz, \
             especially Dave Brubeck Quartet, Paul Desmond and Duke Ellington. \
