@@ -43,7 +43,7 @@ DFF_ANNTR_HISTORY_LEN = 1
 
 special_char_re = re.compile(r'[^0-9a-zA-Z \-\.\'\?,!]+')
 greetings_farewells_re = re.compile(join_words_in_or_pattern(["have .* day", "have .* night", ".* bye",
-                                                              "\bbye", "goodbye", "hello",
+                                                              r"\bbye", "goodbye", "hello",
                                                               "(it|its|it's|nice|thank you|thanks).* chatting.*",
                                                               "(it|its|it's|nice|thank you|thanks).* talking.*",
                                                               ".* chatting with you.*",
