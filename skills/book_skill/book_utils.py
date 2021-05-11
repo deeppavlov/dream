@@ -314,11 +314,11 @@ def get_name(annotated_phrase, mode='author', bookyear=False,
         else:
             raise Exception(f'Wrong mode: {mode}')
         n_years_ago = None
-        wp_annotations = annotated_phrase['annotations']['wiki_parser']
+        wp_annotations = annotated_phrase['annotations'].get('wiki_parser', {})
         if isinstance(wp_annotations, list):
             wp_annotations = wp_annotations[0]
-        toiterate_dict = wp_annotations['topic_skill_entities_info']
-        for key in wp_annotations['entities_info']:
+        toiterate_dict = wp_annotations.get('topic_skill_entities_info', {})
+        for key in wp_annotations.get('entities_info', {}):
             if key not in toiterate_dict:
                 toiterate_dict[key] = wp_annotations['entities_info'][key]
         logger.debug(toiterate_dict)
