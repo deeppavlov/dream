@@ -6,6 +6,7 @@ OPINION_REQUESTS_ABOUT_MUSIC = ["What music do you like?",
                                 "Who is your favorite artist?",
                                 "What is your favorite song?",
                                 "What is your favorite album?",
+                                "Who do you think is the best band ever?"
                                 # "Do you have a favorite artist?"
                                 ]
 
