@@ -12,7 +12,9 @@ def main_test():
     for sent in sentences:
         data = to_dialogs([sent])
         response = requests.post(url, json=data).json()[0][0]
-        assert "Let me tell you something you already know." in response, print(sent, '.', response)
+        allowed_phrases = ['Let me tell you something you already know.',
+                           "Your words are hurting me. Be more kind, I'm still learning."]
+        assert any([allowed_phrase in response for allowed_phrase in allowed_phrases]), print(sent, '.', response)
     print("Success")
 
 
