@@ -15,7 +15,7 @@ from typing import Callable, Dict
 
 import sentry_sdk
 
-from common.link import LIST_OF_SCRIPTED_TOPICS, SKILLS_FOR_LINKING, skills_phrases_map, \
+from common.link import LIST_OF_SCRIPTED_TOPICS, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED, skills_phrases_map, \
     compose_linkto_with_connection_phrase
 from common.sensitive import is_sensitive_situation
 from common.universal_templates import opinion_request_question
@@ -134,7 +134,7 @@ def get_link_to_question(dialog, all_prev_active_skills):
         if from_skill in LIST_OF_SCRIPTED_TOPICS.keys():
             break
     # remove prev active skills from those we can link to
-    available_links = list(set(SKILLS_FOR_LINKING).difference(all_prev_active_skills))
+    available_links = list(set(SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED).difference(all_prev_active_skills))
     # use recommended skills
     recommended_skills = dialog["human_utterances"][-1].get("annotations", []).get("topic_recommendation", [])
     if len(set(available_links).intersection(recommended_skills)) > 0:
@@ -144,8 +144,8 @@ def get_link_to_question(dialog, all_prev_active_skills):
         # if we still have skill to link to, try to generate linking question
         # {'phrase': result, 'skill': linkto_dict["skill"], "connection_phrase": connection}
         link = compose_linkto_with_connection_phrase(
-            SKILLS_FOR_LINKING, human_attributes=human_attr, recent_active_skills=all_prev_active_skills,
-            from_skill=from_skill)
+            SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED, human_attributes=human_attr,
+            recent_active_skills=all_prev_active_skills, from_skill=from_skill)
         human_attr["used_links"][link["skill"]] = human_attr["used_links"].get(link["skill"], []) + [link['phrase']]
         human_attr["prelinkto_connections"] = human_attr["prelinkto_connections"] + [link.get("connection_phrase", "")]
         linked_question = link["phrase"]
