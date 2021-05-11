@@ -7,7 +7,6 @@ from os import getenv
 
 from common.books import BOOK_SKILL_CHECK_PHRASES, about_book, BOOK_PATTERN
 from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
-from common.tutor import get_tutor_phrase
 from common.universal_templates import is_switch_topic, if_chat_about_particular_topic, tell_me_more, \
     is_positive, is_negative
 from common.utils import is_yes, is_no
@@ -61,6 +60,9 @@ UNKNOWN_BOOK_QUESTIONS = ["Sorry I've never heard about this book. What is it ab
                           "Oops. I guess I've never heard about this book before. "
                           "What caught your attention in this book?"]
 DONT_KNOW_EITHER = "I don't know either. Let's talk about something else."
+SKILLS_TO_LINK = ["news_api_skill", "movie_skill", "game_cooperative_skill",
+                  "dff_travel_skill", "dff_animals_skill", "dff_sport_skill",
+                  "dff_food_skill", "dff_music_skill"]
 
 
 class BookSkillScenario:
@@ -214,16 +216,7 @@ class BookSkillScenario:
                         reply = FAVOURITE_BOOK_ANSWERS[1]
                         if BIBLE_RESPONSES[0] == annotated_bot_phrase['text']:
                             reply = f"I am pleased to know it. Let's talk about something else. {reply}"
-                        skills_to_link = ["news_api_skill",
-                                          "movie_skill",
-                                          "book_skill",
-                                          "game_cooperative_skill",
-                                          "dff_travel_skill",
-                                          "dff_animals_skill",
-                                          "dff_sport_skill",
-                                          "dff_food_skill",
-                                          "dff_music_skill"]
-                        reply = f'{reply} {link_to(skills_to_link, human_attr)}'
+                        reply = f'{reply} {link_to(SKILLS_TO_LINK, human_attr)}'
                     else:
                         reply = random.choice(FAVOURITE_BOOK_ANSWERS)
                     confidence = self.super_conf
@@ -340,7 +333,8 @@ class BookSkillScenario:
                             recency_phrase = 'Just recently!'
                         # answering with default conf as we do not even check the user utterance at all
                         logger.debug('Giving recency phrase')
-                        reply, confidence = f"{recency_phrase} {DID_NOT_EXIST} {get_tutor_phrase()}", self.super_conf
+                        reply, confidence = f"{recency_phrase} {DID_NOT_EXIST} " \
+                                            f"{link_to(SKILLS_TO_LINK, human_attr)}", self.super_conf
                 elif bot_phrases[-1] in OPINION_REQUEST_ON_BOOK_PHRASES:
                     # if we previously asked about user's opinion on book
                     logger.debug('Last phrase was OPINION_REQUEST_ON_BOOK_PHRASES')
