@@ -482,9 +482,13 @@ def wp_formatter_dialog(dialog: Dict):
     input_entity_info_list = []
     if entity_info_list:
         for entity_info in entity_info_list:
-            if entity_info and "entity_substr" in entity_info and "entity_ids" in entity_info:
+            if entity_info and "entity_substr" in entity_info and "entity_ids" in entity_info \
+                    and "tokens_match_conf" in entity_info:
                 input_entity_info_list.append(
-                    {"entity_substr": entity_info["entity_substr"], "entity_ids": entity_info["entity_ids"][:5]}
+                    {"entity_substr": entity_info["entity_substr"],
+                     "entity_ids": entity_info["entity_ids"][:5],
+                     "confidences": entity_info["confidences"][:5],
+                     "tokens_match_conf": entity_info["tokens_match_conf"][:5]}
                 )
     parser_info = ["find_top_triplets"]
     if not input_entity_info_list:

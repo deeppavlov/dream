@@ -219,6 +219,7 @@ class KBEntityLinker(Component, Serializable):
                  short_context_batch: List[str] = None) -> Tuple[List[List[List[str]]], List[List[List[float]]]]:
         entity_ids_batch = []
         confidences_batch = []
+        tokens_match_conf_batch = []
         if templates_batch is None:
             templates_batch = ["" for _ in entity_substr_batch]
         if long_context_batch is None:
@@ -231,23 +232,29 @@ class KBEntityLinker(Component, Serializable):
                 zip(entity_substr_batch, templates_batch, long_context_batch, entity_types_batch, short_context_batch):
             entity_ids_list = []
             confidences_list = []
+            tokens_match_conf_list = []
             for entity_substr, entity_types in zip(entity_substr_list, entity_types_list):
-                entity_ids, confidences = self.link_entity(entity_substr, long_context, short_context,
-                                                           template_found, entity_types)
+                entity_ids, confidences, tokens_match_conf = self.link_entity(entity_substr, long_context,
+                                                                              short_context, template_found,
+                                                                              entity_types)
                 if self.num_entities_to_return == 1:
                     if entity_ids:
                         entity_ids_list.append(entity_ids[0])
                         confidences_list.append(confidences[0])
+                        tokens_match_conf_list.append(tokens_match_conf[0])
                     else:
                         entity_ids_list.append("")
                         confidences_list.append(0.0)
+                        tokens_match_conf_list.append(0.0)
                 else:
                     entity_ids_list.append(entity_ids[:self.num_entities_to_return])
                     confidences_list.append(confidences[:self.num_entities_to_return])
+                    tokens_match_conf_list.append(tokens_match_conf[:self.num_entities_to_return])
             entity_ids_batch.append(entity_ids_list)
             confidences_batch.append(confidences_list)
+            tokens_match_conf_batch.append(tokens_match_conf_list)
 
-        return entity_ids_batch, confidences_batch
+        return entity_ids_batch, confidences_batch, tokens_match_conf_batch
 
     def lemmatize_substr(self, text):
         lemm_text = ""
@@ -266,6 +273,7 @@ class KBEntityLinker(Component, Serializable):
                     template_found: Optional[str] = None, entity_types: List[str] = None,
                     cut_entity: bool = False) -> Tuple[List[str], List[float]]:
         confidences = []
+        tokens_match_conf = []
         if not entity:
             entities_ids = ['None']
         else:
@@ -274,31 +282,35 @@ class KBEntityLinker(Component, Serializable):
             found_lets_talk_phrase = any([phrase in short_context for phrase in lets_talk_phrases])
             if short_context and (entity == short_context or entity == short_context[:-1] or found_lets_talk_phrase) \
                     and len(entity.split()) == 1:
-                entity = self.lemmatize_substr(entity)
+                lemm_entity = self.lemmatize_substr(entity)
                 entity_is_uttr = True
+            else:
+                lemm_entity = entity
 
-            candidate_entities = self.candidate_entities_inverted_index(entity)
+            candidate_entities = self.candidate_entities_inverted_index(lemm_entity)
             if self.types_dict:
                 if entity_types:
                     entity_types = set(entity_types)
-                    candidate_entities = [entity for entity in candidate_entities if
-                                          self.types_dict.get(entity[1], set()).intersection(entity_types)]
+                    candidate_entities = [ent for ent in candidate_entities if
+                                          self.types_dict.get(ent[1], set()).intersection(entity_types)]
                 if template_found in ["what is xxx?", "what was xxx?"] or entity_is_uttr:
-                    candidate_entities_filtered = [entity for entity in candidate_entities if
-                                                   not self.types_dict.get(entity[1], set()).intersection(
+                    candidate_entities_filtered = [ent for ent in candidate_entities if
+                                                   not self.types_dict.get(ent[1], set()).intersection(
                                                        self.black_list_what_is)]
                     if candidate_entities_filtered:
                         candidate_entities = candidate_entities_filtered
-            if cut_entity and candidate_entities and len(entity.split()) > 1 and candidate_entities[0][3] == 1:
-                entity = self.cut_entity_substr(entity)
-                candidate_entities = self.candidate_entities_inverted_index(entity)
-            candidate_entities, candidate_names = self.candidate_entities_names(entity, candidate_entities)
-            entities_ids, confidences, srtd_cand_ent = self.sort_found_entities(candidate_entities,
-                                                                                candidate_names, entity, long_context)
+            if cut_entity and candidate_entities and len(lemm_entity.split()) > 1 and candidate_entities[0][3] == 1:
+                lemm_entity = self.cut_entity_substr(lemm_entity)
+                candidate_entities = self.candidate_entities_inverted_index(lemm_entity)
+            candidate_entities, candidate_names = self.candidate_entities_names(lemm_entity, candidate_entities)
+            entities_ids, confidences, tokens_match_conf, srtd_cand_ent = self.sort_found_entities(candidate_entities,
+                                                                                                   candidate_names,
+                                                                                                   lemm_entity,
+                                                                                                   entity, long_context)
             if template_found:
                 entities_ids = self.filter_entities(entities_ids, template_found)
 
-        return entities_ids, confidences
+        return entities_ids, confidences, tokens_match_conf
 
     def cut_entity_substr(self, entity: str):
         word_tokens = nltk.word_tokenize(entity.lower())
@@ -353,13 +365,58 @@ class KBEntityLinker(Component, Serializable):
 
     def sort_found_entities(self, candidate_entities: List[Tuple[int, str, int]],
                             candidate_names: List[List[str]],
+                            lemm_entity: str,
                             entity: str,
                             context: str = None) -> Tuple[List[str], List[float], List[Tuple[str, str, int, int]]]:
         entities_ratios = []
-        entity = entity.lower()
+        lemm_entity = lemm_entity.lower()
         for candidate, entity_names in zip(candidate_entities, candidate_names):
             entity_num, entity_id, num_rels, tokens_matched = candidate
-            fuzz_ratio = max([fuzz.ratio(name.lower(), entity) for name in entity_names])
+            fuzz_ratio = max([fuzz.ratio(name.lower(), lemm_entity) for name in entity_names])
+            entity_tokens = re.findall(self.re_tokenizer, entity.lower())
+            lemm_entity_tokens = re.findall(self.re_tokenizer, lemm_entity.lower())
+            entity_tokens = {word for word in entity_tokens if (len(word) > 1 and word != "'s"
+                                                                and word not in self.stopwords)}
+            lemm_entity_tokens = {word for word in lemm_entity_tokens if (len(word) > 1 and word != "'s"
+                                                                          and word not in self.stopwords)}
+            match_counts = []
+            for name in entity_names:
+                name_tokens = re.findall(self.re_tokenizer, name.lower())
+                name_tokens = {word for word in name_tokens if (len(word) > 1 and word != "'s"
+                                                                and word not in self.stopwords)}
+                entity_inters_len = len(entity_tokens.intersection(name_tokens))
+                lemm_entity_inters_len = len(lemm_entity_tokens.intersection(name_tokens))
+
+                entity_ratio_1 = 0.0
+                entity_ratio_2 = 0.0
+                if len(entity_tokens):
+                    entity_ratio_1 = entity_inters_len / len(entity_tokens)
+                    if entity_ratio_1 > 1.0 and entity_ratio_1 != 0.0:
+                        entity_ratio_1 = 1.0 / entity_ratio_1
+                if len(name_tokens):
+                    entity_ratio_2 = entity_inters_len / len(name_tokens)
+                    if entity_ratio_2 > 1.0 and entity_ratio_2 != 0.0:
+                        entity_ratio_2 = 1.0 / entity_ratio_2
+
+                lemm_entity_ratio_1 = 0.0
+                lemm_entity_ratio_2 = 0.0
+                if len(lemm_entity_tokens):
+                    lemm_entity_ratio_1 = lemm_entity_inters_len / len(lemm_entity_tokens)
+                    if lemm_entity_ratio_1 > 1.0 and lemm_entity_ratio_1 != 0.0:
+                        lemm_entity_ratio_1 = 1.0 / lemm_entity_ratio_1
+                if len(name_tokens):
+                    lemm_entity_ratio_2 = lemm_entity_inters_len / len(name_tokens)
+                    if lemm_entity_ratio_2 > 1.0 and lemm_entity_ratio_2 != 0.0:
+                        lemm_entity_ratio_2 = 1.0 / lemm_entity_ratio_2
+
+                match_count = max(entity_ratio_1, entity_ratio_2, lemm_entity_ratio_1, lemm_entity_ratio_2)
+                match_counts.append(match_count)
+            match_counts = sorted(match_counts, reverse=True)
+            if match_counts:
+                tokens_matched = match_counts[0]
+            else:
+                tokens_matched = 0.0
+
             entities_ratios.append((entity_num, entity_id, tokens_matched, fuzz_ratio, num_rels))
 
         srtd_with_ratios = sorted(entities_ratios, key=lambda x: (x[2], x[3], x[4]), reverse=True)
@@ -373,16 +430,18 @@ class KBEntityLinker(Component, Serializable):
                                     entity_id, score in scores]
             entities_with_scores = sorted(entities_with_scores, key=lambda x: (x[1], x[2], x[3]), reverse=True)
 
-            entities_with_scores = [entity for entity in entities_with_scores if
-                                    (entity[3] > self.descr_rank_score_thres or entity[2] == 100.0)]
+            entities_with_scores = [ent for ent in entities_with_scores if
+                                    (ent[3] > self.descr_rank_score_thres or ent[2] == 100.0)]
             log.debug(f"entities_with_scores {entities_with_scores[:10]}")
-            entity_ids = [entity for entity, _, _, _ in entities_with_scores]
+            entity_ids = [ent for ent, _, _, _ in entities_with_scores]
             confidences = [score for _, _, _, score in entities_with_scores]
+            tokens_match_conf = [ratio for _, ratio, _, _ in entities_with_scores]
         else:
             entity_ids = [ent[1] for ent in srtd_with_ratios]
             confidences = [ent[3] * 0.01 for ent in srtd_with_ratios]
+            tokens_match_conf = [ent[2] for ent in srtd_with_ratios]
 
-        return entity_ids, confidences, srtd_with_ratios
+        return entity_ids, confidences, tokens_match_conf, srtd_with_ratios
 
     def candidate_entities_names(self, entity: str,
                                  candidate_entities: List[Tuple[int, str, int]]) -> Tuple[List[Tuple[int, str, int]],
