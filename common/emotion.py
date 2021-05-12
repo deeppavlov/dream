@@ -27,7 +27,7 @@ POOR_ASR_TEMPLATE = r'^say$'
 LONELINESS_TEMPLATE = re.compile(r"(i am alone|lonely|loneliness)", re.IGNORECASE)
 SAD_TEMPLATE = re.compile(rf"({SAD_TEMPLATE}|{POOR_ASR_TEMPLATE})", re.IGNORECASE)
 BORING_TEMPLATE = r"(boring|bored)"  # The template is used to EXCLUDE answers on this intent
-JOKE_REQUEST_COMPILED_PATTERN = re.compile(r"(tell me|tell|hear)( [a-z]+){0,3} jokes?", re.IGNORECASE)
+JOKE_REQUEST_COMPILED_PATTERN = re.compile(r"(((tell me|tell|hear)( [a-z]+){0,3} jokes?)|^joke)", re.IGNORECASE)
 TALK_ABOUT_EMO_TEMPLATE = re.compile(r'talk about emotion', re.IGNORECASE)
 
 
