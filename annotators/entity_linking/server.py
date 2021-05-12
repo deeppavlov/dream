@@ -87,19 +87,22 @@ def respond():
     entity_types_batch = [[[] for _ in entity_substr_list] for entity_substr_list in entity_substr_batch]
     entity_info_batch = [[{}] for _ in entity_substr_batch]
     try:
-        entity_ids_batch, conf_batch, entity_pages_batch, entity_pages_titles_batch = \
+        entity_ids_batch, conf_batch, tokens_match_conf_batch, entity_pages_batch, entity_pages_titles_batch = \
             el(entity_substr_batch, template_batch, long_context_batch, entity_types_batch, short_context_batch)
         entity_info_batch = []
-        for entity_substr_list, entity_ids_list, conf_list, entity_pages_list, entity_pages_titles_list, context in \
-                zip(entity_substr_batch, entity_ids_batch, conf_batch, entity_pages_batch, entity_pages_titles_batch,
-                    short_context_batch):
+        for entity_substr_list, entity_ids_list, conf_list, tokens_match_conf_list, entity_pages_list,\
+            entity_pages_titles_list, context in zip(entity_substr_batch, entity_ids_batch, conf_batch,
+                                                     tokens_match_conf_batch, entity_pages_batch,
+                                                     entity_pages_titles_batch, short_context_batch):
             entity_info_list = []
-            for entity_substr, entity_ids, conf, entity_pages, entity_pages_titles in \
-                    zip(entity_substr_list, entity_ids_list, conf_list, entity_pages_list, entity_pages_titles_list):
+            for entity_substr, entity_ids, conf, tokens_match_conf, entity_pages, entity_pages_titles in \
+                    zip(entity_substr_list, entity_ids_list, conf_list, tokens_match_conf_list, entity_pages_list,
+                        entity_pages_titles_list):
                 entity_info = {}
                 entity_info["entity_substr"] = entity_substr
                 entity_info["entity_ids"] = entity_ids
                 entity_info["confidences"] = [float(elem) for elem in conf]
+                entity_info["tokens_match_conf"] = [float(elem) for elem in tokens_match_conf]
                 entity_info["entity_pages"] = entity_pages
                 entity_info["entity_pages_titles"] = entity_pages_titles
                 entity_info_list.append(entity_info)
@@ -109,6 +112,7 @@ def respond():
                 entity_info["entity_substr"] = topic_substr
                 entity_info["entity_ids"] = [topic_id]
                 entity_info["confidences"] = [float(1.0)]
+                entity_info["tokens_match_conf"] = [float(1.0)]
                 entity_info_list.append(entity_info)
             entity_info_batch.append(entity_info_list)
     except Exception as e:

@@ -122,9 +122,10 @@ def if_wants_more(vars, all_titles):
 
 
 def find_entity(vars, where_to_find="current"):
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
     if where_to_find == "current":
         annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-        found_entity_substr, found_entity_id, found_entity_types, _ = find_entity_wp(annotations)
+        found_entity_substr, found_entity_id, found_entity_types, _ = find_entity_wp(annotations, bot_uttr)
         if not found_entity_substr:
             found_entity_substr, _ = find_entity_nounphr(annotations)
     else:
@@ -136,7 +137,7 @@ def find_entity(vars, where_to_find="current"):
         if utt_num > 1:
             for i in range(utt_num - 2, 0, -1):
                 annotations = all_user_uttr[i]["annotations"]
-                found_entity_substr, found_entity_id, found_entity_types, _ = find_entity_wp(annotations)
+                found_entity_substr, found_entity_id, found_entity_types, _ = find_entity_wp(annotations, bot_uttr)
                 if not found_entity_substr:
                     found_entity_substr, _ = find_entity_nounphr(annotations)
                 if found_entity_substr:
@@ -564,7 +565,7 @@ def wikihow_step_response(vars):
         state_utils.save_to_shared_memory(vars, used_wikihow_titles=used_wikihow_titles)
     if response:
         state_utils.set_confidence(vars, confidence=CONF_DICT["IN_SCENARIO"])
-        state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     else:
         state_utils.set_confidence(vars, confidence=CONF_DICT["UNDEFINED"])
         state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
@@ -643,7 +644,7 @@ def more_details_response(vars):
                    new_page)
     if response:
         state_utils.set_confidence(vars, confidence=CONF_DICT["IN_SCENARIO"])
-        state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     else:
         state_utils.set_confidence(vars, confidence=CONF_DICT["UNDEFINED"])
         state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)

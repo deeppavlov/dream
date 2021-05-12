@@ -160,10 +160,10 @@ used_types_dict = [{"types": ["Q11253473"  # smart device
 
 used_types = set(itertools.chain.from_iterable([elem.get("types", []) for elem in used_types_dict]))
 used_substr = set(itertools.chain.from_iterable([elem.get("entity_substr", []) for elem in used_types_dict]))
-blacklist_words = {"yup", "true", "false"}
+blacklist_words = {"yup", "true", "false", "boy", "boys"}
 
 prohibited_topics = {"music", "films", "movies", "sport", "travel", "food", "animals", "pet", "pets", "coronavirus",
-                     "corona virus", "gossip", "gossips"}
+                     "corona virus", "gossip", "gossips", "cat", "cats", "dog", "dogs"}
 prohibited_types = {"Q571",  # book
                     "Q277759",  # book series
                     "Q8261",  # novel
@@ -189,10 +189,21 @@ QUESTION_TEMPLATES = ["Would you like to know about {} of {}?",
 
 CONF_DICT = {"UNDEFINED": 0.0, "USER_QUESTION_IN_BEGIN": 0.8, "ENTITY_IN_HISTORY": 0.9, "WIKI_TYPE_DOUBT": 0.9,
              "OTHER_DFF_SKILLS": 0.9, "WIKI_TYPE": 0.94, "IN_SCENARIO": 0.95, "WIKI_TOPIC": 0.99}
-WIKI_BLACKLIST = re.compile(r"(margin|\bfont\b|wikimedia|wikitable)", re.IGNORECASE)
+WIKI_BLACKLIST = re.compile(r"(margin|\bfont\b|wikimedia|wikitable| url )", re.IGNORECASE)
+
+transfer_from_skills = {"dff_animals_skill": {"Q16521", "Q55983715" "Q38547", "Q39367", "Q43577"},
+                        "dff_food_skill": {"Q28149961", "Q2095", "Q11004"},
+                        "dff_sport_skill": {"Q2066131", "Q937857", "Q4009406", "Q10843402", "Q10873124", "Q3665646",
+                                            "Q10833314", "Q19204627", "Q10871364", "Q20639856", "Q847017", "Q476028",
+                                            "Q4498974"},
+                        "dff_music_skill": {"Q488205", "Q36834", "Q177220", "Q753110", "Q134556", "Q7366", "Q482994"},
+                        "movie_skill": {"Q11424", "Q24856", "Q10800557", "Q10798782", "Q2405480", "Q5398426", "Q15416",
+                                        "Q2526255"},
+                        "book_skill": {"Q36180", "Q49757", "Q214917", "Q6625963", "Q28389", "Q571", "Q277759", "Q8261",
+                                       "Q47461344", "Q7725634", "Q1667921"}}
 
 
-def find_entity_wp(annotations):
+def find_entity_wp(annotations, bot_uttr):
     conf_type = "UNDEFINED"
     found_entity_substr = ""
     found_entity_id = ""
@@ -204,6 +215,12 @@ def find_entity_wp(annotations):
         nounphr_label = nounphr.get("label", "")
         if nounphr_text and nounphr_label:
             nounphr_label_dict[nounphr_text] = nounphr_label
+    bot_text = bot_uttr.get("text", "")
+    bot_question = "?" in bot_text
+    prev_active_skill = bot_uttr.get("active_skill")
+    current_types = set()
+    if bot_question and prev_active_skill and prev_active_skill in transfer_from_skills:
+        current_types = transfer_from_skills[prev_active_skill]
     wp_output = annotations.get("wiki_parser", {})
     if isinstance(wp_output, dict):
         entities_info = wp_output.get("entities_info", {})
@@ -213,9 +230,15 @@ def find_entity_wp(annotations):
                 triplets.get("occupation", []) + triplets.get("types_2hop", [])
             type_ids = [elem for elem, label in types]
             inters = set(type_ids).intersection(used_types)
+            coherent_with_prev = True
+            if current_types and not set(type_ids).intersection(current_types):
+                coherent_with_prev = False
             in_not_used_types = set(type_ids).intersection(prohibited_types)
-            in_not_used_topics = entity in prohibited_topics or entity in blacklist_words
-            if inters and not in_not_used_topics and nounphr_label_dict.get(entity, "") != "number":
+            in_not_used_topics = entity.lower() in prohibited_topics or entity.lower() in blacklist_words
+            token_conf = triplets["token_conf"]
+            conf = triplets["conf"]
+            if inters and not in_not_used_topics and nounphr_label_dict.get(entity, "") != "number" \
+                    and coherent_with_prev and token_conf > 0.5 and conf > 0.2:
                 found_entity_substr = entity
                 found_entity_id = entity_id
                 found_entity_types = inters
@@ -233,14 +256,21 @@ def find_entity_wp(annotations):
                         triplets.get("subclass of", []) + triplets.get("occupation", []) + \
                         triplets.get("types_2hop", [])
                     type_ids = [elem for elem, label in types]
-                    conf_type = "WIKI_TYPE"
-                    pos = triplets["pos"]
-                    if pos > 0:
-                        conf_type = "WIKI_TYPE_DOUBT"
-                    found_entity_substr = entity
-                    found_entity_id = entity_id
-                    found_entity_types = type_ids
-                    break
+                    coherent_with_prev = True
+                    if current_types and not set(type_ids).intersection(current_types):
+                        coherent_with_prev = False
+                    if coherent_with_prev:
+                        conf_type = "WIKI_TYPE"
+                        pos = triplets["pos"]
+                        if pos > 0:
+                            conf_type = "WIKI_TYPE_DOUBT"
+                        token_conf = triplets["token_conf"]
+                        conf = triplets["conf"]
+                        if token_conf > 0.5 and conf > 0.2:
+                            found_entity_substr = entity
+                            found_entity_id = entity_id
+                            found_entity_types = type_ids
+                            break
     return found_entity_substr, found_entity_id, found_entity_types, conf_type
 
 
@@ -252,7 +282,7 @@ def find_entity_nounphr(annotations):
     for nounphr in nounphrases:
         nounphr_text = nounphr.get("text", "")
         nounphr_label = nounphr.get("label", "")
-        in_not_used_substr = nounphr_text in prohibited_topics or nounphr_text in blacklist_words
+        in_not_used_substr = nounphr_text.lower() in prohibited_topics or nounphr_text.lower() in blacklist_words
         if nounphr_text in used_substr and not in_not_used_substr and nounphr_label != "number":
             found_entity_substr = nounphr_text
             conf_type = "WIKI_TOPIC"
@@ -289,7 +319,8 @@ def if_user_dont_know_topic(user_uttr, bot_uttr):
 def if_switch_wiki_skill(user_uttr, bot_uttr):
     flag = False
     user_uttr_annotations = user_uttr["annotations"]
-    found_entity_substr, found_entity_id, found_entity_types, conf_type_wp = find_entity_wp(user_uttr_annotations)
+    found_entity_substr, found_entity_id, found_entity_types, conf_type_wp = find_entity_wp(user_uttr_annotations,
+                                                                                            bot_uttr)
     found_entity_substr, conf_type_nounphr = find_entity_nounphr(user_uttr_annotations)
     user_dont_know = if_user_dont_know_topic(user_uttr, bot_uttr)
     asked_name = "what is your name" in bot_uttr.get("text", "").lower()
@@ -310,11 +341,12 @@ def if_switch_wiki_skill(user_uttr, bot_uttr):
 def if_find_entity_in_history(dialog):
     flag = False
     all_user_uttr = dialog["human_utterances"]
+    bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}
     utt_num = len(all_user_uttr)
     if utt_num > 1:
         for i in range(utt_num - 2, 0, -1):
             annotations = all_user_uttr[i]["annotations"]
-            found_entity_substr, found_entity_id, found_entity_types, _ = find_entity_wp(annotations)
+            found_entity_substr, found_entity_id, found_entity_types, _ = find_entity_wp(annotations, bot_uttr)
             found_entity_substr, _ = find_entity_nounphr(annotations)
             if found_entity_id or found_entity_substr:
                 flag = True
@@ -417,6 +449,6 @@ def delete_hyperlinks(par):
             mentions.append(entity_split[1])
             pages.append(entity_split[0].capitalize())
             par = par.replace(replace_str, entity_split[1])
-    par = re.sub("(<ref>|</ref>|ref name|ref)", "", par)
+    par = re.sub(r"(<ref>|</ref>|ref name|ref|\(\)|\( \))", "", par)
     par = par.replace("  ", " ")
     return par, mentions, pages
