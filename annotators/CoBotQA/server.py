@@ -185,7 +185,7 @@ def respond():
                           "didn't catch that", "say that again", "try again", "really nice to meet you too",
                           "like to learn about how I can help", "sorry", "i don't under", "ask me whatever you like",
                           "i don’t know that", "initialism for laughing out loud", "gamelistintent", "listintent",
-                          "try asking", "missed part", "try saying"
+                          "try asking", "missed part", "try saying", " hey is a "
                           ]
 
         if len(response) > 0 and 'skill://amzn1' not in response:
