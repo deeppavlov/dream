@@ -107,6 +107,15 @@ def is_entities(vars):
     return flag
 
 
+def get_last_state(vars):
+    last_state = ""
+    history = list(vars["agent"]["history"].items())
+    if history:
+        history_sorted = sorted(history, key=lambda x: x[0])
+        last_state = history_sorted[-1][1]
+    return last_state
+
+
 def is_last_state(vars, state):
     flag = False
     history = list(vars["agent"]["history"].items())

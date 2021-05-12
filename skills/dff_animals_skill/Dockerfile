@@ -18,6 +18,9 @@ RUN bash /scripts/programy_logger_off.sh
 # ###################### CUSTOM SECTION ######################################
 # Here you can make changes
 
+RUN mkdir -p /root/.deeppavlov/downloads/wikidata
+RUN wget -q -P /root/.deeppavlov/downloads/wikidata http://files.deeppavlov.ai/kbqa/wikidata/breed_facts.json
+
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
 

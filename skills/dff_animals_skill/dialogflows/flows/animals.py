@@ -1,4 +1,3 @@
-import json
 import logging
 import random
 import os
@@ -31,12 +30,24 @@ logger = logging.getLogger(__name__)
 nlp = en_core_web_sm.load()
 p = inflect.engine()
 
-breeds = json.load(open("breeds.json", 'r'))
-
 CONF_1 = 1.0
 CONF_2 = 0.98
 CONF_3 = 0.95
 CONF_4 = 0.9
+
+
+def make_my_pets_info(vars, rnd=True):
+    shared_memory = state_utils.get_shared_memory(vars)
+    my_pets_info = shared_memory.get("my_pets_info", {})
+    if not my_pets_info:
+        if rnd:
+            random.shuffle(WHAT_PETS_I_HAVE)
+        for pet in ["cat", "dog"]:
+            for elem in WHAT_PETS_I_HAVE:
+                if elem["pet"] == pet:
+                    my_pets_info[pet] = {"name": elem["name"], "breed": elem["breed"], "sentence": elem["sentence"]}
+                    break
+        state_utils.save_to_shared_memory(vars, my_pets_info=my_pets_info)
 
 
 def lets_talk_about_request(vars):
@@ -132,6 +143,15 @@ def mention_animals_request(ngrams, vars):
     if dont_like:
         flag = False
     logger.info(f"mention_animals_request={flag}")
+    return flag
+
+
+def user_mentioned_his_pet_request(ngrams, vars):
+    flag = False
+    user_text = state_utils.get_last_human_utterance(vars)["text"]
+    if re.findall(r"my (cat|dog)", user_text):
+        flag = True
+    logger.info(f"user_mentioned_his_pet_request={flag}")
     return flag
 
 
@@ -292,6 +312,7 @@ def not_wants_more_request(ngrams, vars):
 
 
 def what_animals_response(vars):
+    make_my_pets_info(vars, rnd=False)
     what_i_like = random.choice(WILD_ANIMALS)
     response = f"{what_i_like} What animals do you like?"
     state_utils.save_to_shared_memory(vars, start=True)
@@ -302,15 +323,13 @@ def what_animals_response(vars):
 
 
 def have_pets_response(vars):
-    my_pet_info = random.choice(WHAT_PETS_I_HAVE)
-    my_pet = my_pet_info["pet"]
-    my_pet_name = my_pet_info["name"]
-    my_pet_breed = my_pet_info["breed"]
-    sentence = my_pet_info["sentence"]
+    make_my_pets_info(vars)
+    my_pet = random.choice(["cat", "dog"])
+    shared_memory = state_utils.get_shared_memory(vars)
+    my_pets_info = shared_memory.get("my_pets_info", {})
+    sentence = my_pets_info[my_pet]["sentence"]
     state_utils.save_to_shared_memory(vars, start=True)
     state_utils.save_to_shared_memory(vars, my_pet=my_pet)
-    state_utils.save_to_shared_memory(vars, my_pet_name=my_pet_name)
-    state_utils.save_to_shared_memory(vars, my_pet_breed=my_pet_breed)
     response = f"{sentence} Do you have pets?"
     state_utils.save_to_shared_memory(vars, start=True)
     state_utils.save_to_shared_memory(vars, have_pets=True)
@@ -320,15 +339,15 @@ def have_pets_response(vars):
 
 
 def tell_about_pets_response(vars):
-    my_pet_info = random.choice(WHAT_PETS_I_HAVE)
-    my_pet = my_pet_info["pet"]
-    my_pet_name = my_pet_info["name"]
-    my_pet_breed = my_pet_info["breed"]
-    sentence = my_pet_info["sentence"]
+    make_my_pets_info(vars)
+    shared_memory = state_utils.get_shared_memory(vars)
+    my_pet = shared_memory.get("my_pet", "")
+    if not my_pet:
+        my_pet = random.choice(["cat", "dog"])
+        state_utils.save_to_shared_memory(vars, my_pet=my_pet)
+    my_pets_info = shared_memory.get("my_pets_info", {})
+    sentence = my_pets_info[my_pet]["sentence"]
     state_utils.save_to_shared_memory(vars, start=True)
-    state_utils.save_to_shared_memory(vars, my_pet=my_pet)
-    state_utils.save_to_shared_memory(vars, my_pet_name=my_pet_name)
-    state_utils.save_to_shared_memory(vars, my_pet_breed=my_pet_breed)
     response = f"{sentence} Would you like to learn more about my {my_pet}?"
     state_utils.set_confidence(vars, confidence=CONF_1)
     state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
@@ -336,6 +355,7 @@ def tell_about_pets_response(vars):
 
 
 def mention_pets_response(vars):
+    make_my_pets_info(vars)
     replace_plural = {"cats": "cat", "dogs": "dog", "rats": "rat", "puppy": "dog", "puppies": "dog", "kitty": "cat",
                       "kitties": "cat"}
     text = state_utils.get_last_human_utterance(vars)["text"]
@@ -352,6 +372,7 @@ def mention_pets_response(vars):
 
 
 def mention_animals_response(vars):
+    make_my_pets_info(vars)
     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
     animal = ""
     conceptnet = annotations.get("conceptnet", {})
@@ -368,6 +389,7 @@ def mention_animals_response(vars):
 
 
 def what_wild_response(vars):
+    make_my_pets_info(vars)
     what_i_like = random.choice(WILD_ANIMALS)
     response = f"{what_i_like} What wild animals do you like?"
     state_utils.save_to_shared_memory(vars, start=True)
@@ -388,6 +410,7 @@ simplified_dialog_flow = dialogflow_extention.DFEasyFilling(AS.USR_START)
 simplified_dialog_flow.add_user_serial_transitions(
     AS.USR_START,
     {
+        (scopes.USER_PETS, UserPetsState.USR_START): user_mentioned_his_pet_request,
         AS.SYS_WHAT_ANIMALS: sys_what_animals_request,
         AS.SYS_Q_HAVE_PETS: sys_have_pets_request,
         (scopes.WILD_ANIMALS, WildAnimalsState.SYS_WHY_DO_YOU_LIKE): user_likes_animal_request,

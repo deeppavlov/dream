@@ -6,7 +6,11 @@
             "dff_animals_skill_state": {
                 "shared_memory": {
                     "start": true,
-                    "what_animals": true
+                    "what_animals": true,
+                    "my_pets_info": {"cat": {"name": "Thomas", "breed": "Maine Coon",
+                                             "sentence": "I have a cat named Thomas. He is a big fluffy Maine Coon."},
+                                     "dog": {"name": "Jack", "breed": "German Shepherd",
+                                             "sentence": "I have a dog named Jack. He is a German Shepherd. He is very cute."}}
                 },
                 "previous_human_utter_index": 0,
                 "history": {

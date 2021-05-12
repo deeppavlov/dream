@@ -8,37 +8,54 @@ import sentry_sdk
 import common.constants as common_constants
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
+import common.dialogflow_framework.utils.condition as condition_utils
 from common.utils import is_no, is_yes
 import dialogflows.scopes as scopes
 from dialogflows.flows.user_pets_states import State as UserPetsState
 from dialogflows.flows.animals_states import State as AnimalsState
-from common.animals import PETS_TEMPLATE, COLORS_TEMPLATE, CATS_DOGS_PHRASES
+from dialogflows.flows.animals import make_my_pets_info
+from common.animals import PETS_TEMPLATE, CATS_DOGS_PHRASES, stop_about_animals, pet_games, breed_replace_dict
 
 sentry_sdk.init(os.getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-breeds = json.load(open("breeds.json", 'r'))
-
 CONF_1 = 1.0
 CONF_2 = 0.99
 CONF_3 = 0.95
 
+breeds_dict = {}
+
+try:
+    with open("/root/.deeppavlov/downloads/wikidata/breed_facts.json", 'r') as fl:
+        breeds_dict = json.load(fl)
+except Exception as e:
+    sentry_sdk.capture_exception(e)
+    logger.exception(e)
+
 
 def extract_pet(utt):
-    fnd1 = re.findall(r"(used to )?(have|had|like) (a )?(cat|dog)s?", utt)
-    fnd2 = re.findall(r"^(a )?(cat|dog)", utt)
-    fnd3 = re.findall(r"and a (cat|dog)", utt)
-    if fnd1:
-        pet = fnd1[0][3]
-    elif fnd2:
-        pet = fnd2[0][1]
-    elif fnd3:
-        pet = fnd3[0]
+    fnd = re.findall(r"(cat|dog|rat|fish|parrot|hamster)", utt)
+    if fnd:
+        pet = fnd[0]
     else:
         pet = ""
     return pet
+
+
+def delete_pet(vars):
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    user_text = user_uttr["text"]
+    shared_memory = state_utils.get_shared_memory(vars)
+    users_pet = shared_memory.get("users_pet", "")
+    found_pet = re.findall("(don't|do not) have (a )?(cat|dog|rat|fish|parrot|hamster)", user_text)
+    if found_pet:
+        pet = found_pet[0][2]
+        if pet == users_pet:
+            state_utils.save_to_shared_memory(vars, users_pet="")
+            state_utils.save_to_shared_memory(vars, users_pet_name="")
+            state_utils.save_to_shared_memory(vars, users_pet_breed="")
 
 
 def retrieve_and_save(vars):
@@ -49,12 +66,12 @@ def retrieve_and_save(vars):
     found_users_pet = shared_memory.get("users_pet", "")
     if not found_users_pet:
         found_users_pet = extract_pet(user_uttr)
-        found_pet_bot_uttr = re.findall(r"(cat|dog|rat|fish|parrot|hamster)", bot_uttr)
+        found_pet_bot_uttr = re.findall(r"(do you have a )(cat|dog|rat|fish|parrot|hamster)", bot_uttr, re.IGNORECASE)
         if found_users_pet:
             state_utils.save_to_shared_memory(vars, users_pet=found_users_pet)
-        if found_pet_bot_uttr and isyes:
-            state_utils.save_to_shared_memory(vars, users_pet=found_pet_bot_uttr[0])
-            found_users_pet = found_pet_bot_uttr[0]
+        elif found_pet_bot_uttr and isyes:
+            state_utils.save_to_shared_memory(vars, users_pet=found_pet_bot_uttr[0][1])
+            found_users_pet = found_pet_bot_uttr[0][1]
     return found_users_pet
 
 
@@ -63,12 +80,15 @@ def retrieve_and_save_name(vars):
     shared_memory = state_utils.get_shared_memory(vars)
     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
     ner = annotations.get("ner", [])
+    users_pet_breed = shared_memory.get("users_pet_breed", "")
     for entities in ner:
         if entities:
             for entity in entities:
                 if entity.get("type", "") == "PER":
                     name = entity["text"]
-                    if not shared_memory.get("users_pet_name", ""):
+                    if not shared_memory.get("users_pet_name", "") \
+                            and name not in {"black", "white", "grey", "brown", "yellow", "cat", "dog"} \
+                            and name not in users_pet_breed:
                         state_utils.save_to_shared_memory(vars, users_pet_name=name)
     return name
 
@@ -97,15 +117,130 @@ def choose_pet_phrase(vars, found_users_pet):
     return pet_phrase
 
 
+def extract_breed(vars):
+    shared_memory = state_utils.get_shared_memory(vars)
+    found_breed = shared_memory.get("users_pet_breed", "")
+    if not found_breed:
+        breed_titles = set(breeds_dict.keys())
+        user_uttr = state_utils.get_last_human_utterance(vars)
+        annotations = user_uttr["annotations"]
+        nounphrases = annotations.get("cobot_entities", {}).get("entities", []) + \
+            annotations.get("cobot_nounphrases", [])
+        nounphrases = list(set(nounphrases))
+        nounphrases = [re.sub(r"(cat|cats|dog|dogs)", "", phr).replace("  ", " ").strip() for phr in nounphrases]
+        nounphrases = [phr for phr in nounphrases if len(phr) > 2]
+        found_breed = ""
+        if nounphrases:
+            for phr in nounphrases:
+                phr = breed_replace_dict.get(phr, phr)
+                if phr in breed_titles:
+                    found_breed = phr
+                    break
+            if not found_breed:
+                for phr in nounphrases:
+                    phr = breed_replace_dict.get(phr, phr)
+                    for title in breed_titles:
+                        if phr in title or title in phr:
+                            found_breed = title
+                            break
+                    if found_breed:
+                        break
+        if found_breed:
+            state_utils.save_to_shared_memory(vars, users_pet_breed=found_breed)
+    return found_breed
+
+
+def make_utt_with_ack(vars, cur_state):
+    ack = ""
+    statement = ""
+    question = ""
+    shared_memory = state_utils.get_shared_memory(vars)
+    make_my_pets_info(vars)
+    prev_state = condition_utils.get_last_state(vars)
+    isno = is_no(state_utils.get_last_human_utterance(vars))
+    users_pet = shared_memory.get("users_pet", "")
+    users_pet_name = shared_memory.get("users_pet_name", "")
+    users_pet_breed = shared_memory.get("users_pet_breed", "")
+    logger.info(f"make_utt_with_ack {users_pet} {users_pet_name} {users_pet_breed} "
+                f"{breeds_dict.get('users_pet_breed', '')} "
+                f"is_last_state {condition_utils.is_last_state(vars, UserPetsState.SYS_ASK_ABOUT_NAME)}")
+    my_pets_info = shared_memory.get("my_pets_info", {})
+    if str(prev_state).split('.')[-1] == "SYS_ASK_ABOUT_NAME" and users_pet_name:
+        ack = "Very cool name! You have such an amusing mind!"
+    if str(prev_state).split('.')[-1] == "SYS_WHAT_BREED":
+        if users_pet and users_pet_breed:
+            breed_info = breeds_dict[users_pet_breed]
+            facts = breed_info.get("facts", "")
+            if not facts.endswith("."):
+                facts = f"{facts}."
+            if facts:
+                ack = f"I know a lot about {users_pet} breeds. {facts}"
+                #      + f"Would you like to know more about {users_pet_breed}?"
+    if str(prev_state).split('.')[-1] == "SYS_PLAY_WITH_PET":
+        if not isno:
+            ack = "Really, playing with a pet makes a lot of fun."
+    if cur_state == UserPetsState.SYS_ASK_ABOUT_NAME:
+        if users_pet in {"cat", "dog"}:
+            statement = choose_pet_phrase(vars, users_pet)
+        if users_pet:
+            question = f"What is your {users_pet}'s name?"
+        else:
+            question = f"What is your pet's name?"
+    if cur_state == UserPetsState.SYS_WHAT_BREED:
+        if users_pet in {"cat", "dog"}:
+            my_pet = my_pets_info[users_pet]
+            my_pet_breed = my_pet["breed"]
+            statement = f"I have a {my_pet_breed} {users_pet}."
+            question = f"What is your {users_pet}'s breed?"
+    if cur_state == UserPetsState.SYS_PLAY_WITH_PET:
+        if users_pet in {"cat", "dog"}:
+            games = " and ".join(pet_games[users_pet])
+            statement = f"I like to play with my {users_pet} different games, such as {games}."
+        if users_pet:
+            question = f"Do you play with your {users_pet}?"
+    if cur_state == UserPetsState.SYS_LIKE_PET:
+        statement = "There's an old saying that pets repay the love you give them ten-fold."
+        if users_pet_name:
+            question = f"Do you like {users_pet_name}?"
+        elif users_pet:
+            question = f"Do you like your {users_pet}?"
+        else:
+            question = "Do you like your pet?"
+    if cur_state == UserPetsState.SYS_ASK_MORE_INFO:
+        if users_pet_name and users_pet:
+            statement = f"I am very curious about {users_pet_name}."
+            question = f"Could you tell me more about your {users_pet}?"
+        elif users_pet:
+            statement = f"I am very curious about your {users_pet}."
+            question = "Could you tell me more about your pet?"
+        else:
+            statement = "Very interesting!"
+            question = "Could you tell me more about your pet?"
+    response = f"{ack} {statement} {question}"
+    response = response.replace("  ", " ").strip()
+    return response
+
+
+def stop_animals_request(ngrams, vars):
+    flag = False
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    shared_memory = state_utils.get_shared_memory(vars)
+    stop_about_animals(user_uttr, shared_memory)
+    if stop_about_animals(user_uttr, shared_memory):
+        flag = True
+    logger.info(f"stop_animals_request={flag}")
+    return flag
+
+
 def what_pets_request(ngrams, vars):
     flag = False
-    bot_uttr = state_utils.get_last_bot_utterance(vars)["text"]
-    user_uttr = state_utils.get_last_human_utterance(vars)["text"]
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
+    user_uttr = state_utils.get_last_human_utterance(vars)
     isyes = is_yes(state_utils.get_last_human_utterance(vars))
-    user_has = re.findall(r"i (have|had)", user_uttr)
-    mention_pet = re.findall(PETS_TEMPLATE, user_uttr)
-    asked_about_pets = "do you have pets" in bot_uttr.lower()
-    bot_asked_pet = re.findall(r"do you have a (cat|dog)", bot_uttr, re.IGNORECASE)
+    user_has = re.findall(r"i (have|had)", user_uttr["text"])
+    mention_pet = re.findall(PETS_TEMPLATE, user_uttr["text"])
+    asked_about_pets = "do you have pets" in bot_uttr["text"].lower()
+    bot_asked_pet = re.findall(r"do you have a (cat|dog|rat|fish|parrot|hamster)", bot_uttr["text"], re.IGNORECASE)
     logger.info(f"what_pets_request, {asked_about_pets}, {isyes}, {user_has}, {mention_pet}")
     if asked_about_pets and (isyes or user_has) and not mention_pet and not (bot_asked_pet and is_yes):
         flag = True
@@ -115,18 +250,24 @@ def what_pets_request(ngrams, vars):
 
 def ask_about_name_request(ngrams, vars):
     flag = False
-    user_uttr = state_utils.get_last_human_utterance(vars)["text"]
-    bot_uttr = state_utils.get_last_bot_utterance(vars)["text"]
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
     isno = is_no(state_utils.get_last_human_utterance(vars))
     isyes = is_yes(state_utils.get_last_human_utterance(vars))
-    user_has = re.findall(r"i (have|had)", user_uttr)
-    bot_asked_pet = re.findall(r"do you have a (cat|dog)", bot_uttr, re.IGNORECASE)
-    user_has_not = (bot_asked_pet and isno) and not re.findall(PETS_TEMPLATE, user_uttr)
+    user_has = re.findall(r"i (have|had)", user_uttr["text"])
+    extract_breed(vars)
+    delete_pet(vars)
+    bot_asked_pet = re.findall(r"do you have a (cat|dog|rat|fish|parrot|hamster)", bot_uttr["text"], re.IGNORECASE)
+    user_has_not = (bot_asked_pet and isno) and not re.findall(PETS_TEMPLATE, user_uttr["text"])
+    user_told_pet = re.findall("(cat|dog|rat|fish|parrot|hamster)", user_uttr["text"]) \
+        and "do you have pets" in bot_uttr["text"].lower()
+    user_mentioned_pet = re.findall(r"my (cat|dog|rat|fish|parrot|hamster)", user_uttr["text"])
     shared_memory = state_utils.get_shared_memory(vars)
     asked_name = shared_memory.get("asked_name", False)
     users_pet = shared_memory.get("users_pet", "")
-    if not user_has_not and not asked_name and not re.findall(r"(name|call)", user_uttr) \
-            and (users_pet or (bot_asked_pet and (isyes or user_has))):
+    logger.info(f"ask_about_name, users_pet {users_pet} bot_asked_pet {bot_asked_pet} user_told_pet {user_told_pet}")
+    if not user_has_not and not asked_name and not re.findall(r"(name|call)", user_uttr["text"]) \
+            and (users_pet or (bot_asked_pet and (isyes or user_has)) or user_told_pet or user_mentioned_pet):
         flag = True
     logger.info(f"ask_about_name_request={flag}")
     return flag
@@ -143,11 +284,12 @@ def not_have_pets_request(ngrams, vars):
 
 def is_dog_cat_request(ngrams, vars):
     flag = False
-    bot_uttr = state_utils.get_last_bot_utterance(vars)["text"]
-    user_uttr = state_utils.get_last_human_utterance(vars)["text"]
-    user_mention_pet = re.findall(r"\b(cat|dog)s?\b", user_uttr)
-    user_has = re.findall(r"\b(have|had)\b", user_uttr)
-    asked_like = "what animals do you like" in bot_uttr.lower()
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    user_mention_pet = re.findall(r"\b(cat|dog)s?\b", user_uttr["text"])
+    user_has = re.findall(r"\b(have|had)\b", user_uttr["text"])
+    asked_like = "what animals do you like" in bot_uttr["text"].lower()
+    delete_pet(vars)
     if asked_like and user_mention_pet and not user_has:
         flag = True
     logger.info(f"is_dog_cat_request={flag}")
@@ -160,37 +302,60 @@ def ask_about_breed_request(ngrams, vars):
     user_uttr = state_utils.get_last_human_utterance(vars)["text"]
     shared_memory = state_utils.get_shared_memory(vars)
     found_pet = re.findall(PETS_TEMPLATE, user_uttr)
+    delete_pet(vars)
     users_pet = shared_memory.get("users_pet", "")
     users_pet_name = shared_memory.get("users_pet_name", "")
     asked_breed = shared_memory.get("asked_breed", False)
-    found_breed = re.findall("|".join(breeds.keys()), user_uttr)
+    found_breed = extract_breed(vars)
     isno = is_no(state_utils.get_last_human_utterance(vars))
     user_has_not = (re.findall("do you have a (cat|dog)", bot_uttr, re.IGNORECASE) and isno) and not \
         re.findall(PETS_TEMPLATE, user_uttr)
     logger.info(f"ask_about_breed_request_isno {isno}")
     if not user_has_not and not asked_breed and (found_pet or users_pet_name or users_pet) and not found_breed:
         flag = True
+    if (users_pet and users_pet not in {"cat", "dog"}) or (found_pet and found_pet not in {"cat", "dog"}):
+        flag = False
     logger.info(f"ask_about_breed_request={flag}")
     return flag
 
 
-def ask_about_color_request(ngrams, vars):
+def ask_about_playing_request(ngrams, vars):
     flag = False
-    bot_uttr = state_utils.get_last_bot_utterance(vars)["text"]
-    user_uttr = state_utils.get_last_human_utterance(vars)["text"]
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
+    user_uttr = state_utils.get_last_human_utterance(vars)
     shared_memory = state_utils.get_shared_memory(vars)
-    found_pet = re.findall(PETS_TEMPLATE, user_uttr)
+    found_pet = re.findall(PETS_TEMPLATE, user_uttr["text"])
+    delete_pet(vars)
     users_pet = shared_memory.get("users_pet", "")
     users_pet_name = shared_memory.get("users_pet_name", "")
-    asked_color = shared_memory.get("asked_color", False)
-    found_color = re.findall(COLORS_TEMPLATE, user_uttr)
+    asked_play = shared_memory.get("asked_play", False)
+    found_play = "play" in user_uttr["text"]
     isno = is_no(state_utils.get_last_human_utterance(vars))
-    user_has_not = (re.findall("do you have a (cat|dog)", bot_uttr, re.IGNORECASE) and isno) and not \
-        re.findall(PETS_TEMPLATE, user_uttr)
-    logger.info(f"ask_about_color_request_isno {isno}")
-    if not user_has_not and not asked_color and (found_pet or users_pet_name or users_pet) and not found_color:
+    user_has_not = (re.findall("do you have a (cat|dog|rat|fish|parrot|hamster)", bot_uttr["text"], re.IGNORECASE)
+                    and isno) and not re.findall(PETS_TEMPLATE, user_uttr["text"])
+    if not user_has_not and not asked_play and (found_pet or users_pet_name or users_pet) and not found_play:
         flag = True
-    logger.info(f"ask_about_color_request={flag}")
+    logger.info(f"ask_about_playing_request={flag}")
+    return flag
+
+
+def ask_like_request(ngrams, vars):
+    flag = False
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    shared_memory = state_utils.get_shared_memory(vars)
+    found_pet = re.findall(PETS_TEMPLATE, user_uttr["text"])
+    delete_pet(vars)
+    users_pet = shared_memory.get("users_pet", "")
+    users_pet_name = shared_memory.get("users_pet_name", "")
+    asked_like = shared_memory.get("asked_like", False)
+    found_like = re.findall("(like|love)", user_uttr["text"])
+    isno = is_no(state_utils.get_last_human_utterance(vars))
+    user_has_not = (re.findall("do you have a (cat|dog|rat|fish|parrot|hamster)", bot_uttr["text"], re.IGNORECASE)
+                    and isno) and not re.findall(PETS_TEMPLATE, user_uttr["text"])
+    if not user_has_not and not asked_like and (found_pet or users_pet_name or users_pet) and not found_like:
+        flag = True
+    logger.info(f"ask_like_request={flag}")
     return flag
 
 
@@ -200,24 +365,15 @@ def ask_more_info_request(ngrams, vars):
     user_uttr = state_utils.get_last_human_utterance(vars)["text"]
     shared_memory = state_utils.get_shared_memory(vars)
     found_pet = re.findall(PETS_TEMPLATE, user_uttr)
+    delete_pet(vars)
     users_pet = shared_memory.get("users_pet", "")
     asked_more_info = shared_memory.get("asked_more_info", False)
     isno = is_no(state_utils.get_last_human_utterance(vars))
-    user_has_not = (re.findall("do you have a (cat|dog)", bot_uttr, re.IGNORECASE) and isno) and not \
-        re.findall(PETS_TEMPLATE, user_uttr)
+    user_has_not = (re.findall("do you have a (cat|dog|rat|fish|parrot|hamster)", bot_uttr, re.IGNORECASE)
+                    and isno) and not re.findall(PETS_TEMPLATE, user_uttr)
     if not user_has_not and not asked_more_info and (found_pet or users_pet) and "feed" not in user_uttr:
         flag = True
     logger.info(f"ask_about_feeding_request={flag}")
-    return flag
-
-
-def tell_fact_about_breed_request(ngrams, vars):
-    flag = False
-    shared_memory = state_utils.get_shared_memory(vars)
-    fact_about_breed = shared_memory.get("fact_about_breed", False)
-    if not fact_about_breed:
-        flag = True
-    logger.info(f"tell_fact_about_breed_request={flag}")
     return flag
 
 
@@ -235,23 +391,26 @@ def what_pets_response(vars):
 
 
 def ask_about_dog_cat_response(vars):
+    response = ""
     found_users_pet = retrieve_and_save(vars)
-    if found_users_pet:
+    if found_users_pet in {"cat", "dog"}:
         pet_phrase = choose_pet_phrase(vars, found_users_pet)
-        response = f"{pet_phrase} Do you have a {found_users_pet}?"
-    state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+        response = f"{pet_phrase} Do you have a {found_users_pet}?".strip()
+    if response:
+        state_utils.set_confidence(vars, confidence=CONF_1)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+    else:
+        state_utils.set_confidence(vars, confidence=0.0)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
     return response
 
 
 def ask_about_name_response(vars):
     found_users_pet = retrieve_and_save(vars)
+    extract_breed(vars)
     logger.info(f"ask_about_name_response, found_users_pet {found_users_pet}")
-    if found_users_pet:
-        pet_phrase = choose_pet_phrase(vars, found_users_pet)
-        response = f"{pet_phrase} What is your {found_users_pet}'s name?"
-    else:
-        response = "What is his name?"
+    response = make_utt_with_ack(vars, UserPetsState.SYS_ASK_ABOUT_NAME)
+    state_utils.save_to_shared_memory(vars, start=True)
     state_utils.save_to_shared_memory(vars, asked_name=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
     state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
@@ -261,76 +420,54 @@ def ask_about_name_response(vars):
 def suggest_pet_response(vars):
     phrases = [phrase for pet_phrases in CATS_DOGS_PHRASES.values() for phrase in pet_phrases]
     response = random.choice(phrases)
+    state_utils.save_to_shared_memory(vars, start=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
     state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
 
 
 def ask_about_breed_response(vars):
-    found_users_pet = retrieve_and_save(vars)
-    found_users_pet_name = retrieve_and_save_name(vars)
-    if found_users_pet:
-        pet_phrase = choose_pet_phrase(vars, found_users_pet)
-        if found_users_pet_name:
-            response = f"{pet_phrase} What breed is {found_users_pet_name}?"
-        else:
-            response = f"{pet_phrase} What breed is your {found_users_pet}?"
-    else:
-        response = "What breed is it?"
+    retrieve_and_save(vars)
+    extract_breed(vars)
+    retrieve_and_save_name(vars)
+    response = make_utt_with_ack(vars, UserPetsState.SYS_WHAT_BREED)
+    state_utils.save_to_shared_memory(vars, start=True)
     state_utils.save_to_shared_memory(vars, asked_breed=True)
-    state_utils.set_confidence(vars, confidence=CONF_2)
+    state_utils.set_confidence(vars, confidence=CONF_1)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
 
-def ask_about_color_response(vars):
-    found_users_pet = retrieve_and_save(vars)
-    found_users_pet_name = retrieve_and_save_name(vars)
-    if found_users_pet:
-        pet_phrase = choose_pet_phrase(vars, found_users_pet)
-        if found_users_pet_name:
-            response = f"{pet_phrase} What color is {found_users_pet_name}?"
-        else:
-            response = f"{pet_phrase} What color is your {found_users_pet}?"
-    else:
-        response = "What color is it?"
-    state_utils.save_to_shared_memory(vars, asked_color=True)
-    state_utils.set_confidence(vars, confidence=CONF_2)
+def ask_about_playing_response(vars):
+    retrieve_and_save(vars)
+    extract_breed(vars)
+    retrieve_and_save_name(vars)
+    response = make_utt_with_ack(vars, UserPetsState.SYS_PLAY_WITH_PET)
+    state_utils.save_to_shared_memory(vars, start=True)
+    state_utils.save_to_shared_memory(vars, asked_play=True)
+    state_utils.set_confidence(vars, confidence=CONF_1)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    return response
+
+
+def ask_like_response(vars):
+    retrieve_and_save(vars)
+    extract_breed(vars)
+    retrieve_and_save_name(vars)
+    response = make_utt_with_ack(vars, UserPetsState.SYS_LIKE_PET)
+    state_utils.save_to_shared_memory(vars, start=True)
+    state_utils.save_to_shared_memory(vars, asked_like=True)
+    state_utils.set_confidence(vars, confidence=CONF_1)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
 
 def ask_more_info_response(vars):
-    found_users_pet = retrieve_and_save(vars)
-    found_users_pet_name = retrieve_and_save_name(vars)
-    sentence = "It is very interesting."
-    if found_users_pet:
-        if found_users_pet_name:
-            response = f"{sentence} Could you tell more about your {found_users_pet_name}?"
-        else:
-            response = f"{sentence} Could you tell more about your {found_users_pet}?"
-    else:
-        response = f"{sentence} Could you tell more about your pet?"
+    retrieve_and_save(vars)
+    retrieve_and_save_name(vars)
+    response = make_utt_with_ack(vars, UserPetsState.SYS_ASK_MORE_INFO)
+    state_utils.save_to_shared_memory(vars, start=True)
     state_utils.save_to_shared_memory(vars, asked_more_info=True)
-    state_utils.set_confidence(vars, confidence=CONF_3)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
-    return response
-
-
-def tell_fact_about_breed_response(vars):
-    annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-    nounphrases = annotations.get("cobot_nounphrases")
-    fact = ""
-    for nounphrase in nounphrases:
-        if nounphrase in breeds:
-            fact = breeds[nounphrase]
-            break
-    if fact:
-        response = fact
-    else:
-        response = "They are sensitive and intelligent, known for undying loyalty and the amazing ability to" + \
-                   "foresee their owners’ needs."
-    state_utils.save_to_shared_memory(vars, fact_about_breed=True)
     state_utils.set_confidence(vars, confidence=CONF_3)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
@@ -346,12 +483,14 @@ simplified_dialog_flow = dialogflow_extention.DFEasyFilling(UserPetsState.USR_ST
 simplified_dialog_flow.add_user_serial_transitions(
     UserPetsState.USR_START,
     {
+        UserPetsState.SYS_ERR: stop_animals_request,
         UserPetsState.SYS_WHAT_PETS: what_pets_request,
         UserPetsState.SYS_IS_DOG_CAT: is_dog_cat_request,
         UserPetsState.SYS_NOT_HAVE: not_have_pets_request,
         UserPetsState.SYS_ASK_ABOUT_NAME: ask_about_name_request,
         UserPetsState.SYS_WHAT_BREED: ask_about_breed_request,
-        UserPetsState.SYS_WHAT_COLOR: ask_about_color_request,
+        UserPetsState.SYS_PLAY_WITH_PET: ask_about_playing_request,
+        UserPetsState.SYS_LIKE_PET: ask_like_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
 )
@@ -359,9 +498,11 @@ simplified_dialog_flow.add_user_serial_transitions(
 simplified_dialog_flow.add_user_serial_transitions(
     UserPetsState.USR_WHAT_PETS,
     {
+        UserPetsState.SYS_ERR: stop_animals_request,
         UserPetsState.SYS_ASK_ABOUT_NAME: ask_about_name_request,
         UserPetsState.SYS_WHAT_BREED: ask_about_breed_request,
-        UserPetsState.SYS_WHAT_COLOR: ask_about_color_request,
+        UserPetsState.SYS_PLAY_WITH_PET: ask_about_playing_request,
+        UserPetsState.SYS_LIKE_PET: ask_like_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
 )
@@ -369,9 +510,11 @@ simplified_dialog_flow.add_user_serial_transitions(
 simplified_dialog_flow.add_user_serial_transitions(
     UserPetsState.USR_ASK_ABOUT_DOG_CAT,
     {
+        UserPetsState.SYS_ERR: stop_animals_request,
         UserPetsState.SYS_ASK_ABOUT_NAME: ask_about_name_request,
         UserPetsState.SYS_WHAT_BREED: ask_about_breed_request,
-        UserPetsState.SYS_WHAT_COLOR: ask_about_color_request,
+        UserPetsState.SYS_PLAY_WITH_PET: ask_about_playing_request,
+        UserPetsState.SYS_LIKE_PET: ask_like_request,
         UserPetsState.SYS_ASK_MORE_INFO: ask_more_info_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
@@ -380,8 +523,10 @@ simplified_dialog_flow.add_user_serial_transitions(
 simplified_dialog_flow.add_user_serial_transitions(
     UserPetsState.USR_ASK_ABOUT_NAME,
     {
+        UserPetsState.SYS_ERR: stop_animals_request,
         UserPetsState.SYS_WHAT_BREED: ask_about_breed_request,
-        UserPetsState.SYS_WHAT_COLOR: ask_about_color_request,
+        UserPetsState.SYS_PLAY_WITH_PET: ask_about_playing_request,
+        UserPetsState.SYS_LIKE_PET: ask_like_request,
         UserPetsState.SYS_ASK_MORE_INFO: ask_more_info_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
@@ -390,6 +535,7 @@ simplified_dialog_flow.add_user_serial_transitions(
 simplified_dialog_flow.add_user_serial_transitions(
     UserPetsState.USR_NOT_HAVE,
     {
+        UserPetsState.SYS_ERR: stop_animals_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
 )
@@ -397,19 +543,32 @@ simplified_dialog_flow.add_user_serial_transitions(
 simplified_dialog_flow.add_user_serial_transitions(
     UserPetsState.USR_WHAT_BREED,
     {
+        UserPetsState.SYS_ERR: stop_animals_request,
         UserPetsState.SYS_ASK_ABOUT_NAME: ask_about_name_request,
-        UserPetsState.SYS_WHAT_COLOR: ask_about_color_request,
+        UserPetsState.SYS_PLAY_WITH_PET: ask_about_playing_request,
+        UserPetsState.SYS_LIKE_PET: ask_like_request,
         UserPetsState.SYS_ASK_MORE_INFO: ask_more_info_request,
-        UserPetsState.SYS_TELL_FACT_ABOUT_BREED: tell_fact_about_breed_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
 )
 
 simplified_dialog_flow.add_user_serial_transitions(
-    UserPetsState.USR_WHAT_COLOR,
+    UserPetsState.USR_PLAY_WITH_PET,
     {
+        UserPetsState.SYS_ERR: stop_animals_request,
         UserPetsState.SYS_ASK_ABOUT_NAME: ask_about_name_request,
-        UserPetsState.SYS_WHAT_BREED: ask_about_breed_request,
+        UserPetsState.SYS_LIKE_PET: ask_like_request,
+        UserPetsState.SYS_ASK_MORE_INFO: ask_more_info_request,
+        (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
+    },
+)
+
+simplified_dialog_flow.add_user_serial_transitions(
+    UserPetsState.USR_LIKE_PET,
+    {
+        UserPetsState.SYS_ERR: stop_animals_request,
+        UserPetsState.SYS_ASK_ABOUT_NAME: ask_about_name_request,
+        UserPetsState.SYS_PLAY_WITH_PET: ask_about_playing_request,
         UserPetsState.SYS_ASK_MORE_INFO: ask_more_info_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
@@ -418,8 +577,10 @@ simplified_dialog_flow.add_user_serial_transitions(
 simplified_dialog_flow.add_user_serial_transitions(
     UserPetsState.USR_ASK_MORE_INFO,
     {
+        UserPetsState.SYS_ERR: stop_animals_request,
         UserPetsState.SYS_WHAT_BREED: ask_about_breed_request,
-        UserPetsState.SYS_WHAT_COLOR: ask_about_color_request,
+        UserPetsState.SYS_PLAY_WITH_PET: ask_about_playing_request,
+        UserPetsState.SYS_LIKE_PET: ask_like_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
 )
@@ -434,12 +595,12 @@ simplified_dialog_flow.add_system_transition(UserPetsState.SYS_ASK_ABOUT_NAME, U
                                              ask_about_name_response, )
 simplified_dialog_flow.add_system_transition(UserPetsState.SYS_WHAT_BREED, UserPetsState.USR_WHAT_BREED,
                                              ask_about_breed_response, )
-simplified_dialog_flow.add_system_transition(UserPetsState.SYS_WHAT_COLOR, UserPetsState.USR_WHAT_COLOR,
-                                             ask_about_color_response, )
+simplified_dialog_flow.add_system_transition(UserPetsState.SYS_PLAY_WITH_PET, UserPetsState.USR_PLAY_WITH_PET,
+                                             ask_about_playing_response, )
+simplified_dialog_flow.add_system_transition(UserPetsState.SYS_LIKE_PET, UserPetsState.USR_LIKE_PET,
+                                             ask_like_response, )
 simplified_dialog_flow.add_system_transition(UserPetsState.SYS_ASK_MORE_INFO, UserPetsState.USR_ASK_MORE_INFO,
                                              ask_more_info_response, )
-simplified_dialog_flow.add_system_transition(UserPetsState.SYS_TELL_FACT_ABOUT_BREED,
-                                             UserPetsState.USR_TELL_FACT_ABOUT_BREED, tell_fact_about_breed_response, )
 
 simplified_dialog_flow.set_error_successor(UserPetsState.USR_START, UserPetsState.SYS_ERR)
 simplified_dialog_flow.set_error_successor(UserPetsState.SYS_WHAT_PETS, UserPetsState.SYS_ERR)
@@ -450,13 +611,13 @@ simplified_dialog_flow.set_error_successor(UserPetsState.USR_ASK_ABOUT_NAME, Use
 simplified_dialog_flow.set_error_successor(UserPetsState.SYS_NOT_HAVE, UserPetsState.SYS_ERR)
 simplified_dialog_flow.set_error_successor(UserPetsState.USR_NOT_HAVE, UserPetsState.SYS_ERR)
 simplified_dialog_flow.set_error_successor(UserPetsState.SYS_WHAT_BREED, UserPetsState.SYS_ERR)
-simplified_dialog_flow.set_error_successor(UserPetsState.SYS_WHAT_COLOR, UserPetsState.SYS_ERR)
 simplified_dialog_flow.set_error_successor(UserPetsState.USR_WHAT_BREED, UserPetsState.SYS_ERR)
-simplified_dialog_flow.set_error_successor(UserPetsState.USR_WHAT_COLOR, UserPetsState.SYS_ERR)
+simplified_dialog_flow.set_error_successor(UserPetsState.SYS_PLAY_WITH_PET, UserPetsState.SYS_ERR)
+simplified_dialog_flow.set_error_successor(UserPetsState.USR_PLAY_WITH_PET, UserPetsState.SYS_ERR)
+simplified_dialog_flow.set_error_successor(UserPetsState.SYS_LIKE_PET, UserPetsState.SYS_ERR)
+simplified_dialog_flow.set_error_successor(UserPetsState.USR_LIKE_PET, UserPetsState.SYS_ERR)
 simplified_dialog_flow.set_error_successor(UserPetsState.SYS_ASK_MORE_INFO, UserPetsState.SYS_ERR)
 simplified_dialog_flow.set_error_successor(UserPetsState.USR_ASK_MORE_INFO, UserPetsState.SYS_ERR)
-simplified_dialog_flow.set_error_successor(UserPetsState.SYS_TELL_FACT_ABOUT_BREED, UserPetsState.SYS_ERR)
-simplified_dialog_flow.set_error_successor(UserPetsState.USR_TELL_FACT_ABOUT_BREED, UserPetsState.SYS_ERR)
 
 simplified_dialog_flow.add_system_transition(
     UserPetsState.SYS_ERR,
