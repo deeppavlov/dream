@@ -36,7 +36,6 @@ CHANGE_TOPIC_SUBJECT = [
 BY_THE_WAY = [
     "By the way,",
     "Anyway,",
-    "That reminds me,",
     "Oh, before I forget,",
     "I wanted to mention that",
 ]
