@@ -5,7 +5,7 @@ from common.universal_templates import if_chat_about_particular_topic
 GOSSIP_COMPILED_PATTERN = re.compile(
     r"\b(celebrit|actor|actress|writer|author|entrepreneur|sportsperson|musician|gossip)", re.IGNORECASE
 )
-HAVE_YOU_GOSSIP_TEMPLATE = re.compile(r"(would|have|did|was|had|were|are) you .*gossip", re.IGNORECASE)
+HAVE_YOU_GOSSIP_TEMPLATE = re.compile(r"(would|have|did|was|had|were|are|do) you .*gossip", re.IGNORECASE)
 
 GOSSIP_SKILL_TRIGGER_PHRASES = [
     "Would you want to hear the latest gossip?",
