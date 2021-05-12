@@ -413,9 +413,7 @@ class BookSkillScenario:
                         confidence = self.super_conf if reply else 0
                     elif is_no(annotated_user_phrase):
                         reply = 'OK, as you wish.'
-                        reply += link_to(['movie_skill', 'dff_music_skill', 'dff_food_skill',
-                                          'news_api_skill', 'weather_skill', 'dff_music_skill',
-                                          'game_cooperative_skill', 'dff_animals_skill', 'dff_sport_skill'],
+                        reply += link_to(SKILLS_TO_LINK,
                                          dialog["human"]["attributes"])['phrase']
                         confidence = self.low_conf
                     else:
@@ -455,7 +453,13 @@ class BookSkillScenario:
                             used_phrases=human_attr['book_skill']['used_phrases'])
                 else:
                     logger.debug('Final branch')
-                    reply, confidence = self.default_reply, 0
+                    if book_just_active:
+                        link = link_to(SKILLS_TO_LINK, dialog["human"]["attributes"])['phrase']
+                        reply = f" We have been talking about books for a good amount of time. " \
+                                f"Let's talk about something else. {link}"
+                        confidence = self.default_conf
+                    else:
+                        reply, confidence = self.default_reply, 0
                 if confidence == self.super_conf:
                     attr = {"can_continue": MUST_CONTINUE}
                 elif confidence == self.default_conf:
