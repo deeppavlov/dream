@@ -334,7 +334,7 @@ class BookSkillScenario:
                         # answering with default conf as we do not even check the user utterance at all
                         logger.debug('Giving recency phrase')
                         reply, confidence = f"{recency_phrase} {DID_NOT_EXIST} " \
-                                            f"{link_to(SKILLS_TO_LINK, human_attr)}", self.super_conf
+                                            f"{link_to(SKILLS_TO_LINK, human_attr)['phrase']}", self.super_conf
                 elif bot_phrases[-1] in OPINION_REQUEST_ON_BOOK_PHRASES:
                     # if we previously asked about user's opinion on book
                     logger.debug('Last phrase was OPINION_REQUEST_ON_BOOK_PHRASES')
