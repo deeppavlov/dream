@@ -147,10 +147,10 @@ def get_updated_disliked_skills(dialog, can_not_be_disliked_skills=None):
                 break
 
     if linked_to_skill:
-        sentiment = get_sentiment(dialog["human_utterances"][-1], probs=False)
+        negative_prob = get_sentiment(dialog["human_utterances"][-1], probs=True).get("negative", 0.)
         toxicity = get_toxic(dialog["human_utterances"][-1], probs=False)
         _is_no = is_no_intent(dialog["human_utterances"][-1])
-        if (sentiment and sentiment[0] == "negative") or toxicity or _is_no:
+        if negative_prob > 0.8 or toxicity or _is_no:
             if linked_to_skill not in can_not_be_disliked_skills:
                 disliked_skills.append(linked_to_skill)
 
