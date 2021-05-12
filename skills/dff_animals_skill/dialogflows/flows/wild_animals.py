@@ -12,7 +12,7 @@ from common.utils import is_no
 import dialogflows.scopes as scopes
 from dialogflows.flows.wild_animals_states import State as WAS
 from dialogflows.flows.animals_states import State as AnimalsState
-from common.animals import PETS_TEMPLATE
+from common.animals import PETS_TEMPLATE, stop_about_animals
 
 sentry_sdk.init(os.getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -42,6 +42,17 @@ def plural_nouns(text):
         sentry_sdk.capture_exception(e)
         logger.exception(e)
     return plural_text
+
+
+def stop_animals_request(ngrams, vars):
+    flag = False
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    shared_memory = state_utils.get_shared_memory(vars)
+    stop_about_animals(user_uttr, shared_memory)
+    if stop_about_animals(user_uttr, shared_memory):
+        flag = True
+    logger.info(f"stop_animals_request={flag}")
+    return flag
 
 
 def ask_about_zoo_request(ngrams, vars):

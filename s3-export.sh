@@ -59,6 +59,7 @@ files=(
   alexaprize_data/logreg_recommendation_model.pkl
   datasets/wikipedia/enwiki_latest_hyperlinks.db
   kbqa/wikidata/wikihow.pickle
+  kbqa/wikidata/breed_facts.json
 )
 
 for file in ${files[@]}; do

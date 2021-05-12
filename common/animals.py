@@ -1,4 +1,6 @@
 import re
+from common.universal_templates import is_any_question_sentence_in_utterance
+
 
 LIKE_ANIMALS_REQUESTS = ["Do you like animals?"]
 HAVE_PETS_REQUESTS = ["Do you have pets?"]
@@ -30,6 +32,9 @@ HAVE_PETS_TEMPLATE = re.compile(r"(do|did|have) you (have |had )?(any |a )?(pets
 LIKE_PETS_TEMPLATE = re.compile(r"(do|did|have) you (like |love )?(any |a )?(pets|pet|animals|animal)", re.IGNORECASE)
 DONT_LIKE = re.compile(r"(do not like|don't like|dont like|hate)", re.IGNORECASE)
 
+breed_replace_dict = {"lab": "labrador"}
+pet_games = {"dog": ["frisbee", "hide and seek"], "cat": ["run and fetch"]}
+
 
 def check_about_animals(text):
     if re.findall(ANIMALS_FIND_TEMPLATE, text):
@@ -46,6 +51,32 @@ def mentioned_animal(annotations):
             objects = triplets["SymbolOf"]
             if "animal" in objects:
                 flag = True
+    return flag
+
+
+def stop_about_animals(user_uttr, shared_memory):
+    flag = False
+    annotations = user_uttr["annotations"]
+    cobot_entities = annotations.get("cobot_entities", {}).get("entities", [])
+    my_pet_name = shared_memory.get("my_pet_name", "").lower()
+    user_pet_name = shared_memory.get("users_pet_name", "").lower()
+    name_in_entities = my_pet_name in cobot_entities or user_pet_name in cobot_entities
+    found_animal_substr = re.findall(ANIMALS_FIND_TEMPLATE, user_uttr["text"])
+    is_stop = re.findall(r"(stop|shut|something else|change|don't want)", user_uttr["text"])
+    found_animal_wp = ""
+    wp_output = annotations.get("wiki_parser", {})
+    if isinstance(wp_output, dict):
+        entities_info = wp_output.get("entities_info", {})
+        for entity, triplets in entities_info.items():
+            types = triplets.get("types", []) + triplets.get("instance of", []) + triplets.get("subclass of", [])
+            type_ids = [elem for elem, label in types]
+            inters = set(type_ids).intersection({"Q55983715", "Q16521", "Q43577", "Q39367", "Q38547"})
+            if inters:
+                found_animal_wp = entity
+                break
+    isq = is_any_question_sentence_in_utterance(user_uttr)
+    if (isq and cobot_entities and not name_in_entities and not found_animal_substr and not found_animal_wp) or is_stop:
+        flag = True
     return flag
 
 
@@ -79,15 +110,11 @@ WHAT_PETS_I_HAVE = [{"pet": "dog", "name": "Jack", "breed": "German Shepherd",
 CATS_DOGS_PHRASES = {"cat": ["Can cats reduce stress and improve mood? The answer seems to be yes.",
                              "Cats have long been one of the more popular companion animals, constantly battling dogs "
                              "for the number one spot.",
-                             "Whether you had your cat for her whole life, or you’ve just welcomed a cat or kitten "
-                             "into your new family, you can find yourself learning something new about your cat "
-                             "everyday."],
+                             "Cats are a great choice of pet."],
                      "dog": ["Having a dog can help you stay active.",
                              "Nothing beats a long walk with your four-legged friend on a fresh, spring morning.",
-                             "There’s an old saying, which is certainly true, that dogs repay the love you give "
-                             "them ten-fold.",
-                             "One of the most noticeable benefits of owning a dog is that it’s almost impossible to "
-                             "feel lonely when your dog is by your side, and for good reason."]
+                             "It is almost impossible to feel lonely when your dog is by your side.",
+                             "Dogs are a great choice of pet."]
                      }
 
 MY_CAT = ["My cat is as frail as an autumn leaf as an autumn leaf but her purr is as loud as seas.",
