@@ -9,14 +9,9 @@ OPINION_REQUESTS_ABOUT_TRAVELLING = ["Do you like travel?",
                                      "Do you think travel is a great thing?"
                                      ]
 
-OFFER_TALK_ABOUT_TRAVELLING = ["Would you like to talk about travel?",
-                               "Let's chat about travel adventures! Do you agree?",
-                               "I'd like to talk about travel, would you?"
-                               ]
-
 
 def skill_trigger_phrases():
-    return OPINION_REQUESTS_ABOUT_TRAVELLING + OFFER_TALK_ABOUT_TRAVELLING
+    return OPINION_REQUESTS_ABOUT_TRAVELLING
 
 
 QUESTIONS_ABOUT_LOCATION = ["What other places did you visit?",
