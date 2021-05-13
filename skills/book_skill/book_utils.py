@@ -33,7 +33,8 @@ LIKE_PATTERN = r"(like|love|prefer|adore|enjoy|fond of|passionate of|fan of|inte
 FAVORITE_PATTERN = r"(favorite|loved|beloved|fondling|best|most interesting)"
 CHRISTIANITY_PATTERN = r"(bibla\b|bible\b|bibel\b)"
 
-GENRE_DICT = {'memoir autobiography': 'memoir books',
+GENRE_DICT = {'memoir': 'memoir books',
+              'memoir autobiography': 'memoir books',
               'history biography': 'biography books',
               'science technology': 'technology books',
               'debut novel': 'debut novel books',
@@ -58,6 +59,10 @@ book_banned_words_file = pathlib.Path(__file__).parent / "book_banned_words.txt"
 book_banned_words = set([line.strip() for line in book_banned_words_file.read_text().split("\n") if line.strip()])
 book_default_entities = set([j.strip() for j in open('/global_data/book_author_names.txt', 'r').readlines()])
 book_query_dict = cPickle.load(open('/global_data/book_query_dict.pkl', 'rb'))
+
+AUTHOR_WIKI_TYPES = ['Q36180', 'Q18814623']
+BOOK_WIKI_TYPES = ['Q571', "Q7725634", "Q1667921", "Q277759", "Q8261", "Q47461344"]
+MOVIE_WIKI_TYPES = ["Q11424", "Q24856"]
 
 QA_SERVICE_URL = getenv('COBOT_QA_SERVICE_URL')
 WIKIDATA_URL = getenv("WIKIDATA_URL")
@@ -133,7 +138,7 @@ def get_genre(user_phrase, return_name=False):
         genre = 'science fiction'
     elif any([j in user_phrase for j in ['history', 'historic']]):
         genre = 'historical fiction'
-    elif 'fiction' in user_phrase:
+    elif any([j in user_phrase for j in ['fiction', ' all', 'any']]):
         genre = 'fiction'
     else:
         return None
@@ -306,11 +311,11 @@ def get_name(annotated_phrase, mode='author', bookyear=False,
             return None, None
         logger.info(f'Found entities in annotations {all_found_entities}')
         if mode == 'author':
-            types = ['Q36180', 'Q18814623']
+            types = AUTHOR_WIKI_TYPES
         elif mode == 'book':
-            types = ['Q571', "Q7725634", "Q1667921", "Q277759", "Q8261", "Q47461344"]
+            types = BOOK_WIKI_TYPES
         elif mode == 'movie':
-            types = ["Q11424", "Q24856"]
+            types = MOVIE_WIKI_TYPES
         else:
             raise Exception(f'Wrong mode: {mode}')
         n_years_ago = None
@@ -368,6 +373,8 @@ def get_name(annotated_phrase, mode='author', bookyear=False,
                         film_director = toiterate_dict[entity]['film producer'][0][0]
                     else:
                         film_director = get_author(plain_entity, mode='movie')
+                elif mode == 'author':  # to get rid of abbreviations such as J R R Tolkien
+                    found_entity = ' '.join([k for k in found_entity.split(' ') if len(k) > 1])
                 break
             else:
                 logger.info(f'No interception with {types}')
@@ -412,6 +419,27 @@ def best_book_by_author(plain_author_name, default_phrase, plain_last_bookname=N
         return default_phrase
 
 
+def genre_of_book(plain_bookname):
+    plain_genres = request_triples_wikidata("find_object", [(plain_bookname, "P136", "forw")],
+                                            query_dict=book_query_dict)
+    labeled_genres = [entity_to_label(j) for j in plain_genres]
+    matched_genres = [genre for genre in GENRE_DICT.keys() if genre in labeled_genres]
+    if matched_genres:
+        return matched_genres[0]
+    else:
+        for labeled_genre in labeled_genres:
+            # TODO: match genre to wikidata and find genre in annotations
+            for genre_name in GENRE_DICT.keys():
+                split_genre = [j.split(' ') for j in labeled_genre]
+                split_name = [j.split(' ') for j in genre_name]
+                if any([j in split_genre for j in split_name]):
+                    return genre_name
+    if labeled_genres:
+        return labeled_genres[0]
+    else:
+        return ''
+
+
 def parse_author_best_book(annotated_phrase, default_phrase=None):
     global author_names
     logger.debug(f'Calling parse_author_best_book for {annotated_phrase["text"]}')
@@ -428,13 +456,14 @@ def parse_author_best_book(annotated_phrase, default_phrase=None):
         logger.debug(f'Plain_author {plain_author}')
     if plain_author:
         logger.debug(f'author detected: {plain_author} bookname {plain_bookname}')
-        answer = best_book_by_author(plain_author_name=plain_author, plain_last_bookname=plain_bookname,
-                                     default_phrase=default_phrase)
-        logger.debug(f'Answer for parse_author_best_book is {answer}')
-        return answer
+        book = best_book_by_author(plain_author_name=plain_author, plain_last_bookname=plain_bookname,
+                                   default_phrase=default_phrase)
+        author = entity_to_label(plain_author)
+        logger.debug(f'Answer for parse_author_best_book is {(book, author)}')
+        return book, author
     else:
         logger.debug('No author found')
-        return default_phrase
+        return default_phrase, None
 
 
 dontlike_request = re.compile(r"(not like|not want to talk|not want to hear|not concerned about|"
