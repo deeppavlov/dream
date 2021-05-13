@@ -321,19 +321,34 @@ def get_name(annotated_phrase, mode='author', bookyear=False,
         for key in wp_annotations.get('entities_info', {}):
             if key not in toiterate_dict:
                 toiterate_dict[key] = wp_annotations['entities_info'][key]
-        logger.debug(toiterate_dict)
+        keys = sorted(toiterate_dict, key=lambda x: -len(str(toiterate_dict[x])))
+        #  logger.debug(toiterate_dict)
+        #  To discern omonyms ( e.g serbian old king Stephen and Stephen King)
+        #  we sort by the length of wikidata dict -
+        # the more popular is the person the more info about it we have and the sooner we get it
+        toiterate_dict = {key: toiterate_dict[key] for key in keys}
         for entity in toiterate_dict:
+            found_types = []
+            logger.debug(f'Examine {entity}')
+            logger.debug(found_types)
+            if 'types_2hop' in toiterate_dict[entity]:
+                found_types.extend([j[0] for j in toiterate_dict[entity]['types_2hop'] if j[0] not in found_types])
+            logger.debug(found_types)
             if 'instance of' in toiterate_dict[entity]:
-                found_types = [j[0] for j in toiterate_dict[entity]['instance of']]
-            else:
-                logger.warning(f'No instance of found in annotation for {entity}')
+                found_types.extend([j[0] for j in toiterate_dict[entity]['instance of'] if j[0] not in found_types])
+            logger.debug(found_types)
+            if not any([j in types for j in found_types]):
+                logger.warning(f'Querying wikidata for {entity}')
                 found_types = []
                 for type_ in types:
-                    if request_triples_wikidata("check_triplet", [(entity, "P31", "forw")],
-                                                query_dict=book_query_dict):
-                        found_types.append(type)
+                    request_answer = request_triples_wikidata("check_triplet", [(entity, "P31", "forw")],
+                                                              query_dict=book_query_dict)
+                    if isinstance(request_answer, list) and request_answer[0]:
+                        found_types.append(type_)
+            logger.debug(f'Found types {found_types}')
+            logger.debug(f'Interception {[k for k in types if k in found_types]}')
             if any([j in types for j in found_types]) and book_or_author(entity, stopwords):
-                logging.debug(f'{mode} found')
+                logger.debug(f'{mode} found')
                 found_entity = entity
                 if 'plain_entity' not in toiterate_dict[entity]:
                     logger.warning(f'No plain_entity found in annotation for {entity}')
@@ -353,6 +368,9 @@ def get_name(annotated_phrase, mode='author', bookyear=False,
                         film_director = toiterate_dict[entity]['film producer'][0][0]
                     else:
                         film_director = get_author(plain_entity, mode='movie')
+                break
+            else:
+                logger.info(f'No interception with {types}')
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
@@ -380,15 +398,12 @@ def best_book_by_author(plain_author_name, default_phrase, plain_last_bookname=N
         logger.debug(book_list)
         best_bookname = default_phrase  # default value
         if book_list:
-            sorted_book_list = sorted(book_list, key=lambda x: int(x[1:]))  # Sort entities by frequency
-            logger.debug(sorted_book_list)
-            sorted_bookname_list = [entity_to_label(j)
-                                    for j in sorted_book_list]
-            logger.debug('List of books with known booknames')
+            sorted_book_list = sorted(book_list, key=lambda x: int(x[1:]))[:top_n_best_books]
+            # Sort entities by frequency and truncate list beforehand to speed the code up
+            sorted_bookname_list = [entity_to_label(j) for j in sorted_book_list]
             sorted_bookname_list = [j for j in sorted_bookname_list if j is not None]
-            logger.debug(sorted_bookname_list)
             if len(sorted_bookname_list) > 0:
-                best_bookname = random.choice(sorted_bookname_list[:top_n_best_books])
+                best_bookname = random.choice(sorted_bookname_list)
         logger.debug(f'Answer for best_book_by_author {best_bookname}')
         return best_bookname
     except Exception as e:
@@ -405,10 +420,12 @@ def parse_author_best_book(annotated_phrase, default_phrase=None):
         annotated_phrase['text'] = annotated_phrase['text'].split(' is ')[1]
     plain_bookname, _ = get_name(annotated_phrase, 'book', return_plain=True)
     if plain_bookname is None:
+        logger.debug(f'Getting plain author')
         plain_author, _ = get_name(annotated_phrase, 'author', return_plain=True)
     else:
-        logger.debug(f'Processing bookname {plain_bookname}')
+        logger.debug(f'Processing bookname in get_author {plain_bookname}')
         plain_author = get_author(plain_bookname, return_plain=True, mode='book')
+        logger.debug(f'Plain_author {plain_author}')
     if plain_author:
         logger.debug(f'author detected: {plain_author} bookname {plain_bookname}')
         answer = best_book_by_author(plain_author_name=plain_author, plain_last_bookname=plain_bookname,
