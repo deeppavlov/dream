@@ -770,7 +770,7 @@ def tell_fact_response(vars):
                 state_utils.set_confidence(vars, confidence=CONF_DICT[conf_type])
             else:
                 state_utils.set_confidence(vars, confidence=CONF_DICT["IN_SCENARIO"])
-            state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+            state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
         state_utils.save_to_shared_memory(vars, start=True)
     else:
         state_utils.set_confidence(vars, confidence=CONF_DICT["UNDEFINED"])
