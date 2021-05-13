@@ -1,4 +1,10 @@
-FROM python:3.7.4
+FROM tensorflow/tensorflow:1.14.0-py3
+
+ARG DATA_URL=http://files.deeppavlov.ai/alexaprize_data/convert_reddit_v2.3.punct.tar.gz
+
+ADD $DATA_URL /root/convert_data/
+
+RUN tar -xvzf /root/convert_data/*.tar.gz -C /root/convert_data/
 
 RUN mkdir /src
 
@@ -8,11 +14,6 @@ RUN pip install -r /src/requirements.txt
 COPY . /src/
 WORKDIR /src
 
-ARG DATA_URL=files.deeppavlov.ai/alexaprize_data/logreg_recommendation_model.pkl
-
-RUN mkdir /data
-RUN curl -L $DATA_URL --output /data/logreg_recommendation_model.pkl
-
-ENV MODEL_PATH /data/logreg_recommendation_model.pkl
+ENV MODEL_PATH /root/convert_data/
 
 CMD gunicorn --workers=2 server:app
