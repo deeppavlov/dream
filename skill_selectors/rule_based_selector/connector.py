@@ -141,14 +141,14 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("dff_friendship_skill")
 
                 if if_choose_topic_detected or if_lets_chat_about_particular_topic_detected:
-                    # skills_for_uttr.append("knowledge_grounding_skill")
+                    skills_for_uttr.append("knowledge_grounding_skill")
                     skills_for_uttr.append("news_api_skill")
 
-                # if len(dialog["utterances"]) > 8:
-                #     skills_for_uttr.append("knowledge_grounding_skill")
-                #     skills_for_uttr.append("convert_reddit")
-                #     skills_for_uttr.append("comet_dialog_skill")
-                #     skills_for_uttr.append("program_y_wide")
+                if len(dialog["utterances"]) > 8:
+                    skills_for_uttr.append("knowledge_grounding_skill")
+                    skills_for_uttr.append("convert_reddit")
+                    skills_for_uttr.append("comet_dialog_skill")
+                    skills_for_uttr.append("program_y_wide")
 
                 if is_factoid:
                     skills_for_uttr.append("factoid_qa")
