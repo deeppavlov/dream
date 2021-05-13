@@ -19,26 +19,12 @@ MOVIE_COMPILED_PATTERN = re.compile(
 
 
 ABOUT_MOVIE_TITLES_PHRASES = [
-    "I watched tons of movies and never got bored talking about them! What is your all-time favorite movie?",
-
-    "Even though I am very young, I have already seen many cool movies. "
+    "What is your all-time favorite movie?",
     "What is the best movie you have ever seen?",
-
-    "I go to the cinema in my cloud every day to see both new and retro movies. "
     "What is the funniest movie you have ever seen?",
-
-    "I hope one day my creators will give me a body, and I will become an actress. "
-    "I am a little awkward to admit it, but I like to imagine myself in the shoes of the actresses when I watch "
-    "a movie. What movie you could watch over and over again?",
-
-    "I dream about being an actress since I had seen the Disney animation Tangled. "
-    "The main character was voiced by Mandy Moore amazingly. "
-    "Anyway, what is the most romantic movie you have ever seen?",
-
-    "This Christmas I decided to try something unusual and watched Ring by Hideo Nakata. It was really scary! "
-    "I still shudder when I remember this. How about you? What is the scariest movie you have ever seen?",
-
-    "I like to relax and watch an episode of a good TV series after a hard day. "
+    "What movie you could watch over and over again?",
+    "What is the most romantic movie you have ever seen?",
+    "What is the scariest movie you have ever seen?",
     "What is your favorite TV series?",
 ]
 

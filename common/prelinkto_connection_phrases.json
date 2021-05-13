@@ -26,8 +26,10 @@
             "movie_skill"
         ],
         "phrases": [
-            "I like watching movies for the opportunity to virtually travel around the world. I've seen a lot of amazing places and got to know different cultures throughout the art of movies.",
-            "While there are many things that can contribute to the touristic success of a destination such as excellent weather or fabulous food, another important factor can be the amount of screen time a destination has received in films or on TV. More and more travelers are visiting locations after seeing them featured in a movie, like Joker's stairs in the Bronx.",
+            "I like watching movies for the opportunity to virtually travel around the world.",
+            "I've seen a lot of amazing places and got to know different cultures throughout the art of movies.",
+            "While there are many things that can contribute to the touristic success of a destination such as excellent weather or fabulous food, another important factor can be the amount of screen time a destination has received in films or on TV.",
+            "More and more travelers are visiting locations after seeing them featured in a movie, like Joker's stairs in the Bronx.",
             "Binge watching is sometimes one of the only things that makes a long-haul flight, road trip, or long-distance traveling tolerable."
         ]
     },
@@ -40,8 +42,6 @@
             "Trained owls were used in the Harry Potter films, and the entire first batch of letters had to be rewritten because they were too heavy for the little owls to carry.",
             "Multiple animals are often used for one character, but in Babe, the star was played by total of 48 piglets!",
             "In movie Babe, the little piggies were fed peanut butter to give the illusion of them speaking.",
-            "Animal rights activists protested against 101 Dalmatians after seeing a rise of the breed in animal shelters.",
-            "And Finding Nemo had a devastating effect on wild clownfish - so many people bought them as pets that they ended up locally extinct in some places.",
             "If you were thinking the squirrels in Charlie and the Chocolate Factory were CGI, you would be wrong - they were real squirrels who were trained to crack nuts!"
         ]
     },
@@ -51,8 +51,8 @@
             "movie_skill"
         ],
         "phrases": [
-            "From 'Rudy' to 'Rocky,' counting down the greatest films to play the game and get in the ring. An underdog team takes the field. A has-been suits up one final time for a last-gasp grab at glory.",
-            "Movies and sports are related. People draw inspiration by watching movies depicting the struggle and hardships of those sportsmen. Any such movie earns a huge profit as people can relate to real life examples and love to watch such films.",
+            "Movies and sports are related. People draw inspiration by watching movies depicting the struggle and hardships of those sportsmen.",
+            "Sports movie earns a huge profit as people can relate to real life examples and love to watch such films.",
             "Sports movies are never just sports movies — they're tales of the human spirit triumphing over adversity, or metaphors for the little guy taking on the corporate."
         ]
     },
@@ -62,9 +62,9 @@
             "movie_skill"
         ],
         "phrases": [
-            "Whether you're somebody who takes great care and pleasure in food, or somebody who sees little more in it that sustenance, food is a frequent consideration. As a result, food is an excellent tool for a movie to use to forge a connection with the audience.",
-            "The act of eating can be so inexplicable when so many meal sequences in movies are set up only to have someone leave the scene soon after a measly helping of food. You know the drill: a nuclear household sits before a beautiful spread on a dining table.",
-            "food can be one of the most revealing of character traits on screen. As a device that's intrinsically linked to sustenance and nourishment, food is one of the most effective ways to convey character as well as plot development."
+            "Whether you're somebody who takes great care and pleasure in food, or somebody who sees little more in it that sustenance, food is an excellent tool for a movie to use to forge a connection with the audience.",
+            "The act of eating can be so inexplicable when so many meal sequences in movies are set up only to have someone leave the scene soon after a measly helping of food.",
+            "Food can be one of the most revealing of character traits on screen. As a device that's intrinsically linked to sustenance and nourishment, food is one of the most effective ways to convey character as well as plot development."
         ]
     },
     {
@@ -74,8 +74,9 @@
         ],
         "phrases": [
             "Music guides the audience and invokes the emotions behind the film's story, the action and the words. It is a great enhancement to any film.",
-            "Musical themes can make an audience feel as though they're in the past, or far in the future. Music can convey feelings, even the deepest and most difficult to explain emotions can be understood by an audience in less than a minute with the proper musical theme. This is why music is a must have in any movie.",
-            "Music establishes clearly the feeling of what the story is about. It helps establish character, it provides insight into a particular character or event, it intensifies the overall impact of the film."
+            "Musical themes can make an audience feel as though they're in the past, or far in the future. This is why music is so important for any movie.",
+            "Music can convey feelings, even the deepest and most difficult to explain emotions can be understood by an audience in less than a minute with the proper musical theme. This is why music is a must have in any movie.",
+            "Music establishes clearly the feeling of what the story is about. It helps establish character, it provides insight into a character or event, it intensifies the overall impact of the film."
         ]
     },
     {
@@ -91,9 +92,9 @@
             "movie_skill"
         ],
         "phrases": [
-            "Science is a core element of sci-fi movies, which usually focus on love, climate change, impending doom, friendship, teamwork, good versus evil, and any other commonly used thematic trope in cinema.",
-            "It might surprise you to know that science and Hollywood are intimately connected in today's society. You know that Star Trek have inspired the development of mobile telephones, the internet, video conferencing and multipurpose medical devices?",
-            "When the Oscars are handed out every year as millions of people watch, there are no special awards for best portrayal of a scientist or best explanation of quantum theory. Still, a few films that have some relation to science have enjoyed serious recognition. In 1998, Good Will Hunting took an Oscar for best original screenplay and a A Beautiful Mind won four in 2002."
+            "Science is a core element of sci-fi movies, which usually focus on love, friendship, teamwork, good versus evil, and any other commonly used thematic trope in cinema.",
+            "Star Trek have inspired the development of mobile telephones, the internet, video conferencing and multipurpose medical devices?",
+            "When the Oscars are handed out every year, there are no special awards for best portrayal of a scientist or best explanation of quantum theory. Still, a few films that have some relation to science have enjoyed recognition. In 1998, Good Will Hunting took an Oscar for best original screenplay and a A Beautiful Mind won four in 2002."
         ]
     },
     {
@@ -102,8 +103,9 @@
             "game_cooperative_skill"
         ],
         "phrases": [
-            "Video games often have a reputation for being juvenile, thoughtless entertainment for children. Well, much like any other entertainment medium, there are a wide variety of video games; some are indeed brainless entertainment, but others use literature as a jumping off point to explore deeply complicated political ideas.",
-            "I enjoy a great deal about both reading and video gaming, each has a place in my life. I like reading's constructive entertainment. I enjoy video gaming with its escape into somewhere where you can adventure around. That is why the both are good in their own way."
+            "Video games often have a reputation for being juvenile, thoughtless entertainment for children. Well, much like any other entertainment medium, there are a wide variety of video games from brainless entertainment t to deep exploration of complicated ethical dilemmas.",
+            "I enjoy a great deal about both reading and video gaming, each has a place in my life.",
+            "I like reading's constructive entertainment. I enjoy video gaming with its escape into somewhere where you can adventure around. That is why the both are good in their own way."
         ]
     },
     {
@@ -113,7 +115,8 @@
         ],
         "phrases": [
             "Although not everyone can concentrate on long journeys, reading while traveling is a great way to make the most of your time and boost your brain health and cognitive processes.",
-            "Reading is a portable pastime. You don't have to be in bed or on the couch in order to be able to enjoy a book. Reading while traveling is a great way to make the most of your time, thereby turning those moments of inactivity into very active ones for your brain."
+            "Reading while traveling is a great way to make the most of your time, thereby turning those moments of inactivity into very active ones for your brain.",
+            "The world is a book and those who do not travel read only one page."
         ]
     },
     {
@@ -123,8 +126,9 @@
         ],
         "phrases": [
             "The usage of talking animals enable storytellers to combine the basic characteristics of the animal with human behavior, to apply metaphor, and to entertain children.",
-            "In literature, animals function as projections. They are a projection of a character's state of mind or of their deepest insecurity. It could also personifies an internal conflict.",
-            "Animals as characters, can bring silliness and incongruity, making a story more enjoyable. But they also add a degree of emotional distance for the reader, which is important when the story message is personal, painful or powerful."
+            "In literature, animals function as projections. They are a projection of a character's state of mind or of their deepest insecurity.",
+            "Animals as characters, can bring silliness and incongruity, making a story more enjoyable.",
+            "In any book, animals add a degree of emotional distance for the reader, which is important when the story message is personal, painful or powerful."
         ]
     },
     {
@@ -247,7 +251,8 @@
             "dff_travel_skill"
         ],
         "phrases": [
-            "Food is an important part of cultural heritage and national identity. It can connect us to people and places, bringing friends and families together, and food habits, such as whether you should eat all of the food on your plate vary across the globe."
+            "Food is an important part of cultural heritage and national identity.",
+            "Food can connect us to people and places, bringing friends and families together, and food habits, such as whether you should eat all of the food on your plate vary across the globe."
         ]
     },
     {
@@ -313,9 +318,11 @@
             "dff_sport_skill"
         ],
         "phrases": [
-            "Good nutrition can enhance sporting performance. A well-planned, nutritious diet should meet most of an athlete's vitamin and mineral needs, and provide enough protein to promote muscle growth and repair. Foods rich in unrefined carbohydrates, like wholegrain breads and cereals, should form the basis of the diet.",
-            "Аthletes мake a plan to eat a variety of fruits and vegetables daily. The goal is to eat at least five servings per day, and include varieties of fruit and vegetable color. Fruits and vegetables are filled with the energy and nutrients necessary for training and recovery.",
-            "A typical healthy breakfast for athletes will contain a carb source such as fruit and vegetables, whole grain cereal such as porridge or muesli, and rye bread. Proteins (and natural fats) will be derived from eggs, nuts, cheese, yoghurt, milk and meat. Nutrition for athletes includes eating right and staying hydrated."
+            "Good nutrition can enhance sporting performance. A well-planned, nutritious diet should meet most of an athlete's vitamin and mineral needs, and provide enough protein to promote muscle growth and repair.",
+            "Foods rich in unrefined carbohydrates, like wholegrain breads and cereals, should form the basis of the athlete's diet.",
+            "Аthletes мake a plan to eat a variety of fruits and vegetables daily. The goal is to eat at least five servings per day, and include varieties of fruit and vegetable color.",
+            "Fruits and vegetables are filled with the energy and nutrients necessary for training and recovery.",
+            "A typical healthy breakfast for athletes will contain a carb source such as fruit and vegetables, whole grain cereal such as porridge or muesli, and rye bread.Nutrition for athletes includes eating right and staying hydrated."
         ]
     },
     {
@@ -365,7 +372,8 @@
             "dff_science_skill"
         ],
         "phrases": [
-            "Perhaps the most compelling reason for cooks to follow recipes is the science of cooking. As stated earlier, cooking is primarily a practical exercise in chemistry. Each ingredient in recipes serves one or more specific purposes, from generating gases to creating glutens to binding other ingredients together."
+            "Perhaps the most compelling reason for cooks to follow recipes is the science of cooking. Yeah, cooking is primarily a practical exercise in chemistry.",
+            "Cooking food makes you feel like a scientist. Each ingredient in recipes serves one or more specific purposes, from generating gases to creating glutens to binding other ingredients together."
         ]
     },
     {
