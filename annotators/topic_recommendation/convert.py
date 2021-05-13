@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 tensorflow_text.__name__
 
-MODEL_PATH = "/root/convert_data/convert"
+MODEL_PATH = os.getenv("MODEL_PATH")
 
 sess = tf.InteractiveSession(graph=tf.Graph())
 

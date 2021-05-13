@@ -14,6 +14,10 @@ RUN pip install -r /src/requirements.txt
 COPY . /src/
 WORKDIR /src
 
-ENV MODEL_PATH /root/convert_data/
+ENV MODEL_PATH /root/convert_data/convert
+ENV LC_ALL C.UTF-8
+ENV LANG C.UTF-8
+ENV PYTHONPATH /usr/local/bin/python
+ENV DEVICE cpu
 
 CMD gunicorn --workers=2 server:app
