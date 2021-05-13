@@ -1,13 +1,13 @@
 import logging
 import time
-from os import getenv
+import os
 
 from flask import Flask, request, jsonify
 import sentry_sdk
 
 from convert import get_ranked_list
 
-sentry_sdk.init(getenv("SENTRY_DSN"))
+sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
@@ -15,7 +15,6 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-MODEL_PATH = getenv("MODEL_PATH")
 TOP_K = 3
 
 topic2response = {"Let's chat about food": "dff_food_skill",
