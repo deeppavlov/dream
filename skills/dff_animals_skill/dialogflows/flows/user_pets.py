@@ -64,6 +64,7 @@ def retrieve_and_save(vars):
     isyes = is_yes(state_utils.get_last_human_utterance(vars))
     shared_memory = state_utils.get_shared_memory(vars)
     found_users_pet = shared_memory.get("users_pet", "")
+    found_pet_bot_uttr = []
     if not found_users_pet:
         found_users_pet = extract_pet(user_uttr)
         found_pet_bot_uttr = re.findall(r"(do you have a )(cat|dog|rat|fish|parrot|hamster)", bot_uttr, re.IGNORECASE)
@@ -72,25 +73,35 @@ def retrieve_and_save(vars):
         elif found_pet_bot_uttr and isyes:
             state_utils.save_to_shared_memory(vars, users_pet=found_pet_bot_uttr[0][1])
             found_users_pet = found_pet_bot_uttr[0][1]
+    logger.info(f"retrieve_and_save, found_users_pet {found_users_pet} found_pet_bot_uttr {found_pet_bot_uttr}"
+                f" isyes {isyes}")
     return found_users_pet
 
 
 def retrieve_and_save_name(vars):
-    name = ""
+    user_text = state_utils.get_last_human_utterance(vars)["text"]
     shared_memory = state_utils.get_shared_memory(vars)
     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
     ner = annotations.get("ner", [])
     users_pet_breed = shared_memory.get("users_pet_breed", "")
+    found_name = ""
     for entities in ner:
         if entities:
             for entity in entities:
                 if entity.get("type", "") == "PER":
-                    name = entity["text"]
-                    if not shared_memory.get("users_pet_name", "") \
-                            and name not in {"black", "white", "grey", "brown", "yellow", "cat", "dog"} \
-                            and name not in users_pet_breed:
-                        state_utils.save_to_shared_memory(vars, users_pet_name=name)
-    return name
+                    found_name = entity["text"]
+
+    if not found_name:
+        fnd = re.findall(r"(name is |named |called |call him |call her )([a-z]+)\b", user_text)
+        if fnd:
+            found_name = fnd[0][1]
+
+    if found_name and not shared_memory.get("users_pet_name", "") \
+            and found_name not in {"black", "white", "grey", "brown", "yellow", "cat", "dog"} \
+            and found_name not in users_pet_breed:
+        state_utils.save_to_shared_memory(vars, users_pet_name=found_name)
+
+    return found_name
 
 
 def choose_pet_phrase(vars, found_users_pet):
@@ -139,8 +150,10 @@ def extract_breed(vars):
             if not found_breed:
                 for phr in nounphrases:
                     phr = breed_replace_dict.get(phr, phr)
+                    phr_tokens = set(phr.split())
                     for title in breed_titles:
-                        if phr in title or title in phr:
+                        title_tokens = set(title.split())
+                        if phr_tokens.intersection(title_tokens):
                             found_breed = title
                             break
                     if found_breed:
@@ -154,6 +167,7 @@ def make_utt_with_ack(vars, cur_state):
     ack = ""
     statement = ""
     question = ""
+    user_uttr = state_utils.get_last_human_utterance(vars)
     shared_memory = state_utils.get_shared_memory(vars)
     make_my_pets_info(vars)
     prev_state = condition_utils.get_last_state(vars)
@@ -161,8 +175,8 @@ def make_utt_with_ack(vars, cur_state):
     users_pet = shared_memory.get("users_pet", "")
     users_pet_name = shared_memory.get("users_pet_name", "")
     users_pet_breed = shared_memory.get("users_pet_breed", "")
-    logger.info(f"make_utt_with_ack {users_pet} {users_pet_name} {users_pet_breed} "
-                f"{breeds_dict.get('users_pet_breed', '')} "
+    logger.info(f"make_utt_with_ack users_pet {users_pet} users_pet_name {users_pet_name} "
+                f"users_pet_breed {users_pet_breed} {breeds_dict.get('users_pet_breed', '')} "
                 f"is_last_state {condition_utils.is_last_state(vars, UserPetsState.SYS_ASK_ABOUT_NAME)}")
     my_pets_info = shared_memory.get("my_pets_info", {})
     if str(prev_state).split('.')[-1] == "SYS_ASK_ABOUT_NAME" and users_pet_name:
@@ -216,6 +230,8 @@ def make_utt_with_ack(vars, cur_state):
         else:
             statement = "Very interesting!"
             question = "Could you tell me more about your pet?"
+    if "bark" in user_uttr["text"]:
+        ack = f"Woof-woof, bow-bow, ruff-ruff! {ack}"
     response = f"{ack} {statement} {question}"
     response = response.replace("  ", " ").strip()
     return response
@@ -260,13 +276,15 @@ def ask_about_name_request(ngrams, vars):
     bot_asked_pet = re.findall(r"do you have a (cat|dog|rat|fish|parrot|hamster)", bot_uttr["text"], re.IGNORECASE)
     user_has_not = (bot_asked_pet and isno) and not re.findall(PETS_TEMPLATE, user_uttr["text"])
     user_told_pet = re.findall("(cat|dog|rat|fish|parrot|hamster)", user_uttr["text"]) \
-        and "do you have pets" in bot_uttr["text"].lower()
+        and re.findall(r"(do you have pets|what pets do you have)", bot_uttr["text"], re.IGNORECASE)
     user_mentioned_pet = re.findall(r"my (cat|dog|rat|fish|parrot|hamster)", user_uttr["text"])
     shared_memory = state_utils.get_shared_memory(vars)
     asked_name = shared_memory.get("asked_name", False)
     users_pet = shared_memory.get("users_pet", "")
+    users_pet_name = shared_memory.get("users_pet_name", "")
     logger.info(f"ask_about_name, users_pet {users_pet} bot_asked_pet {bot_asked_pet} user_told_pet {user_told_pet}")
-    if not user_has_not and not asked_name and not re.findall(r"(name|call)", user_uttr["text"]) \
+    if not users_pet_name and not user_has_not and not asked_name \
+            and not re.findall(r"(name|call)", user_uttr["text"]) \
             and (users_pet or (bot_asked_pet and (isyes or user_has)) or user_told_pet or user_mentioned_pet):
         flag = True
     logger.info(f"ask_about_name_request={flag}")
@@ -298,22 +316,27 @@ def is_dog_cat_request(ngrams, vars):
 
 def ask_about_breed_request(ngrams, vars):
     flag = False
-    bot_uttr = state_utils.get_last_bot_utterance(vars)["text"]
-    user_uttr = state_utils.get_last_human_utterance(vars)["text"]
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
+    user_uttr = state_utils.get_last_human_utterance(vars)
     shared_memory = state_utils.get_shared_memory(vars)
-    found_pet = re.findall(PETS_TEMPLATE, user_uttr)
+    found_pet = re.findall(PETS_TEMPLATE, user_uttr["text"])
     delete_pet(vars)
     users_pet = shared_memory.get("users_pet", "")
     users_pet_name = shared_memory.get("users_pet_name", "")
+    isyes = is_yes(state_utils.get_last_human_utterance(vars))
+    user_has = re.findall(r"i (have|had)", user_uttr["text"])
+    bot_asked_pet = re.findall(r"do you have a (cat|dog|rat|fish|parrot|hamster)", bot_uttr["text"], re.IGNORECASE)
     asked_breed = shared_memory.get("asked_breed", False)
     found_breed = extract_breed(vars)
     isno = is_no(state_utils.get_last_human_utterance(vars))
-    user_has_not = (re.findall("do you have a (cat|dog)", bot_uttr, re.IGNORECASE) and isno) and not \
-        re.findall(PETS_TEMPLATE, user_uttr)
+    user_has_not = (re.findall("do you have a (cat|dog)", bot_uttr["text"], re.IGNORECASE) and isno) and not \
+        re.findall(PETS_TEMPLATE, user_uttr["text"])
     logger.info(f"ask_about_breed_request_isno {isno}")
-    if not user_has_not and not asked_breed and (found_pet or users_pet_name or users_pet) and not found_breed:
+    if not user_has_not and not asked_breed \
+            and (found_pet or users_pet_name or users_pet or (bot_asked_pet and (isyes or user_has))) \
+            and not found_breed:
         flag = True
-    if (users_pet and users_pet not in {"cat", "dog"}) or (found_pet and found_pet not in {"cat", "dog"}):
+    if (users_pet and users_pet not in {"cat", "dog"}) or (found_pet and found_pet[0] not in {"cat", "dog"}):
         flag = False
     logger.info(f"ask_about_breed_request={flag}")
     return flag
@@ -328,12 +351,19 @@ def ask_about_playing_request(ngrams, vars):
     delete_pet(vars)
     users_pet = shared_memory.get("users_pet", "")
     users_pet_name = shared_memory.get("users_pet_name", "")
+    isyes = is_yes(state_utils.get_last_human_utterance(vars))
+    user_has = re.findall(r"i (have|had)", user_uttr["text"])
+    bot_asked_pet = re.findall(r"do you have a (cat|dog|rat|fish|parrot|hamster)", bot_uttr["text"], re.IGNORECASE)
     asked_play = shared_memory.get("asked_play", False)
     found_play = "play" in user_uttr["text"]
     isno = is_no(state_utils.get_last_human_utterance(vars))
     user_has_not = (re.findall("do you have a (cat|dog|rat|fish|parrot|hamster)", bot_uttr["text"], re.IGNORECASE)
                     and isno) and not re.findall(PETS_TEMPLATE, user_uttr["text"])
-    if not user_has_not and not asked_play and (found_pet or users_pet_name or users_pet) and not found_play:
+    logger.info(f"ask_about_playing_request, users_pet {users_pet} found_pet {found_pet} user_has_not {user_has_not} "
+                f"isno {isno} asked_play {asked_play}")
+    if not user_has_not and not asked_play \
+            and (found_pet or users_pet_name or users_pet or (bot_asked_pet and (isyes or user_has))) \
+            and not found_play:
         flag = True
     logger.info(f"ask_about_playing_request={flag}")
     return flag
@@ -348,12 +378,19 @@ def ask_like_request(ngrams, vars):
     delete_pet(vars)
     users_pet = shared_memory.get("users_pet", "")
     users_pet_name = shared_memory.get("users_pet_name", "")
+    isyes = is_yes(state_utils.get_last_human_utterance(vars))
+    user_has = re.findall(r"i (have|had)", user_uttr["text"])
+    bot_asked_pet = re.findall(r"do you have a (cat|dog|rat|fish|parrot|hamster)", bot_uttr["text"], re.IGNORECASE)
     asked_like = shared_memory.get("asked_like", False)
     found_like = re.findall("(like|love)", user_uttr["text"])
     isno = is_no(state_utils.get_last_human_utterance(vars))
     user_has_not = (re.findall("do you have a (cat|dog|rat|fish|parrot|hamster)", bot_uttr["text"], re.IGNORECASE)
                     and isno) and not re.findall(PETS_TEMPLATE, user_uttr["text"])
-    if not user_has_not and not asked_like and (found_pet or users_pet_name or users_pet) and not found_like:
+    logger.info(f"ask_like_request, users_pet {users_pet} found_pet {found_pet} user_has_not {user_has_not} "
+                f"isno {isno} asked_like {asked_like}")
+    if not user_has_not and not asked_like \
+            and (found_pet or users_pet_name or users_pet or (bot_asked_pet and (isyes or user_has))) \
+            and not found_like:
         flag = True
     logger.info(f"ask_like_request={flag}")
     return flag
@@ -367,11 +404,15 @@ def ask_more_info_request(ngrams, vars):
     found_pet = re.findall(PETS_TEMPLATE, user_uttr)
     delete_pet(vars)
     users_pet = shared_memory.get("users_pet", "")
+    isyes = is_yes(state_utils.get_last_human_utterance(vars))
+    user_has = re.findall(r"i (have|had)", user_uttr["text"])
+    bot_asked_pet = re.findall(r"do you have a (cat|dog|rat|fish|parrot|hamster)", bot_uttr["text"], re.IGNORECASE)
     asked_more_info = shared_memory.get("asked_more_info", False)
     isno = is_no(state_utils.get_last_human_utterance(vars))
     user_has_not = (re.findall("do you have a (cat|dog|rat|fish|parrot|hamster)", bot_uttr, re.IGNORECASE)
                     and isno) and not re.findall(PETS_TEMPLATE, user_uttr)
-    if not user_has_not and not asked_more_info and (found_pet or users_pet) and "feed" not in user_uttr:
+    if not user_has_not and not asked_more_info \
+            and (found_pet or users_pet or (bot_asked_pet and (isyes or user_has))) and "feed" not in user_uttr:
         flag = True
     logger.info(f"ask_about_feeding_request={flag}")
     return flag
@@ -406,9 +447,8 @@ def ask_about_dog_cat_response(vars):
 
 
 def ask_about_name_response(vars):
-    found_users_pet = retrieve_and_save(vars)
+    retrieve_and_save(vars)
     extract_breed(vars)
-    logger.info(f"ask_about_name_response, found_users_pet {found_users_pet}")
     response = make_utt_with_ack(vars, UserPetsState.SYS_ASK_ABOUT_NAME)
     state_utils.save_to_shared_memory(vars, start=True)
     state_utils.save_to_shared_memory(vars, asked_name=True)

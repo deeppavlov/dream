@@ -36,8 +36,8 @@ breed_replace_dict = {"lab": "labrador"}
 pet_games = {"dog": ["frisbee", "hide and seek"], "cat": ["run and fetch"]}
 
 
-def check_about_animals(text):
-    if re.findall(ANIMALS_FIND_TEMPLATE, text):
+def check_about_animals(user_uttr):
+    if re.findall(ANIMALS_FIND_TEMPLATE, user_uttr["text"]):
         return True
     else:
         return False
@@ -117,7 +117,7 @@ CATS_DOGS_PHRASES = {"cat": ["Can cats reduce stress and improve mood? The answe
                              "Dogs are a great choice of pet."]
                      }
 
-MY_CAT = ["My cat is as frail as an autumn leaf as an autumn leaf but her purr is as loud as seas.",
+MY_CAT = ["My cat is as frail as an autumn leaf but her purr is as loud as seas.",
           "Her claws are as gnarled as an ancient oak.",
           "She sits by the fire and tries to keep warm or she curls herself up on my knees.",
           "Her fur is as soft as a kitten's coat but her ears are as deaf as the breeze.",

@@ -76,11 +76,12 @@ def about_cat_request(ngrams, vars):
     flag = False
     text = state_utils.get_last_human_utterance(vars)["text"]
     isno = is_no(state_utils.get_last_human_utterance(vars))
+    dontlike = re.findall(r"(do not like |don't like |hate )(cat|dog)", text)
     shared_memory = state_utils.get_shared_memory(vars)
     told_about_cat = shared_memory.get("told_about_cat", False)
     have_cat = re.findall(r"(do|did) you have (a )?(cat)s?", text)
     ans, pet = answer_users_question(vars)
-    if (not isno or have_cat) and not told_about_cat:
+    if not dontlike and (not isno or have_cat) and not told_about_cat:
         flag = True
     if ans and pet != "cat":
         flag = False
@@ -92,11 +93,12 @@ def about_dog_request(ngrams, vars):
     flag = False
     text = state_utils.get_last_human_utterance(vars)["text"]
     isno = is_no(state_utils.get_last_human_utterance(vars))
+    dontlike = re.findall(r"(do not like |don't like |hate )(cat|dog)", text)
     shared_memory = state_utils.get_shared_memory(vars)
     told_about_dog = shared_memory.get("told_about_dog", False)
     have_dog = re.findall(r"(do|did) you have (a )?(dog)s?", text)
     ans, pet = answer_users_question(vars)
-    if (not isno or have_dog) and not told_about_dog:
+    if not dontlike and (not isno or have_dog) and not told_about_dog:
         flag = True
     if ans and pet != "dog":
         flag = False
@@ -108,12 +110,13 @@ def my_cat_1_request(ngrams, vars):
     flag = False
     text = state_utils.get_last_human_utterance(vars)["text"]
     isno = is_no(state_utils.get_last_human_utterance(vars))
+    dontlike = re.findall(r"(do not like |don't like |hate )(cat|dog)", text)
     shared_memory = state_utils.get_shared_memory(vars)
     my_pet = shared_memory.get("my_pet", "")
     told_about_cat = shared_memory.get("told_about_cat", False)
     start_about_cat = shared_memory.get("start_about_cat", False)
     have_cat = re.findall(r"(do|did) you have (a )?(cat)s?", text)
-    if (not isno or have_cat) and (not told_about_cat or start_about_cat) and my_pet != "dog":
+    if not dontlike and (not isno or have_cat) and (not told_about_cat or start_about_cat) and my_pet != "dog":
         flag = True
     logger.info(f"my_cat_1_request={flag}")
     return flag
@@ -123,12 +126,13 @@ def my_dog_1_request(ngrams, vars):
     flag = False
     text = state_utils.get_last_human_utterance(vars)["text"]
     isno = is_no(state_utils.get_last_human_utterance(vars))
+    dontlike = re.findall(r"(do not like |don't like |hate )(cat|dog)", text)
     shared_memory = state_utils.get_shared_memory(vars)
     my_pet = shared_memory.get("my_pet", "")
     told_about_dog = shared_memory.get("told_about_dog", False)
     start_about_dog = shared_memory.get("start_about_dog", False)
     have_dog = re.findall(r"(do|did) you have (a )?(dog)s?", text)
-    if (not isno or have_dog) and (not told_about_dog or start_about_dog) and my_pet != "cat":
+    if not dontlike and (not isno or have_dog) and (not told_about_dog or start_about_dog) and my_pet != "cat":
         flag = True
     logger.info(f"my_dog_1_request={flag}")
     return flag
@@ -136,9 +140,11 @@ def my_dog_1_request(ngrams, vars):
 
 def my_cat_2_request(ngrams, vars):
     flag = False
+    text = state_utils.get_last_human_utterance(vars)["text"]
     isyes = is_yes(state_utils.get_last_human_utterance(vars))
+    dontlike = re.findall(r"(do not like |don't like |hate )(cat|dog)", text)
     ans, _ = answer_users_question(vars)
-    if isyes or ans:
+    if not dontlike and (isyes or ans):
         flag = True
     logger.info(f"my_cat_2_request={flag}")
     return flag
@@ -146,9 +152,11 @@ def my_cat_2_request(ngrams, vars):
 
 def my_dog_2_request(ngrams, vars):
     flag = False
+    text = state_utils.get_last_human_utterance(vars)["text"]
     isyes = is_yes(state_utils.get_last_human_utterance(vars))
+    dontlike = re.findall(r"(do not like |don't like |hate )(cat|dog)", text)
     ans, _ = answer_users_question(vars)
-    if isyes or ans:
+    if not dontlike and (isyes or ans):
         flag = True
     logger.info(f"my_dog_2_request={flag}")
     return flag
@@ -156,9 +164,11 @@ def my_dog_2_request(ngrams, vars):
 
 def my_cat_3_request(ngrams, vars):
     flag = False
+    text = state_utils.get_last_human_utterance(vars)["text"]
     isyes = is_yes(state_utils.get_last_human_utterance(vars))
+    dontlike = re.findall(r"(do not like |don't like |hate )(cat|dog)", text)
     ans, _ = answer_users_question(vars)
-    if isyes or ans:
+    if not dontlike and (isyes or ans):
         flag = True
     logger.info(f"my_cat_3_request={flag}")
     return flag
@@ -166,9 +176,11 @@ def my_cat_3_request(ngrams, vars):
 
 def my_dog_3_request(ngrams, vars):
     flag = False
+    text = state_utils.get_last_human_utterance(vars)["text"]
     isyes = is_yes(state_utils.get_last_human_utterance(vars))
+    dontlike = re.findall(r"(do not like |don't like |hate )(cat|dog)", text)
     ans, _ = answer_users_question(vars)
-    if isyes or ans:
+    if not dontlike and (isyes or ans):
         flag = True
     logger.info(f"my_dog_3_request={flag}")
     return flag

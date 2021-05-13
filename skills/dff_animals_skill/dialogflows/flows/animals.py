@@ -10,7 +10,7 @@ import common.constants as common_constants
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
 from common.dialogflow_framework.utils.condition import if_was_prev_active
-from common.dialogflow_framework.utils.condition import is_last_state
+from common.dialogflow_framework.utils.condition import get_last_state
 from common.universal_templates import if_chat_about_particular_topic, if_lets_chat
 from common.utils import is_yes, is_no
 from common.animals import PETS_TEMPLATE, ANIMALS_FIND_TEMPLATE, LIKE_ANIMALS_REQUESTS, WILD_ANIMALS, \
@@ -36,6 +36,11 @@ CONF_3 = 0.95
 CONF_4 = 0.9
 
 
+def is_last_state(vars, state):
+    prev_state = get_last_state(vars)
+    return str(prev_state).split('.')[-1] == state
+
+
 def make_my_pets_info(vars, rnd=True):
     shared_memory = state_utils.get_shared_memory(vars)
     my_pets_info = shared_memory.get("my_pets_info", {})
@@ -55,13 +60,14 @@ def lets_talk_about_request(vars):
     user_uttr = state_utils.get_last_human_utterance(vars)
     bot_uttr = state_utils.get_last_bot_utterance(vars)
     have_pets = re.search(HAVE_LIKE_PETS_TEMPLATE, user_uttr["text"])
-    found_prompt = any([phrase in bot_uttr for phrase in TRIGGER_PHRASES])
+    found_prompt = any([phrase.lower() in bot_uttr["text"].lower() for phrase in TRIGGER_PHRASES])
     isyes = is_yes(user_uttr)
     chat_about = if_chat_about_particular_topic(user_uttr, bot_uttr, compiled_pattern=ANIMALS_FIND_TEMPLATE)
+    find_pattern = re.findall(ANIMALS_FIND_TEMPLATE, user_uttr["text"])
     dont_like = re.findall(DONT_LIKE, user_uttr["text"])
     was_prev_active = if_was_prev_active(vars)
-    if not dont_like and (have_pets or (chat_about and (not is_last_state(vars, AS.SYS_WHAT_ANIMALS)
-                                                        or not was_prev_active)) or (found_prompt and isyes)):
+    if not dont_like and (have_pets or ((chat_about or find_pattern) and (not is_last_state(vars, "SYS_WHAT_ANIMALS")
+                                        or not was_prev_active)) or (found_prompt and isyes)):
         flag = True
     logger.info(f"lets_talk_about_request={flag}")
     return flag
@@ -92,7 +98,7 @@ def like_animals_request(ngrams, vars):
     if my_pet == "dog":
         told_about = told_about_dog
     if re.search(LIKE_PETS_TEMPLATE, user_uttr) or (not told_about and started) \
-            and not is_last_state(vars, AS.SYS_WHAT_ANIMALS):
+            and not is_last_state(vars, "SYS_WHAT_ANIMALS"):
         flag = True
     user_has = re.findall("i (have|had)", user_uttr)
     ask_more = "more about" in bot_uttr
@@ -109,7 +115,7 @@ def user_likes_animal_request(ngrams, vars):
     flag = False
     text = state_utils.get_last_human_utterance(vars)["text"]
     animal = re.findall("i like (.*?)", text)
-    if animal and len(animal[0].split()) <= 3 and not is_last_state(vars, AS.SYS_WHAT_ANIMALS):
+    if animal and len(animal[0].split()) <= 3 and not is_last_state(vars, "SYS_WHAT_ANIMALS"):
         flag = True
     logger.info(f"user_likes_request={flag}")
     return flag
@@ -178,7 +184,7 @@ def sys_have_pets_request(ngrams, vars):
     pet = re.search(PETS_TEMPLATE, text)
     if not shared_memory.get("have_pets", False) and not found_users_pet and \
             ((lets_talk_about_request(vars) and not pet) or started) \
-            and not is_last_state(vars, AS.SYS_WHAT_ANIMALS):
+            and not is_last_state(vars, "SYS_WHAT_ANIMALS"):
         flag = True
     logger.info(f"sys_have_pets_request={flag}")
     return flag
@@ -285,7 +291,7 @@ def what_wild_request(ngrams, vars):
     logger.info(f"what_wild_request, is wild {is_wild}, what wild {what_wild}")
     started = shared_memory.get("start", False)
     if dont_like or is_wild or what_wild or user_asks_about_pets \
-            or (not lets_talk_about_request(vars) and not started) and not is_last_state(vars, AS.SYS_WHAT_ANIMALS):
+            or (not lets_talk_about_request(vars) and not started) and not is_last_state(vars, "SYS_WHAT_ANIMALS"):
         flag = False
     if if_lets_chat(text) and not lets_talk_about_request(vars):
         flag = False
