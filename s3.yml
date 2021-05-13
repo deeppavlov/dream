@@ -62,5 +62,5 @@ services:
   topic-recommendation:
     build:
       args:
-        DATA_URL: http://team-dream-storage.s3.amazonaws.com/alexaprize_data/logreg_recommendation_model.pkl
+        DATA_URL: http://team-dream-storage.s3.amazonaws.com/alexaprize_data/convert_reddit_v2.8.tar.gz
 version: "3.7"
