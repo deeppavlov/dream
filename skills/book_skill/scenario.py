@@ -9,7 +9,7 @@ from common.books import BOOK_SKILL_CHECK_PHRASES, about_book, BOOK_PATTERN
 from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.universal_templates import is_switch_topic, if_chat_about_particular_topic, tell_me_more, \
     is_positive, is_negative
-from common.utils import is_yes, is_no
+from common.utils import is_yes, is_no, entity_to_label
 from common.link import link_to
 from book_utils import get_name, get_genre, suggest_template, get_not_given_question_about_books, dontlike, \
     fact_about_book, fav_genre_request_detected, is_side_intent, is_stop, \
@@ -97,13 +97,14 @@ class BookSkillScenario:
     def get_reply_considering_book_author_genre_info(self, annotated_user_phrase,
                                                      annotated_prev_phrase, used_phrases=[]):
         logger.debug('Getting whether phrase contains name of author, book or genre')
-        author_name, _ = get_name(annotated_user_phrase, 'author')
+        plain_author_name, _ = get_name(annotated_user_phrase, 'author', return_plain=True)
         bookname, n_years_ago = get_name(annotated_user_phrase, 'book', bookyear=True)
         genre_name = get_genre(annotated_user_phrase['text'], return_name=True)
-        if author_name is not None:
-            logger.debug(f'Phrase contains name of author {author_name}')
-            reply1 = f'I enjoy reading books of {author_name}.'
-            best_book = best_book_by_author(author_name, default_phrase=None)
+        if plain_author_name is not None:
+            logger.debug(f'Phrase contains name of author {plain_author_name}')
+            author_name = entity_to_label(plain_author_name)
+            reply1 = f'Books of {author_name} are truly amazing.'
+            best_book = best_book_by_author(plain_author_name, default_phrase=None)
             if best_book is not None:
                 reply2 = f'My favourite book of this author is {best_book}.'
             else:
@@ -138,7 +139,6 @@ class BookSkillScenario:
                 confidence = self.default_conf
         else:
             reply, confidence = self.default_reply, 0
-
         return reply, confidence
 
     def __call__(self, dialogs):
