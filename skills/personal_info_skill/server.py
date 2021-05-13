@@ -220,7 +220,7 @@ def process_info(dialog, which_info="name"):
         logger.info(f"Asked for {which_info} in {prev_bot_uttr}")
         found_info = check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr)
         logger.info(f"found_info: {found_info}")
-        if which_info == "name":
+        if which_info == "name" and found_info is not None:
             found_info = filter_unreadable_names(found_info)
         if found_info is None:
             logger.info(f"found_info is None")
