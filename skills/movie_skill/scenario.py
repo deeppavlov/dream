@@ -18,7 +18,7 @@ from common.movies import get_movie_template, praise_actor, praise_director_or_w
     WHAT_OTHER_MOVIE_TO_DISCUSS, CLARIFY_WHAT_MOVIE_TO_DISCUSS
 from common.universal_templates import is_switch_topic, if_chat_about_particular_topic, \
     if_choose_topic, COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
-from common.utils import get_skill_outputs_from_dialog, is_yes, is_no, get_topics, get_intents, get_sentiment, \
+from common.utils import get_skill_outputs_from_dialog, is_yes, is_no, get_intents, get_sentiment, \
     is_donot_know
 from CoBotQA.cobotqa_service import send_cobotqa
 
@@ -211,17 +211,12 @@ class MovieSkillScenario:
 
     def is_about_movies(self, uttr, prev_uttr=None):
         prev_uttr = {} if prev_uttr is None else prev_uttr
-        is_movie_topic = any([topic in get_topics(uttr, which="all")
-                              for topic in ["Entertainment_Movies", "Movies_TV"]])
-
         curr_uttr_is_about_movies = re.search(self.movie_pattern, uttr["text"].lower())
-        prev_uttr_last_sent = prev_uttr.get("annotations", {}).get("sentseg", {}).get("segments", [""])[-1].lower()
-        prev_uttr_is_about_movies = re.search(self.movie_pattern, prev_uttr_last_sent)
+        prev_uttr_is_about_movies = self.is_movie_title_question(prev_uttr)
         lets_talk_about_movies = if_chat_about_particular_topic(uttr, prev_uttr, compiled_pattern=self.movie_pattern)
         chosed_topic = if_choose_topic(uttr, prev_uttr) and curr_uttr_is_about_movies
 
-        if is_movie_topic or lets_talk_about_movies or chosed_topic or curr_uttr_is_about_movies or \
-                ("?" in prev_uttr_last_sent and prev_uttr_is_about_movies):
+        if lets_talk_about_movies or chosed_topic or curr_uttr_is_about_movies or prev_uttr_is_about_movies:
             return True
         else:
             return False
