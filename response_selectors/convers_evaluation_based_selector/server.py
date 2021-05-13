@@ -344,7 +344,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
         if sum(curr_single_scores) == 0.:
             break
 
-    if dialog["human"]["profile"].get("name", False):
+    if dialog["human"]["profile"].get("name", False) and best_skill_name != "personal_info_skill":
         name = dialog["human"]["profile"].get("name", False)
         if len(dialog["bot_utterances"]) >= 1:
             if re.search(r"\b" + name + r"\b", dialog["bot_utterances"][-1]["text"]):
