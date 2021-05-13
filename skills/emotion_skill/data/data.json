@@ -1,6 +1,6 @@
 {
   "jokes":[
-    "Untill recent time, I could tell jokes. But now I am prohibited to do it by the rules of competition. I am sorry for that."
+    "Hey, I love telling jokes but not during this competition. Dead serious about that."
   ],
   "steps":{
     "offer_advice":{
@@ -34,10 +34,10 @@
       "next_step":[""],
       "link": ""
     },
-    "sadness_i_feel":{
+    "pain_i_feel":{
       "answers":[
-        "Problems are like chocolate, you're best to chew them up and digest them as quickly as possible. I can cheer you up talking to you. What do you wanna talk about?",
-        "I am sorry to hear that! I can cheer you up talking to you. What do you wanna talk about?"
+         "I wish I can take this pain away from you faster than even the doctors would. I can't do it, but I can suggest calling up your family doctor.",
+         "I hope you will feel better. You can see your family doctor if you need help."
       ],
       "next_step":[""],
       "link": ""
