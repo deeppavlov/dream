@@ -153,18 +153,6 @@ simplified_dialogflow = dialogflow_extention.DFEasyFilling(State.USR_START)
 # utils
 
 
-def is_yes_request(ngrams, vars):
-    if condition_utils.is_yes_vars(vars):
-        return True
-    return False
-
-
-def is_no_request(ngrams, vars):
-    if condition_utils.is_no_vars(vars):
-        return True
-    return False
-
-
 def get_people_for_topic(cobot_topic):
     # human-curated list (top 10-20 for 2010s)
     peoples = [
@@ -445,7 +433,20 @@ def usr_topic_to_event_response(vars):
 
 def sys_no_or_yes_request(ngrams, vars):
     logger.debug("sys_no_or_yes_request: BEGIN")
-    flag = is_yes_request(ngrams, vars) or is_no_request(ngrams, vars)
+    flag = False
+
+    human_utterance = state_utils.get_last_human_utterance(vars)
+
+    sf_type, sf_confidence = utils.get_speech_function_for_human_utterance(human_utterance)
+
+    # using speech function classifier for agree (yes)
+    # (with the aid of MIDAS & Intents for now)
+    flag = utils.is_speech_function_agree(vars)
+
+    # using speech function classifier for disagree (no)
+    if not flag:
+        flag = utils.is_speech_function_disagree(vars)
+    flag = flag and default_condition_request(ngrams, vars)
     logger.info(f"sys_no_or_yes_request={flag}")
     return flag
 
@@ -1342,10 +1343,10 @@ simplified_dialogflow.add_system_transition(
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_EVENT_TO_PERSON,
     {
-        State.SYS_DISAGREES_ABT_PERSON: is_no_request,
+        State.SYS_DISAGREES_ABT_PERSON: sys_disagrees_abt_person_request,
         State.SYS_SAYS_OPINION_ABT_PERSON: sys_says_opinion_abt_person_request,
         State.SYS_NOT_INTERESTED_IN_PERSON: sys_not_interested_in_person_request,
-        State.SYS_AGREES_ABT_PERSON: is_yes_request,
+        State.SYS_AGREES_ABT_PERSON: sys_agrees_abt_person_request,
         State.SYS_MENTIONS_ANOTHER_PERSON: sys_mentions_another_person_request,
     },
 )
@@ -1367,10 +1368,10 @@ simplified_dialogflow.set_error_successor(State.SYS_NOT_INTERESTED_IN_PERSON, St
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_NOT_INTERESTED_IN_PERSON,
     {
-        State.SYS_DISAGREES_ABT_PERSON: is_no_request,
+        State.SYS_DISAGREES_ABT_PERSON: sys_disagrees_abt_person_request,
         State.SYS_SAYS_OPINION_ABT_PERSON: sys_says_opinion_abt_person_request,
         State.SYS_NOT_INTERESTED_IN_PERSON: sys_not_interested_in_person_request,
-        State.SYS_AGREES_ABT_PERSON: is_yes_request,
+        State.SYS_AGREES_ABT_PERSON: sys_agrees_abt_person_request,
         State.SYS_MENTIONS_ANOTHER_PERSON: sys_mentions_another_person_request,
     },
 )
@@ -1397,10 +1398,10 @@ simplified_dialogflow.add_system_transition(
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_AGREES_ABT_PERSON,
     {
-        State.SYS_DISAGREES_ABT_PERSON: is_no_request,
+        State.SYS_DISAGREES_ABT_PERSON: sys_disagrees_abt_person_request,
         State.SYS_SAYS_OPINION_ABT_PERSON: sys_says_opinion_abt_person_request,
         State.SYS_NOT_INTERESTED_IN_PERSON: sys_not_interested_in_person_request,
-        State.SYS_AGREES_ABT_PERSON: is_yes_request,
+        State.SYS_AGREES_ABT_PERSON: sys_agrees_abt_person_request,
         State.SYS_MENTIONS_ANOTHER_PERSON: sys_mentions_another_person_request,
     },
 )
@@ -1432,10 +1433,10 @@ simplified_dialogflow.add_user_serial_transitions(
     State.USR_DISAGREES_ABT_PERSON,
     {
         State.SYS_MENTIONS_ANOTHER_PERSON: sys_mentions_another_person_request,
-        State.SYS_DISAGREES_ABT_PERSON: is_no_request,
+        State.SYS_DISAGREES_ABT_PERSON: sys_disagrees_abt_person_request,
         State.SYS_SAYS_OPINION_ABT_PERSON: sys_says_opinion_abt_person_request,
         State.SYS_NOT_INTERESTED_IN_PERSON: sys_not_interested_in_person_request,
-        State.SYS_AGREES_ABT_PERSON: is_yes_request,
+        State.SYS_AGREES_ABT_PERSON: sys_agrees_abt_person_request,
     },
 )
 
@@ -1463,10 +1464,10 @@ simplified_dialogflow.add_system_transition(
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_SAYS_OPINION_ABT_PERSON,
     {
-        State.SYS_DISAGREES_ABT_PERSON: is_no_request,
+        State.SYS_DISAGREES_ABT_PERSON: sys_disagrees_abt_person_request,
         # State.SYS_SAYS_OPINION_ABT_PERSON: sys_says_opinion_abt_person_request,
         State.SYS_NOT_INTERESTED_IN_PERSON: sys_not_interested_in_person_request,
-        State.SYS_AGREES_ABT_PERSON: is_yes_request,
+        State.SYS_AGREES_ABT_PERSON: sys_agrees_abt_person_request,
         State.SYS_MENTIONS_ANOTHER_PERSON: sys_mentions_another_person_request,
     },
 )
@@ -1493,10 +1494,10 @@ simplified_dialogflow.add_system_transition(
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_CHANGE_TO_PERSON,
     {
-        State.SYS_DISAGREES_ABT_PERSON: is_no_request,
+        State.SYS_DISAGREES_ABT_PERSON: sys_disagrees_abt_person_request,
         State.SYS_SAYS_OPINION_ABT_PERSON: sys_says_opinion_abt_person_request,
         State.SYS_NOT_INTERESTED_IN_PERSON: sys_not_interested_in_person_request,
-        State.SYS_AGREES_ABT_PERSON: is_yes_request,
+        State.SYS_AGREES_ABT_PERSON: sys_agrees_abt_person_request,
         State.SYS_MENTIONS_ANOTHER_PERSON: sys_mentions_another_person_request,
     },
 )
@@ -1514,10 +1515,10 @@ simplified_dialogflow.add_system_transition(
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_MENTIONS_ANOTHER_PERSON,
     {
-        State.SYS_DISAGREES_ABT_PERSON: is_no_request,
+        State.SYS_DISAGREES_ABT_PERSON: sys_disagrees_abt_person_request,
         State.SYS_SAYS_OPINION_ABT_PERSON: sys_says_opinion_abt_person_request,
         State.SYS_NOT_INTERESTED_IN_PERSON: sys_not_interested_in_person_request,
-        State.SYS_AGREES_ABT_PERSON: is_yes_request,
+        State.SYS_AGREES_ABT_PERSON: sys_agrees_abt_person_request,
         State.SYS_MENTIONS_ANOTHER_PERSON: sys_mentions_another_person_request,
     },
 )
