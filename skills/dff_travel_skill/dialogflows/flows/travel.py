@@ -780,6 +780,7 @@ simplified_dialogflow.add_user_serial_transitions(
     State.USR_START,
     {
         State.SYS_HAVE_BOT_BEEN: have_bot_been_in_request,
+        State.SYS_USR_HAVE_NOT_BEEN: user_have_not_been_in_request,
         State.SYS_USR_HAVE_BEEN: user_have_been_in_request,
         State.SYS_LOC_DETECTED: user_mention_named_entity_loc_request,
         State.SYS_LIKE_TRAVELLING: like_about_travelling_request,
