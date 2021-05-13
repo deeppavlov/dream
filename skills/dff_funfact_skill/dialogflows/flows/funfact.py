@@ -8,8 +8,11 @@ import sentry_sdk
 
 from common.funfact import funfact_requested, story_requested, FUNFACT_LIST, make_question
 from common.constants import MUST_CONTINUE
+from common.utils import get_topics
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
+
+from CoBotQA.cobotqa_service import send_cobotqa
 
 import dialogflows.scopes as scopes
 
@@ -68,10 +71,17 @@ def funfact_response(vars, shuffle=True):
         random.shuffle(FUNFACT_LIST)
     answer = ""
     human_utterance = state_utils.get_last_human_utterance(vars)
+    funfacts_to_iterate = FUNFACT_LIST
+    entity = ''
     if story_requested(human_utterance):
         answer = "Unfortunately, rules of the competition forbid me to tell you a story, " \
-                 "but I can tell you a joke."
-    for funfact, topic in FUNFACT_LIST:
+                 "but I can tell you a fun fact."
+    elif 'fact about' in human_utterance['text']:  # entity requested
+        entity = human_utterance['text'].split('fact about')[1]
+        topic = get_topics(human_utterance, which='cobot_topics')[0]
+        funfact = send_cobotqa(f'fact about {entity}')
+        funfacts_to_iterate = [(funfact, topic)] + funfacts_to_iterate
+    for funfact, topic in funfacts_to_iterate:
         if given_funfacts:
             link_question = make_question()
         else:
