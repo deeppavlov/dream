@@ -468,8 +468,8 @@ def food_fact_response(vars):
             fact = send_cobotqa(f"fact about {berry_name}")
     else:
         facts = annotations.get("fact_retrieval", [])
-        if facts:
-            fact = facts[0]
+        if facts and len(facts) > 2:
+            fact = facts[2]
     try:
         state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
         if re.search(DONOTKNOW_LIKE_RE, human_utt_text):
