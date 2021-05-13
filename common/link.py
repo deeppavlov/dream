@@ -160,6 +160,9 @@ def get_all_linked_to_skills(prev_bot_utt):
 prelinkto_connection_phrases_file = pathlib.Path(__file__).resolve().parent / "prelinkto_connection_phrases.json"
 PRELINKTO_CONNECTION_PHRASES = json.load(prelinkto_connection_phrases_file.open())
 
+prelinkto_topic_phrases_file = pathlib.Path(__file__).resolve().parent / "prelinkto_topic_phrases.json"
+PRELINKTO_TOPIC_PHRASES = json.load(prelinkto_topic_phrases_file.open())
+
 
 def get_prelinkto_connection(from_skill, to_skill, used_templates):
     skill_pair = sorted([from_skill, to_skill])
@@ -169,14 +172,23 @@ def get_prelinkto_connection(from_skill, to_skill, used_templates):
     return ""
 
 
+def get_prelinkto_topic_connection(to_skill, used_templates):
+    if to_skill in PRELINKTO_TOPIC_PHRASES:
+        return get_not_used_template(used_templates, PRELINKTO_TOPIC_PHRASES[to_skill])
+    return ""
+
+
 def compose_linkto_with_connection_phrase(skills, human_attributes, recent_active_skills=None, from_skill=None):
     from_skill = "" if from_skill is None else from_skill
     linkto_dict = link_to(skills, human_attributes, recent_active_skills)
     connection = get_prelinkto_connection(from_skill, linkto_dict["skill"],
                                           human_attributes.get("prelinkto_connections", []))
     if not connection:
-        connection = get_not_used_template(human_attributes.get("prelinkto_connections", []),
-                                           COMPLETELY_CHANGING_THE_SUBJECT_PHRASES)
+        connection = get_prelinkto_topic_connection(linkto_dict["skill"],
+                                                    human_attributes.get("prelinkto_connections", []))
+        if not connection:
+            connection = get_not_used_template(human_attributes.get("prelinkto_connections", []),
+                                               COMPLETELY_CHANGING_THE_SUBJECT_PHRASES)
         result = f"{connection} {linkto_dict['phrase']}"
     else:
         change_topic = choice(CHANGE_TOPIC_SUBJECT).replace(

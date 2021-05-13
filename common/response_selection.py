@@ -29,13 +29,14 @@ CHANGE_TOPIC_SUBJECT = [
     "Speaking of SUBJECT,",
     "Talking about SUBJECT,",
     "Let's talk about SUBJECT,",
-    "We need to discuss SUBJECT,",
-    "Oh, I wanted to talk with you about SUBJECT,",
+    "I feel we need to discuss SUBJECT,",
+    "I wanted to talk with you about SUBJECT,",
+    "I wanted to tell you about SUBJECT,"
 ]
 
 BY_THE_WAY = [
     "By the way,",
     "Anyway,",
     "Oh, before I forget,",
-    "I wanted to mention that",
+    "I wanted to mention that,",
 ]
