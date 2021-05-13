@@ -10,6 +10,7 @@ import requests
 import sentry_sdk
 
 from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
+from common.sensitive import is_sensitive_situation
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
@@ -47,6 +48,9 @@ class State(Enum):
     USR_HELLO_AND_CONTNIUE = auto()
     SYS_USR_ASKS_BOT_HOW_ARE_YOU = auto()
     SYS_USR_ANSWERS_HOW_IS_HE_DOING = auto()
+
+    SYS_WHAT_DO_YOU_DO = auto()
+    USR_FREE_TIME = auto()
 
     SYS_STD_GREETING = auto()
     USR_STD_GREETING = auto()
@@ -213,7 +217,7 @@ def hello_response(vars):
         which_start = random.choice([
             # "starter_weekday",
             # "starter_genre",
-            # "what_do_you_do",
+            "what_do_you_do",
             "how_are_you",
             # "what_is_your_name",
             # "what_to_talk_about"
@@ -243,6 +247,33 @@ def hello_response(vars):
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
         return error_response(vars)
+
+
+##################################################################################################################
+# bot asks: how do you spend your free time
+##################################################################################################################
+def what_do_you_do_request(ngrams, vars):
+    utt = state_utils.get_last_human_utterance(vars)
+    utt_text = utt["text"].lower()
+    shared_memory = state_utils.get_shared_memory(vars)
+    greeting_type = shared_memory.get("greeting_type", "")
+    flag = condition_utils.no_requests(vars) and (greeting_type == "what_do_you_do")
+    flag = flag and all(
+        [
+            "school" not in utt_text,
+            "work" not in utt_text,
+            "kids" not in utt_text,
+            "toys" not in utt_text,
+            not is_sensitive_situation(vars["agent"]["dialog"])
+        ]
+    )
+    return flag
+
+
+def free_time_response(vars):
+    state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+    state_utils.set_can_continue(vars, MUST_CONTINUE)
+    return random.choice(common_greeting.FREE_TIME_RESPONSES)
 
 
 ##################################################################################################################
@@ -566,6 +597,7 @@ simplified_dialogflow.add_user_serial_transitions(
     State.USR_HELLO_AND_CONTNIUE,
     {
         (scopes.STARTER, StarterState.USR_START): starter_flow.starter_request,
+        State.SYS_WHAT_DO_YOU_DO: what_do_you_do_request,
         State.SYS_STD_GREETING: std_greeting_request,
         State.SYS_USR_ASKS_BOT_HOW_ARE_YOU: how_are_you_request,
         State.SYS_USR_ANSWERS_HOW_IS_HE_DOING: positive_or_negative_request,
@@ -574,6 +606,11 @@ simplified_dialogflow.add_user_serial_transitions(
 )
 simplified_dialogflow.set_error_successor(State.USR_HELLO_AND_CONTNIUE, State.SYS_ERR)
 
+##################################################################################################################
+#  SYS_WHAT_DO_YOU_DO
+
+simplified_dialogflow.add_system_transition(State.SYS_WHAT_DO_YOU_DO, State.USR_FREE_TIME, free_time_response)
+simplified_dialogflow.set_error_successor(State.SYS_WHAT_DO_YOU_DO, State.SYS_ERR)
 
 ##################################################################################################################
 #  SYS_USR_ASKS_BOT_HOW_ARE_YOU

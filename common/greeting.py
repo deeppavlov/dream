@@ -4,7 +4,11 @@ HI_THIS_IS_ALEXA = "Hi, this is an Alexa Prize Socialbot!"
 
 WHAT_DO_YOU_DO_RESPONSES = [
     "What do you do on weekdays?",
-    "What do you do on weekends?"
+    # "What do you do on weekends?"
+]
+
+FREE_TIME_RESPONSES = [
+    "When you have 30 minutes of free time, how do you pass the time?"
 ]
 
 FALSE_POSITIVE_TURN_ON_RE = re.compile(r"talk like .*|how .* can you talk|can (we|i) talk to yoda", re.IGNORECASE)
