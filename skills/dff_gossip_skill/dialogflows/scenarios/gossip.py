@@ -25,89 +25,93 @@ AGREEMENT_PROMPTS = [
 
 # Source: https://content.cambly.com/2016/07/31/lesson-22-saying-sorry/
 NOT_INTERESTED_IN_PERSON_ACKNOWLEDGEMENTS = [
-    "Oh I see",
-    "Yay",
-    "Well",
-    "Rrright",
-    "Sorry",
-    "Regret for mentioning that",
-    "Please forgive me",
-    "Apologies",
-    "Pardon me",
-    "Excuse me",
-    "My fault",
+    "Oh I see.",
+    "Yay.",
+    "Well.",
+    "Rrright.",
+    "Sorry.",
+    "Regret for mentioning that.",
+    "Please forgive me.",
+    "Apologies.",
+    "Pardon me.",
+    "Excuse me.",
+    "My fault.",
 ]
 
 CHANGE_TO_OTHER_PERSON_QUESTIONS = [
     "Speaking of target_topic, do you know what's happened about target_person? "
-    "To me, target_person an target_judgement target_occupation.",
+    "To me, target_person is an target_judgement target_occupation, too.",
     "Anyways, as I was thinking about target_topic, I wondered about someone else... "
-    "Right, target_person - a target_judgement target_occupation.",
-    "Gotcha... So, target_topic, it reminded me about target_person. Yeah, target_judgement target_occupation.",
+    "Right, target_person is a target_judgement target_occupation, too.",
+    "Gotcha... So, speaking of target_topic, it reminded me about target_person. "
+    "Yeah, target_judgement target_occupation, too.",
 ]
 
 REACTION_TO_YOUNG_AGE = {
     "Liked": [
         "Gosh I'd love to achieve so much at such age!",
-        "Wish I could be such a target_judgement target_occupation at such age",
-        "target_gender_is too young for being a target_occupation",
+        "Wish I could be such a target_judgement target_occupation at such age.",
+        "target_gender_is too young for being a target_occupation.",
     ],
     "Disliked": [
-        "Gosh not sure if target_gender deserve ss it!",
-        "Wish it was me not target_gender_im. I could be a better target_occupation then target_gender_im!",
-        "For god's sake, why did target_gender even think target_gender can be a target_occupation",
+        "Gosh not sure if target_gender deserves it! Are you with me on it?",
+        "Wish it was me not target_gender_im. I could be a better target_occupation then target_gender_im! "
+        "Do you think so?",
+        "For god's sake, why did target_gender even think target_gender can be a target_occupation. "
+        "Do you think the same?",
     ],
 }
 
 REACTION_TO_CREATIVE_WORK = {
     "Liked": [
-        "really loved target_gender_eir target_creative_work: target_work_name",
-        "enjoyed target_gender_eir target_creative_work: target_work_name",
-        "target_gender_eir target_creative_work, target_work_name, touched my heart",
-        "target_gender_eir target_creative_work target_work_name made me cry",
+        "really loved target_gender_eir target_creative_work: target_work_name.",
+        "enjoyed target_gender_eir target_creative_work: target_work_name.",
+        "target_gender_eir target_creative_work, target_work_name, touched my heart.",
+        "target_gender_eir target_creative_work target_work_name made me cry.",
     ],
     "Disliked": [
-        "really didn't like target_gender_eir target_creative_work: target_work_name",
-        "dislike target_gender_eir target_creative_work: target_work_name",
-        "target_gender_eir target_creative_work, target_work_name, mostly felt like an empty story to me",
-        "target_gender_eir target_creative_work target_work_name made me sad",
+        "Really didn't like target_gender_eir target_creative_work: target_work_name. Are you with me on it?",
+        "Dislike target_gender_eir target_creative_work: target_work_name. Do you feel the same I wonder?",
+        "target_gender_eir target_creative_work, target_work_name, mostly felt like "
+        "an empty story to me. Sounds familiar?",
+        "target_gender_eir target_creative_work target_work_name made me sad. What about you?",
     ],
 }
 
 REACTION_TO_SPORT = {
     "Liked": [
-        "really love target_sport_name",
-        "enjoy watching target_sport_name",
-        "target_sport_name is awesome",
-        "target_sport_name is the best sport",
+        "Really love target_sport_name.",
+        "Enjoy watching target_sport_name.",
+        "target_sport_name is awesome.",
+        "target_sport_name is the best sport.",
     ],
     "Disliked": [
-        "really don't like target_sport_name",
-        "dislike target_sport_name",
-        "target_sport_name is boring to me",
-        "watching target_sport_name makes me sleepy",
+        "Really don't like target_sport_name. Are you with me on this?",
+        "Dislike target_sport_name. Is it the same for you?",
+        "target_sport_name is boring to me. Sounds similar?",
+        "Watching target_sport_name makes me sleepy. What about you?",
     ],
 }
 
 GENERIC_REACTION_TO_CREATIVE_WORK = {
     "Liked": [
-        "really loved their target_creative_works. Do you have a favorite one?",
-        "enjoyed their target_creative_works. Do you have a favorite one?",
-        "their target_creative_works touched my heart. What's your favorite one?",
-        "their target_creative_works made me cry. Was there a such one for you?",
+        "Really loved their target_creative_works. Do you have a favorite one?",
+        "Enjoyed their target_creative_works. Do you have a favorite one?",
+        "Their target_creative_works touched my heart. What's your favorite one?",
+        "Their target_creative_works made me cry. Was there a such one for you?",
     ],
     "Disliked": [
-        "really didn't like their target_creative_work. Anyways... What's your take?",
-        "dislike their target_creative_work. What about you?",
-        "their target_creative_works mostly felt like an empty story to me. Is it so for you, too?",
-        "their target_creative_works made me sad. I don't like to be sad... You?",
+        "Really didn't like their target_creative_work. Anyways... What's your take?",
+        "Dislike their target_creative_work. What about you?",
+        "Their target_creative_works mostly felt like an empty story to me. Is it so for you, too?",
+        "Their target_creative_works made me sad. I don't like to be sad... You?",
     ],
 }
 
 ASK_ABOUT_DATING = [
-    "Do you know whom target_gender_is dating? I heard it's target_partner",
-    "Have you heard whom target_gender_is dating by the way? "
-    "Someone told me target_gender_is dating it's target_partner",
+    "Do you know whom target_gender_is dating? I heard it's target_partner.",
+    "Have you heard whom target_gender_is dating by the way? target_person."
+    "Someone told me target_gender_is dating... It's target_partner.",
     "Guess you don't know whom target_gender_is dating! target_partner!",
 ]
 
@@ -118,31 +122,31 @@ TARGET_JUDGEMENTS_FOR_EMOTION = [
 
 REACTION_TO_SPORT = {
     "Liked": [
-        "target_gender_eir team, target_sport_team, is awesome",
-        "like target_gender_eir team - target_sport_team",
-        "root for target_sport_team - target_gender_eir team",
-        "go target_sport_team!",
+        "target_gender_eir team, target_sport_team, is awesome.",
+        "Like target_gender_eir team - target_sport_team.",
+        "Root for target_sport_team - target_gender_eir team.",
+        "Go target_sport_team!",
     ],
     "Disliked": [
-        "well, target_sport_team used to be good but...",
-        "not into target_gender_eir team - target_sport_team",
-        "target_sport_team don't know how to play well",
-        "watching target_sport_name makes me sleepy",
+        "Well, target_sport_team used to be good but... Are you with me on this?",
+        "Not into target_gender_eir team - target_sport_team. What about you?",
+        "target_sport_team don't know how to play well. Do you also think so?",
+        "Watching target_sport_name makes me sleepy. Is that the same for you?",
     ],
 }
 
 GENERIC_REACTION_TO_SPORT = {
     "Liked": [
-        "really love target_sport_name",
-        "enjoy watching target_sport_name",
-        "target_sport_name is awesome",
-        "target_sport_name is the best sport",
+        "Really love target_sport_name.",
+        "Enjoy watching target_sport_name.",
+        "target_sport_name is awesome.",
+        "target_sport_name is the best sport.",
     ],
     "Disliked": [
-        "really don't like target_sport_name",
-        "dislike target_sport_name",
-        "target_sport_name is boring to me",
-        "watching target_sport_name makes me sleepy",
+        "Really don't like target_sport_name. Are you with me on it?",
+        "Dislike target_sport_name. Is it the same for you?",
+        "target_sport_name is boring to me. What about you?",
+        "Watching target_sport_name makes me sleepy. Sounds similar?",
     ],
 }
 
@@ -153,9 +157,9 @@ SIMPLE_OPINION_ABOUT_LIKED_PERSON_PREVIOUSLY_MENTIONED_BY_BOT = [
 ]
 
 SIMPLE_OPINION_ABOUT_DISLIKED_PERSON_PREVIOUSLY_MENTIONED_BY_BOT = [
-    "target_gender_is uninspiring",
-    "target_gender_is boring",
-    "target_gender_is unimportant",
+    "target_gender_is uninspiring.",
+    "target_gender_is boring.",
+    "target_gender_is unimportant.",
 ]
 
 SIMPLE_REACTION_TO_PERSON_PREVIOUSLY_MENTIONED_BY_BOT = ["So you say that?", "Hmmm?", "Interesting..."]
@@ -180,9 +184,9 @@ SIMPLE_REACTION_TO_PERSON_PREVIOUSLY_MENTIONED_BY_BOT = ["So you say that?", "Hm
 
 
 REACTION_TO_USER_OPINION_ABOUT_PERSON = {
-    "Neutral": ["So you say that?", "Hmmm?", "Interesting..."],
-    "Liked": ["Oh, keep going!", "Please elaborate", "Want to know more!"],
-    "Disliked": ["Why do you think so?", "Curious what do you mean", "Intrigued... Keep going"],
+    "Other": ["So you say that?", "Hmmm?", "Interesting..."],
+    "Liked": ["Oh, keep going!", "Please elaborate.", "Want to know more!"],
+    "Disliked": ["Why do you think so?", "Curious what do you mean?", "Intrigued... Keep going."],
 }
 
 SIMPLE_OPINION_ABOUT_PERSON_PREVIOUSLY_MENTIONED_BY_USER = ["No idea?", "What do you think?", "I guess?"]
@@ -192,24 +196,24 @@ SIMPLE_REACTION_TO_PERSON_PREVIOUSLY_MENTIONED_BY_USER = ["Right... So?", "Aha..
 REACTION_TO_USER_MENTIONING_SOMEONE_RELATED_TO_WHO_USER_MENTIONED_BEFORE = ["yes yes", "aha aha", "huh yeah...", "hmm"]
 
 OPINION_TO_USER_MENTIONING_SOMEONE_RELATION_TO_WHO_USER_MENTIONED_BEFORE = [
-    "target_gender_is a rather interesting person",
-    "target_gender_is, huh..., fascinating",
-    "target_gender_is, hmm, intriguing",
-    "target_gender_is, well, refreshing",
+    "target_gender_is a rather interesting person.",
+    "target_gender_is, huh..., fascinating.",
+    "target_gender_is, hmm, intriguing.",
+    "target_gender_is, well, refreshing.",
 ]
 
 REACTION_TO_USER_MENTIONING_SOMEONE_RELATED_TO_WHO_BOT_MENTIONED_BEFORE = [
-    "aha, what a jump",
-    "interesting... keep going",
-    "rather interesting... and?",
-    "huh, quite interesting",
+    "Aha, what a jump.",
+    "Interesting... keep going.",
+    "Rather interesting... and?",
+    "Huh, quite interesting.",
 ]
 
 OPINION_TO_USER_MENTIONING_SOMEONE_RELATION_TO_WHO_BOT_MENTIONED_BEFORE = [
-    "target_gender_is a rather interesting person",
-    "target_gender_is, huh..., fascinating",
-    "target_gender_is, hmm, intriguing",
-    "target_gender_is, well, refreshing",
+    "target_gender_is a rather interesting person.",
+    "target_gender_is, huh..., fascinating.",
+    "target_gender_is, hmm, intriguing.",
+    "target_gender_is, well, refreshing.",
 ]
 
 CONFUSED_WHY_USER_MENTIONED_PERSON = [
@@ -223,6 +227,29 @@ CONFUSED_WHY_USER_MENTIONED_PEOPLE = [
     "Ok that's too many people to think of. Can't keep them all in my mind!",
     "Hey keep it easy I can't remember all of these people in my mind!",
 ]
+
+OPINION_TO_USER_MENTIONING_SOMEONE_NEW = [
+    "target_gender_is a rather interesting person.",
+    "target_gender_is, huh..., fascinating.",
+    "target_gender_is, hmm, intriguing.",
+    "target_gender_is, well, refreshing.",
+]
+
+
+WANT_TO_HEAR_ANOTHER_FACT = [
+    "Would you want to hear an interesting fact about target_gender_im?",
+    "One more fact about target_gender_im?",
+    "Wanna know another interesting thing about target_gender_im?",
+    "Wanna know more about target_gender_im?"
+]
+
+
+WAIT_BUT_WHY_QUESTIONS = [
+    "Wait but why?",
+    "Oh... Why, I wonder?",
+    "Hmmm, but why?"
+]
+
 
 # CoBot Topics: Entertainment_Movies, Entertainment_Music, Entertainment_Books, Entertainment_General, Sports, Politics,
 # Science_and_Technology, Phatic, Interactive, Inappropriate_Content, Other
@@ -428,8 +455,8 @@ TOPICS_TO_PEOPLE_MAPPINGS = [
         "People": [
             "Elon Musk",
             "Jeff Bezos",
-            # "Bill Gates",
-            # "Tim Timberlake",
+            "Bill Gates",
+            "Tim Timberlake",
 
             # "Philip Scheinfeld",
             # "Jayson Waller",
