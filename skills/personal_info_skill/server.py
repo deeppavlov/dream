@@ -119,6 +119,26 @@ how_do_you_know_my_info_responses = {
         "Maybe you told me this the last time we talked",
     }
 }
+MAX_READABLE_NAME_WORD_LEN = 20
+
+
+def filter_unreadable_names(found_name):
+    words = found_name.split()
+    max_word_len = max([len(w) for w in words])
+    if max_word_len > MAX_READABLE_NAME_WORD_LEN or len(words) > 4:
+        filtered_result = None
+    else:
+        filtered_result = found_name
+    return filtered_result
+
+
+def shorten_long_names(found_name):
+    words = found_name.split()
+    if len(words) > 2:
+        shortened_result = words[0]
+    else:
+        shortened_result = found_name
+    return shortened_result
 
 
 def process_info(dialog, which_info="name"):
@@ -200,6 +220,8 @@ def process_info(dialog, which_info="name"):
         logger.info(f"Asked for {which_info} in {prev_bot_uttr}")
         found_info = check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr)
         logger.info(f"found_info: {found_info}")
+        if which_info == "name":
+            found_info = filter_unreadable_names(found_info)
         if found_info is None:
             logger.info(f"found_info is None")
             if prev_bot_uttr == repeat_info_phrases[which_info].lower():
@@ -216,24 +238,19 @@ def process_info(dialog, which_info="name"):
                 confidence = 1.0
                 attr["can_continue"] = MUST_CONTINUE
         else:
-            human_attr[which_info] = found_info
             if which_info == "name":
-                response = response_phrases[which_info] + human_attr[which_info] + "."
-                confidence = 1.0
-                attr["can_continue"] = MUST_CONTINUE
+                found_info = shorten_long_names(found_info)
+                response = response_phrases[which_info] + found_info + "."
             elif which_info == "location":
                 response = response_phrases[which_info]
-                confidence = 1.0
-                attr["can_continue"] = MUST_CONTINUE
             elif which_info == "homeland":
                 if dialog["human"]["profile"].get("location", None) is None:
                     response = response_phrases[which_info]
-                    confidence = 1.0
-                    attr["can_continue"] = MUST_CONTINUE
                 else:
                     response = response_phrases["location"]
-                    confidence = 1.0
-                    attr["can_continue"] = MUST_CONTINUE
+            human_attr[which_info] = found_info
+            confidence = 1.0
+            attr["can_continue"] = MUST_CONTINUE
 
     return response, confidence, human_attr, bot_attr, attr
 
