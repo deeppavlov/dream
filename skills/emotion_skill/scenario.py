@@ -5,7 +5,7 @@ from os import getenv
 from common.constants import MUST_CONTINUE, CAN_CONTINUE_SCENARIO
 from common.link import link_to
 from common.emotion import is_joke_requested, is_sad, is_alone, is_boring, \
-    skill_trigger_phrases, talk_about_emotion
+    skill_trigger_phrases, talk_about_emotion, is_pain
 from common.universal_templates import book_movie_music_found
 from common.utils import get_emotions
 from collections import defaultdict
@@ -207,7 +207,8 @@ class EmotionSkillScenario:
                 prev_replies_for_user = [u['text'].lower() for u in dialog['bot_utterances']]
                 prev_bot_phrase = ''
                 very_confident = any([function(user_phrase)
-                                      for function in [is_sad, is_boring, is_alone, is_joke_requested]])
+                                      for function in [is_sad, is_boring, is_alone, is_joke_requested, is_pain]])
+                # Confident if regezp
                 link = ''
                 if prev_replies_for_user:
                     prev_bot_phrase = prev_replies_for_user[-1]
@@ -225,6 +226,9 @@ class EmotionSkillScenario:
                 elif is_alone(user_phrase):
                     state = "loneliness_i_feel"
                     emotion_skill_attributes['state'] = "loneliness_i_feel"
+                elif is_pain(annotated_user_phrase['text']):
+                    state = "pain_i_feel"
+                    emotion_skill_attributes['state'] = "pain_i_feel"
                 logger.info(f"user sent: {annotated_user_phrase['text']} state: {state} emotion: {emotion}")
                 if talk_about_emotion(annotated_user_phrase['text']):
                     reply = f'OK. {random.choice(skill_trigger_phrases())}'
