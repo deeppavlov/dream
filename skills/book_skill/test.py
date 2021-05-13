@@ -23,7 +23,7 @@ def main_test():
                     "Books are my diamonds. Do you love reading?",
                     "That's great. Outside of a dog, a book is a man's best friend. "
                     "What is the last book you have read?",
-                    "Interesting. Have you read",
+                    "Have you read his masterpiece",
                     "It's an amazing book! Do you know when it was first published?",
                     # This should be a beginning of the response - response needs to be randomized
                     'I have read a plenty of books from different genres. What is your favorite book genre?',
