@@ -102,10 +102,14 @@ def get_cobotqa(utterances):
     for i, uttr in enumerate(utterances):
         annotation = uttr.get("annotations", {}).get("cobotqa_annotator", {})
         values = annotation.get("facts", [])
-        for v in values:
-            value = v.get("fact", "")
-            if value:
-                result_values.append([(len(utterances) - i - 1) * 0.01, value])
+        response = annotation.get("response", "")
+        if values:
+            for v in values:
+                value = v.get("fact", "")
+                if value:
+                    result_values.append([(len(utterances) - i - 1) * 0.01, value])
+        if response:
+            result_values.append([(len(utterances) - i - 1) * 0.01, response])
     return result_values
 
 
