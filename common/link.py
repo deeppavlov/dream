@@ -186,11 +186,15 @@ def compose_linkto_with_connection_phrase(skills, human_attributes, recent_activ
     if not connection:
         connection = get_prelinkto_topic_connection(linkto_dict["skill"],
                                                     human_attributes.get("prelinkto_connections", []))
-        if not connection:
-            connection = get_not_used_template(human_attributes.get("prelinkto_connections", []),
-                                               COMPLETELY_CHANGING_THE_SUBJECT_PHRASES)
+
+    if not connection:
+        # not found prelinkto connection phrase AND not found prelinkto topic phrase
+        connection = get_not_used_template(human_attributes.get("prelinkto_connections", []),
+                                           COMPLETELY_CHANGING_THE_SUBJECT_PHRASES)
+
         result = f"{connection} {linkto_dict['phrase']}"
     else:
+        # we have prelinkto connection phrase OR prelinkto topic phrase
         change_topic = choice(CHANGE_TOPIC_SUBJECT).replace(
             "SUBJECT", LIST_OF_SCRIPTED_TOPICS.get(linkto_dict["skill"], "it"))
         result = f"{choice(BY_THE_WAY)} {connection} {change_topic} {linkto_dict['phrase']}"
