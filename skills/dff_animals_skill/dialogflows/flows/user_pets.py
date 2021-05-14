@@ -398,10 +398,10 @@ def ask_like_request(ngrams, vars):
 
 def ask_more_info_request(ngrams, vars):
     flag = False
-    bot_uttr = state_utils.get_last_bot_utterance(vars)
-    user_uttr = state_utils.get_last_human_utterance(vars)
+    bot_uttr = state_utils.get_last_bot_utterance(vars)["text"]
+    user_uttr = state_utils.get_last_human_utterance(vars)["text"]
     shared_memory = state_utils.get_shared_memory(vars)
-    found_pet = re.findall(PETS_TEMPLATE, user_uttr["text"])
+    found_pet = re.findall(PETS_TEMPLATE, user_uttr)
     delete_pet(vars)
     users_pet = shared_memory.get("users_pet", "")
     isyes = is_yes(state_utils.get_last_human_utterance(vars))
@@ -409,10 +409,10 @@ def ask_more_info_request(ngrams, vars):
     bot_asked_pet = re.findall(r"do you have a (cat|dog|rat|fish|parrot|hamster)", bot_uttr["text"], re.IGNORECASE)
     asked_more_info = shared_memory.get("asked_more_info", False)
     isno = is_no(state_utils.get_last_human_utterance(vars))
-    user_has_not = (re.findall("do you have a (cat|dog|rat|fish|parrot|hamster)", bot_uttr["text"], re.IGNORECASE)
-                    and isno) and not re.findall(PETS_TEMPLATE, user_uttr["text"])
+    user_has_not = (re.findall("do you have a (cat|dog|rat|fish|parrot|hamster)", bot_uttr, re.IGNORECASE)
+                    and isno) and not re.findall(PETS_TEMPLATE, user_uttr)
     if not user_has_not and not asked_more_info \
-            and (found_pet or users_pet or (bot_asked_pet and (isyes or user_has))) and "feed" not in user_uttr["text"]:
+            and (found_pet or users_pet or (bot_asked_pet and (isyes or user_has))) and "feed" not in user_uttr:
         flag = True
     logger.info(f"ask_about_feeding_request={flag}")
     return flag
