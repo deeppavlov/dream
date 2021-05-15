@@ -254,19 +254,19 @@ def hello_response(vars):
 ##################################################################################################################
 def what_do_you_do_request(ngrams, vars):
     utt = state_utils.get_last_human_utterance(vars)
-    utt_text = utt["text"].lower()
+    utt_text = utt["text"]
     shared_memory = state_utils.get_shared_memory(vars)
     greeting_type = shared_memory.get("greeting_type", "")
     flag = condition_utils.no_requests(vars) and (greeting_type == "what_do_you_do")
-    flag = flag and all(
-        [
-            "school" not in utt_text,
-            "work" not in utt_text,
-            "kids" not in utt_text,
-            "toys" not in utt_text,
-            not is_sensitive_situation(vars["agent"]["dialog"])
-        ]
-    )
+    if re.search(common_greeting.KIDS_WORDS_RE, utt_text):
+        flag = flag and False
+        vars["agent"]["dialog"]["human"]["attributes"]["age_group"] = "kid"
+    elif (re.search(common_greeting.ADULTS_WORDS_RE, utt_text) or is_sensitive_situation(vars["agent"]["dialog"])):
+        flag = flag and False
+        vars["agent"]["dialog"]["human"]["attributes"]["age_group"] = "adult"
+    else:
+        flag = flag and True
+        vars["agent"]["dialog"]["human"]["attributes"]["age_group"] = "unknown"
     return flag
 
 
@@ -432,8 +432,16 @@ GREETING_STEPS = list(common_greeting.GREETING_QUESTIONS)
 
 
 def std_greeting_request(ngrams, vars):
+    utt_text = state_utils.get_last_bot_utterance(vars)["text"]
     flag = True
-    flag = flag and not condition_utils.is_new_human_entity(vars)
+    flag = flag and any(
+        [
+            not condition_utils.is_new_human_entity(vars),
+            any(
+                [i in utt_text for i in common_greeting.WHAT_DO_YOU_DO_RESPONSES + common_greeting.FREE_TIME_RESPONSES]
+            )
+        ]
+    )
     flag = flag and not condition_utils.is_switch_topic(vars)
     flag = flag and not condition_utils.is_opinion_request(vars)
     flag = flag and not condition_utils.is_lets_chat_about_topic_human_initiative(vars)
@@ -609,8 +617,9 @@ simplified_dialogflow.set_error_successor(State.USR_HELLO_AND_CONTNIUE, State.SY
 ##################################################################################################################
 #  SYS_WHAT_DO_YOU_DO
 
-simplified_dialogflow.add_system_transition(State.SYS_WHAT_DO_YOU_DO, State.USR_FREE_TIME, free_time_response)
+simplified_dialogflow.add_system_transition(State.SYS_WHAT_DO_YOU_DO, State.USR_HELLO_AND_CONTNIUE, free_time_response)
 simplified_dialogflow.set_error_successor(State.SYS_WHAT_DO_YOU_DO, State.SYS_ERR)
+
 
 ##################################################################################################################
 #  SYS_USR_ASKS_BOT_HOW_ARE_YOU
