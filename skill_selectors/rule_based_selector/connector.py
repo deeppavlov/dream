@@ -93,10 +93,7 @@ class RuleBasedSkillSelectorConnector:
                 if if_special_weather_turn_on(user_uttr, bot_uttr):
                     skills_for_uttr.append("weather_skill")
 
-                # turn on small talk if let's chat about particular topic or switch topic
-                # otherwise small-talk-skill turns on only when was active and can continue
-                if if_lets_chat_about_particular_topic_detected or if_choose_topic_detected:
-                    skills_for_uttr.append("small_talk_skill")
+                skills_for_uttr.append("small_talk_skill")
 
                 # turn on skills linked to in the previous bot utterance (of course, it's the only one skill)
                 for skill_name in linked_to_skill_names:
@@ -179,10 +176,7 @@ class RuleBasedSkillSelectorConnector:
                 if get_named_locations(user_uttr):
                     skills_for_uttr.append("dff_travel_skill")
 
-                # turn on small talk if let's chat about particular topic or switch topic
-                # otherwise small-talk-skill turns on only when was active and can continue
-                if if_lets_chat_about_particular_topic_detected or if_choose_topic_detected:
-                    skills_for_uttr.append("small_talk_skill")
+                skills_for_uttr.append("small_talk_skill")
 
             # NOW IT IS NOT ONLY FOR USUAL CONVERSATION BUT ALSO FOR SENSITIVE/HIGH PRIORITY INTENTS/ETC
 
