@@ -250,7 +250,8 @@ def find_entity_wp(annotations, bot_uttr):
         wiki_skill_entities_info = wp_output.get("wiki_skill_entities_info", {})
         if wiki_skill_entities_info:
             for entity, triplets in wiki_skill_entities_info.items():
-                if entity not in prohibited_topics and nounphr_label_dict.get(entity, "") != "number":
+                if entity.lower() not in prohibited_topics and entity.lower() not in blacklist_words \
+                        and nounphr_label_dict.get(entity, "") != "number":
                     entity_id = triplets.get("plain_entity", "")
                     types = triplets.get("types", []) + triplets.get("instance of", []) + \
                         triplets.get("subclass of", []) + triplets.get("occupation", []) + \
