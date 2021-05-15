@@ -55,7 +55,7 @@ REACTION_TO_YOUNG_AGE = {
     ],
     "Disliked": [
         "Gosh not sure if target_gender deserves it! Are you with me on it?",
-        "Wish it was me not target_gender_im. I could be a better target_occupation then target_gender_im! "
+        "Wish it was me, not target_gender_im. I could be a better target_occupation than target_gender_im! "
         "Do you think so?",
         "For god's sake, why did target_gender even think target_gender can be a target_occupation. "
         "Do you think the same?",
@@ -130,7 +130,7 @@ REACTION_TO_SPORT = {
     "Disliked": [
         "Well, target_sport_team used to be good but... Are you with me on this?",
         "Not into target_gender_eir team - target_sport_team. What about you?",
-        "target_sport_team don't know how to play well. Do you also think so?",
+        "target_sport_team doesn't know how to play well. Do you also think so?",
         "Watching target_sport_name makes me sleepy. Is that the same for you?",
     ],
 }
