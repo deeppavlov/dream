@@ -15,6 +15,7 @@ from common.universal_templates import if_chat_about_particular_topic, if_lets_c
 from common.utils import is_yes, is_no
 from common.animals import PETS_TEMPLATE, ANIMALS_FIND_TEMPLATE, LIKE_ANIMALS_REQUESTS, WILD_ANIMALS, \
     WHAT_PETS_I_HAVE, HAVE_LIKE_PETS_TEMPLATE, HAVE_PETS_TEMPLATE, LIKE_PETS_TEMPLATE, TRIGGER_PHRASES, DONT_LIKE
+from common.animals import stop_about_animals
 
 import dialogflows.scopes as scopes
 from dialogflows.flows.my_pets_states import State as MyPetsState
@@ -53,6 +54,17 @@ def make_my_pets_info(vars, rnd=True):
                     my_pets_info[pet] = {"name": elem["name"], "breed": elem["breed"], "sentence": elem["sentence"]}
                     break
         state_utils.save_to_shared_memory(vars, my_pets_info=my_pets_info)
+
+
+def stop_animals_request(ngrams, vars):
+    flag = False
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    shared_memory = state_utils.get_shared_memory(vars)
+    stop_about_animals(user_uttr, shared_memory)
+    if stop_about_animals(user_uttr, shared_memory):
+        flag = True
+    logger.info(f"stop_animals_request={flag}")
+    return flag
 
 
 def lets_talk_about_request(vars):
@@ -184,7 +196,7 @@ def sys_have_pets_request(ngrams, vars):
     pet = re.search(PETS_TEMPLATE, text)
     if not shared_memory.get("have_pets", False) and not found_users_pet and \
             ((lets_talk_about_request(vars) and not pet) or started) \
-            and not is_last_state(vars, "SYS_WHAT_ANIMALS"):
+            and not is_last_state(vars, "SYS_WHAT_ANIMALS") and not stop_animals_request(ngrams, vars):
         flag = True
     logger.info(f"sys_have_pets_request={flag}")
     return flag
