@@ -23,7 +23,6 @@ downloads = defaultdict(list)
 
 repo = Repo('/pavlov/DeepPavlov')
 origin = repo.remotes.origin
-origin.pull()
 
 for service_name, service_args in data['services'].items():
     if service_args.get('build', {}).get('args', {}).get('SRC_DIR') is not None:
