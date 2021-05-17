@@ -24,6 +24,7 @@ def load_into_dialogflow(
     dff_shared_state,
     entities,
     used_links,
+    age_group,
     disliked_skills,
     clarification_request_flag,
 ):
@@ -48,6 +49,7 @@ def load_into_dialogflow(
         "cache": {},
         "history": state.get("history", {}),
         "used_links": used_links,
+        "age_group": age_group,
         "disliked_skills": disliked_skills,
         "clarification_request_flag": clarification_request_flag,
     }
@@ -60,6 +62,7 @@ def get_dialog_state(dialogflow):
     dff_shared_state = agent["dff_shared_state"]
     history = agent["history"]
     used_links = agent["used_links"]
+    age_group = agent["age_group"]
     disliked_skills = agent["disliked_skills"]
     current_turn_dff_suspended = agent["current_turn_dff_suspended"]
     history[str(human_utter_index)] = dialogflow.controller().vars()["__system_state__"]
@@ -72,7 +75,7 @@ def get_dialog_state(dialogflow):
     del dialogflow.controller().vars()["agent"]
     state["dialogflow_state"] = dialogflow.serialize()
     logger.debug(f"state={state}")
-    return state, dff_shared_state, used_links, disliked_skills
+    return state, dff_shared_state, used_links, age_group, disliked_skills
 
 
 def run_turn(dialogflow, text):

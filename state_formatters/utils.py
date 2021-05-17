@@ -222,6 +222,7 @@ def dff_formatter(
     state = human_attributes.get(state_name, {})
     dff_shared_state = human_attributes.get("dff_shared_state", {"cross_states": {}, "cross_links": {}})
     used_links = human_attributes.get("used_links", {})
+    age_group = human_attributes.get("age_group", "")
     disliked_skills = human_attributes.get("disliked_skills", {})
     entities = human_attributes.get("entities", {})
 
@@ -262,6 +263,7 @@ def dff_formatter(
             f"dff_shared_state_batch": [dff_shared_state],
             "entities_batch": [entities],
             "used_links_batch": [used_links],
+            "age_group_batch": [age_group],
             "disliked_skills_batch": [disliked_skills],
             "clarification_request_flag_batch": [clarification_request_flag],
         }

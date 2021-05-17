@@ -83,6 +83,14 @@ def get_used_links(vars):
     return vars["agent"]["used_links"]
 
 
+def get_age_group(vars):
+    return vars["agent"]["age_group"]
+
+
+def set_age_group(vars, set_age_group):
+    vars["agent"]["age_group"] = set_age_group
+
+
 def get_disliked_skills(vars):
     return vars["agent"]["disliked_skills"]
 
