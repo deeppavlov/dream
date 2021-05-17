@@ -260,13 +260,13 @@ def what_do_you_do_request(ngrams, vars):
     flag = condition_utils.no_requests(vars) and (greeting_type == "what_do_you_do")
     if re.search(common_greeting.KIDS_WORDS_RE, utt_text):
         flag = flag and False
-        vars["agent"]["dialog"]["human"]["attributes"]["age_group"] = "kid"
+        state_utils.set_age_group(vars, "kid")
     elif (re.search(common_greeting.ADULTS_WORDS_RE, utt_text) or is_sensitive_situation(vars["agent"]["dialog"])):
         flag = flag and False
-        vars["agent"]["dialog"]["human"]["attributes"]["age_group"] = "adult"
+        state_utils.set_age_group(vars, "adult")
     else:
         flag = flag and True
-        vars["agent"]["dialog"]["human"]["attributes"]["age_group"] = "unknown"
+        state_utils.set_age_group(vars, "unknown")
     return flag
 
 

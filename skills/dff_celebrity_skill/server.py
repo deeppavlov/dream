@@ -42,6 +42,7 @@ def handler(requested_data, random_seed=None):
     dff_shared_state_batch = requested_data.get(f"dff_shared_state_batch", [{}] * len(dialog_batch))
     entities_batch = requested_data.get("entities_batch", [{}] * len(dialog_batch))
     used_links_batch = requested_data.get("used_links_batch", [{}] * len(dialog_batch))
+    age_group_batch = requested_data.get("age_group_batch", [""] * len(dialog_batch))
     disliked_skills_batch = requested_data.get("disliked_skills_batch", [{}] * len(dialog_batch))
     clarification_request_flag_batch = requested_data.get(
         "clarification_request_flag_batch", [False] * len(dialog_batch)
@@ -56,6 +57,7 @@ def handler(requested_data, random_seed=None):
         dff_shared_state,
         entities,
         used_links,
+        age_group,
         disliked_skills,
         clarification_request_flag,
     ) in zip(
@@ -65,6 +67,7 @@ def handler(requested_data, random_seed=None):
         dff_shared_state_batch,
         entities_batch,
         used_links_batch,
+        age_group_batch,
         disliked_skills_batch,
         clarification_request_flag_batch,
     ):
@@ -84,16 +87,18 @@ def handler(requested_data, random_seed=None):
                 dff_shared_state,
                 entities,
                 used_links,
+                age_group,
                 disliked_skills,
                 clarification_request_flag,
             )
             text, confidence, can_continue = dialogflow_utils.run_turn(DF, text)
-            state, dff_shared_state, used_links, disliked_skills = dialogflow_utils.get_dialog_state(DF)
+            state, dff_shared_state, used_links, age_group, disliked_skills = dialogflow_utils.get_dialog_state(DF)
 
             human_attr = {
                 f"{SERVICE_NAME}_state": state,
                 "dff_shared_state": dff_shared_state,
                 "used_links": used_links,
+                "age_group": age_group,
                 "disliked_skills": disliked_skills,
             }
             hype_attr = {"can_continue": can_continue}
