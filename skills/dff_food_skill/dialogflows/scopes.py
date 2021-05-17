@@ -2,6 +2,7 @@ from enum import Enum, auto
 
 MAIN = "SYSTEM"
 FOOD = "FOOD"
+FAST_FOOD = "FAST_FOOD"
 
 
 class State(Enum):

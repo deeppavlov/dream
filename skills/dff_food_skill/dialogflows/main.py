@@ -6,6 +6,7 @@ from emora_stdm import CompositeDialogueFlow, DialogueFlow
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 
 import dialogflows.flows.food as food_flow
+import dialogflows.flows.fast_food as fast_food_flow
 import dialogflows.scopes as scopes
 
 logger = logging.getLogger(__name__)
@@ -20,6 +21,7 @@ composite_dialogflow = CompositeDialogueFlow(
 
 
 composite_dialogflow.add_component(food_flow.dialogflow, scopes.FOOD)
+composite_dialogflow.add_component(fast_food_flow.dialogflow, scopes.FAST_FOOD)
 
 dialogflow = composite_dialogflow.component(scopes.MAIN)
 simplified_dialogflow = dialogflow_extention.DFEasyFilling(dialogflow=dialogflow)
