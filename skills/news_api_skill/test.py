@@ -3,7 +3,7 @@ import requests
 
 NEWS_API_SKILL_URL = "http://0.0.0.0:8066/respond"
 
-topic = "example"
+topic = "sport"
 dialogs = {"dialogs": [
     {"utterances": [],
      "bot_utterances": [],
@@ -28,6 +28,6 @@ dialogs = {"dialogs": [
 result = requests.post(NEWS_API_SKILL_URL, json=dialogs, timeout=1.5)
 result = result.json()
 
-assert result[0][1] == 1. and result[0][-1]["news_topic"] == "example", print(result)
+assert result[0][1] == 1. and result[0][-1]["news_topic"] == "sport", print(result)
 
 print("SUCCESS")

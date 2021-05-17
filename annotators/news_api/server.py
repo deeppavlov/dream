@@ -81,6 +81,7 @@ def collect_topics_and_statuses(dialogs):
 def respond():
     st_time = time()
     dialogs = request.json['dialogs']
+    return_list_of_news = request.json.get('return_list_of_news', False)
 
     try:
         topics, which_topics, dialog_ids, prev_news_samples_urls = collect_topics_and_statuses(dialogs)
@@ -90,16 +91,19 @@ def respond():
         which_topics = np.array(which_topics)
         dialog_ids = np.array(dialog_ids)
         prev_news_samples_urls = np.array(prev_news_samples_urls)
+        return_info_list = [return_list_of_news for _ in topics]
 
         # run asynchronous news requests
         results = []
         executor = ThreadPoolExecutor(max_workers=ASYNC_SIZE)
-        for i, result in enumerate(executor.map(NEWS_API_REQUESTOR.send, topics, statuses, prev_news_samples_urls)):
+        for i, result in enumerate(executor.map(NEWS_API_REQUESTOR.send, topics, statuses, prev_news_samples_urls,
+                                                return_info_list)):
             # result is a list of articles. the first one is top rated news.
             # curr_topic = topics[i]
             # which_topic = which_topics[i]  # all, human or bot
-            result = result if (result and result.get("title") and result.get("description")) else {}
-            logger.info(f"Result: {result}.")
+            result = [news if (news and news.get("title") and news.get("description")) else {}
+                      for news in result]
+            logger.info(f"Resulting list of news: {result}.")
             results.append(result)
 
         results = np.array(results)
@@ -115,7 +119,17 @@ def respond():
 
             curr_response = []
             for topic, which_topic, result in zip(curr_topics, curr_which_topics, curr_results):
-                curr_response.append({"entity": topic, "which": which_topic, "news": result})
+                topic = str(topic)
+                result = list(result)
+                which_topic = str(which_topic)
+                if return_list_of_news:
+                    curr_response.append({"entity": topic, "which": which_topic, "list_of_news": result})
+                else:
+                    if result:
+                        curr_response.append({"entity": topic, "which": which_topic, "news": result[0]})
+                    else:
+                        curr_response.append({"entity": topic, "which": which_topic, "news": {}})
+
             responses.append(curr_response)
 
     except Exception as e:
