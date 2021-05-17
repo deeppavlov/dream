@@ -18,7 +18,10 @@ import dialogflows.scopes as scopes
 from common.universal_templates import if_chat_about_particular_topic, DONOTKNOW_LIKE
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.utils import is_yes, is_no, get_entities, join_words_in_or_pattern
-from common.food import TRIGGER_PHRASES, FOOD_WORDS, WHAT_COOK, FOOD_UTTERANCES_RE, CUISINE_UTTERANCES_RE
+from common.food import TRIGGER_PHRASES, FOOD_WORDS, WHAT_COOK, FOOD_UTTERANCES_RE, CUISINE_UTTERANCES_RE, \
+    CONCEPTNET_SYMBOLOF_FOOD, CONCEPTNET_HASPROPERTY_FOOD, CONCEPTNET_CAUSESDESIRE_FOOD
+from dialogflows.flows.fast_food import State as FFState
+from dialogflows.flows.fast_food import fast_food_request
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -32,21 +35,7 @@ spacy_nlp = load("en_core_web_sm")
 
 with open("cuisines_facts.json", "r") as f:
     CUISINES_FACTS = json.load(f)
-CONCEPTNET_SYMBOLOF_FOOD = [
-    "food", "coffee", "sweetness", "hunger",
-    "breakfast", "dinner", "pizza", "potato",
-    "meal", "japanese cuisine", "sushi",
-    "italian cuisine"
-]
-CONCEPTNET_HASPROPERTY_FOOD = [
-    "delicious", "tasty", "sweet", "good with potato", "edible"
-]
-CONCEPTNET_CAUSESDESIRE_FOOD = [
-    "eat", "eat chocolate", "eat breakfast", "eat food", "eat quickly",
-    "eat hamburger", "eat potato",
-    "have meal", "have breakfast", "have food", "have steak",
-    "cook dinner", "cook potato", "cook meal", "cook food", "cook pasta"
-]
+
 FOOD_WORDS_RE = re.compile(FOOD_WORDS, re.IGNORECASE)
 WHAT_COOK_RE = re.compile(WHAT_COOK, re.IGNORECASE)
 DONOTKNOW_LIKE_RE = re.compile(join_words_in_or_pattern(DONOTKNOW_LIKE), re.IGNORECASE)
@@ -111,6 +100,10 @@ class State(Enum):
     USR_COUNTRY = auto()
     SYS_BOT_PERSONA_FAV_FOOD = auto()
     SYS_SAID_FAV_FOOD = auto()
+    SYS_CHECK_COOKING = auto()
+    USR_SUGGEST_COOK = auto()
+    SYS_YES_COOK = auto()
+    SYS_NO_COOK = auto()
     #
     SYS_ERR = auto()
     USR_ERR = auto()
@@ -576,6 +569,13 @@ def smth_request(ngrams, vars):
     return flag
 
 
+def smth_random_request(ngrams, vars):
+    flag = condition_utils.no_requests(vars)
+    flag = flag and random.choice([True, False])
+    logger.info(f"smth_random_request {flag}")
+    return flag
+
+
 def where_are_you_from_response(vars):
     try:
         state_utils.set_confidence(vars, confidence=CONF_LOW)
@@ -588,26 +588,38 @@ def where_are_you_from_response(vars):
         return error_response(vars)
 
 
+def suggest_cook_response(vars):
+    try:
+        state_utils.set_confidence(vars, confidence=CONF_HIGH)
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+        return "May I recommend you a meal to try?"
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        state_utils.set_confidence(vars, 0)
+        return error_response(vars)
+
+
 def what_fav_food_request(ngrams, vars):
     food_topic_checked = lets_talk_about_check(vars)
-    linkto_food_skill_agreed = any(
-        [
-            req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower()
-            for req in TRIGGER_PHRASES
-        ]
-    ) and any(
-        [
-            is_yes(state_utils.get_last_human_utterance(vars)),
-            not is_no(state_utils.get_last_human_utterance(vars)),
-            re.search(LIKE_RE, state_utils.get_last_human_utterance(vars)["text"].lower())
-        ]
-    )
+    # linkto_food_skill_agreed = any(
+    #     [
+    #         req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower()
+    #         for req in TRIGGER_PHRASES
+    #     ]
+    # ) and any(
+    #     [
+    #         is_yes(state_utils.get_last_human_utterance(vars)),
+    #         not is_no(state_utils.get_last_human_utterance(vars)),
+    #         re.search(LIKE_RE, state_utils.get_last_human_utterance(vars)["text"].lower())
+    #     ]
+    # )
     food_1st_time = condition_utils.is_first_time_of_state(vars, State.SYS_WHAT_FAV_FOOD)
     cuisine_1st_time = condition_utils.is_first_time_of_state(vars, State.SYS_WHAT_CUISINE)
-
+    # or linkto_food_skill_agreed
     if any(
         [
-            not (bool(food_topic_checked) or linkto_food_skill_agreed),
+            not (bool(food_topic_checked)),
             food_topic_checked == "CUISINE_UTTERANCES_RE"
         ]
     ):
@@ -621,6 +633,27 @@ def what_fav_food_request(ngrams, vars):
     else:
         flag = False
     logger.info(f"what_fav_food_request {flag}")
+    return flag
+
+
+def check_cooking_request(ngrams, vars):
+    linkto_food_skill_agreed = any(
+        [
+            req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower()
+            for req in TRIGGER_PHRASES
+        ]
+    ) and any(
+        [
+            is_yes(state_utils.get_last_human_utterance(vars)),
+            not is_no(state_utils.get_last_human_utterance(vars)),
+            re.search(LIKE_RE, state_utils.get_last_human_utterance(vars)["text"].lower())
+        ]
+    )
+    if linkto_food_skill_agreed:
+        flag = True
+    else:
+        flag = False
+    logger.info(f"check_cooking_request {flag}")
     return flag
 
 
@@ -686,6 +719,7 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_SAID_FAV_FOOD: said_fav_food_request,
         State.SYS_WHAT_COOK: what_cook_request,
         State.SYS_BOT_PERSONA_FAV_FOOD: bot_persona_fav_food_request,
+        State.SYS_CHECK_COOKING: check_cooking_request,
         State.SYS_WHAT_FAV_FOOD: what_fav_food_request,
         State.SYS_WHAT_CUISINE: what_cuisine_request,
     },
@@ -696,6 +730,28 @@ simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
 
 simplified_dialogflow.add_system_transition(State.SYS_SAID_FAV_FOOD, State.USR_FOOD_FACT, food_fact_response)
 simplified_dialogflow.set_error_successor(State.SYS_SAID_FAV_FOOD, State.SYS_ERR)
+
+
+simplified_dialogflow.add_system_transition(State.SYS_CHECK_COOKING, State.USR_SUGGEST_COOK, suggest_cook_response)
+simplified_dialogflow.set_error_successor(State.SYS_CHECK_COOKING, State.SYS_ERR)
+
+
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_SUGGEST_COOK,
+    {
+        State.SYS_YES_COOK: yes_request,
+        State.SYS_NO_COOK: no_request,
+    },
+)
+simplified_dialogflow.set_error_successor(State.USR_SUGGEST_COOK, State.SYS_ERR)
+
+
+simplified_dialogflow.add_system_transition(State.SYS_YES_COOK, State.USR_HOW_ABOUT_MEAL1, how_about_meal_response)
+simplified_dialogflow.set_error_successor(State.SYS_YES_COOK, State.SYS_ERR)
+
+
+simplified_dialogflow.add_system_transition(State.SYS_NO_COOK, State.USR_WHAT_FAV_FOOD, what_fav_food_response)
+simplified_dialogflow.set_error_successor(State.SYS_NO_COOK, State.SYS_ERR)
 
 
 simplified_dialogflow.add_system_transition(State.SYS_WHAT_FAV_FOOD, State.USR_WHAT_FAV_FOOD, what_fav_food_response)
@@ -784,7 +840,13 @@ simplified_dialogflow.add_system_transition(State.SYS_FAV_FOOD, State.USR_FOOD_F
 simplified_dialogflow.set_error_successor(State.SYS_FAV_FOOD, State.SYS_ERR)
 
 
-simplified_dialogflow.add_user_transition(State.USR_FOOD_FACT, State.SYS_SOMETHING, smth_request)
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_FOOD_FACT,
+    {
+        State.SYS_SOMETHING: smth_random_request,
+        (scopes.FAST_FOOD, FFState.USR_START): fast_food_request,
+    }
+)
 simplified_dialogflow.set_error_successor(State.USR_FOOD_FACT, State.SYS_ERR)
 
 
