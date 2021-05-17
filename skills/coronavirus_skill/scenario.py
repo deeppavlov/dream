@@ -648,7 +648,7 @@ class CoronavirusSkillScenario:
                             elif (wants_cv or about_coronavirus(last_utterance)) and wasnot_first:
                                 logging.info('Returning state phrase')
                                 reply, confidence = get_statephrase(detected_state, STATE_DATA,
-                                                                    COUNTY_DATA, NATION_DATA), 1
+                                                                    COUNTY_DATA, NATION_DATA), 0.95
                                 reply = improve_phrase(reply, asked_about_age, met_last)
                             else:
                                 if is_yes(last_utterance):
