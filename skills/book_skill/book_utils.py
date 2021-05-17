@@ -15,7 +15,6 @@ from common.link import link_to
 from common.utils import entity_to_label, get_raw_entity_names_from_annotations
 from common.universal_templates import is_switch_topic
 from common.custom_requests import request_triples_wikidata, request_entities_entitylinking
-from CoBotQA.cobotqa_service import send_cobotqa
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -55,9 +54,12 @@ GENRE_DICT = {'memoir': 'memoir books',
               }
 GENRE_PHRASES = json.load(open('genre_phrases.json', 'r'))[0]
 
+SKILLS_TO_LINK = ["news_api_skill", "movie_skill", "game_cooperative_skill",
+                  "dff_travel_skill", "dff_animals_skill", "dff_sport_skill",
+                  "dff_food_skill", "dff_music_skill"]
+
 book_banned_words_file = pathlib.Path(__file__).parent / "book_banned_words.txt"
 book_banned_words = set([line.strip() for line in book_banned_words_file.read_text().split("\n") if line.strip()])
-book_default_entities = set([j.strip() for j in open('/global_data/book_author_names.txt', 'r').readlines()])
 book_query_dict = cPickle.load(open('/global_data/book_query_dict.pkl', 'rb'))
 
 AUTHOR_WIKI_TYPES = ['Q36180', 'Q18814623']
@@ -101,6 +103,34 @@ def is_request_about_book_detected(annotated_user_phrase):
     # removed cond4 due to the bug in information_request_detected
     # cond4 = information_request_detected(annotated_user_phrase)
     return cond1 or cond2 or cond3  # or cond4
+
+
+def what_is_book_about(book):
+    fact = ''
+    logger.info(f'Requesting for {book}')
+    if isinstance(book, str):
+        if all([j in 'Q0123456789' for j in book]):
+            plain_book = book
+        else:
+            plain_book = request_entities_entitylinking(book, types=BOOK_WIKI_TYPES)
+            logger.info(f'After request {plain_book}')
+        subjects = request_triples_wikidata("find_object", [(plain_book, 'P921', "forw")],
+                                            query_dict={})[0]
+        if subjects:
+            fact = f'{fact}The main subject of this book is {entity_to_label(subjects[0])}.'
+        locations = request_triples_wikidata("find_object", [(plain_book, 'P840', "forw")],
+                                             query_dict={})[0]
+        if len(locations) > 1:
+            fact = f'{fact} Apart from other locations,'
+        if locations:
+            fact = f'{fact} The action of this book takes place in {entity_to_label(locations[0])}.'
+        if not subjects or not locations:
+            characters = request_triples_wikidata("find_object", [(plain_book, 'P674', "forw")],
+                                                  query_dict={})[0]
+            if characters:
+                fact = f'{fact} One of the main characters of this book is {entity_to_label(characters[0])}.'
+        logger.info(f'Final fact {fact}')
+    return fact
 
 
 def get_genre(user_phrase, return_name=False):
@@ -172,10 +202,6 @@ def fav_genre_request_detected(annotated_user_phrase):
     return re.search(favorite_genre_template, annotated_user_phrase["text"])
 
 
-def fav_book_request_detected(annotated_user_phrase):
-    return re.search(favorite_book_template, annotated_user_phrase["text"])
-
-
 def asked_about_genre(annotated_user_phrase):
     return re.search(asked_genre_template, annotated_user_phrase["text"])
 
@@ -183,11 +209,12 @@ def asked_about_genre(annotated_user_phrase):
 def fact_about_book(annotated_user_phrase):
     logger.debug('fact about')
     logger.debug(annotated_user_phrase)
-    book_name, _ = get_name(annotated_user_phrase, 'book')
+    plain_bookname, _ = get_name(annotated_user_phrase, 'book', return_plain=True)
     movie_name, movie_author = get_name(annotated_user_phrase, 'movie')
     if not movie_name:
         logger.debug('Getting a fact about bookname')
-        reply = send_cobotqa(f'fact about "{book_name}"')
+        bookname = entity_to_label(plain_bookname)
+        reply = what_is_book_about(bookname)
     else:
         reply = f'I enjoyed watching the film {movie_name} based on this book, which was directed by {movie_author}. '
     return reply
@@ -387,8 +414,8 @@ def get_name(annotated_phrase, mode='author', bookyear=False,
     return entity, attribute
 
 
-def best_book_by_author(plain_author_name, default_phrase, plain_last_bookname=None, top_n_best_books=1):
-    logger.debug(f'Calling best_book_by_author for {plain_author_name} {plain_last_bookname}')
+def best_plain_book_by_author(plain_author_name, default_phrase, plain_last_bookname=None, top_n_best_books=1):
+    logger.debug(f'Calling best_pplain_book_by_author for {plain_author_name} {plain_last_bookname}')
     # best books
     book_list = request_triples_wikidata("find_object", [(plain_author_name, "P800", "forw"),
                                                          (plain_author_name, "P50", "backw")],
@@ -405,13 +432,12 @@ def best_book_by_author(plain_author_name, default_phrase, plain_last_bookname=N
         logger.debug(book_list)
         best_bookname = default_phrase  # default value
         if book_list:
-            sorted_book_list = sorted(book_list, key=lambda x: int(x[1:]))[:top_n_best_books]
+            sorted_bookname_list = sorted(book_list, key=lambda x: int(x[1:]))[:top_n_best_books]
             # Sort entities by frequency and truncate list beforehand to speed the code up
-            sorted_bookname_list = [entity_to_label(j) for j in sorted_book_list]
             sorted_bookname_list = [j for j in sorted_bookname_list if j is not None]
             if len(sorted_bookname_list) > 0:
                 best_bookname = random.choice(sorted_bookname_list)
-        logger.debug(f'Answer for best_book_by_author {best_bookname}')
+        logger.debug(f'Answer for best_plain_book_by_author {best_bookname}')
         return best_bookname
     except Exception as e:
         sentry_sdk.capture_exception(e)
@@ -420,22 +446,22 @@ def best_book_by_author(plain_author_name, default_phrase, plain_last_bookname=N
 
 
 def genre_of_book(plain_bookname):
+    logger.info(f'Call genre_of_book for {plain_bookname}')
     plain_genres = request_triples_wikidata("find_object", [(plain_bookname, "P136", "forw")],
                                             query_dict=book_query_dict)
-    labeled_genres = [entity_to_label(j) for j in plain_genres]
-    matched_genres = [genre for genre in GENRE_DICT.keys() if genre in labeled_genres]
-    if matched_genres:
-        return matched_genres[0]
-    else:
-        for labeled_genre in labeled_genres:
-            # TODO: match genre to wikidata and find genre in annotations
-            for genre_name in GENRE_DICT.keys():
-                split_genre = [j.split(' ') for j in labeled_genre]
-                split_name = [j.split(' ') for j in genre_name]
-                if any([j in split_genre for j in split_name]):
-                    return genre_name
-    if labeled_genres:
-        return labeled_genres[0]
+    MAX_DEPTH = 5
+    for _ in range(MAX_DEPTH):
+        if plain_genres and isinstance(plain_genres[0], list):
+            plain_genres = plain_genres[0]
+    logger.debug(f'Plain_genres {plain_genres}')
+    if plain_genres:
+        plain_genres = sorted(plain_genres, key=lambda x: int(x[1:]))
+        genre = entity_to_label(plain_genres[0])
+        if genre[0] not in ['aeoiyu']:
+            genre = f'a {genre}'
+        else:
+            genre = f'an {genre}'
+        return genre
     else:
         return ''
 
@@ -456,11 +482,10 @@ def parse_author_best_book(annotated_phrase, default_phrase=None):
         logger.debug(f'Plain_author {plain_author}')
     if plain_author:
         logger.debug(f'author detected: {plain_author} bookname {plain_bookname}')
-        book = best_book_by_author(plain_author_name=plain_author, plain_last_bookname=plain_bookname,
-                                   default_phrase=default_phrase)
-        author = entity_to_label(plain_author)
-        logger.debug(f'Answer for parse_author_best_book is {(book, author)}')
-        return book, author
+        plain_book = best_plain_book_by_author(plain_author_name=plain_author, plain_last_bookname=plain_bookname,
+                                               default_phrase=default_phrase)
+        logger.debug(f'Answer for parse_author_best_book is {(plain_book, plain_author)}')
+        return plain_book, plain_author
     else:
         logger.debug('No author found')
         return default_phrase, None
@@ -471,13 +496,20 @@ dontlike_request = re.compile(r"(not like|not want to talk|not want to hear|not 
                               r"not want to listen|not know how to read)", re.IGNORECASE)
 
 
-def dontlike(last_utterance):
+def dontlike_books(last_utterance):
     last_uttr_text = last_utterance['text'].lower()
     last_uttr_text = re.sub('wanna', 'want to', last_uttr_text, re.IGNORECASE)
     last_uttr_text = re.sub("don't'", "do not", last_uttr_text, re.IGNORECASE)
     if re.search(dontlike_request, last_uttr_text) or re.search(NOT_LIKE_PATTERN, last_uttr_text):
         return True
     return False
+
+
+dontknow_template = re.compile(r"(not know|cannot remember|don't know|can't remember)", re.IGNORECASE)
+
+
+def dontknow_books(annotated_uttr):
+    return re.search(dontknow_template, annotated_uttr['text'])
 
 
 suggest_template = re.compile(r"(suggest|recommend)", re.IGNORECASE)
@@ -514,22 +546,7 @@ def is_stop(annotated_uttr):
     return exit_intent or switch_intent or stop_or_no_intent
 
 
-dontknow_template = re.compile(r"(not know|cannot remember|don't know|can't remember)", re.IGNORECASE)
-
-
-def dontknow(annotated_uttr):
-    return re.search(dontknow_template, annotated_uttr['text'])
-
-
-def book_was_offered(phrase):
-    part1 = 'Have you read'
-    part2 = '? And if you have read it, what do you think about it?'
-    if phrase.find(part2) > phrase.find(part1):
-        return phrase.split(part1)[1].split(part2)[0].strip()
-    return False
-
-
-def tell_about_book(bookname, bookreads_data):
+def tell_about_genre_book(bookname, bookreads_data):
     reply = None
     logger.debug(f'Detected name {bookname} in last_bot_phrase')
     for genre in bookreads_data:
@@ -547,4 +564,11 @@ def get_movie_answer(annotated_user_phrase, human_attributes):
         reply = f'I enjoyed watching the film {movie_name} based on this book,' \
                 f'which was directed by {movie_author}. '
         reply += link_to(['movie_skill'], human_attributes)['phrase']
+    return reply
+
+
+def exit_skill(reply, human_attr, SKILLS_TO_LINK=SKILLS_TO_LINK):
+    link = link_to(SKILLS_TO_LINK, human_attr)['phrase']
+    reply = f"{reply} We have been talking about books for a fair amount of time. " \
+            f"Let's talk about something else. {link}"
     return reply
