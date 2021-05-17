@@ -19,13 +19,17 @@ MOVIE_COMPILED_PATTERN = re.compile(
 
 
 ABOUT_MOVIE_TITLES_PHRASES = [
-    "What is your all-time favorite movie?",
-    "What is the best movie you have ever seen?",
-    "What is the funniest movie you have ever seen?",
+    "What is the name of the last movie you watched?",
+    "What is the best movie you have seen recently?",
+    "What is the funniest movie you have seen recently?",
     "What movie you could watch over and over again?",
-    "What is the most romantic movie you have ever seen?",
-    "What is the scariest movie you have ever seen?",
+    "What is the most romantic movie you have seen recently?",
+    "What is the scariest movie you have seen recently?",
     "What is your favorite TV series?",
+    "What TV show are you watching these days?",
+    "What TV series did you watch on weekends?",
+    "What TV show do you watch when you need to escape the real world?",
+    "What movie did you watch on weekends?",
 ]
 
 WHAT_OTHER_MOVIE_TO_DISCUSS = "What other movie you'd like to discuss?"
