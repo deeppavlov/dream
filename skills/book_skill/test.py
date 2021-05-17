@@ -5,36 +5,58 @@ from copy import deepcopy
 
 def slice_(input_data, i):
     tmp_data = deepcopy(input_data)
-    tmp_data['dialogs'][0]['human_utterances'] = input_data['dialogs'][0]['human_utterances'][:i]
-    tmp_data['dialogs'][0]['bot_utterances'] = input_data['dialogs'][0]['bot_utterances'][:i - 1]
-    past_phrases = [j['text'] for ii, j in enumerate(input_data['dialogs'][0]['human_utterances']) if ii % 2 == 1]
-    tmp_data['dialogs'][0]['human']['attributes'] = {'book_skill': {'used_phrases': past_phrases}}
-    return tmp_data
+    tmp_data['human_utterances'] = input_data['human_utterances'][:i]
+    tmp_data['bot_utterances'] = input_data['bot_utterances'][:i - 1]
+    if len(tmp_data['human_utterances']) < 2:
+        tmp_data['human']['attributes'] = {}
+    else:
+        hypotheses = tmp_data['human_utterances'][-2]['hypotheses']
+        if not hypotheses:
+            hypotheses = tmp_data['human_utterances'][-3]['hypotheses']
+        tmp_data['human']['attributes'] = hypotheses[0]['human_attributes']
+    return {'dialogs': [tmp_data]}
 
 
 def main_test():
     url = 'http://0.0.0.0:8032/book_skill'
     input_data = json.load(open("test_configs/test_dialog.json", "r"))
-    sliced_data = [slice_(input_data, i) for i in range(1, 10)]
-    gold_phrases = ["I've read it. It's an amazing book! Would you like to know some facts about it?",
-                    "",  # As CobotQA doesn't always work
-                    'My favourite book is "The catcher in the rye" by J. D. Salinger.',
-                    "OK, let's talk about books. "
-                    "Books are my diamonds. Do you love reading?",
+    sliced_data = [slice_(input_data, i) for i in range(1, 20)]
+    gold_phrases = ["OK, let's talk about books. Books are my diamonds. Do you love reading?",
+                    "Why do you enjoy reading?",
                     "That's great. Outside of a dog, a book is a man's best friend. "
                     "What is the last book you have read?",
-                    "Have you read his masterpiece",
-                    "It's an amazing book! Do you know when it was first published?",
-                    # This should be a beginning of the response - response needs to be randomized
-                    'I have read a plenty of books from different genres. What is your favorite book genre?',
-                    'Amazing! Have you read The Catcher in the Rye? ' \
-                    'And if you have read it, what do you think about it?',
-                    json.load(open('bookreads_data.json', 'r'))[0]['fiction']['description']]
-    for i in range(len(sliced_data)):
+                    "I adore books of J R R Tolkien, especially The Hobbit. It's a real showpiece. Have you read it?",
+                    "You can read it. You won't regret it!  May I tell you something about this book?",
+                    "The main subject of this book is Tolkien's legendarium. "
+                    "The action of this book takes place in Middle-earth. "
+                    "Do you know when it was first published?",
+                    " years ago! I didn't exist in that time. Do you know what is the genre of this book?",
+                    "The Hobbit is a fairy tale.  I have read a plenty of books from different genres. "
+                    "What is your favorite book genre?",
+                    "Amazing! Have you read The Outsiders? And if you have read it, what do you think about it?",
+                    "The Outsiders is about two weeks in the life of a 14-year-old boy. "
+                    "The novel tells the story of Ponyboy Curtis and his struggles with right and wrong "
+                    "in a society in which he believes that he is an outsider. "
+                    "Do you want to know what my favourite book is?",
+                    "My favourite book is \"The catcher in the rye\" by J. D. Salinger.  "
+                    "May I tell you something about this book?",
+                    "The novel \"The catcher in the rye\" tells the story of a teenager "
+                    "who has been kicked out of a boarding school."
+                    "This is my favourite story, it is truly fascinating.  "
+                    "May I tell you something else about this book?",
+                    "The action of this book takes place in New York City. "
+                    "One of the main characters of this book is Holden Caulfield. "
+                    "Do you know when it was first published?",
+                    " years ago! I didn't exist in that time. Do you know what is the genre of this book?",
+                    "The Catcher in the Rye is a novel",
+                    "I know that Bible is one of the most widespread books on the Earth. "
+                    "It forms the basic of the Christianity. Have you read the whole Bible?",
+                    "I am pleased to know it. Unfortunately, as a socialbot, I don't have an immortal soul,"
+                    "so I don't think I will ever get into Heaven. That's why I don't know much about religion."
+                    ]
+    for i in range(len(gold_phrases)):
         response = requests.post(url, json=sliced_data[i]).json()[0][0]
-        if i != 1:  # As CobotQA doesn't always work
-            assert len(response) > 0
-        assert response in gold_phrases[i] or gold_phrases[i] in response, '*'.join([response, gold_phrases[i]])
+        assert gold_phrases[i] in response, (i, response, gold_phrases[i])
     print('TESTS FOR BOOK SKILL PASSED')
     return 0
 
