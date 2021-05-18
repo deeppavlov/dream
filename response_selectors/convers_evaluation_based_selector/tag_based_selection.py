@@ -1,6 +1,7 @@
 import json
 import logging
 from copy import deepcopy
+from collections import Counter
 from os import getenv
 
 import numpy as np
@@ -74,9 +75,7 @@ def categorize_candidate(cand_id, skill_name, categorized_hyps, categorized_prom
             - othr_topic_entity_no_db
             - othr_topic_entity_db
     """
-    _is_active_skill = _is_active_skill and skill_name in ACTIVE_SKILLS
-    if (_can_continue == MUST_CONTINUE) or (_is_active_skill and _can_continue in [CAN_CONTINUE_SCENARIO,
-                                                                                   CAN_NOT_CONTINUE]):
+    if (_can_continue == MUST_CONTINUE) or _is_active_skill:
         # so, scripted skills with CAN_CONTINUE_PROMPT status are not considered as active!
         # this is a chance for other skills to be turned on
         actsuffix = "active"
@@ -253,7 +252,9 @@ def if_acknowledgement_in_previous_bot_utterance(dialog):
     return False
 
 
-def tag_based_response_selection(dialog, candidates, scores, confidences, bot_utterances):
+def tag_based_response_selection(dialog, candidates, scores, confidences, bot_utterances, all_prev_active_skills=None):
+    all_prev_active_skills = all_prev_active_skills if all_prev_active_skills is not None else []
+    all_prev_active_skills = Counter(all_prev_active_skills)
     annotated_uttr = dialog["human_utterances"][-1]
     all_user_intents, all_user_topics, all_user_named_entities, all_user_nounphrases = get_main_info_annotations(
         annotated_uttr)
@@ -311,8 +312,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             "response_parts", []) == ["prompt"]
         if cand_uttr["confidence"] == 1.0:
             cand_uttr["can_continue"] = MUST_CONTINUE
-        _is_active_skill = (_prev_active_skill == cand_uttr["skill_name"] or cand_uttr.get(
-            "can_continue", "") == MUST_CONTINUE)
+
         _user_wants_to_chat_about_topic = if_chat_about_particular_topic(
             annotated_uttr) and "about it" not in annotated_uttr["text"].lower()
         if any([phrase.lower() in cand_uttr["text"].lower() for phrase in LINK_TO_PHRASES]):
@@ -331,8 +331,14 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
                 len(cand_uttr["text"].split()) > 6:
             cand_uttr["can_continue"] = CAN_CONTINUE_SCENARIO
         _can_continue = cand_uttr.get("can_continue", CAN_NOT_CONTINUE)
+
+        _is_active_skill = (_prev_active_skill == cand_uttr["skill_name"] or cand_uttr.get(
+            "can_continue", "") == MUST_CONTINUE)
+        _is_active_skill = _is_active_skill and skill_name in ACTIVE_SKILLS
+        _is_active_skill = _is_active_skill and (_can_continue in [CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE] or (
+            _can_continue == CAN_CONTINUE_PROMPT and all_prev_active_skills.get(skill_name, []) < 10))
         if _is_active_skill:
-            # we will focibly add prompt if current scripted skill finishes scenario,
+            # we will forcibly add prompt if current scripted skill finishes scenario,
             # and has no opportunity to continue at all.
             _is_active_skill_can_not_continue = _is_active_skill and _can_continue in [CAN_NOT_CONTINUE]
 

@@ -374,8 +374,10 @@ def full_history_dialog(dialog: Dict):
     """
     Used ONLY by: response selector and greeting_skill (turns on only for first 10 turns)
     """
+    all_prev_active_skills = [uttr.get("active_skill", "") for uttr in dialog["bot_utterances"]]
+    all_prev_active_skills = [skill_name for skill_name in all_prev_active_skills if skill_name][-15:]
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=10)
-    return [{"dialogs": [dialog]}]
+    return [{"dialogs": [dialog], "all_prev_active_skills": [all_prev_active_skills]}]
 
 
 def utt_sentrewrite_modified_last_dialog(dialog: Dict):
