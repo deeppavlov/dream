@@ -255,7 +255,7 @@ class EmotionSkillScenario:
                 if dialog['bot_utterances']:
                     was_active = dialog['bot_utterances'][-1].get('active_skill', {}) == 'emotion_skill'
                     was_book_or_movie = dialog['bot_utterances'][-1].get('active_skill', {}) in ['book_skill',
-                                                                                                 'movie_skill']
+                                                                                                 'dff_movie_skill']
                 else:
                     was_active = False
                     was_book_or_movie = False

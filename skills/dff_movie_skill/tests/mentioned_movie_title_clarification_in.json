@@ -1,0 +1,745 @@
+{
+    "human_utter_index_batch": [
+        2
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "what do you think about movie her?",
+                    "annotations": {
+                        "spelling_preprocessing": "what do you think about movie her",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.0006051945965737104,
+                            "conversational": 0.9993947744369507
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9137352705001831,
+                                "Opinion_RequestIntent": 0.9983375072479248
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Movies": 0.9919222593307495,
+                                "Other": 0.7394580245018005
+                            },
+                            "cobot_topics": {
+                                "Movies_TV": 0.9990087747573853,
+                                "Phatic": 0.9993689656257629
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9994572401046753
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.7057810425758362
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0064438581466674805
+                            }
+                        },
+                        "cobot_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "what do you think about movie her?",
+                            "segments": [
+                                "what do you think about movie her?"
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_topics": {
+                            "text": [
+                                "Movies_TV"
+                            ]
+                        },
+                        "cobot_entities": {
+                            "entities": [],
+                            "labelled_entities": []
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "Opinion_RequestIntent"
+                            ],
+                            "topics": [
+                                "Entertainment_Movies"
+                            ]
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.014499065466225147,
+                                "command": 0.005022411700338125,
+                                "comment": 0.0052331434562802315,
+                                "complaint": 0.0041395011357963085,
+                                "dev_command": 0.006913892924785614,
+                                "neg_answer": 0.0023800451308488846,
+                                "open_question_factual": 0.01945587806403637,
+                                "open_question_opinion": 0.9159643054008484,
+                                "opinion": 0.0040765427984297276,
+                                "other_answers": 0.005515043158084154,
+                                "pos_answer": 0.0030038594268262386,
+                                "statement": 0.0015374055365100503,
+                                "yes_no_question": 0.012258877977728844
+                            }
+                        ],
+                        "entity_linking": [],
+                        "conceptnet": {},
+                        "fact_retrieval": [],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is an Alexa Prize Socialbot! What do you do on weekdays?",
+                                "what do you think about movie her?"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "text": "what do you think about movie the avengers?",
+                    "annotations": {
+                        "spelling_preprocessing": "what do you think about movie the avengers",
+                        "factoid_classification": {
+                            "factoid": 0.0006581527413800359,
+                            "conversational": 0.9993417859077454
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9358154535293579,
+                                "Opinion_RequestIntent": 0.9673842191696167
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Movies": 0.9991531372070312
+                            },
+                            "cobot_topics": {
+                                "Movies_TV": 0.9989135265350342,
+                                "Music": 0.9962669610977173
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9989907741546631
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.7413317561149597
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.003043055534362793
+                            }
+                        },
+                        "cobot_nounphrases": [
+                            "movie",
+                            "the avengers"
+                        ],
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "sentseg": {
+                            "punct_sent": "what do you think about movie the avengers?",
+                            "segments": [
+                                "what do you think about movie the avengers?"
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "cobot_entities": {
+                            "entities": [
+                                "the avengers"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "videoname",
+                                    "text": "the avengers"
+                                }
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_topics": {
+                            "text": [
+                                "Movies_TV"
+                            ]
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "Opinion_RequestIntent"
+                            ],
+                            "topics": [
+                                "Entertainment_Movies"
+                            ]
+                        },
+                        "conceptnet": {
+                            "the avengers": {
+                                "Causes": [
+                                    "war",
+                                    "death",
+                                    "victory"
+                                ],
+                                "CausesDesire": [
+                                    "go to war",
+                                    "compete against someone",
+                                    "compete"
+                                ],
+                                "HasProperty": [
+                                    "popular in europe",
+                                    "famous for their action in war",
+                                    "famous for their action"
+                                ],
+                                "SymbolOf": [
+                                    "victory",
+                                    "war",
+                                    "battle"
+                                ]
+                            }
+                        },
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    0.8806095123291016,
+                                    0.8253771066665649,
+                                    0.8252912759780884,
+                                    0.699190080165863,
+                                    0.6291067600250244
+                                ],
+                                "entity_ids": [
+                                    "Q322646",
+                                    "Q113700",
+                                    "Q182218",
+                                    "Q494985",
+                                    "Q3985737"
+                                ],
+                                "entity_pages": [
+                                    "|name  = The Avengers"
+                                ],
+                                "entity_pages_titles": [
+                                    "Avengers (comics)",
+                                    "The Avengers (TV series)",
+                                    "The Avengers (2012 film)",
+                                    "The Avengers (1998 film)",
+                                    "The Avengers (1950 film)"
+                                ],
+                                "entity_substr": "the avengers",
+                                "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            }
+                        ],
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.01434296928346157,
+                                "command": 0.004127079155296087,
+                                "comment": 0.005739314015954733,
+                                "complaint": 0.0042922100983560085,
+                                "dev_command": 0.007073055021464825,
+                                "neg_answer": 0.002227738732472062,
+                                "open_question_factual": 0.015676433220505714,
+                                "open_question_opinion": 0.9158487915992737,
+                                "opinion": 0.009357715956866741,
+                                "other_answers": 0.00697900028899312,
+                                "pos_answer": 0.0032106677535921335,
+                                "statement": 0.0013688754988834262,
+                                "yes_no_question": 0.009756102226674557
+                            }
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Hi, this is an Alexa Prize Socialbot! What do you do on weekdays?",
+                                "what do you think about movie her?",
+                                "What is your all time favorite movie?",
+                                "what do you think about movie the avengers?"
+                            ]
+                        },
+                        "fact_retrieval": [
+                            "|name  = The Avengers"
+                        ],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "entities_info": {
+                                "the avengers": {
+                                    "conf": 0.8806095123291016,
+                                    "entity_label": "Avengers",
+                                    "inception": [
+                                        [
+                                            "\"+1963-00-00^^T\"",
+                                            "1963"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q14514600",
+                                            "group of fictional characters"
+                                        ],
+                                        [
+                                            "Q14623646",
+                                            "fictional organization"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q322646",
+                                    "pos": 0,
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q14623646",
+                                            "fictional organization"
+                                        ],
+                                        [
+                                            "Q23010327",
+                                            "group of fictitious objects"
+                                        ],
+                                        [
+                                            "Q14514600",
+                                            "group of fictional characters"
+                                        ],
+                                        [
+                                            "Q95074",
+                                            "fictional character"
+                                        ],
+                                        [
+                                            "Q14897293",
+                                            "fictional entity"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "topic_skill_entities_info": {
+                                "the avengers": {
+                                    "awards received": [
+                                        [
+                                            "Q1062026",
+                                            "MTV Movie Award for Best Villain"
+                                        ]
+                                    ],
+                                    "conf": 0.8252912759780884,
+                                    "entity_label": "The Avengers",
+                                    "genre": [
+                                        [
+                                            "Q1535153",
+                                            "superhero film"
+                                        ],
+                                        [
+                                            "Q188473",
+                                            "action film"
+                                        ],
+                                        [
+                                            "Q21192427",
+                                            "fictional crossover"
+                                        ],
+                                        [
+                                            "Q2973181",
+                                            "speculative fiction film"
+                                        ],
+                                        [
+                                            "Q319221",
+                                            "adventure film"
+                                        ],
+                                        [
+                                            "Q471839",
+                                            "science fiction film"
+                                        ]
+                                    ],
+                                    "has quality": [
+                                        [
+                                            "Q45172088",
+                                            "fails the Bechdel Test"
+                                        ],
+                                        [
+                                            "Q58483045",
+                                            "passes the reverse Bechdel Test"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q11424",
+                                            "film"
+                                        ],
+                                        [
+                                            "Q229390",
+                                            "3D film"
+                                        ]
+                                    ],
+                                    "narrative location": [
+                                        [
+                                            "Q1348",
+                                            "Kolkata"
+                                        ],
+                                        [
+                                            "Q60",
+                                            "New York City"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q182218",
+                                    "pos": 2,
+                                    "publication date": [
+                                        [
+                                            "\"+2011-07-15^^T\"",
+                                            "15 July 2011"
+                                        ],
+                                        [
+                                            "\"+2012-04-25^^T\"",
+                                            "25 April 2012"
+                                        ],
+                                        [
+                                            "\"+2012-04-26^^T\"",
+                                            "26 April 2012"
+                                        ],
+                                        [
+                                            "\"+2012-04-27^^T\"",
+                                            "27 April 2012"
+                                        ],
+                                        [
+                                            "\"+2012-05-04^^T\"",
+                                            "04 May 2012"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q229390",
+                                            "3D film"
+                                        ],
+                                        [
+                                            "Q10301427",
+                                            "moving image"
+                                        ],
+                                        [
+                                            "Q11424",
+                                            "film"
+                                        ],
+                                        [
+                                            "Q20937557",
+                                            "series"
+                                        ],
+                                        [
+                                            "Q2431196",
+                                            "audiovisual work"
+                                        ],
+                                        [
+                                            "Q4502142",
+                                            "visual artwork"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "utt_num": 3,
+                            "wiki_skill_entities_info": {
+                                "the avengers": {
+                                    "conf": 0.8806095123291016,
+                                    "entity_label": "Avengers",
+                                    "inception": [
+                                        [
+                                            "\"+1963-00-00^^T\"",
+                                            "1963"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q14514600",
+                                            "group of fictional characters"
+                                        ],
+                                        [
+                                            "Q14623646",
+                                            "fictional organization"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q322646",
+                                    "pos": 0,
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q14623646",
+                                            "fictional organization"
+                                        ],
+                                        [
+                                            "Q23010327",
+                                            "group of fictitious objects"
+                                        ],
+                                        [
+                                            "Q14514600",
+                                            "group of fictional characters"
+                                        ],
+                                        [
+                                            "Q95074",
+                                            "fictional character"
+                                        ],
+                                        [
+                                            "Q14897293",
+                                            "fictional entity"
+                                        ]
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "What is your all time favorite movie?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "What is your all time favorite movie?",
+                            "segments": [
+                                "What is your all time favorite movie?"
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is an Alexa Prize Socialbot! What do you do on weekdays?",
+                                "what do you think about movie her?",
+                                "What is your all time favorite movie?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_movie_skill"
+                }
+            ]
+        }
+    ],
+    "dff_movie_skill_state_batch": [
+        {
+            "current_turn_dff_suspended": false,
+            "dialogflow_state": "{\"vars\": {\"__stack__\": [], \"__user_utterance__\": \"what do you think about movie her\", \"__system_state__\": \"State.SYS_MENTIONED_MOVIES\", \"__state__\": \"State.USR_WAS_ASKED_MOVIE_TITLE_QUESTION\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"What is your all time favorite movie?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"MOVIES\\\"<__tuple__>\\\"State.USR_WAS_ASKED_MOVIE_TITLE_QUESTION\\\"\"}",
+            "history": {
+                "1": "State.SYS_MENTIONED_MOVIES"
+            },
+            "previous_human_utter_index": 1,
+            "shared_memory": {
+                "current_status": "movie_prompt",
+                "used_movies_questions": [
+                    "What is your all-time favorite movie?"
+                ]
+            }
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

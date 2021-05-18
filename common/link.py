@@ -31,7 +31,7 @@ from common.response_selection import COMPLETELY_CHANGING_THE_SUBJECT_PHRASES, C
 
 skills_phrases_map = {
     'news_api_skill': set(news.skill_trigger_phrases()),
-    'movie_skill': set(movies.skill_trigger_phrases()),
+    'dff_movie_skill': set(movies.skill_trigger_phrases()),
     'book_skill': set(books.skill_trigger_phrases()),
     'emotion_skill': set(emotion.skill_trigger_phrases()),
     # 'weather_skill': set(weather.skill_trigger_phrases()),
@@ -49,7 +49,7 @@ skills_phrases_map = {
 # TODO: adding new skill above, add here a conversational topic to the list, it will be used to offer topic in greeting
 LIST_OF_SCRIPTED_TOPICS = {
     "news_api_skill": "news",
-    "movie_skill": "movies",
+    "dff_movie_skill": "movies",
     "book_skill": "books",
     "game_cooperative_skill": "games",
     "dff_travel_skill": "travel",

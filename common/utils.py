@@ -13,7 +13,7 @@ sentry_sdk.init(getenv('SENTRY_DSN'))
 
 other_skills = {'intent_responder', 'program_y_dangerous', 'misheard_asr', 'christmas_new_year_skill',
                 'superbowl_skill', 'oscar_skill', 'valentines_day_skill'}
-scenario_skills = {'movie_skill', 'personal_info_skill',  # 'short_story_skill',
+scenario_skills = {'dff_movie_skill', 'personal_info_skill',  # 'short_story_skill',
                    'book_skill', 'weather_skill', 'emotion_skill', 'dummy_skill_dialog',
                    'meta_script_skill', 'coronavirus_skill', 'small_talk_skill',
                    'news_api_skill', 'game_cooperative_skill'}
@@ -270,20 +270,32 @@ def get_intent_name(text):
     return intent_name
 
 
+OPINION_REQUEST_PATTERN = re.compile(r"(don't|do not|not|are not|are|do)?\s?you\s"
+                                     r"(like|dislike|adore|hate|love|believe|consider|get|know|taste|think|"
+                                     r"recognize|sure|understand|feel|fond of|care for|fansy|appeal|suppose|"
+                                     r"imagine|guess)", re.IGNORECASE)
+OPINION_EXPRESSION_PATTERN = re.compile(r"\bi (don't|do not|not|am not|'m not|am|do)?\s?"
+                                        r"(like|dislike|adore|hate|love|believe|consider|get|know|taste|think|"
+                                        r"recognize|sure|understand|feel|fond of|care for|fansy|appeal|suppose|"
+                                        r"imagine|guess)", re.IGNORECASE)
+
+
 def is_opinion_request(annotated_utterance):
     intents = get_intents(annotated_utterance, which="all", probs=False)
     intent_detected = any([intent in intents for intent in ["Opinion_RequestIntent",
                                                             "open_question_opinion"]])
-    opinion_detected = any([intent in intents for intent in ["Opinion_ExpressionIntent", "opinion"]])
+    uttr_text = annotated_utterance.get("text", "")
+    if intent_detected or (OPINION_REQUEST_PATTERN.search(uttr_text) and "?" in uttr_text):
+        return True
+    else:
+        return False
 
-    opinion_request_pattern = re.compile(r"(don't|do not|not|are not|are|do)?\s?you\s"
-                                         r"(like|dislike|adore|hate|love|believe|consider|get|know|taste|think|"
-                                         r"recognize|sure|understand|feel|fond of|care for|fansy|appeal|suppose|"
-                                         r"imagine|guess)")
-    if intent_detected or \
-        (re.search(opinion_request_pattern,
-                   annotated_utterance.get("text", "").lower())
-         and not opinion_detected and "?" in annotated_utterance.get("text", "")):
+
+def is_opinion_expression(annotated_utterance):
+    all_intents = get_intents(annotated_utterance, which="all")
+    intent_detected = any([intent in all_intents for intent in ["opinion", "Opinion_ExpressionIntent"]])
+    uttr_text = annotated_utterance.get("text", "")
+    if intent_detected or OPINION_EXPRESSION_PATTERN.search(uttr_text):
         return True
     else:
         return False

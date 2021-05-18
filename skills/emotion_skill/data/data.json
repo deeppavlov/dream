@@ -82,7 +82,7 @@
         "Oh, you are in a lovely mood, I see. That's cool. I love some drama movies a lot."
       ],
       "next_step":[""],
-      "link": "movie_skill"
+      "link": "dff_movie_skill"
     },
     "anger":{
       "answers": [

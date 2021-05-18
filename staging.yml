@@ -70,8 +70,8 @@ services:
     image: mongo:4.0.0
     env_file:
       - ${ENV_FILE}
-  movie-skill:
-    image: ${DOCKER_REGISTRY}/movie-skill:${VERSION}
+  dff-movie-skill:
+    image: ${DOCKER_REGISTRY}/dff-movie-skill:${VERSION}
     env_file:
       - ${ENV_FILE}
   eliza:

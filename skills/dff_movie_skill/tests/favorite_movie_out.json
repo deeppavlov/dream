@@ -1,0 +1,30 @@
+[
+    [
+        "I adore all Star Wars movies. The best episode is the fifth one, The Empire Strikes Back. Yoda teachings are so cool! What is your favorite movie?",
+        0.99,
+        {
+            "dff_movie_skill_state": {
+                "shared_memory": {
+                    "current_status": "faq"
+                },
+                "previous_human_utter_index": 1,
+                "history": {
+                    "1": "State.SYS_FAQ"
+                },
+                "current_turn_dff_suspended": false,
+                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_FAQ\", \"__stack__\": [], \"__user_utterance__\": \"what is your favorite movie\", \"__system_state__\": \"State.SYS_FAQ\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"I adore all Star Wars movies. The best episode is the fifth one, The Empire Strikes Back. Yoda teachings are so cool! What is your favorite movie?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"MOVIES\\\"<__tuple__>\\\"State.USR_FAQ\\\"\"}"
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "no"
+        }
+    ]
+]

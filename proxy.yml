@@ -95,13 +95,13 @@ services:
     environment:
       - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/program-y-dangerous
       - PORT=8022
-  movie-skill:
+  dff-movie-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/movie-skill
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/dff-movie-skill
       - PORT=8023
   ner:
     command: ["nginx", "-g", "daemon off;"]

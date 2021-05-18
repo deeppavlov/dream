@@ -54,7 +54,7 @@ GENRE_DICT = {'memoir': 'memoir books',
               }
 GENRE_PHRASES = json.load(open('genre_phrases.json', 'r'))[0]
 
-SKILLS_TO_LINK = ["news_api_skill", "movie_skill", "game_cooperative_skill",
+SKILLS_TO_LINK = ["news_api_skill", "dff_movie_skill", "game_cooperative_skill",
                   "dff_travel_skill", "dff_animals_skill", "dff_sport_skill",
                   "dff_food_skill", "dff_music_skill"]
 
@@ -563,7 +563,7 @@ def get_movie_answer(annotated_user_phrase, human_attributes):
     if movie_name and movie_author:
         reply = f'I enjoyed watching the film {movie_name} based on this book,' \
                 f'which was directed by {movie_author}. '
-        reply += link_to(['movie_skill'], human_attributes)['phrase']
+        reply += link_to(['dff_movie_skill'], human_attributes)['phrase']
     return reply
 
 

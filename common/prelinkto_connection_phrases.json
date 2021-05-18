@@ -2,7 +2,7 @@
     {
         "skill_pair": [
             "book_skill",
-            "movie_skill"
+            "dff_movie_skill"
         ],
         "phrases": [
             "Stephen King once said: Books and movies are like apples and oranges. They both are fruit, but taste completely different.",
@@ -13,7 +13,7 @@
     {
         "skill_pair": [
             "game_cooperative_skill",
-            "movie_skill"
+            "dff_movie_skill"
         ],
         "phrases": [
             "Watching movies is a passive mode of consumption of art. Playing games is interactive, and games have to be adaptive to that.",
@@ -23,7 +23,7 @@
     {
         "skill_pair": [
             "dff_travel_skill",
-            "movie_skill"
+            "dff_movie_skill"
         ],
         "phrases": [
             "I like watching movies for the opportunity to virtually travel around the world.",
@@ -36,7 +36,7 @@
     {
         "skill_pair": [
             "dff_animals_skill",
-            "movie_skill"
+            "dff_movie_skill"
         ],
         "phrases": [
             "Trained owls were used in the Harry Potter films, and the entire first batch of letters had to be rewritten because they were too heavy for the little owls to carry.",
@@ -48,7 +48,7 @@
     {
         "skill_pair": [
             "dff_sport_skill",
-            "movie_skill"
+            "dff_movie_skill"
         ],
         "phrases": [
             "Movies and sports are related. People draw inspiration by watching movies depicting the struggle and hardships of those sportsmen.",
@@ -59,7 +59,7 @@
     {
         "skill_pair": [
             "dff_food_skill",
-            "movie_skill"
+            "dff_movie_skill"
         ],
         "phrases": [
             "Whether you're somebody who takes great care and pleasure in food, or somebody who sees little more in it that sustenance, food is an excellent tool for a movie to use to forge a connection with the audience.",
@@ -70,7 +70,7 @@
     {
         "skill_pair": [
             "dff_music_skill",
-            "movie_skill"
+            "dff_movie_skill"
         ],
         "phrases": [
             "Music guides the audience and invokes the emotions behind the film's story, the action and the words. It is a great enhancement to any film.",
@@ -82,14 +82,14 @@
     {
         "skill_pair": [
             "dff_gossip_skill",
-            "movie_skill"
+            "dff_movie_skill"
         ],
         "phrases": []
     },
     {
         "skill_pair": [
             "dff_science_skill",
-            "movie_skill"
+            "dff_movie_skill"
         ],
         "phrases": [
             "Science is a core element of sci-fi movies, which usually focus on love, friendship, teamwork, good versus evil, and any other commonly used thematic trope in cinema.",

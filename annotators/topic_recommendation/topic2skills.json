@@ -3,7 +3,7 @@
         "dff_music_skill"
     ],
     "genre": [
-        "movie_skill",
+        "dff_movie_skill",
         "book_skill",
         "dff_music_skill",
         "game_cooperative_skill"
@@ -19,7 +19,7 @@
         "dff_gossip_skill"
     ],
     "channelname": [
-        "movie_skill"
+        "dff_movie_skill"
     ],
     "party": [
         "news_api_skill",
@@ -49,7 +49,7 @@
         "book_skill"
     ],
     "videoname": [
-        "movie_skill"
+        "dff_movie_skill"
     ],
     "location": [
         "news_api_skill",
@@ -61,7 +61,7 @@
     ],
     "-": [
         "dff_travel_skill",
-        "movie_skill",
+        "dff_movie_skill",
         "weather_skill",
         "book_skill",
         "emotion_skill",
