@@ -156,7 +156,7 @@ class RuleBasedSkillSelectorConnector:
                 # turn on topical skills based on current cobot-topics, cobot-dialogact-topics & pattern matching
                 skills_for_uttr += turn_on_skills(
                     cobot_topics, cobot_dialogact_topics, user_uttr_text, bot_uttr.get("text", ""),
-                    available_skills=['movie_skill', 'book_skill', 'news_api_skill', 'dff_food_skill',
+                    available_skills=['dff_movie_skill', 'book_skill', 'news_api_skill', 'dff_food_skill',
                                       'dff_animals_skill', 'dff_sport_skill', 'dff_music_skill',
                                       'dff_science_skill', 'dff_gossip_skill',  # 'dff_celebrity_skill',
                                       'game_cooperative_skill', 'weather_skill', 'dff_funfact_skill',

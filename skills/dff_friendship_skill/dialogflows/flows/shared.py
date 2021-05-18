@@ -97,7 +97,7 @@ def link_to_by_enity_request(ngrams, vars):
 
 link_to_skill2key_words = {
     "news_api_skill": ["news"],
-    "movie_skill": ["movie"],
+    "dff_movie_skill": ["movie"],
     "book_skill": ["book"],
     "game_cooperative_skill": ["game"],
     "weather_skill": ["weather"],
@@ -120,7 +120,7 @@ link_to_skill2i_like_to_talk = {
         "Anxious to stay current on the news.",
         "I don't know about you but I feel nervous when I don't know what's going on.",
     ],
-    "movie_skill": ["Movies are my passion.", "Love stories about the world told in motion."],
+    "dff_movie_skill": ["Movies are my passion.", "Love stories about the world told in motion."],
     "book_skill": [
         "With a good book I can lose myself anywhere on Earth.",
         "One of my creators has a huge home library. Wish I could read some of those books.",

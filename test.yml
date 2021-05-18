@@ -86,7 +86,7 @@ services:
     env_file: [ .env.dev ]
   program-y-dangerous:
     env_file: [ .env.dev ]
-  movie-skill:
+  dff-movie-skill:
     env_file: [ .env.dev ]
   ner:
     env_file: [ .env.dev ]

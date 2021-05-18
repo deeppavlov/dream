@@ -29,7 +29,7 @@ def main():
         }
     ]
 
-    gold_results = [['dff_travel_skill', 'book_skill', 'movie_skill']]
+    gold_results = [['dff_travel_skill', 'book_skill', 'dff_movie_skill']]
 
     count = 0
     for data, gold_result in zip(request_data, gold_results):

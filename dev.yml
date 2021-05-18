@@ -105,11 +105,11 @@ services:
       - "./state_formatters:/src/dream_aiml/src/state_formatters"
     ports:
       - 8022:8022
-  movie-skill:
+  dff-movie-skill:
     env_file: [.env.dev]
     volumes:
       - "./common:/src/common"
-      - "./skills/movie_skill:/src"
+      - "./skills/dff_movie_skill:/src"
       - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8023:8023

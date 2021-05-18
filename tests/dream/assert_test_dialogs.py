@@ -30,7 +30,7 @@ SPECIAL_SKILLS = {
         "convert_reddit",
         "grounding_skill",
         "book_skill",
-        "movie_skill",
+        "dff_movie_skill",
         "dff_music_skill",
         "dff_animals_skill",
         "dff_sport_skill",

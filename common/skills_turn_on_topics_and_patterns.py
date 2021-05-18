@@ -18,7 +18,7 @@ from common.weather import WEATHER_COMPILED_PATTERN
 from common.bot_persona import YOUR_FAVORITE_COMPILED_PATTERN
 
 SKILL_TOPICS = {
-    "movie_skill": {
+    "dff_movie_skill": {
         "compiled_patterns": [MOVIE_COMPILED_PATTERN],
         "previous_bot_patterns": [MOVIE_COMPILED_PATTERN],
         "cobot_dialogact_topics": [

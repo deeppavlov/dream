@@ -20,7 +20,7 @@ TOP_K = 3
 topic2response = {"Let's chat about food": "dff_food_skill",
                   "Let's chat about books": "book_skill",
                   "Let's chat about sport": "dff_sport_skill",
-                  "Let's chat about movies": "movie_skill",
+                  "Let's chat about movies": "dff_movie_skill",
                   "Let's chat about animals": "dff_animals_skill",
                   "Let's chat about games": "game_cooperative_skill",
                   "Let's chat about music": "dff_music_skill",

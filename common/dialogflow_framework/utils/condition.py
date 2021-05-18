@@ -29,6 +29,12 @@ def is_opinion_request(vars):
     return flag
 
 
+def is_opinion_expression(vars):
+    flag = common_utils.is_opinion_expression(vars["agent"]["dialog"]["human_utterances"][-1])
+    logging.debug(f"is_opinion_expression = {flag}")
+    return flag
+
+
 def is_previous_turn_dff_suspended(vars):
     flag = vars["agent"].get("previous_turn_dff_suspended", False)
     logging.debug(f"is_previous_turn_dff_suspended = {flag}")
@@ -199,6 +205,12 @@ def is_yes_vars(vars):
 def is_no_vars(vars):
     flag = True
     flag = flag and common_utils.is_no(state_utils.get_last_human_utterance(vars))
+    return flag
+
+
+def is_do_not_know_vars(vars):
+    flag = True
+    flag = flag and common_utils.is_donot_know(state_utils.get_last_human_utterance(vars))
     return flag
 
 

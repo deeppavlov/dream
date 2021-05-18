@@ -674,6 +674,10 @@ def dff_gossip_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_gossip_skill")
 
 
+def dff_movie_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_movie_skill")
+
+
 def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
     # Used by: dialog_breakdown
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=2)
