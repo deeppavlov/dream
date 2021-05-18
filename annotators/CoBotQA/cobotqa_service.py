@@ -2,6 +2,7 @@ import logging
 import os
 import json
 import requests
+import pathlib
 from os import getenv
 import sentry_sdk
 
@@ -17,6 +18,14 @@ if COBOT_QA_SERVICE_URL is None:
     raise RuntimeError('COBOT_QA_SERVICE_URL environment variable is not set')
 
 headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COBOT_API_KEY}'}
+
+with open(pathlib.Path(__file__).resolve().parent / "facts_for_cities.json", "r") as f:
+    TRAVEL_FACTS = json.load(f)
+with open(pathlib.Path(__file__).resolve().parent / "facts_for_countries.json", "r") as f:
+    data = json.load(f)
+    for name in data:
+        TRAVEL_FACTS[name] = data[name]
+TRAVEL_FACTS = {name.lower(): fact for name, fact in TRAVEL_FACTS.items()}
 
 
 def send_cobotqa(question):
