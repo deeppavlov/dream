@@ -11,7 +11,8 @@ import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_exten
 import common.dialogflow_framework.utils.state as state_utils
 from common.dialogflow_framework.utils.condition import if_was_prev_active
 from common.dialogflow_framework.utils.condition import get_last_state
-from common.universal_templates import if_chat_about_particular_topic, if_lets_chat
+from common.universal_templates import if_chat_about_particular_topic, if_lets_chat, \
+    is_any_question_sentence_in_utterance
 from common.utils import is_yes, is_no
 from common.animals import PETS_TEMPLATE, ANIMALS_FIND_TEMPLATE, LIKE_ANIMALS_REQUESTS, WILD_ANIMALS, \
     WHAT_PETS_I_HAVE, HAVE_LIKE_PETS_TEMPLATE, HAVE_PETS_TEMPLATE, LIKE_PETS_TEMPLATE, TRIGGER_PHRASES, DONT_LIKE
@@ -78,7 +79,9 @@ def lets_talk_about_request(vars):
     find_pattern = re.findall(ANIMALS_FIND_TEMPLATE, user_uttr["text"])
     dont_like = re.findall(DONT_LIKE, user_uttr["text"])
     was_prev_active = if_was_prev_active(vars)
-    if not dont_like and (have_pets or ((chat_about or find_pattern) and (not is_last_state(vars, "SYS_WHAT_ANIMALS")
+    if chat_about and find_pattern:
+        flag = True
+    if not dont_like and (have_pets or (find_pattern and (not is_last_state(vars, "SYS_WHAT_ANIMALS")
                                         or not was_prev_active)) or (found_prompt and isyes)):
         flag = True
     logger.info(f"lets_talk_about_request={flag}")
@@ -96,8 +99,8 @@ def have_pets_request(ngrams, vars):
 
 def like_animals_request(ngrams, vars):
     flag = False
-    user_uttr = state_utils.get_last_human_utterance(vars)["text"]
-    bot_uttr = state_utils.get_last_bot_utterance(vars)["text"]
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
     isno = is_no(state_utils.get_last_human_utterance(vars))
     shared_memory = state_utils.get_shared_memory(vars)
     started = shared_memory.get("start", False)
@@ -109,13 +112,14 @@ def like_animals_request(ngrams, vars):
         told_about = told_about_cat
     if my_pet == "dog":
         told_about = told_about_dog
-    if re.search(LIKE_PETS_TEMPLATE, user_uttr) or (not told_about and started) \
+    if (re.search(LIKE_PETS_TEMPLATE, user_uttr["text"])
+        or (not told_about and started and not is_any_question_sentence_in_utterance(user_uttr))) \
             and not is_last_state(vars, "SYS_WHAT_ANIMALS"):
         flag = True
-    user_has = re.findall("i (have|had)", user_uttr)
-    ask_more = "more about" in bot_uttr
-    find_animal = re.findall(ANIMALS_FIND_TEMPLATE, user_uttr)
-    if (if_lets_chat(user_uttr) and not find_animal) or user_has:
+    user_has = re.findall("i (have|had)", user_uttr["text"])
+    ask_more = "more about" in bot_uttr["text"]
+    find_animal = re.findall(ANIMALS_FIND_TEMPLATE, user_uttr["text"])
+    if (if_lets_chat(user_uttr["text"]) and not find_animal) or user_has:
         flag = False
     if ask_more and isno:
         flag = False
@@ -193,10 +197,16 @@ def sys_have_pets_request(ngrams, vars):
     shared_memory = state_utils.get_shared_memory(vars)
     found_users_pet = shared_memory.get("users_pet", "")
     started = shared_memory.get("start", False)
-    pet = re.search(PETS_TEMPLATE, text)
-    if not shared_memory.get("have_pets", False) and not found_users_pet and \
-            ((lets_talk_about_request(vars) and not pet) or started) \
-            and not is_last_state(vars, "SYS_WHAT_ANIMALS") and not stop_animals_request(ngrams, vars):
+    found_pet = re.search(PETS_TEMPLATE, text)
+    have_pets = shared_memory.get("have_pets", False)
+    is_stop = stop_animals_request(ngrams, vars)
+    lets_talk = lets_talk_about_request(vars)
+    wants_about_pets = re.findall(r"\bpets", text) and lets_talk
+    asked_what = is_last_state(vars, "SYS_WHAT_ANIMALS")
+    logger.info(f"sys_have_pets_request, found_users_pet {found_users_pet} have_pets {have_pets} lets_talk {lets_talk}"
+                f"found_pet {found_pet} started {started} asked_what {asked_what} is_stop {is_stop}")
+    if (not have_pets or wants_about_pets) and not found_users_pet and ((lets_talk and not found_pet) or started) \
+            and not asked_what and not is_stop:
         flag = True
     logger.info(f"sys_have_pets_request={flag}")
     return flag
