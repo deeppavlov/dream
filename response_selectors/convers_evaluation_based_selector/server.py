@@ -45,6 +45,7 @@ def respond():
 
     st_time = time.time()
     dialogs_batch = request.json["dialogs"]
+    all_prev_active_skills_batch = request.json.get("all_prev_active_skills", [[]] * len(dialogs_batch))
 
     selected_skill_names = []
     selected_texts = []
@@ -52,7 +53,7 @@ def respond():
     selected_human_attributes = []
     selected_bot_attributes = []
 
-    for i, dialog in enumerate(dialogs_batch):
+    for i, (dialog, all_prev_active_skills) in enumerate(zip(dialogs_batch, all_prev_active_skills_batch)):
         curr_toxicities = []
         curr_has_blacklisted = []
         curr_has_inappropriate = []
@@ -105,7 +106,7 @@ def respond():
             # now we collected all current candidates and their annotations. select response among them
             best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes = select_response(
                 curr_candidates, curr_scores, curr_confidences,
-                curr_toxicities, curr_has_blacklisted, curr_has_inappropriate, dialog)
+                curr_toxicities, curr_has_blacklisted, curr_has_inappropriate, dialog, all_prev_active_skills)
         except Exception as e:
             logger.exception(e)
             sentry_sdk.capture_exception(e)
@@ -297,7 +298,7 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, toxiciti
 
 
 def select_response(candidates, scores, confidences, toxicities, has_blacklisted,
-                    has_inappropriate, dialog):
+                    has_inappropriate, dialog, all_prev_active_skills=None):
     # TOXICITY & BLACKLISTS checks
     n_toxic_candidates, scores, confidences = downscore_toxic_blacklisted_responses(
         scores, confidences, toxicities, has_blacklisted, has_inappropriate)
@@ -316,7 +317,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     if TAG_BASED_SELECTION:
         logger.info(f"Tag based selection")
         best_candidate, best_id, curr_single_scores = tag_based_response_selection(
-            dialog, candidates, scores, confidences, bot_utterances)
+            dialog, candidates, scores, confidences, bot_utterances, all_prev_active_skills)
     else:
         best_candidate, best_id, curr_single_scores = rule_score_based_selection(
             dialog, candidates, scores, confidences, toxicities, bot_utterances)
