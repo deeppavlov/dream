@@ -19,10 +19,13 @@ grounding_patterns = [
     r"^what[\?\.]?$"
 ]
 re_grounding_patterns = re.compile(r"(" + "|".join(grounding_patterns) + r")", re.IGNORECASE)
-
-re_recording_patterns = re.compile(
-    r"(((are|do|can|could|will|would|have|had|whether) (you|amazon|echo)|conversation( is| (can|could) be)?) "
-    r"(record|snoop|spy|wiretap|(see(ing)?|watch(ing)?|track(ing)?) me|listen(ing)? (to )?(me|my)))", re.IGNORECASE)
+RE_RECORDING_TEMPLATE = r"(((are|do|can|could|will|would|have|had|whether) " \
+                        r"(you|amazon|echo)|conversation( is| (can|could) be)?) " \
+                        r"(record|snoop|spy|wiretap|(see(ing)?|watch(ing)?|track(ing)?) " \
+                        r"me|listen(ing)? (to )?(me|my)))"
+RE_RECORDING_TEMPLATE2 = r"((keep)? (protect) (the)? (information)? (protect|secret))"
+re_recording_patterns = re.compile(rf"({RE_RECORDING_TEMPLATE}|{RE_RECORDING_TEMPLATE2})",
+                                   re.IGNORECASE)
 
 
 def are_we_recorded(utterance):
