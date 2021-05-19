@@ -100,6 +100,13 @@ def error_response(vars):
 # let's talk about fast food
 ##################################################################################################################
 
+def is_question(vars):
+    annotations_sentseg = state_utils.get_last_human_utterance(vars)["annotations"].get(
+        "sentseg", {})
+    flag = "?" in annotations_sentseg.get("punct_sent", "")
+    return flag
+
+
 def check_conceptnet(vars):
     annotations_conceptnet = state_utils.get_last_human_utterance(vars)["annotations"].get(
         "conceptnet", {})
@@ -149,7 +156,7 @@ def smth_request(ngrams, vars):
 
 
 def fast_food_request(ngrams, vars):
-    if dont_want_talk(vars):
+    if all([not condition_utils.no_requests(vars), dont_want_talk(vars), is_question(vars)]):
         flag = False
     else:
         flag = True
@@ -169,7 +176,7 @@ def fast_food_response(vars):
 
         state_utils.set_confidence(vars, confidence=CONF_HIGH)
         state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-        return f"Okay. {fact} {question}"
+        return f"I just found out that {fact} {question}"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)

@@ -166,6 +166,12 @@ def error_response(vars):
 # let's talk about food
 ##################################################################################################################
 
+def is_question(vars):
+    annotations_sentseg = state_utils.get_last_human_utterance(vars)["annotations"].get(
+        "sentseg", {})
+    flag = "?" in annotations_sentseg.get("punct_sent", "")
+    return flag
+
 
 def check_conceptnet(vars):
     annotations_conceptnet = state_utils.get_last_human_utterance(vars)["annotations"].get(
@@ -173,26 +179,30 @@ def check_conceptnet(vars):
     conceptnet = False
     food_item = None
     for elem, triplets in annotations_conceptnet.items():
+        symbol_of = triplets.get("SymbolOf", [])
         conceptnet_symbolof = any(
             [
-                i in triplets.get("SymbolOf", []) for i in CONCEPTNET_SYMBOLOF_FOOD
+                i in symbol_of for i in CONCEPTNET_SYMBOLOF_FOOD
+            ] + [
+                'chicken' in i for i in symbol_of
             ]
         )
+        has_property = triplets.get("HasProperty", [])
         conceptnet_hasproperty = any(
             [
-                i in triplets.get("HasProperty", []) for i in CONCEPTNET_HASPROPERTY_FOOD
+                i in has_property for i in CONCEPTNET_HASPROPERTY_FOOD
             ]
         )
         causes_desire = triplets.get("CausesDesire", [])
         conceptnet_causesdesire = any(
             [
                 i in causes_desire for i in CONCEPTNET_CAUSESDESIRE_FOOD
-            ]
-        ) or any(
-            [
+            ] + [
                 'eat' in i for i in causes_desire
             ] + [
                 'cook' in i for i in causes_desire
+            ] + [
+                'food' in i for i in causes_desire
             ]
         )
         conceptnet = any([conceptnet_symbolof, conceptnet_hasproperty, conceptnet_causesdesire])
@@ -341,7 +351,7 @@ def country_response(vars):
             if cuisine_discussed in CUISINES_COUNTRIES:
                 state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
                 state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
-                return f"Have you been in {CUISINES_COUNTRIES[cuisine_discussed]}?"
+                return f"Have you ever been in {CUISINES_COUNTRIES[cuisine_discussed]}?"
             else:
                 state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
                 state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
@@ -424,7 +434,9 @@ def what_fav_food_response(vars):
             if unused_food:
                 food_type = random.choice(unused_food)
             else:
-                food_type = "snack"
+                state_utils.set_confidence(vars, 0)
+                state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+                return error_response(vars)
         else:
             food_type = "food"
 
@@ -514,50 +526,55 @@ def food_fact_response(vars):
     entity = ""
     berry_name = ""
     facts = annotations.get("cobotqa_annotator", {}).get("facts", [])
-    if "berry" in bot_utt_text:
-        berry_names = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
-        if berry_names:
-            berry_name = berry_names[0]
+    if check_conceptnet(vars):
+        if "berry" in bot_utt_text:
+            berry_names = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
+            if berry_names:
+                berry_name = berry_names[0]
 
-        if all(["berry" not in human_utt_text, len(human_utt_text.split()) == 1, berry_name]):
-            berry_name += "berry"
-            fact = send_cobotqa(f"fact about {berry_name}")
-            entity = berry_name
-        elif berry_name:
+            if all(["berr" not in human_utt_text, len(human_utt_text.split()) == 1, berry_name]):
+                berry_name += "berry"
+                fact = send_cobotqa(f"fact about {berry_name}")
+                entity = berry_name
+            elif berry_name:
+                if facts:
+                    fact = facts[0].get("fact", "")
+                    entity = facts[0].get("entity", "")
+        else:
             if facts:
                 fact = facts[0].get("fact", "")
                 entity = facts[0].get("entity", "")
-    else:
-        if facts:
-            fact = facts[0].get("fact", "")
-            entity = facts[0].get("entity", "")
-    try:
-        state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
-        if re.search(DONOTKNOW_LIKE_RE, human_utt_text):
-            state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
-            state_utils.set_confidence(vars, confidence=0.)
-            return error_response(vars)
-        elif (not fact) and check_conceptnet(vars):
-            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
-            return f"Why do you like it?"
-        elif not fact:
-            state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
-            state_utils.set_confidence(vars, confidence=0.)
-            return error_response(vars)
-        elif (fact and entity):
-            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
-            return f"{entity}. {random.choice(acknowledgements)} {fact}"
-        elif fact:
-            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
-            return f"Okay. {fact}"
-        else:
+        try:
+            state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
+            if re.search(DONOTKNOW_LIKE_RE, human_utt_text):
+                state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+                state_utils.set_confidence(vars, confidence=0.)
+                return error_response(vars)
+            elif (not fact) and check_conceptnet(vars):
+                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+                return f"Why do you like it?"
+            elif not fact:
+                state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+                state_utils.set_confidence(vars, confidence=0.)
+                return error_response(vars)
+            elif (fact and entity):
+                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+                return f"{entity}. {random.choice(acknowledgements)} {fact}"
+            elif fact:
+                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+                return f"Okay. {fact}"
+            else:
+                state_utils.set_confidence(vars, 0)
+                state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+                return error_response(vars)
+        except Exception as exc:
+            logger.exception(exc)
+            sentry_sdk.capture_exception(exc)
             state_utils.set_confidence(vars, 0)
-            state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
             return error_response(vars)
-    except Exception as exc:
-        logger.exception(exc)
-        sentry_sdk.capture_exception(exc)
+    else:
         state_utils.set_confidence(vars, 0)
+        state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
         return error_response(vars)
 
 
@@ -662,10 +679,30 @@ def where_are_you_from_response(vars):
 
 
 def suggest_cook_response(vars):
+    user_utt = state_utils.get_last_human_utterance(vars)
     try:
-        state_utils.set_confidence(vars, confidence=CONF_HIGH)
-        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-        return "May I recommend you a meal to try?"
+        linkto_food_skill_agreed = any(
+            [
+                req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower()
+                for req in TRIGGER_PHRASES
+            ]
+        )
+        if linkto_food_skill_agreed:
+            if is_yes(user_utt) or re.search(LIKE_RE, user_utt["text"].lower()):
+                state_utils.set_confidence(vars, confidence=CONF_HIGH)
+                state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+            elif not is_no(user_utt):
+                state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
+                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+            else:
+                state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+                state_utils.set_confidence(vars, 0)
+                return error_response(vars)
+            return "May I recommend you a meal to try?"
+        else:
+            state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+            state_utils.set_confidence(vars, 0)
+            return error_response(vars)
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
