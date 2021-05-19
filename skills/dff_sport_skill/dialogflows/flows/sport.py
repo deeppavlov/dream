@@ -483,7 +483,7 @@ def user_like_sport_response(vars):
             ).replace("KIND_OF_SPORT", ing_form).replace("PASSIVE_SPORT", passive_sport)
             if ing_form != plain_form:
                 opinion = opinion.replace(f'to play {ing_form}', f'to {plain_form}')
-            response = opinion + f" Why do you like {kind_of_sport}?"
+            response = opinion + f" Why do you like {ing_form}?"
             return response
         else:
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
@@ -516,6 +516,8 @@ def user_positive_or_neutral_about_kind_of_sport_response(vars):
         kind_of_sport = shared_memory.get("kind_of_sport", "")
         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
         state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
+        if kind_of_sport in ING_FORMS:
+            kind_of_sport = ING_FORMS[kind_of_sport]
         return random.choice(ASK_ABOUT_ATH_IN_KIND_OF_SPORT).replace("KIND_OF_SPORT", kind_of_sport)
     except Exception as exc:
         logger.exception(exc)
