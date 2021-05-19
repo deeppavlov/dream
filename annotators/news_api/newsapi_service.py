@@ -147,8 +147,11 @@ class CachedRequestsAPI:
                 continue
             description = article.get("content", "") or ""
             sentences_content = sent_tokenize(description)
-            if description and len(sentences_content) > 1:
+            if description and len(sentences_content) > 2:
                 description = " ".join(sentences_content[:2])
+                article["description"] = description
+            elif description and len(sentences_content) > 1:
+                description = sentences_content[0]
                 article["description"] = description
             else:
                 description = article.get("description", "") or ""
