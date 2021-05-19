@@ -131,6 +131,15 @@ def what_do_you_mean_response(dialog):
 
 
 def generate_acknowledgement(dialog):
+    """Generate acknowledgement for human questions.
+
+    Returns:
+        string acknowledgement (templated acknowledgement from `midas_acknowledgements.json` file,
+        confidence (default ACKNOWLEDGEMENT_CONF),
+        human attributes (empty),
+        bot attributes (empty),
+        attributes (with response parts set to acknowledgement)
+    """
     curr_intents = get_intents(dialog['human_utterances'][-1], probs=False, which='all')
     curr_intents = list(set([get_midas_analogue_intent_for_any_intent(intent) for intent in curr_intents
                              if get_midas_analogue_intent_for_any_intent(intent) is not None]))
@@ -140,9 +149,10 @@ def generate_acknowledgement(dialog):
     human_attr = {}
     bot_attr = {}
     curr_human_entities = get_entities(dialog['human_utterances'][-1], only_named=False, with_labels=False)
+    contains_question = is_any_question_sentence_in_utterance(dialog['human_utterances'][-1])
 
     # we generate acknowledgement ONLY if we have some entities!
-    if curr_considered_intents and len(curr_human_entities):
+    if curr_considered_intents and len(curr_human_entities) and contains_question:
         # can generate acknowledgement
         is_need_nounphrase_intent = any([intent in curr_intents for intent in ["open_question_opinion"]])
         if is_need_nounphrase_intent:
