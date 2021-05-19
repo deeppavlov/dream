@@ -422,21 +422,26 @@ def best_plain_book_by_author(plain_author_name, default_phrase, plain_last_book
                                          query_dict=book_query_dict)
     book_list = list(itertools.chain.from_iterable(book_list))
     book_list = list(set(book_list))
+    last_bookname = 'NO_BOOK'
     try:
         logger.debug('List of returned books')
         logger.debug(book_list)
         if plain_last_bookname is not None:
             book_list = [j for j in book_list if plain_last_bookname not in j]
-        book_list = [x[x.find('Q'):] for x in book_list]  # to unify representations
+            last_bookname = entity_to_label(plain_last_bookname)
+        book_list = [x[x.find('Q'):] for x in book_list if x]  # to unify representations
         logger.debug('List of returned books - processed')
         logger.debug(book_list)
         best_bookname = default_phrase  # default value
         if book_list:
-            sorted_bookname_list = sorted(book_list, key=lambda x: int(x[1:]))[:top_n_best_books]
-            # Sort entities by frequency and truncate list beforehand to speed the code up
-            sorted_bookname_list = [j for j in sorted_bookname_list if j is not None]
+            sorted_bookname_list = sorted(book_list, key=lambda x: int(x[1:]))
+            filtered_bookname_list = []
+            for book in sorted_bookname_list:
+                if all([last_bookname not in entity_to_label(book),
+                        len(filtered_bookname_list) < top_n_best_books]):
+                    filtered_bookname_list.append(book)
             if len(sorted_bookname_list) > 0:
-                best_bookname = random.choice(sorted_bookname_list)
+                best_bookname = random.choice(filtered_bookname_list)
         logger.debug(f'Answer for best_plain_book_by_author {best_bookname}')
         return best_bookname
     except Exception as e:
