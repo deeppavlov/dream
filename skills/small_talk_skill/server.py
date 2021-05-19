@@ -11,7 +11,7 @@ from os import getenv
 import sentry_sdk
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT, MUST_CONTINUE
-from common.utils import get_skill_outputs_from_dialog, get_sentiment, get_entities
+from common.utils import get_skill_outputs_from_dialog, get_sentiment, get_entities, join_word_beginnings_in_or_pattern
 from common.universal_templates import if_choose_topic, if_switch_topic, if_chat_about_particular_topic
 
 
@@ -29,8 +29,7 @@ with open("topic_words.json", "r") as f:
 
 for topic in TOPIC_PATTERNS:
     words = TOPIC_PATTERNS[topic]
-    pattern = "(" + "|".join([r'\b%s' % word for word in words]) + ")"
-    TOPIC_PATTERNS[topic] = re.compile(pattern, re.IGNORECASE)
+    TOPIC_PATTERNS[topic] = re.compile(join_word_beginnings_in_or_pattern(words), re.IGNORECASE)
 
 with open("small_talk_scripts.json", "r") as f:
     TOPIC_SCRIPTS = json.load(f)

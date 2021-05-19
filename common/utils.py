@@ -93,11 +93,15 @@ MIDAS_FUNCTIONAL_LABELS = sum([intent_list for intent_list in midas_classes["fun
 
 
 def join_words_in_or_pattern(words):
-    return "(" + "|".join([r'\b%s\b' % word for word in words]) + ")"
+    return r"(" + r"|".join([r"\b%s\b" % word for word in words]) + r")"
+
+
+def join_word_beginnings_in_or_pattern(words):
+    return r"(" + r"|".join([r"\b%s" % word for word in words]) + r")"
 
 
 def join_sentences_in_or_pattern(sents):
-    return "(" + "|".join(sents) + ")"
+    return r"(" + r"|".join(sents) + r")"
 
 
 def get_skill_outputs_from_dialog(utterances, skill_name, activated=False):
