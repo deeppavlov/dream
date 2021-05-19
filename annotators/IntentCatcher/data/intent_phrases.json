@@ -140,6 +140,7 @@
                 ".*go away",
                 "alexa i don't wanna talk about anything right now go home",
                 "stop making that( song| noise)",
+                "stop talking[?.!]?$",
                 "i am done talking now",
                 "cancel simulation",
                 ".*can i get the normal alexa back.*",
