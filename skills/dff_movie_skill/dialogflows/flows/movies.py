@@ -106,7 +106,7 @@ def save_and_update_movie_titles(vars, movie_id, movie_title):
 
 
 def no_requests_request(ngrams, vars):
-    flag = condition_utils.no_requests(vars)
+    flag = condition_utils.no_special_switch_off_requests(vars)
 
     if flag:
         logger.info(f"No special requests in user utterances")
