@@ -101,7 +101,7 @@ bad_subanswers = ["let's talk about", "i have lots of", "world of warcraft",
                   "didn't catch that", "say that again", "try again", "really nice to meet you too",
                   "like to learn about how I can help", "sorry", "i don't under", "ask me whatever you like",
                   "i don’t know that", "initialism for laughing out loud", "gamelistintent", "listintent",
-                  "try asking", "missed part", "try saying", " hey is a "
+                  "try asking", "missed part", "try saying", " hey is a ", "didn't hear that", "try that again"
                   ]
 
 
@@ -193,7 +193,8 @@ def respond():
             sentences = sent_tokenize(response.replace(".,", "."))
             full_resp = response
             response = " ".join(sentences)
-            if full_resp in bad_answers or any([bad_substr in full_resp.lower() for bad_substr in bad_subanswers]):
+            if full_resp in bad_answers or any([bad_substr.lower() in full_resp.lower()
+                                                for bad_substr in bad_subanswers]):
                 response = ""
         else:
             response = ""
