@@ -73,6 +73,7 @@ DIALOG_BEGINNING_SHORT_ANSWER_CONFIDENCE = 0.98
 MIDDLE_DIALOG_START_CONFIDENCE = 0.7
 SUPER_CONFIDENCE = 1.0
 HIGH_CONFIDENCE = 0.98
+MIDDLE_CONFIDENCE = 0.95
 
 # %%
 
@@ -258,6 +259,7 @@ def what_do_you_do_request(ngrams, vars):
     shared_memory = state_utils.get_shared_memory(vars)
     greeting_type = shared_memory.get("greeting_type", "")
     flag = condition_utils.no_requests(vars) and (greeting_type == "what_do_you_do")
+
     if re.search(common_greeting.KIDS_WORDS_RE, utt_text):
         flag = flag and False
         state_utils.set_age_group(vars, "kid")
@@ -265,14 +267,16 @@ def what_do_you_do_request(ngrams, vars):
         flag = flag and False
         state_utils.set_age_group(vars, "adult")
     else:
-        flag = flag and True
+        flag = flag and (not shared_memory.get("free_time", False))
         state_utils.set_age_group(vars, "unknown")
     return flag
 
 
 def free_time_response(vars):
-    state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
-    state_utils.set_can_continue(vars, MUST_CONTINUE)
+    state_utils.save_to_shared_memory(vars, free_time=True)
+
+    state_utils.set_confidence(vars, confidence=MIDDLE_CONFIDENCE)
+    state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
     return random.choice(common_greeting.FREE_TIME_RESPONSES)
 
 
