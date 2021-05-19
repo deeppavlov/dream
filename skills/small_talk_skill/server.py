@@ -202,7 +202,7 @@ def offer_topic(dialog):
     """
     used_topics = dialog["human"]["attributes"].get("small_talk_topics", [])
     topic_set = set(TOPIC_PATTERNS.keys()).difference(set(used_topics)).difference(
-        {"sex", "me", "politics", "depression", "donald trump", "news", "school", "star wars", "work", "you"})
+        {"sex", "me", "politics", "depression", "donald trump", "news", "school", "star wars", "work", "you", "family"})
     if len(topic_set) > 0:
         topic = choice(list(topic_set))
     else:
