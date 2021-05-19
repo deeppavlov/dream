@@ -118,12 +118,17 @@ class CachedRequestsAPI:
         topic = topic.lower() if len(topic) > 0 else "all"
         curr_time = datetime.now()
 
-        if len(self.cached.get(topic, [])) == 0 or \
-                (curr_time - self.prev_renew_times.get(topic, self.first_renew_time)).seconds > self.renew_freq_time:
-            self.cached[topic] = self.get_new_topic_news(topic, return_list_of_news) + self.cached.get(topic, [])
-            self.prev_renew_times[topic] = curr_time
+        if return_list_of_news:
+            top_news = self.get_new_topic_news(topic, return_list_of_news)
+        else:
+            if len(self.cached.get(topic, [])) == 0 or \
+                    (curr_time - self.prev_renew_times.get(topic, self.first_renew_time)).seconds > \
+                    self.renew_freq_time:
+                self.cached[topic] = self.get_new_topic_news(topic, return_list_of_news) + self.cached.get(topic, [])
+                self.prev_renew_times[topic] = curr_time
 
-        top_news = deepcopy(self.cached.get(topic, []))
+            top_news = deepcopy(self.cached.get(topic, []))
+
         if len(prev_news_urls) > 0 and status == "headline":
             # some prev discussed news detected
             top_news = [news for news in top_news if "url" in news and news["url"] not in prev_news_urls]

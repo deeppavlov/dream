@@ -210,8 +210,9 @@ def get_linked_to_dff_skills(dff_shared_state, current_turn, prev_active_skill):
     """
     to_skills = []
     for to_skill in dff_shared_state.get("cross_links", {}).keys():
-        if dff_shared_state.get("cross_links", {})[to_skill].get(current_turn - 1, {}).get(
-                "from_service", "") == prev_active_skill:
+        cross_links = dff_shared_state.get("cross_links", {})[to_skill]
+        if cross_links.get(str(current_turn - 1), {}).get("from_service", "") == prev_active_skill \
+                or cross_links.get(str(current_turn - 2), {}).get("from_service", "") == prev_active_skill:
             to_skills.append(to_skill)
 
     return to_skills

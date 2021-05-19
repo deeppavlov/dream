@@ -30,7 +30,8 @@
                                                                                 ["Q11253473", "smart device"],
                                                                                 ["Q16917685", "mobile computer"],
                                                                                 ["Q17517", "mobile phone"]]}},
-                                     "topic_skill_entities_info": {}}
+                                     "topic_skill_entities_info": {}},
+                     "news_api_annotator": []
                    }
                  }
                ],
@@ -39,6 +40,9 @@
     ],
     "dff_wiki_skill_state_batch": [
         {}
+    ],
+    "dff_shared_state_batch": [
+        {"cross_links": {}}
     ],
     "entities_batch": [
         {

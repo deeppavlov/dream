@@ -3,6 +3,7 @@ import random
 import re
 from common.universal_templates import COMPILE_WHAT_TO_TALK_ABOUT
 from common.animals import ANIMALS_FIND_TEMPLATE
+from common.universal_templates import if_chat_about_particular_topic
 
 used_types_dict = [{"types": ["Q11253473"  # smart device
                               ],
@@ -15,6 +16,12 @@ used_types_dict = [{"types": ["Q11253473"  # smart device
                               ],
                     "titles": {"mythology": "", "heraldry": "", "history": "", "modern depictions": "", "origin": "",
                                "popular culture": "Would you like to know about {} in popular culture?"}},
+                   {"entity_substr": ["ghosts", "spirits"],
+                    "page_title": "Ghost",
+                    "titles": {"fear of ghosts": "Are you afraid of ghosts?",
+                               "common attributes": "I can tell you about ghosts, should I?",
+                               "ghosts and the afterlife": "Some people believe that ghosts are souls of dead people."
+                                                           " Would you like more details?"}},
                    {"entity_substr": ["medicine"],
                     "page_title": "Medicine",
                     "titles": {"clinical practice": "", "branches": "", "quality": "",
@@ -52,12 +59,6 @@ used_types_dict = [{"types": ["Q11253473"  # smart device
                               ],
                     "titles": {"symbols": "", "ideology": "", "voter": "Would you like to know about voters of {}",
                                "structure": ""}},
-                   {"types": ["Q16521"],  # taxon (species of animal)
-                    "titles": {"distribution": "Would you like to know where {} live?",
-                               "relationship with humans": "", "behavior": "", "behaviour": "",
-                               "social structure": "",
-                               "cultural": "Would you like to know about {} in popular culture?",
-                               "culture": "Would you like to know about {} in popular culture?"}},
                    {"entity_substr": ["minecraft"],
                     "types": ["Q7889"],  # video game
                     "wikihow_info": {"Build-a-Wooden-House-in-Minecraft": ""},
@@ -98,7 +99,7 @@ used_types_dict = [{"types": ["Q11253473"  # smart device
                     "titles": {"mobile robot": "Would you like to learn about mobile robots?",
                                "service robot": "Would you like to hear about service robots?",
                                "military robot": "Do you want to learn about military robots?",
-                               "factory robot": "Are you interested in factory robots?",
+                               "factory robot": "Are you infix/dff_wiki_skill/improveterested in factory robots?",
                                "literature": "Would you like to know about books about robots?",
                                "films": "Are you interested in films about robots?"}},
                    {"entity_substr": ["religion"],
@@ -128,10 +129,6 @@ used_types_dict = [{"types": ["Q11253473"  # smart device
                    {"types": ["Q198"],  # war
                     "titles": {"causes": "", "tactics": "", "general features": "", "diplomacy": "", "outbreak": "",
                                "battles": ""}},
-                   {"types": ["Q105756498", "Q215380"],  # type of musical group, musical group
-                    "titles": {"early years": "", "breakthrough success": "", "band split-up": "", "new line-up": "",
-                               "successes and struggles": "", "musical style": "", "development": "", "influences": "",
-                               "awards and achievements": "", "touring years": ""}},
                    {"entity_substr": ["space", "outer space"],
                     "page_title": "Space exploration",
                     "titles": {"first outer space flights": "", "first human outer space flight": "",
@@ -153,14 +150,27 @@ used_types_dict = [{"types": ["Q11253473"  # smart device
                    {"entity_substr": ["fishing"],
                     "page_title": "Fishing",
                     "titles": {"traditional fishing": "", "recreational fishing": "", "techniques": ""}},
+                   {"types": ["Q105756498", "Q215380"],  # type of musical group, musical group
+                    "titles": {"early years": "", "breakthrough success": "", "band split-up": "", "new line-up": "",
+                               "successes and struggles": "", "musical style": "", "development": "", "influences": "",
+                               "awards and achievements": "", "touring years": ""}},
+                   {"types": ["Q16521", "Q55983715", "Q7377"],  # taxon (species of animal)
+                    "titles": {"distribution": "Would you like to know where {} live?",
+                               "relationship with humans": "", "behavior": "", "behaviour": "",
+                               "social structure": "",
+                               "cultural": "Would you like to know about {} in popular culture?",
+                               "culture": "Would you like to know about {} in popular culture?"}},
                    {"types": ["Q2066131"],  # athlete
                     "titles": {"club career": "", "international career": "", "player profile": "",
                                "personal life": ""}}
                    ]
 
+re_tokenizer = re.compile(r"[\w']+|[^\w ]")
+
 used_types = set(itertools.chain.from_iterable([elem.get("types", []) for elem in used_types_dict]))
 used_substr = set(itertools.chain.from_iterable([elem.get("entity_substr", []) for elem in used_types_dict]))
 blacklist_words = {"yup", "true", "false", "boy", "boys"}
+blacklist_titles = {"ethymology", "terminology"}
 
 prohibited_topics = {"music", "films", "movies", "sport", "travel", "food", "animals", "pet", "pets", "coronavirus",
                      "corona virus", "gossip", "gossips", "cat", "cats", "dog", "dogs"}
@@ -184,26 +194,62 @@ prohibited_types = {"Q571",  # book
 QUESTION_TEMPLATES = ["Would you like to know about {} of {}?",
                       "Do you want to learn about {} of {}?",
                       "Are you interested in {} of {}?",
-                      "Do you want to hear about {} of {}?"
+                      "Do you want to hear about {} of {}?",
+                      "Do you want to know about {} of {}?",
+                      "Do you want me to tell you about {} of {}?",
+                      "The next topic is {} of {}, continue?",
+                      "Let me tell you about {} of {}, okey?"
                       ]
 
+NEWS_MORE = ["Do you want more details?", "Should I continue?", "What is your opinion?"]
+
 CONF_DICT = {"UNDEFINED": 0.0, "USER_QUESTION_IN_BEGIN": 0.8, "ENTITY_IN_HISTORY": 0.9, "WIKI_TYPE_DOUBT": 0.9,
-             "OTHER_DFF_SKILLS": 0.9, "WIKI_TYPE": 0.94, "IN_SCENARIO": 0.95, "WIKI_TOPIC": 0.99}
+             "OTHER_DFF_SKILLS": 0.9, "WIKI_TYPE": 0.94, "IN_SCENARIO": 0.95, "SURE_WIKI_TYPE": 0.98,
+             "WIKI_TOPIC": 0.99}
 WIKI_BLACKLIST = re.compile(r"(margin|\bfont\b|wikimedia|wikitable| url )", re.IGNORECASE)
 
-transfer_from_skills = {"dff_animals_skill": {"Q16521", "Q55983715" "Q38547", "Q39367", "Q43577"},
-                        "dff_food_skill": {"Q28149961", "Q2095", "Q11004"},
-                        "dff_sport_skill": {"Q2066131", "Q937857", "Q4009406", "Q10843402", "Q10873124", "Q3665646",
-                                            "Q10833314", "Q19204627", "Q10871364", "Q20639856", "Q847017", "Q476028",
-                                            "Q4498974"},
-                        "dff_music_skill": {"Q488205", "Q36834", "Q177220", "Q753110", "Q134556", "Q7366", "Q482994"},
-                        "dff_movie_skill": {"Q11424", "Q24856", "Q10800557", "Q10798782", "Q2405480", "Q5398426",
-                                            "Q15416", "Q2526255"},
-                        "book_skill": {"Q36180", "Q49757", "Q214917", "Q6625963", "Q28389", "Q571", "Q277759", "Q8261",
-                                       "Q47461344", "Q7725634", "Q1667921"}}
+transfer_from_skills = {
+    "dff_animals_skill": {
+        "Q16521",  # taxon
+        "Q55983715",  # organisms known by a particular common name
+        "Q38547",  # dog crossbreed
+        "Q39367",  # dog breed
+        "Q43577",
+    },  # cat breed
+    "dff_food_skill": {"Q28149961", "Q2095", "Q11004"},
+    "dff_sport_skill": {
+        "Q2066131",  # athlete
+        "Q18536342",  # competitive player
+        "Q20639856",  # team
+        "Q847017",
+    },  # sports club
+    "dff_music_skill": {
+        "Q488205",  # singer-songwriter
+        "Q36834",  # composer
+        "Q177220",  # singer
+        "Q753110",  # songwriter
+        "Q134556",  # single
+        "Q7366",  # song
+        "Q482994",
+    },  # album
+    "dff_movie_skill": {"Q11424", "Q24856", "Q10800557", "Q10798782", "Q2405480", "Q5398426", "Q15416", "Q2526255"},
+    "book_skill": {
+        "Q36180",
+        "Q49757",
+        "Q214917",
+        "Q6625963",
+        "Q28389",
+        "Q571",
+        "Q277759",
+        "Q8261",
+        "Q47461344",
+        "Q7725634",
+        "Q1667921",
+    },
+}
 
 
-def find_entity_wp(annotations, bot_uttr):
+def find_entity_wp(annotations, bot_uttr, specific_types=None):
     conf_type = "UNDEFINED"
     found_entity_substr = ""
     found_entity_id = ""
@@ -217,62 +263,73 @@ def find_entity_wp(annotations, bot_uttr):
             nounphr_label_dict[nounphr_text] = nounphr_label
     bot_text = bot_uttr.get("text", "")
     bot_question = "?" in bot_text
-    prev_active_skill = bot_uttr.get("active_skill")
+    prev_active_skill = bot_uttr.get("active_skill", "")
     current_types = set()
     if bot_question and prev_active_skill and prev_active_skill in transfer_from_skills:
         current_types = transfer_from_skills[prev_active_skill]
+    cobot_topics = annotations.get("cobot_topics", {}).get("text", [])
     wp_output = annotations.get("wiki_parser", {})
     if isinstance(wp_output, dict):
-        entities_info = wp_output.get("entities_info", {})
-        for entity, triplets in entities_info.items():
-            entity_id = triplets.get("plain_entity", "")
-            types = triplets.get("types", []) + triplets.get("instance of", []) + triplets.get("subclass of", []) + \
-                triplets.get("occupation", []) + triplets.get("types_2hop", [])
-            type_ids = [elem for elem, label in types]
-            inters = set(type_ids).intersection(used_types)
-            coherent_with_prev = True
-            if current_types and not set(type_ids).intersection(current_types):
-                coherent_with_prev = False
-            in_not_used_types = set(type_ids).intersection(prohibited_types)
-            in_not_used_topics = entity.lower() in prohibited_topics or entity.lower() in blacklist_words
-            token_conf = triplets["token_conf"]
-            conf = triplets["conf"]
-            if inters and not in_not_used_topics and nounphr_label_dict.get(entity, "") != "number" \
-                    and coherent_with_prev and token_conf > 0.5 and conf > 0.2:
-                found_entity_substr = entity
-                found_entity_id = entity_id
-                found_entity_types = inters
-                found_animal = re.findall(ANIMALS_FIND_TEMPLATE, entity)
-                conf_type = "WIKI_TYPE"
-                if in_not_used_types or found_animal:
-                    conf_type = "OTHER_DFF_SKILLS"
-                break
+        all_entities_info = wp_output.get("entities_info", {})
         wiki_skill_entities_info = wp_output.get("wiki_skill_entities_info", {})
-        if wiki_skill_entities_info:
-            for entity, triplets in wiki_skill_entities_info.items():
-                if entity.lower() not in prohibited_topics and entity.lower() not in blacklist_words \
-                        and nounphr_label_dict.get(entity, "") != "number":
-                    entity_id = triplets.get("plain_entity", "")
+        topic_skill_entities_info = wp_output.get("topic_skill_entities_info", {})
+        for entities_info in [all_entities_info, wiki_skill_entities_info, topic_skill_entities_info]:
+            for entity, triplets in entities_info.items():
+                entity_id = triplets.get("plain_entity", "")
+                types = triplets.get("types", []) + triplets.get("instance of", []) + \
+                    triplets.get("subclass of", []) + triplets.get("occupation", []) + \
+                    triplets.get("types_2hop", [])
+                type_ids = [elem for elem, label in types]
+                if specific_types:
+                    inters = set(type_ids).intersection(specific_types)
+                else:
+                    inters = set(type_ids).intersection(used_types)
+                coherent_with_prev = True
+                if current_types and not set(type_ids).intersection(current_types):
+                    coherent_with_prev = False
+                in_not_used_types = set(type_ids).intersection(prohibited_types)
+                in_not_used_topics = entity.lower() in prohibited_topics or entity.lower() in blacklist_words
+                token_conf = triplets["token_conf"]
+                conf = triplets["conf"]
+                found_animal = re.findall(ANIMALS_FIND_TEMPLATE, entity)
+                in_banned_topics = found_animal or "Food_Drink" in cobot_topics
+                if inters and not in_not_used_topics and not in_banned_topics \
+                        and nounphr_label_dict.get(entity, "") != "number" \
+                        and coherent_with_prev and token_conf > 0.5 and conf > 0.2:
+                    pos = triplets.get("pos", 5)
+                    found_entity_substr = entity
+                    found_entity_id = entity_id
+                    found_entity_types = inters
+                    conf_type = "WIKI_TYPE"
+                    if token_conf > 0.9 and conf > 0.8 and pos == 0:
+                        conf_type = "SURE_WIKI_TYPE"
+                    if pos > 0:
+                        conf_type = "WIKI_TYPE_DOUBT"
+                    if in_not_used_types:
+                        conf_type = "OTHER_DFF_SKILLS"
+                    break
+            if found_entity_substr:
+                break
+
+    return found_entity_substr, found_entity_id, found_entity_types, conf_type
+
+
+def find_entity_types(query_entity, annotations):
+    type_ids = set()
+    wp_output = annotations.get("wiki_parser", {})
+    if isinstance(wp_output, dict):
+        all_entities_info = wp_output.get("entities_info", {})
+        wiki_skill_entities_info = wp_output.get("wiki_skill_entities_info", {})
+        topic_skill_entities_info = wp_output.get("topic_skill_entities_info", {})
+        for entities_info in [all_entities_info, wiki_skill_entities_info, topic_skill_entities_info]:
+            for entity, triplets in entities_info.items():
+                if entity == query_entity:
                     types = triplets.get("types", []) + triplets.get("instance of", []) + \
                         triplets.get("subclass of", []) + triplets.get("occupation", []) + \
                         triplets.get("types_2hop", [])
-                    type_ids = [elem for elem, label in types]
-                    coherent_with_prev = True
-                    if current_types and not set(type_ids).intersection(current_types):
-                        coherent_with_prev = False
-                    if coherent_with_prev:
-                        conf_type = "WIKI_TYPE"
-                        pos = triplets["pos"]
-                        if pos > 0:
-                            conf_type = "WIKI_TYPE_DOUBT"
-                        token_conf = triplets["token_conf"]
-                        conf = triplets["conf"]
-                        if token_conf > 0.5 and conf > 0.2:
-                            found_entity_substr = entity
-                            found_entity_id = entity_id
-                            found_entity_types = type_ids
-                            break
-    return found_entity_substr, found_entity_id, found_entity_types, conf_type
+                    type_ids = set([elem for elem, label in types])
+                    return type_ids
+    return type_ids
 
 
 def find_entity_nounphr(annotations):
@@ -328,15 +385,36 @@ def if_switch_wiki_skill(user_uttr, bot_uttr):
     asked_news = "news" in user_uttr["text"]
     if (found_entity_id or found_entity_substr or user_dont_know) and not asked_name and not asked_news:
         flag = True
-    cobot_topics = user_uttr_annotations.get("cobot_topics", {}).get("text", [])
-    decrease_conf_topic = "UNDEFINED"
-    if "Food_Drink" in cobot_topics:
-        decrease_conf_topic = "OTHER_DFF_SKILLS"
-    all_confs = [(conf_type, CONF_DICT[conf_type]) for conf_type in [conf_type_wp, conf_type_nounphr,
-                                                                     decrease_conf_topic]]
+    all_confs = [(conf_type, CONF_DICT[conf_type]) for conf_type in [conf_type_wp, conf_type_nounphr]]
     all_confs = sorted(all_confs, key=lambda x: x[1], reverse=True)
     wiki_skill_conf_type = all_confs[0][0]
     return flag, wiki_skill_conf_type
+
+
+def if_must_switch(user_uttr, bot_uttr):
+    flag = False
+    user_uttr_annotations = user_uttr["annotations"]
+    lets_chat = if_chat_about_particular_topic(user_uttr, bot_uttr)
+    found_entity_substr_wp, *_, conf_type_wp = find_entity_wp(user_uttr_annotations, bot_uttr)
+    found_entity_substr_nphr, conf_type_nphr = find_entity_nounphr(user_uttr_annotations)
+    if lets_chat and (found_entity_substr_wp or found_entity_substr_nphr) \
+            and (conf_type_wp == "SURE_WIKI_TYPE" or conf_type_nphr == "WIKI_TOPIC"):
+        flag = True
+    return flag
+
+
+def switch_wiki_skill_on_news(user_uttr, bot_uttr):
+    user_uttr_annotations = user_uttr["annotations"]
+    news = user_uttr_annotations["news_api_annotator"]
+    if if_chat_about_particular_topic(user_uttr, bot_uttr):
+        nounphrases = user_uttr_annotations.get("cobot_entities", {}).get("labelled_entities", [])
+        if nounphrases and news:
+            for nounphr in nounphrases:
+                for elem in news:
+                    if elem["entity"] == nounphr["text"] \
+                            and "Q5" in find_entity_types(elem["entity"], user_uttr_annotations):
+                        return True
+    return False
 
 
 def if_find_entity_in_history(dialog):
@@ -355,6 +433,66 @@ def if_find_entity_in_history(dialog):
     return flag
 
 
+def continue_after_topic_skill(dialog):
+    supported_prev_skills = ["dff_animals_skill", "dff_music_skill", "dff_sport_skill"]
+    all_user_uttr = dialog["human_utterances"]
+    all_bot_uttr = dialog["bot_utterances"]
+    all_user_uttr.reverse()
+    all_bot_uttr.reverse()
+    found_entity_substr, found_entity_id, found_page_title, found_entity_types = "", "", "", []
+    conf_type = "UNDEFINED"
+    for user_uttr, bot_uttr in zip(all_user_uttr, all_bot_uttr):
+        prev_topic_skill = bot_uttr.get("active_skill", "")
+        annotations = user_uttr["annotations"]
+        el = annotations.get("entity_linking", [])
+        specific_types = set()
+        if prev_topic_skill in supported_prev_skills:
+            specific_types = transfer_from_skills.get(prev_topic_skill, set())
+        found_entity_substr, found_entity_id, found_entity_types, conf_type = find_entity_wp(annotations, bot_uttr,
+                                                                                             specific_types)
+        if found_entity_substr and found_entity_id:
+            for entity in el:
+                if isinstance(entity, dict) and entity["entity_substr"] == found_entity_substr:
+                    entity_ids = entity["entity_ids"]
+                    pages_titles = entity["entity_pages_titles"]
+                    for entity_id, page_title in zip(entity_ids, pages_titles):
+                        if entity_id == found_entity_id:
+                            found_page_title = page_title
+                            break
+            break
+    return found_entity_substr, found_entity_id, found_entity_types, found_page_title, conf_type
+
+
+def if_linked_to_wiki_skill(annotations, skill_name):
+    flag = False
+    found_entity_substr = ""
+    found_entity_id = ""
+    found_entity_page = ""
+    wp_output = annotations.get("wiki_parser", {})
+    if isinstance(wp_output, dict):
+        entities_info = wp_output.get("entities_info", {})
+        for entity, triplets in entities_info.items():
+            types = triplets.get("types", []) + triplets.get("instance of", []) + triplets.get("subclass of", [])
+            type_ids = [elem for elem, label in types]
+            inters = set(type_ids).intersection(transfer_from_skills[skill_name])
+            if inters:
+                found_entity_substr = entity
+                found_entity_id = triplets.get("plain_entity", "")
+                break
+    el_output = annotations.get("entity_linking", {})
+    for entity in el_output:
+        if isinstance(entity, dict) and entity["entity_substr"] == found_entity_substr:
+            found_entity_ids = entity["entity_ids"]
+            found_pages_titles = entity["entity_pages_titles"]
+            for entity_id, entity_page in zip(found_entity_ids, found_pages_titles):
+                if entity_id == found_entity_id:
+                    found_entity_page = entity_page
+                    break
+    if found_entity_substr and found_entity_page:
+        flag = True
+    return flag
+
+
 def choose_title(vars, all_titles, titles_we_use, prev_title, used_titles):
     found_title = ""
     found_page_title = ""
@@ -364,14 +502,16 @@ def choose_title(vars, all_titles, titles_we_use, prev_title, used_titles):
             rand_title = random.choice(titles_we_use)
             if rand_title.lower() not in used_titles:
                 for title in all_titles:
-                    if rand_title.lower() == title.lower() and rand_title != prev_title:
+                    if rand_title.lower() == title.lower() and rand_title != prev_title \
+                            and rand_title.lower() not in blacklist_titles:
                         found_title = rand_title
                         found_page_title = title
                         found = True
                         break
                 if not found:
                     for title in all_titles:
-                        if rand_title.lower() in title.lower() and rand_title != prev_title:
+                        if rand_title.lower() in title.lower() and rand_title != prev_title \
+                                and rand_title.lower() not in blacklist_titles:
                             found_title = rand_title
                             found_page_title = title
                             found = True
@@ -382,7 +522,8 @@ def choose_title(vars, all_titles, titles_we_use, prev_title, used_titles):
         titles_we_use = set(all_titles).difference({"first_par"})
         if len(titles_we_use) > len(used_titles):
             for title in titles_we_use:
-                if title.lower() not in used_titles:
+                if title.lower() not in used_titles \
+                        and title.lower() not in blacklist_titles:
                     found_title = title.lower()
                     found_page_title = title
     return found_title, found_page_title
@@ -453,3 +594,33 @@ def delete_hyperlinks(par):
     par = re.sub(r"(<ref>|</ref>|ref name|ref|\(\)|\( \))", "", par)
     par = par.replace("  ", " ")
     return par, mentions, pages
+
+
+def preprocess_news(news):
+    news_list = []
+    for elem in news:
+        new_content_list = []
+        title = elem["title"]
+        content = elem["content"]
+        replace_elements = re.findall(r"\[([\d]+ chars)]", content)
+        for replace_elem in replace_elements:
+            content = content.replace(f"[{replace_elem}]", "")
+        content = content.replace("...", "").strip()
+        content_list = content.split("\n")
+        cur_len = 0
+        max_len = 30
+        cur_chunk = []
+        for sentence in content_list:
+            tokens = re.findall(re_tokenizer, sentence)
+            if cur_len + len(tokens) < max_len:
+                cur_chunk.append(sentence)
+                cur_len += len(tokens)
+            else:
+                new_content_list.append([' '.join(cur_chunk).strip(), False])
+                cur_chunk = [sentence]
+                cur_len = len(tokens)
+        if cur_chunk:
+            new_content_list.append([' '.join(cur_chunk).strip(), False])
+        if new_content_list:
+            news_list.append({"title": title, "content": new_content_list[:5]})
+    return news_list

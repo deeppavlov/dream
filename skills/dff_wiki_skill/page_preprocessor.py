@@ -121,3 +121,29 @@ class PagePreprocessor(Component):
             main_pages_batch.append(main_pages_list)
 
         return processed_pages_batch, main_pages_batch
+
+
+@register("whow_page_preprocessor")
+class WhowPagePreprocessor(Component):
+    def __init__(self, *args, **kwargs):
+        pass
+
+    def __call__(self, pages_batch):
+        processed_pages_batch = []
+        for pages_list in pages_batch:
+            processed_pages_list = []
+            for page in pages_list:
+                page_dict = {}
+                if page:
+                    keys_and_values = page.split("\n")
+                    keys = [keys_and_values[i] for i in range(0, len(keys_and_values), 2)]
+                    values = [keys_and_values[i] for i in range(1, len(keys_and_values), 2)]
+                    for key, value in zip(keys, values):
+                        if key == "intro":
+                            page_dict["intro"] = value
+                        else:
+                            page_dict[key] = value.split("\t")
+                processed_pages_list.append(page_dict)
+            processed_pages_batch.append(processed_pages_list)
+
+        return processed_pages_batch

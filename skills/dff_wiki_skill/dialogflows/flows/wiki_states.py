@@ -25,5 +25,8 @@ class State(Enum):
     SYS_START_TALK = auto()
     USR_START_TALK = auto()
     #
+    SYS_NEWS_STEP = auto()
+    USR_NEWS_STEP = auto()
+    #
     SYS_ERR = auto()
     USR_ERR = auto()

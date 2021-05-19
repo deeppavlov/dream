@@ -13,6 +13,7 @@ import dialogflows.scopes as scopes
 from dialogflows.flows.wild_animals_states import State as WAS
 from dialogflows.flows.animals_states import State as AnimalsState
 from common.animals import PETS_TEMPLATE, stop_about_animals
+from common.wiki_skill import if_linked_to_wiki_skill
 
 sentry_sdk.init(os.getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -42,6 +43,16 @@ def plural_nouns(text):
         sentry_sdk.capture_exception(e)
         logger.exception(e)
     return plural_text
+
+
+def activate_after_wiki_skill(vars):
+    flag = False
+    cross_link = state_utils.get_cross_link(vars, service_name="dff_animals_skill")
+    from_skill = cross_link.get("from_service", "")
+    isno = is_no(state_utils.get_last_human_utterance(vars))
+    if from_skill == "dff_wiki_skill" and isno:
+        flag = True
+    return flag
 
 
 def stop_animals_request(ngrams, vars):
@@ -110,7 +121,10 @@ def why_do_you_like_request(ngrams, vars):
     shared_memory = state_utils.get_shared_memory(vars)
     used_why = shared_memory.get("why_do_you_like", False)
     found_pet = re.findall(PETS_TEMPLATE, text)
-    if found_animal and not found_pet and not used_why and not isno:
+    if found_animal and not found_pet and not used_why and not isno \
+            and not if_linked_to_wiki_skill(annotations, "dff_animals_skill"):
+        flag = True
+    if activate_after_wiki_skill(vars):
         flag = True
     logger.info(f"why_do_you_like_request={flag}")
     return flag

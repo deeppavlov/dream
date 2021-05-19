@@ -16,6 +16,7 @@ from common.universal_templates import if_chat_about_particular_topic, if_lets_c
 from common.utils import is_yes, is_no
 from common.animals import PETS_TEMPLATE, ANIMALS_FIND_TEMPLATE, LIKE_ANIMALS_REQUESTS, WILD_ANIMALS, \
     WHAT_PETS_I_HAVE, HAVE_LIKE_PETS_TEMPLATE, HAVE_PETS_TEMPLATE, LIKE_PETS_TEMPLATE, TRIGGER_PHRASES, DONT_LIKE
+from common.wiki_skill import if_linked_to_wiki_skill
 from common.animals import stop_about_animals
 
 import dialogflows.scopes as scopes
@@ -36,6 +37,25 @@ CONF_1 = 1.0
 CONF_2 = 0.98
 CONF_3 = 0.95
 CONF_4 = 0.9
+
+
+def if_link_from_wiki_skill(vars):
+    flag = False
+    cross_link = state_utils.get_cross_link(vars, service_name="dff_animals_skill")
+    from_skill = cross_link.get("from_service", "")
+    if from_skill == "dff_wiki_skill":
+        flag = True
+    return flag
+
+
+def activate_after_wiki_skill(vars):
+    flag = False
+    cross_link = state_utils.get_cross_link(vars, service_name="dff_animals_skill")
+    from_skill = cross_link.get("from_service", "")
+    isno = is_no(state_utils.get_last_human_utterance(vars))
+    if from_skill == "dff_wiki_skill" and isno:
+        flag = True
+    return flag
 
 
 def is_last_state(vars, state):
@@ -162,7 +182,7 @@ def mention_animals_request(ngrams, vars):
             if "animal" in objects and not started:
                 flag = True
     dont_like = re.findall(DONT_LIKE, text)
-    if dont_like:
+    if dont_like or if_link_from_wiki_skill(vars):
         flag = False
     logger.info(f"mention_animals_request={flag}")
     return flag
@@ -214,12 +234,23 @@ def sys_have_pets_request(ngrams, vars):
 
 def is_wild_request(ngrams, vars):
     flag = False
-    text = state_utils.get_last_human_utterance(vars)["text"]
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    text = user_uttr["text"]
+    annotations = user_uttr["annotations"]
     shared_memory = state_utils.get_shared_memory(vars)
     used_is_wild = shared_memory.get("is_wild", False)
-    if not re.search(PETS_TEMPLATE, text) and not used_is_wild:
+    if not re.search(PETS_TEMPLATE, text) and not used_is_wild \
+            and not if_linked_to_wiki_skill(annotations, "dff_animals_skill"):
         flag = True
     logger.info(f"is_wild_request={flag}")
+    return flag
+
+
+def restore_request(ngrams, vars):
+    flag = False
+    if activate_after_wiki_skill(vars):
+        flag = True
+    logger.info(f"restore_request={flag}")
     return flag
 
 
@@ -273,7 +304,7 @@ def user_has_not_pets_request(ngrams, vars):
 def user_likes_request(ngrams, vars):
     flag = False
     isno = is_no(state_utils.get_last_human_utterance(vars))
-    if not isno:
+    if not isno or if_link_from_wiki_skill(vars):
         flag = True
     logger.info(f"user_likes_request={flag}")
     return flag
@@ -315,7 +346,7 @@ def what_wild_request(ngrams, vars):
     if dont_like or is_wild or what_wild or user_asks_about_pets \
             or (not lets_talk_about_request(vars) and not started) and not is_last_state(vars, "SYS_WHAT_ANIMALS"):
         flag = False
-    if if_lets_chat(text) and not lets_talk_about_request(vars):
+    if if_lets_chat(text) and not lets_talk_about_request(vars) or if_link_from_wiki_skill(vars):
         flag = False
     logger.info(f"what_wild_request={flag}")
     return flag
@@ -343,6 +374,7 @@ def what_animals_response(vars):
     make_my_pets_info(vars, rnd=False)
     what_i_like = random.choice(WILD_ANIMALS)
     response = f"{what_i_like} What animals do you like?"
+    state_utils.set_cross_link(vars, to_service_name="dff_wiki_skill", from_service_name="dff_animals_skill")
     state_utils.save_to_shared_memory(vars, start=True)
     state_utils.save_to_shared_memory(vars, what_animals=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
@@ -438,6 +470,7 @@ simplified_dialog_flow = dialogflow_extention.DFEasyFilling(AS.USR_START)
 simplified_dialog_flow.add_user_serial_transitions(
     AS.USR_START,
     {
+        (scopes.WILD_ANIMALS, WildAnimalsState.USR_START): restore_request,
         (scopes.USER_PETS, UserPetsState.USR_START): user_mentioned_his_pet_request,
         AS.SYS_WHAT_ANIMALS: sys_what_animals_request,
         AS.SYS_Q_HAVE_PETS: sys_have_pets_request,

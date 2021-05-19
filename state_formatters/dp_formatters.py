@@ -704,9 +704,10 @@ def dff_bot_persona_skill_formatter(dialog: Dict) -> List[Dict]:
 
 def dff_wiki_skill_formatter(dialog: Dict) -> List[Dict]:
     service_name = f"dff_wiki_skill"
-    return utils.dff_formatter(dialog, service_name, human_last_turns=5,
+    return utils.dff_formatter(dialog, service_name, human_last_turns=5, bot_last_turns=5,
                                used_annotations=["cobot_entities", "cobot_nounphrases", "entity_linking",
-                                                 "factoid_classification", "wiki_parser", "cobot_topics"])
+                                                 "factoid_classification", "wiki_parser", "cobot_topics",
+                                                 "news_api_annotator"])
 
 
 def game_cooperative_skill_formatter(dialog: Dict):
