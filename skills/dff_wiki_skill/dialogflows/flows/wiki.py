@@ -386,7 +386,7 @@ def news_step_response(vars):
     if not started_news and found_entity_substr and curr_page:
         state_utils.save_to_shared_memory(vars, found_entity_substr=[found_entity_substr])
         state_utils.save_to_shared_memory(vars, curr_pages=[curr_page])
-        state_utils.save_to_shared_memory(vars, found_entity_types=[found_entity_types])
+        state_utils.save_to_shared_memory(vars, found_entity_types=[list(found_entity_types)])
     user_uttr = state_utils.get_last_human_utterance(vars)
     annotations = user_uttr["annotations"]
     nounphrases = annotations.get("cobot_entities", {}).get("labelled_entities", [])
@@ -733,7 +733,7 @@ def start_talk_response(vars):
     found_entity_substr, found_entity_id, found_entity_types, found_page_title, _ = continue_after_topic_skill(dialog)
     page_content, _ = get_page_content(found_page_title)
     found_entity_substr_list = [found_entity_substr]
-    found_entity_types_list = [found_entity_types]
+    found_entity_types_list = [list(found_entity_types)]
     curr_pages = [found_page_title]
     chosen_title, chosen_page_title = get_title_info(found_entity_substr, found_entity_types, "", [], page_content)
     titles_q, titles_we_use, all_titles = get_titles(found_entity_substr, found_entity_types, page_content)
