@@ -162,10 +162,6 @@ services:
     image: ${DOCKER_REGISTRY}/news-api-annotator:${VERSION}
     env_file:
       - ${ENV_FILE}
-  greeting-skill:
-    image: ${DOCKER_REGISTRY}/greeting-skill:${VERSION}
-    env_file:
-      - ${ENV_FILE}
   spelling-preprocessing:
     image: ${DOCKER_REGISTRY}/spelling-preprocessing:${VERSION}
     env_file:

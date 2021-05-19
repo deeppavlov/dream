@@ -263,14 +263,6 @@ services:
     environment:
       - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/news-api-annotator
       - PORT=8112
-  greeting-skill:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/greeting-skill
-      - PORT=8070
   factoid-qa:
     command: ["nginx", "-g", "daemon off;"]
     build:

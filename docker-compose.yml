@@ -12,7 +12,7 @@ services:
         convert-reddit:8029, personal-info-skill:8030, asr:8031, misheard-asr:8033, weather-skill:8037,
         eliza:8047, emotion-skill:8049, dummy-skill-dialog:8052, comet-atomic:8053, meta-script-skill:8054,
         coronavirus-skill:8061, small-talk-skill:8062, game-cooperative-skill:8068, program-y-wide:8064,
-        comet-conceptnet:8065, news-api-skill:8066, short-story-skill:8057, greeting-skill:8070, factoid-qa:8071, kbqa:8072,
+        comet-conceptnet:8065, news-api-skill:8066, short-story-skill:8057, factoid-qa:8071, kbqa:8072,
         factoid-classification:8073, spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, text-qa:8078,
         knowledge-grounding:8083, combined-classification:8087, knowledge-grounding-skill:8085,
         dff-friendship-skill:8086, masked-lm:8088, entity-storer:8089, wikidata-dial-skill:8091, wikidata-dial-service:8092,
@@ -601,22 +601,6 @@ services:
           memory: 256M
         reservations:
           memory: 256M
-
-  greeting-skill:
-    build:
-      context: .
-      dockerfile: ./skills/greeting_skill/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8070
-    environment:
-      - FLASK_APP=server
-    deploy:
-      mode: replicated
-      replicas: 2
-      resources:
-        limits:
-          memory: 50M
-        reservations:
-          memory: 50M
 
   factoid-qa:
     build:
