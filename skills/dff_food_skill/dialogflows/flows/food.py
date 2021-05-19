@@ -15,7 +15,7 @@ import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_exten
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 import dialogflows.scopes as scopes
-from common.universal_templates import if_chat_about_particular_topic, DONOTKNOW_LIKE
+from common.universal_templates import if_chat_about_particular_topic, DONOTKNOW_LIKE, COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.utils import is_yes, is_no, get_entities, join_words_in_or_pattern
 from common.food import TRIGGER_PHRASES, FOOD_WORDS, WHAT_COOK, FOOD_UTTERANCES_RE, CUISINE_UTTERANCES_RE, \
@@ -145,6 +145,13 @@ def no_request(ngrams, vars):
     return flag
 
 
+def dont_want_talk(vars):
+    utt = state_utils.get_last_human_utterance(vars)["text"]
+    flag = bool(re.search(COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, utt))
+    logger.info(f"dont_want_talk {flag}")
+    return flag
+
+
 ##################################################################################################################
 # error
 ##################################################################################################################
@@ -206,7 +213,9 @@ def lets_talk_about_check(vars):
     #     flag = ""
     #     logger.info(f"lets_talk_about_check {flag}, weather detected")
     #     return flag
-    if if_chat_about_particular_topic(human_utt, bot_utt, compiled_pattern=FOOD_WORDS_RE):
+    if dont_want_talk(vars):
+        flag = ""
+    elif if_chat_about_particular_topic(human_utt, bot_utt, compiled_pattern=FOOD_WORDS_RE):
         flag = "if_chat_about_particular_topic"
     elif re.search(FOOD_WORDS_RE, human_utt["text"]):
         flag = "FOOD_WORDS_RE"
@@ -273,7 +282,12 @@ def cuisine_request(ngrams, vars):
     spacy_utt = spacy_nlp(utt)
     utt_adj = any([w.pos_ == 'ADJ' for w in spacy_utt])
     all_words = any([i in utt for i in ["all", "many", "multiple"]])
-    flag = any([utt_adj, check_conceptnet(vars)[0], all_words]) and (not re.search(NO_WORDS_RE, utt))
+    flag = any([utt_adj, check_conceptnet(vars)[0], all_words]) and (not any(
+        [
+            re.search(NO_WORDS_RE, utt),
+            dont_want_talk(vars)
+        ]
+    ))
     logger.info(f"cuisine_request {flag}")
     return flag
 
@@ -328,6 +342,10 @@ def country_response(vars):
                 state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
                 state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
                 return f"Have you been in {CUISINES_COUNTRIES[cuisine_discussed]}?"
+            else:
+                state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
+                state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+                return "Where are you from?"
         else:
             state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
             state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
@@ -341,12 +359,53 @@ def country_response(vars):
 
 def what_fav_food_response(vars):
     food_types = {
-        "food": "lava cake",
-        "drink": "orange juice",
-        "fruit": "mango",
-        "dessert": "profiteroles",
-        "vegetable": "broccoli",
-        "berry": "blueberry"
+        "food": [
+            "lava cake",
+            "This cake is delicious, decadent, addicting, divine, just so incredibly good!!!"
+            " Soft warm chocolate cake outside giving way to a creamy, smooth stream of warm "
+            "liquid chocolate inside, ensuring every forkful is bathed in velvety chocolate. "
+            "It is my love at first bite."
+        ],
+        "drink": [
+            "orange juice",
+            "Isually I drink it at breakfast - it’s sweet with natural sugar for quick energy."
+            " Oranges have lots of vitamins and if you drink it with pulp, it has fiber. Also,"
+            " oranges are rich in vitamin C that keeps your immune system healthy."
+        ],
+        "fruit": [
+            "mango",
+            "Every year I wait for the summers so that I can lose myself in the aroma of perfectly"
+            " ripened mangoes and devour its heavenly sweet taste. Some people prefer mangoes which"
+            " are tangy and sour. However, I prefer sweet ones that taste like honey."
+        ],
+        "dessert": [
+            "profiteroles",
+            "Cream puffs of the size of a hamburger on steroids, the two pate a choux ends"
+            " showcased almost two cups of whipped cream - light, fluffy, and fresh. "
+            "There is nothing better than choux pastry!"
+        ],
+        "vegetable": [
+            "broccoli",
+            "This hearty and tasty vegetable is rich in dozens of nutrients. It is said "
+            "to pack the most nutritional punch of any vegetable. When I think about green"
+            " vegetables to include in my diet, broccoli is one of the foremost veggies to "
+            "come to my mind."
+        ],
+        "berry": [
+            "blueberry",
+            "Fresh blueberries are delightful and have a slightly sweet taste that is mixed"
+            " with a little bit of acid from the berry. When I bite down on a blueberry,"
+            " I enjoy a burst of juice as the berry pops, and this juice is very sweet. "
+            "Blueberries are the blues that make you feel good!"
+        ],
+        "snack": [
+            "peanut butter",
+            "It tastes great! Creamy, crunchy or beyond the jar, there is a special place "
+            "among my taste receptors for that signature peanutty flavor. I always gravitate"
+            " toward foods like peanut butter chocolate cheesecake, and peanut butter cottage"
+            " cookies. There are so many peanut butter flavored items for all kinds of food products!"
+            " Still, sometimes it’s best delivered on a spoon."
+        ]
     }
     user_utt = state_utils.get_last_human_utterance(vars)
     shared_memory = state_utils.get_shared_memory(vars)
@@ -406,11 +465,16 @@ def what_fav_food_response(vars):
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
 
         state_utils.save_to_shared_memory(vars, used_food=used_food + [food_type])
-        fav_item = food_types.get(food_type, "peanut butter")
-        if food_type != "drink":
-            return f"I like to eat {fav_item}. What is your favorite {food_type}?"
+        fav_item = food_types.get(food_type, [])
+        if fav_item:
+            if food_type != "drink":
+                return f"I like to eat {fav_item[0]}. {fav_item[1]} What is your favorite {food_type}?"
+            else:
+                return f"I like to drink {fav_item[0]}. {fav_item[1]} What is your favorite {food_type}?"
         else:
-            return f"I like to drink {fav_item}. What is your favorite {food_type}?"
+            state_utils.set_confidence(vars, 0)
+            state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+            return error_response(vars)
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -427,7 +491,8 @@ def fav_food_request(ngrams, vars):
         [
             any([user_fav_food, check_conceptnet(vars), food_words_search]),
             condition_utils.no_requests(vars),
-            not re.search(NO_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"])
+            not re.search(NO_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"]),
+            not dont_want_talk(vars)
         ]
     ):
         flag = True
@@ -446,10 +511,10 @@ def food_fact_response(vars):
     bot_utt_text = state_utils.get_last_bot_utterance(vars)["text"].lower()
 
     fact = ""
+    entity = ""
     berry_name = ""
-    intro = "Did you know that "
+    facts = annotations.get("cobotqa_annotator", {}).get("facts", [])
     if "berry" in bot_utt_text:
-        intro = ""
         berry_names = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
         if berry_names:
             berry_name = berry_names[0]
@@ -457,30 +522,38 @@ def food_fact_response(vars):
         if all(["berry" not in human_utt_text, len(human_utt_text.split()) == 1, berry_name]):
             berry_name += "berry"
             fact = send_cobotqa(f"fact about {berry_name}")
+            entity = berry_name
         elif berry_name:
-            fact = send_cobotqa(f"fact about {berry_name}")
+            if facts:
+                fact = facts[0].get("fact", "")
+                entity = facts[0].get("entity", "")
     else:
-        facts = annotations.get("fact_retrieval", [])
-        if facts and len(facts) > 2:
-            fact = facts[2]
+        if facts:
+            fact = facts[0].get("fact", "")
+            entity = facts[0].get("entity", "")
     try:
         state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
         if re.search(DONOTKNOW_LIKE_RE, human_utt_text):
             state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
             state_utils.set_confidence(vars, confidence=0.)
             return error_response(vars)
-        # "I have never heard about it. Could you tell me more about that please."
         elif (not fact) and check_conceptnet(vars):
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
-            endings = ["Do you recommend", "Why do you like it"]
-            return f"I haven't heard about it. {random.choice(endings)}?"
+            return f"Why do you like it?"
         elif not fact:
             state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
             state_utils.set_confidence(vars, confidence=0.)
             return error_response(vars)
-        else:
+        elif (fact and entity):
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
-            return f"{random.choice(acknowledgements)} {intro}{fact}"
+            return f"{entity}. {random.choice(acknowledgements)} {fact}"
+        elif fact:
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+            return f"Okay. {fact}"
+        else:
+            state_utils.set_confidence(vars, 0)
+            state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+            return error_response(vars)
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -564,7 +637,7 @@ def gourmet_response(vars):
 
 
 def smth_request(ngrams, vars):
-    flag = condition_utils.no_requests(vars)
+    flag = condition_utils.no_requests(vars) and (not dont_want_talk(vars))
     logger.info(f"smth_request {flag}")
     return flag
 
@@ -619,8 +692,9 @@ def what_fav_food_request(ngrams, vars):
     # or linkto_food_skill_agreed
     if any(
         [
-            not (bool(food_topic_checked)),
-            food_topic_checked == "CUISINE_UTTERANCES_RE"
+            not bool(food_topic_checked),
+            food_topic_checked == "CUISINE_UTTERANCES_RE",
+            dont_want_talk(vars)
         ]
     ):
         flag = False
@@ -666,7 +740,9 @@ def said_fav_food_request(ngrams, vars):
             check_conceptnet(vars)[0]
         ]
     )
-    if (fav_in_bot_utt and food_checked):
+    if dont_want_talk(vars):
+        flag = False
+    elif (fav_in_bot_utt and food_checked):
         flag = True
     logger.info(f"said_fav_food_request {flag}")
     return flag
@@ -697,7 +773,7 @@ def what_cuisine_request(ngrams, vars):
             not is_no(state_utils.get_last_human_utterance(vars))
         ]
     )
-    flag = bool(lets_talk_about_check(vars)) or linkto_food_skill_agreed
+    flag = (bool(lets_talk_about_check(vars)) or linkto_food_skill_agreed) and (not dont_want_talk(vars))
     logger.info(f"what_cuisine_request {flag}")
     return flag
 
