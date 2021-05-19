@@ -85,6 +85,7 @@ SOMETHING_LIKE = ["anything", "something", "that", "everything"]
 NOTHING_LIKE = ["nothing", "none", "neither"]
 DONOTKNOW_LIKE = [r"(i )?(do not|don't) know", "you (choose|decide|pick up)", "hard (to say|one)", "none"]
 KNOW_LIKE = ["know", "learn", "find out"]
+LIKE_TEMPLATE = ["like", "love", "prefer"]
 
 # talk to me, talk with me, talk, talk with me now, talk now.
 TALK_TO_ME = join_words_in_or_pattern(TALK_LIKE) + r"(\s" + join_words_in_or_pattern(TO_ME_LIKE) + r")?"
@@ -109,6 +110,7 @@ COMPILE_NOT_WANT_TO_TALK_ABOUT_IT = re.compile(join_sentences_in_or_pattern(
     [
         r"(not|n't|\bno\b) " + join_words_in_or_pattern(WANT_LIKE),
         r"(not|n't|\bno\b) " + join_words_in_or_pattern(TALK_LIKE),
+        r"(not|n't|\bno\b) " + join_words_in_or_pattern(LIKE_TEMPLATE),
     ]),
     re.IGNORECASE)
 
