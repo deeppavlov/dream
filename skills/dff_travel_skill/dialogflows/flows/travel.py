@@ -336,7 +336,7 @@ def have_bot_been_in_request(ngrams, vars):
     return False
 
 
-def collect_facts_about_location(location):
+def collect_facts_about_location(vars, location):
     facts = []
     if location.lower() in TRAVEL_FACTS:
         facts = TRAVEL_FACTS[location.lower()]
@@ -357,7 +357,7 @@ def have_bot_been_in_response(vars):
     else:
         location = "there"
 
-    facts = collect_facts_about_location(location)
+    facts = collect_facts_about_location(vars, location)
     responses = [f"I've been {location} just virtually because physically I live in the cloud. Have you been there?",
                  f"I've been {location} via pictures and videos. Have you been there?",
                  ]
