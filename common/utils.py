@@ -342,7 +342,7 @@ def get_outputs_with_response_from_dialog(utterances, response, activated=False)
 
 def get_not_used_template(used_templates, all_templates):
     """
-    Chooce not used template among all templates
+    Choose not used template among all templates
 
     Args:
         used_templates: list of templates already used in the dialog
@@ -356,6 +356,21 @@ def get_not_used_template(used_templates, all_templates):
         return choice(available)
     else:
         return choice(all_templates)
+
+
+def get_all_not_used_templates(used_templates, all_templates):
+    """
+    Return all not used template among all templates
+
+    Args:
+        used_templates: list of templates already used in the dialog
+        all_templates: list of all available templates
+
+    Returns:
+        string template
+    """
+    available = list(set(all_templates).difference(set(used_templates)))
+    return available
 
 
 def _probs_to_labels(answer_probs, max_proba=True, threshold=0.5):
@@ -774,6 +789,9 @@ def get_named_locations(annotated_utterance):
                     named_locations.append(ent["text"])
 
     named_locations = list(set(named_locations))
+    if re.search(r"\bjapan\b", annotated_utterance["text"], re.IGNORECASE) and "japan" not in named_locations:
+        # NER does not catch this country at all!
+        named_locations.append("japan")
 
     return named_locations
 
