@@ -15,7 +15,7 @@ import sentry_sdk
 from word2number.w2n import word_to_num
 
 from common.coronavirus import CORONA_SWITCH_BEGIN, corona_switch_skill_reply, is_staying_home_requested, \
-    check_about_death, about_virus, quarantine_end
+    check_about_death, about_virus, quarantine_end, vaccine_safety_request
 from common.link import link_to
 from common.utils import is_yes, is_no, get_emotions
 from common.universal_templates import book_movie_music_found, if_chat_about_particular_topic, is_switch_topic
@@ -48,18 +48,21 @@ for county_name in COUNTIES:
     for city_name in COUNTIES[county_name][1:]:
         CITIES[city_name.lower()].append((county_name, COUNTIES[county_name][0]))
 STATE_DATA, COUNTY_DATA, NATION_DATA = None, None, None
-FACT_LIST = ['The origin of coronavirus, Wuhan, has fully canceled the quarantine.',
-             'Only two dogs and two cats on the Earth have ever been diagnosed with coronavirus. '
+FACT_LIST = ['Only two dogs and two cats on the Earth have ever been diagnosed with coronavirus. '
              'Moreover, even dogs and cats who have coronavirus cannot transmit coronavirus to the human.',
-             'The coronavirus vaccines ale already being tested in several countries. '
-             'The vaccine is going to be available this year, so coronavirus will disappear one day.',
+             'Wearing face masks reduces your infection chance by 65%.',
              'Someone who has completed quarantine or has been released from isolation '
              'does not pose a risk of coronavirus infection to other people. '
              'Can you tell me what people love doing  when people are self-isolating?']
 #  NOTE!!!! YOU SHOULD CHECK THAT FACTS ARE NOT BEING CHANGED BY SENTREWRITE!
 #  FORMULATE FACTS IN THIS WAY THAT THEY ARE NOT CHANGED!!! OTHERWISE THERE WILL BE BUG!!!!
+VACCINE_SAFETY_PHRASE = "All CDC-approved vaccines are safe enough for you - " \
+                        "of course, if your doctor does not mind against using them." \
+                        "I can't say the same about getting infected, however, " \
+                        "so vaccines are necessary to prevent people from that.."
+
 QUARANTINE_END_PHRASE = ("Although most American states are easing the restrictions, "
-                         "the Coronavirus peak in the majority of the states hasn't been reached yet. "
+                         "the Coronavirus pandemics in the majority of the states hasn't been reached yet. "
                          "If you want to help ending it faster, please continue social distancing as much as you can. ")
 ORIGIN_PHRASE = 'According to the scientific data, coronavirus COVID 19 is a product of natural evolution. ' \
                 'The first place where it caused an outbreak is the city of Wuhan, China.'
@@ -485,6 +488,8 @@ class CoronavirusSkillScenario:
                 elif asked_have(last_utterance):
                     reply, confidence = BOT_CORONAVIRUS_PHRASE, 0.95
                     reply = improve_phrase(reply)
+                elif vaccine_safety_request(last_utterance):
+                    reply, confidence = VACCINE_SAFETY_PHRASE, 0.95
                 elif emotion_detected(last_utterance, 'fear') or emotion_detected(last_utterance, 'anger'):
                     r = random()
                     if r < 0.5:
