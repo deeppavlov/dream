@@ -12,7 +12,7 @@ from common.link import skills_phrases_map
 from common.constants import CAN_CONTINUE_PROMPT, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.universal_templates import if_chat_about_particular_topic, is_switch_topic, \
     is_any_question_sentence_in_utterance
-from common.utils import get_intent_name, get_intents, get_topics, get_common_tokens_in_lists_of_strings, get_entities
+from common.utils import get_intent_name, get_intents, get_topics, get_entities
 from utils import calculate_single_convers_evaluator_score, CONV_EVAL_STRENGTH, CONFIDENCE_STRENGTH, \
     how_are_you_spec, what_i_can_do_spec, greeting_spec, misheard_with_spec1, \
     misheard_with_spec2, alexa_abilities_spec, join_used_links_in_attributes, get_updated_disliked_skills
@@ -319,13 +319,11 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             # add `prompt` to response_parts if any linkto phrase in hypothesis
             cand_uttr["response_parts"] = cand_uttr.get("response_parts", []) + ["prompt"]
 
-        _same_topics = set(all_cand_topics).intersection(set(all_user_topics))
-        _same_topics = len(_same_topics) > 0 and len(_same_topics.difference(set(GENERAL_TOPICS))) > 0
-        _same_named_entities = len(get_common_tokens_in_lists_of_strings(all_cand_named_entities,
-                                                                         all_user_named_entities)) > 0
-        _same_nounphrases = len(get_common_tokens_in_lists_of_strings(all_cand_nounphrases,
-                                                                      all_user_nounphrases)) > 0
-        _same_topic_entity = _same_topics or _same_named_entities or _same_nounphrases
+        # _same_named_entities = len(get_common_tokens_in_lists_of_strings(all_cand_named_entities,
+        #                                                                  all_user_named_entities)) > 0
+        # _same_nounphrases = len(get_common_tokens_in_lists_of_strings(all_cand_nounphrases,
+        #                                                               all_user_nounphrases)) > 0
+        _same_topic_entity = False
 
         if cand_uttr["skill_name"] == 'program_y' and cand_uttr['confidence'] == 0.98 and \
                 len(cand_uttr["text"].split()) > 6:
