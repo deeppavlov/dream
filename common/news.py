@@ -60,7 +60,8 @@ def was_offer_news_about_topic(uttr: str):
     return False
 
 
-def get_news_about_topic(topic: str, NEWS_API_ANNOTATOR_URL: str, discussed_news=None, return_list_of_news=False):
+def get_news_about_topic(topic: str, NEWS_API_ANNOTATOR_URL: str, discussed_news=None, return_list_of_news=False,
+                         timeout_value=1.0):
     """
     Function to get news output from news-api-skill.
     ```
@@ -119,7 +120,7 @@ def get_news_about_topic(topic: str, NEWS_API_ANNOTATOR_URL: str, discussed_news
         "return_list_of_news": return_list_of_news
     }
     try:
-        result = requests.post(NEWS_API_ANNOTATOR_URL, json=dialogs, timeout=1)
+        result = requests.post(NEWS_API_ANNOTATOR_URL, json=dialogs, timeout=timeout_value)
         result = result.json()[0]
         for entity_news_dict in result:
             if entity_news_dict and str(entity_news_dict["entity"]).lower() == topic.lower():

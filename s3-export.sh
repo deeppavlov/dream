@@ -60,6 +60,8 @@ files=(
   datasets/wikipedia/enwiki_latest_hyperlinks.db
   kbqa/wikidata/wikihow.pickle
   kbqa/wikidata/breed_facts.json
+  kbqa/wikidata/wikihow.db
+  kbqa/wikidata/wikihow_topics.json
 )
 
 for file in ${files[@]}; do
