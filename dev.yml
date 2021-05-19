@@ -247,13 +247,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8112:8112
-  greeting-skill:
-    env_file: [.env.dev]
-    volumes:
-      - "./common:/src/common"
-      - "./skills/greeting_skill:/src"
-    ports:
-      - 8070:8070
   factoid-qa:
     env_file: [.env.dev]
     volumes:

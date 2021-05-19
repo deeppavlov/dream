@@ -12,7 +12,7 @@ services:
         convert-reddit:8029, personal-info-skill:8030, asr:8031, book-skill:8032, misheard-asr:8033,
         christmas-new-year-skill:8036, weather-skill:8037, emotion-classification:8038, alice:8000,
         eliza:8047, emotion-skill:8049, dummy-skill-dialog:8052, comet-atomic:8053, meta-script-skill:8054, oscar-skill:8055,
-        small-talk-skill:8062, program-y-wide:8064, comet-conceptnet:8065, greeting-skill:8070, combined-classification:8087"
+        small-talk-skill:8062, program-y-wide:8064, comet-conceptnet:8065, combined-classification:8087"
       WAIT_HOSTS_TIMEOUT: 480
     env_file:
       - ${ENV_FILE}
