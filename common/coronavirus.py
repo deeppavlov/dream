@@ -15,6 +15,15 @@ def skill_trigger_phrases():
     return [REMOTE_WORK_CORONAVIRUS_PHRASE, STAY_HOME_CORONAVIRUS_PHRASE]
 
 
+VACCINE_TEMPLATE = re.compile(r'(vaccine|vaccination)', re.IGNORECASE)
+SAFETY_TEMPLATE = re.compile(r'(should i|safe)', re.IGNORECASE)
+
+
+def vaccine_safety_request(user_utt):
+    user_utt_text = user_utt.get('text', '')
+    return re.search(VACCINE_TEMPLATE, user_utt_text) and re.search(SAFETY_TEMPLATE, user_utt_text)
+
+
 def corona_skill_was_proposed(prev_bot_utt):
     return REMOTE_WORK_CORONAVIRUS_PHRASE.lower() in prev_bot_utt.get('text', '').lower()
 
