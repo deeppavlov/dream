@@ -147,7 +147,7 @@ def no_request(ngrams, vars):
 
 def no_requests_request(ngrams, vars):
     # SYS_NO_DIALOG_BREAKDOWN_AND_NO_QUESTIONS_REQUEST
-    flag = condition_utils.no_requests(vars)
+    flag = condition_utils.no_special_switch_off_requests(vars)
 
     if flag:
         logger.info(f"No dialog breakdown or request intents in user utterances")
