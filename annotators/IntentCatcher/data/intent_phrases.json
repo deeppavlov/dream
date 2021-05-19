@@ -206,6 +206,8 @@
             "reg_phrases": [
                 "you bet(\\!|\\.)",
                 "^kind of(\\!|\\.)?$",
+                "^sort of(\\!|\\.)?$",
+                "^maybe(\\!|\\.)?$",
                 "i do like"
             ],
             "min_precision": 0.0,
