@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import re
 import time
 from os import getenv
 from typing import Dict, Callable
@@ -15,6 +16,7 @@ from common.universal_templates import if_chat_about_particular_topic, if_choose
 from common.utils import high_priority_intents, low_priority_intents, get_topics, get_intents, get_named_locations
 from common.weather import if_special_weather_turn_on
 from common.wiki_skill import if_switch_wiki_skill, switch_wiki_skill_on_news
+from common.response_selection import UNPREDICTABLE_SKILLS
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -62,6 +64,13 @@ class RuleBasedSkillSelectorConnector:
                 not_detected = {"detected": 0, "confidence": 0.0}
                 dialog["human_utterances"][-1]["annotations"]["intent_catcher"]["exit"] = not_detected
                 dialog["utterances"][-1]["annotations"]["intent_catcher"]["exit"] = not_detected
+            if "repeat" in intent_catcher_intents and prev_active_skill in UNPREDICTABLE_SKILLS and re.match(
+                    r"^what.?$", user_uttr_text):
+                # grounding skill will respond after UNPREDICTABLE_SKILLS on user request "what?"
+                high_priority_intent_detected = False
+                not_detected = {"detected": 0, "confidence": 0.0}
+                dialog["human_utterances"][-1]["annotations"]["intent_catcher"]["repeat"] = not_detected
+                dialog["utterances"][-1]["annotations"]["intent_catcher"]["repeat"] = not_detected
 
             if "/new_persona" in user_uttr_text:
                 # process /new_persona command

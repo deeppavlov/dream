@@ -13,6 +13,9 @@ ACTIVE_SKILLS = [
 ALMOST_ACTIVE_SKILLS = [
     "friendship_skill", "dff_friendship_skill", "knowledge_grounding_skill",
 ]
+UNPREDICTABLE_SKILLS = [
+    "convert_reddit", "knowledge_grounding_skill",
+]
 CAN_NOT_BE_DISLIKED_SKILLS = ["meta_script_skill", "personal_info_skill"]
 NOT_ADD_PROMPT_SKILLS = ["alexa_handler", "intent_responder", "misheard_asr", "program_y_dangerous"]
 
