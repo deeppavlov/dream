@@ -127,3 +127,8 @@ WHY_BOT_LIKES_TO_TRAVEL = [
     "I think that our modern life is impossible without travelling. People get tired of their daily routine, "
     "they need to change the surroundings. Therefore, travelling is an amazing opportunity."
 ]
+
+HAVE_YOU_BEEN_IN_PHRASES = [
+    "I've been LOCATION just virtually because physically I live in the cloud. Have you been there?",
+    "I've been LOCATION via pictures and videos. Have you been there?",
+]

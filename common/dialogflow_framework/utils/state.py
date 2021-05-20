@@ -184,7 +184,7 @@ def get_fact_for_particular_entity_from_human_utterance(vars, entity):
     cobotqa_annotations = get_cobotqa_annotations_from_human_utterance(vars)
     facts_for_entity = []
     for fact in cobotqa_annotations["facts"]:
-        if fact.get("entity", "") == entity:
+        if fact.get("entity", "").lower() == entity.lower():
             facts_for_entity += [fact["fact"]]
 
     return facts_for_entity
