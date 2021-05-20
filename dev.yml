@@ -481,4 +481,11 @@ services:
       - "./annotators/topic_recommendation:/src"
     ports:
       - 8113:8113
+  user-persona-extractor:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/user_persona_extractor:/src"
+      - "./common:/src/common"
+    ports:
+      - 8114:8114
 version: "3.7"

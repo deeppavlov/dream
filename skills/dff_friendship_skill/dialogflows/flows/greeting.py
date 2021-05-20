@@ -10,7 +10,6 @@ import requests
 import sentry_sdk
 
 from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
-from common.sensitive import is_sensitive_situation
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
@@ -254,21 +253,17 @@ def hello_response(vars):
 # bot asks: how do you spend your free time
 ##################################################################################################################
 def what_do_you_do_request(ngrams, vars):
-    utt = state_utils.get_last_human_utterance(vars)
-    utt_text = utt["text"]
     shared_memory = state_utils.get_shared_memory(vars)
     greeting_type = shared_memory.get("greeting_type", "")
     flag = condition_utils.no_requests(vars) and (greeting_type == "what_do_you_do")
+    age_group = state_utils.get_age_group(vars)
 
-    if re.search(common_greeting.KIDS_WORDS_RE, utt_text):
+    if age_group == "kid":
         flag = flag and False
-        state_utils.set_age_group(vars, "kid")
-    elif (re.search(common_greeting.ADULTS_WORDS_RE, utt_text) or is_sensitive_situation(vars["agent"]["dialog"])):
+    elif age_group == "adult":
         flag = flag and False
-        state_utils.set_age_group(vars, "adult")
     else:
         flag = flag and (not shared_memory.get("free_time", False))
-        state_utils.set_age_group(vars, "unknown")
     return flag
 
 

@@ -20,7 +20,7 @@ services:
         dff-animals-skill:8094, dff-travel-skill:8096, dff-food-skill:8097, dff-sport-skill:8098,
         midas-classification:8090, dff-celebrity-skill:8093, fact-retrieval:8100, cobot-entities:8102,
         dff-funfact-skill:8104, dff-bot-persona-skill:8105, cobotqa-annotator:8106, news-api-annotator:8112,
-        dff-gossip-skill:8109, dff-wiki-skill:8111, topic-recommendation:8113"
+        dff-gossip-skill:8109, dff-wiki-skill:8111, topic-recommendation:8113, user-persona-extractor:8114"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
     deploy:
       mode: replicated
@@ -1185,5 +1185,21 @@ services:
           memory: 1536M
         reservations:
           memory: 1536M
+
+  user-persona-extractor:
+    build:
+      context: .
+      dockerfile: ./annotators/user_persona_extractor/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8114
+    environment:
+      - FLASK_APP=server
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 80M
+        reservations:
+          memory: 80M
 
 version: '3.7'

@@ -115,9 +115,3 @@ GIVE_ME_CHANCE_TO_CHEER_UP = [
 
 LIST_ACTIVITIES_RESPONSE = "I'm a socialbot running inside Alexa, and I'm all about chatting with people like you. " \
                            "I can answer questions, share fun facts, discuss movies, books and news."
-
-
-KIDS_WORDS_RE = re.compile(r"(school work|toys|class|father|dad|mother|mom|grandma|"
-                           r"grandpa|school|play|\bgame\b|homework|gaming|games|played|playing)", re.IGNORECASE)
-
-ADULTS_WORDS_RE = re.compile(r"(\bwork\b|kid|family|\bclean\b|working|child|children|cleaning)", re.IGNORECASE)

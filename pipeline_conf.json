@@ -447,6 +447,19 @@
                     "annotators.sentseg"
                 ],
                 "state_manager_method": "add_annotation"
+            },
+            "user_persona_extractor": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://user-persona-extractor:8114/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "update_attributes",
+                "previous_services": [
+                    "annotators.spelling_preprocessing"
+                ]
             }
         },
         "skill_selectors": {
