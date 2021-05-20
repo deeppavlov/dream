@@ -405,8 +405,8 @@ def if_must_switch(user_uttr, bot_uttr):
 
 def switch_wiki_skill_on_news(user_uttr, bot_uttr):
     user_uttr_annotations = user_uttr["annotations"]
-    news = user_uttr_annotations["news_api_annotator"]
-    if if_chat_about_particular_topic(user_uttr, bot_uttr):
+    news = user_uttr_annotations.get("news_api_annotator", [])
+    if if_chat_about_particular_topic(user_uttr, bot_uttr) and news:
         nounphrases = user_uttr_annotations.get("cobot_entities", {}).get("labelled_entities", [])
         if nounphrases and news:
             for nounphr in nounphrases:
