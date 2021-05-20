@@ -3,6 +3,7 @@ import logging
 import os
 import re
 import random
+from copy import deepcopy
 from enum import Enum, auto
 
 import sentry_sdk
@@ -19,7 +20,7 @@ from common.travel import OPINION_REQUESTS_ABOUT_TRAVELLING, TRAVELLING_TEMPLATE
     WHY_DONT_USER_LIKES_TRAVELLING_RESPONSES, USER_IMPRESSIONS_REQUEST, \
     WOULD_USER_LIKE_TO_VISIT_LOC_REQUESTS, ACKNOWLEDGE_USER_WILL_VISIT_LOC, QUESTIONS_ABOUT_LOCATION, \
     ACKNOWLEDGE_USER_DO_NOT_WANT_TO_VISIT_LOC, OFFER_FACT_RESPONSES, OPINION_REQUESTS, HAVE_YOU_BEEN_TEMPLATE, \
-    ACKNOWLEDGE_USER_DISLIKE_LOC, OFFER_MORE_FACT_RESPONSES, \
+    ACKNOWLEDGE_USER_DISLIKE_LOC, OFFER_MORE_FACT_RESPONSES, HAVE_YOU_BEEN_IN_PHRASES, \
     QUESTIONS_ABOUT_BOT_LOCATIONS, WHY_BOT_LIKES_TO_TRAVEL
 from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_intents, get_sentiment, get_not_used_template, get_named_locations, \
@@ -339,7 +340,7 @@ def have_bot_been_in_request(ngrams, vars):
 def collect_facts_about_location(vars, location):
     facts = []
     if location.lower() in TRAVEL_FACTS:
-        facts = TRAVEL_FACTS[location.lower()]
+        facts = deepcopy(TRAVEL_FACTS[location.lower()])
     if not facts:
         facts = state_utils.get_fact_for_particular_entity_from_human_utterance(vars, location)
         facts = [fact for fact in facts if "is a city" not in fact.lower()]
@@ -350,19 +351,25 @@ def collect_facts_about_location(vars, location):
 
 def have_bot_been_in_response(vars):
     # USR_HAVE_BEEN
-    user_mentioned_locations = get_mentioned_locations(vars)
-
-    if len(user_mentioned_locations):
-        location = f"in {user_mentioned_locations[-1]}"
-    else:
-        location = "there"
-
-    facts = collect_facts_about_location(vars, location)
-    responses = [f"I've been {location} just virtually because physically I live in the cloud. Have you been there?",
-                 f"I've been {location} via pictures and videos. Have you been there?",
-                 ]
-    logger.info(f"Bot responses that bot has not been in LOC: {location}.")
     try:
+        user_mentioned_locations = get_mentioned_locations(vars)
+
+        if len(user_mentioned_locations):
+            location = f"in {user_mentioned_locations[-1]}"
+            facts = collect_facts_about_location(vars, location)
+            shared_memory = state_utils.get_shared_memory(vars)
+            discussed_locations = list(set(shared_memory.get("discussed_locations", [])))
+            state_utils.save_to_shared_memory(vars, discussed_location=user_mentioned_locations[-1])
+            state_utils.save_to_shared_memory(
+                vars, discussed_locations=discussed_locations + [user_mentioned_locations[-1]])
+            if facts:
+                state_utils.save_to_shared_memory(
+                    vars, facts_about_discussed_location={"location": user_mentioned_locations[-1],
+                                                          "facts": facts})
+        else:
+            location = "there"
+        logger.info(f"Bot responses that bot has not been in LOC: {location}.")
+
         if have_bot_been_in(vars):
             confidence = choose_conf_decreasing_if_requests_in_human_uttr(vars, SUPER_CONFIDENCE, DEFAULT_CONFIDENCE)
         else:
@@ -373,17 +380,7 @@ def have_bot_been_in_response(vars):
         else:
             state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
-        if len(user_mentioned_locations) > 0:
-            shared_memory = state_utils.get_shared_memory(vars)
-            discussed_locations = list(set(shared_memory.get("discussed_locations", [])))
-            state_utils.save_to_shared_memory(vars, discussed_location=user_mentioned_locations[-1])
-            state_utils.save_to_shared_memory(vars,
-                                              discussed_locations=discussed_locations + [user_mentioned_locations[-1]])
-            if facts:
-                state_utils.save_to_shared_memory(
-                    vars, facts_about_discussed_location={"location": user_mentioned_locations[-1],
-                                                          "facts": facts})
-        return random.choice(responses)
+        return random.choice(HAVE_YOU_BEEN_IN_PHRASES).replace("LOCATION", location)
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -672,17 +669,18 @@ def offer_fact_about_loc_response(vars):
     logger.info(f"Bot offers fact about LOC: {location}.")
 
     facts_about_location = shared_memory.get("facts_about_discussed_location", {})
-    if facts_about_location.get("location", "") == location and facts_about_location.get("facts", []):
+    if facts_about_location.get("location", "") == location and facts_about_location.get(
+            "facts", []) and location != "there":
         facts_about_location = facts_about_location.get("facts", [])
     else:
         facts_about_location = []
-    if len(location) > 0 and len(facts_about_location) == 0:
+    if len(location) > 0 and len(facts_about_location) == 0 and location != "there":
         facts_about_location = [send_cobotqa(f"fact about {location}")]
     used_facts = shared_memory.get("used_facts", [])
     facts_about_location = get_all_not_used_templates(used_facts, facts_about_location)
 
     try:
-        if len(location) and len(facts_about_location) > 0:
+        if len(location) and len(facts_about_location) > 0 and location != "there":
             confidence = choose_conf_decreasing_if_requests_in_human_uttr(vars, SUPER_CONFIDENCE, DEFAULT_CONFIDENCE)
             state_utils.set_confidence(vars, confidence)
             if confidence == SUPER_CONFIDENCE:
@@ -741,7 +739,7 @@ def share_fact_about_loc_response(vars):
     logger.info(f"Bot shares fact about LOC: {location}.")
 
     try:
-        if len(location) and len(facts_about_location) > 0:
+        if len(location) and len(facts_about_location) > 0 and location != "there":
             opinion_req = random.choice(OPINION_REQUESTS)
             confidence = choose_conf_decreasing_if_requests_in_human_uttr(vars, SUPER_CONFIDENCE, DEFAULT_CONFIDENCE)
             state_utils.set_confidence(vars, confidence)

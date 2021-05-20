@@ -3,6 +3,7 @@ import os
 import json
 import requests
 import pathlib
+from copy import deepcopy
 from os import getenv
 import sentry_sdk
 
@@ -24,7 +25,7 @@ with open(pathlib.Path(__file__).resolve().parent / "facts_for_cities.json", "r"
 with open(pathlib.Path(__file__).resolve().parent / "facts_for_countries.json", "r") as f:
     data = json.load(f)
     for name in data:
-        TRAVEL_FACTS[name] = data[name]
+        TRAVEL_FACTS[name] = deepcopy(data[name])
 TRAVEL_FACTS = {name.lower(): fact for name, fact in TRAVEL_FACTS.items()}
 
 
