@@ -196,4 +196,6 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
   topic-recommendation:
     env_file: [ .env.dev ]
+  user-persona-extractor:
+    env_file: [ .env.dev ]
 version: '3.7'

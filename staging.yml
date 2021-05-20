@@ -278,6 +278,10 @@ services:
     image: ${DOCKER_REGISTRY}/topic-recommendation:${VERSION}
     env_file:
       - ${ENV_FILE}
+  user-persona-extractor:
+    image: ${DOCKER_REGISTRY}/user-persona-extractor:${VERSION}
+    env_file:
+      - ${ENV_FILE}
 volumes:
   external-logs:
   external-deeppavlov:
