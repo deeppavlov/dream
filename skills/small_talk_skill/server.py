@@ -44,7 +44,7 @@ YES_CONTINUE_CONFIDENCE = 1.0
 NOT_SCRIPTED_TOPICS = [
     'cars', "depression", "family", "life", "love", "me", "politics", "science",
     # TODO: remove science when dff-science-skill will be merged
-    "school", "sex", "star wars", "donald trump", "work", "you"
+    "school", "sex", "star wars", "donald trump", "work", "you", "superheroes"
 ]
 
 
@@ -265,6 +265,13 @@ def extract_topic_from_user_uttr(dialog):
         return ""
 
 
+def which_topic_lets_chat_about(last_user_uttr, last_bot_uttr):
+    for topic in TOPIC_PATTERNS:
+        if if_chat_about_particular_topic(last_user_uttr, last_bot_uttr, compiled_pattern=TOPIC_PATTERNS[topic]):
+            return topic
+    return None
+
+
 def pickup_topic_and_start_small_talk(dialog):
     """
     Pick up topic for small talk and return first response.
@@ -280,6 +287,8 @@ def pickup_topic_and_start_small_talk(dialog):
         last_bot_uttr = dialog['bot_utterances'][-1]
     else:
         last_bot_uttr = {"text": "---", "annotations": {}}
+
+    topic_user_wants_to_discuss = which_topic_lets_chat_about(last_user_uttr, last_bot_uttr)
 
     if if_choose_topic(last_user_uttr, last_bot_uttr) or if_switch_topic(last_user_uttr["text"].lower()):
         # user asks bot to chose topic: `pick up topic/what do you want to talk about/would you like to switch topic`
@@ -298,23 +307,18 @@ def pickup_topic_and_start_small_talk(dialog):
             response = ""
             confidence = 0.
         logger.info(f"Bot initiates script on topic: `{topic}`.")
-    elif if_chat_about_particular_topic(last_user_uttr, last_bot_uttr):
+    elif topic_user_wants_to_discuss:
         # user said `let's talk about [topic]` or
         # bot said `what do you want to talk about/would you like to switch the topic`,
         #   and user answered [topic] (not something, nothing, i don't know - in this case,
         #   it will be gone through previous if)
-        topic = extract_topic_from_user_uttr(dialog)
-        if len(topic) > 0:
-            response = TOPIC_SCRIPTS.get(topic, [""])[0]
-            if topic in NOT_SCRIPTED_TOPICS:
-                confidence = YES_CONTINUE_CONFIDENCE
-            else:
-                confidence = USER_TOPIC_START_CONFIDENCE
-            logger.info(f"User initiates script on topic: `{topic}`.")
+        topic = topic_user_wants_to_discuss
+        response = TOPIC_SCRIPTS.get(topic, [""])[0]
+        if topic in NOT_SCRIPTED_TOPICS:
+            confidence = YES_CONTINUE_CONFIDENCE
         else:
-            response = ""
-            confidence = 0.
-            logger.info(f"Topic was not extracted.")
+            confidence = USER_TOPIC_START_CONFIDENCE
+        logger.info(f"User initiates script on topic: `{topic}`.")
     else:
         topic = extract_topic_from_user_uttr(dialog)
         if len(topic) > 0:
