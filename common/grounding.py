@@ -4,18 +4,11 @@ import logging
 logger = logging.getLogger(__name__)
 
 grounding_patterns = [
-    "what are we talking about",
-    "what we are talking about",
-    "what do we talk about",
-    "what are you talking about",
-    "what you are talking about",
-    "what do you talk about",
-    "what it is about",
-    "what is it about",
-    "what we are discussing",
-    "what are we discussing",
     "what do you mean",
     "i lost common ground",
+    r"(what|(not|n't) know)(( do| are)( we| you))( talk about| talking about| discuss| discussing)",
+    r"(what|(not|n't) know)(( we| you)( do| are))( talk about| talking about| discuss| discussing)",
+    r"(what|(not|n't) know)(( it is)|( is it)) about",
     r"^what[\?\.]?$"
 ]
 re_grounding_patterns = re.compile(r"(" + "|".join(grounding_patterns) + r")", re.IGNORECASE)
