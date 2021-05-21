@@ -196,6 +196,8 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
   topic-recommendation:
     env_file: [ .env.dev ]
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
   user-persona-extractor:
     env_file: [ .env.dev ]
 version: '3.7'

@@ -12,20 +12,23 @@ sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
+logging.getLogger("werkzeug").setLevel("WARNING")
 
 app = Flask(__name__)
 
 TOP_K = 3
 
-topic2response = {"Let's chat about food": "dff_food_skill",
-                  "Let's chat about books": "book_skill",
-                  "Let's chat about sport": "dff_sport_skill",
-                  "Let's chat about movies": "dff_movie_skill",
-                  "Let's chat about animals": "dff_animals_skill",
-                  "Let's chat about games": "game_cooperative_skill",
-                  "Let's chat about music": "dff_music_skill",
-                  "Let's chat about news": "news_api_skill",
-                  "Let's chat about travels": "dff_travel_skill"}
+topic2response = {
+    "Let's chat about food": "dff_food_skill",
+    "Let's chat about books": "book_skill",
+    "Let's chat about sport": "dff_sport_skill",
+    "Let's chat about movies": "dff_movie_skill",
+    "Let's chat about animals": "dff_animals_skill",
+    "Let's chat about games": "game_cooperative_skill",
+    "Let's chat about music": "dff_music_skill",
+    "Let's chat about news": "news_api_skill",
+    "Let's chat about travels": "dff_travel_skill",
+}
 
 responses = list(topic2response.keys())
 
@@ -46,9 +49,36 @@ def handler(requested_data):
             candidate_topics_batch.append([])
 
     total_time = time.time() - st_time
-    logger.info(f"topic_recommendation exec time: {total_time:.3f}s")
-    logger.warning(candidate_topics_batch)
+    logger.warning(f"topic_recommendation exec time: {total_time:.3f}s")
+    # logger.warning(candidate_topics_batch)
     return candidate_topics_batch
+
+
+try:
+    request_data = {
+        "utterances_histories": [
+            [
+                "i like to have conversation",
+                "Hi, this is an Alexa Prize Socialbot! I think we have not met yet. What name would you like "
+                "me to call you?",
+                "boss bitch",
+                "I'm so clever that sometimes I don't understand a single word of what i'm saying.",
+                "how is that",
+                "Hmm. If you would like to talk about something else just say, 'lets talk about something else'.",
+                "you pick the topic of conversation",
+            ]
+        ],
+        "personality": [{}],
+        "num_ongoing_utt": [0],
+    }
+    handler(request_data)
+    logger.warning("test query processed")
+except Exception as exc:
+    sentry_sdk.capture_exception(exc)
+    logger.exception(exc)
+    raise exc
+
+logger.warning(f"topic_recommendation is loaded and ready")
 
 
 @app.route("/respond", methods=["POST"])
