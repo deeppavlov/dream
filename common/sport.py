@@ -34,15 +34,15 @@ ZERO_CONFIDENCE = 0.0
 NUMBER_PROBABILITY = 0
 
 
-SPORTS_NO_ING = "aerobics|archery|badminton|baseball|basketball|beach volleyball|biathlon" \
+SPORTS_NO_ING = "\b(aerobics|archery|badminton|baseball|basketball|beach volleyball|biathlon" \
                 "|billiards|canoe|car race|chess|climb|coach|cricket" \
-                "|curling|cycle|darts|dive|ski|draughts" \
+                "|curling|cycle|darts|dive|draughts" \
                 "|fence|figure skate|football|golf|gymnastics|handball|hang glide" \
                 "|high jump|hockey|hurdle race|ice rink|in-line skate|jog|judo|karate" \
                 "|long jump|martial arts|motorbike sports|mountaineer|orienteer" \
                 "|parachute|pole-vault|polo|ride|rowing|rugby|sail|ski|snooker" \
                 "|track-and-field|triathlon|tug of war|volleyball|water polo|waterski" \
-                "|weight lift|work out|wrestle|run|swim|fitness|lacrosse|ballet|march|soccer"
+                "|weight lift|work out|wrestle|run|swim|fitness|lacrosse|ballet|march|soccer)"
 # curling in SPORTS_NO_ING is not a mistake - there is not word to curl
 ING_FORMS = {'run': 'running', 'swim': 'swimming', 'ski': 'skiing', 'dive': 'diving', 'box': 'boxing',
              'canoe': 'canoeing', 'climb': 'climbing', 'cycle': 'cycling', 'fence': 'fencing',
