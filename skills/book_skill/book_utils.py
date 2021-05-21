@@ -415,7 +415,7 @@ def get_name(annotated_phrase, mode='author', bookyear=False,
 
 
 def best_plain_book_by_author(plain_author_name, default_phrase, plain_last_bookname=None, top_n_best_books=1):
-    logger.debug(f'Calling best_pplain_book_by_author for {plain_author_name} {plain_last_bookname}')
+    logger.debug(f'Calling best_plain_book_by_author for {plain_author_name} {plain_last_bookname}')
     # best books
     book_list = request_triples_wikidata("find_object", [(plain_author_name, "P800", "forw"),
                                                          (plain_author_name, "P50", "backw")],
@@ -437,7 +437,8 @@ def best_plain_book_by_author(plain_author_name, default_phrase, plain_last_book
             sorted_bookname_list = sorted(book_list, key=lambda x: int(x[1:]))
             filtered_bookname_list = []
             for book in sorted_bookname_list:
-                if all([last_bookname not in entity_to_label(book),
+                logger.debug(f'{last_bookname.lower()} {entity_to_label(book).lower()}')
+                if all([last_bookname.lower() not in entity_to_label(book).lower(),
                         len(filtered_bookname_list) < top_n_best_books]):
                     filtered_bookname_list.append(book)
             if len(sorted_bookname_list) > 0:
@@ -574,6 +575,17 @@ def get_movie_answer(annotated_user_phrase, human_attributes):
 
 def exit_skill(reply, human_attr, SKILLS_TO_LINK=SKILLS_TO_LINK):
     link = link_to(SKILLS_TO_LINK, human_attr)['phrase']
-    reply = f"{reply} We have been talking about books for a fair amount of time. " \
-            f"Let's talk about something else. {link}"
+    exit_phrase = "We have been talking about books for a fair amount of time. " \
+                  f"Let's talk about something else."
+    if not any([exit_phrase in phrase for phrase in human_attr['book_skill']['used_phrases']]):
+        reply = f"{reply} {exit_phrase} {link}"
+    else:
+        reply = f"{link}"
     return reply
+
+
+HAVENT_READ_TEMPLATE = re.compile(r"(haven't|have not|didn't|did not) (read)?", re.IGNORECASE)
+
+
+def havent_read(annotated_user_phrase):
+    return re.search(HAVENT_READ_TEMPLATE, annotated_user_phrase['text'])
