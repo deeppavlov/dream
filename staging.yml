@@ -246,6 +246,10 @@ services:
     image: ${DOCKER_REGISTRY}/dff-food-skill:${VERSION}
     env_file:
       - ${ENV_FILE}
+  dff-science-skill:
+    image: ${DOCKER_REGISTRY}/dff-science-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   dff-music-skill:
     image: ${DOCKER_REGISTRY}/dff-music-skill:${VERSION}
     env_file:
