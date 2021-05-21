@@ -164,14 +164,14 @@ spec:
                     sh label: 'update kubeconfig', script: 'aws eks update-kubeconfig --name staging'
                     sh label: 'update environment', script: 'kubectl create configmap env -n ${NAMESPACE} --from-env-file $ENV_FILE -o yaml --dry-run=client | kubectl apply -f -'
                     sh label: 'generate deployment', script: 'python3 kubernetes/kuber_generator.py'
-                    sh label: 'deploy', script: 'for dir in kubernetes/models/*; do kubectl apply -f $dir || true; done'
-                    sh label: 'recreate pods', script: 'for dp in kubernetes/models/*/*-dp.yaml; do kubectl rollout restart -n ${NAMESPACE} deploy $(basename ${dp%.*}); done'
                     sh label: 'remove redundant pods', script: '''
                       for dp in $(kubectl -n {NAMESPACE} get deploy  --no-headers -o custom-columns=":metadata.name" | grep -e '-dp$');
                       do
-                        [ -d kubernetes/models/${dp%-*} ] || kubectl delete deploy $dp -n {NAMESPACE}
+                        kubectl delete deploy $dp -n {NAMESPACE}
                       done
                     '''
+                    sh label: 'deploy', script: 'for dir in kubernetes/models/*; do kubectl apply -f $dir || true; done'
+                    sh label: 'recreate pods', script: 'for dp in kubernetes/models/*/*-dp.yaml; do kubectl rollout restart -n ${NAMESPACE} deploy $(basename ${dp%.*}); done'
                   }
                   catch (Exception e) {
                     int duration = (currentBuild.duration - startTime) / 1000
