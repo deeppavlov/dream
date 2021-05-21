@@ -600,27 +600,28 @@ def preprocess_news(news):
     news_list = []
     for elem in news:
         new_content_list = []
-        title = elem["title"]
-        content = elem["content"]
-        replace_elements = re.findall(r"\[([\d]+ chars)]", content)
-        for replace_elem in replace_elements:
-            content = content.replace(f"[{replace_elem}]", "")
-        content = content.replace("...", "").strip()
-        content_list = content.split("\n")
-        cur_len = 0
-        max_len = 30
-        cur_chunk = []
-        for sentence in content_list:
-            tokens = re.findall(re_tokenizer, sentence)
-            if cur_len + len(tokens) < max_len:
-                cur_chunk.append(sentence)
-                cur_len += len(tokens)
-            else:
+        title = elem.get("title", "")
+        content = elem.get("content", "")
+        if title and content:
+            replace_elements = re.findall(r"\[([\d]+ chars)]", content)
+            for replace_elem in replace_elements:
+                content = content.replace(f"[{replace_elem}]", "")
+            content = content.replace("...", "").strip()
+            content_list = content.split("\n")
+            cur_len = 0
+            max_len = 30
+            cur_chunk = []
+            for sentence in content_list:
+                tokens = re.findall(re_tokenizer, sentence)
+                if cur_len + len(tokens) < max_len:
+                    cur_chunk.append(sentence)
+                    cur_len += len(tokens)
+                else:
+                    new_content_list.append([' '.join(cur_chunk).strip(), False])
+                    cur_chunk = [sentence]
+                    cur_len = len(tokens)
+            if cur_chunk:
                 new_content_list.append([' '.join(cur_chunk).strip(), False])
-                cur_chunk = [sentence]
-                cur_len = len(tokens)
-        if cur_chunk:
-            new_content_list.append([' '.join(cur_chunk).strip(), False])
-        if new_content_list:
-            news_list.append({"title": title, "content": new_content_list[:5]})
+            if new_content_list:
+                news_list.append({"title": title, "content": new_content_list[:5]})
     return news_list
