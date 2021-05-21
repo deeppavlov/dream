@@ -340,7 +340,7 @@ def get_outputs_with_response_from_dialog(utterances, response, activated=False)
     return result
 
 
-def get_not_used_template(used_templates, all_templates):
+def get_not_used_template(used_templates, all_templates, any_if_no_available=True):
     """
     Choose not used template among all templates
 
@@ -354,8 +354,10 @@ def get_not_used_template(used_templates, all_templates):
     available = list(set(all_templates).difference(set(used_templates)))
     if available:
         return choice(available)
-    else:
+    elif any_if_no_available:
         return choice(all_templates)
+    else:
+        return ""
 
 
 def get_all_not_used_templates(used_templates, all_templates):

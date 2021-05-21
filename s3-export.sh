@@ -54,7 +54,7 @@ files=(
   kbqa/wikidata/q_to_descr_en.pickle
   kbqa/wikidata/q_to_page_en.pickle
   kbqa/wikidata/wikidata_cache.json
-  alexaprize_data/database_most_popular_main_info.json
+  alexaprize_data/database_most_popular_main_info_v1.json
   datasets/wikipedia/enwiki_latest.db
   alexaprize_data/logreg_recommendation_model.pkl
   datasets/wikipedia/enwiki_latest_hyperlinks.db

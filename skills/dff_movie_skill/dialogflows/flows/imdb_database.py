@@ -196,7 +196,9 @@ class IMDb:
                 else:
                     self.database[imdb_id][f"lowercased_{profession}s"] = []
                     self.database[imdb_id][f"{profession}s"] = []
-
+            self.database[imdb_id]["characters"] = [
+                json.loads(char_list)[0]
+                for char_list in self.database[imdb_id]["characters"] if json.loads(char_list)]
         # `self.professionals` is a dictionary with keys from `self.professions`
         # and ['lowercased_prof` for prof in `self.professions`].
         # Each field is a dictionary where key is a name of person and value is a list of movies imdb_ids
@@ -289,7 +291,7 @@ class IMDb:
     def get_imdb_id_based_only_on_title(self, name):
         """
         Given title of the movie return its `imdb_id`.
-        If several movies with the same title, choose those with the highest rating
+        If several movies with the same title, choose those with the highest numVotes
 
         Args:
             name: movie title (could be lower-cased)
@@ -304,15 +306,15 @@ class IMDb:
         elif len(imdb_ids) == 1:
             return imdb_ids[0]
         else:
-            highest_rating = 0.
+            highest_numvotes = 0
             best_imdb_id = imdb_ids[0]
             for imdb_id in imdb_ids:
-                rating = self.database[imdb_id].get("imdb_rating", None)
-                if rating is None:
+                numvotes = self.get_info_about_movie(imdb_id, "numVotes")
+                if numvotes is None:
                     continue
                 else:
-                    if rating > highest_rating:
-                        highest_rating = rating
+                    if numvotes > highest_numvotes:
+                        highest_numvotes = numvotes
                         best_imdb_id = imdb_id
             return best_imdb_id
 

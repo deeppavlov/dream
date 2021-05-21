@@ -86,7 +86,7 @@ class MovieSkillTemplates:
                     pass
         return dialog_subjects
 
-    def extract_mentions(self, annotated_uttr, dialog=None, find_ignored=False):
+    def extract_mentions(self, annotated_uttr, dialog=None, find_ignored=False, check_full_utterance=False):
         """Extract movies titles, movie persons names and genres from the given utterance
 
         Args:
@@ -101,7 +101,7 @@ class MovieSkillTemplates:
         """
         uttr = annotated_uttr["text"]
         # extracting movies titles, movie-persons names
-        movies_titles = extract_movies_names_from_annotations(annotated_uttr)
+        movies_titles = extract_movies_names_from_annotations(annotated_uttr, check_full_utterance)
         if movies_titles is None:
             # no cobot_entities annotations
             movies_ids = []

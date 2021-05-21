@@ -17,12 +17,13 @@ from CoBotQA.cobotqa_service import send_cobotqa
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.movies import get_movie_template, praise_actor, praise_director_or_writer_or_visuals, \
     WHAT_OTHER_MOVIE_TO_DISCUSS, CLARIFY_WHAT_MOVIE_TO_DISCUSS, MOVIE_COMPILED_PATTERN, ABOUT_MOVIE_TITLES_PHRASES, \
-    DIFFERENT_SCRIPT_TEMPLATES
+    DIFFERENT_SCRIPT_TEMPLATES, RECOMMEND_REQUEST_PATTERN, RECOMMEND_OFFER_PATTERN, RECOMMEND_OFFER_RESPONSE, \
+    RECOMMENDATION_PHRASES, REPEAT_RECOMMENDATION_PHRASES
 from common.universal_templates import if_chat_about_particular_topic
-from common.utils import is_opinion_request, is_opinion_expression
+from common.utils import is_opinion_request, is_opinion_expression, get_not_used_template
 from nltk.tokenize import sent_tokenize
 from dialogflows.flows.utils import is_movie_title_question, LETTERS, NOT_WATCHED_TEMPLATE, \
-    NOT_LIKE_NOT_WATCH_MOVIES_TEMPLATE
+    NOT_LIKE_NOT_WATCH_MOVIES_TEMPLATE, recommend_movie_of_genre
 from dialogflows.flows.templates import MovieSkillTemplates
 
 
@@ -56,6 +57,12 @@ class State(Enum):
     SYS_USER_EXPRESSES_OPINION_ABOUT_MOVIE_GENRE = auto()
     SYS_USER_REQUESTS_OPINION_ABOUT_MOVIE_GENRE = auto()
     SYS_MENTIONED_MOVIES = auto()
+
+    SYS_USER_REQUESTS_MOVIE_RECOMMENDATION = auto()
+    SYS_BOT_OFFERS_MOVIE_RECOMMENDATION = auto()
+    SYS_REPEAT_RECOMMENDATION = auto()
+    USR_WAS_OFFERED_RECOMMENDATIONS = auto()
+    USR_ASKED_HAVE_SEEN_MOVIE = auto()
 
     SYS_ERR = auto()
     USR_ERR = auto()
@@ -252,7 +259,7 @@ def not_confident_lets_chat_about_movies_response(vars):
 EXTRACTED_MENTIONS_BUFFER = {}
 
 
-def extract_mentions(vars):
+def extract_mentions(vars, check_full_utterance=False):
     global EXTRACTED_MENTIONS_BUFFER
 
     curr_human_uttr_text = state_utils.get_last_human_utterance(vars).get("text", "")
@@ -260,7 +267,7 @@ def extract_mentions(vars):
         movies_ids, unique_persons, mentioned_genres = EXTRACTED_MENTIONS_BUFFER[curr_human_uttr_text]
     else:
         movies_ids, unique_persons, mentioned_genres = templates.extract_mentions(
-            state_utils.get_last_human_utterance(vars), find_ignored=True)
+            state_utils.get_last_human_utterance(vars), find_ignored=True, check_full_utterance=check_full_utterance)
         if len(EXTRACTED_MENTIONS_BUFFER) == 100:
             EXTRACTED_MENTIONS_BUFFER = {}
         EXTRACTED_MENTIONS_BUFFER[curr_human_uttr_text] = [movies_ids, unique_persons, mentioned_genres]
@@ -281,7 +288,7 @@ def extract_movie_title(vars, movies_ids):
 def is_popular_movie(movie_id):
     movie_title = templates.imdb(movie_id).get("title", "")
 
-    numvotes = templates.imdb.get_info_about_movie(movie_title, "numVotes")
+    numvotes = templates.imdb.get_info_about_movie(movie_id, "numVotes")
     numvotes = 0 if numvotes is None else numvotes
     letters_in_title = re.search(LETTERS, movie_title)
     if numvotes >= 10000 and letters_in_title and len(letters_in_title[0]) >= 2:
@@ -321,11 +328,12 @@ def movie_title_clarification_response(vars):
     # USR_MOVIE_TITLE_CLARIFICATION
     logger.info(f"Bot clarifies movie title.")
     try:
-        movies_ids, unique_persons, mentioned_genres = extract_mentions(vars)
+        movies_ids, unique_persons, mentioned_genres = extract_mentions(vars, check_full_utterance=True)
         movie_id, movie_title = extract_movie_title(vars, movies_ids)
         user_was_asked_for_movie_title_or_clarification = user_was_asked_about_movie_title(vars)
         user_was_asked_for_movie_title_or_clarification |= state_utils.get_shared_memory(vars).get(
             "current_status", "") in ["movie_prompt", "clarification"]
+        user_said_about_movies = MOVIE_COMPILED_PATTERN.search(state_utils.get_last_human_utterance(vars)["text"])
 
         if len(movies_ids) == 0 and user_was_asked_for_movie_title_or_clarification:
             logger.info(f"Previously bot clarified movie title, no title extracted from current utterance. "
@@ -335,7 +343,7 @@ def movie_title_clarification_response(vars):
             state_utils.set_confidence(vars, END_SCENARIO_OFFER_CONFIDENCE)
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
             state_utils.save_to_shared_memory(vars, current_status="movie_prompt")
-        elif user_was_asked_for_movie_title_or_clarification:
+        elif user_was_asked_for_movie_title_or_clarification or user_said_about_movies:
             movie_type = templates.imdb.get_movie_type(movie_id)
             logger.info(f"Clarify movie title `{movie_title}` from user utterance "
                         f"`{state_utils.get_last_human_utterance(vars)['text']}`.")
@@ -377,7 +385,7 @@ def is_no_request(ngrams, vars):
 
 def clarified_movie_title_confirmed_request(ngrams, vars):
     # SYS_CONFIRMED_CLARIFIED_MOVIE_TITLE
-    movies_ids, unique_persons, mentioned_genres = extract_mentions(vars)
+    movies_ids, unique_persons, mentioned_genres = extract_mentions(vars, check_full_utterance=True)
     movie_id = state_utils.get_shared_memory(vars).get("current_movie_id", [])
     is_yes = condition_utils.is_yes_vars(vars)
     is_no = condition_utils.is_no_vars(vars)
@@ -403,7 +411,7 @@ def clarified_movie_title_confirmed_request(ngrams, vars):
 
 def clarify_movie_title_again_request(ngrams, vars):
     # SYS_CLARIFY_MOVIE_TITLE_AGAIN
-    movies_ids, unique_persons, mentioned_genres = extract_mentions(vars)
+    movies_ids, unique_persons, mentioned_genres = extract_mentions(vars, check_full_utterance=True)
     movie_id = state_utils.get_shared_memory(vars).get("current_movie_id", [])
     is_yes = condition_utils.is_yes_vars(vars)
     is_no = condition_utils.is_no_vars(vars)
@@ -445,7 +453,7 @@ def clarify_movie_title_again_request(ngrams, vars):
 
 def did_not_extracted_movie_title_after_clarification_request(ngrams, vars):
     # SYS_NOT_EXTRACTED_MOVIE_TITLE_AFTER_CLARIFICATION
-    movies_ids, unique_persons, mentioned_genres = extract_mentions(vars)
+    movies_ids, unique_persons, mentioned_genres = extract_mentions(vars, check_full_utterance=True)
     movie_id = state_utils.get_shared_memory(vars).get("current_movie_id", [])
     is_yes = condition_utils.is_yes_vars(vars)
     is_no = condition_utils.is_no_vars(vars)
@@ -503,14 +511,15 @@ def movie_request_opinion_response(vars):
     try:
         user_was_asked_for_movie_title_or_clarification = user_was_asked_about_movie_title(vars)
         user_was_asked_for_movie_title_or_clarification |= state_utils.get_shared_memory(vars).get(
-            "current_status", "") in ["movie_prompt", "clarification"]
-        movies_ids, unique_persons, mentioned_genres = extract_mentions(vars)
+            "current_status", "") in ["movie_prompt", "clarification", "movie_recommendation"]
+        movies_ids, unique_persons, mentioned_genres = extract_mentions(
+            vars, check_full_utterance=user_was_asked_for_movie_title_or_clarification)
         movie_id, movie_title = extract_movie_title(vars, movies_ids)
         is_popular_movie_found = is_popular_movie(movie_id) == "popular"
 
         if user_was_asked_for_movie_title_or_clarification or is_popular_movie_found:
             prev_status = state_utils.get_shared_memory(vars).get("current_status", "")
-            if prev_status == "clarification":
+            if prev_status in ["clarification", "movie_recommendation"]:
                 movie_id = state_utils.get_shared_memory(vars).get("current_movie_id", "")
                 movie_title = state_utils.get_shared_memory(vars).get("current_movie_title", "")
 
@@ -570,9 +579,15 @@ def ask_do_you_know_question_response(vars):
             else:
                 response = f"Do you like the genres of this {movie_type}?"
         elif question_type == "like_actor":
-            result = templates.imdb.get_info_about_movie(movie_title, "actors")
-            if result is not None and len(result) > 0:
-                response = f"What do you think about character of {result[0]} in this {movie_type}?"
+            actors = templates.imdb.get_info_about_movie(movie_title, "actors")
+            characters = templates.imdb.get_info_about_movie(movie_title, "characters")
+            if actors is not None and len(actors) > 0 and characters and len(characters) > 0:
+                response = f"What do you think about {actors[0]} who played {characters[0]} in this {movie_type}?"
+            elif actors is not None and len(actors) > 0:
+                response = f"What do you think about {actors[0]} who played the main role in this {movie_type}?"
+
+            elif characters and len(characters) > 0:
+                response = f"What do you think about {characters[0]} character in this {movie_type}?"
             else:
                 response = f"Who is your favorite character in this {movie_type}?"
         else:
@@ -609,8 +624,7 @@ def do_you_know_question_need_to_be_checked_request(ngrams, vars):
     prev_bot_uttr_text = state_utils.get_last_bot_utterance(vars).get("text", "")
     prev_status = state_utils.get_shared_memory(vars).get("current_status", "")
 
-    if prev_status == "do_you_know_question" and all([phrase not in prev_bot_uttr_text
-                                                      for phrase in ["like the genres", "character"]]):
+    if prev_status == "do_you_know_question" and "Do you know " in prev_bot_uttr_text:
         return True
     return False
 
@@ -742,9 +756,8 @@ def generate_fact_from_cobotqa_response(vars):
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
             state_utils.save_to_shared_memory(vars, current_status="fact")
         else:
-            logger.info(f"No appropriate fact found. Ask for another movie.")
-            response = not_confident_lets_chat_about_movies_response(vars)
-            response = f"{get_movie_template('lets_move_on')} {response}"
+            logger.info(f"No appropriate fact found. Offer recommendations.")
+            response = bot_offers_movie_recommendation_response(vars)
 
         return response
 
@@ -799,7 +812,8 @@ def faq_response(vars):
 
 def opinion_expression_about_popular_movie_request(ngrams, vars):
     # SYS_ASK_DO_YOU_KNOW_QUESTION
-    movies_ids, unique_persons, mentioned_genres = extract_mentions(vars)
+    movies_ids, unique_persons, mentioned_genres = extract_mentions(
+        vars, check_full_utterance=user_was_asked_about_movie_title(vars))
     expressed_opinion = is_opinion_expression(state_utils.get_last_human_utterance(vars))
     attitude = state_utils.get_human_sentiment(vars)
 
@@ -882,7 +896,8 @@ def opinion_expression_about_movie_genres_response(vars):
 
 def opinion_requests_about_movie_request(ngrams, vars):
     # SYS_USER_REQUESTS_OPINION_ABOUT_MOVIE
-    movies_ids, unique_persons, mentioned_genres = extract_mentions(vars)
+    movies_ids, unique_persons, mentioned_genres = extract_mentions(
+        vars, check_full_utterance=user_was_asked_about_movie_title(vars))
     expressed_opinion = is_opinion_request(state_utils.get_last_human_utterance(vars))
 
     if expressed_opinion and movies_ids:
@@ -898,7 +913,8 @@ def opinion_requests_about_movie_request(ngrams, vars):
 def bot_express_opinion_and_ask_user_response(vars):
     # USR_WAS_REQUESTED_MOVIE_OPINION
     try:
-        movies_ids, unique_persons, mentioned_genres = extract_mentions(vars)
+        movies_ids, unique_persons, mentioned_genres = extract_mentions(
+            vars, check_full_utterance=user_was_asked_about_movie_title(vars))
         movie_id, movie_title = extract_movie_title(vars, movies_ids)
         # express opinion about last mentioned movie in user uttr
         response, _, _ = templates.give_opinion(vars["agent"]["dialog"])
@@ -962,101 +978,158 @@ def bot_express_opinion_about_genre_and_ask_user_response(vars):
 
 
 ##################################################################################################################
-# usr_start_node
+# user requests recommendations
 ##################################################################################################################
 
-# def usr_start_response(vars):
-#     # USR_START
-#     try:
-#         movies_ids, unique_persons, mentioned_genres = extract_mentions(vars)
-#         movie_id, movie_title = extract_movie_title(vars, movies_ids)
-#
-#         # SYS_USER_REQUESTS_OPINION_ABOUT_MOVIE
-#         expressed_opinion = is_opinion_request(state_utils.get_last_human_utterance(vars))
-#         if expressed_opinion and movies_ids:
-#             movie_id = movies_ids[-1]
-#             response, _, _ = templates.give_opinion(vars["agent"]["dialog"])
-#             if is_popular_movie(movie_id) in ["popular", "known"] and response:
-#                 logger.info(f"Current user utterance is opinion request about popular movie.")
-#                 return bot_express_opinion_and_ask_user_response(vars)
-#         # SYS_ASK_DO_YOU_KNOW_QUESTION
-#         expressed_opinion = is_opinion_expression(state_utils.get_last_human_utterance(vars))
-#         attitude = state_utils.get_human_sentiment(vars)
-#         if expressed_opinion and movies_ids:
-#             movie_id = movies_ids[-1]
-#             response, _, _ = templates.get_user_opinion(vars["agent"]["dialog"], attitude)
-#             if is_popular_movie(movie_id) == "popular" and response:
-#                 logger.info(f"Current user utterance is opinion expression about popular movie.")
-#                 return ask_do_you_know_question_response(vars)
-#         # SYS_EXTRACTED_MOVIE_TITLE
-#         if movie_id:
-#             if is_popular_movie(movie_id) == "popular":
-#                 logger.info("Found movie title with more than 10k votes. movie_title_extracted_request found.")
-#                 return movie_request_opinion_response(vars)
-#         # SYS_CLARIFY_MOVIE_TITLE
-#         if movie_id:
-#             if is_popular_movie(movie_id) == "known":
-#                 logger.info("Found movie title with less than 10k votes. movie_title_to_be_clarified_request found.")
-#                 return movie_title_clarification_response(vars)
-#         # SYS_USER_REQUESTS_OPINION_ABOUT_MOVIE_GENRE
-#         expressed_opinion = is_opinion_request(state_utils.get_last_human_utterance(vars))
-#
-#         if expressed_opinion and mentioned_genres:
-#             response, _, _ = templates.give_opinion(vars["agent"]["dialog"])
-#             if response:
-#                 logger.info(f"Current user utterance is opinion request about movie genre.")
-#                 return bot_express_opinion_about_genre_and_ask_user_response(vars)
-#         # SYS_USER_EXPRESSES_OPINION_ABOUT_MOVIE_GENRE
-#         expressed_opinion = is_opinion_expression(state_utils.get_last_human_utterance(vars))
-#         attitude = state_utils.get_human_sentiment(vars)
-#
-#         if expressed_opinion and mentioned_genres:
-#             response, _, _ = templates.get_user_opinion(vars["agent"]["dialog"], attitude)
-#             if response:
-#                 logger.info(f"Current user utterance is opinion expression about movie genres.")
-#                 return opinion_expression_about_movie_genres_response(response)
-#         # SYS_LETS_CHAT_ABOUT_MOVIES
-#         user_lets_chat_about = if_chat_about_particular_topic(
-#             state_utils.get_last_human_utterance(vars),
-#             state_utils.get_last_bot_utterance(vars),
-#             compiled_pattern=MOVIE_COMPILED_PATTERN)
-#
-#         if user_lets_chat_about:
-#             logger.info(f"Let's chat about movies in user utterances")
-#             return lets_chat_about_movies_response(vars)
-#         # SYS_FAQ
-#         response, result, confidence = templates.faq(vars["agent"]["dialog"])
-#         if response:
-#             if confidence == 1:
-#                 state_utils.set_confidence(vars, SUPER_CONFIDENCE)
-#                 state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-#             else:
-#                 state_utils.set_confidence(vars, confidence)
-#                 state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
-#
-#             state_utils.save_to_shared_memory(vars, current_status="faq")
-#             return response
-#         # SYS_MENTIONED_MOVIES
-#         if MOVIE_COMPILED_PATTERN.search(state_utils.get_last_human_utterance(vars).get("text", "")):
-#             logger.info(f"Mentioned movies in user utterances")
-#             return not_confident_lets_chat_about_movies_response(vars)
-#
-#         return error_response(vars)
-#
-#     except Exception as exc:
-#         logger.exception(exc)
-#         sentry_sdk.capture_exception(exc)
-#         return error_response(vars)
-#
-#
-# def was_opinion_request_status_request(ngrams, vars):
-#     # TODO
-#     shared_memory = state_utils.get_shared_memory(vars)
-#     current_status = shared_memory.get("current_status", "")
-#     if current_status == "opinion_request":
-#         logger.info(f"On previous turn dff-movie-skill had status: {current_status}.")
-#         return True
-#     return False
+def construct_movie_type_and_title(movie_id, genre=None):
+    genre = genre if genre is not None else templates.imdb.get_info_about_movie(movie_id, "genre")
+    genre = genre[0] if isinstance(genre, list) and len(genre) > 0 else genre
+    movie_title = templates.imdb(movie_id)["title"]
+
+    genre_movies = f"{genre} movie" if genre.lower() != "series" else "series"
+    # asking whether user have seen this movie
+    return f"{genre_movies} {movie_title}"
+
+
+def fill_templates_with_movie_info(response, movie_id, genre=None):
+    response = response.replace("MOVIE", construct_movie_type_and_title(movie_id, genre=genre))
+
+    rating = templates.imdb.get_info_about_movie(movie_id, "imdb_rating")
+    response = response.replace("RATING", str(rating) if rating else "high")
+
+    numvotes = templates.imdb.get_info_about_movie(movie_id, "numVotes")
+    if numvotes and numvotes > 1000000:
+        numvotes = f"{int(numvotes / 1000000)} million"
+    elif numvotes and numvotes > 1000:
+        numvotes = f"{int(numvotes / 1000)} thousand"
+    elif numvotes and numvotes > 100:
+        numvotes = f"{int(numvotes / 100)} hundred"
+    else:
+        numvotes = "dozens"
+    response = response.replace("NUM_VOTES", numvotes)
+
+    year = str(templates.imdb.get_info_about_movie(movie_id, "startYear"))
+    # разделяем, чтобы произнести нормально на английском год.
+    response = response.replace("YEAR", f"{year[:2]} {year[2:]}" if year else "the recent past")
+    return response
+
+
+def detected_recommendation_request(vars):
+    recom_request = RECOMMEND_REQUEST_PATTERN.search(state_utils.get_last_human_utterance(vars)["text"])
+    recom_offer = RECOMMEND_OFFER_PATTERN.search(state_utils.get_last_bot_utterance(vars).get("text", ""))
+    user_agrees = condition_utils.is_yes_vars(vars)
+
+    if recom_request or (recom_offer and user_agrees):
+        logger.info(f"User wants to get movies recommendations.")
+        return True
+
+
+def recommendations_request(ngrams, vars):
+    # SYS_USER_REQUESTS_MOVIE_RECOMMENDATION
+    return detected_recommendation_request(vars)
+
+
+def bot_recommends_movie_response(vars):
+    # USR_ASKED_HAVE_SEEN_MOVIE
+    try:
+        shared_memory = state_utils.get_shared_memory(vars)
+        discussed_movie_ids = shared_memory.get("discussed_movie_ids", [])
+        movies_ids, unique_persons, mentioned_genres = extract_mentions(
+            vars, check_full_utterance=user_was_asked_about_movie_title(vars))
+        if len(mentioned_genres):
+            # recommend movie of particular genre
+            genre = mentioned_genres[-1]
+            genre_movies = f"{genre} movies" if genre.lower() != "series" else "series"
+        else:
+            # recommend movie
+            age = state_utils.get_age_group(vars)
+            if len(discussed_movie_ids):
+                genre = templates.imdb.get_info_about_movie(discussed_movie_ids[-1], "genre")
+                genre = genre[0] if len(genre) > 0 and len(genre[0]) > 0 else "Comedy"
+            else:
+                if age == "kid":
+                    genre = "Animation"
+                else:
+                    genre = "Comedy"
+
+            genre_movies = "movies"
+
+        movie_id_to_recommend = recommend_movie_of_genre(genre, discussed_movie_ids=discussed_movie_ids)
+        if movie_id_to_recommend:
+            movie_title_to_recommend = templates.imdb(movie_id_to_recommend)["title"]
+            used_recommendation_phrases = shared_memory.get("used_recommendation_phrases", [])
+            response = get_not_used_template(used_recommendation_phrases, RECOMMENDATION_PHRASES)
+            state_utils.save_to_shared_memory(
+                vars, used_recommendation_phrases=used_recommendation_phrases + [response])
+            # asking whether user have seen this movie
+            response = fill_templates_with_movie_info(response, movie_id_to_recommend, genre=genre)
+            # update discussed movies and current discussed movie
+            save_and_update_movie_titles(vars, movie_id_to_recommend, movie_title_to_recommend)
+            state_utils.save_to_shared_memory(vars, current_status="movie_recommendation")
+        else:
+            response = f"Sorry, seems like I have no more recommendations of {genre_movies}. " \
+                       f"What movie can you recommend to me?"
+            state_utils.save_to_shared_memory(vars, current_status="movie_prompt")
+
+        if detected_recommendation_request(vars):
+            state_utils.set_confidence(vars, SUPER_CONFIDENCE)
+            state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+        else:
+            state_utils.set_confidence(vars, HIGH_CONFIDENCE)
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+
+        return response
+
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        return error_response(vars)
+
+
+def bot_offers_movie_recommendation_response(vars):
+    # USR_WAS_OFFERED_RECOMMENDATIONS
+    try:
+        shared_memory = state_utils.get_shared_memory(vars)
+        used_offer_recommendation_phrases = shared_memory.get("used_offer_recommendation_phrases", [])
+        recom_offer = get_not_used_template(used_offer_recommendation_phrases, RECOMMEND_OFFER_RESPONSE)
+        state_utils.save_to_shared_memory(
+            vars, used_offer_recommendation_phrases=used_offer_recommendation_phrases + [recom_offer])
+        state_utils.save_to_shared_memory(vars, current_status="offer_movie_recommendation")
+        state_utils.set_confidence(vars, HIGH_CONFIDENCE)
+        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+
+        return recom_offer
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        return error_response(vars)
+
+
+def bot_repeats_movie_recommendation_response(vars):
+    # USR_WAS_OFFERED_RECOMMENDATIONS
+    try:
+        shared_memory = state_utils.get_shared_memory(vars)
+        used_repeat_recommendation_phrases = shared_memory.get("used_repeat_recommendation_phrases", [])
+        response = get_not_used_template(used_repeat_recommendation_phrases, REPEAT_RECOMMENDATION_PHRASES)
+        state_utils.save_to_shared_memory(
+            vars, used_repeat_recommendation_phrases=used_repeat_recommendation_phrases + [response])
+
+        movie_id_to_recommend = shared_memory.get("current_movie_id", "")
+        response = fill_templates_with_movie_info(response, movie_id_to_recommend, genre=None)
+
+        recom_offer = bot_offers_movie_recommendation_response(vars)
+
+        state_utils.set_confidence(vars, HIGH_CONFIDENCE)
+        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+
+        response = f"{response} {recom_offer}"
+        return response
+
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        return error_response(vars)
+
 
 ##################################################################################################################
 # error
@@ -1089,6 +1162,7 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_CLARIFY_MOVIE_TITLE: to_be_clarified_movie_title_extracted_request,
         State.SYS_USER_REQUESTS_OPINION_ABOUT_MOVIE_GENRE: opinion_requests_about_genre_request,
         State.SYS_USER_EXPRESSES_OPINION_ABOUT_MOVIE_GENRE: opinion_expression_about_movie_genres_request,
+        State.SYS_USER_REQUESTS_MOVIE_RECOMMENDATION: recommendations_request,
         State.SYS_LETS_CHAT_ABOUT_MOVIES: lets_chat_about_movies_request,
         State.SYS_FAQ: faq_request,
         State.SYS_MENTIONED_MOVIES: mentioned_movies_request,
@@ -1109,6 +1183,53 @@ simplified_dialogflow.add_system_transition(State.SYS_FAQ,
 simplified_dialogflow.add_system_transition(State.SYS_NOT_LIKE_MOVIES,
                                             State.USR_START,
                                             user_not_like_movies_response)
+
+##################################################################################################################
+#  SYS_BOT_OFFERS_MOVIE_RECOMMENDATION
+
+simplified_dialogflow.add_system_transition(State.SYS_BOT_OFFERS_MOVIE_RECOMMENDATION,
+                                            State.USR_WAS_OFFERED_RECOMMENDATIONS,
+                                            bot_offers_movie_recommendation_response)
+
+##################################################################################################################
+#  SYS_USER_REQUESTS_MOVIE_RECOMMENDATION
+
+simplified_dialogflow.add_system_transition(State.SYS_USER_REQUESTS_MOVIE_RECOMMENDATION,
+                                            State.USR_ASKED_HAVE_SEEN_MOVIE,
+                                            bot_recommends_movie_response)
+
+##################################################################################################################
+#  USR_ASKED_HAVE_SEEN_MOVIE
+
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_ASKED_HAVE_SEEN_MOVIE,
+    {
+        State.SYS_EXTRACTED_MOVIE_TITLE: is_yes_request,
+        State.SYS_REPEAT_RECOMMENDATION: is_no_request,
+        State.SYS_MENTIONED_MOVIES: no_requests_request,  # not_confident_lets_chat_about_movies_response
+    },
+)
+simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
+
+
+##################################################################################################################
+#  SYS_REPEAT_RECOMMENDATION
+
+simplified_dialogflow.add_system_transition(State.SYS_REPEAT_RECOMMENDATION,
+                                            State.USR_WAS_OFFERED_RECOMMENDATIONS,
+                                            bot_repeats_movie_recommendation_response)
+
+##################################################################################################################
+#  USR_ASKED_HAVE_SEEN_MOVIE
+
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_WAS_OFFERED_RECOMMENDATIONS,
+    {
+        State.SYS_USER_REQUESTS_MOVIE_RECOMMENDATION: is_yes_request,
+        State.SYS_MENTIONED_MOVIES: no_requests_request,  # not_confident_lets_chat_about_movies_response
+    },
+)
+simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
 
 ##################################################################################################################
 #  SYS_USER_EXPRESSES_OPINION_ABOUT_MOVIE_GENRE
@@ -1262,7 +1383,7 @@ simplified_dialogflow.add_user_serial_transitions(
     State.USR_HAVE_YOU_HEARD_FACT,
     {
         State.SYS_GIVE_FACT_ABOUT_MOVIE: give_more_fact_request,
-        State.SYS_ASK_QUESTION_ABOUT_MOVIE_TITLE: no_requests_request,
+        State.USR_WAS_OFFERED_RECOMMENDATIONS: no_requests_request,
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
