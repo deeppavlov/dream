@@ -1,0 +1,735 @@
+{
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "hi.",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "hi",
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9982210397720337
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9222673177719116
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9989813566207886
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9996328353881836
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.737921953201294
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0014452040195465088
+                            }
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.009537387639284134,
+                            "conversational": 0.990462601184845
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "cobot_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "hi.",
+                            "segments": [
+                                "hi."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.003737201215699315,
+                                "command": 0.014534037560224533,
+                                "comment": 0.007815582677721977,
+                                "complaint": 0.01387196034193039,
+                                "dev_command": 0.011961274780333042,
+                                "neg_answer": 0.0012791294138878584,
+                                "open_question_factual": 0.007067359518259764,
+                                "open_question_opinion": 0.0020942059345543385,
+                                "opinion": 0.02820507064461708,
+                                "other_answers": 0.002917045960202813,
+                                "pos_answer": 0.003618009854108095,
+                                "statement": 0.8965854644775391,
+                                "yes_no_question": 0.006313652731478214
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "cobot_entities": {
+                            "entities": [],
+                            "labelled_entities": []
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Other"
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi."
+                            ]
+                        },
+                        "entity_linking": [],
+                        "conceptnet": {},
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Click to email this to a friend (Opens in new window)\nClick to share on Twitter (Opens in new window)\nClick to share on Facebook (Opens in new window)\nThat\u2019s what friends are for.\nAn emotional Matthew Perry was comforted by \u201cFriends\u201d co-star Jennifer... [2153 chars]",
+                                    "description": "Click to email this to a friend (Opens in new window)\nClick to share on Twitter (Opens in new window)\nClick to share on Facebook (Opens in new window)\nThat\u2019s what friends are for.",
+                                    "image": "https://pagesix.com/wp-content/uploads/sites/3/2021/05/friends-matthew-perry-jennifer-aniston-75-1.jpg?quality=90&strip=all&w=1200",
+                                    "publishedAt": "2021-05-20T12:51:00Z",
+                                    "source": {
+                                        "name": "Page Six",
+                                        "url": "https://pagesix.com"
+                                    },
+                                    "title": "Emotional Matthew Perry on the verge of tears in \u2018Friends\u2019 trailer",
+                                    "url": "https://pagesix.com/2021/05/20/matthew-perry-comforted-by-jennifer-aniston-in-new-friends-trailer/"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": [],
+                        "wiki_parser": {
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "cobotqa_annotator": {
+                            "facts": [],
+                            "response": ""
+                        }
+                    }
+                },
+                {
+                    "text": "i was watching dans paris.",
+                    "annotations": {
+                        "spelling_preprocessing": "i was watching dans paris",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9985626339912415
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.997786283493042
+                            },
+                            "cobot_topics": {
+                                "Politics": 0.02882280945777893
+                            },
+                            "emotion_classification": {
+                                "joy": 0.5778898000717163,
+                                "neutral": 0.993910014629364
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.657469630241394
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0010618269443511963
+                            }
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.01372464932501316,
+                            "conversational": 0.986275315284729
+                        },
+                        "cobot_nounphrases": [
+                            "dans",
+                            "paris"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "i was watching dans paris.",
+                            "segments": [
+                                "i was watching dans paris."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "cobot_entities": {
+                            "entities": [
+                                "dans paris"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "videoname",
+                                    "text": "dans paris"
+                                }
+                            ]
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 5,
+                                    "start_pos": 3,
+                                    "text": "dans paris",
+                                    "type": "PER"
+                                }
+                            ]
+                        ],
+                        "cobot_topics": {
+                            "text": [
+                                "Movies_TV"
+                            ]
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Phatic"
+                            ]
+                        },
+                        "conceptnet": {
+                            "dans paris": {
+                                "Causes": [
+                                    "terrorism",
+                                    "revolution",
+                                    "death"
+                                ],
+                                "CausesDesire": [
+                                    "go to paris",
+                                    "see art",
+                                    "see paris"
+                                ],
+                                "HasProperty": [
+                                    "famous for it chocolate",
+                                    "famous for their chocolate",
+                                    "very popular"
+                                ],
+                                "SymbolOf": [
+                                    "paris",
+                                    "terrorism",
+                                    "france"
+                                ]
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.000534859427716583,
+                                "command": 0.0015844732988625765,
+                                "comment": 0.0017900775419548154,
+                                "complaint": 0.0014856165507808328,
+                                "dev_command": 0.001150240539573133,
+                                "neg_answer": 0.0006977489101700485,
+                                "open_question_factual": 0.0009051082888618112,
+                                "open_question_opinion": 0.00042836341890506446,
+                                "opinion": 0.008521582931280136,
+                                "other_answers": 0.0010040879715234041,
+                                "pos_answer": 0.0007783295004628599,
+                                "statement": 0.9799756407737732,
+                                "yes_no_question": 0.001143883098848164
+                            }
+                        ],
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    0.04390682280063629,
+                                    0.8388468623161316,
+                                    0.991741418838501,
+                                    0.9008011221885681,
+                                    0.8377069234848022
+                                ],
+                                "entity_ids": [
+                                    "Q2016952",
+                                    "Q514741",
+                                    "Q90",
+                                    "Q3181341",
+                                    "Q167646"
+                                ],
+                                "entity_pages": [
+                                    "Dans Paris (English: Inside Paris) is a 2006 French romantic drama film written and directed by Christophe Honor\u00e9 and starring Romain Duris, Louis Garrel, Guy Marchand, Joana Preiss, Alice Butaud, and Marie-France Pisier.",
+                                    "Bruno Paulin Gaston Paris (9 August 1839 \u2013 5 March 1903) was a French writer and scholar. He was nominated for the Nobel Prize in Literature in 1901, 1902 and 1903."
+                                ],
+                                "entity_pages_titles": [
+                                    "Dans Paris",
+                                    "Gaston Paris",
+                                    "Paris",
+                                    "Paris, Kentucky",
+                                    "Paris (mythology)"
+                                ],
+                                "entity_substr": "dans paris",
+                                "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            }
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is an Alexa Prize Socialbot! How are you doing today?",
+                                "i was watching dans paris."
+                            ]
+                        },
+                        "fact_retrieval": [
+                            "Dans Paris (English: Inside Paris) is a 2006 French romantic drama film written and directed by Christophe Honor\u00e9 and starring Romain Duris, Louis Garrel, Guy Marchand, Joana Preiss, Alice Butaud, and Marie-France Pisier.",
+                            "Bruno Paulin Gaston Paris (9 August 1839 \u2013 5 March 1903) was a French writer and scholar.",
+                            "He was nominated for the Nobel Prize in Literature in 1901, 1902 and 1903."
+                        ],
+                        "wiki_parser": {
+                            "entities_info": {
+                                "dans paris": {
+                                    "conf": 0.04390682280063629,
+                                    "entity_label": "Dans Paris",
+                                    "genre": [
+                                        [
+                                            "Q1054574",
+                                            "romance film"
+                                        ],
+                                        [
+                                            "Q130232",
+                                            "drama"
+                                        ]
+                                    ],
+                                    "has quality": [
+                                        [
+                                            "Q45172088",
+                                            "fails the Bechdel Test"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q11424",
+                                            "film"
+                                        ]
+                                    ],
+                                    "narrative location": [
+                                        [
+                                            "Q90",
+                                            "Paris"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q2016952",
+                                    "pos": 0,
+                                    "publication date": [
+                                        [
+                                            "\"+2006-01-01^^T\"",
+                                            "01 January 2006"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q20937557",
+                                            "series"
+                                        ],
+                                        [
+                                            "Q10301427",
+                                            "moving image"
+                                        ],
+                                        [
+                                            "Q4502142",
+                                            "visual artwork"
+                                        ],
+                                        [
+                                            "Q2431196",
+                                            "audiovisual work"
+                                        ],
+                                        [
+                                            "Q11424",
+                                            "film"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "topic_skill_entities_info": {
+                                "dans paris": {
+                                    "conf": 0.04390682280063629,
+                                    "entity_label": "Dans Paris",
+                                    "genre": [
+                                        [
+                                            "Q1054574",
+                                            "romance film"
+                                        ],
+                                        [
+                                            "Q130232",
+                                            "drama"
+                                        ]
+                                    ],
+                                    "has quality": [
+                                        [
+                                            "Q45172088",
+                                            "fails the Bechdel Test"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q11424",
+                                            "film"
+                                        ]
+                                    ],
+                                    "narrative location": [
+                                        [
+                                            "Q90",
+                                            "Paris"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q2016952",
+                                    "pos": 0,
+                                    "publication date": [
+                                        [
+                                            "\"+2006-01-01^^T\"",
+                                            "01 January 2006"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q20937557",
+                                            "series"
+                                        ],
+                                        [
+                                            "Q10301427",
+                                            "moving image"
+                                        ],
+                                        [
+                                            "Q4502142",
+                                            "visual artwork"
+                                        ],
+                                        [
+                                            "Q2431196",
+                                            "audiovisual work"
+                                        ],
+                                        [
+                                            "Q11424",
+                                            "film"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "kbqa": {
+                            "answer": "Not Found",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "A massive explosion in Northern California on Wednesday that destroyed a home and several vehicles was caused by three kids playing with fire in a backyard, officials said.\nVideo shows plumes of smoke and flames billowing into the sky in Martinez, no... [893 chars]",
+                                    "description": "A massive explosion in Northern California on Wednesday that destroyed a home and several vehicles was caused by three kids playing with fire in a backyard, officials said.",
+                                    "image": "https://media-cldnry.s-nbcnews.com/image/upload/t_nbcnews-fp-1200-630,f_auto,q_auto:best/newscms/2021_20/3476308/210520-martinez-fire-mb-1352.jpg",
+                                    "publishedAt": "2021-05-20T13:41:11Z",
+                                    "source": {
+                                        "name": "NBC News",
+                                        "url": "https://www.nbcnews.com"
+                                    },
+                                    "title": "Massive Northern California explosion caught on video caused by three kids playing with fire, officials say",
+                                    "url": "https://www.nbcnews.com/news/us-news/massive-northern-california-explosion-caught-video-caused-three-kids-playing-n1268005"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "dans paris",
+                                "news": {},
+                                "which": "human"
+                            },
+                            {
+                                "entity": "alexa prize",
+                                "news": {
+                                    "content": "From podcasts to Clubhouse, branded audio is more important than ever. Learn how brands are increasing customer loyalty and personalization with these best practices.\nJoin Transform 2021 for the most important themes in enterprise AI & Data. Learn mo... [5218 chars]",
+                                    "description": "From podcasts to Clubhouse, branded audio is more important than ever. Learn how brands are increasing customer loyalty and personalization with these best practices.",
+                                    "image": "https://venturebeat.com/wp-content/uploads/2020/01/amazon-alexa-echo-studio-echo-flex-fire-tv-cube-2.jpg?w=1200&strip=all",
+                                    "publishedAt": "2021-03-11T14:00:34Z",
+                                    "source": {
+                                        "name": "VentureBeat",
+                                        "url": "https://venturebeat.com"
+                                    },
+                                    "title": "Multitasking chatbots are the new Amazon Alexa Prize challenge",
+                                    "url": "https://venturebeat.com/2021/03/11/multitasking-chatbots-are-the-new-amazon-alexa-prize-challenge/"
+                                },
+                                "which": "bot"
+                            }
+                        ],
+                        "cobotqa_annotator": {
+                            "facts": [
+                                {
+                                    "entity": "dans paris",
+                                    "fact": "Here's a fact about Dans Paris. In one scene of the film, where Jonathan walks in front of the cinema, two movie posters are shown. One is for A History of Violence (2005), a film which was also released in cinemas in France via the same distributor as this film. The other is for Last Days (2005) starring Michael Pitt, who co-starred with Louis Garrel in The Dreamers (2003)."
+                                }
+                            ],
+                            "response": ""
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Hi, this is an Alexa Prize Socialbot! How are you doing today?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Hi, this is an Alexa Prize Socialbot! How are you doing today?",
+                            "segments": [
+                                "Hi, this is an Alexa Prize Socialbot!",
+                                "How are you doing today?"
+                            ]
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 7,
+                                    "start_pos": 5,
+                                    "text": "alexa prize",
+                                    "type": "MISC"
+                                }
+                            ],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is an Alexa Prize Socialbot! How are you doing today?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_friendship_skill"
+                }
+            ]
+        }
+    ],
+    "dff_movie_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        ""
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

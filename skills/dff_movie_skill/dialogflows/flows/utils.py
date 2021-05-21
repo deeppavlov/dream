@@ -1,8 +1,11 @@
 import re
+import json
+import pathlib
 import string
 
 from common.universal_templates import if_chat_about_particular_topic, \
     if_choose_topic, COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
+from common.utils import get_not_used_template
 from nltk.tokenize import word_tokenize
 
 
@@ -147,3 +150,24 @@ def lets_chat_about_movies(uttr, prev_uttr=None):
         return True
     else:
         return False
+
+
+with open(pathlib.Path(__file__).resolve().parent.parent.parent / "databases/recommendations.json", "r") as f:
+    RECOMMENDATIONS = json.load(f)
+
+
+def recommend_movie_of_genre(genre, discussed_movie_ids=None):
+    discussed_movie_ids = discussed_movie_ids if discussed_movie_ids is not None else []
+
+    # let's convert genre from `criminal` to `Crime` (standard IMDb genre)
+    for capitalized_genre in GENRES:
+        if genre.lower() in GENRES[capitalized_genre]:
+            genre = capitalized_genre
+
+    # randomly pick up not discussed movie
+    if RECOMMENDATIONS.get(genre, []):
+        # because in RECOMMENDATIONS file imdb ids are started from tt, but in our case we store only digits
+        available_ids = [pair[0][2:] for pair in RECOMMENDATIONS[genre]]
+        return get_not_used_template(discussed_movie_ids, available_ids, any_if_no_available=False)
+
+    return ""
