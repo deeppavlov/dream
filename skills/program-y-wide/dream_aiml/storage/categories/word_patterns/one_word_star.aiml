@@ -1893,7 +1893,6 @@
         <template>
             <random>
                 <li>I can see you're committed to knowing the truth.</li>
-                <li>I appreciate your candor.</li>
                 <li>I can see you feel passionate about this.</li>
             </random>
         </template>
