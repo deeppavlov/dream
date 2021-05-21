@@ -1182,9 +1182,9 @@ services:
       replicas: 4
       resources:
         limits:
-          memory: 1536M
+          memory: 2048M
         reservations:
-          memory: 1536M
+          memory: 2048M
 
   user-persona-extractor:
     build:
