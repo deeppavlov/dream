@@ -11,8 +11,9 @@ from os import getenv
 import sentry_sdk
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT, MUST_CONTINUE
-from common.utils import get_skill_outputs_from_dialog, get_sentiment, get_entities, join_word_beginnings_in_or_pattern
+from common.utils import get_skill_outputs_from_dialog, get_sentiment
 from common.universal_templates import if_choose_topic, if_switch_topic, if_chat_about_particular_topic
+from topic_words import TOPIC_PATTERNS
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -23,28 +24,19 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-
-with open("topic_words.json", "r") as f:
-    TOPIC_PATTERNS = json.load(f)
-
-for topic in TOPIC_PATTERNS:
-    words = TOPIC_PATTERNS[topic]
-    TOPIC_PATTERNS[topic] = re.compile(join_word_beginnings_in_or_pattern(words), re.IGNORECASE)
-
 with open("small_talk_scripts.json", "r") as f:
     TOPIC_SCRIPTS = json.load(f)
 
 USER_TOPIC_START_CONFIDENCE = 0.98
-FOUND_WORD_START_CONFIDENCE = 0.5
+FOUND_WORD_START_CONFIDENCE = 0.9
 BOT_TOPIC_START_CONFIDENCE = 0.98
 CONTINUE_CONFIDENCE = 0.99
 LONG_ANSWER_CONTINUE_CONFIDENCE = 1.0
 YES_CONTINUE_CONFIDENCE = 1.0
 # if let's chat about TOPIC [key-words]
 NOT_SCRIPTED_TOPICS = [
-    'cars', "depression", "family", "life", "love", "me", "politics", "science",
-    # TODO: remove science when dff-science-skill will be merged
-    "school", "sex", "star wars", "donald trump", "work", "you", "superheroes"
+    'cars', "depression", "family", "life", "love", "politics",
+    "school", "sex", "star wars", "donald trump", "work", "superheroes"
 ]
 
 
@@ -228,43 +220,6 @@ def find_topics_in_substring(substring):
     return topics
 
 
-def extract_topics(curr_uttr):
-    entities = get_entities(curr_uttr, only_named=True, with_labels=False)
-    entities = [ent.lower() for ent in entities]
-    entities = [ent for ent in entities
-                if not (ent == "alexa" and curr_uttr["text"].lower()[:5] == "alexa") and "news" not in ent]
-    if len(entities) == 0:
-        for ent in get_entities(curr_uttr, only_named=False, with_labels=False):
-            if ent in entities:
-                pass
-            else:
-                entities.append(ent)
-    entities = [ent for ent in entities if len(ent) > 0]
-    return entities
-
-
-def extract_topic_from_user_uttr(dialog):
-    """
-    Extract one of the considered topics out of `TOPIC_WORDS.keys()`.
-    If none of them, return empty string.
-
-    Args:
-        dialog: dialog from agent
-
-    Returns:
-        string topic
-    """
-    entities = extract_topics(dialog["human_utterances"][-1])
-    topics = []
-    for entity in entities:
-        topics += find_topics_in_substring(entity)
-    if len(topics) > 0:
-        logger.info(f"Extracted topic `{topics[-1]}` from user utterance.")
-        return topics[-1]
-    else:
-        return ""
-
-
 def which_topic_lets_chat_about(last_user_uttr, last_bot_uttr):
     for topic in TOPIC_PATTERNS:
         if if_chat_about_particular_topic(last_user_uttr, last_bot_uttr, compiled_pattern=TOPIC_PATTERNS[topic]):
@@ -320,7 +275,8 @@ def pickup_topic_and_start_small_talk(dialog):
             confidence = USER_TOPIC_START_CONFIDENCE
         logger.info(f"User initiates script on topic: `{topic}`.")
     else:
-        topic = extract_topic_from_user_uttr(dialog)
+        topic = find_topics_in_substring(dialog["human_utterances"][-1]["text"])
+        topic = topic[-1] if len(topic) else ""
         if len(topic) > 0:
             response = TOPIC_SCRIPTS.get(topic, [""])[0]
             confidence = FOUND_WORD_START_CONFIDENCE
