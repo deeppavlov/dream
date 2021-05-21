@@ -40,7 +40,7 @@ FOOD_WORDS_RE = re.compile(FOOD_WORDS, re.IGNORECASE)
 WHAT_COOK_RE = re.compile(WHAT_COOK, re.IGNORECASE)
 DONOTKNOW_LIKE_RE = re.compile(join_words_in_or_pattern(DONOTKNOW_LIKE), re.IGNORECASE)
 NO_WORDS_RE = re.compile(r"(\bnot\b|n't|\bno\b) ", re.IGNORECASE)
-FAV_RE = re.compile(r"favou?rite|like", re.IGNORECASE)
+# FAV_RE = re.compile(r"favou?rite|like", re.IGNORECASE)
 LIKE_RE = re.compile(r"i (like|love|adore)", re.IGNORECASE)
 
 MEALS = [
@@ -480,9 +480,9 @@ def what_fav_food_response(vars):
         fav_item = food_types.get(food_type, [])
         if fav_item:
             if food_type != "drink":
-                return f"I like to eat {fav_item[0]}. {fav_item[1]} What is your favorite {food_type}?"
+                return f"I like to eat {fav_item[0]}. {fav_item[1]} What {food_type} do you like?"
             else:
-                return f"I like to drink {fav_item[0]}. {fav_item[1]} What is your favorite {food_type}?"
+                return f"I like to drink {fav_item[0]}. {fav_item[1]} What {food_type} do you prefer?"
         else:
             state_utils.set_confidence(vars, 0)
             state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
@@ -494,7 +494,7 @@ def what_fav_food_response(vars):
         return error_response(vars)
 
 
-def fav_food_request(ngrams, vars):
+def fav_food_check(vars):
     flag = False
     user_fav_food = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
     # cobot_topic = "Food_Drink" in get_topics(state_utils.get_last_human_utterance(vars), which="cobot_topics")
@@ -508,6 +508,12 @@ def fav_food_request(ngrams, vars):
         ]
     ):
         flag = True
+    logger.info(f"fav_food_check {flag}")
+    return flag
+
+
+def fav_food_request(ngrams, vars):
+    flag = fav_food_check(vars)
     logger.info(f"fav_food_request {flag}")
     return flag
 
@@ -545,7 +551,12 @@ def food_fact_response(vars):
                 fact = facts[0].get("fact", "")
                 entity = facts[0].get("entity", "")
         try:
-            state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
+            if bot_persona_fav_food_check(vars) or len(
+                state_utils.get_last_human_utterance(vars)['text'].split()
+            ) == 1:
+                state_utils.set_confidence(vars, confidence=CONF_HIGH)
+            else:
+                state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
             if re.search(DONOTKNOW_LIKE_RE, human_utt_text):
                 state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
                 state_utils.set_confidence(vars, confidence=0.)
@@ -645,7 +656,7 @@ def gourmet_response(vars):
     try:
         state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
-        return "It seems you're a gourmet! What is your favorite meal?"
+        return "It seems you're a gourmet! What meal do you like?"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -698,7 +709,7 @@ def suggest_cook_response(vars):
                 state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
                 state_utils.set_confidence(vars, 0)
                 return error_response(vars)
-            return "May I recommend you a meal to try?"
+            return "May I recommend you a meal to try to practice cooking?"
         else:
             state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
             state_utils.set_confidence(vars, 0)
@@ -770,7 +781,7 @@ def check_cooking_request(ngrams, vars):
 
 def said_fav_food_request(ngrams, vars):
     flag = False
-    fav_in_bot_utt = re.search(FAV_RE, state_utils.get_last_bot_utterance(vars)["text"])
+    # fav_in_bot_utt = re.search(FAV_RE, state_utils.get_last_bot_utterance(vars)["text"])
     food_checked = any(
         [
             re.search(FOOD_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"]),
@@ -779,21 +790,30 @@ def said_fav_food_request(ngrams, vars):
     )
     if dont_want_talk(vars):
         flag = False
-    elif (fav_in_bot_utt and food_checked):
+    # (fav_in_bot_utt and
+    elif food_checked:
         flag = True
+    else:
+        flag = False
     logger.info(f"said_fav_food_request {flag}")
     return flag
 
 
-def bot_persona_fav_food_request(ngrams, vars):
+def bot_persona_fav_food_check(vars):
     flag = False
     if all(
         [
             "my favorite food is lava cake" in state_utils.get_last_bot_utterance(vars)["text"].lower(),
-            fav_food_request(ngrams, vars)
+            fav_food_check(vars)
         ]
     ):
         flag = True
+    logger.info(f"bot_persona_fav_food_check {flag}")
+    return flag
+
+
+def bot_persona_fav_food_request(ngrams, vars):
+    flag = bot_persona_fav_food_check(vars)
     logger.info(f"bot_persona_fav_food_request {flag}")
     return flag
 
@@ -829,11 +849,11 @@ def what_cuisine_request(ngrams, vars):
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_START,
     {
-        State.SYS_SAID_FAV_FOOD: said_fav_food_request,
         State.SYS_WHAT_COOK: what_cook_request,
         State.SYS_BOT_PERSONA_FAV_FOOD: bot_persona_fav_food_request,
         State.SYS_CHECK_COOKING: check_cooking_request,
         State.SYS_WHAT_FAV_FOOD: what_fav_food_request,
+        State.SYS_SAID_FAV_FOOD: said_fav_food_request,
         State.SYS_WHAT_CUISINE: what_cuisine_request,
     },
 )
