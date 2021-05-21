@@ -52,6 +52,6 @@ hypothesis-scorer:
   CUDA_VISIBLE_DEVICES: '0'
   gpu: 1
 
-hypothesis-scorer:
+topic-recommendation:
   CUDA_VISIBLE_DEVICES: '0'
   gpu: 1
