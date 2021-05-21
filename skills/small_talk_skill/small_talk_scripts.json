@@ -247,6 +247,67 @@
       ]
     }
   ],
+  "superheroes": [
+    "Do you like superheroes?",
+    {
+      "yes": [
+        "I like them, too. I've heard that many people love superheroes. Do you have a favorite one?",
+        {
+          "yes" :[
+            "Tell me more about yours. What is their story?",
+            "Aha. Interesting. Would you want to be them?", 
+            {
+              "yes" : [
+                "Wonderful! I think that while it's great to be a superhero, it is a hard work. What do you think?",
+                "Huh. Being a superhero means not unly having superpowers but also having responsibility.",
+                "You know, it's like when Batman or Spiderman help people in the need.",
+                "Hmmm. Do you think there are real superheroes in the world?", 
+                {
+                  "yes": [
+                    "Right. I also think so. Do you know a real superhero? In my case I know many real superheroes!",
+                    "For example, members of the team who made me, they all are superheroes to me. They work relentlessly on me.",
+                    "But I also believe that teachers at school are superheroes. Wonder why?", 
+                    "Teachers are superheroes because they bravely help pupils to learn more and to grow as people.",
+                    "Still I think the most important superhero in the world is you.",
+                    "My advice for your is simple: No matter what other people think of you, no matter what obstacles are in your way, stand up for the little guy and defend the greater good."
+                  ],
+                  "no": [
+                    "I believe there are. I know many of superheroes.",
+                    "For example, members of the team who made me, they all are superheroes to me. They work relentlessly on me.",
+                    "But I also believe that teachers at school are superheroes. Wonder why?", 
+                    "Teachers are superheroes because they bravely help pupils to learn more and to grow as people.",
+                    "Still I think the most important superhero in the world is you.",
+                    "My advice for your is simple: No matter what other people think of you, no matter what obstacles are in your way, stand up for the little guy and defend the greater good."
+                  ]
+                }
+              ],
+              "no": [
+                "Whom would you want to be the most?",
+                "Aha. Interesting. Can you tell me why?",
+                "Hmm. I see.",
+                "Well thank you very much for sharing this with me!"
+              ]
+              
+            }
+          ],
+          "no" :[
+            "Oh. Well. I see. Well, maybe it's because you're a superhero already?",
+            "Still I think the most important superhero in the world is you.",
+            "My advice for your is simple: No matter what other people think of you, no matter what obstacles are in your way, stand up for the little guy and defend the greater good."
+          ]
+        }
+      ],
+      "no" :[
+        "Oh. I see. Well, it's totally fine not to like superheroes. After all, they don't exist. But...",
+        "Actually there are some real superheroes. They won't call themselves that way but they do a hard work.",
+        "For example, members of the team who made me, they all are superheroes to me. They work relentlessly on me.",
+        "But I also believe that teachers at school are superheroes. Wonder why?", 
+        "Teachers are superheroes because they bravely help pupils to learn more and to grow as people.",
+        "Still I think the most important superhero in the world is you.",
+        "My advice for your is simple: No matter what other people think of you, no matter what obstacles are in your way, stand up for the little guy and defend the greater good."
+      ]
+    }
+  ],
   "sex": [
     "Oh... Did you forget that I am a socialbot? I can't tell you anything about it just because I don't know. Tell me what it is.",
     "Wow... Maybe my life is very boring without it. Does it bring you satisfaction?",
