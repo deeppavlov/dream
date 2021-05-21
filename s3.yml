@@ -50,7 +50,7 @@ services:
     build:
       args:
         AUTHOR_NAMES: http://team-dream-storage.s3.amazonaws.com/alexaprize_data/book_author_names.txt
-        QUERY_DICT: http://team-dream-storage.s3.amazonaws.com/alexaprize_data/book_query_dict.pkl
+        QUERY_DICT: http://team-dream-storage.s3.amazonaws.com/alexaprize_data/book_query_dict2.pkl
   dff-movie-skill:
     build:
       args:
