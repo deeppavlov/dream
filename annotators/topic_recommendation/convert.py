@@ -16,7 +16,6 @@ import tensorflow_text
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 tensorflow_text.__name__
@@ -75,8 +74,8 @@ def encode_responses(texts):
 
 
 def get_ranked_list(context, responses):
-    logger.warning(context)
-    logger.warning(responses)
+    # logger.warning(context)
+    # logger.warning(responses)
     context_encoding = encode_contexts(context)
     response_encodings = encode_responses(responses)  # 79, 512
     scores = context_encoding.dot(response_encodings.T)

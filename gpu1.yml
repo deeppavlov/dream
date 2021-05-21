@@ -54,5 +54,8 @@ services:
   ner:
     environment:
       - CUDA_VISIBLE_DEVICES=1
+  topic-recommendation:
+    environment:
+      - CUDA_VISIBLE_DEVICES=1
 
 version: '3.7'

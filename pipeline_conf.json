@@ -437,7 +437,7 @@
             "topic_recommendation": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 1,
                     "url": "http://topic-recommendation:8113/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:convert_formatter_dialog",
