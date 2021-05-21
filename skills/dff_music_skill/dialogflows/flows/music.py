@@ -52,6 +52,9 @@ what_listen_re = re.compile(
     r"what( music| kind of music| songs?| artists?)? "
     r"((should|can|may) I listen|(would |do |are )?you (suggest|recommend|offer) (listening|to listen))",
     re.IGNORECASE)
+eighties_re = re.compile(r"(80s|eighties)", re.IGNORECASE)
+seventies_re = re.compile(r"(70s|seventies)", re.IGNORECASE)
+
 # what_music = re.compile(r"(what should i|what do you suggest me to) (cook|make for dinner)"
 #                        "( tonight| today| tomorrow){0,1}", re.IGNORECASE)
 
@@ -242,7 +245,7 @@ def i_like_request(ngrams, vars):
 
 def want_music_response(vars):
     try:
-        state_utils.set_confidence(vars, CAN_CONTINUE_CONFIDENCE)
+        state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
         return "Do you want to talk about music?"
     except Exception as exc:
@@ -332,6 +335,11 @@ def taste_response(vars):
 
 def get_genre(vars):
     genres = MUSIC_DATA.get("genres", [])
+    human_utt = state_utils.get_last_human_utterance(vars)['text']
+    if re.search(eighties_re, human_utt):
+        return "80s"
+    elif re.search(seventies_re, human_utt):
+        return "70s"
     wiki_parser = state_utils.get_last_human_utterance(vars)["annotations"].get("wiki_parser", {'entities_info': {}})
     for entity in wiki_parser['entities_info']:
         logger.info(f"Entity: {wiki_parser['entities_info'][entity]}")
@@ -424,6 +432,14 @@ def genre_specific_response(vars):
         elif genre == "alternative":
             return f"When I was younger, I used to listen to Linkin Park a lot. \
             Oh boy, what a legendary band that was. Have you heard about them?"
+        elif genre == "80s":
+            return "I adore 80s music, especially AC/DC. " \
+                   "Their heavy metal album Back in Black is truly fantastic!" \
+                   "Do you know that it's hardcover was black in memory to the Bon Scott?"
+        elif genre == "70s":
+            return "Ah, ABBA group was so cool in the 70s, " \
+                   "I truly enjoy their disco hit Dancing Queen, it makes me feel like dancing. " \
+                   "Do you know that they have sold over 300 million albums and singles worldwide?"
         elif genre == "indie":
             return f"Indie music is so diverse! I like MGMT, and I am a fan of \
             the Pixies. Did you know that David Bowie was their fan too?"
@@ -470,7 +486,7 @@ def genre_advice_response(vars):
 
         genre = state_utils.get_shared_memory(vars).get("genre", "pop")
 
-        if genre == "pop":
+        if genre in ["pop", "80s", "70s"]:
             return f"Well, now you know it."
         elif genre == "jazz":
             return f"Oh, you should definitely check them out, like, one hundred percent."
