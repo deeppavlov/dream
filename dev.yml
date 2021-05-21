@@ -410,6 +410,13 @@ services:
       - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8097:8097
+  dff-science-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_science_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8101:8101
   dff-music-skill:
     env_file: [.env.dev]
     volumes:

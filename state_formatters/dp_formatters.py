@@ -672,6 +672,10 @@ def dff_travel_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_travel_skill")
 
 
+def dff_science_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_science_skill")
+
+
 def dff_gossip_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_gossip_skill")
 

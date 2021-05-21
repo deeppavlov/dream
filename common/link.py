@@ -20,6 +20,7 @@ import common.gossip as dff_gossip_skill
 import common.sport as dff_sport_skill
 import common.animals as dff_animals_skill
 import common.food as dff_food_skill
+import common.science as dff_science_skill
 import common.music as dff_music_skill
 from common.utils import get_not_used_template
 from common.response_selection import COMPLETELY_CHANGING_THE_SUBJECT_PHRASES, CHANGE_TOPIC_SUBJECT, BY_THE_WAY
@@ -43,6 +44,7 @@ skills_phrases_map = {
     # 'dff_celebrity_skill': set(dff_celebrity_skill.skill_trigger_phrases()),
     'dff_gossip_skill': set(dff_gossip_skill.skill_trigger_phrases()),
     'dff_food_skill': set(dff_food_skill.skill_trigger_phrases()),
+    'dff_science_skill': set(dff_science_skill.skill_trigger_phrases()),
     'dff_sport_skill': set(dff_sport_skill.skill_trigger_phrases()),
     'dff_music_skill': set(dff_music_skill.skill_trigger_phrases())
 }
@@ -56,6 +58,7 @@ LIST_OF_SCRIPTED_TOPICS = {
     "dff_animals_skill": "pets",
     "dff_sport_skill": "sport",
     "dff_food_skill": "food",
+    "dff_science_skill": "science",
     "dff_music_skill": "music",
     # "dff_celebrity_skill": "celebrities"
     "dff_gossip_skill": "gossips"

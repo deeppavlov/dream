@@ -7,7 +7,7 @@ ACTIVE_SKILLS = [
     "valentines_dat_skill", "weather_skill", "wikidata_dial_skill",
     "comet_dialog_skill",
     "dff_animals_skill", "dff_food_skill", "dff_music_skill", "dff_sport_skill", "dff_travel_skill",
-    "dff_celebrity_skill", "dff_bot_persona_skill", "dff_gaming_skill", "dff_gossip_skill",
+    "dff_celebrity_skill", "dff_bot_persona_skill", "dff_gaming_skill", "dff_science_skill", "dff_gossip_skill",
     "small_talk_skill",
 ]
 ALMOST_ACTIVE_SKILLS = [

@@ -1,0 +1,406 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "let's talk about science.",
+                    "annotations": {
+                        "spelling_preprocessing": "let's talk about science",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.9953375458717346
+                            },
+                            "cobot_dialogact_topics": {
+                                "Science_and_Technology": 0.9962629079818726
+                            },
+                            "cobot_topics": {
+                                "SciTech": 0.999563455581665
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9997416734695435
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6656569838523865
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.00158730149269104
+                            }
+                        },
+                        "sentseg": {
+                            "punct_sent": "let's talk about science.",
+                            "segments": [
+                                "let's talk about science."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0018734951736405492,
+                                "command": 0.9727977514266968,
+                                "comment": 0.0012754822382703424,
+                                "complaint": 0.002020294778048992,
+                                "dev_command": 0.007987224496901035,
+                                "neg_answer": 0.0011888064909726381,
+                                "open_question_factual": 0.0012769977329298854,
+                                "open_question_opinion": 0.0017748235259205103,
+                                "opinion": 0.0018187272362411022,
+                                "other_answers": 0.000755620130803436,
+                                "pos_answer": 0.0031334846280515194,
+                                "statement": 0.0020494740456342697,
+                                "yes_no_question": 0.002047816524282098
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "cobot_dialogact": {
+                            "intents": [
+                                "Information_RequestIntent"
+                            ],
+                            "topics": [
+                                "Science_and_Technology"
+                            ]
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.0032045755069702864,
+                            "conversational": 0.9967954754829407
+                        },
+                        "cobot_nounphrases": [
+                            "science"
+                        ],
+                        "cobot_topics": {
+                            "text": [
+                                "SciTech"
+                            ]
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "let's talk about science."
+                            ]
+                        },
+                        "cobot_entities": {
+                            "entities": [
+                                "science"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "text": "science"
+                                }
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "news_api_skill",
+                            "dff_gossip_skill",
+                            "dff_sport_skill"
+                        ],
+                        "conceptnet": {
+                            "science": {
+                                "Causes": [
+                                    "you get more knowledge",
+                                    "knowledge",
+                                    "you will learn"
+                                ],
+                                "CausesDesire": [
+                                    "study",
+                                    "understand world",
+                                    "learn"
+                                ],
+                                "HasProperty": [
+                                    "fun",
+                                    "very important",
+                                    "important"
+                                ],
+                                "SymbolOf": [
+                                    "science",
+                                    "genius",
+                                    "knowledge"
+                                ]
+                            }
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "\u2014 Numerous gas stations in the Triangle struggled Tuesday to keep the pumps open following a cyberattack on a major interstate fuel pipeline.\nAs people lined up to fill up at stations across the region, Gov. Roy Cooper's state of emergency declaratio... [1697 chars]",
+                                    "description": "\u2014 Numerous gas stations in the Triangle struggled Tuesday to keep the pumps open following a cyberattack on a major interstate fuel pipeline. As people lined up to fill up at stations across the region, Gov.",
+                                    "image": "https://wwwcache.wral.com/asset/news/national_world/national/2021/05/11/19672618/Sky_5_over_long_gas_lines-KMFOE-DMID1-5qtma43vn-640x480.jpg",
+                                    "publishedAt": "2021-05-11T19:31:14Z",
+                                    "source": {
+                                        "name": "WRAL.com",
+                                        "url": "https://www.wral.com"
+                                    },
+                                    "title": "Panic buying after pipeline hack leads to long lines, little fuel at Triangle gas stations",
+                                    "url": "https://www.wral.com/panic-buying-after-pipeline-hack-leads-to-long-lines-little-fuel-at-triangle-gas-stations/19672116/"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "science",
+                                "news": {
+                                    "content": "FILE - In this Nov.4, 2017 file photo, the logo of the United Nations Educational, Scientific and Cultural Organisation (UNESCO) is seen during the 39th session of the General Conference at the UNESCO headquarters in Paris. While the U.S. president i... [3079 chars]",
+                                    "description": "FILE - In this Nov.4, 2017 file photo, the logo of the United Nations Educational, Scientific and Cultural Organisation (UNESCO) is seen during the 39th session of the General Conference at the UNESCO headquarters in Paris.",
+                                    "image": "https://www.clickondetroit.com/resizer/qKlAenuEAvfWfzn9aXtOkSQIMrE=/800x533/smart/filters:format(jpeg):strip_exif(true):strip_icc(true):no_upscale(true):quality(65)/cloudfront-us-east-1.images.arcpublishing.com/gmg/J3IG3EOHXNAYVL3EAK6ZCVQ3LE.jpg",
+                                    "publishedAt": "2021-05-11T18:24:47Z",
+                                    "source": {
+                                        "name": "WDIV ClickOnDetroit",
+                                        "url": "https://www.clickondetroit.com"
+                                    },
+                                    "title": "Beyond vaccines, UNESCO seeks share more global science",
+                                    "url": "https://www.clickondetroit.com/business/2021/05/11/beyond-vaccines-unesco-seeks-share-more-global-science/"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "cobotqa_annotator": {
+                            "facts": [],
+                            "response": ""
+                        },
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    0.9762973189353943,
+                                    0.9576281309127808,
+                                    0.14688099920749664,
+                                    0.06017213687300682,
+                                    0.06017211824655533
+                                ],
+                                "entity_ids": [
+                                    "Q336",
+                                    "Q24207151",
+                                    "Q845056",
+                                    "Q55096607",
+                                    "Q55096732"
+                                ],
+                                "entity_pages": [
+                                    "Science (from the Latin word scientia, meaning \"knowledge\") is a systematic enterprise that builds and organizes knowledge in the form of testable explanations and predictions about the universe.",
+                                    "r/science, formally dubbed the New Reddit Journal of Science, is an Internet forum on Reddit where the community of participants discuss science topics. A popular feature of the forum is \"Ask me Anything\" (AMA) public discussions. As of 2014, r/science attracted 30,000\u2013100,000 visitors per day, making it the largest community-managed science forum and an attractive place to host discussions."
+                                ],
+                                "entity_pages_titles": [
+                                    "Science",
+                                    "R/science",
+                                    "Science Channel"
+                                ],
+                                "entity_substr": "science"
+                            }
+                        ],
+                        "fact_retrieval": [
+                            "Science (from the Latin word scientia, meaning \"knowledge\") is a systematic enterprise that builds and organizes knowledge in the form of testable explanations and predictions about the universe.",
+                            "r/science, formally dubbed the New Reddit Journal of Science, is an Internet forum on Reddit where the community of participants discuss science topics.",
+                            "A popular feature of the forum is \"Ask me Anything\" (AMA) public discussions."
+                        ],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "entities_info": {
+                                "science": {
+                                    "entity_label": "science",
+                                    "has quality": [
+                                        [
+                                            "Q3320364",
+                                            "scientific evidence"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q11862829",
+                                            "academic discipline"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q336",
+                                    "subclass of": [
+                                        [
+                                            "Q11862829",
+                                            "academic discipline"
+                                        ]
+                                    ],
+                                    "types_2hop": [
+                                        [
+                                            "Q24017414",
+                                            "first-order metaclass"
+                                        ],
+                                        [
+                                            "Q11862829",
+                                            "academic discipline"
+                                        ],
+                                        [
+                                            "Q1047113",
+                                            "specialty"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {
+                                "science": {
+                                    "entity_label": "science",
+                                    "has quality": [
+                                        [
+                                            "Q3320364",
+                                            "scientific evidence"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q11862829",
+                                            "academic discipline"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q336",
+                                    "pos": 0,
+                                    "subclass of": [
+                                        [
+                                            "Q11862829",
+                                            "academic discipline"
+                                        ]
+                                    ],
+                                    "types_2hop": [
+                                        [
+                                            "Q24017414",
+                                            "first-order metaclass"
+                                        ],
+                                        [
+                                            "Q11862829",
+                                            "academic discipline"
+                                        ],
+                                        [
+                                            "Q1047113",
+                                            "specialty"
+                                        ]
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_science_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_states": {},
+            "cross_links": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

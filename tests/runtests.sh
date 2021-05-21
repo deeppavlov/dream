@@ -147,7 +147,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
                      grounding-skill dff-friendship-skill masked-lm entity-storer wikidata-dial-skill \
                      dff-travel-skill dff-animals-skill dff-food-skill dff-sport-skill midas-classification \
                      fact-retrieval cobot-entities news-api-skill cobotqa-annotator hypothesis-scorer \
-                     dff-gossip-skill news-api-annotator dff-wiki-skill topic-recommendation \
+                     dff-gossip-skill news-api-annotator dff-wiki-skill topic-recommendation dff-science-skill\
                      user-persona-extractor; do
 
         echo "Run tests for $container"

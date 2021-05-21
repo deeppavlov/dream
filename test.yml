@@ -170,6 +170,8 @@ services:
     env_file: [ .env.dev ]
   dff-food-skill:
     env_file: [ .env.dev ]
+  dff-science-skill:
+    env_file: [ .env.dev ]
   dff-music-skill:
     env_file: [ .env.dev ]
   fact-retrieval:

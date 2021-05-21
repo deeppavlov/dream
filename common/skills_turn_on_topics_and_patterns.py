@@ -10,6 +10,7 @@ from common.funfact import FUNFACT_COMPILED_PATTERN
 from common.game_cooperative_skill import GAMES_COMPILED_PATTERN
 from common.movies import MOVIE_COMPILED_PATTERN
 from common.music import MUSIC_COMPILED_PATTERN
+from common.science import SCIENCE_COMPILED_PATTERN
 from common.news import NEWS_COMPILED_PATTERN, TOPIC_NEWS_OFFER
 from common.sport import KIND_OF_SPORTS_TEMPLATE, SPORT_TEMPLATE, KIND_OF_COMPETITION_TEMPLATE, COMPETITION_TEMPLATE, \
     ATHLETE_TEMPLETE
@@ -95,8 +96,8 @@ SKILL_TOPICS = {
         ]
     },
     "dff_science_skill": {
-        "compiled_patterns": [],
-        "previous_bot_patterns": [],
+        "compiled_patterns": [SCIENCE_COMPILED_PATTERN],
+        "previous_bot_patterns": [SCIENCE_COMPILED_PATTERN],
         "cobot_dialogact_topics": [
             "Science_and_Technology",
             "Entertainment_Books",

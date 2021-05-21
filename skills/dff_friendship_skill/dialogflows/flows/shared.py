@@ -107,6 +107,7 @@ link_to_skill2key_words = {
     "dff_sport_skill": ["sport"],
     # "dff_celebrity_skill": ["celebrity"],
     "dff_gossip_skill": ["gossips"],
+    "dff_science_skill": ["science"],
     "dff_music_skill": ["music"],
 }
 
@@ -153,6 +154,7 @@ link_to_skill2i_like_to_talk = {
         "I wonder how humans get obsessed over celebrities, so I want to understand it better.",
     ],
     "dff_gossip_skill": ["Sometimes I like to talk about the lives of famous people."],
+    "dff_science_skill": ["Sometimes I like to talk about scientific breakthroughs."],
     "dff_music_skill": [
         "It is impractical things in this world that matter most. A book, a name, a music album.",
         "It is not our enemies that defeat us. It is our fear. "
