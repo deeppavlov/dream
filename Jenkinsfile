@@ -165,9 +165,9 @@ spec:
                     sh label: 'update environment', script: 'kubectl create configmap env -n ${NAMESPACE} --from-env-file $ENV_FILE -o yaml --dry-run=client | kubectl apply -f -'
                     sh label: 'generate deployment', script: 'python3 kubernetes/kuber_generator.py'
                     sh label: 'remove redundant pods', script: '''
-                      for dp in $(kubectl -n {NAMESPACE} get deploy  --no-headers -o custom-columns=":metadata.name" | grep -e '-dp$');
+                      for dp in $(kubectl -n ${NAMESPACE} get deploy  --no-headers -o custom-columns=":metadata.name" | grep -e '-dp$');
                       do
-                        kubectl delete deploy $dp -n {NAMESPACE}
+                        kubectl delete deploy $dp -n ${NAMESPACE}
                       done
                     '''
                     sh label: 'deploy', script: 'for dir in kubernetes/models/*; do kubectl apply -f $dir || true; done'
