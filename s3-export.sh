@@ -62,6 +62,9 @@ files=(
   kbqa/wikidata/breed_facts.json
   kbqa/wikidata/wikihow.db
   kbqa/wikidata/wikihow_topics.json
+  alexaprize_data/parlai_grounding_knowledge/parlai_topical_chat_data.tar.gz
+  alexaprize_data/parlai_grounding_knowledge/topical_chat_blender90_1_sent_48_epochs.tar.gz
+  alexaprize_data/parlai_grounding_knowledge/topical_chat_blender90_3_sent_62_epochs.tar.gz
 )
 
 for file in ${files[@]}; do

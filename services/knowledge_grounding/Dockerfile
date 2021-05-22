@@ -3,6 +3,10 @@ FROM pytorch/pytorch:1.5-cuda10.1-cudnn7-runtime
 ARG MODEL_CKPT
 ENV MODEL_CKPT ${MODEL_CKPT}
 
+ARG DATA_ARG
+ARG MODEL1_ARG
+ARG MODEL2_ARG
+
 RUN apt-get update && apt-get install -y --allow-unauthenticated git wget && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /src
@@ -14,18 +18,18 @@ RUN pip install git+https://github.com/Saraharas/ParlAI@v0.9.4-kg-batch-2models#
 RUN mkdir -p /opt/conda/lib/python3.7/site-packages/data/models
 
 #load data
-RUN wget http://lnsigo.mipt.ru/export/alexaprize_data/parlai_grounding_knowledge/parlai_topical_chat_data.tar.gz -q -P /opt/conda/lib/python3.7/site-packages/data &&\
-tar -xvzf /opt/conda/lib/python3.7/site-packages/data/parlai_topical_chat_data.tar.gz -C /opt/conda/lib/python3.7/site-packages/data &&\
-rm /opt/conda/lib/python3.7/site-packages/data/parlai_topical_chat_data.tar.gz
+RUN wget $DATA_ARG -q -P /opt/conda/lib/python3.7/site-packages/data &&\
+tar -xvzf /opt/conda/lib/python3.7/site-packages/data/*.tar.gz -C /opt/conda/lib/python3.7/site-packages/data &&\
+rm /opt/conda/lib/python3.7/site-packages/data/*.tar.gz
 
 # load models tar.gz
-RUN wget http://lnsigo.mipt.ru/export/alexaprize_data/parlai_grounding_knowledge/topical_chat_blender90_1_sent_48_epochs.tar.gz -q -P /opt/conda/lib/python3.7/site-packages/data/models &&\
-tar -xvzf /opt/conda/lib/python3.7/site-packages/data/models/topical_chat_blender90_1_sent_48_epochs.tar.gz -C /opt/conda/lib/python3.7/site-packages/data/models &&\
-rm /opt/conda/lib/python3.7/site-packages/data/models/topical_chat_blender90_1_sent_48_epochs.tar.gz
+RUN wget $MODEL1_ARG -q -P /opt/conda/lib/python3.7/site-packages/data/models &&\
+tar -xvzf /opt/conda/lib/python3.7/site-packages/data/models/*.tar.gz -C /opt/conda/lib/python3.7/site-packages/data/models &&\
+rm /opt/conda/lib/python3.7/site-packages/data/models/*.tar.gz
 
-RUN wget http://lnsigo.mipt.ru/export/alexaprize_data/parlai_grounding_knowledge/topical_chat_blender90_3_sent_62_epochs.tar.gz -q -P /opt/conda/lib/python3.7/site-packages/data/models &&\
-tar -xvzf /opt/conda/lib/python3.7/site-packages/data/models/topical_chat_blender90_3_sent_62_epochs.tar.gz -C /opt/conda/lib/python3.7/site-packages/data/models &&\
-rm /opt/conda/lib/python3.7/site-packages/data/models/topical_chat_blender90_3_sent_62_epochs.tar.gz
+RUN wget $MODEL2_ARG -q -P /opt/conda/lib/python3.7/site-packages/data/models &&\
+tar -xvzf /opt/conda/lib/python3.7/site-packages/data/models/*.tar.gz -C /opt/conda/lib/python3.7/site-packages/data/models &&\
+rm /opt/conda/lib/python3.7/site-packages/data/models/*.tar.gz
 
 
 WORKDIR /src
