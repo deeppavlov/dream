@@ -109,7 +109,7 @@ def what_is_book_about(book):
     fact = ''
     logger.info(f'Requesting for {book}')
     if isinstance(book, str):
-        if all([j in 'Q0123456789' for j in book]):
+        if is_wikidata_entity(book):
             plain_book = book
         else:
             plain_book = request_entities_entitylinking(book, types=BOOK_WIKI_TYPES)
@@ -213,8 +213,11 @@ def fact_about_book(annotated_user_phrase):
     movie_name, movie_author = get_name(annotated_user_phrase, 'movie')
     if not movie_name:
         logger.debug('Getting a fact about bookname')
-        bookname = entity_to_label(plain_bookname)
-        reply = what_is_book_about(bookname)
+        if plain_bookname:
+            bookname = entity_to_label(plain_bookname)
+            reply = what_is_book_about(bookname)
+        else:
+            reply = ''
     else:
         reply = f'I enjoyed watching the film {movie_name} based on this book, which was directed by {movie_author}. '
     return reply
@@ -256,13 +259,12 @@ def get_author(plain_entity, return_plain=False, mode='book'):
         logger.info(f'Answer {author_entity}')
         return author_entity
     else:
-        try:
+        if is_wikidata_entity(author_entity):
             author_name = entity_to_label(author_entity)
             logger.info(f'Answer for get_author {author_name}')
             return author_name
-        except Exception as e:
-            logging.exception(e)
-            sentry_sdk.raise_exception(e)
+        else:
+            logger.warning(f'Wrong entity {author_entity}')
             return None
 
 
@@ -589,3 +591,13 @@ HAVENT_READ_TEMPLATE = re.compile(r"(haven't|have not|didn't|did not) (read)?", 
 
 def havent_read(annotated_user_phrase):
     return re.search(HAVENT_READ_TEMPLATE, annotated_user_phrase['text'])
+
+
+IS_WIKIDATA_TEMPLATE = re.compile(r'Q[0-9]+', re.IGNORECASE)
+
+
+def is_wikidata_entity(plain_book):
+    if isinstance(plain_book, str):
+        if re.fullmatch(IS_WIKIDATA_TEMPLATE, plain_book):
+            return True
+    return False
