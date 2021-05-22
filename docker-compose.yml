@@ -377,9 +377,9 @@ services:
       replicas: 2
       resources:
         limits:
-          memory: 540M
+          memory: 2540M
         reservations:
-          memory: 540M
+          memory: 2540M
 
   weather-skill:
     build:
