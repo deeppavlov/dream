@@ -16,7 +16,7 @@ from book_utils import get_name, get_genre, suggest_template, get_not_given_ques
     parse_author_best_book, GENRE_PHRASES, was_question_about_book, favorite_book_template, exit_skill, \
     asked_about_genre, GENRE_DICT, is_previous_was_book_skill, just_mentioned, dontknow_books, \
     best_plain_book_by_author, tell_about_genre_book, bible_request, get_movie_answer, \
-    my_favorite, get_author, what_is_book_about, havent_read
+    my_favorite, get_author, what_is_book_about, havent_read, is_wikidata_entity
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -50,7 +50,7 @@ FAVOURITE_BOOK_ANSWERS = [f'My favourite book is "The catcher in the rye" by J. 
                           f'The novel "The catcher in the rye" tells the story of a teenager '
                           f'who has been kicked out of a boarding school.'
                           f'This is my favourite story, it is truly fascinating. {TELL_REQUEST2}']
-WHAT_IS_FAV_GENRE = 'I have read a plenty of books from different genres. What is your favorite book genre?'
+WHAT_IS_FAV_GENRE = 'I have read a plenty of books from different genres. What book genre do you like?'
 ASK_ABOUT_GENRE_BOOK = 'And if you have read it, what do you think about it?'
 HAVE_YOU_READ_BOOK = f'Amazing! Have you read BOOK? {ASK_ABOUT_GENRE_BOOK}'
 BIBLE_RESPONSES = ["I know that Bible is one of the most widespread books on the Earth. "
@@ -145,24 +145,25 @@ class BookSkillScenario:
         plain_bookname, n_years_ago = get_name(annotated_user_phrase, 'book', bookyear=True, return_plain=True)
         movie_name, _ = get_name(annotated_user_phrase, mode='movie')
         genre_name = get_genre(annotated_user_phrase['text'], return_name=True)
-        if plain_author_name:
+        if is_wikidata_entity(plain_author_name):
             author_name = entity_to_label(plain_author_name)
             logger.debug('Authorname found')
             plain_book, _ = parse_author_best_book(annotated_user_phrase)
-            book = entity_to_label(plain_book)
-            if book and not just_mentioned(annotated_user_phrase, book):
-                logger.debug('Found_BEST_BOOK')
-                reply = IF_REMEMBER_LAST_BOOK.replace("BOOK", book).replace('AUTHOR', author_name)
-                human_attr['book_skill']['plain_book'] = plain_book
-                human_attr['book_skill']['n_years_ago'] = CURRENT_YEAR - get_published_year(plain_book)
-                human_attr['book_skill']['book'] = book
-                human_attr['book_skill']['author'] = author_name
-                reply = f'{reply} {ASK_ABOUT_OFFERED_BOOK}'
-                confidence = self.super_conf
+            if is_wikidata_entity(plain_book):
+                book = entity_to_label(plain_book)
+                if book and not just_mentioned(annotated_user_phrase, book):
+                    logger.debug('Found_BEST_BOOK')
+                    reply = IF_REMEMBER_LAST_BOOK.replace("BOOK", book).replace('AUTHOR', author_name)
+                    human_attr['book_skill']['plain_book'] = plain_book
+                    human_attr['book_skill']['n_years_ago'] = CURRENT_YEAR - get_published_year(plain_book)
+                    human_attr['book_skill']['book'] = book
+                    human_attr['book_skill']['author'] = author_name
+                    reply = f'{reply} {ASK_ABOUT_OFFERED_BOOK}'
+                    confidence = self.super_conf
             else:
                 reply, confidence = f'{ACKNOWLEDGE_AUTHOR} {ASK_GENRE_ABOUT_AUTHOR}', self.default_conf
                 reply = reply.replace('AUTHOR', author_name)
-        elif plain_bookname and n_years_ago:
+        elif is_wikidata_entity(plain_bookname) and n_years_ago:
             # if we found book name in user reply
             bookname = entity_to_label(plain_bookname)
             human_attr['book_skill']['n_years_ago'] = n_years_ago
@@ -171,16 +172,19 @@ class BookSkillScenario:
             logger.debug('Bookname detected: returning AMAZING_READ_BOOK & WHEN_IT_WAS_PUBLISHED')
 
             plain_author = get_author(plain_bookname, return_plain=True)
-            if plain_author:
+            if is_wikidata_entity(plain_author):
                 logger.debug('Is author')
                 author_name = entity_to_label(plain_author)
                 human_attr['book_skill']['author'] = author_name
                 offered_plain_bookname = best_plain_book_by_author(plain_author_name=plain_author,
                                                                    plain_last_bookname=plain_bookname,
                                                                    default_phrase='')
-                offered_bookname = entity_to_label(offered_plain_bookname)
-                reply = f"{IF_REMEMBER_LAST_BOOK} {ASK_ABOUT_OFFERED_BOOK}"
-                reply = reply.replace('AUTHOR', author_name).replace('BOOK', offered_bookname)
+                if is_wikidata_entity(plain_bookname):
+                    offered_bookname = entity_to_label(offered_plain_bookname)
+                    reply = f"{IF_REMEMBER_LAST_BOOK} {ASK_ABOUT_OFFERED_BOOK}"
+                    reply = reply.replace('AUTHOR', author_name).replace('BOOK', offered_bookname)
+                else:
+                    reply = f"{AMAZING_READ_BOOK} {WHEN_IT_WAS_PUBLISHED}"
             else:
                 reply = f"{AMAZING_READ_BOOK} {WHEN_IT_WAS_PUBLISHED}"
 
@@ -437,8 +441,7 @@ class BookSkillScenario:
                 elif about_book(annotated_user_phrase):
                     plain_bookname, n_years_ago = get_name(annotated_user_phrase, mode='book', bookyear=True,
                                                            return_plain=True)
-                    bookname = entity_to_label(plain_bookname)
-                    if bookname is None:
+                    if not is_wikidata_entity(plain_bookname):
                         logger.debug('No bookname detected')
                         movie_name, _ = get_name(annotated_user_phrase, mode='movie')
                         if movie_name:
@@ -453,6 +456,7 @@ class BookSkillScenario:
                             reply = exit_skill(reply, human_attr)
                             confidence = self.default_conf
                     else:
+                        bookname = entity_to_label(plain_bookname)
                         human_attr['book_skill']['book'] = bookname
                         human_attr['book_skill']['plain_book'] = plain_bookname
                         retrieved_fact = fact_about_book(annotated_user_phrase)
