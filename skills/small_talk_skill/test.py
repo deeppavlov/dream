@@ -19,7 +19,7 @@ def test_one_step_responses():
          "human": {"attributes": {}}}
     ]}).json()
     assert response[0][:2] == ["Do you have a family?", 1.0], print(response)
-    assert response[1][:2] == ["Can you drive a car?", 0.9], print(response)
+    assert response[1][:2] == ["Can you drive a car?", 0.8], print(response)
     assert response[2][1] == 0.98, print(response)
 
     print("SUCCESS!")

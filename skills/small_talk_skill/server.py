@@ -12,7 +12,8 @@ import sentry_sdk
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT, MUST_CONTINUE
 from common.utils import get_skill_outputs_from_dialog, get_sentiment
-from common.universal_templates import if_choose_topic, if_switch_topic, if_chat_about_particular_topic
+from common.universal_templates import if_choose_topic, if_switch_topic, if_chat_about_particular_topic, \
+    is_any_question_sentence_in_utterance
 from topic_words import TOPIC_PATTERNS
 
 
@@ -28,7 +29,7 @@ with open("small_talk_scripts.json", "r") as f:
     TOPIC_SCRIPTS = json.load(f)
 
 USER_TOPIC_START_CONFIDENCE = 0.98
-FOUND_WORD_START_CONFIDENCE = 0.9
+FOUND_WORD_START_CONFIDENCE = 0.8
 BOT_TOPIC_START_CONFIDENCE = 0.98
 CONTINUE_CONFIDENCE = 0.99
 LONG_ANSWER_CONTINUE_CONFIDENCE = 1.0
@@ -51,8 +52,7 @@ def respond():
     attributes = []
 
     for dialog in dialogs_batch:
-        human_attr = dialog["human"]["attributes"]
-        used_topics = human_attr.get("small_talk_topics", [])
+        used_topics = dialog["human"]["attributes"].get("small_talk_topics", [])
         human_attr = {}
         bot_attr = {}
         attr = {}
@@ -74,8 +74,9 @@ def respond():
         logger.info(f"From current user utterance: `{dialog['human_utterances'][-1]['text']}` "
                     f"extracted topic: `{new_user_topic}`.")
         sentiment = get_sentiment(dialog["human_utterances"][-1], probs=False)[0]
+
         if len(topic) > 0 and len(script) > 0 and \
-                (len(new_user_topic) == 0 or new_conf == FOUND_WORD_START_CONFIDENCE):
+                (len(new_user_topic) == 0 or new_conf == FOUND_WORD_START_CONFIDENCE or new_user_topic == topic):
             # we continue dialog if new topic was not found or was found just as the key word in user sentence.
             # because we can start a conversation picking up topic with key word with small proba
             if sentiment == "negative":
@@ -93,7 +94,11 @@ def respond():
         else:
             logger.info("Try to extract topic from user utterance or offer if requested.")
             response, topic, confidence = pickup_topic_and_start_small_talk(dialog)
-            if len(topic) > 0 and topic not in used_topics:
+            _is_quesion = is_any_question_sentence_in_utterance(dialog["human_utterances"][-1])
+            _is_lets_chat = if_chat_about_particular_topic(
+                dialog["human_utterances"][-1], dialog["bot_utterances"][-1] if dialog["bot_utterances"] else {})
+
+            if len(topic) > 0 and topic not in used_topics and (not _is_quesion or _is_lets_chat):
                 logger.info(f"Starting script on topic: `{topic}`.\n"
                             f"User utterance: `{dialog['human_utterances'][-1]['text']}`.\n"
                             f"Bot response: `{response}`.")
@@ -105,7 +110,8 @@ def respond():
                 attr["small_talk_step"] = 0
                 attr["small_talk_script"] = TOPIC_SCRIPTS.get(topic, [])
             else:
-                logger.info(f"Can not extract or offer topic.")
+                logger.info(f"Can not extract or offer NEW topic.")
+                response = ""
 
         if len(response) == 0:
             confidence = 0.
