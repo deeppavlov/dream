@@ -960,3 +960,36 @@ def get_common_tokens_in_lists_of_strings(list_of_strings_0, list_of_strings_1):
     common_substrings = list(set(list_of_strings_0).intersection(set(list_of_strings_1)))
 
     return common_substrings
+
+
+SYMBOLS_EXCEPT_LETTERS_AND_DIGITS = re.compile(r"[^a-zA-Z0-9\- ]")
+DOUBLE_SPACES = re.compile(r"\s+")
+
+
+def replace_symbols_except_letters_and_digits(s):
+    s = SYMBOLS_EXCEPT_LETTERS_AND_DIGITS.sub(" ", s)
+    s = DOUBLE_SPACES.sub(" ", s).strip()
+    return s
+
+
+def remove_punctuation_from_dict_keys(element):
+    if isinstance(element, dict):
+        new_element = {}
+        for dict_key, value in element.items():
+            if isinstance(value, dict) or isinstance(value, list):
+                new_value = remove_punctuation_from_dict_keys(value)
+                new_element[replace_symbols_except_letters_and_digits(dict_key)] = deepcopy(new_value)
+            else:
+                new_element[replace_symbols_except_letters_and_digits(dict_key)] = deepcopy(value)
+        return new_element
+    elif isinstance(element, list):
+        new_element = []
+        for sub_element in element:
+            if isinstance(sub_element, dict) or isinstance(sub_element, list):
+                new_sub_element = remove_punctuation_from_dict_keys(sub_element)
+                new_element += [new_sub_element]
+            else:
+                new_element += [sub_element]
+        return new_element
+    else:
+        return element
