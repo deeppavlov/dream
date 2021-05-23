@@ -63,6 +63,7 @@ class State(Enum):
     SYS_REPEAT_RECOMMENDATION = auto()
     USR_WAS_OFFERED_RECOMMENDATIONS = auto()
     USR_ASKED_HAVE_SEEN_MOVIE = auto()
+    SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED = auto()
 
     SYS_ERR = auto()
     USR_ERR = auto()
@@ -181,6 +182,13 @@ def user_was_asked_about_movie_title(vars):
     current_status = shared_memory.get("current_status", "")
 
     if is_movie_title_question(prev_bot_uttr) or current_status == "movie_prompt":
+        return True
+    return False
+
+
+def user_was_asked_about_movie_title_request(ngrams, vars):
+
+    if user_was_asked_about_movie_title(vars):
         return True
     return False
 
@@ -1095,8 +1103,13 @@ def bot_offers_movie_recommendation_response(vars):
         state_utils.save_to_shared_memory(
             vars, used_offer_recommendation_phrases=used_offer_recommendation_phrases + [recom_offer])
         state_utils.save_to_shared_memory(vars, current_status="offer_movie_recommendation")
-        state_utils.set_confidence(vars, HIGH_CONFIDENCE)
-        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+        if user_was_asked_about_movie_title(vars):
+            # user was asked some movie title question and the answer does not contain movie title.
+            state_utils.set_confidence(vars, SUPER_CONFIDENCE)
+            state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+        else:
+            state_utils.set_confidence(vars, HIGH_CONFIDENCE)
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
 
         return recom_offer
     except Exception as exc:
@@ -1157,7 +1170,6 @@ simplified_dialogflow.add_user_serial_transitions(
     {
         State.SYS_NOT_LIKE_MOVIES: user_not_like_movies_request,
         State.SYS_USER_REQUESTS_OPINION_ABOUT_MOVIE: opinion_requests_about_movie_request,
-        State.SYS_ASK_DO_YOU_KNOW_QUESTION: opinion_expression_about_popular_movie_request,
         State.SYS_EXTRACTED_MOVIE_TITLE: popular_movie_title_extracted_request,
         State.SYS_CLARIFY_MOVIE_TITLE: to_be_clarified_movie_title_extracted_request,
         State.SYS_USER_REQUESTS_OPINION_ABOUT_MOVIE_GENRE: opinion_requests_about_genre_request,
@@ -1165,6 +1177,7 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_USER_REQUESTS_MOVIE_RECOMMENDATION: recommendations_request,
         State.SYS_LETS_CHAT_ABOUT_MOVIES: lets_chat_about_movies_request,
         State.SYS_FAQ: faq_request,
+        State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED: user_was_asked_about_movie_title_request,
         State.SYS_MENTIONED_MOVIES: mentioned_movies_request,
     },
 )
@@ -1176,6 +1189,13 @@ simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
 simplified_dialogflow.add_system_transition(State.SYS_FAQ,
                                             State.USR_FAQ,
                                             faq_response)
+
+##################################################################################################################
+#  SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED
+
+simplified_dialogflow.add_system_transition(State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED,
+                                            State.USR_WAS_OFFERED_RECOMMENDATIONS,
+                                            bot_offers_movie_recommendation_response)
 
 ##################################################################################################################
 #  SYS_NOT_LIKE_MOVIES
@@ -1274,6 +1294,7 @@ simplified_dialogflow.add_user_serial_transitions(
     {
         State.SYS_EXTRACTED_MOVIE_TITLE: popular_movie_title_extracted_request,
         State.SYS_CLARIFY_MOVIE_TITLE: to_be_clarified_movie_title_extracted_request,
+        State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED: no_requests_request
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
