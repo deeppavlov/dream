@@ -1022,7 +1022,7 @@ def fill_templates_with_movie_info(response, movie_id, genre=None):
     return response
 
 
-def detected_recommendation_request(vars):
+def recommendations_requested(vars):
     recom_request = RECOMMEND_REQUEST_PATTERN.search(state_utils.get_last_human_utterance(vars)["text"])
     recom_offer = RECOMMEND_OFFER_PATTERN.search(state_utils.get_last_bot_utterance(vars).get("text", ""))
     user_agrees = condition_utils.is_yes_vars(vars)
@@ -1030,11 +1030,49 @@ def detected_recommendation_request(vars):
     if recom_request or (recom_offer and user_agrees):
         logger.info(f"User wants to get movies recommendations.")
         return True
+    return False
 
 
 def recommendations_request(ngrams, vars):
     # SYS_USER_REQUESTS_MOVIE_RECOMMENDATION
-    return detected_recommendation_request(vars)
+    return recommendations_requested(vars)
+
+
+def recommendations_declined_request(ngrams, vars):
+    recom_offer = RECOMMEND_OFFER_PATTERN.search(state_utils.get_last_bot_utterance(vars).get("text", ""))
+    user_disagrees = condition_utils.is_no_vars(vars)
+
+    if recom_offer and user_disagrees:
+        logger.info(f"User doesn't want to get movies recommendations.")
+        return True
+    return False
+
+
+def which_genre_movie_to_recommend(vars):
+    shared_memory = state_utils.get_shared_memory(vars)
+    discussed_movie_ids = shared_memory.get("discussed_movie_ids", [])
+    movies_ids, unique_persons, mentioned_genres = extract_mentions(
+        vars, check_full_utterance=user_was_asked_about_movie_title(vars))
+    if len(mentioned_genres):
+        # recommend movie of particular genre
+        genre = mentioned_genres[-1]
+        genre_movies = f"{genre} movies" if genre.lower() != "series" else "series"
+        which_genre = "mentioned"
+    else:
+        # recommend movie
+        age = state_utils.get_age_group(vars)
+        if len(discussed_movie_ids):
+            genre = templates.imdb.get_info_about_movie(discussed_movie_ids[-1], "genre")
+            genre = genre[0] if len(genre) > 0 and len(genre[0]) > 0 else "Comedy"
+        else:
+            if age == "kid":
+                genre = "Animation"
+            else:
+                genre = "Comedy"
+
+        genre_movies = "movies"
+        which_genre = "offered"
+    return genre, genre_movies, which_genre
 
 
 def bot_recommends_movie_response(vars):
@@ -1042,25 +1080,7 @@ def bot_recommends_movie_response(vars):
     try:
         shared_memory = state_utils.get_shared_memory(vars)
         discussed_movie_ids = shared_memory.get("discussed_movie_ids", [])
-        movies_ids, unique_persons, mentioned_genres = extract_mentions(
-            vars, check_full_utterance=user_was_asked_about_movie_title(vars))
-        if len(mentioned_genres):
-            # recommend movie of particular genre
-            genre = mentioned_genres[-1]
-            genre_movies = f"{genre} movies" if genre.lower() != "series" else "series"
-        else:
-            # recommend movie
-            age = state_utils.get_age_group(vars)
-            if len(discussed_movie_ids):
-                genre = templates.imdb.get_info_about_movie(discussed_movie_ids[-1], "genre")
-                genre = genre[0] if len(genre) > 0 and len(genre[0]) > 0 else "Comedy"
-            else:
-                if age == "kid":
-                    genre = "Animation"
-                else:
-                    genre = "Comedy"
-
-            genre_movies = "movies"
+        genre, genre_movies, _ = which_genre_movie_to_recommend(vars)
 
         movie_id_to_recommend = recommend_movie_of_genre(genre, discussed_movie_ids=discussed_movie_ids)
         if movie_id_to_recommend:
@@ -1079,7 +1099,7 @@ def bot_recommends_movie_response(vars):
                        f"What movie can you recommend to me?"
             state_utils.save_to_shared_memory(vars, current_status="movie_prompt")
 
-        if detected_recommendation_request(vars):
+        if recommendations_requested(vars):
             state_utils.set_confidence(vars, SUPER_CONFIDENCE)
             state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         else:
@@ -1098,6 +1118,8 @@ def bot_offers_movie_recommendation_response(vars):
     # USR_WAS_OFFERED_RECOMMENDATIONS
     try:
         shared_memory = state_utils.get_shared_memory(vars)
+        _, genre_movies, which_genre = which_genre_movie_to_recommend(vars)
+
         used_offer_recommendation_phrases = shared_memory.get("used_offer_recommendation_phrases", [])
         recom_offer = get_not_used_template(used_offer_recommendation_phrases, RECOMMEND_OFFER_RESPONSE)
         state_utils.save_to_shared_memory(
@@ -1111,14 +1133,18 @@ def bot_offers_movie_recommendation_response(vars):
             state_utils.set_confidence(vars, HIGH_CONFIDENCE)
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
 
-        return recom_offer
+        if which_genre == "mentioned":
+            return recom_offer.replace("MOVIE", genre_movies)
+        else:
+            return recom_offer.replace("MOVIE", "movie")
+
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
         return error_response(vars)
 
 
-def bot_repeats_movie_recommendation_response(vars):
+def bot_repeats_movie_recommends_and_offers_more_recomends_response(vars):
     # USR_WAS_OFFERED_RECOMMENDATIONS
     try:
         shared_memory = state_utils.get_shared_memory(vars)
@@ -1237,7 +1263,7 @@ simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
 
 simplified_dialogflow.add_system_transition(State.SYS_REPEAT_RECOMMENDATION,
                                             State.USR_WAS_OFFERED_RECOMMENDATIONS,
-                                            bot_repeats_movie_recommendation_response)
+                                            bot_repeats_movie_recommends_and_offers_more_recomends_response)
 
 ##################################################################################################################
 #  USR_ASKED_HAVE_SEEN_MOVIE
@@ -1396,6 +1422,7 @@ simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
 simplified_dialogflow.add_system_transition(State.SYS_GIVE_FACT_ABOUT_MOVIE,
                                             State.USR_HAVE_YOU_HEARD_FACT,
                                             generate_fact_from_cobotqa_response)
+# share fact if available, if no fact - offer recommendations
 
 ##################################################################################################################
 #  USR_CHECK_ANSWER_TO_DO_YOU_KNOW
@@ -1403,6 +1430,8 @@ simplified_dialogflow.add_system_transition(State.SYS_GIVE_FACT_ABOUT_MOVIE,
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_HAVE_YOU_HEARD_FACT,
     {
+        State.SYS_USER_REQUESTS_MOVIE_RECOMMENDATION: recommendations_request,  # if not fact & offered recommendations
+        State.SYS_MENTIONED_MOVIES: recommendations_declined_request,  # not_confident_lets_chat_about_movies_response
         State.SYS_GIVE_FACT_ABOUT_MOVIE: give_more_fact_request,
         State.USR_WAS_OFFERED_RECOMMENDATIONS: no_requests_request,
     },
