@@ -11,7 +11,7 @@ TOPIC_PATTERNS = {
     "life": re.compile(r"(\blife|\blife style|\blifestyle)", re.IGNORECASE),
     "love": re.compile(r"(\blove|\bloving|\bbeloved|\bfriend|\brelationship|\brelation|\bwomen|\bmen\b"
                        r"|\bgirlfriend|\bboyfriend)", re.IGNORECASE),
-    "me": re.compile(r"(\bme\b|\bmyself)", re.IGNORECASE),
+    "me": re.compile(r"(\babout me\b|\bmyself)", re.IGNORECASE),
     "movies": re.compile(r"(\bmovie|\bcinema|\bcartoon|\bseries|\btv\b|\bcinematography|\byoutube|\banime"
                          r"|\bwatch)", re.IGNORECASE),
     "music": re.compile(r"(\bmusic|\bsongs?|\bsing(ing|er)?\b)", re.IGNORECASE),
@@ -33,6 +33,6 @@ TOPIC_PATTERNS = {
     "video games": re.compile(r"(\bvideo ?game|\bgam(e|es|ing)\b|\bplay ?station|\bminecraft|\bgta\b)", re.IGNORECASE),
     "weather": re.compile(r"(\bweather|\bforecast)", re.IGNORECASE),
     "work": re.compile(r"(\bwork(ed|ing|s)?|\bjob\b|\boccupation|\bprofession)", re.IGNORECASE),
-    "you": re.compile(r"(\byou\b|\byourself|\bsocialbot|\balexa\b"
+    "you": re.compile(r"(\babout you\b|\byourself|\bsocialbot|\balexa\b"
                       r"|\b(this|that|amazon|current|alexa) (competition|challenge))", re.IGNORECASE),
 }
