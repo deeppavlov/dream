@@ -21,7 +21,7 @@ from common.travel import OPINION_REQUESTS_ABOUT_TRAVELLING, TRAVELLING_TEMPLATE
     WOULD_USER_LIKE_TO_VISIT_LOC_REQUESTS, ACKNOWLEDGE_USER_WILL_VISIT_LOC, QUESTIONS_ABOUT_LOCATION, \
     ACKNOWLEDGE_USER_DO_NOT_WANT_TO_VISIT_LOC, OFFER_FACT_RESPONSES, OPINION_REQUESTS, HAVE_YOU_BEEN_TEMPLATE, \
     ACKNOWLEDGE_USER_DISLIKE_LOC, OFFER_MORE_FACT_RESPONSES, HAVE_YOU_BEEN_IN_PHRASES, \
-    QUESTIONS_ABOUT_BOT_LOCATIONS, WHY_BOT_LIKES_TO_TRAVEL
+    QUESTIONS_ABOUT_BOT_LOCATIONS, WHY_BOT_LIKES_TO_TRAVEL, I_HAVE_BEEN_IN_AND_LIKED_MOST
 from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_intents, get_sentiment, get_not_used_template, get_named_locations, \
     get_all_not_used_templates
@@ -88,6 +88,7 @@ class State(Enum):
     USR_ASK_ABOUT_ORIGIN = auto()
 
     SYS_BEST_MENTIONED_BY_USER_LOC = auto()
+    SYS_MENTIONED_TRAVELLING = auto()
 
     SYS_LOC_NOT_DETECTED = auto()
 
@@ -175,6 +176,14 @@ def negative_sentiment_request(ngrams, vars):
 ##################################################################################################################
 # let's talk about travelling
 ##################################################################################################################
+
+def mentioned_travelling_request(ngrams, vars):
+    # SYS_MENTIONED_TRAVELLING
+    if TRAVELLING_TEMPLATE.search(state_utils.get_last_human_utterance(vars)):
+        logger.info(f"Mentioned travelling in user utterances")
+        return True
+    return False
+
 
 def lets_chat_about_travelling_request(ngrams, vars):
     # SYS_LETS_CHAT_ABOUT_TRAVELLING
@@ -337,18 +346,6 @@ def have_bot_been_in_request(ngrams, vars):
     return False
 
 
-def collect_facts_about_location(vars, location):
-    facts = []
-    if location.lower() in TRAVEL_FACTS:
-        facts = deepcopy(TRAVEL_FACTS[location.lower()])
-    if not facts:
-        facts = state_utils.get_fact_for_particular_entity_from_human_utterance(vars, location)
-        facts = [fact for fact in facts if "is a city" not in fact.lower()]
-    facts = [fact for fact in facts if len(fact)]
-
-    return facts
-
-
 def have_bot_been_in_response(vars):
     # USR_HAVE_BEEN
     try:
@@ -356,16 +353,13 @@ def have_bot_been_in_response(vars):
 
         if len(user_mentioned_locations):
             location = f"in {user_mentioned_locations[-1]}"
-            facts = collect_facts_about_location(vars, location)
+            collect_and_save_facts_about_location(location, vars)
             shared_memory = state_utils.get_shared_memory(vars)
             discussed_locations = list(set(shared_memory.get("discussed_locations", [])))
             state_utils.save_to_shared_memory(vars, discussed_location=user_mentioned_locations[-1])
             state_utils.save_to_shared_memory(
                 vars, discussed_locations=discussed_locations + [user_mentioned_locations[-1]])
-            if facts:
-                state_utils.save_to_shared_memory(
-                    vars, facts_about_discussed_location={"location": user_mentioned_locations[-1],
-                                                          "facts": facts})
+            collect_and_save_facts_about_location(user_mentioned_locations[-1], vars)
         else:
             location = "there"
         logger.info(f"Bot responses that bot has not been in LOC: {location}.")
@@ -419,15 +413,16 @@ def user_have_been_in_request(ngrams, vars):
 
 def user_have_been_in_response(vars):
     # USR_WHAT_BEST_MENTIONED_BY_USER_LOC
-    user_mentioned_locations = get_mentioned_locations(vars)
-    if len(user_mentioned_locations) > 0:
-        location = user_mentioned_locations[-1]
-    else:
-        location = "there"
-    shared_memory = state_utils.get_shared_memory(vars)
-    logger.info(f"Bot acknowledges that user liked LOC and asks about best about LOC: {location}.")
-
     try:
+        user_mentioned_locations = get_mentioned_locations(vars)
+        if len(user_mentioned_locations) > 0:
+            location = user_mentioned_locations[-1]
+            collect_and_save_facts_about_location(location, vars)
+        else:
+            location = "there"
+        shared_memory = state_utils.get_shared_memory(vars)
+        logger.info(f"Bot acknowledges that user liked LOC and asks about best about LOC: {location}.")
+
         if condition_utils.is_yes_vars(vars):
             confidence = SUPER_CONFIDENCE
         else:
@@ -438,7 +433,19 @@ def user_have_been_in_response(vars):
             discussed_locations = list(set(shared_memory.get("discussed_locations", [])))
             state_utils.save_to_shared_memory(vars, discussed_location=location)
             state_utils.save_to_shared_memory(vars, discussed_locations=discussed_locations + [location])
-        return random.choice(USER_IMPRESSIONS_REQUEST)
+
+        used_user_impressions_requests = shared_memory.get("used_user_impressions_requests", [])
+        user_impressions_request = get_not_used_template(used_user_impressions_requests, USER_IMPRESSIONS_REQUEST)
+        state_utils.save_to_shared_memory(
+            vars, used_questions_about_location=used_user_impressions_requests + [user_impressions_request])
+
+        used_what_do_i_love = shared_memory.get("used_what_do_i_love", [])
+        what_do_i_love = get_not_used_template(used_what_do_i_love, I_HAVE_BEEN_IN_AND_LIKED_MOST)
+        state_utils.save_to_shared_memory(
+            vars, used_questions_about_location=used_what_do_i_love + [what_do_i_love])
+
+        response = user_impressions_request.sub("WHAT_DO_I_LOVE", what_do_i_love)
+        return response
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -458,11 +465,11 @@ def user_no_or_disliked_request(ngrams, vars):
 
 def user_disliked_mentioned_by_user_loc_response(vars):
     # USR_DISLIKE_AND_WHAT_LOC_NOT_CONF
-    shared_memory = state_utils.get_shared_memory(vars)
-    used_questions_about_location = shared_memory.get("used_questions_about_location", [])
-    logger.info(f"Bot acknowledges user dislike loc and asks a question about some other LOC.")
-
     try:
+        shared_memory = state_utils.get_shared_memory(vars)
+        used_questions_about_location = shared_memory.get("used_questions_about_location", [])
+        logger.info(f"Bot acknowledges user dislike loc and asks a question about some other LOC.")
+
         if condition_utils.is_no_vars(vars):
             confidence = SUPER_CONFIDENCE
         else:
@@ -504,11 +511,12 @@ def user_have_not_been_in_request(ngrams, vars):
 
 def user_have_not_been_in_response(vars):
     # USR_WOULD_LIKE_VISIT_LOC
-    shared_memory = state_utils.get_shared_memory(vars)
-    location = shared_memory.get("discussed_location", "")
-    logger.info(f"Bot asks if user wants to visit non-visited LOC: {location}.")
-
     try:
+        shared_memory = state_utils.get_shared_memory(vars)
+        location = shared_memory.get("discussed_location", "")
+        collect_and_save_facts_about_location(location, vars)
+        logger.info(f"Bot asks if user wants to visit non-visited LOC: {location}.")
+
         confidence = choose_conf_decreasing_if_requests_in_human_uttr(vars, SUPER_CONFIDENCE, DEFAULT_CONFIDENCE)
         state_utils.set_confidence(vars, confidence)
         if confidence == SUPER_CONFIDENCE:
@@ -530,11 +538,12 @@ def user_have_not_been_in_response(vars):
 # if user answers he/she would like to visit location
 def user_would_like_to_visit_response(vars):
     # USR_WISH_WOULD_VISIT_LOC
-    shared_memory = state_utils.get_shared_memory(vars)
-    location = shared_memory.get("discussed_location", "")
-    logger.info(f"Bot acknowledges that user would liked to visit LOC: {location}. Wish he/she will do.")
-
     try:
+        shared_memory = state_utils.get_shared_memory(vars)
+        location = shared_memory.get("discussed_location", "")
+        collect_and_save_facts_about_location(location, vars)
+        logger.info(f"Bot acknowledges that user would liked to visit LOC: {location}. Wish he/she will do.")
+
         confidence = choose_conf_decreasing_if_requests_in_human_uttr(vars, SUPER_CONFIDENCE, DEFAULT_CONFIDENCE)
         state_utils.set_confidence(vars, confidence)
         state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
@@ -553,12 +562,12 @@ def user_would_like_to_visit_response(vars):
 # if user answers he/she would NOT like to visit location
 def user_would_not_like_to_visit_response(vars):
     # USR_ACK_NOT_VISIT_LOC_WHAT_LOC
-    shared_memory = state_utils.get_shared_memory(vars)
-    location = shared_memory.get("discussed_location", "")
-    used_questions_about_location = shared_memory.get("used_questions_about_location", [])
-    logger.info(f"Bot acknowledges that user would not like to visit LOC: {location}, asks question about other LOC.")
-
     try:
+        shared_memory = state_utils.get_shared_memory(vars)
+        location = shared_memory.get("discussed_location", "")
+        used_questions_about_location = shared_memory.get("used_questions_about_location", [])
+        logger.info(f"Bot acknowledges that user would not like to visit LOC: {location}, asks question about LOC.")
+
         confidence = choose_conf_decreasing_if_requests_in_human_uttr(vars, SUPER_CONFIDENCE, DEFAULT_CONFIDENCE)
         state_utils.set_confidence(vars, confidence)
         state_utils.set_can_continue(vars, CAN_CONTINUE_PROMPT)
@@ -595,11 +604,11 @@ def like_travelling_acknowledgement(vars):
 
 def confident_ask_question_about_travelling_response(vars):
     # USR_WHAT_LOC_CONF
-    shared_memory = state_utils.get_shared_memory(vars)
-    used_questions_about_location = shared_memory.get("used_questions_about_location", [])
-    logger.info(f"Bot confidently asks a question about some LOC.")
-
     try:
+        shared_memory = state_utils.get_shared_memory(vars)
+        used_questions_about_location = shared_memory.get("used_questions_about_location", [])
+        logger.info(f"Bot confidently asks a question about some LOC.")
+
         # socialbot's opinion about travelling, if we previously asked user, and user likes travelling
         bot_likes_travel = like_travelling_acknowledgement(vars)
         confidence = SUPER_CONFIDENCE
@@ -621,11 +630,11 @@ def confident_ask_question_about_travelling_response(vars):
 
 def not_confident_ask_question_about_travelling_response(vars):
     # USR_WHAT_LOC_NOT_CONF
-    shared_memory = state_utils.get_shared_memory(vars)
-    used_questions_about_location = shared_memory.get("used_questions_about_location", [])
-    logger.info(f"Bot not confidently asks a question about some LOC.")
-
     try:
+        shared_memory = state_utils.get_shared_memory(vars)
+        used_questions_about_location = shared_memory.get("used_questions_about_location", [])
+        logger.info(f"Bot not confidently asks a question about some LOC.")
+
         confidence = choose_conf_decreasing_if_requests_in_human_uttr(vars, HIGH_CONFIDENCE, DEFAULT_CONFIDENCE)
         state_utils.set_confidence(vars, confidence)
         state_utils.set_can_continue(vars, CAN_CONTINUE_PROMPT)
@@ -644,18 +653,37 @@ def not_confident_ask_question_about_travelling_response(vars):
 # offering fact about loc
 ##################################################################################################################
 
+def collect_and_save_facts_about_location(location, vars):
+    shared_memory = state_utils.get_shared_memory(vars)
+    facts_about_location = shared_memory.get("facts_about_discussed_location", {})
+
+    if facts_about_location.get("location", "") == location and facts_about_location.get(
+            "facts", []) and location != "there":
+        facts_about_location = facts_about_location.get("facts", [])
+    elif location.lower() in TRAVEL_FACTS:
+        facts_about_location = deepcopy(TRAVEL_FACTS[location.lower()])
+    else:
+        facts_about_location = state_utils.get_fact_for_particular_entity_from_human_utterance(vars, location)
+        facts_about_location = [fact for fact in facts_about_location if "is a city" not in fact.lower()]
+
+    if len(location) > 0 and len(facts_about_location) == 0 and location != "there":
+        facts_about_location = [send_cobotqa(f"fact about {location}")]
+        facts_about_location = [fact for fact in facts_about_location if "is a city" not in fact.lower()]
+
+    used_facts = shared_memory.get("used_facts", [])
+    facts_about_location = get_all_not_used_templates(used_facts, facts_about_location)
+    facts_about_location = [fact for fact in facts_about_location if len(fact)]
+
+    if len(facts_about_location):
+        state_utils.save_to_shared_memory(
+            vars, facts_about_discussed_location={"location": location, "facts": facts_about_location})
+    return facts_about_location
+
+
 def is_fact_about_loc_available_request(ngrams, vars):
     shared_memory = state_utils.get_shared_memory(vars)
     location = shared_memory.get("discussed_location", "")
-    facts_about_location = shared_memory.get("facts_about_discussed_location", {})
-    if facts_about_location.get("location", "") == location and facts_about_location.get("facts", []):
-        facts_about_location = facts_about_location.get("facts", [])
-    else:
-        facts_about_location = []
-    if len(location) > 0 and len(facts_about_location) == 0:
-        facts_about_location = [send_cobotqa(f"fact about {location}")]
-    used_facts = shared_memory.get("used_facts", [])
-    facts_about_location = get_all_not_used_templates(used_facts, facts_about_location)
+    facts_about_location = collect_and_save_facts_about_location(location, vars)
     if len(location) and len(facts_about_location) > 0:
         logger.info(f"Bot has available facts about LOC: {location}.")
         return True
@@ -664,22 +692,12 @@ def is_fact_about_loc_available_request(ngrams, vars):
 
 def offer_fact_about_loc_response(vars):
     # USR_OFFER_FACT_ABOUT_LOC
-    shared_memory = state_utils.get_shared_memory(vars)
-    location = shared_memory.get("discussed_location", "")
-    logger.info(f"Bot offers fact about LOC: {location}.")
-
-    facts_about_location = shared_memory.get("facts_about_discussed_location", {})
-    if facts_about_location.get("location", "") == location and facts_about_location.get(
-            "facts", []) and location != "there":
-        facts_about_location = facts_about_location.get("facts", [])
-    else:
-        facts_about_location = []
-    if len(location) > 0 and len(facts_about_location) == 0 and location != "there":
-        facts_about_location = [send_cobotqa(f"fact about {location}")]
-    used_facts = shared_memory.get("used_facts", [])
-    facts_about_location = get_all_not_used_templates(used_facts, facts_about_location)
-
     try:
+        shared_memory = state_utils.get_shared_memory(vars)
+        location = shared_memory.get("discussed_location", "")
+        logger.info(f"Bot offers fact about LOC: {location}.")
+        facts_about_location = collect_and_save_facts_about_location(location, vars)
+
         if len(location) and len(facts_about_location) > 0 and location != "there":
             confidence = choose_conf_decreasing_if_requests_in_human_uttr(vars, SUPER_CONFIDENCE, DEFAULT_CONFIDENCE)
             state_utils.set_confidence(vars, confidence)
@@ -690,9 +708,6 @@ def offer_fact_about_loc_response(vars):
             discussed_locations = list(set(shared_memory.get("discussed_locations", [])))
             state_utils.save_to_shared_memory(vars, discussed_location=location)
             state_utils.save_to_shared_memory(vars, discussed_locations=discussed_locations + [location])
-            state_utils.save_to_shared_memory(
-                vars, facts_about_discussed_location={"location": location,
-                                                      "facts": facts_about_location})
             prev_prev_bot_uttr = vars["agent"]["dialog"]["bot_utterances"][-2]["text"] if len(
                 vars["agent"]["dialog"]["bot_utterances"]) >= 2 else ""
             if shared_memory.get("used_facts", []) and any([t in prev_prev_bot_uttr for t in OFFER_FACT_RESPONSES]):
@@ -725,20 +740,14 @@ def offer_fact_about_loc_response(vars):
 
 def share_fact_about_loc_response(vars):
     # USR_SHARE_FACT_ABOUT_LOC
-    shared_memory = state_utils.get_shared_memory(vars)
-    location = shared_memory.get("discussed_location", "")
-    facts_about_location = shared_memory.get("facts_about_discussed_location", {})
-    if facts_about_location.get("location", "") == location and facts_about_location.get("facts", []):
-        facts_about_location = facts_about_location.get("facts", [])
-    else:
-        facts_about_location = []
-    if len(location) > 0 and len(facts_about_location) == 0:
-        facts_about_location = [send_cobotqa(f"fact about {location}")]
-
-    used_opinion_requests = shared_memory.get("used_opinion_requests", [])
-    logger.info(f"Bot shares fact about LOC: {location}.")
 
     try:
+        shared_memory = state_utils.get_shared_memory(vars)
+        location = shared_memory.get("discussed_location", "")
+        facts_about_location = collect_and_save_facts_about_location(location, vars)
+        used_opinion_requests = shared_memory.get("used_opinion_requests", [])
+        logger.info(f"Bot shares fact about LOC: {location}.")
+
         if len(location) and len(facts_about_location) > 0 and location != "there":
             opinion_req = random.choice(OPINION_REQUESTS)
             confidence = choose_conf_decreasing_if_requests_in_human_uttr(vars, SUPER_CONFIDENCE, DEFAULT_CONFIDENCE)
@@ -813,6 +822,7 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_LIKE_TRAVELLING: like_about_travelling_request,
         State.SYS_LETS_CHAT_ABOUT_TRAVELLING: lets_chat_about_travelling_request,
         State.SYS_DISLIKE_TRAVELLING: dislike_about_travelling_request,
+        State.SYS_MENTIONED_TRAVELLING: mentioned_travelling_request,
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
@@ -960,6 +970,12 @@ simplified_dialogflow.add_system_transition(State.SYS_GET_FACT_ABOUT_LOC, State.
 simplified_dialogflow.add_system_transition(State.SYS_LOC_DETECTED, State.USR_HAVE_BEEN,
                                             have_bot_been_in_response)
 # there are no serial transitions because we have USR_HAVE_BEEN in another thread
+
+##################################################################################################################
+#  SYS_MENTIONED_TRAVELLING
+simplified_dialogflow.add_system_transition(State.SYS_MENTIONED_TRAVELLING, State.USR_WHAT_LOC_NOT_CONF,
+                                            not_confident_ask_question_about_travelling_response)
+# there are no user serial transitions because we asked about other location to discuss
 
 ##################################################################################################################
 #  SYS_LETS_CHAT_ABOUT_TRAVELLING

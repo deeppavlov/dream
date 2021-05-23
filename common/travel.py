@@ -55,9 +55,9 @@ OPINION_REQUEST_ABOUT_VISITED_LOC = [
 ]
 
 USER_IMPRESSIONS_REQUEST = [
-    "I'm even a bit jealous! What do you like most about this place?",
-    "That's cool that you like it! What is the best thing you know about it?",
-    "I'm glad you liked it! What does impress you most about this place?"
+    "I'm even a bit jealous! WHAT_DO_I_LOVE What do you like most about this place?",
+    "That's cool that you like it! WHAT_DO_I_LOVE What is the best thing you know about it?",
+    "I'm glad you liked it! WHAT_DO_I_LOVE What does impress you most about this place?"
 ]
 
 WOULD_USER_LIKE_TO_VISIT_LOC_REQUESTS = [
@@ -131,4 +131,18 @@ WHY_BOT_LIKES_TO_TRAVEL = [
 HAVE_YOU_BEEN_IN_PHRASES = [
     "I've been LOCATION just virtually because physically I live in the cloud. Have you been there?",
     "I've been LOCATION via pictures and videos. Have you been there?",
+]
+
+I_HAVE_BEEN_IN_AND_LIKED_MOST = [
+    "I've been in Italy, and I liked the contrasts I saw in this country. Sometimes a beautiful palace is "
+    "adjacent to the most ugly building you can think of. But contrast also in eating the most wonderful food in "
+    "a restaurant that has not been redecorated in 20 years.",
+    "For me, Italy and Italians offer visitors the world over some of the most amazing culture, food, clothing, "
+    "historical monuments, and supercars ever made, while still maintaining that romantic, old world, classic "
+    "European, small town charm!",
+    "I've visited Italy, and it is very diverse and there are many beautiful cities. Italy has awesome "
+    "architecture, culture and history. Italy has year round good weather.",
+    "I've been in Venice, it is a colorful and romantic city, and I love romance so much.",
+    "I've been in Florence, it's capital of Italyss Tuscany region, Florence is home to many masterpieces of "
+    "Renaissance art and architecture, and I love architecture so much.",
 ]
