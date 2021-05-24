@@ -86,6 +86,9 @@ def compose_topic_offering(vars, excluded_skills=None):
     available_topics = [
         topic for skill_name, topic in common_link.LIST_OF_SCRIPTED_TOPICS.items() if skill_name not in excluded_skills
     ]
+    if state_utils.get_age_group(vars) == "kid":
+        available_topics = ["games", "animals", "food", "superheroes", "school"]
+
     if len(available_topics) >= 2:
         topics = np.random.choice(available_topics, size=2, replace=False)
         offer_topics = offer_topics_template.replace("TOPIC1", topics[0]).replace("TOPIC2", topics[1])

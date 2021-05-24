@@ -33,16 +33,35 @@ topic2response = {
 responses = list(topic2response.keys())
 
 
+def recommend_according_to_age(human_attr):
+    skills_to_recommend = []
+    if human_attr.get("age_group", "unknown") != "unknown":
+        if human_attr["age_group"] == "kid":
+            skills_to_recommend = [
+                "game_cooperative_skill",
+                "dff_animals_skill",
+                "dff_food_skill",
+                # "small_talk_skill:superheroes",
+                # "small_talk_skill:school"
+            ]
+
+    return skills_to_recommend
+
+
 def handler(requested_data):
     st_time = time.time()
 
     utter_sentences_batch = requested_data["utterances_histories"]
+    human_attributes_batch = requested_data["human_attributes"]
+
     candidate_topics_batch = []
-    for utter_sentences in utter_sentences_batch:
+    for utter_sentences, human_attr in zip(utter_sentences_batch, human_attributes_batch):
         try:
             topic_ranked_list = get_ranked_list(utter_sentences, responses)
             candidate_topics = [topic2response[responses[i]] for i in topic_ranked_list[:TOP_K]]
-            candidate_topics_batch.append(candidate_topics)
+            age_group_skills = recommend_according_to_age(human_attr)
+
+            candidate_topics_batch.append(age_group_skills if age_group_skills else candidate_topics)
         except Exception as exc:
             logger.exception(exc)
             sentry_sdk.capture_exception(exc)
@@ -70,6 +89,9 @@ try:
         ],
         "personality": [{}],
         "num_ongoing_utt": [0],
+        "human_attributes": [
+            {"age_group": "unknown"}
+        ]
     }
     handler(request_data)
     logger.warning("test query processed")

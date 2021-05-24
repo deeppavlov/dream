@@ -25,6 +25,9 @@ def main():
             ],
             "num_ongoing_utt": [
                 0
+            ],
+            "human_attributes": [
+                {"age_group": "unknown"}
             ]
         }
     ]
