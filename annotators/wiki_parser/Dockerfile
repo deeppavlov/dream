@@ -14,10 +14,17 @@ RUN pip install -r /src/requirements.txt
 RUN pip install pybind11==2.2.4
 RUN pip install hdt==2.3
 
+ARG WIKI_LITE_DB
+ENV WIKI_LITE_DB ${WIKI_LITE_DB}
+ARG WIKI_LITE_INDEX_DB
+ENV WIKI_LITE_INDEX_DB ${WIKI_LITE_INDEX_DB}
+ARG WIKI_CACHE_DB
+ENV WIKI_CACHE_DB ${WIKI_CACHE_DB}
+
 RUN mkdir -p /root/.deeppavlov/downloads/wikidata
-RUN wget -q -P /root/.deeppavlov/downloads/wikidata http://files.deeppavlov.ai/kbqa/wikidata/wikidata_lite.hdt
-RUN wget -q -P /root/.deeppavlov/downloads/wikidata http://files.deeppavlov.ai/kbqa/wikidata/wikidata_lite.hdt.index.v1-1
-RUN wget -q -P /root/.deeppavlov/downloads/wikidata http://files.deeppavlov.ai/kbqa/wikidata/wikidata_cache.json
+RUN wget -q -P /root/.deeppavlov/downloads/wikidata ${WIKI_LITE_DB}
+RUN wget -q -P /root/.deeppavlov/downloads/wikidata ${WIKI_LITE_INDEX_DB}
+RUN wget -q -P /root/.deeppavlov/downloads/wikidata ${WIKI_CACHE_DB}
 
 COPY $SRC_DIR /src
 WORKDIR /src

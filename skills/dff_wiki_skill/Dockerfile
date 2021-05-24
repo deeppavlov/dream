@@ -6,11 +6,6 @@ WORKDIR /src
 COPY common/dialogflow_framework/requirements.txt .
 RUN pip install -r requirements.txt
 
-RUN python -m spacy download en
-RUN python -m spacy download en_core_web_sm
-RUN python -m spacy download en_core_web_md
-RUN python -m nltk.downloader vader_lexicon
-
 COPY common/dialogflow_framework/scripts /scripts
 
 RUN bash /scripts/programy_logger_off.sh
@@ -31,7 +26,10 @@ ENV PORT=$PORT
 
 RUN pip install deeppavlov
 
+RUN python -m spacy download en
 RUN python -m spacy download en_core_web_sm
+RUN python -m spacy download en_core_web_md
+RUN python -m nltk.downloader vader_lexicon
 RUN python -m nltk.downloader punkt
 
 COPY skills/${SERVICE_NAME}/ ./

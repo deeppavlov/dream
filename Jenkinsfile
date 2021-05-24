@@ -241,7 +241,7 @@ spec:
     stage('Tests') {
 
       agent {
-        label 'test'
+        label 'aws-test'
       }
 
       when {
@@ -404,7 +404,8 @@ spec:
               Exception ex = null
               catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                 try {
-                  sh 'tests/runtests.sh MODE=test_skills'
+                  sh label: 'restart comet-conceptnet', script: 'docker-compose --no-ansi -p dream-alexa -f docker-compose.yml -f test.yml -f s3.yml restart comet-conceptnet'
+                  sh label: 'test skills', script: 'tests/runtests.sh MODE=test_skills'
                 }
                 catch (Exception e) {
                   int duration = (currentBuild.duration - startTime) / 1000
@@ -430,7 +431,7 @@ spec:
         }
 
         /*stage('Collect Predictions') {
-
+./tests/runtests.sh MODE=clean
           steps {
             script {
               startTime = currentBuild.duration
