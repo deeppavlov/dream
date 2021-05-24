@@ -19,10 +19,14 @@ RUN bash /scripts/programy_logger_off.sh
 # Here you can make changes
 
 RUN mkdir -p /root/.deeppavlov/downloads/wikidata
-RUN wget -q -P /root/.deeppavlov/downloads/wikidata http://files.deeppavlov.ai/kbqa/wikidata/breed_facts.json
 
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
+
+ARG BREED_FACTS_DB
+ENV BREED_FACTS_DB ${BREED_FACTS_DB}
+
+RUN wget -q -P /root/.deeppavlov/downloads/wikidata ${BREED_FACTS_DB}
 
 COPY skills/${SERVICE_NAME}/requirements.txt .
 RUN pip install -r requirements.txt

@@ -34,10 +34,20 @@ services:
     build:
       args:
         SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
-  wiki-parser:
+  wikidata-dial-service:
     build:
       args:
         SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
+  kbqa:
+    build:
+      args:
+        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
+  wiki-parser:
+    build:
+      args:
+        WIKI_LITE_DB: http://team-dream-storage.s3.amazonaws.com/kbqa/wikidata/wikidata_lite.hdt
+        WIKI_LITE_INDEX_DB: http://team-dream-storage.s3.amazonaws.com/kbqa/wikidata/wikidata_lite.hdt.index.v1-1
+        WIKI_CACHE_DB: http://team-dream-storage.s3.amazonaws.com/kbqa/wikidata/wikidata_cache.json
   combined-classification:
     build:
       args:
@@ -55,6 +65,14 @@ services:
     build:
       args:
         DATABASE_URL: http://team-dream-storage.s3.amazonaws.com/alexaprize_data/database_most_popular_main_info_v1.json
+  dff-animals-skill:
+    build:
+      args:
+        BREED_FACTS_DB: http://team-dream-storage.s3.amazonaws.com/kbqa/wikidata/breed_facts.json
+  dummy-skill-dialog:
+    build:
+      args:
+        DATA_URL: http://team-dream-storage.s3.amazonaws.com/alexaprize_data/dummy_skill_dialog.tar.gz
   dff-wiki-skill:
     build:
       args:
