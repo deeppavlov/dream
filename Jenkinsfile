@@ -41,7 +41,6 @@ pipeline {
   agent none
 
   environment {
-    AGENT_PORT=4242
     WAIT_TIMEOUT=2400
     WAIT_INTERVAL=10
     COMPOSE_HTTP_TIMEOUT=120
@@ -241,7 +240,7 @@ spec:
     stage('Tests') {
 
       agent {
-        label 'aws-test'
+        label 'aws-test1'
       }
 
       when {
@@ -323,6 +322,11 @@ spec:
               Exception ex = null
               catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                 try {
+                  sh '''
+                        sed -i -r "s/(CUDA_VISIBLE_DEVICES=)0/\\1\${GPU0}/g" test.yml
+                        sed -i -r "s/(CUDA_VISIBLE_DEVICES=)1/\\1\${GPU1}/g" test.yml
+                        cat test.yml
+                  '''
                   sh 'tests/runtests.sh MODE=clean && tests/runtests.sh MODE=start'
                 }
                 catch (Exception e) {
@@ -404,7 +408,7 @@ spec:
               Exception ex = null
               catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                 try {
-                  sh label: 'restart comet-conceptnet', script: 'docker-compose --no-ansi -p dream-alexa -f docker-compose.yml -f test.yml -f s3.yml restart comet-conceptnet'
+                  sh label: 'restart comet-conceptnet', script: 'docker-compose --no-ansi -p dream-alexa${WORKER} -f docker-compose.yml -f test.yml -f s3.yml restart comet-conceptnet'
                   sh label: 'test skills', script: 'tests/runtests.sh MODE=test_skills'
                 }
                 catch (Exception e) {
