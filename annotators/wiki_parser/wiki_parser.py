@@ -686,12 +686,14 @@ def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], u
                                                                 or set(types_2hop).intersection(topic_skill_types)):
                                 entity_triplets_info = find_top_triplets(entity, entity_substr, n, token_conf, conf)
                                 topic_skills_triplets_info = {**topic_skills_triplets_info, **entity_triplets_info}
-                                found_topic_skills_info = True
+                                if not set(types_2hop).intersection({"Q11424", "Q24856"}):
+                                    found_topic_skills_info = True
                             if not found_wiki_skill_info and (set(types).intersection(wiki_skill_used_types)
                                                               or set(types_2hop).intersection(wiki_skill_used_types)):
                                 entity_triplets_info = find_top_triplets(entity, entity_substr, n, token_conf, conf)
                                 wiki_skill_triplets_info = {**wiki_skill_triplets_info, **entity_triplets_info}
-                                found_wiki_skill_info = True
+                                if not set(types_2hop).intersection({"Q11424", "Q24856"}):
+                                    found_wiki_skill_info = True
                             if found_topic_skills_info and found_wiki_skill_info:
                                 break
             except Exception as e:
