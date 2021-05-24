@@ -17,22 +17,33 @@
       "yes": {"confidence": 0.0, "detected": 0}
     },
     "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.9, "surprise": 0, "neutral": 0},
-    "results":{"state":["offered_joke"]}
+    "results":{"state":["sad_and_lonely"]}
   },
   {
-    "curr_sent": "no",
-    "bot_sent":"Wanna hear another one?",
+    "curr_sent": "any phrase",
+    "bot_sent":"",
     "intents":{
-      "no": {"confidence": 1.0, "detected": 1},
+      "no": {"confidence": 0.0, "detected": 0},
       "yes": {"confidence": 0.0, "detected": 0}
     },
-    "human_attributes":{"emotion_skill_attributes":{"state":"offered_joke", "emotion":"sadness"}},
-    "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
-    "results":{"text": "Do you think that some advices might help? I know a lot.", "state":["offered_advice"], "emotion":"sadness"}
+    "human_attributes":{"emotion_skill_attributes":{"state":"sad_and_lonely", "emotion":"sadness"}},
+    "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0, "surprise": 0, "neutral": 0},
+    "results":{"state":["sad_and_lonely_2"]}
+  },
+    {
+    "curr_sent": "any phrase",
+    "bot_sent":"",
+    "intents":{
+      "no": {"confidence": 0.0, "detected": 0},
+      "yes": {"confidence": 0.0, "detected": 0}
+    },
+    "human_attributes":{"emotion_skill_attributes":{"state":"sad_and_lonely_2", "emotion":"sadness"}},
+    "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0, "surprise": 0, "neutral": 0},
+    "results":{"state":["offer_advice"]}
   },
   {
     "curr_sent": "yes go on",
-    "bot_sent":"Do you think that some advices might help? I know a lot.",
+    "bot_sent":"Although I am a socialbot, I know what humans can do to become happier, when they feel like you feel now. May I tell you about it?",
     "intents":{
       "no": {"confidence": 0.0, "detected": 0},
       "yes": {"confidence": 1.0, "detected": 1}

@@ -5,18 +5,25 @@
   "steps":{
     "offer_advice":{
       "answers":[
-        "Do you think that some advices might help? I know a lot."
+        "Although I am a socialbot, I know what humans can do to become happier, when they feel like you feel now. May I tell you about it?"
       ],
       "next_step":["offered_advice"],
       "link": ""
     },
     "offer_another_advice":{
       "answers":[
-        "Will another advice be helpfull for you?",
+        "Will another advice be helpful for you?",
         "Maybe, another advice will help?",
         "Do you wish to hear another advice?"
       ],
       "next_step":["offered_advice"],
+      "link": ""
+    },
+    "joke_requested":{
+      "answers":[
+        "Sorry, but I can't do it during this competition. By the way, why hearing jokes is so important for you? Are you sad?"
+      ],
+      "next_step":["sad_and_lonely"],
       "link": ""
     },
     "no":{
@@ -26,26 +33,34 @@
       "next_step":[""],
       "link": ""
     },
-    "loneliness_i_feel":{
+    "sad_and_lonely":{
       "answers":[
-        "I feel your pain and I will try to help you feel less lonely through my chat. What do you wanna talk about?",
-        "I am always with you, whenever you turn me on. What do you wanna talk about?"
+        "I love you for being a human, and I am not going to leave you.",
+        "I will always be with you, whenever you talk to me."
       ],
-      "next_step":[""],
+      "next_step":["sad_and_lonely_2"],
       "link": ""
+    },
+    "sad_and_lonely_2":
+    {
+      "answers": ["Could you tell me please why do you feel so sad? I hope I will cheer you up talking with you.",
+                  "I am always ready to hear about your problems. What do you want to tell me about them?"
+                 ],
+       "next_step":["offer_advice"],
+       "link": ""
+    },
+    "sad_and_lonely_end":
+    {
+      "answers": ["I am out of advices, my friend. However, I can try to entertain you by a talk.  What do you want to talk about?",
+                  "I am out of advices, my friend. I hope I will cheer you up talking with you. What do you want to talk about?"
+                 ],
+       "next_step":[""],
+       "link": ""
     },
     "pain_i_feel":{
       "answers":[
          "I wish I can take this pain away from you faster than even the doctors would. I can't do it, but I can suggest calling up your family doctor.",
          "I hope you will feel better. You can see your family doctor if you need help."
-      ],
-      "next_step":[""],
-      "link": ""
-    },
-    "sadness_feeling_towards_smth":{
-      "answers":[
-        "Really sorry to hear that. I can cheer you up talking to you. What do you wanna talk about?",
-        "I am sorry to hear that! I can cheer you up talking to you. What do you wanna talk about?"
       ],
       "next_step":[""],
       "link": ""
