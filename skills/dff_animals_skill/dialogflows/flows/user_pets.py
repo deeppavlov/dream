@@ -264,6 +264,19 @@ def what_pets_request(ngrams, vars):
     return flag
 
 
+def another_pet_request(ngrams, vars):
+    flag = False
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    shared_memory = state_utils.get_shared_memory(vars)
+    users_pet = shared_memory.get("users_pet", "")
+    another_pet = re.findall(r"my (cat|dog)", user_uttr["text"])
+    if another_pet and users_pet and another_pet[0] != users_pet:
+        flag = True
+    logger.info(f"another_pet_request, users_pet {users_pet} another_pet {another_pet}")
+    logger.info(f"another_pet_request={flag}")
+    return flag
+
+
 def ask_about_name_request(ngrams, vars):
     flag = False
     user_uttr = state_utils.get_last_human_utterance(vars)
@@ -446,6 +459,18 @@ def ask_about_dog_cat_response(vars):
     return response
 
 
+def another_pet_response(vars):
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    users_pet = re.findall(r"my (cat|dog)", user_uttr["text"])
+    if users_pet:
+        response = f"Very interesting! Could you tell more about your {users_pet[0]}?"
+    else:
+        response = f"Very interesting! Could you tell more about your pet?"
+    state_utils.set_confidence(vars, confidence=CONF_1)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+    return response
+
+
 def ask_about_name_response(vars):
     retrieve_and_save(vars)
     extract_breed(vars)
@@ -526,6 +551,7 @@ simplified_dialog_flow.add_user_serial_transitions(
         UserPetsState.SYS_ERR: stop_animals_request,
         UserPetsState.SYS_WHAT_PETS: what_pets_request,
         UserPetsState.SYS_IS_DOG_CAT: is_dog_cat_request,
+        UserPetsState.SYS_ANOTHER_PET: another_pet_request,
         UserPetsState.SYS_NOT_HAVE: not_have_pets_request,
         UserPetsState.SYS_ASK_ABOUT_NAME: ask_about_name_request,
         UserPetsState.SYS_WHAT_BREED: ask_about_breed_request,
@@ -543,6 +569,7 @@ simplified_dialog_flow.add_user_serial_transitions(
         UserPetsState.SYS_WHAT_BREED: ask_about_breed_request,
         UserPetsState.SYS_PLAY_WITH_PET: ask_about_playing_request,
         UserPetsState.SYS_LIKE_PET: ask_like_request,
+        UserPetsState.SYS_ANOTHER_PET: another_pet_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
 )
@@ -556,6 +583,7 @@ simplified_dialog_flow.add_user_serial_transitions(
         UserPetsState.SYS_PLAY_WITH_PET: ask_about_playing_request,
         UserPetsState.SYS_LIKE_PET: ask_like_request,
         UserPetsState.SYS_ASK_MORE_INFO: ask_more_info_request,
+        UserPetsState.SYS_ANOTHER_PET: another_pet_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
 )
@@ -568,6 +596,7 @@ simplified_dialog_flow.add_user_serial_transitions(
         UserPetsState.SYS_PLAY_WITH_PET: ask_about_playing_request,
         UserPetsState.SYS_LIKE_PET: ask_like_request,
         UserPetsState.SYS_ASK_MORE_INFO: ask_more_info_request,
+        UserPetsState.SYS_ANOTHER_PET: another_pet_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
 )
@@ -588,6 +617,7 @@ simplified_dialog_flow.add_user_serial_transitions(
         UserPetsState.SYS_PLAY_WITH_PET: ask_about_playing_request,
         UserPetsState.SYS_LIKE_PET: ask_like_request,
         UserPetsState.SYS_ASK_MORE_INFO: ask_more_info_request,
+        UserPetsState.SYS_ANOTHER_PET: another_pet_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
 )
@@ -599,6 +629,7 @@ simplified_dialog_flow.add_user_serial_transitions(
         UserPetsState.SYS_ASK_ABOUT_NAME: ask_about_name_request,
         UserPetsState.SYS_LIKE_PET: ask_like_request,
         UserPetsState.SYS_ASK_MORE_INFO: ask_more_info_request,
+        UserPetsState.SYS_ANOTHER_PET: another_pet_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
 )
@@ -610,6 +641,7 @@ simplified_dialog_flow.add_user_serial_transitions(
         UserPetsState.SYS_ASK_ABOUT_NAME: ask_about_name_request,
         UserPetsState.SYS_PLAY_WITH_PET: ask_about_playing_request,
         UserPetsState.SYS_ASK_MORE_INFO: ask_more_info_request,
+        UserPetsState.SYS_ANOTHER_PET: another_pet_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
 )
@@ -621,6 +653,7 @@ simplified_dialog_flow.add_user_serial_transitions(
         UserPetsState.SYS_WHAT_BREED: ask_about_breed_request,
         UserPetsState.SYS_PLAY_WITH_PET: ask_about_playing_request,
         UserPetsState.SYS_LIKE_PET: ask_like_request,
+        UserPetsState.SYS_ANOTHER_PET: another_pet_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
 )
@@ -629,6 +662,8 @@ simplified_dialog_flow.add_system_transition(UserPetsState.SYS_WHAT_PETS, UserPe
                                              what_pets_response, )
 simplified_dialog_flow.add_system_transition(UserPetsState.SYS_IS_DOG_CAT, UserPetsState.USR_ASK_ABOUT_DOG_CAT,
                                              ask_about_dog_cat_response, )
+simplified_dialog_flow.add_system_transition(UserPetsState.SYS_ANOTHER_PET, UserPetsState.USR_ANOTHER_PET,
+                                             another_pet_response, )
 simplified_dialog_flow.add_system_transition(UserPetsState.SYS_NOT_HAVE, UserPetsState.USR_NOT_HAVE,
                                              suggest_pet_response, )
 simplified_dialog_flow.add_system_transition(UserPetsState.SYS_ASK_ABOUT_NAME, UserPetsState.USR_ASK_ABOUT_NAME,
@@ -658,6 +693,8 @@ simplified_dialog_flow.set_error_successor(UserPetsState.SYS_LIKE_PET, UserPetsS
 simplified_dialog_flow.set_error_successor(UserPetsState.USR_LIKE_PET, UserPetsState.SYS_ERR)
 simplified_dialog_flow.set_error_successor(UserPetsState.SYS_ASK_MORE_INFO, UserPetsState.SYS_ERR)
 simplified_dialog_flow.set_error_successor(UserPetsState.USR_ASK_MORE_INFO, UserPetsState.SYS_ERR)
+simplified_dialog_flow.set_error_successor(UserPetsState.SYS_ANOTHER_PET, UserPetsState.SYS_ERR)
+simplified_dialog_flow.set_error_successor(UserPetsState.USR_ANOTHER_PET, UserPetsState.SYS_ERR)
 
 simplified_dialog_flow.add_system_transition(
     UserPetsState.SYS_ERR,

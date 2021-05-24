@@ -52,6 +52,7 @@ def activate_after_wiki_skill(vars):
     isno = is_no(state_utils.get_last_human_utterance(vars))
     if from_skill == "dff_wiki_skill" and isno:
         flag = True
+    logger.info(f"activate_after_wiki_skill {cross_link}")
     return flag
 
 
@@ -121,6 +122,7 @@ def why_do_you_like_request(ngrams, vars):
     shared_memory = state_utils.get_shared_memory(vars)
     used_why = shared_memory.get("why_do_you_like", False)
     found_pet = re.findall(PETS_TEMPLATE, text)
+    logger.info(f"why_do_you_like_request, found_animal {found_animal}")
     if found_animal and not found_pet and not used_why and not isno \
             and not if_linked_to_wiki_skill(annotations, "dff_animals_skill"):
         flag = True

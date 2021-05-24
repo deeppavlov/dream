@@ -25,7 +25,7 @@ ANIMALS_TEMPLATE = re.compile(r"(animal|\bpet\b|\bpets\b)", re.IGNORECASE)
 PETS_TEMPLATE = re.compile(r"(\bcat\b|\bcats\b|\bdog\b|\bdogs\b|horse|puppy|puppies|kitty|kitties|kitten|parrot|"
                            r"\brat\b|\brats\b|mouse|hamster|fish)", re.IGNORECASE)
 ANIMALS_FIND_TEMPLATE = re.compile(r"(animal|\bpet\b|\bpets|\bcat\b|\bcats\b|\bdog\b|\bdogs\b|horse|puppy|puppies|"
-                                   r"kitty|kitties|kitten|parrot|\brat\b|\brats\b|mouse|hamster|fish)", re.IGNORECASE)
+                                   r"kitty|kitties|kitten|parrot|\brat\b|\brats\b|mouse|hamster|fish\b)", re.IGNORECASE)
 HAVE_LIKE_PETS_TEMPLATE = re.compile(r"(do|did|have) you (have |had |like )?(any |a )?(pets|pet|animals|animal)",
                                      re.IGNORECASE)
 HAVE_PETS_TEMPLATE = re.compile(r"(do|did|have) you (have |had )?(any |a )?(pets|pet|animals|animal)", re.IGNORECASE)

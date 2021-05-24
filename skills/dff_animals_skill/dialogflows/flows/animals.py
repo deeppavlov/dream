@@ -45,6 +45,7 @@ def if_link_from_wiki_skill(vars):
     from_skill = cross_link.get("from_service", "")
     if from_skill == "dff_wiki_skill":
         flag = True
+    logger.info(f"if_link_from_wiki_skill {cross_link}")
     return flag
 
 
@@ -143,17 +144,36 @@ def like_animals_request(ngrams, vars):
         flag = False
     if ask_more and isno:
         flag = False
+    told_about_my_pet = shared_memory.get("told_about_my_pet", False)
+    if told_about_my_pet:
+        flag = False
     logger.info(f"like_animals_request={flag}")
     return flag
 
 
 def user_likes_animal_request(ngrams, vars):
     flag = False
-    text = state_utils.get_last_human_utterance(vars)["text"]
-    animal = re.findall("i like (.*?)", text)
-    if animal and len(animal[0].split()) <= 3 and not is_last_state(vars, "SYS_WHAT_ANIMALS"):
+    annotations = state_utils.get_last_human_utterance(vars)["annotations"]
+    conceptnet = annotations.get("conceptnet", {})
+    found_animal = ""
+    for elem, triplets in conceptnet.items():
+        if "SymbolOf" in triplets:
+            objects = triplets["SymbolOf"]
+            if "animal" in objects:
+                found_animal = elem
+    wp_output = annotations.get("wiki_parser", {})
+    if isinstance(wp_output, dict):
+        entities_info = wp_output.get("entities_info", {})
+        for entity, triplets in entities_info.items():
+            types = triplets.get("types", []) + triplets.get("instance of", []) + triplets.get("subclass of", [])
+            type_ids = [elem for elem, label in types]
+            inters = set(type_ids).intersection({"Q55983715", "Q16521"})
+            if inters:
+                found_animal = entity
+                break
+    if found_animal and not is_last_state(vars, "SYS_WHAT_ANIMALS"):
         flag = True
-    logger.info(f"user_likes_request={flag}")
+    logger.info(f"user_likes_animal_request={flag}")
     return flag
 
 
@@ -401,6 +421,7 @@ def have_pets_response(vars):
 def tell_about_pets_response(vars):
     make_my_pets_info(vars)
     shared_memory = state_utils.get_shared_memory(vars)
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
     my_pet = shared_memory.get("my_pet", "")
     if not my_pet:
         my_pet = random.choice(["cat", "dog"])
@@ -408,7 +429,11 @@ def tell_about_pets_response(vars):
     my_pets_info = shared_memory.get("my_pets_info", {})
     sentence = my_pets_info[my_pet]["sentence"]
     state_utils.save_to_shared_memory(vars, start=True)
-    response = f"{sentence} Would you like to learn more about my {my_pet}?"
+    state_utils.save_to_shared_memory(vars, told_about_my_pet=True)
+    answer = ""
+    if "what wild animals do you like" in bot_uttr.get("text", "").lower():
+        answer = "Sorry, I did not hear about this animal."
+    response = f"{answer} {sentence} Would you like to learn more about my {my_pet}?".strip()
     state_utils.set_confidence(vars, confidence=CONF_1)
     state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
