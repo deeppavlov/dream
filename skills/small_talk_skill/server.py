@@ -11,7 +11,7 @@ from os import getenv
 import sentry_sdk
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT, MUST_CONTINUE
-from common.utils import get_skill_outputs_from_dialog, get_sentiment
+from common.utils import get_skill_outputs_from_dialog, get_sentiment, is_yes
 from common.universal_templates import if_choose_topic, if_switch_topic, if_chat_about_particular_topic, \
     is_any_question_sentence_in_utterance
 from topic_words import TOPIC_PATTERNS
@@ -151,7 +151,7 @@ def get_next_response_on_topic(topic, curr_user_uttr, curr_step=0, topic_script=
         else:
             confidence = CONTINUE_CONFIDENCE
     elif isinstance(topic_script[curr_step], dict):
-        yes_detected = curr_user_uttr["annotations"].get("intent_catcher", {}).get("yes", {}).get("detected", 0) == 1
+        yes_detected = is_yes(curr_user_uttr)
         if yes_detected:
             next_bot_uttr = topic_script[curr_step]["yes"]
             attr["can_continue"] = MUST_CONTINUE
