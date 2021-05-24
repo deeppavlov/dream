@@ -75,22 +75,21 @@ class EmotionSkillScenario:
         start_states = {
             "joy": 'joy_i_feel' if self._check_i_feel(user_phrase, bot_phrase)
             else 'joy_feeling_towards_smth',
-            "sadness": 'sadness_i_feel' if self._check_i_feel(user_phrase, bot_phrase)
-            else 'sadness_feeling_towards_smth',
+            "sadness": 'sad_and_lonely',
             "fear": 'fear',
             "anger": 'anger',
             "surprise": 'surprise',
             "love": 'love'
         }
-
         state = emotion_skill_attributes.get("state", "")
         prev_jokes_advices = emotion_skill_attributes.get("prev_jokes_advices", [])
         is_yes = intent.get("yes", {}).get("detected", 0)
         is_no = intent.get("no", {}).get("detected", 0)
+        just_asked_about_jokes = "why hearing jokes is so important for you? are you sad?" in bot_phrase
         reply, confidence = "", 0
         link = ''
         self.logger.info(
-            f"_get_reply_and_conf {user_phrase}; {bot_phrase}; {emotion};"
+            f"_get_reply_and_conf {user_phrase}; {bot_phrase}; {emotion}; {just_asked_about_jokes};"
             f" {emotion_skill_attributes}; {intent}; {human_attr}"
         )
 
@@ -102,44 +101,10 @@ class EmotionSkillScenario:
             confidence = min(0.98, self.emotion_precision[emotion])
             if len(step['next_step']):
                 state = random.choice(step['next_step'])
-        elif state == "joke_requested":
-            # got joke request
-            reply = self._random_choice(self.jokes, prev_jokes_advices)
-            if reply == "":
-                state = ""  # We are run out of jokes
-                reply = "I guess I am out of jokes, sorry. Do you know any good jokes?"
-            else:
-                # Add joke to list of already told jokes and advices
-                prev_jokes_advices.append(reply)
+        elif state == "sad_and_lonely" and just_asked_about_jokes and is_no:
+            reply = "Actually, I love jokes but not during this competition. Dead serious about that."
             confidence = 1.0
-        elif state == 'offered_joke':
-            # we offered a joke
-            if is_yes:
-                # User wants a joke -> we provide a joke and then offer another one
-                reply = self._random_choice(self.jokes, prev_jokes_advices)
-                state = ''
-                if reply == "":
-                    state = ""  # We are run out of jokes
-                    reply = "Well, that was the last joke of mine. Do you know any good jokes?"
-                else:
-                    # Add joke to list of already told jokes and advices
-                    prev_jokes_advices.append(reply)
-                confidence = 1.0
-            elif is_no:
-                # User doesn't want a joke
-                if emotion in {'sadness', 'fear', 'anger', 'surprise'}:
-                    state = 'offer_advice'  # We offer an advice
-                else:
-                    state = 'no'  # Can't offer anything
-                step = self.steps[state]
-                reply = random.choice(step['answers'])
-                link = step['link']
-                if link:
-                    link = link_to([link], human_attributes=human_attr)
-                    reply += link['phrase']
-                if len(step['next_step']):
-                    state = random.choice(step['next_step'])
-                confidence = 1.0
+            state = ''
         elif state == 'offered_advice':
             # we offered an advice
             if is_yes:
@@ -147,9 +112,9 @@ class EmotionSkillScenario:
                 reply = self._random_choice(self.advices[emotion], prev_jokes_advices)
                 state = 'offer_another_advice'
                 if reply == "":
-                    state = ""  # We are run out of advices
-                    reply = "I guess i am out of advices. But you can just tell me \
-                        what is on your mind and I am here to listen."
+                    state = "sad_and_lonely_end"
+                    step = self.steps[state]
+                    reply = random.choice(step['answers'])
                 else:
                     prev_jokes_advices.append(reply)
                 confidence = 1.0
