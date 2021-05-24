@@ -190,10 +190,15 @@ def tell_about_cat_response(vars):
     shared_memory = state_utils.get_shared_memory(vars)
     my_pets_info = shared_memory["my_pets_info"]
     sentence = my_pets_info["cat"]["sentence"]
+    name = my_pets_info["cat"]["name"]
+    breed = my_pets_info["cat"]["breed"]
     state_utils.save_to_shared_memory(vars, start_about_cat=True)
     state_utils.save_to_shared_memory(vars, my_pet="cat")
     answer, _ = answer_users_question(vars)
-    response = f"{answer} {sentence} Would you like to learn more about my cat?".strip()
+    if (name in answer and name in sentence) or (breed in answer and breed in sentence):
+        response = f"{sentence} Would you like to learn more about my cat?".strip()
+    else:
+        response = f"{answer} {sentence} Would you like to learn more about my cat?".strip()
     state_utils.set_confidence(vars, confidence=CONF_1)
     state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
@@ -203,24 +208,42 @@ def tell_about_dog_response(vars):
     shared_memory = state_utils.get_shared_memory(vars)
     my_pets_info = shared_memory["my_pets_info"]
     sentence = my_pets_info["dog"]["sentence"]
+    name = my_pets_info["dog"]["name"]
+    breed = my_pets_info["dog"]["breed"]
     state_utils.save_to_shared_memory(vars, start_about_dog=True)
     state_utils.save_to_shared_memory(vars, my_pet="dog")
     answer, _ = answer_users_question(vars)
-    response = f"{answer} {sentence} Would you like to learn more about my dog?".strip()
+    if (name in answer and name in sentence) or (breed in answer and breed in sentence):
+        response = f"{sentence} Would you like to learn more about my dog?".strip()
+    else:
+        response = f"{answer} {sentence} Would you like to learn more about my dog?".strip()
     state_utils.set_confidence(vars, confidence=CONF_1)
     state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
 
 
-def my_cat_1_response(vars):
-    fact = MY_CAT[0]
+def find_fact(vars, fact_list):
     shared_memory = state_utils.get_shared_memory(vars)
+    used_facts = shared_memory.get("used_facts", [])
+    fact = ""
+    for elem in fact_list:
+        fact = elem
+        if fact not in used_facts:
+            used_facts.append(fact)
+            state_utils.save_to_shared_memory(vars, used_facts=used_facts)
+            break
+    return fact
+
+
+def my_cat_1_response(vars):
+    shared_memory = state_utils.get_shared_memory(vars)
+    fact = find_fact(vars, MY_CAT)
     my_pets_info = shared_memory["my_pets_info"]
     my_pet_name = my_pets_info["cat"]["name"]
     question_cat = random.choice(questions_pets)
     question_cat = question_cat.format(random.choice(["my cat", my_pet_name]))
     answer, _ = answer_users_question(vars)
-    response = f"{answer} {fact} {question_cat}".strip()
+    response = f"{answer} {fact} {question_cat}".strip().replace("  ", " ")
     state_utils.save_to_shared_memory(vars, told_about_cat=True)
     state_utils.save_to_shared_memory(vars, start_about_cat=False)
     state_utils.save_to_shared_memory(vars, cat=True)
@@ -231,14 +254,14 @@ def my_cat_1_response(vars):
 
 
 def my_cat_2_response(vars):
-    fact = MY_CAT[1]
+    fact = find_fact(vars, MY_CAT)
     shared_memory = state_utils.get_shared_memory(vars)
     my_pets_info = shared_memory["my_pets_info"]
     my_pet_name = my_pets_info["cat"]["name"]
     question_cat = random.choice(questions_pets)
     question_cat = question_cat.format(random.choice(["my cat", my_pet_name]))
     answer, _ = answer_users_question(vars)
-    response = f"{answer} {fact} {question_cat}".strip()
+    response = f"{answer} {fact} {question_cat}".strip().replace("  ", " ")
     state_utils.save_to_shared_memory(vars, cat=True)
     state_utils.save_to_shared_memory(vars, start_about_cat=False)
     state_utils.set_confidence(vars, confidence=CONF_2)
@@ -248,15 +271,15 @@ def my_cat_2_response(vars):
 
 
 def my_cat_3_response(vars):
-    fact = MY_CAT[2]
+    fact = find_fact(vars, MY_CAT)
     about_dog = "I also have a dog."
     shared_memory = state_utils.get_shared_memory(vars)
     told_about_dog = shared_memory.get("told_about_dog", False)
     answer, _ = answer_users_question(vars)
     if told_about_dog:
-        response = f"{answer} {fact}".strip()
+        response = f"{answer} {fact}".strip().replace("  ", " ")
     else:
-        response = f"{answer} {fact} {about_dog}".strip()
+        response = f"{answer} {fact} {about_dog}".strip().replace("  ", " ")
     state_utils.save_to_shared_memory(vars, cat=True)
     state_utils.save_to_shared_memory(vars, start_about_cat=False)
     state_utils.set_confidence(vars, confidence=CONF_3)
@@ -266,14 +289,14 @@ def my_cat_3_response(vars):
 
 
 def my_dog_1_response(vars):
-    fact = MY_DOG[0]
+    fact = find_fact(vars, MY_DOG)
     shared_memory = state_utils.get_shared_memory(vars)
     my_pets_info = shared_memory["my_pets_info"]
     my_pet_name = my_pets_info["dog"]["name"]
     question_dog = random.choice(questions_pets)
     question_dog = question_dog.format(random.choice(["my dog", my_pet_name]))
     answer, _ = answer_users_question(vars)
-    response = f"{answer} {fact} {question_dog}".strip()
+    response = f"{answer} {fact} {question_dog}".strip().replace("  ", " ")
     state_utils.save_to_shared_memory(vars, told_about_dog=True)
     state_utils.save_to_shared_memory(vars, dog=True)
     state_utils.save_to_shared_memory(vars, start_about_dog=False)
@@ -284,14 +307,14 @@ def my_dog_1_response(vars):
 
 
 def my_dog_2_response(vars):
-    fact = MY_DOG[1]
+    fact = find_fact(vars, MY_DOG)
     shared_memory = state_utils.get_shared_memory(vars)
     my_pets_info = shared_memory["my_pets_info"]
     my_pet_name = my_pets_info["dog"]["name"]
     question_dog = random.choice(questions_pets)
     question_dog = question_dog.format(random.choice(["my dog", my_pet_name]))
     answer, _ = answer_users_question(vars)
-    response = f"{answer} {fact} {question_dog}".strip()
+    response = f"{answer} {fact} {question_dog}".strip().replace("  ", " ")
     state_utils.save_to_shared_memory(vars, dog=True)
     state_utils.save_to_shared_memory(vars, start_about_dog=False)
     state_utils.set_confidence(vars, confidence=CONF_2)
@@ -301,15 +324,15 @@ def my_dog_2_response(vars):
 
 
 def my_dog_3_response(vars):
-    fact = MY_DOG[2]
+    fact = find_fact(vars, MY_DOG)
     about_cat = "I also have a cat."
     shared_memory = state_utils.get_shared_memory(vars)
     told_about_cat = shared_memory.get("told_about_cat", False)
     answer, _ = answer_users_question(vars)
     if told_about_cat:
-        response = f"{answer} {fact}".strip()
+        response = f"{answer} {fact}".strip().replace("  ", " ")
     else:
-        response = f"{answer} {fact} {about_cat}".strip()
+        response = f"{answer} {fact} {about_cat}".strip().replace("  ", " ")
     state_utils.save_to_shared_memory(vars, dog=True)
     state_utils.save_to_shared_memory(vars, start_about_dog=False)
     state_utils.set_confidence(vars, confidence=CONF_3)
