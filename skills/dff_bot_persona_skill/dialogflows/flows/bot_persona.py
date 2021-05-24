@@ -134,12 +134,16 @@ def my_fav_story_response(vars):
             if topic in utt:
                 name = FAV_STORIES_TOPICS.get(topic, "").get("name", "")
                 story = FAV_STORIES_TOPICS.get(topic, "").get("story", "")
-                if name:
+                if name and (topic not in used_topics):
                     response = f"My favorite {topic} is {name}. {story} What about you?"
                     state_utils.set_confidence(vars, confidence=CONF_HIGH)
                     state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
                     state_utils.save_to_shared_memory(vars, used_topics=used_topics + [topic])
                     return response
+                else:
+                    state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+                    state_utils.set_confidence(vars, 0)
+                    return error_response(vars)
         if not name and any(
             [
                 ("my" not in utt) and ("favorite" in utt),
