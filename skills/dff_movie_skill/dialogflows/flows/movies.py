@@ -18,7 +18,7 @@ from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT, MUST_CO
 from common.movies import get_movie_template, praise_actor, praise_director_or_writer_or_visuals, \
     WHAT_OTHER_MOVIE_TO_DISCUSS, CLARIFY_WHAT_MOVIE_TO_DISCUSS, MOVIE_COMPILED_PATTERN, ABOUT_MOVIE_TITLES_PHRASES, \
     DIFFERENT_SCRIPT_TEMPLATES, RECOMMEND_REQUEST_PATTERN, RECOMMEND_OFFER_PATTERN, RECOMMEND_OFFER_RESPONSE, \
-    RECOMMENDATION_PHRASES, REPEAT_RECOMMENDATION_PHRASES
+    RECOMMENDATION_PHRASES, REPEAT_RECOMMENDATION_PHRASES, WOULD_YOU_LIKE_TO_CONTINUE_TALK_ABOUT_MOVIES
 from common.universal_templates import if_chat_about_particular_topic
 from common.utils import is_opinion_request, is_opinion_expression, get_not_used_template
 from nltk.tokenize import sent_tokenize
@@ -64,6 +64,9 @@ class State(Enum):
     USR_WAS_OFFERED_RECOMMENDATIONS = auto()
     USR_ASKED_HAVE_SEEN_MOVIE = auto()
     SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED = auto()
+
+    SYS_OFFER_CONTINUE_MOVIE_TALK = auto()
+    USR_WAS_OFFERED_TO_CONTINUE_MOVIE_TALK = auto()
 
     SYS_ERR = auto()
     USR_ERR = auto()
@@ -746,13 +749,16 @@ def generate_fact_from_cobotqa_response(vars):
         movie_id = state_utils.get_shared_memory(vars).get("current_movie_id", "")
         movie_title = state_utils.get_shared_memory(vars).get("current_movie_title", "")
         movie_type = templates.imdb.get_movie_type(movie_id)
-        prev_movie_skill_text = state_utils.get_last_bot_utterance(vars).get("text", "")
         request_about = random.choice(["awards of", "fact about"])
+
+        used_facts = state_utils.get_shared_memory(vars).get("used_facts", [])
 
         fact = send_cobotqa(f"{request_about} {movie_type} {movie_title}?")
         logger.info(f"Generated fact about {movie_type} `{movie_title}`: {fact}.")
         if len(fact) > 0 and "Sorry, I don't know" not in fact and "This might answer your question" not in fact and \
-                fact not in prev_movie_skill_text:
+                fact not in used_facts:
+            # save original version of used fact
+            state_utils.save_to_shared_memory(vars, used_facts=used_facts + [fact])
             sentences = sent_tokenize(fact.replace(".,", "."))
             if len(sentences[0]) < 100 and "fact about" in sentences[0]:
                 fact = " ".join(sentences[1:3])
@@ -1171,6 +1177,43 @@ def bot_repeats_movie_recommends_and_offers_more_recomends_response(vars):
 
 
 ##################################################################################################################
+# continue talk about movies?
+##################################################################################################################
+
+
+def bot_asks_to_continue_movie_talk_response(vars):
+    # USR_WAS_OFFERED_TO_CONTINUE_MOVIE_TALK
+    try:
+        shared_memory = state_utils.get_shared_memory(vars)
+        used_continue_movie_talk_phrases = shared_memory.get("used_continue_movie_talk_phrases", [])
+        response = get_not_used_template(used_continue_movie_talk_phrases,
+                                         WOULD_YOU_LIKE_TO_CONTINUE_TALK_ABOUT_MOVIES)
+        state_utils.save_to_shared_memory(
+            vars, used_continue_movie_talk_phrases=used_continue_movie_talk_phrases + [response])
+
+        state_utils.set_confidence(vars, HIGH_CONFIDENCE)
+        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
+
+        return response
+
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        return error_response(vars)
+
+
+def user_wants_to_continue_movie_talk_request(ngrams, vars):
+    offer = any([phrase in state_utils.get_last_bot_utterance(vars).get("text", "")
+                 for phrase in WOULD_YOU_LIKE_TO_CONTINUE_TALK_ABOUT_MOVIES])
+    user_agrees = condition_utils.is_yes_vars(vars)
+
+    if offer and user_agrees:
+        logger.info(f"User wants to continue movie talk.")
+        return True
+    return False
+
+
+##################################################################################################################
 # error
 ##################################################################################################################
 
@@ -1255,7 +1298,7 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_MENTIONED_MOVIES: no_requests_request,  # not_confident_lets_chat_about_movies_response
     },
 )
-simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
+simplified_dialogflow.set_error_successor(State.USR_ASKED_HAVE_SEEN_MOVIE, State.SYS_ERR)
 
 
 ##################################################################################################################
@@ -1272,10 +1315,29 @@ simplified_dialogflow.add_user_serial_transitions(
     State.USR_WAS_OFFERED_RECOMMENDATIONS,
     {
         State.SYS_USER_REQUESTS_MOVIE_RECOMMENDATION: is_yes_request,
+        State.SYS_OFFER_CONTINUE_MOVIE_TALK: is_no_request,  # user declined recommendations, offer continue movie talk
         State.SYS_MENTIONED_MOVIES: no_requests_request,  # not_confident_lets_chat_about_movies_response
     },
 )
-simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
+simplified_dialogflow.set_error_successor(State.USR_WAS_OFFERED_RECOMMENDATIONS, State.SYS_ERR)
+
+##################################################################################################################
+#  SYS_OFFER_CONTINUE_MOVIE_TALK
+
+simplified_dialogflow.add_system_transition(State.SYS_OFFER_CONTINUE_MOVIE_TALK,
+                                            State.USR_WAS_OFFERED_TO_CONTINUE_MOVIE_TALK,
+                                            bot_asks_to_continue_movie_talk_response)
+
+##################################################################################################################
+#  USR_ASKED_HAVE_SEEN_MOVIE
+
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_WAS_OFFERED_TO_CONTINUE_MOVIE_TALK,
+    {
+        State.SYS_LETS_CHAT_ABOUT_MOVIES: is_yes_request,
+    },
+)
+simplified_dialogflow.set_error_successor(State.USR_WAS_OFFERED_TO_CONTINUE_MOVIE_TALK, State.SYS_ERR)
 
 ##################################################################################################################
 #  SYS_USER_EXPRESSES_OPINION_ABOUT_MOVIE_GENRE
@@ -1323,7 +1385,7 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED: no_requests_request
     },
 )
-simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
+simplified_dialogflow.set_error_successor(State.USR_WAS_ASKED_MOVIE_TITLE_QUESTION, State.SYS_ERR)
 
 ##################################################################################################################
 #  SYS_EXTRACTED_MOVIE_TITLE
@@ -1350,7 +1412,7 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_NOT_EXTRACTED_AFTER_CLARIFICATION: did_not_extracted_movie_title_after_clarification_request
     },
 )
-simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
+simplified_dialogflow.set_error_successor(State.USR_WAS_ASKED_TO_CLARIFY_MOVIE_TITLE, State.SYS_ERR)
 
 ##################################################################################################################
 #  SYS_NOT_EXTRACTED_AFTER_CLARIFICATION
@@ -1369,7 +1431,7 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_ASK_DO_YOU_KNOW_QUESTION: no_requests_request,
     },
 )
-simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
+simplified_dialogflow.set_error_successor(State.USR_WAS_REQUESTED_MOVIE_OPINION, State.SYS_ERR)
 
 ##################################################################################################################
 #  SYS_USER_NOT_WATCH_MOVIE
@@ -1396,7 +1458,7 @@ simplified_dialogflow.add_user_serial_transitions(
 
     },
 )
-simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
+simplified_dialogflow.set_error_successor(State.USR_WAS_ASKED_DO_YOU_KNOW_QUESTION, State.SYS_ERR)
 
 ##################################################################################################################
 #  SYS_ASK_DO_YOU_KNOW_QUESTION
@@ -1414,7 +1476,7 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_GIVE_FACT_ABOUT_MOVIE: no_requests_request,
     },
 )
-simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
+simplified_dialogflow.set_error_successor(State.USR_CHECK_ANSWER_TO_DO_YOU_KNOW, State.SYS_ERR)
 
 ##################################################################################################################
 #  SYS_GIVE_FACT_ABOUT_MOVIE
@@ -1436,7 +1498,7 @@ simplified_dialogflow.add_user_serial_transitions(
         State.USR_WAS_OFFERED_RECOMMENDATIONS: no_requests_request,
     },
 )
-simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
+simplified_dialogflow.set_error_successor(State.USR_HAVE_YOU_HEARD_FACT, State.SYS_ERR)
 
 ##################################################################################################################
 #  SYS_ASK_QUESTION_ABOUT_MOVIE_TITLE
