@@ -1,16 +1,14 @@
-import pickle
-from typing import Optional, List
 import logging
 import os
 import time
+from typing import Optional, List
 
 import sentry_sdk
-import numpy as np
 from fastapi import FastAPI
 from pydantic import BaseModel
 from starlette.middleware.cors import CORSMiddleware
 
-from models import get_features
+from models import get_speech_function
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
@@ -24,17 +22,14 @@ app.add_middleware(
 
 
 class Payload(BaseModel):
-    bot_utterance: Optional[str]
-    human_utterance: str
-
-
-with open("logreg.pickle", "rb") as f:
-    model = pickle.load(f)
+    phrase: List[str]
+    prev_phrase: Optional[str]
+    prev_speech_function: Optional[str]
 
 
 try:
-    input_features = np.concatenate([get_features("Hi", "How are you")])
-    logger.info(model.predict_proba(input_features))
+    speech_function = get_speech_function("Hi", None, None)
+    logger.info(speech_function)
     logger.info("model loaded, test query processed")
 except Exception as e:
     logger.exception("model not loaded")
@@ -43,11 +38,18 @@ except Exception as e:
 
 
 async def handler(payload: List[Payload]):
-    responses = [{}] * len(payload)
+    responses = [''] * len(payload)
     try:
-        input_features = np.concatenate([get_features(p.human_utterance, p.bot_utterance) for p in payload])
-        probas = model.predict_proba(input_features)
-        responses = [{"type": model.classes_[proba.argmax()], "confidence": proba.max()} for proba in probas]
+        responses = []
+        for p in payload:
+            phrase_len = len(p.phrase)
+            phrases = [p.prev_phrase] + p.phrase
+            authors = ['John'] + ['Doe'] * phrase_len
+            response = [p.prev_speech_function]
+            for phr, prev_phr, auth, prev_auth in zip(phrases[1:], phrases[:-1], authors[1:], authors[:-1]):
+                speech_f = get_speech_function(phr, prev_phr, response[-1], auth, prev_auth)
+                response.append(speech_f)
+            responses.append(response[1:])
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)

@@ -487,4 +487,23 @@ services:
       - "./annotators/topic_recommendation:/src"
     ports:
       - 8113:8113
+  speech-function-classifier:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/speech_function_classifier:/src"
+    ports:
+      - 8108:8108
+  speech-function-predictor:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/speech_function_predictor:/src"
+    ports:
+      - 8107:8107
+  dff-generic-responses-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_generic_responses_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8115:8115
 version: "3.7"

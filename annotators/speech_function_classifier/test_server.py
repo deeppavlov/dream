@@ -12,9 +12,10 @@ def handler(requested_data):
 
 
 def run_test(handler):
-    hypothesis = handler({"bot_utterance": "hi", "human_utterance": "how are you"})
+    hypothesis = handler({'phrase': ['fine, thank you.', 'and you?'], 'prev_phrase': 'How are you doing today?',
+                          'prev_speech_function': 'React.Respond.Develop.Extend'})
     print(f"test name: {hypothesis}")
-    assert hypothesis == [{'type': 'React.Rejoinder.Support.Track.Clarify', 'confidence': 0.2331162013066703}]
+    assert hypothesis == [['React.Respond.Reply.Accept', 'React.Respond.Develop.Extend']]
     print("Success")
 
 

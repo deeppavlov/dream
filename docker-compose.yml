@@ -20,7 +20,8 @@ services:
         dff-animals-skill:8094, dff-travel-skill:8096, dff-food-skill:8097, dff-sport-skill:8098,
         midas-classification:8090, dff-celebrity-skill:8093, fact-retrieval:8100, cobot-entities:8102,
         dff-funfact-skill:8104, dff-bot-persona-skill:8105, cobotqa-annotator:8106, news-api-annotator:8112,
-        dff-gossip-skill:8109, dff-wiki-skill:8111, topic-recommendation:8113"
+        dff-gossip-skill:8109, dff-wiki-skill:8111, topic-recommendation:8113,
+        speech-function-classifier:8108, speech-function-predictor:8107, dff-generic-responses-skill:8115"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
     deploy:
       mode: replicated
@@ -1200,4 +1201,52 @@ services:
         reservations:
           memory: 128M
 
+  speech-function-classifier:
+    build:
+      args:
+        SERVICE_PORT: 8108
+        SERVICE_NAME: speech_function_classifier # has to be the same with skill dir name
+      context: ./annotators/speech_function_classifier/
+    command: uvicorn server:app --reload --host 0.0.0.0 --port 8108
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 1G
+
+  speech-function-predictor:
+    build:
+      args:
+        SERVICE_PORT: 8107
+        SERVICE_NAME: speech_function_predictor # has to be the same with skill dir name
+      context: ./annotators/speech_function_predictor/
+    command: uvicorn server:app --reload --host 0.0.0.0 --port 8107
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 768M
+        reservations:
+          memory: 768M
+
+  dff-generic-responses-skill:
+    build:
+      args:
+        SERVICE_PORT: 8115
+        SERVICE_NAME: dff_generic_responses_skill
+      context: .
+      dockerfile: skills/dff_generic_responses_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8115 --reload
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 768M
+        reservations:
+          memory: 768M
 version: '3.7'

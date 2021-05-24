@@ -670,6 +670,10 @@ def dff_gossip_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_gossip_skill")
 
 
+def dff_generic_responses_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_generic_responses_skill")
+
+
 def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
     # Used by: dialog_breakdown
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=2)
@@ -710,31 +714,53 @@ def game_cooperative_skill_formatter(dialog: Dict):
     return [{"dialogs": [dialog]}]
 
 
-# def speech_function_formatter(dialog: Dict):
-#     resp = {"human_utterance": dialog["human_utterances"][-1]["text"]}
-#     try:
-#         resp["bot_utterance"] = dialog["bot_utterances"][-1]["text"]
-#     except IndexError:
-#         pass
-#     return [resp]
+def speech_function_formatter(dialog: Dict):
+    human_sentseg = dialog["human_utterances"][-1].get('annotations', {}).get('sentseg', {})
+    resp = {"phrase": human_sentseg.get('segments', [dialog["human_utterances"][-1]['text']])}
+    try:
+        bot_sentseg = dialog["bot_utterances"][-1].get('annotations', {}).get('sentseg', {})
+        resp["prev_phrase"] = bot_sentseg.get('segments', [dialog["bot_utterances"][-1]['text']])[-1]
+        bot_function = dialog["bot_utterances"][-1].get('annotations', {}).get('speech_function_classifier', [''])[-1]
+        resp['prev_speech_function'] = bot_function
+    except IndexError:
+        resp['prev_phrase'] = None
+        resp['prev_speech_function'] = None
+    return [resp]
 
 
-# def speech_function_annotation(dialog: Dict):
-#     hypotheses = dialog["utterances"][-1]["hypotheses"]
-#     hypots = [h["text"] for h in hypotheses]
-#     human_utterance = dialog["human_utterances"][-1]["text"]
-#     return [[{"human_utterance": human_utterance, "bot_utterance": h} for h in hypots]]
+def speech_function_bot_formatter(dialog: Dict):
+    bot_sentseg = dialog["bot_utterances"][-1].get('annotations', {}).get('sentseg', {})
+    resp = {"phrase": bot_sentseg.get('segments', [dialog["bot_utterances"][-1]['text']])}
+    try:
+        human_sentseg = dialog["human_utterances"][-2].get('annotations', {}).get('sentseg', {})
+        resp["prev_phrase"] = human_sentseg.get('segments', [dialog["human_utterances"][-2]['text']])[-1]
+        human_function = dialog["human_utterances"][-2].get('annotations', {}).get('speech_function_classifier', [''])[-1]
+        resp['prev_speech_function'] = human_function
+    except IndexError:
+        resp['prev_phrase'] = None
+        resp['prev_speech_function'] = None
+    return [resp]
 
 
-# def speech_function_predictor_formatter(dialog: Dict):
-#     return [[dialog["human_utterances"][-1]["annotations"].get("speech_function_classifier", {}).get("type", "")]]
+def speech_function_annotation(dialog: Dict):
+    human_sentseg = dialog["human_utterances"][-1].get('annotations', {}).get('sentseg', {})
+    prev_phrase = human_sentseg.get('segments', [dialog["human_utterances"][-1]['text']])[-1]
+    human_function = dialog["human_utterances"][-1].get('annotations', {}).get('speech_function_classifier', [''])[-1]
+    hypotheses = dialog["utterances"][-1]["hypotheses"]
+    hypot_phrases = [h.get('annotations', {}).get('sentseg', {}).get('segments', [h['text']]) for h in hypotheses]
+    resp = [{'prev_phrase': prev_phrase, 'prev_speech_function': human_function, 'phrase': hp} for hp in hypot_phrases]
+    return [resp]
 
 
-# def speech_function_hypotheses_predictor_formatter(dialog: Dict):
-#     hypotheses = dialog["utterances"][-1]["hypotheses"]
-#     ans = [[h["annotations"].get("speech_function_classifier").get("type", "") for h in hypotheses]]
-#     return ans
+def speech_function_predictor_formatter(dialog: Dict):
+    return [dialog["human_utterances"][-1]["annotations"].get("speech_function_classifier", [''])]
 
+
+def speech_function_hypotheses_predictor_formatter(dialog: Dict):
+    hypotheses = dialog["utterances"][-1]["hypotheses"]
+    ans = [h["annotations"].get("speech_function_classifier", ['']) for h in hypotheses]
+    return ans
+    
 
 def hypothesis_scorer_formatter(dialog: Dict) -> List[Dict]:
     hypotheses = []

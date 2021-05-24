@@ -19,17 +19,18 @@ app.add_middleware(
     CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"]
 )
 
-
-class_dict, counters, label_to_name = init_model()
+class_dict, label_to_name, A = init_model()
 
 
 def predict(label_name):
+    if label_name == 'React.Respond.Response.Resolve.':
+        label_name = 'React.Rejoinder.Response.Resolve'
     try:
         class_id = class_dict[label_name]
     except KeyError:
-        return {}
-    sorted_classes = sorted(enumerate(counters[class_id]), reverse=True, key=lambda x: x[1])[:5]
-    return [{"prediction": label_to_name[label], "confidence": probability} for label, probability in sorted_classes]
+        return [{}]
+    sorted_lbls = sorted(enumerate(A[class_id]), reverse=True,key=lambda x: x[1])[:5]
+    return [{"prediction": label_to_name[label], "confidence": probability} for label, probability in sorted_lbls]
 
 
 try:
@@ -44,7 +45,7 @@ except Exception as e:
 async def handler(payload: List[str]):
     responses = [{}] * len(payload)
     try:
-        responses = [predict(speech_function) for speech_function in payload]
+        responses = [predict(speech_function.strip('.')) for speech_function in payload]
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
@@ -57,7 +58,7 @@ async def answer(payload: List[str]):
     responses = await handler(payload)
     total_time = time.time() - st_time
     logger.info(f"speech_function_predictor model exec time: {total_time:.3f}s")
-    return responses
+    return [responses]
 
 
 @app.post("/annotation")
