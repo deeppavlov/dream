@@ -557,7 +557,13 @@ def food_fact_response(vars):
                 state_utils.set_confidence(vars, confidence=CONF_HIGH)
             else:
                 state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
-            if re.search(DONOTKNOW_LIKE_RE, human_utt_text):
+            if any(
+                [
+                    re.search(DONOTKNOW_LIKE_RE, human_utt_text),
+                    dont_want_talk(vars),
+                    re.search(NO_WORDS_RE, human_utt_text)
+                ]
+            ):
                 state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
                 state_utils.set_confidence(vars, confidence=0.)
                 return error_response(vars)
@@ -746,7 +752,7 @@ def what_fav_food_request(ngrams, vars):
         ]
     ):
         flag = False
-    elif food_topic_checked == "FOOD_UTTERANCES_RE":
+    elif (food_topic_checked == "FOOD_UTTERANCES_RE") or (food_topic_checked == "if_chat_about_particular_topic"):
         flag = True
     elif (food_1st_time and cuisine_1st_time):
         flag = random.choice([True, False])
