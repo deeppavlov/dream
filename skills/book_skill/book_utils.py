@@ -7,7 +7,6 @@ import sentry_sdk
 from datetime import datetime
 from os import getenv
 import pathlib
-import _pickle as cPickle
 
 from common.books import QUESTIONS_ABOUT_BOOKS, about_book
 from common.utils import is_opinion_request, get_intents
@@ -60,7 +59,7 @@ SKILLS_TO_LINK = ["news_api_skill", "dff_movie_skill", "game_cooperative_skill",
 
 book_banned_words_file = pathlib.Path(__file__).parent / "book_banned_words.txt"
 book_banned_words = set([line.strip() for line in book_banned_words_file.read_text().split("\n") if line.strip()])
-book_query_dict = cPickle.load(open('/global_data/book_query_dict.pkl', 'rb'))
+book_query_dict = {}
 
 AUTHOR_WIKI_TYPES = ['Q36180', 'Q18814623']
 BOOK_WIKI_TYPES = ['Q571', "Q7725634", "Q1667921", "Q277759", "Q8261", "Q47461344"]
