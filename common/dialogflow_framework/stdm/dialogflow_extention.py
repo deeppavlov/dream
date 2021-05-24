@@ -105,7 +105,9 @@ class DFEasyFilling:
                 def run(self, ngrams, vars, args):
                     try:
                         text = nlg(vars=vars)
-                        text = utils.clean_text(text)
+                        texts = text.split("#+#")
+                        texts = [utils.clean_text(t) for t in texts]
+                        text = "#+#".join(texts)
                         return text
                     except Exception as exc:
                         sentry_sdk.capture_exception(exc)
