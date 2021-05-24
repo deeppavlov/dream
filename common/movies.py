@@ -35,6 +35,12 @@ RECOMMENDATION_PHRASES = [
 REPEAT_RECOMMENDATION_PHRASES = [
     "Okay. Then don't forget: MOVIE released in YEAR."
 ]
+WOULD_YOU_LIKE_TO_CONTINUE_TALK_ABOUT_MOVIES = [
+    "Would you like to continue our conversation about movies?",
+    "Would you like to continue to chat about movies?",
+    "Do you to continue to talk about movies?"
+]
+
 
 ABOUT_MOVIE_TITLES_PHRASES = [
     "What is the name of the last movie you watched?",
