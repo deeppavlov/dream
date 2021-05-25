@@ -2,6 +2,7 @@ import logging
 import os
 import requests
 import re
+import pathlib
 from collections import deque
 from copy import deepcopy
 from datetime import datetime
@@ -10,17 +11,19 @@ from os import getenv
 import sentry_sdk
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from nltk.tokenize import sent_tokenize
+from common.utils import join_word_beginnings_in_or_pattern
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
-BLACKLIST_ANNOTATOR_URL = getenv('BLACKLIST_ANNOTATOR_URL')
-
-BLACKLISTED_WORDS = re.compile(r"(\b|^)(gun|shoot|die.?\b|murder|kill|victim)", re.IGNORECASE)
+with open(pathlib.Path(__file__).resolve().parent / "blacklists/restricted_topics_blacklist.txt") as f:
+    words = f.read().splitlines()
+words = [word for word in words if word and re.match(r"^[a-zA-Z \-]+$", word)]
+BLACKLISTED_WORDS = re.compile(join_word_beginnings_in_or_pattern(words), re.IGNORECASE)
 nltk_sentiment_classifier = SentimentIntensityAnalyzer()
+logger.info("Blacklists loaded!")
 
 
 def get_nltk_sentiment(text):
@@ -163,30 +166,7 @@ class CachedRequestsAPI:
 
             articles_to_check += [f"{title} {description}"]
 
-        try:
-            resp = requests.request(url=BLACKLIST_ANNOTATOR_URL, json={"sentences": articles_to_check},
-                                    method="POST", timeout=0.5)
-        except (requests.ConnectTimeout, requests.ReadTimeout) as e:
-            sentry_sdk.capture_exception(e)
-            logger.exception("Blacklisted Annotator requests from News API Annotator Timeout")
-            resp = requests.Response()
-            resp.status_code = 504
-
-        if resp.status_code != 200:
-            logger.warning(
-                f"result status code is not 200: {resp}. result text: {resp.text}; "
-                f"result status: {resp.status_code}")
-            result = [False] * len(articles_to_check)
-            sentry_sdk.capture_message(
-                f"Blacklisted Annotator requests from News API Annotator "
-                f" result status code is not 200: {resp}. result text: {resp.text}; "
-                f"result status: {resp.status_code}")
-        else:
-            # each element is like `{'inappropriate': False, 'profanity': False, 'restricted_topics': False}`
-            result = [sum(d.values()) for d in resp.json()[0]["batch"]]
-
-        articles = [article for article, is_black in zip(articles, result)
-                    if not is_black and not BLACKLISTED_WORDS.search(
-                    f'{article.get("title", "")} {article.get("description", "")}')]
+        articles = [article for article, art_descr in zip(articles, articles_to_check)
+                    if not BLACKLISTED_WORDS.search(art_descr)]
 
         return articles
