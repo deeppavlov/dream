@@ -15,6 +15,7 @@ from common.universal_templates import if_chat_about_particular_topic, if_choose
 from common.utils import high_priority_intents, low_priority_intents, get_topics, get_intents, get_named_locations
 from common.weather import if_special_weather_turn_on
 from common.wiki_skill import if_switch_wiki_skill
+from common.discourse import get_speech_function_predictions_for_human_utterance_annotations
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -45,6 +46,12 @@ class RuleBasedSkillSelectorConnector:
             cobot_topics = set(get_topics(user_uttr, which="cobot_topics"))
 
             is_factoid = user_uttr_annotations.get('factoid_classification', {}).get('factoid', 0.) > 0.9
+
+            # ADDING SPEECH FUNCTION CLASSIFIER & PREDICTOR DATA
+            # speech_functions_from_user_phrase = get_speech_function_for_human_utterance_annotations(user_uttr_annotations)
+            sf_predictions = get_speech_function_predictions_for_human_utterance_annotations(user_uttr_annotations)
+            if sf_predictions:
+                skills_for_uttr.append("dff_generic_responses_skill")
 
             prev_user_uttr_hyp = dialog["human_utterances"][-2]["hypotheses"] if len(
                 dialog["human_utterances"]) > 1 else []

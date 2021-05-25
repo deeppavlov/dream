@@ -20,6 +20,8 @@ from utils import add_question_to_statement, lower_duplicates_score, \
     downscore_toxic_blacklisted_responses, CONV_EVAL_STRENGTH, CONFIDENCE_STRENGTH, \
     how_are_you_spec, what_i_can_do_spec, psycho_help_spec, greeting_spec, misheard_with_spec1, \
     misheard_with_spec2, alexa_abilities_spec
+from common.discourse import get_speech_function_for_human_utterance_annotations
+from common.discourse import get_speech_function_predictions_for_human_utterance_annotations
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
