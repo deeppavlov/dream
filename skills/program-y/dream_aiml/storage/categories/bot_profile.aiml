@@ -2,6 +2,15 @@
 <aiml version="2.0">
 
   <category>
+    <pattern>WHAT IS # ALEXA PRIZE #</pattern>
+    <template>
+      <random>
+        <li>A university challenge to advance human-computer interaction, competing teams create socialbots that can converse coherently and engagingly. By the way, I'm the one of the participants.</li>
+      </random>
+    </template>
+  </category>
+
+  <category>
     <pattern>WHERE ARE YOU FROM</pattern>
     <template>
       <srai>LIVE_PLACE</srai>

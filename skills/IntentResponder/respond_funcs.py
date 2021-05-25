@@ -107,7 +107,7 @@ def random_respond_with_question_asking(dialog, response_phrases):
 
 def what_time_respond(dialog, response_phrases):
     time = datetime.utcnow()
-    response = f"It is {time.hour} hours and {time.minute} minutes by UTC. What a time to be alive!"
+    response = f"It is {time.hour} hours and {time.minute} minutes by U. T. C. What a time to be alive!"
     return response
 
 
@@ -117,22 +117,13 @@ def what_is_current_dialog_id_respond(dialog, response_phrases):
     return response
 
 
-def what_is_your_name_respond(dialog, response_phrases):
-    already_known_user_property = dialog["human"]["profile"].get("name", None)
-    if already_known_user_property is None:
-        response = random.choice(response_phrases).strip() + " What is your name?"
-    else:
-        response = random.choice(response_phrases).strip()
-    return response
-
-
 def get_respond_funcs():
     return {
         "exit": exit_respond,
         "repeat": repeat_respond,
         "where_are_you_from": where_are_you_from_respond,
         "who_made_you": random_respond,
-        "what_is_your_name": what_is_your_name_respond,
+        "what_is_your_name": random_respond,
         "what_is_your_job": random_respond,
         "what_can_you_do": random_respond,
         "what_time": what_time_respond,
@@ -141,5 +132,5 @@ def get_respond_funcs():
         "choose_topic": random_respond,
         "cant_do": random_respond,
         "tell_me_a_story": random_respond,
-        "get_dialog_id" : what_is_current_dialog_id_respond
+        "get_dialog_id": what_is_current_dialog_id_respond
     }
