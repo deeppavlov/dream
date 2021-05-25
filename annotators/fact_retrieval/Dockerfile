@@ -26,6 +26,7 @@ RUN pip install git+https://github.com/deepmipt/DeepPavlov.git@${COMMIT}
 COPY $SRC_DIR /src
 
 WORKDIR /src
+COPY ./common/ ./common/
 RUN pip install pyserini==0.10.1.0
 RUN pip uninstall -y tensorflow
 RUN pip uninstall -y tensorflow-gpu

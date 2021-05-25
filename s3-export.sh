@@ -64,6 +64,8 @@ files=(
   alexaprize_data/parlai_grounding_knowledge/topical_chat_blender90_1_sent_48_epochs.tar.gz
   alexaprize_data/parlai_grounding_knowledge/topical_chat_blender90_3_sent_62_epochs.tar.gz
   alexaprize_data/dummy_skill_dialog.tar.gz
+  kbqa/wikidata/entity_types_sets.pickle
+  datasets/wikipedia/enwiki_latest_topic.db
   alexaprize_data/movie_plots_v0.tar.gz
 )
 

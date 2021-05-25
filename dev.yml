@@ -445,6 +445,7 @@ services:
     volumes:
       - "./annotators/fact_retrieval:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
+      - "./common:/src/common"
     ports:
       - 8100:8100
   cobot-entities:

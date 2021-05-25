@@ -29,7 +29,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-PROHIBITED_WORDS = re.compile(r"(Image|File)", re.IGNORECASE)
+PROHIBITED_WORDS = re.compile(r"(Image|File|\|)", re.IGNORECASE)
 
 
 @register('fact_ranking_infer')

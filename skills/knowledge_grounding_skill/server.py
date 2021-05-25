@@ -130,13 +130,18 @@ def get_annotations_from_dialog(utterances, annotator_name, key_name=None):
     for i, uttr in enumerate(utterances):
         annotation = uttr.get("annotations", {}).get(annotator_name, {})
         value = ""
-        if isinstance(annotation, dict) and key_name in annotation:
-            # check if odqa has nonempty answer along with a paragraph
-            if annotator_name == "kbqa":
-                value = annotation.get(key_name, "")
-            # include only non-empty strs
-            if value:
-                result_values.append([(len(utterances) - i - 1) * 0.01, value])
+        if isinstance(annotation, dict):
+            if key_name in annotation:
+                # check if odqa has nonempty answer along with a paragraph
+                if annotator_name == "kbqa":
+                    value = annotation.get(key_name, "")
+                # include only non-empty strs
+                if value:
+                    result_values.append([(len(utterances) - i - 1) * 0.01, value])
+            if "facts" in annotation:
+                values = deepcopy(annotation["facts"])
+                for value in values[:2]:
+                    result_values.append([(len(utterances) - i - 1) * 0.01, value])
         if isinstance(annotation, list):
             values = deepcopy(annotation)
             for value in values[:2]:
