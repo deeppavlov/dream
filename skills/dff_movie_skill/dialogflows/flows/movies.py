@@ -18,13 +18,16 @@ from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT, MUST_CO
 from common.movies import get_movie_template, praise_actor, praise_director_or_writer_or_visuals, \
     WHAT_OTHER_MOVIE_TO_DISCUSS, CLARIFY_WHAT_MOVIE_TO_DISCUSS, MOVIE_COMPILED_PATTERN, ABOUT_MOVIE_TITLES_PHRASES, \
     DIFFERENT_SCRIPT_TEMPLATES, RECOMMEND_REQUEST_PATTERN, RECOMMEND_OFFER_PATTERN, RECOMMEND_OFFER_RESPONSE, \
-    RECOMMENDATION_PHRASES, REPEAT_RECOMMENDATION_PHRASES, WOULD_YOU_LIKE_TO_CONTINUE_TALK_ABOUT_MOVIES
+    RECOMMENDATION_PHRASES, REPEAT_RECOMMENDATION_PHRASES, WOULD_YOU_LIKE_TO_CONTINUE_TALK_ABOUT_MOVIES, \
+    WHAT_IS_YOUR_FAVORITE_MOMENT_PHRASES, WHAT_IS_YOUR_FAVORITE_MOMENT_NO_PLOT_FOUND_PHRASES
 from common.universal_templates import if_chat_about_particular_topic
-from common.utils import is_opinion_request, is_opinion_expression, get_not_used_template
+from common.utils import is_opinion_request, is_opinion_expression, get_not_used_template, \
+    find_first_complete_sentence
 from nltk.tokenize import sent_tokenize
 from dialogflows.flows.utils import is_movie_title_question, LETTERS, NOT_WATCHED_TEMPLATE, \
     NOT_LIKE_NOT_WATCH_MOVIES_TEMPLATE, recommend_movie_of_genre
 from dialogflows.flows.templates import MovieSkillTemplates
+from dialogflows.flows.movie_plots import MoviePlots
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -64,6 +67,8 @@ class State(Enum):
     USR_WAS_OFFERED_RECOMMENDATIONS = auto()
     USR_ASKED_HAVE_SEEN_MOVIE = auto()
     SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED = auto()
+    SYS_SHARE_INTERESTING_MOMENT = auto()
+    USR_SHARE_INTERESTING_MOMENT = auto()
 
     SYS_OFFER_CONTINUE_MOVIE_TALK = auto()
     USR_WAS_OFFERED_TO_CONTINUE_MOVIE_TALK = auto()
@@ -86,6 +91,7 @@ LINKTO_CONFIDENCE = 0.7
 ZERO_CONFIDENCE = 0.
 
 templates = MovieSkillTemplates()
+movieplots = MoviePlots(imdb=templates.imdb)
 
 ##################################################################################################################
 # Init DialogFlow
@@ -1177,6 +1183,44 @@ def bot_repeats_movie_recommends_and_offers_more_recomends_response(vars):
 
 
 ##################################################################################################################
+# Interesting movie moment
+##################################################################################################################
+
+def share_movie_moment_response(vars):
+    # USR_SHARE_INTERESTING_MOMENT
+    try:
+        shared_memory = state_utils.get_shared_memory(vars)
+        used_interesting_moment_phrases = shared_memory.get("used_interesting_moment_phrases", [])
+        movie_id = shared_memory.get("current_movie_id", "")
+        plot = movieplots.get_plot(movie_id)
+        plot_sentences = sent_tokenize(plot) if plot else []
+        plot_sentences = plot_sentences[1:] if len(plot_sentences) > 1 else []
+
+        if plot_sentences:
+            response = get_not_used_template(used_interesting_moment_phrases,
+                                             WHAT_IS_YOUR_FAVORITE_MOMENT_PHRASES)
+            state_utils.save_to_shared_memory(
+                vars, used_interesting_moment_phrases=used_interesting_moment_phrases + [response])
+            moment = find_first_complete_sentence(plot_sentences)
+            state_utils.set_confidence(vars, HIGH_CONFIDENCE)
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+            return response.replace("MOMENT", moment)
+        else:
+            response = get_not_used_template(used_interesting_moment_phrases,
+                                             WHAT_IS_YOUR_FAVORITE_MOMENT_NO_PLOT_FOUND_PHRASES)
+            state_utils.save_to_shared_memory(
+                vars, used_interesting_moment_phrases=used_interesting_moment_phrases + [response])
+            state_utils.set_confidence(vars, HIGH_CONFIDENCE)
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+            return response
+
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        return error_response(vars)
+
+
+##################################################################################################################
 # continue talk about movies?
 ##################################################################################################################
 
@@ -1454,7 +1498,7 @@ simplified_dialogflow.add_user_serial_transitions(
     State.USR_WAS_ASKED_DO_YOU_KNOW_QUESTION,
     {
         State.SYS_CHECK_ANSWER_TO_DO_YOU_KNOW: do_you_know_question_need_to_be_checked_request,
-        State.SYS_GIVE_FACT_ABOUT_MOVIE: no_requests_request,
+        State.SYS_SHARE_INTERESTING_MOMENT: no_requests_request,
 
     },
 )
@@ -1473,10 +1517,28 @@ simplified_dialogflow.add_system_transition(State.SYS_CHECK_ANSWER_TO_DO_YOU_KNO
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_CHECK_ANSWER_TO_DO_YOU_KNOW,
     {
-        State.SYS_GIVE_FACT_ABOUT_MOVIE: no_requests_request,
+        State.SYS_SHARE_INTERESTING_MOMENT: no_requests_request,
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_CHECK_ANSWER_TO_DO_YOU_KNOW, State.SYS_ERR)
+
+##################################################################################################################
+#  SYS_SHARE_INTERESTING_MOMENT
+
+simplified_dialogflow.add_system_transition(State.SYS_SHARE_INTERESTING_MOMENT,
+                                            State.USR_SHARE_INTERESTING_MOMENT,
+                                            share_movie_moment_response)
+
+##################################################################################################################
+#  USR_CHECK_ANSWER_TO_DO_YOU_KNOW
+
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_SHARE_INTERESTING_MOMENT,
+    {
+        State.SYS_GIVE_FACT_ABOUT_MOVIE: no_requests_request,
+    },
+)
+simplified_dialogflow.set_error_successor(State.USR_SHARE_INTERESTING_MOMENT, State.SYS_ERR)
 
 ##################################################################################################################
 #  SYS_GIVE_FACT_ABOUT_MOVIE

@@ -56,6 +56,18 @@ ABOUT_MOVIE_TITLES_PHRASES = [
     "What movie did you watch on weekends?",
 ]
 
+WHAT_IS_YOUR_FAVORITE_MOMENT_PHRASES = [
+    "Do you remember how 'MOMENT'? Did you like this movie moment?",
+    "Remember how 'MOMENT'? I suppose, you like this moment?",
+    "Do you think that when 'MOMENT' was one of the most impressive moments?"
+]
+
+WHAT_IS_YOUR_FAVORITE_MOMENT_NO_PLOT_FOUND_PHRASES = [
+    "Did you like how characters developed through?",
+    "Do you think the background of the filming made a significant contribution to the picture?",
+    "Did you like the soundtrack?"
+]
+
 WHAT_OTHER_MOVIE_TO_DISCUSS = "What other movie you'd like to discuss?"
 CLARIFY_WHAT_MOVIE_TO_DISCUSS = "Can you say again what movie you'd like to discuss?"
 

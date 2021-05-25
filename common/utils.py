@@ -993,3 +993,20 @@ def remove_punctuation_from_dict_keys(element):
         return new_element
     else:
         return element
+
+
+PERSONAL_PRONOUNS = re.compile(
+    r"\b(i|you|he|she|it|we|they|me|him|her|us|them|its|mine|yours|his|hers|ours|theirs|myself|yourself|himself"
+    r"|herself|itself|ourselves|themselves|their)\b",
+    re.IGNORECASE)
+
+
+def find_first_complete_sentence(sentences):
+    """Find first sentence without any personal pronouns.
+    """
+    for sent in sentences:
+        if PERSONAL_PRONOUNS.search(sent):
+            continue
+        else:
+            return sent
+    return None
