@@ -572,3 +572,16 @@ class IMDb:
                 return []
         else:
             return genres[genre]
+
+    def get_movie_names(self, imdb_id):
+        names = []
+        if "title" in self.database[imdb_id]:
+            names.append(self.database[imdb_id]['title'])
+        if "original_title" in self.database[imdb_id]:
+            if self.database[imdb_id]['original_title'] not in names:
+                names.append(self.database[imdb_id]['original_title'])
+        if "all_titles" in self.database[imdb_id]:
+            for n in self.database[imdb_id]["all_titles"]:
+                if n not in names:
+                    names.append(n)
+        return names

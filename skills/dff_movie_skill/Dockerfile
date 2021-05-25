@@ -2,9 +2,12 @@ FROM python:3.9.1
 
 
 ARG DATABASE_URL
+ARG MOVIE_PLOTS_URL
 
 WORKDIR /data
 RUN wget ${DATABASE_URL} -q -O /data/database_most_popular_main_info.json
+ADD $MOVIE_PLOTS_URL /data/
+RUN tar -xvzf /data/*.tar.gz -C /data/
 
 # ###################### IMMUTABLE SECTION ######################################
 # Do not change anything in this section 
