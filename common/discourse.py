@@ -15,3 +15,12 @@ def get_speech_function_for_human_utterance_annotations(annotations):
 def get_speech_function_predictions_for_human_utterance_annotations(annotations):
     predicted_sfs = annotations.get("speech_function_predictor", [])
     return predicted_sfs
+
+
+def get_speech_function_for_bot_utterance_annotations(text, annotations):
+    sfs = annotations.get("speech_function_classifier", {})
+
+    if len(sfs)>0:
+        return sfs[0].rstrip('.')
+
+    return None

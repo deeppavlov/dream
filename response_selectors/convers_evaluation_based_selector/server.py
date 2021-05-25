@@ -21,8 +21,9 @@ from utils import add_question_to_statement, lower_duplicates_score, \
     how_are_you_spec, what_i_can_do_spec, psycho_help_spec, greeting_spec, misheard_with_spec1, \
     misheard_with_spec2, alexa_abilities_spec
 from common.discourse import get_speech_function_for_human_utterance_annotations
+from common.discourse import get_speech_function_for_bot_utterance_annotations
 from common.discourse import get_speech_function_predictions_for_human_utterance_annotations
-
+from tag_based_selection import get_main_info_annotations
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -35,6 +36,7 @@ app = Flask(__name__)
 CALL_BY_NAME_PROBABILITY = 0.5  # if name is already known
 SHOW_DIALOG_ID = False
 TAG_BASED_SELECTION = True
+DM_BASED_POST_SELECTION = True
 MOST_DUMMY_RESPONSES = ["I really do not know what to answer.",
                         "Sorry, probably, I didn't get what you mean.",
                         "I didn't get it. Sorry"
@@ -298,6 +300,68 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, toxiciti
     return best_candidate, best_id, curr_single_scores
 
 
+def dm_based_response_selection(dialog, candidates, scores, confidences, bot_utterances):
+    annotated_uttr = dialog["human_utterances"][-1]
+    # all_user_intents, all_user_topics, all_user_named_entities, all_user_nounphrases = get_main_info_annotations(
+    #     annotated_uttr)
+    user_uttr_annotations = annotated_uttr["annotations"]
+
+    # obtaining speech functions for all segments of the human's utterance
+    # speech_functions_from_user_phrase = get_speech_function_for_human_utterance_annotations(user_uttr_annotations)
+    
+    filtered_candidates = []
+    proposed_speech_functions = []
+
+    sf_predictions = get_speech_function_predictions_for_human_utterance_annotations(user_uttr_annotations)
+    if sf_predictions:
+        sf_predictions_list = list(sf_predictions)
+        sf_predictions_for_last_phrase = sf_predictions_list[-1]
+
+        # using only last user's phrase
+        for sf_prediction in sf_predictions_for_last_phrase:
+            if "prediction" in sf_prediction:
+                prediction = sf_prediction["prediction"]
+                proposed_speech_functions.append(prediction)
+
+    logger.info(f"Response Selector: Proposed Speech Functions: {proposed_speech_functions}")
+
+    # now it's time to understand how SFC classified responses
+    for candidate in candidates:
+        candidate_annotations = candidate["annotations"]
+        candidate_text = candidate["text"]
+
+        candidate_sfc = get_speech_function_for_bot_utterance_annotations(candidate_text, candidate_annotations)
+
+        if candidate_sfc is not None:
+            if candidate_sfc in proposed_speech_functions:
+                logger.info(f"Speech Function proposed for candidate {candidate_text}: {candidate_sfc}")
+                filtered_candidates.append(candidate)
+    
+    return filtered_candidates
+
+
+def get_non_generic_responses(candidates):
+    non_generic_candidates = []
+    for candidate in candidates:
+        skill_name = candidate["skill_name"]
+        if skill_name is "dff_generic_responses_skill":
+            continue
+        else: 
+            non_generic_candidates.append(candidate)
+    
+    return non_generic_candidates
+
+
+def get_generic_responses(candidates):
+    generic_candidates = []
+    for candidate in candidates:
+        skill_name = candidate["skill_name"]
+        if skill_name is "dff_generic_responses_skill":
+            generic_candidates.append(candidate)
+
+    return generic_candidates
+
+
 def select_response(candidates, scores, confidences, toxicities, has_blacklisted,
                     has_inappropriate, dialog):
     # TOXICITY & BLACKLISTS checks
@@ -322,6 +386,37 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     else:
         best_candidate, best_id, curr_single_scores = rule_score_based_selection(
             dialog, candidates, scores, confidences, toxicities, bot_utterances)
+
+    # EXPERIMENT
+    if DM_BASED_POST_SELECTION:
+        logger.info(f"Discourse Management based post-selection")
+        # exp_best_candidate, exp_best_id, exp_curr_single_scores
+        filtered_candidates = dm_based_response_selection(
+            dialog, candidates, scores, confidences, bot_utterances)
+        
+        # for filtered_candidate in filtered_candidates:
+            # candidate_annotations = filtered_candidate["annotations"]
+            # candidate_text = filtered_candidate["text"]
+            # candidate_sfc = get_speech_function_for_bot_utterance_annotations(candidate_text, candidate_annotations)
+            # logger.info(f"Response Selector: Speech Function for filtered candidate \"{candidate_text}\": {candidate_sfc}")
+
+        if len(filtered_candidates) > 0:
+            logger.info(f"Original best candidate: {best_candidate}")
+
+            non_generic_candidates = get_non_generic_responses(filtered_candidates) 
+            generic_candidates = get_generic_responses(filtered_candidates)
+
+            if len(non_generic_candidates) > 0:
+                exp_best_candidate = non_generic_candidates[0]
+                # experiment
+                logger.info(f"Proposed best non-generic DM-based Candidate: {exp_best_candidate}")
+                best_candidate = exp_best_candidate
+            elif len(generic_candidates) > 0:
+                exp_best_candidate = generic_candidates[0]
+                # experiment
+                logger.info(f"Proposed best generic DM-based Candidate: {exp_best_candidate}")
+                best_candidate = exp_best_candidate
+
 
     logger.info(f"Best candidate: {best_candidate}")
     best_text = best_candidate["text"]
