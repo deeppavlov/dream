@@ -559,16 +559,24 @@ def fact_retrieval_formatter_dialog(dialog: Dict):
 
     entity_info_list = last_human_utt["annotations"].get("entity_linking", [{}])
     entity_pages_list = []
+    entity_ids_list = []
+    entity_substr_list = []
+    entity_pages_titles_list = []
     for entity_info in entity_info_list:
         if "entity_pages" in entity_info and entity_info["entity_pages"]:
             entity_pages_list.append(entity_info["entity_pages"])
-
+            entity_ids_list.append(entity_info["entity_ids"])
+            entity_substr_list.append(entity_info["entity_substr"])
+            entity_pages_titles_list.append(entity_info["entity_pages_titles"])
     return [
         {
             "human_sentences": [last_human_utt["text"]],
             "dialog_history": dialog_history,
-            "entity_substr": nounphrases,
+            "nounphrases": nounphrases,
+            "entity_substr": [entity_substr_list],
             "entity_pages": [entity_pages_list],
+            "entity_ids": [entity_ids_list],
+            "entity_pages_titles": [entity_pages_titles_list]
         }
     ]
 

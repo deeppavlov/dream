@@ -214,15 +214,15 @@ transfer_from_skills = {
         "Q55983715",  # organisms known by a particular common name
         "Q38547",  # dog crossbreed
         "Q39367",  # dog breed
-        "Q43577",
-    },  # cat breed
+        "Q43577"  # cat breed
+    },
     "dff_food_skill": {"Q28149961", "Q2095", "Q11004"},
     "dff_sport_skill": {
         "Q2066131",  # athlete
         "Q18536342",  # competitive player
         "Q20639856",  # team
-        "Q847017",
-    },  # sports club
+        "Q847017"  # sports club
+    },
     "dff_music_skill": {
         "Q488205",  # singer-songwriter
         "Q36834",  # composer
@@ -230,8 +230,8 @@ transfer_from_skills = {
         "Q753110",  # songwriter
         "Q134556",  # single
         "Q7366",  # song
-        "Q482994",
-    },  # album
+        "Q482994"  # album
+    },
     "dff_movie_skill": {"Q11424", "Q24856", "Q10800557", "Q10798782", "Q2405480", "Q5398426", "Q15416", "Q2526255"},
     "book_skill": {
         "Q36180",
