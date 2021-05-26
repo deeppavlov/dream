@@ -10,7 +10,6 @@ import sentry_sdk
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
-import common.entity_utils as entity_utils
 import common.greeting as common_greeting
 import common.link as common_link
 
@@ -195,11 +194,10 @@ link_to_skill2i_like_to_talk = {
 def link_to_by_enity_response(vars):
     ack = get_sentiment_acknowledgement(vars)
     try:
-        entities = state_utils.get_labeled_noun_phrase(vars)
-        time_sorted_human_entities = entity_utils.get_time_sorted_human_entities(entities)
-        if time_sorted_human_entities:
-            logger.debug(f"time_sorted_human_entities= {time_sorted_human_entities}")
-            tgt_entity = list(time_sorted_human_entities)[-1]
+        entities = state_utils.get_new_human_labeled_noun_phrase(vars)
+        if entities:
+            logger.debug(f"entities= {entities}")
+            tgt_entity = list(entities)[-1]
             logger.debug(f"tgt_entity= {tgt_entity}")
             if tgt_entity in sum(link_to_skill2key_words.values(), []):
                 skill_names = [skill for skill, key_words in link_to_skill2key_words.items() if tgt_entity in key_words]

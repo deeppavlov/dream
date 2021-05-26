@@ -1,15 +1,10 @@
 FROM python:3.9.1
 # ###################### IMMUTABLE SECTION ######################################
-# Do not change anything in this section
+# Do not change anything in this section 
 WORKDIR /src
 
 COPY common/dialogflow_framework/requirements.txt .
 RUN pip install -r requirements.txt
-
-RUN python -m spacy download en
-RUN python -m spacy download en_core_web_sm
-RUN python -m spacy download en_core_web_md
-RUN python -m nltk.downloader vader_lexicon
 
 COPY common/dialogflow_framework/scripts /scripts
 
@@ -23,6 +18,7 @@ ENV SERVICE_NAME ${SERVICE_NAME}
 
 COPY skills/${SERVICE_NAME}/requirements.txt .
 RUN pip install -r requirements.txt
+RUN python -m spacy download en_core_web_sm
 
 COPY skills/${SERVICE_NAME}/ ./
 COPY ./common/ ./common/

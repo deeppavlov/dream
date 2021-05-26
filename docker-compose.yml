@@ -258,7 +258,7 @@ services:
         MOVIE_PLOTS_URL: http://files.deeppavlov.ai/alexaprize_data/movie_plots_v0.tar.gz
       context: .
       dockerfile: skills/dff_movie_skill/Dockerfile
-    command: gunicorn --workers=1 --timeout 500 --graceful-timeout 500 server:app -b 0.0.0.0:8023 --reload --preload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8023 --timeout 180
     # command:  flask run -h 0.0.0.0 -p 8023
     # environment:
     #   - FLASK_APP=server
@@ -267,9 +267,9 @@ services:
       replicas: 4
       resources:
         limits:
-          memory: 2048M
+          memory: 1536M
         reservations:
-          memory: 2048M
+          memory: 1536M
 
   ner:
     build:
@@ -785,7 +785,7 @@ services:
         SERVICE_NAME: dff_friendship_skill # has to be the same with skill dir name
       context: .
       dockerfile: ./skills/dff_friendship_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8086 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8086
     # command:  flask run -h 0.0.0.0 -p 8086
     # environment:
     #   - FLASK_APP=server
@@ -794,9 +794,9 @@ services:
       replicas: 4
       resources:
         limits:
-          memory: 768M
+          memory: 256M
         reservations:
-          memory: 768M
+          memory: 256M
 
   masked-lm:
     build:
@@ -860,7 +860,7 @@ services:
         SERVICE_NAME: dff_celebrity_skill
       context: .
       dockerfile: ./skills/dff_celebrity_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8093 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8093
     # command:  flask run -h 0.0.0.0 -p 8093
     # environment:
     #   - FLASK_APP=server
@@ -869,9 +869,9 @@ services:
       replicas: 2
       resources:
         limits:
-          memory: 768M
+          memory: 256M
         reservations:
-          memory: 768M
+          memory: 256M
 
   combined-classification:
     build:
@@ -936,7 +936,7 @@ services:
         BREED_FACTS_DB: http://files.deeppavlov.ai/kbqa/wikidata/breed_facts.json
       context: .
       dockerfile: ./skills/dff_animals_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8094 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8094
     # command:  flask run -h 0.0.0.0 -p 8094
     # environment:
     #   - FLASK_APP=server
@@ -945,9 +945,9 @@ services:
       replicas: 2
       resources:
         limits:
-          memory: 768M
+          memory: 512M
         reservations:
-          memory: 768M
+          memory: 512M
 
   dff-travel-skill:
     build:
@@ -956,7 +956,7 @@ services:
         SERVICE_NAME: dff_travel_skill # has to be the same with skill dir name
       context: .
       dockerfile: skills/dff_travel_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8096 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8096
     # command:  flask run -h 0.0.0.0 -p 8096
     # environment:
     #   - FLASK_APP=server
@@ -976,7 +976,7 @@ services:
         SERVICE_NAME: dff_sport_skill
       context: .
       dockerfile: skills/dff_sport_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8098 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8098
     # command:  flask run -h 0.0.0.0 -p 8098
     # environment:
     #   - FLASK_APP=server
@@ -985,9 +985,9 @@ services:
       replicas: 2
       resources:
         limits:
-          memory: 768M
+          memory: 256M
         reservations:
-          memory: 768M
+          memory: 256M
 
   dff-food-skill:
     build:
@@ -996,7 +996,7 @@ services:
         SERVICE_NAME: dff_food_skill
       context: .
       dockerfile: ./skills/dff_food_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8097 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8097
     # command:  flask run -h 0.0.0.0 -p 8097
     # environment:
     #   - FLASK_APP=server
@@ -1005,9 +1005,9 @@ services:
       replicas: 2
       resources:
         limits:
-          memory: 768M
+          memory: 256M
         reservations:
-          memory: 768M
+          memory: 256M
 
   dff-science-skill:
     build:
@@ -1016,17 +1016,18 @@ services:
         SERVICE_NAME: dff_science_skill
       context: .
       dockerfile: ./skills/dff_science_skill/Dockerfile
-    command:  flask run -h 0.0.0.0 -p 8101
-    environment:
-      - FLASK_APP=server
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8101
+    # command:  flask run -h 0.0.0.0 -p 8101
+    # environment:
+    #   - FLASK_APP=server
     deploy:
       mode: replicated
       replicas: 2
       resources:
         limits:
-          memory: 768M
+          memory: 256M
         reservations:
-          memory: 768M
+          memory: 256M
 
   dff-music-skill:
     build:
@@ -1035,7 +1036,7 @@ services:
         SERVICE_NAME: dff_music_skill # has to be the same with skill dir name
       context: .
       dockerfile: ./skills/dff_music_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8099 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8099
     # command:  flask run -h 0.0.0.0 -p 8099
     # environment:
     #   - FLASK_APP=server
@@ -1044,9 +1045,9 @@ services:
       replicas: 2
       resources:
         limits:
-          memory: 768M
+          memory: 256M
         reservations:
-          memory: 768M
+          memory: 256M
 
   dff-gossip-skill:
     build:
@@ -1055,15 +1056,15 @@ services:
         SERVICE_NAME: dff_gossip_skill
       context: .
       dockerfile: skills/dff_gossip_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8109 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8109
     deploy:
       mode: replicated
       replicas: 2
       resources:
         limits:
-          memory: 768M
+          memory: 256M
         reservations:
-          memory: 768M
+          memory: 256M
 
 
   midas-classification:
@@ -1147,15 +1148,15 @@ services:
         SERVICE_NAME: dff_bot_persona_skill
       context: .
       dockerfile: ./skills/dff_bot_persona_skill/Dockerfile
-    command: gunicorn --workers=1 --timeout 500 --graceful-timeout 500 server:app -b 0.0.0.0:8105 --reload --preload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8105
     deploy:
       mode: replicated
       replicas: 2
       resources:
         limits:
-          memory: 768M
+          memory: 256M
         reservations:
-          memory: 768M
+          memory: 256M
 
   dff-funfact-skill:
     build:
@@ -1164,7 +1165,7 @@ services:
         SERVICE_NAME: dff_funfact_skill # has to be the same with skill dir name
       context: .
       dockerfile: ./skills/dff_funfact_skill/Dockerfile
-    command:  gunicorn --workers=1 server:app -b 0.0.0.0:8104 --reload
+    command:  gunicorn --workers=1 server:app -b 0.0.0.0:8104
     # command:  flask run -h 0.0.0.0 -p 8104
     # environment:
     #   - FLASK_APP=server
@@ -1173,9 +1174,9 @@ services:
       replicas: 2
       resources:
         limits:
-          memory: 768M
+          memory: 256M
         reservations:
-          memory: 768M
+          memory: 256M
 
   dff-wiki-skill:
     build:
@@ -1187,7 +1188,7 @@ services:
         COMMIT: 5b99ac3392e8e178e2bb4f9b218d4ddb2ec2e242
       context: ./
       dockerfile: ./skills/dff_wiki_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8111 --reload --timeout 800
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8111 --timeout 800
     # command:  flask run -h 0.0.0.0 -p 8111 
     # environment:
     #   - FLASK_APP=server
@@ -1196,9 +1197,9 @@ services:
       replicas: 2
       resources:
         limits:
-          memory: 3.5G
+          memory: 2G
         reservations:
-          memory: 3.5G
+          memory: 2G
 
   topic-recommendation:
     build:

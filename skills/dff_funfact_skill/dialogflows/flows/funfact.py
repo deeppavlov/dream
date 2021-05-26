@@ -3,6 +3,7 @@ import os
 import logging
 import random
 from enum import Enum, auto
+import copy
 
 import sentry_sdk
 
@@ -67,11 +68,12 @@ def funfact_response(vars, shuffle=True):
     state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
     shared_memory = state_utils.get_shared_memory(vars)
     given_funfacts = shared_memory.get('given_funfacts', [])
+    funfact_list = copy.deepcopy(FUNFACT_LIST)
     if shuffle:
-        random.shuffle(FUNFACT_LIST)
+        random.shuffle(funfact_list)
     answer = ""
     human_utterance = state_utils.get_last_human_utterance(vars)
-    funfacts_to_iterate = FUNFACT_LIST
+    funfacts_to_iterate = funfact_list
     entity = ''
     if story_requested(human_utterance):
         answer = "Unfortunately, rules of the competition forbid me to tell you a story, " \

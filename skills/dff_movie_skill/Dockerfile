@@ -16,11 +16,6 @@ WORKDIR /src
 COPY common/dialogflow_framework/requirements.txt .
 RUN pip install -r requirements.txt
 
-RUN python -m spacy download en
-RUN python -m spacy download en_core_web_sm
-RUN python -m spacy download en_core_web_md
-RUN python -m nltk.downloader vader_lexicon
-
 COPY common/dialogflow_framework/scripts /scripts
 
 RUN bash /scripts/programy_logger_off.sh
@@ -28,11 +23,17 @@ RUN bash /scripts/programy_logger_off.sh
 # ###################### CUSTOM SECTION ######################################
 # Here you can make changes 
 
+ARG DATABASE_URL
+
+WORKDIR /data
+RUN wget ${DATABASE_URL} -q -O /data/database_most_popular_main_info.json
+
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
 
 COPY skills/${SERVICE_NAME}/requirements.txt .
 RUN pip install -r requirements.txt
+
 RUN python -c "import nltk; nltk.download('punkt')"
 
 COPY skills/${SERVICE_NAME}/ ./
