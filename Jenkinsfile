@@ -408,7 +408,6 @@ spec:
               Exception ex = null
               catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                 try {
-                  sh label: 'restart comet-conceptnet', script: 'docker-compose --no-ansi -p dream-alexa${WORKER} -f docker-compose.yml -f test.yml -f s3.yml restart comet-conceptnet'
                   sh label: 'test skills', script: 'tests/runtests.sh MODE=test_skills'
                 }
                 catch (Exception e) {
