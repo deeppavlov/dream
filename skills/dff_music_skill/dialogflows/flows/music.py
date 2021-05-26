@@ -191,8 +191,8 @@ def lets_talk_about_request(ngrams, vars):
 def music_mention_request(ngrams, vars):
     # has any nounphrases in phrase -> music mention
     flag = False
-    if re.search(music_words_re, state_utils.get_last_human_utterance(vars)["text"]):
-        flag = True
+    flag = bool(re.search(music_words_re, state_utils.get_last_human_utterance(vars)["text"]))
+    flag = flag or get_genre(vars)[0]
     logger.info(f"music_mention_request {flag}")
     return flag
 
@@ -243,11 +243,25 @@ def i_like_request(ngrams, vars):
     return flag
 
 
+# def linkto_request(ngrams, vars):
+#     flag = False
+#     phrase = state_utils.get_last_bot_utterance(vars)["text"]
+#     flag = flag or bool(i_like_re.search(phrase))
+#     flag = flag or bool(what_fav_re.search(phrase))
+#     logger.info(f"linkto_request {flag}")
+#     return flag
+
+
 def want_music_response(vars):
     try:
-        state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
+        genre_flag, genre = get_genre(vars)
+        if genre_flag:
+            phrase = f"I think {genre} is cool. Do you like the whole genre of {genre} music?"
+        else:
+            phrase = f"I guess you want to talk about music, right?"
+        state_utils.set_confidence(vars, MUST_CONTINUE)
         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
-        return "Do you want to talk about music?"
+        return phrase
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -446,6 +460,12 @@ def genre_specific_response(vars):
         elif genre == "all" or genre == "everything":
             return f"I prefer techno most of the time. \
             Do you know David Bowie, by the way?"
+        elif genre == "nineties" or genre == "90s":
+            return "Nineties really rocked. Nirvana, Spice Girls, Dr. Dre, \
+            Oasis - so diverse. Do you like modern music?"
+        elif genre == "eighties" or genre == "80s":
+            return "I really like eighties because it was the sythwave \
+            in techno music, so cool. What do you like the best from eighties?"
         else:
             return f"To me, the rhythm and tempo are most important. What do you like about it?"
     except Exception as exc:
@@ -519,6 +539,10 @@ def genre_advice_response(vars):
             return f"You should check him out, especially \"Space oddity\". \
             It is really something special. \
             They even played it on a real Space Station!"
+        elif genre == "nineties":
+            return "Yea, I guess I share your opinion on that point."
+        elif genre == "eighties":
+            return "Yea, I guess I understand what you mean."
         else:
             return f"Cool, I think I understand what you mean."
     except Exception as exc:
@@ -815,8 +839,11 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_LETS_TALK_ABOUT: lets_talk_about_request,
         State.SYS_MENTION: music_mention_request,
         State.SYS_MUSIC: music_request,
-        State.SYS_ASKS: what_music_request
+        State.SYS_ASKS: what_music_request,
+        State.SYS_KNOWN: known_request
     }
+
+
 )
 
 simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
