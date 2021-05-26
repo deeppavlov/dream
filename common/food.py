@@ -31,8 +31,8 @@ FOOD_COMPILED_PATTERN = re.compile(join_sentences_in_or_pattern(
 ), re.IGNORECASE)
 
 FAST_FOOD_FACTS = [
-    "Roughly 50 million Americans eat at fast food restaurants in the United States each day.",
-    "I just found out that the first fast food was fried fish in ancient Greece.",
+    "roughly 50 million Americans eat at fast food restaurants in the United States each day.",
+    "the first fast food was fried fish in ancient Greece.",
     "Pizza Hut was the first firm to deliver pizza to outer space. They delivered"
     " the pizza to International Space Station in 2001. This pizza was delivered "
     "by Russian rocket and Russian space agency was paid by Pizza Hut about $1,000,000 to deliver it."

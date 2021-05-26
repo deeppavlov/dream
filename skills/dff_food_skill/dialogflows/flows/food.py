@@ -729,21 +729,8 @@ def suggest_cook_response(vars):
 
 def what_fav_food_request(ngrams, vars):
     food_topic_checked = lets_talk_about_check(vars)
-    # linkto_food_skill_agreed = any(
-    #     [
-    #         req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower()
-    #         for req in TRIGGER_PHRASES
-    #     ]
-    # ) and any(
-    #     [
-    #         is_yes(state_utils.get_last_human_utterance(vars)),
-    #         not is_no(state_utils.get_last_human_utterance(vars)),
-    #         re.search(LIKE_RE, state_utils.get_last_human_utterance(vars)["text"].lower())
-    #     ]
-    # )
     food_1st_time = condition_utils.is_first_time_of_state(vars, State.SYS_WHAT_FAV_FOOD)
     cuisine_1st_time = condition_utils.is_first_time_of_state(vars, State.SYS_WHAT_CUISINE)
-    # or linkto_food_skill_agreed
     if any(
         [
             not bool(food_topic_checked),
@@ -787,6 +774,7 @@ def check_cooking_request(ngrams, vars):
 
 def said_fav_food_request(ngrams, vars):
     flag = False
+    food_topic_checked = lets_talk_about_check(vars)
     # fav_in_bot_utt = re.search(FAV_RE, state_utils.get_last_bot_utterance(vars)["text"])
     food_checked = any(
         [
@@ -794,7 +782,13 @@ def said_fav_food_request(ngrams, vars):
             check_conceptnet(vars)[0]
         ]
     )
-    if dont_want_talk(vars):
+    if any(
+        [
+            dont_want_talk(vars),
+            food_topic_checked == "FOOD_UTTERANCES_RE",
+            food_topic_checked == "if_chat_about_particular_topic"
+        ]
+    ):
         flag = False
     # (fav_in_bot_utt and
     elif food_checked:
@@ -858,9 +852,9 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_WHAT_COOK: what_cook_request,
         State.SYS_BOT_PERSONA_FAV_FOOD: bot_persona_fav_food_request,
         State.SYS_CHECK_COOKING: check_cooking_request,
-        State.SYS_WHAT_FAV_FOOD: what_fav_food_request,
         State.SYS_SAID_FAV_FOOD: said_fav_food_request,
-        State.SYS_WHAT_CUISINE: what_cuisine_request,
+        State.SYS_WHAT_FAV_FOOD: what_fav_food_request,
+        State.SYS_WHAT_CUISINE: what_cuisine_request
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
