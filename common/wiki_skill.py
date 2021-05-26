@@ -99,7 +99,7 @@ used_types_dict = [{"types": ["Q11253473"  # smart device
                     "titles": {"mobile robot": "Would you like to learn about mobile robots?",
                                "service robot": "Would you like to hear about service robots?",
                                "military robot": "Do you want to learn about military robots?",
-                               "factory robot": "Are you infix/dff_wiki_skill/improveterested in factory robots?",
+                               "factory robot": "Are you interested in factory robots?",
                                "literature": "Would you like to know about books about robots?",
                                "films": "Are you interested in films about robots?"}},
                    {"entity_substr": ["religion"],
