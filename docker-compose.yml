@@ -438,7 +438,7 @@ services:
         PREPROCESS_DATA: "http://lnsigo.mipt.ru/export/alexaprize_data/comet/categories_oEffect%23oReact%23oWant%23xAttr%23xEffect%23xIntent%23xNeed%23xReact%23xWant-maxe1_17-maxe2_35-maxr_1.pickle"
         TEST_SCRIPT: test_atomic.py
         DECODING_ALGO: beam-3
-    command: flask run -h 0.0.0.0 -p 8053
+    command: flask run -h 0.0.0.0 -p 8053 --without-threads
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - DEVICE=gpu_0
@@ -461,7 +461,7 @@ services:
         PREPROCESS_DATA: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/rel_language-trainsize_100-devversion_12-maxe1_10-maxe2_15-maxr_5.pickle
         DECODING_ALGO: beam-3
         TEST_SCRIPT: test_conceptnet.py
-    command: flask run -h 0.0.0.0 -p 8065
+    command: flask run -h 0.0.0.0 -p 8065 --without-threads
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - DEVICE=gpu_0
