@@ -112,7 +112,8 @@ def why_do_you_like_request(ngrams, vars):
     if isinstance(wp_output, dict):
         entities_info = wp_output.get("entities_info", {})
         for entity, triplets in entities_info.items():
-            types = triplets.get("types", []) + triplets.get("instance of", []) + triplets.get("subclass of", [])
+            types = triplets.get("types", []) + triplets.get("instance of", []) + triplets.get("subclass of", []) + \
+                triplets.get("types_2hop", [])
             type_ids = [elem for elem, label in types]
             inters = set(type_ids).intersection({"Q55983715", "Q16521"})
             if inters:
@@ -122,8 +123,9 @@ def why_do_you_like_request(ngrams, vars):
     shared_memory = state_utils.get_shared_memory(vars)
     used_why = shared_memory.get("why_do_you_like", False)
     found_pet = re.findall(PETS_TEMPLATE, text)
+    found_bird = re.findall(r"(\bbird\b|\bbirds\b)", text)
     logger.info(f"why_do_you_like_request, found_animal {found_animal}")
-    if found_animal and not found_pet and not used_why and not isno \
+    if (found_animal or found_bird) and not found_pet and not used_why and not isno \
             and not if_linked_to_wiki_skill(annotations, "dff_animals_skill"):
         flag = True
     if activate_after_wiki_skill(vars):
