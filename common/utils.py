@@ -962,7 +962,7 @@ def get_common_tokens_in_lists_of_strings(list_of_strings_0, list_of_strings_1):
     return common_substrings
 
 
-SYMBOLS_EXCEPT_LETTERS_AND_DIGITS = re.compile(r"[^a-zA-Z0-9\- ]")
+SYMBOLS_EXCEPT_LETTERS_AND_DIGITS = re.compile(r"[^a-zA-Z0-9\-_ ]")
 DOUBLE_SPACES = re.compile(r"\s+")
 
 
