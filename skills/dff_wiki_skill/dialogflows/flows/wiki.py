@@ -38,6 +38,7 @@ text_qa_url = os.getenv("TEXT_QA_URL")
 
 ANSWER_CONF_THRES = 0.95
 GO_TO_MAIN_PAGE = True
+ANIMAL_TYPES_SET = {"Q16521", "Q55983715", "Q38547", "Q39367", "Q43577"}
 
 page_extractor = build_model(config_name, download=True)
 whow_page_extractor = build_model("whow_page_extractor.json", download=True)
@@ -249,7 +250,9 @@ def get_titles(found_entity_substr, found_entity_types, page_content):
     return titles_q, titles_we_use, all_titles
 
 
-def get_title_info(found_entity_substr, found_entity_types, prev_title, used_titles, page_content):
+def get_title_info(vars, found_entity_substr, found_entity_types, prev_title, used_titles, page_content):
+    shared_memory = state_utils.get_shared_memory(vars)
+    curr_pages = shared_memory.get("curr_pages", [])
     all_titles = find_all_titles([], page_content)
     titles_we_use = []
     for tp in found_entity_types:
@@ -257,7 +260,7 @@ def get_title_info(found_entity_substr, found_entity_types, prev_title, used_tit
     titles_we_use += list(titles_by_entity_substr.get(found_entity_substr, {}).keys())
 
     logger.info(f"all_titles {all_titles}")
-    chosen_title, chosen_page_title = choose_title(vars, all_titles, titles_we_use, prev_title, used_titles)
+    chosen_title, chosen_page_title = choose_title(vars, all_titles, titles_we_use, prev_title, used_titles, curr_pages)
     return chosen_title, chosen_page_title
 
 
@@ -530,7 +533,7 @@ def start_talk_request(ngrams, vars):
             continue_after_topic_skill(dialog)
         if found_entity_substr and found_page_title:
             page_content, _ = get_page_content(found_page_title)
-            chosen_title, chosen_page_title = get_title_info(found_entity_substr, found_entity_types, "", [],
+            chosen_title, chosen_page_title = get_title_info(vars, found_entity_substr, found_entity_types, "", [],
                                                              page_content)
             _, _, all_titles = get_titles(found_entity_substr, found_entity_types, page_content)
         logger.info(f"start_talk_request, found_entity_substr {found_entity_substr} found_entity_id {found_entity_id} "
@@ -604,9 +607,9 @@ def tell_fact_request(ngrams, vars):
     shared_state = vars["agent"]["dff_shared_state"]
     logger.info(f"shared_state {shared_state}")
     if found_entity_substr_list and found_entity_types_list and page_content_list:
-        chosen_title, chosen_page_title = get_title_info(
-            found_entity_substr_list[-1], found_entity_types_list[-1], prev_title, used_titles, page_content_list[-1]
-        )
+        chosen_title, chosen_page_title = get_title_info(vars, found_entity_substr_list[-1],
+                                                         found_entity_types_list[-1], prev_title, used_titles,
+                                                         page_content_list[-1])
         _, _, all_titles = get_titles(found_entity_substr_list[-1], found_entity_types_list[-1], page_content_list[-1])
         logger.info(f"request, chosen_title {chosen_title} chosen_page_title {chosen_page_title}")
         wants_more = if_wants_more(vars, all_titles)
@@ -735,10 +738,11 @@ def start_talk_response(vars):
     found_entity_substr_list = [found_entity_substr]
     found_entity_types_list = [list(found_entity_types)]
     curr_pages = [found_page_title]
-    chosen_title, chosen_page_title = get_title_info(found_entity_substr, found_entity_types, "", [], page_content)
+    chosen_title, chosen_page_title = get_title_info(vars, found_entity_substr, found_entity_types, "", [],
+                                                     page_content)
     titles_q, titles_we_use, all_titles = get_titles(found_entity_substr, found_entity_types, page_content)
     question = make_question(chosen_title, titles_q, found_entity_substr, [])
-    chosen_title, chosen_page_title = choose_title(vars, all_titles, titles_we_use, "", [])
+    chosen_title, chosen_page_title = choose_title(vars, all_titles, titles_we_use, "", [], curr_pages)
     response = question.strip()
     if chosen_title:
         used_titles.append(chosen_title)
@@ -791,7 +795,7 @@ def more_details_response(vars):
     if not titles_we_use:
         titles_we_use = list(set(page_content.keys()).difference({"first_par"}))
     logger.info(f"all_titles {all_titles} titles_q {titles_q} titles_we_use {titles_we_use}")
-    chosen_title, chosen_page_title = choose_title(vars, all_titles, titles_we_use, "", [])
+    chosen_title, chosen_page_title = choose_title(vars, all_titles, titles_we_use, "", [], curr_pages)
     question = make_question(chosen_title, titles_q, found_entity_substr, [])
     response = f"{facts_str} {question}"
     response = response.strip()
@@ -823,7 +827,7 @@ def factoid_q_response(vars):
         new_page_content, new_main_pages = get_page_content(curr_pages[-1])
         new_paragraphs = find_all_paragraphs(new_page_content, [])
         paragraphs += new_paragraphs
-    elif len(curr_pages) > 0:
+    else:
         cur_page_content, cur_main_pages = get_page_content(curr_pages[-1])
         cur_paragraphs = find_paragraph(cur_page_content, prev_page_title)
         paragraphs += cur_paragraphs
@@ -888,11 +892,13 @@ def tell_fact_response(vars):
         titles_q, titles_we_use, all_titles = get_titles(found_entity_substr_list[-1], found_entity_types_list[-1],
                                                          page_content_list[-1])
     logger.info(f"all_titles {all_titles} titles_q {titles_q} titles_we_use {titles_we_use}")
-    chosen_title, chosen_page_title = choose_title(vars, all_titles, titles_we_use, prev_title, used_titles)
+    chosen_title, chosen_page_title = choose_title(vars, all_titles, titles_we_use, prev_title, used_titles,
+                                                   curr_pages)
     logger.info(f"chosen_title {chosen_title} main_pages {main_pages_list}")
     if chosen_title:
         new_page = False
-        if GO_TO_MAIN_PAGE:
+        if GO_TO_MAIN_PAGE and not any([set(found_entity_types).intersection(ANIMAL_TYPES_SET) for
+                                        found_entity_types in found_entity_types_list]):
             chosen_main_pages = main_pages_list[-1].get(chosen_page_title, [])
             if chosen_main_pages:
                 chosen_main_page = random.choice(chosen_main_pages)

@@ -493,7 +493,9 @@ def if_linked_to_wiki_skill(annotations, skill_name):
     return flag
 
 
-def choose_title(vars, all_titles, titles_we_use, prev_title, used_titles):
+def choose_title(vars, all_titles, titles_we_use, prev_title, used_titles, curr_pages=None):
+    if curr_pages is None:
+        curr_pages = []
     found_title = ""
     found_page_title = ""
     if titles_we_use:
@@ -503,7 +505,8 @@ def choose_title(vars, all_titles, titles_we_use, prev_title, used_titles):
             if rand_title.lower() not in used_titles:
                 for title in all_titles:
                     if rand_title.lower() == title.lower() and rand_title != prev_title \
-                            and rand_title.lower() not in blacklist_titles:
+                            and rand_title.lower() not in blacklist_titles \
+                            and not any([rand_title.lower() in curr_page.lower() for curr_page in curr_pages]):
                         found_title = rand_title
                         found_page_title = title
                         found = True
@@ -511,7 +514,8 @@ def choose_title(vars, all_titles, titles_we_use, prev_title, used_titles):
                 if not found:
                     for title in all_titles:
                         if rand_title.lower() in title.lower() and rand_title != prev_title \
-                                and rand_title.lower() not in blacklist_titles:
+                                and rand_title.lower() not in blacklist_titles \
+                                and not any([rand_title.lower() in curr_page.lower() for curr_page in curr_pages]):
                             found_title = rand_title
                             found_page_title = title
                             found = True
@@ -523,7 +527,8 @@ def choose_title(vars, all_titles, titles_we_use, prev_title, used_titles):
         if len(titles_we_use) > len(used_titles):
             for title in titles_we_use:
                 if title.lower() not in used_titles \
-                        and title.lower() not in blacklist_titles:
+                        and title.lower() not in blacklist_titles \
+                        and not any([title.lower() in curr_page.lower() for curr_page in curr_pages]):
                     found_title = title.lower()
                     found_page_title = title
     return found_title, found_page_title
