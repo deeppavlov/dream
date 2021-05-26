@@ -221,11 +221,14 @@ class DummySkillConnector:
             if link_to_question:
                 _prev_bot_uttr = dialog["bot_utterances"][-2]["text"] if len(dialog["bot_utterances"]) > 1 else ""
                 _bot_uttr = dialog["bot_utterances"][-1]["text"] if len(dialog["bot_utterances"]) > 0 else ""
+                _prev_active_skill = dialog["bot_utterances"][-1]["active_skill"] \
+                    if len(dialog["bot_utterances"]) > 0 else ""
 
                 _no_to_first_linkto = any([phrase in _bot_uttr for phrase in LINK_TO_PHRASES])
                 _no_to_first_linkto = _no_to_first_linkto and all([phrase not in _prev_bot_uttr
                                                                    for phrase in LINK_TO_PHRASES])
                 _no_to_first_linkto = _no_to_first_linkto and is_no(dialog["human_utterances"][-1])
+                _no_to_first_linkto = _no_to_first_linkto and _prev_active_skill != "dff_friendship_skill"
 
                 cands += [link_to_question]
                 if ASK_ME_QUESTION_PATTERN.search(dialog["human_utterances"][-1]["text"]) or _no_to_first_linkto:

@@ -5,7 +5,6 @@ import os
 import logging
 from enum import Enum, auto
 
-import numpy as np
 import requests
 import sentry_sdk
 
@@ -14,16 +13,13 @@ import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_exten
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 import common.greeting as common_greeting
-import common.link as common_link
 import dialogflows.scopes as scopes
 from dialogflows.flows.starter_states import State as StarterState
 import dialogflows.flows.weekend as weekend_flow
 import dialogflows.flows.starter as starter_flow
 
-from dialogflows.flows.shared import link_to_by_enity_request
-from dialogflows.flows.shared import link_to_by_enity_response
-from dialogflows.flows.shared import set_confidence_by_universal_policy
-from dialogflows.flows.shared import error_response
+from dialogflows.flows.shared import link_to_by_enity_request, link_to_by_enity_response, \
+    link_to_skill2i_like_to_talk, set_confidence_by_universal_policy, error_response, link_to_skill2key_words
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -80,23 +76,22 @@ MIDDLE_CONFIDENCE = 0.95
 
 def compose_topic_offering(vars, excluded_skills=None):
     excluded_skills = [] if excluded_skills is None else excluded_skills
-    ask_about_topic = random.choice(common_greeting.GREETING_QUESTIONS["what_to_talk_about"])
-    offer_topics_template = random.choice(common_greeting.TOPIC_OFFERING_TEMPLATES)
 
-    available_topics = [
-        topic for skill_name, topic in common_link.LIST_OF_SCRIPTED_TOPICS.items() if skill_name not in excluded_skills
+    available_skill_names = [
+        skill_name for skill_name in link_to_skill2key_words.keys() if skill_name not in excluded_skills
     ]
     if state_utils.get_age_group(vars) == "kid":
-        available_topics = ["games", "animals", "food", "superheroes", "school"]
+        available_skill_names = ["game_cooperative_skill", "dff_animals_skill", "dff_food_skill",
+                                 "superheroes", "school"]  # for small talk skill
+    if len(available_skill_names) == 0:
+        available_skill_names = link_to_skill2key_words.keys()
 
-    if len(available_topics) >= 2:
-        topics = np.random.choice(available_topics, size=2, replace=False)
-        offer_topics = offer_topics_template.replace("TOPIC1", topics[0]).replace("TOPIC2", topics[1])
-
-        response = f"{ask_about_topic} {offer_topics}"
-        state_utils.save_to_shared_memory(vars, offered_topics=list(topics))
+    skill_name = random.choice(available_skill_names)
+    if skill_name in link_to_skill2i_like_to_talk:
+        response = random.choice(link_to_skill2i_like_to_talk[skill_name])
     else:
-        response = ask_about_topic
+        response = f"Would you like to talk about {skill_name}?"
+    state_utils.save_to_shared_memory(vars, offered_topics=link_to_skill2key_words.get(skill_name, skill_name))
 
     return response
 
