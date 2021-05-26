@@ -70,15 +70,18 @@ def respond():
             logger.info(pprint.pformat(curr_candidates, compact=False))
 
 
-            # EXPERIMENT
-            if DM_BASED_PRE_FILTERING:
-                logger.info(f"Discourse Management based pre-filtering")
-                # exp_best_candidate, exp_best_id, exp_curr_single_scores
-                filtered_candidates = dm_based_response_selection(
-            dialog, curr_candidates)
-                if len(filtered_candidates) > 0:
-                    # only if we have at least something good, we can try this out
-                    curr_candidates = filtered_candidates
+            if len(dialog["bot_utterances"]) > 1:
+                # EXPERIMENT
+                if DM_BASED_PRE_FILTERING:
+                    logger.info(f"Discourse Management based pre-filtering")
+                    # exp_best_candidate, exp_best_id, exp_curr_single_scores
+                    filtered_candidates = dm_based_response_selection(
+                dialog, curr_candidates)
+                    if len(filtered_candidates) > 0:
+                        non_generic_responses = get_non_generic_responses(filtered_candidates)
+                        if len(non_generic_responses) > 0:
+                            # only if we have at least something good, we can try this out
+                            curr_candidates = filtered_candidates
 
             for skill_data in curr_candidates:
                 if len(dialog["utterances"]) > 1:
