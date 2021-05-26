@@ -5,6 +5,7 @@ import re
 
 from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_intents, service_intents
+from common.grounding import BUT_PHRASE, REPEAT_PHRASE
 
 logger = logging.getLogger(__name__)
 LAST_N_TURNS = 5  # number of turns to consider in annotator/skill.
@@ -70,7 +71,9 @@ def is_human_uttr_repeat_request_or_misheard(utt):
 def is_bot_uttr_repeated_or_misheard(utt):
     is_asr = utt.get("active_skill", "") == "misheard_asr" and utt.get("confidence", 0.0) == 1.0
     is_repeated = "#+#repeat" in utt.get("text", "")
-    if is_asr or is_repeated:
+    detected_interrupt = any([interrupt_phrase in utt.get("text", "")
+                              for interrupt_phrase in [BUT_PHRASE, REPEAT_PHRASE]])
+    if is_asr or is_repeated or detected_interrupt:
         return True
     else:
         return False
