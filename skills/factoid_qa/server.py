@@ -280,7 +280,7 @@ def respond():
         is_question = "?" in text_rewritten
         if is_factoid and (tell_me_about_intent or is_question):
             questions_batch.append(curr_ann_uttr["text"])
-            facts_batch.append(annotations.get("fact_retrieval", []))
+            facts_batch.append(annotations.get("fact_retrieval", {}).get("facts", []))
             question_nums.append(n)
 
     text_qa_response_batch = [{"answer": "", "answer_sentence": "", "confidence": 0.0} for _ in dialogs_batch]

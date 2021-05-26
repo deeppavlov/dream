@@ -823,7 +823,7 @@ def factoid_q_response(vars):
         new_page_content, new_main_pages = get_page_content(curr_pages[-1])
         new_paragraphs = find_all_paragraphs(new_page_content, [])
         paragraphs += new_paragraphs
-    else:
+    elif len(curr_pages) > 0:
         cur_page_content, cur_main_pages = get_page_content(curr_pages[-1])
         cur_paragraphs = find_paragraph(cur_page_content, prev_page_title)
         paragraphs += cur_paragraphs
