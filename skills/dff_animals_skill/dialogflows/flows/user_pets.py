@@ -232,6 +232,12 @@ def make_utt_with_ack(vars, cur_state):
             question = "Could you tell me more about your pet?"
     if "bark" in user_uttr["text"]:
         ack = f"Woof-woof, bow-bow, ruff-ruff! {ack}"
+    used_acks = shared_memory.get("used_acks", [])
+    if ack and ack in used_acks:
+        ack = ""
+    else:
+        used_acks.append(ack)
+        state_utils.save_to_shared_memory(vars, used_acks=used_acks)
     response = f"{ack} {statement} {question}"
     response = response.replace("  ", " ").strip()
     return response
