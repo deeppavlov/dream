@@ -240,6 +240,7 @@ class BookSkillScenario:
                 logger.debug(f'bot phrases: {bot_phrases}')
 
                 user_phrases = [utt["text"] for utt in dialog['human_utterances'][-2:]]
+                logger.info(f"Input received: {user_phrases[-1]}")
                 annotated_user_phrase = dialog['human_utterances'][-1]
                 genre_detected = get_genre(annotated_user_phrase)
                 yes_or_no = is_yes(annotated_user_phrase) or is_no(annotated_user_phrase)
