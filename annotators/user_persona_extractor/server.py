@@ -24,7 +24,7 @@ def extract_age_group_anywhere_in_conversation(dialog):
 
     if re.search(KIDS_WORDS_RE, curr_uttr_text):
         age_group = "kid"
-    elif re.search(ADULTS_WORDS_RE, curr_uttr_text) or is_sensitive_situation(dialog):
+    elif re.search(ADULTS_WORDS_RE, curr_uttr_text) or is_sensitive_situation(dialog["human_utterances"][-1]):
         age_group = "adult"
     else:
         age_group = "unknown"
@@ -36,7 +36,7 @@ def extract_age_group_using_activities(dialog):
 
     if re.search(KIDS_ACTIVITIES_RE, curr_uttr_text):
         age_group = "kid"
-    elif re.search(ADULTS_ACTIVITIES_RE, curr_uttr_text) or is_sensitive_situation(dialog):
+    elif re.search(ADULTS_ACTIVITIES_RE, curr_uttr_text) or is_sensitive_situation(dialog["human_utterances"][-1]):
         age_group = "adult"
     else:
         age_group = "unknown"

@@ -170,7 +170,7 @@ class DummySkillConnector:
         try:
             st_time = time.time()
             dialog = deepcopy(payload['payload']["dialogs"][0])
-            is_sensitive_case = is_sensitive_situation(dialog)
+            is_sensitive_case = is_sensitive_situation(dialog["human_utterances"][-1])
             all_prev_active_skills = payload['payload']["all_prev_active_skills"][0]
 
             curr_topics = get_topics(dialog["human_utterances"][-1], which="cobot_topics")
