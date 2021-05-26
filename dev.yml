@@ -245,7 +245,6 @@ services:
     volumes:
       - "./annotators/news_api:/src"
       - "./common:/src/common"
-      - "./annotators/BlacklistedWordsDetector/blacklists:/src/blacklists"
     ports:
       - 8112:8112
   factoid-qa:

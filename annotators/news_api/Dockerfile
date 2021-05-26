@@ -9,7 +9,6 @@ RUN python -m nltk.downloader vader_lexicon
 
 COPY ./annotators/news_api/ ./
 COPY ./common/ ./common/
-COPY ./annotators/BlacklistedWordsDetector/blacklists/ ./blacklists/
 COPY ./core ./core
 
 CMD gunicorn --workers=1 server:app --bind 0.0.0.0:8000
