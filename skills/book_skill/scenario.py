@@ -411,7 +411,7 @@ class BookSkillScenario:
                             reply, confidence = '', -0
                 elif len(bot_phrases) >= 1 and any([k in bot_phrases[-1] for k in [TELL_REQUEST, TELL_REQUEST2]]):
                     # We have offered information about book
-                    plain_bookname = human_attr['book_skill']['plain_book']
+                    plain_bookname = human_attr['book_skill'].get('plain_book', '')
                     bookname = human_attr['book_skill']['book']
                     logger.debug(f'TELL_REQUEST with {bookname} {plain_bookname}')
                     if (tell_me_more(annotated_user_phrase) or is_yes(annotated_user_phrase)) and bookname:
@@ -424,7 +424,7 @@ class BookSkillScenario:
                             else:
                                 reply = exit_skill(reply, human_attr)
                                 confidence = self.default_conf
-                        else:
+                        elif plain_bookname:
                             book_fact = what_is_book_about(plain_bookname)
                             if book_fact:
                                 reply = f'{book_fact} {WHEN_IT_WAS_PUBLISHED}'
@@ -433,6 +433,15 @@ class BookSkillScenario:
                                 reply = f'{WHEN_IT_WAS_PUBLISHED}'
                                 confidence = self.default_conf
                             #  запускаем в сценарий дальше
+                        else:
+                            warning_message = 'Either plain_bookname or genre book should be. Check the code'
+                            sentry_sdk.capture_exception(warning_message)
+                            logger.exception(warning_message)
+                            if not human_attr['book_skill'].get('named_favourite', False):
+                                reply = f'{PROPOSE_FAVOURITE_BOOK}'
+                                confidence = self.default_conf
+                            else:
+                                reply, confidence = '', 0
                     elif is_no(annotated_user_phrase):
                         reply = 'OK, as you wish.'
                         reply = exit_skill(reply, human_attr)
