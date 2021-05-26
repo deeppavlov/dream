@@ -210,7 +210,7 @@ def generate_universal_response(dialog):
             human_attr["grounding_skill"]["used_universal_intent_responses"] += [reply]
             confidence = UNIVERSAL_RESPONSE_LOW_CONFIDENCE
             attr = {"response_parts": ["body"], "type": "universal_response"}
-    if is_question and is_sensitive_situation(dialog):
+    if is_question and is_sensitive_situation(dialog["human_utterances"][-1]):
         # if question in sensitive situation - answer with confidence 0.99
         confidence = ALMOST_SUPER_CONF
     if ackn:

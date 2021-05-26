@@ -17,17 +17,16 @@ sensitive_all_intents = {
 }
 
 
-def is_sensitive_situation(dialog):
-    user_uttr = dialog["human_utterances"][-1]
-    user_uttr_annotations = user_uttr["annotations"]
+def is_sensitive_situation(annotated_uttr):
+    user_uttr_annotations = annotated_uttr["annotations"]
 
-    cobot_dialogact_topics = set(get_topics(user_uttr, which="cobot_dialogact_topics"))
-    cobot_topics = set(get_topics(user_uttr, which="cobot_topics"))
+    cobot_dialogact_topics = set(get_topics(annotated_uttr, which="cobot_dialogact_topics"))
+    cobot_topics = set(get_topics(annotated_uttr, which="cobot_topics"))
     sensitive_topics_detected = any(
         [t in sensitive_topics for t in cobot_topics]) or any(
         [t in sensitive_dialogact_topics for t in cobot_dialogact_topics])
 
-    all_intents = get_intents(user_uttr, probs=False, which="all")
+    all_intents = get_intents(annotated_uttr, probs=False, which="all")
     sensitive_dialogacts_detected = any([t in sensitive_all_intents for t in all_intents])
     blist_topics_detected = sum(user_uttr_annotations.get("blacklisted_words", {}).values())
 

@@ -10,6 +10,7 @@ from nltk.tokenize import sent_tokenize
 
 from common.link import skills_phrases_map
 from common.constants import CAN_CONTINUE_PROMPT, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
+from common.sensitive import is_sensitive_situation
 from common.universal_templates import if_chat_about_particular_topic, is_switch_topic, \
     is_any_question_sentence_in_utterance
 from common.utils import get_intent_name, get_intents, get_topics, get_entities
@@ -426,6 +427,9 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
                 and len(dialog['utterances']) < 16:
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
         elif cand_uttr["skill_name"] == 'program_y_dangerous' and cand_uttr['confidence'] == 0.98:
+            categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
+        elif cand_uttr["skill_name"] == 'small_talk_skill' and is_sensitive_situation(dialog["human_utterances"][-1]):
+            # let small talk to talk about sex ^_^
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
         elif cand_uttr["skill_name"] == 'weather_skill' and dialog['human_utterances'][-1]["annotations"].get(
                 "intent_catcher", {}).get("weather_forecast_intent", {}).get("detected", 0) == 1:
