@@ -106,13 +106,6 @@ def is_new_human_entity(vars):
     return flag
 
 
-def is_entities(vars):
-    entities = state_utils.get_labeled_noun_phrase(vars)
-    flag = bool(entities)
-    logging.debug(f"is_entities = {flag}")
-    return flag
-
-
 def get_last_state(vars):
     last_state = ""
     history = list(vars["agent"]["history"].items())

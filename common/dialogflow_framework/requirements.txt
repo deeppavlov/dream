@@ -5,6 +5,6 @@ gunicorn==19.9.0
 healthcheck==1.3.3
 # dialogflow framework
 programy==4.3
-emora-stdm==1.95
+git+git://github.com/kudep/emora_stdm.git@0acfae54d79328d6ad5c1a8247479cdeff90a5db
 # test
 requests==2.22.0

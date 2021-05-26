@@ -1,7 +1,6 @@
 import logging
 import os
 
-import common.entity_utils as entity_utils
 import common.constants as common_constants
 import common.news as common_news
 import common.utils as common_utils
@@ -16,16 +15,13 @@ SERVICE_NAME = os.getenv("SERVICE_NAME")
 NEWS_API_ANNOTATOR_URL = os.getenv("NEWS_API_ANNOTATOR_URL")
 
 
-def get_labeled_noun_phrase(vars):
-    agent = vars["agent"]
-    return entity_utils.load_raw_entities(agent.get("entities", {}))
-
-
 def get_new_human_labeled_noun_phrase(vars):
-    agent = vars["agent"]
-    human_utter_index = agent["human_utter_index"]
-    entities = get_labeled_noun_phrase(vars)
-    return entity_utils.get_new_human_entities(entities, human_utter_index)
+    return (
+        vars["agent"]["dialog"]["human_utterances"][-1]
+        .get("annotations", {})
+        .get("cobot_entities", {})
+        .get("entities", [])
+    )
 
 
 def get_human_sentiment(vars, negative_threshold=0.5, positive_threshold=0.333):
