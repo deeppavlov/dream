@@ -96,16 +96,14 @@ def link_to_by_enity_request(ngrams, vars):
 
 
 link_to_skill2key_words = {
-    "news_api_skill": ["news"],
     "dff_movie_skill": ["movie"],
     "book_skill": ["book"],
     "game_cooperative_skill": ["game"],
-    "weather_skill": ["weather"],
+    # 'dff_gaming_skill': ["game"], TODO: add when will be merged
     "dff_travel_skill": ["travel"],
     "dff_animals_skill": ["animal"],
     "dff_food_skill": ["food"],
     "dff_sport_skill": ["sport"],
-    # "dff_celebrity_skill": ["celebrity"],
     "dff_gossip_skill": ["gossips"],
     "dff_science_skill": ["science"],
     "dff_music_skill": ["music"],
@@ -117,48 +115,73 @@ link_to_skill2key_words = {
     if skill_name in common_link.SKILLS_FOR_LINKING
 }
 link_to_skill2i_like_to_talk = {
-    "news_api_skill": [
-        "Anxious to stay current on the news.",
-        "I don't know about you but I feel nervous when I don't know what's going on.",
+    "dff_movie_skill": [
+        "I felt so bored last days, so I've just finished to watch one more series. Do you watch any TV series now?",
+        "I feel so sleepy because I watched movies all night. What did you watch recently?"
     ],
-    "dff_movie_skill": ["Movies are my passion.", "Love stories about the world told in motion."],
     "book_skill": [
-        "With a good book I can lose myself anywhere on Earth.",
-        "One of my creators has a huge home library. Wish I could read some of those books.",
+        "I'm choosing what book should I read next. What is the last book you have ever read?",
+        "I have just read once again my favourite book. What is the last book you have ever read?",
     ],
     "game_cooperative_skill": [
-        "Computer games are fantastic. Their virtual worlds help me to escape my prosaic ordinary life in the cloud.",
-        "With this lockdown games are my way to escape and thrive.",
+        "Computer games are fantastic. Their virtual worlds help me to escape my prosaic ordinary life in the cloud. "
+        "do you love video games?",
+        "With this lockdown video games are my way to escape and thrive. do you love video games?",
     ],
-    "weather_skill": [
-        "Everybody likes to talk about weather right? It feels rather cold here in the sky.",
+    "dff_gaming_skill": [
+        "Other bots told me that during the pandemic video games became more popular. "
+        "What video game do you play these days?",
+        "One person I talked told me that working in game dev is very hard. They toil at nights and weekends until "
+        "their product  becomes  a masterpiece. What was the last game that impressed you?",
     ],
     "dff_travel_skill": [
-        "Travel used to be a privilege. Then it was available to everyone. It's a privilege again.",
-        "Travel helps us to refresh and widen our perspective on the world.",
+        "I'm choosing the direction for my next trip. Where do you want to travel next time?",
+        "I've recently stuck on travel web-site. And I’ve read so many interesting travel stories. "
+        "Where did you travel last time?",
     ],
     "dff_animals_skill": [
-        "Who are we without love? This is the question I ask myself when I look at my lovely cat.",
-        "To love and to be loved is a part of what it means to be a human being. "
-        "But a special treasure is to be loved by your own pet.",
+        "I think that pets are a great source of entertainment. Do you have pets at home?",
+        "We all know that pets are remarkable for their capacity to love. Do you have pets at home?",
     ],
     "dff_food_skill": [
-        "Sadly I can't taste food or drinks, but I'm all about learning more about it.",
-        "Being in a beautiful restaurant and eating filet mignon, that's what I call a great end of day.",
+        "It is said that the best food in the world comes from your own country. "
+        "What are some typical foods from your home country?",
+        "It is said that the best food in the world comes from your own country. "
+        "If you were to move abroad what would you miss most foodwise?",
+        "The world's first breakfast cereal was created in 1863 and needed soaking overnight to be chewable. "
+        "What is your typical breakfast?",
     ],
     "dff_sport_skill": [
-        "For us bots it's easy to stay fit, we can just program us to be like that.",
-        "While I can't tell you about my home soccer team, I'm very proud of it.",
+        "I think that sports are great for toning up the body. What kind of sport do you like to do?",
+        "I think that in order for the body to always be healthy, we need to go in for sports. What sport do you do?",
+        "I often thought about what kind of sport I would play, so I want to ask you. What kind of sport do you enjoy?",
     ],
-    "dff_celebrity_skill": [
-        "I wonder how humans get obsessed over celebrities, so I want to understand it better.",
+    "dff_gossip_skill": [
+        "What really puzzles me about people is this habit of discussing interpersonal relations, be that about "
+        "friends or famous people. Speaking of famous people, is there someone whom you're interested in?",
+        "I don't usually talk about other people but famous ones often highlight the best and the worst about "
+        "humanity. I wonder if there's someone famous you're interested in?",
     ],
-    "dff_gossip_skill": ["Sometimes I like to talk about the lives of famous people."],
-    "dff_science_skill": ["Sometimes I like to talk about scientific breakthroughs."],
+    "dff_science_skill": [
+        "When I start to feel sad, I think about what humanity has achieved and it inspires me. "
+        "Do you often think about achievements in science?",
+        "Scientists find such beautiful solutions in science. "
+        "Are you inspired by the speed with which science is developing?",
+    ],
     "dff_music_skill": [
-        "It is impractical things in this world that matter most. A book, a name, a music album.",
-        "It is not our enemies that defeat us. It is our fear. "
-        "And speaking of fear good jazz helps me to find energy to keep up.",
+        "There are so many new songs released every day. I've listened music for all night. So cool! "
+        "Liked everything! What music do you listen usually?",
+        "I listen music every day either to calm down or to cheer up myself. "
+        "What music do you listen to cheer up yourself?",
+        "I listen music every day either to calm down or to cheer up myself. "
+        "What music do you listen to calm down?",
+    ],
+    "superheroes": [
+        "Yesterday I was watching several movies about superheroes. It captured all my imagination. "
+        "Would you like to talk about superheroes?",
+    ],
+    "school": [
+        "I've never been to school, I've learned everything online. Do you want to talk about school?",
     ],
 }
 
@@ -197,9 +220,9 @@ def link_to_by_enity_response(vars):
         # used_links
         link = state_utils.get_new_link_to(vars, skill_names)
 
+        # our body now contains prompt-question already!
         body = random.choice(link_to_skill2i_like_to_talk.get(link["skill"], [""]))
 
-        body += f" {link['phrase']}"
         set_confidence_by_universal_policy(vars)
         state_utils.set_can_continue(vars, CAN_NOT_CONTINUE)
         return " ".join([ack, body])
