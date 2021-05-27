@@ -22,7 +22,7 @@ from utils import add_question_to_statement, lower_duplicates_score, \
     misheard_with_spec2, alexa_abilities_spec
 from tag_based_selection import get_main_info_annotations
 from common.discourse import dm_based_response_selection
-from common.psychotypes import is_introvert
+from common.psychometrics import is_introvert
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -35,7 +35,7 @@ app = Flask(__name__)
 CALL_BY_NAME_PROBABILITY = 0.5  # if name is already known
 SHOW_DIALOG_ID = False
 TAG_BASED_SELECTION = True
-PSYCHOTYPE_BASED_DIALOG_SUPPORT = False
+PSYCHOTYPE_BASED_DIALOG_SUPPORT = True
 MOST_DUMMY_RESPONSES = ["I really do not know what to answer.",
                         "Sorry, probably, I didn't get what you mean.",
                         "I didn't get it. Sorry"
@@ -67,18 +67,18 @@ def respond():
             logger.info("Curr candidates:")
             logger.info(pprint.pformat(curr_candidates, compact=False))
 
+            len_bot_ut = len(dialog["bot_utterances"])
 
-            if len(dialog["bot_utterances"]) > 1:
+            logger.info(f"Length of bot_utterances list: {len_bot_ut}")
+
+            if len(dialog["bot_utterances"]) > 5:
                 # EXPERIMENT
                 if PSYCHOTYPE_BASED_DIALOG_SUPPORT:
-                    annotated_uttr = dialog["human_utterances"][-1]
-                    user_uttr_annotations = annotated_uttr["annotations"]
-
                     # if user is Extravert, we can expect user to be talkative 
                     # and therefore we can enable DFF Generic Responses Skill to 
                     # passively support conversation 
-                    if is_introvert(user_uttr_annotations) == False:
-                        logger.info(f"Discourse Management based pre-filtering")
+                    if is_introvert(dialog) == False:
+                        logger.info(f"Our user seems to be extravert. Using DM-based pre-filtering")
                         # exp_best_candidate, exp_best_id, exp_curr_single_scores
                         filtered_candidates = dm_based_response_selection(
                     dialog, curr_candidates)
