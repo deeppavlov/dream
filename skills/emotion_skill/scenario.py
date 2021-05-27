@@ -187,13 +187,13 @@ class EmotionSkillScenario:
                     emotion = most_likely_emotion
                 if is_joke_requested(user_phrase):
                     state = "joke_requested"
-                    emotion_skill_attributes['state'] = "joke_requested"
+                    emotion_skill_attributes['state'] = state
                 elif is_alone(user_phrase):
-                    state = "loneliness_i_feel"
-                    emotion_skill_attributes['state'] = "loneliness_i_feel"
+                    state = "sad_and_lonely"
+                    emotion_skill_attributes['state'] = state
                 elif is_pain(annotated_user_phrase['text']):
                     state = "pain_i_feel"
-                    emotion_skill_attributes['state'] = "pain_i_feel"
+                    emotion_skill_attributes['state'] = state
                 logger.info(f"user sent: {annotated_user_phrase['text']} state: {state} emotion: {emotion}")
                 if talk_about_emotion(annotated_user_phrase['text']):
                     reply = f'OK. {random.choice(skill_trigger_phrases())}'
