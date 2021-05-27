@@ -782,3 +782,8 @@ def topic_recommendation_formatter(dialog: Dict):
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
     utter_entities = [get_entities(utt, only_named=False, with_labels=True) for utt in dialog["human_utterances"]]
     return [{"utter_entities_batch": [utter_entities]}]
+
+
+def personality_detection_formatter(dialog: Dict) -> List[List[str]]:
+    return [[dialog['human_utterances'][-1]['annotations'].get("spelling_preprocessing",
+                                                               dialog['human_utterances'][-1]['text'])]]

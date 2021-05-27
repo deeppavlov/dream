@@ -148,6 +148,15 @@
             }
         },
         "annotators": {
+            "personality_detection": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://personality-detection:8120/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:personality_detection_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation"
+            },
             "speech_function_classifier": {
                 "connector": {
                     "protocol": "http",

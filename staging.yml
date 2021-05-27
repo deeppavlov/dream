@@ -282,6 +282,10 @@ services:
     image: ${DOCKER_REGISTRY}/topic-recommendation:${VERSION}
     env_file:
       - ${ENV_FILE}
+  personality-detection:
+    image: ${DOCKER_REGISTRY}/personality-detection:${VERSION}
+    env_file:
+      - ${ENV_FILE}
 volumes:
   external-logs:
   external-deeppavlov:

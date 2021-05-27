@@ -506,4 +506,10 @@ services:
       - "./common:/src/common"
     ports:
       - 8115:8115
+  personality-detection:
+    env_file: [ .env.dev ]
+    volumes:
+      - "./annotators/personality_detection:/app/src"
+    ports:
+      - 8120:8120
 version: "3.7"
