@@ -179,7 +179,7 @@ def negative_sentiment_request(ngrams, vars):
 
 def mentioned_travelling_request(ngrams, vars):
     # SYS_MENTIONED_TRAVELLING
-    if TRAVELLING_TEMPLATE.search(state_utils.get_last_human_utterance(vars)):
+    if TRAVELLING_TEMPLATE.search(state_utils.get_last_human_utterance(vars)["text"]):
         logger.info(f"Mentioned travelling in user utterances")
         return True
     return False
