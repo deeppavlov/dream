@@ -198,4 +198,6 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
   topic-recommendation:
     env_file: [ .env.dev ]
+  personality-detection:
+    env_file: [ .env.dev ]
 version: '3.7'
