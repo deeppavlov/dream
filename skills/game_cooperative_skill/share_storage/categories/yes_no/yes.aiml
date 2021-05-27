@@ -24,6 +24,12 @@
             <srai>YES</srai>
         </template>
     </category>
+    <category>
+        <pattern>^ SURE ^</pattern>
+        <template>
+            <srai>YES</srai>
+        </template>
+    </category>
    <category>
         <pattern>^ OK ^</pattern>
         <template>
@@ -497,6 +503,12 @@
     </category>
     <category>
         <pattern>YAP</pattern>
+        <template>
+            <srai>yes</srai>
+        </template>
+    </category>
+    <category>
+        <pattern>WHY NOT</pattern>
         <template>
             <srai>yes</srai>
         </template>
