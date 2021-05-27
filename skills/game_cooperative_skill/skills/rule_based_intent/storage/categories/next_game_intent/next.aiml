@@ -6,7 +6,12 @@
             NEXT_ANSWER
         </template>
     </category>
-
+   <category>
+        <pattern> ^ GOING ON ^ </pattern>
+        <template>
+            <srai>NEXT</srai>
+        </template>
+   </category>
    <category>
         <pattern> ^ GO ON ^ </pattern>
         <template>

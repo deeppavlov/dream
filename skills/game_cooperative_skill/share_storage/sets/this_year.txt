@@ -1,9 +1,11 @@
 nowadays
 these days
-2020
-twenty twenty
-two thousand twenty
+2021
+twenty twenty one
+two thousand twenty one
 current year
 this year 
 year
 yearly
+any
+all
