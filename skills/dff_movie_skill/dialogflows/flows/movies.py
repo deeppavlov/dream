@@ -6,7 +6,6 @@ import re
 from enum import Enum, auto
 
 import sentry_sdk
-import pandas as pd
 
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
@@ -1194,8 +1193,7 @@ def share_movie_moment_response(vars):
         used_interesting_moment_phrases = shared_memory.get("used_interesting_moment_phrases", [])
         movie_id = shared_memory.get("current_movie_id", "")
         plot = movieplots.get_plot(movie_id)
-        plot_flag = (isinstance(plot, pd.Series) and plot.any()) or ((not isinstance(plot, pd.Series)) and plot)
-        plot_sentences = sent_tokenize(plot) if plot_flag else []
+        plot_sentences = sent_tokenize(plot) if plot else []
         plot_sentences = plot_sentences[1:] if len(plot_sentences) > 1 else []
 
         if plot_sentences:
