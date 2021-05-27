@@ -259,7 +259,7 @@ def want_music_response(vars):
             phrase = f"I think {genre} is cool. Do you like the whole genre of {genre} music?"
         else:
             phrase = f"I guess you want to talk about music, right?"
-        state_utils.set_confidence(vars, MUST_CONTINUE)
+        state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
         return phrase
     except Exception as exc:
