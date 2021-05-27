@@ -37,6 +37,8 @@ class MoviePlots:
                 break
         if plot is None:
             logger.info(f"(MoviePlots.get_plot)None of movies {names} was found in movie plot dataframes")
+        elif not isinstance(plot, str):
+            plot = plot.values[0]  # if several plots in table, take first appeared
         else:
             logger.info(f"(MoviePlots.get_plot)for movies names {names} plot was found.")
         return plot
