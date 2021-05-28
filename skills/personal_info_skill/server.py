@@ -72,8 +72,11 @@ def respond():
 what_is_your_name_pattern = re.compile(
     r"((what is|what's|whats|tell me|may i know|ask you for) your? name|what name would you like)", re.IGNORECASE)
 my_name_is_pattern = re.compile(r"(my (name is|name's)|call me)", re.IGNORECASE)
-my_name_is_not_pattern = re.compile(r"(my (name is not|name isn't|name's not)|not call me|why do you call me)",
-                                    re.IGNORECASE)
+_is_not_re = r"(is not|isn't|was not|wasn't|have (not|never) been|haven't been|had (not|never) been|hadn't been)"
+my_name_is_not_pattern = re.compile(
+    rf"my (name is not|name {_is_not_re}|name's not)|not call me|why do you call me|"
+    rf"(that|this|it) {_is_not_re} my name",
+    re.IGNORECASE)
 where_are_you_from_pattern = re.compile(r"(where are you from|where you (were|was) born|"
                                         r"(what is|what's|whats|tell me) your "
                                         r"(home\s?land|mother\s?land|native\s?land|birth\s?place))", re.IGNORECASE)
