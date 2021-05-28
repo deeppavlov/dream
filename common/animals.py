@@ -7,7 +7,9 @@ HAVE_PETS_REQUESTS = ["Do you have pets?"]
 
 OFFER_TALK_ABOUT_ANIMALS = ["Would you like to talk about animals?",
                             "Let's chat about animals. Do you agree?",
-                            "I'd like to talk about animals, would you?"
+                            "I'd like to talk about animals, would you?",
+                            "I think that pets are a great source of entertainment. Do you have pets at home?",
+                            "We all know that pets are remarkable for their capacity to love. Do you have pets at home?"
                             ]
 
 TRIGGER_PHRASES = LIKE_ANIMALS_REQUESTS + HAVE_PETS_REQUESTS + OFFER_TALK_ABOUT_ANIMALS
