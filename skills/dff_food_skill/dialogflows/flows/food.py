@@ -20,6 +20,7 @@ from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT, MUST_CO
 from common.utils import is_yes, is_no, get_entities, join_words_in_or_pattern
 from common.food import TRIGGER_PHRASES, FOOD_WORDS, WHAT_COOK, FOOD_UTTERANCES_RE, CUISINE_UTTERANCES_RE, \
     CONCEPTNET_SYMBOLOF_FOOD, CONCEPTNET_HASPROPERTY_FOOD, CONCEPTNET_CAUSESDESIRE_FOOD
+from common.link import link_to_skill2i_like_to_talk
 from dialogflows.flows.fast_food import State as FFState
 from dialogflows.flows.fast_food import fast_food_request
 
@@ -774,14 +775,17 @@ def check_cooking_request(ngrams, vars):
 
 def said_fav_food_request(ngrams, vars):
     flag = False
+    user_utt_text = state_utils.get_last_human_utterance(vars)["text"]
+    bot_utt_text = state_utils.get_last_bot_utterance(vars)["text"]
     food_topic_checked = lets_talk_about_check(vars)
     # fav_in_bot_utt = re.search(FAV_RE, state_utils.get_last_bot_utterance(vars)["text"])
     food_checked = any(
         [
-            re.search(FOOD_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"]),
+            re.search(FOOD_WORDS_RE, user_utt_text),
             check_conceptnet(vars)[0]
         ]
     )
+    linkto_check = any([linkto in bot_utt_text for linkto in link_to_skill2i_like_to_talk["dff_food_skill"]])
     if any(
         [
             dont_want_talk(vars),
@@ -791,6 +795,8 @@ def said_fav_food_request(ngrams, vars):
     ):
         flag = False
     # (fav_in_bot_utt and
+    elif linkto_check and food_checked:
+        flag = True
     elif food_checked:
         flag = True
     else:
