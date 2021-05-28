@@ -5,7 +5,7 @@ from random import choice
 
 from common.utils import join_words_in_or_pattern, join_sentences_in_or_pattern, get_topics, \
     get_intents, get_sentiment, is_yes, is_no, get_entities
-from common.greeting import GREETING_QUESTIONS
+from common.greeting import GREETING_QUESTIONS, WHAT_DO_YOU_DO_RESPONSES, FREE_TIME_RESPONSES
 import sentry_sdk
 
 logger = logging.getLogger(__name__)
@@ -277,6 +277,7 @@ ANY_TOPIC_AMONG_OFFERED = re.compile(
     r"(\bany\b|\ball\b|\beither\b|\bboth\b|don't know|not know"
     r"|you (choose|pick up|tell me|want|wish|like)\.?$)")
 GREETING_QUESTIONS_TEXTS = [question.lower() for t in GREETING_QUESTIONS for question in GREETING_QUESTIONS[t]]
+GREETING_QUESTIONS_TEXTS += [t.lower() for t in WHAT_DO_YOU_DO_RESPONSES + FREE_TIME_RESPONSES]
 
 
 def if_utterance_requests_topic(annotated_uttr):
