@@ -14,8 +14,8 @@ def main():
                      "context": [["What team Robert Lewandowski plays for?"]]}]
 
     if use_context:
-        gold_results = [['Q134773', 'Q3077690', 'Q5365088', 'Q552213'],
-                        ['Q151269', 'Q273773', 'Q187312', 'Q104913', 'Q1153256']]
+        gold_results = [['Q134773', 'Q3077690', 'Q552213', 'Q5365088'],
+                        ['Q151269', 'Q187312', 'Q273773', 'Q104913', 'Q1153256']]
 
     else:
         gold_results = [['Q134773', 'Q3077690', 'Q552213', 'Q5365088', 'Q17006552'],

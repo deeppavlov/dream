@@ -422,23 +422,24 @@ class KBEntityLinker(Component, Serializable):
         srtd_with_ratios = sorted(entities_ratios, key=lambda x: (x[2], x[3], x[4]), reverse=True)
         if self.use_descriptions:
             log.debug(f"context {context}")
-            id_to_score = {entity_id: (tokens_matched, score) for _, entity_id, tokens_matched, score, _ in
-                           srtd_with_ratios[:self.num_entities_for_bert_ranking]}
+            id_to_score = {entity_id: (tokens_matched, score, num_rels) for _, entity_id, tokens_matched, score,
+                           num_rels in srtd_with_ratios[:self.num_entities_for_bert_ranking]}
             entity_ids = [entity_id for _, entity_id, _, _, _ in srtd_with_ratios[:self.num_entities_for_bert_ranking]]
             scores = self.entity_ranker.rank_rels(context, entity_ids)
-            entities_with_scores = [(entity_id, id_to_score[entity_id][0], id_to_score[entity_id][1], score) for
-                                    entity_id, score in scores]
-            entities_with_scores = sorted(entities_with_scores, key=lambda x: (x[1], x[2], x[3]), reverse=True)
+            entities_with_scores = [(entity_id, id_to_score[entity_id][0], id_to_score[entity_id][1],
+                                    id_to_score[entity_id][2], score) for entity_id, score in scores]
+            entities_with_scores = sorted(entities_with_scores, key=lambda x: (x[1], x[2], x[3], x[4]), reverse=True)
 
             entities_with_scores = [ent for ent in entities_with_scores if
-                                    (ent[3] > self.descr_rank_score_thres or ent[2] == 100.0)]
+                                    (ent[4] > self.descr_rank_score_thres or ent[2] == 100.0
+                                     or (ent[1] == 1.0 and ent[2] > 92.0 and ent[3] > 20 and ent[4] > 0.2))]
             log.debug(f"entities_with_scores {entities_with_scores[:10]}")
-            entity_ids = [ent for ent, _, _, _ in entities_with_scores]
-            confidences = [score for _, _, _, score in entities_with_scores]
-            tokens_match_conf = [ratio for _, ratio, _, _ in entities_with_scores]
+            entity_ids = [ent for ent, *_ in entities_with_scores]
+            confidences = [score for *_, score in entities_with_scores]
+            tokens_match_conf = [ratio for _, ratio, *_ in entities_with_scores]
         else:
             entity_ids = [ent[1] for ent in srtd_with_ratios]
-            confidences = [ent[3] * 0.01 for ent in srtd_with_ratios]
+            confidences = [ent[4] * 0.01 for ent in srtd_with_ratios]
             tokens_match_conf = [ent[2] for ent in srtd_with_ratios]
 
         return entity_ids, confidences, tokens_match_conf, srtd_with_ratios
