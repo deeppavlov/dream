@@ -598,6 +598,7 @@ def factoid_q_request(ngrams, vars):
 def tell_fact_request(ngrams, vars):
     flag = False
     user_uttr = state_utils.get_last_human_utterance(vars)
+    isno = is_no(state_utils.get_last_human_utterance(vars))
     found_entity_substr_list, prev_title, prev_page_title, found_entity_types_list, used_titles, _, page_content_list, \
         main_pages_list, page = get_page_info(vars, "request")
     logger.info(f"request, found_entity_substr {found_entity_substr_list} prev_title {prev_title} "
@@ -620,6 +621,8 @@ def tell_fact_request(ngrams, vars):
             flag = True
         if user_uttr["text"].endswith("?") and another_topic_question(vars, all_titles):
             flag = False
+    if isno:
+        flag = False
     logger.info(f"tell_fact_request={flag}")
     return flag
 
