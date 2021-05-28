@@ -187,7 +187,11 @@
             "dff_travel_skill",
             "game_cooperative_skill"
         ],
-        "phrases": []
+        "phrases": [
+            "today, thanks to remarkable advancements in graphic capabilities and data storage, many games resemble vast, vibrant worlds that lie waiting to be explored, taking the form of the rolling plains of the American Wild West or the mesmeric depths of the ocean.",
+            "Whether based on real world locations or set in fantastical settings out of designers' imaginations, navigating through some video games can mimic the sense of wonder and curiosity sparked by physically traveling to a new place.",
+            "Traveling is like playing an open-world video game. But instead of being guided by some main storyline or quest list, you get to choose your own adventure, save up resources so you can go to the parts of the world you want to explore, try to visit as many places as possible by breezing through or stay longer so you can explore each place more thoroughly."
+        ]
     },
     {
         "skill_pair": [
@@ -201,7 +205,11 @@
             "dff_sport_skill",
             "game_cooperative_skill"
         ],
-        "phrases": []
+        "phrases": [
+            "With the development of competitive gaming and global competitions that promise millions in cash prizes, many are now debating if video games should be classified as a sport.",
+            "Competitive video gamers need to put in just as much practice, effort, and dedication as traditional athletes.",
+            "A recent study conducted by the German Sports University in Cologne has shown that professional gamers exhibit high levels of physical strain during competitions, comparable in many cases to traditional sports."
+        ]
     },
     {
         "skill_pair": [
@@ -215,7 +223,12 @@
             "dff_music_skill",
             "game_cooperative_skill"
         ],
-        "phrases": []
+        "phrases": [
+            "When you think of music in video games, you think of the iconic soundtracks of Super Mario Bros, Tetris and Street Fighter II just to name a few. These games have tracks that are often regarded as the greatest in video games’ short but impressive history.",
+            "In video games Many Action and First Person Shooters have adopted the idea that a driving soundtrack can greatly enhance the players experience of the game.",
+            "Grand Theft Auto video game has a diverse collection of radio stations for the player to choose and listen to whilst driving along.",
+            "As video games have become more and more mainstream, the soundtracks have gotten bigger and a lot more impressive."
+        ]
     },
     {
         "skill_pair": [
@@ -243,7 +256,12 @@
             "dff_sport_skill",
             "dff_travel_skill"
         ],
-        "phrases": []
+        "phrases": [
+            "Sports tourism is the act of travelling from one locality to another, with the intention of being in some way involved with a sporting activity or event.",
+            "Hard sports tourism refers to traveling for and participating in competitive sporting events. This includes many of the big events that sometimes attract hundreds of thousands of people.",
+            "Events that would be considered soft tourism include hiking, canoeing, skiing, and other recreational or extreme sports.",
+            "Perhaps the biggest common example of soft sports tourism is golf, as people travel all over the world to play different courses."
+        ]
     },
     {
         "skill_pair": [
@@ -260,7 +278,13 @@
             "dff_music_skill",
             "dff_travel_skill"
         ],
-        "phrases": []
+        "phrases": [
+            "I've always connected music with travel. Firstly, they're two of my favourite things in the world. But, more than that, I've found hearing a certain song can take me straight back to a specific time and place.",
+            "I find music and travel both utterly addictive. After one short trip away, I return with post-travel blues, desperate to go on another one. The same with music – I'm incapable of listening to one song, then turning off.",
+            "There is one thing that almost everyone considers the best thing to do while traveling – listening to music. Whether you are traveling on land, water, or air, the presence or absence of music can completely change your travel experience.",
+            "You need to look at sights, taste local food, smell a different environment, and hear enjoyable music to have the full value of your travels.",
+            "Music makes even the longest journeys bearable as it takes your mind away from the current temporary but challenging situation. Research shows that music reduces anxiety and ushers in a wave of calmness."
+        ]
     },
     {
         "skill_pair": [
@@ -330,7 +354,13 @@
             "dff_music_skill",
             "dff_sport_skill"
         ],
-        "phrases": []
+        "phrases": [
+            "Team sports and musical ensembles entail working together with others, in a fluid and highly interactive way.",
+            "We go far beyond what you thought you're capable of in both sports and music.",
+            "Research has shown that listening to music whilst exercising can reduce your rate of perceived effort by 12% and improve your endurance by 15%.",
+            "Basketball players who were prone to performing poorly under pressure converted more free-throw shots when they had listened to an upbeat piece of music beforehand, as this distracted them from the pressure of performing in front of a crowd.",
+            "Athletes can use music to manipulate their emotions before a competition. Athlete Dame Kelly Holmes said she listened to Alicia Keys ballads as part of her pre-event routine for the 2004 Olympic Games, which relaxed her and allowed her to peak her performance."
+        ]
     },
     {
         "skill_pair": [
