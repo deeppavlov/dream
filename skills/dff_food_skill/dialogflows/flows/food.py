@@ -533,7 +533,7 @@ def food_fact_response(vars):
     entity = ""
     berry_name = ""
     facts = annotations.get("cobotqa_annotator", {}).get("facts", [])
-    if check_conceptnet(vars):
+    if check_conceptnet(vars) and ("shower" not in human_utt_text):
         if "berry" in bot_utt_text:
             berry_names = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
             if berry_names:
