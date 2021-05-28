@@ -168,19 +168,27 @@ def fast_food_response(vars):
     try:
         shared_memory = state_utils.get_shared_memory(vars)
         used_facts = shared_memory.get("fast_food_facts", [])
+        unused_facts = [i for i in FAST_FOOD_FACTS if i not in used_facts]
         used_questions = shared_memory.get("fast_food_questions", [])
-        fact = random.choice([i for i in FAST_FOOD_FACTS if i not in used_facts])
-        question = random.choice([i for i in FAST_FOOD_QUESTIONS if i not in used_questions])
-        state_utils.save_to_shared_memory(vars, fast_food_facts=used_facts + [fact])
-        state_utils.save_to_shared_memory(vars, fast_food_questions=used_questions + [question])
-
-        state_utils.set_confidence(vars, confidence=CONF_HIGH)
-        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-        return f"I just found out that {fact} {question}"
+        unused_questions = [i for i in FAST_FOOD_QUESTIONS if i not in used_questions]
+        fact = ""
+        question = ""
+        if unused_facts:
+            fact = random.choice(unused_facts)
+            state_utils.save_to_shared_memory(vars, fast_food_facts=used_facts + [fact])
+        if unused_questions:
+            question = random.choice(unused_questions)
+            state_utils.save_to_shared_memory(vars, fast_food_questions=used_questions + [question])
+        if fact and question:
+            state_utils.set_confidence(vars, confidence=CONF_HIGH)
+            state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+            return f"I just found out that {fact} {question}"
+        else:
+            state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+            return error_response(vars)
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -197,7 +205,6 @@ def what_eat_response(vars):
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -252,7 +259,6 @@ def food_fact_response(vars):
         state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
         if re.search(DONOTKNOW_LIKE_RE, human_utt_text):
             state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
-            state_utils.set_confidence(vars, confidence=0.)
             return error_response(vars)
         # "I have never heard about it. Could you tell me more about that please."
         elif (not fact) and check_conceptnet(vars):
@@ -260,7 +266,6 @@ def food_fact_response(vars):
             return "Why do you like it?"
         elif not fact:
             state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
-            state_utils.set_confidence(vars, confidence=0.)
             return error_response(vars)
         elif (fact and entity):
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
@@ -269,13 +274,11 @@ def food_fact_response(vars):
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
             return f"Okay. {fact}"
         else:
-            state_utils.set_confidence(vars, 0)
             state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
             return error_response(vars)
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
