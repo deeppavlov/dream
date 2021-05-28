@@ -6,7 +6,7 @@ import datetime
 import sentry_sdk
 from os import getenv
 
-from common.books import BOOK_SKILL_CHECK_PHRASES, about_book, BOOK_PATTERN
+from common.books import BOOK_SKILL_CHECK_PHRASES, about_book, BOOK_PATTERN, ASK_TO_REPEAT_BOOK
 from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.universal_templates import is_switch_topic, if_chat_about_particular_topic, tell_me_more, \
     is_positive, is_negative
@@ -16,7 +16,7 @@ from book_utils import get_name, get_genre, suggest_template, get_not_given_ques
     parse_author_best_book, GENRE_PHRASES, was_question_about_book, favorite_book_template, exit_skill, \
     asked_about_genre, GENRE_DICT, is_previous_was_book_skill, just_mentioned, dontknow_books, \
     best_plain_book_by_author, tell_about_genre_book, bible_request, get_movie_answer, \
-    my_favorite, get_author, what_is_book_about, havent_read, is_wikidata_entity
+    my_favorite, get_author, what_is_book_about, havent_read, is_wikidata_entity, published_year_request
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -63,11 +63,6 @@ USER_DISLIKED_BOOK_PHRASE = "It's OK. Maybe some other books will fit you better
 OPINION_REQUEST_ON_BOOK_PHRASES = ["Did you enjoy this book?",
                                    "Did you find this book interesting?",
                                    "Was this book exciting for you?"]
-UNKNOWN_BOOK_QUESTIONS = ["Sorry I've never heard about this book. What is it about?",
-                          "Not sure if I've heard of this book before. What is it about?",
-                          "I suppose I've never heard about this book before. What did you like about it?",
-                          "Oops. I guess I've never heard about this book before. "
-                          "What caught your attention in this book?"]
 DONT_KNOW_EITHER = "I don't know either. Let's talk about something else."
 
 CURRENT_YEAR = datetime.datetime.today().year
@@ -82,7 +77,7 @@ class BookSkillScenario:
         self.default_reply = ""
         self.bookreads_dir = 'bookreads_data.json'
         self.bookreads_data = json.load(open(self.bookreads_dir, 'r'))[0]
-        self.bookreads_books = [j['title'] for j in self.bookreads_data.values()]
+        self.bookreads_books = [book['title'] for books in self.bookreads_data.values() for book in books]
 
     def get_genre_book(self, annotated_user_phrase, human_attr):
         '''
@@ -99,8 +94,11 @@ class BookSkillScenario:
             human_attr['book_skill']['detected_genre'] = None  # reset attribute
         else:  # default genre
             genre = 'fiction'
-        book = self.bookreads_data[genre]['title']
-        return book
+        for book_info in self.bookreads_data[genre]:
+            book = book_info['title']
+            if book not in human_attr['book_skill']['used_genrebooks']:
+                human_attr['book_skill']['used_genrebooks'].append(book)
+                return book
 
     def fav_book_request_detected(self, annotated_user_phrase, last_bot_phrase, human_attr):
         user_asked_favourite_book = re.search(favorite_book_template, annotated_user_phrase["text"])
@@ -227,6 +225,7 @@ class BookSkillScenario:
             human_attr["book_skill"] = dialog["human"]["attributes"].get("book_skill", {})
             human_attr['book_skill']['used_phrases'] = human_attr['book_skill'].get('used_phrases', [])
             human_attr['book_skill']['last_fact'] = human_attr['book_skill'].get('last_fact', '')
+            human_attr['book_skill']['used_genrebooks'] = human_attr['book_skill'].get('used_genrebooks', [])
             try:
                 # TODO check correct order of concatenation of replies
                 book_just_active = is_previous_was_book_skill(dialog)
@@ -332,29 +331,32 @@ class BookSkillScenario:
                     reply, confidence, human_attr = self.get_author_book_genre_movie_reply(annotated_user_phrase,
                                                                                            annotated_prev_phrase,
                                                                                            human_attr)
-                elif WHEN_IT_WAS_PUBLISHED in bot_phrases[-1]:
-                    n_years_ago = human_attr['book_skill']['n_years_ago']
-                    plain_bookname = human_attr['book_skill']['plain_book']
-                    bookname = human_attr['book_skill']['book']
-                    logger.debug('Bookname detected')
-                    if n_years_ago > 0:
-                        recency_phrase = f"{n_years_ago} years ago!"
+                elif WHEN_IT_WAS_PUBLISHED in bot_phrases[-1] or published_year_request(annotated_user_phrase):
+                    if 'n_years_ago' in human_attr['book_skill']:
+                        n_years_ago = human_attr['book_skill']['n_years_ago']
+                        plain_bookname = human_attr['book_skill']['plain_book']
+                        bookname = human_attr['book_skill']['book']
+                        logger.debug('Bookname detected')
+                        if n_years_ago > 0:
+                            recency_phrase = f"{n_years_ago} years ago!"
+                        else:
+                            recency_phrase = 'Just recently!'
+                        # answering with default conf as we do not even check the user utterance at all
+                        logger.debug('Giving recency phrase')
+                        book_genre = genre_of_book(plain_bookname)
+                        reply = f"{recency_phrase} {DID_NOT_EXIST}"
+                        if book_genre:
+                            reply = f"{reply} {ASK_GENRE_OF_BOOK}"
+                            reply = reply.replace('BOOK', bookname)
+                            human_attr['book_skill']['genre'] = book_genre
+                        elif not human_attr['book_skill'].get('we_asked_genre', False):
+                            reply = f"{reply} {WHAT_IS_FAV_GENRE}"
+                            human_attr['book_skill']['we_asked_genre'] = True
+                        else:
+                            reply = exit_skill(reply, human_attr)
+                        confidence = self.default_conf
                     else:
-                        recency_phrase = 'Just recently!'
-                    # answering with default conf as we do not even check the user utterance at all
-                    logger.debug('Giving recency phrase')
-                    book_genre = genre_of_book(plain_bookname)
-                    reply = f"{recency_phrase} {DID_NOT_EXIST}"
-                    if book_genre:
-                        reply = f"{reply} {ASK_GENRE_OF_BOOK}"
-                        reply = reply.replace('BOOK', bookname)
-                        human_attr['book_skill']['genre'] = book_genre
-                    elif not human_attr['book_skill'].get('we_asked_genre', False):
-                        reply = f"{reply} {WHAT_IS_FAV_GENRE}"
-                        human_attr['book_skill']['we_asked_genre'] = True
-                    else:
-                        reply = exit_skill(reply, human_attr)
-                    confidence = self.default_conf
+                        reply, confidence = ASK_TO_REPEAT_BOOK, self.low_conf
                 elif bot_phrases[-1] in OPINION_REQUEST_ON_BOOK_PHRASES:
                     # if we previously asked about user's opinion on book
                     reply, confidence = self.reply_about_book(annotated_user_phrase, human_attr,

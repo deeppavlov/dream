@@ -557,9 +557,10 @@ def tell_about_genre_book(bookname, bookreads_data):
     reply = None
     logger.debug(f'Detected name {bookname} in last_bot_phrase')
     for genre in bookreads_data:
-        if bookreads_data[genre].get('title', '') == bookname:
-            logger.debug(f'Returning phrase for book of genre {genre}')
-            reply = bookreads_data[genre].get('description', '')
+        for book_ in bookreads_data[genre]:
+            if book_.get('title', '') == bookname:
+                logger.debug(f'Returning phrase for book of genre {genre}')
+                reply = book_.get('description', '')
             return reply
     return reply
 
@@ -583,6 +584,13 @@ def exit_skill(reply, human_attr, SKILLS_TO_LINK=SKILLS_TO_LINK):
     else:
         reply = f"{link}"
     return reply
+
+
+PUBLISHED_YEAR_TEMPLATE = re.compile(r'(it )? was (that book )?(written|published|out)', re.IGNORECASE)
+
+
+def published_year_request(annotated_user_phrase):
+    return re.search(PUBLISHED_YEAR_TEMPLATE, annotated_user_phrase['text'])
 
 
 HAVENT_READ_TEMPLATE = re.compile(r"(haven't|have not|didn't|did not) (read)?", re.IGNORECASE)
