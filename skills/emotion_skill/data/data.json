@@ -49,6 +49,14 @@
        "next_step":["offer_advice"],
        "link": ""
     },
+    "anger_2":
+    {
+      "answers": ["Could you tell me please why do you feel that way? I hope I will cheer you up talking with you.",
+                  "I am always ready to hear about your problems. What do you want to tell me about them?"
+                 ],
+       "next_step":["offer_advice"],
+       "link": ""
+    },
     "sad_and_lonely_end":
     {
       "answers": ["I am out of advices, my friend. However, I can try to entertain you by a talk.  What do you want to talk about?",
@@ -101,9 +109,9 @@
     },
     "anger":{
       "answers": [
-        "Please calm down. Frequent feelings of displeasure have been linked to higher risk of heart disease, high blood pressure, depression and difficulty sleeping. I can cheer you up talking to you. What do you wanna talk about?"
+        "Please calm down. Frequent feelings of displeasure have been linked to higher risk of heart disease, high blood pressure, depression and difficulty sleeping. "
       ],
-      "next_step":[""],
+      "next_step":["anger_2"],
       "link": ""
     }
   },
