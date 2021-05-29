@@ -532,7 +532,19 @@ def food_fact_response(vars):
     fact = ""
     entity = ""
     berry_name = ""
-    facts = annotations.get("cobotqa_annotator", {}).get("facts", [])
+
+    entities_facts = annotations.get("fact_retrieval", {}).get("topic_facts", [])
+    for entity_facts in entities_facts:
+        if entity_facts["entity_type"] in ["food", "fruit", "vegetable", "berry"]:
+            if entity_facts["facts"]:
+                facts = entity_facts["facts"][0].get("sentences", [])
+                entity = entity_facts["entity_substr"]
+            else:
+                facts = []
+
+    if not facts:
+        facts = annotations.get("cobotqa_annotator", {}).get("facts", [])
+
     if check_conceptnet(vars) and ("shower" not in human_utt_text):
         if "berry" in bot_utt_text:
             berry_names = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
@@ -544,11 +556,15 @@ def food_fact_response(vars):
                 fact = send_cobotqa(f"fact about {berry_name}")
                 entity = berry_name
             elif berry_name:
-                if facts:
+                if facts and entity:
+                    fact = facts[0]
+                elif facts:
                     fact = facts[0].get("fact", "")
                     entity = facts[0].get("entity", "")
         else:
-            if facts:
+            if facts and entity:
+                fact = facts[0]
+            elif facts:
                 fact = facts[0].get("fact", "")
                 entity = facts[0].get("entity", "")
         try:
