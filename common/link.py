@@ -79,6 +79,20 @@ skills_link_to_weights = {
     'coronavirus_skill': 0.25,
 }
 
+link_to_skill2key_words = {
+    "dff_movie_skill": ["movie"],
+    "book_skill": ["book"],
+    "game_cooperative_skill": ["game"],
+    # 'dff_gaming_skill': ["game"], TODO: add when will be merged
+    "dff_travel_skill": ["travel"],
+    "dff_animals_skill": ["animal"],
+    "dff_food_skill": ["food"],
+    "dff_sport_skill": ["sport"],
+    "dff_gossip_skill": ["gossips"],
+    "dff_science_skill": ["science"],
+    "dff_music_skill": ["music"],
+}
+
 link_to_skill2i_like_to_talk = {
     "dff_movie_skill": [
         "I felt so bored last days, so I've just finished to watch one more series. Do you watch any TV series now?",

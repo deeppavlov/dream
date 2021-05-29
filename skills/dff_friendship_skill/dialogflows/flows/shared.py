@@ -95,22 +95,8 @@ def link_to_by_enity_request(ngrams, vars):
 
 
 link_to_skill2key_words = {
-    "dff_movie_skill": ["movie"],
-    "book_skill": ["book"],
-    "game_cooperative_skill": ["game"],
-    # 'dff_gaming_skill': ["game"], TODO: add when will be merged
-    "dff_travel_skill": ["travel"],
-    "dff_animals_skill": ["animal"],
-    "dff_food_skill": ["food"],
-    "dff_sport_skill": ["sport"],
-    "dff_gossip_skill": ["gossips"],
-    "dff_science_skill": ["science"],
-    "dff_music_skill": ["music"],
-}
-
-link_to_skill2key_words = {
-    skill_name: link_to_skill2key_words[skill_name]
-    for skill_name in link_to_skill2key_words
+    skill_name: common_link.link_to_skill2key_words[skill_name]
+    for skill_name in common_link.link_to_skill2key_words
     if skill_name in common_link.SKILLS_FOR_LINKING
 }
 
