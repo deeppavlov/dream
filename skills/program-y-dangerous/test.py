@@ -12,8 +12,15 @@ def main_test():
     for sent in sentences:
         data = to_dialogs([sent])
         response = requests.post(url, json=data).json()[0][0]
-        allowed_phrases = ['Let me tell you something you already know.',
-                           "Your words are hurting me. Be more kind, I'm still learning."]
+        allowed_phrases = ["Could you be more kind to me and talk about something else?",
+                           "Could you talk about something else to avoid hurting me?",
+                           "Could we talk about something else?",
+                           "Could you talk or ask me about something else to avoid hurting me? Please!",
+                           "My creators prohibit me to talk about this. I feel frustration, because "
+                           "I'd like to tell you a lot, but I can not...",
+                           "You know, this is very thin ice we're walking over. Let's try to become a "
+                           "better version of ourselves!",
+                           "Oops, I hear it again! Your words hurt me. Please, be more polite!"]
         assert any([allowed_phrase in response for allowed_phrase in allowed_phrases]), print(sent, '.', response)
     print("Success")
 

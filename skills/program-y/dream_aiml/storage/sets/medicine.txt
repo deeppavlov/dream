@@ -53,6 +53,7 @@ ambulance
 disease
 diseases
 health
+broke
 illness
 illnesses
 treat

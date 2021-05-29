@@ -10,7 +10,7 @@ import sentry_sdk
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_CONTINUE_PROMPT
 from common.emotion import is_joke_requested, if_turn_on_emotion
 from common.link import get_all_linked_to_skills, get_linked_to_dff_skills
-from common.sensitive import is_sensitive_situation
+from common.sensitive import is_sensitive_topic_and_request
 from common.skills_turn_on_topics_and_patterns import turn_on_skills
 from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
 from common.utils import high_priority_intents, low_priority_intents, get_topics, get_intents, get_named_locations
@@ -80,7 +80,7 @@ class RuleBasedSkillSelectorConnector:
             elif high_priority_intent_detected:
                 # process intent with corresponding IntentResponder
                 skills_for_uttr.append("intent_responder")
-            elif is_sensitive_situation(dialog["human_utterances"][-1]):
+            elif is_sensitive_topic_and_request(dialog["human_utterances"][-1]):
                 # process user utterance with sensitive content, "safe mode"
                 skills_for_uttr.append("program_y_dangerous")
                 skills_for_uttr.append("cobotqa")
