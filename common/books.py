@@ -9,7 +9,8 @@ SWITCH_BOOK_SKILL_PHRASE = f"What is {BOOK_SKILL_CHECK_PHRASE} you've read?"
 ASK_TO_REPEAT_BOOK = 'Could you repeat please what book are we discussing?'
 
 QUESTIONS_ABOUT_BOOKS = ["What is your favorite book?",
-                         "Which book impressed you the most?",
+                         "What book do you like to read?",
+                         "What's a book you would recommend to your friend?",
                          "What is the longest book you have ever read?",
                          "What's a book you like to recommend to other people?",
                          "What is a book that was recommended to you?"]
