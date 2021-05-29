@@ -65,3 +65,13 @@ def get_subtopic_fact(annotations, entity_type, subtopic):
                     fact = entity_fact["sentences"][0]
                     return fact
     return fact
+
+
+def get_all_facts(annotations, entity_type):
+    facts = []
+    entities_facts = annotations.get("fact_retrieval", {}).get("topic_facts", [])
+    for entity_facts in entities_facts:
+        if entity_facts["entity_type"] == entity_type:
+            facts = entity_facts["facts"]
+            break
+    return facts

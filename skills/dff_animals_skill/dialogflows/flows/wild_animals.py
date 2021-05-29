@@ -12,8 +12,8 @@ from common.utils import is_no
 import dialogflows.scopes as scopes
 from dialogflows.flows.wild_animals_states import State as WAS
 from dialogflows.flows.animals_states import State as AnimalsState
-from common.animals import PETS_TEMPLATE, stop_about_animals
-from common.wiki_skill import if_linked_to_wiki_skill
+from common.animals import PETS_TEMPLATE, stop_about_animals, find_entity_by_types, WILD_ANIMALS_Q, ANIMALS_WIKI_Q
+from common.fact_retrieval import get_all_facts
 
 sentry_sdk.init(os.getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -26,6 +26,7 @@ p = inflect.engine()
 CONF_1 = 1.0
 CONF_2 = 0.99
 CONF_3 = 0.95
+CONF_4 = 0.0
 
 
 def plural_nouns(text):
@@ -60,138 +61,126 @@ def stop_animals_request(ngrams, vars):
     flag = False
     user_uttr = state_utils.get_last_human_utterance(vars)
     shared_memory = state_utils.get_shared_memory(vars)
-    stop_about_animals(user_uttr, shared_memory)
     if stop_about_animals(user_uttr, shared_memory):
         flag = True
     logger.info(f"stop_animals_request={flag}")
     return flag
 
 
-def ask_about_zoo_request(ngrams, vars):
+def animal_questions_request(ngrams, vars):
     flag = False
-    user_uttr = state_utils.get_last_human_utterance(vars)["text"]
-    bot_uttr = state_utils.get_last_bot_utterance(vars)["text"]
-    shared_memory = state_utils.get_shared_memory(vars)
-    user_why_phrases = ["cause", "they", "i like"]
-    if "why do you like" in bot_uttr.lower() and all([phrase not in user_uttr for phrase in user_why_phrases]):
-        flag = False
-    if not shared_memory.get("ask_about_zoo", False) and shared_memory.get("why_do_you_like", False):
-        flag = True
-    logger.info(f"sys_ask_about_zoo_request={flag}")
-    return flag
-
-
-def user_has_been_request(ngrams, vars):
-    flag = False
-    if not is_no(state_utils.get_last_human_utterance(vars)):
-        flag = True
-    logger.info(f"user_has_been_request={flag}")
-    return flag
-
-
-def user_has_not_been_request(ngrams, vars):
-    flag = False
-    if is_no(state_utils.get_last_human_utterance(vars)):
-        flag = True
-    logger.info(f"user_has_not_been_request={flag}")
-    return flag
-
-
-def why_do_you_like_request(ngrams, vars):
-    flag = False
-    text = state_utils.get_last_human_utterance(vars)["text"]
+    user_uttr = state_utils.get_last_human_utterance(vars)
     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-    conceptnet = annotations.get("conceptnet", {})
-    found_animal = ""
-    for elem, triplets in conceptnet.items():
-        if "SymbolOf" in triplets:
-            objects = triplets["SymbolOf"]
-            if "animal" in objects:
-                found_animal = elem
-    wp_output = annotations.get("wiki_parser", {})
-    if isinstance(wp_output, dict):
-        entities_info = wp_output.get("entities_info", {})
-        for entity, triplets in entities_info.items():
-            types = triplets.get("types", []) + triplets.get("instance of", []) + triplets.get("subclass of", []) + \
-                triplets.get("types_2hop", [])
-            type_ids = [elem for elem, label in types]
-            inters = set(type_ids).intersection({"Q55983715", "Q16521"})
-            if inters:
-                found_animal = entity
-                break
-    isno = is_no(state_utils.get_last_human_utterance(vars))
+    found_animal = find_entity_by_types(annotations, {"Q55983715", "Q16521"})
     shared_memory = state_utils.get_shared_memory(vars)
-    used_why = shared_memory.get("why_do_you_like", False)
-    found_pet = re.findall(PETS_TEMPLATE, text)
-    found_bird = re.findall(r"(\bbird\b|\bbirds\b)", text)
-    logger.info(f"why_do_you_like_request, found_animal {found_animal}")
-    if (found_animal or found_bird) and not found_pet and not used_why and not isno \
-            and not if_linked_to_wiki_skill(annotations, "dff_animals_skill"):
+    users_wild_animal = shared_memory.get("users_wild_animal", "")
+    found_pet = re.findall(PETS_TEMPLATE, user_uttr["text"])
+    found_bird = re.findall(r"(\bbird\b|\bbirds\b)", user_uttr["text"])
+    used_wild_q = shared_memory.get("used_wild_q", [])
+    all_facts_used = len(used_wild_q) == len(WILD_ANIMALS_Q)
+    if not found_pet and (found_bird or users_wild_animal or found_animal) and not all_facts_used:
         flag = True
-    if activate_after_wiki_skill(vars):
-        flag = True
-    logger.info(f"why_do_you_like_request={flag}")
+    logger.info(f"animal_questions_request, found_animal {found_animal} users_wild_animal {users_wild_animal}")
+    logger.info(f"animal_questions_request={flag}")
     return flag
 
 
-def ask_about_zoo_response(vars):
-    i_went_zoo = "Last weekend I went to the zoo with my family. We had a great day."
-    question_zoo = "When have you been to the zoo last time?"
-    response = " ".join([i_went_zoo, question_zoo])
-    state_utils.save_to_shared_memory(vars, ask_about_zoo=True)
-    state_utils.set_confidence(vars, confidence=CONF_3)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
-    logger.info(f"ask_about_zoo_response: {response}")
-    return response
-
-
-def ask_more_details_response(vars):
-    response = "What is your impression? What did you like most?"
-    state_utils.set_confidence(vars, confidence=CONF_2)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
-    logger.info(f"ask_more_details_response: {response}")
-    return response
-
-
-def suggest_visiting_response(vars):
-    response = "A day at the zoo also encourages a healthy lifestyle while bringing family and friends together. " + \
-               "It is the perfect day trip destination for any season!"
-    state_utils.set_confidence(vars, confidence=CONF_2)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
-    logger.info(f"suggest_visiting_response: {response}")
-    return response
-
-
-def why_do_you_like_response(vars):
+def animal_questions_response(vars):
+    user_uttr = state_utils.get_last_human_utterance(vars)
     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-    conceptnet = annotations.get("conceptnet", {})
-    found_animal = ""
-    for elem, triplets in conceptnet.items():
-        if "SymbolOf" in triplets:
-            objects = triplets["SymbolOf"]
-            if "animal" in objects:
-                found_animal = elem
-                found_animal = plural_nouns(found_animal)
-    wp_output = annotations.get("wiki_parser", {})
-    if isinstance(wp_output, dict):
-        entities_info = wp_output.get("entities_info", {})
-        for entity, triplets in entities_info.items():
-            types = triplets.get("types", []) + triplets.get("instance of", []) + triplets.get("subclass of", [])
-            type_ids = [elem for elem, label in types]
-            inters = set(type_ids).intersection({"Q55983715", "Q16521"})
-            if inters:
-                found_animal = entity
-                found_animal = plural_nouns(found_animal)
-                break
-    if found_animal:
-        response = f"Cool! Why do you like {found_animal}?"
-    else:
-        response = f"Cool! Why do you like them?"
+    shared_memory = state_utils.get_shared_memory(vars)
+    users_wild_animal = shared_memory.get("users_wild_animal", "")
+    animal_wp = find_entity_by_types(annotations, {"Q55983715", "Q16521"})
+    animal_wp = plural_nouns(animal_wp)
+    found_bird = re.findall(r"(\bbird\b|\bbirds\b)", user_uttr["text"])
+    if animal_wp:
+        facts = get_all_facts(annotations, "animal")
+        if facts:
+            state_utils.save_to_shared_memory(vars, wild_animal_facts=facts)
+
+    cur_animal = ""
+    if animal_wp:
+        cur_animal = animal_wp
+    elif users_wild_animal:
+        cur_animal = users_wild_animal
+    elif found_bird:
+        cur_animal = found_bird[0]
+    if cur_animal:
+        state_utils.save_to_shared_memory(vars, users_wild_animal=cur_animal)
+
+    response = ""
+    used_wild_q = shared_memory.get("used_wild_q", [])
+    for num, question_info in enumerate(WILD_ANIMALS_Q):
+        if num not in used_wild_q:
+            statement = question_info["statement"].format(cur_animal)
+            question = question_info["question"].format(cur_animal)
+            response = f"{statement} {question}".strip().replace("  ", " ")
+            used_wild_q.append(num)
+            state_utils.save_to_shared_memory(vars, used_wild_q=used_wild_q)
+            break
+
+    state_utils.save_to_shared_memory(vars, start=True)
     state_utils.save_to_shared_memory(vars, is_wild=True)
-    state_utils.save_to_shared_memory(vars, why_do_you_like=True)
-    state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
-    logger.info(f"why_do_you_like_response: {response}")
+    if response:
+        state_utils.set_confidence(vars, confidence=CONF_1)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+    else:
+        state_utils.set_confidence(vars, confidence=CONF_4)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
+    logger.info(f"animal_questions_response: {response}")
+    return response
+
+
+def animal_facts_request(ngrams, vars):
+    flag = False
+    shared_memory = state_utils.get_shared_memory(vars)
+    isno = is_no(state_utils.get_last_human_utterance(vars))
+    facts = shared_memory.get("wild_animal_facts", [])
+    used_wild_animal_facts = shared_memory.get("used_wild_animal_facts", [])
+    if facts and len(facts) > len(used_wild_animal_facts):
+        flag = True
+    if len(facts) == len(used_wild_animal_facts) + 1 and isno:
+        flag = False
+    logger.info(f"animal_facts_request={flag}")
+    return flag
+
+
+def animal_facts_response(vars):
+    shared_memory = state_utils.get_shared_memory(vars)
+    users_wild_animal = shared_memory.get("users_wild_animal", "")
+    facts = shared_memory.get("wild_animal_facts", [])
+    isno = is_no(state_utils.get_last_human_utterance(vars))
+    used_wild_animal_facts = shared_memory.get("used_wild_animal_facts", [])
+    found_fact = {}
+    found_num = -1
+    for num, fact in enumerate(facts):
+        if num not in used_wild_animal_facts:
+            found_num = num
+            found_fact = fact
+            used_wild_animal_facts.append(num)
+            state_utils.save_to_shared_memory(vars, used_wild_animal_facts=used_wild_animal_facts)
+            break
+    logger.info(f"animal_facts_response, found_num {found_num} used_wild_animals_facts {used_wild_animal_facts}")
+    response = ""
+    facts_str = " ".join(found_fact["sentences"][:2]).strip().replace("  ", " ")
+    if found_num == 0:
+        facts_str = f"I know a lot about {users_wild_animal}. {facts_str}".strip().replace("  ", " ")
+    if found_num != len(facts) - 1:
+        next_fact = facts[found_num + 1]
+        next_title = next_fact["title"]
+        question = ANIMALS_WIKI_Q.get(next_title, "").format(users_wild_animal)
+        if isno and found_num != 0:
+            facts_str = ""
+        response = f"{facts_str} {question}".strip().replace("  ", " ")
+    else:
+        response = facts_str
+
+    if response:
+        state_utils.set_confidence(vars, confidence=CONF_1)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+    else:
+        state_utils.set_confidence(vars, confidence=CONF_4)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
     return response
 
 
@@ -211,59 +200,39 @@ simplified_dialog_flow = dialogflow_extention.DFEasyFilling(WAS.USR_START)
 simplified_dialog_flow.add_user_serial_transitions(
     WAS.USR_START,
     {
-        WAS.SYS_WHY_DO_YOU_LIKE: why_do_you_like_request,
+        WAS.SYS_ERR: stop_animals_request,
+        WAS.SYS_ANIMAL_Q: animal_questions_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
 )
 
 simplified_dialog_flow.add_user_serial_transitions(
-    WAS.USR_WHY_DO_YOU_LIKE,
+    WAS.USR_ANIMAL_Q,
     {
-        WAS.SYS_ASK_ABOUT_ZOO: ask_about_zoo_request,
+        WAS.SYS_ERR: stop_animals_request,
+        WAS.SYS_ANIMAL_Q: animal_questions_request,
+        WAS.SYS_ANIMAL_F: animal_facts_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
 )
 
 simplified_dialog_flow.add_user_serial_transitions(
-    WAS.USR_ASK_ABOUT_ZOO,
+    WAS.USR_ANIMAL_F,
     {
-        WAS.SYS_USER_HAS_BEEN: user_has_been_request,
-        WAS.SYS_USER_HAS_NOT_BEEN: user_has_not_been_request,
+        WAS.SYS_ERR: stop_animals_request,
+        WAS.SYS_ANIMAL_F: animal_facts_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
 )
 
-simplified_dialog_flow.add_user_serial_transitions(
-    WAS.USR_ASK_MORE_DETAILS,
-    {
-        (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
-    },
-)
-
-simplified_dialog_flow.add_user_serial_transitions(
-    WAS.USR_SUGGEST_VISITING,
-    {
-        (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
-    },
-)
-
-simplified_dialog_flow.add_system_transition(WAS.SYS_WHY_DO_YOU_LIKE, WAS.USR_WHY_DO_YOU_LIKE,
-                                             why_do_you_like_response, )
-simplified_dialog_flow.add_system_transition(WAS.SYS_ASK_ABOUT_ZOO, WAS.USR_ASK_ABOUT_ZOO, ask_about_zoo_response, )
-simplified_dialog_flow.add_system_transition(WAS.SYS_USER_HAS_BEEN, WAS.USR_ASK_MORE_DETAILS,
-                                             ask_more_details_response, )
-simplified_dialog_flow.add_system_transition(WAS.SYS_USER_HAS_NOT_BEEN, WAS.USR_SUGGEST_VISITING,
-                                             suggest_visiting_response, )
+simplified_dialog_flow.add_system_transition(WAS.SYS_ANIMAL_Q, WAS.USR_ANIMAL_Q, animal_questions_response, )
+simplified_dialog_flow.add_system_transition(WAS.SYS_ANIMAL_F, WAS.USR_ANIMAL_F, animal_facts_response, )
 simplified_dialog_flow.add_system_transition(WAS.SYS_ERR, (scopes.MAIN, scopes.State.USR_ROOT), error_response, )
 
 simplified_dialog_flow.set_error_successor(WAS.USR_START, WAS.SYS_ERR)
-simplified_dialog_flow.set_error_successor(WAS.SYS_WHY_DO_YOU_LIKE, WAS.SYS_ERR)
-simplified_dialog_flow.set_error_successor(WAS.USR_WHY_DO_YOU_LIKE, WAS.SYS_ERR)
-simplified_dialog_flow.set_error_successor(WAS.SYS_ASK_ABOUT_ZOO, WAS.SYS_ERR)
-simplified_dialog_flow.set_error_successor(WAS.USR_ASK_ABOUT_ZOO, WAS.SYS_ERR)
-simplified_dialog_flow.set_error_successor(WAS.SYS_USER_HAS_BEEN, WAS.SYS_ERR)
-simplified_dialog_flow.set_error_successor(WAS.SYS_USER_HAS_NOT_BEEN, WAS.SYS_ERR)
-simplified_dialog_flow.set_error_successor(WAS.USR_ASK_MORE_DETAILS, WAS.SYS_ERR)
-simplified_dialog_flow.set_error_successor(WAS.USR_SUGGEST_VISITING, WAS.SYS_ERR)
+simplified_dialog_flow.set_error_successor(WAS.SYS_ANIMAL_Q, WAS.SYS_ERR)
+simplified_dialog_flow.set_error_successor(WAS.USR_ANIMAL_Q, WAS.SYS_ERR)
+simplified_dialog_flow.set_error_successor(WAS.SYS_ANIMAL_F, WAS.SYS_ERR)
+simplified_dialog_flow.set_error_successor(WAS.USR_ANIMAL_F, WAS.SYS_ERR)
 
 dialogflow = simplified_dialog_flow.get_dialogflow()

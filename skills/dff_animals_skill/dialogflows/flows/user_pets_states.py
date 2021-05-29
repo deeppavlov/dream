@@ -12,18 +12,10 @@ class State(Enum):
     USR_ASK_ABOUT_DOG_CAT = auto()
     USR_NOT_HAVE = auto()
     #
-    SYS_ASK_ABOUT_NAME = auto()
-    SYS_WHAT_BREED = auto()
-    SYS_PLAY_WITH_PET = auto()
-    SYS_LIKE_PET = auto()
-    SYS_ASK_MORE_INFO = auto()
+    SYS_ASK_ABOUT_PET = auto()
     SYS_ANOTHER_PET = auto()
     #
-    USR_ASK_ABOUT_NAME = auto()
-    USR_WHAT_BREED = auto()
-    USR_PLAY_WITH_PET = auto()
-    USR_LIKE_PET = auto()
-    USR_ASK_MORE_INFO = auto()
+    USR_ASK_ABOUT_PET = auto()
     USR_ANOTHER_PET = auto()
     #
     SYS_ERR = auto()

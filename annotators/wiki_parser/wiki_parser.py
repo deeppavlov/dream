@@ -49,6 +49,8 @@ wiki_filename = "/root/.deeppavlov/downloads/wikidata/wikidata_lite.hdt"
 document = HDTDocument(wiki_filename)
 USE_CACHE = True
 
+ANIMALS_SKILL_TYPES = {"Q55983715", "Q16521", "Q43577", "Q39367", "Q38547"}
+
 occ = {"business": [["Q131524", "enterpreneur"]],
        "sport": [["Q937857", "football player"],
                  ["Q2066131", "athlete"],
@@ -665,6 +667,7 @@ def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], u
             triplets_info = {}
             topic_skills_triplets_info = {}
             wiki_skill_triplets_info = {}
+            animals_skill_triplets_info = {}
             try:
                 for entity_info in query:
                     if entity_info:
@@ -696,6 +699,14 @@ def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], u
                                     found_wiki_skill_info = True
                             if found_topic_skills_info and found_wiki_skill_info:
                                 break
+                        for n, (entity, token_conf, conf) in \
+                                enumerate(zip(entity_ids, tokens_match_conf_list, confidences)):
+                            types = find_types(entity)
+                            types_2hop = find_types_2hop(entity)
+                            if set(types).intersection(ANIMALS_SKILL_TYPES) \
+                                    or set(types_2hop).intersection(ANIMALS_SKILL_TYPES):
+                                entity_triplets_info = find_top_triplets(entity, entity_substr, n, token_conf, conf)
+                                animals_skill_triplets_info = {**animals_skill_triplets_info, **entity_triplets_info}
             except Exception as e:
                 log.info("Wrong arguments are passed to wiki_parser")
                 sentry_sdk.capture_exception(e)
@@ -703,6 +714,7 @@ def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], u
             wiki_parser_output.append({"entities_info": triplets_info,
                                        "topic_skill_entities_info": topic_skills_triplets_info,
                                        "wiki_skill_entities_info": wiki_skill_triplets_info,
+                                       "animals_skill_entities_info": animals_skill_triplets_info,
                                        "utt_num": utt_num})
         elif parser_info == "find_top_people":
             top_people_list = []

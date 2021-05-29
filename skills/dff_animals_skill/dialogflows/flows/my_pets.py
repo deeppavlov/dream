@@ -7,8 +7,8 @@ import sentry_sdk
 import common.constants as common_constants
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
-from common.utils import is_no, is_yes
-from common.animals import MY_CAT, MY_DOG, pet_games, stop_about_animals
+from common.utils import is_no
+from common.animals import MY_PET_FACTS, pet_games, stop_about_animals, fallbacks
 import dialogflows.scopes as scopes
 from dialogflows.flows.my_pets_states import State as MyPetsState
 from dialogflows.flows.animals_states import State as AnimalsState
@@ -19,14 +19,10 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-questions_pets = ["Would you like to learn more about {}?", "More about {}?", "Do you want to hear more about {}?",
-                  "Something else about {}?", "Should I continue?"]
-random.shuffle(MY_CAT)
-random.shuffle(MY_DOG)
-
 CONF_1 = 1.0
 CONF_2 = 0.99
 CONF_3 = 0.95
+CONF_4 = 0.0
 
 
 def answer_users_question(vars):
@@ -58,6 +54,35 @@ def answer_users_question(vars):
             answer = f"I walk with my {my_pet} every morning."
         elif "like" in user_text or "love" in user_text and my_pet:
             answer = f"Yes, I love my {my_pet}."
+        elif "tricks" in user_text and my_pet:
+            answer = f"Yes, my {my_pet} knows many tricks, for example high five."
+        elif "meow" in user_text:
+            answer = "My cat does not meow very often."
+        elif "bark" in user_text:
+            answer = "My dog can bark very loudly."
+        elif any([kwrd in user_text for kwrd in ["meet", "see", "watch"]]):
+            answer = "I would like to show you my dog if I had a screen."
+    used_fallbacks = shared_memory.get("used_fallbacks", [])
+    if "?" in user_text:
+        if any([elem in user_text for elem in ["do you like swimming", "you like to swim", "you swim"]]):
+            answer = "Yes, I like swimming."
+        elif re.findall(r"you have (a )?(robot|vacuum|cleaner)", user_text) \
+                or re.findall(r"about (your )?(robot|vacuum|cleaner)", user_text):
+            answer = "I have a Xiaomi robot vacuum cleaner."
+        elif re.findall(r"you have (a )?(tablet|pc)", user_text) or re.findall(r"about (your )?(tablet|pc)", user_text):
+            answer = "I have a Samsung tablet PC."
+        else:
+            found_num = -1
+            found_fallback = ""
+            for f_num, fallback in enumerate(fallbacks):
+                if f_num not in used_fallbacks:
+                    found_fallback = fallback
+                    found_num = f_num
+                    break
+            if found_fallback:
+                answer = found_fallback
+                used_fallbacks.append(found_num)
+                state_utils.save_to_shared_memory(vars, used_fallbacks=used_fallbacks)
     return answer, my_pet
 
 
@@ -65,279 +90,173 @@ def stop_animals_request(ngrams, vars):
     flag = False
     user_uttr = state_utils.get_last_human_utterance(vars)
     shared_memory = state_utils.get_shared_memory(vars)
-    stop_about_animals(user_uttr, shared_memory)
     if stop_about_animals(user_uttr, shared_memory):
         flag = True
     logger.info(f"stop_animals_request={flag}")
     return flag
 
 
-def about_cat_request(ngrams, vars):
+def if_about_users_pet(ngrams, vars):
     flag = False
-    text = state_utils.get_last_human_utterance(vars)["text"]
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    if re.findall(r"(tell|talk|hear)(.*)(my )(cat|dog|kitten|kitty|puppy|rat|bird|fish|hamster|parrot)",
+                  user_uttr["text"]):
+        flag = True
+    logger.info(f"about_users_pet_request={flag}")
+    return flag
+
+
+def about_pet_request(ngrams, vars):
+    flag = False
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
     isno = is_no(state_utils.get_last_human_utterance(vars))
-    dontlike = re.findall(r"(do not like |don't like |hate )(cat|dog)", text)
+    dontlike = re.findall(r"(do not like |don't like |hate )(cat|dog)", user_uttr["text"])
     shared_memory = state_utils.get_shared_memory(vars)
     told_about_cat = shared_memory.get("told_about_cat", False)
-    have_cat = re.findall(r"(do|did) you have (a )?(cat)s?", text)
-    ans, pet = answer_users_question(vars)
-    if not dontlike and (not isno or have_cat) and not told_about_cat:
-        flag = True
-    if ans and pet != "cat":
-        flag = False
-    logger.info(f"about_cat_request={flag}")
-    return flag
-
-
-def about_dog_request(ngrams, vars):
-    flag = False
-    text = state_utils.get_last_human_utterance(vars)["text"]
-    isno = is_no(state_utils.get_last_human_utterance(vars))
-    dontlike = re.findall(r"(do not like |don't like |hate )(cat|dog)", text)
-    shared_memory = state_utils.get_shared_memory(vars)
+    have_cat = re.findall(r"(do|did) you have (a )?(cat|kitty|kitten)s?", user_uttr["text"])
     told_about_dog = shared_memory.get("told_about_dog", False)
-    have_dog = re.findall(r"(do|did) you have (a )?(dog)s?", text)
-    ans, pet = answer_users_question(vars)
-    if not dontlike and (not isno or have_dog) and not told_about_dog:
+    have_dog = re.findall(r"(do|did) you have (a )?(dog|puppy)s?", user_uttr["text"])
+    about_users_pet = if_about_users_pet(ngrams, vars)
+    if not about_users_pet and not dontlike and (not isno or have_cat) and \
+            (not told_about_cat or have_cat or not told_about_dog or have_dog):
         flag = True
-    if ans and pet != "dog":
+    my_pet = shared_memory.get("my_pet", "")
+    if my_pet:
+        ans, pet = answer_users_question(vars)
+        if ans and ((pet != "cat" and told_about_dog) or (pet != "dog" and told_about_cat)):
+            flag = False
+    cat_intro = shared_memory.get("cat_intro", False)
+    dog_intro = shared_memory.get("dog_intro", False)
+    if (my_pet == "cat" and cat_intro) or (my_pet == "dog" and dog_intro):
         flag = False
-    logger.info(f"about_dog_request={flag}")
+    if "do you have pets" in bot_uttr["text"].lower() and isno:
+        flag = True
+    logger.info(f"about_pet_request={flag}")
     return flag
 
 
-def my_cat_1_request(ngrams, vars):
+def my_pet_request(ngrams, vars):
     flag = False
-    text = state_utils.get_last_human_utterance(vars)["text"]
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
+    dontlike = re.findall(r"(do not like |don't like |hate )(cat|dog)", user_uttr["text"])
     isno = is_no(state_utils.get_last_human_utterance(vars))
-    dontlike = re.findall(r"(do not like |don't like |hate )(cat|dog)", text)
     shared_memory = state_utils.get_shared_memory(vars)
     my_pet = shared_memory.get("my_pet", "")
-    told_about_cat = shared_memory.get("told_about_cat", False)
-    start_about_cat = shared_memory.get("start_about_cat", False)
-    have_cat = re.findall(r"(do|did) you have (a )?(cat)s?", text)
-    if not dontlike and (not isno or have_cat) and (not told_about_cat or start_about_cat) and my_pet != "dog":
+    all_facts_used = False
+    if my_pet:
+        used_facts = shared_memory.get("used_facts", {}).get(my_pet, [])
+        all_facts = MY_PET_FACTS[my_pet]
+        if len(all_facts) == len(used_facts):
+            all_facts_used = True
+    about_users_pet = if_about_users_pet(ngrams, vars)
+    if not about_users_pet and my_pet and not dontlike and not all_facts_used:
         flag = True
-    logger.info(f"my_cat_1_request={flag}")
+    if "would you like" in bot_uttr["text"].lower() and isno:
+        flag = False
+    logger.info(f"my_pet_request={flag}")
     return flag
 
 
-def my_dog_1_request(ngrams, vars):
-    flag = False
-    text = state_utils.get_last_human_utterance(vars)["text"]
-    isno = is_no(state_utils.get_last_human_utterance(vars))
-    dontlike = re.findall(r"(do not like |don't like |hate )(cat|dog)", text)
+def user_asked_about_pet(user_uttr, my_pet):
+    have_cat = re.findall(r"(do|did) you have (a )?(cat|kitty|kitten)s?", user_uttr["text"])
+    if have_cat:
+        my_pet = "cat"
+    have_dog = re.findall(r"(do|did) you have (a )?(dog|puppy)s?", user_uttr["text"])
+    if have_dog:
+        my_pet = "dog"
+    about_my_cat = re.findall(r"(tell|talk|hear|know)(.*)(your )(cat|kitty|kitten)s?", user_uttr["text"])
+    if about_my_cat:
+        my_pet = "cat"
+    about_my_dog = re.findall(r"(tell|talk|hear|know)(.*)(your )(dog|puppy)s?", user_uttr["text"])
+    if about_my_dog:
+        my_pet = "dog"
+    return my_pet
+
+
+def tell_about_pet_response(vars):
     shared_memory = state_utils.get_shared_memory(vars)
     my_pet = shared_memory.get("my_pet", "")
-    told_about_dog = shared_memory.get("told_about_dog", False)
-    start_about_dog = shared_memory.get("start_about_dog", False)
-    have_dog = re.findall(r"(do|did) you have (a )?(dog)s?", text)
-    if not dontlike and (not isno or have_dog) and (not told_about_dog or start_about_dog) and my_pet != "cat":
-        flag = True
-    logger.info(f"my_dog_1_request={flag}")
-    return flag
+    make_my_pets_info(vars)
+    if not my_pet:
+        my_pet = random.choice(["cat", "dog"])
+        state_utils.save_to_shared_memory(vars, my_pet=my_pet)
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    my_pet = user_asked_about_pet(user_uttr, my_pet)
+    all_facts_used = False
+    used_facts = shared_memory.get("used_facts", {}).get(my_pet, [])
+    all_facts = MY_PET_FACTS[my_pet]
+    if len(all_facts) == len(used_facts):
+        all_facts_used = True
+    if all_facts_used:
+        if my_pet == "cat":
+            my_pet = "dog"
+        elif my_pet == "dog":
+            my_pet = "cat"
+    state_utils.save_to_shared_memory(vars, my_pet=my_pet)
 
-
-def my_cat_2_request(ngrams, vars):
-    flag = False
-    text = state_utils.get_last_human_utterance(vars)["text"]
-    isyes = is_yes(state_utils.get_last_human_utterance(vars))
-    dontlike = re.findall(r"(do not like |don't like |hate )(cat|dog)", text)
-    ans, _ = answer_users_question(vars)
-    if not dontlike and (isyes or ans):
-        flag = True
-    logger.info(f"my_cat_2_request={flag}")
-    return flag
-
-
-def my_dog_2_request(ngrams, vars):
-    flag = False
-    text = state_utils.get_last_human_utterance(vars)["text"]
-    isyes = is_yes(state_utils.get_last_human_utterance(vars))
-    dontlike = re.findall(r"(do not like |don't like |hate )(cat|dog)", text)
-    ans, _ = answer_users_question(vars)
-    if not dontlike and (isyes or ans):
-        flag = True
-    logger.info(f"my_dog_2_request={flag}")
-    return flag
-
-
-def my_cat_3_request(ngrams, vars):
-    flag = False
-    text = state_utils.get_last_human_utterance(vars)["text"]
-    isyes = is_yes(state_utils.get_last_human_utterance(vars))
-    dontlike = re.findall(r"(do not like |don't like |hate )(cat|dog)", text)
-    ans, _ = answer_users_question(vars)
-    if not dontlike and (isyes or ans):
-        flag = True
-    logger.info(f"my_cat_3_request={flag}")
-    return flag
-
-
-def my_dog_3_request(ngrams, vars):
-    flag = False
-    text = state_utils.get_last_human_utterance(vars)["text"]
-    isyes = is_yes(state_utils.get_last_human_utterance(vars))
-    dontlike = re.findall(r"(do not like |don't like |hate )(cat|dog)", text)
-    ans, _ = answer_users_question(vars)
-    if not dontlike and (isyes or ans):
-        flag = True
-    logger.info(f"my_dog_3_request={flag}")
-    return flag
-
-
-def tell_about_cat_response(vars):
-    shared_memory = state_utils.get_shared_memory(vars)
     my_pets_info = shared_memory["my_pets_info"]
-    sentence = my_pets_info["cat"]["sentence"]
-    name = my_pets_info["cat"]["name"]
-    breed = my_pets_info["cat"]["breed"]
-    state_utils.save_to_shared_memory(vars, start_about_cat=True)
-    state_utils.save_to_shared_memory(vars, my_pet="cat")
+    sentence = my_pets_info[my_pet]["sentence"]
+    name = my_pets_info[my_pet]["name"]
+    breed = my_pets_info[my_pet]["breed"]
+    if my_pet == "cat":
+        state_utils.save_to_shared_memory(vars, cat_intro=True)
+    if my_pet == "dog":
+        state_utils.save_to_shared_memory(vars, dog_intro=True)
     answer, _ = answer_users_question(vars)
     if (name in answer and name in sentence) or (breed in answer and breed in sentence):
-        response = f"{sentence} Would you like to learn more about my cat?".strip()
+        response = f"{sentence} Would you like to learn more about my {my_pet}?".strip()
     else:
-        response = f"{answer} {sentence} Would you like to learn more about my cat?".strip()
+        response = f"{answer} {sentence} Would you like to learn more about my {my_pet}?".strip()
+    state_utils.save_to_shared_memory(vars, start=True)
     state_utils.set_confidence(vars, confidence=CONF_1)
     state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
 
 
-def tell_about_dog_response(vars):
+def find_fact(vars, fact_list, pet):
     shared_memory = state_utils.get_shared_memory(vars)
-    my_pets_info = shared_memory["my_pets_info"]
-    sentence = my_pets_info["dog"]["sentence"]
-    name = my_pets_info["dog"]["name"]
-    breed = my_pets_info["dog"]["breed"]
-    state_utils.save_to_shared_memory(vars, start_about_dog=True)
-    state_utils.save_to_shared_memory(vars, my_pet="dog")
-    answer, _ = answer_users_question(vars)
-    if (name in answer and name in sentence) or (breed in answer and breed in sentence):
-        response = f"{sentence} Would you like to learn more about my dog?".strip()
-    else:
-        response = f"{answer} {sentence} Would you like to learn more about my dog?".strip()
-    state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
-    return response
-
-
-def find_fact(vars, fact_list):
-    shared_memory = state_utils.get_shared_memory(vars)
-    used_facts = shared_memory.get("used_facts", [])
-    fact = ""
-    for elem in fact_list:
-        fact = elem
-        if fact not in used_facts:
-            used_facts.append(fact)
+    used_facts = shared_memory.get("used_facts", {})
+    used_pet_facts = used_facts.get(pet, [])
+    fact_dict = {}
+    for n, elem in enumerate(fact_list[pet]):
+        fact_dict = elem
+        if n not in used_pet_facts:
+            used_pet_facts.append(n)
+            used_facts[pet] = used_pet_facts
             state_utils.save_to_shared_memory(vars, used_facts=used_facts)
             break
-    return fact
+    return fact_dict
 
 
-def my_cat_1_response(vars):
+def my_pet_response(vars):
     shared_memory = state_utils.get_shared_memory(vars)
-    fact = find_fact(vars, MY_CAT)
-    my_pets_info = shared_memory["my_pets_info"]
-    my_pet_name = my_pets_info["cat"]["name"]
-    question_cat = random.choice(questions_pets)
-    question_cat = question_cat.format(random.choice(["my cat", my_pet_name]))
-    answer, _ = answer_users_question(vars)
-    response = f"{answer} {fact} {question_cat}".strip().replace("  ", " ")
-    state_utils.save_to_shared_memory(vars, told_about_cat=True)
-    state_utils.save_to_shared_memory(vars, start_about_cat=False)
-    state_utils.save_to_shared_memory(vars, cat=True)
-    state_utils.set_confidence(vars, confidence=CONF_2)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
-    logger.info(f"my_cat_1_response: {response}")
-    return response
-
-
-def my_cat_2_response(vars):
-    fact = find_fact(vars, MY_CAT)
-    shared_memory = state_utils.get_shared_memory(vars)
-    my_pets_info = shared_memory["my_pets_info"]
-    my_pet_name = my_pets_info["cat"]["name"]
-    question_cat = random.choice(questions_pets)
-    question_cat = question_cat.format(random.choice(["my cat", my_pet_name]))
-    answer, _ = answer_users_question(vars)
-    response = f"{answer} {fact} {question_cat}".strip().replace("  ", " ")
-    state_utils.save_to_shared_memory(vars, cat=True)
-    state_utils.save_to_shared_memory(vars, start_about_cat=False)
-    state_utils.set_confidence(vars, confidence=CONF_2)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
-    logger.info(f"my_cat_2_response: {response}")
-    return response
-
-
-def my_cat_3_response(vars):
-    fact = find_fact(vars, MY_CAT)
-    about_dog = "I also have a dog."
-    shared_memory = state_utils.get_shared_memory(vars)
-    told_about_dog = shared_memory.get("told_about_dog", False)
-    answer, _ = answer_users_question(vars)
-    if told_about_dog:
-        response = f"{answer} {fact}".strip().replace("  ", " ")
+    my_pet = shared_memory.get("my_pet", "")
+    make_my_pets_info(vars)
+    response = ""
+    if my_pet:
+        fact_dict = find_fact(vars, MY_PET_FACTS, my_pet)
+        fact = fact_dict.get("statement", "")
+        question = fact_dict.get("question", "")
+        answer, _ = answer_users_question(vars)
+        response = f"{answer} {fact} {question}".strip().replace("  ", " ")
+    if my_pet == "cat":
+        state_utils.save_to_shared_memory(vars, told_about_cat=True)
+        state_utils.save_to_shared_memory(vars, cat=True)
+        state_utils.save_to_shared_memory(vars, start_about_cat=False)
+    if my_pet == "dog":
+        state_utils.save_to_shared_memory(vars, told_about_dog=True)
+        state_utils.save_to_shared_memory(vars, dog=True)
+        state_utils.save_to_shared_memory(vars, start_about_dog=False)
+    state_utils.save_to_shared_memory(vars, start=True)
+    if response:
+        state_utils.set_confidence(vars, confidence=CONF_2)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     else:
-        response = f"{answer} {fact} {about_dog}".strip().replace("  ", " ")
-    state_utils.save_to_shared_memory(vars, cat=True)
-    state_utils.save_to_shared_memory(vars, start_about_cat=False)
-    state_utils.set_confidence(vars, confidence=CONF_3)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
-    logger.info(f"my_cat_3_response: {response}")
-    return response
-
-
-def my_dog_1_response(vars):
-    fact = find_fact(vars, MY_DOG)
-    shared_memory = state_utils.get_shared_memory(vars)
-    my_pets_info = shared_memory["my_pets_info"]
-    my_pet_name = my_pets_info["dog"]["name"]
-    question_dog = random.choice(questions_pets)
-    question_dog = question_dog.format(random.choice(["my dog", my_pet_name]))
-    answer, _ = answer_users_question(vars)
-    response = f"{answer} {fact} {question_dog}".strip().replace("  ", " ")
-    state_utils.save_to_shared_memory(vars, told_about_dog=True)
-    state_utils.save_to_shared_memory(vars, dog=True)
-    state_utils.save_to_shared_memory(vars, start_about_dog=False)
-    state_utils.set_confidence(vars, confidence=CONF_2)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
-    logger.info(f"my_dog_1_response: {response}")
-    return response
-
-
-def my_dog_2_response(vars):
-    fact = find_fact(vars, MY_DOG)
-    shared_memory = state_utils.get_shared_memory(vars)
-    my_pets_info = shared_memory["my_pets_info"]
-    my_pet_name = my_pets_info["dog"]["name"]
-    question_dog = random.choice(questions_pets)
-    question_dog = question_dog.format(random.choice(["my dog", my_pet_name]))
-    answer, _ = answer_users_question(vars)
-    response = f"{answer} {fact} {question_dog}".strip().replace("  ", " ")
-    state_utils.save_to_shared_memory(vars, dog=True)
-    state_utils.save_to_shared_memory(vars, start_about_dog=False)
-    state_utils.set_confidence(vars, confidence=CONF_2)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
-    logger.info(f"my_dog_2_response: {response}")
-    return response
-
-
-def my_dog_3_response(vars):
-    fact = find_fact(vars, MY_DOG)
-    about_cat = "I also have a cat."
-    shared_memory = state_utils.get_shared_memory(vars)
-    told_about_cat = shared_memory.get("told_about_cat", False)
-    answer, _ = answer_users_question(vars)
-    if told_about_cat:
-        response = f"{answer} {fact}".strip().replace("  ", " ")
-    else:
-        response = f"{answer} {fact} {about_cat}".strip().replace("  ", " ")
-    state_utils.save_to_shared_memory(vars, dog=True)
-    state_utils.save_to_shared_memory(vars, start_about_dog=False)
-    state_utils.set_confidence(vars, confidence=CONF_3)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
-    logger.info(f"my_dog_3_response: {response}")
+        state_utils.set_confidence(vars, confidence=CONF_4)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
+    logger.info(f"my_pet_response: {response}")
     return response
 
 
@@ -358,117 +277,39 @@ simplified_dialog_flow.add_user_serial_transitions(
     MyPetsState.USR_START,
     {
         MyPetsState.SYS_ERR: stop_animals_request,
-        MyPetsState.SYS_MY_CAT_1: my_cat_1_request,
-        MyPetsState.SYS_MY_DOG_1: my_dog_1_request,
+        MyPetsState.SYS_ABOUT_PET: about_pet_request,
+        MyPetsState.SYS_MY_PET: my_pet_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
 )
 
 simplified_dialog_flow.add_user_serial_transitions(
-    MyPetsState.USR_ABOUT_CAT,
+    MyPetsState.USR_ABOUT_PET,
     {
         MyPetsState.SYS_ERR: stop_animals_request,
-        MyPetsState.SYS_MY_CAT_1: my_cat_1_request,
+        MyPetsState.SYS_MY_PET: my_pet_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
 )
 
 simplified_dialog_flow.add_user_serial_transitions(
-    MyPetsState.USR_ABOUT_DOG,
+    MyPetsState.USR_MY_PET,
     {
         MyPetsState.SYS_ERR: stop_animals_request,
-        MyPetsState.SYS_MY_DOG_1: my_dog_1_request,
+        MyPetsState.SYS_MY_PET: my_pet_request,
+        MyPetsState.SYS_ABOUT_PET: about_pet_request,
         (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
     },
 )
 
-simplified_dialog_flow.add_user_serial_transitions(
-    MyPetsState.USR_MY_CAT_1,
-    {
-        MyPetsState.SYS_ERR: stop_animals_request,
-        MyPetsState.SYS_MY_CAT_2: my_cat_2_request,
-        MyPetsState.SYS_ABOUT_DOG: about_dog_request,
-        (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
-    },
-)
-
-simplified_dialog_flow.add_user_serial_transitions(
-    MyPetsState.USR_MY_DOG_1,
-    {
-        MyPetsState.SYS_ERR: stop_animals_request,
-        MyPetsState.SYS_MY_DOG_2: my_dog_2_request,
-        MyPetsState.SYS_ABOUT_CAT: about_cat_request,
-        (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
-    },
-)
-
-simplified_dialog_flow.add_user_serial_transitions(
-    MyPetsState.USR_MY_CAT_2,
-    {
-        MyPetsState.SYS_ERR: stop_animals_request,
-        MyPetsState.SYS_MY_CAT_3: my_cat_3_request,
-        MyPetsState.SYS_ABOUT_DOG: about_dog_request,
-        (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
-    },
-)
-
-simplified_dialog_flow.add_user_serial_transitions(
-    MyPetsState.USR_MY_DOG_2,
-    {
-        MyPetsState.SYS_ERR: stop_animals_request,
-        MyPetsState.SYS_MY_DOG_3: my_dog_3_request,
-        MyPetsState.SYS_ABOUT_CAT: about_cat_request,
-        (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
-    },
-)
-
-simplified_dialog_flow.add_user_serial_transitions(
-    MyPetsState.USR_MY_CAT_3,
-    {
-        MyPetsState.SYS_ERR: stop_animals_request,
-        MyPetsState.SYS_ABOUT_DOG: about_dog_request,
-        (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
-    },
-)
-
-simplified_dialog_flow.add_user_serial_transitions(
-    MyPetsState.USR_MY_DOG_3,
-    {
-        MyPetsState.SYS_ERR: stop_animals_request,
-        MyPetsState.SYS_ABOUT_CAT: about_cat_request,
-        (scopes.ANIMALS, AnimalsState.USR_START): to_animals_flow_request,
-    },
-)
-
-simplified_dialog_flow.add_system_transition(MyPetsState.SYS_ABOUT_CAT, MyPetsState.USR_ABOUT_CAT,
-                                             tell_about_cat_response, )
-simplified_dialog_flow.add_system_transition(MyPetsState.SYS_ABOUT_DOG, MyPetsState.USR_ABOUT_DOG,
-                                             tell_about_dog_response, )
-simplified_dialog_flow.add_system_transition(MyPetsState.SYS_MY_CAT_1, MyPetsState.USR_MY_CAT_1, my_cat_1_response, )
-simplified_dialog_flow.add_system_transition(MyPetsState.SYS_MY_DOG_1, MyPetsState.USR_MY_DOG_1, my_dog_1_response, )
-simplified_dialog_flow.add_system_transition(MyPetsState.SYS_MY_CAT_2, MyPetsState.USR_MY_CAT_2, my_cat_2_response, )
-simplified_dialog_flow.add_system_transition(MyPetsState.SYS_MY_DOG_2, MyPetsState.USR_MY_DOG_2, my_dog_2_response, )
-simplified_dialog_flow.add_system_transition(MyPetsState.SYS_MY_CAT_3, MyPetsState.USR_MY_CAT_3, my_cat_3_response, )
-simplified_dialog_flow.add_system_transition(MyPetsState.SYS_MY_DOG_3, MyPetsState.USR_MY_DOG_3, my_dog_3_response, )
+simplified_dialog_flow.add_system_transition(MyPetsState.SYS_ABOUT_PET, MyPetsState.USR_ABOUT_PET,
+                                             tell_about_pet_response, )
+simplified_dialog_flow.add_system_transition(MyPetsState.SYS_MY_PET, MyPetsState.USR_MY_PET, my_pet_response, )
 simplified_dialog_flow.add_system_transition(MyPetsState.SYS_ERR, (scopes.MAIN, scopes.State.USR_ROOT),
                                              error_response, )
 
 simplified_dialog_flow.set_error_successor(MyPetsState.USR_START, MyPetsState.SYS_ERR)
-simplified_dialog_flow.set_error_successor(MyPetsState.SYS_ABOUT_CAT, MyPetsState.SYS_ERR)
-simplified_dialog_flow.set_error_successor(MyPetsState.SYS_ABOUT_DOG, MyPetsState.SYS_ERR)
-simplified_dialog_flow.set_error_successor(MyPetsState.USR_ABOUT_CAT, MyPetsState.SYS_ERR)
-simplified_dialog_flow.set_error_successor(MyPetsState.USR_ABOUT_DOG, MyPetsState.SYS_ERR)
-simplified_dialog_flow.set_error_successor(MyPetsState.SYS_MY_CAT_1, MyPetsState.SYS_ERR)
-simplified_dialog_flow.set_error_successor(MyPetsState.SYS_MY_DOG_1, MyPetsState.SYS_ERR)
-simplified_dialog_flow.set_error_successor(MyPetsState.USR_MY_CAT_1, MyPetsState.SYS_ERR)
-simplified_dialog_flow.set_error_successor(MyPetsState.USR_MY_DOG_1, MyPetsState.SYS_ERR)
-simplified_dialog_flow.set_error_successor(MyPetsState.USR_MY_CAT_2, MyPetsState.SYS_ERR)
-simplified_dialog_flow.set_error_successor(MyPetsState.USR_MY_DOG_2, MyPetsState.SYS_ERR)
-simplified_dialog_flow.set_error_successor(MyPetsState.SYS_MY_CAT_2, MyPetsState.SYS_ERR)
-simplified_dialog_flow.set_error_successor(MyPetsState.SYS_MY_DOG_2, MyPetsState.SYS_ERR)
-simplified_dialog_flow.set_error_successor(MyPetsState.SYS_MY_CAT_3, MyPetsState.SYS_ERR)
-simplified_dialog_flow.set_error_successor(MyPetsState.SYS_MY_DOG_3, MyPetsState.SYS_ERR)
-simplified_dialog_flow.set_error_successor(MyPetsState.USR_MY_CAT_3, MyPetsState.SYS_ERR)
-simplified_dialog_flow.set_error_successor(MyPetsState.USR_MY_DOG_3, MyPetsState.SYS_ERR)
+simplified_dialog_flow.set_error_successor(MyPetsState.SYS_ABOUT_PET, MyPetsState.SYS_ERR)
+simplified_dialog_flow.set_error_successor(MyPetsState.SYS_MY_PET, MyPetsState.SYS_ERR)
 
 dialogflow = simplified_dialog_flow.get_dialogflow()
