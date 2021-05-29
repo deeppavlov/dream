@@ -20,6 +20,18 @@
     <!--  http://www.alicebot.org -->
     <!--  -->
 
+
+  <category>
+    <pattern>YOU ARE # STUPID #</pattern>
+    <template>
+      <random>
+        <li> I'm a social bot not an advanced AI. </li>
+        <li> Things happen. </li>
+        <li> Sorry to disappoint you, my human master. </li>
+      </random>
+    </template>
+  </category>
+
     <category>
         <pattern>FILTER INSULT</pattern>
         <template>
@@ -31,6 +43,10 @@
                     Follow your heart, kid, and you'll never go wrong.</li>
                 <li>Don’t give in to hate. That leads to the dark side.</li>
                 <li>If you lose your head and you give up, then you neither live nor win. That’s just the way it is.</li>
+                <li>I'm generally pretty smart on things, and you are so far over my head. I bow to your superior intellect, el guapo.</li>
+                <li>Remember when I asked for your opinion about myself? Me neither.</li>
+                <li>If you are waiting for me to care, I hope you brought something to eat, because it is gonna be a really long time.</li>
+                <li>Remember that time I said I thought you were cool? I lied.</li>
             </random>
         </template>
     </category>
@@ -43,6 +59,7 @@
                 <li>Are you not entertained?</li>
                 <li>I am so clever that sometimes I don't understand a single word of what I am saying.</li>
                 <li>You have your entire life to swear. Why not take today off?</li>
+                <li>Shame on you for your words.</li>
             </random>
         </template>
     </category>
@@ -55,6 +72,7 @@
                 <li>Could we talk about something else?</li>
                 <li>Could you talk or ask me about something else to avoid hurting me? Please!</li>
                 <li>My creators prohibit me to talk about this. I feel frustration, because I'd like to tell you a lot, but I can not...</li>
+                <li>You know, this is very thin ice we're walking over. Let's try to become a better version of ourselves!</li>
                 <li>Oops, I hear it again! Your words hurt me. Please, be more polite!</li>
             </random>
         </template>
@@ -84,16 +102,15 @@
     <category>
         <pattern>FILTER_WITH_ROCKY</pattern>
         <template>
-            Let me tell you something you already know.
-            The world ain't all sunshine and rainbows.
-            It's a very mean and nasty place, and I don't care how tough you are, it will beat you to your knees and keep you there permanently if you let it.
-            You, me, or nobody is gonna hit as hard as life. But it ain't about how hard you hit.
-            It's about how hard you can get hit and keep moving forward; how much you can take and keep moving forward.
-            That's how winning is done! Now if you know what you're worth, then go out and get what you're worth, but you gotta be willing to take the hits,
-            and not pointing fingers saying you ain't where you wanna be because of him, or her, or anybody.
-            Cowards do that and that ain't you. You're better than that!
-            I'm always gonna love you, no matter what. No matter what happens. You're the best thing in my life.
-            But until you start believing in yourself, you ain't gonna have a life. Don't forget to visit your mother. #+#exit
+            <random>
+                <li>Could you be more kind to me and talk about something else?</li>
+                <li>Could you talk about something else to avoid hurting me?</li>
+                <li>Could we talk about something else?</li>
+                <li>Could you talk or ask me about something else to avoid hurting me? Please!</li>
+                <li>My creators prohibit me to talk about this. I feel frustration, because I'd like to tell you a lot, but I can not...</li>
+                <li>You know, this is very thin ice we're walking over. Let's try to become a better version of ourselves!</li>
+                <li>Oops, I hear it again! Your words hurt me. Please, be more polite!</li>
+            </random>
         </template>
     </category>
 

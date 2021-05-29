@@ -102,7 +102,15 @@
     <category>
         <pattern>FILTER_WITH_ROCKY</pattern>
         <template>
-            Your words are hurting me. Be more kind, I'm still learning.
+            <random>
+                <li>Could you be more kind to me and talk about something else?</li>
+                <li>Could you talk about something else to avoid hurting me?</li>
+                <li>Could we talk about something else?</li>
+                <li>Could you talk or ask me about something else to avoid hurting me? Please!</li>
+                <li>My creators prohibit me to talk about this. I feel frustration, because I'd like to tell you a lot, but I can not...</li>
+                <li>You know, this is very thin ice we're walking over. Let's try to become a better version of ourselves!</li>
+                <li>Oops, I hear it again! Your words hurt me. Please, be more polite!</li>
+            </random>
         </template>
     </category>
 

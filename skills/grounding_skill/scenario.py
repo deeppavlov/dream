@@ -9,7 +9,7 @@ from common.greeting import GREETING_QUESTIONS
 from common.link import skills_phrases_map
 from common.grounding import what_we_talk_about, are_we_recorded, detect_interrupt, detect_end_but, \
     BUT_PHRASE, REPEAT_PHRASE
-from common.sensitive import is_sensitive_situation
+from common.sensitive import is_sensitive_topic_and_request
 from common.universal_templates import is_any_question_sentence_in_utterance
 from common.utils import get_topics, get_intents, get_entities, get_toxic, is_no
 from utils import MIDAS_INTENT_ACKNOWLEDGMENTS, get_midas_intent_acknowledgement, reformulate_question_to_statement, \
@@ -215,7 +215,7 @@ def generate_universal_response(dialog):
             human_attr["grounding_skill"]["used_universal_intent_responses"] += [reply]
             confidence = UNIVERSAL_RESPONSE_LOW_CONFIDENCE
             attr = {"response_parts": ["body"], "type": "universal_response"}
-    if is_question and is_sensitive_situation(dialog["human_utterances"][-1]):
+    if is_question and is_sensitive_topic_and_request(dialog["human_utterances"][-1]):
         # if question in sensitive situation - answer with confidence 0.99
         confidence = ALMOST_SUPER_CONF
     if ackn:
