@@ -21,7 +21,7 @@ from common.travel import OPINION_REQUESTS_ABOUT_TRAVELLING, TRAVELLING_TEMPLATE
     WOULD_USER_LIKE_TO_VISIT_LOC_REQUESTS, ACKNOWLEDGE_USER_WILL_VISIT_LOC, QUESTIONS_ABOUT_LOCATION, \
     ACKNOWLEDGE_USER_DO_NOT_WANT_TO_VISIT_LOC, OFFER_FACT_RESPONSES, OPINION_REQUESTS, HAVE_YOU_BEEN_TEMPLATE, \
     ACKNOWLEDGE_USER_DISLIKE_LOC, OFFER_MORE_FACT_RESPONSES, HAVE_YOU_BEEN_IN_PHRASES, \
-    QUESTIONS_ABOUT_BOT_LOCATIONS, WHY_BOT_LIKES_TO_TRAVEL, I_HAVE_BEEN_IN_AND_LIKED_MOST
+    QUESTIONS_ABOUT_BOT_LOCATIONS, WHY_BOT_LIKES_TO_TRAVEL, I_HAVE_BEEN_IN_AND_LIKED_MOST, TRAVEL_LOCATION_QUESTION
 from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_intents, get_sentiment, get_not_used_template, get_named_locations, \
     get_all_not_used_templates
@@ -306,10 +306,23 @@ def user_mention_named_entity_loc_request(ngrams, vars):
     return False
 
 
+def user_was_asked_for_location(vars):
+    location_question = any([phrase in state_utils.get_last_bot_utterance(vars).get("text", "")
+                             for phrase in QUESTIONS_ABOUT_LOCATION])
+    if TRAVEL_LOCATION_QUESTION.search(state_utils.get_last_bot_utterance(vars).get("text", "")) or location_question:
+        return True
+    return False
+
+
+def user_was_asked_for_location_request(ngrams, vars):
+    if user_was_asked_for_location(vars):
+        return True
+    return False
+
+
 def user_not_mention_named_entity_loc_request(ngrams, vars):
     # SYS_LOC_NOT_DETECTED
-    asked_for_loc = any([question in state_utils.get_last_bot_utterance(vars).get("text", "")
-                         for question in QUESTIONS_ABOUT_LOCATION])
+    asked_for_loc = user_was_asked_for_location(vars)
     user_mentioned_locations = get_mentioned_locations(vars)
     weather_forecast = "weather_forecast_intent" in get_intents(state_utils.get_last_human_utterance(vars),
                                                                 which="intent_catcher")
@@ -784,9 +797,13 @@ def requested_but_not_found_loc_response(vars):
     try:
         shared_memory = state_utils.get_shared_memory(vars)
         discussed_locations = list(set(shared_memory.get("discussed_locations", [])))
-        confidence = choose_conf_decreasing_if_requests_in_human_uttr(vars, HIGH_CONFIDENCE, DEFAULT_CONFIDENCE)
-        state_utils.set_confidence(vars, confidence)
-        state_utils.set_can_continue(vars, CAN_CONTINUE_PROMPT)
+        if user_was_asked_for_location(vars) and condition_utils.no_requests(vars):
+            state_utils.set_confidence(vars, SUPER_CONFIDENCE)
+            state_utils.set_can_continue(vars, MUST_CONTINUE)
+        else:
+            confidence = choose_conf_decreasing_if_requests_in_human_uttr(vars, HIGH_CONFIDENCE, DEFAULT_CONFIDENCE)
+            state_utils.set_confidence(vars, confidence)
+            state_utils.set_can_continue(vars, CAN_CONTINUE_PROMPT)
         city_to_discuss = get_not_used_template(discussed_locations,
                                                 [city.lower() for city in QUESTIONS_ABOUT_BOT_LOCATIONS.keys()])
         state_utils.save_to_shared_memory(vars, discussed_location=city_to_discuss)
@@ -822,6 +839,7 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_LIKE_TRAVELLING: like_about_travelling_request,
         State.SYS_LETS_CHAT_ABOUT_TRAVELLING: lets_chat_about_travelling_request,
         State.SYS_DISLIKE_TRAVELLING: dislike_about_travelling_request,
+        State.SYS_LOC_NOT_DETECTED: user_was_asked_for_location_request,
         State.SYS_MENTIONED_TRAVELLING: mentioned_travelling_request,
     },
 )
