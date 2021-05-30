@@ -63,8 +63,11 @@ USER_DISLIKED_BOOK_PHRASE = "It's OK. Maybe some other books will fit you better
 OPINION_REQUEST_ON_BOOK_PHRASES = ["Did you enjoy this book?",
                                    "Did you find this book interesting?",
                                    "Was this book exciting for you?"]
+BOOK_ACKNOWLEDGEMENT_PHRASE = 'Never heard about it. Is it a book, an author or a genre?'
+WILL_CHECK = 'OK, I will check it out later.'
 DONT_KNOW_EITHER = "I don't know either. Let's talk about something else."
-
+QUESTIONS_ABOUT_BOOK = [BOOK_ANY_PHRASE, LAST_BOOK_READ,
+                        WHAT_BOOK_IMPRESSED_MOST, BOOK_ACKNOWLEDGEMENT_PHRASE] + BOOK_SKILL_CHECK_PHRASES
 CURRENT_YEAR = datetime.datetime.today().year
 
 
@@ -137,13 +140,30 @@ class BookSkillScenario:
         return reply, confidence
 
     def get_author_book_genre_movie_reply(self, annotated_user_phrase,
-                                          annotated_prev_phrase, human_attr):
+                                          annotated_prev_phrase, bot_phrases, human_attr):
         logger.debug('Getting whether phrase contains name of author, book or genre')
         plain_author_name, _ = get_name(annotated_user_phrase, 'author', return_plain=True)
         plain_bookname, n_years_ago = get_name(annotated_user_phrase, 'book', bookyear=True, return_plain=True)
         movie_name, _ = get_name(annotated_user_phrase, mode='movie')
         genre_name = get_genre(annotated_user_phrase['text'], return_name=True)
-        if is_wikidata_entity(plain_author_name):
+        nothing_found = not genre_name and not movie_name and not n_years_ago and not is_wikidata_entity(
+            plain_author_name)
+        we_asked_about_book = any([phrase in bot_phrases[-1]
+                                   for phrase in QUESTIONS_ABOUT_BOOK])
+        if we_asked_about_book and nothing_found:
+            if BOOK_ACKNOWLEDGEMENT_PHRASE != bot_phrases[-1]:
+                reply, confidence = BOOK_ACKNOWLEDGEMENT_PHRASE, self.default_conf
+                was_book_acknowledgement = any([BOOK_ACKNOWLEDGEMENT_PHRASE in j
+                                                for j in human_attr['book_skill']['used_phrases']])
+                if was_book_acknowledgement:
+                    confidence = 0.5 * confidence
+            elif all([WHAT_BOOK_IMPRESSED_MOST not in j for j in human_attr['book_skill']['used_phrases']]):
+                reply, confidence = f'{WILL_CHECK} By the way, {WHAT_BOOK_IMPRESSED_MOST}', self.default_conf
+            elif not human_attr['book_skill'].get('we_asked_genre', False):
+                reply, confidence = f'{WILL_CHECK} By the way, {WHAT_IS_FAV_GENRE}', self.default_conf
+            else:
+                reply, confidence = '', 0
+        elif is_wikidata_entity(plain_author_name):
             author_name = entity_to_label(plain_author_name)
             logger.debug('Authorname found')
             plain_book, _ = parse_author_best_book(annotated_user_phrase)
@@ -279,6 +299,7 @@ class BookSkillScenario:
                 elif my_favorite(annotated_user_phrase) == 'genre':
                     reply, confidence, human_attr = self.get_author_book_genre_movie_reply(annotated_user_phrase,
                                                                                            annotated_prev_phrase,
+                                                                                           bot_phrases,
                                                                                            human_attr)
                 elif my_favorite(annotated_user_phrase) == 'book':
                     reply, confidence = f'So {WHAT_BOOK_IMPRESSED_MOST}', self.default_conf
@@ -327,9 +348,10 @@ class BookSkillScenario:
                     else:
                         logger.debug('No answer detected. Return nothing.')
                         reply, confidence = self.default_reply, 0
-                elif any([phrase in bot_phrases[-1] for phrase in questions_about_book]):
+                elif any([phrase in bot_phrases[-1] for phrase in QUESTIONS_ABOUT_BOOK]):
                     reply, confidence, human_attr = self.get_author_book_genre_movie_reply(annotated_user_phrase,
                                                                                            annotated_prev_phrase,
+                                                                                           bot_phrases,
                                                                                            human_attr)
                 elif WHEN_IT_WAS_PUBLISHED in bot_phrases[-1] or published_year_request(annotated_user_phrase):
                     if 'n_years_ago' in human_attr['book_skill']:
@@ -383,6 +405,7 @@ class BookSkillScenario:
                     else:
                         reply, confidence, human_attr = self.get_author_book_genre_movie_reply(annotated_user_phrase,
                                                                                                annotated_prev_phrase,
+                                                                                               bot_phrases,
                                                                                                human_attr)
                 elif any([k in bot_phrases[-1] for k in [ASK_ABOUT_OFFERED_BOOK,
                                                          OFFER_FACT_ABOUT_BOOK, ASK_ABOUT_GENRE_BOOK]]):
@@ -485,6 +508,7 @@ class BookSkillScenario:
                     if reply == "":
                         reply, confidence, human_attr = self.get_author_book_genre_movie_reply(annotated_user_phrase,
                                                                                                annotated_prev_phrase,
+                                                                                               bot_phrases,
                                                                                                human_attr)
                 else:
                     logger.debug('Final branch')
