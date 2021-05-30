@@ -17,7 +17,7 @@ MOVIE_COMPILED_PATTERN = re.compile(
     r"comedy|comedies|thriller|animation|anime|talk[ -]?show|cartoon|drama|"
     r"fantasy|watch\b|watching\b|watched\b|youtube|\byou tube\b)", re.IGNORECASE)
 RECOMMEND_REQUEST_PATTERN = re.compile(
-    r"(recommend|advice) me[a-z0-9 ]+"
+    r"(recommend|advice|suggest)( me)?[a-z0-9 ]+"
     r"(movie|series|\bshow\b|\btv\b|\bcomed|\bthriller|animation|cartoon|drama|\bfantas|\bwatch)",
     re.IGNORECASE)
 RECOMMEND_OFFER_PATTERN = re.compile(
@@ -30,7 +30,9 @@ RECOMMEND_OFFER_RESPONSE = [
     "Can I recommend you a MOVIE?",
 ]
 RECOMMENDATION_PHRASES = [
-    "You should definitely watch MOVIE released in YEAR. It has RATING rating with NUM_VOTES votes. Have you seen it?",
+    "I encourage you to watch MOVIE released in YEAR. It has RATING rating for NUM_VOTES votes. Have you seen it?",
+    "I urge you to go and watch MOVIE released in YEAR. It has RATING rating for NUM_VOTES votes. Have you seen it?",
+    "I highly commend you to watch MOVIE released in YEAR, with RATING rating for NUM_VOTES votes. Have you seen it?",
 ]
 REPEAT_RECOMMENDATION_PHRASES = [
     "Okay. Then don't forget: MOVIE released in YEAR."

@@ -95,7 +95,7 @@ link_to_skill2key_words = {
 
 link_to_skill2i_like_to_talk = {
     "dff_movie_skill": [
-        "I felt so bored last days, so I've just finished to watch one more series. Do you watch any TV series now?",
+        "I felt so bored last days, so I've just finished to watch one more series. What TV series you watch?",
         "I feel so sleepy because I watched movies all night. What did you watch recently?"
     ],
     "book_skill": [

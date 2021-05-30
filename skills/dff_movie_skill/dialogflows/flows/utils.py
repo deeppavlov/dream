@@ -81,7 +81,7 @@ def list_unique_values(dictionary):
 
 
 MOVIE_WORDS = r"(movie|film|picture|series|tv[ -]?show|reality[ -]?show|netflix|\btv\b|" \
-              r"comedy|comedies|thriller|animation|anime|talk[ -]?show|cartoon)"
+              r"comedy|comedies|thriller|animation|anime|talk[ -]?show|cartoon|watch)"
 MOVIE_PATTERN = re.compile(MOVIE_WORDS, re.IGNORECASE)
 YEAR_TEMPLATE = re.compile(r"([0-9][0-9][0-9][0-9])", re.IGNORECASE)
 NOT_LIKE_NOT_WATCH_MOVIES_TEMPLATE = re.compile(
@@ -92,7 +92,7 @@ NOT_LIKE_NOT_WATCH_MOVIES_TEMPLATE = re.compile(
 NOT_WATCHED_TEMPLATE = re.compile(r"(n't|not) (watch|watching|watched|seen)( it| this| them| these|$|\.)",
                                   re.IGNORECASE)
 
-MOVIE_TITLE_QUESTION = re.compile(r"(what|which)[a-zA-Z\- ']+" + MOVIE_WORDS + r"[a-zA-Z\- ']*\?",
+MOVIE_TITLE_QUESTION = re.compile(r"(what|which|do you)[a-zA-Z\- ']+" + MOVIE_WORDS + r"[a-zA-Z\- ']*\?",
                                   re.IGNORECASE)
 
 EXTRA_SPACE_TEMPLATE = re.compile(r"\s\s+")

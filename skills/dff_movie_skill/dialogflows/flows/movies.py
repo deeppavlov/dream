@@ -67,6 +67,7 @@ class State(Enum):
     USR_WAS_OFFERED_RECOMMENDATIONS = auto()
     USR_ASKED_HAVE_SEEN_MOVIE = auto()
     SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED = auto()
+    SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_AND_REFUSED = auto()
     SYS_SHARE_INTERESTING_MOMENT = auto()
     USR_SHARE_INTERESTING_MOMENT = auto()
 
@@ -198,6 +199,13 @@ def user_was_asked_about_movie_title(vars):
 def user_was_asked_about_movie_title_request(ngrams, vars):
 
     if user_was_asked_about_movie_title(vars):
+        return True
+    return False
+
+
+def user_refused_movie_title_question_request(ngrams, vars):
+
+    if user_was_asked_about_movie_title(vars) and condition_utils.is_no_vars(vars):
         return True
     return False
 
@@ -755,7 +763,7 @@ def generate_fact_from_cobotqa_response(vars):
         movie_id = state_utils.get_shared_memory(vars).get("current_movie_id", "")
         movie_title = state_utils.get_shared_memory(vars).get("current_movie_title", "")
         movie_type = templates.imdb.get_movie_type(movie_id)
-        request_about = random.choice(["awards of", "fact about"])
+        request_about = "fact about"
 
         used_facts = state_utils.get_shared_memory(vars).get("used_facts", [])
 
@@ -1137,18 +1145,24 @@ def bot_offers_movie_recommendation_response(vars):
         state_utils.save_to_shared_memory(
             vars, used_offer_recommendation_phrases=used_offer_recommendation_phrases + [recom_offer])
         state_utils.save_to_shared_memory(vars, current_status="offer_movie_recommendation")
-        if user_was_asked_about_movie_title(vars):
+        if user_was_asked_about_movie_title(vars) and condition_utils.no_special_switch_off_requests(vars) and \
+                len(used_offer_recommendation_phrases) == 0:
             # user was asked some movie title question and the answer does not contain movie title.
+            response = "Haven't heard about it."
             state_utils.set_confidence(vars, SUPER_CONFIDENCE)
             state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         else:
+            response = ""
             state_utils.set_confidence(vars, HIGH_CONFIDENCE)
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
 
         if which_genre == "mentioned":
-            return recom_offer.replace("MOVIE", genre_movies)
+            return f"{response} {recom_offer.replace('MOVIE', genre_movies)}".strip()
+        elif len(used_offer_recommendation_phrases) > 0:
+            # we have already offered recommendations
+            return f"{response} {recom_offer.replace('a MOVIE', 'one more movie')}".strip()
         else:
-            return recom_offer.replace("MOVIE", "movie")
+            return f"{response} {recom_offer.replace('MOVIE', 'movie')}".strip()
 
     except Exception as exc:
         logger.exception(exc)
@@ -1234,9 +1248,12 @@ def bot_asks_to_continue_movie_talk_response(vars):
                                          WOULD_YOU_LIKE_TO_CONTINUE_TALK_ABOUT_MOVIES)
         state_utils.save_to_shared_memory(
             vars, used_continue_movie_talk_phrases=used_continue_movie_talk_phrases + [response])
-
-        state_utils.set_confidence(vars, HIGH_CONFIDENCE)
-        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
+        if user_was_asked_about_movie_title(vars) and condition_utils.no_special_switch_off_requests(vars):
+            state_utils.set_confidence(vars, SUPER_CONFIDENCE)
+            state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+        else:
+            state_utils.set_confidence(vars, HIGH_CONFIDENCE)
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
 
         return response
 
@@ -1290,6 +1307,7 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_USER_REQUESTS_MOVIE_RECOMMENDATION: recommendations_request,
         State.SYS_LETS_CHAT_ABOUT_MOVIES: lets_chat_about_movies_request,
         State.SYS_FAQ: faq_request,
+        State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_AND_REFUSED: user_refused_movie_title_question_request,
         State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED: user_was_asked_about_movie_title_request,
         State.SYS_MENTIONED_MOVIES: mentioned_movies_request,
     },
@@ -1309,6 +1327,13 @@ simplified_dialogflow.add_system_transition(State.SYS_FAQ,
 simplified_dialogflow.add_system_transition(State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED,
                                             State.USR_WAS_OFFERED_RECOMMENDATIONS,
                                             bot_offers_movie_recommendation_response)
+
+##################################################################################################################
+#  SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_AND_REFUSED
+
+simplified_dialogflow.add_system_transition(State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_AND_REFUSED,
+                                            State.USR_WAS_OFFERED_TO_CONTINUE_MOVIE_TALK,
+                                            bot_asks_to_continue_movie_talk_response)
 
 ##################################################################################################################
 #  SYS_NOT_LIKE_MOVIES
@@ -1426,6 +1451,7 @@ simplified_dialogflow.add_user_serial_transitions(
     {
         State.SYS_EXTRACTED_MOVIE_TITLE: popular_movie_title_extracted_request,
         State.SYS_CLARIFY_MOVIE_TITLE: to_be_clarified_movie_title_extracted_request,
+        State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_AND_REFUSED: user_refused_movie_title_question_request,
         State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED: no_requests_request
     },
 )
