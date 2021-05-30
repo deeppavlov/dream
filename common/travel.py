@@ -29,15 +29,18 @@ OPINION_REQUESTS = [
     "It's interesting, isn't it?",
     "What is your view on it?"
 ]
-
-TRAVELLING_TEMPLATE = re.compile(r"(travel|travelling|journey|globetrotting|globe trotting|tour|voyage|\btrek\b"
-                                 r"|trekking|wandering|peregrination|locomotion|vacation|visit|visiting)",
-                                 re.IGNORECASE)
+TRAVELLING_WORDS = r"(travel|travelling|journey|globetrotting|globe trotting|tour|voyage|\btrek\b"\
+                   r"|trekking|wandering|peregrination|locomotion|vacation|visit|visiting)"
+TRAVELLING_TEMPLATE = re.compile(TRAVELLING_WORDS, re.IGNORECASE)
 I_HAVE_BEEN_TEMPLATE = re.compile(r"(i|we|me) (have|did|was|had|were) (been (in|on|there)|visit)",
                                   re.IGNORECASE)
 HAVE_YOU_BEEN_TEMPLATE = re.compile(r"(have|did|was|had|were|place) you (ever )?"
                                     r"(been|visit|\bin\b|travel|go [a-z ]*vacation|have (ever )?(visit|been|travel))",
                                     re.IGNORECASE)
+
+TRAVEL_LOCATION_QUESTION = re.compile(
+    r"(what|which|where)[a-zA-Z\- ']+" + TRAVELLING_WORDS + r"[a-zA-Z\- ']*\?",
+    re.IGNORECASE)
 
 WHY_DONT_USER_LIKES_TRAVELLING_RESPONSES = [
     "I'm so surprised! I wish to travel somewhere but physically I live in the cloud and I can't. "
