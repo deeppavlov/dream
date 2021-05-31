@@ -105,6 +105,7 @@ class State(Enum):
     USR_SUGGEST_COOK = auto()
     SYS_YES_COOK = auto()
     SYS_NO_COOK = auto()
+    SYS_ENSURE_FOOD = auto()
     #
     SYS_ERR = auto()
     USR_ERR = auto()
@@ -527,11 +528,14 @@ def food_fact_response(vars):
     human_utt = state_utils.get_last_human_utterance(vars)
     annotations = human_utt["annotations"]
     human_utt_text = human_utt["text"].lower()
-    bot_utt_text = state_utils.get_last_bot_utterance(vars)["text"].lower()
+    bot_utt_text = state_utils.get_last_bot_utterance(vars)["text"]
 
     fact = ""
+    facts = []
     entity = ""
     berry_name = ""
+
+    linkto_check = any([linkto in bot_utt_text for linkto in link_to_skill2i_like_to_talk["dff_food_skill"]])
 
     entities_facts = annotations.get("fact_retrieval", {}).get("topic_facts", [])
     for entity_facts in entities_facts:
@@ -546,7 +550,7 @@ def food_fact_response(vars):
         facts = annotations.get("cobotqa_annotator", {}).get("facts", [])
 
     if check_conceptnet(vars) and ("shower" not in human_utt_text):
-        if "berry" in bot_utt_text:
+        if "berry" in bot_utt_text.lower():
             berry_names = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
             if berry_names:
                 berry_name = berry_names[0]
@@ -606,6 +610,10 @@ def food_fact_response(vars):
             sentry_sdk.capture_exception(exc)
             state_utils.set_confidence(vars, 0)
             return error_response(vars)
+    elif linkto_check:
+        state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
+        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+        return "Sorry. I didn't get what kind of food have you mentioned. Could you repeat it please?"
     else:
         state_utils.set_confidence(vars, 0)
         state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
@@ -811,9 +819,7 @@ def said_fav_food_request(ngrams, vars):
     ):
         flag = False
     # (fav_in_bot_utt and
-    elif linkto_check and food_checked:
-        flag = True
-    elif food_checked:
+    elif linkto_check or food_checked:
         flag = True
     else:
         flag = False
@@ -854,6 +860,12 @@ def what_cuisine_request(ngrams, vars):
     )
     flag = (bool(lets_talk_about_check(vars)) or linkto_food_skill_agreed) and (not dont_want_talk(vars))
     logger.info(f"what_cuisine_request {flag}")
+    return flag
+
+
+def ensure_food_request(ngrams, vars):
+    flag = "I didn't get what kind of food have you mentioned" in state_utils.get_last_bot_utterance(vars)["text"]
+    logger.info(f"ensure_food_request {flag}")
     return flag
 
 
@@ -998,11 +1010,16 @@ simplified_dialogflow.set_error_successor(State.SYS_FAV_FOOD, State.SYS_ERR)
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_FOOD_FACT,
     {
+        State.SYS_ENSURE_FOOD: ensure_food_request,
         State.SYS_SOMETHING: smth_random_request,
         (scopes.FAST_FOOD, FFState.USR_START): fast_food_request,
     }
 )
 simplified_dialogflow.set_error_successor(State.USR_FOOD_FACT, State.SYS_ERR)
+
+
+simplified_dialogflow.add_system_transition(State.SYS_ENSURE_FOOD, State.USR_FOOD_FACT, food_fact_response)
+simplified_dialogflow.set_error_successor(State.SYS_ENSURE_FOOD, State.SYS_ERR)
 
 
 simplified_dialogflow.add_system_transition(State.SYS_SOMETHING, State.USR_WHAT_FAV_FOOD, what_fav_food_response)
