@@ -292,7 +292,7 @@ class BookSkillScenario:
                         reply, confidence = START_PHRASE, self.super_conf
                 elif should_stop:
                     reply, confidence = '', 0
-                elif dontknow_books(annotated_user_phrase):
+                elif dontknow_books(annotated_user_phrase) and BOOK_ANY_PHRASE not in bot_phrases and book_just_active:
                     reply, confidence = BOOK_ANY_PHRASE, self.default_conf
                 elif ASK_WHY in bot_phrases[-1]:
                     reply, confidence = f"{IF_LOVE_READING} {LAST_BOOK_READ}", self.default_conf
