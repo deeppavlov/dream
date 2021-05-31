@@ -292,21 +292,24 @@ def tell_my_info(dialog, which_info="name"):
 
     curr_user_uttr = dialog["utterances"][-1]["text"].lower()
 
-    tell_my_templates = {"name": re.search(r"((what is|what's|whats|tell me|you know|you remember|memorize|say) "
-                                           r"my name|"
-                                           r"how( [a-zA-z ]+)?call me)",
-                                           curr_user_uttr),
-                         "location": re.search(r"((what is|what's|whats|tell me|you know|you remember|memorize|say) "
-                                               r"my (location|country|city|town)|"
-                                               r"where (am i|i am)(\snow)?|"
-                                               r"where( do)?i live|where( am)?i( am)? living)|"
-                                               r"(what|which) (country|city|town)( do)? (i|am i|i am)",
-                                               curr_user_uttr),
-                         "homeland": re.search(r"((what is|what's|whats|tell me|you know|you remember|memorize|say) "
-                                               r"my (home\s?land|mother\s?land|home\s?town|native\s?land"
-                                               r"|birth\s?place)|"
-                                               r"where (am i|i am) from)",
-                                               curr_user_uttr)}
+    tell_my_templates = {
+        "name": re.search(
+            r"(what is|what's|whats|tell me|you know|you remember|memorize|say) my name|how( [a-zA-Z ]+)?call me|"
+            r"my name is what",
+            curr_user_uttr
+        ),
+        "location": re.search(
+            r"((what is|what's|whats|tell me|you know|you remember|memorize|say) my (location|country|city|town)|"
+            r"where (am i|i am)(\snow)?|where( do)?i live|where( am)?i( am)? living)|(what|which) "
+            r"(country|city|town)( do)? (i|am i|i am)",
+            curr_user_uttr
+        ),
+        "homeland": re.search(
+            r"((what is|what's|whats|tell me|you know|you remember|memorize|say) "
+            r"my (home\s?land|mother\s?land|home\s?town|native\s?land|birth\s?place)|where (am i|i am) from)",
+            curr_user_uttr
+        ),
+    }
 
     responses = {"name": f"Sorry, we are still not familiar. What is your name?",
                  "location": f"Sorry, I don't have this information. But you can tell me. What is your location?",
