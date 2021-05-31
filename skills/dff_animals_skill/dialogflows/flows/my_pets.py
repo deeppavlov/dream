@@ -7,8 +7,9 @@ import sentry_sdk
 import common.constants as common_constants
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
+import common.dialogflow_framework.utils.condition as condition_utils
 from common.utils import is_no
-from common.animals import MY_PET_FACTS, pet_games, stop_about_animals, fallbacks
+from common.animals import MY_PET_FACTS, pet_games, stop_about_animals, fallbacks, DO_YOU_HAVE_TEMPLATE
 import dialogflows.scopes as scopes
 from dialogflows.flows.my_pets_states import State as MyPetsState
 from dialogflows.flows.animals_states import State as AnimalsState
@@ -122,6 +123,30 @@ def about_pet_request(ngrams, vars):
             (not told_about_cat or have_cat or not told_about_dog or have_dog):
         flag = True
     my_pet = shared_memory.get("my_pet", "")
+    bot_asked_pet = re.findall(DO_YOU_HAVE_TEMPLATE, bot_uttr["text"])
+
+    all_facts_used = False
+    if my_pet:
+        used_facts = shared_memory.get("used_facts", {}).get(my_pet, [])
+        all_facts = MY_PET_FACTS[my_pet]
+        if len(all_facts) == len(used_facts):
+            all_facts_used = True
+    prev_state = condition_utils.get_last_state(vars)
+    prev_skill = bot_uttr.get("active_skill", "")
+    if my_pet and prev_skill == "dff_animals_skill" and str(prev_state).split('.')[-1] == "SYS_MY_PET" \
+            and all_facts_used:
+        if my_pet == "cat":
+            my_pet = "dog"
+        elif my_pet == "dog":
+            my_pet = "cat"
+        new_all_facts_used = False
+        used_facts = shared_memory.get("used_facts", {}).get(my_pet, [])
+        all_facts = MY_PET_FACTS[my_pet]
+        if len(all_facts) == len(used_facts):
+            new_all_facts_used = True
+        if not new_all_facts_used:
+            flag = True
+
     if my_pet:
         ans, pet = answer_users_question(vars)
         if ans and ((pet != "cat" and told_about_dog) or (pet != "dog" and told_about_cat)):
@@ -130,7 +155,7 @@ def about_pet_request(ngrams, vars):
     dog_intro = shared_memory.get("dog_intro", False)
     if (my_pet == "cat" and cat_intro) or (my_pet == "dog" and dog_intro):
         flag = False
-    if "do you have pets" in bot_uttr["text"].lower() and isno:
+    if ("do you have pets" in bot_uttr["text"].lower() or bot_asked_pet) and isno:
         flag = True
     logger.info(f"about_pet_request={flag}")
     return flag
@@ -252,7 +277,7 @@ def my_pet_response(vars):
     state_utils.save_to_shared_memory(vars, start=True)
     if response:
         state_utils.set_confidence(vars, confidence=CONF_2)
-        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     else:
         state_utils.set_confidence(vars, confidence=CONF_4)
         state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)

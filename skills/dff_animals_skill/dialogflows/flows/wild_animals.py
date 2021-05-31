@@ -12,7 +12,8 @@ from common.utils import is_no
 import dialogflows.scopes as scopes
 from dialogflows.flows.wild_animals_states import State as WAS
 from dialogflows.flows.animals_states import State as AnimalsState
-from common.animals import PETS_TEMPLATE, stop_about_animals, find_entity_by_types, WILD_ANIMALS_Q, ANIMALS_WIKI_Q
+from common.animals import PETS_TEMPLATE, stop_about_animals, find_entity_by_types, find_entity_conceptnet, \
+    WILD_ANIMALS_Q, ANIMALS_WIKI_Q
 from common.fact_retrieval import get_all_facts
 
 sentry_sdk.init(os.getenv('SENTRY_DSN'))
@@ -72,13 +73,14 @@ def animal_questions_request(ngrams, vars):
     user_uttr = state_utils.get_last_human_utterance(vars)
     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
     found_animal = find_entity_by_types(annotations, {"Q55983715", "Q16521"})
+    found_animal_cnet = find_entity_conceptnet(annotations, ["animal"])
     shared_memory = state_utils.get_shared_memory(vars)
     users_wild_animal = shared_memory.get("users_wild_animal", "")
     found_pet = re.findall(PETS_TEMPLATE, user_uttr["text"])
     found_bird = re.findall(r"(\bbird\b|\bbirds\b)", user_uttr["text"])
     used_wild_q = shared_memory.get("used_wild_q", [])
     all_facts_used = len(used_wild_q) == len(WILD_ANIMALS_Q)
-    if not found_pet and (found_bird or users_wild_animal or found_animal) and not all_facts_used:
+    if not found_pet and (found_bird or users_wild_animal or found_animal or found_animal_cnet) and not all_facts_used:
         flag = True
     logger.info(f"animal_questions_request, found_animal {found_animal} users_wild_animal {users_wild_animal}")
     logger.info(f"animal_questions_request={flag}")
@@ -91,7 +93,7 @@ def animal_questions_response(vars):
     shared_memory = state_utils.get_shared_memory(vars)
     users_wild_animal = shared_memory.get("users_wild_animal", "")
     animal_wp = find_entity_by_types(annotations, {"Q55983715", "Q16521"})
-    animal_wp = plural_nouns(animal_wp)
+    animal_cnet = find_entity_conceptnet(annotations, ["animal"])
     found_bird = re.findall(r"(\bbird\b|\bbirds\b)", user_uttr["text"])
     if animal_wp:
         facts = get_all_facts(annotations, "animal")
@@ -100,7 +102,9 @@ def animal_questions_response(vars):
 
     cur_animal = ""
     if animal_wp:
-        cur_animal = animal_wp
+        cur_animal = plural_nouns(animal_wp)
+    elif animal_cnet:
+        cur_animal = plural_nouns(animal_cnet)
     elif users_wild_animal:
         cur_animal = users_wild_animal
     elif found_bird:
