@@ -35,6 +35,9 @@ HAVE_LIKE_PETS_TEMPLATE = re.compile(r"(do|did|have) you (have |had |like )?(any
 HAVE_PETS_TEMPLATE = re.compile(r"(do|did|have) you (have |had )?(any |a )?(pets|pet|animals|animal)", re.IGNORECASE)
 LIKE_PETS_TEMPLATE = re.compile(r"(do|did|have) you (like |love )?(any |a )?(pets|pet|animals|animal)", re.IGNORECASE)
 DONT_LIKE = re.compile(r"(do not like|don't like|dont like|hate)", re.IGNORECASE)
+DO_YOU_HAVE_TEMPLATE = re.compile(r"do you have (a |an |the |any |some )?(cat|dog|puppy|kitty|kitten|rat|fish|parrot"
+                                  r"|hamster|\bpet|\bpets)", re.IGNORECASE)
+NOT_SWITCH_TEMPLATE = re.compile(r"(hot dog)", re.IGNORECASE)
 
 breed_replace_dict = {"lab": "labrador"}
 pet_games = {"dog": ["frisbee", "hide and seek"], "cat": ["run and fetch"]}
@@ -45,6 +48,8 @@ fallbacks = ["Sorry, I have forgot about this, I have a bad memory. Let's contin
              "Sorry, I forgot the answer, but I would like to tell you more about pets.",
              "Oh, it's not my lucky day, I can't come up with the answer.",
              "Yesterday my neighbour was playing soccer and the ball hit my head, so today i'm a little dumb."]
+
+re_tokenizer = re.compile(r"[\w']+|[^\w ]")
 
 
 def check_about_animals(user_uttr):
@@ -81,14 +86,30 @@ def find_entity_by_types(annotations, types_to_find):
     return found_entity_wp
 
 
+def find_entity_conceptnet(annotations, types_to_find):
+    conceptnet = annotations.get("conceptnet", {})
+    for elem, triplets in conceptnet.items():
+        if "SymbolOf" in triplets:
+            objects = triplets["SymbolOf"]
+            if set(types_to_find).intersection(objects):
+                found_entity = elem
+                return found_entity
+    return ""
+
+
 def stop_about_animals(user_uttr, shared_memory):
     flag = False
     annotations = user_uttr["annotations"]
     cobot_entities = annotations.get("cobot_entities", {}).get("entities", [])
     found_nounphr_for_questions = False
     for entity in cobot_entities:
-        if any([(entity in nounphr or nounphr in entity) for nounphr in nounphr_from_questions]):
-            found_nounphr_for_questions = True
+        entity_tokens = set(re.findall(re_tokenizer, entity))
+        for nounphr in nounphr_from_questions:
+            nounphr_tokens = set(re.findall(re_tokenizer, nounphr))
+            if entity_tokens.intersection(nounphr_tokens):
+                found_nounphr_for_questions = True
+                break
+        if found_nounphr_for_questions:
             break
     my_pet_name = shared_memory.get("my_pet_name", "").lower()
     user_pet_name = shared_memory.get("users_pet_name", "").lower()
