@@ -31,8 +31,6 @@ def get_midas_features_bot(contexts, hypotheses):
 
 def get_features(contexts, hypotheses):
     X_conf = np.array([hyp["confidence"] for hyp in hypotheses]).reshape(-1, 1)
-    X_cobot = np.stack([np.array(list(hyp["cobot_convers_evaluator_annotator"].values()))
-                        for hyp in hypotheses])
 
     X_conv = convert.get_convert_score(contexts, [hyp["text"] for hyp in hypotheses])
 
@@ -40,4 +38,4 @@ def get_features(contexts, hypotheses):
     midas_features_human = get_midas_features_human(contexts)
     X_midas = np.hstack([midas_features_bot, midas_features_human])
 
-    return np.concatenate([X_conf, X_cobot, X_conv, X_midas], axis=1)
+    return np.concatenate([X_conf, X_conv, X_midas], axis=1)

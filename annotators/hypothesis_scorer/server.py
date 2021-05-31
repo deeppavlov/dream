@@ -23,7 +23,7 @@ def get_probas(contexts, hypotheses):
 
 try:
     cb = CatBoostClassifier()
-    cb.load_model("model.cbm")
+    cb.load_model("model-confidence-convert-old_midas.cbm")
     contexts = [[
         "i'm good how are you",
         "Spectacular, by all reports! Do you want to know what I can do?",
