@@ -61,9 +61,9 @@ book_banned_words_file = pathlib.Path(__file__).parent / "book_banned_words.txt"
 book_banned_words = set([line.strip() for line in book_banned_words_file.read_text().split("\n") if line.strip()])
 book_query_dict = {}
 
-AUTHOR_WIKI_TYPES = ['Q36180', 'Q18814623']
+AUTHOR_WIKI_TYPES = ['Q36180', 'Q18814623', 'Q482980', 'Q4853732', 'Q6625963']
 BOOK_WIKI_TYPES = ['Q571', "Q7725634", "Q1667921", "Q277759", "Q8261", "Q47461344"]
-MOVIE_WIKI_TYPES = ["Q11424", "Q24856"]
+MOVIE_WIKI_TYPES = ["Q11424", "Q24856", "Q202866"]
 
 QA_SERVICE_URL = getenv('COBOT_QA_SERVICE_URL')
 WIKIDATA_URL = getenv("WIKIDATA_URL")
