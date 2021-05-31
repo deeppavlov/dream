@@ -101,6 +101,15 @@ how_do_you_know_my_info_patterns = {
     "location": re.compile(rf"{_how_do_you_know_question} where {_i_live_re}"),
     "homeland": re.compile(rf"{_how_do_you_know_question} where i am from")
 }
+
+_secret_word_re = r"(secret|private|confidential)"
+_common_secret_re = rf"(it|this|that) is (a )?{_secret_word_re}|^{_secret_word_re}"
+is_secret_patterns = {
+    "name": re.compile(rf"{_common_secret_re}|(sur|last |first |second |middle )?name is (a )?{_secret_word_re}"),
+    "location": re.compile(rf"{_common_secret_re}|location is (a )?{_secret_word_re}"),
+    "homeland": re.compile(rf"{_common_secret_re}")
+}
+
 BOT_DOESNT_KNOW_INFO_KEY = "bot_doesnt_know_info"
 BOT_KNOWS_INFO_KEY = "bot_knows_info"
 how_do_you_know_my_info_responses = {
@@ -144,6 +153,10 @@ def shorten_long_names(found_name):
     return shortened_result
 
 
+def is_secret(user_text, which_info):
+    return bool(is_secret_patterns[which_info].search(user_text.lower()))
+
+
 def process_info(dialog, which_info="name"):
     human_attr = {}
     bot_attr = {}
@@ -183,15 +196,19 @@ def process_info(dialog, which_info="name"):
 
     got_info = False
     # if user doesn't want to share his info
-    if (is_about_templates[which_info] or prev_bot_uttr == repeat_info_phrases[
-        which_info].lower()) and curr_user_annot.get(
-            "intent_catcher", {}).get("no", {}).get("detected", 0) == 1:
+    if my_name_is_not_pattern.search(curr_user_uttr):
+        logger.info(f"User says My name is not Blabla")
+        response = f"My bad. What is your name again?"
+        confidence = 1.0
+        got_info = True
+        attr["can_continue"] = MUST_CONTINUE
+    elif (is_about_templates[which_info] or prev_bot_uttr == repeat_info_phrases[which_info].lower())\
+            and (is_no(curr_uttr_dict) or is_secret(curr_user_uttr, which_info)):
         response = "As you wish."
         confidence = 1.0
         attr["can_continue"] = CAN_NOT_CONTINUE
         return response, confidence, human_attr, bot_attr, attr
-
-    if re.search(r"is that where you live now", prev_bot_uttr) and is_yes(curr_uttr_dict):
+    elif re.search(r"is that where you live now", prev_bot_uttr) and is_yes(curr_uttr_dict):
         logger.info(f"Found location=homeland")
         if dialog["human"]["attributes"].get("homeland", None):
             human_attr["location"] = dialog["human"]["attributes"]["homeland"]
@@ -210,13 +227,6 @@ def process_info(dialog, which_info="name"):
         response = f"So, where do you live now?"
         confidence = 1.0
         got_info = False
-        attr["can_continue"] = MUST_CONTINUE
-
-    if my_name_is_not_pattern.search(curr_user_uttr):
-        logger.info(f"User says My name is not Blabla")
-        response = f"My bad. What is your name again?"
-        confidence = 1.0
-        got_info = True
         attr["can_continue"] = MUST_CONTINUE
 
     if (is_about_templates[which_info] or prev_bot_uttr == repeat_info_phrases[which_info].lower()) and not got_info:
