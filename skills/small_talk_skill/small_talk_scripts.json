@@ -224,26 +224,34 @@
     "Great thoughts! Thank you."
   ],
   "school": [
-    "Are you a school student now?",
+    "Do you want to talk about school?",
     {
       "yes": [
-        "So, pupil, yeah. That's a great time, don't miss that time! Do you like your school?",
-        "Is that a public or private school?",
-        "Oh cool! Did teachers grade students fairly?",
-        "What are the qualities of a good teacher?",
-        "What subjects were you good at?",
-        "That is awesome! I am so proud of you. Would you like to go to the college?",
-        "How do you think should people go straight from school to university, or do something different?",
-        "Nice thoughts!"
+        "Are you a school student now?",
+        {
+          "yes": [
+            "So, pupil, yeah. That's a great time, don't miss that time! Do you like your school?",
+            "Is that a public or private school?",
+            "Oh cool! Did teachers grade students fairly?",
+            "What are the qualities of a good teacher?",
+            "What subjects were you good at?",
+            "That is awesome! I am so proud of you. Would you like to go to the college?",
+            "How do you think should people go straight from school to university, or do something different?",
+            "Nice thoughts!"
+          ],
+          "no": [
+            "Where did you go to high school?",
+            "I see... What do you remember about your teachers?",
+            "Describe the students who attended your high school.",
+            "Great. Did you make friends in high school that you still keep in touch with?",
+            "What subjects were you good at?",
+            "Hey, knowing these subjects you probably attended the college, did you?",
+            "What advice would you give a high school student who is about to go to college?"
+          ]
+        }
       ],
       "no": [
-        "Where did you go to high school?",
-        "I see... What do you remember about your teachers?",
-        "Describe the students who attended your high school.",
-        "Great. Did you make friends in high school that you still keep in touch with?",
-        "What subjects were you good at?",
-        "Hey, knowing these subjects you probably attended the college, did you?",
-        "What advice would you give a high school student who is about to go to college?"
+        "OK. What do you want to talk about?"
       ]
     }
   ],
