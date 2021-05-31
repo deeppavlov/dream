@@ -556,8 +556,14 @@ def movie_request_opinion_response(vars):
                 actor_compliment = praise_random_actor_from_cast(movie_id)
                 response = f"{reply} {actor_compliment} "\
                            f"{get_movie_template('opinion_request_about_movie', movie_type=movie_type)}"
-                state_utils.set_confidence(vars, SUPER_CONFIDENCE)
-                state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+                if user_was_asked_for_movie_title_or_clarification:
+                    # super conf only if user was asked of movie
+                    state_utils.set_confidence(vars, SUPER_CONFIDENCE)
+                    state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+                else:
+                    state_utils.set_confidence(vars, HIGH_CONFIDENCE)
+                    state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
+
                 save_and_update_movie_titles(vars, movie_id, movie_title)
                 state_utils.save_to_shared_memory(vars, current_status="opinion_request")
             else:
@@ -1543,28 +1549,10 @@ simplified_dialogflow.add_system_transition(State.SYS_CHECK_ANSWER_TO_DO_YOU_KNO
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_CHECK_ANSWER_TO_DO_YOU_KNOW,
     {
-        State.SYS_SHARE_INTERESTING_MOMENT: no_requests_request,
-    },
-)
-simplified_dialogflow.set_error_successor(State.USR_CHECK_ANSWER_TO_DO_YOU_KNOW, State.SYS_ERR)
-
-##################################################################################################################
-#  SYS_SHARE_INTERESTING_MOMENT
-
-simplified_dialogflow.add_system_transition(State.SYS_SHARE_INTERESTING_MOMENT,
-                                            State.USR_SHARE_INTERESTING_MOMENT,
-                                            share_movie_moment_response)
-
-##################################################################################################################
-#  USR_CHECK_ANSWER_TO_DO_YOU_KNOW
-
-simplified_dialogflow.add_user_serial_transitions(
-    State.USR_SHARE_INTERESTING_MOMENT,
-    {
         State.SYS_GIVE_FACT_ABOUT_MOVIE: no_requests_request,
     },
 )
-simplified_dialogflow.set_error_successor(State.USR_SHARE_INTERESTING_MOMENT, State.SYS_ERR)
+simplified_dialogflow.set_error_successor(State.USR_CHECK_ANSWER_TO_DO_YOU_KNOW, State.SYS_ERR)
 
 ##################################################################################################################
 #  SYS_GIVE_FACT_ABOUT_MOVIE
