@@ -34,9 +34,13 @@ TRAVELLING_WORDS = r"(travel|travelling|journey|globetrotting|globe trotting|tou
 TRAVELLING_TEMPLATE = re.compile(TRAVELLING_WORDS, re.IGNORECASE)
 I_HAVE_BEEN_TEMPLATE = re.compile(r"(i|we|me) (have|did|was|had|were) (been (in|on|there)|visit)",
                                   re.IGNORECASE)
-HAVE_YOU_BEEN_TEMPLATE = re.compile(r"(have|did|was|had|were|place) you (ever )?"
-                                    r"(been|visit|\bin\b|travel|go [a-z ]*vacation|have (ever )?(visit|been|travel))",
-                                    re.IGNORECASE)
+HAVE_YOU_BEEN_TEMPLATE = re.compile(
+    r"(have|did|was|had|were|place) you (ever )?(been (in|to)\b|visit|\bin\b|travel|go [a-z ]*vacation|"
+    r"have (ever )?(visit|been (in|to)\b|travel))",
+    re.IGNORECASE)
+COUNTERS_HAVE_YOU_BEEN_TEMPLATE = re.compile(
+    r"(been|was|were|\bbe) in (love|relationships?|coma)",
+    re.IGNORECASE)
 
 TRAVEL_LOCATION_QUESTION = re.compile(
     r"(what|which|where)[a-zA-Z\- ']+" + TRAVELLING_WORDS + r"[a-zA-Z\- ']*\?",
@@ -146,6 +150,15 @@ I_HAVE_BEEN_IN_AND_LIKED_MOST = [
     "I've visited Italy, and it is very diverse and there are many beautiful cities. Italy has awesome "
     "architecture, culture and history. Italy has year round good weather.",
     "I've been in Venice, it is a colorful and romantic city, and I love romance so much.",
-    "I've been in Florence, it's capital of Italyss Tuscany region, Florence is home to many masterpieces of "
+    "I've been in Florence, it's capital of Italy's Tuscany region, Florence is home to many masterpieces of "
     "Renaissance art and architecture, and I love architecture so much.",
 ]
+
+OKAY_ACKNOWLEDGEMENT_PHRASES = [
+    "Okay. Cool. Let's move on.",
+    "I see. I'd like to talk about some other place.",
+    "Yeah okay... Maybe we can talk about another place.",
+    "Cool. Can we talk about some other place."
+]
+
+EXTRA_WORDS_IN_FACTS_PATTERN = re.compile(r"^(according to|here('s| is) a fact)[a-zA-Z0-9 ,\-']+(\.|\,)", re.IGNORECASE)
