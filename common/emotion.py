@@ -1,6 +1,7 @@
 import re
 from common.greeting import HOW_ARE_YOU_RESPONSES
 from common.utils import get_emotions
+from common.universal_templates import if_chat_about_particular_topic
 
 POSITIVE_EMOTIONS = set(['interest', 'inspiration', 'enthusiasm', 'laughter', 'amusement',
                          'empathy', 'curiosity', 'cheer', 'contentment', 'calmness', 'serenity',
@@ -30,11 +31,11 @@ LONELINESS_TEMPLATE = re.compile(r"(i am alone|lonely|loneliness)", re.IGNORECAS
 SAD_TEMPLATE = re.compile(rf"({SAD_PATTERN}|{POOR_ASR_PATTERN})", re.IGNORECASE)
 BORING_TEMPLATE = re.compile(r"(boring|bored)", re.IGNORECASE)  # The template is used to EXCLUDE answers on this intent
 JOKE_REQUEST_TEMPLATE = re.compile(r"(((tell me|tell|hear)( [a-z]+){0,3} jokes?)|^joke)", re.IGNORECASE)
-TALK_ABOUT_EMO_TEMPLATE = re.compile(r'talk about emotion', re.IGNORECASE)
+TALK_ABOUT_EMO_TEMPLATE = re.compile(r'\b(emotion|feeling|i feel\b|depress)', re.IGNORECASE)
 
 
-def talk_about_emotion(uttr):
-    return re.search(TALK_ABOUT_EMO_TEMPLATE, uttr)
+def talk_about_emotion(user_utt, bot_uttr):
+    return if_chat_about_particular_topic(user_utt, bot_uttr, compiled_pattern=TALK_ABOUT_EMO_TEMPLATE)
 
 
 def is_sad(uttr):
@@ -86,7 +87,7 @@ def if_turn_on_emotion(user_utt, bot_uttr):
     how_are_you = any([how_are_you_response.lower() in bot_uttr.get("text", "").lower()
                        for how_are_you_response in HOW_ARE_YOU_RESPONSES])
     joke_request_detected = is_joke_requested(user_utt.get("text", ""))
-    talk_about_regexp = talk_about_emotion(user_utt.get("text", ""))
+    talk_about_regexp = talk_about_emotion(user_utt, bot_uttr)
     pain_detected_by_regexp = is_pain(user_utt.get("text", ""))
     sadness_detected_by_regexp = is_sad(user_utt.get("text", ""))
     loneliness_detected_by_regexp = is_alone(user_utt.get("text", ""))
