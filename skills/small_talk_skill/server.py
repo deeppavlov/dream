@@ -184,6 +184,10 @@ def get_next_response_on_topic(topic, curr_user_uttr, curr_step=0, topic_script=
         next_bot_uttr = attr["small_talk_script"][curr_step]
     else:
         attr["small_talk_script"] = topic_script[:curr_step] + [next_bot_uttr] + topic_script[curr_step + 1:]
+    if attr["small_talk_step"] == len(topic_script) - 1:
+        # last uttr of the script, can not continue!
+        attr["can_continue"] = CAN_NOT_CONTINUE
+
     return next_bot_uttr, confidence, attr
 
 
