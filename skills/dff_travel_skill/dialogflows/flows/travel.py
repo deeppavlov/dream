@@ -21,7 +21,8 @@ from common.travel import OPINION_REQUESTS_ABOUT_TRAVELLING, TRAVELLING_TEMPLATE
     WOULD_USER_LIKE_TO_VISIT_LOC_REQUESTS, ACKNOWLEDGE_USER_WILL_VISIT_LOC, QUESTIONS_ABOUT_LOCATION, \
     ACKNOWLEDGE_USER_DO_NOT_WANT_TO_VISIT_LOC, OFFER_FACT_RESPONSES, OPINION_REQUESTS, HAVE_YOU_BEEN_TEMPLATE, \
     ACKNOWLEDGE_USER_DISLIKE_LOC, OFFER_MORE_FACT_RESPONSES, HAVE_YOU_BEEN_IN_PHRASES, \
-    QUESTIONS_ABOUT_BOT_LOCATIONS, WHY_BOT_LIKES_TO_TRAVEL, I_HAVE_BEEN_IN_AND_LIKED_MOST, TRAVEL_LOCATION_QUESTION
+    QUESTIONS_ABOUT_BOT_LOCATIONS, WHY_BOT_LIKES_TO_TRAVEL, I_HAVE_BEEN_IN_AND_LIKED_MOST, TRAVEL_LOCATION_QUESTION, \
+    COUNTERS_HAVE_YOU_BEEN_TEMPLATE, OKAY_ACKNOWLEDGEMENT_PHRASES, EXTRA_WORDS_IN_FACTS_PATTERN
 from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_intents, get_sentiment, get_not_used_template, get_named_locations, \
     get_all_not_used_templates
@@ -344,9 +345,11 @@ def user_not_mention_named_entity_loc_request(ngrams, vars):
 def have_bot_been_in(vars):
     user_asks_have_you_been = re.search(HAVE_YOU_BEEN_TEMPLATE,
                                         state_utils.get_last_human_utterance(vars)["text"])
+    not_counter = not re.search(COUNTERS_HAVE_YOU_BEEN_TEMPLATE,
+                                state_utils.get_last_human_utterance(vars)["text"])
     user_mentioned_locations = get_mentioned_locations(vars)
 
-    if user_asks_have_you_been and len(user_mentioned_locations) > 0:
+    if user_asks_have_you_been and not_counter and len(user_mentioned_locations) > 0:
         return True
     return False
 
@@ -400,15 +403,19 @@ def have_bot_been_in_response(vars):
 ##################################################################################################################
 
 def _user_have_been_in_request(vars):
+    not_counter = not re.search(COUNTERS_HAVE_YOU_BEEN_TEMPLATE,
+                                state_utils.get_last_bot_utterance(vars)["text"])
     bot_asks_have_you_been_and_user_agrees = re.search(
         HAVE_YOU_BEEN_TEMPLATE,
-        state_utils.get_last_bot_utterance(vars).get("text", "")) and condition_utils.is_yes_vars(vars)
+        state_utils.get_last_bot_utterance(vars).get("text", "")) and condition_utils.is_yes_vars(vars) and not_counter
+
     user_says_been_in = re.search(
         I_HAVE_BEEN_TEMPLATE, state_utils.get_last_human_utterance(vars).get("text", ""))
 
     user_mentioned_locations = get_mentioned_locations(vars)
     bot_asked_about_location = any([req.lower() in state_utils.get_last_bot_utterance(vars).get("text", "").lower()
-                                    for req in QUESTIONS_ABOUT_LOCATION])
+                                    for req in QUESTIONS_ABOUT_LOCATION]) or TRAVEL_LOCATION_QUESTION.search(
+        state_utils.get_last_bot_utterance(vars).get("text", "").lower())
 
     if bot_asks_have_you_been_and_user_agrees or user_says_been_in or (
             bot_asked_about_location and len(user_mentioned_locations) > 0):
@@ -510,9 +517,11 @@ I_HAVE_NOT_BEEN_TEMPLATE = re.compile(r"(i|we|me) (have|did|was|had|were) (not|n
 
 def user_have_not_been_in_request(ngrams, vars):
     # SYS_USR_HAVE_NOT_BEEN
+    not_counter = not re.search(COUNTERS_HAVE_YOU_BEEN_TEMPLATE,
+                                state_utils.get_last_bot_utterance(vars)["text"])
     bot_asks_have_you_been_and_user_disagrees = re.search(
         HAVE_YOU_BEEN_TEMPLATE,
-        state_utils.get_last_bot_utterance(vars).get("text", "")) and condition_utils.is_no_vars(vars)
+        state_utils.get_last_bot_utterance(vars).get("text", "")) and condition_utils.is_no_vars(vars) and not_counter
     user_says_not_been_in = re.search(
         I_HAVE_NOT_BEEN_TEMPLATE, state_utils.get_last_human_utterance(vars)["text"])
 
@@ -685,6 +694,8 @@ def collect_and_save_facts_about_location(location, vars):
 
     used_facts = shared_memory.get("used_facts", [])
     facts_about_location = get_all_not_used_templates(used_facts, facts_about_location)
+    facts_about_location = [EXTRA_WORDS_IN_FACTS_PATTERN.sub("", fact).strip()
+                            for fact in facts_about_location if len(fact)]
     facts_about_location = [fact for fact in facts_about_location if len(fact)]
 
     if len(facts_about_location):
@@ -721,9 +732,13 @@ def offer_fact_about_loc_response(vars):
             discussed_locations = list(set(shared_memory.get("discussed_locations", [])))
             state_utils.save_to_shared_memory(vars, discussed_location=location)
             state_utils.save_to_shared_memory(vars, discussed_locations=discussed_locations + [location])
-            prev_prev_bot_uttr = vars["agent"]["dialog"]["bot_utterances"][-2]["text"] if len(
-                vars["agent"]["dialog"]["bot_utterances"]) >= 2 else ""
-            if shared_memory.get("used_facts", []) and any([t in prev_prev_bot_uttr for t in OFFER_FACT_RESPONSES]):
+
+            if shared_memory.get("used_facts", []):
+                gave_fact_before = shared_memory.get("used_facts",
+                                                     [])[-1] in state_utils.get_last_bot_utterance(vars)["text"]
+            else:
+                gave_fact_before = False
+            if gave_fact_before:
                 # previously were fact. So offer "more" facts
                 return random.choice(OFFER_MORE_FACT_RESPONSES).replace("LOCATION", location)
             else:
@@ -743,7 +758,10 @@ def offer_fact_about_loc_response(vars):
                     return f"{random.choice(TOPIC_NEWS_OFFER)} {location}?"
 
             another_location_question = not_confident_ask_question_about_travelling_response(vars)
-            return f"Okay. Cool. Let's move on. {another_location_question}"
+            used_okay_acknowledgements = shared_memory.get("used_okay_acknowledgements", [])
+            ackn = get_not_used_template(used_okay_acknowledgements, OKAY_ACKNOWLEDGEMENT_PHRASES)
+            state_utils.save_to_shared_memory(vars, used_okay_acknowledgements=used_okay_acknowledgements + [ackn])
+            return f"{ackn} {another_location_question}"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -782,7 +800,10 @@ def share_fact_about_loc_response(vars):
             return f"{fact_about_location} {opinion_req}"
         else:
             another_location_question = not_confident_ask_question_about_travelling_response(vars)
-            return f"Okay. Cool. Let's move on. {another_location_question}"
+            used_okay_acknowledgements = shared_memory.get("used_okay_acknowledgements", [])
+            ackn = get_not_used_template(used_okay_acknowledgements, OKAY_ACKNOWLEDGEMENT_PHRASES)
+            state_utils.save_to_shared_memory(vars, used_okay_acknowledgements=used_okay_acknowledgements + [ackn])
+            return f"{ackn} {another_location_question}"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
