@@ -364,14 +364,6 @@ services:
       - "./annotators/entity_storer:/src"
     ports:
       - 8089:8089
-  dff-celebrity-skill:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/dff_celebrity_skill:/src"
-      - "./common:/src/common"
-      - "./annotators/CoBotQA:/src/CoBotQA"
-    ports:
-      - 8093:8093
   dff-animals-skill:
     env_file: [.env.dev]
     volumes:
@@ -437,6 +429,7 @@ services:
     volumes:
       - "./skills/dff_gossip_skill:/src"
       - "./common:/src/common"
+      - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8109:8109
   fact-retrieval:

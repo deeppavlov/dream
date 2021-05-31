@@ -2,8 +2,7 @@ import re
 
 from common.animals import ANIMALS_TEMPLATE, PETS_TEMPLATE
 from common.books import BOOK_PATTERN
-from common.celebrities import CELEBRITY_COMPILED_PATTERN
-from common.gossip import HAVE_YOU_GOSSIP_TEMPLATE
+from common.gossip import HAVE_YOU_GOSSIP_TEMPLATE, GOSSIP_COMPILED_PATTERN
 from common.coronavirus import virus_compiled
 from common.food import FOOD_COMPILED_PATTERN, FOOD_SKILL_TRANSFER_PHRASES_RE
 from common.funfact import FUNFACT_COMPILED_PATTERN
@@ -108,15 +107,6 @@ SKILL_TOPICS = {
             "SciTech",
         ]
     },
-    "dff_celebrity_skill": {
-        "compiled_patterns": [CELEBRITY_COMPILED_PATTERN],
-        "previous_bot_patterns": [],
-        "cobot_dialogact_topics": [
-        ],
-        "cobot_topics": [
-            "Celebrities"
-        ]
-    },
     "game_cooperative_skill": {
         "compiled_patterns": [GAMES_COMPILED_PATTERN],
         "previous_bot_patterns": [GAMES_COMPILED_PATTERN],
@@ -155,7 +145,7 @@ SKILL_TOPICS = {
     },
     "dff_gossip_skill": {
         "compiled_patterns": [],
-        "previous_bot_patterns": [HAVE_YOU_GOSSIP_TEMPLATE],
+        "previous_bot_patterns": [HAVE_YOU_GOSSIP_TEMPLATE, GOSSIP_COMPILED_PATTERN],
         "cobot_dialogact_topics": [],
         "cobot_topics": [],
     },
