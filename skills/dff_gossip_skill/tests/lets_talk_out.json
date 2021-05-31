@@ -1,6 +1,6 @@
 [
     [
-        "Wait but why?",
+        "OK. I got it.",
         0.98,
         {
             "dff_gossip_skill_state": {
@@ -31,7 +31,7 @@
                     "2": "State.SYS_DISAGREES_ABT_PERSON"
                 },
                 "current_turn_dff_suspended": false,
-                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_DISAGREES_ABT_PERSON\", \"__stack__\": [], \"__user_utterance__\": \"no\", \"__system_state__\": \"State.SYS_DISAGREES_ABT_PERSON\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"Wait but why?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"GOSSIP\\\"<__tuple__>\\\"State.USR_DISAGREES_ABT_PERSON\\\"\"}"
+                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_DISAGREES_ABT_PERSON\", \"__stack__\": [], \"__user_utterance__\": \"no\", \"__system_state__\": \"State.SYS_DISAGREES_ABT_PERSON\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"OK. I got it.\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"GOSSIP\\\"<__tuple__>\\\"State.USR_DISAGREES_ABT_PERSON\\\"\"}"
             },
             "dff_shared_state": {},
             "used_links": {},
@@ -40,7 +40,7 @@
         },
         {},
         {
-            "can_continue": "can"
+            "can_continue": "no"
         }
     ]
 ]

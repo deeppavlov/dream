@@ -72,6 +72,7 @@ WHAT_IS_YOUR_FAVORITE_MOMENT_NO_PLOT_FOUND_PHRASES = [
 
 WHAT_OTHER_MOVIE_TO_DISCUSS = "What other movie you'd like to discuss?"
 CLARIFY_WHAT_MOVIE_TO_DISCUSS = "Can you say again what movie you'd like to discuss?"
+CELEB_ACTOR_PHRASES = ['What is your favourite movie with this actor?']
 
 
 def skill_trigger_phrases():

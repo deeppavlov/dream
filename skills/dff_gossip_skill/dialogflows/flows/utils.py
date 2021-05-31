@@ -12,17 +12,16 @@ import common.custom_requests as custom_requests
 
 import common.utils as common_utils
 
-import dialogflows.scenarios.gossip as common_gossip
-import dialogflows.scenarios.news as common_news
+import dialogflows.scenarios.gossip as this_gossip
+
+import common.gossip as common_gossip
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
-
 
 ENTITY_LINKING_URL = os.getenv("ENTITY_LINKING_URL")
 WIKIDATA_URL = os.getenv("WIKIDATA_URL")
 assert ENTITY_LINKING_URL, ENTITY_LINKING_URL
 assert WIKIDATA_URL, WIKIDATA_URL
-
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +36,6 @@ HIGH_CONFIDENCE = 0.98
 ##################################################################################################################
 # utils
 ##################################################################################################################
-
 
 ##################################################################################################################
 # Entity Linking & Wiki Parser
@@ -64,17 +62,11 @@ def request_el_wp_entities(person, utterance):
         elif isinstance(entity_info, dict):
             entity_ids = entity_info.get("entity_ids", [])
             entity_id = entity_ids and entity_ids[0]
-            wp_output = (
-                entity_id
-                and requests.post(
-                    WIKIDATA_URL,
-                    json={
-                        "parser_info": ["find_top_triplets"],
-                        "query": [[{"entity_substr": person, "entity_ids": [entity_id]}]],
-                    },
-                    timeout=0.8,
-                ).json()
-            )
+            wp_output = (entity_id and requests.post(WIKIDATA_URL, json={
+                "parser_info": ["find_top_triplets"],
+                "query": [[{"entity_substr": person, "entity_ids": [entity_id]}]]}, timeout=0.8).json())
+        else:
+            raise Exception(entities_info)
         entities_info = wp_output and wp_output[0].get("entities_info", {})
     except Exception as exc:
         msg = f"request_el_wp_entities exception: {exc}"
@@ -83,7 +75,7 @@ def request_el_wp_entities(person, utterance):
     return entities_info if entities_info else {}
 
 
-def request_relationship_between_two_people(person_1, person_2):
+def get_relationship_between_two_people(person_1, person_2):
     wp_output = []
     try:
         persons = [person_1, person_2]
@@ -153,24 +145,24 @@ def get_gender_age_person(person, utterance):
     return gender, age
 
 
-def is_creative_person(person, utterance):
-    entities_info = request_el_wp_entities(person, utterance)
+# def is_creative_person(person, utterance):
+#     entities_info = request_el_wp_entities(person, utterance)
 
-    for entity_label in entities_info:
-        triplets = entities_info[entity_label]
+#     for entity_label in entities_info:
+#         triplets = entities_info[entity_label]
 
-        occupations = triplets["occupation"]
-        occupation_titles = set([occ_title for occ_id, occ_title in occupations])
+#         occupations = triplets["occupation"]
+#         occupation_titles = set([occ_title for occ_id, occ_title in occupations])
 
-    sports_occupations = common_news.COBOT_TOPICS_TO_WIKI_OCCUPATIONS["Sports"]
+#     sports_occupations = this_news.COBOT_TOPICS_TO_WIKI_OCCUPATIONS["Sports"]
 
-    is_sports_person = False
+#     is_sports_person = False
 
-    for occupation_title in occupation_titles:
-        if occupation_title in sports_occupations:
-            is_sports_person = True
+#     for occupation_title in occupation_titles:
+#         if occupation_title in sports_occupations:
+#             is_sports_person = True
 
-    return is_sports_person
+#     return is_sports_person
 
 
 def get_teams_for_sportsperson(person, utterance):
@@ -225,7 +217,7 @@ def get_human_readable_gender_statement_current_im(gender: str):
         return "her"
     if "male" in gender.lower():
         return "him"
-    return "their"
+    return "them"
 
 
 def get_notable_works_for_creative_person(person, utterance):
@@ -280,7 +272,7 @@ def get_notable_works_for_creative_person(person, utterance):
 
 
 def get_top_people_from_wiki_for_cobot_topic(cobot_topic, top_people):
-    raw_occupations_list = common_news.COBOT_TOPICS_TO_WIKI_OCCUPATIONS[cobot_topic]
+    raw_occupations_list = common_gossip.COBOT_TOPICS_TO_WIKI_OCCUPATIONS[cobot_topic]
 
     processed_occupations_tuple = tuple([occupation_item[1] for occupation_item in raw_occupations_list])
     results = custom_requests.request_triples_wikidata("find_top_people", [processed_occupations_tuple])
@@ -290,6 +282,49 @@ def get_top_people_from_wiki_for_cobot_topic(cobot_topic, top_people):
         return [person_item[1] for person_item in results[0][0] if person_item]
     else:
         return []
+
+
+def get_cobot_topic_for_occupation(occupation):
+    all_topics_mappings = common_gossip.COBOT_TOPICS_TO_WIKI_OCCUPATIONS
+    for topic, occupations in all_topics_mappings.items():
+        for occupation_pair in occupations:
+            occupation_name = occupation_pair[1]
+            # not "in" but "equals"
+            if str(occupation).lower() == str(occupation_name).lower():
+                return topic
+
+    return None
+
+
+###
+
+###
+
+
+def get_not_used_and_save_reaction_to_new_mentioned_person(vars):
+    shared_memory = state_utils.get_shared_memory(vars)
+    last_reactions_to_new_person = shared_memory.get("last_reactions_to_new_person", [])
+
+    reaction = common_utils.get_not_used_template(
+        used_templates=last_reactions_to_new_person, all_templates=this_gossip.OPINION_TO_USER_MENTIONING_SOMEONE_NEW
+    )
+
+    used_reacts = last_reactions_to_new_person + [reaction]
+    state_utils.save_to_shared_memory(vars, last_reactions_to_new_person=used_reacts[-2:])
+    return reaction
+
+
+# def get_not_used_and_save_wait_but_why_question(vars):
+#     shared_memory = state_utils.get_shared_memory(vars)
+#     last_wait_but_why_questions = shared_memory.get("last_wait_but_why_questions", [])
+#
+#     question = common_utils.get_not_used_template(
+#         used_templates=last_wait_but_why_questions, all_templates=this_gossip.WAIT_BUT_WHY_QUESTIONS
+#     )
+#
+#     used_questions = last_wait_but_why_questions + [question]
+#     state_utils.save_to_shared_memory(vars, last_reactions_to_new_person=used_questions[-2:])
+#     return question
 
 
 ##################################################################################################################
@@ -416,7 +451,7 @@ def get_mentioned_people(vars):
     user_mentioned_named_entities = state_utils.get_named_entities_from_human_utterance(vars)
     user_mentioned_names = []
 
-    logger.debug("user_mentioned_named_entities: " + str(user_mentioned_named_entities))
+    logger.info("user_mentioned_named_entities: " + str(user_mentioned_named_entities))
 
     for named_entity in user_mentioned_named_entities:
         logger.debug(f"named entity: {named_entity}")
@@ -535,7 +570,7 @@ def is_midas_opinion_expression(vars):
 
 
 def get_basic_occupation_for_topic(cobot_topic):
-    occupations = [x["Occupation"] for x in common_gossip.TOPICS_TO_OCCUPATIONS if x["Topic"] == cobot_topic]
+    occupations = [x["Occupation"] for x in this_gossip.TOPICS_TO_OCCUPATIONS if x["Topic"] == cobot_topic]
     if occupations:
         return occupations[0]
 

@@ -18,6 +18,8 @@ from common.weather import if_special_weather_turn_on
 from common.wiki_skill import if_switch_wiki_skill, switch_wiki_skill_on_news
 from common.response_selection import UNPREDICTABLE_SKILLS
 
+from common.gossip import check_is_celebrity_mentioned
+
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.DEBUG)
@@ -47,6 +49,8 @@ class RuleBasedSkillSelectorConnector:
             cobot_topics = set(get_topics(user_uttr, which="cobot_topics"))
 
             is_factoid = user_uttr_annotations.get('factoid_classification', {}).get('factoid', 0.) > 0.9
+
+            is_celebrity_mentioned = check_is_celebrity_mentioned(user_uttr)
 
             prev_user_uttr_hyp = dialog["human_utterances"][-2]["hypotheses"] if len(
                 dialog["human_utterances"]) > 1 else []
@@ -101,6 +105,9 @@ class RuleBasedSkillSelectorConnector:
 
                 if if_special_weather_turn_on(user_uttr, bot_uttr):
                     skills_for_uttr.append("weather_skill")
+
+                if is_celebrity_mentioned:
+                    skills_for_uttr.append("dff_gossip_skill")
 
                 skills_for_uttr.append("small_talk_skill")
 
@@ -171,6 +178,10 @@ class RuleBasedSkillSelectorConnector:
                                       'game_cooperative_skill', 'weather_skill', 'dff_funfact_skill',
                                       'dff_travel_skill', 'coronavirus_skill', "dff_bot_persona_skill",
                                       ])
+
+                # if user mentions
+                if is_celebrity_mentioned:
+                    skills_for_uttr.append("dff_gossip_skill")
 
                 # some special cases
                 if if_special_weather_turn_on(user_uttr, bot_uttr):
