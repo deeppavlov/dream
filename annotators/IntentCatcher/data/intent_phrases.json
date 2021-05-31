@@ -40,7 +40,7 @@
                 "((would)|(can)) ((you)|(we))( please ){0,1}((talk)|(chat)) about ((something else)|(anything else)|(another thing)|(another topic)|(other topic)|(something other)|(something else)|(other things))"
             ],
             "reg_phrases": [
-                "tell me something else(\\.|\\?)",
+                "tell me something else",
                 "don't tell me about .*",
                 "i don't want to talk about .*",
                 "stop talking about .*"
@@ -141,7 +141,7 @@
                 ".*go away",
                 "alexa i don't wanna talk about anything right now go home",
                 "stop making that( song| noise)",
-                "stop talking[?.!]?$",
+                "stop talking",
                 "i am done talking now",
                 "cancel simulation",
                 ".*can i get the normal alexa back.*",
@@ -160,7 +160,7 @@
                 "(alexa ){0,1}((can you )|(please )|(i want you to )|(just )|(i need you to  )){0,1}((tell)|(read)) (me ){0,1} a (((bedtime)|(horror)|(fun)|(baby)|(funny)|(good)) ){0,1}story"
             ],
             "reg_phrases": [
-                "(can you ){0,1}tell me a .* story\\?"
+                "(can you ){0,1}tell me a .* story"
             ],
             "min_precision": 0.99,
             "punctuation": [
@@ -184,8 +184,8 @@
                 "(sorry, ){0,1}i didn't catch that"
             ],
             "reg_phrases": [
-                "^one second*[?.!]?$",
-                "what*[?.!]?$"
+                "one second",
+                "what"
             ],
             "min_precision": 0.94,
             "punctuation": [
@@ -204,10 +204,10 @@
                 "sure why not"
             ],
             "reg_phrases": [
-                "you bet(\\!|\\.)",
-                "^kind of(\\!|\\.)?$",
-                "^sort of(\\!|\\.)?$",
-                "^maybe(\\!|\\.)?$",
+                "you bet",
+                "kind of",
+                "sort of",
+                "maybe",
                 "i do like"
             ],
             "min_precision": 0.0,
@@ -550,8 +550,8 @@
                 "what can ((we)|(you)) talk about"
             ],
             "reg_phrases": [
-                "(tell me ){0,1}what do you ((wanna)|(want to)) talk about\\?",
-                "what can ((we)|(you)) ((talk)|(chat)) about\\?"
+                "(tell me ){0,1}what do you ((wanna)|(want to)) talk about",
+                "what can ((we)|(you)) ((talk)|(chat)) about"
             ],
             "min_precision": 0.00,
             "punctuation": [
