@@ -379,7 +379,8 @@ def get_people_jobs(vars, celebrity_name):
 
 
 def get_mentioned_jobs(vars, celebrity_name):
-    return get_people_jobs(vars, celebrity_name)[-1]
+    jobs = get_people_jobs(vars, celebrity_name)[-1]
+    return jobs if jobs else []
 
 
 def get_celebrity_from_uttr(vars, exclude_types=False, use_only_last_utt=False):
