@@ -169,14 +169,14 @@ class EmotionSkillScenario:
                 user_phrase = annotated_user_phrase['text']
                 most_likely_emotion = self._get_user_emotion(annotated_user_phrase)
                 intent = annotated_user_phrase['annotations'].get("intent_catcher", {})
-                prev_replies_for_user = [u['text'].lower() for u in dialog['bot_utterances']]
-                prev_bot_phrase = ''
+                prev_bot_phrase, prev_annotated_bot_phrase = '', {}
+                if dialog['bot_utterances']:
+                    prev_annotated_bot_phrase = dialog['bot_utterances'][-1]
+                    prev_bot_phrase = prev_annotated_bot_phrase['text']
                 very_confident = any([function(user_phrase)
                                       for function in [is_sad, is_boring, is_alone, is_joke_requested, is_pain]])
                 # Confident if regezp
                 link = ''
-                if prev_replies_for_user:
-                    prev_bot_phrase = prev_replies_for_user[-1]
                 if len(dialog['utterances']) > 1:
                     # Check if we were interrupted
                     active_skill = dialog['utterances'][-2]['active_skill'] == 'emotion_skill'
@@ -195,7 +195,7 @@ class EmotionSkillScenario:
                     state = "pain_i_feel"
                     emotion_skill_attributes['state'] = state
                 logger.info(f"user sent: {annotated_user_phrase['text']} state: {state} emotion: {emotion}")
-                if talk_about_emotion(annotated_user_phrase['text']):
+                if talk_about_emotion(annotated_user_phrase, prev_annotated_bot_phrase):
                     reply = f'OK. {random.choice(skill_trigger_phrases())}'
                     attr['can_continue'] = MUST_CONTINUE
                     confidence = 1
