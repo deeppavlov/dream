@@ -2,6 +2,7 @@
 import logging
 import os
 import random
+import re
 
 # from CoBotQA.cobotqa_service import send_cobotqa
 from enum import Enum, auto
@@ -17,7 +18,7 @@ from common.science import science_topics, SCIENCE_TOPIC_KEY_PHRASES, SCIENCE_TO
 
 from common.science import SCIENCE_COMPILED_PATTERN
 from common.constants import CAN_CONTINUE_PROMPT, MUST_CONTINUE, CAN_CONTINUE_SCENARIO
-from common.universal_templates import if_chat_about_particular_topic
+from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -98,12 +99,24 @@ def error_response(vars):
     return ""
 
 
+def lets_chat_about_science(uttr, prev_uttr=None):
+    prev_uttr = {} if prev_uttr is None else prev_uttr
+    curr_uttr_is_about_science = re.search(SCIENCE_COMPILED_PATTERN, uttr.get("text", "").lower())
+    lets_talk_about_science = if_chat_about_particular_topic(uttr, prev_uttr, compiled_pattern=SCIENCE_COMPILED_PATTERN)
+    chose_topic = if_choose_topic(uttr, prev_uttr) and curr_uttr_is_about_science
+    flag = (
+        lets_talk_about_science
+        or chose_topic
+        or ("?" not in uttr.get("text", "") and "?" in prev_uttr.get("text", "") and curr_uttr_is_about_science)
+    )
+    return bool(flag)
+
+
 def science_request(ngrams, vars):
     flag = bool(
-        if_chat_about_particular_topic(
+        lets_chat_about_science(
             state_utils.get_last_human_utterance(vars),
             state_utils.get_last_bot_utterance(vars),
-            compiled_pattern=SCIENCE_COMPILED_PATTERN,
         )
     )
     logger.info(f"science_request {flag}")
@@ -113,10 +126,8 @@ def science_request(ngrams, vars):
 def first_science_request(ngrams, vars):
     flag = any(
         [
-            if_chat_about_particular_topic(
-                state_utils.get_last_human_utterance(vars),
-                state_utils.get_last_bot_utterance(vars),
-                compiled_pattern=SCIENCE_COMPILED_PATTERN,
+            lets_chat_about_science(
+                state_utils.get_last_human_utterance(vars), state_utils.get_last_bot_utterance(vars)
             ),
             local_utils.get_supported_cobot_topics(vars),
             local_utils.get_supported_cobot_dialog_topics(vars),
@@ -196,10 +207,9 @@ def request_science_topic_response(vars):
             body = f"So, maybe next? Do you wanna talk about {current_topic}?"
         else:
             body = f"I like to talk about a variety of scientific topics. Do you wanna talk about {current_topic}?"
-        if if_chat_about_particular_topic(
+        if lets_chat_about_science(
             state_utils.get_last_human_utterance(vars),
             state_utils.get_last_bot_utterance(vars),
-            compiled_pattern=SCIENCE_COMPILED_PATTERN,
         ):
             state_utils.set_can_continue(vars, MUST_CONTINUE)
             state_utils.set_confidence(vars, confidence=CONF_100)

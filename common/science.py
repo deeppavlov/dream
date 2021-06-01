@@ -64,10 +64,3 @@ def skill_trigger_phrases():
 
 def science_skill_was_proposed(prev_bot_utt):
     return any([phrase.lower() in prev_bot_utt.get("text", "").lower() for phrase in TRIGGER_PHRASES])
-
-
-# %%
-import pathlib
-
-pathlib.Path(__file__).parent
-# %%
