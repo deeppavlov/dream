@@ -150,7 +150,8 @@
             "min_precision": 0.99,
             "punctuation": [
                 ".",
-                "!"
+                "!",
+                "?"
             ]
         },
         "tell_me_a_story": {
@@ -638,6 +639,11 @@
                 "what time is it",
                 "((tell)|(say))( me){0,1} the time"
             ],
+            "reg_phrases": ["what time is it( in)?[\\s\\S]+",
+                            "what time it is( in)?[\\s\\S]+",
+                            "what time it is",
+                            "what time is it"
+                            ],
             "min_precision": 0.90,
             "punctuation": [
                 ".",
