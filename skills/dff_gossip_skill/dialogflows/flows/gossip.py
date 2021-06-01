@@ -392,6 +392,8 @@ def get_celebrity_from_uttr(vars, exclude_types=False, use_only_last_utt=False):
     # we need to get all supported occupations
     celebrity_name, matching_types, mismatching_types = common_gossip.celebrity_from_uttr(human_utterance)
     logger.warning(f'Relations {celebrity_name} {matching_types} {mismatching_types}')
+    if not celebrity_name or not matching_types:
+        return None, None
     mentioned_jobs = get_mentioned_jobs(vars, celebrity_name)
     mismatching_types = [type_ for type_ in mismatching_types if type_ not in mentioned_jobs]
     if exclude_types and mismatching_types:
