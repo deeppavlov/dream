@@ -431,9 +431,6 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         elif cand_uttr["skill_name"] == 'small_talk_skill' and is_sensitive_situation(dialog["human_utterances"][-1]):
             # let small talk to talk about sex ^_^
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
-        elif cand_uttr["skill_name"] == 'weather_skill' and dialog['human_utterances'][-1]["annotations"].get(
-                "intent_catcher", {}).get("weather_forecast_intent", {}).get("detected", 0) == 1:
-            categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
         elif cand_uttr["skill_name"] == 'misheard_asr' and is_misheard:
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
         elif is_intent_candidate:
