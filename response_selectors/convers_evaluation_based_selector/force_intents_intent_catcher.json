@@ -33,9 +33,6 @@
         "intent_catcher",
         "program_y"
     ],
-    "weather_forecast_intent": [
-        "weather_skill"
-    ],
     "dont_understand": [
         "intent_catcher"
     ]
