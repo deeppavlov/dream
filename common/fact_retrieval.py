@@ -15,7 +15,8 @@ topic_types = {
     "album": ["Q482994"],
     "author": ["Q36180", "Q49757", "Q214917", "Q6625963", "Q28389"],
     "book": ["Q571", "Q277759", "Q8261", "Q47461344", "Q7725634", "Q1667921"],
-    "game": ["Q7889"]
+    "game": ["Q7889"],
+    "film": ["Q11424", "Q29168811", "Q24869", "Q202866", "Q5398426", "Q15416"]
 }
 
 topic_titles = {
@@ -30,7 +31,9 @@ topic_titles = {
              "musical style", "development", "influences", "touring years"],
     "author": ["fictional works", "critics by other authors", "life and career"],
     "book": ["composition history", "principal characters", "background", "film"],
-    "game": ["game modes", "multiplayer", "customization", "awards", "films", "virtual reality"]
+    "game": ["game modes", "multiplayer", "customization", "awards", "films", "virtual reality"],
+    "film": ["plot", "production", "development", "filming locations", "filming", "music", "films", "casting",
+             "special effects", "score"]
 }
 
 re_tokenizer = re.compile(r"[\w']+|[^\w ]")
