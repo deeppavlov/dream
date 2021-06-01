@@ -109,26 +109,28 @@ def what_is_book_about(book):
     logger.info(f'Requesting for {book}')
     if isinstance(book, str):
         if is_wikidata_entity(book):
-            plain_book = book
+            plain_books = [book]
         else:
-            plain_book = request_entities_entitylinking(book, types=BOOK_WIKI_TYPES)
-            logger.info(f'After request {plain_book}')
-        subjects = request_triples_wikidata("find_object", [(plain_book, 'P921', "forw")],
-                                            query_dict={})[0]
-        if subjects:
-            fact = f'{fact}The main subject of this book is {entity_to_label(subjects[0])}.'
-        locations = request_triples_wikidata("find_object", [(plain_book, 'P840', "forw")],
-                                             query_dict={})[0]
-        if len(locations) > 1:
-            fact = f'{fact} Apart from other locations,'
-        if locations:
-            fact = f'{fact} The action of this book takes place in {entity_to_label(locations[0])}.'
-        if not subjects or not locations:
-            characters = request_triples_wikidata("find_object", [(plain_book, 'P674', "forw")],
-                                                  query_dict={})[0]
-            if characters:
-                fact = f'{fact} One of the main characters of this book is {entity_to_label(characters[0])}.'
-        logger.info(f'Final fact {fact}')
+            plain_books, _ = request_entities_entitylinking(book, types=BOOK_WIKI_TYPES)
+            logger.info(f'After request {plain_books}')
+        if plain_books:
+            plain_book = plain_books[0]
+            subjects = request_triples_wikidata("find_object", [(plain_book, 'P921', "forw")],
+                                                query_dict={})[0]
+            if subjects:
+                fact = f'{fact}The main subject of this book is {entity_to_label(subjects[0])}.'
+            locations = request_triples_wikidata("find_object", [(plain_book, 'P840', "forw")],
+                                                 query_dict={})[0]
+            if len(locations) > 1:
+                fact = f'{fact} Apart from other locations,'
+            if locations:
+                fact = f'{fact} The action of this book takes place in {entity_to_label(locations[0])}.'
+            if not subjects or not locations:
+                characters = request_triples_wikidata("find_object", [(plain_book, 'P674', "forw")],
+                                                      query_dict={})[0]
+                if characters:
+                    fact = f'{fact} One of the main characters of this book is {entity_to_label(characters[0])}.'
+    logger.info(f'Final fact {fact}')
     return fact
 
 
