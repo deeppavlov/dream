@@ -302,6 +302,9 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
     acknowledgement_hypothesis = {}
 
     for cand_id, cand_uttr in enumerate(candidates):
+        if candidates[cand_id]["confidence"] == 0.:
+            # skip PUNISHED for toxicity candidates
+            continue
 
         all_cand_intents, all_cand_topics, all_cand_named_entities, all_cand_nounphrases = get_main_info_annotations(
             cand_uttr)
