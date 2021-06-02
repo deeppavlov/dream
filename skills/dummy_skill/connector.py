@@ -18,7 +18,7 @@ import sentry_sdk
 from common.link import LIST_OF_SCRIPTED_TOPICS, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED, skills_phrases_map, \
     compose_linkto_with_connection_phrase
 from common.sensitive import is_sensitive_situation
-from common.universal_templates import opinion_request_question
+from common.universal_templates import opinion_request_question, is_switch_topic
 from common.utils import get_topics, get_entities, is_no
 
 
@@ -230,8 +230,11 @@ class DummySkillConnector:
                 _no_to_first_linkto = _no_to_first_linkto and is_no(dialog["human_utterances"][-1])
                 _no_to_first_linkto = _no_to_first_linkto and _prev_active_skill != "dff_friendship_skill"
 
+                _if_switch_topic = is_switch_topic(dialog["human_utterances"][-1])
+                _is_ask_me_something = ASK_ME_QUESTION_PATTERN.search(dialog["human_utterances"][-1]["text"])
+
                 cands += [link_to_question]
-                if ASK_ME_QUESTION_PATTERN.search(dialog["human_utterances"][-1]["text"]) or _no_to_first_linkto:
+                if _is_ask_me_something or _no_to_first_linkto or _if_switch_topic:
                     confs += [1.0]  # Use it only as response selector retrieve skill output modifier
                 else:
                     confs += [0.05]  # Use it only as response selector retrieve skill output modifier
