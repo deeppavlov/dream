@@ -68,12 +68,23 @@ def error_handler(f):
 
 def get_igdb_client_token():
     payload = {"client_id": CLIENT_ID, "client_secret": CLIENT_SECRET, "grant_type": "client_credentials"}
+    url = "https://id.twitch.tv/oauth2/token?"
+    timeout = 20.0
     try:
-        token_data = requests.post("https://id.twitch.tv/oauth2/token?", params=payload, timeout=2.0)
+        token_data = requests.post(url, params=payload, timeout=timeout)
     except RequestException as e:
-        logger.exception("Could not acquire access token for igdb.com. `dff_gaming_skill` failed.")
-        raise e
-    return token_data.json()["access_token"]
+        logger.warning(f"Request to {url} failed. `dff_gaming_skill` failed to build. {e}")
+        access_token = None
+    else:
+        token_data_json = token_data.json()
+        access_token = token_data_json.get("access_token")
+        if access_token is None:
+            logger.warning(
+                f"Could not get access token for CLIENT_ID={CLIENT_ID} and CLIENT_SECRET={CLIENT_SECRET}. "
+                f"`dff_gaming_skill` failed to build\n"
+                f"payload={payload}\nurl={url}\ntimeout={timeout}\nresponse status code: {token_data.status_code}"
+            )
+    return access_token
 
 
 class BearerAuth(requests.auth.AuthBase):
@@ -86,11 +97,14 @@ class BearerAuth(requests.auth.AuthBase):
 
 
 CLIENT_TOKEN = get_igdb_client_token()
-IGDB_POST_KWARGS = {
-    "auth": BearerAuth(CLIENT_TOKEN),
-    "headers": {"Client-ID": CLIENT_ID, "Accept": "application/json", "Content-Type": "text/plain"},
-    "timeout": 1.0,
-}
+if CLIENT_TOKEN is None:
+    IGDB_POST_KWARGS = {
+        "auth": BearerAuth(CLIENT_TOKEN),
+        "headers": {"Client-ID": CLIENT_ID, "Accept": "application/json", "Content-Type": "text/plain"},
+        "timeout": 1.0,
+    }
+else:
+    IGDB_POST_KWARGS = None
 
 
 def get_book_genres():
@@ -263,7 +277,7 @@ def get_game_description_for_first_igdb_candidate(name, results_sort_key):
     if name in games_igdb_search_results:
         igdb_game_description = games_igdb_search_results.get(name)
         logger.info(f"found saved search results for game query '{name}'. Game description: {igdb_game_description}")
-    else:
+    elif IGDB_POST_KWARGS is not None:
         search_body = f'search "{name}"; fields *; where themes != (42);'  # 42 is 'Erotic'
         try:
             logger.info(f"making request to https://api.igdb.com/v4/games. Search body: {search_body}")
@@ -291,6 +305,9 @@ def get_game_description_for_first_igdb_candidate(name, results_sort_key):
                 f"Found game descriptions for query '{name}' on igdb.com. Selected game description: "
                 f"{igdb_game_description}"
             )
+    else:
+        logger.warning("Could not get access (client) token for igdb.com so only saved game descriptions are available")
+        igdb_game_description = None
     return igdb_game_description
 
 
