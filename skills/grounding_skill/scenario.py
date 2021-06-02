@@ -8,7 +8,7 @@ from common.constants import MUST_CONTINUE
 from common.greeting import GREETING_QUESTIONS
 from common.link import skills_phrases_map
 from common.grounding import what_we_talk_about, are_we_recorded, detect_interrupt, detect_end_but, \
-    BUT_PHRASE, REPEAT_PHRASE
+    detect_end_because, BUT_PHRASE, REPEAT_PHRASE, BECAUSE_PHRASE
 from common.sensitive import is_sensitive_topic_and_request
 from common.universal_templates import is_any_question_sentence_in_utterance
 from common.utils import get_topics, get_intents, get_entities, get_toxic, is_no
@@ -89,6 +89,8 @@ def what_do_you_mean_response(dialog):
             reply, confidence = REPEAT_PHRASE, SUPER_CONF
         elif detect_end_but(dialog['human_utterances'][-1]['text']):
             reply, confidence = BUT_PHRASE, SUPER_CONF
+        elif detect_end_because(dialog['human_utterances'][-1]['text']):
+            reply, confidence = BECAUSE_PHRASE, SUPER_CONF
         else:
             # collect prev current intents, topics
             intent_list, da_topic_list, cobot_topic_list = collect_topics_entities_intents(dialog)

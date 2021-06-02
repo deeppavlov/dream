@@ -38,7 +38,9 @@ WHAT_WHO_PATTERN = re.compile(r'(what|who)', re.IGNORECASE)
 WHAT_WHO_IS_PATTERN = re.compile(r'(what|who) is[\.\?]?$', re.IGNORECASE)
 END_ARTICLE_PATTERN = re.compile(r'( a| an| the| and)[\.\?]?$', re.IGNORECASE)
 BUT_PATTERN = re.compile(r" but[\.\?]?$", re.IGNORECASE)
+BECAUSE_PATTERN = re.compile(r" but[\.\?]?$", re.IGNORECASE)
 BUT_PHRASE = 'But what?'
+BECAUSE_PHRASE = 'Because of what?'
 REPEAT_PHRASE = "Could you please repeat what you have just said?"
 
 
@@ -52,3 +54,7 @@ def detect_interrupt(text):
 
 def detect_end_but(text):
     return re.search(BUT_PATTERN, text)
+
+
+def detect_end_because(text):
+    return re.search(BECAUSE_PATTERN, text)
