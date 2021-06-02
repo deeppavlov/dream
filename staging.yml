@@ -262,6 +262,10 @@ services:
     image: ${DOCKER_REGISTRY}/dff-bot-persona-skill:${VERSION}
     env_file:
       - ${ENV_FILE}
+  dff-gaming-skill:
+    image: ${DOCKER_REGISTRY}/dff-gaming-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   dff-gossip-skill:
     image: ${DOCKER_REGISTRY}/dff-gossip-skill:${VERSION}
     env_file:

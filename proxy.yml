@@ -511,6 +511,14 @@ services:
       - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/dff-bot-persona-skill
       - PORT=8105
     command: [ "nginx", "-g", "daemon off;" ]
+  dff-gaming-skill:
+    build:
+      context: df/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/dff-gaming-skill
+      - PORT=8115
+    command: [ "nginx", "-g", "daemon off;" ]
   dff-gossip-skill:
     build:
       context: dp/proxy/

@@ -673,6 +673,10 @@ def dff_animals_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_animals_skill")
 
 
+def dff_gaming_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_gaming_skill")
+
+
 def dff_sport_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_sport_skill")
 
