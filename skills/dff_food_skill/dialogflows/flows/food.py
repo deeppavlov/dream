@@ -229,25 +229,25 @@ def lets_talk_about_check(vars):
         flag = ""
     elif if_chat_about_particular_topic(human_utt, bot_utt, compiled_pattern=FOOD_WORDS_RE):
         flag = "if_chat_about_particular_topic"
-    elif re.search(FOOD_WORDS_RE, human_utt["text"]):
+    elif bool(re.search(FOOD_WORDS_RE, human_utt["text"])):
         flag = "FOOD_WORDS_RE"
-    elif re.search(FOOD_UTTERANCES_RE, bot_utt["text"]):
+    elif bool(re.search(FOOD_UTTERANCES_RE, bot_utt["text"])):
         flag = "FOOD_UTTERANCES_RE"
-    elif re.search(CUISINE_UTTERANCES_RE, bot_utt["text"]):
+    elif bool(re.search(CUISINE_UTTERANCES_RE, bot_utt["text"])):
         flag = "CUISINE_UTTERANCES_RE"
     elif check_conceptnet(vars)[0]:
         flag = "check_conceptnet"
-    elif re.search(DONOTKNOW_LIKE_RE, human_utt["text"]):
+    elif bool(re.search(DONOTKNOW_LIKE_RE, human_utt["text"])):
         flag = "DONOTKNOW_LIKE_RE"
     else:
         flag = ""
     # user_lets_chat_about_food = any(
     #     [
-    #         re.search(FOOD_WORDS_RE, human_utt["text"].lower()),
+    #         bool(re.search(FOOD_WORDS_RE, human_utt["text"].lower())),
     #         if_chat_about_particular_topic(human_utt, bot_utt, compiled_pattern=FOOD_WORDS_RE),
     #         check_conceptnet(vars)[0],
-    #         re.search(FOOD_SKILL_TRANSFER_PHRASES_RE, human_utt["text"].lower()),
-    #         re.search(DONOTKNOW_LIKE_RE, human_utt["text"].lower())
+    #         bool(re.search(FOOD_SKILL_TRANSFER_PHRASES_RE, human_utt["text"].lower())),
+    #         bool(re.search(DONOTKNOW_LIKE_RE, human_utt["text"].lower()))
     #     ]
     # )
     # and (not state_utils.get_last_human_utterance(vars)["text"].startswith("what"))
@@ -296,7 +296,7 @@ def cuisine_request(ngrams, vars):
     all_words = any([i in utt for i in ["all", "many", "multiple"]])
     flag = any([utt_adj, check_conceptnet(vars)[0], all_words]) and (not any(
         [
-            re.search(NO_WORDS_RE, utt),
+            bool(re.search(NO_WORDS_RE, utt)),
             dont_want_talk(vars)
         ]
     ))
@@ -500,12 +500,12 @@ def fav_food_check(vars):
     flag = False
     user_fav_food = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
     # cobot_topic = "Food_Drink" in get_topics(state_utils.get_last_human_utterance(vars), which="cobot_topics")
-    food_words_search = re.search(FOOD_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"])
+    food_words_search = bool(re.search(FOOD_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"]))
     if all(
         [
             any([user_fav_food, check_conceptnet(vars), food_words_search]),
-            condition_utils.no_requests(vars),
-            not re.search(NO_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"]),
+            # condition_utils.no_requests(vars),
+            not bool(re.search(NO_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"])),
             not dont_want_talk(vars)
         ]
     ):
@@ -580,9 +580,9 @@ def food_fact_response(vars):
                 state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
             if any(
                 [
-                    re.search(DONOTKNOW_LIKE_RE, human_utt_text),
+                    bool(re.search(DONOTKNOW_LIKE_RE, human_utt_text)),
                     dont_want_talk(vars),
-                    re.search(NO_WORDS_RE, human_utt_text)
+                    bool(re.search(NO_WORDS_RE, human_utt_text))
                 ]
             ):
                 state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
@@ -730,7 +730,7 @@ def suggest_cook_response(vars):
             ]
         )
         if linkto_food_skill_agreed:
-            if is_yes(user_utt) or re.search(LIKE_RE, user_utt["text"].lower()):
+            if is_yes(user_utt) or bool(re.search(LIKE_RE, user_utt["text"].lower())):
                 state_utils.set_confidence(vars, confidence=CONF_HIGH)
                 state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
             elif not is_no(user_utt):
@@ -786,7 +786,7 @@ def check_cooking_request(ngrams, vars):
         [
             is_yes(state_utils.get_last_human_utterance(vars)),
             not is_no(state_utils.get_last_human_utterance(vars)),
-            re.search(LIKE_RE, state_utils.get_last_human_utterance(vars)["text"].lower())
+            bool(re.search(LIKE_RE, state_utils.get_last_human_utterance(vars)["text"].lower()))
         ]
     )
     if linkto_food_skill_agreed:
@@ -802,10 +802,10 @@ def said_fav_food_request(ngrams, vars):
     user_utt_text = state_utils.get_last_human_utterance(vars)["text"]
     bot_utt_text = state_utils.get_last_bot_utterance(vars)["text"]
     food_topic_checked = lets_talk_about_check(vars)
-    # fav_in_bot_utt = re.search(FAV_RE, state_utils.get_last_bot_utterance(vars)["text"])
+    # fav_in_bot_utt = bool(re.search(FAV_RE, state_utils.get_last_bot_utterance(vars)["text"]))
     food_checked = any(
         [
-            re.search(FOOD_WORDS_RE, user_utt_text),
+            bool(re.search(FOOD_WORDS_RE, user_utt_text)),
             check_conceptnet(vars)[0]
         ]
     )
