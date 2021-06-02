@@ -522,8 +522,8 @@ def did_not_extracted_movie_title_after_clarification_request(ngrams, vars):
 def praise_random_actor_from_cast(movie_id, top_n_actors=2):
     genres = templates.imdb.get_info_about_movie(movie_id, field="genre")
     actors = templates.imdb.get_info_about_movie(movie_id, field="actors")
-    if actors:
-        actor = random.choice(actors[:top_n_actors])
+    if actors and len(actors) > 1:
+        actor = random.choice(actors[1:top_n_actors])
         phrase = praise_actor(actor, animation="Animation" in genres)
     else:
         phrase = "This movie is definitely worth watching."
