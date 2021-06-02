@@ -3,6 +3,7 @@ import os
 import logging
 import random
 import re
+from copy import deepcopy
 from enum import Enum, auto
 
 import sentry_sdk
@@ -15,6 +16,7 @@ import dialogflows.scopes as scopes
 
 from CoBotQA.cobotqa_service import send_cobotqa
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT, MUST_CONTINUE, CAN_NOT_CONTINUE
+from common.gaming import get_harry_potter_part_name_if_special_link_was_used
 from common.movies import get_movie_template, praise_actor, praise_director_or_writer_or_visuals, \
     WHAT_OTHER_MOVIE_TO_DISCUSS, CLARIFY_WHAT_MOVIE_TO_DISCUSS, MOVIE_COMPILED_PATTERN, ABOUT_MOVIE_TITLES_PHRASES, \
     DIFFERENT_SCRIPT_TEMPLATES, RECOMMEND_REQUEST_PATTERN, RECOMMEND_OFFER_PATTERN, RECOMMEND_OFFER_RESPONSE, \
@@ -197,14 +199,12 @@ def user_was_asked_about_movie_title(vars):
 
 
 def user_was_asked_about_movie_title_request(ngrams, vars):
-
     if user_was_asked_about_movie_title(vars):
         return True
     return False
 
 
 def user_refused_movie_title_question_request(ngrams, vars):
-
     if user_was_asked_about_movie_title(vars) and condition_utils.is_no_vars(vars):
         return True
     return False
@@ -286,17 +286,25 @@ EXTRACTED_MENTIONS_BUFFER = {}
 
 def extract_mentions(vars, check_full_utterance=False):
     global EXTRACTED_MENTIONS_BUFFER
-
-    curr_human_uttr_text = state_utils.get_last_human_utterance(vars).get("text", "")
+    curr_human_uttr = deepcopy(state_utils.get_last_human_utterance(vars))
+    curr_human_uttr_text = curr_human_uttr.get("text", "")
+    harry_potter_part_name = get_harry_potter_part_name_if_special_link_was_used(
+        curr_human_uttr, state_utils.get_last_bot_utterance(vars))
+    logger.info(f"harry_potter_part_name={harry_potter_part_name}")
+    if harry_potter_part_name is not None:
+        logger.info(
+            f"replacing phrase '{curr_human_uttr_text}' for '{harry_potter_part_name}' for mentions extraction")
+        curr_human_uttr_text = harry_potter_part_name.lower()
+        curr_human_uttr["text"] = harry_potter_part_name.lower()
+    logger.info("before second if")
     if curr_human_uttr_text in EXTRACTED_MENTIONS_BUFFER:
         movies_ids, unique_persons, mentioned_genres = EXTRACTED_MENTIONS_BUFFER[curr_human_uttr_text]
     else:
         movies_ids, unique_persons, mentioned_genres = templates.extract_mentions(
-            state_utils.get_last_human_utterance(vars), find_ignored=True, check_full_utterance=check_full_utterance)
+            curr_human_uttr, find_ignored=True, check_full_utterance=check_full_utterance)
         if len(EXTRACTED_MENTIONS_BUFFER) == 100:
             EXTRACTED_MENTIONS_BUFFER = {}
         EXTRACTED_MENTIONS_BUFFER[curr_human_uttr_text] = [movies_ids, unique_persons, mentioned_genres]
-
     return movies_ids, unique_persons, mentioned_genres
 
 

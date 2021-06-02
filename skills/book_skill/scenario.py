@@ -8,6 +8,7 @@ from os import getenv
 
 from common.books import BOOK_SKILL_CHECK_PHRASES, about_book, BOOK_PATTERN, ASK_TO_REPEAT_BOOK
 from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
+from common.gaming import ALL_LINKS_TO_BOOKS
 from common.universal_templates import is_switch_topic, if_chat_about_particular_topic, tell_me_more, \
     is_positive, is_negative
 from common.utils import is_yes, is_no, entity_to_label
@@ -66,8 +67,8 @@ OPINION_REQUEST_ON_BOOK_PHRASES = ["Did you enjoy this book?",
 BOOK_ACKNOWLEDGEMENT_PHRASE = 'Never heard about it. Is it a book, an author or a genre?'
 WILL_CHECK = 'OK, I will check it out later.'
 DONT_KNOW_EITHER = "I don't know either. Let's talk about something else."
-QUESTIONS_ABOUT_BOOK = [BOOK_ANY_PHRASE, LAST_BOOK_READ,
-                        WHAT_BOOK_IMPRESSED_MOST, BOOK_ACKNOWLEDGEMENT_PHRASE] + BOOK_SKILL_CHECK_PHRASES
+QUESTIONS_ABOUT_BOOK = [BOOK_ANY_PHRASE, LAST_BOOK_READ, WHAT_BOOK_IMPRESSED_MOST, BOOK_ACKNOWLEDGEMENT_PHRASE] \
+    + BOOK_SKILL_CHECK_PHRASES + ALL_LINKS_TO_BOOKS
 CURRENT_YEAR = datetime.datetime.today().year
 
 

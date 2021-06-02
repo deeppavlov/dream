@@ -1,0 +1,34 @@
+[
+    [
+        "Cool! Minecraft is the best game ever! I had a great time building a copy of the Hogwarts castle from Harry Potter. What is the most interesting thing you built?",
+        1.0,
+        {
+            "dff_gaming_skill_state": {
+                "shared_memory": {
+                    "current_igdb_game_id": 121,
+                    "igdb_game_ids_user_wanted_to_discuss": [
+                        121
+                    ],
+                    "candidate_game_id": ""
+                },
+                "previous_human_utter_index": 0,
+                "history": {
+                    "0": "State.SYS_USER_DEFINITELY_WANTS_TO_TALK_ABOUT_MINECRAFT"
+                },
+                "current_turn_dff_suspended": false,
+                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_TELL_ABOUT_BUILDING_HOGWARTS_IN_MINECRAFT_ASK_WHAT_INTERESTING_USER_BUILT\", \"__stack__\": [], \"__user_utterance__\": \"lets chat about video game minecraft\", \"__system_state__\": \"State.SYS_USER_DEFINITELY_WANTS_TO_TALK_ABOUT_MINECRAFT\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"Cool! Minecraft is the best game ever! I had a great time building a copy of the Hogwarts castle from Harry Potter. What is the most interesting thing you built?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"GAMING\\\"<__tuple__>\\\"State.USR_TELL_ABOUT_BUILDING_HOGWARTS_IN_MINECRAFT_ASK_WHAT_INTERESTING_USER_BUILT\\\"\"}"
+            },
+            "dff_shared_state": {
+                "cross_states": {},
+                "cross_links": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "must"
+        }
+    ]
+]

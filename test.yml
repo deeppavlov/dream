@@ -86,6 +86,8 @@ services:
     env_file: [ .env.dev ]
   dff-movie-skill:
     env_file: [ .env.dev ]
+  dff-gaming-skill:
+    env_file: [ .env.dev ]
   ner:
     env_file: [ .env.dev ]
     volumes:

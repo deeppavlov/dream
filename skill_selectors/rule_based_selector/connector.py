@@ -177,6 +177,7 @@ class RuleBasedSkillSelectorConnector:
                                       'dff_science_skill', 'dff_gossip_skill',  # 'dff_celebrity_skill',
                                       'game_cooperative_skill', 'weather_skill', 'dff_funfact_skill',
                                       'dff_travel_skill', 'coronavirus_skill', "dff_bot_persona_skill",
+                                      'dff_gaming_skill',
                                       ])
 
                 # if user mentions

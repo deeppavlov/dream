@@ -344,6 +344,14 @@ services:
       - "./skills/knowledge_grounding_skill:/src"
     ports:
       - 8085:8085
+
+  dff-gaming-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_gaming_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8115:8115
   dff-friendship-skill:
     env_file: [.env.dev]
     volumes:

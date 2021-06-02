@@ -437,7 +437,7 @@
             "topic_recommendation": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 2,
                     "url": "http://topic-recommendation:8113/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:convert_formatter_dialog",
@@ -839,6 +839,19 @@
                     "url": "http://dff-animals-skill:8094/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_animals_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis"
+            },
+            "dff_gaming_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://dff-gaming-skill:8115/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_gaming_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"

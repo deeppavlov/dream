@@ -1,0 +1,447 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "Let's chat about video game minecraft.",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "Let's chat about video game minecraft",
+                        "factoid_classification": {
+                            "factoid": 0.9820944666862488,
+                            "conversational": 0.01790553517639637
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.9967222213745117
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_General": 0.996674120426178
+                            },
+                            "cobot_topics": {
+                                "Games": 0.9564911127090454
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9976857304573059
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6838250160217285
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.002444237470626831
+                            }
+                        },
+                        "cobot_nounphrases": [
+                            "video game minecraft"
+                        ],
+                        "cobot_entities": {
+                            "entities": [
+                                "video game minecraft"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "text": "video game minecraft"
+                                }
+                            ]
+                        },
+                        "sentseg": {
+                            "punct_sent": "Let's chat about video game minecraft.",
+                            "segments": [
+                                "Let's chat about video game minecraft."
+                            ]
+                        },
+                        "conceptnet": {
+                            "video game minecraft": {
+                                "Causes": [
+                                    "you will be entertain",
+                                    "boredom",
+                                    "entertainment"
+                                ],
+                                "CausesDesire": [
+                                    "play game",
+                                    "play video game",
+                                    "watch tv"
+                                ],
+                                "HasProperty": [
+                                    "very entertain",
+                                    "fun",
+                                    "entertain"
+                                ],
+                                "SymbolOf": [
+                                    "past tense of future",
+                                    "evil",
+                                    "past tense of present"
+                                ]
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_travel_skill",
+                            "game_cooperative_skill",
+                            "dff_movie_skill"
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "cobot_dialogact": {
+                            "intents": [
+                                "Information_RequestIntent"
+                            ],
+                            "topics": [
+                                "Entertainment_General"
+                            ]
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Let's chat about video game minecraft."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    0.9171895384788513,
+                                    0.6538071036338806,
+                                    0.5859475135803223
+                                ],
+                                "entity_ids": [
+                                    "Q7889",
+                                    "Q49740",
+                                    "Q2748998"
+                                ],
+                                "entity_pages": [
+                                    "A video game is an electronic game that involves interaction with a user interface or input device such as a joystick, controller, keyboard, or motion sensing device to generate visual feedback for a player. This feedback is shown on a video display device, such as a TV set, monitor, touchscreen or virtual reality headset. Video games are often augmented with audio feedback delivered through speakers or headphones, and sometimes with other types of feedback, including haptic technology. ",
+                                    "Minecraft is a sandbox video game developed by Mojang. The game was created by Markus \"Notch\" Persson in the Java programming language. Following several early test versions, it was released as a paid public alpha for personal computers in 2009 before releasing in November 2011, with Jens Bergensten taking over development. Minecraft has since been ported to several other platforms and is the best-selling video game of all time, with 200 million copies sold and 126 million monthly active users ."
+                                ],
+                                "entity_pages_titles": [
+                                    "Video game",
+                                    "Minecraft",
+                                    "Game Over (video game)"
+                                ],
+                                "entity_substr": "video game minecraft",
+                                "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            }
+                        ],
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {
+                                "video game minecraft": {
+                                    "conf": 0.9171895384788513,
+                                    "entity_label": "video game",
+                                    "has quality": [
+                                        [
+                                            "Q1971694",
+                                            "game mode"
+                                        ],
+                                        [
+                                            "Q241317",
+                                            "computing platform"
+                                        ],
+                                        [
+                                            "Q42907216",
+                                            "video game theme"
+                                        ],
+                                        [
+                                            "Q55070019",
+                                            "video game feature"
+                                        ],
+                                        [
+                                            "Q659563",
+                                            "video game genre"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q7889",
+                                    "pos": 0,
+                                    "subclass of": [
+                                        [
+                                            "Q17537576",
+                                            "creative work"
+                                        ],
+                                        [
+                                            "Q2249149",
+                                            "electronic game"
+                                        ],
+                                        [
+                                            "Q51938570",
+                                            "entertainment software"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": []
+                                }
+                            },
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {
+                                "video game minecraft": {
+                                    "awards received": [
+                                        [
+                                            "Q16218137",
+                                            "Seumas McNally Grand Prize"
+                                        ]
+                                    ],
+                                    "conf": 0.6538071036338806,
+                                    "entity_label": "Minecraft",
+                                    "genre": [
+                                        [
+                                            "Q21030988",
+                                            "survival game"
+                                        ],
+                                        [
+                                            "Q343568",
+                                            "action-adventure game"
+                                        ]
+                                    ],
+                                    "has quality": [
+                                        [
+                                            "Q70719326",
+                                            "crafting"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q7889",
+                                            "video game"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q49740",
+                                    "pos": 1,
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q17537576",
+                                            "creative work"
+                                        ],
+                                        [
+                                            "Q2249149",
+                                            "electronic game"
+                                        ],
+                                        [
+                                            "Q7889",
+                                            "video game"
+                                        ],
+                                        [
+                                            "Q51938570",
+                                            "entertainment software"
+                                        ]
+                                    ]
+                                }
+                            }
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Games"
+                            ]
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Celtics fans weren\u2019t the only ones angry with Kyrie Irving for stomping on Boston\u2019s center-court logo featuring \u201cLucky the Leprechaun\u201d on Sunday, a moment that took a backseat to a fan later throwing a water bottle at the Nets star.\n\u201cSo nobody going ... [1325 chars]",
+                                    "description": "Celtics fans weren\u2019t the only ones angry with Kyrie Irving for stomping on Boston\u2019s center-court logo featuring \u201cLucky the Leprechaun\u201d on Sunday, a moment that took a backseat to a fan later throwing a water bottle at the Nets star.",
+                                    "image": "https://nypost.com/wp-content/uploads/sites/2/2021/05/Kevin-Garnett-inset-was-not-happy-with-Kyrie-Irving-stomping-on-the-Celtics-logo..jpg?quality=90&strip=all&w=1200",
+                                    "publishedAt": "2021-05-31T23:25:00Z",
+                                    "source": {
+                                        "name": "New York Post ",
+                                        "url": "https://nypost.com"
+                                    },
+                                    "title": "Kevin Garnett blasts Kyrie Irving amid Celtics fiasco",
+                                    "url": "https://nypost.com/2021/05/31/kevin-garnett-blasts-kyrie-irving-amid-celtics-fiasco/"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "video game minecraft",
+                                "news": {},
+                                "which": "human"
+                            }
+                        ],
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0021815956570208073,
+                                "command": 0.9698843359947205,
+                                "comment": 0.0013859765604138374,
+                                "complaint": 0.002004168229177594,
+                                "dev_command": 0.009606814943253994,
+                                "neg_answer": 0.0009775592479854822,
+                                "open_question_factual": 0.0014809122076258063,
+                                "open_question_opinion": 0.002089397981762886,
+                                "opinion": 0.002028576098382473,
+                                "other_answers": 0.0007704641320742667,
+                                "pos_answer": 0.0029320132452994585,
+                                "statement": 0.0024592257104814053,
+                                "yes_no_question": 0.0021990081295371056
+                            }
+                        ],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [
+                                "A video game is an electronic game that involves interaction with a user interface or input device such as a joystick, controller, keyboard, or motion sensing device to generate visual feedback for a player.",
+                                "This feedback is shown on a video display device, such as a TV set, monitor, touchscreen or virtual reality headset.",
+                                "Minecraft is a sandbox video game developed by Mojang.",
+                                "The game was created by Markus \"Notch\" Persson in the Java programming language."
+                            ],
+                            "topic_facts": []
+                        },
+                        "cobotqa_annotator": {
+                            "facts": [
+                                {
+                                    "entity": "video game minecraft",
+                                    "fact": "Here's a fact about Minecrafts. I don't know the total number worldwide, but 2,432 channels are currently streaming Minecraft on Twitch."
+                                }
+                            ],
+                            "response": ""
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_gaming_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_states": {},
+            "cross_links": {}
+        }
+    ],
+    "entities_batch": [
+        {
+            "video game minecraft": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [
+                    {
+                        "full_name": "video game minecraft",
+                        "human_utterance_index": 0,
+                        "previous_skill_name": "pre_start"
+                    }
+                ],
+                "name": "video game minecraft"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}
