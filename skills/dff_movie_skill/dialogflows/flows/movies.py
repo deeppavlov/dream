@@ -290,13 +290,11 @@ def extract_mentions(vars, check_full_utterance=False):
     curr_human_uttr_text = curr_human_uttr.get("text", "")
     harry_potter_part_name = get_harry_potter_part_name_if_special_link_was_used(
         curr_human_uttr, state_utils.get_last_bot_utterance(vars))
-    logger.info(f"harry_potter_part_name={harry_potter_part_name}")
     if harry_potter_part_name is not None:
         logger.info(
             f"replacing phrase '{curr_human_uttr_text}' for '{harry_potter_part_name}' for mentions extraction")
         curr_human_uttr_text = harry_potter_part_name.lower()
         curr_human_uttr["text"] = harry_potter_part_name.lower()
-    logger.info("before second if")
     if curr_human_uttr_text in EXTRACTED_MENTIONS_BUFFER:
         movies_ids, unique_persons, mentioned_genres = EXTRACTED_MENTIONS_BUFFER[curr_human_uttr_text]
     else:
