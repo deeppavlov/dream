@@ -13,7 +13,7 @@ from os import getenv
 import sentry_sdk
 
 from common.universal_templates import opinion_request_question, fact_about_replace, FACT_ABOUT_TEMPLATES
-from common.utils import get_topics, get_intents, get_entities
+from common.utils import get_topics, get_intents, get_entities, is_special_factoid_question, COBOTQA_EXTRA_WORDS
 from common.factoid import FACT_REGEXP, WHAT_REGEXP
 
 
@@ -161,6 +161,11 @@ def respond():
                 confidence = 0.00
                 response = ""
 
+            if is_special_factoid_question(curr_uttr) and confidence > 0 and subject is None:
+                # for special factoid questions, original cobotqa response is found, assign conf to 1.0
+                confidence = 1.0
+
+            response = COBOTQA_EXTRA_WORDS.sub("", response).strip()
             curr_responses.append(response)
             curr_confidences.append(confidence)
         final_responses.append(curr_responses)

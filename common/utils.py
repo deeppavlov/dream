@@ -990,7 +990,7 @@ def remove_punctuation_from_dict_keys(element):
 
 
 PERSONAL_PRONOUNS = re.compile(
-    r"\b(i|you|he|she|it|we|they|me|him|her|us|them|its|mine|yours|his|hers|ours|theirs|myself|yourself|himself"
+    r"\b(i|you|he|she|it|we|they|me|my|him|her|us|them|its|mine|your|yours|his|hers|ours|theirs|myself|yourself|himself"
     r"|herself|itself|ourselves|themselves|their)\b",
     re.IGNORECASE)
 
@@ -1004,3 +1004,28 @@ def find_first_complete_sentence(sentences):
         else:
             return sent
     return None
+
+
+FACTOID_PATTERNS = re.compile(r"^(do you know |((can |could )you )tell me )?(please )?"
+                              r"((what|who|which|where) (is|are|was|were)\b|how to\b|when)", re.IGNORECASE)
+COUNTER_FACTOID_PATTERNS = re.compile(r"^(what|who|which|where) (is|are|was|were)( that|[\.\?]$)\b", re.IGNORECASE)
+
+
+def is_special_factoid_question(annotated_utterance):
+    uttr_text = annotated_utterance.get("text", "")
+    found = FACTOID_PATTERNS.search(uttr_text)
+    if found and not COUNTER_FACTOID_PATTERNS.search(uttr_text):
+        # remove first question like part
+        rest_string = uttr_text[uttr_text.find(found[0]) + len(found[0]):].strip()
+        if PERSONAL_PRONOUNS.search(rest_string):
+            # if any personal pronouns - not our case
+            return False
+        return True
+    return False
+
+
+COBOTQA_EXTRA_WORDS = re.compile(r"(this might answer your question[:\,] "
+                                 r"|(according to|from) (wikipedia|wikihow)[:\,] "
+                                 r"|here's (something|what) I found (from|on) [a-zA-Z0-9\-\.]:"
+                                 r"|here's a fact about [a-zA-Z0-9\- ]\.)",
+                                 re.IGNORECASE)
