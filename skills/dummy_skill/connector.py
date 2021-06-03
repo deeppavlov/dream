@@ -64,7 +64,7 @@ np_ignore_expr = re.compile("(" + "|".join([r'\b%s\b' % word for word in np_igno
 np_remove_expr = re.compile("(" + "|".join([r'\b%s\b' % word for word in np_remove_list]) + ")", re.IGNORECASE)
 rm_spaces_expr = re.compile(r'\s\s+')
 ASK_ME_QUESTION_PATTERN = re.compile(
-    r"^(do you have (a )?question|(can you|could you)?ask me (something|anything|question))", re.IGNORECASE)
+    r"^(do you have (a )?question|(can you|could you)?ask me (something|anything|[a-z ]+question))", re.IGNORECASE)
 
 donotknow_answers = [
     "What do you want to talk about?",
