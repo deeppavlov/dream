@@ -497,7 +497,7 @@ services:
     command: [ "nginx", "-g", "daemon off;" ]
   dff-gaming-skill:
     build:
-      context: df/proxy/
+      context: dp/proxy/
       dockerfile: Dockerfile
     environment:
       - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/dff-gaming-skill
