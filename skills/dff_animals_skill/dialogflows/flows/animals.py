@@ -11,10 +11,10 @@ import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_exten
 import common.dialogflow_framework.utils.state as state_utils
 from common.dialogflow_framework.utils.condition import if_was_prev_active
 from common.dialogflow_framework.utils.condition import get_last_state
-from common.universal_templates import if_chat_about_particular_topic, if_lets_chat
+from common.universal_templates import if_chat_about_particular_topic, if_lets_chat, NOT_LIKE_PATTERN
 from common.utils import is_yes, is_no
 from common.animals import PETS_TEMPLATE, PETS_TEMPLATE_EXT, ANIMALS_FIND_TEMPLATE, LIKE_ANIMALS_REQUESTS, \
-    WILD_ANIMALS, WHAT_PETS_I_HAVE, HAVE_LIKE_PETS_TEMPLATE, TRIGGER_PHRASES, DONT_LIKE, NOT_SWITCH_TEMPLATE, \
+    WILD_ANIMALS, WHAT_PETS_I_HAVE, HAVE_LIKE_PETS_TEMPLATE, TRIGGER_PHRASES, NOT_SWITCH_TEMPLATE, \
     DO_YOU_HAVE_TEMPLATE
 from common.wiki_skill import if_linked_to_wiki_skill
 from common.animals import stop_about_animals, find_entity_by_types, find_entity_conceptnet
@@ -97,7 +97,7 @@ def lets_talk_about_request(vars):
     isno = is_no(user_uttr)
     chat_about = if_chat_about_particular_topic(user_uttr, bot_uttr, compiled_pattern=ANIMALS_FIND_TEMPLATE)
     find_pattern = re.findall(ANIMALS_FIND_TEMPLATE, user_uttr["text"])
-    dont_like = re.findall(DONT_LIKE, user_uttr["text"])
+    dont_like = re.findall(NOT_LIKE_PATTERN, user_uttr["text"])
     was_prev_active = if_was_prev_active(vars)
     if chat_about and find_pattern:
         flag = True
@@ -159,7 +159,7 @@ def mention_pets_request(ngrams, vars):
     text = state_utils.get_last_human_utterance(vars)["text"]
     shared_memory = state_utils.get_shared_memory(vars)
     started = shared_memory.get("start", False)
-    dont_like = re.findall(DONT_LIKE, text)
+    dont_like = re.findall(NOT_LIKE_PATTERN, text)
     found_blacklist = re.findall(NOT_SWITCH_TEMPLATE, text)
     if re.search(PETS_TEMPLATE, text) and not started and not dont_like and not found_blacklist:
         flag = True
@@ -175,7 +175,7 @@ def mention_animals_request(ngrams, vars):
     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
     if find_entity_conceptnet(annotations, ["animal"]) and not started:
         flag = True
-    dont_like = re.findall(DONT_LIKE, text)
+    dont_like = re.findall(NOT_LIKE_PATTERN, text)
     found_blacklist = re.findall(NOT_SWITCH_TEMPLATE, text)
     if dont_like or if_link_from_wiki_skill(vars) or found_blacklist:
         flag = False
@@ -340,7 +340,7 @@ def what_wild_request(ngrams, vars):
     text = state_utils.get_last_human_utterance(vars)["text"]
     shared_memory = state_utils.get_shared_memory(vars)
     user_asks_about_pets = re.search(PETS_TEMPLATE, text)
-    dont_like = re.findall(DONT_LIKE, text)
+    dont_like = re.findall(NOT_LIKE_PATTERN, text)
     is_wild = shared_memory.get("is_wild", False)
     what_wild = shared_memory.get("what_wild", False)
     logger.info(f"what_wild_request, is wild {is_wild}, what wild {what_wild}")

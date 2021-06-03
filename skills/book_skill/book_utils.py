@@ -12,7 +12,7 @@ from common.books import QUESTIONS_ABOUT_BOOKS, about_book
 from common.utils import is_opinion_request, get_intents
 from common.link import link_to
 from common.utils import entity_to_label, get_raw_entity_names_from_annotations
-from common.universal_templates import is_switch_topic
+from common.universal_templates import is_switch_topic, NOT_LIKE_PATTERN
 from common.custom_requests import request_triples_wikidata, request_entities_entitylinking
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -22,12 +22,6 @@ logger = logging.getLogger(__name__)
 
 USE_CACHE = True
 
-NOT_LIKE_PATTERN = r"(dislike|not like|not want|not love|not prefer|hate|n't like|" \
-                   r"not into|not fond|not crazy|not appriciate|n't appriciate|" \
-                   r"disintrested|not for you|not for me|not a big fan|loathe|not stand|n't stand|" \
-                   r"not much of fan|i (do)? not read)"
-LIKE_PATTERN = r"(like|love|prefer|adore|enjoy|fond of|passionate of|fan of|interested in|" \
-               r"into|for you|for me)"
 FAVORITE_PATTERN = r"(favorite|loved|beloved|fondling|best|most interesting)"
 CHRISTIANITY_PATTERN = r"(bibla\b|bible\b|bibel\b)"
 

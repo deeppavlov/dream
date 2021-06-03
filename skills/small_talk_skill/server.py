@@ -13,7 +13,7 @@ import sentry_sdk
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT, MUST_CONTINUE
 from common.utils import get_skill_outputs_from_dialog, get_sentiment, is_yes
 from common.universal_templates import if_choose_topic, if_switch_topic, if_chat_about_particular_topic, \
-    is_any_question_sentence_in_utterance
+    is_any_question_sentence_in_utterance, NOT_LIKE_PATTERN, COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
 from topic_words import TOPIC_PATTERNS
 
 
@@ -79,7 +79,9 @@ def respond():
                 (len(new_user_topic) == 0 or new_conf == FOUND_WORD_START_CONFIDENCE or new_user_topic == topic):
             # we continue dialog if new topic was not found or was found just as the key word in user sentence.
             # because we can start a conversation picking up topic with key word with small proba
-            if sentiment == "negative":
+            user_dont_like = NOT_LIKE_PATTERN.search(dialog['human_utterances'][-1]['text'])
+            user_stop_talking = COMPILE_NOT_WANT_TO_TALK_ABOUT_IT.search(dialog['human_utterances'][-1]['text'])
+            if sentiment == "negative" or user_dont_like or user_stop_talking:
                 logger.info("Found negative sentiment to small talk phrase. Finish script.")
                 response, confidence, attr = "", 0.0, {"can_continue": CAN_NOT_CONTINUE,
                                                        "small_talk_topic": "", "small_talk_step": 0,

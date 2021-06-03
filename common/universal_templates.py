@@ -175,6 +175,14 @@ COMPILE_SOMETHING = re.compile(join_sentences_in_or_pattern(
     re.IGNORECASE)
 
 
+LIKE_WORDS = r"\b(prefer|adore|enjoy|love|like|stand|into\b|fond of|passionate of|crazy|appreciate|interested|fan\b)"
+LIKE_PATTERN = re.compile(LIKE_WORDS, re.IGNORECASE)
+
+NOT_LIKE_PATTERN = re.compile(
+    rf"(hate|loathe|((not|n't) |dis|un)({LIKE_WORDS}|for (me|you)\b)|[a-z ]+\bfan\b)",
+    re.IGNORECASE)
+
+
 def if_lets_chat(uttr):
     uttr_ = uttr.lower()
     if re.search(COMPILE_LETS_TALK, uttr_):

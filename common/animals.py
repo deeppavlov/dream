@@ -34,7 +34,6 @@ HAVE_LIKE_PETS_TEMPLATE = re.compile(r"(do|did|have) you (have |had |like )?(any
                                      re.IGNORECASE)
 HAVE_PETS_TEMPLATE = re.compile(r"(do|did|have) you (have |had )?(any |a )?(pets|pet|animals|animal)", re.IGNORECASE)
 LIKE_PETS_TEMPLATE = re.compile(r"(do|did|have) you (like |love )?(any |a )?(pets|pet|animals|animal)", re.IGNORECASE)
-DONT_LIKE = re.compile(r"(do not like|don't like|dont like|hate)", re.IGNORECASE)
 DO_YOU_HAVE_TEMPLATE = re.compile(r"do you have (a |an |the |any |some )?(cat|dog|puppy|kitty|kitten|rat|fish|parrot"
                                   r"|hamster|\bpet|\bpets)", re.IGNORECASE)
 NOT_SWITCH_TEMPLATE = re.compile(r"(hot dog)", re.IGNORECASE)
