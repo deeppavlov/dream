@@ -11,7 +11,7 @@ from common.grounding import what_we_talk_about, are_we_recorded, detect_interru
     detect_end_because, BUT_PHRASE, REPEAT_PHRASE, BECAUSE_PHRASE
 from common.sensitive import is_sensitive_topic_and_request
 from common.universal_templates import is_any_question_sentence_in_utterance
-from common.utils import get_topics, get_intents, get_entities, get_toxic, is_no
+from common.utils import get_topics, get_intents, get_entities, is_toxic_or_blacklisted_utterance, is_no
 from utils import MIDAS_INTENT_ACKNOWLEDGMENTS, get_midas_intent_acknowledgement, reformulate_question_to_statement, \
     INTENT_DICT, DA_TOPIC_DICT, COBOT_TOPIC_DICT, get_entity_name, get_midas_analogue_intent_for_any_intent
 
@@ -220,7 +220,7 @@ def generate_universal_response(dialog):
     if is_question and is_sensitive_topic_and_request(dialog["human_utterances"][-1]):
         # if question in sensitive situation - answer with confidence 0.99
         confidence = ALMOST_SUPER_CONF
-    if ackn:
+    if ackn and not is_toxic_or_blacklisted_utterance(dialog['human_utterances'][-1]):
         reply = f"{ackn} {reply}"
         attr["response_parts"] = ["acknowlegdement", "body"]
     return reply, confidence, human_attr, bot_attr, attr
@@ -260,14 +260,9 @@ class GroundingSkillScenario:
             curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs = [], [], [], [], []
 
             # what do you mean response
-            if len(dialog['human_utterances']) > 1:
-                prev_human_uttr = dialog['human_utterances'][-2]
-                toxic_result = get_toxic(prev_human_uttr, probs=False)
-                default_blacklist = {'inappropriate': False, 'profanity': False, 'restricted_topics': False}
-                blacklist_result = prev_human_uttr.get("annotations", {}).get('blacklisted_words', default_blacklist)
-                is_toxic = toxic_result or blacklist_result['profanity'] or blacklist_result['inappropriate']
-            else:
-                is_toxic = False
+            is_toxic = is_toxic_or_blacklisted_utterance(
+                dialog['human_utterances'][-2]) if len(dialog['human_utterances']) > 1 else False
+
             reply, confidence, human_attr, bot_attr, attr = are_we_recorded_response(dialog)
             if reply and confidence:
                 curr_responses += [reply]
