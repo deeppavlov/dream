@@ -15,7 +15,7 @@ services:
         comet-conceptnet:8065, news-api-skill:8066, short-story-skill:8057, factoid-qa:8071, kbqa:8072,
         factoid-classification:8073, spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, text-qa:8078,
         knowledge-grounding:8083, combined-classification:8087, knowledge-grounding-skill:8085,
-        dff-friendship-skill:8086, masked-lm:8088, entity-storer:8089, wikidata-dial-skill:8091, wikidata-dial-service:8092,
+        dff-friendship-skill:8086, masked-lm:8088, entity-storer:8089,
         book-skill:8032, grounding-skill:8080,
         dff-animals-skill:8094, dff-travel-skill:8096, dff-food-skill:8097, dff-sport-skill:8098, dff-science-skill:8101,
         midas-classification:8090, fact-retrieval:8100, cobot-entities:8102,
@@ -893,43 +893,6 @@ services:
           memory: 2G
         reservations:
           memory: 2G
-
-  wikidata-dial-skill:
-    build:
-      args:
-        PORT: 8091
-      context: skills/wikidata_dial_skill
-    command: flask run -h 0.0.0.0 -p 8091
-    environment:
-      - FLASK_APP=server
-    deploy:
-      mode: replicated
-      replicas: 1
-      resources:
-        limits:
-          memory: 256M
-        reservations:
-          memory: 256M
-
-  wikidata-dial-service:
-    build:
-      args:
-        CONFIG: kg_dial_generator.json
-        PORT: 8092
-        COMMIT: 5dac85a06fde0e2983c7569ae058e3bf2d45ce2c
-      context: services/wikidata_dial_service
-    command: flask run -h 0.0.0.0 -p 8092
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      mode: replicated
-      replicas: 1
-      resources:
-        limits:
-          memory: 10G
-        reservations:
-          memory: 10G
 
   dff-animals-skill:
     build:

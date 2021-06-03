@@ -152,14 +152,6 @@ services:
     env_file: [ .env.dev ]
   knowledge-grounding-skill:
     env_file: [ .env.dev ]
-  wikidata-dial-skill:
-    env_file: [ .env.dev ]
-  wikidata-dial-service:
-    env_file: [ .env.dev ]
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
-    environment:
-      - CUDA_VISIBLE_DEVICES=1
   dff-animals-skill:
     env_file: [ .env.dev ]
   dff-travel-skill:
