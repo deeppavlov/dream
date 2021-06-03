@@ -302,8 +302,8 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
     acknowledgement_hypothesis = {}
 
     for cand_id, cand_uttr in enumerate(candidates):
-        if candidates[cand_id]["confidence"] == 0.:
-            # skip PUNISHED for toxicity candidates
+        if confidences[cand_id] == 0.:
+            logger.info(f"Dropping cand_id: {cand_id} due to toxicity/blacklists")
             continue
 
         all_cand_intents, all_cand_topics, all_cand_named_entities, all_cand_nounphrases = get_main_info_annotations(
@@ -329,9 +329,9 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         #                                                               all_user_nounphrases)) > 0
         _same_topic_entity = False
 
-        if cand_uttr["skill_name"] == 'program_y' and cand_uttr['confidence'] == 0.98 and \
-                len(cand_uttr["text"].split()) > 6:
-            cand_uttr["can_continue"] = CAN_CONTINUE_SCENARIO
+        # if cand_uttr["skill_name"] == 'program_y' and cand_uttr['confidence'] == 0.98 and \
+        #         len(cand_uttr["text"].split()) > 6:
+        #     cand_uttr["can_continue"] = CAN_CONTINUE_SCENARIO
         _can_continue = cand_uttr.get("can_continue", CAN_NOT_CONTINUE)
 
         _is_active_skill = (_prev_active_skill == cand_uttr["skill_name"] or cand_uttr.get(
@@ -429,8 +429,8 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
                 how_are_you_spec in cand_uttr['text'] or what_i_can_do_spec in cand_uttr['text']) \
                 and len(dialog['utterances']) < 16:
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
-        elif cand_uttr["skill_name"] == 'program_y_dangerous' and cand_uttr['confidence'] == 0.98:
-            categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
+        # elif cand_uttr["skill_name"] == 'program_y_dangerous' and cand_uttr['confidence'] == 0.98:
+        #     categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
         elif cand_uttr["skill_name"] == 'small_talk_skill' and is_sensitive_situation(dialog["human_utterances"][-1]):
             # let small talk to talk about sex ^_^
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
