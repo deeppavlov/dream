@@ -30,7 +30,8 @@ IF_LOVE_READING = "That's great. Outside of a dog, a book is a man's best friend
 LAST_BOOK_READ = "What is the last book you have read?"
 IF_NOT_LOVE_READING = "Why don't you love reading? Maybe you haven't found the right book?"
 IF_NOT_REMEMBER_LAST_BOOK = "That's OK. I can't name it either."
-IF_REMEMBER_LAST_BOOK = "I adore books of AUTHOR, especially BOOK."
+IF_REMEMBER_LAST_BOOK = "You have a great taste in books! " \
+                        "I also adore books of AUTHOR, especially BOOK."
 ASK_WHY = "Why do you enjoy reading?"
 ASK_ABOUT_OFFERED_BOOK = "It's a real showpiece. Have you read it?"
 TELL_REQUEST = " May I tell you something about this book?"
