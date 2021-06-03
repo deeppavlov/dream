@@ -242,10 +242,12 @@ def get_response_for_particular_topic_and_status(topic, curr_meta_script_status,
             logger.info("Topic switching was detected. Finish script.")
             response, confidence = FINISHED_SCRIPT_RESPONSE, 0.5
             attr["meta_script_status"] = FINISHED_SCRIPT
+            attr["can_continue"] = CAN_NOT_CONTINUE
         elif get_user_replies_to_particular_skill(dialog["utterances"], "meta_script_skill")[-2:] == ["no.", "no."]:
             logger.info("Two consequent `no` answers were detected. Finish script.")
             response, confidence = FINISHED_SCRIPT_RESPONSE, 0.5
             attr["meta_script_status"] = FINISHED_SCRIPT
+            attr["can_continue"] = CAN_NOT_CONTINUE
         elif curr_meta_script_status == "comment":
             response, confidence, attr = get_comment_phrase(dialog, attr)
             attr["can_continue"] = CAN_NOT_CONTINUE
@@ -254,6 +256,7 @@ def get_response_for_particular_topic_and_status(topic, curr_meta_script_status,
         elif curr_meta_script_status == "deeper1" and (is_no(user_uttr) or "never" in text_user_uttr):
             response, confidence = FINISHED_SCRIPT_RESPONSE, 0.5
             attr["meta_script_status"] = FINISHED_SCRIPT
+            attr["can_continue"] = CAN_NOT_CONTINUE
         else:
             response, confidence, attr = get_statement_phrase(dialog, topic, attr, TOPICS)
             attr["can_continue"] = CAN_CONTINUE_SCENARIO
