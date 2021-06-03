@@ -308,7 +308,7 @@ def celebrity_from_uttr(human_utterance):
     entity_dict = human_utterance['annotations'].get('wiki_parser', {}).get('topic_skill_entities_info', {})
     logger.info(f"found entities: {entity_dict}")
     for celebrity_name in entity_dict:
-        if 'occupation' in entity_dict[celebrity_name]:
+        if 'occupation' in entity_dict[celebrity_name] and entity_dict[celebrity_name]["pos"] == 0:
             occupation_list = entity_dict[celebrity_name]['occupation']
             matching_types = [job[1] for job in occupation_list if job[0] in raw_profession_list]
             mismatching_types = [job[1] for job in occupation_list if job[0] not in raw_profession_list]
