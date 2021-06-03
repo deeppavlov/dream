@@ -174,7 +174,7 @@ def no_special_switch_off_requests(vars):
     is_switch = is_switch_topic(vars)
     is_lets_chat = is_lets_chat_about_topic_human_initiative(vars)
 
-    if not is_high_priority_intent or is_switch or is_lets_chat:
+    if not (is_high_priority_intent or is_switch or is_lets_chat):
         return True
     return False
 
