@@ -13,7 +13,7 @@ import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_exten
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 import dialogflows.scopes as scopes
-from common.constants import CAN_CONTINUE_PROMPT, MUST_CONTINUE, CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO
+from common.constants import CAN_CONTINUE_PROMPT, CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO
 from common.universal_templates import DONOTKNOW_LIKE, COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
 from common.utils import get_entities, join_words_in_or_pattern
 from common.food import FAST_FOOD_FACTS, FAST_FOOD_QUESTIONS, FAST_FOOD_WHAT_QUESTIONS, FOOD_WORDS, \
@@ -180,8 +180,8 @@ def fast_food_response(vars):
             question = random.choice(unused_questions)
             state_utils.save_to_shared_memory(vars, fast_food_questions=used_questions + [question])
         if fact and question:
-            state_utils.set_confidence(vars, confidence=CONF_HIGH)
-            state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+            state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
+            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
             return f"I just found out that {fact} {question}"
         else:
             state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
