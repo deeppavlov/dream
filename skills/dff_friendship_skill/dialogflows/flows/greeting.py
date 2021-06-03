@@ -311,6 +311,10 @@ def positive_or_negative_request(ngrams, vars):
     return False
 
 
+def no_requests_request(ngrams, vars):
+    return condition_utils.no_requests(vars)
+
+
 def how_human_is_doing_response(vars):
     # USR_STD_GREETING
     try:
@@ -587,7 +591,7 @@ simplified_dialogflow.add_user_serial_transitions(
     {
         (scopes.STARTER, StarterState.USR_START): starter_flow.starter_request,
         State.SYS_USR_ASKS_BOT_HOW_ARE_YOU: how_are_you_request,
-        State.SYS_USR_ANSWERS_HOW_IS_HE_DOING: positive_or_negative_request,
+        State.SYS_USR_ANSWERS_HOW_IS_HE_DOING: no_requests_request,
         (scopes.WEEKEND, weekend_flow.State.USR_START): weekend_flow.std_weekend_request,
     },
 )
