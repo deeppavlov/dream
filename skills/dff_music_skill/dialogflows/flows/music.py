@@ -359,26 +359,27 @@ def get_genre(vars):
     topic_skill_entities_info = wp_output.get("topic_skill_entities_info", {})
     for entities_info in [all_entities_info, topic_skill_entities_info]:
         for entity in entities_info:
-            logger.info(f"Entity: {entities_info[entity]}")
-            if "genre" in entities_info[entity]:
-                for genre in genres:
-                    for entity_genre in entities_info[entity]['genre']:
-                        if genre in entity_genre[1]:
-                            logger.info(f"Genre: {genre}")
-                            return True, genre
-            for i in entities_info[entity].get('instance of', []):
-                label = i[1]
-                if label == 'music genre' or label == 'genre':
+            if entities_info[entity]["conf"] > 0.7 and entities_info[entity]["token_conf"] > 0.9:
+                logger.info(f"Entity: {entities_info[entity]}")
+                if "genre" in entities_info[entity]:
                     for genre in genres:
-                        if genre in entity:
-                            logger.info(f"Genre: {genre}")
-                            return True, genre
-                elif label in {'music band', 'musical band', 'ensemble', 'musical group', 'artist', 'rock band'}:
-                    for genre in genres:
-                        for entity_genre in entities_info[entity].get('genre', []):
+                        for entity_genre in entities_info[entity]['genre']:
                             if genre in entity_genre[1]:
                                 logger.info(f"Genre: {genre}")
                                 return True, genre
+                for i in entities_info[entity].get('instance of', []):
+                    label = i[1]
+                    if label == 'music genre' or label == 'genre':
+                        for genre in genres:
+                            if genre in entity:
+                                logger.info(f"Genre: {genre}")
+                                return True, genre
+                    elif label in {'music band', 'musical band', 'ensemble', 'musical group', 'artist', 'rock band'}:
+                        for genre in genres:
+                            for entity_genre in entities_info[entity].get('genre', []):
+                                if genre in entity_genre[1]:
+                                    logger.info(f"Genre: {genre}")
+                                    return True, genre
     return False, None
 
 
