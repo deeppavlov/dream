@@ -25,7 +25,9 @@ def main_test():
                     "Why do you enjoy reading?",
                     "That's great. Outside of a dog, a book is a man's best friend. "
                     "What is the last book you have read?",
-                    "I adore books of J R R Tolkien, especially The Hobbit. It's a real showpiece. Have you read it?",
+                    "You have a great taste in books! "
+                    "I also adore books of J R R Tolkien, especially The Hobbit. "
+                    "It's a real showpiece. Have you read it?",
                     "You can read it. You won't regret it!  May I tell you something about this book?",
                     "The main subject of this book is Tolkien's legendarium. "
                     "The action of this book takes place in Middle-earth. "
