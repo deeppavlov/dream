@@ -42,7 +42,7 @@ SPORTS_NO_ING = r"\b(aerobics|archery|badminton|baseball|basketball|beach volley
                 r"|long jump|martial arts|motorbike sports|mountaineer|orienteer" \
                 r"|parachute|pole-vault|polo|ride|rowing|rugby|sail|ski|snooker" \
                 r"|track-and-field|triathlon|tug of war|volleyball|water polo|waterski" \
-                r"|weight lift|work out|wrestle|run|swim|fitness|lacrosse|ballet|march|soccer)"
+                r"|weight lift|work out|wrestle|run|swim|tennis|fitness|lacrosse|ballet|march|soccer)"
 # curling in SPORTS_NO_ING is not a mistake - there is not word to curl
 ING_FORMS = {'run': 'running', 'swim': 'swimming', 'ski': 'skiing', 'dive': 'diving', 'box': 'boxing',
              'canoe': 'canoeing', 'climb': 'climbing', 'cycle': 'cycling', 'fence': 'fencing',
@@ -50,9 +50,9 @@ ING_FORMS = {'run': 'running', 'swim': 'swimming', 'ski': 'skiing', 'dive': 'div
              'in-line skate': 'figure skating', 'hang glide': 'hand gliding',
              'high jump': 'high jumping', 'jog': 'jogging', 'sail': 'sailing', 'ride': 'riding', 'row': 'rowing',
              'weight lift': 'weight lifing', 'wrestle': 'wrestling', 'work out': 'working out',
-             'mountaineer': 'mountaineering',
+             'mountaineer': 'mountaineering', 'dance' : 'dancing',
              'orienteer': 'orienteering', 'parachute': 'parachuting', 'pole-vault': 'pole-vaulting',
-             'car race': 'car racing',
+             'car race': 'car racing', 'wakeboard': 'wakeboarding',
              'march': 'marching', 'long jump': 'long jumping'}
 REVERSE_ING_FORMS = {ING_FORMS[key]: key for key in ING_FORMS}
 SPORTS = rf"({'|'.join(ING_FORMS.values())}|{SPORTS_NO_ING})"
@@ -63,7 +63,7 @@ KIND_OF_SPORTS_TEMPLATE = re.compile(
 PASSIVE_SPORT = ["chess", "checkers"]
 
 OPINION_ABOUT_PASSIVE_SPORT = ["KIND_OF_SPORT is cool. But since I live in the cloud, I can only play PASSIVE_SPORT!",
-                               "I would love to play KIND_OF_SPORT. "
+                               "I would like to play KIND_OF_SPORT. "
                                "But I have no physical incarnation, so I can only play PASSIVE_SPORT!"
                                ]
 

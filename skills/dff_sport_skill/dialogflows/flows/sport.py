@@ -13,6 +13,7 @@ from CoBotQA.cobotqa_service import send_cobotqa
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
 from common.universal_templates import if_chat_about_particular_topic
+from common.link import link_to_skill2i_like_to_talk
 from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
 from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
 import common.greeting as common_greeting
@@ -60,7 +61,10 @@ logger = logging.getLogger(__name__)
 
 
 class State(Enum):
+    SYS_LINK_LIKE_SPORT = auto()
+    SYS_LINK_AND_ALL = auto()
     SYS_LINK_TO_LIKE_SPORT = auto()
+    SYS_LINK_AND_NEGATIVE = auto()
     SYS_LINK_TO_LIKE_ATHLETE = auto()
     SYS_LINK_TO_LIKE_COMP = auto()
     USR_START = auto()
@@ -130,6 +134,14 @@ simplified_dialogflow = dialogflow_extention.DFEasyFilling(State.USR_START)
 ##################################################################################################################
 # HELP FUNCTION
 ##################################################################################################################
+
+
+def was_question_to_my_skill(vars):
+    link_to_opinion_about_sport = any(
+        [req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower()
+         for req in link_to_skill2i_like_to_talk['dff_sport_skill']]
+    )
+    return bool(link_to_opinion_about_sport)
 
 
 def donot_chat_about(uttr):
@@ -440,6 +452,15 @@ def user_ask_who_do_u_support_response(vars):
 ##################################################################################################################
 
 
+def link_like_sport_request(ngrams, vars):
+    # SYS_LINK_LIKE_SPORT
+    was_my_question = was_question_to_my_skill(vars)
+    user_like_sport = user_like_sport_request(ngrams, vars)
+    flag = bool(user_like_sport) and bool(was_my_question)
+    logger.info(f"link_like_sport_request={flag}")
+    return flag
+
+
 def user_like_sport_request(ngrams, vars):
     # SYS_TELL_SPORT
     user_says_about_kind_of_sport = re.search(KIND_OF_SPORTS_TEMPLATE,
@@ -724,7 +745,7 @@ def user_ask_about_comp_response(vars):
         state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         return (
             f"Well. if I had a physical embodiment, I would like to go to the {competition} "
-            f"and see this wonderful tournament. Do you have a favorite competition?"
+            f"and see this wonderful tournament. What's your favorite tournament?"
         )
     except Exception as exc:
         logger.exception(exc)
@@ -845,6 +866,15 @@ def user_want_fact_about_comp_response(vars):
 ##################################################################################################################
 
 
+def user_negative_after_link_request(ngrams, vars):
+    # SYS_LINK_AND_NEGATIVE
+    was_question = was_question_to_my_skill(vars)
+    user_negative = user_negative_request(ngrams, vars)
+    flag = bool(was_question) and bool(user_negative)
+    logger.info(f"user_negative_after_link_request={flag}")
+    return flag
+
+
 def user_negative_request(ngrams, vars):
     # SYS_TELL_NEGATIVE
     is_negative = "negative" in get_sentiment(state_utils.get_last_human_utterance(vars),
@@ -880,6 +910,11 @@ def user_negative_response(vars):
 ##################################################################################################################
 # last chance == fullback
 ##################################################################################################################
+
+
+def user_no_emotion_after_link_request(ngrams, vars):
+    # SYS_LINK_AND_ALL
+    return bool(was_question_to_my_skill(vars))
 
 
 def last_chance_request(ngrams, vars):
@@ -918,6 +953,9 @@ def error_response(vars):
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_START,
     {
+        State.SYS_LINK_LIKE_SPORT: link_like_sport_request,
+        State.SYS_LINK_AND_NEGATIVE: user_negative_after_link_request,
+        State.SYS_LINK_AND_ALL: user_no_emotion_after_link_request,
         State.SYS_WHAT_SPORT: user_ask_about_sport_request,
         State.SYS_WHO_FAVORITE_ATHLETE: user_ask_about_athletes_request,
         State.SYS_WHO_SUPPORT: user_ask_who_do_u_support_request,
@@ -1049,9 +1087,14 @@ simplified_dialogflow.add_user_serial_transitions(
 simplified_dialogflow.set_error_successor(State.USR_ASK_ABOUT_SPORT, State.SYS_ERR)
 
 ##################################################################################################################
-# SYS_TELL_SPORT --> USR_WHY_LIKE_SPORT
+# SYS_TELL_SPORT || SYS_LINK_LIKE_SPORT  --> USR_WHY_LIKE_SPORT
 
-simplified_dialogflow.add_system_transition(State.SYS_TELL_SPORT, State.USR_WHY_LIKE_SPORT, user_like_sport_response)
+simplified_dialogflow.add_system_transition(
+    State.SYS_TELL_SPORT, State.USR_WHY_LIKE_SPORT, user_like_sport_response
+)
+simplified_dialogflow.add_system_transition(
+    State.SYS_LINK_LIKE_SPORT, State.USR_WHY_LIKE_SPORT, user_like_sport_response
+)
 
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_WHY_LIKE_SPORT,
@@ -1166,10 +1209,13 @@ simplified_dialogflow.add_user_serial_transitions(
 
 simplified_dialogflow.set_error_successor(State.USR_GET_FACT_ABOUT_COMP, State.SYS_ERR)
 ##################################################################################################################
-# SYS_LAST_CHANCE -> USR_LAST_CHANCE
+# SYS_LAST_CHANCE || SYS_LINK_AND_ALL -> USR_LAST_CHANCE
 
 simplified_dialogflow.add_system_transition(
     State.SYS_LAST_CHANCE, State.USR_LAST_CHANCE, last_chance_response
+)
+simplified_dialogflow.add_system_transition(
+    State.SYS_LINK_AND_ALL, State.USR_LAST_CHANCE, last_chance_response
 )
 
 simplified_dialogflow.add_user_serial_transitions(
@@ -1196,6 +1242,9 @@ simplified_dialogflow.add_user_serial_transitions(
 
 simplified_dialogflow.add_system_transition(
     State.SYS_TELL_NEGATIVE, State.USR_TELL_NEGATIVE, user_negative_response
+)
+simplified_dialogflow.add_system_transition(
+    State.SYS_LINK_AND_NEGATIVE, State.USR_TELL_NEGATIVE, user_negative_response
 )
 
 ##################################################################################################################
