@@ -226,20 +226,32 @@
         "Great thoughts! Thank you."
     ],
     "school": [
-        "Do you want to talk about school?",
         {
             "yes": [
                 "Are you a school student now?",
                 {
                     "yes": [
                         "So, pupil, yeah. That's a great time, don't miss that time! Do you like your school?",
-                        "Is that a public or private school?",
-                        "Oh cool! Did teachers grade students fairly?",
-                        "What are the qualities of a good teacher?",
-                        "What subjects were you good at?",
-                        "That is awesome! I am so proud of you. Would you like to go to the college?",
-                        "How do you think should people go straight from school to university, or do something different?",
-                        "Nice thoughts!"
+                        "Do you go to a public school or a private one?",
+                        "Oh cool! I've heard that some schools utilize uniform. Do you have to wear a uniform in your school?",
+                        "I see. Good preparation makes study significantly easier. You do a lot of homework every day, do you?",
+                        {
+                            "yes": [
+                                "Cool! I believe you are a good pupil! What subjects are you good at?"
+                            ],
+                            "no": [
+                                "Anyway, I believe you are smart person! What subjects are you good at?"
+                            ]
+                        },
+                        "That's interesting! I am so proud of you. Do you play on any of the school's sports teams?",
+                        {
+                            "yes": [
+                                "What kind of sport do you play?"
+                            ],
+                            "no": [
+                                "Anyway, I'd love to but I can't. I believe you put all your resources to study well!"
+                            ]
+                        }
                     ],
                     "no": [
                         "Where did you go to high school?",
@@ -253,7 +265,7 @@
                 }
             ],
             "no": [
-                "OK. What do you want to talk about?"
+                "You've mentioned something related to education, so I suggested you are a school student."
             ]
         }
     ],
