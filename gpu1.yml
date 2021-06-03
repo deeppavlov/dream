@@ -45,12 +45,6 @@ services:
   combined-classification:
     environment:
       - CUDA_VISIBLE_DEVICES=0
-  wikidata-dial-service:
-    environment:
-      - CUDA_VISIBLE_DEVICES=1
-  wikidata-dial-skill:
-    environment:
-      - CUDA_VISIBLE_DEVICES=''
   ner:
     environment:
       - CUDA_VISIBLE_DEVICES=1

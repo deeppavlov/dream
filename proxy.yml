@@ -407,22 +407,6 @@ services:
       - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/convers-evaluation-selector
       - PORT=8009
     command: [ "nginx", "-g", "daemon off;" ]
-  wikidata-dial-skill:
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/wikidata-dial-skill
-      - PORT=8091
-    command: [ "nginx", "-g", "daemon off;" ]
-  wikidata-dial-service:
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/wikidata-dial-service
-      - PORT=8092
-    command: [ "nginx", "-g", "daemon off;" ]
   dff-animals-skill:
     build:
       context: dp/proxy/
