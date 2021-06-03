@@ -107,7 +107,16 @@ class EmotionSkillScenario:
             state = ''
         elif state == 'offered_advice':
             # we offered an advice
-            if is_yes:
+            if is_no:
+                state = 'no'
+                step = self.steps[state]
+                reply = random.choice(step['answers'])
+                if len(step['next_step']):
+                    state = random.choice(step['next_step'])
+                else:
+                    state = ""
+                confidence = 1.0
+            elif is_yes:
                 # provide advices and offer another one
                 reply = self._random_choice(self.advices[emotion], prev_jokes_advices)
                 state = 'offer_another_advice'
@@ -117,15 +126,6 @@ class EmotionSkillScenario:
                     reply = random.choice(step['answers'])
                 else:
                     prev_jokes_advices.append(reply)
-                confidence = 1.0
-            elif is_no:
-                state = 'no'
-                step = self.steps[state]
-                reply = random.choice(step['answers'])
-                if len(step['next_step']):
-                    state = random.choice(step['next_step'])
-                else:
-                    state = ""
                 confidence = 1.0
         else:
             step = self.steps[state]
