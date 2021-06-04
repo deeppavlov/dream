@@ -181,8 +181,9 @@ class BookSkillScenario:
                     reply = f'{reply} {ASK_ABOUT_OFFERED_BOOK}'
                     confidence = self.super_conf
             else:
-                reply, confidence = f'{ACKNOWLEDGE_AUTHOR} {ASK_GENRE_ABOUT_AUTHOR}', self.default_conf
+                reply = f'{ACKNOWLEDGE_AUTHOR} {ASK_GENRE_ABOUT_AUTHOR}'
                 reply = reply.replace('AUTHOR', author_name)
+                confidence = self.default_conf if author_name else 0
         elif is_wikidata_entity(plain_bookname) and n_years_ago:
             # if we found book name in user reply
             bookname = entity_to_label(plain_bookname)
