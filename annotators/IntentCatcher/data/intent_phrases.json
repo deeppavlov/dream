@@ -214,7 +214,8 @@
                 "kind of",
                 "sort of",
                 "maybe",
-                "i do like"
+                "i do like",
+                "(i have|i've) read"
             ],
             "min_precision": 0.0,
             "punctuation": [
