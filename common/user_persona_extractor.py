@@ -10,7 +10,7 @@ KIDS_ACTIVITIES_RE = re.compile(r"(\bplay|\bgame\b|gaming|games|played|playing)"
 
 # Any moment of conversation
 ADULTS_WORDS_RE = re.compile(r"(\bwork\b|\bworking\b|\bgym\b|smoking|drunk|"
-                             r"husband|wife|\bmy child\b|my children\b)", re.IGNORECASE)
+                             r"husband|wife|\bmy child\b|my children\b|\bdaughters?\b|\bsons?\b)", re.IGNORECASE)
 # only after what do you do
 ADULTS_ACTIVITIES_RE = re.compile(r"(\bwork\b|kid|family|\bclean\b|working|child|children|cleaning|girlfriend|"
-                                  r"boyfriend|husband|wife|house ?work)", re.IGNORECASE)
+                                  r"boyfriend|husband|wife|house ?work|\bdaughters?\b|\bsons?\b)", re.IGNORECASE)

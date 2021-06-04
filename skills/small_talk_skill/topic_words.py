@@ -6,7 +6,7 @@ TOPIC_PATTERNS = {
     "cars": re.compile(r"(\bcars?\b|automobile|driving|drive)", re.IGNORECASE),
     "depression": re.compile(r"(depress|stress|melanchol|doldrum|heaviness)", re.IGNORECASE),
     "family": re.compile(r"(\bhusband|\bwife|\bspouse|\bfamily|\bkids?\b|\bchild\b|\bchildren"
-                         r"|\b(grand)?(ma|mom|mother|father|pa|dad|parent)\b)", re.IGNORECASE),
+                         r"|\b(grand)?(ma|mom|mother|father|pa|dad|parent|daughters?|sons?|child)\b)", re.IGNORECASE),
     "food": re.compile(r"(\bfood|\beat(ing|s)?\b|\bcook(s|ed|ing)?\b)", re.IGNORECASE),
     "life": re.compile(r"(\blife|\blife style|\blifestyle)", re.IGNORECASE),
     "love": re.compile(r"(\blove|\bloving|\bbeloved|\bfriend|\brelationship|\brelation|\bwomen|\bmen\b"
