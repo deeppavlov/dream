@@ -153,12 +153,12 @@ class BookSkillScenario:
         we_asked_about_book = any([phrase in bot_phrases[-1]
                                    for phrase in QUESTIONS_ABOUT_BOOK])
         if we_asked_about_book and nothing_found:
-            if BOOK_ACKNOWLEDGEMENT_PHRASE != bot_phrases[-1]:
+            if is_yes(annotated_user_phrase):
+                reply, confidence = f'{bot_phrases[-1]} #+#repeat', self.default_conf
+            elif is_no(annotated_user_phrase) or dontknow_books(annotated_user_phrase):
+                reply, confidence = BOOK_ANY_PHRASE, self.default_conf
+            elif BOOK_ACKNOWLEDGEMENT_PHRASE != bot_phrases[-1]:
                 reply, confidence = BOOK_ACKNOWLEDGEMENT_PHRASE, self.default_conf
-                was_book_acknowledgement = any([BOOK_ACKNOWLEDGEMENT_PHRASE in j
-                                                for j in human_attr['book_skill']['used_phrases']])
-                if was_book_acknowledgement:
-                    confidence = 0.5 * confidence
             elif all([WHAT_BOOK_IMPRESSED_MOST not in j for j in human_attr['book_skill']['used_phrases']]):
                 reply, confidence = f'{WILL_CHECK} By the way, {WHAT_BOOK_IMPRESSED_MOST}', self.default_conf
             elif not human_attr['book_skill'].get('we_asked_genre', False):
@@ -294,6 +294,7 @@ class BookSkillScenario:
                     else:
                         reply, confidence = START_PHRASE, self.super_conf
                 elif should_stop:
+                    logger.debug('Should stop')
                     reply, confidence = '', 0
                 elif dontknow_books(annotated_user_phrase) and BOOK_ANY_PHRASE not in bot_phrases and book_just_active:
                     reply, confidence = BOOK_ANY_PHRASE, self.default_conf
@@ -432,8 +433,8 @@ class BookSkillScenario:
                                                                   OPINION_REQUEST_ON_BOOK_PHRASES)
                     else:
                         logger.debug('No intent detected. Returning nothing')
-                        if not ([PROPOSE_FAVOURITE_BOOK in phrase
-                                 for phrase in human_attr['book_skill']['used_phrases']]):
+                        if not any([PROPOSE_FAVOURITE_BOOK in phrase
+                                    for phrase in human_attr['book_skill']['used_phrases']]):
                             reply, confidence = PROPOSE_FAVOURITE_BOOK, self.default_conf
                         else:
                             reply, confidence = '', -0
@@ -515,9 +516,14 @@ class BookSkillScenario:
                                                                                                human_attr)
                 else:
                     logger.debug('Final branch')
+                    logger.debug(book_just_active)
                     if book_just_active:
-                        reply = exit_skill(reply, human_attr)
-                        confidence = self.default_conf
+                        if not any([PROPOSE_FAVOURITE_BOOK in phrase
+                                    for phrase in human_attr['book_skill']['used_phrases']]):
+                            reply, confidence = PROPOSE_FAVOURITE_BOOK, self.default_conf
+                        else:
+                            reply = exit_skill(reply, human_attr)
+                            confidence = self.default_conf
                     else:
                         reply, confidence = self.default_reply, 0
                 if confidence == self.super_conf:
@@ -535,7 +541,7 @@ class BookSkillScenario:
             if isinstance(reply, list):
                 reply = " ".join(reply)
             if reply in human_attr['book_skill']['used_phrases']:
-                confidence *= 0.95
+                confidence *= 0.5
             texts.append(reply)
             if reply:
                 human_attr['book_skill']['used_phrases'].append(reply)
