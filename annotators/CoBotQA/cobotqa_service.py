@@ -27,6 +27,9 @@ with open(pathlib.Path(__file__).resolve().parent / "facts_for_countries.json", 
     for name in data:
         TRAVEL_FACTS[name] = deepcopy(data[name])
 TRAVEL_FACTS = {name.lower(): fact for name, fact in TRAVEL_FACTS.items()}
+with open(pathlib.Path(__file__).resolve().parent / "food_facts.json", "r") as f:
+    FOOD_FACTS = json.load(f)
+FOOD_FACTS = {name.lower(): fact for name, fact in FOOD_FACTS.items()}
 
 
 def send_cobotqa(question):
