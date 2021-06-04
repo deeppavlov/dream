@@ -8,7 +8,7 @@ from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
 
-from common.constants import CAN_NOT_CONTINUE, MUST_CONTINUE
+from common.constants import CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE, MUST_CONTINUE
 from common.weather import ASK_WEATHER_SKILL_FOR_HOMELAND_PHRASE
 from common.utils import get_entities, get_named_locations, get_named_persons, is_no, is_yes
 
@@ -86,7 +86,7 @@ my_origin_is_pattern = re.compile(r"(my ((home\s?land|mother\s?land|native\s?lan
 what_is_your_location_pattern = re.compile(r"((what is|what's|whats|tell me) your? location|"
                                            r"where do you live|where are you now|"
                                            r"is that where you live now)", re.IGNORECASE)
-my_location_is_pattern = re.compile(r"(my (location is|location's)|(i am|i'm|i)( live| living)? in([a-zA-z ]+)?now)",
+my_location_is_pattern = re.compile(r"my (location is|location's)|(i am|i'm|i)( live| living)? in([a-zA-z ]+)?now",
                                     re.IGNORECASE)
 
 _name_re = r"(first |last |middle |second )?name"
@@ -132,6 +132,45 @@ how_do_you_know_my_info_responses = {
     }
 }
 MAX_READABLE_NAME_WORD_LEN = 20
+NON_GEOGRAPHICAL_LOCATIONS = [
+    "hospital", "school", "work", "home", "car", "train", "train station", "outdoors", "bed", "kitchen",
+    "bedroom", "bathroom", "basement", "jail", "prison", "bath",
+]
+NON_GEOGRAPHICAL_LOCATIONS_COMPILED_PATTERN = re.compile(r'\b' + r'\b|\b'.join(NON_GEOGRAPHICAL_LOCATIONS) + r'\b')
+ASK_GEOGRAPHICAL_LOCATION_BECAUSE_USER_MISUNDERSTOOD_BOT = {
+    "homeland": "Sorry, but I probably misheard you. "
+    "I am just curious to know the region or the city in which you were born",
+    "location": "Sorry, but I probably misheard you. "
+    "Could you please tell me in which city or region you are now?",
+}
+
+RESPONSE_PHRASES = {"name": ["Nice to meet you, "],
+                    "location": [ASK_WEATHER_SKILL_FOR_HOMELAND_PHRASE, "Cool!"],
+                    "homeland": ["Is that where you live now?", "Cool!"]}
+
+REPEAT_INFO_PHRASES = {"name": "I didn't get your name. Could you, please, repeat it.",
+                       "location": "I didn't get your location. Could you, please, repeat it.",
+                       "homeland": "I didn't get where you have been born. Could you please repeat it?"}
+
+
+def did_user_misunderstand_bot_question_about_geography(found_info_or_user_text, which_info, prev_bot_text):
+    logger.info(f"found_info_or_user_text: {found_info_or_user_text}")
+    logger.info(f"which_info: {which_info}")
+    logger.info(f"prev_bot_text: {prev_bot_text}")
+    return which_info != "name" and NON_GEOGRAPHICAL_LOCATIONS_COMPILED_PATTERN.search(found_info_or_user_text) and (
+        where_are_you_from_pattern.search(prev_bot_text)
+        or what_is_your_location_pattern.search(prev_bot_text)
+        or REPEAT_INFO_PHRASES[which_info].lower() in prev_bot_text
+    )
+
+
+def was_user_asked_to_clarify_info(prev_bot_text, which_info):
+    if which_info == "name":
+        res = prev_bot_text == REPEAT_INFO_PHRASES[which_info].lower()
+    else:
+        res = prev_bot_text == REPEAT_INFO_PHRASES[which_info].lower() \
+            or prev_bot_text == ASK_GEOGRAPHICAL_LOCATION_BECAUSE_USER_MISUNDERSTOOD_BOT[which_info].lower()
+    return res
 
 
 def filter_unreadable_names(found_name):
@@ -173,25 +212,19 @@ def process_info(dialog, which_info="name"):
     except IndexError:
         prev_bot_uttr = ""
 
-    logger.info(f"Previous bot uuterance: {prev_bot_uttr}")
+    logger.info(f"Previous bot uterance: {prev_bot_uttr}")
     is_about_templates = {
         "name": what_is_your_name_pattern.search(prev_bot_uttr) or my_name_is_pattern.search(curr_user_uttr),
         "homeland": where_are_you_from_pattern.search(prev_bot_uttr) or my_origin_is_pattern.search(curr_user_uttr),
-        "location": what_is_your_location_pattern.search(prev_bot_uttr) or my_location_is_pattern.search(curr_user_uttr)
+        "location": what_is_your_location_pattern.search(prev_bot_uttr)
+        or my_location_is_pattern.search(curr_user_uttr)
     }
-    repeat_info_phrases = {"name": "I didn't get your name. Could you, please, repeat it.",
-                           "location": "I didn't get your location. Could you, please, repeat it.",
-                           "homeland": "I didn't get where you have been born. Could you please repeat it?"}
-
-    response_phrases = {"name": ["Nice to meet you, "],
-                        "location": [ASK_WEATHER_SKILL_FOR_HOMELAND_PHRASE, "Cool!"],
-                        "homeland": ["Is that where you live now?", "Cool!"]}
     response_phrases = {
-        "name": response_phrases["name"][0],
-        "location": response_phrases["location"][1] if response_phrases["location"][0].lower() in bot_utterance_texts
-        else response_phrases["location"][0],
-        "homeland": response_phrases["homeland"][1] if response_phrases["homeland"][0].lower() in bot_utterance_texts
-        else response_phrases["homeland"][0],
+        "name": RESPONSE_PHRASES["name"][0],
+        "location": RESPONSE_PHRASES["location"][1] if RESPONSE_PHRASES["location"][0].lower() in bot_utterance_texts
+        else RESPONSE_PHRASES["location"][0],
+        "homeland": RESPONSE_PHRASES["homeland"][1] if RESPONSE_PHRASES["homeland"][0].lower() in bot_utterance_texts
+        else RESPONSE_PHRASES["homeland"][0],
     }
 
     got_info = False
@@ -202,7 +235,7 @@ def process_info(dialog, which_info="name"):
         confidence = 1.0
         got_info = True
         attr["can_continue"] = MUST_CONTINUE
-    elif (is_about_templates[which_info] or prev_bot_uttr == repeat_info_phrases[which_info].lower())\
+    elif (is_about_templates[which_info] or was_user_asked_to_clarify_info(prev_bot_uttr, which_info))\
             and (is_no(curr_uttr_dict) or is_secret(curr_user_uttr, which_info)):
         response = "As you wish."
         confidence = 1.0
@@ -229,15 +262,24 @@ def process_info(dialog, which_info="name"):
         got_info = False
         attr["can_continue"] = MUST_CONTINUE
 
-    if (is_about_templates[which_info] or prev_bot_uttr == repeat_info_phrases[which_info].lower()) and not got_info:
+    if (is_about_templates[which_info] or was_user_asked_to_clarify_info(prev_bot_uttr, which_info)) and not got_info:
         logger.info(f"Asked for {which_info} in {prev_bot_uttr}")
-        found_info = check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr)
-        logger.info(f"found_info: {found_info}")
+        found_info, named_entities_found = check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr)
+        logger.info(f"found_info, named_entities_found: {found_info}, {named_entities_found}")
         if which_info == "name" and found_info is not None:
             found_info = filter_unreadable_names(found_info)
         if found_info is None:
             logger.info(f"found_info is None")
-            if prev_bot_uttr == repeat_info_phrases[which_info].lower():
+            if did_user_misunderstand_bot_question_about_geography(curr_user_uttr, which_info, prev_bot_uttr):
+                response = ASK_GEOGRAPHICAL_LOCATION_BECAUSE_USER_MISUNDERSTOOD_BOT[which_info]
+                confidence = 0.9
+                attr["can_continue"] = CAN_CONTINUE_SCENARIO
+            elif which_info in ["homeland", "location"] \
+                    and NON_GEOGRAPHICAL_LOCATIONS_COMPILED_PATTERN.search(curr_user_uttr):
+                response = ""
+                confidence = 0.0
+                attr["can_continue"] = CAN_NOT_CONTINUE
+            elif was_user_asked_to_clarify_info(prev_bot_uttr, which_info):
                 response = ""
                 confidence = 0.0
                 attr["can_continue"] = CAN_NOT_CONTINUE
@@ -247,24 +289,42 @@ def process_info(dialog, which_info="name"):
                 confidence = 1.0
                 attr["can_continue"] = MUST_CONTINUE
             else:
-                response = repeat_info_phrases[which_info]
+                response = REPEAT_INFO_PHRASES[which_info]
                 confidence = 1.0
                 attr["can_continue"] = MUST_CONTINUE
         else:
             if which_info == "name":
                 found_info = shorten_long_names(found_info)
                 response = response_phrases[which_info] + found_info + "."
-            elif which_info == "location":
-                response = response_phrases[which_info]
-            elif which_info == "homeland":
-                if dialog["human"]["profile"].get("location", None) is None:
-                    response = response_phrases[which_info]
+                confidence = 1.0
+                attr["can_continue"] = MUST_CONTINUE
+                human_attr[which_info] = found_info
+            else:
+                if NON_GEOGRAPHICAL_LOCATIONS_COMPILED_PATTERN.search(found_info):
+                    if did_user_misunderstand_bot_question_about_geography(
+                            found_info, which_info, prev_bot_uttr):
+                        response = ASK_GEOGRAPHICAL_LOCATION_BECAUSE_USER_MISUNDERSTOOD_BOT[which_info]
+                        confidence = 0.9
+                        attr["can_continue"] = CAN_CONTINUE_SCENARIO
+                    else:
+                        response = ""
+                        confidence = 0.0
+                        attr["can_continue"] = CAN_NOT_CONTINUE
                 else:
-                    response = response_phrases["location"]
-            human_attr[which_info] = found_info
-            confidence = 1.0
-            attr["can_continue"] = MUST_CONTINUE
-
+                    if which_info == "location":
+                        response = response_phrases[which_info]
+                    elif which_info == "homeland":
+                        if dialog["human"]["profile"].get("location", None) is None:
+                            response = response_phrases[which_info]
+                        else:
+                            response = response_phrases["location"]
+                    human_attr[which_info] = found_info
+                    if named_entities_found:
+                        confidence = 1.0
+                        attr["can_continue"] = MUST_CONTINUE
+                    else:
+                        confidence = 0.9
+                        attr["can_continue"] = CAN_CONTINUE_SCENARIO
     return response, confidence, human_attr, bot_attr, attr
 
 
@@ -385,7 +445,7 @@ def check_entities(which_info, curr_user_uttr, curr_user_annot, prev_bot_uttr):
         ent = named_entities[-1]
         found_info = " ".join([n.capitalize() for n in ent.split()])
     logger.info(f"Found {which_info} `{found_info}`")
-    return found_info
+    return found_info, bool(named_entities)
 
 
 if __name__ == '__main__':
