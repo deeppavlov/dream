@@ -134,7 +134,7 @@
                 "alexa we are done",
                 "talk to (a) different bot",
                 "alexa i am done",
-                "can we stop",
+                "can we stop( please)?",
                 "cancel siri",
                 "(alexa ){0,1}let's stop our chat now",
                 "thank.* for the chat",
@@ -186,7 +186,9 @@
             ],
             "reg_phrases": [
                 "one second",
-                "what"
+                "what",
+                "say it again",
+                "what you said"
             ],
             "min_precision": 0.94,
             "punctuation": [
@@ -692,6 +694,8 @@
             "will you talk shit to me?",
             "chat chat",
             "you talk",
+            "what is your favorite game",
+            "what is your favourite game",
             "can i find you offline",
             "chat alexa",
             "thank you",
