@@ -446,7 +446,7 @@ def news_step_response(vars):
     state_utils.save_to_shared_memory(vars, news_memory=news_memory)
     logger.info(f"news_step_response found_content {found_content} new_title {new_title} news_entity {news_entity}")
 
-    if not started_news:
+    if not started_news and news_entity and new_title:
         response = f"Talking about {news_entity}. I've recently heard that {new_title}. Do you want to hear more?"
     elif found_content:
         if new_title:
@@ -744,7 +744,9 @@ def start_talk_response(vars):
     chosen_title, chosen_page_title = get_title_info(vars, found_entity_substr, found_entity_types, "", [],
                                                      page_content)
     titles_q, titles_we_use, all_titles = get_titles(found_entity_substr, found_entity_types, page_content)
-    question = make_question(chosen_title, titles_q, found_entity_substr, [])
+    question = ""
+    if chosen_title:
+        question = make_question(chosen_title, titles_q, found_entity_substr, [])
     chosen_title, chosen_page_title = choose_title(vars, all_titles, titles_we_use, "", [], curr_pages)
     response = question.strip()
     if chosen_title:
