@@ -229,9 +229,19 @@ def intro_handler(state, skill_state, true_model_names, true_cmds):
     elif skill_state.get("top_name") == "weekly_top":
         text = "Last time we chatted about the best games of the last week. "
     else:
-        text = "I can tell you a few things about popular games. "
+        text = random.choice(
+            [
+                "I can tell you a few things about popular games. ",
+                "I want to tell you a few things about popular games. ",
+            ]
+        )
 
-    text += "For now, I can talk about the most popular games for this or last year"
+    text += random.choice(
+        [
+            "For now, I can talk about the most popular games for this or last year",
+            "For example, I can talk about the most popular games for this or last year",
+        ]
+    )
     if get_game_db().get("weekly_top"):
         text += ", last month, or even the last week (hotties!)"
     elif get_game_db().get("monthly_top"):
