@@ -129,7 +129,7 @@
                 "(thank you ){0,1}(alexa ){0,1}i ((need)|(want)|(have)) to finish( up){0,1}( now){0,1}"
             ],
             "reg_phrases": [
-                "end this conversation",
+                "(leave|end) (the|this) conversation",
                 "alexa done",
                 "alexa we are done",
                 "talk to (a) different bot",
@@ -188,7 +188,10 @@
                 "one second",
                 "what",
                 "say it again",
-                "what you said"
+                "what you said",
+                "could you",
+                "you are very",
+                "the"
             ],
             "min_precision": 0.94,
             "punctuation": [
@@ -708,6 +711,7 @@
             "stupid decision",
             "can you talk to me",
             "alexa talk to me",
+            "oh right now",
             "stop looking takes time and it helps to be creative",
             "i do not want to go",
             "i do not want to do this",
@@ -1372,10 +1376,12 @@
             "will you talking about",
             "need to talk to you",
             "talk to me about fedex",
+            "add cream hatch",
             "i wanna talk to mr. beast",
             "run conversation appliacation",
             "talk talk about kobe bryant how he died",
             "begin chat",
+            "no thank you alexa recommend you a movie this time",
             "i would like you to fucking blow me you stupid bitch no i would like converse",
             "can you talk to come back",
             "let's talk again",
@@ -1520,6 +1526,7 @@
             "play with ((friends)|(dog)|(cat))",
             "play ((basketball)|(baseball)|(geometry dash))",
             "you got different games you said",
+            "i'm not much of a book person but i really enjoyed reading on the princess bride",
             "don't shoot ((people)|(animals)|(birds))",
             "shoot ((me)|(him))",
             "shoot ((this)|(that)) ((dog)|(bird)|(coyote))",
