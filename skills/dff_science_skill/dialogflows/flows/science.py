@@ -17,8 +17,8 @@ import dialogflows.flows.utils as local_utils
 from common.science import science_topics, SCIENCE_TOPIC_KEY_PHRASES, SCIENCE_TOPIC_KEY_PHRASE_RE
 
 from common.science import SCIENCE_COMPILED_PATTERN
-from common.constants import CAN_CONTINUE_PROMPT, MUST_CONTINUE, CAN_CONTINUE_SCENARIO
-from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
+from common.constants import CAN_CONTINUE_PROMPT, MUST_CONTINUE, CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE
+from common.universal_templates import if_chat_about_particular_topic, if_choose_topic, NOT_LIKE_PATTERN
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -39,6 +39,9 @@ CONF_0 = 0.0
 
 class State(Enum):
     USR_START = auto()
+    #
+    SYS_NO_SCIENCE = auto()
+    USR_NO_SCIENCE = auto()
     #
     SYS_REQUEST_SCIENCE_TOPIC = auto()
     USR_REQUEST_SCIENCE_TOPIC = auto()
@@ -267,6 +270,28 @@ def i_think_it_can_change_the_world_response(vars):
         return error_response(vars)
 
 
+def no_science_request(ngrams, vars):
+    human_uttr_text = state_utils.get_last_human_utterance(vars).get("text", "")
+    bot_uttr_text = state_utils.get_last_bot_utterance(vars).get("text", "")
+    if NOT_LIKE_PATTERN.search(human_uttr_text) and (
+        SCIENCE_COMPILED_PATTERN.search(human_uttr_text) or SCIENCE_COMPILED_PATTERN.search(bot_uttr_text)
+    ):
+        return True
+    return False
+
+
+def no_science_response(vars):
+    try:
+        state_utils.set_confidence(vars, confidence=CONF_100)
+        state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+        state_utils.save_to_shared_memory(vars, current_status="")
+        return f"Okay, if I'm always ready to talk about science, the achievements of humanity inspire me. "
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        return error_response(vars)
+
+
 ##################################################################################################################
 ##################################################################################################################
 # linking
@@ -280,10 +305,21 @@ def i_think_it_can_change_the_world_response(vars):
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_START,
     {
+        State.SYS_NO_SCIENCE: no_science_request,
         State.SYS_REQUEST_SCIENCE_TOPIC: first_science_request,
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
+
+##################################################################################################################
+# SYS_NO_SCIENCE
+
+simplified_dialogflow.add_system_transition(
+    State.SYS_NO_SCIENCE,
+    State.USR_START,
+    request_science_topic_response,
+)
+simplified_dialogflow.set_error_successor(State.SYS_NO_SCIENCE, State.SYS_ERR)
 
 ##################################################################################################################
 # SYS_REQUEST_SCIENCE_TOPIC
@@ -300,6 +336,7 @@ simplified_dialogflow.set_error_successor(State.SYS_REQUEST_SCIENCE_TOPIC, State
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_REQUEST_SCIENCE_TOPIC,
     {
+        State.SYS_NO_SCIENCE: no_science_request,
         State.SYS_CAN_YOU_IMAGINE: lets_talk_about_current_subtopic_request,
         State.SYS_REQUEST_SCIENCE_TOPIC: lets_talk_about_request,
     },
@@ -321,6 +358,7 @@ simplified_dialogflow.set_error_successor(State.SYS_CAN_YOU_IMAGINE, State.SYS_E
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_CAN_YOU_IMAGINE,
     {
+        State.SYS_NO_SCIENCE: no_science_request,
         State.SYS_I_THINK_IT_CAN_CHANGE: not_lets_talk_about_request,
         State.SYS_REQUEST_SCIENCE_TOPIC: lets_talk_about_request,
     },
