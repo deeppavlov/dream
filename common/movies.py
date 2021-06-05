@@ -1,6 +1,7 @@
 import re
 from random import choice
 
+from common.fact_retrieval import topic_types
 from common.utils import get_entities
 
 
@@ -196,14 +197,26 @@ def praise_director_or_writer_or_visuals(director, writer):
 
 
 def extract_movies_names_from_annotations(annotated_uttr, check_full_utterance=False):
+    movies_titles = None
     if "cobot_entities" in annotated_uttr["annotations"]:
         movies_titles = []
         entities = get_entities(annotated_uttr, only_named=False, with_labels=True)
         for ent in entities:
             if ent.get("label", "") == "videoname":
                 movies_titles += [ent["text"]]
-    else:
-        movies_titles = None
-    if check_full_utterance:
-        movies_titles += [re.sub(r"[\.\?,!]", "", annotated_uttr["text"]).strip()]
+
+    # for now let's remove full utterance check but add entity_linking usage!
+    if not movies_titles:
+        # either None or empty list
+        if "wiki_parser" in annotated_uttr["annotations"]:
+            movies_titles = []
+            for ent_name, ent_dict in annotated_uttr["annotations"]["wiki_parser"].get("entities_info", {}).items():
+                instance_of_types = [el[0] for el in ent_dict.get("instance of", [])]
+                instance_of_types += [el[0] for el in ent_dict.get("types_2hop", [])]
+                if len(set(instance_of_types).intersection(set(topic_types["film"]))) > 0 and \
+                        ent_dict.get("token_conf", 0.) >= 0.5:
+                    movies_titles += [ent_dict.get("entity_label", ent_name).lower()]
+
+    # if check_full_utterance:
+    #     movies_titles += [re.sub(r"[\.\?,!]", "", annotated_uttr["text"]).strip()]
     return movies_titles
