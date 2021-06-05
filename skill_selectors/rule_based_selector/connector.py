@@ -17,6 +17,7 @@ from common.utils import high_priority_intents, low_priority_intents, get_topics
 from common.weather import if_special_weather_turn_on
 from common.wiki_skill import if_switch_wiki_skill, switch_wiki_skill_on_news
 from common.response_selection import UNPREDICTABLE_SKILLS
+from common.movies import extract_movies_names_from_annotations
 
 from common.gossip import check_is_celebrity_mentioned
 
@@ -196,6 +197,9 @@ class RuleBasedSkillSelectorConnector:
 
                 if get_named_locations(user_uttr):
                     skills_for_uttr.append("dff_travel_skill")
+
+                if extract_movies_names_from_annotations(user_uttr):
+                    skills_for_uttr.append("dff_movie_skill")
 
                 skills_for_uttr.append("small_talk_skill")
 
