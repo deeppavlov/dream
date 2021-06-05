@@ -226,41 +226,28 @@
         "Great thoughts! Thank you."
     ],
     "school": [
+        "Are you a school student now?",
         {
             "yes": [
-                "Are you a school student now?",
+                "So, pupil, yeah. That's a great time, don't miss that time! Do you like your school?",
+                "Do you go to a public school or a private one?",
+                "Oh cool! I've heard that some schools utilize uniform. Do you have to wear a uniform in your school?",
+                "I see. Good preparation makes study significantly easier. You do a lot of homework every day, do you?",
                 {
                     "yes": [
-                        "So, pupil, yeah. That's a great time, don't miss that time! Do you like your school?",
-                        "Do you go to a public school or a private one?",
-                        "Oh cool! I've heard that some schools utilize uniform. Do you have to wear a uniform in your school?",
-                        "I see. Good preparation makes study significantly easier. You do a lot of homework every day, do you?",
-                        {
-                            "yes": [
-                                "Cool! I believe you are a good pupil! What subjects are you good at?"
-                            ],
-                            "no": [
-                                "Anyway, I believe you are smart person! What subjects are you good at?"
-                            ]
-                        },
-                        "That's interesting! I am so proud of you. Do you play on any of the school's sports teams?",
-                        {
-                            "yes": [
-                                "What kind of sport do you play?"
-                            ],
-                            "no": [
-                                "Anyway, I'd love to but I can't. I believe you put all your resources to study well!"
-                            ]
-                        }
+                        "Cool! I believe you are a good pupil! What subjects are you good at?"
                     ],
                     "no": [
-                        "Where did you go to high school?",
-                        "I see... What do you remember about your teachers?",
-                        "Describe the students who attended your high school.",
-                        "Great. Did you make friends in high school that you still keep in touch with?",
-                        "What subjects were you good at?",
-                        "Hey, knowing these subjects you probably attended the college, did you?",
-                        "What advice would you give a high school student who is about to go to college?"
+                        "Anyway, I believe you are smart person! What subjects are you good at?"
+                    ]
+                },
+                "That's interesting! I am so proud of you. Do you play on any of the school's sports teams?",
+                {
+                    "yes": [
+                        "What kind of sport do you play?"
+                    ],
+                    "no": [
+                        "Anyway, I'd love to but I can't. I believe you put all your resources to study well!"
                     ]
                 }
             ],
@@ -411,8 +398,12 @@
                 },
                 "Do you think it is more important to make a lot of money THAN to enjoy your job?",
                 {
-                    "yes": ["So agree with you! Money is a terrible master but an excellent servant. Do you agree?"],
-                    "no": ["I definitely agree with you! Benjamin Franklin once said: Money never made a man happy yet, nor will it. The more a man has, the more he wants. Do you agree?"]
+                    "yes": [
+                        "So agree with you! Money is a terrible master but an excellent servant. Do you agree?"
+                    ],
+                    "no": [
+                        "I definitely agree with you! Benjamin Franklin once said: Money never made a man happy yet, nor will it. The more a man has, the more he wants. Do you agree?"
+                    ]
                 },
                 "Cool! Have you ever thought about future? What do you think you will do after you retire?",
                 "It's a great pleasure to learn new sides of your personality. Thanks for sharing!"
