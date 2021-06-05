@@ -136,7 +136,8 @@ NON_GEOGRAPHICAL_LOCATIONS = [
     "hospital", "school", "work", "home", "car", "train", "train station", "outdoors", "bed", "kitchen",
     "bedroom", "bathroom", "basement", "jail", "prison", "bath",
 ]
-NON_GEOGRAPHICAL_LOCATIONS_COMPILED_PATTERN = re.compile(r'\b' + r'\b|\b'.join(NON_GEOGRAPHICAL_LOCATIONS) + r'\b')
+NON_GEOGRAPHICAL_LOCATIONS_COMPILED_PATTERN = re.compile(
+    r'\b' + r'\b|\b'.join(NON_GEOGRAPHICAL_LOCATIONS) + r'\b', re.I)
 ASK_GEOGRAPHICAL_LOCATION_BECAUSE_USER_MISUNDERSTOOD_BOT = {
     "homeland": "Sorry, but I probably misheard you. "
     "I am just curious to know the region or the city in which you were born",
