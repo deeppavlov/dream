@@ -4,6 +4,8 @@ from common.universal_templates import if_chat_about_particular_topic
 
 logger = logging.getLogger(__name__)
 
+TOP_5k_FREQUENT_WORDS = set([k.strip()
+                             for k in open("common/google-10000-english-no-swears.txt", 'r').readlines()[:5000]])
 
 GOSSIP_COMPILED_PATTERN = re.compile(
     r"\b(celebrit|actor|actress|writer|author|entrepreneur|sportsperson|musician|gossip)", re.IGNORECASE
@@ -309,7 +311,8 @@ def celebrity_from_uttr(human_utterance):
     logger.info(f"found entities: {entity_dict}")
     for celebrity_name in entity_dict:
         if 'occupation' in entity_dict[celebrity_name] and entity_dict[celebrity_name]["pos"] == 0 \
-                and entity_dict[celebrity_name]["conf"] > 0.5:
+                and entity_dict[celebrity_name]["conf"] > 0.5 \
+                and celebrity_name.lower() not in TOP_5k_FREQUENT_WORDS:
             occupation_list = entity_dict[celebrity_name]['occupation']
             matching_types = [job[1] for job in occupation_list if job[0] in raw_profession_list]
             mismatching_types = [job[1] for job in occupation_list if job[0] not in raw_profession_list]
