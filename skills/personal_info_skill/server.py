@@ -153,6 +153,33 @@ REPEAT_INFO_PHRASES = {"name": "I didn't get your name. Could you, please, repea
                        "location": "I didn't get your location. Could you, please, repeat it.",
                        "homeland": "I didn't get where you have been born. Could you please repeat it?"}
 
+TELL_MY_COMPILED_PATTERNS = {
+    "name": re.compile(
+        r"(what is|what's|whats|tell me|you know|you remember|memorize|say) my name|how( [a-zA-Z ]+)?call me|"
+        r"my name is what",
+        re.I
+    ),
+    "location": re.compile(
+        r"((what is|what's|whats|tell me|you know|you remember|memorize|say) my (location|country|city|town)|"
+        r"where (am i|i am)(\snow)?|where( do)?i live|where( am)?i( am)? living)|(what|which) "
+        r"(country|city|town)( do)? (i|am i|i am)",
+        re.I
+    ),
+    "homeland": re.compile(
+        r"((what is|what's|whats|tell me|you know|you remember|memorize|say) "
+        r"my (home\s?land|mother\s?land|home\s?town|native\s?land|birth\s?place)|where (am i|i am) from)",
+        re.I
+    ),
+}
+
+BOT_DOESNT_KNOW_USER_INFO_RESPONSES = {
+    "name": f"Sorry, we are still not familiar. What is your name?",
+    "location": f"Sorry, I don't have this information. But you can tell me. What is your location?",
+    "homeland": f"Sorry, I don't have this information. But you can tell me. Where are you from?"
+}
+
+TELL_USER_HIS_INFO_RESPONSE = "Your {which_info} is {info}."
+
 
 def did_user_misunderstand_bot_question_about_geography(found_info_or_user_text, which_info, prev_bot_text):
     logger.info(f"found_info_or_user_text: {found_info_or_user_text}")
@@ -197,6 +224,17 @@ def is_secret(user_text, which_info):
     return bool(is_secret_patterns[which_info].search(user_text.lower()))
 
 
+def user_tells_bot_called_him_wrong(curr_human_annotated_uttr, prev_bot_text, user_profile):
+    name = user_profile.get("name")
+    if name is None:
+        res = False
+    else:
+        res = my_name_is_not_pattern.search(curr_human_annotated_uttr.get("text", "")) \
+            or TELL_USER_HIS_INFO_RESPONSE.format(which_info="name", info=name).lower() in prev_bot_text \
+            and is_no(curr_human_annotated_uttr)
+    return res
+
+
 def process_info(dialog, which_info="name"):
     human_attr = {}
     bot_attr = {}
@@ -230,7 +268,7 @@ def process_info(dialog, which_info="name"):
 
     got_info = False
     # if user doesn't want to share his info
-    if my_name_is_not_pattern.search(curr_user_uttr):
+    if user_tells_bot_called_him_wrong(curr_uttr_dict, prev_bot_uttr, dialog["human"]["profile"]):
         logger.info(f"User says My name is not Blabla")
         response = f"My bad. What is your name again?"
         confidence = 1.0
@@ -352,38 +390,15 @@ def tell_my_info(dialog, which_info="name"):
     attr = {}
 
     curr_user_uttr = dialog["utterances"][-1]["text"].lower()
-
-    tell_my_templates = {
-        "name": re.search(
-            r"(what is|what's|whats|tell me|you know|you remember|memorize|say) my name|how( [a-zA-Z ]+)?call me|"
-            r"my name is what",
-            curr_user_uttr
-        ),
-        "location": re.search(
-            r"((what is|what's|whats|tell me|you know|you remember|memorize|say) my (location|country|city|town)|"
-            r"where (am i|i am)(\snow)?|where( do)?i live|where( am)?i( am)? living)|(what|which) "
-            r"(country|city|town)( do)? (i|am i|i am)",
-            curr_user_uttr
-        ),
-        "homeland": re.search(
-            r"((what is|what's|whats|tell me|you know|you remember|memorize|say) "
-            r"my (home\s?land|mother\s?land|home\s?town|native\s?land|birth\s?place)|where (am i|i am) from)",
-            curr_user_uttr
-        ),
-    }
-
-    responses = {"name": f"Sorry, we are still not familiar. What is your name?",
-                 "location": f"Sorry, I don't have this information. But you can tell me. What is your location?",
-                 "homeland": f"Sorry, I don't have this information. But you can tell me. Where are you from?"}
-    if tell_my_templates[which_info]:
+    if TELL_MY_COMPILED_PATTERNS[which_info].search(curr_user_uttr):
         logger.info(f"Asked to memorize user's {which_info} in {curr_user_uttr}")
         if dialog["human"]["profile"].get(which_info, None) is None:
-            response = responses[which_info]
+            response = BOT_DOESNT_KNOW_USER_INFO_RESPONSES[which_info]
             confidence = 1.0
             attr["can_continue"] = MUST_CONTINUE
         else:
             name = dialog["human"]["profile"][which_info]
-            response = f"Your {which_info} is {name}."
+            response = TELL_USER_HIS_INFO_RESPONSE.format(which_info=which_info, info=name)
             confidence = 1.
             attr["can_continue"] = MUST_CONTINUE
     return response, confidence, attr
