@@ -45,7 +45,7 @@ FAST_FOOD_QUESTIONS = [
 FAST_FOOD_WHAT_QUESTIONS = [
     "What do you usually eat?",
     "What type of fast food do you prefer?",
-    "If you had to chose one fast food meal what it would be?"
+    "If you had to choose one fast food meal what it would be?"
 ]
 CONCEPTNET_SYMBOLOF_FOOD = [
     "food", "coffee", "sweetness", "hunger",
