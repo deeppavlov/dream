@@ -578,9 +578,12 @@ def food_fact_response(vars):
                 state_utils.set_confidence(vars, confidence=CONF_HIGH)
             else:
                 state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
-            if any(
+            if bool(re.search(DONOTKNOW_LIKE_RE, human_utt_text)):
+                state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
+                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+                return "Well, as for me, I am a fan of pizza despite I cannot eat as humans."
+            elif any(
                 [
-                    bool(re.search(DONOTKNOW_LIKE_RE, human_utt_text)),
                     dont_want_talk(vars),
                     bool(re.search(NO_WORDS_RE, human_utt_text))
                 ]
@@ -590,7 +593,7 @@ def food_fact_response(vars):
                 return error_response(vars)
             elif (not fact) and check_conceptnet(vars):
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
-                return f"Why do you like it?"
+                return "Why do you like it?"
             elif not fact:
                 state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
                 state_utils.set_confidence(vars, confidence=0.)
@@ -601,6 +604,10 @@ def food_fact_response(vars):
             elif fact:
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
                 return f"Okay. {fact}"
+            elif linkto_check:
+                state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
+                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+                return "Sorry. I didn't get what kind of food you have mentioned. Could you repeat it please?"
             else:
                 state_utils.set_confidence(vars, 0)
                 state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
@@ -613,7 +620,7 @@ def food_fact_response(vars):
     elif linkto_check:
         state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
-        return "Sorry. I didn't get what kind of food have you mentioned. Could you repeat it please?"
+        return "Sorry. I didn't get what kind of food you have mentioned. Could you repeat it please?"
     else:
         state_utils.set_confidence(vars, 0)
         state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
