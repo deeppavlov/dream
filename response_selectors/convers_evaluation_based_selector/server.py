@@ -61,7 +61,7 @@ def respond():
         curr_scores = []
 
         try:
-            curr_candidates = dialog["utterances"][-1]["hypotheses"]
+            curr_candidates = dialog["human_utterances"][-1]["hypotheses"]
             logger.info("Curr candidates:")
             logger.info(pprint.pformat(curr_candidates, compact=False))
 
@@ -110,16 +110,16 @@ def respond():
         except Exception as e:
             logger.exception(e)
             sentry_sdk.capture_exception(e)
-            if dialog["utterances"][-1].get("hypotheses", []):
-                best_cand = random.choice(dialog["utterances"][-1]["hypotheses"])
+            if dialog["human_utterances"][-1].get("hypotheses", []):
+                best_cand = random.choice(dialog["human_utterances"][-1]["hypotheses"])
             else:
                 best_cand = {"text": random.choice(MOST_DUMMY_RESPONSES), "confidence": 0.1,
                              "human_attributes": {}, "bot_attributes": {}, "skill_name": "dummy_skill"}
             best_skill_name = best_cand["skill_name"]
             best_text = best_cand["text"]
             best_confidence = best_cand["confidence"]
-            best_human_attributes = best_cand["human_attributes"]
-            best_bot_attributes = best_cand["bot_attributes"]
+            best_human_attributes = best_cand.get("human_attributes", {})
+            best_bot_attributes = best_cand.get("bot_attributes", {})
 
         selected_skill_names.append(best_skill_name)
         selected_texts.append(best_text)
