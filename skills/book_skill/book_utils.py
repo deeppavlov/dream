@@ -249,6 +249,8 @@ def get_author(plain_entity, return_plain=False, mode='book'):
     author_list = list(set(author_list))
     author_list = [x[x.find('Q'):] for x in author_list]  # to unify representations
     sorted_author_list = sorted(author_list, key=lambda x: int(x[1:]))  # Sort entities by frequency
+    if not sorted_author_list:
+        return None
     author_entity = sorted_author_list[0]
     if return_plain:
         logger.info(f'Answer {author_entity}')
