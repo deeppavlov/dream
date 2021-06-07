@@ -285,13 +285,14 @@ def get_published_year(book_entity):
             published_year = published_year_list[0]
         else:
             published_year = ''
-    try:
-        year_candidates = re.findall(r"[\d]{3,4}", published_year)
-        published_year = int(year_candidates[0])
-        assert published_year
-    except Exception:
-        # sentry_sdk.capture_exception(e)
-        logger.exception(f'Could not obtain published year from {published_year_list}')
+    year_candidates = re.findall(r"[\d]{3,4}", published_year)
+    if year_candidates:
+        try:
+            published_year = int(year_candidates[0])
+            assert published_year
+        except Exception:
+            # sentry_sdk.capture_exception(e)
+            logger.exception(f'Could not obtain published year from {published_year_list}')
     logger.info(f'Answer for get_published_year {published_year}')
     return published_year
 
