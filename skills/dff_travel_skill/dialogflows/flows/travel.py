@@ -464,7 +464,7 @@ def user_have_been_in_response(vars):
         state_utils.save_to_shared_memory(
             vars, used_questions_about_location=used_what_do_i_love + [what_do_i_love])
 
-        response = user_impressions_request.replace("WHAT_DO_I_LOVE", what_do_i_love)
+        response = user_impressions_request.replace("WHAT_DO_I_LOVE", what_do_i_love).replace("LOCATION", location)
         return response
     except Exception as exc:
         logger.exception(exc)
