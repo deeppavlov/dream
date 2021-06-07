@@ -156,7 +156,7 @@ REPEAT_INFO_PHRASES = {"name": "I didn't get your name. Could you, please, repea
 TELL_MY_COMPILED_PATTERNS = {
     "name": re.compile(
         r"(what is|what's|whats|tell me|you know|you remember|memorize|say) my name|how( [a-zA-Z ]+)?call me|"
-        r"my name is what",
+        r"my name is what|you( can| could| shall| will)? tell my name",
         re.I
     ),
     "location": re.compile(
