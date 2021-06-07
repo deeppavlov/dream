@@ -15,8 +15,9 @@ import common.constants as common_constants
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
 import common.gaming as common_gaming
-from common.gaming import GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN, VIDEO_GAME_WORDS_RE, load_json
-from common.universal_templates import if_chat_about_particular_topic
+from common.gaming import GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN, VIDEO_GAME_WORDS_COMPILED_PATTERN,\
+    load_json
+from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
 from common.utils import is_yes
 
 import dialogflows.scopes as scopes
@@ -262,6 +263,18 @@ def lets_talk_about_game(vars):
     return flag
 
 
+def switch_to_particular_game_discussion(vars):
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    prev_bot_uttr = state_utils.get_last_bot_utterance(vars)
+    found_video_game_name = bool(
+        GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.search(user_uttr.get("text", "").lower()))
+    choose_particular_game = if_choose_topic(user_uttr, prev_bot_uttr) and found_video_game_name
+    question_answer_contains_video_game = "?" not in user_uttr.get("text", "") \
+        and "?" in prev_bot_uttr.get("text", "") \
+        and found_video_game_name
+    return lets_talk_about_game(vars) or choose_particular_game or question_answer_contains_video_game
+
+
 def extract_game_names_user_wants_to_discuss_from_re(vars, compiled_regexp):
     user_uttr = state_utils.get_last_human_utterance(vars)
     games = compiled_regexp.findall(user_uttr['text'])
@@ -493,12 +506,12 @@ def is_minecraft_mentioned_in_user_uttr(ngrams, vars):
 
 def is_found_text_definitely_game(text):
     logger.info(f"(is_found_text_definitely_game)text: {text}")
-    return bool(VIDEO_GAME_WORDS_RE.match(text))
+    return bool(VIDEO_GAME_WORDS_COMPILED_PATTERN.match(text))
 
 
 def user_maybe_wants_to_talk_about_particular_game_request(ngrams, vars):
     logger.info(f"user_maybe_wants_to_talk_about_particular_game_request")
-    if lets_talk_about_game(vars):
+    if switch_to_particular_game_discussion(vars):
         game_names_from_local_list_of_games = extract_game_names_user_wants_to_discuss_from_re(
             vars, GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN)
         logger.info(
@@ -506,7 +519,7 @@ def user_maybe_wants_to_talk_about_particular_game_request(ngrams, vars):
             f"{game_names_from_local_list_of_games}"
         )
         assert game_names_from_local_list_of_games,\
-            "At least one game should have been found in function `lets_talk_about_game()`"
+            "At least one game should have been found in function `switch_to_particular_game_discussion()`"
         if is_found_text_definitely_game(game_names_from_local_list_of_games[0]):
             flag = False
         else:
@@ -521,9 +534,9 @@ def user_definitely_wants_to_talk_about_particular_game_request(ngrams, vars, ad
     logger.info(f"user_definitely_wants_to_talk_about_particular_game_request")
     game_names_from_local_list_of_games = extract_game_names_user_wants_to_discuss_from_re(
         vars, GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN)
-    if lets_talk_about_game(vars):
+    if switch_to_particular_game_discussion(vars):
         assert game_names_from_local_list_of_games,\
-            "At least one game should have been found in function `lets_talk_about_game()`"
+            "At least one game should have been found in function `switch_to_particular_game_discussion()`"
         if is_found_text_definitely_game(game_names_from_local_list_of_games[0]):
             flag = additional_check(ngrams, vars)
         else:
@@ -543,9 +556,9 @@ def search_igdb_game_description_by_user_phrase(vars):
     game_names_from_local_list_of_games = extract_game_names_user_wants_to_discuss_from_re(
         vars, GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN)
     assert game_names_from_local_list_of_games, \
-        "At least one game should have been found in function `lets_talk_about_game()`"
+        "At least one game should have been found in function `switch_to_particular_game_discussion()`"
     first_name = game_names_from_local_list_of_games[0]
-    match = VIDEO_GAME_WORDS_RE.match(first_name)
+    match = VIDEO_GAME_WORDS_COMPILED_PATTERN.match(first_name)
     if match:
         game_word_mentioned = True
         first_name = first_name[match.span()[1]:]

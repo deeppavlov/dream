@@ -3,11 +3,11 @@ import re
 from pathlib import Path
 
 
-VIDEO_GAME_WORDS_RE = re.compile(r"(?:(?:the |a )?(?:video )?game )?")
+VIDEO_GAME_WORDS_COMPILED_PATTERN = re.compile(r"(?:(?:the |a )?(?:video )?game )")
 
 
 def compile_re_pattern_for_list_of_strings(strings):
-    regex = r'\b' + r'\b|\b'.join([f"{VIDEO_GAME_WORDS_RE.pattern}" + s for s in strings]) + r'\b'
+    regex = r'\b' + r'\b|\b'.join([f"{VIDEO_GAME_WORDS_COMPILED_PATTERN.pattern}?" + s for s in strings]) + r'\b'
     return re.compile(regex, flags=re.I)
 
 
