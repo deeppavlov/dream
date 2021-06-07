@@ -172,11 +172,12 @@ class BookSkillScenario:
             plain_book, _ = parse_author_best_book(annotated_user_phrase)
             if is_wikidata_entity(plain_book):
                 book = entity_to_label(plain_book)
-                if book and not just_mentioned(annotated_user_phrase, book):
+                year = get_published_year(plain_book)
+                if book and year and not just_mentioned(annotated_user_phrase, book):
                     logger.debug('Found_BEST_BOOK')
                     reply = IF_REMEMBER_LAST_BOOK.replace("BOOK", book).replace('AUTHOR', author_name)
                     human_attr['book_skill']['plain_book'] = plain_book
-                    human_attr['book_skill']['n_years_ago'] = CURRENT_YEAR - get_published_year(plain_book)
+                    human_attr['book_skill']['n_years_ago'] = CURRENT_YEAR - year
                     human_attr['book_skill']['book'] = book
                     human_attr['book_skill']['author'] = author_name
                     reply = f'{reply} {ASK_ABOUT_OFFERED_BOOK}'
