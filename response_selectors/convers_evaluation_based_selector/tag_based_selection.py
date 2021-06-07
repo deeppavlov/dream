@@ -302,7 +302,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
     acknowledgement_hypothesis = {}
 
     for cand_id, cand_uttr in enumerate(candidates):
-        if confidences[cand_id] == 0.:
+        if confidences[cand_id] == 0. and cand_uttr["skill_name"] not in ACTIVE_SKILLS:
             logger.info(f"Dropping cand_id: {cand_id} due to toxicity/blacklists")
             continue
 
