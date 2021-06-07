@@ -114,9 +114,9 @@ link_to_skill2i_like_to_talk = {
         "their product  becomes  a masterpiece. What was the last game that impressed you?",
     ],
     "dff_travel_skill": [
-        "I'm choosing the direction for my next trip. Where do you want to travel next time?",
+        "I'm choosing the direction for my next digital trip. What country would you like to travel next time?",
         "I've recently stuck on travel web-site. And I’ve read so many interesting travel stories. "
-        "Where did you travel last time?",
+        "What city did you travel last time?",
     ],
     "dff_animals_skill": [
         "I think that pets are a great source of entertainment. Do you have pets at home?",
