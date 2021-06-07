@@ -163,6 +163,7 @@ class BookSkillScenario:
                 reply, confidence = f'{WILL_CHECK} By the way, {WHAT_BOOK_IMPRESSED_MOST}', self.default_conf
             elif not human_attr['book_skill'].get('we_asked_genre', False):
                 reply, confidence = f'{WILL_CHECK} By the way, {WHAT_IS_FAV_GENRE}', self.default_conf
+                human_attr['book_skill']['we_asked_genre'] = True
             else:
                 reply, confidence = '', 0
         elif is_wikidata_entity(plain_author_name):
