@@ -62,9 +62,9 @@ OPINION_REQUEST_ABOUT_VISITED_LOC = [
 ]
 
 USER_IMPRESSIONS_REQUEST = [
-    "I'm even a bit jealous! WHAT_DO_I_LOVE What do you like most about this place?",
-    "That's cool that you like it! WHAT_DO_I_LOVE What is the best thing you know about it?",
-    "I'm glad you liked it! WHAT_DO_I_LOVE What does impress you most about this place?"
+    "I'm even a bit jealous! WHAT_DO_I_LOVE What do you like most about LOCATION?",
+    "That's cool that you like it! WHAT_DO_I_LOVE What is the best thing you know about LOCATION?",
+    "I'm glad you liked it! WHAT_DO_I_LOVE What does impress you most about LOCATION?"
 ]
 
 WOULD_USER_LIKE_TO_VISIT_LOC_REQUESTS = [
@@ -141,17 +141,15 @@ HAVE_YOU_BEEN_IN_PHRASES = [
 ]
 
 I_HAVE_BEEN_IN_AND_LIKED_MOST = [
-    "I've been in Italy, and I liked the contrasts I saw in this country. Sometimes a beautiful palace is "
-    "adjacent to the most ugly building you can think of. But contrast also in eating the most wonderful food in "
-    "a restaurant that has not been redecorated in 20 years.",
-    "For me, Italy and Italians offer visitors the world over some of the most amazing culture, food, clothing, "
-    "historical monuments, and supercars ever made, while still maintaining that romantic, old world, classic "
-    "European, small town charm!",
-    "I've visited Italy, and it is very diverse and there are many beautiful cities. Italy has awesome "
-    "architecture, culture and history. Italy has year round good weather.",
-    "I've been in Venice, it is a colorful and romantic city, and I love romance so much.",
-    "I've been in Florence, it's capital of Italy's Tuscany region, Florence is home to many masterpieces of "
-    "Renaissance art and architecture, and I love architecture so much.",
+    "I've been virtually in many different places, and I liked the contrasts I saw: in architecture, "
+    "food, music and even people.",
+    "I've been virtually in many different countries, and I liked how the old architecture adjoins to a modern "
+    "buildings.",
+    "I've visited a lot of different cities using the Internet, and every place is special, every city has "
+    "awesome architecture, culture and history.",
+    "I've been in many colorful and romantic cities, and I love romance so much.",
+    "I've been in many different places using the Internet, иге my attention is always devoted to architecture, "
+    "I love architecture so much!",
 ]
 
 OKAY_ACKNOWLEDGEMENT_PHRASES = [
