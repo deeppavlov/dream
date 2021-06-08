@@ -66,7 +66,7 @@ OPINION_REQUEST_ON_BOOK_PHRASES = ["Did you enjoy this book?",
                                    "Did you find this book interesting?",
                                    "Was this book exciting for you?"]
 BOOK_ACKNOWLEDGEMENT_PHRASE = 'Never heard about it. Is it a book, an author or a genre?'
-WILL_CHECK = 'OK, I will check it out later.'
+WILL_CHECK = 'I will check it out later.'
 DONT_KNOW_EITHER = "I don't know either. Let's talk about something else."
 QUESTIONS_ABOUT_BOOK = [BOOK_ANY_PHRASE, LAST_BOOK_READ, WHAT_BOOK_IMPRESSED_MOST, BOOK_ACKNOWLEDGEMENT_PHRASE] \
     + BOOK_SKILL_CHECK_PHRASES + ALL_LINKS_TO_BOOKS
@@ -157,12 +157,18 @@ class BookSkillScenario:
                 reply, confidence = f'{bot_phrases[-1]} #+#repeat', self.default_conf
             elif is_no(annotated_user_phrase) or dontknow_books(annotated_user_phrase):
                 reply, confidence = BOOK_ANY_PHRASE, self.default_conf
+            elif 'by' in annotated_user_phrase['text']:
+                possible_author = annotated_user_phrase['text'].split('by')[-1]
+                reply = f'I have never heard about such writer as {possible_author}. {WILL_CHECK}'
+                if not human_attr['book_skill'].get('we_asked_genre', False):
+                    reply, confidence = f'{reply} By the way, {WHAT_IS_FAV_GENRE}', self.default_conf
+                    human_attr['book_skill']['we_asked_genre'] = True
             elif BOOK_ACKNOWLEDGEMENT_PHRASE != bot_phrases[-1]:
                 reply, confidence = BOOK_ACKNOWLEDGEMENT_PHRASE, self.default_conf
             elif all([WHAT_BOOK_IMPRESSED_MOST not in j for j in human_attr['book_skill']['used_phrases']]):
-                reply, confidence = f'{WILL_CHECK} By the way, {WHAT_BOOK_IMPRESSED_MOST}', self.default_conf
+                reply, confidence = f'OK, {WILL_CHECK} By the way, {WHAT_BOOK_IMPRESSED_MOST}', self.default_conf
             elif not human_attr['book_skill'].get('we_asked_genre', False):
-                reply, confidence = f'{WILL_CHECK} By the way, {WHAT_IS_FAV_GENRE}', self.default_conf
+                reply, confidence = f'OK, {WILL_CHECK} By the way, {WHAT_IS_FAV_GENRE}', self.default_conf
                 human_attr['book_skill']['we_asked_genre'] = True
             else:
                 reply, confidence = '', 0
