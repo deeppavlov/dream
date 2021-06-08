@@ -19,7 +19,7 @@ ENV SERVICE_NAME ${SERVICE_NAME}
 
 COPY skills/${SERVICE_NAME}/requirements.txt .
 RUN pip install -r requirements.txt
-
+RUN python -c "import nltk; nltk.download('punkt')"
 COPY skills/${SERVICE_NAME}/ ./
 COPY ./common/ ./common/
 
