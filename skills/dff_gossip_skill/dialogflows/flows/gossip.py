@@ -1162,13 +1162,13 @@ def usr_says_opinion_abt_person_response(vars):
 
         # while we understand this is an opinion we don't know what it actually is
         # so we use sentiment analysis as a shortcut
-        sentiment = state_utils.get_human_sentiment(vars)
+        sentiment = state_utils.get_human_sentiment(vars, negative_threshold=0.75)
 
         current_person = shared_memory.get("current_person", "")
 
         # generating sentiment-based response
 
-        sentiment = state_utils.get_human_sentiment(vars)
+        sentiment = state_utils.get_human_sentiment(vars, negative_threshold=0.75)
         judgement = "Other"
         if "negative" in sentiment:
             judgement = "Disliked"
@@ -1473,7 +1473,7 @@ def usr_mentions_another_person_response(vars):
                     state_utils.save_to_shared_memory(vars, bot_emotion_towards_current_person=target_emotion_type)
 
             # no matter what we want to save the fact that user mentioned this particular person
-            sentiment = state_utils.get_human_sentiment(vars)
+            sentiment = state_utils.get_human_sentiment(vars, negative_threshold=0.75)
             judgement = "Other"
             if "negative" in sentiment:
                 judgement = "Disliked"
