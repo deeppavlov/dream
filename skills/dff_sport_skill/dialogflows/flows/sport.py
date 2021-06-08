@@ -35,6 +35,7 @@ from common.sport import (
     KIND_OF_COMPETITION_TEMPLATE,
     ATHLETE_TEMPLETE,
     LIKE_TEMPLATE,
+    HATE_TEMPLATE,
     SUPPORT_TEMPLATE,
     QUESTION_TEMPLATE,
     LAST_CHANCE_TEMPLATE,
@@ -879,8 +880,10 @@ def user_negative_request(ngrams, vars):
     # SYS_TELL_NEGATIVE
     is_negative = "negative" in get_sentiment(state_utils.get_last_human_utterance(vars),
                                               probs=False, default_labels=["neutral"])
-    no_vars = condition_utils.is_no_vars(vars)
-    flag = is_negative or no_vars
+    no_or_hate_vars = condition_utils.is_no_vars(vars) or re.search(
+        HATE_TEMPLATE, state_utils.get_last_human_utterance(vars)["text"].lower()
+    )
+    flag = is_negative or no_or_hate_vars
     logger.info(f"user_negative_request={flag}")
     return flag
 
@@ -896,7 +899,7 @@ def user_negative_response(vars):
             body = compose_topic_offering(excluded_skills=prev_active_skills)
             return body
         else:
-            countries = ["Russia", "China", "Germany"]
+            countries = ["Russia", "China", "Germany", "France", "Japan"]
             country = random.choice(countries)
             return f"I know that sport is very popular in {country}. " \
                    f"Have you ever been in {country}?"

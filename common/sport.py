@@ -40,20 +40,20 @@ SPORTS_NO_ING = r"\b(aerobics|archery|badminton|baseball|basketball|beach volley
                 r"|fence|figure skate|football|golf|gymnastics|handball|hang glide" \
                 r"|high jump|hockey|hurdle race|ice rink|in-line skate|jog|judo|karate" \
                 r"|long jump|martial arts|motorbike sports|mountaineer|orienteer" \
-                r"|parachute|pole-vault|polo|ride|rowing|rugby|sail|ski|snooker" \
+                r"|parachute|pole-vault|polo|ride|rowing|rugby|ski|snooker" \
                 r"|track-and-field|triathlon|tug of war|volleyball|water polo|waterski" \
-                r"|weight lift|work out|wrestle|run|swim|tennis|fitness|lacrosse|ballet|march|soccer)"
+                r"|weight lift|work out|wrestle|run|swim|tennis|fitness|lacrosse|ballet|soccer)"
 # curling in SPORTS_NO_ING is not a mistake - there is not word to curl
 ING_FORMS = {'run': 'running', 'swim': 'swimming', 'ski': 'skiing', 'dive': 'diving', 'box': 'boxing',
              'canoe': 'canoeing', 'climb': 'climbing', 'cycle': 'cycling', 'fence': 'fencing',
              'figure skate': 'figure skating',
              'in-line skate': 'figure skating', 'hang glide': 'hand gliding',
-             'high jump': 'high jumping', 'jog': 'jogging', 'sail': 'sailing', 'ride': 'riding', 'row': 'rowing',
+             'high jump': 'high jumping', 'jog': 'jogging', 'ride': 'riding', 'row': 'rowing',
              'weight lift': 'weight lifing', 'wrestle': 'wrestling', 'work out': 'working out',
              'mountaineer': 'mountaineering', 'dance' : 'dancing',
              'orienteer': 'orienteering', 'parachute': 'parachuting', 'pole-vault': 'pole-vaulting',
              'car race': 'car racing', 'wakeboard': 'wakeboarding',
-             'march': 'marching', 'long jump': 'long jumping'}
+             'long jump': 'long jumping'}
 REVERSE_ING_FORMS = {ING_FORMS[key]: key for key in ING_FORMS}
 SPORTS = rf"({'|'.join(ING_FORMS.values())}|{SPORTS_NO_ING})"
 KIND_OF_SPORTS_TEMPLATE = re.compile(
@@ -87,6 +87,8 @@ SUPPORT_TEMPLATE = re.compile(r"(support|a fan of)", re.IGNORECASE)
 QUESTION_TEMPLATE = re.compile(r"(what|did|do|which|who) (team )?(you )?(do|is|are|kind of|know|like)", re.IGNORECASE)
 
 LIKE_TEMPLATE = re.compile(r"(like|love|support|a fan of|favorite|enjoy|want to talk)?", re.IGNORECASE)
+
+HATE_TEMPLATE = re.compile(r"(hate)", re.IGNORECASE)
 
 COMPETITION_TEMPLATE = re.compile(r"(tournament|tourney|competition|championship|derby)", re.IGNORECASE)
 
