@@ -217,7 +217,7 @@ class BookSkillScenario:
             else:
                 reply = f"{AMAZING_READ_BOOK} {WHEN_IT_WAS_PUBLISHED}"
 
-            if len(bookname.split()) > 2 and bookname.lower() in annotated_user_phrase['text'].lower():
+            if len(bookname.split()) > 1 and bookname.lower() in annotated_user_phrase['text'].lower():
                 # if book title is long enough and is in user reply,we set super conf
                 confidence = self.super_conf
             else:
@@ -235,7 +235,12 @@ class BookSkillScenario:
             else:
                 confidence = self.default_conf
         elif movie_name:
-            reply, confidence = get_movie_answer(annotated_user_phrase, human_attr), self.default_conf
+            reply = get_movie_answer(annotated_user_phrase, human_attr)
+            if len(movie_name.split()) > 1 and movie_name.lower() in annotated_user_phrase['text'].lower():
+                # if book title is long enough and is in user reply,we set super conf
+                confidence = self.super_conf
+            else:
+                confidence = self.default_conf
         else:
             if any([WHAT_BOOK_IMPRESSED_MOST in j for j in human_attr['book_skill']['used_phrases']]):
                 reply, confidence = self.default_reply, 0
