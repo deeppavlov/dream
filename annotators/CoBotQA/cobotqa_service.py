@@ -20,6 +20,7 @@ if COBOT_QA_SERVICE_URL is None:
 
 headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COBOT_API_KEY}'}
 
+# travel
 with open(pathlib.Path(__file__).resolve().parent / "facts_for_cities.json", "r") as f:
     TRAVEL_FACTS = json.load(f)
 with open(pathlib.Path(__file__).resolve().parent / "facts_for_countries.json", "r") as f:
@@ -27,9 +28,14 @@ with open(pathlib.Path(__file__).resolve().parent / "facts_for_countries.json", 
     for name in data:
         TRAVEL_FACTS[name] = deepcopy(data[name])
 TRAVEL_FACTS = {name.lower(): fact for name, fact in TRAVEL_FACTS.items()}
+# food
 with open(pathlib.Path(__file__).resolve().parent / "food_facts.json", "r") as f:
     FOOD_FACTS = json.load(f)
 FOOD_FACTS = {name.lower(): fact for name, fact in FOOD_FACTS.items()}
+# animals
+with open(pathlib.Path(__file__).resolve().parent / "facts_for_animals.json", "r") as f:
+    ANIMALS_FACTS = json.load(f)
+ANIMALS_FACTS = {name.lower(): fact for name, fact in ANIMALS_FACTS.items()}
 
 
 def send_cobotqa(question):

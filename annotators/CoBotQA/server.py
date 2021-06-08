@@ -12,7 +12,7 @@ from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
-from cobotqa_service import send_cobotqa, TRAVEL_FACTS, FOOD_FACTS
+from cobotqa_service import send_cobotqa, TRAVEL_FACTS, FOOD_FACTS, ANIMALS_FACTS
 
 from common.utils import get_entities
 
@@ -229,6 +229,10 @@ def respond():
                         curr_resp["facts"].append({"entity": resp_subj, "fact": fact})
             if resp_subj and resp_subj.lower() in FOOD_FACTS:
                 for fact in FOOD_FACTS[resp_subj.lower()]:
+                    if {"entity": resp_subj, "fact": fact} not in curr_resp["facts"]:
+                        curr_resp["facts"].append({"entity": resp_subj, "fact": fact})
+            if resp_subj and resp_subj.lower() in ANIMALS_FACTS:
+                for fact in ANIMALS_FACTS[resp_subj.lower()]:
                     if {"entity": resp_subj, "fact": fact} not in curr_resp["facts"]:
                         curr_resp["facts"].append({"entity": resp_subj, "fact": fact})
 
