@@ -1523,7 +1523,7 @@ simplified_dialogflow.add_user_serial_transitions(
     State.USR_START,
     {
         State.SYS_TOPIC_TO_EVENT: sys_topic_to_event_request,
-        # State.SYS_AGREES_ABT_PERSON: sys_celebrity_found_request,
+        State.SYS_AGREES_ABT_PERSON: sys_celebrity_found_request,
         # State.SYS_MENTIONS_ANOTHER_PERSON: sys_celebrity_found_request,
         State.SYS_MENTIONS_ANOTHER_PERSON: sys_mentions_another_person_request,
     },
