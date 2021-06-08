@@ -28,11 +28,11 @@ class EmotionSkillScenario:
         self.regexp_sad = False
 
     def _get_user_emotion(self, annotated_user_phrase, discard_emotion=None):
-        if is_sad(annotated_user_phrase['text']):
+        if any([is_sad(annotated_user_phrase['text']),
+                is_alone(annotated_user_phrase['text']),
+                is_boring(annotated_user_phrase['text'])]):
             self.regexp_sad = True
             return 'sadness'
-        elif is_boring(annotated_user_phrase['text']):
-            return 'neutral'
         most_likely_emotion = None
         emotion_probs = get_emotions(annotated_user_phrase, probs=True)
         if discard_emotion in emotion_probs:
@@ -187,9 +187,6 @@ class EmotionSkillScenario:
                     emotion = most_likely_emotion
                 if is_joke_requested(user_phrase):
                     state = "joke_requested"
-                    emotion_skill_attributes['state'] = state
-                elif is_alone(user_phrase):
-                    state = "sad_and_lonely"
                     emotion_skill_attributes['state'] = state
                 elif is_pain(annotated_user_phrase['text']):
                     state = "pain_i_feel"
