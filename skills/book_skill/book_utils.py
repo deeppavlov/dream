@@ -511,7 +511,7 @@ def dontlike_books(last_utterance):
     return False
 
 
-dontknow_template = re.compile(r"(not know|cannot remember|don't know|can't remember)", re.IGNORECASE)
+dontknow_template = re.compile(r"(n't|not) (know|remember)", re.IGNORECASE)
 
 
 def dontknow_books(annotated_uttr):
