@@ -27,7 +27,7 @@ SAD_PATTERN = r"\b(sad|horrible|depressed|awful|dire|upset|trash|^(\w{0,15} )?ba
 POOR_ASR_PATTERN = r'^say$'
 
 PAIN_TEMPLATE = re.compile(PAIN_PATTERN, re.IGNORECASE)
-LONELINESS_TEMPLATE = re.compile(r"(i am alone|lonely|loneliness)", re.IGNORECASE)
+LONELINESS_TEMPLATE = re.compile(r"(i am alone|lonely|loneliness|do you love me)", re.IGNORECASE)
 SAD_TEMPLATE = re.compile(rf"({SAD_PATTERN}|{POOR_ASR_PATTERN})", re.IGNORECASE)
 BORING_TEMPLATE = re.compile(r"(boring|bored)", re.IGNORECASE)  # The template is used to EXCLUDE answers on this intent
 JOKE_REQUEST_TEMPLATE = re.compile(r"(((tell me|tell|hear)( [a-z]+){0,3} jokes?)|^joke)", re.IGNORECASE)
