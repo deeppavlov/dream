@@ -956,12 +956,9 @@ def bot_express_opinion_and_ask_user_response(vars):
         movies_ids, unique_persons, mentioned_genres = extract_mentions(
             vars, check_full_utterance=user_was_asked_about_movie_title(vars))
         movie_id, movie_title = extract_movie_title(vars, movies_ids)
-        # express opinion about last mentioned movie in user uttr
-        response, _, _ = templates.give_opinion(vars["agent"]["dialog"])
-        # request opinion about last mentioned movie in user uttr
-        opinion_request_response = movie_request_opinion_response(vars)
+        # express opinion and request opinion about last mentioned movie in user uttr
+        response = movie_request_opinion_response(vars)
 
-        response = f"{response} {opinion_request_response}"
         if is_popular_movie(movie_id) == "popular":
             state_utils.set_confidence(vars, SUPER_CONFIDENCE)
             state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
