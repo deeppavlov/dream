@@ -1485,7 +1485,7 @@ def usr_mentions_another_person_response(vars):
             save_mentioned_person(vars, user_mentioned_person, judgement, "people_mentioned_by_user")
 
             # saving current user's emotion towards the currently discussed person
-            state_utils.save_to_shared_memory(vars, bot_emotion_towards_current_person=target_emotion_type)
+            state_utils.save_to_shared_memory(vars, bot_emotion_towards_current_person=judgement)
 
             current_person = user_mentioned_person
             # obtaining topic using reverse lookup from occupations
