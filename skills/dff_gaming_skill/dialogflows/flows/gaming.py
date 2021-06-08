@@ -18,7 +18,7 @@ import common.gaming as common_gaming
 from common.gaming import GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN, VIDEO_GAME_WORDS_COMPILED_PATTERN,\
     load_json
 from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
-from common.utils import is_yes
+from common.utils import is_no, is_yes
 
 import dialogflows.scopes as scopes
 
@@ -282,13 +282,14 @@ def extract_game_names_user_wants_to_discuss_from_re(vars, compiled_regexp):
 
 
 def get_game_description_for_first_igdb_candidate(name, results_sort_key):
+    name_lower = name.lower()
     if isinstance(results_sort_key, str):
         def results_sort_key(x):
             return -x[results_sort_key] if results_sort_key in x else 1
     elif not callable(results_sort_key):
         raise ValueError("The argument `results_sort_key` has to be either `str` or callable.")
-    if name in games_igdb_search_results:
-        igdb_game_description = games_igdb_search_results.get(name)
+    if name_lower in games_igdb_search_results:
+        igdb_game_description = games_igdb_search_results.get(name_lower)
         logger.info(f"found saved search results for game query '{name}'. Game description: {igdb_game_description}")
     elif IGDB_POST_KWARGS is not None:
         search_body = f'search "{name}"; fields *; where themes != (42);'  # 42 is 'Erotic'
@@ -312,7 +313,7 @@ def get_game_description_for_first_igdb_candidate(name, results_sort_key):
                 )
             igdb_game_description = None
         if igdb_game_description is not None:
-            games_igdb_search_results[name] = igdb_game_description
+            games_igdb_search_results[name_lower] = igdb_game_description
             games_igdb_ids[str(igdb_game_description["id"])] = igdb_game_description
             logger.info(
                 f"Found game descriptions for query '{name}' on igdb.com. Selected game description: "
@@ -329,8 +330,9 @@ def search_igdb_for_game(
         results_sort_key="rating_count",
         search_result_keys_to_keep=(
             "url", "rating", "rating_count", "summary", "created_at", "first_release_date", "involved_companies",
-            "genres", "themes", "category", "name", "alternative_names", "id"),
+            "genres", "themes", "category", "name", "id"),
 ):
+    logger.info("Searching for igdb game description of game {repr(name)}")
     igdb_game_description = get_game_description_for_first_igdb_candidate(name, results_sort_key)
     if igdb_game_description is not None:
         filtered_game_description = {}
@@ -359,20 +361,23 @@ def get_igdb_ids_for_games_user_wanted_to_discuss(vars, assert_not_empty=True):
     shared_memory = state_utils.get_shared_memory(vars)
     ids = shared_memory.get("igdb_ids_for_games_user_wanted_to_discuss", [])
     if assert_not_empty:
-        assert ids, "Shared memory field 'igdb_game_ids_user_wanted_to_discuss' is empty. If dff_gaming_skill reached "\
-            "state SYS_USER_CONFIRMS_GAME 'games_user_wanted_do_discuss' cannot be empty "
+        assert ids, "Shared memory field 'igdb_game_ids_user_wanted_to_discuss' is empty. "\
+            "If dff_gaming_skill reached state SYS_USER_CONFIRMS_GAME 'games_user_wanted_do_discuss' cannot be empty "
     return ids
 
 
 def get_current_igdb_game(vars, assert_not_empty=True):
     shared_memory = state_utils.get_shared_memory(vars)
     game_id = shared_memory.get("current_igdb_game_id", "")
-    if assert_not_empty:
-        assert game_id, "Shared memory field 'current_igdb_game_id' is empty. If dff_gaming_skill reached "\
-            "state SYS_USER_CONFIRMS_GAME and did not reached SYS_ERR 'current_igdb_game_id' cannot be empty"
-    game = games_igdb_ids.get(str(game_id))
-    assert game is not None, f"If some game is set for discussion it should have been added to `games_igdb_ids`. "\
-        f"No game for id {repr(game_id)}."
+    if game_id:
+        game = games_igdb_ids.get(str(game_id))
+        assert game is not None, f"If some game is set for discussion it should have been added to `games_igdb_ids`."\
+            f" No game for id {repr(game_id)}."
+    else:
+        game = None
+        if assert_not_empty:
+            assert game_id, "Shared memory field 'current_igdb_game_id' is empty. If dff_gaming_skill reached "\
+                "state SYS_USER_CONFIRMS_GAME and did not reached SYS_ERR 'current_igdb_game_id' cannot be empty"
     return game
 
 
@@ -437,7 +442,7 @@ def get_new_linkto_response_based_on_genres_and_themes(vars):
 
 def get_split_summary(vars):
     shared_memory = state_utils.get_shared_memory(vars)
-    current_index = shared_memory.get("curr_summary_sent_index", "")
+    current_index = shared_memory.get("curr_summary_sent_index", 0)
     game = get_current_igdb_game(vars)
     summary = game.get('summary')
     assert summary is not None, "Game descriptions without required keys are filtered in function "\
@@ -495,7 +500,10 @@ def are_there_2_or_more_turns_left_in_game_description(ngrams, vars):
 def is_game_candidate_minecraft(ngrams, vars):
     candidate_game_id = get_candidate_game_id(vars)
     assert candidate_game_id is not None and candidate_game_id, ASSERTION_ERROR_MSG_CANDIDATE_IS_GAME_NOT_SET
-    candidate_game = games_igdb_ids[candidate_game_id]
+    candidate_game_id_str = str(candidate_game_id)
+    assert candidate_game_id_str in games_igdb_ids, f"If igdb game id {candidate_game_id_str} was set as candidate "\
+        f"for discussion, the igdb game description should have been put into global variable `games_igdb_ids`"
+    candidate_game = games_igdb_ids[candidate_game_id_str]
     return "minecraft" in candidate_game["name"].lower()
 
 
@@ -682,33 +690,44 @@ def praise_user_achievement_in_minecraft_and_try_to_link_to_harry_potter_respons
     return response
 
 
-def update_memory_when_game_for_discussion_is_chosen(vars, candidate_game_id_is_already_set):
+def set_current_igdb_game_id_if_game_for_is_discussion_identified(vars, candidate_game_id_is_already_set):
     if candidate_game_id_is_already_set:
         set_current_igdb_game_id_from_candidate_game_id(vars)
         put_candidate_id_to_igdb_game_ids_user_wanted_to_discuss(vars)
     else:
         igdb_game_description, _ = search_igdb_game_description_by_user_phrase(vars)
-        state_utils.save_to_shared_memory(vars, current_igdb_game_id=igdb_game_description["id"])
-        put_game_id_to_igdb_game_ids_user_wanted_to_discuss(vars, igdb_game_description["id"])
+        if igdb_game_description is not None:
+            state_utils.save_to_shared_memory(vars, current_igdb_game_id=igdb_game_description["id"])
+            put_game_id_to_igdb_game_ids_user_wanted_to_discuss(vars, igdb_game_description["id"])
     clean_candidate_game_id(vars)
 
 
 @error_handler
 def confess_bot_never_played_game_and_ask_user_if_he_played_response(vars, candidate_game_id_is_already_set):
-    update_memory_when_game_for_discussion_is_chosen(vars, candidate_game_id_is_already_set)
-    game = get_current_igdb_game(vars)
-    if 'genres' not in game or not game['genres']:
-        logger.warning(f"No genre for game '{game['name']}'.")
-        genres = ""
-    elif len(game['genres']) == 1:
-        genres = IGDB_GAME_GENRES_FOR_REPLICAS[game['genres'][0]]
+    set_current_igdb_game_id_if_game_for_is_discussion_identified(vars, candidate_game_id_is_already_set)
+    game = get_current_igdb_game(vars, assert_not_empty=False)
+    if game is None:
+        logger.warning(
+            "No appropriate igdb game description were found. Game description could be filtered because it lacked "
+            "required keys. Another cause possible cause of this situation is that local igdb saved search results "
+            "do not have detected game. In such a case you should update local copy of igdb.com search results."
+        )
+        response = error_response(vars)
+        state_utils.set_confidence(vars, confidence=CONF_0)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
     else:
-        genres = f"{IGDB_GAME_GENRES_FOR_REPLICAS[game['genres'][0]]} "\
-            f"and {IGDB_GAME_GENRES_FOR_REPLICAS[game['genres'][1]]}"
-    response = f"I've heard it is a cool {genres}. Unfortunately, I haven't tried it out. "\
-               f"Have you ever played {game['name']}?"
-    state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+        if 'genres' not in game or not game['genres']:
+            logger.warning(f"No genre for game '{game['name']}'.")
+            genres = ""
+        elif len(game['genres']) == 1:
+            genres = IGDB_GAME_GENRES_FOR_REPLICAS[game['genres'][0]]
+        else:
+            genres = f"{IGDB_GAME_GENRES_FOR_REPLICAS[game['genres'][0]]} "\
+                f"and {IGDB_GAME_GENRES_FOR_REPLICAS[game['genres'][1]]}"
+        response = f"I've heard it is a cool {genres}. Unfortunately, I haven't tried it out. "\
+                   f"Have you ever played {game['name']}?"
+        state_utils.set_confidence(vars, confidence=CONF_1)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
 
 
@@ -728,7 +747,7 @@ def tell_about_building_hogwarts_in_minecraft_ask_what_interesting_user_built_re
         candidate_game_id_is_already_set,
         must_continue,
 ):
-    update_memory_when_game_for_discussion_is_chosen(vars, candidate_game_id_is_already_set)
+    set_current_igdb_game_id_if_game_for_is_discussion_identified(vars, candidate_game_id_is_already_set)
     response = f"Cool! Minecraft is the best game ever! I had a great time building a copy of the Hogwarts castle "\
         "from Harry Potter. What is the most interesting thing you built?"
     if must_continue:
@@ -745,8 +764,14 @@ def suggest_user_game_description_response(vars):
     logger.info("called suggest_user_game_description_response")
     game = get_current_igdb_game(vars)
     response = f"Would you like me to tell you short description of {game['name']}?"
-    state_utils.set_confidence(vars, confidence=CONF_092_CAN_CONTINUE)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    human_uttr = state_utils.get_last_human_utterance(vars)
+    logger.info(f"(suggest_user_game_description_response)human_uttr: {human_uttr['text']}")
+    if is_no(human_uttr):
+        state_utils.set_confidence(vars, confidence=CONF_1)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+    else:
+        state_utils.set_confidence(vars, confidence=CONF_092_CAN_CONTINUE)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
 
@@ -757,6 +782,8 @@ def describe_game_to_user_response(vars, ask_if_user_wants_more=True):
         response = text + ".. Would you like to hear more?"
     else:
         response = text + " So. Would you like to play this game?"
+    if num_remaining_sentences == 0:
+        state_utils.save_to_shared_memory(vars, curr_summary_sent_index=0)
     state_utils.set_confidence(vars, confidence=CONF_092_CAN_CONTINUE)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
@@ -995,7 +1022,11 @@ simplified_dialogflow.set_error_successor(State.USR_SUGGEST_USER_GAME_DESCRIPTIO
 simplified_dialogflow.add_system_transition(
     State.SYS_USER_DOESNT_WANT_GAME_DESCRIPTION,
     State.USR_START,
-    partial(link_to_other_skills_response, prefix="Okay."),
+    partial(
+        link_to_other_skills_response,
+        prefix="Okay.",
+        shared_memory_actions=[lambda vars: state_utils.save_to_shared_memory(vars, curr_summary_sent_index=0)],
+    ),
 )
 simplified_dialogflow.set_error_successor(State.SYS_USER_RECOMMENDS_GAME, State.SYS_ERR)
 ##############################################################
