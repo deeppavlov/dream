@@ -89,8 +89,7 @@ NOT_LIKE_NOT_WATCH_MOVIES_TEMPLATE = re.compile(
     r"tv[ -]?show|reality[ -]?show|netflix|\btv\b|comedy|comedies|thriller|"
     r"animation|anime|talk[ -]?show|cartoon)", re.IGNORECASE)
 
-NOT_WATCHED_TEMPLATE = re.compile(r"(n't|not) (watch|watching|watched|seen)( it| this| them| these|$|\.)",
-                                  re.IGNORECASE)
+NOT_WATCHED_TEMPLATE = re.compile(r"(have|'ve|did|was|had|were)( never| not|n't) (seen|watch)", re.IGNORECASE)
 
 MOVIE_TITLE_QUESTION = re.compile(r"(what|which|do you)[a-zA-Z\- ']+" + MOVIE_WORDS + r"[a-zA-Z\- ']*\?",
                                   re.IGNORECASE)

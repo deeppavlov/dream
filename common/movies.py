@@ -41,7 +41,7 @@ REPEAT_RECOMMENDATION_PHRASES = [
 WOULD_YOU_LIKE_TO_CONTINUE_TALK_ABOUT_MOVIES = [
     "Would you like to continue our conversation about movies?",
     "Would you like to continue to chat about movies?",
-    "Do you to continue to talk about movies?"
+    "Do you want to continue to talk about movies?"
 ]
 
 
