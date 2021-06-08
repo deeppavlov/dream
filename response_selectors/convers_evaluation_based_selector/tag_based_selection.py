@@ -15,7 +15,7 @@ from common.universal_templates import if_chat_about_particular_topic, is_switch
     is_any_question_sentence_in_utterance
 from common.utils import get_intent_name, get_intents, get_topics, get_entities
 from utils import calculate_single_convers_evaluator_score, CONV_EVAL_STRENGTH, CONFIDENCE_STRENGTH, \
-    how_are_you_spec, what_i_can_do_spec, greeting_spec, misheard_with_spec1, \
+    how_are_you_spec, what_i_can_do_spec, greeting_spec, misheard_with_spec1, psycho_help_spec, \
     misheard_with_spec2, alexa_abilities_spec, join_used_links_in_attributes, get_updated_disliked_skills
 from common.response_selection import ACTIVE_SKILLS, ALMOST_ACTIVE_SKILLS, CAN_NOT_BE_DISLIKED_SKILLS, \
     NOT_ADD_PROMPT_SKILLS
@@ -439,6 +439,8 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         elif is_intent_candidate:
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
         elif cand_uttr["skill_name"] == "dff_friendship_skill" and alexa_abilities_spec in cand_uttr['text']:
+            categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
+        elif "program_y" in cand_uttr["skill_name"] and psycho_help_spec in cand_uttr['text']:
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
         elif cand_uttr["confidence"] >= 1.:
             # -------------------- SUPER CONFIDENCE CASE HERE! --------------------
