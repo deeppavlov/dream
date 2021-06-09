@@ -5,52 +5,50 @@ services:
       - "/cephfs/home/ignatov/artifacts:/output"
       - ".:/dp-agent"
     ports:
-      - 4242:4242
+      - ${AGENT_PORT}:4242
   kbqa:
     env_file: [ .env.dev ]
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
-      - CUDA_VISIBLE_DEVICES=9
+      - CUDA_VISIBLE_DEVICES=0
   factoid-classification:
     env_file: [ .env.dev ]
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
-      - CUDA_VISIBLE_DEVICES=9
+      - CUDA_VISIBLE_DEVICES=0
   text-qa:
     env_file: [ .env.dev ]
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
-      - CUDA_VISIBLE_DEVICES=6
+      - CUDA_VISIBLE_DEVICES=0
   comet-atomic:
     env_file: [ .env.dev ]
     environment:
-      - CUDA_VISIBLE_DEVICES=6
+      - CUDA_VISIBLE_DEVICES=0
   comet-conceptnet:
     env_file: [ .env.dev ]
     environment:
-      - CUDA_VISIBLE_DEVICES=6
+      - CUDA_VISIBLE_DEVICES=1
   knowledge-grounding:
     env_file: [ .env.dev ]
     environment:
-      - CUDA_VISIBLE_DEVICES=8
+      - CUDA_VISIBLE_DEVICES=1
   midas-classification:
     environment:
-      - CUDA_VISIBLE_DEVICES=6
+      - CUDA_VISIBLE_DEVICES=0
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
   combined-classification:
     env_file: [ .env.dev ]
     environment:
-      - CUDA_VISIBLE_DEVICES=7
+      - CUDA_VISIBLE_DEVICES=1
   mongo:
     env_file: [ .env.dev ]
     command: mongod
     image: mongo:4.0.0
-    ports:
-      - 27017:27017
     # # you can use persistent local volume if you need
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
@@ -86,14 +84,16 @@ services:
     env_file: [ .env.dev ]
   program-y-dangerous:
     env_file: [ .env.dev ]
-  movie-skill:
+  dff-movie-skill:
+    env_file: [ .env.dev ]
+  dff-gaming-skill:
     env_file: [ .env.dev ]
   ner:
     env_file: [ .env.dev ]
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
-      - CUDA_VISIBLE_DEVICES=5
+      - CUDA_VISIBLE_DEVICES=1
   eliza:
     env_file: [ .env.dev ]
   convert-reddit:
@@ -128,8 +128,6 @@ services:
     env_file: [ .env.dev ]
   news-api-annotator:
     env_file: [ .env.dev ]
-  greeting-skill:
-    env_file: [ .env.dev ]
   factoid-qa:
     env_file: [ .env.dev ]
   entity-linking:
@@ -147,30 +145,22 @@ services:
   masked-lm:
     env_file: [ .env.dev ]
     environment:
-      - CUDA_VISIBLE_DEVICES=9
+      - CUDA_VISIBLE_DEVICES=0
   dff-friendship-skill:
     env_file: [ .env.dev ]
   entity-storer:
     env_file: [ .env.dev ]
   knowledge-grounding-skill:
     env_file: [ .env.dev ]
-  wikidata-dial-skill:
-    env_file: [ .env.dev ]
-  wikidata-dial-service:
-    env_file: [ .env.dev ]
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
-    environment:
-      - CUDA_VISIBLE_DEVICES=7
   dff-animals-skill:
     env_file: [ .env.dev ]
   dff-travel-skill:
     env_file: [ .env.dev ]
-  dff-celebrity-skill:
-    env_file: [ .env.dev ]
   dff-sport-skill:
     env_file: [ .env.dev ]
   dff-food-skill:
+    env_file: [ .env.dev ]
+  dff-science-skill:
     env_file: [ .env.dev ]
   dff-music-skill:
     env_file: [ .env.dev ]
@@ -179,7 +169,7 @@ services:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
-      - CUDA_VISIBLE_DEVICES=6
+      - CUDA_VISIBLE_DEVICES=0
   dff-bot-persona-skill:
     env_file: [ .env.dev ]
   cobot-entities:
@@ -191,12 +181,16 @@ services:
   hypothesis-scorer:
     env_file: [ .env.dev ]
     environment:
-      - CUDA_VISIBLE_DEVICES=5
+      - CUDA_VISIBLE_DEVICES=1
   dff-wiki-skill:
     env_file: [ .env.dev ]
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
   topic-recommendation:
+    env_file: [ .env.dev ]
+    environment:
+      - CUDA_VISIBLE_DEVICES=1
+  user-persona-extractor:
     env_file: [ .env.dev ]
   personality-detection:
     env_file: [ .env.dev ]

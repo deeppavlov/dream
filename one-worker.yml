@@ -21,7 +21,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8018
   dummy-skill-dialog:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8052 -t 60
-  movie-skill:
+  dff-movie-skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8023 --timeout=300 --preload
   ner:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8021 -t 100
@@ -49,8 +49,6 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8066 -t 15
   news-api-annotator:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8112 -t 15
-  greeting-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8070 --timeout=60 --preload
   factoid-qa:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8071
   kbqa:
@@ -67,16 +65,14 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8090
   combined-classification:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8087
-  wikidata-dial-service:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8092
-  wikidata-dial-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8091
   dff-travel-skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8096
-  dff-celebrity-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8093
   dff-food-skill:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8097
+  dff-gaming-skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8115
+  dff-science-skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8101
   cobot-entities:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8102
   dff-funfact-skill:

@@ -60,7 +60,8 @@ def was_offer_news_about_topic(uttr: str):
     return False
 
 
-def get_news_about_topic(topic: str, NEWS_API_ANNOTATOR_URL: str, discussed_news=None):
+def get_news_about_topic(topic: str, NEWS_API_ANNOTATOR_URL: str, discussed_news=None, return_list_of_news=False,
+                         timeout_value=1.0):
     """
     Function to get news output from news-api-skill.
     ```
@@ -76,6 +77,7 @@ def get_news_about_topic(topic: str, NEWS_API_ANNOTATOR_URL: str, discussed_news
         - topic: string topic/entity about which one wants to get news
         - NEWS_API_ANNOTATOR_URL: news api skill url
         - discussed_news: list of string news urls which were given to user (not to repeat)
+        - get_list_of_news: whether to get list of news or not
 
     Returns:
         - dictionary with news, as curr_news about in example
@@ -114,14 +116,19 @@ def get_news_about_topic(topic: str, NEWS_API_ANNOTATOR_URL: str, discussed_news
                     }
             }
         ]
-        }
-    ]}
+        }],
+        "return_list_of_news": return_list_of_news
+    }
     try:
-        result = requests.post(NEWS_API_ANNOTATOR_URL, json=dialogs, timeout=1)
+        result = requests.post(NEWS_API_ANNOTATOR_URL, json=dialogs, timeout=timeout_value)
         result = result.json()[0]
         for entity_news_dict in result:
             if entity_news_dict and str(entity_news_dict["entity"]).lower() == topic.lower():
-                result_news = entity_news_dict["news"]
+                if return_list_of_news:
+                    result_news = entity_news_dict["list_of_news"]
+                else:
+                    result_news = entity_news_dict["news"]
+
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)

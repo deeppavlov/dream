@@ -4,6 +4,9 @@ ARG CONFIG
 ARG COMMIT=0.13.0
 ARG PORT
 
+ARG SED_ARG=" | "
+
+
 ENV CONFIG=$CONFIG
 ENV PORT=$PORT
 
@@ -20,6 +23,8 @@ RUN cd DeepPavlov && \
 COPY . /src
 
 WORKDIR /src
+
+RUN sed -i "s|$SED_ARG|g" "kg_dial_generator.json"
 
 RUN python -m deeppavlov install $CONFIG
 RUN python -m spacy download en_core_web_sm

@@ -28,6 +28,10 @@
     ],
     "download": [
       {
+        "url": "http://files.deeppavlov.ai/kbqa/wikidata/entity_types_sets.pickle",
+        "subdir": "{DOWNLOADS_PATH}/wikidata"
+      },
+      {
         "url": "http://files.deeppavlov.ai/kbqa/wikidata/topical_chat.tar.gz",
         "subdir": "{DOWNLOADS_PATH}/topical_chat"
       }

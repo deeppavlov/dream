@@ -11,6 +11,7 @@ sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
+logging.getLogger("werkzeug").setLevel("WARNING")
 
 app = Flask(__name__)
 
@@ -23,7 +24,7 @@ def get_probas(contexts, hypotheses):
 
 try:
     cb = CatBoostClassifier()
-    cb.load_model("model.cbm")
+    cb.load_model("model-confidence-convert-old_midas.cbm")
     contexts = [[
         "i'm good how are you",
         "Spectacular, by all reports! Do you want to know what I can do?",
@@ -64,7 +65,7 @@ def batch_respond():
         sentry_sdk.capture_exception(e)
         logger.exception(e)
 
-    logging.info(f"hypothesis_scorer exec time {time.time() - st_time}")
+    logging.warning(f"hypothesis_scorer exec time {time.time() - st_time}")
     return jsonify([{"batch": responses}])
 
 

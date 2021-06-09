@@ -19,17 +19,11 @@ logger = logging.getLogger(__name__)
 
 
 CACHED_MAXSIZE = 1000
-
-
-def get_function_id(func):
-    return f"name:{func.__name__}:id:{id(func)}"
-
-
 CACHED_FUNCTIONS = collections.defaultdict(dict)
 
 
 def add_cached_function(func):
-    func_id = get_function_id(func)
+    func_id = repr(func)
     CACHED_FUNCTIONS[func_id]["func"] = func
     CACHED_FUNCTIONS[func_id]["cache"] = {}
 
@@ -47,7 +41,7 @@ def drop_cache_overhead(func_id, cached_maxsize):
 
 
 def exec_cached_function(func, *args, **kwargs):
-    func_id = get_function_id(func)
+    func_id = repr(func)
     var_hash = hash(str(vars))
     if var_hash not in CACHED_FUNCTIONS[func_id]["cache"]:
         drop_cache_overhead(func_id, CACHED_MAXSIZE - 1)

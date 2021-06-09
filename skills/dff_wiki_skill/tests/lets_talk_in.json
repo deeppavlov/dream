@@ -19,16 +19,19 @@
                                                          0.9730489253997803,
                                                          0.9415334463119507],
                                          "entity_ids": ["Q22645", "Q19723451", "Q18623089", "Q18611337", "Q48423376"],
+                                         "tokens_match_conf": [1.0, 1.0, 1.0, 1.0, 1.0],
                                          "entity_substr": "smartphone",
                                          "entity_pages_titles": ["Smartphone"]
                                         }],
                      "wiki_parser": {"entities_info": {"smartphone": {"entity_label": "smartphone",
                                                                       "plain_entity": "Q22645",
+                                                                      "conf": 1.0, "token_conf": 1.0,
                                                                       "types": [["Q1067263", "information appliance"],
                                                                                 ["Q11253473", "smart device"],
                                                                                 ["Q16917685", "mobile computer"],
                                                                                 ["Q17517", "mobile phone"]]}},
-                                     "topic_skill_entities_info": {}}
+                                     "topic_skill_entities_info": {}},
+                     "news_api_annotator": []
                    }
                  }
                ],
@@ -37,6 +40,9 @@
     ],
     "dff_wiki_skill_state_batch": [
         {}
+    ],
+    "dff_shared_state_batch": [
+        {"cross_links": {}}
     ],
     "entities_batch": [
         {

@@ -19,6 +19,7 @@ from common.universal_templates import is_switch_topic, if_chat_about_particular
 
 from common.utils import get_skill_outputs_from_dialog, is_yes
 from common.game_cooperative_skill import game_skill_was_proposed, GAMES_COMPILED_PATTERN
+from common.gaming import GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN
 from common.dialogflow_framework.programy.text_preprocessing import clean_text
 
 from router import run_skills as skill
@@ -120,6 +121,12 @@ def respond():
             bot_utterance = dialog["bot_utterances"][-1] if dialog["bot_utterances"] else {}
             text = response.get("text", "Sorry")
             if not response.get("confidence"):
+                confidence = 0
+            elif not is_active_last_answer and if_chat_about_particular_topic(
+                dialog["human_utterances"][-1],
+                bot_utterance,
+                compiled_pattern=GAMES_COMPILED_PATTERN,
+            ) and GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.search(last_utter_text):
                 confidence = 0
             elif not is_active_last_answer and if_chat_about_particular_topic(
                 dialog["human_utterances"][-1],

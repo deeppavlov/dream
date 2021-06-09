@@ -8,22 +8,31 @@ def main():
 
     request_data = [
         {
-            "utter_entities_batch": [
+            "utterances_histories": [
                 [
-                    [{"label": "gamename", "text": "mario"}],
-                    [{"label": "videoname", "text": "interstellar"}],
-                    [
-                        {"label": "person", "text": "linus torvalds"},
-                        {"label": "videoname", "text": "minecraft"},
-                        {"label": "videoname", "text": "harry potter"},
-                        {"label": "device", "text": "samsung"},
-                    ],
+                    "i like to have conversation",
+                    "Hi, this is an Alexa Prize Socialbot! I think we have not met yet. What name would you like "
+                    "me to call you?",
+                    "boss bitch",
+                    "I'm so clever that sometimes I don't understand a single word of what i'm saying.",
+                    "how is that",
+                    "Hmm. If you would like to talk about something else just say, 'lets talk about something else'.",
+                    "you pick the topic of conversation"
                 ]
+            ],
+            "personality": [
+                {}
+            ],
+            "num_ongoing_utt": [
+                0
+            ],
+            "human_attributes": [
+                {"age_group": "unknown"}
             ]
         }
     ]
 
-    gold_results = [['news_api_skill', 'dff_gossip_skill']]
+    gold_results = [['dff_travel_skill', 'book_skill', 'dff_movie_skill']]
 
     count = 0
     for data, gold_result in zip(request_data, gold_results):

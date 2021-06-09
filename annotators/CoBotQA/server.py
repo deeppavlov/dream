@@ -12,7 +12,7 @@ from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
-from cobotqa_service import send_cobotqa
+from cobotqa_service import send_cobotqa, TRAVEL_FACTS, FOOD_FACTS, ANIMALS_FACTS
 
 from common.utils import get_entities
 
@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-N_FACTS_TO_CHOSE = 2
+N_FACTS_TO_CHOSE = 1
 ASK_QUESTION_PROB = 0.5
 
 ASYNC_SIZE = int(os.environ.get('ASYNC_SIZE', 6))
@@ -74,6 +74,35 @@ def get_common_words(a: str, b: str, lemmatize: bool = True) -> set:
         tokens_a = {lemmatizer.lemmatize(t) for t in tokens_a}
         tokens_b = {lemmatizer.lemmatize(t) for t in tokens_b}
     return tokens_a & tokens_b
+
+
+bad_answers = ['You can now put your wizarding world knowledge to the test with the official Harry Potter '
+               'quiz. Just say: "Play the Harry Potter Quiz."',
+               "I can provide information, music, news, weather, and more.",
+               'For the latest in politics and other news, try asking "Alexa, play my Flash Briefing."',
+               "I don't have an opinion on that.", "[GetMusicDetailsIntent:Music]",
+               "Thank you!",
+               "Thanks!",
+               "That's really nice, thanks.",
+               "That's nice of you to say.",
+               "Kazuo Ishiguro, Gretchen Mol, Benjamin Wadsworth, Johann Mühlegg, Ramkumar Ramanathan"
+               " and others.", "I didn't catch that. Please say that again.", "Okay."
+               ]
+bad_subanswers = ["let's talk about", "i have lots of", "world of warcraft",
+                  " wow ", " ok is", "coolness is ", "about nice",
+                  "\"let's talk\" is a 2002 drama", "visit amazon.com/",
+                  'alexa, play my flash briefing.', "amazon alexa",
+                  "past tense", "plural form", "singular form", "present tense", "future tense", "bob cut",
+                  "movie theater", "alexa app", "more news", "be here when you need me", "the weeknd",
+                  "faktas", "fact about amazing", "also called movie or motion picture",
+                  "known as eugen warming", "select a chat program that fits your needs",
+                  "is usually defined as a humorous anecdote or remark intended to provoke laughter",
+                  "joke is a display of humour in which words are used within a specific",
+                  "didn't catch that", "say that again", "try again", "really nice to meet you too",
+                  "like to learn about how I can help", "sorry", "i don't under", "ask me whatever you like",
+                  "i don’t know that", "initialism for laughing out loud", "gamelistintent", "listintent",
+                  "try asking", "missed part", "try saying", " hey is a ", "didn't hear that", "try that again"
+                  ]
 
 
 @app.route("/respond", methods=['POST'])
@@ -160,39 +189,12 @@ def respond():
                 and 'Fun is defined by the Oxford English Dictionary as' in response:
             response = ''
 
-        bad_answers = ['You can now put your wizarding world knowledge to the test with the official Harry Potter '
-                       'quiz. Just say: "Play the Harry Potter Quiz."',
-                       "I can provide information, music, news, weather, and more.",
-                       'For the latest in politics and other news, try asking "Alexa, play my Flash Briefing."',
-                       "I don't have an opinion on that.", "[GetMusicDetailsIntent:Music]",
-                       "Thank you!",
-                       "Thanks!",
-                       "That's really nice, thanks.",
-                       "That's nice of you to say.",
-                       "Kazuo Ishiguro, Gretchen Mol, Benjamin Wadsworth, Johann Mühlegg, Ramkumar Ramanathan"
-                       " and others.", "I didn't catch that. Please say that again.", "Okay."
-                       ]
-        bad_subanswers = ["let's talk about", "i have lots of", "world of warcraft",
-                          " wow ", " ok is", "coolness is ", "about nice",
-                          "\"let's talk\" is a 2002 drama", "visit amazon.com/",
-                          'alexa, play my flash briefing.', "amazon alexa",
-                          "past tense", "plural form", "singular form", "present tense", "future tense", "bob cut",
-                          "movie theater", "alexa app", "more news", "be here when you need me", "the weeknd",
-                          "faktas", "fact about amazing", "also called movie or motion picture",
-                          "known as eugen warming", "select a chat program that fits your needs",
-                          "is usually defined as a humorous anecdote or remark intended to provoke laughter",
-                          "joke is a display of humour in which words are used within a specific",
-                          "didn't catch that", "say that again", "try again", "really nice to meet you too",
-                          "like to learn about how I can help", "sorry", "i don't under", "ask me whatever you like",
-                          "i don’t know that", "initialism for laughing out loud", "gamelistintent", "listintent",
-                          "try asking", "missed part", "try saying"
-                          ]
-
         if len(response) > 0 and 'skill://amzn1' not in response:
             sentences = sent_tokenize(response.replace(".,", "."))
             full_resp = response
             response = " ".join(sentences)
-            if full_resp in bad_answers or any([bad_substr in full_resp.lower() for bad_substr in bad_subanswers]):
+            if full_resp in bad_answers or any([bad_substr.lower() in full_resp.lower()
+                                                for bad_substr in bad_subanswers]):
                 response = ""
         else:
             response = ""
@@ -200,20 +202,39 @@ def respond():
 
     dialog_ids = np.array(dialog_ids)
     responses = np.array(responses)
+    questions = np.array(questions)
     subjects = np.array(subjects)
 
     final_responses = []
     for i, dialog in enumerate(dialogs):
         resp_cands = list(responses[dialog_ids == i])
+        resp_questions = list(questions[dialog_ids == i])
         resp_subjects = list(subjects[dialog_ids == i])
 
         curr_resp = {"facts": []}
-        for resp_cand, resp_subj in zip(resp_cands, resp_subjects):
+        for resp_cand, resp_subj, question in zip(resp_cands, resp_subjects, resp_questions):
             if resp_subj is None:
                 # resp_cand can be ""
                 curr_resp["response"] = resp_cand
             elif resp_cand:
                 curr_resp["facts"].append({"entity": resp_subj, "fact": resp_cand})
+            if resp_subj and resp_subj.lower() in TRAVEL_FACTS:
+                for fact in TRAVEL_FACTS[resp_subj.lower()]:
+                    fact.replace("%", " percent")
+                    fact.replace("ºC", " Celsius")
+                    fact.replace("ºF", " Fahrenheit")
+                    fact.replace("°C", " Celsius")
+                    fact.replace("°F", " Fahrenheit")
+                    if {"entity": resp_subj, "fact": fact} not in curr_resp["facts"]:
+                        curr_resp["facts"].append({"entity": resp_subj, "fact": fact})
+            if resp_subj and resp_subj.lower() in FOOD_FACTS:
+                for fact in FOOD_FACTS[resp_subj.lower()]:
+                    if {"entity": resp_subj, "fact": fact} not in curr_resp["facts"]:
+                        curr_resp["facts"].append({"entity": resp_subj, "fact": fact})
+            if resp_subj and resp_subj.lower() in ANIMALS_FACTS:
+                for fact in ANIMALS_FACTS[resp_subj.lower()]:
+                    if {"entity": resp_subj, "fact": fact} not in curr_resp["facts"]:
+                        curr_resp["facts"].append({"entity": resp_subj, "fact": fact})
 
         final_responses.append(curr_resp)
     total_time = time() - st_time

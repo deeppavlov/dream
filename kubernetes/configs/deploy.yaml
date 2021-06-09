@@ -51,3 +51,7 @@ fact-retrieval:
 hypothesis-scorer:
   CUDA_VISIBLE_DEVICES: '0'
   gpu: 1
+
+topic-recommendation:
+  CUDA_VISIBLE_DEVICES: '0'
+  gpu: 1

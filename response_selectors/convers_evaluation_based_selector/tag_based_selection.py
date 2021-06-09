@@ -1,6 +1,7 @@
 import json
 import logging
 from copy import deepcopy
+from collections import Counter
 from os import getenv
 
 import numpy as np
@@ -9,11 +10,12 @@ from nltk.tokenize import sent_tokenize
 
 from common.link import skills_phrases_map
 from common.constants import CAN_CONTINUE_PROMPT, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
+from common.sensitive import is_sensitive_situation
 from common.universal_templates import if_chat_about_particular_topic, is_switch_topic, \
     is_any_question_sentence_in_utterance
-from common.utils import get_intent_name, get_intents, get_topics, get_common_tokens_in_lists_of_strings, get_entities
+from common.utils import get_intent_name, get_intents, get_topics, get_entities
 from utils import calculate_single_convers_evaluator_score, CONV_EVAL_STRENGTH, CONFIDENCE_STRENGTH, \
-    how_are_you_spec, what_i_can_do_spec, greeting_spec, misheard_with_spec1, \
+    how_are_you_spec, what_i_can_do_spec, greeting_spec, misheard_with_spec1, psycho_help_spec, \
     misheard_with_spec2, alexa_abilities_spec, join_used_links_in_attributes, get_updated_disliked_skills
 from common.response_selection import ACTIVE_SKILLS, ALMOST_ACTIVE_SKILLS, CAN_NOT_BE_DISLIKED_SKILLS, \
     NOT_ADD_PROMPT_SKILLS
@@ -74,9 +76,7 @@ def categorize_candidate(cand_id, skill_name, categorized_hyps, categorized_prom
             - othr_topic_entity_no_db
             - othr_topic_entity_db
     """
-    _is_active_skill = _is_active_skill and skill_name in ACTIVE_SKILLS
-    if (_can_continue == MUST_CONTINUE) or (_is_active_skill and _can_continue in [CAN_CONTINUE_SCENARIO,
-                                                                                   CAN_NOT_CONTINUE]):
+    if (_can_continue == MUST_CONTINUE) or _is_active_skill:
         # so, scripted skills with CAN_CONTINUE_PROMPT status are not considered as active!
         # this is a chance for other skills to be turned on
         actsuffix = "active"
@@ -253,7 +253,9 @@ def if_acknowledgement_in_previous_bot_utterance(dialog):
     return False
 
 
-def tag_based_response_selection(dialog, candidates, scores, confidences, bot_utterances):
+def tag_based_response_selection(dialog, candidates, scores, confidences, bot_utterances, all_prev_active_skills=None):
+    all_prev_active_skills = all_prev_active_skills if all_prev_active_skills is not None else []
+    all_prev_active_skills = Counter(all_prev_active_skills)
     annotated_uttr = dialog["human_utterances"][-1]
     all_user_intents, all_user_topics, all_user_named_entities, all_user_nounphrases = get_main_info_annotations(
         annotated_uttr)
@@ -268,13 +270,13 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
                                                                    for _intent in REQUIRE_ACTION_INTENTS.keys()])
     _force_intents_detected = [_intent for _intent in FORCE_INTENTS_IC.keys() if _intent in all_user_intents]
     # list of user intents which require some action by socialbot
-    _require_action_intents_detected = [_intent for _intent in REQUIRE_ACTION_INTENTS.keys()
-                                        if _intent in all_user_intents]
+    # _require_action_intents_detected = [_intent for _intent in REQUIRE_ACTION_INTENTS.keys()
+    #                                     if _intent in all_user_intents]
     _force_intents_skills = sum([FORCE_INTENTS_IC.get(_intent, [])
                                  for _intent in _force_intents_detected], [])
     # list of intents required by the socialbot
-    _required_actions = sum([REQUIRE_ACTION_INTENTS.get(_intent, [])
-                             for _intent in _require_action_intents_detected], [])
+    # _required_actions = sum([REQUIRE_ACTION_INTENTS.get(_intent, [])
+    #                          for _intent in _require_action_intents_detected], [])
     _contains_entities = len(get_entities(annotated_uttr, only_named=False, with_labels=False)) > 0
     _is_active_skill_can_not_continue = False
 
@@ -300,6 +302,9 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
     acknowledgement_hypothesis = {}
 
     for cand_id, cand_uttr in enumerate(candidates):
+        if confidences[cand_id] == 0. and cand_uttr["skill_name"] not in ACTIVE_SKILLS:
+            logger.info(f"Dropping cand_id: {cand_id} due to toxicity/blacklists")
+            continue
 
         all_cand_intents, all_cand_topics, all_cand_named_entities, all_cand_nounphrases = get_main_info_annotations(
             cand_uttr)
@@ -311,28 +316,31 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             "response_parts", []) == ["prompt"]
         if cand_uttr["confidence"] == 1.0:
             cand_uttr["can_continue"] = MUST_CONTINUE
-        _is_active_skill = (_prev_active_skill == cand_uttr["skill_name"] or cand_uttr.get(
-            "can_continue", "") == MUST_CONTINUE)
+
         _user_wants_to_chat_about_topic = if_chat_about_particular_topic(
             annotated_uttr) and "about it" not in annotated_uttr["text"].lower()
         if any([phrase.lower() in cand_uttr["text"].lower() for phrase in LINK_TO_PHRASES]):
             # add `prompt` to response_parts if any linkto phrase in hypothesis
             cand_uttr["response_parts"] = cand_uttr.get("response_parts", []) + ["prompt"]
 
-        _same_topics = set(all_cand_topics).intersection(set(all_user_topics))
-        _same_topics = len(_same_topics) > 0 and len(_same_topics.difference(set(GENERAL_TOPICS))) > 0
-        _same_named_entities = len(get_common_tokens_in_lists_of_strings(all_cand_named_entities,
-                                                                         all_user_named_entities)) > 0
-        _same_nounphrases = len(get_common_tokens_in_lists_of_strings(all_cand_nounphrases,
-                                                                      all_user_nounphrases)) > 0
-        _same_topic_entity = _same_topics or _same_named_entities or _same_nounphrases
+        # _same_named_entities = len(get_common_tokens_in_lists_of_strings(all_cand_named_entities,
+        #                                                                  all_user_named_entities)) > 0
+        # _same_nounphrases = len(get_common_tokens_in_lists_of_strings(all_cand_nounphrases,
+        #                                                               all_user_nounphrases)) > 0
+        _same_topic_entity = False
 
-        if cand_uttr["skill_name"] == 'program_y' and cand_uttr['confidence'] == 0.98 and \
-                len(cand_uttr["text"].split()) > 6:
-            cand_uttr["can_continue"] = CAN_CONTINUE_SCENARIO
+        # if cand_uttr["skill_name"] == 'program_y' and cand_uttr['confidence'] == 0.98 and \
+        #         len(cand_uttr["text"].split()) > 6:
+        #     cand_uttr["can_continue"] = CAN_CONTINUE_SCENARIO
         _can_continue = cand_uttr.get("can_continue", CAN_NOT_CONTINUE)
+
+        _is_active_skill = (_prev_active_skill == cand_uttr["skill_name"] or cand_uttr.get(
+            "can_continue", "") == MUST_CONTINUE)
+        _is_active_skill = _is_active_skill and skill_name in ACTIVE_SKILLS
+        _is_active_skill = _is_active_skill and (_can_continue in [CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE] or (
+            _can_continue == CAN_CONTINUE_PROMPT and all_prev_active_skills.get(skill_name, []) < 10))
         if _is_active_skill:
-            # we will focibly add prompt if current scripted skill finishes scenario,
+            # we will forcibly add prompt if current scripted skill finishes scenario,
             # and has no opportunity to continue at all.
             _is_active_skill_can_not_continue = _is_active_skill and _can_continue in [CAN_NOT_CONTINUE]
 
@@ -379,27 +387,27 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
                 _is_active_skill, _can_continue, _same_topic_entity, _is_dialog_abandon,
                 _is_required_da=False)
 
-        elif _is_require_action_intent:
-            # =====user intent requires particular action=====
-
-            CASE = "User intent requires action. USER UTTERANCE CONTAINS QUESTION."
-            _is_grounding_reqda = skill_name == "grounding_skill" and cand_uttr.get(
-                "type", "") == "universal_response"
-            _is_active_skill = cand_uttr.get("can_continue", "") == MUST_CONTINUE  # no priority to prev active skill
-            _can_continue = CAN_NOT_CONTINUE  # no priority to scripted skills
-
-            if set(all_cand_intents).intersection(set(_required_actions)) or _is_grounding_reqda or _is_active_skill:
-                # -----one of the can intent is in intents required by user-----
-                categorized_hyps, categorized_prompts = categorize_candidate(
-                    cand_id, skill_name, categorized_hyps, categorized_prompts, _is_just_prompt,
-                    _is_active_skill, _can_continue, _same_topic_entity, _is_dialog_abandon,
-                    _is_required_da=True)
-            else:
-                # -----NO required dialog acts-----
-                categorized_hyps, categorized_prompts = categorize_candidate(
-                    cand_id, skill_name, categorized_hyps, categorized_prompts, _is_just_prompt,
-                    _is_active_skill, _can_continue, _same_topic_entity, _is_dialog_abandon,
-                    _is_required_da=False)
+        # elif _is_require_action_intent:
+        #     # =====user intent requires particular action=====
+        #
+        #     CASE = "User intent requires action. USER UTTERANCE CONTAINS QUESTION."
+        #     _is_grounding_reqda = skill_name == "grounding_skill" and cand_uttr.get(
+        #         "type", "") == "universal_response"
+        #     _is_active_skill = cand_uttr.get("can_continue", "") == MUST_CONTINUE  # no priority to prev active skill
+        #     _can_continue = CAN_NOT_CONTINUE  # no priority to scripted skills
+        #
+        #     if set(all_cand_intents).intersection(set(_required_actions)) or _is_grounding_reqda or _is_active_skill:
+        #         # -----one of the can intent is in intents required by user-----
+        #         categorized_hyps, categorized_prompts = categorize_candidate(
+        #             cand_id, skill_name, categorized_hyps, categorized_prompts, _is_just_prompt,
+        #             _is_active_skill, _can_continue, _same_topic_entity, _is_dialog_abandon,
+        #             _is_required_da=True)
+        #     else:
+        #         # -----NO required dialog acts-----
+        #         categorized_hyps, categorized_prompts = categorize_candidate(
+        #             cand_id, skill_name, categorized_hyps, categorized_prompts, _is_just_prompt,
+        #             _is_active_skill, _can_continue, _same_topic_entity, _is_dialog_abandon,
+        #             _is_required_da=False)
 
         else:
             # =====user intent does NOT require particular action=====
@@ -421,16 +429,18 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
                 how_are_you_spec in cand_uttr['text'] or what_i_can_do_spec in cand_uttr['text']) \
                 and len(dialog['utterances']) < 16:
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
-        elif cand_uttr["skill_name"] == 'program_y_dangerous' and cand_uttr['confidence'] == 0.98:
-            categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
-        elif cand_uttr["skill_name"] == 'weather_skill' and dialog['human_utterances'][-1]["annotations"].get(
-                "intent_catcher", {}).get("weather_forecast_intent", {}).get("detected", 0) == 1:
+        # elif cand_uttr["skill_name"] == 'program_y_dangerous' and cand_uttr['confidence'] == 0.98:
+        #     categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
+        elif cand_uttr["skill_name"] == 'small_talk_skill' and is_sensitive_situation(dialog["human_utterances"][-1]):
+            # let small talk to talk about sex ^_^
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
         elif cand_uttr["skill_name"] == 'misheard_asr' and is_misheard:
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
         elif is_intent_candidate:
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
         elif cand_uttr["skill_name"] == "dff_friendship_skill" and alexa_abilities_spec in cand_uttr['text']:
+            categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
+        elif "program_y" in cand_uttr["skill_name"] and psycho_help_spec in cand_uttr['text']:
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
         elif cand_uttr["confidence"] >= 1.:
             # -------------------- SUPER CONFIDENCE CASE HERE! --------------------

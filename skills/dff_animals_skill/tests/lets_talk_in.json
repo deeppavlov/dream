@@ -299,7 +299,27 @@
         }
     ],
     "dff_animals_skill_state_batch": [
-        {}
+        {
+            "shared_memory": {
+                "my_pets_info": {
+                    "cat": {
+                        "name": "Thomas",
+                        "breed": "Maine Coon",
+                        "sentence": "I have a cat named Thomas. He is a big fluffy Maine Coon."
+                    },
+                    "dog": {
+                        "name": "Jack",
+                        "breed": "German Shepherd",
+                        "sentence": "I have a dog named Jack. He is a German Shepherd. He is very cute."
+                    }
+                }
+            }
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {}
+        }
     ],
     "entities_batch": [
         {

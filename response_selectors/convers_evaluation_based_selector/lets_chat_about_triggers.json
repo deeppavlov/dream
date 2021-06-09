@@ -11,7 +11,7 @@
         ],
         "trigger_function": null,
         "skills": [
-            "movie_skill",
+            "dff_movie_skill",
             "small_talk_skill"
         ]
     },

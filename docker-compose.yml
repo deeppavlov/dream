@@ -8,21 +8,21 @@ services:
       WAIT_HOSTS: "cobotqa:8081, cobot-topics:8000, cobot-dialogact:8002, cobot-convers-evaluator-annotator:8004,
         cobot-nounphrases:8006, program-y:8008, sentseg:8011, convers-evaluation-selector:8009, personality-catcher:8010,
         intent-responder:8012, intent-catcher:8014, blacklisted-words:8018,
-        sentrewrite:8017, ner:8021, program-y-dangerous:8022, movie-skill:8023,
+        sentrewrite:8017, ner:8021, program-y-dangerous:8022, dff-movie-skill:8023,
         convert-reddit:8029, personal-info-skill:8030, asr:8031, misheard-asr:8033, weather-skill:8037,
         eliza:8047, emotion-skill:8049, dummy-skill-dialog:8052, comet-atomic:8053, meta-script-skill:8054,
         coronavirus-skill:8061, small-talk-skill:8062, game-cooperative-skill:8068, program-y-wide:8064,
-        comet-conceptnet:8065, news-api-skill:8066, short-story-skill:8057, greeting-skill:8070, factoid-qa:8071, kbqa:8072,
+        comet-conceptnet:8065, news-api-skill:8066, short-story-skill:8057, factoid-qa:8071, kbqa:8072,
         factoid-classification:8073, spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, text-qa:8078,
         knowledge-grounding:8083, combined-classification:8087, knowledge-grounding-skill:8085,
-        dff-friendship-skill:8086, masked-lm:8088, entity-storer:8089, wikidata-dial-skill:8091, wikidata-dial-service:8092,
+        dff-friendship-skill:8086, masked-lm:8088, entity-storer:8089,
         book-skill:8032, grounding-skill:8080,
-        dff-animals-skill:8094, dff-travel-skill:8096, dff-food-skill:8097, dff-sport-skill:8098,
-        midas-classification:8090, dff-celebrity-skill:8093, fact-retrieval:8100, cobot-entities:8102,
+        dff-animals-skill:8094, dff-travel-skill:8096, dff-food-skill:8097, dff-sport-skill:8098, dff-science-skill:8101,
+        midas-classification:8090, fact-retrieval:8100, cobot-entities:8102,
         dff-funfact-skill:8104, dff-bot-persona-skill:8105, cobotqa-annotator:8106, news-api-annotator:8112,
-        dff-gossip-skill:8109, dff-wiki-skill:8111, topic-recommendation:8113,
-        speech-function-classifier:8108, speech-function-predictor:8107, dff-generic-responses-skill:8115,
-        personality-detection:8120"
+        dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
+        user-persona-extractor:8114, speech-function-classifier:8108, speech-function-predictor:8107,
+        dff-generic-responses-skill:8115, personality-detection:8120"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
     deploy:
       mode: replicated
@@ -251,23 +251,27 @@ services:
         reservations:
           memory: 256M
 
-  movie-skill:
+  dff-movie-skill:
     build:
-      context: .
-      dockerfile: ./skills/movie_skill/Dockerfile
       args:
-        DATABASE_URL: http://files.deeppavlov.ai/alexaprize_data/database_most_popular_main_info.json
-    command: python -m flask run -h 0.0.0.0 -p 8023
-    environment:
-      - FLASK_APP=server
+        SERVICE_PORT: 8023
+        SERVICE_NAME: dff_movie_skill # has to be the same with skill dir name
+        DATABASE_URL: http://files.deeppavlov.ai/alexaprize_data/database_most_popular_main_info_v1.json
+        MOVIE_PLOTS_URL: http://files.deeppavlov.ai/alexaprize_data/movie_plots_v0.tar.gz
+      context: .
+      dockerfile: skills/dff_movie_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8023 --timeout 180
+    # command:  flask run -h 0.0.0.0 -p 8023
+    # environment:
+    #   - FLASK_APP=server
     deploy:
       mode: replicated
       replicas: 4
       resources:
         limits:
-          memory: 1280M
+          memory: 1536M
         reservations:
-          memory: 1280M
+          memory: 1536M
 
   ner:
     build:
@@ -366,9 +370,6 @@ services:
     build:
       context: .
       dockerfile: ./skills/book_skill/Dockerfile
-      args:
-        AUTHOR_NAMES: http://files.deeppavlov.ai/alexaprize_data/book_author_names.txt
-        QUERY_DICT: http://files.deeppavlov.ai/alexaprize_data/book_query_dict.pkl
     command: python -m flask run -h 0.0.0.0 -p 8032
     environment:
       - FLASK_APP=server
@@ -377,9 +378,9 @@ services:
       replicas: 2
       resources:
         limits:
-          memory: 540M
+          memory: 2540M
         reservations:
-          memory: 540M
+          memory: 2540M
 
   weather-skill:
     build:
@@ -415,6 +416,8 @@ services:
 
   dummy-skill-dialog:
     build:
+      args:
+        DATA_URL: http://files.deeppavlov.ai/alexaprize_data/dummy_skill_dialog.tar.gz
       context: ./skills/dummy_skill_dialog/
     command: flask run -h 0.0.0.0 -p 8052 --without-threads
     environment:
@@ -437,7 +440,7 @@ services:
         PREPROCESS_DATA: "http://lnsigo.mipt.ru/export/alexaprize_data/comet/categories_oEffect%23oReact%23oWant%23xAttr%23xEffect%23xIntent%23xNeed%23xReact%23xWant-maxe1_17-maxe2_35-maxr_1.pickle"
         TEST_SCRIPT: test_atomic.py
         DECODING_ALGO: beam-3
-    command: flask run -h 0.0.0.0 -p 8053
+    command: flask run -h 0.0.0.0 -p 8053 --without-threads
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - DEVICE=gpu_0
@@ -460,7 +463,7 @@ services:
         PREPROCESS_DATA: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/rel_language-trainsize_100-devversion_12-maxe1_10-maxe2_15-maxr_5.pickle
         DECODING_ALGO: beam-3
         TEST_SCRIPT: test_conceptnet.py
-    command: flask run -h 0.0.0.0 -p 8065
+    command: flask run -h 0.0.0.0 -p 8065 --without-threads
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - DEVICE=gpu_0
@@ -602,22 +605,6 @@ services:
         reservations:
           memory: 256M
 
-  greeting-skill:
-    build:
-      context: .
-      dockerfile: ./skills/greeting_skill/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8070
-    environment:
-      - FLASK_APP=server
-    deploy:
-      mode: replicated
-      replicas: 2
-      resources:
-        limits:
-          memory: 50M
-        reservations:
-          memory: 50M
-
   factoid-qa:
     build:
       context: .
@@ -657,6 +644,9 @@ services:
   wiki-parser:
     build:
       args:
+        WIKI_LITE_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata_lite.hdt
+        WIKI_LITE_INDEX_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata_lite.hdt.index.v1-1
+        WIKI_CACHE_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata_cache.json
         CONFIG: wiki_parser.json
         PORT: 8077
         SRC_DIR: annotators/wiki_parser
@@ -773,6 +763,9 @@ services:
     build:
       args:
         MODEL_CKPT: 3_sent_62_epochs
+        DATA_ARG: http://files.deeppavlov.ai/alexaprize_data/parlai_grounding_knowledge/parlai_topical_chat_data.tar.gz
+        MODEL1_ARG: http://files.deeppavlov.ai/alexaprize_data/parlai_grounding_knowledge/topical_chat_blender90_1_sent_48_epochs.tar.gz
+        MODEL2_ARG: http://files.deeppavlov.ai/alexaprize_data/parlai_grounding_knowledge/topical_chat_blender90_3_sent_62_epochs.tar.gz
       context: ./services/knowledge_grounding/
     command: flask run -h 0.0.0.0 -p 8083
     environment:
@@ -787,6 +780,28 @@ services:
         reservations:
           memory: 4G
 
+  dff-gaming-skill:
+    build:
+      args:
+        SERVICE_PORT: 8115
+        SERVICE_NAME: dff_gaming_skill # has to be the same with skill dir name
+        GAMES_IGDB_SEARCH_RESULTS_URL: http://files.deeppavlov.ai/alexaprize_data/games_igdb_search_results_v1.json
+        GAMES_IGDB_IDS_URL: http://files.deeppavlov.ai/alexaprize_data/game_igdb_ids_v1.json
+      context: .
+      dockerfile: ./skills/dff_gaming_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8115 --reload --timeout 500 --graceful-timeout 500
+    # command:  flask run -h 0.0.0.0 -p 8115
+    # environment:
+    #   - FLASK_APP=server
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
   dff-friendship-skill:
     build:
       args:
@@ -794,7 +809,7 @@ services:
         SERVICE_NAME: dff_friendship_skill # has to be the same with skill dir name
       context: .
       dockerfile: ./skills/dff_friendship_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8086 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8086
     # command:  flask run -h 0.0.0.0 -p 8086
     # environment:
     #   - FLASK_APP=server
@@ -803,9 +818,9 @@ services:
       replicas: 4
       resources:
         limits:
-          memory: 768M
+          memory: 256M
         reservations:
-          memory: 768M
+          memory: 256M
 
   masked-lm:
     build:
@@ -862,26 +877,6 @@ services:
         reservations:
           memory: 200M
 
-  dff-celebrity-skill:
-    build:
-      args:
-        SERVICE_PORT: 8093
-        SERVICE_NAME: dff_celebrity_skill
-      context: .
-      dockerfile: ./skills/dff_celebrity_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8093 --reload
-    # command:  flask run -h 0.0.0.0 -p 8093
-    # environment:
-    #   - FLASK_APP=server
-    deploy:
-      mode: replicated
-      replicas: 2
-      resources:
-        limits:
-          memory: 768M
-        reservations:
-          memory: 768M
-
   combined-classification:
     build:
       args:
@@ -900,51 +895,15 @@ services:
         reservations:
           memory: 2G
 
-  wikidata-dial-skill:
-    build:
-      args:
-        PORT: 8091
-      context: skills/wikidata_dial_skill
-    command: flask run -h 0.0.0.0 -p 8091
-    environment:
-      - FLASK_APP=server
-    deploy:
-      mode: replicated
-      replicas: 1
-      resources:
-        limits:
-          memory: 256M
-        reservations:
-          memory: 256M
-
-  wikidata-dial-service:
-    build:
-      args:
-        CONFIG: kg_dial_generator.json
-        PORT: 8092
-        COMMIT: 5dac85a06fde0e2983c7569ae058e3bf2d45ce2c
-      context: services/wikidata_dial_service
-    command: flask run -h 0.0.0.0 -p 8092
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      mode: replicated
-      replicas: 1
-      resources:
-        limits:
-          memory: 10G
-        reservations:
-          memory: 10G
-
   dff-animals-skill:
     build:
       args:
         SERVICE_PORT: 8094
         SERVICE_NAME: dff_animals_skill # has to be the same with skill dir name
+        BREED_FACTS_DB: http://files.deeppavlov.ai/kbqa/wikidata/breed_facts.json
       context: .
       dockerfile: ./skills/dff_animals_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8094 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8094
     # command:  flask run -h 0.0.0.0 -p 8094
     # environment:
     #   - FLASK_APP=server
@@ -953,9 +912,9 @@ services:
       replicas: 2
       resources:
         limits:
-          memory: 768M
+          memory: 512M
         reservations:
-          memory: 768M
+          memory: 512M
 
   dff-travel-skill:
     build:
@@ -964,7 +923,7 @@ services:
         SERVICE_NAME: dff_travel_skill # has to be the same with skill dir name
       context: .
       dockerfile: skills/dff_travel_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8096 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8096
     # command:  flask run -h 0.0.0.0 -p 8096
     # environment:
     #   - FLASK_APP=server
@@ -984,7 +943,7 @@ services:
         SERVICE_NAME: dff_sport_skill
       context: .
       dockerfile: skills/dff_sport_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8098 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8098
     # command:  flask run -h 0.0.0.0 -p 8098
     # environment:
     #   - FLASK_APP=server
@@ -993,9 +952,9 @@ services:
       replicas: 2
       resources:
         limits:
-          memory: 768M
+          memory: 256M
         reservations:
-          memory: 768M
+          memory: 256M
 
   dff-food-skill:
     build:
@@ -1004,7 +963,7 @@ services:
         SERVICE_NAME: dff_food_skill
       context: .
       dockerfile: ./skills/dff_food_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8097 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8097
     # command:  flask run -h 0.0.0.0 -p 8097
     # environment:
     #   - FLASK_APP=server
@@ -1013,9 +972,29 @@ services:
       replicas: 2
       resources:
         limits:
-          memory: 768M
+          memory: 256M
         reservations:
-          memory: 768M
+          memory: 256M
+
+  dff-science-skill:
+    build:
+      args:
+        SERVICE_PORT: 8101
+        SERVICE_NAME: dff_science_skill
+      context: .
+      dockerfile: ./skills/dff_science_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8101
+    # command:  flask run -h 0.0.0.0 -p 8101
+    # environment:
+    #   - FLASK_APP=server
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
 
   dff-music-skill:
     build:
@@ -1024,7 +1003,7 @@ services:
         SERVICE_NAME: dff_music_skill # has to be the same with skill dir name
       context: .
       dockerfile: ./skills/dff_music_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8099 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8099
     # command:  flask run -h 0.0.0.0 -p 8099
     # environment:
     #   - FLASK_APP=server
@@ -1033,9 +1012,9 @@ services:
       replicas: 2
       resources:
         limits:
-          memory: 768M
+          memory: 256M
         reservations:
-          memory: 768M
+          memory: 256M
 
   dff-gossip-skill:
     build:
@@ -1044,15 +1023,15 @@ services:
         SERVICE_NAME: dff_gossip_skill
       context: .
       dockerfile: skills/dff_gossip_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8109 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8109
     deploy:
       mode: replicated
       replicas: 2
       resources:
         limits:
-          memory: 768M
+          memory: 256M
         reservations:
-          memory: 768M
+          memory: 256M
 
 
   midas-classification:
@@ -1077,6 +1056,8 @@ services:
     build:
       args:
         CONFIG: fact_retrieval_page.json
+        CONFIG_WIKI: page_extractor.json
+        CONFIG_WHOW: whow_page_extractor.json
         PORT: 8100
         SRC_DIR: annotators/fact_retrieval/
         COMMIT: 4b3e60c407644b750c9dc292ac6bf206081fb9d0
@@ -1134,15 +1115,15 @@ services:
         SERVICE_NAME: dff_bot_persona_skill
       context: .
       dockerfile: ./skills/dff_bot_persona_skill/Dockerfile
-    command: gunicorn --workers=1 --timeout 500 --graceful-timeout 500 server:app -b 0.0.0.0:8105 --reload --preload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8105
     deploy:
       mode: replicated
       replicas: 2
       resources:
         limits:
-          memory: 768M
+          memory: 256M
         reservations:
-          memory: 768M
+          memory: 256M
 
   dff-funfact-skill:
     build:
@@ -1151,7 +1132,7 @@ services:
         SERVICE_NAME: dff_funfact_skill # has to be the same with skill dir name
       context: .
       dockerfile: ./skills/dff_funfact_skill/Dockerfile
-    command:  gunicorn --workers=1 server:app -b 0.0.0.0:8104 --reload
+    command:  gunicorn --workers=1 server:app -b 0.0.0.0:8104
     # command:  flask run -h 0.0.0.0 -p 8104
     # environment:
     #   - FLASK_APP=server
@@ -1160,9 +1141,9 @@ services:
       replicas: 2
       resources:
         limits:
-          memory: 768M
+          memory: 256M
         reservations:
-          memory: 768M
+          memory: 256M
 
   dff-wiki-skill:
     build:
@@ -1174,7 +1155,7 @@ services:
         COMMIT: 5b99ac3392e8e178e2bb4f9b218d4ddb2ec2e242
       context: ./
       dockerfile: ./skills/dff_wiki_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8111 --reload --timeout 800
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8111 --timeout 800
     # command:  flask run -h 0.0.0.0 -p 8111 
     # environment:
     #   - FLASK_APP=server
@@ -1183,14 +1164,14 @@ services:
       replicas: 2
       resources:
         limits:
-          memory: 3.5G
+          memory: 2G
         reservations:
-          memory: 3.5G
+          memory: 2G
 
   topic-recommendation:
     build:
       context: ./annotators/topic_recommendation/
-    command: flask run -h 0.0.0.0 -p 8113 --reload
+    command: flask run -h 0.0.0.0 -p 8113
     environment:
       - FLASK_APP=server
     deploy:
@@ -1198,9 +1179,25 @@ services:
       replicas: 4
       resources:
         limits:
-          memory: 128M
+          memory: 2048M
         reservations:
-          memory: 128M
+          memory: 2048M
+
+  user-persona-extractor:
+    build:
+      context: .
+      dockerfile: ./annotators/user_persona_extractor/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8114
+    environment:
+      - FLASK_APP=server
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          memory: 80M
+        reservations:
+          memory: 80M
 
   speech-function-classifier:
     build:

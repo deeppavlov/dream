@@ -5,6 +5,7 @@ import re
 
 from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_intents, service_intents
+from common.grounding import BUT_PHRASE, REPEAT_PHRASE
 
 logger = logging.getLogger(__name__)
 LAST_N_TURNS = 5  # number of turns to consider in annotator/skill.
@@ -70,7 +71,9 @@ def is_human_uttr_repeat_request_or_misheard(utt):
 def is_bot_uttr_repeated_or_misheard(utt):
     is_asr = utt.get("active_skill", "") == "misheard_asr" and utt.get("confidence", 0.0) == 1.0
     is_repeated = "#+#repeat" in utt.get("text", "")
-    if is_asr or is_repeated:
+    detected_interrupt = any([interrupt_phrase in utt.get("text", "")
+                              for interrupt_phrase in [BUT_PHRASE, REPEAT_PHRASE]])
+    if is_asr or is_repeated or detected_interrupt:
         return True
     else:
         return False
@@ -222,6 +225,7 @@ def dff_formatter(
     state = human_attributes.get(state_name, {})
     dff_shared_state = human_attributes.get("dff_shared_state", {"cross_states": {}, "cross_links": {}})
     used_links = human_attributes.get("used_links", {})
+    age_group = human_attributes.get("age_group", "")
     disliked_skills = human_attributes.get("disliked_skills", {})
     entities = human_attributes.get("entities", {})
 
@@ -262,6 +266,7 @@ def dff_formatter(
             f"dff_shared_state_batch": [dff_shared_state],
             "entities_batch": [entities],
             "used_links_batch": [used_links],
+            "age_group_batch": [age_group],
             "disliked_skills_batch": [disliked_skills],
             "clarification_request_flag_batch": [clarification_request_flag],
         }

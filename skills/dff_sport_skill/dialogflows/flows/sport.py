@@ -13,6 +13,7 @@ from CoBotQA.cobotqa_service import send_cobotqa
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
 from common.universal_templates import if_chat_about_particular_topic
+from common.link import link_to_skill2i_like_to_talk
 from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
 from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
 import common.greeting as common_greeting
@@ -34,6 +35,7 @@ from common.sport import (
     KIND_OF_COMPETITION_TEMPLATE,
     ATHLETE_TEMPLETE,
     LIKE_TEMPLATE,
+    HATE_TEMPLATE,
     SUPPORT_TEMPLATE,
     QUESTION_TEMPLATE,
     LAST_CHANCE_TEMPLATE,
@@ -42,7 +44,9 @@ from common.sport import (
     SUPER_CONFIDENCE,
     HIGH_CONFIDENCE,
     ZERO_CONFIDENCE,
-    NUMBER_PROBABILITY
+    NUMBER_PROBABILITY,
+    ING_FORMS,
+    REVERSE_ING_FORMS
 )
 
 import common.dialogflow_framework.utils.condition as condition_utils
@@ -58,7 +62,10 @@ logger = logging.getLogger(__name__)
 
 
 class State(Enum):
+    SYS_LINK_LIKE_SPORT = auto()
+    SYS_LINK_AND_ALL = auto()
     SYS_LINK_TO_LIKE_SPORT = auto()
+    SYS_LINK_AND_NEGATIVE = auto()
     SYS_LINK_TO_LIKE_ATHLETE = auto()
     SYS_LINK_TO_LIKE_COMP = auto()
     USR_START = auto()
@@ -128,6 +135,14 @@ simplified_dialogflow = dialogflow_extention.DFEasyFilling(State.USR_START)
 ##################################################################################################################
 # HELP FUNCTION
 ##################################################################################################################
+
+
+def was_question_to_my_skill(vars):
+    link_to_opinion_about_sport = any(
+        [req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower()
+         for req in link_to_skill2i_like_to_talk['dff_sport_skill']]
+    )
+    return bool(link_to_opinion_about_sport)
 
 
 def donot_chat_about(uttr):
@@ -438,6 +453,15 @@ def user_ask_who_do_u_support_response(vars):
 ##################################################################################################################
 
 
+def link_like_sport_request(ngrams, vars):
+    # SYS_LINK_LIKE_SPORT
+    was_my_question = was_question_to_my_skill(vars)
+    user_like_sport = user_like_sport_request(ngrams, vars)
+    flag = bool(user_like_sport) and bool(was_my_question)
+    logger.info(f"link_like_sport_request={flag}")
+    return flag
+
+
 def user_like_sport_request(ngrams, vars):
     # SYS_TELL_SPORT
     user_says_about_kind_of_sport = re.search(KIND_OF_SPORTS_TEMPLATE,
@@ -467,10 +491,21 @@ def user_like_sport_response(vars):
             state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
             state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
             passive_sport = random.choice(PASSIVE_SPORT)
+            if kind_of_sport in ING_FORMS:
+                plain_form = kind_of_sport
+                ing_form = ING_FORMS[plain_form]  # running swimming
+            elif kind_of_sport in REVERSE_ING_FORMS:  # retrieved ing form
+                ing_form = kind_of_sport
+                plain_form = REVERSE_ING_FORMS[ing_form]
+            else:
+                ing_form = kind_of_sport
+                plain_form = kind_of_sport
             opinion = random.choice(
                 OPINION_ABOUT_PASSIVE_SPORT
-            ).replace("KIND_OF_SPORT", kind_of_sport).replace("PASSIVE_SPORT", passive_sport)
-            response = opinion + f" Why do you like {kind_of_sport}?"
+            ).replace("KIND_OF_SPORT", ing_form).replace("PASSIVE_SPORT", passive_sport)
+            if ing_form != plain_form:
+                opinion = opinion.replace(f'to play {ing_form}', f'to {plain_form}')
+            response = opinion + f" Why do you like {ing_form}?"
             return response
         else:
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
@@ -503,6 +538,8 @@ def user_positive_or_neutral_about_kind_of_sport_response(vars):
         kind_of_sport = shared_memory.get("kind_of_sport", "")
         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
         state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
+        if kind_of_sport in ING_FORMS:
+            kind_of_sport = ING_FORMS[kind_of_sport]
         return random.choice(ASK_ABOUT_ATH_IN_KIND_OF_SPORT).replace("KIND_OF_SPORT", kind_of_sport)
     except Exception as exc:
         logger.exception(exc)
@@ -709,7 +746,7 @@ def user_ask_about_comp_response(vars):
         state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
         return (
             f"Well. if I had a physical embodiment, I would like to go to the {competition} "
-            f"and see this wonderful tournament.Do you have a favorite competition?"
+            f"and see this wonderful tournament. What's your favorite tournament?"
         )
     except Exception as exc:
         logger.exception(exc)
@@ -830,12 +867,23 @@ def user_want_fact_about_comp_response(vars):
 ##################################################################################################################
 
 
+def user_negative_after_link_request(ngrams, vars):
+    # SYS_LINK_AND_NEGATIVE
+    was_question = was_question_to_my_skill(vars)
+    user_negative = user_negative_request(ngrams, vars)
+    flag = bool(was_question) and bool(user_negative)
+    logger.info(f"user_negative_after_link_request={flag}")
+    return flag
+
+
 def user_negative_request(ngrams, vars):
     # SYS_TELL_NEGATIVE
     is_negative = "negative" in get_sentiment(state_utils.get_last_human_utterance(vars),
                                               probs=False, default_labels=["neutral"])
-    no_vars = condition_utils.is_no_vars(vars)
-    flag = is_negative or no_vars
+    no_or_hate_vars = condition_utils.is_no_vars(vars) or re.search(
+        HATE_TEMPLATE, state_utils.get_last_human_utterance(vars)["text"].lower()
+    )
+    flag = is_negative or no_or_hate_vars
     logger.info(f"user_negative_request={flag}")
     return flag
 
@@ -851,9 +899,9 @@ def user_negative_response(vars):
             body = compose_topic_offering(excluded_skills=prev_active_skills)
             return body
         else:
-            countries = ["Russia", "China", "Germany"]
+            countries = ["Russia", "China", "Germany", "France", "Japan"]
             country = random.choice(countries)
-            return f"I know that sports are very popular in {country}. " \
+            return f"I know that sport is very popular in {country}. " \
                    f"Have you ever been in {country}?"
     except Exception as exc:
         logger.exception(exc)
@@ -865,6 +913,11 @@ def user_negative_response(vars):
 ##################################################################################################################
 # last chance == fullback
 ##################################################################################################################
+
+
+def user_no_emotion_after_link_request(ngrams, vars):
+    # SYS_LINK_AND_ALL
+    return bool(was_question_to_my_skill(vars))
 
 
 def last_chance_request(ngrams, vars):
@@ -903,6 +956,9 @@ def error_response(vars):
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_START,
     {
+        State.SYS_LINK_LIKE_SPORT: link_like_sport_request,
+        State.SYS_LINK_AND_NEGATIVE: user_negative_after_link_request,
+        State.SYS_LINK_AND_ALL: user_no_emotion_after_link_request,
         State.SYS_WHAT_SPORT: user_ask_about_sport_request,
         State.SYS_WHO_FAVORITE_ATHLETE: user_ask_about_athletes_request,
         State.SYS_WHO_SUPPORT: user_ask_who_do_u_support_request,
@@ -938,9 +994,9 @@ simplified_dialogflow.add_system_transition(
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_ASK_ABOUT_ATHLETE,
     {
+        State.SYS_TELL_NEGATIVE: user_negative_request,
         State.SYS_TELL_ATHLETE: user_like_or_ask_about_player_request,
         State.SYS_TELL_SPORT: user_like_sport_request,
-        State.SYS_TELL_NEGATIVE: user_negative_request,
         State.SYS_LAST_CHANCE: last_chance_request
     },
 )
@@ -969,8 +1025,8 @@ simplified_dialogflow.add_system_transition(
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_ASK_ABOUT_COMP,
     {
-        State.SYS_TELL_COMP: user_like_comp_request,
         State.SYS_TELL_NEGATIVE: user_negative_request,
+        State.SYS_TELL_COMP: user_like_comp_request,
         State.SYS_LAST_CHANCE: last_chance_request
     },
 )
@@ -984,8 +1040,8 @@ simplified_dialogflow.add_system_transition(State.SYS_TELL_COMP, State.USR_WHY_L
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_WHY_LIKE_COMP,
     {
-        State.SYS_NOT_NEGATIVE_AFTER_Y_COMP: user_positive_or_neutral_about_comp_request,
         State.SYS_TELL_NEGATIVE: user_negative_request,
+        State.SYS_NOT_NEGATIVE_AFTER_Y_COMP: user_positive_or_neutral_about_comp_request,
         State.SYS_LAST_CHANCE: last_chance_request
     },
 )
@@ -1001,9 +1057,9 @@ simplified_dialogflow.add_system_transition(
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_ASK_WHO_SUPPORT,
     {
+        State.SYS_TELL_NEGATIVE: user_negative_request,
         State.SYS_TELL_ATHLETE: user_like_or_ask_about_player_request,
         State.SYS_TELL_SPORT: user_like_sport_request,
-        State.SYS_TELL_NEGATIVE: user_negative_request,
         State.SYS_LAST_CHANCE: last_chance_request
     },
 )
@@ -1025,27 +1081,32 @@ simplified_dialogflow.add_system_transition(
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_ASK_ABOUT_SPORT,
     {
+        State.SYS_TELL_NEGATIVE: user_negative_request,
         State.SYS_TELL_SPORT: user_like_sport_request,
         State.SYS_TELL_ATHLETE: user_like_or_ask_about_player_request,
-        State.SYS_TELL_NEGATIVE: user_negative_request,
         State.SYS_LAST_CHANCE: last_chance_request
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_ASK_ABOUT_SPORT, State.SYS_ERR)
 
 ##################################################################################################################
-# SYS_TELL_SPORT --> USR_WHY_LIKE_SPORT
+# SYS_TELL_SPORT || SYS_LINK_LIKE_SPORT  --> USR_WHY_LIKE_SPORT
 
-simplified_dialogflow.add_system_transition(State.SYS_TELL_SPORT, State.USR_WHY_LIKE_SPORT, user_like_sport_response)
+simplified_dialogflow.add_system_transition(
+    State.SYS_TELL_SPORT, State.USR_WHY_LIKE_SPORT, user_like_sport_response
+)
+simplified_dialogflow.add_system_transition(
+    State.SYS_LINK_LIKE_SPORT, State.USR_WHY_LIKE_SPORT, user_like_sport_response
+)
 
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_WHY_LIKE_SPORT,
     {
+        State.SYS_TELL_NEGATIVE: user_negative_request,
         State.SYS_TELL_ATHLETE: user_like_or_ask_about_player_request,
         State.SYS_TELL_TEAM: user_tell_team_request,
         State.SYS_TELL_ATHLETE_WITHOUT_TEAM: user_like_or_ask_about_player_without_team_request,
         State.SYS_NOT_NEGATIVE_AFTER_Y_KIND_OF_SPORT: user_positive_or_neutral_about_kind_of_sport_request,
-        State.SYS_TELL_NEGATIVE: user_negative_request,
         State.SYS_LAST_CHANCE: last_chance_request
     },
 )
@@ -1060,10 +1121,10 @@ simplified_dialogflow.add_system_transition(State.SYS_NOT_NEGATIVE_AFTER_Y_KIND_
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_HAVE_ATH_FROM_THIS_SPORT,
     {
+        State.SYS_TELL_NEGATIVE: user_negative_request,
         State.SYS_TELL_ATHLETE: user_like_or_ask_about_player_request,
         State.SYS_TELL_TEAM: user_tell_team_request,
         State.SYS_TELL_ATHLETE_WITHOUT_TEAM: user_like_or_ask_about_player_without_team_request,
-        State.SYS_TELL_NEGATIVE: user_negative_request,
         State.SYS_LAST_CHANCE: last_chance_request
     },
 )
@@ -1078,8 +1139,8 @@ simplified_dialogflow.add_system_transition(
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_LIKE_ATHLETE,
     {
-        State.SYS_NOT_NEG_AFTER_ATHLETE_WITH_TEAM: user_not_neg_after_comment_ath_with_team_request,
         State.SYS_TELL_NEGATIVE: user_negative_request,
+        State.SYS_NOT_NEG_AFTER_ATHLETE_WITH_TEAM: user_not_neg_after_comment_ath_with_team_request,
         State.SYS_LAST_CHANCE: last_chance_request
     },
 )
@@ -1106,8 +1167,8 @@ simplified_dialogflow.add_system_transition(
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_GET_OPIN_ABOUT_TEAM,
     {
-        State.SYS_NOT_NEG_AFT_COMMENT_TEAM: user_not_neg_after_comment_team_request,
         State.SYS_TELL_NEGATIVE: user_negative_request,
+        State.SYS_NOT_NEG_AFT_COMMENT_TEAM: user_not_neg_after_comment_team_request,
         State.SYS_LAST_CHANCE: last_chance_request
     },
 )
@@ -1126,8 +1187,8 @@ simplified_dialogflow.add_system_transition(
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_OFFER_FACT_ABOUT_COMP,
     {
-        State.SYS_WANT_FACT_ABOUT_COMP: user_want_fact_about_comp_request,
         State.SYS_TELL_NEGATIVE: user_negative_request,
+        State.SYS_WANT_FACT_ABOUT_COMP: user_want_fact_about_comp_request,
         State.SYS_LAST_CHANCE: last_chance_request
     },
 )
@@ -1151,15 +1212,19 @@ simplified_dialogflow.add_user_serial_transitions(
 
 simplified_dialogflow.set_error_successor(State.USR_GET_FACT_ABOUT_COMP, State.SYS_ERR)
 ##################################################################################################################
-# SYS_LAST_CHANCE -> USR_LAST_CHANCE
+# SYS_LAST_CHANCE || SYS_LINK_AND_ALL -> USR_LAST_CHANCE
 
 simplified_dialogflow.add_system_transition(
     State.SYS_LAST_CHANCE, State.USR_LAST_CHANCE, last_chance_response
+)
+simplified_dialogflow.add_system_transition(
+    State.SYS_LINK_AND_ALL, State.USR_LAST_CHANCE, last_chance_response
 )
 
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_LAST_CHANCE,
     {
+        State.SYS_TELL_NEGATIVE: user_negative_request,
         State.SYS_WHAT_SPORT: user_ask_about_sport_request,
         State.SYS_WHO_FAVORITE_ATHLETE: user_ask_about_athletes_request,
         State.SYS_WHO_SUPPORT: user_ask_who_do_u_support_request,
@@ -1172,7 +1237,6 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_LETS_TALK_ABOUT_COMP: user_lets_talk_about_comp_request,
         State.SYS_LETS_TALK_ATHLETE: lets_talk_about_athlete_request,
         State.SYS_LETS_TALK_SPORT: lets_talk_about_sport_request,
-        State.SYS_TELL_NEGATIVE: user_negative_request
     },
 )
 
@@ -1181,6 +1245,9 @@ simplified_dialogflow.add_user_serial_transitions(
 
 simplified_dialogflow.add_system_transition(
     State.SYS_TELL_NEGATIVE, State.USR_TELL_NEGATIVE, user_negative_response
+)
+simplified_dialogflow.add_system_transition(
+    State.SYS_LINK_AND_NEGATIVE, State.USR_TELL_NEGATIVE, user_negative_response
 )
 
 ##################################################################################################################

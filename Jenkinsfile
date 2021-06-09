@@ -41,7 +41,6 @@ pipeline {
   agent none
 
   environment {
-    AGENT_PORT=4242
     WAIT_TIMEOUT=2400
     WAIT_INTERVAL=10
     COMPOSE_HTTP_TIMEOUT=120
@@ -164,14 +163,14 @@ spec:
                     sh label: 'update kubeconfig', script: 'aws eks update-kubeconfig --name staging'
                     sh label: 'update environment', script: 'kubectl create configmap env -n ${NAMESPACE} --from-env-file $ENV_FILE -o yaml --dry-run=client | kubectl apply -f -'
                     sh label: 'generate deployment', script: 'python3 kubernetes/kuber_generator.py'
-                    sh label: 'deploy', script: 'for dir in kubernetes/models/*; do kubectl apply -f $dir || true; done'
-                    sh label: 'recreate pods', script: 'for dp in kubernetes/models/*/*-dp.yaml; do kubectl rollout restart -n ${NAMESPACE} deploy $(basename ${dp%.*}); done'
                     sh label: 'remove redundant pods', script: '''
-                      for dp in $(kubectl get deploy -n {NAMESPACE} -l app.kubernetes.io/managed-by!=Helm --no-headers -o custom-columns=":metadata.name");
+                      for dp in $(kubectl -n ${NAMESPACE} get deploy  --no-headers -o custom-columns=":metadata.name" | grep -e '-dp$');
                       do
-                        [ -d kubernetes/models/${dp%-*} ] || kubectl delete deploy $dp -n {NAMESPACE}
+                        kubectl delete deploy $dp -n ${NAMESPACE}
                       done
                     '''
+                    sh label: 'deploy', script: 'for dir in kubernetes/models/*; do kubectl apply -f $dir || true; done'
+                    sh label: 'recreate pods', script: 'for dp in kubernetes/models/*/*-dp.yaml; do kubectl rollout restart -n ${NAMESPACE} deploy $(basename ${dp%.*}); done'
                   }
                   catch (Exception e) {
                     int duration = (currentBuild.duration - startTime) / 1000
@@ -241,7 +240,7 @@ spec:
     stage('Tests') {
 
       agent {
-        label 'test'
+        label 'aws-test1'
       }
 
       when {
@@ -323,6 +322,11 @@ spec:
               Exception ex = null
               catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                 try {
+                  sh '''
+                        sed -i -r "s/(CUDA_VISIBLE_DEVICES=)0/\\1\${GPU0}/g" test.yml
+                        sed -i -r "s/(CUDA_VISIBLE_DEVICES=)1/\\1\${GPU1}/g" test.yml
+                        cat test.yml
+                  '''
                   sh 'tests/runtests.sh MODE=clean && tests/runtests.sh MODE=start'
                 }
                 catch (Exception e) {
@@ -404,7 +408,7 @@ spec:
               Exception ex = null
               catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                 try {
-                  sh 'tests/runtests.sh MODE=test_skills'
+                  sh label: 'test skills', script: 'tests/runtests.sh MODE=test_skills'
                 }
                 catch (Exception e) {
                   int duration = (currentBuild.duration - startTime) / 1000
@@ -430,7 +434,7 @@ spec:
         }
 
         /*stage('Collect Predictions') {
-
+./tests/runtests.sh MODE=clean
           steps {
             script {
               startTime = currentBuild.duration

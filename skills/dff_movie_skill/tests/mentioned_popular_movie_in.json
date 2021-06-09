@@ -1,0 +1,679 @@
+{
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "hi.",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "hi",
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.009537387639284134,
+                            "conversational": 0.990462601184845
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9982210397720337
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9222673177719116
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9989813566207886
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9996328353881836
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.737921953201294
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0014452040195465088
+                            }
+                        },
+                        "cobot_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "hi.",
+                            "segments": [
+                                "hi."
+                            ]
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.003737201215699315,
+                                "command": 0.014534037560224533,
+                                "comment": 0.007815582677721977,
+                                "complaint": 0.01387196034193039,
+                                "dev_command": 0.011961274780333042,
+                                "neg_answer": 0.0012791294138878584,
+                                "open_question_factual": 0.007067359518259764,
+                                "open_question_opinion": 0.0020942059345543385,
+                                "opinion": 0.02820507064461708,
+                                "other_answers": 0.002917045960202813,
+                                "pos_answer": 0.003618009854108095,
+                                "statement": 0.8965854644775391,
+                                "yes_no_question": 0.006313652731478214
+                            }
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Other"
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        },
+                        "cobot_entities": {
+                            "entities": [],
+                            "labelled_entities": []
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi."
+                            ]
+                        },
+                        "conceptnet": {},
+                        "entity_linking": [],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "FILE - In this photo March 22, 2013 file photo, the exterior of the Internal Revenue Service (IRS) building in Washington. Lawmakers are increasingly looking at boosting the IRS to help pay for infrastructure improvements. (AP Photo/Susan Walsh, File... [6289 chars]",
+                                    "description": "FILE - In this photo March 22, 2013 file photo, the exterior of the Internal Revenue Service (IRS) building in Washington. Lawmakers are increasingly looking at boosting the IRS to help pay for infrastructure improvements.",
+                                    "image": "https://storage.googleapis.com/afs-prod/media/c34884747805457cb36ead260bcffb75/3000.jpeg",
+                                    "publishedAt": "2021-05-15T04:31:01Z",
+                                    "source": {
+                                        "name": "Associated Press",
+                                        "url": "https://apnews.com"
+                                    },
+                                    "title": "IRS to the rescue? Tax audits eyed for infrastructure cash",
+                                    "url": "https://apnews.com/article/personal-taxes-business-government-and-politics-e6151149b8fdba343a9053e5942c0679"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "fact_retrieval": [],
+                        "cobotqa_annotator": {
+                            "facts": [],
+                            "response": ""
+                        }
+                    }
+                },
+                {
+                    "text": "watched the conjuring.",
+                    "annotations": {
+                        "spelling_preprocessing": "watched the conjuring",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9419320821762085
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Movies": 0.9978549480438232
+                            },
+                            "cobot_topics": {
+                                "Celebrities": 0.904719352722168
+                            },
+                            "emotion_classification": {
+                                "anger": 0.6894047260284424,
+                                "fear": 0.5277460813522339,
+                                "joy": 0.5667851567268372,
+                                "neutral": 0.841903805732727
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.5992509126663208
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.005112737417221069
+                            }
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "cobot_nounphrases": [
+                            "the conjuring"
+                        ],
+                        "factoid_classification": {
+                            "factoid": 0.006642981432378292,
+                            "conversational": 0.9933570027351379
+                        },
+                        "sentseg": {
+                            "punct_sent": "watched the conjuring.",
+                            "segments": [
+                                "watched the conjuring."
+                            ]
+                        },
+                        "cobot_entities": {
+                            "entities": [
+                                "conjuring"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "videoname",
+                                    "text": "conjuring"
+                                }
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_topics": {
+                            "text": [
+                                "SciTech"
+                            ]
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Phatic"
+                            ]
+                        },
+                        "conceptnet": {
+                            "conjuring": {
+                                "Causes": [
+                                    "hallucination",
+                                    "illusion",
+                                    "you become hypnotize"
+                                ],
+                                "CausesDesire": [
+                                    "create illusion",
+                                    "perform trick",
+                                    "create dream"
+                                ],
+                                "HasProperty": [
+                                    "fun",
+                                    "entertain",
+                                    "good"
+                                ],
+                                "SymbolOf": [
+                                    "pagan religion",
+                                    "witchcraft",
+                                    "magic"
+                                ]
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0015396333765238523,
+                                "command": 0.006136483512818813,
+                                "comment": 0.003722867462784052,
+                                "complaint": 0.0020787150133401155,
+                                "dev_command": 0.004078887403011322,
+                                "neg_answer": 0.0010590917663648725,
+                                "open_question_factual": 0.0018716691993176937,
+                                "open_question_opinion": 0.0010960798244923353,
+                                "opinion": 0.07179462909698486,
+                                "other_answers": 0.0014359536580741405,
+                                "pos_answer": 0.0025409196969121695,
+                                "statement": 0.9000451564788818,
+                                "yes_no_question": 0.002599918283522129
+                            }
+                        ],
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    0.11064642667770386,
+                                    0.045067090541124344,
+                                    0.014249587431550026
+                                ],
+                                "entity_ids": [
+                                    "Q5161201",
+                                    "Q27959608",
+                                    "Q5540479"
+                                ],
+                                "entity_pages": [
+                                    "Conjuring is an illustrated book by James Randi. Randi gives a detailed history of conjuring, more commonly known as magic, said to be the worlds second oldest profession. It includes detailed portraits of conjurors, including the Harry Blackstone, Sr., Harry Blackstone, Jr., Harry Houdini and his entourage, Howard Thurston, Robert Heller, Joe Berg, and others.",
+                                    "Conjuring is a 1896 French short silent film directed by Georges M\u00e9li\u00e8s."
+                                ],
+                                "entity_pages_titles": [
+                                    "Conjuring (book)",
+                                    "Conjuring (film)",
+                                    "The Conjuring"
+                                ],
+                                "entity_substr": "conjuring",
+                                "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            }
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is an Alexa Prize Socialbot! What do you do on weekdays?",
+                                "watched the conjuring."
+                            ]
+                        },
+                        "fact_retrieval": [
+                            "Conjuring is an illustrated book by James Randi.",
+                            "Randi gives a detailed history of conjuring, more commonly known as magic, said to be the worlds second oldest profession.",
+                            "Conjuring is a 1896 French short silent film directed by Georges M\u00e9li\u00e8s."
+                        ],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "entities_info": {
+                                "conjuring": {
+                                    "author": [
+                                        [
+                                            "Q294918",
+                                            "James Randi"
+                                        ]
+                                    ],
+                                    "conf": 0.11064642667770386,
+                                    "entity_label": "Conjuring",
+                                    "instance of": [
+                                        [
+                                            "Q7725634",
+                                            "literary work"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q5161201",
+                                    "pos": 0,
+                                    "publication date": [
+                                        [
+                                            "\"+1992-00-00^^T\"",
+                                            "1992"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q17537576",
+                                            "creative work"
+                                        ],
+                                        [
+                                            "Q234460",
+                                            "text"
+                                        ],
+                                        [
+                                            "Q47461344",
+                                            "written work"
+                                        ],
+                                        [
+                                            "Q7725634",
+                                            "literary work"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "topic_skill_entities_info": {
+                                "conjuring": {
+                                    "author": [
+                                        [
+                                            "Q294918",
+                                            "James Randi"
+                                        ]
+                                    ],
+                                    "conf": 0.11064642667770386,
+                                    "entity_label": "Conjuring",
+                                    "instance of": [
+                                        [
+                                            "Q7725634",
+                                            "literary work"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q5161201",
+                                    "pos": 0,
+                                    "publication date": [
+                                        [
+                                            "\"+1992-00-00^^T\"",
+                                            "1992"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q17537576",
+                                            "creative work"
+                                        ],
+                                        [
+                                            "Q234460",
+                                            "text"
+                                        ],
+                                        [
+                                            "Q47461344",
+                                            "written work"
+                                        ],
+                                        [
+                                            "Q7725634",
+                                            "literary work"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "FILE - In this photo March 22, 2013 file photo, the exterior of the Internal Revenue Service (IRS) building in Washington. Lawmakers are increasingly looking at boosting the IRS to help pay for infrastructure improvements. (AP Photo/Susan Walsh, File... [6289 chars]",
+                                    "description": "FILE - In this photo March 22, 2013 file photo, the exterior of the Internal Revenue Service (IRS) building in Washington. Lawmakers are increasingly looking at boosting the IRS to help pay for infrastructure improvements.",
+                                    "image": "https://storage.googleapis.com/afs-prod/media/c34884747805457cb36ead260bcffb75/3000.jpeg",
+                                    "publishedAt": "2021-05-15T04:31:01Z",
+                                    "source": {
+                                        "name": "Associated Press",
+                                        "url": "https://apnews.com"
+                                    },
+                                    "title": "IRS to the rescue? Tax audits eyed for infrastructure cash",
+                                    "url": "https://apnews.com/article/personal-taxes-business-government-and-politics-e6151149b8fdba343a9053e5942c0679"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "conjuring",
+                                "news": {
+                                    "content": "It actually became a thing in the \u201880s, so much so that the Department of Justice issued a guidebook to police departments on how to work with psychics. You can literally look it up; it's in their archive section on their site, but it was because of ... [306 chars]",
+                                    "description": "It actually became a thing in the \u201880s, so much so that the Department of Justice issued a guidebook to police departments on how to work with psychics.",
+                                    "image": "https://img.cinemablend.com/quill/0/4/2/d/8/4/042d84098e833061913d9b702cd5ff8673eb9c0d.jpg",
+                                    "publishedAt": "2021-05-11T01:31:00Z",
+                                    "source": {
+                                        "name": "CinemaBlend",
+                                        "url": "https://www.cinemablend.com"
+                                    },
+                                    "title": "How The Conjuring 3 Is Taking Key Inspiration From A Beloved Brad Pitt Movie",
+                                    "url": "https://www.cinemablend.com/news/2567141/conjuring-3-key-inspiration-se7en-brad-pitt-michael-chaves"
+                                },
+                                "which": "human"
+                            },
+                            {
+                                "entity": "alexa prize",
+                                "news": {
+                                    "content": "From podcasts to Clubhouse, branded audio is more important than ever. Learn how brands are increasing customer loyalty and personalization with these best practices.\nJoin Transform 2021 for the most important themes in enterprise AI & Data. Learn mo... [5218 chars]",
+                                    "description": "From podcasts to Clubhouse, branded audio is more important than ever. Learn how brands are increasing customer loyalty and personalization with these best practices. Join Transform 2021 for the most important themes in enterprise AI & Data.",
+                                    "image": "https://venturebeat.com/wp-content/uploads/2020/01/amazon-alexa-echo-studio-echo-flex-fire-tv-cube-2.jpg?w=1200&strip=all",
+                                    "publishedAt": "2021-03-11T14:00:34Z",
+                                    "source": {
+                                        "name": "VentureBeat",
+                                        "url": "https://venturebeat.com"
+                                    },
+                                    "title": "Multitasking chatbots are the new Amazon Alexa Prize challenge",
+                                    "url": "https://venturebeat.com/2021/03/11/multitasking-chatbots-are-the-new-amazon-alexa-prize-challenge/"
+                                },
+                                "which": "bot"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Hi, this is an Alexa Prize Socialbot! What do you do on weekdays?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Hi, this is an Alexa Prize Socialbot! What do you do on weekdays?",
+                            "segments": [
+                                "Hi, this is an Alexa Prize Socialbot!",
+                                "What do you do on weekdays?"
+                            ]
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 7,
+                                    "start_pos": 5,
+                                    "text": "alexa prize",
+                                    "type": "MISC"
+                                }
+                            ],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is an Alexa Prize Socialbot! What do you do on weekdays?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_friendship_skill"
+                }
+            ]
+        }
+    ],
+    "dff_movie_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

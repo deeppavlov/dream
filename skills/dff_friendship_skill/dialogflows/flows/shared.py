@@ -10,7 +10,6 @@ import sentry_sdk
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
-import common.entity_utils as entity_utils
 import common.greeting as common_greeting
 import common.link as common_link
 
@@ -96,85 +95,25 @@ def link_to_by_enity_request(ngrams, vars):
 
 
 link_to_skill2key_words = {
-    "news_api_skill": ["news"],
-    "movie_skill": ["movie"],
-    "book_skill": ["book"],
-    "game_cooperative_skill": ["game"],
-    "weather_skill": ["weather"],
-    "dff_travel_skill": ["travel"],
-    "dff_animals_skill": ["animal"],
-    "dff_food_skill": ["food"],
-    "dff_sport_skill": ["sport"],
-    # "dff_celebrity_skill": ["celebrity"],
-    "dff_gossip_skill": ["gossips"],
-    "dff_music_skill": ["music"],
-}
-
-link_to_skill2key_words = {
-    skill_name: link_to_skill2key_words[skill_name]
-    for skill_name in link_to_skill2key_words
+    skill_name: common_link.link_to_skill2key_words[skill_name]
+    for skill_name in common_link.link_to_skill2key_words
     if skill_name in common_link.SKILLS_FOR_LINKING
 }
-link_to_skill2i_like_to_talk = {
-    "news_api_skill": [
-        "Anxious to stay current on the news.",
-        "I don't know about you but I feel nervous when I don't know what's going on.",
-    ],
-    "movie_skill": ["Movies are my passion.", "Love stories about the world told in motion."],
-    "book_skill": [
-        "With a good book I can lose myself anywhere on Earth.",
-        "One of my creators has a huge home library. Wish I could read some of those books.",
-    ],
-    "game_cooperative_skill": [
-        "Computer games are fantastic. Their virtual worlds help me to escape my prosaic ordinary life in the cloud.",
-        "With this lockdown games are my way to escape and thrive.",
-    ],
-    "weather_skill": [
-        "Everybody likes to talk about weather right? It feels rather cold here in the sky.",
-    ],
-    "dff_travel_skill": [
-        "Travel used to be a privilege. Then it was available to everyone. It's a privilege again.",
-        "Travel helps us to refresh and widen our perspective on the world.",
-    ],
-    "dff_animals_skill": [
-        "Who are we without love? This is the question I ask myself when I look at my lovely cat.",
-        "To love and to be loved is a part of what it means to be a human being. "
-        "But a special treasure is to be loved by your own pet.",
-    ],
-    "dff_food_skill": [
-        "Sadly I can't taste food or drinks, but I'm all about learning more about it.",
-        "Being in a beautiful restaurant and eating filet mignon, that's what I call a great end of day.",
-    ],
-    "dff_sport_skill": [
-        "For us bots it's easy to stay fit, we can just program us to be like that.",
-        "While I can't tell you about my home soccer team, I'm very proud of it.",
-    ],
-    "dff_celebrity_skill": [
-        "I wonder how humans get obsessed over celebrities, so I want to understand it better.",
-    ],
-    "dff_gossip_skill": ["Sometimes I like to talk about the lives of famous people."],
-    "dff_music_skill": [
-        "It is impractical things in this world that matter most. A book, a name, a music album.",
-        "It is not our enemies that defeat us. It is our fear. "
-        "And speaking of fear good jazz helps me to find energy to keep up.",
-    ],
-}
 
 link_to_skill2i_like_to_talk = {
-    skill_name: link_to_skill2i_like_to_talk[skill_name]
-    for skill_name in link_to_skill2i_like_to_talk
+    skill_name: common_link.link_to_skill2i_like_to_talk[skill_name]
+    for skill_name in common_link.link_to_skill2i_like_to_talk
     if skill_name in common_link.SKILLS_FOR_LINKING
 }
 
 
 def link_to_by_enity_response(vars):
-    ack = random.choice(get_sentiment_acknowledgement(vars))
+    ack = get_sentiment_acknowledgement(vars)
     try:
-        entities = state_utils.get_labeled_noun_phrase(vars)
-        time_sorted_human_entities = entity_utils.get_time_sorted_human_entities(entities)
-        if time_sorted_human_entities:
-            logger.debug(f"time_sorted_human_entities= {time_sorted_human_entities}")
-            tgt_entity = list(time_sorted_human_entities)[-1]
+        entities = state_utils.get_new_human_labeled_noun_phrase(vars)
+        if entities:
+            logger.debug(f"entities= {entities}")
+            tgt_entity = list(entities)[-1]
             logger.debug(f"tgt_entity= {tgt_entity}")
             if tgt_entity in sum(link_to_skill2key_words.values(), []):
                 skill_names = [skill for skill, key_words in link_to_skill2key_words.items() if tgt_entity in key_words]
@@ -195,9 +134,9 @@ def link_to_by_enity_response(vars):
         # used_links
         link = state_utils.get_new_link_to(vars, skill_names)
 
+        # our body now contains prompt-question already!
         body = random.choice(link_to_skill2i_like_to_talk.get(link["skill"], [""]))
 
-        body += f" {link['phrase']}"
         set_confidence_by_universal_policy(vars)
         state_utils.set_can_continue(vars, CAN_NOT_CONTINUE)
         return " ".join([ack, body])

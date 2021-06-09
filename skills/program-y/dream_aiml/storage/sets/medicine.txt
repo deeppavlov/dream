@@ -19,7 +19,7 @@ hangovers
 ache
 aches
 headache
-headches
+headaches
 backache
 backaches
 stomach
@@ -53,6 +53,7 @@ ambulance
 disease
 diseases
 health
+broke
 illness
 illnesses
 treat

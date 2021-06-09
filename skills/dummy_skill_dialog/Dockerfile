@@ -1,6 +1,7 @@
 FROM tensorflow/tensorflow:1.14.0-py3
 
-ARG DATA_URL=http://files.deeppavlov.ai/alexaprize_data/dummy_skill_dialog.tar.gz
+ARG DATA_URL
+ENV DATA_URL ${DATA_URL}
 
 ADD $DATA_URL /root/model/
 

@@ -5,7 +5,7 @@ from random import choice
 
 from common.utils import join_words_in_or_pattern, join_sentences_in_or_pattern, get_topics, \
     get_intents, get_sentiment, is_yes, is_no, get_entities
-from common.greeting import GREETING_QUESTIONS
+from common.greeting import GREETING_QUESTIONS, WHAT_DO_YOU_DO_RESPONSES, FREE_TIME_RESPONSES
 import sentry_sdk
 
 logger = logging.getLogger(__name__)
@@ -85,6 +85,8 @@ SOMETHING_LIKE = ["anything", "something", "that", "everything"]
 NOTHING_LIKE = ["nothing", "none", "neither"]
 DONOTKNOW_LIKE = [r"(i )?(do not|don't) know", "you (choose|decide|pick up)", "hard (to say|one)", "none"]
 KNOW_LIKE = ["know", "learn", "find out"]
+LIKE_TEMPLATE = ["like", "love", "prefer"]
+ASK_TEMPLATE = ["ask", "request"]
 
 # talk to me, talk with me, talk, talk with me now, talk now.
 TALK_TO_ME = join_words_in_or_pattern(TALK_LIKE) + r"(\s" + join_words_in_or_pattern(TO_ME_LIKE) + r")?"
@@ -109,6 +111,8 @@ COMPILE_NOT_WANT_TO_TALK_ABOUT_IT = re.compile(join_sentences_in_or_pattern(
     [
         r"(not|n't|\bno\b) " + join_words_in_or_pattern(WANT_LIKE),
         r"(not|n't|\bno\b) " + join_words_in_or_pattern(TALK_LIKE),
+        r"(not|n't|\bno\b) " + join_words_in_or_pattern(LIKE_TEMPLATE),
+        r"(not|n't|\bno\b) " + join_words_in_or_pattern(ASK_TEMPLATE)
     ]),
     re.IGNORECASE)
 
@@ -168,6 +172,14 @@ COMPILE_SOMETHING = re.compile(join_sentences_in_or_pattern(
     [join_words_in_or_pattern(SOMETHING_LIKE),
      join_words_in_or_pattern(NOTHING_LIKE),
      join_words_in_or_pattern(DONOTKNOW_LIKE)]) + END,
+    re.IGNORECASE)
+
+
+LIKE_WORDS = r"\b(prefer|adore|enjoy|love|like|stand|into\b|fond of|passionate of|crazy|appreciate|interested|fan\b)"
+LIKE_PATTERN = re.compile(LIKE_WORDS, re.IGNORECASE)
+
+NOT_LIKE_PATTERN = re.compile(
+    rf"(hate|loathe|((not|n't) |dis|un)({LIKE_WORDS}|for (me|you)\b)|[a-z ]+\bfan\b)",
     re.IGNORECASE)
 
 
@@ -275,6 +287,7 @@ ANY_TOPIC_AMONG_OFFERED = re.compile(
     r"(\bany\b|\ball\b|\beither\b|\bboth\b|don't know|not know"
     r"|you (choose|pick up|tell me|want|wish|like)\.?$)")
 GREETING_QUESTIONS_TEXTS = [question.lower() for t in GREETING_QUESTIONS for question in GREETING_QUESTIONS[t]]
+GREETING_QUESTIONS_TEXTS += [t.lower() for t in WHAT_DO_YOU_DO_RESPONSES + FREE_TIME_RESPONSES]
 
 
 def if_utterance_requests_topic(annotated_uttr):

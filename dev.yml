@@ -105,11 +105,11 @@ services:
       - "./state_formatters:/src/dream_aiml/src/state_formatters"
     ports:
       - 8022:8022
-  movie-skill:
+  dff-movie-skill:
     env_file: [.env.dev]
     volumes:
       - "./common:/src/common"
-      - "./skills/movie_skill:/src"
+      - "./skills/dff_movie_skill:/src"
       - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8023:8023
@@ -247,13 +247,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8112:8112
-  greeting-skill:
-    env_file: [.env.dev]
-    volumes:
-      - "./common:/src/common"
-      - "./skills/greeting_skill:/src"
-    ports:
-      - 8070:8070
   factoid-qa:
     env_file: [.env.dev]
     volumes:
@@ -325,19 +318,6 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8078:8078
-  wikidata-dial-skill:
-    env_file: [ .env.dev ]
-    volumes:
-      - "./skills/wikidata_dial_skill:/src"
-    ports:
-      - 8091:8091
-  wikidata-dial-service:
-    env_file: [ .env.dev ]
-    volumes:
-      - "./services/wikidata_dial_service:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8092:8092
   knowledge-grounding:
     env_file: [.env.dev]
     volumes:
@@ -351,6 +331,14 @@ services:
       - "./skills/knowledge_grounding_skill:/src"
     ports:
       - 8085:8085
+
+  dff-gaming-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_gaming_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8115:8115
   dff-friendship-skill:
     env_file: [.env.dev]
     volumes:
@@ -371,14 +359,6 @@ services:
       - "./annotators/entity_storer:/src"
     ports:
       - 8089:8089
-  dff-celebrity-skill:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/dff_celebrity_skill:/src"
-      - "./common:/src/common"
-      - "./annotators/CoBotQA:/src/CoBotQA"
-    ports:
-      - 8093:8093
   dff-animals-skill:
     env_file: [.env.dev]
     volumes:
@@ -417,6 +397,13 @@ services:
       - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8097:8097
+  dff-science-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_science_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8101:8101
   dff-music-skill:
     env_file: [.env.dev]
     volumes:
@@ -437,6 +424,7 @@ services:
     volumes:
       - "./skills/dff_gossip_skill:/src"
       - "./common:/src/common"
+      - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8109:8109
   fact-retrieval:
@@ -444,6 +432,7 @@ services:
     volumes:
       - "./annotators/fact_retrieval:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
+      - "./common:/src/common"
     ports:
       - 8100:8100
   cobot-entities:
@@ -463,6 +452,7 @@ services:
     volumes:
       - "./skills/dff_funfact_skill:/src"
       - "./common:/src/common"
+      - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8104:8104
   dff-bot-persona-skill:
@@ -487,6 +477,13 @@ services:
       - "./annotators/topic_recommendation:/src"
     ports:
       - 8113:8113
+  user-persona-extractor:
+    env_file: [ .env.dev ]
+    volumes:
+      - "./annotators/user_persona_extractor:/src"
+      - "./common:/src/common"
+    ports:
+      - 8114:8114
   speech-function-classifier:
     env_file: [.env.dev]
     volumes:

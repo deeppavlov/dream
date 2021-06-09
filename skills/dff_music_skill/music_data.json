@@ -1,5 +1,40 @@
 {
   "structured_data":{
+    "country":{
+      "Luke Combs":[
+        "Better Together",
+        "Without You",
+        "Loving On You",
+        "Cold As You"
+      ],
+      "Morgan Wallen": [
+        "7 Summers",
+        "Heartless",
+        "Wasted On You",
+        "Cover Me Up",
+        "865"
+      ],
+      "Kane Brown": ["Be Like That"],
+      "Maren Morris": ["The Bones", "You And Over Me"]
+    },
+    "80s":{
+      "AC/DC":[
+        "Hells Bells",
+        "Shoot to Thrill",
+        "Back in Black",
+        "Have a Drink on Me",
+        "Shake A Leg"
+      ]
+    },
+    "70s":{
+      "ABBA":[
+      "Mamma Mia",
+      "Money, Money, Money",
+      "Rock Me",
+      "Dancing Queen",
+      "Fernando"
+      ]
+    },
     "pop":{
       "Britney Spears":[
         "Toxic",
@@ -182,7 +217,11 @@
     "all",
     "everything",
     "alternative",
-    "contemporary"
+    "contemporary",
+    "eighties",
+    "nineties",
+    "80s",
+    "70s"
   ],
   "artist": [
     "Britney Spears",
@@ -193,7 +232,11 @@
     "Selena Gomez",
     "Drake",
     "Post Malone",
-    "Billie Eilish"
+    "Billie Eilish",
+    "Luke Combs",
+    "Morgan Wallen",
+    "Kane Brown",
+    "Maren Morris"
   ],
   "song":[
 

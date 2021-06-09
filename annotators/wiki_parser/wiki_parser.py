@@ -49,6 +49,8 @@ wiki_filename = "/root/.deeppavlov/downloads/wikidata/wikidata_lite.hdt"
 document = HDTDocument(wiki_filename)
 USE_CACHE = True
 
+ANIMALS_SKILL_TYPES = {"Q55983715", "Q16521", "Q43577", "Q39367", "Q38547"}
+
 occ = {"business": [["Q131524", "enterpreneur"]],
        "sport": [["Q937857", "football player"],
                  ["Q2066131", "athlete"],
@@ -332,8 +334,9 @@ def find_types_2hop(entity: str):
     types_1hop = find_types(entity)
     types_2hop_list = []
     for tp in types_1hop:
-        types_2hop = find_types(tp) + find_subclasses(tp)
-        types_2hop_list += types_2hop
+        if tp != "Q5":
+            types_2hop = find_types(tp) + find_subclasses(tp)
+            types_2hop_list += types_2hop
     types_list = types_2hop_list + types_1hop
     types_list = list(set(types_list))
     return types_list
@@ -468,7 +471,7 @@ def extract_info():
     return art_genres_dict, people_genres_dict
 
 
-def find_top_triplets(entity, entity_substr, pos=None):
+def find_top_triplets(entity, entity_substr, pos=None, token_conf=None, conf=None):
     triplets_info = {}
     if entity.startswith("Q"):
         triplets = {}
@@ -590,6 +593,10 @@ def find_top_triplets(entity, entity_substr, pos=None):
         triplets["types_2hop"] = types_2hop_with_labels
         if pos is not None:
             triplets["pos"] = pos
+        if token_conf is not None:
+            triplets["token_conf"] = token_conf
+        if conf is not None:
+            triplets["conf"] = conf
         triplets_info[entity_substr] = triplets
     return triplets_info
 
@@ -660,31 +667,46 @@ def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], u
             triplets_info = {}
             topic_skills_triplets_info = {}
             wiki_skill_triplets_info = {}
+            animals_skill_triplets_info = {}
             try:
                 for entity_info in query:
                     if entity_info:
                         entity_substr = entity_info.get("entity_substr", "")
-                        entity_ids = entity_info.get("entity_ids")
+                        entity_ids = entity_info.get("entity_ids", [])
+                        tokens_match_conf_list = entity_info.get("tokens_match_conf", [1.0])
+                        confidences = entity_info.get("confidences", [1.0])
                         if entity_ids:
-                            entity_triplets_info = find_top_triplets(entity_ids[0], entity_substr)
+                            entity_triplets_info = find_top_triplets(entity_ids[0], entity_substr, 0,
+                                                                     tokens_match_conf_list[0], confidences[0])
                             triplets_info = {**triplets_info, **entity_triplets_info}
                         found_topic_skills_info = False
                         found_wiki_skill_info = False
-                        for n, entity in enumerate(entity_ids):
+                        for n, (entity, token_conf, conf) in \
+                                enumerate(zip(entity_ids, tokens_match_conf_list, confidences)):
                             types = find_types(entity)
                             types_2hop = find_types_2hop(entity)
                             if not found_topic_skills_info and (set(types).intersection(topic_skill_types)
                                                                 or set(types_2hop).intersection(topic_skill_types)):
-                                entity_triplets_info = find_top_triplets(entity, entity_substr)
+                                entity_triplets_info = find_top_triplets(entity, entity_substr, n, token_conf, conf)
                                 topic_skills_triplets_info = {**topic_skills_triplets_info, **entity_triplets_info}
-                                found_topic_skills_info = True
+                                if not set(types_2hop).intersection({"Q11424", "Q24856"}):
+                                    found_topic_skills_info = True
                             if not found_wiki_skill_info and (set(types).intersection(wiki_skill_used_types)
                                                               or set(types_2hop).intersection(wiki_skill_used_types)):
-                                entity_triplets_info = find_top_triplets(entity, entity_substr, n)
+                                entity_triplets_info = find_top_triplets(entity, entity_substr, n, token_conf, conf)
                                 wiki_skill_triplets_info = {**wiki_skill_triplets_info, **entity_triplets_info}
-                                found_wiki_skill_info = True
+                                if not set(types_2hop).intersection({"Q11424", "Q24856"}):
+                                    found_wiki_skill_info = True
                             if found_topic_skills_info and found_wiki_skill_info:
                                 break
+                        for n, (entity, token_conf, conf) in \
+                                enumerate(zip(entity_ids, tokens_match_conf_list, confidences)):
+                            types = find_types(entity)
+                            types_2hop = find_types_2hop(entity)
+                            if set(types).intersection(ANIMALS_SKILL_TYPES) \
+                                    or set(types_2hop).intersection(ANIMALS_SKILL_TYPES):
+                                entity_triplets_info = find_top_triplets(entity, entity_substr, n, token_conf, conf)
+                                animals_skill_triplets_info = {**animals_skill_triplets_info, **entity_triplets_info}
             except Exception as e:
                 log.info("Wrong arguments are passed to wiki_parser")
                 sentry_sdk.capture_exception(e)
@@ -692,17 +714,8 @@ def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], u
             wiki_parser_output.append({"entities_info": triplets_info,
                                        "topic_skill_entities_info": topic_skills_triplets_info,
                                        "wiki_skill_entities_info": wiki_skill_triplets_info,
+                                       "animals_skill_entities_info": animals_skill_triplets_info,
                                        "utt_num": utt_num})
-        elif parser_info == "find_top_triplets_for_topic_skills":
-            triplets_info = {}
-            for entities_list in query:
-                for entities in entities_list:
-                    for entity in entities:
-                        types = find_types(entity)
-                        if set(types).intersection(topic_skill_types):
-                            entity_triplets_info = find_top_triplets(entity)
-                            triplets_info = {**triplets_info, **entity_triplets_info}
-            wiki_parser_output.append(triplets_info)
         elif parser_info == "find_top_people":
             top_people_list = []
             try:

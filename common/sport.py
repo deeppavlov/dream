@@ -33,24 +33,39 @@ ZERO_CONFIDENCE = 0.0
 
 NUMBER_PROBABILITY = 0
 
+
+SPORTS_NO_ING = r"\b(aerobics|archery|badminton|baseball|basketball|beach volleyball|biathlon" \
+                r"|billiards|canoe|car race|chess|climb|coach|cricket" \
+                r"|curling|cycle|darts|dive|draughts" \
+                r"|fence|figure skate|football|golf|gymnastics|handball|hang glide" \
+                r"|high jump|hockey|hurdle race|ice rink|in-line skate|jog|judo|karate" \
+                r"|long jump|martial arts|motorbike sports|mountaineer|orienteer" \
+                r"|parachute|pole-vault|polo|ride|rowing|rugby|ski|snooker" \
+                r"|track-and-field|triathlon|tug of war|volleyball|water polo|waterski" \
+                r"|weight lift|work out|wrestle|run|swim|tennis|fitness|lacrosse|ballet|soccer)"
+# curling in SPORTS_NO_ING is not a mistake - there is not word to curl
+ING_FORMS = {'run': 'running', 'swim': 'swimming', 'ski': 'skiing', 'dive': 'diving', 'box': 'boxing',
+             'canoe': 'canoeing', 'climb': 'climbing', 'cycle': 'cycling', 'fence': 'fencing',
+             'figure skate': 'figure skating',
+             'in-line skate': 'figure skating', 'hang glide': 'hand gliding',
+             'high jump': 'high jumping', 'jog': 'jogging', 'ride': 'riding', 'row': 'rowing',
+             'weight lift': 'weight lifing', 'wrestle': 'wrestling', 'work out': 'working out',
+             'mountaineer': 'mountaineering', 'dance' : 'dancing',
+             'orienteer': 'orienteering', 'parachute': 'parachuting', 'pole-vault': 'pole-vaulting',
+             'car race': 'car racing', 'wakeboard': 'wakeboarding',
+             'long jump': 'long jumping'}
+REVERSE_ING_FORMS = {ING_FORMS[key]: key for key in ING_FORMS}
+SPORTS = rf"({'|'.join(ING_FORMS.values())}|{SPORTS_NO_ING})"
 KIND_OF_SPORTS_TEMPLATE = re.compile(
-    r"(aerobics|archery|badminton|baseball|basketball|beach volleyball|biathlon"
-    r"|billiards|boxing|canoeing|car racing|chess|climbing|coach|cricket"
-    r"|cross-country skiing|curling|cycling|darts|diving skiing|draughts"
-    r"|fencing|figure skating|football|golf|gymnastics|handball|hang gliding"
-    r"|high jump|hockey|hurdle race|ice rink|in-line skating|jogging|judo|karate"
-    r"|long jump|martial arts|motorbike sports|mountaineering|orienteering"
-    r"|parachuting|pole-vaulting|polo|riding|rowing|rugby|sailing|skis|snooker"
-    r"|track-and-field|triathlon|tug of war|volleyball|water polo|waterski"
-    r"|weight lifting|working out|wrestling|run|swim|fitness|lacrosse|riding horses|ballet|marching|soccer)",
+    SPORTS,
     re.IGNORECASE,
 )
-
 PASSIVE_SPORT = ["chess", "checkers"]
 
 OPINION_ABOUT_PASSIVE_SPORT = ["KIND_OF_SPORT is cool. But since I live in the cloud, I can only play PASSIVE_SPORT!",
-                               "I would love to play KIND_OF_SPORT. "
-                               "But I have no physical incarnation, so I can only play PASSIVE_SPORT!"]
+                               "I would like to play KIND_OF_SPORT. "
+                               "But I have no physical incarnation, so I can only play PASSIVE_SPORT!"
+                               ]
 
 KIND_OF_COMPETITION_TEMPLATE = re.compile(
     r"(FIFA World Cup|Olympic Games|Super Bowl|Grand National"
@@ -73,6 +88,8 @@ QUESTION_TEMPLATE = re.compile(r"(what|did|do|which|who) (team )?(you )?(do|is|a
 
 LIKE_TEMPLATE = re.compile(r"(like|love|support|a fan of|favorite|enjoy|want to talk)?", re.IGNORECASE)
 
+HATE_TEMPLATE = re.compile(r"(hate)", re.IGNORECASE)
+
 COMPETITION_TEMPLATE = re.compile(r"(tournament|tourney|competition|championship|derby)", re.IGNORECASE)
 
 OFFER_FACT_COMPETITION = ["I recently wandered on the Internet and found an interesting fact about COMPETITION."
@@ -85,8 +102,8 @@ OPINION_REQUESTS = ["What do you think about it?",
                     "What is your view on it?"
                     ]
 
-ASK_ABOUT_ATH_IN_KIND_OF_SPORT = ["Yep, that's cool. I'm curious to know if you have any idols in KIND_OF_SPORT?",
-                                  "Wow, that's cool. Do you have a favorite athlete in KIND_OF_SPORT?"]
+ASK_ABOUT_ATH_IN_KIND_OF_SPORT = ["Yep, that's cool. I'm really wondering who is your idol in KIND_OF_SPORT?",
+                                  "Wow, that's cool. Who is your favorite athlete in KIND_OF_SPORT?"]
 
 OPINION_ABOUT_ATHLETE_WITH_TEAM_AND_POS = ["Oh, I know this POSITION from TEAM. He does his job well.",
                                            "Oh, I kind of know him. He is a POSITION and plays in TEAM."]

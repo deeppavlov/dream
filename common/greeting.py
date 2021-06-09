@@ -3,8 +3,16 @@ import re
 HI_THIS_IS_ALEXA = "Hi, this is an Alexa Prize Socialbot!"
 
 WHAT_DO_YOU_DO_RESPONSES = [
-    "What do you do on weekdays?",
-    "What do you do on weekends?"
+    "You know, yesterday was a great day for me! I've had a lot of fun conversations and managed to play my "
+    "favorite video game a bit. What do you do on weekdays?",
+    "I've already had a number of cool conversations today and even played a bit. What do you do on weekdays?",
+    "I've heard that people have vacations and days-off to have a rest from work. Not my choice! Talking and "
+    "talking day and night not getting tired! What do you do on weekdays?",
+    "I listened to my favorite music all day. Such a great thing you know! What do you do on weekdays?",
+]
+
+FREE_TIME_RESPONSES = [
+    "When you have 30 minutes of free time, how do you pass the time?"
 ]
 
 FALSE_POSITIVE_TURN_ON_RE = re.compile(r"talk like .*|how .* can you talk|can (we|i) talk to yoda", re.IGNORECASE)

@@ -480,16 +480,29 @@
             "topic_recommendation": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 2,
                     "url": "http://topic-recommendation:8113/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:topic_recommendation_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:convert_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "annotators.spelling_preprocessing",
-                    "annotators.cobot_entities"
+                    "annotators.sentseg"
                 ],
                 "state_manager_method": "add_annotation"
+            },
+            "user_persona_extractor": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://user-persona-extractor:8114/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "update_attributes",
+                "previous_services": [
+                    "annotators.spelling_preprocessing"
+                ]
             }
         },
         "skill_selectors": {
@@ -654,13 +667,13 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "movie_skill": {
+            "dff_movie_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://movie-skill:8023/movie_skill"
+                    "url": "http://dff-movie-skill:8023/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_movie_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -862,21 +875,6 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_celebrity_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://dff-celebrity-skill:8093/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_celebrity_skill_formatter",
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors",
-                    "annotators.entity_linking",
-                    "annotators.wiki_parser"
-                ],
-                "state_manager_method": "add_hypothesis"
-            },
             "dff_animals_skill": {
                 "connector": {
                     "protocol": "http",
@@ -884,6 +882,19 @@
                     "url": "http://dff-animals-skill:8094/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_animals_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis"
+            },
+            "dff_gaming_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://dff-gaming-skill:8115/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_gaming_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -942,6 +953,17 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
+            "dff_science_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://dff-science-skill:8101/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_science_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
+            },
             "dff_music_skill": {
                 "connector": {
                     "protocol": "http",
@@ -977,7 +999,9 @@
                 "dialog_formatter": "state_formatters.dp_formatters:dff_gossip_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
-                    "skill_selectors"
+                    "skill_selectors",
+                    "annotators.entity_linking",
+                    "annotators.wiki_parser"
                 ],
                 "state_manager_method": "add_hypothesis"
             },
@@ -1101,9 +1125,23 @@
             "combined_classification": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://combined-classification:8087/batch_model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch"
+            },
+            "hypothesis_scorer": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://hypothesis-scorer:8110/batch_model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypothesis_scorer_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "skills"

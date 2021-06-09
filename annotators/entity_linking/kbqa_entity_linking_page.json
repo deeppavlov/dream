@@ -14,7 +14,7 @@
       {
         "class_name": "kbqa_entity_linking:KBEntityLinker",
         "in": ["entity_substr", "template", "long_context", "entity_types", "short_context"],
-        "out": ["entity_ids", "confidences"],
+        "out": ["entity_ids", "confidences", "tokens_match_conf"],
         "load_path": "{DOWNLOADS_PATH}/wikidata_eng",
         "inverted_index_filename": "inverted_index_eng.pickle",
         "entities_list_filename": "entities_list.pickle",
@@ -41,7 +41,7 @@
         "q_to_page_filename": "{DOWNLOADS_PATH}/wikidata_eng/q_to_page_en.pickle"
       }
     ],
-    "out": ["entity_ids", "confidences", "first_par", "entity_pages_titles"]
+    "out": ["entity_ids", "confidences", "tokens_match_conf", "first_par", "entity_pages_titles"]
   },
   "metadata": {
     "variables": {

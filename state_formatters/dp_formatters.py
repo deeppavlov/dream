@@ -73,6 +73,7 @@ def convert_formatter_dialog(dialog: Dict) -> List[Dict]:
             "utterances_histories": [[utt["text"] for utt in dialog["utterances"]]],
             "personality": [dialog["bot"]["persona"]],
             "num_ongoing_utt": [utils.count_ongoing_skill_utterances(dialog["bot_utterances"], "convert_reddit")],
+            "human_attributes": [dialog["human"]["attributes"]],
         }
     ]
 
@@ -374,8 +375,10 @@ def full_history_dialog(dialog: Dict):
     """
     Used ONLY by: response selector and greeting_skill (turns on only for first 10 turns)
     """
+    all_prev_active_skills = [uttr.get("active_skill", "") for uttr in dialog["bot_utterances"]]
+    all_prev_active_skills = [skill_name for skill_name in all_prev_active_skills if skill_name][-15:]
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=10)
-    return [{"dialogs": [dialog]}]
+    return [{"dialogs": [dialog], "all_prev_active_skills": [all_prev_active_skills]}]
 
 
 def utt_sentrewrite_modified_last_dialog(dialog: Dict):
@@ -482,9 +485,13 @@ def wp_formatter_dialog(dialog: Dict):
     input_entity_info_list = []
     if entity_info_list:
         for entity_info in entity_info_list:
-            if entity_info and "entity_substr" in entity_info and "entity_ids" in entity_info:
+            if entity_info and "entity_substr" in entity_info and "entity_ids" in entity_info \
+                    and "tokens_match_conf" in entity_info:
                 input_entity_info_list.append(
-                    {"entity_substr": entity_info["entity_substr"], "entity_ids": entity_info["entity_ids"][:5]}
+                    {"entity_substr": entity_info["entity_substr"],
+                     "entity_ids": entity_info["entity_ids"][:5],
+                     "confidences": entity_info["confidences"][:5],
+                     "tokens_match_conf": entity_info["tokens_match_conf"][:5]}
                 )
     parser_info = ["find_top_triplets"]
     if not input_entity_info_list:
@@ -552,16 +559,24 @@ def fact_retrieval_formatter_dialog(dialog: Dict):
 
     entity_info_list = last_human_utt["annotations"].get("entity_linking", [{}])
     entity_pages_list = []
+    entity_ids_list = []
+    entity_substr_list = []
+    entity_pages_titles_list = []
     for entity_info in entity_info_list:
         if "entity_pages" in entity_info and entity_info["entity_pages"]:
             entity_pages_list.append(entity_info["entity_pages"])
-
+            entity_ids_list.append(entity_info["entity_ids"])
+            entity_substr_list.append(entity_info["entity_substr"])
+            entity_pages_titles_list.append(entity_info["entity_pages_titles"])
     return [
         {
             "human_sentences": [last_human_utt["text"]],
             "dialog_history": dialog_history,
-            "entity_substr": nounphrases,
+            "nounphrases": nounphrases,
+            "entity_substr": [entity_substr_list],
             "entity_pages": [entity_pages_list],
+            "entity_ids": [entity_ids_list],
+            "entity_pages_titles": [entity_pages_titles_list]
         }
     ]
 
@@ -658,6 +673,10 @@ def dff_animals_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_animals_skill")
 
 
+def dff_gaming_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_gaming_skill")
+
+
 def dff_sport_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_sport_skill")
 
@@ -666,12 +685,20 @@ def dff_travel_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_travel_skill")
 
 
+def dff_science_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_science_skill")
+
+
 def dff_gossip_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_gossip_skill")
 
 
 def dff_generic_responses_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_generic_responses_skill")
+
+
+def dff_movie_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_movie_skill")
 
 
 def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
@@ -698,9 +725,10 @@ def dff_bot_persona_skill_formatter(dialog: Dict) -> List[Dict]:
 
 def dff_wiki_skill_formatter(dialog: Dict) -> List[Dict]:
     service_name = f"dff_wiki_skill"
-    return utils.dff_formatter(dialog, service_name, human_last_turns=5,
+    return utils.dff_formatter(dialog, service_name, human_last_turns=5, bot_last_turns=5,
                                used_annotations=["cobot_entities", "cobot_nounphrases", "entity_linking",
-                                                 "factoid_classification", "wiki_parser", "cobot_topics"])
+                                                 "factoid_classification", "wiki_parser", "cobot_topics",
+                                                 "news_api_annotator"])
 
 
 def game_cooperative_skill_formatter(dialog: Dict):

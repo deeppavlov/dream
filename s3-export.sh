@@ -15,8 +15,6 @@ files=(
   deeppavlov_data/bert/uncased_L-4_H-128_A-2.zip
   deeppavlov_data/wiki_index.tar.gz
   deeppavlov_data/multi_squad_model_noans_1.1.tar.gz
-  alexaprize_data/book_author_names.txt
-  alexaprize_data/book_query_dict.pkl
   alexaprize_data/cobot_bert_6task.tar.gz
   alexaprize_data/comet/atomic_pretrained_model.pickle
   alexaprize_data/comet/categories_oEffect#oReact#oWant#xAttr#xEffect#xIntent#xNeed#xReact#xWant-maxe1_17-maxe2_35-maxr_1.pickle
@@ -54,11 +52,21 @@ files=(
   kbqa/wikidata/q_to_descr_en.pickle
   kbqa/wikidata/q_to_page_en.pickle
   kbqa/wikidata/wikidata_cache.json
-  alexaprize_data/database_most_popular_main_info.json
+  alexaprize_data/database_most_popular_main_info_v1.json
   datasets/wikipedia/enwiki_latest.db
   alexaprize_data/logreg_recommendation_model.pkl
   datasets/wikipedia/enwiki_latest_hyperlinks.db
   kbqa/wikidata/wikihow.pickle
+  kbqa/wikidata/breed_facts.json
+  kbqa/wikidata/wikihow.db
+  kbqa/wikidata/wikihow_topics.json
+  alexaprize_data/parlai_grounding_knowledge/parlai_topical_chat_data.tar.gz
+  alexaprize_data/parlai_grounding_knowledge/topical_chat_blender90_1_sent_48_epochs.tar.gz
+  alexaprize_data/parlai_grounding_knowledge/topical_chat_blender90_3_sent_62_epochs.tar.gz
+  alexaprize_data/dummy_skill_dialog.tar.gz
+  kbqa/wikidata/entity_types_sets.pickle
+  datasets/wikipedia/enwiki_latest_topic.db
+  alexaprize_data/movie_plots_v0.tar.gz
 )
 
 for file in ${files[@]}; do

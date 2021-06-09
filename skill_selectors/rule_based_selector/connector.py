@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import re
 import time
 from os import getenv
 from typing import Dict, Callable
@@ -7,15 +8,18 @@ from typing import Dict, Callable
 import sentry_sdk
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_CONTINUE_PROMPT
+from common.discourse import get_speech_function_predictions_for_human_utterance_annotations
 from common.emotion import is_joke_requested, if_turn_on_emotion
+from common.gossip import check_is_celebrity_mentioned
 from common.link import get_all_linked_to_skills, get_linked_to_dff_skills
-from common.sensitive import is_sensitive_situation
+from common.movies import extract_movies_names_from_annotations
+from common.response_selection import UNPREDICTABLE_SKILLS
+from common.sensitive import is_sensitive_topic_and_request
 from common.skills_turn_on_topics_and_patterns import turn_on_skills
 from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
 from common.utils import high_priority_intents, low_priority_intents, get_topics, get_intents, get_named_locations
 from common.weather import if_special_weather_turn_on
-from common.wiki_skill import if_switch_wiki_skill
-from common.discourse import get_speech_function_predictions_for_human_utterance_annotations
+from common.wiki_skill import if_switch_wiki_skill, switch_wiki_skill_on_news
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -53,6 +57,8 @@ class RuleBasedSkillSelectorConnector:
             if sf_predictions:
                 skills_for_uttr.append("dff_generic_responses_skill")
 
+            is_celebrity_mentioned = check_is_celebrity_mentioned(user_uttr)
+
             prev_user_uttr_hyp = dialog["human_utterances"][-2]["hypotheses"] if len(
                 dialog["human_utterances"]) > 1 else []
 
@@ -69,6 +75,13 @@ class RuleBasedSkillSelectorConnector:
                 not_detected = {"detected": 0, "confidence": 0.0}
                 dialog["human_utterances"][-1]["annotations"]["intent_catcher"]["exit"] = not_detected
                 dialog["utterances"][-1]["annotations"]["intent_catcher"]["exit"] = not_detected
+            if "repeat" in intent_catcher_intents and prev_active_skill in UNPREDICTABLE_SKILLS and re.match(
+                    r"^what.?$", user_uttr_text):
+                # grounding skill will respond after UNPREDICTABLE_SKILLS on user request "what?"
+                high_priority_intent_detected = False
+                not_detected = {"detected": 0, "confidence": 0.0}
+                dialog["human_utterances"][-1]["annotations"]["intent_catcher"]["repeat"] = not_detected
+                dialog["utterances"][-1]["annotations"]["intent_catcher"]["repeat"] = not_detected
 
             if "/new_persona" in user_uttr_text:
                 # process /new_persona command
@@ -78,7 +91,7 @@ class RuleBasedSkillSelectorConnector:
             elif high_priority_intent_detected:
                 # process intent with corresponding IntentResponder
                 skills_for_uttr.append("intent_responder")
-            elif is_sensitive_situation(dialog):
+            elif is_sensitive_topic_and_request(dialog["human_utterances"][-1]):
                 # process user utterance with sensitive content, "safe mode"
                 skills_for_uttr.append("program_y_dangerous")
                 skills_for_uttr.append("cobotqa")
@@ -100,10 +113,10 @@ class RuleBasedSkillSelectorConnector:
                 if if_special_weather_turn_on(user_uttr, bot_uttr):
                     skills_for_uttr.append("weather_skill")
 
-                # turn on small talk if let's chat about particular topic or switch topic
-                # otherwise small-talk-skill turns on only when was active and can continue
-                if if_lets_chat_about_particular_topic_detected or if_choose_topic_detected:
-                    skills_for_uttr.append("small_talk_skill")
+                if is_celebrity_mentioned:
+                    skills_for_uttr.append("dff_gossip_skill")
+
+                skills_for_uttr.append("small_talk_skill")
 
                 # turn on skills linked to in the previous bot utterance (of course, it's the only one skill)
                 for skill_name in linked_to_skill_names:
@@ -136,7 +149,7 @@ class RuleBasedSkillSelectorConnector:
                 if low_priority_intent_detected:
                     skills_for_uttr.append("intent_responder")
                 switch_wiki_skill, _ = if_switch_wiki_skill(user_uttr, bot_uttr)
-                if switch_wiki_skill:
+                if switch_wiki_skill or switch_wiki_skill_on_news(user_uttr, bot_uttr):
                     skills_for_uttr.append("dff_wiki_skill")
                 skills_for_uttr.append("grounding_skill")
                 skills_for_uttr.append("program_y")
@@ -166,12 +179,17 @@ class RuleBasedSkillSelectorConnector:
                 # turn on topical skills based on current cobot-topics, cobot-dialogact-topics & pattern matching
                 skills_for_uttr += turn_on_skills(
                     cobot_topics, cobot_dialogact_topics, user_uttr_text, bot_uttr.get("text", ""),
-                    available_skills=['movie_skill', 'book_skill', 'news_api_skill', 'dff_food_skill',
+                    available_skills=['dff_movie_skill', 'book_skill', 'news_api_skill', 'dff_food_skill',
                                       'dff_animals_skill', 'dff_sport_skill', 'dff_music_skill',
                                       'dff_science_skill', 'dff_gossip_skill',  # 'dff_celebrity_skill',
                                       'game_cooperative_skill', 'weather_skill', 'dff_funfact_skill',
                                       'dff_travel_skill', 'coronavirus_skill', "dff_bot_persona_skill",
+                                      'dff_gaming_skill',
                                       ])
+
+                # if user mentions
+                if is_celebrity_mentioned:
+                    skills_for_uttr.append("dff_gossip_skill")
 
                 # some special cases
                 if if_special_weather_turn_on(user_uttr, bot_uttr):
@@ -186,10 +204,10 @@ class RuleBasedSkillSelectorConnector:
                 if get_named_locations(user_uttr):
                     skills_for_uttr.append("dff_travel_skill")
 
-                # turn on small talk if let's chat about particular topic or switch topic
-                # otherwise small-talk-skill turns on only when was active and can continue
-                if if_lets_chat_about_particular_topic_detected or if_choose_topic_detected:
-                    skills_for_uttr.append("small_talk_skill")
+                if extract_movies_names_from_annotations(user_uttr):
+                    skills_for_uttr.append("dff_movie_skill")
+
+                skills_for_uttr.append("small_talk_skill")
 
             # NOW IT IS NOT ONLY FOR USUAL CONVERSATION BUT ALSO FOR SENSITIVE/HIGH PRIORITY INTENTS/ETC
 

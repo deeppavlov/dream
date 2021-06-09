@@ -47,7 +47,7 @@ TOP_FREQUENT_BIGRAMS_TO_FIND_VERB = {
     for bigram in TOP_FREQUENT_VERB_NOUN_PHRASES
     if TOP_FREQUENT_VERB_NOUN_PHRASES[bigram] < 200
 }
-TOP_1k_FREQUENT_WORDS = (WORK_DIR / "google-10000-english-no-swears.txt").open().read().splitlines()[:1000]
+TOP_1k_FREQUENT_WORDS = (WORK_DIR / "common/google-10000-english-no-swears.txt").open().read().splitlines()[:1000]
 TOP_100_FREQUENT_WORDS = set(TOP_1k_FREQUENT_WORDS[:100])
 TOP_1k_FREQUENT_WORDS = set(TOP_1k_FREQUENT_WORDS)
 

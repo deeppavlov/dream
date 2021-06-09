@@ -7,10 +7,11 @@ from os import getenv
 from common.constants import MUST_CONTINUE
 from common.greeting import GREETING_QUESTIONS
 from common.link import skills_phrases_map
-from common.grounding import what_we_talk_about, are_we_recorded
-from common.sensitive import is_sensitive_situation
+from common.grounding import what_we_talk_about, are_we_recorded, detect_interrupt, detect_end_but, \
+    detect_end_because, detect_end_when, BUT_PHRASE, REPEAT_PHRASE, BECAUSE_PHRASE, WHEN_PHRASE
+from common.sensitive import is_sensitive_topic_and_request
 from common.universal_templates import is_any_question_sentence_in_utterance
-from common.utils import get_topics, get_intents, get_entities, get_toxic, is_no
+from common.utils import get_topics, get_intents, get_entities, is_toxic_or_blacklisted_utterance, is_no
 from utils import MIDAS_INTENT_ACKNOWLEDGMENTS, get_midas_intent_acknowledgement, reformulate_question_to_statement, \
     INTENT_DICT, DA_TOPIC_DICT, COBOT_TOPIC_DICT, get_entity_name, get_midas_analogue_intent_for_any_intent
 
@@ -84,6 +85,14 @@ def what_do_you_mean_response(dialog):
             reply, confidence = '', 0
         elif len(dialog.get('human_utterances', [])) < 2:
             reply, confidence = DONTKNOW_PHRASE, DONTKNOW_CONF
+        elif detect_interrupt(dialog['human_utterances'][-1]['text']):
+            reply, confidence = REPEAT_PHRASE, SUPER_CONF
+        elif detect_end_but(dialog['human_utterances'][-1]['text']):
+            reply, confidence = BUT_PHRASE, SUPER_CONF
+        elif detect_end_because(dialog['human_utterances'][-1]['text']):
+            reply, confidence = BECAUSE_PHRASE, SUPER_CONF
+        elif detect_end_when(dialog['human_utterances'][-1]['text']):
+            reply, confidence = WHEN_PHRASE, SUPER_CONF
         else:
             # collect prev current intents, topics
             intent_list, da_topic_list, cobot_topic_list = collect_topics_entities_intents(dialog)
@@ -131,6 +140,15 @@ def what_do_you_mean_response(dialog):
 
 
 def generate_acknowledgement(dialog):
+    """Generate acknowledgement for human questions.
+
+    Returns:
+        string acknowledgement (templated acknowledgement from `midas_acknowledgements.json` file,
+        confidence (default ACKNOWLEDGEMENT_CONF),
+        human attributes (empty),
+        bot attributes (empty),
+        attributes (with response parts set to acknowledgement)
+    """
     curr_intents = get_intents(dialog['human_utterances'][-1], probs=False, which='all')
     curr_intents = list(set([get_midas_analogue_intent_for_any_intent(intent) for intent in curr_intents
                              if get_midas_analogue_intent_for_any_intent(intent) is not None]))
@@ -140,9 +158,10 @@ def generate_acknowledgement(dialog):
     human_attr = {}
     bot_attr = {}
     curr_human_entities = get_entities(dialog['human_utterances'][-1], only_named=False, with_labels=False)
+    contains_question = is_any_question_sentence_in_utterance(dialog['human_utterances'][-1])
 
     # we generate acknowledgement ONLY if we have some entities!
-    if curr_considered_intents and len(curr_human_entities):
+    if curr_considered_intents and len(curr_human_entities) and contains_question:
         # can generate acknowledgement
         is_need_nounphrase_intent = any([intent in curr_intents for intent in ["open_question_opinion"]])
         if is_need_nounphrase_intent:
@@ -200,10 +219,10 @@ def generate_universal_response(dialog):
             human_attr["grounding_skill"]["used_universal_intent_responses"] += [reply]
             confidence = UNIVERSAL_RESPONSE_LOW_CONFIDENCE
             attr = {"response_parts": ["body"], "type": "universal_response"}
-    if is_question and is_sensitive_situation(dialog):
+    if is_question and is_sensitive_topic_and_request(dialog["human_utterances"][-1]):
         # if question in sensitive situation - answer with confidence 0.99
         confidence = ALMOST_SUPER_CONF
-    if ackn:
+    if ackn and not is_toxic_or_blacklisted_utterance(dialog['human_utterances'][-1]):
         reply = f"{ackn} {reply}"
         attr["response_parts"] = ["acknowlegdement", "body"]
     return reply, confidence, human_attr, bot_attr, attr
@@ -243,14 +262,9 @@ class GroundingSkillScenario:
             curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs = [], [], [], [], []
 
             # what do you mean response
-            if len(dialog['human_utterances']) > 1:
-                prev_human_uttr = dialog['human_utterances'][-2]
-                toxic_result = get_toxic(prev_human_uttr, probs=False)
-                default_blacklist = {'inappropriate': False, 'profanity': False, 'restricted_topics': False}
-                blacklist_result = prev_human_uttr.get("annotations", {}).get('blacklisted_words', default_blacklist)
-                is_toxic = toxic_result or blacklist_result['profanity'] or blacklist_result['inappropriate']
-            else:
-                is_toxic = False
+            is_toxic = is_toxic_or_blacklisted_utterance(
+                dialog['human_utterances'][-2]) if len(dialog['human_utterances']) > 1 else False
+
             reply, confidence, human_attr, bot_attr, attr = are_we_recorded_response(dialog)
             if reply and confidence:
                 curr_responses += [reply]

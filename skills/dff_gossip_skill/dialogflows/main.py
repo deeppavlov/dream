@@ -36,7 +36,8 @@ for node in [scopes.State.USR_ROOT, scopes.State.USR_ERR]:
         node,
         {
             (scopes.GOSSIP, gossip_flow.State.USR_START): gossip_flow.sys_topic_to_event_request,
-            # (scopes.GOSSIP, gossip_flow.State.USR_START): gossip_request,
+            # (scopes.GOSSIP, gossip_flow.State.USR_START): gossip_flow.sys_mentions_another_person_request,
+            (scopes.GOSSIP, gossip_flow.State.USR_START): gossip_flow.sys_celebrity_found_request,
         },
     )
 simplified_dialogflow.set_error_successor(scopes.State.USR_ROOT, scopes.State.SYS_ERR)

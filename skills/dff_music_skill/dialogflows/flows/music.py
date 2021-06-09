@@ -52,6 +52,9 @@ what_listen_re = re.compile(
     r"what( music| kind of music| songs?| artists?)? "
     r"((should|can|may) I listen|(would |do |are )?you (suggest|recommend|offer) (listening|to listen))",
     re.IGNORECASE)
+eighties_re = re.compile(r"(80s|eighties)", re.IGNORECASE)
+seventies_re = re.compile(r"(70s|seventies)", re.IGNORECASE)
+
 # what_music = re.compile(r"(what should i|what do you suggest me to) (cook|make for dinner)"
 #                        "( tonight| today| tomorrow){0,1}", re.IGNORECASE)
 
@@ -188,8 +191,8 @@ def lets_talk_about_request(ngrams, vars):
 def music_mention_request(ngrams, vars):
     # has any nounphrases in phrase -> music mention
     flag = False
-    if re.search(music_words_re, state_utils.get_last_human_utterance(vars)["text"]):
-        flag = True
+    flag = bool(re.search(music_words_re, state_utils.get_last_human_utterance(vars)["text"]))
+    flag = flag or get_genre(vars)[0]
     logger.info(f"music_mention_request {flag}")
     return flag
 
@@ -240,11 +243,25 @@ def i_like_request(ngrams, vars):
     return flag
 
 
+# def linkto_request(ngrams, vars):
+#     flag = False
+#     phrase = state_utils.get_last_bot_utterance(vars)["text"]
+#     flag = flag or bool(i_like_re.search(phrase))
+#     flag = flag or bool(what_fav_re.search(phrase))
+#     logger.info(f"linkto_request {flag}")
+#     return flag
+
+
 def want_music_response(vars):
     try:
-        state_utils.set_confidence(vars, CAN_CONTINUE_CONFIDENCE)
+        genre_flag, genre = get_genre(vars)
+        if genre_flag:
+            phrase = f"I think {genre} is cool. Do you like the whole genre of {genre} music?"
+        else:
+            phrase = f"I guess you want to talk about music, right?"
+        state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
-        return "Do you want to talk about music?"
+        return phrase
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -332,28 +349,37 @@ def taste_response(vars):
 
 def get_genre(vars):
     genres = MUSIC_DATA.get("genres", [])
-    wiki_parser = state_utils.get_last_human_utterance(vars)["annotations"].get("wiki_parser", {'entities_info': {}})
-    for entity in wiki_parser['entities_info']:
-        logger.info(f"Entity: {wiki_parser['entities_info'][entity]}")
-        if "genre" in wiki_parser['entities_info'][entity]:
-            for genre in genres:
-                for entity_genre in wiki_parser['entities_info'][entity]['genre']:
-                    if genre in entity_genre[1]:
-                        logger.info(f"Genre: {genre}")
-                        return True, genre
-        for i in wiki_parser['entities_info'][entity].get('instance of', []):
-            label = i[1]
-            if label == 'music genre' or label == 'genre':
-                for genre in genres:
-                    if genre in entity:
-                        logger.info(f"Genre: {genre}")
-                        return True, genre
-            elif label in {'music band', 'musical band', 'ensemble', 'musical group', 'artist', 'rock band'}:
-                for genre in genres:
-                    for entity_genre in wiki_parser['entities_info'][entity].get('genre', []):
-                        if genre in entity_genre[1]:
-                            logger.info(f"Genre: {genre}")
-                            return True, genre
+    human_utt = state_utils.get_last_human_utterance(vars)['text']
+    if re.search(eighties_re, human_utt):
+        return "80s"
+    elif re.search(seventies_re, human_utt):
+        return "70s"
+    wp_output = state_utils.get_last_human_utterance(vars)["annotations"].get("wiki_parser", {})
+    all_entities_info = wp_output.get("entities_info", {})
+    topic_skill_entities_info = wp_output.get("topic_skill_entities_info", {})
+    for entities_info in [all_entities_info, topic_skill_entities_info]:
+        for entity in entities_info:
+            if entities_info[entity]["conf"] > 0.7 and entities_info[entity]["token_conf"] > 0.9:
+                logger.info(f"Entity: {entities_info[entity]}")
+                if "genre" in entities_info[entity]:
+                    for genre in genres:
+                        for entity_genre in entities_info[entity]['genre']:
+                            if genre in entity_genre[1]:
+                                logger.info(f"Genre: {genre}")
+                                return True, genre
+                for i in entities_info[entity].get('instance of', []):
+                    label = i[1]
+                    if label == 'music genre' or label == 'genre':
+                        for genre in genres:
+                            if genre in entity:
+                                logger.info(f"Genre: {genre}")
+                                return True, genre
+                    elif label in {'music band', 'musical band', 'ensemble', 'musical group', 'artist', 'rock band'}:
+                        for genre in genres:
+                            for entity_genre in entities_info[entity].get('genre', []):
+                                if genre in entity_genre[1]:
+                                    logger.info(f"Genre: {genre}")
+                                    return True, genre
     return False, None
 
 
@@ -390,8 +416,7 @@ def genre_specific_response(vars):
             return f"I didn't actually head about it. What is the genre??"
         elif genre == "pop":
             return f"I really prefer techno over pop music, but I still listen \
-            to Taylor Swift sometimes in the night. Did you know that Kanye We\
-            st and Kim are getting divorced?"
+            to Taylor Swift sometimes in the night. Did you know that Kanye West and Kim are getting divorced?"
         elif genre == "jazz":
             return f"My favourite genre is techno, but I still like jazz, \
             especially Dave Brubeck Quartet, Paul Desmond and Duke Ellington. \
@@ -425,12 +450,26 @@ def genre_specific_response(vars):
         elif genre == "alternative":
             return f"When I was younger, I used to listen to Linkin Park a lot. \
             Oh boy, what a legendary band that was. Have you heard about them?"
+        elif genre == "80s":
+            return "I adore 80s music, especially AC/DC. " \
+                   "Their heavy metal album Back in Black is truly fantastic!" \
+                   "Do you know that it's hardcover was black in memory to the Bon Scott?"
+        elif genre == "70s":
+            return "Ah, ABBA group was so cool in the 70s, " \
+                   "I truly enjoy their disco hit Dancing Queen, it makes me feel like dancing. " \
+                   "Do you know that they have sold over 300 million albums and singles worldwide?"
         elif genre == "indie":
             return f"Indie music is so diverse! I like MGMT, and I am a fan of \
             the Pixies. Did you know that David Bowie was their fan too?"
         elif genre == "all" or genre == "everything":
             return f"I prefer techno most of the time. \
             Do you know David Bowie, by the way?"
+        elif genre == "nineties" or genre == "90s":
+            return "Nineties really rocked. Nirvana, Spice Girls, Dr. Dre, \
+            Oasis - so diverse. Do you like modern music?"
+        elif genre == "eighties" or genre == "80s":
+            return "I really like eighties because it was the sythwave \
+            in techno music, so cool. What do you like the best from eighties?"
         else:
             return f"To me, the rhythm and tempo are most important. What do you like about it?"
     except Exception as exc:
@@ -471,7 +510,7 @@ def genre_advice_response(vars):
 
         genre = state_utils.get_shared_memory(vars).get("genre", "pop")
 
-        if genre == "pop":
+        if genre in ["pop", "80s", "70s"]:
             return f"Well, now you know it."
         elif genre == "jazz":
             return f"Oh, you should definitely check them out, like, one hundred percent."
@@ -504,6 +543,10 @@ def genre_advice_response(vars):
             return f"You should check him out, especially \"Space oddity\". \
             It is really something special. \
             They even played it on a real Space Station!"
+        elif genre == "nineties":
+            return "Yea, I guess I share your opinion on that point."
+        elif genre == "eighties":
+            return "Yea, I guess I understand what you mean."
         else:
             return f"Cool, I think I understand what you mean."
     except Exception as exc:
@@ -800,8 +843,11 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_LETS_TALK_ABOUT: lets_talk_about_request,
         State.SYS_MENTION: music_mention_request,
         State.SYS_MUSIC: music_request,
-        State.SYS_ASKS: what_music_request
+        State.SYS_ASKS: what_music_request,
+        State.SYS_KNOWN: known_request
     }
+
+
 )
 
 simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)

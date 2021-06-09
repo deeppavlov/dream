@@ -10,7 +10,7 @@ from nltk.tokenize import sent_tokenize
 from common.duplicates import NOT_LOWER_DUPLICATES_SENTS
 from common.link import skills_phrases_map
 from common.utils import scenario_skills, retrieve_skills, okay_statements, is_question, substitute_nonwords, \
-    get_sentiment, get_toxic, is_no_intent
+    get_sentiment, get_toxic  # , is_no_intent
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -24,7 +24,7 @@ CONFIDENCE_STRENGTH = 2
 CONV_EVAL_STRENGTH = 0.4
 how_are_you_spec = "Do you want to know what I can do?"  # this is always at the end of answers to `how are you`
 what_i_can_do_spec = "socialbot running inside"
-psycho_help_spec = "might not always feel like it"
+psycho_help_spec = "you can call the National Suicide Prevention Lifeline"
 greeting_spec = "this is an Alexa Prize Socialbot"
 misheard_with_spec1 = "I misheard you"
 misheard_with_spec2 = "like to chat about"
@@ -76,7 +76,7 @@ def lower_duplicates_score(candidates, bot_utt_counter, scores, confidences):
         if cand['skill_name'] == 'intent_responder' and '#+#repeat' in cand['text']:
             continue
         # TODO: remove the quick fix of gcs petitions, issue is https://github.com/deepmipt/assistant/issues/80
-        if cand['skill_name'] in ['game_cooperative_skill', "news_api_skill", "movie_skill"]:
+        if cand['skill_name'] in ['game_cooperative_skill', "news_api_skill", "dff_movie_skill"]:
             continue
 
         cand_sents = sent_tokenize(cand["text"].lower())
@@ -147,10 +147,10 @@ def get_updated_disliked_skills(dialog, can_not_be_disliked_skills=None):
                 break
 
     if linked_to_skill:
-        sentiment = get_sentiment(dialog["human_utterances"][-1], probs=False)
+        negative_prob = get_sentiment(dialog["human_utterances"][-1], probs=True).get("negative", 0.)
         toxicity = get_toxic(dialog["human_utterances"][-1], probs=False)
-        _is_no = is_no_intent(dialog["human_utterances"][-1])
-        if (sentiment and sentiment[0] == "negative") or toxicity or _is_no:
+        # _is_no = is_no_intent(dialog["human_utterances"][-1])
+        if negative_prob > 0.8 or toxicity:  # or _is_no:
             if linked_to_skill not in can_not_be_disliked_skills:
                 disliked_skills.append(linked_to_skill)
 

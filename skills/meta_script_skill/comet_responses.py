@@ -71,8 +71,8 @@ def fill_comet_atomic_template(curr_user_uttr, template, relation):
 
 grammar_compiled = [[re.compile("did you not be", re.IGNORECASE), "were not you"],
                     [re.compile("did you be", re.IGNORECASE), "were you"],
-                    [re.compile("(\bhis\b|\bher\b|\btheir\b)", re.IGNORECASE), "your"],
-                    [re.compile("\bdo n't\b", re.IGNORECASE), "don't"],
+                    [re.compile(r"(\bhis\b|\bher\b|\btheir\b)", re.IGNORECASE), "your"],
+                    [re.compile(r"\bdo n't\b", re.IGNORECASE), "don't"],
                     [re.compile("'d don't", re.IGNORECASE), "'b not"]
                     ]
 

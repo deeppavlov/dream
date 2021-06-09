@@ -15,10 +15,10 @@ from typing import Callable, Dict
 
 import sentry_sdk
 
-from common.link import LIST_OF_SCRIPTED_TOPICS, SKILLS_FOR_LINKING, skills_phrases_map, \
+from common.link import LIST_OF_SCRIPTED_TOPICS, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED, skills_phrases_map, \
     compose_linkto_with_connection_phrase
 from common.sensitive import is_sensitive_situation
-from common.universal_templates import opinion_request_question
+from common.universal_templates import opinion_request_question, is_switch_topic
 from common.utils import get_topics, get_entities, is_no
 
 
@@ -29,7 +29,6 @@ logger = logging.getLogger(__name__)
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
 ASK_QUESTION_PROB = 0.7
-ASK_NORMAL_QUESTION_PROB = 0.5
 LINK_TO_PROB = 0.5
 LINK_TO_PHRASES = sum([list(list_el) for list_el in skills_phrases_map.values()], [])
 
@@ -65,7 +64,7 @@ np_ignore_expr = re.compile("(" + "|".join([r'\b%s\b' % word for word in np_igno
 np_remove_expr = re.compile("(" + "|".join([r'\b%s\b' % word for word in np_remove_list]) + ")", re.IGNORECASE)
 rm_spaces_expr = re.compile(r'\s\s+')
 ASK_ME_QUESTION_PATTERN = re.compile(
-    r"^(do you have (a )?question|(can you|could you)?ask me (something|anything|question))", re.IGNORECASE)
+    r"^(do you have (a )?question|(can you|could you)?ask me (something|anything|[a-z ]+question))", re.IGNORECASE)
 
 donotknow_answers = [
     "What do you want to talk about?",
@@ -135,7 +134,7 @@ def get_link_to_question(dialog, all_prev_active_skills):
         if from_skill in LIST_OF_SCRIPTED_TOPICS.keys():
             break
     # remove prev active skills from those we can link to
-    available_links = list(set(SKILLS_FOR_LINKING).difference(all_prev_active_skills))
+    available_links = list(set(SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED).difference(all_prev_active_skills))
     # use recommended skills
     recommended_skills = dialog["human_utterances"][-1].get("annotations", []).get("topic_recommendation", [])
     if len(set(available_links).intersection(recommended_skills)) > 0:
@@ -145,8 +144,8 @@ def get_link_to_question(dialog, all_prev_active_skills):
         # if we still have skill to link to, try to generate linking question
         # {'phrase': result, 'skill': linkto_dict["skill"], "connection_phrase": connection}
         link = compose_linkto_with_connection_phrase(
-            SKILLS_FOR_LINKING, human_attributes=human_attr, recent_active_skills=all_prev_active_skills,
-            from_skill=from_skill)
+            SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED, human_attributes=human_attr,
+            recent_active_skills=all_prev_active_skills, from_skill=from_skill)
         human_attr["used_links"][link["skill"]] = human_attr["used_links"].get(link["skill"], []) + [link['phrase']]
         human_attr["prelinkto_connections"] = human_attr["prelinkto_connections"] + [link.get("connection_phrase", "")]
         linked_question = link["phrase"]
@@ -171,8 +170,8 @@ class DummySkillConnector:
         try:
             st_time = time.time()
             dialog = deepcopy(payload['payload']["dialogs"][0])
-            is_sensitive_case = is_sensitive_situation(dialog)
-            all_prev_active_skills = list(set((payload['payload']["all_prev_active_skills"][0])))
+            is_sensitive_case = is_sensitive_situation(dialog["human_utterances"][-1])
+            all_prev_active_skills = payload['payload']["all_prev_active_skills"][0]
 
             curr_topics = get_topics(dialog["human_utterances"][-1], which="cobot_topics")
             curr_nounphrases = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
@@ -217,44 +216,25 @@ class DummySkillConnector:
                     attrs += [{"type": "nounphrase_question"}]
                     human_attrs += [{}]
                     bot_attrs += [{}]
-                else:
-                    if random.random() < ASK_NORMAL_QUESTION_PROB:
-                        logger.info("No special nounphrases for questions. Return question of the same topic.")
-                        cands += [questions_generator.get_random_text(curr_topics)]
-                        confs += [0.5]
-                        attrs += [{"type": "topic_question"}]
-                        human_attrs += [{}]
-                        bot_attrs += [{}]
-                    else:
-                        logger.info("No special nounphrases for questions. Return link-to question.")
-                        question, human_attr = generate_question_not_from_last_responses(dialog, all_prev_active_skills)
-                        if len(question) > 0:
-                            cands += [question]
-                            confs += [0.55]
-                            attrs += [{"type": "normal_question"}]
-                            human_attrs += [human_attr]
-                            bot_attrs += [{}]
-            else:
-                logger.info("Dialog begins. No special nounphrases for questions. Return link-to question.")
-                question, human_attr = generate_question_not_from_last_responses(dialog, all_prev_active_skills)
-                cands += [question]
-                confs += [0.55]
-                attrs += [{"type": "normal_question"}]
-                human_attrs += [human_attr]
-                bot_attrs += [{}]
 
             link_to_question, human_attr = get_link_to_question(dialog, all_prev_active_skills)
             if link_to_question:
                 _prev_bot_uttr = dialog["bot_utterances"][-2]["text"] if len(dialog["bot_utterances"]) > 1 else ""
                 _bot_uttr = dialog["bot_utterances"][-1]["text"] if len(dialog["bot_utterances"]) > 0 else ""
+                _prev_active_skill = dialog["bot_utterances"][-1]["active_skill"] \
+                    if len(dialog["bot_utterances"]) > 0 else ""
 
                 _no_to_first_linkto = any([phrase in _bot_uttr for phrase in LINK_TO_PHRASES])
                 _no_to_first_linkto = _no_to_first_linkto and all([phrase not in _prev_bot_uttr
                                                                    for phrase in LINK_TO_PHRASES])
                 _no_to_first_linkto = _no_to_first_linkto and is_no(dialog["human_utterances"][-1])
+                _no_to_first_linkto = _no_to_first_linkto and _prev_active_skill != "dff_friendship_skill"
+
+                _if_switch_topic = is_switch_topic(dialog["human_utterances"][-1])
+                _is_ask_me_something = ASK_ME_QUESTION_PATTERN.search(dialog["human_utterances"][-1]["text"])
 
                 cands += [link_to_question]
-                if ASK_ME_QUESTION_PATTERN.search(dialog["human_utterances"][-1]["text"]) or _no_to_first_linkto:
+                if _is_ask_me_something or _no_to_first_linkto or _if_switch_topic:
                     confs += [1.0]  # Use it only as response selector retrieve skill output modifier
                 else:
                     confs += [0.05]  # Use it only as response selector retrieve skill output modifier

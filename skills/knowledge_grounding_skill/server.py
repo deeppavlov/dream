@@ -43,7 +43,7 @@ DFF_ANNTR_HISTORY_LEN = 1
 
 special_char_re = re.compile(r'[^0-9a-zA-Z \-\.\'\?,!]+')
 greetings_farewells_re = re.compile(join_words_in_or_pattern(["have .* day", "have .* night", ".* bye",
-                                                              "\bbye", "goodbye", "hello",
+                                                              r"\bbye", "goodbye", "hello",
                                                               "(it|its|it's|nice|thank you|thanks).* chatting.*",
                                                               "(it|its|it's|nice|thank you|thanks).* talking.*",
                                                               ".* chatting with you.*",
@@ -102,10 +102,14 @@ def get_cobotqa(utterances):
     for i, uttr in enumerate(utterances):
         annotation = uttr.get("annotations", {}).get("cobotqa_annotator", {})
         values = annotation.get("facts", [])
-        for v in values:
-            value = v.get("fact", "")
-            if value:
-                result_values.append([(len(utterances) - i - 1) * 0.01, value])
+        response = annotation.get("response", "")
+        if values:
+            for v in values:
+                value = v.get("fact", "")
+                if value:
+                    result_values.append([(len(utterances) - i - 1) * 0.01, value])
+        if response:
+            result_values.append([(len(utterances) - i - 1) * 0.01, response])
     return result_values
 
 
@@ -126,13 +130,18 @@ def get_annotations_from_dialog(utterances, annotator_name, key_name=None):
     for i, uttr in enumerate(utterances):
         annotation = uttr.get("annotations", {}).get(annotator_name, {})
         value = ""
-        if isinstance(annotation, dict) and key_name in annotation:
-            # check if odqa has nonempty answer along with a paragraph
-            if annotator_name == "kbqa":
-                value = annotation.get(key_name, "")
-            # include only non-empty strs
-            if value:
-                result_values.append([(len(utterances) - i - 1) * 0.01, value])
+        if isinstance(annotation, dict):
+            if key_name in annotation:
+                # check if odqa has nonempty answer along with a paragraph
+                if annotator_name == "kbqa":
+                    value = annotation.get(key_name, "")
+                # include only non-empty strs
+                if value:
+                    result_values.append([(len(utterances) - i - 1) * 0.01, value])
+            if "facts" in annotation:
+                values = deepcopy(annotation["facts"])
+                for value in values[:2]:
+                    result_values.append([(len(utterances) - i - 1) * 0.01, value])
         if isinstance(annotation, list):
             values = deepcopy(annotation)
             for value in values[:2]:

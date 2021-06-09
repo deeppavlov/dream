@@ -1,0 +1,560 @@
+{
+    "human_utter_index_batch": [
+        3
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "her?",
+                    "annotations": {
+                        "spelling_preprocessing": "her",
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.005928618833422661,
+                            "conversational": 0.9940714240074158
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.7925578355789185
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9897595643997192
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9998255372047424
+                            },
+                            "emotion_classification": {
+                                "anger": 0.5928271412849426,
+                                "neutral": 0.9917839169502258
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.7908162474632263
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.001528918743133545
+                            }
+                        },
+                        "cobot_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "her?",
+                            "segments": [
+                                "her?"
+                            ]
+                        },
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_entities": {
+                            "entities": [],
+                            "labelled_entities": []
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "Opinion_ExpressionIntent"
+                            ],
+                            "topics": [
+                                "Entertainment_Movies"
+                            ]
+                        },
+                        "entity_linking": [],
+                        "conceptnet": {},
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.000567131326533854,
+                                "command": 0.00070127536309883,
+                                "comment": 0.0015892218798398972,
+                                "complaint": 0.0004863580106757581,
+                                "dev_command": 0.0004227316821925342,
+                                "neg_answer": 0.00029344187350943685,
+                                "open_question_factual": 0.0006798693211749196,
+                                "open_question_opinion": 0.0008448117296211421,
+                                "opinion": 0.990174412727356,
+                                "other_answers": 0.000883009226527065,
+                                "pos_answer": 0.0004812451370526105,
+                                "statement": 0.0025177246425300837,
+                                "yes_no_question": 0.00035884074168279767
+                            }
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Hi, this is an Alexa Prize Socialbot! How are you doing today?",
+                                "what do you think about movie her?",
+                                "What is your all time favorite movie?",
+                                "her?"
+                            ]
+                        },
+                        "fact_retrieval": [],
+                        "wiki_parser": {
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 3,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "FILE - In this photo March 22, 2013 file photo, the exterior of the Internal Revenue Service (IRS) building in Washington. Lawmakers are increasingly looking at boosting the IRS to help pay for infrastructure improvements. (AP Photo/Susan Walsh, File... [6289 chars]",
+                                    "description": "FILE - In this photo March 22, 2013 file photo, the exterior of the Internal Revenue Service (IRS) building in Washington. Lawmakers are increasingly looking at boosting the IRS to help pay for infrastructure improvements.",
+                                    "image": "https://storage.googleapis.com/afs-prod/media/c34884747805457cb36ead260bcffb75/3000.jpeg",
+                                    "publishedAt": "2021-05-15T04:31:01Z",
+                                    "source": {
+                                        "name": "Associated Press",
+                                        "url": "https://apnews.com"
+                                    },
+                                    "title": "IRS to the rescue? Tax audits eyed for infrastructure cash",
+                                    "url": "https://apnews.com/article/personal-taxes-business-government-and-politics-e6151149b8fdba343a9053e5942c0679"
+                                },
+                                "which": "all"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "text": "i watched movie her.",
+                    "annotations": {
+                        "spelling_preprocessing": "i watched movie her",
+                        "factoid_classification": {
+                            "factoid": 0.014863061718642712,
+                            "conversational": 0.985136866569519
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9927219152450562
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Movies": 0.9968552589416504
+                            },
+                            "cobot_topics": {
+                                "Movies_TV": 0.9993519186973572
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9984903335571289
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6520847082138062
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0012921690940856934
+                            }
+                        },
+                        "cobot_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "i watched movie her.",
+                            "segments": [
+                                "i watched movie her."
+                            ]
+                        },
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_entities": {
+                            "entities": [
+                                "her"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "videoname",
+                                    "text": "her"
+                                }
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Movies_TV"
+                            ]
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "Information_DeliveryIntent"
+                            ],
+                            "topics": [
+                                "Entertainment_Movies"
+                            ]
+                        },
+                        "entity_linking": [
+                            {
+                                "confidences": [],
+                                "entity_ids": [],
+                                "entity_pages": [],
+                                "entity_pages_titles": [],
+                                "entity_substr": "her",
+                                "tokens_match_conf": []
+                            }
+                        ],
+                        "conceptnet": {
+                            "her": {
+                                "Causes": [
+                                    "you feel sad",
+                                    "happiness",
+                                    "feel good"
+                                ],
+                                "CausesDesire": [
+                                    "play game",
+                                    "compete",
+                                    "play"
+                                ],
+                                "HasProperty": [
+                                    "pretty",
+                                    "red",
+                                    "ugly"
+                                ],
+                                "SymbolOf": [
+                                    "love",
+                                    "purity",
+                                    "peace"
+                                ]
+                            }
+                        },
+                        "fact_retrieval": [],
+                        "wiki_parser": {
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 4,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "sentrewrite": {
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 55,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "Travel",
+                                        "start": 49,
+                                        "text": "Travel"
+                                    },
+                                    {
+                                        "end": 87,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "Travel",
+                                        "start": 85,
+                                        "text": "it"
+                                    }
+                                ]
+                            ],
+                            "modified_sents": [
+                                "What is your all time favorite movie?",
+                                "her?",
+                                "Cool! Travel used to be a privilege. Then Travel was available to everyone. It's a privilege again. Do you think travel is a great thing?",
+                                "i watched movie her."
+                            ]
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Cool! Travel used to be a privilege. Then it was available to everyone. It's a privilege again. Do you think travel is a great thing?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Cool! Travel used to be a privilege. Then it was available to everyone. It's a privilege again. Do you think travel is a great thing?",
+                            "segments": [
+                                "Cool!",
+                                "Travel used to be a privilege.",
+                                "Then it was available to everyone.",
+                                "It's a privilege again.",
+                                "Do you think travel is a great thing?"
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            [],
+                            [],
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 90,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "Travel",
+                                        "start": 84,
+                                        "text": "Travel"
+                                    },
+                                    {
+                                        "end": 122,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "Travel",
+                                        "start": 120,
+                                        "text": "it"
+                                    }
+                                ]
+                            ],
+                            "modified_sents": [
+                                "what do you think about movie her?",
+                                "What is your all time favorite movie?",
+                                "her?",
+                                "Cool! Travel used to be a privilege. Then Travel was available to everyone. It's a privilege again. Do you think travel is a great thing?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_friendship_skill"
+                }
+            ]
+        }
+    ],
+    "dff_movie_skill_state_batch": [
+        {
+            "current_turn_dff_suspended": false,
+            "dialogflow_state": "{\"vars\": {\"__stack__\": [], \"__user_utterance__\": \"what do you think about movie her\", \"__system_state__\": \"State.SYS_MENTIONED_MOVIES\", \"__state__\": \"State.USR_WAS_ASKED_MOVIE_TITLE_QUESTION\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"What is your all time favorite movie?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"MOVIES\\\"<__tuple__>\\\"State.USR_WAS_ASKED_MOVIE_TITLE_QUESTION\\\"\"}",
+            "history": {
+                "1": "State.SYS_MENTIONED_MOVIES"
+            },
+            "previous_human_utter_index": 1,
+            "shared_memory": {
+                "current_status": "movie_prompt",
+                "used_movies_questions": [
+                    "What is your all-time favorite movie?"
+                ]
+            }
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {
+            "dff_travel_skill": [
+                "Do you think travel is a great thing?"
+            ]
+        }
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

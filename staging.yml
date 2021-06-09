@@ -70,8 +70,8 @@ services:
     image: mongo:4.0.0
     env_file:
       - ${ENV_FILE}
-  movie-skill:
-    image: ${DOCKER_REGISTRY}/movie-skill:${VERSION}
+  dff-movie-skill:
+    image: ${DOCKER_REGISTRY}/dff-movie-skill:${VERSION}
     env_file:
       - ${ENV_FILE}
   eliza:
@@ -162,10 +162,6 @@ services:
     image: ${DOCKER_REGISTRY}/news-api-annotator:${VERSION}
     env_file:
       - ${ENV_FILE}
-  greeting-skill:
-    image: ${DOCKER_REGISTRY}/greeting-skill:${VERSION}
-    env_file:
-      - ${ENV_FILE}
   spelling-preprocessing:
     image: ${DOCKER_REGISTRY}/spelling-preprocessing:${VERSION}
     env_file:
@@ -222,14 +218,6 @@ services:
      image: ${DOCKER_REGISTRY}/combined-classification:${VERSION}
      env_file:
        - ${ENV_FILE}
-  wikidata-dial-service:
-    image: ${DOCKER_REGISTRY}/wikidata-dial-service:${VERSION}
-    env_file:
-      - ${ENV_FILE}
-  wikidata-dial-skill:
-    image: ${DOCKER_REGISTRY}/wikidata-dial-skill:${VERSION}
-    env_file:
-      - ${ENV_FILE}
   dff-animals-skill:
     image: ${DOCKER_REGISTRY}/dff-animals-skill:${VERSION}
     env_file:
@@ -238,16 +226,16 @@ services:
     image: ${DOCKER_REGISTRY}/dff-travel-skill:${VERSION}
     env_file:
       - ${ENV_FILE}
-  dff-celebrity-skill:
-    image: ${DOCKER_REGISTRY}/dff-celebrity-skill:${VERSION}
-    env_file:
-      - ${ENV_FILE}
   dff-sport-skill:
     image: ${DOCKER_REGISTRY}/dff-sport-skill:${VERSION}
     env_file:
       - ${ENV_FILE}
   dff-food-skill:
     image: ${DOCKER_REGISTRY}/dff-food-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  dff-science-skill:
+    image: ${DOCKER_REGISTRY}/dff-science-skill:${VERSION}
     env_file:
       - ${ENV_FILE}
   dff-music-skill:
@@ -266,6 +254,10 @@ services:
     image: ${DOCKER_REGISTRY}/dff-bot-persona-skill:${VERSION}
     env_file:
       - ${ENV_FILE}
+  dff-gaming-skill:
+    image: ${DOCKER_REGISTRY}/dff-gaming-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   dff-gossip-skill:
     image: ${DOCKER_REGISTRY}/dff-gossip-skill:${VERSION}
     env_file:
@@ -280,6 +272,10 @@ services:
       - ${ENV_FILE}
   topic-recommendation:
     image: ${DOCKER_REGISTRY}/topic-recommendation:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  user-persona-extractor:
+    image: ${DOCKER_REGISTRY}/user-persona-extractor:${VERSION}
     env_file:
       - ${ENV_FILE}
   personality-detection:

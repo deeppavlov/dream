@@ -29,6 +29,12 @@ def is_opinion_request(vars):
     return flag
 
 
+def is_opinion_expression(vars):
+    flag = common_utils.is_opinion_expression(vars["agent"]["dialog"]["human_utterances"][-1])
+    logging.debug(f"is_opinion_expression = {flag}")
+    return flag
+
+
 def is_previous_turn_dff_suspended(vars):
     flag = vars["agent"].get("previous_turn_dff_suspended", False)
     logging.debug(f"is_previous_turn_dff_suspended = {flag}")
@@ -100,11 +106,13 @@ def is_new_human_entity(vars):
     return flag
 
 
-def is_entities(vars):
-    entities = state_utils.get_labeled_noun_phrase(vars)
-    flag = bool(entities)
-    logging.debug(f"is_entities = {flag}")
-    return flag
+def get_last_state(vars):
+    last_state = ""
+    history = list(vars["agent"]["history"].items())
+    if history:
+        history_sorted = sorted(history, key=lambda x: x[0])
+        last_state = history_sorted[-1][1]
+    return last_state
 
 
 def is_last_state(vars, state):
@@ -153,16 +161,33 @@ def is_no_human_abandon(vars):
     return False
 
 
-def no_requests(vars):
-    """Function to determine if user didn't asked to switch topic, user didn't ask to talk about something particular,
-    user didn't requested some special intents (like what_is_your_name, what_are_you_talking_about),
-    user didn't asked or requested something,
+def no_special_switch_off_requests(vars):
+    """Function to determine if
+        - user didn't asked to switch topic,
+        - user didn't ask to talk about something particular,
+        - user didn't requested high priority intents (like what_is_your_name)
     """
-    intents = common_utils.get_intents(state_utils.get_last_human_utterance(vars), which="all")
     intents_by_catcher = common_utils.get_intents(
         state_utils.get_last_human_utterance(vars), probs=False, which="intent_catcher"
     )
     is_high_priority_intent = any([intent not in common_utils.service_intents for intent in intents_by_catcher])
+    is_switch = is_switch_topic(vars)
+    is_lets_chat = is_lets_chat_about_topic_human_initiative(vars)
+
+    if not (is_high_priority_intent or is_switch or is_lets_chat):
+        return True
+    return False
+
+
+def no_requests(vars):
+    """Function to determine if
+        - user didn't asked to switch topic,
+        - user didn't ask to talk about something particular,
+        - user didn't requested high priority intents (like what_is_your_name)
+        - user didn't requested any special intents
+        - user didn't ask questions
+    """
+    contain_no_special_requests = no_special_switch_off_requests(vars)
 
     request_intents = [
         "opinion_request",
@@ -173,10 +198,11 @@ def no_requests(vars):
         "Topic_SwitchIntent",
         "Opinion_RequestIntent",
     ]
+    intents = common_utils.get_intents(state_utils.get_last_human_utterance(vars), which="all")
     is_not_request_intent = all([intent not in request_intents for intent in intents])
     is_no_question = "?" not in state_utils.get_last_human_utterance(vars)["text"]
 
-    if not is_high_priority_intent and is_not_request_intent and is_no_question:
+    if contain_no_special_requests and is_not_request_intent and is_no_question:
         return True
     return False
 
@@ -190,6 +216,12 @@ def is_yes_vars(vars):
 def is_no_vars(vars):
     flag = True
     flag = flag and common_utils.is_no(state_utils.get_last_human_utterance(vars))
+    return flag
+
+
+def is_do_not_know_vars(vars):
+    flag = True
+    flag = flag and common_utils.is_donot_know(state_utils.get_last_human_utterance(vars))
     return flag
 
 

@@ -31,10 +31,6 @@
       {
         "url": "http://files.deeppavlov.ai/datasets/wikipedia/enwiki_latest_hyperlinks.db",
         "subdir": "{DOWNLOADS_PATH}/odqa"
-      },
-      {
-        "url": "http://files.deeppavlov.ai/kbqa/wikidata/wikihow.pickle",
-        "subdir": "{DOWNLOADS_PATH}/wikidata"
       }
     ]
   }

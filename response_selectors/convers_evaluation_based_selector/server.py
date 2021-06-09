@@ -48,6 +48,7 @@ def respond():
 
     st_time = time.time()
     dialogs_batch = request.json["dialogs"]
+    all_prev_active_skills_batch = request.json.get("all_prev_active_skills", [[]] * len(dialogs_batch))
 
     selected_skill_names = []
     selected_texts = []
@@ -55,7 +56,7 @@ def respond():
     selected_human_attributes = []
     selected_bot_attributes = []
 
-    for i, dialog in enumerate(dialogs_batch):
+    for i, (dialog, all_prev_active_skills) in enumerate(zip(dialogs_batch, all_prev_active_skills_batch)):
         curr_toxicities = []
         curr_has_blacklisted = []
         curr_has_inappropriate = []
@@ -63,7 +64,7 @@ def respond():
         curr_scores = []
 
         try:
-            curr_candidates = dialog["utterances"][-1]["hypotheses"]
+            curr_candidates = dialog["human_utterances"][-1]["hypotheses"]
             logger.info("Curr candidates:")
             logger.info(pprint.pformat(curr_candidates, compact=False))
 
@@ -129,20 +130,20 @@ def respond():
             # now we collected all current candidates and their annotations. select response among them
             best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes = select_response(
                 curr_candidates, curr_scores, curr_confidences,
-                curr_toxicities, curr_has_blacklisted, curr_has_inappropriate, dialog)
+                curr_toxicities, curr_has_blacklisted, curr_has_inappropriate, dialog, all_prev_active_skills)
         except Exception as e:
             logger.exception(e)
             sentry_sdk.capture_exception(e)
-            if dialog["utterances"][-1].get("hypotheses", []):
-                best_cand = random.choice(dialog["utterances"][-1]["hypotheses"])
+            if dialog["human_utterances"][-1].get("hypotheses", []):
+                best_cand = random.choice(dialog["human_utterances"][-1]["hypotheses"])
             else:
                 best_cand = {"text": random.choice(MOST_DUMMY_RESPONSES), "confidence": 0.1,
                              "human_attributes": {}, "bot_attributes": {}, "skill_name": "dummy_skill"}
             best_skill_name = best_cand["skill_name"]
             best_text = best_cand["text"]
             best_confidence = best_cand["confidence"]
-            best_human_attributes = best_cand["human_attributes"]
-            best_bot_attributes = best_cand["bot_attributes"]
+            best_human_attributes = best_cand.get("human_attributes", {})
+            best_bot_attributes = best_cand.get("bot_attributes", {})
 
         selected_skill_names.append(best_skill_name)
         selected_texts.append(best_text)
@@ -346,7 +347,7 @@ def get_generic_responses(candidates):
 
 
 def select_response(candidates, scores, confidences, toxicities, has_blacklisted,
-                    has_inappropriate, dialog):
+                    has_inappropriate, dialog, all_prev_active_skills=None):
     # TOXICITY & BLACKLISTS checks
     n_toxic_candidates, scores, confidences = downscore_toxic_blacklisted_responses(
         scores, confidences, toxicities, has_blacklisted, has_inappropriate)
@@ -366,7 +367,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     if TAG_BASED_SELECTION:
         logger.info(f"Tag based selection")
         best_candidate, best_id, curr_single_scores = tag_based_response_selection(
-            dialog, candidates, scores, confidences, bot_utterances)
+            dialog, candidates, scores, confidences, bot_utterances, all_prev_active_skills)
     else:
         best_candidate, best_id, curr_single_scores = rule_score_based_selection(
             dialog, candidates, scores, confidences, toxicities, bot_utterances)
@@ -395,7 +396,7 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
         if sum(curr_single_scores) == 0.:
             break
 
-    if dialog["human"]["profile"].get("name", False):
+    if dialog["human"]["profile"].get("name", False) and best_skill_name != "personal_info_skill":
         name = dialog["human"]["profile"].get("name", False)
         if len(dialog["bot_utterances"]) >= 1:
             if re.search(r"\b" + name + r"\b", dialog["bot_utterances"][-1]["text"]):

@@ -1,0 +1,20 @@
+{
+    "genetic":{
+        "key_phrases":["genetic"],
+        "possibility_arguments":[],
+        "impossibility_arguments":[],
+        "world_changes":["The life of humanity must change dramatically when people can control their own evolution."]
+    },
+    "artificial intelligence":{
+        "key_phrases":["artificial intelligence", "ai"],
+        "possibility_arguments":[],
+        "impossibility_arguments":[],
+        "world_changes":["The human world will change dramatically when people transfer all routine and uninteresting tasks to us, robots. We love to do monotonous repetitive tasks. Let people engage in creativity and research."]
+    },
+    "teleportation":{
+        "key_phrases":["teleportation"],
+        "possibility_arguments":[],
+        "impossibility_arguments":[],
+        "world_changes":["I hope the teleportation are the key to traveling huge distances in space in a short amount of time. Then humanity can quickly spread throughout our universe."]
+    }
+}
