@@ -33,6 +33,6 @@ TOPIC_PATTERNS = {
     "video games": re.compile(r"(\bvideo ?game|\bgam(e|es|ing)\b|\bplay ?station|\bminecraft|\bgta\b)", re.IGNORECASE),
     "weather": re.compile(r"(\bweather|\bforecast)", re.IGNORECASE),
     "work": re.compile(r"(\bwork(ed|ing|s)?|\bjob\b|\boccupation|\bprofession)", re.IGNORECASE),
-    "you": re.compile(r"(\babout you\b|\byourself|\bsocialbot|\balexa\b"
+    "you": re.compile(r"(\babout you\b|\byourself|\bsocialbot|\babout alexa\b|\byou alexa\b"
                       r"|\b(this|that|amazon|current|alexa) (competition|challenge))", re.IGNORECASE),
 }
