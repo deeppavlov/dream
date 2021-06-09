@@ -214,7 +214,7 @@ def extract_movies_names_from_annotations(annotated_uttr, check_full_utterance=F
                 instance_of_types = [el[0] for el in ent_dict.get("instance of", [])]
                 instance_of_types += [el[0] for el in ent_dict.get("types_2hop", [])]
                 if len(set(instance_of_types).intersection(set(topic_types["film"]))) > 0 and \
-                        ent_dict.get("token_conf", 0.) >= 0.5:
+                        ent_dict.get("token_conf", 0.) >= 0.5 and ent_dict.get("conf", 0.) >= 0.5:
                     movies_titles += [ent_dict.get("entity_label", ent_name).lower()]
 
     # if check_full_utterance:
