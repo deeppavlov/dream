@@ -607,3 +607,10 @@ def is_wikidata_entity(plain_book):
         if re.fullmatch(IS_WIKIDATA_TEMPLATE, plain_book):
             return True
     return False
+
+
+LOVE_READING_TEMPLATE = re.compile(r"i (do )?(like|love|prefer) (book|read)", re.IGNORECASE)
+
+
+def if_loves_reading(annotated_user_phrase):
+    return re.search(LOVE_READING_TEMPLATE, annotated_user_phrase['text'])
