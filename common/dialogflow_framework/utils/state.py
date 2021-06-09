@@ -180,7 +180,7 @@ def get_fact_for_particular_entity_from_human_utterance(vars, entity):
     cobotqa_annotations = get_cobotqa_annotations_from_human_utterance(vars)
     facts_for_entity = []
     for fact in cobotqa_annotations["facts"]:
-        if fact.get("entity", "").lower() == entity.lower():
+        if fact.get("entity", "").lower() == entity.lower() and "Sorry, I don't know" not in fact.get("fact", ""):
             facts_for_entity += [fact["fact"]]
 
     return facts_for_entity
@@ -198,3 +198,13 @@ def get_news_about_particular_entity_from_human_utterance(vars, entity):
         curr_news = common_news.get_news_about_topic(entity, NEWS_API_ANNOTATOR_URL)
 
     return curr_news
+
+
+def get_facts_from_fact_retrieval(vars):
+    annotations = vars["agent"]["dialog"]["human_utterances"][-1].get("annotations", {})
+    if "fact_retrieval" in annotations:
+        if isinstance(annotations["fact_retrieval"], dict):
+            return annotations["fact_retrieval"].get("facts", [])
+        elif isinstance(annotations["fact_retrieval"], list):
+            return annotations["fact_retrieval"]
+    return []

@@ -158,5 +158,3 @@ OKAY_ACKNOWLEDGEMENT_PHRASES = [
     "Yeah okay... Maybe we can talk about another place.",
     "Cool. Can we talk about some other place."
 ]
-
-EXTRA_WORDS_IN_FACTS_PATTERN = re.compile(r"^(according to|here('s| is) a fact)[a-zA-Z0-9 ,\-']+(\.|\,)", re.IGNORECASE)

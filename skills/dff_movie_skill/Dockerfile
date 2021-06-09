@@ -1,14 +1,6 @@
 FROM python:3.9.1
 
 
-ARG DATABASE_URL
-ARG MOVIE_PLOTS_URL
-
-WORKDIR /data
-RUN wget ${DATABASE_URL} -q -O /data/database_most_popular_main_info.json
-ADD $MOVIE_PLOTS_URL /data/
-RUN tar -xvzf /data/*.tar.gz -C /data/
-
 # ###################### IMMUTABLE SECTION ######################################
 # Do not change anything in this section 
 WORKDIR /src
@@ -23,10 +15,6 @@ RUN bash /scripts/programy_logger_off.sh
 # ###################### CUSTOM SECTION ######################################
 # Here you can make changes 
 
-ARG DATABASE_URL
-
-WORKDIR /data
-RUN wget ${DATABASE_URL} -q -O /data/database_most_popular_main_info.json
 
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
@@ -35,6 +23,15 @@ COPY skills/${SERVICE_NAME}/requirements.txt .
 RUN pip install -r requirements.txt
 
 RUN python -c "import nltk; nltk.download('punkt')"
+
+ARG DATABASE_URL
+ARG MOVIE_PLOTS_URL
+
+WORKDIR /data
+RUN wget ${DATABASE_URL} -q -O /data/database_most_popular_main_info.json
+ADD $MOVIE_PLOTS_URL /data/
+RUN tar -xvzf /data/*.tar.gz -C /data/
+WORKDIR /src
 
 COPY skills/${SERVICE_NAME}/ ./
 COPY ./common/ ./common/

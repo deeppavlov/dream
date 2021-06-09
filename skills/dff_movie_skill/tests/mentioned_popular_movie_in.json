@@ -8,18 +8,14 @@
                 {
                     "text": "hi.",
                     "annotations": {
+                        "spelling_preprocessing": "hi",
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "spelling_preprocessing": "hi",
                         "blacklisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
-                        },
-                        "factoid_classification": {
-                            "factoid": 0.009537387639284134,
-                            "conversational": 0.990462601184845
                         },
                         "combined_classification": {
                             "cobot_dialogact_intents": {
@@ -42,12 +38,21 @@
                             }
                         },
                         "cobot_nounphrases": [],
+                        "cobot_entities": {
+                            "entities": [],
+                            "labelled_entities": []
+                        },
                         "sentseg": {
                             "punct_sent": "hi.",
                             "segments": [
                                 "hi."
                             ]
                         },
+                        "factoid_classification": {
+                            "factoid": 0.009537387639284134,
+                            "conversational": 0.990462601184845
+                        },
+                        "conceptnet": {},
                         "midas_classification": [
                             {
                                 "appreciation": 0.003737201215699315,
@@ -65,6 +70,24 @@
                                 "yes_no_question": 0.006313652731478214
                             }
                         ],
+                        "topic_recommendation": [
+                            "dff_travel_skill",
+                            "dff_movie_skill",
+                            "dff_animals_skill"
+                        ],
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Other"
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        },
                         "intent_catcher": {
                             "cant_do": {
                                 "confidence": 0.0,
@@ -158,61 +181,47 @@
                         "ner": [
                             []
                         ],
-                        "cobot_dialogact": {
-                            "intents": [
-                                "General_ChatIntent"
-                            ],
-                            "topics": [
-                                "Other"
-                            ]
-                        },
-                        "cobot_topics": {
-                            "text": [
-                                "Phatic"
-                            ]
-                        },
-                        "cobot_entities": {
-                            "entities": [],
-                            "labelled_entities": []
-                        },
+                        "entity_linking": [],
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
                                 "hi."
                             ]
                         },
-                        "conceptnet": {},
-                        "entity_linking": [],
-                        "news_api_annotator": [
-                            {
-                                "entity": "all",
-                                "news": {
-                                    "content": "FILE - In this photo March 22, 2013 file photo, the exterior of the Internal Revenue Service (IRS) building in Washington. Lawmakers are increasingly looking at boosting the IRS to help pay for infrastructure improvements. (AP Photo/Susan Walsh, File... [6289 chars]",
-                                    "description": "FILE - In this photo March 22, 2013 file photo, the exterior of the Internal Revenue Service (IRS) building in Washington. Lawmakers are increasingly looking at boosting the IRS to help pay for infrastructure improvements.",
-                                    "image": "https://storage.googleapis.com/afs-prod/media/c34884747805457cb36ead260bcffb75/3000.jpeg",
-                                    "publishedAt": "2021-05-15T04:31:01Z",
-                                    "source": {
-                                        "name": "Associated Press",
-                                        "url": "https://apnews.com"
-                                    },
-                                    "title": "IRS to the rescue? Tax audits eyed for infrastructure cash",
-                                    "url": "https://apnews.com/article/personal-taxes-business-government-and-politics-e6151149b8fdba343a9053e5942c0679"
-                                },
-                                "which": "all"
-                            }
-                        ],
                         "kbqa": {
                             "answer": "",
                             "confidence": 0.0,
                             "qa_system": "kbqa"
                         },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
                         "wiki_parser": {
+                            "animals_skill_entities_info": {},
                             "entities_info": {},
                             "topic_skill_entities_info": {},
                             "utt_num": 1,
                             "wiki_skill_entities_info": {}
                         },
-                        "fact_retrieval": [],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "WASHINGTON \u2014 U.S. Capitol Police leaders learned that Trump supporters were discussing ways to infiltrate tunnels around the complex and target Democratic members of Congress on Jan. 6 but failed to act on the threats, according to a new Senate repor... [10840 chars]",
+                                    "description": "Capitol Police learned Trump backers had discussed entering Capitol tunnels and targeting Democrats on Jan. 6 but didn't act on threats, new Senate report says.",
+                                    "image": "https://media-cldnry.s-nbcnews.com/image/upload/t_nbcnews-fp-1200-630,f_auto,q_auto:best/newscms/2021_23/3480997/210607-washington-capitol-mob-riot-ac-529p_0.jpg",
+                                    "publishedAt": "2021-06-08T09:00:16Z",
+                                    "source": {
+                                        "name": "NBC News",
+                                        "url": "https://www.nbcnews.com"
+                                    },
+                                    "title": "Capitol Police didn't act on warnings Trump backers would breach Capitol, target Democrats, report says",
+                                    "url": "https://www.nbcnews.com/politics/congress/capitol-police-didn-t-act-warnings-trump-backers-would-breach-n1269888"
+                                },
+                                "which": "all"
+                            }
+                        ],
                         "cobotqa_annotator": {
                             "facts": [],
                             "response": ""
@@ -225,6 +234,10 @@
                         "spelling_preprocessing": "watched the conjuring",
                         "asr": {
                             "asr_confidence": "undefined"
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.006642981432378292,
+                            "conversational": 0.9933570027351379
                         },
                         "combined_classification": {
                             "cobot_dialogact_intents": {
@@ -257,16 +270,6 @@
                         "cobot_nounphrases": [
                             "the conjuring"
                         ],
-                        "factoid_classification": {
-                            "factoid": 0.006642981432378292,
-                            "conversational": 0.9933570027351379
-                        },
-                        "sentseg": {
-                            "punct_sent": "watched the conjuring.",
-                            "segments": [
-                                "watched the conjuring."
-                            ]
-                        },
                         "cobot_entities": {
                             "entities": [
                                 "conjuring"
@@ -277,6 +280,44 @@
                                     "text": "conjuring"
                                 }
                             ]
+                        },
+                        "sentseg": {
+                            "punct_sent": "watched the conjuring.",
+                            "segments": [
+                                "watched the conjuring."
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "dff_travel_skill",
+                            "dff_animals_skill",
+                            "game_cooperative_skill"
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "conceptnet": {
+                            "conjuring": {
+                                "Causes": [
+                                    "hallucination",
+                                    "illusion",
+                                    "you become hypnotize"
+                                ],
+                                "CausesDesire": [
+                                    "create illusion",
+                                    "perform trick",
+                                    "create dream"
+                                ],
+                                "HasProperty": [
+                                    "fun",
+                                    "entertain",
+                                    "good"
+                                ],
+                                "SymbolOf": [
+                                    "pagan religion",
+                                    "witchcraft",
+                                    "magic"
+                                ]
+                            }
                         },
                         "intent_catcher": {
                             "cant_do": {
@@ -368,14 +409,23 @@
                                 "detected": 0
                             }
                         },
-                        "ner": [
-                            []
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0020918352529406548,
+                                "command": 0.009003600105643272,
+                                "comment": 0.004490260034799576,
+                                "complaint": 0.0036138605792075396,
+                                "dev_command": 0.009249228984117508,
+                                "neg_answer": 0.0013690516352653503,
+                                "open_question_factual": 0.004563090391457081,
+                                "open_question_opinion": 0.0019947083201259375,
+                                "opinion": 0.0461726114153862,
+                                "other_answers": 0.002006476279348135,
+                                "pos_answer": 0.0024277609772980213,
+                                "statement": 0.9069463610649109,
+                                "yes_no_question": 0.006071203388273716
+                            }
                         ],
-                        "cobot_topics": {
-                            "text": [
-                                "SciTech"
-                            ]
-                        },
                         "cobot_dialogact": {
                             "intents": [
                                 "General_ChatIntent"
@@ -384,67 +434,31 @@
                                 "Phatic"
                             ]
                         },
-                        "conceptnet": {
-                            "conjuring": {
-                                "Causes": [
-                                    "hallucination",
-                                    "illusion",
-                                    "you become hypnotize"
-                                ],
-                                "CausesDesire": [
-                                    "create illusion",
-                                    "perform trick",
-                                    "create dream"
-                                ],
-                                "HasProperty": [
-                                    "fun",
-                                    "entertain",
-                                    "good"
-                                ],
-                                "SymbolOf": [
-                                    "pagan religion",
-                                    "witchcraft",
-                                    "magic"
-                                ]
-                            }
+                        "cobot_topics": {
+                            "text": [
+                                "SciTech"
+                            ]
                         },
-                        "midas_classification": [
-                            {
-                                "appreciation": 0.0015396333765238523,
-                                "command": 0.006136483512818813,
-                                "comment": 0.003722867462784052,
-                                "complaint": 0.0020787150133401155,
-                                "dev_command": 0.004078887403011322,
-                                "neg_answer": 0.0010590917663648725,
-                                "open_question_factual": 0.0018716691993176937,
-                                "open_question_opinion": 0.0010960798244923353,
-                                "opinion": 0.07179462909698486,
-                                "other_answers": 0.0014359536580741405,
-                                "pos_answer": 0.0025409196969121695,
-                                "statement": 0.9000451564788818,
-                                "yes_no_question": 0.002599918283522129
-                            }
-                        ],
                         "entity_linking": [
                             {
                                 "confidences": [
-                                    0.11064642667770386,
+                                    0.014249587431550026,
                                     0.045067090541124344,
-                                    0.014249587431550026
+                                    0.11064642667770386
                                 ],
                                 "entity_ids": [
-                                    "Q5161201",
+                                    "Q5540479",
                                     "Q27959608",
-                                    "Q5540479"
+                                    "Q5161201"
                                 ],
                                 "entity_pages": [
-                                    "Conjuring is an illustrated book by James Randi. Randi gives a detailed history of conjuring, more commonly known as magic, said to be the worlds second oldest profession. It includes detailed portraits of conjurors, including the Harry Blackstone, Sr., Harry Blackstone, Jr., Harry Houdini and his entourage, Howard Thurston, Robert Heller, Joe Berg, and others.",
+                                    "The Conjuring is a 2013 American supernatural horror film directed by James Wan and written by Chad Hayes and Carey W. Hayes. It is the inaugural film in the Conjuring Universe franchise. Patrick Wilson and Vera Farmiga star as Ed and Lorraine Warren, paranormal investigators and authors associated with prominent cases of haunting. Their purportedly real-life reports inspired The Amityville Horror story and film franchise. The Warrens come to the assistance of the Perron family, who experienced increasingly disturbing events in their farmhouse in Rhode Island in 1971.",
                                     "Conjuring is a 1896 French short silent film directed by Georges M\u00e9li\u00e8s."
                                 ],
                                 "entity_pages_titles": [
-                                    "Conjuring (book)",
+                                    "The Conjuring",
                                     "Conjuring (film)",
-                                    "The Conjuring"
+                                    "Conjuring (book)"
                                 ],
                                 "entity_substr": "conjuring",
                                 "tokens_match_conf": [
@@ -454,18 +468,39 @@
                                 ]
                             }
                         ],
-                        "sentrewrite": {
-                            "clusters": [],
-                            "modified_sents": [
-                                "hi.",
-                                "Hi, this is an Alexa Prize Socialbot! What do you do on weekdays?",
-                                "watched the conjuring."
-                            ]
-                        },
-                        "fact_retrieval": [
-                            "Conjuring is an illustrated book by James Randi.",
-                            "Randi gives a detailed history of conjuring, more commonly known as magic, said to be the worlds second oldest profession.",
-                            "Conjuring is a 1896 French short silent film directed by Georges M\u00e9li\u00e8s."
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "WASHINGTON \u2014 U.S. Capitol Police leaders learned that Trump supporters were discussing ways to infiltrate tunnels around the complex and target Democratic members of Congress on Jan. 6 but failed to act on the threats, according to a new Senate repor... [10840 chars]",
+                                    "description": "Capitol Police learned Trump backers had discussed entering Capitol tunnels and targeting Democrats on Jan. 6 but didn't act on threats, new Senate report says.",
+                                    "image": "https://media-cldnry.s-nbcnews.com/image/upload/t_nbcnews-fp-1200-630,f_auto,q_auto:best/newscms/2021_23/3480997/210607-washington-capitol-mob-riot-ac-529p_0.jpg",
+                                    "publishedAt": "2021-06-08T09:00:16Z",
+                                    "source": {
+                                        "name": "NBC News",
+                                        "url": "https://www.nbcnews.com"
+                                    },
+                                    "title": "Capitol Police didn't act on warnings Trump backers would breach Capitol, target Democrats, report says",
+                                    "url": "https://www.nbcnews.com/politics/congress/capitol-police-didn-t-act-warnings-trump-backers-would-breach-n1269888"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "conjuring",
+                                "news": {
+                                    "content": "The Conjuring: The Devil Made Me Do It is now in theaters and streaming on HBO Max. Like the previous two main Conjuring movies before it, The Devil Made Me Do It is supposedly based on a true story. But just how true is The Devil Made Me Do It?\nAs y... [6165 chars]",
+                                    "description": "The Conjuring: The Devil Made Me Do It is now in theaters and streaming on HBO Max. Like the previous two main Conjuring movies before it, The Devil Made Me Do It is supposedly based on a true story.",
+                                    "image": "https://d13ezvd6yrslxm.cloudfront.net/wp/wp-content/images/The-Devil-Made-Me-Do-It-Ending-Explained.jpg",
+                                    "publishedAt": "2021-06-07T15:47:05Z",
+                                    "source": {
+                                        "name": "/FILM",
+                                        "url": "https://www.slashfilm.com"
+                                    },
+                                    "title": "The Devil Made Me Do It Ending Explained",
+                                    "url": "https://www.slashfilm.com/the-devil-made-me-do-it-ending-explained/"
+                                },
+                                "which": "human"
+                            }
                         ],
                         "kbqa": {
                             "answer": "",
@@ -473,47 +508,76 @@
                             "qa_system": "kbqa"
                         },
                         "wiki_parser": {
+                            "animals_skill_entities_info": {},
                             "entities_info": {
                                 "conjuring": {
-                                    "author": [
+                                    "conf": 0.014249587431550026,
+                                    "entity_label": "The Conjuring",
+                                    "genre": [
                                         [
-                                            "Q294918",
-                                            "James Randi"
+                                            "Q200092",
+                                            "horror film"
+                                        ],
+                                        [
+                                            "Q2484376",
+                                            "thriller film"
                                         ]
                                     ],
-                                    "conf": 0.11064642667770386,
-                                    "entity_label": "Conjuring",
+                                    "has quality": [
+                                        [
+                                            "Q45171911",
+                                            "passes the Bechdel Test"
+                                        ]
+                                    ],
                                     "instance of": [
                                         [
-                                            "Q7725634",
-                                            "literary work"
+                                            "Q11424",
+                                            "film"
                                         ]
                                     ],
-                                    "plain_entity": "Q5161201",
+                                    "narrative location": [
+                                        [
+                                            "Q779",
+                                            "Connecticut"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q5540479",
                                     "pos": 0,
                                     "publication date": [
                                         [
-                                            "\"+1992-00-00^^T\"",
-                                            "1992"
+                                            "\"+2013-06-08^^T\"",
+                                            "08 June 2013"
+                                        ],
+                                        [
+                                            "\"+2013-08-01^^T\"",
+                                            "01 August 2013"
+                                        ],
+                                        [
+                                            "\"+2013-09-19^^T\"",
+                                            "19 September 2013"
                                         ]
                                     ],
                                     "token_conf": 1.0,
                                     "types_2hop": [
                                         [
-                                            "Q17537576",
-                                            "creative work"
+                                            "Q20937557",
+                                            "series"
                                         ],
                                         [
-                                            "Q234460",
-                                            "text"
+                                            "Q11424",
+                                            "film"
                                         ],
                                         [
-                                            "Q47461344",
-                                            "written work"
+                                            "Q2431196",
+                                            "audiovisual work"
                                         ],
                                         [
-                                            "Q7725634",
-                                            "literary work"
+                                            "Q4502142",
+                                            "visual artwork"
+                                        ],
+                                        [
+                                            "Q10301427",
+                                            "moving image"
                                         ]
                                     ]
                                 }
@@ -535,7 +599,7 @@
                                         ]
                                     ],
                                     "plain_entity": "Q5161201",
-                                    "pos": 0,
+                                    "pos": 2,
                                     "publication date": [
                                         [
                                             "\"+1992-00-00^^T\"",
@@ -544,6 +608,10 @@
                                     ],
                                     "token_conf": 1.0,
                                     "types_2hop": [
+                                        [
+                                            "Q7725634",
+                                            "literary work"
+                                        ],
                                         [
                                             "Q17537576",
                                             "creative work"
@@ -555,10 +623,6 @@
                                         [
                                             "Q47461344",
                                             "written work"
-                                        ],
-                                        [
-                                            "Q7725634",
-                                            "literary work"
                                         ]
                                     ]
                                 }
@@ -566,87 +630,26 @@
                             "utt_num": 2,
                             "wiki_skill_entities_info": {}
                         },
-                        "news_api_annotator": [
-                            {
-                                "entity": "all",
-                                "news": {
-                                    "content": "FILE - In this photo March 22, 2013 file photo, the exterior of the Internal Revenue Service (IRS) building in Washington. Lawmakers are increasingly looking at boosting the IRS to help pay for infrastructure improvements. (AP Photo/Susan Walsh, File... [6289 chars]",
-                                    "description": "FILE - In this photo March 22, 2013 file photo, the exterior of the Internal Revenue Service (IRS) building in Washington. Lawmakers are increasingly looking at boosting the IRS to help pay for infrastructure improvements.",
-                                    "image": "https://storage.googleapis.com/afs-prod/media/c34884747805457cb36ead260bcffb75/3000.jpeg",
-                                    "publishedAt": "2021-05-15T04:31:01Z",
-                                    "source": {
-                                        "name": "Associated Press",
-                                        "url": "https://apnews.com"
-                                    },
-                                    "title": "IRS to the rescue? Tax audits eyed for infrastructure cash",
-                                    "url": "https://apnews.com/article/personal-taxes-business-government-and-politics-e6151149b8fdba343a9053e5942c0679"
-                                },
-                                "which": "all"
-                            },
-                            {
-                                "entity": "conjuring",
-                                "news": {
-                                    "content": "It actually became a thing in the \u201880s, so much so that the Department of Justice issued a guidebook to police departments on how to work with psychics. You can literally look it up; it's in their archive section on their site, but it was because of ... [306 chars]",
-                                    "description": "It actually became a thing in the \u201880s, so much so that the Department of Justice issued a guidebook to police departments on how to work with psychics.",
-                                    "image": "https://img.cinemablend.com/quill/0/4/2/d/8/4/042d84098e833061913d9b702cd5ff8673eb9c0d.jpg",
-                                    "publishedAt": "2021-05-11T01:31:00Z",
-                                    "source": {
-                                        "name": "CinemaBlend",
-                                        "url": "https://www.cinemablend.com"
-                                    },
-                                    "title": "How The Conjuring 3 Is Taking Key Inspiration From A Beloved Brad Pitt Movie",
-                                    "url": "https://www.cinemablend.com/news/2567141/conjuring-3-key-inspiration-se7en-brad-pitt-michael-chaves"
-                                },
-                                "which": "human"
-                            },
-                            {
-                                "entity": "alexa prize",
-                                "news": {
-                                    "content": "From podcasts to Clubhouse, branded audio is more important than ever. Learn how brands are increasing customer loyalty and personalization with these best practices.\nJoin Transform 2021 for the most important themes in enterprise AI & Data. Learn mo... [5218 chars]",
-                                    "description": "From podcasts to Clubhouse, branded audio is more important than ever. Learn how brands are increasing customer loyalty and personalization with these best practices. Join Transform 2021 for the most important themes in enterprise AI & Data.",
-                                    "image": "https://venturebeat.com/wp-content/uploads/2020/01/amazon-alexa-echo-studio-echo-flex-fire-tv-cube-2.jpg?w=1200&strip=all",
-                                    "publishedAt": "2021-03-11T14:00:34Z",
-                                    "source": {
-                                        "name": "VentureBeat",
-                                        "url": "https://venturebeat.com"
-                                    },
-                                    "title": "Multitasking chatbots are the new Amazon Alexa Prize challenge",
-                                    "url": "https://venturebeat.com/2021/03/11/multitasking-chatbots-are-the-new-amazon-alexa-prize-challenge/"
-                                },
-                                "which": "bot"
-                            }
-                        ]
+                        "fact_retrieval": {
+                            "facts": [
+                                "The Conjuring is a 2013 American supernatural horror film directed by James Wan and written by Chad Hayes and Carey W. Hayes.",
+                                "It is the inaugural film in the Conjuring Universe franchise.",
+                                "Conjuring is a 1896 French short silent film directed by Georges M\u00e9li\u00e8s."
+                            ],
+                            "topic_facts": []
+                        }
                     }
                 }
             ],
             "bot_utterances": [
                 {
-                    "text": "Hi, this is an Alexa Prize Socialbot! What do you do on weekdays?",
+                    "text": "Hi, this is an Alexa Prize Socialbot! How are you?",
                     "annotations": {
                         "sentseg": {
-                            "punct_sent": "Hi, this is an Alexa Prize Socialbot! What do you do on weekdays?",
+                            "punct_sent": "Hi, this is an Alexa Prize Socialbot! How are you?",
                             "segments": [
                                 "Hi, this is an Alexa Prize Socialbot!",
-                                "What do you do on weekdays?"
-                            ]
-                        },
-                        "ner": [
-                            [
-                                {
-                                    "confidence": 1,
-                                    "end_pos": 7,
-                                    "start_pos": 5,
-                                    "text": "alexa prize",
-                                    "type": "MISC"
-                                }
-                            ],
-                            []
-                        ],
-                        "sentrewrite": {
-                            "clusters": [],
-                            "modified_sents": [
-                                "hi.",
-                                "Hi, this is an Alexa Prize Socialbot! What do you do on weekdays?"
+                                "How are you?"
                             ]
                         }
                     },
@@ -669,6 +672,9 @@
     ],
     "used_links_batch": [
         {}
+    ],
+    "age_group_batch": [
+        "unknown"
     ],
     "disliked_skills_batch": [
         []
