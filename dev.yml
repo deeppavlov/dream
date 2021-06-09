@@ -475,6 +475,7 @@ services:
     env_file: [.env.dev]
     volumes:
       - "./annotators/topic_recommendation:/src"
+      - "./common:/src/common"
     ports:
       - 8113:8113
   user-persona-extractor:

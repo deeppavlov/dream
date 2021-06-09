@@ -7,12 +7,15 @@ ADD $DATA_URL /root/convert_data/
 RUN tar -xvzf /root/convert_data/*.tar.gz -C /root/convert_data/
 
 RUN mkdir /src
+RUN mkdir /src/common
 
-COPY ./requirements.txt /src/requirements.txt
+COPY ./annotators/topic_recommendation/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt && pip uninstall -y tensorflow-gpu==1.14.0 tensorflow==1.14.0 && \
      pip install tensorflow-gpu==1.14.0
 
-COPY . /src/
+COPY ./annotators/topic_recommendation/ /src/
+COPY ./common/ /src/common/
+
 WORKDIR /src
 
 ENV MODEL_PATH /root/convert_data/convert
