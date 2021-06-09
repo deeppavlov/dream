@@ -129,13 +129,15 @@ def my_fav_story_response(vars):
         used_topics = shared_memory.get("used_topics", [])
         name = ""
         story = ""
+        question = ""
         response = ""
         for topic in FAV_STORIES_TOPICS:
             if topic in utt:
                 name = FAV_STORIES_TOPICS.get(topic, "").get("name", "")
                 story = FAV_STORIES_TOPICS.get(topic, "").get("story", "")
+                question = FAV_STORIES_TOPICS.get(topic, "").get("question", "")
                 if name and (topic not in used_topics):
-                    response = f"My favorite {topic} is {name}. {story} What about you?"
+                    response = f"My favorite {topic} is {name}. {story} {question}?"
                     if topic == "book":
                         state_utils.set_confidence(vars, confidence=CONF_LOW)
                         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
@@ -293,7 +295,7 @@ def top_favs_response(vars):
     try:
         state_utils.set_confidence(vars, confidence=CONF_LOW)
         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
-        return f"What are your top three favorites?"
+        return "What are your top three favorite things in the world?"
 
     except Exception as exc:
         logger.exception(exc)
