@@ -8,7 +8,7 @@ ACTIVE_SKILLS = [
     "comet_dialog_skill",
     "dff_animals_skill", "dff_food_skill", "dff_music_skill", "dff_sport_skill", "dff_travel_skill",
     "dff_bot_persona_skill", "dff_gaming_skill", "dff_science_skill", "dff_gossip_skill",
-    "small_talk_skill",
+    "small_talk_skill", "dff_wiki_skill"
 ]
 ALMOST_ACTIVE_SKILLS = [
     "friendship_skill", "dff_friendship_skill", "knowledge_grounding_skill",
