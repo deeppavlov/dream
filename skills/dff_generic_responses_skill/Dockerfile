@@ -1,4 +1,6 @@
 FROM python:3.9.1
+
+RUN pip install spacy==3.0.5
 # ###################### IMMUTABLE SECTION ######################################
 # Do not change anything in this section 
 WORKDIR /src

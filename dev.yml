@@ -494,6 +494,7 @@ services:
     env_file: [.env.dev]
     volumes:
       - "./annotators/speech_function_predictor:/src"
+      - "./common:/src/common"
     ports:
       - 8107:8107
   dff-generic-responses-skill:

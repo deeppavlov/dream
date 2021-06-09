@@ -54,7 +54,7 @@ def cut_labels(list_of_labels):
 
 
 def init_model():
-    with open('res_cor.json') as data:
+    with open('common/speech_functions/res_cor.json') as data:
         file = json.load(data)
 
     dialogues = []
