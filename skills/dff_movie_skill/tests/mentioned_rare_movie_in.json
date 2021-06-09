@@ -445,7 +445,9 @@
                             }
                         ],
                         "fact_retrieval": {
-                            "facts": [],
+                            "facts": [
+                                "Movies, or films, are a type of visual communication which uses moving pictures and sound to tell stories or teach people something. Most people watch movies as a type of entertainment or a way to have fun. For some people, fun movies can mean movies that make them laugh, while for others it can mean movies that make them cry, or feel afraid."
+                            ],
                             "topic_facts": []
                         },
                         "kbqa": {
