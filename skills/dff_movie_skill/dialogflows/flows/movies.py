@@ -291,10 +291,17 @@ def extract_mentions(vars, check_full_utterance=False):
     harry_potter_part_name = get_harry_potter_part_name_if_special_link_was_used(
         curr_human_uttr, state_utils.get_last_bot_utterance(vars))
     if harry_potter_part_name is not None:
+        new_cobot_entities = {
+            "entities": [harry_potter_part_name],
+            "labelled_entities": [{"label": "videoname", "text": harry_potter_part_name}]
+        }
+        if "annotations" not in curr_human_uttr:
+            curr_human_uttr["annotations"] = {}
         logger.info(
-            f"replacing phrase '{curr_human_uttr_text}' for '{harry_potter_part_name}' for mentions extraction")
-        curr_human_uttr_text = harry_potter_part_name.lower()
-        curr_human_uttr["text"] = harry_potter_part_name.lower()
+            f"For mentions extraction cobot_entities annotation "
+            f"'{curr_human_uttr['annotations'].get('cobot_entities')}' is replaced with '{new_cobot_entities}'"
+        )
+        curr_human_uttr["annotations"]["cobot_entities"] = new_cobot_entities
     if curr_human_uttr_text in EXTRACTED_MENTIONS_BUFFER:
         movies_ids, unique_persons, mentioned_genres = EXTRACTED_MENTIONS_BUFFER[curr_human_uttr_text]
     else:

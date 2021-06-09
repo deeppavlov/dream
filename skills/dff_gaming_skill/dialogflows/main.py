@@ -5,8 +5,10 @@ from emora_stdm import CompositeDialogueFlow, DialogueFlow
 
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 
-import dialogflows.flows.gaming as gaming_flow
+import dialogflows.flows.gaming.flow as gaming_flow
+import dialogflows.flows.minecraft.flow as minecraft_flow
 import dialogflows.scopes as scopes
+
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +22,7 @@ composite_dialogflow = CompositeDialogueFlow(
 
 
 composite_dialogflow.add_component(gaming_flow.dialogflow, scopes.GAMING)
+composite_dialogflow.add_component(minecraft_flow.dialogflow, scopes.MINECRAFT)
 
 dialogflow = composite_dialogflow.component(scopes.MAIN)
 simplified_dialogflow = dialogflow_extention.DFEasyFilling(dialogflow=dialogflow)
@@ -46,7 +49,7 @@ for node in [scopes.State.USR_ROOT, scopes.State.USR_ERR]:
     simplified_dialogflow.add_user_serial_transitions(
         node,
         {
-            (scopes.GAMING, gaming_flow.State.USR_START): gaming_request,
+            (scopes.GAMING, gaming_flow.GamingState.USR_START): gaming_request,
         },
     )
 simplified_dialogflow.set_error_successor(scopes.State.USR_ROOT, scopes.State.SYS_ERR)

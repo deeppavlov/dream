@@ -1,0 +1,17 @@
+from enum import Enum, auto
+
+
+class State(Enum):
+    USR_START = auto()
+    ####################
+    # from (scopes.GAMING, USR_CHECK_WITH_USER_GAME_TITLE)
+    SYS_USER_WANTS_TO_TALK_ABOUT_MINECRAFT = auto()
+
+    # from SYS_USER_WANTS_TO_TALK_ABOUT_MINECRAFT
+    USR_TELL_ABOUT_BUILDING_HOGWARTS_IN_MINECRAFT_ASK_WHAT_INTERESTING_USER_BUILT = auto()
+
+    # from USR_TELL_ABOUT_BUILDING_HOGWARTS_IN_MINECRAFT_ASK_WHAT_INTERESTING_USER_BUILT
+    SYS_USER_TELLS_ABOUT_HIS_ACHIEVEMENT_IN_MINECRAFT = auto()
+    ####################
+    SYS_ERR = auto()
+    USR_ERR = auto()

@@ -2,6 +2,7 @@ from enum import Enum, auto
 
 MAIN = "SYSTEM"
 GAMING = "GAMING"
+MINECRAFT = "MINECRAFT"
 
 
 class State(Enum):
