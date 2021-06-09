@@ -24,6 +24,7 @@ def animals_skill_was_proposed(prev_bot_utt):
 
 
 ANIMALS_TEMPLATE = re.compile(r"(animal|\bpet\b|\bpets\b)", re.IGNORECASE)
+ANIMAL_MENTION_TEMPLATE = re.compile(r"animal", re.IGNORECASE)
 PETS_TEMPLATE = re.compile(r"(\bcat\b|\bcats\b|\bdog\b|\bdogs\b|horse|puppy|puppies|kitty|kitties|kitten|parrot|"
                            r"\brat\b|\brats\b|mouse|hamster|fish)", re.IGNORECASE)
 PETS_TEMPLATE_EXT = re.compile(r"(\bcat\b|\bcats\b|\bdog\b|\bdogs\b|horse|puppy|puppies|kitty|kitties|kitten|parrot|"
@@ -34,6 +35,7 @@ HAVE_LIKE_PETS_TEMPLATE = re.compile(r"(do|did|have) you (have |had |like )?(any
                                      re.IGNORECASE)
 HAVE_PETS_TEMPLATE = re.compile(r"(do|did|have) you (have |had )?(any |a )?(pets|pet|animals|animal)", re.IGNORECASE)
 LIKE_PETS_TEMPLATE = re.compile(r"(do|did|have) you (like |love )?(any |a )?(pets|pet|animals|animal)", re.IGNORECASE)
+DONT_LIKE = re.compile(r"(do not like|don't like|dont like|hate)", re.IGNORECASE)
 DO_YOU_HAVE_TEMPLATE = re.compile(r"do you have (a |an |the |any |some )?(cat|dog|puppy|kitty|kitten|rat|fish|parrot"
                                   r"|hamster|\bpet|\bpets)", re.IGNORECASE)
 NOT_SWITCH_TEMPLATE = re.compile(r"(hot dog)", re.IGNORECASE)
@@ -142,8 +144,8 @@ WHAT_PETS_I_HAVE = [{"pet": "dog", "name": "Jack", "breed": "German Shepherd",
                      "sentence": "I have a dog named Charlie. He is a Husky. He is very cute."},
                     {"pet": "dog", "name": "Archie", "breed": "Labrador",
                      "sentence": "I have a dog named Archie. He is a Labrador. He is very cute."},
-                    {"pet": "cat", "name": "Thomas", "breed": "Maine Coon",
-                     "sentence": "I have a cat named Thomas. He is a big fluffy Maine Coon."},
+                    {"pet": "cat", "name": "Thomas", "breed": "Norwegian Forest cat",
+                     "sentence": "I have a cat named Thomas. He is a big fluffy Norwegian Forest cat."},
                     {"pet": "cat", "name": "Jackie", "breed": "Persian",
                      "sentence": "I have a cat named Jackie. He is a Persian."},
                     {"pet": "cat", "name": "Prince", "breed": "Siamese",

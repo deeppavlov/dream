@@ -13,8 +13,9 @@ import dialogflows.scopes as scopes
 from dialogflows.flows.wild_animals_states import State as WAS
 from dialogflows.flows.animals_states import State as AnimalsState
 from common.animals import PETS_TEMPLATE, stop_about_animals, find_entity_by_types, find_entity_conceptnet, \
-    WILD_ANIMALS_Q, ANIMALS_WIKI_Q
+    WILD_ANIMALS_Q, ANIMALS_WIKI_Q, ANIMAL_MENTION_TEMPLATE
 from common.fact_retrieval import get_all_facts
+from common.universal_templates import if_chat_about_particular_topic
 
 sentry_sdk.init(os.getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -89,8 +90,10 @@ def animal_questions_request(ngrams, vars):
 
 def animal_questions_response(vars):
     user_uttr = state_utils.get_last_human_utterance(vars)
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
     shared_memory = state_utils.get_shared_memory(vars)
+    started = shared_memory.get("start", False)
     users_wild_animal = shared_memory.get("users_wild_animal", "")
     animal_wp = find_entity_by_types(annotations, {"Q55983715", "Q16521"})
     animal_cnet = find_entity_conceptnet(annotations, ["animal"])
@@ -125,9 +128,17 @@ def animal_questions_response(vars):
 
     state_utils.save_to_shared_memory(vars, start=True)
     state_utils.save_to_shared_memory(vars, is_wild=True)
+    if_chat = if_chat_about_particular_topic(user_uttr, bot_uttr, compiled_pattern=ANIMAL_MENTION_TEMPLATE)
     if response:
-        state_utils.set_confidence(vars, confidence=CONF_1)
-        state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+        if if_chat:
+            state_utils.set_confidence(vars, confidence=CONF_1)
+            state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+        elif started:
+            state_utils.set_confidence(vars, confidence=CONF_2)
+            state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+        else:
+            state_utils.set_confidence(vars, confidence=CONF_3)
+            state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_PROMPT)
     else:
         state_utils.set_confidence(vars, confidence=CONF_4)
         state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
