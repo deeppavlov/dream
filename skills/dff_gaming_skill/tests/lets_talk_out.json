@@ -13,10 +13,10 @@
                 },
                 "previous_human_utter_index": 0,
                 "history": {
-                    "0": "State.SYS_USER_DEFINITELY_WANTS_TO_TALK_ABOUT_MINECRAFT"
+                    "0": "State.SYS_USER_WANTS_TO_TALK_ABOUT_MINECRAFT"
                 },
                 "current_turn_dff_suspended": false,
-                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_TELL_ABOUT_BUILDING_HOGWARTS_IN_MINECRAFT_ASK_WHAT_INTERESTING_USER_BUILT\", \"__stack__\": [], \"__user_utterance__\": \"lets chat about video game minecraft\", \"__system_state__\": \"State.SYS_USER_DEFINITELY_WANTS_TO_TALK_ABOUT_MINECRAFT\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"Cool! Minecraft is the best game ever! I had a great time building a copy of the Hogwarts castle from Harry Potter. What is the most interesting thing you built?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"GAMING\\\"<__tuple__>\\\"State.USR_TELL_ABOUT_BUILDING_HOGWARTS_IN_MINECRAFT_ASK_WHAT_INTERESTING_USER_BUILT\\\"\"}"
+                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_TELL_ABOUT_BUILDING_HOGWARTS_IN_MINECRAFT_ASK_WHAT_INTERESTING_USER_BUILT\", \"__stack__\": [], \"__user_utterance__\": \"lets chat about video game minecraft\", \"__system_state__\": \"State.SYS_USER_WANTS_TO_TALK_ABOUT_MINECRAFT\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"Cool! Minecraft is the best game ever! I had a great time building a copy of the Hogwarts castle from Harry Potter. What is the most interesting thing you built?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"MINECRAFT\\\"<__tuple__>\\\"State.USR_TELL_ABOUT_BUILDING_HOGWARTS_IN_MINECRAFT_ASK_WHAT_INTERESTING_USER_BUILT\\\"\"}"
             },
             "dff_shared_state": {
                 "cross_states": {},

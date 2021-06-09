@@ -6,15 +6,11 @@
         {
             "human_utterances": [
                 {
-                    "text": "Let's chat about video game minecraft.",
+                    "text": "Let's chat about video game Minecraft.",
                     "annotations": {
+                        "spelling_preprocessing": "Let's chat about video game Minecraft",
                         "asr": {
                             "asr_confidence": "undefined"
-                        },
-                        "spelling_preprocessing": "Let's chat about video game minecraft",
-                        "factoid_classification": {
-                            "factoid": 0.9820944666862488,
-                            "conversational": 0.01790553517639637
                         },
                         "blacklisted_words": {
                             "inappropriate": false,
@@ -23,88 +19,35 @@
                         },
                         "combined_classification": {
                             "cobot_dialogact_intents": {
-                                "Information_RequestIntent": 0.9967222213745117
+                                "Information_RequestIntent": 0.9968101978302002
                             },
                             "cobot_dialogact_topics": {
-                                "Entertainment_General": 0.996674120426178
+                                "Entertainment_General": 0.9984691739082336
                             },
                             "cobot_topics": {
-                                "Games": 0.9564911127090454
+                                "Games": 0.9905738830566406
                             },
                             "emotion_classification": {
-                                "neutral": 0.9976857304573059
+                                "neutral": 0.9982374906539917
                             },
                             "sentiment_classification": {
-                                "neutral": 0.6838250160217285
+                                "neutral": 0.6592917442321777
                             },
                             "toxic_classification": {
-                                "toxic": 0.002444237470626831
+                                "toxic": 0.0017843246459960938
                             }
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.9837716221809387,
+                            "conversational": 0.016228346154093742
                         },
                         "cobot_nounphrases": [
                             "video game minecraft"
                         ],
-                        "cobot_entities": {
-                            "entities": [
-                                "video game minecraft"
-                            ],
-                            "labelled_entities": [
-                                {
-                                    "label": "misc",
-                                    "text": "video game minecraft"
-                                }
-                            ]
-                        },
                         "sentseg": {
-                            "punct_sent": "Let's chat about video game minecraft.",
+                            "punct_sent": "Let's chat about video game Minecraft.",
                             "segments": [
-                                "Let's chat about video game minecraft."
-                            ]
-                        },
-                        "conceptnet": {
-                            "video game minecraft": {
-                                "Causes": [
-                                    "you will be entertain",
-                                    "boredom",
-                                    "entertainment"
-                                ],
-                                "CausesDesire": [
-                                    "play game",
-                                    "play video game",
-                                    "watch tv"
-                                ],
-                                "HasProperty": [
-                                    "very entertain",
-                                    "fun",
-                                    "entertain"
-                                ],
-                                "SymbolOf": [
-                                    "past tense of future",
-                                    "evil",
-                                    "past tense of present"
-                                ]
-                            }
-                        },
-                        "topic_recommendation": [
-                            "dff_travel_skill",
-                            "game_cooperative_skill",
-                            "dff_movie_skill"
-                        ],
-                        "ner": [
-                            []
-                        ],
-                        "cobot_dialogact": {
-                            "intents": [
-                                "Information_RequestIntent"
-                            ],
-                            "topics": [
-                                "Entertainment_General"
-                            ]
-                        },
-                        "sentrewrite": {
-                            "clusters": [],
-                            "modified_sents": [
-                                "Let's chat about video game minecraft."
+                                "Let's chat about video game Minecraft."
                             ]
                         },
                         "intent_catcher": {
@@ -197,40 +140,292 @@
                                 "detected": 0
                             }
                         },
+                        "topic_recommendation": [
+                            "dff_travel_skill",
+                            "game_cooperative_skill",
+                            "dff_movie_skill"
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "cobot_dialogact": {
+                            "intents": [
+                                "Information_RequestIntent"
+                            ],
+                            "topics": [
+                                "Entertainment_General"
+                            ]
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0021815956570208073,
+                                "command": 0.9698843359947205,
+                                "comment": 0.0013859765604138374,
+                                "complaint": 0.002004168229177594,
+                                "dev_command": 0.009606814943253994,
+                                "neg_answer": 0.0009775592479854822,
+                                "open_question_factual": 0.0014809122076258063,
+                                "open_question_opinion": 0.002089397981762886,
+                                "opinion": 0.002028576098382473,
+                                "other_answers": 0.0007704641320742667,
+                                "pos_answer": 0.0029320132452994585,
+                                "statement": 0.0024592257104814053,
+                                "yes_no_question": 0.0021990081295371056
+                            }
+                        ],
+                        "cobot_topics": {
+                            "text": [
+                                "Games"
+                            ]
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Let's chat about video game Minecraft."
+                            ]
+                        },
+                        "cobot_entities": {
+                            "entities": [
+                                "video game",
+                                "Minecraft"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "text": "video game"
+                                },
+                                {
+                                    "label": "gamename",
+                                    "text": "Minecraft"
+                                }
+                            ]
+                        },
+                        "conceptnet": {
+                            "Minecraft": {
+                                "Causes": [
+                                    "enlightenment",
+                                    "learn",
+                                    "you learn"
+                                ],
+                                "CausesDesire": [
+                                    "learn about subject",
+                                    "study",
+                                    "write essay"
+                                ],
+                                "HasProperty": [
+                                    "science fiction",
+                                    "science",
+                                    "interest"
+                                ],
+                                "SymbolOf": [
+                                    "philosophy",
+                                    "religion",
+                                    "science"
+                                ]
+                            },
+                            "video game": {
+                                "Causes": [
+                                    "entertainment",
+                                    "boredom",
+                                    "enjoyment"
+                                ],
+                                "CausesDesire": [
+                                    "play game",
+                                    "play video game",
+                                    "watch video game"
+                                ],
+                                "HasProperty": [
+                                    "fun",
+                                    "fun to watch",
+                                    "entertain"
+                                ],
+                                "SymbolOf": [
+                                    "game",
+                                    "mouse",
+                                    "child"
+                                ]
+                            }
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "A worker wearing a face mask works on a production line manufacturing bicycle steel rim at a factory, as the country is hit by the novel coronavirus outbreak, in Hangzhou, Zhejiang province, China March 2, 2020. China Daily via REUTERS/File Photo\nChi... [4195 chars]",
+                                    "description": "A worker wearing a face mask works on a production line manufacturing bicycle steel rim at a factory, as the country is hit by the novel coronavirus outbreak, in Hangzhou, Zhejiang province, China March 2, 2020.",
+                                    "image": "https://www.reuters.com/resizer/A8cSqtAn4KzJoFUXhfxJT26bJ-A=/1200x628/smart/filters:quality(80)/cloudfront-us-east-2.images.arcpublishing.com/reuters/IMFRCSNMK5KLTA2DVKFTUHHABI.jpg",
+                                    "publishedAt": "2021-06-09T07:00:00Z",
+                                    "source": {
+                                        "name": "Reuters",
+                                        "url": "https://www.reuters.com"
+                                    },
+                                    "title": "China's highest producer inflation in over 12 years highlights global price pressures",
+                                    "url": "https://www.reuters.com/world/china/chinas-may-factory-gate-prices-rise-fastest-pace-over-12-years-2021-06-09/"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "video game",
+                                "news": {
+                                    "content": "Playdate gets preorder date, games, and a weird new accessory\nIf you thought the crank on this video game machine was weird, wait until you see the Stereo Dock. The Playdate is a handheld video game machine that has a black and white display, directi... [1752 chars]",
+                                    "description": "Playdate gets preorder date, games, and a weird new accessory\nIf you thought the crank on this video game machine was weird, wait until you see the Stereo Dock.",
+                                    "image": "https://cdn.slashgear.com/wp-content/uploads/2021/06/playdate_2352.jpg",
+                                    "publishedAt": "2021-06-08T17:35:20Z",
+                                    "source": {
+                                        "name": "SlashGear",
+                                        "url": "https://www.slashgear.com"
+                                    },
+                                    "title": "Playdate gets preorder date, games, and a weird new accessory",
+                                    "url": "https://www.slashgear.com/playdate-gets-preorder-date-games-and-a-weird-new-accessory-08676931/"
+                                },
+                                "which": "human"
+                            },
+                            {
+                                "entity": "Minecraft",
+                                "news": {
+                                    "content": "Minecraft adds new ways glow and emit light\nToday we\u2019re taking a peek at the Minecraft Caves & Cliffs update: Part I, and the several new ways you can now emit light. There\u2019s a new Cave Vine, for example, grown by Glow Berries. They\u2019re not as bright ... [2127 chars]",
+                                    "description": "Minecraft adds new ways glow and emit light\nToday we\u2019re taking a peek at the Minecraft Caves & Cliffs update: Part I, and the several new ways you can now emit light. There\u2019s a new Cave Vine, for example, grown by Glow Berries.",
+                                    "image": "https://cdn.slashgear.com/wp-content/uploads/2021/06/vinery3.jpg",
+                                    "publishedAt": "2021-06-08T20:24:29Z",
+                                    "source": {
+                                        "name": "SlashGear",
+                                        "url": "https://www.slashgear.com"
+                                    },
+                                    "title": "Minecraft adds new ways glow and emit light",
+                                    "url": "https://www.slashgear.com/minecraft-update-117-adds-new-ways-to-emit-light-08676943/"
+                                },
+                                "which": "human"
+                            }
+                        ],
                         "entity_linking": [
                             {
                                 "confidences": [
-                                    0.9171895384788513,
-                                    0.6538071036338806,
-                                    0.5859475135803223
+                                    0.9208821058273315,
+                                    0.583527147769928,
+                                    0.5288652777671814,
+                                    0.6913381814956665,
+                                    0.9382187128067017
                                 ],
                                 "entity_ids": [
                                     "Q7889",
-                                    "Q49740",
-                                    "Q2748998"
+                                    "Q5215066",
+                                    "Q24939454",
+                                    "Q296101",
+                                    "Q659563"
                                 ],
                                 "entity_pages": [
-                                    "A video game is an electronic game that involves interaction with a user interface or input device such as a joystick, controller, keyboard, or motion sensing device to generate visual feedback for a player. This feedback is shown on a video display device, such as a TV set, monitor, touchscreen or virtual reality headset. Video games are often augmented with audio feedback delivered through speakers or headphones, and sometimes with other types of feedback, including haptic technology. ",
-                                    "Minecraft is a sandbox video game developed by Mojang. The game was created by Markus \"Notch\" Persson in the Java programming language. Following several early test versions, it was released as a paid public alpha for personal computers in 2009 before releasing in November 2011, with Jens Bergensten taking over development. Minecraft has since been ported to several other platforms and is the best-selling video game of all time, with 200 million copies sold and 126 million monthly active users ."
+                                    "A video game is an electronic game that involves interaction with a user interface or input device such as a joystick, controller, keyboard, or motion sensing device to generate visual feedback for a player. This feedback is shown on a video display device, such as a TV set, monitor, touchscreen or virtual reality headset. Video games are often augmented with audio feedback delivered through speakers or headphones, and sometimes with other types of feedback, including haptic technology. "
                                 ],
                                 "entity_pages_titles": [
                                     "Video game",
-                                    "Minecraft",
-                                    "Game Over (video game)"
+                                    "Dance Dance Revolution: Best of Cool Dancers",
+                                    "Styx: Shards of Darkness",
+                                    "APB: All Points Bulletin",
+                                    "Video game genre"
                                 ],
-                                "entity_substr": "video game minecraft",
+                                "entity_substr": "video game",
                                 "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            },
+                            {
+                                "confidences": [
+                                    0.6725127100944519,
+                                    0.03942441940307617,
+                                    0.7062528729438782,
+                                    0.5526330471038818,
+                                    0.6438705325126648
+                                ],
+                                "entity_ids": [
+                                    "Q49740",
+                                    "Q40083273",
+                                    "Q25445348",
+                                    "Q6016926",
+                                    "Q26945014"
+                                ],
+                                "entity_pages": [
+                                    "Minecraft is a sandbox video game developed by Mojang. The game was created by Markus \"Notch\" Persson in the Java programming language. Following several early test versions, it was released as a paid public alpha for personal computers in 2009 before releasing in November 2011, with Jens Bergensten taking over development. Minecraft has since been ported to several other platforms and is the best-selling video game of all time, with 200 million copies sold and 126 million monthly active users ."
+                                ],
+                                "entity_pages_titles": [
+                                    "Minecraft",
+                                    "Minecraft PE"
+                                ],
+                                "entity_substr": "minecraft",
+                                "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
                                     1.0,
                                     1.0,
                                     1.0
                                 ]
                             }
                         ],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
                         "wiki_parser": {
                             "animals_skill_entities_info": {},
                             "entities_info": {
-                                "video game minecraft": {
-                                    "conf": 0.9171895384788513,
+                                "minecraft": {
+                                    "awards received": [
+                                        [
+                                            "Q16218137",
+                                            "Seumas McNally Grand Prize"
+                                        ]
+                                    ],
+                                    "conf": 0.6725127100944519,
+                                    "entity_label": "Minecraft",
+                                    "genre": [
+                                        [
+                                            "Q21030988",
+                                            "survival game"
+                                        ],
+                                        [
+                                            "Q343568",
+                                            "action-adventure game"
+                                        ]
+                                    ],
+                                    "has quality": [
+                                        [
+                                            "Q70719326",
+                                            "crafting"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q7889",
+                                            "video game"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q49740",
+                                    "pos": 0,
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q7889",
+                                            "video game"
+                                        ],
+                                        [
+                                            "Q51938570",
+                                            "entertainment software"
+                                        ],
+                                        [
+                                            "Q17537576",
+                                            "creative work"
+                                        ],
+                                        [
+                                            "Q2249149",
+                                            "electronic game"
+                                        ]
+                                    ]
+                                },
+                                "video game": {
+                                    "conf": 0.9208821058273315,
                                     "entity_label": "video game",
                                     "has quality": [
                                         [
@@ -274,17 +469,45 @@
                                     "types_2hop": []
                                 }
                             },
-                            "topic_skill_entities_info": {},
+                            "topic_skill_entities_info": {
+                                "minecraft": {
+                                    "conf": 0.03942441940307617,
+                                    "entity_label": "Minecraft",
+                                    "instance of": [
+                                        [
+                                            "Q18011172",
+                                            "film project"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q40083273",
+                                    "pos": 1,
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q11424",
+                                            "film"
+                                        ],
+                                        [
+                                            "Q18011172",
+                                            "film project"
+                                        ],
+                                        [
+                                            "Q64728694",
+                                            "proposed entity"
+                                        ]
+                                    ]
+                                }
+                            },
                             "utt_num": 1,
                             "wiki_skill_entities_info": {
-                                "video game minecraft": {
+                                "minecraft": {
                                     "awards received": [
                                         [
                                             "Q16218137",
                                             "Seumas McNally Grand Prize"
                                         ]
                                     ],
-                                    "conf": 0.6538071036338806,
+                                    "conf": 0.6725127100944519,
                                     "entity_label": "Minecraft",
                                     "genre": [
                                         [
@@ -309,17 +532,9 @@
                                         ]
                                     ],
                                     "plain_entity": "Q49740",
-                                    "pos": 1,
+                                    "pos": 0,
                                     "token_conf": 1.0,
                                     "types_2hop": [
-                                        [
-                                            "Q17537576",
-                                            "creative work"
-                                        ],
-                                        [
-                                            "Q2249149",
-                                            "electronic game"
-                                        ],
                                         [
                                             "Q7889",
                                             "video game"
@@ -327,60 +542,65 @@
                                         [
                                             "Q51938570",
                                             "entertainment software"
+                                        ],
+                                        [
+                                            "Q17537576",
+                                            "creative work"
+                                        ],
+                                        [
+                                            "Q2249149",
+                                            "electronic game"
+                                        ]
+                                    ]
+                                },
+                                "video game": {
+                                    "conf": 0.583527147769928,
+                                    "entity_label": "Dance Dance Revolution: Best of Cool Dancers",
+                                    "genre": [
+                                        [
+                                            "Q2016457",
+                                            "exergaming"
+                                        ],
+                                        [
+                                            "Q584105",
+                                            "music video game"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q7889",
+                                            "video game"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q5215066",
+                                    "pos": 1,
+                                    "publication date": [
+                                        [
+                                            "\"+1999-02-11^^T\"",
+                                            "11 February 1999"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q7889",
+                                            "video game"
+                                        ],
+                                        [
+                                            "Q51938570",
+                                            "entertainment software"
+                                        ],
+                                        [
+                                            "Q17537576",
+                                            "creative work"
+                                        ],
+                                        [
+                                            "Q2249149",
+                                            "electronic game"
                                         ]
                                     ]
                                 }
                             }
-                        },
-                        "cobot_topics": {
-                            "text": [
-                                "Games"
-                            ]
-                        },
-                        "news_api_annotator": [
-                            {
-                                "entity": "all",
-                                "news": {
-                                    "content": "Celtics fans weren\u2019t the only ones angry with Kyrie Irving for stomping on Boston\u2019s center-court logo featuring \u201cLucky the Leprechaun\u201d on Sunday, a moment that took a backseat to a fan later throwing a water bottle at the Nets star.\n\u201cSo nobody going ... [1325 chars]",
-                                    "description": "Celtics fans weren\u2019t the only ones angry with Kyrie Irving for stomping on Boston\u2019s center-court logo featuring \u201cLucky the Leprechaun\u201d on Sunday, a moment that took a backseat to a fan later throwing a water bottle at the Nets star.",
-                                    "image": "https://nypost.com/wp-content/uploads/sites/2/2021/05/Kevin-Garnett-inset-was-not-happy-with-Kyrie-Irving-stomping-on-the-Celtics-logo..jpg?quality=90&strip=all&w=1200",
-                                    "publishedAt": "2021-05-31T23:25:00Z",
-                                    "source": {
-                                        "name": "New York Post ",
-                                        "url": "https://nypost.com"
-                                    },
-                                    "title": "Kevin Garnett blasts Kyrie Irving amid Celtics fiasco",
-                                    "url": "https://nypost.com/2021/05/31/kevin-garnett-blasts-kyrie-irving-amid-celtics-fiasco/"
-                                },
-                                "which": "all"
-                            },
-                            {
-                                "entity": "video game minecraft",
-                                "news": {},
-                                "which": "human"
-                            }
-                        ],
-                        "midas_classification": [
-                            {
-                                "appreciation": 0.0021815956570208073,
-                                "command": 0.9698843359947205,
-                                "comment": 0.0013859765604138374,
-                                "complaint": 0.002004168229177594,
-                                "dev_command": 0.009606814943253994,
-                                "neg_answer": 0.0009775592479854822,
-                                "open_question_factual": 0.0014809122076258063,
-                                "open_question_opinion": 0.002089397981762886,
-                                "opinion": 0.002028576098382473,
-                                "other_answers": 0.0007704641320742667,
-                                "pos_answer": 0.0029320132452994585,
-                                "statement": 0.0024592257104814053,
-                                "yes_no_question": 0.0021990081295371056
-                            }
-                        ],
-                        "kbqa": {
-                            "answer": "",
-                            "confidence": 0.0,
-                            "qa_system": "kbqa"
                         },
                         "fact_retrieval": {
                             "facts": [
@@ -394,8 +614,12 @@
                         "cobotqa_annotator": {
                             "facts": [
                                 {
-                                    "entity": "video game minecraft",
-                                    "fact": "Here's a fact about Minecrafts. I don't know the total number worldwide, but 2,432 channels are currently streaming Minecraft on Twitch."
+                                    "entity": "video game",
+                                    "fact": "Here's a fact about video games. Yes, you can recycle or trade-in eligible video games. Visit Amazon Second Chance to learn more about recycling and trade-in options for video games and other devices."
+                                },
+                                {
+                                    "entity": "Minecraft",
+                                    "fact": "Here's a fact about Minecrafts. Minecraft is currently ranked #131 on IMDb's most popular video games."
                                 }
                             ],
                             "response": ""
