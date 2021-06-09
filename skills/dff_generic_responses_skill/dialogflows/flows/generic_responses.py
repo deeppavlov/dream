@@ -39,7 +39,7 @@ nltk.download('punkt')
 
 file = None
 
-with open('cor.json') as data:
+with open('common/speech_functions/res_cor.json') as data:
     file = json.load(data)
 
 #region Sample Data
