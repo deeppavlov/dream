@@ -13,7 +13,7 @@ from transformers import AutoTokenizer, AutoModel
 
 nlp = spacy.load("en_core_web_sm")
 
-with open('cor.json') as data:
+with open('common/speech_functions/res_cor.json') as data:
     file = json.load(data)
 
 

@@ -1204,7 +1204,8 @@ services:
       args:
         SERVICE_PORT: 8108
         SERVICE_NAME: speech_function_classifier # has to be the same with skill dir name
-      context: ./annotators/speech_function_classifier/
+      context: .
+      dockerfile: ./annotators/speech_function_classifier/Dockerfile
     command: uvicorn server:app --reload --host 0.0.0.0 --port 8108
     deploy:
       mode: replicated

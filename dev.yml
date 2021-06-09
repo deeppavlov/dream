@@ -488,6 +488,7 @@ services:
     env_file: [.env.dev]
     volumes:
       - "./annotators/speech_function_classifier:/src"
+      - "./common:/src/common"
     ports:
       - 8108:8108
   speech-function-predictor:
