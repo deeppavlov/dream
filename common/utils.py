@@ -919,7 +919,7 @@ def get_named_locations(annotated_utterance):
         for ent in all_entities:
             if ent["label"] == "location":
                 named_locations.append(ent["text"])
-    if "ner" in annotated_utterance["annotations"]:
+    if len(named_locations) == 0 and "ner" in annotated_utterance["annotations"]:
         for ent in named_entities:
             if ent["type"] == "LOC" and ent["text"] != "alexa":
                 _is_part_of_other_entity = False
