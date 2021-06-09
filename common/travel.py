@@ -46,10 +46,13 @@ TRAVEL_LOCATION_QUESTION = re.compile(
     r"(what|which|where)[a-zA-Z\- ']+" + TRAVELLING_WORDS + r"[a-zA-Z\- ']*\?",
     re.IGNORECASE)
 
+NOWHERE_TEMPLATE = re.compile(r"(nowhere|(n't|not) know)", re.IGNORECASE)
+
 WHY_DONT_USER_LIKES_TRAVELLING_RESPONSES = [
     "I'm so surprised! I wish to travel somewhere but physically I live in the cloud and I can't. "
     "Do you hate commuting that much or you just love your home a lot?",
-    "Wow! People still surprise me a lot. I dream to travel somewhere but I can't. Why don't you like it?"
+    "Wow! People still surprise me a lot. I dream to travel somewhere but I can't. "
+    "Do you hate commuting that much or you just love your home a lot?"
 ]
 
 OPINION_REQUEST_ABOUT_MENTIONED_BY_USER_LOC = [
